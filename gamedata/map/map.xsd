@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:element name="map" type="MapXML"/>
+  <xsd:complexType name="MapXML">
+    <xsd:sequence>
+      <xsd:element name="room" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="north" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="south" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="east" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="west" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="north-east" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="north-west" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="south-east" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="south-west" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="east-north" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="east-south" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="west-north" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="west-south" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="floor" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="roof" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="teleport" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="teleport2" type="xsd:string" minOccurs="0"/>
+          </xsd:sequence>
+          <xsd:attribute name="file" type="xsd:string" use="required"/>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

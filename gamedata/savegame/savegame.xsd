@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:element name="savegame" type="SaveGameXML"/>
+  <xsd:complexType name="SaveGameXML">
+    <xsd:sequence>
+      <xsd:element name="exploredRooms">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="visited" maxOccurs="unbounded">
+              <xsd:complexType>
+                <xsd:attribute name="filename" type="xsd:string" use="required"/>
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="freeByblos" type="xsd:boolean"/>
+      <xsd:element name="freeEgyptus" type="xsd:boolean"/>
+      <xsd:element name="freePenitentiary" type="xsd:boolean"/>
+      <xsd:element name="freeSafari" type="xsd:boolean"/>
+      <xsd:element name="freeBlacktooth" type="xsd:boolean"/>
+      <xsd:element name="bonus">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="room" maxOccurs="unbounded">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:element name="label" type="xsd:short"/>
+                </xsd:sequence>
+                <xsd:attribute name="filename" type="xsd:string" use="required"/>
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="players">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="player" maxOccurs="unbounded">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:element name="active" type="xsd:boolean"/>
+                  <xsd:element name="roomFilename" type="xsd:string"/>
+                  <xsd:element name="x" type="xsd:int"/>
+                  <xsd:element name="y" type="xsd:int"/>
+                  <xsd:element name="z" type="xsd:int"/>
+                  <xsd:element name="direction" type="xsd:int"/>
+                  <xsd:element name="entry" type="xsd:int"/>
+                  <xsd:element name="lives" type="xsd:short"/>
+                  <xsd:element name="hasHorn" type="xsd:boolean"/>
+                  <xsd:element name="hasHandbag" type="xsd:boolean"/>
+                  <xsd:element name="ammo" type="xsd:int"/>
+                </xsd:sequence>
+                <xsd:attribute name="label" type="xsd:short" use="required"/>
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

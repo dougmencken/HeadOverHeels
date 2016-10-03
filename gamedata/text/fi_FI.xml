@@ -1,0 +1,711 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<language xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="language.xsd">
+
+  <text id="new-game" x="190" y="180">
+    <properties>
+      <ustring>Uusi peli</ustring>
+    </properties>
+  </text>
+  
+  <text id="blacktooth-empire" x="140" y="0">
+    <properties>
+      <ustring>Blacktoothin Imperiumi</ustring>
+    </properties>
+  </text>
+  
+  <text id="blacktooth" x="236" y="330">
+    <properties>
+      <ustring>Blacktooth</ustring>
+    </properties>
+  </text>
+  
+  <text id="egyptus" x="56" y="200">
+    <properties>
+      <ustring>Egyptus</ustring>
+    </properties>
+  </text>
+  
+  <text id="penitentiary" x="400" y="200">
+    <properties>
+      <ustring>Penitentiary</ustring>
+    </properties>
+  </text>
+  
+  <text id="byblos" x="62" y="450">
+    <properties>
+      <ustring>Byblos</ustring>
+    </properties>
+  </text>
+  
+  <text id="safari" x="450" y="450">
+    <properties>
+      <ustring>Safari</ustring>
+    </properties>
+  </text>
+  
+  <text id="load-game" x="0" y="0">
+    <properties>
+      <ustring>Lataa peli</ustring>
+    </properties>
+  </text>
+  
+  <text id="keyboard" x="0" y="0">
+    <properties>
+      <ustring>Näppäimistö</ustring>
+    </properties>
+  </text>
+  
+  <text id="left" x="96" y="110">
+    <properties>
+      <ustring>Vasen..........</ustring>
+    </properties>
+  </text>
+  
+  <text id="right" x="0" y="0">
+    <properties>
+      <ustring>Oikea..........</ustring>
+    </properties>
+  </text>
+  
+  <text id="up" x="0" y="0">
+    <properties>
+      <ustring>Ylös...........</ustring>
+    </properties>
+  </text>
+  
+  <text id="down" x="0" y="0">
+    <properties>
+      <ustring>Alas...........</ustring>
+    </properties>
+  </text>
+  
+  <text id="take" x="0" y="0">
+    <properties>
+      <ustring>Kanna..........</ustring>
+    </properties>
+  </text>
+  
+  <text id="jump" x="0" y="0">
+    <properties>
+      <ustring>Hyppy..........</ustring>
+    </properties>
+  </text>
+  
+  <text id="shoot" x="0" y="0">
+    <properties>
+      <ustring>Ammu...........</ustring>
+    </properties>
+  </text>
+  
+  <text id="take-jump" x="0" y="0">
+    <properties>
+      <ustring>Kanna+Hyppy....</ustring>
+    </properties>
+  </text>
+  
+  <text id="swap" x="0" y="0">
+    <properties>
+      <ustring>Vaihto.........</ustring>
+    </properties>
+  </text>
+  
+  <text id="halt" x="0" y="0">
+    <properties>
+      <ustring>Tauko..........</ustring>
+    </properties>
+  </text>
+  
+  <text id="confirm-quit" x="0" y="142">
+    <properties font="big" color="cyan">
+      <ustring>Paina Esc lopettaaksesi pelin</ustring>
+    </properties>
+  </text>
+  
+  <text id="confirm-resume" x="0" y="184">
+    <properties font="big" color="yellow">
+      <ustring>Paina jotain muuta näppäintä</ustring>
+    </properties>
+    <properties font="big" color="yellow">
+      <ustring>aloittaaksesi uudestaan</ustring>
+    </properties>
+  </text>
+  
+  <text id="audio" x="0" y="0">
+    <properties>
+      <ustring>Äänet</ustring>
+    </properties>
+  </text>
+  
+  <text id="soundfx" x="96" y="210">
+    <properties>
+      <ustring>Ääniefektit........</ustring>
+    </properties>
+  </text>
+  
+  <text id="music" x="0" y="0">
+    <properties>
+      <ustring>Musiikki...........</ustring>
+    </properties>
+  </text>
+  
+  <text id="volume" x="0" y="0">
+    <properties>
+      <ustring>Äänenvoimakkuus</ustring>
+    </properties>
+  </text>
+  
+  <text id="credits" x="0" y="0">
+    <properties>
+      <ustring>Tekijät</ustring>
+    </properties>
+  </text>
+  
+  <text id="credits-text" x="0" y="480">
+    <properties font="big" color="multicolor">
+      <ustring>Alkuperäinen peli</ustring>
+    </properties>
+    <properties font="big" color="white">
+      <ustring>Jon Ritman</ustring>
+    </properties>
+    <properties font="big" color="white">
+      <ustring>Bernie Drummond</ustring>
+    </properties>
+    <properties font="big" color="white">
+      <ustring>Guy Stevens</ustring>
+    </properties>
+    <properties font="big" color="white">
+      <ustring>F. David Thorpe</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="big" color="multicolor">
+      <ustring>Ohjelmointi</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Jorge Rodríguez Santos</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="big" color="multicolor">
+      <ustring>Grafiikkasuunnittelu</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Davit Masiá</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Xavi Colomé</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Ricardo Oyón</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="big" color="multicolor">
+      <ustring>Musiikki</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Chiastic</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Ben Duckworth</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Octavio Molano</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="big" color="multicolor">
+      <ustring>Ääniefektit</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Jorge Rodríguez Santos</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Octavio Molano</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Xavi Colomé</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="big" color="multicolor">
+      <ustring>Beta-testaajat</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Xavi Colomé</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Paco Santoyo López</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Santiago Acha Jiménez</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="big" color="multicolor">
+      <ustring>Afrikaansinkielinen versio</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Hendrik Bezuidenhout</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="big" color="multicolor">
+      <ustring>Asturiankielinen versio</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Xavi García</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="big" color="multicolor">
+      <ustring>Baskimaankielinen versio</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Xavi Colomé</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="big" color="multicolor">
+      <ustring>Englanninkielinen versio</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Enrique García</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="big" color="multicolor">
+      <ustring>Galiciankielinen versio</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Rubén Sánchez</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="big" color="multicolor">
+      <ustring>Italiankielinen versio</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Claudio Vicari</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="big" color="multicolor">
+      <ustring>Kataloniankielinen versio</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Efrén García</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Xavi Colomé</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="big" color="multicolor">
+      <ustring>Kroatiankielinen versio</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Jakiša Tomić</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="big" color="multicolor">
+      <ustring>Latinankielinen versio</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Rosa Roca</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="big" color="multicolor">
+      <ustring>Puolankielinen versio</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Marcin Drews</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="big" color="multicolor">
+      <ustring>Portugalinkielinen versio (Brasilia)</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Fábio Oliveira</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="big" color="multicolor">
+      <ustring>Portugalinkielinen versio (Portugali)</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Filipe Silva</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="big" color="multicolor">
+      <ustring>Ranskankielinen versio</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Jérôme Ginestet</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="big" color="multicolor">
+      <ustring>Saksankielinen versio</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Beatrix Scharpenberg</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="big" color="multicolor">
+      <ustring>Serbiankielinen versio</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Milos Babović</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="big" color="multicolor">
+      <ustring>Slovakiankielinen versio</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Vlado Makys</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="big" color="multicolor">
+      <ustring>Suomenkielinen versio</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Mikko Järvinen</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="big" color="multicolor">
+      <ustring>Tanskankielinen versio</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Peter Behrend</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Jacob Gunness</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="big" color="multicolor">
+      <ustring>Valenciankielinen versio</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Davit Masiá</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="big" color="multicolor">
+      <ustring>Venäjänkielinen versio</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Dmitrii Sibarov</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="big" color="multicolor">
+      <ustring>Erityiskiitokset</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Ignacio Pérez Gil</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Marcos Morales</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Nancy Loor Zambrano</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Remakes Zone</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Computer Emuzone</ustring>
+    </properties>
+    <properties font="regular" color="orange">
+      <ustring>Ja</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Alberto Rodríguez Santos</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Arturo Tuya</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Benito Nemesio</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Caleb</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Carlos Hernández</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Carlos Herrero</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Craig Laycock</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Dan Harper</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Darryl LeCount</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>David C.</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Fabián Álvarez</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>George Wood</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Henri</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Ivan García</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>James Manners</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Javi "Objeto"</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Jérôme M.</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Jorge Mateo</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Jorge Moreno</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>José Luis Sáez</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Juan Luis Martínez</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Luis Cargnelutti</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Luke Barlow</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Luke Tweedy</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Marcial</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Miguel Ángel Espinosa</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Pedro J. Guillén</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>ReuWen</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Rob</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Scott Wightman</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Simon Burgess</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Tony Brazil</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Z80 User</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+  </text>
+  
+  <text id="exit" x="0" y="0">
+    <properties>
+      <ustring>Poistu</ustring>
+    </properties>
+  </text>
+  
+  <text id="save-game" x="0" y="57">
+    <properties font="big" color="orange">
+      <ustring>Reinkarnaatiokala antaa sinulle</ustring>
+    </properties>
+    <properties font="big" color="orange">
+      <ustring>mahdollisuuden tallentaa peli</ustring>
+    </properties>
+    <properties font="big" color="orange">
+      <ustring>painamalla F2</ustring>
+    </properties>
+  </text>
+  
+  <text id="empty-slot" x="0" y="0">
+    <properties>
+      <ustring>Saatavissa</ustring>
+    </properties>
+  </text>
+  
+  <text id="score" x="0" y="300">
+    <properties>
+      <ustring>Pisteet:</ustring>
+    </properties>
+  </text>
+  
+  <text id="explored-rooms" x="0" y="340">
+    <properties>
+      <ustring>Tutkittu %d huonetta</ustring>
+    </properties>
+  </text>
+  
+  <text id="liberated-planets" x="0" y="380">
+    <properties>
+      <ustring>Vapautettu %d planeettaa</ustring>
+    </properties>
+  </text>
+  
+  <text id="rooms" x="0" y="0">
+    <properties>
+      <ustring>huonetta</ustring>
+    </properties>
+  </text>
+  
+  <text id="planets" x="0" y="0">
+    <properties>
+      <ustring>planeettaa</ustring>
+    </properties>
+  </text>
+  
+  <text id="final-text" x="0" y="157">
+    <properties font="big" color="yellow">
+      <ustring>Sankaruuttasi ylistetään ja väki</ustring>
+    </properties>
+    <properties font="big" color="yellow">
+      <ustring>huutaa nimeäsi</ustring>
+    </properties>
+    <properties font="regular" color="cyan">
+      <ustring>Tätä tietä, rakas ystävä. Kaksi</ustring>
+    </properties>
+    <properties font="regular" color="cyan">
+      <ustring>sankariamme teki ehdottomasti</ustring>
+    </properties>
+    <properties font="regular" color="cyan">
+      <ustring>lopun Blacktoothin Keisarin</ustring>
+    </properties>
+    <properties font="regular" color="cyan">
+      <ustring>tyranniasta</ustring>
+    </properties>
+  </text>
+  
+  <text id="dummy" x="0" y="180">
+    <properties>
+      <ustring>Tumpelo</ustring>
+    </properties>
+  </text>
+  
+  <text id="novice" x="0" y="180">
+    <properties>
+      <ustring>Aloittelija</ustring>
+    </properties>
+  </text>
+  
+  <text id="spy" x="0" y="180">
+    <properties>
+      <ustring>Vakooja</ustring>
+    </properties>
+  </text>
+  
+  <text id="master-spy" x="0" y="180">
+    <properties>
+      <ustring>Mestarivakooja</ustring>
+    </properties>
+  </text>
+  
+  <text id="hero" x="0" y="180">
+    <properties>
+      <ustring>Sankari</ustring>
+    </properties>
+  </text>
+  
+  <text id="emperor" x="0" y="180">
+    <properties>
+      <ustring>Keisari</ustring>
+    </properties>
+  </text>
+  
+  <text id="jon" x="64" y="22">
+    <properties>
+      <ustring>JON</ustring>
+    </properties>
+  </text>
+  
+  <text id="ritman" x="40" y="52">
+    <properties>
+      <ustring>RITMAN</ustring>
+    </properties>
+  </text>
+  
+  <text id="bernie" x="500" y="22">
+    <properties>
+      <ustring>BERNIE</ustring>
+    </properties>
+  </text>
+  
+  <text id="drummond" x="483" y="52">
+    <properties>
+      <ustring>DRUMMOND</ustring>
+    </properties>
+  </text>
+  
+  <text id="ocean" x="56" y="440">
+    <properties>
+      <ustring>{ 1987 Ocean Software Ltd.</ustring>
+    </properties>
+  </text>
+  
+  <text id="jorge" x="56" y="410">
+    <properties>
+      <ustring>{ 2009 Jorge Rodríguez Santos</ustring>
+    </properties>
+  </text>
+  
+</language>

@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:element name="configuration" type="ConfigurationXML"/>
+  <xsd:complexType name="ConfigurationXML">
+    <xsd:sequence>
+      <xsd:element name="language" type="xsd:string"/>
+      <xsd:element name="keyboard">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="left" type="xsd:int"/>
+            <xsd:element name="right" type="xsd:int"/>
+            <xsd:element name="up" type="xsd:int"/>
+            <xsd:element name="down" type="xsd:int"/>
+            <xsd:element name="take" type="xsd:int"/>
+            <xsd:element name="jump" type="xsd:int"/>
+            <xsd:element name="shoot" type="xsd:int"/>
+            <xsd:element name="takeandjump" type="xsd:int"/>
+            <xsd:element name="swap" type="xsd:int"/>
+            <xsd:element name="halt" type="xsd:int"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="volume">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="fx" type="xsd:int"/>
+            <xsd:element name="music" type="xsd:int"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

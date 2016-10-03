@@ -1,0 +1,3543 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<items xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="items.xsd">
+
+  <!-- Brick #1 -->
+  <item label="1">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0.032</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/item/brick1.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>56</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/brick1-shadows.bmp">
+      <shadowWidth>64</shadowWidth>
+      <shadowHeight>31</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Vulcano -->
+  <item label="2">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>true</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/item/vulcano.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>56</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/vulcano-shadows.bmp">
+      <shadowWidth>64</shadowWidth>
+      <shadowHeight>31</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+  </item>
+
+  <!-- Spikes -->
+  <item label="3">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>true</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/item/spikes.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>56</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/spikes-shadows.bmp">
+      <shadowWidth>64</shadowWidth>
+      <shadowHeight>31</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Toaster -->
+  <item label="4">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>2</directionFrames>
+    <mortal>true</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/item/toaster.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>56</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/toaster-shadows.bmp">
+      <shadowWidth>64</shadowWidth>
+      <shadowHeight>31</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Conveyor belt -->
+  <item label="5">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>4</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0.040</speed>
+    <bitmap file="gfx/item/conveyor-belt.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>56</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/conveyor-belt-shadows.bmp">
+      <shadowWidth>64</shadowWidth>
+      <shadowHeight>31</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Book -->
+  <item label="6">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>2</directionFrames>
+    <mortal>false</mortal>
+    <weight>0.020</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0.040</speed>
+    <bitmap file="gfx/item/book.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>56</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/book-shadows.bmp">
+      <shadowWidth>64</shadowWidth>
+      <shadowHeight>31</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Stool -->
+  <item label="7">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>4</directionFrames>
+    <mortal>false</mortal>
+    <weight>0.020</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0.040</speed>
+    <bitmap file="gfx/item/stool.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>56</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/stool-shadows.bmp">
+      <shadowWidth>64</shadowWidth>
+      <shadowHeight>31</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Puppy -->
+  <item label="8">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>2</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/item/puppy.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>56</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/puppy-shadows.bmp">
+      <shadowWidth>64</shadowWidth>
+      <shadowHeight>31</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Sandwich -->
+  <item label="9">
+    <widthX>15</widthX>
+    <widthY>15</widthY>
+    <height>24</height>
+    <directionFrames>4</directionFrames>
+    <mortal>false</mortal>
+    <weight>0.010</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0.040</speed>
+    <bitmap file="gfx/item/sandwich.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>56</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/sandwich-shadows.bmp">
+      <shadowWidth>64</shadowWidth>
+      <shadowHeight>31</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+  </item>
+
+  <!-- Switch -->
+  <item label="10">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/item/switch.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>48</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/switch-shadows.bmp">
+      <shadowWidth>48</shadowWidth>
+      <shadowHeight>25</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+    <frame>1</frame>
+  </item>
+  
+  <!-- Brick #2 -->
+  <item label="11">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0.032</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/item/brick2.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>56</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/brick2-shadows.bmp">
+      <shadowWidth>64</shadowWidth>
+      <shadowHeight>31</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Bars N-S -->
+  <item label="12">
+    <widthX>8</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/item/bars-ns.bmp">
+      <frameWidth>42</frameWidth>
+      <frameHeight>44</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/bars-ns-shadows.bmp">
+      <shadowWidth>40</shadowWidth>
+      <shadowHeight>22</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Bars E-W -->
+  <item label="80">
+    <widthX>16</widthX>
+    <widthY>8</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/item/bars-ew.bmp">
+      <frameWidth>42</frameWidth>
+      <frameHeight>44</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/bars-ew-shadows.bmp">
+      <shadowWidth>40</shadowWidth>
+      <shadowHeight>22</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Drum -->
+  <item label="13">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0.010</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0.040</speed>
+    <bitmap file="gfx/item/drum.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>48</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/drum-shadows.bmp">
+      <shadowWidth>48</shadowWidth>
+      <shadowHeight>25</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Portable brick -->
+  <item label="14">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0.010</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0.040</speed>
+    <bitmap file="gfx/item/portable-brick.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>48</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/portable-brick-shadows.bmp">
+      <shadowWidth>48</shadowWidth>
+      <shadowHeight>25</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Donuts -->
+  <item label="15">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>24</height>
+    <directionFrames>2</directionFrames>
+    <mortal>false</mortal>
+    <weight>0.010</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/item/donuts.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>48</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/donuts-shadows.bmp">
+      <shadowWidth>48</shadowWidth>
+      <shadowHeight>25</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Rabbit (extra life) -->
+  <item label="16">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>24</height>
+    <directionFrames>2</directionFrames>
+    <mortal>false</mortal>
+    <weight>0.010</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0.040</speed>
+    <bitmap file="gfx/item/rabbit-gold.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>48</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/rabbit-shadows.bmp">
+      <shadowWidth>48</shadowWidth>
+      <shadowHeight>25</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Rabbit (high jump) -->
+  <item label="17">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>24</height>
+    <directionFrames>2</directionFrames>
+    <mortal>false</mortal>
+    <weight>0.010</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0.040</speed>
+    <bitmap file="gfx/item/rabbit-bronze.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>48</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/rabbit-shadows.bmp">
+      <shadowWidth>48</shadowWidth>
+      <shadowHeight>25</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Rabbit (high speed) -->
+  <item label="18">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>24</height>
+    <directionFrames>2</directionFrames>
+    <mortal>false</mortal>
+    <weight>0.010</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0.040</speed>
+    <bitmap file="gfx/item/rabbit-bronze.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>48</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/rabbit-shadows.bmp">
+      <shadowWidth>48</shadowWidth>
+      <shadowHeight>25</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Rabbit (shield) -->
+  <item label="19">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>24</height>
+    <directionFrames>2</directionFrames>
+    <mortal>false</mortal>
+    <weight>0.010</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0.040</speed>
+    <bitmap file="gfx/item/rabbit-silver.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>48</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/rabbit-shadows.bmp">
+      <shadowWidth>48</shadowWidth>
+      <shadowHeight>25</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Crown -->
+  <item label="20">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0.010</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0.040</speed>
+    <bitmap file="gfx/item/crown.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>48</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/crown-shadows.bmp">
+      <shadowWidth>48</shadowWidth>
+      <shadowHeight>25</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+  </item>
+
+  <!-- Bomb -->
+  <item label="21">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>true</mortal>
+    <weight>0.010</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0.020</speed>
+    <bitmap file="gfx/item/bomb.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>48</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/bomb-shadows.bmp">
+      <shadowWidth>48</shadowWidth>
+      <shadowHeight>25</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Portable brick #2 -->
+  <item label="22">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0.010</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0.040</speed>
+    <bitmap file="gfx/item/portable-brick2.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>48</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/portable-brick2-shadows.bmp">
+      <shadowWidth>48</shadowWidth>
+      <shadowHeight>25</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Ball -->
+  <item label="23">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0.010</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0.020</speed>
+    <bitmap file="gfx/item/ball.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>48</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/ball-shadows.bmp">
+      <shadowWidth>48</shadowWidth>
+      <shadowHeight>25</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Remote control -->
+  <item label="24">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0.010</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/item/remote-control.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>48</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/remote-control-shadows.bmp">
+      <shadowWidth>48</shadowWidth>
+      <shadowHeight>25</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Brick cylinder -->
+  <item label="25">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/item/cylinder.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>48</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Horn -->
+  <item label="26">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>28</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0.010</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/item/horn.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>52</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Imperial guard head -->
+  <item label="27">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>24</height>
+    <directionFrames>4</directionFrames>
+    <mortal>true</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0.040</speed>
+    <bitmap file="gfx/item/imperial-guard-head.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>48</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Elephant head -->
+  <item label="28">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>24</height>
+    <directionFrames>4</directionFrames>
+    <mortal>true</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/item/elephant-head.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>48</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Monkey head -->
+  <item label="29">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>24</height>
+    <directionFrames>4</directionFrames>
+    <mortal>true</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/item/monkey-head.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>48</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Handbag -->
+  <item label="30">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0.010</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/item/handbag.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>48</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Elevator -->
+  <item label="31">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0.100</framesDelay>
+    <speed>0.020</speed>
+    <bitmap file="gfx/item/elevator.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>48</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/elevator-shadows.bmp">
+      <shadowWidth>48</shadowWidth>
+      <shadowHeight>25</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+    <frame>1</frame>
+    <frame>2</frame>
+    <frame>3</frame>
+  </item>
+  
+  <!-- Helicopter bug -->
+  <item label="32">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>true</mortal>
+    <weight>0.010</weight>
+    <framesDelay>0.100</framesDelay>
+    <speed>0.030</speed>
+    <bitmap file="gfx/item/helicopter-bug.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>48</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/helicopter-bug-shadows.bmp">
+      <shadowWidth>48</shadowWidth>
+      <shadowHeight>25</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+    <frame>1</frame>
+    <frame>2</frame>
+    <frame>3</frame>
+  </item>
+  
+  <!-- Reincarnation Fish -->
+  <item label="33">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0.010</weight>
+    <framesDelay>0.200</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/item/fish.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>48</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/fish-shadows.bmp">
+      <shadowWidth>48</shadowWidth>
+      <shadowHeight>25</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+    <frame>1</frame>
+  </item>
+  
+  <!-- Siren -->
+  <item label="34">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>true</mortal>
+    <weight>0.010</weight>
+    <framesDelay>0.040</framesDelay>
+    <speed>0.040</speed>
+    <bitmap file="gfx/item/siren.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>48</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/siren-shadows.bmp">
+      <shadowWidth>48</shadowWidth>
+      <shadowHeight>25</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+    <frame>1</frame>
+  </item>
+  
+  <!-- Teleport -->
+  <item label="35">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0.150</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/item/teleport.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>56</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/teleport-shadows.bmp">
+      <shadowWidth>64</shadowWidth>
+      <shadowHeight>31</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+    <frame>1</frame>
+  </item>
+  
+  <!-- Second Teleport -->
+  <item label="83">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0.150</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/item/teleport.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>56</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/teleport-shadows.bmp">
+      <shadowWidth>64</shadowWidth>
+      <shadowHeight>31</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+    <frame>1</frame>
+  </item>
+  
+  <!-- Turtle -->
+  <item label="36">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>24</height>
+    <directionFrames>4</directionFrames>
+    <mortal>true</mortal>
+    <weight>0.010</weight>
+    <framesDelay>0.150</framesDelay>
+    <speed>0.040</speed>
+    <bitmap file="gfx/item/turtle.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>48</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/turtle-shadows.bmp">
+      <shadowWidth>48</shadowWidth>
+      <shadowHeight>25</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+    <frame>1</frame>
+  </item>
+  
+  <!-- Trampoline -->
+  <item label="37">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0.010</weight>
+    <framesDelay>0.080</framesDelay>
+    <speed>0.040</speed>
+    <bitmap file="gfx/item/trampoline.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>56</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/trampoline-shadows.bmp">
+      <shadowWidth>48</shadowWidth>
+      <shadowHeight>25</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+    <frame>1</frame>
+  </item>
+  
+  <!-- Bubbles -->
+  <item label="38">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0.130</framesDelay>
+    <speed>0.010</speed>
+    <bitmap file="gfx/item/bubbles.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>48</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/bubbles-shadows.bmp">
+      <shadowWidth>48</shadowWidth>
+      <shadowHeight>25</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+    <frame>1</frame>
+    <frame>2</frame>
+    <frame>3</frame>
+    <frame>4</frame>
+    <frame>5</frame>
+  </item>
+  
+  <!-- Double Bubbles -->
+  <item label="82">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>48</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0.130</framesDelay>
+    <speed>0.010</speed>
+    <bitmap file="gfx/item/double-bubbles.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>80</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/bubbles-shadows.bmp">
+      <shadowWidth>48</shadowWidth>
+      <shadowHeight>25</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+    <frame>1</frame>
+    <frame>2</frame>
+    <frame>3</frame>
+    <frame>4</frame>
+    <frame>5</frame>
+  </item>
+  
+  <!-- Mortal cap -->
+  <item label="39">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>true</mortal>
+    <weight>0.010</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0.020</speed>
+    <bitmap file="gfx/item/cap.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>48</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/cap-shadows.bmp">
+      <shadowWidth>48</shadowWidth>
+      <shadowHeight>25</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Cap -->
+  <item label="81">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0.010</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0.020</speed>
+    <bitmap file="gfx/item/cap.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>48</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/cap-shadows.bmp">
+      <shadowWidth>48</shadowWidth>
+      <shadowHeight>25</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Big head robot -->
+  <item label="40">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>48</height>
+    <directionFrames>4</directionFrames>
+    <mortal>true</mortal>
+    <weight>0.010</weight>
+    <framesDelay>0.150</framesDelay>
+    <speed>0.040</speed>
+    <bitmap file="gfx/item/big-head-robot.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>80</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/big-head-robot-shadows.bmp">
+      <shadowWidth>48</shadowWidth>
+      <shadowHeight>25</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Elephant -->
+  <item label="41">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>48</height>
+    <directionFrames>4</directionFrames>
+    <mortal>true</mortal>
+    <weight>0.010</weight>
+    <framesDelay>0.150</framesDelay>
+    <speed>0.040</speed>
+    <bitmap file="gfx/item/elephant.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>80</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/elephant-shadows.bmp">
+      <shadowWidth>48</shadowWidth>
+      <shadowHeight>25</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Monkey -->
+  <item label="42">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>48</height>
+    <directionFrames>4</directionFrames>
+    <mortal>true</mortal>
+    <weight>0.010</weight>
+    <framesDelay>0.150</framesDelay>
+    <speed>0.040</speed>
+    <bitmap file="gfx/item/monkey.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>80</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/monkey-shadows.bmp">
+      <shadowWidth>48</shadowWidth>
+      <shadowHeight>25</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Diver -->
+  <item label="43">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>48</height>
+    <directionFrames>4</directionFrames>
+    <mortal>true</mortal>
+    <weight>0.010</weight>
+    <framesDelay>0.150</framesDelay>
+    <speed>0.040</speed>
+    <bitmap file="gfx/item/diver.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>80</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/diver-shadows.bmp">
+      <shadowWidth>48</shadowWidth>
+      <shadowHeight>25</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Bubble robot -->
+  <item label="44">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>48</height>
+    <directionFrames>1</directionFrames>
+    <mortal>true</mortal>
+    <weight>0.010</weight>
+    <framesDelay>0.100</framesDelay>
+    <speed>0.040</speed>
+    <bitmap file="gfx/item/bubble-robot.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>80</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/bubble-robot-shadows.bmp">
+      <shadowWidth>48</shadowWidth>
+      <shadowHeight>25</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+    <frame>1</frame>
+    <frame>2</frame>
+    <frame>3</frame>
+  </item>
+  
+  <!-- Imperial guard -->
+  <item label="45">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>48</height>
+    <directionFrames>4</directionFrames>
+    <mortal>true</mortal>
+    <weight>0</weight>
+    <framesDelay>0.100</framesDelay>
+    <speed>0.040</speed>
+    <bitmap file="gfx/item/imperial-guard.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>80</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/imperial-guard-shadows.bmp">
+      <shadowWidth>48</shadowWidth>
+      <shadowHeight>25</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+    <frame>1</frame>
+    <frame>2</frame>
+    <frame>3</frame>
+  </item>
+  
+  <!-- Charles -->
+  <item label="46">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>48</height>
+    <directionFrames>4</directionFrames>
+    <mortal>false</mortal>
+    <weight>0.010</weight>
+    <framesDelay>0.150</framesDelay>
+    <speed>0.040</speed>
+    <bitmap file="gfx/item/robot.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>80</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/robot-shadows.bmp">
+      <shadowWidth>48</shadowWidth>
+      <shadowHeight>25</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Dead Fish -->
+  <item label="47">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>true</mortal>
+    <weight>0.010</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/item/fish.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>48</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/fish-shadows.bmp">
+      <shadowWidth>48</shadowWidth>
+      <shadowHeight>25</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Head -->
+  <item label="52">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>23</height>
+    <directionFrames>4</directionFrames>
+    <mortal>false</mortal>
+    <weight>0.020</weight>
+    <framesDelay>0.090</framesDelay>
+    <speed>0.040</speed>
+    <bitmap file="gfx/item/head.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>48</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/head-shadows.bmp">
+      <shadowWidth>48</shadowWidth>
+      <shadowHeight>25</shadowHeight>
+    </shadow>
+    <extraFrames>6</extraFrames>
+    <frame>0</frame>
+    <frame>2</frame>
+    <frame>1</frame>
+    <frame>2</frame>
+  </item>
+  
+  <!-- Heels -->
+  <item label="53">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>24</height>
+    <directionFrames>4</directionFrames>
+    <mortal>false</mortal>
+    <weight>0.010</weight>
+    <framesDelay>0.090</framesDelay>
+    <speed>0.020</speed>
+    <bitmap file="gfx/item/heels.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>48</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/heels-shadows.bmp">
+      <shadowWidth>48</shadowWidth>
+      <shadowHeight>25</shadowHeight>
+    </shadow>
+    <extraFrames>3</extraFrames>
+    <frame>0</frame>
+    <frame>1</frame>
+    <frame>0</frame>
+    <frame>2</frame>
+  </item>
+  
+  <!-- Head over Heels -->
+  <item label="55">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>47</height>
+    <directionFrames>4</directionFrames>
+    <mortal>false</mortal>
+    <weight>0.020</weight>
+    <framesDelay>0.100</framesDelay>
+    <speed>0.020</speed>
+    <bitmap file="gfx/item/headoverheels.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>80</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/headoverheels-shadows.bmp">
+      <shadowWidth>48</shadowWidth>
+      <shadowHeight>25</shadowHeight>
+    </shadow>
+    <extraFrames>8</extraFrames>
+    <frame>0</frame>
+    <frame>1</frame>
+    <frame>2</frame>
+    <frame>3</frame>
+  </item>
+  
+  <!-- Throne guard -->
+  <item label="66">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>48</height>
+    <directionFrames>1</directionFrames>
+    <mortal>true</mortal>
+    <weight>0.010</weight>
+    <framesDelay>0.100</framesDelay>
+    <speed>0.020</speed>
+    <bitmap file="gfx/item/throne-guard.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>80</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/throne-guard-shadows.bmp">
+      <shadowWidth>48</shadowWidth>
+      <shadowHeight>25</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+    <frame>1</frame>
+    <frame>2</frame>
+    <frame>3</frame>
+  </item>
+  
+  <!-- Emperor -->
+  <item label="84">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>true</mortal>
+    <weight>0.010</weight>
+    <framesDelay>0.200</framesDelay>
+    <speed>0.020</speed>
+    <bitmap file="gfx/item/emperor.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>48</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/emperor-shadows.bmp">
+      <shadowWidth>48</shadowWidth>
+      <shadowHeight>25</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+    <frame>1</frame>
+  </item>
+  
+  <!-- Static Head -->
+  <item label="85">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>24</height>
+    <directionFrames>2</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/item/freedonian-head.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>48</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/freedonian-head-shadows.bmp">
+      <shadowWidth>48</shadowWidth>
+      <shadowHeight>25</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Static Heels -->
+  <item label="86">
+    <widthX>12</widthX>
+    <widthY>12</widthY>
+    <height>24</height>
+    <directionFrames>2</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/item/freedonian-heels.bmp">
+      <frameWidth>48</frameWidth>
+      <frameHeight>48</frameHeight>
+    </bitmap>
+    <shadow file="gfx/item/freedonian-heels-shadows.bmp">
+      <shadowWidth>48</shadowWidth>
+      <shadowHeight>25</shadowHeight>
+    </shadow>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Jail Wall X -->
+  <item label="200">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>101</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/jail/jail-wall-x.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>117</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+    
+  <!-- Jail Wall Y -->
+  <item label="201">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>101</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/jail/jail-wall-y.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>117</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+    
+  <!-- Jail North Shaft -->
+  <item label="202">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/jail/jail-column-shaft-north.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>39</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+    
+  <!-- Jail North Capital -->
+  <item label="203">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/jail/jail-column-capital-north.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>49</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+    
+  <!-- Jail East Shaft -->
+  <item label="204">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/jail/jail-column-shaft-east.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>39</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+    
+  <!-- Jail East Capital -->
+  <item label="205">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/jail/jail-column-capital-east.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>49</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+    
+  <!-- Jail South Capital -->
+  <item label="206">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/jail/jail-column-capital-south.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>56</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+    
+  <!-- Jail West Capital -->
+  <item label="207">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/jail/jail-column-capital-west.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>56</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Blacktooth Wall X (1) -->
+  <item label="210">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>99</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/blacktooth/blacktooth-wall-x-1.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>115</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Blacktooth Wall Y (1) -->
+  <item label="211">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>99</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/blacktooth/blacktooth-wall-y-1.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>115</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Blacktooth Wall X (2) -->
+  <item label="212">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>99</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/blacktooth/blacktooth-wall-x-2.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>115</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Blacktooth Wall Y (2) -->
+  <item label="213">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>99</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/blacktooth/blacktooth-wall-y-2.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>115</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Blacktooth Wall X (3) -->
+  <item label="214">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>99</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/blacktooth/blacktooth-wall-x-3.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>115</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Blacktooth Wall Y (3) -->
+  <item label="215">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>99</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/blacktooth/blacktooth-wall-y-3.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>115</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Blacktooth North Shaft -->
+  <item label="216">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/blacktooth/blacktooth-column-shaft-north.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>39</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Blacktooth North Capital -->
+  <item label="217">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/blacktooth/blacktooth-column-capital-north.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>49</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Blacktooth East Shaft -->
+  <item label="218">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/blacktooth/blacktooth-column-shaft-east.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>39</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Blacktooth East Capital -->
+  <item label="219">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/blacktooth/blacktooth-column-capital-east.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>49</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Blacktooth South Capital -->
+  <item label="220">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/blacktooth/blacktooth-column-capital-south.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>56</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Blacktooth West Capital -->
+  <item label="221">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/blacktooth/blacktooth-column-capital-west.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>56</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Market Wall X (1) -->
+  <item label="230">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>100</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/market/market-wall-x-1.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>116</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Market Wall Y (1) -->
+  <item label="231">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>100</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/market/market-wall-y-1.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>116</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+    
+  <!-- Market Wall X (2) -->
+  <item label="232">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>100</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/market/market-wall-x-2.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>116</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+    
+  <!-- Market Wall Y (2) -->
+  <item label="233">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>100</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/market/market-wall-y-2.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>116</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Market Wall X (3) -->
+  <item label="234">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>100</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/market/market-wall-x-3.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>116</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+    
+  <!-- Market Wall Y (3) -->
+  <item label="235">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>100</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/market/market-wall-y-3.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>116</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Market North Shaft -->
+  <item label="236">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/market/market-column-shaft-north.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>39</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Market North Capital -->
+  <item label="237">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/market/market-column-capital-north.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>49</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Market East Shaft -->
+  <item label="238">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/market/market-column-shaft-east.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>39</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Market East Capital -->
+  <item label="239">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/market/market-column-capital-east.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>49</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Market South Capital -->
+  <item label="240">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/market/market-column-capital-south.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>56</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Market West Capital -->
+  <item label="241">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/market/market-column-capital-west.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>56</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Moon base Wall X (1) -->
+  <item label="250">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>99</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/moonbase/moonbase-wall-x-1.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>115</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Moon base Wall Y (1) -->
+  <item label="251">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>99</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/moonbase/moonbase-wall-y-1.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>115</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Moon base Wall X (2) -->
+  <item label="252">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>99</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/moonbase/moonbase-wall-x-2.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>115</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Moon base Wall Y (2) -->
+  <item label="253">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>99</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/moonbase/moonbase-wall-y-2.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>115</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Moon base Wall X (3) -->
+  <item label="254">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>99</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/moonbase/moonbase-wall-x-3.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>115</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Moon base Wall Y (3) -->
+  <item label="255">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>99</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/moonbase/moonbase-wall-y-3.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>115</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Moon base Wall X (4) -->
+  <item label="256">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>99</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/moonbase/moonbase-wall-x-4.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>115</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Moon base Wall Y (4) -->
+  <item label="257">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>99</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/moonbase/moonbase-wall-y-4.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>115</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Moon base North Shaft -->
+  <item label="258">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/moonbase/moonbase-column-shaft-north.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>39</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Moon base Capital North -->
+  <item label="259">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/moonbase/moonbase-column-capital-north.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>49</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Moon base East Shaft -->
+  <item label="260">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/moonbase/moonbase-column-shaft-east.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>39</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Moon base Capital East -->
+  <item label="261">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/moonbase/moonbase-column-capital-east.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>49</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Moon base Capital South -->
+  <item label="262">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/moonbase/moonbase-column-capital-south.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>56</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Moon base Capital West -->
+  <item label="263">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/moonbase/moonbase-column-capital-west.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>56</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Byblos Wall X (1) -->
+  <item label="270">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>100</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/byblos/byblos-wall-x-1.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>116</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Byblos Wall Y (1) -->
+  <item label="271">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>100</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/byblos/byblos-wall-y-1.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>116</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Byblos Wall X (2) -->
+  <item label="272">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>100</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/byblos/byblos-wall-x-2.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>116</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Byblos Wall Y (2) -->
+  <item label="273">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>100</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/byblos/byblos-wall-y-2.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>116</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Byblos Shaft North -->
+  <item label="274">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/byblos/byblos-column-shaft-north.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>39</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Byblos Capital North 275-->
+  <item label="275">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/byblos/byblos-column-capital-north.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>49</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Byblos Shaft East -->
+  <item label="276">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/byblos/byblos-column-shaft-east.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>39</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Byblos Capital East -->
+  <item label="277">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/byblos/byblos-column-capital-east.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>49</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Byblos Capital South -->
+  <item label="278">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/byblos/byblos-column-capital-south.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>56</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Byblos Capital West -->
+  <item label="279">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/byblos/byblos-column-capital-west.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>56</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Egyptus Wall X (1) -->
+  <item label="280">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>100</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/egyptus/egyptus-wall-x-1.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>116</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Egyptus Wall Y (1) -->
+  <item label="281">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>100</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/egyptus/egyptus-wall-y-1.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>116</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Egyptus Wall X (2) -->
+  <item label="282">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>99</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/egyptus/egyptus-wall-x-2.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>115</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Egyptus Wall Y (2) -->
+  <item label="283">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>99</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/egyptus/egyptus-wall-y-2.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>115</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Egyptus Shaft North -->
+  <item label="284">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/egyptus/egyptus-column-shaft-north.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>39</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Egyptus Capital North -->
+  <item label="285">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/egyptus/egyptus-column-capital-north.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>49</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Egyptus Shaft East -->
+  <item label="286">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/egyptus/egyptus-column-shaft-east.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>39</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Egyptus Capital East 287-->
+  <item label="287">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/egyptus/egyptus-column-capital-east.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>49</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Egyptus Capital South -->
+  <item label="288">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/egyptus/egyptus-column-capital-south.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>56</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Egyptus Capital West -->
+  <item label="289">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/egyptus/egyptus-column-capital-west.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>56</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Penitentiary Wall X (1) -->
+  <item label="290">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>99</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/penitentiary/penitentiary-wall-x-1.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>115</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Penitentiary Wall Y (1) -->
+  <item label="291">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>99</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/penitentiary/penitentiary-wall-y-1.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>115</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Penitentiary Wall X (2) -->
+  <item label="292">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>99</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/penitentiary/penitentiary-wall-x-2.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>115</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Penitentiary Wall Y (2) -->
+  <item label="293">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>99</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/penitentiary/penitentiary-wall-y-2.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>115</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Penitentiary Shaft North -->
+  <item label="294">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/penitentiary/penitentiary-column-shaft-north.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>39</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Penitentiary Capital North -->
+  <item label="295">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/penitentiary/penitentiary-column-capital-north.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>49</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Penitentiary Shaft East -->
+  <item label="296">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/penitentiary/penitentiary-column-shaft-east.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>39</frameHeight>
+    </bitmap>      
+    <frame>0</frame>
+  </item>
+  
+  <!-- Penitentiary Capital East -->
+  <item label="297">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/penitentiary/penitentiary-column-capital-east.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>49</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Penitentiary Capital South -->
+  <item label="298">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/penitentiary/penitentiary-column-capital-south.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>56</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Penitentiary Capital West -->
+  <item label="299">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/penitentiary/penitentiary-column-capital-west.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>56</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Safari Wall X (1) -->
+  <item label="300">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>100</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/safari/safari-wall-x-1.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>116</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Safari Wall Y (1) -->
+  <item label="301">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>100</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/safari/safari-wall-y-1.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>116</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Safari Wall X (2) -->
+  <item label="302">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>100</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/safari/safari-wall-x-2.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>116</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Safari Wall Y (2) -->
+  <item label="303">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>100</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/safari/safari-wall-y-2.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>116</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Safari Wall X (3) -->
+  <item label="304">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>100</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/safari/safari-wall-x-3.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>116</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Safari Wall Y (3) -->
+  <item label="305">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>100</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/safari/safari-wall-y-3.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>116</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Safari Shaft North -->
+  <item label="306">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/safari/safari-column-shaft-north.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>39</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Safari Capital North -->
+  <item label="307">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/safari/safari-column-capital-north.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>49</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Safari Shaft East -->
+  <item label="308">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/safari/safari-column-shaft-east.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>39</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Safari Capital East -->
+  <item label="309">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/safari/safari-column-capital-east.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>49</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Safari Capital South -->
+  <item label="310">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/safari/safari-column-capital-south.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>56</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Safari Capital West -->
+  <item label="311">
+    <widthX>16</widthX>
+    <widthY>16</widthY>
+    <height>24</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/safari/safari-column-capital-west.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>56</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Hidden Wall X -->
+  <item label="312">
+    <widthX>0</widthX>
+    <widthY>16</widthY>
+    <height>224</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/item/hidden-wall.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>115</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Hidden Wall Y -->
+  <item label="313">
+    <widthX>16</widthX>
+    <widthY>0</widthY>
+    <height>224</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/item/hidden-wall.bmp">
+      <frameWidth>64</frameWidth>
+      <frameHeight>115</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Jail North Door -->
+  <item label="2001">
+    <door>north</door>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <widthY>32</widthY>
+    <height>48</height>
+    <height>48</height>
+    <height>51</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/jail/jail-door-north.bmp">
+      <frameWidth>82</frameWidth>
+      <frameHeight>140</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Blacktooth North Door -->
+  <item label="2011">
+    <door>north</door>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <widthY>32</widthY>
+    <height>48</height>
+    <height>48</height>
+    <height>51</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/blacktooth/blacktooth-door-north.bmp">
+      <frameWidth>82</frameWidth>
+      <frameHeight>140</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Market North Door -->
+  <item label="2022">
+    <door>north</door>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <widthY>32</widthY>
+    <height>48</height>
+    <height>48</height>
+    <height>51</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/market/market-door-north.bmp">
+      <frameWidth>82</frameWidth>
+      <frameHeight>140</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Moon base North Door -->
+  <item label="2033">
+    <door>north</door>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <widthY>32</widthY>
+    <height>48</height>
+    <height>48</height>
+    <height>51</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/moonbase/moonbase-door-north.bmp">
+      <frameWidth>82</frameWidth>
+      <frameHeight>140</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Byblos North Door -->
+  <item label="2044">
+    <door>north</door>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <widthY>32</widthY>
+    <height>48</height>
+    <height>48</height>
+    <height>51</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/byblos/byblos-door-north.bmp">
+      <frameWidth>82</frameWidth>
+      <frameHeight>140</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Egyptus North Door -->
+  <item label="2055">
+    <door>north</door>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <widthY>32</widthY>
+    <height>48</height>
+    <height>48</height>
+    <height>51</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/egyptus/egyptus-door-north.bmp">
+      <frameWidth>82</frameWidth>
+      <frameHeight>140</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Penitentiary North Door -->
+  <item label="2066">
+    <door>north</door>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <widthY>32</widthY>
+    <height>48</height>
+    <height>48</height>
+    <height>51</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/penitentiary/penitentiary-door-north.bmp">
+      <frameWidth>82</frameWidth>
+      <frameHeight>140</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Safari North Door -->
+  <item label="2077">
+    <door>north</door>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <widthY>32</widthY>
+    <height>48</height>
+    <height>48</height>
+    <height>51</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/safari/safari-door-north.bmp">
+      <frameWidth>82</frameWidth>
+      <frameHeight>140</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Jail South Door -->
+  <item label="3001">
+    <door>south</door>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <widthY>32</widthY>
+    <height>48</height>
+    <height>48</height>
+    <height>51</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/jail/jail-door-south.bmp">
+      <frameWidth>82</frameWidth>
+      <frameHeight>140</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Blacktooth South Door -->
+  <item label="3011">
+    <door>south</door>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <widthY>32</widthY>
+    <height>48</height>
+    <height>48</height>
+    <height>51</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/blacktooth/blacktooth-door-south.bmp">
+      <frameWidth>82</frameWidth>
+      <frameHeight>140</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Market South Door -->
+  <item label="3022">
+    <door>south</door>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <widthY>32</widthY>
+    <height>48</height>
+    <height>48</height>
+    <height>51</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/market/market-door-south.bmp">
+      <frameWidth>82</frameWidth>
+      <frameHeight>140</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Moon base South Door -->
+  <item label="3033">
+    <door>south</door>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <widthY>32</widthY>
+    <height>48</height>
+    <height>48</height>
+    <height>51</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/moonbase/moonbase-door-south.bmp">
+      <frameWidth>82</frameWidth>
+      <frameHeight>140</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Byblos South Door -->
+  <item label="3044">
+    <door>south</door>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <widthY>32</widthY>
+    <height>48</height>
+    <height>48</height>
+    <height>51</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/byblos/byblos-door-south.bmp">
+      <frameWidth>82</frameWidth>
+      <frameHeight>140</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Egyptus South Door -->
+  <item label="3055">
+    <door>south</door>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <widthY>32</widthY>
+    <height>48</height>
+    <height>48</height>
+    <height>51</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/egyptus/egyptus-door-south.bmp">
+      <frameWidth>82</frameWidth>
+      <frameHeight>140</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Penitentiary South Door -->
+  <item label="3066">
+    <door>south</door>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <widthY>32</widthY>
+    <height>48</height>
+    <height>48</height>
+    <height>51</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/penitentiary/penitentiary-door-south.bmp">
+      <frameWidth>82</frameWidth>
+      <frameHeight>140</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Safari South Door -->
+  <item label="3077">
+    <door>south</door>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <widthY>32</widthY>
+    <height>48</height>
+    <height>48</height>
+    <height>51</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/safari/safari-door-south.bmp">
+      <frameWidth>82</frameWidth>
+      <frameHeight>140</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Jail East Door -->
+  <item label="4001">
+    <door>east</door>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthX>32</widthX>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <height>48</height>
+    <height>48</height>
+    <height>51</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/jail/jail-door-east.bmp">
+      <frameWidth>82</frameWidth>
+      <frameHeight>140</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Blacktooth East Door -->
+  <item label="4011">
+    <door>east</door>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthX>32</widthX>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <height>48</height>
+    <height>48</height>
+    <height>51</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/blacktooth/blacktooth-door-east.bmp">
+      <frameWidth>82</frameWidth>
+      <frameHeight>140</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Market East Door -->
+  <item label="4022">
+    <door>east</door>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthX>32</widthX>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <height>48</height>
+    <height>48</height>
+    <height>51</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/market/market-door-east.bmp">
+      <frameWidth>82</frameWidth>
+      <frameHeight>140</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Moon base East Door -->
+  <item label="4033">
+    <door>east</door>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthX>32</widthX>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <height>48</height>
+    <height>48</height>
+    <height>51</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/moonbase/moonbase-door-east.bmp">
+      <frameWidth>82</frameWidth>
+      <frameHeight>140</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Byblos East Door -->
+  <item label="4044">
+    <door>east</door>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthX>32</widthX>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <height>48</height>
+    <height>48</height>
+    <height>51</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/byblos/byblos-door-east.bmp">
+      <frameWidth>82</frameWidth>
+      <frameHeight>140</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Egyptus East Door -->
+  <item label="4055">
+    <door>east</door>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthX>32</widthX>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <height>48</height>
+    <height>48</height>
+    <height>51</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/egyptus/egyptus-door-east.bmp">
+      <frameWidth>82</frameWidth>
+      <frameHeight>140</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Penitentiary East Door -->
+  <item label="4066">
+    <door>east</door>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthX>32</widthX>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <height>48</height>
+    <height>48</height>
+    <height>51</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/penitentiary/penitentiary-door-east.bmp">
+      <frameWidth>82</frameWidth>
+      <frameHeight>140</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Safari East Door -->
+  <item label="4077">
+    <door>east</door>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthX>32</widthX>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <height>48</height>
+    <height>48</height>
+    <height>51</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/safari/safari-door-east.bmp">
+      <frameWidth>82</frameWidth>
+      <frameHeight>140</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Jail West Door -->
+  <item label="5001">
+    <door>west</door>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthX>32</widthX>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <height>48</height>
+    <height>48</height>
+    <height>51</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/jail/jail-door-west.bmp">
+      <frameWidth>82</frameWidth>
+      <frameHeight>140</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Blacktooth West Door -->
+  <item label="5011">
+    <door>west</door>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthX>32</widthX>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <height>48</height>
+    <height>48</height>
+    <height>51</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/blacktooth/blacktooth-door-west.bmp">
+      <frameWidth>82</frameWidth>
+      <frameHeight>140</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Market West Door -->
+  <item label="5022">
+    <door>west</door>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthX>32</widthX>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <height>48</height>
+    <height>48</height>
+    <height>51</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/market/market-door-west.bmp">
+      <frameWidth>82</frameWidth>
+      <frameHeight>140</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Moon base West Door -->
+  <item label="5033">
+    <door>west</door>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthX>32</widthX>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <height>48</height>
+    <height>48</height>
+    <height>51</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/moonbase/moonbase-door-west.bmp">
+      <frameWidth>82</frameWidth>
+      <frameHeight>140</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Byblos West Door -->
+  <item label="5044">
+    <door>west</door>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthX>32</widthX>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <height>48</height>
+    <height>48</height>
+    <height>51</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/byblos/byblos-door-west.bmp">
+      <frameWidth>82</frameWidth>
+      <frameHeight>140</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Egyptus West Door -->
+  <item label="5055">
+    <door>west</door>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthX>32</widthX>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <height>48</height>
+    <height>48</height>
+    <height>51</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/egyptus/egyptus-door-west.bmp">
+      <frameWidth>82</frameWidth>
+      <frameHeight>140</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Penitentiary West Door -->
+  <item label="5066">
+    <door>west</door>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthX>32</widthX>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <height>48</height>
+    <height>48</height>
+    <height>51</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/penitentiary/penitentiary-door-west.bmp">
+      <frameWidth>82</frameWidth>
+      <frameHeight>140</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+  
+  <!-- Safari West Door -->
+  <item label="5077">
+    <door>west</door>
+    <widthX>9</widthX>
+    <widthX>9</widthX>
+    <widthX>32</widthX>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <widthY>9</widthY>
+    <height>48</height>
+    <height>48</height>
+    <height>51</height>
+    <directionFrames>1</directionFrames>
+    <mortal>false</mortal>
+    <weight>0</weight>
+    <framesDelay>0</framesDelay>
+    <speed>0</speed>
+    <bitmap file="gfx/safari/safari-door-west.bmp">
+      <frameWidth>82</frameWidth>
+      <frameHeight>140</frameHeight>
+    </bitmap>
+    <frame>0</frame>
+  </item>
+</items>
+

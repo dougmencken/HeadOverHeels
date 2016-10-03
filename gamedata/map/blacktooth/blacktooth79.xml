@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<room xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="room.xsd">
+
+  <name>blacktooth/blacktooth79.xml</name>
+
+  <scenery>blacktooth</scenery>
+  
+  <xTiles>9</xTiles>
+
+  <yTiles>9</yTiles>
+
+  <width>16</width>
+
+  <floorType>none</floorType>
+
+  <floor>
+    <tile>
+      <x>0</x>
+      <y>1</y>
+      <offsetX>0</offsetX>
+      <offsetY>0</offsetY>
+      <bitmap>gfx/blacktooth/blacktooth-floor-underground-north.bmp</bitmap>
+    </tile>
+    <tile>
+      <x>0</x>
+      <y>2</y>
+      <offsetX>0</offsetX>
+      <offsetY>0</offsetY>
+      <bitmap>gfx/blacktooth/blacktooth-floor-underground-north.bmp</bitmap>
+    </tile>
+    <tile>
+      <x>0</x>
+      <y>3</y>
+      <offsetX>0</offsetX>
+      <offsetY>0</offsetY>
+      <bitmap>gfx/blacktooth/blacktooth-floor-underground-north.bmp</bitmap>
+    </tile>
+    <tile>
+      <x>0</x>
+      <y>4</y>
+      <offsetX>0</offsetX>
+      <offsetY>0</offsetY>
+      <bitmap>gfx/blacktooth/blacktooth-floor-underground-north.bmp</bitmap>
+    </tile>
+    <tile>
+      <x>0</x>
+      <y>5</y>
+      <offsetX>0</offsetX>
+      <offsetY>0</offsetY>
+      <bitmap>gfx/blacktooth/blacktooth-floor-underground-north.bmp</bitmap>
+    </tile>
+    <tile>
+      <x>0</x>
+      <y>6</y>
+      <offsetX>0</offsetX>
+      <offsetY>0</offsetY>
+      <bitmap>gfx/blacktooth/blacktooth-floor-underground-north.bmp</bitmap>
+    </tile>
+    <tile>
+      <x>0</x>
+      <y>7</y>
+      <offsetX>0</offsetX>
+      <offsetY>0</offsetY>
+      <bitmap>gfx/blacktooth/blacktooth-floor-underground-north.bmp</bitmap>
+    </tile>
+    <tile>
+      <x>0</x>
+      <y>8</y>
+      <offsetX>0</offsetX>
+      <offsetY>0</offsetY>
+      <bitmap>gfx/blacktooth/blacktooth-floor-underground-north.bmp</bitmap>
+    </tile>
+    <tile>
+      <x>1</x>
+      <y>0</y>
+      <offsetX>0</offsetX>
+      <offsetY>0</offsetY>
+      <bitmap>gfx/blacktooth/blacktooth-floor-underground-east.bmp</bitmap>
+    </tile>
+    <tile>
+      <x>2</x>
+      <y>0</y>
+      <offsetX>0</offsetX>
+      <offsetY>0</offsetY>
+      <bitmap>gfx/blacktooth/blacktooth-floor-underground-east.bmp</bitmap>
+    </tile>
+    <tile>
+      <x>3</x>
+      <y>0</y>
+      <offsetX>0</offsetX>
+      <offsetY>0</offsetY>
+      <bitmap>gfx/blacktooth/blacktooth-floor-underground-east.bmp</bitmap>
+    </tile>
+    <tile>
+      <x>4</x>
+      <y>0</y>
+      <offsetX>0</offsetX>
+      <offsetY>0</offsetY>
+      <bitmap>gfx/blacktooth/blacktooth-floor-underground-east.bmp</bitmap>
+    </tile>
+    <tile>
+      <x>5</x>
+      <y>0</y>
+      <offsetX>0</offsetX>
+      <offsetY>0</offsetY>
+      <bitmap>gfx/blacktooth/blacktooth-floor-underground-east.bmp</bitmap>
+    </tile>
+    <tile>
+      <x>6</x>
+      <y>0</y>
+      <offsetX>0</offsetX>
+      <offsetY>0</offsetY>
+      <bitmap>gfx/blacktooth/blacktooth-floor-underground-east.bmp</bitmap>
+    </tile>
+    <tile>
+      <x>7</x>
+      <y>0</y>
+      <offsetX>0</offsetX>
+      <offsetY>0</offsetY>
+      <bitmap>gfx/blacktooth/blacktooth-floor-underground-east.bmp</bitmap>
+    </tile>
+    <tile>
+      <x>8</x>
+      <y>0</y>
+      <offsetX>0</offsetX>
+      <offsetY>0</offsetY>
+      <bitmap>gfx/blacktooth/blacktooth-floor-underground-east.bmp</bitmap>
+    </tile>
+    <tile>
+      <x>8</x>
+      <y>1</y>
+      <offsetX>0</offsetX>
+      <offsetY>0</offsetY>
+      <bitmap>gfx/blacktooth/blacktooth-nofloor-south.bmp</bitmap>
+    </tile>
+    <tile>
+      <x>8</x>
+      <y>2</y>
+      <offsetX>0</offsetX>
+      <offsetY>0</offsetY>
+      <bitmap>gfx/blacktooth/blacktooth-nofloor-south.bmp</bitmap>
+    </tile>
+    <tile>
+      <x>8</x>
+      <y>3</y>
+      <offsetX>0</offsetX>
+      <offsetY>0</offsetY>
+      <bitmap>gfx/blacktooth/blacktooth-nofloor-south.bmp</bitmap>
+    </tile>
+    <tile>
+      <x>8</x>
+      <y>4</y>
+      <offsetX>0</offsetX>
+      <offsetY>0</offsetY>
+      <bitmap>gfx/blacktooth/blacktooth-nofloor-south.bmp</bitmap>
+    </tile>
+    <tile>
+      <x>8</x>
+      <y>5</y>
+      <offsetX>0</offsetX>
+      <offsetY>0</offsetY>
+      <bitmap>gfx/blacktooth/blacktooth-nofloor-south.bmp</bitmap>
+    </tile>
+    <tile>
+      <x>8</x>
+      <y>6</y>
+      <offsetX>0</offsetX>
+      <offsetY>0</offsetY>
+      <bitmap>gfx/blacktooth/blacktooth-nofloor-south.bmp</bitmap>
+    </tile>
+    <tile>
+      <x>8</x>
+      <y>7</y>
+      <offsetX>0</offsetX>
+      <offsetY>0</offsetY>
+      <bitmap>gfx/blacktooth/blacktooth-nofloor-south.bmp</bitmap>
+    </tile>
+    <tile>
+      <x>1</x>
+      <y>8</y>
+      <offsetX>0</offsetX>
+      <offsetY>0</offsetY>
+      <bitmap>gfx/blacktooth/blacktooth-nofloor-west.bmp</bitmap>
+    </tile>
+    <tile>
+      <x>2</x>
+      <y>8</y>
+      <offsetX>0</offsetX>
+      <offsetY>0</offsetY>
+      <bitmap>gfx/blacktooth/blacktooth-nofloor-west.bmp</bitmap>
+    </tile>
+    <tile>
+      <x>3</x>
+      <y>8</y>
+      <offsetX>0</offsetX>
+      <offsetY>0</offsetY>
+      <bitmap>gfx/blacktooth/blacktooth-nofloor-west.bmp</bitmap>
+    </tile>
+    <tile>
+      <x>4</x>
+      <y>8</y>
+      <offsetX>0</offsetX>
+      <offsetY>0</offsetY>
+      <bitmap>gfx/blacktooth/blacktooth-nofloor-west.bmp</bitmap>
+    </tile>
+    <tile>
+      <x>5</x>
+      <y>8</y>
+      <offsetX>0</offsetX>
+      <offsetY>0</offsetY>
+      <bitmap>gfx/blacktooth/blacktooth-nofloor-west.bmp</bitmap>
+    </tile>
+    <tile>
+      <x>6</x>
+      <y>8</y>
+      <offsetX>0</offsetX>
+      <offsetY>0</offsetY>
+      <bitmap>gfx/blacktooth/blacktooth-nofloor-west.bmp</bitmap>
+    </tile>
+    <tile>
+      <x>7</x>
+      <y>8</y>
+      <offsetX>0</offsetX>
+      <offsetY>0</offsetY>
+      <bitmap>gfx/blacktooth/blacktooth-nofloor-west.bmp</bitmap>
+    </tile>
+    <tile>
+      <x>8</x>
+      <y>8</y>
+      <offsetX>0</offsetX>
+      <offsetY>0</offsetY>
+      <bitmap>gfx/blacktooth/blacktooth-nofloor-sw.bmp</bitmap>
+    </tile>
+  </floor>
+
+  <items>
+    <item x="0" y="1" z="0">
+      <label>211</label>
+      <direction>none</direction>
+      <behavior>0</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="2" z="0">
+      <label>215</label>
+      <direction>none</direction>
+      <behavior>0</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="3" z="0">
+      <label>211</label>
+      <direction>none</direction>
+      <behavior>0</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="4" z="0">
+      <label>213</label>
+      <direction>none</direction>
+      <behavior>0</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="5" z="0">
+      <label>213</label>
+      <direction>none</direction>
+      <behavior>0</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="6" z="0">
+      <label>211</label>
+      <direction>none</direction>
+      <behavior>0</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="7" z="0">
+      <label>215</label>
+      <direction>none</direction>
+      <behavior>0</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="8" z="0">
+      <label>211</label>
+      <direction>none</direction>
+      <behavior>0</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="1" y="0" z="0">
+      <label>210</label>
+      <direction>none</direction>
+      <behavior>0</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="2" y="0" z="0">
+      <label>214</label>
+      <direction>none</direction>
+      <behavior>0</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="3" y="0" z="0">
+      <label>210</label>
+      <direction>none</direction>
+      <behavior>0</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="4" y="0" z="0">
+      <label>212</label>
+      <direction>none</direction>
+      <behavior>0</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="5" y="0" z="0">
+      <label>212</label>
+      <direction>none</direction>
+      <behavior>0</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="6" y="0" z="0">
+      <label>210</label>
+      <direction>none</direction>
+      <behavior>0</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="7" y="0" z="0">
+      <label>214</label>
+      <direction>none</direction>
+      <behavior>0</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="8" y="0" z="0">
+      <label>210</label>
+      <direction>none</direction>
+      <behavior>0</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="7" y="1" z="0">
+      <label>11</label>
+      <direction>none</direction>
+      <behavior>0</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="7" y="2" z="0">
+      <label>11</label>
+      <direction>none</direction>
+      <behavior>0</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="7" y="3" z="0">
+      <label>11</label>
+      <direction>none</direction>
+      <behavior>0</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="7" y="4" z="0">
+      <label>11</label>
+      <direction>none</direction>
+      <behavior>0</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="7" y="5" z="0">
+      <label>11</label>
+      <direction>none</direction>
+      <behavior>0</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="7" y="6" z="0">
+      <label>11</label>
+      <direction>none</direction>
+      <behavior>0</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="7" y="7" z="0">
+      <label>11</label>
+      <direction>none</direction>
+      <behavior>0</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="1" y="8" z="0">
+      <label>11</label>
+      <direction>none</direction>
+      <behavior>0</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="1" y="8" z="1">
+      <label>33</label>
+      <direction>none</direction>
+      <behavior>20</behavior>
+      <type>freeitem</type>
+    </item>
+    <item x="2" y="8" z="0">
+      <label>11</label>
+      <direction>none</direction>
+      <behavior>29</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="7" y="8" z="0">
+      <label>11</label>
+      <direction>none</direction>
+      <behavior>0</behavior>
+      <type>griditem</type>
+    </item>
+  </items>
+
+</room>

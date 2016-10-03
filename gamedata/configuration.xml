@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="configuration.xsd">
+
+  <language></language>
+
+  <keyboard>
+    <left>82</left>
+    <right>83</right>
+    <up>84</up>
+    <down>85</down>
+    <take>13</take>
+    <jump>75</jump>
+    <shoot>14</shoot>
+    <takeandjump>2</takeandjump>
+    <swap>26</swap>
+    <halt>59</halt>
+  </keyboard>
+
+  <volume>
+    <fx>75</fx>
+    <music>99</music>
+  </volume>
+
+</configuration>
