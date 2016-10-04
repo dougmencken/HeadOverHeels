@@ -1,6 +1,5 @@
 AUTOMAKE_OPTIONS = -Wno-override
 AM_CCFLAGS = -Wall -O2
-CXXFLAGS =
 AM_CXXFLAGS = $(CXXFLAGS)
 headoverheels_CXXFLAGS = -Wall -Wno-deprecated -O2 -I. -Iactions -Ibehaviors -Igui -Istates
 AM_LDFLAGS = `allegro-config --libs release` -lvorbisfile -lvorbisenc -lvorbis -logg -lxerces-c -lpthread
