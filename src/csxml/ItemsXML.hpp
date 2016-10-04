@@ -34,11 +34,6 @@
 #ifndef ITEMS_XML_HPP
 #define ITEMS_XML_HPP
 
-// Begin prologue
-//
-//
-// End prologue
-
 #include <xsd/cxx/version.hxx>
 
 #if (XSD_INT_VERSION != 3000000L)
@@ -58,8 +53,6 @@
 #include <xsd/cxx/tree/exceptions.hxx>
 #include <xsd/cxx/tree/elements.hxx>
 #include <xsd/cxx/tree/types.hxx>
-
-#include <xsd/cxx/xml/error-handler.hxx>
 
 #include <xsd/cxx/tree/parsing.hxx>
 
@@ -193,10 +186,6 @@ namespace xml_schema
   typedef ::xsd::cxx::tree::severity severity;
   typedef ::xsd::cxx::tree::error< char > error;
   typedef ::xsd::cxx::tree::diagnostics< char > diagnostics;
-
-  // Error handler interface
-  //
-  typedef ::xsd::cxx::xml::error_handler< char > error_handler;
 }
 
 // Forward declarations
@@ -764,8 +753,8 @@ namespace ixml
 #include <iosfwd>
 
 #include <xercesc/dom/DOMDocument.hpp>
-#include <xercesc/dom/DOMInputSource.hpp>
-#include <xercesc/dom/DOMErrorHandler.hpp>
+
+# include <xercesc/dom/DOMLSInput.hpp>
 
 namespace ixml
 {
@@ -774,18 +763,6 @@ namespace ixml
 
   ::std::auto_ptr< ::ixml::ItemsXML >
   items (const ::std::string& uri,
-         ::xml_schema::flags f = 0,
-         const ::xml_schema::properties& p = ::xml_schema::properties ());
-
-  ::std::auto_ptr< ::ixml::ItemsXML >
-  items (const ::std::string& uri,
-         ::xml_schema::error_handler& eh,
-         ::xml_schema::flags f = 0,
-         const ::xml_schema::properties& p = ::xml_schema::properties ());
-
-  ::std::auto_ptr< ::ixml::ItemsXML >
-  items (const ::std::string& uri,
-         ::xercesc::DOMErrorHandler& eh,
          ::xml_schema::flags f = 0,
          const ::xml_schema::properties& p = ::xml_schema::properties ());
 
@@ -799,53 +776,15 @@ namespace ixml
 
   ::std::auto_ptr< ::ixml::ItemsXML >
   items (::std::istream& is,
-         ::xml_schema::error_handler& eh,
-         ::xml_schema::flags f = 0,
-         const ::xml_schema::properties& p = ::xml_schema::properties ());
-
-  ::std::auto_ptr< ::ixml::ItemsXML >
-  items (::std::istream& is,
-         ::xercesc::DOMErrorHandler& eh,
-         ::xml_schema::flags f = 0,
-         const ::xml_schema::properties& p = ::xml_schema::properties ());
-
-  ::std::auto_ptr< ::ixml::ItemsXML >
-  items (::std::istream& is,
          const ::std::string& id,
          ::xml_schema::flags f = 0,
          const ::xml_schema::properties& p = ::xml_schema::properties ());
 
-  ::std::auto_ptr< ::ixml::ItemsXML >
-  items (::std::istream& is,
-         const ::std::string& id,
-         ::xml_schema::error_handler& eh,
-         ::xml_schema::flags f = 0,
-         const ::xml_schema::properties& p = ::xml_schema::properties ());
-
-  ::std::auto_ptr< ::ixml::ItemsXML >
-  items (::std::istream& is,
-         const ::std::string& id,
-         ::xercesc::DOMErrorHandler& eh,
-         ::xml_schema::flags f = 0,
-         const ::xml_schema::properties& p = ::xml_schema::properties ());
-
-  // Parse xercesc::DOMInputSource
+  // Parse xercesc::DOMLSInput
   //
 
   ::std::auto_ptr< ::ixml::ItemsXML >
-  items (const ::xercesc::DOMInputSource& is,
-         ::xml_schema::flags f = 0,
-         const ::xml_schema::properties& p = ::xml_schema::properties ());
-
-  ::std::auto_ptr< ::ixml::ItemsXML >
-  items (const ::xercesc::DOMInputSource& is,
-         ::xml_schema::error_handler& eh,
-         ::xml_schema::flags f = 0,
-         const ::xml_schema::properties& p = ::xml_schema::properties ());
-
-  ::std::auto_ptr< ::ixml::ItemsXML >
-  items (const ::xercesc::DOMInputSource& is,
-         ::xercesc::DOMErrorHandler& eh,
+  items (const ::xercesc::DOMLSInput& is,
          ::xml_schema::flags f = 0,
          const ::xml_schema::properties& p = ::xml_schema::properties ());
 
@@ -864,10 +803,5 @@ namespace ixml
 }
 
 #include <xsd/cxx/post.hxx>
-
-// Begin epilogue
-//
-//
-// End epilogue
 
 #endif // ITEMS_XML_HPP

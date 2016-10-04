@@ -12,9 +12,12 @@
 #include <xercesc/dom/DOMAttr.hpp>
 #include <xercesc/dom/DOMElement.hpp>
 #include <xercesc/dom/DOMDocument.hpp>
-#include <xercesc/dom/DOMInputSource.hpp>
 #include <xercesc/dom/DOMNamedNodeMap.hpp>
-#include <xercesc/dom/DOMErrorHandler.hpp>
+
+#include <xercesc/util/XercesVersion.hpp>
+#if XERCES_VERSION_MAJOR >= 3
+# include <xercesc/dom/DOMLSInput.hpp>
+#endif
 
 #include <xsd/cxx/xml/elements.hxx>      // properies
 #include <xsd/cxx/xml/error-handler.hxx>
@@ -97,31 +100,16 @@ namespace xsd
 
         template <typename C>
         xml::dom::auto_ptr<xercesc::DOMDocument>
-        parse (const xercesc::DOMInputSource&,
-               error_handler<C>&,
+        parse (const xercesc::DOMLSInput&,
                const properties<C>&,
-               unsigned long flags);
-
-        template <typename C>
-        xml::dom::auto_ptr<xercesc::DOMDocument>
-        parse (const xercesc::DOMInputSource&,
-               xercesc::DOMErrorHandler&,
-               const properties<C>&,
-               unsigned long flags);
+               ::xml_schema::flags flags);
 
         template <typename C>
         xml::dom::auto_ptr<xercesc::DOMDocument>
         parse (const std::basic_string<C>& uri,
-               error_handler<C>&,
                const properties<C>&,
-               unsigned long flags);
+               ::xml_schema::flags flags);
 
-        template <typename C>
-        xml::dom::auto_ptr<xercesc::DOMDocument>
-        parse (const std::basic_string<C>& uri,
-               xercesc::DOMErrorHandler&,
-               const properties<C>&,
-               unsigned long flags);
       }
     }
   }

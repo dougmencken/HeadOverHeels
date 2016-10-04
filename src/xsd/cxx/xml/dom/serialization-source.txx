@@ -6,14 +6,17 @@
 #include <xercesc/util/XMLUni.hpp>     // xercesc::fg*
 #include <xercesc/util/XMLUniDefs.hpp> // chLatin_L, etc
 
+# include <xercesc/dom/DOMLSSerializer.hpp>
+# include <xercesc/dom/DOMLSOutput.hpp>
+
 #include <xercesc/dom/DOMElement.hpp>
-#include <xercesc/dom/DOMWriter.hpp>
-#include <xercesc/dom/DOMImplementation.hpp>
-#include <xercesc/dom/DOMImplementationRegistry.hpp>
+
+# include <xercesc/dom/DOMImplementationLS.hpp>
+# include <xercesc/dom/DOMImplementation.hpp>
+# include <xercesc/dom/DOMImplementationRegistry.hpp>
 
 #include <xsd/cxx/xml/string.hxx>
 #include <xsd/cxx/xml/bits/literals.hxx>
-#include <xsd/cxx/xml/dom/bits/error-handler-proxy.hxx>
 
 namespace xsd
 {
@@ -147,12 +150,11 @@ namespace xsd
               throw mapping<C> (ns);
           }
 
-          const XMLCh ls[] = {xercesc::chLatin_L,
-                              xercesc::chLatin_S,
-                              xercesc::chNull};
+          const XMLCh lsId [] = { xercesc::chLatin_L ,
+                                  xercesc::chLatin_S ,
+                                  xercesc::chNull } ;
 
-          DOMImplementation* impl (
-            DOMImplementationRegistry::getDOMImplementation (ls));
+          xercesc::DOMImplementation * impl = xercesc::DOMImplementationRegistry::getDOMImplementation ( lsId );
 
           auto_ptr<DOMDocument> doc (
             impl->createDocument (
@@ -293,69 +295,48 @@ namespace xsd
 
         template <typename C>
         bool
-        serialize (xercesc::XMLFormatTarget& target,
+        serialize (xercesc::XMLFormatTarget& destination,
                    const xercesc::DOMDocument& doc,
                    const std::basic_string<C>& encoding,
-                   xercesc::DOMErrorHandler& eh,
                    unsigned long flags)
         {
-          // HP aCC cannot handle using namespace xercesc;
-          //
-          using xercesc::DOMImplementationRegistry;
-          using xercesc::DOMImplementation;
-          using xercesc::DOMWriter;
           using xercesc::XMLUni;
 
           const XMLCh ls[] = {xercesc::chLatin_L,
                               xercesc::chLatin_S,
                               xercesc::chNull};
 
-          DOMImplementation* impl (
-            DOMImplementationRegistry::getDOMImplementation (ls));
+          xercesc::DOMImplementationLS * lsImpl = ( xercesc::DOMImplementationLS * ) xercesc::DOMImplementationRegistry::getDOMImplementation ( ls );
 
-          // Get an instance of DOMWriter.
+          // Get an instance of DOMLSSerializer
           //
-          bits::error_handler_proxy<C> ehp (eh);
+          xml::dom::auto_ptr< xercesc::DOMLSSerializer > writer ( lsImpl->createLSSerializer () );
+          xercesc::DOMConfiguration * config = writer->getDomConfig();
 
-          xml::dom::auto_ptr<DOMWriter> writer (impl->createDOMWriter ());
-
-          writer->setErrorHandler (&ehp);
-          writer->setEncoding(xml::string (encoding).c_str ());
-
-          // Set some nice features if the serializer supports them.
+          // Set some nice features if the serializer supports them
           //
-          if (writer->canSetFeature (
-                XMLUni::fgDOMWRTDiscardDefaultContent, true))
-            writer->setFeature (XMLUni::fgDOMWRTDiscardDefaultContent, true);
+          if ( config->canSetParameter ( XMLUni::fgDOMWRTDiscardDefaultContent, true ) )
+            config->setParameter ( XMLUni::fgDOMWRTDiscardDefaultContent, true );
 
-          if (writer->canSetFeature (XMLUni::fgDOMWRTFormatPrettyPrint, true))
-            writer->setFeature (XMLUni::fgDOMWRTFormatPrettyPrint, true);
+          if ( config->canSetParameter ( XMLUni::fgDOMWRTFormatPrettyPrint, true ) )
+            config->setParameter ( XMLUni::fgDOMWRTFormatPrettyPrint, true );
 
-          // See if we need to write XML declaration.
+          // See if we need to write XML declaration
           //
-          if ((flags & no_xml_declaration) &&
-              writer->canSetFeature (XMLUni::fgDOMXMLDeclaration, false))
-            writer->setFeature (XMLUni::fgDOMXMLDeclaration, false);
+          if ( flags & no_xml_declaration )
+          {
+            if ( config->canSetParameter ( XMLUni::fgDOMXMLDeclaration, false ) )
+              config->setParameter ( XMLUni::fgDOMXMLDeclaration, false );
+          }
 
-          writer->writeNode (&target, doc);
+          xml::dom::auto_ptr< xercesc::DOMLSOutput > out ( lsImpl->createLSOutput () ) ;
+          out->setEncoding ( xml::string (encoding).c_str () );
+          out->setByteStream ( &destination );
 
-          if (ehp.failed ())
-            return false;
-
-          return true;
+          bool okay = writer->write ( &doc, out.get () );
+          return okay;
         }
 
-        template <typename C>
-        bool
-        serialize (xercesc::XMLFormatTarget& target,
-                   const xercesc::DOMDocument& doc,
-                   const std::basic_string<C>& enconding,
-                   error_handler<C>& eh,
-                   unsigned long flags)
-        {
-          bits::error_handler_proxy<C> ehp (eh);
-          return serialize (target, doc, enconding, ehp, flags);
-        }
       }
     }
   }

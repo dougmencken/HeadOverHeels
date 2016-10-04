@@ -1,0 +1,446 @@
+http://osdir.com/ml/text.xml.xerces-c.devel/2005-02/msg00098.html
+
+OSDir.com <http://osdir.com/ml/>
+text.xml.xerces-c.devel <http://osdir.com/ml/text.xml.xerces-c.devel/>
+
+
+  Subject: The Road to 3.0 (was Request for feedback on some
+  proposed xercesc changes)
+
+
+Date Index <http://osdir.com/ml/text.xml.xerces-c.devel/2005-02/>
+Thread: Prev
+<http://osdir.com/ml/text.xml.xerces-c.devel/2005-02/msg00097.html> Next
+<http://osdir.com/ml/text.xml.xerces-c.devel/2005-02/msg00116.html>
+Thread Index
+<http://osdir.com/ml/text.xml.xerces-c.devel/2005-02/threads.html>
+
+
+I agree that we should move to the future and shed old baggage.
+
+I propose that we create a 2.6.x branch, and get CVS HEAD headed toward
+a 3.0 release, covering the latest version of the spec, which might be
+unstable for a while.
+
+Perhaps this would also be a good time (pre-branch) to move to
+subversion? It does a lot better job of dealing with deleted and
+reorganized files, directories, etc.
+
+Proposed sequence:
+
+(1) Move to subversion.
+
+(2) Create xercesc 2.x branch for any further 2.x bug fixes or development
+
+(3) HEAD will begin work toward a 3.0 release which sheds old
+interfaces, etc.
+
+(On thing I'd love to see resolved for 3.0 would be a re-work of the
+configure/build infrastructure and ports. Xerces would gain a lot more
+mindshare if it had a cleaned up ./configure/make/make install build,
+and a way to lose all of the redundancy that creating a port currently
+requires.)
+
+-jdb
+
+On Feb 8, 2005, at 5:50 AM, Gareth Reakes wrote:
+
+Hey,
+I feel we really should move to the latest version of the spec, even if
+we don't fully implement it. Its difficult for new users, users who are
+using both c + j and it makes the project seem like not a lot is
+happening - even though that is not true.
+If we do move, it does make sense to me to get rid of the old
+interfaces, and therefore go to Xerces 3.0. Having them hanging around
+will only be confusing. Any one else any feelings on this?
+Gareth
+Alberto Massari wrote:
+Hi David,
+At 12.18 04/02/2005 -0500, David Cargill wrote:
+Hi Alberto,
+Adding /Wp64 sounds fine.
+I am not sure about having the next release be 3.0. I think the risk of
+someone having PSVIDefs in their code is a small risk (given that we have
+already removed the functionality). I agree it would be nice to clean up a
+number of items but I think 3.0 should have some significant functionality
+or architectural change from the current code base. However, this is just
+my opinion, and I wonder what others think? Anyone?
+We discussed about the same issue before 2.6; at that time I was
+proposing to delete those PSVI methods from the XMLElementDecl/XMLAttDef
+classes as part of the new implementation for DOMTypeInfo, but our
+policy only allowed us to mark them as deprecated. The alternative
+(releasing a 3.0 version) was not considered a viable choice (because no
+major features were introduced).
+What has changed now? We simply have more deprecated stuff to remove,
+but no new features yet. So, either we keep adhering to the policy (and
+keep those enums around for a little more time), or we start working for
+a 3.0 release, scheduling the work for those features that would break
+source code compatibility.
+BTW, what is the outstanding work for DOML3? If methods have changed
+names, could we introduce the new names and mark the old ones as
+deprecated?
+This is what I found doing a quick comparison between the specs (Load &
+Save and Core) and the source code:
+DOMImplementationLS interface:
+- createDOMBuilder is now createLSBuilder
+- createDOMWriter is now createLSSerializer
+- createDOMInputSource is now createLSInput
+- a new createLSOutput method has been added
+DOMBuilder interface:
+- its name is now DOMLSParser
+- new enum value ACTION_REPLACE_CHILDREN, and numeric values for the
+others have been changed
+- getErrorHandler, getEntityResolver, getFeature, canSetFeature have
+been removed
+- new abort() method
+DOMInputSource interface:
+- its name is now DOMLSInput:
+- a new certifiedText attribute
+- 3 ways to get text: characterStream, byteStream, stringData
+DOMEntityResolver interface:
+- its name is now DOMLSResourceResolver
+- resolveEntity is now resolveResource
+DOMNodeFilter interface:
+- its name is now DOMLSParserFilter
+- new enum FILTER_INTERRUPT
+- new method startElement
+- new attribute whatToShow
+DOMWriter interface:
+- its name is now DOMLSSerializer
+- features and encoding are enclosed in a DOMConfiguration attribute
+- writeNode() is now write()
+- new writeToURI method
+DOMWriterFilter interface:
+- its name is now DOMLSSerializerFilter
+DOMBuilderFilter is now DOMLSParserFilter:
+- it has just a whatToShow attribute, but it looks like we don't even
+define the interface (it's just a forward declaration)
+DOMNode interface:
+- compareTreePosition() has been changed into compareDocumentPosition(),
+with different enums
+- lookupNamespacePrefix() is now lookupPrefix()
+- getInterface() is now getFeature()
+DOMElement interface:
+- the setIdAttribute, setIdAttributeNS, setIdAttributeNode now have a
+boolean flag as last argument
+DOMText interface:
+- a new method isElementContentWhitespace replaces the non-standard
+method isIgnorableWhitespace
+DOMTypeInfo interface:
+- a new method isDerivedFrom has been introduced
+DOMUserDataHandler interface:
+- a new enum, NODE_ADOPTED
+DOMLocator interface:
+- getOffset should be duplicated into getUtf16Offset and getByteOffset
+- getErrorNode is now getRelatedNode
+DOMConfiguration interface:
+- a new parameterNames attribute
+DOMEntity interface:
+- getEncoding/getActualEncoding are now getInputEncoding/getXmlEncoding
+- getVersion is now getXmlVersion
+DOMDocument:
+- getEncoding/getActualEncoding are now getInputEncoding/getXmlEncoding
+- getStandalone is now getXmlStandalone
+- getVersion is no getXmlVersion
+- getDOMConfiguration is now getDomConfig
+All in all, source code compatibility could be maintained, creating new
+classes instead of renaming them, and adding new methods for the ones
+that changed names. But clearly the amount of deprecated code in the
+parser would grow (e.g. we already have questions on why there is a
+XercesDOMParser and a DOMBuilder; now we would have those two plus
+DOMLSParser)
+Maybe we should also keep track (perhaps in a Jira bug) of changes we
+should make for the next version of xercesc (you mentioned adding const to
+some signatures). It would be good if we didn't lose track of these...
+I was referring to these three Jira bugs:
+- XERCESC-783: DOMUserDataHandler::handle specifies src and dst as const
+DOMNode*, but the specs say they are DOMNode* (and the user wants to
+modify them)
+- XERCESC-1153: XMLSchemaDescriptionImpl::getLocationHints should return
+a const object to prevent attempts to change its state
+- XERCESC-1223: DOMDocument::importNode should declare the source node
+as const DOMNode*
+What do users think about this issue?
+Alberto
+---------------------------------------------------------------------
+To unsubscribe, e-mail: xerces-c-dev-unsubscribe@xxxxxxxxxxxxxx
+For additional commands, e-mail: xerces-c-dev-help@xxxxxxxxxxxxxx
+--
+Gareth Reakes, Managing Director Parthenon Computing
++44-1865-811184 http://www.parthcomp.com <http://www.parthcomp.com/>
+---------------------------------------------------------------------
+To unsubscribe, e-mail: xerces-c-dev-unsubscribe@xxxxxxxxxxxxxx
+For additional commands, e-mail: xerces-c-dev-help@xxxxxxxxxxxxxx
+
+
+
+*Thread at a glance:*
+
+      Previous Message by Date:
+
+Re: Request for feedback on some proposed xercesc changes (including
+breaking source code compatibility)
+<http://osdir.com/ml/text.xml.xerces-c.devel/2005-02/msg00097.html>
+
+Hey, I feel we really should move to the latest version of the spec,
+even if we don't fully implement it. Its difficult for new users, users
+who are using both c + j and it makes the project seem like not a lot is
+happening - even though that is not true. If we do move, it does make
+sense to me to get rid of the old interfaces, and therefore go to Xerces
+3.0. Having them hanging around will only be confusing. Any one else any
+feelings on this? Gareth Alberto Massari wrote: Hi David, At 12.18
+04/02/2005 -0500, David Cargill wrote: Hi Alberto, Adding /Wp64 sounds
+fine. I am not sure about having the next release be 3.0. I think the
+risk of someone having PSVIDefs in their code is a small risk (given
+that we have already removed the functionality). I agree it would be
+nice to clean up a number of items but I think 3.0 should have some
+significant functionality or architectural change from the current code
+base. However, this is just my opinion, and I wonder what others think?
+Anyone? We discussed about the same issue before 2.6; at that time I was
+proposing to delete those PSVI methods from the XMLElementDecl/XMLAttDef
+classes as part of the new implementation for DOMTypeInfo, but our
+policy only allowed us to mark them as deprecated. The alternative
+(releasing a 3.0 version) was not considered a viable choice (because no
+major features were introduced). What has changed now? We simply have
+more deprecated stuff to remove, but no new features yet. So, either we
+keep adhering to the policy (and keep those enums around for a little
+more time), or we start working for a 3.0 release, scheduling the work
+for those features that would break source code compatibility. BTW, what
+is the outstanding work for DOML3? If methods have changed names, could
+we introduce the new names and mark the old ones as deprecated? This is
+what I found doing a quick comparison between the specs (Load & Save and
+Core) and the source code: DOMImplementationLS interface: -
+createDOMBuilder is now createLSBuilder - createDOMWriter is now
+createLSSerializer - createDOMInputSource is now createLSInput - a new
+createLSOutput method has been added DOMBuilder interface: - its name is
+now DOMLSParser - new enum value ACTION_REPLACE_CHILDREN, and numeric
+values for the others have been changed - getErrorHandler,
+getEntityResolver, getFeature, canSetFeature have been removed - new
+abort() method DOMInputSource interface: - its name is now DOMLSInput: -
+a new certifiedText attribute - 3 ways to get text: characterStream,
+byteStream, stringData DOMEntityResolver interface: - its name is now
+DOMLSResourceResolver - resolveEntity is now resolveResource
+DOMNodeFilter interface: - its name is now DOMLSParserFilter - new enum
+FILTER_INTERRUPT - new method startElement - new attribute whatToShow
+DOMWriter interface: - its name is now DOMLSSerializer - features and
+encoding are enclosed in a DOMConfiguration attribute - writeNode() is
+now write() - new writeToURI method DOMWriterFilter interface: - its
+name is now DOMLSSerializerFilter DOMBuilderFilter is now
+DOMLSParserFilter: - it has just a whatToShow attribute, but it looks
+like we don't even define the interface (it's just a forward
+declaration) DOMNode interface: - compareTreePosition() has been changed
+into compareDocumentPosition(), with different enums -
+lookupNamespacePrefix() is now lookupPrefix() - getInterface() is now
+getFeature() DOMElement interface: - the setIdAttribute,
+setIdAttributeNS, setIdAttributeNode now have a boolean flag as last
+argument DOMText interface: - a new method isElementContentWhitespace
+replaces the non-standard method isIgnorableWhitespace DOMTypeInfo
+interface: - a new method isDerivedFrom has been introduced
+DOMUserDataHandler interface: - a new enum, NODE_ADOPTED DOMLocator
+interface: - getOffset should be duplicated into getUtf16Offset and
+getByteOffset - getErrorNode is now getRelatedNode DOMConfiguration
+interface: - a new parameterNames attribute DOMEntity interface: -
+getEncoding/getActualEncoding are now getInputEncoding/getXmlEncoding -
+getVersion is now getXmlVersion DOMDocument: -
+getEncoding/getActualEncoding are now getInputEncoding/getXmlEncoding -
+getStandalone is now getXmlStandalone - getVersion is no getXmlVersion -
+getDOMConfiguration is now getDomConfig All in all, source code
+compatibility could be maintained, creating new classes instead of
+renaming them, and adding new methods for the ones that changed names.
+But clearly the amount of deprecated code in the parser would grow (e.g.
+we already have questions on why there is a XercesDOMParser and a
+DOMBuilder; now we would have those two plus DOMLSParser) Maybe we
+should also keep track (perhaps in a Jira bug) of changes we should make
+for the next version of xercesc (you mentioned adding const to some
+signatures). It would be good if we didn't lose track of these... I was
+referring to these three Jira bugs: - XERCESC-783:
+DOMUserDataHandler::handle specifies src and dst as const DOMNode*, but
+the specs say they are DOMNode* (and the user wants to modify them) -
+XERCESC-1153: XMLSchemaDescriptionImpl::getLocationHints should return a
+const object to prevent attempts to change its state - XERCESC-1223:
+DOMDocument::importNode should declare the source node as const DOMNode*
+What do users think about this issue? Alberto
+--------------------------------------------------------------------- To
+unsubscribe, e-mail: xerces-c-dev-unsubscribe@xxxxxxxxxxxxxx For
+additional commands, e-mail: xerces-c-dev-help@xxxxxxxxxxxxxx -- Gareth
+Reakes, Managing Director Parthenon Computing +44-1865-811184
+http://www.parthcomp.com
+
+
+      Next Message by Date:
+
+RE: Request for feedback on some proposed xercesc changes (including
+breaking source code compatibility)
+<http://osdir.com/ml/text.xml.xerces-c.devel/2005-02/msg00099.html>
+
+> I feel we really should move to the latest version of the spec, even
+if > we don't fully implement it. Its difficult for new users, users who
+are > using both c + j and it makes the project seem like not a lot is >
+happening - even though that is not true. It definitely looks that way
+from the outside in the areas of DOM and XSD. So if indeed you can
+support DOM3 sooner rather than later, +1 from me. > If we do move, it
+does make sense to me to get rid of the old > interfaces, and therefore
+go to Xerces 3.0. Having them hanging around > will only be confusing.
+Any one else any feelings on this? +1. However, I think a concerted
+effort to close some outstanding bugs ought to be made if you go to 3.0,
+because those of us maintaining our own patches will be stuck without
+full DOM3 support otherwise. xml:lang support and proper base64 handling
+during validation are still the top problems for me. -- Scott
+
+
+      Previous Message by Thread:
+
+Re: Request for feedback on some proposed xercesc changes (including
+breaking source code compatibility)
+<http://osdir.com/ml/text.xml.xerces-c.devel/2005-02/msg00097.html>
+
+Hey, I feel we really should move to the latest version of the spec,
+even if we don't fully implement it. Its difficult for new users, users
+who are using both c + j and it makes the project seem like not a lot is
+happening - even though that is not true. If we do move, it does make
+sense to me to get rid of the old interfaces, and therefore go to Xerces
+3.0. Having them hanging around will only be confusing. Any one else any
+feelings on this? Gareth Alberto Massari wrote: Hi David, At 12.18
+04/02/2005 -0500, David Cargill wrote: Hi Alberto, Adding /Wp64 sounds
+fine. I am not sure about having the next release be 3.0. I think the
+risk of someone having PSVIDefs in their code is a small risk (given
+that we have already removed the functionality). I agree it would be
+nice to clean up a number of items but I think 3.0 should have some
+significant functionality or architectural change from the current code
+base. However, this is just my opinion, and I wonder what others think?
+Anyone? We discussed about the same issue before 2.6; at that time I was
+proposing to delete those PSVI methods from the XMLElementDecl/XMLAttDef
+classes as part of the new implementation for DOMTypeInfo, but our
+policy only allowed us to mark them as deprecated. The alternative
+(releasing a 3.0 version) was not considered a viable choice (because no
+major features were introduced). What has changed now? We simply have
+more deprecated stuff to remove, but no new features yet. So, either we
+keep adhering to the policy (and keep those enums around for a little
+more time), or we start working for a 3.0 release, scheduling the work
+for those features that would break source code compatibility. BTW, what
+is the outstanding work for DOML3? If methods have changed names, could
+we introduce the new names and mark the old ones as deprecated? This is
+what I found doing a quick comparison between the specs (Load & Save and
+Core) and the source code: DOMImplementationLS interface: -
+createDOMBuilder is now createLSBuilder - createDOMWriter is now
+createLSSerializer - createDOMInputSource is now createLSInput - a new
+createLSOutput method has been added DOMBuilder interface: - its name is
+now DOMLSParser - new enum value ACTION_REPLACE_CHILDREN, and numeric
+values for the others have been changed - getErrorHandler,
+getEntityResolver, getFeature, canSetFeature have been removed - new
+abort() method DOMInputSource interface: - its name is now DOMLSInput: -
+a new certifiedText attribute - 3 ways to get text: characterStream,
+byteStream, stringData DOMEntityResolver interface: - its name is now
+DOMLSResourceResolver - resolveEntity is now resolveResource
+DOMNodeFilter interface: - its name is now DOMLSParserFilter - new enum
+FILTER_INTERRUPT - new method startElement - new attribute whatToShow
+DOMWriter interface: - its name is now DOMLSSerializer - features and
+encoding are enclosed in a DOMConfiguration attribute - writeNode() is
+now write() - new writeToURI method DOMWriterFilter interface: - its
+name is now DOMLSSerializerFilter DOMBuilderFilter is now
+DOMLSParserFilter: - it has just a whatToShow attribute, but it looks
+like we don't even define the interface (it's just a forward
+declaration) DOMNode interface: - compareTreePosition() has been changed
+into compareDocumentPosition(), with different enums -
+lookupNamespacePrefix() is now lookupPrefix() - getInterface() is now
+getFeature() DOMElement interface: - the setIdAttribute,
+setIdAttributeNS, setIdAttributeNode now have a boolean flag as last
+argument DOMText interface: - a new method isElementContentWhitespace
+replaces the non-standard method isIgnorableWhitespace DOMTypeInfo
+interface: - a new method isDerivedFrom has been introduced
+DOMUserDataHandler interface: - a new enum, NODE_ADOPTED DOMLocator
+interface: - getOffset should be duplicated into getUtf16Offset and
+getByteOffset - getErrorNode is now getRelatedNode DOMConfiguration
+interface: - a new parameterNames attribute DOMEntity interface: -
+getEncoding/getActualEncoding are now getInputEncoding/getXmlEncoding -
+getVersion is now getXmlVersion DOMDocument: -
+getEncoding/getActualEncoding are now getInputEncoding/getXmlEncoding -
+getStandalone is now getXmlStandalone - getVersion is no getXmlVersion -
+getDOMConfiguration is now getDomConfig All in all, source code
+compatibility could be maintained, creating new classes instead of
+renaming them, and adding new methods for the ones that changed names.
+But clearly the amount of deprecated code in the parser would grow (e.g.
+we already have questions on why there is a XercesDOMParser and a
+DOMBuilder; now we would have those two plus DOMLSParser) Maybe we
+should also keep track (perhaps in a Jira bug) of changes we should make
+for the next version of xercesc (you mentioned adding const to some
+signatures). It would be good if we didn't lose track of these... I was
+referring to these three Jira bugs: - XERCESC-783:
+DOMUserDataHandler::handle specifies src and dst as const DOMNode*, but
+the specs say they are DOMNode* (and the user wants to modify them) -
+XERCESC-1153: XMLSchemaDescriptionImpl::getLocationHints should return a
+const object to prevent attempts to change its state - XERCESC-1223:
+DOMDocument::importNode should declare the source node as const DOMNode*
+What do users think about this issue? Alberto
+--------------------------------------------------------------------- To
+unsubscribe, e-mail: xerces-c-dev-unsubscribe@xxxxxxxxxxxxxx For
+additional commands, e-mail: xerces-c-dev-help@xxxxxxxxxxxxxx -- Gareth
+Reakes, Managing Director Parthenon Computing +44-1865-811184
+http://www.parthcomp.com
+
+
+      Next Message by Thread:
+
+Re: The Road to 3.0 (was Request for feedback on some proposed xercesc
+changes) <http://osdir.com/ml/text.xml.xerces-c.devel/2005-02/msg00116.html>
+
+Hi James, This looks like an excellent--and ambitious--roadmap to me!
+James Berry <jberry@xxxxxxxxxx> wrote on 02/08/2005 09:56:00 AM: > I
+agree that we should move to the future and shed old baggage. Moving to
+the future is always good. I am a bit confused though about what "old
+baggage" we need to shed, and just what shedding implies. The deprecated
+DOM, for instance, is now built into a separate library; folks that
+don't need it have no reason to deploy it. Does the inclusion of that
+unquestionably elderly code in our build manifestly cause anyone pain?
+If there is other code--aside from things like demonstrably useless
+enums--that is annoying people, perhaps we could mete the same treatment
+out to it? > > I propose that we create a 2.6.x branch, and get CVS HEAD
+headed toward > a 3.0 release, covering the latest version of the spec,
+which might be > unstable for a while. > > Perhaps this would also be a
+good time (pre-branch) to move to > subversion? It does a lot better job
+of dealing with deleted and > reorganized files, directories, etc. > >
+Proposed sequence: > > (1) Move to subversion. I agree that this is
+beneficial and inevitable. We have clear direction from the
+Infrastructure team that all projects will eventually be presented with
+an offer they can't refuse along these lines. That said, as a Cygwin
+user and a command-line devotee, I'd love to be assured there's hope for
+my preferred method of code extraction. (Mind you, given the amount I'm
+committing these days, that hardly matters! :) ) > > (2) Create xercesc
+2.x branch for any further 2.x bug fixes or > development > > (3) HEAD
+will begin work toward a 3.0 release which sheds old > interfaces, etc.
+Reiterating the above, I'd like a bit more clarity about the old
+interfaces we'd like to shed, and just what shedding implies (as well as
+why it's needed, if shedding == deletion from the source tree). DOM
+level 3 certainly does sound like something we should be aiming to
+support. Looking back at some notes from early 2003, the stimate was
+that Core would have cost about 3 person months, and load/save about 1
+month; given that there has been further divergence since, it's somewhat
+hard to imagine that these numbers are not conservative. So, before
+committing ourselves to this course, or to a schedule, it seems to me
+prudent to estalish that there are volunteers who are able to undertake
+the necessary work at present. > (On thing I'd love to see resolved for
+3.0 would be a re-work of the > configure/build infrastructure and
+ports. Xerces would gain a lot more > mindshare if it had a cleaned up
+./configure/make/make install build, > and a way to lose all of the
+redundancy that creating a port currently > requires.) I'm very much
+ready to admit my ignorance of other build architectures. It sure does
+seem that Xerces-C is supported on lots of platforms and compilers;
+given that there is a certain amount of investment in the existing
+infrastructure, I for one would sure be appreciative of some education
+as to the advantages of alternatives, as well as what's necessary in
+terms of migration for tooling (build systems etc.) that centre around
+what we currently have. Understanding a bit more concretely what's wrong
+with what we currently have would also sure be helpful. Those are a few
+things that occur to me at first glance anyway. The overall direction of
+this proposal is good; just want to make sure all the details are
+accounted for. Cheers! Neil Neil Graham Manager, XML Parser Development
+IBM Toronto Lab Phone: 905-413-3519, T/L 969-3519 E-mail: neilg@xxxxxxxxxx
+
+
+vvv
+
+Home <http://osdir.com/ml> | News <http://osdir.com/> | Sitemap
+<http://osdir.com/ml/site_dir/> | FAQ <http://osdir.com/ml/faq.php> |
+advertise <http://osdir.com/Article9135.phtml> | OSDir is an Inevitable
+<http://inevitablecorp.com/> website. GBiz <http://gbiz.org/> is too!
+super tiny logo

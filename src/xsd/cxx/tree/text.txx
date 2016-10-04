@@ -38,6 +38,15 @@ namespace xsd
               break;
             }
           case DOMNode::ELEMENT_NODE:
+          case DOMNode::ATTRIBUTE_NODE:
+          case DOMNode::ENTITY_REFERENCE_NODE:
+          case DOMNode::ENTITY_NODE:
+          case DOMNode::PROCESSING_INSTRUCTION_NODE:
+          case DOMNode::COMMENT_NODE:
+          case DOMNode::DOCUMENT_NODE:
+          case DOMNode::DOCUMENT_TYPE_NODE:
+          case DOMNode::DOCUMENT_FRAGMENT_NODE:
+          case DOMNode::NOTATION_NODE:
             {
               throw expected_text_content<C> ();
             }

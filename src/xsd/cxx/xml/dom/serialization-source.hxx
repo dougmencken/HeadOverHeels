@@ -12,10 +12,8 @@
 #include <xercesc/dom/DOMAttr.hpp>
 #include <xercesc/dom/DOMElement.hpp>
 #include <xercesc/dom/DOMDocument.hpp>
-#include <xercesc/dom/DOMErrorHandler.hpp>
 #include <xercesc/framework/XMLFormatter.hpp> // XMLFormatTarget, XMLFormatter
 
-#include <xsd/cxx/xml/error-handler.hxx>
 #include <xsd/cxx/xml/dom/auto-ptr.hxx>
 #include <xsd/cxx/xml/dom/elements.hxx> // name
 #include <xsd/cxx/xml/dom/serialization-header.hxx>
@@ -107,15 +105,6 @@ namespace xsd
         serialize (xercesc::XMLFormatTarget& target,
                    const xercesc::DOMDocument& doc,
                    const std::basic_string<C>& enconding,
-                   error_handler<C>& eh,
-                   unsigned long flags);
-
-        template <typename C>
-        bool
-        serialize (xercesc::XMLFormatTarget& target,
-                   const xercesc::DOMDocument& doc,
-                   const std::basic_string<C>& enconding,
-                   xercesc::DOMErrorHandler& eh,
                    unsigned long flags);
 
         //
@@ -136,7 +125,7 @@ namespace xsd
           //
           virtual void
           writeChars (const XMLByte* const buf,
-                      const unsigned int size,
+                      XMLSize_t size,
                       xercesc::XMLFormatter* const)
           {
             // Ignore the data if there was a stream failure and

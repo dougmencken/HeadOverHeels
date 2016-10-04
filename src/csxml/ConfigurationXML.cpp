@@ -31,11 +31,6 @@
 // in the accompanying FLOSSE file
 //
 
-// Begin prologue
-//
-//
-// End prologue
-
 #include <xsd/cxx/pre.hxx>
 
 #include "ConfigurationXML.hpp"
@@ -839,7 +834,6 @@ namespace cxml
 #include <istream>
 #include <xercesc/framework/Wrapper4InputSource.hpp>
 #include <xsd/cxx/xml/sax/std-input-source.hxx>
-#include <xsd/cxx/tree/error-handler.hxx>
 
 namespace cxml
 {
@@ -852,60 +846,9 @@ namespace cxml
       (f & ::xml_schema::flags::dont_initialize) == 0,
       (f & ::xml_schema::flags::keep_dom) == 0);
 
-    ::xsd::cxx::tree::error_handler< char > h;
+    ::xsd::cxx::xml::dom::auto_ptr< ::xercesc::DOMDocument > d ( ::xsd::cxx::xml::dom::parse< char > ( u, p, f ) );
 
-    ::xsd::cxx::xml::dom::auto_ptr< ::xercesc::DOMDocument > d (
-      ::xsd::cxx::xml::dom::parse< char > (u, h, p, f));
-
-    h.throw_if_failed< ::xsd::cxx::tree::parsing< char > > ();
-
-    ::std::auto_ptr< ::cxml::ConfigurationXML > r (
-      ::cxml::configuration (
-        d.get (), f | ::xml_schema::flags::own_dom, p));
-
-    if (f & ::xml_schema::flags::keep_dom)
-      d.release ();
-
-    return r;
-  }
-
-  ::std::auto_ptr< ::cxml::ConfigurationXML >
-  configuration (const ::std::string& u,
-                 ::xml_schema::error_handler& h,
-                 ::xml_schema::flags f,
-                 const ::xml_schema::properties& p)
-  {
-    ::xsd::cxx::xml::auto_initializer i (
-      (f & ::xml_schema::flags::dont_initialize) == 0,
-      (f & ::xml_schema::flags::keep_dom) == 0);
-
-    ::xsd::cxx::xml::dom::auto_ptr< ::xercesc::DOMDocument > d (
-      ::xsd::cxx::xml::dom::parse< char > (u, h, p, f));
-
-    if (!d)
-      throw ::xsd::cxx::tree::parsing< char > ();
-
-    ::std::auto_ptr< ::cxml::ConfigurationXML > r (
-      ::cxml::configuration (
-        d.get (), f | ::xml_schema::flags::own_dom, p));
-
-    if (f & ::xml_schema::flags::keep_dom)
-      d.release ();
-
-    return r;
-  }
-
-  ::std::auto_ptr< ::cxml::ConfigurationXML >
-  configuration (const ::std::string& u,
-                 ::xercesc::DOMErrorHandler& h,
-                 ::xml_schema::flags f,
-                 const ::xml_schema::properties& p)
-  {
-    ::xsd::cxx::xml::dom::auto_ptr< ::xercesc::DOMDocument > d (
-      ::xsd::cxx::xml::dom::parse< char > (u, h, p, f));
-
-    if (!d)
-      throw ::xsd::cxx::tree::parsing< char > ();
+    if ( ! d ) throw ::xsd::cxx::tree::parsing< char > ();
 
     ::std::auto_ptr< ::cxml::ConfigurationXML > r (
       ::cxml::configuration (
@@ -933,32 +876,6 @@ namespace cxml
 
   ::std::auto_ptr< ::cxml::ConfigurationXML >
   configuration (::std::istream& is,
-                 ::xml_schema::error_handler& h,
-                 ::xml_schema::flags f,
-                 const ::xml_schema::properties& p)
-  {
-    ::xsd::cxx::xml::auto_initializer i (
-      (f & ::xml_schema::flags::dont_initialize) == 0,
-      (f & ::xml_schema::flags::keep_dom) == 0);
-
-    ::xsd::cxx::xml::sax::std_input_source isrc (is);
-    ::xercesc::Wrapper4InputSource wrap (&isrc, false);
-    return ::cxml::configuration (wrap, h, f, p);
-  }
-
-  ::std::auto_ptr< ::cxml::ConfigurationXML >
-  configuration (::std::istream& is,
-                 ::xercesc::DOMErrorHandler& h,
-                 ::xml_schema::flags f,
-                 const ::xml_schema::properties& p)
-  {
-    ::xsd::cxx::xml::sax::std_input_source isrc (is);
-    ::xercesc::Wrapper4InputSource wrap (&isrc, false);
-    return ::cxml::configuration (wrap, h, f, p);
-  }
-
-  ::std::auto_ptr< ::cxml::ConfigurationXML >
-  configuration (::std::istream& is,
                  const ::std::string& sid,
                  ::xml_schema::flags f,
                  const ::xml_schema::properties& p)
@@ -973,88 +890,13 @@ namespace cxml
   }
 
   ::std::auto_ptr< ::cxml::ConfigurationXML >
-  configuration (::std::istream& is,
-                 const ::std::string& sid,
-                 ::xml_schema::error_handler& h,
+  configuration (const ::xercesc::DOMLSInput& i,
                  ::xml_schema::flags f,
                  const ::xml_schema::properties& p)
   {
-    ::xsd::cxx::xml::auto_initializer i (
-      (f & ::xml_schema::flags::dont_initialize) == 0,
-      (f & ::xml_schema::flags::keep_dom) == 0);
+    ::xsd::cxx::xml::dom::auto_ptr< ::xercesc::DOMDocument > d ( ::xsd::cxx::xml::dom::parse< char > ( i, p, f ) );
 
-    ::xsd::cxx::xml::sax::std_input_source isrc (is, sid);
-    ::xercesc::Wrapper4InputSource wrap (&isrc, false);
-    return ::cxml::configuration (wrap, h, f, p);
-  }
-
-  ::std::auto_ptr< ::cxml::ConfigurationXML >
-  configuration (::std::istream& is,
-                 const ::std::string& sid,
-                 ::xercesc::DOMErrorHandler& h,
-                 ::xml_schema::flags f,
-                 const ::xml_schema::properties& p)
-  {
-    ::xsd::cxx::xml::sax::std_input_source isrc (is, sid);
-    ::xercesc::Wrapper4InputSource wrap (&isrc, false);
-    return ::cxml::configuration (wrap, h, f, p);
-  }
-
-  ::std::auto_ptr< ::cxml::ConfigurationXML >
-  configuration (const ::xercesc::DOMInputSource& i,
-                 ::xml_schema::flags f,
-                 const ::xml_schema::properties& p)
-  {
-    ::xsd::cxx::tree::error_handler< char > h;
-
-    ::xsd::cxx::xml::dom::auto_ptr< ::xercesc::DOMDocument > d (
-      ::xsd::cxx::xml::dom::parse< char > (i, h, p, f));
-
-    h.throw_if_failed< ::xsd::cxx::tree::parsing< char > > ();
-
-    ::std::auto_ptr< ::cxml::ConfigurationXML > r (
-      ::cxml::configuration (
-        d.get (), f | ::xml_schema::flags::own_dom, p));
-
-    if (f & ::xml_schema::flags::keep_dom)
-      d.release ();
-
-    return r;
-  }
-
-  ::std::auto_ptr< ::cxml::ConfigurationXML >
-  configuration (const ::xercesc::DOMInputSource& i,
-                 ::xml_schema::error_handler& h,
-                 ::xml_schema::flags f,
-                 const ::xml_schema::properties& p)
-  {
-    ::xsd::cxx::xml::dom::auto_ptr< ::xercesc::DOMDocument > d (
-      ::xsd::cxx::xml::dom::parse< char > (i, h, p, f));
-
-    if (!d)
-      throw ::xsd::cxx::tree::parsing< char > ();
-
-    ::std::auto_ptr< ::cxml::ConfigurationXML > r (
-      ::cxml::configuration (
-        d.get (), f | ::xml_schema::flags::own_dom, p));
-
-    if (f & ::xml_schema::flags::keep_dom)
-      d.release ();
-
-    return r;
-  }
-
-  ::std::auto_ptr< ::cxml::ConfigurationXML >
-  configuration (const ::xercesc::DOMInputSource& i,
-                 ::xercesc::DOMErrorHandler& h,
-                 ::xml_schema::flags f,
-                 const ::xml_schema::properties& p)
-  {
-    ::xsd::cxx::xml::dom::auto_ptr< ::xercesc::DOMDocument > d (
-      ::xsd::cxx::xml::dom::parse< char > (i, h, p, f));
-
-    if (!d)
-      throw ::xsd::cxx::tree::parsing< char > ();
+    if ( ! d ) throw ::xsd::cxx::tree::parsing< char > ();
 
     ::std::auto_ptr< ::cxml::ConfigurationXML > r (
       ::cxml::configuration (
@@ -1142,7 +984,6 @@ namespace cxml
 
 #include <ostream>
 #include <xsd/cxx/xml/dom/serialization-source.hxx>
-#include <xsd/cxx/tree/error-handler.hxx>
 
 namespace cxml
 {
@@ -1159,49 +1000,10 @@ namespace cxml
     ::xsd::cxx::xml::dom::auto_ptr< ::xercesc::DOMDocument > d (
       ::cxml::configuration (s, m, f));
 
-    ::xsd::cxx::tree::error_handler< char > h;
-
     ::xsd::cxx::xml::dom::ostream_format_target t (o);
-    if (!::xsd::cxx::xml::dom::serialize (t, *d, e, h, f))
+    if (!::xsd::cxx::xml::dom::serialize (t, *d, e, f))
     {
-      h.throw_if_failed< ::xsd::cxx::tree::serialization< char > > ();
-    }
-  }
-
-  void
-  configuration (::std::ostream& o,
-                 const ::cxml::ConfigurationXML& s,
-                 const ::xml_schema::namespace_infomap& m,
-                 ::xml_schema::error_handler& h,
-                 const ::std::string& e,
-                 ::xml_schema::flags f)
-  {
-    ::xsd::cxx::xml::auto_initializer i (
-      (f & ::xml_schema::flags::dont_initialize) == 0);
-
-    ::xsd::cxx::xml::dom::auto_ptr< ::xercesc::DOMDocument > d (
-      ::cxml::configuration (s, m, f));
-    ::xsd::cxx::xml::dom::ostream_format_target t (o);
-    if (!::xsd::cxx::xml::dom::serialize (t, *d, e, h, f))
-    {
-      throw ::xsd::cxx::tree::serialization< char > ();
-    }
-  }
-
-  void
-  configuration (::std::ostream& o,
-                 const ::cxml::ConfigurationXML& s,
-                 const ::xml_schema::namespace_infomap& m,
-                 ::xercesc::DOMErrorHandler& h,
-                 const ::std::string& e,
-                 ::xml_schema::flags f)
-  {
-    ::xsd::cxx::xml::dom::auto_ptr< ::xercesc::DOMDocument > d (
-      ::cxml::configuration (s, m, f));
-    ::xsd::cxx::xml::dom::ostream_format_target t (o);
-    if (!::xsd::cxx::xml::dom::serialize (t, *d, e, h, f))
-    {
-      throw ::xsd::cxx::tree::serialization< char > ();
+      throw ::xsd::cxx::tree::parsing< char > ();
     }
   }
 
@@ -1215,43 +1017,9 @@ namespace cxml
     ::xsd::cxx::xml::dom::auto_ptr< ::xercesc::DOMDocument > d (
       ::cxml::configuration (s, m, f));
 
-    ::xsd::cxx::tree::error_handler< char > h;
-
-    if (!::xsd::cxx::xml::dom::serialize (t, *d, e, h, f))
+    if (!::xsd::cxx::xml::dom::serialize (t, *d, e, f))
     {
-      h.throw_if_failed< ::xsd::cxx::tree::serialization< char > > ();
-    }
-  }
-
-  void
-  configuration (::xercesc::XMLFormatTarget& t,
-                 const ::cxml::ConfigurationXML& s,
-                 const ::xml_schema::namespace_infomap& m,
-                 ::xml_schema::error_handler& h,
-                 const ::std::string& e,
-                 ::xml_schema::flags f)
-  {
-    ::xsd::cxx::xml::dom::auto_ptr< ::xercesc::DOMDocument > d (
-      ::cxml::configuration (s, m, f));
-    if (!::xsd::cxx::xml::dom::serialize (t, *d, e, h, f))
-    {
-      throw ::xsd::cxx::tree::serialization< char > ();
-    }
-  }
-
-  void
-  configuration (::xercesc::XMLFormatTarget& t,
-                 const ::cxml::ConfigurationXML& s,
-                 const ::xml_schema::namespace_infomap& m,
-                 ::xercesc::DOMErrorHandler& h,
-                 const ::std::string& e,
-                 ::xml_schema::flags f)
-  {
-    ::xsd::cxx::xml::dom::auto_ptr< ::xercesc::DOMDocument > d (
-      ::cxml::configuration (s, m, f));
-    if (!::xsd::cxx::xml::dom::serialize (t, *d, e, h, f))
-    {
-      throw ::xsd::cxx::tree::serialization< char > ();
+      throw ::xsd::cxx::tree::parsing< char > ();
     }
   }
 
@@ -1490,9 +1258,4 @@ namespace cxml
 }
 
 #include <xsd/cxx/post.hxx>
-
-// Begin epilogue
-//
-//
-// End epilogue
 

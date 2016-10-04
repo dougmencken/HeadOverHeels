@@ -5,8 +5,8 @@
 
 #include <xercesc/util/XMLUniDefs.hpp> // chLatin_L, etc
 
-#include <xercesc/dom/DOMImplementation.hpp>
-#include <xercesc/dom/DOMImplementationRegistry.hpp>
+# include <xercesc/dom/DOMImplementation.hpp>
+# include <xercesc/dom/DOMImplementationRegistry.hpp>
 
 namespace xsd
 {
@@ -24,13 +24,11 @@ namespace xsd
                               xercesc::chLatin_S,
                               xercesc::chNull};
 
-          // Get an implementation of the Load-Store (LS) interface.
+          // Get an implementation of the Load-Store (LS) interface
           //
-          xercesc::DOMImplementation* impl (
-            xercesc::DOMImplementationRegistry::getDOMImplementation (ls));
+          xercesc::DOMImplementation * impl = xercesc::DOMImplementationRegistry::getDOMImplementation ( ls );
 
-          return xml::dom::auto_ptr<xercesc::DOMDocument> (
-            impl->createDocument ());
+          return xml::dom::auto_ptr< xercesc::DOMDocument > ( impl->createDocument () );
         }
       }
     }

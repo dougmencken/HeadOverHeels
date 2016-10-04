@@ -34,11 +34,6 @@
 #ifndef CONFIGURATION_XML_HPP
 #define CONFIGURATION_XML_HPP
 
-// Begin prologue
-//
-//
-// End prologue
-
 #include <xsd/cxx/version.hxx>
 
 #if (XSD_INT_VERSION != 3000000L)
@@ -58,8 +53,6 @@
 #include <xsd/cxx/tree/exceptions.hxx>
 #include <xsd/cxx/tree/elements.hxx>
 #include <xsd/cxx/tree/types.hxx>
-
-#include <xsd/cxx/xml/error-handler.hxx>
 
 #include <xsd/cxx/tree/parsing.hxx>
 
@@ -201,10 +194,6 @@ namespace xml_schema
   typedef ::xsd::cxx::tree::severity severity;
   typedef ::xsd::cxx::tree::error< char > error;
   typedef ::xsd::cxx::tree::diagnostics< char > diagnostics;
-
-  // Error handler interface
-  //
-  typedef ::xsd::cxx::xml::error_handler< char > error_handler;
 }
 
 // Forward declarations
@@ -566,8 +555,8 @@ namespace cxml
 #include <iosfwd>
 
 #include <xercesc/dom/DOMDocument.hpp>
-#include <xercesc/dom/DOMInputSource.hpp>
-#include <xercesc/dom/DOMErrorHandler.hpp>
+
+# include <xercesc/dom/DOMLSInput.hpp>
 
 namespace cxml
 {
@@ -576,18 +565,6 @@ namespace cxml
 
   ::std::auto_ptr< ::cxml::ConfigurationXML >
   configuration (const ::std::string& uri,
-                 ::xml_schema::flags f = 0,
-                 const ::xml_schema::properties& p = ::xml_schema::properties ());
-
-  ::std::auto_ptr< ::cxml::ConfigurationXML >
-  configuration (const ::std::string& uri,
-                 ::xml_schema::error_handler& eh,
-                 ::xml_schema::flags f = 0,
-                 const ::xml_schema::properties& p = ::xml_schema::properties ());
-
-  ::std::auto_ptr< ::cxml::ConfigurationXML >
-  configuration (const ::std::string& uri,
-                 ::xercesc::DOMErrorHandler& eh,
                  ::xml_schema::flags f = 0,
                  const ::xml_schema::properties& p = ::xml_schema::properties ());
 
@@ -601,53 +578,15 @@ namespace cxml
 
   ::std::auto_ptr< ::cxml::ConfigurationXML >
   configuration (::std::istream& is,
-                 ::xml_schema::error_handler& eh,
-                 ::xml_schema::flags f = 0,
-                 const ::xml_schema::properties& p = ::xml_schema::properties ());
-
-  ::std::auto_ptr< ::cxml::ConfigurationXML >
-  configuration (::std::istream& is,
-                 ::xercesc::DOMErrorHandler& eh,
-                 ::xml_schema::flags f = 0,
-                 const ::xml_schema::properties& p = ::xml_schema::properties ());
-
-  ::std::auto_ptr< ::cxml::ConfigurationXML >
-  configuration (::std::istream& is,
                  const ::std::string& id,
                  ::xml_schema::flags f = 0,
                  const ::xml_schema::properties& p = ::xml_schema::properties ());
 
-  ::std::auto_ptr< ::cxml::ConfigurationXML >
-  configuration (::std::istream& is,
-                 const ::std::string& id,
-                 ::xml_schema::error_handler& eh,
-                 ::xml_schema::flags f = 0,
-                 const ::xml_schema::properties& p = ::xml_schema::properties ());
-
-  ::std::auto_ptr< ::cxml::ConfigurationXML >
-  configuration (::std::istream& is,
-                 const ::std::string& id,
-                 ::xercesc::DOMErrorHandler& eh,
-                 ::xml_schema::flags f = 0,
-                 const ::xml_schema::properties& p = ::xml_schema::properties ());
-
-  // Parse xercesc::DOMInputSource
+  // Parse xercesc::DOMLSInput
   //
 
   ::std::auto_ptr< ::cxml::ConfigurationXML >
-  configuration (const ::xercesc::DOMInputSource& is,
-                 ::xml_schema::flags f = 0,
-                 const ::xml_schema::properties& p = ::xml_schema::properties ());
-
-  ::std::auto_ptr< ::cxml::ConfigurationXML >
-  configuration (const ::xercesc::DOMInputSource& is,
-                 ::xml_schema::error_handler& eh,
-                 ::xml_schema::flags f = 0,
-                 const ::xml_schema::properties& p = ::xml_schema::properties ());
-
-  ::std::auto_ptr< ::cxml::ConfigurationXML >
-  configuration (const ::xercesc::DOMInputSource& is,
-                 ::xercesc::DOMErrorHandler& eh,
+  configuration (const ::xercesc::DOMLSInput& is,
                  ::xml_schema::flags f = 0,
                  const ::xml_schema::properties& p = ::xml_schema::properties ());
 
@@ -668,7 +607,6 @@ namespace cxml
 #include <iosfwd>
 
 #include <xercesc/dom/DOMDocument.hpp>
-#include <xercesc/dom/DOMErrorHandler.hpp>
 #include <xercesc/framework/XMLFormatter.hpp>
 
 #include <xsd/cxx/xml/dom/auto-ptr.hxx>
@@ -685,22 +623,6 @@ namespace cxml
                  const ::std::string& e = "UTF-8",
                  ::xml_schema::flags f = 0);
 
-  void
-  configuration (::std::ostream& os,
-                 const ::cxml::ConfigurationXML& x,
-                 const ::xml_schema::namespace_infomap& m,
-                 ::xml_schema::error_handler& eh,
-                 const ::std::string& e = "UTF-8",
-                 ::xml_schema::flags f = 0);
-
-  void
-  configuration (::std::ostream& os,
-                 const ::cxml::ConfigurationXML& x,
-                 const ::xml_schema::namespace_infomap& m,
-                 ::xercesc::DOMErrorHandler& eh,
-                 const ::std::string& e = "UTF-8",
-                 ::xml_schema::flags f = 0);
-
   // Serialize to xercesc::XMLFormatTarget
   //
 
@@ -708,22 +630,6 @@ namespace cxml
   configuration (::xercesc::XMLFormatTarget& ft,
                  const ::cxml::ConfigurationXML& x,
                  const ::xml_schema::namespace_infomap& m,
-                 const ::std::string& e = "UTF-8",
-                 ::xml_schema::flags f = 0);
-
-  void
-  configuration (::xercesc::XMLFormatTarget& ft,
-                 const ::cxml::ConfigurationXML& x,
-                 const ::xml_schema::namespace_infomap& m,
-                 ::xml_schema::error_handler& eh,
-                 const ::std::string& e = "UTF-8",
-                 ::xml_schema::flags f = 0);
-
-  void
-  configuration (::xercesc::XMLFormatTarget& ft,
-                 const ::cxml::ConfigurationXML& x,
-                 const ::xml_schema::namespace_infomap& m,
-                 ::xercesc::DOMErrorHandler& eh,
                  const ::std::string& e = "UTF-8",
                  ::xml_schema::flags f = 0);
 
@@ -754,10 +660,5 @@ namespace cxml
 }
 
 #include <xsd/cxx/post.hxx>
-
-// Begin epilogue
-//
-//
-// End epilogue
 
 #endif // CONFIGURATION_XML_HPP

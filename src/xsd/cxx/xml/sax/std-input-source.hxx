@@ -29,14 +29,14 @@ namespace xsd
           {
           }
 
-          virtual unsigned int
+          virtual XMLFilePos
           curPos () const
           {
             return static_cast<unsigned int> (is_.tellg ());
           }
 
-          virtual unsigned int
-          readBytes (XMLByte* const buf, const unsigned int size)
+          virtual XMLSize_t
+          readBytes (XMLByte* const buf, XMLSize_t size)
           {
             // Unset the exception failbit while we are working
             // with the stream
@@ -62,6 +62,12 @@ namespace xsd
               return static_cast<unsigned int> (is_.gcount ());
             else
               return 0;
+          }
+
+          virtual const XMLCh*
+          getContentType() const
+          {
+            return 0;
           }
 
         private :

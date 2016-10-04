@@ -31,11 +31,6 @@
 // in the accompanying FLOSSE file
 //
 
-// Begin prologue
-//
-//
-// End prologue
-
 #include <xsd/cxx/pre.hxx>
 
 #include "LanguageXML.hpp"
@@ -535,60 +530,10 @@ namespace lxml
       (f & ::xml_schema::flags::dont_initialize) == 0,
       (f & ::xml_schema::flags::keep_dom) == 0);
 
-    ::xsd::cxx::tree::error_handler< char > h;
-
     ::xsd::cxx::xml::dom::auto_ptr< ::xercesc::DOMDocument > d (
-      ::xsd::cxx::xml::dom::parse< char > (u, h, p, f));
+      ::xsd::cxx::xml::dom::parse< char > (u, p, f));
 
-    h.throw_if_failed< ::xsd::cxx::tree::parsing< char > > ();
-
-    ::std::auto_ptr< ::lxml::LanguageXML > r (
-      ::lxml::language (
-        d.get (), f | ::xml_schema::flags::own_dom, p));
-
-    if (f & ::xml_schema::flags::keep_dom)
-      d.release ();
-
-    return r;
-  }
-
-  ::std::auto_ptr< ::lxml::LanguageXML >
-  language (const ::std::string& u,
-            ::xml_schema::error_handler& h,
-            ::xml_schema::flags f,
-            const ::xml_schema::properties& p)
-  {
-    ::xsd::cxx::xml::auto_initializer i (
-      (f & ::xml_schema::flags::dont_initialize) == 0,
-      (f & ::xml_schema::flags::keep_dom) == 0);
-
-    ::xsd::cxx::xml::dom::auto_ptr< ::xercesc::DOMDocument > d (
-      ::xsd::cxx::xml::dom::parse< char > (u, h, p, f));
-
-    if (!d)
-      throw ::xsd::cxx::tree::parsing< char > ();
-
-    ::std::auto_ptr< ::lxml::LanguageXML > r (
-      ::lxml::language (
-        d.get (), f | ::xml_schema::flags::own_dom, p));
-
-    if (f & ::xml_schema::flags::keep_dom)
-      d.release ();
-
-    return r;
-  }
-
-  ::std::auto_ptr< ::lxml::LanguageXML >
-  language (const ::std::string& u,
-            ::xercesc::DOMErrorHandler& h,
-            ::xml_schema::flags f,
-            const ::xml_schema::properties& p)
-  {
-    ::xsd::cxx::xml::dom::auto_ptr< ::xercesc::DOMDocument > d (
-      ::xsd::cxx::xml::dom::parse< char > (u, h, p, f));
-
-    if (!d)
-      throw ::xsd::cxx::tree::parsing< char > ();
+    if ( ! d ) throw ::xsd::cxx::tree::parsing< char > ();
 
     ::std::auto_ptr< ::lxml::LanguageXML > r (
       ::lxml::language (
@@ -616,32 +561,6 @@ namespace lxml
 
   ::std::auto_ptr< ::lxml::LanguageXML >
   language (::std::istream& is,
-            ::xml_schema::error_handler& h,
-            ::xml_schema::flags f,
-            const ::xml_schema::properties& p)
-  {
-    ::xsd::cxx::xml::auto_initializer i (
-      (f & ::xml_schema::flags::dont_initialize) == 0,
-      (f & ::xml_schema::flags::keep_dom) == 0);
-
-    ::xsd::cxx::xml::sax::std_input_source isrc (is);
-    ::xercesc::Wrapper4InputSource wrap (&isrc, false);
-    return ::lxml::language (wrap, h, f, p);
-  }
-
-  ::std::auto_ptr< ::lxml::LanguageXML >
-  language (::std::istream& is,
-            ::xercesc::DOMErrorHandler& h,
-            ::xml_schema::flags f,
-            const ::xml_schema::properties& p)
-  {
-    ::xsd::cxx::xml::sax::std_input_source isrc (is);
-    ::xercesc::Wrapper4InputSource wrap (&isrc, false);
-    return ::lxml::language (wrap, h, f, p);
-  }
-
-  ::std::auto_ptr< ::lxml::LanguageXML >
-  language (::std::istream& is,
             const ::std::string& sid,
             ::xml_schema::flags f,
             const ::xml_schema::properties& p)
@@ -656,88 +575,14 @@ namespace lxml
   }
 
   ::std::auto_ptr< ::lxml::LanguageXML >
-  language (::std::istream& is,
-            const ::std::string& sid,
-            ::xml_schema::error_handler& h,
-            ::xml_schema::flags f,
-            const ::xml_schema::properties& p)
-  {
-    ::xsd::cxx::xml::auto_initializer i (
-      (f & ::xml_schema::flags::dont_initialize) == 0,
-      (f & ::xml_schema::flags::keep_dom) == 0);
-
-    ::xsd::cxx::xml::sax::std_input_source isrc (is, sid);
-    ::xercesc::Wrapper4InputSource wrap (&isrc, false);
-    return ::lxml::language (wrap, h, f, p);
-  }
-
-  ::std::auto_ptr< ::lxml::LanguageXML >
-  language (::std::istream& is,
-            const ::std::string& sid,
-            ::xercesc::DOMErrorHandler& h,
-            ::xml_schema::flags f,
-            const ::xml_schema::properties& p)
-  {
-    ::xsd::cxx::xml::sax::std_input_source isrc (is, sid);
-    ::xercesc::Wrapper4InputSource wrap (&isrc, false);
-    return ::lxml::language (wrap, h, f, p);
-  }
-
-  ::std::auto_ptr< ::lxml::LanguageXML >
-  language (const ::xercesc::DOMInputSource& i,
-            ::xml_schema::flags f,
-            const ::xml_schema::properties& p)
-  {
-    ::xsd::cxx::tree::error_handler< char > h;
-
-    ::xsd::cxx::xml::dom::auto_ptr< ::xercesc::DOMDocument > d (
-      ::xsd::cxx::xml::dom::parse< char > (i, h, p, f));
-
-    h.throw_if_failed< ::xsd::cxx::tree::parsing< char > > ();
-
-    ::std::auto_ptr< ::lxml::LanguageXML > r (
-      ::lxml::language (
-        d.get (), f | ::xml_schema::flags::own_dom, p));
-
-    if (f & ::xml_schema::flags::keep_dom)
-      d.release ();
-
-    return r;
-  }
-
-  ::std::auto_ptr< ::lxml::LanguageXML >
-  language (const ::xercesc::DOMInputSource& i,
-            ::xml_schema::error_handler& h,
+  language (const ::xercesc::DOMLSInput& i,
             ::xml_schema::flags f,
             const ::xml_schema::properties& p)
   {
     ::xsd::cxx::xml::dom::auto_ptr< ::xercesc::DOMDocument > d (
-      ::xsd::cxx::xml::dom::parse< char > (i, h, p, f));
+      ::xsd::cxx::xml::dom::parse< char > (i, p, f));
 
-    if (!d)
-      throw ::xsd::cxx::tree::parsing< char > ();
-
-    ::std::auto_ptr< ::lxml::LanguageXML > r (
-      ::lxml::language (
-        d.get (), f | ::xml_schema::flags::own_dom, p));
-
-    if (f & ::xml_schema::flags::keep_dom)
-      d.release ();
-
-    return r;
-  }
-
-  ::std::auto_ptr< ::lxml::LanguageXML >
-  language (const ::xercesc::DOMInputSource& i,
-            ::xercesc::DOMErrorHandler& h,
-            ::xml_schema::flags f,
-            const ::xml_schema::properties& p)
-  {
-    ::xsd::cxx::xml::dom::auto_ptr< ::xercesc::DOMDocument > d (
-      ::xsd::cxx::xml::dom::parse< char > (i, h, p, f));
-
-    if (!d)
-      throw ::xsd::cxx::tree::parsing< char > ();
+    if ( ! d ) throw ::xsd::cxx::tree::parsing< char > ();
 
     ::std::auto_ptr< ::lxml::LanguageXML > r (
       ::lxml::language (
@@ -824,9 +669,4 @@ namespace lxml
 }
 
 #include <xsd/cxx/post.hxx>
-
-// Begin epilogue
-//
-//
-// End epilogue
 

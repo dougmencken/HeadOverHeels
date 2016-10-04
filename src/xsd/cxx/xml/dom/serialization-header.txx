@@ -13,6 +13,8 @@
 #include <xercesc/util/XMLString.hpp>
 #include <xercesc/validators/schema/SchemaSymbols.hpp>
 
+#include <xercesc/util/XercesVersion.hpp>
+
 #include <xsd/cxx/xml/string.hxx>
 #include <xsd/cxx/xml/bits/literals.hxx>
 
@@ -32,7 +34,11 @@ namespace xsd
         {
           string xns (ns);
 
-          const XMLCh* p (e.lookupNamespacePrefix (xns.c_str (), false));
+      #if XERCES_VERSION_MAJOR >= 3
+          const XMLCh* p ( e.lookupPrefix (xns.c_str ()) );
+      #else
+          const XMLCh* p ( e.lookupNamespacePrefix (xns.c_str (), false) );
+      #endif
 
           if (p == 0)
           {

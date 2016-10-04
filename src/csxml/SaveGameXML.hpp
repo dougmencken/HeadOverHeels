@@ -34,11 +34,6 @@
 #ifndef SAVE_GAME_XML_HPP
 #define SAVE_GAME_XML_HPP
 
-// Begin prologue
-//
-//
-// End prologue
-
 #include <xsd/cxx/version.hxx>
 
 #if (XSD_INT_VERSION != 3000000L)
@@ -201,10 +196,6 @@ namespace xml_schema
   typedef ::xsd::cxx::tree::severity severity;
   typedef ::xsd::cxx::tree::error< char > error;
   typedef ::xsd::cxx::tree::diagnostics< char > diagnostics;
-
-  // Error handler interface
-  //
-  typedef ::xsd::cxx::xml::error_handler< char > error_handler;
 }
 
 // Forward declarations
@@ -876,8 +867,8 @@ namespace sgxml
 #include <iosfwd>
 
 #include <xercesc/dom/DOMDocument.hpp>
-#include <xercesc/dom/DOMInputSource.hpp>
-#include <xercesc/dom/DOMErrorHandler.hpp>
+
+# include <xercesc/dom/DOMLSInput.hpp>
 
 namespace sgxml
 {
@@ -886,18 +877,6 @@ namespace sgxml
 
   ::std::auto_ptr< ::sgxml::SaveGameXML >
   savegame (const ::std::string& uri,
-            ::xml_schema::flags f = 0,
-            const ::xml_schema::properties& p = ::xml_schema::properties ());
-
-  ::std::auto_ptr< ::sgxml::SaveGameXML >
-  savegame (const ::std::string& uri,
-            ::xml_schema::error_handler& eh,
-            ::xml_schema::flags f = 0,
-            const ::xml_schema::properties& p = ::xml_schema::properties ());
-
-  ::std::auto_ptr< ::sgxml::SaveGameXML >
-  savegame (const ::std::string& uri,
-            ::xercesc::DOMErrorHandler& eh,
             ::xml_schema::flags f = 0,
             const ::xml_schema::properties& p = ::xml_schema::properties ());
 
@@ -911,53 +890,15 @@ namespace sgxml
 
   ::std::auto_ptr< ::sgxml::SaveGameXML >
   savegame (::std::istream& is,
-            ::xml_schema::error_handler& eh,
-            ::xml_schema::flags f = 0,
-            const ::xml_schema::properties& p = ::xml_schema::properties ());
-
-  ::std::auto_ptr< ::sgxml::SaveGameXML >
-  savegame (::std::istream& is,
-            ::xercesc::DOMErrorHandler& eh,
-            ::xml_schema::flags f = 0,
-            const ::xml_schema::properties& p = ::xml_schema::properties ());
-
-  ::std::auto_ptr< ::sgxml::SaveGameXML >
-  savegame (::std::istream& is,
             const ::std::string& id,
             ::xml_schema::flags f = 0,
             const ::xml_schema::properties& p = ::xml_schema::properties ());
 
-  ::std::auto_ptr< ::sgxml::SaveGameXML >
-  savegame (::std::istream& is,
-            const ::std::string& id,
-            ::xml_schema::error_handler& eh,
-            ::xml_schema::flags f = 0,
-            const ::xml_schema::properties& p = ::xml_schema::properties ());
-
-  ::std::auto_ptr< ::sgxml::SaveGameXML >
-  savegame (::std::istream& is,
-            const ::std::string& id,
-            ::xercesc::DOMErrorHandler& eh,
-            ::xml_schema::flags f = 0,
-            const ::xml_schema::properties& p = ::xml_schema::properties ());
-
-  // Parse xercesc::DOMInputSource
+  // Parse xercesc::DOMLSInput
   //
 
   ::std::auto_ptr< ::sgxml::SaveGameXML >
-  savegame (const ::xercesc::DOMInputSource& is,
-            ::xml_schema::flags f = 0,
-            const ::xml_schema::properties& p = ::xml_schema::properties ());
-
-  ::std::auto_ptr< ::sgxml::SaveGameXML >
-  savegame (const ::xercesc::DOMInputSource& is,
-            ::xml_schema::error_handler& eh,
-            ::xml_schema::flags f = 0,
-            const ::xml_schema::properties& p = ::xml_schema::properties ());
-
-  ::std::auto_ptr< ::sgxml::SaveGameXML >
-  savegame (const ::xercesc::DOMInputSource& is,
-            ::xercesc::DOMErrorHandler& eh,
+  savegame (const ::xercesc::DOMLSInput& is,
             ::xml_schema::flags f = 0,
             const ::xml_schema::properties& p = ::xml_schema::properties ());
 
@@ -978,7 +919,6 @@ namespace sgxml
 #include <iosfwd>
 
 #include <xercesc/dom/DOMDocument.hpp>
-#include <xercesc/dom/DOMErrorHandler.hpp>
 #include <xercesc/framework/XMLFormatter.hpp>
 
 #include <xsd/cxx/xml/dom/auto-ptr.hxx>
@@ -995,22 +935,6 @@ namespace sgxml
             const ::std::string& e = "UTF-8",
             ::xml_schema::flags f = 0);
 
-  void
-  savegame (::std::ostream& os,
-            const ::sgxml::SaveGameXML& x,
-            const ::xml_schema::namespace_infomap& m,
-            ::xml_schema::error_handler& eh,
-            const ::std::string& e = "UTF-8",
-            ::xml_schema::flags f = 0);
-
-  void
-  savegame (::std::ostream& os,
-            const ::sgxml::SaveGameXML& x,
-            const ::xml_schema::namespace_infomap& m,
-            ::xercesc::DOMErrorHandler& eh,
-            const ::std::string& e = "UTF-8",
-            ::xml_schema::flags f = 0);
-
   // Serialize to xercesc::XMLFormatTarget
   //
 
@@ -1018,22 +942,6 @@ namespace sgxml
   savegame (::xercesc::XMLFormatTarget& ft,
             const ::sgxml::SaveGameXML& x,
             const ::xml_schema::namespace_infomap& m,
-            const ::std::string& e = "UTF-8",
-            ::xml_schema::flags f = 0);
-
-  void
-  savegame (::xercesc::XMLFormatTarget& ft,
-            const ::sgxml::SaveGameXML& x,
-            const ::xml_schema::namespace_infomap& m,
-            ::xml_schema::error_handler& eh,
-            const ::std::string& e = "UTF-8",
-            ::xml_schema::flags f = 0);
-
-  void
-  savegame (::xercesc::XMLFormatTarget& ft,
-            const ::sgxml::SaveGameXML& x,
-            const ::xml_schema::namespace_infomap& m,
-            ::xercesc::DOMErrorHandler& eh,
             const ::std::string& e = "UTF-8",
             ::xml_schema::flags f = 0);
 
@@ -1076,10 +984,5 @@ namespace sgxml
 }
 
 #include <xsd/cxx/post.hxx>
-
-// Begin epilogue
-//
-//
-// End epilogue
 
 #endif // SAVE_GAME_XML_HPP
