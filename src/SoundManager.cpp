@@ -21,11 +21,13 @@ SoundManager::SoundManager()
   install_timer();
 
   int soundSystems[] = { DIGI_AUTODETECT,
+#ifdef __gnu_linux__
                          DIGI_ALSA,
                          DIGI_OSS,
                          DIGI_ESD,
                          DIGI_ARTS,
                          DIGI_JACK,
+#endif
                          DIGI_NONE };
   int result = -1;
   int index = 0;
