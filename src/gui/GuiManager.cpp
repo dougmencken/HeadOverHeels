@@ -29,7 +29,7 @@ GuiManager::GuiManager()
   this->allegroSetup();
 
   // Título de la ventana
-  set_window_title("Head over Heels v1.0.1");
+  set_window_title ( "Head over Heels v1.1" );
 
   // Ruta absoluta a los datos
   std::string path = isomot::sharePath();

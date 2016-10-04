@@ -11,3 +11,10 @@ Build:
     make && make install DESTDIR=`pwd`/headoverheelsroot
 
 For external dependencies look at external/README.external
+
+Collect application bundle for Mac OS X:
+
+    export games="/Applications/Games"
+    cp -r extras/Head\ over\ Heels.app "${games}"/
+    cp headoverheelsroot/usr/bin/headoverheels "${games}"/Head\ over\ Heels.app/Contents/MacOS/
+    cp -r headoverheelsroot/usr/share/headoverheels/* "${games}"/Head\ over\ Heels.app/Contents/Resources/
