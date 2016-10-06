@@ -12,6 +12,8 @@ AC_PROG_CXX
 
 # Checks for header files
 AC_CHECK_HEADERS(allegro.h,, [AC_MSG_ERROR(allegro headers not found)])
+AC_CHECK_HEADERS(zlib.h,, [AC_MSG_ERROR(zlib headers not found)])
+AC_CHECK_HEADERS(png.h,, [AC_MSG_ERROR(libpng headers not found)])
 AC_CHECK_HEADERS(vorbis/codec.h vorbis/vorbisenc.h vorbis/vorbisfile.h,, [AC_MSG_ERROR(vorbis headers not found)])
 AC_CHECK_HEADERS(ogg/ogg.h,, [AC_MSG_ERROR(ogg headers not found)])
 AC_CHECK_HEADERS(xercesc/util/XercesVersion.hpp,, [AC_MSG_ERROR(xerces-c headers not found)])

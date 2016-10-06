@@ -1,11 +1,14 @@
 AUTOMAKE_OPTIONS = -Wno-override
 AM_CCFLAGS = -Wall -O2
 AM_CXXFLAGS = $(CXXFLAGS)
-headoverheels_CXXFLAGS = -Wall -Wno-deprecated -O2 -I. -Iactions -Ibehaviors -Igui -Istates
-AM_LDFLAGS = `allegro-config --libs release` -lvorbisfile -lvorbisenc -lvorbis -logg -lxerces-c -lpthread
+headoverheels_CXXFLAGS = -Wall -Wno-deprecated -O2 -I. -Iloadpng -Iactions -Ibehaviors -Igui -Istates
+AM_LDFLAGS = `allegro-config --libs release` -lvorbisfile -lvorbisenc -lvorbis -logg -lxerces-c -lpthread -lz -lpng
 
 bin_PROGRAMS = headoverheels
-headoverheels_SOURCES = main.cpp \
+headoverheels_SOURCES = loadpng/loadpng.c \
+			loadpng/savepng.c \
+			loadpng/regpng.c \
+			main.cpp \
 			BonusManager.cpp \
 			BonusManager.hpp \
 			Camera.cpp \

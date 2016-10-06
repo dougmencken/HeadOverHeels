@@ -24,6 +24,7 @@
 #include <map>
 #include <cassert>
 #include <allegro.h>
+#include <loadpng.h>
 #include "Gui.hpp"
 
 namespace gui
