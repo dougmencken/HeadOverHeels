@@ -95,7 +95,7 @@ public:
   /**
    * Nombre del archivo que contiene los fotogramas del elemento
    */
-  std::string bitmap;
+  std::string picture;
 
   /**
    * Anchura en píxeles de cada fotograma
@@ -136,12 +136,12 @@ public:
   /**
    * Conjunto de fotogramas del elemento
    */
-  std::vector<BITMAP*> motion;
+  std::vector< BITMAP* > motion;
 
   /**
    * Conjunto de sombras del elemento
    */
-  std::vector<BITMAP*> shadows;
+  std::vector< BITMAP* > shadows;
 };
 
 }

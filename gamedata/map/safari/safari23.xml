@@ -19,357 +19,357 @@
       <y>2</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor-north.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor-north.png</bitmap>
     </tile>
     <tile>
       <x>0</x>
       <y>3</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor-north.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor-north.png</bitmap>
     </tile>
     <tile>
       <x>7</x>
       <y>0</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor-south.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor-south.png</bitmap>
     </tile>
     <tile>
       <x>7</x>
       <y>1</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor-south.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor-south.png</bitmap>
     </tile>
     <tile>
       <x>7</x>
       <y>2</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor-south.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor-south.png</bitmap>
     </tile>
     <tile>
       <x>7</x>
       <y>3</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor-south.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor-south.png</bitmap>
     </tile>
     <tile>
       <x>7</x>
       <y>4</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor-south.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor-south.png</bitmap>
     </tile>
     <tile>
       <x>7</x>
       <y>5</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor-south.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor-south.png</bitmap>
     </tile>
     <tile>
       <x>1</x>
       <y>6</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor-west.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor-west.png</bitmap>
     </tile>
     <tile>
       <x>2</x>
       <y>6</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor-west.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor-west.png</bitmap>
     </tile>
     <tile>
       <x>3</x>
       <y>6</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor-west.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor-west.png</bitmap>
     </tile>
     <tile>
       <x>4</x>
       <y>6</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor-west.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor-west.png</bitmap>
     </tile>
     <tile>
       <x>5</x>
       <y>6</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor-west.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor-west.png</bitmap>
     </tile>
     <tile>
       <x>6</x>
       <y>6</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor-west.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor-west.png</bitmap>
     </tile>
     <tile>
       <x>7</x>
       <y>6</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor-sw.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor-sw.png</bitmap>
     </tile>
     <tile>
       <x>1</x>
       <y>0</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor.png</bitmap>
     </tile>
     <tile>
       <x>1</x>
       <y>1</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor.png</bitmap>
     </tile>
     <tile>
       <x>1</x>
       <y>2</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor.png</bitmap>
     </tile>
     <tile>
       <x>1</x>
       <y>3</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor.png</bitmap>
     </tile>
     <tile>
       <x>1</x>
       <y>4</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor.png</bitmap>
     </tile>
     <tile>
       <x>1</x>
       <y>5</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor.png</bitmap>
     </tile>
     <tile>
       <x>2</x>
       <y>0</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor.png</bitmap>
     </tile>
     <tile>
       <x>2</x>
       <y>1</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor.png</bitmap>
     </tile>
     <tile>
       <x>2</x>
       <y>2</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor.png</bitmap>
     </tile>
     <tile>
       <x>2</x>
       <y>3</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor.png</bitmap>
     </tile>
     <tile>
       <x>2</x>
       <y>4</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor.png</bitmap>
     </tile>
     <tile>
       <x>2</x>
       <y>5</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor.png</bitmap>
     </tile>
     <tile>
       <x>3</x>
       <y>0</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor.png</bitmap>
     </tile>
     <tile>
       <x>3</x>
       <y>1</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor.png</bitmap>
     </tile>
     <tile>
       <x>3</x>
       <y>2</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor.png</bitmap>
     </tile>
     <tile>
       <x>3</x>
       <y>3</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor.png</bitmap>
     </tile>
     <tile>
       <x>3</x>
       <y>4</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor.png</bitmap>
     </tile>
     <tile>
       <x>3</x>
       <y>5</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor.png</bitmap>
     </tile>
     <tile>
       <x>4</x>
       <y>0</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor.png</bitmap>
     </tile>
     <tile>
       <x>4</x>
       <y>1</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor.png</bitmap>
     </tile>
     <tile>
       <x>4</x>
       <y>2</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor.png</bitmap>
     </tile>
     <tile>
       <x>4</x>
       <y>3</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor.png</bitmap>
     </tile>
     <tile>
       <x>4</x>
       <y>4</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor.png</bitmap>
     </tile>
     <tile>
       <x>4</x>
       <y>5</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor.png</bitmap>
     </tile>
     <tile>
       <x>5</x>
       <y>0</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor.png</bitmap>
     </tile>
     <tile>
       <x>5</x>
       <y>1</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor.png</bitmap>
     </tile>
     <tile>
       <x>5</x>
       <y>2</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor.png</bitmap>
     </tile>
     <tile>
       <x>5</x>
       <y>3</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor.png</bitmap>
     </tile>
     <tile>
       <x>5</x>
       <y>4</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor.png</bitmap>
     </tile>
     <tile>
       <x>5</x>
       <y>5</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor.png</bitmap>
     </tile>
     <tile>
       <x>6</x>
       <y>0</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor.png</bitmap>
     </tile>
     <tile>
       <x>6</x>
       <y>1</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor.png</bitmap>
     </tile>
     <tile>
       <x>6</x>
       <y>2</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor.png</bitmap>
     </tile>
     <tile>
       <x>6</x>
       <y>3</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor.png</bitmap>
     </tile>
     <tile>
       <x>6</x>
       <y>4</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor.png</bitmap>
     </tile>
     <tile>
       <x>6</x>
       <y>5</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/safari/safari-floor.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-floor.png</bitmap>
     </tile>
   </floor>
 
@@ -377,32 +377,32 @@
     <wall>
       <axis>x</axis>
       <index>1</index>
-      <bitmap>gfx/safari/safari-wall-x-2.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-wall-x-2.png</bitmap>
     </wall>
     <wall>
       <axis>x</axis>
       <index>2</index>
-      <bitmap>gfx/safari/safari-wall-x-1.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-wall-x-1.png</bitmap>
     </wall>
     <wall>
       <axis>x</axis>
       <index>3</index>
-      <bitmap>gfx/safari/safari-wall-x-3.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-wall-x-3.png</bitmap>
     </wall>
     <wall>
       <axis>x</axis>
       <index>4</index>
-      <bitmap>gfx/safari/safari-wall-x-3.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-wall-x-3.png</bitmap>
     </wall>
     <wall>
       <axis>x</axis>
       <index>5</index>
-      <bitmap>gfx/safari/safari-wall-x-1.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-wall-x-1.png</bitmap>
     </wall>
     <wall>
       <axis>x</axis>
       <index>6</index>
-      <bitmap>gfx/safari/safari-wall-x-2.bmp</bitmap>
+      <bitmap>gfx/safari.png/safari-wall-x-2.png</bitmap>
     </wall>
   </walls>
 

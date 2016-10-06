@@ -66,10 +66,10 @@ protected:
 
   /**
    * Extracción de los fotogramas de un elemento a partir de una imagen
-   * @param itemData Un elemento con los campos bitmap, frameWidth y frameHeight no nulos
+   * @param itemData Un elemento con los campos picture, frameWidth y frameHeight no nulos
    * @return El elemento con el campo motion almacenando los fotogramas ó 0 si se produjo un error
    */
-  ItemData* createBitmapFrames(ItemData* itemData);
+  ItemData * createPictureFrames( ItemData * itemData ) ;
 
   /**
    * Extracción de los fotogramas de las sombras de un elemento a partir de una imagen

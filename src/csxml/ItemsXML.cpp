@@ -236,28 +236,28 @@ namespace ixml
     this->speed_.set (speed);
   }
 
-  const item::bitmap_type& item::
-  bitmap () const
+  const item::picture_type& item::
+  picture () const
   {
-    return this->bitmap_.get ();
+    return this->picture_.get ();
   }
 
-  item::bitmap_type& item::
-  bitmap ()
+  item::picture_type& item::
+  picture ()
   {
-    return this->bitmap_.get ();
-  }
-
-  void item::
-  bitmap (const bitmap_type& bitmap)
-  {
-    this->bitmap_.set (bitmap);
+    return this->picture_.get ();
   }
 
   void item::
-  bitmap (::std::auto_ptr< bitmap_type > bitmap)
+  picture (const picture_type& picture)
   {
-    this->bitmap_.set (bitmap);
+    this->picture_.set (picture);
+  }
+
+  void item::
+  picture (::std::auto_ptr< picture_type > picture)
+  {
+    this->picture_.set (picture);
   }
 
   const item::shadow_optional& item::
@@ -384,64 +384,64 @@ namespace ixml
   }
 
 
-  // bitmap
+  // picture
   //
 
-  const bitmap::frameWidth_type& bitmap::
+  const picture::frameWidth_type& picture::
   frameWidth () const
   {
     return this->frameWidth_.get ();
   }
 
-  bitmap::frameWidth_type& bitmap::
+  picture::frameWidth_type& picture::
   frameWidth ()
   {
     return this->frameWidth_.get ();
   }
 
-  void bitmap::
+  void picture::
   frameWidth (const frameWidth_type& frameWidth)
   {
     this->frameWidth_.set (frameWidth);
   }
 
-  const bitmap::frameHeight_type& bitmap::
+  const picture::frameHeight_type& picture::
   frameHeight () const
   {
     return this->frameHeight_.get ();
   }
 
-  bitmap::frameHeight_type& bitmap::
+  picture::frameHeight_type& picture::
   frameHeight ()
   {
     return this->frameHeight_.get ();
   }
 
-  void bitmap::
+  void picture::
   frameHeight (const frameHeight_type& frameHeight)
   {
     this->frameHeight_.set (frameHeight);
   }
 
-  const bitmap::file_type& bitmap::
+  const picture::file_type& picture::
   file () const
   {
     return this->file_.get ();
   }
 
-  bitmap::file_type& bitmap::
+  picture::file_type& picture::
   file ()
   {
     return this->file_.get ();
   }
 
-  void bitmap::
+  void picture::
   file (const file_type& file)
   {
     this->file_.set (file);
   }
 
-  void bitmap::
+  void picture::
   file (::std::auto_ptr< file_type > file)
   {
     this->file_.set (file);
@@ -542,10 +542,10 @@ namespace ixml
   : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
     item_ (f, this)
   {
-    if ((f & ::xml_schema::flags::base) == 0)
+    if ( ( f & ::xml_schema::flags::base ) == 0 )
     {
-      ::xsd::cxx::xml::dom::parser< char > p (e);
-      this->parse (p, f);
+      ::xsd::cxx::xml::dom::parser< char > p ( e );
+      this->parse ( p, f );
     }
   }
 
@@ -590,7 +590,7 @@ namespace ixml
         const weight_type& weight,
         const framesDelay_type& framesDelay,
         const speed_type& speed,
-        const bitmap_type& bitmap,
+        const picture_type& picture,
         const label_type& label)
   : ::xml_schema::type (),
     door_ (::xml_schema::flags (), this),
@@ -602,7 +602,7 @@ namespace ixml
     weight_ (weight, ::xml_schema::flags (), this),
     framesDelay_ (framesDelay, ::xml_schema::flags (), this),
     speed_ (speed, ::xml_schema::flags (), this),
-    bitmap_ (bitmap, ::xml_schema::flags (), this),
+    picture_ (picture, ::xml_schema::flags (), this),
     shadow_ (::xml_schema::flags (), this),
     extraFrames_ (::xml_schema::flags (), this),
     frame_ (::xml_schema::flags (), this),
@@ -624,7 +624,7 @@ namespace ixml
     weight_ (x.weight_, f, this),
     framesDelay_ (x.framesDelay_, f, this),
     speed_ (x.speed_, f, this),
-    bitmap_ (x.bitmap_, f, this),
+    picture_ (x.picture_, f, this),
     shadow_ (x.shadow_, f, this),
     extraFrames_ (x.extraFrames_, f, this),
     frame_ (x.frame_, f, this),
@@ -646,7 +646,7 @@ namespace ixml
     weight_ (f, this),
     framesDelay_ (f, this),
     speed_ (f, this),
-    bitmap_ (f, this),
+    picture_ (f, this),
     shadow_ (f, this),
     extraFrames_ (f, this),
     frame_ (f, this),
@@ -762,16 +762,16 @@ namespace ixml
         }
       }
 
-      // bitmap
+      // picture
       //
-      if (n.name () == "bitmap" && n.namespace_ ().empty ())
+      if (n.name () == "picture" && n.namespace_ ().empty ())
       {
-        ::std::auto_ptr< bitmap_type > r (
-          bitmap_traits::create (i, f, this));
+        ::std::auto_ptr< picture_type > r (
+          picture_traits::create (i, f, this));
 
-        if (!bitmap_.present ())
+        if (!picture_.present ())
         {
-          this->bitmap (r);
+          this->picture (r);
           continue;
         }
       }
@@ -847,10 +847,10 @@ namespace ixml
         "");
     }
 
-    if (!bitmap_.present ())
+    if (!picture_.present ())
     {
       throw ::xsd::cxx::tree::expected_element< char > (
-        "bitmap",
+        "picture",
         "");
     }
 
@@ -956,11 +956,11 @@ namespace ixml
     ::ixml::door::west
   };
 
-  // bitmap
+  // picture
   //
 
-  bitmap::
-  bitmap (const frameWidth_type& frameWidth,
+  picture::
+  picture (const frameWidth_type& frameWidth,
           const frameHeight_type& frameHeight,
           const file_type& file)
   : ::xml_schema::type (),
@@ -970,8 +970,8 @@ namespace ixml
   {
   }
 
-  bitmap::
-  bitmap (const bitmap& x,
+  picture::
+  picture (const picture& x,
           ::xml_schema::flags f,
           ::xml_schema::type* c)
   : ::xml_schema::type (x, f, c),
@@ -981,8 +981,8 @@ namespace ixml
   {
   }
 
-  bitmap::
-  bitmap (const ::xercesc::DOMElement& e,
+  picture::
+  picture (const ::xercesc::DOMElement& e,
           ::xml_schema::flags f,
           ::xml_schema::type* c)
   : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
@@ -997,7 +997,7 @@ namespace ixml
     }
   }
 
-  void bitmap::
+  void picture::
   parse (::xsd::cxx::xml::dom::parser< char >& p,
          ::xml_schema::flags f)
   {
@@ -1070,11 +1070,11 @@ namespace ixml
     }
   }
 
-  bitmap* bitmap::
+  picture* picture::
   _clone (::xml_schema::flags f,
           ::xml_schema::type* c) const
   {
-    return new bitmap (*this, f, c);
+    return new picture (*this, f, c);
   }
 
   // shadow
@@ -1213,14 +1213,14 @@ namespace ixml
   {
     ::xsd::cxx::xml::dom::auto_ptr< ::xercesc::DOMDocument > d ( ::xsd::cxx::xml::dom::parse< char > ( u, p, f ) );
 
-    if (!d)
+    if ( ! d )
       throw ::xsd::cxx::tree::parsing< char > ();
 
     ::std::auto_ptr< ::ixml::ItemsXML > r (
       ::ixml::items (
-        d.get (), f | ::xml_schema::flags::own_dom, p));
+        d.get (), f | ::xml_schema::flags::own_dom, p ) );
 
-    if (f & ::xml_schema::flags::keep_dom)
+    if ( f & ::xml_schema::flags::keep_dom )
       d.release ();
 
     return r;

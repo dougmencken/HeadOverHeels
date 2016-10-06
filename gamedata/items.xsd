@@ -24,7 +24,7 @@
             <xsd:element name="weight" type="xsd:double"/>
             <xsd:element name="framesDelay" type="xsd:double"/>
             <xsd:element name="speed" type="xsd:double"/>
-            <xsd:element name="bitmap">
+            <xsd:element name="picture">
               <xsd:complexType>
                 <xsd:sequence>
                   <xsd:element name="frameWidth" type="xsd:int"/>

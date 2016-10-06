@@ -23,4 +23,31 @@ AC_CHECK_HEADERS(pthread.h,, [AC_MSG_ERROR(pthread.h not found)])
 
 # Checks for library functions
 
-AC_OUTPUT(Makefile src/Makefile gamedata/Makefile  gamedata/gfx/Makefile gamedata/gfx/blacktooth/Makefile gamedata/gfx/byblos/Makefile gamedata/gfx/egyptus/Makefile gamedata/gfx/gui/Makefile gamedata/gfx/item/Makefile gamedata/gfx/jail/Makefile gamedata/gfx/market/Makefile gamedata/gfx/moonbase/Makefile gamedata/gfx/penitentiary/Makefile gamedata/gfx/safari/Makefile gamedata/map/Makefile gamedata/map/blacktooth/Makefile gamedata/map/byblos/Makefile gamedata/map/egyptus/Makefile gamedata/map/moonbase/Makefile gamedata/map/penitentiary/Makefile gamedata/map/safari/Makefile gamedata/music/Makefile gamedata/savegame/Makefile gamedata/sound/Makefile gamedata/text/Makefile)
+# Makefiles
+AC_OUTPUT( \
+            Makefile \
+            src/Makefile \
+            gamedata/Makefile \
+            gamedata/gfx/Makefile \
+            gamedata/gfx/blacktooth.png/Makefile \
+            gamedata/gfx/byblos.png/Makefile \
+            gamedata/gfx/egyptus.png/Makefile \
+            gamedata/gfx/gui.png/Makefile \
+            gamedata/gfx/item.png/Makefile \
+            gamedata/gfx/jail.png/Makefile \
+            gamedata/gfx/market.png/Makefile \
+            gamedata/gfx/moonbase.png/Makefile \
+            gamedata/gfx/penitentiary.png/Makefile \
+            gamedata/gfx/safari.png/Makefile \
+            gamedata/map/Makefile \
+            gamedata/map/blacktooth/Makefile \
+            gamedata/map/byblos/Makefile \
+            gamedata/map/egyptus/Makefile \
+            gamedata/map/moonbase/Makefile \
+            gamedata/map/penitentiary/Makefile \
+            gamedata/map/safari/Makefile \
+            gamedata/music/Makefile \
+            gamedata/savegame/Makefile \
+            gamedata/sound/Makefile \
+            gamedata/text/Makefile \
+         )

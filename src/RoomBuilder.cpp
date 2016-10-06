@@ -10,6 +10,7 @@
 #include "Door.hpp"
 #include "BonusManager.hpp"
 #include "GameManager.hpp"
+#include <loadpng.h>
 
 namespace isomot
 {
@@ -310,7 +311,7 @@ FloorTile* RoomBuilder::buildFloorTile(const rxml::tile& tile)
 
   try
   {
-    BITMAP* bitmap = load_bitmap((isomot::sharePath() + tile.bitmap()).c_str(), 0);
+    BITMAP* bitmap = load_png( ( isomot::sharePath() + tile.bitmap() ).c_str(), 0 );
     if(bitmap == 0) throw "Bitmap " + tile.bitmap() + " not found.";
     int column = room->getTilesX() * tile.y() + tile.x();
     floorTile = new FloorTile(column, tile.x(), tile.y(), bitmap);
@@ -330,7 +331,7 @@ Wall* RoomBuilder::buildWall(const rxml::wall& wall)
 
   try
   {
-    BITMAP* bitmap = load_bitmap((isomot::sharePath() + wall.bitmap()).c_str(), 0);
+    BITMAP* bitmap = load_png( ( isomot::sharePath() + wall.bitmap() ).c_str(), 0 );
     if(bitmap == 0) throw "Bitmap " + wall.bitmap() + " not found.";
     roomWall = new Wall(wall.axis() == rxml::axis::x ? AxisX : AxisY, wall.index(), bitmap);
   }

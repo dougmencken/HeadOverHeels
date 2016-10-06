@@ -19,133 +19,133 @@
       <y>1</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/penitentiary/penitentiary-floor-underground-north.bmp</bitmap>
+      <bitmap>gfx/penitentiary.png/penitentiary-floor-underground-north.png</bitmap>
     </tile>
     <tile>
       <x>0</x>
       <y>2</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/penitentiary/penitentiary-floor-underground-north.bmp</bitmap>
+      <bitmap>gfx/penitentiary.png/penitentiary-floor-underground-north.png</bitmap>
     </tile>
     <tile>
       <x>0</x>
       <y>3</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/penitentiary/penitentiary-floor-underground-north.bmp</bitmap>
+      <bitmap>gfx/penitentiary.png/penitentiary-floor-underground-north.png</bitmap>
     </tile>
     <tile>
       <x>0</x>
       <y>4</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/penitentiary/penitentiary-floor-underground-north.bmp</bitmap>
+      <bitmap>gfx/penitentiary.png/penitentiary-floor-underground-north.png</bitmap>
     </tile>
     <tile>
       <x>0</x>
       <y>5</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/penitentiary/penitentiary-floor-underground-north.bmp</bitmap>
+      <bitmap>gfx/penitentiary.png/penitentiary-floor-underground-north.png</bitmap>
     </tile>
     <tile>
       <x>0</x>
       <y>6</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/penitentiary/penitentiary-floor-underground-north.bmp</bitmap>
+      <bitmap>gfx/penitentiary.png/penitentiary-floor-underground-north.png</bitmap>
     </tile>
     <tile>
       <x>0</x>
       <y>7</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/penitentiary/penitentiary-floor-underground-north.bmp</bitmap>
+      <bitmap>gfx/penitentiary.png/penitentiary-floor-underground-north.png</bitmap>
     </tile>
     <tile>
       <x>0</x>
       <y>8</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/penitentiary/penitentiary-floor-underground-north.bmp</bitmap>
+      <bitmap>gfx/penitentiary.png/penitentiary-floor-underground-north.png</bitmap>
     </tile>
     <tile>
       <x>1</x>
       <y>0</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/penitentiary/penitentiary-floor-east.bmp</bitmap>
+      <bitmap>gfx/penitentiary.png/penitentiary-floor-east.png</bitmap>
     </tile>
     <tile>
       <x>2</x>
       <y>0</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/penitentiary/penitentiary-floor-east.bmp</bitmap>
+      <bitmap>gfx/penitentiary.png/penitentiary-floor-east.png</bitmap>
     </tile>
     <tile>
       <x>2</x>
       <y>1</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/penitentiary/penitentiary-nofloor-south.bmp</bitmap>
+      <bitmap>gfx/penitentiary.png/penitentiary-nofloor-south.png</bitmap>
     </tile>
     <tile>
       <x>2</x>
       <y>2</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/penitentiary/penitentiary-nofloor-south.bmp</bitmap>
+      <bitmap>gfx/penitentiary.png/penitentiary-nofloor-south.png</bitmap>
     </tile>
     <tile>
       <x>2</x>
       <y>3</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/penitentiary/penitentiary-nofloor-south.bmp</bitmap>
+      <bitmap>gfx/penitentiary.png/penitentiary-nofloor-south.png</bitmap>
     </tile>
     <tile>
       <x>2</x>
       <y>4</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/penitentiary/penitentiary-nofloor-south.bmp</bitmap>
+      <bitmap>gfx/penitentiary.png/penitentiary-nofloor-south.png</bitmap>
     </tile>
     <tile>
       <x>2</x>
       <y>5</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/penitentiary/penitentiary-nofloor-south.bmp</bitmap>
+      <bitmap>gfx/penitentiary.png/penitentiary-nofloor-south.png</bitmap>
     </tile>
     <tile>
       <x>2</x>
       <y>6</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/penitentiary/penitentiary-nofloor-south.bmp</bitmap>
+      <bitmap>gfx/penitentiary.png/penitentiary-nofloor-south.png</bitmap>
     </tile>
     <tile>
       <x>2</x>
       <y>7</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/penitentiary/penitentiary-nofloor-south.bmp</bitmap>
+      <bitmap>gfx/penitentiary.png/penitentiary-nofloor-south.png</bitmap>
     </tile>
     <tile>
       <x>1</x>
       <y>8</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/penitentiary/penitentiary-nofloor-west.bmp</bitmap>
+      <bitmap>gfx/penitentiary.png/penitentiary-nofloor-west.png</bitmap>
     </tile>
     <tile>
       <x>2</x>
       <y>8</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/penitentiary/penitentiary-nofloor-sw.bmp</bitmap>
+      <bitmap>gfx/penitentiary.png/penitentiary-nofloor-sw.png</bitmap>
     </tile>
   </floor>
 

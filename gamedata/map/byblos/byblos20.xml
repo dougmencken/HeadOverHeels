@@ -19,322 +19,322 @@
       <y>3</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor-north.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor-north.png</bitmap>
     </tile>
     <tile>
       <x>0</x>
       <y>4</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor-north.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor-north.png</bitmap>
     </tile>
     <tile>
       <x>3</x>
       <y>0</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor-east.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor-east.png</bitmap>
     </tile>
     <tile>
       <x>4</x>
       <y>0</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor-east.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor-east.png</bitmap>
     </tile>
     <tile>
       <x>1</x>
       <y>7</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor-west.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor-west.png</bitmap>
     </tile>
     <tile>
       <x>2</x>
       <y>7</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor-west.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor-west.png</bitmap>
     </tile>
     <tile>
       <x>3</x>
       <y>7</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor-west.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor-west.png</bitmap>
     </tile>
     <tile>
       <x>4</x>
       <y>7</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor-west.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor-west.png</bitmap>
     </tile>
     <tile>
       <x>5</x>
       <y>7</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor-west.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor-west.png</bitmap>
     </tile>
     <tile>
       <x>6</x>
       <y>7</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor-west.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor-west.png</bitmap>
     </tile>
     <tile>
       <x>1</x>
       <y>1</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor.png</bitmap>
     </tile>
     <tile>
       <x>1</x>
       <y>2</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor.png</bitmap>
     </tile>
     <tile>
       <x>1</x>
       <y>3</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor.png</bitmap>
     </tile>
     <tile>
       <x>1</x>
       <y>4</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor.png</bitmap>
     </tile>
     <tile>
       <x>1</x>
       <y>5</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor.png</bitmap>
     </tile>
     <tile>
       <x>1</x>
       <y>6</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor.png</bitmap>
     </tile>
     <tile>
       <x>2</x>
       <y>1</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor.png</bitmap>
     </tile>
     <tile>
       <x>2</x>
       <y>2</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor.png</bitmap>
     </tile>
     <tile>
       <x>2</x>
       <y>3</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor.png</bitmap>
     </tile>
     <tile>
       <x>2</x>
       <y>4</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor.png</bitmap>
     </tile>
     <tile>
       <x>2</x>
       <y>5</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor.png</bitmap>
     </tile>
     <tile>
       <x>2</x>
       <y>6</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor.png</bitmap>
     </tile>
     <tile>
       <x>3</x>
       <y>1</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor.png</bitmap>
     </tile>
     <tile>
       <x>3</x>
       <y>2</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor.png</bitmap>
     </tile>
     <tile>
       <x>3</x>
       <y>3</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor.png</bitmap>
     </tile>
     <tile>
       <x>3</x>
       <y>4</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor.png</bitmap>
     </tile>
     <tile>
       <x>3</x>
       <y>5</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor.png</bitmap>
     </tile>
     <tile>
       <x>3</x>
       <y>6</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor.png</bitmap>
     </tile>
     <tile>
       <x>4</x>
       <y>1</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor.png</bitmap>
     </tile>
     <tile>
       <x>4</x>
       <y>2</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor.png</bitmap>
     </tile>
     <tile>
       <x>4</x>
       <y>3</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor.png</bitmap>
     </tile>
     <tile>
       <x>4</x>
       <y>4</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor.png</bitmap>
     </tile>
     <tile>
       <x>4</x>
       <y>5</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor.png</bitmap>
     </tile>
     <tile>
       <x>4</x>
       <y>6</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor.png</bitmap>
     </tile>
     <tile>
       <x>5</x>
       <y>1</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor.png</bitmap>
     </tile>
     <tile>
       <x>5</x>
       <y>2</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor.png</bitmap>
     </tile>
     <tile>
       <x>5</x>
       <y>3</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor.png</bitmap>
     </tile>
     <tile>
       <x>5</x>
       <y>4</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor.png</bitmap>
     </tile>
     <tile>
       <x>5</x>
       <y>5</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor.png</bitmap>
     </tile>
     <tile>
       <x>5</x>
       <y>6</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor.png</bitmap>
     </tile>
     <tile>
       <x>6</x>
       <y>1</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor.png</bitmap>
     </tile>
     <tile>
       <x>6</x>
       <y>2</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor.png</bitmap>
     </tile>
     <tile>
       <x>6</x>
       <y>3</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor.png</bitmap>
     </tile>
     <tile>
       <x>6</x>
       <y>4</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor.png</bitmap>
     </tile>
     <tile>
       <x>6</x>
       <y>5</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor.png</bitmap>
     </tile>
     <tile>
       <x>6</x>
       <y>6</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>gfx/byblos/byblos-floor.bmp</bitmap>
+      <bitmap>gfx/byblos.png/byblos-floor.png</bitmap>
     </tile>
   </floor>
 

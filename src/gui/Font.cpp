@@ -1,5 +1,7 @@
 #include "Font.hpp"
 
+#include <loadpng.h>
+
 namespace gui
 {
 
@@ -7,7 +9,7 @@ Font::Font(const std::string& fontName, const std::string& fontFile, int color, 
 : fontName(fontName)
 {
   // Carga el archivo
-  BITMAP* bitmapFont = load_bitmap(fontFile.c_str(), 0);
+  BITMAP* bitmapFont = load_png(fontFile.c_str(), 0);
   assert(bitmapFont);
 
   // Duplica su tamaño, si procede

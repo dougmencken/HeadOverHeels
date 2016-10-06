@@ -13,11 +13,11 @@
     <weight>0.032</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/item/brick1.bmp">
+    <picture file="gfx/item.png/brick1.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/brick1-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/brick1-shadows.png">
       <shadowWidth>64</shadowWidth>
       <shadowHeight>31</shadowHeight>
     </shadow>
@@ -34,11 +34,11 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/item/vulcano.bmp">
+    <picture file="gfx/item.png/vulcano.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/vulcano-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/vulcano-shadows.png">
       <shadowWidth>64</shadowWidth>
       <shadowHeight>31</shadowHeight>
     </shadow>
@@ -55,11 +55,11 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/item/spikes.bmp">
+    <picture file="gfx/item.png/spikes.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/spikes-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/spikes-shadows.png">
       <shadowWidth>64</shadowWidth>
       <shadowHeight>31</shadowHeight>
     </shadow>
@@ -76,11 +76,11 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/item/toaster.bmp">
+    <picture file="gfx/item.png/toaster.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/toaster-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/toaster-shadows.png">
       <shadowWidth>64</shadowWidth>
       <shadowHeight>31</shadowHeight>
     </shadow>
@@ -97,11 +97,11 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0.040</speed>
-    <bitmap file="gfx/item/conveyor-belt.bmp">
+    <picture file="gfx/item.png/conveyor-belt.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/conveyor-belt-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/conveyor-belt-shadows.png">
       <shadowWidth>64</shadowWidth>
       <shadowHeight>31</shadowHeight>
     </shadow>
@@ -118,11 +118,11 @@
     <weight>0.020</weight>
     <framesDelay>0</framesDelay>
     <speed>0.040</speed>
-    <bitmap file="gfx/item/book.bmp">
+    <picture file="gfx/item.png/book.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/book-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/book-shadows.png">
       <shadowWidth>64</shadowWidth>
       <shadowHeight>31</shadowHeight>
     </shadow>
@@ -139,11 +139,11 @@
     <weight>0.020</weight>
     <framesDelay>0</framesDelay>
     <speed>0.040</speed>
-    <bitmap file="gfx/item/stool.bmp">
+    <picture file="gfx/item.png/stool.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/stool-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/stool-shadows.png">
       <shadowWidth>64</shadowWidth>
       <shadowHeight>31</shadowHeight>
     </shadow>
@@ -160,11 +160,11 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/item/puppy.bmp">
+    <picture file="gfx/item.png/puppy.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/puppy-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/puppy-shadows.png">
       <shadowWidth>64</shadowWidth>
       <shadowHeight>31</shadowHeight>
     </shadow>
@@ -181,11 +181,11 @@
     <weight>0.010</weight>
     <framesDelay>0</framesDelay>
     <speed>0.040</speed>
-    <bitmap file="gfx/item/sandwich.bmp">
+    <picture file="gfx/item.png/sandwich.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/sandwich-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/sandwich-shadows.png">
       <shadowWidth>64</shadowWidth>
       <shadowHeight>31</shadowHeight>
     </shadow>
@@ -202,11 +202,11 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/item/switch.bmp">
+    <picture file="gfx/item.png/switch.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/switch-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/switch-shadows.png">
       <shadowWidth>48</shadowWidth>
       <shadowHeight>25</shadowHeight>
     </shadow>
@@ -224,11 +224,11 @@
     <weight>0.032</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/item/brick2.bmp">
+    <picture file="gfx/item.png/brick2.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/brick2-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/brick2-shadows.png">
       <shadowWidth>64</shadowWidth>
       <shadowHeight>31</shadowHeight>
     </shadow>
@@ -245,11 +245,11 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/item/bars-ns.bmp">
+    <picture file="gfx/item.png/bars-ns.png">
       <frameWidth>42</frameWidth>
       <frameHeight>44</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/bars-ns-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/bars-ns-shadows.png">
       <shadowWidth>40</shadowWidth>
       <shadowHeight>22</shadowHeight>
     </shadow>
@@ -266,11 +266,11 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/item/bars-ew.bmp">
+    <picture file="gfx/item.png/bars-ew.png">
       <frameWidth>42</frameWidth>
       <frameHeight>44</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/bars-ew-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/bars-ew-shadows.png">
       <shadowWidth>40</shadowWidth>
       <shadowHeight>22</shadowHeight>
     </shadow>
@@ -287,11 +287,11 @@
     <weight>0.010</weight>
     <framesDelay>0</framesDelay>
     <speed>0.040</speed>
-    <bitmap file="gfx/item/drum.bmp">
+    <picture file="gfx/item.png/drum.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/drum-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/drum-shadows.png">
       <shadowWidth>48</shadowWidth>
       <shadowHeight>25</shadowHeight>
     </shadow>
@@ -308,11 +308,11 @@
     <weight>0.010</weight>
     <framesDelay>0</framesDelay>
     <speed>0.040</speed>
-    <bitmap file="gfx/item/portable-brick.bmp">
+    <picture file="gfx/item.png/portable-brick.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/portable-brick-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/portable-brick-shadows.png">
       <shadowWidth>48</shadowWidth>
       <shadowHeight>25</shadowHeight>
     </shadow>
@@ -329,11 +329,11 @@
     <weight>0.010</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/item/donuts.bmp">
+    <picture file="gfx/item.png/donuts.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/donuts-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/donuts-shadows.png">
       <shadowWidth>48</shadowWidth>
       <shadowHeight>25</shadowHeight>
     </shadow>
@@ -350,11 +350,11 @@
     <weight>0.010</weight>
     <framesDelay>0</framesDelay>
     <speed>0.040</speed>
-    <bitmap file="gfx/item/rabbit-gold.bmp">
+    <picture file="gfx/item.png/rabbit-gold.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/rabbit-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/rabbit-shadows.png">
       <shadowWidth>48</shadowWidth>
       <shadowHeight>25</shadowHeight>
     </shadow>
@@ -371,11 +371,11 @@
     <weight>0.010</weight>
     <framesDelay>0</framesDelay>
     <speed>0.040</speed>
-    <bitmap file="gfx/item/rabbit-bronze.bmp">
+    <picture file="gfx/item.png/rabbit-bronze.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/rabbit-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/rabbit-shadows.png">
       <shadowWidth>48</shadowWidth>
       <shadowHeight>25</shadowHeight>
     </shadow>
@@ -392,11 +392,11 @@
     <weight>0.010</weight>
     <framesDelay>0</framesDelay>
     <speed>0.040</speed>
-    <bitmap file="gfx/item/rabbit-bronze.bmp">
+    <picture file="gfx/item.png/rabbit-bronze.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/rabbit-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/rabbit-shadows.png">
       <shadowWidth>48</shadowWidth>
       <shadowHeight>25</shadowHeight>
     </shadow>
@@ -413,11 +413,11 @@
     <weight>0.010</weight>
     <framesDelay>0</framesDelay>
     <speed>0.040</speed>
-    <bitmap file="gfx/item/rabbit-silver.bmp">
+    <picture file="gfx/item.png/rabbit-silver.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/rabbit-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/rabbit-shadows.png">
       <shadowWidth>48</shadowWidth>
       <shadowHeight>25</shadowHeight>
     </shadow>
@@ -434,11 +434,11 @@
     <weight>0.010</weight>
     <framesDelay>0</framesDelay>
     <speed>0.040</speed>
-    <bitmap file="gfx/item/crown.bmp">
+    <picture file="gfx/item.png/crown.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/crown-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/crown-shadows.png">
       <shadowWidth>48</shadowWidth>
       <shadowHeight>25</shadowHeight>
     </shadow>
@@ -455,11 +455,11 @@
     <weight>0.010</weight>
     <framesDelay>0</framesDelay>
     <speed>0.020</speed>
-    <bitmap file="gfx/item/bomb.bmp">
+    <picture file="gfx/item.png/bomb.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/bomb-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/bomb-shadows.png">
       <shadowWidth>48</shadowWidth>
       <shadowHeight>25</shadowHeight>
     </shadow>
@@ -476,11 +476,11 @@
     <weight>0.010</weight>
     <framesDelay>0</framesDelay>
     <speed>0.040</speed>
-    <bitmap file="gfx/item/portable-brick2.bmp">
+    <picture file="gfx/item.png/portable-brick2.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/portable-brick2-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/portable-brick2-shadows.png">
       <shadowWidth>48</shadowWidth>
       <shadowHeight>25</shadowHeight>
     </shadow>
@@ -497,11 +497,11 @@
     <weight>0.010</weight>
     <framesDelay>0</framesDelay>
     <speed>0.020</speed>
-    <bitmap file="gfx/item/ball.bmp">
+    <picture file="gfx/item.png/ball.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/ball-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/ball-shadows.png">
       <shadowWidth>48</shadowWidth>
       <shadowHeight>25</shadowHeight>
     </shadow>
@@ -518,11 +518,11 @@
     <weight>0.010</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/item/remote-control.bmp">
+    <picture file="gfx/item.png/remote-control.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/remote-control-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/remote-control-shadows.png">
       <shadowWidth>48</shadowWidth>
       <shadowHeight>25</shadowHeight>
     </shadow>
@@ -539,10 +539,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/item/cylinder.bmp">
+    <picture file="gfx/item.png/cylinder.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -556,10 +556,10 @@
     <weight>0.010</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/item/horn.bmp">
+    <picture file="gfx/item.png/horn.png">
       <frameWidth>48</frameWidth>
       <frameHeight>52</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -573,10 +573,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0.040</speed>
-    <bitmap file="gfx/item/imperial-guard-head.bmp">
+    <picture file="gfx/item.png/imperial-guard-head.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -590,10 +590,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/item/elephant-head.bmp">
+    <picture file="gfx/item.png/elephant-head.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -607,10 +607,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/item/monkey-head.bmp">
+    <picture file="gfx/item.png/monkey-head.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -624,10 +624,10 @@
     <weight>0.010</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/item/handbag.bmp">
+    <picture file="gfx/item.png/handbag.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -641,11 +641,11 @@
     <weight>0</weight>
     <framesDelay>0.100</framesDelay>
     <speed>0.020</speed>
-    <bitmap file="gfx/item/elevator.bmp">
+    <picture file="gfx/item.png/elevator.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/elevator-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/elevator-shadows.png">
       <shadowWidth>48</shadowWidth>
       <shadowHeight>25</shadowHeight>
     </shadow>
@@ -665,11 +665,11 @@
     <weight>0.010</weight>
     <framesDelay>0.100</framesDelay>
     <speed>0.030</speed>
-    <bitmap file="gfx/item/helicopter-bug.bmp">
+    <picture file="gfx/item.png/helicopter-bug.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/helicopter-bug-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/helicopter-bug-shadows.png">
       <shadowWidth>48</shadowWidth>
       <shadowHeight>25</shadowHeight>
     </shadow>
@@ -689,11 +689,11 @@
     <weight>0.010</weight>
     <framesDelay>0.200</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/item/fish.bmp">
+    <picture file="gfx/item.png/fish.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/fish-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/fish-shadows.png">
       <shadowWidth>48</shadowWidth>
       <shadowHeight>25</shadowHeight>
     </shadow>
@@ -711,11 +711,11 @@
     <weight>0.010</weight>
     <framesDelay>0.040</framesDelay>
     <speed>0.040</speed>
-    <bitmap file="gfx/item/siren.bmp">
+    <picture file="gfx/item.png/siren.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/siren-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/siren-shadows.png">
       <shadowWidth>48</shadowWidth>
       <shadowHeight>25</shadowHeight>
     </shadow>
@@ -733,11 +733,11 @@
     <weight>0</weight>
     <framesDelay>0.150</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/item/teleport.bmp">
+    <picture file="gfx/item.png/teleport.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/teleport-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/teleport-shadows.png">
       <shadowWidth>64</shadowWidth>
       <shadowHeight>31</shadowHeight>
     </shadow>
@@ -755,11 +755,11 @@
     <weight>0</weight>
     <framesDelay>0.150</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/item/teleport.bmp">
+    <picture file="gfx/item.png/teleport.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/teleport-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/teleport-shadows.png">
       <shadowWidth>64</shadowWidth>
       <shadowHeight>31</shadowHeight>
     </shadow>
@@ -777,11 +777,11 @@
     <weight>0.010</weight>
     <framesDelay>0.150</framesDelay>
     <speed>0.040</speed>
-    <bitmap file="gfx/item/turtle.bmp">
+    <picture file="gfx/item.png/turtle.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/turtle-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/turtle-shadows.png">
       <shadowWidth>48</shadowWidth>
       <shadowHeight>25</shadowHeight>
     </shadow>
@@ -799,11 +799,11 @@
     <weight>0.010</weight>
     <framesDelay>0.080</framesDelay>
     <speed>0.040</speed>
-    <bitmap file="gfx/item/trampoline.bmp">
+    <picture file="gfx/item.png/trampoline.png">
       <frameWidth>48</frameWidth>
       <frameHeight>56</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/trampoline-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/trampoline-shadows.png">
       <shadowWidth>48</shadowWidth>
       <shadowHeight>25</shadowHeight>
     </shadow>
@@ -821,11 +821,11 @@
     <weight>0</weight>
     <framesDelay>0.130</framesDelay>
     <speed>0.010</speed>
-    <bitmap file="gfx/item/bubbles.bmp">
+    <picture file="gfx/item.png/bubbles.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/bubbles-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/bubbles-shadows.png">
       <shadowWidth>48</shadowWidth>
       <shadowHeight>25</shadowHeight>
     </shadow>
@@ -847,11 +847,11 @@
     <weight>0</weight>
     <framesDelay>0.130</framesDelay>
     <speed>0.010</speed>
-    <bitmap file="gfx/item/double-bubbles.bmp">
+    <picture file="gfx/item.png/double-bubbles.png">
       <frameWidth>48</frameWidth>
       <frameHeight>80</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/bubbles-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/bubbles-shadows.png">
       <shadowWidth>48</shadowWidth>
       <shadowHeight>25</shadowHeight>
     </shadow>
@@ -873,11 +873,11 @@
     <weight>0.010</weight>
     <framesDelay>0</framesDelay>
     <speed>0.020</speed>
-    <bitmap file="gfx/item/cap.bmp">
+    <picture file="gfx/item.png/cap.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/cap-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/cap-shadows.png">
       <shadowWidth>48</shadowWidth>
       <shadowHeight>25</shadowHeight>
     </shadow>
@@ -894,11 +894,11 @@
     <weight>0.010</weight>
     <framesDelay>0</framesDelay>
     <speed>0.020</speed>
-    <bitmap file="gfx/item/cap.bmp">
+    <picture file="gfx/item.png/cap.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/cap-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/cap-shadows.png">
       <shadowWidth>48</shadowWidth>
       <shadowHeight>25</shadowHeight>
     </shadow>
@@ -915,11 +915,11 @@
     <weight>0.010</weight>
     <framesDelay>0.150</framesDelay>
     <speed>0.040</speed>
-    <bitmap file="gfx/item/big-head-robot.bmp">
+    <picture file="gfx/item.png/big-head-robot.png">
       <frameWidth>48</frameWidth>
       <frameHeight>80</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/big-head-robot-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/big-head-robot-shadows.png">
       <shadowWidth>48</shadowWidth>
       <shadowHeight>25</shadowHeight>
     </shadow>
@@ -936,11 +936,11 @@
     <weight>0.010</weight>
     <framesDelay>0.150</framesDelay>
     <speed>0.040</speed>
-    <bitmap file="gfx/item/elephant.bmp">
+    <picture file="gfx/item.png/elephant.png">
       <frameWidth>48</frameWidth>
       <frameHeight>80</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/elephant-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/elephant-shadows.png">
       <shadowWidth>48</shadowWidth>
       <shadowHeight>25</shadowHeight>
     </shadow>
@@ -957,11 +957,11 @@
     <weight>0.010</weight>
     <framesDelay>0.150</framesDelay>
     <speed>0.040</speed>
-    <bitmap file="gfx/item/monkey.bmp">
+    <picture file="gfx/item.png/monkey.png">
       <frameWidth>48</frameWidth>
       <frameHeight>80</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/monkey-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/monkey-shadows.png">
       <shadowWidth>48</shadowWidth>
       <shadowHeight>25</shadowHeight>
     </shadow>
@@ -978,11 +978,11 @@
     <weight>0.010</weight>
     <framesDelay>0.150</framesDelay>
     <speed>0.040</speed>
-    <bitmap file="gfx/item/diver.bmp">
+    <picture file="gfx/item.png/diver.png">
       <frameWidth>48</frameWidth>
       <frameHeight>80</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/diver-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/diver-shadows.png">
       <shadowWidth>48</shadowWidth>
       <shadowHeight>25</shadowHeight>
     </shadow>
@@ -999,11 +999,11 @@
     <weight>0.010</weight>
     <framesDelay>0.100</framesDelay>
     <speed>0.040</speed>
-    <bitmap file="gfx/item/bubble-robot.bmp">
+    <picture file="gfx/item.png/bubble-robot.png">
       <frameWidth>48</frameWidth>
       <frameHeight>80</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/bubble-robot-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/bubble-robot-shadows.png">
       <shadowWidth>48</shadowWidth>
       <shadowHeight>25</shadowHeight>
     </shadow>
@@ -1023,11 +1023,11 @@
     <weight>0</weight>
     <framesDelay>0.100</framesDelay>
     <speed>0.040</speed>
-    <bitmap file="gfx/item/imperial-guard.bmp">
+    <picture file="gfx/item.png/imperial-guard.png">
       <frameWidth>48</frameWidth>
       <frameHeight>80</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/imperial-guard-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/imperial-guard-shadows.png">
       <shadowWidth>48</shadowWidth>
       <shadowHeight>25</shadowHeight>
     </shadow>
@@ -1047,11 +1047,11 @@
     <weight>0.010</weight>
     <framesDelay>0.150</framesDelay>
     <speed>0.040</speed>
-    <bitmap file="gfx/item/robot.bmp">
+    <picture file="gfx/item.png/robot.png">
       <frameWidth>48</frameWidth>
       <frameHeight>80</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/robot-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/robot-shadows.png">
       <shadowWidth>48</shadowWidth>
       <shadowHeight>25</shadowHeight>
     </shadow>
@@ -1068,11 +1068,11 @@
     <weight>0.010</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/item/fish.bmp">
+    <picture file="gfx/item.png/fish.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/fish-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/fish-shadows.png">
       <shadowWidth>48</shadowWidth>
       <shadowHeight>25</shadowHeight>
     </shadow>
@@ -1089,11 +1089,11 @@
     <weight>0.020</weight>
     <framesDelay>0.090</framesDelay>
     <speed>0.040</speed>
-    <bitmap file="gfx/item/head.bmp">
+    <picture file="gfx/item.png/head.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/head-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/head-shadows.png">
       <shadowWidth>48</shadowWidth>
       <shadowHeight>25</shadowHeight>
     </shadow>
@@ -1114,11 +1114,11 @@
     <weight>0.010</weight>
     <framesDelay>0.090</framesDelay>
     <speed>0.020</speed>
-    <bitmap file="gfx/item/heels.bmp">
+    <picture file="gfx/item.png/heels.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/heels-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/heels-shadows.png">
       <shadowWidth>48</shadowWidth>
       <shadowHeight>25</shadowHeight>
     </shadow>
@@ -1139,11 +1139,11 @@
     <weight>0.020</weight>
     <framesDelay>0.100</framesDelay>
     <speed>0.020</speed>
-    <bitmap file="gfx/item/headoverheels.bmp">
+    <picture file="gfx/item.png/headoverheels.png">
       <frameWidth>48</frameWidth>
       <frameHeight>80</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/headoverheels-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/headoverheels-shadows.png">
       <shadowWidth>48</shadowWidth>
       <shadowHeight>25</shadowHeight>
     </shadow>
@@ -1164,11 +1164,11 @@
     <weight>0.010</weight>
     <framesDelay>0.100</framesDelay>
     <speed>0.020</speed>
-    <bitmap file="gfx/item/throne-guard.bmp">
+    <picture file="gfx/item.png/throne-guard.png">
       <frameWidth>48</frameWidth>
       <frameHeight>80</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/throne-guard-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/throne-guard-shadows.png">
       <shadowWidth>48</shadowWidth>
       <shadowHeight>25</shadowHeight>
     </shadow>
@@ -1188,11 +1188,11 @@
     <weight>0.010</weight>
     <framesDelay>0.200</framesDelay>
     <speed>0.020</speed>
-    <bitmap file="gfx/item/emperor.bmp">
+    <picture file="gfx/item.png/emperor.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/emperor-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/emperor-shadows.png">
       <shadowWidth>48</shadowWidth>
       <shadowHeight>25</shadowHeight>
     </shadow>
@@ -1210,11 +1210,11 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/item/freedonian-head.bmp">
+    <picture file="gfx/item.png/freedonian-head.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/freedonian-head-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/freedonian-head-shadows.png">
       <shadowWidth>48</shadowWidth>
       <shadowHeight>25</shadowHeight>
     </shadow>
@@ -1231,11 +1231,11 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/item/freedonian-heels.bmp">
+    <picture file="gfx/item.png/freedonian-heels.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
-    </bitmap>
-    <shadow file="gfx/item/freedonian-heels-shadows.bmp">
+    </picture>
+    <shadow file="gfx/item.png/freedonian-heels-shadows.png">
       <shadowWidth>48</shadowWidth>
       <shadowHeight>25</shadowHeight>
     </shadow>
@@ -1252,10 +1252,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/jail/jail-wall-x.bmp">
+    <picture file="gfx/jail.png/jail-wall-x.png">
       <frameWidth>64</frameWidth>
       <frameHeight>117</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
     
@@ -1269,10 +1269,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/jail/jail-wall-y.bmp">
+    <picture file="gfx/jail.png/jail-wall-y.png">
       <frameWidth>64</frameWidth>
       <frameHeight>117</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
     
@@ -1286,10 +1286,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/jail/jail-column-shaft-north.bmp">
+    <picture file="gfx/jail.png/jail-column-shaft-north.png">
       <frameWidth>64</frameWidth>
       <frameHeight>39</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
     
@@ -1303,10 +1303,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/jail/jail-column-capital-north.bmp">
+    <picture file="gfx/jail.png/jail-column-capital-north.png">
       <frameWidth>64</frameWidth>
       <frameHeight>49</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
     
@@ -1320,10 +1320,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/jail/jail-column-shaft-east.bmp">
+    <picture file="gfx/jail.png/jail-column-shaft-east.png">
       <frameWidth>64</frameWidth>
       <frameHeight>39</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
     
@@ -1337,10 +1337,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/jail/jail-column-capital-east.bmp">
+    <picture file="gfx/jail.png/jail-column-capital-east.png">
       <frameWidth>64</frameWidth>
       <frameHeight>49</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
     
@@ -1354,10 +1354,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/jail/jail-column-capital-south.bmp">
+    <picture file="gfx/jail.png/jail-column-capital-south.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
     
@@ -1371,10 +1371,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/jail/jail-column-capital-west.bmp">
+    <picture file="gfx/jail.png/jail-column-capital-west.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -1388,10 +1388,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/blacktooth/blacktooth-wall-x-1.bmp">
+    <picture file="gfx/blacktooth.png/blacktooth-wall-x-1.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -1405,10 +1405,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/blacktooth/blacktooth-wall-y-1.bmp">
+    <picture file="gfx/blacktooth.png/blacktooth-wall-y-1.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -1422,10 +1422,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/blacktooth/blacktooth-wall-x-2.bmp">
+    <picture file="gfx/blacktooth.png/blacktooth-wall-x-2.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -1439,10 +1439,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/blacktooth/blacktooth-wall-y-2.bmp">
+    <picture file="gfx/blacktooth.png/blacktooth-wall-y-2.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -1456,10 +1456,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/blacktooth/blacktooth-wall-x-3.bmp">
+    <picture file="gfx/blacktooth.png/blacktooth-wall-x-3.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -1473,10 +1473,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/blacktooth/blacktooth-wall-y-3.bmp">
+    <picture file="gfx/blacktooth.png/blacktooth-wall-y-3.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -1490,10 +1490,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/blacktooth/blacktooth-column-shaft-north.bmp">
+    <picture file="gfx/blacktooth.png/blacktooth-column-shaft-north.png">
       <frameWidth>64</frameWidth>
       <frameHeight>39</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -1507,10 +1507,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/blacktooth/blacktooth-column-capital-north.bmp">
+    <picture file="gfx/blacktooth.png/blacktooth-column-capital-north.png">
       <frameWidth>64</frameWidth>
       <frameHeight>49</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -1524,10 +1524,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/blacktooth/blacktooth-column-shaft-east.bmp">
+    <picture file="gfx/blacktooth.png/blacktooth-column-shaft-east.png">
       <frameWidth>64</frameWidth>
       <frameHeight>39</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -1541,10 +1541,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/blacktooth/blacktooth-column-capital-east.bmp">
+    <picture file="gfx/blacktooth.png/blacktooth-column-capital-east.png">
       <frameWidth>64</frameWidth>
       <frameHeight>49</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -1558,10 +1558,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/blacktooth/blacktooth-column-capital-south.bmp">
+    <picture file="gfx/blacktooth.png/blacktooth-column-capital-south.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -1575,10 +1575,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/blacktooth/blacktooth-column-capital-west.bmp">
+    <picture file="gfx/blacktooth.png/blacktooth-column-capital-west.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -1592,10 +1592,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/market/market-wall-x-1.bmp">
+    <picture file="gfx/market.png/market-wall-x-1.png">
       <frameWidth>64</frameWidth>
       <frameHeight>116</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -1609,10 +1609,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/market/market-wall-y-1.bmp">
+    <picture file="gfx/market.png/market-wall-y-1.png">
       <frameWidth>64</frameWidth>
       <frameHeight>116</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
     
@@ -1626,10 +1626,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/market/market-wall-x-2.bmp">
+    <picture file="gfx/market.png/market-wall-x-2.png">
       <frameWidth>64</frameWidth>
       <frameHeight>116</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
     
@@ -1643,10 +1643,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/market/market-wall-y-2.bmp">
+    <picture file="gfx/market.png/market-wall-y-2.png">
       <frameWidth>64</frameWidth>
       <frameHeight>116</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -1660,10 +1660,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/market/market-wall-x-3.bmp">
+    <picture file="gfx/market.png/market-wall-x-3.png">
       <frameWidth>64</frameWidth>
       <frameHeight>116</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
     
@@ -1677,10 +1677,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/market/market-wall-y-3.bmp">
+    <picture file="gfx/market.png/market-wall-y-3.png">
       <frameWidth>64</frameWidth>
       <frameHeight>116</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -1694,10 +1694,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/market/market-column-shaft-north.bmp">
+    <picture file="gfx/market.png/market-column-shaft-north.png">
       <frameWidth>64</frameWidth>
       <frameHeight>39</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -1711,10 +1711,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/market/market-column-capital-north.bmp">
+    <picture file="gfx/market.png/market-column-capital-north.png">
       <frameWidth>64</frameWidth>
       <frameHeight>49</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -1728,10 +1728,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/market/market-column-shaft-east.bmp">
+    <picture file="gfx/market.png/market-column-shaft-east.png">
       <frameWidth>64</frameWidth>
       <frameHeight>39</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -1745,10 +1745,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/market/market-column-capital-east.bmp">
+    <picture file="gfx/market.png/market-column-capital-east.png">
       <frameWidth>64</frameWidth>
       <frameHeight>49</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -1762,10 +1762,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/market/market-column-capital-south.bmp">
+    <picture file="gfx/market.png/market-column-capital-south.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -1779,10 +1779,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/market/market-column-capital-west.bmp">
+    <picture file="gfx/market.png/market-column-capital-west.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -1796,10 +1796,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/moonbase/moonbase-wall-x-1.bmp">
+    <picture file="gfx/moonbase.png/moonbase-wall-x-1.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -1813,10 +1813,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/moonbase/moonbase-wall-y-1.bmp">
+    <picture file="gfx/moonbase.png/moonbase-wall-y-1.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -1830,10 +1830,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/moonbase/moonbase-wall-x-2.bmp">
+    <picture file="gfx/moonbase.png/moonbase-wall-x-2.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -1847,10 +1847,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/moonbase/moonbase-wall-y-2.bmp">
+    <picture file="gfx/moonbase.png/moonbase-wall-y-2.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -1864,10 +1864,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/moonbase/moonbase-wall-x-3.bmp">
+    <picture file="gfx/moonbase.png/moonbase-wall-x-3.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -1881,10 +1881,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/moonbase/moonbase-wall-y-3.bmp">
+    <picture file="gfx/moonbase.png/moonbase-wall-y-3.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -1898,10 +1898,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/moonbase/moonbase-wall-x-4.bmp">
+    <picture file="gfx/moonbase.png/moonbase-wall-x-4.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -1915,10 +1915,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/moonbase/moonbase-wall-y-4.bmp">
+    <picture file="gfx/moonbase.png/moonbase-wall-y-4.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -1932,10 +1932,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/moonbase/moonbase-column-shaft-north.bmp">
+    <picture file="gfx/moonbase.png/moonbase-column-shaft-north.png">
       <frameWidth>64</frameWidth>
       <frameHeight>39</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -1949,10 +1949,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/moonbase/moonbase-column-capital-north.bmp">
+    <picture file="gfx/moonbase.png/moonbase-column-capital-north.png">
       <frameWidth>64</frameWidth>
       <frameHeight>49</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -1966,10 +1966,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/moonbase/moonbase-column-shaft-east.bmp">
+    <picture file="gfx/moonbase.png/moonbase-column-shaft-east.png">
       <frameWidth>64</frameWidth>
       <frameHeight>39</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -1983,10 +1983,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/moonbase/moonbase-column-capital-east.bmp">
+    <picture file="gfx/moonbase.png/moonbase-column-capital-east.png">
       <frameWidth>64</frameWidth>
       <frameHeight>49</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2000,10 +2000,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/moonbase/moonbase-column-capital-south.bmp">
+    <picture file="gfx/moonbase.png/moonbase-column-capital-south.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2017,10 +2017,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/moonbase/moonbase-column-capital-west.bmp">
+    <picture file="gfx/moonbase.png/moonbase-column-capital-west.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2034,10 +2034,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/byblos/byblos-wall-x-1.bmp">
+    <picture file="gfx/byblos.png/byblos-wall-x-1.png">
       <frameWidth>64</frameWidth>
       <frameHeight>116</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2051,10 +2051,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/byblos/byblos-wall-y-1.bmp">
+    <picture file="gfx/byblos.png/byblos-wall-y-1.png">
       <frameWidth>64</frameWidth>
       <frameHeight>116</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2068,10 +2068,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/byblos/byblos-wall-x-2.bmp">
+    <picture file="gfx/byblos.png/byblos-wall-x-2.png">
       <frameWidth>64</frameWidth>
       <frameHeight>116</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2085,10 +2085,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/byblos/byblos-wall-y-2.bmp">
+    <picture file="gfx/byblos.png/byblos-wall-y-2.png">
       <frameWidth>64</frameWidth>
       <frameHeight>116</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2102,10 +2102,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/byblos/byblos-column-shaft-north.bmp">
+    <picture file="gfx/byblos.png/byblos-column-shaft-north.png">
       <frameWidth>64</frameWidth>
       <frameHeight>39</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2119,10 +2119,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/byblos/byblos-column-capital-north.bmp">
+    <picture file="gfx/byblos.png/byblos-column-capital-north.png">
       <frameWidth>64</frameWidth>
       <frameHeight>49</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2136,10 +2136,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/byblos/byblos-column-shaft-east.bmp">
+    <picture file="gfx/byblos.png/byblos-column-shaft-east.png">
       <frameWidth>64</frameWidth>
       <frameHeight>39</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2153,10 +2153,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/byblos/byblos-column-capital-east.bmp">
+    <picture file="gfx/byblos.png/byblos-column-capital-east.png">
       <frameWidth>64</frameWidth>
       <frameHeight>49</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2170,10 +2170,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/byblos/byblos-column-capital-south.bmp">
+    <picture file="gfx/byblos.png/byblos-column-capital-south.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2187,10 +2187,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/byblos/byblos-column-capital-west.bmp">
+    <picture file="gfx/byblos.png/byblos-column-capital-west.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2204,10 +2204,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/egyptus/egyptus-wall-x-1.bmp">
+    <picture file="gfx/egyptus.png/egyptus-wall-x-1.png">
       <frameWidth>64</frameWidth>
       <frameHeight>116</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2221,10 +2221,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/egyptus/egyptus-wall-y-1.bmp">
+    <picture file="gfx/egyptus.png/egyptus-wall-y-1.png">
       <frameWidth>64</frameWidth>
       <frameHeight>116</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2238,10 +2238,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/egyptus/egyptus-wall-x-2.bmp">
+    <picture file="gfx/egyptus.png/egyptus-wall-x-2.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2255,10 +2255,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/egyptus/egyptus-wall-y-2.bmp">
+    <picture file="gfx/egyptus.png/egyptus-wall-y-2.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2272,10 +2272,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/egyptus/egyptus-column-shaft-north.bmp">
+    <picture file="gfx/egyptus.png/egyptus-column-shaft-north.png">
       <frameWidth>64</frameWidth>
       <frameHeight>39</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2289,10 +2289,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/egyptus/egyptus-column-capital-north.bmp">
+    <picture file="gfx/egyptus.png/egyptus-column-capital-north.png">
       <frameWidth>64</frameWidth>
       <frameHeight>49</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2306,10 +2306,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/egyptus/egyptus-column-shaft-east.bmp">
+    <picture file="gfx/egyptus.png/egyptus-column-shaft-east.png">
       <frameWidth>64</frameWidth>
       <frameHeight>39</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2323,10 +2323,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/egyptus/egyptus-column-capital-east.bmp">
+    <picture file="gfx/egyptus.png/egyptus-column-capital-east.png">
       <frameWidth>64</frameWidth>
       <frameHeight>49</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2340,10 +2340,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/egyptus/egyptus-column-capital-south.bmp">
+    <picture file="gfx/egyptus.png/egyptus-column-capital-south.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2357,10 +2357,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/egyptus/egyptus-column-capital-west.bmp">
+    <picture file="gfx/egyptus.png/egyptus-column-capital-west.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2374,10 +2374,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/penitentiary/penitentiary-wall-x-1.bmp">
+    <picture file="gfx/penitentiary.png/penitentiary-wall-x-1.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2391,10 +2391,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/penitentiary/penitentiary-wall-y-1.bmp">
+    <picture file="gfx/penitentiary.png/penitentiary-wall-y-1.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2408,10 +2408,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/penitentiary/penitentiary-wall-x-2.bmp">
+    <picture file="gfx/penitentiary.png/penitentiary-wall-x-2.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2425,10 +2425,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/penitentiary/penitentiary-wall-y-2.bmp">
+    <picture file="gfx/penitentiary.png/penitentiary-wall-y-2.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2442,10 +2442,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/penitentiary/penitentiary-column-shaft-north.bmp">
+    <picture file="gfx/penitentiary.png/penitentiary-column-shaft-north.png">
       <frameWidth>64</frameWidth>
       <frameHeight>39</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2459,10 +2459,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/penitentiary/penitentiary-column-capital-north.bmp">
+    <picture file="gfx/penitentiary.png/penitentiary-column-capital-north.png">
       <frameWidth>64</frameWidth>
       <frameHeight>49</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2476,10 +2476,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/penitentiary/penitentiary-column-shaft-east.bmp">
+    <picture file="gfx/penitentiary.png/penitentiary-column-shaft-east.png">
       <frameWidth>64</frameWidth>
       <frameHeight>39</frameHeight>
-    </bitmap>      
+    </picture>      
     <frame>0</frame>
   </item>
   
@@ -2493,10 +2493,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/penitentiary/penitentiary-column-capital-east.bmp">
+    <picture file="gfx/penitentiary.png/penitentiary-column-capital-east.png">
       <frameWidth>64</frameWidth>
       <frameHeight>49</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2510,10 +2510,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/penitentiary/penitentiary-column-capital-south.bmp">
+    <picture file="gfx/penitentiary.png/penitentiary-column-capital-south.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2527,10 +2527,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/penitentiary/penitentiary-column-capital-west.bmp">
+    <picture file="gfx/penitentiary.png/penitentiary-column-capital-west.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2544,10 +2544,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/safari/safari-wall-x-1.bmp">
+    <picture file="gfx/safari.png/safari-wall-x-1.png">
       <frameWidth>64</frameWidth>
       <frameHeight>116</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2561,10 +2561,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/safari/safari-wall-y-1.bmp">
+    <picture file="gfx/safari.png/safari-wall-y-1.png">
       <frameWidth>64</frameWidth>
       <frameHeight>116</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2578,10 +2578,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/safari/safari-wall-x-2.bmp">
+    <picture file="gfx/safari.png/safari-wall-x-2.png">
       <frameWidth>64</frameWidth>
       <frameHeight>116</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2595,10 +2595,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/safari/safari-wall-y-2.bmp">
+    <picture file="gfx/safari.png/safari-wall-y-2.png">
       <frameWidth>64</frameWidth>
       <frameHeight>116</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2612,10 +2612,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/safari/safari-wall-x-3.bmp">
+    <picture file="gfx/safari.png/safari-wall-x-3.png">
       <frameWidth>64</frameWidth>
       <frameHeight>116</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2629,10 +2629,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/safari/safari-wall-y-3.bmp">
+    <picture file="gfx/safari.png/safari-wall-y-3.png">
       <frameWidth>64</frameWidth>
       <frameHeight>116</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2646,10 +2646,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/safari/safari-column-shaft-north.bmp">
+    <picture file="gfx/safari.png/safari-column-shaft-north.png">
       <frameWidth>64</frameWidth>
       <frameHeight>39</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2663,10 +2663,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/safari/safari-column-capital-north.bmp">
+    <picture file="gfx/safari.png/safari-column-capital-north.png">
       <frameWidth>64</frameWidth>
       <frameHeight>49</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2680,10 +2680,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/safari/safari-column-shaft-east.bmp">
+    <picture file="gfx/safari.png/safari-column-shaft-east.png">
       <frameWidth>64</frameWidth>
       <frameHeight>39</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2697,10 +2697,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/safari/safari-column-capital-east.bmp">
+    <picture file="gfx/safari.png/safari-column-capital-east.png">
       <frameWidth>64</frameWidth>
       <frameHeight>49</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2714,10 +2714,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/safari/safari-column-capital-south.bmp">
+    <picture file="gfx/safari.png/safari-column-capital-south.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2731,10 +2731,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/safari/safari-column-capital-west.bmp">
+    <picture file="gfx/safari.png/safari-column-capital-west.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2748,10 +2748,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/item/hidden-wall.bmp">
+    <picture file="gfx/item.png/hidden-wall.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2765,10 +2765,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/item/hidden-wall.bmp">
+    <picture file="gfx/item.png/hidden-wall.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2789,10 +2789,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/jail/jail-door-north.bmp">
+    <picture file="gfx/jail.png/jail-door-north.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2813,10 +2813,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/blacktooth/blacktooth-door-north.bmp">
+    <picture file="gfx/blacktooth.png/blacktooth-door-north.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2837,10 +2837,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/market/market-door-north.bmp">
+    <picture file="gfx/market.png/market-door-north.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2861,10 +2861,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/moonbase/moonbase-door-north.bmp">
+    <picture file="gfx/moonbase.png/moonbase-door-north.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2885,10 +2885,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/byblos/byblos-door-north.bmp">
+    <picture file="gfx/byblos.png/byblos-door-north.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2909,10 +2909,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/egyptus/egyptus-door-north.bmp">
+    <picture file="gfx/egyptus.png/egyptus-door-north.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2933,10 +2933,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/penitentiary/penitentiary-door-north.bmp">
+    <picture file="gfx/penitentiary.png/penitentiary-door-north.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2957,10 +2957,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/safari/safari-door-north.bmp">
+    <picture file="gfx/safari.png/safari-door-north.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -2981,10 +2981,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/jail/jail-door-south.bmp">
+    <picture file="gfx/jail.png/jail-door-south.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -3005,10 +3005,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/blacktooth/blacktooth-door-south.bmp">
+    <picture file="gfx/blacktooth.png/blacktooth-door-south.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -3029,10 +3029,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/market/market-door-south.bmp">
+    <picture file="gfx/market.png/market-door-south.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -3053,10 +3053,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/moonbase/moonbase-door-south.bmp">
+    <picture file="gfx/moonbase.png/moonbase-door-south.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -3077,10 +3077,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/byblos/byblos-door-south.bmp">
+    <picture file="gfx/byblos.png/byblos-door-south.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -3101,10 +3101,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/egyptus/egyptus-door-south.bmp">
+    <picture file="gfx/egyptus.png/egyptus-door-south.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -3125,10 +3125,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/penitentiary/penitentiary-door-south.bmp">
+    <picture file="gfx/penitentiary.png/penitentiary-door-south.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -3149,10 +3149,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/safari/safari-door-south.bmp">
+    <picture file="gfx/safari.png/safari-door-south.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -3173,10 +3173,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/jail/jail-door-east.bmp">
+    <picture file="gfx/jail.png/jail-door-east.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -3197,10 +3197,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/blacktooth/blacktooth-door-east.bmp">
+    <picture file="gfx/blacktooth.png/blacktooth-door-east.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -3221,10 +3221,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/market/market-door-east.bmp">
+    <picture file="gfx/market.png/market-door-east.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -3245,10 +3245,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/moonbase/moonbase-door-east.bmp">
+    <picture file="gfx/moonbase.png/moonbase-door-east.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -3269,10 +3269,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/byblos/byblos-door-east.bmp">
+    <picture file="gfx/byblos.png/byblos-door-east.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -3293,10 +3293,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/egyptus/egyptus-door-east.bmp">
+    <picture file="gfx/egyptus.png/egyptus-door-east.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -3317,10 +3317,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/penitentiary/penitentiary-door-east.bmp">
+    <picture file="gfx/penitentiary.png/penitentiary-door-east.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -3341,10 +3341,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/safari/safari-door-east.bmp">
+    <picture file="gfx/safari.png/safari-door-east.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -3365,10 +3365,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/jail/jail-door-west.bmp">
+    <picture file="gfx/jail.png/jail-door-west.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -3389,10 +3389,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/blacktooth/blacktooth-door-west.bmp">
+    <picture file="gfx/blacktooth.png/blacktooth-door-west.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -3413,10 +3413,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/market/market-door-west.bmp">
+    <picture file="gfx/market.png/market-door-west.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -3437,10 +3437,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/moonbase/moonbase-door-west.bmp">
+    <picture file="gfx/moonbase.png/moonbase-door-west.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -3461,10 +3461,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/byblos/byblos-door-west.bmp">
+    <picture file="gfx/byblos.png/byblos-door-west.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -3485,10 +3485,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/egyptus/egyptus-door-west.bmp">
+    <picture file="gfx/egyptus.png/egyptus-door-west.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -3509,10 +3509,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/penitentiary/penitentiary-door-west.bmp">
+    <picture file="gfx/penitentiary.png/penitentiary-door-west.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
   
@@ -3533,10 +3533,10 @@
     <weight>0</weight>
     <framesDelay>0</framesDelay>
     <speed>0</speed>
-    <bitmap file="gfx/safari/safari-door-west.bmp">
+    <picture file="gfx/safari.png/safari-door-west.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
-    </bitmap>
+    </picture>
     <frame>0</frame>
   </item>
 </items>

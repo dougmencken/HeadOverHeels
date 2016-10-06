@@ -38,7 +38,7 @@ namespace gui
 
   /**
    * Tabla con los caracteres UTF-8 utilizados para presentar el texto en diferentes idiomas
-   * El orden de los caracteres coincide con la disposición de los mísmos en archivo "font.bmp"
+   * El orden de los caracteres coincide con la disposición de los mísmos en archivo "font"
    */
   const std::string characters[CharactersArraySize] =
   {

@@ -195,7 +195,7 @@ namespace ixml
   class ItemsXML;
   class item;
   class door;
-  class bitmap;
+  class picture;
   class shadow;
 }
 
@@ -404,22 +404,22 @@ namespace ixml
     void
     speed (const speed_type& x);
 
-    // bitmap
+    // picture
     //
-    typedef ::ixml::bitmap bitmap_type;
-    typedef ::xsd::cxx::tree::traits< bitmap_type, char > bitmap_traits;
+    typedef ::ixml::picture picture_type;
+    typedef ::xsd::cxx::tree::traits< picture_type, char > picture_traits;
 
-    const bitmap_type&
-    bitmap () const;
+    const picture_type&
+    picture () const;
 
-    bitmap_type&
-    bitmap ();
-
-    void
-    bitmap (const bitmap_type& x);
+    picture_type&
+    picture ();
 
     void
-    bitmap (::std::auto_ptr< bitmap_type > p);
+    picture (const picture_type& x);
+
+    void
+    picture (::std::auto_ptr< picture_type > p);
 
     // shadow
     //
@@ -498,7 +498,7 @@ namespace ixml
           const weight_type&,
           const framesDelay_type&,
           const speed_type&,
-          const bitmap_type&,
+          const picture_type&,
           const label_type&);
 
     item (const ::xercesc::DOMElement& e,
@@ -530,7 +530,7 @@ namespace ixml
     ::xsd::cxx::tree::one< weight_type > weight_;
     ::xsd::cxx::tree::one< framesDelay_type > framesDelay_;
     ::xsd::cxx::tree::one< speed_type > speed_;
-    ::xsd::cxx::tree::one< bitmap_type > bitmap_;
+    ::xsd::cxx::tree::one< picture_type > picture_;
     shadow_optional shadow_;
     extraFrames_optional extraFrames_;
     frame_sequence frame_;
@@ -591,7 +591,7 @@ namespace ixml
     static const value _xsd_door_indexes_[4];
   };
 
-  class bitmap: public ::xml_schema::type
+  class picture: public ::xml_schema::type
   {
     public:
     // frameWidth
@@ -641,21 +641,21 @@ namespace ixml
 
     // Constructors
     //
-    bitmap (const frameWidth_type&,
-            const frameHeight_type&,
-            const file_type&);
+    picture ( const frameWidth_type& ,
+            const frameHeight_type& ,
+            const file_type& ) ;
 
-    bitmap (const ::xercesc::DOMElement& e,
-            ::xml_schema::flags f = 0,
-            ::xml_schema::type* c = 0);
+    picture ( const ::xercesc::DOMElement& e ,
+            ::xml_schema::flags f = 0 ,
+            ::xml_schema::type* c = 0 ) ;
 
-    bitmap (const bitmap& x,
-            ::xml_schema::flags f = 0,
-            ::xml_schema::type* c = 0);
+    picture ( const picture& x ,
+            ::xml_schema::flags f = 0 ,
+            ::xml_schema::type* c = 0 ) ;
 
-    virtual bitmap*
-    _clone (::xml_schema::flags f = 0,
-            ::xml_schema::type* c = 0) const;
+    virtual picture*
+    _clone ( ::xml_schema::flags f = 0 ,
+             ::xml_schema::type* c = 0 ) const;
 
     // Implementation
     //
