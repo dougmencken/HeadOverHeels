@@ -160,6 +160,6 @@
 ------- April 2006 -------
 
 9	Fix an endianness on big-endian machines, from Siarhei Siamashka.
-	I haven't tested it.
+	It works well.
 
 	Released: version 1.5.
