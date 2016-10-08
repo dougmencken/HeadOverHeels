@@ -13,6 +13,8 @@
 #include "Exception.hpp"
 #include "SoundManager.hpp"
 
+# include <xercesc/util/PlatformUtils.hpp>
+
 namespace isomot
 {
 
@@ -31,6 +33,8 @@ MapManager::~MapManager()
 
 void MapManager::load()
 {
+  xercesc::XMLPlatformUtils::Initialize ();
+
   // Carga el archivo XML especificado y almacena los datos XML en la lista
   try
   {
@@ -149,6 +153,8 @@ void MapManager::load()
   {
     std::cerr << e.what() << std::endl;
   }
+
+  xercesc::XMLPlatformUtils::Terminate ();
 }
 
 void MapManager::start(const std::string& firstRoomFileName, const std::string& secondRoomFileName)

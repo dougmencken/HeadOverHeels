@@ -763,7 +763,7 @@ namespace ixml
 
   ::std::auto_ptr< ::ixml::ItemsXML >
   items (const ::std::string& uri,
-         ::xml_schema::flags f = 0,
+         ::xml_schema::flags f = ::xml_schema::flags::dont_initialize,
          const ::xml_schema::properties& p = ::xml_schema::properties ());
 
   // Parse std::istream
@@ -771,13 +771,13 @@ namespace ixml
 
   ::std::auto_ptr< ::ixml::ItemsXML >
   items (::std::istream& is,
-         ::xml_schema::flags f = 0,
+         ::xml_schema::flags f = ::xml_schema::flags::dont_initialize,
          const ::xml_schema::properties& p = ::xml_schema::properties ());
 
   ::std::auto_ptr< ::ixml::ItemsXML >
   items (::std::istream& is,
          const ::std::string& id,
-         ::xml_schema::flags f = 0,
+         ::xml_schema::flags f = ::xml_schema::flags::dont_initialize,
          const ::xml_schema::properties& p = ::xml_schema::properties ());
 
   // Parse xercesc::DOMLSInput
@@ -785,7 +785,7 @@ namespace ixml
 
   ::std::auto_ptr< ::ixml::ItemsXML >
   items (const ::xercesc::DOMLSInput& is,
-         ::xml_schema::flags f = 0,
+         ::xml_schema::flags f = ::xml_schema::flags::dont_initialize,
          const ::xml_schema::properties& p = ::xml_schema::properties ());
 
   // Parse xercesc::DOMDocument
@@ -793,12 +793,12 @@ namespace ixml
 
   ::std::auto_ptr< ::ixml::ItemsXML >
   items (const ::xercesc::DOMDocument& d,
-         ::xml_schema::flags f = 0,
+         ::xml_schema::flags f = ::xml_schema::flags::dont_initialize,
          const ::xml_schema::properties& p = ::xml_schema::properties ());
 
   ::std::auto_ptr< ::ixml::ItemsXML >
   items (::xercesc::DOMDocument* d,
-         ::xml_schema::flags f = 0,
+         ::xml_schema::flags f = ::xml_schema::flags::dont_initialize,
          const ::xml_schema::properties& p = ::xml_schema::properties ());
 }
 

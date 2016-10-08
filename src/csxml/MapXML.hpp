@@ -671,7 +671,7 @@ namespace mxml
 
   ::std::auto_ptr< ::mxml::MapXML >
   map (const ::std::string& uri,
-       ::xml_schema::flags f = 0,
+       ::xml_schema::flags f = ::xml_schema::flags::dont_initialize,
        const ::xml_schema::properties& p = ::xml_schema::properties ());
 
   // Parse std::istream
@@ -679,13 +679,13 @@ namespace mxml
 
   ::std::auto_ptr< ::mxml::MapXML >
   map (::std::istream& is,
-       ::xml_schema::flags f = 0,
+       ::xml_schema::flags f = ::xml_schema::flags::dont_initialize,
        const ::xml_schema::properties& p = ::xml_schema::properties ());
 
   ::std::auto_ptr< ::mxml::MapXML >
   map (::std::istream& is,
        const ::std::string& id,
-       ::xml_schema::flags f = 0,
+       ::xml_schema::flags f = ::xml_schema::flags::dont_initialize,
        const ::xml_schema::properties& p = ::xml_schema::properties ());
 
   // Parse xercesc::DOMLSInput
@@ -693,7 +693,7 @@ namespace mxml
 
   ::std::auto_ptr< ::mxml::MapXML >
   map (const ::xercesc::DOMLSInput& is,
-       ::xml_schema::flags f = 0,
+       ::xml_schema::flags f = ::xml_schema::flags::dont_initialize,
        const ::xml_schema::properties& p = ::xml_schema::properties ());
 
   // Parse xercesc::DOMDocument
@@ -701,12 +701,12 @@ namespace mxml
 
   ::std::auto_ptr< ::mxml::MapXML >
   map (const ::xercesc::DOMDocument& d,
-       ::xml_schema::flags f = 0,
+       ::xml_schema::flags f = ::xml_schema::flags::dont_initialize,
        const ::xml_schema::properties& p = ::xml_schema::properties ());
 
   ::std::auto_ptr< ::mxml::MapXML >
   map (::xercesc::DOMDocument* d,
-       ::xml_schema::flags f = 0,
+       ::xml_schema::flags f = ::xml_schema::flags::dont_initialize,
        const ::xml_schema::properties& p = ::xml_schema::properties ());
 }
 

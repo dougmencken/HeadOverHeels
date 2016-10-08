@@ -4,6 +4,8 @@
 #include <loadpng.h>
 #include <fstream>
 
+# include <xercesc/util/PlatformUtils.hpp>
+
 namespace isomot
 {
 
@@ -19,6 +21,8 @@ ItemDataManager::~ItemDataManager()
 
 void ItemDataManager::load()
 {
+  xercesc::XMLPlatformUtils::Initialize ();
+
   // Carga el archivo XML especificado y almacena los datos XML en la lista
   try
   {
@@ -187,6 +191,8 @@ void ItemDataManager::load()
   {
     std::cerr << e.what() << std::endl;
   }
+
+  xercesc::XMLPlatformUtils::Terminate ();
 }
 
 ItemData* ItemDataManager::find(const short label)
