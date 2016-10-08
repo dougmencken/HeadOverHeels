@@ -228,7 +228,7 @@ public: // Operaciones de consulta y actualización
 
   /**
    * Devuelve el estado del proceso de enmascarado
-   * @return NoMask, sin máscara; MustBeMasked, debe ser enmascarado; o, Masked, enmascarado
+   * @return NoMask, sin máscara; ItIsMasked, debe ser enmascarado; o, Masked, enmascarado
    */
   MaskStatus getMaskStatus() const { return maskStatus; }
 

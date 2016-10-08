@@ -74,7 +74,7 @@ void GridItem::changeImage(BITMAP* image)
       // Si las sombras están activas el elemento debe sombrearse
       if(mediator->getShadingScale() < 256)
       {
-        this->shadeStatus = MustBeShady;
+        this->shadeStatus = ItIsShady;
       }
 
       // A cuántos píxeles está la imagen del punto origen de la sala
@@ -99,11 +99,11 @@ void GridItem::changeImage(BITMAP* image)
   }
 }
 
-void GridItem::changeShadow(BITMAP* shadow)
+void GridItem::changeShadow( BITMAP* shadow )
 {
   // Si el elemento no tiene ninguna sombra entonces simplemente se asigna. Se entiende que este
   // caso sucede únicamente durante la creación del elemento
-  if(this->shadow == NULL)
+  if( this->shadow == NULL )
   {
     // Asignación de la sombra
     this->shadow = shadow;
@@ -115,27 +115,27 @@ void GridItem::changeShadow(BITMAP* shadow)
     this->shadow = shadow;
 
     // Hay que calcular a qué elementos se sombreará, a no ser que la nueva sombra sea nula
-    if(this->image)
+    if( this->image )
     {
       // Si las sombras están activas los elementos deben sombrearse
-      if(mediator->getShadingScale() < 256)
+      if( mediator->getShadingScale() < 256 )
       {
-        mediator->markItemsForShady(this);
+        mediator->markItemsForShady( this );
       }
     }
   }
 }
 
-void GridItem::requestCastShadow(int column)
+void GridItem::requestCastShadow( int column )
 {
-  if(this->image && this->shadeStatus == MustBeShady)
+  if( this->image && this->shadeStatus == ItIsShady )
   {
-    mediator->castShadow(this);
+    mediator->castShadow( this );
 
     // Si no se ha podido sombrear entonces se destruye la imagen de sombreado
-    if(this->shadeStatus != Shady && this->processedImage)
+    if( this->shadeStatus != Shady && this->processedImage )
     {
-      destroy_bitmap(this->processedImage);
+      destroy_bitmap( this->processedImage );
       this->processedImage = 0;
     }
 
@@ -144,29 +144,29 @@ void GridItem::requestCastShadow(int column)
   }
 }
 
-void GridItem::castShadowImage(int x, int y, BITMAP* shadow, short shadingScale, unsigned char transparency)
+void GridItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale, unsigned char transparency )
 {
   // El sombreado se realiza si el elemento que sombrea no es totalmente transparente
-  if(transparency < 100)
+  if( transparency < 100 )
   {
     // Anchura del elemento
     int width = this->itemData->widthX;
     // Coordenada inicial X
-    int sx = x - this->offset.first;
-    if(sx < 0) sx = 0;
+    int inix = x - this->offset.first;
+    if( inix < 0 ) inix = 0;
     // Coordenada inicial Y
-    int sy = y - this->offset.second;
-    if(sy < 0) sy = 0;
+    int iniy = y - this->offset.second;
+    if( iniy < 0 ) iniy = 0;
     // Coordenada final X
-    int ex = x - this->offset.first + shadow->w;
-    if(ex > this->image->w) ex = this->image->w;
+    int endx = x - this->offset.first + shadow->w;
+    if( endx > this->image->w ) endx = this->image->w;
     // Coordenada final Y
-    int ey = y - this->offset.second + shadow->h;
-    if(ey > this->image->h) ey = this->image->h;
+    int endy = y - this->offset.second + shadow->h;
+    if( endy > this->image->h ) endy = this->image->h;
     // Coordenada intermedia Y
     int my = this->image->h - width - this->itemData->height + 1;
-    if(ey < my) my = ey;
-    if(ey > my + width) ey = my + width;
+    if( endy < my ) my = endy;
+    if( endy > my + width ) endy = my + width;
 
     // Índice para recorrer las filas de píxeles de la imágenes image y processedImage del elemento
     int iRow = 0;
@@ -190,33 +190,39 @@ void GridItem::castShadowImage(int x, int y, BITMAP* shadow, short shadingScale,
     int rtpx1 = 0;
 
     // Las coordenadas iniciales tienen que ser menores a las finales
-    if(sy < ey && sx < ex)
+    if( iniy < endy && inix < endx )
     {
-      int n2i = sx + this->offset.first - x;
+      int n2i = inix + this->offset.first - x;
 
       // En principio, la imagen del elemento sombreado es la imagen del elemento sin sombrear
-      if(!this->processedImage)
+      if( ! this->processedImage )
       {
-        this->processedImage = create_bitmap_ex(bitmap_color_depth(this->image), this->image->w, this->image->h);
+        this->processedImage = create_bitmap_ex( bitmap_color_depth( this->image ), this->image->w, this->image->h );
       }
-      if(this->shadeStatus == MustBeShady)
+      if( this->shadeStatus == ItIsShady )
       {
-        blit(this->image, this->processedImage, 0, 0, 0, 0, this->image->w, this->image->h);
+        blit( this->image, this->processedImage, 0, 0, 0, 0, this->image->w, this->image->h );
         this->shadeStatus = Shady;
       }
 
       // Incremento de los índices iRpx, iGpx e iBpx
-      char iInc = (bitmap_color_depth(this->image) == 32 ? 4 : 3);
+      char iInc = ( bitmap_color_depth( this->image ) == 32 ? 4 : 3 );
       // Incremento del índice sPixel
-      char sInc = (bitmap_color_depth(shadow) == 32 ? 4 : 3);
+      char sInc = ( bitmap_color_depth( shadow ) == 32 ? 4 : 3 );
 
       // Grado de opacidad del sombreado desde 0 a 255, siendo 0 la opacidad total y 255
       // casi la transparencia total
       short opacity = short(((256.0 - shadingScale) / 100) * transparency + shadingScale);
 
-      ex = ex * iInc + IS_BIG_ENDIAN(bitmap_color_depth(this->image));
-      sx = sx * iInc + IS_BIG_ENDIAN(bitmap_color_depth(this->image));
-      n2i = n2i * sInc + IS_BIG_ENDIAN(bitmap_color_depth(shadow));
+      endx *= iInc;
+      inix *= iInc;
+      #if IS_BIG_ENDIAN
+          inix += bitmap_color_depth( this->image ) == 32 ? 1 : 0 ;
+      #endif
+      n2i *= sInc;
+      #if IS_BIG_ENDIAN
+          n2i += bitmap_color_depth( shadow ) == 32 ? 1 : 0 ;
+      #endif
 
       unsigned char* lm;
       unsigned char* ln;
@@ -229,7 +235,7 @@ void GridItem::castShadowImage(int x, int y, BITMAP* shadow, short shadingScale,
 
         // En función de la opacidad de la sombra se halla
         // el valor del divisor del píxel: píxel / 2^pxDiv
-        while(opacity != 2)
+        while( opacity != 2 )
         {
           opacity = opacity >> 1;
           pxDiv--;
@@ -237,14 +243,14 @@ void GridItem::castShadowImage(int x, int y, BITMAP* shadow, short shadingScale,
 
         // Sombreado de la superficie del elemento, la parte superior
         // Se recorren las filas de las tres imágenes entre los límites calculados
-        for(iRow = sy, sRow = sy + this->offset.second - y; iRow < my; iRow++, sRow++)
+        for( iRow = iniy, sRow = iniy + this->offset.second - y; iRow < my; iRow++, sRow++ )
         {
           unsigned char* sln = shadow->line[sRow];
           unsigned char* iln = this->image->line[iRow];
           unsigned char* rln = this->processedImage->line[iRow];
 
           // Se recorren los píxeles de cada fila según los límites calculados
-          for(iRpx = sx, iGpx = sx + 1, iBpx = sx + 2, sPixel = n2i; iRpx < ex; iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc)
+          for( iRpx = inix, iGpx = inix + 1, iBpx = inix + 2, sPixel = n2i; iRpx < endx; iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc )
           {
             // Si el píxel de las tres imágenes no tiene el color clave (255,0,255)
             // entonces el píxel de la imagen resultante se divide entre 2^pxDiv, es decir, se oscurece
@@ -262,27 +268,33 @@ void GridItem::castShadowImage(int x, int y, BITMAP* shadow, short shadingScale,
         // Sombreado de los laterales del elemento
         ltpx = ((this->image->w) >> 1) - (width << 1) + ((iRow - my) << 1);
         rtpx = ((this->image->w) >> 1) + (width << 1) - ((iRow - my) << 1) - 2;
-        ltpx = ltpx * iInc + IS_BIG_ENDIAN(bitmap_color_depth(this->image));
-        rtpx = rtpx * iInc + IS_BIG_ENDIAN(bitmap_color_depth(this->image));
+        ltpx = ltpx * iInc;
+        #if IS_BIG_ENDIAN
+            ltpx += bitmap_color_depth( this->image ) == 32 ? 1 : 0 ;
+        #endif
+        rtpx = rtpx * iInc;
+        #if IS_BIG_ENDIAN
+            rtpx += bitmap_color_depth( this->image ) == 32 ? 1 : 0 ;
+        #endif
 
-        for(ltpx1 = ltpx + iInc, rtpx1 = rtpx + iInc; iRow < ey; iRow++, sRow++, ltpx += 2 * iInc, ltpx1 += 2 * iInc, rtpx -= 2 * iInc, rtpx1 -= 2 * iInc)
+        for( ltpx1 = ltpx + iInc, rtpx1 = rtpx + iInc; iRow < endy; iRow++, sRow++, ltpx += 2 * iInc, ltpx1 += 2 * iInc, rtpx -= 2 * iInc, rtpx1 -= 2 * iInc )
         {
           unsigned char* sln = shadow->line[sRow];
           unsigned char* iln = this->image->line[iRow];
           unsigned char* rln = this->processedImage->line[iRow];
 
-          if(sx < ltpx)
+          if( inix < ltpx )
           {
-            sx = ltpx;
-            n2i = sx + (this->offset.first - x) * sInc + IS_BIG_ENDIAN(bitmap_color_depth(shadow));
+            inix = ltpx;
+            n2i = inix + (this->offset.first - x) * sInc;
           }
 
-          if(ex > rtpx + 2 * iInc)
+          if( endx > rtpx + 2 * iInc )
           {
-            ex = rtpx + 2 * iInc;
+            endx = rtpx + 2 * iInc;
           }
 
-          for(iRpx = sx, iGpx = sx + 1, iBpx = sx + 2, sPixel = n2i; iRpx < ex; iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc)
+          for( iRpx = inix, iGpx = inix + 1, iBpx = inix + 2, sPixel = n2i; iRpx < endx; iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc )
           {
             if(sln[sPixel] < 255 || sln[sPixel + 1] || sln[sPixel + 2] < 255)
             {
@@ -321,7 +333,7 @@ void GridItem::castShadowImage(int x, int y, BITMAP* shadow, short shadingScale,
         if(opacity)
         {
           // Se recorren las filas de las tres imágenes entre los límites calculados
-          for(iRow = sy, sRow = sy + this->offset.second - y; iRow < my; iRow++, sRow++)
+          for( iRow = iniy, sRow = iniy + this->offset.second - y; iRow < my; iRow++, sRow++ )
           {
             unsigned short color;
             unsigned char* sln = shadow->line[sRow];
@@ -329,7 +341,7 @@ void GridItem::castShadowImage(int x, int y, BITMAP* shadow, short shadingScale,
             unsigned char* rln = this->processedImage->line[iRow];
 
             // Se recorren los píxeles de cada fila según los límites calculados
-            for(iRpx = sx, iGpx = sx + 1, iBpx = sx + 2, sPixel = n2i; iRpx < ex; iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc)
+            for( iRpx = inix, iGpx = inix + 1, iBpx = inix + 2, sPixel = n2i; iRpx < endx; iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc )
             {
               // Si el píxel de las tres imágenes no tiene el color clave (255,0,255)
               // entonces el píxel de la imagen resultante se decrementa su valor para oscurecerlo
@@ -349,27 +361,34 @@ void GridItem::castShadowImage(int x, int y, BITMAP* shadow, short shadingScale,
 
           ltpx = ((this->image->w) >> 1) - 2 * width + 2 * (iRow - my);
           rtpx = ((this->image->w) >> 1) + 2 * width - 2 * (iRow - my) - 2;
-          ltpx = ltpx * iInc + IS_BIG_ENDIAN(bitmap_color_depth(this->image));
-          rtpx = rtpx * iInc + IS_BIG_ENDIAN(bitmap_color_depth(this->image));
+          ltpx = ltpx * iInc;
+          rtpx = rtpx * iInc;
+          #if IS_BIG_ENDIAN
+              ltpx += bitmap_color_depth( this->image ) == 32 ? 1 : 0 ;
+          #endif
+          rtpx = rtpx * iInc;
+          #if IS_BIG_ENDIAN
+              rtpx += bitmap_color_depth( this->image ) == 32 ? 1 : 0 ;
+          #endif
 
-          for(ltpx1 = ltpx + iInc, rtpx1 = rtpx + iInc; iRow < ey; iRow++, sRow++, ltpx += 2 * iInc, ltpx1 += 2 * iInc, rtpx -= 2 * iInc, rtpx1 -= 2 * iInc)
+          for( ltpx1 = ltpx + iInc, rtpx1 = rtpx + iInc; iRow < endy; iRow++, sRow++, ltpx += 2 * iInc, ltpx1 += 2 * iInc, rtpx -= 2 * iInc, rtpx1 -= 2 * iInc )
           {
             unsigned char* sln = shadow->line[sRow];
             unsigned char* iln = this->image->line[iRow];
             unsigned char* rln = this->processedImage->line[iRow];
 
-            if(sx < ltpx)
+            if(inix < ltpx)
             {
-              sx = ltpx;
-              n2i = sx + (this->offset.first - x) * sInc + IS_BIG_ENDIAN(bitmap_color_depth(shadow));
+              inix = ltpx;
+              n2i = inix + (this->offset.first - x) * sInc;
             }
 
-            if(ex > rtpx + 2 * iInc)
+            if(endx > rtpx + 2 * iInc)
             {
-              ex = rtpx + 2 * iInc;
+              endx = rtpx + 2 * iInc;
             }
 
-            for(iRpx = sx, iGpx = sx + 1, iBpx = sx + 2, sPixel = n2i; iRpx < ex; iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc)
+            for( iRpx = inix, iGpx = inix + 1, iBpx = inix + 2, sPixel = n2i; iRpx < endx; iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc )
             {
               if(sln[sPixel] < 255 || sln[sPixel + 1] || sln[sPixel + 2] < 255)
               {
@@ -412,14 +431,14 @@ void GridItem::castShadowImage(int x, int y, BITMAP* shadow, short shadingScale,
         else
         {
           // Se recorren las filas de las tres imágenes entre los límites calculados
-          for(iRow = sy, sRow = sy + this->offset.second - y; iRow < my; iRow++, sRow++)
+          for(iRow = iniy, sRow = iniy + this->offset.second - y; iRow < my; iRow++, sRow++)
           {
             unsigned char* sln = shadow->line[sRow];
             unsigned char* iln = this->image->line[iRow];
             unsigned char* rln = this->processedImage->line[iRow];
 
             // Se recorren los píxeles de cada fila según los límites calculados
-            for(iRpx = sx, iGpx = sx + 1, iBpx = sx + 2, sPixel = n2i; iRpx < ex; iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc)
+            for( iRpx = inix, iGpx = inix + 1, iBpx = inix + 2, sPixel = n2i; iRpx < endx; iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc )
             {
               // Si el píxel de las tres imágenes no tiene el color clave (255,0,255)
               // entonces el píxel de la imagen resultante se cero, totalmente negro
@@ -434,27 +453,33 @@ void GridItem::castShadowImage(int x, int y, BITMAP* shadow, short shadingScale,
 
           ltpx = ((this->image->w) >> 1) - 2 * width + 2 * (iRow - my);
           rtpx = ((this->image->w) >> 1) + 2 * width - 2 * (iRow - my) - 2;
-          ltpx = ltpx * iInc + IS_BIG_ENDIAN(bitmap_color_depth(this->image));
-          rtpx = rtpx * iInc + IS_BIG_ENDIAN(bitmap_color_depth(this->image));
+          ltpx = ltpx * iInc;
+          #if IS_BIG_ENDIAN
+              ltpx += bitmap_color_depth( this->image ) == 32 ? 1 : 0 ;
+          #endif
+          rtpx = rtpx * iInc;
+          #if IS_BIG_ENDIAN
+              rtpx += bitmap_color_depth( this->image ) == 32 ? 1 : 0 ;
+          #endif
 
-          for(ltpx1 = ltpx + iInc, rtpx1 = rtpx + iInc; iRow < ey; iRow++, sRow++, ltpx += 2 * iInc, ltpx1 += 2 * iInc, rtpx -= 2 * iInc, rtpx1 -= 2 * iInc)
+          for( ltpx1 = ltpx + iInc, rtpx1 = rtpx + iInc; iRow < endy; iRow++, sRow++, ltpx += 2 * iInc, ltpx1 += 2 * iInc, rtpx -= 2 * iInc, rtpx1 -= 2 * iInc )
           {
             unsigned char* sln = shadow->line[sRow];
             unsigned char* iln = this->image->line[iRow];
             unsigned char* rln = this->processedImage->line[iRow];
 
-            if(sx < ltpx)
+            if( inix < ltpx )
             {
-              sx = ltpx;
-              n2i = sx + (this->offset.first - x) * sInc + IS_BIG_ENDIAN(bitmap_color_depth(shadow));
+              inix = ltpx;
+              n2i = inix + ( this->offset.first - x ) * sInc;
             }
 
-            if(ex > rtpx + 2 * iInc)
+            if(endx > rtpx + 2 * iInc)
             {
-              ex = rtpx + 2 * iInc;
+              endx = rtpx + 2 * iInc;
             }
 
-            for(iRpx = sx, iGpx = sx + 1, iBpx = sx + 2, sPixel = n2i; iRpx < ex; iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc)
+            for(iRpx = inix, iGpx = inix + 1, iBpx = inix + 2, sPixel = n2i; iRpx < endx; iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc)
             {
               if(sln[sPixel] < 255 || sln[sPixel + 1] || sln[sPixel + 2] < 255)
               {

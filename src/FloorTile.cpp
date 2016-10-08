@@ -56,14 +56,14 @@ void FloorTile::draw(BITMAP* destination)
 
 void FloorTile::requestCastShadow()
 {
-  if(this->image && this->shadeStatus == MustBeShady)
+  if( this->image && this->shadeStatus == ItIsShady )
   {
-    mediator->castShadow(this);
+    mediator->castShadow( this );
 
     // Si no se ha podido sombrear entonces se destruye la imagen de sombreado
-    if(this->shadeStatus != Shady && this->shadyImage)
+    if( this->shadeStatus != Shady && this->shadyImage )
     {
-      destroy_bitmap(this->shadyImage);
+      destroy_bitmap( this->shadyImage );
       this->shadyImage = 0;
     }
 
@@ -72,23 +72,23 @@ void FloorTile::requestCastShadow()
   }
 }
 
-void FloorTile::castShadowImage(int x, int y, BITMAP* shadow, short shadingScale, unsigned char transparency)
+void FloorTile::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale, unsigned char transparency )
 {
   // El sombreado se realiza si el elemento que sombrea no es totalmente transparente
-  if(transparency < 100)
+  if( transparency < 100 )
   {
     // Coordenada inicial X
-    int sx = x - this->offset.first;
-    if(sx < 0) sx = 0;
+    int inix = x - this->offset.first;
+    if( inix < 0 ) inix = 0;
     // Coordenada inicial Y
-    int sy = y - this->offset.second;
-    if(sy < 0) sy = 0;
+    int iniy = y - this->offset.second;
+    if( iniy < 0 ) iniy = 0;
     // Coordenada final X
-    int ex = x - this->offset.first + shadow->w;
-    if(ex > this->image->w) ex = this->image->w;
+    int endx = x - this->offset.first + shadow->w;
+    if( endx > this->image->w ) endx = this->image->w;
     // Coordenada final Y
-    int ey = y - this->offset.second + shadow->h;
-    if(ey > this->image->h) ey = this->image->h;
+    int endy = y - this->offset.second + shadow->h;
+    if( endy > this->image->h ) endy = this->image->h;
 
     // Índice para recorrer las filas de píxeles de la imágenes image y shadyImage de la loseta
     int iRow = 0;
@@ -104,33 +104,39 @@ void FloorTile::castShadowImage(int x, int y, BITMAP* shadow, short shadingScale
     int sPixel = 0;
 
     // Las coordenadas iniciales tienen que ser menores a las finales
-    if(sy < ey && sx < ex)
+    if( iniy < endy && inix < endx )
     {
-      int n2i = sx + this->offset.first - x;
+      int n2i = inix + this->offset.first - x;
 
       // En principio, la imagen de la loseta sombreada es la imagen de la loseta sin sombrear
-      if(!this->shadyImage)
+      if( ! this->shadyImage )
       {
-        this->shadyImage = create_bitmap_ex(bitmap_color_depth(this->image), this->image->w, this->image->h);
+        this->shadyImage = create_bitmap_ex( bitmap_color_depth( this->image ), this->image->w, this->image->h );
       }
-      if(this->shadeStatus == MustBeShady)
+      if( this->shadeStatus == ItIsShady )
       {
-        blit(this->image, this->shadyImage, 0, 0, 0, 0, this->image->w, this->image->h);
+        blit( this->image, this->shadyImage, 0, 0, 0, 0, this->image->w, this->image->h );
         this->shadeStatus = Shady;
       }
 
       // Incremento de los índices iRpx, iGpx e iBpx
-      char iInc = (bitmap_color_depth(this->image) == 32 ? 4 : 3);
+      char iInc = ( bitmap_color_depth( this->image ) == 32 ? 4 : 3 );
       // Incremento del índice sPixel
-      char sInc = (bitmap_color_depth(shadow) == 32 ? 4 : 3);
+      char sInc = ( bitmap_color_depth( shadow ) == 32 ? 4 : 3 );
 
       // Grado de opacidad del sombreado desde 0 a 255, siendo 0 la opacidad total y 255
       // casi la transparencia total
-      short opacity = short(((256.0 - shadingScale) / 100) * transparency + shadingScale);
+      short opacity = short( ( ( 256.0 - shadingScale ) / 100 ) * transparency + shadingScale );
 
-      ex *= iInc;
-      sx = sx * iInc + IS_BIG_ENDIAN(bitmap_color_depth(this->image));
-      n2i = n2i * sInc + IS_BIG_ENDIAN(bitmap_color_depth(shadow));
+      endx *= iInc;
+      inix *= iInc;
+      #if IS_BIG_ENDIAN
+          inix += bitmap_color_depth( this->image ) == 32 ? 1 : 0 ;
+      #endif
+      n2i *= sInc;
+      #if IS_BIG_ENDIAN
+          n2i += bitmap_color_depth( shadow ) == 32 ? 1 : 0;
+      #endif
 
       // La opacidad es potencia de dos en el intervalo [2,128]
       if(int(pow(2, log10(opacity) / log10(2))) == opacity)
@@ -140,21 +146,21 @@ void FloorTile::castShadowImage(int x, int y, BITMAP* shadow, short shadingScale
 
         // En función de la opacidad de la sombra se halla
         // el valor del divisor del píxel: píxel / 2^pxDiv
-        while(opacity != 2)
+        while( opacity != 2 )
         {
           opacity = opacity >> 1;
           pxDiv--;
         }
 
         // Se recorren las filas de las tres imágenes entre los límites calculados
-        for(iRow = sy, sRow = sy + this->offset.second - y; iRow < ey; iRow++, sRow++)
+        for( iRow = iniy, sRow = iniy + this->offset.second - y; iRow < endy; iRow++, sRow++ )
         {
           unsigned char* sln = shadow->line[sRow];
           unsigned char* iln = this->image->line[iRow];
           unsigned char* rln = this->shadyImage->line[iRow];
 
           // Se recorren los píxeles de cada fila según los límites calculados
-          for(iRpx = sx, iGpx = sx + 1, iBpx = sx + 2, sPixel = n2i; iRpx < ex; iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc)
+          for( iRpx = inix, iGpx = inix + 1, iBpx = inix + 2, sPixel = n2i; iRpx < endx; iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc )
           {
             // Si el píxel de las tres imágenes no tiene el color clave (255,0,255)
             // entonces el píxel de la imagen resultante se divide entre 2^pxDiv, es decir, se oscurece
@@ -173,10 +179,10 @@ void FloorTile::castShadowImage(int x, int y, BITMAP* shadow, short shadingScale
       else
       {
         // La opacidad no es cero, es decir, hay cierta transparencia
-        if(opacity)
+        if( opacity )
         {
           // Se recorren las filas de las tres imágenes entre los límites calculados
-          for(iRow = sy, sRow = sy + this->offset.second - y; iRow < ey; iRow++, sRow++)
+          for( iRow = iniy, sRow = iniy + this->offset.second - y; iRow < endy; iRow++, sRow++ )
           {
             unsigned short color;
             unsigned char* sln = shadow->line[sRow];
@@ -184,7 +190,7 @@ void FloorTile::castShadowImage(int x, int y, BITMAP* shadow, short shadingScale
             unsigned char* rln = this->shadyImage->line[iRow];
 
             // Se recorren los píxeles de cada fila según los límites calculados
-            for(iRpx = sx, iGpx = sx + 1, iBpx = sx + 2, sPixel = n2i; iRpx < ex; iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc)
+            for( iRpx = inix, iGpx = inix + 1, iBpx = inix + 2, sPixel = n2i; iRpx < endx; iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc )
             {
               // Si el píxel de las tres imágenes no tiene el color clave (255,0,255)
               // entonces el píxel de la imagen resultante se decrementa su valor para oscurecerlo
@@ -193,11 +199,11 @@ void FloorTile::castShadowImage(int x, int y, BITMAP* shadow, short shadingScale
                  (sln[sPixel] < 255 || sln[sPixel + 1] || sln[sPixel + 2] < 255))
               {
                 color = iln[iRpx] * opacity;
-                rln[iRpx] = (unsigned char)(color >> 8);
+                rln[iRpx] = (unsigned char)( color >> 8 );
                 color = iln[iGpx] * opacity;
-                rln[iGpx] = (unsigned char)(color >> 8);
+                rln[iGpx] = (unsigned char)( color >> 8 );
                 color = iln[iBpx] * opacity;
-                rln[iBpx] = (unsigned char)(color >> 8);
+                rln[iBpx] = (unsigned char)( color >> 8 );
               }
             }
           }
@@ -206,14 +212,14 @@ void FloorTile::castShadowImage(int x, int y, BITMAP* shadow, short shadingScale
         else
         {
           // Se recorren las filas de las tres imágenes entre los límites calculados
-          for(iRow = sy, sRow = sy + this->offset.second - y; iRow < ey; iRow++, sRow++)
+          for( iRow = iniy, sRow = iniy + this->offset.second - y; iRow < endy; iRow++, sRow++ )
           {
             unsigned char* sln = shadow->line[sRow];
             unsigned char* iln = this->image->line[iRow];
             unsigned char* rln = this->shadyImage->line[iRow];
 
             // Se recorren los píxeles de cada fila según los límites calculados
-            for(iRpx = sx, iGpx = sx + 1, iBpx = sx + 2, sPixel = n2i; iRpx < ex; iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc)
+            for( iRpx = inix, iGpx = inix + 1, iBpx = inix + 2, sPixel = n2i; iRpx < endx; iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc )
             {
               // Si el píxel de las tres imágenes no tiene el color clave (255,0,255)
               // entonces el píxel de la imagen resultante se cero, totalmente negro

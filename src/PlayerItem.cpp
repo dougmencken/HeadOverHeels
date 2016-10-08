@@ -267,8 +267,8 @@ bool PlayerItem::changeData(int value, int x, int y, int z, const Datum& datum, 
         }
 
         // El elemento debe volver a sombrearse y enmascararse tras el cambio de posición
-        this->shadeStatus = MustBeShady;
-        this->maskStatus = MustBeMasked;
+        this->shadeStatus = ItIsShady;
+        this->maskStatus = ItIsMasked;
 
         // La lista de elementos libres debe reordenarse
         mediator->activateFreeItemsSorting();

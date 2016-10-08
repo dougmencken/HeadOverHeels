@@ -16,7 +16,7 @@ Item::Item(ItemData* itemData, int z, const Direction& direction) : RoomComponen
   this->direction = direction;
   this->frameIndex = 0;
   this->backwardMotion = false;
-  this->shadeStatus = MustBeShady;
+  this->shadeStatus = ItIsShady;
   this->image = 0;
   this->shadow = 0;
   this->processedImage = 0;

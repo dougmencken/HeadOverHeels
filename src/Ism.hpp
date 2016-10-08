@@ -35,10 +35,12 @@
   #include <sys/types.h>
 #endif
 
+/* #define IS_BIG_ENDIAN (!*(unsigned char *)&(uint16_t){1}) */
+
 #ifdef ALLEGRO_BIG_ENDIAN
-  #define IS_BIG_ENDIAN(_VALUE_) (_VALUE_ == 32 ? 1 : 0)
+  #define IS_BIG_ENDIAN 1
 #else
-  #define IS_BIG_ENDIAN(_VALUE_) 0
+  #define IS_BIG_ENDIAN 0
 #endif
 
 namespace isomot
@@ -125,9 +127,9 @@ namespace isomot
    */
   enum ShadeStatus
   {
-    NoShadow,     /**< Sin sombra. */
-    MustBeShady,  /**< Sin sombra pero debe sombrearse. */
-    Shady         /**< Sombreado. */
+    NoShadow,     /**< Sin sombra */
+    ItIsShady,    /**< Sin sombra pero debe sombrearse */
+    Shady         /**< Sombreado */
   };
 
   /**
@@ -135,9 +137,9 @@ namespace isomot
    */
   enum MaskStatus
   {
-    NoMask,       /**< Sin máscara. */
-    MustBeMasked, /**< Sin máscara pero debe enmascararse. */
-    Masked        /**< Enmascarado. */
+    NoMask,       /**< Sin máscara */
+    ItIsMasked,   /**< Sin máscara pero debe enmascararse */
+    Masked        /**< Enmascarado */
   };
 
   /**
