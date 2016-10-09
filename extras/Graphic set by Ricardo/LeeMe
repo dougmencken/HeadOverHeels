@@ -1,0 +1,27 @@
+Cómo instalar gráficos alternativos
+
+MICROSOFT WINDOWS
+-----------------
+
+El motor isométrico usa los gráficos ubicados en la carpeta "gfx".
+Esta carpeta se encuentra normalmente en C:\Archivos de programa\headoverheels-1.0.0\share\headoverheels.
+
+1. Copia la carpeta "gfx.2003", "gfx.riderx" o "gfx.loquesea" en C:\Archivos de programa\headoverheels-1.0.0\share\headoverheels.
+2. Renombra la carpeta "gfx" a, por ejemplo, "gfx.2009".
+3. Renombra la carpeta que acabas de copiar a "gfx".
+4. Ejecuta el juego.
+
+LINUX Y OTROS
+-------------
+
+El motor isométrico usa los gráficos ubicados en la carpeta "gfx".
+Esta carpeta se encuentra en ${PREFIX}/share/headoverheels. ${PREFIX} suele ser /usr/local o /usr.
+
+1. Copia la carpeta "gfx.2003", "gfx.riderx" o "gfx.loques en ${PREFIX}/share/headoverheels/
+2. Renombra la carpeta "gfx" a, por ejemplo, "gfx.2009".
+3. Crea un enlace simbólico con nombre "gfx" a la carpeta que desees usar:
+   $ ln -s gfx.2003 gfx
+4. Ejecuta el juego.
+
+Para cualquier problema o aclaración, no dudes en contactar conmigo: jorge@helmantika.org
+Te sugiero que en el asunto del mensaje pongas "Head over Heels - GFX". Gracias.
