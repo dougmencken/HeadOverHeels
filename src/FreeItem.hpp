@@ -25,6 +25,7 @@
 #include <allegro.h>
 #include "Ism.hpp"
 #include "Item.hpp"
+#include "Drawable.hpp"
 
 namespace isomot
 {
@@ -37,7 +38,7 @@ class ItemData;
  * por la sala como, por ejemplo, los enemigos, el propio jugador o todo aquello que deba tener
  * anchuras distintas de las anchuras de las celdas de la rejilla
  */
-class FreeItem : public Item
+class FreeItem : public Drawable, public Item
 {
 public:
 
@@ -49,28 +50,27 @@ public:
    * @param z Posición espacial Z o a qué distancia está el elemento del suelo
    * @param direction Dirección inicial del elemento
    */
-	FreeItem(ItemData* itemData, int x, int y, int z, const Direction& direction);
+        FreeItem(ItemData* itemData, int x, int y, int z, const Direction& direction);
 
-  /**
-   * Constructor copia. No copia los atributos que son punteros
-   * @param freeItem Un objeto de esta clase
-   */
-	FreeItem(const FreeItem& freeItem);
+        /**
+         * Constructor copia. No copia los atributos que son punteros
+         * @param freeItem Un objeto de esta clase
+         */
+        FreeItem(const FreeItem& freeItem);
 
-	virtual ~FreeItem();
+        virtual ~FreeItem();
 
-  /**
-   * Dibuja el elemento libre
-   * @param destination Imagen donde se realizará el dibujo
-   */
-  void draw(BITMAP* destination);
+        /**
+         * Dibuja el elemento libre
+         */
+        void draw( BITMAP* where );
 
-  /**
-   * Cambia la presentación gráfica del elemento, destruyendo la imagen procesada y señalando qué elementos
-   * hay que volver a enmascarar
-   * @param image Un fotograma del elemento
-   */
-  void changeImage(BITMAP* image);
+        /**
+         * Cambia la presentación gráfica del elemento, destruyendo la imagen procesada y señalando qué elementos
+         * hay que volver a enmascarar
+         * @param image Un fotograma del elemento
+         */
+        void changeImage( BITMAP* image );
 
   /**
    * Cambia la sombra de la presentación gráfica del elemento, destruyendo la imagen procesada y señalando

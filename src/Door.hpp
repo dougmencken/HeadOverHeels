@@ -21,7 +21,8 @@
 #define DOOR_HPP_
 
 #include "Ism.hpp"
-#include "RoomComponent.hpp"
+#include "Drawable.hpp"
+#include "Mediated.hpp"
 
 namespace isomot
 {
@@ -33,7 +34,7 @@ class FreeItem;
 /**
  * Una puerta de la sala. Realmente una puerta son tres elementos libres: las jambas y el dintel
  */
-class Door : public RoomComponent
+class Door : public Drawable, public Mediated
 {
 public:
 
@@ -50,11 +51,7 @@ public:
 
 	virtual ~Door();
 
-  /**
-   * Dibuja el componente
-   * @param destination Imagen donde se realizará el dibujo
-   */
-  void draw(BITMAP* destination) {}
+	void draw( BITMAP* where ) { }
 
 private:
 

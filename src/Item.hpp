@@ -25,7 +25,7 @@
 #include <allegro.h>
 #include "Ism.hpp"
 #include "HPC.hpp"
-#include "RoomComponent.hpp"
+#include "Mediated.hpp"
 
 namespace isomot
 {
@@ -38,31 +38,25 @@ class Behavior;
  * Interfaz que define los atributos y operaciones mínimas para poder crear un elemento
  * perteneciente a alguna sala
  */
-class Item : public RoomComponent
+class Item : public Mediated
 {
 public:
 
-  /**
-   * Constructor
-   * @param itemData Datos invariables del elemento
-   * @param z Posición espacial Z o a qué distancia está el elemento del suelo
-   * @param direction Dirección inicial del elemento
-   */
-        Item(ItemData* itemData, int z, const Direction& direction);
+       /**
+        * Constructor
+        * @param itemData Datos invariables del elemento
+        * @param z Posición espacial Z o a qué distancia está el elemento del suelo
+        * @param direction Dirección inicial del elemento
+        */
+        Item( ItemData* itemData, int z, const Direction& direction );
 
-  /**
-   * Constructor copia. No copia los atributos que son punteros
-   * @param item Un objeto de esta clase
-   */
-        Item(const Item& item);
+       /**
+        * Constructor copia. No copia los atributos que son punteros
+        * @param item Un objeto de esta clase
+        */
+        Item( const Item& item );
 
         virtual ~Item();
-
-  /**
-   * Dibuja el componente
-   * @param destination Imagen donde se realizará el dibujo
-   */
-        virtual void draw(BITMAP* destination);
 
   /**
    * Actualiza el comportamiento del elemento

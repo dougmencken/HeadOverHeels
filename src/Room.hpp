@@ -26,7 +26,8 @@
 #include <list>
 #include <utility>
 #include "Ism.hpp"
-#include "RoomComponent.hpp"
+#include "Drawable.hpp"
+#include "Mediated.hpp"
 
 namespace isomot
 {
@@ -47,7 +48,7 @@ class TripleRoomStartPoint;
  * Una sala dibujada en perspectiva isométrica. Se compone de una rejilla sobre la que se colocan la mayoría
  * de los elementos. Así mismo, pueden situarse losetas en el suelo y paredes en el perímetro de la sala
  */
-class Room : public RoomComponent
+class Room : public Drawable, public Mediated
 {
 public:
 
@@ -61,85 +62,85 @@ public:
    * @param tileSize Longitud del lado de una loseta en unidades isométricas
    * @param floorType Tipo de suelo
    */
-	Room(const std::string& identifier, const std::string& scenery, int xTiles, int yTiles, int tileSize, const FloorId& floorType);
+        Room(const std::string& identifier, const std::string& scenery, int xTiles, int yTiles, int tileSize, const FloorId& floorType);
 
-	virtual ~Room();
+        virtual ~Room();
 
   /**
    * Añade un nueva loseta a la sala
    * @param floorTile La nueva loseta
    */
-  void addComponent(FloorTile* floorTile);
+  void addItem( FloorTile* floorTile );
 
   /**
    * Añade un nuevo segmento de muro a la sala
    * @param wall El nuevo segmento de muro
    */
-  void addComponent(Wall* wall);
+  void addWall( Wall* wall );
 
   /**
    * Añade una nueva puerta a la sala
    * @param door La nueva puerta
    */
-  void addComponent(Door* door);
+  void addDoor( Door* door );
 
   /**
    * Añade un nuevo elemento rejilla de la sala
    * @param gridItem Un elemento rejilla
    */
-  void addComponent(GridItem* gridItem);
+  void addItem( GridItem* gridItem );
 
   /**
    * Añade un nuevo elemento libre de la sala
    * @param gridItem Un elemento libre
    */
-  void addComponent(FreeItem* freeItem);
+  void addItem( FreeItem* freeItem );
 
   /**
    * Añade un nuevo jugador a la sala
    * @param gridItem Un elemento libre
    */
-  void addComponent(PlayerItem* playerItem);
+  void addPlayer( PlayerItem* playerItem );
 
   /**
    * Elimina una loseta de la sala
    * @param floorTile La loseta a eliminar
    */
-  void removeComponent(FloorTile* floorTile);
+  void removeItem( FloorTile* floorTile );
 
   /**
    * Elimina un elemento rejilla de la sala
    * @param gridItem Un elemento rejilla
    */
-  void removeComponent(GridItem* gridItem);
+  void removeItem( GridItem* gridItem );
 
   /**
    * Elimina un elemento libre de la sala
    * @param gridItem Un elemento libre
    */
-  void removeComponent(FreeItem* freeItem);
+  void removeItem( FreeItem* freeItem );
 
   /**
    * Elimina un jugador de la sala
    * @param gridItem Un jugador
    */
-  void removeComponent(PlayerItem* playerItem);
+  void removePlayer( PlayerItem* playerItem );
 
-  /**
-   * Dibuja la sala
-   * @param destination Imagen donde se realizará el dibujo
-   */
-	void draw(BITMAP* destination = 0);
+        /**
+         * Dibuja la sala
+         * @param destination Imagen donde se realizará el dibujo
+         */
+        void draw( BITMAP* destination = 0 );
 
-	/**
-	 * Inicia la actualización de los elementos de la sala
-	 */
-	void startUpdate();
+        /**
+         * Inicia la actualización de los elementos de la sala
+         */
+        void startUpdate();
 
-	/**
-	 * Detiene la actualización de los elementos de la sala
-	 */
-	void stopUpdate();
+        /**
+         * Detiene la actualización de los elementos de la sala
+         */
+        void stopUpdate();
 
   /**
    * Calcula los límites reales de la sala en función de su tamaño y las puertas existentes

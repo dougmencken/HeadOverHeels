@@ -187,7 +187,7 @@ void MapManager::start(const std::string& firstRoomFileName, const std::string& 
       firstRoomData->addPlayerPosition(firstPlayerPosition);
 
       // Crea al jugador
-      roomBuilder->buildPlayerItem(Head, HeadBehavior, centerX, centerY, 0, West);
+      roomBuilder->buildPlayer( Head, HeadBehavior, centerX, centerY, 0, West );
 
       // La primera sala es la sala activa
       firstRoom->activatePlayer(Head);
@@ -226,7 +226,7 @@ void MapManager::start(const std::string& firstRoomFileName, const std::string& 
       secondRoomData->addPlayerPosition(secondPlayerPosition);
 
       // Crea al jugador
-      roomBuilder->buildPlayerItem(Heels, HeelsBehavior, centerX, centerY, 0, South);
+      roomBuilder->buildPlayer( Heels, HeelsBehavior, centerX, centerY, 0, South );
 
       // Activa al jugador
       secondRoom->activatePlayer(Heels);
@@ -283,45 +283,45 @@ void MapManager::startOldGame(const sgxml::player& data)
       }
 
       // Almacena en los datos de la sala en el mapa la posición inicial del jugador
-      PlayerStartPosition playerPosition(playerId);
-      playerPosition.assignPosition(Direction(data.entry()), data.x(), data.y(), data.z(), Direction(data.direction()));
-      roomData->addPlayerPosition(playerPosition);
+      PlayerStartPosition playerPosition( playerId );
+      playerPosition.assignPosition( Direction( data.entry() ), data.x (), data.y (), data.z (), Direction( data.direction() ) );
+      roomData->addPlayerPosition( playerPosition );
 
       // Crea al jugador en la sala
-      std::auto_ptr<RoomBuilder> roomBuilder(new RoomBuilder(isomot->getItemDataManager()));
-      PlayerItem* player = roomBuilder->buildPlayerItem(room, playerId, behaviorId, data.x(), data.y(), data.z(), Direction(data.direction()));
+      std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( isomot->getItemDataManager() ) );
+      PlayerItem* player = roomBuilder->buildPlayer( room, playerId, behaviorId, data.x (), data.y (), data.z (), Direction( data.direction() ) );
 
       // Se cambia el estado del jugador en función de la vía de entrada
-      switch(Direction(data.entry()))
+      switch( Direction( data.entry() ) )
       {
         case North:
         case Northeast:
         case Northwest:
-          player->getBehavior()->changeStateId(StateAutoMoveSouth);
+          player->getBehavior()->changeStateId( StateAutoMoveSouth );
           break;
 
         case South:
         case Southeast:
         case Southwest:
-          player->getBehavior()->changeStateId(StateAutoMoveNorth);
+          player->getBehavior()->changeStateId( StateAutoMoveNorth );
           break;
 
         case East:
         case Eastnorth:
         case Eastsouth:
-          player->getBehavior()->changeStateId(StateAutoMoveWest);
+          player->getBehavior()->changeStateId( StateAutoMoveWest );
           break;
 
         case West:
         case Westnorth:
         case Westsouth:
-          player->getBehavior()->changeStateId(StateAutoMoveEast);
+          player->getBehavior()->changeStateId( StateAutoMoveEast );
           break;
 
         case ByTeleport:
         case ByTeleport2:
         case Wait:
-          player->getBehavior()->changeStateId(StateStartWayInTeletransport);
+          player->getBehavior()->changeStateId( StateStartWayInTeletransport );
           break;
 
         default:
@@ -414,8 +414,8 @@ Room* MapManager::changeRoom(const Direction& exit)
   // jugador activo en la sala que se abandona
   else
   {
-    activeRoom->removeComponent(player);
-    activeRoomData->removePlayerPosition(PlayerId(player->getLabel()));
+    activeRoom->removePlayer( player );
+    activeRoomData->removePlayerPosition( PlayerId( player->getLabel() ) );
   }
 
   // Busca en el mapa los datos de la sala destino y obtiene la vía de entrada
@@ -462,55 +462,55 @@ Room* MapManager::changeRoom(const Direction& exit)
     PlayerItem* player = newRoom->getMediator()->getActivePlayer();
     PlayerStartPosition playerPresentPosition(PlayerId(player->getLabel()));
     playerPresentPosition.assignPosition(player->getExit(), player->getX(), player->getY(), player->getZ(), player->getOrientation());
-    destinationRoomData->addPlayerPosition(playerPosition, playerPresentPosition);
+    destinationRoomData->addPlayerPosition( playerPosition, playerPresentPosition );
   }
   else
   {
-    destinationRoomData->addPlayerPosition(playerPosition);
+    destinationRoomData->addPlayerPosition( playerPosition );
   }
 
   // Crea al jugador
-  std::auto_ptr<RoomBuilder> roomBuilder(new RoomBuilder(isomot->getItemDataManager()));
-  if(entry == ByTeleport || entry == ByTeleport2)
+  std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( isomot->getItemDataManager() ) );
+  if( entry == ByTeleport || entry == ByTeleport2 )
   {
     z = Top;
   }
-  player = roomBuilder->buildPlayerItem(newRoom, activePlayer, playerBehavior, x, y, z, exitPosition.getOrientation(), hasItem);
+  player = roomBuilder->buildPlayer( newRoom, activePlayer, playerBehavior, x, y, z, exitPosition.getOrientation(), hasItem );
 
   // Se cambia el estado del jugador en función de la vía de entrada
-  switch(entry)
+  switch( entry )
   {
     case North:
     case Northeast:
     case Northwest:
-      player->getBehavior()->changeStateId(StateAutoMoveSouth);
+      player->getBehavior()->changeStateId( StateAutoMoveSouth );
       break;
 
     case South:
     case Southeast:
     case Southwest:
-      player->getBehavior()->changeStateId(StateAutoMoveNorth);
+      player->getBehavior()->changeStateId( StateAutoMoveNorth );
       break;
 
     case East:
     case Eastnorth:
     case Eastsouth:
-      player->getBehavior()->changeStateId(StateAutoMoveWest);
+      player->getBehavior()->changeStateId( StateAutoMoveWest );
       break;
 
     case West:
     case Westnorth:
     case Westsouth:
-      player->getBehavior()->changeStateId(StateAutoMoveEast);
+      player->getBehavior()->changeStateId( StateAutoMoveEast );
       break;
 
     case ByTeleport:
     case ByTeleport2:
-      player->getBehavior()->changeStateId(StateStartWayInTeletransport);
+      player->getBehavior()->changeStateId( StateStartWayInTeletransport );
       break;
 
     case Up:
-      player->getBehavior()->changeStateId(StateFall);
+      player->getBehavior()->changeStateId( StateFall );
       break;
 
     default:
@@ -539,25 +539,25 @@ Room* MapManager::restartRoom()
   activeRoom->deactivate();
 
   // Busca en el mapa los datos de la sala activa
-  MapRoomData* activeRoomData = findRoomData(activeRoom->getIdentifier());
+  MapRoomData* activeRoomData = findRoomData( activeRoom->getIdentifier() );
 
   // Se vuelve a crear la sala
-  std::auto_ptr<RoomBuilder> roomBuilder(new RoomBuilder(isomot->getItemDataManager(), path + activeRoomData->getRoom()));
+  std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( isomot->getItemDataManager(), path + activeRoomData->getRoom() ) );
   newRoom = roomBuilder->buildRoom();
 
   // Posición inicial de todos los jugadores presentes en la sala
-  std::list<PlayerStartPosition> playersPosition = activeRoomData->getPlayersPosition();
+  std::list< PlayerStartPosition > playersPosition = activeRoomData->getPlayersPosition();
 
   BehaviorId playerBehavior = NoBehavior;
 
   // Para cada jugador presente en la sala:
-  for(std::list<PlayerStartPosition>::iterator i = playersPosition.begin(); i != playersPosition.end(); ++i)
+  for( std::list< PlayerStartPosition >::iterator i = playersPosition.begin (); i != playersPosition.end (); ++i )
   {
     // Recupera el comportamiento del jugador
-    player = dynamic_cast<PlayerItem*>(activeRoom->getMediator()->findItem(short((*i).getPlayer())));
+    player = dynamic_cast< PlayerItem* >( activeRoom->getMediator()->findItem( short(( *i ).getPlayer()) ) );
 
     // Si hay un jugador presente en la sala, se recupera su comportamiento
-    if(player != 0)
+    if( player != 0 )
     {
       playerBehavior = player->getBehavior()->getId();
     }
@@ -566,7 +566,7 @@ Room* MapManager::restartRoom()
     // se crean los dos jugadores simples a partir de sus datos de posición inicial
     else
     {
-      switch((*i).getPlayer())
+      switch( ( *i ).getPlayer() )
       {
         case Head:
           playerBehavior = HeadBehavior;
@@ -586,66 +586,66 @@ Room* MapManager::restartRoom()
     }
 
     // Se comprueba si éste es el jugador activo. En tal caso se recuperan sus datos de posición inicial
-    if(activeRoomData->getActivePlayer() == (*i).getPlayer() || player == 0)
+    if( activeRoomData->getActivePlayer() == ( *i ).getPlayer() || player == 0 )
     {
       // Si no hay jugador activo se asigna a partir de los datos de posición
-      activePlayer = player != 0 ? activeRoomData->getActivePlayer() : (*i).getPlayer();
+      activePlayer = player != 0 ? activeRoomData->getActivePlayer() : ( *i ).getPlayer();
 
       // Posición inicial del jugador
-      int x = (*i).getX();
-      int y = (*i).getY();
-      int z = (*i).getZ();
+      int x = ( *i ).getX();
+      int y = ( *i ).getY();
+      int z = ( *i ).getZ();
 
       // Crea al jugador
-      player = roomBuilder->buildPlayerItem(newRoom, (*i).getPlayer(), playerBehavior, x, y, z, (*i).getOrientation());
+      player = roomBuilder->buildPlayer( newRoom, ( *i ).getPlayer(), playerBehavior, x, y, z, ( *i ).getOrientation() );
 
       // Si se ha podido crear al jugador, la partida continua. De lo contrario quiere decir que ha terminado
-      if(player != 0)
+      if( player != 0 )
       {
         // Vía de entrada del jugador
-        entry = (*i).getEntry();
+        entry = ( *i ).getEntry();
 
         // Si el jugador ha cambiado (se ha pasado del jugador compuesto a uno simple), se actualiza
-        if(PlayerId(player->getLabel()) != activePlayer)
+        if( PlayerId( player->getLabel() ) != activePlayer )
         {
-          activePlayer = PlayerId(player->getLabel());
+          activePlayer = PlayerId( player->getLabel() );
           // Se debe actualizar la lista de posiciones iniciales porque el jugador ha cambiado
-          PlayerStartPosition newPlayerStartPosition(activePlayer);
-          newPlayerStartPosition.assignPosition(entry, (*i).getX(), (*i).getY(), (*i).getZ(), (*i).getOrientation());
-          i = playersPosition.erase(i);
-          i = playersPosition.insert(i, newPlayerStartPosition);
+          PlayerStartPosition newPlayerStartPosition( activePlayer );
+          newPlayerStartPosition.assignPosition( entry, ( *i ).getX(), ( *i ).getY(), ( *i ).getZ(), ( *i ).getOrientation() );
+          i = playersPosition.erase( i );
+          i = playersPosition.insert( i, newPlayerStartPosition );
         }
 
         // Se cambia el estado del jugador en función de la vía de entrada
-        switch(entry)
+        switch( entry )
         {
           case North:
           case Northeast:
           case Northwest:
-            player->getBehavior()->changeStateId(StateAutoMoveSouth);
+            player->getBehavior()->changeStateId( StateAutoMoveSouth );
             break;
 
           case South:
           case Southeast:
           case Southwest:
-            player->getBehavior()->changeStateId(StateAutoMoveNorth);
+            player->getBehavior()->changeStateId( StateAutoMoveNorth );
             break;
 
           case East:
           case Eastnorth:
           case Eastsouth:
-            player->getBehavior()->changeStateId(StateAutoMoveWest);
+            player->getBehavior()->changeStateId( StateAutoMoveWest );
             break;
 
           case West:
           case Westnorth:
           case Westsouth:
-            player->getBehavior()->changeStateId(StateAutoMoveEast);
+            player->getBehavior()->changeStateId( StateAutoMoveEast );
             break;
 
           case ByTeleport:
           case ByTeleport2:
-            player->getBehavior()->changeStateId(StateStartWayInTeletransport);
+            player->getBehavior()->changeStateId( StateStartWayInTeletransport );
             break;
 
           default:
@@ -658,39 +658,39 @@ Room* MapManager::restartRoom()
     else
     {
       // Crea al jugador
-      PlayerStartPosition* position = activeRoomData->findPlayerPosition((*i).getPlayer());
-      player = roomBuilder->buildPlayerItem(newRoom, (*i).getPlayer(), playerBehavior, position->getX(), position->getY(), position->getZ(), position->getOrientation());
+      PlayerStartPosition* position = activeRoomData->findPlayerPosition( ( *i ).getPlayer() );
+      player = roomBuilder->buildPlayer( newRoom, ( *i ).getPlayer(), playerBehavior, position->getX(), position->getY(), position->getZ(), position->getOrientation() );
 
       // Se cambia el estado del jugador en función de la vía de entrada
-      switch((*i).getEntry())
+      switch( ( *i ).getEntry() )
       {
         case North:
         case Northeast:
         case Northwest:
-          player->getBehavior()->changeStateId(StateAutoMoveSouth);
+          player->getBehavior()->changeStateId( StateAutoMoveSouth );
           break;
 
         case South:
         case Southeast:
         case Southwest:
-          player->getBehavior()->changeStateId(StateAutoMoveNorth);
+          player->getBehavior()->changeStateId( StateAutoMoveNorth );
           break;
 
         case East:
         case Eastnorth:
         case Eastsouth:
-          player->getBehavior()->changeStateId(StateAutoMoveWest);
+          player->getBehavior()->changeStateId( StateAutoMoveWest );
           break;
 
         case West:
         case Westnorth:
         case Westsouth:
-          player->getBehavior()->changeStateId(StateAutoMoveEast);
+          player->getBehavior()->changeStateId( StateAutoMoveEast );
           break;
 
         case ByTeleport:
         case ByTeleport2:
-          player->getBehavior()->changeStateId(StateStartWayInTeletransport);
+          player->getBehavior()->changeStateId( StateStartWayInTeletransport );
           break;
 
         default:
@@ -704,15 +704,15 @@ Room* MapManager::restartRoom()
   delete activeRoom;
 
   // Hay jugador
-  if(player != 0)
+  if( player != 0 )
   {
     // Se añade la sala recién creada a la lista
-    rooms.push_back(newRoom);
+    rooms.push_back( newRoom );
 
     // La primera sala es la sala activa
-    activeRoomData->setActivePlayer(activePlayer);
-    newRoom->activatePlayer(activePlayer);
-    newRoom->getCamera()->turnOn(newRoom->getMediator()->getActivePlayer(), entry);
+    activeRoomData->setActivePlayer( activePlayer );
+    newRoom->activatePlayer( activePlayer );
+    newRoom->getCamera()->turnOn( newRoom->getMediator()->getActivePlayer(), entry );
     activeRoom = newRoom;
     // Activa la nueva sala
     activeRoom->activate();

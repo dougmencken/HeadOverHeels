@@ -160,26 +160,26 @@ bool Volatile::update()
       break;
 
     case StateDestroy:
-      if((id != VolatileWeightBehavior && id != VolatileHeavyBehavior && id != VolatilePuppyBehavior) ||
-         (id == VolatileWeightBehavior && destroyTimer->getValue() > 0.030) ||
-         (id == VolatileHeavyBehavior && destroyTimer->getValue() > 0.600) ||
-         (id == VolatilePuppyBehavior && destroyTimer->getValue() > 0.500))
+      if( ( id != VolatileWeightBehavior && id != VolatileHeavyBehavior && id != VolatilePuppyBehavior ) ||
+         ( id == VolatileWeightBehavior && destroyTimer->getValue() > 0.030 ) ||
+          ( id == VolatileHeavyBehavior && destroyTimer->getValue() > 0.600 ) ||
+         ( id == VolatilePuppyBehavior && destroyTimer->getValue() > 0.500 ) )
       {
         destroy = true;
 
         // Emite el sonido de destrucción
-        this->soundManager->play(item->getLabel(), stateId);
+        this->soundManager->play( item->getLabel(), stateId );
 
         // Crea el elemento en la misma posición que el volátil y a su misma altura
-        FreeItem* freeItem = new FreeItem(bubblesData,
-                                          item->getX(), item->getY(), item->getZ(),
-                                          NoDirection);
+        FreeItem* freeItem = new FreeItem( bubblesData,
+                                           item->getX(), item->getY(), item->getZ(),
+                                           NoDirection );
 
-        freeItem->assignBehavior(VolatileTimeBehavior, 0);
-        freeItem->setCollisionDetector(false);
+        freeItem->assignBehavior( VolatileTimeBehavior, 0 );
+        freeItem->setCollisionDetector( false );
 
         // Se añade a la sala actual
-        mediator->getRoom()->addComponent(freeItem);
+        mediator->getRoom()->addItem( freeItem );
       }
       break;
 
@@ -194,9 +194,9 @@ bool Volatile::update()
   return destroy;
 }
 
-void Volatile::setExtraData(void* data)
+void Volatile::setExtraData( void* data )
 {
-  this->bubblesData = reinterpret_cast<ItemData*>(data);
+  this->bubblesData = reinterpret_cast< ItemData* >( data );
 }
 
 }

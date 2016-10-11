@@ -4,7 +4,7 @@
 namespace isomot
 {
 
-FloorTile::FloorTile() : RoomComponent()
+FloorTile::FloorTile() : Mediated()
 {
   this->column = 0;
   this->coordinates.first = this->coordinates.second = 0;
@@ -14,7 +14,7 @@ FloorTile::FloorTile() : RoomComponent()
   this->shadeStatus = NoShadow;
 }
 
-FloorTile::FloorTile(int column, int x, int y, BITMAP* image) : RoomComponent()
+FloorTile::FloorTile(int column, int x, int y, BITMAP* image) : Mediated()
 {
   this->column = column;
   this->coordinates.first = x;
@@ -40,17 +40,17 @@ void FloorTile::calculateOffset()
   }
 }
 
-void FloorTile::draw(BITMAP* destination)
+void FloorTile::draw( BITMAP* where )
 {
   // Lo loseta está sombreada
-  if(this->shadyImage)
+  if( this->shadyImage )
   {
-    draw_sprite(destination, this->shadyImage, this->offset.first, this->offset.second);
+    draw_sprite( where, this->shadyImage, this->offset.first, this->offset.second );
   }
   // La loseta no tiene sombra
-  else if(this->image)
+  else if( this->image )
   {
-    draw_sprite(destination, this->image, this->offset.first, this->offset.second);
+    draw_sprite( where, this->image, this->offset.first, this->offset.second );
   }
 }
 

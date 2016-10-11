@@ -25,6 +25,7 @@
 #include <allegro.h>
 #include "Ism.hpp"
 #include "Item.hpp"
+#include "Drawable.hpp"
 
 namespace isomot
 {
@@ -39,86 +40,86 @@ class ItemData;
  * No se puede cambiar las coordenadas X e Y de un elemento rejilla, solo se puede cambiar su
  * coordenada Z
  */
-class GridItem : public Item
+class GridItem : public Item, public Drawable
 {
+
 public:
 
-  /**
-   * Constructor
-   * @param itemData Datos invariables del elemento
-   * @param cx Celda que ocupa el elemento en el eje X
-   * @param cy Celda que ocupa el elemento en el eje Y
-   * @param z Posición espacial Z o a qué distancia está el elemento del suelo
-   * @param direction Dirección inicial del elemento
-   */
-  GridItem(ItemData* itemData, int cx, int cy, int z, const Direction& direction);
+        /**
+         * Constructor
+         * @param itemData Datos invariables del elemento
+         * @param cx Celda que ocupa el elemento en el eje X
+         * @param cy Celda que ocupa el elemento en el eje Y
+         * @param z Posición espacial Z o a qué distancia está el elemento del suelo
+         * @param direction Dirección inicial del elemento
+         */
+        GridItem( ItemData* itemData, int cx, int cy, int z, const Direction& direction );
 
-	virtual ~GridItem();
+        virtual ~GridItem();
 
-  /**
-   * Dibuja el elemento rejilla
-   * @param destination Imagen donde se realizará el dibujo
-   */
-  void draw(BITMAP* destination);
+        /**
+         * Dibuja el elemento rejilla
+         */
+        void draw( BITMAP* where );
 
-  /**
-   * Cambia la presentación gráfica del elemento, destruyendo la imagen procesada y señalando qué elementos
-   * hay que volver a enmascarar
-   * @param image Un fotograma del elemento
-   */
-  void changeImage(BITMAP* image);
+        /**
+         * Cambia la presentación gráfica del elemento, destruyendo la imagen procesada y señalando qué elementos
+         * hay que volver a enmascarar
+         * @param image Un fotograma del elemento
+         */
+        void changeImage( BITMAP* image );
 
-  /**
-   * Cambia la sombra de la presentación gráfica del elemento, destruyendo la imagen procesada y señalando
-   * qué elementos hay que volver a sombrear
-   * @param image Una sombra de un fotograma del elemento
-   */
-  void changeShadow(BITMAP* shadow);
+        /**
+         * Cambia la sombra de la presentación gráfica del elemento, destruyendo la imagen procesada y señalando
+         * qué elementos hay que volver a sombrear
+         * @param image Una sombra de un fotograma del elemento
+         */
+        void changeShadow( BITMAP* shadow );
 
-  /**
-   * Solicita el sombreado del elemento
-   * @param column Columna de elementos rejilla a la que pertenece este elemento
-   */
-  void requestCastShadow(int column);
+        /**
+         * Solicita el sombreado del elemento
+         * @param column Columna de elementos rejilla a la que pertenece este elemento
+         */
+        void requestCastShadow(int column);
 
-  /**
-   * Sombrea la imagen del elemento con la sombra de otro elemento
-   * @param x Coordenada X de pantalla donde está situada la base del elemento que sombrea
-   * @param y Coordenada Y de pantalla donde está situada la base del elemento que sombrea
-   * @param shadow La sombra que se proyecta sobre el elemento
-   * @param shadingScale Grado de opacidad de las sombras desde 0, sin sombras, hasta 256,
-   *                     sombras totalmente opacas
-   * @param transparency Grado de transparencia del elemento que sombrea
-   */
-  void castShadowImage(int x, int y, BITMAP* shadow, short shadingScale, unsigned char transparency = 0);
+        /**
+         * Sombrea la imagen del elemento con la sombra de otro elemento
+         * @param x Coordenada X de pantalla donde está situada la base del elemento que sombrea
+         * @param y Coordenada Y de pantalla donde está situada la base del elemento que sombrea
+         * @param shadow La sombra que se proyecta sobre el elemento
+         * @param shadingScale Grado de opacidad de las sombras desde 0, sin sombras, hasta 256,
+         *                     sombras totalmente opacas
+         * @param transparency Grado de transparencia del elemento que sombrea
+         */
+        void castShadowImage(int x, int y, BITMAP* shadow, short shadingScale, unsigned char transparency = 0);
 
-  /**
-   * Cambia el valor de la coordenada Z
-   * @param value Nuevo valor para Z
-   * @return true si se pudo cambiar el dato o false si hubo colisión y no hubo cambio
-   */
-  virtual bool changeZ(int value);
+        /**
+         * Cambia el valor de la coordenada Z
+         * @param value Nuevo valor para Z
+         * @return true si se pudo cambiar el dato o false si hubo colisión y no hubo cambio
+         */
+        virtual bool changeZ(int value);
 
-  /**
-   * Cambia el valor de la coordenada Z
-   * @param value Valor que se sumará a la coordenada Z actual
-   * @return true si se pudo cambiar el dato o false si hubo colisión y no hubo cambio
-   */
-  virtual bool addZ(int value);
+        /**
+         * Cambia el valor de la coordenada Z
+         * @param value Valor que se sumará a la coordenada Z actual
+         * @return true si se pudo cambiar el dato o false si hubo colisión y no hubo cambio
+         */
+        virtual bool addZ(int value);
 
-  /**
-   * Cambia la altura del elemento
-   * @param value Nueva altura del elemento
-   * @return true si se pudo cambiar el dato o false si hubo colisión y no hubo cambio
-   */
-  virtual bool changeHeight(int value);
+        /**
+         * Cambia la altura del elemento
+         * @param value Nueva altura del elemento
+         * @return true si se pudo cambiar el dato o false si hubo colisión y no hubo cambio
+         */
+        virtual bool changeHeight(int value);
 
-  /**
-   * Cambia la altura del elemento
-   * @param value Valor que se sumará a la altura actual
-   * @return true si se pudo cambiar el dato o false si hubo colisión y no hubo cambio
-   */
-  virtual bool addHeight(int value);
+        /**
+         * Cambia la altura del elemento
+         * @param value Valor que se sumará a la altura actual
+         * @return true si se pudo cambiar el dato o false si hubo colisión y no hubo cambio
+         */
+        virtual bool addHeight(int value);
 
 protected:
 
@@ -168,6 +169,7 @@ public: // Operaciones de consulta y actualización
    * @return Un número positivo
    */
   int getColumn() const { return column; }
+
 };
 
 }

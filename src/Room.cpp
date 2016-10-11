@@ -13,7 +13,7 @@
 namespace isomot
 {
 
-Room::Room(const std::string& identifier, const std::string& scenery, int xTiles, int yTiles, int tileSize, const FloorId& floorType) : RoomComponent()
+Room::Room( const std::string& identifier, const std::string& scenery, int xTiles, int yTiles, int tileSize, const FloorId& floorType ) : Mediated()
 {
   this->identifier = identifier;
   this->scenery = scenery;
@@ -145,378 +145,440 @@ Room::~Room()
   destroy_bitmap(destination);
 }
 
-void Room::addComponent(FloorTile* floorTile)
+void Room::addItem( FloorTile* floorTile )
 {
   // Se añade una nueva loseta
-  floorTile->setMediator(mediator);
+  floorTile->setMediator( mediator );
   floorTile->calculateOffset();
-  this->floor[floorTile->getColumn()] = floorTile;
+  this->floor[ floorTile->getColumn() ] = floorTile;
 }
 
-void Room::addComponent(Wall* wall)
+void Room::addWall( Wall* wall )
 {
   // Se añade un segmento de muro sin puerta
-  wall->setMediator(mediator);
+  wall->setMediator( mediator );
   wall->calculateOffset();
 
-  switch(wall->getAxis())
+  switch( wall->getAxis() )
   {
     case AxisX:
-      this->wallX.push_back(wall);
+      this->wallX.push_back( wall );
       break;
 
     case AxisY:
-      this->wallY.push_back(wall);
+      this->wallY.push_back( wall );
       break;
   }
 }
 
-void Room::addComponent(Door* door)
+void Room::addDoor( Door* door )
 {
   // Se añade una de las cuatro puertas. Cada puerta en realidad son tres elementos libres
-  door->setMediator(mediator);
-  this->doors[door->getDirection()] = door;
-  this->addComponent(door->getLeftJamb());
-  this->addComponent(door->getRightJamb());
-  this->addComponent(door->getLintel());
+  door->setMediator( mediator );
+  this->doors[ door->getDirection() ] = door;
+  this->addItem( door->getLeftJamb() );
+  this->addItem( door->getRightJamb() );
+  this->addItem( door->getLintel() );
 }
 
-void Room::addComponent(GridItem* gridItem)
+#define NULL_GRIDITEM           "Cannot add grid item which is nil"
+#define NO_ISOMOT_GRIDITEM      "Cannot add grid item because Isomot isn't active"
+#define OUT_OF_LIMITS_GRIDITEM  "Coordinates for grid item are out of limits"
+#define OUT_OF_ROOM_GRIDITEM    "Coordinates for grid item are out of room"
+#define ZERO_HEIGHT_GRIDITEM    "Height for grid item is zero or negative"
+#define COLLISION_GRIDITEM      "Collision with grid item"
+
+void Room::addItem( GridItem* gridItem )
 {
   try
   {
-    // La sala debe estar activa
-    if(!this->active)
+    if ( ! gridItem )
     {
-      throw Exception("Cannot add grid-item because Isomot isn't active.");
+      throw Exception( NULL_GRIDITEM );
+    }
+
+    // La sala debe estar activa
+    if( ! this->active )
+    {
+      throw Exception( NO_ISOMOT_GRIDITEM );
     }
 
     // Las coordenadas deben estar dentro de los límites
-    if((gridItem->getCellX() < 0 || gridItem->getCellY() < 0) ||
-       (gridItem->getCellX() >= this->tilesNumber.first || gridItem->getCellY() >= this->tilesNumber.second))
+    if( ( gridItem->getCellX() < 0 || gridItem->getCellY() < 0 ) ||
+       ( gridItem->getCellX() >= this->tilesNumber.first || gridItem->getCellY() >= this->tilesNumber.second ) )
     {
-      throw Exception("Incorrect coordinates for grid-item.");
+      throw Exception( OUT_OF_LIMITS_GRIDITEM );
     }
 
     // El elemento debe tener altura
-    if(gridItem->getHeight() < 1)
+    if( gridItem->getHeight() < 1 )
     {
-      throw Exception("Incorrect height for grid-item.");
+      throw Exception( ZERO_HEIGHT_GRIDITEM );
     }
 
     // Vacía la pila de colisiones
     mediator->clearCollisionStack();
 
     // Asigna el identificador de Isomot
-    gridItem->setId(this->lastGridId);
+    gridItem->setId( this->lastGridId );
 
     // Si el elemento se va a colocar a una altura específica se buscan colisiones
-    if(gridItem->getZ() != Top)
+    if( gridItem->getZ() != Top )
     {
-      mediator->findCollision(gridItem);
+      mediator->findCollision( gridItem );
     }
     // Si el elemento se va en los más alto de la columna se busca el valor de Z
     else
     {
-      gridItem->setZ(mediator->findHighestZ(gridItem));
+      gridItem->setZ( mediator->findHighestZ( gridItem ) );
     }
 
     // Si se encontraron colisiones el elemento no se puede añadir
-    if(!mediator->isCollisionStackEmpty())
+    if( ! mediator->isCollisionStackEmpty () )
     {
-      throw Exception("Cannot add grid-item: collision detected.");
+      throw Exception( COLLISION_GRIDITEM );
     }
 
-    // Cálculo del desplazamiento de la imagen respecto del píxel que marca el punto (0,0,0) de la sala
-    if(gridItem->getImage())
+    // Cálculo del desplazamiento de la imagen respecto del píxel que marca el punto ( 0, 0, 0 ) de la sala
+    if( gridItem->getImage() )
     {
-      std::pair<int, int> offset(((this->tileSize * (gridItem->getCellX() - gridItem->getCellY())) << 1) - (gridItem->getImage()->w >> 1) + 1,
-                                 this->tileSize * (gridItem->getCellX() + gridItem->getCellY() + 2) - gridItem->getImage()->h - gridItem->getZ() - 1);
-      gridItem->setOffset(offset);
+      std::pair<int, int> offset(
+          ( ( this->tileSize * ( gridItem->getCellX() - gridItem->getCellY() ) ) << 1 ) - ( gridItem->getImage()->w >> 1 ) + 1,
+          this->tileSize * ( gridItem->getCellX() + gridItem->getCellY() + 2 ) - gridItem->getImage()->h - gridItem->getZ() - 1
+      ) ;
+      gridItem->setOffset( offset );
     }
 
     // Añade el elemento a la sala
-    gridItem->setMediator(mediator);
-    gridItem->setColumn(this->tilesNumber.first * gridItem->getCellY() + gridItem->getCellX());
-    mediator->insertItem(gridItem);
+    gridItem->setMediator( mediator );
+    gridItem->setColumn( this->tilesNumber.first * gridItem->getCellY() + gridItem->getCellX() );
+    mediator->insertItem( gridItem );
 
     // Pone a sombrear los elementos afectados por la inserción
-    if(this->shadingScale < 256 && gridItem->getShadow())
+    if( this->shadingScale < 256 && gridItem->getShadow() )
     {
-      mediator->markItemsForShady(gridItem);
+      mediator->markItemsForShady( gridItem );
     }
 
     // Marca para enmascarar los elementos libres afectados por la inserción
-    mediator->markItemsForMasking(gridItem);
+    mediator->markItemsForMasking( gridItem );
 
     // Nuevo valor del identificador para elementos rejilla
     this->lastGridId += 2;
   }
-  catch(const Exception& e)
+  catch ( const Exception& e )
   {
-    std::cout << e.what() << std::endl;
+    std::cout << e.what () << std::endl ;
   }
 }
 
-void Room::addComponent(FreeItem* freeItem)
+#define NULL_FREEITEM           "Cannot add free item which is nil"
+#define NO_ISOMOT_FREEITEM      "Cannot add free item because Isomot isn't active"
+#define OUT_OF_LIMITS_FREEITEM  "Coordinates for free item are out of limits"
+#define OUT_OF_ROOM_FREEITEM    "Coordinates for free item are out of room"
+#define ZERO_WIDTH_FREEITEM     "One or more of dimensions for free item are zero or negative"
+#define COLLISION_FREEITEM      "Collision with free item"
+
+void Room::addItem( FreeItem* freeItem )
 {
   try
   {
-    // La sala debe estar activa
-    if(!this->active)
+    if ( ! freeItem )
     {
-      throw Exception("Cannot add free-item because Isomot isn't active.");
+      throw Exception( NULL_FREEITEM );
+    }
+
+    // La sala debe estar activa
+    if( ! this->active )
+    {
+      throw Exception( NO_ISOMOT_FREEITEM );
     }
 
     // Las coordenadas deben estar dentro de los límites
-    if(freeItem->getX() < 0 || freeItem->getY() < 1 || freeItem->getZ() < Top)
+    if( freeItem->getX() < 0 || freeItem->getY() < 1 || freeItem->getZ() < Top )
     {
-      throw Exception("Incorrect coordinates for free-item.");
+      throw Exception( OUT_OF_LIMITS_FREEITEM );
     }
 
     // El elemento debe tener volumen
-    if(freeItem->getHeight() < 1 || freeItem->getWidthX() < 1 || freeItem->getWidthY() < 1)
+    if( freeItem->getHeight() < 1 || freeItem->getWidthX() < 1 || freeItem->getWidthY() < 1 )
     {
-      throw Exception("Incorrect dimensions for free-item.");
+      throw Exception( ZERO_WIDTH_FREEITEM );
     }
 
     // El elemento no puede estar fuera de la sala
-    if((freeItem->getX() + freeItem->getWidthX() > this->tilesNumber.first * this->tileSize) ||
-       (freeItem->getY() - freeItem->getWidthY() < -1) ||
-       (freeItem->getY() > this->tilesNumber.second * this->tileSize - 1))
+    if( ( freeItem->getX() + freeItem->getWidthX() > this->tilesNumber.first * this->tileSize )
+        || ( freeItem->getY() - freeItem->getWidthY() < -1 )
+        || ( freeItem->getY() > this->tilesNumber.second * this->tileSize - 1 ) )
     {
-      throw Exception("Incorrect coordinates for free-item: out of room.");
+      throw Exception( OUT_OF_ROOM_FREEITEM );
     }
 
     // Vacía la pila de colisiones
-    mediator->clearCollisionStack();
+    mediator->clearCollisionStack ();
 
     // Asigna el identificador de Isomot
-    freeItem->setId(this->lastFreeId);
+    freeItem->setId( this->lastFreeId );
 
     // Si el elemento se va a colocar a una altura específica se buscan colisiones
-    if(freeItem->getZ() > Top)
+    if( freeItem->getZ() > Top )
     {
-      mediator->findCollision(freeItem);
+      mediator->findCollision( freeItem );
     }
     // Si el elemento se va en los más alto de la columna se busca el valor de Z
     else
     {
-      freeItem->setZ(mediator->findHighestZ(freeItem));
+      freeItem->setZ( mediator->findHighestZ( freeItem ) );
     }
 
     // Si se encontraron colisiones el elemento no se puede añadir
-    if(!mediator->isCollisionStackEmpty())
+    if( ! mediator->isCollisionStackEmpty () )
     {
-      throw Exception("Cannot add free-item: collision detected.");
+      throw Exception( COLLISION_FREEITEM );
     }
 
-    // Cálculo del desplazamiento de la imagen respecto del píxel que marca el punto (0,0,0) de la sala
-    if(freeItem->getImage())
+    // Cálculo del desplazamiento de la imagen respecto del píxel que marca el punto ( 0, 0, 0 ) de la sala
+    if( freeItem->getImage () )
     {
-      std::pair<int, int> offset(((freeItem->getX() - freeItem->getY()) << 1) + freeItem->getWidthX() + freeItem->getWidthY() - (freeItem->getImage()->w >> 1) - 1,
-                                 freeItem->getX() + freeItem->getY() + freeItem->getWidthX() - freeItem->getImage()->h - freeItem->getZ());
-      freeItem->setOffset(offset);
+      std::pair<int, int> offset(
+        ( ( freeItem->getX() - freeItem->getY() ) << 1 ) + freeItem->getWidthX() + freeItem->getWidthY() - ( freeItem->getImage()->w >> 1 ) - 1,
+        freeItem->getX() + freeItem->getY() + freeItem->getWidthX() - freeItem->getImage()->h - freeItem->getZ()
+      ) ;
+      freeItem->setOffset( offset );
     }
 
     // Añade el elemento a la sala
-    mediator->addTransparency(0);
-    freeItem->setMediator(mediator);
-    mediator->insertItem(freeItem);
+    mediator->addTransparency( 0 );
+    freeItem->setMediator( mediator );
+    mediator->insertItem( freeItem );
 
     // Pone a sombrear los elementos afectados por la inserción
-    if(this->shadingScale < 256 && freeItem->getShadow())
+    if( this->shadingScale < 256 && freeItem->getShadow() )
     {
-      mediator->markItemsForShady(freeItem);
+      mediator->markItemsForShady( freeItem );
     }
 
     // Marca para enmascarar los elementos libres afectados por la inserción
-    mediator->markItemsForMasking(freeItem);
+    mediator->markItemsForMasking( freeItem );
 
     // Nuevo valor del identificador para elementos rejilla
     this->lastFreeId += 2;
   }
-  catch(const Exception& e)
+  catch ( const Exception& e )
   {
-    std::cout << e.what() << std::endl;
+    if ( freeItem ) {
+        std::cout << e.what ()
+              << std::endl
+              << "   free item at " << freeItem->getX() << " " << freeItem->getY() << " " << freeItem->getZ()
+              << " has dimensions " << freeItem->getWidthX() << " x " << freeItem->getWidthY() << " x " << freeItem->getHeight()
+              << std::endl
+              << "   inside room of " << this->tilesNumber.first << " x " << this->tilesNumber.second << " tiles"
+              << " each tile of " << this->tileSize << " pixels"
+              << std::endl ;
+    } else
+        std::cout << e.what () << std::endl ;
   }
 }
 
-void Room::addComponent(PlayerItem* playerItem)
+#define NULL_PLAYER             "Cannot add player which is nil"
+#define NO_ISOMOT_PLAYER        "Cannot add player because Isomot isn't active"
+#define OUT_OF_LIMITS_PLAYER    "Coordinates for player are out of limits"
+#define OUT_OF_ROOM_PLAYER      "Coordinates for player are out of room"
+#define ZERO_WIDTH_PLAYER       "One or more of dimensions for player are zero or negative"
+#define COLLISION_PLAYER        "Collision with player"
+
+void Room::addPlayer( PlayerItem* playerItem )
 {
   try
   {
-    // La sala debe estar activa
-    if(!this->active)
+    if ( ! playerItem )
     {
-      throw Exception("Cannot add player-item because Isomot isn't active.");
+      throw Exception( NULL_PLAYER );
+    }
+
+    // La sala debe estar activa
+    if( ! this->active )
+    {
+      throw Exception( NO_ISOMOT_PLAYER );
     }
 
     // Las coordenadas deben estar dentro de los límites
-    if(playerItem->getX() < 0 || playerItem->getY() < 1 || playerItem->getZ() < Top)
+    if( playerItem->getX() < 0 || playerItem->getY() < 1 || playerItem->getZ() < Top )
     {
-      throw Exception("Incorrect coordinates for player-item.");
+      throw Exception( OUT_OF_LIMITS_PLAYER );
     }
 
     // El elemento debe tener volumen
-    if(playerItem->getHeight() < 1 || playerItem->getWidthX() < 1 || playerItem->getWidthY() < 1)
+    if( playerItem->getHeight() < 1 || playerItem->getWidthX() < 1 || playerItem->getWidthY() < 1 )
     {
-      throw Exception("Incorrect dimensions for player-item.");
+      throw Exception( ZERO_WIDTH_PLAYER );
     }
 
     // El elemento no puede estar fuera de la sala
-    if((playerItem->getX() + playerItem->getWidthX() > this->tilesNumber.first * this->tileSize) ||
-       (playerItem->getY() - playerItem->getWidthY() < -1) ||
-       (playerItem->getY() > this->tilesNumber.second * this->tileSize - 1))
+    if( ( playerItem->getX() + playerItem->getWidthX() > this->tilesNumber.first * this->tileSize )
+        || ( playerItem->getY() - playerItem->getWidthY() < -1 )
+        || ( playerItem->getY() > this->tilesNumber.second * this->tileSize - 1 ) )
     {
-      throw Exception("Incorrect coordinates for player-item: out of room.");
+      throw Exception( OUT_OF_ROOM_PLAYER );
     }
 
     // Vacía la pila de colisiones
     mediator->clearCollisionStack();
 
     // Asigna el identificador de Isomot
-    playerItem->setId(this->lastFreeId);
+    playerItem->setId( this->lastFreeId );
 
     // Si el elemento se va a colocar a una altura específica se buscan colisiones
-    if(playerItem->getZ() > Top)
+    if( playerItem->getZ() > Top )
     {
-      mediator->findCollision(playerItem);
-      while(!mediator->isCollisionStackEmpty())
+      mediator->findCollision( playerItem );
+      while( ! mediator->isCollisionStackEmpty () )
       {
-        playerItem->setZ(playerItem->getZ() + LayerHeight);
-        mediator->clearCollisionStack();
-        mediator->findCollision(playerItem);
+        playerItem->setZ( playerItem->getZ() + LayerHeight );
+        mediator->clearCollisionStack ();
+        mediator->findCollision( playerItem );
       }
     }
     // Si el elemento se va en los más alto de la columna se busca el valor de Z
     else
     {
-      playerItem->setZ(mediator->findHighestZ(playerItem));
+      playerItem->setZ( mediator->findHighestZ( playerItem ) );
     }
 
     // Si se encontraron colisiones el elemento no se puede añadir
-    if(!mediator->isCollisionStackEmpty())
+    if( ! mediator->isCollisionStackEmpty () )
     {
-      throw Exception("Cannot add player-item: collision detected.");
+      throw Exception( COLLISION_PLAYER );
     }
 
     // Cálculo del desplazamiento de la imagen respecto del píxel que marca el punto (0,0,0) de la sala
-    if(playerItem->getImage())
+    if( playerItem->getImage () )
     {
-      std::pair<int, int> offset(((playerItem->getX() - playerItem->getY()) << 1) + playerItem->getWidthX() + playerItem->getWidthY() - (playerItem->getImage()->w >> 1) - 1,
-                                 playerItem->getX() + playerItem->getY() + playerItem->getWidthX() - playerItem->getImage()->h - playerItem->getZ());
-      playerItem->setOffset(offset);
+      std::pair<int, int> offset(
+        ( ( playerItem->getX() - playerItem->getY() ) << 1 ) + playerItem->getWidthX() + playerItem->getWidthY() - ( playerItem->getImage()->w >> 1 ) - 1,
+        playerItem->getX() + playerItem->getY() + playerItem->getWidthX() - playerItem->getImage()->h - playerItem->getZ()
+      ) ;
+      playerItem->setOffset( offset );
     }
 
     // Añade el elemento a la sala
-    mediator->addTransparency(0);
-    playerItem->setMediator(mediator);
-    mediator->insertItem(playerItem);
+    mediator->addTransparency( 0 );
+    playerItem->setMediator( mediator );
+    mediator->insertItem( playerItem );
 
     // Pone a sombrear los elementos afectados por la inserción
-    if(this->shadingScale < 256 && playerItem->getShadow())
+    if( this->shadingScale < 256 && playerItem->getShadow() )
     {
-      mediator->markItemsForShady(playerItem);
+      mediator->markItemsForShady( playerItem );
     }
 
     // Marca para enmascarar los elementos libres afectados por la inserción
-    mediator->markItemsForMasking(playerItem);
+    mediator->markItemsForMasking( playerItem );
 
     // Nuevo valor del identificador para elementos rejilla
     this->lastFreeId += 2;
   }
-  catch(const Exception& e)
+  catch ( const Exception& e )
   {
-    std::cout << e.what() << std::endl;
+    if ( playerItem ) {
+        std::cout << e.what ()
+              << std::endl
+              << "   player at " << playerItem->getX() << " " << playerItem->getY() << " " << playerItem->getZ()
+              << " has dimensions " << playerItem->getWidthX() << " x " << playerItem->getWidthY() << " x " << playerItem->getHeight()
+              << std::endl
+              << "   inside room of " << this->tilesNumber.first << " x " << this->tilesNumber.second << " tiles"
+              << " each tile of " << this->tileSize << " pixels"
+              << std::endl ;
+    } else
+        std::cout << e.what () << std::endl ;
   }
 }
 
-void Room::removeComponent(FloorTile* floorTile)
+void Room::removeItem( FloorTile* floorTile )
 {
   // La eliminación es en realidad una sustitución por una loseta vacía
-  this->floor[floorTile->getColumn()] = 0;//FloorTile();
+  this->floor[ floorTile->getColumn() ] = 0;
   delete floorTile;
 }
 
-void Room::removeComponent(GridItem* gridItem)
+void Room::removeItem( GridItem* gridItem )
 {
   try
   {
     // Elimina el elemento de la sala
-    mediator->removeItem(gridItem);
+    mediator->removeItem( gridItem );
 
     // Pone a sombrear los elementos afectados por la eliminación
-    if(this->shadingScale < 256 && gridItem->getShadow())
+    if( this->shadingScale < 256 && gridItem->getShadow() )
     {
-      mediator->markItemsForShady(gridItem);
+      mediator->markItemsForShady( gridItem );
     }
 
     // Marca para enmascarar los elementos libres afectados por la eliminación
-    mediator->markItemsForMasking(gridItem);
+    mediator->markItemsForMasking( gridItem );
 
     // Destrucción del elemento
     delete gridItem;
   }
-  catch(const Exception& e)
+  catch( const Exception& e )
   {
-    std::cout << e.what() << std::endl;
+    std::cout << e.what () << std::endl ;
   }
 }
 
-void Room::removeComponent(FreeItem* freeItem)
+void Room::removeItem( FreeItem* freeItem )
 {
   try
   {
     // Se elimina de la tabla de transparencias
-    mediator->removeTransparency(freeItem->getTransparency());
+    mediator->removeTransparency( freeItem->getTransparency() );
 
     // Elimina el elemento de la sala
-    mediator->removeItem(freeItem);
+    mediator->removeItem( freeItem );
 
     // Pone a sombrear los elementos afectados por la eliminación
-    if(this->shadingScale < 256 && freeItem->getShadow())
+    if( this->shadingScale < 256 && freeItem->getShadow() )
     {
-      mediator->markItemsForShady(freeItem);
+      mediator->markItemsForShady( freeItem );
     }
 
     // Marca para enmascarar los elementos libres afectados por la eliminación
-    mediator->markItemsForMasking(freeItem);
+    mediator->markItemsForMasking( freeItem );
 
     // Destrucción del elemento
     delete freeItem;
   }
-  catch(const Exception& e)
+  catch( const Exception& e )
   {
-    std::cout << e.what() << std::endl;
+    std::cout << e.what () << std::endl ;
   }
 }
 
-void Room::removeComponent(PlayerItem* playerItem)
+void Room::removePlayer( PlayerItem* playerItem )
 {
   try
   {
     // Se elimina de la tabla de transparencias
-    mediator->removeTransparency(playerItem->getTransparency());
+    mediator->removeTransparency( playerItem->getTransparency() );
 
     // Elimina el elemento de la sala
-    mediator->removeItem(playerItem);
+    mediator->removeItem( playerItem );
 
     // Pone a sombrear los elementos afectados por la eliminación
-    if(this->shadingScale < 256 && playerItem->getShadow())
+    if( this->shadingScale < 256 && playerItem->getShadow() )
     {
-      mediator->markItemsForShady(playerItem);
+      mediator->markItemsForShady( playerItem );
     }
 
     // Marca para enmascarar los elementos libres afectados por la eliminación
-    mediator->markItemsForMasking(playerItem);
+    mediator->markItemsForMasking( playerItem );
 
     // Destrucción del elemento
     delete playerItem;
   }
-  catch(const Exception& e)
+  catch( const Exception& e )
   {
-    std::cout << e.what() << std::endl;
+    std::cout << e.what () << std::endl ;
   }
 }
 
@@ -910,15 +972,15 @@ void Room::assignTripleRoomBounds(int minX, int maxX, int minY, int maxY)
   this->tripleRoomBoundY.second = maxY;
 }
 
-TripleRoomStartPoint* Room::findTripleRoomStartPoint(const Direction& direction)
+TripleRoomStartPoint* Room::findTripleRoomStartPoint( const Direction& direction )
 {
-  std::list<TripleRoomStartPoint>::iterator i = std::find_if(tripleRoomStartPoints.begin(), tripleRoomStartPoints.end(), std::bind2nd(EqualTripleRoomStartPoint(), direction));
-  return (i != tripleRoomStartPoints.end() ? (&(*i)) : 0);
+  std::list< TripleRoomStartPoint >::iterator i = std::find_if( tripleRoomStartPoints.begin(), tripleRoomStartPoints.end(), std::bind2nd( EqualTripleRoomStartPoint(), direction ) );
+  return ( i != tripleRoomStartPoints.end() ? ( &( *i ) ) : 0 );
 }
 
-Door* Room::getDoor(const Direction& direction) const
+Door* Room::getDoor( const Direction& direction ) const
 {
-  return doors[direction];
+  return doors[ direction ];
 }
 
 Camera* Room::getCamera() const
@@ -926,17 +988,16 @@ Camera* Room::getCamera() const
   return camera;
 }
 
-TripleRoomStartPoint::TripleRoomStartPoint(const Direction& direction, int x, int y)
+TripleRoomStartPoint::TripleRoomStartPoint( const Direction& direction, int x, int y )
 : direction(direction),
   x(x),
   y(y)
 {
-
 }
 
-bool EqualTripleRoomStartPoint::operator()(TripleRoomStartPoint point, Direction direction) const
+bool EqualTripleRoomStartPoint::operator()( TripleRoomStartPoint point, Direction direction ) const
 {
-  return (point.getDirection() == direction);
+  return ( point.getDirection() == direction );
 }
 
 }

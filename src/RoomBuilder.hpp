@@ -77,7 +77,7 @@ public:
          * @param z Coordenada isométrica Z donde se situará al jugador
          * @param direction Dirección inicial del jugador
          */
-        PlayerItem* buildPlayerItem(const PlayerId& playerId, const BehaviorId& behaviorId, int x, int y, int z, const Direction& direction);
+        PlayerItem* buildPlayer( const PlayerId& playerId, const BehaviorId& behaviorId, int x, int y, int z, const Direction& direction );
 
         /**
          * Crea un jugador en la sala especificada. La sala ya debe estar construida
@@ -91,7 +91,7 @@ public:
          * @param direction Dirección inicial del jugador
          * @param hasItem Indica si el jugador llevaba un elemento en el bolso
          */
-        PlayerItem* buildPlayerItem(Room* room, const PlayerId& playerId, const BehaviorId& behaviorId, int x, int y, int z, const Direction& direction, bool hasItem = false);
+        PlayerItem* buildPlayer( Room* room, const PlayerId& playerId, const BehaviorId& behaviorId, int x, int y, int z, const Direction& direction, bool hasItem = false );
 
 private:
 
@@ -99,31 +99,31 @@ private:
          * Crea una loseta
          * @param Datos del archivo XML para crear la loseta en la sala
          */
-        FloorTile* buildFloorTile(const rxml::tile& tile);
+        FloorTile* buildFloorTile( const rxml::tile& tile );
 
         /**
          * Crea un segmento de muro
          * @param Datos del archivo XML para crear el segmento de muro en la sala
          */
-        Wall* buildWall(const rxml::wall& wall);
+        Wall* buildWall( const rxml::wall& wall );
 
         /**
          * Crea un elemento rejilla
          * @param Datos del archivo XML para crear el elemento rejilla en la sala
          */
-        GridItem* buildGridItem(const rxml::item& item);
+        GridItem* buildGridItem( const rxml::item& item );
 
         /**
          * Crea un elemento libre
          * @param Datos del archivo XML para crear el elemento libre en la sala
          */
-        FreeItem* buildFreeItem(const rxml::item& item);
+        FreeItem* buildFreeItem( const rxml::item& item );
 
         /**
          * Crea una puerta
          * @param Datos del archivo XML para crear la puerta en la sala
          */
-        Door* buildDoor(const rxml::item& item);
+        Door* buildDoor( const rxml::item& item );
 
 private:
 

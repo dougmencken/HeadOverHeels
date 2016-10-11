@@ -52,8 +52,8 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			PlayerItem.hpp \
 			RoomBuilder.cpp \
 			RoomBuilder.hpp \
-			RoomComponent.cpp \
-			RoomComponent.hpp \
+			Drawable.hpp \
+			Mediated.hpp \
 			Room.cpp \
 			Room.hpp \
 			SoundManager.cpp \

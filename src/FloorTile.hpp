@@ -24,7 +24,8 @@
 #include <cmath>
 #include <allegro.h>
 #include "Ism.hpp"
-#include "RoomComponent.hpp"
+#include "Drawable.hpp"
+#include "Mediated.hpp"
 
 namespace isomot
 {
@@ -32,7 +33,7 @@ namespace isomot
 /**
  * Una loseta de una sala. Un conjunto de estos elementos forma el suelo
  */
-class FloorTile : public RoomComponent
+class FloorTile : public Drawable, public Mediated
 {
 public:
 
@@ -48,20 +49,19 @@ public:
    * @param y Coordenada Y de la loseta en la rejilla
    * @param image Representación gráfica de la loseta
    */
-	FloorTile(int column, int x, int y, BITMAP* image);
+        FloorTile( int column, int x, int y, BITMAP* image );
 
-	virtual ~FloorTile();
+        virtual ~FloorTile();
 
-	/**
-	 * Calcula el desplazamiento de la imagen de la loseta en función de los atributos actuales
-	 */
-	void calculateOffset();
+        /**
+         * Calcula el desplazamiento de la imagen de la loseta en función de los atributos actuales
+         */
+        void calculateOffset();
 
-  /**
-   * Dibuja la loseta
-   * @param destination Imagen donde se realizará el dibujo
-   */
-  void draw(BITMAP* destination);
+        /**
+         * Dibuja la loseta
+         */
+        void draw( BITMAP* where );
 
   /**
    * Solicita el sombreado de la loseta
@@ -79,7 +79,7 @@ public:
    *                     sombras totalmente opacas
    * @param transparency Grado de transparencia del elemento que sombrea a la loseta
    */
-  void castShadowImage(int x, int y, BITMAP* shadow, short shadingScale, unsigned char transparency = 0);
+  void castShadowImage( int x, int y, BITMAP* shadow, short shadingScale, unsigned char transparency = 0 );
 
 private:
 
@@ -91,12 +91,12 @@ private:
   /**
    * Coordenadas X e Y, respectivamente, de la loseta en la rejilla
    */
-  std::pair<int, int> coordinates;
+  std::pair< int, int > coordinates;
 
   /**
    * Desplazamiento de la loseta en los ejes X e Y, respectivamente
    */
-  std::pair<int, int> offset;
+  std::pair< int, int > offset;
 
   /**
    * Gráfico de la loseta
@@ -138,25 +138,25 @@ public: // Operaciones de consulta y actualización
    * @param x Desplazamiento de la loseta en el eje X
    * @param y Desplazamiento de la loseta en el eje Y
    */
-  void setOffset(int x, int y) { offset.first = x; offset.second = y; }
+  void setOffset( int x, int y ) {  offset.first = x; offset.second = y;  }
 
   /**
    * Gráfico de la loseta
    * @return Devuelve una imagen de Allegro
    */
-  BITMAP* getImage() { return image; }
+  BITMAP* getImage() {  return image;  }
 
   /**
    * Establece el estado del proceso de sombreado
    * @param shadeStatus NO_SHADOW, sin sombra; MUST_BE_SHADY, debe ser sombreado; o, SHADY, sombreado
    */
-  void setShadeStatus(const ShadeStatus& shadeStatus) { this->shadeStatus = shadeStatus; }
+  void setShadeStatus( const ShadeStatus& shadeStatus ) {  this->shadeStatus = shadeStatus;  }
 
   /**
    * Estado del proceso de sombreado
    * @return NO_SHADOW, sin sombra; MUST_BE_SHADY, debe ser sombreado; o, SHADY, sombreado
    */
-  ShadeStatus getShadeStatus() const { return shadeStatus; }
+  ShadeStatus getShadeStatus() const {  return shadeStatus;  }
 };
 
 }

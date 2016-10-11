@@ -1,5 +1,5 @@
 #include "Mediator.hpp"
-#include "RoomComponent.hpp"
+#include "Mediated.hpp"
 #include "Room.hpp"
 #include "RoomBuilder.hpp"
 #include "Item.hpp"
@@ -101,10 +101,10 @@ void Mediator::update()
   }
 
   // Se eliminan los elementos rejilla que pudieran haberse destruido
-  while(!gridItemsToDelete.empty())
+  while( ! gridItemsToDelete.empty() )
   {
     GridItem* gi = gridItemsToDelete.top();
-    room->removeComponent(gi);
+    room->removeItem( gi );
     gridItemsToDelete.pop();
   }
 
@@ -147,10 +147,10 @@ void Mediator::update()
   }
 
   // Se eliminan los elementos libres que pudieran haberse destruido
-  while(!freeItemsToDelete.empty())
+  while( ! freeItemsToDelete.empty() )
   {
     FreeItem* fi = freeItemsToDelete.top();
-    room->removeComponent(fi);
+    room->removeItem( fi );
     freeItemsToDelete.pop();
   }
 
@@ -175,10 +175,10 @@ void Mediator::startUpdate()
 
   pthread_attr_t attr;
 
-  pthread_attr_init(&attr);
-  pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+  pthread_attr_init( &attr );
+  pthread_attr_setdetachstate( &attr, PTHREAD_CREATE_JOINABLE );
 
-  pthread_create(&thread, 0, updateThread, reinterpret_cast<void*>(this));
+  pthread_create( &thread, 0, updateThread, reinterpret_cast< void * >( this ) );
 
   pthread_attr_destroy(&attr);
 }
@@ -186,36 +186,38 @@ void Mediator::startUpdate()
 void Mediator::stopUpdate()
 {
   this->threadRunning = false;
-  pthread_join(thread, 0);
+  pthread_join( thread, 0 );
 }
 
-void* updateThread(void* thisClass)
+void* updateThread( void* thisClass )
 {
-  Mediator* mediator = reinterpret_cast<Mediator*>(thisClass);
+  Mediator* mediator = reinterpret_cast< Mediator* >( thisClass );
 
-  while(mediator->isThreadRunning())
+  while( mediator->isThreadRunning() )
   {
     mediator->update();
-    sleep(10);
+    sleep( 10 );
   }
 
-  pthread_exit(0);
+  pthread_exit( 0 );
 }
 
-void Mediator::markItemsForMasking( FreeItem* freeitem )
+void Mediator::markItemsForMasking( FreeItem* item )
 {
+  if ( ! item ) return;
+
   // Se recorre la lista de elementos libres para ver cúales hay que volver a enmascarar
   for( std::list< FreeItem* >::iterator f = freeItems.begin (); f != freeItems.end (); ++f )
   {
     FreeItem* thatFreeItem = *f;
 
-    if( thatFreeItem->getId() != freeitem->getId() && thatFreeItem->getImage() )
+    if( thatFreeItem->getId() != item->getId() && thatFreeItem->getImage() )
     {
       // El elemento debe enmascararse si hay solapamiento entre las imágenes
-      if( ( thatFreeItem->getOffsetX() < freeitem->getOffsetX() + freeitem->getImage()->w ) &&
-         ( thatFreeItem->getOffsetX() + thatFreeItem->getImage()->w > freeitem->getOffsetX() ) &&
-         ( thatFreeItem->getOffsetY() < freeitem->getOffsetY() + freeitem->getImage()->h ) &&
-         ( thatFreeItem->getOffsetY() + thatFreeItem->getImage()->h > freeitem->getOffsetY() ) )
+      if( ( thatFreeItem->getOffsetX() < item->getOffsetX() + item->getImage()->w ) &&
+         ( thatFreeItem->getOffsetX() + thatFreeItem->getImage()->w > item->getOffsetX() ) &&
+         ( thatFreeItem->getOffsetY() < item->getOffsetY() + item->getImage()->h ) &&
+         ( thatFreeItem->getOffsetY() + thatFreeItem->getImage()->h > item->getOffsetY() ) )
       {
         thatFreeItem->setMaskStatus( ItIsMasked );
       }
@@ -225,6 +227,8 @@ void Mediator::markItemsForMasking( FreeItem* freeitem )
 
 void Mediator::markItemsForMasking( GridItem* gridItem )
 {
+  if ( ! gridItem ) return;
+
   // Se recorre la lista de elementos libres para ver cúales hay que volver a enmascarar
   for( std::list< FreeItem* >::iterator f = freeItems.begin (); f != freeItems.end (); ++f )
   {
@@ -1090,14 +1094,14 @@ bool Mediator::nextPlayer(ItemDataManager* itemDataManager)
         }
 
         // Elimina a los jugadores simples
-        this->room->removeComponent(previousPlayer);
-        this->room->removeComponent(activePlayer);
+        this->room->removePlayer( previousPlayer );
+        this->room->removePlayer( activePlayer );
 
         // Crea al jugador compuesto
-        std::auto_ptr<RoomBuilder> roomBuilder(new RoomBuilder(itemDataManager));
-        activePlayer = roomBuilder->buildPlayerItem(this->room, HeadAndHeels, HeadAndHeelsBehavior, x, y, z, direction);
+        std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( itemDataManager ) );
+        activePlayer = roomBuilder->buildPlayer( this->room, HeadAndHeels, HeadAndHeelsBehavior, x, y, z, direction );
         // Le devuelve el elemento que tuviera en el bolso
-        activePlayer->assignTakenItem(takenItemData, takenItemImage, takenItemBehaviorId);
+        activePlayer->assignTakenItem( takenItemData, takenItemImage, takenItemBehaviorId );
 
         // Libera el acceso exclusivo a la lista de elementos libres
         pthread_mutex_unlock(&freeItemsMutex);
@@ -1107,7 +1111,7 @@ bool Mediator::nextPlayer(ItemDataManager* itemDataManager)
     }
   }
   // Si el jugador actual y el anterior es el mismo entonces debe ser el jugador compuesto
-  else if(activePlayer->getLabel() == HeadAndHeels)
+  else if( activePlayer->getLabel() == HeadAndHeels )
   {
     int x = activePlayer->getX();
     int y = activePlayer->getY();
@@ -1122,17 +1126,17 @@ bool Mediator::nextPlayer(ItemDataManager* itemDataManager)
     takenItemImage = activePlayer->consultTakenItemImage();
 
     // Elimina al jugador compuesto
-    this->room->removeComponent(activePlayer);
+    this->room->removePlayer( activePlayer );
 
     // Crea a Heels y a Head
-    std::auto_ptr<RoomBuilder> roomBuilder(new RoomBuilder(itemDataManager));
-    previousPlayer = roomBuilder->buildPlayerItem(this->room, Heels, HeelsBehavior, x, y, z, direction);
-    previousPlayer->assignTakenItem(takenItemData, takenItemImage, takenItemBehaviorId);
-    activePlayer = roomBuilder->buildPlayerItem(this->room, Head, HeadBehavior, x, y, z + LayerHeight, direction);
+    std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( itemDataManager ) );
+    previousPlayer = roomBuilder->buildPlayer( this->room, Heels, HeelsBehavior, x, y, z, direction );
+    previousPlayer->assignTakenItem( takenItemData, takenItemImage, takenItemBehaviorId );
+    activePlayer = roomBuilder->buildPlayer( this->room, Head, HeadBehavior, x, y, z + LayerHeight, direction );
 
-    if(this->lastControlledPlayer == Head)
+    if( this->lastControlledPlayer == Head )
     {
-      std::swap(previousPlayer, activePlayer);
+      std::swap( previousPlayer, activePlayer );
     }
   }
 

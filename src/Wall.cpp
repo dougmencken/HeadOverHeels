@@ -4,7 +4,7 @@
 namespace isomot
 {
 
-Wall::Wall(Axis axis, int index, BITMAP* image) : RoomComponent()
+Wall::Wall(Axis axis, int index, BITMAP* image) : Mediated()
 {
   this->axis = axis;
   this->index = index;
@@ -32,11 +32,11 @@ void Wall::calculateOffset()
   this->offset.second = (this->index + 1) * mediator->getTileSize() - this->image->h - 1 + mediator->getY0();
 }
 
-void Wall::draw(BITMAP* destination)
+void Wall::draw( BITMAP* where )
 {
-  if(this->image)
+  if( this->image )
   {
-    draw_sprite(destination, this->image, this->offset.first, this->offset.second);
+    draw_sprite( where, this->image, this->offset.first, this->offset.second );
   }
 }
 

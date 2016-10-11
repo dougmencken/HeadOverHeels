@@ -242,52 +242,52 @@ void Isomot::updateEndRoom()
   Room* activeRoom = mapManager->getActiveRoom();
 
   // Si aún no se ha preparado la sala final, se hace ahora
-  if(!this->isEndRoom)
+  if( ! this->isEndRoom )
   {
     short player = activeRoom->getMediator()->getActivePlayer()->getLabel();
-    activeRoom->getMediator()->removeItem(activeRoom->getMediator()->getActivePlayer());
+    activeRoom->getMediator()->removeItem( activeRoom->getMediator()->getActivePlayer() );
 
     // Crea (como elemento libre) al jugador que ha llegado en la posición adecuada
-    FreeItem* freeItem = new FreeItem(this->itemDataManager->find(player), 66, 92, Top, South);
-    activeRoom->addComponent(freeItem);
+    FreeItem* freeItem = new FreeItem( this->itemDataManager->find( player ), 66, 92, Top, South );
+    activeRoom->addItem( freeItem );
 
     // Crea las coronas recuperadas
     GameManager* gameManager = GameManager::getInstance();
     int crowns = 0;
 
     // La corona de Safari
-    if(gameManager->isFreePlanet(Safari))
+    if( gameManager->isFreePlanet( Safari ) )
     {
-      freeItem = new FreeItem(this->itemDataManager->find(short(Crown)), 66, 75, Top, NoDirection);
-      activeRoom->addComponent(freeItem);
+      freeItem = new FreeItem( this->itemDataManager->find( short(Crown) ), 66, 75, Top, NoDirection );
+      activeRoom->addItem( freeItem );
       crowns++;
     }
     // La corona de Egyptus
-    if(gameManager->isFreePlanet(Egyptus))
+    if( gameManager->isFreePlanet( Egyptus ) )
     {
-      freeItem = new FreeItem(this->itemDataManager->find(short(Crown)), 66, 59, Top, NoDirection);
-      activeRoom->addComponent(freeItem);
+      freeItem = new FreeItem( this->itemDataManager->find( short(Crown) ), 66, 59, Top, NoDirection );
+      activeRoom->addItem( freeItem );
       crowns++;
     }
     // La corona de Penitentiary
-    if(gameManager->isFreePlanet(Penitentiary))
+    if( gameManager->isFreePlanet( Penitentiary ) )
     {
-      freeItem = new FreeItem(this->itemDataManager->find(short(Crown)), 65, 107, Top, NoDirection);
-      activeRoom->addComponent(freeItem);
+      freeItem = new FreeItem( this->itemDataManager->find( short(Crown) ), 65, 107, Top, NoDirection );
+      activeRoom->addItem( freeItem );
       crowns++;
     }
     // La corona de Byblos
-    if(gameManager->isFreePlanet(Byblos))
+    if( gameManager->isFreePlanet( Byblos ) )
     {
-      freeItem = new FreeItem(this->itemDataManager->find(short(Crown)), 65, 123, Top, NoDirection);
-      activeRoom->addComponent(freeItem);
+      freeItem = new FreeItem( this->itemDataManager->find( short(Crown) ), 65, 123, Top, NoDirection );
+      activeRoom->addItem( freeItem );
       crowns++;
     }
     // La corona de Blacktooth
-    if(gameManager->isFreePlanet(Blacktooth))
+    if( gameManager->isFreePlanet( Blacktooth ) )
     {
-      freeItem = new FreeItem(this->itemDataManager->find(short(Crown)), 65, 91, Top, NoDirection);
-      activeRoom->addComponent(freeItem);
+      freeItem = new FreeItem( this->itemDataManager->find( short(Crown) ), 65, 91, Top, NoDirection );
+      activeRoom->addItem( freeItem );
       crowns++;
     }
 
@@ -308,11 +308,11 @@ void Isomot::updateEndRoom()
   else
   {
     // Se dispara una salva de honor
-    if(activeRoom->getMediator()->findItem(CannonBallLabel) == 0 && activeRoom->getMediator()->findItem(BubblesLabel) == 0)
+    if( activeRoom->getMediator()->findItem( CannonBallLabel ) == 0 && activeRoom->getMediator()->findItem( BubblesLabel ) == 0 )
     {
-      FreeItem* freeItem = new FreeItem(this->itemDataManager->find(CannonBallLabel), 146, 93, LayerHeight, NoDirection);
-      freeItem->assignBehavior(CannonBallBehavior, this->itemDataManager->find(BubblesLabel));
-      activeRoom->addComponent(freeItem);
+      FreeItem* freeItem = new FreeItem( this->itemDataManager->find( CannonBallLabel ), 146, 93, LayerHeight, NoDirection );
+      freeItem->assignBehavior( CannonBallBehavior, this->itemDataManager->find( BubblesLabel ) );
+      activeRoom->addItem( freeItem );
     }
   }
 }

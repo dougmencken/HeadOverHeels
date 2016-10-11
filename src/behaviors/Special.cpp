@@ -152,29 +152,29 @@ bool Special::update()
       break;
 
     case StateDestroy:
-      if(destroyTimer->getValue() > 0.100)
+      if( destroyTimer->getValue() > 0.100 )
       {
         destroy = true;
 
         // Emite el sonido de destrucción
-        this->soundManager->play(item->getLabel(), stateId);
+        this->soundManager->play( item->getLabel(), stateId );
 
         // Los bonus deben desaparecer de las salas una vez se cojan. Al regresar ya no deben estar
-        BonusManager::getInstance()->destroyBonus(item->getMediator()->getRoom()->getIdentifier(), item->getLabel());
+        BonusManager::getInstance()->destroyBonus( item->getMediator()->getRoom()->getIdentifier(), item->getLabel() );
 
         // Ejecuta la acción asociada a la toma del elemento especial
-        takeSpecial(static_cast<PlayerItem*>(sender));
+        takeSpecial( static_cast< PlayerItem* >( sender ) );
 
         // Crea el elemento "burbujas" en la misma posición que el especial y a su misma altura
-        freeItem = new FreeItem(bubblesData,
-                                item->getX(), item->getY(), item->getZ(),
-                                NoDirection);
+        freeItem = new FreeItem( bubblesData,
+                                 item->getX(), item->getY(), item->getZ(),
+                                 NoDirection );
 
-        freeItem->assignBehavior(VolatileTimeBehavior, 0);
-        freeItem->setCollisionDetector(false);
+        freeItem->assignBehavior( VolatileTimeBehavior, 0 );
+        freeItem->setCollisionDetector( false );
 
         // Se añade a la sala actual
-        mediator->getRoom()->addComponent(freeItem);
+        mediator->getRoom()->addItem( freeItem );
       }
       break;
 

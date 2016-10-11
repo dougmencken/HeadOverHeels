@@ -5,8 +5,8 @@
 namespace isomot
 {
 
-FreeItem::FreeItem(ItemData* itemData, int x, int y, int z, const Direction& direction)
-: Item(itemData, z, direction)
+FreeItem::FreeItem( ItemData* itemData, int x, int y, int z, const Direction& direction )
+: Item( itemData, z, direction )
 {
   this->x = x;
   this->y = (y >= 0 ? y : 0);
@@ -30,50 +30,48 @@ FreeItem::FreeItem(ItemData* itemData, int x, int y, int z, const Direction& dir
   }
 }
 
-FreeItem::FreeItem(const FreeItem& freeItem)
-: Item(freeItem),
+FreeItem::FreeItem( const FreeItem& freeItem )
+: Item( freeItem ),
   maskStatus(freeItem.maskStatus),
   transparency(freeItem.transparency),
   collisionDetector(freeItem.collisionDetector),
   dead(freeItem.dead),
   shadyImage(0)
 {
-  if(freeItem.shadyImage != 0)
+  if( freeItem.shadyImage != 0 )
   {
-    this->shadyImage = create_bitmap_ex(32, freeItem.shadyImage->w, freeItem.shadyImage->h);
-    blit(freeItem.shadyImage, this->shadyImage, 0, 0, 0, 0, this->shadyImage->w, this->shadyImage->h);
+    this->shadyImage = create_bitmap_ex( 32, freeItem.shadyImage->w, freeItem.shadyImage->h );
+    blit( freeItem.shadyImage, this->shadyImage, 0, 0, 0, 0, this->shadyImage->w, this->shadyImage->h );
   }
 }
 
 FreeItem::~FreeItem()
 {
-  if(shadyImage != 0)
-  {
-    destroy_bitmap(shadyImage);
-  }
+    if( shadyImage != 0 )
+        destroy_bitmap( shadyImage );
 }
 
-void FreeItem::draw(BITMAP* destination)
+void FreeItem::draw( BITMAP* where )
 {
   // Dibujado del elemento transparente
-  if(this->transparency > 0 && this->transparency < 100)
+  if( this->transparency > 0 && this->transparency < 100 )
   {
-    set_trans_blender(0, 0, 0, int(256 - 2.56 * this->transparency));
-    draw_trans_sprite(destination,
-                      this->processedImage ? this->processedImage : (this->shadyImage ? this->shadyImage : this->image),
-                      mediator->getX0() + this->offset.first,
-                      mediator->getY0() + this->offset.second);
+    set_trans_blender( 0, 0, 0, int( 256 - 2.56 * this->transparency ) );
+    draw_trans_sprite( where,
+                       this->processedImage ? this->processedImage : ( this->shadyImage ? this->shadyImage : this->image ),
+                       mediator->getX0 () + this->offset.first,
+                       mediator->getY0 () + this->offset.second );
   }
   else
   {
-    draw_sprite(destination,
-                this->processedImage ? this->processedImage : (this->shadyImage ? this->shadyImage : this->image),
-                mediator->getX0() + this->offset.first,
-                mediator->getY0() + this->offset.second);
+    draw_sprite( where,
+                 this->processedImage ? this->processedImage : ( this->shadyImage ? this->shadyImage : this->image ),
+                 mediator->getX0 () + this->offset.first,
+                 mediator->getY0 () + this->offset.second );
   }
 }
 
-void FreeItem::changeImage(BITMAP* image)
+void FreeItem::changeImage( BITMAP* image )
 {
   // Si el elemento no tiene ninguna imagen entonces simplemente se asigna. Se entiende que este
   // caso sucede únicamente durante la creación del elemento

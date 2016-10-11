@@ -4,7 +4,8 @@
 #include <utility>
 #include <allegro.h>
 #include "Ism.hpp"
-#include "RoomComponent.hpp"
+#include "Drawable.hpp"
+#include "Mediated.hpp"
 
 namespace isomot
 {
@@ -12,7 +13,7 @@ namespace isomot
 /**
  * Un segmento de una pared de la sala
  */
-class Wall : public RoomComponent
+class Wall : public Drawable, public Mediated
 {
 public:
 
@@ -23,7 +24,7 @@ public:
 	 *              más cerca estará del origen de coordenadas
 	 * @param image Imagen del segmento de la pared
 	 */
-	Wall(Axis axis, int index, BITMAP* image);
+	Wall( Axis axis, int index, BITMAP* image );
 
 	virtual ~Wall();
 
@@ -34,9 +35,8 @@ public:
 
 	/**
 	 * Dibuja el segmento de la pared
-	 * @param destination Imagen donde se realizará el dibujo
 	 */
-	void draw(BITMAP* destination);
+	void draw( BITMAP* where );
 
 private:
 

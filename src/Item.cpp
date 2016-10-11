@@ -7,7 +7,7 @@
 namespace isomot
 {
 
-Item::Item(ItemData* itemData, int z, const Direction& direction) : RoomComponent()
+Item::Item( ItemData* itemData, int z, const Direction& direction ) : Mediated()
 {
   this->id = 0;
   this->label = itemData->label;
@@ -23,15 +23,15 @@ Item::Item(ItemData* itemData, int z, const Direction& direction) : RoomComponen
   this->offset.first = this->offset.second = 0;
   this->behavior = 0;
 
-  // // Si el elemento tiene más de un fotograma por dirección entonces tiene animación
-  if((itemData->motion.size() - itemData->extraFrames) / itemData->directionFrames > 1)
+  // Si el elemento tiene más de un fotograma por dirección entonces tiene animación
+  if( ( itemData->motion.size() - itemData->extraFrames ) / itemData->directionFrames > 1 )
   {
     motionTimer.start();
   }
 }
 
-Item::Item(const Item& item)
-: RoomComponent(item),
+Item::Item( const Item& item )
+: Mediated( item ),
   id(item.id),
   label(item.label),
   x(item.x),
@@ -49,10 +49,10 @@ Item::Item(const Item& item)
   motionTimer(item.motionTimer),
   behavior(0)
 {
-  if(item.processedImage != 0)
+  if( item.processedImage != 0 )
   {
-    this->processedImage = create_bitmap_ex(32, item.processedImage->w, item.processedImage->h);
-    blit(item.processedImage, this->processedImage, 0, 0, 0, 0, this->processedImage->w, this->processedImage->h);
+    this->processedImage = create_bitmap_ex( 32, item.processedImage->w, item.processedImage->h );
+    blit( item.processedImage, this->processedImage, 0, 0, 0, 0, this->processedImage->w, this->processedImage->h );
   }
 }
 
@@ -67,11 +67,6 @@ Item::~Item()
   {
     destroy_bitmap(this->processedImage);
   }
-}
-
-void Item::draw(BITMAP* destination)
-{
-
 }
 
 bool Item::update()

@@ -445,17 +445,17 @@ void UserControlled::wayOutTeletransport(PlayerItem* playerItem)
   }
 }
 
-void UserControlled::destroy(PlayerItem* playerItem)
+void UserControlled::destroy( PlayerItem* playerItem )
 {
-  switch(stateId)
+  switch( stateId )
   {
     // El jugador ha sido destruido por un enemigo
     case StateStartDestroy:
       // La destrucción se ejecuta siempre y cuando no tenga inmunidad
-      if(playerItem->getShieldTime() == 0)
+      if( playerItem->getShieldTime() == 0 )
       {
         // Cambia a las burbujas pero conservando la etiqueta del jugador
-        playerItem->changeItemData(itemDataManager->find(transitionDataLabel), NoDirection);
+        playerItem->changeItemData( itemDataManager->find( transitionDataLabel ), NoDirection );
         // Inicia la destrucción
         stateId = StateDestroy;
       }
@@ -468,9 +468,9 @@ void UserControlled::destroy(PlayerItem* playerItem)
 
     case StateDestroy:
       // Anima el elemento. Si ha llegado al final la sala se reinicia
-      if(playerItem->animate())
+      if( playerItem->animate() )
       {
-        playerItem->setExit(Restart);
+        playerItem->setExit( Restart );
         playerItem->loseLife();
       }
       break;
@@ -480,42 +480,42 @@ void UserControlled::destroy(PlayerItem* playerItem)
   }
 }
 
-void UserControlled::shot(PlayerItem* playerItem)
+void UserControlled::shot( PlayerItem* playerItem )
 {
   // El jugador puede disparar si tiene la bocina y rosquillas
-  if(playerItem->hasTool(Horn) && playerItem->getAmmo() > 0)
+  if( playerItem->hasTool( Horn ) && playerItem->getAmmo() > 0 )
   {
     this->shotPresent = true;
 
     // Se buscan los datos del elemento empleado como disparo
-    ItemData* shotData = this->itemDataManager->find(shotDataLabel);
+    ItemData* shotData = this->itemDataManager->find( shotDataLabel );
 
-    if(shotData != 0)
+    if( shotData != 0 )
     {
       // Detiene el sonido del disparo
-      this->soundManager->stop(playerItem->getLabel(), StateShot);
+      this->soundManager->stop( playerItem->getLabel(), StateShot );
 
       // Crea el elemento en la misma posición que el jugador y a su misma altura
       int z = playerItem->getZ() + playerItem->getHeight() - shotData->height;
-      FreeItem* freeItem = new FreeItem(shotData,
-                                        playerItem->getX(), playerItem->getY(),
-                                        z < 0 ? 0 : z,
-                                        playerItem->getDirection());
+      FreeItem* freeItem = new FreeItem( shotData,
+                                         playerItem->getX(), playerItem->getY(),
+                                         z < 0 ? 0 : z,
+                                         playerItem->getDirection() );
 
-      freeItem->assignBehavior(ShotBehavior, 0);
-      dynamic_cast<Shot*>(freeItem->getBehavior())->setPlayerItem(playerItem);
+      freeItem->assignBehavior( ShotBehavior, 0 );
+      dynamic_cast< Shot* >( freeItem->getBehavior() )->setPlayerItem( playerItem );
 
       // En un primer momento no detecta colisiones ya que parte de la misma posición del jugador
-      freeItem->setCollisionDetector(false);
+      freeItem->setCollisionDetector( false );
 
       // Se añade a la sala actual
-      playerItem->getMediator()->getRoom()->addComponent(freeItem);
+      playerItem->getMediator()->getRoom()->addItem( freeItem );
 
       // Se gasta una rosquillas
       playerItem->consumeAmmo();
 
       // Emite el sonido del disparo
-      this->soundManager->play(playerItem->getLabel(), StateShot);
+      this->soundManager->play( playerItem->getLabel(), StateShot );
     }
   }
 }
@@ -576,25 +576,25 @@ void UserControlled::take(PlayerItem* playerItem)
   }
 }
 
-void UserControlled::drop(PlayerItem* playerItem)
+void UserControlled::drop( PlayerItem* playerItem )
 {
   // El jugador debe haber cogido algún elemento
-  if(takenItemData != 0)
+  if( takenItemData != 0 )
   {
     // El elemento se deja justo debajo. Si el jugador no puede ascender no es posible dejarlo
-    if(playerItem->addZ(LayerHeight))
+    if( playerItem->addZ( LayerHeight ) )
     {
       // Crea el elemento en la misma posición pero debajo del jugador
-      FreeItem* freeItem = new FreeItem(takenItemData,
-                                        playerItem->getX(), playerItem->getY(),
-                                        playerItem->getZ() - LayerHeight,
-                                        NoDirection);
+      FreeItem* freeItem = new FreeItem( takenItemData,
+                                         playerItem->getX(), playerItem->getY(),
+                                         playerItem->getZ() - LayerHeight,
+                                         NoDirection );
 
       // Sólo pueden cogerse los elementos portátiles o el trampolín
-      freeItem->assignBehavior(takenItemBehaviorId, 0);
+      freeItem->assignBehavior( takenItemBehaviorId, 0 );
 
       // Se añade a la sala actual
-      playerItem->getMediator()->getRoom()->addComponent(freeItem);
+      playerItem->getMediator()->getRoom()->addItem( freeItem );
 
       // El jugador ya no tiene el elemento
       takenItemData = 0;
@@ -602,23 +602,23 @@ void UserControlled::drop(PlayerItem* playerItem)
       takenItemBehaviorId = NoBehavior;
 
       // Se actualiza el estado para que salte o se detenga
-      stateId = (stateId == StateDropAndJump ? StateJump : StateWait);
+      stateId = ( stateId == StateDropAndJump ? StateJump : StateWait );
 
       // Comunica al gestor del juego que el bolso está vacío
-      GameManager::getInstance()->setItemTaken(takenItemImage);
+      GameManager::getInstance()->setItemTaken( takenItemImage );
       // Emite el sonido correspondiente
-      this->soundManager->stop(playerItem->getLabel(), StateFall);
-      this->soundManager->play(playerItem->getLabel(), StateDropItem);
+      this->soundManager->stop( playerItem->getLabel(), StateFall );
+      this->soundManager->play( playerItem->getLabel(), StateDropItem );
     }
     else
     {
       // Se emite sonido de error
-      this->soundManager->play(playerItem->getLabel(), StateError);
+      this->soundManager->play( playerItem->getLabel(), StateError );
     }
   }
 
   // Estado inicial si no se ha dejado ningún elemento
-  if(stateId != StateJump)
+  if( stateId != StateJump )
   {
     stateId = StateWait;
   }

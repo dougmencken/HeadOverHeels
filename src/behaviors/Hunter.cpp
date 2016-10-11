@@ -399,33 +399,33 @@ StateId Hunter::calculateDirection8(const StateId& stateId)
 
 bool Hunter::createFullBody()
 {
-  FreeItem* freeItem = dynamic_cast<FreeItem*>(this->item);
+  FreeItem* freeItem = dynamic_cast< FreeItem* >( this->item );
   bool created = false;
 
-  if(freeItem->getLabel() == ImperialGuardHeadLabel && freeItem->checkPosition(0, 0, -LayerHeight, Add))
+  if( freeItem->getLabel() == ImperialGuardHeadLabel && freeItem->checkPosition( 0, 0, -LayerHeight, Add ) )
   {
     created = true;
 
     // Crea el elemento en la misma posición que el jugador y a su misma altura
-    FreeItem* newItem = new FreeItem(guardData,
-                                     freeItem->getX(), freeItem->getY(), freeItem->getZ() - LayerHeight,
-                                     freeItem->getDirection());
+    FreeItem* newItem = new FreeItem( guardData,
+                                      freeItem->getX(), freeItem->getY(), freeItem->getZ() - LayerHeight,
+                                      freeItem->getDirection() );
 
-    newItem->assignBehavior(Hunter4Behavior, 0);
+    newItem->assignBehavior( Hunter4Behavior, 0 );
 
     // El elemento actual debe dejar de detectar colisiones porque,
     // de lo contrariom no se podrá crear el guarda completo
     freeItem->setCollisionDetector(false);
     // Se añade a la sala actual
-    freeItem->getMediator()->getRoom()->addComponent(newItem);
+    freeItem->getMediator()->getRoom()->addItem( newItem );
   }
 
   return created;
 }
 
-void Hunter::setExtraData(void* data)
+void Hunter::setExtraData( void* data )
 {
-  this->guardData = reinterpret_cast<ItemData*>(data);
+  this->guardData = reinterpret_cast< ItemData* >( data );
 }
 
 }

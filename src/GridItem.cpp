@@ -29,25 +29,25 @@ GridItem::~GridItem()
 
 }
 
-void GridItem::draw(BITMAP* destination)
+void GridItem::draw( BITMAP* where )
 {
   // El elemento está sombreado
-  if(this->processedImage)
+  if( this->processedImage )
   {
-    draw_sprite(destination, this->processedImage, mediator->getX0() + this->offset.first, mediator->getY0() + this->offset.second);
+    draw_sprite( where, this->processedImage, mediator->getX0() + this->offset.first, mediator->getY0() + this->offset.second );
   }
   // El elemento no tiene sombra
-  else if(this->image)
+  else if( this->image )
   {
-    draw_sprite(destination, this->image, mediator->getX0() + this->offset.first, mediator->getY0() + this->offset.second);
+    draw_sprite( where, this->image, mediator->getX0() + this->offset.first, mediator->getY0() + this->offset.second );
   }
 }
 
-void GridItem::changeImage(BITMAP* image)
+void GridItem::changeImage( BITMAP* image )
 {
   // Si el elemento no tiene ninguna imagen entonces simplemente se asigna. Se entiende que este
   // caso sucede únicamente durante la creación del elemento
-  if(this->image == 0)
+  if( this->image == 0 )
   {
     // Asignación de la imagen
     this->image = image;
@@ -56,30 +56,30 @@ void GridItem::changeImage(BITMAP* image)
   else
   {
     // Copia el elemento antes de realizar el cambio
-    GridItem oldGridItem(*this);
+    GridItem oldGridItem( *this );
 
     // Cambio de imagen
     this->image = image;
 
     // Si el elemento tiene una imagen procesada entonces hay que volver a crearla
-    if(this->processedImage)
+    if( this->processedImage )
     {
-      destroy_bitmap(this->processedImage);
+      destroy_bitmap( this->processedImage );
       this->processedImage = 0;
     }
 
     // Hay que calcular el nuevo desplazamiento de la imagen a no ser que sea nula
-    if(this->image)
+    if( this->image )
     {
       // Si las sombras están activas el elemento debe sombrearse
-      if(mediator->getShadingScale() < 256)
+      if( mediator->getShadingScale() < 256 )
       {
         this->shadeStatus = ItIsShady;
       }
 
       // A cuántos píxeles está la imagen del punto origen de la sala
-      this->offset.first = ((mediator->getTileSize() * (this->cell.first - this->cell.second)) << 1) - (image->w >> 1) + 1;
-      this->offset.second = mediator->getTileSize() * (this->cell.first + this->cell.second + 2) - image->h - this->z - 1;
+      this->offset.first = ( ( mediator->getTileSize() * ( this->cell.first - this->cell.second ) ) << 1 ) - ( image->w >> 1 ) + 1;
+      this->offset.second = mediator->getTileSize() * ( this->cell.first + this->cell.second + 2 ) - image->h - this->z - 1;
     }
     else
     {
@@ -87,14 +87,14 @@ void GridItem::changeImage(BITMAP* image)
     }
 
     // Se marcan para enmascar los elementos libres afectados por la antigua imagen
-    if(oldGridItem.getImage())
+    if( oldGridItem.getImage() )
     {
-      mediator->markItemsForMasking(&oldGridItem);
+      mediator->markItemsForMasking( &oldGridItem );
     }
     // Se marcan para enmascar los elementos libres afectados por la nueva imagen
     if(this->image)
     {
-      mediator->markItemsForMasking(this);
+      mediator->markItemsForMasking( this );
     }
   }
 }

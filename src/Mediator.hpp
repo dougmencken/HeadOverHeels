@@ -39,7 +39,7 @@ namespace isomot
 {
 
 // Declaraciones adelantadas
-class RoomComponent;
+class Mediated;
 class Item;
 class Room;
 class FloorTile;
