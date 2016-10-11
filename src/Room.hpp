@@ -55,7 +55,7 @@ public:
    * Constructor. Los parámetros especificados definen las dimensiones de la sala
    * @param identifier Identificador textual de la sala. Se hace coincidir con el nombre de su archivo
    * @param scenery Identificador textual del escenario al que pertenece la sala: jail, blacktooth,
-   * marketplace, moonbase, egyptus, penitentiary, safary o byblos
+   * marketplace, themoon, egyptus, penitentiary, safary o byblos
    * @param xTiles Número de losetas en el eje X
    * @param yTiles Número de losetas en el eje Y
    * @param tileSize Longitud del lado de una loseta en unidades isométricas
@@ -231,7 +231,7 @@ private:
 
   /**
    * Identificador textual del escenario al que pertenece la sala: jail, blacktooth, marketplace,
-   * moonbase, egyptus, penitentiary, safary o byblos
+   * themoon, egyptus, penitentiary, safary o byblos
    */
   std::string scenery;
 
@@ -353,7 +353,7 @@ public: // Operaciones de consulta y actualización
 
   /**
    * Identificador textual del escenario al que pertenece la sala
-   * @return jail, blacktooth, marketplace, moonbase, egyptus, penitentiary, safary o byblos
+   * @return jail, blacktooth, marketplace, themoon, egyptus, penitentiary, safary o byblos
    */
   std::string getScenery() const { return this->scenery; }
 

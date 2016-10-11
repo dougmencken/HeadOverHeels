@@ -108,9 +108,9 @@ GuiManager::GuiManager()
   bitmap = load_png( ( path + "gfx/gui.png/market-frame.png" ).c_str (), 0 );
   assert(bitmap);
   images[ "market-frame" ] = bitmap;
-  bitmap = load_png( ( path + "gfx/gui.png/moonbase-frame.png" ).c_str (), 0 );
+  bitmap = load_png( ( path + "gfx/gui.png/themoon-frame.png" ).c_str (), 0 );
   assert(bitmap);
-  images[ "moonbase-frame" ] = bitmap;
+  images[ "themoon-frame" ] = bitmap;
   bitmap = load_png( ( path + "gfx/gui.png/egyptus-frame.png" ).c_str (), 0 );
   assert(bitmap);
   images[ "egyptus-frame" ] = bitmap;

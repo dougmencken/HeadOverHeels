@@ -36,14 +36,14 @@ AC_OUTPUT( \
             gamedata/gfx/item.png/Makefile \
             gamedata/gfx/jail.png/Makefile \
             gamedata/gfx/market.png/Makefile \
-            gamedata/gfx/moonbase.png/Makefile \
+            gamedata/gfx/themoon.png/Makefile \
             gamedata/gfx/penitentiary.png/Makefile \
             gamedata/gfx/safari.png/Makefile \
             gamedata/map/Makefile \
             gamedata/map/blacktooth/Makefile \
             gamedata/map/byblos/Makefile \
             gamedata/map/egyptus/Makefile \
-            gamedata/map/moonbase/Makefile \
+            gamedata/map/themoon/Makefile \
             gamedata/map/penitentiary/Makefile \
             gamedata/map/safari/Makefile \
             gamedata/music/Makefile \

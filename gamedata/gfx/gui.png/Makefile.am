@@ -22,7 +22,7 @@ gamedatagfxgui_DATA = background.png \
 		      horn.png \
 		      jail-frame.png \
 		      market-frame.png \
-		      moonbase-frame.png \
+		      themoon-frame.png \
 		      option.png \
 		      penitentiary.png \
 		      penitentiary-frame.png \
