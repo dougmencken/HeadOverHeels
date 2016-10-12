@@ -3,6 +3,8 @@
 #include "PlayerItem.hpp"
 #include "Ism.hpp"
 
+# include "RoomBuilder.hpp"
+
 namespace isomot
 {
 
@@ -11,22 +13,20 @@ Camera::Camera(Room* room)
   reference(std::pair<int, int>(0, 0)),
   delta(std::pair<int, int>(0, 0))
 {
-
 }
 
 Camera::~Camera()
 {
-
 }
 
-void Camera::turnOn(PlayerItem* player, const Direction& entry)
+void Camera::turnOn( PlayerItem* player, const Direction& entry )
 {
-  if(delta.first == 0 && delta.second == 0 && player != 0 && (room->getTilesX() > 10 || room->getTilesY() > 10))
+  if( delta.first == 0 && delta.second == 0 && player != 0 && ( room->getTilesX() > 10 || room->getTilesY() > 10 ) )
   {
     // Sala doble a lo largo del eje Y
-    if(room->getTilesX() <= 10 && room->getTilesY() > 10)
+    if( room->getTilesX() <= 10 && room->getTilesY() > 10 )
     {
-      if(abs(player->getY()) < room->getTilesY() * room->getTileSize() / 2)
+      if( abs( player->getY() ) < room->getTilesY() * room->getTileSize() / 2 )
       {
         delta.first = room->getDestination()->w - ScreenWidth;
         delta.second = 0;
@@ -38,38 +38,44 @@ void Camera::turnOn(PlayerItem* player, const Direction& entry)
       }
     }
     // Sala doble a lo largo del eje X
-    else if(room->getTilesX() > 10 && room->getTilesY() <= 10)
+    else if( room->getTilesX() > 10 && room->getTilesY() <= 10 )
     {
-      if(abs(player->getX()) < room->getTilesX() * room->getTileSize() / 2)
+      if( abs( player->getX() ) < room->getTilesX() * room->getTileSize() / 2 )
       {
         delta.first = 0;
         delta.second = 0;
       }
       else
       {
-        delta.first = room->getDestination()->w - ScreenWidth;
-        delta.second = room->getDestination()->h - ScreenHeight;
+        delta.first = room->getDestination ()->w - ScreenWidth;
+        delta.second = room->getDestination ()->h - ScreenHeight;
       }
     }
     // Sala triple
     else
     {
-      //delta.first = room->getX0() - (ScreenWidth >> 1) + 0 * room->getTileSize() * 2; // X - Y
-      //delta.second = 0 * room->getTileSize(); // X + Y
-
       // Posición inicial
-      TripleRoomStartPoint* startPoint = room->findTripleRoomStartPoint(entry);
-      assert(startPoint != 0);
-      delta.first = startPoint->getX();
-      delta.second = startPoint->getY();
+      TripleRoomStartPoint* startPoint = room->findTripleRoomStartPoint( entry );
+      if( startPoint != 0 )
+      {
+          delta.first = startPoint->getX();
+          delta.second = startPoint->getY();
+      }
+      else
+      { // exempli gratia on restore of a game which was saved in triple room
+          int midX = RoomBuilder::getXCenterOfRoom( player->getItemData(), room );
+          int midY = RoomBuilder::getYCenterOfRoom( player->getItemData(), room );
+          delta.first = midX + ( 12 * room->getTileSize() );
+          delta.second = midY + ( 6 * room->getTileSize() );
+      }
     }
 
-    reference.first = player->getX();
-    reference.second = player->getY();
+    reference.first = player->getX ();
+    reference.second = player->getY ();
   }
 }
 
-bool Camera::center(PlayerItem* player)
+bool Camera::center( PlayerItem* player )
 {
   // Indica si la cámara se ha desplazado
   bool changed = false;

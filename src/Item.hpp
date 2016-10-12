@@ -316,6 +316,8 @@ public: // Operaciones de consulta y actualización
    */
   bool isMortal() const;
 
+  ItemData* getItemData() const {  return this->itemData;  }
+
   /**
    * Cuántos fotogramas diferentes tiene el elemento para cada una de las direcciones posibles:
    * norte, sur, este y oeste

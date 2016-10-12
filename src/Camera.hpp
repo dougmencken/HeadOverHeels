@@ -40,66 +40,72 @@ class PlayerItem;
  */
 class Camera
 {
+
 public:
 
-  /**
-   * Constructor
-   * @param La sala objetivo de la cámara
-   */
-	Camera(Room* room);
+        /**
+         * Constructor
+         * @param La sala objetivo de la cámara
+         */
+        Camera( Room* room );
 
-	virtual ~Camera();
+        virtual ~Camera();
 
-	/**
-   * Centra la sala en pantalla y establece el punto de referencia. Una vez se ha
-   * asignado dicho punto debe usarse la operación "center" para centrar la sala,
-   * pues "turnOn" ya no tendrá efecto
-   * @param player El jugador activo
-   * @param entry Vía de entrada a la sala
-   */
-	void turnOn(PlayerItem* player, const Direction& entry);
+        /**
+        * Centra la sala en pantalla y establece el punto de referencia. Una vez se ha
+        * asignado dicho punto debe usarse la operación "center" para centrar la sala,
+        * pues "turnOn" ya no tendrá efecto
+        * @param player El jugador activo
+        * @param entry Vía de entrada a la sala
+        */
+        void turnOn( PlayerItem* player, const Direction& entry );
 
-	/**
-	 * Centra la sala en pantalla
-	 * @param player El jugador activo
-	 * @return true si se ha producido variación respecto al desplazamiento previo,
-	 * o false en caso contrario
-	 */
-	bool center(PlayerItem* player);
+        /**
+         * Centra la sala en pantalla
+         * @param player El jugador activo
+         * @return true si se ha producido variación respecto al desplazamiento previo,
+         * o false en caso contrario
+         */
+        bool center( PlayerItem* player );
 
 private:
 
-  /**
-   * La sala objetivo de la cámara
-   */
-  Room* room;
+        /**
+         * La sala objetivo de la cámara
+         */
+        Room* room;
 
-  /**
-   * Punto de referencia a partir del cual se realizará el desplazamiento de la cámara
-   * Coincide con las coordenadas X e Y del jugador activo
-   */
-  std::pair<int, int> reference;
+        /**
+         * Punto de referencia a partir del cual se realizará el desplazamiento de la cámara
+         * Coincide con las coordenadas X e Y del jugador activo
+         */
+        std::pair< int, int > reference;
 
-  /**
-   * Desplazamiento de pantalla a realizar en el eje X e Y, respectivamente, para centrar la sala
-   */
-  std::pair<int, int> delta;
+        /**
+         * Desplazamiento de pantalla a realizar en el eje X e Y, respectivamente, para centrar la sala
+         */
+        std::pair< int, int > delta;
 
 public: // Operaciones de consulta y actualización
 
-  /**
-   * Desplazamiento de pantalla a realizar en el eje X para centrar la sala
-   * @return Un número positivo indica que la sala se desplazará a la derecha, mientras que un
-   * número negativo desplazará la sala a la izquierda
-   */
-  int getDeltaX() const { return delta.first; }
+        /**
+         * Desplazamiento de pantalla a realizar en el eje X para centrar la sala
+         * @return Un número positivo indica que la sala se desplazará a la derecha, mientras que un
+         * número negativo desplazará la sala a la izquierda
+         */
+        int getDeltaX() const {  return delta.first;  }
 
-  /**
-   * Desplazamiento de pantalla a realizar en el eje Y para centrar la sala
-   * @return Un número positivo indica que la sala se desplazará hacia abajo, mientras que un
-   * número negativo desplazará la sala hacia arriba
-   */
-  int getDeltaY() const { return delta.second; }
+        /**
+         * Desplazamiento de pantalla a realizar en el eje Y para centrar la sala
+         * @return Un número positivo indica que la sala se desplazará hacia abajo, mientras que un
+         * número negativo desplazará la sala hacia arriba
+         */
+        int getDeltaY() const {  return delta.second;  }
+
+        void setDeltaX( int delta ) {  this->delta.first = delta;  }
+
+        void setDeltaY( int delta ) {  this->delta.second = delta;  }
+
 };
 
 }
