@@ -12,13 +12,13 @@
       <file>sound/sink.wav</file>
     </state>
   </item>
-  
+
   <!-- Vulcano -->
-  
+
   <!-- Spikes -->
-  
+
   <!-- Toaster -->
-  
+
   <!-- Conveyor belt -->
   <item label="5">
     <state id="active">
@@ -28,7 +28,7 @@
       <file>sound/destruction.wav</file>
     </state>
   </item>
-  
+
   <!-- Book -->
   <item label="6">
     <state id="fall">
@@ -44,7 +44,7 @@
       <file>sound/destruction.wav</file>
     </state>
   </item>
-  
+
   <!-- Stool -->
   <item label="7">
     <state id="fall">
@@ -57,14 +57,14 @@
       <file>sound/push.wav</file>
     </state>
   </item>
-  
+
   <!-- Puppy -->
   <item label="8">
     <state id="destroy">
       <file>sound/silence-puppy.wav</file>
     </state>
   </item>
-  
+
   <!-- Sandwich -->
   <item label="9">
     <state id="fall">
@@ -74,14 +74,14 @@
       <file>sound/push.wav</file>
     </state>
   </item>
-  
+
   <!-- Switch -->
   <item label="10">
     <state id="switch">
       <file>sound/switch.wav</file>
     </state>
   </item>
-  
+
   <!-- Brick #2 -->
   <item label="11">
     <state id="destroy">
@@ -91,21 +91,21 @@
       <file>sound/sink.wav</file>
     </state>
   </item>
-  
+
   <!-- Bars N-S -->
   <item label="12">
     <state id="destroy">
       <file>sound/destruction.wav</file>
     </state>
   </item>
-  
+
   <!-- Bars E-W -->
   <item label="80">
     <state id="destroy">
       <file>sound/destruction.wav</file>
     </state>
   </item>
-  
+
   <!-- Drum -->
   <item label="13">
     <state id="fall">
@@ -115,7 +115,7 @@
       <file>sound/push.wav</file>
     </state>
   </item>
-  
+
   <!-- Portable brick -->
   <item label="14">
     <state id="fall">
@@ -125,51 +125,51 @@
       <file>sound/push.wav</file>
     </state>
   </item>
-  
+
   <!-- Donuts -->
   <item label="15">
     <state id="destroy">
       <file>sound/tools.wav</file>
     </state>
   </item>
-  
+
   <!-- Rabbit (extra life) -->
   <item label="16">
     <state id="destroy">
       <file>sound/bonus.wav</file>
     </state>
   </item>
-  
+
   <!-- Rabbit (high jump) -->
   <item label="17">
     <state id="destroy">
       <file>sound/bonus.wav</file>
     </state>
   </item>
-  
+
   <!-- Rabbit (high speed) -->
   <item label="18">
     <state id="destroy">
       <file>sound/bonus.wav</file>
     </state>
   </item>
-  
+
   <!-- Rabbit (shield) -->
   <item label="19">
     <state id="destroy">
       <file>sound/bonus.wav</file>
     </state>
   </item>
-  
+
   <!-- Crown -->
-  
+
   <!-- Bomb -->
   <item label="21">
     <state id="move">
       <file>sound/adjust.wav</file>
     </state>
   </item>
-  
+
   <!-- Portable brick #2 -->
   <item label="22">
     <state id="fall">
@@ -179,7 +179,7 @@
       <file>sound/push.wav</file>
     </state>
   </item>
-  
+
   <!-- Ball -->
   <item label="23">
     <state id="fall">
@@ -189,38 +189,38 @@
       <file>sound/push.wav</file>
     </state>
   </item>
-  
+
   <!-- Remote control -->
-  
+
   <!-- Brick cylinder -->
-  
+
   <!-- Horn -->
   <item label="26">
     <state id="destroy">
       <file>sound/tools.wav</file>
     </state>
   </item>
-  
+
   <!-- Imperial guard head -->
-  
+
   <!-- Elephant head -->
-  
+
   <!-- Monkey head -->
-  
+
   <!-- Handbag -->
   <item label="30">
     <state id="destroy">
       <file>sound/tools.wav</file>
     </state>
   </item>
-  
+
   <!-- Elevator -->
   <item label="31">
     <state id="move">
       <file>sound/blades.wav</file>
     </state>
   </item>
-  
+
   <!-- Helicopter bug -->
   <item label="32">
     <state id="wait">
@@ -230,14 +230,14 @@
       <file>sound/blades.wav</file>
     </state>
   </item>
-  
+
   <!-- Reincarnation Fish -->
   <item label="33">
     <state id="destroy">
       <file>sound/bonus.wav</file>
     </state>
   </item>
-  
+
   <!-- Siren -->
   <item label="34">
     <state id="fall">
@@ -250,21 +250,21 @@
       <file>sound/siren.wav</file>
     </state>
   </item>
-  
+
   <!-- Teleport -->
   <item label="35">
     <state id="active">
       <file>sound/teleport.wav</file>
     </state>
   </item>
-  
+
   <!-- Teleport2 -->
   <item label="83">
     <state id="active">
       <file>sound/teleport.wav</file>
     </state>
   </item>
-  
+
   <!-- Turtle -->
   <item label="36">
     <state id="fall">
@@ -277,7 +277,7 @@
       <file>sound/gamusino.wav</file>
     </state>
   </item>
-  
+
   <!-- Trampoline -->
   <item label="37">
     <state id="fall">
@@ -290,15 +290,15 @@
       <file>sound/spring.wav</file>
     </state>
   </item>
-  
+
   <!-- Bubbles -->
-  
+
   <!-- Double Bubbles -->
-  
+
   <!-- Mortal cap 39 -->
-  
+
   <!-- Cap 81 -->
-  
+
   <!-- Big head robot -->
   <item label="40">
     <state id="fall">
@@ -311,7 +311,7 @@
       <file>sound/bighead-robot.wav</file>
     </state>
   </item>
-  
+
   <!-- Elephant -->
   <item label="41">
     <state id="fall">
@@ -324,7 +324,7 @@
       <file>sound/elephant.wav</file>
     </state>
   </item>
-  
+
   <!-- Monkey -->
   <item label="42">
     <state id="fall">
@@ -337,7 +337,7 @@
       <file>sound/monkey.wav</file>
     </state>
   </item>
-  
+
   <!-- Diver -->
   <item label="43">
     <state id="fall">
@@ -350,7 +350,7 @@
       <file>sound/robot-collision.wav</file>
     </state>
   </item>
-  
+
   <!-- Bubble robot -->
   <item label="44">
     <state id="fall">
@@ -363,14 +363,14 @@
       <file>sound/bubbles-bug.wav</file>
     </state>
   </item>
-  
+
   <!-- Imperial guard -->
   <item label="45">
     <state id="wait">
       <file>sound/imperial-guard.wav</file>
     </state>
   </item>
-  
+
   <!-- Charles -->
   <item label="46">
     <state id="fall">
@@ -383,9 +383,9 @@
       <file>sound/robot.wav</file>
     </state>
   </item>
-  
+
   <!-- Dead Fish -->
-  
+
   <!-- Head -->
   <item label="52">
     <state id="move">
@@ -413,7 +413,7 @@
       <file>sound/teleport-out.wav</file>
     </state>
   </item>
-  
+
   <!-- Heels -->
   <item label="53">
     <state id="move">
@@ -447,7 +447,7 @@
       <file>sound/error.wav</file>
     </state>
   </item>
-  
+
   <!-- Head over Heels -->
   <item label="55">
     <state id="move">
@@ -484,7 +484,7 @@
       <file>sound/error.wav</file>
     </state>
   </item>
-  
+
   <!-- Throne guard 66 -->
 
 </sounds>
