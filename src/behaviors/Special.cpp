@@ -185,75 +185,79 @@ bool Special::update()
   return destroy;
 }
 
-bool Special::checkDestruction(Item* sender)
+bool Special::checkDestruction( Item* sender )
 {
-  short playerId = sender->getLabel();
-  short magicItemId = this->item->getLabel();
+        short playerId = sender->getLabel();
+        short magicItemId = this->item->getLabel();
 
-  return (playerId == Head         && (magicItemId == Donuts ||
-                                       magicItemId == ExtraLife ||
-                                       magicItemId == HighSpeed ||
-                                       magicItemId == Shield ||
-                                       magicItemId == Crown ||
-                                       magicItemId == Horn ||
-                                       magicItemId == ReincarnationFish)) ||
-         (playerId == Heels        && (magicItemId == ExtraLife ||
-                                       magicItemId == HighJump ||
-                                       magicItemId == Shield ||
-                                       magicItemId == Crown ||
-                                       magicItemId == Handbag ||
-                                       magicItemId == ReincarnationFish)) ||
-         (playerId == HeadAndHeels && (magicItemId == Donuts ||
-                                       magicItemId == ExtraLife ||
-                                       magicItemId == Shield ||
-                                       magicItemId == Crown ||
-                                       magicItemId == Horn ||
-                                       magicItemId == Handbag ||
-                                       magicItemId == ReincarnationFish));
+        return  ( playerId == Head      &&  ( magicItemId == Donuts ||
+                                                magicItemId == ExtraLife ||
+                                                magicItemId == HighSpeed ||
+                                                magicItemId == Shield ||
+                                                magicItemId == Crown ||
+                                                magicItemId == Horn ||
+                                                magicItemId == ReincarnationFish ) )
+                ||
+
+                ( playerId == Heels     &&  ( magicItemId == ExtraLife ||
+                                                magicItemId == HighJump ||
+                                                magicItemId == Shield ||
+                                                magicItemId == Crown ||
+                                                magicItemId == Handbag ||
+                                                magicItemId == ReincarnationFish ) )
+                ||
+
+                ( playerId == HeadAndHeels  &&  ( magicItemId == Donuts ||
+                                                magicItemId == ExtraLife ||
+                                                magicItemId == Shield ||
+                                                magicItemId == Crown ||
+                                                magicItemId == Horn ||
+                                                magicItemId == Handbag ||
+                                                magicItemId == ReincarnationFish ) ) ;
 }
 
-void Special::takeSpecial(PlayerItem* sender)
+void Special::takeSpecial( PlayerItem* who )
 {
-  switch(this->item->getLabel())
-  {
-    case Donuts:
-      sender->addAmmo(DonutsPerTray);
-      break;
+        switch( this->item->getLabel() )
+        {
+                case Donuts:
+                        who->addAmmo( DonutsPerTray );
+                        break;
 
-    case ExtraLife:
-      sender->addLives(2);
-      break;
+                case ExtraLife:
+                        who->addLives( 2 );
+                        break;
 
-    case HighSpeed:
-      sender->activateHighSpeed();
-      break;
+                case HighSpeed:
+                        who->activateHighSpeed();
+                        break;
 
-    case HighJump:
-      sender->addHighJumps(10);
-      break;
+                case HighJump:
+                        who->addHighJumps( 10 );
+                        break;
 
-    case Shield:
-      sender->activateShield();
-      break;
+                case Shield:
+                        who->activateShield();
+                        break;
 
-    case Crown:
-      sender->liberatePlanet();
-      break;
+                case Crown:
+                        who->liberatePlanet();
+                        break;
 
-    case Horn:
-    case Handbag:
-      sender->takeTool(this->item->getLabel());
-      break;
+                case Horn:
+                case Handbag:
+                        who->takeTool( this->item->getLabel () );
+                        break;
 
-    case ReincarnationFish:
-      sender->savePlayer(this->item->getX(), this->item->getY(), this->item->getZ());
-      break;
-  }
+                case ReincarnationFish:
+                        who->saveAt( this->item->getX (), this->item->getY (), this->item->getZ () );
+                        break;
+        }
 }
 
-void Special::setExtraData(void* data)
+void Special::setExtraData( void* data )
 {
-  this->bubblesData = reinterpret_cast<ItemData*>(data);
+        this->bubblesData = reinterpret_cast< ItemData* >( data );
 }
 
 }

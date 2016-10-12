@@ -53,15 +53,15 @@ namespace sgxml
   }
 
   void SaveGameXML::
-  exploredRooms (const exploredRooms_type& exploredRooms)
+  exploredRooms ( const exploredRooms_type& exploredRooms )
   {
-    this->exploredRooms_.set (exploredRooms);
+    this->exploredRooms_.set ( exploredRooms );
   }
 
   void SaveGameXML::
-  exploredRooms (::std::auto_ptr< exploredRooms_type > exploredRooms)
+  exploredRooms ( ::std::auto_ptr< exploredRooms_type > exploredRooms )
   {
-    this->exploredRooms_.set (exploredRooms);
+    this->exploredRooms_.set ( exploredRooms );
   }
 
   const SaveGameXML::freeByblos_type& SaveGameXML::
@@ -77,9 +77,9 @@ namespace sgxml
   }
 
   void SaveGameXML::
-  freeByblos (const freeByblos_type& freeByblos)
+  freeByblos ( const freeByblos_type& freeByblos )
   {
-    this->freeByblos_.set (freeByblos);
+    this->freeByblos_.set ( freeByblos );
   }
 
   const SaveGameXML::freeEgyptus_type& SaveGameXML::
@@ -95,9 +95,9 @@ namespace sgxml
   }
 
   void SaveGameXML::
-  freeEgyptus (const freeEgyptus_type& freeEgyptus)
+  freeEgyptus ( const freeEgyptus_type& freeEgyptus )
   {
-    this->freeEgyptus_.set (freeEgyptus);
+    this->freeEgyptus_.set ( freeEgyptus );
   }
 
   const SaveGameXML::freePenitentiary_type& SaveGameXML::
@@ -113,9 +113,9 @@ namespace sgxml
   }
 
   void SaveGameXML::
-  freePenitentiary (const freePenitentiary_type& freePenitentiary)
+  freePenitentiary ( const freePenitentiary_type& freePenitentiary )
   {
-    this->freePenitentiary_.set (freePenitentiary);
+    this->freePenitentiary_.set ( freePenitentiary );
   }
 
   const SaveGameXML::freeSafari_type& SaveGameXML::
@@ -131,9 +131,9 @@ namespace sgxml
   }
 
   void SaveGameXML::
-  freeSafari (const freeSafari_type& freeSafari)
+  freeSafari ( const freeSafari_type& freeSafari )
   {
-    this->freeSafari_.set (freeSafari);
+    this->freeSafari_.set ( freeSafari );
   }
 
   const SaveGameXML::freeBlacktooth_type& SaveGameXML::
@@ -149,9 +149,9 @@ namespace sgxml
   }
 
   void SaveGameXML::
-  freeBlacktooth (const freeBlacktooth_type& freeBlacktooth)
+  freeBlacktooth ( const freeBlacktooth_type& freeBlacktooth )
   {
-    this->freeBlacktooth_.set (freeBlacktooth);
+    this->freeBlacktooth_.set ( freeBlacktooth );
   }
 
   const SaveGameXML::bonus_type& SaveGameXML::
@@ -167,15 +167,15 @@ namespace sgxml
   }
 
   void SaveGameXML::
-  bonus (const bonus_type& bonus)
+  bonus ( const bonus_type& bonus )
   {
-    this->bonus_.set (bonus);
+    this->bonus_.set ( bonus );
   }
 
   void SaveGameXML::
-  bonus (::std::auto_ptr< bonus_type > bonus)
+  bonus ( ::std::auto_ptr< bonus_type > bonus )
   {
-    this->bonus_.set (bonus);
+    this->bonus_.set ( bonus );
   }
 
   const SaveGameXML::players_type& SaveGameXML::
@@ -191,15 +191,15 @@ namespace sgxml
   }
 
   void SaveGameXML::
-  players (const players_type& players)
+  players ( const players_type& players )
   {
-    this->players_.set (players);
+    this->players_.set ( players );
   }
 
   void SaveGameXML::
-  players (::std::auto_ptr< players_type > players)
+  players ( ::std::auto_ptr< players_type > players )
   {
-    this->players_.set (players);
+    this->players_.set ( players );
   }
 
 
@@ -219,7 +219,7 @@ namespace sgxml
   }
 
   void exploredRooms::
-  visited (const visited_sequence& visited)
+  visited ( const visited_sequence& visited )
   {
     this->visited_ = visited;
   }
@@ -241,7 +241,7 @@ namespace sgxml
   }
 
   void bonus::
-  room (const room_sequence& room)
+  room ( const room_sequence& room )
   {
     this->room_ = room;
   }
@@ -263,7 +263,7 @@ namespace sgxml
   }
 
   void players::
-  player (const player_sequence& player)
+  player ( const player_sequence& player )
   {
     this->player_ = player;
   }
@@ -285,15 +285,15 @@ namespace sgxml
   }
 
   void visited::
-  filename (const filename_type& filename)
+  filename ( const filename_type& filename )
   {
-    this->filename_.set (filename);
+    this->filename_.set ( filename );
   }
 
   void visited::
-  filename (::std::auto_ptr< filename_type > filename)
+  filename ( ::std::auto_ptr< filename_type > filename )
   {
-    this->filename_.set (filename);
+    this->filename_.set ( filename );
   }
 
 
@@ -331,15 +331,15 @@ namespace sgxml
   }
 
   void room::
-  filename (const filename_type& filename)
+  filename ( const filename_type& filename )
   {
-    this->filename_.set (filename);
+    this->filename_.set ( filename );
   }
 
   void room::
-  filename (::std::auto_ptr< filename_type > filename)
+  filename ( ::std::auto_ptr< filename_type > filename )
   {
-    this->filename_.set (filename);
+    this->filename_.set ( filename );
   }
 
 
@@ -359,9 +359,9 @@ namespace sgxml
   }
 
   void player::
-  active (const active_type& active)
+  active ( const active_type& active )
   {
-    this->active_.set (active);
+    this->active_.set ( active );
   }
 
   const player::roomFilename_type& player::
@@ -377,15 +377,15 @@ namespace sgxml
   }
 
   void player::
-  roomFilename (const roomFilename_type& roomFilename)
+  roomFilename ( const roomFilename_type& roomFilename )
   {
-    this->roomFilename_.set (roomFilename);
+    this->roomFilename_.set ( roomFilename );
   }
 
   void player::
-  roomFilename (::std::auto_ptr< roomFilename_type > roomFilename)
+  roomFilename ( ::std::auto_ptr< roomFilename_type > roomFilename )
   {
-    this->roomFilename_.set (roomFilename);
+    this->roomFilename_.set ( roomFilename );
   }
 
   const player::x_type& player::
@@ -401,9 +401,9 @@ namespace sgxml
   }
 
   void player::
-  x (const x_type& x)
+  x ( const x_type& x )
   {
-    this->x_.set (x);
+    this->x_.set ( x );
   }
 
   const player::y_type& player::
@@ -419,9 +419,9 @@ namespace sgxml
   }
 
   void player::
-  y (const y_type& y)
+  y ( const y_type& y )
   {
-    this->y_.set (y);
+    this->y_.set ( y );
   }
 
   const player::z_type& player::
@@ -437,9 +437,9 @@ namespace sgxml
   }
 
   void player::
-  z (const z_type& z)
+  z ( const z_type& z )
   {
-    this->z_.set (z);
+    this->z_.set ( z );
   }
 
   const player::direction_type& player::
@@ -455,9 +455,9 @@ namespace sgxml
   }
 
   void player::
-  direction (const direction_type& direction)
+  direction ( const direction_type& direction )
   {
-    this->direction_.set (direction);
+    this->direction_.set ( direction );
   }
 
   const player::entry_type& player::
@@ -473,9 +473,9 @@ namespace sgxml
   }
 
   void player::
-  entry (const entry_type& entry)
+  entry ( const entry_type& entry )
   {
-    this->entry_.set (entry);
+    this->entry_.set ( entry );
   }
 
   const player::lives_type& player::
@@ -491,9 +491,9 @@ namespace sgxml
   }
 
   void player::
-  lives (const lives_type& lives)
+  lives ( const lives_type& lives )
   {
-    this->lives_.set (lives);
+    this->lives_.set ( lives );
   }
 
   const player::hasHorn_type& player::
@@ -509,9 +509,9 @@ namespace sgxml
   }
 
   void player::
-  hasHorn (const hasHorn_type& hasHorn)
+  hasHorn ( const hasHorn_type& hasHorn )
   {
-    this->hasHorn_.set (hasHorn);
+    this->hasHorn_.set ( hasHorn );
   }
 
   const player::hasHandbag_type& player::
@@ -527,9 +527,9 @@ namespace sgxml
   }
 
   void player::
-  hasHandbag (const hasHandbag_type& hasHandbag)
+  hasHandbag ( const hasHandbag_type& hasHandbag )
   {
-    this->hasHandbag_.set (hasHandbag);
+    this->hasHandbag_.set ( hasHandbag );
   }
 
   const player::ammo_type& player::
@@ -545,9 +545,9 @@ namespace sgxml
   }
 
   void player::
-  ammo (const ammo_type& ammo)
+  ammo ( const ammo_type& ammo )
   {
-    this->ammo_.set (ammo);
+    this->ammo_.set ( ammo );
   }
 
   const player::label_type& player::
@@ -563,9 +563,9 @@ namespace sgxml
   }
 
   void player::
-  label (const label_type& label)
+  label ( const label_type& label )
   {
-    this->label_.set (label);
+    this->label_.set ( label );
   }
 }
 

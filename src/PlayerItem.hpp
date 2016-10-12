@@ -38,6 +38,7 @@ class Mediator;
  */
 class PlayerItem : public FreeItem
 {
+
 public:
 
         /**
@@ -48,95 +49,95 @@ public:
          * @param z Posición espacial Z o a qué distancia está el elemento del suelo
          * @param direction Dirección inicial del elemento
          */
-        PlayerItem(ItemData* itemData, int x, int y, int z, const Direction& direction);
+        PlayerItem( ItemData* itemData, int x, int y, int z, const Direction& direction ) ;
 
         /**
          * Constructor copia. No copia los atributos que son punteros
          * @param playerItem Un objeto de esta clase
          */
-        PlayerItem(const PlayerItem& playerItem);
+        PlayerItem( const PlayerItem& playerItem ) ;
 
-        virtual ~PlayerItem();
+        virtual ~PlayerItem( ) ;
 
         /**
          * Actualiza el elemento en función de las órdenes dadas por el usuario
          */
-        virtual void execute();
+        virtual void execute () ;
 
         /**
          * Actualiza el comportamiento del elemento
          */
-        virtual bool update();
+        virtual bool update () ;
 
         /**
          * El jugador espera a que el usuario le dé una orden, lo que implica detener al jugador o, lo que
          * es lo mismo, establecer el fotograma de parada
          */
-        void wait();
+        void wait () ;
 
         /**
          * Añade vidas al jugador
          * @param lives Número de vidas a sumar
          */
-        void addLives(unsigned char lives);
+        void addLives( unsigned char lives ) ;
 
         /**
          * El jugador pierde una vida
          */
-        void loseLife();
+        void loseLife () ;
 
         /**
          * El jugador coge un objeto de utilidad
          * @label Etiqueta del elemento
          */
-        void takeTool(short label);
+        void takeTool( short label ) ;
 
         /**
          * Aumenta la cantidad de munición que tiene el jugador (rosquillas)
          * @param ammo Un número mayor o igual que cero
          */
-        void addAmmo(const unsigned short ammo);
+        void addAmmo( const unsigned short ammo ) ;
 
         /**
          * El jugador consume una unidad de munición
          */
-        void consumeAmmo();
+        void consumeAmmo () ;
 
         /**
          * Activa el movimiento a doble velocidad del personaje
          */
-        void activateHighSpeed();
+        void activateHighSpeed () ;
 
         /**
          * El jugador consume una unidad de tiempo del movimiento a doble velocidad
          */
-        void decreaseHighSpeed();
+        void decreaseHighSpeed () ;
 
         /**
          * Añade un número de grandes saltos al jugador
          * @param highJumps Un número entre 0 y 10
          */
-        void addHighJumps(unsigned char highJumps);
+        void addHighJumps ( unsigned char highJumps ) ;
 
         /**
          * El jugador consume un gran salto
          */
-        void decreaseHighJumps();
+        void decreaseHighJumps () ;
 
         /**
          * Activa la inmunidad del personaje
          */
-        void activateShield();
+        void activateShield () ;
 
         /**
          * El jugador consume una unidad de tiempo de inmunidad
          */
-        void decreaseShield();
+        void decreaseShield () ;
 
         /**
          * El jugador libera un planeta
          */
-        void liberatePlanet();
+        void liberatePlanet() ;
 
         /**
          * Establece los datos del elemento que tiene el jugador en el bolso
@@ -144,28 +145,27 @@ public:
          * @param takenItemImage Imagen del elemento tomado por el jugador
          * @param behaviorId Comportamiento del elemento tomado por el jugador
          */
-        void assignTakenItem(ItemData* itemData, BITMAP* takenItemImage, const BehaviorId& behaviorId);
+        void assignTakenItem( ItemData* itemData, BITMAP* takenItemImage, const BehaviorId& behaviorId ) ;
 
         /**
          * Obtiene los datos del elemento que tiene el jugador en el bolso
          * @param data Devuelve los datos del elemento tomado por el jugador
          * @param behaviorId Devuelve el comportamiento del elemento tomado por el jugador
          */
-        ItemData* consultTakenItem(BehaviorId* behaviorId);
+        ItemData* consultTakenItem( BehaviorId* behaviorId ) ;
 
         /**
          * Obtiene la imagen del elemento tomado por el jugador
          * @return Una imagen ó 0 si el jugador no tiene ningún elemento
          */
-        BITMAP* consultTakenItemImage();
+        BITMAP* consultTakenItemImage () ;
 
         /**
          * Desencadena la grabación de la partida cuando este jugador coge el pez de la reencarnación
-         * @param x Coordenada X donde estaba situado el pez de la reencarnación
-         * @param y Coordenada Y donde estaba situado el pez de la reencarnación
-         * @param z Coordenada Z donde estaba situado el pez de la reencarnación
          */
-        void savePlayer(int x, int y, int z);
+        void save () ;
+
+        void saveAt ( int x, int y, int z ) ;
 
 protected:
 
@@ -183,7 +183,7 @@ protected:
          * del jugador durante el ascenso
          * @return true si se pudo cambiar el dato o false si hubo colisión y no hubo cambio
          */
-        virtual bool changeData(int value, int x, int y, int z, const Datum& datum, const Mode& mode);
+        virtual bool changeData ( int value, int x, int y, int z, const Datum& datum, const Mode& mode ) ;
 
         /**
          * Comprueba si el jugador ha chocado con alguna puerta. En caso afirmativo moverá al jugador
@@ -193,7 +193,7 @@ protected:
          * @param id Identificador asignado por el motor de un elemento existente en la pila de colisiones
          * @return true si hubo colisión y por tanto desplazamiento del jugador o false en caso contrario
          */
-        bool isCollidingWithDoor(const Direction& direction, Mediator* mediator, int id, const PlayerItem& previousPosition);
+        bool isCollidingWithDoor ( const Direction& direction, Mediator* mediator, int id, const PlayerItem& previousPosition ) ;
 
         /**
          * Comprueba que el jugador no esté debajo de una puerta o bien que la puerta no exista
@@ -201,7 +201,7 @@ protected:
          * @param mediator El mediador de los elementos
          * @return true si el jugador está bajo la puerta indicada o false en caso contrario
          */
-        bool isNotUnderDoor(const Direction& direction, Mediator* mediator);
+        bool isNotUnderDoor( const Direction& direction, Mediator* mediator ) ;
 
         /**
          * Comprueba si el jugador ha chocado con los límites de la sala. Implicaría un cambio de sala
@@ -209,14 +209,14 @@ protected:
          * @param mediator El mediador de los elementos
          * @return true si ha alcanzado el límite de la sala o false en caso contrario
          */
-        bool isCollidingWithRoomBorder(const Direction& direction, Mediator* mediator);
+        bool isCollidingWithRoomBorder( const Direction& direction, Mediator* mediator ) ;
 
 private:
 
         /**
          * Número de vidas del jugador
          */
-        unsigned char lives;
+        unsigned char lives ;
 
         /**
          * Tiempo restante de movimiento a doble velocidad. Si el jugador no posee esta habilidad
@@ -226,47 +226,47 @@ private:
          * 3. Consume una unidad de tiempo cada 8 pasos, siempre y cuando se den 4 seguidos
          * 4. Cuando salta no consume
          */
-        unsigned int highSpeed;
+        unsigned int highSpeed ;
 
         /**
          * Número de grandes saltos del jugador
          */
-        unsigned int highJumps;
+        unsigned int highJumps ;
 
         /**
          * Tiempo restante de inmunidad. Si el jugador no posee esta habilidad entonces vale cero
          */
-        double shield;
+        double shield ;
 
         /**
          * Indica si el jugador tiene su útil (bocina o bolso)
          */
-        std::vector<short> tools;
+        std::vector< short > tools ;
 
         /**
          * Cantidad de munición que tiene el jugador (rosquillas)
          */
-        unsigned short ammo;
+        unsigned short ammo ;
 
         /**
          * Dirección de salida del jugador al abandonar la sala
          */
-        Direction exit;
+        Direction exit ;
 
         /**
          * Orientación, dirección a la que mira el jugador al abandonar la sala
          */
-        Direction orientation;
+        Direction orientation ;
 
         /**
          * Cronómetro de la inmunidad. Una vez se coja el conejo el jugador dispone de 25 segundos de inmunidad
          */
-        HPC* shieldTimer;
+        HPC* shieldTimer ;
 
         /**
          * Tiempo en segundos que un jugador es inmune
          */
-        double shieldTime;
+        double shieldTime ;
 
 public: // Operaciones de consulta y actualización
 
@@ -274,97 +274,98 @@ public: // Operaciones de consulta y actualización
          * Establece el número de vidas del jugador
          * @param lives Un número mayor o igual que cero
          */
-        void setLives(unsigned char lives) { this->lives = lives; }
+        void setLives ( unsigned char lives ) {  this->lives = lives ;  }
 
         /**
          * Indica el número de vidas del jugador
          * @return Un número mayor o igual que cero
          */
-        unsigned char getLives() const { return this->lives; }
+        unsigned char getLives () const {  return this->lives ;  }
 
         /**
          * Tiempo restante de doble velocidad
          * @param highSpeed Un número entre 0 y 99
          */
-        void setHighSpeed(unsigned int highSpeed) { this->highSpeed = highSpeed; }
+        void setHighSpeed ( unsigned int highSpeed ) {  this->highSpeed = highSpeed ;  }
 
         /**
          * Devuelve el tiempo restante de doble velocidad
          * @return Un número entre 0 y 99
          */
-        unsigned int getHighSpeed() const { return this->highSpeed; }
+        unsigned int getHighSpeed () const {  return this->highSpeed ;  }
 
         /**
          * Establece el número de grandes saltos del jugador
          * @param highSpeed Un número entre 0 y 10
          */
-        void setHighJumps(unsigned int highJumps) { this->highJumps = highJumps; }
+        void setHighJumps ( unsigned int highJumps ) {  this->highJumps = highJumps ;  }
 
         /**
          * Devuelve el número de grandes saltos del jugador
          * @return Un número entre 0 y 10
          */
-        unsigned int getHighJumps() const { return this->highJumps; }
+        unsigned int getHighJumps () const {  return this->highJumps ;  }
 
         /**
          * Establece el tiempo total de inmunidad y activa el cronómetro si está activado
          * @param shield Un número de segundos
          */
-        void setShieldTime(double shield);
+        void setShieldTime ( double shield ) ;
 
         /**
          * Devuelve el tiempo total de inmunidad
          * @return Un número de segundos
          */
-        double getShieldTime() const { return this->shieldTime; }
+        double getShieldTime () const {  return this->shieldTime ;  }
 
         /**
          * Asigna los objetos de utilidad que tiene el jugador
          * @param hasTool true si lo posee o false en caso contrario
          */
-        void setTools(const std::vector<short>& tools) { this->tools = tools; }
+        void setTools ( const std::vector< short >& tools ) {  this->tools = tools ;  }
 
         /**
          * Indica si el jugador tiene su útil (bocina o bolso)
          * @return true si tiene el útil o false en caso contrario
          */
-        bool hasTool(const MagicItem& label) const;
+        bool hasTool ( const MagicItem& label ) const ;
 
         /**
          * Establece la cantidad de munición que tiene el jugador (rosquillas)
          * @param ammo Un número mayor o igual que cero
          */
-        void setAmmo(const unsigned short ammo) { this->ammo = ammo; }
+        void setAmmo ( const unsigned short ammo ) {  this->ammo = ammo ;  }
 
         /**
          * Indica la cantidad de munición que tiene el jugador (rosquillas)
          * @return Un número mayor o igual que cero
          */
-        unsigned short getAmmo() const { return this->ammo; }
+        unsigned short getAmmo () const {  return this->ammo ;  }
 
         /**
          * Establece la dirección de salida del jugador al abandonar la sala
          * @param direction El suelo, el techo o la ubicación de alguna puerta
          */
-        void setExit(const Direction& direction) { this->exit = direction; }
+        void setExit ( const Direction& direction ) {  this->exit = direction ;  }
 
         /**
          * Dirección de salida del jugador al abandonar la sala
          * @return El suelo, el techo o la ubicación de alguna puerta
          */
-        Direction getExit() const { return this->exit; }
+        Direction getExit () const {  return this->exit ;  }
 
         /**
          * Establece la orientación, dirección a la que mira el jugador al abandonar la sala
          * @param direction Algún punto cardinal
          */
-        void setOrientation(const Direction& direction) { this->orientation = direction; }
+        void setOrientation ( const Direction& direction ) {  this->orientation = direction ;  }
 
         /**
          * Orientación, dirección a la que mira el jugador al abandonar la sala
          * @return Algún punto cardinal
          */
-        Direction getOrientation() const { return this->orientation; }
+        Direction getOrientation () const {  return this->orientation ;  }
+
 };
 
 }

@@ -199,7 +199,7 @@ bool Hunter::update()
   return destroy;
 }
 
-StateId Hunter::calculateDirection(const StateId& stateId)
+StateId Hunter::calculateDirection( const StateId& stateId )
 {
   if(id == Hunter4Behavior || id == HunterWaiting4Behavior)
   {
@@ -213,7 +213,7 @@ StateId Hunter::calculateDirection(const StateId& stateId)
   return StateWait;
 }
 
-StateId Hunter::calculateDirection4(const StateId& stateId)
+StateId Hunter::calculateDirection4( const StateId& stateId )
 {
   FreeItem* freeItem = dynamic_cast<FreeItem*>(this->item);
   PlayerItem* playerItem = freeItem->getMediator()->getActivePlayer();
@@ -283,13 +283,13 @@ StateId Hunter::calculateDirection4(const StateId& stateId)
   return stateId;
 }
 
-StateId Hunter::calculateDirection8(const StateId& stateId)
+StateId Hunter::calculateDirection8( const StateId& stateId )
 {
-  FreeItem* freeItem = dynamic_cast<FreeItem*>(this->item);
+  FreeItem* freeItem = dynamic_cast< FreeItem* >( this->item );
   PlayerItem* playerItem = freeItem->getMediator()->getActivePlayer();
 
   // Se comprueba si el jugador activo está en la sala
-  if(playerItem != 0)
+  if( playerItem != 0 )
   {
     // Distancia del cazador al jugador en los ejes X e Y
     int dx = freeItem->getX() - playerItem->getX();
@@ -298,99 +298,99 @@ StateId Hunter::calculateDirection8(const StateId& stateId)
     // El siguiente algoritmo obtiene la dirección más adecuada, aquella que permita alcanzar al
     // jugador lo más rápido posible, en función de las distancias en los ejes X e Y entre el
     // cazador y el jugador
-    if(abs(dy) > abs(dx))
+    if( abs(dy) > abs(dx) )
     {
-      if(dx > 1)
+      if( dx > 1 )
       {
-        if(dy > 1)
+        if( dy > 1 )
         {
-          changeStateId(StateMoveNortheast);
+          changeStateId( StateMoveNortheast );
         }
-        else if(dy < -1)
+        else if( dy < -1 )
         {
-          changeStateId(StateMoveNorthwest);
+          changeStateId( StateMoveNorthwest );
         }
         else
         {
-          changeStateId(StateMoveNorth);
+          changeStateId( StateMoveNorth );
         }
       }
-      else if(dx < -1)
+      else if( dx < -1 )
       {
-        if(dy > 1)
+        if( dy > 1 )
         {
-          changeStateId(StateMoveSoutheast);
+          changeStateId( StateMoveSoutheast );
         }
-        else if(dy < -1)
+        else if( dy < -1 )
         {
-          changeStateId(StateMoveSouthwest);
+          changeStateId( StateMoveSouthwest );
         }
         else
         {
-          changeStateId(StateMoveSouth);
+          changeStateId( StateMoveSouth );
         }
       }
       else
       {
-        if(dy > 0)
+        if( dy > 0 )
         {
-          changeStateId(StateMoveEast);
+          changeStateId( StateMoveEast );
         }
-        else if(dy < 0)
+        else if( dy < 0 )
         {
-          changeStateId(StateMoveWest);
+          changeStateId( StateMoveWest );
         }
       }
     }
-    else if(abs(dy) < abs(dx))
+    else if( abs( dy ) < abs( dx ) )
     {
-      if(dy > 1)
+      if( dy > 1 )
       {
-        if(dx > 1)
+        if( dx > 1 )
         {
-          changeStateId(StateMoveNortheast);
+          changeStateId( StateMoveNortheast );
         }
-        else if(dx < -1)
+        else if( dx < -1 )
         {
-          changeStateId(StateMoveSoutheast);
+          changeStateId( StateMoveSoutheast );
         }
         else
         {
-          changeStateId(StateMoveEast);
+          changeStateId( StateMoveEast );
         }
       }
-      else if(dy < -1)
+      else if( dy < -1 )
       {
-        if(dx > 1)
+        if( dx > 1 )
         {
-          changeStateId(StateMoveNorthwest);
+          changeStateId( StateMoveNorthwest );
         }
-        else if(dx < -1)
+        else if( dx < -1 )
         {
-          changeStateId(StateMoveSouthwest);
+          changeStateId( StateMoveSouthwest );
         }
         else
         {
-          changeStateId(StateMoveWest);
+          changeStateId( StateMoveWest );
         }
       }
       else
       {
-        if(dx > 0)
+        if( dx > 0 )
         {
-          changeStateId(StateMoveNorth);
+          changeStateId( StateMoveNorth );
         }
-        else if(dx < 0)
+        else if( dx < 0 )
         {
-          changeStateId(StateMoveSouth);
+          changeStateId( StateMoveSouth );
         }
       }
     }
 
     // El guardián del trono huirá del jugador si éste tiene cuatro coronas
-    if(item->getLabel() == ThroneGuard && GameManager::getInstance()->getNumberFreePlanets() >= 4)
+    if( item->getLabel() == ThroneGuard && GameManager::getInstance()->countFreePlanets() >= 4 )
     {
-       changeStateId(StateMoveSouthwest);
+       changeStateId( StateMoveSouthwest );
     }
   }
 
@@ -415,7 +415,7 @@ bool Hunter::createFullBody()
 
     // El elemento actual debe dejar de detectar colisiones porque,
     // de lo contrariom no se podrá crear el guarda completo
-    freeItem->setCollisionDetector(false);
+    freeItem->setCollisionDetector( false );
     // Se añade a la sala actual
     freeItem->getMediator()->getRoom()->addItem( newItem );
   }

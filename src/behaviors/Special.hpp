@@ -40,65 +40,65 @@ class Special : public Behavior
 {
 public:
 
-  /**
-   * Constructor
-   * @param item Elemento que tiene este comportamiento
-   * @param id Identificador de comportamiento
-   */
-  Special(Item* item, const BehaviorId& id);
+        /**
+         * Constructor
+         * @param item Elemento que tiene este comportamiento
+         * @param id Identificador de comportamiento
+         */
+        Special( Item* item, const BehaviorId& id ) ;
 
-  virtual ~Special();
+        virtual ~Special () ;
 
-  /**
-   * Actualiza el comportamiento del elemento en cada ciclo
-   * @return false si la actualización implica la destrucción del elemento o true en caso contrario
-   */
-  virtual bool update();
-
-protected:
-
-  /**
-   * Comprueba si el elemento especial puede ser destruido. Depende del elemento en cuestión
-   * y del jugador que lo tome
-   * @param playerItem Jugador que toma el elemento
-   */
-  bool checkDestruction(Item* sender);
-
-  /**
-   * Ejecuta la acción asociada a la toma del elemento especial
-   */
-  void takeSpecial(PlayerItem* sender);
+        /**
+         * Actualiza el comportamiento del elemento en cada ciclo
+         * @return false si la actualización implica la destrucción del elemento o true en caso contrario
+         */
+        virtual bool update () ;
 
 protected:
 
-  /**
-   * Datos del elemento empleado como disparo
-   */
-  ItemData* bubblesData;
+        /**
+         * Comprueba si el elemento especial puede ser destruido. Depende del elemento en cuestión
+         * y del jugador que lo tome
+         * @param playerItem Jugador que toma el elemento
+         */
+        bool checkDestruction ( Item* sender ) ;
+
+        /**
+         * Ejecuta la acción asociada a la toma del elemento especial
+         */
+        void takeSpecial ( PlayerItem* sender ) ;
+
+protected:
+
+        /**
+         * Datos del elemento empleado como disparo
+         */
+        ItemData* bubblesData ;
 
 private:
 
-  /**
-   * Cronómetro que controla el tiempo de existencia del elemento volátil
-   */
-  HPC* destroyTimer;
+        /**
+         * Cronómetro que controla el tiempo de existencia del elemento volátil
+         */
+        HPC* destroyTimer ;
 
-  /**
-   * Cronómetro que controla la velocidad de movimiento del elemento
-   */
-  HPC* speedTimer;
+        /**
+         * Cronómetro que controla la velocidad de movimiento del elemento
+         */
+        HPC* speedTimer ;
 
-  /**
-   * Cronómetro que controla la velocidad de caída del elemento
-   */
-  HPC* fallenTimer;
+        /**
+         * Cronómetro que controla la velocidad de caída del elemento
+         */
+        HPC* fallenTimer ;
 
 public: // Operaciones de consulta y actualización
 
-  /**
-   * Asigna los datos del elemento usado como transición en la destrucción del volátil
-   */
-  void setExtraData(void* data);
+        /**
+         * Asigna los datos del elemento usado como transición en la destrucción del volátil
+         */
+        void setExtraData ( void* data ) ;
 };
 
 }

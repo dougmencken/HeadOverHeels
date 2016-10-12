@@ -144,6 +144,12 @@ BITMAP* Isomot::update()
                 key[ KEY_B ] = 0;
         }
 
+        if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_S ] )
+        {
+                gameManager->eatFish ( activeRoom->getMediator()->getActivePlayer(), activeRoom );
+                key[ KEY_S ] = 0;
+        }
+
         // Si se pulsa la tecla de intercambio se cambia de personaje y/o de sala
         if( ! this->isEndRoom && InputManager::getInstance()->swap() )
         {

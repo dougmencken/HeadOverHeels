@@ -109,33 +109,24 @@ namespace xsd
 
         //
         //
-        template <typename C>
-        auto_ptr<xercesc::DOMDocument>
-        serialize (const std::basic_string<C>& el,
-                   const std::basic_string<C>& ns,
-                   const namespace_infomap<C>& map,
-                   unsigned long)
+        template < typename C >
+        auto_ptr< xercesc::DOMDocument >
+        serialize ( const std::basic_string< C >& el,
+                    const std::basic_string< C >& ns,
+                    const namespace_infomap< C >& map,
+                    unsigned long )
         {
-          // HP aCC cannot handle using namespace xercesc;
-          //
-          using xercesc::DOMImplementationRegistry;
-          using xercesc::DOMImplementation;
-          using xercesc::DOMDocument;
-          using xercesc::DOMElement;
-
-          //
-          //
-          typedef std::basic_string<C> string;
-          typedef namespace_infomap<C> infomap;
+          typedef std::basic_string< C > string;
+          typedef namespace_infomap< C > infomap;
           typedef typename infomap::const_iterator infomap_iterator;
 
-          C colon (':'), space (' ');
+          C colon ( ':' ), space ( ' ' );
 
           string prefix;
 
           if (!ns.empty ())
           {
-            infomap_iterator i (map.begin ()), e (map.end ());
+            infomap_iterator i ( map.begin () ), e ( map.end () );
 
             for ( ;i != e; ++i)
             {
@@ -150,21 +141,22 @@ namespace xsd
               throw mapping<C> (ns);
           }
 
-          const XMLCh lsId [] = { xercesc::chLatin_L ,
-                                  xercesc::chLatin_S ,
-                                  xercesc::chNull } ;
+          const XMLCh lsId [] = {  xercesc::chLatin_L ,
+                                   xercesc::chLatin_S ,
+                                   xercesc::chNull  } ;
 
           xercesc::DOMImplementation * impl = xercesc::DOMImplementationRegistry::getDOMImplementation ( lsId );
 
-          auto_ptr<DOMDocument> doc (
+          string nameOfDoc = prefix.empty () ? string ( el ) : string ( prefix + colon + el ) ;
+          fprintf ( stdout, "serialize \"%s\"\n", nameOfDoc.c_str () );
+
+          auto_ptr< xercesc::DOMDocument > doc (
             impl->createDocument (
               (ns.empty () ? 0 : xml::string (ns).c_str ()),
-              xml::string ((prefix.empty ()
-                            ? el
-                            : prefix + colon + el)).c_str (),
+              xml::string ( nameOfDoc ).c_str (),
               0));
 
-          DOMElement* root (doc->getDocumentElement ());
+          xercesc::DOMElement* root (doc->getDocumentElement ());
 
           // Check if we need to provide xsi mapping.
           //
@@ -293,20 +285,20 @@ namespace xsd
         }
 
 
-        template <typename C>
+        template < typename C >
         bool
-        serialize (xercesc::XMLFormatTarget& destination,
-                   const xercesc::DOMDocument& doc,
-                   const std::basic_string<C>& encoding,
-                   unsigned long flags)
+        serialize ( xercesc::XMLFormatTarget& destination,
+                    const xercesc::DOMDocument& doc,
+                    const std::basic_string< C >& encoding,
+                    unsigned long flags )
         {
           using xercesc::XMLUni;
 
-          const XMLCh ls[] = {xercesc::chLatin_L,
-                              xercesc::chLatin_S,
-                              xercesc::chNull};
+          const XMLCh lsId [] = {  xercesc::chLatin_L,
+                                   xercesc::chLatin_S,
+                                   xercesc::chNull  } ;
 
-          xercesc::DOMImplementationLS * lsImpl = ( xercesc::DOMImplementationLS * ) xercesc::DOMImplementationRegistry::getDOMImplementation ( ls );
+          xercesc::DOMImplementationLS * lsImpl = ( xercesc::DOMImplementationLS * ) xercesc::DOMImplementationRegistry::getDOMImplementation ( lsId );
 
           // Get an instance of DOMLSSerializer
           //

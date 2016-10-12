@@ -8,157 +8,157 @@
       <ustring>Novo jogo</ustring>
     </properties>
   </text>
-  
+
   <text id="blacktooth-empire" x="140" y="0">
     <properties>
       <ustring>O Império Blacktooth</ustring>
     </properties>
   </text>
-  
+
   <text id="blacktooth" x="236" y="330">
     <properties>
       <ustring>Blacktooth</ustring>
     </properties>
   </text>
-  
+
   <text id="egyptus" x="56" y="200">
     <properties>
       <ustring>Egyptus</ustring>
     </properties>
   </text>
-  
+
   <text id="penitentiary" x="400" y="200">
     <properties>
       <ustring>Penitentiary</ustring>
     </properties>
   </text>
-  
+
   <text id="byblos" x="62" y="450">
     <properties>
       <ustring>Byblos</ustring>
     </properties>
   </text>
-  
+
   <text id="safari" x="450" y="450">
     <properties>
       <ustring>Safari</ustring>
     </properties>
   </text>
-  
+
   <text id="load-game" x="0" y="0">
     <properties>
       <ustring>Carregar jogo</ustring>
     </properties>
   </text>
-  
+
   <text id="keyboard" x="0" y="0">
     <properties>
       <ustring>Teclado</ustring>
     </properties>
   </text>
-  
+
   <text id="left" x="96" y="110">
     <properties>
       <ustring>Esquerda.......</ustring>
     </properties>
   </text>
-  
+
   <text id="right" x="0" y="0">
     <properties>
       <ustring>Direita........</ustring>
     </properties>
   </text>
-  
+
   <text id="up" x="0" y="0">
     <properties>
       <ustring>Cima...........</ustring>
     </properties>
   </text>
-  
+
   <text id="down" x="0" y="0">
     <properties>
       <ustring>Baixo..........</ustring>
     </properties>
   </text>
-  
+
   <text id="take" x="0" y="0">
     <properties>
       <ustring>Pegar/deixar...</ustring>
     </properties>
   </text>
-  
+
   <text id="jump" x="0" y="0">
     <properties>
       <ustring>Saltar.........</ustring>
     </properties>
   </text>
-  
+
   <text id="shoot" x="0" y="0">
     <properties>
       <ustring>Disparar.......</ustring>
     </properties>
   </text>
-  
+
   <text id="take-jump" x="0" y="0">
     <properties>
       <ustring>Pegar+Saltar...</ustring>
     </properties>
   </text>
-  
+
   <text id="swap" x="0" y="0">
     <properties>
       <ustring>Mudar..........</ustring>
     </properties>
   </text>
-  
+
   <text id="halt" x="0" y="0">
     <properties>
       <ustring>Parar..........</ustring>
     </properties>
   </text>
-  
+
   <text id="confirm-quit" x="0" y="142">
     <properties font="big" color="cyan">
       <ustring>Carrega em Esc para abandonar o jogo</ustring>
     </properties>
   </text>
-  
+
   <text id="confirm-resume" x="0" y="184">
     <properties font="big" color="yellow">
       <ustring>Carrega noutra tecla para voltar</ustring>
     </properties>
   </text>
-  
+
   <text id="audio" x="0" y="0">
     <properties>
       <ustring>Audio</ustring>
     </properties>
   </text>
-  
+
   <text id="soundfx" x="96" y="210">
     <properties>
       <ustring>Efeitos sonoros....</ustring>
     </properties>
   </text>
-  
+
   <text id="music" x="0" y="0">
     <properties>
       <ustring>Música.............</ustring>
     </properties>
   </text>
-  
+
   <text id="volume" x="0" y="0">
     <properties>
       <ustring>Volume</ustring>
     </properties>
   </text>
-  
+
   <text id="credits" x="0" y="0">
     <properties>
       <ustring>Créditos</ustring>
     </properties>
   </text>
-  
+
   <text id="credits-text" x="0" y="480">
     <properties font="big" color="multicolor">
       <ustring>Jogo original</ustring>
@@ -557,13 +557,13 @@
       <ustring> </ustring>
     </properties>
   </text>
-  
+
   <text id="exit" x="0" y="0">
     <properties>
       <ustring>Sair</ustring>
     </properties>
   </text>
-  
+
   <text id="save-game" x="0" y="57">
     <properties font="big" color="orange">
       <ustring>O Peixe da Reencarnação dá-te a</ustring>
@@ -572,46 +572,46 @@
       <ustring>oportunidade de gravar o jogo</ustring>
     </properties>
     <properties font="big" color="orange">
-      <ustring>carregando em F2</ustring>
+      <ustring>carregando em SPACE</ustring>
     </properties>
   </text>
-  
+
   <text id="empty-slot" x="0" y="0">
     <properties>
       <ustring>Disponível</ustring>
     </properties>
   </text>
-  
+
   <text id="score" x="0" y="300">
     <properties>
       <ustring>Pontuação:</ustring>
     </properties>
   </text>
-  
+
   <text id="explored-rooms" x="0" y="340">
     <properties>
       <ustring>Exploraste %d salas</ustring>
     </properties>
   </text>
-  
+
   <text id="liberated-planets" x="0" y="380">
     <properties>
       <ustring>Libertaste %d planetas</ustring>
     </properties>
   </text>
-  
+
   <text id="rooms" x="0" y="0">
     <properties>
       <ustring>salas</ustring>
     </properties>
   </text>
-  
+
   <text id="planets" x="0" y="0">
     <properties>
       <ustring>planetas</ustring>
     </properties>
   </text>
-  
+
   <text id="final-text" x="0" y="200">
     <properties font="big" color="yellow">
       <ustring>O povo louva e apregoa o teu heroísmo</ustring>
@@ -629,77 +629,77 @@
       <ustring>Imperador Blacktooth</ustring>
     </properties>
   </text>
-  
+
   <text id="dummy" x="0" y="180">
     <properties>
       <ustring>Aprendiz</ustring>
     </properties>
   </text>
-  
+
   <text id="novice" x="0" y="180">
     <properties>
       <ustring>Principiante</ustring>
     </properties>
   </text>
-  
+
   <text id="spy" x="0" y="180">
     <properties>
       <ustring>Espião</ustring>
     </properties>
   </text>
-  
+
   <text id="master-spy" x="0" y="180">
     <properties>
       <ustring>Mestre Espião</ustring>
     </properties>
   </text>
-  
+
   <text id="hero" x="0" y="180">
     <properties>
       <ustring>Herói</ustring>
     </properties>
   </text>
-  
+
   <text id="emperor" x="0" y="180">
     <properties>
       <ustring>Imperador</ustring>
     </properties>
   </text>
-  
+
   <text id="jon" x="64" y="22">
     <properties>
       <ustring>JON</ustring>
     </properties>
   </text>
-  
+
   <text id="ritman" x="40" y="52">
     <properties>
       <ustring>RITMAN</ustring>
     </properties>
   </text>
-  
+
   <text id="bernie" x="500" y="22">
     <properties>
       <ustring>BERNIE</ustring>
     </properties>
   </text>
-  
+
   <text id="drummond" x="483" y="52">
     <properties>
       <ustring>DRUMMOND</ustring>
     </properties>
   </text>
-  
+
   <text id="ocean" x="56" y="440">
     <properties>
       <ustring>{ 1987 Ocean Software Ltd.</ustring>
     </properties>
   </text>
-  
+
   <text id="jorge" x="56" y="410">
     <properties>
       <ustring>{ 2009 Jorge Rodríguez Santos</ustring>
     </properties>
   </text>
-  
+
 </language>

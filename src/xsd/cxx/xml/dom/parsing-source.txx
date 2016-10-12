@@ -157,11 +157,11 @@ namespace xsd
           return doc;
         }
 
-        template <typename C>
-        auto_ptr<xercesc::DOMDocument>
-        parse (const std::basic_string<C>& uri,
-               const properties<C>& prop,
-               ::xml_schema::flags flags)
+        template < typename C >
+        auto_ptr< xercesc::DOMDocument >
+        parse ( const std::basic_string< C >& uri,
+                const properties< C >& prop,
+                ::xml_schema::flags flags )
         {
           fprintf ( stdout, "parse \"%s\"\n", uri.c_str () );
 

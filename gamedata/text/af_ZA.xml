@@ -8,115 +8,115 @@
       <ustring>Nuwe speletjie</ustring>
     </properties>
   </text>
-  
+
   <text id="blacktooth-empire" x="0" y="0">
     <properties>
       <ustring>Die Blacktooth Keiserryk</ustring>
     </properties>
   </text>
-  
+
   <text id="blacktooth" x="236" y="330">
     <properties>
       <ustring>Blacktooth</ustring>
     </properties>
   </text>
-  
+
   <text id="egyptus" x="56" y="200">
     <properties>
       <ustring>Egyptus</ustring>
     </properties>
   </text>
-  
+
   <text id="penitentiary" x="400" y="200">
     <properties>
       <ustring>Penitentiary</ustring>
     </properties>
   </text>
-  
+
   <text id="byblos" x="62" y="450">
     <properties>
       <ustring>Byblos</ustring>
     </properties>
   </text>
-  
+
   <text id="safari" x="450" y="450">
     <properties>
       <ustring>Safari</ustring>
     </properties>
   </text>
-  
+
   <text id="load-game" x="0" y="0">
     <properties>
       <ustring>Laai speletjie</ustring>
     </properties>
   </text>
-  
+
   <text id="keyboard" x="0" y="0">
     <properties>
       <ustring>Sleutelbord</ustring>
     </properties>
   </text>
-  
+
   <text id="left" x="96" y="110">
     <properties>
       <ustring>Links..........</ustring>
     </properties>
   </text>
-  
+
   <text id="right" x="0" y="0">
     <properties>
       <ustring>Regs...........</ustring>
     </properties>
   </text>
-  
+
   <text id="up" x="0" y="0">
     <properties>
       <ustring>Op.............</ustring>
     </properties>
   </text>
-  
+
   <text id="down" x="0" y="0">
     <properties>
       <ustring>Af.............</ustring>
     </properties>
   </text>
-  
+
   <text id="take" x="0" y="0">
     <properties>
       <ustring>Dra............</ustring>
     </properties>
   </text>
-  
+
   <text id="jump" x="0" y="0">
     <properties>
       <ustring>Spring.........</ustring>
     </properties>
   </text>
-  
+
   <text id="shoot" x="0" y="0">
     <properties>
       <ustring>Vuur...........</ustring>
     </properties>
   </text>
-  
+
   <text id="take-jump" x="0" y="0">
     <properties>
       <ustring>Dra+Spring.....</ustring>
     </properties>
   </text>
-  
+
   <text id="swap" x="0" y="0">
     <properties>
       <ustring>Ruil...........</ustring>
     </properties>
   </text>
-  
+
   <text id="halt" x="0" y="0">
     <properties>
       <ustring>Pouse..........</ustring>
     </properties>
   </text>
-  
+
   <text id="confirm-quit" x="0" y="142">
     <properties font="big" color="cyan">
       <ustring>Druk Esc om speletjie</ustring>
@@ -125,7 +125,7 @@
       <ustring>klaar te maak</ustring>
     </properties>
   </text>
-  
+
   <text id="confirm-resume" x="0" y="226">
     <properties font="big" color="yellow">
       <ustring>Druk enige ander sleutel om</ustring>
@@ -134,37 +134,37 @@
       <ustring>weer te begin</ustring>
     </properties>
   </text>
-  
+
   <text id="audio" x="0" y="0">
     <properties>
       <ustring>Audio</ustring>
     </properties>
   </text>
-  
+
   <text id="soundfx" x="96" y="210">
     <properties>
       <ustring>Klank effekte......</ustring>
     </properties>
   </text>
-  
+
   <text id="music" x="0" y="0">
     <properties>
       <ustring>Musiek.............</ustring>
     </properties>
   </text>
-  
+
   <text id="volume" x="0" y="0">
     <properties>
       <ustring>Volume</ustring>
     </properties>
   </text>
-  
+
   <text id="credits" x="0" y="0">
     <properties>
       <ustring>Krediete</ustring>
     </properties>
   </text>
-  
+
   <text id="credits-text" x="0" y="480">
     <properties font="big" color="multicolor">
       <ustring>Oorspronklike speletjie</ustring>
@@ -563,58 +563,58 @@
       <ustring> </ustring>
     </properties>
   </text>
-  
+
   <text id="exit" x="0" y="0">
     <properties>
       <ustring>Klaar</ustring>
     </properties>
   </text>
-  
+
   <text id="save-game" x="0" y="142">
     <properties font="big" color="orange">
       <ustring>Reinkanasie Vis gee jou kans om</ustring>
     </properties>
     <properties font="big" color="orange">
-      <ustring>jou speletjie met F2 te stoor</ustring>   
+      <ustring>jou speletjie met SPACE te stoor</ustring>
     </properties>
   </text>
-  
+
   <text id="empty-slot" x="0" y="0">
     <properties>
       <ustring>Beskikbaar</ustring>
     </properties>
   </text>
-  
+
   <text id="score" x="0" y="300">
     <properties>
       <ustring>Telling:</ustring>
     </properties>
   </text>
-  
+
   <text id="explored-rooms" x="0" y="340">
     <properties>
       <ustring>%d Kamers verken</ustring>
     </properties>
   </text>
-  
+
   <text id="liberated-planets" x="0" y="380">
     <properties>
       <ustring>Skommel %d planete</ustring>
     </properties>
   </text>
-  
+
   <text id="rooms" x="0" y="0">
     <properties>
       <ustring>kamers</ustring>
     </properties>
   </text>
-  
+
   <text id="planets" x="0" y="0">
     <properties>
       <ustring>planete</ustring>
     </properties>
   </text>
-  
+
   <text id="final-text" x="0" y="200">
     <properties font="big" color="yellow">
       <ustring>Mense salueer jou heldedaad en</ustring>
@@ -632,77 +632,77 @@
       <ustring>Blacktooth Emperor's tirannie</ustring>
     </properties>
   </text>
-  
+
   <text id="dummy" x="0" y="180">
     <properties>
       <ustring>Skyn</ustring>
     </properties>
   </text>
-  
+
   <text id="novice" x="0" y="180">
     <properties>
       <ustring>Nuweling</ustring>
     </properties>
   </text>
-  
+
   <text id="spy" x="0" y="180">
     <properties>
       <ustring>Spioen</ustring>
     </properties>
   </text>
-  
+
   <text id="master-spy" x="0" y="180">
     <properties>
       <ustring>Baasspioen</ustring>
     </properties>
   </text>
-  
+
   <text id="hero" x="0" y="180">
     <properties>
       <ustring>Held</ustring>
     </properties>
   </text>
-  
+
   <text id="emperor" x="0" y="180">
     <properties>
       <ustring>Keiser</ustring>
     </properties>
   </text>
-  
+
   <text id="jon" x="64" y="22">
     <properties>
       <ustring>JON</ustring>
     </properties>
   </text>
-  
+
   <text id="ritman" x="40" y="52">
     <properties>
       <ustring>RITMAN</ustring>
     </properties>
   </text>
-  
+
   <text id="bernie" x="500" y="22">
     <properties>
       <ustring>BERNIE</ustring>
     </properties>
   </text>
-  
+
   <text id="drummond" x="483" y="52">
     <properties>
       <ustring>DRUMMOND</ustring>
     </properties>
   </text>
-  
+
   <text id="ocean" x="56" y="440">
     <properties>
       <ustring>{ 1987 Ocean Software Ltd.</ustring>
     </properties>
   </text>
-  
+
   <text id="jorge" x="56" y="410">
     <properties>
       <ustring>{ 2009 Jorge Rodríguez Santos</ustring>
     </properties>
   </text>
-  
+
 </language>

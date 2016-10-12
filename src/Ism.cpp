@@ -37,9 +37,9 @@ std::string homePath()
 #if defined ( __WIN32 )
       HomePath = sharePath();
 #else /* #elif defined ( __gnu_linux__ ) */
-      char* cpath = getenv("HOME");
-      assert(cpath != 0);
-      HomePath = std::string(cpath) + "/.headoverheels/";
+      char* home = getenv( "HOME" );
+      assert( home != 0 );
+      HomePath = std::string( home ) + "/.headoverheels/";
       if( ! file_exists( HomePath.c_str(), FA_DIREC, 0 ) )
       {
         mkdir( HomePath.c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH );

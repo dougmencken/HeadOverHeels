@@ -28,6 +28,8 @@
 #include <fstream>
 #include "csxml/SaveGameXML.hpp"
 #include "Ism.hpp"
+#include "PlayerItem.hpp"
+#include "Room.hpp"
 
 namespace isomot
 {
@@ -215,14 +217,10 @@ public:
 
         /**
          * Come un pez, es decir, desencadena el proceso para guardar la partida
-         * @param roomId Identificador de la sala donde se ha cogido el pez de la reencarnación
-         * @param label Etiqueta del jugador que ha cogido el pez
-         * @param x Coordenada X donde está situado el pez de la reencarnación
-         * @param y Coordenada Y donde está situado el pez de la reencarnación
-         * @param z Coordenada Z donde está situado el pez de la reencarnación
-         * @param direction Dirección a la que mira el jugador en el momento de coger el pez
          */
-        void eatFish ( const std::string& roomId, short label, int x, int y, int z, const Direction& direction ) ;
+        void eatFish ( PlayerItem* character, Room* room ) ;
+
+        void eatFish ( PlayerItem* character, Room* room, int x, int y, int z ) ;
 
         /**
          * Finaliza la partida porque los jugadores han perdido todas sus vidas
@@ -485,7 +483,7 @@ public: // Operaciones de consulta y actualización
         /**
          * Número de planetas liberados
          */
-        size_t getNumberFreePlanets () const ;
+        size_t countFreePlanets () const ;
 
 };
 

@@ -19,7 +19,7 @@ namespace isomot
 
 GameManager* GameManager::instance = 0;
 
-GameManager::GameManager()
+GameManager::GameManager( )
         : vidasInfinitas( false )
         , drawBackgroundPicture( true )
         , isomot( new Isomot() )
@@ -44,12 +44,12 @@ GameManager::GameManager()
 {
 }
 
-GameManager::~GameManager()
+GameManager::~GameManager( )
 {
         delete isomot;
 }
 
-GameManager* GameManager::getInstance()
+GameManager* GameManager::getInstance ()
 {
         if ( instance == 0 )
         {
@@ -59,7 +59,7 @@ GameManager* GameManager::getInstance()
         return instance;
 }
 
-StopCode GameManager::start()
+StopCode GameManager::start ()
 {
         this->vidasInfinitas = false;
         this->headLives = 8;
@@ -81,13 +81,13 @@ StopCode GameManager::start()
         return this->update();
 }
 
-StopCode GameManager::restart()
+StopCode GameManager::restart ()
 {
         this->isomot->restart();
         return this->update();
 }
 
-void GameManager::drawGameStatus( BITMAP* destination )
+void GameManager::drawGameStatus ( BITMAP* destination )
 {
         BITMAP* bitmap = 0;
         std::stringstream ss;
@@ -208,17 +208,17 @@ void GameManager::drawGameStatus( BITMAP* destination )
         release_screen();
 }
 
-void GameManager::loadGame( const std::string& fileName )
+void GameManager::loadGame ( const std::string& fileName )
 {
         this->gameFileManager->loadGame( fileName );
 }
 
-void GameManager::saveGame( const std::string& fileName )
+void GameManager::saveGame ( const std::string& fileName )
 {
         this->gameFileManager->saveGame( fileName );
 }
 
-void GameManager::addLives( const PlayerId& player, unsigned char lives )
+void GameManager::addLives ( const PlayerId& player, unsigned char lives )
 {
         switch( player )
         {
@@ -254,7 +254,7 @@ void GameManager::addLives( const PlayerId& player, unsigned char lives )
         }
 }
 
-void GameManager::loseLife( const PlayerId& player )
+void GameManager::loseLife ( const PlayerId& player )
 {
         if ( ! vidasInfinitas )
         {
@@ -291,7 +291,7 @@ void GameManager::loseLife( const PlayerId& player )
         }
 }
 
-void GameManager::takeTool( const MagicItem& label )
+void GameManager::takeTool ( const MagicItem& label )
 {
         switch( label )
         {
@@ -308,7 +308,7 @@ void GameManager::takeTool( const MagicItem& label )
         }
 }
 
-void GameManager::addHighSpeed( const PlayerId& player, unsigned int highSpeed )
+void GameManager::addHighSpeed ( const PlayerId& player, unsigned int highSpeed )
 {
         switch( player )
         {
@@ -326,7 +326,7 @@ void GameManager::addHighSpeed( const PlayerId& player, unsigned int highSpeed )
         }
 }
 
-void GameManager::decreaseHighSpeed( const PlayerId& player )
+void GameManager::decreaseHighSpeed ( const PlayerId& player )
 {
         switch(player)
         {
@@ -343,7 +343,7 @@ void GameManager::decreaseHighSpeed( const PlayerId& player )
         }
 }
 
-void GameManager::addHighJumps( const PlayerId& player, unsigned int highJumps )
+void GameManager::addHighJumps ( const PlayerId& player, unsigned int highJumps )
 {
         switch( player )
         {
@@ -361,7 +361,7 @@ void GameManager::addHighJumps( const PlayerId& player, unsigned int highJumps )
         }
 }
 
-void GameManager::decreaseHighJumps( const PlayerId& player )
+void GameManager::decreaseHighJumps ( const PlayerId& player )
 {
         switch( player )
         {
@@ -378,7 +378,7 @@ void GameManager::decreaseHighJumps( const PlayerId& player )
         }
 }
 
-void GameManager::addShield( const PlayerId& player, double shield )
+void GameManager::addShield ( const PlayerId& player, double shield )
 {
         switch( player )
         {
@@ -418,7 +418,7 @@ void GameManager::addShield( const PlayerId& player, double shield )
         }
 }
 
-void GameManager::decreaseShield( const PlayerId& player, double shield )
+void GameManager::decreaseShield ( const PlayerId& player, double shield )
 {
         switch( player )
         {
@@ -458,7 +458,7 @@ void GameManager::decreaseShield( const PlayerId& player, double shield )
         }
 }
 
-void GameManager::emptyHandbag( const PlayerId& player )
+void GameManager::emptyHandbag ( const PlayerId& player )
 {
         switch( player )
         {
@@ -472,7 +472,7 @@ void GameManager::emptyHandbag( const PlayerId& player )
         }
 }
 
-void GameManager::resetFreePlanets()
+void GameManager::resetFreePlanets ()
 {
         for( int i = Blacktooth; i < Safari; ++i )
         {
@@ -480,7 +480,7 @@ void GameManager::resetFreePlanets()
         }
 }
 
-void GameManager::liberatePlanet( const PlanetId& planet, bool now )
+void GameManager::liberatePlanet ( const PlanetId& planet, bool now )
 {
         if( planet >= Blacktooth && planet <= Safari )
         {
@@ -489,7 +489,7 @@ void GameManager::liberatePlanet( const PlanetId& planet, bool now )
         }
 }
 
-bool GameManager::isFreePlanet( const PlanetId& planet ) const
+bool GameManager::isFreePlanet ( const PlanetId& planet ) const
 {
         bool isFree = false;
 
@@ -501,7 +501,7 @@ bool GameManager::isFreePlanet( const PlanetId& planet ) const
         return isFree;
 }
 
-unsigned short GameManager::freePlanetsCount() const
+unsigned short GameManager::freePlanetsCount () const
 {
         unsigned short number = 0;
 
@@ -513,13 +513,21 @@ unsigned short GameManager::freePlanetsCount() const
         return number;
 }
 
-void GameManager::eatFish( const std::string& roomId, short label, int x, int y, int z, const Direction& direction )
+void GameManager::eatFish ( PlayerItem* character, Room* room )
 {
-        this->eatenFish = true;
-        this->gameFileManager->assignFishData( roomId, label, x, y, z, direction );
+        this->eatFish( character, room, character->getX (), character->getY (), character->getZ () ) ;
 }
 
-StopCode GameManager::update()
+void GameManager::eatFish ( PlayerItem* character, Room* room, int x, int y, int z )
+{
+        this->eatenFish = true;
+
+        this->gameFileManager->assignFishData(
+                room->getIdentifier (), character->getLabel (),
+                        x, y, z, character->getDirection () ) ;
+}
+
+StopCode GameManager::update ()
 {
         StopCode stopCode = NoStopCode;
 
@@ -555,7 +563,7 @@ StopCode GameManager::update()
         return stopCode;
 }
 
-StopCode GameManager::stop()
+StopCode GameManager::stop ()
 {
         bool exit = false;
         bool confirm = false;
@@ -618,8 +626,8 @@ StopCode GameManager::stop()
                         {
                                 int key = readkey() >> 8;
 
-                                // Si se pulsa F2 se mostrará la interfaz para la grabación de la partida
-                                if( key == KEY_F2 )
+                                // Si se pulsa SPACE se mostrará la interfaz para la grabación de la partida
+                                if( key == KEY_SPACE )
                                 {
                                         exit = true;
                                         stopCode = SaveGame;
@@ -731,7 +739,7 @@ StopCode GameManager::stop()
         return stopCode;
 }
 
-unsigned char GameManager::getLives( const PlayerId& player ) const
+unsigned char GameManager::getLives ( const PlayerId& player ) const
 {
         unsigned char lives = 0;
 
@@ -756,7 +764,7 @@ unsigned char GameManager::getLives( const PlayerId& player ) const
         return lives;
 }
 
-double GameManager::getShield( const PlayerId& player ) const
+double GameManager::getShield ( const PlayerId& player ) const
 {
         double time = 0.0;
 
@@ -781,7 +789,7 @@ double GameManager::getShield( const PlayerId& player ) const
         return time;
 }
 
-std::vector< short > GameManager::hasTool( const PlayerId& player ) const
+std::vector< short > GameManager::hasTool ( const PlayerId& player ) const
 {
         std::vector< short > tools;
 
@@ -819,12 +827,12 @@ std::vector< short > GameManager::hasTool( const PlayerId& player ) const
         return tools;
 }
 
-unsigned short GameManager::getDonuts( const PlayerId& player ) const
+unsigned short GameManager::getDonuts ( const PlayerId& player ) const
 {
         return ( player == Head || player == HeadAndHeels ? this->donuts : 0 );
 }
 
-size_t GameManager::getNumberFreePlanets() const
+size_t GameManager::countFreePlanets () const
 {
         return std::count( this->freePlanets.begin (), this->freePlanets.end (), true );
 }
