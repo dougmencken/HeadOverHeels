@@ -42,11 +42,11 @@ class PlayerItem;
  */
 enum PlanetId
 {
-  Blacktooth,
-  Egyptus,
-  Penitentiary,
-  Byblos,
-  Safari
+        Blacktooth,
+        Egyptus,
+        Penitentiary,
+        Byblos,
+        Safari
 };
 
 /**
@@ -54,12 +54,12 @@ enum PlanetId
  */
 enum StopCode
 {
-  NoStopCode, /**< Ninguno. */
-  UserAction, /**< El usuario ha detenido la partida. */
-  FreePlanet, /**< Se acaba de liberar un planeta. */
-  SaveGame,   /**< Se acaba de coger el pez de la reencarnación. */
-  Freedom,    /**< Se ha llegado a Freedom pero no con todas las coronas. */
-  Sucess      /**< Se ha conseguido acabar el juego. */
+        NoStopCode,   /*  Ninguno  */
+        UserAction,   /*  El usuario ha detenido la partida  */
+        FreePlanet,   /*  Se acaba de liberar un planeta  */
+        SaveGame,     /*  Se acaba de coger el pez de la reencarnación  */
+        Freedom,      /*  Se ha llegado a Freedom pero no con todas las coronas  */
+        Sucess        /*  Se ha conseguido acabar el juego  */
 };
 
 /**
@@ -69,412 +69,424 @@ enum StopCode
  */
 class GameManager
 {
+
 private:
 
-	GameManager();
+        GameManager( ) ;
 
 public:
 
-	virtual ~GameManager();
+        virtual ~GameManager( ) ;
 
-  /**
-   * Único objeto de esta clase para toda la aplicación
-   * @return Un puntero al objeto único
-   */
-  static GameManager* getInstance();
+        /**
+         * Único objeto de esta clase para toda la aplicación
+         * @return Un puntero al objeto único
+         */
+        static GameManager* getInstance () ;
 
-  /**
-   * Todo empieza aquí
-   * @return Razón por la que se ha detenido el juego
-   */
-  StopCode start();
+        /**
+         * Todo empieza aquí
+         * @return Razón por la que se ha detenido el juego
+         */
+        StopCode start () ;
 
-  /**
-   * Reanuda la partida tras una interrupción. La interrupción viene dada porque se ha liberado
-   * un planeta o porque se acaba de grabar la partida
-   * @return Razón por la que se ha interrumpido el juego
-   */
-  StopCode restart();
+        /**
+         * Reanuda la partida tras una interrupción. La interrupción viene dada porque se ha liberado
+         * un planeta o porque se acaba de grabar la partida
+         * @return Razón por la que se ha interrumpido el juego
+         */
+        StopCode restart () ;
 
-  /**
-   * Dibuja en pantalla la información relativa al juego actual compuesta de:
-   * un marco, vidas disponibles, herramientas disponibles, objeto guardado en el
-   * bolso, tiempo restante de inmunidad, saltos largos disponibles y rosquillas
-   * disponibles
-   * @param destination Imagen donde se dibujará toda la información
-   */
-  void drawGameStatus(BITMAP* destination);
+        /**
+         * Dibuja en pantalla la información relativa al juego actual compuesta de:
+         * un marco, vidas disponibles, herramientas disponibles, objeto guardado en el
+         * bolso, tiempo restante de inmunidad, saltos largos disponibles y rosquillas
+         * disponibles
+         * @param destination Imagen donde se dibujará toda la información
+         */
+        void drawGameStatus ( BITMAP* destination ) ;
 
-  /**
-   * Carga una partida grabada en disco
-   * @param fileName Nombre del archivo que contiene los datos de la partida
-   */
-  void loadGame(const std::string& fileName);
+        /**
+         * Carga una partida grabada en disco
+         * @param fileName Nombre del archivo que contiene los datos de la partida
+         */
+        void loadGame ( const std::string& fileName ) ;
 
-  /**
-   * Guarda en disco la partida actual
-   * @param fileName Nombre del archivo
-   */
-  void saveGame(const std::string& fileName);
+        /**
+         * Guarda en disco la partida actual
+         * @param fileName Nombre del archivo
+         */
+        void saveGame ( const std::string& fileName ) ;
 
-  /**
-   * Añade un número de vidas a un jugador
-   * @param player Identificador del jugador
-   * @param lives Número de vidas a sumar
-   */
-  void addLives(const PlayerId& player, unsigned char lives);
+        /**
+         * Añade un número de vidas a un jugador
+         * @param player Identificador del jugador
+         * @param lives Número de vidas a sumar
+         */
+        void addLives ( const PlayerId& player, unsigned char lives ) ;
 
-  /**
-   * Resta una vida a un jugador
-   * @param player Identificador del jugador
-   */
-  void loseLife(const PlayerId& player);
+        /**
+         * Resta una vida a un jugador
+         * @param player Identificador del jugador
+         */
+        void loseLife ( const PlayerId& player ) ;
 
-  /**
-   * Un jugador coge su complemento
-   * @param Etiqueta del elemento
-   */
-  void takeTool(const MagicItem& label);
+        /**
+         * Un jugador coge su complemento
+         * @param Etiqueta del elemento
+         */
+        void takeTool ( const MagicItem& label ) ;
 
-  /**
-   * Resta una rosquilla a Head
-   */
-  void consumeDonut() { this->donuts--; }
+        /**
+         * Resta una rosquilla a Head
+         */
+        void consumeDonut () {  this->donuts-- ;  }
 
-  /**
-   * Añade velocidad doble a un jugador
-   * @param player Jugador que toma la velocidad
-   * @param highSpeed Un número entre 0 y 99
-   */
-  void addHighSpeed(const PlayerId& player, unsigned int highSpeed);
+        /**
+         * Añade velocidad doble a un jugador
+         * @param player Jugador que toma la velocidad
+         * @param highSpeed Un número entre 0 y 99
+         */
+        void addHighSpeed ( const PlayerId& player, unsigned int highSpeed ) ;
 
-  /**
-   * Resta una unidad al tiempo restante de doble velocidad
-   * @param Jugador que tiene la doble velocidad
-   */
-  void decreaseHighSpeed(const PlayerId& player);
+        /**
+         * Resta una unidad al tiempo restante de doble velocidad
+         * @param Jugador que tiene la doble velocidad
+         */
+        void decreaseHighSpeed ( const PlayerId& player ) ;
 
-  /**
-   * Añade un número de grandes saltos a un jugador
-   * @param player Jugador que toma los saltos
-   * @param highJumps Un número entre 0 y 10
-   */
-  void addHighJumps(const PlayerId& player, unsigned int highJumps);
+        /**
+         * Añade un número de grandes saltos a un jugador
+         * @param player Jugador que toma los saltos
+         * @param highJumps Un número entre 0 y 10
+         */
+        void addHighJumps ( const PlayerId& player, unsigned int highJumps ) ;
 
-  /**
-   * Resta un gran salto al jugador
-   * @param player Jugador que tiene los saltos
-   */
-  void decreaseHighJumps(const PlayerId& player);
+        /**
+         * Resta un gran salto al jugador
+         * @param player Jugador que tiene los saltos
+         */
+        void decreaseHighJumps ( const PlayerId& player ) ;
 
-  /**
-   * Añade inmunidad a un jugador
-   * @param player Jugador que toma la inmunidad
-   * @param shield Un número de milisegundos
-   */
-  void addShield(const PlayerId& player, double shield);
+        /**
+         * Añade inmunidad a un jugador
+         * @param player Jugador que toma la inmunidad
+         * @param shield Un número de milisegundos
+         */
+        void addShield ( const PlayerId& player, double shield ) ;
 
-  /**
-   * Actualiza el tiempo restante de inmunidad
-   * @param player Jugador que tiene la inmunidad
-   * @param shield Un número de milisegundos
-   */
-  void decreaseShield(const PlayerId& player, double shield);
+        /**
+         * Actualiza el tiempo restante de inmunidad
+         * @param player Jugador que tiene la inmunidad
+         * @param shield Un número de milisegundos
+         */
+        void decreaseShield ( const PlayerId& player, double shield ) ;
 
-  /**
-   * Elimina el elemento que contiene el bolso para no mostrarlo en la interfaz
-   * @param player Jugador que tiene el bolso
-   */
-  void emptyHandbag(const PlayerId& player);
+        /**
+         * Elimina el elemento que contiene el bolso para no mostrarlo en la interfaz
+         * @param player Jugador que tiene el bolso
+         */
+        void emptyHandbag ( const PlayerId& player ) ;
 
-  /**
-   * Establece todos los planetas como miembros del Imperio Blacktooth
-   */
-  void resetFreePlanets();
+        /**
+         * Establece todos los planetas como miembros del Imperio Blacktooth
+         */
+        void resetFreePlanets () ;
 
-  /**
-   * Libera un planeta
-   * @param planet El planeta liberado: Blacktooth, Egyptus, Penitentiary, Byblos o Safari
-   * @param now Indica si se acaba de liberar o bien ya estaba liberado de una partida anterior
-   */
-  void liberatePlanet(const PlanetId& planet, bool now = true);
+        /**
+         * Libera un planeta
+         * @param planet El planeta liberado: Blacktooth, Egyptus, Penitentiary, Byblos o Safari
+         * @param now Indica si se acaba de liberar o bien ya estaba liberado de una partida anterior
+         */
+        void liberatePlanet ( const PlanetId& planet, bool now = true ) ;
 
-  /**
-   * Indica si un planeta es libre
-   * @param planet Un planeta: Blacktooth, Egyptus, Penitentiary, Byblos o Safari
-   * @return true si se tiene la corona correspondiente o false en caso contrario
-   */
-  bool isFreePlanet(const PlanetId& planet) const;
+        /**
+         * Indica si un planeta es libre
+         * @param planet Un planeta: Blacktooth, Egyptus, Penitentiary, Byblos o Safari
+         * @return true si se tiene la corona correspondiente o false en caso contrario
+         */
+        bool isFreePlanet ( const PlanetId& planet ) const ;
 
-  /**
-   * Número de planetas liberados hasta el momento
-   * @return Un número entre 0 y 5
-   */
-  unsigned short freePlanetsCount() const;
+        /**
+         * Número de planetas liberados hasta el momento
+         * @return Un número entre 0 y 5
+         */
+        unsigned short freePlanetsCount () const ;
 
-  /**
-   * Come un pez, es decir, desencadena el proceso para guardar la partida
-   * @param roomId Identificador de la sala donde se ha cogido el pez de la reencarnación
-   * @param label Etiqueta del jugador que ha cogido el pez
-   * @param x Coordenada X donde está situado el pez de la reencarnación
-   * @param y Coordenada Y donde está situado el pez de la reencarnación
-   * @param z Coordenada Z donde está situado el pez de la reencarnación
-   * @param direction Dirección a la que mira el jugador en el momento de coger el pez
-   */
-  void eatFish(const std::string& roomId, short label, int x, int y, int z, const Direction& direction);
+        /**
+         * Come un pez, es decir, desencadena el proceso para guardar la partida
+         * @param roomId Identificador de la sala donde se ha cogido el pez de la reencarnación
+         * @param label Etiqueta del jugador que ha cogido el pez
+         * @param x Coordenada X donde está situado el pez de la reencarnación
+         * @param y Coordenada Y donde está situado el pez de la reencarnación
+         * @param z Coordenada Z donde está situado el pez de la reencarnación
+         * @param direction Dirección a la que mira el jugador en el momento de coger el pez
+         */
+        void eatFish ( const std::string& roomId, short label, int x, int y, int z, const Direction& direction ) ;
 
-  /**
-   * Finaliza la partida porque los jugadores han perdido todas sus vidas
-   */
-  void end() { this->gameOver = true; }
+        /**
+         * Finaliza la partida porque los jugadores han perdido todas sus vidas
+         */
+        void end () {  this->gameOver = true ;  }
 
-  /**
-   * Finaliza la partida porque los jugadores han llegado a Freedom
-   */
-  void arriveFreedom() { this->freedom = true; }
+        /**
+         * Finaliza la partida porque los jugadores han llegado a Freedom
+         */
+        void arriveFreedom () {  this->freedom = true ;  }
 
-  /**
-   * Finaliza la partida porque los jugadores se han proclamado emperadores
-   */
-  void success() { this->emperator = true; }
+        /**
+         * Finaliza la partida porque los jugadores se han proclamado emperadores
+         */
+        void success () {  this->emperator = true ;  }
 
 private:
 
-  /**
-   * Actualiza el juego de forma periódica. Implica redibujar la vista isométrica,
-   * que a su vez, actualiza el estado de todos los elementos
-   * @return Razón por la que se ha detenido la actualización
-   */
-  StopCode update();
+        /**
+         * Actualiza el juego de forma periódica. Implica redibujar la vista isométrica,
+         * que a su vez, actualiza el estado de todos los elementos
+         * @return Razón por la que se ha detenido la actualización
+         */
+        StopCode update () ;
 
-  /**
-   * Detiene el juego en curso. Si el usuario pulsa ESC abandonará la partida
-   * en curso y si pulsa cualquier otra tecla el juego continuará
-   * @return Razón por la que se ha detenido la actualización
-   */
-  StopCode stop();
+        /**
+         * Detiene el juego en curso. Si el usuario pulsa ESC abandonará la partida
+         * en curso y si pulsa cualquier otra tecla el juego continuará
+         * @return Razón por la que se ha detenido la actualización
+         */
+        StopCode stop () ;
 
 public:
 
-  /**
-   * Indica si se han activado las vidas infinitas
-   */
-  bool infiniteLives;
+        bool areLivesInexhaustible () const {  return vidasInfinitas ;  }
+
+        void toggleInfiniteLives () {  vidasInfinitas = ! vidasInfinitas ;  }
+
+        bool hasBackgroundPicture () const {  return drawBackgroundPicture ;  }
+
+        void toggleBackgroundPicture () {  drawBackgroundPicture = ! drawBackgroundPicture ;  }
 
 private:
 
-  /**
-   * Único objeto de esta clase para toda la aplicación
-   */
-  static GameManager* instance;
+        /**
+         * Indica si se han activado las vidas infinitas
+         */
+        bool vidasInfinitas ;
 
-  /**
-   * El motor isométrico del juego
-   */
-  Isomot* isomot;
+        bool drawBackgroundPicture ;
 
-  /**
-   * Gestor de la grabación y recuperación de una partida
-   */
-  GameFileManager* gameFileManager;
+        /**
+         * Único objeto de esta clase para toda la aplicación
+         */
+        static GameManager* instance ;
 
-  /**
-   * Vidas de Head
-   */
-  unsigned char headLives;
+        /**
+         * El motor isométrico del juego
+         */
+        Isomot* isomot ;
 
-  /**
-   * Vidas de Heels
-   */
-  unsigned char heelsLives;
+        /**
+         * Gestor de la grabación y recuperación de una partida
+         */
+        GameFileManager* gameFileManager ;
 
-  /**
-   * Tiempo restante para consumir la doble velocidad de Head
-   */
-  unsigned int highSpeed;
+        /**
+         * Vidas de Head
+         */
+        unsigned char headLives ;
 
-  /**
-   * Número de grandes saltos que le restan a Heels
-   */
-  unsigned int highJumps;
+        /**
+         * Vidas de Heels
+         */
+        unsigned char heelsLives ;
 
-  /**
-   * Tiempo restante para consumir la inmunidad de Head
-   */
-  double headShield;
+        /**
+         * Tiempo restante para consumir la doble velocidad de Head
+         */
+        unsigned int highSpeed ;
 
-  /**
-   * Tiempo restante para consumir la inmunidad de Heels
-   */
-  double heelsShield;
+        /**
+         * Número de grandes saltos que le restan a Heels
+         */
+        unsigned int highJumps ;
 
-  /**
-   * Indica si Head tiene la bocina
-   */
-  bool horn;
+        /**
+         * Tiempo restante para consumir la inmunidad de Head
+         */
+        double headShield ;
 
-  /**
-   * Indica si Heels tiene el bolso
-   */
-  bool handbag;
+        /**
+         * Tiempo restante para consumir la inmunidad de Heels
+         */
+        double heelsShield ;
 
-  /**
-   * Número de rosquillas que tiene Head
-   */
-  unsigned short donuts;
+        /**
+         * Indica si Head tiene la bocina
+         */
+        bool horn ;
 
-  /**
-   * Imagen del elemento que está dentro del bolso
-   */
-  BITMAP* itemTaken;
+        /**
+         * Indica si Heels tiene el bolso
+         */
+        bool handbag ;
 
-  /**
-   * Número de salas visitadas por los jugadores
-   */
-  unsigned short visitedRooms;
+        /**
+         * Número de rosquillas que tiene Head
+         */
+        unsigned short donuts ;
 
-  /**
-   * Indica qué planetas han sido liberados. El orden de los mísmos viene dado por
-   * el enumerado PlanetId
-   */
-  std::vector<bool> freePlanets;
+        /**
+         * Imagen del elemento que está dentro del bolso
+         */
+        BITMAP* itemTaken ;
 
-  /**
-   * Si un jugador acaba de coger una corona se detiene la partida para mostrar la pantalla de los planetas
-   */
-  bool takenCrown;
+        /**
+         * Número de salas visitadas por los jugadores
+         */
+        unsigned short visitedRooms ;
 
-  /**
-   * Si un jugador acaba de comer un pez se detiene la partida para dar la opción de grabar la partida
-   */
-  bool eatenFish;
+        /**
+         * Indica qué planetas han sido liberados. El orden de los mísmos viene dado por
+         * el enumerado PlanetId
+         */
+        std::vector< bool > freePlanets ;
 
-  /**
-   * Los jugadores han perdido todas las vidas
-   */
-  bool gameOver;
+        /**
+         * Si un jugador acaba de coger una corona se detiene la partida para mostrar la pantalla de los planetas
+         */
+        bool takenCrown ;
 
-  /**
-   * Los jugadores han llegado a Freedom
-   */
-  bool freedom;
+        /**
+         * Si un jugador acaba de comer un pez se detiene la partida para dar la opción de grabar la partida
+         */
+        bool eatenFish ;
 
-  /**
-   * Los jugadores se han proclamado Emperadores de Blacktooth
-   */
-  bool emperator;
+        /**
+         * Los jugadores han perdido todas las vidas
+         */
+        bool gameOver ;
+
+        /**
+         * Los jugadores han llegado a Freedom
+         */
+        bool freedom ;
+
+        /**
+         * Los jugadores se han proclamado Emperadores de Blacktooth
+         */
+        bool emperator ;
 
 public: // Operaciones de consulta y actualización
 
-  /**
-   * Establece el número de vidas de Head
-   * @param lives Un número entre 0 y 8
-   */
-  void setHeadLives(unsigned char lives) { this->headLives = lives; }
+        /**
+         * Establece el número de vidas de Head
+         * @param lives Un número entre 0 y 8
+         */
+        void setHeadLives ( unsigned char lives ) {  this->headLives = lives ;  }
 
-  /**
-   * Establece el número de vidas de Heels
-   * @param lives Un número entre 0 y 8
-   */
-  void setHeelsLives(unsigned char lives) { this->heelsLives = lives; }
+        /**
+         * Establece el número de vidas de Heels
+         * @param lives Un número entre 0 y 8
+         */
+        void setHeelsLives ( unsigned char lives ) {  this->heelsLives = lives ;  }
 
-  /**
-   * Devuelve el número de vias de un jugador
-   * @param player El jugador
-   * @return Un número entre 0 y 8
-   */
-  unsigned char getLives(const PlayerId& player) const;
+        /**
+         * Devuelve el número de vias de un jugador
+         * @param player El jugador
+         * @return Un número entre 0 y 8
+         */
+        unsigned char getLives ( const PlayerId& player ) const ;
 
-  /**
-   * Establece el tiempo restante de movimiento a doble velocidad
-   * @param Un número entre 0 y 99
-   */
-  void setHighSpeed(unsigned int highSpeed) { this->highSpeed = highSpeed; }
+        /**
+         * Establece el tiempo restante de movimiento a doble velocidad
+         * @param Un número entre 0 y 99
+         */
+        void setHighSpeed ( unsigned int highSpeed ) {  this->highSpeed = highSpeed ;  }
 
-  /**
-   * Devuelve el tiempo restante de movimiento a doble velocidad
-   * @return Un número entre 0 y 99
-   */
-  unsigned int getHighSpeed() const { return this->highSpeed; }
+        /**
+         * Devuelve el tiempo restante de movimiento a doble velocidad
+         * @return Un número entre 0 y 99
+         */
+        unsigned int getHighSpeed () const {  return this->highSpeed;  }
 
-  /**
-   * Establece el número de grandes saltos del jugador
-   * @param highJumps Un número entre 0 y 10
-   */
-  void setHighJumps(unsigned int highJumps) { this->highJumps = highJumps; }
+        /**
+         * Establece el número de grandes saltos del jugador
+         * @param highJumps Un número entre 0 y 10
+         */
+        void setHighJumps ( unsigned int highJumps ) {  this->highJumps = highJumps ;  }
 
-  /**
-   * Devuelve el número de grandes saltos del jugador
-   * @return Un número entre 0 y 10
-   */
-  unsigned int getHighJumps() const { return this->highJumps; }
+        /**
+         * Devuelve el número de grandes saltos del jugador
+         * @return Un número entre 0 y 10
+         */
+        unsigned int getHighJumps () const {  return this->highJumps ;  }
 
-  /**
-   * Establece el tiempo restante de inmunidad para Head
-   * @param Un número de milisegundos
-   */
-  void setHeadShield(unsigned int shield) { this->headShield = shield; }
+        /**
+         * Establece el tiempo restante de inmunidad para Head
+         * @param Un número de milisegundos
+         */
+        void setHeadShield ( unsigned int shield ) {  this->headShield = shield ;  }
 
-  /**
-   * Establece el tiempo restante de inmunidad para Heels
-   * @param Un número de milisegundos
-   */
-  void setHeelsShield(unsigned int shield) { this->heelsShield = shield; }
+        /**
+         * Establece el tiempo restante de inmunidad para Heels
+         * @param Un número de milisegundos
+         */
+        void setHeelsShield ( unsigned int shield ) {  this->heelsShield = shield ;  }
 
-  /**
-   * Devuelve el tiempo restante de inmunidad de un jugador
-   * @param player El jugador
-   * @return Un número de milisegundos
-   */
-  double getShield(const PlayerId& player) const;
+        /**
+         * Devuelve el tiempo restante de inmunidad de un jugador
+         * @param player El jugador
+         * @return Un número de milisegundos
+         */
+        double getShield ( const PlayerId& player ) const ;
 
-  /**
-   * Establece la posesión de la bocina por Head
-   * @param hasHorn true si tiene la bocina o false en caso contrario
-   */
-  void setHorn(bool hasHorn) { this->horn = hasHorn; }
+        /**
+         * Establece la posesión de la bocina por Head
+         * @param hasHorn true si tiene la bocina o false en caso contrario
+         */
+        void setHorn ( bool hasHorn ) {  this->horn = hasHorn ;  }
 
-  /**
-   * Indica si un jugador posee su complemento
-   * @param player El jugador
-   * @return Un vector con las etiquetas de los complementos que posee el jugador
-   */
-  std::vector<short> hasTool(const PlayerId& player) const;
+        /**
+         * Indica si un jugador posee su complemento
+         * @param player El jugador
+         * @return Un vector con las etiquetas de los complementos que posee el jugador
+         */
+        std::vector< short > hasTool ( const PlayerId& player ) const ;
 
-  /**
-   * Establece la posesión del bolso por Heels
-   * @param hasHorn true si tiene el bolso o false en caso contrario
-   */
-  void setHandbag(bool hasHandbag) { this->handbag = hasHandbag; }
+        /**
+         * Establece la posesión del bolso por Heels
+         * @param hasHorn true si tiene el bolso o false en caso contrario
+         */
+        void setHandbag ( bool hasHandbag ) {  this->handbag = hasHandbag ;  }
 
-  /**
-   * Establece el número de rosquillas que tiene Head
-   * @param Un número mayor o igual que 0
-   */
-  void setDonuts(unsigned short number) { this->donuts = number; }
+        /**
+         * Establece el número de rosquillas que tiene Head
+         * @param Un número mayor o igual que 0
+         */
+        void setDonuts ( unsigned short number ) {  this->donuts = number ;  }
 
-  /**
-   * Devuelve el número de rosquillas que tiene Head
-   * @return Un número mayor o igual que 0
-   */
-  unsigned short getDonuts(const PlayerId& player) const;
+        /**
+         * Devuelve el número de rosquillas que tiene Head
+         * @return Un número mayor o igual que 0
+         */
+        unsigned short getDonuts ( const PlayerId& player ) const ;
 
-  /**
-   * Imagen del elemento que está dentro del bolso
-   * @param bitmap Un fotograma del elemento
-   */
-  void setItemTaken(BITMAP* bitmap) { this->itemTaken = bitmap; }
+        /**
+         * Imagen del elemento que está dentro del bolso
+         * @param bitmap Un fotograma del elemento
+         */
+        void setItemTaken ( BITMAP* bitmap ) {  this->itemTaken = bitmap ;  }
 
-  /**
-   * Número de salas visitadas por los jugadores
-   * @return Un número mayor que 2
-   */
-  unsigned short getVisitedRooms() const { return this->visitedRooms; }
+        /**
+         * Número de salas visitadas por los jugadores
+         * @return Un número mayor que 2
+         */
+        unsigned short getVisitedRooms () const {  return this->visitedRooms ;  }
 
-  /**
-   * Número de planetas liberados
-   */
-  size_t getNumberFreePlanets() const;
+        /**
+         * Número de planetas liberados
+         */
+        size_t getNumberFreePlanets () const ;
+
 };
 
 }

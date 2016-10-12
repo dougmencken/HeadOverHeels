@@ -442,4 +442,24 @@ Door* RoomBuilder::buildDoor(const rxml::item& item)
   return new Door(this->itemDataManager, item.label(), item.x(), item.y(), (item.z() > Top ? item.z() * LayerHeight : Top), Direction(item.direction() - 1));
 }
 
+/* static */
+int RoomBuilder::getXCenterOfRoom( ItemData* playerData, Room* theRoom )
+{
+        return
+                ( ( theRoom->getBound( South ) - theRoom->getBound( North ) + playerData->widthX ) >> 1 )
+                        + ( theRoom->getDoor( North ) != 0 ? theRoom->getTileSize() >> 1 : 0 )
+                                - ( theRoom->getDoor( South ) != 0 ? theRoom->getTileSize() >> 1 : 0 ) ;
+
+}
+
+/* static */
+int RoomBuilder::getYCenterOfRoom( ItemData* playerData, Room* theRoom )
+{
+        return
+                ( ( theRoom->getBound( West ) - theRoom->getBound( East ) + playerData->widthY ) >> 1 )
+                        + ( theRoom->getDoor( East ) != 0 ? theRoom->getTileSize() >> 1 : 0 )
+                                - ( theRoom->getDoor( West ) != 0 ? theRoom->getTileSize() >> 1 : 0 )
+                                        - 1 ;
+}
+
 }

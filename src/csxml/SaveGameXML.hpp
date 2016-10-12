@@ -501,7 +501,7 @@ namespace sgxml
     player ();
 
     void
-    player (const player_sequence& s);
+    player ( const player_sequence& s );
 
     // Constructors
     //
@@ -845,8 +845,7 @@ namespace sgxml
     //
     protected:
     void
-    parse (::xsd::cxx::xml::dom::parser< char >&,
-           ::xml_schema::flags);
+    parse ( ::xsd::cxx::xml::dom::parser< char >&, ::xml_schema::flags );
 
     private:
     ::xsd::cxx::tree::one< active_type > active_;

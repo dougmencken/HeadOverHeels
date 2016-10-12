@@ -30,6 +30,9 @@
 #include "csxml/MapXML.hpp"
 #include "csxml/SaveGameXML.hpp"
 
+# include "Room.hpp"
+# include "ItemDataManager.hpp"
+
 namespace isomot
 {
 
@@ -42,6 +45,7 @@ class Room;
  */
 class MapManager
 {
+
 public:
 
   /**
@@ -49,7 +53,7 @@ public:
    * @param isomot El motor isométrico
    * @param fileName Nombre del archivo XML que contiene los datos del mapa
    */
-  MapManager(Isomot* isomot, const std::string& fileName);
+  MapManager( Isomot* isomot, const std::string& fileName );
 
   virtual ~MapManager();
 
@@ -65,13 +69,13 @@ public:
    * @param secondRoomFileName Nombre del archivo XML que contiene los datos del mapa de la segunda sala
    * del juego, aquella donde se colocará al segundo jugador
    */
-  virtual void start(const std::string& firstRoomFileName, const std::string& secondRoomFileName);
+  virtual void beginNewGame( const std::string& firstRoomFileName, const std::string& secondRoomFileName );
 
   /**
    * Crea la sala inicial de un jugador determinado
    * @param data Datos del archivo que contiene la información de una partida guardada
    */
-  void startOldGame(const sgxml::player& data);
+  void beginOldGame( const sgxml::player& data );
 
   /**
    * Limpia los datos almacenados relacionados con la partida en curso
@@ -83,7 +87,7 @@ public:
    * @param exit Salida tomada por el jugador
    * @return La nueva sala
    */
-  Room* changeRoom(const Direction& exit);
+  Room* changeRoom( const Direction& exit );
 
   /**
    * Reinicia la sala activa, es decir, se vuelve a crear la sala activa en el estado inicial
@@ -96,7 +100,7 @@ public:
    * @param fileName Nombre del archivo que contiene los datos de la sala
    * @return La sala creada ó 0 si no se pudo construir
    */
-  Room* createRoom(const std::string& fileName);
+  Room* createRoom( const std::string& fileName );
 
   /**
    * Cambia la sala activa por la sala siguiente donde haya un jugador
@@ -120,14 +124,14 @@ public:
    * @param visitedSequence Estructura de datos empleada por el archivo XML para guardar
    * las salas visitadas
    */
-  void load(sgxml::exploredRooms::visited_sequence& visitedSequence);
+  void load( sgxml::exploredRooms::visited_sequence& visitedSequence );
 
   /**
    * Guarda en disco las salas visitadas por los jugadores
    * @param visitedSequence Estructura de datos empleada por el archivo XML para guardar
    * las salas visitadas
    */
-  void save(sgxml::exploredRooms::visited_sequence& visitedSequence);
+  void save( sgxml::exploredRooms::visited_sequence& visitedSequence );
 
   /**
    * Cuenta el número de salas visitadas por los jugadores
@@ -140,14 +144,14 @@ public:
    * @param room El nombre del archivo de la sala
    * @return Un registro con los datos de la sala en el mapa ó 0 si la búsqueda fracasó
    */
-  MapRoomData* findRoomData(const std::string& room);
+  MapRoomData* findRoomData( const std::string& room );
 
   /**
    * Busca una sala en el conjunto de salas creadas
    * @param room El nombre del archivo de la sala
    * @return Una sala ó 0 si la búsqueda fracasó
    */
-  Room* findRoom(const std::string& room);
+  Room* findRoom( const std::string& room );
 
   /**
    * Busca la vía de entrada de un jugador a una sala
@@ -155,7 +159,7 @@ public:
    * @param playerId Un jugador
    * @return La dirección de entrada a la sala
    */
-  PlayerStartPosition* findPlayerPosition(const std::string& room, const PlayerId& playerId);
+  PlayerStartPosition* findPlayerPosition( const std::string& room, const PlayerId& playerId );
 
 protected:
 
@@ -182,7 +186,7 @@ protected:
   /**
    * Datos de todas las salas en el mapa. Almacena la comunicación entre ellas
    */
-  std::list<MapRoomData> mapData;
+  std::list< MapRoomData > mapData;
 
   /**
    * Ruta absoluta a los archivos del mapa
@@ -202,6 +206,7 @@ public: // Operaciones de consulta y actualización
    * @return Una sala ó 0 si no hay más jugadores
    */
   Room* getHideRoom();
+
 };
 
 /**
@@ -209,17 +214,21 @@ public: // Operaciones de consulta y actualización
  */
 class EqualMapRoomData : public std::binary_function<MapRoomData, std::string, bool>
 {
+
 public:
-  bool operator()(const MapRoomData& mapData, const std::string& room) const;
+  bool operator()( const MapRoomData& mapData, const std::string& room ) const;
+
 };
 
 /**
  * Objeto-función usado como predicado en la búsqueda de una sala
  */
-class EqualRoom : public std::binary_function<Room*, std::string, bool>
+class EqualRoom : public std::binary_function< Room*, std::string, bool >
 {
+
 public:
-  bool operator()(Room* room, const std::string& identifier) const;
+  bool operator()( Room* room, const std::string& identifier ) const;
+
 };
 
 }

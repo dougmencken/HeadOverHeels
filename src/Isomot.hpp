@@ -24,6 +24,7 @@
 #ifdef __WIN32
   #include <winalleg.h>
 #endif
+
 #include "csxml/SaveGameXML.hpp"
 
 namespace isomot
@@ -38,89 +39,93 @@ class MapManager;
  */
 class Isomot
 {
+
 public:
 
-  Isomot();
+        Isomot();
 
-  virtual ~Isomot();
+        virtual ~Isomot();
 
-  /**
-   * Crea las salas iniciales y pone en marcha el motor isométrico
-   */
-  void start();
+        /**
+         * Crea las salas iniciales y pone en marcha el motor isométrico
+         */
+        void start();
 
-  /**
-   * Crea dos salas a partir de los datos contenidos en el archivo XML donde se guarda una partida
-   * y pone en marcha el motor isométrico
-   */
-  void start(const sgxml::players::player_sequence& playerSequence);
+        /**
+         * Crea dos salas a partir de los datos contenidos en el archivo XML donde se guarda una partida
+         * y pone en marcha el motor isométrico
+         */
+        void start(const sgxml::players::player_sequence& playerSequence);
 
-  /**
-   * Detiene el motor isométrico
-   */
-  void stop();
+        /**
+         * Detiene el motor isométrico
+         */
+        void stop();
 
-  /**
-   * Pone en marcha el motor isométrico después de una parada
-   */
-  void restart();
+        /**
+         * Pone en marcha el motor isométrico después de una parada
+         */
+        void restart();
 
-  /**
-   * Prepara el motor para iniciar una nueva partida
-   */
-  void reset();
+        /**
+         * Prepara el motor para iniciar una nueva partida
+         */
+        void reset();
 
-  /**
-   * Actualiza el motor isométrico. La actualización se realiza en dos subprocesos diferenciados:
-   * Por un lado se actualizan todas las maquinas de estados de los elementos del juegos y por otro
-   * lado se dibuja la sala activa
-   * @return La imagen donde se ha dibujado la vista isométrica
-   */
-  BITMAP* update();
-
-private:
-
-  /**
-   * Gestiona la sala final del juego. Es una sala muy especial porque el usuario no tiene el
-   * control de ningún jugador
-   */
-  void updateEndRoom();
+        /**
+         * Actualiza el motor isométrico. La actualización se realiza en dos subprocesos diferenciados:
+         * Por un lado se actualizan todas las maquinas de estados de los elementos del juegos y por otro
+         * lado se dibuja la sala activa
+         * @return La imagen donde se ha dibujado la vista isométrica
+         */
+        BITMAP* update();
 
 private:
 
-  /**
-   * Indica si el motor está gestionando la sala final del juego
-   */
-  bool isEndRoom;
+        void prepare ();
 
-  /**
-   * Imagen donde se dibuja la vista isométrica
-   */
-  BITMAP* view;
+        /**
+         * Gestiona la sala final del juego. Es una sala muy especial porque el usuario no tiene el
+         * control de ningún jugador
+         */
+        void updateEndRoom();
 
-  /**
-   * Gestor de datos de los elementos del juego
-   */
-  ItemDataManager* itemDataManager;
+private:
 
-  /**
-   * Gestor del mapa
-   */
-  MapManager* mapManager;
+        /**
+         * Indica si el motor está gestionando la sala final del juego
+         */
+        bool isEndRoom;
+
+        /**
+         * Imagen donde se dibuja la vista isométrica
+         */
+        BITMAP* view;
+
+        /**
+         * Gestor de datos de los elementos del juego
+         */
+        ItemDataManager* itemDataManager;
+
+        /**
+         * Gestor del mapa
+         */
+        MapManager* mapManager;
 
 public: // Operaciones de consulta y actualización
 
-  /**
-   * Gestor de datos de los elementos del juego
-   * @return Un puntero al gestor
-   */
-  ItemDataManager* getItemDataManager() const;
+        /**
+         * Gestor de datos de los elementos del juego
+         * @return Un puntero al gestor
+         */
+        ItemDataManager* getItemDataManager() const;
 
-  /**
-   * Gestor del mapa
-   * @return Un puntero al gestor
-   */
-  MapManager* getMapManager() const;
+        /**
+         * Gestor del mapa
+         * @return Un puntero al gestor
+         */
+        MapManager* getMapManager() const;
+
 };
 
 }

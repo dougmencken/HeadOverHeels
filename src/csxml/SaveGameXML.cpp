@@ -972,23 +972,23 @@ namespace sgxml
   }
 
   void players::
-  parse (::xsd::cxx::xml::dom::parser< char >& p,
-         ::xml_schema::flags f)
+  parse ( ::xsd::cxx::xml::dom::parser< char >& p,
+          ::xml_schema::flags f )
   {
-    for (; p.more_elements (); p.next_element ())
+    for ( ; p.more_elements (); p.next_element () )
     {
-      const ::xercesc::DOMElement& i (p.cur_element ());
+      const ::xercesc::DOMElement& i ( p.cur_element () );
       const ::xsd::cxx::xml::qualified_name< char > n (
-        ::xsd::cxx::xml::dom::name< char > (i));
+        ::xsd::cxx::xml::dom::name< char > (i)
+      );
 
       // player
       //
-      if (n.name () == "player" && n.namespace_ ().empty ())
+      if ( n.name () == "player" && n.namespace_ ().empty () )
       {
-        ::std::auto_ptr< player_type > r (
-          player_traits::create (i, f, this));
+        ::std::auto_ptr< player_type > r ( player_traits::create ( i, f, this ) );
 
-        this->player ().push_back (r);
+        this->player ().push_back ( r );
         continue;
       }
 

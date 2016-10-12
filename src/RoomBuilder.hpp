@@ -32,6 +32,7 @@ namespace isomot
 
 // Declaraciones adelantadas
 class ItemDataManager;
+class ItemData;
 class Room;
 class FloorTile;
 class Wall;
@@ -45,6 +46,7 @@ class Door;
  */
 class RoomBuilder
 {
+
 public:
 
         /**
@@ -92,6 +94,10 @@ public:
          * @param hasItem Indica si el jugador llevaba un elemento en el bolso
          */
         PlayerItem* buildPlayer( Room* room, const PlayerId& playerId, const BehaviorId& behaviorId, int x, int y, int z, const Direction& direction, bool hasItem = false );
+
+        static int getXCenterOfRoom( ItemData* playerData, Room* theRoom );
+
+        static int getYCenterOfRoom( ItemData* playerData, Room* theRoom );
 
 private:
 
@@ -141,6 +147,7 @@ private:
          * La sala en construcción
          */
         Room* room;
+
 };
 
 }

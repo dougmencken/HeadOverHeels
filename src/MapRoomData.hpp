@@ -37,82 +37,83 @@ class PlayerStartPosition;
  */
 class MapRoomData
 {
+
 public:
 
-  /**
-   * Constructor
-   * @param Nombre completo del archivo que contiene los datos de esta sala
-   */
-	MapRoomData(const std::string& room);
+        /**
+         * Constructor
+         * @param Nombre completo del archivo que contiene los datos de esta sala
+         */
+        MapRoomData( const std::string& room );
 
-	virtual ~MapRoomData();
+        virtual ~MapRoomData();
 
-	/**
-	 * Asigna la posición inicial de un jugador en la sala
-	 * @param playerPosition Datos de posición
-	 * @param playerPresent Indica si ya hay un jugador presente en esta sala. En tal caso puede
-	 * darse la circunstancia de que la vía de entrada de ambos jugadores sea la misma. Para solventar
-	 * este conflicto se cambian los datos del jugador presente por sus datos de posición actuales
-	 */
-	void addPlayerPosition(const PlayerStartPosition& playerPosition);
+        /**
+         * Asigna la posición inicial de un jugador en la sala
+         * @param playerPosition Datos de posición
+         * @param playerPresent Indica si ya hay un jugador presente en esta sala. En tal caso puede
+         * darse la circunstancia de que la vía de entrada de ambos jugadores sea la misma. Para solventar
+         * este conflicto se cambian los datos del jugador presente por sus datos de posición actuales
+         */
+        void addPlayerPosition( const PlayerStartPosition& playerPosition );
 
-  /**
-   * Asigna la posición inicial de un jugador en la sala
-   * @param playerPosition Datos de posición
-   * @param playerPresentPosition Datos de un jugador que ya está presente en esta sala. Puede
-   * darse la circunstancia de que la vía de entrada de ambos jugadores sea la misma. Para solventar
-   * este conflicto se cambian los datos del jugador presente por sus datos de posición actuales
-   */
-	void addPlayerPosition(PlayerStartPosition& playerPosition, PlayerStartPosition& playerPresentPosition);
+        /**
+         * Asigna la posición inicial de un jugador en la sala
+         * @param playerPosition Datos de posición
+         * @param playerPresentPosition Datos de un jugador que ya está presente en esta sala. Puede
+         * darse la circunstancia de que la vía de entrada de ambos jugadores sea la misma. Para solventar
+         * este conflicto se cambian los datos del jugador presente por sus datos de posición actuales
+         */
+        void addPlayerPosition( PlayerStartPosition& playerPosition, PlayerStartPosition& playerPresentPosition );
 
-	/**
-	 * Elimina la posición inicial de un jugador de la sala
-	 * @param player Identificador del jugador
-	 */
-	void removePlayerPosition(const PlayerId& player);
+        /**
+         * Elimina la posición inicial de un jugador de la sala
+         * @param player Identificador del jugador
+         */
+        void removePlayerPosition( const PlayerId& player );
 
-	/**
-   * Busca la posición inicial de un jugador en la sala
-   * @param player Identificador del jugador
-   * @return Datos con la posición inicial del jugador ó 0 si no existen datos para el jugador
-   */
-	PlayerStartPosition* findPlayerPosition(const PlayerId& player);
+        /**
+         * Busca la posición inicial de un jugador en la sala
+         * @param player Identificador del jugador
+         * @return Datos con la posición inicial del jugador ó 0 si no existen datos para el jugador
+         */
+        PlayerStartPosition* findPlayerPosition( const PlayerId& player );
 
-	/**
-   * Indica si hay jugadores en la sala
-   * @return true si quedan jugadores o false en caso contrario
-   */
-  bool remainPlayers();
+        /**
+         * Indica si hay jugadores en la sala
+         * @return true si quedan jugadores o false en caso contrario
+         */
+        bool remainPlayers();
 
-	/**
-	 * Busca una sala conectada con ésta
-	 * @param exit Salida de la sala actual que comunica con la sala destino
-	 * @param entry Devuelve la entrada por la que se accederá a la sala
-	 * @return El nombre del archivo de la sala destino o una cadena vacía si
-	 * la salida no conduce a alguna parte
-	 */
-	std::string findDestinationRoom(const Direction& exit, Direction* entry) const;
+        /**
+         * Busca una sala conectada con ésta
+         * @param exit Salida de la sala actual que comunica con la sala destino
+         * @param entry Devuelve la entrada por la que se accederá a la sala
+         * @return El nombre del archivo de la sala destino o una cadena vacía si
+         * la salida no conduce a alguna parte
+         */
+        std::string findDestinationRoom( const Direction& exit, Direction* entry ) const;
 
-	/**
-	 * Comprueba que la entrada a la sala es correcta y la corrige si no lo es
-	 * Cuando se accede a una sala triple o cuádruple desde una simple o doble
-	 * la entrada no es correcta porque por la estructura del mapa se devuelve
-	 * un punto cardinal simple y las puertas de las salas triple o cuádruples
-	 * no están situadas en esos puntos cardinales
-	 * @param entry Dirección de entrada a comprobar
-	 * @param previousRoom Nombre de la sala desde la cual se ha entrado a ésta
-	 */
-	void adjustEntry(Direction* entry, const std::string& previousRoom);
+        /**
+         * Comprueba que la entrada a la sala es correcta y la corrige si no lo es
+         * Cuando se accede a una sala triple o cuádruple desde una simple o doble
+         * la entrada no es correcta porque por la estructura del mapa se devuelve
+         * un punto cardinal simple y las puertas de las salas triple o cuádruples
+         * no están situadas en esos puntos cardinales
+         * @param entry Dirección de entrada a comprobar
+         * @param previousRoom Nombre de la sala desde la cual se ha entrado a ésta
+         */
+        void adjustEntry( Direction* entry, const std::string& previousRoom );
 
-	/**
-	 * Elimina la posición inicial de los jugadores en la sala
-	 */
-	void clearPlayersPosition();
+        /**
+         * Elimina la posición inicial de los jugadores en la sala
+         */
+        void clearPlayersPosition();
 
-  /**
-   * Reestablece los datos de la sala para una nueva partida
-   */
-  void reset();
+        /**
+         * Reestablece los datos de la sala para una nueva partida
+         */
+        void reset();
 
 private:
 
@@ -377,13 +378,14 @@ public: // Operaciones de consulta y actualización
  */
 class PlayerStartPosition
 {
+
 public:
 
   /**
    * Constructor
    * @param player Identificador del jugador
    */
-  PlayerStartPosition(const PlayerId& player);
+  PlayerStartPosition( const PlayerId& player );
 
   virtual ~PlayerStartPosition();
 
@@ -391,7 +393,7 @@ public:
    * Establece la puerta por la que entra el jugador a la sala
    * @param door Identificador de la posición de una puerta
    */
-  void assignDoor(const Direction& door);
+  void assignDoor( const Direction& door );
 
   /**
    * Establece la posición espacial por la que entra el jugador a la sala
@@ -401,7 +403,7 @@ public:
    * @param z Coordenada Z donde aparece el jugador
    * @param orientation Orientación del jugador
    */
-  void assignPosition(const Direction& entry, int x, int y, int z, const Direction& orientation);
+  void assignPosition( const Direction& entry, int x, int y, int z, const Direction& orientation );
 
 private:
 
@@ -466,14 +468,15 @@ public: // Operaciones de consulta y actualización
    * Orientación del jugador si no entra por una puerta
    */
   Direction getOrientation() const { return orientation; }
+
 };
 
 /**
  * Objeto-función usado como predicado en la búsqueda de la posición inicial de un jugador
  */
-struct EqualPlayerStartPosition : public std::binary_function<PlayerStartPosition, PlayerId, bool>
+struct EqualPlayerStartPosition : public std::binary_function< PlayerStartPosition, PlayerId, bool >
 {
-  bool operator()(const PlayerStartPosition& position, const PlayerId& player) const;
+  bool operator()( const PlayerStartPosition& position, const PlayerId& player ) const;
 };
 
 }

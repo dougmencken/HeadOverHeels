@@ -479,26 +479,23 @@ void PlayerItem::wait()
   }
 }
 
-void PlayerItem::addLives(unsigned char lives)
+void PlayerItem::addLives( unsigned char lives )
 {
-  if(this->lives < 100)
-  {
-    this->lives += lives;
-    GameManager::getInstance()->addLives(PlayerId(this->getLabel()), lives);
-  }
+        if( this->lives < 100 )
+        {
+                this->lives += lives;
+                GameManager::getInstance()->addLives( PlayerId( this->getLabel () ), lives );
+        }
 }
 
 void PlayerItem::loseLife()
 {
-  if(!GameManager::getInstance()->infiniteLives)
-  {
-    if(this->lives > 0)
-    {
-      this->lives--;
-      GameManager::getInstance()->loseLife(PlayerId(this->getLabel()));
-    }
-  }
-  GameManager::getInstance()->emptyHandbag(PlayerId(this->getLabel()));
+        if( this->lives > 0 )
+        {
+                this->lives--;
+                GameManager::getInstance()->loseLife( PlayerId( this->getLabel () ) );
+        }
+        GameManager::getInstance()->emptyHandbag( PlayerId( this->getLabel () ) );
 }
 
 void PlayerItem::takeTool(short label)
@@ -579,30 +576,30 @@ void PlayerItem::decreaseShield()
   }
 }
 
-void PlayerItem::liberatePlanet()
+void PlayerItem::liberatePlanet ()
 {
-  std::string scenery = this->mediator->getRoom()->getScenery();
+        std::string scenery = this->mediator->getRoom()->getScenery();
 
-  if(scenery.compare("jail") == 0 || scenery.compare("blacktooth") == 0 || scenery.compare("market") == 0)
-  {
-    GameManager::getInstance()->liberatePlanet(Blacktooth);
-  }
-  else if(scenery.compare("egyptus") == 0)
-  {
-    GameManager::getInstance()->liberatePlanet(Egyptus);
-  }
-  else if(scenery.compare("penitentiary") == 0)
-  {
-    GameManager::getInstance()->liberatePlanet(Penitentiary);
-  }
-  else if(scenery.compare("safari") == 0)
-  {
-    GameManager::getInstance()->liberatePlanet(Safari);
-  }
-  else if(scenery.compare("byblos") == 0)
-  {
-    GameManager::getInstance()->liberatePlanet(Byblos);
-  }
+        if( scenery.compare( "jail" ) == 0 || scenery.compare( "blacktooth" ) == 0 || scenery.compare( "market" ) == 0 )
+        {
+                GameManager::getInstance()->liberatePlanet( Blacktooth );
+        }
+        else if( scenery.compare( "egyptus" ) == 0 )
+        {
+                GameManager::getInstance()->liberatePlanet( Egyptus );
+        }
+        else if( scenery.compare( "penitentiary" ) == 0 )
+        {
+                GameManager::getInstance()->liberatePlanet( Penitentiary );
+        }
+        else if( scenery.compare( "safari" ) == 0 )
+        {
+                GameManager::getInstance()->liberatePlanet( Safari );
+        }
+        else if( scenery.compare( "byblos" ) == 0 )
+        {
+                GameManager::getInstance()->liberatePlanet( Byblos );
+        }
 }
 
 void PlayerItem::assignTakenItem(ItemData* itemData, BITMAP* takenItemImage, const BehaviorId& behaviorId)

@@ -3,69 +3,67 @@
 namespace isomot
 {
 
-MapRoomData::MapRoomData(const std::string& room)
-: room(room),
-  visited(false),
-  activePlayer(NoPlayer)
+MapRoomData::MapRoomData( const std::string& room )
+: room( room ),
+  visited( false ),
+  activePlayer( NoPlayer )
 {
-
 }
 
 MapRoomData::~MapRoomData()
 {
-
 }
 
-void MapRoomData::addPlayerPosition(const PlayerStartPosition& playerPosition)
+void MapRoomData::addPlayerPosition( const PlayerStartPosition& playerPosition )
 {
-  this->playersPosition.push_back(playerPosition);
+  this->playersPosition.push_back( playerPosition );
   this->visited = true;
 }
 
-void MapRoomData::addPlayerPosition(PlayerStartPosition& playerPosition, PlayerStartPosition& playerPresentPosition)
+void MapRoomData::addPlayerPosition( PlayerStartPosition& playerPosition, PlayerStartPosition& playerPresentPosition )
 {
-  PlayerStartPosition* position = this->findPlayerPosition(playerPresentPosition.getPlayer());
-  if(position != 0)
+  PlayerStartPosition* position = this->findPlayerPosition( playerPresentPosition.getPlayer() );
+  if( position != 0 )
   {
-    if(playerPosition.getEntry() == position->getEntry())
+    if( playerPosition.getEntry() == position->getEntry() )
     {
-      this->removePlayerPosition(playerPresentPosition.getPlayer());
-      this->playersPosition.push_back(playerPresentPosition);
+      this->removePlayerPosition( playerPresentPosition.getPlayer() );
+      this->playersPosition.push_back( playerPresentPosition );
     }
   }
-  this->playersPosition.push_back(playerPosition);
+  this->playersPosition.push_back( playerPosition );
   this->visited = true;
 }
 
-void MapRoomData::removePlayerPosition(const PlayerId& player)
+void MapRoomData::removePlayerPosition( const PlayerId& player )
 {
   // Se comprueba si el jugador compuesto estaba en la sala porque de ser así, al salir alguno
   // de los jugadores simples habrá que alterar el jugador que queda en la sala por el otro jugador
   // simple
-  std::list<PlayerStartPosition>::iterator i = std::find_if(playersPosition.begin(), playersPosition.end(), std::bind2nd(EqualPlayerStartPosition(), HeadAndHeels));
-  if(i != playersPosition.end())
+  std::list< PlayerStartPosition >::iterator i = std::find_if( playersPosition.begin(), playersPosition.end(), std::bind2nd( EqualPlayerStartPosition(), HeadAndHeels ) );
+  if( i != playersPosition.end() )
   {
-    PlayerStartPosition singlePlayerPosition(player == Head ? Heels : Head);
-    singlePlayerPosition.assignPosition((*i).getEntry(), (*i).getX(), (*i).getY(), (*i).getZ(), (*i).getOrientation());
-    i = playersPosition.erase(std::remove_if(playersPosition.begin(), playersPosition.end(), std::bind2nd(EqualPlayerStartPosition(), HeadAndHeels)), playersPosition.end());
-    i = playersPosition.insert(i, singlePlayerPosition);
+    PlayerStartPosition singlePlayerPosition( player == Head ? Heels : Head );
+    singlePlayerPosition.assignPosition( ( *i ).getEntry(), ( *i ).getX(), ( *i ).getY(), ( *i ).getZ(), ( *i ).getOrientation() );
+    i = playersPosition.erase( std::remove_if( playersPosition.begin(), playersPosition.end(), std::bind2nd( EqualPlayerStartPosition(), HeadAndHeels ) ), playersPosition.end() );
+    i = playersPosition.insert( i, singlePlayerPosition );
   }
   // Había sólo un jugador o estaban los dos jugadores simples y abandona uno la sala
   else
   {
     i = playersPosition.erase(std::remove_if(playersPosition.begin(), playersPosition.end(), std::bind2nd(EqualPlayerStartPosition(), player)), playersPosition.end());
     // Si se ha eliminado al jugador activo y queda el otro habrá que seleccionarlo para asumir ese papel
-    if(!playersPosition.empty() && player == activePlayer && !playersPosition.empty())
+    if( !playersPosition.empty() && player == activePlayer && !playersPosition.empty() )
     {
-      activePlayer = (i != playersPosition.end() ? (*i).getPlayer() : (*playersPosition.begin()).getPlayer());
+      activePlayer = ( i != playersPosition.end() ? ( *i ).getPlayer() : ( *playersPosition.begin() ).getPlayer() );
     }
   }
 }
 
-PlayerStartPosition* MapRoomData::findPlayerPosition(const PlayerId& player)
+PlayerStartPosition* MapRoomData::findPlayerPosition( const PlayerId& player )
 {
-  std::list<PlayerStartPosition>::iterator i = find_if(playersPosition.begin(), playersPosition.end(), std::bind2nd(EqualPlayerStartPosition(), player));
-  return (i != playersPosition.end() ? (&(*i)) : 0);
+  std::list< PlayerStartPosition >::iterator i = find_if( playersPosition.begin(), playersPosition.end(), std::bind2nd( EqualPlayerStartPosition(), player ) );
+  return ( i != playersPosition.end() ? ( &( *i ) ) : 0 );
 }
 
 bool MapRoomData::remainPlayers()
@@ -73,11 +71,11 @@ bool MapRoomData::remainPlayers()
   return !playersPosition.empty();
 }
 
-std::string MapRoomData::findDestinationRoom(const Direction& exit, Direction* entry) const
+std::string MapRoomData::findDestinationRoom( const Direction& exit, Direction* entry ) const
 {
   std::string fileName;
 
-  switch(exit)
+  switch( exit )
   {
     case North:
       fileName = north;
@@ -166,31 +164,31 @@ std::string MapRoomData::findDestinationRoom(const Direction& exit, Direction* e
   return fileName;
 }
 
-void MapRoomData::adjustEntry(Direction* entry, const std::string& previousRoom)
+void MapRoomData::adjustEntry( Direction* entry, const std::string& previousRoom )
 {
-  switch(*entry)
+  switch( *entry )
   {
     case North:
-      if(north.empty())
+      if( north.empty() )
       {
-        if(northEast.compare(previousRoom) == 0)
+        if( northEast.compare( previousRoom ) == 0 )
         {
           *entry = Northeast;
         }
-        else if(northWest.compare(previousRoom) == 0)
+        else if( northWest.compare( previousRoom ) == 0 )
         {
           *entry = Northwest;
         }
       }
 
     case South:
-      if(south.empty())
+      if( south.empty() )
       {
-        if(southEast.compare(previousRoom) == 0)
+        if( southEast.compare( previousRoom ) == 0 )
         {
           *entry = Southeast;
         }
-        else if(southWest.compare(previousRoom) == 0)
+        else if( southWest.compare( previousRoom ) == 0 )
         {
           *entry = Southwest;
         }
@@ -198,13 +196,13 @@ void MapRoomData::adjustEntry(Direction* entry, const std::string& previousRoom)
       break;
 
     case East:
-      if(east.empty())
+      if( east.empty() )
       {
-        if(eastNorth.compare(previousRoom) == 0)
+        if( eastNorth.compare( previousRoom ) == 0 )
         {
           *entry = Eastnorth;
         }
-        else if(eastSouth.compare(previousRoom) == 0)
+        else if( eastSouth.compare( previousRoom ) == 0 )
         {
           *entry = Eastsouth;
         }
@@ -212,13 +210,13 @@ void MapRoomData::adjustEntry(Direction* entry, const std::string& previousRoom)
       break;
 
     case West:
-      if(west.empty())
+      if( west.empty() )
       {
-        if(westNorth.compare(previousRoom) == 0)
+        if( westNorth.compare( previousRoom ) == 0 )
         {
           *entry = Westnorth;
         }
-        else if(westSouth.compare(previousRoom) == 0)
+        else if( westSouth.compare( previousRoom ) == 0 )
         {
           *entry = Westsouth;
         }
@@ -241,22 +239,21 @@ void MapRoomData::reset()
   this->playersPosition.clear();
 }
 
-PlayerStartPosition::PlayerStartPosition(const PlayerId& player)
+PlayerStartPosition::PlayerStartPosition( const PlayerId& player )
 {
   this->player = player;
 }
 
 PlayerStartPosition::~PlayerStartPosition()
 {
-
 }
 
-void PlayerStartPosition::assignDoor(const Direction& door)
+void PlayerStartPosition::assignDoor( const Direction& door )
 {
   this->entry = door;
 }
 
-void PlayerStartPosition::assignPosition(const Direction& entry, int x, int y, int z, const Direction& orientation)
+void PlayerStartPosition::assignPosition( const Direction& entry, int x, int y, int z, const Direction& orientation )
 {
   this->entry = entry;
   this->x = x;
@@ -265,9 +262,9 @@ void PlayerStartPosition::assignPosition(const Direction& entry, int x, int y, i
   this->orientation = orientation;
 }
 
-bool EqualPlayerStartPosition::operator()(const PlayerStartPosition& position, const PlayerId& player) const
+bool EqualPlayerStartPosition::operator()( const PlayerStartPosition& position, const PlayerId& player ) const
 {
-  return (position.getPlayer() == player);
+  return ( position.getPlayer() == player );
 }
 
 }
