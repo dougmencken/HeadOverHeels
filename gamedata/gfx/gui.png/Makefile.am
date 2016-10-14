@@ -17,7 +17,9 @@ gamedatagfxgui_DATA = background.png \
 		      handbag.png \
 		      head.png \
 		      heels.png \
+		      high-jumps.gray.png \
 		      high-jumps.png \
+		      high-speed.gray.png \
 		      high-speed.png \
 		      horn.png \
 		      jail-frame.png \
@@ -30,4 +32,5 @@ gamedatagfxgui_DATA = background.png \
 		      safari-frame.png \
 		      selected-option.png \
 		      selected-option-mini.png \
+		      shield.gray.png \
 		      shield.png

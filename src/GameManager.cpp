@@ -142,7 +142,8 @@ void GameManager::drawGameStatus( BITMAP* destination )
                 }
 
                 // Grandes saltos
-                draw_sprite( destination, gui::GuiManager::getInstance ()->findImage( "high-jumps" ), 505, 392 );
+                bitmap = gui::GuiManager::getInstance ()->findImage( this->highJumps > 0 ? "high-jumps" : "high-jumps.gray" );
+                draw_sprite( destination, bitmap, 505, 392 );
                 if( this->highJumps > 0 )
                 {
                         ss.str( std::string() );
@@ -152,7 +153,8 @@ void GameManager::drawGameStatus( BITMAP* destination )
                 }
 
                 // Gran velocidad
-                draw_sprite( destination, gui::GuiManager::getInstance ()->findImage( "high-speed" ), 107, 392 );
+                bitmap = gui::GuiManager::getInstance ()->findImage( this->highSpeed > 0 ? "high-speed" : "high-speed.gray" );
+                draw_sprite( destination, bitmap, 107, 392 );
                 if( this->highSpeed > 0 )
                 {
                         ss.str( std::string () );
@@ -162,7 +164,7 @@ void GameManager::drawGameStatus( BITMAP* destination )
                 }
 
                 // Escudo de Head
-                bitmap = gui::GuiManager::getInstance ()->findImage( "shield" );
+                bitmap = gui::GuiManager::getInstance ()->findImage( this->headShield > 0 ? "shield" : "shield.gray" );
                 draw_sprite( destination, bitmap, 107, 436 );
                 if( this->headShield > 0 )
                 {
@@ -175,6 +177,7 @@ void GameManager::drawGameStatus( BITMAP* destination )
                 }
 
                 // Escudo de Heels
+                bitmap = gui::GuiManager::getInstance ()->findImage( this->heelsShield > 0 ? "shield" : "shield.gray" );
                 draw_sprite( destination, bitmap, 505, 436 );
                 if( this->heelsShield > 0 )
                 {
