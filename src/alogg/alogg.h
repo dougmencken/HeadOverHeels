@@ -44,12 +44,19 @@
 #include <dmalloc.h>
 #endif
 
+#ifdef ALOGG_USE_TREMOR
+#include <tremor/ivorbisfile.h>
+#include <tremor/ivorbiscodec.h>
+#else
+#include <vorbis/vorbisfile.h>
+#include <vorbis/vorbisenc.h>
+#endif
+
 struct SAMPLE;
 struct PACKFILE;
 struct DATAFILE;
 struct AUDIOSTREAM;
 struct OggVorbis_File;
-struct ov_callbacks;
 
 struct alogg_stream;
 struct alogg_encoding_data;
@@ -83,14 +90,14 @@ struct alogg_stream *alogg_start_streaming_datafile(
   AL_CONST struct DATAFILE *dat,size_t block_size
 );
 struct alogg_stream *alogg_start_streaming_callbacks(
-  void *datasource,struct ov_callbacks *callbacks,size_t block_size,
+  void *datasource, ov_callbacks *callbacks, size_t block_size,
   int (*update)(struct alogg_stream*,void*)
 );
-int alogg_read_stream_data(struct alogg_stream*,void *buffer,size_t size);
-int alogg_update_streaming(struct alogg_stream*);
-int alogg_stop_streaming(struct alogg_stream*);
-struct AUDIOSTREAM *alogg_get_audio_stream(struct alogg_stream*);
-struct OggVorbis_File *alogg_get_vorbis_file(struct alogg_stream*);
+int alogg_read_stream_data( struct alogg_stream*, void *buffer, size_t size );
+int alogg_update_streaming( struct alogg_stream* );
+int alogg_stop_streaming( struct alogg_stream* );
+struct AUDIOSTREAM *alogg_get_audio_stream( struct alogg_stream* );
+struct OggVorbis_File *alogg_get_vorbis_file( struct alogg_stream* );
 
 #ifndef ALOGG_USE_TREMOR
 

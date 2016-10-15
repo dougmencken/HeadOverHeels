@@ -22,10 +22,8 @@ ShowAuthors::ShowAuthors(BITMAP* destination)
 
 void ShowAuthors::execute()
 {
-  // Detiene la reproducción del tema principal
   SoundManager::getInstance()->stopOgg();
-  // Inicia la reproducción del tema "Head over Heels"
-  SoundManager::getInstance()->playOgg("music/CreditsTheme.ogg");
+  SoundManager::getInstance()->playOgg( "music/CreditsTheme.ogg", /* loop */ true );
 
   LanguageText* langString = 0;
   Screen* screen = new Screen(0, 0, this->destination);

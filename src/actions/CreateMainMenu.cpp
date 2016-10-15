@@ -26,13 +26,10 @@ CreateMainMenu::CreateMainMenu(BITMAP* destination)
 
 void CreateMainMenu::execute()
 {
-  // Si no está sonando la melodía principal:
-  if(!SoundManager::getInstance()->isPlayingTheme("music/MainTheme.ogg"))
+  if ( ! SoundManager::getInstance()->isPlayingOgg( "music/MainTheme.ogg" ) )
   {
-    // Detiene la reproducción del tema en curso
     SoundManager::getInstance()->stopOgg();
-    // Se reproduce la melodía principal
-    SoundManager::getInstance()->playOgg("music/MainTheme.ogg");
+    SoundManager::getInstance()->playOgg( "music/MainTheme.ogg", /* loop */ true );
   }
 
   Label* label = 0;

@@ -27,10 +27,8 @@ CreatePlanetsScreen::CreatePlanetsScreen(BITMAP* destination, bool gameInProgres
 
 void CreatePlanetsScreen::execute()
 {
-  // Detiene la reproducción del tema principal
   SoundManager::getInstance()->stopOgg();
-  // Inicia la reproducción del tema "Head over Heels"
-  SoundManager::getInstance()->playOgg("music/HeadOverHeels.ogg");
+  SoundManager::getInstance()->playOgg( "music/HeadOverHeels.ogg", /* loop */ true );
 
   Label* label = 0;
   LanguageText* langString = 0;

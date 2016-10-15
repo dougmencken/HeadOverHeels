@@ -31,131 +31,195 @@
 #include <allegro/debug.h>
 #include "aloggpth.h"
 
-static void *alogg_threaded_streamer(void *data)
+
+static void * alogg_threaded_streamer( void* data )
 {
-  int ret=1;
-  struct alogg_thread *thread=data;
+        int moreData = 1;
+        struct threadMeta * meta = data;
+        alogg_thread * thread = &meta->th;
 
 #ifndef __WIN32
-  struct timespec pause;
-  pause.tv_sec = 0;
-  pause.tv_nsec = 10000000;
+        struct timespec pause;
+        pause.tv_sec = 0;
+        pause.tv_nsec = 10000000;
 #endif
 
-  ASSERT(thread);
-  ASSERT(thread->stream);
+        ASSERT( meta );
+        ASSERT( thread->stream );
 
-  while (1) {
+        int loop = ( meta->path[ 0 ] == 0 ? 0 : 1 );
+        size_t sizeOfBuffer = ( meta->bufsize < 1024 ) ? 40 * 1024 : meta->bufsize;
 
+        while ( 1 ) {
 
-    alogg_lock_thread(thread);
-    ret=alogg_update_streaming(thread->stream);
-    alogg_unlock_thread(thread);
+                alogg_lock_thread( thread );
+                moreData = alogg_update_streaming( thread->stream );
+                alogg_unlock_thread( thread );
 
-    if (ret==0 || thread->stop) break;
+                if ( ( moreData == 0 && ! loop ) || thread->stop )
+                {
+                        break;
+                }
+                if ( loop && moreData == 0 && ! thread->stop )
+                {
+                        TRACE( "rewinding stream\n" );
+                        alogg_lock_thread( thread );
+                        alogg_stop_streaming( thread->stream );
+                        thread->stream = alogg_start_streaming( meta->path, sizeOfBuffer );
+                        thread->stop = 0;
+                        thread->alive = 1;
+                        alogg_unlock_thread( thread );
+                }
 
-#ifndef __WIN32
-    nanosleep(&pause, 0);
-#else
-    Sleep(10);
-#endif
-  }
+        #ifndef __WIN32
+                nanosleep( &pause, 0 );
+        #else
+                Sleep( 10 );
+        #endif
 
-  TRACE("stopping stream\n");
-  alogg_lock_thread(thread);
-  thread->alive=0;
-  thread->stop=1;
-  alogg_stop_streaming(thread->stream);
-  alogg_unlock_thread(thread);
-  pthread_mutex_destroy(&thread->mutex);
-  pthread_exit(NULL);
+        }
+
+        TRACE( "stopping stream\n" );
+        alogg_lock_thread( thread );
+        thread->alive = 0;
+        thread->stop = 1;
+        alogg_stop_streaming( thread->stream );
+        alogg_unlock_thread( thread );
+        pthread_mutex_destroy( &thread->mutex );
+        pthread_exit( NULL );
 }
 
-int alogg_lock_thread(struct alogg_thread *thread)
+int alogg_lock_thread( struct alogg_thread *thread )
 {
-  ASSERT(thread);
-  return pthread_mutex_lock(&thread->mutex);
+        ASSERT( thread );
+        return pthread_mutex_lock(&thread->mutex);
 }
 
-int alogg_try_lock_thread(struct alogg_thread *thread)
+int alogg_try_lock_thread( struct alogg_thread *thread )
 {
-  ASSERT(thread);
-  return pthread_mutex_trylock(&thread->mutex);
+        ASSERT( thread );
+        return pthread_mutex_trylock(&thread->mutex);
 }
 
-int alogg_unlock_thread(struct alogg_thread *thread)
+int alogg_unlock_thread( struct alogg_thread *thread )
 {
-  ASSERT(thread);
-  return pthread_mutex_unlock(&thread->mutex);
+        ASSERT( thread );
+        return pthread_mutex_unlock(&thread->mutex);
 }
 
-int alogg_is_thread_alive(struct alogg_thread *thread)
+int alogg_is_thread_alive( struct alogg_thread *thread )
 {
-  ASSERT(thread);
-  if (!thread) return 0;
-  return thread->alive;
+        ASSERT( thread );
+        if ( ! thread ) return 0;
+        return thread->alive;
 }
 
-struct alogg_thread *alogg_create_thread(struct alogg_stream *stream)
+int alogg_run_thread( alogg_thread * thread, void * data )
 {
-  alogg_thread *thread=NULL;
+        ASSERT( thread );
+        ASSERT( thread->stream );
+        ASSERT( data );
 
-  ASSERT(stream);
+        thread->stop = 0;
+        thread->alive = 1;
 
-  /* Create a control structure */
-  thread=malloc(sizeof(alogg_thread));
-  if (!thread) return NULL;
+        /* initialize a new thread and its associated mutex */
+        pthread_mutex_init( &thread->mutex, NULL );
+        if ( pthread_create( &thread->thread, NULL, &alogg_threaded_streamer, data ) ) {
+                pthread_mutex_destroy( &thread->mutex );
+                return 0;
+        }
 
-  thread->stream=stream;
-  thread->stop=0;
-  thread->alive=1;
-
-  /* Initialize a new thread and its associated mutex */
-  pthread_mutex_init(&thread->mutex,NULL);
-  if (pthread_create(&thread->thread,NULL,&alogg_threaded_streamer,thread)) {
-    pthread_mutex_destroy(&thread->mutex);
-    free(thread);
-    return NULL;
-  }
-
-  return thread;
+        return 1;
 }
 
-void alogg_destroy_thread(alogg_thread *thread)
+struct alogg_thread* alogg_create_thread( struct alogg_stream* stream )
 {
-  ASSERT(thread);
+        threadMeta * meta = NULL;
+        alogg_thread * thread = NULL;
 
-  if (!thread) return;
-  ASSERT(!thread->alive);
+        ASSERT( stream );
 
-  free(thread);
+        meta = malloc( sizeof( threadMeta ) );
+        if ( ! meta ) return NULL;
+
+        meta->path[ 0 ] = 0;
+        meta->bufsize = 0;
+        thread = &meta->th;
+        thread->stream = stream;
+
+        if ( ! alogg_run_thread( thread, meta ) )
+                return NULL;
+
+        return thread;
 }
 
-void alogg_join_thread(alogg_thread *thread)
+struct alogg_thread* alogg_create_thread_which_loops( struct alogg_stream* stream, const char* pathtofile, size_t lenofbuf )
 {
-  ASSERT(thread);
+        threadMeta * meta = NULL;
+        alogg_thread * thread = NULL;
 
-  if (!thread) return;
-  ASSERT(!thread->alive);
+        ASSERT( stream );
 
-  pthread_join(thread->thread, NULL);
+        meta = malloc( sizeof( threadMeta ) );
+        if ( ! meta ) return NULL;
+
+        if ( pathtofile )
+        {
+                size_t lenOfpath = 1 + strlen( pathtofile );
+                if ( lenOfpath > ALOGG_MAXPATH ) lenOfpath = ALOGG_MAXPATH;
+                memcpy( /* to */ meta->path, /* from */ pathtofile, lenOfpath );
+                meta->path[ lenOfpath - 1 ] = 0;
+        }
+        else
+        {
+                meta->path[ 0 ] = 0;
+        }
+        meta->bufsize = lenofbuf;
+        thread = &meta->th;
+        thread->stream = stream;
+
+        if ( ! alogg_run_thread( thread, meta ) )
+                return NULL;
+
+        return thread;
 }
 
-void alogg_stop_thread(alogg_thread *thread)
+void alogg_destroy_thread( alogg_thread *thread )
 {
-  ASSERT(thread);
+        ASSERT( thread );
 
-  if (!thread) return;
-  alogg_lock_thread(thread);
-  thread->stop=1;
-  alogg_unlock_thread(thread);
+        if ( ! thread ) return;
+        ASSERT( ! thread->alive );
+
+        free( thread );
 }
 
-struct alogg_stream *alogg_get_thread_stream(alogg_thread *thread)
+void alogg_join_thread( alogg_thread *thread )
 {
-  ASSERT(thread);
+        ASSERT( thread);
 
-  if (!thread) return NULL;
-  if (!thread->alive) return NULL;
-  return thread->stream;
+        if ( ! thread ) return;
+        ASSERT( ! thread->alive );
+
+        pthread_join( thread->thread, NULL );
+}
+
+void alogg_stop_thread( alogg_thread *thread )
+{
+        ASSERT( thread );
+
+        if ( ! thread ) return;
+        alogg_lock_thread( thread );
+        thread->stop = 1;
+        alogg_unlock_thread( thread );
+}
+
+struct alogg_stream *alogg_get_thread_stream( alogg_thread *thread )
+{
+        ASSERT( thread );
+
+        if ( ! thread ) return NULL;
+        if ( ! thread->alive ) return NULL;
+        return thread->stream;
 }

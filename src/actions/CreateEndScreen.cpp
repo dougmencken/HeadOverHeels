@@ -22,10 +22,8 @@ CreateEndScreen::CreateEndScreen(BITMAP* destination, unsigned short rooms, unsi
 
 void CreateEndScreen::execute()
 {
-  // Detiene la reproducción del tema actual
   SoundManager::getInstance()->stopOgg();
-  // Inicia la reproducción del tema "Head over Heels"
-  SoundManager::getInstance()->playOgg("music/MainTheme.ogg");
+  SoundManager::getInstance()->playOgg( "music/MainTheme.ogg", /* loop */ true );
 
   Label* label = 0;
   LanguageText* langString = 0;

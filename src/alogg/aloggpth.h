@@ -46,16 +46,25 @@ typedef struct alogg_thread {
   int alive;
 } alogg_thread;
 
-struct alogg_thread *alogg_create_thread(struct alogg_stream *stream);
-void alogg_destroy_thread(struct alogg_thread *thread);
+#define ALOGG_MAXPATH  1024
 
-int alogg_lock_thread(struct alogg_thread *thread);
-int alogg_try_lock_thread(struct alogg_thread *thread);
-int alogg_unlock_thread(struct alogg_thread *thread);
+typedef struct threadMeta {
+    alogg_thread th;
+    char path[ ALOGG_MAXPATH ];
+    size_t bufsize;
+} threadMeta;
 
-int alogg_is_thread_alive(struct alogg_thread *thread);
-void alogg_join_thread(struct alogg_thread *thread);
-void alogg_stop_thread(struct alogg_thread *thread);
+struct alogg_thread *alogg_create_thread( struct alogg_stream *stream );
+struct alogg_thread *alogg_create_thread_which_loops( struct alogg_stream *stream, const char* pathtofile, size_t lenofbuf );
+void alogg_destroy_thread( struct alogg_thread *thread );
+
+int alogg_lock_thread( struct alogg_thread *thread );
+int alogg_try_lock_thread( struct alogg_thread *thread );
+int alogg_unlock_thread( struct alogg_thread *thread );
+
+int alogg_is_thread_alive( struct alogg_thread *thread );
+void alogg_join_thread( struct alogg_thread *thread );
+void alogg_stop_thread( struct alogg_thread *thread );
 
 struct alogg_stream *alogg_get_thread_stream();
 

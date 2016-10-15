@@ -33,13 +33,7 @@
 #include <allegro/datafile.h>
 #include <allegro/digi.h>
 #include <allegro/stream.h>
-#ifdef ALOGG_USE_TREMOR
-#include <tremor/ivorbisfile.h>
-#include <tremor/ivorbiscodec.h>
-#else
-#include <vorbis/vorbisfile.h>
-#include <vorbis/vorbisenc.h>
-#endif
+
 #include "aloggcfg.h"
 #include "aloggint.h"
 #include "alogg.h"
@@ -66,8 +60,6 @@ typedef struct alogg_stream {
   int done;
   int (*update)(struct alogg_stream*,void*);
 } alogg_stream;
-
-
 
 void alogg_init()
 {
@@ -210,19 +202,19 @@ static size_t memory_read(void *ptr,size_t size,size_t nmemb,void *datasource)
   return read_size;
 }
 
-static int memory_seek(void *datasource,ogg_int64_t offset,int whence)
+static int memory_seek( void *datasource, ogg_int64_t offset, int whence )
 {
-  datogg_object *ovd=(datogg_object*)datasource;
-  int position=0;
-  ASSERT(ovd);
-  if (!ovd) return -1;
-  switch (whence) {
-    case SEEK_SET: position=offset; break;
-    case SEEK_CUR: position=ovd->position+offset; break;
-    case SEEK_END: position=ovd->size+offset; break;
+  datogg_object *ovd = ( datogg_object* )datasource;
+  int position = 0;
+  ASSERT( ovd );
+  if ( ! ovd ) return -1;
+  switch ( whence ) {
+    case SEEK_SET: position = offset; break;
+    case SEEK_CUR: position = ovd->position+offset; break;
+    case SEEK_END: position = ovd->size+offset; break;
     default: ASSERT(0); break;
   }
-  ovd->position=position;
+  ovd->position = position;
   return 0;
 }
 
@@ -501,7 +493,7 @@ alogg_stream *alogg_start_streaming(AL_CONST char *filename,size_t block_size)
   if (!f) return NULL;
 
   stream=alogg_start_streaming_callbacks(
-    f,(struct ov_callbacks*)&packfile_callbacks,block_size,NULL
+    f,(ov_callbacks*)&packfile_callbacks,block_size,NULL
   );
   if (!stream) pack_fclose(f);
   return stream;
@@ -525,7 +517,7 @@ alogg_stream *alogg_start_streaming_datafile(
   ovd->allocated=0;
   ovd->data=dat->dat;
   stream=alogg_start_streaming_callbacks(
-    ovd,(struct ov_callbacks*)&datafile_callbacks,block_size,NULL
+    ovd,(ov_callbacks*)&datafile_callbacks,block_size,NULL
   );
   if (!stream) free(ovd);
   return stream;
@@ -538,12 +530,12 @@ alogg_stream *aloggint_start_streaming_datogg(
   if (!ovd) return NULL;
   ovd->position=0;
   return alogg_start_streaming_callbacks(
-    ovd,(struct ov_callbacks*)&memory_callbacks,block_size,NULL
+    ovd,(ov_callbacks*)&memory_callbacks,block_size,NULL
   );
 }
 
 alogg_stream *alogg_start_streaming_callbacks(
-  void *datasource,struct ov_callbacks *callbacks,size_t block_size,
+  void *datasource,ov_callbacks *callbacks,size_t block_size,
   int (*update)(alogg_stream*,void*)
 )
 {
@@ -642,26 +634,26 @@ int alogg_read_stream_data(alogg_stream *stream,void *block,size_t size)
   return read_size;
 }
 
-int alogg_update_streaming(alogg_stream *stream)
+int alogg_update_streaming( alogg_stream *stream )
 {
-  ASSERT(stream);
-  ASSERT(stream->update);
-  return stream->update(stream,stream->datasource);
+  ASSERT( stream );
+  ASSERT( stream->update );
+  return stream->update( stream,stream->datasource );
 }
 
-int alogg_stop_streaming(alogg_stream *stream)
+int alogg_stop_streaming( alogg_stream *stream )
 {
-  ASSERT(stream);
-  ASSERT(stream->vf);
-  ASSERT(stream->audio_stream);
+  ASSERT( stream );
+  ASSERT( stream->vf );
+  ASSERT( stream->audio_stream );
 
   /* stop the stream */
-  stop_audio_stream(stream->audio_stream);
+  stop_audio_stream( stream->audio_stream );
 
   /* free all resources */
-  ov_clear(stream->vf);
-  free(stream->vf);
-  free(stream);
+  ov_clear( stream->vf );
+  free( stream->vf );
+  free( stream );
 
   return 0;
 }
