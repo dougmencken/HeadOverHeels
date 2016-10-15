@@ -38,39 +38,41 @@ class Menu;
  */
 class RedefineKey : public Action
 {
+
 public:
 
-  /**
-   * Constructor
-   * @param menu Menú de opciones donde se encuentra el texto de la tecla a cambiar
-   * @param keyText Descripción de la tecla a cambiar
-   * @param assignedKey Código de la tecla asignada actualmente
-   */
-	RedefineKey(Menu* menu, std::string keyText, int assignedKey);
+        /**
+        * Constructor
+        * @param menu Menú de opciones donde se encuentra el texto de la tecla a cambiar
+        * @param keyText Descripción de la tecla a cambiar
+        * @param assignedKey Código de la tecla asignada actualmente
+        */
+        RedefineKey( Menu* menu, std::string keyText, int assignedKey ) ;
 
-  /**
-   * Ejecuta el contenido de la acción, es decir, cambia la tecla
-   */
-  void execute();
+        /**
+        * Change the key
+        */
+        void doIt () ;
 
 private:
 
-  /**
-   * Menú de opciones donde se encuentra el texto de la tecla a cambiar
-   */
-  Menu* menu;
+        /**
+        * Menú de opciones donde se encuentra el texto de la tecla a cambiar
+        */
+        Menu* menu ;
 
-  /**
-   * Descripción de la tecla a cambiar
-   */
-  std::string keyText;
+        /**
+        * Descripción de la tecla a cambiar
+        */
+        std::string keyText ;
 
-  /**
-   * Código de la tecla asignada actualmente
-   */
-  int assignedKey;
+        /**
+        * Código de la tecla asignada actualmente
+        */
+        int assignedKey ;
+
 };
 
 }
 
-#endif /*REDEFINEKEY_HPP_*/
+#endif

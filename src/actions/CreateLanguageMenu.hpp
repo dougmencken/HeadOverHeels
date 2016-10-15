@@ -38,48 +38,50 @@ class LanguageText;
  */
 class CreateLanguageMenu : public Action
 {
+
 public:
 
-  /**
-   * Constructor
-   * @param destination Imagen donde se dibujará la interfaz gráfica
-   */
-  CreateLanguageMenu(BITMAP* destination);
+        /**
+         * Constructor
+         * @param picture Imagen donde se dibujará la interfaz gráfica
+         */
+        CreateLanguageMenu( BITMAP* picture ) ;
 
-  ~CreateLanguageMenu();
+        ~CreateLanguageMenu( ) ;
 
-  /**
-   * Ejecuta el contenido de la acción, es decir, muestra el menú de idioma
-   */
-  void execute();
-
-private:
-
-  /**
-   * Analiza el archivo XML y extrae las cadenas ligándolas a un identificador textual
-   * @param fileName Archivo XML con los textos empleados en el juego
-   */
-  void parse(const std::string& fileName);
+        /**
+         * Show the language menu
+         */
+        void doIt () ;
 
 private:
 
-  /**
-   * Idioma seleccinado en la configuración inicial
-   */
-  std::string language;
+        /**
+         * Analiza el archivo XML y extrae las cadenas ligándolas a un identificador textual
+         * @param fileName Archivo XML con los textos empleados en el juego
+         */
+        void parse ( const std::string& fileName ) ;
 
-  /**
-   * Imagen donde se dibujará la interfaz gráfica
-   */
-  BITMAP* destination;
+private:
 
-  /**
-   * Textos empleados en la interfaz de usuario. Cada elemento se compone de un identificador
-   * único, su posición en la pantalla y la cadena con el texto
-   */
-  std::list<LanguageText*> texts;
+        /**
+         * Idioma seleccinado en la configuración inicial
+         */
+        std::string language ;
+
+        /**
+         * Imagen donde se dibujará la interfaz gráfica
+         */
+        BITMAP* where ;
+
+        /**
+         * Textos empleados en la interfaz de usuario. Cada elemento se compone de un identificador
+         * único, su posición en la pantalla y la cadena con el texto
+         */
+        std::list< LanguageText* > texts ;
+
 };
 
 }
 
-#endif /* CREATELANGUAGEMENU_HPP_ */
+#endif

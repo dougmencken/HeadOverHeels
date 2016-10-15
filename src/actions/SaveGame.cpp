@@ -1,32 +1,31 @@
 #include "SaveGame.hpp"
 #include "Ism.hpp"
 #include "GameManager.hpp"
-#include "StartGame.hpp"
+#include "BeginGame.hpp"
 
 using gui::SaveGame;
-using gui::StartGame;
+using gui::BeginGame;
 
-SaveGame::SaveGame(BITMAP* destination, int slot)
+SaveGame::SaveGame( BITMAP* picture, int slot )
 : Action(),
-  destination(destination),
-  slot(slot)
+  where( picture ),
+  slot( slot )
 {
 
 }
 
-void SaveGame::execute()
+void SaveGame::doIt ()
 {
-  // Se graba la partida en la ubicación especificada
-  if(slot != 0)
-  {
-    std::stringstream ss;
-    isomot::GameManager* gameManager = isomot::GameManager::getInstance();
-    ss << isomot::homePath() << "savegame/savegame" << slot << ".xml";
-    gameManager->saveGame(ss.str());
-  }
+        // Se graba la partida en la ubicación especificada
+        if ( slot != 0 )
+        {
+                std::stringstream ss;
+                isomot::GameManager* gameManager = isomot::GameManager::getInstance();
+                ss << isomot::homePath() << "savegame/savegame" << slot << ".xml";
+                gameManager->saveGame( ss.str() );
+        }
 
-  // Se vuelve a la partida en curso
-  StartGame startGame(this->destination, true);
-  startGame.execute();
+        // Se vuelve a la partida en curso
+        BeginGame begin( this->where, true );
+        begin.doIt ();
 }
-

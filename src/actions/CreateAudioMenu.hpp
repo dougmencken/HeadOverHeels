@@ -33,27 +33,29 @@ namespace gui
  */
 class CreateAudioMenu : public Action
 {
+
 public:
 
-  /**
-   * Constructor
-   * @param destination Imagen donde se dibujará la interfaz gráfica
-   */
-  CreateAudioMenu(BITMAP* destination);
+        /**
+         * Constructor
+         * @param destination Imagen donde se dibujará la interfaz gráfica
+         */
+        CreateAudioMenu( BITMAP* destination ) ;
 
-  /**
-   * Ejecuta el contenido de la acción, es decir, muestra el menú de configuración
-   */
-  void execute();
+        /**
+         * Show the audio menu
+         */
+        void doIt () ;
 
 private:
 
-  /**
-   * Imagen donde se dibujará la interfaz gráfica
-   */
-  BITMAP* destination;
+        /**
+         * Imagen donde se dibujará la interfaz gráfica
+         */
+        BITMAP* destination ;
+
 };
 
 }
 
-#endif /*CREATEAUDIOMENU_HPP_*/
+#endif

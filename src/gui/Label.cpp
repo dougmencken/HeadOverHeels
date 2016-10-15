@@ -7,63 +7,63 @@
 namespace gui
 {
 
-Label::Label(const std::string& text)
-: Widget(0, 0),
-  text(text),
-  fontName("regular"),
-  color("white"),
-  font(0),
-  buffer(0)
+Label::Label( const std::string& text )
+: Widget( 0, 0 ),
+  text( text ),
+  fontName( "regular" ),
+  color( "white" ),
+  font( 0 ),
+  buffer( 0 )
 {
-  this->createBitmapLabel(this->text, this->fontName, this->color);
+        this->createBitmapLabel( this->text, this->fontName, this->color );
 }
 
-Label::Label(unsigned int x, unsigned int y, const std::string& text)
-: Widget(x, y),
-  text(text),
-  fontName("regular"),
-  color("white"),
-  font(0),
-  buffer(0)
+Label::Label( unsigned int x, unsigned int y, const std::string& text )
+: Widget( x, y ),
+  text( text ),
+  fontName( "regular" ),
+  color( "white" ),
+  font( 0 ),
+  buffer( 0 )
 {
-  this->createBitmapLabel(this->text, this->fontName, this->color);
+        this->createBitmapLabel( this->text, this->fontName, this->color );
 }
 
-Label::Label(unsigned int x, unsigned int y, const std::string& text, const std::string& fontName, const std::string& color, int spacing)
-: Widget(x, y),
-  text(text),
-  fontName(fontName),
-  color(color),
-  font(0),
-  buffer(0)
+Label::Label( unsigned int x, unsigned int y, const std::string& text, const std::string& fontName, const std::string& color, int spacing )
+: Widget( x, y ),
+  text( text ),
+  fontName( fontName ),
+  color( color ),
+  font( 0 ),
+  buffer( 0 )
 {
-  this->createBitmapLabel(this->text, this->fontName, this->color, spacing);
+        this->createBitmapLabel( this->text, this->fontName, this->color, spacing );
 }
 
-Label::~Label()
+Label::~Label( )
 {
-  destroy_bitmap(this->buffer);
+        destroy_bitmap( this->buffer );
 }
 
-void Label::changeFont(const std::string& fontName, const std::string& color)
+void Label::changeFont( const std::string& fontName, const std::string& color )
 {
-  this->fontName = fontName;
-  this->color = color;
-  this->createBitmapLabel(this->text, fontName, color);
+        this->fontName = fontName;
+        this->color = color;
+        this->createBitmapLabel( this->text, fontName, color );
 }
 
-void Label::draw(BITMAP* destination)
+void Label::draw( BITMAP* where )
 {
-  // Dibuja la cadena en la imagen destino
-  draw_sprite(destination, this->buffer, this->x, this->y);
+        // Dibuja la cadena en la imagen destino
+        draw_sprite( where, this->buffer, this->x, this->y );
 }
 
-void Label::handleKey(int key)
+void Label::handleKey( int key )
 {
-  if(key >> 8 == KEY_ENTER && action != 0)
-  {
-    action->execute();
-  }
+        if ( key >> 8 == KEY_ENTER && action != 0 )
+        {
+                action->doIt ();
+        }
 }
 
 BITMAP* Label::createBitmapLabel(const std::string& text, const std::string& fontName, const std::string& color, int spacing)

@@ -17,8 +17,8 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-#ifndef STARTGAME_H_
-#define STARTGAME_H_
+#ifndef BeginGame_h_
+#define BeginGame_h_
 
 #include <allegro.h>
 #include "Action.hpp"
@@ -29,35 +29,37 @@ namespace gui
 /**
  * Inicia una nueva partida
  * */
-class StartGame : public Action
+class BeginGame : public Action
 {
+
 public:
 
-  /**
-   * Constructor
-   * @param destination Imagen donde se dibujará la interfaz gráfica
-   * @param gameInProgress Indica si hay una partida en curso o comienza una nueva
-   */
-  StartGame(BITMAP* destination, bool gameInProgress);
+        /**
+         * Constructor
+         * @param picture Imagen donde se dibujará la interfaz gráfica
+         * @param gameInProgress Indica si hay una partida en curso o comienza una nueva
+         */
+        BeginGame( BITMAP* picture, bool gameInProgress ) ;
 
-	/**
-   * Inicia una nueva partida, es decir, pone en marcha el gestor del juego
-   */
-  void execute();
+        /**
+         * Begin the game
+         */
+        void doIt () ;
 
 private:
 
-  /**
-   * Imagen donde se dibujará la interfaz gráfica
-   */
-  BITMAP* destination;
+        /**
+         * Imagen donde se dibujará la interfaz gráfica
+         */
+        BITMAP* where ;
 
-  /**
-   * Indica si hay una partida en curso o comienza una nueva
-   */
-  bool gameInProgress;
+        /**
+         * Indica si hay una partida en curso o comienza una nueva
+         */
+        bool gameInProgress ;
+
 };
 
 }
 
-#endif /*STARTGAME_H_*/
+#endif

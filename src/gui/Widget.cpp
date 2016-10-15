@@ -4,44 +4,44 @@
 namespace gui
 {
 
-Widget::Widget(unsigned int x, unsigned int y)
-: x(x),
-  y(y),
-  sucessor(0),
-  action(0)
+Widget::Widget( unsigned int x, unsigned int y )
+: x( x ),
+  y( y ),
+  sucessor( 0 ),
+  action( 0 )
 {
 
 }
 
-Widget::~Widget()
+Widget::~Widget( )
 {
 
 }
 
 void Widget::execute()
 {
-  if(this->action != 0)
-  {
-    this->action->execute();
-  }
+        if ( this->action != 0 )
+        {
+                this->action->doIt ();
+        }
 }
 
-void Widget::handleKey(int key)
+void Widget::handleKey( int key )
 {
-  if(this->sucessor != 0)
-  {
-    this->sucessor->handleKey(key);
-  }
+        if ( this->sucessor != 0 )
+        {
+                this->sucessor->handleKey( key );
+        }
 }
 
-void Widget::setAction(Action* action)
+void Widget::setAction( Action* action )
 {
-  this->action = action;
+        this->action = action;
 }
 
 Action* Widget::getAction() const
 {
-  return this->action;
+        return this->action;
 }
 
 }

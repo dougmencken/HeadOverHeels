@@ -17,8 +17,8 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-#ifndef EXITAPPLICATION_HPP_
-#define EXITAPPLICATION_HPP_
+#ifndef ExitApplication_hpp_
+#define ExitApplication_hpp_
 
 #include "Action.hpp"
 
@@ -30,16 +30,17 @@ namespace gui
  */
 class ExitApplication : public Action
 {
+
 public:
 
-	ExitApplication();
+        ExitApplication( );
 
-  /**
-   * Ejecuta el contenido de la acción, es decir, muestra el menú principal del juego
-   */
-  void execute();
+        void doIt () {  bye () ;  }
+
+        void bye () ;
+
 };
 
 }
 
-#endif /*EXITAPPLICATION_HPP_*/
+#endif

@@ -32,35 +32,37 @@ namespace gui
  */
 class LoadGame : public Action
 {
+
 public:
 
-  /**
-   * Constructor
-   * @param destination Imagen donde se dibujará la interfaz gráfica
-   * @param slot Número del archivo a cargar
-   */
-	LoadGame(BITMAP* destination, int slot);
+        /**
+         * Constructor
+         * @param picture Imagen donde se dibujará la interfaz gráfica
+         * @param slot Número del archivo a cargar
+         */
+        LoadGame( BITMAP* picture, int slot ) ;
 
 
-  /**
-   * Ejecuta el contenido de la acción, es decir, carga la partida y pone en marcha el juego
-   */
-  void execute();
+        /**
+         * Load the game and begin it
+         */
+        void doIt () ;
 
 private:
 
-  /**
-   * Imagen donde se dibujará la interfaz gráfica
-   */
-  BITMAP* destination;
+        /**
+         * Imagen donde se dibujará la interfaz gráfica
+         */
+        BITMAP* where ;
 
-  /**
-   * Número del archivo a cargar. Los archivos tienen un nombre de la forma savegameN.xml,
-   * donde N es este número
-   */
-  int slot;
+        /**
+         * Número del archivo a cargar. Los archivos tienen un nombre de la forma savegameN.xml,
+         * donde N es este número
+         */
+        int slot ;
+
 };
 
 }
 
-#endif /*LOADGAME_HPP_*/
+#endif

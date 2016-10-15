@@ -32,33 +32,35 @@ namespace gui
  */
 class SelectLanguage: public Action
 {
+
 public:
 
-  /**
-   * Constructor
-   * @param destination Imagen donde se dibujará la interfaz gráfica
-   * @param language Código ISO del idioma seleccionado
-   */
-  SelectLanguage(BITMAP* destination, const std::string& language);
+        /**
+         * Constructor
+         * @param picture Imagen donde se dibujará la interfaz gráfica
+         * @param language Código ISO del idioma seleccionado
+         */
+        SelectLanguage( BITMAP* picture, const std::string& language ) ;
 
-  /**
-   * Ejecuta el contenido de la acción, es decir, establece el idioma del juego
-   */
-  void execute();
+        /**
+         * Set the language of the game
+         */
+        void doIt () ;
 
 private:
 
-  /**
-   * Imagen donde se dibujará la interfaz gráfica
-   */
-  BITMAP* destination;
+        /**
+         * Imagen donde se dibujará la interfaz gráfica
+         */
+        BITMAP* where ;
 
-  /**
-   * Código ISO del idioma seleccionado
-   */
-  std::string language;
+        /**
+         * Código ISO del idioma seleccionado
+         */
+        std::string language ;
+
 };
 
 }
 
-#endif /* SELECTLANGUAGE_HPP_ */
+#endif

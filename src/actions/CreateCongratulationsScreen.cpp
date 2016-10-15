@@ -8,45 +8,46 @@
 
 using gui::CreateCongratulationsScreen;
 
-CreateCongratulationsScreen::CreateCongratulationsScreen(BITMAP* destination, unsigned short rooms, unsigned short planets)
-: Action(),
-  destination(destination),
-  rooms(rooms),
-  planets(planets)
+
+CreateCongratulationsScreen::CreateCongratulationsScreen( BITMAP* picture, unsigned short rooms, unsigned short planets )
+: Action( ),
+  where( picture ),
+  rooms( rooms ),
+  planets( planets )
 {
 
 }
 
-void CreateCongratulationsScreen::execute()
+void CreateCongratulationsScreen::doIt ()
 {
-  LanguageText* langString = 0;
-  Screen* screen = new Screen(0, 0, this->destination);
-  LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
+        LanguageText* langString = 0;
+        Screen* screen = new Screen( 0, 0, this->where );
+        LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
 
-  // Imagen de fondo
-  screen->setBackground(GuiManager::getInstance()->findImage("background"));
-  screen->setAction(new CreateEndScreen(this->destination, rooms, planets));
+        // Imagen de fondo
+        screen->setBackground( GuiManager::getInstance()->findImage( "background" ) );
+        screen->setAction( new CreateEndScreen( this->where, rooms, planets ) );
 
-  // Head coronado
-  screen->addWidget(new Icon(192, 50, GuiManager::getInstance()->findImage("crown")));
-  screen->addWidget(new Icon(192, 100, GuiManager::getInstance()->findImage("head")));
+        // Head coronado
+        screen->addWidget( new Icon( 192, 50, GuiManager::getInstance()->findImage( "crown" ) ) );
+        screen->addWidget( new Icon( 192, 100, GuiManager::getInstance()->findImage( "head" ) ) );
 
-  // Heels coronado
-  screen->addWidget(new Icon(400, 50, GuiManager::getInstance()->findImage("crown")));
-  screen->addWidget(new Icon(400, 100, GuiManager::getInstance()->findImage("heels")));
+        // Heels coronado
+        screen->addWidget( new Icon( 400, 50, GuiManager::getInstance()->findImage( "crown" ) ) );
+        screen->addWidget( new Icon( 400, 100, GuiManager::getInstance()->findImage( "heels" ) ) );
 
-  // Texto final
-  langString = languageManager->findLanguageString("final-text");
-  TextField* textField = new TextField(langString->getX(), langString->getY(), 640, 480, CenterAlignment);
+        // Texto final
+        langString = languageManager->findLanguageString( "final-text" );
+        TextField* textField = new TextField( langString->getX(), langString->getY(), 640, 480, CenterAlignment );
 
-  for(size_t i = 0; i < langString->getLinesCount(); i++)
-  {
-    LanguageLine* line = langString->getLine(i);
-    textField->addLine(line->text, line->font, line->color);
-  }
+        for ( size_t i = 0; i < langString->getLinesCount(); i++ )
+        {
+                LanguageLine* line = langString->getLine( i );
+                textField->addLine( line->text, line->font, line->color );
+        }
 
-  screen->addWidget(textField);
+        screen->addWidget( textField );
 
-  // Cambia la pantalla mostrada en la interfaz
-  GuiManager::getInstance()->changeScreen(screen);
+        // Cambia la pantalla mostrada en la interfaz
+        GuiManager::getInstance()->changeScreen( screen );
 }

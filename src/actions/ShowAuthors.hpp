@@ -36,27 +36,26 @@ class LanguageLine;
  */
 class ShowAuthors : public Action
 {
+
 public:
 
-  /**
-   * Constructor
-   * @param destination Imagen donde se dibujará la interfaz gráfica
-   */
-	ShowAuthors(BITMAP* destination);
+        /**
+         * Constructor
+         * @param picture Imagen donde se dibujará la interfaz gráfica
+         */
+        ShowAuthors( BITMAP* picture ) ;
 
-  /**
-   * Ejecuta el contenido de la acción, es decir, muestra el menú principal del juego
-   */
-  void execute();
+        void doIt () ;
 
 private:
 
-  /**
-   * Imagen donde se dibujará la interfaz gráfica
-   */
-  BITMAP* destination;
+        /**
+         * Imagen donde se dibujará la interfaz gráfica
+         */
+        BITMAP* where ;
+
 };
 
 }
 
-#endif /*SHOWAUTHORS_HPP_*/
+#endif

@@ -22,8 +22,8 @@ using isomot::SoundManager;
 GuiManager* GuiManager::instance = 0;
 
 GuiManager::GuiManager()
-: screen(0),
-  active(true)
+: screen( 0 ),
+  active( true )
 {
   // Inicialización de Allegro
   this->allegroSetup();
@@ -207,119 +207,119 @@ GuiManager::GuiManager()
   isomot::GameKey gameKey[] = { isomot::KeyNorth, isomot::KeySouth, isomot::KeyEast, isomot::KeyWest,
                                 isomot::KeyTake, isomot::KeyJump, isomot::KeyShoot, isomot::KeyTakeAndJump,
                                 isomot::KeySwap, isomot::KeyHalt };
-  for(int i = 0; i < 10; i++)
+  for ( int i = 0; i < 10; i++ )
   {
-    inputManager->changeUserKey(gameKey[i], configurationManager->getKey(gameKey[i]));
+    inputManager->changeUserKey( gameKey[ i ], configurationManager->getKey( gameKey[ i ] ) );
   }
 
   // Se inicializa el gestor de sonido cargando los sonidos
-  SoundManager::getInstance()->load("sounds.xml");
-
-  // Se comunica al gestor de sonido los niveles del volumen
-  SoundManager::getInstance()->setFxVolume(configurationManager->getSoundFxVolume());
-  SoundManager::getInstance()->setMusicVolume(configurationManager->getMusicVolume());
+  SoundManager::getInstance()->load( "sounds.xml" );
 }
 
 GuiManager::~GuiManager()
 {
-  for(std::map<std::string, BITMAP*>::iterator i = this->images.begin(); i != this->images.end(); ++i)
-  {
-    delete (*i).second;
-  }
+        for ( std::map< std::string, BITMAP* >::iterator i = this->images.begin (); i != this->images.end (); ++i )
+        {
+                delete ( *i ).second;
+        }
 
-  this->images.clear();
+        this->images.clear();
 
-  delete this->languageManager;
-  delete this->configurationManager;
+        delete this->languageManager;
+        delete this->configurationManager;
 }
 
 GuiManager* GuiManager::getInstance()
 {
-  if(instance == 0)
-  {
-    instance = new GuiManager();
-  }
+        if ( instance == 0 )
+        {
+                instance = new GuiManager();
+        }
 
-  return instance;
+        return instance;
 }
 
 void GuiManager::start()
 {
-  // Se presenta la lista de lenguas disponibles
-  std::auto_ptr<CreateLanguageMenu> languageMenu(new CreateLanguageMenu(this->destination));
-  languageMenu->execute();
+        // Se presenta la lista de lenguas disponibles
+        std::auto_ptr< CreateLanguageMenu > languageMenu( new CreateLanguageMenu( this->destination ) );
+        languageMenu->doIt ();
 
-  // Dibuja la interfaz de usuario y procesa la pulsación de teclas
-  while(this->active)
-  {
-    this->screen->draw(this->destination);
+        // Dibuja la interfaz de usuario y procesa la pulsación de teclas
+        while ( this->active )
+        {
+                this->screen->draw( this->destination );
 
-    if(keypressed())
-    {
-      this->screen->handleKey(readkey());
-    }
+                if ( keypressed() )
+                {
+                        this->screen->handleKey( readkey() );
+                }
 
-    sleep(30);
-  }
+                sleep( 30 );
+        }
 }
 
-void GuiManager::changeScreen(Screen* screen)
+void GuiManager::changeScreen( Screen* screen )
 {
-  if(this->screen != 0)
-  {
-    delete this->screen;
-  }
+        if ( this->screen != 0 )
+        {
+                delete this->screen;
+        }
 
-  this->screen = screen;
+        this->screen = screen;
 }
 
 void GuiManager::refresh()
 {
-  if(this->active)
-  {
-    this->screen->draw(this->destination);
-  }
+        if ( this->active )
+        {
+                this->screen->draw( this->destination );
+        }
 }
 
-BITMAP* GuiManager::findImage(const std::string& name)
+BITMAP* GuiManager::findImage( const std::string& name )
 {
-  std::map<std::string, BITMAP*>::iterator i  = images.find(name);
-  return (i != images.end() ? (*i).second : 0);
+        std::map< std::string, BITMAP* >::iterator i  = images.find( name );
+        return ( i != images.end () ? ( *i ).second : 0 );
 }
 
-void GuiManager::assignLanguage(const std::string& language)
+void GuiManager::assignLanguage( const std::string& language )
 {
-  if(this->languageManager == 0)
-  {
-    this->languageManager = new LanguageManager(isomot::sharePath() + "text/" + language + ".xml");
-  }
+        if ( this->languageManager == 0 )
+        {
+                this->languageManager = new LanguageManager( isomot::sharePath() + "text/" + language + ".xml" );
+        }
 }
 
 void GuiManager::allegroSetup()
 {
-  // Inicializa Allegro
-  allegro_init();
-  // Trabajo a color real con canal alfa
-  set_color_depth(32);
-  // Resolución de 640x480 píxeles en ventana
-  set_gfx_mode(GFX_AUTODETECT_WINDOWED, 640, 480, 0, 0);
+        // Inicializa Allegro
+        allegro_init ();
+
+        // Trabajo a color real con canal alfa
+        set_color_depth( 32 );
+
+        // Resolución de 640x480 píxeles en ventana
+        set_gfx_mode( GFX_AUTODETECT_WINDOWED, 640, 480, 0, 0 );
+
 #ifdef __WIN32
-  // Si la aplicación pierde el foco el juego se seguirá ejecutando
-  // Se opera de este modo porque hay subprocesos que seguirán ejecutándose aunque el
-  // subproceso principal se pare
-  set_display_switch_mode(SWITCH_BACKGROUND);
+        // Si la aplicación pierde el foco el juego se seguirá ejecutando
+        // Se opera de este modo porque hay subprocesos que seguirán ejecutándose aunque el
+        // subproceso principal se pare
+        set_display_switch_mode( SWITCH_BACKGROUND );
 #endif
-  // Instala el controlador de eventos del teclado
-  install_keyboard();
+
+        // Instala el controlador de eventos del teclado
+        install_keyboard ();
 }
 
 ConfigurationManager* GuiManager::getConfigurationManager() const
 {
-  return this->configurationManager;
+        return this->configurationManager;
 }
 
 LanguageManager* GuiManager::getLanguageManager() const
 {
-  return this->languageManager;
+        return this->languageManager;
 }
 

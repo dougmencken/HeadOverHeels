@@ -33,21 +33,23 @@ class Menu;
  */
 class AdjustSoundFx : public AdjustValue
 {
+
 public:
 
-  /**
-   * Constructor
-   * @param menu Menú de opciones donde se cambia el volumen de los efectos sonoros
-   * @param text Descripción de la opción que permite cambiar el volumen
-   */
-  AdjustSoundFx(Menu* menu, const std::string& text);
+        /**
+         * Constructor
+         * @param menu Menú de opciones donde se cambia el volumen de los efectos sonoros
+         * @param text Descripción de la opción que permite cambiar el volumen
+         */
+        AdjustSoundFx( Menu* menu, const std::string& text ) ;
 
-  /**
-   * Ejecuta el contenido de la acción, es decir, cambia el volumen
-   */
-  void execute();
+        /**
+         * Change the volume of effects
+         */
+        void doIt () ;
+
 };
 
 }
 
-#endif /*ADJUSTSOUNDFX_HPP_*/
+#endif

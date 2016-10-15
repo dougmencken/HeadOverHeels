@@ -13,7 +13,7 @@ SoundManager::SoundManager( )
         : fileName( std::string() ),
           oggPlayer( 0 ),
           oggStream( 0 ),
-          fxVolume( 80 ),
+          effectsVolume( 80 ),
           musicVolume( 75 )
 {
         alogg_init();
@@ -89,7 +89,7 @@ void SoundManager::play( short label, const StateId& stateId, bool loop )
         {
                 deallocate_voice( sampleData->voice );
                 sampleData->voice = allocate_voice( sampleData->sample );
-                voice_set_volume( sampleData->voice, ( this->fxVolume * 255 ) / 100 );
+                voice_set_volume( sampleData->voice, ( this->effectsVolume * 255 ) / 100 );
                 if ( loop )
                 {
                         voice_set_playmode( sampleData->voice, PLAYMODE_LOOP );
@@ -174,7 +174,7 @@ void SoundManager::stopOgg ()
         }
 }
 
-void SoundManager::setMusicVolume( int volume )
+void SoundManager::setVolumeOfMusic( int volume )
 {
           this->musicVolume = volume == 0 ? 1 : volume;
           set_volume( ( this->musicVolume * 255 ) / 100, 0 );

@@ -17,52 +17,58 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-#ifndef CREATECONGRATULATIONSSCREEN_HPP_
-#define CREATECONGRATULATIONSSCREEN_HPP_
+#ifndef CreateListOfSavedGames_hpp_
+#define CreateListOfSavedGames_hpp_
 
+#include <sstream>
 #include <allegro.h>
 #include "Action.hpp"
+#include "csxml/SaveGameXML.hpp"
 
 namespace gui
 {
 
 /**
- * Presenta el texto final de felicitación cuando se termina con éxito el juego
+ * Crea el menú para seleccionar la partida a cargar
  */
-class CreateCongratulationsScreen : public Action
+class CreateListOfSavedGames : public gui::Action
 {
 
 public:
 
         /**
          * Constructor
-         * @param picture Imagen donde se dibujará la interfaz gráfica
-         * @param rooms Número de salas visitadas
-         * @param planets Número de planetas liberados
+         * @param destination Imagen donde se dibujará la interfaz gráfica
+         * @param isLoadMenu true para cargar partidas o false para grabarlas
          */
-        CreateCongratulationsScreen( BITMAP* picture, unsigned short rooms, unsigned short planets ) ;
+        CreateListOfSavedGames( BITMAP* destination, bool isLoadMenu ) ;
 
         /**
-         * Crea la pantalla con el texto
+         * Show the saved games
          */
         void doIt () ;
 
 private:
 
         /**
+         * Recupera la información esencial de un archivo para mostrarla en pantalla posteriormente
+         * @param fileName Nombre del archivo XML que contiene los datos de la partida
+         * @param rooms Devuelve el número de salas visitadas
+         * @param planets Devuelve el número de planetas liberados
+         */
+        void recoverFileInfo( const std::string& fileName, short* rooms, short* planets ) ;
+
+private:
+
+        /**
          * Imagen donde se dibujará la interfaz gráfica
          */
-        BITMAP* where ;
+        BITMAP* destination ;
 
         /**
-         * Número de salas visitadas
+         * Indica si se presenta el menú para cargar (true) o grabar partidas (false)
          */
-        unsigned short rooms ;
-
-        /**
-         * Número de planetas liberados
-         */
-        unsigned short planets ;
+        bool loadMenu ;
 
 };
 

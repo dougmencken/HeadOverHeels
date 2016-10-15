@@ -35,41 +35,43 @@ class Menu;
  */
 class AdjustValue : public gui::Action
 {
+
 public:
 
-  /**
-   * Constructor
-   * @param menu Menú de opciones donde se cambia el valor
-   * @param text Descripción de la opción que permite cambiar el valor
-   * @param value Valor a cambiar
-   */
-  AdjustValue(Menu* menu, const std::string& text, int value);
+        /**
+         * Constructor
+         * @param menu Menú de opciones donde se cambia el valor
+         * @param text Descripción de la opción que permite cambiar el valor
+         * @param value Valor a cambiar
+         */
+        AdjustValue( Menu* menu, const std::string& text, int value ) ;
 
-  /**
-   * Ejecuta el contenido de la acción, es decir, cambia el valor
-   */
-  void execute();
+        /**
+         * Change the value
+         */
+        void doIt () ;
 
 private:
 
-  /**
-   * Menú de opciones donde se cambia el valor
-   */
-  Menu* menu;
+        /**
+         * Menú de opciones donde se cambia el valor
+         */
+        Menu* menu ;
 
-  /**
-   * Descripción de la opción que permite cambiar el valor
-   */
-  std::string text;
+        /**
+         * Descripción de la opción que permite cambiar el valor
+         */
+        std::string text ;
 
 protected:
 
-  /**
-   * Valor a cambiar
-   */
-  int value;
+        /**
+         * Valor a cambiar
+         */
+        int value ;
+
 };
 
 }
 
-#endif /*ADJUSTVALUE_HPP_*/
+#endif

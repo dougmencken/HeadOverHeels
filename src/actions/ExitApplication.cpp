@@ -1,17 +1,20 @@
 #include "ExitApplication.hpp"
 #include "GuiManager.hpp"
 #include "ConfigurationManager.hpp"
+
 using gui::ExitApplication;
 
-ExitApplication::ExitApplication()
-: Action()
+
+ExitApplication::ExitApplication( )
+: Action( )
 {
 
 }
 
-void ExitApplication::execute()
+void ExitApplication::bye ()
 {
-  GuiManager::getInstance()->getConfigurationManager()->write();
-  GuiManager::getInstance()->suspend();
+
+        GuiManager::getInstance()->getConfigurationManager()->write();
+        GuiManager::getInstance()->suspend();
 
 }

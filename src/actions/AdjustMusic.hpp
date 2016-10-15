@@ -33,21 +33,23 @@ class Menu;
  */
 class AdjustMusic : public AdjustValue
 {
+
 public:
 
-  /**
-   * Constructor
-   * @param menu Menú de opciones donde se cambia el volumen de la música
-   * @param text Descripción de la opción que permite cambiar el volumen
-   */
-	AdjustMusic(Menu* menu, const std::string& text);
+        /**
+         * Constructor
+         * @param menu Menú de opciones donde se cambia el volumen de la música
+         * @param text Descripción de la opción que permite cambiar el volumen
+         */
+        AdjustMusic( Menu* menu, const std::string& text ) ;
 
-  /**
-   * Ejecuta el contenido de la acción, es decir, cambia el volumen
-   */
-  void execute();
+        /**
+         * Change the volume of music
+         */
+        void doIt () ;
+
 };
 
 }
 
-#endif /*ADJUSTMUSIC_HPP_*/
+#endif

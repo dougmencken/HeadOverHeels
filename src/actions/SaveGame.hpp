@@ -32,34 +32,36 @@ namespace gui
  */
 class SaveGame : public Action
 {
+
 public:
 
-  /**
-   * Constructor
-   * @param destination Imagen donde se dibujará la interfaz gráfica
-   * @param slot Número del archivo a grabar
-   */
-	SaveGame(BITMAP* destination, int slot);
+        /**
+         * Constructor
+         * @param picture Imagen donde se dibujará la interfaz gráfica
+         * @param slot Número del archivo a grabar
+         */
+        SaveGame( BITMAP* picture, int slot ) ;
 
-  /**
-   * Ejecuta el contenido de la acción, es decir, graba la partida y devuelve el control al juego
-   */
-  void execute();
+        /**
+         * Save the game and back to play
+         */
+        void doIt () ;
 
 private:
 
-  /**
-   * Imagen donde se dibujará la interfaz gráfica
-   */
-  BITMAP* destination;
+        /**
+         * Imagen donde se dibujará la interfaz gráfica
+         */
+        BITMAP* where ;
 
-  /**
-   * Número del archivo a grabar. Los archivos tienen un nombre de la forma savegameN.xml,
-   * donde N es este número
-   */
-  int slot;
+        /**
+         * Número del archivo a grabar. Los archivos tienen un nombre de la forma savegameN.xml,
+         * donde N es este número
+         */
+        int slot ;
+
 };
 
 }
 
-#endif /*SAVEGAME_HPP_*/
+#endif

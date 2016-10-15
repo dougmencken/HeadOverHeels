@@ -39,66 +39,68 @@ class Action;
  */
 class Screen : public Widget
 {
+
 public:
 
-  /**
-   * Constructor
-   * @param x Coordenada X de pantalla donde situar el elemento
-   * @param y Coordenada Y de pantalla donde situar el elemento
-   * @param destination Imagen donde se volcará la pantalla
-   */
-	Screen(unsigned int x, unsigned int y, BITMAP* destination);
+        /**
+         * Constructor
+         * @param x Coordenada X de pantalla donde situar el elemento
+         * @param y Coordenada Y de pantalla donde situar el elemento
+         * @param destination Imagen donde se volcará la pantalla
+         */
+        Screen( unsigned int x, unsigned int y, BITMAP* destination ) ;
 
-	virtual ~Screen();
+        virtual ~Screen( ) ;
 
-	/**
-	 * Dibuja todo el contenido de la pantalla
-	 * @param destination Imagen donde será dibujada
-	 */
-	void draw(BITMAP* destination);
+        /**
+         * Dibuja todo el contenido de la pantalla
+         * @param destination Imagen donde será dibujada
+         */
+        void draw ( BITMAP* where ) ;
 
-	/**
-   * Responde a la pulsación de una tecla
-   */
-  void handleKey(int key);
+        /**
+         * Responde a la pulsación de una tecla
+         */
+        void handleKey ( int key ) ;
 
-  /**
-   * Añade un nuevo componente a la pantalla
-   * @param widget Un componente de la interfaz de usuario
-   */
-	void addWidget(Widget* widget);
+        /**
+         * Añade un nuevo componente a la pantalla
+         * @param widget Un componente de la interfaz de usuario
+         */
+        void addWidget ( Widget* widget ) ;
 
 private:
 
-  /**
-   * Color de fondo
-   */
-  int backgroundColor;
+        /**
+         * Color de fondo
+         */
+        int backgroundColor ;
 
-  /**
-   * Imagen de fondo de la pantalla
-   */
-  BITMAP* backgroundImage;
+        /**
+         * Imagen de fondo de la pantalla
+         */
+        BITMAP* backgroundImage ;
 
-  /**
-   * Imagen donde se volcarán la pantalla
-   */
-  BITMAP* destination;
+        /**
+         * Imagen donde se volcarán la pantalla
+         */
+        BITMAP* where ;
 
-  /**
-   * Elementos de la interfaz de usuario contenidos en la pantalla
-   */
-  std::list<Widget*> widgets;
+        /**
+         * Elementos de la interfaz de usuario contenidos en la pantalla
+         */
+        std::list< Widget* > widgets ;
 
 public: // Operaciones de consulta y actualización
 
-  /**
-   * Establece la imagen de fondo de la pantalla
-   * @param image Una imagen
-   */
-  void setBackground(BITMAP* image) { this->backgroundImage = image; }
+        /**
+         * Establece la imagen de fondo de la pantalla
+         * @param image Una imagen
+         */
+        void setBackground( BITMAP* image ) {  this->backgroundImage = image ;  }
+
 };
 
 }
 
-#endif /*SCREEN_HPP_*/
+#endif

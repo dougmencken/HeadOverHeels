@@ -32,27 +32,29 @@ namespace gui
  */
 class CreateMainMenu : public Action
 {
+
 public:
 
-  /**
-   * Constructor
-   * @param destination Imagen donde se dibujará la interfaz gráfica
-   */
-	CreateMainMenu(BITMAP* destination);
+        /**
+         * Constructor
+         * @param destination Imagen donde se dibujará la interfaz gráfica
+         */
+        CreateMainMenu( BITMAP* destination ) ;
 
-  /**
-   * Ejecuta el contenido de la acción, es decir, muestra el menú principal del juego
-   */
-	void execute();
+        /**
+         * Show the main menu of the game
+         */
+        void doIt () ;
 
 private:
 
-  /**
-   * Imagen donde se dibujará la interfaz gráfica
-   */
-  BITMAP* destination;
+        /**
+         * Imagen donde se dibujará la interfaz gráfica
+         */
+        BITMAP* destination ;
+
 };
 
 }
 
-#endif /*CREATEMAINMENU_HPP_*/
+#endif

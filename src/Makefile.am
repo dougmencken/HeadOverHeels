@@ -64,7 +64,6 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			Wall.hpp \
 			Win32HPC.cpp \
 			Win32HPC.hpp \
-			actions/Action.cpp \
 			actions/Action.hpp \
 			actions/AdjustMusic.cpp \
 			actions/AdjustMusic.hpp \
@@ -72,14 +71,16 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			actions/AdjustSoundFx.hpp \
 			actions/AdjustValue.cpp \
 			actions/AdjustValue.hpp \
+			actions/BeginGame.cpp \
+			actions/BeginGame.hpp \
 			actions/CreateAudioMenu.cpp \
 			actions/CreateAudioMenu.hpp \
 			actions/CreateCongratulationsScreen.cpp \
 			actions/CreateCongratulationsScreen.hpp \
 			actions/CreateEndScreen.cpp \
 			actions/CreateEndScreen.hpp \
-			actions/CreateFileGameMenu.cpp \
-			actions/CreateFileGameMenu.hpp \
+			actions/CreateListOfSavedGames.cpp \
+			actions/CreateListOfSavedGames.hpp \
 			actions/CreateKeyboardMenu.cpp \
 			actions/CreateKeyboardMenu.hpp \
 			actions/CreateLanguageMenu.cpp \
@@ -100,8 +101,6 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			actions/SelectLanguage.hpp \
 			actions/ShowAuthors.cpp \
 			actions/ShowAuthors.hpp \
-			actions/StartGame.cpp \
-			actions/StartGame.hpp \
 			alogg/alogg.c \
 			alogg/aloggcfg.h \
 			alogg/alogg.h \

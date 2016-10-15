@@ -8,15 +8,14 @@ using gui::AdjustSoundFx;
 using gui::GuiManager;
 using isomot::SoundManager;
 
-AdjustSoundFx::AdjustSoundFx(Menu* menu, const std::string& text)
-: AdjustValue(menu, text, SoundManager::getInstance()->getFxVolume())
+AdjustSoundFx::AdjustSoundFx( Menu* menu, const std::string& text )
+: AdjustValue( menu, text, SoundManager::getInstance()->getVolumeOfEffects() )
 {
 
 }
 
-void AdjustSoundFx::execute()
+void AdjustSoundFx::doIt ()
 {
-  AdjustValue::execute();
-  SoundManager::getInstance()->setFxVolume(value);
-  GuiManager::getInstance()->getConfigurationManager()->setSoundFxVolume(value);
+	AdjustValue::doIt ();
+	SoundManager::getInstance()->setVolumeOfEffects( value );
 }

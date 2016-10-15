@@ -31,83 +31,85 @@ namespace gui
  */
 class CreatePlanetsScreen : public Action
 {
+
 public:
 
-  /**
-   * Constructor
-   * @param destination Imagen donde se dibujará la interfaz gráfica
-   * @param gameInProgress Indica si hay una partida en curso o comienza una nueva
-   */
-  CreatePlanetsScreen(BITMAP* destination, bool gameInProgress);
+        /**
+         * Constructor
+         * @param picture Imagen donde se dibujará la interfaz gráfica
+         * @param gameInProgress Indica si hay una partida en curso o comienza una nueva
+         */
+        CreatePlanetsScreen( BITMAP* picture, bool gameInProgress );
 
-  /**
-   * Crea la pantalla de los planetas
-   */
-  void execute();
+        /**
+         * Crea la pantalla de los planetas
+         */
+        void doIt () ;
 
-  /**
-   * Indica la liberación de Blacktooth
-   */
-  void blacktoothIsFree() { this->blacktooth = true; }
+        /**
+         * Indica la liberación de Blacktooth
+         */
+        void blacktoothIsFree() {  this->blacktooth = true ;  }
 
-  /**
-   * Indica la liberación de Egyptus
-   */
-  void egyptusIsFree() { this->egyptus = true; }
+        /**
+         * Indica la liberación de Egyptus
+         */
+        void egyptusIsFree() {  this->egyptus = true ;  }
 
-  /**
-   * Indica la liberación de Penitentiary
-   */
-  void penitentiaryIsFree() { this->penitentiary = true; }
+        /**
+         * Indica la liberación de Penitentiary
+         */
+        void penitentiaryIsFree() {  this->penitentiary = true ;  }
 
-  /**
-   * Indica la liberación de Byblos
-   */
-  void byblosIsFree() { this->byblos = true; }
+        /**
+         * Indica la liberación de Byblos
+         */
+        void byblosIsFree() {  this->byblos = true ;  }
 
-  /**
-   * Indica la liberación de Safari
-   */
-  void safariIsFree() { this->safari = true; }
+        /**
+         * Indica la liberación de Safari
+         */
+        void safariIsFree() {  this->safari = true ;  }
 
 private:
 
-  /**
-   * Imagen donde se dibujará la interfaz gráfica
-   */
-  BITMAP* destination;
+        /**
+         * Imagen donde se dibujará la interfaz gráfica
+         */
+        BITMAP* where ;
 
-  /**
-   * Indica si hay una partida en curso o comienza una nueva
-   */
-  bool gameInProgress;
+        /**
+         * Indica si hay una partida en curso o comienza una nueva
+         */
+        bool gameInProgress ;
 
-  /**
-   * Indica si Blacktooth ha sido liberado
-   */
-  bool blacktooth;
+        /**
+         * Indica si Blacktooth ha sido liberado
+         */
+        bool blacktooth ;
 
-  /**
-   * Indica si Egyptus ha sido liberado
-   */
-  bool egyptus;
+        /**
+         * Indica si Egyptus ha sido liberado
+         */
+        bool egyptus ;
 
-  /**
-   * Indica si Penitentiary ha sido liberado
-   */
-  bool penitentiary;
+        /**
+         * Indica si Penitentiary ha sido liberado
+         */
+        bool penitentiary ;
 
-  /**
-   * Indica si Byblos ha sido liberado
-   */
-  bool byblos;
+        /**
+         * Indica si Byblos ha sido liberado
+         */
+        bool byblos ;
 
-  /**
-   * Indica si Safari ha sido liberado
-   */
-  bool safari;
+        /**
+         * Indica si Safari ha sido liberado
+         */
+        bool safari ;
+
 };
 
 }
 
-#endif /*CREATEPLANETSSCREEN_HPP_*/
+#endif

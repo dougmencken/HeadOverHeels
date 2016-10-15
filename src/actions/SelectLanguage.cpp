@@ -5,22 +5,23 @@
 
 using gui::SelectLanguage;
 
-SelectLanguage::SelectLanguage(BITMAP* destination, const std::string& language)
+
+SelectLanguage::SelectLanguage( BITMAP* picture, const std::string& language )
 : Action(),
-  destination(destination),
-  language(language)
+  where( picture ),
+  language( language )
 {
 
 }
 
-void SelectLanguage::execute()
+void SelectLanguage::doIt ()
 {
-  ConfigurationManager* configuration = GuiManager::getInstance()->getConfigurationManager();
-  configuration->setLanguage(language);
-  configuration->write();
+        ConfigurationManager* configuration = GuiManager::getInstance()->getConfigurationManager();
+        configuration->setLanguage( language );
+        configuration->write();
 
-  GuiManager::getInstance()->assignLanguage(language);
+        GuiManager::getInstance()->assignLanguage( language );
 
-  CreateMainMenu mainMenu(this->destination);
-  mainMenu.execute();
+        CreateMainMenu mainMenu( this->where );
+        mainMenu.doIt ();
 }

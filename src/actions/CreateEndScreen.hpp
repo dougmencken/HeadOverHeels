@@ -33,39 +33,41 @@ namespace gui
  */
 class CreateEndScreen : public gui::Action
 {
+
 public:
 
-  /**
-   * Constructor
-   * @param destination Imagen donde se dibujará la interfaz gráfica
-   * @param rooms Número de salas visitadas
-   * @param planets Número de planetas liberados
-   */
-  CreateEndScreen(BITMAP* destination, unsigned short rooms, unsigned short planets);
+        /**
+         * Constructor
+         * @param destination Imagen donde se dibujará la interfaz gráfica
+         * @param rooms Número de salas visitadas
+         * @param planets Número de planetas liberados
+         */
+        CreateEndScreen( BITMAP* destination, unsigned short rooms, unsigned short planets ) ;
 
-  /**
-   * Ejecuta el contenido de la acción, es decir, muestra la pantalla resumen de la partida
-   */
-  void execute();
+        /**
+         * Show the summary screen
+         */
+        void doIt () ;
 
 private:
 
-  /**
-   * Imagen donde se dibujará la interfaz gráfica
-   */
-  BITMAP* destination;
+        /**
+         * Imagen donde se dibujará la interfaz gráfica
+         */
+        BITMAP* destination ;
 
-  /**
-   * Número de salas visitadas
-   */
-  unsigned short rooms;
+        /**
+         * Número de salas visitadas
+         */
+        unsigned short rooms ;
 
-  /**
-   * Número de planetas liberados
-   */
-  unsigned short planets;
+        /**
+         * Número de planetas liberados
+         */
+        unsigned short planets ;
+
 };
 
 }
 
-#endif /*CREATEENDSCREEN_HPP_*/
+#endif

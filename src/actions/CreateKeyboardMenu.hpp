@@ -32,27 +32,29 @@ namespace gui
  */
 class CreateKeyboardMenu : public Action
 {
+
 public:
 
-  /**
-   * Constructor
-   * @param destination Imagen donde se dibujará la interfaz gráfica
-   */
-  CreateKeyboardMenu(BITMAP* destination);
+        /**
+         * Constructor
+         * @param destination Imagen donde se dibujará la interfaz gráfica
+         */
+        CreateKeyboardMenu( BITMAP* destination ) ;
 
-  /**
-   * Ejecuta el contenido de la acción, es decir, muestra el menú de configuración
-   */
-  void execute();
+        /**
+         * Show the keys menu
+         */
+        void doIt () ;
 
 private:
 
-  /**
-   * Imagen donde se dibujará la interfaz gráfica
-   */
-  BITMAP* destination;
+        /**
+         * Imagen donde se dibujará la interfaz gráfica
+         */
+        BITMAP* destination ;
+
 };
 
 }
 
-#endif /*CREATEKEYBOARDMENU_HPP_*/
+#endif

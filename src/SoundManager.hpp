@@ -174,7 +174,7 @@ private:
         /**
          * Volumen de los efectos sonoros
          */
-        int fxVolume ;
+        int effectsVolume ;
 
         /**
          * Volumen de la música
@@ -192,25 +192,25 @@ public: // Operaciones de consulta y actualización
          * Establece el volumen de los efectos sonoros
          * @param volume Un valor comprendido entre 0 y 99
          */
-        void setFxVolume ( int volume ) {  this->fxVolume = volume ;  }
+        void setVolumeOfEffects ( int volume ) {  this->effectsVolume = volume ;  }
 
         /**
          * Volumen de los efectos sonoros
          * @return Un valor comprendido entre 0 y 99
          */
-        int getFxVolume () const {  return this->fxVolume ;  }
+        int getVolumeOfEffects () const {  return this->effectsVolume ;  }
 
         /**
          * Establece el volumen de la música
          * @param volume Un valor comprendido entre 0 y 99
          */
-        void setMusicVolume ( int volume ) ;
+        void setVolumeOfMusic ( int volume ) ;
 
         /**
          * Volumen de la música
          * @return Un valor comprendido entre 0 y 99
          */
-        int getMusicVolume () const {  return this->musicVolume ;  }
+        int getVolumeOfMusic () const {  return this->musicVolume ;  }
 
 };
 
