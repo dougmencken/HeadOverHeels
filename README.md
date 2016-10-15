@@ -1,8 +1,8 @@
-# HeadOverHeels remake
+# Head over Heels
 
-http://www.headoverheels2.com/drupal/en/gallery/20
+The free and open source remake of game
 
-Originated from version 1.0.1 by Jorge Rodríguez Santos < jorge@helmantika.org >
+Originated from version 1.0.1 by Jorge Rodríguez Santos http://www.headoverheels2.com/drupal/en/
 
 Build:
 

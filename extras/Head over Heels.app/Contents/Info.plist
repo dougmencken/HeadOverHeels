@@ -7,13 +7,13 @@
     <key>CFBundleExecutable</key>
     <string>headoverheels</string>
     <key>CFBundleGetInfoString</key>
-    <string>Head over Heels 1.1</string>
+    <string>Head over Heels 1.2</string>
     <key>CFBundleIconFile</key>
     <string>headoverheels.icns</string>
     <key>CFBundleShortVersionString</key>
-    <string>1.1</string>
+    <string>1.2</string>
     <key>CFBundleVersion</key>
-    <string>1.1</string>
+    <string>1.2</string>
     <key>CFBundleName</key>
     <string>Head over Heels</string>
     <key>CFBundlePackageType</key>

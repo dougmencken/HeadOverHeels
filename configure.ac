@@ -1,8 +1,8 @@
 # Process this file with autoconf to get a configure script
 
 AC_PREREQ([2.63])
-AC_INIT(headoverheels, 1.1, jorge@helmantika.org)
-AM_INIT_AUTOMAKE(headoverheels, 1.1)
+AC_INIT(headoverheels, 1.2, dougmencken@gmail.com)
+AM_INIT_AUTOMAKE(headoverheels, 1.2)
 
 # Checks for programs
 AC_PROG_CC
