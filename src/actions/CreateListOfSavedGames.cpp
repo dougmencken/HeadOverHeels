@@ -15,9 +15,9 @@
 using gui::CreateListOfSavedGames;
 
 
-CreateListOfSavedGames::CreateListOfSavedGames( BITMAP* destination, bool isLoadMenu )
+CreateListOfSavedGames::CreateListOfSavedGames( BITMAP* picture, bool isLoadMenu )
 : Action(),
-  destination( destination ),
+  where( picture ),
   loadMenu( isLoadMenu )
 {
 
@@ -25,52 +25,21 @@ CreateListOfSavedGames::CreateListOfSavedGames( BITMAP* destination, bool isLoad
 
 void CreateListOfSavedGames::doIt ()
 {
-        Label* label = 0;
-        LanguageText* langString = 0;
-        Screen* screen = new Screen( 0, 0, this->destination );
-        LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
+        Screen* screen = new Screen( 0, 0, this->where );
 
         // Imagen de fondo
         screen->setBackground( GuiManager::getInstance()->findImage( "background" ) );
+
         // Si es el menú de carga y se pulsa Esc se vuelve al menú principal
         if ( loadMenu )
         {
-                screen->setAction( new CreateMainMenu( this->destination ) );
+                screen->setAction( new CreateMainMenu( this->where ) );
         }
 
-        // Etiqueta fija: JON
-        langString = languageManager->findLanguageString( "jon" );
-        label = new Label( langString->getX(), langString->getY(), langString->getText(), "regular", "multicolor" );
-        screen->addWidget( label );
-        // Etiqueta fija: RITMAN
-        langString = languageManager->findLanguageString( "ritman" );
-        label = new Label( langString->getX(), langString->getY(), langString->getText(), "regular", "multicolor" );
-        screen->addWidget( label );
-        // Etiqueta fija: BERNIE
-        langString = languageManager->findLanguageString( "bernie" );
-        label = new Label( langString->getX(), langString->getY(), langString->getText(), "regular", "multicolor" );
-        screen->addWidget( label );
-        // Etiqueta fija: DRUMMOND
-        langString = languageManager->findLanguageString( "drummond" );
-        label = new Label( langString->getX(), langString->getY(), langString->getText(), "regular", "multicolor" );
-        screen->addWidget( label );
+        CreateMainMenu::placeHeadAndHeels( screen, /* icons */ true, /* copyrights */ false );
 
-        // Etiqueta fija: HEAD
-        label = new Label( 200, 24, "HEAD" );
-        label->changeFont( "big", "yellow" );
-        screen->addWidget( label );
-        // Etiqueta fija: OVER
-        label = new Label( 280, 45, "OVER", "regular", "multicolor" );
-        screen->addWidget( label );
-        // Etiqueta fija: HEELS
-        label = new Label( 360, 24, "HEELS" );
-        label->changeFont( "big", "yellow" );
-        screen->addWidget( label );
-
-        // Icono: Head
-        screen->addWidget( new Icon( 206, 84, GuiManager::getInstance()->findImage( "head" ) ) );
-        // Icono: Heels
-        screen->addWidget( new Icon( 378, 84, GuiManager::getInstance()->findImage( "heels" ) ) );
+        Label* label = 0;
+        LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
 
         // Las partidas guardadas
         Menu* menu = new Menu( 80, 160 );
@@ -92,11 +61,11 @@ void CreateListOfSavedGames::doIt ()
 
                         if ( loadMenu )
                         {
-                                label->setAction( new LoadGame( this->destination, fileCount ) );
+                                label->setAction( new LoadGame( this->where, fileCount ) );
                         }
                         else
                         {
-                                label->setAction( new SaveGame( this->destination, fileCount ) );
+                                label->setAction( new SaveGame( this->where, fileCount ) );
                         }
 
                         if ( fileCount == 1 )
@@ -117,7 +86,7 @@ void CreateListOfSavedGames::doIt ()
                         label = new Label( ss.str() );
                         if ( ! loadMenu )
                         {
-                                label->setAction( new SaveGame( this->destination, fileCount ) );
+                                label->setAction( new SaveGame( this->where, fileCount ) );
                         }
 
                         if ( fileCount == 1 )

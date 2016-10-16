@@ -38,9 +38,9 @@ public:
 
         /**
          * Constructor
-         * @param destination Imagen donde se dibujará la interfaz gráfica
+         * @param picture Imagen donde se dibujará la interfaz gráfica
          */
-        CreateAudioMenu( BITMAP* destination ) ;
+        CreateAudioMenu( BITMAP* picture ) ;
 
         /**
          * Show the audio menu
@@ -52,7 +52,7 @@ private:
         /**
          * Imagen donde se dibujará la interfaz gráfica
          */
-        BITMAP* destination ;
+        BITMAP* where ;
 
 };
 

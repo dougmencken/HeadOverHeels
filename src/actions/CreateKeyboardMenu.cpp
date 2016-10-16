@@ -13,53 +13,24 @@ using gui::CreateKeyboardMenu;
 using isomot::InputManager;
 
 
-CreateKeyboardMenu::CreateKeyboardMenu( BITMAP* destination )
+CreateKeyboardMenu::CreateKeyboardMenu( BITMAP* picture )
 : Action(),
-  destination( destination )
+  where( picture )
 {
 
 }
 
 void CreateKeyboardMenu::doIt ()
 {
+        Screen* screen = new Screen( 0, 0, this->where );
+        screen->setBackground( GuiManager::getInstance()->findImage( "background" ) );
+        screen->setAction( new CreateMainMenu( this->where ) );
+
+        CreateMainMenu::placeHeadAndHeels( screen, /* icons */ false, /* copyrights */ true );
+
         Label* label = 0;
         LanguageText* langString = 0;
-        Screen* screen = new Screen( 0, 0, this->destination );
         LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
-        InputManager* inputManager = InputManager::getInstance();
-
-        // Imagen de fondo
-        screen->setBackground( GuiManager::getInstance()->findImage( "background" ) );
-        screen->setAction( new CreateMainMenu( this->destination ) );
-
-        // Etiqueta fija: JON
-        langString = languageManager->findLanguageString( "jon" );
-        label = new Label( langString->getX(), langString->getY(), langString->getText(), "regular", "multicolor" );
-        screen->addWidget( label );
-        // Etiqueta fija: RITMAN
-        langString = languageManager->findLanguageString( "ritman" );
-        label = new Label( langString->getX(), langString->getY(), langString->getText(), "regular", "multicolor" );
-        screen->addWidget( label );
-        // Etiqueta fija: BERNIE
-        langString = languageManager->findLanguageString( "bernie" );
-        label = new Label( langString->getX(), langString->getY(), langString->getText(), "regular", "multicolor" );
-        screen->addWidget( label );
-        // Etiqueta fija: DRUMMOND
-        langString = languageManager->findLanguageString( "drummond" );
-        label = new Label( langString->getX(), langString->getY(), langString->getText(), "regular", "multicolor" );
-        screen->addWidget( label );
-
-        // Etiqueta fija: HEAD
-        label = new Label( 200, 24, "HEAD" );
-        label->changeFont( "big", "yellow" );
-        screen->addWidget( label );
-        // Etiqueta fija: OVER
-        label = new Label( 280, 45, "OVER", "regular", "multicolor" );
-        screen->addWidget( label );
-        // Etiqueta fija: HEELS
-        label = new Label( 360, 24, "HEELS" );
-        label->changeFont( "big", "yellow" );
-        screen->addWidget( label );
 
         // Las opciones del menú
         std::string textKey[ ] = {  "left", "right", "up", "down", "take", "jump", "shoot", "take-jump", "swap", "halt"  };
@@ -70,6 +41,8 @@ void CreateKeyboardMenu::doIt ()
         // La primera opción almacena la posición del menú en pantalla
         langString = languageManager->findLanguageString( "left" );
         Menu* menu = new Menu( langString->getX(), langString->getY() );
+
+        InputManager* inputManager = InputManager::getInstance();
 
         // Creación de las opciones: una por cada tecla empleada en el juego
         for ( int i = 0; i < 10; i++ )
@@ -99,18 +72,6 @@ void CreateKeyboardMenu::doIt ()
 
         // El menú que aparece en pantalla
         screen->addWidget( menu );
-
-        // Etiqueta fija: (C) 1987 OCEAN SOFTWARE LTD
-        langString = languageManager->findLanguageString( "ocean" );
-        label = new Label( langString->getX(), langString->getY(), langString->getText() );
-        label->changeFont( "regular", "cyan" );
-        screen->addWidget( label );
-
-        // Etiqueta fija: (C) 2008 JORGE RODRÍGUEZ SANTOS
-        langString = languageManager->findLanguageString( "jorge" );
-        label = new Label( langString->getX(), langString->getY(), langString->getText() );
-        label->changeFont( "regular", "orange");
-        screen->addWidget( label );
 
         // Crea la cadena de responsabilidad
         screen->setSucessor( menu );

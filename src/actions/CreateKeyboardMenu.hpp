@@ -37,9 +37,9 @@ public:
 
         /**
          * Constructor
-         * @param destination Imagen donde se dibujará la interfaz gráfica
+         * @param picture Imagen donde se dibujará la interfaz gráfica
          */
-        CreateKeyboardMenu( BITMAP* destination ) ;
+        CreateKeyboardMenu( BITMAP* picture ) ;
 
         /**
          * Show the keys menu
@@ -51,7 +51,7 @@ private:
         /**
          * Imagen donde se dibujará la interfaz gráfica
          */
-        BITMAP* destination ;
+        BITMAP* where ;
 
 };
 

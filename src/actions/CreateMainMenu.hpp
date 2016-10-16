@@ -37,21 +37,23 @@ public:
 
         /**
          * Constructor
-         * @param destination Imagen donde se dibujará la interfaz gráfica
+         * @param picture Imagen donde se dibujará la interfaz gráfica
          */
-        CreateMainMenu( BITMAP* destination ) ;
+        CreateMainMenu( BITMAP* picture ) ;
 
         /**
          * Show the main menu of the game
          */
         void doIt () ;
 
+        static void placeHeadAndHeels ( Screen* screen, bool iconsToo, bool copyrightsToo ) ;
+
 private:
 
         /**
          * Imagen donde se dibujará la interfaz gráfica
          */
-        BITMAP* destination ;
+        BITMAP* where ;
 
 };
 

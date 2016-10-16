@@ -38,11 +38,11 @@ public:
 
         /**
          * Constructor
-         * @param destination Imagen donde se dibujará la interfaz gráfica
+         * @param picture Imagen donde se dibujará la interfaz gráfica
          * @param rooms Número de salas visitadas
          * @param planets Número de planetas liberados
          */
-        CreateEndScreen( BITMAP* destination, unsigned short rooms, unsigned short planets ) ;
+        CreateEndScreen( BITMAP* picture, unsigned short rooms, unsigned short planets ) ;
 
         /**
          * Show the summary screen
@@ -54,7 +54,7 @@ private:
         /**
          * Imagen donde se dibujará la interfaz gráfica
          */
-        BITMAP* destination ;
+        BITMAP* where ;
 
         /**
          * Número de salas visitadas

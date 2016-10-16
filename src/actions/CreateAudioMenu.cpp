@@ -14,53 +14,26 @@ using gui::CreateAudioMenu;
 using isomot::SoundManager;
 
 
-CreateAudioMenu::CreateAudioMenu( BITMAP* destination )
+CreateAudioMenu::CreateAudioMenu( BITMAP* picture )
 : Action(),
-  destination( destination )
+  where( picture )
 {
 
 }
 
 void CreateAudioMenu::doIt ()
 {
-        std::stringstream ss;
+        Screen* screen = new Screen( 0, 0, this->where );
+        screen->setBackground( GuiManager::getInstance()->findImage( "background" ) );
+        screen->setAction( new CreateMainMenu( this->where ) );
+
+        CreateMainMenu::placeHeadAndHeels( screen, /* icons */ false, /* copyrights */ true );
+
         Label* label = 0;
         LanguageText* langString = 0;
-        Screen* screen = new Screen( 0, 0, this->destination );
         LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
 
-        // Imagen de fondo
-        screen->setBackground( GuiManager::getInstance()->findImage( "background" ) );
-        screen->setAction( new CreateMainMenu( this->destination ) );
-
-        // Etiqueta fija: JON
-        langString = languageManager->findLanguageString( "jon" );
-        label = new Label( langString->getX(), langString->getY(), langString->getText(), "regular", "multicolor" );
-        screen->addWidget( label );
-        // Etiqueta fija: RITMAN
-        langString = languageManager->findLanguageString( "ritman" );
-        label = new Label( langString->getX(), langString->getY(), langString->getText(), "regular", "multicolor" );
-        screen->addWidget( label );
-        // Etiqueta fija: BERNIE
-        langString = languageManager->findLanguageString( "bernie" );
-        label = new Label( langString->getX(), langString->getY(), langString->getText(), "regular", "multicolor" );
-        screen->addWidget( label );
-        // Etiqueta fija: DRUMMOND
-        langString = languageManager->findLanguageString( "drummond" );
-        label = new Label( langString->getX(), langString->getY(), langString->getText(), "regular", "multicolor" );
-        screen->addWidget( label );
-
-        // Etiqueta fija: HEAD
-        label = new Label( 200, 24, "HEAD" );
-        label->changeFont( "big", "yellow" );
-        screen->addWidget( label );
-        // Etiqueta fija: OVER
-        label = new Label( 280, 45, "OVER", "regular", "multicolor" );
-        screen->addWidget( label );
-        // Etiqueta fija: HEELS
-        label = new Label( 360, 24, "HEELS" );
-        label->changeFont( "big", "yellow" );
-        screen->addWidget( label );
+        std::stringstream ss;
 
         // 1. Efectos sonoros
         ss << SoundManager::getInstance()->getVolumeOfEffects();
@@ -78,18 +51,6 @@ void CreateAudioMenu::doIt ()
         label->setAction( new AdjustMusic( menu, langString->getText() ) );
         menu->addOption( label );
         screen->addWidget( menu );
-
-        // Etiqueta fija: (C) 1987 OCEAN SOFTWARE LTD
-        langString = languageManager->findLanguageString( "ocean" );
-        label = new Label( langString->getX(), langString->getY(), langString->getText() );
-        label->changeFont( "regular", "cyan" );
-        screen->addWidget( label );
-
-        // Etiqueta fija: (C) 2008 JORGE RODRÍGUEZ SANTOS
-        langString = languageManager->findLanguageString( "jorge" );
-        label = new Label( langString->getX(), langString->getY(), langString->getText() );
-        label->changeFont( "regular", "orange" );
-        screen->addWidget( label );
 
         // Crea la cadena de responsabilidad
         screen->setSucessor( menu );

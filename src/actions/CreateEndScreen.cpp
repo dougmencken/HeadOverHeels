@@ -14,9 +14,9 @@ using gui::CreateEndScreen;
 using isomot::SoundManager;
 
 
-CreateEndScreen::CreateEndScreen( BITMAP* destination, unsigned short rooms, unsigned short planets )
+CreateEndScreen::CreateEndScreen( BITMAP* picture, unsigned short rooms, unsigned short planets )
 : Action(),
-  destination( destination ),
+  where( picture ),
   rooms( rooms ),
   planets( planets )
 {
@@ -27,49 +27,18 @@ void CreateEndScreen::doIt ()
         SoundManager::getInstance()->stopOgg();
         SoundManager::getInstance()->playOgg( "music/MainTheme.ogg", /* loop */ true );
 
+        Screen* screen = new Screen( 0, 0, this->where );
+
+        // Imagen de fondo
+        screen->setBackground( GuiManager::getInstance()->findImage( "background" ) );
+        screen->setAction( new CreateMainMenu( this->where ) );
+
+        CreateMainMenu::placeHeadAndHeels( screen, /* icons */ true, /* copyrights */ false );
+
         Label* label = 0;
         LanguageText* langString = 0;
-        Screen* screen = new Screen( 0, 0, this->destination );
         LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
         std::stringstream ss;
-
-          // Imagen de fondo
-          screen->setBackground( GuiManager::getInstance()->findImage( "background" ) );
-          screen->setAction( new CreateMainMenu( this->destination ) );
-
-        // Etiqueta fija: JON
-        langString = languageManager->findLanguageString( "jon" );
-        label = new Label( langString->getX(), langString->getY(), langString->getText(), "regular", "multicolor" );
-        screen->addWidget( label );
-        // Etiqueta fija: RITMAN
-        langString = languageManager->findLanguageString( "ritman" );
-        label = new Label( langString->getX(), langString->getY(), langString->getText(), "regular", "multicolor" );
-        screen->addWidget( label );
-        // Etiqueta fija: BERNIE
-        langString = languageManager->findLanguageString( "bernie" );
-        label = new Label( langString->getX(), langString->getY(), langString->getText(), "regular", "multicolor" );
-        screen->addWidget( label );
-        // Etiqueta fija: DRUMMOND
-        langString = languageManager->findLanguageString( "drummond" );
-        label = new Label( langString->getX(), langString->getY(), langString->getText(), "regular", "multicolor" );
-        screen->addWidget( label );
-
-        // Etiqueta fija: HEAD
-        label = new Label( 200, 24, "HEAD" );
-        label->changeFont( "big", "yellow" );
-        screen->addWidget( label );
-        // Etiqueta fija: OVER
-        label = new Label( 280, 45, "OVER", "regular", "multicolor" );
-        screen->addWidget( label );
-        // Etiqueta fija: HEELS
-        label = new Label( 360, 24, "HEELS" );
-        label->changeFont( "big", "yellow" );
-        screen->addWidget( label );
-
-        // Icono: Head
-        screen->addWidget( new Icon( 206, 84, GuiManager::getInstance()->findImage( "head" ) ) );
-        // Icono: Heels
-        screen->addWidget( new Icon( 378, 84, GuiManager::getInstance()->findImage( "heels" ) ) );
 
         // Puntuación alcanzada por el jugador
         unsigned int score = this->rooms * 160 + this->planets * 10000;
@@ -119,7 +88,7 @@ void CreateEndScreen::doIt ()
         }
 
         // Crea la cadena de responsabilidad
-        label->setAction( new CreateMainMenu( this->destination ) );
+        label->setAction( new CreateMainMenu( this->where ) );
         screen->setSucessor( label );
 
         // Cambia la pantalla mostrada en la interfaz

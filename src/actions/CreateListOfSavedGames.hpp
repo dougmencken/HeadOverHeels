@@ -38,10 +38,10 @@ public:
 
         /**
          * Constructor
-         * @param destination Imagen donde se dibujará la interfaz gráfica
+         * @param picture Imagen donde se dibujará la interfaz gráfica
          * @param isLoadMenu true para cargar partidas o false para grabarlas
          */
-        CreateListOfSavedGames( BITMAP* destination, bool isLoadMenu ) ;
+        CreateListOfSavedGames( BITMAP* picture, bool isLoadMenu ) ;
 
         /**
          * Show the saved games
@@ -63,7 +63,7 @@ private:
         /**
          * Imagen donde se dibujará la interfaz gráfica
          */
-        BITMAP* destination ;
+        BITMAP* where ;
 
         /**
          * Indica si se presenta el menú para cargar (true) o grabar partidas (false)
