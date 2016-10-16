@@ -37,145 +37,143 @@ class Font;
  */
 class Label : public Widget
 {
+
 public:
 
-  /**
-   * Constructor. La posición de la etiqueta se establece en (0, 0), se usa la fuente
-   * por defecto y el texto es de color blanco
-   * @param text El texto a presentar
-   */
-  Label(const std::string& text);
+        /**
+         * Constructor. La posición de la etiqueta se establece en (0, 0), se usa la fuente
+         * por defecto y el texto es de color blanco
+         * @param text El texto a presentar
+         */
+        Label( const std::string& text ) ;
 
-  /**
-   * Constructor. Se usa la fuente por defecto y el texto es de color blanco
-   * @param x Coordenada X de pantalla donde situar el elemento
-   * @param y Coordenada Y de pantalla donde situar el elemento
-   * @param text El texto a presentar
-   */
-	Label(unsigned int x, unsigned int y, const std::string& text);
+        /**
+         * Constructor. Se usa la fuente por defecto y el texto es de color blanco
+         * @param x Coordenada X de pantalla donde situar el elemento
+         * @param y Coordenada Y de pantalla donde situar el elemento
+         * @param text El texto a presentar
+         */
+        Label( unsigned int x, unsigned int y, const std::string& text ) ;
 
-  /**
-   * Constructor
-   * @param x Coordenada X de pantalla donde situar el elemento
-   * @param y Coordenada Y de pantalla donde situar el elemento
-   * @param text El texto a presentar
-   * @param font Nombre de la fuente caligráfica usada para representar el texto
-   * @param color Color del texto
-   * @param spacing Espaciado entre caracteres, suma o resta tantos píxeles como se indiquen
-   */
-  Label(unsigned int x, unsigned int y, const std::string& text, const std::string& fontName, const std::string& color, int spacing = 0);
+        /**
+         * Constructor
+         * @param x Coordenada X de pantalla donde situar el elemento
+         * @param y Coordenada Y de pantalla donde situar el elemento
+         * @param text El texto a presentar
+         * @param font Nombre de la fuente caligráfica usada para representar el texto
+         * @param color Color del texto
+         * @param spacing Espaciado entre caracteres, suma o resta tantos píxeles como se indiquen
+         */
+        Label( unsigned int x, unsigned int y, const std::string& text, const std::string& fontName, const std::string& color, int spacing = 0 ) ;
 
-	virtual ~Label();
+        virtual ~Label( ) ;
 
-	/**
-	 * Cambia el tipo de letra del texto
-	 * @param font Nombre de la fuente caligráfica
-	 * @param color Color del texto
-	 */
-	void changeFont(const std::string& fontName, const std::string& color);
+        /**
+         * Cambia el tipo de letra del texto
+         * @param font Nombre de la fuente caligráfica
+         * @param color Color del texto
+         */
+        void changeFont( const std::string& fontName, const std::string& color ) ;
 
-	/**
-	 * Dibuja el elemento
-	 * @param destination Imagen donde será dibujado
-	 */
-	void draw(BITMAP* destination);
+        /**
+         * Dibuja el elemento
+         * @param where Imagen donde será dibujado
+         */
+        void draw( BITMAP* where ) ;
 
-	/**
-   * Responde a la pulsación de una tecla
-   */
-  void handleKey(int key);
-
-  /**
-   * Crea una etiqueta multicolor, los caracteres alternan entre el celeste, el amarillo
-   * y el naranja, y la añade a la pantalla
-   */
-  //static void createMulticolorLabel(Screen* screen, unsigned int x, unsigned int y, const std::string& text);
+        /**
+         * Responde a la pulsación de una tecla
+         */
+        void handleKey( int key ) ;
 
 private:
 
-  /**
-   * Crea la etiqueta sobre una imagen descodificando una cadena UTF-8
-   * @param text Una cadena de caracteres UTF-8
-   * @param font Fuente caligráfica empleada para dibujar el texto
-   * @param color Color del texto
-   * @param spacing Espaciado entre caracteres, suma o resta tantos píxeles como se indiquen
-   * @return La imagen con fondo magenta (el color clave) y el texto
-   */
-  BITMAP* createBitmapLabel(const std::string& text, const std::string& fontName, const std::string& color, int spacing = 0);
+        /**
+         * Crea la etiqueta sobre una imagen descodificando una cadena UTF-8
+         * @param text Una cadena de caracteres UTF-8
+         * @param font Fuente caligráfica empleada para dibujar el texto
+         * @param color Color del texto
+         * @param spacing Espaciado entre caracteres, suma o resta tantos píxeles como se indiquen
+         * @return La imagen con fondo magenta (el color clave) y el texto
+         */
+        BITMAP* createBitmapLabel( const std::string& text, const std::string& fontName, const std::string& color, int spacing = 0 ) ;
 
 protected:
 
-  /**
-   * El texto de la etiqueta
-   */
-  std::string text;
+        /**
+         * El texto de la etiqueta
+         */
+        std::string text ;
 
-  /**
-   * Nombre de la fuente caligráfica de la etiqueta
-   */
-  std::string fontName;
+        /**
+         * Nombre de la fuente caligráfica de la etiqueta
+         */
+        std::string fontName ;
 
-  /**
-   * Color del texto
-   */
-  std::string color;
+        /**
+         * Color del texto
+         */
+        std::string color ;
 
-  /**
-   * Fuente caligráfica de un color específico empleada para representar el texto
-   */
-  Font* font;
+        /**
+         * Fuente caligráfica de un color específico empleada para representar el texto
+         */
+        Font* font ;
 
-  /**
-   * El texto de una etiqueta en pantalla se compone de muchas imágenes, tantos como
-   * caracteres tenga. Esta imagen almacena la composición para evitar volverla a
-   * realizar si el texto no cambia
-   */
-  BITMAP* buffer;
+        /**
+         * El texto de una etiqueta en pantalla se compone de muchas imágenes, tantos como
+         * caracteres tenga. Esta imagen almacena la composición para evitar volverla a
+         * realizar si el texto no cambia
+         */
+        BITMAP* buffer ;
 
 public: // Operaciones de consulta y actualización
 
-  /**
-   * Devuelve el texto de la etiqueta
-   * @param Una cadena de caracteres
-   */
-  std::string getText() const { return this->text; }
+        /**
+         * Devuelve el texto de la etiqueta
+         * @param Una cadena de caracteres
+         */
+        std::string getText () const {  return this->text ;  }
 
-  /**
-   * Devuelve la fuente tipográfica usada en la etiqueta
-   * @param Un tipo de letra
-   */
-  std::string getFontName() const { return this->fontName; }
+        void setText( const std::string& str ) {  this->text = str ;  }
 
-  /**
-   * Devuelve el color del texto
-   * @param Un color
-   */
-  std::string getColor() const { return this->color; }
+        /**
+         * Devuelve la fuente tipográfica usada en la etiqueta
+         * @param Un tipo de letra
+         */
+        std::string getFontName () const {  return this->fontName ;  }
 
-  /**
-   * Fuente caligráfica de un color específico empleada para representar el texto
-   */
-  Font* getFont() const;
+        /**
+         * Devuelve el color del texto
+         * @param Un color
+         */
+        std::string getColor () const {  return this->color ;  }
 
-  /**
-   * Devuelve la anchura de la etiqueta
-   */
-  int getWidth() const { return this->buffer->w; }
+        /**
+         * Fuente caligráfica de un color específico empleada para representar el texto
+         */
+        Font* getFont () const {  return this->font ;  }
 
-  /**
-   * Devuelve la altura de la etiqueta
-   */
-  int getHeight() const { return this->buffer->h; }
+        /**
+         * Devuelve la anchura de la etiqueta
+         */
+        int getWidth () const {  return this->buffer->w ;  }
+
+        /**
+         * Devuelve la altura de la etiqueta
+         */
+        int getHeight () const {  return this->buffer->h ;  }
+
 };
 
 /**
  * Objeto-función usado como predicado en la búsqueda de una etiqueta
  */
-struct EqualLabel : public std::binary_function<Label*, std::string, bool>
+struct EqualLabel : public std::binary_function< Label*, std::string, bool >
 {
-  bool operator()(const Label* label, const std::string& text) const;
+        bool operator() ( const Label* label, const std::string& text ) const;
 };
 
 }
 
-#endif /*LABEL_HPP_*/
+#endif

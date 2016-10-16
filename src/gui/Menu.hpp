@@ -17,8 +17,8 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-#ifndef MENU_HPP_
-#define MENU_HPP_
+#ifndef Menu_hpp_
+#define Menu_hpp_
 
 #include <list>
 #include <string>
@@ -40,108 +40,112 @@ class Label;
  */
 class Menu : public Widget
 {
+
 public:
 
-  /**
-   * Constructor
-   * @param x Coordenada X de pantalla donde situar el menú
-   * @param y Coordenada Y de pantalla donde situar el menú
-   */
-	Menu(unsigned int x, unsigned int y);
+        /**
+         * Constructor
+         * @param x Coordenada X de pantalla donde situar el menú
+         * @param y Coordenada Y de pantalla donde situar el menú
+         */
+        Menu( unsigned int x, unsigned int y );
 
-  /**
-   * Constructor de un menú de dos columnas
-   * @param x Coordenada X de pantalla donde situar el menú
-   * @param y Coordenada Y de pantalla donde situar el menú
-   * @param secondColumnX Posición donde se situa la segunda columna del menú
-   * @param rows Número de filas de la primera columna
-   */
-  Menu(unsigned int x, unsigned int y, unsigned int secondColumnX, unsigned short rows);
+        /**
+         * Constructor de un menú de dos columnas
+         * @param x Coordenada X de pantalla donde situar el menú
+         * @param y Coordenada Y de pantalla donde situar el menú
+         * @param secondColumnX Posición donde se situa la segunda columna del menú
+         * @param rows Número de filas de la primera columna
+         */
+        Menu( unsigned int x, unsigned int y, unsigned int secondColumnX, unsigned short rows );
 
-	virtual ~Menu();
+        virtual ~Menu( );
 
-  /**
-   * Dibuja el manú
-   * @param destination Imagen donde será dibujado
-   */
-  void draw(BITMAP* destination);
+        /**
+         * Dibuja el manú
+         * @param destination Imagen donde será dibujado
+         */
+        void draw ( BITMAP* destination ) ;
 
-  /**
-   * Responde a la pulsación de una tecla
-   */
-  void handleKey(int key);
+        /**
+         * Responde a la pulsación de una tecla
+         */
+        void handleKey ( int key ) ;
 
-  /**
-   * Añade una opción al menú
-   * @param action Una orden
-   */
-  void addOption(Label* label);
+        /**
+         * Añade una opción al menú
+         * @param action Una orden
+         */
+        void addOption ( Label* label ) ;
 
-  /**
-   * Añade una orden al menú estableciéndola como la acción seleccionada
-   * @param action Una orden
-   */
-  void addActiveOption(Label* label);
+        /**
+         * Añade una orden al menú estableciéndola como la acción seleccionada
+         * @param action Una orden
+         */
+        void addActiveOption ( Label* label ) ;
 
-  /**
-   * Cambia una opción del menú
-   * @param text Texto de la opción a sustituir
-   * @param label Nueva opción
-   */
-  void changeOption(const std::string& text, Label* label);
+        Label* getActiveOption () const {  return this->activeOption ;  }
 
-private:
-
-  /**
-   * Selecciona la opción anterior del menú respecto de la actual
-   */
-  void previousOption();
-
-  /**
-   * Selecciona la opción siguiente del menú respecto de la actual
-   */
-  void nextOption();
+        /**
+         * Cambia una opción del menú
+         * @param text Texto de la opción a sustituir
+         * @param label Nueva opción
+         */
+        void changeOption ( const std::string& text, Label* label );
 
 private:
 
-  /**
-   * Posición donde se situa la segunda columna del menú. Si vale 0 el menú tiene una columna
-   */
-  unsigned int secondColumnX;
+        /**
+         * Selecciona la opción anterior del menú respecto de la actual
+         */
+        void previousOption () ;
 
-  /**
-   * Número de filas de la primera columna. Cuando se sobrepase el número indicado se empezará
-   * a situar el texto en la segunda columna. Si vale 0xffff el menú sólo tiene una columna
-   */
-  unsigned short rows;
+        /**
+         * Selecciona la opción siguiente del menú respecto de la actual
+         */
+        void nextOption () ;
+
+private:
+
+        /**
+         * Posición donde se situa la segunda columna del menú. Si vale 0 el menú tiene una columna
+         */
+        unsigned int secondColumnX ;
+
+        /**
+         * Número de filas de la primera columna. Cuando se sobrepase el número indicado se empezará
+         * a situar el texto en la segunda columna. Si vale 0xffff el menú sólo tiene una columna
+         */
+        unsigned short rows ;
 
 
-  /**
-   * Opciones de las que se compone el menú. El orden en la lista es el orden de aparición en el menú
-   */
-  std::list<Label*> options;
+        /**
+         * Opciones de las que se compone el menú. El orden en la lista es el orden de aparición en el menú
+         */
+        std::list< Label* > options ;
 
-  /**
-   * La opción seleccionada
-   */
-  Label* activeOption;
+        /**
+         * La opción seleccionada
+         */
+        Label* activeOption ;
 
-  /**
-   * Viñeta para cada opción de menú
-   */
-  BITMAP* optionImage;
+        /**
+         * Viñeta para cada opción de menú
+         */
+        BITMAP* optionImage ;
 
-  /**
-   * Viñeta para la opción seleccionada en el menú. Tamaño doble
-   */
-  BITMAP* selectedOptionImage;
+        /**
+         * Viñeta para la opción seleccionada en el menú. Tamaño doble
+         */
+        BITMAP* selectedOptionImage ;
 
-  /**
-   * Viñeta para la opción seleccionada en el menú. Tamaño normal
-   */
-  BITMAP* selectedOptionImageMini;
+        /**
+         * Viñeta para la opción seleccionada en el menú. Tamaño normal
+         */
+        BITMAP* selectedOptionImageMini ;
+
 };
 
 }
 
-#endif /*MENU_HPP_*/
+#endif

@@ -65,12 +65,6 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			Win32HPC.cpp \
 			Win32HPC.hpp \
 			actions/Action.hpp \
-			actions/AdjustMusic.cpp \
-			actions/AdjustMusic.hpp \
-			actions/AdjustSoundFx.cpp \
-			actions/AdjustSoundFx.hpp \
-			actions/AdjustValue.cpp \
-			actions/AdjustValue.hpp \
 			actions/BeginGame.cpp \
 			actions/BeginGame.hpp \
 			actions/CreateAudioMenu.cpp \
