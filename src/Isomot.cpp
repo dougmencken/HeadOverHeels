@@ -1,9 +1,11 @@
+
 #include "Isomot.hpp"
 #include "GameManager.hpp"
 #include "ItemDataManager.hpp"
 #include "MapManager.hpp"
 #include "BonusManager.hpp"
 #include "InputManager.hpp"
+#include "SoundManager.hpp"
 #include "Room.hpp"
 #include "Mediator.hpp"
 #include "Camera.hpp"
@@ -226,6 +228,9 @@ BITMAP* Isomot::update()
                 else
                 {
                         activeRoom = mapManager->changeRoom( exit );
+
+                        std::string scenery = activeRoom->getScenery ();
+                        SoundManager::getInstance()->playOgg ( "music/" + scenery + ".ogg", /* loop */ false );
                 }
         }
 

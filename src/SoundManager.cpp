@@ -154,6 +154,10 @@ void SoundManager::playOgg ( const std::string& fileName, bool loop )
                         if ( this->oggPlayer )
                                 this->oggPlaying = fileName;
                 }
+                else
+                {
+                        std::cerr << "can't play Ogg file " << fileName << std::endl ;
+                }
         }
 }
 
