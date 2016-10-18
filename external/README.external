@@ -1,4 +1,35 @@
+
 External dependencies
+
+    zlib
+
+        a Massively Spiffy Yet Delicately Unobtrusive Compression Library
+
+            ./configure --prefix=/opt/zlib-1.2.8 --libdir=/opt/zlib-1.2.8/lib --archs="" && make
+            make install DESTDIR=`pwd`/root32dir
+            CC="/usr/bin/gcc-4.2 -arch ppc64" CXX="/usr/bin/g++-4.2 -arch ppc64" ./configure --prefix=/opt/zlib-1.2.8 --libdir=/opt/zlib-1.2.8/lib --archs="" && make
+            make install DESTDIR=`pwd`/root64dir
+            lipo -create root32dir/opt/zlib-1.2.8/lib/libz.1.2.8.dylib root64dir/opt/zlib-1.2.8/lib/libz.1.2.8.dylib -output ./libz.1.2.8.dylib
+            sudo make install
+
+            ./configure --prefix=/opt/zlib-1.2.8 --libdir=/opt/zlib-1.2.8/lib --archs="" --static && make
+            make install DESTDIR=`pwd`/root32dir
+            CC="/usr/bin/gcc-4.2 -arch ppc64" CXX="/usr/bin/g++-4.2 -arch ppc64" ./configure --prefix=/opt/zlib-1.2.8 --libdir=/opt/zlib-1.2.8/lib --archs="" --static && make
+            make install DESTDIR=`pwd`/root64dir
+            lipo -create root32dir/opt/zlib-1.2.8/lib/libz.a root64dir/opt/zlib-1.2.8/lib/libz.a -output ./libz.a
+            sudo make install
+
+            file -h /opt/zlib-1.2.8/lib/libz*
+
+    libpng
+
+        a Portable Network Graphics reference library which supports almost all PNG features
+
+            LDFLAGS="-L/opt/zlib-1.2.8/lib" \
+              ./configure --prefix=/opt/libpng-1.6.25 --mandir=/opt/libpng-1.6.25/share/man \
+              --enable-static --enable-shared --with-zlib-prefix=/opt/zlib-1.2.8
+            make
+            sudo make install
 
     vorbis ( libogg, libvorbis, vorbis-tools )
 
