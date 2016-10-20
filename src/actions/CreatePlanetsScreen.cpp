@@ -7,10 +7,10 @@
 #include "Icon.hpp"
 #include "Label.hpp"
 #include "CreateMainMenu.hpp"
-#include "BeginGame.hpp"
+#include "ContinueGame.hpp"
 
 using gui::CreatePlanetsScreen;
-using gui::BeginGame;
+using gui::ContinueGame;
 using isomot::SoundManager;
 
 
@@ -18,19 +18,19 @@ CreatePlanetsScreen::CreatePlanetsScreen( BITMAP* picture, bool gameInProgress )
 : Action(),
   where( picture ),
   gameInProgress( gameInProgress ),
-  blacktooth( false ),
-  egyptus( false ),
-  penitentiary( false ),
-  byblos( false ),
-  safari( false )
+  blacktoothFree( false ),
+  egyptusFree( false ),
+  penitentiaryFree( false ),
+  byblosFree( false ),
+  safariFree( false )
 {
 
 }
 
 void CreatePlanetsScreen::doIt ()
 {
-        SoundManager::getInstance()->stopOgg();
-        SoundManager::getInstance()->playOgg( "music/HeadOverHeels.ogg", /* loop */ true );
+        ///SoundManager::getInstance()->stopAnyOgg();
+        SoundManager::getInstance()->playOgg( "music/HeadOverHeels.ogg", /* loop */ false );
 
         Label* label = 0;
         LanguageText* langString = 0;
@@ -45,39 +45,41 @@ void CreatePlanetsScreen::doIt ()
         label = new Label( 0, 0, langString->getText() );
         label->changeFont( "big", "yellow" );
         label->changePosition( ( 640 - label->getWidth() ) >> 1, langString->getY() );
-        label->setAction( new BeginGame( this->where, gameInProgress ) );
-        planets->addWidget( label );
+        label->setAction( new ContinueGame( this->where, gameInProgress ) );
 
-        // Crea la cadena de responsabilidad
-        planets->setSucessor( label );
+        planets->addWidget( label );
+        planets->setNext( label );
+
+        BITMAP* chapeau = GuiManager::getInstance()->findImage( "crown" ) ;
+        BITMAP* chapeauTriste = GuiManager::getInstance()->findImage( "grey-crown" ) ;
 
         // Egyptus
         planets->addWidget( new Icon( 77, 121, GuiManager::getInstance()->findImage( "egyptus" ) ) );
-        planets->addWidget( new Icon( 90, 70, GuiManager::getInstance()->findImage( this->egyptus ? "crown" : "grey-crown" ) ) );
+        planets->addWidget( new Icon( 90, 70, egyptusFree ? chapeau : chapeauTriste ) );
         langString = languageManager->findLanguageString( "egyptus" );
         planets->addWidget( new Label( langString->getX(), langString->getY(), langString->getText() ) );
 
         // Penitentiary
         planets->addWidget( new Icon( 463, 121, GuiManager::getInstance()->findImage( "penitentiary" ) ) );
-        planets->addWidget( new Icon( 476, 70, GuiManager::getInstance()->findImage( this->penitentiary ? "crown" : "grey-crown" ) ) );
+        planets->addWidget( new Icon( 476, 70, penitentiaryFree ? chapeau : chapeauTriste ) );
         langString = languageManager->findLanguageString( "penitentiary" );
         planets->addWidget( new Label( langString->getX(), langString->getY(), langString->getText() ) );
 
         // Byblos
         planets->addWidget( new Icon( 77, 371, GuiManager::getInstance()->findImage( "byblos" ) ) );
-        planets->addWidget( new Icon( 90, 320, GuiManager::getInstance()->findImage( this->byblos ? "crown" : "grey-crown" ) ) );
+        planets->addWidget( new Icon( 90, 320, byblosFree ? chapeau : chapeauTriste ) );
         langString = languageManager->findLanguageString( "byblos" );
         planets->addWidget( new Label( langString->getX(), langString->getY(), langString->getText() ) );
 
         // Safari
         planets->addWidget( new Icon( 463, 371, GuiManager::getInstance()->findImage( "safari" ) ) );
-        planets->addWidget( new Icon( 476, 320, GuiManager::getInstance()->findImage( this->safari ? "crown" : "grey-crown" ) ) );
+        planets->addWidget( new Icon( 476, 320, safariFree ? chapeau : chapeauTriste ) );
         langString = languageManager->findLanguageString( "safari" );
         planets->addWidget( new Label( langString->getX(), langString->getY(), langString->getText() ) );
 
         // Blacktooth
         planets->addWidget( new Icon( 283, 251, GuiManager::getInstance()->findImage( "blacktooth" ) ) );
-        planets->addWidget( new Icon( 296, 200, GuiManager::getInstance()->findImage( this->blacktooth ? "crown" : "grey-crown" ) ) );
+        planets->addWidget( new Icon( 296, 200, blacktoothFree ? chapeau : chapeauTriste ) );
         langString = languageManager->findLanguageString( "blacktooth" );
         planets->addWidget( new Label( langString->getX(), langString->getY(), langString->getText() ) );
 

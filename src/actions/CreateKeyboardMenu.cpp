@@ -1,3 +1,4 @@
+
 #include "CreateKeyboardMenu.hpp"
 #include "GuiManager.hpp"
 #include "LanguageManager.hpp"
@@ -24,7 +25,7 @@ void CreateKeyboardMenu::doIt ()
 {
         Screen* screen = new Screen( 0, 0, this->where );
         screen->setBackground( GuiManager::getInstance()->findImage( "background" ) );
-        screen->setAction( new CreateMainMenu( this->where ) );
+        screen->setEscapeAction( new CreateMainMenu( this->where ) );
 
         CreateMainMenu::placeHeadAndHeels( screen, /* icons */ false, /* copyrights */ true );
 
@@ -72,9 +73,7 @@ void CreateKeyboardMenu::doIt ()
 
         // El menú que aparece en pantalla
         screen->addWidget( menu );
-
-        // Crea la cadena de responsabilidad
-        screen->setSucessor( menu );
+        screen->setNext( menu );
 
         // Cambia la pantalla mostrada en la interfaz
         GuiManager::getInstance()->changeScreen( screen );

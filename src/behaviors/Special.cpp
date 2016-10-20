@@ -15,18 +15,18 @@ namespace isomot
 
 Special::Special(Item* item, const BehaviorId& id) : Behavior(item, id)
 {
-  stateId = StateWait;
-  destroyTimer = new HPC();
-  speedTimer = new HPC();
-  fallenTimer = new HPC();
-  destroyTimer->start();
-  speedTimer->start();
-  fallenTimer->start();
+        stateId = StateWait;
+        destroyTimer = new HPC();
+        speedTimer = new HPC();
+        fallenTimer = new HPC();
+        destroyTimer->start();
+        speedTimer->start();
+        fallenTimer->start();
 }
 
 Special::~Special()
 {
-  delete destroyTimer;
+        delete destroyTimer;
 }
 
 bool Special::update()
@@ -35,33 +35,33 @@ bool Special::update()
   FreeItem* freeItem = 0;
   Mediator* mediator = item->getMediator();
 
-  switch(stateId)
+  switch ( stateId )
   {
     case StateWait:
       // Si tiene un elemento encima entonces el elemento puede desaparecer
-      if(!item->checkPosition(0, 0, 1, Add))
+      if ( ! item->checkPosition( 0, 0, 1, Add ) )
       {
-        bool mustBeDestroy = true;
-        Item* topItem = mediator->findItem(mediator->popCollision());
+        bool destroy = true;
+        Item* topItem = mediator->findItem( mediator->popCollision() );
 
         // El elemento situado encima debe ser un jugador y debe poder tomar el elemento
-        if(dynamic_cast<PlayerItem*>(topItem) && checkDestruction(topItem))
+        if ( dynamic_cast< PlayerItem * >( topItem ) && checkDestruction( topItem ) )
         {
-          topItem->checkPosition(0, 0, -1, Add);
+          topItem->checkPosition( 0, 0, -1, Add );
 
           // Si el elemento que desencadena la destrucción está unicamente sobre el especial
           // entonces la destrucción es segura. Si está sobre varios elementos hay que averiguar
           // (para poder destruirlo) si los elementos que rodean al especial son también especiales
           // y/o volátiles porque, de lo contrario, el elemento no se destruirá
-          if(mediator->collisionStackSize() > 1)
+          if ( mediator->collisionStackSize() > 1 )
           {
-            mustBeDestroy = !mediator->collisionWith(SpecialBehavior) &&
-                            !mediator->collisionWith(VolatileWeightBehavior) &&
-                            !mediator->collisionWith(VolatileTouchBehavior);
+            destroy = ! mediator->collisionWith( SpecialBehavior ) &&
+                        ! mediator->collisionWith( VolatileWeightBehavior ) &&
+                          ! mediator->collisionWith( VolatileTouchBehavior );
           }
 
           // Cambio de estado si se han cumplido las condiciones
-          if(mustBeDestroy)
+          if ( destroy )
           {
             stateId = StateDestroy;
             // Almacena el elemento que ha provocado la destrucción
@@ -77,7 +77,7 @@ bool Special::update()
       item->animate();
 
       // Se comprueba si el elemento debe caer
-      if(stateId != StateDestroy)
+      if ( stateId != StateDestroy )
       {
         stateId = StateFall;
       }
@@ -221,7 +221,10 @@ void Special::takeSpecial( PlayerItem* who )
         switch( this->item->getLabel() )
         {
                 case Donuts:
-                        who->addAmmo( DonutsPerTray );
+                {
+                        const unsigned short DonutsPerBox = 6 ;
+                        who->addAmmo( DonutsPerBox );
+                }
                         break;
 
                 case ExtraLife:

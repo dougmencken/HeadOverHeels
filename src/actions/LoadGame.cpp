@@ -1,3 +1,4 @@
+
 #include "LoadGame.hpp"
 #include "Ism.hpp"
 #include "GameManager.hpp"
@@ -5,6 +6,7 @@
 
 using gui::LoadGame;
 using gui::CreatePlanetsScreen;
+
 
 LoadGame::LoadGame( BITMAP* picture, int slot )
 : Action(),
@@ -25,29 +27,19 @@ void LoadGame::doIt ()
         CreatePlanetsScreen planetsScreen( this->where, true );
 
         if ( gameManager->isFreePlanet( isomot::Blacktooth ) )
-        {
                 planetsScreen.blacktoothIsFree();
-        }
 
         if ( gameManager->isFreePlanet( isomot::Egyptus ) )
-        {
                 planetsScreen.egyptusIsFree();
-        }
 
         if ( gameManager->isFreePlanet( isomot::Penitentiary ) )
-        {
                 planetsScreen.penitentiaryIsFree();
-        }
 
         if ( gameManager->isFreePlanet( isomot::Safari ) )
-        {
                 planetsScreen.safariIsFree();
-        }
 
         if ( gameManager->isFreePlanet( isomot::Byblos ) )
-        {
                 planetsScreen.byblosIsFree();
-        }
 
         planetsScreen.doIt ();
 }

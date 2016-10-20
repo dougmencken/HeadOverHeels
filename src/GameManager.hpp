@@ -17,8 +17,8 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-#ifndef GAMEMANAGER_HPP_
-#define GAMEMANAGER_HPP_
+#ifndef GameManager_hpp_
+#define GameManager_hpp_
 
 #include <string>
 #include <vector>
@@ -52,16 +52,16 @@ enum PlanetId
 };
 
 /**
- * Código devuelto por la operación start que indica por qué se ha detenido el juego
+ * Why the game was paused
  */
-enum StopCode
+enum WhyPause
 {
-        NoStopCode,   /*  Ninguno  */
-        UserAction,   /*  El usuario ha detenido la partida  */
-        FreePlanet,   /*  Se acaba de liberar un planeta  */
-        SaveGame,     /*  Se acaba de coger el pez de la reencarnación  */
-        Freedom,      /*  Se ha llegado a Freedom pero no con todas las coronas  */
-        Sucess        /*  Se ha conseguido acabar el juego  */
+        Nevermind,
+        FreePlanet,
+        SaveGame,
+        Freedom,
+        Sucess,
+        GameOver
 };
 
 /**
@@ -90,23 +90,23 @@ public:
          * Todo empieza aquí
          * @return Razón por la que se ha detenido el juego
          */
-        StopCode start () ;
+        WhyPause begin () ;
 
         /**
          * Reanuda la partida tras una interrupción. La interrupción viene dada porque se ha liberado
          * un planeta o porque se acaba de grabar la partida
          * @return Razón por la que se ha interrumpido el juego
          */
-        StopCode restart () ;
+        WhyPause resume () ;
 
         /**
          * Dibuja en pantalla la información relativa al juego actual compuesta de:
          * un marco, vidas disponibles, herramientas disponibles, objeto guardado en el
          * bolso, tiempo restante de inmunidad, saltos largos disponibles y rosquillas
          * disponibles
-         * @param destination Imagen donde se dibujará toda la información
+         * @param where Imagen donde se dibujará toda la información
          */
-        void drawGameStatus ( BITMAP* destination ) ;
+        void drawAmbianceOfGame ( BITMAP* where ) ;
 
         /**
          * Carga una partida grabada en disco
@@ -244,14 +244,14 @@ private:
          * que a su vez, actualiza el estado de todos los elementos
          * @return Razón por la que se ha detenido la actualización
          */
-        StopCode update () ;
+        WhyPause update () ;
 
         /**
          * Detiene el juego en curso. Si el usuario pulsa ESC abandonará la partida
          * en curso y si pulsa cualquier otra tecla el juego continuará
          * @return Razón por la que se ha detenido la actualización
          */
-        StopCode stop () ;
+        WhyPause pause () ;
 
 public:
 
@@ -489,4 +489,4 @@ public: // Operaciones de consulta y actualización
 
 }
 
-#endif /*GAMEMANAGER_HPP_*/
+#endif

@@ -90,7 +90,7 @@ void CreateMainMenu::doIt ()
 {
         if ( ! SoundManager::getInstance()->isPlayingOgg( "music/MainTheme.ogg" ) )
         {
-                SoundManager::getInstance()->stopOgg();
+                ///SoundManager::getInstance()->stopAnyOgg();
                 SoundManager::getInstance()->playOgg( "music/MainTheme.ogg", /* loop */ true );
         }
 
@@ -138,9 +138,7 @@ void CreateMainMenu::doIt ()
         menu->addOption( label );
 
         screen->addWidget( menu );
-
-        // Crea la cadena de responsabilidad
-        screen->setSucessor( menu );
+        screen->setNext( menu );
 
         // Cambia la pantalla mostrada en la interfaz
         GuiManager::getInstance()->changeScreen( screen );

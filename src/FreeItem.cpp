@@ -1,3 +1,4 @@
+
 #include "FreeItem.hpp"
 #include "ItemData.hpp"
 #include "Mediator.hpp"
@@ -6,43 +7,44 @@ namespace isomot
 {
 
 FreeItem::FreeItem( ItemData* itemData, int x, int y, int z, const Direction& direction )
-: Item( itemData, z, direction )
+: Item( itemData, z, direction ),
+        myMask ( WantMask ),
+        transparency ( 0 ),
+        collisionDetector ( true ),
+        dead ( false ),
+        shadyImage ( 0 )
 {
-  this->x = x;
-  this->y = (y >= 0 ? y : 0);
-  this->maskStatus = ItIsMasked;
-  this->transparency = 0;
-  this->collisionDetector = true;
-  this->dead = false;
-  this->shadyImage = 0;
-  this->anchor = 0;
+        this->x = x;
+        this->y = y;
+        if ( y < 0 ) this->y = 0;
+        this->anchor = 0;
 
-  // Asignación de los fotogramas iniciales
-  int framesNumber = (itemData->motion.size() - itemData->extraFrames) / itemData->directionFrames;
-  int currentFrame = (itemData->directionFrames > 1 ? itemData->frames[frameIndex] + framesNumber * direction : itemData->frames[0]);
+        // Asignación de los fotogramas iniciales
+        int framesNumber = ( itemData->motion.size() - itemData->extraFrames ) / itemData->directionFrames;
+        int currentFrame = ( itemData->directionFrames > 1 ? itemData->frames[ frameIndex ] + framesNumber * direction : itemData->frames[ 0 ] );
 
-  this->image = itemData->motion[currentFrame];
+        this->image = itemData->motion[ currentFrame ];
 
-  // Puede no tener sombra
-  if(itemData->shadowWidth != 0 && itemData->shadowHeight != 0)
-  {
-    this->shadow = itemData->shadows[currentFrame];
-  }
+        // Puede no tener sombra
+        if ( itemData->shadowWidth != 0 && itemData->shadowHeight != 0 )
+        {
+                this->shadow = itemData->shadows[ currentFrame ];
+        }
 }
 
 FreeItem::FreeItem( const FreeItem& freeItem )
 : Item( freeItem ),
-  maskStatus(freeItem.maskStatus),
-  transparency(freeItem.transparency),
-  collisionDetector(freeItem.collisionDetector),
-  dead(freeItem.dead),
-  shadyImage(0)
+        myMask( freeItem.myMask ),
+        transparency( freeItem.transparency ),
+        collisionDetector( freeItem.collisionDetector ),
+        dead( freeItem.dead ),
+        shadyImage( 0 )
 {
-  if( freeItem.shadyImage != 0 )
-  {
-    this->shadyImage = create_bitmap_ex( 32, freeItem.shadyImage->w, freeItem.shadyImage->h );
-    blit( freeItem.shadyImage, this->shadyImage, 0, 0, 0, 0, this->shadyImage->w, this->shadyImage->h );
-  }
+        if ( freeItem.shadyImage != 0 )
+        {
+                this->shadyImage = create_bitmap_ex( 32, freeItem.shadyImage->w, freeItem.shadyImage->h );
+                blit( freeItem.shadyImage, this->shadyImage, 0, 0, 0, 0, this->shadyImage->w, this->shadyImage->h );
+        }
 }
 
 FreeItem::~FreeItem()
@@ -88,8 +90,8 @@ void FreeItem::changeImage( BITMAP* image )
 
     // Cambio de imagen
     this->image = image;
-    this->shadeStatus = ItIsShady;
-    this->maskStatus = ItIsMasked;
+    this->myShady = WantShadow;
+    this->myMask = WantMask;
 
     // Si la imagen no es nula se recalcula el desplazamiento y se vuelven a crear las
     // imágenes procesadas si éstas tienen un tamaño distinto a la nueva imagen
@@ -177,50 +179,50 @@ void FreeItem::changeShadow( BITMAP* shadow )
 
 void FreeItem::requestCastShadow()
 {
-  if( this->image && this->shadeStatus == ItIsShady )
-  {
-    mediator->castShadow( this );
+        if( this->image && this->myShady == WantShadow )
+        {
+                mediator->castShadow( this );
 
-    // Si el elemento se ha sombreado se marca para enmascararlo
-    if(this->shadeStatus == Shady)
-    {
-      this->maskStatus = ItIsMasked;
-    }
+                // Si el elemento se ha sombreado se marca para enmascararlo
+                if ( this->myShady == AlreadyShady )
+                {
+                        this->myMask = WantMask;
+                }
 
-    // Si no se ha podido sombrear entonces se destruye la imagen de sombreado
-    // y se marca el elemento para enmascararlo
-    if( this->shadeStatus == ItIsShady && this->shadyImage )
-    {
-      destroy_bitmap( this->shadyImage );
-      this->shadyImage = 0;
-      this->maskStatus = ItIsMasked;
-    }
-  }
+                // Si no se ha podido sombrear entonces se destruye la imagen de sombreado
+                // y se marca el elemento para enmascararlo
+                if ( this->myShady == WantShadow && this->shadyImage )
+                {
+                        destroy_bitmap( this->shadyImage );
+                        this->shadyImage = 0;
+                        this->myMask = WantMask;
+                }
+        }
 }
 
 void FreeItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale, unsigned char transparency )
 {
   // El sombreado se realiza si el elemento que sombrea no es totalmente transparente
-  if( transparency < 100 )
+  if ( transparency < 100 )
   {
     // Anchura del elemento
     int width = ( this->itemData->widthX > this->itemData->widthY ? this->itemData->widthX : this->itemData->widthY );
     // Coordenada inicial X
     int inix = x - this->offset.first;
-    if( inix < 0 ) inix = 0;
+    if ( inix < 0 ) inix = 0;
     // Coordenada inicial Y
     int iniy = y - this->offset.second;
-    if( iniy < 0 ) iniy = 0;
+    if ( iniy < 0 ) iniy = 0;
     // Coordenada final X
     int endx = x - this->offset.first + shadow->w;
-    if( endx > this->image->w ) endx = this->image->w;
+    if ( endx > this->image->w ) endx = this->image->w;
     // Coordenada final Y
     int endy = y - this->offset.second + shadow->h;
-    if( endy > this->image->h ) endy = this->image->h;
+    if ( endy > this->image->h ) endy = this->image->h;
     // Coordenada intermedia Y
     int my = this->image->h - width - this->itemData->height;
-    if( endy < my ) my = endy;
-    if( endy > my + width ) endy = my + width;
+    if ( endy < my ) my = endy;
+    if ( endy > my + width ) endy = my + width;
 
     // Índice para recorrer las filas de píxeles de la imágenes image y shadyImage del elemento
     int iRow = 0;
@@ -244,19 +246,19 @@ void FreeItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
     int rtpx1 = 0;
 
     // Las coordenadas iniciales tienen que ser menores a las finales
-    if( iniy < endy && inix < endx )
+    if ( iniy < endy && inix < endx )
     {
       int n2i = inix + this->offset.first - x;
 
       // En principio, la imagen del elemento sombreado es la imagen del elemento sin sombrear
-      if( ! this->shadyImage )
+      if ( ! this->shadyImage )
       {
         this->shadyImage = create_bitmap_ex(bitmap_color_depth(this->image), this->image->w, this->image->h);
       }
-      if( this->shadeStatus == ItIsShady )
+      if ( this->myShady == WantShadow )
       {
         blit(this->image, this->shadyImage, 0, 0, 0, 0, this->image->w, this->image->h);
-        this->shadeStatus = Shady;
+        this->myShady = AlreadyShady;
       }
 
       // Incremento de los índices iRpx, iGpx e iBpx
@@ -279,14 +281,14 @@ void FreeItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
       #endif
 
       // Si la opacidad es potencia de 2 en el intervalo [2,128]
-      if(int(pow(2, log10(opacity) / log10(2))) == opacity)
+      if ( int ( pow( 2, log10( opacity ) / log10( 2 ) ) ) == opacity )
       {
         // Divisor del píxel
         char pxDiv = 7;
 
         // En función de la opacidad de la sombra se halla
         // el valor del divisor del píxel: píxel / 2^pxDiv
-        while(opacity != 2)
+        while ( opacity != 2 )
         {
           opacity = opacity >> 1;
           pxDiv--;
@@ -294,14 +296,14 @@ void FreeItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
 
         // Sombreado de la superficie del elemento, la parte superior
         // Se recorren las filas de las tres imágenes entre los límites calculados
-        for( iRow = iniy, sRow = iniy + this->offset.second - y; iRow < my; iRow++, sRow++ )
+        for ( iRow = iniy, sRow = iniy + this->offset.second - y; iRow < my; iRow++, sRow++ )
         {
-          unsigned char* sln = shadow->line[sRow];
-          unsigned char* iln = this->image->line[iRow];
-          unsigned char* rln = this->shadyImage->line[iRow];
+          unsigned char* sln = shadow->line[ sRow ];
+          unsigned char* iln = this->image->line[ iRow ];
+          unsigned char* rln = this->shadyImage->line[ iRow ];
 
           // Se recorren los píxeles de cada fila según los límites calculados
-          for( iRpx = inix, iGpx = inix + 1, iBpx = inix + 2, sPixel = n2i; iRpx < endx; iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc )
+          for ( iRpx = inix, iGpx = inix + 1, iBpx = inix + 2, sPixel = n2i; iRpx < endx; iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc )
           {
             // Si el píxel de las tres imágenes no tiene el color clave (255,0,255)
             // entonces el píxel de la imagen resultante se divide entre 2^pxDiv, es decir, se oscurece
@@ -309,9 +311,9 @@ void FreeItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
                (iln[iRpx] == rln[iRpx] && iln[iGpx] == rln[iGpx] && iln[iBpx] == rln[iBpx]) &&
                (sln[sPixel] < 255 || sln[sPixel + 1] || sln[sPixel + 2] < 255))
             {
-              rln[iRpx] = iln[iRpx] >> pxDiv;
-              rln[iGpx] = iln[iGpx] >> pxDiv;
-              rln[iBpx] = iln[iBpx] >> pxDiv;
+              rln[ iRpx ] = iln[ iRpx ] >> pxDiv;
+              rln[ iGpx ] = iln[ iGpx ] >> pxDiv;
+              rln[ iBpx ] = iln[ iBpx ] >> pxDiv;
             }
           }
         }
@@ -330,38 +332,38 @@ void FreeItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
         #endif
 
         // Sombrea en escalera isométrica la parte izquierda y derecha del elemento
-        for( ltpx1 = ltpx + iInc, rtpx1 = rtpx + iInc; iRow < endy; iRow++, sRow++, ltpx += 2 * iInc, ltpx1 += 2 * iInc, rtpx -= 2 * iInc, rtpx1 -= 2 * iInc )
+        for ( ltpx1 = ltpx + iInc, rtpx1 = rtpx + iInc; iRow < endy; iRow++, sRow++, ltpx += 2 * iInc, ltpx1 += 2 * iInc, rtpx -= 2 * iInc, rtpx1 -= 2 * iInc )
         {
-          unsigned char* sln = shadow->line[sRow];
-          unsigned char* iln = this->image->line[iRow];
-          unsigned char* rln = this->shadyImage->line[iRow];
+          unsigned char* sln = shadow->line[ sRow ];
+          unsigned char* iln = this->image->line[ iRow ];
+          unsigned char* rln = this->shadyImage->line[ iRow ];
 
-          if( inix < ltpx )
+          if ( inix < ltpx )
           {
             inix = ltpx;
-            n2i = inix + (this->offset.first - x) * sInc;
+            n2i = inix + ( this->offset.first - x ) * sInc;
           }
 
-          if(endx > rtpx + 2 * iInc)
+          if ( endx > rtpx + 2 * iInc )
           {
             endx = rtpx + 2 * iInc;
           }
 
-          for(iRpx = inix, iGpx = inix + 1, iBpx = inix + 2, sPixel = n2i; iRpx < endx; iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc)
+          for ( iRpx = inix, iGpx = inix + 1, iBpx = inix + 2, sPixel = n2i; iRpx < endx; iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc )
           {
-            if(sln[sPixel] < 255 || sln[sPixel + 1] || sln[sPixel + 2] < 255)
+            if ( sln[ sPixel ] < 255 || sln[ sPixel + 1 ] || sln[ sPixel + 2 ] < 255 )
             {
-              if((iln[iRpx] < 255 || iln[iGpx] || iln[iBpx] < 255) &&
-                 (iln[iRpx] == rln[iRpx] && iln[iGpx] == rln[iGpx] && iln[iBpx] == rln[iBpx]))
+              if ( ( iln[ iRpx ] < 255 || iln[ iGpx ] || iln[ iBpx ] < 255 ) &&
+                 ( iln[ iRpx ] == rln[ iRpx ] && iln[ iGpx ] == rln[ iGpx ] && iln[ iBpx ] == rln[ iBpx ] ) )
               {
-                rln[iRpx] = iln[iRpx] >> pxDiv;
-                rln[iGpx] = iln[iGpx] >> pxDiv;
-                rln[iBpx] = iln[iBpx] >> pxDiv;
+                rln[ iRpx ] = iln[ iRpx ] >> pxDiv;
+                rln[ iGpx ] = iln[ iGpx ] >> pxDiv;
+                rln[ iBpx ] = iln[ iBpx ] >> pxDiv;
               }
 
-              if(iRpx == ltpx || iRpx == ltpx1 || iRpx == rtpx || iRpx == rtpx1)
+              if ( iRpx == ltpx || iRpx == ltpx1 || iRpx == rtpx || iRpx == rtpx1 )
               {
-                for(int yy = iRow + 1; yy < image->h; yy++)
+                for ( int yy = iRow + 1; yy < image->h; yy++ )
                 {
                   unsigned char* iln2 = this->image->line[yy];
                   unsigned char* rln2 = this->shadyImage->line[yy];
@@ -403,17 +405,17 @@ void FreeItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
                  (sln[sPixel] < 255 || sln[sPixel + 1] || sln[sPixel + 2] < 255))
               {
                 color = iln[iRpx] * opacity;
-                rln[iRpx] = (unsigned char)( color >> 8 );
+                rln[iRpx] = ( unsigned char )( color >> 8 );
                 color = iln[iGpx] * opacity;
-                rln[iGpx] = (unsigned char)( color >> 8 );
+                rln[iGpx] = ( unsigned char )( color >> 8 );
                 color = iln[iBpx] * opacity;
-                rln[iBpx] = (unsigned char)( color >> 8 );
+                rln[iBpx] = ( unsigned char )( color >> 8 );
               }
             }
           }
 
-          ltpx = ((this->image->w) >> 1) - (width << 1) + (this->itemData->widthX - this->itemData->widthY) + ((iRow - my) << 1);
-          rtpx = ((this->image->w) >> 1) + (width << 1) + (this->itemData->widthX - this->itemData->widthY) - ((iRow - my) << 1) - 2;
+          ltpx = ( ( this->image->w ) >> 1 ) - ( width << 1 ) + ( this->itemData->widthX - this->itemData->widthY ) + ( ( iRow - my ) << 1 );
+          rtpx = ( ( this->image->w ) >> 1 ) + ( width << 1 ) + ( this->itemData->widthX - this->itemData->widthY ) - ( ( iRow - my ) << 1 ) - 2;
           ltpx = ltpx * iInc;
           #if IS_BIG_ENDIAN
               ltpx += bitmap_color_depth( this->image ) == 32 ? 1 : 0 ;
@@ -423,26 +425,26 @@ void FreeItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
               rtpx += bitmap_color_depth( this->image ) == 32 ? 1 : 0 ;
           #endif
 
-          for(ltpx1 = ltpx + iInc, rtpx1 = rtpx + iInc; iRow < endy; iRow++, sRow++, ltpx += 2 * iInc, ltpx1 += 2 * iInc, rtpx -= 2 * iInc, rtpx1 -= 2 * iInc)
+          for ( ltpx1 = ltpx + iInc, rtpx1 = rtpx + iInc; iRow < endy; iRow++, sRow++, ltpx += 2 * iInc, ltpx1 += 2 * iInc, rtpx -= 2 * iInc, rtpx1 -= 2 * iInc )
           {
-            unsigned char* sln = shadow->line[sRow];
-            unsigned char* iln = this->image->line[iRow];
-            unsigned char* rln = this->shadyImage->line[iRow];
+            unsigned char* sln = shadow->line[ sRow ];
+            unsigned char* iln = this->image->line[ iRow ];
+            unsigned char* rln = this->shadyImage->line[ iRow ];
 
-            if(inix < ltpx)
+            if ( inix < ltpx )
             {
               inix = ltpx;
-              n2i = inix + (this->offset.first - x) * sInc;
+              n2i = inix + ( this->offset.first - x ) * sInc;
             }
 
-            if(endx > rtpx + 2 * iInc)
+            if ( endx > rtpx + 2 * iInc )
             {
               endx = rtpx + 2 * iInc;
             }
 
-            for(iRpx = inix, iGpx = inix + 1, iBpx = inix + 2, sPixel = n2i; iRpx < endx; iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc)
+            for ( iRpx = inix, iGpx = inix + 1, iBpx = inix + 2, sPixel = n2i; iRpx < endx; iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc )
             {
-              if(sln[sPixel] < 255 || sln[sPixel + 1] || sln[sPixel + 2] < 255)
+              if ( sln[ sPixel ] < 255 || sln[ sPixel + 1 ] || sln[ sPixel + 2 ] < 255 )
               {
                 if((iln[iRpx] < 255 || iln[iGpx] || iln[iBpx] < 255) &&
                    (iln[iRpx] == rln[iRpx] && iln[iGpx] == rln[iGpx] && iln[iBpx] == rln[iBpx]))
@@ -483,14 +485,14 @@ void FreeItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
         else
         {
           // Se recorren las filas de las tres imágenes entre los límites calculados
-          for(iRow = iniy, sRow = iniy + this->offset.second - y; iRow < my; iRow++, sRow++)
+          for ( iRow = iniy, sRow = iniy + this->offset.second - y; iRow < my; iRow++, sRow++ )
           {
-            unsigned char* sln = shadow->line[sRow];
-            unsigned char* iln = this->image->line[iRow];
-            unsigned char* rln = this->shadyImage->line[iRow];
+            unsigned char* sln = shadow->line[ sRow ];
+            unsigned char* iln = this->image->line[ iRow ];
+            unsigned char* rln = this->shadyImage->line[ iRow ];
 
             // Se recorren los píxeles de cada fila según los límites calculados
-            for(iRpx = inix, iGpx = inix + 1, iBpx = inix + 2, sPixel = n2i; iRpx < endx; iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc)
+            for ( iRpx = inix, iGpx = inix + 1, iBpx = inix + 2, sPixel = n2i; iRpx < endx; iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc )
             {
               // Si el píxel de las tres imágenes no tiene el color clave (255,0,255)
               // entonces el píxel de la imagen resultante se cero, totalmente negro
@@ -503,8 +505,8 @@ void FreeItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
             }
           }
 
-          ltpx = ((this->image->w) >> 1) - (width << 1) + (this->itemData->widthX - this->itemData->widthY) + ((iRow - my) << 1);
-          rtpx = ((this->image->w) >> 1) + (width << 1) + (this->itemData->widthX - this->itemData->widthY) - ((iRow - my) << 1) - 2;
+          ltpx = ( ( this->image->w ) >> 1 ) - ( width << 1 ) + ( this->itemData->widthX - this->itemData->widthY ) + ( ( iRow - my ) << 1 );
+          rtpx = ( ( this->image->w ) >> 1 ) + ( width << 1 ) + ( this->itemData->widthX - this->itemData->widthY ) - ( ( iRow - my ) << 1 ) - 2;
           ltpx = ltpx * iInc;
           #if IS_BIG_ENDIAN
               ltpx += bitmap_color_depth( this->image ) == 32 ? 1 : 0 ;
@@ -516,22 +518,22 @@ void FreeItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
 
           for( ltpx1 = ltpx + iInc, rtpx1 = rtpx + iInc; iRow < endy; iRow++, sRow++, ltpx += 2 * iInc, ltpx1 += 2 * iInc, rtpx -= 2 * iInc, rtpx1 -= 2 * iInc )
           {
-            unsigned char* sln = shadow->line[sRow];
-            unsigned char* iln = this->image->line[iRow];
-            unsigned char* rln = this->shadyImage->line[iRow];
+            unsigned char* sln = shadow->line[ sRow ];
+            unsigned char* iln = this->image->line[ iRow ];
+            unsigned char* rln = this->shadyImage->line[ iRow ];
 
-            if( inix < ltpx )
+            if ( inix < ltpx )
             {
               inix = ltpx;
-              n2i = inix + (this->offset.first - x) * sInc;
+              n2i = inix + ( this->offset.first - x ) * sInc;
             }
 
-            if(endx > rtpx + 2 * iInc)
+            if ( endx > rtpx + 2 * iInc )
             {
               endx = rtpx + 2 * iInc;
             }
 
-            for(iRpx = inix, iGpx = inix + 1, iBpx = inix + 2, sPixel = n2i; iRpx < endx; iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc)
+            for ( iRpx = inix, iGpx = inix + 1, iBpx = inix + 2, sPixel = n2i; iRpx < endx; iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc )
             {
               if(sln[sPixel] < 255 || sln[sPixel + 1] || sln[sPixel + 2] < 255)
               {
@@ -566,289 +568,290 @@ void FreeItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
 
 void FreeItem::requestMask()
 {
-  mediator->mask(this);
+        mediator->mask( this );
 
-  // Si no se ha podido enmascarar se destruye la imagen final
-  if(this->maskStatus == ItIsMasked && this->processedImage)
-  {
-    destroy_bitmap(this->processedImage);
-    this->processedImage = 0;
-  }
+        // Si no se ha podido enmascarar se destruye la imagen final
+        if ( this->myMask == WantMask && this->processedImage )
+        {
+                destroy_bitmap( this->processedImage );
+                this->processedImage = 0;
+        }
 
-  // Reinicia los atributos para el siguiente ciclo
-  this->shadeStatus = NoShadow;
-  this->maskStatus = NoMask;
+        // Reinicia los atributos para el siguiente ciclo
+        this->myShady = NoShadow;
+        this->myMask = NoMask;
 }
 
-void FreeItem::maskImage(int x, int y, BITMAP* image)
+void FreeItem::maskImage( int x, int y, BITMAP* image )
 {
-  // Se enmascarará la imagen sombreada. Si el elemento no está sombreado se hará con la imagen normal
-  BITMAP* currentImage = ( this->shadyImage ? this->shadyImage : this->image );
+        // Se enmascarará la imagen sombreada. Si el elemento no está sombreado se hará con la imagen normal
+        BITMAP* currentImage = ( this->shadyImage ? this->shadyImage : this->image );
 
-  // Coordenada inicial X
-  int inix = x - this->offset.first;
-  if( inix < 0 ) inix = 0;
-  // Coordenada inicial Y
-  int iniy = y - this->offset.second;
-  if( iniy < 0 ) iniy = 0;
-  // Coordenada final X
-  int endx = x - this->offset.first + image->w;
-  if( endx > currentImage->w ) endx = currentImage->w;
-  // Coordenada final Y
-  int endy = y - this->offset.second + image->h;
-  if( endy > currentImage->h ) endy = currentImage->h;
+        // Coordenada inicial X
+        int inix = x - this->offset.first;
+        if( inix < 0 ) inix = 0;
+        // Coordenada inicial Y
+        int iniy = y - this->offset.second;
+        if( iniy < 0 ) iniy = 0;
+        // Coordenada final X
+        int endx = x - this->offset.first + image->w;
+        if( endx > currentImage->w ) endx = currentImage->w;
+        // Coordenada final Y
+        int endy = y - this->offset.second + image->h;
+        if( endy > currentImage->h ) endy = currentImage->h;
 
-  // Índice para recorrer las filas de píxeles de la imagen currentImage
-  int cRow = 0;
-  // Índice para recorrer las filas de píxeles de la imagen image
-  int iRow = 0;
-  // Índice para recorrer los píxeles de una fila de la imagen currentImage
-  int cPixel = 0;
-  // Índice para recorrer los píxeles de una fila de la imagen image
-  int iPixel = 0;
+        // Índice para recorrer las filas de píxeles de la imagen currentImage
+        int cRow = 0;
+        // Índice para recorrer las filas de píxeles de la imagen image
+        int iRow = 0;
+        // Índice para recorrer los píxeles de una fila de la imagen currentImage
+        int cPixel = 0;
+        // Índice para recorrer los píxeles de una fila de la imagen image
+        int iPixel = 0;
 
-  // En principio, la imagen del elemento enmascarado es la imagen del elemento sin enmascarar,
-  // sombreada o sin sombrear
-  if( ! this->processedImage )
-  {
-    this->processedImage = create_bitmap_ex(bitmap_color_depth(currentImage), currentImage->w, currentImage->h);
-  }
+        // En principio, la imagen del elemento enmascarado es la imagen del elemento sin enmascarar,
+        // sombreada o sin sombrear
+        if ( ! this->processedImage )
+        {
+                this->processedImage = create_bitmap_ex( bitmap_color_depth( currentImage ), currentImage->w, currentImage->h );
+        }
 
-  if( this->maskStatus == ItIsMasked )
-  {
-    blit(currentImage, this->processedImage, 0, 0, 0, 0, currentImage->w, currentImage->h);
-    this->maskStatus = Masked;
-  }
+        if ( this->myMask == WantMask )
+        {
+                blit( currentImage, this->processedImage, 0, 0, 0, 0, currentImage->w, currentImage->h );
+                this->myMask = AlreadyMasked;
+        }
 
-  char increase1 = ( bitmap_color_depth(this->processedImage) == 32 ? 4 : 3 );
-  char increase2 = ( bitmap_color_depth(image) == 32 ? 4 : 3 );
+        char increase1 = ( bitmap_color_depth( this->processedImage ) == 32 ? 4 : 3 );
+        char increase2 = ( bitmap_color_depth( image ) == 32 ? 4 : 3 );
 
-  int n2i = inix + this->offset.first - x;
+        int n2i = inix + this->offset.first - x;
 
-  endx *= increase1;
-  inix = inix * increase1;
-  #if IS_BIG_ENDIAN
-    inix += bitmap_color_depth( currentImage ) == 32 ? 1 : 0 ;
-  #endif
-  n2i = n2i * increase2;
-  #if IS_BIG_ENDIAN
-    n2i += bitmap_color_depth( image ) == 32 ? 1 : 0;
-  #endif
+        endx *= increase1;
+        inix = inix * increase1;
+        #if IS_BIG_ENDIAN
+                inix += bitmap_color_depth( currentImage ) == 32 ? 1 : 0 ;
+        #endif
+        n2i = n2i * increase2;
+        #if IS_BIG_ENDIAN
+                n2i += bitmap_color_depth( image ) == 32 ? 1 : 0;
+        #endif
 
-  for(cRow = iniy, iRow = iniy + this->offset.second - y; cRow < endy; cRow++, iRow++)
-  {
-    unsigned char* cln = this->processedImage->line[cRow];
-    unsigned char* iln = image->line[iRow];
+        for ( cRow = iniy, iRow = iniy + this->offset.second - y; cRow < endy; cRow++, iRow++ )
+        {
+                unsigned char* cln = this->processedImage->line[ cRow ];
+                unsigned char* iln = image->line[ iRow ];
 
-    for(cPixel = inix, iPixel = n2i; cPixel < endx; cPixel += increase1, iPixel += increase2)
-    {
-      if(iln[iPixel] != 255 || iln[iPixel+1] != 0 || iln[iPixel+2] != 255)
-      {
-        cln[cPixel] = cln[cPixel+2] = 255;
-        cln[cPixel+1] = 0;
-      }
-    }
-  }
+                for ( cPixel = inix, iPixel = n2i; cPixel < endx; cPixel += increase1, iPixel += increase2 )
+                {
+                        if ( iln[ iPixel ] != 255 || iln[ iPixel + 1 ] != 0 || iln[ iPixel + 2 ] != 255 )
+                        {
+                                cln[ cPixel ] = cln[ cPixel + 2 ] = 255;
+                                cln[ cPixel + 1 ] = 0;
+                        }
+                }
+        }
 }
 
-bool FreeItem::changeData(int value, int x, int y, int z, const Datum& datum, const Mode& mode)
+bool FreeItem::changeData( int value, int x, int y, int z, const Datum& datum, const WhatToDo& how )
 {
-  bool collisionFound = false;
+        bool collisionFound = false;
 
-  // Vacía la pila de colisiones
-  mediator->clearCollisionStack();
+        // Vacía la pila de colisiones
+        mediator->clearCollisionStack();
 
-  // Copia el elemento antes de realizar el movimiento
-  FreeItem oldFreeItem(*this);
+        // Copia el elemento antes de realizar el movimiento
+        FreeItem oldFreeItem( *this );
 
-  switch(datum)
-  {
-    case CoordinateX:
-      this->x = value + this->x * mode;
-      break;
+        switch ( datum )
+        {
+                case CoordinateX:
+                        this->x = value + this->x * how;
+                        break;
 
-    case CoordinateY:
-      this->y = value + this->y * mode;
-      break;
+                case CoordinateY:
+                        this->y = value + this->y * how;
+                        break;
 
-    case CoordinateZ:
-      this->z = value + this->z * mode;
-      break;
+                case CoordinateZ:
+                        this->z = value + this->z * how;
+                        break;
 
-    case CoordinatesXYZ:
-      this->x = x + this->x * mode;
-      this->y = y + this->y * mode;
-      this->z = z + this->z * mode;
-      break;
+                case CoordinatesXYZ:
+                        this->x = x + this->x * how;
+                        this->y = y + this->y * how;
+                        this->z = z + this->z * how;
+                        break;
 
-    case WidthX:
-      this->itemData->widthX = value + this->itemData->widthX * mode;
-      break;
+                case WidthX:
+                        this->itemData->widthX = value + this->itemData->widthX * how;
+                        break;
 
-    case WidthY:
-      this->itemData->widthY = value + this->itemData->widthY * mode;
-      break;
+                case WidthY:
+                        this->itemData->widthY = value + this->itemData->widthY * how;
+                        break;
 
-    case Height:
-      this->itemData->height = value + this->itemData->height * mode;
-      break;
-  }
+                case Height:
+                        this->itemData->height = value + this->itemData->height * how;
+                        break;
+        }
 
-  // Se buscan colisiones con las paredes reales, aquellas que delimitan la sala
-  if(this->x < mediator->getBound(North))
-  {
-    mediator->pushCollision(NorthWall);
-  }
-  else if(this->x + this->itemData->widthX > mediator->getBound(South))
-  {
-    mediator->pushCollision(SouthWall);
-  }
-  if(this->y >= mediator->getBound(West))
-  {
-    mediator->pushCollision(WestWall);
-  }
-  else if(this->y - this->itemData->widthY + 1 < mediator->getBound(East))
-  {
-    mediator->pushCollision(EastWall);
-  }
-  // Se buscan colisiones con el suelo
-  if(this->z < 0)
-  {
-    mediator->pushCollision(Floor);
-  }
+        // Se buscan colisiones con las paredes reales, aquellas que delimitan la sala
+        if ( this->x < mediator->getBound( North ) )
+        {
+                mediator->pushCollision( NorthWall );
+        }
+        else if ( this->x + this->itemData->widthX > mediator->getBound( South ) )
+        {
+                mediator->pushCollision( SouthWall );
+        }
+        if ( this->y >= mediator->getBound( West ) )
+        {
+                mediator->pushCollision( WestWall );
+        }
+        else if ( this->y - this->itemData->widthY + 1 < mediator->getBound( East ) )
+        {
+                mediator->pushCollision( EastWall );
+        }
 
-  // Si ha habido colisión con algún elemento especial se detiene el proceso
-  if(!(collisionFound = !mediator->isCollisionStackEmpty()))
-  {
-    // Busca colisiones con el resto de elementos de la sala
-    // Si hay colisión se interrumpe el proceso
-    if(!(collisionFound = mediator->findCollision(this)))
-    {
-      // Si el elemento tiene imagen se marcan para enmascarar los elementos
-      // libres cuyas imágenes se solapen con la suya. La operación se realiza
-      // tanto para la posición anterior como la posición actual
-      if(this->image)
-      {
-        // A cuántos píxeles está la imagen del punto origen de la sala
-        this->offset.first = ((this->x - this->y) << 1) + this->itemData->widthX + this->itemData->widthY - (image->w >> 1) - 1;
-        this->offset.second = this->x + this->y + this->itemData->widthX - image->h - this->z;
+        // Se buscan colisiones con el suelo
+        if ( this->z < 0 )
+        {
+                mediator->pushCollision( Floor );
+        }
 
-        mediator->markItemsForMasking(&oldFreeItem);
-        mediator->markItemsForMasking(this);
-      }
-      else
-      {
-        this->offset.first = this->offset.second = 0;
-      }
+        // Si ha habido colisión con algún elemento especial se detiene el proceso
+        if ( ! ( collisionFound = ! mediator->isCollisionStackEmpty() ) )
+        {
+                // Busca colisiones con el resto de elementos de la sala
+                // Si hay colisión se interrumpe el proceso
+                if ( ! ( collisionFound = mediator->findCollision( this ) ) )
+                {
+                        // Si el elemento tiene imagen se marcan para enmascarar los elementos
+                        // libres cuyas imágenes se solapen con la suya. La operación se realiza
+                        // tanto para la posición anterior como la posición actual
+                        if ( this->image )
+                        {
+                                // A cuántos píxeles está la imagen del punto origen de la sala
+                                this->offset.first = ( ( this->x - this->y ) << 1 ) + this->itemData->widthX + this->itemData->widthY - ( image->w >> 1 ) - 1;
+                                this->offset.second = this->x + this->y + this->itemData->widthX - image->h - this->z;
 
-      // Si las sombras están activas se buscan qué elementos hay que volver a sombrear
-      // La búsqueda se realiza tanto para la posición anterior como la posición actual
-      if(mediator->getShadingScale() < 256)
-      {
-        mediator->markItemsForShady(&oldFreeItem);
-        mediator->markItemsForShady(this);
-      }
+                                mediator->markItemsForMasking( &oldFreeItem );
+                                mediator->markItemsForMasking( this );
+                        }
+                        else
+                        {
+                                this->offset.first = this->offset.second = 0;
+                        }
 
-      // El elemento debe volver a sombrearse y enmascararse tras el cambio de posición
-      this->shadeStatus = ItIsShady;
-      this->maskStatus = ItIsMasked;
+                        // Si las sombras están activas se buscan qué elementos hay que volver a sombrear
+                        // La búsqueda se realiza tanto para la posición anterior como la posición actual
+                        if ( mediator->getShadingScale() < 256 )
+                        {
+                                mediator->markItemsForShady( &oldFreeItem );
+                                mediator->markItemsForShady( this );
+                        }
 
-      // La lista de elementos libres debe reordenarse
-      mediator->activateFreeItemsSorting();
-    }
-  }
+                        // El elemento debe volver a sombrearse y enmascararse tras el cambio de posición
+                        this->myShady = WantShadow;
+                        this->myMask = WantMask;
 
-  // Si hubo colisión se restauran los valores anteriores
-  if(collisionFound)
-  {
-    this->x = oldFreeItem.getX();
-    this->y = oldFreeItem.getY();
-    this->z = oldFreeItem.getZ();
-    this->itemData->widthX = oldFreeItem.getWidthX();
-    this->itemData->widthY = oldFreeItem.getWidthY();
-    this->itemData->height = oldFreeItem.getHeight();
-    this->offset = oldFreeItem.getOffset();
-  }
+                        // La lista de elementos libres debe reordenarse
+                        mediator->activateFreeItemsSorting();
+                }
+        }
 
-  return !collisionFound;
+        // Si hubo colisión se restauran los valores anteriores
+        if ( collisionFound )
+        {
+                this->x = oldFreeItem.getX();
+                this->y = oldFreeItem.getY();
+                this->z = oldFreeItem.getZ();
+                this->itemData->widthX = oldFreeItem.getWidthX();
+                this->itemData->widthY = oldFreeItem.getWidthY();
+                this->itemData->height = oldFreeItem.getHeight();
+                this->offset = oldFreeItem.getOffset();
+        }
+
+        return ! collisionFound;
 }
 
-bool FreeItem::changeX(int value)
+bool FreeItem::changeX( int value )
 {
-  return this->changeData(value, 0, 0, 0, CoordinateX, Change);
+        return this->changeData( value, 0, 0, 0, CoordinateX, Change );
 }
 
-bool FreeItem::changeY(int value)
+bool FreeItem::changeY( int value )
 {
-  return this->changeData(value, 0, 0, 0, CoordinateY, Change);
+        return this->changeData( value, 0, 0, 0, CoordinateY, Change );
 }
 
-bool FreeItem::changeZ(int value)
+bool FreeItem::changeZ( int value )
 {
-  return this->changeData(value, 0, 0, 0, CoordinateZ, Change);
+        return this->changeData( value, 0, 0, 0, CoordinateZ, Change );
 }
 
-bool FreeItem::changePosition(int x, int y, int z)
+bool FreeItem::changePosition( int x, int y, int z )
 {
-  return this->changeData(0, x, y, z, CoordinatesXYZ, Change);
+        return this->changeData( 0, x, y, z, CoordinatesXYZ, Change );
 }
 
-bool FreeItem::addX(int value)
+bool FreeItem::addX( int value )
 {
-  return this->changeData(value, 0, 0, 0, CoordinateX, Add);
+        return this->changeData( value, 0, 0, 0, CoordinateX, Add );
 }
 
-bool FreeItem::addY(int value)
+bool FreeItem::addY( int value )
 {
-  return this->changeData(value, 0, 0, 0, CoordinateY, Add);
+        return this->changeData( value, 0, 0, 0, CoordinateY, Add );
 }
 
-bool FreeItem::addZ(int value)
+bool FreeItem::addZ( int value )
 {
-  return this->changeData(value, 0, 0, 0, CoordinateZ, Add);
+        return this->changeData( value, 0, 0, 0, CoordinateZ, Add );
 }
 
-bool FreeItem::addPosition(int x, int y, int z)
+bool FreeItem::addPosition( int x, int y, int z )
 {
-  return this->changeData(0, x, y, z, CoordinatesXYZ, Add);
+        return this->changeData( 0, x, y, z, CoordinatesXYZ, Add );
 }
 
-bool FreeItem::changeTransp(unsigned char value, const Mode& mode)
+bool FreeItem::changeTransparency( unsigned char value, const WhatToDo& how )
 {
-  bool changed = false;
+        bool changed = false;
 
-  // Nuevo valor de la transparencia del elemento
-  unsigned char transp = value + this->transparency * mode;
+        // Nuevo valor de la transparencia del elemento
+        unsigned char transpa = value + this->transparency * how;
 
-  // Comprobación de validez
-  if(transp <= 100 && transp != this->transparency)
-  {
-    // ¿Hay qué enmascarar el elemento?
-    bool mask = this->image && (this->transparency == 0 || transp == 0);
+        // Comprobación de validez
+        if ( transpa <= 100 && transpa != this->transparency )
+        {
+                // ¿Hay qué enmascarar el elemento?
+                bool mask = this->image && ( this->transparency == 0 || transpa == 0 );
 
-    // Actualización de la tabla de transparencias
-    mediator->removeTransparency(this->transparency);
-    mediator->addTransparency(transp);
-    this->transparency = transp;
+                // Actualización de la tabla de transparencias
+                mediator->removeTransparency( this->transparency );
+                mediator->addTransparency( transpa );
+                this->transparency = transpa;
 
-    // Marca para sombrear los elementos que pudiera tener debajo
-    mediator->markItemsForShady(this);
-    // Marca para enmascarar los elementos solapados
-    if(mask)
-    {
-      mediator->markItemsForMasking(this);
-    }
+                // Marca para sombrear los elementos que pudiera tener debajo
+                mediator->markItemsForShady( this );
+                // Marca para enmascarar los elementos solapados
+                if ( mask )
+                {
+                        mediator->markItemsForMasking( this ) ;
+                }
 
-    // La transparencia ha cambiado
-    changed = true;
-  }
+                // La transparencia ha cambiado
+                changed = true;
+        }
 
-  return changed;
+        return changed;
 }
 
 ItemData* FreeItem::getItemData()
 {
-  return itemData;
+        return itemData;
 }
 
 }

@@ -17,8 +17,8 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-#ifndef BeginGame_h_
-#define BeginGame_h_
+#ifndef ContinueGame_h_
+#define ContinueGame_h_
 
 #include <allegro.h>
 #include "Action.hpp"
@@ -26,10 +26,7 @@
 namespace gui
 {
 
-/**
- * Inicia una nueva partida
- * */
-class BeginGame : public Action
+class ContinueGame : public Action
 {
 
 public:
@@ -39,7 +36,7 @@ public:
          * @param picture Imagen donde se dibujará la interfaz gráfica
          * @param gameInProgress Indica si hay una partida en curso o comienza una nueva
          */
-        BeginGame( BITMAP* picture, bool gameInProgress ) ;
+        ContinueGame( BITMAP* picture, bool gameInProgress ) ;
 
         /**
          * Begin the game

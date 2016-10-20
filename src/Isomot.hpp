@@ -42,35 +42,32 @@ class Isomot
 
 public:
 
-        Isomot();
+        Isomot( ) ;
 
-        virtual ~Isomot();
+        virtual ~Isomot( ) ;
 
         /**
          * Crea las salas iniciales y pone en marcha el motor isométrico
          */
-        void start();
+        void beginNew () ;
 
         /**
          * Crea dos salas a partir de los datos contenidos en el archivo XML donde se guarda una partida
          * y pone en marcha el motor isométrico
          */
-        void start(const sgxml::players::player_sequence& playerSequence);
+        void beginOld ( const sgxml::players::player_sequence& playerSequence ) ;
 
         /**
          * Detiene el motor isométrico
          */
-        void stop();
+        void pause () ;
 
-        /**
-         * Pone en marcha el motor isométrico después de una parada
-         */
-        void restart();
+        void resume () ;
 
         /**
          * Prepara el motor para iniciar una nueva partida
          */
-        void reset();
+        void reset () ;
 
         /**
          * Actualiza el motor isométrico. La actualización se realiza en dos subprocesos diferenciados:
@@ -78,39 +75,39 @@ public:
          * lado se dibuja la sala activa
          * @return La imagen donde se ha dibujado la vista isométrica
          */
-        BITMAP* update();
+        BITMAP* update () ;
 
 private:
 
-        void prepare ();
+        void prepare () ;
 
         /**
          * Gestiona la sala final del juego. Es una sala muy especial porque el usuario no tiene el
          * control de ningún jugador
          */
-        void updateEndRoom();
+        void updateEndRoom () ;
 
 private:
 
         /**
          * Indica si el motor está gestionando la sala final del juego
          */
-        bool isEndRoom;
+        bool isEndRoom ;
 
         /**
          * Imagen donde se dibuja la vista isométrica
          */
-        BITMAP* view;
+        BITMAP* view ;
 
         /**
          * Gestor de datos de los elementos del juego
          */
-        ItemDataManager* itemDataManager;
+        ItemDataManager* itemDataManager ;
 
         /**
          * Gestor del mapa
          */
-        MapManager* mapManager;
+        MapManager* mapManager ;
 
 public: // Operaciones de consulta y actualización
 
@@ -118,13 +115,13 @@ public: // Operaciones de consulta y actualización
          * Gestor de datos de los elementos del juego
          * @return Un puntero al gestor
          */
-        ItemDataManager* getItemDataManager() const;
+        ItemDataManager* getItemDataManager () const ;
 
         /**
          * Gestor del mapa
          * @return Un puntero al gestor
          */
-        MapManager* getMapManager() const;
+        MapManager* getMapManager () const ;
 
 };
 

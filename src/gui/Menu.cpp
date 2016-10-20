@@ -1,3 +1,4 @@
+
 #include "Menu.hpp"
 #include "Gui.hpp"
 #include "GuiManager.hpp"
@@ -136,9 +137,9 @@ void Menu::handleKey( int key )
                         break;
 
                 default:
-                        if ( this->sucessor != 0 )
+                        if ( this->next != 0 )
                         {
-                                this->sucessor->handleKey( key );
+                                next->handleKey( key );
                         }
         }
 }
@@ -151,7 +152,7 @@ void Menu::addOption( Label* label )
 void Menu::addActiveOption( Label* label )
 {
         this->addOption( label );
-        this->sucessor = label;
+        this->next = label;
         this->activeOption = label;
 }
 
@@ -167,7 +168,7 @@ void Menu::changeOption( const std::string& text, Label* label )
 
         if ( this->activeOption == oldLabel )
         {
-                this->sucessor = label;
+                this->next = label;
                 this->activeOption = label;
         }
 
@@ -179,7 +180,7 @@ void Menu::previousOption()
         std::list< Label* >::iterator i = std::find_if( options.begin (), options.end (), std::bind2nd( EqualLabel(), this->activeOption->getText() ) );
         assert ( i != options.end () );
         this->activeOption = ( i == options.begin() ? *options.rbegin() : *( --i ) );
-        this->sucessor = this->activeOption;
+        this->next = this->activeOption;
 }
 
 void Menu::nextOption()
@@ -187,7 +188,7 @@ void Menu::nextOption()
         std::list< Label* >::iterator i = std::find_if( options.begin(), options.end(), std::bind2nd( EqualLabel(), this->activeOption->getText() ) );
         assert ( i != options.end () );
         this->activeOption = ( ++i == options.end() ? *options.begin() : *i );
-        this->sucessor = this->activeOption;
+        this->next = this->activeOption;
 }
 
 }

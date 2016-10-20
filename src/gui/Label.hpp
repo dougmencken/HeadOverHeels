@@ -17,8 +17,8 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-#ifndef LABEL_HPP_
-#define LABEL_HPP_
+#ifndef Label_hpp_
+#define Label_hpp_
 
 #include <string>
 #include <cassert>
@@ -28,9 +28,9 @@
 namespace gui
 {
 
-// Declaraciones adelantadas
 class Screen;
 class Font;
+class Action;
 
 /**
  * Un texto fijo presente en la pantalla
@@ -41,7 +41,7 @@ class Label : public Widget
 public:
 
         /**
-         * Constructor. La posición de la etiqueta se establece en (0, 0), se usa la fuente
+         * Constructor. La posición de la etiqueta se establece en ( 0, 0 ), se usa la fuente
          * por defecto y el texto es de color blanco
          * @param text El texto a presentar
          */
@@ -127,6 +127,8 @@ protected:
          */
         BITMAP* buffer ;
 
+        Action* myAction ;
+
 public: // Operaciones de consulta y actualización
 
         /**
@@ -163,6 +165,10 @@ public: // Operaciones de consulta y actualización
          * Devuelve la altura de la etiqueta
          */
         int getHeight () const {  return this->buffer->h ;  }
+
+        Action* getAction ( ) const {  return myAction ;  }
+
+        void setAction ( Action* action ) {  myAction = action ;  }
 
 };
 

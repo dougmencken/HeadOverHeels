@@ -1,172 +1,171 @@
+
 #include "GridItem.hpp"
 #include "ItemData.hpp"
 #include "Mediator.hpp"
 
+
 namespace isomot
 {
 
-GridItem::GridItem(ItemData* itemData, int cx, int cy, int z, const Direction& direction)
-: Item(itemData, z, direction)
+GridItem::GridItem( ItemData* itemData, int cx, int cy, int z, const Direction& direction )
+: Item( itemData, z, direction )
 {
-  this->cell.first = cx;
-  this->cell.second = cy;
+        this->cell.first = cx;
+        this->cell.second = cy;
 
-  // Coordenadas libres del elemento rejilla
-  this->x = cx * this->itemData->widthX;
-  this->y = (cy + 1) * this->itemData->widthY - 1;
+        // Coordenadas libres del elemento rejilla
+        this->x = cx * this->itemData->widthX;
+        this->y = ( cy + 1 ) * this->itemData->widthY - 1;
 
-  // Imágenes iniciales
-  this->image = itemData->motion[itemData->motion.size() / itemData->directionFrames * direction];
-  // Puede no tener sombra
-  if(itemData->shadowWidth != 0 && itemData->shadowHeight != 0)
-  {
-    this->shadow = itemData->shadows[itemData->motion.size() / itemData->directionFrames * direction];
-  }
+        // Imágenes iniciales
+        this->image = itemData->motion[ itemData->motion.size() / itemData->directionFrames * direction ];
+        // Puede no tener sombra
+        if ( itemData->shadowWidth != 0 && itemData->shadowHeight != 0 )
+        {
+                this->shadow = itemData->shadows[ itemData->motion.size() / itemData->directionFrames * direction ];
+        }
 }
 
-GridItem::~GridItem()
+GridItem::~GridItem( )
 {
 
 }
 
 void GridItem::draw( BITMAP* where )
 {
-  // El elemento está sombreado
-  if( this->processedImage )
-  {
-    draw_sprite( where, this->processedImage, mediator->getX0() + this->offset.first, mediator->getY0() + this->offset.second );
-  }
-  // El elemento no tiene sombra
-  else if( this->image )
-  {
-    draw_sprite( where, this->image, mediator->getX0() + this->offset.first, mediator->getY0() + this->offset.second );
-  }
+        // El elemento está sombreado
+        if ( this->processedImage )
+        {
+                draw_sprite( where, this->processedImage, mediator->getX0() + this->offset.first, mediator->getY0() + this->offset.second );
+        }
+        // El elemento no tiene sombra
+        else if ( this->image )
+        {
+                draw_sprite( where, this->image, mediator->getX0() + this->offset.first, mediator->getY0() + this->offset.second );
+        }
 }
 
 void GridItem::changeImage( BITMAP* image )
 {
-  // Si el elemento no tiene ninguna imagen entonces simplemente se asigna. Se entiende que este
-  // caso sucede únicamente durante la creación del elemento
-  if( this->image == 0 )
-  {
-    // Asignación de la imagen
-    this->image = image;
-  }
-  // En caso contrario se realiza el cambio
-  else
-  {
-    // Copia el elemento antes de realizar el cambio
-    GridItem oldGridItem( *this );
+        // Si el elemento no tiene ninguna imagen entonces simplemente se asigna. Se entiende que este
+        // caso sucede únicamente durante la creación del elemento
+        if ( this->image == 0 )
+        {
+                // Asignación de la imagen
+                this->image = image;
+        }
+        // En caso contrario se realiza el cambio
+        else
+        {
+                // Copia el elemento antes de realizar el cambio
+                GridItem oldGridItem( *this );
 
-    // Cambio de imagen
-    this->image = image;
+                // Cambio de imagen
+                this->image = image;
 
-    // Si el elemento tiene una imagen procesada entonces hay que volver a crearla
-    if( this->processedImage )
-    {
-      destroy_bitmap( this->processedImage );
-      this->processedImage = 0;
-    }
+                // Si el elemento tiene una imagen procesada entonces hay que volver a crearla
+                if ( this->processedImage )
+                {
+                        destroy_bitmap( this->processedImage );
+                        this->processedImage = 0;
+                }
 
-    // Hay que calcular el nuevo desplazamiento de la imagen a no ser que sea nula
-    if( this->image )
-    {
-      // Si las sombras están activas el elemento debe sombrearse
-      if( mediator->getShadingScale() < 256 )
-      {
-        this->shadeStatus = ItIsShady;
-      }
+                // Hay que calcular el nuevo desplazamiento de la imagen a no ser que sea nula
+                if ( this->image )
+                {
+                        // Si las sombras están activas el elemento debe sombrearse
+                        if ( mediator->getShadingScale() < 256 )
+                        {
+                                this->myShady = WantShadow;
+                        }
 
-      // A cuántos píxeles está la imagen del punto origen de la sala
-      this->offset.first = ( ( mediator->getTileSize() * ( this->cell.first - this->cell.second ) ) << 1 ) - ( image->w >> 1 ) + 1;
-      this->offset.second = mediator->getTileSize() * ( this->cell.first + this->cell.second + 2 ) - image->h - this->z - 1;
-    }
-    else
-    {
-      this->offset.first = this->offset.second = 0;
-    }
+                        // A cuántos píxeles está la imagen del punto origen de la sala
+                        this->offset.first = ( ( mediator->getTileSize() * ( this->cell.first - this->cell.second ) ) << 1 ) - ( image->w >> 1 ) + 1;
+                        this->offset.second = mediator->getTileSize() * ( this->cell.first + this->cell.second + 2 ) - image->h - this->z - 1;
+                }
+                else
+                {
+                        this->offset.first = this->offset.second = 0;
+                }
 
-    // Se marcan para enmascar los elementos libres afectados por la antigua imagen
-    if( oldGridItem.getImage() )
-    {
-      mediator->markItemsForMasking( &oldGridItem );
-    }
-    // Se marcan para enmascar los elementos libres afectados por la nueva imagen
-    if(this->image)
-    {
-      mediator->markItemsForMasking( this );
-    }
-  }
+                // Se marcan para enmascar los elementos libres afectados por la antigua imagen
+                if ( oldGridItem.getImage() )
+                        mediator->markItemsForMasking( &oldGridItem );
+
+                // Se marcan para enmascar los elementos libres afectados por la nueva imagen
+                if ( this->image )
+                        mediator->markItemsForMasking( this );
+        }
 }
 
 void GridItem::changeShadow( BITMAP* shadow )
 {
-  // Si el elemento no tiene ninguna sombra entonces simplemente se asigna. Se entiende que este
-  // caso sucede únicamente durante la creación del elemento
-  if( this->shadow == NULL )
-  {
-    // Asignación de la sombra
-    this->shadow = shadow;
-  }
-  // En caso contrario se realiza el cambio
-  else
-  {
-    // Cambio de la sombra
-    this->shadow = shadow;
+        // Si el elemento no tiene ninguna sombra entonces simplemente se asigna. Se entiende que este
+        // caso sucede únicamente durante la creación del elemento
+        if ( this->shadow == NULL )
+        {
+                // Asignación de la sombra
+                this->shadow = shadow;
+        }
+        // En caso contrario se realiza el cambio
+        else
+        {
+        // Cambio de la sombra
+        this->shadow = shadow;
 
-    // Hay que calcular a qué elementos se sombreará, a no ser que la nueva sombra sea nula
-    if( this->image )
-    {
-      // Si las sombras están activas los elementos deben sombrearse
-      if( mediator->getShadingScale() < 256 )
-      {
-        mediator->markItemsForShady( this );
-      }
-    }
-  }
+        // Hay que calcular a qué elementos se sombreará, a no ser que la nueva sombra sea nula
+        if ( this->image )
+        {
+                // Si las sombras están activas los elementos deben sombrearse
+                if ( mediator->getShadingScale() < 256 )
+                {
+                        mediator->markItemsForShady( this );
+                }
+        }
+        }
 }
 
 void GridItem::requestCastShadow( int column )
 {
-  if( this->image && this->shadeStatus == ItIsShady )
-  {
-    mediator->castShadow( this );
+        if ( this->image && this->myShady == WantShadow )
+        {
+                mediator->castShadow( this );
 
-    // Si no se ha podido sombrear entonces se destruye la imagen de sombreado
-    if( this->shadeStatus != Shady && this->processedImage )
-    {
-      destroy_bitmap( this->processedImage );
-      this->processedImage = 0;
-    }
+                // Si no se ha podido sombrear entonces se destruye la imagen de sombreado
+                if ( this->myShady != AlreadyShady && this->processedImage )
+                {
+                        destroy_bitmap( this->processedImage );
+                        this->processedImage = 0;
+                }
 
-    // Reinicia el atributo para el siguiente ciclo
-    this->shadeStatus = NoShadow;
-  }
+                // Reinicia el atributo para el siguiente ciclo
+                this->myShady = NoShadow;
+        }
 }
 
 void GridItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale, unsigned char transparency )
 {
   // El sombreado se realiza si el elemento que sombrea no es totalmente transparente
-  if( transparency < 100 )
+  if ( transparency < 100 )
   {
     // Anchura del elemento
     int width = this->itemData->widthX;
     // Coordenada inicial X
     int inix = x - this->offset.first;
-    if( inix < 0 ) inix = 0;
+    if ( inix < 0 ) inix = 0;
     // Coordenada inicial Y
     int iniy = y - this->offset.second;
-    if( iniy < 0 ) iniy = 0;
+    if ( iniy < 0 ) iniy = 0;
     // Coordenada final X
     int endx = x - this->offset.first + shadow->w;
-    if( endx > this->image->w ) endx = this->image->w;
+    if ( endx > this->image->w ) endx = this->image->w;
     // Coordenada final Y
     int endy = y - this->offset.second + shadow->h;
-    if( endy > this->image->h ) endy = this->image->h;
+    if ( endy > this->image->h ) endy = this->image->h;
     // Coordenada intermedia Y
     int my = this->image->h - width - this->itemData->height + 1;
-    if( endy < my ) my = endy;
-    if( endy > my + width ) endy = my + width;
+    if ( endy < my ) my = endy;
+    if ( endy > my + width ) endy = my + width;
 
     // Índice para recorrer las filas de píxeles de la imágenes image y processedImage del elemento
     int iRow = 0;
@@ -190,19 +189,19 @@ void GridItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
     int rtpx1 = 0;
 
     // Las coordenadas iniciales tienen que ser menores a las finales
-    if( iniy < endy && inix < endx )
+    if ( iniy < endy && inix < endx )
     {
       int n2i = inix + this->offset.first - x;
 
       // En principio, la imagen del elemento sombreado es la imagen del elemento sin sombrear
-      if( ! this->processedImage )
+      if ( ! this->processedImage )
       {
         this->processedImage = create_bitmap_ex( bitmap_color_depth( this->image ), this->image->w, this->image->h );
       }
-      if( this->shadeStatus == ItIsShady )
+      if ( this->myShady == WantShadow )
       {
         blit( this->image, this->processedImage, 0, 0, 0, 0, this->image->w, this->image->h );
-        this->shadeStatus = Shady;
+        this->myShady = AlreadyShady;
       }
 
       // Incremento de los índices iRpx, iGpx e iBpx
@@ -212,7 +211,7 @@ void GridItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
 
       // Grado de opacidad del sombreado desde 0 a 255, siendo 0 la opacidad total y 255
       // casi la transparencia total
-      short opacity = short(((256.0 - shadingScale) / 100) * transparency + shadingScale);
+      short opacity = short( ( ( 256.0 - shadingScale ) / 100 ) * transparency + shadingScale );
 
       endx *= iInc;
       inix *= iInc;
@@ -227,8 +226,8 @@ void GridItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
       unsigned char* lm;
       unsigned char* ln;
 
-      // Si la opacidad es potencia de 2 en el intervalo [2,128]
-      if(int(pow(2, log10(opacity) / log10(2))) == opacity)
+      // Si la opacidad es potencia de 2 en el intervalo [ 2, 128 ]
+      if ( int ( pow( 2, log10( opacity ) / log10( 2 ) ) ) == opacity )
       {
         // Divisor del píxel
         char pxDiv = 7;
@@ -512,102 +511,98 @@ void GridItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
   }
 }
 
-bool GridItem::changeZ(int value)
+bool GridItem::changeZ( int value )
 {
-  return changeData(value, CoordinateZ, Change);
+        return changeData( value, CoordinateZ, Change );
 }
 
-bool GridItem::addZ(int value)
+bool GridItem::addZ( int value )
 {
-  return changeData(value, CoordinateZ, Add);
+        return changeData( value, CoordinateZ, Add );
 }
 
-bool GridItem::changeHeight(int value)
+bool GridItem::changeHeight( int value )
 {
-  return changeData(value, Height, Change);
+        return changeData( value, Height, Change );
 }
 
-bool GridItem::addHeight(int value)
+bool GridItem::addHeight( int value )
 {
-  return changeData(value, Height, Add);
+        return changeData( value, Height, Add );
 }
 
-bool GridItem::changeData(int value, const Datum& datum, const Mode& mode)
+bool GridItem::changeData( int value, const Datum& datum, const WhatToDo& what )
 {
-  bool collisionFound = false;
+        bool collisionFound = false;
 
-  // Vacía la pila de colisiones
-  mediator->clearCollisionStack();
+        // Vacía la pila de colisiones
+        mediator->clearCollisionStack();
 
-  // Copia el elemento antes de realizar el movimiento
-  GridItem oldGridItem(*this);
+        // Copia el elemento antes de realizar el movimiento
+        GridItem oldGridItem( *this );
 
-  // Calcula el nuevo valor dependiendo del dato y el modo elegidos
-  if(datum == CoordinateZ)
-  {
-    this->z = value + this->z * mode;
-  }
-  else if(datum == Height)
-  {
-     this->itemData->height = value + this->itemData->height * mode;
-  }
-
-  // Si ha habido colisión con el suelo se interrumpe el proceso
-  if(this->z < 0)
-  {
-    mediator->pushCollision(Floor);
-    collisionFound = true;
-  }
-  // En caso contrario se buscan colisiones con otros elementos
-  else
-  {
-    // Si hay colisión se interrumpe el proceso
-    if(!(collisionFound = mediator->findCollision(this)))
-    {
-      // Si el elemento rejilla tiene imagen se marcan para enmascarar los elementos
-      // libres cuyas imágenes se solapen con la suya y espacialmente queden detrás suyo
-      if(this->image)
-      {
-        // A cuántos píxeles está la imagen del punto origen de la sala. Sólo cambia el
-        // valor en el eje Y pues es el que depende de la coordenada Z
-        this->offset.second = mediator->getTileSize() * (this->cell.first + this->cell.second + 2) - this->image->h - this->z - 1;
-
-        mediator->markItemsForMasking(&oldGridItem);
-        mediator->markItemsForMasking(this);
-      }
-      else
-      {
-        this->offset.first = this->offset.second = 0;
-      }
-
-      // Si cambió la posición Z y las sombras están activas se buscan qué elementos hay que
-      // volver a sombrear
-      if(datum == CoordinateZ && mediator->getShadingScale() < 256)
-      {
-        if(this->z > oldGridItem.getZ())
+        // Calcula el nuevo valor dependiendo del dato y el modo elegidos
+        if ( datum == CoordinateZ )
         {
-          mediator->markItemsForShady(this);
+                this->z = value + this->z * what;
         }
+        else if ( datum == Height )
+        {
+                this->itemData->height = value + this->itemData->height * what;
+        }
+
+        // Si ha habido colisión con el suelo se interrumpe el proceso
+        if ( this->z < 0 )
+        {
+                mediator->pushCollision( Floor );
+                collisionFound = true;
+        }
+        // En caso contrario se buscan colisiones con otros elementos
         else
         {
-          mediator->markItemsForShady(&oldGridItem);
+                // Si hay colisión se interrumpe el proceso
+                if ( ! ( collisionFound = mediator->findCollision( this ) ) )
+                {
+                        // Si el elemento rejilla tiene imagen se marcan para enmascarar los elementos
+                        // libres cuyas imágenes se solapen con la suya y espacialmente queden detrás suyo
+                        if ( this->image )
+                        {
+                                // A cuántos píxeles está la imagen del punto origen de la sala. Sólo cambia el
+                                // valor en el eje Y pues es el que depende de la coordenada Z
+                                this->offset.second = mediator->getTileSize() * ( this->cell.first + this->cell.second + 2 ) - this->image->h - this->z - 1;
+
+                                mediator->markItemsForMasking( &oldGridItem );
+                                mediator->markItemsForMasking( this );
+                        }
+                        else
+                        {
+                                this->offset.first = this->offset.second = 0;
+                        }
+
+                        // Si cambió la posición Z y las sombras están activas se buscan qué elementos hay que
+                        // volver a sombrear
+                        if ( datum == CoordinateZ && mediator->getShadingScale() < 256 )
+                        {
+                                if ( this->z > oldGridItem.getZ() )
+                                        mediator->markItemsForShady( this );
+                                else
+                                        mediator->markItemsForShady( &oldGridItem );
+                        }
+
+                        // Se ordena la columna de elementos rejilla
+                        mediator->activateGridItemsSorting();
+                }
         }
-      }
 
-      // Se ordena la columna de elementos rejilla
-      mediator->activateGridItemsSorting();
-    }
-  }
+        // Si se hubo colisión se restauran los valores anteriores
+        if ( collisionFound )
+        {
+                this->z = oldGridItem.getZ();
+                this->itemData->height = oldGridItem.getHeight();
+                this->offset.second = oldGridItem.getOffsetY();
+        }
 
-  // Si se hubo colisión se restauran los valores anteriores
-  if(collisionFound)
-  {
-    this->z = oldGridItem.getZ();
-    this->itemData->height = oldGridItem.getHeight();
-    this->offset.second = oldGridItem.getOffsetY();
-  }
-
-  return !collisionFound;
+        return ! collisionFound;
 }
 
 }

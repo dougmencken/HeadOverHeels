@@ -49,27 +49,27 @@ public:
         /**
          * Indica la liberación de Blacktooth
          */
-        void blacktoothIsFree() {  this->blacktooth = true ;  }
+        void blacktoothIsFree() {  blacktoothFree = true ;  }
 
         /**
          * Indica la liberación de Egyptus
          */
-        void egyptusIsFree() {  this->egyptus = true ;  }
+        void egyptusIsFree() {  egyptusFree = true ;  }
 
         /**
          * Indica la liberación de Penitentiary
          */
-        void penitentiaryIsFree() {  this->penitentiary = true ;  }
+        void penitentiaryIsFree() {  penitentiaryFree = true ;  }
 
         /**
          * Indica la liberación de Byblos
          */
-        void byblosIsFree() {  this->byblos = true ;  }
+        void byblosIsFree() {  byblosFree = true ;  }
 
         /**
          * Indica la liberación de Safari
          */
-        void safariIsFree() {  this->safari = true ;  }
+        void safariIsFree() {  safariFree = true ;  }
 
 private:
 
@@ -86,27 +86,27 @@ private:
         /**
          * Indica si Blacktooth ha sido liberado
          */
-        bool blacktooth ;
+        bool blacktoothFree ;
 
         /**
          * Indica si Egyptus ha sido liberado
          */
-        bool egyptus ;
+        bool egyptusFree ;
 
         /**
          * Indica si Penitentiary ha sido liberado
          */
-        bool penitentiary ;
+        bool penitentiaryFree ;
 
         /**
          * Indica si Byblos ha sido liberado
          */
-        bool byblos ;
+        bool byblosFree ;
 
         /**
          * Indica si Safari ha sido liberado
          */
-        bool safari ;
+        bool safariFree ;
 
 };
 

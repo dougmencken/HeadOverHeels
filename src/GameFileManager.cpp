@@ -52,23 +52,23 @@ void GameFileManager::loadGame( const std::string& fileName )
                 // Asigna los bonus que no deben aparecer en esta partida
                 BonusManager::getInstance()->load( saveGameXML->bonus().room() );
 
-                if( saveGameXML->freeByblos() )
+                if ( saveGameXML->freeByblos() )
                 {
                         this->gameManager->liberatePlanet( Byblos, false );
                 }
-                if( saveGameXML->freeEgyptus() )
+                if ( saveGameXML->freeEgyptus() )
                 {
                         this->gameManager->liberatePlanet( Egyptus, false );
                 }
-                if( saveGameXML->freePenitentiary() )
+                if ( saveGameXML->freePenitentiary() )
                 {
                         this->gameManager->liberatePlanet( Penitentiary, false );
                 }
-                if( saveGameXML->freeSafari() )
+                if ( saveGameXML->freeSafari() )
                 {
                         this->gameManager->liberatePlanet( Safari, false );
                 }
-                if(saveGameXML->freeBlacktooth())
+                if ( saveGameXML->freeBlacktooth() )
                 {
                         this->gameManager->liberatePlanet( Blacktooth, false );
                 }
@@ -76,7 +76,7 @@ void GameFileManager::loadGame( const std::string& fileName )
                 // Asigna el estado de los jugadores
                 this->assignPlayerStatus( saveGameXML->players().player() );
                 // Crea las salas iniciales y la posición de los jugadores
-                this->isomot->start( saveGameXML->players().player() );
+                this->isomot->beginOld( saveGameXML->players().player() );
         }
         catch ( const xml_schema::exception& e )
         {
@@ -143,27 +143,27 @@ void GameFileManager::saveGame( const std::string& fileName )
                 // se encuentre en la misma sala que el jugador activo
                 Room* hideRoom = this->isomot->getMapManager()->getHideRoom();
                 Room* activeRoom = this->isomot->getMapManager()->getActiveRoom();
-                PlayerItem* inactivePlayer = ( hideRoom != 0 ? hideRoom->getMediator()->getActivePlayer() : activeRoom->getMediator()->getHidePlayer() );
+                PlayerItem* inactivePlayer = ( hideRoom != 0 ? hideRoom->getMediator()->getActivePlayer() : activeRoom->getMediator()->getHiddenPlayer() );
 
                 // Si hay algún otro jugador, se almacenan sus datos
                 if ( inactivePlayer != 0 )
                 {
                         PlayerId inactivePlayerId = PlayerId( inactivePlayer->getLabel() );
                         std::vector< short > tools = this->gameManager->hasTool( inactivePlayerId );
-                        PlayerStartPosition* startPosition = this->isomot->getMapManager()->findPlayerPosition(
+                        PlayerStartPosition* initialPosition = this->isomot->getMapManager()->findPlayerPosition(
                                 hideRoom != 0 ? hideRoom->getIdentifier() : activeRoom->getIdentifier(), PlayerId( inactivePlayer->getLabel() )
                         );
-                        if ( startPosition == 0 )
+                        if ( initialPosition == 0 )
                         {
-                                startPosition = this->isomot->getMapManager()->findPlayerPosition( activeRoom->getIdentifier(), HeadAndHeels );
+                                initialPosition = this->isomot->getMapManager()->findPlayerPosition( activeRoom->getIdentifier(), HeadAndHeels );
                         }
                         playerSequence.push_back( sgxml::player( false,
                                        hideRoom != 0 ? hideRoom->getIdentifier() : activeRoom->getIdentifier(),
-                                       startPosition->getX(),
-                                       startPosition->getY(),
-                                       startPosition->getZ(),
+                                       initialPosition->getX(),
+                                       initialPosition->getY(),
+                                       initialPosition->getZ(),
                                        int( inactivePlayer->getDirection() ),
-                                       startPosition->getEntry(),
+                                       initialPosition->getEntry(),
                                        this->gameManager->getLives( inactivePlayerId ),
                                        inactivePlayerId == Head || inactivePlayerId == HeadAndHeels ? std::find( tools.begin(), tools.end(), short( Horn ) ) != tools.end() : false,
                                        inactivePlayerId == Heels || inactivePlayerId == HeadAndHeels ? std::find( tools.begin(), tools.end(), short( Handbag ) ) != tools.end() : false,

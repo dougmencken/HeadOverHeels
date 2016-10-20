@@ -25,16 +25,15 @@ ShowAuthors::ShowAuthors( BITMAP* picture )
 
 void ShowAuthors::doIt ()
 {
-        SoundManager::getInstance()->stopOgg();
+        ///SoundManager::getInstance()->stopAnyOgg();
         SoundManager::getInstance()->playOgg( "music/CreditsTheme.ogg", /* loop */ true );
 
-        LanguageText* langString = 0;
         Screen* screen = new Screen( 0, 0, this->where );
-        LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
-
-        // Imagen de fondo
         screen->setBackground( GuiManager::getInstance()->findImage( "background" ) );
-        screen->setAction( new CreateMainMenu( this->where ) );
+        screen->setEscapeAction( new CreateMainMenu( this->where ) );
+
+        LanguageText* langString = 0;
+        LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
 
         langString = languageManager->findLanguageString( "credits-text" );
         TextField* textField = new TextField( langString->getX(), langString->getY(), 640, 480, CenterAlignment );

@@ -65,8 +65,8 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			Win32HPC.cpp \
 			Win32HPC.hpp \
 			actions/Action.hpp \
-			actions/BeginGame.cpp \
-			actions/BeginGame.hpp \
+			actions/ContinueGame.cpp \
+			actions/ContinueGame.hpp \
 			actions/CreateAudioMenu.cpp \
 			actions/CreateAudioMenu.hpp \
 			actions/CreateCongratulationsScreen.cpp \

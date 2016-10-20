@@ -13,7 +13,8 @@ Label::Label( const std::string& text )
         fontName( "regular" ),
         color( "white" ),
         font( 0 ),
-        buffer( 0 )
+        buffer( 0 ),
+        myAction( 0 )
 {
         this->createBitmapLabel( this->text, this->fontName, this->color );
 }
@@ -24,7 +25,8 @@ Label::Label( unsigned int x, unsigned int y, const std::string& text )
         fontName( "regular" ),
         color( "white" ),
         font( 0 ),
-        buffer( 0 )
+        buffer( 0 ),
+        myAction( 0 )
 {
         this->createBitmapLabel( this->text, this->fontName, this->color );
 }
@@ -60,9 +62,9 @@ void Label::draw( BITMAP* where )
 
 void Label::handleKey( int key )
 {
-        if ( key >> 8 == KEY_ENTER && action != 0 )
+        if ( key >> 8 == KEY_ENTER && myAction != 0 )
         {
-                action->doIt ();
+                myAction->doIt ();
         }
 }
 

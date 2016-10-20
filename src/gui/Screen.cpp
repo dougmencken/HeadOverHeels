@@ -5,11 +5,12 @@
 namespace gui
 {
 
-Screen::Screen( unsigned int x, unsigned int y, BITMAP* where )
+Screen::Screen( unsigned int x, unsigned int y, BITMAP* picture )
 : Widget( x, y ),
   backgroundColor( makecol( 0, 0, 0 ) ),
-  backgroundImage( 0 ),
-  where( where )
+  backgroundPicture( 0 ),
+  where( picture ),
+  escapeAction( 0 )
 {
 
 }
@@ -25,9 +26,9 @@ void Screen::draw( BITMAP* where )
         clear_to_color( where, backgroundColor );
 
         // Si se definió una imagen de fondo entonces se vuelca
-        if ( this->backgroundImage != 0 )
+        if ( this->backgroundPicture != 0 )
         {
-                blit( this->backgroundImage, where, 0, 0, 0, 0, this->backgroundImage->w, this->backgroundImage->h );
+                blit( this->backgroundPicture, where, 0, 0, 0, 0, this->backgroundPicture->w, this->backgroundPicture->h );
         }
 
         // Dibuja cada componente en la pantalla
@@ -39,9 +40,9 @@ void Screen::draw( BITMAP* where )
 
 void Screen::handleKey( int key )
 {
-        if ( action != 0 && key >> 8 == KEY_ESC )
+        if ( escapeAction != 0 && key >> 8 == KEY_ESC )
         {
-                this->action->doIt ();
+                this->escapeAction->doIt ();
         }
         else
         {

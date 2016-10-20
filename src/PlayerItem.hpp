@@ -17,8 +17,8 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-#ifndef PLAYERITEM_HPP_
-#define PLAYERITEM_HPP_
+#ifndef PlayerItem_hpp_
+#define PlayerItem_hpp_
 
 #include <vector>
 #include "FreeItem.hpp"
@@ -178,12 +178,12 @@ protected:
          * @param datum El dato que se quiere modificar: CoordinateX, la coordenada X; CoordinateY, la
          * coordenada Y; CoordinateZ, la coordenada Z; WidthX, la anchura en el eje X; WidthY, la anchura en
          * el eje Y; o, Height, la altura
-         * @param mode Modo para interpretar el nuevo valor. Puede usarse Change para cambiarlo o Add para sumarlo
+         * @param how Modo para interpretar el nuevo valor. Puede usarse Change para cambiarlo o Add para sumarlo
          * @param jumpIndex Índice del salto utilizado para el desplazamiento de elementos situados encima
          * del jugador durante el ascenso
          * @return true si se pudo cambiar el dato o false si hubo colisión y no hubo cambio
          */
-        virtual bool changeData ( int value, int x, int y, int z, const Datum& datum, const Mode& mode ) ;
+        virtual bool changeData ( int value, int x, int y, int z, const Datum& datum, const WhatToDo& how ) ;
 
         /**
          * Comprueba si el jugador ha chocado con alguna puerta. En caso afirmativo moverá al jugador
@@ -370,4 +370,4 @@ public: // Operaciones de consulta y actualización
 
 }
 
-#endif /*PLAYERITEM_HPP_*/
+#endif

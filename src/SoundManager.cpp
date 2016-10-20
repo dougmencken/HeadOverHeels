@@ -146,35 +146,54 @@ void SoundManager::playOgg ( const std::string& fileName, bool loop )
                 this->oggStream = alogg_start_streaming( ( isomot::sharePath() + fileName ).c_str (), lengthOfbuffer );
                 if ( this->oggStream )
                 {
+                        alogg_thread* oggThread = 0;
                         if ( loop )
-                                this->oggPlayer = alogg_create_thread_which_loops( this->oggStream, ( isomot::sharePath() + fileName ).c_str (), lengthOfbuffer );
+                                oggThread = alogg_create_thread_which_loops( this->oggStream, ( isomot::sharePath() + fileName ).c_str (), lengthOfbuffer );
                         else
-                                this->oggPlayer = alogg_create_thread( this->oggStream );
+                                oggThread = alogg_create_thread( this->oggStream );
 
-                        if ( this->oggPlayer )
+                        if ( oggThread != 0 )
+                        {
+                                if ( this->oggPlayer != 0 )
+                                        this->stopAnyOgg (); // it is playback of just single Ogg yet
+                                                             // or previous oggPlayer will be lost
+                                                             // and if it is the one which loops forever it would never ever end
+
                                 this->oggPlaying = fileName;
+                                this->oggPlayer = oggThread;
+
+                                if ( loop )
+                                        std::cout << "looping";
+                                else
+                                        std::cout << "playing";
+                                std::cout << " Ogg " << fileName << std::endl ;
+                        }
                 }
                 else
                 {
-                        std::cerr << "can't play Ogg file " << fileName << std::endl ;
+                        std::cerr << "can't play Ogg " << fileName << std::endl ;
                 }
         }
 }
 
-void SoundManager::stopOgg ()
+void SoundManager::stopAnyOgg ()
 {
-        if ( this->oggPlayer != 0 )
+        if ( oggPlayer != 0 )
         {
-                if ( this->oggPlayer->stop != 1 )
+                if ( oggPlayer->stop == 0 )
                 {
-                        alogg_stop_thread( this->oggPlayer );
-                        while( alogg_is_thread_alive( this->oggPlayer ) ) ;
-                        alogg_join_thread( this->oggPlayer );
-                        alogg_destroy_thread( this->oggPlayer );
+                        alogg_stop_thread( oggPlayer );
+                        while( alogg_is_thread_alive( oggPlayer ) ) ;
+                        alogg_join_thread( oggPlayer );
+                        alogg_destroy_thread( oggPlayer );
+                        oggPlayer->stop = 1;
+
+                        std::cout << "Ogg playback is off" << std::endl ;
                 }
-                this->oggStream = 0;
-                this->oggPlayer = 0;
-                this->oggPlaying.clear();
+
+                oggPlayer = 0;
+                oggStream = 0;
+                oggPlaying.clear();
         }
 }
 

@@ -30,7 +30,6 @@
 namespace gui
 {
 
-// Declaraciones adelantadas
 class Action;
 
 /**
@@ -46,15 +45,15 @@ public:
          * Constructor
          * @param x Coordenada X de pantalla donde situar el elemento
          * @param y Coordenada Y de pantalla donde situar el elemento
-         * @param destination Imagen donde se volcará la pantalla
+         * @param picture Imagen donde se volcará la pantalla
          */
-        Screen( unsigned int x, unsigned int y, BITMAP* destination ) ;
+        Screen( unsigned int x, unsigned int y, BITMAP* picture ) ;
 
         virtual ~Screen( ) ;
 
         /**
          * Dibuja todo el contenido de la pantalla
-         * @param destination Imagen donde será dibujada
+         * @param where Imagen donde será dibujada
          */
         void draw ( BITMAP* where ) ;
 
@@ -79,17 +78,19 @@ private:
         /**
          * Imagen de fondo de la pantalla
          */
-        BITMAP* backgroundImage ;
+        BITMAP * backgroundPicture ;
 
         /**
          * Imagen donde se volcarán la pantalla
          */
-        BITMAP* where ;
+        BITMAP * where ;
 
         /**
          * Elementos de la interfaz de usuario contenidos en la pantalla
          */
         std::list< Widget* > widgets ;
+
+        Action* escapeAction ;
 
 public: // Operaciones de consulta y actualización
 
@@ -97,7 +98,9 @@ public: // Operaciones de consulta y actualización
          * Establece la imagen de fondo de la pantalla
          * @param image Una imagen
          */
-        void setBackground( BITMAP* image ) {  this->backgroundImage = image ;  }
+        void setBackground ( BITMAP* image ) {  backgroundPicture = image ;  }
+
+        void setEscapeAction ( Action* action ) {  escapeAction = action ;  }
 
 };
 

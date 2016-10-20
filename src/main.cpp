@@ -1,21 +1,24 @@
+
 #include <allegro.h>
 #ifdef __WIN32
   #include <winalleg.h>
 #endif
+
 #include "GuiManager.hpp"
+
 
 int main()
 {
 #ifdef __WIN32
-  timeBeginPeriod(1);
+        timeBeginPeriod( 1 );
 #endif
 
-  gui::GuiManager::getInstance()->start();
+        gui::GuiManager::getInstance()->enter ();
 
 #ifdef __WIN32
-  timeEndPeriod(1);
+        timeEndPeriod( 1 );
 #endif
 
-  return 0;
+        return EXIT_SUCCESS;
 }
 END_OF_MAIN()

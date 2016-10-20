@@ -23,7 +23,7 @@ void CreateAudioMenu::doIt ()
 {
         Screen* screen = new Screen( 0, 0, this->where );
         screen->setBackground( GuiManager::getInstance()->findImage( "background" ) );
-        screen->setAction( new CreateMainMenu( this->where ) );
+        screen->setEscapeAction( new CreateMainMenu( this->where ) );
 
         CreateMainMenu::placeHeadAndHeels( screen, /* icons */ false, /* copyrights */ true );
 
@@ -45,9 +45,7 @@ void CreateAudioMenu::doIt ()
         menu->addOption( labelMusic );
 
         screen->addWidget( menu );
-
-        // Crea la cadena de responsabilidad
-        screen->setSucessor( menu );
+        screen->setNext( menu );
 
         // Cambia la pantalla mostrada en la interfaz
         GuiManager::getInstance()->changeScreen( screen );

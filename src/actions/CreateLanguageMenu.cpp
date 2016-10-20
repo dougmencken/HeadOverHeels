@@ -76,9 +76,7 @@ void CreateLanguageMenu::doIt ()
         }
 
         screen->addWidget( menu );
-
-        // Crea la cadena de responsabilidad
-        screen->setSucessor( menu );
+        screen->setNext( menu );
 
         // Cambia la pantalla mostrada en la interfaz
         GuiManager::getInstance()->changeScreen( screen );

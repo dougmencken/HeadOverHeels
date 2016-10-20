@@ -26,7 +26,7 @@ void CreateCongratulationsScreen::doIt ()
 
         // Imagen de fondo
         screen->setBackground( GuiManager::getInstance()->findImage( "background" ) );
-        screen->setAction( new CreateEndScreen( this->where, rooms, planets ) );
+        screen->setEscapeAction( new CreateEndScreen( this->where, rooms, planets ) );
 
         // Head coronado
         screen->addWidget( new Icon( 192, 50, GuiManager::getInstance()->findImage( "crown" ) ) );

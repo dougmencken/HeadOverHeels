@@ -117,7 +117,7 @@ public:
         /**
          * Detiene la reproducción en curso de un archivo Ogg
          */
-        void stopOgg () ;
+        void stopAnyOgg () ;
 
         /**
          * Indica si un determinado archivo Ogg está reproduciéndose

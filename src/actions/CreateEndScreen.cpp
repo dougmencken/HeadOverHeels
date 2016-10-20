@@ -24,14 +24,14 @@ CreateEndScreen::CreateEndScreen( BITMAP* picture, unsigned short rooms, unsigne
 
 void CreateEndScreen::doIt ()
 {
-        SoundManager::getInstance()->stopOgg();
+        ///SoundManager::getInstance()->stopAnyOgg();
         SoundManager::getInstance()->playOgg( "music/MainTheme.ogg", /* loop */ true );
 
-        Screen* screen = new Screen( 0, 0, this->where );
+        Action * mainMenu = new CreateMainMenu( this->where ) ;
 
-        // Imagen de fondo
+        Screen* screen = new Screen( 0, 0, this->where );
         screen->setBackground( GuiManager::getInstance()->findImage( "background" ) );
-        screen->setAction( new CreateMainMenu( this->where ) );
+        screen->setEscapeAction( mainMenu );
 
         CreateMainMenu::placeHeadAndHeels( screen, /* icons */ true, /* copyrights */ false );
 
@@ -78,7 +78,7 @@ void CreateEndScreen::doIt ()
         // Obtiene el rango en función de la puntuación conseguida
         for ( int i = 0; i < 6; i++ )
         {
-                if ( score > bounds[ i ] && score <= bounds[ i+1 ] )
+                if ( score > bounds[ i ] && score <= bounds[ i + 1 ] )
                 {
                         langString = languageManager->findLanguageString( ranges[ i ] );
                         label = new Label( 0, 0, langString->getText(), "big", "multicolor" );
@@ -87,9 +87,8 @@ void CreateEndScreen::doIt ()
                 }
         }
 
-        // Crea la cadena de responsabilidad
-        label->setAction( new CreateMainMenu( this->where ) );
-        screen->setSucessor( label );
+        label->setAction( mainMenu );
+        screen->setNext( label );
 
         // Cambia la pantalla mostrada en la interfaz
         GuiManager::getInstance()->changeScreen( screen );

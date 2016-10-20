@@ -37,7 +37,7 @@ Isomot::~Isomot()
         destroy_bitmap( this->view );
 }
 
-void Isomot::start()
+void Isomot::beginNew()
 {
         this->prepare ();
 
@@ -47,17 +47,24 @@ void Isomot::start()
 
         // Pone en marcha la sala inicial
         mapManager->getActiveRoom()->startUpdate ();
+
+        std::cout << "new game" << std::endl ;
+        SoundManager::getInstance()->playOgg ( "music/begin.ogg", /* loop */ false );
 }
 
-void Isomot::start( const sgxml::players::player_sequence& playerSequence )
+void Isomot::beginOld( const sgxml::players::player_sequence& playerSequence )
 {
         this->prepare ();
 
         // Se crean las salas iniciales
-        for( sgxml::players::player_const_iterator i = playerSequence.begin (); i != playerSequence.end (); ++i )
+        for ( sgxml::players::player_const_iterator i = playerSequence.begin (); i != playerSequence.end (); ++i )
         {
-                this->mapManager->beginOldGame( *i );
+                this->mapManager->beginOldGameWithPlayer( *i );
         }
+
+        std::cout << "old game" << std::endl ;
+        // no begin.ogg here
+        // anyway HeadOverHeels.ogg from CreatePlanetsScreen will silence it
 }
 
 void Isomot::prepare ()
@@ -65,20 +72,20 @@ void Isomot::prepare ()
         this->isEndRoom = false;
 
         // Crea la imagen donde se dibujará la vista isométrica
-        if( this->view == 0 )
+        if ( this->view == 0 )
         {
                 this->view = create_bitmap_ex( 32, ScreenWidth, ScreenHeight );
         }
 
         // Se cargan y almacenan los datos de los elementos del juego
-        if( this->itemDataManager == 0 )
+        if ( this->itemDataManager == 0 )
         {
                 this->itemDataManager = new ItemDataManager( "items.xml" );
                 this->itemDataManager->load ();
         }
 
         // Se crea y se pone en marcha el gestor del mapa
-        if( this->mapManager == 0 )
+        if ( this->mapManager == 0 )
         {
                 this->mapManager = new MapManager( this, "map.xml" );
                 this->mapManager->load ();
@@ -90,7 +97,7 @@ void Isomot::prepare ()
         }
 }
 
-void Isomot::stop()
+void Isomot::pause ()
 {
         // Detiene la actualización de los estados de los elementos y
         // la representación de la vista isométrica
@@ -100,7 +107,7 @@ void Isomot::stop()
         }
 }
 
-void Isomot::restart()
+void Isomot::resume ()
 {
         // Reactiva la actualización de los estados de los elementos y
         // la representación de la vista isométrica
@@ -170,15 +177,15 @@ BITMAP* Isomot::update()
         }
 
         // Si se pulsa la tecla de intercambio se cambia de personaje y/o de sala
-        if( ! this->isEndRoom && InputManager::getInstance()->swap() )
+        if ( ! this->isEndRoom && InputManager::getInstance()->swap() )
         {
                 // Antes de cambiar el jugador se detiene el actual
                 activeRoom->getMediator()->getActivePlayer()->wait();
-                if( activeRoom->getMediator()->getActivePlayer()->getBehavior()->getStateId() == StateWait )
+                if ( activeRoom->getMediator()->getActivePlayer()->getBehavior()->getStateId() == StateWait )
                 {
                         // Si se puede cambiar de jugador en la misma sala hay que comunicar
                         // al gestor del mapa este hecho
-                        if( activeRoom->changePlayer( this->itemDataManager ) )
+                        if ( activeRoom->changePlayer( this->itemDataManager ) )
                         {
                                 mapManager->updateActivePlayer();
                         }
@@ -193,7 +200,7 @@ BITMAP* Isomot::update()
         }
 
         // Si la sala está activa entonces se dibuja
-        if( activeRoom->isActive() )
+        if ( activeRoom->isActive() )
         {
                 activeRoom->draw();
         }
@@ -202,11 +209,11 @@ BITMAP* Isomot::update()
         {
                 Direction exit = activeRoom->getExit();
 
-                if( exit == Restart )
+                if ( exit == Restart )
                 {
                         PlayerItem* player = activeRoom->getMediator()->getActivePlayer();
 
-                        if( player->getLives() != 0 || ( PlayerId(player->getLabel ()) == HeadAndHeels && player->getLives() == 0 ) )
+                        if ( player->getLives() != 0 || ( PlayerId(player->getLabel ()) == HeadAndHeels && player->getLives() == 0 ) )
                         {
                                 activeRoom = mapManager->restartRoom();
                         }
@@ -235,24 +242,24 @@ BITMAP* Isomot::update()
         }
 
         // Si hay una sala activa, se dibuja
-        if( activeRoom != 0 )
+        if ( activeRoom != 0 )
         {
                 blit (
-                        activeRoom->getDestination(), this->view,
+                        activeRoom->getPicture(), this->view,
                         activeRoom->getCamera()->getDeltaX(), activeRoom->getCamera()->getDeltaY(),
                         0, 0,
-                        activeRoom->getDestination()->w, activeRoom->getDestination()->h
+                        activeRoom->getPicture()->w, activeRoom->getPicture()->h
                 );
 
                 // Delata al tramposo
-                if( GameManager::getInstance()->areLivesInexhaustible () )
+                if ( GameManager::getInstance()->areLivesInexhaustible () )
                 {
                         textout_ex( this->view, font, "VIDAS INFINITAS", 18, 10, makecol( 255, 255, 255 ), -1 );
                         textout_ex( this->view, font, "INFINITE LIVES", this->view->w - 128, 10, makecol( 255, 255, 255 ), -1 );
                 }
 
                 // La sala final es muy especial
-                if( activeRoom->getIdentifier().compare( "blacktooth/blacktooth88.xml" ) == 0 )
+                if ( activeRoom->getIdentifier().compare( "blacktooth/blacktooth88.xml" ) == 0 )
                 {
                         this->updateEndRoom();
                 }

@@ -34,6 +34,14 @@ public:
 
 };
 
+class DoNothing : public Action
+{
+
+public:
+        virtual void doIt () {  }
+
+};
+
 }
 
 #endif

@@ -17,8 +17,8 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-#ifndef GUIMANAGER_HPP_
-#define GUIMANAGER_HPP_
+#ifndef GuiManager_hpp_
+#define GuiManager_hpp_
 
 #include <string>
 #include <map>
@@ -41,117 +41,120 @@ class ConfigurationManager;
  */
 class GuiManager
 {
+
 private:
 
-  /**
-   * Constructor. Carga y almacena el conjunto de imágenes empleadas por la interfaz de
-   * usuario, así como manda crear todos las fuentes tipográficas utilizadas
-   */
-  GuiManager();
+        /**
+        * Constructor
+        * Carga y almacena el conjunto de imágenes empleadas por la interfaz de
+        * usuario, así como manda crear todos las fuentes tipográficas utilizadas
+        */
+        GuiManager( ) ;
 
 public:
 
-	~GuiManager();
+        ~GuiManager( ) ;
 
-  /**
-   * Único objeto de esta clase para toda la aplicación
-   * @return Un puntero al objeto único
-   */
-  static GuiManager* getInstance();
+        /**
+        * Único objeto de esta clase para toda la aplicación
+        * @return Un puntero al objeto único
+        */
+        static GuiManager* getInstance () ;
 
-  /**
-   * Envía la orden para crea el menú principal y empieza a mostrarlo en pantalla
-   */
-  void start();
+        /**
+        * Envía la orden para crea el menú principal y empieza a mostrarlo en pantalla
+        */
+        void enter () ;
 
-  /**
-   * Muestra la pantalla actual
-   */
-  void changeScreen(Screen* screen);
+        /**
+        * Muestra la pantalla actual
+        */
+        void changeScreen ( Screen* screen ) ;
 
-  /**
-   * Actualiza el contenido de la pantalla
-   */
-  void refresh();
+        /**
+        * Actualiza el contenido de la pantalla
+        */
+        void refresh () ;
 
-	/**
-	 * Busca una imagen usada en la interfaz de usuario
-	 * @param name Identificador textual asignado a la imagen
-	 * @return La imagen ó 0 si no existe
-	 */
-	BITMAP* findImage(const std::string& name);
+        /**
+         * Busca una imagen usada en la interfaz de usuario
+         * @param name Identificador textual asignado a la imagen
+         * @return La imagen ó 0 si no existe
+         */
+        BITMAP * findImage ( const std::string& name ) ;
 
-	/**
-	 * Establece el idioma de la interfaz de usuario
-	 * @param language Código ISO de la lengua
-	 */
-	void assignLanguage(const std::string& language);
+        /**
+         * Establece el idioma de la interfaz de usuario
+         * @param language Código ISO de la lengua
+         */
+        void assignLanguage ( const std::string& language ) ;
 
-	/**
-	 * Suspende la presentación de la interfaz de usuario. Conduce al cierre de la aplicación
-	 */
-	void suspend() { this->active = false; }
+        /**
+         * Suspende la presentación de la interfaz de usuario. Conduce al cierre de la aplicación
+         */
+        void suspend () {  this->active = false ;  }
 
 protected:
 
-  /**
-   * Inicializa Allegro, establece el modo de vídeo e instala el controlador del teclado
-   */
-  void allegroSetup();
+        /**
+        * Inicializa Allegro, establece el modo de vídeo e instala el controlador del teclado
+        */
+        void allegroSetup () ;
 
 private:
 
-  /**
-   * Único objeto de esta clase para toda la aplicación
-   */
-  static GuiManager* instance;
+        /**
+        * Único objeto de esta clase para toda la aplicación
+        */
+        static GuiManager * instance ;
 
-  /**
-   * Pantalla mostrada por la interfaz
-   */
-  Screen* screen;
+        /**
+        * Pantalla mostrada por la interfaz
+        */
+        Screen * screen ;
 
-  /**
-   * Imagen donde se dibujará la interfaz gráfica
-   */
-  BITMAP* destination;
+        /**
+        * Imagen donde se dibujará la interfaz gráfica
+        */
+        BITMAP * picture ;
 
-  /**
-   * El gestor de la configuración del juego
-   */
-  ConfigurationManager* configurationManager;
+        /**
+        * El gestor de la configuración del juego
+        */
+        ConfigurationManager * configurationManager ;
 
-  /**
-   * El gestor de idioma
-   */
-  LanguageManager* languageManager;
+        /**
+        * El gestor de idioma
+        */
+        LanguageManager * languageManager ;
 
-  /**
-   * Imágenes empleadas en la interfaz de usuario. Cada imagen tiene asociado un
-   * identificador textual
-   */
-  std::map<std::string, BITMAP*> images;
+        /**
+        * Imágenes empleadas en la interfaz de usuario. Cada imagen tiene asociado un
+        * identificador textual
+        */
+        std::map < std::string, BITMAP * > images ;
 
-  /**
-   * Indica que la presentación de la interfaz y la gestión del teclado está activa
-   */
-  bool active;
+        /**
+        * Indica que la presentación de la interfaz y la gestión del teclado está activa
+        */
+        bool active ;
 
 public: // Operaciones de consulta y actualización
 
-  /**
-   * Devuelve el gestor de la configuración del juego
-   * @return Un puntero al gestor ó 0 si no está creado
-   */
-  ConfigurationManager* getConfigurationManager() const;
+        /**
+        * Devuelve el gestor de la configuración del juego
+        * @return Un puntero al gestor ó 0 si no está creado
+        */
+        ConfigurationManager* getConfigurationManager () const ;
 
-  /**
-   * Devuelve el gestor de idioma
-   * @return Un puntero al gestor ó 0 si no está creado
-   */
-  LanguageManager* getLanguageManager() const;
+        /**
+        * Devuelve el gestor de idioma
+        * @return Un puntero al gestor ó 0 si no está creado
+        */
+        LanguageManager* getLanguageManager () const ;
+
 };
 
 }
 
-#endif /*GUIMANAGER_HPP_*/
+#endif

@@ -33,7 +33,11 @@ void CreateListOfSavedGames::doIt ()
         // Si es el menú de carga y se pulsa Esc se vuelve al menú principal
         if ( loadMenu )
         {
-                screen->setAction( new CreateMainMenu( this->where ) );
+                screen->setEscapeAction( new CreateMainMenu( this->where ) );
+        }
+        else
+        {
+
         }
 
         CreateMainMenu::placeHeadAndHeels( screen, /* icons */ true, /* copyrights */ false );
@@ -49,62 +53,46 @@ void CreateListOfSavedGames::doIt ()
                 ss << fileCount;
                 std::string file = isomot::homePath() + "savegame/savegame" + ss.str () + ".xml";
 
-                if ( exists( file.c_str() ) )
+                if ( exists( file.c_str () ) )
                 {
                         short rooms = 0;
                         short planets = 0;
                         this->recoverFileInfo( file, &rooms, &planets );
                         ss.str( std::string() );
-                        ss << fileCount << ". " << rooms << " " << languageManager->findLanguageString( "rooms" )->getText() << "; "
+                        ss << /* fileCount << ". " << */ rooms << " " << languageManager->findLanguageString( "rooms" )->getText() << "; "
                                                 << planets << " " << languageManager->findLanguageString( "planets" )->getText();
                         label = new Label( ss.str() );
 
                         if ( loadMenu )
-                        {
                                 label->setAction( new LoadGame( this->where, fileCount ) );
-                        }
                         else
-                        {
                                 label->setAction( new SaveGame( this->where, fileCount ) );
-                        }
 
                         if ( fileCount == 1 )
-                        {
                                 menu->addActiveOption( label );
-                        }
                         else
-                        {
                                 menu->addOption( label );
-                        }
-
-                        continue;
                 }
                 else
                 {
                         ss.str( std::string() );
-                        ss << fileCount << ". " << languageManager->findLanguageString( "empty-slot" )->getText();
+                        ss << /* fileCount << ". " << */ languageManager->findLanguageString( "empty-slot" )->getText();
                         label = new Label( ss.str() );
+                        //if ( loadMenu )
+                                //label->setAction( new DoNothing( ) );
+                        //else
                         if ( ! loadMenu )
-                        {
                                 label->setAction( new SaveGame( this->where, fileCount ) );
-                        }
 
                         if ( fileCount == 1 )
-                        {
                                 menu->addActiveOption( label );
-                        }
                         else
-                        {
                                 menu->addOption( label );
-                        }
                 }
         }
 
-        // Añade el menú a la pantalla actual
         screen->addWidget( menu );
-
-        // Crea la cadena de responsabilidad
-        screen->setSucessor( menu );
+        screen->setNext( menu );
 
         // Cambia la pantalla mostrada en la interfaz
         GuiManager::getInstance()->changeScreen( screen );

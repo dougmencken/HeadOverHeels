@@ -1,3 +1,4 @@
+
 #include "GameManager.hpp"
 #include "Exception.hpp"
 #include "Isomot.hpp"
@@ -59,8 +60,10 @@ GameManager* GameManager::getInstance ()
         return instance;
 }
 
-StopCode GameManager::start ()
+WhyPause GameManager::begin ()
 {
+        fprintf ( stdout, "GameManager::begin ()\n" ) ;
+
         this->vidasInfinitas = false;
         this->headLives = 8;
         this->heelsLives = 8;
@@ -77,17 +80,20 @@ StopCode GameManager::start ()
         this->freePlanets = std::vector< bool >( 5, false );
 
         Assert< ENullPointer >( this->isomot );
-        this->isomot->start();
-        return this->update();
+        this->isomot->beginNew ();
+        return this->update ();
 }
 
-StopCode GameManager::restart ()
+WhyPause GameManager::resume ()
 {
-        this->isomot->restart();
-        return this->update();
+        fprintf ( stdout, "GameManager::resume ()\n" ) ;
+
+        this->isomot->resume ();
+
+        return this->update ();
 }
 
-void GameManager::drawGameStatus ( BITMAP* destination )
+void GameManager::drawAmbianceOfGame ( BITMAP* where )
 {
         BITMAP* bitmap = 0;
         std::stringstream ss;
@@ -95,77 +101,77 @@ void GameManager::drawGameStatus ( BITMAP* destination )
         // Escenario de la sala
         std::string scenery = this->isomot->getMapManager()->getActiveRoom()->getScenery();
         // Si no hay escenario definido, no se pinta ningún indicador: es la pantalla final del juego
-        if( ! scenery.empty () )
+        if ( ! scenery.empty () )
         {
                 if ( drawBackgroundPicture )
                 {
                         // Marco. Varía en función del escenario
-                        draw_sprite( destination, gui::GuiManager::getInstance()->findImage( scenery + "-frame" ), 0, 0 );
+                        draw_sprite( where, gui::GuiManager::getInstance()->findImage( scenery + "-frame" ), 0, 0 );
                 }
 
                 // Jugador seleccionado
                 PlayerId playerId = static_cast< PlayerId >( this->isomot->getMapManager()->getActiveRoom()->getMediator()->getActivePlayer()->getLabel() );
                 std::string headIcon = playerId == Head || playerId == HeadAndHeels ? "head" : "grey-head";
                 std::string heelsIcon = playerId == Heels || playerId == HeadAndHeels ? "heels" : "grey-heels";
-                draw_sprite( destination, gui::GuiManager::getInstance ()->findImage( headIcon ), 161, 425 );
-                draw_sprite( destination, gui::GuiManager::getInstance ()->findImage( heelsIcon ), 431, 425 );
+                draw_sprite( where, gui::GuiManager::getInstance ()->findImage( headIcon ), 161, 425 );
+                draw_sprite( where, gui::GuiManager::getInstance ()->findImage( heelsIcon ), 431, 425 );
 
                 // La bocina
                 bitmap = gui::GuiManager::getInstance ()->findImage( this->horn ? "horn" : "grey-horn" );
-                draw_sprite( destination, bitmap, 33, 425 );
+                draw_sprite( where, bitmap, 33, 425 );
 
                 // El bolso
                 bitmap = gui::GuiManager::getInstance ()->findImage( this->handbag ? "handbag" : "grey-handbag" );
-                draw_sprite( destination, bitmap, 559, 425 );
+                draw_sprite( where, bitmap, 559, 425 );
 
                 // Vidas de Head
                 ss.str( std::string() );
                 ss << int( this->headLives );
                 gui::Label headLivesLabel( this->headLives > 9 ? 214 : 221, 424, ss.str (), "big", "white", -2 );
-                headLivesLabel.draw( destination );
+                headLivesLabel.draw( where );
 
                 // Vidas de Heels
                 ss.str( std::string() );
                 ss << int( this->heelsLives );
                 gui::Label heelsLivesLabel( this->heelsLives > 9 ? 398 : 405, 424, ss.str (), "big", "white", -2 );
-                heelsLivesLabel.draw( destination );
+                heelsLivesLabel.draw( where );
 
                 // Número de rosquillas
                 bitmap = gui::GuiManager::getInstance ()->findImage( this->donuts != 0 ? "donuts" : "grey-donuts" );
-                draw_sprite( destination, bitmap, 33, 361 );
+                draw_sprite( where, bitmap, 33, 361 );
                 if( this->donuts > 0 )
                 {
                         ss.str( std::string() );
                         ss << this->donuts;
                         gui::Label donutsLabel( this->donuts > 9 ? 42 : 49, 372, ss.str (), "regular", "white", -2 );
-                        donutsLabel.draw( destination );
+                        donutsLabel.draw( where );
                 }
 
                 // Grandes saltos
                 bitmap = gui::GuiManager::getInstance ()->findImage( this->highJumps > 0 ? "high-jumps" : "high-jumps.gray" );
-                draw_sprite( destination, bitmap, 505, 392 );
+                draw_sprite( where, bitmap, 505, 392 );
                 if( this->highJumps > 0 )
                 {
                         ss.str( std::string() );
                         ss << int( this->highJumps );
                         gui::Label highJumpsLabel( this->highJumps > 9 ? 505 : 512, 393, ss.str (), "regular", "white", -2 );
-                        highJumpsLabel.draw( destination );
+                        highJumpsLabel.draw( where );
                 }
 
                 // Gran velocidad
                 bitmap = gui::GuiManager::getInstance ()->findImage( this->highSpeed > 0 ? "high-speed" : "high-speed.gray" );
-                draw_sprite( destination, bitmap, 107, 392 );
+                draw_sprite( where, bitmap, 107, 392 );
                 if( this->highSpeed > 0 )
                 {
                         ss.str( std::string () );
                         ss << int( this->highSpeed );
                         gui::Label highSpeedLabel( this->highSpeed > 9 ? 107 : 114, 393, ss.str (), "regular", "white", -2 );
-                        highSpeedLabel.draw( destination );
+                        highSpeedLabel.draw( where );
                 }
 
                 // Escudo de Head
                 bitmap = gui::GuiManager::getInstance ()->findImage( this->headShield > 0 ? "shield" : "shield.gray" );
-                draw_sprite( destination, bitmap, 107, 436 );
+                draw_sprite( where, bitmap, 107, 436 );
                 if( this->headShield > 0 )
                 {
                         int headShieldValue = int( this->headShield * 99.0 / 25.0 );
@@ -173,12 +179,12 @@ void GameManager::drawGameStatus ( BITMAP* destination )
                         ss.str( std::string() );
                         ss << headShieldValue;
                         gui::Label headShieldLabel( headShieldValue > 9 ? 107 : 114, 437, ss.str (), "regular", "white", -2 );
-                        headShieldLabel.draw( destination );
+                        headShieldLabel.draw( where );
                 }
 
                 // Escudo de Heels
                 bitmap = gui::GuiManager::getInstance ()->findImage( this->heelsShield > 0 ? "shield" : "shield.gray" );
-                draw_sprite( destination, bitmap, 505, 436 );
+                draw_sprite( where, bitmap, 505, 436 );
                 if( this->heelsShield > 0 )
                 {
                         int heelsShieldValue = int( this->heelsShield * 99.0 / 25.0 );
@@ -186,36 +192,36 @@ void GameManager::drawGameStatus ( BITMAP* destination )
                         ss.str( std::string() );
                         ss << heelsShieldValue;
                         gui::Label heelsShieldLabel( heelsShieldValue > 9 ? 505 : 512, 437, ss.str (), "regular", "white", -2 );
-                        heelsShieldLabel.draw( destination );
+                        heelsShieldLabel.draw( where );
                 }
 
                 // Elemento que hay dentro del bolso
                 if( this->itemTaken != 0 )
                 {
-                        draw_sprite( destination, this->itemTaken, 559, 361 );
+                        draw_sprite( where, this->itemTaken, 559, 361 );
                 }
         }
         else
         {
                 // En la pantalla final del juego se dibuja FREEDOM en la esquina inferior izquierda
                 gui::Label freedomLabel( 84, 362, "FREEDOM", "big", "multicolor" );
-                freedomLabel.draw( destination );
+                freedomLabel.draw( where );
         }
 
         // Muestra todo en pantalla
         acquire_screen();
-        blit( destination, screen, 0, 0, 0, 0, destination->w, destination->h );
+        blit( where, screen, 0, 0, 0, 0, where->w, where->h );
         release_screen();
 }
 
 void GameManager::loadGame ( const std::string& fileName )
 {
-        this->gameFileManager->loadGame( fileName );
+        gameFileManager->loadGame( fileName );
 }
 
 void GameManager::saveGame ( const std::string& fileName )
 {
-        this->gameFileManager->saveGame( fileName );
+        gameFileManager->saveGame( fileName );
 }
 
 void GameManager::addLives ( const PlayerId& player, unsigned char lives )
@@ -522,29 +528,27 @@ void GameManager::eatFish ( PlayerItem* character, Room* room, int x, int y, int
 {
         this->eatenFish = true;
 
-        this->gameFileManager->assignFishData(
+        gameFileManager->assignFishData(
                 room->getIdentifier (), character->getLabel (),
                         x, y, z, character->getDirection () ) ;
 }
 
-StopCode GameManager::update ()
+WhyPause GameManager::update ()
 {
-        StopCode stopCode = NoStopCode;
+        WhyPause why = Nevermind;
 
         // Mientras el usuario no pulse la tecla de abandono y lo confirme con Escape,
         // el juego se actualiza periódicamente
-        while( stopCode == NoStopCode )
+        while ( why == Nevermind )
         {
-                if( ! key[ InputManager::getInstance()->readUserKey( KeyHalt ) ] && ! this->takenCrown && ! this->eatenFish && ! this->gameOver )
+                if ( ! key[ InputManager::getInstance()->readUserKey( KeyHalt ) ] && ! this->takenCrown && ! this->eatenFish && ! this->gameOver )
                 {
                         // Actualiza la vista isométrica
                         BITMAP* view = this->isomot->update();
                         // Se ha podido actualizar
-                        if( view != 0 )
+                        if ( view != 0 )
                         {
-                                // Dibuja el marco y el estado del juego
-                                this->drawGameStatus( view );
-                                // Se dibuja cada 10 milisegundos
+                                this->drawAmbianceOfGame( view );
                                 sleep( 10 );
                         }
                         else
@@ -556,33 +560,33 @@ StopCode GameManager::update ()
                 else
                 {
                         // Detiene el juego
-                        stopCode = this->stop();
+                        why = this->pause ();
                 }
         }
 
-        return stopCode;
+        return why;
 }
 
-StopCode GameManager::stop ()
+WhyPause GameManager::pause ()
 {
         bool exit = false;
         bool confirm = false;
-        StopCode stopCode = NoStopCode;
+        WhyPause why = Nevermind;
 
         // Detiene el motor isométrico
-        this->isomot->stop();
+        this->isomot->pause();
 
         // Da tiempo a que el usuario vea la parada
         clear_keybuf();
 
         // El usuario acaba de liberar un planeta, se muestra la pantalla de los planetas
-        if( this->takenCrown )
+        if ( this->takenCrown )
         {
-                stopCode = FreePlanet;
+                why = FreePlanet;
                 this->takenCrown = false;
         }
         // El usuario acaba de comer un pez, se le da la opción de grabar la partida
-        else if( this->eatenFish )
+        else if ( this->eatenFish )
         {
                 this->eatenFish = false;
                 isomot::InputManager* inputManager = InputManager::getInstance();
@@ -593,7 +597,7 @@ StopCode GameManager::stop ()
 
                 text = language->findLanguageString( "save-game" );
                 int deltaY = text->getY();
-                for( size_t i = 0; i < text->getLinesCount(); i++ )
+                for ( size_t i = 0; i < text->getLinesCount(); i++ )
                 {
                         gui::LanguageLine* line = text->getLine( i );
                         gui::Label label( 0, 0, line->text, line->font, line->color );
@@ -606,7 +610,7 @@ StopCode GameManager::stop ()
 
                 text = language->findLanguageString( "confirm-resume" );
                 deltaY = text->getY();
-                for( size_t i = 0; i < text->getLinesCount(); i++ )
+                for ( size_t i = 0; i < text->getLinesCount(); i++ )
                 {
                         gui::LanguageLine* line = text->getLine( i );
                         gui::Label label( 0, 0, line->text, line->font, line->color );
@@ -620,17 +624,17 @@ StopCode GameManager::stop ()
                 clear_keybuf();
 
                 // Mientras el usuario no elija una de las dos opciones no se hará nada
-                while( ! confirm && ! exit )
+                while ( ! confirm && ! exit )
                 {
-                        if( keypressed() )
+                        if ( keypressed() )
                         {
                                 int key = readkey() >> 8;
 
                                 // Si se pulsa SPACE se mostrará la interfaz para la grabación de la partida
-                                if( key == KEY_SPACE )
+                                if ( key == KEY_SPACE )
                                 {
                                         exit = true;
-                                        stopCode = SaveGame;
+                                        why = SaveGame;
                                 }
                                 // Si se pulsa cualquier otra tecla, excepto una tecla de movimiento o salto,
                                 // prosigue la partida en curso
@@ -642,7 +646,7 @@ StopCode GameManager::stop ()
                                          key != KEY_ESC )
                                 {
                                         confirm = true;
-                                        this->isomot->restart();
+                                        this->isomot->resume();
                                 }
                         }
 
@@ -651,26 +655,26 @@ StopCode GameManager::stop ()
                 }
         }
         // El usuario ha acabado con las vidas de todos los jugadores
-        else if( this->gameOver )
+        else if ( this->gameOver )
         {
                 this->gameOver = false;
-                stopCode = UserAction;
+                why = GameOver;
                 this->visitedRooms = this->isomot->getMapManager()->countVisitedRooms();
                 this->isomot->reset();
         }
         // El usuario ha llegado a Freedom pero le faltaron coronas
-        else if( this->freedom )
+        else if ( this->freedom )
         {
                 this->freedom = false;
-                stopCode = Freedom;
+                why = Freedom;
                 this->visitedRooms = this->isomot->getMapManager()->countVisitedRooms();
                 this->isomot->reset();
         }
         // El usuario ha acabado el juego
-        else if( this->emperator )
+        else if ( this->emperator )
         {
                 this->emperator = false;
-                stopCode = Sucess;
+                why = Sucess;
                 this->visitedRooms = this->isomot->getMapManager()->countVisitedRooms();
                 this->isomot->reset();
         }
@@ -686,7 +690,7 @@ StopCode GameManager::stop ()
 
                 text = language->findLanguageString( "confirm-quit" );
                 int deltaY = text->getY();
-                for( size_t i = 0; i < text->getLinesCount(); i++ )
+                for ( size_t i = 0; i < text->getLinesCount(); i++ )
                 {
                         gui::LanguageLine* line = text->getLine( i );
                         gui::Label label( 0, 0, line->text, line->font, line->color );
@@ -699,7 +703,7 @@ StopCode GameManager::stop ()
 
                 text = language->findLanguageString( "confirm-resume" );
                 deltaY = text->getY();
-                for( size_t i = 0; i < text->getLinesCount(); i++ )
+                for ( size_t i = 0; i < text->getLinesCount(); i++ )
                 {
                         gui::LanguageLine* line = text->getLine( i );
                         gui::Label label( 0, 0, line->text, line->font, line->color );
@@ -711,15 +715,15 @@ StopCode GameManager::stop ()
                 }
 
                 // Mientras el usuario no elija una de las dos opciones no se hará nada
-                while( ! confirm && ! exit )
+                while ( ! confirm && ! exit )
                 {
-                        if( keypressed() )
+                        if ( keypressed() )
                         {
                                 // Si ha pulsado Escape se suspende la partida en curso
-                                if( readkey() >> 8 == KEY_ESC )
+                                if ( readkey() >> 8 == KEY_ESC )
                                 {
                                         exit = true;
-                                        stopCode = UserAction;
+                                        why = GameOver;
                                         this->visitedRooms = this->isomot->getMapManager()->countVisitedRooms();
                                         this->isomot->reset();
                                 }
@@ -727,7 +731,7 @@ StopCode GameManager::stop ()
                                 else
                                 {
                                         confirm = true;
-                                        this->isomot->restart();
+                                        this->isomot->resume();
                                 }
                         }
 
@@ -736,14 +740,14 @@ StopCode GameManager::stop ()
                 }
         }
 
-        return stopCode;
+        return why;
 }
 
 unsigned char GameManager::getLives ( const PlayerId& player ) const
 {
         unsigned char lives = 0;
 
-        switch( player )
+        switch ( player )
         {
                 case Head:
                         lives = this->headLives;
@@ -793,28 +797,28 @@ std::vector< short > GameManager::hasTool ( const PlayerId& player ) const
 {
         std::vector< short > tools;
 
-        switch( player )
+        switch ( player )
         {
                 case Head:
-                        if( this->horn )
+                        if ( this->horn )
                         {
                                 tools.push_back( Horn );
                         }
                         break;
 
                 case Heels:
-                        if( this->handbag )
+                        if ( this->handbag )
                         {
                                 tools.push_back( Handbag );
                         }
                         break;
 
                 case HeadAndHeels:
-                        if( this->horn )
+                        if ( this->horn )
                         {
                                 tools.push_back( Horn );
                         }
-                        if( this->handbag )
+                        if ( this->handbag )
                         {
                                 tools.push_back( Handbag );
                         }

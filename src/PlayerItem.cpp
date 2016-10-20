@@ -50,7 +50,7 @@ PlayerItem::~PlayerItem()
         }
 }
 
-bool PlayerItem::changeData( int value, int x, int y, int z, const Datum& datum, const Mode& mode )
+bool PlayerItem::changeData( int value, int x, int y, int z, const Datum& datum, const WhatToDo& how )
 {
         bool collisionFound = false;
 
@@ -63,33 +63,33 @@ bool PlayerItem::changeData( int value, int x, int y, int z, const Datum& datum,
         switch ( datum )
         {
                 case CoordinateX:
-                        this->x = value + this->x * mode;
+                        this->x = value + this->x * how;
                         break;
 
                 case CoordinateY:
-                        this->y = value + this->y * mode;
+                        this->y = value + this->y * how;
                         break;
 
                 case CoordinateZ:
-                        this->z = value + this->z * mode;
+                        this->z = value + this->z * how;
                         break;
 
                 case CoordinatesXYZ:
-                        this->x = x + this->x * mode;
-                        this->y = y + this->y * mode;
-                        this->z = z + this->z * mode;
+                        this->x = x + this->x * how;
+                        this->y = y + this->y * how;
+                        this->z = z + this->z * how;
                         break;
 
                 case WidthX:
-                        this->itemData->widthX = value + this->itemData->widthX * mode;
+                        this->itemData->widthX = value + this->itemData->widthX * how;
                         break;
 
                 case WidthY:
-                        this->itemData->widthY = value + this->itemData->widthY * mode;
+                        this->itemData->widthY = value + this->itemData->widthY * how;
                         break;
 
                 case Height:
-                        this->itemData->height = value + this->itemData->height * mode;
+                        this->itemData->height = value + this->itemData->height * how;
                         break;
         }
 
@@ -263,8 +263,8 @@ bool PlayerItem::changeData( int value, int x, int y, int z, const Datum& datum,
                                 }
 
                                 // El elemento debe volver a sombrearse y enmascararse tras el cambio de posición
-                                this->shadeStatus = ItIsShady;
-                                this->maskStatus = ItIsMasked;
+                                this->myShady = WantShadow;
+                                this->myMask = WantMask;
 
                                 // La lista de elementos libres debe reordenarse
                                 mediator->activateFreeItemsSorting();

@@ -1,10 +1,12 @@
+
 #include "SaveGame.hpp"
 #include "Ism.hpp"
 #include "GameManager.hpp"
-#include "BeginGame.hpp"
+#include "ContinueGame.hpp"
 
 using gui::SaveGame;
-using gui::BeginGame;
+using gui::ContinueGame;
+
 
 SaveGame::SaveGame( BITMAP* picture, int slot )
 : Action(),
@@ -25,7 +27,6 @@ void SaveGame::doIt ()
                 gameManager->saveGame( ss.str() );
         }
 
-        // Se vuelve a la partida en curso
-        BeginGame begin( this->where, true );
-        begin.doIt ();
+        ContinueGame game( this->where, true );
+        game.doIt ();
 }

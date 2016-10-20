@@ -17,8 +17,8 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-#ifndef GRIDITEM_HPP_
-#define GRIDITEM_HPP_
+#ifndef GridItem_hpp_
+#define GridItem_hpp_
 
 #include <utility>
 #include <cmath>
@@ -26,6 +26,7 @@
 #include "Ism.hpp"
 #include "Item.hpp"
 #include "Drawable.hpp"
+
 
 namespace isomot
 {
@@ -53,34 +54,34 @@ public:
          * @param z Posición espacial Z o a qué distancia está el elemento del suelo
          * @param direction Dirección inicial del elemento
          */
-        GridItem( ItemData* itemData, int cx, int cy, int z, const Direction& direction );
+        GridItem( ItemData* itemData, int cx, int cy, int z, const Direction& direction ) ;
 
-        virtual ~GridItem();
+        virtual ~GridItem( ) ;
 
         /**
          * Dibuja el elemento rejilla
          */
-        void draw( BITMAP* where );
+        void draw ( BITMAP* where ) ;
 
         /**
          * Cambia la presentación gráfica del elemento, destruyendo la imagen procesada y señalando qué elementos
          * hay que volver a enmascarar
          * @param image Un fotograma del elemento
          */
-        void changeImage( BITMAP* image );
+        void changeImage ( BITMAP* image ) ;
 
         /**
          * Cambia la sombra de la presentación gráfica del elemento, destruyendo la imagen procesada y señalando
          * qué elementos hay que volver a sombrear
          * @param image Una sombra de un fotograma del elemento
          */
-        void changeShadow( BITMAP* shadow );
+        void changeShadow ( BITMAP* shadow ) ;
 
         /**
          * Solicita el sombreado del elemento
          * @param column Columna de elementos rejilla a la que pertenece este elemento
          */
-        void requestCastShadow(int column);
+        void requestCastShadow ( int column ) ;
 
         /**
          * Sombrea la imagen del elemento con la sombra de otro elemento
@@ -91,87 +92,87 @@ public:
          *                     sombras totalmente opacas
          * @param transparency Grado de transparencia del elemento que sombrea
          */
-        void castShadowImage(int x, int y, BITMAP* shadow, short shadingScale, unsigned char transparency = 0);
+        void castShadowImage ( int x, int y, BITMAP* shadow, short shadingScale, unsigned char transparency = 0 ) ;
 
         /**
          * Cambia el valor de la coordenada Z
          * @param value Nuevo valor para Z
          * @return true si se pudo cambiar el dato o false si hubo colisión y no hubo cambio
          */
-        virtual bool changeZ(int value);
+        virtual bool changeZ ( int value ) ;
 
         /**
          * Cambia el valor de la coordenada Z
          * @param value Valor que se sumará a la coordenada Z actual
          * @return true si se pudo cambiar el dato o false si hubo colisión y no hubo cambio
          */
-        virtual bool addZ(int value);
+        virtual bool addZ ( int value ) ;
 
         /**
          * Cambia la altura del elemento
          * @param value Nueva altura del elemento
          * @return true si se pudo cambiar el dato o false si hubo colisión y no hubo cambio
          */
-        virtual bool changeHeight(int value);
+        virtual bool changeHeight ( int value ) ;
 
         /**
          * Cambia la altura del elemento
          * @param value Valor que se sumará a la altura actual
          * @return true si se pudo cambiar el dato o false si hubo colisión y no hubo cambio
          */
-        virtual bool addHeight(int value);
+        virtual bool addHeight ( int value ) ;
 
 protected:
 
-  /**
-   * Cambia el dato solicitado del elemento
-   * @param value El nuevo valor
-   * @param datum El dato que se quiere modificar: CoordinateZ, la coordenada Z, o Height, la altura
-   * @param mode Modo para interpretar el nuevo valor. Puede usarse Change para cambiarlo o Add para sumarlo
-   * @return true si se pudo cambiar el dato o false si hubo colisión y no hubo cambio
-   */
-  virtual bool changeData(int value, const Datum& datum, const Mode& mode);
+        /**
+         * Cambia el dato solicitado del elemento
+         * @param value El nuevo valor
+         * @param datum El dato que se quiere modificar: CoordinateZ, la coordenada Z, o Height, la altura
+         * @param what Modo para interpretar el nuevo valor. Puede usarse Change para cambiarlo o Add para sumarlo
+         * @return true si se pudo cambiar el dato o false si hubo colisión y no hubo cambio
+         */
+        virtual bool changeData ( int value, const Datum& datum, const WhatToDo& what ) ;
 
 protected:
 
-  /**
-   * Posición en el eje X e Y, respectivamente, de la celda que ocupa el elemento en la sala
-   */
-  std::pair<int, int> cell;
+        /**
+         * Posición en el eje X e Y, respectivamente, de la celda que ocupa el elemento en la sala
+         */
+        std::pair < int, int > cell ;
 
-  /**
-   * Índice de la columna de elementos a los que pertenece el elemento rejilla
-   */
-  int column;
+        /**
+         * Índice de la columna de elementos a los que pertenece el elemento rejilla
+         */
+        int column ;
 
-public: // Operaciones de consulta y actualización
+public:
 
-  /**
-   * Posición en el eje X de la celda que ocupa el elemento en la sala
-   * @return Un número positivo
-   */
-  int getCellX() const { return cell.first; }
+        /**
+         * Posición en el eje X de la celda que ocupa el elemento en la sala
+         * @return Un número positivo
+         */
+        int getCellX () const {  return cell.first ;  }
 
-  /**
-   * DPosición en el eje Y de la celda que ocupa el elemento en la sala
-   * @return Un número positivo
-   */
-  int getCellY() const { return cell.second; }
+        /**
+         * Posición en el eje Y de la celda que ocupa el elemento en la sala
+         * @return Un número positivo
+         */
+        int getCellY () const {  return cell.second ;  }
 
-  /**
-   * Establece el índice de la columna de elementos a los que pertenece el elemento rejilla
-   * @param Un número positivo
-   */
-  void setColumn(const int column) { this->column = column; }
+        /**
+         * Establece el índice de la columna de elementos a los que pertenece el elemento rejilla
+         * @param Un número positivo
+         */
+        void setColumn (const int column) {  this->column = column ;  }
 
-  /**
-   * Índice de la columna de elementos a los que pertenece el elemento rejilla
-   * @return Un número positivo
-   */
-  int getColumn() const { return column; }
+        /**
+         * Índice de la columna de elementos a los que pertenece el elemento rejilla
+         * @return Un número positivo
+         */
+        int getColumn () const {  return column ;  }
 
 };
 
 }
 
-#endif //GRIDITEM_HPP_
+#endif
