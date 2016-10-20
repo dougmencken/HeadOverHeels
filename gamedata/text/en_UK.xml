@@ -569,13 +569,13 @@
       <ustring>Reincarnation Fish lets you</ustring>
     </properties>
     <properties font="big" color="orange">
-      <ustring>save the game, pressing SPACE</ustring>
+      <ustring>save the game by touching SPACE</ustring>
     </properties>
   </text>
 
   <text id="empty-slot" x="0" y="0">
     <properties>
-      <ustring>Available</ustring>
+      <ustring>Free</ustring>
     </properties>
   </text>
 

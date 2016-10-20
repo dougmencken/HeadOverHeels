@@ -183,7 +183,7 @@ void SoundManager::stopAnyOgg ()
                 if ( oggPlayer->stop == 0 )
                 {
                         alogg_stop_thread( oggPlayer );
-                        while( alogg_is_thread_alive( oggPlayer ) ) ;
+                        while ( alogg_is_thread_alive( oggPlayer ) ) ;
                         alogg_join_thread( oggPlayer );
                         alogg_destroy_thread( oggPlayer );
                         oggPlayer->stop = 1;
@@ -197,7 +197,7 @@ void SoundManager::stopAnyOgg ()
         }
 }
 
-void SoundManager::setVolumeOfMusic( int volume )
+void SoundManager::setVolumeOfMusic( unsigned int volume )
 {
           this->musicVolume = volume == 0 ? 1 : volume;
           set_volume( ( this->musicVolume * 255 ) / 100, 0 );

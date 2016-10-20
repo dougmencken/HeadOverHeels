@@ -174,12 +174,12 @@ private:
         /**
          * Volumen de los efectos sonoros
          */
-        int effectsVolume ;
+        unsigned int effectsVolume ;
 
         /**
          * Volumen de la música
          */
-        int musicVolume ;
+        unsigned int musicVolume ;
 
         /**
          * Tabla de sonidos
@@ -192,25 +192,25 @@ public: // Operaciones de consulta y actualización
          * Establece el volumen de los efectos sonoros
          * @param volume Un valor comprendido entre 0 y 99
          */
-        void setVolumeOfEffects ( int volume ) {  this->effectsVolume = volume ;  }
+        void setVolumeOfEffects ( unsigned int volume ) {  this->effectsVolume = volume ;  }
 
         /**
          * Volumen de los efectos sonoros
          * @return Un valor comprendido entre 0 y 99
          */
-        int getVolumeOfEffects () const {  return this->effectsVolume ;  }
+        unsigned int getVolumeOfEffects () const {  return this->effectsVolume ;  }
 
         /**
          * Establece el volumen de la música
          * @param volume Un valor comprendido entre 0 y 99
          */
-        void setVolumeOfMusic ( int volume ) ;
+        void setVolumeOfMusic ( unsigned int volume ) ;
 
         /**
          * Volumen de la música
          * @return Un valor comprendido entre 0 y 99
          */
-        int getVolumeOfMusic () const {  return this->musicVolume ;  }
+        unsigned int getVolumeOfMusic () const {  return this->musicVolume ;  }
 
 };
 

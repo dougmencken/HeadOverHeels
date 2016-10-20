@@ -5,4 +5,5 @@ gamedatamusic_DATA = CreditsTheme.ogg \
 		    begin.ogg \
 		    market.ogg \
 		    blacktooth.ogg \
-		    jail.ogg
+		    jail.ogg \
+		    themoon.ogg
