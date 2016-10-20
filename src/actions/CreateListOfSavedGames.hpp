@@ -61,6 +61,8 @@ private:
          */
         bool loadMenu ;
 
+        static const unsigned int howManySaves = 10 ;
+
 };
 
 }

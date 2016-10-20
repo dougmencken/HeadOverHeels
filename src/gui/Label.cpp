@@ -57,7 +57,7 @@ void Label::changeFont( const std::string& fontName, const std::string& color )
 void Label::draw( BITMAP* where )
 {
         // Dibuja la cadena en la imagen destino
-        draw_sprite( where, this->buffer, this->x, this->y );
+        draw_sprite( where, this->buffer, this->getX (), this->getY () );
 }
 
 void Label::handleKey( int key )
@@ -136,7 +136,12 @@ BITMAP* Label::createBitmapLabel( const std::string& text, const std::string& fo
         return this->buffer;
 }
 
-bool EqualLabel::operator() ( const Label* label, const std::string& text ) const
+bool EqualXYOfLabel::operator() ( const Label* label, std::pair < unsigned int, unsigned int > thatXY ) const
+{
+        return ( label->getY () == thatXY.second && label->getX () == thatXY.first );
+}
+
+bool EqualTextOfLabel::operator() ( const Label* label, const std::string& text ) const
 {
         return ( label->getText().compare( text ) == 0 );
 }

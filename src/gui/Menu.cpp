@@ -84,10 +84,10 @@ void Menu::draw( BITMAP* where )
                         {
                                 bullet = this->optionImage;
                         }
-                        draw_sprite( where, bullet, x, y + dy );
+                        draw_sprite( where, bullet, getX (), getY () + dy );
 
                         // Ajusta la posición de la etiqueta
-                        label->changePosition( this->x + dx, this->y + dy );
+                        label->changePosition( getX () + dx, getY () + dy );
                         // Dibuja la etiqueta
                         label->draw( where );
 
@@ -104,9 +104,11 @@ void Menu::draw( BITMAP* where )
                         }
 
                         // Dibuja la viñeta
-                        draw_sprite( where, ( label == this->activeOption ? this->selectedOptionImageMini : this->optionImage ), x + this->secondColumnX, y + dy );
+                        draw_sprite( where,
+                                        ( label == this->activeOption ? this->selectedOptionImageMini : this->optionImage ),
+                                        getX () + this->secondColumnX, getY () + dy );
                         // Ajusta la posición de la etiqueta
-                        label->changePosition( this->x + dx + this->secondColumnX, this->y + dy );
+                        label->changePosition( getX () + dx + this->secondColumnX, getY () + dy );
                         // Dibuja la etiqueta
                         label->draw( where );
                         // Actualiza la diferencia de la altura
@@ -137,9 +139,9 @@ void Menu::handleKey( int key )
                         break;
 
                 default:
-                        if ( this->next != 0 )
+                        if ( this->getNext() != 0 )
                         {
-                                next->handleKey( key );
+                                getNext()->handleKey( key );
                         }
         }
 }
@@ -152,43 +154,24 @@ void Menu::addOption( Label* label )
 void Menu::addActiveOption( Label* label )
 {
         this->addOption( label );
-        this->next = label;
+        setNext( label );
         this->activeOption = label;
 }
 
-void Menu::changeOption( const std::string& text, Label* label )
+void Menu::previousOption ()
 {
-        std::list< Label* >::iterator i = std::find_if( options.begin (), options.end (), std::bind2nd( EqualLabel(), text ) );
-        assert ( i != options.end() );
-
-        Label* oldLabel = *i;
-        i = options.erase( i );
-        label->setAction( oldLabel->getAction() );
-        options.insert( i, label );
-
-        if ( this->activeOption == oldLabel )
-        {
-                this->next = label;
-                this->activeOption = label;
-        }
-
-        delete oldLabel;
-}
-
-void Menu::previousOption()
-{
-        std::list< Label* >::iterator i = std::find_if( options.begin (), options.end (), std::bind2nd( EqualLabel(), this->activeOption->getText() ) );
+        std::list< Label* >::iterator i = std::find_if( options.begin (), options.end (), std::bind2nd( EqualXYOfLabel(), this->activeOption->getXY () ) );
         assert ( i != options.end () );
         this->activeOption = ( i == options.begin() ? *options.rbegin() : *( --i ) );
-        this->next = this->activeOption;
+        setNext( this->activeOption );
 }
 
-void Menu::nextOption()
+void Menu::nextOption ()
 {
-        std::list< Label* >::iterator i = std::find_if( options.begin(), options.end(), std::bind2nd( EqualLabel(), this->activeOption->getText() ) );
+        std::list< Label* >::iterator i = std::find_if( options.begin (), options.end (), std::bind2nd( EqualXYOfLabel(), this->activeOption->getXY () ) );
         assert ( i != options.end () );
         this->activeOption = ( ++i == options.end() ? *options.begin() : *i );
-        this->next = this->activeOption;
+        setNext( this->activeOption );
 }
 
 }

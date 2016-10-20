@@ -77,13 +77,6 @@ public:
 
         Label* getActiveOption () const {  return this->activeOption ;  }
 
-        /**
-         * Cambia una opción del menú
-         * @param text Texto de la opción a sustituir
-         * @param label Nueva opción
-         */
-        void changeOption ( const std::string& text, Label* label );
-
 private:
 
         /**

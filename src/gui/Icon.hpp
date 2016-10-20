@@ -8,8 +8,8 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef ICON_HPP_
-#define ICON_HPP_
+#ifndef Icon_hpp_
+#define Icon_hpp_
 
 #include <allegro.h>
 #include "Widget.hpp"
@@ -22,32 +22,34 @@ namespace gui
  */
 class Icon : public Widget
 {
+
 public:
 
-  /**
-   * Constructor
-   * @param x Coordenada X de pantalla donde situar el elemento
-   * @param x Coordenada X de pantalla donde situar el elemento
-   * @param image La imagen a presentar
-   */
-	Icon(unsigned int x, unsigned int y, BITMAP* image);
+       /**
+        * Constructor
+        * @param x Coordenada X de pantalla donde situar el elemento
+        * @param x Coordenada X de pantalla donde situar el elemento
+        * @param image La imagen a presentar
+        */
+        Icon( unsigned int x, unsigned int y, BITMAP * image ) ;
 
-	virtual ~Icon();
+        virtual ~Icon( ) ;
 
-  /**
-   * Dibuja el elemento
-   * @param destination Imagen donde será dibujado
-   */
-  void draw(BITMAP* destination);
+       /**
+        * Dibuja el elemento
+        * @param where Imagen donde será dibujado
+        */
+        void draw ( BITMAP* where ) ;
 
 private:
 
-  /**
-   * La imagen del icono
-   */
-  BITMAP* image;
+       /**
+        * La imagen del icono
+        */
+        BITMAP* image ;
+
 };
 
 }
 
-#endif /*ICON_HPP_*/
+#endif

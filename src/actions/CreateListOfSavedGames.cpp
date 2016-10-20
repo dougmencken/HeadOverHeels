@@ -47,7 +47,7 @@ void CreateListOfSavedGames::doIt ()
 
         // Las partidas guardadas
         Menu* menu = new Menu( 80, 160 );
-        for ( int fileCount = 1; fileCount < 10; fileCount++ )
+        for ( unsigned int fileCount = 1; fileCount <= howManySaves; fileCount++ )
         {
                 std::stringstream ss;
                 ss << fileCount;
@@ -59,36 +59,31 @@ void CreateListOfSavedGames::doIt ()
                         short planets = 0;
                         this->recoverFileInfo( file, &rooms, &planets );
                         ss.str( std::string() );
-                        ss << /* fileCount << ". " << */ rooms << " " << languageManager->findLanguageString( "rooms" )->getText() << "; "
-                                                << planets << " " << languageManager->findLanguageString( "planets" )->getText();
+                        ss << rooms << " " << languageManager->findLanguageString( "rooms" )->getText() << " "
+                                << planets << " " << languageManager->findLanguageString( "planets" )->getText();
                         label = new Label( ss.str() );
 
                         if ( loadMenu )
                                 label->setAction( new LoadGame( this->where, fileCount ) );
                         else
                                 label->setAction( new SaveGame( this->where, fileCount ) );
-
-                        if ( fileCount == 1 )
-                                menu->addActiveOption( label );
-                        else
-                                menu->addOption( label );
                 }
                 else
                 {
                         ss.str( std::string() );
-                        ss << /* fileCount << ". " << */ languageManager->findLanguageString( "empty-slot" )->getText();
+                        ss << languageManager->findLanguageString( "empty-slot" )->getText();
                         label = new Label( ss.str() );
                         //if ( loadMenu )
                                 //label->setAction( new DoNothing( ) );
                         //else
                         if ( ! loadMenu )
                                 label->setAction( new SaveGame( this->where, fileCount ) );
-
-                        if ( fileCount == 1 )
-                                menu->addActiveOption( label );
-                        else
-                                menu->addOption( label );
                 }
+
+                if ( fileCount == 1 )
+                        menu->addActiveOption( label );
+                else
+                        menu->addOption( label );
         }
 
         screen->addWidget( menu );

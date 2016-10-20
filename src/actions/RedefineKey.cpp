@@ -22,8 +22,6 @@ RedefineKey::RedefineKey( Menu* menu, std::string keyText, int assignedKey )
 void RedefineKey::doIt ()
 {
         bool keyChanged = false;
-        Label* label = new Label( this->keyText );
-        menu->changeOption( this->keyText + scancode_to_name( this->assignedKey ), label );
         GuiManager::getInstance()->refresh();
 
         clear_keybuf();
@@ -42,7 +40,7 @@ void RedefineKey::doIt ()
                                 InputManager::getInstance()->findKeyType( newKey ) == gameKey )
                         {
                                 this->assignedKey = newKey;
-                                menu->changeOption( label->getText(), new Label( this->keyText + scancode_to_name( this->assignedKey ) ) );
+                                menu->getActiveOption()->setText( this->keyText + scancode_to_name( this->assignedKey ) );
                                 InputManager::getInstance()->changeUserKey( gameKey, newKey );
                                 GuiManager::getInstance()->getConfigurationManager()->setKey( gameKey, newKey );
                                 keyChanged = true;

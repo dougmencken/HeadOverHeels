@@ -163,10 +163,17 @@ public: // Operaciones de consulta y actualización
 
 };
 
+
+struct EqualXYOfLabel : public std::binary_function< Label*, std::pair < unsigned int, unsigned int >, bool >
+{
+        bool operator() ( const Label* label, std::pair < unsigned int, unsigned int > thatXY ) const;
+};
+
+
 /**
  * Objeto-función usado como predicado en la búsqueda de una etiqueta
  */
-struct EqualLabel : public std::binary_function< Label*, std::string, bool >
+struct EqualTextOfLabel : public std::binary_function< Label*, std::string, bool >
 {
         bool operator() ( const Label* label, const std::string& text ) const;
 };
