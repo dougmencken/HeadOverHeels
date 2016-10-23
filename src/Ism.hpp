@@ -313,7 +313,7 @@ namespace isomot
                 StateSwitch,                    /* El elemento (un interruptor) cambia de estado */
                 StateCollision,                 /* El elemento choca con algo */
                 StateActive,                    /* El elemento se acaba de activar */
-                StateError                      /* Estado imposible, se utiliza en el gestor de sonido */
+                Mistake                         /* Estado imposible, se utiliza en el gestor de sonido */
         } ;
 
         /**

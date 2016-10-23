@@ -18,6 +18,8 @@
 namespace gui
 {
 
+class Screen ;
+
 /**
  * Crea el menú principal del juego
  */

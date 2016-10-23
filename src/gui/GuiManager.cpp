@@ -215,7 +215,7 @@ GuiManager::GuiManager( )
         }
 
         // Se inicializa el gestor de sonido cargando los sonidos
-        SoundManager::getInstance()->load( "sounds.xml" );
+        SoundManager::getInstance()->readListOfSounds( "sounds.xml" );
 }
 
 GuiManager::~GuiManager( )

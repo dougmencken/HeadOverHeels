@@ -682,7 +682,7 @@ WhyPause GameManager::pause ()
         else
         {
                 // Detiene todos los sonidos
-                SoundManager::getInstance()->stopAllSounds();
+                SoundManager::getInstance()->stopEverySound ();
 
                 // Presenta las intrucciones en pantalla
                 gui::LanguageText* text = 0;

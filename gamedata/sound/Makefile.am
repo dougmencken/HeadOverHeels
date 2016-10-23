@@ -8,7 +8,7 @@ gamedatasound_DATA = adjust.wav \
 		    destruction.wav \
 		    drop.wav \
 		    elephant.wav \
-		    error.wav \
+		    o-ou.wav \
 		    fall.wav \
 		    gamusino.wav \
 		    head-falling.wav \

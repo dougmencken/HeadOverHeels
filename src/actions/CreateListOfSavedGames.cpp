@@ -10,13 +10,14 @@
 #include "CreateMainMenu.hpp"
 #include "LoadGame.hpp"
 #include "SaveGame.hpp"
+#include "PlaySound.hpp"
 #include "Ism.hpp"
 
 using gui::CreateListOfSavedGames;
 
 
 CreateListOfSavedGames::CreateListOfSavedGames( BITMAP* picture, bool isLoadMenu )
-: Action(),
+: Action( ),
   where( picture ),
   loadMenu( isLoadMenu )
 {
@@ -73,10 +74,9 @@ void CreateListOfSavedGames::doIt ()
                         ss.str( std::string() );
                         ss << languageManager->findLanguageString( "empty-slot" )->getText();
                         label = new Label( ss.str() );
-                        //if ( loadMenu )
-                                //label->setAction( new DoNothing( ) );
-                        //else
-                        if ( ! loadMenu )
+                        if ( loadMenu )
+                                label->setAction( new PlaySound( isomot::Mistake ) );
+                        else
                                 label->setAction( new SaveGame( this->where, fileCount ) );
                 }
 

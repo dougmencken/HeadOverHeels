@@ -45,7 +45,6 @@ template< > struct hash< std::string >
 namespace isomot
 {
 
-// Declaraciones adelantadas
 class SampleData;
 class SoundData;
 
@@ -77,7 +76,7 @@ public:
          * que almacena los sonidos
          * @param fileName Nombre del archivo XML que contiene los datos de los sonidos
          */
-        void load ( const std::string& fileName ) ;
+        void readListOfSounds ( const std::string& fileName ) ;
 
         /**
          * Reproduce un sonido
@@ -97,7 +96,7 @@ public:
         /**
          * Detiene la reproducción de todos los sonidos
          */
-        void stopAllSounds () ;
+        void stopEverySound () ;
 
         /**
          * Reproduce un archivo Ogg

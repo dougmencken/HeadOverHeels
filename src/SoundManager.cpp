@@ -52,7 +52,7 @@ SoundManager* SoundManager::getInstance()
         return instance;
 }
 
-void SoundManager::load( const std::string& fileName )
+void SoundManager::readListOfSounds( const std::string& fileName )
 {
         // Carga el archivo XML especificado y almacena los datos XML en la lista
         try
@@ -70,6 +70,8 @@ void SoundManager::load( const std::string& fileName )
 
                         this->soundData.push_back( soundData );
                 }
+
+                std::cout << "read list of sounds from " << fileName << std::endl ;
         }
         catch ( const xml_schema::exception& e )
         {
@@ -87,9 +89,9 @@ void SoundManager::play( short label, const StateId& stateId, bool loop )
 
         if ( sampleData != 0 && sampleData->voice == -1 )
         {
-                deallocate_voice( sampleData->voice );
                 sampleData->voice = allocate_voice( sampleData->sample );
                 voice_set_volume( sampleData->voice, ( this->effectsVolume * 255 ) / 100 );
+                voice_set_playmode( sampleData->voice, PLAYMODE_PLAY /* PLAYMODE_BACKWARD */ );
                 if ( loop )
                 {
                         voice_set_playmode( sampleData->voice, PLAYMODE_LOOP );
@@ -104,7 +106,7 @@ void SoundManager::play( short label, const StateId& stateId, bool loop )
                         if ( voice_get_position( j->second.voice ) == -1 )
                         {
                                 deallocate_voice( j->second.voice );
-                                ( &( j->second) )->voice = -1;
+                                j->second.voice = -1;
                         }
                 }
         }
@@ -114,13 +116,13 @@ void SoundManager::stop( short label, const StateId& stateId )
 {
         SampleData* sampleData = this->findSample( label, stateId );
 
-        if( sampleData != 0 )
+        if ( sampleData != 0 )
         {
                 stop_sample( sampleData->sample );
         }
 }
 
-void SoundManager::stopAllSounds()
+void SoundManager::stopEverySound ()
 {
         for ( std::list< SoundData >::iterator i = soundData.begin (); i != soundData.end (); ++i )
         {
@@ -130,7 +132,7 @@ void SoundManager::stopAllSounds()
                         if ( voice_get_position( j->second.voice ) == -1 )
                         {
                                 deallocate_voice( j->second.voice );
-                                ( &( j->second ) )->voice = -1;
+                                j->second.voice = -1;
                         }
                 }
         }
@@ -333,8 +335,8 @@ std::string SoundManager::translateStateIdToString ( const StateId& stateId )
                         state = "active";
                         break;
 
-                case StateError:
-                        state = "error";
+                case Mistake:
+                        state = "mistake";
                         break;
 
                 default:

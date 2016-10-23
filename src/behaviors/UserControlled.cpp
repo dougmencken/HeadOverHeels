@@ -612,8 +612,8 @@ void UserControlled::drop( PlayerItem* playerItem )
     }
     else
     {
-      // Se emite sonido de error
-      this->soundManager->play( playerItem->getLabel(), StateError );
+      // Se emite sonido de o~ ou
+      this->soundManager->play( playerItem->getLabel(), Mistake );
     }
   }
 

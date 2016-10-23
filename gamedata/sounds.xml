@@ -3,6 +3,12 @@
 <sounds xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="sounds.xsd">
 
+  <item label="0">
+    <state id="mistake">
+      <file>sound/o-ou.wav</file>
+    </state>
+  </item>
+
   <!-- Brick #1 -->
   <item label="1">
     <state id="destroy">
@@ -443,8 +449,8 @@
     <state id="drop">
       <file>sound/drop.wav</file>
     </state>
-    <state id="error">
-      <file>sound/error.wav</file>
+    <state id="mistake">
+      <file>sound/o-ou.wav</file>
     </state>
   </item>
 
@@ -480,8 +486,8 @@
     <state id="drop">
       <file>sound/drop.wav</file>
     </state>
-    <state id="error">
-      <file>sound/error.wav</file>
+    <state id="mistake">
+      <file>sound/o-ou.wav</file>
     </state>
   </item>
 

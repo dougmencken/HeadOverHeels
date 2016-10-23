@@ -337,7 +337,7 @@ Room* MapManager::changeRoom( const Direction& exit )
         activeRoom->deactivate();
 
         // Detiene todos los sonidos
-        SoundManager::getInstance()->stopAllSounds();
+        SoundManager::getInstance()->stopEverySound ();
 
         // Busca en el mapa los datos de la sala activa
         MapRoomData* activeRoomData = findRoomData( activeRoom->getIdentifier() );
@@ -701,7 +701,7 @@ Room* MapManager::swapRoom()
         if ( rooms.size() > 1 )
         {
                 // Detiene todos los sonidos
-                SoundManager::getInstance()->stopAllSounds();
+                SoundManager::getInstance()->stopEverySound ();
 
                 // Desactiva la sala actual
                 activeRoom->deactivate();

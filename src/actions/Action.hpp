@@ -14,8 +14,6 @@
 namespace gui
 {
 
-class Screen;
-
 class Action
 {
 
@@ -33,7 +31,7 @@ class DoNothing : public Action
 {
 
 public:
-        virtual void doIt () {  }
+        void doIt () {  }
 
 };
 
