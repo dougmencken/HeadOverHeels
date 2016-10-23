@@ -804,4 +804,4 @@ namespace ixml
 
 #include <xsd/cxx/post.hxx>
 
-#endif // ITEMS_XML_HPP
+#endif

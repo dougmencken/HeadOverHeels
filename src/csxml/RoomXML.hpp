@@ -2101,4 +2101,4 @@ namespace rxml
 
 #include <xsd/cxx/post.hxx>
 
-#endif // ROOM_XML_HPP
+#endif

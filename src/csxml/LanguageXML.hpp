@@ -500,4 +500,4 @@ namespace lxml
 
 #include <xsd/cxx/post.hxx>
 
-#endif // LANGUAGE_XML_HPP
+#endif

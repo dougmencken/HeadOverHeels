@@ -712,4 +712,4 @@ namespace mxml
 
 #include <xsd/cxx/post.hxx>
 
-#endif // MAP_XML_HPP
+#endif

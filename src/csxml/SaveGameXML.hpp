@@ -984,4 +984,4 @@ namespace sgxml
 
 #include <xsd/cxx/post.hxx>
 
-#endif // SAVE_GAME_XML_HPP
+#endif

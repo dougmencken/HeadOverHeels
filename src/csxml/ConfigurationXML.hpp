@@ -661,4 +661,4 @@ namespace cxml
 
 #include <xsd/cxx/post.hxx>
 
-#endif // CONFIGURATION_XML_HPP
+#endif

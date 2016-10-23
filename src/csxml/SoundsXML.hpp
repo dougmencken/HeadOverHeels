@@ -442,4 +442,4 @@ namespace sxml
 
 #include <xsd/cxx/post.hxx>
 
-#endif // SOUNDS_XML_HPP
+#endif
