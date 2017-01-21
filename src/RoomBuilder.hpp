@@ -94,15 +94,17 @@ private:
 
         /**
          * Crea una loseta
-         * @param Datos del archivo XML para crear la loseta en la sala
+         * @param tile data from XML file about the floor tile in the room
+         * @param gfxPrefix where to search for picture of the floor tile
          */
-        FloorTile* buildFloorTile( const rxml::tile& tile );
+        FloorTile* buildFloorTile( const rxml::tile& tile, const char* gfxPrefix );
 
         /**
          * Crea un segmento de muro
-         * @param Datos del archivo XML para crear el segmento de muro en la sala
+         * @param wall data from XML file about the wall segment in the room
+         * @param gfxPrefix where to search for picture of the wall segment
          */
-        Wall* buildWall( const rxml::wall& wall );
+        Wall* buildWall( const rxml::wall& wall, const char* gfxPrefix );
 
         /**
          * Crea un elemento rejilla

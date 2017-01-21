@@ -23,116 +23,129 @@ namespace isomot
  */
 class ItemData
 {
-public:
-
-  /**
-   * Constructor. Inicializa todos los campos del registro de datos
-   */
-  ItemData();
-
-  virtual ~ItemData();
 
 public:
 
-  /**
-   * Etiqueta unívoca del elemento, es decir, no puede haber dos elementos de distinto tipo con la
-   * misma etiqueta. Las etiquetas son constantes y no cadenas de caracteres
-   */
-  short label;
+        ItemData( ) ;
 
-  /**
-   * Anchura espacial del elemento en el eje X
-   */
-  int widthX;
+        virtual ~ItemData( ) ;
 
-  /**
-   * Anchura espacial del elemento en el eje Y
-   */
-  int widthY;
+public:
 
-  /**
-   * Altura espacial del elemento
-   */
-  int height;
+        std::string getNameOfFile () {  return this->nameOfFile;  }
 
-  /**
-   * Indica cuántos fotogramas diferentes tiene el elemento para cada una de las direcciones
-   * posibles: norte, sur, este y oeste. Los valores posibles son 1, 2 y 4
-   */
-  unsigned char directionFrames;
+        void setNameOfFile ( std::string newName ) {  this->nameOfFile = newName ;  }
 
-  /**
-   * Indica si el elemento es mortal, es decir, si al tocarlo el jugador perderá una vida
-   */
-  bool mortal;
+        void clearNameOfFile () {  this->nameOfFile.clear() ;  }
 
-  /**
-   * El peso del elemento en segundos. Puede ser 0 para indicar que aunque quede suspendido en el
-   * aire no caerá o un valor distinto para indicar lo contrario. Cuanto mayor sea este valor mayor
-   * será la velocidad de caída
-   */
-  double weight;
+        std::string getNameOfShadowFile () {  return this->nameOfShadowFile;  }
 
-  /**
-   * Tiempo en segundos que será mostrado cada fotograma de la secuencia de animación
-   */
-  double framesDelay;
+        void setNameOfShadowFile ( std::string newNameOfShadow ) {  this->nameOfShadowFile = newNameOfShadow ;  }
 
-  /**
-   * Tiempo en segundos necesario para que el elemento se mueva
-   */
-  double speed;
+        void clearNameOfShadowFile () {  this->nameOfShadowFile.clear() ;  }
 
-  /**
-   * Nombre del archivo que contiene los fotogramas del elemento
-   */
-  std::string picture;
+       /**
+        * Etiqueta unívoca del elemento, es decir, no puede haber dos elementos de distinto tipo con la
+        * misma etiqueta. Las etiquetas son constantes y no cadenas de caracteres
+        */
+        short label ;
 
-  /**
-   * Anchura en píxeles de cada fotograma
-   */
-  int frameWidth;
+       /**
+        * Anchura espacial del elemento en el eje X
+        */
+        int widthX ;
 
-  /**
-   * Altura en píxeles de cada fotograma
-   */
-  int frameHeight;
+       /**
+        * Anchura espacial del elemento en el eje Y
+        */
+        int widthY ;
 
-  /**
-   * Nombre del archivo que contiene las sombras del elemento
-   */
-  std::string shadow;
+       /**
+        * Altura espacial del elemento
+        */
+        int height ;
 
-  /**
-   * Anchura en píxeles de cada sombra
-   */
-  int shadowWidth;
+       /**
+        * Indica cuántos fotogramas diferentes tiene el elemento para cada una de las direcciones
+        * posibles: norte, sur, este y oeste. Los valores posibles son 1, 2 y 4
+        */
+        unsigned char directionFrames ;
 
-  /**
-   * Altura en píxeles de cada sombra
-   */
-  int shadowHeight;
+       /**
+        * Indica si el elemento es mortal, es decir, si al tocarlo el jugador perderá una vida
+        */
+        bool mortal ;
 
-  /**
-   * Fotogramas extra del elemento, es decir, aquellos que no tiene relación con el movimiento como,
-   * por ejemplo, los fotogramas de salto
-   */
-  int extraFrames;
+       /**
+        * El peso del elemento en segundos. Puede ser 0 para indicar que aunque quede suspendido en el
+        * aire no caerá o un valor distinto para indicar lo contrario. Cuanto mayor sea este valor mayor
+        * será la velocidad de caída
+        */
+        double weight ;
 
-  /**
-   * Indica los fotogramas que forman la secuencia de animación
-   */
-  std::vector<int> frames;
+       /**
+        * Tiempo en segundos que será mostrado cada fotograma de la secuencia de animación
+        */
+        double framesDelay ;
 
-  /**
-   * Conjunto de fotogramas del elemento
-   */
-  std::vector< BITMAP* > motion;
+       /**
+        * Tiempo en segundos necesario para que el elemento se mueva
+        */
+        double speed ;
 
-  /**
-   * Conjunto de sombras del elemento
-   */
-  std::vector< BITMAP* > shadows;
+       /**
+        * Anchura en píxeles de cada fotograma
+        */
+        int frameWidth ;
+
+       /**
+        * Altura en píxeles de cada fotograma
+        */
+        int frameHeight ;
+
+       /**
+        * Anchura en píxeles de cada sombra
+        */
+        int shadowWidth ;
+
+       /**
+        * Altura en píxeles de cada sombra
+        */
+        int shadowHeight ;
+
+       /**
+        * Fotogramas extra del elemento, es decir, aquellos que no tiene relación con el movimiento como,
+        * por ejemplo, los fotogramas de salto
+        */
+        int extraFrames ;
+
+       /**
+        * Indica los fotogramas que forman la secuencia de animación
+        */
+        std::vector< int > frames ;
+
+       /**
+        * Conjunto de fotogramas del elemento
+        */
+        std::vector< BITMAP * > motion ;
+
+       /**
+        * Conjunto de sombras del elemento
+        */
+        std::vector< BITMAP * > shadows ;
+
+private:
+
+       /**
+        * Name of the file that contains the frames of this item
+        */
+        std::string nameOfFile ;
+
+       /**
+        * Name of the file that contains the shadows for this item
+        */
+        std::string nameOfShadowFile ;
+
 };
 
 }
