@@ -1,6 +1,6 @@
 // The free and open source remake of Head over Heels
 //
-// Copyright © 2016 Douglas Mencken dougmencken @ gmail.com
+// Copyright © 2017 Douglas Mencken dougmencken@gmail.com
 // Copyright © 2008 Jorge Rodríguez Santos
 // Original game copyright © 1987 Ocean Software Ltd.
 //
@@ -15,10 +15,10 @@
 #include "HPC.hpp"
 #include "Ism.hpp"
 
+
 namespace isomot
 {
 
-// Declaraciones adelantadas
 class Item;
 class ItemData;
 class PlayerItem;
@@ -27,8 +27,10 @@ class PlayerItem;
  * Elemento que puede desplazarse sólo al ser empujado por otros, ya que
  * carece de movimiento autónomo
  */
+
 class Special : public Behavior
 {
+
 public:
 
         /**
@@ -65,31 +67,31 @@ protected:
         /**
          * Datos del elemento empleado como disparo
          */
-        ItemData* bubblesData ;
+        ItemData * bubblesData ;
 
 private:
 
         /**
          * Cronómetro que controla el tiempo de existencia del elemento volátil
          */
-        HPC* destroyTimer ;
+        HPC * destroyTimer ;
 
         /**
          * Cronómetro que controla la velocidad de movimiento del elemento
          */
-        HPC* speedTimer ;
+        HPC * speedTimer ;
 
         /**
          * Cronómetro que controla la velocidad de caída del elemento
          */
-        HPC* fallenTimer ;
+        HPC * fallTimer ;
 
 public: // Operaciones de consulta y actualización
 
         /**
          * Asigna los datos del elemento usado como transición en la destrucción del volátil
          */
-        void setExtraData ( void* data ) ;
+        void setMoreData ( void * data ) ;
 };
 
 }

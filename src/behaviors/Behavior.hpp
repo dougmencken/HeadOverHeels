@@ -1,6 +1,6 @@
 // The free and open source remake of Head over Heels
 //
-// Copyright © 2016 Douglas Mencken dougmencken @ gmail.com
+// Copyright © 2017 Douglas Mencken dougmencken@gmail.com
 // Copyright © 2008 Jorge Rodríguez Santos
 // Original game copyright © 1987 Ocean Software Ltd.
 //
@@ -15,21 +15,22 @@
 #include <stack>
 #include "Ism.hpp"
 
+
 namespace isomot
 {
 
-// Declaraciones adelantadas
 class Item;
 class BehaviorState;
 class SoundManager;
 
 /**
- * Abstracción del modelo de comportamiento de un elemento. Los elementos del juego cambiarán
- * de estado en cada ciclo de actualización. La transición entre estados está dirigida por las
- * diferentes clases de comportamiento
+ * Abstraction of behavior of an element. Elements of the game will change state in each update
+ * cycle. The transition between states is driven by different kinds of behavior
  */
+
 class Behavior
 {
+
 protected:
 
         /**
@@ -37,11 +38,11 @@ protected:
          * @param item Elemento que tiene este comportamiento
          * @param id Identificador del comportamiento
          */
-        Behavior(Item* item, const BehaviorId& id);
+        Behavior( Item * item, const BehaviorId & id ) ;
 
 public:
 
-        virtual ~Behavior();
+        virtual ~Behavior( ) ;
 
         /**
          * Crea el comportamiento del elemento
@@ -50,18 +51,13 @@ public:
          * @param extra Datos extra necesarios para configurar el comportamiento
          * @return Un objeto de la clase con el comportamiento especificado
          */
-        static Behavior* createBehavior(Item* item, const BehaviorId& id, void* extraData);
+        static Behavior* createBehavior ( Item* item, const BehaviorId& id, void* extraData ) ;
 
         /**
-         * Actualiza el comportamiento del elemento en cada ciclo
-         * @return false si la actualización implica la destrucción del elemento o true en caso contrario
+         * Updates behavior of the element in each cycle
+         * @return false if this update causes destruction of the element or true otherwise
          */
-        virtual bool update() = 0;
-
-        /**
-         * Actualiza el estado del elemento en función de las órdenes dadas por el usuario
-         */
-        virtual void execute() {}
+        virtual bool update () = 0 ;
 
         /**
          * Asigna el identificador del estado actual del comportamiento y cambia el estado
@@ -69,56 +65,56 @@ public:
          * @param Un identificador de estado
          * @param Elemento que emite el cambio de estado
          */
-        virtual void changeStateId(const StateId& stateId, Item* sender = 0);
+        virtual void changeStateId ( const StateId & stateId, Item * sender = 0 ) ;
 
 protected:
 
-        friend class BehaviorState;
+        friend class BehaviorState ;
 
         /**
          * Cambia el estado del comportamiento
          * @param state El nuevo estado
          */
-        void changeState(BehaviorState* state) { this->state = state; }
+        void changeState ( BehaviorState * state ) {  this->state = state ;  }
 
         /**
          * Cambia el estado de todos los elementos que hayan colisionado con el emisor
          * @param sender Elemento que propaga el estado
          * @param stateId Identificador del estado
          */
-        void propagateState(Item* sender, const StateId& stateId);
+        void propagateState ( Item * sender, const StateId & stateId ) ;
 
 protected:
 
         /**
          * Identificador del comportamiento
          */
-        BehaviorId id;
+        BehaviorId id ;
 
         /**
          * Elemento que tiene este comportamiento
          */
-        Item* item;
+        Item * item ;
 
         /**
          * Estado actual del comportamiento
          */
-        BehaviorState* state;
+        BehaviorState * state ;
 
         /**
          * Elemento que cambia el estado del elemento con este comportamiento
          */
-        Item* sender;
+        Item * sender ;
 
         /**
          * El gestor de sonido
          */
-        SoundManager* soundManager;
+        SoundManager * soundManager ;
 
         /**
          * Identificador del estado actual del comportamiento
          */
-        StateId stateId;
+        StateId stateId ;
 
 public: // Operaciones de consulta y actualización
 
@@ -126,23 +122,24 @@ public: // Operaciones de consulta y actualización
          * Identificador del comportamiento
          * @return Un comportamiento predefinido
          */
-        BehaviorId getId() const { return id; }
+        BehaviorId getId () const {  return id ;  }
 
         /**
          * Identificador del estado actual del comportamiento
          */
-        StateId getStateId() const { return stateId; }
+        StateId getStateId () const {  return stateId ;  }
 
         /**
          * Elemento con este comportamiento
          * @return Un elemento de la sala
          */
-        Item* getItem() { return item; }
+        Item* getItem () {  return item ;  }
 
         /**
-         * Asigna datos extra que puedan necesitarse para ejecutar el comportamiento
+         * Add some more data that may be needed for behavior
          */
-        virtual void setExtraData(void* data);
+        virtual void setMoreData ( void * data ) { }
+
 };
 
 }

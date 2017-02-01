@@ -1,6 +1,6 @@
 // The free and open source remake of Head over Heels
 //
-// Copyright © 2016 Douglas Mencken dougmencken @ gmail.com
+// Copyright © 2017 Douglas Mencken dougmencken@gmail.com
 // Copyright © 2008 Jorge Rodríguez Santos
 // Original game copyright © 1987 Ocean Software Ltd.
 //
@@ -62,7 +62,7 @@ public:
         * Añade un nueva loseta a la sala
         * @param floorTile La nueva loseta
         */
-        void addItem ( FloorTile* floorTile ) ;
+        void addFloor ( FloorTile * floorTile ) ;
 
         /**
         * Añade un nuevo segmento de muro a la sala
@@ -80,37 +80,37 @@ public:
         * Añade un nuevo elemento rejilla de la sala
         * @param gridItem Un elemento rejilla
         */
-        void addItem ( GridItem* gridItem ) ;
+        void addItem ( GridItem * gridItem ) ;
 
        /**
         * Añade un nuevo elemento libre de la sala
         * @param gridItem Un elemento libre
         */
-        void addItem ( FreeItem* freeItem ) ;
+        void addItem ( FreeItem * freeItem ) ;
 
        /**
         * Añade un nuevo jugador a la sala
         * @param gridItem Un elemento libre
         */
-        void addPlayer ( PlayerItem* playerItem ) ;
+        void addPlayer ( PlayerItem * playerItem ) ;
 
        /**
         * Elimina una loseta de la sala
         * @param floorTile La loseta a eliminar
         */
-        void removeItem ( FloorTile* floorTile ) ;
+        void removeFloor ( FloorTile * floorTile ) ;
 
        /**
         * Elimina un elemento rejilla de la sala
         * @param gridItem Un elemento rejilla
         */
-        void removeItem ( GridItem* gridItem ) ;
+        void removeItem ( GridItem * gridItem ) ;
 
        /**
         * Elimina un elemento libre de la sala
         * @param gridItem Un elemento libre
         */
-        void removeItem ( FreeItem* freeItem ) ;
+        void removeItem ( FreeItem * freeItem ) ;
 
        /**
         * Elimina un jugador de la sala

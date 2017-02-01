@@ -54,8 +54,8 @@ Mediator::~Mediator()
         // Elimina los elementos rejilla
         for ( size_t i = 0; i < structure.size(); i++ )
         {
-        std::for_each( structure[ i ].begin(), structure[ i ].end (), DeleteObject() );
-        structure[ i ].clear();
+                std::for_each( structure[ i ].begin(), structure[ i ].end (), DeleteObject() );
+                structure[ i ].clear();
         }
 
         // Elimina los elementos libres
@@ -77,14 +77,14 @@ void Mediator::update()
         // Ordenación de las listas de elementos rejilla, si procede
         if ( this->gridItemsSorting )
         {
-        for ( unsigned int i = 0; i < structure.size(); i++ )
-        {
-        if ( ! structure[ i ].empty() )
-        {
-        structure[ i ].sort( sortGridItemList );
-        }
-        }
-        this->gridItemsSorting = false;
+                for ( unsigned int i = 0; i < structure.size(); i++ )
+                {
+                        if ( ! structure[ i ].empty() )
+                        {
+                                structure[ i ].sort( sortGridItemList );
+                        }
+                }
+                this->gridItemsSorting = false;
         }
 
         // Elementos libres que se eliminarán después de la actualización
@@ -128,10 +128,9 @@ void Mediator::update()
                 }
         }
 
-        // Actualiza el jugador activo en función de las órdenes dadas por el usuario
         if ( activePlayer != 0 )
         {
-                activePlayer->execute();
+                activePlayer->behave ();
         }
 
         // Elementos libres que se eliminarán después de la actualización
@@ -333,562 +332,562 @@ void Mediator::markFreeItemsForShady( Item* item )
         }
 }
 
-void Mediator::castShadow( FloorTile* floorTile )
+void Mediator::castShadowOnFloor( FloorTile* floorTile )
 {
-  int xCell = floorTile->getX();
-  int yCell = floorTile->getY();
-  int column = floorTile->getColumn();
-  int tileSize = room->getTileSize();
+        int xCell = floorTile->getX();
+        int yCell = floorTile->getY();
+        int column = floorTile->getColumn();
+        int tileSize = room->getTileSize();
 
-  // Se sombrea con todos los elementos rejilla que pueda tener por encima
-  for( std::list< GridItem* >::iterator g = structure[ column ].begin(); g != structure[ column ].end(); ++g )
-  {
-    GridItem* gridItem = static_cast< GridItem* >( *g );
-
-    // Si el elemento tiene sombra entonces se sombrea la imagen de la loseta
-    if( gridItem->getShadow() )
-    {
-      floorTile->castShadowImage (
-          /* x */ ( tileSize << 1 ) * ( xCell - yCell ) - ( gridItem->getShadow()->w >> 1 ) + room->getX0() + 1,
-          /* y */ tileSize * ( xCell + yCell + 1 ) - ( gridItem->getShadow()->h >> 1 ) + room->getY0() - 1,
-          /* shadow */ gridItem->getShadow(),
-          /* shadingScale */ room->shadingScale
-          /* transparency = 0 (default) */
-      ) ;
-    }
-  }
-
-  // Se sombrea con los elementos libres que pueda tener por encima
-  for( int percent = 0; percent <= 100; percent++ )
-  {
-    int itemsNumber = transparencyManager->getTransparencyItems( percent );
-
-    // Tiene que haber elementos en el porcentaje de transparencia actual
-    if( itemsNumber != 0 )
-    {
-      // Para todo elemento con ese grado de transparencia
-      for( int n = 0; n < itemsNumber; n++ )
-      {
-        // Recorre la lista de elementos libres para sombrear la loseta
-        for( std::list< FreeItem* >::iterator f = freeItems.begin (); f != freeItems.end (); ++f )
+        // Se sombrea con todos los elementos rejilla que pueda tener por encima
+        for ( std::list< GridItem * >::iterator g = structure[ column ].begin (); g != structure[ column ].end (); ++g )
         {
-          FreeItem* freeItem = static_cast< FreeItem* >( *f );
+                GridItem* gridItem = static_cast< GridItem * >( *g );
 
-          if( freeItem->getShadow() && freeItem->getTransparency() == percent )
-          {
-            // Rango de columnas que interseccionan por el elemento
-            int xStart = freeItem->getX() / tileSize;
-            int xEnd = ( freeItem->getX() + freeItem->getWidthX() - 1 ) / tileSize;
-            int yStart = ( freeItem->getY() - freeItem->getWidthY() + 1 ) / tileSize;
-            int yEnd = freeItem->getY() / tileSize;
-
-            if( xCell >= xStart && xCell <= xEnd && yCell >= yStart && yCell <= yEnd )
-            {
-              floorTile->castShadowImage (
-                  /* x */ ( ( freeItem->getX() - freeItem->getY() ) << 1 ) + room->getX0() + ( freeItem->getWidthX() + freeItem->getWidthY() ) - ( ( freeItem->getShadow()->w ) >> 1 ) - 1,
-                  /* y */ freeItem->getX() + freeItem->getY() + room->getY0() + ( ( freeItem->getWidthX() - freeItem->getWidthY() + 1 ) >> 1 ) - ( ( freeItem->getShadow()->h ) >> 1 ),
-                  /* shadow */ freeItem->getShadow(),
-                  /* shadingScale */ room->shadingScale,
-                  /* transparency */ freeItem->getTransparency()
-              ) ;
-            }
-          }
+                // Si el elemento tiene sombra entonces se sombrea la imagen de la loseta
+                if(  gridItem->getShadow() )
+                {
+                        floorTile->castShadowImage (
+                                /* x */ ( tileSize << 1 ) * ( xCell - yCell ) - ( gridItem->getShadow()->w >> 1 ) + room->getX0() + 1,
+                                /* y */ tileSize * ( xCell + yCell + 1 ) - ( gridItem->getShadow()->h >> 1 ) + room->getY0() - 1,
+                                /* shadow */ gridItem->getShadow(),
+                                /* shadingScale */ room->shadingScale
+                                /* transparency = 0 (default) */
+                        ) ;
+                }
         }
-      }
-    }
-  }
+
+        // Se sombrea con los elementos libres que pueda tener por encima
+        for ( int percent = 0; percent <= 100; percent++ )
+        {
+                int itemsNumber = transparencyManager->getTransparencyItems( percent );
+
+                // Tiene que haber elementos en el porcentaje de transparencia actual
+                if ( itemsNumber != 0 )
+                {
+                        // Para todo elemento con ese grado de transparencia
+                        for ( int n = 0; n < itemsNumber; n++ )
+                        {
+                                // Recorre la lista de elementos libres para sombrear la loseta
+                                for ( std::list< FreeItem* >::iterator f = freeItems.begin (); f != freeItems.end (); ++f )
+                                {
+                                        FreeItem* freeItem = static_cast< FreeItem* >( *f );
+
+                                        if ( freeItem->getShadow() && freeItem->getTransparency() == percent )
+                                        {
+                                                // Rango de columnas que interseccionan por el elemento
+                                                int xStart = freeItem->getX() / tileSize;
+                                                int xEnd = ( freeItem->getX() + freeItem->getWidthX() - 1 ) / tileSize;
+                                                int yStart = ( freeItem->getY() - freeItem->getWidthY() + 1 ) / tileSize;
+                                                int yEnd = freeItem->getY() / tileSize;
+
+                                                if ( xCell >= xStart && xCell <= xEnd && yCell >= yStart && yCell <= yEnd )
+                                                {
+                                                        floorTile->castShadowImage (
+                                                                /* x */ ( ( freeItem->getX() - freeItem->getY() ) << 1 ) + room->getX0() + ( freeItem->getWidthX() + freeItem->getWidthY() ) - ( ( freeItem->getShadow()->w ) >> 1 ) - 1,
+                                                                /* y */ freeItem->getX() + freeItem->getY() + room->getY0() + ( ( freeItem->getWidthX() - freeItem->getWidthY() + 1 ) >> 1 ) - ( ( freeItem->getShadow()->h ) >> 1 ),
+                                                                /* shadow */ freeItem->getShadow(),
+                                                                /* shadingScale */ room->shadingScale,
+                                                                /* transparency */ freeItem->getTransparency()
+                                                        ) ;
+                                                }
+                                        }
+                                }
+                        }
+                }
+        }
 }
 
-void Mediator::castShadow( GridItem* gridItem )
+void Mediator::castShadowOnGrid( GridItem* gridItem )
 {
-  int tileSize = room->getTileSize();
-  int column = gridItem->getColumn();
+        int tileSize = room->getTileSize();
+        int column = gridItem->getColumn();
 
-  // Se sombrea con todos los elementos rejilla que pueda tener por encima
-  for( std::list< GridItem* >::iterator g = structure[ column ].begin(); g != structure[ column ].end(); ++g )
-  {
-    GridItem* tempItem = static_cast< GridItem* >( *g );
-
-    if( tempItem->getShadow() && tempItem->getZ() > gridItem->getZ() )
-    {
-      gridItem->castShadowImage (
-          /* x */ gridItem->getOffsetX() + ( ( gridItem->getImage()->w - tempItem->getShadow()->w) >> 1 ),
-          /* y */ gridItem->getOffsetY() + gridItem->getImage()->h - room->getTileSize() - gridItem->getHeight() - ( tempItem->getShadow()->h >> 1 ),
-          /* shadow */ tempItem->getShadow(),
-          /* shadingScale */ room->shadingScale
-          /* transparency = 0 (default) */
-      ) ;
-    }
-  }
-
-  // Se sombrea con los elementos libres que pueda tener por encima
-  for( int percent = 0; percent <= 100; percent++ )
-  {
-    int itemsNumber = transparencyManager->getTransparencyItems( percent );
-
-    // Tiene que haber elementos en el porcentaje de transparencia actual
-    if( itemsNumber != 0 )
-    {
-      // Para todo elemento con ese grado de transparencia
-      for( int n = 0; n < itemsNumber; n++ )
-      {
-        // Recorre la lista de elementos libres para sombrear la loseta
-        for( std::list< FreeItem* >::iterator f = freeItems.begin(); f != freeItems.end(); ++f )
+        // Se sombrea con todos los elementos rejilla que pueda tener por encima
+        for ( std::list< GridItem* >::iterator g = structure[ column ].begin(); g != structure[ column ].end(); ++g )
         {
-          FreeItem* freeItem = static_cast< FreeItem* >( *f );
+                GridItem* tempItem = static_cast< GridItem* >( *g );
 
-          if( freeItem->getShadow() && freeItem->getTransparency() == percent && freeItem->getZ() > gridItem->getZ() )
-          {
-            // Rango de columnas que interseccionan por el elemento
-            int xStart = freeItem->getX() / tileSize;
-            int xEnd = (freeItem->getX() + freeItem->getWidthX() - 1) / tileSize;
-            int yStart = (freeItem->getY() - freeItem->getWidthY() + 1) / tileSize;
-            int yEnd = freeItem->getY() / tileSize;
-
-            if(gridItem->getCellX() >= xStart && gridItem->getCellX() <= xEnd && gridItem->getCellY() >= yStart && gridItem->getCellY() <= yEnd)
-            {
-              gridItem->castShadowImage (
-                  /* x */ ( ( freeItem->getX() - freeItem->getY() ) << 1 ) + ( freeItem->getWidthX() + freeItem->getWidthY() ) - ( ( freeItem->getShadow()->w ) >> 1 ) - 1,
-                  /* y */ freeItem->getX() + freeItem->getY() + ( ( freeItem->getWidthX() - freeItem->getWidthY() + 1 ) >> 1 ) - ( ( freeItem->getShadow()->h ) >> 1 ) - gridItem->getZ() - gridItem->getHeight(),
-                  /* shadow */ freeItem->getShadow(),
-                  /* shadingScale */ room->shadingScale,
-                  /* transparency */ freeItem->getTransparency()
-              ) ;
-            }
-          }
+                if ( tempItem->getShadow() && tempItem->getZ() > gridItem->getZ() )
+                {
+                        gridItem->castShadowImage (
+                                /* x */ gridItem->getOffsetX() + ( ( gridItem->getImage()->w - tempItem->getShadow()->w) >> 1 ),
+                                /* y */ gridItem->getOffsetY() + gridItem->getImage()->h - room->getTileSize() - gridItem->getHeight() - ( tempItem->getShadow()->h >> 1 ),
+                                /* shadow */ tempItem->getShadow(),
+                                /* shadingScale */ room->shadingScale
+                                /* transparency = 0 (default) */
+                        ) ;
+                }
         }
-      }
-    }
-  }
+
+        // Se sombrea con los elementos libres que pueda tener por encima
+        for ( int percent = 0; percent <= 100; percent++ )
+        {
+                int itemsNumber = transparencyManager->getTransparencyItems( percent );
+
+                // Tiene que haber elementos en el porcentaje de transparencia actual
+                if ( itemsNumber != 0 )
+                {
+                        // Para todo elemento con ese grado de transparencia
+                        for ( int n = 0; n < itemsNumber; n++ )
+                        {
+                                // Recorre la lista de elementos libres para sombrear la loseta
+                                for ( std::list< FreeItem* >::iterator f = freeItems.begin(); f != freeItems.end(); ++f )
+                                {
+                                        FreeItem* freeItem = static_cast< FreeItem* >( *f );
+
+                                        if ( freeItem->getShadow() && freeItem->getTransparency() == percent && freeItem->getZ() > gridItem->getZ() )
+                                        {
+                                                // Rango de columnas que interseccionan por el elemento
+                                                int xStart = freeItem->getX() / tileSize;
+                                                int xEnd = (freeItem->getX() + freeItem->getWidthX() - 1) / tileSize;
+                                                int yStart = (freeItem->getY() - freeItem->getWidthY() + 1) / tileSize;
+                                                int yEnd = freeItem->getY() / tileSize;
+
+                                                if ( gridItem->getCellX() >= xStart && gridItem->getCellX() <= xEnd && gridItem->getCellY() >= yStart && gridItem->getCellY() <= yEnd )
+                                                {
+                                                        gridItem->castShadowImage (
+                                                                /* x */ ( ( freeItem->getX() - freeItem->getY() ) << 1 ) + ( freeItem->getWidthX() + freeItem->getWidthY() ) - ( ( freeItem->getShadow()->w ) >> 1 ) - 1,
+                                                                /* y */ freeItem->getX() + freeItem->getY() + ( ( freeItem->getWidthX() - freeItem->getWidthY() + 1 ) >> 1 ) - ( ( freeItem->getShadow()->h ) >> 1 ) - gridItem->getZ() - gridItem->getHeight(),
+                                                                /* shadow */ freeItem->getShadow(),
+                                                                /* shadingScale */ room->shadingScale,
+                                                                /* transparency */ freeItem->getTransparency()
+                                                        ) ;
+                                                }
+                                        }
+                                }
+                        }
+                }
+        }
 }
 
-void Mediator::castShadow( FreeItem* freeItem )
+void Mediator::castShadowOnFreeItem( FreeItem* freeItem )
 {
-  int tileSize = room->getTileSize();
+        int tileSize = room->getTileSize();
 
-  // Rango de columnas que interseccionan con el elemento
-  int xStart = freeItem->getX() / tileSize;
-  int xEnd = ( freeItem->getX() + freeItem->getWidthX() - 1 ) / tileSize;
-  int yStart = ( freeItem->getY() - freeItem->getWidthY() + 1 ) / tileSize;
-  int yEnd = freeItem->getY() / tileSize;
+        // Rango de columnas que interseccionan con el elemento
+        int xStart = freeItem->getX() / tileSize;
+        int xEnd = ( freeItem->getX() + freeItem->getWidthX() - 1 ) / tileSize;
+        int yStart = ( freeItem->getY() - freeItem->getWidthY() + 1 ) / tileSize;
+        int yEnd = freeItem->getY() / tileSize;
 
-  // Se sombrea con los elementos rejilla
-  for( int yCell = yStart; yCell <= yEnd; yCell++ )
-  {
-    for( int xCell = xStart; xCell <= xEnd; xCell++ )
-    {
-      int column = yCell * room->getTilesX() + xCell;
-
-      for( std::list< GridItem* >::iterator g = structure[ column ].begin (); g != structure[ column ].end (); ++g )
-      {
-        GridItem* gridItem = static_cast< GridItem* >( *g );
-
-        if( gridItem->getShadow() && gridItem->getZ() > freeItem->getZ() )
+        // Se sombrea con los elementos rejilla
+        for ( int yCell = yStart; yCell <= yEnd; yCell++ )
         {
-          freeItem->castShadowImage (
-              /* x */ ( tileSize << 1 ) * ( xCell - yCell ) - ( gridItem->getShadow()->w >> 1 ) + 1,
-              /* y */ tileSize * ( xCell + yCell + 1 ) - freeItem->getZ() - freeItem->getHeight() - ( gridItem->getShadow()->h >> 1 ) - 1,
-              /* shadow */ gridItem->getShadow(),
-              /* shadingScale */ room->shadingScale
-              /* transparency = 0 (default) */
-          ) ;
+                for ( int xCell = xStart; xCell <= xEnd; xCell++ )
+                {
+                        int column = yCell * room->getTilesX() + xCell;
+
+                        for ( std::list< GridItem* >::iterator g = structure[ column ].begin (); g != structure[ column ].end (); ++g )
+                        {
+                                GridItem* gridItem = static_cast< GridItem* >( *g );
+
+                                if ( gridItem->getShadow() && gridItem->getZ() > freeItem->getZ() )
+                                {
+                                        freeItem->castShadowImage (
+                                                /* x */ ( tileSize << 1 ) * ( xCell - yCell ) - ( gridItem->getShadow()->w >> 1 ) + 1,
+                                                /* y */ tileSize * ( xCell + yCell + 1 ) - freeItem->getZ() - freeItem->getHeight() - ( gridItem->getShadow()->h >> 1 ) - 1,
+                                                /* shadow */ gridItem->getShadow(),
+                                                /* shadingScale */ room->shadingScale
+                                                /* transparency = 0 (default) */
+                                        ) ;
+                                }
+                        }
+                }
         }
-      }
-    }
-  }
 
-  // Se sombrea con los elementos libres que pueda tener por encima
-  for ( int percent = 0; percent <= 100; percent++ )
-  {
-    int itemsNumber = transparencyManager->getTransparencyItems(percent);
-
-    // Tiene que haber elementos en el porcentaje de transparencia actual
-    if ( itemsNumber != 0 )
-    {
-      // Para todo elemento con ese grado de transparencia
-      for ( int n = 0; n < itemsNumber; n++ )
-      {
-        // Recorre la lista de elementos libres para sombrear el elemento
-        for ( std::list< FreeItem* >::iterator f = freeItems.begin (); f != freeItems.end (); ++f )
+        // Se sombrea con los elementos libres que pueda tener por encima
+        for ( int percent = 0; percent <= 100; percent++ )
         {
-          FreeItem* tempItem = static_cast< FreeItem* >( *f );
+                int itemsNumber = transparencyManager->getTransparencyItems(percent);
 
-          if ( tempItem->getShadow() && tempItem->getTransparency() == percent && tempItem->getId() != freeItem->getId() )
-          {
-            if ( freeItem->getZ() < tempItem->getZ() &&
-                 freeItem->getX() < tempItem->getX() + tempItem->getWidthX() && tempItem->getX() < freeItem->getX() + freeItem->getWidthX() &&
-                 freeItem->getY() > tempItem->getY() - tempItem->getWidthY() && tempItem->getY() > freeItem->getY() - freeItem->getWidthY() )
-            {
-              freeItem->castShadowImage(
-                  /* x */ ( ( tempItem->getX() - tempItem->getY() ) << 1 ) + tempItem->getWidthX() + tempItem->getWidthY() - ( tempItem->getShadow()->w >> 1 ) - 1,
-                  /* y */ tempItem->getX() + tempItem->getY() - freeItem->getZ() - freeItem->getHeight() + ( ( tempItem->getWidthX() - tempItem->getWidthY() - tempItem->getShadow()->h ) >> 1 ),
-                  /* shadow */ tempItem->getShadow(),
-                  /* shadingScale */ room->shadingScale,
-                  /* transparency */ freeItem->getTransparency()
-              );
-            }
-          }
+                // Tiene que haber elementos en el porcentaje de transparencia actual
+                if ( itemsNumber != 0 )
+                {
+                        // Para todo elemento con ese grado de transparencia
+                        for ( int n = 0; n < itemsNumber; n++ )
+                        {
+                                // Recorre la lista de elementos libres para sombrear el elemento
+                                for ( std::list< FreeItem* >::iterator f = freeItems.begin (); f != freeItems.end (); ++f )
+                                {
+                                        FreeItem* tempItem = static_cast< FreeItem* >( *f );
+
+                                        if ( tempItem->getShadow() && tempItem->getTransparency() == percent && tempItem->getId() != freeItem->getId() )
+                                        {
+                                                if ( freeItem->getZ() < tempItem->getZ() &&
+                                                        freeItem->getX() < tempItem->getX() + tempItem->getWidthX() && tempItem->getX() < freeItem->getX() + freeItem->getWidthX() &&
+                                                        freeItem->getY() > tempItem->getY() - tempItem->getWidthY() && tempItem->getY() > freeItem->getY() - freeItem->getWidthY() )
+                                                {
+                                                        freeItem->castShadowImage(
+                                                                /* x */ ( ( tempItem->getX() - tempItem->getY() ) << 1 ) + tempItem->getWidthX() + tempItem->getWidthY() - ( tempItem->getShadow()->w >> 1 ) - 1,
+                                                                /* y */ tempItem->getX() + tempItem->getY() - freeItem->getZ() - freeItem->getHeight() + ( ( tempItem->getWidthX() - tempItem->getWidthY() - tempItem->getShadow()->h ) >> 1 ),
+                                                                /* shadow */ tempItem->getShadow(),
+                                                                /* shadingScale */ room->shadingScale,
+                                                                /* transparency */ freeItem->getTransparency()
+                                                        );
+                                                }
+                                        }
+                                }
+                        }
+                }
         }
-      }
-    }
-  }
 }
 
 void Mediator::mask( FreeItem* freeItem )
 {
-  // Se busca el elemento en la lista para comprobar las ocultaciones únicamente
-  // con los elementos siguientes. Si la ordenación de la lista está bien hecha
-  // no debe haber ocultaciones con los elementos anteriores
-  std::list< FreeItem * >::iterator f = std::find_if( freeItems.begin (), freeItems.end (), std::bind2nd( EqualItemId(), freeItem->getId() ) );
+        // Se busca el elemento en la lista para comprobar las ocultaciones únicamente
+        // con los elementos siguientes. Si la ordenación de la lista está bien hecha
+        // no debe haber ocultaciones con los elementos anteriores
+        std::list< FreeItem * >::iterator f = std::find_if( freeItems.begin (), freeItems.end (), std::bind2nd( EqualItemId(), freeItem->getId() ) );
 
-  // Si se ha encontrado el elemento se procede a enmascarar
-  if ( f != freeItems.end () )
-  {
-    // Se compara freeItem con los siguientes elementos libres de la lista para comprobar las ocultaciones
-    while ( ++f != freeItems.end () )
-    {
-      FreeItem* tempItem = static_cast< FreeItem * >( *f );
-
-      // El otro elemento tiene que tener imagen y uno de los dos tiene que estar
-      // marcado para enmascararlo; además el otro no tiene que ser transparente
-      if ( tempItem->getImage() &&
-         ( ( freeItem->whichMask() != NoMask && tempItem->getTransparency() == 0 ) ||
-          ( tempItem->whichMask() != NoMask && freeItem->getTransparency() == 0 ) ) )
-      {
-        // Se comprueba si sus gráficos se solapan
-        if ( ( tempItem->getOffsetX() < freeItem->getOffsetX() + freeItem->getImage()->w ) &&
-           ( tempItem->getOffsetX() + tempItem->getImage()->w > freeItem->getOffsetX() ) &&
-           ( tempItem->getOffsetY() < freeItem->getOffsetY() + freeItem->getImage()->h ) &&
-           ( tempItem->getOffsetY() + tempItem->getImage()->h > freeItem->getOffsetY() ) )
+        // Si se ha encontrado el elemento se procede a enmascarar
+        if ( f != freeItems.end () )
         {
-          // freeItem está detrás de tempItem
-          if ( ( freeItem->getX() + freeItem->getWidthX() <= tempItem->getX() ) ||
-             ( freeItem->getY() <= tempItem->getY() - tempItem->getWidthY() ) ||
-             ( freeItem->getZ() + freeItem->getHeight() <= tempItem->getZ() ) )
-          {
-            freeItem->maskImage( tempItem->getOffsetX(), tempItem->getOffsetY(), tempItem->getImage() );
-          }
-          // tempItem está detrás de freeItem
-          else
-          {
-            tempItem->maskImage( freeItem->getOffsetX(), freeItem->getOffsetY(), freeItem->getImage() );
-          }
+                // Se compara freeItem con los siguientes elementos libres de la lista para comprobar las ocultaciones
+                while ( ++f != freeItems.end () )
+                {
+                        FreeItem* tempItem = static_cast< FreeItem * >( *f );
+
+                        // El otro elemento tiene que tener imagen y uno de los dos tiene que estar
+                        // marcado para enmascararlo; además el otro no tiene que ser transparente
+                        if ( tempItem->getImage() &&
+                                ( ( freeItem->whichMask() != NoMask && tempItem->getTransparency() == 0 ) ||
+                                ( tempItem->whichMask() != NoMask && freeItem->getTransparency() == 0 ) ) )
+                        {
+                                // Se comprueba si sus gráficos se solapan
+                                if ( ( tempItem->getOffsetX() < freeItem->getOffsetX() + freeItem->getImage()->w ) &&
+                                        ( tempItem->getOffsetX() + tempItem->getImage()->w > freeItem->getOffsetX() ) &&
+                                        ( tempItem->getOffsetY() < freeItem->getOffsetY() + freeItem->getImage()->h ) &&
+                                        ( tempItem->getOffsetY() + tempItem->getImage()->h > freeItem->getOffsetY() ) )
+                                {
+                                        // freeItem está detrás de tempItem
+                                        if ( ( freeItem->getX() + freeItem->getWidthX() <= tempItem->getX() ) ||
+                                                ( freeItem->getY() <= tempItem->getY() - tempItem->getWidthY() ) ||
+                                                ( freeItem->getZ() + freeItem->getHeight() <= tempItem->getZ() ) )
+                                        {
+                                                freeItem->maskImage( tempItem->getOffsetX(), tempItem->getOffsetY(), tempItem->getImage() );
+                                        }
+                                        // tempItem está detrás de freeItem
+                                        else
+                                        {
+                                                tempItem->maskImage( freeItem->getOffsetX(), freeItem->getOffsetY(), freeItem->getImage() );
+                                        }
+                                }
+                        }
+                }
         }
-      }
-    }
-  }
 
-  // Se compara freeItem con los elementos rejilla que tiene debajo para comprobar las ocultaciones
-  int xStart = freeItem->getX() / room->getTileSize();
-  int xEnd = ( ( freeItem->getX() + freeItem->getWidthX() - 1 ) / room->getTileSize() ) + 1;
-  int yStart = ( freeItem->getY() / room->getTileSize() ) + 1;
-  int yEnd = ( freeItem->getY() - freeItem->getWidthY() + 1) / room ->getTileSize();
+        // Se compara freeItem con los elementos rejilla que tiene debajo para comprobar las ocultaciones
+        int xStart = freeItem->getX() / room->getTileSize();
+        int xEnd = ( ( freeItem->getX() + freeItem->getWidthX() - 1 ) / room->getTileSize() ) + 1;
+        int yStart = ( freeItem->getY() / room->getTileSize() ) + 1;
+        int yEnd = ( freeItem->getY() - freeItem->getWidthY() + 1 ) / room ->getTileSize();
 
-  // Si el elemento libre hay que enmascararlo, se procede a hacerlo con los elementos rejilla
-  if ( freeItem->whichMask() != NoMask )
-  {
-    do
-    {
-      int i = 0;
-
-      while ( ( xStart + i < room->getTilesX() ) && ( yStart + i < room->getTilesY() ) )
-      {
-        int column = room->getTilesX() * ( yStart + i ) + xStart + i;
-
-        for ( std::list< GridItem * >::iterator g = structure[ column ].begin (); g != structure[ column ].end (); ++g )
+        // Si el elemento libre hay que enmascararlo, se procede a hacerlo con los elementos rejilla
+        if ( freeItem->whichMask() != NoMask )
         {
-          GridItem* gridItem = static_cast< GridItem * >( *g );
+                do
+                {
+                        int i = 0;
 
-          // El elemento rejilla tiene que tener una imagen
-          if ( gridItem->getImage() )
-          {
-            // Se comprueba si sus gráficos se solapan
-            if ( ( gridItem->getOffsetX() < freeItem->getOffsetX() + freeItem->getImage()->w ) &&
-               ( gridItem->getOffsetX() + gridItem->getImage()->w > freeItem->getOffsetX() ) &&
-               ( gridItem->getOffsetY() < freeItem->getOffsetY() + freeItem->getImage()->h ) &&
-               ( gridItem->getOffsetY() + gridItem->getImage()->h > freeItem->getOffsetY() ) )
-            {
-              // freeItem está detrás de gridItem
-              if ( ( freeItem->getX() + freeItem->getWidthX() <= ( xStart + i ) * room->getTileSize() ) ||
-                 ( freeItem->getY() <= (yStart + i + 1) * room->getTileSize() - 1 - room->getTileSize() ) ||
-                 ( freeItem->getZ() + freeItem->getHeight() <= gridItem->getZ() ) )
-              {
-                freeItem->maskImage( gridItem->getOffsetX(), gridItem->getOffsetY(), gridItem->getImage() );
-              }
-            }
-          }
+                        while ( ( xStart + i < room->getTilesX() ) && ( yStart + i < room->getTilesY() ) )
+                        {
+                                int column = room->getTilesX() * ( yStart + i ) + xStart + i;
+
+                                for ( std::list< GridItem * >::iterator g = structure[ column ].begin (); g != structure[ column ].end (); ++g )
+                                {
+                                        GridItem* gridItem = static_cast< GridItem * >( *g );
+
+                                        // El elemento rejilla tiene que tener una imagen
+                                        if ( gridItem->getImage() )
+                                        {
+                                                // Se comprueba si sus gráficos se solapan
+                                                if ( ( gridItem->getOffsetX() < freeItem->getOffsetX() + freeItem->getImage()->w ) &&
+                                                        ( gridItem->getOffsetX() + gridItem->getImage()->w > freeItem->getOffsetX() ) &&
+                                                        ( gridItem->getOffsetY() < freeItem->getOffsetY() + freeItem->getImage()->h ) &&
+                                                        ( gridItem->getOffsetY() + gridItem->getImage()->h > freeItem->getOffsetY() ) )
+                                                {
+                                                        // freeItem está detrás de gridItem
+                                                        if ( ( freeItem->getX() + freeItem->getWidthX() <= ( xStart + i ) * room->getTileSize() ) ||
+                                                                ( freeItem->getY() <= (yStart + i + 1) * room->getTileSize() - 1 - room->getTileSize() ) ||
+                                                                ( freeItem->getZ() + freeItem->getHeight() <= gridItem->getZ() ) )
+                                                        {
+                                                                freeItem->maskImage( gridItem->getOffsetX(), gridItem->getOffsetY(), gridItem->getImage() );
+                                                        }
+                                                }
+                                        }
+                                }
+                                i++;
+                        }
+
+                        if ( yStart != yEnd )
+                        {
+                                yStart--;
+                        }
+                        else
+                        {
+                                xStart++;
+                        }
+                }
+                while ( xStart <= xEnd );
         }
-        i++;
-      }
-
-      if ( yStart != yEnd )
-      {
-        yStart--;
-      }
-      else
-      {
-        xStart++;
-      }
-    }
-    while ( xStart <= xEnd );
-  }
 }
 
-Item* Mediator::findItem(int id)
+Item* Mediator::findItemById( int id )
 {
-  Item* item = 0;
+        Item* item = 0;
 
-  // Búsqueda en la lista de elementos libres
-  if(id & 1)
-  {
-    std::list<FreeItem*>::iterator f = std::find_if(freeItems.begin(), freeItems.end(), std::bind2nd(EqualItemId(), id));
+        // Búsqueda en la lista de elementos libres
+        if ( id & 1 )
+        {
+                std::list< FreeItem * >::iterator f = std::find_if( freeItems.begin (), freeItems.end (), std::bind2nd( EqualItemId (), id ) );
 
-    if(f != freeItems.end())
-    {
-      item = dynamic_cast<Item*>(*f);
-    }
-  }
-  // Búsqueda en las listas de elementos rejilla
-  else
-  {
-    std::list<GridItem*>::iterator g;
+                if ( f != freeItems.end () )
+                {
+                        item = dynamic_cast< Item * >( *f );
+                }
+        }
+        // Búsqueda en las listas de elementos rejilla
+        else
+        {
+                std::list< GridItem * >::iterator g;
 
-    for(int i = 0; i < room->getTilesX() * room->getTilesY(); i++)
-    {
-      g = std::find_if(structure[i].begin(), structure[i].end(), std::bind2nd(EqualItemId(), id));
+                for ( int i = 0; i < room->getTilesX() * room->getTilesY(); i++ )
+                {
+                        g = std::find_if( structure[ i ].begin (), structure[ i ].end (), std::bind2nd( EqualItemId (), id ) );
 
-      if(g != structure[i].end())
-      {
-        item = dynamic_cast<Item*>(*g);
-        i = room->getTilesX() * room->getTilesY();
-      }
-    }
-  }
+                        if ( g != structure[ i ].end() )
+                        {
+                                item = dynamic_cast< Item * >( *g );
+                                i = room->getTilesX() * room->getTilesY();
+                        }
+                }
+        }
 
-  return item;
+        return item;
 }
 
-Item* Mediator::findItem(short label)
+Item* Mediator::findItemByLabel( short label )
 {
-  Item* item = 0;
+        Item* item = 0;
 
-  // Búsqueda en la lista de elementos libres
-  std::list<FreeItem*>::iterator f = std::find_if(freeItems.begin(), freeItems.end(), std::bind2nd(EqualItemLabel(), label));
+        // Búsqueda en la lista de elementos libres
+        std::list< FreeItem * >::iterator f = std::find_if( freeItems.begin (), freeItems.end (), std::bind2nd( EqualItemLabel (), label ) );
 
-  if(f != freeItems.end())
-  {
-    item = dynamic_cast<Item*>(*f);
-  }
+        if ( f != freeItems.end () )
+        {
+                item = dynamic_cast< Item * >( *f );
+        }
 
-  // Búsqueda en las listas de elementos rejilla si el elemento no era libre
-  if(item == 0)
-  {
-    std::list<GridItem*>::iterator g;
+        // Búsqueda en las listas de elementos rejilla si el elemento no era libre
+        if ( item == 0 )
+        {
+                std::list< GridItem * >::iterator g;
 
-    for(int i = 0; i < room->getTilesX() * room->getTilesY(); i++)
-    {
-      g = std::find_if(structure[i].begin(), structure[i].end(), std::bind2nd(EqualItemLabel(), label));
+                for ( int i = 0; i < room->getTilesX() * room->getTilesY(); i++ )
+                {
+                        g = std::find_if( structure[ i ].begin (), structure[ i ].end (), std::bind2nd( EqualItemLabel (), label ) );
 
-      if(g != structure[i].end())
-      {
-        item = dynamic_cast<Item*>(*g);
-        i = room->getTilesX() * room->getTilesY();
-      }
-    }
-  }
+                        if ( g != structure[ i ].end () )
+                        {
+                                item = dynamic_cast< Item * >( *g );
+                                i = room->getTilesX() * room->getTilesY();
+                        }
+                }
+        }
 
-  return item;
+        return item;
 }
 
-Item* Mediator::findItem(const BehaviorId& id)
+Item* Mediator::findItemByBehavior( const BehaviorId& id )
 {
-  Item* item = 0;
+        Item* item = 0;
 
-  // Búsqueda en la lista de elementos libres
-  std::list<FreeItem*>::iterator f = std::find_if(freeItems.begin(), freeItems.end(), std::bind2nd(EqualItemBehavior(), id));
+        // Búsqueda en la lista de elementos libres
+        std::list< FreeItem * >::iterator f = std::find_if( freeItems.begin (), freeItems.end (), std::bind2nd( EqualItemBehavior (), id ) );
 
-  if(f != freeItems.end())
-  {
-    item = dynamic_cast<Item*>(*f);
-  }
+        if ( f != freeItems.end () )
+        {
+                item = dynamic_cast< Item * >( *f );
+        }
 
-  // Búsqueda en las listas de elementos rejilla si el elemento no era libre
-  if(item == 0)
-  {
-    std::list<GridItem*>::iterator g;
+        // Búsqueda en las listas de elementos rejilla si el elemento no era libre
+        if ( item == 0 )
+        {
+                std::list< GridItem * >::iterator g;
 
-    for(int i = 0; i < room->getTilesX() * room->getTilesY(); i++)
-    {
-      g = std::find_if(structure[i].begin(), structure[i].end(), std::bind2nd(EqualItemBehavior(), id));
+                for ( int i = 0; i < room->getTilesX() * room->getTilesY(); i++ )
+                {
+                        g = std::find_if( structure[ i ].begin (), structure[ i ].end (), std::bind2nd( EqualItemBehavior (), id ) );
 
-      if(g != structure[i].end())
-      {
-        item = dynamic_cast<Item*>(*g);
-        i = room->getTilesX() * room->getTilesY();
-      }
-    }
-  }
+                        if ( g != structure[ i ].end () )
+                        {
+                                item = dynamic_cast< Item * >( *g );
+                                i = room->getTilesX() * room->getTilesY();
+                        }
+                }
+        }
 
-  return item;
+        return item;
 }
 
-bool Mediator::findCollision(Item* item)
+bool Mediator::findCollisionWithItem( Item * item )
 {
-  bool collisionFound = false;
+        bool collisionFound = false;
 
-  // El elemento debe ser rejilla o libre con la capacidad de detectar colisiones
-  if(dynamic_cast<GridItem*>(item) || (dynamic_cast<FreeItem*>(item) && dynamic_cast<FreeItem*>(item)->isCollisionDetector()))
-  {
-    // Se recorre la lista de elementos libres buscando colisiones
-    for(std::list<FreeItem*>::iterator f = freeItems.begin(); f != freeItems.end(); ++f)
-    {
-      FreeItem* freeItem = static_cast<FreeItem*>(*f);
-
-      if(freeItem->getId() != item->getId() && freeItem->isCollisionDetector())
-      {
-        // Se busca la intersección en los tres ejes
-        if((freeItem->getX() + freeItem->getWidthX() > item->getX()) && (freeItem->getX() < item->getX() + item->getWidthX()) &&
-           (freeItem->getY() > item->getY() - item->getWidthX()) && (freeItem->getY() - freeItem->getWidthY() < item->getY()) &&
-           (freeItem->getZ() + freeItem->getHeight() > item->getZ()) && (freeItem->getZ() < item->getZ() + item->getHeight()))
+        // El elemento debe ser rejilla o libre con la capacidad de detectar colisiones
+        if ( dynamic_cast< GridItem * >( item ) || ( dynamic_cast< FreeItem * >( item ) && dynamic_cast< FreeItem * >( item )->isCollisionDetector() ) )
         {
-          collisions.push_back(freeItem->getId());
-          collisionFound = true;
+                // Se recorre la lista de elementos libres buscando colisiones
+                for ( std::list< FreeItem * >::iterator f = freeItems.begin (); f != freeItems.end (); ++f )
+                {
+                        FreeItem* freeItem = static_cast< FreeItem * >( *f );
+
+                        if ( freeItem->getId() != item->getId() && freeItem->isCollisionDetector() )
+                        {
+                                // Se busca la intersección en los tres ejes
+                                if ( ( freeItem->getX() + freeItem->getWidthX() > item->getX() ) && ( freeItem->getX() < item->getX() + item->getWidthX() ) &&
+                                        ( freeItem->getY() > item->getY() - item->getWidthX() ) && ( freeItem->getY() - freeItem->getWidthY() < item->getY() ) &&
+                                        ( freeItem->getZ() + freeItem->getHeight() > item->getZ() ) && ( freeItem->getZ() < item->getZ() + item->getHeight() ) )
+                                {
+                                        collisions.push_back( freeItem->getId() );
+                                        collisionFound = true;
+                                }
+                        }
+                }
+
+                // Caso de que el elemento sea rejilla
+                if ( dynamic_cast< GridItem * >( item ) )
+                {
+                        GridItem* temp = dynamic_cast< GridItem * >( item );
+                        int column = room->getTilesX() * temp->getCellY() + temp->getCellX();
+
+                        // Se recorren las listas de elementos rejilla buscando colisiones
+                        for ( std::list< GridItem * >::iterator g = this->structure[ column ].begin (); g != this->structure[ column ].end (); ++g )
+                        {
+                                GridItem* gridItem = static_cast< GridItem * >( *g );
+
+                                if ( gridItem->getId() != item->getId() )
+                                {
+                                        // Se busca la intersección en los tres ejes
+                                        if ( ( gridItem->getX() + gridItem->getWidthX() > item->getX() ) && ( gridItem->getX() < item->getX() + item->getWidthX() ) &&
+                                                ( gridItem->getY() > item->getY() - item->getWidthX() ) && ( gridItem->getY() - gridItem->getWidthY() < item->getY() ) &&
+                                                ( gridItem->getZ() + gridItem->getHeight() > item->getZ() ) && ( gridItem->getZ() < item->getZ() + item->getHeight() ) )
+                                        {
+                                                collisions.push_back( gridItem->getId() );
+                                                collisionFound = true;
+                                        }
+                                }
+                        }
+                }
+                // Caso de que el elemento sea libre
+                else if( dynamic_cast< FreeItem * >( item ) )
+                {
+                        int xStart = item->getX() / room->tileSize;
+                        int xEnd = ( item->getX() + item->getWidthX() - 1 ) / room->tileSize + 1;
+                        int yStart = ( item->getY() - item->getWidthY() + 1 ) / room->tileSize;
+                        int yEnd = item->getY() / room->tileSize + 1;
+
+                        // Correción de datos por si el elemento choca con alguna pared
+                        if ( xStart < 0 ) xStart = 0;
+                        if ( xEnd > room->getTilesX() ) room->getTilesX();
+                        if ( yStart < 0 ) yStart = 0;
+                        if ( yEnd > room->getTilesY() ) yEnd = room->getTilesY();
+
+                        // Se buscan colisiones sólo en el rango de columnas que interseccionan con el elemento
+                        for ( int i = xStart; i < xEnd; i++ )
+                        {
+                                for ( int j = yStart; j < yEnd; j++ )
+                                {
+                                        for ( std::list< GridItem * >::iterator g = this->structure[ room->getTilesX() * j + i ].begin ();
+                                                g != this->structure[ room->getTilesX() * j + i ].end (); ++g )
+                                        {
+                                                GridItem* gridItem = static_cast< GridItem * >( *g );
+
+                                                if ( ( gridItem->getZ() + gridItem->getHeight() > item->getZ() ) && ( gridItem->getZ() < item->getZ() + item->getHeight() ) )
+                                                {
+                                                        collisions.push_back( gridItem->getId() );
+                                                        collisionFound = true;
+                                                }
+                                        }
+                                }
+                        }
+                }
         }
-      }
-    }
 
-    // Caso de que el elemento sea rejilla
-    if(dynamic_cast<GridItem*>(item))
-    {
-      GridItem* temp = dynamic_cast<GridItem*>(item);
-      int column = room->getTilesX() * temp->getCellY() + temp->getCellX();
-
-      // Se recorren las listas de elementos rejilla buscando colisiones
-      for(std::list<GridItem*>::iterator g = this->structure[column].begin(); g != this->structure[column].end(); ++g)
-      {
-        GridItem* gridItem = static_cast<GridItem*>(*g);
-
-        if(gridItem->getId() != item->getId())
-        {
-          // Se busca la intersección en los tres ejes
-          if((gridItem->getX() + gridItem->getWidthX() > item->getX()) && (gridItem->getX() < item->getX() + item->getWidthX()) &&
-             (gridItem->getY() > item->getY() - item->getWidthX()) && (gridItem->getY() - gridItem->getWidthY() < item->getY()) &&
-             (gridItem->getZ() + gridItem->getHeight() > item->getZ()) && (gridItem->getZ() < item->getZ() + item->getHeight()))
-          {
-            collisions.push_back(gridItem->getId());
-            collisionFound = true;
-          }
-        }
-      }
-    }
-    // Caso de que el elemento sea libre
-    else if(dynamic_cast<FreeItem*>(item))
-    {
-      int xStart = item->getX() / room->tileSize;
-      int xEnd = (item->getX() + item->getWidthX() - 1) / room->tileSize + 1;
-      int yStart = (item->getY() - item->getWidthY() + 1) / room->tileSize;
-      int yEnd = item->getY() / room->tileSize + 1;
-
-      // Correción de datos por si el elemento choca con alguna pared
-      if(xStart < 0) xStart = 0;
-      if(xEnd > room->getTilesX()) room->getTilesX();
-      if(yStart < 0) yStart = 0;
-      if(yEnd > room->getTilesY()) yEnd = room->getTilesY();
-
-      // Se buscan colisiones sólo en el rango de columnas que interseccionan con el elemento
-      for(int i = xStart; i < xEnd; i++)
-      {
-        for(int j = yStart; j < yEnd; j++)
-        {
-          for(std::list<GridItem*>::iterator g = this->structure[room->getTilesX() * j + i].begin(); g != this->structure[room->getTilesX() * j + i].end(); ++g)
-          {
-            GridItem* gridItem = static_cast<GridItem*>(*g);
-
-            if((gridItem->getZ() + gridItem->getHeight() > item->getZ()) && (gridItem->getZ() < item->getZ() + item->getHeight()))
-            {
-              collisions.push_back(gridItem->getId());
-              collisionFound = true;
-            }
-          }
-        }
-      }
-    }
-  }
-
-  return collisionFound;
+        return collisionFound;
 }
 
-int Mediator::findHighestZ(Item* item)
+int Mediator::findHighestZ( Item * item )
 {
-  int z(0);
+        int z( 0 );
 
-  // Se recorre la lista de elementos libres buscando aquel que intersecta
-  // con la columna y de mayor altura
-  for(std::list<FreeItem*>::iterator f = freeItems.begin(); f != freeItems.end(); ++f)
-  {
-    FreeItem* freeItem = static_cast<FreeItem*>(*f);
-
-    if(freeItem->getId() != item->getId() && freeItem->isCollisionDetector())
-    {
-
-      // Se busca la intersección en los ejes X e Y y la mayor Z
-      if((freeItem->getX() + freeItem->getWidthX() > item->getX()) && (freeItem->getX() < item->getX() + item->getWidthX()) &&
-         (freeItem->getY() > item->getY() - item->getWidthX()) && (freeItem->getY() - freeItem->getWidthY() < item->getY()) &&
-         (freeItem->getZ() + freeItem->getHeight() > item->getZ()))
-      {
-        z = freeItem->getZ() + freeItem->getHeight();
-      }
-    }
-  }
-
-  // Búsqueda en la estructura de la sala en el caso de que sea un elemento rejilla
-  if(dynamic_cast<GridItem*>(item))
-  {
-    GridItem* gridItem = dynamic_cast<GridItem*>(item);
-    int column(room->getTilesX() * gridItem->getCellY() + gridItem->getCellX());
-
-    // Se recorren los elementos de la columna buscando el mayor
-    for(std::list<GridItem*>::iterator g = this->structure[column].begin(); g != this->structure[column].end(); ++g)
-    {
-      GridItem* tempItem = static_cast<GridItem*>(*g);
-
-      if(tempItem->getZ() + tempItem->getHeight() > z)
-      {
-        z = tempItem->getZ() + tempItem->getHeight();
-      }
-    }
-  }
-  // Búsqueda en la estructura de la sala en el caso de que sea un elemento libre
-  else if(dynamic_cast<FreeItem*>(item))
-  {
-    FreeItem* freeItem = dynamic_cast<FreeItem*>(item);
-
-    // Rango de columnas intersectadas por el elemento
-    int xStart = freeItem->getX() / room->getTileSize();
-    int xEnd = (freeItem->getX() + freeItem->getWidthX() - 1) / room->getTileSize() + 1;
-    int yStart = (freeItem->getY() - freeItem->getWidthY() + 1) / room->getTileSize();
-    int yEnd = freeItem->getY() / room->getTileSize() + 1;
-
-    // Se recorren los elementos de la columas intersectadas
-    for(int i = xStart; i < xEnd; i++)
-    {
-      for(int j = yStart; j < yEnd; j++)
-      {
-        int column(room->getTilesX() * j + i);
-        for(std::list<GridItem*>::iterator g = structure[column].begin(); g != structure[column].end(); ++g)
+        // Se recorre la lista de elementos libres buscando aquel que intersecta
+        // con la columna y de mayor altura
+        for ( std::list< FreeItem * >::iterator f = freeItems.begin (); f != freeItems.end (); ++f )
         {
-          GridItem* gridItem = static_cast<GridItem*>(*g);
+                FreeItem* freeItem = static_cast< FreeItem * >( *f );
 
-          if(gridItem->getZ() + gridItem->getHeight() > z)
-          {
-            z = gridItem->getZ() + gridItem->getHeight();
-          }
+                if ( freeItem->getId() != item->getId() && freeItem->isCollisionDetector() )
+                {
+                        // Se busca la intersección en los ejes X e Y y la mayor Z
+                        if ( ( freeItem->getX() + freeItem->getWidthX() > item->getX() ) && ( freeItem->getX() < item->getX() + item->getWidthX() ) &&
+                                ( freeItem->getY() > item->getY() - item->getWidthX() ) && ( freeItem->getY() - freeItem->getWidthY() < item->getY() ) &&
+                                ( freeItem->getZ() + freeItem->getHeight() > item->getZ() ) )
+                        {
+                                z = freeItem->getZ() + freeItem->getHeight();
+                        }
+                }
         }
-      }
-    }
-  }
 
-  return z;
+        // Búsqueda en la estructura de la sala en el caso de que sea un elemento rejilla
+        if ( dynamic_cast< GridItem * >( item ) )
+        {
+                GridItem* gridItem = dynamic_cast< GridItem * >( item );
+                int column( room->getTilesX() * gridItem->getCellY() + gridItem->getCellX() );
+
+                // Se recorren los elementos de la columna buscando el mayor
+                for ( std::list< GridItem * >::iterator g = this->structure[ column ].begin (); g != this->structure[ column ].end (); ++g )
+                {
+                        GridItem* tempItem = static_cast< GridItem * >( *g );
+
+                        if ( tempItem->getZ() + tempItem->getHeight() > z )
+                        {
+                                z = tempItem->getZ() + tempItem->getHeight();
+                        }
+                }
+        }
+        // Búsqueda en la estructura de la sala en el caso de que sea un elemento libre
+        else if( dynamic_cast< FreeItem * >( item ) )
+        {
+                FreeItem* freeItem = dynamic_cast< FreeItem * >( item );
+
+                // Rango de columnas intersectadas por el elemento
+                int xStart = freeItem->getX() / room->getTileSize();
+                int xEnd = ( freeItem->getX() + freeItem->getWidthX() - 1 ) / room->getTileSize() + 1;
+                int yStart = ( freeItem->getY() - freeItem->getWidthY() + 1 ) / room->getTileSize();
+                int yEnd = freeItem->getY() / room->getTileSize() + 1;
+
+                // Se recorren los elementos de la columas intersectadas
+                for ( int i = xStart; i < xEnd; i++ )
+                {
+                        for ( int j = yStart; j < yEnd; j++ )
+                        {
+                                int column( room->getTilesX() * j + i );
+                                for ( std::list< GridItem * >::iterator g = structure[ column ].begin (); g != structure[ column ].end (); ++g )
+                                {
+                                        GridItem* gridItem = static_cast< GridItem * >( *g );
+
+                                        if ( gridItem->getZ() + gridItem->getHeight() > z )
+                                        {
+                                                z = gridItem->getZ() + gridItem->getHeight();
+                                        }
+                                }
+                        }
+                }
+        }
+
+        return z;
 }
 
 void Mediator::insertItem( GridItem* gridItem )
@@ -979,7 +978,7 @@ int Mediator::popCollision()
 
         if ( ! collisions.empty() )
         {
-                std::vector< int >::iterator i = collisions.begin();
+                std::vector< int >::iterator i = collisions.begin ();
                 id = *i;
                 i = collisions.erase( i );
         }
@@ -987,26 +986,11 @@ int Mediator::popCollision()
         return id;
 }
 
-void Mediator::clearCollisionStack()
-{
-        collisions.clear();
-}
-
-bool Mediator::isCollisionStackEmpty()
-{
-        return collisions.empty();
-}
-
-unsigned int Mediator::collisionStackSize()
-{
-        return collisions.size();
-}
-
-Item* Mediator::collisionWith( short label )
+Item* Mediator::collisionWithByLabel( short label )
 {
         for ( unsigned int i = 0; i < collisions.size(); i++ )
         {
-                Item* item = findItem( collisions[ i ] );
+                Item* item = findItemById( collisions[ i ] );
 
                 if ( item != 0 && item->getLabel() == label )
                         return item;
@@ -1015,11 +999,11 @@ Item* Mediator::collisionWith( short label )
         return 0;
 }
 
-Item* Mediator::collisionWith( const BehaviorId& id )
+Item* Mediator::collisionWithByBehavior( const BehaviorId& id )
 {
         for ( unsigned int i = 0; i < collisions.size(); i++ )
         {
-                Item* item = findItem( collisions[ i ] );
+                Item* item = findItemById( collisions[ i ] );
 
                 if ( item != 0 && item->getBehavior() != 0 && item->getBehavior()->getId() == id )
                         return item;
@@ -1032,7 +1016,7 @@ Item* Mediator::collisionWithBadBoy()
 {
         for ( unsigned int i = 0; i < collisions.size(); i++ )
         {
-                Item* item = findItem( collisions[ i ] );
+                Item* item = findItemById( collisions[ i ] );
 
                 if ( item != 0 && item->getBehavior() != 0 && item->isMortal()
                         && std::find( badBoys.begin(), badBoys.end(), item->getBehavior()->getId() ) != badBoys.end() )
@@ -1103,7 +1087,7 @@ bool Mediator::nextPlayer( ItemDataManager* itemDataManager )
 
                                 // Crea al jugador compuesto
                                 std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( itemDataManager ) );
-                                activePlayer = roomBuilder->buildPlayer( this->room, HeadAndHeels, HeadAndHeelsBehavior, x, y, z, direction );
+                                activePlayer = roomBuilder->buildPlayerInRoom( this->room, HeadAndHeels, HeadAndHeelsBehavior, x, y, z, direction );
                                 // Le devuelve el elemento que tuviera en el bolso
                                 activePlayer->assignTakenItem( takenItemData, takenItemImage, takenItemBehaviorId );
 
@@ -1134,9 +1118,9 @@ bool Mediator::nextPlayer( ItemDataManager* itemDataManager )
 
                 // Crea a Heels y a Head
                 std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( itemDataManager ) );
-                previousPlayer = roomBuilder->buildPlayer( this->room, Heels, HeelsBehavior, x, y, z, direction );
+                previousPlayer = roomBuilder->buildPlayerInRoom( this->room, Heels, HeelsBehavior, x, y, z, direction );
                 previousPlayer->assignTakenItem( takenItemData, takenItemImage, takenItemBehaviorId );
-                activePlayer = roomBuilder->buildPlayer( this->room, Head, HeadBehavior, x, y, z + LayerHeight, direction );
+                activePlayer = roomBuilder->buildPlayerInRoom( this->room, Head, HeadBehavior, x, y, z + LayerHeight, direction );
 
                 if ( this->lastControlledPlayer == Head )
                 {
@@ -1270,12 +1254,12 @@ Room* Mediator::getRoom() const
 
 void Mediator::setActivePlayer( PlayerItem* playerItem )
 {
-          this->activePlayer = playerItem;
+        this->activePlayer = playerItem;
 }
 
 PlayerItem* Mediator::getActivePlayer() const
 {
-          return this->activePlayer;
+        return this->activePlayer;
 }
 
 PlayerItem* Mediator::getHiddenPlayer() const

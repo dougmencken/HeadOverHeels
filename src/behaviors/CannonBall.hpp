@@ -1,6 +1,6 @@
 // The free and open source remake of Head over Heels
 //
-// Copyright © 2016 Douglas Mencken dougmencken @ gmail.com
+// Copyright © 2017 Douglas Mencken dougmencken@gmail.com
 // Copyright © 2008 Jorge Rodríguez Santos
 // Original game copyright © 1987 Ocean Software Ltd.
 //
@@ -14,55 +14,58 @@
 #include "Behavior.hpp"
 #include "HPC.hpp"
 
+
 namespace isomot
 {
 
-// Declaraciones adelantadas
 class Item;
 class ItemData;
 
 /**
  * La bola de cañón de la pantalla final. Se mueve hacia el norte y cuando colisiona desaparece
  */
+
 class CannonBall : public Behavior
 {
+
 public:
 
-  /**
-   * Constructor
-   * @param item Elemento que tiene este comportamiento
-   * @param id Identificador de comportamiento
-   */
-	CannonBall(Item* item, const BehaviorId& id);
+       /**
+        * Constructor
+        * @param item Elemento que tiene este comportamiento
+        * @param id Identificador de comportamiento
+        */
+        CannonBall( Item * item, const BehaviorId & id ) ;
 
-	virtual ~CannonBall();
+        virtual ~CannonBall( );
 
-  /**
-   * Actualiza el comportamiento del elemento en cada ciclo
-   * @return false si la actualización implica la destrucción del elemento o true en caso contrario
-   */
-  virtual bool update();
+       /**
+        * Actualiza el comportamiento del elemento en cada ciclo
+        * @return false si la actualización implica la destrucción del elemento o true en caso contrario
+        */
+        virtual bool update () ;
 
 protected:
 
-  /**
-   * Datos del elemento empleado como disparo
-   */
-  ItemData* bubblesData;
+       /**
+        * Datos del elemento empleado como disparo
+        */
+        ItemData * bubblesData ;
 
 private:
 
-  /**
-   * Cronómetro que controla la velocidad de movimiento del elemento
-   */
-  HPC* speedTimer;
+       /**
+        * Cronómetro que controla la velocidad de movimiento del elemento
+        */
+        HPC * speedTimer ;
 
 public: // Operaciones de consulta y actualización
 
-  /**
-   * Asigna los datos del elemento usado para representar la explosión de la bola
-   */
-  void setExtraData(void* data);
+       /**
+        * Asigna los datos del elemento usado para representar la explosión de la bola
+        */
+        void setMoreData ( void * data ) ;
+
 };
 
 }

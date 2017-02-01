@@ -1,6 +1,6 @@
 // The free and open source remake of Head over Heels
 //
-// Copyright © 2016 Douglas Mencken dougmencken @ gmail.com
+// Copyright © 2017 Douglas Mencken dougmencken@gmail.com
 // Copyright © 2008 Jorge Rodríguez Santos
 // Original game copyright © 1987 Ocean Software Ltd.
 //
@@ -15,10 +15,10 @@
 #include "Behavior.hpp"
 #include "HPC.hpp"
 
+
 namespace isomot
 {
 
-// Declaraciones adelantadas
 class Item;
 
 /**
@@ -27,43 +27,45 @@ class Item;
  */
 class Switch : public Behavior
 {
+
 public:
 
-  /**
-   * Constructor
-   * @param item Elemento que tiene este comportamiento
-   * @param id Identificador del comportamiento
-   */
-  Switch(Item* item, const BehaviorId& id);
+       /**
+        * Constructor
+        * @param item Elemento que tiene este comportamiento
+        * @param id Identificador del comportamiento
+        */
+        Switch( Item * item, const BehaviorId & id ) ;
 
-  virtual ~Switch();
+        virtual ~Switch( ) ;
 
-  /**
-   * Actualiza el comportamiento del elemento en cada ciclo
-   * @return false si la actualización implica la destrucción del elemento o true en caso contrario
-   */
-  virtual bool update();
-
-private:
-
-  /**
-   * Comprueba si hay elementos junto al interruptor
-   * @param Un vector donde almacenar el conjunto de elementos
-   * @return true si se encontró algún elemento o false en caso contrario
-   */
-  bool checkSideItems(std::vector<Item*>& sideItems);
+       /**
+        * Actualiza el comportamiento del elemento en cada ciclo
+        * @return false si la actualización implica la destrucción del elemento o true en caso contrario
+        */
+        virtual bool update () ;
 
 private:
 
-  /**
-   * Indica que hay un elemento encima
-   */
-  bool itemOver;
+       /**
+        * Comprueba si hay elementos junto al interruptor
+        * @param Un vector donde almacenar el conjunto de elementos
+        * @return true si se encontró algún elemento o false en caso contrario
+        */
+        bool checkSideItems ( std::vector< Item * > & sideItems ) ;
 
-  /**
-   * Elementos que han accionado el interruptor
-   */
-  std::vector<Item*> triggerItems;
+private:
+
+       /**
+        * Indica que hay un elemento encima
+        */
+        bool itemOver ;
+
+       /**
+        * Elementos que han accionado el interruptor
+        */
+        std::vector< Item * > triggerItems ;
+
 };
 
 }

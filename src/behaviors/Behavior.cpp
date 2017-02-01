@@ -1,3 +1,4 @@
+
 #include "Behavior.hpp"
 #include "Item.hpp"
 #include "FreeItem.hpp"
@@ -30,226 +31,222 @@
 #include "DisplaceState.hpp"
 #include "FallState.hpp"
 
+
 namespace isomot
 {
 
-Behavior::Behavior(Item* item, const BehaviorId& id)
-: id(id),
-  item(item),
-  state(0),
-  sender(0),
-  soundManager(SoundManager::getInstance()),
-  stateId(StateWait)
+Behavior::Behavior( Item* item, const BehaviorId& id )
+:       id( id ),
+        item( item ),
+        state( 0 ),
+        sender( 0 ),
+        soundManager( SoundManager::getInstance() ),
+        stateId( StateWait )
 {
 
 }
 
-Behavior::~Behavior()
+Behavior::~Behavior( )
 {
 
 }
 
-Behavior* Behavior::createBehavior(Item* item, const BehaviorId& id, void* extraData)
+Behavior* Behavior::createBehavior( Item* item, const BehaviorId& id, void* extraData )
 {
-  Behavior* behavior = 0;
+        Behavior* behavior = 0;
 
-  // Construye el objeto adecuado en función del identificador
-  switch(id)
-  {
-    case NoBehavior:
-      break;
+        // Construye el objeto adecuado en función del identificador
+        switch ( id )
+        {
+                case NoBehavior:
+                        break;
 
-    case BubblesBehavior:
-      break;
+                case BubblesBehavior:
+                        break;
 
-    case ConveyorBeltNortheast:
-    case ConveyorBeltSouthwest:
-      behavior = new ConveyorBelt(item ,id);
-      break;
+                case ConveyorBeltNortheast:
+                case ConveyorBeltSouthwest:
+                        behavior = new ConveyorBelt( item, id );
+                        break;
 
-    case DetectorBehavior:
-      behavior = new Detector(item, id);
-      break;
+                case DetectorBehavior:
+                        behavior = new Detector( item, id );
+                        break;
 
-    case DriveBehavior:
-      behavior = new Drive(item, id);
-      break;
+                case DriveBehavior:
+                        behavior = new Drive( item, id );
+                        break;
 
-    case ElevatorBehavior:
-      behavior = new Elevator(item, id);
-      behavior->setExtraData(extraData);
-      break;
+                case ElevatorBehavior:
+                        behavior = new Elevator( item, id );
+                        behavior->setMoreData( extraData );
+                        break;
 
-    case Hunter4Behavior:
-    case HunterWaiting4Behavior:
-    case Hunter8Behavior:
-    case HunterWaiting8Behavior:
-      behavior = new Hunter(item, id);
-      if(HunterWaiting4Behavior)
-      {
-        behavior->setExtraData(extraData);
-      }
-      break;
+                case Hunter4Behavior:
+                case HunterWaiting4Behavior:
+                case Hunter8Behavior:
+                case HunterWaiting8Behavior:
+                        behavior = new Hunter( item, id );
+                        if ( HunterWaiting4Behavior )
+                        {
+                                behavior->setMoreData( extraData );
+                        }
+                        break;
 
-    case ImpelBehavior:
-      behavior = new Impel(item, id);
-      break;
+                case ImpelBehavior:
+                        behavior = new Impel( item, id );
+                        break;
 
-    case TurnLeftBehavior:
-    case TurnRightBehavior:
-      behavior = new Turn(item, id);
-      break;
+                case TurnLeftBehavior:
+                case TurnRightBehavior:
+                        behavior = new Turn( item, id );
+                        break;
 
-    case MobileBehavior:
-      behavior = new Mobile(item, id);
-      break;
+                case MobileBehavior:
+                        behavior = new Mobile( item, id );
+                        break;
 
-    case OneWayBehavior:
-    case FlyingOneWayBehavior:
-      behavior = new OneWay(item, id, id == FlyingOneWayBehavior);
-      break;
+                case OneWayBehavior:
+                case FlyingOneWayBehavior:
+                        behavior = new OneWay( item, id, id == FlyingOneWayBehavior );
+                        break;
 
-    case Patrol4cBehavior:
-    case Patrol4dBehavior:
-    case Patrol8Behavior:
-      behavior = new Patrol(item, id);
-      break;
+                case Patrol4cBehavior:
+                case Patrol4dBehavior:
+                case Patrol8Behavior:
+                        behavior = new Patrol( item, id );
+                        break;
 
-    case RemoteControlBehavior:
-    case SteerBehavior:
-      behavior = new RemoteControl(item ,id);
-      break;
+                case RemoteControlBehavior:
+                case SteerBehavior:
+                        behavior = new RemoteControl( item, id );
+                        break;
 
-    case SinkBehavior:
-      behavior = new Sink(item, id);
-      break;
+                case SinkBehavior:
+                        behavior = new Sink( item, id );
+                        break;
 
-    case ShotBehavior:
-      behavior = new Shot(item, id);
-      break;
+                case ShotBehavior:
+                        behavior = new Shot( item, id );
+                        break;
 
-    case SpecialBehavior:
-      behavior = new Special(item, id);
-      behavior->setExtraData(extraData);
-      break;
+                case SpecialBehavior:
+                        behavior = new Special( item, id );
+                        behavior->setMoreData( extraData );
+                        break;
 
-    case SwitchBehavior:
-      behavior = new Switch(item, id);
-      break;
+                case SwitchBehavior:
+                        behavior = new Switch( item, id );
+                        break;
 
-    case TeleportBehavior:
-      behavior = new Teleport(item, id);
-      break;
+                case TeleportBehavior:
+                        behavior = new Teleport( item, id );
+                        break;
 
-    case TrampolineBehavior:
-      behavior = new Trampoline(item, id);
-      break;
+                case TrampolineBehavior:
+                        behavior = new Trampoline( item, id );
+                        break;
 
-    case VolatileTimeBehavior:
-    case VolatileTouchBehavior:
-    case VolatileWeightBehavior:
-    case VolatilePuppyBehavior:
-    case VolatileHeavyBehavior:
-      behavior = new Volatile(item, id);
-      behavior->setExtraData(extraData);
-      break;
+                case VolatileTimeBehavior:
+                case VolatileTouchBehavior:
+                case VolatileWeightBehavior:
+                case VolatilePuppyBehavior:
+                case VolatileHeavyBehavior:
+                        behavior = new Volatile( item, id );
+                        behavior->setMoreData( extraData );
+                        break;
 
-    case CannonBallBehavior:
-      behavior = new CannonBall(item, id);
-      behavior->setExtraData(extraData);
-      break;
+                case CannonBallBehavior:
+                        behavior = new CannonBall( item, id );
+                        behavior->setMoreData( extraData );
+                        break;
 
-    case HeadBehavior:
-      behavior = new PlayerHead(item, id);
-      behavior->setExtraData(extraData);
-      break;
+                case HeadBehavior:
+                        behavior = new PlayerHead( item, id );
+                        behavior->setMoreData( extraData );
+                        break;
 
-    case HeelsBehavior:
-      behavior = new PlayerHeels(item, id);
-      behavior->setExtraData(extraData);
-      break;
+                case HeelsBehavior:
+                        behavior = new PlayerHeels( item, id );
+                        behavior->setMoreData( extraData );
+                        break;
 
-    case HeadAndHeelsBehavior:
-      behavior = new PlayerHeadAndHeels(item, id);
-      behavior->setExtraData(extraData);
-      break;
-  }
+                case HeadAndHeelsBehavior:
+                        behavior = new PlayerHeadAndHeels( item, id );
+                        behavior->setMoreData( extraData );
+                        break;
+        }
 
-  return behavior;
+        return behavior;
 }
 
-void Behavior::changeStateId(const StateId& stateId, Item* sender)
+void Behavior::changeStateId( const StateId& stateId, Item* sender )
 {
-  this->stateId = stateId;
-  this->sender = sender;
+        this->stateId = stateId;
+        this->sender = sender;
 
-  // Asigna el estado en función del identificador
-  switch(stateId)
-  {
-    case StateMoveNorth:
-    case StateMoveSouth:
-    case StateMoveEast:
-    case StateMoveWest:
-    case StateMoveNortheast:
-    case StateMoveNorthwest:
-    case StateMoveSoutheast:
-    case StateMoveSouthwest:
-    case StateMoveUp:
-    case StateMoveDown:
-      state = MoveState::getInstance();
-      break;
+        // Asigna el estado en función del identificador
+        switch( stateId )
+        {
+                case StateMoveNorth:
+                case StateMoveSouth:
+                case StateMoveEast:
+                case StateMoveWest:
+                case StateMoveNortheast:
+                case StateMoveNorthwest:
+                case StateMoveSoutheast:
+                case StateMoveSouthwest:
+                case StateMoveUp:
+                case StateMoveDown:
+                        state = MoveState::getInstance();
+                        break;
 
-    case StateDisplaceNorth:
-    case StateDisplaceSouth:
-    case StateDisplaceEast:
-    case StateDisplaceWest:
-    case StateDisplaceNortheast:
-    case StateDisplaceSoutheast:
-    case StateDisplaceSouthwest:
-    case StateDisplaceNorthwest:
-    case StateForceDisplaceNorth:
-    case StateForceDisplaceSouth:
-    case StateForceDisplaceEast:
-    case StateForceDisplaceWest:
-      state = DisplaceState::getInstance();
-      break;
+                case StateDisplaceNorth:
+                case StateDisplaceSouth:
+                case StateDisplaceEast:
+                case StateDisplaceWest:
+                case StateDisplaceNortheast:
+                case StateDisplaceSoutheast:
+                case StateDisplaceSouthwest:
+                case StateDisplaceNorthwest:
+                case StateForceDisplaceNorth:
+                case StateForceDisplaceSouth:
+                case StateForceDisplaceEast:
+                case StateForceDisplaceWest:
+                        state = DisplaceState::getInstance();
+                        break;
 
-    case StateFall:
-      state = FallState::getInstance();
-      break;
+                case StateFall:
+                        state = FallState::getInstance();
+                        break;
 
-    default:
-      ;
-  }
+                default:
+                        ;
+        }
 }
 
-void Behavior::propagateState(Item* sender, const StateId& stateId)
+void Behavior::propagateState( Item* sender, const StateId& stateId )
 {
-  Mediator* mediator = sender->getMediator();
+        Mediator* mediator = sender->getMediator();
 
-  // Mientras haya elementos que hayan chocado con el emisor
-  while(!mediator->isCollisionStackEmpty())
-  {
-    // Identificador del primer elemento de la pila de colisiones
-    int id = mediator->popCollision();
+        // Mientras haya elementos que hayan chocado con el emisor
+        while ( ! mediator->isStackOfCollisionsEmpty () )
+        {
+                // Identificador del primer elemento de la pila de colisiones
+                int id = mediator->popCollision();
 
-    // El elemento tiene que se un elemento libre o uno rejilla
-    if((id >= FirstFreeId && (id & 1)) || (id >= FirstGridId && !(id & 1)))
-    {
-      Item* item = mediator->findItem(id);
+                // El elemento tiene que se un elemento libre o uno rejilla
+                if ( ( id >= FirstFreeId && ( id & 1 )) || ( id >= FirstGridId && !( id & 1 ) ) )
+                {
+                        Item* item = mediator->findItemById( id );
 
-      // Si el elemento se ha encontrado y tiene comportamiento se cambia su estado
-      if(item != 0 && item->getBehavior() != 0)
-      {
-        item->getBehavior()->changeStateId(stateId);
-      }
-    }
-  }
-}
-
-void Behavior::setExtraData(void* data)
-{
-
+                        // Si el elemento se ha encontrado y tiene comportamiento se cambia su estado
+                        if ( item != 0 && item->getBehavior() != 0 )
+                        {
+                                item->getBehavior()->changeStateId( stateId );
+                        }
+                }
+        }
 }
 
 }

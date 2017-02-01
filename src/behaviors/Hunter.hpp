@@ -1,6 +1,6 @@
 // The free and open source remake of Head over Heels
 //
-// Copyright © 2016 Douglas Mencken dougmencken @ gmail.com
+// Copyright © 2017 Douglas Mencken dougmencken@gmail.com
 // Copyright © 2008 Jorge Rodríguez Santos
 // Original game copyright © 1987 Ocean Software Ltd.
 //
@@ -14,81 +14,83 @@
 #include "Behavior.hpp"
 #include "HPC.hpp"
 
+
 namespace isomot
 {
 
-// Declaraciones adelantadas
 class Item;
 class ItemData;
 
 /**
  * Intenta dar caza al jugador moviéndose allá donde esté
  */
+
 class Hunter : public Behavior
 {
+
 public:
 
-  /**
-   * Constructor
-   * @param item Elemento que tiene este comportamiento
-   * @param id Identificador del comportamiento
-   */
-  Hunter(Item* item, const BehaviorId& id);
+       /**
+        * Constructor
+        * @param item Elemento que tiene este comportamiento
+        * @param id Identificador del comportamiento
+        */
+        Hunter( Item * item, const BehaviorId & id ) ;
 
-  virtual ~Hunter();
+        virtual ~Hunter( ) ;
 
-  /**
-   * Actualiza el comportamiento del elemento en cada ciclo
-   * @return false si la actualización implica la destrucción del elemento o true en caso contrario
-   */
-  virtual bool update();
-
-private:
-
-  /**
-   * Calcula el sentido en el que debe avanzar el elemento para poder cazar al jugador activo
-   * @return El estado que indica la dirección calculada
-   */
-  StateId calculateDirection(const StateId& stateId);
-
-  /**
-   * Calcula el sentido en el que debe avanzar el elemento para poder cazar al jugador activo
-   * La dirección está restringida a los puntos cardinales básicos
-   * @return El estado que indica la dirección calculada
-   */
-  StateId calculateDirection4(const StateId& stateId);
-
-  /**
-   * Calcula el sentido en el que debe avanzar el elemento para poder cazar al jugador activo
-   * La dirección puede ser cualquier de las ocho direcciones posibles
-   * @return El estado que indica la dirección calculada
-   */
-  StateId calculateDirection8(const StateId& stateId);
-
-  /**
-   * Crea para los cazadores ocultos el guarda imperial completo
-   * @return true si se creó o false si todavía no se puede crear
-   */
-  bool createFullBody();
+       /**
+        * Actualiza el comportamiento del elemento en cada ciclo
+        * @return false si la actualización implica la destrucción del elemento o true en caso contrario
+        */
+        virtual bool update () ;
 
 private:
 
-  /**
-   * Cronómetro que controla la velocidad de movimiento del elemento
-   */
-  HPC* speedTimer;
+       /**
+        * Calcula el sentido en el que debe avanzar el elemento para poder cazar al jugador activo
+        * @return El estado que indica la dirección calculada
+        */
+        StateId calculateDirection ( const StateId & stateId ) ;
 
-  /**
-   * Datos del guarda imperial
-   */
-  ItemData* guardData;
+       /**
+        * Calcula el sentido en el que debe avanzar el elemento para poder cazar al jugador activo
+        * La dirección está restringida a los puntos cardinales básicos
+        * @return El estado que indica la dirección calculada
+        */
+        StateId calculateDirection4 ( const StateId & stateId ) ;
+
+       /**
+        * Calcula el sentido en el que debe avanzar el elemento para poder cazar al jugador activo
+        * La dirección puede ser cualquier de las ocho direcciones posibles
+        * @return El estado que indica la dirección calculada
+        */
+        StateId calculateDirection8 ( const StateId & stateId ) ;
+
+       /**
+        * Crea para los cazadores ocultos el guarda imperial completo
+        * @return true si se creó o false si todavía no se puede crear
+        */
+        bool createFullBody () ;
+
+private:
+
+       /**
+        * Cronómetro que controla la velocidad de movimiento del elemento
+        */
+        HPC * speedTimer ;
+
+       /**
+        * Datos del guarda imperial
+        */
+        ItemData * guardData ;
 
 public: // Operaciones de consulta y actualización
 
-  /**
-   * Asigna los datos del elemento usado como disparo
-   */
-  void setExtraData(void* data);
+       /**
+        * Asigna los datos del elemento usado como disparo
+        */
+        void setMoreData( void * data ) ;
 
 };
 

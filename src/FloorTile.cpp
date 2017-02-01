@@ -60,7 +60,7 @@ void FloorTile::requestCastShadow()
 {
         if ( this->image && this->shady == WantShadow )
         {
-                mediator->castShadow( this );
+                mediator->castShadowOnFloor( this );
 
                 // Si no se ha podido sombrear entonces se destruye la imagen de sombreado
                 if ( this->shady != AlreadyShady && this->shadyImage )

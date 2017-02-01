@@ -1,6 +1,6 @@
 // The free and open source remake of Head over Heels
 //
-// Copyright © 2016 Douglas Mencken dougmencken @ gmail.com
+// Copyright © 2017 Douglas Mencken dougmencken@gmail.com
 // Copyright © 2008 Jorge Rodríguez Santos
 // Original game copyright © 1987 Ocean Software Ltd.
 //
@@ -14,10 +14,10 @@
 #include "Behavior.hpp"
 #include "HPC.hpp"
 
+
 namespace isomot
 {
 
-// Declaraciones adelantadas
 class Item;
 
 /**
@@ -25,34 +25,36 @@ class Item;
  */
 class Detector : public Behavior
 {
+
 public:
 
-  /**
-   * Constructor
-   * @param item Elemento que tiene este comportamiento
-   * @param id Identificador del comportamiento
-   */
-  Detector(Item* item, const BehaviorId& id);
+       /**
+        * Constructor
+        * @param item Elemento que tiene este comportamiento
+        * @param id Identificador del comportamiento
+        */
+        Detector( Item * item, const BehaviorId & id ) ;
 
-  virtual ~Detector();
+        virtual ~Detector( ) ;
 
-  /**
-   * Actualiza el comportamiento del elemento en cada ciclo
-   * @return false si la actualización implica la destrucción del elemento o true en caso contrario
-   */
-  virtual bool update();
+       /**
+        * Actualiza el comportamiento del elemento en cada ciclo
+        * @return false si la actualización implica la destrucción del elemento o true en caso contrario
+        */
+        virtual bool update () ;
 
 private:
 
-  /**
-   * Cronómetro que controla la velocidad de movimiento del elemento
-   */
-  HPC* speedTimer;
+       /**
+        * Cronómetro que controla la velocidad de movimiento del elemento
+        */
+        HPC * speedTimer ;
 
-  /**
-   * Cronómetro que controla la velocidad de caída del elemento
-   */
-  HPC* fallenTimer;
+       /**
+        * Cronómetro que controla la velocidad de caída del elemento
+        */
+        HPC * fallTimer ;
+
 };
 
 }

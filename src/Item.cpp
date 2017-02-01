@@ -207,7 +207,7 @@ bool Item::checkPosition( int x, int y, int z, const WhatToDo& what )
         int pz = this->z;
 
         // Vacía la pila de colisiones
-        mediator->clearCollisionStack();
+        mediator->clearStackOfCollisions( );
 
         // Nuevas coordenadas
         this->x = x + this->x * what;
@@ -239,10 +239,10 @@ bool Item::checkPosition( int x, int y, int z, const WhatToDo& what )
         }
 
         // Si ha habido colisión con algún elemento especial se detiene el proceso
-        if ( ! ( collisionFound = ! mediator->isCollisionStackEmpty() ) )
+        if ( ! ( collisionFound = ! mediator->isStackOfCollisionsEmpty () ) )
         {
                 // Busca colisiones con el resto de elementos de la sala
-                collisionFound = mediator->findCollision( this );
+                collisionFound = mediator->findCollisionWithItem( this );
         }
 
         // Restaura las coordenadas originales

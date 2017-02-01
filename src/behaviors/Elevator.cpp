@@ -7,22 +7,23 @@
 namespace isomot
 {
 
-Elevator::Elevator(Item* item, const BehaviorId& id) : Behavior(item, id)
+Elevator::Elevator( Item * item, const BehaviorId & id ) :
+        Behavior( item, id )
 {
-  stateId = StateWait;
-  speedTimer = new HPC();
-  stopTimer = new HPC();
-  speedTimer->start();
-  stopTimer->start();
+        stateId = StateWait;
+        speedTimer = new HPC();
+        stopTimer = new HPC();
+        speedTimer->start();
+        stopTimer->start();
 }
 
-Elevator::~Elevator()
+Elevator::~Elevator( )
 {
-  delete speedTimer;
-  delete stopTimer;
+        delete speedTimer;
+        delete stopTimer;
 }
 
-bool Elevator::update()
+bool Elevator::update ()
 {
   FreeItem* freeItem = dynamic_cast<FreeItem*>(this->item);
 
@@ -112,13 +113,13 @@ bool Elevator::update()
   return false;
 }
 
-void Elevator::setExtraData(void* data)
+void Elevator::setMoreData( void * data )
 {
-  int* values = reinterpret_cast<int*>(data);
+        int * values = reinterpret_cast< int * >( data );
 
-  this->top = values[0];
-  this->bottom = values[1];
-  this->ascent = bool(values[2]);
+        this->top = values[ 0 ];
+        this->bottom = values[ 1 ];
+        this->ascent = bool( values[ 2 ] );
 }
 
 }

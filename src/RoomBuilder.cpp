@@ -140,7 +140,7 @@ Room* RoomBuilder::buildRoom ()
                 for ( rxml::floor::tile_const_iterator i = roomXML->floor().tile().begin (); i != roomXML->floor().tile().end (); ++i )
                 {
                         FloorTile* floorTile = this->buildFloorTile( *i, "gfx" );
-                        room->addItem( floorTile );
+                        room->addFloor( floorTile );
                 }
 
                 // Crea las paredes sin puertas
@@ -220,12 +220,12 @@ Room* RoomBuilder::buildRoom ()
         return this->room;
 }
 
-PlayerItem* RoomBuilder::buildPlayer( const PlayerId& playerId, const BehaviorId& behaviorId, int x, int y, int z, const Direction& direction )
+PlayerItem* RoomBuilder::buildPlayerInTheSameRoom( const PlayerId& playerId, const BehaviorId& behaviorId, int x, int y, int z, const Direction& direction )
 {
-        return buildPlayer( this->room, playerId, behaviorId, x, y, z, direction );
+        return buildPlayerInRoom( this->room, playerId, behaviorId, x, y, z, direction );
 }
 
-PlayerItem* RoomBuilder::buildPlayer( Room* room, const PlayerId& playerId, const BehaviorId& behaviorId, int x, int y, int z, const Direction& direction, bool hasItem )
+PlayerItem* RoomBuilder::buildPlayerInRoom( Room* room, const PlayerId& playerId, const BehaviorId& behaviorId, int x, int y, int z, const Direction& direction, bool hasItem )
 {
         PlayerItem* playerItem = 0;
         GameManager* gameManager = GameManager::getInstance();

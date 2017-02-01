@@ -1,6 +1,6 @@
 // The free and open source remake of Head over Heels
 //
-// Copyright © 2016 Douglas Mencken dougmencken @ gmail.com
+// Copyright © 2017 Douglas Mencken dougmencken@gmail.com
 // Copyright © 2008 Jorge Rodríguez Santos
 // Original game copyright © 1987 Ocean Software Ltd.
 //
@@ -70,7 +70,7 @@ public:
          * @param z Coordenada isométrica Z donde se situará al jugador
          * @param direction Dirección inicial del jugador
          */
-        PlayerItem* buildPlayer( const PlayerId& playerId, const BehaviorId& behaviorId, int x, int y, int z, const Direction& direction );
+        PlayerItem* buildPlayerInTheSameRoom( const PlayerId& playerId, const BehaviorId& behaviorId, int x, int y, int z, const Direction& direction );
 
         /**
          * Crea un jugador en la sala especificada. La sala ya debe estar construida
@@ -84,7 +84,7 @@ public:
          * @param direction Dirección inicial del jugador
          * @param hasItem Indica si el jugador llevaba un elemento en el bolso
          */
-        PlayerItem* buildPlayer( Room* room, const PlayerId& playerId, const BehaviorId& behaviorId, int x, int y, int z, const Direction& direction, bool hasItem = false );
+        PlayerItem* buildPlayerInRoom( Room* room, const PlayerId& playerId, const BehaviorId& behaviorId, int x, int y, int z, const Direction& direction, bool hasItem = false );
 
         static int getXCenterOfRoom( ItemData* playerData, Room* theRoom );
 

@@ -10,33 +10,34 @@
 namespace isomot
 {
 
-Mobile::Mobile(Item* item, const BehaviorId& id) : Behavior(item, id)
+Mobile::Mobile( Item * item, const BehaviorId & id ) :
+        Behavior( item, id )
 {
-  stateId = StateWait;
-  speedTimer = new HPC();
-  fallenTimer = new HPC();
-  speedTimer->start();
-  fallenTimer->start();
+        stateId = StateWait;
+        speedTimer = new HPC();
+        fallTimer = new HPC();
+        speedTimer->start();
+        fallTimer->start();
 }
 
 Mobile::~Mobile()
 {
-  delete speedTimer;
-  delete fallenTimer;
+        delete speedTimer;
+        delete fallTimer;
 }
 
-bool Mobile::update()
+bool Mobile::update ()
 {
-  FreeItem* freeItem = dynamic_cast<FreeItem*>(this->item);
+  FreeItem* freeItem = dynamic_cast< FreeItem * >( this->item );
   bool destroy = false;
 
-  switch(stateId)
+  switch ( stateId )
   {
     case StateWait:
       // Se comprueba si el elemento debe empezar a caer
       if(FallState::getInstance()->fall(this))
       {
-        fallenTimer->reset();
+        fallTimer->reset();
         stateId = StateFall;
       }
       break;
@@ -102,7 +103,7 @@ bool Mobile::update()
         destroy = true;
       }
       // Si ha llegado el momento de caer entonces el elemento desciende una unidad
-      else if(fallenTimer->getValue() > freeItem->getWeight())
+      else if(fallTimer->getValue() > freeItem->getWeight())
       {
         // Actualiza el estado
         this->changeStateId(stateId);
@@ -114,7 +115,7 @@ bool Mobile::update()
         }
 
         // Se pone a cero el cronómetro para el siguiente ciclo
-        fallenTimer->reset();
+        fallTimer->reset();
       }
       break;
 

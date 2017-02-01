@@ -24,7 +24,7 @@ Volatile::~Volatile()
         delete destroyTimer;
 }
 
-bool Volatile::update()
+bool Volatile::update ()
 {
         bool destroy = false;
         Mediator* mediator = item->getMediator();
@@ -47,7 +47,7 @@ bool Volatile::update()
 
                                 // Se inspeccionan todos los elementos que haya encima para ver
                                 // si la destrucción se puede llevar a cabo
-                                while ( ! mediator->isCollisionStackEmpty() )
+                                while ( ! mediator->isStackOfCollisionsEmpty() )
                                 {
                                         // Identificador del primer elemento de la pila de colisiones
                                         int id = mediator->popCollision();
@@ -55,7 +55,7 @@ bool Volatile::update()
                                         // El elemento tiene que se un elemento libre
                                         if ( id >= FirstFreeId && ( id & 1 ) )
                                         {
-                                                Item* item = mediator->findItem( id );
+                                                Item* item = mediator->findItemById( id );
 
                                                 // Si el elemento existe, se mira si es volátil o especial porque
                                                 // el elemento se destruirá a no ser que ese elemento esté apoyándose en otro
@@ -80,11 +80,11 @@ bool Volatile::update()
                                         // Si el elemento que desencadena la destrucción está unicamente sobre el volátil
                                         // entonces la destrucción es segura. Si está sobre varios elementos, se tienen que dar
                                         // ciertas condiciones para poder destruilo
-                                        if ( mediator->collisionStackSize() > 1 )
+                                        if ( mediator->depthOfStackOfCollisions() > 1 )
                                         {
-                                                while ( ! mediator->isCollisionStackEmpty() )
+                                                while ( ! mediator->isStackOfCollisionsEmpty() )
                                                 {
-                                                        Item* bottomItem = mediator->findItem( mediator->popCollision() );
+                                                        Item* bottomItem = mediator->findCollisionPop( );
 
                                                         if ( bottomItem != 0 )
                                                         {
@@ -117,7 +117,7 @@ bool Volatile::update()
                         // Es un perrito del silencio. Desaparece si Head o el jugador compuesto están en la sala
                         else if ( id == VolatilePuppyBehavior )
                         {
-                                if ( mediator->findItem( short( Head ) ) != 0 || mediator->findItem( short( HeadAndHeels ) ) != 0 )
+                                if ( mediator->findItemByLabel( short( Head ) ) != 0 || mediator->findItemByLabel( short( HeadAndHeels ) ) != 0 )
                                 {
                                         stateId = StateDestroy;
                                         destroyTimer->reset();
@@ -149,7 +149,7 @@ bool Volatile::update()
                                                 break;
 
                                         case VolatilePuppyBehavior:
-                                                if ( mediator->findItem( short( Head ) ) != 0 || mediator->findItem( short( HeadAndHeels ) ) != 0 )
+                                                if ( mediator->findItemByLabel( short( Head ) ) != 0 || mediator->findItemByLabel( short( HeadAndHeels ) ) != 0 )
                                                 {
                                                         stateId = StateDestroy;
                                                 }
@@ -201,9 +201,9 @@ bool Volatile::update()
         return destroy;
 }
 
-void Volatile::setExtraData( void* data )
+void Volatile::setMoreData( void* data )
 {
-        this->bubblesData = reinterpret_cast< ItemData* >( data );
+        this->bubblesData = reinterpret_cast< ItemData * >( data );
 }
 
 }

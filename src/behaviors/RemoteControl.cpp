@@ -10,42 +10,42 @@
 namespace isomot
 {
 
-RemoteControl::RemoteControl(Item* item, const BehaviorId& id) : Behavior(item, id)
+RemoteControl::RemoteControl( Item * item, const BehaviorId & id ) : Behavior( item, id )
 {
-  stateId = StateWait;
-  controlledItem = 0;
+        stateId = StateWait;
+        controlledItem = 0;
 
-  // Sólo se mueve el elemento controlado, el controlador es fijo
-  if(id == SteerBehavior)
-  {
-    speedTimer = new HPC();
-    fallenTimer = new HPC();
-    speedTimer->start();
-    fallenTimer->start();
-  }
+        // Sólo se mueve el elemento controlado, el controlador es fijo
+        if ( id == SteerBehavior )
+        {
+                speedTimer = new HPC();
+                fallTimer = new HPC();
+                speedTimer->start();
+                fallTimer->start();
+        }
 }
 
 RemoteControl::~RemoteControl()
 {
-  if(id == SteerBehavior)
-  {
-    delete speedTimer;
-    delete fallenTimer;
-  }
+        if ( id == SteerBehavior )
+        {
+                delete speedTimer;
+                delete fallTimer;
+        }
 }
 
-bool RemoteControl::update()
+bool RemoteControl::update ()
 {
-  FreeItem* freeItem = dynamic_cast<FreeItem*>(this->item);
+  FreeItem* freeItem = dynamic_cast< FreeItem * >( this->item );
   bool destroy = false;
 
   // Si este es el elemento controlador, busca al controlado
-  if(id == RemoteControlBehavior && controlledItem == 0)
+  if ( id == RemoteControlBehavior && controlledItem == 0 )
   {
-    controlledItem = static_cast<FreeItem*>(freeItem->getMediator()->findItem(SteerBehavior));
+    controlledItem = static_cast< FreeItem * >( freeItem->getMediator()->findItemByBehavior( SteerBehavior ) );
   }
 
-  switch(stateId)
+  switch ( stateId )
   {
     case StateWait:
       break;
@@ -55,13 +55,13 @@ bool RemoteControl::update()
     case StateMoveEast:
     case StateMoveWest:
       // Si este es el elemento controlado y está activo y ha llegado el momento de moverse, entonces:
-      if(id == SteerBehavior)
+      if ( id == SteerBehavior )
       {
-        if(speedTimer->getValue() > freeItem->getSpeed())
+        if ( speedTimer->getValue() > freeItem->getSpeed() )
         {
           // El elemento se mueve. Si colisiona vuelve al estado inicial para tomar una nueva dirección
-          state->move(this, &stateId, true);
-          if(stateId != StateFall)
+          state->move( this, &stateId, true );
+          if ( stateId != StateFall )
           {
             stateId = StateWait;
           }
@@ -83,9 +83,9 @@ bool RemoteControl::update()
     case StateDisplaceSoutheast:
     case StateDisplaceSouthwest:
       // Si este es el elemento controlado y está activo y ha llegado el momento de moverse, entonces:
-      if(id == SteerBehavior)
+      if ( id == SteerBehavior )
       {
-        if(speedTimer->getValue() > freeItem->getSpeed())
+        if ( speedTimer->getValue() > freeItem->getSpeed() )
         {
           // Emite el sonido de de desplazamiento si está siendo empujado, no desplazado
           // por un elemento que haya debajo
@@ -154,17 +154,17 @@ bool RemoteControl::update()
       }
       // Si este es el elemento controlado y ha llegado el momento de caer entonces
       // el elemento desciende una unidad
-      else if(id == SteerBehavior && fallenTimer->getValue() > freeItem->getWeight())
+      else if ( id == SteerBehavior && fallTimer->getValue() > freeItem->getWeight() )
       {
-        if(!state->fall(this))
+        if ( ! state->fall( this ) )
         {
           // Emite el sonido de caída
-          this->soundManager->play(freeItem->getLabel(), stateId);
+          this->soundManager->play( freeItem->getLabel(), stateId );
           stateId = StateWait;
         }
 
         // Se pone a cero el cronómetro para el siguiente ciclo
-        fallenTimer->reset();
+        fallTimer->reset();
       }
       break;
 

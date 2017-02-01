@@ -9,27 +9,28 @@
 namespace isomot
 {
 
-Impel::Impel(Item* item, const BehaviorId& id) : Behavior(item, id)
+Impel::Impel( Item * item, const BehaviorId & id ) :
+        Behavior( item, id )
 {
-  stateId = StateWait;
-  speedTimer = new HPC();
-  fallenTimer = new HPC();
-  speedTimer->start();
-  fallenTimer->start();
+        stateId = StateWait;
+        speedTimer = new HPC();
+        fallTimer = new HPC();
+        speedTimer->start();
+        fallTimer->start();
 }
 
 Impel::~Impel()
 {
-  delete speedTimer;
-  delete fallenTimer;
+        delete speedTimer;
+        delete fallTimer;
 }
 
-bool Impel::update()
+bool Impel::update ()
 {
-  FreeItem* freeItem = dynamic_cast<FreeItem*>(this->item);
+  FreeItem * freeItem = dynamic_cast< FreeItem * >( this->item );
   bool destroy = false;
 
-  switch(stateId)
+  switch ( stateId )
   {
     case StateWait:
       break;
@@ -67,15 +68,15 @@ bool Impel::update()
         destroy = true;
       }
       // Si ha llegado el momento de caer entonces el elemento desciende una unidad
-      else if(fallenTimer->getValue() > freeItem->getWeight())
+      else if ( fallTimer->getValue() > freeItem->getWeight() )
       {
-        if(!state->fall(this))
+        if ( ! state->fall( this ) )
         {
           stateId = StateWait;
         }
 
         // Se pone a cero el cronómetro para el siguiente ciclo
-        fallenTimer->reset();
+        fallTimer->reset();
       }
       break;
 

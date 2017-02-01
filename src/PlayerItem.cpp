@@ -55,7 +55,7 @@ bool PlayerItem::changeData( int value, int x, int y, int z, const Datum& datum,
         bool collisionFound = false;
 
         // Vacía la pila de colisiones
-        mediator->clearCollisionStack();
+        mediator->clearStackOfCollisions( );
 
         // Copia el elemento antes de realizar el movimiento
         PlayerItem oldPlayerItem( *this );
@@ -95,13 +95,13 @@ bool PlayerItem::changeData( int value, int x, int y, int z, const Datum& datum,
 
         // Busca colisiones con las puertas de la sala
         bool doorCollision = false;
-        if ( ( collisionFound = mediator->findCollision( this ) ) )
+        if ( ( collisionFound = mediator->findCollisionWithItem( this ) ) )
         {
                 // Dirección de avance
                 int wayX = ( datum == CoordinateX || x != 0 ? value : 0 );
                 int wayY = ( datum == CoordinateY || y != 0 ? value : 0 );
 
-                while ( ! mediator->isCollisionStackEmpty() )
+                while ( ! mediator->isStackOfCollisionsEmpty () )
                 {
                         int id = mediator->popCollision();
 
@@ -188,7 +188,7 @@ bool PlayerItem::changeData( int value, int x, int y, int z, const Datum& datum,
         }
 
         // Si ha habido colisión con alguna pared, se detiene el proceso
-        if ( ! ( collisionFound = ! mediator->isCollisionStackEmpty() ) )
+        if ( ! ( collisionFound = ! mediator->isStackOfCollisionsEmpty () ) )
         {
                 // Se buscan colisiones con los límites de la sala, ahora que se sabe que el jugador
                 // puede estar atravesando una puerta
@@ -231,11 +231,11 @@ bool PlayerItem::changeData( int value, int x, int y, int z, const Datum& datum,
                 }
 
                 // Si se ha llegado a los límites de la sala se detiene el proceso
-                if ( ! ( collisionFound = ! mediator->isCollisionStackEmpty() ) )
+                if ( ! ( collisionFound = ! mediator->isStackOfCollisionsEmpty () ) )
                 {
                         // Busca colisiones con el resto de elementos de la sala
                         // Si hay colisión se interrumpe el proceso
-                        if ( ! ( collisionFound = mediator->findCollision( this ) ) )
+                        if ( ! ( collisionFound = mediator->findCollisionWithItem( this ) ) )
                         {
                                 // Si el elemento tiene imagen se marcan para enmascarar los elementos
                                 // libres cuyas imágenes se solapen con la suya. La operación se realiza
@@ -430,25 +430,26 @@ bool PlayerItem::isCollidingWithRoomBorder( const Direction& direction, Mediator
         return result;
 }
 
-void PlayerItem::execute()
+void PlayerItem::behave ()
 {
-        if( behavior != 0 )
+	UserControlled* userBehavior = dynamic_cast< UserControlled* >( this->behavior );
+        if( userBehavior != 0 )
         {
-                behavior->execute();
+                userBehavior->behave ( );
         }
 }
 
-bool PlayerItem::update()
+bool PlayerItem::update ()
 {
         if( behavior != 0 )
         {
-                behavior->update();
+                behavior->update ( );
         }
 
         return false;
 }
 
-void PlayerItem::wait()
+void PlayerItem::wait ()
 {
         StateId stateId = this->behavior->getStateId();
 

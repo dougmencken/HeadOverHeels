@@ -345,7 +345,7 @@ void Isomot::updateEndRoom()
         else
         {
                 // Se dispara una salva de honor
-                if( activeRoom->getMediator()->findItem( CannonBallLabel ) == 0 && activeRoom->getMediator()->findItem( BubblesLabel ) == 0 )
+                if( activeRoom->getMediator()->findItemByLabel( CannonBallLabel ) == 0 && activeRoom->getMediator()->findItemByLabel( BubblesLabel ) == 0 )
                 {
                         FreeItem* freeItem = new FreeItem( this->itemDataManager->find( CannonBallLabel ), 146, 93, LayerHeight, NoDirection );
                         freeItem->assignBehavior( CannonBallBehavior, this->itemDataManager->find( BubblesLabel ) );

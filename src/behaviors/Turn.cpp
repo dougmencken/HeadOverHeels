@@ -11,22 +11,23 @@
 namespace isomot
 {
 
-Turn::Turn(Item* item, const BehaviorId& id) : Behavior(item, id)
+Turn::Turn( Item * item, const BehaviorId & id ) :
+        Behavior( item, id )
 {
-  stateId = StateWait;
-  speedTimer = new HPC();
-  fallenTimer = new HPC();
-  speedTimer->start();
-  fallenTimer->start();
+        stateId = StateWait;
+        speedTimer = new HPC();
+        fallTimer = new HPC();
+        speedTimer->start();
+        fallTimer->start();
 }
 
 Turn::~Turn()
 {
-  delete speedTimer;
-  delete fallenTimer;
+        delete speedTimer;
+        delete fallTimer;
 }
 
-bool Turn::update()
+bool Turn::update ()
 {
   bool destroy = false;
   FreeItem* freeItem = dynamic_cast<FreeItem*>(this->item);
@@ -98,7 +99,7 @@ bool Turn::update()
         destroy = true;
       }
       // Si ha llegado el momento de caer entonces el elemento desciende una unidad
-      else if(fallenTimer->getValue() > freeItem->getWeight())
+      else if(fallTimer->getValue() > freeItem->getWeight())
       {
         if(!state->fall(this))
         {
@@ -108,7 +109,7 @@ bool Turn::update()
         }
 
         // Se pone a cero el cronómetro para el siguiente ciclo
-        fallenTimer->reset();
+        fallTimer->reset();
       }
       break;
 

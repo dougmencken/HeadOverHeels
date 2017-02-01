@@ -1,6 +1,6 @@
 // The free and open source remake of Head over Heels
 //
-// Copyright © 2016 Douglas Mencken dougmencken @ gmail.com
+// Copyright © 2017 Douglas Mencken dougmencken@gmail.com
 // Copyright © 2008 Jorge Rodríguez Santos
 // Original game copyright © 1987 Ocean Software Ltd.
 //
@@ -119,19 +119,19 @@ public:
         * Sombrea una loseta
         * @param floorTile La loseta que solicita la operación
         */
-        void castShadow( FloorTile* floorTile ) ;
+        void castShadowOnFloor( FloorTile* floorTile ) ;
 
        /**
         * Sombrea un elemento rejilla
         * @param gridItem El elemento rejilla que solicita la operación
         */
-        void castShadow( GridItem* gridItem ) ;
+        void castShadowOnGrid( GridItem* gridItem ) ;
 
        /**
         * Sombrea un elemento libre
         * @param freeItem El elemento libre que solicita la operación
         */
-        void castShadow( FreeItem* freeItem ) ;
+        void castShadowOnFreeItem( FreeItem* freeItem ) ;
 
        /**
         * Enmascara un elemento libre
@@ -144,7 +144,7 @@ public:
         * @param id Identificador del elemento asignado por el motor
         * @return El elemento si se encontró ó 0 si no existe
         */
-        Item* findItem ( int id ) ;
+        Item* findItemById ( int id ) ;
 
        /**
         * Busca un elemento en la sala
@@ -152,7 +152,7 @@ public:
         * devolverá el primero que encuentre
         * @return El elemento si se encontró ó 0 si no existe
         */
-        Item* findItem ( short label ) ;
+        Item* findItemByLabel ( short label ) ;
 
        /**
         * Busca un elemento en la sala
@@ -160,17 +160,17 @@ public:
         * devolverá el primero que encuentre
         * @return El elemento si se encontró ó 0 si no existe
         */
-        Item* findItem ( const BehaviorId& id ) ;
+        Item* findItemByBehavior ( const BehaviorId& id ) ;
 
        /**
         * Busca colisiones entre un elemento y el resto de la sala. De haberlas se almacenarán en la pila
         * @param item El elemento para el que se buscarán colisiones
         * @return true si se encontraron colisiones o false en caso contrario
         */
-        bool findCollision ( Item* item ) ;
+        bool findCollisionWithItem ( Item* item ) ;
 
        /**
-        * Busca la coordenada Z más alta donde situar un elemento
+        * Search for Z coordinate which is the highest position to place an element
         * @param item El elemento para el que se busca la coordenada
         * @return El nuevo valor de Z o cero si hubo colisión o no se pudo hallar
         */
@@ -240,33 +240,35 @@ public:
        /**
         * Vacía la pila de colisiones
         */
-        void clearCollisionStack () ;
+        void clearStackOfCollisions () {  collisions.clear() ;  }
 
        /**
         * Indica si la pila de colisiones está vacía
         * @return true si está vacía o false en caso contrario
         */
-        bool isCollisionStackEmpty () ;
+        bool isStackOfCollisionsEmpty () {  return collisions.empty() ;  }
 
        /**
         * Número de elementos en la pila de colisiones
         * @return Un número positivo ó 0 si la pila está vacía
         */
-        unsigned int collisionStackSize () ;
+        unsigned int depthOfStackOfCollisions () {  return collisions.size() ;  }
 
        /**
         * Indica si un elemento ha chocado con otro de un tipo determinado
         * @param id Etiqueta del elemento
         * @return El elemento con el que se ha producido la colisión ó 0 si no hay colisión
         */
-        Item* collisionWith ( short label ) ;
+        Item* collisionWithByLabel ( short label ) ;
 
        /**
         * Indica si un elemento ha chocado con otro de un comportamiento determinado
         * @param id Identificador del comportamiento
         * @return El elemento con el que se ha producido la colisión ó 0 si no hay colisión
         */
-        Item* collisionWith ( const BehaviorId& id ) ;
+        Item* collisionWithByBehavior ( const BehaviorId& id ) ;
+
+        Item* findCollisionPop () {  return this->findItemById( this->popCollision() ) ;  }
 
        /**
         * Indica si un elemento ha chocado con otro capaz de quitar vida a un jugador y que pueda

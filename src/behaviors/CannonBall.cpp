@@ -1,3 +1,4 @@
+
 #include "CannonBall.hpp"
 #include "FreeItem.hpp"
 #include "Mediator.hpp"
@@ -5,27 +6,29 @@
 #include "Mediator.hpp"
 #include "Room.hpp"
 
+
 namespace isomot
 {
 
-CannonBall::CannonBall(Item* item, const BehaviorId& id) : Behavior(item, id)
+CannonBall::CannonBall( Item * item, const BehaviorId & id ) :
+	Behavior( item, id )
 {
-  stateId = StateWait;
-  speedTimer = new HPC();
-  speedTimer->start();
+	stateId = StateWait;
+	speedTimer = new HPC();
+	speedTimer->start();
 }
 
-CannonBall::~CannonBall()
+CannonBall::~CannonBall( )
 {
-  delete speedTimer;
+	delete speedTimer;
 }
 
-bool CannonBall::update()
+bool CannonBall::update ()
 {
   FreeItem* freeItem = dynamic_cast< FreeItem* >( this->item );
   bool destroy = false;
 
-  switch( stateId )
+  switch ( stateId )
   {
     case StateWait:
       // Asigna el estado de movimiento
@@ -33,13 +36,13 @@ bool CannonBall::update()
       break;
 
     case StateMoveNorth:
-      if( speedTimer->getValue() > freeItem->getSpeed() )
+      if ( speedTimer->getValue() > freeItem->getSpeed() )
       {
         // Almacena en la pila de colisiones los elementos que hay al norte
         freeItem->checkPosition(-1, 0, 0, Add);
 
         // Si no hay colisión, la bola se mueve
-        if( freeItem->getMediator()->isCollisionStackEmpty() )
+        if ( freeItem->getMediator()->isStackOfCollisionsEmpty() )
         {
           state->move( this, &stateId, false );
         }
@@ -75,9 +78,9 @@ bool CannonBall::update()
   return destroy;
 }
 
-void CannonBall::setExtraData(void* data)
+void CannonBall::setMoreData( void * data )
 {
-  this->bubblesData = reinterpret_cast<ItemData*>(data);
+	this->bubblesData = reinterpret_cast< ItemData * >( data );
 }
 
 }

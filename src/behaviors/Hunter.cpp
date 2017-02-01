@@ -13,26 +13,27 @@
 namespace isomot
 {
 
-Hunter::Hunter(Item* item, const BehaviorId& id) : Behavior(item, id)
+Hunter::Hunter( Item * item, const BehaviorId & id ) :
+        Behavior( item, id )
 {
-  stateId = StateWait;
-  speedTimer = new HPC();
-  speedTimer->start();
+        stateId = StateWait;
+        speedTimer = new HPC();
+        speedTimer->start();
 }
 
 Hunter::~Hunter()
 {
-  delete speedTimer;
+        delete speedTimer;
 }
 
-bool Hunter::update()
+bool Hunter::update ()
 {
-  FreeItem* freeItem = dynamic_cast<FreeItem*>(this->item);
+  FreeItem* freeItem = dynamic_cast< FreeItem * >( this->item );
   PlayerItem* playerItem = freeItem->getMediator()->getActivePlayer();
   Mediator* mediator = freeItem->getMediator();
   bool destroy = false;
 
-  switch(stateId)
+  switch ( stateId )
   {
     case StateWait:
       // Si el elemento no tiene que esperar la cercanía del jugador, se activa sin más
@@ -201,16 +202,16 @@ bool Hunter::update()
 
 StateId Hunter::calculateDirection( const StateId& stateId )
 {
-  if(id == Hunter4Behavior || id == HunterWaiting4Behavior)
-  {
-    return calculateDirection4(stateId);
-  }
-  else if(id == Hunter8Behavior || id == HunterWaiting8Behavior)
-  {
-    return calculateDirection8(stateId);
-  }
+        if ( id == Hunter4Behavior || id == HunterWaiting4Behavior )
+        {
+                return calculateDirection4( stateId );
+        }
+        else if ( id == Hunter8Behavior || id == HunterWaiting8Behavior )
+        {
+                return calculateDirection8( stateId );
+        }
 
-  return StateWait;
+        return StateWait;
 }
 
 StateId Hunter::calculateDirection4( const StateId& stateId )
@@ -423,9 +424,9 @@ bool Hunter::createFullBody()
   return created;
 }
 
-void Hunter::setExtraData( void* data )
+void Hunter::setMoreData( void * data )
 {
-  this->guardData = reinterpret_cast< ItemData* >( data );
+        this->guardData = reinterpret_cast< ItemData * >( data );
 }
 
 }

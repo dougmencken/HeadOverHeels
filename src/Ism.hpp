@@ -1,6 +1,6 @@
 // The free and open source remake of Head over Heels
 //
-// Copyright © 2016 Douglas Mencken dougmencken @ gmail.com
+// Copyright © 2017 Douglas Mencken dougmencken@gmail.com
 // Copyright © 2008 Jorge Rodríguez Santos
 // Original game copyright © 1987 Ocean Software Ltd.
 //
@@ -97,7 +97,7 @@ namespace isomot
                 Up,                /* Arriba, incremento en el eje Z. Salida a una sala sin suelo */
                 Down,              /* Abajo, decremento en el eje Z. Salida por una sala sin suelo */
                 ByTeleport,        /* Telepuerto, salida a otra sala con telepuerto */
-                ByTeleport2,       /* Segundo telepuerto, salida a otra sala con telepuerto */
+                ByTeleportToo,     /* Segundo telepuerto, salida a otra sala con telepuerto */
                 NoEntry,           /* No hay entrada a la sala */
                 NoExit,            /* No hay salida de la sala */
                 Restart,           /* Se sale de la sala, reiniciándola. Se usa cuando el jugador es destruido */

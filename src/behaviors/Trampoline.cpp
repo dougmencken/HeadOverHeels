@@ -11,33 +11,34 @@
 namespace isomot
 {
 
-Trampoline::Trampoline(Item* item, const BehaviorId& id) : Behavior(item, id)
+Trampoline::Trampoline( Item * item, const BehaviorId & id ) :
+        Behavior( item, id )
 {
-  stateId = StateWait;
-  folded = rebounding = false;
-  regularFrame = 0;
-  foldedFrame = 1;
-  speedTimer = new HPC();
-  fallenTimer = new HPC();
-  reboundTimer = new HPC();
-  speedTimer->start();
-  fallenTimer->start();
-  reboundTimer->start();
+        stateId = StateWait;
+        folded = rebounding = false;
+        regularFrame = 0;
+        foldedFrame = 1;
+        speedTimer = new HPC();
+        fallTimer = new HPC();
+        reboundTimer = new HPC();
+        speedTimer->start();
+        fallTimer->start();
+        reboundTimer->start();
 }
 
 Trampoline::~Trampoline()
 {
-  delete speedTimer;
-  delete fallenTimer;
-  delete reboundTimer;
+        delete speedTimer;
+        delete fallTimer;
+        delete reboundTimer;
 }
 
-bool Trampoline::update()
+bool Trampoline::update ()
 {
-  FreeItem* freeItem = dynamic_cast<FreeItem*>(this->item);
+  FreeItem * freeItem = dynamic_cast< FreeItem * >( this->item );
   bool destroy = false;
 
-  switch(stateId)
+  switch ( stateId )
   {
     case StateWait:
       // Si hay elementos encima el trampolín se pliega
@@ -79,7 +80,7 @@ bool Trampoline::update()
       // Se comprueba si el elemento debe empezar a caer
       if(FallState::getInstance()->fall(this))
       {
-        fallenTimer->reset();
+        fallTimer->reset();
         stateId = StateFall;
       }
       break;
@@ -121,7 +122,7 @@ bool Trampoline::update()
         destroy = true;
       }
       // Si ha llegado el momento de caer entonces el elemento desciende una unidad
-      else if(fallenTimer->getValue() > freeItem->getWeight())
+      else if(fallTimer->getValue() > freeItem->getWeight())
       {
         // El elemento cae
         this->changeStateId(stateId);
@@ -133,7 +134,7 @@ bool Trampoline::update()
         }
 
         // Se pone a cero el cronómetro para el siguiente ciclo
-        fallenTimer->reset();
+        fallTimer->reset();
       }
       break;
 

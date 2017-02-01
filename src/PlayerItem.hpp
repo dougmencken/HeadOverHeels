@@ -1,6 +1,6 @@
 // The free and open source remake of Head over Heels
 //
-// Copyright © 2016 Douglas Mencken dougmencken @ gmail.com
+// Copyright © 2017 Douglas Mencken dougmencken@gmail.com
 // Copyright © 2008 Jorge Rodríguez Santos
 // Original game copyright © 1987 Ocean Software Ltd.
 //
@@ -18,7 +18,6 @@
 namespace isomot
 {
 
-// Declaraciones adelantadas
 class ItemData;
 class Mediator;
 
@@ -27,6 +26,7 @@ class Mediator;
  * Son una especialización de los elementos libres porque pueden atravesar puertas, cambiar
  * de sala, coger otros elementos o destruirlos
  */
+
 class PlayerItem : public FreeItem
 {
 
@@ -50,10 +50,7 @@ public:
 
         virtual ~PlayerItem( ) ;
 
-        /**
-         * Actualiza el elemento en función de las órdenes dadas por el usuario
-         */
-        virtual void execute () ;
+        virtual void behave () ;
 
         /**
          * Actualiza el comportamiento del elemento
@@ -134,16 +131,16 @@ public:
          * Establece los datos del elemento que tiene el jugador en el bolso
          * @param data Datos del elemento tomado por el jugador
          * @param takenItemImage Imagen del elemento tomado por el jugador
-         * @param behaviorId Comportamiento del elemento tomado por el jugador
+         * @param behavior Comportamiento del elemento tomado por el jugador
          */
-        void assignTakenItem( ItemData* itemData, BITMAP* takenItemImage, const BehaviorId& behaviorId ) ;
+        void assignTakenItem( ItemData* itemData, BITMAP* takenItemImage, const BehaviorId& behavior ) ;
 
         /**
          * Obtiene los datos del elemento que tiene el jugador en el bolso
          * @param data Devuelve los datos del elemento tomado por el jugador
-         * @param behaviorId Devuelve el comportamiento del elemento tomado por el jugador
+         * @param behavior Devuelve el comportamiento del elemento tomado por el jugador
          */
-        ItemData* consultTakenItem( BehaviorId* behaviorId ) ;
+        ItemData* consultTakenItem( BehaviorId* behavior ) ;
 
         /**
          * Obtiene la imagen del elemento tomado por el jugador
