@@ -196,7 +196,7 @@ BITMAP* Isomot::update()
                         }
                 }
                 // Las repeticiones de esta tecla no deben procesarse
-                InputManager::getInstance()->noRepeat( KeySwap );
+                InputManager::getInstance()->noRepeat( "swap" );
         }
 
         // Si la sala está activa entonces se dibuja

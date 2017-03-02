@@ -216,22 +216,22 @@ void PlayerHead::behave ()
                         {
                                 shot( playerItem );
                                 // Las repeticiones de esta tecla no deben procesarse
-                                input->noRepeat( KeyShoot );
+                                input->noRepeat( "shoot" );
                         }
                         // ...y se ha pulsado alguna tecla de movimiento entonces se mueve
-                        else if ( input->left() && !input->right() && !input->up() && !input->down() )
+                        else if ( input->movenorth() && !input->movesouth() && !input->moveeast() && !input->movewest() )
                         {
                                 stateId = StateMoveNorth;
                         }
-                        else if ( !input->left() && input->right() && !input->up() && !input->down() )
+                        else if ( !input->movenorth() && input->movesouth() && !input->moveeast() && !input->movewest() )
                         {
                                 stateId = StateMoveSouth;
                         }
-                        else if ( !input->left() && !input->right() && input->up() && !input->down() )
+                        else if ( !input->movenorth() && !input->movesouth() && input->moveeast() && !input->movewest() )
                         {
                                 stateId = StateMoveEast;
                         }
-                        else if ( !input->left() && !input->right() && !input->up() && input->down() )
+                        else if ( !input->movenorth() && !input->movesouth() && !input->moveeast() && input->movewest() )
                         {
                                 stateId = StateMoveWest;
                         }
@@ -252,27 +252,27 @@ void PlayerHead::behave ()
                         {
                                 shot( playerItem );
                                 // Las repeticiones de esta tecla no deben procesarse
-                                input->noRepeat( KeyShoot );
+                                input->noRepeat( "shoot" );
                         }
                         // ...y se ha pulsado alguna tecla de movimiento entonces sigue moviéndose
-                        else if ( input->left() && !input->right() && !input->up() && !input->down() )
+                        else if ( input->movenorth() && !input->movesouth() && !input->moveeast() && !input->movewest() )
                         {
                                 stateId = StateMoveNorth;
                         }
-                        else if ( !input->left() && input->right() && !input->up() && !input->down() )
+                        else if ( !input->movenorth() && input->movesouth() && !input->moveeast() && !input->movewest() )
                         {
                                 stateId = StateMoveSouth;
                         }
-                        else if ( !input->left() && !input->right() && input->up() && !input->down() )
+                        else if ( !input->movenorth() && !input->movesouth() && input->moveeast() && !input->movewest() )
                         {
                                 stateId = StateMoveEast;
                         }
-                        else if ( !input->left() && !input->right() && !input->up() && input->down() )
+                        else if ( !input->movenorth() && !input->movesouth() && !input->moveeast() && input->movewest() )
                         {
                                 stateId = StateMoveWest;
                         }
                         // Si por el contrario se han soltado las teclas de movimiento entonces se pone en espera
-                        else if ( !input->left() && !input->right() && !input->up() && !input->down() )
+                        else if ( !input->movenorth() && !input->movesouth() && !input->moveeast() && !input->movewest() )
                         {
                                 SoundManager::getInstance()->stop( playerItem->getLabel(), stateId );
                                 stateId = StateWait;
@@ -291,22 +291,22 @@ void PlayerHead::behave ()
                         {
                                 shot( playerItem );
                                 // Las repeticiones de esta tecla no deben procesarse
-                                input->noRepeat( KeyShoot );
+                                input->noRepeat( "shoot" );
                         }
                         // ...y se ha pulsado alguna tecla de movimiento entonces sigue moviéndose
-                        else if ( input->left() && !input->right() && !input->up() && !input->down() )
+                        else if ( input->movenorth() && !input->movesouth() && !input->moveeast() && !input->movewest() )
                         {
                                 stateId = StateMoveNorth;
                         }
-                        else if ( !input->left() && input->right() && !input->up() && !input->down() )
+                        else if ( !input->movenorth() && input->movesouth() && !input->moveeast() && !input->movewest() )
                         {
                                 stateId = StateMoveSouth;
                         }
-                        else if ( !input->left() && !input->right() && input->up() && !input->down() )
+                        else if ( !input->movenorth() && !input->movesouth() && input->moveeast() && !input->movewest() )
                         {
                                 stateId = StateMoveEast;
                         }
-                        else if ( !input->left() && !input->right() && !input->up() && input->down() )
+                        else if ( !input->movenorth() && !input->movesouth() && !input->moveeast() && input->movewest() )
                         {
                                 stateId = StateMoveWest;
                         }
@@ -322,19 +322,19 @@ void PlayerHead::behave ()
                         // ...y se ha pulsado alguna tecla de movimiento entonces: si pretende avanzar en la dirección
                         // contraria a la que se está deplazando entonces se anula el desplazamiento; en caso contrario,
                         // avanza en la dirección que se esté ordenando
-                        else if ( input->left() && !input->right() && !input->up() && !input->down() )
+                        else if ( input->movenorth() && !input->movesouth() && !input->moveeast() && !input->movewest() )
                         {
                                 stateId = ( stateId == StateForceDisplaceSouth ? StateCancelDisplaceSouth : StateMoveNorth );
                         }
-                        else if ( !input->left() && input->right() && !input->up() && !input->down() )
+                        else if ( !input->movenorth() && input->movesouth() && !input->moveeast() && !input->movewest() )
                         {
                                 stateId = ( stateId == StateForceDisplaceNorth ? StateCancelDisplaceNorth : StateMoveSouth );
                         }
-                        else if ( !input->left() && !input->right() && input->up() && !input->down() )
+                        else if ( !input->movenorth() && !input->movesouth() && input->moveeast() && !input->movewest() )
                         {
                                 stateId = ( stateId == StateForceDisplaceWest ? StateCancelDisplaceWest : StateMoveEast );
                         }
-                        else if ( !input->left() && !input->right() && !input->up() && input->down() )
+                        else if ( !input->movenorth() && !input->movesouth() && !input->moveeast() && input->movewest() )
                         {
                                 stateId = ( stateId == StateForceDisplaceEast ? StateCancelDisplaceEast : StateMoveWest );
                         }
@@ -347,22 +347,22 @@ void PlayerHead::behave ()
                         {
                                 shot( playerItem );
                                 // Las repeticiones de esta tecla no deben procesarse
-                                input->noRepeat( KeyShoot );
+                                input->noRepeat( "shoot" );
                         }
                         // ...y se ha pulsado alguna tecla de movimiento entonces el salto cambia de orientación
-                        else if ( input->left() && !input->right() && !input->up() && !input->down() && playerItem->getDirection() != North )
+                        else if ( input->movenorth() && !input->movesouth() && !input->moveeast() && !input->movewest() && playerItem->getDirection() != North )
                         {
                                 playerItem->changeDirection( North );
                         }
-                        else if ( !input->left() && input->right() && !input->up() && !input->down() && playerItem->getDirection() != South )
+                        else if ( !input->movenorth() && input->movesouth() && !input->moveeast() && !input->movewest() && playerItem->getDirection() != South )
                         {
                                 playerItem->changeDirection( South );
                         }
-                        else if ( !input->left() && !input->right() && input->up() && !input->down() && playerItem->getDirection() != East )
+                        else if ( !input->movenorth() && !input->movesouth() && input->moveeast() && !input->movewest() && playerItem->getDirection() != East )
                         {
                                 playerItem->changeDirection( East );
                         }
-                        else if ( !input->left() && !input->right() && !input->up() && input->down() && playerItem->getDirection() != West )
+                        else if ( !input->movenorth() && !input->movesouth() && !input->moveeast() && input->movewest() && playerItem->getDirection() != West )
                         {
                                 playerItem->changeDirection( West );
                         }
@@ -375,10 +375,10 @@ void PlayerHead::behave ()
                         {
                                 shot( playerItem );
                                 // Las repeticiones de esta tecla no deben procesarse
-                                input->noRepeat( KeyShoot );
+                                input->noRepeat( "shoot" );
                         }
                         // ...y se intenta mover entonces Head planea
-                        else if ( input->left() || input->right() || input->up() || input->down() )
+                        else if ( input->movenorth() || input->movesouth() || input->moveeast() || input->movewest() )
                         {
                                 stateId = StateGlide;
                         }
@@ -394,27 +394,27 @@ void PlayerHead::behave ()
                         {
                                 shot( playerItem );
                                 // Las repeticiones de esta tecla no deben procesarse
-                                input->noRepeat( KeyShoot );
+                                input->noRepeat( "shoot" );
                         }
                         // ...y se ha pulsado alguna tecla de movimiento entonces cambia la orientación
-                        else if ( input->left() && !input->right() && !input->up() && !input->down() && playerItem->getDirection() != North )
+                        else if ( input->movenorth() && !input->movesouth() && !input->moveeast() && !input->movewest() && playerItem->getDirection() != North )
                         {
                                 playerItem->changeDirection( North );
                         }
-                        else if ( !input->left() && input->right() && !input->up() && !input->down() && playerItem->getDirection() != South )
+                        else if ( !input->movenorth() && input->movesouth() && !input->moveeast() && !input->movewest() && playerItem->getDirection() != South )
                         {
                                 playerItem->changeDirection( South );
                         }
-                        else if ( !input->left() && !input->right() && input->up() && !input->down() && playerItem->getDirection() != East )
+                        else if ( !input->movenorth() && !input->movesouth() && input->moveeast() && !input->movewest() && playerItem->getDirection() != East )
                         {
                                 playerItem->changeDirection( East );
                         }
-                        else if ( !input->left() && !input->right() && !input->up() && input->down() && playerItem->getDirection() != West )
+                        else if ( !input->movenorth() && !input->movesouth() && !input->moveeast() && input->movewest() && playerItem->getDirection() != West )
                         {
                                 playerItem->changeDirection( West );
                         }
                         // ...y deja de moverse con las teclas de dirección entonces simplemente cae
-                        else if ( !input->left() && !input->right() && !input->up() && !input->down() )
+                        else if ( !input->movenorth() && !input->movesouth() && !input->moveeast() && !input->movewest() )
                         {
                                 stateId = StateFall;
                         }

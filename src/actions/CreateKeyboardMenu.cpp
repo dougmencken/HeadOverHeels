@@ -14,9 +14,9 @@ using gui::CreateKeyboardMenu;
 using isomot::InputManager;
 
 
-CreateKeyboardMenu::CreateKeyboardMenu( BITMAP* picture )
-: Action(),
-  where( picture )
+CreateKeyboardMenu::CreateKeyboardMenu( BITMAP* picture ) :
+        Action( ) ,
+        where( picture )
 {
 
 }
@@ -30,35 +30,38 @@ void CreateKeyboardMenu::doIt ()
         CreateMainMenu::placeHeadAndHeels( screen, /* icons */ false, /* copyrights */ true );
 
         Label* label = 0;
-        LanguageText* langString = 0;
         LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
 
-        // Las opciones del menú
-        std::string textKey[ ] = {  "left", "right", "up", "down", "take", "jump", "shoot", "take-jump", "swap", "halt"  };
-        isomot::GameKey gameKey[ ] = {  isomot::KeyNorth, isomot::KeySouth, isomot::KeyEast, isomot::KeyWest,
-                                        isomot::KeyTake, isomot::KeyJump, isomot::KeyShoot, isomot::KeyTakeAndJump,
-                                        isomot::KeySwap, isomot::KeyHalt  };
-
         // La primera opción almacena la posición del menú en pantalla
-        langString = languageManager->findLanguageString( "left" );
+        LanguageText* langString = languageManager->findLanguageString( "movenorth" );
         Menu* menu = new Menu( langString->getX(), langString->getY() );
 
-        InputManager* inputManager = InputManager::getInstance();
+        InputManager* supportOfInput = InputManager::getInstance();
 
-        // Creación de las opciones: una por cada tecla empleada en el juego
-        for ( int i = 0; i < 10; i++ )
+        // Create one option for each key used in the game
+        for ( size_t i = 0; i < InputManager::numberOfKeys; i++ )
         {
+                std::string nameOfThisKey = InputManager::namesOfKeys[ i ];
+
                 // Código de la tecla asignada
-                int scancode = inputManager->readUserKey( gameKey[i] );
+                int scancode = supportOfInput->getUserKey( nameOfThisKey );
 
                 // Descripción del uso de la tecla
-                std::string keyText = languageManager->findLanguageString( textKey[i] )->getText();
+                std::string textOfKey = languageManager->findLanguageString( nameOfThisKey )->getText();
+                std::string dottedTextOfKey( textOfKey );
+                for ( size_t position = textOfKey.length() ; position < 16 ; ++position ) {
+                        dottedTextOfKey = dottedTextOfKey + ".";
+                }
 
-                // Se crea la opción de menú con la descripción de la tecla y la propia tecla
-                label = new Label( keyText + scancode_to_name( scancode ) );
+                // The menu option is made of the description of the key and the key itself
+                label = new Label( dottedTextOfKey + scancode_to_name( scancode ) );
+                if ( scancode == 0 )
+                {
+                        label->changeFontAndColor( label->getFontName (), "cyan" );
+                }
 
-                // Se asigna como acción el cambio de la tecla por parte del usuario
-                label->setAction( new RedefineKey( menu, keyText, scancode ) );
+                // Assign as action the possibility to change the key
+                label->setAction( new RedefineKey( menu, nameOfThisKey ) );
 
                 // La primera opción es la opción activa
                 if ( i == 0 )

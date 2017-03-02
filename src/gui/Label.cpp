@@ -47,7 +47,7 @@ Label::~Label( )
         destroy_bitmap( this->buffer );
 }
 
-void Label::changeFont( const std::string& fontName, const std::string& color )
+void Label::changeFontAndColor( const std::string& fontName, const std::string& color )
 {
         this->fontName = fontName;
         this->color = color;

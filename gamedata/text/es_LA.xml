@@ -57,63 +57,63 @@
     </properties>
   </text>
 
-  <text id="left" x="96" y="110">
+  <text id="movenorth" x="96" y="110">
     <properties>
-      <ustring>Izquierda......</ustring>
+      <ustring>Izquierda</ustring>
     </properties>
   </text>
 
-  <text id="right" x="0" y="0">
+  <text id="movesouth" x="0" y="0">
     <properties>
-      <ustring>Derecha........</ustring>
+      <ustring>Derecha</ustring>
     </properties>
   </text>
 
-  <text id="up" x="0" y="0">
+  <text id="moveeast" x="0" y="0">
     <properties>
-      <ustring>Arriba.........</ustring>
+      <ustring>Arriba</ustring>
     </properties>
   </text>
 
-  <text id="down" x="0" y="0">
+  <text id="movewest" x="0" y="0">
     <properties>
-      <ustring>Abajo..........</ustring>
+      <ustring>Abajo</ustring>
     </properties>
   </text>
 
   <text id="take" x="0" y="0">
     <properties>
-      <ustring>Tomar/Soltar...</ustring>
+      <ustring>Tomar/Soltar</ustring>
     </properties>
   </text>
 
   <text id="jump" x="0" y="0">
     <properties>
-      <ustring>Saltar.........</ustring>
+      <ustring>Saltar</ustring>
     </properties>
   </text>
 
   <text id="shoot" x="0" y="0">
     <properties>
-      <ustring>Disparar.......</ustring>
+      <ustring>Disparar</ustring>
     </properties>
   </text>
 
   <text id="take-jump" x="0" y="0">
     <properties>
-      <ustring>Tomar+Saltar...</ustring>
+      <ustring>Tomar+Saltar</ustring>
     </properties>
   </text>
 
   <text id="swap" x="0" y="0">
     <properties>
-      <ustring>Intercambiar...</ustring>
+      <ustring>Intercambiar</ustring>
     </properties>
   </text>
 
   <text id="halt" x="0" y="0">
     <properties>
-      <ustring>Detener........</ustring>
+      <ustring>Detener</ustring>
     </properties>
   </text>
 
@@ -137,13 +137,13 @@
 
   <text id="soundfx" x="96" y="210">
     <properties>
-      <ustring>Efectos sonoros....</ustring>
+      <ustring>Efectos sonoros</ustring>
     </properties>
   </text>
 
   <text id="music" x="0" y="0">
     <properties>
-      <ustring>Música.............</ustring>
+      <ustring>Música</ustring>
     </properties>
   </text>
 

@@ -2,6 +2,7 @@
 #include "GuiManager.hpp"
 #include "Ism.hpp"
 #include "FontManager.hpp"
+
 #include "ConfigurationManager.hpp"
 #include "LanguageManager.hpp"
 #include "InputManager.hpp"
@@ -206,12 +207,9 @@ GuiManager::GuiManager( )
 
         // Se comunica al gestor de entradas qué teclas
         InputManager* inputManager = InputManager::getInstance();
-        isomot::GameKey gameKey[ ] = { isomot::KeyNorth, isomot::KeySouth, isomot::KeyEast, isomot::KeyWest,
-        isomot::KeyTake, isomot::KeyJump, isomot::KeyShoot, isomot::KeyTakeAndJump,
-        isomot::KeySwap, isomot::KeyHalt };
-        for ( int i = 0; i < 10; i++ )
+        for ( size_t i = 0; i < InputManager::numberOfKeys; i++ )
         {
-                inputManager->changeUserKey( gameKey[ i ], configurationManager->getKey( gameKey[ i ] ) );
+                inputManager->changeUserKey( InputManager::namesOfKeys[ i ], configurationManager->getKey( InputManager::namesOfKeys[ i ] ) );
         }
 
         // Se inicializa el gestor de sonido cargando los sonidos

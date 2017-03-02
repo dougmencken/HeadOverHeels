@@ -64,18 +64,18 @@ public:
          * @param font Nombre de la fuente caligráfica
          * @param color Color del texto
          */
-        void changeFont( const std::string& fontName, const std::string& color ) ;
+        void changeFontAndColor ( const std::string& fontName, const std::string& color ) ;
 
         /**
          * Dibuja el elemento
          * @param where Imagen donde será dibujado
          */
-        void draw( BITMAP* where ) ;
+        void draw ( BITMAP* where ) ;
 
         /**
          * Responde a la pulsación de una tecla
          */
-        void handleKey( int key ) ;
+        void handleKey ( int key ) ;
 
 private:
 
@@ -87,7 +87,7 @@ private:
          * @param spacing Espaciado entre caracteres, suma o resta tantos píxeles como se indiquen
          * @return La imagen con fondo magenta (el color clave) y el texto
          */
-        BITMAP* createBitmapLabel( const std::string& text, const std::string& fontName, const std::string& color, int spacing = 0 ) ;
+        BITMAP* createBitmapLabel ( const std::string& text, const std::string& fontName, const std::string& color, int spacing = 0 ) ;
 
 protected:
 

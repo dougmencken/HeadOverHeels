@@ -57,63 +57,63 @@
     </properties>
   </text>
 
-  <text id="left" x="60" y="110">
+  <text id="movenorth" x="60" y="110">
     <properties>
-      <ustring>Ezkerraldea........</ustring>
+      <ustring>Ezkerraldea</ustring>
     </properties>
   </text>
 
-  <text id="right" x="0" y="0">
+  <text id="movesouth" x="0" y="0">
     <properties>
-      <ustring>Eskuinaldea........</ustring>
+      <ustring>Eskuinaldea</ustring>
     </properties>
   </text>
 
-  <text id="up" x="0" y="0">
+  <text id="moveeast" x="0" y="0">
     <properties>
-      <ustring>Goian..............</ustring>
+      <ustring>Goian</ustring>
     </properties>
   </text>
 
-  <text id="down" x="0" y="0">
+  <text id="movewest" x="0" y="0">
     <properties>
-      <ustring>Behean.............</ustring>
+      <ustring>Behean</ustring>
     </properties>
   </text>
 
   <text id="take" x="0" y="0">
     <properties>
-      <ustring>Hartu/Utzi.........</ustring>
+      <ustring>Hartu/Utzi</ustring>
     </properties>
   </text>
 
   <text id="jump" x="0" y="0">
     <properties>
-      <ustring>Jauzi egitea.......</ustring>
+      <ustring>Jauzi egitea</ustring>
     </properties>
   </text>
 
   <text id="shoot" x="0" y="0">
     <properties>
-      <ustring>Tiro egitea........</ustring>
+      <ustring>Tiro egitea</ustring>
     </properties>
   </text>
 
   <text id="take-jump" x="0" y="0">
     <properties>
-      <ustring>Hartu+Jauzi egitea.</ustring>
+      <ustring>Hartu+Jauzi egitea</ustring>
     </properties>
   </text>
 
   <text id="swap" x="0" y="0">
     <properties>
-      <ustring>Aldatzea...........</ustring>
+      <ustring>Aldatzea</ustring>
     </properties>
   </text>
 
   <text id="halt" x="0" y="0">
     <properties>
-      <ustring>Gelditzea..........</ustring>
+      <ustring>Gelditzea</ustring>
     </properties>
   </text>
 
@@ -143,13 +143,13 @@
 
   <text id="soundfx" x="96" y="210">
     <properties>
-      <ustring>Efektu soinudunak..</ustring>
+      <ustring>Efektu soinudunak</ustring>
     </properties>
   </text>
 
   <text id="music" x="0" y="0">
     <properties>
-      <ustring>Musika.............</ustring>
+      <ustring>Musika</ustring>
     </properties>
   </text>
 

@@ -1,23 +1,41 @@
-#include "InputManager.hpp"
 
-using isomot::GameKey;
+#include "InputManager.hpp"
+#include <iostream>
+
 using isomot::InputManager;
 
-InputManager* InputManager::instance = 0;
+
+InputManager* InputManager::instance = 0 ;
+
+const std::string InputManager::namesOfKeys[ ] =
+
+                        {  "movenorth", "movesouth", "moveeast", "movewest",
+                           "take", "jump", "shoot", "take-jump",
+                           "swap", "halt"  } ;
+
+const std::string InputManager::nameOfAbsentKey = "unknown" ;
+
 
 InputManager::InputManager()
 {
-  // Asigna una configuración por defecto al teclado
-  userKeys.push_back( KEY_LEFT );
-  userKeys.push_back( KEY_RIGHT );
-  userKeys.push_back( KEY_UP );
-  userKeys.push_back( KEY_DOWN );
-  userKeys.push_back( KEY_M );
-  userKeys.push_back( KEY_SPACE );
-  userKeys.push_back( KEY_N );
-  userKeys.push_back( KEY_V );
-  userKeys.push_back( KEY_G );
-  userKeys.push_back( KEY_ESC );
+        userKeys.insert( std::pair< std::string, int >( "movenorth", KEY_LEFT ) );   // Tecla para mover el jugador al norte, izquierda
+        userKeys.insert( std::pair< std::string, int >( "movesouth", KEY_RIGHT ) );  // Tecla para mover el jugador al sur, derecha
+        userKeys.insert( std::pair< std::string, int >( "moveeast", KEY_UP ) );      // Tecla para mover el jugador al este, arriba
+        userKeys.insert( std::pair< std::string, int >( "movewest", KEY_DOWN ) );    // Tecla para mover el jugador al oeste, abajo
+        userKeys.insert( std::pair< std::string, int >( "take", KEY_C ) );           // Tecla para coger y dejar objetos
+        userKeys.insert( std::pair< std::string, int >( "jump", KEY_SPACE ) );       // Tecla para saltar
+        userKeys.insert( std::pair< std::string, int >( "shoot", KEY_N ) );          // Tecla para disparar
+        userKeys.insert( std::pair< std::string, int >( "take-jump", KEY_B ) );      // Tecla para coger/dejar un objeto y saltar
+        userKeys.insert( std::pair< std::string, int >( "swap", KEY_X ) );           // Tecla para cambiar de jugador
+        userKeys.insert( std::pair< std::string, int >( "halt", KEY_M ) );           // Tecla para detener el juego
+
+        std::cout << "InputManager provides by default\n" ;
+        for ( std::map< std::string, int >::const_iterator iter = userKeys.begin (); iter != userKeys.end (); ++iter )
+        { // iter->first is name of key, iter->second is its scancode
+                std::cout << "   key with name \"" << iter->first
+                          << "\" paired to " << scancode_to_name( iter->second ) << " ( " << iter->second << " )"
+                          << std::endl ;
+        }
 }
 
 InputManager::~InputManager()
@@ -26,81 +44,78 @@ InputManager::~InputManager()
 
 InputManager* InputManager::getInstance()
 {
-  if( instance == 0 )
-  {
-    instance = new InputManager();
-  }
+        if ( instance == 0 )
+        {
+                instance = new InputManager();
+        }
 
-  return instance;
+        return instance;
 }
 
-GameKey InputManager::findKeyType( int scancode ) const
+std::string InputManager::findNameOfKeyByCode( int scanCode )
 {
-  GameKey result = KeyNone;
+        for ( std::map< std::string, int >::const_iterator iter = userKeys.begin (); iter != userKeys.end (); ++iter )
+        {
+                if ( iter->second == scanCode )
+                {
+                        return iter->first;
+                }
+        }
 
-  for( size_t i = 0; i < userKeys.size(); i++ )
-  {
-    if( userKeys[ i ] == scancode )
-    {
-      result = static_cast< GameKey >(i);
-      break;
-    }
-  }
-
-  return result;
+        return InputManager::nameOfAbsentKey ;
 }
 
-bool InputManager::left()
+bool InputManager::movenorth()
 {
-  return key[ this->userKeys[ KeyNorth ] ];
+        return key[ getUserKey( "movenorth" ) ];
 }
 
-bool InputManager::right()
+bool InputManager::movesouth()
 {
-  return key[ this->userKeys[ KeySouth ] ];
+        return key[ getUserKey( "movesouth" ) ];
 }
 
-bool InputManager::up()
+bool InputManager::moveeast()
 {
-  return key[ this->userKeys[ KeyEast ] ];
+        return key[ getUserKey( "moveeast" ) ];
 }
 
-bool InputManager::down()
+bool InputManager::movewest()
 {
-  return key[ this->userKeys[ KeyWest ] ];
+        return key[ getUserKey( "movewest" ) ];
 }
 
 bool InputManager::take()
 {
-  return key[ this->userKeys[ KeyTake ] ];
+        return key[ getUserKey( "take" ) ];
 }
 
 bool InputManager::jump()
 {
-  return key[ this->userKeys[ KeyJump ] ];
+        return key[ getUserKey( "jump" ) ];
 }
 
 bool InputManager::shoot()
 {
-  return key[ this->userKeys[ KeyShoot ] ];
+        return key[ getUserKey( "shoot" ) ];
 }
 
 bool InputManager::takeAndJump()
 {
-  return key[ this->userKeys[ KeyTakeAndJump ] ];
+        return key[ getUserKey( "take-jump" ) ];
 }
 
 bool InputManager::swap()
 {
-  return key[ this->userKeys[ KeySwap ] ];
+        return key[ getUserKey( "swap" ) ];
 }
 
 bool InputManager::halt()
 {
-  return key[ this->userKeys[ KeyHalt ] ];
+        return key[ getUserKey( "halt" ) ];
 }
 
-void InputManager::noRepeat(const GameKey& gameKey)
+void InputManager::noRepeat( const std::string& nameOfKey )
 {
-  key[ this->userKeys[ gameKey ] ] = 0;
+        key[ getUserKey( nameOfKey ) ] = 0;
 }

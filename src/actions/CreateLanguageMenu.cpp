@@ -6,7 +6,7 @@
 #include "ConfigurationManager.hpp"
 #include "Font.hpp"
 #include "Screen.hpp"
-#include "Menu.hpp"
+#include "MenuWithMultipleColumns.hpp"
 #include "Label.hpp"
 #include "Icon.hpp"
 #include "SelectLanguage.hpp"
@@ -44,14 +44,14 @@ void CreateLanguageMenu::doIt ()
 
         // Etiqueta fija: HEAD
         label = new Label( 200, 24, "HEAD" );
-        label->changeFont( "big", "yellow" );
+        label->changeFontAndColor( "big", "yellow" );
         screen->addWidget( label );
         // Etiqueta fija: OVER
         label = new Label( 280, 45, "OVER", "regular", "multicolor" );
         screen->addWidget( label );
         // Etiqueta fija: HEELS
         label = new Label( 360, 24, "HEELS" );
-        label->changeFont( "big", "yellow" );
+        label->changeFontAndColor( "big", "yellow" );
         screen->addWidget( label );
 
         // Icono: Head
@@ -60,7 +60,7 @@ void CreateLanguageMenu::doIt ()
         screen->addWidget( new Icon( 518, 24, GuiManager::getInstance()->findImage( "heels" ) ) );
 
         // Presenta los idiomas disponibles
-        Menu* menu = new Menu( 40, 120, 300, 11 );
+        MenuWithMultipleColumns * menu = new MenuWithMultipleColumns( 40, 120, 300, 11 );
         for ( std::list< LanguageText * >::iterator i = this->texts.begin (); i != this->texts.end (); ++i )
         {
                 label = new Label( ( *i )->getText() );

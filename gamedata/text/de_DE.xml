@@ -57,63 +57,63 @@
     </properties>
   </text>
 
-  <text id="left" x="56" y="110">
+  <text id="movenorth" x="56" y="110">
     <properties>
-      <ustring>Links..............</ustring>
+      <ustring>Links</ustring>
     </properties>
   </text>
 
-  <text id="right" x="0" y="0">
+  <text id="movesouth" x="0" y="0">
     <properties>
-      <ustring>Rechts.............</ustring>
+      <ustring>Rechts</ustring>
     </properties>
   </text>
 
-  <text id="up" x="0" y="0">
+  <text id="moveeast" x="0" y="0">
     <properties>
-      <ustring>Aufwärts...........</ustring>
+      <ustring>Aufwärts</ustring>
     </properties>
   </text>
 
-  <text id="down" x="0" y="0">
+  <text id="movewest" x="0" y="0">
     <properties>
-      <ustring>Abwärts............</ustring>
+      <ustring>Abwärts</ustring>
     </properties>
   </text>
 
   <text id="take" x="0" y="0">
     <properties>
-      <ustring>Aufnehmen..........</ustring>
+      <ustring>Aufnehmen</ustring>
     </properties>
   </text>
 
   <text id="jump" x="0" y="0">
     <properties>
-      <ustring>Springen...........</ustring>
+      <ustring>Springen</ustring>
     </properties>
   </text>
 
   <text id="shoot" x="0" y="0">
     <properties>
-      <ustring>Schießen...........</ustring>
+      <ustring>Schießen</ustring>
     </properties>
   </text>
 
   <text id="take-jump" x="0" y="0">
     <properties>
-      <ustring>Aufnehmen+Springen.</ustring>
+      <ustring>Aufnehmen+Springen</ustring>
     </properties>
   </text>
 
   <text id="swap" x="0" y="0">
     <properties>
-      <ustring>Figur wechseln.....</ustring>
+      <ustring>Figur wechseln</ustring>
     </properties>
   </text>
 
   <text id="halt" x="0" y="0">
     <properties>
-      <ustring>Anhalten...........</ustring>
+      <ustring>Anhalten</ustring>
     </properties>
   </text>
 
@@ -140,13 +140,13 @@
 
   <text id="soundfx" x="96" y="210">
     <properties>
-      <ustring>Soundeffekte.......</ustring>
+      <ustring>Soundeffekte</ustring>
     </properties>
   </text>
 
   <text id="music" x="0" y="0">
     <properties>
-      <ustring>Musik..............</ustring>
+      <ustring>Musik</ustring>
     </properties>
   </text>
 

@@ -57,75 +57,75 @@
     </properties>
   </text>
 
-  <text id="left" x="96" y="110">
+  <text id="movenorth" x="96" y="110">
     <properties>
-      <ustring>Left...........</ustring>
+      <ustring>Move North</ustring>
     </properties>
   </text>
 
-  <text id="right" x="0" y="0">
+  <text id="movesouth" x="0" y="0">
     <properties>
-      <ustring>Right..........</ustring>
+      <ustring>Move South</ustring>
     </properties>
   </text>
 
-  <text id="up" x="0" y="0">
+  <text id="moveeast" x="0" y="0">
     <properties>
-      <ustring>Up.............</ustring>
+      <ustring>Move East</ustring>
     </properties>
   </text>
 
-  <text id="down" x="0" y="0">
+  <text id="movewest" x="0" y="0">
     <properties>
-      <ustring>Down...........</ustring>
+      <ustring>Move West</ustring>
     </properties>
   </text>
 
   <text id="take" x="0" y="0">
     <properties>
-      <ustring>Carry/Drop.....</ustring>
+      <ustring>Carry/Drop</ustring>
     </properties>
   </text>
 
   <text id="jump" x="0" y="0">
     <properties>
-      <ustring>Jump...........</ustring>
+      <ustring>Jump</ustring>
     </properties>
   </text>
 
   <text id="shoot" x="0" y="0">
     <properties>
-      <ustring>Shoot..........</ustring>
+      <ustring>Shoot</ustring>
     </properties>
   </text>
 
   <text id="take-jump" x="0" y="0">
     <properties>
-      <ustring>Carry+Jump.....</ustring>
+      <ustring>Carry+Jump</ustring>
     </properties>
   </text>
 
   <text id="swap" x="0" y="0">
     <properties>
-      <ustring>Swop...........</ustring>
+      <ustring>Swop</ustring>
     </properties>
   </text>
 
   <text id="halt" x="0" y="0">
     <properties>
-      <ustring>Halt...........</ustring>
+      <ustring>Pause</ustring>
     </properties>
   </text>
 
   <text id="confirm-quit" x="0" y="142">
     <properties font="big" color="cyan">
-      <ustring>Press Esc to quit game</ustring>
+      <ustring>Use Esc to quit game</ustring>
     </properties>
   </text>
 
   <text id="confirm-resume" x="0" y="184">
     <properties font="big" color="yellow">
-      <ustring>Press another key to resume</ustring>
+      <ustring>and another key to resume</ustring>
     </properties>
   </text>
 
@@ -137,13 +137,13 @@
 
   <text id="soundfx" x="96" y="210">
     <properties>
-      <ustring>Sound FX...........</ustring>
+      <ustring>Sound FX</ustring>
     </properties>
   </text>
 
   <text id="music" x="0" y="0">
     <properties>
-      <ustring>Music..............</ustring>
+      <ustring>Music</ustring>
     </properties>
   </text>
 

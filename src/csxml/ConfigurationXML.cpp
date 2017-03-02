@@ -116,76 +116,76 @@ namespace cxml
   // keyboard
   //
 
-  const keyboard::left_type& keyboard::
-  left () const
+  const keyboard::movenorth_type& keyboard::
+  movenorth () const
   {
-    return this->left_.get ();
+    return this->movenorth_.get ();
   }
 
-  keyboard::left_type& keyboard::
-  left ()
+  keyboard::movenorth_type& keyboard::
+  movenorth ()
   {
-    return this->left_.get ();
-  }
-
-  void keyboard::
-  left (const left_type& left)
-  {
-    this->left_.set (left);
-  }
-
-  const keyboard::right_type& keyboard::
-  right () const
-  {
-    return this->right_.get ();
-  }
-
-  keyboard::right_type& keyboard::
-  right ()
-  {
-    return this->right_.get ();
+    return this->movenorth_.get ();
   }
 
   void keyboard::
-  right (const right_type& right)
+  movenorth ( const movenorth_type& movenorth )
   {
-    this->right_.set (right);
+    this->movenorth_.set ( movenorth );
   }
 
-  const keyboard::up_type& keyboard::
-  up () const
+  const keyboard::movesouth_type& keyboard::
+  movesouth () const
   {
-    return this->up_.get ();
+    return this->movesouth_.get ();
   }
 
-  keyboard::up_type& keyboard::
-  up ()
+  keyboard::movesouth_type& keyboard::
+  movesouth ()
   {
-    return this->up_.get ();
-  }
-
-  void keyboard::
-  up (const up_type& up)
-  {
-    this->up_.set (up);
-  }
-
-  const keyboard::down_type& keyboard::
-  down () const
-  {
-    return this->down_.get ();
-  }
-
-  keyboard::down_type& keyboard::
-  down ()
-  {
-    return this->down_.get ();
+    return this->movesouth_.get ();
   }
 
   void keyboard::
-  down (const down_type& down)
+  movesouth ( const movesouth_type& movesouth )
   {
-    this->down_.set (down);
+    this->movesouth_.set ( movesouth );
+  }
+
+  const keyboard::moveeast_type& keyboard::
+  moveeast () const
+  {
+    return this->moveeast_.get ();
+  }
+
+  keyboard::moveeast_type& keyboard::
+  moveeast ()
+  {
+    return this->moveeast_.get ();
+  }
+
+  void keyboard::
+  moveeast ( const moveeast_type& moveeast )
+  {
+    this->moveeast_.set ( moveeast );
+  }
+
+  const keyboard::movewest_type& keyboard::
+  movewest () const
+  {
+    return this->movewest_.get ();
+  }
+
+  keyboard::movewest_type& keyboard::
+  movewest ()
+  {
+    return this->movewest_.get ();
+  }
+
+  void keyboard::
+  movewest ( const movewest_type& movewest )
+  {
+    this->movewest_.set ( movewest );
   }
 
   const keyboard::take_type& keyboard::
@@ -470,10 +470,10 @@ namespace cxml
   //
 
   keyboard::
-  keyboard (const left_type& left,
-            const right_type& right,
-            const up_type& up,
-            const down_type& down,
+  keyboard (const movenorth_type& movenorth,
+            const movesouth_type& movesouth,
+            const moveeast_type& moveeast,
+            const movewest_type& movewest,
             const take_type& take,
             const jump_type& jump,
             const shoot_type& shoot,
@@ -481,10 +481,10 @@ namespace cxml
             const swap_type& swap,
             const halt_type& halt)
   : ::xml_schema::type (),
-    left_ (left, ::xml_schema::flags (), this),
-    right_ (right, ::xml_schema::flags (), this),
-    up_ (up, ::xml_schema::flags (), this),
-    down_ (down, ::xml_schema::flags (), this),
+    movenorth_ (movenorth, ::xml_schema::flags (), this),
+    movesouth_ (movesouth, ::xml_schema::flags (), this),
+    moveeast_ (moveeast, ::xml_schema::flags (), this),
+    movewest_ (movewest, ::xml_schema::flags (), this),
     take_ (take, ::xml_schema::flags (), this),
     jump_ (jump, ::xml_schema::flags (), this),
     shoot_ (shoot, ::xml_schema::flags (), this),
@@ -499,10 +499,10 @@ namespace cxml
             ::xml_schema::flags f,
             ::xml_schema::type* c)
   : ::xml_schema::type (x, f, c),
-    left_ (x.left_, f, this),
-    right_ (x.right_, f, this),
-    up_ (x.up_, f, this),
-    down_ (x.down_, f, this),
+    movenorth_ (x.movenorth_, f, this),
+    movesouth_ (x.movesouth_, f, this),
+    moveeast_ (x.moveeast_, f, this),
+    movewest_ (x.movewest_, f, this),
     take_ (x.take_, f, this),
     jump_ (x.jump_, f, this),
     shoot_ (x.shoot_, f, this),
@@ -517,10 +517,10 @@ namespace cxml
             ::xml_schema::flags f,
             ::xml_schema::type* c)
   : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
-    left_ (f, this),
-    right_ (f, this),
-    up_ (f, this),
-    down_ (f, this),
+    movenorth_ (f, this),
+    movesouth_ (f, this),
+    moveeast_ (f, this),
+    movewest_ (f, this),
     take_ (f, this),
     jump_ (f, this),
     shoot_ (f, this),
@@ -545,46 +545,46 @@ namespace cxml
       const ::xsd::cxx::xml::qualified_name< char > n (
         ::xsd::cxx::xml::dom::name< char > (i));
 
-      // left
+      // movenorth
       //
-      if (n.name () == "left" && n.namespace_ ().empty ())
+      if (n.name () == "movenorth" && n.namespace_ ().empty ())
       {
-        if (!left_.present ())
+        if (!movenorth_.present ())
         {
-          this->left (left_traits::create (i, f, this));
+          this->movenorth (movenorth_traits::create (i, f, this));
           continue;
         }
       }
 
-      // right
+      // movesouth
       //
-      if (n.name () == "right" && n.namespace_ ().empty ())
+      if (n.name () == "movesouth" && n.namespace_ ().empty ())
       {
-        if (!right_.present ())
+        if (!movesouth_.present ())
         {
-          this->right (right_traits::create (i, f, this));
+          this->movesouth (movesouth_traits::create (i, f, this));
           continue;
         }
       }
 
-      // up
+      // moveeast
       //
-      if (n.name () == "up" && n.namespace_ ().empty ())
+      if (n.name () == "moveeast" && n.namespace_ ().empty ())
       {
-        if (!up_.present ())
+        if (!moveeast_.present ())
         {
-          this->up (up_traits::create (i, f, this));
+          this->moveeast (moveeast_traits::create (i, f, this));
           continue;
         }
       }
 
-      // down
+      // movewest
       //
-      if (n.name () == "down" && n.namespace_ ().empty ())
+      if (n.name () == "movewest" && n.namespace_ ().empty ())
       {
-        if (!down_.present ())
+        if (!movewest_.present ())
         {
-          this->down (down_traits::create (i, f, this));
+          this->movewest (movewest_traits::create (i, f, this));
           continue;
         }
       }
@@ -658,31 +658,31 @@ namespace cxml
       break;
     }
 
-    if (!left_.present ())
+    if (!movenorth_.present ())
     {
       throw ::xsd::cxx::tree::expected_element< char > (
-        "left",
+        "movenorth",
         "");
     }
 
-    if (!right_.present ())
+    if (!movesouth_.present ())
     {
       throw ::xsd::cxx::tree::expected_element< char > (
-        "right",
+        "movesouth",
         "");
     }
 
-    if (!up_.present ())
+    if (!moveeast_.present ())
     {
       throw ::xsd::cxx::tree::expected_element< char > (
-        "up",
+        "moveeast",
         "");
     }
 
-    if (!down_.present ())
+    if (!movewest_.present ())
     {
       throw ::xsd::cxx::tree::expected_element< char > (
-        "down",
+        "movewest",
         "");
     }
 
@@ -1117,48 +1117,48 @@ namespace cxml
   {
     e << static_cast< const ::xml_schema::type& > (i);
 
-    // left
+    // movenorth
     //
     {
       ::xercesc::DOMElement& s (
         ::xsd::cxx::xml::dom::create_element (
-          "left",
+          "movenorth",
           e));
 
-      s << i.left ();
+      s << i.movenorth ();
     }
 
-    // right
+    // movesouth
     //
     {
       ::xercesc::DOMElement& s (
         ::xsd::cxx::xml::dom::create_element (
-          "right",
+          "movesouth",
           e));
 
-      s << i.right ();
+      s << i.movesouth ();
     }
 
-    // up
+    // moveeast
     //
     {
       ::xercesc::DOMElement& s (
         ::xsd::cxx::xml::dom::create_element (
-          "up",
+          "moveeast",
           e));
 
-      s << i.up ();
+      s << i.moveeast ();
     }
 
-    // down
+    // movewest
     //
     {
       ::xercesc::DOMElement& s (
         ::xsd::cxx::xml::dom::create_element (
-          "down",
+          "movewest",
           e));
 
-      s << i.down ();
+      s << i.movewest ();
     }
 
     // take

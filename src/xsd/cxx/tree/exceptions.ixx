@@ -56,7 +56,7 @@ namespace xsd
       print (std::basic_ostream<char>& os) const
       {
         if (diagnostics_.empty ())
-          os << "instance document parsing failed";
+          os << "can not parse instance document";
         else
           os << diagnostics_;
       }
@@ -301,7 +301,7 @@ namespace xsd
       print (std::basic_ostream<wchar_t>& os) const
       {
         if (diagnostics_.empty ())
-          os << L"instance document parsing failed";
+          os << L"can not parse instance document";
         else
           os << diagnostics_;
       }

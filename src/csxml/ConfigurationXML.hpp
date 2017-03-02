@@ -306,61 +306,49 @@ namespace cxml
   class keyboard: public ::xml_schema::type
   {
     public:
-    // left
+    // movenorth
     //
-    typedef ::xml_schema::int_ left_type;
-    typedef ::xsd::cxx::tree::traits< left_type, char > left_traits;
+    typedef ::xml_schema::int_ movenorth_type;
+    typedef ::xsd::cxx::tree::traits< movenorth_type, char > movenorth_traits;
 
-    const left_type&
-    left () const;
+    const movenorth_type& movenorth () const;
 
-    left_type&
-    left ();
+    movenorth_type& movenorth ();
 
-    void
-    left (const left_type& x);
+    void movenorth ( const movenorth_type& x );
 
-    // right
+    // movesouth
     //
-    typedef ::xml_schema::int_ right_type;
-    typedef ::xsd::cxx::tree::traits< right_type, char > right_traits;
+    typedef ::xml_schema::int_ movesouth_type;
+    typedef ::xsd::cxx::tree::traits< movesouth_type, char > movesouth_traits;
 
-    const right_type&
-    right () const;
+    const movesouth_type& movesouth () const;
 
-    right_type&
-    right ();
+    movesouth_type& movesouth ();
 
-    void
-    right (const right_type& x);
+    void movesouth ( const movesouth_type& x );
 
-    // up
+    // moveeast
     //
-    typedef ::xml_schema::int_ up_type;
-    typedef ::xsd::cxx::tree::traits< up_type, char > up_traits;
+    typedef ::xml_schema::int_ moveeast_type;
+    typedef ::xsd::cxx::tree::traits< moveeast_type, char > moveeast_traits;
 
-    const up_type&
-    up () const;
+    const moveeast_type& moveeast () const;
 
-    up_type&
-    up ();
+    moveeast_type& moveeast ();
 
-    void
-    up (const up_type& x);
+    void moveeast ( const moveeast_type& x );
 
-    // down
+    // movewest
     //
-    typedef ::xml_schema::int_ down_type;
-    typedef ::xsd::cxx::tree::traits< down_type, char > down_traits;
+    typedef ::xml_schema::int_ movewest_type;
+    typedef ::xsd::cxx::tree::traits< movewest_type, char > movewest_traits;
 
-    const down_type&
-    down () const;
+    const movewest_type& movewest () const;
 
-    down_type&
-    down ();
+    movewest_type& movewest ();
 
-    void
-    down (const down_type& x);
+    void movewest ( const movewest_type& x );
 
     // take
     //
@@ -448,10 +436,10 @@ namespace cxml
 
     // Constructors
     //
-    keyboard (const left_type&,
-              const right_type&,
-              const up_type&,
-              const down_type&,
+    keyboard (const movenorth_type&,
+              const movesouth_type&,
+              const moveeast_type&,
+              const movewest_type&,
               const take_type&,
               const jump_type&,
               const shoot_type&,
@@ -479,10 +467,10 @@ namespace cxml
            ::xml_schema::flags);
 
     private:
-    ::xsd::cxx::tree::one< left_type > left_;
-    ::xsd::cxx::tree::one< right_type > right_;
-    ::xsd::cxx::tree::one< up_type > up_;
-    ::xsd::cxx::tree::one< down_type > down_;
+    ::xsd::cxx::tree::one< movenorth_type > movenorth_;
+    ::xsd::cxx::tree::one< movesouth_type > movesouth_;
+    ::xsd::cxx::tree::one< moveeast_type > moveeast_;
+    ::xsd::cxx::tree::one< movewest_type > movewest_;
     ::xsd::cxx::tree::one< take_type > take_;
     ::xsd::cxx::tree::one< jump_type > jump_;
     ::xsd::cxx::tree::one< shoot_type > shoot_;

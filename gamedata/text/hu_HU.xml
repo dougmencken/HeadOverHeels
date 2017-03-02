@@ -57,63 +57,63 @@
     </properties>
   </text>
 
-  <text id="left" x="56" y="110">
+  <text id="movenorth" x="56" y="110">
     <properties>
-      <ustring>balra..............</ustring>
+      <ustring>balra</ustring>
     </properties>
   </text>
 
-  <text id="right" x="0" y="0">
+  <text id="movesouth" x="0" y="0">
     <properties>
-      <ustring>jobbra.............</ustring>
+      <ustring>jobbra</ustring>
     </properties>
   </text>
 
-  <text id="up" x="0" y="0">
+  <text id="moveeast" x="0" y="0">
     <properties>
-      <ustring>felfele............</ustring>
+      <ustring>felfele</ustring>
     </properties>
   </text>
 
-  <text id="down" x="0" y="0">
+  <text id="movewest" x="0" y="0">
     <properties>
-      <ustring>lefele.............</ustring>
+      <ustring>lefele</ustring>
     </properties>
   </text>
 
   <text id="take" x="0" y="0">
     <properties>
-      <ustring>felvétel...........</ustring>
+      <ustring>felvétel</ustring>
     </properties>
   </text>
 
   <text id="jump" x="0" y="0">
     <properties>
-      <ustring>ugrás..............</ustring>
+      <ustring>ugrás</ustring>
     </properties>
   </text>
 
   <text id="shoot" x="0" y="0">
     <properties>
-      <ustring>lövés..............</ustring>
+      <ustring>lövés</ustring>
     </properties>
   </text>
 
   <text id="take-jump" x="0" y="0">
     <properties>
-      <ustring>felvétel és ugrás..</ustring>
+      <ustring>felvétel és ugrás</ustring>
     </properties>
   </text>
 
   <text id="swap" x="0" y="0">
     <properties>
-      <ustring>játékos váltása....</ustring>
+      <ustring>játékos váltása</ustring>
     </properties>
   </text>
 
   <text id="halt" x="0" y="0">
     <properties>
-      <ustring>szünet.............</ustring>
+      <ustring>szünet</ustring>
     </properties>
   </text>
 
@@ -140,13 +140,13 @@
 
   <text id="soundfx" x="96" y="210">
     <properties>
-      <ustring>zörejek............</ustring>
+      <ustring>zörejek</ustring>
     </properties>
   </text>
 
   <text id="music" x="0" y="0">
     <properties>
-      <ustring>zene...............</ustring>
+      <ustring>zene</ustring>
     </properties>
   </text>
 

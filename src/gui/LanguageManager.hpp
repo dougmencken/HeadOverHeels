@@ -20,115 +20,123 @@
 #include "csxml/LanguageXML.hpp"
 #include "Gui.hpp"
 
+
 namespace gui
 {
 
-// Declaraciones adelantadas
 class LanguageText;
 
 /**
  * Lee las cadenas de texto usadas en el juego de un archivo XML y las almacena
  * en una estructura de datos a la que acceden otros objetos de la interfaz de usuario
  */
+
 class LanguageManager
 {
+
 public:
 
-  /**
-   * Constructor
-   * @param fileName Archivo XML con los textos empleados en el juego
-   */
-	LanguageManager(const std::string& fileName);
+       /**
+        * Constructor
+        * @param fileName Archivo XML con los textos empleados en el juego
+        */
+        LanguageManager( const std::string & fileName ) ;
 
-	~LanguageManager();
+        ~LanguageManager( );
 
-	/**
-	 * Busca una cadena de idioma
-	 * @param id Cadena identificativa
-	 * @return La cadena si se encontró ó 0 en caso contrario
-	 */
-	LanguageText* findLanguageString(const std::string& id);
-
-private:
-
-  /**
-   * Analiza el archivo XML y extrae las cadenas ligándolas a un identificador textual
-   * @param fileName Archivo XML con los textos empleados en el juego
-   */
-  void parse(const std::string& fileName);
+        /**
+         * Busca una cadena de idioma
+         * @param id Cadena identificativa
+         * @return La cadena si se encontró ó 0 en caso contrario
+         */
+        LanguageText * findLanguageString ( const std::string & id ) ;
 
 private:
 
-  /**
-   * Textos empleados en la interfaz de usuario. Cada elemento se compone de un identificador
-   * único, su posición en la pantalla y la cadena con el texto
-   */
-  std::list<LanguageText*> texts;
+       /**
+        * Analiza el archivo XML y extrae las cadenas ligándolas a un identificador textual
+        * @param fileName Archivo XML con los textos empleados en el juego
+        */
+        void parse ( const std::string & fileName ) ;
+
+private:
+
+       /**
+        * Textos empleados en la interfaz de usuario. Cada elemento se compone de un identificador
+        * único, su posición en la pantalla y la cadena con el texto
+        */
+        std::list< LanguageText * > texts ;
 
 };
 
 struct LanguageLine
 {
-  std::string text;
 
-  std::string font;
+        std::string text ;
 
-  std::string color;
+        std::string font ;
+
+        std::string color ;
+
 };
 
 class LanguageText
 {
+
 public:
 
-  LanguageText(const std::string& id, unsigned int x, unsigned int y);
+        LanguageText( const std::string& id ) ;
+
+        LanguageText( const std::string& id, unsigned int x, unsigned int y ) ;
 
 private:
 
-  std::string id;
+        std::string id ;
 
-  unsigned int x;
+        unsigned int x ;
 
-  unsigned int y;
+        unsigned int y ;
 
-  std::vector<LanguageLine> lines;
+        std::vector< LanguageLine > lines ;
 
 public:
 
-  void addLine(const std::string& text);
+        void addLine ( const std::string& text ) ;
 
-  void addLine(const std::string& text, const std::string& font, const std::string& color);
+        void addLine ( const std::string& text, const std::string& font, const std::string& color ) ;
 
-  std::string getId() const { return this->id; }
+        std::string getId () const {  return this->id ;  }
 
-  unsigned int getX() const { return this->x; }
+        unsigned int getX () const {  return this->x ;  }
 
-  unsigned int getY() const { return this->y; }
+        unsigned int getY () const {  return this->y ;  }
 
-  std::string getFirstLineText() const { return this->lines[0].text; }
+        std::string getFirstLineText () const {  return this->lines[ 0 ].text ;  }
 
-  std::string getFirstLineFont() const { return this->lines[0].font; }
+        std::string getFirstLineFont () const {  return this->lines[ 0 ].font ;  }
 
-  std::string getFirstLineColor() const { return this->lines[0].color; }
+        std::string getFirstLineColor () const {  return this->lines[ 0 ].color ;  }
 
-  std::string getText() const { return this->getFirstLineText(); }
+        std::string getText () const {  return this->getFirstLineText() ;  }
 
-  std::string getFont() const { return this->getFirstLineFont(); }
+        std::string getFont () const {  return this->getFirstLineFont() ;  }
 
-  std::string getColor() const { return this->getFirstLineColor(); }
+        std::string getColor () const {  return this->getFirstLineColor() ;  }
 
-  LanguageLine* getFirstLine() { return &(this->lines[0]); }
+        LanguageLine* getFirstLine () {  return &( this->lines[ 0 ] ) ;  }
 
-  LanguageLine* getLine(size_t number) { return &(this->lines[number]); }
+        LanguageLine* getLine ( size_t number ) {  return &( this->lines[ number ] ) ;  }
 
-  size_t getLinesCount() { return this->lines.size(); }
+        size_t getLinesCount () {  return this->lines.size() ;  }
+
 };
 
 /**
  * Objeto-función usado como predicado en la búsqueda de una cadena de idioma
  */
-struct EqualLanguageString : public std::binary_function<LanguageText*, std::string, bool>
+struct EqualLanguageString : public std::binary_function< LanguageText *, std::string, bool >
 {
-  bool operator()(const LanguageText* lang, const std::string& id) const;
+        bool operator() ( const LanguageText* lang, const std::string& id ) const;
 };
 
 }

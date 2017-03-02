@@ -4,20 +4,20 @@
   <language></language>
 
   <keyboard>
-    <left>82</left>
-    <right>83</right>
-    <up>84</up>
-    <down>85</down>
-    <take>13</take>
+    <movenorth>82</movenorth>
+    <movesouth>83</movesouth>
+    <moveeast>84</moveeast>
+    <movewest>85</movewest>
+    <take>3</take>
     <jump>75</jump>
     <shoot>14</shoot>
     <takeandjump>2</takeandjump>
-    <swap>26</swap>
-    <halt>59</halt>
+    <swap>24</swap>
+    <halt>13</halt>
   </keyboard>
 
   <volume>
-    <fx>75</fx>
+    <fx>88</fx>
     <music>99</music>
   </volume>
 

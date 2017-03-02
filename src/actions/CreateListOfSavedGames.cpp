@@ -75,9 +75,15 @@ void CreateListOfSavedGames::doIt ()
                         ss << languageManager->findLanguageString( "empty-slot" )->getText();
                         label = new Label( ss.str() );
                         if ( loadMenu )
+                        {
+                                label->changeFontAndColor( label->getFontName (), "cyan" );
                                 label->setAction( new PlaySound( isomot::Mistake ) );
+                        }
                         else
+                        {
+                                label->changeFontAndColor( label->getFontName (), "orange" );
                                 label->setAction( new SaveGame( this->where, fileCount ) );
+                        }
                 }
 
                 if ( fileCount == 1 )

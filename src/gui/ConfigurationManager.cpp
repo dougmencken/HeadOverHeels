@@ -1,10 +1,11 @@
 
 #include "ConfigurationManager.hpp"
 #include "SoundManager.hpp"
+#include "InputManager.hpp"
 
 using gui::ConfigurationManager;
 using isomot::SoundManager;
-using isomot::GameKey;
+using isomot::InputManager;
 
 
 ConfigurationManager::ConfigurationManager( const std::string& fileName )
@@ -24,16 +25,16 @@ void ConfigurationManager::read()
                 this->language = configurationXML->language();
 
                 // Almacena la configuración del teclado
-                this->keys[ static_cast< int >( isomot::KeyNorth ) ] = configurationXML->keyboard().left();
-                this->keys[ static_cast< int >( isomot::KeySouth ) ] = configurationXML->keyboard().right();
-                this->keys[ static_cast< int >( isomot::KeyEast ) ] = configurationXML->keyboard().up();
-                this->keys[ static_cast< int >( isomot::KeyWest ) ] = configurationXML->keyboard().down();
-                this->keys[ static_cast< int >( isomot::KeyTake ) ] = configurationXML->keyboard().take();
-                this->keys[ static_cast< int >( isomot::KeyJump ) ] = configurationXML->keyboard().jump();
-                this->keys[ static_cast< int >( isomot::KeyShoot ) ] = configurationXML->keyboard().shoot();
-                this->keys[ static_cast< int >( isomot::KeyTakeAndJump ) ] = configurationXML->keyboard().takeandjump();
-                this->keys[ static_cast< int >( isomot::KeySwap ) ] = configurationXML->keyboard().swap();
-                this->keys[ static_cast< int >( isomot::KeyHalt ) ] = configurationXML->keyboard().halt();
+                this->setKey( "movenorth", configurationXML->keyboard().movenorth() );
+                this->setKey( "movesouth", configurationXML->keyboard().movesouth() );
+                this->setKey( "moveeast", configurationXML->keyboard().moveeast() );
+                this->setKey( "movewest", configurationXML->keyboard().movewest() );
+                this->setKey( "take", configurationXML->keyboard().take() );
+                this->setKey( "jump", configurationXML->keyboard().jump() );
+                this->setKey( "shoot", configurationXML->keyboard().shoot() );
+                this->setKey( "take-jump", configurationXML->keyboard().takeandjump() );
+                this->setKey( "swap", configurationXML->keyboard().swap() );
+                this->setKey( "halt", configurationXML->keyboard().halt() );
 
                 // Almacena los niveles de volumen
                 this->setVolumeOfSoundEffects( configurationXML->volume().fx() );
@@ -50,16 +51,16 @@ void ConfigurationManager::write()
         try
         {
                 cxml::keyboard userKeys (
-                        this->keys[ static_cast< int >( isomot::KeyNorth ) ],
-                        this->keys[ static_cast< int >( isomot::KeySouth ) ],
-                        this->keys[ static_cast< int >( isomot::KeyEast ) ],
-                        this->keys[ static_cast< int >( isomot::KeyWest ) ],
-                        this->keys[ static_cast< int >( isomot::KeyTake ) ],
-                        this->keys[ static_cast< int >( isomot::KeyJump ) ],
-                        this->keys[ static_cast< int >( isomot::KeyShoot ) ],
-                        this->keys[ static_cast< int >( isomot::KeyTakeAndJump ) ],
-                        this->keys[ static_cast< int >( isomot::KeySwap ) ],
-                        this->keys[ static_cast< int >( isomot::KeyHalt ) ]
+                        this->getKey( "movenorth" ),
+                        this->getKey( "movesouth" ),
+                        this->getKey( "moveeast" ),
+                        this->getKey( "movewest" ),
+                        this->getKey( "take" ),
+                        this->getKey( "jump" ),
+                        this->getKey( "shoot" ),
+                        this->getKey( "take-jump" ),
+                        this->getKey( "swap" ),
+                        this->getKey( "halt" )
                 );
 
                 cxml::volume userVolume( this->getVolumeOfSoundEffects (), this->getVolumeOfMusic () );
@@ -80,6 +81,16 @@ void ConfigurationManager::write()
         {
                 std::cout << e << std::endl ;
         }
+}
+
+void ConfigurationManager::setKey ( const std::string& nameOfKey, int keyCode )
+{
+        InputManager::getInstance()->changeUserKey( nameOfKey, keyCode ) ;
+}
+
+int ConfigurationManager::getKey ( const std::string& nameOfKey )
+{
+        return InputManager::getInstance()->getUserKey( nameOfKey ) ;
 }
 
 void ConfigurationManager::setVolumeOfSoundEffects ( int volume ) const

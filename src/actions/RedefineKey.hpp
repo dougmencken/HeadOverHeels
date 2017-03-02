@@ -18,49 +18,40 @@
 #endif
 #include "Action.hpp"
 
+
 namespace gui
 {
 
-// Declaraciones adelantadas
 class Menu;
 
 /**
  * Cambia una tecla para el control del juego por otra indicada por el usuario
  */
+
 class RedefineKey : public Action
 {
 
 public:
 
-        /**
-        * Constructor
+       /**
         * @param menu Menú de opciones donde se encuentra el texto de la tecla a cambiar
-        * @param keyText Descripción de la tecla a cambiar
-        * @param assignedKey Código de la tecla asignada actualmente
+        * @param name Name of the key like "jump" or "movesouth"
         */
-        RedefineKey( Menu* menu, std::string keyText, int assignedKey ) ;
+        RedefineKey( Menu* menu, std::string name ) ;
 
-        /**
-        * Change the key
-        */
         void doIt () ;
 
 private:
 
-        /**
+       /**
         * Menú de opciones donde se encuentra el texto de la tecla a cambiar
         */
         Menu* menu ;
 
-        /**
-        * Descripción de la tecla a cambiar
+       /**
+        * Name of the key like "take" or "moveeast"
         */
-        std::string keyText ;
-
-        /**
-        * Código de la tecla asignada actualmente
-        */
-        int assignedKey ;
+        std::string nameOfKey ;
 
 };
 

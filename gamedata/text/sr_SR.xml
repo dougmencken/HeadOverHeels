@@ -57,63 +57,63 @@
     </properties>
   </text>
 
-  <text id="left" x="96" y="110">
+  <text id="movenorth" x="96" y="110">
     <properties>
-      <ustring>Лево...........</ustring>
+      <ustring>Лево</ustring>
     </properties>
   </text>
 
-  <text id="right" x="0" y="0">
+  <text id="movesouth" x="0" y="0">
     <properties>
-      <ustring>Десно..........</ustring>
+      <ustring>Десно</ustring>
     </properties>
   </text>
 
-  <text id="up" x="0" y="0">
+  <text id="moveeast" x="0" y="0">
     <properties>
-      <ustring>Горе...........</ustring>
+      <ustring>Горе</ustring>
     </properties>
   </text>
 
-  <text id="down" x="0" y="0">
+  <text id="movewest" x="0" y="0">
     <properties>
-      <ustring>Доле...........</ustring>
+      <ustring>Доле</ustring>
     </properties>
   </text>
 
   <text id="take" x="0" y="0">
     <properties>
-      <ustring>Носити.........</ustring>
+      <ustring>Носити</ustring>
     </properties>
   </text>
 
   <text id="jump" x="0" y="0">
     <properties>
-      <ustring>Скок...........</ustring>
+      <ustring>Скок</ustring>
     </properties>
   </text>
 
   <text id="shoot" x="0" y="0">
     <properties>
-      <ustring>Пуцање.........</ustring>
+      <ustring>Пуцање</ustring>
     </properties>
   </text>
 
   <text id="take-jump" x="0" y="0">
     <properties>
-      <ustring>Носити+Скок....</ustring>
+      <ustring>Носити+Скок</ustring>
     </properties>
   </text>
 
   <text id="swap" x="0" y="0">
     <properties>
-      <ustring>Замена.........</ustring>
+      <ustring>Замена</ustring>
     </properties>
   </text>
 
   <text id="halt" x="0" y="0">
     <properties>
-      <ustring>Пауза..........</ustring>
+      <ustring>Пауза</ustring>
     </properties>
   </text>
 
@@ -140,13 +140,13 @@
 
   <text id="soundfx" x="96" y="210">
     <properties>
-      <ustring>Звучни ефекти......</ustring>
+      <ustring>Звучни ефекти</ustring>
     </properties>
   </text>
 
   <text id="music" x="0" y="0">
     <properties>
-      <ustring>Музика.............</ustring>
+      <ustring>Музика</ustring>
     </properties>
   </text>
 

@@ -333,24 +333,6 @@ namespace isomot
         } ;
 
         /**
-         * Teclas usadas para el control del juego
-         */
-        enum GameKey
-        {
-                KeyNorth,        /* Tecla para mover el jugador al norte, izquierda */
-                KeySouth,        /* Tecla para mover el jugador al sur, derecha */
-                KeyEast,         /* Tecla para mover el jugador al este, arriba */
-                KeyWest,         /* Tecla para mover el jugador al oeste, abajo */
-                KeyTake,         /* Tecla para coger y dejar objetos */
-                KeyJump,         /* Tecla para saltar */
-                KeyShoot,        /* Tecla para disparar */
-                KeyTakeAndJump,  /* Tecla para coger/dejar un objeto y saltar */
-                KeySwap,         /* Tecla para cambiar de jugador */
-                KeyHalt,         /* Tecla para detener el juego */
-                KeyNone          /* Tecla nula */
-        } ;
-
-        /**
          * Resolución horizontal de la pantalla del juego
          */
         const int ScreenWidth = 640 ;

@@ -44,14 +44,14 @@ void CreateMainMenu::placeHeadAndHeels( Screen* screen, bool iconsToo, bool copy
         screen->addWidget( label );
 
         label = new Label( 200, 24, "HEAD" );
-        label->changeFont( "big", "yellow" );
+        label->changeFontAndColor( "big", "yellow" );
         screen->addWidget( label );
 
         label = new Label( 280, 45, "OVER", "regular", "multicolor" );
         screen->addWidget( label );
 
         label = new Label( 360, 24, "HEELS" );
-        label->changeFont( "big", "yellow" );
+        label->changeFontAndColor( "big", "yellow" );
         screen->addWidget( label );
 
         if ( iconsToo )
@@ -67,13 +67,13 @@ void CreateMainMenu::placeHeadAndHeels( Screen* screen, bool iconsToo, bool copy
                 // Etiqueta fija: (C) 1987 OCEAN SOFTWARE LTD
                 langString = languageManager->findLanguageString( "ocean" );
                 label = new Label( langString->getX(), langString->getY(), langString->getText() );
-                label->changeFont( "regular", "cyan" );
+                label->changeFontAndColor( "regular", "cyan" );
                 screen->addWidget( label );
 
                 // Etiqueta fija: (C) 2008 JORGE RODRÍGUEZ SANTOS
                 langString = languageManager->findLanguageString( "jorge" );
                 label = new Label( langString->getX(), langString->getY(), langString->getText() );
-                label->changeFont( "regular", "orange" );
+                label->changeFontAndColor( "regular", "orange" );
                 screen->addWidget( label );
         }
 }

@@ -7,10 +7,10 @@
       <xsd:element name="keyboard">
         <xsd:complexType>
           <xsd:sequence>
-            <xsd:element name="left" type="xsd:int"/>
-            <xsd:element name="right" type="xsd:int"/>
-            <xsd:element name="up" type="xsd:int"/>
-            <xsd:element name="down" type="xsd:int"/>
+            <xsd:element name="movenorth" type="xsd:int"/>
+            <xsd:element name="movesouth" type="xsd:int"/>
+            <xsd:element name="moveeast" type="xsd:int"/>
+            <xsd:element name="movewest" type="xsd:int"/>
             <xsd:element name="take" type="xsd:int"/>
             <xsd:element name="jump" type="xsd:int"/>
             <xsd:element name="shoot" type="xsd:int"/>

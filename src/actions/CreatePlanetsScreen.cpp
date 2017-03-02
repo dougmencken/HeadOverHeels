@@ -43,7 +43,7 @@ void CreatePlanetsScreen::doIt ()
         // Etiqueta fija: El Imperio Blacktooth
         langString = languageManager->findLanguageString( "blacktooth-empire" );
         label = new Label( 0, 0, langString->getText() );
-        label->changeFont( "big", "yellow" );
+        label->changeFontAndColor( "big", "yellow" );
         label->changePosition( ( 640 - label->getWidth() ) >> 1, langString->getY() );
         label->setAction( new ContinueGame( this->where, gameInProgress ) );
 

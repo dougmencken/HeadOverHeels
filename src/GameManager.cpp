@@ -541,7 +541,7 @@ WhyPause GameManager::update ()
         // el juego se actualiza periódicamente
         while ( why == Nevermind )
         {
-                if ( ! key[ InputManager::getInstance()->readUserKey( KeyHalt ) ] && ! this->takenCrown && ! this->eatenFish && ! this->gameOver )
+                if ( ! key[ InputManager::getInstance()->getUserKey( "halt" ) ] && ! this->takenCrown && ! this->eatenFish && ! this->gameOver )
                 {
                         // Actualiza la vista isométrica
                         BITMAP* view = this->isomot->update();
@@ -638,11 +638,11 @@ WhyPause GameManager::pause ()
                                 }
                                 // Si se pulsa cualquier otra tecla, excepto una tecla de movimiento o salto,
                                 // prosigue la partida en curso
-                                else if( key != inputManager->readUserKey( KeyNorth ) &&
-                                         key != inputManager->readUserKey( KeySouth ) &&
-                                         key != inputManager->readUserKey( KeyEast ) &&
-                                         key != inputManager->readUserKey( KeyWest ) &&
-                                         key != inputManager->readUserKey( KeyJump ) &&
+                                else if( key != inputManager->getUserKey( "movenorth" ) &&
+                                         key != inputManager->getUserKey( "movesouth" ) &&
+                                         key != inputManager->getUserKey( "moveeast" ) &&
+                                         key != inputManager->getUserKey( "movewest" ) &&
+                                         key != inputManager->getUserKey( "jump" ) &&
                                          key != KEY_ESC )
                                 {
                                         confirm = true;

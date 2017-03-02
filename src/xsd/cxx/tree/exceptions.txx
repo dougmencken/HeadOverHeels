@@ -52,7 +52,7 @@ namespace xsd
       const char* parsing<C>::
       what () const throw ()
       {
-        return "instance document parsing failed";
+        return "can not parse instance document";
       }
 
 

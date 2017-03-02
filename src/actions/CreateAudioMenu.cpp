@@ -33,15 +33,25 @@ void CreateAudioMenu::doIt ()
         // Efectos sonoros
         ss << SoundManager::getInstance()->getVolumeOfEffects();
         LanguageText* langStringFx = languageManager->findLanguageString( "soundfx" );
-        Menu* menu = new Menu( langStringFx->getX(), langStringFx->getY() );
-        Label* labelEffects = new Label( langStringFx->getText() + ss.str() );
-        menu->addActiveOption( labelEffects );
+        std::string stringFxDotted ( langStringFx->getText() );
+        for ( size_t position = stringFxDotted.length() ; position < 20 ; ++position ) {
+                stringFxDotted = stringFxDotted + ".";
+        }
+        Label* labelEffects = new Label( stringFxDotted + ss.str() );
+
+        ss.str( std::string() ); // clear ss
 
         // Música
-        ss.str( std::string() );
         ss << SoundManager::getInstance()->getVolumeOfMusic();
         LanguageText* langStringMusic = languageManager->findLanguageString( "music" );
-        Label* labelMusic = new Label( langStringMusic->getText() + ss.str() );
+        std::string stringMusicDotted ( langStringMusic->getText() );
+        for ( size_t position = stringMusicDotted.length() ; position < 20 ; ++position ) {
+                stringMusicDotted = stringMusicDotted + ".";
+        }
+        Label* labelMusic = new Label( stringMusicDotted + ss.str() );
+
+        Menu* menu = new Menu( langStringFx->getX(), langStringFx->getY() );
+        menu->addActiveOption( labelEffects );
         menu->addOption( labelMusic );
 
         screen->addWidget( menu );
@@ -92,12 +102,20 @@ void CreateAudioMenu::doIt ()
 
                                 if ( menu->getActiveOption () == labelMusic )
                                 {
-                                        labelMusic->setText( langStringMusic->getText() + ss.str() );
+                                        std::string musicStringDotted ( langStringMusic->getText() );
+                                        for ( size_t position = musicStringDotted.length() ; position < 20 ; ++position ) {
+                                                musicStringDotted = musicStringDotted + ".";
+                                        }
+                                        labelMusic->setText( musicStringDotted + ss.str() );
                                         SoundManager::getInstance()->setVolumeOfMusic( value );
                                 }
                                 else if ( menu->getActiveOption () == labelEffects )
                                 {
-                                        labelEffects->setText( langStringFx->getText() + ss.str() );
+                                        std::string stringEffectsDotted ( langStringFx->getText() );
+                                        for ( size_t position = stringEffectsDotted.length() ; position < 20 ; ++position ) {
+                                                stringEffectsDotted = stringEffectsDotted + ".";
+                                        }
+                                        labelEffects->setText( stringEffectsDotted + ss.str() );
                                         SoundManager::getInstance()->setVolumeOfEffects( value );
                                 }
 

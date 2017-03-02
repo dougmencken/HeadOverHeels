@@ -194,7 +194,7 @@ void PlayerHeels::behave ()
                         {
                                 stateId = ( takenItemData == 0 ? StateTakeItem : StateDropItem );
                                 // Las repeticiones de esta tecla no deben procesarse
-                                input->noRepeat( KeyTake );
+                                input->noRepeat( "take" );
                         }
                         // ...y ha pulsado la tecla para coger un elemento y luego saltar entonces
                         // intenta cogerlo / dejarlo y luego salta
@@ -202,22 +202,22 @@ void PlayerHeels::behave ()
                         {
                                 stateId = ( takenItemData == 0 ? StateTakeAndJump : StateDropAndJump );
                                 // Las repeticiones de esta tecla no deben procesarse
-                                input->noRepeat( KeyTakeAndJump );
+                                input->noRepeat( "take-jump" );
                         }
                         // ...y se ha pulsado alguna tecla de movimiento entonces se mueve
-                        else if ( input->left() && !input->right() && !input->up() && !input->down() )
+                        else if ( input->movenorth() && !input->movesouth() && !input->moveeast() && !input->movewest() )
                         {
                                 stateId = StateMoveNorth;
                         }
-                        else if ( !input->left() && input->right() && !input->up() && !input->down() )
+                        else if ( !input->movenorth() && input->movesouth() && !input->moveeast() && !input->movewest() )
                         {
                                 stateId = StateMoveSouth;
                         }
-                        else if ( !input->left() && !input->right() && input->up() && !input->down() )
+                        else if ( !input->movenorth() && !input->movesouth() && input->moveeast() && !input->movewest() )
                         {
                                 stateId = StateMoveEast;
                         }
-                        else if ( !input->left() && !input->right() && !input->up() && input->down() )
+                        else if ( !input->movenorth() && !input->movesouth() && !input->moveeast() && input->movewest() )
                         {
                                 stateId = StateMoveWest;
                         }
@@ -246,7 +246,7 @@ void PlayerHeels::behave ()
                         {
                                 stateId = ( takenItemData == 0 ? StateTakeItem : StateDropItem );
                                 // Las repeticiones de esta tecla no deben procesarse
-                                input->noRepeat( KeyTake );
+                                input->noRepeat( "take" );
                         }
                         // ...y ha pulsado la tecla para coger un elemento y luego saltar entonces
                         // intenta cogerlo / dejarlo y luego salta
@@ -254,27 +254,27 @@ void PlayerHeels::behave ()
                         {
                                 stateId = ( takenItemData == 0 ? StateTakeAndJump : StateDropAndJump );
                                 // Las repeticiones de esta tecla no deben procesarse
-                                input->noRepeat( KeyTakeAndJump );
+                                input->noRepeat( "take-jump" );
                         }
                         // ...y se ha pulsado alguna tecla de movimiento entonces sigue moviéndose
-                        else if ( input->left() && !input->right() && !input->up() && !input->down() )
+                        else if ( input->movenorth() && !input->movesouth() && !input->moveeast() && !input->movewest() )
                         {
                                 stateId = StateMoveNorth;
                         }
-                        else if ( !input->left() && input->right() && !input->up() && !input->down() )
+                        else if ( !input->movenorth() && input->movesouth() && !input->moveeast() && !input->movewest() )
                         {
                                 stateId = StateMoveSouth;
                         }
-                        else if ( !input->left() && !input->right() && input->up() && !input->down() )
+                        else if ( !input->movenorth() && !input->movesouth() && input->moveeast() && !input->movewest() )
                         {
                                 stateId = StateMoveEast;
                         }
-                        else if ( !input->left() && !input->right() && !input->up() && input->down() )
+                        else if ( !input->movenorth() && !input->movesouth() && !input->moveeast() && input->movewest() )
                         {
                                 stateId = StateMoveWest;
                         }
                         // Si por el contrario se han soltado las teclas de movimiento entonces se pone en espera
-                        else if ( !input->left() && !input->right() && !input->up() && !input->down() )
+                        else if ( !input->movenorth() && !input->movesouth() && !input->moveeast() && !input->movewest() )
                         {
                                 SoundManager::getInstance()->stop( playerItem->getLabel(), stateId );
                                 stateId = StateWait;
@@ -293,7 +293,7 @@ void PlayerHeels::behave ()
                         {
                                 stateId = ( takenItemData == 0 ? StateTakeItem : StateDropItem );
                                 // Las repeticiones de esta tecla no deben procesarse
-                                input->noRepeat( KeyTake );
+                                input->noRepeat( "take" );
                         }
                         // ...y ha pulsado la tecla para coger un elemento y luego saltar entonces
                         // intenta cogerlo / dejarlo y luego salta
@@ -301,22 +301,22 @@ void PlayerHeels::behave ()
                         {
                                 stateId = ( takenItemData == 0 ? StateTakeAndJump : StateDropAndJump );
                                 // Las repeticiones de esta tecla no deben procesarse
-                                input->noRepeat( KeyTakeAndJump );
+                                input->noRepeat( "take-jump" );
                         }
                         // ...y se ha pulsado alguna tecla de movimiento entonces sigue moviéndose
-                        else if ( input->left() && !input->right() && !input->up() && !input->down() )
+                        else if ( input->movenorth() && !input->movesouth() && !input->moveeast() && !input->movewest() )
                         {
                                 stateId = StateMoveNorth;
                         }
-                        else if ( !input->left() && input->right() && !input->up() && !input->down() )
+                        else if ( !input->movenorth() && input->movesouth() && !input->moveeast() && !input->movewest() )
                         {
                                 stateId = StateMoveSouth;
                         }
-                        else if ( !input->left() && !input->right() && input->up() && !input->down() )
+                        else if ( !input->movenorth() && !input->movesouth() && input->moveeast() && !input->movewest() )
                         {
                                 stateId = StateMoveEast;
                         }
-                        else if ( !input->left() && !input->right() && !input->up() && input->down() )
+                        else if ( !input->movenorth() && !input->movesouth() && !input->moveeast() && input->movewest() )
                         {
                                 stateId = StateMoveWest;
                         }
@@ -332,19 +332,19 @@ void PlayerHeels::behave ()
                         // ...y se ha pulsado alguna tecla de movimiento entonces: si pretende avanzar en la dirección
                         // contraria a la que se está deplazando entonces se anula el desplazamiento; en caso contrario,
                         // avanza en la dirección que se esté ordenando
-                        else if ( input->left() && !input->right() && !input->up() && !input->down() )
+                        else if ( input->movenorth() && !input->movesouth() && !input->moveeast() && !input->movewest() )
                         {
                                 stateId = ( stateId == StateForceDisplaceSouth ? StateCancelDisplaceSouth : StateMoveNorth );
                         }
-                        else if ( !input->left() && input->right() && !input->up() && !input->down() )
+                        else if ( !input->movenorth() && input->movesouth() && !input->moveeast() && !input->movewest() )
                         {
                                 stateId = ( stateId == StateForceDisplaceNorth ? StateCancelDisplaceNorth : StateMoveSouth );
                         }
-                        else if ( !input->left() && !input->right() && input->up() && !input->down() )
+                        else if ( !input->movenorth() && !input->movesouth() && input->moveeast() && !input->movewest() )
                         {
                                 stateId = ( stateId == StateForceDisplaceWest ? StateCancelDisplaceWest : StateMoveEast );
                         }
-                        else if ( !input->left() && !input->right() && !input->up() && input->down() )
+                        else if ( !input->movenorth() && !input->movesouth() && !input->moveeast() && input->movewest() )
                         {
                                 stateId = ( stateId == StateForceDisplaceEast ? StateCancelDisplaceEast : StateMoveWest );
                         }
@@ -362,7 +362,7 @@ void PlayerHeels::behave ()
                         {
                                 stateId = ( takenItemData == 0 ? StateTakeItem : StateDropItem );
                                 // Las repeticiones de esta tecla no deben procesarse
-                                input->noRepeat( KeyTake );
+                                input->noRepeat( "take" );
                         }
                 }
         }

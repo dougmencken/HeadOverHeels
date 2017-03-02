@@ -21,8 +21,6 @@
 namespace gui
 {
 
-// Declaraciones adelantadas
-class Screen;
 class Label;
 
 /**
@@ -41,22 +39,15 @@ public:
          */
         Menu( unsigned int x, unsigned int y );
 
-        /**
-         * Constructor de un menú de dos columnas
-         * @param x Coordenada X de pantalla donde situar el menú
-         * @param y Coordenada Y de pantalla donde situar el menú
-         * @param secondColumnX Posición donde se situa la segunda columna del menú
-         * @param rows Número de filas de la primera columna
-         */
-        Menu( unsigned int x, unsigned int y, unsigned int secondColumnX, unsigned short rows );
-
         virtual ~Menu( );
 
         /**
          * Dibuja el manú
-         * @param destination Imagen donde será dibujado
+         * @param where Imagen donde será dibujado
          */
-        void draw ( BITMAP* destination ) ;
+        void draw ( BITMAP* where ) ;
+
+        void redraw () ;
 
         /**
          * Responde a la pulsación de una tecla
@@ -77,7 +68,9 @@ public:
 
         Label* getActiveOption () const {  return this->activeOption ;  }
 
-private:
+        std::list < Label * > getEveryOption () {  return this->options ;  }
+
+protected:
 
         /**
          * Selecciona la opción anterior del menú respecto de la actual
@@ -89,29 +82,19 @@ private:
          */
         void nextOption () ;
 
-private:
-
-        /**
-         * Posición donde se situa la segunda columna del menú. Si vale 0 el menú tiene una columna
-         */
-        unsigned int secondColumnX ;
-
-        /**
-         * Número de filas de la primera columna. Cuando se sobrepase el número indicado se empezará
-         * a situar el texto en la segunda columna. Si vale 0xffff el menú sólo tiene una columna
-         */
-        unsigned short rows ;
-
+protected:
 
         /**
          * Opciones de las que se compone el menú. El orden en la lista es el orden de aparición en el menú
          */
-        std::list< Label* > options ;
+        std::list < Label * > options ;
 
         /**
          * La opción seleccionada
          */
         Label* activeOption ;
+
+        BITMAP * whereToDraw ;
 
         /**
          * Viñeta para cada opción de menú

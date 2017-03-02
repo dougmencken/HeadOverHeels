@@ -14,7 +14,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-#include <ext/hash_map>
+#include <map>
 #include <allegro.h>
 #include "csxml/ConfigurationXML.hpp"
 #include "Ism.hpp"
@@ -62,11 +62,6 @@ private:
          */
         std::string language ;
 
-        /**
-         * Tabla con las teclas empleadas en el juego
-         */
-        __gnu_cxx::hash_map < int, int > keys ;
-
 public: // Operaciones de consulta y actualización
 
         /**
@@ -85,17 +80,17 @@ public: // Operaciones de consulta y actualización
 
         /**
          * Asigna una tecla a una acción del juego
-         * @param gameKey Una acción del juego
-         * @param key Una tecla según la codificación de Allegro: KEY_LEFT, KEY_A, etc
+         * @param nameOfKey Una acción del juego
+         * @param keyCode Una tecla según la codificación de Allegro: KEY_LEFT, KEY_A, etc
          */
-        void setKey ( const isomot::GameKey& gameKey, int keyCode ) {  this->keys[ static_cast< int >( gameKey ) ] = keyCode ;  }
+        void setKey ( const std::string& nameOfKey, int keyCode ) ;
 
         /**
          * Tecla ligada a una acción del juego
-         * @param gameKey Una acción del juego
+         * @param nameOfKey Una acción del juego
          * @return Una tecla según la codificación de Allegro: KEY_LEFT, KEY_A, etc
          */
-        int getKey ( const isomot::GameKey& gameKey ) {  return this->keys[ static_cast< int >( gameKey ) ] ;  }
+        int getKey ( const std::string& nameOfKey ) ;
 
         /**
          * Asigna el volumen de los efectos de sonido
