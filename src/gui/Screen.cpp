@@ -1,5 +1,7 @@
+
 #include "Screen.hpp"
 #include "Gui.hpp"
+#include "GuiManager.hpp"
 #include "actions/Action.hpp"
 
 namespace gui
@@ -38,15 +40,23 @@ void Screen::draw( BITMAP* where )
         blit( where, screen, 0, 0, 0, 0, where->w, where->h );
 }
 
-void Screen::handleKey( int key )
+void Screen::handleKey( int rawKey )
 {
-        if ( escapeAction != 0 && key >> 8 == KEY_ESC )
+        int theKey = rawKey >> 8;
+
+        if ( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && ( theKey == KEY_F ) )
+        {
+                gui::GuiManager::getInstance()->toggleFullScreenVideo ();
+                return;
+        }
+
+        if ( escapeAction != 0 && theKey == KEY_ESC )
         {
                 this->escapeAction->doIt ();
         }
         else
         {
-                Widget::handleKey( key );
+                Widget::handleKey( rawKey );
         }
 }
 

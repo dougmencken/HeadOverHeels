@@ -1,6 +1,7 @@
 
 #include "Isomot.hpp"
 #include "GameManager.hpp"
+#include "GuiManager.hpp"
 #include "ItemDataManager.hpp"
 #include "MapManager.hpp"
 #include "BonusManager.hpp"
@@ -139,6 +140,12 @@ BITMAP* Isomot::update()
 {
         Room* activeRoom = mapManager->getActiveRoom();
         GameManager* gameManager = GameManager::getInstance();
+
+        if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_F ] )
+        {
+                gui::GuiManager::getInstance()->toggleFullScreenVideo ();
+                key[ KEY_F ] = 0;
+        }
 
         if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_I ] )
         {

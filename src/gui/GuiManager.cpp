@@ -296,21 +296,38 @@ void GuiManager::allegroSetup()
         // Inicializa Allegro
         allegro_init ();
 
-        // Trabajo a color real con canal alfa
+        // 8 bits for each of three colors with 8 bits for alpha channel
         set_color_depth( 32 );
 
-        // Resolución de 640x480 píxeles en ventana
-        set_gfx_mode( GFX_AUTODETECT_WINDOWED, 640, 480, 0, 0 );
+        // try 640 pixels x 480 pixels at full screen
+        // if that can’t be done use 640 pixels x 480 pixels in window
+        this->atFullScreen = true;
+        if ( set_gfx_mode( GFX_AUTODETECT_FULLSCREEN, 640, 480, 0, 0 ) != 0 )
+        {
+                fprintf( stdout, "can't get 640 pixels x 480 pixels at full screen\n" );
+                this->atFullScreen = false;
+                set_gfx_mode( GFX_AUTODETECT_WINDOWED, 640, 480, 0, 0 );
+        }
 
 #ifdef __WIN32
-        // Si la aplicación pierde el foco el juego se seguirá ejecutando
-        // Se opera de este modo porque hay subprocesos que seguirán ejecutándose aunque el
-        // subproceso principal se pare
+        // When this application loses focus the game will continue in background
+        // because there are threads that will continue even when the main thread pauses
         set_display_switch_mode( SWITCH_BACKGROUND );
 #endif
 
         // Instala el controlador de eventos del teclado
         install_keyboard ();
+}
+
+void GuiManager::toggleFullScreenVideo()
+{
+        int magicCard = GFX_AUTODETECT_FULLSCREEN;
+        if ( this->atFullScreen )
+                magicCard = GFX_AUTODETECT_WINDOWED;
+
+        set_gfx_mode( magicCard, 640, 480, 0, 0 );
+        this->atFullScreen = ! this->atFullScreen ;
+        fprintf( stdout, "video is now %s\n", ( this->atFullScreen ? "at full screen" : "in window" ) );
 }
 
 ConfigurationManager* GuiManager::getConfigurationManager() const

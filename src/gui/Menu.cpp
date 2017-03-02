@@ -29,7 +29,7 @@ Menu::~Menu( )
 
 void Menu::draw( BITMAP* where )
 {
-	if ( where == 0 ) return ;
+        if ( where == 0 ) return ;
 
         int dx( this->optionImage->w );
         int dy( 0 );
@@ -43,23 +43,23 @@ void Menu::draw( BITMAP* where )
                 // Change the font depending on whether or not the option is active now
                 if ( label == this->activeOption )
                 {
-                	label->changeFontAndColor( "big", label->getColor() );
+                        label->changeFontAndColor( "big", label->getColor() );
                 }
                 else
                 {
                         label->changeFontAndColor( "regular", label->getColor() );
                 }
 
-		BITMAP* mark = ( this->activeOption == label ) ? this->selectedOptionImage : this->optionImage ;
-		draw_sprite( where, mark, getX (), getY () + dy );
+                BITMAP* mark = ( this->activeOption == label ) ? this->selectedOptionImage : this->optionImage ;
+                draw_sprite( where, mark, getX (), getY () + dy );
 
-		// Ajusta la posición de la etiqueta
-		label->changePosition( getX () + dx, getY () + dy );
-		// Dibuja la etiqueta
-		label->draw( where );
+                // Ajusta la posición de la etiqueta
+                label->changePosition( getX () + dx, getY () + dy );
+                // Dibuja la etiqueta
+                label->draw( where );
 
-		// Actualiza la diferencia de la altura
-		dy += label->getFont()->getCharHeight() - ( label == this->activeOption ? 8 : 4 );
+                // Actualiza la diferencia de la altura
+                dy += label->getFont()->getCharHeight() - ( label == this->activeOption ? 8 : 4 );
 
                 // Reduce for leading
                 dy -= label->getFont()->getCharHeight() >> 5;
@@ -75,9 +75,17 @@ void Menu::redraw ()
         GuiManager::getInstance()->refresh();
 }
 
-void Menu::handleKey( int key )
+void Menu::handleKey( int rawKey )
 {
-        switch ( key >> 8 )
+        int theKey = rawKey >> 8;
+
+        if ( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && ( theKey == KEY_F ) )
+        {
+                gui::GuiManager::getInstance()->toggleFullScreenVideo ();
+                return;
+        }
+
+        switch ( theKey )
         {
                 case KEY_UP:
                         this->previousOption();
@@ -90,7 +98,7 @@ void Menu::handleKey( int key )
                 default:
                         if ( this->getNext() != 0 )
                         {
-                                getNext()->handleKey( key );
+                                getNext()->handleKey( rawKey );
                         }
         }
 }
