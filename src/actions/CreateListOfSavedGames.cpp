@@ -47,7 +47,7 @@ void CreateListOfSavedGames::doIt ()
         LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
 
         // Las partidas guardadas
-        Menu* menu = new Menu( 80, 160 );
+        Menu* menu = new Menu( 100, 160 );
         for ( unsigned int fileCount = 1; fileCount <= howManySaves; fileCount++ )
         {
                 std::stringstream ss;
@@ -95,7 +95,6 @@ void CreateListOfSavedGames::doIt ()
         screen->addWidget( menu );
         screen->setNext( menu );
 
-        // Cambia la pantalla mostrada en la interfaz
         GuiManager::getInstance()->changeScreen( screen );
 }
 

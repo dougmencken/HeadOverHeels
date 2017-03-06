@@ -1,20 +1,23 @@
+
 #include "CreateAudioMenu.hpp"
 #include "GuiManager.hpp"
 #include "LanguageManager.hpp"
 #include "SoundManager.hpp"
-#include "Font.hpp"
 #include "Screen.hpp"
 #include "Menu.hpp"
 #include "Label.hpp"
 #include "CreateMainMenu.hpp"
 
+#include <string>
+#include <sstream>
+
 using gui::CreateAudioMenu;
 using isomot::SoundManager;
 
 
-CreateAudioMenu::CreateAudioMenu( BITMAP* picture )
-: Action(),
-  where( picture )
+CreateAudioMenu::CreateAudioMenu( BITMAP* picture ) :
+        Action(),
+        where( picture )
 {
 
 }
@@ -25,106 +28,112 @@ void CreateAudioMenu::doIt ()
         screen->setBackground( GuiManager::getInstance()->findImage( "background" ) );
         screen->setEscapeAction( new CreateMainMenu( this->where ) );
 
-        CreateMainMenu::placeHeadAndHeels( screen, /* icons */ false, /* copyrights */ true );
+        CreateMainMenu::placeHeadAndHeels( screen, /* icons */ false, /* copyrights */ false );
 
         LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
         std::stringstream ss;
 
+        const size_t positionOfValue = 20;
+
         // Efectos sonoros
         ss << SoundManager::getInstance()->getVolumeOfEffects();
-        LanguageText* langStringFx = languageManager->findLanguageString( "soundfx" );
-        std::string stringFxDotted ( langStringFx->getText() );
-        for ( size_t position = stringFxDotted.length() ; position < 20 ; ++position ) {
-                stringFxDotted = stringFxDotted + ".";
+        LanguageText* langStringEffects = languageManager->findLanguageString( "soundfx" );
+        std::string stringEffectsSpaced ( langStringEffects->getText() );
+        for ( size_t position = stringEffectsSpaced.length() ; position < positionOfValue ; ++position ) {
+                stringEffectsSpaced = stringEffectsSpaced + " ";
         }
-        Label* labelEffects = new Label( stringFxDotted + ss.str() );
+        Label* labelEffects = new Label( stringEffectsSpaced + ss.str() );
 
         ss.str( std::string() ); // clear ss
 
         // Música
         ss << SoundManager::getInstance()->getVolumeOfMusic();
         LanguageText* langStringMusic = languageManager->findLanguageString( "music" );
-        std::string stringMusicDotted ( langStringMusic->getText() );
-        for ( size_t position = stringMusicDotted.length() ; position < 20 ; ++position ) {
-                stringMusicDotted = stringMusicDotted + ".";
+        std::string stringMusicSpaced ( langStringMusic->getText() );
+        for ( size_t position = stringMusicSpaced.length() ; position < positionOfValue ; ++position ) {
+                stringMusicSpaced = stringMusicSpaced + " ";
         }
-        Label* labelMusic = new Label( stringMusicDotted + ss.str() );
+        Label* labelMusic = new Label( stringMusicSpaced + ss.str() );
 
-        Menu* menu = new Menu( langStringFx->getX(), langStringFx->getY() );
+        Menu* menu = new Menu( langStringEffects->getX(), langStringEffects->getY() );
         menu->addActiveOption( labelEffects );
         menu->addOption( labelMusic );
 
         screen->addWidget( menu );
         screen->setNext( menu );
 
-        // Cambia la pantalla mostrada en la interfaz
         GuiManager::getInstance()->changeScreen( screen );
         GuiManager::getInstance()->refresh();
 
         clear_keybuf();
-        int theKey = KEY_MAX;
-        while ( theKey != KEY_ESC )
+
+        while ( true )
         {
-                int musicVolume = SoundManager::getInstance()->getVolumeOfMusic();
-                int effectsVolume = SoundManager::getInstance()->getVolumeOfEffects();
-                int value = ( menu->getActiveOption () == labelMusic ) ? musicVolume : effectsVolume ;
-
-                if ( keypressed () )
+                if ( keypressed() )
                 {
-                        int previousValue = value;
+                        // get the key pressed by user
+                        int theKey = readkey() >> 8;
 
-                        // Tecla pulsada por el usuario
-                        theKey = readkey() >> 8;
-
-                        // Si se pulsa el cursor izquierdo se baja el volumen
-                        if ( theKey == KEY_LEFT )
+                        if ( theKey == KEY_ESC )
                         {
-                                value = ( value > 0 ? value - 1 : 0 );
-                                theKey = KEY_MAX;
+                                clear_keybuf();
+                                screen->handleKey ( theKey << 8 );
+                                break;
                         }
-                        // Si se pulsa el cursor derecho se sube el volumen
-                        else if ( theKey == KEY_RIGHT )
+                        else
                         {
-                                value = ( value < 99 ? value + 1 : 99 );
-                                theKey = KEY_MAX;
-                        }
-                        else if ( theKey == KEY_UP || theKey == KEY_DOWN )
-                        {
-                                menu->handleKey ( theKey << 8 );
-                                GuiManager::getInstance()->refresh();
-                                theKey = KEY_MAX;
-                        }
+                                int musicVolume = SoundManager::getInstance()->getVolumeOfMusic();
+                                int effectsVolume = SoundManager::getInstance()->getVolumeOfEffects();
+                                int value = ( menu->getActiveOption () == labelMusic ) ? musicVolume : effectsVolume ;
+                                int previousValue = value;
 
-                        if ( value != previousValue )
-                        {
-                                ss.str( std::string() );
-                                ss << value;
+                                bool doneWithKey = false;
 
-                                if ( menu->getActiveOption () == labelMusic )
-                                {
-                                        std::string musicStringDotted ( langStringMusic->getText() );
-                                        for ( size_t position = musicStringDotted.length() ; position < 20 ; ++position ) {
-                                                musicStringDotted = musicStringDotted + ".";
-                                        }
-                                        labelMusic->setText( musicStringDotted + ss.str() );
-                                        SoundManager::getInstance()->setVolumeOfMusic( value );
+                                if ( theKey == KEY_LEFT )
+                                { // decrease the volume
+                                        value = ( value > 0 ? value - 1 : 0 );
+                                        doneWithKey = true;
                                 }
-                                else if ( menu->getActiveOption () == labelEffects )
-                                {
-                                        std::string stringEffectsDotted ( langStringFx->getText() );
-                                        for ( size_t position = stringEffectsDotted.length() ; position < 20 ; ++position ) {
-                                                stringEffectsDotted = stringEffectsDotted + ".";
-                                        }
-                                        labelEffects->setText( stringEffectsDotted + ss.str() );
-                                        SoundManager::getInstance()->setVolumeOfEffects( value );
+                                else if ( theKey == KEY_RIGHT )
+                                { // increase the volume
+                                        value = ( value < 99 ? value + 1 : 99 );
+                                        doneWithKey = true;
                                 }
 
-                                GuiManager::getInstance()->refresh();
-                        }
+                                if ( value != previousValue )
+                                {
+                                        ss.str( std::string() );
+                                        ss << value;
 
-                        if ( theKey != KEY_MAX )
-                        {
-                                simulate_keypress( theKey << 8 );
+                                        if ( menu->getActiveOption () == labelMusic )
+                                        {
+                                                std::string musicStringSpaced ( langStringMusic->getText() );
+                                                for ( size_t position = musicStringSpaced.length() ; position < positionOfValue ; ++position ) {
+                                                        musicStringSpaced = musicStringSpaced + " ";
+                                                }
+                                                labelMusic->setText( musicStringSpaced + ss.str() );
+                                                SoundManager::getInstance()->setVolumeOfMusic( value );
+                                        }
+                                        else if ( menu->getActiveOption () == labelEffects )
+                                        {
+                                                std::string stringEffectsSpaced ( langStringEffects->getText() );
+                                                for ( size_t position = stringEffectsSpaced.length() ; position < positionOfValue ; ++position ) {
+                                                        stringEffectsSpaced = stringEffectsSpaced + " ";
+                                                }
+                                                labelEffects->setText( stringEffectsSpaced + ss.str() );
+                                                SoundManager::getInstance()->setVolumeOfEffects( value );
+                                        }
+
+                                        menu->redraw ();
+                                }
+
+                                if ( ! doneWithKey )
+                                {
+                                        menu->handleKey ( theKey << 8 );
+                                        menu->redraw ();
+                                }
+
+                                clear_keybuf();
                         }
                 }
 

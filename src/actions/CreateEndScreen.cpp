@@ -90,6 +90,5 @@ void CreateEndScreen::doIt ()
         label->setAction( mainMenu );
         screen->setNext( label );
 
-        // Cambia la pantalla mostrada en la interfaz
         GuiManager::getInstance()->changeScreen( screen );
 }

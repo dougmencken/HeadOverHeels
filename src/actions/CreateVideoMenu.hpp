@@ -8,40 +8,39 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef CreateAudioMenu_hpp_
-#define CreateAudioMenu_hpp_
+#ifndef CreateVideoMenu_hpp_
+#define CreateVideoMenu_hpp_
 
 #include "Action.hpp"
 
 #include <allegro.h>
 
+
 namespace gui
 {
 
 /**
- * Crea el menú de para el ajuste de los efectos sonidos y la música
+ * Create menu to modify video & graphics
  */
-class CreateAudioMenu : public Action
+
+class CreateVideoMenu : public Action
 {
 
 public:
 
         /**
          * Constructor
-         * @param picture Imagen donde se dibujará la interfaz gráfica
+         * @param picture Image where to draw
          */
-        CreateAudioMenu( BITMAP* picture ) ;
+        CreateVideoMenu( BITMAP* picture ) ;
 
         /**
-         * Show the audio menu
+         * Show this menu
          */
         void doIt () ;
 
 private:
 
-        /**
-         * Imagen donde se dibujará la interfaz gráfica
-         */
         BITMAP* where ;
 
 };

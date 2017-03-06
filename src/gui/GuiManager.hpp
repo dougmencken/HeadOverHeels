@@ -85,6 +85,8 @@ public:
         */
         void suspend () {  this->active = false ;  }
 
+        bool isAtFullScreen () ;
+
        /**
         * Use it to toggle video at full screen & video in window
         */

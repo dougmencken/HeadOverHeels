@@ -242,6 +242,7 @@ GuiManager* GuiManager::getInstance ()
 void GuiManager::enter ()
 {
         // Se presenta la lista de lenguas disponibles
+        // Present the list of languages
         std::auto_ptr< CreateLanguageMenu > languageMenu( new CreateLanguageMenu( this->picture ) );
         languageMenu->doIt ();
 
@@ -285,10 +286,13 @@ BITMAP* GuiManager::findImage( const std::string& name )
 
 void GuiManager::assignLanguage( const std::string& language )
 {
-        if ( this->languageManager == 0 )
+        if ( this->languageManager != 0 )
         {
-                this->languageManager = new LanguageManager( isomot::sharePath() + "text/" + language + ".xml" );
+                delete this->languageManager;
+                this->languageManager = 0;
         }
+
+        this->languageManager = new LanguageManager( isomot::sharePath() + "text/" + language + ".xml" );
 }
 
 void GuiManager::allegroSetup()
@@ -319,7 +323,12 @@ void GuiManager::allegroSetup()
         install_keyboard ();
 }
 
-void GuiManager::toggleFullScreenVideo()
+bool GuiManager::isAtFullScreen ()
+{
+        return this->atFullScreen;
+}
+
+void GuiManager::toggleFullScreenVideo ()
 {
         int magicCard = GFX_AUTODETECT_FULLSCREEN;
         if ( this->atFullScreen )
@@ -328,6 +337,8 @@ void GuiManager::toggleFullScreenVideo()
         set_gfx_mode( magicCard, 640, 480, 0, 0 );
         this->atFullScreen = ! this->atFullScreen ;
         fprintf( stdout, "video is now %s\n", ( this->atFullScreen ? "at full screen" : "in window" ) );
+        sleep( 80 );
+        refresh ();
 }
 
 ConfigurationManager* GuiManager::getConfigurationManager() const

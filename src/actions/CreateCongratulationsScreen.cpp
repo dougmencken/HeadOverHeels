@@ -48,6 +48,5 @@ void CreateCongratulationsScreen::doIt ()
 
         screen->addWidget( textField );
 
-        // Cambia la pantalla mostrada en la interfaz
         GuiManager::getInstance()->changeScreen( screen );
 }

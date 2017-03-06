@@ -46,7 +46,6 @@ void ShowAuthors::doIt ()
 
         screen->addWidget( textField );
 
-        // Cambia la pantalla mostrada en la interfaz
         GuiManager::getInstance()->changeScreen( screen );
 
         // Mientras no se pulse Escape, se mueve el texto hacia arriba

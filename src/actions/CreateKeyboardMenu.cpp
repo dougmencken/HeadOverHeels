@@ -27,7 +27,7 @@ void CreateKeyboardMenu::doIt ()
         screen->setBackground( GuiManager::getInstance()->findImage( "background" ) );
         screen->setEscapeAction( new CreateMainMenu( this->where ) );
 
-        CreateMainMenu::placeHeadAndHeels( screen, /* icons */ false, /* copyrights */ true );
+        CreateMainMenu::placeHeadAndHeels( screen, /* icons */ false, /* copyrights */ false );
 
         Label* label = 0;
         LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
@@ -78,6 +78,5 @@ void CreateKeyboardMenu::doIt ()
         screen->addWidget( menu );
         screen->setNext( menu );
 
-        // Cambia la pantalla mostrada en la interfaz
         GuiManager::getInstance()->changeScreen( screen );
 }

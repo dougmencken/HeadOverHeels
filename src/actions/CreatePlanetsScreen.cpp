@@ -83,6 +83,5 @@ void CreatePlanetsScreen::doIt ()
         langString = languageManager->findLanguageString( "blacktooth" );
         planets->addWidget( new Label( langString->getX(), langString->getY(), langString->getText() ) );
 
-        // Cambia la pantalla mostrada en la interfaz
         GuiManager::getInstance()->changeScreen( planets );
 }

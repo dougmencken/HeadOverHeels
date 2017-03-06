@@ -22,14 +22,13 @@ RedefineKey::RedefineKey( Menu* menu, std::string name )
 
 void RedefineKey::doIt ()
 {
-        bool exitLoop = false;
-
         Label * activeLabel = menu->getActiveOption();
         activeLabel->changeFontAndColor( "big", "yellow" );
         menu->redraw ();
 
         clear_keybuf();
 
+        bool exitLoop = false;
         while ( ! exitLoop )
         {
                 if ( keypressed() )

@@ -3,7 +3,6 @@
 #include "GuiManager.hpp"
 #include "LanguageManager.hpp"
 #include "SoundManager.hpp"
-#include "Font.hpp"
 #include "Screen.hpp"
 #include "Menu.hpp"
 
@@ -12,6 +11,7 @@
 #include "CreatePlanetsScreen.hpp"
 #include "CreateKeyboardMenu.hpp"
 #include "CreateAudioMenu.hpp"
+#include "CreateVideoMenu.hpp"
 #include "CreateListOfSavedGames.hpp"
 #include "ShowAuthors.hpp"
 #include "ExitApplication.hpp"
@@ -24,23 +24,17 @@ using isomot::SoundManager;
 void CreateMainMenu::placeHeadAndHeels( Screen* screen, bool iconsToo, bool copyrightsToo )
 {
         Label* label = 0;
-        LanguageText* langString = 0;
-        LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
 
-        langString = languageManager->findLanguageString( "jon" );
-        label = new Label( langString->getX(), langString->getY(), langString->getText(), "regular", "multicolor" );
+        label = new Label( 64, 22, "Jon", "regular", "multicolor" );
         screen->addWidget( label );
 
-        langString = languageManager->findLanguageString( "ritman" );
-        label = new Label( langString->getX(), langString->getY(), langString->getText(), "regular", "multicolor" );
+        label = new Label( 40, 52, "Ritman", "regular", "multicolor" );
         screen->addWidget( label );
 
-        langString = languageManager->findLanguageString( "bernie" );
-        label = new Label( langString->getX(), langString->getY(), langString->getText(), "regular", "multicolor" );
+        label = new Label( 500, 22, "Bernie", "regular", "multicolor" );
         screen->addWidget( label );
 
-        langString = languageManager->findLanguageString( "drummond" );
-        label = new Label( langString->getX(), langString->getY(), langString->getText(), "regular", "multicolor" );
+        label = new Label( 483, 52, "Drummond", "regular", "multicolor" );
         screen->addWidget( label );
 
         label = new Label( 200, 24, "HEAD" );
@@ -56,32 +50,40 @@ void CreateMainMenu::placeHeadAndHeels( Screen* screen, bool iconsToo, bool copy
 
         if ( iconsToo )
         {
-                // Icono: Head
                 screen->addWidget( new Icon( 206, 84, GuiManager::getInstance()->findImage( "head" ) ) );
-                // Icono: Heels
                 screen->addWidget( new Icon( 378, 84, GuiManager::getInstance()->findImage( "heels" ) ) );
         }
 
         if ( copyrightsToo )
         {
-                // Etiqueta fija: (C) 1987 OCEAN SOFTWARE LTD
-                langString = languageManager->findLanguageString( "ocean" );
-                label = new Label( langString->getX(), langString->getY(), langString->getText() );
+                const int whereX = 56;
+                const int whereY = 440;
+                const int stepY = 28;
+
+                // (c) 1987 Ocean Software Ltd.
+                std::string copyrightString ( "{ 1987 Ocean Software Ltd." );
+                label = new Label( whereX, whereY, copyrightString );
                 label->changeFontAndColor( "regular", "cyan" );
                 screen->addWidget( label );
 
-                // Etiqueta fija: (C) 2008 JORGE RODRÍGUEZ SANTOS
-                langString = languageManager->findLanguageString( "jorge" );
-                label = new Label( langString->getX(), langString->getY(), langString->getText() );
+                // (c) 2009 Jorge Rodríguez Santos
+                copyrightString = "{ 2009 Jorge Rodríguez Santos" ;
+                label = new Label( whereX, whereY - stepY, copyrightString );
                 label->changeFontAndColor( "regular", "orange" );
+                screen->addWidget( label );
+
+                // (c) 2017 Douglas Mencken
+                copyrightString = "{ 2017 Douglas Mencken" ;
+                label = new Label( whereX, whereY - stepY - stepY, copyrightString );
+                label->changeFontAndColor( "regular", "yellow" );
                 screen->addWidget( label );
         }
 }
 
 
-CreateMainMenu::CreateMainMenu( BITMAP* picture )
-: Action(),
-  where( picture )
+CreateMainMenu::CreateMainMenu( BITMAP* picture ) :
+        Action(),
+        where( picture )
 {
 
 }
@@ -122,17 +124,18 @@ void CreateMainMenu::doIt ()
         label->setAction( new CreateKeyboardMenu( this->where ) );
         menu->addOption( label );
 
-        // Sonido
         label = new Label( languageManager->findLanguageString( "audio" )->getText() );
         label->setAction( new CreateAudioMenu( this->where ) );
         menu->addOption( label );
 
-        // Autores
+        label = new Label( languageManager->findLanguageString( "video" )->getText() );
+        label->setAction( new CreateVideoMenu( this->where ) );
+        menu->addOption( label );
+
         label = new Label( languageManager->findLanguageString( "credits" )->getText() );
         label->setAction( new ShowAuthors( this->where ) );
         menu->addOption( label );
 
-        // Salir al escritorio
         label = new Label( languageManager->findLanguageString( "exit" )->getText() );
         label->setAction( new ExitApplication() );
         menu->addOption( label );
@@ -140,6 +143,5 @@ void CreateMainMenu::doIt ()
         screen->addWidget( menu );
         screen->setNext( menu );
 
-        // Cambia la pantalla mostrada en la interfaz
         GuiManager::getInstance()->changeScreen( screen );
 }

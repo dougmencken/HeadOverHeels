@@ -49,7 +49,7 @@ void Isomot::beginNew()
         // Pone en marcha la sala inicial
         mapManager->getActiveRoom()->startUpdate ();
 
-        std::cout << "new game" << std::endl ;
+        std::cout << "play new game" << std::endl ;
         SoundManager::getInstance()->playOgg ( "music/begin.ogg", /* loop */ false );
 }
 
@@ -63,9 +63,8 @@ void Isomot::beginOld( const sgxml::players::player_sequence& playerSequence )
                 this->mapManager->beginOldGameWithPlayer( *i );
         }
 
-        std::cout << "old game" << std::endl ;
+        std::cout << "continue previous game" << std::endl ;
         // no begin.ogg here
-        // anyway HeadOverHeels.ogg from CreatePlanetsScreen will silence it
 }
 
 void Isomot::prepare ()

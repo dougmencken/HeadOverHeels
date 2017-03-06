@@ -6,7 +6,7 @@ gamedatatext_DATA = language.xml \
 		    ca_ES.xml \
 		    da_DK.xml \
 		    de_DE.xml \
-		    en_UK.xml \
+		    en_US.xml \
 		    es_ES.xml \
 		    es_LA.xml \
 		    eu_ES.xml \

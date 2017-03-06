@@ -3,7 +3,7 @@
 <language xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="language.xsd">
 
-  <text id="new-game" x="170" y="180">
+  <text id="new-game" x="170" y="150">
     <properties>
       <ustring>Новая игра</ustring>
     </properties>
@@ -57,7 +57,7 @@
     </properties>
   </text>
 
-  <text id="movenorth" x="96" y="110">
+  <text id="movenorth" x="105" y="132">
     <properties>
       <ustring>Лево</ustring>
     </properties>
@@ -138,7 +138,7 @@
     </properties>
   </text>
 
-  <text id="soundfx" x="96" y="210">
+  <text id="soundfx" x="104" y="210">
     <properties>
       <ustring>Звуковые эффекты</ustring>
     </properties>
@@ -666,42 +666,6 @@
   <text id="emperor" x="0" y="180">
     <properties>
       <ustring>Император</ustring>
-    </properties>
-  </text>
-
-  <text id="jon" x="56" y="22">
-    <properties>
-      <ustring>Джон</ustring>
-    </properties>
-  </text>
-
-  <text id="ritman" x="40" y="52">
-    <properties>
-      <ustring>Ритман</ustring>
-    </properties>
-  </text>
-
-  <text id="bernie" x="508" y="22">
-    <properties>
-      <ustring>Берни</ustring>
-    </properties>
-  </text>
-
-  <text id="drummond" x="483" y="52">
-    <properties>
-      <ustring>Драммонд</ustring>
-    </properties>
-  </text>
-
-  <text id="ocean" x="56" y="440">
-    <properties>
-      <ustring>{ 1987 Ocean Software Ltd.</ustring>
-    </properties>
-  </text>
-
-  <text id="jorge" x="56" y="410">
-    <properties>
-      <ustring>{ 2009 Jorge Rodríguez Santos</ustring>
     </properties>
   </text>
 
