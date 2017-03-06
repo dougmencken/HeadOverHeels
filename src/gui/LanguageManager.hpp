@@ -38,9 +38,10 @@ public:
 
        /**
         * Constructor
-        * @param fileName Archivo XML con los textos empleados en el juego
+        * @param fileName XML file with localized strings used in the game
+        * @param fileWithGuaranteedStrings The file with more strings than in fileName
         */
-        LanguageManager( const std::string & fileName ) ;
+        LanguageManager( const std::string & fileName, const std::string& fileWithGuaranteedStrings ) ;
 
         ~LanguageManager( );
 
@@ -55,9 +56,10 @@ private:
 
        /**
         * Analiza el archivo XML y extrae las cadenas ligándolas a un identificador textual
-        * @param fileName Archivo XML con los textos empleados en el juego
+        * @param fileName XML file with localized strings used in the game
+        * @param fileWithGuaranteedStrings The file with more strings than in fileName
         */
-        void parse ( const std::string & fileName ) ;
+        void parse ( const std::string & fileName, const std::string& fileWithGuaranteedStrings ) ;
 
 private:
 
@@ -66,6 +68,8 @@ private:
         * único, su posición en la pantalla y la cadena con el texto
         */
         std::list< LanguageText * > texts ;
+
+        std::list< LanguageText * > backupTexts ;
 
 };
 

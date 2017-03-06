@@ -292,7 +292,8 @@ void GuiManager::assignLanguage( const std::string& language )
                 this->languageManager = 0;
         }
 
-        this->languageManager = new LanguageManager( isomot::sharePath() + "text/" + language + ".xml" );
+        std::string pathToTextInGameData = isomot::sharePath() + "text/";
+        this->languageManager = new LanguageManager( pathToTextInGameData + language + ".xml", pathToTextInGameData + "en_US.xml" );
 }
 
 void GuiManager::allegroSetup()
