@@ -135,7 +135,7 @@
     </properties>
   </text>
 
-  <text id="full-screen" x="104" y="210">
+  <text id="full-screen" x="93" y="196">
     <properties>
       <ustring>Full Screen</ustring>
     </properties>
@@ -144,6 +144,12 @@
   <text id="graphic-set" x="0" y="0">
     <properties>
       <ustring>Graphic Set</ustring>
+    </properties>
+  </text>
+
+  <text id="draw-background" x="0" y="0">
+    <properties>
+      <ustring>Draw Background</ustring>
     </properties>
   </text>
 

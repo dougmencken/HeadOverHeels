@@ -1,6 +1,7 @@
 
 #include "CreateVideoMenu.hpp"
 #include "GuiManager.hpp"
+#include "GameManager.hpp"
 #include "LanguageManager.hpp"
 #include "Screen.hpp"
 #include "Menu.hpp"
@@ -28,7 +29,7 @@ void CreateVideoMenu::doIt ()
         CreateMainMenu::placeHeadAndHeels( screen, /* icons */ false, /* copyrights */ false );
 
         std::string nameOfSet = "default";
-        const size_t positionOfSetting = 16;
+        const size_t positionOfSetting = 18;
 
         LanguageManager* languageManager = gui::GuiManager::getInstance()->getLanguageManager();
 
@@ -39,6 +40,13 @@ void CreateVideoMenu::doIt ()
         }
         Label* labelFullscreen = new Label( stringFullscreenSpaced + ( gui::GuiManager::getInstance()->isAtFullScreen () ? "yes" : "no" ) );
 
+        LanguageText* textDrawBackground = languageManager->findLanguageString( "draw-background" );
+        std::string stringDrawBackgroundSpaced ( textDrawBackground->getText() );
+        for ( size_t position = stringDrawBackgroundSpaced.length() ; position < positionOfSetting ; ++position ) {
+                stringDrawBackgroundSpaced = stringDrawBackgroundSpaced + " ";
+        }
+        Label* labelDrawBackground = new Label( stringDrawBackgroundSpaced + ( isomot::GameManager::getInstance()->hasBackgroundPicture () ? "yes" : "no" ) );
+
         LanguageText* textGraphicSet = languageManager->findLanguageString( "graphic-set" );
         std::string stringGraphicSetSpaced ( textGraphicSet->getText() );
         for ( size_t position = stringGraphicSetSpaced.length() ; position < positionOfSetting ; ++position ) {
@@ -48,6 +56,7 @@ void CreateVideoMenu::doIt ()
 
         Menu* menu = new Menu( textFullscreen->getX(), textFullscreen->getY() );
         menu->addActiveOption( labelFullscreen );
+        menu->addOption( labelDrawBackground );
         menu->addOption( labelGraphicSet );
 
         screen->addWidget( menu );
@@ -97,6 +106,11 @@ void CreateVideoMenu::doIt ()
 
                                                 doneWithKey = true;
                                         }
+                                        else if ( menu->getActiveOption () == labelDrawBackground )
+                                        {
+                                                isomot::GameManager::getInstance()->toggleBackgroundPicture ();
+                                                doneWithKey = true;
+                                        }
                                 }
 
                                 if ( ! doneWithKey )
@@ -106,12 +120,19 @@ void CreateVideoMenu::doIt ()
 
                                 clear_keybuf();
 
-                                // update label of "full screen" option here
+                                // update labels for "full screen" & "draw background" options here
+
                                 std::string stringFullscreenSpaced ( textFullscreen->getText() );
                                 for ( size_t position = stringFullscreenSpaced.length() ; position < positionOfSetting ; ++position ) {
                                         stringFullscreenSpaced = stringFullscreenSpaced + " ";
                                 }
                                 labelFullscreen->setText( stringFullscreenSpaced + ( gui::GuiManager::getInstance()->isAtFullScreen () ? "yes" : "no" ) );
+
+                                std::string stringDrawBackgroundSpaced ( textDrawBackground->getText() );
+                                for ( size_t position = stringDrawBackgroundSpaced.length() ; position < positionOfSetting ; ++position ) {
+                                        stringDrawBackgroundSpaced = stringDrawBackgroundSpaced + " ";
+                                }
+                                labelDrawBackground->setText( stringDrawBackgroundSpaced + ( isomot::GameManager::getInstance()->hasBackgroundPicture () ? "yes" : "no" ) );
 
                                 menu->redraw ();
                         }
