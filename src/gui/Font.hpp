@@ -18,6 +18,7 @@
 #include <allegro.h>
 #include "Gui.hpp"
 
+
 namespace gui
 {
 
@@ -30,68 +31,71 @@ const unsigned short RowsPerBitmapFont = 21;
  * gui::characters. Los caracteres pueden representarse de un determinado color y al doble
  * de su tamaño original
  */
+
 class Font
 {
+
 public:
 
-  /**
-   * Constructor
-   * @param fontName Nombre de la fuente tipográfica empleado como identificador
-   * @param fontFile Nombre del archivo de imagen que contienen la fuente tipográfica
-   * @param color Color de los caracteres. El color se puede cambiar sólo si los caracteres son blancos
-   * @param doubleSize Si vale true se doblará la altura de los caracteres
-   */
-  Font(const std::string& fontName, const std::string& fontFile, int color = makecol(255, 255, 255), bool doubleSize = false);
+        /**
+         * Constructor
+         * @param fontName Nombre de la fuente tipográfica empleado como identificador
+         * @param fontFile Nombre del archivo de imagen que contienen la fuente tipográfica
+         * @param color Color de los caracteres. El color se puede cambiar sólo si los caracteres son blancos
+         * @param doubleSize Si vale true se doblará la altura de los caracteres
+         */
+        Font( const std::string& fontName, const std::string& fontFile, int color = makecol( 255, 255, 255 ), bool doubleSize = false ) ;
 
-  virtual ~Font();
+        virtual ~Font( ) ;
 
-  /**
-   * Devuelve el carácter especificado
-   * @param Un carácter UTF-8
-   * @return La imagen del carácter o la imagen del símbolo '?' si no se encontró
-   */
-  BITMAP* getChar(const std::string& character);
+        /**
+         * Devuelve el carácter especificado
+         * @param Un carácter UTF-8
+         * @return La imagen del carácter o la imagen del símbolo '?' si no se encontró
+         */
+        BITMAP * getChar ( const std::string & character ) ;
 
 private:
 
-  /**
-   * Nombre de la fuente tipográfica empleado como identificador
-   */
-  std::string fontName;
+        /**
+         * Nombre de la fuente tipográfica empleado como identificador
+         */
+        std::string fontName ;
 
-  /**
-   * Anchura de cada carácter en píxeles. Las fuentes caligráficas son monoespaciadas
-   */
-  unsigned short charWidth;
+        /**
+         * Anchura de cada carácter en píxeles. Las fuentes caligráficas son monoespaciadas
+         */
+        unsigned short charWidth ;
 
-  /**
-   * Altura de cada carácter en píxeles. Las fuentes caligráficas son monoespaciadas
-   */
-  unsigned short charHeight;
+        /**
+         * Altura de cada carácter en píxeles. Las fuentes caligráficas son monoespaciadas
+         */
+        unsigned short charHeight ;
 
-  /**
-   * Conjunto de caracteres disponibles
-   */
-  std::vector<BITMAP*> charVector;
+        /**
+         * Conjunto de caracteres disponibles
+         */
+        std::vector< BITMAP * > charVector ;
 
 public: // Operaciones de consulta y actualización
 
-  /**
-   * Nombre de la fuente tipográfica empleado como identificador
-   * @return Una cadena con el nombre de la fuente
-   */
-  std::string getFontName() const { return fontName; }
+        /**
+         * Nombre de la fuente tipográfica empleado como identificador
+         * @return Una cadena con el nombre de la fuente
+         */
+        std::string getFontName () const  {  return fontName ;  }
 
-  /**
-   * Anchura de cada carácter en píxeles. Las fuentes caligráficas son monoespaciadas
-   * @return Un número mayor que cero
-   */
-  unsigned short getCharWidth() const  { return charWidth; }
+        /**
+         * Anchura de cada carácter en píxeles. Las fuentes caligráficas son monoespaciadas
+         * @return Un número mayor que cero
+         */
+        unsigned short getCharWidth () const  {  return charWidth ;  }
 
-  /**
-   * Altura de cada carácter en píxeles. Las fuentes caligráficas son monoespaciadas
-   */
-  unsigned short getCharHeight() const { return charHeight; }
+        /**
+         * Altura de cada carácter en píxeles. Las fuentes caligráficas son monoespaciadas
+         */
+        unsigned short getCharHeight () const  {  return charHeight ;  }
+
 };
 
 }

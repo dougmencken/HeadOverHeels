@@ -185,15 +185,18 @@ GuiManager::GuiManager( )
         assert( bitmap );
         images[ "high-speed.gray" ] = bitmap;
 
-        // Se crean, a través del gesto de fuentes, todos los tipos de letra empleados en el juego
-        gui::FontManager::getInstance()->createFont( "regular-white", path + "gfx/font.png", makecol( 255, 255, 255 ) );
-        gui::FontManager::getInstance()->createFont( "big-white", path + "gfx/font.png", makecol( 255, 255, 255 ), true );
-        gui::FontManager::getInstance()->createFont( "regular-orange", path + "gfx/font.png", makecol( 239, 129, 0 ) );
-        gui::FontManager::getInstance()->createFont( "regular-cyan", path + "gfx/font.png", makecol( 0, 228, 231 ) );
-        gui::FontManager::getInstance()->createFont( "regular-yellow", path + "gfx/font.png", makecol( 255, 255, 50 ) );
-        gui::FontManager::getInstance()->createFont( "big-orange", path + "gfx/font.png", makecol( 239, 129, 0 ), true );
-        gui::FontManager::getInstance()->createFont( "big-cyan", path + "gfx/font.png", makecol( 0, 228, 231 ), true );
-        gui::FontManager::getInstance()->createFont( "big-yellow", path + "gfx/font.png", makecol( 255, 255, 50 ), true );
+        // Every font used in the game is created here
+
+        gui::FontManager::getInstance()->createFont( "regular-white", path + "font.png", makecol( 255, 255, 255 ) );
+        gui::FontManager::getInstance()->createFont( "big-white", path + "font.png", makecol( 255, 255, 255 ), true );
+
+        gui::FontManager::getInstance()->createFont( "regular-orange", path + "font.png", makecol( 239, 129, 0 ) );
+        gui::FontManager::getInstance()->createFont( "regular-cyan", path + "font.png", makecol( 0, 228, 231 ) );
+        gui::FontManager::getInstance()->createFont( "regular-yellow", path + "font.png", makecol( 255, 255, 50 ) );
+
+        gui::FontManager::getInstance()->createFont( "big-orange", path + "font.png", makecol( 239, 129, 0 ), true );
+        gui::FontManager::getInstance()->createFont( "big-cyan", path + "font.png", makecol( 0, 228, 231 ), true );
+        gui::FontManager::getInstance()->createFont( "big-yellow", path + "font.png", makecol( 255, 255, 50 ), true );
 
         // Se crea la imagen donde se dibujará la interfaz gráfica
         this->picture = create_bitmap_ex( 32, 640, 480 );

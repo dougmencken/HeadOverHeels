@@ -5,6 +5,8 @@ gamedata_DATA = configuration.xml \
 		items.xsd \
 		sounds.xml \
 		sounds.xsd \
+		font.png \
 		hoh-icon.png
 
-SUBDIRS = gfx map music savegame sound text
+SUBDIRS = map music savegame sound text \
+		gfx gfx.2009 gfx.riderx gfx.2003

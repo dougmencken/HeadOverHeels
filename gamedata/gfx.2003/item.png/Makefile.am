@@ -1,5 +1,5 @@
-gamedatagfxitemdir = $(datadir)/@PACKAGE@/gfx/item.png
-gamedatagfxitem_DATA = ball.png \
+gamedatagfx2003itemdir = $(datadir)/@PACKAGE@/gfx.2003/item.png
+gamedatagfx2003item_DATA = ball.png \
 		      ball-shadows.png \
 		      bars-ew.png \
 		      bars-ew-shadows.png \
