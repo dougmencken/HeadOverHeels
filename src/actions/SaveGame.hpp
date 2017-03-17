@@ -15,12 +15,14 @@
 #include <allegro.h>
 #include "Action.hpp"
 
+
 namespace gui
 {
 
 /**
  * Graba la partida en curso y regresa al juego
  */
+
 class SaveGame : public Action
 {
 
@@ -37,6 +39,8 @@ public:
          * Save the game and back to play
          */
         void doIt () ;
+
+        const char * getNameOfAction ()  {  return "SaveGame" ;  }
 
 private:
 

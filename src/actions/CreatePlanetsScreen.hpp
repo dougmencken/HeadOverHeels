@@ -37,6 +37,8 @@ public:
          */
         void doIt () ;
 
+        const char * getNameOfAction ()  {  return "CreatePlanetsScreen" ;  }
+
         /**
          * Indica la liberación de Blacktooth
          */

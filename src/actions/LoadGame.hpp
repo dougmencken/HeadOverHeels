@@ -15,12 +15,14 @@
 #include <allegro.h>
 #include "Action.hpp"
 
+
 namespace gui
 {
 
 /**
  * Carga una partida del disco y pone en marcha el juego
  */
+
 class LoadGame : public Action
 {
 
@@ -38,6 +40,8 @@ public:
          * Load the game and begin it
          */
         void doIt () ;
+
+        const char * getNameOfAction ()  {  return "LoadGame" ;  }
 
 private:
 

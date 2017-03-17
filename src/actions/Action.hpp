@@ -25,6 +25,8 @@ public:
 
         virtual void doIt () = 0 ;
 
+        virtual const char * getNameOfAction () = 0 ;
+
 };
 
 class DoNothing : public Action
@@ -32,6 +34,8 @@ class DoNothing : public Action
 
 public:
         void doIt () {  }
+
+        const char * getNameOfAction ()  {  return "DoNothing" ;  }
 
 };
 

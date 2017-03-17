@@ -15,12 +15,14 @@
 
 #include <allegro.h>
 
+
 namespace gui
 {
 
 /**
  * Crea el menú de para el ajuste de los efectos sonidos y la música
  */
+
 class CreateAudioMenu : public Action
 {
 
@@ -36,6 +38,8 @@ public:
          * Show the audio menu
          */
         void doIt () ;
+
+        const char * getNameOfAction ()  {  return "CreateAudioMenu" ;  }
 
 private:
 

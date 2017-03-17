@@ -39,6 +39,8 @@ public:
          */
         void doIt () ;
 
+        const char * getNameOfAction ()  {  return "CreateVideoMenu" ;  }
+
 private:
 
         BITMAP* where ;

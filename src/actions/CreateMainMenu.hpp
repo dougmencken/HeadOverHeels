@@ -15,6 +15,7 @@
 #include <allegro.h>
 #include "Action.hpp"
 
+
 namespace gui
 {
 
@@ -23,6 +24,7 @@ class Screen ;
 /**
  * Crea el menú principal del juego
  */
+
 class CreateMainMenu : public Action
 {
 
@@ -38,6 +40,8 @@ public:
          * Show the main menu of the game
          */
         void doIt () ;
+
+        const char * getNameOfAction ()  {  return "CreateMainMenu" ;  }
 
         static void placeHeadAndHeels ( Screen* screen, bool iconsToo, bool copyrightsToo ) ;
 

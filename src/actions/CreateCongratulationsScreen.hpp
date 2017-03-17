@@ -14,12 +14,14 @@
 #include <allegro.h>
 #include "Action.hpp"
 
+
 namespace gui
 {
 
 /**
  * Presenta el texto final de felicitación cuando se termina con éxito el juego
  */
+
 class CreateCongratulationsScreen : public Action
 {
 
@@ -37,6 +39,8 @@ public:
          * Crea la pantalla con el texto
          */
         void doIt () ;
+
+        const char * getNameOfAction ()  {  return "CreateCongratulationsScreen" ;  }
 
 private:
 

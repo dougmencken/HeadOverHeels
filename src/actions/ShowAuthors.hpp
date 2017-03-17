@@ -14,10 +14,10 @@
 #include <allegro.h>
 #include "Action.hpp"
 
+
 namespace gui
 {
 
-// Declaraciones adelantadas
 class Screen;
 class Label;
 class LanguageLine;
@@ -25,6 +25,7 @@ class LanguageLine;
 /**
  * Muestra los autores de la aplicación y todos sus colaboradores
  */
+
 class ShowAuthors : public Action
 {
 
@@ -37,6 +38,8 @@ public:
         ShowAuthors( BITMAP* picture ) ;
 
         void doIt () ;
+
+        const char * getNameOfAction ()  {  return "ShowAuthors" ;  }
 
 private:
 

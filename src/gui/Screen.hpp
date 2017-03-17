@@ -91,7 +91,7 @@ public: // Operaciones de consulta y actualización
          */
         void setBackground ( BITMAP* image ) {  backgroundPicture = image ;  }
 
-        void setEscapeAction ( Action* action ) {  escapeAction = action ;  }
+        void setEscapeAction ( Action* action ) ;
 
 };
 

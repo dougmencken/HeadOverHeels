@@ -16,12 +16,14 @@
 #include "Action.hpp"
 #include "csxml/SaveGameXML.hpp"
 
+
 namespace gui
 {
 
 /**
  * Crea el menú para seleccionar la partida a cargar
  */
+
 class CreateListOfSavedGames : public gui::Action
 {
 
@@ -38,6 +40,8 @@ public:
          * Show the saved games
          */
         void doIt () ;
+
+        const char * getNameOfAction ()  {  return "CreateListOfSavedGames" ;  }
 
 private:
 

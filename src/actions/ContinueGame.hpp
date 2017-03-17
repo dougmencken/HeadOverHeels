@@ -14,6 +14,7 @@
 #include <allegro.h>
 #include "Action.hpp"
 
+
 namespace gui
 {
 
@@ -33,6 +34,8 @@ public:
          * Begin the game
          */
         void doIt () ;
+
+        const char * getNameOfAction ()  {  return "ContinueGame" ;  }
 
 private:
 

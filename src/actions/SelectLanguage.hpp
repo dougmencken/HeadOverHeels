@@ -15,12 +15,14 @@
 #include <allegro.h>
 #include "Action.hpp"
 
+
 namespace gui
 {
 
 /**
  * Establece el idioma del juego
  */
+
 class SelectLanguage: public Action
 {
 
@@ -37,6 +39,8 @@ public:
          * Set the language of the game
          */
         void doIt () ;
+
+        const char * getNameOfAction ()  {  return "SelectLanguage" ;  }
 
 private:
 

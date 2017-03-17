@@ -34,6 +34,8 @@ public:
                 isomot::SoundManager::getInstance()->play ( 0, whichSound, /* loop */ false );
         }
 
+        const char * getNameOfAction ()  {  return "PlaySound" ;  }
+
 private:
 
         isomot::StateId whichSound ;

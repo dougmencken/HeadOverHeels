@@ -37,6 +37,8 @@ public:
          */
         void doIt () ;
 
+        const char * getNameOfAction ()  {  return "CreateKeyboardMenu" ;  }
+
 private:
 
         /**

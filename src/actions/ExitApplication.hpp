@@ -13,12 +13,10 @@
 
 #include "Action.hpp"
 
+
 namespace gui
 {
 
-/**
- * Finaliza la ejecución de la aplicación
- */
 class ExitApplication : public Action
 {
 
@@ -29,6 +27,8 @@ public:
         void doIt () {  bye () ;  }
 
         void bye () ;
+
+        const char * getNameOfAction ()  {  return "ExitApplication" ;  }
 
 };
 

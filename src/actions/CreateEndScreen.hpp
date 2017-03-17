@@ -15,6 +15,7 @@
 #include <allegro.h>
 #include "Action.hpp"
 
+
 namespace gui
 {
 
@@ -22,6 +23,7 @@ namespace gui
  * Crea la pantalla resumen de la partida. Muestra el rango, la puntuación, el
  * número de salas visitadas y el número de planetas liberados
  */
+
 class CreateEndScreen : public gui::Action
 {
 
@@ -39,6 +41,8 @@ public:
          * Show the summary screen
          */
         void doIt () ;
+
+        const char * getNameOfAction ()  {  return "CreateEndScreen" ;  }
 
 private:
 
