@@ -31,6 +31,17 @@ Label::Label( unsigned int x, unsigned int y, const std::string& text )
         this->createBitmapLabel( this->text, this->fontName, this->color );
 }
 
+Label::Label( const std::string& text, const std::string& fontName, const std::string& color, int spacing )
+: Widget( 0, 0 ),
+        text( text ),
+        fontName( fontName ),
+        color( color ),
+        font( 0 ),
+        buffer( 0 )
+{
+        this->createBitmapLabel( this->text, this->fontName, this->color, spacing );
+}
+
 Label::Label( unsigned int x, unsigned int y, const std::string& text, const std::string& fontName, const std::string& color, int spacing )
 : Widget( x, y ),
         text( text ),

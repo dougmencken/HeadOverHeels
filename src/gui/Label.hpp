@@ -48,10 +48,19 @@ public:
 
         /**
          * Constructor
+         * @param text El texto a presentar
+         * @param fontName Nombre de la fuente caligráfica usada para representar el texto
+         * @param color Color del texto
+         * @param spacing Espaciado entre caracteres, suma o resta tantos píxeles como se indiquen
+         */
+        Label( const std::string& text, const std::string& fontName, const std::string& color, int spacing = 0 ) ;
+
+        /**
+         * Constructor
          * @param x Coordenada X de pantalla donde situar el elemento
          * @param y Coordenada Y de pantalla donde situar el elemento
          * @param text El texto a presentar
-         * @param font Nombre de la fuente caligráfica usada para representar el texto
+         * @param fontName Nombre de la fuente caligráfica usada para representar el texto
          * @param color Color del texto
          * @param spacing Espaciado entre caracteres, suma o resta tantos píxeles como se indiquen
          */
@@ -61,7 +70,7 @@ public:
 
         /**
          * Cambia el tipo de letra del texto
-         * @param font Nombre de la fuente caligráfica
+         * @param fontName Nombre de la fuente caligráfica
          * @param color Color del texto
          */
         void changeFontAndColor ( const std::string& fontName, const std::string& color ) ;
