@@ -20,6 +20,7 @@
 #include "ItemData.hpp"
 #include "csxml/ItemsXML.hpp"
 
+
 namespace isomot
 {
 
@@ -28,6 +29,7 @@ namespace isomot
  * archivo XML, creando una lista de datos que incluye también los gráficos y las sombras de cada
  * elemento
  */
+
 class ItemDataManager
 {
 
@@ -42,17 +44,18 @@ public:
         virtual ~ItemDataManager( ) ;
 
         /**
-         * Crea la lista de datos a partir de la información extraída por el gestor XML del archivo de
-         * definición de elementos
+         * Compose data for items from XML file with definitions of these items
          */
-        void load () ;
+        void loadItems () ;
+
+        void freeItems () ;
 
         /**
          * Busca un elemento en la lista
          * @param label El identificador del elemento a encontrar
          * @return Un registro con los datos del elemento ó 0 si la búsqueda fracasó
          */
-        ItemData* find ( const short label ) ;
+        ItemData* findItemByLabel ( const short label ) ;
 
 protected:
 

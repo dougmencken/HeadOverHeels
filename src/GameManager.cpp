@@ -20,8 +20,10 @@ namespace isomot
 
 GameManager* GameManager::instance = 0;
 
+
 GameManager::GameManager( )
-        : vidasInfinitas( false )
+        : chosenGraphicSet( "gfx" )
+        , vidasInfinitas( false )
         , drawBackgroundPicture( true )
         , isomot( new Isomot() )
         , gameFileManager( new GameFileManager( this, isomot ) )
@@ -216,6 +218,7 @@ void GameManager::drawAmbianceOfGame ( BITMAP* where )
 
 void GameManager::loadGame ( const std::string& fileName )
 {
+        isomot->prepare() ;
         gameFileManager->loadGame( fileName );
 }
 
@@ -772,7 +775,7 @@ double GameManager::getShield ( const PlayerId& player ) const
 {
         double time = 0.0;
 
-        switch( player )
+        switch ( player )
         {
                 case Head:
                         time = this->headShield;

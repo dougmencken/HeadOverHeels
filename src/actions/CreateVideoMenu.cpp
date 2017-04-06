@@ -1,5 +1,6 @@
 
 #include "CreateVideoMenu.hpp"
+#include "CreateMenuOfGraphicSets.hpp"
 #include "GuiManager.hpp"
 #include "GameManager.hpp"
 #include "LanguageManager.hpp"
@@ -8,9 +9,8 @@
 #include "Label.hpp"
 #include "CreateMainMenu.hpp"
 
-#include <string>
-
-using gui::CreateVideoMenu;
+using gui::CreateVideoMenu ;
+using gui::CreateMenuOfGraphicSets ;
 
 
 CreateVideoMenu::CreateVideoMenu( BITMAP* picture ) :
@@ -28,8 +28,7 @@ void CreateVideoMenu::doIt ()
 
         CreateMainMenu::placeHeadAndHeels( screen, /* icons */ false, /* copyrights */ false );
 
-        std::string nameOfSet = "default";
-        const size_t positionOfSetting = 18;
+        const size_t positionOfSetting = 20;
 
         LanguageManager* languageManager = gui::GuiManager::getInstance()->getLanguageManager();
 
@@ -48,11 +47,8 @@ void CreateVideoMenu::doIt ()
         Label* labelDrawBackground = new Label( stringDrawBackgroundSpaced + ( isomot::GameManager::getInstance()->hasBackgroundPicture () ? "yes" : "no" ) );
 
         LanguageText* textGraphicSet = languageManager->findLanguageString( "graphic-set" );
-        std::string stringGraphicSetSpaced ( textGraphicSet->getText() );
-        for ( size_t position = stringGraphicSetSpaced.length() ; position < positionOfSetting ; ++position ) {
-                stringGraphicSetSpaced = stringGraphicSetSpaced + " ";
-        }
-        Label* labelGraphicSet = new Label( stringGraphicSetSpaced + nameOfSet );
+        Label* labelGraphicSet = new Label( textGraphicSet->getText(), "regular", "yellow" );
+        labelGraphicSet->setAction( new CreateMenuOfGraphicSets( this->where ) );
 
         Menu* menu = new Menu( textFullscreen->getX(), textFullscreen->getY() );
         menu->addActiveOption( labelFullscreen );
@@ -60,7 +56,7 @@ void CreateVideoMenu::doIt ()
         menu->addOption( labelGraphicSet );
 
         screen->addWidget( menu );
-        screen->setNext( menu );
+        screen->setKeyHandler( menu );
 
         gui::GuiManager::getInstance()->changeScreen( screen );
         gui::GuiManager::getInstance()->refresh();
@@ -91,21 +87,6 @@ void CreateVideoMenu::doIt ()
                                                 gui::GuiManager::getInstance()->toggleFullScreenVideo ();
                                                 doneWithKey = true;
                                         }
-                                        else if ( menu->getActiveOption () == labelGraphicSet )
-                                        {
-                                                // well it’s still something TO DO ...
-                                                // now just paint it yellow or cyan
-                                                if ( theKey == KEY_LEFT )
-                                                {
-                                                        labelGraphicSet->changeFontAndColor( labelGraphicSet->getFontName (), "yellow" );
-                                                }
-                                                else if ( theKey == KEY_RIGHT )
-                                                {
-                                                        labelGraphicSet->changeFontAndColor( labelGraphicSet->getFontName (), "cyan" );
-                                                }
-
-                                                doneWithKey = true;
-                                        }
                                         else if ( menu->getActiveOption () == labelDrawBackground )
                                         {
                                                 isomot::GameManager::getInstance()->toggleBackgroundPicture ();
@@ -115,7 +96,7 @@ void CreateVideoMenu::doIt ()
 
                                 if ( ! doneWithKey )
                                 {
-                                        menu->handleKey ( theKey << 8 );
+                                        screen->getKeyHandler()->handleKey ( theKey << 8 );
                                 }
 
                                 clear_keybuf();

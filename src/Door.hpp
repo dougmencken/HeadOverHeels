@@ -15,126 +15,130 @@
 #include "Drawable.hpp"
 #include "Mediated.hpp"
 
+
 namespace isomot
 {
 
-// Declaraciones adelantadas
 class ItemDataManager;
 class FreeItem;
 
+
 /**
- * Una puerta de la sala. Realmente una puerta son tres elementos libres: las jambas y el dintel
+ * A door to the room. It is really three free elements: two jambs and lintel
  */
+
 class Door : public Drawable, public Mediated
 {
+
 public:
 
-  /**
-   * Constructor
-   * @param itemDataManager Gestor de datos necesario para encontrar las tres partes de la puerta
-   * @param label Identificador de la puerta
-   * @param cx Celda que ocupa el elemento en el eje X
-   * @param cy Celda que ocupa el elemento en el eje Y
-   * @param z Posición espacial Z o a qué distancia está el elemento del suelo
-   * @param direction Dirección inicial del elemento
-   */
-	Door(ItemDataManager* itemDataManager, short label, int cx, int cy, int z, const Direction& direction);
+       /**
+        * Constructor
+        * @param itemDataManager Gestor de datos necesario para encontrar las tres partes de la puerta
+        * @param label Identificador de la puerta
+        * @param cx Celda que ocupa el elemento en el eje X
+        * @param cy Celda que ocupa el elemento en el eje Y
+        * @param z Posición espacial Z o a qué distancia está el elemento del suelo
+        * @param direction Dirección inicial del elemento
+        */
+        Door( ItemDataManager* itemDataManager, short label, int cx, int cy, int z, const Direction& direction ) ;
 
-	virtual ~Door();
+        virtual ~Door( ) ;
 
-	void draw( BITMAP* where ) { }
+        void draw ( BITMAP* where ) { }
 
 private:
 
-  /**
-   * Identificador de la puerta
-   */
-  short label;
+       /**
+        * Gestor de los datos invariables de los elementos del juego
+        */
+        ItemDataManager * itemDataManager ;
 
-  /**
-   * Celda que ocupa el elemento en el eje X
-   */
-  int cx;
+       /**
+        * Identificador de la puerta
+        */
+        short label ;
 
-  /**
-   * Celda que ocupa el elemento en el eje Y
-   */
-  int cy;
+       /**
+        * Celda que ocupa el elemento en el eje X
+        */
+        int cx ;
 
-  /**
-   * Posición espacial Z o a qué distancia está el elemento del suelo
-   */
-  int z;
+       /**
+        * Celda que ocupa el elemento en el eje Y
+        */
+        int cy ;
 
-  /**
-   * Coordenada inicial del vado de la puerta
-   */
-  int rightLimit;
+       /**
+        * Posición espacial Z o a qué distancia está el elemento del suelo
+        */
+        int z ;
 
-  /**
-   * Coordenada final del vado de la puerta
-   */
-  int leftLimit;
+       /**
+        * Coordenada inicial del vado de la puerta
+        */
+        int rightLimit ;
 
-  /**
-   * El tipo de puerta determinado por su posición en la sala
-   */
-  Direction direction;
+       /**
+        * Coordenada final del vado de la puerta
+        */
+        int leftLimit ;
 
-  /**
-   * Gestor de los datos invariables de los elementos del juego
-   */
-  ItemDataManager* itemDataManager;
+       /**
+        * El tipo de puerta determinado por su posición en la sala
+        */
+        Direction direction ;
 
-  /**
-   * Jamba izquierda
-   */
-  FreeItem* leftJamb;
+       /**
+        * Jamba izquierda
+        */
+        FreeItem * leftJamb ;
 
-  /**
-   * Jamba derecha
-   */
-  FreeItem* rightJamb;
+       /**
+        * Jamba derecha
+        */
+        FreeItem * rightJamb ;
 
-  /**
-   * Dintel
-   */
-  FreeItem* lintel;
+       /**
+        * Lintel
+        */
+        FreeItem * lintel ;
 
 public: // Operaciones de consulta y actualización
 
-  /**
-   * Indica si un determinado elemento se encuentra en el vado de la puerta
-   * @param x Coordenada isométrica X del elemento
-   * @param y Coordenada isométrica Y del elemento
-   * @param z Coordenada isométrica Z del elemento
-   * @return true si el elemento está bajo la puerta o false en caso contrario
-   */
-  bool isUnderDoor(int x, int y, int z);
+       /**
+        * Indica si un determinado elemento se encuentra en el vado de la puerta
+        * @param x Coordenada isométrica X del elemento
+        * @param y Coordenada isométrica Y del elemento
+        * @param z Coordenada isométrica Z del elemento
+        * @return true si el elemento está bajo la puerta o false en caso contrario
+        */
+        bool isUnderDoor ( int x, int y, int z ) ;
 
-  /**
-   * El tipo de puerta determinado por su posición en la sala
-   * @return North, South, East o West
-   */
-  Direction getDirection() const { return direction; }
+       /**
+        * El tipo de puerta determinado por su posición en la sala
+        * @return North, South, East o West
+        */
+        Direction getDirection () const {  return direction ;  }
 
-  /**
-   * La jamba izquierda de la puerta. Si no existe se crea
-   * @return Un elemento libre
-   */
-  FreeItem* getLeftJamb();
+       /**
+        * La jamba izquierda de la puerta. Si no existe se crea
+        * @return Un elemento libre
+        */
+        FreeItem * getLeftJamb () ;
 
-  /**
-   * La jamba derecha de la puerta. Si no existe se crea
-   * @return Un elemento libre
-   */
-  FreeItem* getRightJamb();
+       /**
+        * La jamba derecha de la puerta. Si no existe se crea
+        * @return Un elemento libre
+        */
+        FreeItem * getRightJamb () ;
 
-  /**
-   * El dintel de la puerta. Si no existe se crea
-   * @return Un elemento libre
-   */
-  FreeItem* getLintel();
+       /**
+        * The lintel of the door. If it is absent it would be created
+        * @return a free item
+        */
+        FreeItem * getLintel () ;
+
 };
 
 }

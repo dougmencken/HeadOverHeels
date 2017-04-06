@@ -13,7 +13,7 @@ int main()
         timeBeginPeriod( 1 );
 #endif
 
-        gui::GuiManager::getInstance()->enter ();
+        gui::GuiManager::getInstance()->begin ();
 
 #ifdef __WIN32
         timeEndPeriod( 1 );

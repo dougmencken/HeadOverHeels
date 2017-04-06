@@ -13,6 +13,7 @@
 
 # include <xercesc/util/PlatformUtils.hpp>
 
+
 namespace isomot
 {
 
@@ -24,12 +25,12 @@ MapManager::MapManager( Isomot* isomot, const std::string& fileName )
 
 }
 
-MapManager::~MapManager()
+MapManager::~MapManager( )
 {
 
 }
 
-void MapManager::load ()
+void MapManager::loadMap ()
 {
         xercesc::XMLPlatformUtils::Initialize ();
 
@@ -138,7 +139,7 @@ void MapManager::beginNewGame( const std::string& firstRoomFileName, const std::
                 if ( firstRoom != 0 )
                 {
                         // Posición inicial del jugador
-                        ItemData* firstPlayerData = isomot->getItemDataManager()->find( Head );
+                        ItemData* firstPlayerData = isomot->getItemDataManager()->findItemByLabel( Head );
 
                         int centerX = RoomBuilder::getXCenterOfRoom( firstPlayerData, firstRoom );
                         int centerY = RoomBuilder::getYCenterOfRoom( firstPlayerData, firstRoom );
@@ -173,7 +174,7 @@ void MapManager::beginNewGame( const std::string& firstRoomFileName, const std::
                 if ( secondRoom != 0 )
                 {
                         // Posición inicial del jugador
-                        ItemData* secondPlayerData = isomot->getItemDataManager()->find( Heels );
+                        ItemData* secondPlayerData = isomot->getItemDataManager()->findItemByLabel( Heels );
 
                         int centerX = RoomBuilder::getXCenterOfRoom( secondPlayerData, secondRoom );
                         int centerY = RoomBuilder::getYCenterOfRoom( secondPlayerData, secondRoom );
@@ -402,7 +403,7 @@ Room* MapManager::changeRoom( const Direction& exit )
         }
 
         // Datos del jugador activo
-        ItemData* playerData = isomot->getItemDataManager()->find( activePlayer );
+        ItemData* playerData = isomot->getItemDataManager()->findItemByLabel( activePlayer );
 
         // Posición inicial del jugador
         int x = exitPosition.getX ();
@@ -767,7 +768,7 @@ void MapManager::updateActivePlayer()
         activeRoomData->setActivePlayer( PlayerId( activeRoom->getMediator()->getActivePlayer()->getLabel() ) );
 }
 
-void MapManager::load( sgxml::exploredRooms::visited_sequence& visitedSequence )
+void MapManager::loadVisitedSequence( sgxml::exploredRooms::visited_sequence& visitedSequence )
 {
         for ( sgxml::exploredRooms::visited_const_iterator i = visitedSequence.begin (); i != visitedSequence.end (); ++i )
         {
@@ -779,7 +780,7 @@ void MapManager::load( sgxml::exploredRooms::visited_sequence& visitedSequence )
         }
 }
 
-void MapManager::save( sgxml::exploredRooms::visited_sequence& visitedSequence )
+void MapManager::saveVisitedSequence( sgxml::exploredRooms::visited_sequence& visitedSequence )
 {
         for ( std::list< MapRoomData >::iterator i = this->mapData.begin (); i != this->mapData.end (); ++i )
         {

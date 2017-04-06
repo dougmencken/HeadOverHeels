@@ -4,15 +4,17 @@
 #include "GuiManager.hpp"
 #include "actions/Action.hpp"
 
+
 namespace gui
 {
 
-Screen::Screen( unsigned int x, unsigned int y, BITMAP* picture )
-: Widget( x, y ),
-  backgroundColor( makecol( 0, 0, 0 ) ),
-  backgroundPicture( 0 ),
-  where( picture ),
-  escapeAction( 0 )
+Screen::Screen( unsigned int x, unsigned int y, BITMAP* picture ) :
+        Widget( x, y ),
+        backgroundColor( makecol( 0, 0, 0 ) ),
+        backgroundPicture( 0 ),
+        where( picture ),
+        escapeAction( 0 ),
+        keyHandler( 0 )
 {
 
 }
@@ -52,11 +54,16 @@ void Screen::handleKey( int rawKey )
 
         if ( escapeAction != 0 && theKey == KEY_ESC )
         {
+                fprintf( stdout, "escape action %s ...\n", ( escapeAction != 0 ? escapeAction->getNameOfAction() : "nope" ) );
                 this->escapeAction->doIt ();
+                fprintf( stdout, "... done with action %s\n", ( escapeAction != 0 ? escapeAction->getNameOfAction() : "nope" ) );
         }
         else
         {
-                Widget::handleKey( rawKey );
+                if ( this->keyHandler != 0 )
+                {
+                        this->keyHandler->handleKey( rawKey );
+                }
         }
 }
 
@@ -67,8 +74,7 @@ void Screen::addWidget( Widget* widget )
 
 void Screen::setEscapeAction ( Action* action )
 {
-	escapeAction = action ;
-	fprintf( stdout, "escape action is %s\n", ( action != 0 ? action->getNameOfAction() : "nope" ) );
+        escapeAction = action ;
 }
 
 }

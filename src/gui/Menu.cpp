@@ -13,6 +13,7 @@ namespace gui
 
 Menu::Menu( unsigned int x, unsigned int y )
 : Widget( x, y ),
+        handlerOfKeys( 0 ),
         activeOption( 0 ),
         optionImage( GuiManager::getInstance()->findImage( "option" ) ),
         selectedOptionImage( GuiManager::getInstance()->findImage( "selected-option" ) ),
@@ -96,9 +97,9 @@ void Menu::handleKey( int rawKey )
                         break;
 
                 default:
-                        if ( this->getNext() != 0 )
+                        if ( this->handlerOfKeys != 0 )
                         {
-                                getNext()->handleKey( rawKey );
+                                handlerOfKeys->handleKey( rawKey );
                         }
         }
 }
@@ -111,7 +112,7 @@ void Menu::addOption( Label* label )
 void Menu::addActiveOption( Label* label )
 {
         this->addOption( label );
-        setNext( label );
+        this->handlerOfKeys = label;
         this->activeOption = label;
 }
 
@@ -120,7 +121,7 @@ void Menu::previousOption ()
         std::list< Label* >::iterator i = std::find_if( options.begin (), options.end (), std::bind2nd( EqualXYOfLabel(), this->activeOption->getXY () ) );
         assert ( i != options.end () );
         this->activeOption = ( i == options.begin() ? *options.rbegin() : *( --i ) );
-        setNext( this->activeOption );
+        this->handlerOfKeys = this->activeOption ;
 }
 
 void Menu::nextOption ()
@@ -128,7 +129,7 @@ void Menu::nextOption ()
         std::list< Label* >::iterator i = std::find_if( options.begin (), options.end (), std::bind2nd( EqualXYOfLabel(), this->activeOption->getXY () ) );
         assert ( i != options.end () );
         this->activeOption = ( ++i == options.end() ? *options.begin() : *i );
-        setNext( this->activeOption );
+        this->handlerOfKeys = this->activeOption ;
 }
 
 }

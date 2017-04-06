@@ -228,6 +228,10 @@ public:
          */
         void success () {  this->emperator = true ;  }
 
+        const char* getChosenGraphicSet () {  return chosenGraphicSet.c_str () ;  }
+
+        void setChosenGraphicSet ( const char* newSet ) {  chosenGraphicSet = newSet ;  }
+
 private:
 
         /**
@@ -255,6 +259,8 @@ public:
         void toggleBackgroundPicture () {  drawBackgroundPicture = ! drawBackgroundPicture ;  }
 
 private:
+
+        std::string chosenGraphicSet ;
 
         /**
          * Indica si se han activado las vidas infinitas

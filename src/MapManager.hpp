@@ -24,16 +24,18 @@
 # include "Room.hpp"
 # include "ItemDataManager.hpp"
 
+
 namespace isomot
 {
 
-// Declaraciones adelantadas
 class Isomot;
 class Room;
+
 
 /**
  * El gestor del mapa
  */
+
 class MapManager
 {
 
@@ -49,9 +51,9 @@ public:
         virtual ~MapManager( ) ;
 
         /**
-         * Crea la lista de datos a partir de la información extraída por el gestor XML del archivo del mapa
+         * Compose data for map from XML file
          */
-        void load () ;
+        void loadMap () ;
 
         virtual void beginNewGame ( const std::string& firstRoomFileName, const std::string& secondRoomFileName ) ;
 
@@ -104,14 +106,14 @@ public:
          * @param visitedSequence Estructura de datos empleada por el archivo XML para guardar
          * las salas visitadas
          */
-        void load ( sgxml::exploredRooms::visited_sequence& visitedSequence ) ;
+        void loadVisitedSequence ( sgxml::exploredRooms::visited_sequence& visitedSequence ) ;
 
         /**
          * Guarda en disco las salas visitadas por los jugadores
          * @param visitedSequence Estructura de datos empleada por el archivo XML para guardar
          * las salas visitadas
          */
-        void save ( sgxml::exploredRooms::visited_sequence& visitedSequence ) ;
+        void saveVisitedSequence ( sgxml::exploredRooms::visited_sequence& visitedSequence ) ;
 
         /**
          * Cuenta el número de salas visitadas por los jugadores

@@ -5,8 +5,8 @@ namespace isomot
 {
 
 ItemData::ItemData( ) :
-	label( 0 ) ,
-	widthX( 0 ) ,
+        label( 0 ) ,
+        widthX( 0 ) ,
         widthY( 0 ) ,
         height( 0 ) ,
         directionFrames( 0 ) ,

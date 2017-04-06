@@ -398,7 +398,7 @@ void UserControlled::wayInTeletransport( PlayerItem * playerItem )
                         playerItem->setOrientation( playerItem->getDirection() );
                         // Cambia a las burbujas pero conservando la etiqueta del jugador
                         playerData = playerItem->getItemData();
-                        playerItem->changeItemData( itemDataManager->find( transitionDataLabel ), NoDirection );
+                        playerItem->changeItemData( itemDataManager->findItemByLabel( transitionDataLabel ), NoDirection );
                         // Las burbujas se animarán marcha atrás
                         playerItem->setBackwardMotion();
                         // Inicia el teletransporte
@@ -431,7 +431,7 @@ void UserControlled::wayOutTeletransport( PlayerItem * playerItem )
                         // Almacena la orientación de salida
                         playerItem->setOrientation( playerItem->getDirection() );
                         // Cambia a las burbujas pero conservando la etiqueta del jugador
-                        playerItem->changeItemData( itemDataManager->find( transitionDataLabel ), NoDirection );
+                        playerItem->changeItemData( itemDataManager->findItemByLabel( transitionDataLabel ), NoDirection );
                         // Inicia el teletransporte
                         stateId = StateWayOutTeletransport;
                         break;
@@ -460,7 +460,7 @@ void UserControlled::destroy( PlayerItem* playerItem )
                         if ( playerItem->getShieldTime() == 0 )
                         {
                                 // Cambia a las burbujas pero conservando la etiqueta del jugador
-                                playerItem->changeItemData( itemDataManager->find( transitionDataLabel ), NoDirection );
+                                playerItem->changeItemData( itemDataManager->findItemByLabel( transitionDataLabel ), NoDirection );
                                 // Inicia la destrucción
                                 stateId = StateDestroy;
                         }
@@ -493,7 +493,7 @@ void UserControlled::shot( PlayerItem* playerItem )
                 this->shotPresent = true;
 
                 // Se buscan los datos del elemento empleado como disparo
-                ItemData* shotData = this->itemDataManager->find( shotDataLabel );
+                ItemData* shotData = this->itemDataManager->findItemByLabel( shotDataLabel );
 
                 if ( shotData != 0 )
                 {
@@ -561,7 +561,7 @@ void UserControlled::take( PlayerItem * playerItem )
                         // Guarda el elemento seleccionado y lo hace desaparecer de la sala
                         if ( takenItem != 0 )
                         {
-                                takenItemData = itemDataManager->find( takenItem->getLabel() );
+                                takenItemData = itemDataManager->findItemByLabel( takenItem->getLabel() );
                                 takenItem->getBehavior()->changeStateId( StateDestroy );
                                 stateId = ( stateId == StateTakeAndJump ? StateJump : StateTakenItem );
 

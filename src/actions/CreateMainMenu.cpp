@@ -141,7 +141,7 @@ void CreateMainMenu::doIt ()
         menu->addOption( label );
 
         screen->addWidget( menu );
-        screen->setNext( menu );
+        screen->setKeyHandler( menu );
 
         GuiManager::getInstance()->changeScreen( screen );
 }

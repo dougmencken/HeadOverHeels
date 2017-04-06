@@ -18,16 +18,18 @@
 
 #include "csxml/SaveGameXML.hpp"
 
+
 namespace isomot
 {
 
-// Declaraciones adelantadas
 class ItemDataManager;
 class MapManager;
+
 
 /**
  * El motor isométrico
  */
+
 class Isomot
 {
 
@@ -36,6 +38,8 @@ public:
         Isomot( ) ;
 
         virtual ~Isomot( ) ;
+
+        void prepare () ;
 
         /**
          * Crea las salas iniciales y pone en marcha el motor isométrico
@@ -70,7 +74,7 @@ public:
 
 private:
 
-        void prepare () ;
+        void offVidasInfinitas () ;
 
         /**
          * Gestiona la sala final del juego. Es una sala muy especial porque el usuario no tiene el

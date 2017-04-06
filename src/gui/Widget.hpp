@@ -45,7 +45,7 @@ public:
          * Recibe la pulsación de una tecla. Las subclases pueden responder a dicho evento
          * o comunicárselo al siguiente componente
          */
-        virtual void handleKey ( int key ) ;
+        virtual void handleKey ( int key ) = 0 ;
 
         /**
          * Cambia la posición del elemento
@@ -61,11 +61,6 @@ private:
          * second es la coordenada Y de pantalla donde situar el elemento
          */
         std::pair < unsigned int, unsigned int > xy;
-
-        /**
-         * when this widget wants to share with some other one
-         */
-        Widget* next ;
 
 protected:
 
@@ -90,15 +85,6 @@ public: // Operaciones de consulta y actualización
          * los límites de la resolución establecida
          */
         unsigned int getY () const {  return this->xy.second ;  }
-
-        /**
-         * Establece el sucesor del componente en la cadena de responsabilidad para dar respuesta
-         * a la pulsación de una tecla
-         * @param widget Un componente de la interfaz gráfica
-         */
-        void setNext ( Widget* widget ) {  this->next = widget ;  }
-
-        Widget* getNext () const {  return this->next ;  }
 
 };
 

@@ -76,7 +76,7 @@ void CreateKeyboardMenu::doIt ()
 
         // El menú que aparece en pantalla
         screen->addWidget( menu );
-        screen->setNext( menu );
+        screen->setKeyHandler( menu );
 
         GuiManager::getInstance()->changeScreen( screen );
 }

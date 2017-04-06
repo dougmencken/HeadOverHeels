@@ -48,7 +48,7 @@ void CreatePlanetsScreen::doIt ()
         label->setAction( new ContinueGame( this->where, gameInProgress ) );
 
         planets->addWidget( label );
-        planets->setNext( label );
+        planets->setKeyHandler( label );
 
         BITMAP* chapeau = GuiManager::getInstance()->findImage( "crown" ) ;
         BITMAP* chapeauTriste = GuiManager::getInstance()->findImage( "grey-crown" ) ;

@@ -13,40 +13,42 @@
 #include "PlayerItem.hpp"
 #include "Behavior.hpp"
 
+
 namespace isomot
 {
 
-Isomot::Isomot()
-: isEndRoom( false )
+Isomot::Isomot( ) :
+        isEndRoom( false ),
+        view( 0 ),
+        itemDataManager( 0 ),
+        mapManager( 0 )
 {
-        // Crea la imagen donde se dibujará la vista isométrica
-        this->view = create_bitmap_ex( 32, ScreenWidth, ScreenHeight );
 
-        // Se cargan y almacenan los datos de los elementos del juego
-        this->itemDataManager = new ItemDataManager( "items.xml" );
-        this->itemDataManager->load();
-
-        // Se crea y se pone en marcha el gestor del mapa
-        this->mapManager = new MapManager( this, "map.xml" );
-        this->mapManager->load();
 }
 
-Isomot::~Isomot()
+Isomot::~Isomot( )
 {
         delete this->mapManager;
         delete this->itemDataManager;
-        destroy_bitmap( this->view );
+
+        if ( this->view != 0 )
+        {
+                destroy_bitmap( this->view );
+                this->view = 0;
+        }
 }
 
 void Isomot::beginNew()
 {
-        this->prepare ();
+        prepare() ;
+        offVidasInfinitas() ;
+        this->isEndRoom = false;
 
-        // Se crean las salas iniciales
+        // initial rooms
         mapManager->beginNewGame( "blacktooth/blacktooth01.xml", "blacktooth/blacktooth23.xml" );
         //mapManager->beginNewGame( "blacktooth/blacktooth85.xml", "blacktooth/blacktooth23.xml" );
 
-        // Pone en marcha la sala inicial
+        // go to the initial room
         mapManager->getActiveRoom()->startUpdate ();
 
         std::cout << "play new game" << std::endl ;
@@ -55,9 +57,9 @@ void Isomot::beginNew()
 
 void Isomot::beginOld( const sgxml::players::player_sequence& playerSequence )
 {
-        this->prepare ();
+        offVidasInfinitas() ;
+        this->isEndRoom = false;
 
-        // Se crean las salas iniciales
         for ( sgxml::players::player_const_iterator i = playerSequence.begin (); i != playerSequence.end (); ++i )
         {
                 this->mapManager->beginOldGameWithPlayer( *i );
@@ -69,28 +71,29 @@ void Isomot::beginOld( const sgxml::players::player_sequence& playerSequence )
 
 void Isomot::prepare ()
 {
-        this->isEndRoom = false;
-
-        // Crea la imagen donde se dibujará la vista isométrica
+        // image where the isometric view will be drawn
         if ( this->view == 0 )
         {
                 this->view = create_bitmap_ex( 32, ScreenWidth, ScreenHeight );
         }
 
-        // Se cargan y almacenan los datos de los elementos del juego
+        // data for elements of the game
         if ( this->itemDataManager == 0 )
         {
                 this->itemDataManager = new ItemDataManager( "items.xml" );
-                this->itemDataManager->load ();
+                this->itemDataManager->loadItems ();
         }
 
-        // Se crea y se pone en marcha el gestor del mapa
+        // data for map
         if ( this->mapManager == 0 )
         {
                 this->mapManager = new MapManager( this, "map.xml" );
-                this->mapManager->load ();
+                this->mapManager->loadMap ();
         }
+}
 
+void Isomot::offVidasInfinitas ()
+{
         if ( GameManager::getInstance()->areLivesInexhaustible () )
         {
                 GameManager::getInstance()->toggleInfiniteLives ();
@@ -101,7 +104,7 @@ void Isomot::pause ()
 {
         // Detiene la actualización de los estados de los elementos y
         // la representación de la vista isométrica
-        if( mapManager->getActiveRoom() != 0 )
+        if ( mapManager->getActiveRoom() != 0 )
         {
                 mapManager->getActiveRoom()->deactivate();
         }
@@ -122,7 +125,7 @@ void Isomot::reset()
         this->isEndRoom = false;
 
         // Destruye la vista isométrica actual
-        if( this->view != 0 )
+        if ( this->view != 0 )
         {
                 destroy_bitmap( this->view );
                 this->view = 0;
@@ -285,13 +288,13 @@ void Isomot::updateEndRoom()
         Room* activeRoom = mapManager->getActiveRoom();
 
         // Si aún no se ha preparado la sala final, se hace ahora
-        if( ! this->isEndRoom )
+        if ( ! this->isEndRoom )
         {
                 short player = activeRoom->getMediator()->getActivePlayer()->getLabel();
                 activeRoom->getMediator()->removeItem( activeRoom->getMediator()->getActivePlayer() );
 
                 // Crea (como elemento libre) al jugador que ha llegado en la posición adecuada
-                FreeItem* freeItem = new FreeItem( this->itemDataManager->find( player ), 66, 92, Top, South );
+                FreeItem* freeItem = new FreeItem( this->itemDataManager->findItemByLabel( player ), 66, 92, Top, South );
                 activeRoom->addItem( freeItem );
 
                 // Crea las coronas recuperadas
@@ -299,43 +302,43 @@ void Isomot::updateEndRoom()
                 int crowns = 0;
 
                 // La corona de Safari
-                if( gameManager->isFreePlanet( Safari ) )
+                if ( gameManager->isFreePlanet( Safari ) )
                 {
-                        freeItem = new FreeItem( this->itemDataManager->find( short(Crown) ), 66, 75, Top, NoDirection );
+                        freeItem = new FreeItem( this->itemDataManager->findItemByLabel( short(Crown) ), 66, 75, Top, NoDirection );
                         activeRoom->addItem( freeItem );
                         crowns++;
                 }
                 // La corona de Egyptus
-                if( gameManager->isFreePlanet( Egyptus ) )
+                if ( gameManager->isFreePlanet( Egyptus ) )
                 {
-                        freeItem = new FreeItem( this->itemDataManager->find( short(Crown) ), 66, 59, Top, NoDirection );
+                        freeItem = new FreeItem( this->itemDataManager->findItemByLabel( short(Crown) ), 66, 59, Top, NoDirection );
                         activeRoom->addItem( freeItem );
                         crowns++;
                 }
                 // La corona de Penitentiary
-                if( gameManager->isFreePlanet( Penitentiary ) )
+                if ( gameManager->isFreePlanet( Penitentiary ) )
                 {
-                        freeItem = new FreeItem( this->itemDataManager->find( short(Crown) ), 65, 107, Top, NoDirection );
+                        freeItem = new FreeItem( this->itemDataManager->findItemByLabel( short(Crown) ), 65, 107, Top, NoDirection );
                         activeRoom->addItem( freeItem );
                         crowns++;
                 }
                 // La corona de Byblos
-                if( gameManager->isFreePlanet( Byblos ) )
+                if ( gameManager->isFreePlanet( Byblos ) )
                 {
-                        freeItem = new FreeItem( this->itemDataManager->find( short(Crown) ), 65, 123, Top, NoDirection );
+                        freeItem = new FreeItem( this->itemDataManager->findItemByLabel( short(Crown) ), 65, 123, Top, NoDirection );
                         activeRoom->addItem( freeItem );
                         crowns++;
                 }
                 // La corona de Blacktooth
-                if( gameManager->isFreePlanet( Blacktooth ) )
+                if ( gameManager->isFreePlanet( Blacktooth ) )
                 {
-                        freeItem = new FreeItem( this->itemDataManager->find( short(Crown) ), 65, 91, Top, NoDirection );
+                        freeItem = new FreeItem( this->itemDataManager->findItemByLabel( short(Crown) ), 65, 91, Top, NoDirection );
                         activeRoom->addItem( freeItem );
                         crowns++;
                 }
 
                 // Si se han conseguido las cinco coronas se mostrará la pantalla de felicitación
-                if( crowns == 5 )
+                if ( crowns == 5 )
                 {
                         gameManager->success();
                 }
@@ -350,11 +353,10 @@ void Isomot::updateEndRoom()
         }
         else
         {
-                // Se dispara una salva de honor
-                if( activeRoom->getMediator()->findItemByLabel( CannonBallLabel ) == 0 && activeRoom->getMediator()->findItemByLabel( BubblesLabel ) == 0 )
+                if ( activeRoom->getMediator()->findItemByLabel( CannonBallLabel ) == 0 && activeRoom->getMediator()->findItemByLabel( BubblesLabel ) == 0 )
                 {
-                        FreeItem* freeItem = new FreeItem( this->itemDataManager->find( CannonBallLabel ), 146, 93, LayerHeight, NoDirection );
-                        freeItem->assignBehavior( CannonBallBehavior, this->itemDataManager->find( BubblesLabel ) );
+                        FreeItem* freeItem = new FreeItem( this->itemDataManager->findItemByLabel( CannonBallLabel ), 146, 93, LayerHeight, NoDirection );
+                        freeItem->assignBehavior( CannonBallBehavior, this->itemDataManager->findItemByLabel( BubblesLabel ) );
                         activeRoom->addItem( freeItem );
                 }
         }
@@ -367,7 +369,7 @@ ItemDataManager* Isomot::getItemDataManager() const
 
 MapManager* Isomot::getMapManager() const
 {
-        return this->mapManager;
+        return mapManager;
 }
 
 }

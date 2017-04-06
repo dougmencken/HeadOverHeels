@@ -72,6 +72,8 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			actions/CreateAudioMenu.hpp \
 			actions/CreateVideoMenu.hpp \
 			actions/CreateVideoMenu.cpp \
+			actions/CreateMenuOfGraphicSets.hpp \
+			actions/CreateMenuOfGraphicSets.cpp \
 			actions/CreateCongratulationsScreen.cpp \
 			actions/CreateCongratulationsScreen.hpp \
 			actions/CreateEndScreen.cpp \

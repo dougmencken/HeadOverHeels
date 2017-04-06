@@ -7,6 +7,7 @@
 #include "LanguageManager.hpp"
 #include "InputManager.hpp"
 #include "SoundManager.hpp"
+#include "GameManager.hpp"
 #include "Font.hpp"
 #include "Screen.hpp"
 #include "Menu.hpp"
@@ -24,9 +25,9 @@ using isomot::SoundManager;
 
 GuiManager* GuiManager::instance = 0;
 
-GuiManager::GuiManager( )
-: screen( 0 ),
-  active( true )
+GuiManager::GuiManager( ) :
+        screen( 0 ),
+        active( true )
 {
         // Inicialización de Allegro
         this->allegroSetup();
@@ -38,165 +39,22 @@ GuiManager::GuiManager( )
 #endif
         set_window_title ( nameOfWindow.c_str () );
 
-        // Ruta absoluta a los datos
-        std::string path = isomot::sharePath();
+        loadImages ();
 
-        // Carga y almacena las imágenes
-
-        BITMAP* bitmap = 0;
-
-        bitmap = load_png( ( path + "gfx/gui.png/background.png" ).c_str (), 0 );
-        assert( bitmap );
-        images[ "background" ] = bitmap;
-
-        bitmap = load_png( ( path + "gfx/gui.png/blacktooth.png" ).c_str (), 0 );
-        assert( bitmap );
-        images[ "blacktooth" ] = bitmap;
-
-        bitmap = load_png( ( path + "gfx/gui.png/byblos.png" ).c_str (), 0 );
-        assert( bitmap );
-        images[ "byblos" ] = bitmap;
-
-        bitmap = load_png( ( path + "gfx/gui.png/crown.png" ).c_str (), 0 );
-        assert( bitmap );
-        images[ "crown" ] = bitmap;
-
-        bitmap = load_png( ( path + "gfx/gui.png/donuts.png" ).c_str (), 0 );
-        assert( bitmap );
-        images[ "donuts" ] = bitmap;
-
-        bitmap = load_png( ( path + "gfx/gui.png/egyptus.png" ).c_str (), 0 );
-        assert( bitmap );
-        images[ "egyptus" ] = bitmap;
-
-        bitmap = load_png( ( path + "gfx/gui.png/grey-crown.png" ).c_str (), 0 );
-        assert( bitmap );
-        images[ "grey-crown" ] = bitmap;
-
-        bitmap = load_png( ( path + "gfx/gui.png/grey-donuts.png" ).c_str (), 0 );
-        assert( bitmap );
-        images[ "grey-donuts" ] = bitmap;
-
-        bitmap = load_png( ( path + "gfx/gui.png/grey-handbag.png" ).c_str (), 0 );
-        assert( bitmap );
-        images[ "grey-handbag" ] = bitmap;
-
-        bitmap = load_png( ( path + "gfx/gui.png/grey-head.png" ).c_str (), 0 );
-        assert( bitmap );
-        images[ "grey-head" ] = bitmap;
-
-        bitmap = load_png( ( path + "gfx/gui.png/grey-heels.png" ).c_str (), 0 );
-        assert( bitmap );
-        images[ "grey-heels" ] = bitmap;
-
-        bitmap = load_png( ( path + "gfx/gui.png/grey-horn.png" ).c_str (), 0 );
-        assert( bitmap );
-        images[ "grey-horn" ] = bitmap;
-
-        bitmap = load_png( ( path + "gfx/gui.png/handbag.png" ).c_str (), 0 );
-        assert( bitmap );
-        images[ "handbag" ] = bitmap;
-
-        bitmap = load_png( ( path + "gfx/gui.png/head.png" ).c_str (), 0 );
-        assert( bitmap );
-        images[ "head" ] = bitmap;
-
-        bitmap = load_png( ( path + "gfx/gui.png/heels.png" ).c_str (), 0 );
-        assert( bitmap );
-        images[ "heels" ] = bitmap;
-
-        bitmap = load_png( ( path + "gfx/gui.png/horn.png" ).c_str (), 0 );
-        assert( bitmap );
-        images[ "horn" ] = bitmap;
-
-        bitmap = load_png( ( path + "gfx/gui.png/penitentiary.png" ).c_str (), 0 );
-        assert( bitmap );
-        images[ "penitentiary" ] = bitmap;
-
-        bitmap = load_png( ( path + "gfx/gui.png/safari.png" ).c_str (), 0 );
-        assert( bitmap );
-        images[ "safari" ] = bitmap;
-
-        bitmap = load_png( ( path + "gfx/gui.png/option.png" ).c_str (), 0 );
-        assert( bitmap );
-        images[ "option" ] = bitmap;
-
-        bitmap = load_png( ( path + "gfx/gui.png/selected-option.png" ).c_str (), 0 );
-        assert( bitmap );
-        images[ "selected-option" ] = bitmap;
-
-        bitmap = load_png( ( path + "gfx/gui.png/selected-option-mini.png" ).c_str (), 0 );
-        assert( bitmap );
-        images[ "selected-option-mini" ] = bitmap;
-
-        bitmap = load_png( ( path + "gfx/gui.png/jail-frame.png" ).c_str (), 0 );
-        assert( bitmap );
-        images[ "jail-frame" ] = bitmap;
-
-        bitmap = load_png( ( path + "gfx/gui.png/blacktooth-frame.png" ).c_str (), 0 );
-        assert( bitmap );
-        images[ "blacktooth-frame" ] = bitmap;
-
-        bitmap = load_png( ( path + "gfx/gui.png/market-frame.png" ).c_str (), 0 );
-        assert( bitmap );
-        images[ "market-frame" ] = bitmap;
-
-        bitmap = load_png( ( path + "gfx/gui.png/themoon-frame.png" ).c_str (), 0 );
-        assert( bitmap );
-        images[ "themoon-frame" ] = bitmap;
-
-        bitmap = load_png( ( path + "gfx/gui.png/egyptus-frame.png" ).c_str (), 0 );
-        assert( bitmap );
-        images[ "egyptus-frame" ] = bitmap;
-
-        bitmap = load_png( ( path + "gfx/gui.png/penitentiary-frame.png" ).c_str (), 0 );
-        assert( bitmap );
-        images[ "penitentiary-frame" ] = bitmap;
-
-        bitmap = load_png( ( path + "gfx/gui.png/safari-frame.png" ).c_str (), 0 );
-        assert( bitmap );
-        images[ "safari-frame" ] = bitmap;
-
-        bitmap = load_png( ( path + "gfx/gui.png/byblos-frame.png" ).c_str (), 0 );
-        assert( bitmap );
-        images[ "byblos-frame" ] = bitmap;
-
-        bitmap = load_png( ( path + "gfx/gui.png/shield.png" ).c_str (), 0 );
-        assert( bitmap );
-        images[ "shield" ] = bitmap;
-
-        bitmap = load_png( ( path + "gfx/gui.png/shield.gray.png" ).c_str (), 0 );
-        assert( bitmap );
-        images[ "shield.gray" ] = bitmap;
-
-        bitmap = load_png( ( path + "gfx/gui.png/high-jumps.png" ).c_str (), 0 );
-        assert( bitmap );
-        images[ "high-jumps" ] = bitmap;
-
-        bitmap = load_png( ( path + "gfx/gui.png/high-jumps.gray.png" ).c_str (), 0 );
-        assert( bitmap );
-        images[ "high-jumps.gray" ] = bitmap;
-
-        bitmap = load_png( ( path + "gfx/gui.png/high-speed.png" ).c_str (), 0 );
-        assert( bitmap );
-        images[ "high-speed" ] = bitmap;
-
-        bitmap = load_png( ( path + "gfx/gui.png/high-speed.gray.png" ).c_str (), 0 );
-        assert( bitmap );
-        images[ "high-speed.gray" ] = bitmap;
+        std::string pathToFont = isomot::sharePath();
 
         // Every font used in the game is created here
 
-        gui::FontManager::getInstance()->createFont( "regular-white", path + "font.png", makecol( 255, 255, 255 ) );
-        gui::FontManager::getInstance()->createFont( "big-white", path + "font.png", makecol( 255, 255, 255 ), true );
+        gui::FontManager::getInstance()->createFont( "regular-white", pathToFont + "font.png", makecol( 255, 255, 255 ) );
+        gui::FontManager::getInstance()->createFont( "big-white", pathToFont + "font.png", makecol( 255, 255, 255 ), true );
 
-        gui::FontManager::getInstance()->createFont( "regular-orange", path + "font.png", makecol( 239, 129, 0 ) );
-        gui::FontManager::getInstance()->createFont( "regular-cyan", path + "font.png", makecol( 0, 228, 231 ) );
-        gui::FontManager::getInstance()->createFont( "regular-yellow", path + "font.png", makecol( 255, 255, 50 ) );
+        gui::FontManager::getInstance()->createFont( "regular-orange", pathToFont + "font.png", makecol( 239, 129, 0 ) );
+        gui::FontManager::getInstance()->createFont( "regular-cyan", pathToFont + "font.png", makecol( 0, 228, 231 ) );
+        gui::FontManager::getInstance()->createFont( "regular-yellow", pathToFont + "font.png", makecol( 255, 255, 50 ) );
 
-        gui::FontManager::getInstance()->createFont( "big-orange", path + "font.png", makecol( 239, 129, 0 ), true );
-        gui::FontManager::getInstance()->createFont( "big-cyan", path + "font.png", makecol( 0, 228, 231 ), true );
-        gui::FontManager::getInstance()->createFont( "big-yellow", path + "font.png", makecol( 255, 255, 50 ), true );
+        gui::FontManager::getInstance()->createFont( "big-orange", pathToFont + "font.png", makecol( 239, 129, 0 ), true );
+        gui::FontManager::getInstance()->createFont( "big-cyan", pathToFont + "font.png", makecol( 0, 228, 231 ), true );
+        gui::FontManager::getInstance()->createFont( "big-yellow", pathToFont + "font.png", makecol( 255, 255, 50 ), true );
 
         // Se crea la imagen donde se dibujará la interfaz gráfica
         this->picture = create_bitmap_ex( 32, 640, 480 );
@@ -221,12 +79,7 @@ GuiManager::GuiManager( )
 
 GuiManager::~GuiManager( )
 {
-        for ( std::map< std::string, BITMAP* >::iterator i = this->images.begin (); i != this->images.end (); ++i )
-        {
-                delete ( *i ).second;
-        }
-
-        this->images.clear();
+        freeImages ();
 
         delete this->languageManager;
         delete this->configurationManager;
@@ -242,7 +95,175 @@ GuiManager* GuiManager::getInstance ()
         return instance;
 }
 
-void GuiManager::enter ()
+void GuiManager::loadImages ()
+{
+        std::string gfxSet = isomot::GameManager::getInstance()->getChosenGraphicSet() ;
+        fprintf ( stdout, "get images for user interface from set \"%s\"\n", gfxSet.c_str () );
+        std::string pathToGraphics = isomot::sharePath() + gfxSet + "/";
+
+        BITMAP* bitmap = 0;
+
+        bitmap = load_png( ( pathToGraphics + "gui.png/background.png" ).c_str (), 0 );
+        assert( bitmap );
+        images[ "background" ] = bitmap;
+
+        bitmap = load_png( ( pathToGraphics + "gui.png/blacktooth.png" ).c_str (), 0 );
+        assert( bitmap );
+        images[ "blacktooth" ] = bitmap;
+
+        bitmap = load_png( ( pathToGraphics + "gui.png/byblos.png" ).c_str (), 0 );
+        assert( bitmap );
+        images[ "byblos" ] = bitmap;
+
+        bitmap = load_png( ( pathToGraphics + "gui.png/crown.png" ).c_str (), 0 );
+        assert( bitmap );
+        images[ "crown" ] = bitmap;
+
+        bitmap = load_png( ( pathToGraphics + "gui.png/donuts.png" ).c_str (), 0 );
+        assert( bitmap );
+        images[ "donuts" ] = bitmap;
+
+        bitmap = load_png( ( pathToGraphics + "gui.png/egyptus.png" ).c_str (), 0 );
+        assert( bitmap );
+        images[ "egyptus" ] = bitmap;
+
+        bitmap = load_png( ( pathToGraphics + "gui.png/grey-crown.png" ).c_str (), 0 );
+        assert( bitmap );
+        images[ "grey-crown" ] = bitmap;
+
+        bitmap = load_png( ( pathToGraphics + "gui.png/grey-donuts.png" ).c_str (), 0 );
+        assert( bitmap );
+        images[ "grey-donuts" ] = bitmap;
+
+        bitmap = load_png( ( pathToGraphics + "gui.png/grey-handbag.png" ).c_str (), 0 );
+        assert( bitmap );
+        images[ "grey-handbag" ] = bitmap;
+
+        bitmap = load_png( ( pathToGraphics + "gui.png/grey-head.png" ).c_str (), 0 );
+        assert( bitmap );
+        images[ "grey-head" ] = bitmap;
+
+        bitmap = load_png( ( pathToGraphics + "gui.png/grey-heels.png" ).c_str (), 0 );
+        assert( bitmap );
+        images[ "grey-heels" ] = bitmap;
+
+        bitmap = load_png( ( pathToGraphics + "gui.png/grey-horn.png" ).c_str (), 0 );
+        assert( bitmap );
+        images[ "grey-horn" ] = bitmap;
+
+        bitmap = load_png( ( pathToGraphics + "gui.png/handbag.png" ).c_str (), 0 );
+        assert( bitmap );
+        images[ "handbag" ] = bitmap;
+
+        bitmap = load_png( ( pathToGraphics + "gui.png/head.png" ).c_str (), 0 );
+        assert( bitmap );
+        images[ "head" ] = bitmap;
+
+        bitmap = load_png( ( pathToGraphics + "gui.png/heels.png" ).c_str (), 0 );
+        assert( bitmap );
+        images[ "heels" ] = bitmap;
+
+        bitmap = load_png( ( pathToGraphics + "gui.png/horn.png" ).c_str (), 0 );
+        assert( bitmap );
+        images[ "horn" ] = bitmap;
+
+        bitmap = load_png( ( pathToGraphics + "gui.png/penitentiary.png" ).c_str (), 0 );
+        assert( bitmap );
+        images[ "penitentiary" ] = bitmap;
+
+        bitmap = load_png( ( pathToGraphics + "gui.png/safari.png" ).c_str (), 0 );
+        assert( bitmap );
+        images[ "safari" ] = bitmap;
+
+        bitmap = load_png( ( pathToGraphics + "gui.png/option.png" ).c_str (), 0 );
+        assert( bitmap );
+        images[ "option" ] = bitmap;
+
+        bitmap = load_png( ( pathToGraphics + "gui.png/selected-option.png" ).c_str (), 0 );
+        assert( bitmap );
+        images[ "selected-option" ] = bitmap;
+
+        bitmap = load_png( ( pathToGraphics + "gui.png/selected-option-mini.png" ).c_str (), 0 );
+        assert( bitmap );
+        images[ "selected-option-mini" ] = bitmap;
+
+        bitmap = load_png( ( pathToGraphics + "gui.png/jail-frame.png" ).c_str (), 0 );
+        assert( bitmap );
+        images[ "jail-frame" ] = bitmap;
+
+        bitmap = load_png( ( pathToGraphics + "gui.png/blacktooth-frame.png" ).c_str (), 0 );
+        assert( bitmap );
+        images[ "blacktooth-frame" ] = bitmap;
+
+        bitmap = load_png( ( pathToGraphics + "gui.png/market-frame.png" ).c_str (), 0 );
+        assert( bitmap );
+        images[ "market-frame" ] = bitmap;
+
+        bitmap = load_png( ( pathToGraphics + "gui.png/themoon-frame.png" ).c_str (), 0 );
+        assert( bitmap );
+        images[ "themoon-frame" ] = bitmap;
+
+        bitmap = load_png( ( pathToGraphics + "gui.png/egyptus-frame.png" ).c_str (), 0 );
+        assert( bitmap );
+        images[ "egyptus-frame" ] = bitmap;
+
+        bitmap = load_png( ( pathToGraphics + "gui.png/penitentiary-frame.png" ).c_str (), 0 );
+        assert( bitmap );
+        images[ "penitentiary-frame" ] = bitmap;
+
+        bitmap = load_png( ( pathToGraphics + "gui.png/safari-frame.png" ).c_str (), 0 );
+        assert( bitmap );
+        images[ "safari-frame" ] = bitmap;
+
+        bitmap = load_png( ( pathToGraphics + "gui.png/byblos-frame.png" ).c_str (), 0 );
+        assert( bitmap );
+        images[ "byblos-frame" ] = bitmap;
+
+        bitmap = load_png( ( pathToGraphics + "gui.png/shield.png" ).c_str (), 0 );
+        assert( bitmap );
+        images[ "shield" ] = bitmap;
+
+        bitmap = load_png( ( pathToGraphics + "gui.png/shield.gray.png" ).c_str (), 0 );
+        if ( bitmap == 0 )
+                bitmap = load_png( ( pathToGraphics + "gui.png/shield.png" ).c_str (), 0 );
+        images[ "shield.gray" ] = bitmap;
+
+        bitmap = load_png( ( pathToGraphics + "gui.png/high-jumps.png" ).c_str (), 0 );
+        assert( bitmap );
+        images[ "high-jumps" ] = bitmap;
+
+        bitmap = load_png( ( pathToGraphics + "gui.png/high-jumps.gray.png" ).c_str (), 0 );
+        if ( bitmap == 0 )
+                bitmap = load_png( ( pathToGraphics + "gui.png/high-jumps.png" ).c_str (), 0 );
+        images[ "high-jumps.gray" ] = bitmap;
+
+        bitmap = load_png( ( pathToGraphics + "gui.png/high-speed.png" ).c_str (), 0 );
+        assert( bitmap );
+        images[ "high-speed" ] = bitmap;
+
+        bitmap = load_png( ( pathToGraphics + "gui.png/high-speed.gray.png" ).c_str (), 0 );
+        if ( bitmap == 0 )
+                bitmap = load_png( ( pathToGraphics + "gui.png/high-speed.png" ).c_str (), 0 );
+        images[ "high-speed.gray" ] = bitmap;
+}
+
+void GuiManager::freeImages ()
+{
+        for ( std::map< std::string, BITMAP* >::iterator i = this->images.begin (); i != this->images.end (); ++i )
+        {
+                delete ( *i ).second;
+        }
+
+        this->images.clear();
+}
+
+void GuiManager::reloadImages ()
+{
+        freeImages ();
+        loadImages ();
+}
+
+void GuiManager::begin ()
 {
         // Se presenta la lista de lenguas disponibles
         // Present the list of languages
@@ -301,7 +322,6 @@ void GuiManager::assignLanguage( const std::string& language )
 
 void GuiManager::allegroSetup()
 {
-        // Inicializa Allegro
         allegro_init ();
 
         // 8 bits for each of three colors with 8 bits for alpha channel

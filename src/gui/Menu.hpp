@@ -70,6 +70,10 @@ public:
 
         std::list < Label * > getEveryOption () {  return this->options ;  }
 
+private:
+
+        Label* handlerOfKeys ;
+
 protected:
 
         /**

@@ -139,7 +139,7 @@ Room* RoomBuilder::buildRoom ()
                 // Crea el suelo a base de losetas
                 for ( rxml::floor::tile_const_iterator i = roomXML->floor().tile().begin (); i != roomXML->floor().tile().end (); ++i )
                 {
-                        FloorTile* floorTile = this->buildFloorTile( *i, "gfx" );
+                        FloorTile* floorTile = this->buildFloorTile( *i, isomot::GameManager::getInstance()->getChosenGraphicSet() );
                         room->addFloor( floorTile );
                 }
 
@@ -148,7 +148,7 @@ Room* RoomBuilder::buildRoom ()
                 {
                         for ( rxml::walls::wall_const_iterator i = roomXML->walls().get().wall().begin (); i != roomXML->walls().get().wall().end (); ++i )
                         {
-                                Wall* wall = this->buildWall( *i, "gfx" );
+                                Wall* wall = this->buildWall( *i, isomot::GameManager::getInstance()->getChosenGraphicSet() );
                                 room->addWall( wall );
                         }
                 }
@@ -167,7 +167,7 @@ Room* RoomBuilder::buildRoom ()
                                 if ( door == 0 )
                                 {
                                         std::ostringstream oss;
-                                        oss << "Cannot build door with coordinates " << ( *i ).x () << ", " << ( *i ).y () << ", " << ( *i ).z () ;
+                                        oss << "oops, can't build a door with coordinates " << ( *i ).x () << ", " << ( *i ).y () << ", " << ( *i ).z () ;
                                         std::cout << oss.str () << std::endl ;
                                         throw oss.str ();
                                 }
@@ -180,7 +180,7 @@ Room* RoomBuilder::buildRoom ()
                                 if ( gridItem == 0 )
                                 {
                                         std::ostringstream oss;
-                                        oss << "Cannot build grid item with coordinates " << ( *i ).x () << ", " << ( *i ).y () << ", " << ( *i ).z () ;
+                                        oss << "oops, can't build a grid item with coordinates " << ( *i ).x () << ", " << ( *i ).y () << ", " << ( *i ).z () ;
                                         std::cout << oss.str () << std::endl ;
                                         throw oss.str ();
                                 }
@@ -192,11 +192,11 @@ Room* RoomBuilder::buildRoom ()
                                 FreeItem* freeItem = this->buildFreeItem( *i );
                                 if ( freeItem == 0 )
                                 {
-                                        // En este caso no se lanza ninguna excepción porque hay
-                                        // elementos -los bonus- que pueden no crearse
                                         std::ostringstream oss;
-                                        oss << "Cannot build free item with coordinates " << ( *i ).x () << ", " << ( *i ).y () << ", " << ( *i ).z () ;
+                                        oss << "free item with coordinates " << ( *i ).x () << ", " << ( *i ).y () << ", " << ( *i ).z () << " is absent";
                                         std::cout << oss.str () << std::endl ;
+                                        // don't throw an exception here
+                                        // there are bonus elements that may already be taken and thus absent
                                 }
                                 else
                                 {
@@ -265,7 +265,7 @@ PlayerItem* RoomBuilder::buildPlayerInRoom( Room* room, const PlayerId& playerId
         }
 
         // Se buscan los datos del elemento
-        ItemData* itemData = this->itemDataManager->find( short( newPlayerId ) );
+        ItemData* itemData = this->itemDataManager->findItemByLabel( short( newPlayerId ) );
 
         // Si se han encontrado y al jugador le quedan vidas, se coloca el elemento en la sala
         if ( newPlayerId != NoPlayer && itemData != 0 )
@@ -355,7 +355,7 @@ GridItem* RoomBuilder::buildGridItem( const rxml::item& item )
         GridItem* gridItem = 0;
 
         // Se buscan los datos del elemento
-        ItemData* itemData = this->itemDataManager->find( item.label () );
+        ItemData* itemData = this->itemDataManager->findItemByLabel( item.label () );
 
         // Si se han encontrado, se coloca el elemento en la sala
         if ( itemData != 0 )
@@ -369,7 +369,7 @@ GridItem* RoomBuilder::buildGridItem( const rxml::item& item )
                      item.behavior() == VolatileWeightBehavior || item.behavior() == VolatileHeavyBehavior ||
                      item.behavior() == VolatilePuppyBehavior )
                 {
-                        gridItem->assignBehavior( BehaviorId( item.behavior() ), reinterpret_cast< void * >( this->itemDataManager->find( BubblesLabel ) ) );
+                        gridItem->assignBehavior( BehaviorId( item.behavior() ), reinterpret_cast< void * >( this->itemDataManager->findItemByLabel( BubblesLabel ) ) );
                 }
                 else
                 {
@@ -385,7 +385,7 @@ FreeItem* RoomBuilder::buildFreeItem( const rxml::item& item )
         FreeItem* freeItem = 0;
 
         // Se buscan los datos del elemento
-        ItemData* itemData = this->itemDataManager->find( item.label () );
+        ItemData* itemData = this->itemDataManager->findItemByLabel( item.label () );
 
         // Si se han encontrado, se coloca el elemento en la sala
         if ( itemData != 0 )
@@ -431,7 +431,7 @@ FreeItem* RoomBuilder::buildFreeItem( const rxml::item& item )
                                 case HunterWaiting4Behavior:
                                         freeItem->assignBehavior(
                                                 BehaviorId( item.behavior () ),
-                                                reinterpret_cast< void * >( this->itemDataManager->find( ImperialGuardLabel ) )
+                                                reinterpret_cast< void * >( this->itemDataManager->findItemByLabel( ImperialGuardLabel ) )
                                         );
                                         break;
 
@@ -442,7 +442,7 @@ FreeItem* RoomBuilder::buildFreeItem( const rxml::item& item )
                                 case CannonBallBehavior:
                                         freeItem->assignBehavior(
                                                 BehaviorId( item.behavior () ),
-                                                reinterpret_cast< void * >( this->itemDataManager->find( BubblesLabel ) )
+                                                reinterpret_cast< void * >( this->itemDataManager->findItemByLabel( BubblesLabel ) )
                                         );
                                         break;
 

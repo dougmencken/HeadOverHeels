@@ -21,7 +21,6 @@
 namespace gui
 {
 
-// Declaraciones adelantadas
 class Screen;
 class LanguageManager;
 class ConfigurationManager;
@@ -52,10 +51,16 @@ public:
         */
         static GuiManager* getInstance () ;
 
+        void loadImages () ;
+
+        void freeImages () ;
+
+        void reloadImages () ;
+
        /**
-        * Envía la orden para crea el menú principal y empieza a mostrarlo en pantalla
+        * Begin with the menu for this game
         */
-        void enter () ;
+        void begin () ;
 
        /**
         * Muestra la pantalla actual

@@ -14,6 +14,7 @@
 #include <allegro.h>
 #include "Widget.hpp"
 
+
 namespace gui
 {
 
@@ -40,6 +41,8 @@ public:
         * @param where Imagen donde será dibujado
         */
         void draw ( BITMAP* where ) ;
+
+        void handleKey ( int rawKey ) { /* do nothing */ }
 
 private:
 

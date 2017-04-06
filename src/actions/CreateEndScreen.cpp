@@ -88,7 +88,7 @@ void CreateEndScreen::doIt ()
         }
 
         label->setAction( mainMenu );
-        screen->setNext( label );
+        screen->setKeyHandler( label );
 
         GuiManager::getInstance()->changeScreen( screen );
 }

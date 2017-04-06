@@ -83,6 +83,8 @@ private:
 
         Action* escapeAction ;
 
+        Widget* keyHandler ;
+
 public: // Operaciones de consulta y actualización
 
         /**
@@ -92,6 +94,14 @@ public: // Operaciones de consulta y actualización
         void setBackground ( BITMAP* image ) {  backgroundPicture = image ;  }
 
         void setEscapeAction ( Action* action ) ;
+
+        /**
+         * Assign the successor of this component in the chain to handle of typing of a key
+         * @param widget Un componente de la interfaz gráfica
+         */
+        void setKeyHandler ( Widget* widget ) {  keyHandler = widget ;  }
+
+        Widget * getKeyHandler () {  return keyHandler ;  }
 
 };
 

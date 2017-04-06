@@ -60,7 +60,7 @@ void CreateAudioMenu::doIt ()
         menu->addOption( labelMusic );
 
         screen->addWidget( menu );
-        screen->setNext( menu );
+        screen->setKeyHandler( menu );
 
         GuiManager::getInstance()->changeScreen( screen );
         GuiManager::getInstance()->refresh();
@@ -123,17 +123,15 @@ void CreateAudioMenu::doIt ()
                                                 labelEffects->setText( stringEffectsSpaced + ss.str() );
                                                 SoundManager::getInstance()->setVolumeOfEffects( value );
                                         }
-
-                                        menu->redraw ();
                                 }
 
                                 if ( ! doneWithKey )
                                 {
-                                        menu->handleKey ( theKey << 8 );
-                                        menu->redraw ();
+                                        screen->getKeyHandler()->handleKey ( theKey << 8 );
                                 }
 
                                 clear_keybuf();
+                                menu->redraw ();
                         }
                 }
 

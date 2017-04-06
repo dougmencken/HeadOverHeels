@@ -93,7 +93,7 @@ void CreateListOfSavedGames::doIt ()
         }
 
         screen->addWidget( menu );
-        screen->setNext( menu );
+        screen->setKeyHandler( menu );
 
         GuiManager::getInstance()->changeScreen( screen );
 }

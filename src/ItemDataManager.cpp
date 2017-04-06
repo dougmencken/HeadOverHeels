@@ -1,11 +1,13 @@
 
 #include "ItemDataManager.hpp"
+#include "GameManager.hpp"
 #include "Exception.hpp"
 #include "Ism.hpp"
 #include <loadpng.h>
 #include <fstream>
 
 # include <xercesc/util/PlatformUtils.hpp>
+
 
 namespace isomot
 {
@@ -17,10 +19,10 @@ ItemDataManager::ItemDataManager( const std::string& name )
 
 ItemDataManager::~ItemDataManager()
 {
-        std::for_each( itemData.begin(), itemData.end(), destroyItemData );
+        freeItems() ;
 }
 
-void ItemDataManager::load ()
+void ItemDataManager::loadItems ()
 {
         xercesc::XMLPlatformUtils::Initialize ();
 
@@ -54,7 +56,7 @@ void ItemDataManager::load ()
                         // Se almacenan los fotogramas en el vector motion siempre que el elemento no sea una puerta
                         if ( ! ( *i ).door ().present () )
                         {
-                                createPictureFrames( item.get(), "gfx" );
+                                createPictureFrames( item.get(), isomot::GameManager::getInstance()->getChosenGraphicSet() );
                         }
 
                         // El elemento puede no tener sombra
@@ -67,7 +69,7 @@ void ItemDataManager::load ()
                                 // Altura en píxeles de un fotograma de sombra
                                 item->shadowHeight = ( *i ).shadow().get().shadowHeight();
                                 // Se almacenan los fotogramas en el vector shadows
-                                createShadowFrames( item.get(), "gfx" );
+                                createShadowFrames( item.get(), isomot::GameManager::getInstance()->getChosenGraphicSet() );
                         }
 
                         // Sólo unos pocos elementos tienen fotogramas extra
@@ -147,11 +149,14 @@ void ItemDataManager::load ()
                                 }
 
                                 // Se cargan el gráfico de la puerta al completo y se obtienen los gráficos de sus tres partes
-                                BITMAP* picture = load_png( ( isomot::sharePath() + "gfx" + "/" + item->getNameOfFile( ) ).c_str () , 0 );
+                                BITMAP* picture = load_png( ( isomot::sharePath() + isomot::GameManager::getInstance()->getChosenGraphicSet() + "/" + item->getNameOfFile( ) ).c_str () , 0 );
                                 if ( picture == 0 )
                                 {
-                                        std::cerr << "picture \"" << item->getNameOfFile( ) << "\" at \"" << "gfx" << "\" is absent" << std::endl ;
-                                        throw "picture " + item->getNameOfFile( ) + " at " + "gfx" + " is absent" ;
+                                        std::cerr <<
+                                                "picture \"" << item->getNameOfFile( ) <<
+                                                "\" at \"" << isomot::GameManager::getInstance()->getChosenGraphicSet() <<
+                                                "\" is absent" << std::endl ;
+                                        throw "picture " + item->getNameOfFile( ) + " at " + isomot::GameManager::getInstance()->getChosenGraphicSet() + " is absent" ;
                                 }
 
                                 // Creación de la jamba izquierda
@@ -200,7 +205,12 @@ void ItemDataManager::load ()
         xercesc::XMLPlatformUtils::Terminate ();
 }
 
-ItemData* ItemDataManager::find( const short label )
+void ItemDataManager::freeItems ()
+{
+	std::for_each( itemData.begin(), itemData.end(), destroyItemData );
+}
+
+ItemData* ItemDataManager::findItemByLabel( const short label )
 {
         std::list< ItemData >::iterator i = std::find_if( itemData.begin (), itemData.end (), std::bind2nd( EqualItemData(), label ) );
         ItemData* data = ( i != itemData.end() ? static_cast< ItemData * >( &( *i ) ) : 0 );
