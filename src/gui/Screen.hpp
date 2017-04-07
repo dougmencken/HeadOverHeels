@@ -79,7 +79,7 @@ private:
         /**
          * Elementos de la interfaz de usuario contenidos en la pantalla
          */
-        std::list< Widget* > widgets ;
+        std::list < Widget * > widgets ;
 
         Action* escapeAction ;
 
@@ -93,7 +93,9 @@ public: // Operaciones de consulta y actualización
          */
         void setBackground ( BITMAP* image ) {  backgroundPicture = image ;  }
 
-        void setEscapeAction ( Action* action ) ;
+        void setEscapeAction ( Action * action ) {  escapeAction = action ;  }
+
+        Action * getEscapeAction () {  return escapeAction ;  }
 
         /**
          * Assign the successor of this component in the chain to handle of typing of a key

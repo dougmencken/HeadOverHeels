@@ -10,6 +10,7 @@
 #include "Label.hpp"
 #include "Icon.hpp"
 #include "SelectLanguage.hpp"
+#include "CreateMainMenu.hpp"
 
 using gui::CreateLanguageMenu;
 using gui::LanguageManager;
@@ -21,14 +22,10 @@ CreateLanguageMenu::CreateLanguageMenu( BITMAP* picture )
 : Action(),
   where( picture )
 {
-        // Lee los idiomas en los que está disponible el juego
+        // Read list of languages available for this game
         this->parse( isomot::sharePath() + "text/language.xml" );
 
-        // Lee el idioma establecido en la configuración
-        ConfigurationManager configurationManager( isomot::homePath() + "configuration.xml" );
-        configurationManager.read();
-
-        language = configurationManager.getLanguage();
+        language = GuiManager::getInstance()->getConfigurationManager()->getLanguage();
         if ( language.compare( "en_UK" ) == 0 )
         { // for backwards compatibility
                 language = "en_US";
@@ -44,18 +41,19 @@ void CreateLanguageMenu::doIt ()
 {
         Screen* screen = new Screen( 0, 0, this->where );
         screen->setBackground( GuiManager::getInstance()->findImage( "background" ) );
+        screen->setEscapeAction( new gui::CreateMainMenu( this->where ) );
 
         Label* label = 0;
 
         // Etiqueta fija: HEAD
-        label = new Label( 200, 24, "HEAD" );
+        label = new Label( 200, 24, "Head" );
         label->changeFontAndColor( "big", "yellow" );
         screen->addWidget( label );
         // Etiqueta fija: OVER
-        label = new Label( 280, 45, "OVER", "regular", "multicolor" );
+        label = new Label( 280, 45, "over", "regular", "multicolor" );
         screen->addWidget( label );
         // Etiqueta fija: HEELS
-        label = new Label( 360, 24, "HEELS" );
+        label = new Label( 360, 24, "Heels" );
         label->changeFontAndColor( "big", "yellow" );
         screen->addWidget( label );
 

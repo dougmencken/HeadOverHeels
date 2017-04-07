@@ -72,9 +72,4 @@ void Screen::addWidget( Widget* widget )
         this->widgets.push_back( widget );
 }
 
-void Screen::setEscapeAction ( Action* action )
-{
-        escapeAction = action ;
-}
-
 }

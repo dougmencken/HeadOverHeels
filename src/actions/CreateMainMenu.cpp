@@ -37,14 +37,14 @@ void CreateMainMenu::placeHeadAndHeels( Screen* screen, bool iconsToo, bool copy
         label = new Label( 483, 52, "Drummond", "regular", "multicolor" );
         screen->addWidget( label );
 
-        label = new Label( 200, 24, "HEAD" );
+        label = new Label( 200, 24, "Head" );
         label->changeFontAndColor( "big", "yellow" );
         screen->addWidget( label );
 
-        label = new Label( 280, 45, "OVER", "regular", "multicolor" );
+        label = new Label( 280, 45, "over", "regular", "multicolor" );
         screen->addWidget( label );
 
-        label = new Label( 360, 24, "HEELS" );
+        label = new Label( 360, 24, "Heels" );
         label->changeFontAndColor( "big", "yellow" );
         screen->addWidget( label );
 

@@ -27,6 +27,7 @@ GuiManager* GuiManager::instance = 0;
 
 GuiManager::GuiManager( ) :
         screen( 0 ),
+        languageManager( 0 ),
         active( true )
 {
         // Inicialización de Allegro
@@ -60,11 +61,14 @@ GuiManager::GuiManager( ) :
         this->picture = create_bitmap_ex( 32, 640, 480 );
 
         // Se crea el gestor de configuración y se cargan los datos del disco
-        this->configurationManager = new ConfigurationManager( isomot::homePath() + "configuration.xml" );
-        this->configurationManager->read();
+        configurationManager = new ConfigurationManager( isomot::homePath() + "configuration.xml" );
+        configurationManager->read();
 
-        // No hay lengua definida todavía
-        this->languageManager = 0;
+        std::string language = configurationManager->getLanguage() ;
+        if ( language.compare( "en_UK" ) == 0 )
+                language = "en_US"; // for compatibility
+
+        assignLanguage( language );
 
         // Se comunica al gestor de entradas qué teclas
         InputManager* inputManager = InputManager::getInstance();
@@ -284,14 +288,18 @@ void GuiManager::begin ()
         }
 }
 
-void GuiManager::changeScreen( Screen* screen )
+void GuiManager::changeScreen( Screen* newScreen )
 {
         if ( this->screen != 0 )
         {
-                delete this->screen;
+                Action* escape = screen->getEscapeAction () ;
+                fprintf( stdout, "there's previous screen with escape action \" %s \"\n", ( escape != 0 ? escape->getNameOfAction() : "none" ) );
+                listOfPreviousScreens.push_back( screen );
         }
 
-        this->screen = screen;
+        Action* escapeOfNewScreen = newScreen->getEscapeAction () ;
+        fprintf( stdout, "new screen with escape action \" %s \"\n", ( escapeOfNewScreen != 0 ? escapeOfNewScreen->getNameOfAction() : "none" ) );
+        this->screen = newScreen;
 }
 
 void GuiManager::refresh()
@@ -316,6 +324,7 @@ void GuiManager::assignLanguage( const std::string& language )
                 this->languageManager = 0;
         }
 
+        fprintf( stdout, "language \"%s\"\n", language.c_str () );
         std::string pathToTextInGameData = isomot::sharePath() + "text/";
         this->languageManager = new LanguageManager( pathToTextInGameData + language + ".xml", pathToTextInGameData + "en_US.xml" );
 }

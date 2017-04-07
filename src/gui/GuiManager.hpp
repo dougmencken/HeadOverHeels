@@ -12,6 +12,7 @@
 #define GuiManager_hpp_
 
 #include <string>
+#include <list>
 #include <map>
 #include <cassert>
 #include <allegro.h>
@@ -63,9 +64,9 @@ public:
         void begin () ;
 
        /**
-        * Muestra la pantalla actual
+        * Change the current screen
         */
-        void changeScreen ( Screen* screen ) ;
+        void changeScreen ( Screen* newScreen ) ;
 
        /**
         * Actualiza el contenido de la pantalla
@@ -112,9 +113,11 @@ private:
         static GuiManager * instance ;
 
        /**
-        * Pantalla mostrada por la interfaz
+        * Screen to display by interface
         */
         Screen * screen ;
+
+        std::list < Screen * > listOfPreviousScreens;
 
        /**
         * Imagen donde se dibujará la interfaz gráfica
