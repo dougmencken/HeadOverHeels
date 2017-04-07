@@ -101,44 +101,37 @@ void CreateMainMenu::doIt ()
 
         CreateMainMenu::placeHeadAndHeels( screen, true, true );
 
-        Label* label = 0;
-        LanguageText* langString = 0;
         LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
 
         // Las opciones del menú
 
-        // Nuevo juego
-        langString = languageManager->findLanguageString( "new-game" );
-        Menu* menu = new Menu( langString->getX(), langString->getY() );
-        label = new Label( langString->getText() );
-        label->setAction( new CreatePlanetsScreen( this->where, false ) );
-        menu->addActiveOption( label );
+        LanguageText* langString = languageManager->findLanguageString( "new-game" );
 
-        // Cargar juego
-        label = new Label( languageManager->findLanguageString( "load-game" )->getText() );
-        label->setAction( new CreateListOfSavedGames( this->where, true ) );
-        menu->addOption( label );
+        Label* newGame = new Label( langString->getText() );
+        Label* loadGame = new Label( languageManager->findLanguageString( "load-game" )->getText() );
+        Label* defineKeys = new Label( languageManager->findLanguageString( "keyboard-menu" )->getText() );
+        Label* adjustAudio = new Label( languageManager->findLanguageString( "audio-menu" )->getText() );
+        Label* adjustVideo = new Label( languageManager->findLanguageString( "video-menu" )->getText() );
+        Label* showCredits = new Label( languageManager->findLanguageString( "show-credits" )->getText() );
+        Label* quitGame = new Label( languageManager->findLanguageString( "exit-game" )->getText() );
 
-        // Teclado
-        label = new Label( languageManager->findLanguageString( "keyboard" )->getText() );
-        label->setAction( new CreateKeyboardMenu( this->where ) );
-        menu->addOption( label );
+        newGame->setAction( new CreatePlanetsScreen( this->where, false ) );
+        loadGame->setAction( new CreateListOfSavedGames( this->where, true ) );
+        defineKeys->setAction( new CreateKeyboardMenu( this->where ) );
+        adjustAudio->setAction( new CreateAudioMenu( this->where ) );
+        adjustVideo->setAction( new CreateVideoMenu( this->where ) );
+        showCredits->setAction( new ShowAuthors( this->where ) );
+        quitGame->setAction( new ExitApplication() );
 
-        label = new Label( languageManager->findLanguageString( "audio" )->getText() );
-        label->setAction( new CreateAudioMenu( this->where ) );
-        menu->addOption( label );
+        Menu * menu = new Menu( langString->getX(), langString->getY() );
 
-        label = new Label( languageManager->findLanguageString( "video" )->getText() );
-        label->setAction( new CreateVideoMenu( this->where ) );
-        menu->addOption( label );
-
-        label = new Label( languageManager->findLanguageString( "credits" )->getText() );
-        label->setAction( new ShowAuthors( this->where ) );
-        menu->addOption( label );
-
-        label = new Label( languageManager->findLanguageString( "exit" )->getText() );
-        label->setAction( new ExitApplication() );
-        menu->addOption( label );
+        menu->addActiveOption( newGame );
+        menu->addOption( loadGame );
+        menu->addOption( defineKeys );
+        menu->addOption( adjustAudio );
+        menu->addOption( adjustVideo );
+        menu->addOption( showCredits );
+        menu->addOption( quitGame );
 
         screen->addWidget( menu );
         screen->setKeyHandler( menu );

@@ -24,17 +24,17 @@ namespace gui
    * Detiene un subproceso durante un periodo de tiempo
    * @param miliseconds Número de milisegundos que será detenido el subproceso
    */
-  void sleep(unsigned long miliseconds);
+  void sleep ( unsigned long miliseconds ) ;
 
   /**
    * Objeto-función para la destrucción de los objetos de un contenedor de la STL
    */
   struct DeleteObject
   {
-    template<typename T>
-    void operator()(const T* ptr) const
+    template < typename T >
+    void operator() ( const T* ptr ) const
     {
-      if(ptr != 0)
+      if ( ptr != 0 )
       {
         delete ptr;
       }
@@ -44,15 +44,15 @@ namespace gui
   /**
    * Número máximo de caracteres manejados por la aplicación
    */
-  const int CharactersArraySize = 336;
+  const int HowManyCharacters = 336;
 
   /**
    * Tabla con los caracteres UTF-8 utilizados para presentar el texto en diferentes idiomas
    * El orden de los caracteres coincide con la disposición de los mísmos en archivo "font"
    */
-  const std::string characters[CharactersArraySize] =
+  const std::string characters[ HowManyCharacters ] =
   {
-      " ",        "!",        "\"",       "",         "$",        "",         "",         "'",
+      " ",        "!",        "\"",       "",         "$",        "",         "&",        "'",
       "(",        ")",        "",         "+",        ",",        "-",        ".",        "/",
       "0",        "1",        "2",        "3",        "4",        "5",        "6",        "7",
       "8",        "9",        ":",        ";",        "",         "",         "",         "?",

@@ -23,10 +23,19 @@ LanguageText* LanguageManager::findLanguageString( const std::string& id )
         if ( i == texts.end () )
         {
                 i = std::find_if( backupTexts.begin (), backupTexts.end (), std::bind2nd( EqualLanguageString(), id ) );
-                return ( i == backupTexts.end () ) ? 0 : *i ;
+                if ( i != backupTexts.end () )
+                {
+                        return *i ;
+                }
+                else
+                {
+                        LanguageText* text = new LanguageText( id ) ;
+                        text->addLine( "?notfound" );
+                        return text ;
+                }
         }
 
-        return *i;
+        return *i ;
 }
 
 void LanguageManager::parse( const std::string& fileName, const std::string& fileWithGuaranteedStrings )

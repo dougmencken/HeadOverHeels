@@ -66,7 +66,7 @@ Font::~Font( )
 
 BITMAP* Font::getChar( const std::string& character )
 {
-        for ( int i = 0; i < CharactersArraySize; i++ )
+        for ( int i = 0; i < HowManyCharacters; i++ )
         {
                 if ( character.compare( gui::characters[ i ] ) == 0 )
                 {

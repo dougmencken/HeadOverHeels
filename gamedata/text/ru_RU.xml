@@ -51,7 +51,7 @@
     </properties>
   </text>
 
-  <text id="keyboard" x="0" y="0">
+  <text id="keyboard-menu" x="0" y="0">
     <properties>
       <ustring>Клавиатура</ustring>
     </properties>
@@ -132,7 +132,7 @@
     </properties>
   </text>
 
-  <text id="audio" x="0" y="0">
+  <text id="audio-menu" x="0" y="0">
     <properties>
       <ustring>Звук</ustring>
     </properties>
@@ -156,7 +156,7 @@
     </properties>
   </text>
 
-  <text id="credits" x="0" y="0">
+  <text id="show-credits" x="0" y="0">
     <properties>
       <ustring>Титры</ustring>
     </properties>
@@ -206,7 +206,7 @@
       <ustring> </ustring>
     </properties>
     <properties font="big" color="multicolor">
-      <ustring>Музыка</ustring>
+      <ustring>Музыка &amp; Звуковые эффекты</ustring>
     </properties>
     <properties font="regular" color="white">
       <ustring>Чиастик</ustring>
@@ -218,19 +218,13 @@
       <ustring>Октавио Молано</ustring>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
-    </properties>
-    <properties font="big" color="multicolor">
-      <ustring>Звуковые эффекты</ustring>
-    </properties>
-    <properties font="regular" color="white">
       <ustring>Хорхе Родригуез Сантос</ustring>
     </properties>
     <properties font="regular" color="white">
-      <ustring>Октавио Молано</ustring>
+      <ustring>Ксавь Коломе</ustring>
     </properties>
     <properties font="regular" color="white">
-      <ustring>Ксавь Коломе</ustring>
+      <ustring>Douglas Mencken</ustring>
     </properties>
     <properties font="regular" color="white">
       <ustring> </ustring>
@@ -561,7 +555,7 @@
     </properties>
   </text>
 
-  <text id="exit" x="0" y="0">
+  <text id="exit-game" x="0" y="0">
     <properties>
       <ustring>Выход</ustring>
     </properties>

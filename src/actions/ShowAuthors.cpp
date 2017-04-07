@@ -38,7 +38,9 @@ void ShowAuthors::doIt ()
         langString = languageManager->findLanguageString( "credits-text" );
         TextField* textField = new TextField( langString->getX(), langString->getY(), 640, 480, CenterAlignment );
 
-        for ( size_t i = 0; i < langString->getLinesCount(); i++ )
+        size_t howManyLines = langString->getLinesCount() ;
+        fprintf( stdout, "credits-text has %ld lines\n", howManyLines );
+        for ( size_t i = 0; i < howManyLines; i++ )
         {
                 LanguageLine* line = langString->getLine( i );
                 textField->addLine( line->text, line->font, line->color );
@@ -55,6 +57,6 @@ void ShowAuthors::doIt ()
                 textField->changePosition( textField->getX(), textField->getY() - 1 );
                 GuiManager::getInstance()->refresh();
                 exit = ( keypressed() && key[ KEY_ESC ] );
-                sleep( 45 );
+                sleep( 30 );
         }
 }
