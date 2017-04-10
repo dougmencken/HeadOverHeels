@@ -72,7 +72,7 @@ public:
         * @param x Coordenada X de pantalla donde situar el elemento
         * @param y Coordenada Y de pantalla donde situar el elemento
         */
-        void changePosition ( unsigned int x, unsigned int y ) ;
+        void changePosition ( int x, int y ) ;
 
 private:
 

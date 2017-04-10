@@ -32,7 +32,7 @@ public:
          * @param x Coordenada X de pantalla donde situar el elemento
          * @param x Coordenada X de pantalla donde situar el elemento
          */
-        Widget( unsigned int x, unsigned int y ) ;
+        Widget( int x, int y ) ;
 
         virtual ~Widget( ) ;
 
@@ -52,7 +52,7 @@ public:
          * @param x Coordenada X de pantalla donde situar el elemento
          * @param y Coordenada Y de pantalla donde situar el elemento
          */
-        virtual void changePosition ( unsigned int x, unsigned int y ) ;
+        virtual void changePosition ( int x, int y ) ;
 
 private:
 
@@ -60,31 +60,21 @@ private:
          * first es la coordenada X de pantalla donde situar el elemento
          * second es la coordenada Y de pantalla donde situar el elemento
          */
-        std::pair < unsigned int, unsigned int > xy;
+        std::pair < int, int > xy;
 
 protected:
 
-        void setX ( unsigned int x ) {  this->xy.first = x ;  }
+        void setX ( int x ) {  this->xy.first = x ;  }
 
-        void setY ( unsigned int y ) {  this->xy.second = y ;  }
+        void setY ( int y ) {  this->xy.second = y ;  }
 
 public: // Operaciones de consulta y actualización
 
-        std::pair < unsigned int, unsigned int > getXY () const {  return this->xy ;  }
+        std::pair < int, int > getXY () const {  return this->xy ;  }
 
-        /**
-         * Coordenada X de pantalla donde situar el elemento
-         * @return Una coordenada de pantalla que no tiene porque estar en
-         * los límites de la resolución establecida
-         */
-        unsigned int getX () const {  return this->xy.first ;  }
+        int getX () const {  return this->xy.first ;  }
 
-        /**
-         * Coordenada Y de pantalla donde situar el elemento
-         * @return Una coordenada de pantalla que no tiene porque estar en
-         * los límites de la resolución establecida
-         */
-        unsigned int getY () const {  return this->xy.second ;  }
+        int getY () const {  return this->xy.second ;  }
 
 };
 

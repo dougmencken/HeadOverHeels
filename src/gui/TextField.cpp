@@ -61,7 +61,7 @@ void TextField::addLine( const std::string& text, const std::string& font, const
         lines.push_back( label );
 }
 
-void TextField::changePosition( unsigned int x, unsigned int y )
+void TextField::changePosition( int x, int y )
 {
         for ( std::list< Label * >::iterator i = this->lines.begin (); i != this->lines.end (); ++i )
         {

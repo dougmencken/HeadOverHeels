@@ -37,7 +37,7 @@ public:
          * @param x Coordenada X de pantalla donde situar el menú
          * @param y Coordenada Y de pantalla donde situar el menú
          */
-        Menu( unsigned int x, unsigned int y );
+        Menu( int x, int y );
 
         virtual ~Menu( );
 

@@ -44,7 +44,7 @@ public:
          * @param y Coordenada Y de pantalla donde situar el elemento
          * @param text El texto a presentar
          */
-        Label( unsigned int x, unsigned int y, const std::string& text ) ;
+        Label( int x, int y, const std::string& text ) ;
 
         /**
          * Constructor
@@ -64,7 +64,7 @@ public:
          * @param color Color del texto
          * @param spacing Espaciado entre caracteres, suma o resta tantos píxeles como se indiquen
          */
-        Label( unsigned int x, unsigned int y, const std::string& text, const std::string& fontName, const std::string& color, int spacing = 0 ) ;
+        Label( int x, int y, const std::string& text, const std::string& fontName, const std::string& color, int spacing = 0 ) ;
 
         virtual ~Label( ) ;
 
@@ -173,9 +173,9 @@ public: // Operaciones de consulta y actualización
 };
 
 
-struct EqualXYOfLabel : public std::binary_function< Label*, std::pair < unsigned int, unsigned int >, bool >
+struct EqualXYOfLabel : public std::binary_function< Label*, std::pair < int, int >, bool >
 {
-        bool operator() ( const Label* label, std::pair < unsigned int, unsigned int > thatXY ) const;
+        bool operator() ( const Label* label, std::pair < int, int > thatXY ) const;
 };
 
 

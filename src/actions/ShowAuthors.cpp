@@ -28,25 +28,34 @@ void ShowAuthors::doIt ()
         ///SoundManager::getInstance()->stopAnyOgg();
         SoundManager::getInstance()->playOgg( "music/CreditsTheme.ogg", /* loop */ true );
 
-        Screen* screen = new Screen( this->where, this );
-        screen->setBackground( GuiManager::getInstance()->findImage( "background" ) );
-        screen->setEscapeAction( new CreateMainMenu( this->where ) );
-
-        LanguageText* langString = 0;
-        LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
-
-        langString = languageManager->findLanguageString( "credits-text" );
-        TextField* textField = new TextField( langString->getX(), langString->getY(), 640, 480, CenterAlignment );
-
-        size_t howManyLines = langString->getLinesCount() ;
-        fprintf( stdout, "credits-text has %ld lines\n", howManyLines );
-        for ( size_t i = 0; i < howManyLines; i++ )
+        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this, this->where );
+        if ( screen->countWidgets() == 0 )
         {
-                LanguageLine* line = langString->getLine( i );
-                textField->addLine( line->text, line->font, line->color );
-        }
+                screen->setBackground( GuiManager::getInstance()->findImage( "background" ) );
+                screen->setEscapeAction( new CreateMainMenu( this->where ) );
 
-        screen->addWidget( textField );
+                LanguageText* langString = 0;
+                LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
+
+                langString = languageManager->findLanguageString( "credits-text" );
+                this->initialY = langString->getY();
+                this->linesOfCredits = new TextField( langString->getX(), initialY, 640, 480, CenterAlignment );
+
+                size_t howManyLines = langString->getLinesCount() ;
+                fprintf( stdout, "credits-text has %ld lines\n", howManyLines );
+                for ( size_t i = 0; i < howManyLines; i++ )
+                {
+                        LanguageLine* line = langString->getLine( i );
+                        linesOfCredits->addLine( line->text, line->font, line->color );
+                }
+
+                screen->addWidget( linesOfCredits );
+        }
+        else
+        {
+                // restore the initial position
+                linesOfCredits->changePosition( linesOfCredits->getX(), initialY );
+        }
 
         GuiManager::getInstance()->changeScreen( screen );
 
@@ -54,9 +63,23 @@ void ShowAuthors::doIt ()
         bool exit = false;
         while ( ! exit )
         {
-                textField->changePosition( textField->getX(), textField->getY() - 1 );
+                int yNow = linesOfCredits->getY() - 1;
+                if ( yNow <= -5000 )
+                {
+                        // let this scrolling loop
+                        yNow = initialY ;
+                }
+
+                linesOfCredits->changePosition( linesOfCredits->getX(), yNow );
                 GuiManager::getInstance()->refresh();
+
                 exit = ( keypressed() && key[ KEY_ESC ] );
+
+                if ( keypressed() && ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && ( key[ KEY_F ] ) )
+                {
+                        gui::GuiManager::getInstance()->toggleFullScreenVideo ();
+                }
+
                 sleep( 30 );
         }
 }

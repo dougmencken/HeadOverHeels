@@ -19,7 +19,7 @@ Label::Label( const std::string& text )
         this->createBitmapLabel( this->text, this->fontName, this->color );
 }
 
-Label::Label( unsigned int x, unsigned int y, const std::string& text )
+Label::Label( int x, int y, const std::string& text )
 : Widget( x, y ),
         text( text ),
         fontName( "regular" ),
@@ -42,7 +42,7 @@ Label::Label( const std::string& text, const std::string& fontName, const std::s
         this->createBitmapLabel( this->text, this->fontName, this->color, spacing );
 }
 
-Label::Label( unsigned int x, unsigned int y, const std::string& text, const std::string& fontName, const std::string& color, int spacing )
+Label::Label( int x, int y, const std::string& text, const std::string& fontName, const std::string& color, int spacing )
 : Widget( x, y ),
         text( text ),
         fontName( fontName ),
@@ -147,7 +147,7 @@ BITMAP* Label::createBitmapLabel( const std::string& text, const std::string& fo
         return this->buffer;
 }
 
-bool EqualXYOfLabel::operator() ( const Label* label, std::pair < unsigned int, unsigned int > thatXY ) const
+bool EqualXYOfLabel::operator() ( const Label* label, std::pair < int, int > thatXY ) const
 {
         return ( label->getY () == thatXY.second && label->getX () == thatXY.first );
 }

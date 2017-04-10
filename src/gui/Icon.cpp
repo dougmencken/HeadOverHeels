@@ -4,7 +4,7 @@
 namespace gui
 {
 
-Icon::Icon( unsigned int x, unsigned int y, BITMAP* image ) : Widget( x, y )
+Icon::Icon( int x, int y, BITMAP* image ) : Widget( x, y )
 {
         this->image = image;
 }

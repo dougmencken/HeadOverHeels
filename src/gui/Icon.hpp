@@ -32,7 +32,7 @@ public:
         * @param x Coordenada X de pantalla donde situar el elemento
         * @param image La imagen a presentar
         */
-        Icon( unsigned int x, unsigned int y, BITMAP * image ) ;
+        Icon( int x, int y, BITMAP * image ) ;
 
         virtual ~Icon( ) ;
 

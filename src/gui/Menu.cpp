@@ -11,7 +11,7 @@
 namespace gui
 {
 
-Menu::Menu( unsigned int x, unsigned int y )
+Menu::Menu( int x, int y )
 : Widget( x, y ),
         handlerOfKeys( 0 ),
         activeOption( 0 ),

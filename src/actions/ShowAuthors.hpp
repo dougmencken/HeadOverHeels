@@ -18,12 +18,10 @@
 namespace gui
 {
 
-class Screen;
-class Label;
-class LanguageLine;
+class TextField;
 
 /**
- * Muestra los autores de la aplicación y todos sus colaboradores
+ * Show authors of this game
  */
 
 class ShowAuthors : public Action
@@ -33,7 +31,7 @@ public:
 
         /**
          * Constructor
-         * @param picture Imagen donde se dibujará la interfaz gráfica
+         * @param picture Where to draw the graphical interface
          */
         ShowAuthors( BITMAP* picture ) ;
 
@@ -43,10 +41,11 @@ public:
 
 private:
 
-        /**
-         * Imagen donde se dibujará la interfaz gráfica
-         */
-        BITMAP* where ;
+        BITMAP * where ;
+
+        TextField * linesOfCredits ;
+
+        unsigned int initialY ;
 
 };
 
