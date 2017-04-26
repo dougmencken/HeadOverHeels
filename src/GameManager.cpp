@@ -639,14 +639,16 @@ WhyPause GameManager::pause ()
                                         exit = true;
                                         why = SaveGame;
                                 }
-                                // Si se pulsa cualquier otra tecla, excepto una tecla de movimiento o salto,
-                                // prosigue la partida en curso
-                                else if( key != inputManager->getUserKey( "movenorth" ) &&
-                                         key != inputManager->getUserKey( "movesouth" ) &&
-                                         key != inputManager->getUserKey( "moveeast" ) &&
-                                         key != inputManager->getUserKey( "movewest" ) &&
-                                         key != inputManager->getUserKey( "jump" ) &&
-                                         key != KEY_ESC )
+                                else if ( key != inputManager->getUserKey( "movenorth" ) &&
+                                          key != inputManager->getUserKey( "movesouth" ) &&
+                                          key != inputManager->getUserKey( "moveeast" ) &&
+                                          key != inputManager->getUserKey( "movewest" ) &&
+                                          key != inputManager->getUserKey( "jump" ) &&
+                                          key != inputManager->getUserKey( "take" ) &&
+                                          key != inputManager->getUserKey( "take-jump" ) &&
+                                          key != inputManager->getUserKey( "swap" ) &&
+                                          key != inputManager->getUserKey( "shoot" ) &&
+                                          key != KEY_ESC )
                                 {
                                         confirm = true;
                                         this->isomot->resume();
@@ -654,6 +656,7 @@ WhyPause GameManager::pause ()
                         }
 
                         // Sondea la decisión del usuario cada 10 milisegundos
+                        // Poll the decision of user every 10 milliseconds
                         sleep( 10 );
                 }
         }

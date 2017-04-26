@@ -41,7 +41,7 @@ public:
          */
         void doIt () ;
 
-        const char * getNameOfAction ()  {  return "LoadGame" ;  }
+        std::string getNameOfAction ()  {  return "LoadGame" ;  }
 
 private:
 

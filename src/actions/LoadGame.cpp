@@ -24,22 +24,22 @@ void LoadGame::doIt ()
         ss << isomot::homePath() << "savegame/savegame" << slot << ".xml";
         gameManager->loadGame( ss.str() );
 
-        CreatePlanetsScreen planetsScreen( this->where, true );
+        CreatePlanetsScreen * planetsAction = new CreatePlanetsScreen( this->where, true );
 
         if ( gameManager->isFreePlanet( isomot::Blacktooth ) )
-                planetsScreen.blacktoothIsFree();
+                planetsAction->blacktoothIsFree();
 
         if ( gameManager->isFreePlanet( isomot::Egyptus ) )
-                planetsScreen.egyptusIsFree();
+                planetsAction->egyptusIsFree();
 
         if ( gameManager->isFreePlanet( isomot::Penitentiary ) )
-                planetsScreen.penitentiaryIsFree();
+                planetsAction->penitentiaryIsFree();
 
         if ( gameManager->isFreePlanet( isomot::Safari ) )
-                planetsScreen.safariIsFree();
+                planetsAction->safariIsFree();
 
         if ( gameManager->isFreePlanet( isomot::Byblos ) )
-                planetsScreen.byblosIsFree();
+                planetsAction->byblosIsFree();
 
-        planetsScreen.doIt ();
+        planetsAction->doIt ();
 }

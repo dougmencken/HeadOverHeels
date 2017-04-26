@@ -11,6 +11,9 @@
 #ifndef Action_hpp_
 #define Action_hpp_
 
+#include <string>
+
+
 namespace gui
 {
 
@@ -25,7 +28,7 @@ public:
 
         virtual void doIt () = 0 ;
 
-        virtual const char * getNameOfAction () = 0 ;
+        virtual std::string getNameOfAction () = 0 ;
 
 };
 
@@ -33,9 +36,10 @@ class DoNothing : public Action
 {
 
 public:
+
         void doIt () {  }
 
-        const char * getNameOfAction ()  {  return "DoNothing" ;  }
+        std::string getNameOfAction ()  {  return "DoNothing" ;  }
 
 };
 

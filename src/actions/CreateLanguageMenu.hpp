@@ -45,7 +45,7 @@ public:
          */
         void doIt () ;
 
-        const char * getNameOfAction ()  {  return "CreateLanguageMenu" ;  }
+        std::string getNameOfAction ()  {  return "CreateLanguageMenu" ;  }
 
 private:
 

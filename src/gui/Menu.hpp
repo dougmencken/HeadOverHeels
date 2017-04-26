@@ -55,18 +55,18 @@ public:
         void handleKey ( int key ) ;
 
         /**
-         * Añade una opción al menú
-         * @param action Una orden
+         * Add option to menu
          */
         void addOption ( Label* label ) ;
 
-        /**
-         * Añade una orden al menú estableciéndola como la acción seleccionada
-         * @param action Una orden
-         */
-        void addActiveOption ( Label* label ) ;
-
         Label* getActiveOption () const {  return this->activeOption ;  }
+
+        void setActiveOption ( Label* option ) ;
+
+        /**
+         * Make the first option active
+         */
+        void resetActiveOption () ;
 
         std::list < Label * > getEveryOption () {  return this->options ;  }
 

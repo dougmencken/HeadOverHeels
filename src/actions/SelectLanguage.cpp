@@ -1,3 +1,4 @@
+
 #include "SelectLanguage.hpp"
 #include "CreateMainMenu.hpp"
 #include "GuiManager.hpp"
@@ -22,6 +23,6 @@ void SelectLanguage::doIt ()
 
         GuiManager::getInstance()->assignLanguage( language );
 
-        CreateMainMenu mainMenu( this->where );
-        mainMenu.doIt ();
+        CreateMainMenu * mainMenu = new CreateMainMenu( this->where );
+        mainMenu->doIt ();
 }

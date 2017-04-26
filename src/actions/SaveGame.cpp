@@ -18,6 +18,8 @@ SaveGame::SaveGame( BITMAP* picture, int slot )
 
 void SaveGame::doIt ()
 {
+        clear_keybuf();
+
         // Se graba la partida en la ubicación especificada
         if ( slot != 0 )
         {
@@ -27,6 +29,6 @@ void SaveGame::doIt ()
                 gameManager->saveGame( ss.str() );
         }
 
-        ContinueGame game( this->where, true );
-        game.doIt ();
+        ContinueGame * game = new ContinueGame( this->where, true );
+        game->doIt ();
 }

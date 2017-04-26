@@ -39,47 +39,46 @@ CreateLanguageMenu::~CreateLanguageMenu( )
 
 void CreateLanguageMenu::doIt ()
 {
-        Screen* screen = new Screen( 0, 0, this->where );
-        screen->setBackground( GuiManager::getInstance()->findImage( "background" ) );
-        screen->setEscapeAction( new gui::CreateMainMenu( this->where ) );
-
-        Label* label = 0;
-
-        // Etiqueta fija: HEAD
-        label = new Label( 200, 24, "Head" );
-        label->changeFontAndColor( "big", "yellow" );
-        screen->addWidget( label );
-        // Etiqueta fija: OVER
-        label = new Label( 280, 45, "over", "regular", "multicolor" );
-        screen->addWidget( label );
-        // Etiqueta fija: HEELS
-        label = new Label( 360, 24, "Heels" );
-        label->changeFontAndColor( "big", "yellow" );
-        screen->addWidget( label );
-
-        // Icono: Head
-        screen->addWidget( new Icon( 66, 24, GuiManager::getInstance()->findImage( "head" ) ) );
-        // Icono: Heels
-        screen->addWidget( new Icon( 518, 24, GuiManager::getInstance()->findImage( "heels" ) ) );
-
-        // Presenta los idiomas disponibles
-        MenuWithMultipleColumns * menu = new MenuWithMultipleColumns( 40, 120, 300, 11 );
-        for ( std::list< LanguageText * >::iterator i = this->texts.begin (); i != this->texts.end (); ++i )
+        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this, this->where );
+        if ( screen->countWidgets() == 0 )
         {
-                label = new Label( ( *i )->getText() );
-                label->setAction( new SelectLanguage( this->where, ( *i )->getId() ) );
-                if ( ( this->language.empty() && i == this->texts.begin() ) || this->language.compare( ( *i )->getId() ) == 0 )
-                {
-                        menu->addActiveOption( label );
-                }
-                else
-                {
-                        menu->addOption( label );
-                }
-        }
+                screen->setBackground( GuiManager::getInstance()->findImage( "background" ) );
+                screen->setEscapeAction( new gui::CreateMainMenu( this->where ) );
 
-        screen->addWidget( menu );
-        screen->setKeyHandler( menu );
+                Label* label = 0;
+
+                label = new Label( 200, 24, "Head" );
+                label->changeFontAndColor( "big", "yellow" );
+                screen->addWidget( label );
+
+                label = new Label( 280, 45, "over", "regular", "multicolor" );
+                screen->addWidget( label );
+
+                label = new Label( 360, 24, "Heels" );
+                label->changeFontAndColor( "big", "yellow" );
+                screen->addWidget( label );
+
+                screen->addWidget( new Icon( 66, 24, GuiManager::getInstance()->findImage( "head" ) ) );
+                screen->addWidget( new Icon( 518, 24, GuiManager::getInstance()->findImage( "heels" ) ) );
+
+                // Presenta los idiomas disponibles
+                MenuWithMultipleColumns * menu = new MenuWithMultipleColumns( 40, 120, 300, 11 );
+                for ( std::list< LanguageText * >::iterator i = this->texts.begin (); i != this->texts.end (); ++i )
+                {
+                        label = new Label( ( *i )->getText() );
+                        label->setAction( new SelectLanguage( this->where, ( *i )->getId() ) );
+
+                        menu->addOption( label );
+
+                        if ( ( this->language.empty() && i == this->texts.begin() ) || this->language.compare( ( *i )->getId() ) == 0 )
+                        {
+                                menu->setActiveOption( label );
+                        }
+                }
+
+                screen->addWidget( menu );
+                screen->setKeyHandler( menu );
+        }
 
         GuiManager::getInstance()->changeScreen( screen );
 }

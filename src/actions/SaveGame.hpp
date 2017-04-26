@@ -40,7 +40,7 @@ public:
          */
         void doIt () ;
 
-        const char * getNameOfAction ()  {  return "SaveGame" ;  }
+        std::string getNameOfAction ()  {  return "SaveGame" ;  }
 
 private:
 

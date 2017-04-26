@@ -15,51 +15,60 @@ using gui::CreateMenuOfGraphicSets ;
 
 CreateVideoMenu::CreateVideoMenu( BITMAP* picture ) :
         Action(),
-        where( picture )
+        where( picture ),
+        listOfOptions ( 0 ),
+        labelFullscreen ( 0 ),
+        labelDrawBackground ( 0 ),
+        labelGraphicSet ( 0 )
 {
 
 }
 
 void CreateVideoMenu::doIt ()
 {
-        Screen* screen = new Screen( 0, 0, this->where );
-        screen->setBackground( gui::GuiManager::getInstance()->findImage( "background" ) );
-        screen->setEscapeAction( new CreateMainMenu( this->where ) );
-
-        CreateMainMenu::placeHeadAndHeels( screen, /* icons */ false, /* copyrights */ false );
-
         const size_t positionOfSetting = 20;
 
         LanguageManager* languageManager = gui::GuiManager::getInstance()->getLanguageManager();
-
         LanguageText* textFullscreen = languageManager->findLanguageString( "full-screen" );
-        std::string stringFullscreenSpaced ( textFullscreen->getText() );
-        for ( size_t position = stringFullscreenSpaced.length() ; position < positionOfSetting ; ++position ) {
-                stringFullscreenSpaced = stringFullscreenSpaced + " ";
-        }
-        Label* labelFullscreen = new Label( stringFullscreenSpaced + ( gui::GuiManager::getInstance()->isAtFullScreen () ? "yes" : "no" ) );
-
         LanguageText* textDrawBackground = languageManager->findLanguageString( "draw-background" );
-        std::string stringDrawBackgroundSpaced ( textDrawBackground->getText() );
-        for ( size_t position = stringDrawBackgroundSpaced.length() ; position < positionOfSetting ; ++position ) {
-                stringDrawBackgroundSpaced = stringDrawBackgroundSpaced + " ";
+
+        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this, this->where );
+        if ( screen->countWidgets() == 0 )
+        {
+                screen->setBackground( gui::GuiManager::getInstance()->findImage( "background" ) );
+                screen->setEscapeAction( new CreateMainMenu( this->where ) );
+
+                CreateMainMenu::placeHeadAndHeels( screen, /* icons */ false, /* copyrights */ false );
+
+                std::string stringFullscreenSpaced ( textFullscreen->getText() );
+                for ( size_t position = stringFullscreenSpaced.length() ; position < positionOfSetting ; ++position ) {
+                        stringFullscreenSpaced = stringFullscreenSpaced + " ";
+                }
+                this->labelFullscreen = new Label( stringFullscreenSpaced + ( gui::GuiManager::getInstance()->isAtFullScreen () ? "yes" : "no" ) );
+
+                std::string stringDrawBackgroundSpaced ( textDrawBackground->getText() );
+                for ( size_t position = stringDrawBackgroundSpaced.length() ; position < positionOfSetting ; ++position ) {
+                        stringDrawBackgroundSpaced = stringDrawBackgroundSpaced + " ";
+                }
+                this->labelDrawBackground = new Label( stringDrawBackgroundSpaced + ( isomot::GameManager::getInstance()->hasBackgroundPicture () ? "yes" : "no" ) );
+
+                LanguageText* textGraphicSet = languageManager->findLanguageString( "graphic-set" );
+                this->labelGraphicSet = new Label( textGraphicSet->getText(), "regular", "yellow" );
+                labelGraphicSet->setAction( new CreateMenuOfGraphicSets( this->where, this ) );
+
+                this->listOfOptions = new Menu( textFullscreen->getX(), textFullscreen->getY() );
+                listOfOptions->addOption( labelFullscreen );
+                listOfOptions->addOption( labelDrawBackground );
+                listOfOptions->addOption( labelGraphicSet );
+
+                screen->addWidget( listOfOptions );
         }
-        Label* labelDrawBackground = new Label( stringDrawBackgroundSpaced + ( isomot::GameManager::getInstance()->hasBackgroundPicture () ? "yes" : "no" ) );
-
-        LanguageText* textGraphicSet = languageManager->findLanguageString( "graphic-set" );
-        Label* labelGraphicSet = new Label( textGraphicSet->getText(), "regular", "yellow" );
-        labelGraphicSet->setAction( new CreateMenuOfGraphicSets( this->where ) );
-
-        Menu* menu = new Menu( textFullscreen->getX(), textFullscreen->getY() );
-        menu->addActiveOption( labelFullscreen );
-        menu->addOption( labelDrawBackground );
-        menu->addOption( labelGraphicSet );
-
-        screen->addWidget( menu );
-        screen->setKeyHandler( menu );
+        if ( screen->getKeyHandler() == 0 )
+        {
+                screen->setKeyHandler( listOfOptions );
+        }
 
         gui::GuiManager::getInstance()->changeScreen( screen );
-        gui::GuiManager::getInstance()->refresh();
 
         clear_keybuf();
 
@@ -82,12 +91,12 @@ void CreateVideoMenu::doIt ()
 
                                 if ( theKey == KEY_LEFT || theKey == KEY_RIGHT )
                                 {
-                                        if ( menu->getActiveOption () == labelFullscreen )
+                                        if ( listOfOptions->getActiveOption () == labelFullscreen )
                                         {
                                                 gui::GuiManager::getInstance()->toggleFullScreenVideo ();
                                                 doneWithKey = true;
                                         }
-                                        else if ( menu->getActiveOption () == labelDrawBackground )
+                                        else if ( listOfOptions->getActiveOption () == labelDrawBackground )
                                         {
                                                 isomot::GameManager::getInstance()->toggleBackgroundPicture ();
                                                 doneWithKey = true;
@@ -115,7 +124,7 @@ void CreateVideoMenu::doIt ()
                                 }
                                 labelDrawBackground->setText( stringDrawBackgroundSpaced + ( isomot::GameManager::getInstance()->hasBackgroundPicture () ? "yes" : "no" ) );
 
-                                menu->redraw ();
+                                listOfOptions->redraw ();
                         }
 
                         // No te comas la CPU

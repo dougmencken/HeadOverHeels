@@ -18,6 +18,8 @@
 namespace gui
 {
 
+class Menu ;
+
 /**
  * Crea el menú de configuración del teclado y el joystick
  */
@@ -37,14 +39,16 @@ public:
          */
         void doIt () ;
 
-        const char * getNameOfAction ()  {  return "CreateKeyboardMenu" ;  }
+        std::string getNameOfAction ()  {  return "CreateKeyboardMenu" ;  }
 
 private:
 
         /**
          * Imagen donde se dibujará la interfaz gráfica
          */
-        BITMAP* where ;
+        BITMAP * where ;
+
+        Menu * menuOfKeys ;
 
 };
 

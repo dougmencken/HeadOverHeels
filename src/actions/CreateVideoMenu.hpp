@@ -19,6 +19,9 @@
 namespace gui
 {
 
+class Menu;
+class Label;
+
 /**
  * Create menu to modify video & graphics
  */
@@ -39,11 +42,17 @@ public:
          */
         void doIt () ;
 
-        const char * getNameOfAction ()  {  return "CreateVideoMenu" ;  }
+        std::string getNameOfAction ()  {  return "CreateVideoMenu" ;  }
 
 private:
 
-        BITMAP* where ;
+        BITMAP * where ;
+
+        Menu * listOfOptions ;
+
+        Label * labelFullscreen ;
+        Label * labelDrawBackground ;
+        Label * labelGraphicSet ;
 
 };
 

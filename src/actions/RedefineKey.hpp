@@ -41,7 +41,7 @@ public:
 
         void doIt () ;
 
-        const char * getNameOfAction ()  {  return "RedefineKey" ;  }
+        std::string getNameOfAction ()  {  return "RedefineKey" ;  }
 
 private:
 

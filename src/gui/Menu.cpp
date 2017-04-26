@@ -32,6 +32,11 @@ void Menu::draw( BITMAP* where )
 {
         if ( where == 0 ) return ;
 
+        if ( activeOption == 0 )
+        {
+                resetActiveOption ();
+        }
+
         int dx( this->optionImage->w );
         int dy( 0 );
 
@@ -109,11 +114,27 @@ void Menu::addOption( Label* label )
         options.push_back( label );
 }
 
-void Menu::addActiveOption( Label* label )
+void Menu::setActiveOption ( Label* option )
 {
-        this->addOption( label );
-        this->handlerOfKeys = label;
-        this->activeOption = label;
+        for ( std::list< Label * >::iterator i = options.begin () ; i != options.end () ; ++i )
+        {
+                if ( ( *i ) == option )
+                {
+                        handlerOfKeys = option ;
+                        activeOption = option ;
+                        return;
+                }
+        }
+
+        if ( option != 0 )
+        {
+                fprintf( stderr, "option \"%s\" isn't from this menu\n", option->getText().c_str () );
+        }
+}
+
+void Menu::resetActiveOption ()
+{
+        setActiveOption( * options.begin () );
 }
 
 void Menu::previousOption ()

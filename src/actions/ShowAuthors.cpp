@@ -28,7 +28,7 @@ void ShowAuthors::doIt ()
         ///SoundManager::getInstance()->stopAnyOgg();
         SoundManager::getInstance()->playOgg( "music/CreditsTheme.ogg", /* loop */ true );
 
-        Screen* screen = new Screen( 0, 0, this->where );
+        Screen* screen = new Screen( this->where, this );
         screen->setBackground( GuiManager::getInstance()->findImage( "background" ) );
         screen->setEscapeAction( new CreateMainMenu( this->where ) );
 

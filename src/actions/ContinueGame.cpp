@@ -30,38 +30,47 @@ void ContinueGame::doIt ()
         // liberado, la pantalla para grabar la partida o la pantalla de fin del juego
         if ( why == isomot::FreePlanet )
         {
-                CreatePlanetsScreen planetsScreen( this->where, true );
+                CreatePlanetsScreen * planetsAction = new CreatePlanetsScreen( this->where, true );
 
                 if ( gameManager->isFreePlanet( isomot::Blacktooth ) )
-                        planetsScreen.blacktoothIsFree();
+                        planetsAction->blacktoothIsFree();
 
                 if ( gameManager->isFreePlanet( isomot::Egyptus ) )
-                        planetsScreen.egyptusIsFree();
+                        planetsAction->egyptusIsFree();
 
                 if ( gameManager->isFreePlanet( isomot::Penitentiary ) )
-                        planetsScreen.penitentiaryIsFree();
+                        planetsAction->penitentiaryIsFree();
 
                 if ( gameManager->isFreePlanet( isomot::Safari ) )
-                        planetsScreen.safariIsFree();
+                        planetsAction->safariIsFree();
 
                 if ( gameManager->isFreePlanet( isomot::Byblos ) )
-                        planetsScreen.byblosIsFree();
+                        planetsAction->byblosIsFree();
 
-                planetsScreen.doIt ();
+                planetsAction->doIt ();
         }
         else if ( why == isomot::SaveGame )
         {
-                CreateListOfSavedGames listOfGames( this->where, false );
-                listOfGames.doIt ();
+                CreateListOfSavedGames * listOfGamesAction = new CreateListOfSavedGames( this->where, false );
+
+                listOfGamesAction->doIt ();
         }
         else if ( why == isomot::GameOver || why == isomot::Freedom )
         {
-                CreateEndScreen endScreen( this->where, gameManager->getVisitedRooms(), gameManager->freePlanetsCount() );
-                endScreen.doIt ();
+                CreateEndScreen * endScreenAction =
+                        new CreateEndScreen(
+                                this->where, gameManager->getVisitedRooms(), gameManager->freePlanetsCount()
+                        );
+
+                endScreenAction->doIt ();
         }
         else if ( why == isomot::Sucess )
         {
-                CreateCongratulationsScreen congratulationsScreen( this->where, gameManager->getVisitedRooms(), gameManager->freePlanetsCount() );
-                congratulationsScreen.doIt ();
+                CreateCongratulationsScreen * congratulationsScreenAction =
+                        new CreateCongratulationsScreen(
+                                this->where, gameManager->getVisitedRooms(), gameManager->freePlanetsCount()
+                        );
+
+                congratulationsScreenAction->doIt ();
         }
 }

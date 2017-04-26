@@ -23,60 +23,59 @@ CreateKeyboardMenu::CreateKeyboardMenu( BITMAP* picture ) :
 
 void CreateKeyboardMenu::doIt ()
 {
-        Screen* screen = new Screen( 0, 0, this->where );
-        screen->setBackground( GuiManager::getInstance()->findImage( "background" ) );
-        screen->setEscapeAction( new CreateMainMenu( this->where ) );
-
-        CreateMainMenu::placeHeadAndHeels( screen, /* icons */ false, /* copyrights */ false );
-
-        Label* label = 0;
-        LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
-
-        // La primera opción almacena la posición del menú en pantalla
-        LanguageText* langString = languageManager->findLanguageString( "movenorth" );
-        Menu* menu = new Menu( langString->getX(), langString->getY() );
-
-        InputManager* supportOfInput = InputManager::getInstance();
-
-        // Create one option for each key used in the game
-        for ( size_t i = 0; i < InputManager::numberOfKeys; i++ )
+        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this, this->where );
+        if ( screen->countWidgets() == 0 )
         {
-                std::string nameOfThisKey = InputManager::namesOfKeys[ i ];
+                screen->setBackground( GuiManager::getInstance()->findImage( "background" ) );
+                screen->setEscapeAction( new CreateMainMenu( this->where ) );
 
-                // Código de la tecla asignada
-                int scancode = supportOfInput->getUserKey( nameOfThisKey );
+                CreateMainMenu::placeHeadAndHeels( screen, /* icons */ false, /* copyrights */ false );
 
-                // Descripción del uso de la tecla
-                std::string textOfKey = languageManager->findLanguageString( nameOfThisKey )->getText();
-                std::string dottedTextOfKey( textOfKey );
-                for ( size_t position = textOfKey.length() ; position < 16 ; ++position ) {
-                        dottedTextOfKey = dottedTextOfKey + ".";
-                }
+                Label* label = 0;
+                LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
 
-                // The menu option is made of the description of the key and the key itself
-                label = new Label( dottedTextOfKey + scancode_to_name( scancode ) );
-                if ( scancode == 0 )
+                // la primera opción almacena la posición del menú en pantalla
+                LanguageText* langString = languageManager->findLanguageString( "movenorth" );
+                this->menuOfKeys = new Menu( langString->getX(), langString->getY() );
+
+                InputManager* supportOfInput = InputManager::getInstance();
+
+                // create one option for each key used in the game
+                for ( size_t i = 0; i < InputManager::numberOfKeys; i++ )
                 {
-                        label->changeFontAndColor( label->getFontName (), "cyan" );
+                        std::string nameOfThisKey = InputManager::namesOfKeys[ i ];
+
+                        // Código de la tecla asignada
+                        int scancode = supportOfInput->getUserKey( nameOfThisKey );
+
+                        // Descripción del uso de la tecla
+                        std::string textOfKey = languageManager->findLanguageString( nameOfThisKey )->getText();
+                        std::string dottedTextOfKey( textOfKey );
+                        for ( size_t position = textOfKey.length() ; position < 16 ; ++position ) {
+                                dottedTextOfKey = dottedTextOfKey + ".";
+                        }
+
+                        // The menu option is made of the description of the key and the key itself
+                        label = new Label( dottedTextOfKey + scancode_to_name( scancode ) );
+                        if ( scancode == 0 )
+                        {
+                                label->changeFontAndColor( label->getFontName (), "cyan" );
+                        }
+
+                        // assign as action the possibility to change the key
+                        label->setAction( new RedefineKey( menuOfKeys, nameOfThisKey ) );
+
+                        menuOfKeys->addOption( label );
                 }
 
-                // Assign as action the possibility to change the key
-                label->setAction( new RedefineKey( menu, nameOfThisKey ) );
-
-                // La primera opción es la opción activa
-                if ( i == 0 )
-                {
-                        menu->addActiveOption( label );
-                }
-                else
-                {
-                        menu->addOption( label );
-                }
+                screen->addWidget( menuOfKeys );
+                screen->setKeyHandler( menuOfKeys );
         }
-
-        // El menú que aparece en pantalla
-        screen->addWidget( menu );
-        screen->setKeyHandler( menu );
+        else
+        {
+                // select first option of menu
+                menuOfKeys->resetActiveOption();
+        }
 
         GuiManager::getInstance()->changeScreen( screen );
 }

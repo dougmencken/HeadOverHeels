@@ -39,7 +39,7 @@ public:
 
         void doIt () ;
 
-        const char * getNameOfAction ()  {  return "ShowAuthors" ;  }
+        std::string getNameOfAction ()  {  return "ShowAuthors" ;  }
 
 private:
 

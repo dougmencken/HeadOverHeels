@@ -8,11 +8,12 @@
 namespace gui
 {
 
-Screen::Screen( unsigned int x, unsigned int y, BITMAP* picture ) :
-        Widget( x, y ),
+Screen::Screen( BITMAP* picture, Action* action ) :
+        Widget( 0, 0 ),
         backgroundColor( makecol( 0, 0, 0 ) ),
         backgroundPicture( 0 ),
         where( picture ),
+        actionOfScreen( action ),
         escapeAction( 0 ),
         keyHandler( 0 )
 {
@@ -54,9 +55,9 @@ void Screen::handleKey( int rawKey )
 
         if ( escapeAction != 0 && theKey == KEY_ESC )
         {
-                fprintf( stdout, "escape action %s ...\n", ( escapeAction != 0 ? escapeAction->getNameOfAction() : "nope" ) );
+                fprintf( stdout, "escape action %s ...\n", ( escapeAction != 0 ? escapeAction->getNameOfAction().c_str () : "nope" ) );
                 this->escapeAction->doIt ();
-                fprintf( stdout, "... done with action %s\n", ( escapeAction != 0 ? escapeAction->getNameOfAction() : "nope" ) );
+                fprintf( stdout, "... done with action %s\n", ( escapeAction != 0 ? escapeAction->getNameOfAction().c_str () : "nope" ) );
         }
         else
         {
@@ -70,6 +71,11 @@ void Screen::handleKey( int rawKey )
 void Screen::addWidget( Widget* widget )
 {
         this->widgets.push_back( widget );
+}
+
+void Screen::freeWidgets ()
+{
+	widgets.clear() ;
 }
 
 }

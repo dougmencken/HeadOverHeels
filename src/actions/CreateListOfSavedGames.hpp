@@ -31,8 +31,8 @@ public:
 
         /**
          * Constructor
-         * @param picture Imagen donde se dibujará la interfaz gráfica
-         * @param isLoadMenu true para cargar partidas o false para grabarlas
+         * @param picture Image where to draw
+         * @param isLoadMenu true for "load game", false for "save game"
          */
         CreateListOfSavedGames( BITMAP* picture, bool isLoadMenu ) ;
 
@@ -41,29 +41,25 @@ public:
          */
         void doIt () ;
 
-        const char * getNameOfAction ()  {  return "CreateListOfSavedGames" ;  }
+        std::string getNameOfAction ()  {  return "CreateListOfSavedGames" ;  }
+
+        bool isLoadMenu () {  return this->isMenuForLoad ;  }
 
 private:
 
         /**
-         * Recupera la información esencial de un archivo para mostrarla en pantalla posteriormente
+         * Read some information from a file of saved game to display it
          * @param fileName Nombre del archivo XML que contiene los datos de la partida
          * @param rooms Devuelve el número de salas visitadas
          * @param planets Devuelve el número de planetas liberados
          */
-        void recoverFileInfo( const std::string& fileName, short* rooms, short* planets ) ;
+        void readSomeInfoFromGamefile( const std::string& fileName, short* rooms, short* planets ) ;
 
 private:
 
-        /**
-         * Imagen donde se dibujará la interfaz gráfica
-         */
         BITMAP* where ;
 
-        /**
-         * Indica si se presenta el menú para cargar (true) o grabar partidas (false)
-         */
-        bool loadMenu ;
+        bool isMenuForLoad ;
 
         static const unsigned int howManySaves = 10 ;
 

@@ -13,10 +13,12 @@
 #include "Menu.hpp"
 #include "Icon.hpp"
 #include "Label.hpp"
-#include "actions/CreateMainMenu.hpp"
 #include "actions/CreateLanguageMenu.hpp"
 
+#define DEBUG_GUI       0
+
 using gui::GuiManager;
+using gui::Screen;
 using gui::LanguageManager;
 using gui::ConfigurationManager;
 using isomot::InputManager;
@@ -83,7 +85,9 @@ GuiManager::GuiManager( ) :
 
 GuiManager::~GuiManager( )
 {
-        freeImages ();
+        freeImages () ;
+
+        freeScreens () ;
 
         delete this->languageManager;
         delete this->configurationManager;
@@ -290,23 +294,90 @@ void GuiManager::begin ()
 
 void GuiManager::changeScreen( Screen* newScreen )
 {
-        if ( this->screen != 0 )
+        assert( newScreen );
+
+# if  defined( DEBUG_GUI )  &&  DEBUG_GUI
+
+        if ( listOfScreens.size () > 0 )
         {
-                Action* escape = screen->getEscapeAction () ;
-                fprintf( stdout, "there's previous screen with escape action \" %s \"\n", ( escape != 0 ? escape->getNameOfAction() : "none" ) );
-                listOfPreviousScreens.push_back( screen );
+                fprintf ( stderr, " + +  s c r e e n z \n" ) ;
+                for (  std::map< std::string, Screen * >::iterator i = listOfScreens.begin (); i != listOfScreens.end (); ++i )
+                {
+                        if ( i->second )
+                        {
+                                Action * action = i->second->getActionOfScreen () ;
+                                std::cerr << "   screen @ " << i->second ;
+                                std::cerr << "  action @ " << action ;
+                                std::cerr << " \" " << action->getNameOfAction() << " \"" << std::endl ;
+                        }
+                }
+                fprintf ( stderr, " - -  s c r e e n z \n" ) ;
         }
 
-        Action* escapeOfNewScreen = newScreen->getEscapeAction () ;
-        fprintf( stdout, "new screen with escape action \" %s \"\n", ( escapeOfNewScreen != 0 ? escapeOfNewScreen->getNameOfAction() : "none" ) );
-        this->screen = newScreen;
+        if ( this->screen )
+        {
+                Action* action = screen->getActionOfScreen () ;
+                Action* escape = screen->getEscapeAction () ;
+                fprintf( stdout, ". previous screen was for action \" %s \" with escape action \" %s \"\n",
+                                 action->getNameOfAction().c_str (),
+                                 ( escape != 0 ? escape->getNameOfAction().c_str () : "none" ) );
+        }
+
+        if ( newScreen )
+        {
+                Action* actionOfNewScreen = newScreen->getActionOfScreen () ;
+                Action* escapeOfNewScreen = newScreen->getEscapeAction () ;
+                fprintf( stdout, ". new screen is for action \" %s \" with escape action \" %s \"\n",
+                                 actionOfNewScreen->getNameOfAction().c_str (),
+                                 ( escapeOfNewScreen != 0 ? escapeOfNewScreen->getNameOfAction().c_str () : "none" )
+                ) ;
+        }
+
+# endif
+
+        if ( listOfScreens.find( newScreen->getActionOfScreen()->getNameOfAction() ) != listOfScreens.end () )
+        {
+                this->screen = newScreen;
+                refresh() ;
+        }
+        else
+        {
+                fprintf( stderr, "there's no screen for action \" %s \", please create it before use\n",
+                                 newScreen->getActionOfScreen()->getNameOfAction().c_str () );
+        }
+}
+
+Screen * GuiManager::findOrCreateScreenForAction ( Action* action, BITMAP* picture )
+{
+        assert( action );
+        assert( picture );
+
+        std::string nameOfAction = action->getNameOfAction() ;
+
+        if ( listOfScreens.find( nameOfAction ) != listOfScreens.end () )
+        {
+                Screen * theScreen = listOfScreens[ nameOfAction ];
+                fprintf( stdout, "here's existing screen for action \" %s \"\n", nameOfAction.c_str () );
+                return theScreen;
+        }
+
+        fprintf( stdout, "going to create new screen for action \" %s \"\n", nameOfAction.c_str () );
+        Screen * newScreen = new Screen( picture, action );
+        listOfScreens[ nameOfAction ] = newScreen;
+        return newScreen;
+}
+
+void GuiManager::freeScreens ()
+{
+        listOfScreens.clear() ;
+        fprintf( stdout, "now list of screens is empty\n" );
 }
 
 void GuiManager::refresh()
 {
-        if ( this->active )
+        if ( ( this->active ) && ( this->screen != 0 ) )
         {
-                this->screen->draw( this->picture );
+                screen->draw( this->picture );
         }
 }
 

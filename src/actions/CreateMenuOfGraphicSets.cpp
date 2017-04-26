@@ -12,9 +12,11 @@
 using gui::CreateMenuOfGraphicSets ;
 
 
-CreateMenuOfGraphicSets::CreateMenuOfGraphicSets( BITMAP* picture ) :
+CreateMenuOfGraphicSets::CreateMenuOfGraphicSets( BITMAP* picture, Action* previous ) :
         Action(),
-        where( picture )
+        where( picture ),
+        actionOnEscape( previous ),
+        menuOfGraphicSets( 0 )
 {
         graphicSets[ "gfx" ] = "Present" ;
         graphicSets[ "gfx.2009" ] = "By Davit" ;
@@ -24,30 +26,32 @@ CreateMenuOfGraphicSets::CreateMenuOfGraphicSets( BITMAP* picture ) :
 
 void CreateMenuOfGraphicSets::doIt ()
 {
-        Screen* screen = new Screen( 0, 0, this->where );
-        screen->setBackground( gui::GuiManager::getInstance()->findImage( "background" ) );
-        screen->setEscapeAction( new CreateVideoMenu( this->where ) );
+        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this, this->where );
+        if ( screen->countWidgets() == 0 || menuOfGraphicSets == 0 )
+        {
+                screen->setBackground( gui::GuiManager::getInstance()->findImage( "background" ) );
+                screen->setEscapeAction( this->actionOnEscape );
 
-        CreateMainMenu::placeHeadAndHeels( screen, /* icons */ false, /* copyrights */ false );
+                CreateMainMenu::placeHeadAndHeels( screen, /* icons */ false, /* copyrights */ false );
 
-        std::string nameOfSet = graphicSets[ "gfx" ];
+                std::string nameOfSet = graphicSets[ "gfx" ];
 
-        const size_t positionOfSecondColumn = 15;
+                const size_t positionOfSecondColumn = 15;
 
-        std::string stringGraphicSetSpaced ( "uno" );
-        for ( size_t position = stringGraphicSetSpaced.length() ; position < positionOfSecondColumn ; ++position ) {
-                stringGraphicSetSpaced = stringGraphicSetSpaced + " ";
+                std::string stringGraphicSetSpaced ( "uno" );
+                for ( size_t position = stringGraphicSetSpaced.length() ; position < positionOfSecondColumn ; ++position ) {
+                        stringGraphicSetSpaced = stringGraphicSetSpaced + " ";
+                }
+                Label* labelGraphicSet = new Label( stringGraphicSetSpaced + nameOfSet );
+
+                this->menuOfGraphicSets = new Menu( 100, 160 );
+                menuOfGraphicSets->addOption( labelGraphicSet );
+
+                screen->addWidget( menuOfGraphicSets );
+                screen->setKeyHandler( menuOfGraphicSets );
         }
-        Label* labelGraphicSet = new Label( stringGraphicSetSpaced + nameOfSet );
-
-        Menu* menu = new Menu( 100, 160 );
-        menu->addActiveOption( labelGraphicSet );
-
-        screen->addWidget( menu );
-        screen->setKeyHandler( menu );
 
         gui::GuiManager::getInstance()->changeScreen( screen );
-        gui::GuiManager::getInstance()->refresh();
 
         clear_keybuf();
 
@@ -70,29 +74,28 @@ void CreateMenuOfGraphicSets::doIt ()
 
                                 if ( theKey == KEY_LEFT || theKey == KEY_RIGHT )
                                 {
-                                        if ( menu->getActiveOption () == labelGraphicSet )
+                                        Label* activeSet = menuOfGraphicSets->getActiveOption() ;
+
+                                        std::string previousSet( isomot::GameManager::getInstance()->getChosenGraphicSet() );
+
+                                        // well it’s still something TO DO ...
+                                        // now just paint it yellow or cyan
+                                        if ( theKey == KEY_LEFT )
                                         {
-                                                std::string previousSet( isomot::GameManager::getInstance()->getChosenGraphicSet() );
-
-                                                // well it’s still something TO DO ...
-                                                // now just paint it yellow or cyan
-                                                if ( theKey == KEY_LEFT )
-                                                {
-                                                        labelGraphicSet->changeFontAndColor( labelGraphicSet->getFontName (), "yellow" );
-                                                }
-                                                else if ( theKey == KEY_RIGHT )
-                                                {
-                                                        labelGraphicSet->changeFontAndColor( labelGraphicSet->getFontName (), "cyan" );
-                                                }
-
-                                                if ( previousSet.compare( isomot::GameManager::getInstance()->getChosenGraphicSet() ) != 0 )
-                                                { // new set is not the same as previous one
-                                                        gui::GuiManager::getInstance()->reloadImages ();
-                                                        sleep( 100 );
-                                                }
-
-                                                doneWithKey = true;
+                                                activeSet->changeFontAndColor( activeSet->getFontName (), "yellow" );
                                         }
+                                        else if ( theKey == KEY_RIGHT )
+                                        {
+                                                activeSet->changeFontAndColor( activeSet->getFontName (), "cyan" );
+                                        }
+
+                                        if ( previousSet.compare( isomot::GameManager::getInstance()->getChosenGraphicSet() ) != 0 )
+                                        { // new set is not the same as previous one
+                                                gui::GuiManager::getInstance()->reloadImages ();
+                                                sleep( 100 );
+                                        }
+
+                                        doneWithKey = true;
                                 }
 
                                 if ( ! doneWithKey )
@@ -101,7 +104,7 @@ void CreateMenuOfGraphicSets::doIt ()
                                 }
 
                                 clear_keybuf();
-                                menu->redraw ();
+                                menuOfGraphicSets->redraw ();
                         }
 
                         // No te comas la CPU

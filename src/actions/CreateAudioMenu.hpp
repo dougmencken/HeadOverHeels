@@ -19,6 +19,9 @@
 namespace gui
 {
 
+class Menu;
+class Label;
+
 /**
  * Crea el menú de para el ajuste de los efectos sonidos y la música
  */
@@ -30,7 +33,7 @@ public:
 
         /**
          * Constructor
-         * @param picture Imagen donde se dibujará la interfaz gráfica
+         * @param picture Image where to draw
          */
         CreateAudioMenu( BITMAP* picture ) ;
 
@@ -39,14 +42,16 @@ public:
          */
         void doIt () ;
 
-        const char * getNameOfAction ()  {  return "CreateAudioMenu" ;  }
+        std::string getNameOfAction ()  {  return "CreateAudioMenu" ;  }
 
 private:
 
-        /**
-         * Imagen donde se dibujará la interfaz gráfica
-         */
-        BITMAP* where ;
+        BITMAP * where ;
+
+        Menu * listOfOptions ;
+
+        Label * labelEffects ;
+        Label * labelMusic ;
 
 };
 

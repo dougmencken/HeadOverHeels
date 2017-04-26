@@ -17,53 +17,66 @@ using isomot::SoundManager;
 
 CreateAudioMenu::CreateAudioMenu( BITMAP* picture ) :
         Action(),
-        where( picture )
+        where( picture ),
+        listOfOptions ( 0 ),
+        labelEffects ( 0 ),
+        labelMusic ( 0 )
 {
 
 }
 
 void CreateAudioMenu::doIt ()
 {
-        Screen* screen = new Screen( 0, 0, this->where );
-        screen->setBackground( GuiManager::getInstance()->findImage( "background" ) );
-        screen->setEscapeAction( new CreateMainMenu( this->where ) );
-
-        CreateMainMenu::placeHeadAndHeels( screen, /* icons */ false, /* copyrights */ false );
-
-        LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
-        std::stringstream ss;
-
         const size_t positionOfValue = 20;
 
-        // Efectos sonoros
-        ss << SoundManager::getInstance()->getVolumeOfEffects();
+        LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
         LanguageText* langStringEffects = languageManager->findLanguageString( "soundfx" );
-        std::string stringEffectsSpaced ( langStringEffects->getText() );
-        for ( size_t position = stringEffectsSpaced.length() ; position < positionOfValue ; ++position ) {
-                stringEffectsSpaced = stringEffectsSpaced + " ";
-        }
-        Label* labelEffects = new Label( stringEffectsSpaced + ss.str() );
-
-        ss.str( std::string() ); // clear ss
-
-        // Música
-        ss << SoundManager::getInstance()->getVolumeOfMusic();
         LanguageText* langStringMusic = languageManager->findLanguageString( "music" );
-        std::string stringMusicSpaced ( langStringMusic->getText() );
-        for ( size_t position = stringMusicSpaced.length() ; position < positionOfValue ; ++position ) {
-                stringMusicSpaced = stringMusicSpaced + " ";
+
+        std::stringstream ss;
+
+        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this, this->where );
+        if ( screen->countWidgets() == 0 )
+        {
+                screen->setBackground( GuiManager::getInstance()->findImage( "background" ) );
+                screen->setEscapeAction( new CreateMainMenu( this->where ) );
+
+                CreateMainMenu::placeHeadAndHeels( screen, /* icons */ false, /* copyrights */ false );
+
+                ss.str( std::string() ); // clear ss
+
+                // Efectos sonoros
+                ss << SoundManager::getInstance()->getVolumeOfEffects();
+
+                std::string stringEffectsSpaced ( langStringEffects->getText() );
+                for ( size_t position = stringEffectsSpaced.length() ; position < positionOfValue ; ++position ) {
+                        stringEffectsSpaced = stringEffectsSpaced + " ";
+                }
+                this->labelEffects = new Label( stringEffectsSpaced + ss.str() );
+
+                ss.str( std::string() );
+
+                // Música
+                ss << SoundManager::getInstance()->getVolumeOfMusic();
+
+                std::string stringMusicSpaced ( langStringMusic->getText() );
+                for ( size_t position = stringMusicSpaced.length() ; position < positionOfValue ; ++position ) {
+                        stringMusicSpaced = stringMusicSpaced + " ";
+                }
+                this->labelMusic = new Label( stringMusicSpaced + ss.str() );
+
+                this->listOfOptions = new Menu( langStringEffects->getX(), langStringEffects->getY() );
+                listOfOptions->addOption( labelEffects );
+                listOfOptions->addOption( labelMusic );
+
+                screen->addWidget( listOfOptions );
         }
-        Label* labelMusic = new Label( stringMusicSpaced + ss.str() );
-
-        Menu* menu = new Menu( langStringEffects->getX(), langStringEffects->getY() );
-        menu->addActiveOption( labelEffects );
-        menu->addOption( labelMusic );
-
-        screen->addWidget( menu );
-        screen->setKeyHandler( menu );
+        if ( screen->getKeyHandler() == 0 )
+        {
+                screen->setKeyHandler( listOfOptions );
+        }
 
         GuiManager::getInstance()->changeScreen( screen );
-        GuiManager::getInstance()->refresh();
 
         clear_keybuf();
 
@@ -84,7 +97,7 @@ void CreateAudioMenu::doIt ()
                         {
                                 int musicVolume = SoundManager::getInstance()->getVolumeOfMusic();
                                 int effectsVolume = SoundManager::getInstance()->getVolumeOfEffects();
-                                int value = ( menu->getActiveOption () == labelMusic ) ? musicVolume : effectsVolume ;
+                                int value = ( listOfOptions->getActiveOption () == labelMusic ) ? musicVolume : effectsVolume ;
                                 int previousValue = value;
 
                                 bool doneWithKey = false;
@@ -102,10 +115,10 @@ void CreateAudioMenu::doIt ()
 
                                 if ( value != previousValue )
                                 {
-                                        ss.str( std::string() );
+                                        ss.str( std::string() ); // clear ss
                                         ss << value;
 
-                                        if ( menu->getActiveOption () == labelMusic )
+                                        if ( listOfOptions->getActiveOption () == labelMusic )
                                         {
                                                 std::string musicStringSpaced ( langStringMusic->getText() );
                                                 for ( size_t position = musicStringSpaced.length() ; position < positionOfValue ; ++position ) {
@@ -114,7 +127,7 @@ void CreateAudioMenu::doIt ()
                                                 labelMusic->setText( musicStringSpaced + ss.str() );
                                                 SoundManager::getInstance()->setVolumeOfMusic( value );
                                         }
-                                        else if ( menu->getActiveOption () == labelEffects )
+                                        else if ( listOfOptions->getActiveOption () == labelEffects )
                                         {
                                                 std::string stringEffectsSpaced ( langStringEffects->getText() );
                                                 for ( size_t position = stringEffectsSpaced.length() ; position < positionOfValue ; ++position ) {
@@ -131,7 +144,7 @@ void CreateAudioMenu::doIt ()
                                 }
 
                                 clear_keybuf();
-                                menu->redraw ();
+                                listOfOptions->redraw ();
                         }
                 }
 

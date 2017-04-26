@@ -41,7 +41,7 @@ public:
          */
         void doIt () ;
 
-        const char * getNameOfAction ()  {  return "CreateMainMenu" ;  }
+        std::string getNameOfAction ()  {  return "CreateMainMenu" ;  }
 
         static void placeHeadAndHeels ( Screen* screen, bool iconsToo, bool copyrightsToo ) ;
 

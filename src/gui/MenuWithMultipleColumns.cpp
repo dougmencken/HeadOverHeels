@@ -27,11 +27,16 @@ MenuWithMultipleColumns::~MenuWithMultipleColumns( )
 
 void MenuWithMultipleColumns::draw( BITMAP* where )
 {
-	if ( where == 0 ) return ;
+        if ( where == 0 ) return ;
 
         int dx( this->optionImage->w );
         int dy( 0 );
         int count = 0;
+
+        if ( activeOption == 0 )
+        {
+                resetActiveOption ();
+        }
 
         // For each label
         // Para cada etiqueta
@@ -42,11 +47,11 @@ void MenuWithMultipleColumns::draw( BITMAP* where )
                 // Establece el tipo de letra dependiendo de si la opción está o no seleccionada
                 if ( label == this->activeOption )
                 {
-                	label->changeFontAndColor( "regular", "orange" );
+                        label->changeFontAndColor( "regular", "orange" );
                 }
                 else
                 {
-                	label->changeFontAndColor( "regular", "white" );
+                        label->changeFontAndColor( "regular", "white" );
                 }
 
                 // Dibuja la opción de menú en un menú de una sola columna o si es un menú de

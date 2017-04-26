@@ -24,14 +24,18 @@ CreateEndScreen::CreateEndScreen( BITMAP* picture, unsigned short rooms, unsigne
 
 void CreateEndScreen::doIt ()
 {
-        ///SoundManager::getInstance()->stopAnyOgg();
         SoundManager::getInstance()->playOgg( "music/MainTheme.ogg", /* loop */ true );
 
-        Action * mainMenu = new CreateMainMenu( this->where ) ;
-
-        Screen* screen = new Screen( 0, 0, this->where );
-        screen->setBackground( GuiManager::getInstance()->findImage( "background" ) );
-        screen->setEscapeAction( mainMenu );
+        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this, this->where );
+        if ( screen->countWidgets() > 0 )
+        {
+                screen->freeWidgets();
+        }
+        else
+        {
+                screen->setBackground( GuiManager::getInstance()->findImage( "background" ) );
+                screen->setEscapeAction( new CreateMainMenu( this->where ) );
+        }
 
         CreateMainMenu::placeHeadAndHeels( screen, /* icons */ true, /* copyrights */ false );
 
@@ -87,7 +91,7 @@ void CreateEndScreen::doIt ()
                 }
         }
 
-        label->setAction( mainMenu );
+        label->setAction( screen->getEscapeAction () );
         screen->setKeyHandler( label );
 
         GuiManager::getInstance()->changeScreen( screen );

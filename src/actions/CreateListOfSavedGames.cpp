@@ -10,43 +10,50 @@
 #include "CreateMainMenu.hpp"
 #include "LoadGame.hpp"
 #include "SaveGame.hpp"
+#include "ContinueGame.hpp"
 #include "PlaySound.hpp"
 #include "Ism.hpp"
 
 using gui::CreateListOfSavedGames;
+using gui::ContinueGame;
 
 
 CreateListOfSavedGames::CreateListOfSavedGames( BITMAP* picture, bool isLoadMenu )
-: Action( ),
-  where( picture ),
-  loadMenu( isLoadMenu )
+        : Action( )
+        , where( picture )
+        , isMenuForLoad( isLoadMenu )
 {
 
 }
 
 void CreateListOfSavedGames::doIt ()
 {
-        Screen* screen = new Screen( 0, 0, this->where );
-
-        // Imagen de fondo
-        screen->setBackground( GuiManager::getInstance()->findImage( "background" ) );
-
-        // Si es el menú de carga y se pulsa Esc se vuelve al menú principal
-        if ( loadMenu )
+        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this, this->where );
+        if ( screen->countWidgets() > 0 )
         {
+                screen->freeWidgets() ;
+        }
+        else
+        {
+                screen->setBackground( GuiManager::getInstance()->findImage( "background" ) );
+        }
+
+        if ( isLoadMenu() )
+        {
+                // return to main menu
                 screen->setEscapeAction( new CreateMainMenu( this->where ) );
         }
         else
         {
-
+                // return to play
+                screen->setEscapeAction( new ContinueGame( this->where, true ) );
         }
 
         CreateMainMenu::placeHeadAndHeels( screen, /* icons */ true, /* copyrights */ false );
 
-        Label* label = 0;
         LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
 
-        // Las partidas guardadas
+        // saved games
         Menu* menu = new Menu( 100, 160 );
         for ( unsigned int fileCount = 1; fileCount <= howManySaves; fileCount++ )
         {
@@ -58,38 +65,38 @@ void CreateListOfSavedGames::doIt ()
                 {
                         short rooms = 0;
                         short planets = 0;
-                        this->recoverFileInfo( file, &rooms, &planets );
+                        readSomeInfoFromGamefile( file, &rooms, &planets );
                         ss.str( std::string() );
                         ss << rooms << " " << languageManager->findLanguageString( "rooms" )->getText() << " "
                                 << planets << " " << languageManager->findLanguageString( "planets" )->getText();
-                        label = new Label( ss.str() );
+                        Label* label = new Label( ss.str() );
 
-                        if ( loadMenu )
+                        if ( isLoadMenu() )
                                 label->setAction( new LoadGame( this->where, fileCount ) );
                         else
                                 label->setAction( new SaveGame( this->where, fileCount ) );
+                                // very funny to change to LoadGame here by the way to get many heads, just try it
+
+                        menu->addOption( label );
                 }
                 else
                 {
                         ss.str( std::string() );
                         ss << languageManager->findLanguageString( "empty-slot" )->getText();
-                        label = new Label( ss.str() );
-                        if ( loadMenu )
+                        Label* labelOfFree = new Label( ss.str() );
+                        if ( isLoadMenu() )
                         {
-                                label->changeFontAndColor( label->getFontName (), "cyan" );
-                                label->setAction( new PlaySound( isomot::Mistake ) );
+                                labelOfFree->changeFontAndColor( labelOfFree->getFontName (), "cyan" );
+                                labelOfFree->setAction( new PlaySound( isomot::Mistake ) );
                         }
                         else
                         {
-                                label->changeFontAndColor( label->getFontName (), "orange" );
-                                label->setAction( new SaveGame( this->where, fileCount ) );
+                                labelOfFree->changeFontAndColor( labelOfFree->getFontName (), "orange" );
+                                labelOfFree->setAction( new SaveGame( this->where, fileCount ) );
                         }
-                }
 
-                if ( fileCount == 1 )
-                        menu->addActiveOption( label );
-                else
-                        menu->addOption( label );
+                        menu->addOption( labelOfFree );
+                }
         }
 
         screen->addWidget( menu );
@@ -98,7 +105,7 @@ void CreateListOfSavedGames::doIt ()
         GuiManager::getInstance()->changeScreen( screen );
 }
 
-void CreateListOfSavedGames::recoverFileInfo( const std::string& fileName, short* rooms, short* planets )
+void CreateListOfSavedGames::readSomeInfoFromGamefile( const std::string& fileName, short* rooms, short* planets )
 {
         try
         {
@@ -111,8 +118,8 @@ void CreateListOfSavedGames::recoverFileInfo( const std::string& fileName, short
                                 ( saveGameXML->freeSafari() ? 1 : 0 ) +
                                 ( saveGameXML->freeBlacktooth() ? 1 : 0 );
         }
-        catch( const xml_schema::exception& e )
+        catch ( const xml_schema::exception& e )
         {
-                std::cout << e << std::endl ;
+                std::cout << "CreateListOfSavedGames::readSomeInfoFromGamefile got " << e << std::endl ;
         }
 }

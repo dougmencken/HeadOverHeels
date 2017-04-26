@@ -34,11 +34,10 @@ public:
 
         /**
          * Constructor
-         * @param x Coordenada X de pantalla donde situar el elemento
-         * @param y Coordenada Y de pantalla donde situar el elemento
-         * @param picture Imagen donde se volcará la pantalla
+         * @param picture Where to draw this screen
+         * @param action Action for which this screen is created
          */
-        Screen( unsigned int x, unsigned int y, BITMAP* picture ) ;
+        Screen( BITMAP * picture, Action * action ) ;
 
         virtual ~Screen( ) ;
 
@@ -58,6 +57,10 @@ public:
          * @param widget Un componente de la interfaz de usuario
          */
         void addWidget ( Widget* widget ) ;
+
+        size_t countWidgets () {  return widgets.size () ;  }
+
+        void freeWidgets () ;
 
 private:
 
@@ -81,6 +84,8 @@ private:
          */
         std::list < Widget * > widgets ;
 
+        Action* actionOfScreen ;
+
         Action* escapeAction ;
 
         Widget* keyHandler ;
@@ -93,9 +98,11 @@ public: // Operaciones de consulta y actualización
          */
         void setBackground ( BITMAP* image ) {  backgroundPicture = image ;  }
 
+        Action * getActionOfScreen () const {  return actionOfScreen ;  }
+
         void setEscapeAction ( Action * action ) {  escapeAction = action ;  }
 
-        Action * getEscapeAction () {  return escapeAction ;  }
+        Action * getEscapeAction () const {  return escapeAction ;  }
 
         /**
          * Assign the successor of this component in the chain to handle of typing of a key
@@ -103,7 +110,7 @@ public: // Operaciones de consulta y actualización
          */
         void setKeyHandler ( Widget* widget ) {  keyHandler = widget ;  }
 
-        Widget * getKeyHandler () {  return keyHandler ;  }
+        Widget * getKeyHandler () const {  return keyHandler ;  }
 
 };
 

@@ -23,6 +23,7 @@ namespace gui
 {
 
 class Screen;
+class Action;
 class LanguageManager;
 class ConfigurationManager;
 
@@ -67,6 +68,14 @@ public:
         * Change the current screen
         */
         void changeScreen ( Screen* newScreen ) ;
+
+       /*
+        * Search in list of screens for the one associated with this action
+        * When there's no such screen found, create a new one with a given picture
+        */
+        Screen * findOrCreateScreenForAction ( Action * action, BITMAP * picture ) ;
+
+        void freeScreens () ;
 
        /**
         * Actualiza el contenido de la pantalla
@@ -117,7 +126,7 @@ private:
         */
         Screen * screen ;
 
-        std::list < Screen * > listOfPreviousScreens;
+        std::map < std::string, Screen * > listOfScreens;
 
        /**
         * Imagen donde se dibujará la interfaz gráfica

@@ -29,16 +29,22 @@ CreatePlanetsScreen::CreatePlanetsScreen( BITMAP* picture, bool gameInProgress )
 
 void CreatePlanetsScreen::doIt ()
 {
-        ///SoundManager::getInstance()->stopAnyOgg();
         SoundManager::getInstance()->playOgg( "music/HeadOverHeels.ogg", /* loop */ false );
 
         Label* label = 0;
         LanguageText* langString = 0;
-        Screen* planets = new Screen( 0, 0, this->where );
         LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
 
-        // Imagen de fondo
-        planets->setBackground( GuiManager::getInstance()->findImage( "background" ) );
+        Screen* planets = GuiManager::getInstance()->findOrCreateScreenForAction( this, this->where );
+
+        if ( planets->countWidgets() == 0 )
+        {
+                planets->setBackground( GuiManager::getInstance()->findImage( "background" ) );
+        }
+        else
+        {
+                planets->freeWidgets() ;
+        }
 
         // Etiqueta fija: El Imperio Blacktooth
         langString = languageManager->findLanguageString( "blacktooth-empire" );

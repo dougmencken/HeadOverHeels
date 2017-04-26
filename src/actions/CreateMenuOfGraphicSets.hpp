@@ -21,6 +21,8 @@
 namespace gui
 {
 
+class Menu;
+
 /**
  * Create menu with list of graphic sets
  */
@@ -33,19 +35,24 @@ public:
         /**
          * Constructor
          * @param picture Image where to draw
+         * @param previous Instance of action to do on escape
          */
-        CreateMenuOfGraphicSets( BITMAP* picture ) ;
+        CreateMenuOfGraphicSets( BITMAP * picture, Action * previous ) ;
 
         /**
          * Show this menu
          */
         void doIt () ;
 
-        const char * getNameOfAction ()  {  return "CreateMenuOfGraphicSets" ;  }
+        std::string getNameOfAction ()  {  return "CreateMenuOfGraphicSets" ;  }
 
 private:
 
-        BITMAP* where ;
+        BITMAP * where ;
+
+        Action * actionOnEscape ;
+
+        Menu * menuOfGraphicSets;
 
         std::map < std::string, std::string > graphicSets ;
 

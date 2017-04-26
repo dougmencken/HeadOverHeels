@@ -20,13 +20,20 @@ CreateCongratulationsScreen::CreateCongratulationsScreen( BITMAP* picture, unsig
 
 void CreateCongratulationsScreen::doIt ()
 {
-        LanguageText* langString = 0;
-        Screen* screen = new Screen( 0, 0, this->where );
         LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
+        LanguageText* langString = 0;
 
-        // Imagen de fondo
-        screen->setBackground( GuiManager::getInstance()->findImage( "background" ) );
-        screen->setEscapeAction( new CreateEndScreen( this->where, rooms, planets ) );
+        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this, this->where );
+
+        if ( screen->countWidgets() == 0 )
+        {
+                screen->setBackground( GuiManager::getInstance()->findImage( "background" ) );
+                screen->setEscapeAction( new CreateEndScreen( this->where, rooms, planets ) );
+        }
+        else
+        {
+                screen->freeWidgets() ;
+        }
 
         // Head coronado
         screen->addWidget( new Icon( 192, 50, GuiManager::getInstance()->findImage( "crown" ) ) );
