@@ -33,11 +33,10 @@ void CreateEndScreen::doIt ()
         }
         else
         {
-                screen->setBackground( GuiManager::getInstance()->findImage( "background" ) );
                 screen->setEscapeAction( new CreateMainMenu( this->where ) );
         }
 
-        CreateMainMenu::placeHeadAndHeels( screen, /* icons */ true, /* copyrights */ false );
+        screen->placeHeadAndHeels( /* icons */ true, /* copyrights */ false );
 
         Label* label = 0;
         LanguageText* langString = 0;

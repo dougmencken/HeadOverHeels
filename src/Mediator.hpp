@@ -24,16 +24,17 @@
 #endif
 #include <pthread.h>
 #include <sys/time.h>
+
 #include "Ism.hpp"
+
+#include "Room.hpp"
 
 
 namespace isomot
 {
 
-// Declaraciones adelantadas
 class Mediated;
 class Item;
-class Room;
 class FloorTile;
 class GridItem;
 class FreeItem;
@@ -41,6 +42,7 @@ class PlayerItem;
 class Door;
 class TransparencyManager;
 class ItemDataManager;
+
 
 /**
  * En Isomot una columna es una lista de elementos rejilla que se dibujarán a lo largo del eje Z
@@ -53,10 +55,12 @@ typedef std::list < GridItem* > Column ;
  */
 void* updateThread ( void* thisClass ) ;
 
+
 /**
- * Mediador entre los distintos elementos de la sala. Recoge las peticiones lanzadas por los elementos ante
- * determinados sucesos y las envía a otros elementos para que las procesen
+ * Mediator for various items of the room. It collects requests sent by items at some events,
+ * and forwards them to other items
  */
+
 class Mediator
 {
 
@@ -452,50 +456,50 @@ public: // Operaciones de consulta y actualización
         * Coordenadas de pantalla X donde está situada la coordenada origen de la sala
         * @return Un número entero
         */
-        int getX0 () const ;
+        int getX0 () const {  return room->getX0() ;  }
 
        /**
         * Coordenadas de pantalla Y donde está situada la coordenada origen de la sala
         * @return Un número entero
         */
-        int getY0 () const ;
+        int getY0 () const {  return room->getY0() ;  }
 
        /**
         * Devuelve el número de losetas de la sala en el eje X
         * @return Una número positivo
         */
-        int getTilesX () const ;
+        int getTilesX () const {  return room->tilesNumber.first ;  }
 
        /**
         * Devuelve el número de losetas de la sala en el eje X
         * @return Una número positivo
         */
-        int getTilesY () const ;
+        int getTilesY () const {  return room->tilesNumber.second ;  }
 
        /**
         * Devuelve la longitud del lado de una loseta en unidades isométricas
         * @return Un valor múltiplo de dos
         */
-        int getTileSize () const ;
+        int getTileSize () const {  return room->tileSize ;  }
 
        /**
-        * Grado de opacidad de las sombras
-        * @return Un valor entre 0, sin sombras, hasta 256, sombras totalmente opacas
+        * Degree for opacity of shadows
+        * @return A value between 0, no shadows, up to 256, fully opaque shadows
         */
-        short getShadingScale () const ;
+        short getDegreeOfShading () const {  return room->shadingScale ;  }
 
        /**
         * Límite de la sala
         * @param direction Un punto cardinal indicativo del límite que se quiere obtener
         * @return Un valor en unidades isométricas
         */
-        unsigned short getBound ( const Direction& direction) ;
+        unsigned short getBound ( const Direction& direction ) ;
 
        /**
         * Sala en la que negocia este mediador
         * @return Una sala
         */
-        Room* getRoom () const ;
+        Room* getRoom () const {  return room ;  }
 
        /**
         * Establece el jugador controlado por el usuario
@@ -508,7 +512,7 @@ public: // Operaciones de consulta y actualización
         * @return Un jugador ó 0 si no hay ninguno en la sala. El segundo caso puede darse durante
         * la transición entre salas
         */
-        PlayerItem* getActivePlayer () const ;
+        PlayerItem* getActivePlayer () const {  return this->activePlayer ;  }
 
        /**
         * Jugador inactivo, aquel que no está controlando el usuario

@@ -30,7 +30,7 @@ gamedatagfxgui_DATA = background.png \
 		      penitentiary-frame.png \
 		      safari.png \
 		      safari-frame.png \
-		      selected-option.png \
-		      selected-option-mini.png \
+		      chosen-option.png \
+		      chosen-option-mini.png \
 		      shield.gray.png \
 		      shield.png

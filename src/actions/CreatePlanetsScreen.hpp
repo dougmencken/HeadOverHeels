@@ -32,6 +32,8 @@ public:
          */
         CreatePlanetsScreen( BITMAP* picture, bool gameInProgress );
 
+        virtual ~CreatePlanetsScreen( ) ;
+
         /**
          * Crea la pantalla de los planetas
          */
@@ -100,6 +102,20 @@ private:
          * Indica si Safari ha sido liberado
          */
         bool safariFree ;
+
+        BITMAP * chapeau ;
+
+        BITMAP * chapeauTriste ;
+
+        BITMAP * planetBlacktooth ;
+
+        BITMAP * planetSafari ;
+
+        BITMAP * planetBookworld ;
+
+        BITMAP * planetEgyptus ;
+
+        BITMAP * planetPenitentiary ;
 
 };
 

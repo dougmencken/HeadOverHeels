@@ -596,7 +596,7 @@ void Room::draw( BITMAP* where )
                 // Se calcula la posición de la cámara
                 if ( tilesNumber.first > 10 || tilesNumber.second > 10 )
                 {
-                        camera->center( mediator->getActivePlayer () );
+                        camera->centerOn( mediator->getActivePlayer () );
                 }
 
                 // Se dibujan las losetas

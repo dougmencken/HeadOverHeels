@@ -15,49 +15,53 @@
 #include "Ism.hpp"
 #include "BehaviorState.hpp"
 
+
 namespace isomot
 {
 
-// Declaraciones adelantadas
-class Behavior;
-class FreeItem;
+class Behavior ;
+class FreeItem ;
+
 
 /**
  * Caída de un elemento
  */
+
 class FallState : public BehaviorState
 {
+
 protected:
 
-	FallState();
+        FallState( ) ;
 
 public:
 
-	virtual ~FallState();
+        virtual ~FallState( ) ;
 
-  /**
-   * Único objeto de esta clase para toda la aplicación
-   * @return Un puntero a la clase madre para hacer uso del polimorfismo de clase
-   */
-	static BehaviorState* getInstance();
+       /**
+        * Único objeto de esta clase para toda la aplicación
+        * @return Un puntero a la clase madre para hacer uso del polimorfismo de clase
+        */
+        static BehaviorState * getInstance () ;
 
-  /**
-   * Estado que hace caer a un elemento
-   * @param behavior Comportamiento usuario del estado de caída
-   * @return true si se produjo la caída o false si hubo colisión
-   */
-	virtual bool fall(Behavior* behavior);
-
-private:
-
-  void assignAnchor(FreeItem* freeItem, std::stack<int> bottomItems);
+       /**
+        * Estado que hace caer a un elemento
+        * @param behavior Comportamiento usuario del estado de caída
+        * @return true si se produjo la caída o false si hubo colisión
+        */
+        virtual bool fall ( Behavior * behavior ) ;
 
 private:
 
-  /**
-   * Único objeto de esta clase para toda la aplicación
-   */
-  static BehaviorState* instance;
+        void assignAnchor ( FreeItem * freeItem, std::stack < int > bottomItems ) ;
+
+private:
+
+       /**
+        * Único objeto de esta clase para toda la aplicación
+        */
+        static BehaviorState * instance ;
+
 };
 
 }

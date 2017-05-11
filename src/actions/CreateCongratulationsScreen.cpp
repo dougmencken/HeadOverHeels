@@ -1,4 +1,7 @@
+
 #include "CreateCongratulationsScreen.hpp"
+
+#include "GameManager.hpp"
 #include "GuiManager.hpp"
 #include "LanguageManager.hpp"
 #include "Screen.hpp"
@@ -6,16 +9,22 @@
 #include "TextField.hpp"
 #include "CreateEndScreen.hpp"
 
-using gui::CreateCongratulationsScreen;
+using gui::CreateCongratulationsScreen ;
+using isomot::GameManager ;
 
 
-CreateCongratulationsScreen::CreateCongratulationsScreen( BITMAP* picture, unsigned short rooms, unsigned short planets )
-: Action( ),
-  where( picture ),
-  rooms( rooms ),
-  planets( planets )
+CreateCongratulationsScreen::CreateCongratulationsScreen( BITMAP* picture, unsigned short rooms, unsigned short planets ) : Action( )
+	, where( picture )
+	, rooms( rooms )
+	, planets( planets )
+	, pictureOfCrown( 0 )
 {
 
+}
+
+CreateCongratulationsScreen::~CreateCongratulationsScreen( )
+{
+        delete pictureOfCrown ;
 }
 
 void CreateCongratulationsScreen::doIt ()
@@ -27,7 +36,6 @@ void CreateCongratulationsScreen::doIt ()
 
         if ( screen->countWidgets() == 0 )
         {
-                screen->setBackground( GuiManager::getInstance()->findImage( "background" ) );
                 screen->setEscapeAction( new CreateEndScreen( this->where, rooms, planets ) );
         }
         else
@@ -35,13 +43,15 @@ void CreateCongratulationsScreen::doIt ()
                 screen->freeWidgets() ;
         }
 
+        this->pictureOfCrown = GameManager::refreshPicture( pictureOfCrown, "crown.png" );
+
         // Head coronado
-        screen->addWidget( new Icon( 192, 50, GuiManager::getInstance()->findImage( "crown" ) ) );
-        screen->addWidget( new Icon( 192, 100, GuiManager::getInstance()->findImage( "head" ) ) );
+        screen->addWidget( new Icon( 192, 50, pictureOfCrown ) );
+        screen->addIconOfHeadAt( 192, 100 );
 
         // Heels coronado
-        screen->addWidget( new Icon( 400, 50, GuiManager::getInstance()->findImage( "crown" ) ) );
-        screen->addWidget( new Icon( 400, 100, GuiManager::getInstance()->findImage( "heels" ) ) );
+        screen->addWidget( new Icon( 400, 50, pictureOfCrown ) );
+        screen->addIconOfHeelsAt( 400, 100 );
 
         // Texto final
         langString = languageManager->findLanguageString( "final-text" );

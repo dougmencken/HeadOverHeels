@@ -14,7 +14,9 @@
 #include <utility>
 #include <cmath>
 #include <allegro.h>
+
 #include "Ism.hpp"
+
 #include "Item.hpp"
 #include "Drawable.hpp"
 
@@ -25,10 +27,10 @@ namespace isomot
 class ItemData;
 
 /**
- * Los elementos libres son aquellos que pueden estar en cualquier lugar y moverse libremente
- * por la sala como, por ejemplo, los enemigos, el propio jugador o todo aquello que deba tener
- * anchuras distintas de las anchuras de las celdas de la rejilla
+ * Free elements are those that can be anywhere and move freely around the room
+ * such as players, enemies, or something which widths differ from widths of grid cells
  */
+
 class FreeItem : public Drawable, public Item
 {
 
@@ -101,54 +103,24 @@ public:
 
         /**
          * Cambia el valor de la coordenada X
-         * @param value Nuevo valor para X
-         * @return true si se pudo cambiar el dato o false si hubo colisión y no hubo cambio
-         */
-        virtual bool changeX ( int value ) ;
-
-        /**
-         * Cambia el valor de la coordenada Y
-         * @param value Nuevo valor para Y
-         * @return true si se pudo cambiar el dato o false si hubo colisión y no hubo cambio
-         */
-        virtual bool changeY ( int value ) ;
-
-        /**
-         * Cambia el valor de la coordenada Z
-         * @param value Nuevo valor para Z
-         * @return true si se pudo cambiar el dato o false si hubo colisión y no hubo cambio
-         */
-        virtual bool changeZ ( int value ) ;
-
-        /**
-         * Cambia la posición del elemento
-         * @param x Nuevo valor para la coordenada X
-         * @param y Nuevo valor para la coordenada Y
-         * @param z Nuevo valor para la coordenada Z
-         * @return true si se pudo cambiar el dato o false si hubo colisión y no hubo cambio
-         */
-        virtual bool changePosition ( int x, int y, int z ) ;
-
-        /**
-         * Cambia el valor de la coordenada X
          * @param value Valor que se sumará a la coordenada X actual
          * @return true si se pudo cambiar el dato o false si hubo colisión y no hubo cambio
          */
-        virtual bool addX ( int value ) ;
+        virtual bool addToX ( int value ) ;
 
         /**
          * Cambia el valor de la coordenada Y
          * @param value Valor que se sumará a la coordenada Y actual
          * @return true si se pudo cambiar el dato o false si hubo colisión y no hubo cambio
          */
-        virtual bool addY ( int value ) ;
+        virtual bool addToY ( int value ) ;
 
         /**
          * Cambia el valor de la coordenada Z
          * @param value Valor que se sumará a la coordenada Z actual
          * @return true si se pudo cambiar el dato o false si hubo colisión y no hubo cambio
          */
-        virtual bool addZ ( int value ) ;
+        virtual bool addToZ ( int value ) ;
 
         /**
          * Cambia la posición del elemento
@@ -157,7 +129,7 @@ public:
          * @param z Valor que se sumará a la coordenada Z actual
          * @return true si se pudo cambiar el dato o false si hubo colisión y no hubo cambio
          */
-        virtual bool addPosition ( int x, int y, int z ) ;
+        virtual bool addToPosition ( int x, int y, int z ) ;
 
         /**
          * Cambia el grado de transparencia del elemento
@@ -257,7 +229,7 @@ public: // Operaciones de consulta y actualización
          * conservar el actual
          * @return Un registro con los datos que caracterizan al elemento
          */
-        ItemData * getItemData () ;
+        ItemData * getDataOfFreeItem () const {  return dataOfItem ;  }
 
 };
 

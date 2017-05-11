@@ -101,17 +101,10 @@ public:
 
         /**
          * Cambia el valor de la coordenada Z
-         * @param value Nuevo valor para Z
-         * @return true si se pudo cambiar el dato o false si hubo colisión y no hubo cambio
-         */
-        virtual bool changeZ ( int value ) ;
-
-        /**
-         * Cambia el valor de la coordenada Z
          * @param value Valor que se sumará a la coordenada Z actual
          * @return true si se pudo cambiar el dato o false si hubo colisión y no hubo cambio
          */
-        virtual bool addZ ( int value ) ;
+        virtual bool addToZ ( int value ) = 0 ;
 
         /**
          * Comprueba si el elemento puede moverse a la posición indicada
@@ -158,7 +151,7 @@ protected:
         /**
          * Datos invariables del elemento, aquellos que definen sus características básicas
          */
-        ItemData * itemData ;
+        ItemData * dataOfItem ;
 
         /**
          * Posición espacial X en unidades isométricas
@@ -309,8 +302,6 @@ public: // Operaciones de consulta y actualización
          */
         bool isMortal () const ;
 
-        ItemData* getItemData () const {  return this->itemData ;  }
-
         /**
          * Cuántos fotogramas diferentes tiene el elemento para cada una de las direcciones posibles ~
          * norte, sur, este y oeste
@@ -405,7 +396,7 @@ public: // Operaciones de consulta y actualización
          * Comportamiento del elemento
          * @return Un puntero a un comportamiento
          */
-        Behavior * getBehavior () ;
+        Behavior * getBehavior () const {  return behavior ;  }
 
         /**
          * Elemento que sirve de referencia para saber si éste debe ser movido cuando otros
@@ -419,7 +410,7 @@ public: // Operaciones de consulta y actualización
          * estén debajo
          * @return Un elemento ó 0 si no hay ninguno
          */
-        Item * getAnchor () ;
+        Item * getAnchor () const {  return this->anchor ;  }
 
 };
 

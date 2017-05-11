@@ -15,17 +15,41 @@ Menu::Menu( int x, int y )
 : Widget( x, y ),
         handlerOfKeys( 0 ),
         activeOption( 0 ),
-        optionImage( GuiManager::getInstance()->findImage( "option" ) ),
-        selectedOptionImage( GuiManager::getInstance()->findImage( "selected-option" ) ),
-        selectedOptionImageMini( GuiManager::getInstance()->findImage( "selected-option-mini" ) )
+        optionImage( 0 ),
+        chosenOptionImage( 0 ),
+        chosenOptionImageMini( 0 )
 {
-
+        refreshPictures ();
 }
 
 Menu::~Menu( )
 {
         std::for_each( options.begin (), options.end (), DeleteObject() );
         options.clear();
+}
+
+void Menu::refreshPictures ()
+{
+        if ( optionImage != 0 )
+        {
+                delete optionImage;
+                optionImage = 0;
+        }
+        optionImage = load_png( ( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + "option.png" ).c_str (), 0 );
+
+        if ( chosenOptionImage != 0 )
+        {
+                delete chosenOptionImage;
+                chosenOptionImage = 0;
+        }
+        chosenOptionImage = load_png( ( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + "chosen-option.png" ).c_str (), 0 );
+
+        if ( chosenOptionImageMini != 0 )
+        {
+                delete chosenOptionImageMini;
+                chosenOptionImageMini = 0;
+        }
+        chosenOptionImageMini = load_png( ( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + "chosen-option-mini.png" ).c_str (), 0 );
 }
 
 void Menu::draw( BITMAP* where )
@@ -36,6 +60,8 @@ void Menu::draw( BITMAP* where )
         {
                 resetActiveOption ();
         }
+
+        refreshPictures ();
 
         int dx( this->optionImage->w );
         int dy( 0 );
@@ -56,8 +82,9 @@ void Menu::draw( BITMAP* where )
                         label->changeFontAndColor( "regular", label->getColor() );
                 }
 
-                BITMAP* mark = ( this->activeOption == label ) ? this->selectedOptionImage : this->optionImage ;
-                draw_sprite( where, mark, getX (), getY () + dy );
+                BITMAP * mark = ( this->activeOption == label ) ? this->chosenOptionImage : this->optionImage ;
+                if ( mark != 0 )
+                        draw_sprite( where, mark, getX (), getY () + dy );
 
                 // Ajusta la posición de la etiqueta
                 label->changePosition( getX () + dx, getY () + dy );

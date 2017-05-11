@@ -27,10 +27,9 @@ class Icon : public Widget
 public:
 
        /**
-        * Constructor
-        * @param x Coordenada X de pantalla donde situar el elemento
-        * @param x Coordenada X de pantalla donde situar el elemento
-        * @param image La imagen a presentar
+        * @param x horizontal offset
+        * @param y vertical offset
+        * @param image la imagen a presentar
         */
         Icon( int x, int y, BITMAP * image ) ;
 
@@ -40,16 +39,17 @@ public:
         * Dibuja el elemento
         * @param where Imagen donde será dibujado
         */
-        void draw ( BITMAP* where ) ;
+        void draw ( BITMAP * where ) ;
 
-        void handleKey ( int rawKey ) { /* do nothing */ }
+        void handleKey ( int rawKey ) {  /* do nothing */  }
+
+        BITMAP * getPicture () const {  return icon ;  }
+
+        void setPicture ( BITMAP * newPicture ) {  delete icon ;  icon = newPicture ;  }
 
 private:
 
-       /**
-        * La imagen del icono
-        */
-        BITMAP* image ;
+        BITMAP * icon ;
 
 };
 

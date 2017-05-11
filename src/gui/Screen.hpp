@@ -18,10 +18,12 @@
 #include <allegro.h>
 #include "Widget.hpp"
 
+
 namespace gui
 {
 
-class Action;
+class Action ;
+class Icon ;
 
 /**
  * La pantalla del juego: un contenedor donde mostrar los elementos de la interfaz
@@ -62,6 +64,12 @@ public:
 
         void freeWidgets () ;
 
+        void addIconOfHeadAt ( int x, int y ) ;
+
+        void addIconOfHeelsAt ( int x, int y ) ;
+
+        void placeHeadAndHeels ( bool iconsToo, bool copyrightsToo ) ;
+
 private:
 
         /**
@@ -84,11 +92,15 @@ private:
          */
         std::list < Widget * > widgets ;
 
-        Action* actionOfScreen ;
+        Action * actionOfScreen ;
 
-        Action* escapeAction ;
+        Action * escapeAction ;
 
-        Widget* keyHandler ;
+        Widget * keyHandler ;
+
+        Icon * iconOfHead ;
+
+        Icon * iconOfHeels ;
 
 public: // Operaciones de consulta y actualización
 
@@ -96,7 +108,13 @@ public: // Operaciones de consulta y actualización
          * Establece la imagen de fondo de la pantalla
          * @param image Una imagen
          */
-        void setBackground ( BITMAP* image ) {  backgroundPicture = image ;  }
+        void setBackground ( BITMAP * image ) {  backgroundPicture = image ;  }
+
+        BITMAP * getBackground () const {  return backgroundPicture ;  }
+
+        void refreshBackground () ;
+
+        void refreshIcons () ;
 
         Action * getActionOfScreen () const {  return actionOfScreen ;  }
 

@@ -1,23 +1,30 @@
 
 #include "Icon.hpp"
 
+
 namespace gui
 {
 
-Icon::Icon( int x, int y, BITMAP* image ) : Widget( x, y )
+Icon::Icon( int x, int y, BITMAP* image ) :
+        Widget( x, y ) ,
+        icon( image )
 {
-        this->image = image;
+
 }
 
 Icon::~Icon()
 {
-
+        delete icon ;
+        icon = 0 ;
 }
 
 void Icon::draw( BITMAP* where )
 {
-        // Dibuja el icono en la imagen destino
-        draw_sprite( where, image, this->getX(), this->getY() );
+        if ( icon != 0 )
+        {
+                // dibuja el icono en la imagen destino
+                draw_sprite( where, icon, getX(), getY() );
+        }
 }
 
 }

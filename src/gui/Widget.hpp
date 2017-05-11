@@ -39,7 +39,7 @@ public:
         /**
          * Dibuja el elemento
          */
-        virtual void draw ( BITMAP* where ) = 0 ;
+        virtual void draw ( BITMAP * where ) = 0 ;
 
         /**
          * Recibe la pulsación de una tecla. Las subclases pueden responder a dicho evento

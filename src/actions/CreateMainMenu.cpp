@@ -20,67 +20,6 @@ using gui::CreateMainMenu;
 using isomot::SoundManager;
 
 
-/* static */
-void CreateMainMenu::placeHeadAndHeels( Screen* screen, bool iconsToo, bool copyrightsToo )
-{
-        Label* label = 0;
-
-        label = new Label( 64, 22, "Jon", "regular", "multicolor" );
-        screen->addWidget( label );
-
-        label = new Label( 40, 52, "Ritman", "regular", "multicolor" );
-        screen->addWidget( label );
-
-        label = new Label( 500, 22, "Bernie", "regular", "multicolor" );
-        screen->addWidget( label );
-
-        label = new Label( 483, 52, "Drummond", "regular", "multicolor" );
-        screen->addWidget( label );
-
-        label = new Label( 200, 24, "Head" );
-        label->changeFontAndColor( "big", "yellow" );
-        screen->addWidget( label );
-
-        label = new Label( 280, 45, "over", "regular", "multicolor" );
-        screen->addWidget( label );
-
-        label = new Label( 360, 24, "Heels" );
-        label->changeFontAndColor( "big", "yellow" );
-        screen->addWidget( label );
-
-        if ( iconsToo )
-        {
-                screen->addWidget( new Icon( 206, 84, GuiManager::getInstance()->findImage( "head" ) ) );
-                screen->addWidget( new Icon( 378, 84, GuiManager::getInstance()->findImage( "heels" ) ) );
-        }
-
-        if ( copyrightsToo )
-        {
-                const int whereX = 56;
-                const int whereY = 440;
-                const int stepY = 28;
-
-                // (c) 1987 Ocean Software Ltd.
-                std::string copyrightString ( "{ 1987 Ocean Software Ltd." );
-                label = new Label( whereX, whereY, copyrightString );
-                label->changeFontAndColor( "regular", "cyan" );
-                screen->addWidget( label );
-
-                // (c) 2009 Jorge Rodríguez Santos
-                copyrightString = "{ 2009 Jorge Rodríguez Santos" ;
-                label = new Label( whereX, whereY - stepY, copyrightString );
-                label->changeFontAndColor( "regular", "orange" );
-                screen->addWidget( label );
-
-                // (c) 2017 Douglas Mencken
-                copyrightString = "{ 2017 Douglas Mencken" ;
-                label = new Label( whereX, whereY - stepY - stepY, copyrightString );
-                label->changeFontAndColor( "regular", "yellow" );
-                screen->addWidget( label );
-        }
-}
-
-
 CreateMainMenu::CreateMainMenu( BITMAP* picture ) :
         Action(),
         where( picture )
@@ -99,9 +38,7 @@ void CreateMainMenu::doIt ()
         Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this, this->where );
         if ( screen->countWidgets() == 0 )
         {
-                screen->setBackground( GuiManager::getInstance()->findImage( "background" ) );
-
-                CreateMainMenu::placeHeadAndHeels( screen, true, true );
+                screen->placeHeadAndHeels( /* icons */ true, /* copyrights */ true );
 
                 LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
 

@@ -43,8 +43,6 @@ public:
 
         std::string getNameOfAction ()  {  return "CreateMainMenu" ;  }
 
-        static void placeHeadAndHeels ( Screen* screen, bool iconsToo, bool copyrightsToo ) ;
-
 private:
 
         /**

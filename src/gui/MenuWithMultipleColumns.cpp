@@ -29,6 +29,8 @@ void MenuWithMultipleColumns::draw( BITMAP* where )
 {
         if ( where == 0 ) return ;
 
+        refreshPictures ();
+
         int dx( this->optionImage->w );
         int dy( 0 );
         int count = 0;
@@ -58,7 +60,7 @@ void MenuWithMultipleColumns::draw( BITMAP* where )
                 // doble columna, dibuja la opción en la primera columna
                 if ( count <= this->rows )
                 {
-                        BITMAP* mark = ( this->activeOption == label ) ? this->selectedOptionImageMini : this->optionImage ;
+                        BITMAP* mark = ( activeOption == label ) ? chosenOptionImageMini : optionImage ;
                         draw_sprite( where, mark, getX (), getY () + dy );
 
                         // Ajusta la posición de la etiqueta
@@ -79,13 +81,15 @@ void MenuWithMultipleColumns::draw( BITMAP* where )
                         }
 
                         // Dibuja la viñeta
-                        draw_sprite( where,
-                                        ( label == this->activeOption ? this->selectedOptionImageMini : this->optionImage ),
-                                        getX () + this->secondColumnX, getY () + dy );
+                        draw_sprite( where, ( label == activeOption ? chosenOptionImageMini : optionImage ),
+                                                getX () + secondColumnX, getY () + dy );
+
                         // Ajusta la posición de la etiqueta
                         label->changePosition( getX () + dx + this->secondColumnX, getY () + dy );
+
                         // Dibuja la etiqueta
                         label->draw( where );
+
                         // Actualiza la diferencia de la altura
                         dy += label->getFont()->getCharHeight() - 4;
                 }

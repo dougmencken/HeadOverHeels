@@ -26,10 +26,9 @@ void CreateKeyboardMenu::doIt ()
         Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this, this->where );
         if ( screen->countWidgets() == 0 )
         {
-                screen->setBackground( GuiManager::getInstance()->findImage( "background" ) );
                 screen->setEscapeAction( new CreateMainMenu( this->where ) );
 
-                CreateMainMenu::placeHeadAndHeels( screen, /* icons */ false, /* copyrights */ false );
+                screen->placeHeadAndHeels( /* icons */ false, /* copyrights */ false );
 
                 Label* label = 0;
                 LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();

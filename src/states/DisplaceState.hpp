@@ -14,47 +14,50 @@
 #include "Ism.hpp"
 #include "BehaviorState.hpp"
 
+
 namespace isomot
 {
 
-// Declaraciones adelantadas
-class Behavior;
+class Behavior ;
 
 /**
  * Desplazamiento de un elemento
  */
+
 class DisplaceState : public BehaviorState
 {
+
 protected:
 
-	DisplaceState();
+        DisplaceState( ) ;
 
 public:
 
-	virtual ~DisplaceState();
+        virtual ~DisplaceState( ) ;
 
-  /**
-   * Único objeto de esta clase para toda la aplicación
-   * @return Un puntero a la clase madre para hacer uso del polimorfismo de clase
-   */
-  static BehaviorState* getInstance();
+       /**
+        * Único objeto de esta clase para toda la aplicación
+        * @return Un puntero a la clase madre para hacer uso del polimorfismo de clase
+        */
+        static BehaviorState * getInstance() ;
 
-  /**
-   * Estado que desplaza a un elemento
-   * @param behavior Comportamiento usuario del estado de desplazamiento
-   * @param substate Un subestado que concreta la dirección de desplazamiento
-   * @param canFall Indica si el elemento puede caer. Si se dan las condiciones para la caída
-   *                se producirá el cambio de estado correspondiente
-   * @return true si se produjo el desplazamiento o el cambio de estado; o, false si hubo colisión
-   */
-  virtual bool displace(Behavior* behavior, StateId* substate, bool canFall);
+       /**
+        * Estado que desplaza a un elemento
+        * @param behavior Comportamiento usuario del estado de desplazamiento
+        * @param substate Un subestado que concreta la dirección de desplazamiento
+        * @param canFall Indica si el elemento puede caer. Si se dan las condiciones para la caída
+        *                se producirá el cambio de estado correspondiente
+        * @return true si se produjo el desplazamiento o el cambio de estado; o, false si hubo colisión
+        */
+        virtual bool displace ( Behavior * behavior, StateId * substate, bool canFall ) ;
 
 private:
 
-  /**
-   * Único objeto de esta clase para toda la aplicación
-   */
-  static BehaviorState* instance;
+       /**
+        * Único objeto de esta clase para toda la aplicación
+        */
+        static BehaviorState * instance ;
+
 };
 
 }

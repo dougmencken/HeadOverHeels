@@ -35,8 +35,8 @@ BehaviorState* FallState::getInstance()
 
 bool FallState::fall( Behavior * behavior )
 {
-        bool isFalling = behavior->getItem()->addZ( -1 );
-        ///behavior->getItem()->setAnchor( 0 );
+        bool isFalling = behavior->getItem()->addToZ( -1 );
+        /////behavior->getItem()->setAnchor( 0 );
 
         // Si ha dejado de caer se comprueba si elemento es un jugador y
         // puede haber chocado con un elemento mortal
@@ -63,7 +63,7 @@ bool FallState::fall( Behavior * behavior )
                         bottomItems.pop();
 
                         // El elemento tiene que ser un elemento libre o uno rejilla
-                        if ( ( id >= FirstFreeId && ( id & 1 )) || ( id >= FirstGridId && !( id & 1 ) ) )
+                        if ( ( id >= FirstFreeId && ( id & 1 )) || ( id >= FirstGridId && ! ( id & 1 ) ) )
                         {
                                 Item* item = mediator->findItemById( id );
 

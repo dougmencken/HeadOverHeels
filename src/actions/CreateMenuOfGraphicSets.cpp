@@ -21,31 +21,44 @@ CreateMenuOfGraphicSets::CreateMenuOfGraphicSets( BITMAP* picture, Action* previ
         graphicSets[ "gfx" ] = "Present" ;
         graphicSets[ "gfx.2009" ] = "By Davit" ;
         graphicSets[ "gfx.riderx" ] = "By Ricardo" ;
-        graphicSets[ "gfx.2003" ] = "Initial By Davit " ;
+        graphicSets[ "gfx.2003" ] = "Initial By Davit" ;
+
+        menuOfGraphicSets = new Menu( 66, 200 );
 }
 
 void CreateMenuOfGraphicSets::doIt ()
 {
+        const size_t positionOfSecondColumn = 18;
+
         Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this, this->where );
-        if ( screen->countWidgets() == 0 || menuOfGraphicSets == 0 )
+
+        if ( screen->countWidgets() == 0 )
         {
-                screen->setBackground( gui::GuiManager::getInstance()->findImage( "background" ) );
                 screen->setEscapeAction( this->actionOnEscape );
 
-                CreateMainMenu::placeHeadAndHeels( screen, /* icons */ false, /* copyrights */ false );
+                screen->placeHeadAndHeels( /* icons */ true, /* copyrights */ false );
 
-                std::string nameOfSet = graphicSets[ "gfx" ];
+                for ( std::map < std::string, std::string >::iterator i = graphicSets.begin (); i != graphicSets.end (); ++i )
+                {
+                        std::string nameOfSet = i->second;
+                        std::string nameOfSetSpaced ( nameOfSet );
 
-                const size_t positionOfSecondColumn = 15;
+                        for ( size_t position = nameOfSetSpaced.length() ; position < positionOfSecondColumn ; ++position ) {
+                                nameOfSetSpaced = nameOfSetSpaced + " ";
+                        }
 
-                std::string stringGraphicSetSpaced ( "uno" );
-                for ( size_t position = stringGraphicSetSpaced.length() ; position < positionOfSecondColumn ; ++position ) {
-                        stringGraphicSetSpaced = stringGraphicSetSpaced + " ";
+                        Label * theLabel = new Label( nameOfSetSpaced + i->first );
+                        if ( i->first.compare( isomot::GameManager::getInstance()->getChosenGraphicSet() ) != 0 )
+                        {
+                                theLabel->changeFontAndColor( theLabel->getFontName (), "cyan" );
+                        }
+                        else
+                        {
+                                theLabel->changeFontAndColor( theLabel->getFontName (), "yellow" );
+                        }
+
+                        menuOfGraphicSets->addOption( theLabel );
                 }
-                Label* labelGraphicSet = new Label( stringGraphicSetSpaced + nameOfSet );
-
-                this->menuOfGraphicSets = new Menu( 100, 160 );
-                menuOfGraphicSets->addOption( labelGraphicSet );
 
                 screen->addWidget( menuOfGraphicSets );
                 screen->setKeyHandler( menuOfGraphicSets );
@@ -72,27 +85,22 @@ void CreateMenuOfGraphicSets::doIt ()
                         {
                                 bool doneWithKey = false;
 
-                                if ( theKey == KEY_LEFT || theKey == KEY_RIGHT )
+                                if ( theKey == KEY_ENTER )
                                 {
-                                        Label* activeSet = menuOfGraphicSets->getActiveOption() ;
+                                        std::string chosenSet = menuOfGraphicSets->getActiveOption()->getText().substr( positionOfSecondColumn ) ;
 
-                                        std::string previousSet( isomot::GameManager::getInstance()->getChosenGraphicSet() );
-
-                                        // well it’s still something TO DO ...
-                                        // now just paint it yellow or cyan
-                                        if ( theKey == KEY_LEFT )
-                                        {
-                                                activeSet->changeFontAndColor( activeSet->getFontName (), "yellow" );
-                                        }
-                                        else if ( theKey == KEY_RIGHT )
-                                        {
-                                                activeSet->changeFontAndColor( activeSet->getFontName (), "cyan" );
-                                        }
-
-                                        if ( previousSet.compare( isomot::GameManager::getInstance()->getChosenGraphicSet() ) != 0 )
+                                        if ( chosenSet.compare( isomot::GameManager::getInstance()->getChosenGraphicSet() ) != 0 )
                                         { // new set is not the same as previous one
-                                                gui::GuiManager::getInstance()->reloadImages ();
-                                                sleep( 100 );
+                                                isomot::GameManager::getInstance()->setChosenGraphicSet( chosenSet.c_str () ) ;
+
+                                                gui::GuiManager::getInstance()->refreshScreens ();
+
+                                                std::list < Label * > everySet = menuOfGraphicSets->getEveryOption ();
+                                                for ( std::list < Label * >::iterator i = everySet.begin (); i != everySet.end (); ++i )
+                                                {
+                                                        ( * i )->changeFontAndColor( ( * i )->getFontName (), "cyan" );
+                                                }
+                                                menuOfGraphicSets->getActiveOption()->changeFontAndColor( menuOfGraphicSets->getActiveOption()->getFontName (), "yellow" );
                                         }
 
                                         doneWithKey = true;

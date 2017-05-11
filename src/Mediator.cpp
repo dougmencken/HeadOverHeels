@@ -1,7 +1,6 @@
 
 #include "Mediator.hpp"
 #include "Mediated.hpp"
-#include "Room.hpp"
 #include "RoomBuilder.hpp"
 #include "Item.hpp"
 #include "GridItem.hpp"
@@ -1212,54 +1211,14 @@ bool Mediator::sortFreeItemList( FreeItem* f1, FreeItem* f2 )
         );
 }
 
-int Mediator::getX0() const
-{
-        return room->getX0();
-}
-
-int Mediator::getY0() const
-{
-        return room->getY0();
-}
-
-int Mediator::getTilesX() const
-{
-        return room->tilesNumber.first;
-}
-
-int Mediator::getTilesY() const
-{
-        return room->tilesNumber.second;
-}
-
-int Mediator::getTileSize() const
-{
-        return room->tileSize;
-}
-
-short Mediator::getShadingScale() const
-{
-        return room->shadingScale;
-}
-
 unsigned short Mediator::getBound( const Direction& direction )
 {
         return room->bounds[ direction ];
 }
 
-Room* Mediator::getRoom() const
-{
-        return room;
-}
-
 void Mediator::setActivePlayer( PlayerItem* playerItem )
 {
         this->activePlayer = playerItem;
-}
-
-PlayerItem* Mediator::getActivePlayer() const
-{
-        return this->activePlayer;
 }
 
 PlayerItem* Mediator::getHiddenPlayer() const

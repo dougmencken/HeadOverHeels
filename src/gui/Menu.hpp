@@ -86,6 +86,8 @@ protected:
          */
         void nextOption () ;
 
+        void refreshPictures () ;
+
 protected:
 
         /**
@@ -108,12 +110,12 @@ protected:
         /**
          * Viñeta para la opción seleccionada en el menú. Tamaño doble
          */
-        BITMAP* selectedOptionImage ;
+        BITMAP* chosenOptionImage ;
 
         /**
          * Viñeta para la opción seleccionada en el menú. Tamaño normal
          */
-        BITMAP* selectedOptionImageMini ;
+        BITMAP* chosenOptionImageMini ;
 
 };
 

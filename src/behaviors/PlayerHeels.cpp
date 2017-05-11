@@ -157,7 +157,7 @@ bool PlayerHeels::update()
                         break;
 
                 case StateTakenItem:
-                        playerItem->addZ( - LayerHeight );
+                        playerItem->addToZ( - LayerHeight );
                         stateId = StateWait;
                         break;
 

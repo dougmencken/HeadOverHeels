@@ -397,7 +397,7 @@ void UserControlled::wayInTeletransport( PlayerItem * playerItem )
                         // Almacena la orientación de entrada
                         playerItem->setOrientation( playerItem->getDirection() );
                         // Cambia a las burbujas pero conservando la etiqueta del jugador
-                        playerData = playerItem->getItemData();
+                        playerData = playerItem->getDataOfFreeItem() ;
                         playerItem->changeItemData( itemDataManager->findItemByLabel( transitionDataLabel ), NoDirection );
                         // Las burbujas se animarán marcha atrás
                         playerItem->setBackwardMotion();
@@ -440,7 +440,7 @@ void UserControlled::wayOutTeletransport( PlayerItem * playerItem )
                         // Anima el elemento. Si ha llegado al final hay cambio de sala
                         if ( playerItem->animate() )
                         {
-                                playerItem->addZ( -1 );
+                                playerItem->addToZ( -1 );
                                 playerItem->setExit( playerItem->getMediator()->collisionWithByLabel( TeleportLabel ) ? ByTeleport : ByTeleportToo );
                         }
                         break;
@@ -587,7 +587,7 @@ void UserControlled::drop( PlayerItem* playerItem )
         if ( takenItemData != 0 )
         {
                 // El elemento se deja justo debajo. Si el jugador no puede ascender no es posible dejarlo
-                if ( playerItem->addZ( LayerHeight ) )
+                if ( playerItem->addToZ( LayerHeight ) )
                 {
                         // Crea el elemento en la misma posición pero debajo del jugador
                         FreeItem* freeItem = new FreeItem( takenItemData,

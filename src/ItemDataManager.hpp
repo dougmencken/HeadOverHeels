@@ -172,7 +172,7 @@ protected:
         /**
          * Nombre del archivo XML que contiene los datos de los elementos
          */
-        std::string nameOfFile ;
+        std::string nameOfXMLFile ;
 
         /**
          * Datos de todos los elementos del juego

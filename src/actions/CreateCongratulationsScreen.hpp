@@ -35,6 +35,8 @@ public:
          */
         CreateCongratulationsScreen( BITMAP* picture, unsigned short rooms, unsigned short planets ) ;
 
+        virtual ~CreateCongratulationsScreen( ) ;
+
         /**
          * Crea la pantalla con el texto
          */
@@ -47,7 +49,7 @@ private:
         /**
          * Imagen donde se dibujará la interfaz gráfica
          */
-        BITMAP* where ;
+        BITMAP * where ;
 
         /**
          * Número de salas visitadas
@@ -58,6 +60,8 @@ private:
          * Número de planetas liberados
          */
         unsigned short planets ;
+
+        BITMAP * pictureOfCrown ;
 
 };
 

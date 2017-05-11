@@ -22,10 +22,10 @@
 #include "PlayerItem.hpp"
 #include "Room.hpp"
 
+
 namespace isomot
 {
 
-// Declaraciones adelantadas
 class Isomot;
 class GameFileManager;
 class PlayerItem;
@@ -56,10 +56,10 @@ enum WhyPause
 };
 
 /**
- * Se encarga de gestionar la interfaz de usuario y el motor isométrico. Además, almacena
- * los datos propios de este videojuego: vidas de los jugadores, condiciones para la
- * victoria, etc
+ * Manages user interface and isometric engine. Also, it holds data for the game
+ * such as how many player's lives left, which planets are now free, et cetera
  */
+
 class GameManager
 {
 
@@ -68,6 +68,8 @@ private:
         GameManager( ) ;
 
 public:
+
+        static BITMAP * refreshPicture ( BITMAP * picture, const char * nameOfPicture ) ;
 
         virtual ~GameManager( ) ;
 
@@ -248,6 +250,10 @@ private:
          */
         WhyPause pause () ;
 
+        void refreshImages () ;
+
+        void refreshBackgroundFrames () ;
+
 public:
 
         bool areLivesInexhaustible () const {  return vidasInfinitas ;  }
@@ -370,7 +376,55 @@ private:
          */
         bool emperator ;
 
-public: // Operaciones de consulta y actualización
+        BITMAP * frameForJail ;
+
+        BITMAP * frameForBlacktooth ;
+
+        BITMAP * frameForMarket ;
+
+        BITMAP * frameForMoon ;
+
+        BITMAP * frameForByblos ;
+
+        BITMAP * frameForSafari ;
+
+        BITMAP * frameForEgyptus ;
+
+        BITMAP * frameForPenitentiary ;
+
+        BITMAP * pictureOfHead ;
+
+        BITMAP * grayPictureOfHead ;
+
+        BITMAP * pictureOfHeels ;
+
+        BITMAP * grayPictureOfHeels ;
+
+        BITMAP * pictureOfBag ;
+
+        BITMAP * grayPictureOfBag ;
+
+        BITMAP * pictureOfHorn ;
+
+        BITMAP * grayPictureOfHorn ;
+
+        BITMAP * pictureOfDonuts ;
+
+        BITMAP * grayPictureOfDonuts ;
+
+        BITMAP * pictureOfGrandesSaltos ;
+
+        BITMAP * grayPictureOfGrandesSaltos ;
+
+        BITMAP * pictureOfGranVelocidad ;
+
+        BITMAP * grayPictureOfGranVelocidad ;
+
+        BITMAP * pictureOfEscudo ;
+
+        BITMAP * grayPictureOfEscudo ;
+
+public:
 
         /**
          * Establece el número de vidas de Head

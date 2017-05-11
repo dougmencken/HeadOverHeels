@@ -14,7 +14,7 @@ namespace isomot
 
 ItemDataManager::ItemDataManager( const std::string& name )
 {
-        this->nameOfFile = name;
+        this->nameOfXMLFile = name;
 }
 
 ItemDataManager::~ItemDataManager()
@@ -26,34 +26,26 @@ void ItemDataManager::loadItems ()
 {
         xercesc::XMLPlatformUtils::Initialize ();
 
-        // Carga el archivo XML especificado y almacena los datos XML en la lista
+        // load items from XML file, and transfer this data to the list of items
         try
         {
-                std::auto_ptr< ixml::ItemsXML > itemsXML( ixml::items( ( isomot::sharePath() + nameOfFile ) .c_str() ) );
+                std::auto_ptr< ixml::ItemsXML > itemsXML( ixml::items( ( isomot::sharePath() + nameOfXMLFile ) .c_str() ) );
 
                 for ( ixml::ItemsXML::item_const_iterator i = itemsXML->item().begin (); i != itemsXML->item().end (); ++i )
                 {
                         std::auto_ptr< ItemData > item( new ItemData );
 
-                        // Identificador único y exclusivo del elemento
-                        item->label = ( *i ).label();
-                        // Número de fotogramas en función de la dirección del elemento
-                        item->directionFrames = ( *i ).directionFrames();
-                        // Elemento ofensivo o inofensivo
-                        item->mortal = ( *i ).mortal();
-                        // Cada cuántos milisegundos cae el elemento
-                        item->weight = ( *i ).weight();
-                        // Cada cuántos milisegundos cambian los fotogramas de la secuencia de animación
-                        item->framesDelay = ( *i ).framesDelay();
-                        // Cada cuántos milisegundos se desplaza el elemento una unidad isométrica
-                        item->speed = ( *i ).speed();
-                        // Ruta a los gráficos del elemento
-                        item->setNameOfFile( ( *i ).picture().file() );
-                        // Anchura en píxeles de un fotograma
-                        item->frameWidth = ( *i ).picture().frameWidth();
-                        // Altura en píxeles de un fotograma
-                        item->frameHeight = ( *i ).picture().frameHeight();
-                        // Se almacenan los fotogramas en el vector motion siempre que el elemento no sea una puerta
+                        item->label = ( *i ).label();                           // unique label of this item
+                        item->directionFrames = ( *i ).directionFrames();       // number of frames for this direction of item
+                        item->mortal = ( *i ).mortal();                         // offensive or harmless
+                        item->weight = ( *i ).weight();                         // how long, in milliseconds, it falls
+                        item->framesDelay = ( *i ).framesDelay();               // delay, in milliseconds, between frames in animation sequence
+                        item->speed = ( *i ).speed();                           // how many milliseconds this item moves one single isometric unit
+                        item->setNameOfFile( ( *i ).picture().file() );         // name of file with item's graphics
+                        item->frameWidth = ( *i ).picture().frameWidth();       // width, in pixels, of frame
+                        item->frameHeight = ( *i ).picture().frameHeight();     // height, in pixels, of frame
+
+                        // item's frames are stored in motion vector as long as item isn't door
                         if ( ! ( *i ).door ().present () )
                         {
                                 createPictureFrames( item.get(), isomot::GameManager::getInstance()->getChosenGraphicSet() );
@@ -148,7 +140,7 @@ void ItemDataManager::loadItems ()
                                         }
                                 }
 
-                                // Se cargan el gráfico de la puerta al completo y se obtienen los gráficos de sus tres partes
+                                // load graphics for door as its three parts
                                 BITMAP* picture = load_png( ( isomot::sharePath() + isomot::GameManager::getInstance()->getChosenGraphicSet() + "/" + item->getNameOfFile( ) ).c_str () , 0 );
                                 if ( picture == 0 )
                                 {
@@ -161,34 +153,34 @@ void ItemDataManager::loadItems ()
 
                                 // Creación de la jamba izquierda
                                 BITMAP* left = cutOutLeftJamb( picture, dm, ( *i ).door().get() );
-                                leftJamb.motion.push_back(left);
-                                this->itemData.push_back(leftJamb);
+                                leftJamb.motion.push_back( left );
+                                this->itemData.push_back( leftJamb );
 
                                 // Creación de la jamba derecha
                                 BITMAP* right = cutOutRightJamb( picture, dm, ( *i ).door().get() );
                                 rightJamb.label += 1;
-                                rightJamb.motion.push_back(right);
-                                this->itemData.push_back(rightJamb);
+                                rightJamb.motion.push_back( right );
+                                this->itemData.push_back( rightJamb );
 
                                 // Creación del dintel
                                 BITMAP* top = cutOutLintel( picture, dm, ( *i ).door().get() );
                                 lintel.label += 2;
-                                lintel.motion.push_back(top);
-                                this->itemData.push_back(lintel);
+                                lintel.motion.push_back( top );
+                                this->itemData.push_back( lintel );
 
                                 // La imagen original no se volverá a utilizar
                                 destroy_bitmap( picture ) ;
                         }
                         else
                         {
-                                // Anchura en el eje X en unidades isométricas del elemento
+                                // width at axis X in isometric units
                                 item->widthX = *( ( *i ).widthX() ).begin ();
-                                // Anchura en el eje Y en unidades isométricas del elemento
+                                // width at axis Y in isometric units
                                 item->widthY = *( ( *i ).widthY() ).begin ();
-                                // Anchura en el eje Z en unidades isométricas del elemento; su altura
+                                // width at axis Z, or height, in isometric units
                                 item->height = *( ( *i ).height() ).begin ();
 
-                                // Los datos del elemento simple se incorporan a la lista
+                                // add data to the list
                                 this->itemData.push_back( *item.get() );
                         }
                 }
@@ -207,7 +199,7 @@ void ItemDataManager::loadItems ()
 
 void ItemDataManager::freeItems ()
 {
-	std::for_each( itemData.begin(), itemData.end(), destroyItemData );
+        std::for_each( itemData.begin(), itemData.end(), destroyItemData );
 }
 
 ItemData* ItemDataManager::findItemByLabel( const short label )

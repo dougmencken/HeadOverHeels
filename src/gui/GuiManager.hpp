@@ -53,12 +53,6 @@ public:
         */
         static GuiManager* getInstance () ;
 
-        void loadImages () ;
-
-        void freeImages () ;
-
-        void reloadImages () ;
-
        /**
         * Begin with the menu for this game
         */
@@ -77,17 +71,14 @@ public:
 
         void freeScreens () ;
 
+        void refreshScreens () ;
+
        /**
         * Actualiza el contenido de la pantalla
         */
         void refresh () ;
 
-       /**
-        * Busca una imagen usada en la interfaz de usuario
-        * @param name Identificador textual asignado a la imagen
-        * @return La imagen ó 0 si no existe
-        */
-        BITMAP * findImage ( const std::string& name ) ;
+        std::string getPathToPicturesOfGui () ;
 
        /**
         * Establece el idioma de la interfaz de usuario
@@ -142,12 +133,6 @@ private:
         * El gestor de idioma
         */
         LanguageManager * languageManager ;
-
-       /**
-        * Imágenes empleadas en la interfaz de usuario. Cada imagen tiene asociado un
-        * identificador textual
-        */
-        std::map < std::string, BITMAP * > images ;
 
        /**
         * Indica que la presentación de la interfaz y la gestión del teclado está activa

@@ -41,7 +41,7 @@ bool JumpState::jump( Behavior* behavior, StateId* substate, const std::vector< 
         Mediator* mediator = playerItem->getMediator();
 
         // Movimiento vertical
-        if ( ! playerItem->addZ( jumpMatrix[ *jumpIndex ].second ) )
+        if ( ! playerItem->addToZ( jumpMatrix[ *jumpIndex ].second ) )
         {
                 // Si no ha podido ascender levanta a todos los elementos que pudiera tener encima
                 if ( jumpMatrix[ *jumpIndex ].second > 0 )
@@ -80,7 +80,7 @@ bool JumpState::jump( Behavior* behavior, StateId* substate, const std::vector< 
                         }
 
                         // Ahora ya puede ascender
-                        playerItem->addZ( jumpMatrix[ *jumpIndex ].second - ( *jumpIndex > 0 && *jumpIndex % 2 == 0 ? 1 : 2 ) );
+                        playerItem->addToZ( jumpMatrix[ *jumpIndex ].second - ( *jumpIndex > 0 && *jumpIndex % 2 == 0 ? 1 : 2 ) );
                 }
         }
 
@@ -89,25 +89,25 @@ bool JumpState::jump( Behavior* behavior, StateId* substate, const std::vector< 
         {
                 case North:
                         // Movimiento hacia el norte
-                        changedData = playerItem->addX( - jumpMatrix[ *jumpIndex ].first );
+                        changedData = playerItem->addToX( - jumpMatrix[ *jumpIndex ].first );
                         displaceStateId = StateDisplaceNorth;
                         break;
 
                 case South:
                         // Movimiento hacia el sur
-                        changedData = playerItem->addX( jumpMatrix[ *jumpIndex ].first );
+                        changedData = playerItem->addToX( jumpMatrix[ *jumpIndex ].first );
                         displaceStateId = StateDisplaceSouth;
                         break;
 
                 case East:
                         // Movimiento hacia el este
-                        changedData = playerItem->addY( - jumpMatrix[ *jumpIndex ].first );
+                        changedData = playerItem->addToY( - jumpMatrix[ *jumpIndex ].first );
                         displaceStateId = StateDisplaceEast;
                         break;
 
                 case West:
-                        // Movimiento hacia el sur
-                        changedData = playerItem->addY( jumpMatrix[ *jumpIndex ].first );
+                        // Movimiento hacia el oeste
+                        changedData = playerItem->addToY( jumpMatrix[ *jumpIndex ].first );
                         displaceStateId = StateDisplaceWest;
                         break;
 
@@ -158,7 +158,7 @@ void JumpState::lift( FreeItem* sender, FreeItem* freeItem, int z )
                 else if ( freeItem->getBehavior()->getId() != ElevatorBehavior )
                 {
                         // Si no se puede levantar, se toma el elemento con el que choca para levantarlo
-                        if ( ! freeItem->addZ( z ) )
+                        if ( ! freeItem->addToZ( z ) )
                         {
                                 Mediator* mediator = freeItem->getMediator();
 
@@ -175,7 +175,7 @@ void JumpState::lift( FreeItem* sender, FreeItem* freeItem, int z )
                                 }
 
                                 // Ahora ya puede ascender
-                                freeItem->addZ( z );
+                                freeItem->addToZ( z );
                         }
                 }
         }

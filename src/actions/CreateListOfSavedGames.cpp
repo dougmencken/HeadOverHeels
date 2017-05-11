@@ -33,10 +33,6 @@ void CreateListOfSavedGames::doIt ()
         {
                 screen->freeWidgets() ;
         }
-        else
-        {
-                screen->setBackground( GuiManager::getInstance()->findImage( "background" ) );
-        }
 
         if ( isLoadMenu() )
         {
@@ -49,7 +45,7 @@ void CreateListOfSavedGames::doIt ()
                 screen->setEscapeAction( new ContinueGame( this->where, true ) );
         }
 
-        CreateMainMenu::placeHeadAndHeels( screen, /* icons */ true, /* copyrights */ false );
+        screen->placeHeadAndHeels( /* icons */ true, /* copyrights */ false );
 
         LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
 

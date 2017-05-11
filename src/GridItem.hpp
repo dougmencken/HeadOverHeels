@@ -50,23 +50,21 @@ public:
         virtual ~GridItem( ) ;
 
         /**
-         * Dibuja el elemento rejilla
+         * Draw this grid item
          */
         void draw ( BITMAP* where ) ;
 
         /**
-         * Cambia la presentación gráfica del elemento, destruyendo la imagen procesada y señalando qué elementos
-         * hay que volver a enmascarar
+         * Change graphics of this item, replacing the current image, and pointing out what to remask
          * @param image Un fotograma del elemento
          */
-        void changeImage ( BITMAP* image ) ;
+        void changeImage ( BITMAP* newImage ) ;
 
         /**
-         * Cambia la sombra de la presentación gráfica del elemento, destruyendo la imagen procesada y señalando
-         * qué elementos hay que volver a sombrear
+         * Change shadow for this item, replacing the current one, and figuring out what to reshadow
          * @param image Una sombra de un fotograma del elemento
          */
-        void changeShadow ( BITMAP* shadow ) ;
+        void changeShadow ( BITMAP* newShadow ) ;
 
         /**
          * Solicita el sombreado del elemento
@@ -87,17 +85,10 @@ public:
 
         /**
          * Cambia el valor de la coordenada Z
-         * @param value Nuevo valor para Z
-         * @return true si se pudo cambiar el dato o false si hubo colisión y no hubo cambio
-         */
-        virtual bool changeZ ( int value ) ;
-
-        /**
-         * Cambia el valor de la coordenada Z
          * @param value Valor que se sumará a la coordenada Z actual
          * @return true si se pudo cambiar el dato o false si hubo colisión y no hubo cambio
          */
-        virtual bool addZ ( int value ) ;
+        virtual bool addToZ ( int value ) ;
 
         /**
          * Cambia la altura del elemento

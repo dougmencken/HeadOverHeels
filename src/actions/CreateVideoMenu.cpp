@@ -35,10 +35,9 @@ void CreateVideoMenu::doIt ()
         Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this, this->where );
         if ( screen->countWidgets() == 0 )
         {
-                screen->setBackground( gui::GuiManager::getInstance()->findImage( "background" ) );
                 screen->setEscapeAction( new CreateMainMenu( this->where ) );
 
-                CreateMainMenu::placeHeadAndHeels( screen, /* icons */ false, /* copyrights */ false );
+                screen->placeHeadAndHeels( /* icons */ false, /* copyrights */ false );
 
                 std::string stringFullscreenSpaced ( textFullscreen->getText() );
                 for ( size_t position = stringFullscreenSpaced.length() ; position < positionOfSetting ; ++position ) {

@@ -31,7 +31,6 @@ void ShowAuthors::doIt ()
         Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this, this->where );
         if ( screen->countWidgets() == 0 )
         {
-                screen->setBackground( GuiManager::getInstance()->findImage( "background" ) );
                 screen->setEscapeAction( new CreateMainMenu( this->where ) );
 
                 LanguageText* langString = 0;

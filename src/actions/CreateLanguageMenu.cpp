@@ -42,7 +42,6 @@ void CreateLanguageMenu::doIt ()
         Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this, this->where );
         if ( screen->countWidgets() == 0 )
         {
-                screen->setBackground( GuiManager::getInstance()->findImage( "background" ) );
                 screen->setEscapeAction( new gui::CreateMainMenu( this->where ) );
 
                 Label* label = 0;
@@ -58,8 +57,8 @@ void CreateLanguageMenu::doIt ()
                 label->changeFontAndColor( "big", "yellow" );
                 screen->addWidget( label );
 
-                screen->addWidget( new Icon( 66, 24, GuiManager::getInstance()->findImage( "head" ) ) );
-                screen->addWidget( new Icon( 518, 24, GuiManager::getInstance()->findImage( "heels" ) ) );
+                screen->addIconOfHeadAt( 66, 24 );
+                screen->addIconOfHeelsAt( 518, 24 );
 
                 // Presenta los idiomas disponibles
                 MenuWithMultipleColumns * menu = new MenuWithMultipleColumns( 40, 120, 300, 11 );

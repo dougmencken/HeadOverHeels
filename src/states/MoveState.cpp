@@ -61,7 +61,7 @@ bool MoveState::move( Behavior* behavior, StateId* substate, bool canFall )
                                         freeItem->changeDirection( North );
                                 }
 
-                                changedData = freeItem->addX( -1 );
+                                changedData = freeItem->addToX( -1 );
                                 displaceStateId = StateDisplaceNorth;
                         }
                         break;
@@ -75,7 +75,7 @@ bool MoveState::move( Behavior* behavior, StateId* substate, bool canFall )
                                         freeItem->changeDirection( South );
                                 }
 
-                                changedData = freeItem->addX( 1 );
+                                changedData = freeItem->addToX( 1 );
                                 displaceStateId = StateDisplaceSouth;
                         }
                         break;
@@ -89,7 +89,7 @@ bool MoveState::move( Behavior* behavior, StateId* substate, bool canFall )
                                         freeItem->changeDirection( East );
                                 }
 
-                                changedData = freeItem->addY( -1 );
+                                changedData = freeItem->addToY( -1 );
                                 displaceStateId = StateDisplaceEast;
                         }
                         break;
@@ -103,7 +103,7 @@ bool MoveState::move( Behavior* behavior, StateId* substate, bool canFall )
                                         freeItem->changeDirection( West );
                                 }
 
-                                changedData = freeItem->addY( 1 );
+                                changedData = freeItem->addToY( 1 );
                                 displaceStateId = StateDisplaceWest;
                         }
                         break;
@@ -111,7 +111,7 @@ bool MoveState::move( Behavior* behavior, StateId* substate, bool canFall )
                 case StateMoveNortheast:
                         if ( freeItem != 0 )
                         {
-                                changedData = freeItem->addPosition( -1, -1, 0 );
+                                changedData = freeItem->addToPosition( -1, -1, 0 );
                                 displaceStateId = StateDisplaceNortheast;
                         }
                         break;
@@ -119,7 +119,7 @@ bool MoveState::move( Behavior* behavior, StateId* substate, bool canFall )
                 case StateMoveNorthwest:
                         if ( freeItem != 0 )
                         {
-                                changedData = freeItem->addPosition( -1, 1, 0 );
+                                changedData = freeItem->addToPosition( -1, 1, 0 );
                                 displaceStateId = StateDisplaceNorthwest;
                         }
                         break;
@@ -127,7 +127,7 @@ bool MoveState::move( Behavior* behavior, StateId* substate, bool canFall )
                 case StateMoveSoutheast:
                         if ( freeItem != 0 )
                         {
-                                changedData = freeItem->addPosition( 1, -1, 0 );
+                                changedData = freeItem->addToPosition( 1, -1, 0 );
                                 displaceStateId = StateDisplaceSoutheast;
                         }
                         break;
@@ -135,14 +135,14 @@ bool MoveState::move( Behavior* behavior, StateId* substate, bool canFall )
                 case StateMoveSouthwest:
                         if ( freeItem != 0 )
                         {
-                                changedData = freeItem->addPosition( 1, 1, 0 );
+                                changedData = freeItem->addToPosition( 1, 1, 0 );
                                 displaceStateId = StateDisplaceSouthwest;
                         }
                         break;
 
                 case StateMoveUp:
                         // Si no ha podido ascender, levanta a todos los elementos que pudiera tener encima
-                        if ( ! ( changedData = freeItem->addZ( 1 ) ) )
+                        if ( ! ( changedData = freeItem->addToZ( 1 ) ) )
                         {
                                 while ( ! mediator->isStackOfCollisionsEmpty() )
                                 {
@@ -155,7 +155,7 @@ bool MoveState::move( Behavior* behavior, StateId* substate, bool canFall )
                                 }
 
                                 // Ahora ya puede ascender
-                                changedData = freeItem->addZ( 1 );
+                                changedData = freeItem->addToZ( 1 );
                         }
                         break;
 
@@ -172,7 +172,7 @@ bool MoveState::move( Behavior* behavior, StateId* substate, bool canFall )
                         }
 
                         // Si pudo descender entonces deben descender con él los elementos que tiene encima
-                        if ( ( changedData = freeItem->addZ( -1 ) ) && loading )
+                        if ( ( changedData = freeItem->addToZ( -1 ) ) && loading )
                         {
                                 while ( ! topItems.empty() )
                                 {
@@ -259,7 +259,7 @@ void MoveState::ascent( FreeItem* freeItem, int z )
                 if ( freeItem->getBehavior()->getId() != ElevatorBehavior )
                 {
                         // Si no se puede levantar, se toma el elemento con el que choca para levantarlo
-                        if ( ! freeItem->addZ( z ) )
+                        if ( ! freeItem->addToZ( z ) )
                         {
                                 Mediator* mediator = freeItem->getMediator();
 
@@ -276,7 +276,7 @@ void MoveState::ascent( FreeItem* freeItem, int z )
                                 }
 
                                 // Ahora ya puede ascender
-                                freeItem->addZ( z );
+                                freeItem->addToZ( z );
                         }
 
                         // Si el elemento es un jugador y supera la altura máxima de la sala entonces pasa a
@@ -310,13 +310,13 @@ void MoveState::descend( FreeItem* freeItem, int z )
                 }
 
                 // Si puede descender entonces hace bajar a todos los elementos apilados encima
-                if ( freeItem->addZ( -1 ) && loading )
+                if ( freeItem->addToZ( -1 ) && loading )
                 {
                         // Desciende el resto de unidades. Se hace de una en una porque de lo contrario
                         // se podría detectar colisión y no descendería ninguna unidad
                         for ( int i = 0; i < ( z - 1 ); i++ )
                         {
-                                freeItem->addZ( -1 );
+                                freeItem->addToZ( -1 );
                         }
 
                         // Para todo elemento que pueda tener encima

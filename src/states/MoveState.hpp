@@ -14,31 +14,33 @@
 #include "Ism.hpp"
 #include "BehaviorState.hpp"
 
+
 namespace isomot
 {
 
-// Declaraciones adelantadas
-class Behavior;
-class FreeItem;
+class Behavior ;
+class FreeItem ;
 
 /**
  * Movimiento de un elemento
  */
+
 class MoveState : public BehaviorState
 {
+
 protected:
 
-        MoveState();
+        MoveState( ) ;
 
 public:
 
-        virtual ~MoveState();
+        virtual ~MoveState( ) ;
 
         /**
          * Único objeto de esta clase para toda la aplicación
          * @return Un puntero a la clase madre para hacer uso del polimorfismo de clase
          */
-        static BehaviorState* getInstance();
+        static BehaviorState * getInstance () ;
 
         /**
          * Estado que mueve a un elemento
@@ -48,7 +50,7 @@ public:
          *                se producirá el cambio de estado correspondiente
          * @return true si se produjo el movimiento o el cambio de estado; o, false si hubo colisión
          */
-        virtual bool move(Behavior* behavior, StateId* substate, bool canFall);
+        virtual bool move ( Behavior * behavior, StateId * substate, bool canFall ) ;
 
 protected:
 
@@ -57,21 +59,22 @@ protected:
          * @param freeItem Primer elemento de la pila
          * @param z Unidades que ascenderá la pila de elementos
          */
-        void ascent(FreeItem* freeItem, int z);
+        void ascent ( FreeItem * freeItem, int z ) ;
 
         /**
          * Operación recursiva que hace descender todos los elementos apilados sobre un elemento
          * @param freeItem Primer elemento de la pila
          * @param z Unidades que descenderá la pila de elementos
          */
-        void descend(FreeItem* freeItem, int z);
+        void descend ( FreeItem * freeItem, int z ) ;
 
 private:
 
         /**
          * Único objeto de esta clase para toda la aplicación
          */
-        static BehaviorState* instance;
+        static BehaviorState * instance ;
+
 };
 
 }

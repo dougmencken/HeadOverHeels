@@ -15,10 +15,10 @@
 #include <cassert>
 #include "Ism.hpp"
 
+
 namespace isomot
 {
 
-// Declaraciones adelantadas
 class Room;
 class PlayerItem;
 
@@ -38,9 +38,9 @@ public:
          * Constructor
          * @param La sala objetivo de la cámara
          */
-        Camera( Room* room );
+        Camera( Room* room ) ;
 
-        virtual ~Camera();
+        virtual ~Camera( ) ;
 
         /**
         * Centra la sala en pantalla y establece el punto de referencia. Una vez se ha
@@ -49,7 +49,7 @@ public:
         * @param player El jugador activo
         * @param entry Vía de entrada a la sala
         */
-        void turnOn( PlayerItem* player, const Direction& entry );
+        void turnOn ( PlayerItem* player, const Direction& entry ) ;
 
         /**
          * Centra la sala en pantalla
@@ -57,25 +57,25 @@ public:
          * @return true si se ha producido variación respecto al desplazamiento previo,
          * o false en caso contrario
          */
-        bool center( PlayerItem* player );
+        bool centerOn ( PlayerItem * player ) ;
 
 private:
 
         /**
          * La sala objetivo de la cámara
          */
-        Room* room;
+        Room * room ;
 
         /**
          * Punto de referencia a partir del cual se realizará el desplazamiento de la cámara
          * Coincide con las coordenadas X e Y del jugador activo
          */
-        std::pair< int, int > reference;
+        std::pair < int, int > reference ;
 
         /**
          * Desplazamiento de pantalla a realizar en el eje X e Y, respectivamente, para centrar la sala
          */
-        std::pair< int, int > delta;
+        std::pair < int, int > delta ;
 
 public: // Operaciones de consulta y actualización
 
@@ -84,18 +84,18 @@ public: // Operaciones de consulta y actualización
          * @return Un número positivo indica que la sala se desplazará a la derecha, mientras que un
          * número negativo desplazará la sala a la izquierda
          */
-        int getDeltaX() const {  return delta.first;  }
+        int getDeltaX () const {  return delta.first;  }
 
         /**
          * Desplazamiento de pantalla a realizar en el eje Y para centrar la sala
          * @return Un número positivo indica que la sala se desplazará hacia abajo, mientras que un
          * número negativo desplazará la sala hacia arriba
          */
-        int getDeltaY() const {  return delta.second;  }
+        int getDeltaY () const {  return delta.second;  }
 
-        void setDeltaX( int delta ) {  this->delta.first = delta;  }
+        void setDeltaX ( int delta ) {  this->delta.first = delta;  }
 
-        void setDeltaY( int delta ) {  this->delta.second = delta;  }
+        void setDeltaY ( int delta ) {  this->delta.second = delta;  }
 
 };
 
