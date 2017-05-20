@@ -25,6 +25,7 @@ GameManager* GameManager::instance = 0;
 GameManager::GameManager( )
         : chosenGraphicSet( "gfx" )
         , vidasInfinitas( false )
+        , drawShadows( true )
         , drawBackgroundPicture( true )
         , isomot( new Isomot() )
         , gameFileManager( new GameFileManager( this, isomot ) )

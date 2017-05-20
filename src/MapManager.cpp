@@ -34,9 +34,9 @@ void MapManager::loadMap ()
 {
         xercesc::XMLPlatformUtils::Initialize ();
 
-        // Carga el archivo XML especificado y almacena los datos XML en la lista
         try
         {
+                // read from the XML file
                 std::auto_ptr< mxml::MapXML > mapXML( mxml::map( ( isomot::sharePath() + "map/" + fileName ).c_str () ) );
 
                 for ( mxml::MapXML::room_const_iterator i = mapXML->room().begin (); i != mapXML->room().end (); ++i )
@@ -44,71 +44,55 @@ void MapManager::loadMap ()
                         // Se crea la sala a partir del nombre de su archivo XML
                         std::auto_ptr< MapRoomData > roomData( new MapRoomData( ( *i ).file() ) );
 
-                        // Conexión norte
                         if ( ( *i ).north().present() )
-                                roomData->setNorth( ( *i ).north().get() );
+                                roomData->setNorth( ( *i ).north().get() );             // connection on north
 
-                        // Conexión sur
                         if ( ( *i ).south().present() )
-                                roomData->setSouth( ( *i ).south().get() );
+                                roomData->setSouth( ( *i ).south().get() );             // connection on south
 
-                        // Conexión este
                         if ( ( *i ).east().present() )
-                                roomData->setEast( ( *i ).east().get() );
+                                roomData->setEast( ( *i ).east().get() );               // connection on east
 
-                        // Conexión oeste
                         if ( ( *i ).west().present() )
-                                roomData->setWest( ( *i ).west().get() );
+                                roomData->setWest( ( *i ).west().get() );               // connection on west
 
-                        // Conexión inferior
                         if ( ( *i ).floor().present() )
-                                roomData->setFloor( ( *i ).floor().get() );
+                                roomData->setFloor( ( *i ).floor().get() );             // connection on bottom
 
-                        // Conexión superior
                         if ( ( *i ).roof().present() )
-                                roomData->setRoof( ( *i ).roof().get() );
+                                roomData->setRoof( ( *i ).roof().get() );               // connection on top
 
-                        // Conexión por telepuerto
                         if ( ( *i ).teleport().present() )
-                                roomData->setTeleport( ( *i ).teleport().get() );
+                                roomData->setTeleport( ( *i ).teleport().get() );       // connection via teleport
 
-                        // Conexión por un segundo telepuerto
                         if ( ( *i ).teleport2().present() )
-                                roomData->setTeleportToo( ( *i ).teleport2().get() );
+                                roomData->setTeleportToo( ( *i ).teleport2().get() );   // connection via second teleport
 
-                        // Conexión norte-este
                         if ( ( *i ).north_east().present() )
-                                roomData->setNorthEast( ( *i ).north_east().get() );
+                                roomData->setNorthEast( ( *i ).north_east().get() );    // north-east connection
 
-                        // Conexión norte-oeste
                         if ( ( *i ).north_west().present() )
-                                roomData->setNorthWest( ( *i ).north_west().get() );
+                                roomData->setNorthWest( ( *i ).north_west().get() );    // north-west connection
 
-                        // Conexión sur-este
                         if ( ( *i ).south_east().present() )
-                                roomData->setSouthEast( ( *i ).south_east().get() );
+                                roomData->setSouthEast( ( *i ).south_east().get() );    // south-east connection
 
-                        // Conexión norte-oeste
                         if ( ( *i ).south_west().present() )
-                                roomData->setSouthWest( ( *i ).south_west().get() );
+                                roomData->setSouthWest( ( *i ).south_west().get() );    // south-west connection
 
-                        // Conexión este-norte
                         if ( ( *i ).east_north().present() )
-                                roomData->setEastNorth( ( *i ).east_north().get() );
+                                roomData->setEastNorth( ( *i ).east_north().get() );    // east-north connection
 
-                        // Conexión este-sur
                         if ( ( *i ).east_south().present() )
-                                roomData->setEastSouth( ( *i ).east_south().get() );
+                                roomData->setEastSouth( ( *i ).east_south().get() );    // east-south connection
 
-                        // Conexión oeste-norte
                         if ( ( *i ).west_north().present() )
-                                roomData->setWestNorth( ( *i ).west_north().get() );
+                                roomData->setWestNorth( ( *i ).west_north().get() );    // west-north connection
 
-                        // Conexión oeste-sur
                         if ( ( *i ).west_south().present() )
-                                roomData->setWestSouth( ( *i ).west_south().get() );
+                                roomData->setWestSouth( ( *i ).west_south().get() );    // west-south connection
 
-                        // Los datos de la sala se incorporan a la lista
+                        // add data for this room to the list
                         this->mapData.push_back( *roomData.get() );
                 }
         }
@@ -287,23 +271,20 @@ void MapManager::beginOldGameWithPlayer( const sgxml::player& data )
                                         ;
                         }
 
-                        // Si se está creando al jugador activo entonces su sala es la sala activa
-                        if ( data.active() )
+                        // for active player or for other player when it is created in another room
+                        // when other player is in the same room as active player then there’s no need to do anything more
+                        if ( data.active() || this->activeRoom != room )
                         {
-                                room->activatePlayer(playerId );
-                                room->getCamera()->turnOn( room->getMediator()->getActivePlayer(), Direction( data.entry() ) );
-                                this->activeRoom = room;
-                                roomData->setActivePlayer( playerId );
-                                this->rooms.push_back( room );
-                        }
-                        // Si el otro jugador se crea en otra sala entonces se establece como el jugador
-                        // que el usuario controla en dicha sala. Si se crea en la misma sala que el
-                        // jugador activo entonces no hace falta hacer nada más
-                        else if ( this->activeRoom != room )
-                        {
-                                // Activa al jugador
                                 room->activatePlayer( playerId );
                                 room->getCamera()->turnOn( room->getMediator()->getActivePlayer(), Direction( data.entry() ) );
+                                /////room->getCamera()->centerOn( room->getMediator()->getActivePlayer () );
+
+                                if ( data.active() )
+                                {
+                                        // for active player this room is active one
+                                        this->activeRoom = room;
+                                }
+
                                 roomData->setActivePlayer( playerId );
                                 this->rooms.push_back( room );
                         }
@@ -481,8 +462,8 @@ Room* MapManager::changeRoom( const Direction& exit )
         nextRoomData->setActivePlayer( activePlayer );
         newRoom->activatePlayer( activePlayer );
         newRoom->getCamera()->turnOn( newRoom->getMediator()->getActivePlayer(), entry );
+
         activeRoom = newRoom;
-        // Activa la nueva sala
         activeRoom->activate();
 
         return newRoom;
@@ -820,11 +801,6 @@ Room* MapManager::findRoom( const std::string& room )
 PlayerStartPosition* MapManager::findPlayerPosition( const std::string& room, const PlayerId& playerId )
 {
         return this->findRoomData( room )->findPlayerPosition( playerId );
-}
-
-Room* MapManager::getActiveRoom()
-{
-        return activeRoom;
 }
 
 Room* MapManager::getHideRoom()

@@ -168,7 +168,7 @@ protected:
         /**
          * Datos de todas las salas en el mapa. Almacena la comunicación entre ellas
          */
-        std::list< MapRoomData > mapData ;
+        std::list < MapRoomData > mapData ;
 
 public: // Operaciones de consulta y actualización
 
@@ -176,13 +176,13 @@ public: // Operaciones de consulta y actualización
          * La sala que se está mostrando en pantalla
          * @return Una sala
          */
-        Room* getActiveRoom () ;
+        Room * getActiveRoom () const {  return activeRoom ;  }
 
         /**
          * La sala donde se encuentra el jugador que no está activo
          * @return Una sala ó 0 si no hay más jugadores
          */
-        Room* getHideRoom () ;
+        Room * getHideRoom () ;
 
 };
 

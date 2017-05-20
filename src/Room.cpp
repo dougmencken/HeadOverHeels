@@ -10,6 +10,7 @@
 #include "Door.hpp"
 #include "Mediator.hpp"
 #include "Camera.hpp"
+#include "GameManager.hpp"
 
 
 namespace isomot
@@ -112,8 +113,8 @@ Room::Room( const std::string& identifier, const std::string& scenery, int xTile
                 picture = create_bitmap_ex( 32, w, h );
         }
 
-        // Sombreado de la sala: 50% de opacidad
-        this->shadingScale = 128;
+        // 128 for 50% opacity of shading or 256 for no shadows
+        this->shadingScale = isomot::GameManager::getInstance()->getDrawShadows () ? 128 : 256 ;
 
         // Ahora la sala ya está activa
         this->active = true;
@@ -185,6 +186,7 @@ void Room::addDoor( Door * door )
         this->addItem( door->getRightJamb() );
         this->addItem( door->getLintel() );
 }
+
 
 #define NULL_GRIDITEM           "Cannot add grid item which is nil"
 #define NO_ISOMOT_GRIDITEM      "Cannot add grid item because Isomot isn't active"
@@ -272,6 +274,7 @@ void Room::addItem( GridItem * gridItem )
                 std::cout << e.what () << std::endl ;
         }
 }
+
 
 #define NULL_FREEITEM           "Cannot add free item which is nil"
 #define NO_ISOMOT_FREEITEM      "Cannot add free item because Isomot isn't active"
@@ -376,6 +379,7 @@ void Room::addItem( FreeItem * freeItem )
                         std::cout << e.what () << std::endl ;
         }
 }
+
 
 #define NULL_PLAYER             "Cannot add player which is nil"
 #define NO_ISOMOT_PLAYER        "Cannot add player because Isomot isn't active"
@@ -513,7 +517,7 @@ void Room::removeItem( GridItem * gridItem )
                 // Destrucción del elemento
                 delete gridItem;
         }
-        catch( const Exception& e )
+        catch ( const Exception& e )
         {
                 std::cout << e.what () << std::endl ;
         }
@@ -541,7 +545,7 @@ void Room::removeItem( FreeItem * freeItem )
                 // Destrucción del elemento
                 delete freeItem;
         }
-        catch( const Exception& e )
+        catch ( const Exception& e )
         {
                 std::cout << e.what () << std::endl ;
         }
@@ -569,7 +573,7 @@ void Room::removePlayer( PlayerItem* playerItem )
                 // Destrucción del elemento
                 delete playerItem;
         }
-        catch( const Exception& e )
+        catch ( const Exception& e )
         {
                 std::cout << e.what () << std::endl ;
         }
@@ -577,39 +581,38 @@ void Room::removePlayer( PlayerItem* playerItem )
 
 void Room::draw( BITMAP* where )
 {
-        // La sala se dibuja si está activa
+        // draw room when it is active one
         if ( active )
         {
-                // Si no se ha especificado bitmap de destino se utiliza el propio de la sala
-                if ( picture == 0 )
-                        picture = this->picture;
+                // draw in picture of room itself when destination bitmap isn’t given
+                if ( where == 0 )
+                        where = this->picture ;
 
-                // Limpia la imagen donde se dibuja la sala
-                clear_bitmap( picture );
+                // clean the image where to draw this room
+                clear_bitmap( where );
 
-                // Se bloquea la memoria de vídeo ocupada por la imagen antes de dibujar
-                if ( is_video_bitmap( picture ) )
+                // acquire video memory before drawing
+                if ( is_video_bitmap( where ) )
                 {
-                        acquire_bitmap( picture );
+                        acquire_bitmap( where );
                 }
 
-                // Se calcula la posición de la cámara
+                // adjust position of camera
                 if ( tilesNumber.first > 10 || tilesNumber.second > 10 )
                 {
                         camera->centerOn( mediator->getActivePlayer () );
                 }
 
-                // Se dibujan las losetas
+                // draw tiles of room
                 for ( int xCell = 0; xCell < this->tilesNumber.first; xCell++ )
                 {
                         for ( int yCell = 0; yCell < this->tilesNumber.second; yCell++ )
                         {
                                 int column = this->tilesNumber.first * yCell + xCell;
 
-                                // Si hay loseta en esa posición:
-                                if ( floor[ column ] != 0 )
+                                if ( floor[ column ] != 0 )  // if there is tile of floor here
                                 {
-                                        // Si las sombras están activas hay que sombrear la loseta
+                                        // shade this tile when shadows are on
                                         if ( shadingScale < 256 && floor[ column ]->getImage() )
                                         {
                                                 mediator->lockGridItemMutex();
@@ -621,83 +624,75 @@ void Room::draw( BITMAP* where )
                                                 mediator->unlockFreeItemMutex();
                                         }
 
-                                        // Dibuja las loseta
-                                        floor[ column ]->draw( picture );
+                                        // draw this tile o’floor
+                                        floor[ column ]->draw( where );
                                 }
                         }
                 }
 
-                // Se dibujan los muros sin puertas
+                // draw walls without doors
                 for ( std::vector< Wall * >::iterator wx = this->wallX.begin (); wx != this->wallX.end (); ++wx )
                 {
-                        ( *wx )->draw( picture );
+                        ( *wx )->draw( where );
                 }
                 for ( std::vector< Wall * >::iterator wy = this->wallY.begin (); wy != this->wallY.end (); ++wy )
                 {
-                        ( *wy )->draw( picture );
+                        ( *wy )->draw( where );
                 }
 
                 mediator->lockGridItemMutex();
                 mediator->lockFreeItemMutex();
 
-                // Se dibujan los elementos rejilla
+                // draw grid items
                 for ( int i = 0; i < this->tilesNumber.first * this->tilesNumber.second; i++ )
                 {
-                        for(std::list<GridItem*>::iterator g = mediator->structure[drawIndex[i]].begin(); g != mediator->structure[drawIndex[i]].end(); ++g)
+                        for ( std::list< GridItem * >::iterator g = mediator->structure[ drawIndex[ i ] ].begin (); g != mediator->structure[ drawIndex[ i ] ].end (); ++g )
                         {
-                                GridItem* gridItem = static_cast<GridItem*>(*g);
+                                GridItem* gridItem = static_cast< GridItem * >( *g );
 
-                                // Si las sombras están activas hay que sombrear el elemento
                                 if ( shadingScale < 256 && gridItem->getImage() )
                                 {
                                         gridItem->requestCastShadow( drawIndex[ i ] );
                                 }
 
-                                // Dibuja el elemento
-                                gridItem->draw( picture );
+                                gridItem->draw( where );
                         }
                 }
 
+                // for free items there’re two steps of drawing
 
-                // Se dibujan los elementos libres en dos grandes pasos
-
-                // Primero se sombrean tanto con los elementos rejilla como con el resto de elementos libres
+                // at first shade them with both of grid items and other free items
                 for ( std::list< FreeItem * >::iterator f = mediator->freeItems.begin (); f != mediator->freeItems.end (); ++f )
                 {
                         FreeItem* freeItem = static_cast< FreeItem * >( *f );
 
                         if ( freeItem->getImage() )
                         {
-                                // Si las sombras están activas hay que sombrear el elemento
+                                // shade an item when shadows are on
                                 if ( shadingScale < 256 )
-                                {
                                         freeItem->requestCastShadow();
-                                }
                         }
                 }
 
-                // Luego se enmascaran teniendo en cuenta a ambos tipos de elemetos y, por último, se dibujan
+                // then mask them and finally draw them
                 for ( std::list< FreeItem * >::iterator f = mediator->freeItems.begin (); f != mediator->freeItems.end (); ++f )
                 {
                         FreeItem* freeItem = static_cast< FreeItem * >( *f );
 
                         if ( freeItem->getImage() )
                         {
-                                // Se enmascara el elemento
                                 freeItem->requestMask();
-
-                                // Se dibuja el elemento
-                                freeItem->draw( picture );
+                                freeItem->draw( where );
                         }
                 }
 
                 mediator->unlockGridItemMutex();
                 mediator->unlockFreeItemMutex();
 
-                // Se libera la memoria de vídeo ocupada por la imagen después de dibujar
-                if ( is_video_bitmap( picture ) )
+                // free used video memory after drawing
+                if ( is_video_bitmap( where ) )
                 {
-                        release_bitmap( picture );
+                        release_bitmap( where );
                 }
         }
 }

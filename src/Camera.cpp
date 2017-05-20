@@ -67,8 +67,8 @@ void Camera::turnOn( PlayerItem* player, const Direction& entry )
                         { // exempli gratia on restore of a game which was saved in triple room
                                 int midX = RoomBuilder::getXCenterOfRoom( player->getDataOfFreeItem(), room );
                                 int midY = RoomBuilder::getYCenterOfRoom( player->getDataOfFreeItem(), room );
-                                delta.first = midX + ( 12 * room->getTileSize() );
-                                delta.second = midY + ( 6 * room->getTileSize() );
+                                delta.first = midX + ( 12 * room->getTileSize() );  // yeah, 12 is just some magic number
+                                delta.second = midY + ( 6 * room->getTileSize() );  // as well as 6
                         }
                 }
 

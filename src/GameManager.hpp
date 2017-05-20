@@ -260,6 +260,10 @@ public:
 
         void toggleInfiniteLives () {  vidasInfinitas = ! vidasInfinitas ;  }
 
+        bool getDrawShadows () const {  return drawShadows ;  }
+
+        void toggleDrawShadows () {  drawShadows = ! drawShadows ;  }
+
         bool hasBackgroundPicture () const {  return drawBackgroundPicture ;  }
 
         void toggleBackgroundPicture () {  drawBackgroundPicture = ! drawBackgroundPicture ;  }
@@ -272,6 +276,8 @@ private:
          * Indica si se han activado las vidas infinitas
          */
         bool vidasInfinitas ;
+
+        bool drawShadows ;
 
         bool drawBackgroundPicture ;
 

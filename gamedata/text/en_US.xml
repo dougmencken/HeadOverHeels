@@ -135,21 +135,27 @@
     </properties>
   </text>
 
-  <text id="full-screen" x="93" y="196">
+  <text id="full-screen" x="93" y="182">
     <properties>
       <ustring>Full Screen</ustring>
     </properties>
   </text>
 
-  <text id="graphic-set" x="0" y="0">
+  <text id="draw-shadows" x="0" y="0">
     <properties>
-      <ustring>Choose Set of Graphics</ustring>
+      <ustring>Draw Shadows</ustring>
     </properties>
   </text>
 
   <text id="draw-background" x="0" y="0">
     <properties>
       <ustring>Draw Background</ustring>
+    </properties>
+  </text>
+
+  <text id="graphic-set" x="0" y="0">
+    <properties>
+      <ustring>Choose Set of Graphics</ustring>
     </properties>
   </text>
 
