@@ -32,7 +32,7 @@ namespace xsd
       C* b (const_cast<C*> (str_.data ()));
       C* e (b + str_.size ());
 
-      setg (b, b, e);
+      this->setg (b, b, e);
     }
 
     template <typename C>

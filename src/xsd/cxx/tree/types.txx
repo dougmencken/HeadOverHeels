@@ -335,11 +335,11 @@ namespace xsd
         xml::std_memory_manager mm;
         auto_array<XMLByte, xml::std_memory_manager> r (
           Base64::encode (
-            reinterpret_cast<const XMLByte*> (this->data ()),
-            static_cast<unsigned int> (this->size ()),
-            &n,
+            reinterpret_cast< const XMLByte * > ( this->data () ),
+            static_cast< XMLSize_t > ( this->size () ),
+            static_cast< XMLSize_t * > ( &n ),
             &mm),
-	  mm);
+          mm);
 
         std::basic_string<C> str;
 
@@ -375,8 +375,13 @@ namespace xsd
         //
 #if _XERCES_VERSION >= 20700
         auto_array<XMLByte, xml::std_memory_manager> data (
-          Base64::decodeToXMLByte (src, &size, &mm, Base64::Conf_RFC2045),
-	  mm);
+          Base64::decodeToXMLByte (
+            src,
+            static_cast< XMLSize_t * > ( &size ),
+            &mm,
+            Base64::Conf_RFC2045
+          ),
+          mm);
 
         if (data)
         {
@@ -392,7 +397,7 @@ namespace xsd
 #if _XERCES_VERSION >= 20600  // Xerces 2.5.0 does not have Conf_RFC2045.
         auto_array<XMLCh, xml::std_memory_manager> data (
           Base64::decode (src, &size, &mm, Base64::Conf_RFC2045),
-	  mm);
+          mm);
 #else
         auto_array<XMLCh, xml::std_memory_manager> data (
           Base64::decode (src, &size, &mm), mm);
@@ -478,7 +483,7 @@ namespace xsd
           for (size_t i (0); i < n; ++i)
           {
             unsigned char byte (
-	      static_cast<unsigned char> (*(this->data () + i)));
+              static_cast<unsigned char> (*(this->data () + i)));
             unsigned char h (byte >> 4);
             unsigned char l (byte & 0x0F);
 
@@ -646,4 +651,3 @@ namespace xsd
     }
   }
 }
-
