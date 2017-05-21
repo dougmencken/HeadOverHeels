@@ -16,7 +16,7 @@ namespace isomot
 {
 
 Special::Special( Item * item, const BehaviorId & id ) :
-	Behavior( item, id )
+        Behavior( item, id )
 {
         stateId = StateWait;
         destroyTimer = new HPC();
@@ -160,10 +160,10 @@ bool Special::update ()
                                 destroy = true;
 
                                 // Emite el sonido de destrucción
-                                this->soundManager->play( item->getLabel(), stateId );
+                                SoundManager::getInstance()->play( item->getLabel(), stateId );
 
                                 // Los bonus deben desaparecer de las salas una vez se cojan. Al regresar ya no deben estar
-                                BonusManager::getInstance()->destroyBonus( item->getMediator()->getRoom()->getIdentifier(), item->getLabel() );
+                                BonusManager::getInstance()->markBonusAsAbsent( item->getMediator()->getRoom()->getIdentifier(), item->getLabel() );
 
                                 // Ejecuta la acción asociada a la toma del elemento especial
                                 takeSpecial( static_cast< PlayerItem* >( sender ) );

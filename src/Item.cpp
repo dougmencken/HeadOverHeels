@@ -245,7 +245,6 @@ bool Item::checkPosition( int x, int y, int z, const WhatToDo& what )
 
 void Item::assignBehavior( const BehaviorId& id, void* extraData )
 {
-        // Construye el objeto adecuado en función del identificador
         this->behavior = Behavior::createBehavior( this, id, extraData );
 }
 

@@ -359,7 +359,7 @@ void Mediator::castShadowOnFloor( FloorTile* floorTile )
         // Se sombrea con los elementos libres que pueda tener por encima
         for ( int percent = 0; percent <= 100; percent++ )
         {
-                int itemsNumber = transparencyManager->getTransparencyItems( percent );
+                int itemsNumber = transparencyManager->countItemsWithDegreeOfTransparency( percent );
 
                 // Tiene que haber elementos en el porcentaje de transparencia actual
                 if ( itemsNumber != 0 )
@@ -422,7 +422,7 @@ void Mediator::castShadowOnGrid( GridItem* gridItem )
         // Se sombrea con los elementos libres que pueda tener por encima
         for ( int percent = 0; percent <= 100; percent++ )
         {
-                int itemsNumber = transparencyManager->getTransparencyItems( percent );
+                int itemsNumber = transparencyManager->countItemsWithDegreeOfTransparency( percent );
 
                 // Tiene que haber elementos en el porcentaje de transparencia actual
                 if ( itemsNumber != 0 )
@@ -470,7 +470,7 @@ void Mediator::castShadowOnFreeItem( FreeItem* freeItem )
         int yStart = ( freeItem->getY() - freeItem->getWidthY() + 1 ) / tileSize;
         int yEnd = freeItem->getY() / tileSize;
 
-        // Se sombrea con los elementos rejilla
+        // shadow from grid items
         for ( int yCell = yStart; yCell <= yEnd; yCell++ )
         {
                 for ( int xCell = xStart; xCell <= xEnd; xCell++ )
@@ -495,16 +495,16 @@ void Mediator::castShadowOnFreeItem( FreeItem* freeItem )
                 }
         }
 
-        // Se sombrea con los elementos libres que pueda tener por encima
+        // shadow from free items it may have above
         for ( int percent = 0; percent <= 100; percent++ )
         {
-                int itemsNumber = transparencyManager->getTransparencyItems(percent);
+                int countOfItems = transparencyManager->countItemsWithDegreeOfTransparency( percent );
 
                 // Tiene que haber elementos en el porcentaje de transparencia actual
-                if ( itemsNumber != 0 )
+                if ( countOfItems != 0 )
                 {
                         // Para todo elemento con ese grado de transparencia
-                        for ( int n = 0; n < itemsNumber; n++ )
+                        for ( int n = 0; n < countOfItems; n++ )
                         {
                                 // Recorre la lista de elementos libres para sombrear el elemento
                                 for ( std::list< FreeItem* >::iterator f = freeItems.begin (); f != freeItems.end (); ++f )

@@ -89,7 +89,7 @@ bool Teleport::update ()
                 if ( activated )
                 {
                         item->animate();
-                        this->soundManager->play( item->getLabel(), StateActive );
+                        SoundManager::getInstance()->play( item->getLabel(), StateActive );
                 }
                 break;
 

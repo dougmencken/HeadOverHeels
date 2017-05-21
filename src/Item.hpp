@@ -22,14 +22,13 @@
 namespace isomot
 {
 
-// Declaraciones adelantadas
-class ItemData;
-class Behavior;
+class ItemData ;
+class Behavior ;
 
 /**
- * Interfaz que define los atributos y operaciones mínimas para poder crear un elemento
- * perteneciente a alguna sala
+ * Interface that defines attributes and operations for some item in some room
  */
+
 class Item : public Mediated
 {
 

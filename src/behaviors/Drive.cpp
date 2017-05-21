@@ -109,8 +109,8 @@ bool Drive::update ()
                 case StateMoveSouth:
                 case StateMoveEast:
                 case StateMoveWest:
-                        // Si el elemento está activo y ha llegado el momento de moverse, entonces:
-                        if ( ! freeItem->isDead() )
+                        // item is active and it is time to move
+                        if ( ! freeItem->isFrozen() )
                         {
                                 if ( speedTimer->getValue() > freeItem->getSpeed() )
                                 {
@@ -119,8 +119,9 @@ bool Drive::update ()
                                         {
                                                 running = false;
                                                 stateId = StateWait;
+
                                                 // Emite el sonido de colisión
-                                                this->soundManager->play( freeItem->getLabel(), StateCollision );
+                                                SoundManager::getInstance()->play( freeItem->getLabel(), StateCollision );
                                         }
 
                                         // Se pone a cero el cronómetro para el siguiente ciclo
@@ -146,15 +147,15 @@ bool Drive::update ()
                                 // El elemento se mueve hasta detectar un colisión
                                 if ( ! state->displace( this, &stateId, true ) )
                                 {
-                                stateId = StateWait;
+                                        stateId = StateWait;
                                 }
 
                                 // Se pone a cero el cronómetro para el siguiente ciclo
                                 speedTimer->reset();
                         }
 
-                        // Si el elemento estaba inactivo, después del desplazamiento seguirá estando
-                        if ( freeItem->isDead() )
+                        // inactive item will continue to be inactive
+                        if ( freeItem->isFrozen() )
                         {
                                 stateId = StateFreeze;
                         }
@@ -181,11 +182,11 @@ bool Drive::update ()
                         break;
 
                 case StateFreeze:
-                        freeItem->setDead( true );
+                        freeItem->setFrozen( true );
                         break;
 
                 case StateWakeUp:
-                        freeItem->setDead( false );
+                        freeItem->setFrozen( false );
                         stateId = StateWait;
                         break;
 

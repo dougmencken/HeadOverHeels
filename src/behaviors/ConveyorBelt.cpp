@@ -99,7 +99,7 @@ bool ConveyorBelt::update ()
                                                                 }
 
                                                                 // Reproduce el sonido de la cinta transportadora
-                                                                this->soundManager->play( item->getLabel(), StateActive );
+                                                                SoundManager::getInstance()->play( item->getLabel(), StateActive );
                                                         }
                                                 }
                                         }

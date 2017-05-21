@@ -7,30 +7,31 @@
 namespace isomot
 {
 
-FreeItem::FreeItem( ItemData* itemData, int x, int y, int z, const Direction& direction )
-: Item( itemData, z, direction ),
-        myMask ( WantMask ),
-        transparency ( 0 ),
-        collisionDetector ( true ),
-        dead ( false ),
-        shadyImage ( 0 )
+FreeItem::FreeItem( ItemData* itemData, int x, int y, int z, const Direction& direction ) : Item ( itemData, z, direction )
+        , myMask ( WantMask )
+        , transparency ( 0 )
+        , collisionDetector ( true )
+        , frozen ( false )
+        , shadyImage ( 0 )
 {
         this->x = x;
         this->y = y;
         if ( y < 0 ) this->y = 0;
         this->anchor = 0;
 
-        // Asignación de los fotogramas iniciales
-        int framesNumber = ( getDataOfFreeItem ()->motion.size() - getDataOfFreeItem ()->extraFrames ) / getDataOfFreeItem ()->directionFrames;
-        int currentFrame = ( getDataOfFreeItem ()->directionFrames > 1 ? getDataOfFreeItem ()->frames[ frameIndex ] + framesNumber * direction : getDataOfFreeItem ()->frames[ 0 ] );
+        // init frames
+        int howManyFrames = ( getDataOfFreeItem ()->motion.size() - getDataOfFreeItem ()->extraFrames ) / getDataOfFreeItem ()->directionFrames;
+        int currentFrame = ( getDataOfFreeItem ()->directionFrames > 1 ? getDataOfFreeItem ()->frames[ frameIndex ] + howManyFrames * direction : getDataOfFreeItem ()->frames[ 0 ] );
 
         this->image = getDataOfFreeItem ()->motion[ currentFrame ];
 
-        // Puede no tener sombra
+        // get shadow
         if ( getDataOfFreeItem ()->shadowWidth != 0 && getDataOfFreeItem ()->shadowHeight != 0 )
         {
                 this->shadow = getDataOfFreeItem ()->shadows[ currentFrame ];
         }
+
+        ///fprintf( stdout, "meet new free item with graphics from %s\n", getDataOfFreeItem ()->getNameOfFile().c_str () ) ;
 }
 
 FreeItem::FreeItem( const FreeItem& freeItem )
@@ -38,7 +39,7 @@ FreeItem::FreeItem( const FreeItem& freeItem )
         myMask( freeItem.myMask ),
         transparency( freeItem.transparency ),
         collisionDetector( freeItem.collisionDetector ),
-        dead( freeItem.dead ),
+        frozen( freeItem.frozen ),
         shadyImage( 0 )
 {
         if ( freeItem.shadyImage != 0 )
@@ -773,9 +774,11 @@ bool FreeItem::changeData( int value, int x, int y, int z, const Datum& datum, c
                 this->x = oldFreeItem.getX();
                 this->y = oldFreeItem.getY();
                 this->z = oldFreeItem.getZ();
+
                 this->dataOfItem->widthX = oldFreeItem.getWidthX();
                 this->dataOfItem->widthY = oldFreeItem.getWidthY();
                 this->dataOfItem->height = oldFreeItem.getHeight();
+
                 this->offset = oldFreeItem.getOffset();
         }
 
@@ -822,13 +825,13 @@ bool FreeItem::changeTransparency( unsigned char value, const WhatToDo& how )
 
                 // Marca para sombrear los elementos que pudiera tener debajo
                 mediator->markItemsForShady( this );
+
                 // Marca para enmascarar los elementos solapados
                 if ( mask )
                 {
                         mediator->markItemsForMasking( this ) ;
                 }
 
-                // La transparencia ha cambiado
                 changed = true;
         }
 

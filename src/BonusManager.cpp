@@ -1,104 +1,107 @@
+
 #include "BonusManager.hpp"
+
 
 namespace isomot
 {
 
-BonusManager::BonusManager()
+BonusManager::BonusManager( )
 {
 
 }
 
-BonusManager::~BonusManager()
+BonusManager::~BonusManager( )
 {
-  bonusRooms.clear();
+        bonusRooms.clear();
 }
 
-BonusManager* BonusManager::instance = 0;
-BonusManager* BonusManager::getInstance()
-{
-  if(instance == 0)
-  {
-    instance = new BonusManager();
-  }
+BonusManager * BonusManager::instance = 0 ;
 
-  return instance;
+BonusManager* BonusManager::getInstance ()
+{
+        if ( instance == 0 )
+        {
+                instance = new BonusManager();
+        }
+
+        return instance;
 }
 
-void BonusManager::destroyBonus(const std::string& fileName, const short label)
+void BonusManager::markBonusAsAbsent ( const std::string& fileName, const short label )
 {
-  // Se busca la sala
-  std::list<BonusRoom>::iterator result = std::find(bonusRooms.begin(), bonusRooms.end(), fileName);
+        // search in bonus rooms
+        std::list< BonusRoom >::iterator result = std::find( bonusRooms.begin (), bonusRooms.end (), fileName );
 
-  // Si se encuentra se añade como ausente el bonus, en caso contrario se crea un registro
-  // con la nueva sala y se añade como ausente el bonus
-  if(result != bonusRooms.end())
-  {
-    (*result).destroyBonus(label);
-  }
-  else
-  {
-    BonusRoom bonusRoom(fileName);
-    bonusRoom.destroyBonus(label);
-    bonusRooms.push_back(bonusRoom);
-  }
+        if ( result != bonusRooms.end () )
+        {
+                // room is found so just mark this bonus as absent here
+                ( *result ).markBonusAsAbsent( label ) ;
+        }
+        else
+        {
+                // otherwise create new record for this room and then mark this bonus as absent
+                BonusRoom bonusRoom( fileName ) ;
+                bonusRoom.markBonusAsAbsent( label ) ;
+                bonusRooms.push_back( bonusRoom ) ;
+        }
 }
 
-bool BonusManager::isPresent(const std::string& fileName, const short label)
+bool BonusManager::isPresent ( const std::string& fileName, const short label )
 {
-  // Se busca la sala
-  std::list<BonusRoom>::iterator result = std::find(bonusRooms.begin(), bonusRooms.end(), fileName);
+        std::list< BonusRoom >::iterator result = std::find( bonusRooms.begin (), bonusRooms.end (), fileName ) ;
 
-  // El bonus está presente en la sala si el registro de la sala no existe o el bonus no está presente en la sala
-  return (result == bonusRooms.end() || (result != bonusRooms.end() && !(*result).isPresent(label)));
+        // the bonus is here when this room is absent or when the bonus is not in bonus room
+        return ( result == bonusRooms.end () || ( result != bonusRooms.end () && ! ( *result ).isPresent( label ) ) );
 }
 
-void BonusManager::load(const sgxml::bonus::room_sequence& roomSequence)
+void BonusManager::load ( const sgxml::bonus::room_sequence& roomSequence )
 {
-  for(sgxml::bonus::room_const_iterator i = roomSequence.begin(); i != roomSequence.end(); ++i)
-  {
-    this->destroyBonus((*i).filename(), (*i).label());
-  }
+        for ( sgxml::bonus::room_const_iterator i = roomSequence.begin (); i != roomSequence.end (); ++i )
+        {
+                this->markBonusAsAbsent( ( *i ).filename(), ( *i ).label() );
+        }
 }
 
-void BonusManager::save(sgxml::bonus::room_sequence& roomSequence)
+void BonusManager::save ( sgxml::bonus::room_sequence& roomSequence )
 {
-  for(std::list<BonusRoom>::iterator r = this->bonusRooms.begin(); r !=this->bonusRooms.end(); ++r)
-  {
-    for(std::list<short>::iterator b = (*r).getBonusItems().begin(); b != (*r).getBonusItems().end(); ++b)
-    {
-      roomSequence.push_back(sgxml::room(*b, (*r).getFileName()));
-    }
-  }
+        for ( std::list< BonusRoom >::iterator r = this->bonusRooms.begin (); r !=this->bonusRooms.end (); ++r )
+        {
+                for ( std::list< short >::iterator b = ( *r ).getBonusItems().begin (); b != ( *r ).getBonusItems().end (); ++b )
+                {
+                        roomSequence.push_back( sgxml::room( *b, ( *r ).getNameOfFile() ) );
+                }
+        }
 }
 
-void BonusManager::reset()
+void BonusManager::reset ()
 {
-  this->bonusRooms.clear();
+        this->bonusRooms.clear();
 }
 
-BonusRoom::BonusRoom(const std::string& fileName)
+BonusRoom::BonusRoom( const std::string& name )
+        : nameOfFile( name )
 {
-  this->fileName = fileName;
+
 }
 
-BonusRoom::~BonusRoom()
+BonusRoom::~BonusRoom( )
 {
-  bonusItems.clear();
+        bonusItems.clear();
 }
 
-void BonusRoom::destroyBonus(const short label)
+void BonusRoom::markBonusAsAbsent ( const short label )
 {
-  bonusItems.push_back(label);
+        bonusItems.push_back( label ) ;
 }
 
-bool BonusRoom::isPresent(short label)
+bool BonusRoom::isPresent ( short label )
 {
-  return std::find(bonusItems.begin(), bonusItems.end(), label) != bonusItems.end();
+        return std::find( bonusItems.begin (), bonusItems.end (), label ) != bonusItems.end () ;
 }
 
-bool BonusRoom::operator==(const std::string& fileName)
+bool BonusRoom::operator== ( const std::string& fileName )
 {
-  return (this->fileName.compare(fileName) == 0);
+        return ( this->nameOfFile.compare( fileName ) == 0 ) ;
 }
 
 }

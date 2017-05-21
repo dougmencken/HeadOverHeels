@@ -56,7 +56,7 @@ bool Sink::update ()
         }
 
         // Emite el sonido acorde al estado
-        this->soundManager->play( gridItem->getLabel(), stateId );
+        SoundManager::getInstance()->play( gridItem->getLabel(), stateId );
 
         return false;
 }

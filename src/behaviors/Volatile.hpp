@@ -19,12 +19,11 @@
 namespace isomot
 {
 
-class Item;
-class ItemData;
+class Item ;
+class ItemData ;
 
 /**
- * Elemento que puede desplazarse sólo al ser empujado por otros, ya que
- * carece de movimiento autónomo
+ * For items which lack autonomous movement and move only when touched by some other item
  */
 
 class Volatile : public Behavior
@@ -46,6 +45,11 @@ public:
         */
         virtual bool update () ;
 
+       /**
+        * Asigna los datos del elemento usado como transición en la destrucción del volátil
+        */
+        void setMoreData ( void * data ) ;
+
 protected:
 
        /**
@@ -64,13 +68,6 @@ private:
         * Cronómetro que controla el tiempo de existencia del elemento volátil
         */
         HPC * destroyTimer ;
-
-public: // Operaciones de consulta y actualización
-
-       /**
-        * Asigna los datos del elemento usado como transición en la destrucción del volátil
-        */
-        void setMoreData( void * data ) ;
 
 };
 

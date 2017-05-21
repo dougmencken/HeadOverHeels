@@ -18,7 +18,7 @@
 namespace isomot
 {
 
-class Item;
+class Item ;
 
 /**
  * Detecta a un jugador y avanza en la dirección adecuada para darle caza

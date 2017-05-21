@@ -19,13 +19,12 @@
 namespace isomot
 {
 
-class Item;
-class BehaviorState;
-class SoundManager;
+class Item ;
+class BehaviorState ;
 
 /**
- * Abstraction of behavior of an element. Elements of the game will change state in each update
- * cycle. The transition between states is driven by different kinds of behavior
+ * Abstraction of behavior of an element. Elements of the game change activity in each cycle
+ * of update. The transition between activities is defined by different kinds of behavior
  */
 
 class Behavior
@@ -105,11 +104,6 @@ protected:
          * Elemento que cambia el estado del elemento con este comportamiento
          */
         Item * sender ;
-
-        /**
-         * El gestor de sonido
-         */
-        SoundManager * soundManager ;
 
         /**
          * Identificador del estado actual del comportamiento

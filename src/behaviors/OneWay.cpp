@@ -1,3 +1,4 @@
+
 #include "OneWay.hpp"
 #include "Item.hpp"
 #include "FreeItem.hpp"
@@ -7,6 +8,7 @@
 #include "Mediator.hpp"
 #include "Room.hpp"
 #include "SoundManager.hpp"
+
 
 namespace isomot
 {
@@ -31,6 +33,7 @@ OneWay::OneWay( Item * item, const BehaviorId & id, bool isFlying ) :
 OneWay::~OneWay()
 {
         delete speedTimer;
+
         if ( this->isFlying )
         {
                 delete fallTimer;
@@ -52,8 +55,7 @@ bool OneWay::update ()
                 case StateMoveSouth:
                 case StateMoveEast:
                 case StateMoveWest:
-                        // Si el elemento está activo y ha llegado el momento de moverse, entonces:
-                        if ( ! freeItem->isDead() )
+                        if ( ! freeItem->isFrozen() )
                         {
                                 if ( speedTimer->getValue() > freeItem->getSpeed() )
                                 {
@@ -63,8 +65,9 @@ bool OneWay::update ()
                                         if ( ! state->move( this, &stateId, true ) )
                                         {
                                                 turnRound();
+
                                                 // Emite el sonido de colisión
-                                                this->soundManager->play( freeItem->getLabel(), StateCollision );
+                                                SoundManager::getInstance()->play( freeItem->getLabel(), StateCollision );
                                         }
 
                                         // Se pone a cero el cronómetro para el siguiente ciclo
@@ -87,7 +90,7 @@ bool OneWay::update ()
                         if ( ! this->isFlying )
                         {
                                 // Emite el sonido de de desplazamiento
-                                this->soundManager->play( freeItem->getLabel(), stateId );
+                                SoundManager::getInstance()->play( freeItem->getLabel(), stateId );
 
                                 // El elemento es deplazado por otro. Si el desplazamiento no se pudo realizar por
                                 // colisión entonces el estado se propaga a los elementos con los que ha chocado
@@ -96,11 +99,9 @@ bool OneWay::update ()
                                 // Una vez se ha completado el desplazamiento el elemento vuelve a su comportamiento normal
                                 stateId = StateWait;
 
-                                // Si el elemento estaba inactivo, después del desplazamiento seguirá estando
-                                if ( freeItem->isDead() )
-                                {
+                                // preserve inactivity for frozen item
+                                if ( freeItem->isFrozen() )
                                         stateId = StateFreeze;
-                                }
                         }
                         else
                         {
@@ -123,7 +124,7 @@ bool OneWay::update ()
                                         if ( ! state->fall( this ) )
                                         {
                                                 // Emite el sonido de caída
-                                                this->soundManager->play( freeItem->getLabel(), stateId );
+                                                SoundManager::getInstance()->play( freeItem->getLabel(), stateId );
                                                 stateId = StateWait;
                                         }
 
@@ -138,11 +139,11 @@ bool OneWay::update ()
                         break;
 
                 case StateFreeze:
-                        freeItem->setDead( true );
+                        freeItem->setFrozen( true );
                         break;
 
                 case StateWakeUp:
-                        freeItem->setDead( false );
+                        freeItem->setFrozen( false );
                         stateId = StateWait;
                         break;
 

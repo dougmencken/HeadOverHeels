@@ -35,7 +35,7 @@ Patrol::~Patrol()
 bool Patrol::update ()
 {
         FreeItem * freeItem = dynamic_cast< FreeItem * >( this->item );
-        bool destroy = false;
+        bool alive = true;
 
         switch ( stateId )
         {
@@ -51,8 +51,7 @@ bool Patrol::update ()
                 case StateMoveNorthwest:
                 case StateMoveSoutheast:
                 case StateMoveSouthwest:
-                        // Si el elemento está activo y ha llegado el momento de moverse, entonces:
-                        if ( ! freeItem->isDead() )
+                        if ( ! freeItem->isFrozen() )
                         {
                                 if ( speedTimer->getValue() > freeItem->getSpeed())
                                 {
@@ -72,11 +71,11 @@ bool Patrol::update ()
                                                 changeDirection();
 
                                                 // Emite el sonido de colisión
-                                                this->soundManager->play( freeItem->getLabel(), StateCollision );
+                                                SoundManager::getInstance()->play( freeItem->getLabel(), StateCollision );
                                         }
 
                                         // Emite el sonido de movimiento
-                                        this->soundManager->play( freeItem->getLabel(), stateId );
+                                        SoundManager::getInstance()->play( freeItem->getLabel(), stateId );
 
                                         // Se pone a cero el cronómetro para el siguiente ciclo
                                         speedTimer->reset();
@@ -96,7 +95,7 @@ bool Patrol::update ()
                 case StateDisplaceSouthwest:
                 case StateDisplaceNorthwest:
                         // Emite el sonido de de desplazamiento
-                        this->soundManager->play( freeItem->getLabel(), stateId );
+                        SoundManager::getInstance()->play( freeItem->getLabel(), stateId );
 
                         // El elemento es deplazado por otro. Si el desplazamiento no se pudo realizar por
                         // colisión entonces el estado se propaga a los elementos con los que ha chocado
@@ -105,8 +104,8 @@ bool Patrol::update ()
                         // Una vez se ha completado el desplazamiento el elemento vuelve a su comportamiento normal
                         stateId = StateWait;
 
-                        // Si el elemento estaba inactivo, después del desplazamiento seguirá estando
-                        if ( freeItem->isDead() )
+                        // preserve inactivity for frozen item
+                        if ( freeItem->isFrozen() )
                         {
                                 stateId = StateFreeze;
                         }
@@ -117,7 +116,7 @@ bool Patrol::update ()
                         if ( item->getZ() == 0 && item->getMediator()->getRoom()->getFloorType() == NoFloor )
                         {
                                 // El elemento desaparece
-                                destroy = true;
+                                alive = false;
                         }
                         // Si ha llegado el momento de caer entonces el elemento desciende una unidad
                         else if ( fallTimer->getValue() > freeItem->getWeight() )
@@ -126,7 +125,7 @@ bool Patrol::update ()
                                 if ( ! state->fall( this ) )
                                 {
                                         // Emite el sonido de caída
-                                        this->soundManager->play( freeItem->getLabel(), stateId );
+                                        SoundManager::getInstance()->play( freeItem->getLabel(), stateId );
                                         stateId = StateWait;
                                 }
 
@@ -136,11 +135,11 @@ bool Patrol::update ()
                         break;
 
                 case StateFreeze:
-                        freeItem->setDead(true);
+                        freeItem->setFrozen( true );
                         break;
 
                 case StateWakeUp:
-                        freeItem->setDead(false);
+                        freeItem->setFrozen( false );
                         stateId = StateWait;
                         break;
 
@@ -148,7 +147,7 @@ bool Patrol::update ()
                         ;
         }
 
-        return destroy;
+        return !alive ;
 }
 
 void Patrol::changeDirection()

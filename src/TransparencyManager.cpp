@@ -1,39 +1,40 @@
+
 #include "TransparencyManager.hpp"
+
 
 namespace isomot
 {
 
 TransparencyManager::TransparencyManager()
 {
- // Se inicializa la tabla de transparencias
-  for(unsigned int i = 0; i <= 101; i++)
-  {
-    this->table.push_back(0);
-  }
+        for ( unsigned int i = 0; i <= 101; i++ )
+        {
+                this->table.push_back( 0 ) ;
+        }
 }
 
 TransparencyManager::~TransparencyManager()
 {
-  this->table.clear();
+        this->table.clear() ;
 }
 
-void TransparencyManager::add(const unsigned char percent)
+void TransparencyManager::add( const unsigned char amount )
 {
-  if(percent <= 100)
-  {
-    this->table[percent]++;
-  }
+        if ( amount <= 100 )
+        {
+                this->table[ amount ]++ ;
+        }
 }
 
-void TransparencyManager::remove(const unsigned char percent)
+void TransparencyManager::remove( const unsigned char amount )
 {
-  if(percent <= 100)
-  {
-    if(this->table[percent] > 0)
-    {
-      this->table[percent]--;
-    }
-  }
+        if ( amount <= 100 )
+        {
+                if ( this->table[ amount ] > 0 )
+                {
+                        this->table[ amount ]-- ;
+                }
+        }
 }
 
 }

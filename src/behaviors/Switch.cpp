@@ -92,7 +92,7 @@ bool Switch::update ()
                                                                 // Comunica a la sala el cambio de estado del interruptor
                                                                 mediator->changeSwitchState();
                                                                 // Activa el sonido de conmutación
-                                                                this->soundManager->play( item->getLabel(), StateSwitch );
+                                                                SoundManager::getInstance()->play( item->getLabel(), StateSwitch );
                                                         }
                                                 }
                                         }
@@ -121,7 +121,7 @@ bool Switch::update ()
                                 // Comunica a la sala el cambio de estado del interruptor
                                 mediator->changeSwitchState();
                                 // Activa el sonido de conmutación
-                                this->soundManager->play( item->getLabel(), StateSwitch );
+                                SoundManager::getInstance()->play( item->getLabel(), StateSwitch );
                         }
 
                         // Vuelta al estado inicial

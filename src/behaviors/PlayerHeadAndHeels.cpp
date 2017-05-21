@@ -191,7 +191,7 @@ bool PlayerHeadAndHeels::update ()
         }
 
         // Reproduce el sonido asociado al estado actual
-        this->soundManager->play( playerItem->getLabel(), stateId );
+        SoundManager::getInstance()->play( playerItem->getLabel(), stateId );
 
         return false;
 }

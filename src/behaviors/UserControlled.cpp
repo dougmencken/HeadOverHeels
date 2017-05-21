@@ -108,8 +108,8 @@ void UserControlled::wait( PlayerItem * playerItem )
 
 void UserControlled::move( PlayerItem * playerItem )
 {
-        // El elemento debe estar activo
-        if ( ! playerItem->isDead() )
+        // move when the item is active
+        if ( ! playerItem->isFrozen() )
         {
                 // Si el jugador ha cogido velocidad extra entonces se divide su velocidad habitual
                 double speed = playerItem->getSpeed() / ( playerItem->getLabel() == PlayerId( Head ) && playerItem->getHighSpeed() > 0 ? 2 : 1 );
@@ -175,7 +175,7 @@ void UserControlled::autoMove( PlayerItem * playerItem )
         // Si deja de moverse de forma automática se detiene el sonido correspondiente
         if ( stateId == StateWait )
         {
-                this->soundManager->stop( playerItem->getLabel(), StateAutoMove );
+                SoundManager::getInstance()->stop( playerItem->getLabel(), StateAutoMove );
         }
 }
 
@@ -195,8 +195,7 @@ void UserControlled::displace( PlayerItem * playerItem )
 
 void UserControlled::cancelDisplace( PlayerItem * playerItem )
 {
-        // Si el elemento está activo y ha llegado el momento de moverse, entonces:
-        if ( ! playerItem->isDead() )
+        if ( ! playerItem->isFrozen() )
         {
                 if ( speedTimer->getValue() > playerItem->getSpeed() )
                 {
@@ -244,7 +243,7 @@ void UserControlled::fall( PlayerItem * playerItem )
         // Si deja de caer se detiene el sonido correspondiente
         if ( stateId != StateFall )
         {
-                this->soundManager->stop( playerItem->getLabel(), StateFall );
+                SoundManager::getInstance()->stop( playerItem->getLabel(), StateFall );
         }
 }
 
@@ -267,7 +266,7 @@ void UserControlled::jump( PlayerItem * playerItem )
                                 {
                                         playerItem->decreaseHighJumps();
                                 }
-                                this->soundManager->play( playerItem->getLabel(), StateRebound );
+                                SoundManager::getInstance()->play( playerItem->getLabel(), StateRebound );
                         }
                         break;
 
@@ -310,7 +309,7 @@ void UserControlled::jump( PlayerItem * playerItem )
         // Si deja de saltar se detiene el sonido correspondiente
         if ( stateId != StateJump && stateId != StateRegularJump && stateId != StateHighJump )
         {
-                this->soundManager->stop( playerItem->getLabel(), StateJump );
+                SoundManager::getInstance()->stop( playerItem->getLabel(), StateJump );
         }
 
         // Si el jugador supera la altura máxima de la sala entonces pasa a la sala de arriba
@@ -385,7 +384,7 @@ void UserControlled::glide( PlayerItem * playerItem )
         // Si deja de planear se detiene el sonido correspondiente
         if ( stateId != StateGlide )
         {
-                this->soundManager->stop( playerItem->getLabel(), StateGlide );
+                SoundManager::getInstance()->stop( playerItem->getLabel(), StateGlide );
         }
 }
 
@@ -498,7 +497,7 @@ void UserControlled::shot( PlayerItem* playerItem )
                 if ( shotData != 0 )
                 {
                         // Detiene el sonido del disparo
-                        this->soundManager->stop( playerItem->getLabel(), StateShot );
+                        SoundManager::getInstance()->stop( playerItem->getLabel(), StateShot );
 
                         // Crea el elemento en la misma posición que el jugador y a su misma altura
                         int z = playerItem->getZ() + playerItem->getHeight() - shotData->height;
@@ -520,7 +519,7 @@ void UserControlled::shot( PlayerItem* playerItem )
                         playerItem->consumeAmmo();
 
                         // Emite el sonido del disparo
-                        this->soundManager->play( playerItem->getLabel(), StateShot );
+                        SoundManager::getInstance()->play( playerItem->getLabel(), StateShot );
                 }
         }
 }
@@ -569,7 +568,7 @@ void UserControlled::take( PlayerItem * playerItem )
                                 takenItemImage = takenItem->getImage();
                                 GameManager::getInstance()->setItemTaken( takenItemImage );
                                 // Emite el sonido correspondiente
-                                this->soundManager->play( playerItem->getLabel(), StateTakeItem );
+                                SoundManager::getInstance()->play( playerItem->getLabel(), StateTakeItem );
                         }
                 }
         }
@@ -612,13 +611,13 @@ void UserControlled::drop( PlayerItem* playerItem )
                         // Comunica al gestor del juego que el bolso está vacío
                         GameManager::getInstance()->setItemTaken( takenItemImage );
                         // Emite el sonido correspondiente
-                        this->soundManager->stop( playerItem->getLabel(), StateFall );
-                        this->soundManager->play( playerItem->getLabel(), StateDropItem );
+                        SoundManager::getInstance()->stop( playerItem->getLabel(), StateFall );
+                        SoundManager::getInstance()->play( playerItem->getLabel(), StateDropItem );
                 }
                 else
                 {
                         // Se emite sonido de o~ ou
-                        this->soundManager->play( playerItem->getLabel(), Mistake );
+                        SoundManager::getInstance()->play( playerItem->getLabel(), Mistake );
                 }
         }
 

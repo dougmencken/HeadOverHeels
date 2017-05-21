@@ -18,12 +18,11 @@
 namespace isomot
 {
 
-// Declaraciones adelantadas
-class Item;
+class Item ;
 
 /**
- * Mueve al elemento en un único sentido. Cuando éste choca con algo gira 180º y prosigue la
- * marcha en sentido contrario
+ * Moves item in only one direction. When it collides with something,
+ * it rotates 180° and continues to move in the opposite direction
  */
 
 class OneWay : public Behavior

@@ -18,11 +18,12 @@
 namespace isomot
 {
 
-class Item;
+class Item ;
 
 /**
  * Mueve al elemento en la dirección marcada por el elemento que tiene encima
  */
+
 class Drive : public Behavior
 {
 

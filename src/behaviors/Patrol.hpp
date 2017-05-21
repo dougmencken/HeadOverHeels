@@ -18,13 +18,12 @@
 namespace isomot
 {
 
-class Item;
+class Item ;
 
 /**
- * Mueve aleatoriamente al elemento dependiendo del tipo de comportamiento. En el
- * caso del patrullero-4c se mueve en las direcciones norte, sur, este u oeste; en
- * el caso del patrullero-4d lo hace en las direcciones noreste, noroeste, sudeste
- * y sudoeste; y, en el caso del patrullero-8 lo hace en todas las direcciones
+ * Moves the item randomly depending on the type of behavior. In the case of patrolman-4c it moves
+ * north, south, east or west. In the case of the patrolman-4d it moves northeast, northwest,
+ * southeast and southwest. And in the case of the patrolman-8 it moves in all directions
  */
 
 class Patrol : public Behavior

@@ -174,7 +174,7 @@ bool Volatile::update ()
                                 destroy = true;
 
                                 // Emite el sonido de destrucción
-                                this->soundManager->play( item->getLabel(), stateId );
+                                SoundManager::getInstance()->play( item->getLabel(), stateId );
 
                                 // Crea el elemento en la misma posición que el volátil y a su misma altura
                                 FreeItem* freeItem = new FreeItem(

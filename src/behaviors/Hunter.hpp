@@ -18,11 +18,11 @@
 namespace isomot
 {
 
-class Item;
-class ItemData;
+class Item ;
+class ItemData ;
 
 /**
- * Intenta dar caza al jugador moviéndose allá donde esté
+ * Try to hunt for player by moving wherever it is
  */
 
 class Hunter : public Behavior
@@ -73,6 +73,11 @@ private:
         */
         bool createFullBody () ;
 
+       /**
+        * Asigna los datos del elemento usado como disparo
+        */
+        void setMoreData ( void * data ) ;
+
 private:
 
        /**
@@ -84,13 +89,6 @@ private:
         * Datos del guarda imperial
         */
         ItemData * guardData ;
-
-public: // Operaciones de consulta y actualización
-
-       /**
-        * Asigna los datos del elemento usado como disparo
-        */
-        void setMoreData( void * data ) ;
 
 };
 

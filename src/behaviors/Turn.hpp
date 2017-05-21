@@ -18,11 +18,11 @@
 namespace isomot
 {
 
-class Item;
+class Item ;
 
 /**
- * Mueve al elemento en un único sentido. Cuando éste choca con algo gira 90º a izquierda
- * o derecha y prosigue la marcha
+ * Moves item in only one direction. When it collides with something,
+ * it turns 90° left or right and continues to move
  */
 
 class Turn : public Behavior

@@ -175,12 +175,12 @@ protected:
         /**
          * Indica si el elemento está inactivo
          */
-        bool dead ;
+        bool frozen ;
 
         /**
          * Fotograma actual del elemento sombreado pero sin enmascarar
          */
-        BITMAP* shadyImage ;
+        BITMAP * shadyImage ;
 
 public: // Operaciones de consulta y actualización
 
@@ -214,15 +214,15 @@ public: // Operaciones de consulta y actualización
 
         /**
          * Establece si el elemento está inactivo
-         * @param dead true si está detenido o false en caso contrario
+         * @param frozen true si está detenido o false en caso contrario
          */
-        void setDead ( bool dead ) {  this->dead = dead ;  }
+        void setFrozen ( bool frozen ) {  this->frozen = frozen ;  }
 
         /**
          * Indica si el elemento está inactivo
          * @return true si está detenido o false en caso contrario
          */
-        bool isDead () const {  return dead ;  }
+        bool isFrozen () const {  return frozen ;  }
 
         /**
          * Datos invariables del elemento. Se emplea cuando el elemento cambia de aspecto y se desea

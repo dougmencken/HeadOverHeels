@@ -3,7 +3,6 @@
 #include "Item.hpp"
 #include "FreeItem.hpp"
 #include "Mediator.hpp"
-#include "SoundManager.hpp"
 #include "BehaviorState.hpp"
 #include "CannonBall.hpp"
 #include "ConveyorBelt.hpp"
@@ -40,7 +39,6 @@ Behavior::Behavior( Item* item, const BehaviorId& id )
         item( item ),
         state( 0 ),
         sender( 0 ),
-        soundManager( SoundManager::getInstance() ),
         stateId( StateWait )
 {
 
