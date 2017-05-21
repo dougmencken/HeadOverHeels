@@ -4,8 +4,8 @@
 #include "ItemData.hpp"
 #include "FreeItem.hpp"
 #include "PlayerItem.hpp"
-#include "DisplaceState.hpp"
-#include "FallState.hpp"
+#include "DisplaceKindOfActivity.hpp"
+#include "FallKindOfActivity.hpp"
 #include "Room.hpp"
 #include "Mediator.hpp"
 #include "BonusManager.hpp"
@@ -15,10 +15,9 @@
 namespace isomot
 {
 
-Special::Special( Item * item, const BehaviorId & id ) :
+Special::Special( Item * item, const BehaviorOfItem & id ) :
         Behavior( item, id )
 {
-        stateId = StateWait;
         destroyTimer = new HPC();
         speedTimer = new HPC();
         fallTimer = new HPC();
@@ -38,9 +37,9 @@ bool Special::update ()
         FreeItem* freeItem = 0;
         Mediator* mediator = item->getMediator();
 
-        switch ( stateId )
+        switch ( activity )
         {
-                case StateWait:
+                case Wait:
                         // Si tiene un elemento encima entonces el elemento puede desaparecer
                         if ( ! item->checkPosition( 0, 0, 1, Add ) )
                         {
@@ -66,7 +65,7 @@ bool Special::update ()
                                         // Cambio de estado si se han cumplido las condiciones
                                         if ( destroy )
                                         {
-                                                stateId = StateDestroy;
+                                                activity = Destroy;
                                                 // Almacena el elemento que ha provocado la destrucción
                                                 this->sender = topItem;
                                                 // Los elementos especiales si se cogen al posarse encima, da tiempo a saltar;
@@ -80,60 +79,60 @@ bool Special::update ()
                         item->animate();
 
                         // Se comprueba si el elemento debe caer
-                        if ( stateId != StateDestroy )
+                        if ( activity != Destroy )
                         {
-                                stateId = StateFall;
+                                activity = Fall;
                         }
                         break;
 
-                case StateDisplaceNorth:
-                case StateDisplaceSouth:
-                case StateDisplaceEast:
-                case StateDisplaceWest:
-                case StateDisplaceNortheast:
-                case StateDisplaceSoutheast:
-                case StateDisplaceSouthwest:
-                case StateDisplaceNorthwest:
-                case StateDisplaceUp:
+                case DisplaceNorth:
+                case DisplaceSouth:
+                case DisplaceEast:
+                case DisplaceWest:
+                case DisplaceNortheast:
+                case DisplaceSoutheast:
+                case DisplaceSouthwest:
+                case DisplaceNorthwest:
+                case DisplaceUp:
                         // Si el elemento es desplazado por un jugador y éste puede tomarlo entonces se destruye
                         if ( dynamic_cast< PlayerItem * >( sender ) && checkDestruction( sender ) )
                         {
-                                stateId = StateDestroy;
+                                activity = Destroy;
                         }
                         // El elemento es deplazado por otro. Si el desplazamiento no se pudo realizar por
                         // colisión entonces el estado se propaga a los elementos con los que ha chocado
                         else if ( speedTimer->getValue() > item->getSpeed() )
                         {
-                                state = DisplaceState::getInstance();
-                                state->displace( this, &stateId, true );
+                                whatToDo = DisplaceKindOfActivity::getInstance();
+                                whatToDo->displace( this, &activity, true );
 
                                 // Una vez se ha completado el desplazamiento el elemento vuelve a su comportamiento normal
-                                stateId = StateFall;
+                                activity = Fall;
 
                                 // Se pone a cero el cronómetro para el siguiente ciclo
                                 speedTimer->reset();
                         }
                         break;
 
-                case StateForceDisplaceNorth:
-                case StateForceDisplaceSouth:
-                case StateForceDisplaceEast:
-                case StateForceDisplaceWest:
+                case ForceDisplaceNorth:
+                case ForceDisplaceSouth:
+                case ForceDisplaceEast:
+                case ForceDisplaceWest:
                         // El elemento es arrastrado porque está encima de una cinta transportadora
                         if ( speedTimer->getValue() > item->getSpeed() )
                         {
-                                state = DisplaceState::getInstance();
-                                state->displace( this, &stateId, true );
+                                whatToDo = DisplaceKindOfActivity::getInstance();
+                                whatToDo->displace( this, &activity, true );
 
                                 // Una vez se ha completado el desplazamiento el elemento vuelve a su comportamiento normal
-                                stateId = StateFall;
+                                activity = Fall;
 
                                 // Se pone a cero el cronómetro para el siguiente ciclo
                                 speedTimer->reset();
                         }
                         break;
 
-                case StateFall:
+                case Fall:
                         // Se comprueba si ha topado con el suelo en una sala sin suelo
                         if ( item->getZ() == 0 && item->getMediator()->getRoom()->getFloorType() == NoFloor )
                         {
@@ -143,10 +142,10 @@ bool Special::update ()
                         // Si ha llegado el momento de caer entonces el elemento desciende una unidad
                         else if ( fallTimer->getValue() > item->getWeight() )
                         {
-                                state = FallState::getInstance();
-                                if ( ! state->fall( this ) )
+                                whatToDo = FallKindOfActivity::getInstance();
+                                if ( ! whatToDo->fall( this ) )
                                 {
-                                        stateId = StateWait;
+                                        activity = Wait;
                                 }
 
                                 // Se pone a cero el cronómetro para el siguiente ciclo
@@ -154,13 +153,13 @@ bool Special::update ()
                         }
                         break;
 
-                case StateDestroy:
+                case Destroy:
                         if ( destroyTimer->getValue() > 0.100 )
                         {
                                 destroy = true;
 
                                 // Emite el sonido de destrucción
-                                SoundManager::getInstance()->play( item->getLabel(), stateId );
+                                SoundManager::getInstance()->play( item->getLabel(), activity );
 
                                 // Los bonus deben desaparecer de las salas una vez se cojan. Al regresar ya no deben estar
                                 BonusManager::getInstance()->markBonusAsAbsent( item->getMediator()->getRoom()->getIdentifier(), item->getLabel() );
@@ -195,7 +194,7 @@ bool Special::checkDestruction( Item* sender )
 
         return  ( playerId == Head      &&  ( magicItemId == Donuts ||
                                                 magicItemId == ExtraLife ||
-                                                magicItemId == HighSpeed ||
+                                                magicItemId == HighSpeedItem ||
                                                 magicItemId == Shield ||
                                                 magicItemId == Crown ||
                                                 magicItemId == Horn ||
@@ -203,7 +202,7 @@ bool Special::checkDestruction( Item* sender )
                 ||
 
                 ( playerId == Heels     &&  ( magicItemId == ExtraLife ||
-                                                magicItemId == HighJump ||
+                                                magicItemId == HighJumpItem ||
                                                 magicItemId == Shield ||
                                                 magicItemId == Crown ||
                                                 magicItemId == Handbag ||
@@ -221,7 +220,7 @@ bool Special::checkDestruction( Item* sender )
 
 void Special::takeSpecial( PlayerItem* who )
 {
-        switch( this->item->getLabel() )
+        switch ( this->item->getLabel() )
         {
                 case Donuts:
                 {
@@ -234,11 +233,11 @@ void Special::takeSpecial( PlayerItem* who )
                         who->addLives( 2 );
                         break;
 
-                case HighSpeed:
+                case HighSpeedItem:
                         who->activateHighSpeed();
                         break;
 
-                case HighJump:
+                case HighJumpItem:
                         who->addHighJumps( 10 );
                         break;
 

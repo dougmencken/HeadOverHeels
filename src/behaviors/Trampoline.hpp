@@ -18,7 +18,7 @@
 namespace isomot
 {
 
-class Item;
+class Item ;
 
 /**
  * Mueve al elemento en la dirección marcada por el elemento que tiene encima
@@ -34,7 +34,7 @@ public:
         * @param item Elemento que tiene este comportamiento
         * @param id Identificador del comportamiento
         */
-        Trampoline( Item * item, const BehaviorId & id ) ;
+        Trampoline( Item * item, const BehaviorOfItem & id ) ;
 
         virtual ~Trampoline( ) ;
 

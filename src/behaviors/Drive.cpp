@@ -3,8 +3,8 @@
 #include "Item.hpp"
 #include "FreeItem.hpp"
 #include "PlayerItem.hpp"
-#include "DisplaceState.hpp"
-#include "FallState.hpp"
+#include "DisplaceKindOfActivity.hpp"
+#include "FallKindOfActivity.hpp"
 #include "Mediator.hpp"
 #include "Room.hpp"
 #include "SoundManager.hpp"
@@ -13,9 +13,8 @@
 namespace isomot
 {
 
-Drive::Drive( Item* item, const BehaviorId& id ) : Behavior( item, id )
+Drive::Drive( Item* item, const BehaviorOfItem& id ) : Behavior( item, id )
 {
-        stateId = StateWait;
         running = false;
         speedTimer = new HPC();
         fallTimer = new HPC();
@@ -36,28 +35,28 @@ bool Drive::update ()
         bool destroyOrNot = false;
         bool playerFound = false;
 
-        switch ( stateId )
+        switch ( activity )
         {
-                case StateWait:
+                case Wait:
                         // Si está en marcha sigue avanzando según su orientación actual
                         if ( running )
                         {
                                 switch ( freeItem->getDirection() )
                                 {
                                         case North:
-                                                changeStateId( StateMoveNorth );
+                                                changeActivityOfItem( MoveNorth );
                                                 break;
 
                                         case South:
-                                                changeStateId( StateMoveSouth );
+                                                changeActivityOfItem( MoveSouth );
                                                 break;
 
                                         case East:
-                                                changeStateId( StateMoveEast );
+                                                changeActivityOfItem( MoveEast );
                                                 break;
 
                                         case West:
-                                                changeStateId( StateMoveWest );
+                                                changeActivityOfItem( MoveWest );
                                                 break;
 
                                         default:
@@ -81,19 +80,19 @@ bool Drive::update ()
                                                         switch ( dynamic_cast< PlayerItem * >( item )->getDirection() )
                                                         {
                                                                 case North:
-                                                                        changeStateId( StateMoveNorth );
+                                                                        changeActivityOfItem( MoveNorth );
                                                                         break;
 
                                                                 case South:
-                                                                        changeStateId( StateMoveSouth );
+                                                                        changeActivityOfItem( MoveSouth );
                                                                         break;
 
                                                                 case East:
-                                                                        changeStateId( StateMoveEast );
+                                                                        changeActivityOfItem( MoveEast );
                                                                         break;
 
                                                                 case West:
-                                                                        changeStateId( StateMoveWest );
+                                                                        changeActivityOfItem( MoveWest );
                                                                         break;
 
                                                                 default:
@@ -105,23 +104,23 @@ bool Drive::update ()
                         }
                         break;
 
-                case StateMoveNorth:
-                case StateMoveSouth:
-                case StateMoveEast:
-                case StateMoveWest:
+                case MoveNorth:
+                case MoveSouth:
+                case MoveEast:
+                case MoveWest:
                         // item is active and it is time to move
                         if ( ! freeItem->isFrozen() )
                         {
                                 if ( speedTimer->getValue() > freeItem->getSpeed() )
                                 {
                                         // El elemento se mueve. Si colisiona vuelve al estado inicial para tomar una nueva dirección
-                                        if ( ! state->move( this, &stateId, true ) )
+                                        if ( ! whatToDo->move( this, &activity, true ) )
                                         {
                                                 running = false;
-                                                stateId = StateWait;
+                                                activity = Wait;
 
                                                 // Emite el sonido de colisión
-                                                SoundManager::getInstance()->play( freeItem->getLabel(), StateCollision );
+                                                SoundManager::getInstance()->play( freeItem->getLabel(), Collision );
                                         }
 
                                         // Se pone a cero el cronómetro para el siguiente ciclo
@@ -133,21 +132,21 @@ bool Drive::update ()
                         }
                         break;
 
-                case StateDisplaceNorth:
-                case StateDisplaceSouth:
-                case StateDisplaceEast:
-                case StateDisplaceWest:
-                case StateDisplaceNortheast:
-                case StateDisplaceNorthwest:
-                case StateDisplaceSoutheast:
-                case StateDisplaceSouthwest:
+                case DisplaceNorth:
+                case DisplaceSouth:
+                case DisplaceEast:
+                case DisplaceWest:
+                case DisplaceNortheast:
+                case DisplaceNorthwest:
+                case DisplaceSoutheast:
+                case DisplaceSouthwest:
                         // Si el elemento está activo y ha llegado el momento de moverse, entonces:
                         if ( speedTimer->getValue() > freeItem->getSpeed() )
                         {
                                 // El elemento se mueve hasta detectar un colisión
-                                if ( ! state->displace( this, &stateId, true ) )
+                                if ( ! whatToDo->displace( this, &activity, true ) )
                                 {
-                                        stateId = StateWait;
+                                        activity = Wait;
                                 }
 
                                 // Se pone a cero el cronómetro para el siguiente ciclo
@@ -157,11 +156,11 @@ bool Drive::update ()
                         // inactive item will continue to be inactive
                         if ( freeItem->isFrozen() )
                         {
-                                stateId = StateFreeze;
+                                activity = Freeze;
                         }
                         break;
 
-                case StateFall:
+                case Fall:
                         // Se comprueba si ha topado con el suelo en una sala sin suelo
                         if ( freeItem->getZ() == 0 && freeItem->getMediator()->getRoom()->getFloorType() == NoFloor )
                         {
@@ -171,9 +170,9 @@ bool Drive::update ()
                         // Si ha llegado el momento de caer entonces el elemento desciende una unidad
                         else if ( fallTimer->getValue() > freeItem->getWeight() )
                         {
-                                if ( ! state->fall( this ) )
+                                if ( ! whatToDo->fall( this ) )
                                 {
-                                        stateId = StateWait;
+                                        activity = Wait;
                                 }
 
                                 // Se pone a cero el cronómetro para el siguiente ciclo
@@ -181,13 +180,13 @@ bool Drive::update ()
                         }
                         break;
 
-                case StateFreeze:
+                case Freeze:
                         freeItem->setFrozen( true );
                         break;
 
-                case StateWakeUp:
+                case WakeUp:
                         freeItem->setFrozen( false );
-                        stateId = StateWait;
+                        activity = Wait;
                         break;
 
                 default:

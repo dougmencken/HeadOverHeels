@@ -4,8 +4,8 @@
 #include "ItemData.hpp"
 #include "FreeItem.hpp"
 #include "PlayerItem.hpp"
-#include "DisplaceState.hpp"
-#include "FallState.hpp"
+#include "DisplaceKindOfActivity.hpp"
+#include "FallKindOfActivity.hpp"
 #include "Mediator.hpp"
 #include "Room.hpp"
 #include "SoundManager.hpp"
@@ -15,10 +15,9 @@
 namespace isomot
 {
 
-Hunter::Hunter( Item * item, const BehaviorId & id ) :
+Hunter::Hunter( Item * item, const BehaviorOfItem & id ) :
         Behavior( item, id )
 {
-        stateId = StateWait;
         speedTimer = new HPC();
         speedTimer->start();
 }
@@ -35,14 +34,14 @@ bool Hunter::update ()
         Mediator* mediator = freeItem->getMediator();
         bool alive = true;
 
-        switch ( stateId )
+        switch ( activity )
         {
-                case StateWait:
+                case Wait:
                 // Si el elemento no tiene que esperar la cercanía del jugador, se activa sin más
-                if ( id == Hunter4Behavior || id == Hunter8Behavior )
+                if ( theBehavior == Hunter4Behavior || theBehavior == Hunter8Behavior )
                 {
-                        SoundManager::getInstance()->play( freeItem->getLabel(), stateId );
-                        stateId = calculateDirection( stateId );
+                        SoundManager::getInstance()->play( freeItem->getLabel(), activity );
+                        activity = calculateDirection( activity );
                 }
                 // Se comprueba la cercanía del jugador para activar el elemento
                 else
@@ -56,13 +55,13 @@ bool Hunter::update ()
                                 playerItem->getY() > freeItem->getY() - delta  &&
                                 playerItem->getY() < freeItem->getY() + freeItem->getWidthY() + delta )
                         {
-                                stateId = calculateDirection( stateId );
+                                activity = calculateDirection( activity );
                         }
 
                         // Si se mueve en ocho direcciones emite sonido cuando está detenido
-                        if ( id == HunterWaiting8Behavior )
+                        if ( theBehavior == HunterWaiting8Behavior )
                         {
-                                SoundManager::getInstance()->play( freeItem->getLabel(), stateId );
+                                SoundManager::getInstance()->play( freeItem->getLabel(), activity );
                         }
 
                         // Anima el elemento aunque esté detenido
@@ -70,12 +69,12 @@ bool Hunter::update ()
                 }
                 break;
 
-                case StateMoveNorth:
-                case StateMoveSouth:
-                case StateMoveEast:
-                case StateMoveWest:
+                case MoveNorth:
+                case MoveSouth:
+                case MoveEast:
+                case MoveWest:
                         // Si se crea el guarda completo entonces el elemento actual debe destruirse
-                        if ( id == HunterWaiting4Behavior && createFullBody() )
+                        if ( theBehavior == HunterWaiting4Behavior && createFullBody() )
                         {
                                 alive = false;
                         }
@@ -85,15 +84,15 @@ bool Hunter::update ()
                                 if ( speedTimer->getValue() > freeItem->getSpeed() )
                                 {
                                         // El elemento se mueve
-                                        state->move( this, &stateId, false );
+                                        whatToDo->move( this, &activity, false );
                                         // Se pone a cero el cronómetro para el siguiente ciclo
                                         speedTimer->reset();
                                         // Comprueba si hay cambio de dirección
-                                        stateId = calculateDirection( stateId );
+                                        activity = calculateDirection( activity );
                                         // Cae si tiene que hacerlo
                                         if ( freeItem->getWeight() > 0 )
                                         {
-                                                FallState::getInstance()->fall( this );
+                                                FallKindOfActivity::getInstance()->fall( this );
                                         }
                                 }
 
@@ -101,42 +100,42 @@ bool Hunter::update ()
                                 freeItem->animate();
 
                                 // Emite el sonido de movimiento
-                                SoundManager::getInstance()->play( freeItem->getLabel(), stateId );
+                                SoundManager::getInstance()->play( freeItem->getLabel(), activity );
                         }
                         break;
 
-                case StateMoveNortheast:
-                case StateMoveNorthwest:
-                case StateMoveSoutheast:
-                case StateMoveSouthwest:
+                case MoveNortheast:
+                case MoveNorthwest:
+                case MoveSoutheast:
+                case MoveSouthwest:
                         if ( ! freeItem->isFrozen() )
                         {
                                 if ( speedTimer->getValue() > freeItem->getSpeed() )
                                 {
                                         // El elemento se mueve
-                                        if ( ! state->move( this, &stateId, false ) )
+                                        if ( ! whatToDo->move( this, &activity, false ) )
                                         {
-                                                if ( stateId == StateMoveNortheast || stateId == StateMoveNorthwest )
+                                                if ( activity == MoveNortheast || activity == MoveNorthwest )
                                                 {
-                                                        StateId tempStateId = StateMoveNorth;
-                                                        if ( ! state->move( this, &tempStateId, false ) )
+                                                        ActivityOfItem tempActivity = MoveNorth;
+                                                        if ( ! whatToDo->move( this, &tempActivity, false ) )
                                                         {
-                                                                stateId = ( stateId == StateMoveNortheast ? StateMoveEast : StateMoveWest );
+                                                                activity = ( activity == MoveNortheast ? MoveEast : MoveWest );
                                                                 if ( freeItem->getWeight() > 0 )
                                                                 {
-                                                                        FallState::getInstance()->fall( this );
+                                                                        FallKindOfActivity::getInstance()->fall( this );
                                                                 }
                                                         }
                                                 }
                                                 else
                                                 {
-                                                        StateId tempStateId = StateMoveSouth;
-                                                        if ( ! state->move( this, &tempStateId, false ) )
+                                                        ActivityOfItem tempActivity = MoveSouth;
+                                                        if ( ! whatToDo->move( this, &tempActivity, false ) )
                                                         {
-                                                                stateId = ( stateId == StateMoveSoutheast ? StateMoveEast : StateMoveWest );
+                                                                activity = ( activity == MoveSoutheast ? MoveEast : MoveWest );
                                                                 if ( freeItem->getWeight() > 0 )
                                                                 {
-                                                                        FallState::getInstance()->fall( this );
+                                                                        FallKindOfActivity::getInstance()->fall( this );
                                                                 }
                                                         }
                                                 }
@@ -144,7 +143,7 @@ bool Hunter::update ()
                                         else
                                         {
                                                 // Comprueba si hay cambio de dirección
-                                                stateId = calculateDirection( stateId );
+                                                activity = calculateDirection( activity );
                                         }
 
                                         // Se pone a cero el cronómetro para el siguiente ciclo
@@ -155,24 +154,24 @@ bool Hunter::update ()
                                 freeItem->animate();
 
                                 // Emite el sonido de movimiento
-                                SoundManager::getInstance()->play( freeItem->getLabel(), stateId );
+                                SoundManager::getInstance()->play( freeItem->getLabel(), activity );
                         }
                         break;
 
-                case StateDisplaceNorth:
-                case StateDisplaceSouth:
-                case StateDisplaceEast:
-                case StateDisplaceWest:
-                case StateDisplaceNortheast:
-                case StateDisplaceNorthwest:
-                case StateDisplaceSoutheast:
-                case StateDisplaceSouthwest:
+                case DisplaceNorth:
+                case DisplaceSouth:
+                case DisplaceEast:
+                case DisplaceWest:
+                case DisplaceNortheast:
+                case DisplaceNorthwest:
+                case DisplaceSoutheast:
+                case DisplaceSouthwest:
                         // Si el elemento está activo y ha llegado el momento de moverse, entonces:
                         if ( speedTimer->getValue() > freeItem->getSpeed() )
                         {
                                 // El elemento se mueve
-                                state->displace( this, &stateId, false );
-                                stateId = StateWait;
+                                whatToDo->displace( this, &activity, false );
+                                activity = Wait;
                                 // Se pone a cero el cronómetro para el siguiente ciclo
                                 speedTimer->reset();
                         }
@@ -180,17 +179,17 @@ bool Hunter::update ()
                         // preserve inactivity for frozen item
                         if ( freeItem->isFrozen() )
                         {
-                                stateId = StateFreeze;
+                                activity = Freeze;
                         }
                         break;
 
-                case StateFreeze:
+                case Freeze:
                         freeItem->setFrozen( true );
                         break;
 
-                case StateWakeUp:
+                case WakeUp:
                         freeItem->setFrozen( false );
-                        stateId = StateWait;
+                        activity = Wait;
                         break;
 
                 default:
@@ -200,21 +199,21 @@ bool Hunter::update ()
         return !alive;
 }
 
-StateId Hunter::calculateDirection( const StateId& stateId )
+ActivityOfItem Hunter::calculateDirection( const ActivityOfItem& activity )
 {
-        if ( id == Hunter4Behavior || id == HunterWaiting4Behavior )
+        if ( theBehavior == Hunter4Behavior || theBehavior == HunterWaiting4Behavior )
         {
-                return calculateDirection4( stateId );
+                return calculateDirection4( activity );
         }
-        else if ( id == Hunter8Behavior || id == HunterWaiting8Behavior )
+        else if ( theBehavior == Hunter8Behavior || theBehavior == HunterWaiting8Behavior )
         {
-                return calculateDirection8( stateId );
+                return calculateDirection8( activity );
         }
 
-        return StateWait;
+        return Wait;
 }
 
-StateId Hunter::calculateDirection4( const StateId& stateId )
+ActivityOfItem Hunter::calculateDirection4( const ActivityOfItem& activity )
 {
         FreeItem* freeItem = dynamic_cast< FreeItem * >( this->item );
         PlayerItem* playerItem = freeItem->getMediator()->getActivePlayer();
@@ -231,24 +230,24 @@ StateId Hunter::calculateDirection4( const StateId& stateId )
                         if ( dx > 0 )
                         {
                                 // Si la distancia es positiva se mueve al norte
-                                changeStateId( StateMoveNorth );
+                                changeActivityOfItem( MoveNorth );
                         }
                         else if ( dx < 0 )
                         {
                                 // Si la distancia es negativa se mueve al sur
-                                changeStateId( StateMoveSouth );
+                                changeActivityOfItem( MoveSouth );
                         }
                         else
                         {
                                 if ( dy > 0 )
                                 {
                                         // Si la distancia es positiva se mueve al este
-                                        changeStateId( StateMoveEast );
+                                        changeActivityOfItem( MoveEast );
                                 }
                                 else if ( dy < 0 )
                                 {
                                         // Si la distancia es negativa se mueve al oeste
-                                        changeStateId( StateMoveWest );
+                                        changeActivityOfItem( MoveWest );
                                 }
                         }
                 }
@@ -258,33 +257,33 @@ StateId Hunter::calculateDirection4( const StateId& stateId )
                         if ( dy > 0 )
                         {
                                 // Si la distancia es positiva se mueve al este
-                                changeStateId( StateMoveEast );
+                                changeActivityOfItem( MoveEast );
                         }
                         else if ( dy < 0 )
                         {
                                 // Si la distancia es negativa se mueve al oeste
-                                changeStateId( StateMoveWest );
+                                changeActivityOfItem( MoveWest );
                         }
                         else
                         {
                                 if ( dx > 0 )
                                 {
                                         // Si la distancia es positiva se mueve al norte
-                                        changeStateId( StateMoveNorth );
+                                        changeActivityOfItem( MoveNorth );
                                 }
                                 else if ( dx < 0 )
                                 {
                                         // Si la distancia es negativa se mueve al sur
-                                        changeStateId( StateMoveSouth );
+                                        changeActivityOfItem( MoveSouth );
                                 }
                         }
                 }
         }
 
-        return stateId;
+        return activity;
 }
 
-StateId Hunter::calculateDirection8( const StateId& stateId )
+ActivityOfItem Hunter::calculateDirection8( const ActivityOfItem& activity )
 {
         FreeItem* freeItem = dynamic_cast< FreeItem* >( this->item );
         PlayerItem* playerItem = freeItem->getMediator()->getActivePlayer();
@@ -304,27 +303,27 @@ StateId Hunter::calculateDirection8( const StateId& stateId )
                         if ( dx > 1 )
                         {
                                 if ( dy > 1 )
-                                        changeStateId( StateMoveNortheast );
+                                        changeActivityOfItem( MoveNortheast );
                                 else if ( dy < -1 )
-                                        changeStateId( StateMoveNorthwest );
+                                        changeActivityOfItem( MoveNorthwest );
                                 else
-                                        changeStateId( StateMoveNorth );
+                                        changeActivityOfItem( MoveNorth );
                         }
                         else if ( dx < -1 )
                         {
                                 if ( dy > 1 )
-                                        changeStateId( StateMoveSoutheast );
+                                        changeActivityOfItem( MoveSoutheast );
                                 else if ( dy < -1 )
-                                        changeStateId( StateMoveSouthwest );
+                                        changeActivityOfItem( MoveSouthwest );
                                 else
-                                        changeStateId( StateMoveSouth );
+                                        changeActivityOfItem( MoveSouth );
                         }
                         else
                         {
                                 if ( dy > 0 )
-                                        changeStateId( StateMoveEast );
+                                        changeActivityOfItem( MoveEast );
                                 else if ( dy < 0 )
-                                        changeStateId( StateMoveWest );
+                                        changeActivityOfItem( MoveWest );
                         }
                 }
                 else if ( abs( dy ) < abs( dx ) )
@@ -332,38 +331,38 @@ StateId Hunter::calculateDirection8( const StateId& stateId )
                         if ( dy > 1 )
                         {
                                 if ( dx > 1 )
-                                        changeStateId( StateMoveNortheast );
+                                        changeActivityOfItem( MoveNortheast );
                                 else if ( dx < -1 )
-                                        changeStateId( StateMoveSoutheast );
+                                        changeActivityOfItem( MoveSoutheast );
                                 else
-                                        changeStateId( StateMoveEast );
+                                        changeActivityOfItem( MoveEast );
                         }
                         else if ( dy < -1 )
                         {
                                 if ( dx > 1 )
-                                        changeStateId( StateMoveNorthwest );
+                                        changeActivityOfItem( MoveNorthwest );
                                 else if ( dx < -1 )
-                                        changeStateId( StateMoveSouthwest );
+                                        changeActivityOfItem( MoveSouthwest );
                                 else
-                                        changeStateId( StateMoveWest );
+                                        changeActivityOfItem( MoveWest );
                         }
                         else
                         {
                                 if ( dx > 0 )
-                                        changeStateId( StateMoveNorth );
+                                        changeActivityOfItem( MoveNorth );
                                 else if ( dx < 0 )
-                                        changeStateId( StateMoveSouth );
+                                        changeActivityOfItem( MoveSouth );
                         }
                 }
 
                 // El guardián del trono huirá del jugador si éste tiene cuatro coronas
                 if ( item->getLabel() == ThroneGuard && GameManager::getInstance()->countFreePlanets() >= 4 )
                 {
-                        changeStateId( StateMoveSouthwest );
+                        changeActivityOfItem( MoveSouthwest );
                 }
         }
 
-        return stateId;
+        return activity;
 }
 
 bool Hunter::createFullBody()

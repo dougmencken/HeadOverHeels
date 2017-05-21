@@ -2,9 +2,9 @@
 #include "Patrol.hpp"
 #include "Item.hpp"
 #include "FreeItem.hpp"
-#include "MoveState.hpp"
-#include "DisplaceState.hpp"
-#include "FallState.hpp"
+#include "MoveKindOfActivity.hpp"
+#include "DisplaceKindOfActivity.hpp"
+#include "FallKindOfActivity.hpp"
 #include "Mediator.hpp"
 #include "Room.hpp"
 #include "SoundManager.hpp"
@@ -13,10 +13,9 @@
 namespace isomot
 {
 
-Patrol::Patrol( Item * item, const BehaviorId & id ) :
+Patrol::Patrol( Item * item, const BehaviorOfItem & id ) :
         Behavior( item, id )
 {
-        stateId = StateWait;
         speedTimer = new HPC();
         fallTimer = new HPC();
         changeTimer = new HPC();
@@ -37,20 +36,20 @@ bool Patrol::update ()
         FreeItem * freeItem = dynamic_cast< FreeItem * >( this->item );
         bool alive = true;
 
-        switch ( stateId )
+        switch ( activity )
         {
-                case StateWait:
+                case Wait:
                         changeDirection();
                         break;
 
-                case StateMoveNorth:
-                case StateMoveSouth:
-                case StateMoveEast:
-                case StateMoveWest:
-                case StateMoveNortheast:
-                case StateMoveNorthwest:
-                case StateMoveSoutheast:
-                case StateMoveSouthwest:
+                case MoveNorth:
+                case MoveSouth:
+                case MoveEast:
+                case MoveWest:
+                case MoveNortheast:
+                case MoveNorthwest:
+                case MoveSoutheast:
+                case MoveSouthwest:
                         if ( ! freeItem->isFrozen() )
                         {
                                 if ( speedTimer->getValue() > freeItem->getSpeed())
@@ -65,17 +64,17 @@ bool Patrol::update ()
                                         // El elemento se mueve. Si el movimiento no se pudo realizar por colisión entonces
                                         // se desplaza a los elementos con los que pudiera haber chocado y el elemento da media
                                         // vuelta cambiando su estado a otro de movimiento
-                                        if ( ! state->move( this, &stateId, true ) )
+                                        if ( ! whatToDo->move( this, &activity, true ) )
                                         {
                                                 // Fuerza el cambio de dirección
                                                 changeDirection();
 
                                                 // Emite el sonido de colisión
-                                                SoundManager::getInstance()->play( freeItem->getLabel(), StateCollision );
+                                                SoundManager::getInstance()->play( freeItem->getLabel(), Collision );
                                         }
 
                                         // Emite el sonido de movimiento
-                                        SoundManager::getInstance()->play( freeItem->getLabel(), stateId );
+                                        SoundManager::getInstance()->play( freeItem->getLabel(), activity );
 
                                         // Se pone a cero el cronómetro para el siguiente ciclo
                                         speedTimer->reset();
@@ -86,32 +85,32 @@ bool Patrol::update ()
                         }
                         break;
 
-                case StateDisplaceNorth:
-                case StateDisplaceSouth:
-                case StateDisplaceEast:
-                case StateDisplaceWest:
-                case StateDisplaceNortheast:
-                case StateDisplaceSoutheast:
-                case StateDisplaceSouthwest:
-                case StateDisplaceNorthwest:
+                case DisplaceNorth:
+                case DisplaceSouth:
+                case DisplaceEast:
+                case DisplaceWest:
+                case DisplaceNortheast:
+                case DisplaceSoutheast:
+                case DisplaceSouthwest:
+                case DisplaceNorthwest:
                         // Emite el sonido de de desplazamiento
-                        SoundManager::getInstance()->play( freeItem->getLabel(), stateId );
+                        SoundManager::getInstance()->play( freeItem->getLabel(), activity );
 
                         // El elemento es deplazado por otro. Si el desplazamiento no se pudo realizar por
                         // colisión entonces el estado se propaga a los elementos con los que ha chocado
-                        state->displace( this, &stateId, true );
+                        whatToDo->displace( this, &activity, true );
 
                         // Una vez se ha completado el desplazamiento el elemento vuelve a su comportamiento normal
-                        stateId = StateWait;
+                        activity = Wait;
 
                         // preserve inactivity for frozen item
                         if ( freeItem->isFrozen() )
                         {
-                                stateId = StateFreeze;
+                                activity = Freeze;
                         }
                         break;
 
-                case StateFall:
+                case Fall:
                         // Se comprueba si ha topado con el suelo en una sala sin suelo
                         if ( item->getZ() == 0 && item->getMediator()->getRoom()->getFloorType() == NoFloor )
                         {
@@ -122,11 +121,11 @@ bool Patrol::update ()
                         else if ( fallTimer->getValue() > freeItem->getWeight() )
                         {
                                 // Si termina de caer vuelve al estado inicial
-                                if ( ! state->fall( this ) )
+                                if ( ! whatToDo->fall( this ) )
                                 {
                                         // Emite el sonido de caída
-                                        SoundManager::getInstance()->play( freeItem->getLabel(), stateId );
-                                        stateId = StateWait;
+                                        SoundManager::getInstance()->play( freeItem->getLabel(), activity );
+                                        activity = Wait;
                                 }
 
                                 // Se pone a cero el cronómetro para el siguiente ciclo
@@ -134,13 +133,13 @@ bool Patrol::update ()
                         }
                         break;
 
-                case StateFreeze:
+                case Freeze:
                         freeItem->setFrozen( true );
                         break;
 
-                case StateWakeUp:
+                case WakeUp:
                         freeItem->setFrozen( false );
-                        stateId = StateWait;
+                        activity = Wait;
                         break;
 
                 default:
@@ -155,7 +154,7 @@ void Patrol::changeDirection()
         int direction = 0;
 
         // En función del tipo las orientaciones a barajar son distintas
-        switch ( id )
+        switch ( theBehavior )
         {
                 case Patrol4cBehavior:
                         direction = ( rand() % 4 );
@@ -177,42 +176,42 @@ void Patrol::changeDirection()
         switch ( static_cast< Direction >( direction ) )
         {
                 case North:
-                stateId = StateMoveNorth;
+                activity = MoveNorth;
                 break;
 
                 case South:
-                stateId = StateMoveSouth;
+                activity = MoveSouth;
                 break;
 
                 case East:
-                        stateId = StateMoveEast;
+                        activity = MoveEast;
                         break;
 
                 case West:
-                        stateId = StateMoveWest;
+                        activity = MoveWest;
                         break;
 
                 case Northeast:
-                        stateId = StateMoveNortheast;
+                        activity = MoveNortheast;
                         break;
 
                 case Northwest:
-                        stateId = StateMoveNorthwest;
+                        activity = MoveNorthwest;
                         break;
 
                 case Southeast:
-                        stateId = StateMoveSoutheast;
+                        activity = MoveSoutheast;
                         break;
 
                 case Southwest:
-                        stateId = StateMoveSouthwest;
+                        activity = MoveSouthwest;
                         break;
 
                 default:
                         ;
         }
 
-        state = MoveState::getInstance();
+        whatToDo = MoveKindOfActivity::getInstance();
 }
 
 }

@@ -242,7 +242,7 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
                                 draw_sprite( where, background, 0, 0 );
                 }
 
-                PlayerId playerId = static_cast< PlayerId >( this->isomot->getMapManager()->getActiveRoom()->getMediator()->getActivePlayer()->getLabel() );
+                WhichPlayer playerId = static_cast< WhichPlayer >( this->isomot->getMapManager()->getActiveRoom()->getMediator()->getActivePlayer()->getLabel() );
                 draw_sprite( where, ( ( playerId == Head || playerId == HeadAndHeels ) ? pictureOfHead : grayPictureOfHead ), 161, 425 );
                 draw_sprite( where, ( ( playerId == Heels || playerId == HeadAndHeels ) ? pictureOfHeels : grayPictureOfHeels ), 431, 425 );
 
@@ -348,7 +348,7 @@ void GameManager::saveGame ( const std::string& fileName )
         gameFileManager->saveGame( fileName );
 }
 
-void GameManager::addLives ( const PlayerId& player, unsigned char lives )
+void GameManager::addLives ( const WhichPlayer& player, unsigned char lives )
 {
         switch( player )
         {
@@ -384,7 +384,7 @@ void GameManager::addLives ( const PlayerId& player, unsigned char lives )
         }
 }
 
-void GameManager::loseLife ( const PlayerId& player )
+void GameManager::loseLife ( const WhichPlayer& player )
 {
         if ( ! vidasInfinitas )
         {
@@ -438,7 +438,7 @@ void GameManager::takeTool ( const MagicItem& label )
         }
 }
 
-void GameManager::addHighSpeed ( const PlayerId& player, unsigned int highSpeed )
+void GameManager::addHighSpeed ( const WhichPlayer& player, unsigned int highSpeed )
 {
         switch( player )
         {
@@ -456,7 +456,7 @@ void GameManager::addHighSpeed ( const PlayerId& player, unsigned int highSpeed 
         }
 }
 
-void GameManager::decreaseHighSpeed ( const PlayerId& player )
+void GameManager::decreaseHighSpeed ( const WhichPlayer& player )
 {
         switch(player)
         {
@@ -473,7 +473,7 @@ void GameManager::decreaseHighSpeed ( const PlayerId& player )
         }
 }
 
-void GameManager::addHighJumps ( const PlayerId& player, unsigned int highJumps )
+void GameManager::addHighJumps ( const WhichPlayer& player, unsigned int highJumps )
 {
         switch( player )
         {
@@ -491,7 +491,7 @@ void GameManager::addHighJumps ( const PlayerId& player, unsigned int highJumps 
         }
 }
 
-void GameManager::decreaseHighJumps ( const PlayerId& player )
+void GameManager::decreaseHighJumps ( const WhichPlayer& player )
 {
         switch( player )
         {
@@ -508,7 +508,7 @@ void GameManager::decreaseHighJumps ( const PlayerId& player )
         }
 }
 
-void GameManager::addShield ( const PlayerId& player, double shield )
+void GameManager::addShield ( const WhichPlayer& player, double shield )
 {
         switch( player )
         {
@@ -548,7 +548,7 @@ void GameManager::addShield ( const PlayerId& player, double shield )
         }
 }
 
-void GameManager::decreaseShield ( const PlayerId& player, double shield )
+void GameManager::decreaseShield ( const WhichPlayer& player, double shield )
 {
         switch( player )
         {
@@ -588,7 +588,7 @@ void GameManager::decreaseShield ( const PlayerId& player, double shield )
         }
 }
 
-void GameManager::emptyHandbag ( const PlayerId& player )
+void GameManager::emptyHandbag ( const WhichPlayer& player )
 {
         switch( player )
         {
@@ -871,7 +871,7 @@ WhyPause GameManager::pause ()
         return why;
 }
 
-unsigned char GameManager::getLives ( const PlayerId& player ) const
+unsigned char GameManager::getLives ( const WhichPlayer& player ) const
 {
         unsigned char lives = 0;
 
@@ -896,7 +896,7 @@ unsigned char GameManager::getLives ( const PlayerId& player ) const
         return lives;
 }
 
-double GameManager::getShield ( const PlayerId& player ) const
+double GameManager::getShield ( const WhichPlayer& player ) const
 {
         double time = 0.0;
 
@@ -921,7 +921,7 @@ double GameManager::getShield ( const PlayerId& player ) const
         return time;
 }
 
-std::vector< short > GameManager::hasTool ( const PlayerId& player ) const
+std::vector< short > GameManager::hasTool ( const WhichPlayer& player ) const
 {
         std::vector< short > tools;
 
@@ -959,7 +959,7 @@ std::vector< short > GameManager::hasTool ( const PlayerId& player ) const
         return tools;
 }
 
-unsigned short GameManager::getDonuts ( const PlayerId& player ) const
+unsigned short GameManager::getDonuts ( const WhichPlayer& player ) const
 {
         return ( player == Head || player == HeadAndHeels ? this->donuts : 0 );
 }

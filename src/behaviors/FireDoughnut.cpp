@@ -1,65 +1,63 @@
 
-#include "Shot.hpp"
-#include "FreeItem.hpp"
+#include "FireDoughnut.hpp"
 #include "Mediator.hpp"
-#include "MoveState.hpp"
+#include "FreeItem.hpp"
 #include "PlayerItem.hpp"
 #include "UserControlled.hpp"
+#include "MoveKindOfActivity.hpp"
 
 
 namespace isomot
 {
 
-Shot::Shot( Item * item, const BehaviorId & id )
-: Behavior( item, id )
+FireDoughnut::FireDoughnut( Item * item, const BehaviorOfItem & id )
+        : Behavior( item, id )
+        , playerItem( 0 )
 {
-        stateId = StateWait;
-        playerItem = 0;
         speedTimer = new HPC();
         speedTimer->start();
 }
 
-Shot::~Shot( )
+FireDoughnut::~FireDoughnut( )
 {
         delete speedTimer;
 }
 
-bool Shot::update ()
+bool FireDoughnut::update ()
 {
         FreeItem* freeItem = dynamic_cast< FreeItem * >( this->item );
         bool destroy = false;
 
-        switch ( stateId )
+        switch ( activity )
         {
                 // El estado inicial establece la dirección
-                case StateWait:
+                case Wait:
                         switch ( freeItem->getDirection() )
                         {
                                 case North:
-                                        stateId = StateMoveNorth;
+                                        activity = MoveNorth;
                                         break;
 
                                 case South:
-                                        stateId = StateMoveSouth;
+                                        activity = MoveSouth;
                                         break;
 
                                 case East:
-                                        stateId = StateMoveEast;
+                                        activity = MoveEast;
                                         break;
 
                                 case West:
-                                        stateId = StateMoveWest;
+                                        activity = MoveWest;
                                         break;
 
                                 default:
                                         ;
                         }
 
-                        // Asigna el estado de movimiento
-                        state = MoveState::getInstance();
+                        whatToDo = MoveKindOfActivity::getInstance();
                         break;
 
-                case StateMoveNorth:
+                case MoveNorth:
                         if ( speedTimer->getValue() > freeItem->getSpeed() )
                         {
                                 // Almacena en la pila de colisiones los elementos que hay al norte
@@ -69,18 +67,18 @@ bool Shot::update ()
                                 if ( freeItem->getMediator()->isStackOfCollisionsEmpty() || freeItem->getMediator()->collisionWithByLabel( playerItem->getLabel() ) )
                                 {
                                         freeItem->setCollisionDetector( false );
-                                        state->move( this, &stateId, false );
+                                        whatToDo->move( this, &activity, false );
                                 }
                                 else
                                 {
                                         // Si ha chocado con un elemento enemigo entonces lo paraliza
                                         if ( freeItem->getMediator()->collisionWithBadBoy() )
                                         {
-                                                propagateState( this->item, StateFreeze );
+                                                propagateActivity( this->item, Freeze );
                                         }
 
                                         // En caso de colisión con cualquier elemento (excepto el jugador), el disparo desaparece
-                                        dynamic_cast< UserControlled * >( playerItem->getBehavior() )->setShotPresent( false );
+                                        dynamic_cast< UserControlled * >( playerItem->getBehavior() )->setFireFromHooter( false );
                                         destroy = true;
                                 }
 
@@ -92,7 +90,7 @@ bool Shot::update ()
                         }
                         break;
 
-                case StateMoveSouth:
+                case MoveSouth:
                         if ( speedTimer->getValue() > freeItem->getSpeed() )
                         {
                                 // Almacena en la pila de colisiones los elementos que hay al sur
@@ -102,18 +100,18 @@ bool Shot::update ()
                                 if ( freeItem->getMediator()->isStackOfCollisionsEmpty() || freeItem->getMediator()->collisionWithByLabel( playerItem->getLabel() ) )
                                 {
                                         freeItem->setCollisionDetector( false );
-                                        state->move( this, &stateId, false );
+                                        whatToDo->move( this, &activity, false );
                                 }
                                 else
                                 {
                                         // Si ha chocado con un elemento enemigo entonces lo paraliza
                                         if ( freeItem->getMediator()->collisionWithBadBoy() )
                                         {
-                                                propagateState( this->item, StateFreeze );
+                                                propagateActivity( this->item, Freeze );
                                         }
 
                                         // En caso de colisión con cualquier elemento (excepto el jugador), el disparo desaparece
-                                        dynamic_cast< UserControlled * >( playerItem->getBehavior() )->setShotPresent( false );
+                                        dynamic_cast< UserControlled * >( playerItem->getBehavior() )->setFireFromHooter( false );
                                         destroy = true;
                                 }
 
@@ -125,7 +123,7 @@ bool Shot::update ()
                         }
                         break;
 
-                case StateMoveEast:
+                case MoveEast:
                         if ( speedTimer->getValue() > freeItem->getSpeed() )
                         {
                                 // Almacena en la pila de colisiones los elementos que hay al este
@@ -135,18 +133,18 @@ bool Shot::update ()
                                 if ( freeItem->getMediator()->isStackOfCollisionsEmpty() || freeItem->getMediator()->collisionWithByLabel( playerItem->getLabel() ) )
                                 {
                                         freeItem->setCollisionDetector( false );
-                                        state->move( this, &stateId, false );
+                                        whatToDo->move( this, &activity, false );
                                 }
                                 else
                                 {
                                         // Si ha chocado con un elemento enemigo entonces lo paraliza
                                         if ( freeItem->getMediator()->collisionWithBadBoy() )
                                         {
-                                                propagateState( this->item, StateFreeze );
+                                                propagateActivity( this->item, Freeze );
                                         }
 
                                         // En caso de colisión con cualquier elemento (excepto el jugador), el disparo desaparece
-                                        dynamic_cast< UserControlled * >( playerItem->getBehavior() )->setShotPresent( false );
+                                        dynamic_cast< UserControlled * >( playerItem->getBehavior() )->setFireFromHooter( false );
                                         destroy = true;
                                 }
 
@@ -158,7 +156,7 @@ bool Shot::update ()
                         }
                         break;
 
-                case StateMoveWest:
+                case MoveWest:
                         if ( speedTimer->getValue() > freeItem->getSpeed() )
                         {
                                 // Almacena en la pila de colisiones los elementos que hay al oeste
@@ -168,18 +166,18 @@ bool Shot::update ()
                                 if ( freeItem->getMediator()->isStackOfCollisionsEmpty() || freeItem->getMediator()->collisionWithByLabel( playerItem->getLabel() ) )
                                 {
                                         freeItem->setCollisionDetector( false );
-                                        state->move( this, &stateId, false );
+                                        whatToDo->move( this, &activity, false );
                                 }
                                 else
                                 {
                                         // Si ha chocado con un elemento enemigo entonces lo paraliza
                                         if ( freeItem->getMediator()->collisionWithBadBoy() )
                                         {
-                                                propagateState( this->item, StateFreeze );
+                                                propagateActivity( this->item, Freeze );
                                         }
 
                                         // En caso de colisión con cualquier elemento (excepto el jugador), el disparo desaparece
-                                        dynamic_cast< UserControlled * >( playerItem->getBehavior() )->setShotPresent( false );
+                                        dynamic_cast< UserControlled * >( playerItem->getBehavior() )->setFireFromHooter( false );
                                         destroy = true;
                                 }
 
@@ -198,9 +196,9 @@ bool Shot::update ()
         return destroy;
 }
 
-void Shot::setPlayerItem( PlayerItem * playerItem )
+void FireDoughnut::setPlayerItem( PlayerItem * player )
 {
-        this->playerItem = playerItem;
+        this->playerItem = player;
 }
 
 }

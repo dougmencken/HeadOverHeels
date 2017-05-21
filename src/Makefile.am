@@ -1,7 +1,7 @@
 AUTOMAKE_OPTIONS = -Wno-override
 AM_CCFLAGS = -Wall -O2
 AM_CXXFLAGS = $(CXXFLAGS)
-headoverheels_CXXFLAGS = -Wall -Wno-deprecated -O2 -I. -Iloadpng -Iactions -Ibehaviors -Igui -Istates
+headoverheels_CXXFLAGS = -Wall -Wno-deprecated -O2 -I. -Iloadpng -Igui -Iguiactions -Ibehaviors -Iactivities
 AM_LDFLAGS = `allegro-config --libs release` -lvorbisfile -lvorbisenc -lvorbis -logg -lxerces-c -lpthread -lz -lpng
 
 bin_PROGRAMS = headoverheels
@@ -64,50 +64,84 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			Wall.hpp \
 			Win32HPC.cpp \
 			Win32HPC.hpp \
-			actions/Action.hpp \
-			actions/PlaySound.hpp \
-			actions/ContinueGame.cpp \
-			actions/ContinueGame.hpp \
-			actions/CreateAudioMenu.cpp \
-			actions/CreateAudioMenu.hpp \
-			actions/CreateVideoMenu.hpp \
-			actions/CreateVideoMenu.cpp \
-			actions/CreateMenuOfGraphicSets.hpp \
-			actions/CreateMenuOfGraphicSets.cpp \
-			actions/CreateCongratulationsScreen.cpp \
-			actions/CreateCongratulationsScreen.hpp \
-			actions/CreateEndScreen.cpp \
-			actions/CreateEndScreen.hpp \
-			actions/CreateListOfSavedGames.cpp \
-			actions/CreateListOfSavedGames.hpp \
-			actions/CreateKeyboardMenu.cpp \
-			actions/CreateKeyboardMenu.hpp \
-			actions/CreateLanguageMenu.cpp \
-			actions/CreateLanguageMenu.hpp \
-			actions/CreateMainMenu.cpp \
-			actions/CreateMainMenu.hpp \
-			actions/CreatePlanetsScreen.cpp \
-			actions/CreatePlanetsScreen.hpp \
-			actions/ExitApplication.cpp \
-			actions/ExitApplication.hpp \
-			actions/LoadGame.cpp \
-			actions/LoadGame.hpp \
-			actions/RedefineKey.cpp \
-			actions/RedefineKey.hpp \
-			actions/SaveGame.cpp \
-			actions/SaveGame.hpp \
-			actions/SelectLanguage.cpp \
-			actions/SelectLanguage.hpp \
-			actions/ShowAuthors.cpp \
-			actions/ShowAuthors.hpp \
 			alogg/alogg.c \
 			alogg/aloggcfg.h \
 			alogg/alogg.h \
 			alogg/aloggint.h \
 			alogg/aloggpth.c \
 			alogg/aloggpth.h \
-			behaviors/Behavior.cpp \
-			behaviors/Behavior.hpp \
+			activities/KindOfActivity.cpp \
+			activities/KindOfActivity.hpp \
+			activities/DisplaceKindOfActivity.cpp \
+			activities/DisplaceKindOfActivity.hpp \
+			activities/FallKindOfActivity.cpp \
+			activities/FallKindOfActivity.hpp \
+			activities/JumpKindOfActivity.cpp \
+			activities/JumpKindOfActivity.hpp \
+			activities/MoveKindOfActivity.cpp \
+			activities/MoveKindOfActivity.hpp \
+			gui/ConfigurationManager.cpp \
+			gui/ConfigurationManager.hpp \
+			gui/Font.cpp \
+			gui/Font.hpp \
+			gui/FontManager.cpp \
+			gui/FontManager.hpp \
+			gui/Gui.cpp \
+			gui/Gui.hpp \
+			gui/GuiManager.cpp \
+			gui/GuiManager.hpp \
+			gui/Icon.cpp \
+			gui/Icon.hpp \
+			gui/Label.cpp \
+			gui/Label.hpp \
+			gui/LanguageManager.cpp \
+			gui/LanguageManager.hpp \
+			gui/Menu.cpp \
+			gui/Menu.hpp \
+			gui/MenuWithMultipleColumns.cpp \
+			gui/MenuWithMultipleColumns.hpp \
+			gui/Screen.cpp \
+			gui/Screen.hpp \
+			gui/TextField.cpp \
+			gui/TextField.hpp \
+			gui/Widget.cpp \
+			gui/Widget.hpp \
+			guiactions/Action.hpp \
+			guiactions/PlaySound.hpp \
+			guiactions/ContinueGame.cpp \
+			guiactions/ContinueGame.hpp \
+			guiactions/CreateAudioMenu.cpp \
+			guiactions/CreateAudioMenu.hpp \
+			guiactions/CreateVideoMenu.hpp \
+			guiactions/CreateVideoMenu.cpp \
+			guiactions/CreateMenuOfGraphicSets.hpp \
+			guiactions/CreateMenuOfGraphicSets.cpp \
+			guiactions/CreateCongratulationsScreen.cpp \
+			guiactions/CreateCongratulationsScreen.hpp \
+			guiactions/CreateEndScreen.cpp \
+			guiactions/CreateEndScreen.hpp \
+			guiactions/CreateListOfSavedGames.cpp \
+			guiactions/CreateListOfSavedGames.hpp \
+			guiactions/CreateKeyboardMenu.cpp \
+			guiactions/CreateKeyboardMenu.hpp \
+			guiactions/CreateLanguageMenu.cpp \
+			guiactions/CreateLanguageMenu.hpp \
+			guiactions/CreateMainMenu.cpp \
+			guiactions/CreateMainMenu.hpp \
+			guiactions/CreatePlanetsScreen.cpp \
+			guiactions/CreatePlanetsScreen.hpp \
+			guiactions/ExitApplication.cpp \
+			guiactions/ExitApplication.hpp \
+			guiactions/LoadGame.cpp \
+			guiactions/LoadGame.hpp \
+			guiactions/RedefineKey.cpp \
+			guiactions/RedefineKey.hpp \
+			guiactions/SaveGame.cpp \
+			guiactions/SaveGame.hpp \
+			guiactions/SelectLanguage.cpp \
+			guiactions/SelectLanguage.hpp \
+			guiactions/ShowAuthors.cpp \
+			guiactions/ShowAuthors.hpp \
 			behaviors/CannonBall.cpp \
 			behaviors/CannonBall.hpp \
 			behaviors/ConveyorBelt.cpp \
@@ -136,8 +170,8 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			behaviors/PlayerHeels.hpp \
 			behaviors/RemoteControl.cpp \
 			behaviors/RemoteControl.hpp \
-			behaviors/Shot.cpp \
-			behaviors/Shot.hpp \
+			behaviors/FireDoughnut.cpp \
+			behaviors/FireDoughnut.hpp \
 			behaviors/Sink.cpp \
 			behaviors/Sink.hpp \
 			behaviors/Special.cpp \
@@ -154,6 +188,8 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			behaviors/UserControlled.hpp \
 			behaviors/Volatile.cpp \
 			behaviors/Volatile.hpp \
+			behaviors/Behavior.cpp \
+			behaviors/Behavior.hpp \
 			csxml/ConfigurationXML.cpp \
 			csxml/ConfigurationXML.hpp \
 			csxml/ItemsXML.cpp \
@@ -167,40 +203,4 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			csxml/SaveGameXML.cpp \
 			csxml/SaveGameXML.hpp \
 			csxml/SoundsXML.cpp \
-			csxml/SoundsXML.hpp \
-			gui/ConfigurationManager.cpp \
-			gui/ConfigurationManager.hpp \
-			gui/Font.cpp \
-			gui/Font.hpp \
-			gui/FontManager.cpp \
-			gui/FontManager.hpp \
-			gui/Gui.cpp \
-			gui/Gui.hpp \
-			gui/GuiManager.cpp \
-			gui/GuiManager.hpp \
-			gui/Icon.cpp \
-			gui/Icon.hpp \
-			gui/Label.cpp \
-			gui/Label.hpp \
-			gui/LanguageManager.cpp \
-			gui/LanguageManager.hpp \
-			gui/Menu.cpp \
-			gui/Menu.hpp \
-			gui/MenuWithMultipleColumns.cpp \
-			gui/MenuWithMultipleColumns.hpp \
-			gui/Screen.cpp \
-			gui/Screen.hpp \
-			gui/TextField.cpp \
-			gui/TextField.hpp \
-			gui/Widget.cpp \
-			gui/Widget.hpp \
-			states/BehaviorState.cpp \
-			states/BehaviorState.hpp \
-			states/DisplaceState.cpp \
-			states/DisplaceState.hpp \
-			states/FallState.cpp \
-			states/FallState.hpp \
-			states/JumpState.cpp \
-			states/JumpState.hpp \
-			states/MoveState.cpp \
-			states/MoveState.hpp
+			csxml/SoundsXML.hpp

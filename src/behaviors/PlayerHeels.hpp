@@ -35,7 +35,7 @@ public:
         * @param item Elemento que tiene este comportamiento
         * @param id Identificador del comportamiento
         */
-        PlayerHeels( Item * item, const BehaviorId & id ) ;
+        PlayerHeels( Item * item, const BehaviorOfItem & id ) ;
 
         virtual ~PlayerHeels( ) ;
 

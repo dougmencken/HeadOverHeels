@@ -1,6 +1,6 @@
 
-#include "JumpState.hpp"
-#include "FallState.hpp"
+#include "JumpKindOfActivity.hpp"
+#include "FallKindOfActivity.hpp"
 #include "Behavior.hpp"
 #include "Item.hpp"
 #include "FreeItem.hpp"
@@ -11,32 +11,32 @@
 namespace isomot
 {
 
-BehaviorState* JumpState::instance = 0;
+KindOfActivity * JumpKindOfActivity::instance = 0;
 
-JumpState::JumpState( ) : BehaviorState()
+JumpKindOfActivity::JumpKindOfActivity( ) : KindOfActivity()
 {
 
 }
 
-JumpState::~JumpState( )
+JumpKindOfActivity::~JumpKindOfActivity( )
 {
 
 }
 
-BehaviorState* JumpState::getInstance()
+KindOfActivity* JumpKindOfActivity::getInstance()
 {
         if ( instance == 0 )
         {
-                instance = new JumpState();
+                instance = new JumpKindOfActivity();
         }
 
         return instance;
 }
 
-bool JumpState::jump( Behavior* behavior, StateId* substate, const std::vector< JumpMotion >& jumpMatrix, int* jumpIndex )
+bool JumpKindOfActivity::jump( Behavior* behavior, ActivityOfItem* activity, const std::vector< JumpMotion >& jumpMatrix, int* jumpIndex )
 {
         bool changedData = false;
-        StateId displaceStateId = StateWait;
+        ActivityOfItem displaceActivity = Wait;
         PlayerItem* playerItem = dynamic_cast< PlayerItem * >( behavior->getItem() );
         Mediator* mediator = playerItem->getMediator();
 
@@ -62,7 +62,7 @@ bool JumpState::jump( Behavior* behavior, StateId* substate, const std::vector< 
                                         {
                                                 if ( item->isMortal() && playerItem->getShieldTime() <= 0 )
                                                 {
-                                                        playerItem->getBehavior()->changeStateId( StateStartDestroy );
+                                                        playerItem->getBehavior()->changeActivityOfItem( StartDestroy );
                                                 }
                                                 // Si no es mortal y es un elemento libre levanta a los elementos que pudiera tener encima
                                                 else
@@ -90,25 +90,25 @@ bool JumpState::jump( Behavior* behavior, StateId* substate, const std::vector< 
                 case North:
                         // Movimiento hacia el norte
                         changedData = playerItem->addToX( - jumpMatrix[ *jumpIndex ].first );
-                        displaceStateId = StateDisplaceNorth;
+                        displaceActivity = DisplaceNorth;
                         break;
 
                 case South:
                         // Movimiento hacia el sur
                         changedData = playerItem->addToX( jumpMatrix[ *jumpIndex ].first );
-                        displaceStateId = StateDisplaceSouth;
+                        displaceActivity = DisplaceSouth;
                         break;
 
                 case East:
                         // Movimiento hacia el este
                         changedData = playerItem->addToY( - jumpMatrix[ *jumpIndex ].first );
-                        displaceStateId = StateDisplaceEast;
+                        displaceActivity = DisplaceEast;
                         break;
 
                 case West:
                         // Movimiento hacia el oeste
                         changedData = playerItem->addToY( jumpMatrix[ *jumpIndex ].first );
-                        displaceStateId = StateDisplaceWest;
+                        displaceActivity = DisplaceWest;
                         break;
 
                 default:
@@ -118,7 +118,7 @@ bool JumpState::jump( Behavior* behavior, StateId* substate, const std::vector< 
         // En caso de colisión en los ejes X o Y se desplaza a los elementos implicados
         if ( ! changedData )
         {
-                this->propagateStateAdjacentItems( playerItem, displaceStateId );
+                this->propagateActivityToAdjacentItems( playerItem, displaceActivity );
         }
         // En caso de que el elemento se haya movido se comprueba si hay que desplazar los elementos
         // que pueda tener encima
@@ -126,7 +126,7 @@ bool JumpState::jump( Behavior* behavior, StateId* substate, const std::vector< 
         // jugador pueda librarse de un elemento que tenga encima
         else if ( changedData && *jumpIndex > 4 )
         {
-                this->propagateStateTopItems( playerItem, displaceStateId );
+                this->propagateActivityToTopItems( playerItem, displaceActivity );
         }
 
         // Se pasa a la siguiente fase del salto
@@ -135,27 +135,28 @@ bool JumpState::jump( Behavior* behavior, StateId* substate, const std::vector< 
         // Si se han completado todas las fases, el salto termina
         if ( *jumpIndex >= int( jumpMatrix.size() ) )
         {
-                changeState( behavior, FallState::getInstance() );
+                changeKindOfActivity( behavior, FallKindOfActivity::getInstance() );
 
                 *jumpIndex = 0;
-                *substate = StateFall;
+                *activity = Fall;
         }
 
         return changedData;
 }
 
-void JumpState::lift( FreeItem* sender, FreeItem* freeItem, int z )
+void JumpKindOfActivity::lift( FreeItem* sender, FreeItem* freeItem, int z )
 {
         // El elemento debe poder cambiar de estado
         if ( freeItem->getBehavior() != 0 )
         {
                 // Si el elemento es volátil se le comunica que se está empujando
-                if ( freeItem->getBehavior()->getId() == VolatileTouchBehavior || freeItem->getBehavior()->getId() == SpecialBehavior )
+                if ( freeItem->getBehavior()->getBehaviorOfItem () == VolatileTouchBehavior ||
+                                freeItem->getBehavior()->getBehaviorOfItem () == SpecialBehavior )
                 {
-                        freeItem->getBehavior()->changeStateId( StateDisplaceUp, sender );
+                        freeItem->getBehavior()->changeActivityOfItem( DisplaceUp, sender );
                 }
                 // Si el elemento no es el ascensor entonces se levanta
-                else if ( freeItem->getBehavior()->getId() != ElevatorBehavior )
+                else if ( freeItem->getBehavior()->getBehaviorOfItem () != ElevatorBehavior )
                 {
                         // Si no se puede levantar, se toma el elemento con el que choca para levantarlo
                         if ( ! freeItem->addToZ( z ) )

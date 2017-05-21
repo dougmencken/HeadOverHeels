@@ -2,17 +2,16 @@
 #include "Sink.hpp"
 #include "Item.hpp"
 #include "GridItem.hpp"
-#include "FallState.hpp"
+#include "FallKindOfActivity.hpp"
 #include "SoundManager.hpp"
 
 
 namespace isomot
 {
 
-Sink::Sink( Item * item, const BehaviorId & id ) :
+Sink::Sink( Item * item, const BehaviorOfItem & id ) :
         Behavior( item, id )
 {
-        stateId = StateWait;
         fallTimer = new HPC();
         fallTimer->start();
 }
@@ -26,24 +25,24 @@ bool Sink::update ()
 {
         GridItem * gridItem = dynamic_cast< GridItem * >( this->item );
 
-        switch ( stateId )
+        switch ( activity )
         {
-                case StateWait:
+                case Wait:
                         // Si tiene un elemento encima entonces el elemento empieza a descender
                         if ( ! gridItem->checkPosition( 0, 0, 1, Add ) )
                         {
-                                this->changeStateId( StateFall );
+                                this->changeActivityOfItem( Fall );
                         }
                         break;
 
-                case StateFall:
+                case Fall:
                         // Si ha llegado el momento de caer entonces el elemento desciende una unidad
                         if ( fallTimer->getValue() > gridItem->getWeight() )
                         {
                                 // Si no puede seguir descendiendo o ya no hay ningún elemento encima entonces se detiene
-                                if ( ! state->fall( this ) || gridItem->checkPosition( 0, 0, 1, Add ) )
+                                if ( ! whatToDo->fall( this ) || gridItem->checkPosition( 0, 0, 1, Add ) )
                                 {
-                                        stateId = StateWait;
+                                        activity = Wait;
                                 }
 
                                 // Se pone a cero el cronómetro para el siguiente ciclo
@@ -52,11 +51,11 @@ bool Sink::update ()
                         break;
 
                 default:
-                        stateId = StateWait;
+                        activity = Wait;
         }
 
         // Emite el sonido acorde al estado
-        SoundManager::getInstance()->play( gridItem->getLabel(), stateId );
+        SoundManager::getInstance()->play( gridItem->getLabel(), activity );
 
         return false;
 }

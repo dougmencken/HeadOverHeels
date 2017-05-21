@@ -3,7 +3,6 @@
 #include "Item.hpp"
 #include "FreeItem.hpp"
 #include "Mediator.hpp"
-#include "BehaviorState.hpp"
 #include "CannonBall.hpp"
 #include "ConveyorBelt.hpp"
 #include "Detector.hpp"
@@ -16,7 +15,7 @@
 #include "Patrol.hpp"
 #include "RemoteControl.hpp"
 #include "Sink.hpp"
-#include "Shot.hpp"
+#include "FireDoughnut.hpp"
 #include "Special.hpp"
 #include "Switch.hpp"
 #include "Teleport.hpp"
@@ -26,20 +25,21 @@
 #include "PlayerHead.hpp"
 #include "PlayerHeels.hpp"
 #include "PlayerHeadAndHeels.hpp"
-#include "MoveState.hpp"
-#include "DisplaceState.hpp"
-#include "FallState.hpp"
+#include "KindOfActivity.hpp"
+#include "MoveKindOfActivity.hpp"
+#include "DisplaceKindOfActivity.hpp"
+#include "FallKindOfActivity.hpp"
 
 
 namespace isomot
 {
 
-Behavior::Behavior( Item* item, const BehaviorId& id )
-:       id( id ),
-        item( item ),
-        state( 0 ),
-        sender( 0 ),
-        stateId( StateWait )
+Behavior::Behavior( Item * whichItem, const BehaviorOfItem & behavior ) :
+          theBehavior( behavior )
+        , item( whichItem )
+        , whatToDo( 0 )
+        , activity( Wait )
+        , sender( 0 )
 {
 
 }
@@ -49,11 +49,10 @@ Behavior::~Behavior( )
 
 }
 
-Behavior* Behavior::createBehavior( Item* item, const BehaviorId& id, void* extraData )
+Behavior* Behavior::createBehavior( Item * item, const BehaviorOfItem& id, void * extraData )
 {
         Behavior* behavior = 0;
 
-        // Construye el objeto adecuado en función del identificador
         switch ( id )
         {
                 case NoBehavior:
@@ -124,8 +123,8 @@ Behavior* Behavior::createBehavior( Item* item, const BehaviorId& id, void* extr
                         behavior = new Sink( item, id );
                         break;
 
-                case ShotBehavior:
-                        behavior = new Shot( item, id );
+                case FireDoughnutBehavior:
+                        behavior = new FireDoughnut( item, id );
                         break;
 
                 case SpecialBehavior:
@@ -178,44 +177,43 @@ Behavior* Behavior::createBehavior( Item* item, const BehaviorId& id, void* extr
         return behavior;
 }
 
-void Behavior::changeStateId( const StateId& stateId, Item* sender )
+void Behavior::changeActivityOfItem( const ActivityOfItem& activity, Item* sender )
 {
-        this->stateId = stateId;
+        this->activity = activity;
         this->sender = sender;
 
-        // Asigna el estado en función del identificador
-        switch( stateId )
+        switch ( activity )
         {
-                case StateMoveNorth:
-                case StateMoveSouth:
-                case StateMoveEast:
-                case StateMoveWest:
-                case StateMoveNortheast:
-                case StateMoveNorthwest:
-                case StateMoveSoutheast:
-                case StateMoveSouthwest:
-                case StateMoveUp:
-                case StateMoveDown:
-                        state = MoveState::getInstance();
+                case MoveNorth:
+                case MoveSouth:
+                case MoveEast:
+                case MoveWest:
+                case MoveNortheast:
+                case MoveNorthwest:
+                case MoveSoutheast:
+                case MoveSouthwest:
+                case MoveUp:
+                case MoveDown:
+                        whatToDo = MoveKindOfActivity::getInstance();
                         break;
 
-                case StateDisplaceNorth:
-                case StateDisplaceSouth:
-                case StateDisplaceEast:
-                case StateDisplaceWest:
-                case StateDisplaceNortheast:
-                case StateDisplaceSoutheast:
-                case StateDisplaceSouthwest:
-                case StateDisplaceNorthwest:
-                case StateForceDisplaceNorth:
-                case StateForceDisplaceSouth:
-                case StateForceDisplaceEast:
-                case StateForceDisplaceWest:
-                        state = DisplaceState::getInstance();
+                case DisplaceNorth:
+                case DisplaceSouth:
+                case DisplaceEast:
+                case DisplaceWest:
+                case DisplaceNortheast:
+                case DisplaceSoutheast:
+                case DisplaceSouthwest:
+                case DisplaceNorthwest:
+                case ForceDisplaceNorth:
+                case ForceDisplaceSouth:
+                case ForceDisplaceEast:
+                case ForceDisplaceWest:
+                        whatToDo = DisplaceKindOfActivity::getInstance();
                         break;
 
-                case StateFall:
-                        state = FallState::getInstance();
+                case Fall:
+                        whatToDo = FallKindOfActivity::getInstance();
                         break;
 
                 default:
@@ -223,7 +221,7 @@ void Behavior::changeStateId( const StateId& stateId, Item* sender )
         }
 }
 
-void Behavior::propagateState( Item* sender, const StateId& stateId )
+void Behavior::propagateActivity( Item* sender, const ActivityOfItem& activity )
 {
         Mediator* mediator = sender->getMediator();
 
@@ -241,7 +239,7 @@ void Behavior::propagateState( Item* sender, const StateId& stateId )
                         // Si el elemento se ha encontrado y tiene comportamiento se cambia su estado
                         if ( item != 0 && item->getBehavior() != 0 )
                         {
-                                item->getBehavior()->changeStateId( stateId );
+                                item->getBehavior()->changeActivityOfItem( activity );
                         }
                 }
         }

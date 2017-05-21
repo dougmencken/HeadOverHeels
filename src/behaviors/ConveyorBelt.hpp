@@ -18,12 +18,9 @@
 namespace isomot
 {
 
-// Declaraciones adelantadas
-class Item;
+class Item ;
 
-/**
- * Cinta transportadora que arrastra a los elementos situados encima
- */
+
 class ConveyorBelt : public Behavior
 {
 
@@ -34,7 +31,7 @@ public:
         * @param item Elemento que tiene este comportamiento
         * @param id Identificador del comportamiento
         */
-        ConveyorBelt( Item * item, const BehaviorId & id ) ;
+        ConveyorBelt( Item * item, const BehaviorOfItem & behavior ) ;
 
         virtual ~ConveyorBelt( ) ;
 

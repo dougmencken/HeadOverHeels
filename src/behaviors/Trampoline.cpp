@@ -3,8 +3,8 @@
 #include "Item.hpp"
 #include "FreeItem.hpp"
 #include "PlayerItem.hpp"
-#include "DisplaceState.hpp"
-#include "FallState.hpp"
+#include "DisplaceKindOfActivity.hpp"
+#include "FallKindOfActivity.hpp"
 #include "Mediator.hpp"
 #include "Room.hpp"
 #include "SoundManager.hpp"
@@ -13,10 +13,9 @@
 namespace isomot
 {
 
-Trampoline::Trampoline( Item * item, const BehaviorId & id ) :
+Trampoline::Trampoline( Item * item, const BehaviorOfItem & id ) :
         Behavior( item, id )
 {
-        stateId = StateWait;
         folded = rebounding = false;
         regularFrame = 0;
         foldedFrame = 1;
@@ -40,9 +39,9 @@ bool Trampoline::update ()
         FreeItem * freeItem = dynamic_cast< FreeItem * >( this->item );
         bool destroy = false;
 
-        switch ( stateId )
+        switch ( activity )
         {
-                case StateWait:
+                case Wait:
                         // Si hay elementos encima el trampolín se pliega
                         if ( ! freeItem->checkPosition( 0, 0, 1, Add ) )
                         {
@@ -60,7 +59,7 @@ bool Trampoline::update ()
                                         // Emite el sonido de rebote
                                         if ( reboundTimer->getValue() > 0.100 )
                                         {
-                                                SoundManager::getInstance()->play( freeItem->getLabel(), StateActive );
+                                                SoundManager::getInstance()->play( freeItem->getLabel(), IsActive );
                                         }
                                 }
                                 else
@@ -80,35 +79,35 @@ bool Trampoline::update ()
                         }
 
                         // Se comprueba si el elemento debe empezar a caer
-                        if ( FallState::getInstance()->fall( this ) )
+                        if ( FallKindOfActivity::getInstance()->fall( this ) )
                         {
                                 fallTimer->reset();
-                                stateId = StateFall;
+                                activity = Fall;
                         }
                         break;
 
-                case StateDisplaceNorth:
-                case StateDisplaceSouth:
-                case StateDisplaceEast:
-                case StateDisplaceWest:
-                case StateDisplaceNortheast:
-                case StateDisplaceNorthwest:
-                case StateDisplaceSoutheast:
-                case StateDisplaceSouthwest:
+                case DisplaceNorth:
+                case DisplaceSouth:
+                case DisplaceEast:
+                case DisplaceWest:
+                case DisplaceNortheast:
+                case DisplaceNorthwest:
+                case DisplaceSoutheast:
+                case DisplaceSouthwest:
                         // Si el elemento está activo y ha llegado el momento de moverse, entonces:
                         if ( speedTimer->getValue() > freeItem->getSpeed() )
                         {
                                 // Emite el sonido de de desplazamiento
-                                SoundManager::getInstance()->play( freeItem->getLabel(), stateId );
+                                SoundManager::getInstance()->play( freeItem->getLabel(), activity );
 
                                 // Actualiza el estado
-                                this->changeStateId( stateId );
-                                this->state->displace( this, &stateId, true );
+                                this->changeActivityOfItem( activity );
+                                whatToDo->displace( this, &activity, true );
 
                                 // Si no está cayendo entonces vuelve al estado inicial
-                                if ( stateId != StateFall )
+                                if ( activity != Fall )
                                 {
-                                        stateId = StateWait;
+                                        activity = Wait;
                                 }
 
                                 // Se pone a cero el cronómetro para el siguiente ciclo
@@ -116,7 +115,7 @@ bool Trampoline::update ()
                         }
                         break;
 
-                case StateFall:
+                case Fall:
                         // Se comprueba si ha topado con el suelo en una sala sin suelo
                         if ( item->getZ() == 0 && item->getMediator()->getRoom()->getFloorType() == NoFloor )
                         {
@@ -127,12 +126,12 @@ bool Trampoline::update ()
                         else if ( fallTimer->getValue() > freeItem->getWeight() )
                         {
                                 // El elemento cae
-                                this->changeStateId( stateId );
-                                if ( ! state->fall( this ) )
+                                this->changeActivityOfItem( activity );
+                                if ( ! whatToDo->fall( this ) )
                                 {
                                         // Emite el sonido de caída
-                                        SoundManager::getInstance()->play( freeItem->getLabel(), stateId );
-                                        stateId = StateWait;
+                                        SoundManager::getInstance()->play( freeItem->getLabel(), activity );
+                                        activity = Wait;
                                 }
 
                                 // Se pone a cero el cronómetro para el siguiente ciclo
@@ -140,7 +139,7 @@ bool Trampoline::update ()
                         }
                         break;
 
-                case StateDestroy:
+                case Destroy:
                         // Se destruye cuando el elemento se coge
                         destroy = true;
                         break;

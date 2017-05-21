@@ -37,7 +37,7 @@ public:
         * @param id Identificador de comportamiento: Patrol4cBehavior, Patrol4dBehavior
         * o Patrol8Behavior
         */
-        Patrol( Item * item, const BehaviorId & id ) ;
+        Patrol( Item * item, const BehaviorOfItem & id ) ;
 
         virtual ~Patrol( ) ;
 

@@ -33,7 +33,7 @@ public:
         * @param item Elemento que tiene este comportamiento
         * @param id Identificador del comportamiento
         */
-        Detector( Item * item, const BehaviorId & id ) ;
+        Detector( Item * item, const BehaviorOfItem & id ) ;
 
         virtual ~Detector( ) ;
 

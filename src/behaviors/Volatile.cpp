@@ -11,10 +11,10 @@
 namespace isomot
 {
 
-Volatile::Volatile( Item* item, const BehaviorId& id ) : Behavior( item, id )
+Volatile::Volatile( Item* item, const BehaviorOfItem& id )
+        : Behavior( item, id )
+        , solid( false )
 {
-        this->solid = false;
-        stateId = StateWait;
         destroyTimer = new HPC();
         destroyTimer->start();
 }
@@ -29,15 +29,17 @@ bool Volatile::update ()
         bool destroy = false;
         Mediator* mediator = item->getMediator();
 
-        switch ( stateId )
+        switch ( activity )
         {
-                case StateWait:
-                case StateWakeUp:
+                case Wait:
+                case WakeUp:
                         // En este estado tiene que ser forzosamente volátil
                         this->solid = false;
 
                         // Si es volátil por contacto o por peso y tiene un elemento encima entonces puede destruirse
-                        if ( ( id == VolatileTouchBehavior || id == VolatileWeightBehavior || id == VolatileHeavyBehavior )
+                        if ( ( getBehaviorOfItem () == VolatileTouchBehavior ||
+                                        getBehaviorOfItem () == VolatileWeightBehavior ||
+                                                getBehaviorOfItem () == VolatileHeavyBehavior )
                                 && ! item->checkPosition( 0, 0, 1, Add ) )
                         {
                                 bool destroy = false;
@@ -60,10 +62,10 @@ bool Volatile::update ()
                                                 // Si el elemento existe, se mira si es volátil o especial porque
                                                 // el elemento se destruirá a no ser que ese elemento esté apoyándose en otro
                                                 if ( item != 0 && item->getBehavior() != 0 &&
-                                                        item->getBehavior()->getId() != VolatileWeightBehavior &&
-                                                        item->getBehavior()->getId() != VolatileHeavyBehavior &&
-                                                        item->getBehavior()->getId() != VolatileTouchBehavior &&
-                                                        item->getBehavior()->getId() != SpecialBehavior )
+                                                        item->getBehavior()->getBehaviorOfItem () != VolatileWeightBehavior &&
+                                                        item->getBehavior()->getBehaviorOfItem () != VolatileHeavyBehavior &&
+                                                        item->getBehavior()->getBehaviorOfItem () != VolatileTouchBehavior &&
+                                                        item->getBehavior()->getBehaviorOfItem () != SpecialBehavior )
                                                 {
                                                         destroy = true;
                                                         topItems.push( item );
@@ -94,11 +96,11 @@ bool Volatile::update ()
                                                                 // sobre un elemento que está destruyéndose
                                                                 if ( ( bottomItem->getBehavior() == 0 ) ||
                                                                         ( bottomItem->getBehavior() != 0
-                                                                                && bottomItem->getBehavior()->getId() != VolatileWeightBehavior
-                                                                                && bottomItem->getBehavior()->getId() != VolatileTouchBehavior
-                                                                                && bottomItem->getBehavior()->getId() != SpecialBehavior ) ||
+                                                                                && bottomItem->getBehavior()->getBehaviorOfItem () != VolatileWeightBehavior
+                                                                                && bottomItem->getBehavior()->getBehaviorOfItem () != VolatileTouchBehavior
+                                                                                && bottomItem->getBehavior()->getBehaviorOfItem () != SpecialBehavior ) ||
                                                                         ( bottomItem->getBehavior() != 0
-                                                                                && bottomItem->getBehavior()->getStateId() == StateDestroy ) )
+                                                                                && bottomItem->getBehavior()->getActivityOfItem() == Destroy ) )
                                                                 {
                                                                         destroy = false;
                                                                 }
@@ -110,71 +112,71 @@ bool Volatile::update ()
                                 // Cambio de estado si se han cumplido las condiciones
                                 if ( destroy )
                                 {
-                                        stateId = StateDestroy;
+                                        activity = Destroy;
                                         destroyTimer->reset();
                                 }
                         }
                         // Es un perrito del silencio. Desaparece si Head o el jugador compuesto están en la sala
-                        else if ( id == VolatilePuppyBehavior )
+                        else if ( getBehaviorOfItem () == VolatilePuppyBehavior )
                         {
                                 if ( mediator->findItemByLabel( short( Head ) ) != 0 || mediator->findItemByLabel( short( HeadAndHeels ) ) != 0 )
                                 {
-                                        stateId = StateDestroy;
+                                        activity = Destroy;
                                         destroyTimer->reset();
                                 }
                         }
                         // Es volátil por tiempo, es decir, el elemento creado al destruirse el volátil
-                        else if ( id == VolatileTimeBehavior )
+                        else if ( getBehaviorOfItem () == VolatileTimeBehavior )
                         {
                                 destroy = ( destroyTimer->getValue() > item->getFramesDelay() * double( item->countFrames() ) );
                                 item->animate();
                         }
                         break;
 
-                case StateDisplaceNorth:
-                case StateDisplaceSouth:
-                case StateDisplaceEast:
-                case StateDisplaceWest:
-                case StateDisplaceNortheast:
-                case StateDisplaceSoutheast:
-                case StateDisplaceSouthwest:
-                case StateDisplaceNorthwest:
+                case DisplaceNorth:
+                case DisplaceSouth:
+                case DisplaceEast:
+                case DisplaceWest:
+                case DisplaceNortheast:
+                case DisplaceSoutheast:
+                case DisplaceSouthwest:
+                case DisplaceNorthwest:
                         // Si un elemento volátil por contacto es desplazado entonces se destruye
                         if ( ! solid )
                         {
-                                switch ( id )
+                                switch ( getBehaviorOfItem () )
                                 {
                                         case VolatileTouchBehavior:
-                                                stateId = StateDestroy;
+                                                activity = Destroy;
                                                 break;
 
                                         case VolatilePuppyBehavior:
                                                 if ( mediator->findItemByLabel( short( Head ) ) != 0 || mediator->findItemByLabel( short( HeadAndHeels ) ) != 0 )
                                                 {
-                                                        stateId = StateDestroy;
+                                                        activity = Destroy;
                                                 }
                                                 break;
 
                                         default:
-                                                stateId = StateWait;
+                                                activity = Wait;
                                 }
                         }
                         else
                         {
-                                stateId = StateFreeze;
+                                activity = Freeze;
                         }
                         break;
 
-                case StateDestroy:
-                        if ( ( id != VolatileWeightBehavior && id != VolatileHeavyBehavior && id != VolatilePuppyBehavior ) ||
-                                ( id == VolatileWeightBehavior && destroyTimer->getValue() > 0.030 ) ||
-                                ( id == VolatileHeavyBehavior && destroyTimer->getValue() > 0.600 ) ||
-                                ( id == VolatilePuppyBehavior && destroyTimer->getValue() > 0.500 ) )
+                case Destroy:
+                        if ( ( getBehaviorOfItem () != VolatileWeightBehavior && getBehaviorOfItem () != VolatileHeavyBehavior && getBehaviorOfItem () != VolatilePuppyBehavior ) ||
+                                ( getBehaviorOfItem () == VolatileWeightBehavior && destroyTimer->getValue() > 0.030 ) ||
+                                ( getBehaviorOfItem () == VolatileHeavyBehavior && destroyTimer->getValue() > 0.600 ) ||
+                                ( getBehaviorOfItem () == VolatilePuppyBehavior && destroyTimer->getValue() > 0.500 ) )
                         {
                                 destroy = true;
 
                                 // Emite el sonido de destrucción
-                                SoundManager::getInstance()->play( item->getLabel(), stateId );
+                                SoundManager::getInstance()->play( item->getLabel(), activity );
 
                                 // Crea el elemento en la misma posición que el volátil y a su misma altura
                                 FreeItem* freeItem = new FreeItem(
@@ -190,7 +192,7 @@ bool Volatile::update ()
                         }
                         break;
 
-                case StateFreeze:
+                case Freeze:
                         this->solid = true;
                         break;
 

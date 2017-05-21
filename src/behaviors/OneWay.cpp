@@ -2,9 +2,9 @@
 #include "OneWay.hpp"
 #include "Item.hpp"
 #include "FreeItem.hpp"
-#include "MoveState.hpp"
-#include "DisplaceState.hpp"
-#include "FallState.hpp"
+#include "MoveKindOfActivity.hpp"
+#include "DisplaceKindOfActivity.hpp"
+#include "FallKindOfActivity.hpp"
 #include "Mediator.hpp"
 #include "Room.hpp"
 #include "SoundManager.hpp"
@@ -13,11 +13,9 @@
 namespace isomot
 {
 
-OneWay::OneWay( Item * item, const BehaviorId & id, bool isFlying ) :
+OneWay::OneWay( Item * item, const BehaviorOfItem & id, bool isFlying ) :
         Behavior( item, id )
 {
-        stateId = StateWait;
-
         speedTimer = new HPC();
         speedTimer->start();
 
@@ -45,16 +43,16 @@ bool OneWay::update ()
         bool destroy = false;
         FreeItem * freeItem = dynamic_cast< FreeItem * >( this->item );
 
-        switch ( stateId )
+        switch ( activity )
         {
-                case StateWait:
+                case Wait:
                         start();
                         break;
 
-                case StateMoveNorth:
-                case StateMoveSouth:
-                case StateMoveEast:
-                case StateMoveWest:
+                case MoveNorth:
+                case MoveSouth:
+                case MoveEast:
+                case MoveWest:
                         if ( ! freeItem->isFrozen() )
                         {
                                 if ( speedTimer->getValue() > freeItem->getSpeed() )
@@ -62,12 +60,12 @@ bool OneWay::update ()
                                         // El elemento se mueve. Si el movimiento no se pudo realizar por colisión entonces
                                         // se desplaza a los elementos con los que pudiera haber chocado y el elemento da media
                                         // vuelta cambiando su estado a otro de movimiento
-                                        if ( ! state->move( this, &stateId, true ) )
+                                        if ( ! whatToDo->move( this, &activity, true ) )
                                         {
                                                 turnRound();
 
                                                 // Emite el sonido de colisión
-                                                SoundManager::getInstance()->play( freeItem->getLabel(), StateCollision );
+                                                SoundManager::getInstance()->play( freeItem->getLabel(), Collision );
                                         }
 
                                         // Se pone a cero el cronómetro para el siguiente ciclo
@@ -79,37 +77,37 @@ bool OneWay::update ()
                         }
                         break;
 
-                case StateDisplaceNorth:
-                case StateDisplaceSouth:
-                case StateDisplaceEast:
-                case StateDisplaceWest:
-                case StateDisplaceNortheast:
-                case StateDisplaceSoutheast:
-                case StateDisplaceSouthwest:
-                case StateDisplaceNorthwest:
+                case DisplaceNorth:
+                case DisplaceSouth:
+                case DisplaceEast:
+                case DisplaceWest:
+                case DisplaceNortheast:
+                case DisplaceSoutheast:
+                case DisplaceSouthwest:
+                case DisplaceNorthwest:
                         if ( ! this->isFlying )
                         {
                                 // Emite el sonido de de desplazamiento
-                                SoundManager::getInstance()->play( freeItem->getLabel(), stateId );
+                                SoundManager::getInstance()->play( freeItem->getLabel(), activity );
 
                                 // El elemento es deplazado por otro. Si el desplazamiento no se pudo realizar por
                                 // colisión entonces el estado se propaga a los elementos con los que ha chocado
-                                state->displace( this, &stateId, true );
+                                whatToDo->displace( this, &activity, true );
 
                                 // Una vez se ha completado el desplazamiento el elemento vuelve a su comportamiento normal
-                                stateId = StateWait;
+                                activity = Wait;
 
                                 // preserve inactivity for frozen item
                                 if ( freeItem->isFrozen() )
-                                        stateId = StateFreeze;
+                                        activity = Freeze;
                         }
                         else
                         {
-                                stateId = StateWait;
+                                activity = Wait;
                         }
                         break;
 
-                case StateFall:
+                case Fall:
                         if ( ! this->isFlying )
                         {
                                 // Se comprueba si ha topado con el suelo en una sala sin suelo
@@ -121,11 +119,11 @@ bool OneWay::update ()
                                 // Si ha llegado el momento de caer entonces el elemento desciende una unidad
                                 else if ( fallTimer->getValue() > freeItem->getWeight() )
                                 {
-                                        if ( ! state->fall( this ) )
+                                        if ( ! whatToDo->fall( this ) )
                                         {
                                                 // Emite el sonido de caída
-                                                SoundManager::getInstance()->play( freeItem->getLabel(), stateId );
-                                                stateId = StateWait;
+                                                SoundManager::getInstance()->play( freeItem->getLabel(), activity );
+                                                activity = Wait;
                                         }
 
                                         // Se pone a cero el cronómetro para el siguiente ciclo
@@ -134,17 +132,17 @@ bool OneWay::update ()
                         }
                         else
                         {
-                                stateId = StateWait;
+                                activity = Wait;
                         }
                         break;
 
-                case StateFreeze:
+                case Freeze:
                         freeItem->setFrozen( true );
                         break;
 
-                case StateWakeUp:
+                case WakeUp:
                         freeItem->setFrozen( false );
-                        stateId = StateWait;
+                        activity = Wait;
                         break;
 
                 default:
@@ -159,26 +157,26 @@ void OneWay::start()
         switch ( dynamic_cast< FreeItem * >( this->item )->getDirection() )
         {
                 case North:
-                        stateId = StateMoveNorth;
+                        activity = MoveNorth;
                         break;
 
                 case South:
-                        stateId = StateMoveSouth;
+                        activity = MoveSouth;
                         break;
 
                 case East:
-                        stateId = StateMoveEast;
+                        activity = MoveEast;
                         break;
 
                 case West:
-                        stateId = StateMoveWest;
+                        activity = MoveWest;
                         break;
 
                 default:
                         ;
         }
 
-        state = MoveState::getInstance();
+        whatToDo = MoveKindOfActivity::getInstance();
 }
 
 void OneWay::turnRound()
@@ -188,7 +186,7 @@ void OneWay::turnRound()
         switch ( freeItem->getDirection() )
         {
                 case North:
-                        stateId = StateMoveSouth;
+                        activity = MoveSouth;
                         if ( freeItem->getDirectionFrames() > 1 )
                         {
                                 freeItem->changeDirection( South );
@@ -196,7 +194,7 @@ void OneWay::turnRound()
                         break;
 
                 case South:
-                        stateId = StateMoveNorth;
+                        activity = MoveNorth;
                         if ( freeItem->getDirectionFrames() > 1 )
                         {
                                 freeItem->changeDirection( North );
@@ -204,7 +202,7 @@ void OneWay::turnRound()
                         break;
 
                 case East:
-                        stateId = StateMoveWest;
+                        activity = MoveWest;
                         if ( freeItem->getDirectionFrames() > 1 )
                         {
                                 freeItem->changeDirection( West );
@@ -212,7 +210,7 @@ void OneWay::turnRound()
                         break;
 
                 case West:
-                        stateId = StateMoveEast;
+                        activity = MoveEast;
                         if ( freeItem->getDirectionFrames() > 1 )
                         {
                                 freeItem->changeDirection( East );

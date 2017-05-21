@@ -19,7 +19,7 @@
 namespace isomot
 {
 
-class Item;
+class Item ;
 
 /**
  * Elemento que se activa al detectar un elemento encima. Permite el teletransporte entre salas
@@ -35,7 +35,7 @@ public:
         * @param item Elemento que tiene este comportamiento
         * @param id Identificador de comportamiento
         */
-        Teleport( Item * item, const BehaviorId & id ) ;
+        Teleport( Item * item, const BehaviorOfItem & id ) ;
 
         virtual ~Teleport( ) ;
 

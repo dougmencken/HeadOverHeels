@@ -11,7 +11,7 @@
 namespace isomot
 {
 
-PlayerHeels::PlayerHeels( Item* item, const BehaviorId& id ) :
+PlayerHeels::PlayerHeels( Item* item, const BehaviorOfItem& id ) :
         UserControlled( item, id )
 {
         // Fotogramas del salto
@@ -49,13 +49,10 @@ PlayerHeels::PlayerHeels( Item* item, const BehaviorId& id ) :
         // Elemento de transición entre telepuertos
         transitionDataLabel = 38;
         // Elemento empleado como disparo
-        shotDataLabel = 38;
+        labelOfFireFromHooter = 38;
 
         // Pasos automáticos
         automaticStepsCounter = 16;
-
-        // Estado inicial
-        stateId = StateWait;
 
         // Creación y puesta en marcha de los cronómetros
         speedTimer = new HPC ();
@@ -84,85 +81,85 @@ bool PlayerHeels::update()
         }
 
         // Acciones a realizar en función del estado actual del jugador
-        switch ( stateId )
+        switch ( activity )
         {
-                case StateWait:
+                case Wait:
                         wait( playerItem );
                         break;
 
-                case StateAutoMoveNorth:
-                case StateAutoMoveSouth:
-                case StateAutoMoveEast:
-                case StateAutoMoveWest:
+                case AutoMoveNorth:
+                case AutoMoveSouth:
+                case AutoMoveEast:
+                case AutoMoveWest:
                         autoMove( playerItem );
                         break;
 
-                case StateMoveNorth:
-                case StateMoveSouth:
-                case StateMoveEast:
-                case StateMoveWest:
+                case MoveNorth:
+                case MoveSouth:
+                case MoveEast:
+                case MoveWest:
                         move( playerItem );
                         break;
 
-                case StateDisplaceNorth:
-                case StateDisplaceSouth:
-                case StateDisplaceEast:
-                case StateDisplaceWest:
-                case StateDisplaceNortheast:
-                case StateDisplaceSoutheast:
-                case StateDisplaceSouthwest:
-                case StateDisplaceNorthwest:
-                case StateForceDisplaceNorth:
-                case StateForceDisplaceSouth:
-                case StateForceDisplaceEast:
-                case StateForceDisplaceWest:
+                case DisplaceNorth:
+                case DisplaceSouth:
+                case DisplaceEast:
+                case DisplaceWest:
+                case DisplaceNortheast:
+                case DisplaceSoutheast:
+                case DisplaceSouthwest:
+                case DisplaceNorthwest:
+                case ForceDisplaceNorth:
+                case ForceDisplaceSouth:
+                case ForceDisplaceEast:
+                case ForceDisplaceWest:
                         displace( playerItem );
                         break;
 
-                case StateCancelDisplaceNorth:
-                case StateCancelDisplaceSouth:
-                case StateCancelDisplaceEast:
-                case StateCancelDisplaceWest:
+                case CancelDisplaceNorth:
+                case CancelDisplaceSouth:
+                case CancelDisplaceEast:
+                case CancelDisplaceWest:
                         cancelDisplace( playerItem );
                         break;
 
-                case StateFall:
+                case Fall:
                         fall( playerItem );
                         break;
 
-                case StateJump:
-                case StateRegularJump:
-                case StateHighJump:
+                case Jump:
+                case RegularJump:
+                case HighJump:
                         jump( playerItem );
                         break;
 
-                case StateStartWayOutTeletransport:
-                case StateWayOutTeletransport:
+                case StartWayOutTeletransport:
+                case WayOutTeletransport:
                         wayOutTeletransport( playerItem );
                         break;
 
-                case StateStartWayInTeletransport:
-                case StateWayInTeletransport:
+                case StartWayInTeletransport:
+                case WayInTeletransport:
                         wayInTeletransport( playerItem );
                         break;
 
-                case StateStartDestroy:
-                case StateDestroy:
+                case StartDestroy:
+                case Destroy:
                         destroy( playerItem );
                         break;
 
-                case StateTakeItem:
-                case StateTakeAndJump:
+                case TakeItem:
+                case TakeAndJump:
                         take( playerItem );
                         break;
 
-                case StateTakenItem:
+                case TakenItem:
                         playerItem->addToZ( - LayerHeight );
-                        stateId = StateWait;
+                        activity = Wait;
                         break;
 
-                case StateDropItem:
-                case StateDropAndJump:
+                case DropItem:
+                case DropAndJump:
                         drop( playerItem );
                         break;
 
@@ -171,7 +168,7 @@ bool PlayerHeels::update()
         }
 
         // Reproduce el sonido asociado al estado actual
-        SoundManager::getInstance()->play( playerItem->getLabel(), stateId );
+        SoundManager::getInstance()->play( playerItem->getLabel(), activity );
 
         return false;
 }
@@ -182,17 +179,17 @@ void PlayerHeels::behave ()
         InputManager* input = InputManager::getInstance();
 
         // Si no está en modo automático
-        if ( stateId != StateAutoMoveNorth && stateId != StateAutoMoveSouth && stateId != StateAutoMoveEast && stateId != StateAutoMoveWest &&
-                stateId != StateStartWayOutTeletransport && stateId != StateWayOutTeletransport && stateId != StateStartWayInTeletransport && stateId != StateWayInTeletransport &&
-                stateId != StateStartDestroy && stateId != StateDestroy )
+        if ( activity != AutoMoveNorth && activity != AutoMoveSouth && activity != AutoMoveEast && activity != AutoMoveWest &&
+                activity != StartWayOutTeletransport && activity != WayOutTeletransport && activity != StartWayInTeletransport && activity != WayInTeletransport &&
+                activity != StartDestroy && activity != Destroy )
         {
                 // Si está esperando o parpadeando
-                if ( stateId == StateWait || stateId == StateBlink )
+                if ( activity == Wait || activity == Blink )
                 {
                         // ...y ha pulsado la tecla para coger un elemento entonces intenta cogerlo / dejarlo
                         if ( input->take() )
                         {
-                                stateId = ( takenItemData == 0 ? StateTakeItem : StateDropItem );
+                                activity = ( takenItemData == 0 ? TakeItem : DropItem );
                                 // Las repeticiones de esta tecla no deben procesarse
                                 input->noRepeat( "take" );
                         }
@@ -200,26 +197,26 @@ void PlayerHeels::behave ()
                         // intenta cogerlo / dejarlo y luego salta
                         else if ( input->takeAndJump() )
                         {
-                                stateId = ( takenItemData == 0 ? StateTakeAndJump : StateDropAndJump );
+                                activity = ( takenItemData == 0 ? TakeAndJump : DropAndJump );
                                 // Las repeticiones de esta tecla no deben procesarse
                                 input->noRepeat( "take-jump" );
                         }
                         // ...y se ha pulsado alguna tecla de movimiento entonces se mueve
                         else if ( input->movenorth() && !input->movesouth() && !input->moveeast() && !input->movewest() )
                         {
-                                stateId = StateMoveNorth;
+                                activity = MoveNorth;
                         }
                         else if ( !input->movenorth() && input->movesouth() && !input->moveeast() && !input->movewest() )
                         {
-                                stateId = StateMoveSouth;
+                                activity = MoveSouth;
                         }
                         else if ( !input->movenorth() && !input->movesouth() && input->moveeast() && !input->movewest() )
                         {
-                                stateId = StateMoveEast;
+                                activity = MoveEast;
                         }
                         else if ( !input->movenorth() && !input->movesouth() && !input->moveeast() && input->movewest() )
                         {
-                                stateId = StateMoveWest;
+                                activity = MoveWest;
                         }
                         // ...y se ha pulsado la tecla de salto entonces salta
                         else if ( input->jump() )
@@ -227,11 +224,11 @@ void PlayerHeels::behave ()
                                 // Almacena en la pila de colisiones los elementos que tiene debajo
                                 playerItem->checkPosition( 0, 0, -1, Add );
                                 // Si está sobre un telepuerto y salta entonces el jugador será teletransportado, sino saltará
-                                stateId = ( playerItem->getMediator()->collisionWithByBehavior( TeleportBehavior ) ? StateStartWayOutTeletransport : StateJump );
+                                activity = ( playerItem->getMediator()->collisionWithByBehavior( TeleportBehavior ) ? StartWayOutTeletransport : Jump );
                         }
                 }
                 // Si está moviéndose
-                else if ( stateId == StateMoveNorth || stateId == StateMoveSouth || stateId == StateMoveEast || stateId == StateMoveWest )
+                else if ( activity == MoveNorth || activity == MoveSouth || activity == MoveEast || activity == MoveWest )
                 {
                         // ...y se ha pulsado la tecla de salto entonces salta
                         if( input->jump() )
@@ -239,12 +236,12 @@ void PlayerHeels::behave ()
                                 // Almacena en la pila de colisiones los elementos que tiene debajo
                                 playerItem->checkPosition( 0, 0, -1, Add );
                                 // Si está sobre un telepuerto y salta entonces el jugador será teletransportado, sino saltará
-                                stateId = ( playerItem->getMediator()->collisionWithByBehavior( TeleportBehavior ) ? StateStartWayOutTeletransport : StateJump );
+                                activity = ( playerItem->getMediator()->collisionWithByBehavior( TeleportBehavior ) ? StartWayOutTeletransport : Jump );
                         }
                         // ...y ha pulsado la tecla para coger un elemento entonces intenta cogerlo / dejarlo
                         else if ( input->take() )
                         {
-                                stateId = ( takenItemData == 0 ? StateTakeItem : StateDropItem );
+                                activity = ( takenItemData == 0 ? TakeItem : DropItem );
                                 // Las repeticiones de esta tecla no deben procesarse
                                 input->noRepeat( "take" );
                         }
@@ -252,46 +249,46 @@ void PlayerHeels::behave ()
                         // intenta cogerlo / dejarlo y luego salta
                         else if ( input->takeAndJump() )
                         {
-                                stateId = ( takenItemData == 0 ? StateTakeAndJump : StateDropAndJump );
+                                activity = ( takenItemData == 0 ? TakeAndJump : DropAndJump );
                                 // Las repeticiones de esta tecla no deben procesarse
                                 input->noRepeat( "take-jump" );
                         }
                         // ...y se ha pulsado alguna tecla de movimiento entonces sigue moviéndose
                         else if ( input->movenorth() && !input->movesouth() && !input->moveeast() && !input->movewest() )
                         {
-                                stateId = StateMoveNorth;
+                                activity = MoveNorth;
                         }
                         else if ( !input->movenorth() && input->movesouth() && !input->moveeast() && !input->movewest() )
                         {
-                                stateId = StateMoveSouth;
+                                activity = MoveSouth;
                         }
                         else if ( !input->movenorth() && !input->movesouth() && input->moveeast() && !input->movewest() )
                         {
-                                stateId = StateMoveEast;
+                                activity = MoveEast;
                         }
                         else if ( !input->movenorth() && !input->movesouth() && !input->moveeast() && input->movewest() )
                         {
-                                stateId = StateMoveWest;
+                                activity = MoveWest;
                         }
                         // Si por el contrario se han soltado las teclas de movimiento entonces se pone en espera
                         else if ( !input->movenorth() && !input->movesouth() && !input->moveeast() && !input->movewest() )
                         {
-                                SoundManager::getInstance()->stop( playerItem->getLabel(), stateId );
-                                stateId = StateWait;
+                                SoundManager::getInstance()->stop( playerItem->getLabel(), activity );
+                                activity = Wait;
                         }
                 }
                 // Si está siendo desplazado
-                else if ( stateId == StateDisplaceNorth || stateId == StateDisplaceSouth || stateId == StateDisplaceEast || stateId == StateDisplaceWest )
+                else if ( activity == DisplaceNorth || activity == DisplaceSouth || activity == DisplaceEast || activity == DisplaceWest )
                 {
                         // ...y se ha pulsado la tecla de salto entonces salta
                         if ( input->jump() )
                         {
-                                stateId = StateJump;
+                                activity = Jump;
                         }
                         // ...y ha pulsado la tecla para coger un elemento entonces intenta cogerlo
                         else if ( input->take() )
                         {
-                                stateId = ( takenItemData == 0 ? StateTakeItem : StateDropItem );
+                                activity = ( takenItemData == 0 ? TakeItem : DropItem );
                                 // Las repeticiones de esta tecla no deben procesarse
                                 input->noRepeat( "take" );
                         }
@@ -299,68 +296,68 @@ void PlayerHeels::behave ()
                         // intenta cogerlo / dejarlo y luego salta
                         else if ( input->takeAndJump() )
                         {
-                                stateId = ( takenItemData == 0 ? StateTakeAndJump : StateDropAndJump );
+                                activity = ( takenItemData == 0 ? TakeAndJump : DropAndJump );
                                 // Las repeticiones de esta tecla no deben procesarse
                                 input->noRepeat( "take-jump" );
                         }
                         // ...y se ha pulsado alguna tecla de movimiento entonces sigue moviéndose
                         else if ( input->movenorth() && !input->movesouth() && !input->moveeast() && !input->movewest() )
                         {
-                                stateId = StateMoveNorth;
+                                activity = MoveNorth;
                         }
                         else if ( !input->movenorth() && input->movesouth() && !input->moveeast() && !input->movewest() )
                         {
-                                stateId = StateMoveSouth;
+                                activity = MoveSouth;
                         }
                         else if ( !input->movenorth() && !input->movesouth() && input->moveeast() && !input->movewest() )
                         {
-                                stateId = StateMoveEast;
+                                activity = MoveEast;
                         }
                         else if ( !input->movenorth() && !input->movesouth() && !input->moveeast() && input->movewest() )
                         {
-                                stateId = StateMoveWest;
+                                activity = MoveWest;
                         }
                 }
                 // Si está siendo desplazado forzosamente
-                else if ( stateId == StateForceDisplaceNorth || stateId == StateForceDisplaceSouth || stateId == StateForceDisplaceEast || stateId == StateForceDisplaceWest )
+                else if ( activity == ForceDisplaceNorth || activity == ForceDisplaceSouth || activity == ForceDisplaceEast || activity == ForceDisplaceWest )
                 {
                         // ...y se ha pulsado la tecla de salto entonces salta
                         if ( input->jump() )
                         {
-                                stateId = StateJump;
+                                activity = Jump;
                         }
                         // ...y se ha pulsado alguna tecla de movimiento entonces: si pretende avanzar en la dirección
                         // contraria a la que se está deplazando entonces se anula el desplazamiento; en caso contrario,
                         // avanza en la dirección que se esté ordenando
                         else if ( input->movenorth() && !input->movesouth() && !input->moveeast() && !input->movewest() )
                         {
-                                stateId = ( stateId == StateForceDisplaceSouth ? StateCancelDisplaceSouth : StateMoveNorth );
+                                activity = ( activity == ForceDisplaceSouth ? CancelDisplaceSouth : MoveNorth );
                         }
                         else if ( !input->movenorth() && input->movesouth() && !input->moveeast() && !input->movewest() )
                         {
-                                stateId = ( stateId == StateForceDisplaceNorth ? StateCancelDisplaceNorth : StateMoveSouth );
+                                activity = ( activity == ForceDisplaceNorth ? CancelDisplaceNorth : MoveSouth );
                         }
                         else if ( !input->movenorth() && !input->movesouth() && input->moveeast() && !input->movewest() )
                         {
-                                stateId = ( stateId == StateForceDisplaceWest ? StateCancelDisplaceWest : StateMoveEast );
+                                activity = ( activity == ForceDisplaceWest ? CancelDisplaceWest : MoveEast );
                         }
                         else if ( !input->movenorth() && !input->movesouth() && !input->moveeast() && input->movewest() )
                         {
-                                stateId = ( stateId == StateForceDisplaceEast ? StateCancelDisplaceEast : StateMoveWest );
+                                activity = ( activity == ForceDisplaceEast ? CancelDisplaceEast : MoveWest );
                         }
                 }
                 // Si está saltando
-                else if ( stateId == StateJump || stateId == StateRegularJump || stateId == StateHighJump )
+                else if ( activity == Jump || activity == RegularJump || activity == HighJump )
                 {
 
                 }
                 // Si está cayendo
-                else if ( stateId == StateFall )
+                else if ( activity == Fall )
                 {
                         // ...y ha pulsado la tecla para coger un elemento entonces intenta cogerlo / dejarlo
                         if ( input->take() )
                         {
-                                stateId = ( takenItemData == 0 ? StateTakeItem : StateDropItem );
+                                activity = ( takenItemData == 0 ? TakeItem : DropItem );
                                 // Las repeticiones de esta tecla no deben procesarse
                                 input->noRepeat( "take" );
                         }

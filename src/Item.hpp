@@ -118,10 +118,10 @@ public:
 
         /**
          * Crea el comportamiento del elemento según el identificador
-         * @param behaviorId Identificador del comportamiento del elemento
+         * @param behavior Identificador del comportamiento del elemento
          * @param extra Datos extra necesarios para configurar el comportamiento
          */
-        void assignBehavior( const BehaviorId& id, void* extraData ) ;
+        void assignBehavior( const BehaviorOfItem& behavior, void* extraData ) ;
 
         /**
          * Establece el sentido de la animación del primer al último fotograma (hacia adelante)

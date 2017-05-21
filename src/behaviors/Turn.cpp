@@ -2,9 +2,9 @@
 #include "Turn.hpp"
 #include "Item.hpp"
 #include "FreeItem.hpp"
-#include "MoveState.hpp"
-#include "DisplaceState.hpp"
-#include "FallState.hpp"
+#include "MoveKindOfActivity.hpp"
+#include "DisplaceKindOfActivity.hpp"
+#include "FallKindOfActivity.hpp"
 #include "Mediator.hpp"
 #include "Room.hpp"
 #include "SoundManager.hpp"
@@ -13,10 +13,9 @@
 namespace isomot
 {
 
-Turn::Turn( Item * item, const BehaviorId & id ) :
+Turn::Turn( Item * item, const BehaviorOfItem & id ) :
         Behavior( item, id )
 {
-        stateId = StateWait;
         speedTimer = new HPC();
         fallTimer = new HPC();
         speedTimer->start();
@@ -34,16 +33,16 @@ bool Turn::update ()
         bool freeze = false;
         FreeItem* freeItem = dynamic_cast< FreeItem * >( this->item );
 
-        switch ( stateId )
+        switch ( activity )
         {
-                case StateWait:
+                case Wait:
                         start();
                         break;
 
-                case StateMoveNorth:
-                case StateMoveSouth:
-                case StateMoveEast:
-                case StateMoveWest:
+                case MoveNorth:
+                case MoveSouth:
+                case MoveEast:
+                case MoveWest:
                         if ( ! freeItem->isFrozen() )
                         {
                                 if ( speedTimer->getValue() > freeItem->getSpeed() )
@@ -51,12 +50,12 @@ bool Turn::update ()
                                         // El elemento se mueve. Si el movimiento no se pudo realizar por colisión entonces
                                         // se desplaza a los elementos con los que pudiera haber chocado y el elemento da media
                                         // vuelta cambiando su estado a otro de movimiento
-                                        if ( ! state->move( this, &stateId, true ) )
+                                        if ( ! whatToDo->move( this, &activity, true ) )
                                         {
                                                 turn();
 
                                                 // Emite el sonido de colisión
-                                                SoundManager::getInstance()->play( freeItem->getLabel(), StateCollision );
+                                                SoundManager::getInstance()->play( freeItem->getLabel(), Collision );
                                         }
 
                                         // Se pone a cero el cronómetro para el siguiente ciclo
@@ -68,32 +67,32 @@ bool Turn::update ()
                         }
                         break;
 
-                case StateDisplaceNorth:
-                case StateDisplaceSouth:
-                case StateDisplaceEast:
-                case StateDisplaceWest:
-                case StateDisplaceNortheast:
-                case StateDisplaceSoutheast:
-                case StateDisplaceSouthwest:
-                case StateDisplaceNorthwest:
+                case DisplaceNorth:
+                case DisplaceSouth:
+                case DisplaceEast:
+                case DisplaceWest:
+                case DisplaceNortheast:
+                case DisplaceSoutheast:
+                case DisplaceSouthwest:
+                case DisplaceNorthwest:
                         // Emite el sonido de de desplazamiento
-                        SoundManager::getInstance()->play( freeItem->getLabel(), stateId );
+                        SoundManager::getInstance()->play( freeItem->getLabel(), activity );
 
                         // El elemento es deplazado por otro. Si el desplazamiento no se pudo realizar por
                         // colisión entonces el estado se propaga a los elementos con los que ha chocado
-                        state->displace( this, &stateId, true );
+                        whatToDo->displace( this, &activity, true );
 
                         // Una vez se ha completado el desplazamiento el elemento vuelve a su comportamiento normal
-                        stateId = StateWait;
+                        activity = Wait;
 
                         // inactive item will continue to be inactive
                         if ( freeItem->isFrozen() )
                         {
-                                stateId = StateFreeze;
+                                activity = Freeze;
                         }
                         break;
 
-                case StateFall:
+                case Fall:
                         // Se comprueba si ha topado con el suelo en una sala sin suelo
                         if ( freeItem->getZ() == 0 && freeItem->getMediator()->getRoom()->getFloorType() == NoFloor )
                         {
@@ -103,11 +102,11 @@ bool Turn::update ()
                         // Si ha llegado el momento de caer entonces el elemento desciende una unidad
                         else if ( fallTimer->getValue() > freeItem->getWeight() )
                         {
-                                if ( ! state->fall( this ) )
+                                if ( ! whatToDo->fall( this ) )
                                 {
                                         // Emite el sonido de caída
-                                        SoundManager::getInstance()->play( freeItem->getLabel(), stateId );
-                                        stateId = StateWait;
+                                        SoundManager::getInstance()->play( freeItem->getLabel(), activity );
+                                        activity = Wait;
                                 }
 
                                 // Se pone a cero el cronómetro para el siguiente ciclo
@@ -115,13 +114,13 @@ bool Turn::update ()
                         }
                         break;
 
-                case StateFreeze:
+                case Freeze:
                         freeItem->setFrozen( true );
                         break;
 
-                case StateWakeUp:
+                case WakeUp:
                         freeItem->setFrozen( false );
-                        stateId = StateWait;
+                        activity = Wait;
                         break;
 
                 default:
@@ -136,26 +135,26 @@ void Turn::start()
         switch ( dynamic_cast< FreeItem * >( this->item )->getDirection() )
         {
                 case North:
-                        stateId = StateMoveNorth;
+                        activity = MoveNorth;
                         break;
 
                 case South:
-                        stateId = StateMoveSouth;
+                        activity = MoveSouth;
                         break;
 
                 case East:
-                        stateId = StateMoveEast;
+                        activity = MoveEast;
                         break;
 
                 case West:
-                        stateId = StateMoveWest;
+                        activity = MoveWest;
                         break;
 
                 default:
                         ;
         }
 
-        state = MoveState::getInstance();
+        whatToDo = MoveKindOfActivity::getInstance();
 }
 
 void Turn::turn()
@@ -165,34 +164,34 @@ void Turn::turn()
         switch ( freeItem->getDirection() )
         {
                 case North:
-                        stateId = ( id == TurnLeftBehavior ? StateMoveWest : StateMoveEast );
+                        activity = ( theBehavior == TurnLeftBehavior ? MoveWest : MoveEast );
                         if ( freeItem->getDirectionFrames() > 1 )
                         {
-                        freeItem->changeDirection( id == TurnLeftBehavior ? West : East );
+                        freeItem->changeDirection( theBehavior == TurnLeftBehavior ? West : East );
                         }
                         break;
 
                 case South:
-                        stateId = ( id == TurnLeftBehavior ? StateMoveEast : StateMoveWest );
+                        activity = ( theBehavior == TurnLeftBehavior ? MoveEast : MoveWest );
                         if ( freeItem->getDirectionFrames() > 1 )
                         {
-                                freeItem->changeDirection( id == TurnLeftBehavior ? East : West );
+                                freeItem->changeDirection( theBehavior == TurnLeftBehavior ? East : West );
                         }
                         break;
 
                 case East:
-                        stateId = ( id == TurnLeftBehavior ? StateMoveNorth : StateMoveSouth );
+                        activity = ( theBehavior == TurnLeftBehavior ? MoveNorth : MoveSouth );
                         if ( freeItem->getDirectionFrames() > 1 )
                         {
-                                freeItem->changeDirection( id == TurnLeftBehavior ? North : South );
+                                freeItem->changeDirection( theBehavior == TurnLeftBehavior ? North : South );
                         }
                         break;
 
                 case West:
-                        stateId = ( id == TurnLeftBehavior ? StateMoveSouth : StateMoveNorth );
+                        activity = ( theBehavior == TurnLeftBehavior ? MoveSouth : MoveNorth );
                         if ( freeItem->getDirectionFrames() > 1 )
                         {
-                                freeItem->changeDirection( id == TurnLeftBehavior ? South : North );
+                                freeItem->changeDirection( theBehavior == TurnLeftBehavior ? South : North );
                         }
                         break;
 

@@ -1,6 +1,6 @@
 
-#include "DisplaceState.hpp"
-#include "FallState.hpp"
+#include "DisplaceKindOfActivity.hpp"
+#include "FallKindOfActivity.hpp"
 #include "Behavior.hpp"
 #include "Item.hpp"
 #include "GridItem.hpp"
@@ -10,32 +10,33 @@
 namespace isomot
 {
 
-BehaviorState* DisplaceState::instance = 0;
+KindOfActivity * DisplaceKindOfActivity::instance = 0 ;
 
-DisplaceState::DisplaceState() : BehaviorState()
+
+DisplaceKindOfActivity::DisplaceKindOfActivity() : KindOfActivity()
 {
 
 }
 
-DisplaceState::~DisplaceState()
+DisplaceKindOfActivity::~DisplaceKindOfActivity()
 {
 }
 
-BehaviorState* DisplaceState::getInstance()
+KindOfActivity* DisplaceKindOfActivity::getInstance()
 {
         if ( instance == 0 )
         {
-                instance = new DisplaceState();
+                instance = new DisplaceKindOfActivity();
         }
 
         return instance;
 }
 
-bool DisplaceState::displace( Behavior* behavior, StateId* substate, bool canFall )
+bool DisplaceKindOfActivity::displace( Behavior* behavior, ActivityOfItem* activity, bool canFall )
 {
         bool changedData = false;
         FreeItem* freeItem = 0;
-        StateId displaceStateId = *substate;
+        ActivityOfItem displaceActivity = *activity;
 
         // Acceso al elemento que hay que mover si dicho elemento es libre
         if ( behavior->getItem()->getId() & 1 )
@@ -43,73 +44,73 @@ bool DisplaceState::displace( Behavior* behavior, StateId* substate, bool canFal
                 freeItem = dynamic_cast < FreeItem * > ( behavior->getItem () );
         }
 
-        switch ( *substate )
+        switch ( *activity )
         {
-                case StateDisplaceNorth:
-                case StateForceDisplaceNorth:
+                case DisplaceNorth:
+                case ForceDisplaceNorth:
                         if ( freeItem != 0 )
                         {
                                 changedData = freeItem->addToX( -1 );
                         }
-                        displaceStateId = StateDisplaceNorth;
+                        displaceActivity = DisplaceNorth;
                         break;
 
-                case StateDisplaceSouth:
-                case StateForceDisplaceSouth:
+                case DisplaceSouth:
+                case ForceDisplaceSouth:
                         if ( freeItem != 0 )
                         {
                                 changedData = freeItem->addToX( 1 );
                         }
-                        displaceStateId = StateDisplaceSouth;
+                        displaceActivity = DisplaceSouth;
                         break;
 
-                case StateDisplaceEast:
-                case StateForceDisplaceEast:
+                case DisplaceEast:
+                case ForceDisplaceEast:
                         if ( freeItem != 0 )
                         {
                                 changedData = freeItem->addToY( -1 );
                         }
-                        displaceStateId = StateDisplaceEast;
+                        displaceActivity = DisplaceEast;
                         break;
 
-                case StateDisplaceWest:
-                case StateForceDisplaceWest:
+                case DisplaceWest:
+                case ForceDisplaceWest:
                         if ( freeItem != 0 )
                         {
                                 changedData = freeItem->addToY( 1 );
                         }
-                        displaceStateId = StateDisplaceWest;
+                        displaceActivity = DisplaceWest;
                         break;
 
-                case StateDisplaceNortheast:
+                case DisplaceNortheast:
                         if ( freeItem != 0 )
                         {
                                 changedData = freeItem->addToPosition( -1, -1, 0 );
                         }
                         break;
 
-                case StateDisplaceNorthwest:
+                case DisplaceNorthwest:
                         if ( freeItem != 0 )
                         {
                                 changedData = freeItem->addToPosition( -1, 1, 0 );
                         }
                         break;
 
-                case StateDisplaceSoutheast:
+                case DisplaceSoutheast:
                         if ( freeItem != 0 )
                         {
                                 changedData = freeItem->addToPosition( 1, -1, 0 );
                         }
                         break;
 
-                case StateDisplaceSouthwest:
+                case DisplaceSouthwest:
                         if ( freeItem != 0 )
                         {
                                 changedData = freeItem->addToPosition( 1, 1, 0 );
                         }
                         break;
 
-                case StateDisplaceUp:
+                case DisplaceUp:
                         changedData = behavior->getItem()->addToZ( 1 );
                         break;
 
@@ -122,23 +123,23 @@ bool DisplaceState::displace( Behavior* behavior, StateId* substate, bool canFal
                 // En caso de colisión en los ejes X o Y se desplaza a los elementos implicados
                 if ( ! changedData )
                 {
-                        this->propagateStateAdjacentItems( freeItem, displaceStateId );
+                        this->propagateActivityToAdjacentItems( freeItem, displaceActivity );
                 }
                 // En caso de que el elemento se haya movido se comprueba si hay que desplazar los elementos
                 // que pueda tener encima
                 else
                 {
-                        this->propagateStateTopItems( freeItem, *substate );
+                        this->propagateActivityToTopItems( freeItem, *activity );
                 }
         }
 
         // Si el elemento puede caer entonces se comprueba si hay que cambiar el estado
         if ( canFall )
         {
-                if ( FallState::getInstance()->fall( behavior ) )
+                if ( FallKindOfActivity::getInstance()->fall( behavior ) )
                 {
-                        changeState( behavior, FallState::getInstance() );
-                        *substate = StateFall;
+                        changeKindOfActivity( behavior, FallKindOfActivity::getInstance() );
+                        *activity = Fall;
                         changedData = true;
                 }
         }

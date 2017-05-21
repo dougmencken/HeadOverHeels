@@ -1,6 +1,6 @@
 
-#include "MoveState.hpp"
-#include "FallState.hpp"
+#include "MoveKindOfActivity.hpp"
+#include "FallKindOfActivity.hpp"
 #include "Behavior.hpp"
 #include "Item.hpp"
 #include "GridItem.hpp"
@@ -14,32 +14,32 @@
 namespace isomot
 {
 
-BehaviorState* MoveState::instance = 0;
+KindOfActivity * MoveKindOfActivity::instance = 0 ;
 
 
-MoveState::MoveState( ) : BehaviorState()
+MoveKindOfActivity::MoveKindOfActivity( ) : KindOfActivity()
 {
 
 }
 
-MoveState::~MoveState( )  { }
+MoveKindOfActivity::~MoveKindOfActivity( )  { }
 
 
-BehaviorState* MoveState::getInstance()
+KindOfActivity* MoveKindOfActivity::getInstance()
 {
         if ( instance == 0 )
         {
-                instance = new MoveState();
+                instance = new MoveKindOfActivity();
         }
 
         return instance;
 }
 
-bool MoveState::move( Behavior* behavior, StateId* substate, bool canFall )
+bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, bool canFall )
 {
         bool changedData = false;
         bool loading = false;
-        StateId displaceStateId = StateWait;
+        ActivityOfItem displaceActivity = Wait;
         FreeItem* freeItem = 0;
         Mediator* mediator = 0;
 
@@ -50,10 +50,10 @@ bool MoveState::move( Behavior* behavior, StateId* substate, bool canFall )
                 mediator = freeItem->getMediator();
         }
 
-        switch ( *substate )
+        switch ( *activity )
         {
-                case StateMoveNorth:
-                case StateAutoMoveNorth:
+                case MoveNorth:
+                case AutoMoveNorth:
                         if ( freeItem != 0 )
                         {
                                 if ( freeItem->getDirection() != North )
@@ -62,12 +62,12 @@ bool MoveState::move( Behavior* behavior, StateId* substate, bool canFall )
                                 }
 
                                 changedData = freeItem->addToX( -1 );
-                                displaceStateId = StateDisplaceNorth;
+                                displaceActivity = DisplaceNorth;
                         }
                         break;
 
-                case StateMoveSouth:
-                case StateAutoMoveSouth:
+                case MoveSouth:
+                case AutoMoveSouth:
                         if ( freeItem != 0 )
                         {
                                 if ( freeItem->getDirection() != South )
@@ -76,12 +76,12 @@ bool MoveState::move( Behavior* behavior, StateId* substate, bool canFall )
                                 }
 
                                 changedData = freeItem->addToX( 1 );
-                                displaceStateId = StateDisplaceSouth;
+                                displaceActivity = DisplaceSouth;
                         }
                         break;
 
-                case StateMoveEast:
-                case StateAutoMoveEast:
+                case MoveEast:
+                case AutoMoveEast:
                         if ( freeItem != 0 )
                         {
                                 if ( freeItem->getDirection() != East )
@@ -90,12 +90,12 @@ bool MoveState::move( Behavior* behavior, StateId* substate, bool canFall )
                                 }
 
                                 changedData = freeItem->addToY( -1 );
-                                displaceStateId = StateDisplaceEast;
+                                displaceActivity = DisplaceEast;
                         }
                         break;
 
-                case StateMoveWest:
-                case StateAutoMoveWest:
+                case MoveWest:
+                case AutoMoveWest:
                         if ( freeItem != 0 )
                         {
                                 if ( freeItem->getDirection() != West )
@@ -104,43 +104,43 @@ bool MoveState::move( Behavior* behavior, StateId* substate, bool canFall )
                                 }
 
                                 changedData = freeItem->addToY( 1 );
-                                displaceStateId = StateDisplaceWest;
+                                displaceActivity = DisplaceWest;
                         }
                         break;
 
-                case StateMoveNortheast:
+                case MoveNortheast:
                         if ( freeItem != 0 )
                         {
                                 changedData = freeItem->addToPosition( -1, -1, 0 );
-                                displaceStateId = StateDisplaceNortheast;
+                                displaceActivity = DisplaceNortheast;
                         }
                         break;
 
-                case StateMoveNorthwest:
+                case MoveNorthwest:
                         if ( freeItem != 0 )
                         {
                                 changedData = freeItem->addToPosition( -1, 1, 0 );
-                                displaceStateId = StateDisplaceNorthwest;
+                                displaceActivity = DisplaceNorthwest;
                         }
                         break;
 
-                case StateMoveSoutheast:
+                case MoveSoutheast:
                         if ( freeItem != 0 )
                         {
                                 changedData = freeItem->addToPosition( 1, -1, 0 );
-                                displaceStateId = StateDisplaceSoutheast;
+                                displaceActivity = DisplaceSoutheast;
                         }
                         break;
 
-                case StateMoveSouthwest:
+                case MoveSouthwest:
                         if ( freeItem != 0 )
                         {
                                 changedData = freeItem->addToPosition( 1, 1, 0 );
-                                displaceStateId = StateDisplaceSouthwest;
+                                displaceActivity = DisplaceSouthwest;
                         }
                         break;
 
-                case StateMoveUp:
+                case MoveUp:
                         // Si no ha podido ascender, levanta a todos los elementos que pudiera tener encima
                         if ( ! ( changedData = freeItem->addToZ( 1 ) ) )
                         {
@@ -159,7 +159,7 @@ bool MoveState::move( Behavior* behavior, StateId* substate, bool canFall )
                         }
                         break;
 
-                case StateMoveDown:
+                case MoveDown:
                 {
                         // Comprueba si tiene elementos encima
                         loading = !freeItem->checkPosition( 0, 0, 2, Add );
@@ -188,28 +188,28 @@ bool MoveState::move( Behavior* behavior, StateId* substate, bool canFall )
                 }
                         break;
 
-                case StateCancelDisplaceNorth:
+                case CancelDisplaceNorth:
                         if ( freeItem->getDirection() != South )
                         {
                                 freeItem->changeDirection( South );
                         }
                         break;
 
-                case StateCancelDisplaceSouth:
+                case CancelDisplaceSouth:
                         if ( freeItem->getDirection() != North )
                         {
                                 freeItem->changeDirection( North );
                         }
                         break;
 
-                case StateCancelDisplaceEast:
+                case CancelDisplaceEast:
                         if ( freeItem->getDirection() != West )
                         {
                                 freeItem->changeDirection( West );
                         }
                         break;
 
-                case StateCancelDisplaceWest:
+                case CancelDisplaceWest:
                         if ( freeItem->getDirection() != East )
                         {
                                 freeItem->changeDirection( East );
@@ -225,24 +225,24 @@ bool MoveState::move( Behavior* behavior, StateId* substate, bool canFall )
                 // En caso de colisión en los ejes X o Y se desplaza a los elementos implicados
                 if ( ! changedData )
                 {
-                        this->propagateStateAdjacentItems( freeItem, displaceStateId );
+                        this->propagateActivityToAdjacentItems( freeItem, displaceActivity );
                 }
                 // En caso de que el elemento se haya movido se comprueba si hay que desplazar los elementos
                 // que pueda tener encima. La excepción es para el movimiento vertical porque de lo contrario
                 // se cambiaría el estado de los elementos situados encima de un ascensor
-                else if ( *substate != StateMoveUp && *substate != StateMoveDown )
+                else if ( *activity != MoveUp && *activity != MoveDown )
                 {
-                        this->propagateStateTopItems( freeItem, displaceStateId );
+                        this->propagateActivityToTopItems( freeItem, displaceActivity );
                 }
         }
 
         // Si el elemento puede caer entonces se comprueba si hay que cambiar el estado
-        if ( canFall && *substate )
+        if ( canFall && *activity )
         {
-                if ( FallState::getInstance()->fall( behavior ) )
+                if ( FallKindOfActivity::getInstance()->fall( behavior ) )
                 {
-                        changeState( behavior, FallState::getInstance() );
-                        *substate = StateFall;
+                        changeKindOfActivity( behavior, FallKindOfActivity::getInstance() );
+                        *activity = Fall;
                         changedData = true;
                 }
         }
@@ -250,13 +250,13 @@ bool MoveState::move( Behavior* behavior, StateId* substate, bool canFall )
         return changedData;
 }
 
-void MoveState::ascent( FreeItem* freeItem, int z )
+void MoveKindOfActivity::ascent( FreeItem* freeItem, int z )
 {
         // El elemento debe poder cambiar de estado
         if ( freeItem->getBehavior() != 0 )
         {
                 // Si el elemento no es el ascensor entonces se levanta
-                if ( freeItem->getBehavior()->getId() != ElevatorBehavior )
+                if ( freeItem->getBehavior()->getBehaviorOfItem () != ElevatorBehavior )
                 {
                         // Si no se puede levantar, se toma el elemento con el que choca para levantarlo
                         if ( ! freeItem->addToZ( z ) )
@@ -292,7 +292,7 @@ void MoveState::ascent( FreeItem* freeItem, int z )
         }
 }
 
-void MoveState::descend( FreeItem* freeItem, int z )
+void MoveKindOfActivity::descend( FreeItem* freeItem, int z )
 {
         // El elemento debe poder cambiar de estado
         if ( freeItem->getBehavior() != 0 )

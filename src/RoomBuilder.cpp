@@ -220,17 +220,17 @@ Room* RoomBuilder::buildRoom ()
         return this->room;
 }
 
-PlayerItem* RoomBuilder::buildPlayerInTheSameRoom( const PlayerId& playerId, const BehaviorId& behaviorId, int x, int y, int z, const Direction& direction )
+PlayerItem* RoomBuilder::buildPlayerInTheSameRoom( const WhichPlayer& playerId, const BehaviorOfItem& behaviorId, int x, int y, int z, const Direction& direction )
 {
         return buildPlayerInRoom( this->room, playerId, behaviorId, x, y, z, direction );
 }
 
-PlayerItem* RoomBuilder::buildPlayerInRoom( Room* room, const PlayerId& playerId, const BehaviorId& behaviorId, int x, int y, int z, const Direction& direction, bool hasItem )
+PlayerItem* RoomBuilder::buildPlayerInRoom( Room* room, const WhichPlayer& playerId, const BehaviorOfItem& behaviorId, int x, int y, int z, const Direction& direction, bool hasItem )
 {
         PlayerItem* playerItem = 0;
         GameManager* gameManager = GameManager::getInstance();
-        PlayerId newPlayerId = playerId;
-        BehaviorId newBehaviorId = behaviorId;
+        WhichPlayer newWhichPlayer = playerId;
+        BehaviorOfItem newBehaviorOfItem = behaviorId;
 
         // Si el jugador compuesto se ha quedado sin vidas, se comprueba si alguno de
         // los jugadores conseva alguna, para crearlo en su lugar
@@ -241,17 +241,17 @@ PlayerItem* RoomBuilder::buildPlayerInRoom( Room* room, const PlayerId& playerId
                         // Jugador Superviviente
                         if ( gameManager->getLives( Head ) > 0 )
                         {
-                                newPlayerId = Head;
-                                newBehaviorId = HeadBehavior;
+                                newWhichPlayer = Head;
+                                newBehaviorOfItem = HeadBehavior;
                         }
                         else if ( gameManager->getLives( Heels ) > 0 )
                         {
-                                newPlayerId = Heels;
-                                newBehaviorId = HeelsBehavior;
+                                newWhichPlayer = Heels;
+                                newBehaviorOfItem = HeelsBehavior;
                         }
                         else
                         {
-                                newPlayerId = NoPlayer;
+                                newWhichPlayer = NoPlayer;
                         }
                 }
                 // Es posible que los dos jugadores se unieran en la sala y se hayan quedado sin vidas
@@ -259,19 +259,19 @@ PlayerItem* RoomBuilder::buildPlayerInRoom( Room* room, const PlayerId& playerId
                 {
                         if ( gameManager->getLives( Head ) == 0 && gameManager->getLives( Heels ) == 0 )
                         {
-                                newPlayerId = NoPlayer;
+                                newWhichPlayer = NoPlayer;
                         }
                 }
         }
 
         // Se buscan los datos del elemento
-        ItemData* itemData = this->itemDataManager->findItemByLabel( short( newPlayerId ) );
+        ItemData* itemData = this->itemDataManager->findItemByLabel( short( newWhichPlayer ) );
 
         // Si se han encontrado y al jugador le quedan vidas, se coloca el elemento en la sala
-        if ( newPlayerId != NoPlayer && itemData != 0 )
+        if ( newWhichPlayer != NoPlayer && itemData != 0 )
         {
                 // Para poder crear el jugador le deben quedar vidas
-                if ( gameManager->getLives( newPlayerId ) > 0 )
+                if ( gameManager->getLives( newWhichPlayer ) > 0 )
                 {
                         playerItem = new PlayerItem( itemData, x, y, z, direction );
 
@@ -282,13 +282,13 @@ PlayerItem* RoomBuilder::buildPlayerInRoom( Room* room, const PlayerId& playerId
                         }
 
                         // Asigna las vidas
-                        playerItem->setLives( gameManager->getLives( newPlayerId ) );
+                        playerItem->setLives( gameManager->getLives( newWhichPlayer ) );
 
                         // Asigna la posesión de sus objetos
-                        playerItem->setTools( gameManager->hasTool( newPlayerId ) );
+                        playerItem->setTools( gameManager->hasTool( newWhichPlayer ) );
 
                         // Asigna la cantidad de munición disponible
-                        playerItem->setAmmo( gameManager->getDonuts( newPlayerId ) );
+                        playerItem->setAmmo( gameManager->getDonuts( newWhichPlayer ) );
 
                         // Asigna la cantidad de grandes saltos disponibles
                         playerItem->setHighJumps( gameManager->getHighJumps() );
@@ -297,12 +297,12 @@ PlayerItem* RoomBuilder::buildPlayerInRoom( Room* room, const PlayerId& playerId
                         playerItem->setHighSpeed( gameManager->getHighSpeed() );
 
                         // Asigna el tiempo restante de inmunidad
-                        playerItem->setShieldTime( gameManager->getShield( newPlayerId ) );
+                        playerItem->setShieldTime( gameManager->getShield( newWhichPlayer ) );
 
                         // Un jugador necesita acceso a los datos de otros elementos dado que los
                         // necesita para modelar su comportamiento. Por ejemplo: el disparo y el elemento
                         // de transición entre los telepuertos
-                        playerItem->assignBehavior( newBehaviorId, reinterpret_cast< void * >( itemDataManager ) );
+                        playerItem->assignBehavior( newBehaviorOfItem, reinterpret_cast< void * >( itemDataManager ) );
 
                         // Añade el jugador a la sala
                         room->addPlayer( playerItem );
@@ -369,11 +369,11 @@ GridItem* RoomBuilder::buildGridItem( const rxml::item& item )
                      item.behavior() == VolatileWeightBehavior || item.behavior() == VolatileHeavyBehavior ||
                      item.behavior() == VolatilePuppyBehavior )
                 {
-                        gridItem->assignBehavior( BehaviorId( item.behavior() ), reinterpret_cast< void * >( this->itemDataManager->findItemByLabel( BubblesLabel ) ) );
+                        gridItem->assignBehavior( BehaviorOfItem( item.behavior() ), reinterpret_cast< void * >( this->itemDataManager->findItemByLabel( BubblesLabel ) ) );
                 }
                 else
                 {
-                        gridItem->assignBehavior( BehaviorId( item.behavior() ), 0 );
+                        gridItem->assignBehavior( BehaviorOfItem( item.behavior() ), 0 );
                 }
         }
 
@@ -420,7 +420,7 @@ FreeItem* RoomBuilder::buildFreeItem( const rxml::item& item )
                                         if ( foundData == 3 )
                                         {
                                                 freeItem->assignBehavior(
-                                                        BehaviorId( item.behavior () ),
+                                                        BehaviorOfItem( item.behavior () ),
                                                         reinterpret_cast< void * >( data )
                                                 );
                                                 delete[] data;
@@ -430,7 +430,7 @@ FreeItem* RoomBuilder::buildFreeItem( const rxml::item& item )
 
                                 case HunterWaiting4Behavior:
                                         freeItem->assignBehavior(
-                                                BehaviorId( item.behavior () ),
+                                                BehaviorOfItem( item.behavior () ),
                                                 reinterpret_cast< void * >( this->itemDataManager->findItemByLabel( ImperialGuardLabel ) )
                                         );
                                         break;
@@ -441,13 +441,13 @@ FreeItem* RoomBuilder::buildFreeItem( const rxml::item& item )
                                 case VolatileWeightBehavior:
                                 case CannonBallBehavior:
                                         freeItem->assignBehavior(
-                                                BehaviorId( item.behavior () ),
+                                                BehaviorOfItem( item.behavior () ),
                                                 reinterpret_cast< void * >( this->itemDataManager->findItemByLabel( BubblesLabel ) )
                                         );
                                         break;
 
                                 default:
-                                        freeItem->assignBehavior( BehaviorId( item.behavior () ), 0 );
+                                        freeItem->assignBehavior( BehaviorOfItem( item.behavior () ), 0 );
                         }
                 }
         }

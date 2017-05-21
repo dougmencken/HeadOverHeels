@@ -37,7 +37,7 @@ void MapRoomData::addPlayerPosition( PlayerStartPosition& playerPosition, Player
         this->visited = true;
 }
 
-void MapRoomData::removePlayerPosition( const PlayerId& player )
+void MapRoomData::removePlayerPosition( const WhichPlayer& player )
 {
         // Se comprueba si el jugador compuesto estaba en la sala porque de ser así, al salir alguno
         // de los jugadores simples habrá que alterar el jugador que queda en la sala por el otro jugador
@@ -62,7 +62,7 @@ void MapRoomData::removePlayerPosition( const PlayerId& player )
         }
 }
 
-PlayerStartPosition* MapRoomData::findPlayerPosition( const PlayerId& player )
+PlayerStartPosition* MapRoomData::findPlayerPosition( const WhichPlayer& player )
 {
         std::list< PlayerStartPosition >::iterator i = find_if( playersPosition.begin(), playersPosition.end(), std::bind2nd( EqualPlayerStartPosition(), player ) );
         return ( i != playersPosition.end() ? ( &( *i ) ) : 0 );
@@ -242,7 +242,7 @@ void MapRoomData::reset()
 	this->playersPosition.clear();
 }
 
-PlayerStartPosition::PlayerStartPosition( const PlayerId& player )
+PlayerStartPosition::PlayerStartPosition( const WhichPlayer& player )
 {
 	this->player = player;
 }
@@ -265,7 +265,7 @@ void PlayerStartPosition::assignPosition( const Direction& entry, int x, int y, 
 	this->orientation = orientation;
 }
 
-bool EqualPlayerStartPosition::operator() ( const PlayerStartPosition& position, const PlayerId& player ) const
+bool EqualPlayerStartPosition::operator() ( const PlayerStartPosition& position, const WhichPlayer& player ) const
 {
 	return ( position.getPlayer() == player );
 }

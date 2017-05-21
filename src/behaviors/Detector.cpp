@@ -3,8 +3,8 @@
 #include "Item.hpp"
 #include "FreeItem.hpp"
 #include "PlayerItem.hpp"
-#include "DisplaceState.hpp"
-#include "FallState.hpp"
+#include "DisplaceKindOfActivity.hpp"
+#include "FallKindOfActivity.hpp"
 #include "Mediator.hpp"
 #include "Room.hpp"
 #include "SoundManager.hpp"
@@ -13,10 +13,9 @@
 namespace isomot
 {
 
-Detector::Detector( Item * item, const BehaviorId & id ) :
+Detector::Detector( Item * item, const BehaviorOfItem & id ) :
         Behavior( item, id )
 {
-        stateId = StateWait;
         speedTimer = new HPC();
         fallTimer = new HPC();
         speedTimer->start();
@@ -37,22 +36,22 @@ bool Detector::update ()
 
         if ( playerItem != 0 )
         {
-                switch ( stateId )
+                switch ( activity )
                 {
                         // Si está parado intenta detectar a un jugador
-                        case StateWait:
+                        case Wait:
                                 // Un jugador se cruza en el eje X del "perseguidor"
                                 if ( freeItem->getX() >= playerItem->getX() - 1 && freeItem->getX() <= playerItem->getX() + 1 )
                                 {
                                         // ...a la derecha de él
                                         if ( playerItem->getY() <= freeItem->getY() )
                                         {
-                                                changeStateId( StateMoveEast );
+                                                changeActivityOfItem( MoveEast );
                                         }
                                         // ...a la izquierda de él
                                         else if ( playerItem->getY() >= freeItem->getY() )
                                         {
-                                                changeStateId( StateMoveWest );
+                                                changeActivityOfItem( MoveWest );
                                         }
                                 }
                                 // Un jugador se cruza en el eje Y del "perseguidor"
@@ -61,36 +60,36 @@ bool Detector::update ()
                                         // ...a la derecha de él
                                         if ( playerItem->getX() <= freeItem->getX() )
                                         {
-                                                changeStateId( StateMoveNorth );
+                                                changeActivityOfItem( MoveNorth );
                                         }
                                         else
                                         // ...a la izquierda de él
                                         if ( playerItem->getX() >= freeItem->getX() )
                                         {
-                                                changeStateId( StateMoveSouth );
+                                                changeActivityOfItem( MoveSouth );
                                         }
                                 }
 
                                 // Emite el sonido de activación del movimiento
-                                if ( stateId != StateWait )
+                                if ( activity != Wait )
                                 {
-                                        SoundManager::getInstance()->play( freeItem->getLabel(), stateId );
+                                        SoundManager::getInstance()->play( freeItem->getLabel(), activity );
                                 }
                                 break;
 
-                        case StateMoveNorth:
-                        case StateMoveSouth:
-                        case StateMoveEast:
-                        case StateMoveWest:
+                        case MoveNorth:
+                        case MoveSouth:
+                        case MoveEast:
+                        case MoveWest:
                                 // item is active and it is time to move
                                 if ( ! freeItem->isFrozen() )
                                 {
                                         if ( speedTimer->getValue() > freeItem->getSpeed() )
                                         {
                                                 // El elemento se mueve. Si colisiona vuelve al estado inicial para tomar una nueva dirección
-                                                if ( ! state->move( this, &stateId, true ) )
+                                                if ( ! whatToDo->move( this, &activity, true ) )
                                                 {
-                                                        stateId = StateWait;
+                                                        activity = Wait;
                                                 }
 
                                                 // Se pone a cero el cronómetro para el siguiente ciclo
@@ -102,21 +101,21 @@ bool Detector::update ()
                                 }
                                 break;
 
-                        case StateDisplaceNorth:
-                        case StateDisplaceSouth:
-                        case StateDisplaceEast:
-                        case StateDisplaceWest:
-                        case StateDisplaceNortheast:
-                        case StateDisplaceNorthwest:
-                        case StateDisplaceSoutheast:
-                        case StateDisplaceSouthwest:
+                        case DisplaceNorth:
+                        case DisplaceSouth:
+                        case DisplaceEast:
+                        case DisplaceWest:
+                        case DisplaceNortheast:
+                        case DisplaceNorthwest:
+                        case DisplaceSoutheast:
+                        case DisplaceSouthwest:
                                 // Si el elemento está activo y ha llegado el momento de moverse, entonces:
                                 if ( speedTimer->getValue() > freeItem->getSpeed() )
                                 {
                                         // El elemento se mueve hasta detectar un colisión
-                                        if ( ! state->displace( this, &stateId, true ) )
+                                        if ( ! whatToDo->displace( this, &activity, true ) )
                                         {
-                                                stateId = StateWait;
+                                                activity = Wait;
                                         }
 
                                         // Se pone a cero el cronómetro para el siguiente ciclo
@@ -126,11 +125,11 @@ bool Detector::update ()
                                 // preserve inactivity for inactive item
                                 if ( freeItem->isFrozen() )
                                 {
-                                        stateId = StateFreeze;
+                                        activity = Freeze;
                                 }
                                 break;
 
-                        case StateFall:
+                        case Fall:
                                 // Se comprueba si ha topado con el suelo en una sala sin suelo
                                 if ( freeItem->getZ() == 0 && freeItem->getMediator()->getRoom()->getFloorType() == NoFloor )
                                 {
@@ -139,9 +138,9 @@ bool Detector::update ()
                                 // Si ha llegado el momento de caer entonces el elemento desciende una unidad
                                 else if ( fallTimer->getValue() > freeItem->getWeight() )
                                 {
-                                        if ( ! state->fall( this ) )
+                                        if ( ! whatToDo->fall( this ) )
                                         {
-                                                stateId = StateWait;
+                                                activity = Wait;
                                         }
 
                                         // Se pone a cero el cronómetro para el siguiente ciclo
@@ -149,13 +148,13 @@ bool Detector::update ()
                                 }
                                 break;
 
-                        case StateFreeze:
+                        case Freeze:
                                 freeItem->setFrozen( true );
                                 break;
 
-                        case StateWakeUp:
+                        case WakeUp:
                                 freeItem->setFrozen( false );
-                                stateId = StateWait;
+                                activity = Wait;
                                 break;
 
                         default:

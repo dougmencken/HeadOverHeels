@@ -34,7 +34,7 @@ public:
         * @param item Elemento que tiene este comportamiento
         * @param id Identificador del comportamiento
         */
-        Drive( Item * item, const BehaviorId & id ) ;
+        Drive( Item * item, const BehaviorOfItem & id ) ;
 
         virtual ~Drive( ) ;
 

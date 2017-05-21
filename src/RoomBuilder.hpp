@@ -70,7 +70,7 @@ public:
          * @param z Coordenada isométrica Z donde se situará al jugador
          * @param direction Dirección inicial del jugador
          */
-        PlayerItem* buildPlayerInTheSameRoom( const PlayerId& playerId, const BehaviorId& behaviorId, int x, int y, int z, const Direction& direction );
+        PlayerItem* buildPlayerInTheSameRoom( const WhichPlayer& playerId, const BehaviorOfItem& behaviorId, int x, int y, int z, const Direction& direction );
 
         /**
          * Crea un jugador en la sala especificada. La sala ya debe estar construida
@@ -84,7 +84,7 @@ public:
          * @param direction Dirección inicial del jugador
          * @param hasItem Indica si el jugador llevaba un elemento en el bolso
          */
-        PlayerItem* buildPlayerInRoom( Room* room, const PlayerId& playerId, const BehaviorId& behaviorId, int x, int y, int z, const Direction& direction, bool hasItem = false );
+        PlayerItem* buildPlayerInRoom( Room* room, const WhichPlayer& playerId, const BehaviorOfItem& behaviorId, int x, int y, int z, const Direction& direction, bool hasItem = false );
 
         static int getXCenterOfRoom( ItemData* playerData, Room* theRoom );
 

@@ -16,6 +16,7 @@
 #include <algorithm>
 #include <functional>
 #include <allegro.h>
+
 #include "Widget.hpp"
 
 
@@ -29,6 +30,7 @@ class Icon ;
  * La pantalla del juego: un contenedor donde mostrar los elementos de la interfaz
  * gráfica de usuario
  */
+
 class Screen : public Widget
 {
 

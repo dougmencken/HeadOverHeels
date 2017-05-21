@@ -8,18 +8,21 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef Shot_hpp_
-#define Shot_hpp_
+#ifndef FireDoughnut_hpp_
+#define FireDoughnut_hpp_
 
 #include "Behavior.hpp"
 #include "HPC.hpp"
 
+
 namespace isomot
 {
 
+class Item ;
 class PlayerItem ;
 
-class Shot : public Behavior
+
+class FireDoughnut : public Behavior
 {
 
 public:
@@ -29,9 +32,9 @@ public:
         * @param item Elemento que tiene este comportamiento
         * @param id Identificador de comportamiento
         */
-        Shot( Item* item, const BehaviorId& id ) ;
+        FireDoughnut( Item * item, const BehaviorOfItem & id ) ;
 
-        virtual ~Shot( ) ;
+        virtual ~FireDoughnut( ) ;
 
        /**
         * Actualiza el comportamiento del elemento en cada ciclo
@@ -39,27 +42,18 @@ public:
         */
         virtual bool update () ;
 
+        void setPlayerItem ( PlayerItem * player ) ;
+
 private:
 
-       /**
-        * El jugador que ha disparado
-        */
-        PlayerItem* playerItem ;
+        PlayerItem * playerItem ;
 
        /**
         * Cronómetro que controla la velocidad de movimiento del elemento
         */
-        HPC* speedTimer ;
+        HPC * speedTimer ;
 
-public:
-
-       /**
-        * Establece el jugador que ha disparado
-        * @param playerItem Un jugador
-        */
-        void setPlayerItem ( PlayerItem* playerItem ) ;
-
-};
+} ;
 
 }
 

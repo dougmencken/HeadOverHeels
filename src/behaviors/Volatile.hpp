@@ -23,7 +23,7 @@ class Item ;
 class ItemData ;
 
 /**
- * For items which lack autonomous movement and move only when touched by some other item
+ * For items which lack autonomous movement and move only on touch by some other item
  */
 
 class Volatile : public Behavior
@@ -35,7 +35,7 @@ public:
         * @param item Elemento que tiene este comportamiento
         * @param id Identificador de comportamiento
         */
-        Volatile( Item * item, const BehaviorId & id ) ;
+        Volatile( Item * item, const BehaviorOfItem & id ) ;
 
         virtual ~Volatile( ) ;
 

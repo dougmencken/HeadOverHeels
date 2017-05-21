@@ -141,7 +141,7 @@ public:
          * @param playerId Un jugador
          * @return La dirección de entrada a la sala
          */
-        PlayerStartPosition* findPlayerPosition ( const std::string& room, const PlayerId& playerId ) ;
+        PlayerStartPosition* findPlayerPosition ( const std::string& room, const WhichPlayer& playerId ) ;
 
 protected:
 

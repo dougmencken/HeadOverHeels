@@ -3,8 +3,8 @@
 #include "Item.hpp"
 #include "FreeItem.hpp"
 #include "PlayerItem.hpp"
-#include "DisplaceState.hpp"
-#include "FallState.hpp"
+#include "DisplaceKindOfActivity.hpp"
+#include "FallKindOfActivity.hpp"
 #include "Mediator.hpp"
 #include "SoundManager.hpp"
 
@@ -12,10 +12,10 @@
 namespace isomot
 {
 
-ConveyorBelt::ConveyorBelt( Item* item, const BehaviorId& id ) : Behavior( item, id )
+ConveyorBelt::ConveyorBelt( Item* item, const BehaviorOfItem& behavior )
+        : Behavior( item, behavior )
+        , active( false )
 {
-        stateId = StateWait;
-        active = false;
         speedTimer = new HPC();
         speedTimer->start();
 }
@@ -29,90 +29,87 @@ bool ConveyorBelt::update ()
 {
         Mediator* mediator = item->getMediator();
 
-        switch ( stateId )
+        switch ( activity )
         {
-                case StateWait:
-                // Si está parado comprueba si hay elementos encima
-                if ( speedTimer->getValue() > item->getSpeed() )
-                {
-                        if ( ! item->checkPosition( 0, 0, 1, Add ) )
+                case Wait:
+                        if ( speedTimer->getValue() > item->getSpeed() )
                         {
-                                // Copia la pila de colisiones
-                                std::stack< int > topItems;
-                                while ( ! mediator->isStackOfCollisionsEmpty() )
+                                if ( ! item->checkPosition( 0, 0, 1, Add ) )
                                 {
-                                        topItems.push( mediator->popCollision() );
-                                }
-
-                                // Mientras haya elementos encima de este elemento se comprobarán
-                                // las condiciones para ver si pueden cambiar de estado
-                                while ( ! topItems.empty () )
-                                {
-                                        // Identificador del primer elemento de la pila de colisiones
-                                        int id = topItems.top();
-                                        topItems.pop();
-
-                                        // El elemento tiene que ser un elemento libre
-                                        if ( id >= FirstFreeId && ( id & 1 ) )
+                                        // Copia la pila de colisiones
+                                        std::stack< int > topItems;
+                                        while ( ! mediator->isStackOfCollisionsEmpty() )
                                         {
-                                                FreeItem* topItem = dynamic_cast< FreeItem * >( mediator->findItemById( id ) );
+                                                topItems.push( mediator->popCollision() );
+                                        }
 
-                                                // El elemento debe tener comportamiento
-                                                if ( topItem != 0 && topItem->getBehavior() != 0 )
+                                        // check conditions as long as there are items on top
+                                        while ( ! topItems.empty () )
+                                        {
+                                                int top = topItems.top();
+                                                topItems.pop();
+
+                                                // El elemento tiene que ser un elemento libre
+                                                if ( top >= FirstFreeId && ( top & 1 ) )
                                                 {
-                                                        // El ancla del elemento debe ser esta cinta transportadora para proceder a arrastrarlo
-                                                        if ( topItem->getAnchor() == 0 || item->getId() == topItem->getAnchor()->getId() )
-                                                        {
-                                                                if ( this->id == ConveyorBeltNortheast )
-                                                                {
-                                                                        if ( item->getDirection() == South )
-                                                                        {
-                                                                                if ( topItem->getBehavior()->getStateId() != StateRegularJump && topItem->getBehavior()->getStateId() != StateHighJump )
-                                                                                {
-                                                                                        topItem->getBehavior()->changeStateId( StateForceDisplaceNorth );
-                                                                                }
-                                                                        }
-                                                                        else if ( item->getDirection() == West )
-                                                                        {
-                                                                                if ( topItem->getBehavior()->getStateId() != StateRegularJump && topItem->getBehavior()->getStateId() != StateHighJump )
-                                                                                {
-                                                                                        topItem->getBehavior()->changeStateId( StateForceDisplaceEast );
-                                                                                }
-                                                                        }
-                                                                }
-                                                                if ( this->id == ConveyorBeltSouthwest )
-                                                                {
-                                                                        if ( item->getDirection() == South )
-                                                                        {
-                                                                                if ( topItem->getBehavior()->getStateId() != StateRegularJump && topItem->getBehavior()->getStateId() != StateHighJump )
-                                                                                {
-                                                                                        topItem->getBehavior()->changeStateId( StateForceDisplaceSouth );
-                                                                                }
-                                                                        }
-                                                                        else if ( item->getDirection() == West )
-                                                                        {
-                                                                                if ( topItem->getBehavior()->getStateId() != StateRegularJump && topItem->getBehavior()->getStateId() != StateHighJump )
-                                                                                {
-                                                                                        topItem->getBehavior()->changeStateId( StateForceDisplaceWest );
-                                                                                }
-                                                                        }
-                                                                }
+                                                        FreeItem* topItem = dynamic_cast< FreeItem * >( mediator->findItemById( top ) );
 
-                                                                // Reproduce el sonido de la cinta transportadora
-                                                                SoundManager::getInstance()->play( item->getLabel(), StateActive );
+                                                        // El elemento debe tener comportamiento
+                                                        if ( topItem != 0 && topItem->getBehavior() != 0 )
+                                                        {
+                                                                // El ancla del elemento debe ser esta cinta transportadora para proceder a arrastrarlo
+                                                                if ( topItem->getAnchor() == 0 || item->getId() == topItem->getAnchor()->getId() )
+                                                                {
+                                                                        if ( this->theBehavior == ConveyorBeltNortheast )
+                                                                        {
+                                                                                if ( item->getDirection() == South )
+                                                                                {
+                                                                                        if ( topItem->getBehavior()->getActivityOfItem() != RegularJump && topItem->getBehavior()->getActivityOfItem() != HighJump )
+                                                                                        {
+                                                                                                topItem->getBehavior()->changeActivityOfItem( ForceDisplaceNorth );
+                                                                                        }
+                                                                                }
+                                                                                else if ( item->getDirection() == West )
+                                                                                {
+                                                                                        if ( topItem->getBehavior()->getActivityOfItem() != RegularJump && topItem->getBehavior()->getActivityOfItem() != HighJump )
+                                                                                        {
+                                                                                                topItem->getBehavior()->changeActivityOfItem( ForceDisplaceEast );
+                                                                                        }
+                                                                                }
+                                                                        }
+                                                                        if ( this->theBehavior == ConveyorBeltSouthwest )
+                                                                        {
+                                                                                if ( item->getDirection() == South )
+                                                                                {
+                                                                                        if ( topItem->getBehavior()->getActivityOfItem() != RegularJump && topItem->getBehavior()->getActivityOfItem() != HighJump )
+                                                                                        {
+                                                                                                topItem->getBehavior()->changeActivityOfItem( ForceDisplaceSouth );
+                                                                                        }
+                                                                                }
+                                                                                else if ( item->getDirection() == West )
+                                                                                {
+                                                                                        if ( topItem->getBehavior()->getActivityOfItem() != RegularJump && topItem->getBehavior()->getActivityOfItem() != HighJump )
+                                                                                        {
+                                                                                                topItem->getBehavior()->changeActivityOfItem( ForceDisplaceWest );
+                                                                                        }
+                                                                                }
+                                                                        }
+
+                                                                        // play sound of conveyor belt
+                                                                        SoundManager::getInstance()->play( item->getLabel(), IsActive );
+                                                                }
                                                         }
                                                 }
                                         }
                                 }
-                        }
 
-                        // Reinicia el cronómetro para el siguiente ciclo
-                        speedTimer->reset();
-                }
-                break;
+                                // Reinicia el cronómetro para el siguiente ciclo
+                                speedTimer->reset();
+                        }
+                        break;
 
                 default:
-                        stateId = StateWait;
+                        activity = Wait;
         }
 
         return false;

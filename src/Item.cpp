@@ -243,9 +243,9 @@ bool Item::checkPosition( int x, int y, int z, const WhatToDo& what )
         return ! collisionFound;
 }
 
-void Item::assignBehavior( const BehaviorId& id, void* extraData )
+void Item::assignBehavior( const BehaviorOfItem& behavior, void* extraData )
 {
-        this->behavior = Behavior::createBehavior( this, id, extraData );
+        this->behavior = Behavior::createBehavior( this, behavior, extraData );
 }
 
 void Item::setForwardMotion()

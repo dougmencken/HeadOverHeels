@@ -6,11 +6,11 @@
 #include "PlayerItem.hpp"
 #include "Room.hpp"
 #include "Mediator.hpp"
-#include "MoveState.hpp"
-#include "DisplaceState.hpp"
-#include "FallState.hpp"
-#include "JumpState.hpp"
-#include "Shot.hpp"
+#include "MoveKindOfActivity.hpp"
+#include "DisplaceKindOfActivity.hpp"
+#include "FallKindOfActivity.hpp"
+#include "JumpKindOfActivity.hpp"
+#include "FireDoughnut.hpp"
 #include "GameManager.hpp"
 #include "SoundManager.hpp"
 
@@ -18,19 +18,24 @@
 namespace isomot
 {
 
-UserControlled::UserControlled( Item * item, const BehaviorId & id ) : Behavior( item, id )
+UserControlled::UserControlled( Item * item, const BehaviorOfItem & id )
+        : Behavior( item, id )
+        , jumpIndex( 0 )
+        , jumpFrames( 0 )
+        , highJumpFrames( 0 )
+        , automaticSteps( 0 )
+        , automaticStepsCounter( 0 )
+        , highSpeedSteps( 0 )
+        , shieldSteps( 0 )
+        , takenItemData( 0 )
+        , takenItemImage( 0 )
+        , takenItemBehavior( NoBehavior )
+        , speedTimer( 0 )
+        , fallTimer( 0 )
+        , glideTimer( 0 )
+        , blinkingTimer( 0 )
 {
-        jumpIndex = 0;
-        jumpFrames = highJumpFrames = 0;
-        automaticSteps = automaticStepsCounter = highSpeedSteps = shieldSteps = 0;
         fallFrames[ North ] = fallFrames[ South ] = fallFrames[ East ] = fallFrames[ West ] = 0xffffffff; // wtf is this magic mask for ?
-        speedTimer = 0;
-        fallTimer = 0;
-        glideTimer = 0;
-        blinkingTimer = 0;
-        takenItemData = 0;
-        takenItemImage = 0;
-        takenItemBehaviorId = NoBehavior;
 }
 
 UserControlled::~UserControlled()
@@ -38,47 +43,47 @@ UserControlled::~UserControlled()
 
 }
 
-void UserControlled::changeStateId( const StateId & stateId, Item * sender )
+void UserControlled::changeActivityOfItem( const ActivityOfItem & activityOf, Item * sender )
 {
-        this->stateId = stateId;
+        this->activity = activityOf;
         this->sender = sender;
 
         // Asigna el estado en función del identificador
-        switch ( stateId )
+        switch ( activityOf )
         {
-                case StateMoveNorth:
-                case StateMoveSouth:
-                case StateMoveEast:
-                case StateMoveWest:
-                case StateMoveNortheast:
-                case StateMoveNorthwest:
-                case StateMoveSoutheast:
-                case StateMoveSouthwest:
-                case StateMoveUp:
-                case StateMoveDown:
-                        state = MoveState::getInstance();
+                case MoveNorth:
+                case MoveSouth:
+                case MoveEast:
+                case MoveWest:
+                case MoveNortheast:
+                case MoveNorthwest:
+                case MoveSoutheast:
+                case MoveSouthwest:
+                case MoveUp:
+                case MoveDown:
+                        whatToDo = MoveKindOfActivity::getInstance();
                         break;
 
-                case StateDisplaceNorth:
-                case StateDisplaceSouth:
-                case StateDisplaceEast:
-                case StateDisplaceWest:
-                case StateDisplaceNortheast:
-                case StateDisplaceSoutheast:
-                case StateDisplaceSouthwest:
-                case StateDisplaceNorthwest:
-                case StateForceDisplaceNorth:
-                case StateForceDisplaceSouth:
-                case StateForceDisplaceEast:
-                case StateForceDisplaceWest:
-                        state = DisplaceState::getInstance();
+                case DisplaceNorth:
+                case DisplaceSouth:
+                case DisplaceEast:
+                case DisplaceWest:
+                case DisplaceNortheast:
+                case DisplaceSoutheast:
+                case DisplaceSouthwest:
+                case DisplaceNorthwest:
+                case ForceDisplaceNorth:
+                case ForceDisplaceSouth:
+                case ForceDisplaceEast:
+                case ForceDisplaceWest:
+                        whatToDo = DisplaceKindOfActivity::getInstance();
                         break;
 
-                case StateFall:
-                        state = FallState::getInstance();
+                case Fall:
+                        whatToDo = FallKindOfActivity::getInstance();
                         break;
 
-                case StateStartWayInTeletransport:
+                case StartWayInTeletransport:
                         this->item->changeFrame( this->nullFrame );
                         break;
 
@@ -87,50 +92,50 @@ void UserControlled::changeStateId( const StateId & stateId, Item * sender )
         }
 }
 
-void UserControlled::wait( PlayerItem * playerItem )
+void UserControlled::wait( PlayerItem * player )
 {
-        playerItem->wait();
+        player->wait();
 
         // Se comprueba si el jugador debe empezar a caer
-        if ( FallState::getInstance()->fall( this ) )
+        if ( FallKindOfActivity::getInstance()->fall( this ) )
         {
                 speedTimer->reset();
-                stateId = StateFall;
+                activity = Fall;
 
                 // Si el jugador se detiene entonces se para la cuenta atrás
                 // del conejo que proporciona doble velocidad
-                if ( playerItem->getLabel() == PlayerId( Head ) && playerItem->getHighSpeed() > 0 && this->highSpeedSteps < 4 )
+                if ( player->getLabel() == WhichPlayer( Head ) && player->getHighSpeed() > 0 && this->highSpeedSteps < 4 )
                 {
                         this->highSpeedSteps = 0;
                 }
         }
 }
 
-void UserControlled::move( PlayerItem * playerItem )
+void UserControlled::move( PlayerItem * player )
 {
         // move when the item is active
-        if ( ! playerItem->isFrozen() )
+        if ( ! player->isFrozen() )
         {
                 // Si el jugador ha cogido velocidad extra entonces se divide su velocidad habitual
-                double speed = playerItem->getSpeed() / ( playerItem->getLabel() == PlayerId( Head ) && playerItem->getHighSpeed() > 0 ? 2 : 1 );
+                double speed = player->getSpeed() / ( player->getLabel() == WhichPlayer( Head ) && player->getHighSpeed() > 0 ? 2 : 1 );
 
                 // Si ha llegado el momento de moverse
                 if ( speedTimer->getValue() > speed )
                 {
-                        state = MoveState::getInstance();
+                        whatToDo = MoveKindOfActivity::getInstance();
 
                         // El elemento se mueve. Si el movimiento no se pudo realizar por colisión entonces
                         // se desplaza a los elementos con los que pudiera haber chocado
-                        bool moved = state->move( this, &stateId, true );
+                        bool moved = whatToDo->move( this, &activity, true );
 
                         // Si se ha movido y no ha cambiado de estado entonces se cuenta un paso
-                        if ( playerItem->getLabel() == PlayerId( Head ) && playerItem->getHighSpeed() > 0 && moved && stateId != StateFall )
+                        if ( player->getLabel() == WhichPlayer( Head ) && player->getHighSpeed() > 0 && moved && activity != Fall )
                         {
                                 this->highSpeedSteps++;
 
                                 if ( this->highSpeedSteps == 8 )
                                 {
-                                        playerItem->decreaseHighSpeed();
+                                        player->decreaseHighSpeed();
                                         this->highSpeedSteps = 4;
                                 }
                         }
@@ -139,101 +144,101 @@ void UserControlled::move( PlayerItem * playerItem )
                         speedTimer->reset();
 
                         // Anima el elemento
-                        playerItem->animate();
+                        player->animate();
                 }
         }
 }
 
-void UserControlled::autoMove( PlayerItem * playerItem )
+void UserControlled::autoMove( PlayerItem * player )
 {
         // Si el jugador ha cogido velocidad extra entonces se divide su velocidad habitual
-        double speed = playerItem->getSpeed() / ( playerItem->getLabel() == PlayerId( Head ) && playerItem->getHighSpeed() > 0 ? 2 : 1 );
+        double speed = player->getSpeed() / ( player->getLabel() == WhichPlayer( Head ) && player->getHighSpeed() > 0 ? 2 : 1 );
 
         // Si el elemento está activo y ha llegado el momento de moverse, entonces:
         if ( speedTimer->getValue() > speed )
         {
-                state = MoveState::getInstance();
+                whatToDo = MoveKindOfActivity::getInstance();
 
                 // El elemento se mueve. Si el movimiento no se pudo realizar por colisión entonces
                 // se desplaza a los elementos con los que pudiera haber chocado
-                state->move( this, &stateId, true );
+                whatToDo->move( this, &activity, true );
 
                 // Se pone a cero el cronómetro para el siguiente ciclo
                 speedTimer->reset();
 
                 // Anima el elemento
-                playerItem->animate();
+                player->animate();
 
                 // Se comprueba si seguirá moviéndose de forma automática
                 if ( --automaticStepsCounter < 0 )
                 {
                         automaticStepsCounter = automaticSteps;
-                        stateId = StateWait;
+                        activity = Wait;
                 }
         }
 
         // Si deja de moverse de forma automática se detiene el sonido correspondiente
-        if ( stateId == StateWait )
+        if ( activity == Wait )
         {
-                SoundManager::getInstance()->stop( playerItem->getLabel(), StateAutoMove );
+                SoundManager::getInstance()->stop( player->getLabel(), AutoMove );
         }
 }
 
-void UserControlled::displace( PlayerItem * playerItem )
+void UserControlled::displace( PlayerItem * player )
 {
         // El elemento es deplazado por otro. Si el desplazamiento no se pudo realizar por
         // colisión entonces el estado se propaga a los elementos con los que ha chocado
-        if ( speedTimer->getValue() > playerItem->getSpeed() )
+        if ( speedTimer->getValue() > player->getSpeed() )
         {
-                state->displace( this, &stateId, true );
+                whatToDo->displace( this, &activity, true );
                 // Una vez se ha completado el desplazamiento el elemento vuelve a su comportamiento normal
-                stateId = StateWait;
+                activity = Wait;
                 // Se pone a cero el cronómetro para el siguiente ciclo
                 speedTimer->reset();
         }
 }
 
-void UserControlled::cancelDisplace( PlayerItem * playerItem )
+void UserControlled::cancelDisplace( PlayerItem * player )
 {
-        if ( ! playerItem->isFrozen() )
+        if ( ! player->isFrozen() )
         {
-                if ( speedTimer->getValue() > playerItem->getSpeed() )
+                if ( speedTimer->getValue() > player->getSpeed() )
                 {
-                        state = MoveState::getInstance();
+                        whatToDo = MoveKindOfActivity::getInstance();
 
                         // El elemento se mueve. Si el movimiento no se pudo realizar por colisión entonces
                         // se desplaza a los elementos con los que pudiera haber chocado
-                        state->move( this, &stateId, false );
+                        whatToDo->move( this, &activity, false );
 
                         // Se pone a cero el cronómetro para el siguiente ciclo
                         speedTimer->reset();
 
                         // Anima el elemento
-                        playerItem->animate();
+                        player->animate();
                 }
         }
 }
 
-void UserControlled::fall( PlayerItem * playerItem )
+void UserControlled::fall( PlayerItem * player )
 {
         // Si ha llegado el momento de caer entonces el elemento desciende una unidad
-        if ( fallTimer->getValue() > playerItem->getWeight() )
+        if ( fallTimer->getValue() > player->getWeight() )
         {
-                state = FallState::getInstance();
+                whatToDo = FallKindOfActivity::getInstance();
 
                 // Si no hay colisión ahora ni en el siguiente ciclo, selecciona el fotograma de caída del personaje
-                if ( state->fall( this ) )
+                if ( whatToDo->fall( this ) )
                 {
-                        if ( playerItem->checkPosition( 0, 0, -1, Add ) )
+                        if ( player->checkPosition( 0, 0, -1, Add ) )
                         {
-                                playerItem->changeFrame( fallFrames[ playerItem->getDirection() ] );
+                                player->changeFrame( fallFrames[ player->getDirection() ] );
                         }
                 }
                 // Si hay colisión deja de caer y vuelve al estado inicial siempre que
                 // el jugador no haya sido destruido por la colisión con un elemento mortal
-                else if ( stateId != StateStartDestroy || ( stateId == StateStartDestroy && playerItem->getShieldTime() > 0 ) )
+                else if ( activity != StartDestroy || ( activity == StartDestroy && player->getShieldTime() > 0 ) )
                 {
-                        stateId = StateWait;
+                        activity = Wait;
                 }
 
                 // Se pone a cero el cronómetro para el siguiente ciclo
@@ -241,64 +246,64 @@ void UserControlled::fall( PlayerItem * playerItem )
         }
 
         // Si deja de caer se detiene el sonido correspondiente
-        if ( stateId != StateFall )
+        if ( activity != Fall )
         {
-                SoundManager::getInstance()->stop( playerItem->getLabel(), StateFall );
+                SoundManager::getInstance()->stop( player->getLabel(), Fall );
         }
 }
 
-void UserControlled::jump( PlayerItem * playerItem )
+void UserControlled::jump( PlayerItem * player )
 {
-        switch ( stateId )
+        switch ( activity )
         {
-                case StateJump:
+                case Jump:
                         // Almacena en la pila de colisiones los elementos que tiene debajo
-                        playerItem->checkPosition( 0, 0, -1, Add );
+                        player->checkPosition( 0, 0, -1, Add );
                         // Si está sobre un trampolín o tiene el conejo de los grandes saltos, el jugador dará un gran salto
-                        stateId = ( playerItem->getMediator()->collisionWithByBehavior( TrampolineBehavior ) ||
-                                        ( playerItem->getHighJumps() > 0 && playerItem->getLabel() == PlayerId( Heels ) )
-                                ? StateHighJump
-                                : StateRegularJump );
+                        activity = ( player->getMediator()->collisionWithByBehavior( TrampolineBehavior ) ||
+                                        ( player->getHighJumps() > 0 && player->getLabel() == WhichPlayer( Heels ) )
+                                ? HighJump
+                                : RegularJump );
                         // Si está sobre el trampolín emite el sonido propio de este elemento
-                        if ( stateId == StateHighJump )
+                        if ( activity == HighJump )
                         {
-                                if ( playerItem->getLabel() == PlayerId( Heels ) )
+                                if ( player->getLabel() == WhichPlayer( Heels ) )
                                 {
-                                        playerItem->decreaseHighJumps();
+                                        player->decreaseHighJumps();
                                 }
-                                SoundManager::getInstance()->play( playerItem->getLabel(), StateRebound );
+                                SoundManager::getInstance()->play( player->getLabel(), Rebound );
                         }
                         break;
 
-                case StateRegularJump:
+                case RegularJump:
                         // Si ha llegado el momento de saltar:
-                        if ( speedTimer->getValue() > playerItem->getSpeed() )
+                        if ( speedTimer->getValue() > player->getSpeed() )
                         {
                                 // Salta en función del ciclo actual
-                                state = JumpState::getInstance();
-                                state->jump( this, &stateId, jumpMatrix, &jumpIndex );
+                                whatToDo = JumpKindOfActivity::getInstance();
+                                whatToDo->jump( this, &activity, jumpMatrix, &jumpIndex );
 
                                 // Se pone a cero el cronómetro para el siguiente ciclo
                                 speedTimer->reset();
 
                                 // Anima el elemento
-                                playerItem->animate();
+                                player->animate();
                         }
                         break;
 
-                case StateHighJump:
+                case HighJump:
                         // Si ha llegado el momento de saltar:
-                        if ( speedTimer->getValue() > playerItem->getSpeed() )
+                        if ( speedTimer->getValue() > player->getSpeed() )
                         {
                                 // Salta en función del ciclo actual
-                                state = JumpState::getInstance();
-                                state->jump( this, &stateId, highJumpMatrix, &jumpIndex );
+                                whatToDo = JumpKindOfActivity::getInstance();
+                                whatToDo->jump( this, &activity, highJumpMatrix, &jumpIndex );
 
                                 // Se pone a cero el cronómetro para el siguiente ciclo
                                 speedTimer->reset();
 
                                 // Anima el elemento
-                                playerItem->animate();
+                                player->animate();
                         }
                         break;
 
@@ -307,33 +312,33 @@ void UserControlled::jump( PlayerItem * playerItem )
         }
 
         // Si deja de saltar se detiene el sonido correspondiente
-        if ( stateId != StateJump && stateId != StateRegularJump && stateId != StateHighJump )
+        if ( activity != Jump && activity != RegularJump && activity != HighJump )
         {
-                SoundManager::getInstance()->stop( playerItem->getLabel(), StateJump );
+                SoundManager::getInstance()->stop( player->getLabel(), Jump );
         }
 
         // Si el jugador supera la altura máxima de la sala entonces pasa a la sala de arriba
         // Se supone que no hay posibilidad de alcanzar la altura máxima de una sala que no
         // conduce a otra situada sobre ella
-        if ( playerItem->getZ() >= MaxLayers * LayerHeight )
+        if ( player->getZ() >= MaxLayers * LayerHeight )
         {
-                playerItem->setExit( Up );
-                playerItem->setOrientation( playerItem->getDirection() );
+                player->setExit( Up );
+                player->setOrientation( player->getDirection() );
         }
 }
 
-void UserControlled::glide( PlayerItem * playerItem )
+void UserControlled::glide( PlayerItem * player )
 {
         // Si ha pasado el tiempo necesario para que el elemento descienda:
-        //if ( glideTimer->getValue() > playerItem->getSpeed() / 2.0 )
-        if ( glideTimer->getValue() > playerItem->getWeight() )
+        //if ( glideTimer->getValue() > player->getSpeed() / 2.0 )
+        if ( glideTimer->getValue() > player->getWeight() )
         {
-                state = FallState::getInstance();
+                whatToDo = FallKindOfActivity::getInstance();
 
                 // Si hay colisión deja de caer y vuelve al estado inicial
-                if ( ! state->fall( this ) && ( stateId != StateStartDestroy || ( stateId == StateStartDestroy && playerItem->getShieldTime() > 0 ) ) )
+                if ( ! whatToDo->fall( this ) && ( activity != StartDestroy || ( activity == StartDestroy && player->getShieldTime() > 0 ) ) )
                 {
-                        stateId = StateWait;
+                        activity = Wait;
                 }
 
                 // Se pone a cero el cronómetro para el siguiente ciclo
@@ -341,28 +346,28 @@ void UserControlled::glide( PlayerItem * playerItem )
         }
 
         // Si ha pasado el tiempo necesario para mover el elemento:
-        if ( speedTimer->getValue() > playerItem->getSpeed() * ( playerItem->getLabel() == PlayerId( HeadAndHeels ) ? 2 : 1 ) )
+        if ( speedTimer->getValue() > player->getSpeed() * ( player->getLabel() == WhichPlayer( HeadAndHeels ) ? 2 : 1 ) )
         {
-                state = MoveState::getInstance();
-                StateId substate;
+                whatToDo = MoveKindOfActivity::getInstance();
+                ActivityOfItem subactivity;
 
                 // Subestado para ejecutar el movimiento
-                switch ( playerItem->getDirection() )
+                switch ( player->getDirection() )
                 {
                         case North:
-                                substate = StateMoveNorth;
+                                subactivity = MoveNorth;
                                 break;
 
                         case South:
-                                substate = StateMoveSouth;
+                                subactivity = MoveSouth;
                                 break;
 
                         case East:
-                                substate = StateMoveEast;
+                                subactivity = MoveEast;
                                 break;
 
                         case West:
-                                substate = StateMoveWest;
+                                subactivity = MoveWest;
                                 break;
 
                         default:
@@ -372,48 +377,48 @@ void UserControlled::glide( PlayerItem * playerItem )
                 // El elemento se mueve. Si el movimiento no se pudo realizar por colisión entonces
                 // se desplaza a los elementos con los que pudiera haber chocado y el elemento da media
                 // vuelta cambiando su estado a otro de movimiento
-                state->move( this, &substate, false );
+                whatToDo->move( this, &subactivity, false );
 
                 // Selecciona el fotograma de caída del personaje
-                playerItem->changeFrame( fallFrames[ playerItem->getDirection() ] );
+                player->changeFrame( fallFrames[ player->getDirection() ] );
 
                 // Se pone a cero el cronómetro para el siguiente ciclo
                 speedTimer->reset();
         }
 
         // Si deja de planear se detiene el sonido correspondiente
-        if ( stateId != StateGlide )
+        if ( activity != Glide )
         {
-                SoundManager::getInstance()->stop( playerItem->getLabel(), StateGlide );
+                SoundManager::getInstance()->stop( player->getLabel(), Glide );
         }
 }
 
-void UserControlled::wayInTeletransport( PlayerItem * playerItem )
+void UserControlled::wayInTeletransport( PlayerItem * player )
 {
-        switch ( stateId )
+        switch ( activity )
         {
-                case StateStartWayInTeletransport:
+                case StartWayInTeletransport:
                         // Almacena la orientación de entrada
-                        playerItem->setOrientation( playerItem->getDirection() );
+                        player->setOrientation( player->getDirection() );
                         // Cambia a las burbujas pero conservando la etiqueta del jugador
-                        playerData = playerItem->getDataOfFreeItem() ;
-                        playerItem->changeItemData( itemDataManager->findItemByLabel( transitionDataLabel ), NoDirection );
+                        playerData = player->getDataOfFreeItem() ;
+                        player->changeItemData( itemDataManager->findItemByLabel( transitionDataLabel ), NoDirection );
                         // Las burbujas se animarán marcha atrás
-                        playerItem->setBackwardMotion();
+                        player->setBackwardMotion();
                         // Inicia el teletransporte
-                        stateId = StateWayInTeletransport;
+                        activity = WayInTeletransport;
                         break;
 
-                case StateWayInTeletransport:
+                case WayInTeletransport:
                         // Anima el elemento. Si ha llegado al final el jugador aparece
-                        if ( playerItem->animate() )
+                        if ( player->animate() )
                         {
                                 // Cambia al aspecto original del jugador
-                                playerItem->changeItemData( playerData, NoDirection );
+                                player->changeItemData( playerData, NoDirection );
                                 // Se recupera su orientación original
-                                playerItem->changeDirection( playerItem->getOrientation() );
+                                player->changeDirection( player->getOrientation() );
                                 // Estado inicial
-                                stateId = StateWait;
+                                activity = Wait;
                         }
                         break;
 
@@ -422,25 +427,25 @@ void UserControlled::wayInTeletransport( PlayerItem * playerItem )
         }
 }
 
-void UserControlled::wayOutTeletransport( PlayerItem * playerItem )
+void UserControlled::wayOutTeletransport( PlayerItem * player )
 {
-        switch ( stateId )
+        switch ( activity )
         {
-                case StateStartWayOutTeletransport:
+                case StartWayOutTeletransport:
                         // Almacena la orientación de salida
-                        playerItem->setOrientation( playerItem->getDirection() );
+                        player->setOrientation( player->getDirection() );
                         // Cambia a las burbujas pero conservando la etiqueta del jugador
-                        playerItem->changeItemData( itemDataManager->findItemByLabel( transitionDataLabel ), NoDirection );
+                        player->changeItemData( itemDataManager->findItemByLabel( transitionDataLabel ), NoDirection );
                         // Inicia el teletransporte
-                        stateId = StateWayOutTeletransport;
+                        activity = WayOutTeletransport;
                         break;
 
-                case StateWayOutTeletransport:
+                case WayOutTeletransport:
                         // Anima el elemento. Si ha llegado al final hay cambio de sala
-                        if ( playerItem->animate() )
+                        if ( player->animate() )
                         {
-                                playerItem->addToZ( -1 );
-                                playerItem->setExit( playerItem->getMediator()->collisionWithByLabel( TeleportLabel ) ? ByTeleport : ByTeleportToo );
+                                player->addToZ( -1 );
+                                player->setExit( player->getMediator()->collisionWithByLabel( TeleportLabel ) ? ByTeleport : ByTeleportToo );
                         }
                         break;
 
@@ -449,33 +454,33 @@ void UserControlled::wayOutTeletransport( PlayerItem * playerItem )
         }
 }
 
-void UserControlled::destroy( PlayerItem* playerItem )
+void UserControlled::destroy( PlayerItem* player )
 {
-        switch ( stateId )
+        switch ( activity )
         {
                 // El jugador ha sido destruido por un enemigo
-                case StateStartDestroy:
+                case StartDestroy:
                         // La destrucción se ejecuta siempre y cuando no tenga inmunidad
-                        if ( playerItem->getShieldTime() == 0 )
+                        if ( player->getShieldTime() == 0 )
                         {
                                 // Cambia a las burbujas pero conservando la etiqueta del jugador
-                                playerItem->changeItemData( itemDataManager->findItemByLabel( transitionDataLabel ), NoDirection );
+                                player->changeItemData( itemDataManager->findItemByLabel( transitionDataLabel ), NoDirection );
                                 // Inicia la destrucción
-                                stateId = StateDestroy;
+                                activity = Destroy;
                         }
                         // Si tiene inmunidad vuelve al estado inicial
                         else
                         {
-                                stateId = StateWait;
+                                activity = Wait;
                         }
                         break;
 
-                case StateDestroy:
+                case Destroy:
                         // Anima el elemento. Si ha llegado al final la sala se reinicia
-                        if ( playerItem->animate() )
+                        if ( player->animate() )
                         {
-                                playerItem->setExit( Restart );
-                                playerItem->loseLife();
+                                player->setExit( Restart );
+                                player->loseLife();
                         }
                         break;
 
@@ -484,56 +489,59 @@ void UserControlled::destroy( PlayerItem* playerItem )
         }
 }
 
-void UserControlled::shot( PlayerItem* playerItem )
+void UserControlled::useHooter( PlayerItem* player )
 {
         // El jugador puede disparar si tiene la bocina y rosquillas
-        if ( playerItem->hasTool( Horn ) && playerItem->getAmmo() > 0 )
+        if ( player->hasTool( Horn ) && player->getAmmo() > 0 )
         {
-                this->shotPresent = true;
+                this->fireFromHooterIsPresent = true;
 
-                // Se buscan los datos del elemento empleado como disparo
-                ItemData* shotData = this->itemDataManager->findItemByLabel( shotDataLabel );
+                ItemData* hooterData = this->itemDataManager->findItemByLabel( labelOfFireFromHooter );
 
-                if ( shotData != 0 )
+                if ( hooterData != 0 )
                 {
                         // Detiene el sonido del disparo
-                        SoundManager::getInstance()->stop( playerItem->getLabel(), StateShot );
+                        SoundManager::getInstance()->stop( player->getLabel(), Doughnut );
 
                         // Crea el elemento en la misma posición que el jugador y a su misma altura
-                        int z = playerItem->getZ() + playerItem->getHeight() - shotData->height;
-                        FreeItem* freeItem = new FreeItem( shotData,
-                        playerItem->getX(), playerItem->getY(),
-                        z < 0 ? 0 : z,
-                        playerItem->getDirection() );
+                        int z = player->getZ() + player->getHeight() - hooterData->height;
+                        FreeItem* freeItem = new FreeItem
+                        (
+                                hooterData,
+                                player->getX(), player->getY(),
+                                z < 0 ? 0 : z,
+                                player->getDirection()
+                        );
 
-                        freeItem->assignBehavior( ShotBehavior, 0 );
-                        dynamic_cast< Shot * >( freeItem->getBehavior() )->setPlayerItem( playerItem );
+                        freeItem->assignBehavior( FireDoughnutBehavior, 0 );
+                        FireDoughnut * doughnutBehavior = dynamic_cast< FireDoughnut * >( freeItem->getBehavior() );
+                        doughnutBehavior->setPlayerItem( player );
 
                         // En un primer momento no detecta colisiones ya que parte de la misma posición del jugador
                         freeItem->setCollisionDetector( false );
 
                         // Se añade a la sala actual
-                        playerItem->getMediator()->getRoom()->addItem( freeItem );
+                        player->getMediator()->getRoom()->addItem( freeItem );
 
                         // Se gasta una rosquillas
-                        playerItem->consumeAmmo();
+                        player->consumeAmmo();
 
                         // Emite el sonido del disparo
-                        SoundManager::getInstance()->play( playerItem->getLabel(), StateShot );
+                        SoundManager::getInstance()->play( player->getLabel(), Doughnut );
                 }
         }
 }
 
-void UserControlled::take( PlayerItem * playerItem )
+void UserControlled::take( PlayerItem * player )
 {
         // El jugador puede coger objetos si tiene el bolso
-        if ( playerItem->hasTool( Handbag ) )
+        if ( player->hasTool( Handbag ) )
         {
-                Mediator* mediator = playerItem->getMediator();
+                Mediator* mediator = player->getMediator();
                 Item* takenItem = 0;
 
                 // Comprueba si hay elementos debajo
-                if ( ! playerItem->checkPosition( 0, 0, -1, Add ) )
+                if ( ! player->checkPosition( 0, 0, -1, Add ) )
                 {
                         int coordinates = 0;
 
@@ -544,15 +552,15 @@ void UserControlled::take( PlayerItem * playerItem )
                                 Item* bottomItem = mediator->findCollisionPop( );
 
                                 if ( bottomItem != 0 && bottomItem->getBehavior() != 0 &&
-                                        ( bottomItem->getBehavior()->getId() == MobileBehavior || bottomItem->getBehavior()->getId() == TrampolineBehavior ) &&
-                                        bottomItem->getWidthX() <= ( mediator->getTileSize() * 3 ) / 4 &&
-                                        bottomItem->getWidthY() <= ( mediator->getTileSize() * 3 ) / 4 )
+                                        ( bottomItem->getBehavior()->getBehaviorOfItem() == MobileBehavior || bottomItem->getBehavior()->getBehaviorOfItem() == TrampolineBehavior ) &&
+                                                bottomItem->getWidthX() <= ( mediator->getTileSize() * 3 ) / 4 &&
+                                                bottomItem->getWidthY() <= ( mediator->getTileSize() * 3 ) / 4 )
                                 {
                                         if ( bottomItem->getX() + bottomItem->getY() > coordinates )
                                         {
                                                 coordinates = bottomItem->getX() + bottomItem->getY();
                                                 takenItem = bottomItem;
-                                                takenItemBehaviorId = bottomItem->getBehavior()->getId();
+                                                takenItemBehavior = bottomItem->getBehavior()->getBehaviorOfItem ();
                                         }
                                 }
                         }
@@ -561,70 +569,70 @@ void UserControlled::take( PlayerItem * playerItem )
                         if ( takenItem != 0 )
                         {
                                 takenItemData = itemDataManager->findItemByLabel( takenItem->getLabel() );
-                                takenItem->getBehavior()->changeStateId( StateDestroy );
-                                stateId = ( stateId == StateTakeAndJump ? StateJump : StateTakenItem );
+                                takenItem->getBehavior()->changeActivityOfItem( Destroy );
+                                activity = ( activity == TakeAndJump ? Jump : TakenItem );
 
                                 // Comunica al gestor del juego el elemento que se ha cogido
                                 takenItemImage = takenItem->getImage();
                                 GameManager::getInstance()->setItemTaken( takenItemImage );
                                 // Emite el sonido correspondiente
-                                SoundManager::getInstance()->play( playerItem->getLabel(), StateTakeItem );
+                                SoundManager::getInstance()->play( player->getLabel(), TakeItem );
                         }
                 }
         }
 
         // Estado inicial si no se ha cogido ningún elemento
-        if ( stateId != StateTakenItem && stateId != StateJump )
+        if ( activity != TakenItem && activity != Jump )
         {
-                stateId = StateWait;
+                activity = Wait;
         }
 }
 
-void UserControlled::drop( PlayerItem* playerItem )
+void UserControlled::drop( PlayerItem* player )
 {
         // El jugador debe haber cogido algún elemento
         if ( takenItemData != 0 )
         {
                 // El elemento se deja justo debajo. Si el jugador no puede ascender no es posible dejarlo
-                if ( playerItem->addToZ( LayerHeight ) )
+                if ( player->addToZ( LayerHeight ) )
                 {
                         // Crea el elemento en la misma posición pero debajo del jugador
                         FreeItem* freeItem = new FreeItem( takenItemData,
-                                                           playerItem->getX(), playerItem->getY(),
-                                                           playerItem->getZ() - LayerHeight,
+                                                           player->getX(), player->getY(),
+                                                           player->getZ() - LayerHeight,
                                                            NoDirection );
 
                         // Sólo pueden cogerse los elementos portátiles o el trampolín
-                        freeItem->assignBehavior( takenItemBehaviorId, 0 );
+                        freeItem->assignBehavior( takenItemBehavior, 0 );
 
                         // Se añade a la sala actual
-                        playerItem->getMediator()->getRoom()->addItem( freeItem );
+                        player->getMediator()->getRoom()->addItem( freeItem );
 
                         // El jugador ya no tiene el elemento
                         takenItemData = 0;
                         takenItemImage = 0;
-                        takenItemBehaviorId = NoBehavior;
+                        takenItemBehavior = NoBehavior;
 
                         // Se actualiza el estado para que salte o se detenga
-                        stateId = ( stateId == StateDropAndJump ? StateJump : StateWait );
+                        activity = ( activity == DropAndJump ? Jump : Wait );
 
                         // Comunica al gestor del juego que el bolso está vacío
                         GameManager::getInstance()->setItemTaken( takenItemImage );
                         // Emite el sonido correspondiente
-                        SoundManager::getInstance()->stop( playerItem->getLabel(), StateFall );
-                        SoundManager::getInstance()->play( playerItem->getLabel(), StateDropItem );
+                        SoundManager::getInstance()->stop( player->getLabel(), Fall );
+                        SoundManager::getInstance()->play( player->getLabel(), DropItem );
                 }
                 else
                 {
                         // Se emite sonido de o~ ou
-                        SoundManager::getInstance()->play( playerItem->getLabel(), Mistake );
+                        SoundManager::getInstance()->play( player->getLabel(), Mistake );
                 }
         }
 
         // Estado inicial si no se ha dejado ningún elemento
-        if ( stateId != StateJump )
+        if ( activity != Jump )
         {
-                stateId = StateWait;
+                activity = Wait;
         }
 }
 
@@ -633,11 +641,11 @@ void UserControlled::setMoreData( void * data )
         this->itemDataManager = reinterpret_cast< ItemDataManager * >( data );
 }
 
-void UserControlled::assignTakenItem( ItemData* itemData, BITMAP* takenItemImage, const BehaviorId& behaviorId )
+void UserControlled::assignTakenItem( ItemData* itemData, BITMAP* takenItemImage, const BehaviorOfItem& behavior )
 {
         this->takenItemData = itemData;
         this->takenItemImage = takenItemImage;
-        this->takenItemBehaviorId = behaviorId;
+        this->takenItemBehavior = behavior;
 }
 
 }

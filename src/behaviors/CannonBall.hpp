@@ -18,8 +18,8 @@
 namespace isomot
 {
 
-class Item;
-class ItemData;
+class Item ;
+class ItemData ;
 
 /**
  * La bola de cañón de la pantalla final. Se mueve hacia el norte y cuando colisiona desaparece
@@ -33,9 +33,9 @@ public:
        /**
         * Constructor
         * @param item Elemento que tiene este comportamiento
-        * @param id Identificador de comportamiento
+        * @param behavior Identificador de comportamiento
         */
-        CannonBall( Item * item, const BehaviorId & id ) ;
+        CannonBall( Item * item, const BehaviorOfItem & behavior ) ;
 
         virtual ~CannonBall( );
 

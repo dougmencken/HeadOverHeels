@@ -13,17 +13,18 @@
 
 #include <vector>
 #include <utility>
+
 #include "Behavior.hpp"
 #include "HPC.hpp"
+
 
 namespace isomot
 {
 
-// Declaraciones adelantadas
-class Item;
-class ItemData;
-class ItemDataManager;
-class PlayerItem;
+class Item ;
+class ItemData ;
+class ItemDataManager ;
+class PlayerItem ;
 
 
 /**
@@ -41,7 +42,7 @@ public:
         * @param item Elemento que tiene este comportamiento
         * @param id Identificador del comportamiento
         */
-        UserControlled( Item * item, const BehaviorId & id ) ;
+        UserControlled( Item * item, const BehaviorOfItem & id ) ;
 
         virtual ~UserControlled( ) ;
 
@@ -59,108 +60,106 @@ public:
        /**
         * Asigna el identificador del estado actual del comportamiento y cambia el estado
         * del comportamiento según el identificador
-        * @param Un identificador de estado
-        * @param Elemento que emite el cambio de estado
         */
-        virtual void changeStateId ( const StateId& stateId, Item* sender = 0 ) ;
+        virtual void changeActivityOfItem ( const ActivityOfItem& activityOf, Item* sender = 0 ) ;
 
 protected:
 
        /**
         * Pone en espera al jugador. Implica la presentación del primer fotograma de la
         * secuencia de animación según la orientación del jugador
-        * @param playerItem El jugador que va a cambiar su comportamiento
+        * @param player El jugador que va a cambiar su comportamiento
         */
-        virtual void wait( PlayerItem * playerItem ) ;
+        virtual void wait( PlayerItem * player ) ;
 
        /**
         * Mueve al jugador a la velocidad establecida en los datos del elemento y en la
         * dirección de alguno de los cuatro puntos cardinales
-        * @param playerItem El jugador que va a cambiar su comportamiento
+        * @param player El jugador que va a cambiar su comportamiento
         */
-        virtual void move( PlayerItem * playerItem ) ;
+        virtual void move( PlayerItem * player ) ;
 
        /**
         * Mueve automáticamente al jugador a la velocidad establecida en los datos del elemento
         * y en la dirección de alguno de los cuatro puntos cardinales, una distancia igual al
         * número definido en los pasos automáticos (automaticSteps)
-        * @param playerItem El jugador que va a cambiar su comportamiento
+        * @param player El jugador que va a cambiar su comportamiento
         */
-        virtual void autoMove( PlayerItem * playerItem ) ;
+        virtual void autoMove( PlayerItem * player ) ;
 
        /**
         * Desplaza al jugador a la velocidad del elemento que lo empuja y en la dirección de alguno
         * de los cuatro puntos cardinales y sus puntos intermedios, es decir, en ocho direcciones
         * posibles
-        * @param playerItem El jugador que va a cambiar su comportamiento
+        * @param player El jugador que va a cambiar su comportamiento
         */
-        virtual void displace( PlayerItem * playerItem ) ;
+        virtual void displace( PlayerItem * player ) ;
 
        /**
         * Cancela el desplazamiento del jugador moviéndolo en la dirección contraria a la que está
         * siendo desplazado. Tiene el efecto de dejarlo parado en un punto al contrarrestar la fuerza
         * de desplazamiento. Este estado se utiliza normalmente cuando el jugador es arrastrado por
         * una cinta transportadora o algún elemento similar
-        * @param playerItem El jugador que va a cambiar su comportamiento
+        * @param player El jugador que va a cambiar su comportamiento
         */
-        virtual void cancelDisplace( PlayerItem * playerItem ) ;
+        virtual void cancelDisplace( PlayerItem * player ) ;
 
        /**
         * El jugador cae hasta topar con algo a la velocidad establecida en los datos del elemento
-        * @param playerItem El jugador que va a cambiar su comportamiento
+        * @param player El jugador que va a cambiar su comportamiento
         */
-        virtual void fall( PlayerItem * playerItem ) ;
+        virtual void fall( PlayerItem * player ) ;
 
        /**
         * Hace saltar al jugador según la definición del salto realizada en las subclases
-        * @param playerItem El jugador que va a cambiar su comportamiento
+        * @param player El jugador que va a cambiar su comportamiento
         */
-        virtual void jump( PlayerItem * playerItem ) ;
+        virtual void jump( PlayerItem * player ) ;
 
        /**
         * Hace planear al jugador a la velocidad establecida en los datos del elemento
         * y en la dirección de alguno de los cuatro puntos cardinales
         * @pre El jugador debe estar en el aire porque esté cayendo o haya saltado
-        * @param playerItem El jugador que va a cambiar su comportamiento
+        * @param player El jugador que va a cambiar su comportamiento
         */
-        virtual void glide( PlayerItem * playerItem ) ;
+        virtual void glide( PlayerItem * player ) ;
 
        /**
         * Teletransporta al jugador desde otra sala
-        * @param playerItem El jugador que va a cambiar su comportamiento
+        * @param player El jugador que va a cambiar su comportamiento
         */
-        virtual void wayInTeletransport( PlayerItem * playerItem ) ;
+        virtual void wayInTeletransport( PlayerItem * player ) ;
 
        /**
         * Teletransporta al jugador hacia otra sala
-        * @param playerItem El jugador que va a cambiar su comportamiento
+        * @param player El jugador que va a cambiar su comportamiento
         */
-        virtual void wayOutTeletransport( PlayerItem * playerItem ) ;
+        virtual void wayOutTeletransport( PlayerItem * player ) ;
 
        /**
         * Destruye al jugador por haber sido eliminado por un enemigo
-        * @param playerItem El jugador que va a cambiar su comportamiento
+        * @param player El jugador que va a cambiar su comportamiento
         */
-        virtual void destroy( PlayerItem * playerItem ) ;
+        virtual void destroy( PlayerItem * player ) ;
 
        /**
         * El jugador dispara algo que paralizará a los elementos mortales móviles
-        * @param playerItem El jugador que va a cambiar su comportamiento
+        * @param player El jugador que va a cambiar su comportamiento
         */
-        virtual void shot( PlayerItem * playerItem ) ;
+        virtual void useHooter( PlayerItem * player ) ;
 
        /**
         * El jugador toma el elemento que haya debajo de él
-        * @param playerItem El jugador que va a cambiar su comportamiento
+        * @param player El jugador que va a cambiar su comportamiento
         */
-        virtual void take( PlayerItem * playerItem ) ;
+        virtual void take( PlayerItem * player ) ;
 
        /**
         * El jugador deja un elemento justo debajo de él. Implica un ascenso del jugador en altura
         * @pre Debe tener un elemento que haya tomado con anterioridad
-        * @param playerItem El jugador que va a cambiar su comportamiento
+        * @param player El jugador que va a cambiar su comportamiento
         */
-        virtual void drop( PlayerItem * playerItem ) ;
+        virtual void drop( PlayerItem * player ) ;
 
 protected:
 
@@ -223,9 +222,9 @@ protected:
         int nullFrame ;
 
        /**
-        * Indica si hay un disparo presente en la sala
+        * Is there a fire from hooter in the room
         */
-        bool shotPresent ;
+        bool fireFromHooterIsPresent ;
 
        /**
         * Datos del elemento empleado como transición en el cambio de sala a través de un telepuerto
@@ -233,9 +232,9 @@ protected:
         short transitionDataLabel ;
 
        /**
-        * Datos del elemento empleado como disparo
+        * Item used as fire from hooter
         */
-        short shotDataLabel ;
+        short labelOfFireFromHooter ;
 
        /**
         * Gestor de datos de los elementos del juego
@@ -258,9 +257,9 @@ protected:
         BITMAP* takenItemImage ;
 
        /**
-        * Comportamiento del elemento tomado por el jugador
+        * Behavior of item taken by player
         */
-        BehaviorId takenItemBehaviorId ;
+        BehaviorOfItem takenItemBehavior ;
 
        /**
         * Cronómetro que controla la velocidad de movimiento del elemento
@@ -273,26 +272,23 @@ protected:
         HPC* fallTimer ;
 
        /**
-        * Cronómetro que controla la velocidad al planear del elemento
+        * Timer for gliding speed of item
         */
         HPC* glideTimer ;
 
        /**
-        * Timer to support blinking of the element
+        * Timer for blinking of item
         */
         HPC* blinkingTimer ;
 
-public: // Operaciones de consulta y actualización
+public:
 
        /**
         * Número de fases de las que se compone el salto
         */
         int getJumpFrames () const {  return jumpFrames ;  }
 
-       /**
-        * Establece la presencia o ausencia de un disparo en la sala
-        */
-        void setShotPresent ( bool isPresent ) {  this->shotPresent = isPresent ;  }
+        void setFireFromHooter ( bool isHere ) {  this->fireFromHooterIsPresent = isHere ;  }
 
        /**
         * Almacena el gestor de datos de los elementos del juego
@@ -302,11 +298,11 @@ public: // Operaciones de consulta y actualización
 
        /**
         * Establece los datos del elemento que tiene el jugador en el bolso
-        * @param data Datos del elemento tomado por el jugador
+        * @param itemData Datos del elemento tomado por el jugador
         * @param takenItemImage Imagen del elemento tomado por el jugador
-        * @param behaviorId Comportamiento del elemento tomado por el jugador
+        * @param behavior Comportamiento del elemento tomado por el jugador
         */
-        void assignTakenItem ( ItemData * itemData, BITMAP * takenItemImage, const BehaviorId & behaviorId ) ;
+        void assignTakenItem ( ItemData * itemData, BITMAP * takenItemImage, const BehaviorOfItem & behavior ) ;
 
        /**
         * Datos del elemento tomado por el jugador
@@ -320,11 +316,7 @@ public: // Operaciones de consulta y actualización
         */
         BITMAP* getTakenItemImage () const {  return this->takenItemImage ;  }
 
-       /**
-        * Comportamiento del elemento tomado por el jugador
-        * @return Identificador del comportamiento
-        */
-        BehaviorId getTakenItemBehaviorId () const {  return this->takenItemBehaviorId ;  }
+        BehaviorOfItem getTakenItemBehavior () const {  return this->takenItemBehavior ;  }
 
 };
 

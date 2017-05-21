@@ -164,7 +164,7 @@ public:
         * devolverá el primero que encuentre
         * @return El elemento si se encontró ó 0 si no existe
         */
-        Item* findItemByBehavior ( const BehaviorId& id ) ;
+        Item* findItemByBehavior ( const BehaviorOfItem& id ) ;
 
        /**
         * Busca colisiones entre un elemento y el resto de la sala. De haberlas se almacenarán en la pila
@@ -270,7 +270,7 @@ public:
         * @param id Identificador del comportamiento
         * @return El elemento con el que se ha producido la colisión ó 0 si no hay colisión
         */
-        Item* collisionWithByBehavior ( const BehaviorId& id ) ;
+        Item* collisionWithByBehavior ( const BehaviorOfItem& id ) ;
 
         Item* findCollisionPop () {  return this->findItemById( this->popCollision() ) ;  }
 
@@ -298,11 +298,11 @@ public:
         bool alivePlayer ( ItemDataManager* itemDataManager ) ;
 
        /**
-        * Establece el estado del interruptor si éste está presente en la sala. Si se enciende entonces
-        * los elementos volátiles dejan de serlo y los elementos mortales móviles se detienen. Si se apaga
-        * entonces los mencionados elementos vuelven a su estado original
+        * Toggle the switch if it is present in a room, most rooms do not have a switch. If it
+        * turns on then moving free items stop and volatile items are no longer volatile. If it
+        * goes off then such items restore their original behavior
         */
-        void changeSwitchState () ;
+        void toggleSwitchInRoom () ;
 
        /**
         * Activa la ordenación de las listas de elementos rejilla
@@ -389,17 +389,12 @@ private:
         */
         bool freeItemsSorting ;
 
-       /**
-        * Estado del interruptor si existe, porque la mayoría de las salas no tienen un elemento interruptor
-        * Con el interruptor encendido (true) los elementos volátiles dejan de serlo y los elementos mortales
-        * móviles se detienen; con el interruptor apagado los mencionados elementos vuelven a su estado original
-        */
-        bool switchState ;
+        bool switchInRoomIsOn ;
 
        /**
         * Último jugador controlado antes de hacer un cambio de jugador
         */
-        PlayerId lastControlledPlayer ;
+        WhichPlayer lastControlledPlayer ;
 
        /**
         * Sala en la que negocia este mediador
@@ -427,7 +422,7 @@ private:
         * Lista de elementos capaces de eliminar al jugador y que pueden ser paralizados por la acción
         * de un disparo o por el cambio de estado de una palanca
         */
-        std::vector < BehaviorId > badBoys ;
+        std::vector < BehaviorOfItem > badBoys ;
 
        /**
         * Jugador controlado por el usuario
@@ -532,44 +527,44 @@ public: // Operaciones de consulta y actualización
 /**
  * Objeto-función usado como predicado en la búsqueda de un elemento por su identificador
  */
-class EqualItemId : public std::binary_function< Item*, int, bool >
+class EqualItemId : public std::binary_function< Item *, int, bool >
 {
 
 public:
-        bool operator()( Item* item, int id ) const;
+        bool operator() ( Item* item, int id ) const ;
 
 };
 
 /**
  * Objeto-función usado como predicado en la búsqueda de un jugador por su identificador
  */
-class EqualPlayerItemId : public std::binary_function< PlayerItem*, int, bool >
+class EqualPlayerItemId : public std::binary_function< PlayerItem *, int, bool >
 {
 
 public:
-        bool operator()( PlayerItem* playerItem, int id ) const;
+        bool operator() ( PlayerItem* playerItem, int id ) const ;
 
 };
 
 /**
  * Objeto-función usado como predicado en la búsqueda de un elemento por su etiqueta
  */
-class EqualItemLabel : public std::binary_function< Item*, short, bool >
+class EqualItemLabel : public std::binary_function< Item *, short, bool >
 {
 
 public:
-        bool operator()( Item* item, short label ) const;
+        bool operator() ( Item* item, short label ) const ;
 
 };
 
 /**
  * Objeto-función usado como predicado en la búsqueda de un elemento por su comportamiento
  */
-class EqualItemBehavior : public std::binary_function< Item*, BehaviorId, bool >
+class EqualBehaviorOfItem : public std::binary_function< Item *, BehaviorOfItem, bool >
 {
 
 public:
-        bool operator()( Item* item, BehaviorId id ) const;
+        bool operator() ( Item* item, BehaviorOfItem behavior ) const ;
 
 };
 

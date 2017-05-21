@@ -36,7 +36,7 @@ public:
         * @param id Identificador del comportamiento
         * @param isFlying Indica si el elemento vuela
         */
-        OneWay( Item * item, const BehaviorId & id, bool isFlying ) ;
+        OneWay( Item * item, const BehaviorOfItem & id, bool isFlying ) ;
 
         virtual ~OneWay( ) ;
 

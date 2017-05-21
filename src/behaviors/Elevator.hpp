@@ -18,7 +18,7 @@
 namespace isomot
 {
 
-class Item;
+class Item ;
 
 /**
  * Mueve a los elementos situados encima hacia arriba o hacia abajo
@@ -34,7 +34,7 @@ public:
         * @param item Elemento que tiene este comportamiento
         * @param id Identificador del comportamiento
         */
-        Elevator( Item * item, const BehaviorId & id ) ;
+        Elevator( Item * item, const BehaviorOfItem & id ) ;
 
         virtual ~Elevator( ) ;
 
@@ -61,12 +61,7 @@ private:
         */
         bool ascent ;
 
-       /**
-        * Estado válido. Los ascensores no se pueden desplazar, por esta razón se utiliza este atributo
-        * para retornar a un estado válido cuando algún elemento cambie el estado del ascensor debido a
-        * una colisión
-        */
-        StateId validState ;
+        ActivityOfItem lastActivity ;
 
        /**
         * Cronómetro que controla la velocidad de movimiento del elemento

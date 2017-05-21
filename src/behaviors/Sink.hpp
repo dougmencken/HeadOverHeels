@@ -34,7 +34,7 @@ public:
         * @param item Elemento que tiene este comportamiento
         * @param id Identificador del comportamiento
         */
-        Sink( Item * item, const BehaviorId & id ) ;
+        Sink( Item * item, const BehaviorOfItem & id ) ;
 
         virtual ~Sink( ) ;
 

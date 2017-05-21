@@ -60,14 +60,14 @@ public:
          * Elimina la posición inicial de un jugador de la sala
          * @param player Identificador del jugador
          */
-        void removePlayerPosition ( const PlayerId& player ) ;
+        void removePlayerPosition ( const WhichPlayer& player ) ;
 
         /**
          * Busca la posición inicial de un jugador en la sala
          * @param player Identificador del jugador
          * @return Datos con la posición inicial del jugador ó 0 si no existen datos para el jugador
          */
-        PlayerStartPosition * findPlayerPosition ( const PlayerId& player ) ;
+        PlayerStartPosition * findPlayerPosition ( const WhichPlayer& player ) ;
 
         /**
          * Indica si hay jugadores en la sala
@@ -120,7 +120,7 @@ private:
         /**
          * El jugador activo, el que controla el usuario, cuando se crea la sala
          */
-        PlayerId activePlayer ;
+        WhichPlayer activePlayer ;
 
         /**
          * Posición inicial de los jugadores que pudieran estar presentes en la sala cuando ésta se crea
@@ -249,13 +249,13 @@ public: // Operaciones de consulta y actualización
         /**
          * Establece el jugador activo, el que controla el usuario, cuando se crea la sala
          */
-        void setActivePlayer ( const PlayerId& activePlayer ) {  this->activePlayer = activePlayer ;  }
+        void setActivePlayer ( const WhichPlayer& activePlayer ) {  this->activePlayer = activePlayer ;  }
 
         /**
          * El jugador activo, el que controla el usuario, cuando se crea la sala
          * @return El identificador de un jugador
          */
-        PlayerId getActivePlayer () const {  return activePlayer ;  }
+        WhichPlayer getActivePlayer () const {  return activePlayer ;  }
 
         /**
          * Posición inicial de los jugadores que pudieran estar presentes en la sala cuando ésta se crea
@@ -376,7 +376,7 @@ public:
          * Constructor
          * @param player Identificador del jugador
          */
-        PlayerStartPosition( const PlayerId& player ) ;
+        PlayerStartPosition( const WhichPlayer& player ) ;
 
         virtual ~PlayerStartPosition( ) ;
 
@@ -401,7 +401,7 @@ private:
         /**
          * Jugador que está presente en la sala cuando la sala se crea
          */
-        PlayerId player ;
+        WhichPlayer player ;
 
         /**
          * Camino de entrada del jugador: puerta, telepuerto, por el suelo o por el techo
@@ -433,7 +433,7 @@ public: // Operaciones de consulta y actualización
         /**
          * Jugador que está presente en la sala cuando la sala se crea
          */
-        PlayerId getPlayer () const {  return player ;  }
+        WhichPlayer getPlayer () const {  return player ;  }
 
         /**
          * Camino de entrada del jugador: puerta, telepuerto, por el suelo o por el techo
@@ -465,9 +465,9 @@ public: // Operaciones de consulta y actualización
 /**
  * Objeto-función usado como predicado en la búsqueda de la posición inicial de un jugador
  */
-struct EqualPlayerStartPosition : public std::binary_function< PlayerStartPosition, PlayerId, bool >
+struct EqualPlayerStartPosition : public std::binary_function< PlayerStartPosition, WhichPlayer, bool >
 {
-        bool operator() ( const PlayerStartPosition& position, const PlayerId& player ) const ;
+        bool operator() ( const PlayerStartPosition& position, const WhichPlayer& player ) const ;
 };
 
 }

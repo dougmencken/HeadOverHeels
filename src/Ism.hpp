@@ -101,7 +101,7 @@ namespace isomot
                 NoEntry,           /* No hay entrada a la sala */
                 NoExit,            /* No hay salida de la sala */
                 Restart,           /* Se sale de la sala, reiniciándola. Se usa cuando el jugador es destruido */
-                Wait               /* Ninguna, espera en la sala */
+                JustWait           /* Ninguna, espera en la sala */
         } ;
 
         /**
@@ -192,10 +192,7 @@ namespace isomot
                 WestsouthBorder    /* En salas triples o cuádruples, el límite existente tras la puerta oeste-sur. Alcanzarlo implica el cambio de sala */
         } ;
 
-        /**
-         * Identificador de los jugadores
-         */
-        enum PlayerId
+        enum WhichPlayer
         {
                 Head = 52,           /* El jugador Head */
                 Heels = 53,          /* El jugador Heels */
@@ -203,10 +200,7 @@ namespace isomot
                 NoPlayer = 127       /* No hay jugador, se utiliza en la transición vía telepuertos */
         } ;
 
-        /**
-         * Tipo de comportamiento que puede tener un elemento
-         */
-        enum BehaviorId
+        enum BehaviorOfItem
         {
                 NoBehavior = 0,                     /* Sin comportamiento */
                 BubblesBehavior = 1,                /* Representación del transporte de un jugador a través de un telepuerto */
@@ -227,7 +221,7 @@ namespace isomot
                 Patrol8Behavior = 16,               /* Movimiento aleatorio en cualquiera de las ocho direcciones */
                 RemoteControlBehavior = 17,         /* Control remoto de otro elemento */
                 SinkBehavior = 18,                  /* Movimiento descendente producido cuando un elemento está encima */
-                ShotBehavior = 19,                  /* Movimiento en un único sentido, cuando choca con algo lo paraliza, sólo si es un elemento móvil y mortal, luego desaparece */
+                FireDoughnutBehavior = 19,          /* Movimiento en un único sentido, cuando choca con algo lo paraliza, sólo si es un elemento móvil y mortal, luego desaparece */
                 SpecialBehavior = 20,               /* Elementos volátiles que dan algún poder al jugador */
                 SteerBehavior = 21,                 /* Elemento controlado a distancia por un control remoto */
                 SwitchBehavior = 22,                /* Un conmutador que cambia el estado de elementos volátiles a no-volátiles y detiene a los elementos mortales */
@@ -247,72 +241,71 @@ namespace isomot
                 HeadAndHeelsBehavior = 66           /* El jugador compuesto de Head y Heels */
         } ;
 
-        // Estado de los elementos
-        enum StateId
+        enum ActivityOfItem
         {
-                StateWait,                      /* El elemento está quieto */
-                StatePush,                      /* El elemento ha sido empujado por otro */
-                StateMove,                      /* El elemento se mueve. Estado genérico usado por el gestor de sonido */
-                StateMoveNorth = 64,            /* El elemento se mueve al norte */
-                StateMoveSouth,                 /* El elemento se mueve al sur */
-                StateMoveEast,                  /* El elemento se mueve al este */
-                StateMoveWest,                  /* El elemento se mueve al oeste */
-                StateMoveNortheast,             /* El elemento se mueve al nordeste */
-                StateMoveSoutheast,             /* El elemento se mueve al sudeste */
-                StateMoveSouthwest,             /* El elemento se mueve al sudoeste */
-                StateMoveNorthwest,             /* El elemento se mueve al noroeste */
-                StateMoveUp,                    /* El elemento se mueve arriba */
-                StateMoveDown,                  /* El elemento se mueve abajo */
-                StateBlink,                     /* El elemento parpadea */
-                StateJump,                      /* El elemento salta */
-                StateRegularJump,               /* El elemento salta de modo normal */
-                StateHighJump,                  /* El elemento salta de modo especial, a mayor altura y desplazamiento */
-                StateFall,                      /* El elemento cae */
-                StateGlide,                     /* El elemento planea */
-                StateTakeItem,                  /* El elemento coge otro elemento */
-                StateTakenItem,                 /* El elemento ha cogido otro elemento */
-                StateDropItem,                  /* El elemento suelta a otro elemento previamente cogido */
-                StateTakeAndJump,               /* El elemento coge otro elemento y luego salta */
-                StateDropAndJump,               /* El elemento deja otro elemento y luego salta */
-                StateDisplaceNorth,             /* El elemento es desplazado al norte por otro elemento */
-                StateDisplaceSouth,             /* El elemento es desplazado al sur por otro elemento */
-                StateDisplaceEast,              /* El elemento es desplazado al este por otro elemento */
-                StateDisplaceWest,              /* El elemento es desplazado al oeste por otro elemento */
-                StateDisplaceNortheast,         /* El elemento es desplazado al noreste por otro elemento */
-                StateDisplaceSoutheast,         /* El elemento es desplazado al sudeste por otro elemento */
-                StateDisplaceSouthwest,         /* El elemento es desplazado al sudoeste por otro elemento */
-                StateDisplaceNorthwest,         /* El elemento es desplazado al noroeste por otro elemento */
-                StateDisplaceUp,                /* El elemento es desplazado hacia arriba por otro elemento */
-                StateDisplaceDown,              /* El elemento es desplazado hacia abajo por otro elemento */
-                StateStartWayOutTeletransport,  /* El elemento inicia el teletransporte de ida */
-                StateWayOutTeletransport,       /* El elemento se está teletransportando a otra sala */
-                StateStartWayInTeletransport,   /* El elemento inicia el teletransporte de vuelta */
-                StateWayInTeletransport,        /* El elemento se está teletransportando desde otra sala */
-                StateAutoMove,                  /* El elemento se mueve automáticamente. Estado genérico usado por el gestor de sonido */
-                StateAutoMoveNorth,             /* El elemento se mueve automáticamente al norte */
-                StateAutoMoveSouth,             /* El elemento se mueve automáticamente al sur */
-                StateAutoMoveEast,              /* El elemento se mueve automáticamente al este */
-                StateAutoMoveWest,              /* El elemento se mueve automáticamente al oeste */
-                StateForceDisplace,
-                StateForceDisplaceNorth,        /* El elemento se desplaza automáticamente al norte */
-                StateForceDisplaceSouth,        /* El elemento se desplaza automáticamente al sur */
-                StateForceDisplaceEast,         /* El elemento se desplaza automáticamente al este */
-                StateForceDisplaceWest,         /* El elemento se desplaza automáticamente al oeste */
-                StateCancelDisplaceNorth,       /* El elemento deja de desplazarse automáticamente al norte */
-                StateCancelDisplaceSouth,       /* El elemento deja de desplazarse automáticamente al sur */
-                StateCancelDisplaceEast,        /* El elemento deja de desplazarse automáticamente al este */
-                StateCancelDisplaceWest,        /* El elemento deja de desplazarse automáticamente al oeste */
-                StateFreeze,                    /* El elemento está detenido por la acción de un rosquillazo o por la activación de un interruptor */
-                StateWakeUp,                    /* El elemento se vuelve a activar por la desactivación del interruptor */
-                StateStopTop,                   /* El elemento ha alcanzado su altura máxima. Aplicado a elementos de movimiento vertical */
-                StateStopBottom,                /* El elemento ha alcanzado su altura mínima. Aplicado a elementos de movimiento vertical */
-                StateStartDestroy,              /* El elemento inicia su destrucción */
-                StateDestroy,                   /* El elemento se destruye */
-                StateShot,                      /* El elemento dispara */
-                StateRebound,                   /* El elemento rebota */
-                StateSwitch,                    /* El elemento (un interruptor) cambia de estado */
-                StateCollision,                 /* El elemento choca con algo */
-                StateActive,                    /* El elemento se acaba de activar */
+                Wait,                           /* El elemento está quieto */
+                Push,                           /* El elemento ha sido empujado por otro */
+                Move,                           /* El elemento se mueve. Estado genérico usado por el gestor de sonido */
+                MoveNorth = 64,                 /* El elemento se mueve al norte */
+                MoveSouth,                      /* El elemento se mueve al sur */
+                MoveEast,                       /* El elemento se mueve al este */
+                MoveWest,                       /* El elemento se mueve al oeste */
+                MoveNortheast,                  /* El elemento se mueve al nordeste */
+                MoveSoutheast,                  /* El elemento se mueve al sudeste */
+                MoveSouthwest,                  /* El elemento se mueve al sudoeste */
+                MoveNorthwest,                  /* El elemento se mueve al noroeste */
+                MoveUp,                         /* El elemento se mueve arriba */
+                MoveDown,                       /* El elemento se mueve abajo */
+                Blink,                          /* El elemento parpadea */
+                Jump,                           /* El elemento salta */
+                RegularJump,                    /* El elemento salta de modo normal */
+                HighJump,                       /* El elemento salta de modo especial, a mayor altura y desplazamiento */
+                Fall,                           /* El elemento cae */
+                Glide,                          /* El elemento planea */
+                TakeItem,                       /* El elemento coge otro elemento */
+                TakenItem,                      /* El elemento ha cogido otro elemento */
+                DropItem,                       /* El elemento suelta a otro elemento previamente cogido */
+                TakeAndJump,                    /* El elemento coge otro elemento y luego salta */
+                DropAndJump,                    /* El elemento deja otro elemento y luego salta */
+                DisplaceNorth,                  /* El elemento es desplazado al norte por otro elemento */
+                DisplaceSouth,                  /* El elemento es desplazado al sur por otro elemento */
+                DisplaceEast,                   /* El elemento es desplazado al este por otro elemento */
+                DisplaceWest,                   /* El elemento es desplazado al oeste por otro elemento */
+                DisplaceNortheast,              /* El elemento es desplazado al noreste por otro elemento */
+                DisplaceSoutheast,              /* El elemento es desplazado al sudeste por otro elemento */
+                DisplaceSouthwest,              /* El elemento es desplazado al sudoeste por otro elemento */
+                DisplaceNorthwest,              /* El elemento es desplazado al noroeste por otro elemento */
+                DisplaceUp,                     /* El elemento es desplazado hacia arriba por otro elemento */
+                DisplaceDown,                   /* El elemento es desplazado hacia abajo por otro elemento */
+                StartWayOutTeletransport,       /* El elemento inicia el teletransporte de ida */
+                WayOutTeletransport,            /* El elemento se está teletransportando a otra sala */
+                StartWayInTeletransport,        /* El elemento inicia el teletransporte de vuelta */
+                WayInTeletransport,             /* El elemento se está teletransportando desde otra sala */
+                AutoMove,                       /* El elemento se mueve automáticamente. Estado genérico usado por el gestor de sonido */
+                AutoMoveNorth,                  /* El elemento se mueve automáticamente al norte */
+                AutoMoveSouth,                  /* El elemento se mueve automáticamente al sur */
+                AutoMoveEast,                   /* El elemento se mueve automáticamente al este */
+                AutoMoveWest,                   /* El elemento se mueve automáticamente al oeste */
+                ForceDisplace,
+                ForceDisplaceNorth,             /* El elemento se desplaza automáticamente al norte */
+                ForceDisplaceSouth,             /* El elemento se desplaza automáticamente al sur */
+                ForceDisplaceEast,              /* El elemento se desplaza automáticamente al este */
+                ForceDisplaceWest,              /* El elemento se desplaza automáticamente al oeste */
+                CancelDisplaceNorth,            /* El elemento deja de desplazarse automáticamente al norte */
+                CancelDisplaceSouth,            /* El elemento deja de desplazarse automáticamente al sur */
+                CancelDisplaceEast,             /* El elemento deja de desplazarse automáticamente al este */
+                CancelDisplaceWest,             /* El elemento deja de desplazarse automáticamente al oeste */
+                Freeze,                         /* El elemento está detenido por la acción de un rosquillazo o por la activación de un interruptor */
+                WakeUp,                         /* El elemento se vuelve a activar por la desactivación del interruptor */
+                StopTop,                        /* El elemento ha alcanzado su altura máxima. Aplicado a elementos de movimiento vertical */
+                StopBottom,                     /* El elemento ha alcanzado su altura mínima. Aplicado a elementos de movimiento vertical */
+                StartDestroy,                   /* El elemento inicia su destrucción */
+                Destroy,                        /* El elemento se destruye */
+                Doughnut,
+                Rebound,                        /* El elemento rebota */
+                SwitchIt,                       /* El elemento (un interruptor) cambia de estado */
+                Collision,                      /* El elemento choca con algo */
+                IsActive,
                 Mistake                         /* Estado imposible, se utiliza en el gestor de sonido */
         } ;
 
@@ -323,8 +316,8 @@ namespace isomot
         {
                 Donuts = 15,
                 ExtraLife = 16,
-                HighJump = 17,
-                HighSpeed = 18,
+                HighJumpItem = 17,
+                HighSpeedItem = 18,
                 Shield = 19,
                 Crown = 20,
                 Horn = 26,

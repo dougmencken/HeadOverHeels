@@ -35,7 +35,7 @@ public:
         * @param item Elemento que tiene este comportamiento
         * @param id Identificador del comportamiento
         */
-        Impel( Item * item, const BehaviorId & id ) ;
+        Impel( Item * item, const BehaviorOfItem & id ) ;
 
         virtual ~Impel( ) ;
 

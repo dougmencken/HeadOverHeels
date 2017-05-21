@@ -2,8 +2,8 @@
 #include "RemoteControl.hpp"
 #include "Item.hpp"
 #include "FreeItem.hpp"
-#include "DisplaceState.hpp"
-#include "FallState.hpp"
+#include "DisplaceKindOfActivity.hpp"
+#include "FallKindOfActivity.hpp"
 #include "Mediator.hpp"
 #include "Room.hpp"
 #include "SoundManager.hpp"
@@ -12,13 +12,13 @@
 namespace isomot
 {
 
-RemoteControl::RemoteControl( Item * item, const BehaviorId & id ) : Behavior( item, id )
+RemoteControl::RemoteControl( Item * item, const BehaviorOfItem & id ) : Behavior( item, id )
 {
-        stateId = StateWait;
+        activity = Wait;
         controlledItem = 0;
 
         // Sólo se mueve el elemento controlado, el controlador es fijo
-        if ( id == SteerBehavior )
+        if ( theBehavior == SteerBehavior )
         {
                 speedTimer = new HPC();
                 fallTimer = new HPC();
@@ -29,7 +29,7 @@ RemoteControl::RemoteControl( Item * item, const BehaviorId & id ) : Behavior( i
 
 RemoteControl::~RemoteControl()
 {
-        if ( id == SteerBehavior )
+        if ( theBehavior == SteerBehavior )
         {
                 delete speedTimer;
                 delete fallTimer;
@@ -42,31 +42,31 @@ bool RemoteControl::update ()
         bool destroy = false;
 
         // Si este es el elemento controlador, busca al controlado
-        if ( id == RemoteControlBehavior && controlledItem == 0 )
+        if ( theBehavior == RemoteControlBehavior && controlledItem == 0 )
         {
                 controlledItem = static_cast< FreeItem * >( freeItem->getMediator()->findItemByBehavior( SteerBehavior ) );
         }
 
-        switch ( stateId )
+        switch ( activity )
         {
-                case StateWait:
+                case Wait:
                         break;
 
-                case StateMoveNorth:
-                case StateMoveSouth:
-                case StateMoveEast:
-                case StateMoveWest:
+                case MoveNorth:
+                case MoveSouth:
+                case MoveEast:
+                case MoveWest:
                         // Si este es el elemento controlado y está activo y ha llegado el momento de moverse, entonces:
-                        if ( id == SteerBehavior )
+                        if ( theBehavior == SteerBehavior )
                         {
                                 if ( speedTimer->getValue() > freeItem->getSpeed() )
                                 {
                                         // El elemento se mueve. Si colisiona vuelve al estado inicial para tomar una nueva dirección
-                                        state->move( this, &stateId, true );
+                                        whatToDo->move( this, &activity, true );
 
-                                        if ( stateId != StateFall )
+                                        if ( activity != Fall )
                                         {
-                                                stateId = StateWait;
+                                                activity = Wait;
                                         }
 
                                         // Se pone a cero el cronómetro para el siguiente ciclo
@@ -78,16 +78,16 @@ bool RemoteControl::update ()
                         }
                         break;
 
-                case StateDisplaceNorth:
-                case StateDisplaceSouth:
-                case StateDisplaceEast:
-                case StateDisplaceWest:
-                case StateDisplaceNortheast:
-                case StateDisplaceNorthwest:
-                case StateDisplaceSoutheast:
-                case StateDisplaceSouthwest:
+                case DisplaceNorth:
+                case DisplaceSouth:
+                case DisplaceEast:
+                case DisplaceWest:
+                case DisplaceNortheast:
+                case DisplaceNorthwest:
+                case DisplaceSoutheast:
+                case DisplaceSouthwest:
                         // Si este es el elemento controlado y está activo y ha llegado el momento de moverse, entonces:
-                        if ( id == SteerBehavior )
+                        if ( theBehavior == SteerBehavior )
                         {
                                 if ( speedTimer->getValue() > freeItem->getSpeed() )
                                 {
@@ -95,14 +95,14 @@ bool RemoteControl::update ()
                                         // por un elemento que haya debajo
                                         if ( this->sender == 0 || ( this->sender != 0 && this->sender != this->item ) )
                                         {
-                                                SoundManager::getInstance()->play( freeItem->getLabel(), stateId );
+                                                SoundManager::getInstance()->play( freeItem->getLabel(), activity );
                                         }
 
                                         // Desplaza el elemento una unidad
-                                        state->displace( this, &stateId, true );
-                                        if ( stateId != StateFall )
+                                        whatToDo->displace( this, &activity, true );
+                                        if ( activity != Fall )
                                         {
-                                                stateId = StateWait;
+                                                activity = Wait;
                                         }
 
                                         // Se pone a cero el cronómetro para el siguiente ciclo
@@ -115,41 +115,41 @@ bool RemoteControl::update ()
 
                         // Para los cuatro puntos cardinales básicos el elemento controlador debe cambiar el estado
                         // del elemento controlado
-                        if ( stateId == StateDisplaceNorth || stateId == StateDisplaceSouth || stateId == StateDisplaceEast || stateId == StateDisplaceWest )
+                        if ( activity == DisplaceNorth || activity == DisplaceSouth || activity == DisplaceEast || activity == DisplaceWest )
                         {
-                                if ( id == RemoteControlBehavior )
+                                if ( theBehavior == RemoteControlBehavior )
                                 {
-                                        StateId motionStateId = StateWait;
+                                        ActivityOfItem motionActivity = Wait;
 
-                                        switch ( stateId )
+                                        switch ( activity )
                                         {
-                                                case StateDisplaceNorth:
-                                                        motionStateId = StateMoveNorth;
+                                                case DisplaceNorth:
+                                                        motionActivity = MoveNorth;
                                                         break;
 
-                                                case StateDisplaceSouth:
-                                                        motionStateId = StateMoveSouth;
+                                                case DisplaceSouth:
+                                                        motionActivity = MoveSouth;
                                                         break;
 
-                                                case StateDisplaceEast:
-                                                        motionStateId = StateMoveEast;
+                                                case DisplaceEast:
+                                                        motionActivity = MoveEast;
                                                         break;
 
-                                                case StateDisplaceWest:
-                                                        motionStateId = StateMoveWest;
+                                                case DisplaceWest:
+                                                        motionActivity = MoveWest;
                                                         break;
 
                                                 default:
                                                         ;
                                         }
 
-                                        dynamic_cast< RemoteControl * >( controlledItem->getBehavior() )->changeStateId( motionStateId );
-                                        stateId = StateWait;
+                                        dynamic_cast< RemoteControl * >( controlledItem->getBehavior() )->changeActivityOfItem( motionActivity );
+                                        activity = Wait;
                                 }
                         }
                         break;
 
-                case StateFall:
+                case Fall:
                         // Se comprueba si ha topado con el suelo en una sala sin suelo
                         if ( freeItem->getZ() == 0 && freeItem->getMediator()->getRoom()->getFloorType() == NoFloor )
                         {
@@ -158,13 +158,13 @@ bool RemoteControl::update ()
                         }
                         // Si este es el elemento controlado y ha llegado el momento de caer entonces
                         // el elemento desciende una unidad
-                        else if ( id == SteerBehavior && fallTimer->getValue() > freeItem->getWeight() )
+                        else if ( theBehavior == SteerBehavior && fallTimer->getValue() > freeItem->getWeight() )
                         {
-                                if ( ! state->fall( this ) )
+                                if ( ! whatToDo->fall( this ) )
                                 {
                                         // Emite el sonido de caída
-                                        SoundManager::getInstance()->play( freeItem->getLabel(), stateId );
-                                        stateId = StateWait;
+                                        SoundManager::getInstance()->play( freeItem->getLabel(), activity );
+                                        activity = Wait;
                                 }
 
                                 // Se pone a cero el cronómetro para el siguiente ciclo

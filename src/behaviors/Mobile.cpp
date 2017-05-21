@@ -4,18 +4,17 @@
 #include "FreeItem.hpp"
 #include "Room.hpp"
 #include "Mediator.hpp"
-#include "DisplaceState.hpp"
-#include "FallState.hpp"
+#include "DisplaceKindOfActivity.hpp"
+#include "FallKindOfActivity.hpp"
 #include "SoundManager.hpp"
 
 
 namespace isomot
 {
 
-Mobile::Mobile( Item * item, const BehaviorId & id ) :
+Mobile::Mobile( Item * item, const BehaviorOfItem & id ) :
         Behavior( item, id )
 {
-        stateId = StateWait;
         speedTimer = new HPC();
         fallTimer = new HPC();
         speedTimer->start();
@@ -33,25 +32,25 @@ bool Mobile::update ()
         FreeItem* freeItem = dynamic_cast< FreeItem * >( this->item );
         bool freeze = false;
 
-        switch ( stateId )
+        switch ( activity )
         {
-                case StateWait:
+                case Wait:
                         // Se comprueba si el elemento debe empezar a caer
-                        if ( FallState::getInstance()->fall( this ) )
+                        if ( FallKindOfActivity::getInstance()->fall( this ) )
                         {
                                 fallTimer->reset();
-                                stateId = StateFall;
+                                activity = Fall;
                         }
                         break;
 
-                case StateDisplaceNorth:
-                case StateDisplaceSouth:
-                case StateDisplaceEast:
-                case StateDisplaceWest:
-                case StateDisplaceNortheast:
-                case StateDisplaceSoutheast:
-                case StateDisplaceSouthwest:
-                case StateDisplaceNorthwest:
+                case DisplaceNorth:
+                case DisplaceSouth:
+                case DisplaceEast:
+                case DisplaceWest:
+                case DisplaceNortheast:
+                case DisplaceSoutheast:
+                case DisplaceSouthwest:
+                case DisplaceNorthwest:
                         // El elemento es deplazado por otro. Si el desplazamiento no se pudo realizar por
                         // colisión entonces el estado se propaga a los elementos con los que ha chocado
                         if ( speedTimer->getValue() > freeItem->getSpeed() )
@@ -61,15 +60,15 @@ bool Mobile::update ()
                                 // TODO Hecho para portátiles y para Carlos ¿aplica a otros elementos?
                                 if ( this->sender == 0 || ( this->sender != 0 && this->sender != this->item ) )
                                 {
-                                        SoundManager::getInstance()->play( freeItem->getLabel(), stateId );
+                                        SoundManager::getInstance()->play( freeItem->getLabel(), activity );
                                 }
 
                                 // Actualiza el estado
-                                this->changeStateId( stateId );
-                                state->displace( this, &stateId, true );
+                                this->changeActivityOfItem( activity );
+                                whatToDo->displace( this, &activity, true );
 
                                 // Una vez se ha completado el desplazamiento el elemento vuelve a su comportamiento normal
-                                stateId = StateWait;
+                                activity = Wait;
 
                                 // Se pone a cero el cronómetro para el siguiente ciclo
                                 speedTimer->reset();
@@ -79,25 +78,25 @@ bool Mobile::update ()
                         freeItem->animate();
                         break;
 
-                case StateForceDisplaceNorth:
-                case StateForceDisplaceSouth:
-                case StateForceDisplaceEast:
-                case StateForceDisplaceWest:
+                case ForceDisplaceNorth:
+                case ForceDisplaceSouth:
+                case ForceDisplaceEast:
+                case ForceDisplaceWest:
                         // El elemento es arrastrado porque está encima de una cinta transportadora
                         if ( speedTimer->getValue() > item->getSpeed() )
                         {
-                                state = DisplaceState::getInstance();
-                                state->displace( this, &stateId, true );
+                                whatToDo = DisplaceKindOfActivity::getInstance();
+                                whatToDo->displace( this, &activity, true );
 
                                 // Una vez se ha completado el desplazamiento el elemento vuelve a su comportamiento normal
-                                stateId = StateFall;
+                                activity = Fall;
 
                                 // Se pone a cero el cronómetro para el siguiente ciclo
                                 speedTimer->reset();
                         }
                         break;
 
-                case StateFall:
+                case Fall:
                         // Se comprueba si ha topado con el suelo en una sala sin suelo
                         if ( freeItem->getZ() == 0 && freeItem->getMediator()->getRoom()->getFloorType() == NoFloor )
                         {
@@ -108,12 +107,12 @@ bool Mobile::update ()
                         else if ( fallTimer->getValue() > freeItem->getWeight() )
                         {
                                 // Actualiza el estado
-                                this->changeStateId( stateId );
-                                if ( ! state->fall( this ) )
+                                this->changeActivityOfItem( activity );
+                                if ( ! whatToDo->fall( this ) )
                                 {
                                         // Emite el sonido de caída
-                                        SoundManager::getInstance()->play( freeItem->getLabel(), stateId );
-                                        stateId = StateWait;
+                                        SoundManager::getInstance()->play( freeItem->getLabel(), activity );
+                                        activity = Wait;
                                 }
 
                                 // Se pone a cero el cronómetro para el siguiente ciclo
@@ -121,7 +120,7 @@ bool Mobile::update ()
                         }
                         break;
 
-                case StateDestroy:
+                case Destroy:
                         // Se destruye cuando el elemento se coge
                         freeze = true;
                         break;

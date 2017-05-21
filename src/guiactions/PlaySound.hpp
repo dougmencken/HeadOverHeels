@@ -14,8 +14,6 @@
 #include "SoundManager.hpp"
 
 
-enum isomot::StateId ;
-
 namespace gui
 {
 
@@ -24,7 +22,7 @@ class PlaySound : public Action
 
 public:
 
-        PlaySound( isomot::StateId what ) : Action( ) {  whichSound = what ;  }
+        PlaySound( isomot::ActivityOfItem what ) : Action( ) {  whichSound = what ;  }
 
         virtual ~PlaySound( ) { }
 
@@ -38,7 +36,7 @@ public:
 
 private:
 
-        isomot::StateId whichSound ;
+        isomot::ActivityOfItem whichSound ;
 
 };
 

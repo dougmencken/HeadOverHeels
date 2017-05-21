@@ -8,20 +8,21 @@
 #include "GameManager.hpp"
 #include "UserControlled.hpp"
 
+
 namespace isomot
 {
 
 PlayerItem::PlayerItem( ItemData* itemData, int x, int y, int z, const Direction& direction )
-: FreeItem( itemData, x, y, z, direction ),
-        lives( 0 ),
-        highSpeed( 0 ),
-        highJumps( 0 ),
-        shield( 0 ),
-        ammo( 0 ),
-        exit( NoExit ),
-        orientation( NoDirection ),
-        shieldTimer( 0 ),
-        shieldTime( 25.0 )
+        : FreeItem( itemData, x, y, z, direction )
+        , lives( 0 )
+        , highSpeed( 0 )
+        , highJumps( 0 )
+        , shield( 0 )
+        , ammo( 0 )
+        , exit( NoExit )
+        , orientation( NoDirection )
+        , shieldTimer( 0 )
+        , shieldTime( 25.0 )
 {
 
 }
@@ -44,7 +45,7 @@ PlayerItem::PlayerItem( const PlayerItem& playerItem )
 
 PlayerItem::~PlayerItem()
 {
-        if( this->shieldTimer != 0 )
+        if ( this->shieldTimer != 0 )
         {
                 delete shieldTimer;
         }
@@ -451,12 +452,12 @@ bool PlayerItem::update ()
 
 void PlayerItem::wait ()
 {
-        StateId stateId = this->behavior->getStateId();
+        ActivityOfItem activity = this->behavior->getActivityOfItem();
 
         // Si el jugador se está teletransportando o está muriendo no se podrá detener
-        if ( stateId != StateStartWayOutTeletransport && stateId != StateWayOutTeletransport &&
-                stateId != StateStartWayInTeletransport && stateId != StateWayInTeletransport &&
-                stateId != StateStartDestroy && stateId != StateDestroy )
+        if ( activity != StartWayOutTeletransport && activity != WayOutTeletransport &&
+                activity != StartWayInTeletransport && activity != WayInTeletransport &&
+                activity != StartDestroy && activity != Destroy )
         {
                 // El fotograma de parada es distinto segn la orientación del elemento
                 int currentFrame = ( getDataOfFreeItem()->motion.size() - getDataOfFreeItem()->extraFrames ) / getDataOfFreeItem()->directionFrames * static_cast < int > ( direction );
@@ -472,7 +473,7 @@ void PlayerItem::wait ()
                         }
                 }
 
-                this->behavior->changeStateId( StateWait );
+                this->behavior->changeActivityOfItem( Wait );
         }
 }
 
@@ -481,7 +482,7 @@ void PlayerItem::addLives( unsigned char lives )
         if( this->lives < 100 )
         {
                 this->lives += lives;
-                GameManager::getInstance()->addLives( PlayerId( this->getLabel () ), lives );
+                GameManager::getInstance()->addLives( WhichPlayer( this->getLabel () ), lives );
         }
 }
 
@@ -490,9 +491,9 @@ void PlayerItem::loseLife()
         if( this->lives > 0 )
         {
                 this->lives--;
-                GameManager::getInstance()->loseLife( PlayerId( this->getLabel () ) );
+                GameManager::getInstance()->loseLife( WhichPlayer( this->getLabel () ) );
         }
-        GameManager::getInstance()->emptyHandbag( PlayerId( this->getLabel () ) );
+        GameManager::getInstance()->emptyHandbag( WhichPlayer( this->getLabel () ) );
 }
 
 void PlayerItem::takeTool( short label )
@@ -509,7 +510,7 @@ void PlayerItem::addAmmo( const unsigned short ammo )
 
 void PlayerItem::consumeAmmo()
 {
-        if( this->ammo > 0 )
+        if ( this->ammo > 0 )
         {
                 this->ammo--;
                 GameManager::getInstance()->consumeDonut();
@@ -518,31 +519,31 @@ void PlayerItem::consumeAmmo()
 
 void PlayerItem::activateHighSpeed()
 {
-  this->highSpeed = 99;
-  GameManager::getInstance()->addHighSpeed( PlayerId( this->getLabel() ), 99 );
+        this->highSpeed = 99;
+        GameManager::getInstance()->addHighSpeed( WhichPlayer( this->getLabel() ), 99 );
 }
 
 void PlayerItem::decreaseHighSpeed()
 {
-        if( this->highSpeed > 0 )
+        if ( this->highSpeed > 0 )
         {
                 this->highSpeed--;
-                GameManager::getInstance()->decreaseHighSpeed( PlayerId( this->getLabel() ) );
+                GameManager::getInstance()->decreaseHighSpeed( WhichPlayer( this->getLabel() ) );
         }
 }
 
 void PlayerItem::addHighJumps( unsigned char highJumps )
 {
         this->highJumps += highJumps;
-        GameManager::getInstance()->addHighJumps( PlayerId( this->getLabel() ), highJumps );
+        GameManager::getInstance()->addHighJumps( WhichPlayer( this->getLabel() ), highJumps );
 }
 
 void PlayerItem::decreaseHighJumps()
 {
-        if( this->highJumps > 0 )
+        if ( this->highJumps > 0 )
         {
                 this->highJumps--;
-                GameManager::getInstance()->decreaseHighJumps( PlayerId( this->getLabel() ) );
+                GameManager::getInstance()->decreaseHighJumps( WhichPlayer( this->getLabel() ) );
         }
 }
 
@@ -552,18 +553,18 @@ void PlayerItem::activateShield()
         this->shieldTimer->start();
         this->shieldTime = 25.000;
         this->shield = shieldTime - shieldTimer->getValue();
-        GameManager::getInstance()->addShield( PlayerId( this->getLabel() ), this->shield );
+        GameManager::getInstance()->addShield( WhichPlayer( this->getLabel() ), this->shield );
 }
 
 void PlayerItem::decreaseShield()
 {
-        if( this->shieldTimer != 0 )
+        if ( this->shieldTimer != 0 )
         {
                 this->shield = shieldTime - shieldTimer->getValue();
-                GameManager::getInstance()->decreaseShield( PlayerId( this->getLabel() ), this->shield );
+                GameManager::getInstance()->decreaseShield( WhichPlayer( this->getLabel() ), this->shield );
         }
 
-        if( this->shield < 0 )
+        if ( this->shield < 0 )
         {
                 this->shieldTime = 0.000;
                 this->shield = 0;
@@ -577,42 +578,42 @@ void PlayerItem::liberatePlanet ()
 {
         std::string scenery = this->mediator->getRoom()->getScenery();
 
-        if( scenery.compare( "jail" ) == 0 || scenery.compare( "blacktooth" ) == 0 || scenery.compare( "market" ) == 0 )
+        if ( scenery.compare( "jail" ) == 0 || scenery.compare( "blacktooth" ) == 0 || scenery.compare( "market" ) == 0 )
         {
                 GameManager::getInstance()->liberatePlanet( Blacktooth );
         }
-        else if( scenery.compare( "egyptus" ) == 0 )
+        else if ( scenery.compare( "egyptus" ) == 0 )
         {
                 GameManager::getInstance()->liberatePlanet( Egyptus );
         }
-        else if( scenery.compare( "penitentiary" ) == 0 )
+        else if ( scenery.compare( "penitentiary" ) == 0 )
         {
                 GameManager::getInstance()->liberatePlanet( Penitentiary );
         }
-        else if( scenery.compare( "safari" ) == 0 )
+        else if ( scenery.compare( "safari" ) == 0 )
         {
                 GameManager::getInstance()->liberatePlanet( Safari );
         }
-        else if( scenery.compare( "byblos" ) == 0 )
+        else if ( scenery.compare( "byblos" ) == 0 )
         {
                 GameManager::getInstance()->liberatePlanet( Byblos );
         }
 }
 
-void PlayerItem::assignTakenItem ( ItemData* itemData, BITMAP* takenItemImage, const BehaviorId& behaviorId )
+void PlayerItem::assignTakenItem ( ItemData* itemData, BITMAP* takenItemImage, const BehaviorOfItem& behaviorId )
 {
         dynamic_cast< UserControlled* >( this->behavior )->assignTakenItem( itemData, takenItemImage, behaviorId );
 }
 
-ItemData* PlayerItem::consultTakenItem ( BehaviorId* behaviorId )
+ItemData* PlayerItem::consultTakenItem ( BehaviorOfItem* behaviorId )
 {
-        *behaviorId = dynamic_cast< UserControlled* >( this->behavior )->getTakenItemBehaviorId();
-        return dynamic_cast< UserControlled* >( this->behavior )->getTakenItemData();
+        *behaviorId = dynamic_cast< UserControlled * >( this->behavior )->getTakenItemBehavior ();
+        return dynamic_cast< UserControlled * >( this->behavior )->getTakenItemData ();
 }
 
 BITMAP* PlayerItem::consultTakenItemImage ()
 {
-        return dynamic_cast< UserControlled* >( this->behavior )->getTakenItemImage();
+        return dynamic_cast< UserControlled * >( this->behavior )->getTakenItemImage ();
 }
 
 void PlayerItem::save ()

@@ -13,6 +13,7 @@
 
 #include <string>
 #include <stack>
+
 #include "Ism.hpp"
 
 
@@ -20,7 +21,7 @@ namespace isomot
 {
 
 class Item ;
-class BehaviorState ;
+class KindOfActivity ;
 
 /**
  * Abstraction of behavior of an element. Elements of the game change activity in each cycle
@@ -34,10 +35,10 @@ protected:
 
         /**
          * Constructor
-         * @param item Elemento que tiene este comportamiento
-         * @param id Identificador del comportamiento
+         * @param whichItem Elemento que tiene este comportamiento
+         * @param behavior Identificador del comportamiento
          */
-        Behavior( Item * item, const BehaviorId & id ) ;
+        Behavior( Item * whichItem, const BehaviorOfItem & behavior ) ;
 
 public:
 
@@ -46,11 +47,11 @@ public:
         /**
          * Crea el comportamiento del elemento
          * @param item Elemento que tiene este comportamiento
-         * @param behaviorId Identificador del comportamiento del elemento
-         * @param extra Datos extra necesarios para configurar el comportamiento
+         * @param id Identificador del comportamiento del elemento
+         * @param extraData Datos extra necesarios para configurar el comportamiento
          * @return Un objeto de la clase con el comportamiento especificado
          */
-        static Behavior* createBehavior ( Item* item, const BehaviorId& id, void* extraData ) ;
+        static Behavior* createBehavior ( Item* item, const BehaviorOfItem& id, void* extraData ) ;
 
         /**
          * Updates behavior of the element in each cycle
@@ -61,34 +62,28 @@ public:
         /**
          * Asigna el identificador del estado actual del comportamiento y cambia el estado
          * del comportamiento según el identificador
-         * @param Un identificador de estado
+         * @param Activity of item
          * @param Elemento que emite el cambio de estado
          */
-        virtual void changeStateId ( const StateId & stateId, Item * sender = 0 ) ;
+        virtual void changeActivityOfItem ( const ActivityOfItem & activity, Item * sender = 0 ) ;
 
 protected:
 
-        friend class BehaviorState ;
+        friend class KindOfActivity ;
 
         /**
-         * Cambia el estado del comportamiento
-         * @param state El nuevo estado
+         * Change the kind of activity
          */
-        void changeState ( BehaviorState * state ) {  this->state = state ;  }
+        void changeActivityTo ( KindOfActivity * kind ) {  this->whatToDo = kind ;  }
 
         /**
-         * Cambia el estado de todos los elementos que hayan colisionado con el emisor
-         * @param sender Elemento que propaga el estado
-         * @param stateId Identificador del estado
+         * Change activity of every item collided with the sender
          */
-        void propagateState ( Item * sender, const StateId & stateId ) ;
+        void propagateActivity ( Item * sender, const ActivityOfItem & activity ) ;
 
 protected:
 
-        /**
-         * Identificador del comportamiento
-         */
-        BehaviorId id ;
+        BehaviorOfItem theBehavior ;
 
         /**
          * Elemento que tiene este comportamiento
@@ -96,32 +91,25 @@ protected:
         Item * item ;
 
         /**
-         * Estado actual del comportamiento
+         * Current kind of activity
          */
-        BehaviorState * state ;
+        KindOfActivity * whatToDo ;
+
+        /**
+         * Current variant of activity
+         */
+        ActivityOfItem activity ;
 
         /**
          * Elemento que cambia el estado del elemento con este comportamiento
          */
         Item * sender ;
 
-        /**
-         * Identificador del estado actual del comportamiento
-         */
-        StateId stateId ;
+public:
 
-public: // Operaciones de consulta y actualización
+        BehaviorOfItem getBehaviorOfItem () const {  return theBehavior ;  }
 
-        /**
-         * Identificador del comportamiento
-         * @return Un comportamiento predefinido
-         */
-        BehaviorId getId () const {  return id ;  }
-
-        /**
-         * Identificador del estado actual del comportamiento
-         */
-        StateId getStateId () const {  return stateId ;  }
+        ActivityOfItem getActivityOfItem () const {  return activity ;  }
 
         /**
          * Elemento con este comportamiento

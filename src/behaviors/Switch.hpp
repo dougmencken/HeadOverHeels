@@ -19,12 +19,9 @@
 namespace isomot
 {
 
-class Item;
+class Item ;
 
-/**
- * Mueve al elemento en un único sentido. Cuando éste choca con algo gira 180º y prosigue la
- * marcha en sentido contrario
- */
+
 class Switch : public Behavior
 {
 
@@ -35,7 +32,7 @@ public:
         * @param item Elemento que tiene este comportamiento
         * @param id Identificador del comportamiento
         */
-        Switch( Item * item, const BehaviorId & id ) ;
+        Switch( Item * item, const BehaviorOfItem & id ) ;
 
         virtual ~Switch( ) ;
 

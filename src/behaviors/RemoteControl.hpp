@@ -18,8 +18,8 @@
 namespace isomot
 {
 
-class Item;
-class FreeItem;
+class Item ;
+class FreeItem ;
 
 /**
  * Representa a un par de elementos controlador/controlado. Cuando un elemento choca con un elemento
@@ -36,7 +36,7 @@ public:
         * @param item Elemento que tiene este comportamiento
         * @param id Identificador del comportamiento
         */
-        RemoteControl( Item * item, const BehaviorId & id ) ;
+        RemoteControl( Item * item, const BehaviorOfItem & id ) ;
 
         virtual ~RemoteControl( ) ;
 

@@ -190,7 +190,7 @@ BITMAP* Isomot::update()
         {
                 // Antes de cambiar el jugador se detiene el actual
                 activeRoom->getMediator()->getActivePlayer()->wait();
-                if ( activeRoom->getMediator()->getActivePlayer()->getBehavior()->getStateId() == StateWait )
+                if ( activeRoom->getMediator()->getActivePlayer()->getBehavior()->getActivityOfItem() == Wait )
                 {
                         // Si se puede cambiar de jugador en la misma sala hay que comunicar
                         // al gestor del mapa este hecho
@@ -222,7 +222,7 @@ BITMAP* Isomot::update()
                 {
                         PlayerItem* player = activeRoom->getMediator()->getActivePlayer();
 
-                        if ( player->getLives() != 0 || ( PlayerId(player->getLabel ()) == HeadAndHeels && player->getLives() == 0 ) )
+                        if ( player->getLives() != 0 || ( WhichPlayer(player->getLabel ()) == HeadAndHeels && player->getLives() == 0 ) )
                         {
                                 activeRoom = mapManager->restartRoom();
                         }

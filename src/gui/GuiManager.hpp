@@ -17,20 +17,23 @@
 #include <cassert>
 #include <allegro.h>
 #include <loadpng.h>
+
 #include "Gui.hpp"
+
 
 namespace gui
 {
 
-class Screen;
-class Action;
-class LanguageManager;
-class ConfigurationManager;
+class Screen ;
+class Action ;
+class LanguageManager ;
+class ConfigurationManager ;
 
 /**
  * El gestor de la interfaz usuario almacena las imágenes empleadas por la interfaz, ordena
  * la creación de los tipos de letra usados e inicia el juego mostrando el menú principal
  */
+
 class GuiManager
 {
 

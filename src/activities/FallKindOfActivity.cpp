@@ -1,5 +1,5 @@
 
-#include "FallState.hpp"
+#include "FallKindOfActivity.hpp"
 #include "Behavior.hpp"
 #include "Item.hpp"
 #include "FreeItem.hpp"
@@ -11,29 +11,29 @@
 namespace isomot
 {
 
-BehaviorState* FallState::instance = 0;
+KindOfActivity * FallKindOfActivity::instance = 0;
 
-FallState::FallState( ) : BehaviorState()
+FallKindOfActivity::FallKindOfActivity( ) : KindOfActivity()
 {
 
 }
 
-FallState::~FallState( )
+FallKindOfActivity::~FallKindOfActivity( )
 {
 
 }
 
-BehaviorState* FallState::getInstance()
+KindOfActivity* FallKindOfActivity::getInstance()
 {
         if ( instance == 0 )
         {
-                instance = new FallState();
+                instance = new FallKindOfActivity();
         }
 
         return instance;
 }
 
-bool FallState::fall( Behavior * behavior )
+bool FallKindOfActivity::fall( Behavior * behavior )
 {
         bool isFalling = behavior->getItem()->addToZ( -1 );
         /////behavior->getItem()->setAnchor( 0 );
@@ -76,7 +76,7 @@ bool FallState::fall( Behavior * behavior )
                                         {
                                                 if ( sender->checkPosition( 0, 0, -1, Add ) )
                                                 {
-                                                        item->getBehavior()->changeStateId( StateStartDestroy );
+                                                        item->getBehavior()->changeActivityOfItem( StartDestroy );
                                                 }
                                         }
                                         // Si el elemento es mortal y el emisor es un jugador entonces el jugador muere
@@ -86,7 +86,7 @@ bool FallState::fall( Behavior * behavior )
                                         {
                                                 if ( sender->checkPosition( 0, 0, -1, Add ) )
                                                 {
-                                                        sender->getBehavior()->changeStateId( StateStartDestroy );
+                                                        sender->getBehavior()->changeActivityOfItem( StartDestroy );
                                                 }
                                                 else
                                                 {
@@ -105,7 +105,7 @@ bool FallState::fall( Behavior * behavior )
                                                         // Si todos son mortales entonces el jugador muere
                                                         if ( allMortal )
                                                         {
-                                                                sender->getBehavior()->changeStateId( StateStartDestroy );
+                                                                sender->getBehavior()->changeActivityOfItem( StartDestroy );
                                                         }
                                                 }
                                         }
@@ -130,7 +130,7 @@ bool FallState::fall( Behavior * behavior )
 
                                         // Se comprueba si el suelo de la sala es mortal, porque en este caso el jugador perderá una vida
                                         case MortalFloor:
-                                                playerItem->getBehavior()->changeStateId( StateStartDestroy );
+                                                playerItem->getBehavior()->changeActivityOfItem( StartDestroy );
                                                 break;
                                 }
                         }
@@ -140,7 +140,7 @@ bool FallState::fall( Behavior * behavior )
         return isFalling;
 }
 
-void FallState::assignAnchor( FreeItem* freeItem, std::stack< int > bottomItems )
+void FallKindOfActivity::assignAnchor( FreeItem* freeItem, std::stack< int > bottomItems )
 {
         if ( freeItem != 0 )
         {

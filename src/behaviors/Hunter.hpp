@@ -35,7 +35,7 @@ public:
         * @param item Elemento que tiene este comportamiento
         * @param id Identificador del comportamiento
         */
-        Hunter( Item * item, const BehaviorId & id ) ;
+        Hunter( Item * item, const BehaviorOfItem & id ) ;
 
         virtual ~Hunter( ) ;
 
@@ -51,21 +51,21 @@ private:
         * Calcula el sentido en el que debe avanzar el elemento para poder cazar al jugador activo
         * @return El estado que indica la dirección calculada
         */
-        StateId calculateDirection ( const StateId & stateId ) ;
+        ActivityOfItem calculateDirection ( const ActivityOfItem & activity ) ;
 
        /**
         * Calcula el sentido en el que debe avanzar el elemento para poder cazar al jugador activo
         * La dirección está restringida a los puntos cardinales básicos
         * @return El estado que indica la dirección calculada
         */
-        StateId calculateDirection4 ( const StateId & stateId ) ;
+        ActivityOfItem calculateDirection4 ( const ActivityOfItem & activity ) ;
 
        /**
         * Calcula el sentido en el que debe avanzar el elemento para poder cazar al jugador activo
         * La dirección puede ser cualquier de las ocho direcciones posibles
         * @return El estado que indica la dirección calculada
         */
-        StateId calculateDirection8 ( const StateId & stateId ) ;
+        ActivityOfItem calculateDirection8 ( const ActivityOfItem & activity ) ;
 
        /**
         * Crea para los cazadores ocultos el guarda imperial completo

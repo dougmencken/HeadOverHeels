@@ -2,7 +2,7 @@
 #include "Screen.hpp"
 #include "Gui.hpp"
 #include "GuiManager.hpp"
-#include "actions/Action.hpp"
+#include "Action.hpp"
 #include "Label.hpp"
 #include "Icon.hpp"
 

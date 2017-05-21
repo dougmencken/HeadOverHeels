@@ -35,7 +35,7 @@ public:
         * @param item Elemento que tiene este comportamiento
         * @param id Identificador del comportamiento: LeftTurnBehavior o RightTurnBehavior
         */
-        Turn( Item * item, const BehaviorId & id ) ;
+        Turn( Item * item, const BehaviorOfItem & id ) ;
 
         virtual ~Turn( ) ;
 

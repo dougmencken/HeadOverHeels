@@ -83,9 +83,9 @@ void SoundManager::readListOfSounds( const std::string& fileName )
         }
 }
 
-void SoundManager::play( short label, const StateId& stateId, bool loop )
+void SoundManager::play( short label, const ActivityOfItem& activity, bool loop )
 {
-        SampleData* sampleData = this->findSample( label, stateId );
+        SampleData* sampleData = this->findSample( label, activity );
 
         if ( sampleData != 0 && sampleData->voice == -1 )
         {
@@ -112,9 +112,9 @@ void SoundManager::play( short label, const StateId& stateId, bool loop )
         }
 }
 
-void SoundManager::stop( short label, const StateId& stateId )
+void SoundManager::stop( short label, const ActivityOfItem& activity )
 {
-        SampleData* sampleData = this->findSample( label, stateId );
+        SampleData* sampleData = this->findSample( label, activity );
 
         if ( sampleData != 0 )
         {
@@ -205,145 +205,145 @@ void SoundManager::setVolumeOfMusic( unsigned int volume )
           set_volume( ( this->musicVolume * 255 ) / 100, 0 );
 }
 
-SampleData* SoundManager::findSample( short label, const StateId& stateId )
+SampleData* SoundManager::findSample( short label, const ActivityOfItem& activity )
 {
         std::list< SoundData >::iterator i = std::find_if( soundData.begin(), soundData.end(), std::bind2nd( EqualSoundData(), label ) );
 
-        return i != soundData.end () ? ( *i ).find( this->translateStateIdToString( stateId ) ) : 0;
+        return i != soundData.end () ? ( *i ).find( this->translateActivityOfItemToString( activity ) ) : 0;
 }
 
-std::string SoundManager::translateStateIdToString ( const StateId& stateId )
+std::string SoundManager::translateActivityOfItemToString ( const ActivityOfItem& activity )
 {
-        std::string state;
+        std::string stringOfActivity;
 
-        switch ( stateId )
+        switch ( activity )
         {
-                case StateWait:
-                        state = "wait";
+                case Wait:
+                        stringOfActivity = "wait";
                         break;
 
-                case StatePush:
+                case Push:
                         break;
 
-                case StateMove:
-                case StateMoveNorth:
-                case StateMoveSouth:
-                case StateMoveEast:
-                case StateMoveWest:
-                case StateMoveNortheast:
-                case StateMoveSoutheast:
-                case StateMoveSouthwest:
-                case StateMoveNorthwest:
-                case StateMoveUp:
-                case StateMoveDown:
-                case StateAutoMove:
-                case StateAutoMoveNorth:
-                case StateAutoMoveSouth:
-                case StateAutoMoveEast:
-                case StateAutoMoveWest:
-                        state = "move";
+                case Move:
+                case MoveNorth:
+                case MoveSouth:
+                case MoveEast:
+                case MoveWest:
+                case MoveNortheast:
+                case MoveSoutheast:
+                case MoveSouthwest:
+                case MoveNorthwest:
+                case MoveUp:
+                case MoveDown:
+                case AutoMove:
+                case AutoMoveNorth:
+                case AutoMoveSouth:
+                case AutoMoveEast:
+                case AutoMoveWest:
+                        stringOfActivity = "move";
                         break;
 
-                case StateBlink:
+                case Blink:
                         break;
 
-                case StateJump:
-                case StateRegularJump:
-                case StateHighJump:
-                        state = "jump";
+                case Jump:
+                case RegularJump:
+                case HighJump:
+                        stringOfActivity = "jump";
                         break;
 
-                case StateFall:
-                case StateGlide:
-                        state = "fall";
+                case Fall:
+                case Glide:
+                        stringOfActivity = "fall";
                         break;
 
-                case StateTakeItem:
-                case StateTakeAndJump:
-                        state = "take";
+                case TakeItem:
+                case TakeAndJump:
+                        stringOfActivity = "take";
                         break;
 
-                case StateTakenItem:
+                case TakenItem:
                 break;
 
-                case StateDropItem:
-                case StateDropAndJump:
-                        state = "drop";
+                case DropItem:
+                case DropAndJump:
+                        stringOfActivity = "drop";
                         break;
 
-                case StateDisplaceNorth:
-                case StateDisplaceSouth:
-                case StateDisplaceEast:
-                case StateDisplaceWest:
-                case StateDisplaceNortheast:
-                case StateDisplaceSoutheast:
-                case StateDisplaceSouthwest:
-                case StateDisplaceNorthwest:
-                case StateDisplaceUp:
-                case StateDisplaceDown:
-                        state = "push";
+                case DisplaceNorth:
+                case DisplaceSouth:
+                case DisplaceEast:
+                case DisplaceWest:
+                case DisplaceNortheast:
+                case DisplaceSoutheast:
+                case DisplaceSouthwest:
+                case DisplaceNorthwest:
+                case DisplaceUp:
+                case DisplaceDown:
+                        stringOfActivity = "push";
                         break;
 
-                case StateStartWayOutTeletransport:
-                case StateWayOutTeletransport:
-                        state = "teleport-out";
+                case StartWayOutTeletransport:
+                case WayOutTeletransport:
+                        stringOfActivity = "teleport-out";
                         break;
 
-                case StateStartWayInTeletransport:
-                case StateWayInTeletransport:
-                        state = "teleport-in";
+                case StartWayInTeletransport:
+                case WayInTeletransport:
+                        stringOfActivity = "teleport-in";
                         break;
 
-                case StateForceDisplaceNorth:
-                case StateForceDisplaceSouth:
-                case StateForceDisplaceEast:
-                case StateForceDisplaceWest:
-                        state = "force";
+                case ForceDisplaceNorth:
+                case ForceDisplaceSouth:
+                case ForceDisplaceEast:
+                case ForceDisplaceWest:
+                        stringOfActivity = "force";
                         break;
 
-                case StateCancelDisplaceNorth:
-                case StateCancelDisplaceSouth:
-                case StateCancelDisplaceEast:
-                case StateCancelDisplaceWest:
-                        state = "move";
+                case CancelDisplaceNorth:
+                case CancelDisplaceSouth:
+                case CancelDisplaceEast:
+                case CancelDisplaceWest:
+                        stringOfActivity = "move";
                         break;
 
-                case StateStartDestroy:
+                case StartDestroy:
                         break;
 
-                case StateDestroy:
-                        state = "destroy";
+                case Destroy:
+                        stringOfActivity = "destroy";
                         break;
 
-                case StateShot:
-                        state = "shot";
+                case Doughnut:
+                        stringOfActivity = "shot";
                         break;
 
-                case StateRebound:
-                        state = "rebound";
+                case Rebound:
+                        stringOfActivity = "rebound";
                         break;
 
-                case StateSwitch:
-                        state = "switch";
+                case SwitchIt:
+                        stringOfActivity = "switch";
                         break;
 
-                case StateCollision:
-                        state = "collision";
+                case Collision:
+                        stringOfActivity = "collision";
                         break;
 
-                case StateActive:
-                        state = "active";
+                case IsActive:
+                        stringOfActivity = "active";
                         break;
 
                 case Mistake:
-                        state = "mistake";
+                        stringOfActivity = "mistake";
                         break;
 
                 default:
                         ;
         }
 
-        return state;
+        return stringOfActivity;
 }
 
 SoundData::SoundData( short label )

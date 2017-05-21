@@ -57,6 +57,7 @@ std::string homePath()
 }
 
 std::string SharePath;
+
 std::string sharePath()
 {
         if ( SharePath.empty () )

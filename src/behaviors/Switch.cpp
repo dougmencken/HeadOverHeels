@@ -9,11 +9,11 @@
 namespace isomot
 {
 
-Switch::Switch( Item * item, const BehaviorId & id ) :
-        Behavior( item, id ),
-        itemOver( false )
+Switch::Switch( Item * item, const BehaviorOfItem & id )
+        : Behavior( item, id )
+        , itemOver( false )
 {
-	this->stateId = StateWait;
+
 }
 
 Switch::~Switch( )
@@ -26,9 +26,9 @@ bool Switch::update ()
         Mediator * mediator = item->getMediator();
         std::vector< Item * > sideItems;
 
-        switch ( stateId )
+        switch ( activity )
         {
-                case StateWait:
+                case Wait:
                         // Comprueba si hay elementos a los lados
                         if ( checkSideItems( sideItems ) )
                         {
@@ -39,8 +39,9 @@ bool Switch::update ()
                                 {
                                         Item* tempItem = triggerItems[ i ];
 
-                                        if ( std::find_if( sideItems.begin (), sideItems.end (), std::bind2nd( EqualItemId(), tempItem->getId() ) ) == sideItems.end() ||
-                                                ( dynamic_cast< PlayerItem * >( tempItem ) && tempItem->getBehavior()->getStateId() == StateWait ) )
+                                        if ( std::find_if( sideItems.begin (), sideItems.end (),
+                                                std::bind2nd( EqualItemId(), tempItem->getId() ) ) == sideItems.end() ||
+                                                ( dynamic_cast< PlayerItem * >( tempItem ) && tempItem->getBehavior()->getActivityOfItem() == Wait ) )
                                         {
                                                 triggerItems.erase( std::remove_if(
                                                         triggerItems.begin (), triggerItems.end (),
@@ -81,8 +82,8 @@ bool Switch::update ()
                                                 // Además no puede activarse por el "roce" de un salto, sino que debe estar completamente posado
                                                 // sobre el interruptor
                                                 if ( topItem != 0 && topItem->getBehavior() != 0 && ! topItem->checkPosition( 0, 0, -1, Add ) &&
-                                                        topItem->getBehavior()->getStateId() != StateRegularJump &&
-                                                        topItem->getBehavior()->getStateId() != StateHighJump)
+                                                        topItem->getBehavior()->getActivityOfItem() != RegularJump &&
+                                                        topItem->getBehavior()->getActivityOfItem() != HighJump )
                                                 {
                                                         // Si sólo hay un elemento debajo entonces se activa
                                                         if ( ! itemOver && mediator->depthOfStackOfCollisions() == 1 )
@@ -90,9 +91,9 @@ bool Switch::update ()
                                                                 itemOver = true;
                                                                 item->animate();
                                                                 // Comunica a la sala el cambio de estado del interruptor
-                                                                mediator->changeSwitchState();
+                                                                mediator->toggleSwitchInRoom();
                                                                 // Activa el sonido de conmutación
-                                                                SoundManager::getInstance()->play( item->getLabel(), StateSwitch );
+                                                                SoundManager::getInstance()->play( item->getLabel(), SwitchIt );
                                                         }
                                                 }
                                         }
@@ -104,14 +105,14 @@ bool Switch::update ()
                         }
                         break;
 
-                case StateDisplaceNorth:
-                case StateDisplaceSouth:
-                case StateDisplaceEast:
-                case StateDisplaceWest:
-                case StateDisplaceNortheast:
-                case StateDisplaceSoutheast:
-                case StateDisplaceSouthwest:
-                case StateDisplaceNorthwest:
+                case DisplaceNorth:
+                case DisplaceSouth:
+                case DisplaceEast:
+                case DisplaceWest:
+                case DisplaceNortheast:
+                case DisplaceSoutheast:
+                case DisplaceSouthwest:
+                case DisplaceNorthwest:
                         // Si el elemento no estaba junto al interruptor entonces ahora lo activa y ya no lo podrá
                         // volver a activar a no ser que se cumplan las condiciones fijadas en el estado inicial
                         if ( std::find_if( triggerItems.begin (), triggerItems.end (), std::bind2nd( EqualItemId(), sender->getId() ) ) == triggerItems.end () )
@@ -119,13 +120,13 @@ bool Switch::update ()
                                 triggerItems.push_back( sender );
                                 item->animate();
                                 // Comunica a la sala el cambio de estado del interruptor
-                                mediator->changeSwitchState();
+                                mediator->toggleSwitchInRoom();
                                 // Activa el sonido de conmutación
-                                SoundManager::getInstance()->play( item->getLabel(), StateSwitch );
+                                SoundManager::getInstance()->play( item->getLabel(), SwitchIt );
                         }
 
                         // Vuelta al estado inicial
-                        stateId = StateWait;
+                        activity = Wait;
                         break;
 
                 default:

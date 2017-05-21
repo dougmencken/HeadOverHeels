@@ -81,17 +81,17 @@ public:
         /**
          * Reproduce un sonido
          * @param label Identificador del elemento que emite el sonido
-         * @param state Estado del elemento
+         * @param activity Activity of item
          * @param loop Si vale true, el sonido se reproduce continuamente
          */
-        void play ( short label, const StateId& stateId, bool loop = false ) ;
+        void play ( short label, const ActivityOfItem& activity, bool loop = false ) ;
 
         /**
          * Detiene la reproducción de un sonido
          * @param label Identificador del elemento que emite el sonido
-         * @param state Estado del elemento
+         * @param activity Activity of item
          */
-        void stop ( short label, const StateId& stateId ) ;
+        void stop ( short label, const ActivityOfItem& activity ) ;
 
         /**
          * Detiene la reproducción de todos los sonidos
@@ -121,18 +121,17 @@ private:
         /**
          * Busca un sonido en la tabla
          * @param label Identificador del elemento que emite el sonido
-         * @param state Estado del elemento
+         * @param activity Activity of item
          * @return El sonido ó 0 si no se encontró
          */
-        SampleData* findSample ( short label, const StateId& stateId ) ;
+        SampleData* findSample ( short label, const ActivityOfItem& activity ) ;
 
         /**
          * Traduce el identificador de un estado empleado por Isomot a una cadena
          * de caracteres utilizada en la tabla de sonidos
-         * @param stateId Un estado usado por el motor isométrico
          * @return Una cadena de caracteres con alguno de los estado manejados por la tabla de sonidos
          */
-        std::string translateStateIdToString ( const StateId& stateId ) ;
+        std::string translateActivityOfItemToString ( const ActivityOfItem& activity ) ;
 
 private:
 

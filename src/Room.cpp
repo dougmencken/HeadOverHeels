@@ -762,7 +762,7 @@ void Room::calculateCoordinates( bool hasNorthDoor, bool hasEastDoor, int deltaX
         }
 }
 
-void Room::activatePlayer( const PlayerId& playerId )
+void Room::activatePlayer( const WhichPlayer& playerId )
 {
         Item* item = mediator->findItemByLabel( static_cast< short >( playerId ) );
 

@@ -20,7 +20,7 @@ Mediator::Mediator( Room* room )
         this->transparencyManager = new TransparencyManager();
         this->gridItemsSorting = false;
         this->freeItemsSorting = false;
-        this->switchState = false;
+        this->switchInRoomIsOn = false;
         this->activePlayer = 0;
 
         // Creación de los mútex para la protección de las listas de elementos
@@ -698,12 +698,12 @@ Item* Mediator::findItemByLabel( short label )
         return item;
 }
 
-Item* Mediator::findItemByBehavior( const BehaviorId& id )
+Item* Mediator::findItemByBehavior( const BehaviorOfItem& id )
 {
         Item* item = 0;
 
         // Búsqueda en la lista de elementos libres
-        std::list< FreeItem * >::iterator f = std::find_if( freeItems.begin (), freeItems.end (), std::bind2nd( EqualItemBehavior (), id ) );
+        std::list< FreeItem * >::iterator f = std::find_if( freeItems.begin (), freeItems.end (), std::bind2nd( EqualBehaviorOfItem (), id ) );
 
         if ( f != freeItems.end () )
         {
@@ -717,7 +717,7 @@ Item* Mediator::findItemByBehavior( const BehaviorId& id )
 
                 for ( int i = 0; i < room->getTilesX() * room->getTilesY(); i++ )
                 {
-                        g = std::find_if( structure[ i ].begin (), structure[ i ].end (), std::bind2nd( EqualItemBehavior (), id ) );
+                        g = std::find_if( structure[ i ].begin (), structure[ i ].end (), std::bind2nd( EqualBehaviorOfItem (), id ) );
 
                         if ( g != structure[ i ].end () )
                         {
@@ -998,13 +998,13 @@ Item* Mediator::collisionWithByLabel( short label )
         return 0;
 }
 
-Item* Mediator::collisionWithByBehavior( const BehaviorId& id )
+Item* Mediator::collisionWithByBehavior( const BehaviorOfItem& id )
 {
         for ( unsigned int i = 0; i < collisions.size(); i++ )
         {
                 Item* item = findItemById( collisions[ i ] );
 
-                if ( item != 0 && item->getBehavior() != 0 && item->getBehavior()->getId() == id )
+                if ( item != 0 && item->getBehavior() != 0 && item->getBehavior()->getBehaviorOfItem () == id )
                         return item;
         }
 
@@ -1018,7 +1018,7 @@ Item* Mediator::collisionWithBadBoy()
                 Item* item = findItemById( collisions[ i ] );
 
                 if ( item != 0 && item->getBehavior() != 0 && item->isMortal()
-                        && std::find( badBoys.begin(), badBoys.end(), item->getBehavior()->getId() ) != badBoys.end() )
+                        && std::find( badBoys.begin(), badBoys.end(), item->getBehavior()->getBehaviorOfItem () ) != badBoys.end() )
                 {
                         return item;
                 }
@@ -1068,15 +1068,15 @@ bool Mediator::nextPlayer( ItemDataManager* itemDataManager )
                                 // Obtiene los datos del elemento que Heels pueda tener en el bolso
                                 ItemData* takenItemData = 0;
                                 BITMAP* takenItemImage = 0;
-                                BehaviorId takenItemBehaviorId = NoBehavior;
+                                BehaviorOfItem takenItemBehavior = NoBehavior;
                                 if ( previousPlayer->getLabel() == Heels )
                                 {
-                                        takenItemData = previousPlayer->consultTakenItem( &takenItemBehaviorId );
+                                        takenItemData = previousPlayer->consultTakenItem( &takenItemBehavior );
                                         takenItemImage = previousPlayer->consultTakenItemImage();
                                 }
                                 else
                                 {
-                                        takenItemData = activePlayer->consultTakenItem( &takenItemBehaviorId );
+                                        takenItemData = activePlayer->consultTakenItem( &takenItemBehavior );
                                         takenItemImage = activePlayer->consultTakenItemImage();
                                 }
 
@@ -1088,7 +1088,7 @@ bool Mediator::nextPlayer( ItemDataManager* itemDataManager )
                                 std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( itemDataManager ) );
                                 activePlayer = roomBuilder->buildPlayerInRoom( this->room, HeadAndHeels, HeadAndHeelsBehavior, x, y, z, direction );
                                 // Le devuelve el elemento que tuviera en el bolso
-                                activePlayer->assignTakenItem( takenItemData, takenItemImage, takenItemBehaviorId );
+                                activePlayer->assignTakenItem( takenItemData, takenItemImage, takenItemBehavior );
 
                                 // Libera el acceso exclusivo a la lista de elementos libres
                                 pthread_mutex_unlock( &freeItemsMutex );
@@ -1108,8 +1108,8 @@ bool Mediator::nextPlayer( ItemDataManager* itemDataManager )
                 // Obtiene los datos del elemento que pudiera haber en el bolso
                 ItemData* takenItemData = 0;
                 BITMAP* takenItemImage = 0;
-                BehaviorId takenItemBehaviorId = NoBehavior;
-                takenItemData = activePlayer->consultTakenItem( &takenItemBehaviorId );
+                BehaviorOfItem takenItemBehavior = NoBehavior;
+                takenItemData = activePlayer->consultTakenItem( &takenItemBehavior );
                 takenItemImage = activePlayer->consultTakenItemImage();
 
                 // Elimina al jugador compuesto
@@ -1118,7 +1118,7 @@ bool Mediator::nextPlayer( ItemDataManager* itemDataManager )
                 // Crea a Heels y a Head
                 std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( itemDataManager ) );
                 previousPlayer = roomBuilder->buildPlayerInRoom( this->room, Heels, HeelsBehavior, x, y, z, direction );
-                previousPlayer->assignTakenItem( takenItemData, takenItemImage, takenItemBehaviorId );
+                previousPlayer->assignTakenItem( takenItemData, takenItemImage, takenItemBehavior );
                 activePlayer = roomBuilder->buildPlayerInRoom( this->room, Head, HeadBehavior, x, y, z + LayerHeight, direction );
 
                 if ( this->lastControlledPlayer == Head )
@@ -1155,10 +1155,9 @@ bool Mediator::alivePlayer( ItemDataManager* itemDataManager )
         return ( previousPlayer != activePlayer );
 }
 
-void Mediator::changeSwitchState()
+void Mediator::toggleSwitchInRoom ()
 {
-        // Cambio de estado
-        this->switchState = !this->switchState;
+        this->switchInRoomIsOn = ! this->switchInRoomIsOn ;
 
         // Búsqueda en la lista de elementos libres de elementos volátiles y mortales móviles para congelarlos
         for ( std::list< FreeItem* >::iterator f = freeItems.begin (); f != freeItems.end (); ++f )
@@ -1167,12 +1166,12 @@ void Mediator::changeSwitchState()
 
                 if ( freeItem != 0 && freeItem->getBehavior() != 0 )
                 {
-                        BehaviorId behaviorId = freeItem->getBehavior()->getId();
+                        BehaviorOfItem behaviorId = freeItem->getBehavior()->getBehaviorOfItem ();
 
                         if ( behaviorId == VolatileTouchBehavior || behaviorId == VolatileWeightBehavior ||
                                         std::find( badBoys.begin (), badBoys.end (), behaviorId ) != badBoys.end () )
                         {
-                                freeItem->getBehavior()->changeStateId( this->switchState ? StateFreeze : StateWakeUp );
+                                freeItem->getBehavior()->changeActivityOfItem( this->switchInRoomIsOn ? Freeze : WakeUp );
                         }
                 }
         }
@@ -1186,11 +1185,11 @@ void Mediator::changeSwitchState()
 
                         if ( gridItem != 0 && gridItem->getBehavior() != 0 )
                         {
-                                BehaviorId behaviorId = gridItem->getBehavior()->getId();
+                                BehaviorOfItem behaviorId = gridItem->getBehavior()->getBehaviorOfItem ();
 
                                 if ( behaviorId == VolatileTouchBehavior || behaviorId == VolatileWeightBehavior )
                                 {
-                                        gridItem->getBehavior()->changeStateId( this->switchState ? StateFreeze : StateWait );
+                                        gridItem->getBehavior()->changeActivityOfItem( this->switchInRoomIsOn ? Freeze : Wait );
                                 }
                         }
                 }
@@ -1239,24 +1238,24 @@ Door* Mediator::getDoor( const Direction& direction )
         return room->doors[ direction ];
 }
 
-bool EqualItemId::operator()( Item* item, int id ) const
+bool EqualItemId::operator() ( Item* item, int id ) const
 {
         return ( item->getId() == id );
 }
 
-bool EqualPlayerItemId::operator()( PlayerItem* playerItem, int id ) const
+bool EqualPlayerItemId::operator() ( PlayerItem* playerItem, int id ) const
 {
         return ( playerItem->getId() == id );
 }
 
-bool EqualItemLabel::operator()( Item* item, short label ) const
+bool EqualItemLabel::operator() ( Item* item, short label ) const
 {
         return ( item->getLabel() == label );
 }
 
-bool EqualItemBehavior::operator()( Item* item, BehaviorId id ) const
+bool EqualBehaviorOfItem::operator() ( Item* item, BehaviorOfItem behavior ) const
 {
-        return ( item->getBehavior() != 0 && item->getBehavior()->getId() == id );
+        return ( item->getBehavior() != 0 && item->getBehavior()->getBehaviorOfItem () == behavior );
 }
 
 }

@@ -8,11 +8,11 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef JumpState_hpp_
-#define JumpState_hpp_
+#ifndef JumpKindOfActivity_hpp_
+#define JumpKindOfActivity_hpp_
 
 #include <vector>
-#include "BehaviorState.hpp"
+#include "KindOfActivity.hpp"
 #include "Ism.hpp"
 
 
@@ -26,22 +26,22 @@ class FreeItem;
  * Salto de un elemento
  */
 
-class JumpState : public BehaviorState
+class JumpKindOfActivity : public KindOfActivity
 {
 
 protected:
 
-        JumpState();
+        JumpKindOfActivity();
 
 public:
 
-        virtual ~JumpState();
+        virtual ~JumpKindOfActivity();
 
        /**
         * Único objeto de esta clase para toda la aplicación
         * @return Un puntero a la clase madre para hacer uso del polimorfismo de clase
         */
-        static BehaviorState * getInstance() ;
+        static KindOfActivity * getInstance() ;
 
        /**
         * Estado que hace saltar a un elemento
@@ -51,7 +51,7 @@ public:
         * @param jumpIndex Índice que indica la fase del salto que se está ejecutando
         * @return true si se produjo el salto o false si hubo colisión
         */
-        virtual bool jump ( Behavior * behavior, StateId * substate, const std::vector < JumpMotion >& jumpMatrix, int * jumpIndex ) ;
+        virtual bool jump ( Behavior * behavior, ActivityOfItem * activity, const std::vector < JumpMotion >& jumpMatrix, int * jumpIndex ) ;
 
 protected:
 
@@ -68,7 +68,7 @@ private:
        /**
         * Único objeto de esta clase para toda la aplicación
         */
-        static BehaviorState * instance ;
+        static KindOfActivity * instance ;
 
 };
 

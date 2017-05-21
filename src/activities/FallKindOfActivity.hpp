@@ -8,12 +8,12 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef FallState_hpp_
-#define FallState_hpp_
+#ifndef FallKindOfActivity_hpp_
+#define FallKindOfActivity_hpp_
 
 #include <stack>
 #include "Ism.hpp"
-#include "BehaviorState.hpp"
+#include "KindOfActivity.hpp"
 
 
 namespace isomot
@@ -27,22 +27,22 @@ class FreeItem ;
  * Caída de un elemento
  */
 
-class FallState : public BehaviorState
+class FallKindOfActivity : public KindOfActivity
 {
 
 protected:
 
-        FallState( ) ;
+        FallKindOfActivity( ) ;
 
 public:
 
-        virtual ~FallState( ) ;
+        virtual ~FallKindOfActivity( ) ;
 
        /**
         * Único objeto de esta clase para toda la aplicación
         * @return Un puntero a la clase madre para hacer uso del polimorfismo de clase
         */
-        static BehaviorState * getInstance () ;
+        static KindOfActivity * getInstance () ;
 
        /**
         * Estado que hace caer a un elemento
@@ -60,7 +60,7 @@ private:
        /**
         * Único objeto de esta clase para toda la aplicación
         */
-        static BehaviorState * instance ;
+        static KindOfActivity * instance ;
 
 };
 

@@ -152,7 +152,7 @@ public:
         * Establece el jugador que controla el usuario
         * @param playerId El identificador de alguno de los jugadores
         */
-        void activatePlayer ( const PlayerId& playerId ) ;
+        void activatePlayer ( const WhichPlayer& playerId ) ;
 
        /**
         * Activa la sala. Implica la puesta en marcha de la actualización de los elementos y del dibujado

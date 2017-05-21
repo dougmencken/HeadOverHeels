@@ -118,13 +118,13 @@ public:
          * @param player Identificador del jugador
          * @param lives Número de vidas a sumar
          */
-        void addLives ( const PlayerId& player, unsigned char lives ) ;
+        void addLives ( const WhichPlayer& player, unsigned char lives ) ;
 
         /**
          * Resta una vida a un jugador
          * @param player Identificador del jugador
          */
-        void loseLife ( const PlayerId& player ) ;
+        void loseLife ( const WhichPlayer& player ) ;
 
         /**
          * Un jugador coge su complemento
@@ -142,46 +142,46 @@ public:
          * @param player Jugador que toma la velocidad
          * @param highSpeed Un número entre 0 y 99
          */
-        void addHighSpeed ( const PlayerId& player, unsigned int highSpeed ) ;
+        void addHighSpeed ( const WhichPlayer& player, unsigned int highSpeed ) ;
 
         /**
          * Resta una unidad al tiempo restante de doble velocidad
          * @param Jugador que tiene la doble velocidad
          */
-        void decreaseHighSpeed ( const PlayerId& player ) ;
+        void decreaseHighSpeed ( const WhichPlayer& player ) ;
 
         /**
          * Añade un número de grandes saltos a un jugador
          * @param player Jugador que toma los saltos
          * @param highJumps Un número entre 0 y 10
          */
-        void addHighJumps ( const PlayerId& player, unsigned int highJumps ) ;
+        void addHighJumps ( const WhichPlayer& player, unsigned int highJumps ) ;
 
         /**
          * Resta un gran salto al jugador
          * @param player Jugador que tiene los saltos
          */
-        void decreaseHighJumps ( const PlayerId& player ) ;
+        void decreaseHighJumps ( const WhichPlayer& player ) ;
 
         /**
          * Añade inmunidad a un jugador
          * @param player Jugador que toma la inmunidad
          * @param shield Un número de milisegundos
          */
-        void addShield ( const PlayerId& player, double shield ) ;
+        void addShield ( const WhichPlayer& player, double shield ) ;
 
         /**
          * Actualiza el tiempo restante de inmunidad
          * @param player Jugador que tiene la inmunidad
          * @param shield Un número de milisegundos
          */
-        void decreaseShield ( const PlayerId& player, double shield ) ;
+        void decreaseShield ( const WhichPlayer& player, double shield ) ;
 
         /**
          * Elimina el elemento que contiene el bolso para no mostrarlo en la interfaz
          * @param player Jugador que tiene el bolso
          */
-        void emptyHandbag ( const PlayerId& player ) ;
+        void emptyHandbag ( const WhichPlayer& player ) ;
 
         /**
          * Establece todos los planetas como miembros del Imperio Blacktooth
@@ -449,7 +449,7 @@ public:
          * @param player El jugador
          * @return Un número entre 0 y 8
          */
-        unsigned char getLives ( const PlayerId& player ) const ;
+        unsigned char getLives ( const WhichPlayer& player ) const ;
 
         /**
          * Establece el tiempo restante de movimiento a doble velocidad
@@ -492,7 +492,7 @@ public:
          * @param player El jugador
          * @return Un número de milisegundos
          */
-        double getShield ( const PlayerId& player ) const ;
+        double getShield ( const WhichPlayer& player ) const ;
 
         /**
          * Establece la posesión de la bocina por Head
@@ -505,7 +505,7 @@ public:
          * @param player El jugador
          * @return Un vector con las etiquetas de los complementos que posee el jugador
          */
-        std::vector< short > hasTool ( const PlayerId& player ) const ;
+        std::vector< short > hasTool ( const WhichPlayer& player ) const ;
 
         /**
          * Establece la posesión del bolso por Heels
@@ -523,7 +523,7 @@ public:
          * Devuelve el número de rosquillas que tiene Head
          * @return Un número mayor o igual que 0
          */
-        unsigned short getDonuts ( const PlayerId& player ) const ;
+        unsigned short getDonuts ( const WhichPlayer& player ) const ;
 
         /**
          * Imagen del elemento que está dentro del bolso

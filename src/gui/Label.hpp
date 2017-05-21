@@ -14,18 +14,21 @@
 #include <string>
 #include <cassert>
 #include <allegro.h>
+
 #include "Widget.hpp"
+
 
 namespace gui
 {
 
-class Screen;
-class Font;
-class Action;
+class Screen ;
+class Font ;
+class Action ;
 
 /**
  * Un texto fijo presente en la pantalla
  */
+
 class Label : public Widget
 {
 

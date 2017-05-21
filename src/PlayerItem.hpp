@@ -15,16 +15,15 @@
 #include "FreeItem.hpp"
 #include "HPC.hpp"
 
+
 namespace isomot
 {
 
-class ItemData;
-class Mediator;
+class ItemData ;
+class Mediator ;
 
 /**
- * Los elementos jugador, los jugadores, son aquellos elementos controlador por el usuario
- * Son una especialización de los elementos libres porque pueden atravesar puertas, cambiar
- * de sala, coger otros elementos o destruirlos
+ * Item of player controller by the user
  */
 
 class PlayerItem : public FreeItem
@@ -133,14 +132,14 @@ public:
          * @param takenItemImage Imagen del elemento tomado por el jugador
          * @param behavior Comportamiento del elemento tomado por el jugador
          */
-        void assignTakenItem( ItemData* itemData, BITMAP* takenItemImage, const BehaviorId& behavior ) ;
+        void assignTakenItem( ItemData* itemData, BITMAP* takenItemImage, const BehaviorOfItem& behavior ) ;
 
         /**
          * Obtiene los datos del elemento que tiene el jugador en el bolso
          * @param data Devuelve los datos del elemento tomado por el jugador
          * @param behavior Devuelve el comportamiento del elemento tomado por el jugador
          */
-        ItemData* consultTakenItem( BehaviorId* behavior ) ;
+        ItemData* consultTakenItem( BehaviorOfItem* behavior ) ;
 
         /**
          * Obtiene la imagen del elemento tomado por el jugador

@@ -13,7 +13,7 @@
 #include "Menu.hpp"
 #include "Icon.hpp"
 #include "Label.hpp"
-#include "actions/CreateLanguageMenu.hpp"
+#include "CreateLanguageMenu.hpp"
 
 #define DEBUG_GUI       0
 

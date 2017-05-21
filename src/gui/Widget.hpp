@@ -15,6 +15,7 @@
 
 #include <utility>
 
+
 namespace gui
 {
 
@@ -22,6 +23,7 @@ namespace gui
  * Base para la creación de los elementos existentes en la interfaz gráfica de usuario
  * Cada nuevo elemento debe recodificar la operación 'draw'
  */
+
 class Widget
 {
 

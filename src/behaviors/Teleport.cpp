@@ -9,11 +9,11 @@
 namespace isomot
 {
 
-Teleport::Teleport( Item * item, const BehaviorId & id ) :
+Teleport::Teleport( Item * item, const BehaviorOfItem & id ) :
         Behavior( item, id ),
         activated( false )
 {
-        stateId = StateWait;
+
 }
 
 Teleport::~Teleport()
@@ -25,9 +25,9 @@ bool Teleport::update ()
 {
         Mediator * mediator = item->getMediator();
 
-        switch ( stateId )
+        switch ( activity )
         {
-                case StateWait:
+                case Wait:
                 // Comprueba si hay elementos encima
                 if ( ! item->checkPosition( 0, 0, 1, Add ) )
                 {
@@ -89,12 +89,12 @@ bool Teleport::update ()
                 if ( activated )
                 {
                         item->animate();
-                        SoundManager::getInstance()->play( item->getLabel(), StateActive );
+                        SoundManager::getInstance()->play( item->getLabel(), IsActive );
                 }
                 break;
 
                 default:
-                        stateId = StateWait;
+                        activity = Wait;
         }
 
         return false;

@@ -105,39 +105,46 @@ void GameFileManager::saveGame( const std::string& fileName )
                 sgxml::players::player_sequence playerSequence( players.player() );
 
                 // El jugador activo
-                PlayerId activePlayerId = PlayerId( this->label );
+                WhichPlayer whoPlaysYet = WhichPlayer( this->label );
 
                 // Número de vidas
                 unsigned short lives = 0;
-                switch ( activePlayerId )
+                switch ( whoPlaysYet )
                 {
-                case Head:
-                case Heels:
-                lives = this->gameManager->getLives( activePlayerId );
-                break;
+                        case Head:
+                        case Heels:
+                                lives = this->gameManager->getLives( whoPlaysYet );
+                                break;
 
-                case HeadAndHeels:
-                lives = this->gameManager->getLives( Head ) * 100 + this->gameManager->getLives( Heels );
-                break;
+                        case HeadAndHeels:
+                                lives = this->gameManager->getLives( Head ) * 100 + this->gameManager->getLives( Heels );
+                                break;
 
-                default:
-                ;
+                        default:
+                                ;
                 }
+
                 // Posesión de objetos
-                std::vector< short > tools = this->gameManager->hasTool( activePlayerId );
+                std::vector< short > tools = this->gameManager->hasTool( whoPlaysYet );
+
                 // Almacenamiento de todos los datos
-                playerSequence.push_back( sgxml::player( true,
-                             this->roomId,
-                             this->x,
-                             this->y,
-                             this->z,
-                             int( this->direction ),
-                             Wait,
-                             lives,
-                             activePlayerId == Head || activePlayerId == HeadAndHeels ? std::find( tools.begin (), tools.end (), short( Horn ) ) != tools.end () : false,
-                             activePlayerId == Heels || activePlayerId == HeadAndHeels ? std::find( tools.begin (), tools.end (), short( Handbag) ) != tools.end () : false,
-                             this->gameManager->getDonuts( activePlayerId ),
-                             this->label ) );
+                playerSequence.push_back(
+                        sgxml::player
+                        (
+                                true,
+                                this->roomId,
+                                this->x,
+                                this->y,
+                                this->z,
+                                int( this->direction ),
+                                Wait,
+                                lives,
+                                whoPlaysYet == Head || whoPlaysYet == HeadAndHeels ? std::find( tools.begin (), tools.end (), short( Horn ) ) != tools.end () : false,
+                                whoPlaysYet == Heels || whoPlaysYet == HeadAndHeels ? std::find( tools.begin (), tools.end (), short( Handbag ) ) != tools.end () : false,
+                                this->gameManager->getDonuts( whoPlaysYet ),
+                                this->label
+                        )
+                );
 
                 // Es posible que no haya más salas bien porque no haya más jugadores o porque el otro jugador
                 // se encuentre en la misma sala que el jugador activo
@@ -148,27 +155,32 @@ void GameFileManager::saveGame( const std::string& fileName )
                 // Si hay algún otro jugador, se almacenan sus datos
                 if ( inactivePlayer != 0 )
                 {
-                        PlayerId inactivePlayerId = PlayerId( inactivePlayer->getLabel() );
-                        std::vector< short > tools = this->gameManager->hasTool( inactivePlayerId );
+                        WhichPlayer whoWaitsToPlay = WhichPlayer( inactivePlayer->getLabel() );
+                        std::vector< short > tools = this->gameManager->hasTool( whoWaitsToPlay );
                         PlayerStartPosition* initialPosition = this->isomot->getMapManager()->findPlayerPosition(
-                                hideRoom != 0 ? hideRoom->getIdentifier() : activeRoom->getIdentifier(), PlayerId( inactivePlayer->getLabel() )
+                                hideRoom != 0 ? hideRoom->getIdentifier() : activeRoom->getIdentifier(), WhichPlayer( inactivePlayer->getLabel() )
                         );
                         if ( initialPosition == 0 )
                         {
                                 initialPosition = this->isomot->getMapManager()->findPlayerPosition( activeRoom->getIdentifier(), HeadAndHeels );
                         }
-                        playerSequence.push_back( sgxml::player( false,
-                                       hideRoom != 0 ? hideRoom->getIdentifier() : activeRoom->getIdentifier(),
-                                       initialPosition->getX(),
-                                       initialPosition->getY(),
-                                       initialPosition->getZ(),
-                                       int( inactivePlayer->getDirection() ),
-                                       initialPosition->getEntry(),
-                                       this->gameManager->getLives( inactivePlayerId ),
-                                       inactivePlayerId == Head || inactivePlayerId == HeadAndHeels ? std::find( tools.begin(), tools.end(), short( Horn ) ) != tools.end() : false,
-                                       inactivePlayerId == Heels || inactivePlayerId == HeadAndHeels ? std::find( tools.begin(), tools.end(), short( Handbag ) ) != tools.end() : false,
-                                       this->gameManager->getDonuts( inactivePlayerId ),
-                                       inactivePlayer->getLabel() ) );
+                        playerSequence.push_back(
+                                sgxml::player
+                                (
+                                        false,
+                                        hideRoom != 0 ? hideRoom->getIdentifier() : activeRoom->getIdentifier(),
+                                        initialPosition->getX(),
+                                        initialPosition->getY(),
+                                        initialPosition->getZ(),
+                                        int( inactivePlayer->getDirection() ),
+                                        initialPosition->getEntry(),
+                                        this->gameManager->getLives( whoWaitsToPlay ),
+                                        whoWaitsToPlay == Head || whoWaitsToPlay == HeadAndHeels ? std::find( tools.begin(), tools.end(), short( Horn ) ) != tools.end() : false,
+                                        whoWaitsToPlay == Heels || whoWaitsToPlay == HeadAndHeels ? std::find( tools.begin(), tools.end(), short( Handbag ) ) != tools.end() : false,
+                                        this->gameManager->getDonuts( whoWaitsToPlay ),
+                                        inactivePlayer->getLabel()
+                                )
+                        ) ;
                 }
 
                 // Almacena los jugadores
@@ -220,6 +232,7 @@ void GameFileManager::assignPlayerStatus( const sgxml::players::player_sequence&
                                 lives -= 100;
                                 headLives++;
                         }
+
                         heelsLives = static_cast< unsigned char >( lives );
                 }
 

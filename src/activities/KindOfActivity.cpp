@@ -1,5 +1,5 @@
 
-#include "BehaviorState.hpp"
+#include "KindOfActivity.hpp"
 #include "Behavior.hpp"
 #include "Item.hpp"
 #include "FreeItem.hpp"
@@ -11,42 +11,42 @@
 namespace isomot
 {
 
-BehaviorState::BehaviorState()
+KindOfActivity::KindOfActivity( )
 {
 
 }
 
-BehaviorState::~BehaviorState()
+KindOfActivity::~KindOfActivity( )
 {
 
 }
 
-bool BehaviorState::move( Behavior * behavior, StateId * substate, bool canFall )
-{
-        return true;
-}
-
-bool BehaviorState::displace( Behavior * behavior, StateId * substate, bool canFall )
+bool KindOfActivity::move( Behavior * behavior, ActivityOfItem * activity, bool canFall )
 {
         return true;
 }
 
-bool BehaviorState::fall( Behavior * behavior )
+bool KindOfActivity::displace( Behavior * behavior, ActivityOfItem * activity, bool canFall )
 {
         return true;
 }
 
-bool BehaviorState::jump( Behavior * behavior, StateId * substate, const std::vector< JumpMotion >& jumpMatrix, int * jumpIndex )
+bool KindOfActivity::fall( Behavior * behavior )
 {
         return true;
 }
 
-void BehaviorState::changeState( Behavior * behavior, BehaviorState * state )
+bool KindOfActivity::jump( Behavior * behavior, ActivityOfItem * activity, const std::vector< JumpMotion >& jumpMatrix, int * jumpIndex )
 {
-        behavior->changeState( state );
+        return true;
 }
 
-void BehaviorState::propagateStateAdjacentItems( Item * sender, const StateId& stateId )
+void KindOfActivity::changeKindOfActivity ( Behavior * behavior, KindOfActivity * newKind )
+{
+        behavior->changeActivityTo( newKind ) ;
+}
+
+void KindOfActivity::propagateActivityToAdjacentItems( Item * sender, const ActivityOfItem& activity )
 {
         Mediator* mediator = sender->getMediator();
 
@@ -74,10 +74,10 @@ void BehaviorState::propagateStateAdjacentItems( Item * sender, const StateId& s
                                                 // dichos elementos harán de tope
                                                 if ( mediator->depthOfStackOfCollisions() == 1 )
                                                 {
-                                                        if ( item->getBehavior()->getStateId() != StateStartDestroy &&
-                                                                item->getBehavior()->getStateId() != StateDestroy )
+                                                        if ( item->getBehavior()->getActivityOfItem() != StartDestroy &&
+                                                                item->getBehavior()->getActivityOfItem() != Destroy )
                                                         {
-                                                                item->getBehavior()->changeStateId( StateStartDestroy );
+                                                                item->getBehavior()->changeActivityOfItem( StartDestroy );
                                                         }
                                                 }
                                         }
@@ -85,18 +85,18 @@ void BehaviorState::propagateStateAdjacentItems( Item * sender, const StateId& s
                                         else if ( dynamic_cast< PlayerItem * >( sender ) && item->isMortal() &&
                                                         dynamic_cast< PlayerItem * >( sender )->getShieldTime() <= 0 )
                                         {
-                                                if ( sender->getBehavior()->getStateId() != StateStartDestroy && item->getBehavior()->getStateId() != StateDestroy )
+                                                if ( sender->getBehavior()->getActivityOfItem() != StartDestroy && item->getBehavior()->getActivityOfItem() != Destroy )
                                                 {
-                                                        sender->getBehavior()->changeStateId( StateStartDestroy );
-                                                        item->getBehavior()->changeStateId( stateId, sender );
+                                                        sender->getBehavior()->changeActivityOfItem( StartDestroy );
+                                                        item->getBehavior()->changeActivityOfItem( activity, sender );
                                                 }
                                         }
                                         // Si no, se comunica el estado de desplazamiento al elemento
                                         else
                                         {
-                                                if ( item->getBehavior()->getStateId() != StateDestroy )
+                                                if ( item->getBehavior()->getActivityOfItem() != Destroy )
                                                 {
-                                                        item->getBehavior()->changeStateId( stateId, sender );
+                                                        item->getBehavior()->changeActivityOfItem( activity, sender );
                                                 }
                                         }
                                 }
@@ -104,9 +104,9 @@ void BehaviorState::propagateStateAdjacentItems( Item * sender, const StateId& s
                                 // entonces el que cambia de estado es el jugador, ya que muere
                                 else if ( dynamic_cast< PlayerItem * >( sender ) && item->isMortal() && dynamic_cast< PlayerItem * >( sender )->getShieldTime() <= 0 )
                                 {
-                                        if ( sender->getBehavior()->getStateId() != StateStartDestroy && sender->getBehavior()->getStateId() != StateDestroy )
+                                        if ( sender->getBehavior()->getActivityOfItem() != StartDestroy && sender->getBehavior()->getActivityOfItem() != Destroy )
                                         {
-                                                sender->getBehavior()->changeStateId( StateStartDestroy );
+                                                sender->getBehavior()->changeActivityOfItem( StartDestroy );
                                         }
                                 }
                         }
@@ -199,7 +199,7 @@ void BehaviorState::propagateStateAdjacentItems( Item * sender, const StateId& s
         }
 }
 
-void BehaviorState::propagateStateTopItems( Item * sender, const StateId& stateId )
+void KindOfActivity::propagateActivityToTopItems( Item * sender, const ActivityOfItem& activity )
 {
         // Acceso al mediador
         Mediator* mediator = sender->getMediator();
@@ -237,15 +237,15 @@ void BehaviorState::propagateStateTopItems( Item * sender, const StateId& stateI
                                                 // Si sólo hay un elemento debajo o debajo está el ancla, el estado se propaga
                                                 if ( mediator->depthOfStackOfCollisions() == 1 || topItem->getAnchor() == sender )
                                                 {
-                                                        if ( topItem->getBehavior()->getStateId() != StateDestroy )
+                                                        if ( topItem->getBehavior()->getActivityOfItem() != Destroy )
                                                         {
                                                                 // Si el elemento es un jugador y el emisor es mortal entonces el jugador muere
                                                                 if ( dynamic_cast< PlayerItem * >( topItem ) && sender->isMortal() &&
                                                                         dynamic_cast< PlayerItem * >( topItem )->getShieldTime() <= 0 )
                                                                 {
-                                                                        if ( topItem->getBehavior()->getStateId() != StateStartDestroy )
+                                                                        if ( topItem->getBehavior()->getActivityOfItem() != StartDestroy )
                                                                         {
-                                                                                topItem->getBehavior()->changeStateId( StateStartDestroy );
+                                                                                topItem->getBehavior()->changeActivityOfItem( StartDestroy );
                                                                         }
                                                                 }
                                                                 // Si no, se comunica el estado de desplazamiento al elemento
@@ -253,11 +253,11 @@ void BehaviorState::propagateStateTopItems( Item * sender, const StateId& stateI
                                                                 {
                                                                         // Se envía el propio elemento como emisor para saber que está
                                                                         // siendo desplazado por un elemento situado debajo de él
-                                                                        StateId currentStateId = topItem->getBehavior()->getStateId();
-                                                                        if ( currentStateId != StateDisplaceNorth && currentStateId != StateDisplaceSouth &&
-                                                                                currentStateId != StateDisplaceEast && currentStateId != StateDisplaceWest )
+                                                                        ActivityOfItem currentActivity = topItem->getBehavior()->getActivityOfItem();
+                                                                        if ( currentActivity != DisplaceNorth && currentActivity != DisplaceSouth &&
+                                                                                currentActivity != DisplaceEast && currentActivity != DisplaceWest )
                                                                         {
-                                                                                topItem->getBehavior()->changeStateId( stateId, topItem );
+                                                                                topItem->getBehavior()->changeActivityOfItem( activity, topItem );
                                                                         }
                                                                 }
                                                         }

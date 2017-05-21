@@ -38,7 +38,7 @@ public:
          * @param item Elemento que tiene este comportamiento
          * @param id Identificador de comportamiento
          */
-        Special( Item* item, const BehaviorId& id ) ;
+        Special( Item* item, const BehaviorOfItem& id ) ;
 
         virtual ~Special () ;
 

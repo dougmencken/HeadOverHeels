@@ -17,62 +17,65 @@
 /**
  * Cronómetro de alta precisión para sistemas Linux
  */
+
 class HPC
 {
+
 public:
 
-  HPC();
+        HPC( ) ;
 
-  virtual ~HPC();
+        virtual ~HPC( ) ;
 
-  /**
-   * Pone en marcha el cronómetro
-   */
-  void start();
+       /**
+        * Pone en marcha el cronómetro
+        */
+        void start () ;
 
-  /**
-   * Devuelve el tiempo transcurrido desde que el cronómetro se puso en marcha
-   * @return Un valor en milisegundos
-   */
-  double getValue();
+       /**
+        * Devuelve el tiempo transcurrido desde que el cronómetro se puso en marcha
+        * @return Un valor en milisegundos
+        */
+        double getValue () ;
 
-  /**
-   * Pone a cero el cronómetro
-   */
-  void reset();
+       /**
+        * Pone a cero el cronómetro
+        */
+        void reset () ;
 
-  /**
-   * Detiene el cronómetro
-   */
-  void stop();
+       /**
+        * Detiene el cronómetro
+        */
+        void stop () ;
 
-  /**
-   * Reinicia el cronómetro
-   */
-  void restart();
+       /**
+        * Reinicia el cronómetro
+        */
+        void restart () ;
 
 protected:
 
-  /**
-   * Instante en el que se puso en marcha el cronómetro
-   */
-  timeval trestart;
+       /**
+        * Instante en el que se puso en marcha el cronómetro
+        */
+        timeval trestart ;
 
-  /**
-   * Instante en el que se detiene el cronómetro
-   */
-  timeval tstop;
+       /**
+        * Instante en el que se detiene el cronómetro
+        */
+        timeval tstop ;
 
-  /**
-   * Periodo de tiempo transcurrido entre que el cronómetro se paró y se volvió a poner en
-   * marcha
-   */
-  double period;
+       /**
+        * Periodo de tiempo transcurrido entre que el cronómetro se paró y se volvió a poner en
+        * marcha
+        */
+        double period ;
 
-  /**
-   * Huso horario
-   */
-  struct timezone tz;
+       /**
+        * Huso horario
+        */
+        struct timezone tz ;
+
 };
 
 #endif

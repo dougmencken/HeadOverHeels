@@ -1,18 +1,20 @@
+
 #include "Impel.hpp"
 #include "Item.hpp"
 #include "FreeItem.hpp"
-#include "DisplaceState.hpp"
-#include "FallState.hpp"
+#include "DisplaceKindOfActivity.hpp"
+#include "FallKindOfActivity.hpp"
 #include "Mediator.hpp"
 #include "Room.hpp"
+
 
 namespace isomot
 {
 
-Impel::Impel( Item * item, const BehaviorId & id ) :
+Impel::Impel( Item * item, const BehaviorOfItem & id ) :
         Behavior( item, id )
 {
-        stateId = StateWait;
+        activity = Wait;
         speedTimer = new HPC();
         fallTimer = new HPC();
         speedTimer->start();
@@ -27,64 +29,64 @@ Impel::~Impel()
 
 bool Impel::update ()
 {
-  FreeItem * freeItem = dynamic_cast< FreeItem * >( this->item );
-  bool destroy = false;
+        FreeItem * freeItem = dynamic_cast< FreeItem * >( this->item );
+        bool destroy = false;
 
-  switch ( stateId )
-  {
-    case StateWait:
-      break;
-
-    case StateDisplaceNorth:
-    case StateDisplaceSouth:
-    case StateDisplaceEast:
-    case StateDisplaceWest:
-    case StateDisplaceNortheast:
-    case StateDisplaceNorthwest:
-    case StateDisplaceSoutheast:
-    case StateDisplaceSouthwest:
-      // Si el elemento está activo y ha llegado el momento de moverse, entonces:
-      if(speedTimer->getValue() > freeItem->getSpeed())
-      {
-        // El elemento se mueve hasta detectar un colisión
-        if(!state->displace(this, &stateId, true))
+        switch ( activity )
         {
-          stateId = StateWait;
+                case Wait:
+                        break;
+
+                case DisplaceNorth:
+                case DisplaceSouth:
+                case DisplaceEast:
+                case DisplaceWest:
+                case DisplaceNortheast:
+                case DisplaceNorthwest:
+                case DisplaceSoutheast:
+                case DisplaceSouthwest:
+                        // Si el elemento está activo y ha llegado el momento de moverse, entonces:
+                        if ( speedTimer->getValue() > freeItem->getSpeed() )
+                        {
+                                // El elemento se mueve hasta detectar un colisión
+                                if ( ! whatToDo->displace( this, &activity, true ) )
+                                {
+                                        activity = Wait;
+                                }
+
+                                // Se pone a cero el cronómetro para el siguiente ciclo
+                                speedTimer->reset();
+                        }
+
+                        // Anima el elemento
+                        freeItem->animate();
+                        break;
+
+                case Fall:
+                        // Se comprueba si ha topado con el suelo en una sala sin suelo
+                        if ( freeItem->getZ() == 0 && freeItem->getMediator()->getRoom()->getFloorType() == NoFloor )
+                        {
+                                // El elemento desaparece
+                                destroy = true;
+                        }
+                        // Si ha llegado el momento de caer entonces el elemento desciende una unidad
+                        else if ( fallTimer->getValue() > freeItem->getWeight() )
+                        {
+                                if ( ! whatToDo->fall( this ) )
+                                {
+                                        activity = Wait;
+                                }
+
+                                // Se pone a cero el cronómetro para el siguiente ciclo
+                                fallTimer->reset();
+                        }
+                        break;
+
+                default:
+                        ;
         }
 
-        // Se pone a cero el cronómetro para el siguiente ciclo
-        speedTimer->reset();
-      }
-
-      // Anima el elemento
-      freeItem->animate();
-      break;
-
-    case StateFall:
-      // Se comprueba si ha topado con el suelo en una sala sin suelo
-      if(freeItem->getZ() == 0 && freeItem->getMediator()->getRoom()->getFloorType() == NoFloor)
-      {
-        // El elemento desaparece
-        destroy = true;
-      }
-      // Si ha llegado el momento de caer entonces el elemento desciende una unidad
-      else if ( fallTimer->getValue() > freeItem->getWeight() )
-      {
-        if ( ! state->fall( this ) )
-        {
-          stateId = StateWait;
-        }
-
-        // Se pone a cero el cronómetro para el siguiente ciclo
-        fallTimer->reset();
-      }
-      break;
-
-    default:
-      ;
-  }
-
-  return destroy;
+        return destroy;
 }
 
 }

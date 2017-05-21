@@ -8,11 +8,11 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef MoveState_hpp_
-#define MoveState_hpp_
+#ifndef MoveKindOfActivity_hpp_
+#define MoveKindOfActivity_hpp_
 
 #include "Ism.hpp"
-#include "BehaviorState.hpp"
+#include "KindOfActivity.hpp"
 
 
 namespace isomot
@@ -25,32 +25,32 @@ class FreeItem ;
  * Movimiento de un elemento
  */
 
-class MoveState : public BehaviorState
+class MoveKindOfActivity : public KindOfActivity
 {
 
 protected:
 
-        MoveState( ) ;
+        MoveKindOfActivity( ) ;
 
 public:
 
-        virtual ~MoveState( ) ;
+        virtual ~MoveKindOfActivity( ) ;
 
         /**
          * Único objeto de esta clase para toda la aplicación
          * @return Un puntero a la clase madre para hacer uso del polimorfismo de clase
          */
-        static BehaviorState * getInstance () ;
+        static KindOfActivity * getInstance () ;
 
         /**
          * Estado que mueve a un elemento
          * @param behavior Comportamiento usuario del estado de movimiento
-         * @param substate Un subestado que concreta la dirección de movimiento
+         * @param activity Direction of movement
          * @param canFall Indica si el elemento puede caer. Si se dan las condiciones para la caída
          *                se producirá el cambio de estado correspondiente
          * @return true si se produjo el movimiento o el cambio de estado; o, false si hubo colisión
          */
-        virtual bool move ( Behavior * behavior, StateId * substate, bool canFall ) ;
+        virtual bool move ( Behavior * behavior, ActivityOfItem * activity, bool canFall ) ;
 
 protected:
 
@@ -73,7 +73,7 @@ private:
         /**
          * Único objeto de esta clase para toda la aplicación
          */
-        static BehaviorState * instance ;
+        static KindOfActivity * instance ;
 
 };
 
