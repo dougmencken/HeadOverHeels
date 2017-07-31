@@ -48,7 +48,7 @@ void CreateAudioMenu::doIt ()
                 ss << SoundManager::getInstance()->getVolumeOfEffects();
 
                 std::string stringEffectsSpaced ( langStringEffects->getText() );
-                for ( size_t position = stringEffectsSpaced.length() ; position < positionOfValue ; ++position ) {
+                for ( size_t position = utf8StringLength( stringEffectsSpaced ) ; position < positionOfValue ; ++position ) {
                         stringEffectsSpaced = stringEffectsSpaced + " ";
                 }
                 this->labelEffects = new Label( stringEffectsSpaced + ss.str() );
@@ -59,7 +59,7 @@ void CreateAudioMenu::doIt ()
                 ss << SoundManager::getInstance()->getVolumeOfMusic();
 
                 std::string stringMusicSpaced ( langStringMusic->getText() );
-                for ( size_t position = stringMusicSpaced.length() ; position < positionOfValue ; ++position ) {
+                for ( size_t position = utf8StringLength( stringMusicSpaced ) ; position < positionOfValue ; ++position ) {
                         stringMusicSpaced = stringMusicSpaced + " ";
                 }
                 this->labelMusic = new Label( stringMusicSpaced + ss.str() );
@@ -120,7 +120,7 @@ void CreateAudioMenu::doIt ()
                                         if ( listOfOptions->getActiveOption () == labelMusic )
                                         {
                                                 std::string musicStringSpaced ( langStringMusic->getText() );
-                                                for ( size_t position = musicStringSpaced.length() ; position < positionOfValue ; ++position ) {
+                                                for ( size_t position = utf8StringLength( musicStringSpaced ) ; position < positionOfValue ; ++position ) {
                                                         musicStringSpaced = musicStringSpaced + " ";
                                                 }
                                                 labelMusic->setText( musicStringSpaced + ss.str() );
@@ -129,7 +129,7 @@ void CreateAudioMenu::doIt ()
                                         else if ( listOfOptions->getActiveOption () == labelEffects )
                                         {
                                                 std::string stringEffectsSpaced ( langStringEffects->getText() );
-                                                for ( size_t position = stringEffectsSpaced.length() ; position < positionOfValue ; ++position ) {
+                                                for ( size_t position = utf8StringLength( stringEffectsSpaced ) ; position < positionOfValue ; ++position ) {
                                                         stringEffectsSpaced = stringEffectsSpaced + " ";
                                                 }
                                                 labelEffects->setText( stringEffectsSpaced + ss.str() );

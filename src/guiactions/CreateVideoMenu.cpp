@@ -29,9 +29,13 @@ void CreateVideoMenu::doIt ()
         const size_t positionOfSetting = 20;
 
         LanguageManager* languageManager = gui::GuiManager::getInstance()->getLanguageManager();
+
         LanguageText* textFullscreen = languageManager->findLanguageString( "full-screen" );
         LanguageText* textDrawShadows = languageManager->findLanguageString( "draw-shadows" );
         LanguageText* textDrawBackground = languageManager->findLanguageString( "draw-background" );
+
+        std::string yeah = languageManager->findLanguageString( "yep" )-> getText ();
+        std::string nope = languageManager->findLanguageString( "nope" )->getText ();
 
         Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this, this->where );
         if ( screen->countWidgets() == 0 )
@@ -41,22 +45,22 @@ void CreateVideoMenu::doIt ()
                 screen->placeHeadAndHeels( /* icons */ false, /* copyrights */ false );
 
                 std::string stringFullscreenSpaced ( textFullscreen->getText() );
-                for ( size_t position = stringFullscreenSpaced.length() ; position < positionOfSetting ; ++position ) {
+                for ( size_t position = utf8StringLength( stringFullscreenSpaced ) ; position < positionOfSetting ; ++position ) {
                         stringFullscreenSpaced = stringFullscreenSpaced + " ";
                 }
-                this->labelFullscreen = new Label( stringFullscreenSpaced + ( gui::GuiManager::getInstance()->isAtFullScreen () ? "yes" : "no" ) );
+                this->labelFullscreen = new Label( stringFullscreenSpaced + ( gui::GuiManager::getInstance()->isAtFullScreen () ? yeah : nope ) );
 
                 std::string stringDrawShadowsSpaced ( textDrawShadows->getText() );
-                for ( size_t position = stringDrawShadowsSpaced.length() ; position < positionOfSetting ; ++position ) {
+                for ( size_t position = utf8StringLength( stringDrawShadowsSpaced ) ; position < positionOfSetting ; ++position ) {
                         stringDrawShadowsSpaced = stringDrawShadowsSpaced + " ";
                 }
-                this->labelDrawShadows = new Label( stringDrawShadowsSpaced + ( isomot::GameManager::getInstance()->getDrawShadows () ? "yes" : "no" ) );
+                this->labelDrawShadows = new Label( stringDrawShadowsSpaced + ( isomot::GameManager::getInstance()->getDrawShadows () ? yeah : nope ) );
 
                 std::string stringDrawBackgroundSpaced ( textDrawBackground->getText() );
-                for ( size_t position = stringDrawBackgroundSpaced.length() ; position < positionOfSetting ; ++position ) {
+                for ( size_t position = utf8StringLength( stringDrawBackgroundSpaced ) ; position < positionOfSetting ; ++position ) {
                         stringDrawBackgroundSpaced = stringDrawBackgroundSpaced + " ";
                 }
-                this->labelDrawBackground = new Label( stringDrawBackgroundSpaced + ( isomot::GameManager::getInstance()->hasBackgroundPicture () ? "yes" : "no" ) );
+                this->labelDrawBackground = new Label( stringDrawBackgroundSpaced + ( isomot::GameManager::getInstance()->hasBackgroundPicture () ? yeah : nope ) );
 
                 LanguageText* textGraphicSet = languageManager->findLanguageString( "graphic-set" );
                 this->labelGraphicSet = new Label( textGraphicSet->getText(), "regular", "yellow" );
@@ -122,25 +126,25 @@ void CreateVideoMenu::doIt ()
 
                                 clear_keybuf();
 
-                                // update labels of options here
+                                // update labels of options now
 
                                 std::string stringFullscreenSpaced ( textFullscreen->getText() );
-                                for ( size_t position = stringFullscreenSpaced.length() ; position < positionOfSetting ; ++position ) {
+                                for ( size_t position = utf8StringLength( stringFullscreenSpaced ) ; position < positionOfSetting ; ++position ) {
                                         stringFullscreenSpaced = stringFullscreenSpaced + " ";
                                 }
-                                labelFullscreen->setText( stringFullscreenSpaced + ( gui::GuiManager::getInstance()->isAtFullScreen () ? "yes" : "no" ) );
+                                labelFullscreen->setText( stringFullscreenSpaced + ( gui::GuiManager::getInstance()->isAtFullScreen () ? yeah : nope ) );
 
                                 std::string stringDrawShadowsSpaced ( textDrawShadows->getText() );
-                                for ( size_t position = stringDrawShadowsSpaced.length() ; position < positionOfSetting ; ++position ) {
+                                for ( size_t position = utf8StringLength( stringDrawShadowsSpaced ) ; position < positionOfSetting ; ++position ) {
                                         stringDrawShadowsSpaced = stringDrawShadowsSpaced + " ";
                                 }
-                                labelDrawShadows->setText( stringDrawShadowsSpaced + ( isomot::GameManager::getInstance()->getDrawShadows () ? "yes" : "no" ) );
+                                labelDrawShadows->setText( stringDrawShadowsSpaced + ( isomot::GameManager::getInstance()->getDrawShadows () ? yeah : nope ) );
 
                                 std::string stringDrawBackgroundSpaced ( textDrawBackground->getText() );
-                                for ( size_t position = stringDrawBackgroundSpaced.length() ; position < positionOfSetting ; ++position ) {
+                                for ( size_t position = utf8StringLength( stringDrawBackgroundSpaced ) ; position < positionOfSetting ; ++position ) {
                                         stringDrawBackgroundSpaced = stringDrawBackgroundSpaced + " ";
                                 }
-                                labelDrawBackground->setText( stringDrawBackgroundSpaced + ( isomot::GameManager::getInstance()->hasBackgroundPicture () ? "yes" : "no" ) );
+                                labelDrawBackground->setText( stringDrawBackgroundSpaced + ( isomot::GameManager::getInstance()->hasBackgroundPicture () ? yeah : nope ) );
 
                                 listOfOptions->redraw ();
                         }

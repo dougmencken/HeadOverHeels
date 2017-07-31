@@ -97,6 +97,38 @@ const std::string characters[ HowManyCharacters ] =
         "\321\231", "\321\232", "\321\233", "\321\237", "",         "",         "",         ""
 };
 
+/*
+ * moves the iterator to next unicode character in the string, returns number of bytes skipped
+ * from the code by Albert Zeyer and Dark Charlie licensed under LGPL https://sourceforge.net/p/openlierox/code/ci/master/tree/include/Unicode.h
+ */
+template < typename _Iterator1, typename _Iterator2 >
+inline size_t incUtf8StringIterator( _Iterator1 & it, const _Iterator2 & last )
+{
+        if ( it == last ) return 0;
+        unsigned char c;
+        size_t res = 1;
+        for ( ++it; last != it; ++it, ++res ) {
+                c = *it;
+                if ( ! ( c & 0x80 ) || ( ( c & 0xC0 ) == 0xC0 ) ) break;
+        }
+
+        return res;
+}
+
+/*
+ * gives the real length of UTF-8 encoded std::string
+ * from the code by Albert Zeyer and Dark Charlie licensed under LGPL https://sourceforge.net/p/openlierox/code/ci/master/tree/include/Unicode.h
+ */
+inline size_t utf8StringLength( const std::string& str )
+{
+        size_t len = 0;
+        std::string::const_iterator it = str.begin ();
+        for ( ; it != str.end (); incUtf8StringIterator ( it, str.end () ) )
+                len ++;
+
+        return len ;
+}
+
 }
 
 #endif

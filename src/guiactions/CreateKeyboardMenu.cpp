@@ -23,6 +23,8 @@ CreateKeyboardMenu::CreateKeyboardMenu( BITMAP* picture ) :
 
 void CreateKeyboardMenu::doIt ()
 {
+        const size_t positionOfKey = 21;
+
         Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this, this->where );
         if ( screen->countWidgets() == 0 )
         {
@@ -50,7 +52,7 @@ void CreateKeyboardMenu::doIt ()
                         // Descripción del uso de la tecla
                         std::string textOfKey = languageManager->findLanguageString( nameOfThisKey )->getText();
                         std::string dottedTextOfKey( textOfKey );
-                        for ( size_t position = textOfKey.length() ; position < 16 ; ++position ) {
+                        for ( size_t position = utf8StringLength( textOfKey ) ; position < positionOfKey ; ++position ) {
                                 dottedTextOfKey = dottedTextOfKey + ".";
                         }
 

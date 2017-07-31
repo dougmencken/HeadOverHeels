@@ -30,7 +30,7 @@ LanguageText* LanguageManager::findLanguageString( const std::string& id )
                 else
                 {
                         LanguageText* text = new LanguageText( id ) ;
-                        text->addLine( "?notfound" );
+                        text->addLine( "(" + id + ")" );
                         return text ;
                 }
         }
