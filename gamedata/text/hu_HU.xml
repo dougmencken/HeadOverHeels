@@ -3,6 +3,18 @@
 <language xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="language.xsd">
 
+  <text id="yep" x="0" y="0">
+    <properties>
+      <ustring>igen</ustring>
+    </properties>
+  </text>
+
+  <text id="nope" x="0" y="0">
+    <properties>
+      <ustring>nem</ustring>
+    </properties>
+  </text>
+
   <text id="new-game" x="170" y="150">
     <properties>
       <ustring>Új játék</ustring>
