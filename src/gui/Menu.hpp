@@ -18,40 +18,30 @@
 #include <allegro.h>
 #include "Widget.hpp"
 
+
 namespace gui
 {
 
-class Label;
+class Label ;
 
 /**
- * Un menú de la interfaz donde las opciones se eligen mediante las teclas Flecha Arriba
- * y Flecha Abajo y se seleccionan mediante la tecla Intro
+ * Menu of user interface where options are chosen by Up Arrow / Down Arrow keys
+ * and are selected by using Enter key
  */
+
 class Menu : public Widget
 {
 
 public:
 
-        /**
-         * Constructor
-         * @param x Coordenada X de pantalla donde situar el menú
-         * @param y Coordenada Y de pantalla donde situar el menú
-         */
         Menu( int x, int y );
 
         virtual ~Menu( );
 
-        /**
-         * Dibuja el manú
-         * @param where Imagen donde será dibujado
-         */
         void draw ( BITMAP* where ) ;
 
         void redraw () ;
 
-        /**
-         * Responde a la pulsación de una tecla
-         */
         void handleKey ( int key ) ;
 
         /**
@@ -70,6 +60,10 @@ public:
 
         std::list < Label * > getEveryOption () {  return this->options ;  }
 
+        unsigned int getWidthOfMenu () const ;
+
+        unsigned int getHeightOfMenu () const ;
+
 private:
 
         Label* handlerOfKeys ;
@@ -77,12 +71,12 @@ private:
 protected:
 
         /**
-         * Selecciona la opción anterior del menú respecto de la actual
+         * Choose the previous option of this menu
          */
         void previousOption () ;
 
         /**
-         * Selecciona la opción siguiente del menú respecto de la actual
+         * Choose the next option of this menu
          */
         void nextOption () ;
 
@@ -91,29 +85,29 @@ protected:
 protected:
 
         /**
-         * Opciones de las que se compone el menú. El orden en la lista es el orden de aparición en el menú
+         * Options that make up the menu
          */
         std::list < Label * > options ;
 
         /**
-         * La opción seleccionada
+         * The chosen option
          */
         Label* activeOption ;
 
         BITMAP * whereToDraw ;
 
         /**
-         * Viñeta para cada opción de menú
+         * Image before each option of menu
          */
         BITMAP* optionImage ;
 
         /**
-         * Viñeta para la opción seleccionada en el menú. Tamaño doble
+         * Image for the chosen option which is double sized
          */
         BITMAP* chosenOptionImage ;
 
         /**
-         * Viñeta para la opción seleccionada en el menú. Tamaño normal
+         * Image for the chosen option which is single sized
          */
         BITMAP* chosenOptionImageMini ;
 

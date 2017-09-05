@@ -66,13 +66,13 @@ void Menu::draw( BITMAP* where )
         int dx( this->optionImage->w );
         int dy( 0 );
 
-        // For each label
-        // Para cada etiqueta
+        // for each label
+        // para cada etiqueta
         for ( std::list< Label* >::iterator i = options.begin (); i != options.end (); ++i )
         {
                 Label* label = *i;
 
-                // Change the font depending on whether or not the option is active now
+                // change the font depending on whether or not the option is active now
                 if ( label == this->activeOption )
                 {
                         label->changeFontAndColor( "big", label->getColor() );
@@ -86,15 +86,12 @@ void Menu::draw( BITMAP* where )
                 if ( mark != 0 )
                         draw_sprite( where, mark, getX (), getY () + dy );
 
-                // Ajusta la posición de la etiqueta
                 label->changePosition( getX () + dx, getY () + dy );
-                // Dibuja la etiqueta
                 label->draw( where );
 
-                // Actualiza la diferencia de la altura
                 dy += label->getFont()->getCharHeight() - ( label == this->activeOption ? 8 : 4 );
 
-                // Reduce for leading
+                // reduce for leading
                 dy -= label->getFont()->getCharHeight() >> 5;
         }
 
@@ -162,6 +159,32 @@ void Menu::setActiveOption ( Label* option )
 void Menu::resetActiveOption ()
 {
         setActiveOption( * options.begin () );
+}
+
+unsigned int Menu::getWidthOfMenu () const
+{
+        unsigned int widthOfMenu = 0;
+
+        for ( std::list< Label * >::const_iterator i = options.begin () ; i != options.end () ; ++i )
+        {
+                unsigned int theWidth = ( *i )->getWidth() + this->optionImage->w;
+                if ( theWidth > widthOfMenu ) widthOfMenu = theWidth ;
+        }
+
+        return widthOfMenu;
+}
+
+unsigned int Menu::getHeightOfMenu () const
+{
+        unsigned int heightOfMenu = 0;
+
+        for ( std::list< Label * >::const_iterator i = options.begin () ; i != options.end () ; ++i )
+        {
+                heightOfMenu += ( *i )->getFont()->getCharHeight() - 4;
+                heightOfMenu -= ( *i )->getFont()->getCharHeight() >> 5;
+        }
+
+        return ( heightOfMenu >= 4 ) ? ( heightOfMenu - 4 ) : 0; // -4 is for that single active option
 }
 
 void Menu::previousOption ()
