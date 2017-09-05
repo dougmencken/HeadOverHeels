@@ -15,19 +15,16 @@
 #include <cassert>
 #include <allegro.h>
 
+#include "Gui.hpp"
 #include "Widget.hpp"
+#include "Font.hpp"
 
 
 namespace gui
 {
 
 class Screen ;
-class Font ;
 class Action ;
-
-/**
- * Un texto fijo presente en la pantalla
- */
 
 class Label : public Widget
 {
@@ -54,7 +51,7 @@ public:
          * @param text El texto a presentar
          * @param fontName Nombre de la fuente caligráfica usada para representar el texto
          * @param color Color del texto
-         * @param spacing Espaciado entre caracteres, suma o resta tantos píxeles como se indiquen
+         * @param spacing Space between characters
          */
         Label( const std::string& text, const std::string& fontName, const std::string& color, int spacing = 0 ) ;
 
@@ -65,7 +62,7 @@ public:
          * @param text El texto a presentar
          * @param fontName Nombre de la fuente caligráfica usada para representar el texto
          * @param color Color del texto
-         * @param spacing Espaciado entre caracteres, suma o resta tantos píxeles como se indiquen
+         * @param spacing Space between characters
          */
         Label( int x, int y, const std::string& text, const std::string& fontName, const std::string& color, int spacing = 0 ) ;
 
@@ -89,85 +86,60 @@ public:
          */
         void handleKey ( int key ) ;
 
-private:
-
-        /**
-         * Crea la etiqueta sobre una imagen descodificando una cadena UTF-8
-         * @param text Una cadena de caracteres UTF-8
-         * @param font Fuente caligráfica empleada para dibujar el texto
-         * @param color Color del texto
-         * @param spacing Espaciado entre caracteres, suma o resta tantos píxeles como se indiquen
-         * @return La imagen con fondo magenta (el color clave) y el texto
-         */
-        BITMAP* createBitmapLabel ( const std::string& text, const std::string& fontName, const std::string& color, int spacing = 0 ) ;
-
 protected:
 
         /**
-         * El texto de la etiqueta
+         * Create image of label
+         * @param text A string of characters in utf-8
+         * @param font Font to draw these characters
+         * @param color Color of text
+         * @return The image with magenta (key color) background and the text
          */
+        BITMAP * createBitmapOfLabel ( const std::string& text, const std::string& fontName, const std::string& color ) ;
+
+private:
+
         std::string text ;
 
-        /**
-         * Nombre de la fuente caligráfica de la etiqueta
-         */
         std::string fontName ;
 
-        /**
-         * Color del texto
-         */
         std::string color ;
 
-        /**
-         * Fuente caligráfica de un color específico empleada para representar el texto
-         */
         Font* font ;
 
+        int spacing ;
+
         /**
-         * El texto de una etiqueta en pantalla se compone de muchas imágenes, tantos como
-         * caracteres tenga. Esta imagen almacena la composición para evitar volverla a
-         * realizar si el texto no cambia
+         * Image made as composition of characters
          */
         BITMAP* buffer ;
 
         Action* myAction ;
 
-public: // Operaciones de consulta y actualización
+public:
 
-        /**
-         * Devuelve el texto de la etiqueta
-         * @param Una cadena de caracteres
-         */
         std::string getText () const {  return this->text ;  }
 
         void setText( const std::string& str ) {  this->text = str ;  }
 
-        /**
-         * Devuelve la fuente tipográfica usada en la etiqueta
-         * @param Un tipo de letra
-         */
         std::string getFontName () const {  return this->fontName ;  }
 
-        /**
-         * Devuelve el color del texto
-         * @param Un color
-         */
         std::string getColor () const {  return this->color ;  }
 
-        /**
-         * Fuente caligráfica de un color específico empleada para representar el texto
-         */
         Font* getFont () const {  return this->font ;  }
 
-        /**
-         * Devuelve la anchura de la etiqueta
-         */
-        int getWidth () const {  return this->buffer->w ;  }
+        int getSpacing () const {  return this->spacing ;  }
 
-        /**
-         * Devuelve la altura de la etiqueta
-         */
-        int getHeight () const {  return this->buffer->h ;  }
+        void setSpacing ( int newSpacing ) {  this->spacing = newSpacing ;  }
+
+        unsigned int getWidth () const
+        {
+                // symbols of game fonts are monospaced
+                return utf8StringLength( text ) * ( font->getCharWidth() + spacing ) ;
+                /* return this->buffer->w ; */
+        }
+
+        unsigned int getHeight () const {  return font->getCharHeight() ; /* return this->buffer->h ; */  }
 
         Action* getAction ( ) const {  return myAction ;  }
 
@@ -182,9 +154,6 @@ struct EqualXYOfLabel : public std::binary_function< Label*, std::pair < int, in
 };
 
 
-/**
- * Objeto-función usado como predicado en la búsqueda de una etiqueta
- */
 struct EqualTextOfLabel : public std::binary_function< Label*, std::string, bool >
 {
         bool operator() ( const Label* label, const std::string& text ) const;

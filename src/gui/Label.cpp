@@ -2,7 +2,6 @@
 #include "Label.hpp"
 #include "Screen.hpp"
 #include "FontManager.hpp"
-#include "Font.hpp"
 #include "Action.hpp"
 
 
@@ -15,10 +14,12 @@ Label::Label( const std::string& text )
         fontName( "regular" ),
         color( "white" ),
         font( 0 ),
+        spacing( 0 ),
         buffer( 0 ),
         myAction( 0 )
 {
-        this->createBitmapLabel( this->text, this->fontName, this->color );
+        this->font = FontManager::getInstance()->findFont( fontName, color );
+        this->createBitmapOfLabel( this->text, this->fontName, this->color );
 }
 
 Label::Label( int x, int y, const std::string& text )
@@ -27,10 +28,12 @@ Label::Label( int x, int y, const std::string& text )
         fontName( "regular" ),
         color( "white" ),
         font( 0 ),
+        spacing( 0 ),
         buffer( 0 ),
         myAction( 0 )
 {
-        this->createBitmapLabel( this->text, this->fontName, this->color );
+        this->font = FontManager::getInstance()->findFont( fontName, color );
+        this->createBitmapOfLabel( this->text, this->fontName, this->color );
 }
 
 Label::Label( const std::string& text, const std::string& fontName, const std::string& color, int spacing )
@@ -39,9 +42,11 @@ Label::Label( const std::string& text, const std::string& fontName, const std::s
         fontName( fontName ),
         color( color ),
         font( 0 ),
+        spacing( spacing ),
         buffer( 0 )
 {
-        this->createBitmapLabel( this->text, this->fontName, this->color, spacing );
+        this->font = FontManager::getInstance()->findFont( fontName, color.compare( "multicolor" ) == 0 ? "white" : color );
+        this->createBitmapOfLabel( this->text, this->fontName, this->color );
 }
 
 Label::Label( int x, int y, const std::string& text, const std::string& fontName, const std::string& color, int spacing )
@@ -50,9 +55,11 @@ Label::Label( int x, int y, const std::string& text, const std::string& fontName
         fontName( fontName ),
         color( color ),
         font( 0 ),
+        spacing( spacing ),
         buffer( 0 )
 {
-        this->createBitmapLabel( this->text, this->fontName, this->color, spacing );
+        this->font = FontManager::getInstance()->findFont( fontName, color.compare( "multicolor" ) == 0 ? "white" : color );
+        this->createBitmapOfLabel( this->text, this->fontName, this->color );
 }
 
 Label::~Label( )
@@ -64,12 +71,12 @@ void Label::changeFontAndColor( const std::string& fontName, const std::string& 
 {
         this->fontName = fontName;
         this->color = color;
-        this->createBitmapLabel( this->text, fontName, color );
+        this->font = FontManager::getInstance()->findFont( fontName, color.compare( "multicolor" ) == 0 ? "white" : color );
+        this->createBitmapOfLabel( this->text, this->fontName, this->color );
 }
 
 void Label::draw( BITMAP* where )
 {
-        // Dibuja la cadena en la imagen destino
         draw_sprite( where, this->buffer, this->getX (), this->getY () );
 }
 
@@ -81,69 +88,53 @@ void Label::handleKey( int key )
         }
 }
 
-BITMAP* Label::createBitmapLabel( const std::string& text, const std::string& fontName, const std::string& color, int spacing )
+BITMAP * Label::createBitmapOfLabel( const std::string& text, const std::string& fontName, const std::string& color )
 {
-        int colorIndex(0);
-        // Colores empleados en una etiqueta multicolor
-        std::string colorFont[ ] = {  "cyan", "yellow", "orange"  };
-
-        // Se selecciona la fuente usada para representar el texto
-        this->font = FontManager::getInstance()->findFont( fontName, color.compare( "multicolor" ) == 0 ? "white" : color );
-        assert( this->font );
-
-        // Si ya está la etiqueta creada se destruye y se vuelve a crear
-        if ( buffer != 0 )
+        // re-create buffer
+        if ( this->buffer != 0 )
         {
                 destroy_bitmap( this->buffer );
         }
-        buffer = create_bitmap_ex( 32, text.size() * ( font->getCharWidth() + spacing ), font->getCharHeight() );
-        clear_to_color( buffer, makecol( 255, 0, 255 ) );
 
-        // Número de caracteres en la cadena. No tiene porque coincidir con la longitud de la mísma
-        size_t charNum = 0;
+        buffer = create_bitmap_ex( 32, getWidth(), getHeight() );
+        clear_to_color( buffer, makecol( 255, 0, 255 ) ); // magenta is “ key ” color used as transparency
 
-        // Descodificación de la cadena UTF-8
-        for ( size_t i = 0; i < text.size(); i++ )
+        const size_t numberOfColors = 3;
+        std::string multiColors[ numberOfColors ] = {  "cyan", "yellow", "orange"  }; // sequence of colors for multi~color labels
+        size_t colorIndex( 0 ); // index in that sequence for color of character to draw
+
+        size_t charPos = 0; // position of character in the string which for utf-8 isn't always the same as character’s offset in bytes
+
+        std::string::const_iterator iter = text.begin ();
+        while ( iter != text.end () )
         {
-                std::string str = text.substr( i, 1 );
-
-                if ( str.compare( "\300" ) >= 0 && str.compare( "\340" ) < 0 )
-                {
-                        str = text.substr( i, 2 );
-                        i++;
-                }
-                else if ( str.compare( "\340" ) >= 0 && str.compare( "\360" ) < 0 )
-                {
-                        str = text.substr( i, 3 );
-                        i += 2;
-                }
-                else if ( str.compare( "\360" ) >= 0 )
-                {
-                        str = text.substr( i, 4 );
-                        i += 3;
-                }
-
-                // Si la etiqueta es multicolor se selecciona la fuente adecuada
                 if ( color.compare( "multicolor" ) == 0 )
                 {
-                        this->font = FontManager::getInstance()->findFont( fontName, colorFont[ colorIndex ] );
+                        // pick a color for this character
+                        this->font = FontManager::getInstance()->findFont( fontName, multiColors[ colorIndex ] );
                         assert( this->font );
-                        colorIndex = ( colorIndex == 2 ? 0 : colorIndex + 1 );
+
+                        // cycle in the sequence of colors
+                        colorIndex++;
+                        if ( colorIndex >= numberOfColors ) colorIndex = 0;
                 }
 
-                // Copia del carácter a la imagen de la etiqueta
-                blit( this->font->getChar( str ), buffer, 0, 0, charNum * ( this->font->getCharWidth() + spacing ), 0, this->font->getCharWidth(), this->font->getCharHeight() );
-                charNum++;
-        }
+                // draw this character
+                blit(
+                        this->font->getChar( text.substr(
+                                std::distance( text.begin (), iter ),
+                                incUtf8StringIterator ( iter, text.end () ) // string iterator increments here
+                        ) ),
+                        buffer,
+                        0,
+                        0,
+                        charPos * ( this->font->getCharWidth() + spacing ),
+                        0,
+                        this->font->getCharWidth(),
+                        this->font->getCharHeight()
+                );
 
-        // Si la longitud de la cadena no coincide con el número de caracteres de la misma
-        // (caso del cirílico) entonces se ajusta el buffer al tamaño real
-        if ( charNum != text.size() )
-        {
-                BITMAP* bitmap = create_bitmap_ex( 32, charNum * ( font->getCharWidth() + spacing ), font->getCharHeight() );
-                blit( this->buffer, bitmap, 0, 0, 0, 0, bitmap->w, bitmap->h );
-                destroy_bitmap( this->buffer );
-                this->buffer = bitmap;
+                charPos ++;
         }
 
         return this->buffer;
