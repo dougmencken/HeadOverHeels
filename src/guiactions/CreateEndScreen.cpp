@@ -1,6 +1,7 @@
 
 #include "CreateEndScreen.hpp"
 #include "GuiManager.hpp"
+#include "LanguageText.hpp"
 #include "LanguageManager.hpp"
 #include "SoundManager.hpp"
 #include "Font.hpp"

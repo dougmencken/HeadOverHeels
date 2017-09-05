@@ -45,13 +45,13 @@
     </properties>
   </text>
 
-  <text id="load-game" x="0" y="0">
+  <text id="load-game">
     <properties>
       <ustring>Carregar joc</ustring>
     </properties>
   </text>
 
-  <text id="keyboard-menu" x="0" y="0">
+  <text id="keyboard-menu">
     <properties>
       <ustring>Teclat</ustring>
     </properties>
@@ -63,55 +63,55 @@
     </properties>
   </text>
 
-  <text id="movesouth" x="0" y="0">
+  <text id="movesouth">
     <properties>
       <ustring>Dreta</ustring>
     </properties>
   </text>
 
-  <text id="moveeast" x="0" y="0">
+  <text id="moveeast">
     <properties>
       <ustring>Amunt</ustring>
     </properties>
   </text>
 
-  <text id="movewest" x="0" y="0">
+  <text id="movewest">
     <properties>
       <ustring>Avall</ustring>
     </properties>
   </text>
 
-  <text id="take" x="0" y="0">
+  <text id="take">
     <properties>
       <ustring>Agafar/deixar</ustring>
     </properties>
   </text>
 
-  <text id="jump" x="0" y="0">
+  <text id="jump">
     <properties>
       <ustring>Saltar</ustring>
     </properties>
   </text>
 
-  <text id="shoot" x="0" y="0">
+  <text id="shoot">
     <properties>
       <ustring>Disparar</ustring>
     </properties>
   </text>
 
-  <text id="take-jump" x="0" y="0">
+  <text id="take-jump">
     <properties>
       <ustring>Agafar+Saltar</ustring>
     </properties>
   </text>
 
-  <text id="swap" x="0" y="0">
+  <text id="swap">
     <properties>
       <ustring>Canvi</ustring>
     </properties>
   </text>
 
-  <text id="halt" x="0" y="0">
+  <text id="halt">
     <properties>
       <ustring>Detenir</ustring>
     </properties>
@@ -129,7 +129,7 @@
     </properties>
   </text>
 
-  <text id="audio-menu" x="0" y="0">
+  <text id="audio-menu">
     <properties>
       <ustring>So</ustring>
     </properties>
@@ -141,19 +141,19 @@
     </properties>
   </text>
 
-  <text id="music" x="0" y="0">
+  <text id="music">
     <properties>
       <ustring>Música</ustring>
     </properties>
   </text>
 
-  <text id="volume" x="0" y="0">
+  <text id="volume">
     <properties>
       <ustring>Volumen</ustring>
     </properties>
   </text>
 
-  <text id="show-credits" x="0" y="0">
+  <text id="show-credits">
     <properties>
       <ustring>Crèdits</ustring>
     </properties>
@@ -558,7 +558,7 @@
     </properties>
   </text>
 
-  <text id="exit-game" x="0" y="0">
+  <text id="exit-game">
     <properties>
       <ustring>Sortir</ustring>
     </properties>
@@ -573,7 +573,7 @@
     </properties>
   </text>
 
-  <text id="empty-slot" x="0" y="0">
+  <text id="empty-slot">
     <properties>
       <ustring>Disponible</ustring>
     </properties>
@@ -597,13 +597,13 @@
     </properties>
   </text>
 
-  <text id="rooms" x="0" y="0">
+  <text id="rooms">
     <properties>
       <ustring>sales</ustring>
     </properties>
   </text>
 
-  <text id="planets" x="0" y="0">
+  <text id="planets">
     <properties>
       <ustring>planetes</ustring>
     </properties>

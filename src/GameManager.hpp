@@ -19,7 +19,6 @@
 #include <fstream>
 #include "csxml/SaveGameXML.hpp"
 #include "Ism.hpp"
-#include "PlayerItem.hpp"
 #include "Room.hpp"
 
 

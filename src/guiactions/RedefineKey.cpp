@@ -4,6 +4,7 @@
 #include "ConfigurationManager.hpp"
 #include "GuiManager.hpp"
 #include "LanguageManager.hpp"
+#include "LanguageText.hpp"
 #include "Menu.hpp"
 #include "Label.hpp"
 

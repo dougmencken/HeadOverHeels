@@ -5,6 +5,7 @@
 #include "LanguageManager.hpp"
 #include "ConfigurationManager.hpp"
 #include "Font.hpp"
+#include "LanguageText.hpp"
 #include "Screen.hpp"
 #include "MenuWithMultipleColumns.hpp"
 #include "Label.hpp"
@@ -92,7 +93,7 @@ void CreateLanguageMenu::parse( const std::string& fileName )
                 // Almacena todos los registros del archivo en la lista
                 for ( lxml::LanguageXML::text_const_iterator t = languageXML->text().begin (); t != languageXML->text().end (); ++t )
                 {
-                        LanguageText* lang = new LanguageText( ( *t ).id (), ( *t ).x (), ( *t ).y () );
+                        LanguageText* lang = new LanguageText( ( *t ).id () );
 
                         for ( lxml::text::properties_const_iterator p = ( *t ).properties().begin (); p != ( *t ).properties().end (); ++p )
                         {

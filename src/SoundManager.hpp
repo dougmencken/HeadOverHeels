@@ -42,6 +42,7 @@ template< > struct hash< std::string >
 
 }
 
+
 namespace isomot
 {
 
@@ -260,10 +261,9 @@ public:
         short label ;
 
         /**
-         * Tabla hash que almacena el par estado/sonido. El estado viene definido por la cadena de
-         * caracteres que figura en el archivo XML de definición de los sonidos
+         * Hash table of activity / sound pairs. Activity is string from XML file of sounds
          */
-        __gnu_cxx::hash_map<std::string, SampleData> table;
+        __gnu_cxx::hash_map< std::string, SampleData > table ;
 
         /**
          * Ruta al archivo ejecutable. Se necesita para cargar los sonidos

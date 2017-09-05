@@ -4,6 +4,7 @@
 #include "GameManager.hpp"
 #include "GuiManager.hpp"
 #include "LanguageManager.hpp"
+#include "LanguageText.hpp"
 #include "Screen.hpp"
 #include "Icon.hpp"
 #include "TextField.hpp"

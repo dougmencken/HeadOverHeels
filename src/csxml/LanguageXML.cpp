@@ -296,14 +296,12 @@ namespace lxml
   //
 
   text::
-  text (const id_type& id,
-        const x_type& x,
-        const y_type& y)
+  text ( const id_type& id, const x_type& x, const y_type& y )
   : ::xml_schema::type (),
-    properties_ (::xml_schema::flags (), this),
-    id_ (id, ::xml_schema::flags (), this),
-    x_ (x, ::xml_schema::flags (), this),
-    y_ (y, ::xml_schema::flags (), this)
+    properties_ ( ::xml_schema::flags (), this ),
+    id_ ( id, ::xml_schema::flags (), this ),
+    x_ ( x, ::xml_schema::flags (), this ),
+    y_ ( y, ::xml_schema::flags (), this )
   {
   }
 
@@ -388,24 +386,10 @@ namespace lxml
       }
     }
 
-    if (!id_.present ())
+    if ( ! id_.present () )
     {
       throw ::xsd::cxx::tree::expected_attribute< char > (
         "id",
-        "");
-    }
-
-    if (!x_.present ())
-    {
-      throw ::xsd::cxx::tree::expected_attribute< char > (
-        "x",
-        "");
-    }
-
-    if (!y_.present ())
-    {
-      throw ::xsd::cxx::tree::expected_attribute< char > (
-        "y",
         "");
     }
   }

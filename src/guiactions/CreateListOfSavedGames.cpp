@@ -1,6 +1,7 @@
 
 #include "CreateListOfSavedGames.hpp"
 #include "GuiManager.hpp"
+#include "LanguageText.hpp"
 #include "LanguageManager.hpp"
 #include "Font.hpp"
 #include "Screen.hpp"

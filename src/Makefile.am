@@ -94,6 +94,8 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			gui/Icon.hpp \
 			gui/Label.cpp \
 			gui/Label.hpp \
+			gui/LanguageText.cpp \
+			gui/LanguageText.hpp \
 			gui/LanguageManager.cpp \
 			gui/LanguageManager.hpp \
 			gui/Menu.cpp \

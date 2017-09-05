@@ -3,139 +3,139 @@
 <language xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="language.xsd">
 
-  <text id="af_ZA" x="0" y="0">
+  <text id="af_ZA">
     <properties>
       <ustring>Afrikaans</ustring>
     </properties>
   </text>
 
-  <text id="ast_ES" x="0" y="0">
+  <text id="ast_ES">
     <properties>
       <ustring>Bable</ustring>
     </properties>
   </text>
 
-  <text id="ca_ES" x="0" y="0">
+  <text id="ca_ES">
     <properties>
       <ustring>Català</ustring>
     </properties>
   </text>
 
-  <text id="da_DK" x="0" y="0">
+  <text id="da_DK">
     <properties>
       <ustring>Dansk</ustring>
     </properties>
   </text>
 
-  <text id="de_DE" x="0" y="0">
+  <text id="de_DE">
     <properties>
       <ustring>Deutsch</ustring>
     </properties>
   </text>
 
-  <text id="en_US" x="0" y="0">
+  <text id="en_US">
     <properties>
       <ustring>English</ustring>
     </properties>
   </text>
 
-  <text id="es_ES" x="0" y="0">
+  <text id="es_ES">
     <properties>
       <ustring>Español(ES)</ustring>
     </properties>
   </text>
 
-  <text id="es_LA" x="0" y="0">
+  <text id="es_LA">
     <properties>
       <ustring>Español(LA)</ustring>
     </properties>
   </text>
 
-  <text id="eu_ES" x="0" y="0">
+  <text id="eu_ES">
     <properties>
       <ustring>Euskera</ustring>
     </properties>
   </text>
 
-  <text id="fr_FR" x="0" y="0">
+  <text id="fr_FR">
     <properties>
       <ustring>Français</ustring>
     </properties>
   </text>
 
-  <text id="gl_ES" x="0" y="0">
+  <text id="gl_ES">
     <properties>
       <ustring>Galego</ustring>
     </properties>
   </text>
 
-  <text id="hr_HR" x="0" y="0">
+  <text id="hr_HR">
     <properties>
       <ustring>Hrvatski</ustring>
     </properties>
   </text>
 
-  <text id="hu_HU" x="0" y="0">
+  <text id="hu_HU">
     <properties>
       <ustring>Magyar</ustring>
     </properties>
   </text>
 
-  <text id="it_IT" x="0" y="0">
+  <text id="it_IT">
     <properties>
       <ustring>Italiano</ustring>
     </properties>
   </text>
 
-  <text id="la_VA" x="0" y="0">
+  <text id="la_VA">
     <properties>
       <ustring>Latin</ustring>
     </properties>
   </text>
 
-  <text id="pl_PL" x="0" y="0">
+  <text id="pl_PL">
     <properties>
       <ustring>Polski</ustring>
     </properties>
   </text>
 
-  <text id="pt_BR" x="0" y="0">
+  <text id="pt_BR">
     <properties>
       <ustring>Português(BR)</ustring>
     </properties>
   </text>
 
-  <text id="pt_PT" x="0" y="0">
+  <text id="pt_PT">
     <properties>
       <ustring>Português(PT)</ustring>
     </properties>
   </text>
 
-  <text id="ru_RU" x="0" y="0">
+  <text id="ru_RU">
     <properties>
       <ustring>Русский</ustring>
     </properties>
   </text>
 
-  <text id="sk_SK" x="0" y="0">
+  <text id="sk_SK">
     <properties>
       <ustring>Slovenčina</ustring>
     </properties>
   </text>
 
-  <text id="fi_FI" x="0" y="0">
+  <text id="fi_FI">
     <properties>
       <ustring>Suomi</ustring>
     </properties>
   </text>
 
-  <text id="sr_SR" x="0" y="0">
+  <text id="sr_SR">
     <properties>
       <ustring>Српски</ustring>
     </properties>
   </text>
 
-  <text id="val_ES" x="0" y="0">
+  <text id="val_ES">
     <properties>
       <ustring>Valencià</ustring>
     </properties>

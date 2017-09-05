@@ -2,6 +2,7 @@
 #include "CreateKeyboardMenu.hpp"
 #include "GuiManager.hpp"
 #include "LanguageManager.hpp"
+#include "LanguageText.hpp"
 #include "InputManager.hpp"
 #include "Font.hpp"
 #include "Screen.hpp"

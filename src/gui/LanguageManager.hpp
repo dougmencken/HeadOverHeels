@@ -12,23 +12,16 @@
 #define LanguageManager_hpp_
 
 #include <string>
-#include <vector>
 #include <list>
-#include <algorithm>
-#include <functional>
-#include <iostream>
-#include "csxml/LanguageXML.hpp"
-#include "Gui.hpp"
 
 
 namespace gui
 {
 
-class LanguageText;
+class LanguageText ;
 
 /**
- * Lee las cadenas de texto usadas en el juego de un archivo XML y las almacena
- * en una estructura de datos a la que acceden otros objetos de la interfaz de usuario
+ * Read strings of text from XML file and store them in data structure
  */
 
 class LanguageManager
@@ -45,98 +38,25 @@ public:
 
         ~LanguageManager( );
 
-        /**
-         * Busca una cadena de idioma
-         * @param id Cadena identificativa
-         * @return La cadena si se encontró ó 0 en caso contrario
-         */
         LanguageText * findLanguageString ( const std::string & id ) ;
 
 private:
 
        /**
-        * Analiza el archivo XML y extrae las cadenas ligándolas a un identificador textual
+        * Parse the XML file so each string pairs with its identifier
         * @param fileName XML file with localized strings used in the game
         * @param fileWithGuaranteedStrings The file with more strings than in fileName
         */
         void parse ( const std::string & fileName, const std::string& fileWithGuaranteedStrings ) ;
 
-private:
-
-       /**
-        * Textos empleados en la interfaz de usuario. Cada elemento se compone de un identificador
-        * único, su posición en la pantalla y la cadena con el texto
-        */
         std::list< LanguageText * > texts ;
 
         std::list< LanguageText * > backupTexts ;
 
 };
 
-struct LanguageLine
-{
-
-        std::string text ;
-
-        std::string font ;
-
-        std::string color ;
-
-};
-
-class LanguageText
-{
-
-public:
-
-        LanguageText( const std::string& id ) ;
-
-        LanguageText( const std::string& id, unsigned int x, unsigned int y ) ;
-
-private:
-
-        std::string id ;
-
-        unsigned int x ;
-
-        unsigned int y ;
-
-        std::vector< LanguageLine > lines ;
-
-public:
-
-        void addLine ( const std::string& text ) ;
-
-        void addLine ( const std::string& text, const std::string& font, const std::string& color ) ;
-
-        std::string getId () const {  return this->id ;  }
-
-        unsigned int getX () const {  return this->x ;  }
-
-        unsigned int getY () const {  return this->y ;  }
-
-        std::string getFirstLineText () const {  return this->lines[ 0 ].text ;  }
-
-        std::string getFirstLineFont () const {  return this->lines[ 0 ].font ;  }
-
-        std::string getFirstLineColor () const {  return this->lines[ 0 ].color ;  }
-
-        std::string getText () const {  return this->getFirstLineText() ;  }
-
-        std::string getFont () const {  return this->getFirstLineFont() ;  }
-
-        std::string getColor () const {  return this->getFirstLineColor() ;  }
-
-        LanguageLine* getFirstLine () {  return &( this->lines[ 0 ] ) ;  }
-
-        LanguageLine* getLine ( size_t number ) {  return &( this->lines[ number ] ) ;  }
-
-        size_t getLinesCount () {  return this->lines.size() ;  }
-
-};
-
 /**
- * Objeto-función usado como predicado en la búsqueda de una cadena de idioma
+ * Object-function used as a predicate in the search for a language string
  */
 struct EqualLanguageString : public std::binary_function< LanguageText *, std::string, bool >
 {

@@ -306,7 +306,7 @@ namespace lxml
     x ();
 
     void
-    x (const x_type& x);
+    x ( const x_type& x );
 
     // y
     //
@@ -320,13 +320,11 @@ namespace lxml
     y ();
 
     void
-    y (const y_type& x);
+    y ( const y_type& x );
 
     // Constructors
     //
-    text (const id_type&,
-          const x_type&,
-          const y_type&);
+    text ( const id_type&, const x_type&, const y_type& ) ;
 
     text (const ::xercesc::DOMElement& e,
           ::xml_schema::flags f = 0,

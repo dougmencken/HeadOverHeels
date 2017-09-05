@@ -1,6 +1,9 @@
 
+#include "csxml/LanguageXML.hpp"
+#include "LanguageText.hpp"
 #include "LanguageManager.hpp"
-#include "Gui.hpp"
+#include "Gui.hpp" // for DeleteObject() in destructor
+#include <iostream>
 
 
 namespace gui
@@ -40,7 +43,6 @@ LanguageText* LanguageManager::findLanguageString( const std::string& id )
 
 void LanguageManager::parse( const std::string& fileName, const std::string& fileWithGuaranteedStrings )
 {
-        // Carga el archivo XML especificado y almacena los datos XML en la lista
         try
         {
                 std::auto_ptr< lxml::LanguageXML > languageXML( lxml::language( fileName.c_str() ) );
@@ -109,40 +111,6 @@ void LanguageManager::parse( const std::string& fileName, const std::string& fil
         {
                 std::cerr << e << std::endl ;
         }
-}
-
-LanguageText::LanguageText( const std::string& id, unsigned int x, unsigned int y ) :
-        id( id ) ,
-        x( x ) ,
-        y( y )
-{
-
-}
-
-LanguageText::LanguageText( const std::string& id ) :
-        id( id ) ,
-        x( 0 ) ,
-        y( 0 )
-{
-
-}
-
-void LanguageText::addLine( const std::string& text )
-{
-        LanguageLine line;
-        line.text = text;
-        line.font = std::string();
-        line.color = std::string();
-        lines.push_back( line );
-}
-
-void LanguageText::addLine( const std::string& text, const std::string& font, const std::string& color )
-{
-        LanguageLine line;
-        line.text = text;
-        line.font = font;
-        line.color = color;
-        lines.push_back( line );
 }
 
 inline bool EqualLanguageString::operator() ( const LanguageText* lang, const std::string& id ) const

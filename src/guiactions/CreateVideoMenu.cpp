@@ -3,6 +3,7 @@
 #include "CreateMenuOfGraphicSets.hpp"
 #include "GuiManager.hpp"
 #include "GameManager.hpp"
+#include "LanguageText.hpp"
 #include "LanguageManager.hpp"
 #include "Screen.hpp"
 #include "Menu.hpp"

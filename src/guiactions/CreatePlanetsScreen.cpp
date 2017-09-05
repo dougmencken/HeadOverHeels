@@ -3,6 +3,7 @@
 #include "GuiManager.hpp"
 #include "GameManager.hpp"
 #include "LanguageManager.hpp"
+#include "LanguageText.hpp"
 #include "SoundManager.hpp"
 #include "Screen.hpp"
 #include "Icon.hpp"

@@ -17,8 +17,8 @@
             </xsd:element>
           </xsd:sequence>
           <xsd:attribute name="id" type="xsd:string" use="required"/>
-          <xsd:attribute name="x" type="xsd:int" use="required"/>
-          <xsd:attribute name="y" type="xsd:int" use="required"/>
+          <xsd:attribute name="x" type="xsd:int"/>
+          <xsd:attribute name="y" type="xsd:int"/>
         </xsd:complexType>
       </xsd:element>
     </xsd:sequence>

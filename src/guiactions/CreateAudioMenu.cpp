@@ -2,6 +2,7 @@
 #include "CreateAudioMenu.hpp"
 #include "GuiManager.hpp"
 #include "LanguageManager.hpp"
+#include "LanguageText.hpp"
 #include "SoundManager.hpp"
 #include "Screen.hpp"
 #include "Menu.hpp"

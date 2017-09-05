@@ -2,24 +2,25 @@
 #include "GameManager.hpp"
 #include "Exception.hpp"
 #include "Isomot.hpp"
-#include "GameFileManager.hpp"
-#include "MapManager.hpp"
 #include "Room.hpp"
 #include "Mediator.hpp"
 #include "PlayerItem.hpp"
-#include "GuiManager.hpp"
-#include "LanguageManager.hpp"
 #include "Label.hpp"
+#include "GameFileManager.hpp"
+#include "GuiManager.hpp"
+#include "MapManager.hpp"
 #include "InputManager.hpp"
 #include "BonusManager.hpp"
 #include "SoundManager.hpp"
 #include "InputManager.hpp"
+#include "LanguageText.hpp"
+#include "LanguageManager.hpp"
 
 
 namespace isomot
 {
 
-GameManager* GameManager::instance = 0;
+GameManager * GameManager::instance = 0;
 
 
 GameManager::GameManager( )

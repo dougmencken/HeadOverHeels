@@ -1,6 +1,7 @@
 
 #include "ShowAuthors.hpp"
 #include "GuiManager.hpp"
+#include "LanguageText.hpp"
 #include "LanguageManager.hpp"
 #include "SoundManager.hpp"
 
