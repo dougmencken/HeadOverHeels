@@ -182,7 +182,7 @@ protected:
          */
         BITMAP * shadyImage ;
 
-public: // Operaciones de consulta y actualización
+public:
 
         /**
          * Establece el estado del proceso de enmascarado

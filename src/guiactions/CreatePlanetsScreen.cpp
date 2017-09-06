@@ -52,8 +52,6 @@ void CreatePlanetsScreen::doIt ()
 {
         SoundManager::getInstance()->playOgg( "music/HeadOverHeels.ogg", /* loop */ false );
 
-        Label* label = 0;
-        LanguageText* langString = 0;
         LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
 
         Screen* planets = GuiManager::getInstance()->findOrCreateScreenForAction( this, this->where );
@@ -63,11 +61,11 @@ void CreatePlanetsScreen::doIt ()
                 planets->freeWidgets() ;
         }
 
-        // Etiqueta fija: El Imperio Blacktooth
-        langString = languageManager->findLanguageString( "blacktooth-empire" );
-        label = new Label( 0, 0, langString->getText() );
-        label->changeFontAndColor( "big", "yellow" );
-        label->changePosition( ( 640 - label->getWidth() ) >> 1, langString->getY() );
+        Label* label = 0;
+
+        // etiqueta fija “ El Imperio Blacktooth ”
+        label = new Label( languageManager->findLanguageString( "blacktooth-empire" )->getText(), "big", "yellow" );
+        label->moveTo( ( 640 - label->getWidth() ) >> 1, 0 );
         label->setAction( new ContinueGame( this->where, gameInProgress ) );
 
         planets->addWidget( label );
@@ -82,35 +80,90 @@ void CreatePlanetsScreen::doIt ()
         this->chapeau = GameManager::refreshPicture( this->chapeau, "crown.png" );
         this->chapeauTriste = GameManager::refreshPicture( this->chapeauTriste, "grey-crown.png" );
 
+        Icon* imageOfChapeau = 0;
+        const int halfOfChapeauWidth = this->chapeau->w >> 1;
+        const int chapeauOffsetY = -50;
+        const int labelOffsetY = 80;
+
         // Egyptus
-        planets->addWidget( new Icon( 77, 121, planetEgyptus ) );
-        planets->addWidget( new Icon( 90, 70, egyptusFree ? chapeau : chapeauTriste ) );
-        langString = languageManager->findLanguageString( "egyptus" );
-        planets->addWidget( new Label( langString->getX(), langString->getY(), langString->getText() ) );
+        const int egyptusX = 77; const int egyptusY = 120;
+        Icon* imageOfEgyptus = new Icon( egyptusX, egyptusY, planetEgyptus );
+        planets->addWidget( imageOfEgyptus );
+
+        imageOfChapeau = new Icon(
+                egyptusX + ( imageOfEgyptus->getWidth() >> 1 ) - halfOfChapeauWidth,
+                egyptusY + chapeauOffsetY,
+                egyptusFree ? chapeau : chapeauTriste
+        );
+        planets->addWidget( imageOfChapeau );
+
+        label = new Label( languageManager->findLanguageString( "egyptus" )->getText() );
+        label->moveTo( egyptusX + ( imageOfEgyptus->getWidth() >> 1 ) - ( label->getWidth() >> 1 ), egyptusY + labelOffsetY );
+        planets->addWidget( label );
 
         // Penitentiary
-        planets->addWidget( new Icon( 463, 121, planetPenitentiary ) );
-        planets->addWidget( new Icon( 476, 70, penitentiaryFree ? chapeau : chapeauTriste ) );
-        langString = languageManager->findLanguageString( "penitentiary" );
-        planets->addWidget( new Label( langString->getX(), langString->getY(), langString->getText() ) );
+        const int penitentiaryX = 463; const int penitentiaryY = egyptusY;
+        Icon* imageOfPenitentiary = new Icon( penitentiaryX, penitentiaryY, planetPenitentiary );
+        planets->addWidget( imageOfPenitentiary );
+
+        imageOfChapeau = new Icon(
+                penitentiaryX + ( imageOfPenitentiary->getWidth() >> 1 ) - halfOfChapeauWidth,
+                penitentiaryY + chapeauOffsetY,
+                penitentiaryFree ? chapeau : chapeauTriste
+        );
+        planets->addWidget( imageOfChapeau );
+
+        label = new Label( languageManager->findLanguageString( "penitentiary" )->getText() );
+        label->moveTo( penitentiaryX + ( imageOfPenitentiary->getWidth() >> 1 ) - ( label->getWidth() >> 1 ), penitentiaryY + labelOffsetY );
+        planets->addWidget( label );
 
         // Byblos
-        planets->addWidget( new Icon( 77, 371, planetBookworld ) );
-        planets->addWidget( new Icon( 90, 320, byblosFree ? chapeau : chapeauTriste ) );
-        langString = languageManager->findLanguageString( "byblos" );
-        planets->addWidget( new Label( langString->getX(), langString->getY(), langString->getText() ) );
+        const int byblosX = egyptusX; const int byblosY = 370;
+        Icon* imageOfByblos = new Icon( byblosX, byblosY, planetBookworld );
+        planets->addWidget( imageOfByblos );
+
+        imageOfChapeau = new Icon(
+                byblosX + ( imageOfByblos->getWidth() >> 1 ) - halfOfChapeauWidth,
+                byblosY + chapeauOffsetY,
+                byblosFree ? chapeau : chapeauTriste
+        );
+        planets->addWidget( imageOfChapeau );
+
+        label = new Label( languageManager->findLanguageString( "byblos" )->getText() );
+        label->moveTo( byblosX + ( imageOfByblos->getWidth() >> 1 ) - ( label->getWidth() >> 1 ), byblosY + labelOffsetY );
+        planets->addWidget( label );
 
         // Safari
-        planets->addWidget( new Icon( 463, 371, planetSafari ) );
-        planets->addWidget( new Icon( 476, 320, safariFree ? chapeau : chapeauTriste ) );
-        langString = languageManager->findLanguageString( "safari" );
-        planets->addWidget( new Label( langString->getX(), langString->getY(), langString->getText() ) );
+        const int safariX = penitentiaryX; const int safariY = byblosY;
+        Icon* imageOfSafari = new Icon( safariX, safariY, planetSafari );
+        planets->addWidget( imageOfSafari );
+
+        imageOfChapeau = new Icon(
+                safariX + ( imageOfSafari->getWidth() >> 1 ) - halfOfChapeauWidth,
+                safariY + chapeauOffsetY,
+                safariFree ? chapeau : chapeauTriste
+        );
+        planets->addWidget( imageOfChapeau );
+
+        label = new Label( languageManager->findLanguageString( "safari" )->getText() );
+        label->moveTo( safariX + ( imageOfSafari->getWidth() >> 1 ) - ( label->getWidth() >> 1 ), safariY + labelOffsetY );
+        planets->addWidget( label );
 
         // Blacktooth
-        planets->addWidget( new Icon( 283, 251, planetBlacktooth ) );
-        planets->addWidget( new Icon( 296, 200, blacktoothFree ? chapeau : chapeauTriste ) );
-        langString = languageManager->findLanguageString( "blacktooth" );
-        planets->addWidget( new Label( langString->getX(), langString->getY(), langString->getText() ) );
+        const int blacktoothX = 283; const int blacktoothY = 250;
+        Icon* imageOfBlacktooth = new Icon( blacktoothX, blacktoothY, planetBlacktooth );
+        planets->addWidget( imageOfBlacktooth );
+
+        imageOfChapeau = new Icon(
+                blacktoothX + ( imageOfBlacktooth->getWidth() >> 1 ) - halfOfChapeauWidth,
+                blacktoothY + chapeauOffsetY,
+                blacktoothFree ? chapeau : chapeauTriste
+        );
+        planets->addWidget( imageOfChapeau );
+
+        label = new Label( languageManager->findLanguageString( "blacktooth" )->getText() );
+        label->moveTo( blacktoothX + ( imageOfBlacktooth->getWidth() >> 1 ) - ( label->getWidth() >> 1 ), blacktoothY + labelOffsetY );
+        planets->addWidget( label );
 
         GuiManager::getInstance()->changeScreen( planets );
 }

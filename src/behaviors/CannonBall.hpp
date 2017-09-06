@@ -59,7 +59,7 @@ private:
         */
         HPC * speedTimer ;
 
-public: // Operaciones de consulta y actualización
+public:
 
        /**
         * Asigna los datos del elemento usado para representar la explosión de la bola

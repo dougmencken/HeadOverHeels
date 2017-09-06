@@ -20,8 +20,7 @@ namespace gui
 {
 
 /**
- * Base para la creación de los elementos existentes en la interfaz gráfica de usuario
- * Cada nuevo elemento debe recodificar la operación 'draw'
+ * Foundation for creating elements of the user interface
  */
 
 class Widget
@@ -29,32 +28,23 @@ class Widget
 
 public:
 
-        /**
-         * Constructor
-         * @param x Coordenada X de pantalla donde situar el elemento
-         * @param x Coordenada X de pantalla donde situar el elemento
-         */
+        Widget( ) ;
+
         Widget( int x, int y ) ;
 
         virtual ~Widget( ) ;
 
-        /**
-         * Dibuja el elemento
-         */
         virtual void draw ( BITMAP * where ) = 0 ;
 
         /**
-         * Recibe la pulsación de una tecla. Las subclases pueden responder a dicho evento
-         * o comunicárselo al siguiente componente
+         * Subclasses may respond to this event or notify other component
          */
         virtual void handleKey ( int key ) = 0 ;
 
         /**
-         * Cambia la posición del elemento
-         * @param x Coordenada X de pantalla donde situar el elemento
-         * @param y Coordenada Y de pantalla donde situar el elemento
+         * Change position of the widget
          */
-        virtual void changePosition ( int x, int y ) ;
+        virtual void moveTo ( int x, int y ) ;
 
 private:
 
@@ -70,7 +60,7 @@ protected:
 
         void setY ( int y ) {  this->xy.second = y ;  }
 
-public: // Operaciones de consulta y actualización
+public:
 
         std::pair < int, int > getXY () const {  return this->xy ;  }
 

@@ -336,7 +336,7 @@ private:
         */
         std::pair < int, int > tripleRoomBoundY ;
 
-public: // Operaciones de consulta y actualización
+public:
 
        /**
         * Identificador textual de la sala. Se hace coincidir con el nombre de su archivo
@@ -476,7 +476,7 @@ private:
          */
         int y ;
 
-public: // Operaciones de consulta y actualización
+public:
 
         /**
          * Dirección de entrada a la sala

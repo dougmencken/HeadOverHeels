@@ -176,7 +176,7 @@ private:
          */
         std::list < SoundData > soundData ;
 
-public: // Operaciones de consulta y actualización
+public:
 
         /**
          * Establece el volumen de los efectos sonoros
@@ -270,7 +270,7 @@ public:
          */
         std::string path ;
 
-public: // Operaciones de consulta y actualización
+public:
 
         /**
          * La etiqueta que identifica a un elemento

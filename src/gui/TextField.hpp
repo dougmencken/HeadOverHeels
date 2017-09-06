@@ -12,21 +12,14 @@
 #define TextField_hpp_
 
 #include <list>
-#include <algorithm>
-#include <functional>
-#include <string>
-#include <memory>
-
 #include <allegro.h>
-
 #include "Widget.hpp"
 
 
 namespace gui
 {
 
-// Declaraciones adelantadas
-class Label;
+class Label ;
 
 enum Alignment
 {
@@ -36,8 +29,9 @@ enum Alignment
 };
 
 /**
- * Almacena texto en varias líneas que puede alinearse a la izquierda, centro y derecha
+ * Stores text in multiple lines aligned left, center or right
  */
+
 class TextField : public Widget
 {
 
@@ -51,52 +45,44 @@ public:
         * @param height Altura del campo de texto
         * @param alignment Alineación horizontal del texto: izquierda, centro o derecha
         */
-        TextField( unsigned int x, unsigned int y, unsigned int width, unsigned int height, const Alignment& alignment ) ;
+        TextField( int x, int y, unsigned int width, unsigned int height, const Alignment& alignment ) ;
 
         virtual ~TextField( ) ;
 
-        /**
-        * Dibuja el elemento
-        */
         virtual void draw ( BITMAP * where ) ;
 
         void handleKey ( int rawKey ) { /* do nothing */ }
 
-        /**
+       /**
         * Añade una nueva línea al campo de texto
         */
         void addLine ( const std::string& text, const std::string& font, const std::string& color ) ;
 
-        /**
-        * Cambia la posición del elemento
-        * @param x Coordenada X de pantalla donde situar el elemento
-        * @param y Coordenada Y de pantalla donde situar el elemento
+       /**
+        * Change position of text field
         */
-        void changePosition ( int x, int y ) ;
+        void moveTo ( int x, int y ) ;
 
 private:
 
-        /**
+       /**
         * Anchura del campo de texto
         */
         unsigned int width ;
 
-        /**
+       /**
         * Altura del campo de texto
         */
         unsigned int height ;
 
-        /**
+       /**
         * Alineación horizontal del texto: izquierda, centro o derecha
         */
         Alignment alignment ;
 
-        /**
-        * Distancia de interlineado respecto a la última línea añadida
-        */
-        unsigned int delta ;
+        unsigned int heightOfField ;
 
-        /**
+       /**
         * El campo de texto se compone de etiquetas
         */
         std::list < Label * > lines ;

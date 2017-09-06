@@ -12,11 +12,6 @@
 #define GameManager_hpp_
 
 #include <string>
-#include <vector>
-#include <algorithm>
-#include <sstream>
-#include <iostream>
-#include <fstream>
 #include "csxml/SaveGameXML.hpp"
 #include "Ism.hpp"
 #include "Room.hpp"
@@ -30,7 +25,7 @@ class GameFileManager;
 class PlayerItem;
 
 /**
- * Planetas que el jugador debe liberar
+ * Planets to liberate
  */
 enum PlanetId
 {

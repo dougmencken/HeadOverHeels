@@ -22,16 +22,14 @@
 namespace isomot
 {
 
-// Declaraciones adelantadas
-class ItemData;
+class ItemData ;
 
 /**
- * Los elementos rejilla son aquellos que están colocados en una posición concreta de la
- * rejilla, y tienen las mismas anchuras que sus celdas. Los elementos rejilla son, básicamente,
- * los bloques estáticos del juego sobre los que el jugador va a saltar
- * No se puede cambiar las coordenadas X e Y de un elemento rejilla, solo se puede cambiar su
- * coordenada Z
+ * Grid items are those which are placed in a particular position and have the same widths
+ * as cells of grid have. Grid items are mostly static blocks on which player jumps. You can’t
+ * change X and Y coordinates of grid item, you can only change its Z coordinate
  */
+
 class GridItem : public Item, public Drawable
 {
 

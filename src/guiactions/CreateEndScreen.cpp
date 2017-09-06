@@ -39,43 +39,39 @@ void CreateEndScreen::doIt ()
 
         screen->placeHeadAndHeels( /* icons */ true, /* copyrights */ false );
 
-        Label* label = 0;
-        LanguageText* langString = 0;
         LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
+        Label* label = 0;
         std::stringstream ss;
 
-        // Puntuación alcanzada por el jugador
+        // score reached by the player
         unsigned int score = this->rooms * 160 + this->planets * 10000;
-        langString = languageManager->findLanguageString( "score" );
         ss.str( std::string() );
         ss << score;
-        label = new Label( 0, 0, langString->getText() + " " + ss.str(), "regular", "yellow" );
-        label->changePosition( ( 640 - label->getWidth() ) >> 1, langString->getY() );
+        label = new Label( languageManager->findLanguageString( "score" )->getText() + " " + ss.str(), "regular", "yellow" );
+        label->moveTo( ( 640 - label->getWidth() ) >> 1, 300 );
         screen->addWidget( label );
 
-        // Número de salas visitadas
-        langString = languageManager->findLanguageString( "explored-rooms" );
-        std::string exploredRooms = langString->getText();
+        // count of visited rooms
+        std::string exploredRooms = languageManager->findLanguageString( "explored-rooms" )->getText();
         ss.str( std::string() );
         ss << this->rooms;
         size_t prooms = exploredRooms.find( "%d" );
         exploredRooms.replace( prooms, 2, ss.str() );
-        label = new Label( 0, 0, exploredRooms, "regular", "cyan" );
-        label->changePosition( ( 640 - label->getWidth() ) >> 1, langString->getY() );
+        label = new Label( exploredRooms, "regular", "cyan" );
+        label->moveTo( ( 640 - label->getWidth() ) >> 1, 340 );
         screen->addWidget( label );
 
-        // Número de planetas liberados
-        langString = languageManager->findLanguageString( "liberated-planets" );
-        std::string liberatedPlanets = langString->getText();
+        // count of liberated planets
+        std::string liberatedPlanets = languageManager->findLanguageString( "liberated-planets" )->getText();
         ss.str( std::string() );
         ss << this->planets;
         size_t pplanets = liberatedPlanets.find( "%d" );
         liberatedPlanets.replace( pplanets, 2, ss.str() );
-        label = new Label( 0, 0, liberatedPlanets, "regular", "white" );
-        label->changePosition( ( 640 - label->getWidth() ) >> 1, langString->getY() );
+        label = new Label( liberatedPlanets, "regular", "white" );
+        label->moveTo( ( 640 - label->getWidth() ) >> 1, 380 );
         screen->addWidget( label );
 
-        // Rango alcanzado por el jugador
+        // range reached by player
         unsigned int bounds[ ] = {  0, 8000, 20000, 30000, 55000, 84000, 0xffffffff  };
         std::string ranges[ ] = {  "dummy", "novice", "spy", "master-spy", "hero", "emperor"  };
 
@@ -84,9 +80,8 @@ void CreateEndScreen::doIt ()
         {
                 if ( score > bounds[ i ] && score <= bounds[ i + 1 ] )
                 {
-                        langString = languageManager->findLanguageString( ranges[ i ] );
-                        label = new Label( 0, 0, langString->getText(), "big", "multicolor" );
-                        label->changePosition( ( 640 - label->getWidth() ) >> 1, langString->getY() );
+                        label = new Label( languageManager->findLanguageString( ranges[ i ] )->getText(), "big", "multicolor" );
+                        label->moveTo( ( 640 - label->getWidth() ) >> 1, 180 );
                         screen->addWidget( label );
                 }
         }

@@ -255,7 +255,7 @@ private:
          */
         double shieldTime ;
 
-public: // Operaciones de consulta y actualización
+public:
 
         /**
          * Establece el número de vidas del jugador

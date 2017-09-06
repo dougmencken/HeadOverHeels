@@ -47,15 +47,16 @@ void CreateLanguageMenu::doIt ()
 
                 Label* label = 0;
 
-                label = new Label( 200, 24, "Head" );
-                label->changeFontAndColor( "big", "yellow" );
+                label = new Label( "Head", "big", "yellow" );
+                label->moveTo( 200, 24 );
                 screen->addWidget( label );
 
-                label = new Label( 280, 45, "over", "regular", "multicolor" );
+                label = new Label( "over", "regular", "multicolor" );
+                label->moveTo( 280, 45 );
                 screen->addWidget( label );
 
-                label = new Label( 360, 24, "Heels" );
-                label->changeFontAndColor( "big", "yellow" );
+                label = new Label( "Heels", "big", "yellow" );
+                label->moveTo( 360, 24 );
                 screen->addWidget( label );
 
                 screen->addIconOfHeadAt( 66, 24 );

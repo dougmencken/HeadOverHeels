@@ -47,6 +47,10 @@ public:
 
         void setPicture ( BITMAP * newPicture ) {  delete icon ;  icon = newPicture ;  }
 
+        unsigned int getWidth () const {  return this->icon->w ;  }
+
+        unsigned int getHeight () const {  return this->icon->h ;  }
+
 private:
 
         BITMAP * icon ;

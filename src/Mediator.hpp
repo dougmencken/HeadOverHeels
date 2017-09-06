@@ -439,7 +439,7 @@ private:
         */
         TransparencyManager * transparencyManager ;
 
-public: // Operaciones de consulta y actualización
+public:
 
        /**
         * Indica si el subproceso de actualización de elementos está ejecutándose

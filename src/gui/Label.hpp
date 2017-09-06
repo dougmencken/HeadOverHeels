@@ -12,7 +12,6 @@
 #define Label_hpp_
 
 #include <string>
-#include <cassert>
 #include <allegro.h>
 
 #include "Gui.hpp"
@@ -32,53 +31,27 @@ class Label : public Widget
 public:
 
         /**
-         * Constructor. La posición de la etiqueta se establece en ( 0, 0 ), se usa la fuente
-         * por defecto y el texto es de color blanco
-         * @param text El texto a presentar
+         * Constructor
+         * @param text The text of this label
          */
         Label( const std::string& text ) ;
 
         /**
-         * Constructor. Se usa la fuente por defecto y el texto es de color blanco
-         * @param x Coordenada X de pantalla donde situar el elemento
-         * @param y Coordenada Y de pantalla donde situar el elemento
-         * @param text El texto a presentar
-         */
-        Label( int x, int y, const std::string& text ) ;
-
-        /**
          * Constructor
-         * @param text El texto a presentar
-         * @param fontName Nombre de la fuente caligráfica usada para representar el texto
-         * @param color Color del texto
+         * @param text The text of this label
+         * @param fontName Name of font to draw characters
+         * @param color Color of text
          * @param spacing Space between characters
          */
         Label( const std::string& text, const std::string& fontName, const std::string& color, int spacing = 0 ) ;
 
-        /**
-         * Constructor
-         * @param x Coordenada X de pantalla donde situar el elemento
-         * @param y Coordenada Y de pantalla donde situar el elemento
-         * @param text El texto a presentar
-         * @param fontName Nombre de la fuente caligráfica usada para representar el texto
-         * @param color Color del texto
-         * @param spacing Space between characters
-         */
-        Label( int x, int y, const std::string& text, const std::string& fontName, const std::string& color, int spacing = 0 ) ;
-
         virtual ~Label( ) ;
 
         /**
-         * Cambia el tipo de letra del texto
-         * @param fontName Nombre de la fuente caligráfica
-         * @param color Color del texto
+         * Change font and color of text
          */
         void changeFontAndColor ( const std::string& fontName, const std::string& color ) ;
 
-        /**
-         * Dibuja el elemento
-         * @param where Imagen donde será dibujado
-         */
         void draw ( BITMAP* where ) ;
 
         /**
@@ -91,7 +64,7 @@ protected:
         /**
          * Create image of label
          * @param text A string of characters in utf-8
-         * @param font Font to draw these characters
+         * @param font Name of font to draw these characters
          * @param color Color of text
          * @return The image with magenta (key color) background and the text
          */
@@ -120,7 +93,7 @@ public:
 
         std::string getText () const {  return this->text ;  }
 
-        void setText( const std::string& str ) {  this->text = str ;  }
+        void setText( const std::string& newText ) {  this->text = newText ;  }
 
         std::string getFontName () const {  return this->fontName ;  }
 
@@ -136,10 +109,9 @@ public:
         {
                 // symbols of game fonts are monospaced
                 return utf8StringLength( text ) * ( font->getCharWidth() + spacing ) ;
-                /* return this->buffer->w ; */
         }
 
-        unsigned int getHeight () const {  return font->getCharHeight() ; /* return this->buffer->h ; */  }
+        unsigned int getHeight () const {  return font->getCharHeight() ;  }
 
         Action* getAction ( ) const {  return myAction ;  }
 

@@ -147,7 +147,7 @@ private:
         */
         bool atFullScreen ;
 
-public: // Operaciones de consulta y actualización
+public:
 
        /**
         * Devuelve el gestor de la configuración del juego

@@ -227,7 +227,7 @@ private:
          */
         std::string westSouth ;
 
-public: // Operaciones de consulta y actualización
+public:
 
         /**
          * Nombre completo del archivo que contiene los datos de esta sala
@@ -428,7 +428,7 @@ private:
          */
         Direction orientation ;
 
-public: // Operaciones de consulta y actualización
+public:
 
         /**
          * Jugador que está presente en la sala cuando la sala se crea

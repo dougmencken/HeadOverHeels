@@ -9,21 +9,7 @@ namespace gui
 {
 
 Label::Label( const std::string& text )
-: Widget( 0, 0 ),
-        text( text ),
-        fontName( "regular" ),
-        color( "white" ),
-        font( 0 ),
-        spacing( 0 ),
-        buffer( 0 ),
-        myAction( 0 )
-{
-        this->font = FontManager::getInstance()->findFont( fontName, color );
-        this->createBitmapOfLabel( this->text, this->fontName, this->color );
-}
-
-Label::Label( int x, int y, const std::string& text )
-: Widget( x, y ),
+: Widget( ),
         text( text ),
         fontName( "regular" ),
         color( "white" ),
@@ -37,20 +23,7 @@ Label::Label( int x, int y, const std::string& text )
 }
 
 Label::Label( const std::string& text, const std::string& fontName, const std::string& color, int spacing )
-: Widget( 0, 0 ),
-        text( text ),
-        fontName( fontName ),
-        color( color ),
-        font( 0 ),
-        spacing( spacing ),
-        buffer( 0 )
-{
-        this->font = FontManager::getInstance()->findFont( fontName, color.compare( "multicolor" ) == 0 ? "white" : color );
-        this->createBitmapOfLabel( this->text, this->fontName, this->color );
-}
-
-Label::Label( int x, int y, const std::string& text, const std::string& fontName, const std::string& color, int spacing )
-: Widget( x, y ),
+: Widget( ),
         text( text ),
         fontName( fontName ),
         color( color ),

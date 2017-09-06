@@ -9,37 +9,37 @@
     </properties>
   </text>
 
-  <text id="blacktooth-empire" x="140" y="0">
+  <text id="blacktooth-empire">
     <properties>
       <ustring>Империя Блактут</ustring>
     </properties>
   </text>
 
-  <text id="blacktooth" x="264" y="330">
+  <text id="blacktooth">
     <properties>
       <ustring>Блактут</ustring>
     </properties>
   </text>
 
-  <text id="egyptus" x="56" y="200">
+  <text id="egyptus">
     <properties>
       <ustring>Египтус</ustring>
     </properties>
   </text>
 
-  <text id="penitentiary" x="382" y="200">
+  <text id="penitentiary">
     <properties>
       <ustring>Пенитенциарные</ustring>
     </properties>
   </text>
 
-  <text id="byblos" x="64" y="450">
+  <text id="byblos">
     <properties>
       <ustring>Библос</ustring>
     </properties>
   </text>
 
-  <text id="safari" x="450" y="450">
+  <text id="safari">
     <properties>
       <ustring>Сафари</ustring>
     </properties>
@@ -582,19 +582,19 @@
     </properties>
   </text>
 
-  <text id="score" x="0" y="300">
+  <text id="score">
     <properties>
       <ustring>Счет:</ustring>
     </properties>
   </text>
 
-  <text id="explored-rooms" x="0" y="340">
+  <text id="explored-rooms">
     <properties>
       <ustring>Исследовано %d комнат</ustring>
     </properties>
   </text>
 
-  <text id="liberated-planets" x="0" y="380">
+  <text id="liberated-planets">
     <properties>
       <ustring>Освобождено %d планет</ustring>
     </properties>
@@ -612,7 +612,7 @@
     </properties>
   </text>
 
-  <text id="final-text" x="0" y="157">
+  <text id="final-text" x="0" y="160">
     <properties font="big" color="yellow">
       <ustring>Люди салютуют Вашему героизму и</ustring>
     </properties>
@@ -626,44 +626,44 @@
       <ustring>два наших героя определенно положат</ustring>
     </properties>
     <properties font="regular" color="cyan">
-      <ustring>коней тирании</ustring>
+      <ustring>конец тирании</ustring>
     </properties>
     <properties font="regular" color="multicolor">
       <ustring>Императора Блактут</ustring>
     </properties>
   </text>
 
-  <text id="dummy" x="0" y="180">
+  <text id="dummy">
     <properties>
       <ustring>Глупышка</ustring>
     </properties>
   </text>
 
-  <text id="novice" x="0" y="180">
+  <text id="novice">
     <properties>
       <ustring>Новичок</ustring>
     </properties>
   </text>
 
-  <text id="spy" x="0" y="180">
+  <text id="spy">
     <properties>
       <ustring>Шпион</ustring>
     </properties>
   </text>
 
-  <text id="master-spy" x="0" y="180">
+  <text id="master-spy">
     <properties>
       <ustring>Шпион асс</ustring>
     </properties>
   </text>
 
-  <text id="hero" x="0" y="180">
+  <text id="hero">
     <properties>
       <ustring>Герой</ustring>
     </properties>
   </text>
 
-  <text id="emperor" x="0" y="180">
+  <text id="emperor">
     <properties>
       <ustring>Император</ustring>
     </properties>

@@ -15,104 +15,106 @@
 #include "Ism.hpp"
 #include "csxml/SaveGameXML.hpp"
 
+
 namespace isomot
 {
 
-// Declaraciones adelantadas
-class GameManager;
-class Isomot;
-class MapManager;
+class GameManager ;
+class Isomot ;
+class MapManager ;
 
 /**
- * Gestiona la grabación y recuperación de una partida
+ * Deals with saving and restoring of game
  */
+
 class GameFileManager
 {
+
 public:
 
-  /**
-   * Constructor
-   * @param gameManager El gestor del juego
-   * @param isomot El motor isométrico del juego
-   */
-	GameFileManager(const GameManager* gameManager, const Isomot* isomot);
+       /**
+        * Constructor
+        * @param gameManager El gestor del juego
+        * @param isomot El motor isométrico del juego
+        */
+        GameFileManager( const GameManager * gameManager, const Isomot * isomot ) ;
 
-	~GameFileManager();
+        ~GameFileManager( ) ;
 
-  /**
-   * Guarda los datos necesarios para grabar la partida
-   * @param roomId Identificador de la sala donde se ha cogido el pez de la reencarnación
-   * @param label Etiqueta del jugador que ha cogido el pez
-   * @param x Coordenada X donde está situado el pez de la reencarnación
-   * @param y Coordenada Y donde está situado el pez de la reencarnación
-   * @param z Coordenada Z donde está situado el pez de la reencarnación
-   * @param direction Dirección a la que mira el jugador en el momento de coger el pez
-   */
-	void assignFishData(const std::string& roomId, short label, int x, int y, int z, const Direction& direction);
+       /**
+        * Guarda los datos necesarios para grabar la partida
+        * @param roomId Identificador de la sala donde se ha cogido el pez de la reencarnación
+        * @param label Etiqueta del jugador que ha cogido el pez
+        * @param x Coordenada X donde está situado el pez de la reencarnación
+        * @param y Coordenada Y donde está situado el pez de la reencarnación
+        * @param z Coordenada Z donde está situado el pez de la reencarnación
+        * @param direction Dirección a la que mira el jugador en el momento de coger el pez
+        */
+        void assignFishData ( const std::string& roomId, short label, int x, int y, int z, const Direction& direction ) ;
 
-  /**
-   * Carga una partida de un archivo XML
-   * @param fileName Nombre del archivo
-   */
-  void loadGame(const std::string& fileName);
+       /**
+        * Carga una partida de un archivo XML
+        * @param fileName Nombre del archivo
+        */
+        void loadGame ( const std::string& fileName ) ;
 
-  /**
-   * Guarda una partida en un archivo XML
-   * @param fileName Nombre del archivo
-   * @pre El jugador ha tenido que comerse el pez, es decir, la partida se graba en disco sólo
-   * si se han asignado los datos necesarios a través de assignFishData
-   */
-  void saveGame(const std::string& fileName);
-
-private:
-
-  /**
-   * Establece el estado de los jugadores (vidas, bocina, bolso y rosquillas)
-   * @param playerSequence Datos obtenidos de los jugadores de la partida cargada
-   */
-  void assignPlayerStatus(const sgxml::players::player_sequence& playerSequence);
+       /**
+        * Guarda una partida en un archivo XML
+        * @param fileName Nombre del archivo
+        * @pre El jugador ha tenido que comerse el pez, es decir, la partida se graba en disco sólo
+        * si se han asignado los datos necesarios a través de assignFishData
+        */
+        void saveGame ( const std::string& fileName ) ;
 
 private:
 
-  /**
-   * Identificador de la sala donde se ha cogido el pez de la reencarnación
-   */
-  std::string roomId;
+       /**
+        * Establece el estado de los jugadores (vidas, bocina, bolso y rosquillas)
+        * @param playerSequence Datos obtenidos de los jugadores de la partida cargada
+        */
+        void assignPlayerStatus ( const sgxml::players::player_sequence& playerSequence ) ;
 
-  /**
-   * Etiqueta del jugador que ha cogido el pez
-   */
-  short label;
+private:
 
-  /**
-   * Coordenada X donde está situado el pez de la reencarnación
-   */
-  int x;
+       /**
+        * Identificador de la sala donde se ha cogido el pez de la reencarnación
+        */
+        std::string roomId ;
 
-  /**
-   * Coordenada Y donde está situado el pez de la reencarnación
-   */
-  int y;
+       /**
+        * Label of player who has caught the fish
+        */
+        short label ;
 
-  /**
-   * Coordenada Z donde está situado el pez de la reencarnación
-   */
-  int z;
+       /**
+        * Coordenada X donde está situado el pez de la reencarnación
+        */
+        int x ;
 
-  /**
-   * Dirección a la que mira el jugador en el momento de coger el pez
-   */
-  Direction direction;
+       /**
+        * Coordenada Y donde está situado el pez de la reencarnación
+        */
+        int y ;
 
-  /**
-   * El gestor del juego
-   */
-  GameManager* gameManager;
+       /**
+        * Coordenada Z donde está situado el pez de la reencarnación
+        */
+        int z ;
 
-  /**
-   * El motor isométrico del juego
-   */
-  Isomot* isomot;
+       /**
+        * Dirección a la que mira el jugador en el momento de coger el pez
+        */
+        Direction direction ;
+
+       /**
+        * El gestor del juego
+        */
+        GameManager * gameManager ;
+
+       /**
+        * El motor isométrico del juego
+        */
+        Isomot * isomot ;
 
 };
 

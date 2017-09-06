@@ -13,8 +13,6 @@
 
 #include <list>
 #include <string>
-#include <algorithm>
-#include <functional>
 #include <allegro.h>
 #include "Widget.hpp"
 
@@ -33,6 +31,8 @@ class Menu : public Widget
 {
 
 public:
+
+        Menu( );
 
         Menu( int x, int y );
 

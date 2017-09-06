@@ -11,12 +11,8 @@
 #ifndef Screen_hpp_
 #define Screen_hpp_
 
-#include <cmath>
 #include <list>
-#include <algorithm>
-#include <functional>
 #include <allegro.h>
-
 #include "Widget.hpp"
 
 
@@ -27,8 +23,7 @@ class Action ;
 class Icon ;
 
 /**
- * La pantalla del juego: un contenedor donde mostrar los elementos de la interfaz
- * gráfica de usuario
+ * Container for elements of user interface
  */
 
 class Screen : public Widget
@@ -104,7 +99,7 @@ private:
 
         Icon * iconOfHeels ;
 
-public: // Operaciones de consulta y actualización
+public:
 
         /**
          * Establece la imagen de fondo de la pantalla
@@ -126,7 +121,6 @@ public: // Operaciones de consulta y actualización
 
         /**
          * Assign the successor of this component in the chain to handle of typing of a key
-         * @param widget Un componente de la interfaz gráfica
          */
         void setKeyHandler ( Widget* widget ) {  keyHandler = widget ;  }
 

@@ -20,6 +20,7 @@ namespace gui
 /**
  * Crea la pantalla de los planetas
  */
+
 class CreatePlanetsScreen : public Action
 {
 
@@ -41,30 +42,15 @@ public:
 
         std::string getNameOfAction ()  {  return "CreatePlanetsScreen" ;  }
 
-        /**
-         * Indica la liberación de Blacktooth
-         */
-        void blacktoothIsFree() {  blacktoothFree = true ;  }
+        void liberateBlacktooth() {  blacktoothFree = true ;  }
 
-        /**
-         * Indica la liberación de Egyptus
-         */
-        void egyptusIsFree() {  egyptusFree = true ;  }
+        void liberateEgyptus() {  egyptusFree = true ;  }
 
-        /**
-         * Indica la liberación de Penitentiary
-         */
-        void penitentiaryIsFree() {  penitentiaryFree = true ;  }
+        void liberatePenitentiary() {  penitentiaryFree = true ;  }
 
-        /**
-         * Indica la liberación de Byblos
-         */
-        void byblosIsFree() {  byblosFree = true ;  }
+        void liberateByblos() {  byblosFree = true ;  }
 
-        /**
-         * Indica la liberación de Safari
-         */
-        void safariIsFree() {  safariFree = true ;  }
+        void liberateSafari() {  safariFree = true ;  }
 
 private:
 

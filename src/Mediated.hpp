@@ -32,7 +32,7 @@ protected:
         */
         Mediator * mediator ;
 
-public: // Operaciones de consulta y actualización
+public:
 
        /**
         * Establece el mediador entre los elementos pertenecientes a la sala

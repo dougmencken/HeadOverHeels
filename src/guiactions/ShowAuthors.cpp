@@ -54,7 +54,7 @@ void ShowAuthors::doIt ()
         else
         {
                 // restore the initial position
-                linesOfCredits->changePosition( linesOfCredits->getX(), initialY );
+                linesOfCredits->moveTo( linesOfCredits->getX(), initialY );
         }
 
         GuiManager::getInstance()->changeScreen( screen );
@@ -70,7 +70,7 @@ void ShowAuthors::doIt ()
                         yNow = initialY ;
                 }
 
-                linesOfCredits->changePosition( linesOfCredits->getX(), yNow );
+                linesOfCredits->moveTo( linesOfCredits->getX(), yNow );
                 GuiManager::getInstance()->refresh();
 
                 exit = ( keypressed() && key[ KEY_ESC ] );

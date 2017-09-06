@@ -9,37 +9,37 @@
     </properties>
   </text>
 
-  <text id="blacktooth-empire" x="140" y="0">
+  <text id="blacktooth-empire">
     <properties>
       <ustring>Blacktooth-eko inperioa</ustring>
     </properties>
   </text>
 
-  <text id="blacktooth" x="236" y="330">
+  <text id="blacktooth">
     <properties>
       <ustring>Blacktooth</ustring>
     </properties>
   </text>
 
-  <text id="egyptus" x="56" y="200">
+  <text id="egyptus">
     <properties>
       <ustring>Egyptus</ustring>
     </properties>
   </text>
 
-  <text id="penitentiary" x="400" y="200">
+  <text id="penitentiary">
     <properties>
       <ustring>Penitentiary</ustring>
     </properties>
   </text>
 
-  <text id="byblos" x="62" y="450">
+  <text id="byblos">
     <properties>
       <ustring>Byblos</ustring>
     </properties>
   </text>
 
-  <text id="safari" x="450" y="450">
+  <text id="safari">
     <properties>
       <ustring>Safari</ustring>
     </properties>
@@ -588,19 +588,19 @@
     </properties>
   </text>
 
-  <text id="score" x="0" y="300">
+  <text id="score">
     <properties>
       <ustring>Puntuaketa:</ustring>
     </properties>
   </text>
 
-  <text id="explored-rooms" x="0" y="340">
+  <text id="explored-rooms">
     <properties>
       <ustring>%d gelak exploratu dituzu</ustring>
     </properties>
   </text>
 
-  <text id="liberated-planets" x="0" y="380">
+  <text id="liberated-planets">
     <properties>
       <ustring>%d planetak askatu dituzu</ustring>
     </properties>
@@ -618,7 +618,7 @@
     </properties>
   </text>
 
-  <text id="final-text" x="0" y="157">
+  <text id="final-text" x="0" y="160">
     <properties font="big" color="yellow">
       <ustring>Herria alabatzen eta pregonatzen du</ustring>
     </properties>
@@ -639,37 +639,37 @@
     </properties>
   </text>
 
-  <text id="dummy" x="0" y="180">
+  <text id="dummy">
     <properties>
       <ustring>Mutil</ustring>
     </properties>
   </text>
 
-  <text id="novice" x="0" y="180">
+  <text id="novice">
     <properties>
       <ustring>Hasiberri</ustring>
     </properties>
   </text>
 
-  <text id="spy" x="0" y="180">
+  <text id="spy">
     <properties>
       <ustring>Zelatari</ustring>
     </properties>
   </text>
 
-  <text id="master-spy" x="0" y="180">
+  <text id="master-spy">
     <properties>
       <ustring>Zelatari Maisutza</ustring>
     </properties>
   </text>
 
-  <text id="hero" x="0" y="180">
+  <text id="hero">
     <properties>
       <ustring>Heroi</ustring>
     </properties>
   </text>
 
-  <text id="emperor" x="0" y="180">
+  <text id="emperor">
     <properties>
       <ustring>Enperadore</ustring>
     </properties>

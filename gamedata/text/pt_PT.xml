@@ -9,37 +9,37 @@
     </properties>
   </text>
 
-  <text id="blacktooth-empire" x="140" y="0">
+  <text id="blacktooth-empire">
     <properties>
       <ustring>O Império Blacktooth</ustring>
     </properties>
   </text>
 
-  <text id="blacktooth" x="236" y="330">
+  <text id="blacktooth">
     <properties>
       <ustring>Blacktooth</ustring>
     </properties>
   </text>
 
-  <text id="egyptus" x="56" y="200">
+  <text id="egyptus">
     <properties>
       <ustring>Egyptus</ustring>
     </properties>
   </text>
 
-  <text id="penitentiary" x="400" y="200">
+  <text id="penitentiary">
     <properties>
       <ustring>Penitentiary</ustring>
     </properties>
   </text>
 
-  <text id="byblos" x="62" y="450">
+  <text id="byblos">
     <properties>
       <ustring>Byblos</ustring>
     </properties>
   </text>
 
-  <text id="safari" x="450" y="450">
+  <text id="safari">
     <properties>
       <ustring>Safari</ustring>
     </properties>
@@ -582,19 +582,19 @@
     </properties>
   </text>
 
-  <text id="score" x="0" y="300">
+  <text id="score">
     <properties>
       <ustring>Pontuação:</ustring>
     </properties>
   </text>
 
-  <text id="explored-rooms" x="0" y="340">
+  <text id="explored-rooms">
     <properties>
       <ustring>Exploraste %d salas</ustring>
     </properties>
   </text>
 
-  <text id="liberated-planets" x="0" y="380">
+  <text id="liberated-planets">
     <properties>
       <ustring>Libertaste %d planetas</ustring>
     </properties>
@@ -630,37 +630,37 @@
     </properties>
   </text>
 
-  <text id="dummy" x="0" y="180">
+  <text id="dummy">
     <properties>
       <ustring>Aprendiz</ustring>
     </properties>
   </text>
 
-  <text id="novice" x="0" y="180">
+  <text id="novice">
     <properties>
       <ustring>Principiante</ustring>
     </properties>
   </text>
 
-  <text id="spy" x="0" y="180">
+  <text id="spy">
     <properties>
       <ustring>Espião</ustring>
     </properties>
   </text>
 
-  <text id="master-spy" x="0" y="180">
+  <text id="master-spy">
     <properties>
       <ustring>Mestre Espião</ustring>
     </properties>
   </text>
 
-  <text id="hero" x="0" y="180">
+  <text id="hero">
     <properties>
       <ustring>Herói</ustring>
     </properties>
   </text>
 
-  <text id="emperor" x="0" y="180">
+  <text id="emperor">
     <properties>
       <ustring>Imperador</ustring>
     </properties>

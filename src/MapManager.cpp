@@ -335,7 +335,7 @@ Room* MapManager::changeRoom( const Direction& exit )
         BehaviorOfItem playerBehavior = player->getBehavior()->getBehaviorOfItem ();
 
         // Averigua si el jugador porta un elemento
-        bool hasItem = player->consultTakenItemImage() != 0;
+        bool withItem = player->consultTakenItemImage() != 0;
 
         // Almacena los límites sala para normalizar las coordenadas de salida o entrada a la nueva
         // sala en en caso de que el jugador acceda a través del suelo, el techo o un telepuerto
@@ -416,7 +416,7 @@ Room* MapManager::changeRoom( const Direction& exit )
         {
                 z = Top;
         }
-        player = roomBuilder->buildPlayerInRoom( newRoom, activePlayer, playerBehavior, x, y, z, exitPosition.getOrientation(), hasItem );
+        player = roomBuilder->buildPlayerInRoom( newRoom, activePlayer, playerBehavior, x, y, z, exitPosition.getOrientation(), withItem );
 
         // Se cambia el estado del jugador en función de la vía de entrada
         switch ( entry )

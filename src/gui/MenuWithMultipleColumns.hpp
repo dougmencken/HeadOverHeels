@@ -11,11 +11,6 @@
 #ifndef MenuWithMultipleColumns_hpp_
 #define MenuWithMultipleColumns_hpp_
 
-#include <list>
-#include <string>
-#include <algorithm>
-#include <functional>
-#include <allegro.h>
 #include "Menu.hpp"
 
 
@@ -34,7 +29,7 @@ public:
          * @param secondColumnX Posición donde se situa la segunda columna del menú
          * @param rows Número de filas de la primera columna
          */
-        MenuWithMultipleColumns( unsigned int x, unsigned int y, unsigned int secondColumnX, unsigned short rows );
+        MenuWithMultipleColumns( int x, int y, int secondColumnX, unsigned short rows );
 
         virtual ~MenuWithMultipleColumns( );
 

@@ -73,7 +73,7 @@ private:
         */
         HPC * stopTimer ;
 
-public: // Operaciones de consulta y actualización
+public:
 
        /**
         * Asigna los datos de altura máxima y mínima, así como el movimiento inicial del ascensor

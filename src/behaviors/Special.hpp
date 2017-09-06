@@ -86,7 +86,7 @@ private:
          */
         HPC * fallTimer ;
 
-public: // Operaciones de consulta y actualización
+public:
 
         /**
          * Asigna los datos del elemento usado como transición en la destrucción del volátil

@@ -170,7 +170,7 @@ protected:
          */
         std::list < MapRoomData > mapData ;
 
-public: // Operaciones de consulta y actualización
+public:
 
         /**
          * La sala que se está mostrando en pantalla

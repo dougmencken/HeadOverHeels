@@ -128,13 +128,13 @@ void Screen::freeWidgets ()
 
 void Screen::addIconOfHeadAt ( int x, int y )
 {
-        iconOfHead->changePosition( x, y );
+        iconOfHead->moveTo( x, y );
         addWidget( iconOfHead );
 }
 
 void Screen::addIconOfHeelsAt ( int x, int y )
 {
-        iconOfHeels->changePosition( x, y );
+        iconOfHeels->moveTo( x, y );
         addWidget( iconOfHeels );
 }
 
@@ -142,27 +142,32 @@ void Screen::placeHeadAndHeels( bool iconsToo, bool copyrightsToo )
 {
         Label* label = 0;
 
-        label = new Label( 64, 22, "Jon", "regular", "multicolor" );
+        label = new Label( "Jon", "regular", "multicolor" );
+        label->moveTo( 64, 22 );
         addWidget( label );
 
-        label = new Label( 40, 52, "Ritman", "regular", "multicolor" );
+        label = new Label( "Ritman", "regular", "multicolor" );
+        label->moveTo( 40, 52 );
         addWidget( label );
 
-        label = new Label( 500, 22, "Bernie", "regular", "multicolor" );
+        label = new Label( "Bernie", "regular", "multicolor" );
+        label->moveTo( 500, 22 );
         addWidget( label );
 
-        label = new Label( 483, 52, "Drummond", "regular", "multicolor" );
+        label = new Label( "Drummond", "regular", "multicolor" );
+        label->moveTo( 483, 52 );
         addWidget( label );
 
-        label = new Label( 200, 24, "Head" );
-        label->changeFontAndColor( "big", "yellow" );
+        label = new Label( "Head", "big", "yellow" );
+        label->moveTo( 200, 24 );
         addWidget( label );
 
-        label = new Label( 280, 45, "over", "regular", "multicolor" );
+        label = new Label( "over", "regular", "multicolor" );
+        label->moveTo( 280, 45 );
         addWidget( label );
 
-        label = new Label( 360, 24, "Heels" );
-        label->changeFontAndColor( "big", "yellow" );
+        label = new Label( "Heels", "big", "yellow" );
+        label->moveTo( 360, 24 );
         addWidget( label );
 
         if ( iconsToo )
@@ -179,20 +184,20 @@ void Screen::placeHeadAndHeels( bool iconsToo, bool copyrightsToo )
 
                 // (c) 1987 Ocean Software Ltd.
                 std::string copyrightString ( "{ 1987 Ocean Software Ltd." );
-                label = new Label( whereX, whereY, copyrightString );
-                label->changeFontAndColor( "regular", "cyan" );
+                label = new Label( copyrightString, "regular", "cyan" );
+                label->moveTo( whereX, whereY );
                 addWidget( label );
 
                 // (c) 2009 Jorge Rodríguez Santos
                 copyrightString = "{ 2009 Jorge Rodríguez Santos" ;
-                label = new Label( whereX, whereY - stepY, copyrightString );
-                label->changeFontAndColor( "regular", "orange" );
+                label = new Label( copyrightString, "regular", "orange" );
+                label->moveTo( whereX, whereY - stepY );
                 addWidget( label );
 
                 // (c) 2017 Douglas Mencken
                 copyrightString = "{ 2017 Douglas Mencken" ;
-                label = new Label( whereX, whereY - stepY - stepY, copyrightString );
-                label->changeFontAndColor( "regular", "yellow" );
+                label = new Label( copyrightString, "regular", "yellow" );
+                label->moveTo( whereX, whereY - stepY - stepY );
                 addWidget( label );
         }
 }

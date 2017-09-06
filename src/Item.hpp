@@ -227,7 +227,7 @@ protected:
          */
         Item* anchor ;
 
-public: // Operaciones de consulta y actualización
+public:
 
         /**
          * Establece el identificador único del elemento asignado por el motor

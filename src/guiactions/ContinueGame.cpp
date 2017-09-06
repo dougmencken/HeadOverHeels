@@ -33,19 +33,19 @@ void ContinueGame::doIt ()
                 CreatePlanetsScreen * planetsAction = new CreatePlanetsScreen( this->where, true );
 
                 if ( gameManager->isFreePlanet( isomot::Blacktooth ) )
-                        planetsAction->blacktoothIsFree();
+                        planetsAction->liberateBlacktooth();
 
                 if ( gameManager->isFreePlanet( isomot::Egyptus ) )
-                        planetsAction->egyptusIsFree();
+                        planetsAction->liberateEgyptus();
 
                 if ( gameManager->isFreePlanet( isomot::Penitentiary ) )
-                        planetsAction->penitentiaryIsFree();
+                        planetsAction->liberatePenitentiary();
 
                 if ( gameManager->isFreePlanet( isomot::Safari ) )
-                        planetsAction->safariIsFree();
+                        planetsAction->liberateSafari();
 
                 if ( gameManager->isFreePlanet( isomot::Byblos ) )
-                        planetsAction->byblosIsFree();
+                        planetsAction->liberateByblos();
 
                 planetsAction->doIt ();
         }

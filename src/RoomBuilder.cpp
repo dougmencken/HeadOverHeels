@@ -13,6 +13,7 @@
 #include "GameManager.hpp"
 #include <loadpng.h>
 
+
 namespace isomot
 {
 
@@ -225,7 +226,7 @@ PlayerItem* RoomBuilder::buildPlayerInTheSameRoom( const WhichPlayer& playerId, 
         return buildPlayerInRoom( this->room, playerId, behaviorId, x, y, z, direction );
 }
 
-PlayerItem* RoomBuilder::buildPlayerInRoom( Room* room, const WhichPlayer& playerId, const BehaviorOfItem& behaviorId, int x, int y, int z, const Direction& direction, bool hasItem )
+PlayerItem* RoomBuilder::buildPlayerInRoom( Room* room, const WhichPlayer& playerId, const BehaviorOfItem& behaviorId, int x, int y, int z, const Direction& direction, bool withItem )
 {
         PlayerItem* playerItem = 0;
         GameManager* gameManager = GameManager::getInstance();
@@ -276,7 +277,7 @@ PlayerItem* RoomBuilder::buildPlayerInRoom( Room* room, const WhichPlayer& playe
                         playerItem = new PlayerItem( itemData, x, y, z, direction );
 
                         // No se pueden llevar elementos a otras salas
-                        if ( hasItem )
+                        if ( withItem )
                         {
                                 gameManager->setItemTaken( 0 );
                         }

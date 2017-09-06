@@ -62,7 +62,7 @@ private:
          */
         std::string language ;
 
-public: // Operaciones de consulta y actualización
+public:
 
         /**
          * Asigna el idioma empleado en la interfaz de usuario

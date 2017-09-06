@@ -104,7 +104,7 @@ private:
          */
         MapManager* mapManager ;
 
-public: // Operaciones de consulta y actualización
+public:
 
         /**
          * Gestor de datos de los elementos del juego

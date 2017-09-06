@@ -104,7 +104,7 @@ private:
         */
         FreeItem * lintel ;
 
-public: // Operaciones de consulta y actualización
+public:
 
        /**
         * Indica si un determinado elemento se encuentra en el vado de la puerta

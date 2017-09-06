@@ -11,6 +11,17 @@
 namespace gui
 {
 
+Menu::Menu( )
+: Widget( ),
+        handlerOfKeys( 0 ),
+        activeOption( 0 ),
+        optionImage( 0 ),
+        chosenOptionImage( 0 ),
+        chosenOptionImageMini( 0 )
+{
+        refreshPictures ();
+}
+
 Menu::Menu( int x, int y )
 : Widget( x, y ),
         handlerOfKeys( 0 ),
@@ -86,7 +97,7 @@ void Menu::draw( BITMAP* where )
                 if ( mark != 0 )
                         draw_sprite( where, mark, getX (), getY () + dy );
 
-                label->changePosition( getX () + dx, getY () + dy );
+                label->moveTo( getX () + dx, getY () + dy );
                 label->draw( where );
 
                 dy += label->getFont()->getCharHeight() - ( label == this->activeOption ? 8 : 4 );

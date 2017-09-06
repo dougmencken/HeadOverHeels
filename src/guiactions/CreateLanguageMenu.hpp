@@ -13,7 +13,6 @@
 
 #include <string>
 #include <list>
-#include <functional>
 #include <allegro.h>
 #include "Action.hpp"
 #include "csxml/LanguageXML.hpp"
@@ -21,12 +20,12 @@
 namespace gui
 {
 
-// Declaraciones previas
-class LanguageText;
+class LanguageText ;
 
 /**
  * Crea el menú de selección de idioma
  */
+
 class CreateLanguageMenu : public Action
 {
 

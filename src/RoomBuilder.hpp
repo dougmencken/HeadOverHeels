@@ -18,23 +18,24 @@
 #include "csxml/RoomXML.hpp"
 #include "Ism.hpp"
 
+
 namespace isomot
 {
 
-// Declaraciones adelantadas
-class ItemDataManager;
-class ItemData;
-class Room;
-class FloorTile;
-class Wall;
-class GridItem;
-class FreeItem;
-class PlayerItem;
-class Door;
+class ItemDataManager ;
+class ItemData ;
+class Room ;
+class FloorTile ;
+class Wall ;
+class GridItem ;
+class FreeItem ;
+class PlayerItem ;
+class Door ;
 
 /**
- * Creador de una sala. Construye las distintas partes de una sala a partir de los datos de un archivo
+ * Creates a room by constructing different parts of it via data from file
  */
+
 class RoomBuilder
 {
 
@@ -45,21 +46,21 @@ public:
          * @param itemDataManager Gestor de datos de los elementos del juego
          * @param fileName Nombre del archivo que contiene los datos de la sala
          */
-        RoomBuilder(ItemDataManager* itemDataManager, const std::string& fileName);
+        RoomBuilder( ItemDataManager* itemDataManager, const std::string& fileName ) ;
 
         /**
          * Constructor para una sala que ya ha sido creada
          * @param itemDataManager Gestor de datos de los elementos del juego
          */
-        RoomBuilder(ItemDataManager* itemDataManager);
+        RoomBuilder( ItemDataManager* itemDataManager ) ;
 
-        virtual ~RoomBuilder();
+        virtual ~RoomBuilder( ) ;
 
         /**
          * Construye la sala a partir de los datos del archivo XML
          * @return Una sala ó 0 si la sala no se pudo construir
          */
-        Room* buildRoom();
+        Room * buildRoom () ;
 
         /**
          * Crea un jugador en la sala en construcción. La sala ya debe estar construida
@@ -70,7 +71,7 @@ public:
          * @param z Coordenada isométrica Z donde se situará al jugador
          * @param direction Dirección inicial del jugador
          */
-        PlayerItem* buildPlayerInTheSameRoom( const WhichPlayer& playerId, const BehaviorOfItem& behaviorId, int x, int y, int z, const Direction& direction );
+        PlayerItem * buildPlayerInTheSameRoom ( const WhichPlayer& playerId, const BehaviorOfItem& behaviorId, int x, int y, int z, const Direction& direction ) ;
 
         /**
          * Crea un jugador en la sala especificada. La sala ya debe estar construida
@@ -82,13 +83,13 @@ public:
          * @param y Coordenada isométrica Y donde se situará al jugador
          * @param z Coordenada isométrica Z donde se situará al jugador
          * @param direction Dirección inicial del jugador
-         * @param hasItem Indica si el jugador llevaba un elemento en el bolso
+         * @param withItem Indica si el jugador llevaba un elemento en el bolso
          */
-        PlayerItem* buildPlayerInRoom( Room* room, const WhichPlayer& playerId, const BehaviorOfItem& behaviorId, int x, int y, int z, const Direction& direction, bool hasItem = false );
+        PlayerItem * buildPlayerInRoom ( Room* room, const WhichPlayer& playerId, const BehaviorOfItem& behaviorId, int x, int y, int z, const Direction& direction, bool withItem = false );
 
-        static int getXCenterOfRoom( ItemData* playerData, Room* theRoom );
+        static int getXCenterOfRoom ( ItemData* playerData, Room* theRoom ) ;
 
-        static int getYCenterOfRoom( ItemData* playerData, Room* theRoom );
+        static int getYCenterOfRoom ( ItemData* playerData, Room* theRoom ) ;
 
 private:
 
@@ -97,49 +98,49 @@ private:
          * @param tile data from XML file about the floor tile in the room
          * @param gfxPrefix where to search for picture of the floor tile
          */
-        FloorTile* buildFloorTile( const rxml::tile& tile, const char* gfxPrefix );
+        FloorTile* buildFloorTile ( const rxml::tile& tile, const char* gfxPrefix ) ;
 
         /**
          * Crea un segmento de muro
          * @param wall data from XML file about the wall segment in the room
          * @param gfxPrefix where to search for picture of the wall segment
          */
-        Wall* buildWall( const rxml::wall& wall, const char* gfxPrefix );
+        Wall* buildWall ( const rxml::wall& wall, const char* gfxPrefix ) ;
 
         /**
          * Crea un elemento rejilla
          * @param Datos del archivo XML para crear el elemento rejilla en la sala
          */
-        GridItem* buildGridItem( const rxml::item& item );
+        GridItem* buildGridItem ( const rxml::item& item ) ;
 
         /**
          * Crea un elemento libre
          * @param Datos del archivo XML para crear el elemento libre en la sala
          */
-        FreeItem* buildFreeItem( const rxml::item& item );
+        FreeItem* buildFreeItem ( const rxml::item& item ) ;
 
         /**
          * Crea una puerta
          * @param Datos del archivo XML para crear la puerta en la sala
          */
-        Door* buildDoor( const rxml::item& item );
+        Door* buildDoor ( const rxml::item& item ) ;
 
 private:
 
         /**
          * Nombre del archivo XML que contiene los datos de la sala
          */
-        std::string fileName;
+        std::string fileName ;
 
         /**
          * Gestor de los datos invariables de los elementos del juego
          */
-        ItemDataManager* itemDataManager;
+        ItemDataManager * itemDataManager ;
 
         /**
          * La sala en construcción
          */
-        Room* room;
+        Room * room ;
 
 };
 

@@ -256,13 +256,15 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
                 // vidas de Head
                 ss.str( std::string() );
                 ss << int( this->headLives );
-                gui::Label headLivesLabel( this->headLives > 9 ? 214 : 221, 424, ss.str (), "big", "white", -2 );
+                gui::Label headLivesLabel( ss.str (), "big", "white", -2 );
+                headLivesLabel.moveTo( this->headLives > 9 ? 214 : 221, 424 );
                 headLivesLabel.draw( where );
 
                 // vidas de Heels
                 ss.str( std::string() );
                 ss << int( this->heelsLives );
-                gui::Label heelsLivesLabel( this->heelsLives > 9 ? 398 : 405, 424, ss.str (), "big", "white", -2 );
+                gui::Label heelsLivesLabel( ss.str (), "big", "white", -2 );
+                heelsLivesLabel.moveTo( this->heelsLives > 9 ? 398 : 405, 424 );
                 heelsLivesLabel.draw( where );
 
                 // número de rosquillas
@@ -271,7 +273,8 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
                 {
                         ss.str( std::string() );
                         ss << this->donuts;
-                        gui::Label donutsLabel( this->donuts > 9 ? 42 : 49, 372, ss.str (), "regular", "white", -2 );
+                        gui::Label donutsLabel( ss.str (), "regular", "white", -2 );
+                        donutsLabel.moveTo( this->donuts > 9 ? 42 : 49, 372 );
                         donutsLabel.draw( where );
                 }
 
@@ -281,7 +284,8 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
                 {
                         ss.str( std::string() );
                         ss << int( this->highJumps );
-                        gui::Label highJumpsLabel( this->highJumps > 9 ? 505 : 512, 393, ss.str (), "regular", "white", -2 );
+                        gui::Label highJumpsLabel( ss.str (), "regular", "white", -2 );
+                        highJumpsLabel.moveTo( this->highJumps > 9 ? 505 : 512, 393 );
                         highJumpsLabel.draw( where );
                 }
 
@@ -291,7 +295,8 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
                 {
                         ss.str( std::string () );
                         ss << int( this->highSpeed );
-                        gui::Label highSpeedLabel( this->highSpeed > 9 ? 107 : 114, 393, ss.str (), "regular", "white", -2 );
+                        gui::Label highSpeedLabel( ss.str (), "regular", "white", -2 );
+                        highSpeedLabel.moveTo( this->highSpeed > 9 ? 107 : 114, 393 );
                         highSpeedLabel.draw( where );
                 }
 
@@ -303,7 +308,8 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
 
                         ss.str( std::string() );
                         ss << headShieldValue;
-                        gui::Label headShieldLabel( headShieldValue > 9 ? 107 : 114, 437, ss.str (), "regular", "white", -2 );
+                        gui::Label headShieldLabel( ss.str (), "regular", "white", -2 );
+                        headShieldLabel.moveTo( headShieldValue > 9 ? 107 : 114, 437 );
                         headShieldLabel.draw( where );
                 }
 
@@ -315,7 +321,8 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
 
                         ss.str( std::string() );
                         ss << heelsShieldValue;
-                        gui::Label heelsShieldLabel( heelsShieldValue > 9 ? 505 : 512, 437, ss.str (), "regular", "white", -2 );
+                        gui::Label heelsShieldLabel( ss.str (), "regular", "white", -2 );
+                        heelsShieldLabel.moveTo( heelsShieldValue > 9 ? 505 : 512, 437 );
                         heelsShieldLabel.draw( where );
                 }
 
@@ -327,8 +334,9 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
         }
         else
         {
-                // en la pantalla final del juego se dibuja FREEDOM en la esquina inferior izquierda
-                gui::Label freedomLabel( 84, 362, "FREEDOM", "big", "multicolor" );
+                // draw FREEDOM in the final screen
+                gui::Label freedomLabel( "FREEDOM", "big", "multicolor" );
+                freedomLabel.moveTo( 84, 362 );
                 freedomLabel.draw( where );
         }
 
@@ -726,8 +734,8 @@ WhyPause GameManager::pause ()
                 for ( size_t i = 0; i < text->getLinesCount(); i++ )
                 {
                         gui::LanguageLine* line = text->getLine( i );
-                        gui::Label label( 0, 0, line->text, line->font, line->color );
-                        label.changePosition( ( 640 - label.getWidth() ) >> 1, deltaY );
+                        gui::Label label( line->text, line->font, line->color );
+                        label.moveTo( ( 640 - label.getWidth() ) >> 1, deltaY );
                         deltaY += label.getHeight() * 3 / 4;
                         acquire_screen();
                         label.draw( screen );
@@ -739,8 +747,8 @@ WhyPause GameManager::pause ()
                 for ( size_t i = 0; i < text->getLinesCount(); i++ )
                 {
                         gui::LanguageLine* line = text->getLine( i );
-                        gui::Label label( 0, 0, line->text, line->font, line->color );
-                        label.changePosition( ( 640 - label.getWidth() ) >> 1, deltaY );
+                        gui::Label label( line->text, line->font, line->color );
+                        label.moveTo( ( 640 - label.getWidth() ) >> 1, deltaY );
                         deltaY += label.getHeight() * 3 / 4;
                         acquire_screen();
                         label.draw( screen );
@@ -822,8 +830,8 @@ WhyPause GameManager::pause ()
                 for ( size_t i = 0; i < text->getLinesCount(); i++ )
                 {
                         gui::LanguageLine* line = text->getLine( i );
-                        gui::Label label( 0, 0, line->text, line->font, line->color );
-                        label.changePosition( ( 640 - label.getWidth() ) >> 1, deltaY );
+                        gui::Label label( line->text, line->font, line->color );
+                        label.moveTo( ( 640 - label.getWidth() ) >> 1, deltaY );
                         deltaY += label.getHeight() * 3 / 4;
                         acquire_screen();
                         label.draw( screen );
@@ -835,8 +843,8 @@ WhyPause GameManager::pause ()
                 for ( size_t i = 0; i < text->getLinesCount(); i++ )
                 {
                         gui::LanguageLine* line = text->getLine( i );
-                        gui::Label label( 0, 0, line->text, line->font, line->color );
-                        label.changePosition( ( 640 - label.getWidth() ) >> 1, deltaY );
+                        gui::Label label( line->text, line->font, line->color );
+                        label.moveTo( ( 640 - label.getWidth() ) >> 1, deltaY );
                         deltaY += label.getHeight() * 3 / 4;
                         acquire_screen();
                         label.draw( screen );

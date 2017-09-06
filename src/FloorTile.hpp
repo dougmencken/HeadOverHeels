@@ -25,6 +25,7 @@ namespace isomot
 /**
  * Una loseta de una sala. Un conjunto de estos elementos forma el suelo
  */
+
 class FloorTile : public Drawable, public Mediated
 {
 
@@ -33,7 +34,7 @@ public:
        /**
         * Constructor. Crea una loseta nula
         */
-        FloorTile();
+        FloorTile( ) ;
 
        /**
         * Constructor
@@ -106,7 +107,7 @@ private:
          */
         WhichShade shady ;
 
-public: // Operaciones de consulta y actualización
+public:
 
         /**
          * Columna de la sala a la que pertenece la loseta

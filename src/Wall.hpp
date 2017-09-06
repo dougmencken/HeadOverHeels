@@ -71,7 +71,7 @@ private:
 	 */
 	BITMAP* image;
 
-public: // Operaciones de consulta y actualización
+public:
 
 	/**
 	 * Eje donde está situada la pared

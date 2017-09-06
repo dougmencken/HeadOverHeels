@@ -12,7 +12,6 @@
 #define Camera_hpp_
 
 #include <utility>
-#include <cassert>
 #include "Ism.hpp"
 
 
@@ -77,7 +76,7 @@ private:
          */
         std::pair < int, int > delta ;
 
-public: // Operaciones de consulta y actualización
+public:
 
         /**
          * Desplazamiento de pantalla a realizar en el eje X para centrar la sala

@@ -20,8 +20,8 @@ namespace gui
 {
 
 /**
- * Crea la pantalla resumen de la partida. Muestra el rango, la puntuación, el
- * número de salas visitadas y el número de planetas liberados
+ * Create summary screen to show player’s range, score, number of visited rooms
+ * and number of liberated planets
  */
 
 class CreateEndScreen : public gui::Action
@@ -31,14 +31,14 @@ public:
 
         /**
          * Constructor
-         * @param picture Imagen donde se dibujará la interfaz gráfica
-         * @param rooms Número de salas visitadas
-         * @param planets Número de planetas liberados
+         * @param picture Image where to draw
+         * @param rooms Count of visited rooms
+         * @param planets Count of liberated planets
          */
         CreateEndScreen( BITMAP* picture, unsigned short rooms, unsigned short planets ) ;
 
         /**
-         * Show the summary screen
+         * Show summary screen
          */
         void doIt () ;
 
@@ -46,18 +46,15 @@ public:
 
 private:
 
-        /**
-         * Imagen donde se dibujará la interfaz gráfica
-         */
         BITMAP* where ;
 
         /**
-         * Número de salas visitadas
+         * Count of visited rooms
          */
         unsigned short rooms ;
 
         /**
-         * Número de planetas liberados
+         * Count of liberated planets
          */
         unsigned short planets ;
 

@@ -5,8 +5,14 @@
 namespace gui
 {
 
+Widget::Widget( )
+        : xy ( std::make_pair( 0, 0 ) )
+{
+
+}
+
 Widget::Widget( int x, int y )
-: xy ( std::make_pair( x, y ) )
+        : xy ( std::make_pair( x, y ) )
 {
 
 }
@@ -16,7 +22,7 @@ Widget::~Widget( )
 
 }
 
-void Widget::changePosition( int x, int y )
+void Widget::moveTo( int x, int y )
 {
         xy = std::make_pair( x, y ) ;
 }

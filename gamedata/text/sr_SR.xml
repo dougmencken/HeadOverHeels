@@ -9,37 +9,37 @@
     </properties>
   </text>
 
-  <text id="blacktooth-empire" x="140" y="0">
+  <text id="blacktooth-empire">
     <properties>
       <ustring>Краљевство Блактутих</ustring>
     </properties>
   </text>
 
-  <text id="blacktooth" x="264" y="330">
+  <text id="blacktooth">
     <properties>
       <ustring>Блактут</ustring>
     </properties>
   </text>
 
-  <text id="egyptus" x="56" y="200">
+  <text id="egyptus">
     <properties>
       <ustring>Египтус</ustring>
     </properties>
   </text>
 
-  <text id="penitentiary" x="418" y="200">
+  <text id="penitentiary">
     <properties>
       <ustring>Казнионица</ustring>
     </properties>
   </text>
 
-  <text id="byblos" x="64" y="450">
+  <text id="byblos">
     <properties>
       <ustring>Библос</ustring>
     </properties>
   </text>
 
-  <text id="safari" x="450" y="450">
+  <text id="safari">
     <properties>
       <ustring>Сафари</ustring>
     </properties>
@@ -582,19 +582,19 @@
     </properties>
   </text>
 
-  <text id="score" x="0" y="300">
+  <text id="score">
     <properties>
       <ustring>Резултат:</ustring>
     </properties>
   </text>
 
-  <text id="explored-rooms" x="0" y="340">
+  <text id="explored-rooms">
     <properties>
       <ustring>Претражено %d соба</ustring>
     </properties>
   </text>
 
-  <text id="liberated-planets" x="0" y="380">
+  <text id="liberated-planets">
     <properties>
       <ustring>Ослобођено %d планета</ustring>
     </properties>
@@ -630,37 +630,37 @@
     </properties>
   </text>
 
-  <text id="dummy" x="0" y="180">
+  <text id="dummy">
     <properties>
       <ustring>Тука</ustring>
     </properties>
   </text>
 
-  <text id="novice" x="0" y="180">
+  <text id="novice">
     <properties>
       <ustring>Почетник</ustring>
     </properties>
   </text>
 
-  <text id="spy" x="0" y="180">
+  <text id="spy">
     <properties>
       <ustring>Шпијун</ustring>
     </properties>
   </text>
 
-  <text id="master-spy" x="0" y="180">
+  <text id="master-spy">
     <properties>
       <ustring>Мајстор шпијун</ustring>
     </properties>
   </text>
 
-  <text id="hero" x="0" y="180">
+  <text id="hero">
     <properties>
       <ustring>Јунак</ustring>
     </properties>
   </text>
 
-  <text id="emperor" x="0" y="180">
+  <text id="emperor">
     <properties>
       <ustring>Цар</ustring>
     </properties>

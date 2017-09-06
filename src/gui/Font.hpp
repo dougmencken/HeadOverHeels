@@ -77,7 +77,7 @@ private:
          */
         std::vector< BITMAP * > charVector ;
 
-public: // Operaciones de consulta y actualización
+public:
 
         /**
          * Nombre de la fuente tipográfica empleado como identificador

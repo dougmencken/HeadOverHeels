@@ -8,12 +8,12 @@ using gui::Alignment;
 using gui::Label;
 
 
-TextField::TextField( unsigned int x, unsigned int y, unsigned int width, unsigned int height, const Alignment& alignment )
+TextField::TextField( int x, int y, unsigned int width, unsigned int height, const Alignment& alignment )
 : Widget( x, y ),
         width( width ),
         height( height ),
         alignment( alignment ),
-        delta( y )
+        heightOfField( 0 )
 {
 
 }
@@ -56,19 +56,20 @@ void TextField::addLine( const std::string& text, const std::string& font, const
                         break;
         }
 
-        Label* label = new Label( posX, delta, text, font, color );
-        this->delta += label->getFont()->getCharHeight();
+        Label* label = new Label( text, font, color );
+        label->moveTo( posX, this->getY () + heightOfField );
+        this->heightOfField += label->getHeight();
+
         lines.push_back( label );
 }
 
-void TextField::changePosition( int x, int y )
+void TextField::moveTo( int x, int y )
 {
         for ( std::list< Label * >::iterator i = this->lines.begin (); i != this->lines.end (); ++i )
         {
                 Label* label = ( *i );
-                label->changePosition( label->getX() + x - this->getX(), label->getY() + y - this->getY() );
+                label->moveTo( label->getX() + x - this->getX(), label->getY() + y - this->getY() );
         }
 
-        this->setX( x );
-        this->setY( y );
+        Widget::moveTo( x, y );
 }
