@@ -20,5 +20,7 @@ Collect application bundle for Mac OS X:
 
     export games="/Applications/Games"
     cp -r extras/Head\ over\ Heels.app "${games}"/
+    mkdir -p "${games}"/Head\ over\ Heels.app/Contents/MacOS/
+    mkdir -p "${games}"/Head\ over\ Heels.app/Contents/Resources/
     cp headoverheelsroot/game/bin/headoverheels "${games}"/Head\ over\ Heels.app/Contents/MacOS/
     cp -r headoverheelsroot/game/share/headoverheels/* "${games}"/Head\ over\ Heels.app/Contents/Resources/

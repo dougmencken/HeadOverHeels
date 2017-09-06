@@ -23,6 +23,8 @@ RedefineKey::RedefineKey( Menu* menu, std::string name )
 
 void RedefineKey::doIt ()
 {
+        const size_t positionOfKey = 21;
+
         Label * activeLabel = menu->getActiveOption();
         activeLabel->changeFontAndColor( "big", "yellow" );
         menu->redraw ();
@@ -60,7 +62,7 @@ void RedefineKey::doIt ()
                                                         if ( ( *iter )->getText().find( textOfThatKey ) == 0 )
                                                         {  // this label begins with the text of that previous key
                                                                 std::string dottedLabelForKey( textOfThatKey );
-                                                                for ( size_t position = textOfThatKey.length() ; position < 16 ; ++position ) {
+                                                                for ( size_t position = utf8StringLength( textOfThatKey ) ; position < positionOfKey ; ++position ) {
                                                                         dottedLabelForKey = dottedLabelForKey + ".";
                                                                 }
                                                                 ( *iter )->setText( dottedLabelForKey + scancode_to_name( 0 ) );
@@ -79,7 +81,7 @@ void RedefineKey::doIt ()
 
                                         std::string textOfKey = GuiManager::getInstance()->getLanguageManager()->findLanguageString( this->nameOfKey )->getText();
                                         std::string dottedTextOfKey( textOfKey );
-                                        for ( size_t position = textOfKey.length() ; position < 16 ; ++position ) {
+                                        for ( size_t position = utf8StringLength( textOfKey ) ; position < positionOfKey ; ++position ) {
                                                 dottedTextOfKey = dottedTextOfKey + ".";
                                         }
                                         activeLabel->setText( dottedTextOfKey + scancode_to_name( newKey ) );
