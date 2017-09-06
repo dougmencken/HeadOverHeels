@@ -17,36 +17,32 @@
 namespace gui
 {
 
+/*
+ * Two-column menu
+ */
+
 class MenuWithMultipleColumns : public Menu
 {
 
 public:
 
         /**
-         * Constructor de un menú de dos columnas
-         * @param x Coordenada X de pantalla donde situar el menú
-         * @param y Coordenada Y de pantalla donde situar el menú
-         * @param secondColumnX Posición donde se situa la segunda columna del menú
-         * @param rows Número de filas de la primera columna
+         * Constructor
+         * @param space Space between columns
          */
-        MenuWithMultipleColumns( int x, int y, int secondColumnX, unsigned short rows );
+        MenuWithMultipleColumns( unsigned int space );
 
         virtual ~MenuWithMultipleColumns( );
 
         void draw ( BITMAP* where ) ;
 
+        virtual unsigned int getWidthOfMenu () const ;
+
+        virtual unsigned int getHeightOfMenu () const ;
+
 private:
 
-        /**
-         * Posición donde se situa la segunda columna del menú. Si vale 0 el menú tiene una columna
-         */
-        unsigned int secondColumnX ;
-
-        /**
-         * Número de filas de la primera columna. Cuando se sobrepase el número indicado se empezará
-         * a situar el texto en la segunda columna. Si vale 0xffff el menú sólo tiene una columna
-         */
-        unsigned short rows ;
+        unsigned int spaceBetweenColumns;
 
 };
 

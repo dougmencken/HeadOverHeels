@@ -35,12 +35,10 @@ void CreateKeyboardMenu::doIt ()
 
                 Label* label = 0;
                 LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
-
-                // la primera opción almacena la posición del menú en pantalla
-                LanguageText* langString = languageManager->findLanguageString( "movenorth" );
-                this->menuOfKeys = new Menu( langString->getX(), langString->getY() );
-
                 InputManager* supportOfInput = InputManager::getInstance();
+
+                this->menuOfKeys = new Menu( );
+                menuOfKeys->setVerticalOffset( 80 );
 
                 // create one option for each key used in the game
                 for ( size_t i = 0; i < InputManager::numberOfKeys; i++ )

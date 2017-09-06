@@ -730,7 +730,8 @@ WhyPause GameManager::pause ()
                 gui::LanguageManager* language = gui::GuiManager::getInstance()->getLanguageManager();
 
                 text = language->findLanguageString( "save-game" );
-                int deltaY = text->getY();
+                int deltaY = 100;
+
                 for ( size_t i = 0; i < text->getLinesCount(); i++ )
                 {
                         gui::LanguageLine* line = text->getLine( i );
@@ -743,7 +744,8 @@ WhyPause GameManager::pause ()
                 }
 
                 text = language->findLanguageString( "confirm-resume" );
-                deltaY = text->getY();
+                deltaY += 20;
+
                 for ( size_t i = 0; i < text->getLinesCount(); i++ )
                 {
                         gui::LanguageLine* line = text->getLine( i );
@@ -779,6 +781,7 @@ WhyPause GameManager::pause ()
                                           key != inputManager->getUserKey( "take-jump" ) &&
                                           key != inputManager->getUserKey( "swap" ) &&
                                           key != inputManager->getUserKey( "shoot" ) &&
+                                          key != inputManager->getUserKey( "halt" ) &&
                                           key != KEY_ESC )
                                 {
                                         confirm = true;
@@ -818,15 +821,14 @@ WhyPause GameManager::pause ()
         // el usuario ha pulsado la tecla de pausa
         else
         {
-                // Detiene todos los sonidos
                 SoundManager::getInstance()->stopEverySound ();
 
-                // Presenta las intrucciones en pantalla
                 gui::LanguageText* text = 0;
                 gui::LanguageManager* language = gui::GuiManager::getInstance()->getLanguageManager();
 
                 text = language->findLanguageString( "confirm-quit" );
-                int deltaY = text->getY();
+                int deltaY = 140;
+
                 for ( size_t i = 0; i < text->getLinesCount(); i++ )
                 {
                         gui::LanguageLine* line = text->getLine( i );
@@ -839,7 +841,8 @@ WhyPause GameManager::pause ()
                 }
 
                 text = language->findLanguageString( "confirm-resume" );
-                deltaY = text->getY();
+                deltaY += 20;
+
                 for ( size_t i = 0; i < text->getLinesCount(); i++ )
                 {
                         gui::LanguageLine* line = text->getLine( i );

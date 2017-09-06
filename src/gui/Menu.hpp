@@ -34,8 +34,6 @@ public:
 
         Menu( );
 
-        Menu( int x, int y );
-
         virtual ~Menu( );
 
         void draw ( BITMAP* where ) ;
@@ -60,9 +58,11 @@ public:
 
         std::list < Label * > getEveryOption () {  return this->options ;  }
 
-        unsigned int getWidthOfMenu () const ;
+        void setVerticalOffset ( int offset ) ;
 
-        unsigned int getHeightOfMenu () const ;
+        virtual unsigned int getWidthOfMenu () const ;
+
+        virtual unsigned int getHeightOfMenu () const ;
 
 private:
 

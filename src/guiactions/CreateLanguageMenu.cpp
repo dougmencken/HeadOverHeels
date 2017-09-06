@@ -62,8 +62,11 @@ void CreateLanguageMenu::doIt ()
                 screen->addIconOfHeadAt( 66, 24 );
                 screen->addIconOfHeelsAt( 518, 24 );
 
-                // Presenta los idiomas disponibles
-                MenuWithMultipleColumns * menu = new MenuWithMultipleColumns( 40, 120, 300, 11 );
+                // presenta los idiomas disponibles
+
+                MenuWithMultipleColumns * menu = new MenuWithMultipleColumns( /* space between columns */ 40 );
+                menu->setVerticalOffset( 50 ); // adjust for header over heelser
+
                 for ( std::list< LanguageText * >::iterator i = this->texts.begin (); i != this->texts.end (); ++i )
                 {
                         label = new Label( ( *i )->getText() );

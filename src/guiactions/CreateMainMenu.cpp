@@ -45,9 +45,7 @@ void CreateMainMenu::doIt ()
 
                 // Las opciones del menú
 
-                LanguageText* langString = languageManager->findLanguageString( "new-game" );
-
-                Label* newGame = new Label( langString->getText() );
+                Label* newGame = new Label( languageManager->findLanguageString( "new-game" )->getText() );
                 Label* loadGame = new Label( languageManager->findLanguageString( "load-game" )->getText() );
                 Label* defineKeys = new Label( languageManager->findLanguageString( "keyboard-menu" )->getText() );
                 Label* adjustAudio = new Label( languageManager->findLanguageString( "audio-menu" )->getText() );
@@ -63,7 +61,8 @@ void CreateMainMenu::doIt ()
                 showCredits->setAction( new ShowAuthors( this->where ) );
                 quitGame->setAction( new ExitApplication() );
 
-                Menu * menu = new Menu( langString->getX(), langString->getY() );
+                Menu * menu = new Menu( );
+                menu->setVerticalOffset( 20 );
 
                 menu->addOption( newGame );
                 menu->addOption( loadGame );

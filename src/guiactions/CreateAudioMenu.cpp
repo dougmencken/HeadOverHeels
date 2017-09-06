@@ -65,9 +65,10 @@ void CreateAudioMenu::doIt ()
                 }
                 this->labelMusic = new Label( stringMusicSpaced + ss.str() );
 
-                this->listOfOptions = new Menu( langStringEffects->getX(), langStringEffects->getY() );
+                this->listOfOptions = new Menu(  );
                 listOfOptions->addOption( labelEffects );
                 listOfOptions->addOption( labelMusic );
+                listOfOptions->setVerticalOffset( 40 );
 
                 screen->addWidget( listOfOptions );
         }

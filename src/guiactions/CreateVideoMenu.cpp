@@ -67,11 +67,12 @@ void CreateVideoMenu::doIt ()
                 this->labelGraphicSet = new Label( textGraphicSet->getText(), "regular", "yellow" );
                 labelGraphicSet->setAction( new CreateMenuOfGraphicSets( this->where, this ) );
 
-                this->listOfOptions = new Menu( textFullscreen->getX(), textFullscreen->getY() );
+                this->listOfOptions = new Menu( );
                 listOfOptions->addOption( labelFullscreen );
                 listOfOptions->addOption( labelDrawShadows );
                 listOfOptions->addOption( labelDrawBackground );
                 listOfOptions->addOption( labelGraphicSet );
+                listOfOptions->setVerticalOffset( 40 );
 
                 screen->addWidget( listOfOptions );
         }

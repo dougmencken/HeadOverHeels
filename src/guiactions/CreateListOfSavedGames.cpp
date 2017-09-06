@@ -50,8 +50,9 @@ void CreateListOfSavedGames::doIt ()
 
         LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
 
-        // saved games
-        Menu* menu = new Menu( 100, 160 );
+        // list of games
+        Menu* menu = new Menu( );
+        menu->setVerticalOffset( 112 );
         for ( unsigned int fileCount = 1; fileCount <= howManySaves; fileCount++ )
         {
                 std::stringstream ss;

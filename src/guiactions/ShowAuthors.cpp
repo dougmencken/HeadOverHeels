@@ -38,8 +38,8 @@ void ShowAuthors::doIt ()
                 LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
 
                 langString = languageManager->findLanguageString( "credits-text" );
-                this->initialY = langString->getY();
-                this->linesOfCredits = new TextField( langString->getX(), initialY, 640, 480, CenterAlignment );
+                this->initialY = where->h;
+                this->linesOfCredits = new TextField( 0, initialY, 640, 480, CenterAlignment );
 
                 size_t howManyLines = langString->getLinesCount() ;
                 fprintf( stdout, "credits-text has %ld lines\n", howManyLines );
@@ -59,14 +59,14 @@ void ShowAuthors::doIt ()
 
         GuiManager::getInstance()->changeScreen( screen );
 
-        // Mientras no se pulse Escape, se mueve el texto hacia arriba
+        // move text up
         bool exit = false;
         while ( ! exit )
         {
                 int yNow = linesOfCredits->getY() - 1;
                 if ( yNow <= -5000 )
                 {
-                        // let this scrolling loop
+                        // let it loop
                         yNow = initialY ;
                 }
 
@@ -80,6 +80,6 @@ void ShowAuthors::doIt ()
                         gui::GuiManager::getInstance()->toggleFullScreenVideo ();
                 }
 
-                sleep( 30 );
+                sleep( 25 );
         }
 }

@@ -15,7 +15,7 @@
     </properties>
   </text>
 
-  <text id="new-game" x="216" y="150">
+  <text id="new-game">
     <properties>
       <ustring>New game</ustring>
     </properties>
@@ -69,7 +69,7 @@
     </properties>
   </text>
 
-  <text id="movenorth" x="68" y="132">
+  <text id="movenorth">
     <properties>
       <ustring>Move North</ustring>
     </properties>
@@ -129,13 +129,13 @@
     </properties>
   </text>
 
-  <text id="confirm-quit" x="0" y="142">
+  <text id="confirm-quit">
     <properties font="big" color="cyan">
       <ustring>Use Esc to quit game</ustring>
     </properties>
   </text>
 
-  <text id="confirm-resume" x="0" y="184">
+  <text id="confirm-resume">
     <properties font="big" color="yellow">
       <ustring>and another key to resume</ustring>
     </properties>
@@ -147,7 +147,7 @@
     </properties>
   </text>
 
-  <text id="full-screen" x="93" y="182">
+  <text id="full-screen">
     <properties>
       <ustring>Full Screen</ustring>
     </properties>
@@ -177,7 +177,7 @@
     </properties>
   </text>
 
-  <text id="soundfx" x="104" y="210">
+  <text id="soundfx">
     <properties>
       <ustring>Sound Effects</ustring>
     </properties>
@@ -201,7 +201,7 @@
     </properties>
   </text>
 
-  <text id="credits-text" x="0" y="480">
+  <text id="credits-text">
     <properties font="big" color="multicolor">
       <ustring>Original game</ustring>
     </properties>
@@ -618,12 +618,15 @@
     </properties>
   </text>
 
-  <text id="save-game" x="0" y="100">
+  <text id="save-game">
     <properties font="big" color="orange">
       <ustring>Reincarnation Fish lets you</ustring>
     </properties>
     <properties font="big" color="orange">
-      <ustring>save the game by touching SPACE</ustring>
+      <ustring>save the game</ustring>
+    </properties>
+    <properties font="big" color="orange">
+      <ustring>by touching SPACE</ustring>
     </properties>
   </text>
 
@@ -635,7 +638,7 @@
 
   <text id="score">
     <properties>
-      <ustring>Score:</ustring>
+      <ustring>Score</ustring>
     </properties>
   </text>
 

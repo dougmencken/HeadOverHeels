@@ -15,17 +15,7 @@ Menu::Menu( )
 : Widget( ),
         handlerOfKeys( 0 ),
         activeOption( 0 ),
-        optionImage( 0 ),
-        chosenOptionImage( 0 ),
-        chosenOptionImageMini( 0 )
-{
-        refreshPictures ();
-}
-
-Menu::Menu( int x, int y )
-: Widget( x, y ),
-        handlerOfKeys( 0 ),
-        activeOption( 0 ),
+        whereToDraw( 0 ),
         optionImage( 0 ),
         chosenOptionImage( 0 ),
         chosenOptionImageMini( 0 )
@@ -67,12 +57,38 @@ void Menu::draw( BITMAP* where )
 {
         if ( where == 0 ) return ;
 
+        if ( where != this->whereToDraw )
+        {
+                this->whereToDraw = where;
+        }
+
         if ( activeOption == 0 )
         {
                 resetActiveOption ();
         }
 
         refreshPictures ();
+
+        // adjust font of every option
+        // font for chosen option is double-height
+        for ( std::list< Label* >::iterator i = options.begin (); i != options.end (); ++i )
+        {
+                Label* label = *i;
+
+                if ( label == this->activeOption )
+                {
+                        label->changeFontAndColor( "big", label->getColor() );
+                }
+                else
+                {
+                        label->changeFontAndColor( "regular", label->getColor() );
+                }
+        }
+
+        // update position of the whole menu to draw it centered
+        int previousX = getX (); int previousY = getY ();
+        setX( previousX + ( ( 640 - previousX ) >> 1 ) - ( getWidthOfMenu () >> 1 ) );
+        setY( previousY + ( ( 480 - previousY ) >> 1 ) - ( getHeightOfMenu() >> 1 ) );
 
         int dx( this->optionImage->w );
         int dy( 0 );
@@ -83,16 +99,6 @@ void Menu::draw( BITMAP* where )
         {
                 Label* label = *i;
 
-                // change the font depending on whether or not the option is active now
-                if ( label == this->activeOption )
-                {
-                        label->changeFontAndColor( "big", label->getColor() );
-                }
-                else
-                {
-                        label->changeFontAndColor( "regular", label->getColor() );
-                }
-
                 BITMAP * mark = ( this->activeOption == label ) ? this->chosenOptionImage : this->optionImage ;
                 if ( mark != 0 )
                         draw_sprite( where, mark, getX (), getY () + dy );
@@ -100,14 +106,16 @@ void Menu::draw( BITMAP* where )
                 label->moveTo( getX () + dx, getY () + dy );
                 label->draw( where );
 
-                dy += label->getFont()->getCharHeight() - ( label == this->activeOption ? 8 : 4 );
+                // update vertical offset
+                dy += label->getHeight() - ( label == this->activeOption ? 8 : 4 );
 
-                // reduce for leading
-                dy -= label->getFont()->getCharHeight() >> 5;
+                // adjust spacing between lines
+                dy -= label->getHeight() >> 5;
         }
 
-        if ( where != this->whereToDraw )
-                this->whereToDraw = where;
+        // back to initial position of menu
+        setX ( previousX );
+        setY ( previousY );
 }
 
 void Menu::redraw ()
@@ -172,6 +180,11 @@ void Menu::resetActiveOption ()
         setActiveOption( * options.begin () );
 }
 
+void Menu::setVerticalOffset ( int offset )
+{
+	setY( offset );
+}
+
 unsigned int Menu::getWidthOfMenu () const
 {
         unsigned int widthOfMenu = 0;
@@ -191,8 +204,8 @@ unsigned int Menu::getHeightOfMenu () const
 
         for ( std::list< Label * >::const_iterator i = options.begin () ; i != options.end () ; ++i )
         {
-                heightOfMenu += ( *i )->getFont()->getCharHeight() - 4;
-                heightOfMenu -= ( *i )->getFont()->getCharHeight() >> 5;
+                heightOfMenu += ( *i )->getHeight() - 4;
+                heightOfMenu -= ( *i )->getHeight() >> 5;
         }
 
         return ( heightOfMenu >= 4 ) ? ( heightOfMenu - 4 ) : 0; // -4 is for that single active option

@@ -3,7 +3,7 @@
 <language xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="language.xsd">
 
-  <text id="new-game" x="190" y="150">
+  <text id="new-game">
     <properties>
       <ustring>Nou joc</ustring>
     </properties>
@@ -57,7 +57,7 @@
     </properties>
   </text>
 
-  <text id="movenorth" x="105" y="132">
+  <text id="movenorth">
     <properties>
       <ustring>Esquerra</ustring>
     </properties>
@@ -117,13 +117,13 @@
     </properties>
   </text>
 
-  <text id="confirm-quit" x="0" y="142">
+  <text id="confirm-quit">
     <properties font="big" color="cyan">
       <ustring>Polsa Esc per a abandonar la partida</ustring>
     </properties>
   </text>
 
-  <text id="confirm-resume" x="0" y="184">
+  <text id="confirm-resume">
     <properties font="big" color="yellow">
       <ustring>Polsa una altra tecla per a</ustring>
     </properties>
@@ -138,7 +138,7 @@
     </properties>
   </text>
 
-  <text id="soundfx" x="104" y="210">
+  <text id="soundfx">
     <properties>
       <ustring>Efectes de so</ustring>
     </properties>
@@ -162,7 +162,7 @@
     </properties>
   </text>
 
-  <text id="credits-text" x="0" y="480">
+  <text id="credits-text">
     <properties font="big" color="multicolor">
       <ustring>Joc original</ustring>
     </properties>
@@ -567,7 +567,7 @@
     </properties>
   </text>
 
-  <text id="save-game" x="0" y="57">
+  <text id="save-game">
     <properties font="big" color="orange">
       <ustring>El Peix de la Reencarnació et dóna</ustring>
     </properties>
@@ -587,7 +587,7 @@
 
   <text id="score">
     <properties>
-      <ustring>Puntuació:</ustring>
+      <ustring>Puntuació</ustring>
     </properties>
   </text>
 

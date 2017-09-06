@@ -3,7 +3,7 @@
 <language xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="language.xsd">
 
-  <text id="new-game" x="190" y="150">
+  <text id="new-game">
     <properties>
       <ustring>Nova igra</ustring>
     </properties>
@@ -57,7 +57,7 @@
     </properties>
   </text>
 
-  <text id="movenorth" x="105" y="132">
+  <text id="movenorth">
     <properties>
       <ustring>Lijevo</ustring>
     </properties>
@@ -117,13 +117,13 @@
     </properties>
   </text>
 
-  <text id="confirm-quit" x="0" y="142">
+  <text id="confirm-quit">
     <properties font="big" color="cyan">
       <ustring>Pritisni ESC za izlaz iz igre</ustring>
     </properties>
   </text>
 
-  <text id="confirm-resume" x="0" y="184">
+  <text id="confirm-resume">
     <properties font="big" color="yellow">
       <ustring>Pritisni neku od ostalih tipki</ustring>
     </properties>
@@ -138,7 +138,7 @@
     </properties>
   </text>
 
-  <text id="soundfx" x="104" y="210">
+  <text id="soundfx">
     <properties>
       <ustring>Zvučni efekti</ustring>
     </properties>
@@ -162,7 +162,7 @@
     </properties>
   </text>
 
-  <text id="credits-text" x="0" y="480">
+  <text id="credits-text">
     <properties font="big" color="multicolor">
       <ustring>Originalna igra</ustring>
     </properties>
@@ -567,7 +567,7 @@
     </properties>
   </text>
 
-  <text id="save-game" x="0" y="100">
+  <text id="save-game">
     <properties font="big" color="orange">
       <ustring>Reinkarnacijska Riba ti daje šansu</ustring>
     </properties>
@@ -584,7 +584,7 @@
 
   <text id="score">
     <properties>
-      <ustring>Bodovi:</ustring>
+      <ustring>Bodovi</ustring>
     </properties>
   </text>
 
