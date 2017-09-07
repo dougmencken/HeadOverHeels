@@ -29,13 +29,14 @@ GuiManager* GuiManager::instance = 0;
 
 GuiManager::GuiManager( ) :
         screen( 0 ),
+        language( "" ),
         languageManager( 0 ),
-        active( true )
+        active( true ),
+        atFullScreen( false ),
+        preferencesRead( false )
 {
-        // Inicialización de Allegro
         this->allegroSetup();
 
-        // Título de la ventana
         std::string nameOfWindow = "Head over Heels";
 #ifdef PACKAGE_VERSION
         nameOfWindow = nameOfWindow + " v" + PACKAGE_VERSION;
@@ -44,7 +45,7 @@ GuiManager::GuiManager( ) :
 
         std::string pathToFont = isomot::sharePath();
 
-        // Every font used in the game is created here
+        // every font used in the game is created here
 
         gui::FontManager::getInstance()->createFont( "regular-white", pathToFont + "font.png", makecol( 255, 255, 255 ) );
         gui::FontManager::getInstance()->createFont( "big-white", pathToFont + "font.png", makecol( 255, 255, 255 ), true );
@@ -57,27 +58,12 @@ GuiManager::GuiManager( ) :
         gui::FontManager::getInstance()->createFont( "big-cyan", pathToFont + "font.png", makecol( 0, 228, 231 ), true );
         gui::FontManager::getInstance()->createFont( "big-yellow", pathToFont + "font.png", makecol( 255, 255, 50 ), true );
 
-        // Se crea la imagen donde se dibujará la interfaz gráfica
+        // create image to draw interface
         this->picture = create_bitmap_ex( 32, 640, 480 );
 
-        // Se crea el gestor de configuración y se cargan los datos del disco
-        configurationManager = new ConfigurationManager( isomot::homePath() + "configuration.xml" );
-        configurationManager->read();
+        configurationManager = new ConfigurationManager( isomot::homePath() + "preferences.xml" );
 
-        std::string language = configurationManager->getLanguage() ;
-        if ( language.compare( "en_UK" ) == 0 )
-                language = "en_US"; // for compatibility
-
-        assignLanguage( language );
-
-        // Se comunica al gestor de entradas qué teclas
-        InputManager* inputManager = InputManager::getInstance();
-        for ( size_t i = 0; i < InputManager::numberOfKeys; i++ )
-        {
-                inputManager->changeUserKey( InputManager::namesOfKeys[ i ], configurationManager->getKey( InputManager::namesOfKeys[ i ] ) );
-        }
-
-        // Se inicializa el gestor de sonido cargando los sonidos
+        // initialize sound manager
         SoundManager::getInstance()->readListOfSounds( "sounds.xml" );
 }
 
@@ -94,9 +80,19 @@ GuiManager* GuiManager::getInstance ()
         if ( instance == 0 )
         {
                 instance = new GuiManager();
+                instance->readPreferences ();
         }
 
         return instance;
+}
+
+void GuiManager::readPreferences ()
+{
+        if ( ! preferencesRead )
+        {
+                configurationManager->read() ;
+                preferencesRead = true ;
+        }
 }
 
 void GuiManager::begin ()
@@ -166,7 +162,7 @@ void GuiManager::changeScreen( Screen* newScreen )
         if ( listOfScreens.find( newScreen->getActionOfScreen()->getNameOfAction() ) != listOfScreens.end () )
         {
                 this->screen = newScreen;
-                refresh() ;
+                redraw() ;
         }
         else
         {
@@ -213,7 +209,7 @@ void GuiManager::refreshScreens ()
         }
 }
 
-void GuiManager::refresh()
+void GuiManager::redraw()
 {
         if ( ( this->active ) && ( this->screen != 0 ) )
         {
@@ -224,6 +220,42 @@ void GuiManager::refresh()
 std::string GuiManager::getPathToPicturesOfGui ()
 {
         return isomot::sharePath() + isomot::GameManager::getInstance()->getChosenGraphicSet() + "/" + "gui.png" + "/" ;
+}
+
+void GuiManager::allegroSetup()
+{
+        allegro_init ();
+
+        // 8 bits for each of three colors with 8 bits for alpha channel
+        set_color_depth( 32 );
+
+        int magicCard = this->atFullScreen ? GFX_AUTODETECT_FULLSCREEN : GFX_AUTODETECT_WINDOWED ;
+        set_gfx_mode( magicCard, 640, 480, 0, 0 );
+
+#ifdef __WIN32
+        // when application loses focus, the game will continue in background
+        // because there are threads that will continue even when the main thread pauses
+        set_display_switch_mode( SWITCH_BACKGROUND );
+#endif
+
+        // install handler of keyboard events
+        install_keyboard ();
+}
+
+bool GuiManager::isAtFullScreen ()
+{
+        return this->atFullScreen;
+}
+
+void GuiManager::toggleFullScreenVideo ()
+{
+        int magicCardToggled = this->atFullScreen ? GFX_AUTODETECT_WINDOWED : GFX_AUTODETECT_FULLSCREEN ;
+        set_gfx_mode( magicCardToggled, 640, 480, 0, 0 );
+        this->atFullScreen = ! this->atFullScreen ;
+
+        fprintf( stdout, "video is now %s\n", ( this->atFullScreen ? "at full screen" : "in window" ) );
+        sleep( 80 );
+        redraw ();
 }
 
 void GuiManager::assignLanguage( const std::string& language )
@@ -237,59 +269,4 @@ void GuiManager::assignLanguage( const std::string& language )
         fprintf( stdout, "language \"%s\"\n", language.c_str () );
         std::string pathToTextInGameData = isomot::sharePath() + "text/";
         this->languageManager = new LanguageManager( pathToTextInGameData + language + ".xml", pathToTextInGameData + "en_US.xml" );
-}
-
-void GuiManager::allegroSetup()
-{
-        allegro_init ();
-
-        // 8 bits for each of three colors with 8 bits for alpha channel
-        set_color_depth( 32 );
-
-        // try 640 pixels x 480 pixels at full screen
-        // if that can’t be done use 640 pixels x 480 pixels in window
-        this->atFullScreen = true;
-        if ( set_gfx_mode( GFX_AUTODETECT_FULLSCREEN, 640, 480, 0, 0 ) != 0 )
-        {
-                fprintf( stdout, "can't get 640 pixels x 480 pixels at full screen\n" );
-                this->atFullScreen = false;
-                set_gfx_mode( GFX_AUTODETECT_WINDOWED, 640, 480, 0, 0 );
-        }
-
-#ifdef __WIN32
-        // When this application loses focus the game will continue in background
-        // because there are threads that will continue even when the main thread pauses
-        set_display_switch_mode( SWITCH_BACKGROUND );
-#endif
-
-        // Instala el controlador de eventos del teclado
-        install_keyboard ();
-}
-
-bool GuiManager::isAtFullScreen ()
-{
-        return this->atFullScreen;
-}
-
-void GuiManager::toggleFullScreenVideo ()
-{
-        int magicCard = GFX_AUTODETECT_FULLSCREEN;
-        if ( this->atFullScreen )
-                magicCard = GFX_AUTODETECT_WINDOWED;
-
-        set_gfx_mode( magicCard, 640, 480, 0, 0 );
-        this->atFullScreen = ! this->atFullScreen ;
-        fprintf( stdout, "video is now %s\n", ( this->atFullScreen ? "at full screen" : "in window" ) );
-        sleep( 80 );
-        refresh ();
-}
-
-ConfigurationManager* GuiManager::getConfigurationManager() const
-{
-        return this->configurationManager;
-}
-
-LanguageManager* GuiManager::getLanguageManager() const
-{
-        return this->languageManager;
 }

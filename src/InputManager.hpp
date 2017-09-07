@@ -107,7 +107,7 @@ public:
         * El usuario está disparando
         * @return true si pulsa la tecla o el botón indicado
         */
-        bool shoot () ;
+        bool doughnut () ;
 
        /**
         * El usuario está cogiendo o dejando algún objeto y saltando

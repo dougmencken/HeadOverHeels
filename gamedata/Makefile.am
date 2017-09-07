@@ -1,6 +1,5 @@
 gamedatadir = $(datadir)/@PACKAGE@
-gamedata_DATA = configuration.xml \
-		configuration.xsd \
+gamedata_DATA = configuration.xsd \
 		items.xml \
 		items.xsd \
 		sounds.xml \

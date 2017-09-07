@@ -19,20 +19,11 @@
 namespace gui
 {
 
-/**
- * Establece el idioma del juego
- */
-
 class SelectLanguage: public Action
 {
 
 public:
 
-        /**
-         * Constructor
-         * @param picture Imagen donde se dibujará la interfaz gráfica
-         * @param language Código ISO del idioma seleccionado
-         */
         SelectLanguage( BITMAP* picture, const std::string& language ) ;
 
         /**
@@ -44,14 +35,8 @@ public:
 
 private:
 
-        /**
-         * Imagen donde se dibujará la interfaz gráfica
-         */
         BITMAP* where ;
 
-        /**
-         * Código ISO del idioma seleccionado
-         */
         std::string language ;
 
 };

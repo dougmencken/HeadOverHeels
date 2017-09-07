@@ -1,9 +1,13 @@
 
 #include "ConfigurationManager.hpp"
-#include "SoundManager.hpp"
 #include "InputManager.hpp"
+#include "SoundManager.hpp"
+#include "GuiManager.hpp"
+#include "GameManager.hpp"
 
 using gui::ConfigurationManager;
+using gui::GuiManager;
+using isomot::GameManager;
 using isomot::SoundManager;
 using isomot::InputManager;
 
@@ -16,29 +20,53 @@ ConfigurationManager::ConfigurationManager( const std::string& fileName )
 
 void ConfigurationManager::read()
 {
-        // Carga el archivo XML especificado y almacena los datos XML en los diferentes atributos
         try
         {
-                std::auto_ptr< cxml::ConfigurationXML > configurationXML( cxml::configuration( fileName.c_str() ) );
+                std::auto_ptr< cxml::ConfigurationXML > configurationXML( cxml::preferences( fileName.c_str() ) );
 
-                // Almacena el idioma seleccionado
-                this->language = configurationXML->language();
+                // chosen language
 
-                // Almacena la configuración del teclado
-                this->setKey( "movenorth", configurationXML->keyboard().movenorth() );
-                this->setKey( "movesouth", configurationXML->keyboard().movesouth() );
-                this->setKey( "moveeast", configurationXML->keyboard().moveeast() );
-                this->setKey( "movewest", configurationXML->keyboard().movewest() );
-                this->setKey( "take", configurationXML->keyboard().take() );
-                this->setKey( "jump", configurationXML->keyboard().jump() );
-                this->setKey( "shoot", configurationXML->keyboard().shoot() );
-                this->setKey( "take-jump", configurationXML->keyboard().takeandjump() );
-                this->setKey( "swap", configurationXML->keyboard().swap() );
-                this->setKey( "halt", configurationXML->keyboard().halt() );
+                GuiManager::getInstance()->setLanguage( configurationXML->language() );
 
-                // Almacena los niveles de volumen
-                this->setVolumeOfSoundEffects( configurationXML->volume().fx() );
-                this->setVolumeOfMusic( configurationXML->volume().music() );
+                // keys of keyboard
+
+                InputManager::getInstance()->changeUserKey( "movenorth", configurationXML->keyboard().movenorth() );
+                InputManager::getInstance()->changeUserKey( "movesouth", configurationXML->keyboard().movesouth() );
+                InputManager::getInstance()->changeUserKey( "moveeast", configurationXML->keyboard().moveeast() );
+                InputManager::getInstance()->changeUserKey( "movewest", configurationXML->keyboard().movewest() );
+                InputManager::getInstance()->changeUserKey( "take", configurationXML->keyboard().take() );
+                InputManager::getInstance()->changeUserKey( "jump", configurationXML->keyboard().jump() );
+                InputManager::getInstance()->changeUserKey( "doughnut", configurationXML->keyboard().doughnut() );
+                InputManager::getInstance()->changeUserKey( "take-jump", configurationXML->keyboard().takeandjump() );
+                InputManager::getInstance()->changeUserKey( "swap", configurationXML->keyboard().swap() );
+                InputManager::getInstance()->changeUserKey( "halt", configurationXML->keyboard().halt() );
+
+                // preferences of audio
+
+                SoundManager::getInstance()->setVolumeOfEffects( configurationXML->audio().fx() ) ;
+                SoundManager::getInstance()->setVolumeOfMusic( configurationXML->audio().music() ) ;
+
+                // preferences of video
+
+                int nowAtFullScreen = GuiManager::getInstance()->isAtFullScreen () ? 1 : 0;
+                if ( nowAtFullScreen != configurationXML->video().fullscreen() )
+                {
+                        GuiManager::getInstance()->toggleFullScreenVideo ();
+                }
+
+                int drawShadowsNow = GameManager::getInstance()->getDrawShadows () ? 1 : 0;
+                if ( drawShadowsNow != configurationXML->video().shadows() )
+                {
+                        GameManager::getInstance()->toggleDrawShadows ();
+                }
+
+                int drawBackgroundPictureNow = GameManager::getInstance()->hasBackgroundPicture () ? 1 : 0;
+                if ( drawBackgroundPictureNow != configurationXML->video().background() )
+                {
+                        GameManager::getInstance()->toggleBackgroundPicture ();
+                }
+
+                GameManager::getInstance()->setChosenGraphicSet( configurationXML->video().graphics().c_str () ) ;
         }
         catch ( const xml_schema::exception& e )
         {
@@ -51,64 +79,46 @@ void ConfigurationManager::write()
         try
         {
                 cxml::keyboard userKeys (
-                        this->getKey( "movenorth" ),
-                        this->getKey( "movesouth" ),
-                        this->getKey( "moveeast" ),
-                        this->getKey( "movewest" ),
-                        this->getKey( "take" ),
-                        this->getKey( "jump" ),
-                        this->getKey( "shoot" ),
-                        this->getKey( "take-jump" ),
-                        this->getKey( "swap" ),
-                        this->getKey( "halt" )
+                        InputManager::getInstance()->getUserKey( "movenorth" ),
+                        InputManager::getInstance()->getUserKey( "movesouth" ),
+                        InputManager::getInstance()->getUserKey( "moveeast" ),
+                        InputManager::getInstance()->getUserKey( "movewest" ),
+                        InputManager::getInstance()->getUserKey( "take" ),
+                        InputManager::getInstance()->getUserKey( "jump" ),
+                        InputManager::getInstance()->getUserKey( "doughnut" ),
+                        InputManager::getInstance()->getUserKey( "take-jump" ),
+                        InputManager::getInstance()->getUserKey( "swap" ),
+                        InputManager::getInstance()->getUserKey( "halt" )
                 );
 
-                cxml::volume userVolume( this->getVolumeOfSoundEffects (), this->getVolumeOfMusic () );
+                cxml::audio audioPreferences (
+                        SoundManager::getInstance()->getVolumeOfEffects (),
+                        SoundManager::getInstance()->getVolumeOfMusic ()
+                );
 
-                // Creación de la configuración
-                cxml::ConfigurationXML configurationXML( this->language, userKeys, userVolume );
+                cxml::video videoPreferences (
+                        GuiManager::getInstance()->isAtFullScreen () ? 1 : 0,
+                        GameManager::getInstance()->getDrawShadows () ? 1 : 0,
+                        GameManager::getInstance()->hasBackgroundPicture () ? 1 : 0,
+                        GameManager::getInstance()->getChosenGraphicSet()
+                );
 
-                // Información del esquema
+                cxml::ConfigurationXML configurationXML (
+                        GuiManager::getInstance()->getLanguage(),
+                        userKeys,
+                        audioPreferences,
+                        videoPreferences
+                );
+
                 xml_schema::namespace_infomap map;
                 map[ "" ].name = "";
                 map[ "" ].schema = "configuration.xsd";
 
-                // Creación del archivo
                 std::ofstream outputFile( fileName.c_str () );
-                cxml::configuration( outputFile, configurationXML, map );
+                cxml::preferences( outputFile, configurationXML, map );
         }
         catch ( const xml_schema::exception& e )
         {
                 std::cout << e << std::endl ;
         }
-}
-
-void ConfigurationManager::setKey ( const std::string& nameOfKey, int keyCode )
-{
-        InputManager::getInstance()->changeUserKey( nameOfKey, keyCode ) ;
-}
-
-int ConfigurationManager::getKey ( const std::string& nameOfKey )
-{
-        return InputManager::getInstance()->getUserKey( nameOfKey ) ;
-}
-
-void ConfigurationManager::setVolumeOfSoundEffects ( int volume ) const
-{
-        SoundManager::getInstance()->setVolumeOfEffects( volume ) ;
-}
-
-int ConfigurationManager::getVolumeOfSoundEffects () const
-{
-        return SoundManager::getInstance()->getVolumeOfEffects ();
-}
-
-void ConfigurationManager::setVolumeOfMusic ( int volume ) const
-{
-        SoundManager::getInstance()->setVolumeOfMusic( volume ) ;
-}
-
-int ConfigurationManager::getVolumeOfMusic () const
-{
-        return SoundManager::getInstance()->getVolumeOfMusic ();
 }

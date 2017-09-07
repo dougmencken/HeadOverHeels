@@ -209,11 +209,11 @@ void PlayerHead::behave ()
                                 activity = ( playerItem->getMediator()->collisionWithByBehavior( TeleportBehavior ) ? StartWayOutTeletransport : Jump );
                         }
                         // ...y ha pulsado la tecla de disparo entonces dispara
-                        else if ( input->shoot() && ! fireFromHooterIsPresent )
+                        else if ( input->doughnut() && ! fireFromHooterIsPresent )
                         {
                                 useHooter( playerItem );
                                 // Las repeticiones de esta tecla no deben procesarse
-                                input->noRepeat( "shoot" );
+                                input->noRepeat( "doughnut" );
                         }
                         // ...y se ha pulsado alguna tecla de movimiento entonces se mueve
                         else if ( input->movenorth() && !input->movesouth() && !input->moveeast() && !input->movewest() )
@@ -245,11 +245,11 @@ void PlayerHead::behave ()
                                 activity = ( playerItem->getMediator()->collisionWithByBehavior( TeleportBehavior ) ? StartWayOutTeletransport : Jump );
                         }
                         // ...y ha pulsado la tecla de disparo entonces dispara
-                        else if ( input->shoot() && ! fireFromHooterIsPresent )
+                        else if ( input->doughnut() && ! fireFromHooterIsPresent )
                         {
                                 useHooter( playerItem );
                                 // Las repeticiones de esta tecla no deben procesarse
-                                input->noRepeat( "shoot" );
+                                input->noRepeat( "doughnut" );
                         }
                         // ...y se ha pulsado alguna tecla de movimiento entonces sigue moviéndose
                         else if ( input->movenorth() && !input->movesouth() && !input->moveeast() && !input->movewest() )
@@ -284,11 +284,11 @@ void PlayerHead::behave ()
                                 activity = Jump;
                         }
                         // ...y se ha pulsado la tecla de disparo entonces dispara
-                        else if ( input->shoot() && ! fireFromHooterIsPresent )
+                        else if ( input->doughnut() && ! fireFromHooterIsPresent )
                         {
                                 useHooter( playerItem );
                                 // Las repeticiones de esta tecla no deben procesarse
-                                input->noRepeat( "shoot" );
+                                input->noRepeat( "doughnut" );
                         }
                         // ...y se ha pulsado alguna tecla de movimiento entonces sigue moviéndose
                         else if ( input->movenorth() && !input->movesouth() && !input->moveeast() && !input->movewest() )
@@ -340,11 +340,11 @@ void PlayerHead::behave ()
                 else if ( activity == Jump || activity == RegularJump || activity == HighJump )
                 {
                         // ...y ha pulsado la tecla de disparo entonces dispara
-                        if ( input->shoot() && ! fireFromHooterIsPresent )
+                        if ( input->doughnut() && ! fireFromHooterIsPresent )
                         {
                                 useHooter( playerItem );
                                 // Las repeticiones de esta tecla no deben procesarse
-                                input->noRepeat( "shoot" );
+                                input->noRepeat( "doughnut" );
                         }
                         // ...y se ha pulsado alguna tecla de movimiento entonces el salto cambia de orientación
                         else if ( input->movenorth() && !input->movesouth() && !input->moveeast() && !input->movewest() && playerItem->getDirection() != North )
@@ -368,11 +368,11 @@ void PlayerHead::behave ()
                 else if ( activity == Fall )
                 {
                         // ...y ha pulsado la tecla de disparo entonces dispara
-                        if ( input->shoot() && ! fireFromHooterIsPresent )
+                        if ( input->doughnut() && ! fireFromHooterIsPresent )
                         {
                                 useHooter( playerItem );
                                 // Las repeticiones de esta tecla no deben procesarse
-                                input->noRepeat( "shoot" );
+                                input->noRepeat( "doughnut" );
                         }
                         // ...y se intenta mover entonces Head planea
                         else if ( input->movenorth() || input->movesouth() || input->moveeast() || input->movewest() )
@@ -387,11 +387,11 @@ void PlayerHead::behave ()
                 if ( activity == Glide )
                 {
                         // ...y ha pulsado la tecla de disparo entonces dispara
-                        if ( input->shoot() && ! fireFromHooterIsPresent )
+                        if ( input->doughnut() && ! fireFromHooterIsPresent )
                         {
                                 useHooter( playerItem );
                                 // Las repeticiones de esta tecla no deben procesarse
-                                input->noRepeat( "shoot" );
+                                input->noRepeat( "doughnut" );
                         }
                         // ...y se ha pulsado alguna tecla de movimiento entonces cambia la orientación
                         else if ( input->movenorth() && !input->movesouth() && !input->moveeast() && !input->movewest() && playerItem->getDirection() != North )

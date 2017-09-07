@@ -88,30 +88,53 @@ namespace cxml
     this->keyboard_.set (keyboard);
   }
 
-  const ConfigurationXML::volume_type& ConfigurationXML::
-  volume () const
+  const ConfigurationXML::audio_type& ConfigurationXML::
+  audio () const
   {
-    return this->volume_.get ();
+    return this->audio_.get ();
   }
 
-  ConfigurationXML::volume_type& ConfigurationXML::
-  volume ()
+  ConfigurationXML::audio_type& ConfigurationXML::
+  audio ()
   {
-    return this->volume_.get ();
-  }
-
-  void ConfigurationXML::
-  volume (const volume_type& volume)
-  {
-    this->volume_.set (volume);
+    return this->audio_.get ();
   }
 
   void ConfigurationXML::
-  volume (::std::auto_ptr< volume_type > volume)
+  audio (const audio_type& audio)
   {
-    this->volume_.set (volume);
+    this->audio_.set (audio);
   }
 
+  void ConfigurationXML::
+  audio (::std::auto_ptr< audio_type > audio)
+  {
+    this->audio_.set (audio);
+  }
+
+  const ConfigurationXML::video_type& ConfigurationXML::
+  video () const
+  {
+    return this->video_.get ();
+  }
+
+  ConfigurationXML::video_type& ConfigurationXML::
+  video ()
+  {
+    return this->video_.get ();
+  }
+
+  void ConfigurationXML::
+  video (const video_type& video)
+  {
+    this->video_.set (video);
+  }
+
+  void ConfigurationXML::
+  video (::std::auto_ptr< video_type > video)
+  {
+    this->video_.set (video);
+  }
 
   // keyboard
   //
@@ -224,22 +247,22 @@ namespace cxml
     this->jump_.set (jump);
   }
 
-  const keyboard::shoot_type& keyboard::
-  shoot () const
+  const keyboard::doughnut_type& keyboard::
+  doughnut () const
   {
-    return this->shoot_.get ();
+    return this->doughnut_.get ();
   }
 
-  keyboard::shoot_type& keyboard::
-  shoot ()
+  keyboard::doughnut_type& keyboard::
+  doughnut ()
   {
-    return this->shoot_.get ();
+    return this->doughnut_.get ();
   }
 
   void keyboard::
-  shoot (const shoot_type& shoot)
+  doughnut (const doughnut_type& doughnut)
   {
-    this->shoot_.set (shoot);
+    this->doughnut_.set (doughnut);
   }
 
   const keyboard::takeandjump_type& keyboard::
@@ -297,43 +320,124 @@ namespace cxml
   }
 
 
-  // volume
+  // audio
   //
 
-  const volume::fx_type& volume::
+  const audio::fx_type& audio::
   fx () const
   {
     return this->fx_.get ();
   }
 
-  volume::fx_type& volume::
+  audio::fx_type& audio::
   fx ()
   {
     return this->fx_.get ();
   }
 
-  void volume::
+  void audio::
   fx (const fx_type& fx)
   {
     this->fx_.set (fx);
   }
 
-  const volume::music_type& volume::
+  const audio::music_type& audio::
   music () const
   {
     return this->music_.get ();
   }
 
-  volume::music_type& volume::
+  audio::music_type& audio::
   music ()
   {
     return this->music_.get ();
   }
 
-  void volume::
+  void audio::
   music (const music_type& music)
   {
     this->music_.set (music);
+  }
+
+  // video
+  //
+
+  const video::fullscreen_type& video::
+  fullscreen () const
+  {
+    return this->fullscreen_.get ();
+  }
+
+  video::fullscreen_type& video::
+  fullscreen ()
+  {
+    return this->fullscreen_.get ();
+  }
+
+  void video::
+  fullscreen (const fullscreen_type& fullscreen)
+  {
+    this->fullscreen_.set (fullscreen);
+  }
+
+  const video::shadows_type& video::
+  shadows () const
+  {
+    return this->shadows_.get ();
+  }
+
+  video::shadows_type& video::
+  shadows ()
+  {
+    return this->shadows_.get ();
+  }
+
+  void video::
+  shadows (const shadows_type& shadows)
+  {
+    this->shadows_.set (shadows);
+  }
+
+  const video::background_type& video::
+  background () const
+  {
+    return this->background_.get ();
+  }
+
+  video::background_type& video::
+  background ()
+  {
+    return this->background_.get ();
+  }
+
+  void video::
+  background (const background_type& background)
+  {
+    this->background_.set (background);
+  }
+
+  const video::graphics_type& video::
+  graphics () const
+  {
+    return this->graphics_.get ();
+  }
+
+  video::graphics_type& video::
+  graphics ()
+  {
+    return this->graphics_.get ();
+  }
+
+  void video::
+  graphics (const graphics_type& graphics)
+  {
+    this->graphics_.set (graphics);
+  }
+
+  void video::
+  graphics (::std::auto_ptr< graphics_type > graphics)
+  {
+    this->graphics_.set (graphics);
   }
 }
 
@@ -347,11 +451,13 @@ namespace cxml
   ConfigurationXML::
   ConfigurationXML (const language_type& language,
                     const keyboard_type& keyboard,
-                    const volume_type& volume)
+                    const audio_type& audio,
+                    const video_type& video)
   : ::xml_schema::type (),
     language_ (language, ::xml_schema::flags (), this),
     keyboard_ (keyboard, ::xml_schema::flags (), this),
-    volume_ (volume, ::xml_schema::flags (), this)
+    audio_ (audio, ::xml_schema::flags (), this),
+    video_ (video, ::xml_schema::flags (), this)
   {
   }
 
@@ -362,7 +468,8 @@ namespace cxml
   : ::xml_schema::type (x, f, c),
     language_ (x.language_, f, this),
     keyboard_ (x.keyboard_, f, this),
-    volume_ (x.volume_, f, this)
+    audio_ (x.audio_, f, this),
+    video_ (x.video_, f, this)
   {
   }
 
@@ -373,7 +480,8 @@ namespace cxml
   : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
     language_ (f, this),
     keyboard_ (f, this),
-    volume_ (f, this)
+    audio_ (f, this),
+    video_ (f, this)
   {
     if ((f & ::xml_schema::flags::base) == 0)
     {
@@ -393,7 +501,7 @@ namespace cxml
         ::xsd::cxx::xml::dom::name< char > (i));
 
       // language
-      //
+
       if (n.name () == "language" && n.namespace_ ().empty ())
       {
         ::std::auto_ptr< language_type > r (
@@ -407,7 +515,7 @@ namespace cxml
       }
 
       // keyboard
-      //
+
       if (n.name () == "keyboard" && n.namespace_ ().empty ())
       {
         ::std::auto_ptr< keyboard_type > r (
@@ -420,42 +528,35 @@ namespace cxml
         }
       }
 
-      // volume
-      //
-      if (n.name () == "volume" && n.namespace_ ().empty ())
-      {
-        ::std::auto_ptr< volume_type > r (
-          volume_traits::create (i, f, this));
+      // audio
 
-        if (!volume_.present ())
+      if (n.name () == "audio" && n.namespace_ ().empty ())
+      {
+        ::std::auto_ptr< audio_type > r (
+          audio_traits::create (i, f, this));
+
+        if (!audio_.present ())
         {
-          this->volume (r);
+          this->audio (r);
+          continue;
+        }
+      }
+
+      // video
+
+      if (n.name () == "video" && n.namespace_ ().empty ())
+      {
+        ::std::auto_ptr< video_type > r (
+          video_traits::create (i, f, this));
+
+        if (!video_.present ())
+        {
+          this->video (r);
           continue;
         }
       }
 
       break;
-    }
-
-    if (!language_.present ())
-    {
-      throw ::xsd::cxx::tree::expected_element< char > (
-        "language",
-        "");
-    }
-
-    if (!keyboard_.present ())
-    {
-      throw ::xsd::cxx::tree::expected_element< char > (
-        "keyboard",
-        "");
-    }
-
-    if (!volume_.present ())
-    {
-      throw ::xsd::cxx::tree::expected_element< char > (
-        "volume",
-        "");
     }
   }
 
@@ -476,7 +577,7 @@ namespace cxml
             const movewest_type& movewest,
             const take_type& take,
             const jump_type& jump,
-            const shoot_type& shoot,
+            const doughnut_type& doughnut,
             const takeandjump_type& takeandjump,
             const swap_type& swap,
             const halt_type& halt)
@@ -487,7 +588,7 @@ namespace cxml
     movewest_ (movewest, ::xml_schema::flags (), this),
     take_ (take, ::xml_schema::flags (), this),
     jump_ (jump, ::xml_schema::flags (), this),
-    shoot_ (shoot, ::xml_schema::flags (), this),
+    doughnut_ (doughnut, ::xml_schema::flags (), this),
     takeandjump_ (takeandjump, ::xml_schema::flags (), this),
     swap_ (swap, ::xml_schema::flags (), this),
     halt_ (halt, ::xml_schema::flags (), this)
@@ -505,7 +606,7 @@ namespace cxml
     movewest_ (x.movewest_, f, this),
     take_ (x.take_, f, this),
     jump_ (x.jump_, f, this),
-    shoot_ (x.shoot_, f, this),
+    doughnut_ (x.doughnut_, f, this),
     takeandjump_ (x.takeandjump_, f, this),
     swap_ (x.swap_, f, this),
     halt_ (x.halt_, f, this)
@@ -523,7 +624,7 @@ namespace cxml
     movewest_ (f, this),
     take_ (f, this),
     jump_ (f, this),
-    shoot_ (f, this),
+    doughnut_ (f, this),
     takeandjump_ (f, this),
     swap_ (f, this),
     halt_ (f, this)
@@ -611,13 +712,13 @@ namespace cxml
         }
       }
 
-      // shoot
+      // doughnut
       //
-      if (n.name () == "shoot" && n.namespace_ ().empty ())
+      if (n.name () == "doughnut" && n.namespace_ ().empty ())
       {
-        if (!shoot_.present ())
+        if (!doughnut_.present ())
         {
-          this->shoot (shoot_traits::create (i, f, this));
+          this->doughnut (doughnut_traits::create (i, f, this));
           continue;
         }
       }
@@ -657,76 +758,6 @@ namespace cxml
 
       break;
     }
-
-    if (!movenorth_.present ())
-    {
-      throw ::xsd::cxx::tree::expected_element< char > (
-        "movenorth",
-        "");
-    }
-
-    if (!movesouth_.present ())
-    {
-      throw ::xsd::cxx::tree::expected_element< char > (
-        "movesouth",
-        "");
-    }
-
-    if (!moveeast_.present ())
-    {
-      throw ::xsd::cxx::tree::expected_element< char > (
-        "moveeast",
-        "");
-    }
-
-    if (!movewest_.present ())
-    {
-      throw ::xsd::cxx::tree::expected_element< char > (
-        "movewest",
-        "");
-    }
-
-    if (!take_.present ())
-    {
-      throw ::xsd::cxx::tree::expected_element< char > (
-        "take",
-        "");
-    }
-
-    if (!jump_.present ())
-    {
-      throw ::xsd::cxx::tree::expected_element< char > (
-        "jump",
-        "");
-    }
-
-    if (!shoot_.present ())
-    {
-      throw ::xsd::cxx::tree::expected_element< char > (
-        "shoot",
-        "");
-    }
-
-    if (!takeandjump_.present ())
-    {
-      throw ::xsd::cxx::tree::expected_element< char > (
-        "takeandjump",
-        "");
-    }
-
-    if (!swap_.present ())
-    {
-      throw ::xsd::cxx::tree::expected_element< char > (
-        "swap",
-        "");
-    }
-
-    if (!halt_.present ())
-    {
-      throw ::xsd::cxx::tree::expected_element< char > (
-        "halt",
-        "");
-    }
   }
 
   keyboard* keyboard::
@@ -736,11 +767,11 @@ namespace cxml
     return new keyboard (*this, f, c);
   }
 
-  // volume
+  // audio
   //
 
-  volume::
-  volume (const fx_type& fx,
+  audio::
+  audio ( const fx_type& fx,
           const music_type& music)
   : ::xml_schema::type (),
     fx_ (fx, ::xml_schema::flags (), this),
@@ -748,8 +779,8 @@ namespace cxml
   {
   }
 
-  volume::
-  volume (const volume& x,
+  audio::
+  audio ( const audio& x,
           ::xml_schema::flags f,
           ::xml_schema::type* c)
   : ::xml_schema::type (x, f, c),
@@ -758,8 +789,8 @@ namespace cxml
   {
   }
 
-  volume::
-  volume (const ::xercesc::DOMElement& e,
+  audio::
+  audio ( const ::xercesc::DOMElement& e,
           ::xml_schema::flags f,
           ::xml_schema::type* c)
   : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
@@ -773,7 +804,7 @@ namespace cxml
     }
   }
 
-  void volume::
+  void audio::
   parse (::xsd::cxx::xml::dom::parser< char >& p,
          ::xml_schema::flags f)
   {
@@ -807,27 +838,123 @@ namespace cxml
 
       break;
     }
-
-    if (!fx_.present ())
-    {
-      throw ::xsd::cxx::tree::expected_element< char > (
-        "fx",
-        "");
-    }
-
-    if (!music_.present ())
-    {
-      throw ::xsd::cxx::tree::expected_element< char > (
-        "music",
-        "");
-    }
   }
 
-  volume* volume::
+  audio* audio::
   _clone (::xml_schema::flags f,
           ::xml_schema::type* c) const
   {
-    return new volume (*this, f, c);
+    return new audio (*this, f, c);
+  }
+
+  // video
+  //
+
+  video::
+  video ( const fullscreen_type& fullscreen,
+          const shadows_type& shadows,
+          const background_type& background,
+          const graphics_type& graphics )
+  : ::xml_schema::type (),
+    fullscreen_ (fullscreen, ::xml_schema::flags (), this),
+    shadows_ (shadows, ::xml_schema::flags (), this),
+    background_ (background, ::xml_schema::flags (), this),
+    graphics_ (graphics, ::xml_schema::flags (), this)
+  {
+  }
+
+  video::
+  video ( const video& x,
+          ::xml_schema::flags f,
+          ::xml_schema::type* c )
+  : ::xml_schema::type (x, f, c),
+    fullscreen_ (x.fullscreen_, f, this),
+    shadows_ (x.shadows_, f, this),
+    background_ (x.background_, f, this),
+    graphics_ (x.graphics_, f, this)
+  {
+  }
+
+  video::
+  video ( const ::xercesc::DOMElement& e,
+          ::xml_schema::flags f,
+          ::xml_schema::type* c )
+  : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
+    fullscreen_ (f, this),
+    shadows_ (f, this),
+    background_ (f, this),
+    graphics_ (f, this)
+  {
+    if ((f & ::xml_schema::flags::base) == 0)
+    {
+      ::xsd::cxx::xml::dom::parser< char > p (e);
+      this->parse (p, f);
+    }
+  }
+
+  void video::
+  parse (::xsd::cxx::xml::dom::parser< char >& p,
+         ::xml_schema::flags f)
+  {
+    for (; p.more_elements (); p.next_element ())
+    {
+      const ::xercesc::DOMElement& i (p.cur_element ());
+      const ::xsd::cxx::xml::qualified_name< char > n (
+        ::xsd::cxx::xml::dom::name< char > (i));
+
+      // fullscreen
+
+      if (n.name () == "fullscreen" && n.namespace_ ().empty ())
+      {
+        if (!fullscreen_.present ())
+        {
+          this->fullscreen (fullscreen_traits::create (i, f, this));
+          continue;
+        }
+      }
+
+      // shadows
+
+      if (n.name () == "shadows" && n.namespace_ ().empty ())
+      {
+        if (!shadows_.present ())
+        {
+          this->shadows (shadows_traits::create (i, f, this));
+          continue;
+        }
+      }
+
+      // background
+
+      if (n.name () == "background" && n.namespace_ ().empty ())
+      {
+        if (!background_.present ())
+        {
+          this->background (background_traits::create (i, f, this));
+          continue;
+        }
+      }
+
+      // graphics
+
+      if (n.name () == "graphics" && n.namespace_ ().empty ())
+      {
+        if (!graphics_.present ())
+        {
+          this->graphics (graphics_traits::create (i, f, this));
+          continue;
+        }
+      }
+
+      break;
+    }
+  }
+
+  video* video::
+  _clone (::xml_schema::flags f,
+          ::xml_schema::type* c) const
+  {
+    return new video (*this, f, c);
   }
 }
 
@@ -838,9 +965,9 @@ namespace cxml
 namespace cxml
 {
   ::std::auto_ptr< ::cxml::ConfigurationXML >
-  configuration (const ::std::string& u,
+  preferences (  const ::std::string& u,
                  ::xml_schema::flags f,
-                 const ::xml_schema::properties& p)
+                 const ::xml_schema::properties& p )
   {
     ::xsd::cxx::xml::auto_initializer i (
       (f & ::xml_schema::flags::dont_initialize) == 0,
@@ -851,7 +978,7 @@ namespace cxml
     if ( ! d ) throw ::xsd::cxx::tree::parsing< char > ();
 
     ::std::auto_ptr< ::cxml::ConfigurationXML > r (
-      ::cxml::configuration (
+      ::cxml::preferences (
         d.get (), f | ::xml_schema::flags::own_dom, p));
 
     if (f & ::xml_schema::flags::keep_dom)
@@ -861,9 +988,9 @@ namespace cxml
   }
 
   ::std::auto_ptr< ::cxml::ConfigurationXML >
-  configuration (::std::istream& is,
+  preferences (  ::std::istream& is,
                  ::xml_schema::flags f,
-                 const ::xml_schema::properties& p)
+                 const ::xml_schema::properties& p )
   {
     ::xsd::cxx::xml::auto_initializer i (
       (f & ::xml_schema::flags::dont_initialize) == 0,
@@ -871,14 +998,14 @@ namespace cxml
 
     ::xsd::cxx::xml::sax::std_input_source isrc (is);
     ::xercesc::Wrapper4InputSource wrap (&isrc, false);
-    return ::cxml::configuration (wrap, f, p);
+    return ::cxml::preferences (wrap, f, p);
   }
 
   ::std::auto_ptr< ::cxml::ConfigurationXML >
-  configuration (::std::istream& is,
+  preferences (  ::std::istream& is,
                  const ::std::string& sid,
                  ::xml_schema::flags f,
-                 const ::xml_schema::properties& p)
+                 const ::xml_schema::properties& p )
   {
     ::xsd::cxx::xml::auto_initializer i (
       (f & ::xml_schema::flags::dont_initialize) == 0,
@@ -886,20 +1013,20 @@ namespace cxml
 
     ::xsd::cxx::xml::sax::std_input_source isrc (is, sid);
     ::xercesc::Wrapper4InputSource wrap (&isrc, false);
-    return ::cxml::configuration (wrap, f, p);
+    return ::cxml::preferences (wrap, f, p);
   }
 
   ::std::auto_ptr< ::cxml::ConfigurationXML >
-  configuration (const ::xercesc::DOMLSInput& i,
+  preferences (  const ::xercesc::DOMLSInput& i,
                  ::xml_schema::flags f,
-                 const ::xml_schema::properties& p)
+                 const ::xml_schema::properties& p )
   {
     ::xsd::cxx::xml::dom::auto_ptr< ::xercesc::DOMDocument > d ( ::xsd::cxx::xml::dom::parse< char > ( i, p, f ) );
 
     if ( ! d ) throw ::xsd::cxx::tree::parsing< char > ();
 
     ::std::auto_ptr< ::cxml::ConfigurationXML > r (
-      ::cxml::configuration (
+      ::cxml::preferences (
         d.get (), f | ::xml_schema::flags::own_dom, p));
 
     if (f & ::xml_schema::flags::keep_dom)
@@ -909,9 +1036,9 @@ namespace cxml
   }
 
   ::std::auto_ptr< ::cxml::ConfigurationXML >
-  configuration (const ::xercesc::DOMDocument& d,
+  preferences (  const ::xercesc::DOMDocument& d,
                  ::xml_schema::flags f,
-                 const ::xml_schema::properties& p)
+                 const ::xml_schema::properties& p )
   {
     if (f & ::xml_schema::flags::keep_dom)
     {
@@ -919,7 +1046,7 @@ namespace cxml
         static_cast< ::xercesc::DOMDocument* > (d.cloneNode (true)));
 
       ::std::auto_ptr< ::cxml::ConfigurationXML > r (
-        ::cxml::configuration (
+        ::cxml::preferences (
           c.get (), f | ::xml_schema::flags::own_dom, p));
 
       c.release ();
@@ -930,7 +1057,7 @@ namespace cxml
     const ::xsd::cxx::xml::qualified_name< char > n (
       ::xsd::cxx::xml::dom::name< char > (e));
 
-    if (n.name () == "configuration" &&
+    if (n.name () == "preferences" &&
         n.namespace_ () == "")
     {
       ::std::auto_ptr< ::cxml::ConfigurationXML > r (
@@ -942,14 +1069,14 @@ namespace cxml
     throw ::xsd::cxx::tree::unexpected_element < char > (
       n.name (),
       n.namespace_ (),
-      "configuration",
+      "preferences",
       "");
   }
 
   ::std::auto_ptr< ::cxml::ConfigurationXML >
-  configuration (::xercesc::DOMDocument* d,
+  preferences (  ::xercesc::DOMDocument* d,
                  ::xml_schema::flags f,
-                 const ::xml_schema::properties&)
+                 const ::xml_schema::properties& )
   {
     ::xsd::cxx::xml::dom::auto_ptr< ::xercesc::DOMDocument > c (
       ((f & ::xml_schema::flags::keep_dom) &&
@@ -964,7 +1091,7 @@ namespace cxml
     const ::xsd::cxx::xml::qualified_name< char > n (
       ::xsd::cxx::xml::dom::name< char > (e));
 
-    if (n.name () == "configuration" &&
+    if (n.name () == "preferences" &&
         n.namespace_ () == "")
     {
       ::std::auto_ptr< ::cxml::ConfigurationXML > r (
@@ -977,7 +1104,7 @@ namespace cxml
     throw ::xsd::cxx::tree::unexpected_element < char > (
       n.name (),
       n.namespace_ (),
-      "configuration",
+      "preferences",
       "");
   }
 }
@@ -988,17 +1115,17 @@ namespace cxml
 namespace cxml
 {
   void
-  configuration (::std::ostream& o,
+  preferences (  ::std::ostream& o,
                  const ::cxml::ConfigurationXML& s,
                  const ::xml_schema::namespace_infomap& m,
                  const ::std::string& e,
-                 ::xml_schema::flags f)
+                 ::xml_schema::flags f )
   {
     ::xsd::cxx::xml::auto_initializer i (
       (f & ::xml_schema::flags::dont_initialize) == 0);
 
     ::xsd::cxx::xml::dom::auto_ptr< ::xercesc::DOMDocument > d (
-      ::cxml::configuration (s, m, f));
+      ::cxml::preferences (s, m, f));
 
     ::xsd::cxx::xml::dom::ostream_format_target t (o);
     if (!::xsd::cxx::xml::dom::serialize (t, *d, e, f))
@@ -1008,14 +1135,14 @@ namespace cxml
   }
 
   void
-  configuration (::xercesc::XMLFormatTarget& t,
+  preferences (  ::xercesc::XMLFormatTarget& t,
                  const ::cxml::ConfigurationXML& s,
                  const ::xml_schema::namespace_infomap& m,
                  const ::std::string& e,
-                 ::xml_schema::flags f)
+                 ::xml_schema::flags f )
   {
     ::xsd::cxx::xml::dom::auto_ptr< ::xercesc::DOMDocument > d (
-      ::cxml::configuration (s, m, f));
+      ::cxml::preferences (s, m, f));
 
     if (!::xsd::cxx::xml::dom::serialize (t, *d, e, f))
     {
@@ -1024,15 +1151,15 @@ namespace cxml
   }
 
   void
-  configuration (::xercesc::DOMDocument& d,
+  preferences (  ::xercesc::DOMDocument& d,
                  const ::cxml::ConfigurationXML& s,
-                 ::xml_schema::flags)
+                 ::xml_schema::flags )
   {
     ::xercesc::DOMElement& e (*d.getDocumentElement ());
     const ::xsd::cxx::xml::qualified_name< char > n (
       ::xsd::cxx::xml::dom::name< char > (e));
 
-    if (n.name () == "configuration" &&
+    if (n.name () == "preferences" &&
         n.namespace_ () == "")
     {
       e << s;
@@ -1042,25 +1169,25 @@ namespace cxml
       throw ::xsd::cxx::tree::unexpected_element < char > (
         n.name (),
         n.namespace_ (),
-        "configuration",
+        "preferences",
         "");
     }
   }
 
   ::xsd::cxx::xml::dom::auto_ptr< ::xercesc::DOMDocument >
-  configuration (const ::cxml::ConfigurationXML& s,
+  preferences (  const ::cxml::ConfigurationXML& s,
                  const ::xml_schema::namespace_infomap& m,
-                 ::xml_schema::flags f)
+                 ::xml_schema::flags f )
   {
     try
     {
       ::xsd::cxx::xml::dom::auto_ptr< ::xercesc::DOMDocument > d (
         ::xsd::cxx::xml::dom::serialize< char > (
-          "configuration",
+          "preferences",
           "",
           m, f));
 
-      ::cxml::configuration (*d, s, f);
+      ::cxml::preferences (*d, s, f);
       return d;
     }
     catch (const ::xsd::cxx::xml::dom::mapping< char >& e)
@@ -1079,7 +1206,6 @@ namespace cxml
     e << static_cast< const ::xml_schema::type& > (i);
 
     // language
-    //
     {
       ::xercesc::DOMElement& s (
         ::xsd::cxx::xml::dom::create_element (
@@ -1090,7 +1216,6 @@ namespace cxml
     }
 
     // keyboard
-    //
     {
       ::xercesc::DOMElement& s (
         ::xsd::cxx::xml::dom::create_element (
@@ -1100,15 +1225,24 @@ namespace cxml
       s << i.keyboard ();
     }
 
-    // volume
-    //
+    // audio
     {
       ::xercesc::DOMElement& s (
         ::xsd::cxx::xml::dom::create_element (
-          "volume",
+          "audio",
           e));
 
-      s << i.volume ();
+      s << i.audio ();
+    }
+
+    // video
+    {
+      ::xercesc::DOMElement& s (
+        ::xsd::cxx::xml::dom::create_element (
+          "video",
+          e));
+
+      s << i.video ();
     }
   }
 
@@ -1183,15 +1317,15 @@ namespace cxml
       s << i.jump ();
     }
 
-    // shoot
+    // doughnut
     //
     {
       ::xercesc::DOMElement& s (
         ::xsd::cxx::xml::dom::create_element (
-          "shoot",
+          "doughnut",
           e));
 
-      s << i.shoot ();
+      s << i.doughnut ();
     }
 
     // takeandjump
@@ -1229,7 +1363,7 @@ namespace cxml
   }
 
   void
-  operator<< (::xercesc::DOMElement& e, const volume& i)
+  operator<< (::xercesc::DOMElement& e, const audio& i)
   {
     e << static_cast< const ::xml_schema::type& > (i);
 
@@ -1253,6 +1387,52 @@ namespace cxml
           e));
 
       s << i.music ();
+    }
+  }
+
+  void
+  operator<< (::xercesc::DOMElement& e, const video& i)
+  {
+    e << static_cast< const ::xml_schema::type& > (i);
+
+    // fullscreen
+    {
+      ::xercesc::DOMElement& s (
+        ::xsd::cxx::xml::dom::create_element (
+          "fullscreen",
+          e));
+
+      s << i.fullscreen ();
+    }
+
+    // shadows
+    {
+      ::xercesc::DOMElement& s (
+        ::xsd::cxx::xml::dom::create_element (
+          "shadows",
+          e));
+
+      s << i.shadows ();
+    }
+
+    // background
+    {
+      ::xercesc::DOMElement& s (
+        ::xsd::cxx::xml::dom::create_element (
+          "background",
+          e));
+
+      s << i.background ();
+    }
+
+    // graphics
+    {
+      ::xercesc::DOMElement& s (
+        ::xsd::cxx::xml::dom::create_element (
+          "graphics",
+          e));
+
+      s << i.graphics ();
     }
   }
 }

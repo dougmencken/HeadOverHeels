@@ -105,9 +105,9 @@
     </properties>
   </text>
 
-  <text id="shoot">
+  <text id="doughnut">
     <properties>
-      <ustring>Shoot</ustring>
+      <ustring>Fire Doughnut</ustring>
     </properties>
   </text>
 

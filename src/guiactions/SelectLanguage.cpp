@@ -2,9 +2,8 @@
 #include "SelectLanguage.hpp"
 #include "CreateMainMenu.hpp"
 #include "GuiManager.hpp"
-#include "ConfigurationManager.hpp"
 
-using gui::SelectLanguage;
+using gui::SelectLanguage ;
 
 
 SelectLanguage::SelectLanguage( BITMAP* picture, const std::string& language )
@@ -17,11 +16,7 @@ SelectLanguage::SelectLanguage( BITMAP* picture, const std::string& language )
 
 void SelectLanguage::doIt ()
 {
-        ConfigurationManager* configuration = GuiManager::getInstance()->getConfigurationManager();
-        configuration->setLanguage( language );
-        configuration->write();
-
-        GuiManager::getInstance()->assignLanguage( language );
+        GuiManager::getInstance()->setLanguage( language );
 
         CreateMainMenu * mainMenu = new CreateMainMenu( this->where );
         mainMenu->doIt ();

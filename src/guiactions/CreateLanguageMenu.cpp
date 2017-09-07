@@ -14,6 +14,7 @@
 #include "CreateMainMenu.hpp"
 
 using gui::CreateLanguageMenu;
+using gui::GuiManager;
 using gui::LanguageManager;
 using gui::LanguageText;
 using gui::SelectLanguage;
@@ -23,14 +24,8 @@ CreateLanguageMenu::CreateLanguageMenu( BITMAP* picture )
 : Action(),
   where( picture )
 {
-        // Read list of languages available for this game
+        // read list of languages available for this game
         this->parse( isomot::sharePath() + "text/language.xml" );
-
-        language = GuiManager::getInstance()->getConfigurationManager()->getLanguage();
-        if ( language.compare( "en_UK" ) == 0 )
-        { // for backwards compatibility
-                language = "en_US";
-        }
 }
 
 CreateLanguageMenu::~CreateLanguageMenu( )
@@ -64,6 +59,8 @@ void CreateLanguageMenu::doIt ()
 
                 // presenta los idiomas disponibles
 
+                std::string language = GuiManager::getInstance()->getLanguage();
+
                 MenuWithMultipleColumns * menu = new MenuWithMultipleColumns( /* space between columns */ 40 );
                 menu->setVerticalOffset( 50 ); // adjust for header over heelser
 
@@ -74,7 +71,7 @@ void CreateLanguageMenu::doIt ()
 
                         menu->addOption( label );
 
-                        if ( ( this->language.empty() && i == this->texts.begin() ) || this->language.compare( ( *i )->getId() ) == 0 )
+                        if ( ( language.empty() && i == this->texts.begin() ) || language.compare( ( *i )->getId() ) == 0 )
                         {
                                 menu->setActiveOption( label );
                         }

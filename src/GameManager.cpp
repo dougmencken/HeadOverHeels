@@ -780,7 +780,7 @@ WhyPause GameManager::pause ()
                                           key != inputManager->getUserKey( "take" ) &&
                                           key != inputManager->getUserKey( "take-jump" ) &&
                                           key != inputManager->getUserKey( "swap" ) &&
-                                          key != inputManager->getUserKey( "shoot" ) &&
+                                          key != inputManager->getUserKey( "doughnut" ) &&
                                           key != inputManager->getUserKey( "halt" ) &&
                                           key != KEY_ESC )
                                 {

@@ -71,7 +71,7 @@ void ShowAuthors::doIt ()
                 }
 
                 linesOfCredits->moveTo( linesOfCredits->getX(), yNow );
-                GuiManager::getInstance()->refresh();
+                GuiManager::getInstance()->redraw ();
 
                 exit = ( keypressed() && key[ KEY_ESC ] );
 

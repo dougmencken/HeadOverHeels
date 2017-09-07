@@ -29,31 +29,19 @@ class Action ;
 class LanguageManager ;
 class ConfigurationManager ;
 
-/**
- * El gestor de la interfaz usuario almacena las imágenes empleadas por la interfaz, ordena
- * la creación de los tipos de letra usados e inicia el juego mostrando el menú principal
- */
-
 class GuiManager
 {
 
 private:
 
-       /**
-        * Constructor
-        * Carga y almacena el conjunto de imágenes empleadas por la interfaz de
-        * usuario, así como manda crear todos las fuentes tipográficas utilizadas
-        */
         GuiManager( ) ;
+
+        void readPreferences () ;
 
 public:
 
         ~GuiManager( ) ;
 
-       /**
-        * Único objeto de esta clase para toda la aplicación
-        * @return Un puntero al objeto único
-        */
         static GuiManager* getInstance () ;
 
        /**
@@ -76,22 +64,10 @@ public:
 
         void refreshScreens () ;
 
-       /**
-        * Actualiza el contenido de la pantalla
-        */
-        void refresh () ;
+        void redraw () ;
 
         std::string getPathToPicturesOfGui () ;
 
-       /**
-        * Establece el idioma de la interfaz de usuario
-        * @param language Código ISO de la lengua
-        */
-        void assignLanguage ( const std::string& language ) ;
-
-       /**
-        * Suspende la presentación de la interfaz de usuario. Conduce al cierre de la aplicación
-        */
         void suspend () {  this->active = false ;  }
 
         bool isAtFullScreen () ;
@@ -103,15 +79,12 @@ public:
 
 protected:
 
-       /**
-        * Inicializa Allegro, establece el modo de vídeo e instala el controlador del teclado
-        */
         void allegroSetup () ;
 
 private:
 
        /**
-        * Único objeto de esta clase para toda la aplicación
+        * Unique object of this class for the whole game
         */
         static GuiManager * instance ;
 
@@ -122,23 +95,19 @@ private:
 
         std::map < std::string, Screen * > listOfScreens;
 
-       /**
-        * Imagen donde se dibujará la interfaz gráfica
-        */
         BITMAP * picture ;
 
        /**
-        * El gestor de la configuración del juego
+        * Language for user interface
         */
+        std::string language ;
+
         ConfigurationManager * configurationManager ;
 
-       /**
-        * El gestor de idioma
-        */
         LanguageManager * languageManager ;
 
        /**
-        * Indica que la presentación de la interfaz y la gestión del teclado está activa
+        * When active draw interface and handle keyboard
         */
         bool active ;
 
@@ -147,19 +116,30 @@ private:
         */
         bool atFullScreen ;
 
+        bool preferencesRead ;
+
+private:
+
+        void assignLanguage ( const std::string& language ) ;
+
 public:
 
        /**
-        * Devuelve el gestor de la configuración del juego
-        * @return Un puntero al gestor ó 0 si no está creado
+        * @return A string of characters in the LLL_CC format
+        *         where LLL is a language code according to ISO 639
+        *         and CC is a country code according to ISO 3166
         */
-        ConfigurationManager* getConfigurationManager () const ;
+        std::string getLanguage () const {  return this->language ;  }
 
-       /**
-        * Devuelve el gestor de idioma
-        * @return Un puntero al gestor ó 0 si no está creado
-        */
-        LanguageManager* getLanguageManager () const ;
+        void setLanguage ( const std::string& language )
+        {
+                this->language = language ;
+                assignLanguage( language );
+        }
+
+        ConfigurationManager* getConfigurationManager () const {  return this->configurationManager ;  }
+
+        LanguageManager* getLanguageManager () const {  return this->languageManager ;  }
 
 };
 

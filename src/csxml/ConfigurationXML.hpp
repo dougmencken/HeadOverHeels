@@ -200,9 +200,10 @@ namespace xml_schema
 //
 namespace cxml
 {
-  class ConfigurationXML;
-  class keyboard;
-  class volume;
+  class ConfigurationXML ;
+  class keyboard ;
+  class audio ;
+  class video ;
 }
 
 
@@ -221,8 +222,9 @@ namespace cxml
   class ConfigurationXML: public ::xml_schema::type
   {
     public:
+
     // language
-    //
+
     typedef ::xml_schema::string language_type;
     typedef ::xsd::cxx::tree::traits< language_type, char > language_traits;
 
@@ -239,7 +241,7 @@ namespace cxml
     language (::std::auto_ptr< language_type > p);
 
     // keyboard
-    //
+
     typedef ::cxml::keyboard keyboard_type;
     typedef ::xsd::cxx::tree::traits< keyboard_type, char > keyboard_traits;
 
@@ -255,28 +257,46 @@ namespace cxml
     void
     keyboard (::std::auto_ptr< keyboard_type > p);
 
-    // volume
-    //
-    typedef ::cxml::volume volume_type;
-    typedef ::xsd::cxx::tree::traits< volume_type, char > volume_traits;
+    // audio
 
-    const volume_type&
-    volume () const;
+    typedef ::cxml::audio audio_type;
+    typedef ::xsd::cxx::tree::traits< audio_type, char > audio_traits;
 
-    volume_type&
-    volume ();
+    const audio_type&
+    audio () const;
 
-    void
-    volume (const volume_type& x);
+    audio_type&
+    audio ();
 
     void
-    volume (::std::auto_ptr< volume_type > p);
+    audio (const audio_type& x);
+
+    void
+    audio (::std::auto_ptr< audio_type > p);
+
+    // video
+
+    typedef ::cxml::video video_type;
+    typedef ::xsd::cxx::tree::traits< video_type, char > video_traits;
+
+    const video_type&
+    video () const;
+
+    video_type&
+    video ();
+
+    void
+    video (const video_type& x);
+
+    void
+    video (::std::auto_ptr< video_type > p);
 
     // Constructors
     //
     ConfigurationXML (const language_type&,
                       const keyboard_type&,
-                      const volume_type&);
+                      const audio_type&,
+                      const video_type&);
 
     ConfigurationXML (const ::xercesc::DOMElement& e,
                       ::xml_schema::flags f = 0,
@@ -293,14 +313,17 @@ namespace cxml
     // Implementation
     //
     protected:
+
     void
     parse (::xsd::cxx::xml::dom::parser< char >&,
            ::xml_schema::flags);
 
     private:
+
     ::xsd::cxx::tree::one< language_type > language_;
     ::xsd::cxx::tree::one< keyboard_type > keyboard_;
-    ::xsd::cxx::tree::one< volume_type > volume_;
+    ::xsd::cxx::tree::one< audio_type > audio_;
+    ::xsd::cxx::tree::one< video_type > video_;
   };
 
   class keyboard: public ::xml_schema::type
@@ -378,19 +401,19 @@ namespace cxml
     void
     jump (const jump_type& x);
 
-    // shoot
+    // doughnut
     //
-    typedef ::xml_schema::int_ shoot_type;
-    typedef ::xsd::cxx::tree::traits< shoot_type, char > shoot_traits;
+    typedef ::xml_schema::int_ doughnut_type;
+    typedef ::xsd::cxx::tree::traits< doughnut_type, char > doughnut_traits;
 
-    const shoot_type&
-    shoot () const;
+    const doughnut_type&
+    doughnut () const;
 
-    shoot_type&
-    shoot ();
+    doughnut_type&
+    doughnut ();
 
     void
-    shoot (const shoot_type& x);
+    doughnut (const doughnut_type& x);
 
     // takeandjump
     //
@@ -442,7 +465,7 @@ namespace cxml
               const movewest_type&,
               const take_type&,
               const jump_type&,
-              const shoot_type&,
+              const doughnut_type&,
               const takeandjump_type&,
               const swap_type&,
               const halt_type&);
@@ -473,13 +496,13 @@ namespace cxml
     ::xsd::cxx::tree::one< movewest_type > movewest_;
     ::xsd::cxx::tree::one< take_type > take_;
     ::xsd::cxx::tree::one< jump_type > jump_;
-    ::xsd::cxx::tree::one< shoot_type > shoot_;
+    ::xsd::cxx::tree::one< doughnut_type > doughnut_;
     ::xsd::cxx::tree::one< takeandjump_type > takeandjump_;
     ::xsd::cxx::tree::one< swap_type > swap_;
     ::xsd::cxx::tree::one< halt_type > halt_;
   };
 
-  class volume: public ::xml_schema::type
+  class audio: public ::xml_schema::type
   {
     public:
     // fx
@@ -512,18 +535,18 @@ namespace cxml
 
     // Constructors
     //
-    volume (const fx_type&,
+    audio (const fx_type&,
             const music_type&);
 
-    volume (const ::xercesc::DOMElement& e,
+    audio (const ::xercesc::DOMElement& e,
             ::xml_schema::flags f = 0,
             ::xml_schema::type* c = 0);
 
-    volume (const volume& x,
+    audio (const audio& x,
             ::xml_schema::flags f = 0,
             ::xml_schema::type* c = 0);
 
-    virtual volume*
+    virtual audio*
     _clone (::xml_schema::flags f = 0,
             ::xml_schema::type* c = 0) const;
 
@@ -537,6 +560,102 @@ namespace cxml
     private:
     ::xsd::cxx::tree::one< fx_type > fx_;
     ::xsd::cxx::tree::one< music_type > music_;
+  };
+
+  class video: public ::xml_schema::type
+  {
+    public:
+
+    // fullscreen
+
+    typedef ::xml_schema::int_ fullscreen_type;
+    typedef ::xsd::cxx::tree::traits< fullscreen_type, char > fullscreen_traits;
+
+    const fullscreen_type&
+    fullscreen () const;
+
+    fullscreen_type&
+    fullscreen ();
+
+    void
+    fullscreen (const fullscreen_type& x);
+
+    // shadows
+
+    typedef ::xml_schema::int_ shadows_type;
+    typedef ::xsd::cxx::tree::traits< shadows_type, char > shadows_traits;
+
+    const shadows_type&
+    shadows () const;
+
+    shadows_type&
+    shadows ();
+
+    void
+    shadows (const shadows_type& x);
+
+    // background
+
+    typedef ::xml_schema::int_ background_type;
+    typedef ::xsd::cxx::tree::traits< background_type, char > background_traits;
+
+    const background_type&
+    background () const;
+
+    background_type&
+    background ();
+
+    void
+    background (const background_type& x);
+
+    // graphics
+
+    typedef ::xml_schema::string graphics_type;
+    typedef ::xsd::cxx::tree::traits< graphics_type, char > graphics_traits;
+
+    const graphics_type&
+    graphics () const;
+
+    graphics_type&
+    graphics ();
+
+    void
+    graphics (const graphics_type& x);
+
+    void
+    graphics (::std::auto_ptr< graphics_type > p);
+
+    // Constructors
+    //
+    video ( const fullscreen_type&,
+            const shadows_type&,
+            const background_type&,
+            const graphics_type& );
+
+    video ( const ::xercesc::DOMElement& e,
+            ::xml_schema::flags f = 0,
+            ::xml_schema::type* c = 0 );
+
+    video ( const video& x,
+            ::xml_schema::flags f = 0,
+            ::xml_schema::type* c = 0 );
+
+    virtual video*
+    _clone (::xml_schema::flags f = 0,
+            ::xml_schema::type* c = 0) const;
+
+    // Implementation
+    //
+    protected:
+    void
+    parse (::xsd::cxx::xml::dom::parser< char >&,
+           ::xml_schema::flags);
+
+    private:
+    ::xsd::cxx::tree::one< fullscreen_type > fullscreen_;
+    ::xsd::cxx::tree::one< shadows_type > shadows_;
+    ::xsd::cxx::tree::one< background_type > background_;
+    ::xsd::cxx::tree::one< graphics_type > graphics_;
   };
 }
 
@@ -552,44 +671,44 @@ namespace cxml
   //
 
   ::std::auto_ptr< ::cxml::ConfigurationXML >
-  configuration (const ::std::string& uri,
+  preferences (  const ::std::string& uri,
                  ::xml_schema::flags f = 0,
-                 const ::xml_schema::properties& p = ::xml_schema::properties ());
+                 const ::xml_schema::properties& p = ::xml_schema::properties () );
 
   // Parse std::istream
   //
 
   ::std::auto_ptr< ::cxml::ConfigurationXML >
-  configuration (::std::istream& is,
+  preferences (  ::std::istream& is,
                  ::xml_schema::flags f = 0,
-                 const ::xml_schema::properties& p = ::xml_schema::properties ());
+                 const ::xml_schema::properties& p = ::xml_schema::properties () );
 
   ::std::auto_ptr< ::cxml::ConfigurationXML >
-  configuration (::std::istream& is,
+  preferences (  ::std::istream& is,
                  const ::std::string& id,
                  ::xml_schema::flags f = 0,
-                 const ::xml_schema::properties& p = ::xml_schema::properties ());
+                 const ::xml_schema::properties& p = ::xml_schema::properties () );
 
   // Parse xercesc::DOMLSInput
   //
 
   ::std::auto_ptr< ::cxml::ConfigurationXML >
-  configuration (const ::xercesc::DOMLSInput& is,
+  preferences (  const ::xercesc::DOMLSInput& is,
                  ::xml_schema::flags f = 0,
-                 const ::xml_schema::properties& p = ::xml_schema::properties ());
+                 const ::xml_schema::properties& p = ::xml_schema::properties () );
 
   // Parse xercesc::DOMDocument
   //
 
   ::std::auto_ptr< ::cxml::ConfigurationXML >
-  configuration (const ::xercesc::DOMDocument& d,
+  preferences (  const ::xercesc::DOMDocument& d,
                  ::xml_schema::flags f = 0,
-                 const ::xml_schema::properties& p = ::xml_schema::properties ());
+                 const ::xml_schema::properties& p = ::xml_schema::properties () );
 
   ::std::auto_ptr< ::cxml::ConfigurationXML >
-  configuration (::xercesc::DOMDocument* d,
+  preferences (  ::xercesc::DOMDocument* d,
                  ::xml_schema::flags f = 0,
-                 const ::xml_schema::properties& p = ::xml_schema::properties ());
+                 const ::xml_schema::properties& p = ::xml_schema::properties () );
 }
 
 #include <iosfwd>
@@ -605,46 +724,49 @@ namespace cxml
   //
 
   void
-  configuration (::std::ostream& os,
+  preferences (  ::std::ostream& os,
                  const ::cxml::ConfigurationXML& x,
                  const ::xml_schema::namespace_infomap& m,
                  const ::std::string& e = "UTF-8",
-                 ::xml_schema::flags f = 0);
+                 ::xml_schema::flags f = 0 );
 
   // Serialize to xercesc::XMLFormatTarget
   //
 
   void
-  configuration (::xercesc::XMLFormatTarget& ft,
+  preferences (  ::xercesc::XMLFormatTarget& ft,
                  const ::cxml::ConfigurationXML& x,
                  const ::xml_schema::namespace_infomap& m,
                  const ::std::string& e = "UTF-8",
-                 ::xml_schema::flags f = 0);
+                 ::xml_schema::flags f = 0 );
 
   // Serialize to an existing xercesc::DOMDocument
   //
 
   void
-  configuration (::xercesc::DOMDocument& d,
+  preferences (  ::xercesc::DOMDocument& d,
                  const ::cxml::ConfigurationXML& x,
-                 ::xml_schema::flags f = 0);
+                 ::xml_schema::flags f = 0 );
 
   // Serialize to a new xercesc::DOMDocument
   //
 
   ::xsd::cxx::xml::dom::auto_ptr< ::xercesc::DOMDocument >
-  configuration (const ::cxml::ConfigurationXML& x,
+  preferences (  const ::cxml::ConfigurationXML& x,
                  const ::xml_schema::namespace_infomap& m,
-                 ::xml_schema::flags f = 0);
+                 ::xml_schema::flags f = 0 );
 
   void
-  operator<< (::xercesc::DOMElement&, const ConfigurationXML&);
+  operator<< ( ::xercesc::DOMElement&, const ConfigurationXML& );
 
   void
-  operator<< (::xercesc::DOMElement&, const keyboard&);
+  operator<< ( ::xercesc::DOMElement&, const keyboard& );
 
   void
-  operator<< (::xercesc::DOMElement&, const volume&);
+  operator<< ( ::xercesc::DOMElement&, const audio& );
+
+  void
+  operator<< (::xercesc::DOMElement&, const video&);
 }
 
 #include <xsd/cxx/post.hxx>

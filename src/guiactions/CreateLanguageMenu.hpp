@@ -57,11 +57,6 @@ private:
 private:
 
         /**
-         * Idioma seleccinado en la configuración inicial
-         */
-        std::string language ;
-
-        /**
          * Imagen donde se dibujará la interfaz gráfica
          */
         BITMAP* where ;

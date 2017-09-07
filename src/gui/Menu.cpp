@@ -121,7 +121,7 @@ void Menu::draw( BITMAP* where )
 void Menu::redraw ()
 {
         draw( this->whereToDraw );
-        GuiManager::getInstance()->refresh();
+        GuiManager::getInstance()->redraw();
 }
 
 void Menu::handleKey( int rawKey )

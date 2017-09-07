@@ -46,9 +46,8 @@ std::string homePath()
                         mkdir( HomePath.c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH );
                         mkdir( ( HomePath + "savegame/" ).c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH );
 
-                        copyTextFile( sharePath() + "configuration.xsd", HomePath + "configuration.xsd" );
-                        copyTextFile( sharePath() + "configuration.xml", HomePath + "configuration.xml" );
-                        copyTextFile( sharePath() + "savegame/savegame.xsd", HomePath + "savegame/savegame.xsd" );
+                        /// copyTextFile( sharePath() + "configuration.xsd", HomePath + "configuration.xsd" );
+                        /// copyTextFile( sharePath() + "savegame/savegame.xsd", HomePath + "savegame/savegame.xsd" );
                 }
         #endif
         }
