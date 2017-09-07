@@ -8,4 +8,5 @@ gamedatamusic_DATA = CreditsTheme.ogg \
 		blacktooth.ogg \
 		jail.ogg \
 		themoon.ogg \
-		byblos.ogg
+		byblos.ogg \
+		egyptus.ogg
