@@ -94,22 +94,22 @@ public:
         double speed ;
 
        /**
-        * Width in pixels of each frame
+        * Width in pixels of each frame for item
         */
         int frameWidth ;
 
        /**
-        * Height in pixels of each frame
+        * Height in pixels of each frame for item
         */
         int frameHeight ;
 
        /**
-        * Width in pixels of each shadow
+        * Width in pixels of each frame for item’s shadow
         */
         int shadowWidth ;
 
        /**
-        * Height in pixels of each shadow
+        * Height in pixels of each frame for item’s shadow
         */
         int shadowHeight ;
 

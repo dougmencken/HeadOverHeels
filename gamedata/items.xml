@@ -1179,7 +1179,7 @@
   </item>
 
   <!-- Emperor -->
-  <item label="84">
+  <item label="emperor">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>24</height>
@@ -1201,7 +1201,7 @@
   </item>
 
   <!-- Static Head -->
-  <item label="85">
+  <item label="static-head">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>24</height>
@@ -1222,7 +1222,7 @@
   </item>
 
   <!-- Static Heels -->
-  <item label="86">
+  <item label="static-heels">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>24</height>

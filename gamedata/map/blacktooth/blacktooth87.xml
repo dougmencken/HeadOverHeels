@@ -625,7 +625,7 @@
       <type>griditem</type>
     </item>
     <item x="1" y="5" z="1">
-      <label>84</label>
+      <label>emperor</label>
       <direction>none</direction>
       <behavior>10</behavior>
       <type>freeitem</type>

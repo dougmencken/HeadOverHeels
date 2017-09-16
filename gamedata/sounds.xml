@@ -26,7 +26,7 @@
   <!-- Toaster -->
 
   <!-- Conveyor belt -->
-  <item label="5">
+  <item label="conveyor-belt">
     <state id="active">
       <file>sound/conveyor-belt.wav</file>
     </state>
@@ -36,7 +36,7 @@
   </item>
 
   <!-- Book -->
-  <item label="6">
+  <item label="book">
     <state id="fall">
       <file>sound/fall.wav</file>
     </state>
@@ -52,7 +52,7 @@
   </item>
 
   <!-- Stool -->
-  <item label="7">
+  <item label="stool">
     <state id="fall">
       <file>sound/fall.wav</file>
     </state>
@@ -65,14 +65,14 @@
   </item>
 
   <!-- Puppy -->
-  <item label="8">
+  <item label="puppy">
     <state id="destroy">
       <file>sound/silence-puppy.wav</file>
     </state>
   </item>
 
   <!-- Sandwich -->
-  <item label="9">
+  <item label="sandwich">
     <state id="fall">
       <file>sound/fall.wav</file>
     </state>
@@ -82,14 +82,14 @@
   </item>
 
   <!-- Switch -->
-  <item label="10">
+  <item label="switch">
     <state id="switch">
       <file>sound/switch.wav</file>
     </state>
   </item>
 
-  <!-- Brick #2 -->
-  <item label="11">
+  <!-- Brick number two -->
+  <item label="brick2">
     <state id="destroy">
       <file>sound/destruction.wav</file>
     </state>
@@ -98,22 +98,22 @@
     </state>
   </item>
 
-  <!-- Bars N-S -->
-  <item label="12">
+  <!-- Bars north-south -->
+  <item label="bars-ns">
     <state id="destroy">
       <file>sound/destruction.wav</file>
     </state>
   </item>
 
-  <!-- Bars E-W -->
-  <item label="80">
+  <!-- Bars east-west -->
+  <item label="bars-ew">
     <state id="destroy">
       <file>sound/destruction.wav</file>
     </state>
   </item>
 
   <!-- Drum -->
-  <item label="13">
+  <item label="drum">
     <state id="fall">
       <file>sound/fall.wav</file>
     </state>
@@ -123,7 +123,7 @@
   </item>
 
   <!-- Portable brick -->
-  <item label="14">
+  <item label="portable-brick">
     <state id="fall">
       <file>sound/fall.wav</file>
     </state>
@@ -133,35 +133,35 @@
   </item>
 
   <!-- Donuts -->
-  <item label="15">
+  <item label="donuts">
     <state id="destroy">
       <file>sound/tools.wav</file>
     </state>
   </item>
 
-  <!-- Rabbit (extra life) -->
-  <item label="16">
+  <!-- Rabbit with extra lives -->
+  <item label="extra-life">
     <state id="destroy">
       <file>sound/bonus.wav</file>
     </state>
   </item>
 
-  <!-- Rabbit (high jump) -->
-  <item label="17">
+  <!-- Rabbit with high jumps -->
+  <item label="high-jumps">
     <state id="destroy">
       <file>sound/bonus.wav</file>
     </state>
   </item>
 
-  <!-- Rabbit (high speed) -->
-  <item label="18">
+  <!-- Rabbit with high speed -->
+  <item label="high-speed">
     <state id="destroy">
       <file>sound/bonus.wav</file>
     </state>
   </item>
 
-  <!-- Rabbit (shield) -->
-  <item label="19">
+  <!-- Rabbit with immunity -->
+  <item label="shield">
     <state id="destroy">
       <file>sound/bonus.wav</file>
     </state>
@@ -170,14 +170,14 @@
   <!-- Crown -->
 
   <!-- Bomb -->
-  <item label="21">
+  <item label="bomb">
     <state id="move">
       <file>sound/adjust.wav</file>
     </state>
   </item>
 
-  <!-- Portable brick #2 -->
-  <item label="22">
+  <!-- Another portable brick -->
+  <item label="another-portable-brick">
     <state id="fall">
       <file>sound/fall.wav</file>
     </state>
@@ -201,7 +201,7 @@
   <!-- Brick cylinder -->
 
   <!-- Horn -->
-  <item label="26">
+  <item label="horn">
     <state id="destroy">
       <file>sound/tools.wav</file>
     </state>
@@ -214,21 +214,21 @@
   <!-- Monkey head -->
 
   <!-- Handbag -->
-  <item label="30">
+  <item label="handbag">
     <state id="destroy">
       <file>sound/tools.wav</file>
     </state>
   </item>
 
   <!-- Elevator -->
-  <item label="31">
+  <item label="elevator">
     <state id="move">
       <file>sound/blades.wav</file>
     </state>
   </item>
 
   <!-- Helicopter bug -->
-  <item label="32">
+  <item label="helicopter-bug">
     <state id="wait">
       <file>sound/blades.wav</file>
     </state>
@@ -238,14 +238,14 @@
   </item>
 
   <!-- Reincarnation Fish -->
-  <item label="33">
+  <item label="reincarnation-fish">
     <state id="destroy">
       <file>sound/bonus.wav</file>
     </state>
   </item>
 
   <!-- Siren -->
-  <item label="34">
+  <item label="siren">
     <state id="fall">
       <file>sound/fall.wav</file>
     </state>
@@ -265,14 +265,14 @@
   </item>
 
   <!-- Teleport too -->
-  <item label="teleport2">
+  <item label="teleport-too">
     <state id="active">
       <file>sound/teleport.wav</file>
     </state>
   </item>
 
   <!-- Turtle -->
-  <item label="36">
+  <item label="turtle">
     <state id="fall">
       <file>sound/fall.wav</file>
     </state>
@@ -285,7 +285,7 @@
   </item>
 
   <!-- Trampoline -->
-  <item label="37">
+  <item label="trampoline">
     <state id="fall">
       <file>sound/fall.wav</file>
     </state>
@@ -301,12 +301,8 @@
 
   <!-- Double Bubbles -->
 
-  <!-- Mortal cap 39 -->
-
-  <!-- Cap 81 -->
-
   <!-- Big head robot -->
-  <item label="40">
+  <item label="bighead-robot">
     <state id="fall">
       <file>sound/fall.wav</file>
     </state>
@@ -319,7 +315,7 @@
   </item>
 
   <!-- Elephant -->
-  <item label="41">
+  <item label="elephant">
     <state id="fall">
       <file>sound/fall.wav</file>
     </state>
@@ -332,7 +328,7 @@
   </item>
 
   <!-- Monkey -->
-  <item label="42">
+  <item label="monkey">
     <state id="fall">
       <file>sound/fall.wav</file>
     </state>
@@ -345,7 +341,7 @@
   </item>
 
   <!-- Diver -->
-  <item label="43">
+  <item label="diver">
     <state id="fall">
       <file>sound/fall.wav</file>
     </state>
@@ -358,7 +354,7 @@
   </item>
 
   <!-- Bubble robot -->
-  <item label="44">
+  <item label="bubble-robot">
     <state id="fall">
       <file>sound/fall.wav</file>
     </state>
@@ -371,14 +367,14 @@
   </item>
 
   <!-- Imperial guard -->
-  <item label="45">
+  <item label="imperial-guard">
     <state id="wait">
       <file>sound/imperial-guard.wav</file>
     </state>
   </item>
 
   <!-- Charles -->
-  <item label="46">
+  <item label="charles-robot">
     <state id="fall">
       <file>sound/fall.wav</file>
     </state>
@@ -390,10 +386,8 @@
     </state>
   </item>
 
-  <!-- Dead Fish -->
-
   <!-- Head -->
-  <item label="52">
+  <item label="head">
     <state id="move">
       <file>sound/head-walking.wav</file>
     </state>
@@ -421,7 +415,7 @@
   </item>
 
   <!-- Heels -->
-  <item label="53">
+  <item label="heels">
     <state id="move">
       <file>sound/heels-walking.wav</file>
     </state>
@@ -455,7 +449,7 @@
   </item>
 
   <!-- Head over Heels -->
-  <item label="55">
+  <item label="headoverheels">
     <state id="move">
       <file>sound/heels-walking.wav</file>
     </state>
@@ -490,8 +484,6 @@
       <file>sound/o-ou.wav</file>
     </state>
   </item>
-
-  <!-- Throne guard 66 -->
 
 </sounds>
 
