@@ -355,8 +355,8 @@ ActivityOfItem Hunter::calculateDirection8( const ActivityOfItem& activity )
                         }
                 }
 
-                // El guardián del trono huirá del jugador si éste tiene cuatro coronas
-                if ( item->getLabel() == ThroneGuard && GameManager::getInstance()->countFreePlanets() >= 4 )
+                // guardian of throne flees from player with four crowns
+                if ( item->getLabel() == "throne-guard" && GameManager::getInstance()->countFreePlanets() >= 4 )
                 {
                         changeActivityOfItem( MoveSouthwest );
                 }
@@ -370,7 +370,7 @@ bool Hunter::createFullBody()
         FreeItem* freeItem = dynamic_cast< FreeItem* >( this->item );
         bool created = false;
 
-        if ( freeItem->getLabel() == ImperialGuardHeadLabel && freeItem->checkPosition( 0, 0, -LayerHeight, Add ) )
+        if ( freeItem->getLabel() == "imperial-guard-head" && freeItem->checkPosition( 0, 0, -LayerHeight, Add ) )
         {
                 created = true;
 

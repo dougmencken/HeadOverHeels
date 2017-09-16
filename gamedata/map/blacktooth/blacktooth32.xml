@@ -201,13 +201,13 @@
 
   <items>
     <item x="0" y="0" z="-1">
-      <label>5011</label>
+      <label>blacktooth-door-west</label>
       <direction>east</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="0" y="9" z="-1">
-      <label>5011</label>
+      <label>blacktooth-door-west</label>
       <direction>west</direction>
       <behavior>0</behavior>
       <type>door</type>

@@ -666,7 +666,7 @@ Item* Mediator::findItemById( int id )
         return item;
 }
 
-Item* Mediator::findItemByLabel( short label )
+Item* Mediator::findItemByLabel( const std::string& label )
 {
         Item* item = 0;
 
@@ -985,7 +985,7 @@ int Mediator::popCollision()
         return id;
 }
 
-Item* Mediator::collisionWithByLabel( short label )
+Item* Mediator::collisionWithByLabel( const std::string& label )
 {
         for ( unsigned int i = 0; i < collisions.size(); i++ )
         {
@@ -1043,23 +1043,23 @@ bool Mediator::nextPlayer( ItemDataManager* itemDataManager )
         // Si se llegó al final se asigna el primero, sino el siguiente
         activePlayer = ( i != playerItems.end () ? ( *i ) : *playerItems.begin () );
 
-        // Si los jugadores son distintos, se comprueba si son candidatos a unirse
+        // see if different players may join
         if ( previousPlayer != activePlayer )
         {
                 const int delta = room->getTileSize() >> 1;
 
-                if ( ( previousPlayer->getLabel() == Head && activePlayer->getLabel() == Heels ) ||
-                                ( previousPlayer->getLabel() == Heels && activePlayer->getLabel() == Head ) )
+                if ( ( previousPlayer->getLabel() == "head" && activePlayer->getLabel() == "heels" ) ||
+                                ( previousPlayer->getLabel() == "heels" && activePlayer->getLabel() == "head" ) )
                 {
                         if ( ( previousPlayer->getX() + delta >= activePlayer->getX() )
                                 && ( previousPlayer->getX() + previousPlayer->getWidthX() - delta <= activePlayer->getX() + activePlayer->getWidthX() )
                                 && ( previousPlayer->getY() + delta >= activePlayer->getY() )
                                 && ( previousPlayer->getY() + previousPlayer->getWidthY() - delta <= activePlayer->getY() + activePlayer->getWidthY() )
-                                && ( ( previousPlayer->getLabel() == Head && previousPlayer->getZ() - LayerHeight == activePlayer->getZ() ) ||
-                                        ( previousPlayer->getLabel() == Heels && activePlayer->getZ() - LayerHeight == previousPlayer->getZ() ) ) )
+                                && ( ( previousPlayer->getLabel() == "head" && previousPlayer->getZ() - LayerHeight == activePlayer->getZ() ) ||
+                                        ( previousPlayer->getLabel() == "heels" && activePlayer->getZ() - LayerHeight == previousPlayer->getZ() ) ) )
                         {
-                                PlayerItem* reference = previousPlayer->getLabel() == Heels ? previousPlayer : activePlayer;
-                                this->lastControlledPlayer = previousPlayer->getLabel() == Heels ? Heels : Head;
+                                PlayerItem* reference = previousPlayer->getLabel() == "heels" ? previousPlayer : activePlayer;
+                                this->lastActivePlayer = previousPlayer->getLabel() == "heels" ? "heels" : "head";
                                 int x = reference->getX();
                                 int y = reference->getY();
                                 int z = reference->getZ();
@@ -1069,7 +1069,7 @@ bool Mediator::nextPlayer( ItemDataManager* itemDataManager )
                                 ItemData* takenItemData = 0;
                                 BITMAP* takenItemImage = 0;
                                 BehaviorOfItem takenItemBehavior = NoBehavior;
-                                if ( previousPlayer->getLabel() == Heels )
+                                if ( previousPlayer->getLabel() == "heels" )
                                 {
                                         takenItemData = previousPlayer->consultTakenItem( &takenItemBehavior );
                                         takenItemImage = previousPlayer->consultTakenItemImage();
@@ -1086,7 +1086,7 @@ bool Mediator::nextPlayer( ItemDataManager* itemDataManager )
 
                                 // Crea al jugador compuesto
                                 std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( itemDataManager ) );
-                                activePlayer = roomBuilder->buildPlayerInRoom( this->room, HeadAndHeels, HeadAndHeelsBehavior, x, y, z, direction );
+                                activePlayer = roomBuilder->buildPlayerInRoom( this->room, "headoverheels", HeadAndHeelsBehavior, x, y, z, direction );
                                 // Le devuelve el elemento que tuviera en el bolso
                                 activePlayer->assignTakenItem( takenItemData, takenItemImage, takenItemBehavior );
 
@@ -1098,7 +1098,7 @@ bool Mediator::nextPlayer( ItemDataManager* itemDataManager )
                 }
         }
         // Si el jugador actual y el anterior es el mismo entonces debe ser el jugador compuesto
-        else if ( activePlayer->getLabel() == HeadAndHeels )
+        else if ( activePlayer->getLabel() == "headoverheels" )
         {
                 int x = activePlayer->getX();
                 int y = activePlayer->getY();
@@ -1117,11 +1117,11 @@ bool Mediator::nextPlayer( ItemDataManager* itemDataManager )
 
                 // Crea a Heels y a Head
                 std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( itemDataManager ) );
-                previousPlayer = roomBuilder->buildPlayerInRoom( this->room, Heels, HeelsBehavior, x, y, z, direction );
+                previousPlayer = roomBuilder->buildPlayerInRoom( this->room, "heels", HeelsBehavior, x, y, z, direction );
                 previousPlayer->assignTakenItem( takenItemData, takenItemImage, takenItemBehavior );
-                activePlayer = roomBuilder->buildPlayerInRoom( this->room, Head, HeadBehavior, x, y, z + LayerHeight, direction );
+                activePlayer = roomBuilder->buildPlayerInRoom( this->room, "head", HeadBehavior, x, y, z + LayerHeight, direction );
 
-                if ( this->lastControlledPlayer == Head )
+                if ( this->lastActivePlayer == "head" )
                 {
                         std::swap( previousPlayer, activePlayer );
                 }
@@ -1248,7 +1248,7 @@ bool EqualPlayerItemId::operator() ( PlayerItem* playerItem, int id ) const
         return ( playerItem->getId() == id );
 }
 
-bool EqualItemLabel::operator() ( Item* item, short label ) const
+bool EqualItemLabel::operator() ( Item* item, const std::string& label ) const
 {
         return ( item->getLabel() == label );
 }

@@ -424,37 +424,37 @@
 
   <items>
     <item x="6" y="2" z="-1">
-      <label>3066</label>
+      <label>penitentiary-door-south</label>
       <direction>south</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="2" y="6" z="-1">
-      <label>5066</label>
+      <label>penitentiary-door-west</label>
       <direction>west</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="0" y="0" z="0">
-      <label>1</label>
+      <label>brick1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="0" z="1">
-      <label>1</label>
+      <label>brick1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="0" z="2">
-      <label>1</label>
+      <label>brick1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="0" z="3">
-      <label>47</label>
+      <label>mortal-fish</label>
       <direction>none</direction>
       <behavior>20</behavior>
       <type>freeitem</type>

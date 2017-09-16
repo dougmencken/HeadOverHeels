@@ -483,43 +483,43 @@
 
   <items>
     <item x="6" y="3" z="-1">
-      <label>3001</label>
+      <label>jail-door-south</label>
       <direction>south</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="0" y="0" z="0">
-      <label>35</label>
+      <label>teleport</label>
       <direction>none</direction>
       <behavior>23</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="7" z="0">
-      <label>12</label>
+      <label>bars-ns</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="0" y="7" z="2">
-      <label>12</label>
+      <label>bars-ns</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="0" y="7" z="4">
-      <label>12</label>
+      <label>bars-ns</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="0" y="7" z="6">
-      <label>12</label>
+      <label>bars-ns</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="0" y="7" z="7">
-      <label>16</label>
+      <label>extra-life</label>
       <direction>west</direction>
       <behavior>20</behavior>
       <type>freeitem</type>

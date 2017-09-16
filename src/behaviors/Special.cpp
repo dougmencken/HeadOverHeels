@@ -47,7 +47,7 @@ bool Special::update ()
                                 Item* topItem = mediator->findCollisionPop( );
 
                                 // El elemento situado encima debe ser un jugador y debe poder tomar el elemento
-                                if ( dynamic_cast< PlayerItem * >( topItem ) && checkDestruction( topItem ) )
+                                if ( dynamic_cast< PlayerItem * >( topItem ) && mayTake( topItem ) )
                                 {
                                         topItem->checkPosition( 0, 0, -1, Add );
 
@@ -95,7 +95,7 @@ bool Special::update ()
                 case DisplaceNorthwest:
                 case DisplaceUp:
                         // Si el elemento es desplazado por un jugador y éste puede tomarlo entonces se destruye
-                        if ( dynamic_cast< PlayerItem * >( sender ) && checkDestruction( sender ) )
+                        if ( dynamic_cast< PlayerItem * >( sender ) && mayTake( sender ) )
                         {
                                 activity = Destroy;
                         }
@@ -158,24 +158,21 @@ bool Special::update ()
                         {
                                 destroy = true;
 
-                                // Emite el sonido de destrucción
+                                // play sound of taking
                                 SoundManager::getInstance()->play( item->getLabel(), activity );
 
-                                // Los bonus deben desaparecer de las salas una vez se cojan. Al regresar ya no deben estar
+                                // bonuses disappear from room once they are got
                                 BonusManager::getInstance()->markBonusAsAbsent( item->getMediator()->getRoom()->getIdentifier(), item->getLabel() );
 
-                                // Ejecuta la acción asociada a la toma del elemento especial
-                                takeSpecial( static_cast< PlayerItem* >( sender ) );
+                                takeMagicItem( static_cast< PlayerItem* >( sender ) );
 
-                                // Crea el elemento "burbujas" en la misma posición que el especial y a su misma altura
-                                freeItem = new FreeItem( bubblesData,
-                                item->getX(), item->getY(), item->getZ(),
-                                NoDirection );
+                                // create item "bubbles" in the place of magic item
+                                freeItem = new FreeItem( bubblesData, item->getX(), item->getY(), item->getZ(), NoDirection );
 
                                 freeItem->assignBehavior( VolatileTimeBehavior, 0 );
                                 freeItem->setCollisionDetector( false );
 
-                                // Se añade a la sala actual
+                                // add to current room
                                 mediator->getRoom()->addItem( freeItem );
                         }
                         break;
@@ -187,76 +184,73 @@ bool Special::update ()
         return destroy;
 }
 
-bool Special::checkDestruction( Item* sender )
+bool Special::mayTake( Item* sender )
 {
-        short playerId = sender->getLabel();
-        short magicItemId = this->item->getLabel();
+        std::string player = sender->getLabel();
+        std::string magicItem = this->item->getLabel();
 
-        return  ( playerId == Head      &&  ( magicItemId == Donuts ||
-                                                magicItemId == ExtraLife ||
-                                                magicItemId == HighSpeedItem ||
-                                                magicItemId == Shield ||
-                                                magicItemId == Crown ||
-                                                magicItemId == Horn ||
-                                                magicItemId == ReincarnationFish ) )
+        return  ( player == "head"      &&  ( magicItem == "donuts" ||
+                                                magicItem == "extra-life" ||
+                                                magicItem == "high-speed" ||
+                                                magicItem == "shield" ||
+                                                magicItem == "crown" ||
+                                                magicItem == "horn" ||
+                                                magicItem == "reincarnation-fish" ) )
                 ||
 
-                ( playerId == Heels     &&  ( magicItemId == ExtraLife ||
-                                                magicItemId == HighJumpItem ||
-                                                magicItemId == Shield ||
-                                                magicItemId == Crown ||
-                                                magicItemId == Handbag ||
-                                                magicItemId == ReincarnationFish ) )
+                ( player == "heels"     &&  ( magicItem == "extra-life" ||
+                                                magicItem == "high-jumps" ||
+                                                magicItem == "shield" ||
+                                                magicItem == "crown" ||
+                                                magicItem == "handbag" ||
+                                                magicItem == "reincarnation-fish" ) )
                 ||
 
-                ( playerId == HeadAndHeels  &&  ( magicItemId == Donuts ||
-                                                magicItemId == ExtraLife ||
-                                                magicItemId == Shield ||
-                                                magicItemId == Crown ||
-                                                magicItemId == Horn ||
-                                                magicItemId == Handbag ||
-                                                magicItemId == ReincarnationFish ) ) ;
+                ( player == "headoverheels"  &&  ( magicItem == "donuts" ||
+                                                magicItem == "extra-life" ||
+                                                magicItem == "shield" ||
+                                                magicItem == "crown" ||
+                                                magicItem == "horn" ||
+                                                magicItem == "handbag" ||
+                                                magicItem == "reincarnation-fish" ) ) ;
 }
 
-void Special::takeSpecial( PlayerItem* who )
+void Special::takeMagicItem( PlayerItem* who )
 {
-        switch ( this->item->getLabel() )
+        std::string magicItem = this->item->getLabel();
+
+        if ( magicItem == "donuts" )
         {
-                case Donuts:
-                {
-                        const unsigned short DonutsPerBox = 6 ;
-                        who->addAmmo( DonutsPerBox );
-                }
-                        break;
-
-                case ExtraLife:
-                        who->addLives( 2 );
-                        break;
-
-                case HighSpeedItem:
-                        who->activateHighSpeed();
-                        break;
-
-                case HighJumpItem:
-                        who->addHighJumps( 10 );
-                        break;
-
-                case Shield:
-                        who->activateShield();
-                        break;
-
-                case Crown:
-                        who->liberatePlanet();
-                        break;
-
-                case Horn:
-                case Handbag:
-                        who->takeTool( this->item->getLabel () );
-                        break;
-
-                case ReincarnationFish:
-                        who->saveAt( this->item->getX (), this->item->getY (), this->item->getZ () );
-                        break;
+                const unsigned short DonutsPerBox = 6 ;
+                who->addAmmo( DonutsPerBox );
+        }
+        else if ( magicItem == "extra-life" )
+        {
+                who->addLives( 2 );
+        }
+        else if ( magicItem == "high-speed" )
+        {
+                who->activateHighSpeed();
+        }
+        else if ( magicItem == "high-jumps" )
+        {
+                who->addHighJumps( 10 );
+        }
+        else if ( magicItem == "shield" )
+        {
+                who->activateShield();
+        }
+        else if ( magicItem == "crown" )
+        {
+                who->liberatePlanet();
+        }
+        else if ( magicItem == "horn" || magicItem == "handbag" )
+        {
+                who->takeTool( magicItem );
+        }
+        else if ( magicItem == "reincarnation-fish" )
+        {
+                who->saveAt( this->item->getX (), this->item->getY (), this->item->getZ () );
         }
 }
 

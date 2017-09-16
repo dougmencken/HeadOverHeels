@@ -201,85 +201,85 @@
 
   <items>
     <item x="0" y="0" z="-1">
-      <label>294</label>
+      <label>penitentiary-shaft-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="1" z="-1">
-      <label>294</label>
+      <label>penitentiary-shaft-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="0" z="-1">
-      <label>295</label>
+      <label>penitentiary-capital-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="1" z="-1">
-      <label>295</label>
+      <label>penitentiary-capital-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="0" z="-1">
-      <label>3066</label>
+      <label>penitentiary-door-south</label>
       <direction>north</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="9" y="0" z="0">
-      <label>298</label>
+      <label>penitentiary-capital-south</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="9" y="1" z="0">
-      <label>298</label>
+      <label>penitentiary-capital-south</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="9" y="0" z="-1">
-      <label>3066</label>
+      <label>penitentiary-door-south</label>
       <direction>south</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="5" y="0" z="0">
-      <label>2</label>
+      <label>vulcano</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="5" y="0" z="1">
-      <label>2</label>
+      <label>vulcano</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="1" z="0">
-      <label>11</label>
+      <label>brick2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="1" z="0">
-      <label>9</label>
+      <label>sandwich</label>
       <direction>south</direction>
       <behavior>5</behavior>
       <type>freeitem</type>
     </item>
     <item x="5" y="1" z="1">
-      <label>2</label>
+      <label>vulcano</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="8" y="1" z="0">
-      <label>11</label>
+      <label>brick2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>

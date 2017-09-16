@@ -201,97 +201,97 @@
 
   <items>
     <item x="0" y="0" z="-1">
-      <label>258</label>
+      <label>moon-shaft-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="1" z="-1">
-      <label>258</label>
+      <label>moon-shaft-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="0" z="-1">
-      <label>258</label>
+      <label>moon-shaft-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="1" z="-1">
-      <label>258</label>
+      <label>moon-shaft-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="0" z="-1">
-      <label>258</label>
+      <label>moon-shaft-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="1" z="-1">
-      <label>258</label>
+      <label>moon-shaft-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="0" z="-1">
-      <label>259</label>
+      <label>moon-capital-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="1" z="-1">
-      <label>259</label>
+      <label>moon-capital-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="0" z="-1">
-      <label>3033</label>
+      <label>themoon-door-south</label>
       <direction>north</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="9" y="0" z="-1">
-      <label>3033</label>
+      <label>themoon-door-south</label>
       <direction>south</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="1" y="0" z="2">
-      <label>8</label>
+      <label>puppy</label>
       <direction>west</direction>
       <behavior>30</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="0" z="1">
-      <label>8</label>
+      <label>puppy</label>
       <direction>west</direction>
       <behavior>30</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="0" z="0">
-      <label>8</label>
+      <label>puppy</label>
       <direction>west</direction>
       <behavior>30</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="1" z="2">
-      <label>8</label>
+      <label>puppy</label>
       <direction>west</direction>
       <behavior>30</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="1" z="1">
-      <label>8</label>
+      <label>puppy</label>
       <direction>west</direction>
       <behavior>30</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="1" z="0">
-      <label>8</label>
+      <label>puppy</label>
       <direction>west</direction>
       <behavior>30</behavior>
       <type>griditem</type>

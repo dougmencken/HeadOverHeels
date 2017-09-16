@@ -340,115 +340,115 @@
 
   <items>
     <item x="0" y="1" z="0">
-      <label>281</label>
+      <label>egyptus-wall-y-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="2" z="0">
-      <label>281</label>
+      <label>egyptus-wall-y-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="5" z="0">
-      <label>281</label>
+      <label>egyptus-wall-y-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="6" z="0">
-      <label>281</label>
+      <label>egyptus-wall-y-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="3" z="-1">
-      <label>2055</label>
+      <label>egyptus-door-north</label>
       <direction>north</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="1" y="0" z="0">
-      <label>280</label>
+      <label>egyptus-wall-x-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="0" z="0">
-      <label>280</label>
+      <label>egyptus-wall-x-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="5" y="0" z="0">
-      <label>280</label>
+      <label>egyptus-wall-x-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="6" y="0" z="0">
-      <label>280</label>
+      <label>egyptus-wall-x-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="0" z="-1">
-      <label>4055</label>
+      <label>egyptus-door-east</label>
       <direction>east</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="3" y="7" z="-1">
-      <label>5055</label>
+      <label>egyptus-door-west</label>
       <direction>west</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="2" y="1" z="0">
-      <label>2</label>
+      <label>vulcano</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="5" y="1" z="0">
-      <label>2</label>
+      <label>vulcano</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="2" z="0">
-      <label>2</label>
+      <label>vulcano</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="6" y="2" z="0">
-      <label>2</label>
+      <label>vulcano</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="5" z="0">
-      <label>2</label>
+      <label>vulcano</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="6" y="5" z="0">
-      <label>2</label>
+      <label>vulcano</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="6" z="0">
-      <label>2</label>
+      <label>vulcano</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="5" y="6" z="0">
-      <label>2</label>
+      <label>vulcano</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>

@@ -19,8 +19,9 @@ namespace isomot
 {
 
 /**
- * Registro que almacena la definición de un elemento del juego leído de un archivo del disco
+ * Container for definition of an item read from file
  */
+
 class ItemData
 {
 
@@ -45,10 +46,9 @@ public:
         void clearNameOfShadowFile () {  this->nameOfShadowFile.clear() ;  }
 
        /**
-        * Etiqueta unívoca del elemento, es decir, no puede haber dos elementos de distinto tipo con la
-        * misma etiqueta. Las etiquetas son constantes y no cadenas de caracteres
+        * Label names an item uniquely, there’s no two different items with the same label
         */
-        short label ;
+        std::string label ;
 
        /**
         * Anchura espacial del elemento en el eje X
@@ -94,43 +94,42 @@ public:
         double speed ;
 
        /**
-        * Anchura en píxeles de cada fotograma
+        * Width in pixels of each frame
         */
         int frameWidth ;
 
        /**
-        * Altura en píxeles de cada fotograma
+        * Height in pixels of each frame
         */
         int frameHeight ;
 
        /**
-        * Anchura en píxeles de cada sombra
+        * Width in pixels of each shadow
         */
         int shadowWidth ;
 
        /**
-        * Altura en píxeles de cada sombra
+        * Height in pixels of each shadow
         */
         int shadowHeight ;
 
        /**
-        * Fotogramas extra del elemento, es decir, aquellos que no tiene relación con el movimiento como,
-        * por ejemplo, los fotogramas de salto
+        * Extra frames are those that don’t relate to regular motion, such as frames of jump
         */
         int extraFrames ;
 
        /**
-        * Indica los fotogramas que forman la secuencia de animación
+        * Frames that define sequence of animation
         */
         std::vector< int > frames ;
 
        /**
-        * Conjunto de fotogramas del elemento
+        * Pictures of item
         */
         std::vector< BITMAP * > motion ;
 
        /**
-        * Conjunto de sombras del elemento
+        * Pictures of item’s shadow
         */
         std::vector< BITMAP * > shadows ;
 

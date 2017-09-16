@@ -179,139 +179,139 @@
 
   <items>
     <item x="0" y="1" z="0">
-      <label>201</label>
+      <label>jail-wall-y</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="2" z="0">
-      <label>201</label>
+      <label>jail-wall-y</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="3" z="0">
-      <label>201</label>
+      <label>jail-wall-y</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="4" z="0">
-      <label>201</label>
+      <label>jail-wall-y</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="5" z="0">
-      <label>201</label>
+      <label>jail-wall-y</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="6" z="0">
-      <label>201</label>
+      <label>jail-wall-y</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="0" z="0">
-      <label>200</label>
+      <label>jail-wall-x</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="0" z="0">
-      <label>200</label>
+      <label>jail-wall-x</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="5" y="0" z="0">
-      <label>200</label>
+      <label>jail-wall-x</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="6" y="0" z="0">
-      <label>200</label>
+      <label>jail-wall-x</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="0" z="-1">
-      <label>204</label>
+      <label>jail-shaft-east</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="0" z="-1">
-      <label>204</label>
+      <label>jail-shaft-east</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="0" z="-1">
-      <label>205</label>
+      <label>jail-capital-east</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="0" z="-1">
-      <label>205</label>
+      <label>jail-capital-east</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="0" z="-1">
-      <label>5001</label>
+      <label>jail-door-west</label>
       <direction>east</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="1" y="1" z="0">
-      <label>5</label>
+      <label>conveyor-belt</label>
       <direction>none</direction>
       <behavior>3</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="1" z="0">
-      <label>5</label>
+      <label>conveyor-belt</label>
       <direction>none</direction>
       <behavior>3</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="1" z="0">
-      <label>5</label>
+      <label>conveyor-belt</label>
       <direction>none</direction>
       <behavior>3</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="1" z="0">
-      <label>5</label>
+      <label>conveyor-belt</label>
       <direction>none</direction>
       <behavior>3</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="2" z="0">
-      <label>5</label>
+      <label>conveyor-belt</label>
       <direction>west</direction>
       <behavior>2</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="3" z="0">
-      <label>5</label>
+      <label>conveyor-belt</label>
       <direction>west</direction>
       <behavior>2</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="4" z="0">
-      <label>5</label>
+      <label>conveyor-belt</label>
       <direction>west</direction>
       <behavior>2</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="6" z="0">
-      <label>31</label>
+      <label>elevator</label>
       <direction>none</direction>
       <behavior>6</behavior>
       <type>freeitem</type>

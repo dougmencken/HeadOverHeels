@@ -605,73 +605,73 @@
 
   <items>
     <item x="3" y="8" z="-1">
-      <label>5055</label>
+      <label>egyptus-door-west</label>
       <direction>west</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="0" y="7" z="4">
-      <label>11</label>
+      <label>brick2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="7" z="6">
-      <label>11</label>
+      <label>brick2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="7" z="7">
-      <label>37</label>
+      <label>trampoline</label>
       <direction>none</direction>
       <behavior>24</behavior>
       <type>freeitem</type>
     </item>
     <item x="1" y="7" z="4">
-      <label>11</label>
+      <label>brick2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="7" z="4">
-      <label>11</label>
+      <label>brick2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="7" z="4">
-      <label>11</label>
+      <label>brick2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="7" z="5">
-      <label>35</label>
+      <label>teleport</label>
       <direction>none</direction>
       <behavior>23</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="7" z="4">
-      <label>11</label>
+      <label>brick2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="5" y="7" z="4">
-      <label>11</label>
+      <label>brick2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="6" y="7" z="0">
-      <label>7</label>
+      <label>stool</label>
       <direction>none</direction>
       <behavior>12</behavior>
       <type>freeitem</type>
     </item>
     <item x="7" y="7" z="2">
-      <label>31</label>
+      <label>elevator</label>
       <direction>none</direction>
       <behavior>6</behavior>
       <type>freeitem</type>

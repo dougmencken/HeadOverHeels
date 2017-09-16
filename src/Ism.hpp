@@ -192,14 +192,6 @@ namespace isomot
                 WestsouthBorder    /* En salas triples o cuádruples, el límite existente tras la puerta oeste-sur. Alcanzarlo implica el cambio de sala */
         } ;
 
-        enum WhichPlayer
-        {
-                Head = 52,           /* El jugador Head */
-                Heels = 53,          /* El jugador Heels */
-                HeadAndHeels = 55,   /* El jugador compuesto de Head y Heels */
-                NoPlayer = 127       /* No hay jugador, se utiliza en la transición vía telepuertos */
-        } ;
-
         enum BehaviorOfItem
         {
                 NoBehavior = 0,                     /* Sin comportamiento */
@@ -309,89 +301,34 @@ namespace isomot
                 Mistake                         /* Estado imposible, se utiliza en el gestor de sonido */
         } ;
 
-        /**
-         * Elementos con un significado especial en el juego
-         */
-        enum MagicItem
-        {
-                Donuts = 15,
-                ExtraLife = 16,
-                HighJumpItem = 17,
-                HighSpeedItem = 18,
-                Shield = 19,
-                Crown = 20,
-                Horn = 26,
-                Handbag = 30,
-                ReincarnationFish = 33
-        } ;
-
-        /**
-         * Resolución horizontal de la pantalla del juego
-         */
         const int ScreenWidth = 640 ;
 
-        /**
-         * Resolución vertical de la pantalla del juego
-         */
         const int ScreenHeight = 480 ;
 
-        /**
-         * Valor de la coordenada Z. Indica que el elemento se situará encima de aquel a mayor altura
-         */
         const int Top = -1 ;
 
         /**
-         * Altura en unidades isométricas para una capa, es decir, un elemento situado en la rejilla a una
-         * altura n estará a n * LayerHeight unidades isométricas del suelo
+         * Height in isometric units of layer
+         * Item in the grid at height n is n * LayerHeight units
          */
         const int LayerHeight = 24 ;
 
         /**
-         * Número máximo de capas de una sala. En unidades isométricas la altura máxima de una sala es el
-         * resultado del producto LevelHeight * MaxLayers
+         * Maximum number of layers in room
+         * In isometric units maximum height of room is LayerHeight * MaxLayers
          */
         const int MaxLayers = 10 ;
 
         /**
-         * Identificador del primer elemento libre que asigna el motor. Debe ser un número impar
+         * Identifier of first free element assigned by engine
+         * Supposed to be an odd number
          */
         const int FirstFreeId = 21 ;
 
         /**
-         * Identificador del primer elemento rejilla que asigna el motor
+         * Identifier of first grid element assigned by engine
          */
         const int FirstGridId = FirstFreeId + 1 ;
-
-        /**
-         * Etiqueta del elemento empleado para representar la destrucción de los elementos volátiles
-         */
-        const short BubblesLabel = 38 ;
-
-        /**
-         * Etiqueta del elemento que representa al guarda imperial en espera
-         * La cercanía de un jugador provocará su activación
-         */
-        const short ImperialGuardHeadLabel = 27 ;
-
-        /**
-         * Etiqueta del elemento que representa al guarda imperial
-         */
-        const short ImperialGuardLabel = 45 ;
-
-        /**
-         * Etiqueta del primer telepuerto
-         */
-        const short TeleportLabel = 35 ;
-
-        /**
-         * Etiqueta de la bola de cañón
-         */
-        const short CannonBallLabel = 23 ;
-
-        /**
-         * Etiqueta del guardián del trono
-         */
-        const short ThroneGuard = 66 ;
 
 }
 

@@ -58,39 +58,39 @@
 
   <bonus>
     <room filename="blacktooth/blacktooth01.xml">
-      <label>16</label>
+      <label>extra-life</label>
     </room>
     <room filename="blacktooth/blacktooth06.xml">
-      <label>15</label>
+      <label>donuts</label>
     </room>
     <room filename="blacktooth/blacktooth27.xml">
-      <label>33</label>
+      <label>reincarnation-fish</label>
     </room>
     <room filename="blacktooth/blacktooth28.xml">
-      <label>30</label>
+      <label>handbag</label>
     </room>
     <room filename="blacktooth/blacktooth09.xml">
-      <label>26</label>
+      <label>horn</label>
     </room>
     <room filename="blacktooth/blacktooth08.xml">
-      <label>33</label>
+      <label>reincarnation-fish</label>
     </room>
     <room filename="blacktooth/blacktooth14.xml">
-      <label>15</label>
+      <label>donuts</label>
     </room>
     <room filename="blacktooth/blacktooth14.xml">
-      <label>18</label>
+      <label>high-speed</label>
     </room>
     <room filename="blacktooth/blacktooth33.xml">
-      <label>17</label>
+      <label>high-jumps</label>
     </room>
     <room filename="blacktooth/blacktooth21.xml">
-      <label>33</label>
+      <label>reincarnation-fish</label>
     </room>
   </bonus>
 
   <players>
-    <player label="52">
+    <player label="head">
       <active>true</active>
       <roomFilename>blacktooth/blacktooth21.xml</roomFilename>
       <x>2</x>
@@ -103,7 +103,7 @@
       <hasHandbag>false</hasHandbag>
       <ammo>12</ammo>
     </player>
-    <player label="53">
+    <player label="heels">
       <active>false</active>
       <roomFilename>blacktooth/blacktooth46.xml</roomFilename>
       <x>68</x>

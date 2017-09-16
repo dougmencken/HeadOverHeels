@@ -55,10 +55,8 @@ PlayerHead::PlayerHead( Item* item, const BehaviorOfItem& id ) :
         blinkFrames[ East ] = 9;
         blinkFrames[ West ] = 16;
 
-        // Elemento de transición entre telepuertos
-        transitionDataLabel = 38;
-        // Elemento empleado como disparo
-        labelOfFireFromHooter = 38;
+        labelOfTransitionViaTeleport = "bubbles";
+        labelOfFireFromHooter = "bubbles";
 
         // Pasos automáticos
         automaticStepsCounter = 16;

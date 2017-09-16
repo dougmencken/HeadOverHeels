@@ -172,163 +172,163 @@
 
   <items>
     <item x="0" y="1" z="0">
-      <label>271</label>
+      <label>byblos-wall-y-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="2" z="0">
-      <label>271</label>
+      <label>byblos-wall-y-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="3" z="0">
-      <label>273</label>
+      <label>byblos-wall-y-2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="6" z="0">
-      <label>273</label>
+      <label>byblos-wall-y-2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="7" z="0">
-      <label>271</label>
+      <label>byblos-wall-y-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="8" z="0">
-      <label>271</label>
+      <label>byblos-wall-y-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="4" z="-1">
-      <label>274</label>
+      <label>byblos-shaft-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="5" z="-1">
-      <label>274</label>
+      <label>byblos-shaft-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="4" z="-1">
-      <label>274</label>
+      <label>byblos-shaft-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="5" z="-1">
-      <label>274</label>
+      <label>byblos-shaft-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="4" z="-1">
-      <label>274</label>
+      <label>byblos-shaft-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="5" z="-1">
-      <label>274</label>
+      <label>byblos-shaft-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="4" z="-1">
-      <label>275</label>
+      <label>byblos-capital-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="5" z="-1">
-      <label>275</label>
+      <label>byblos-capital-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="4" z="-1">
-      <label>3044</label>
+      <label>byblos-door-south</label>
       <direction>north</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="1" y="0" z="-1">
-      <label>276</label>
+      <label>byblos-shaft-east</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="0" z="-1">
-      <label>276</label>
+      <label>byblos-shaft-east</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="0" z="-1">
-      <label>276</label>
+      <label>byblos-shaft-east</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="0" z="-1">
-      <label>276</label>
+      <label>byblos-shaft-east</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="0" z="-1">
-      <label>276</label>
+      <label>byblos-shaft-east</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="0" z="-1">
-      <label>276</label>
+      <label>byblos-shaft-east</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="0" z="-1">
-      <label>277</label>
+      <label>byblos-capital-east</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="0" z="-1">
-      <label>277</label>
+      <label>byblos-capital-east</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="0" z="-1">
-      <label>5044</label>
+      <label>byblos-door-west</label>
       <direction>east</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="1" y="9" z="-1">
-      <label>5044</label>
+      <label>byblos-door-west</label>
       <direction>west</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="2" y="1" z="0">
-      <label>6</label>
+      <label>book</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="1" z="1">
-      <label>6</label>
+      <label>book</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>

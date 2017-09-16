@@ -201,25 +201,25 @@
 
   <items>
     <item x="0" y="0" z="-1">
-      <label>3011</label>
+      <label>blacktooth-door-south</label>
       <direction>north</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="9" y="0" z="-1">
-      <label>3011</label>
+      <label>blacktooth-door-south</label>
       <direction>south</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="5" y="0" z="0">
-      <label>43</label>
+      <label>diver</label>
       <direction>west</direction>
       <behavior>13</behavior>
       <type>freeitem</type>
     </item>
     <item x="7" y="0" z="0">
-      <label>37</label>
+      <label>trampoline</label>
       <direction>none</direction>
       <behavior>24</behavior>
       <type>freeitem</type>

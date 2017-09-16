@@ -98,6 +98,12 @@ namespace sxml
     this->label_.set (label);
   }
 
+  void item::
+  label (::std::auto_ptr< label_type > label)
+  {
+    this->label_.set (label);
+  }
+
 
   // state
   //

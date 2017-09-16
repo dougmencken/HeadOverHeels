@@ -201,67 +201,67 @@
 
   <items>
     <item x="0" y="0" z="-1">
-      <label>284</label>
+      <label>egyptus-shaft-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="1" z="-1">
-      <label>284</label>
+      <label>egyptus-shaft-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="0" z="-1">
-      <label>284</label>
+      <label>egyptus-shaft-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="1" z="-1">
-      <label>284</label>
+      <label>egyptus-shaft-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="0" z="-1">
-      <label>284</label>
+      <label>egyptus-shaft-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="1" z="-1">
-      <label>284</label>
+      <label>egyptus-shaft-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="0" z="-1">
-      <label>285</label>
+      <label>egyptus-capital-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="1" z="-1">
-      <label>285</label>
+      <label>egyptus-capital-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="0" z="-1">
-      <label>3055</label>
+      <label>egyptus-door-south</label>
       <direction>north</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="9" y="0" z="-1">
-      <label>3055</label>
+      <label>egyptus-door-south</label>
       <direction>south</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="4" y="0" z="0">
-      <label>37</label>
+      <label>trampoline</label>
       <direction>none</direction>
       <behavior>24</behavior>
       <type>freeitem</type>

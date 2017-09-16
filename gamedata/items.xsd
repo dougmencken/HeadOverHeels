@@ -45,7 +45,7 @@
             <xsd:element name="extraFrames" type="xsd:int" minOccurs="0"/>
             <xsd:element name="frame" type="xsd:int" maxOccurs="unbounded"/>
           </xsd:sequence>
-          <xsd:attribute name="label" type="xsd:short" use="required"/>
+          <xsd:attribute name="label" type="xsd:string" use="required"/>
         </xsd:complexType>
       </xsd:element>
     </xsd:sequence>

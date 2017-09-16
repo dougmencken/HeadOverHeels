@@ -109,22 +109,22 @@ public:
 
         /**
          * Añade un número de vidas a un jugador
-         * @param player Identificador del jugador
+         * @param player Name of character
          * @param lives Número de vidas a sumar
          */
-        void addLives ( const WhichPlayer& player, unsigned char lives ) ;
+        void addLives ( const std::string& player, unsigned char lives ) ;
 
         /**
          * Resta una vida a un jugador
-         * @param player Identificador del jugador
+         * @param player Name of character
          */
-        void loseLife ( const WhichPlayer& player ) ;
+        void loseLife ( const std::string& player ) ;
 
         /**
-         * Un jugador coge su complemento
-         * @param Etiqueta del elemento
+         * Player takes magic item
+         * @param Label of item
          */
-        void takeTool ( const MagicItem& label ) ;
+        void takeMagicItem ( const std::string& label ) ;
 
         /**
          * Resta una rosquilla a Head
@@ -133,49 +133,49 @@ public:
 
         /**
          * Añade velocidad doble a un jugador
-         * @param player Jugador que toma la velocidad
+         * @param player Player taking high speed
          * @param highSpeed Un número entre 0 y 99
          */
-        void addHighSpeed ( const WhichPlayer& player, unsigned int highSpeed ) ;
+        void addHighSpeed ( const std::string& player, unsigned int highSpeed ) ;
 
         /**
          * Resta una unidad al tiempo restante de doble velocidad
-         * @param Jugador que tiene la doble velocidad
+         * @param Player with high speed
          */
-        void decreaseHighSpeed ( const WhichPlayer& player ) ;
+        void decreaseHighSpeed ( const std::string& player ) ;
 
         /**
          * Añade un número de grandes saltos a un jugador
-         * @param player Jugador que toma los saltos
+         * @param player Player taking high jumps
          * @param highJumps Un número entre 0 y 10
          */
-        void addHighJumps ( const WhichPlayer& player, unsigned int highJumps ) ;
+        void addHighJumps ( const std::string& player, unsigned int highJumps ) ;
 
         /**
          * Resta un gran salto al jugador
-         * @param player Jugador que tiene los saltos
+         * @param player Player with high jumps
          */
-        void decreaseHighJumps ( const WhichPlayer& player ) ;
+        void decreaseHighJumps ( const std::string& player ) ;
 
         /**
          * Añade inmunidad a un jugador
-         * @param player Jugador que toma la inmunidad
+         * @param player Player taking immunity
          * @param shield Un número de milisegundos
          */
-        void addShield ( const WhichPlayer& player, double shield ) ;
+        void addShield ( const std::string& player, double shield ) ;
 
         /**
          * Actualiza el tiempo restante de inmunidad
-         * @param player Jugador que tiene la inmunidad
+         * @param player Player with immunity
          * @param shield Un número de milisegundos
          */
-        void decreaseShield ( const WhichPlayer& player, double shield ) ;
+        void modifyShield ( const std::string& player, double shield ) ;
 
         /**
          * Elimina el elemento que contiene el bolso para no mostrarlo en la interfaz
-         * @param player Jugador que tiene el bolso
+         * @param player Player with handbag
          */
-        void emptyHandbag ( const WhichPlayer& player ) ;
+        void emptyHandbag ( const std::string& player ) ;
 
         /**
          * Establece todos los planetas como miembros del Imperio Blacktooth
@@ -427,23 +427,13 @@ private:
 public:
 
         /**
-         * Establece el número de vidas de Head
-         * @param lives Un número entre 0 y 8
+         * Returns the number of lives left for player
          */
+        unsigned char getLives ( const std::string& player ) const ;
+
         void setHeadLives ( unsigned char lives ) {  this->headLives = lives ;  }
 
-        /**
-         * Establece el número de vidas de Heels
-         * @param lives Un número entre 0 y 8
-         */
         void setHeelsLives ( unsigned char lives ) {  this->heelsLives = lives ;  }
-
-        /**
-         * Devuelve el número de vias de un jugador
-         * @param player El jugador
-         * @return Un número entre 0 y 8
-         */
-        unsigned char getLives ( const WhichPlayer& player ) const ;
 
         /**
          * Establece el tiempo restante de movimiento a doble velocidad
@@ -486,7 +476,7 @@ public:
          * @param player El jugador
          * @return Un número de milisegundos
          */
-        double getShield ( const WhichPlayer& player ) const ;
+        double getShield ( const std::string& player ) const ;
 
         /**
          * Establece la posesión de la bocina por Head
@@ -495,11 +485,9 @@ public:
         void setHorn ( bool hasHorn ) {  this->horn = hasHorn ;  }
 
         /**
-         * Indica si un jugador posee su complemento
-         * @param player El jugador
-         * @return Un vector con las etiquetas de los complementos que posee el jugador
+         * @return Vector with tools owned by the player
          */
-        std::vector< short > hasTool ( const WhichPlayer& player ) const ;
+        std::vector < std::string > playerTools ( const std::string& player ) const ;
 
         /**
          * Establece la posesión del bolso por Heels
@@ -517,7 +505,7 @@ public:
          * Devuelve el número de rosquillas que tiene Head
          * @return Un número mayor o igual que 0
          */
-        unsigned short getDonuts ( const WhichPlayer& player ) const ;
+        unsigned short getDonuts ( const std::string& player ) const ;
 
         /**
          * Imagen del elemento que está dentro del bolso

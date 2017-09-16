@@ -35,7 +35,7 @@ Room::Room( const std::string& identifier, const std::string& scenery, int xTile
         memset( this->bounds, 0xffff, 12 * sizeof( unsigned short ) );
         memset( this->doors, 0, 12 * sizeof( Door * ) );
 
-        // Creación del suelo vacío
+        // create empty floor
         for ( int i = 0; i < xTiles * yTiles + 1; i++ )
         {
                 this->floor.push_back( 0 );
@@ -179,9 +179,10 @@ void Room::addWall( Wall * wall )
 
 void Room::addDoor( Door * door )
 {
-        // Se añade una de las cuatro puertas. Cada puerta en realidad son tres elementos libres
         door->setMediator( mediator );
         this->doors[ door->getDirection() ] = door;
+
+        // each door is actually three free items
         this->addItem( door->getLeftJamb() );
         this->addItem( door->getRightJamb() );
         this->addItem( door->getLintel() );
@@ -714,7 +715,7 @@ void Room::calculateBounds()
         bounds[ South ] = tileSize * tilesNumber.first - ( doors[ South ] || doors[ Southeast ] || doors[ Southwest ]  ? tileSize : 0 );
         bounds[ West ] = tileSize * tilesNumber.second - ( doors[ West ] || doors[ Westnorth ] || doors[ Westsouth ]  ? tileSize : 0 );
 
-        // Límites de las puertas de las salas triples
+        // door limits of triple room
         bounds[ Northeast ] = doors[ Northeast ] ? doors[ Northeast ]->getLintel()->getX() + doors[ Northeast ]->getLintel()->getWidthX() - tileSize : bounds[ North ];
         bounds[ Northwest ] = doors[ Northwest ] ? doors[ Northwest ]->getLintel()->getX() + doors[ Northwest ]->getLintel()->getWidthX() - tileSize : bounds[ North ];
         bounds[ Southeast ] = doors[ Southeast ] ? doors[ Southeast ]->getLintel()->getX() + tileSize : bounds[ South ];
@@ -762,11 +763,9 @@ void Room::calculateCoordinates( bool hasNorthDoor, bool hasEastDoor, int deltaX
         }
 }
 
-void Room::activatePlayer( const WhichPlayer& playerId )
+void Room::activatePlayer( const std::string& player )
 {
-        Item* item = mediator->findItemByLabel( static_cast< short >( playerId ) );
-
-        // Si se ha encontrado al jugador se asigna como el jugador activo
+        Item* item = mediator->findItemByLabel( player );
         if ( item != 0 )
         {
                 mediator->setActivePlayer( static_cast< PlayerItem * >( item ) );
@@ -775,17 +774,13 @@ void Room::activatePlayer( const WhichPlayer& playerId )
 
 void Room::activate()
 {
-        // Inicia la actualización de los elementos de la sala
         this->startUpdate();
-        // Activa la sala, iniciando la operación de dibujo
         this->active = true;
 }
 
 void Room::deactivate()
 {
-        // Suspende la actualización de los elementos de la sala
         this->stopUpdate();
-        // Desactiva la sala, suspendiéndose la operación de dibujo
         this->active = false;
 }
 

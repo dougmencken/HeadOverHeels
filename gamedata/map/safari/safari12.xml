@@ -469,13 +469,13 @@
 
   <items>
     <item x="8" y="2" z="-1">
-      <label>3077</label>
+      <label>safari-door-south</label>
       <direction>south</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="0" y="0" z="0">
-      <label>31</label>
+      <label>elevator</label>
       <direction>none</direction>
       <behavior>6</behavior>
       <type>freeitem</type>
@@ -484,133 +484,133 @@
       <extra>1</extra>
     </item>
     <item x="2" y="0" z="0">
-      <label>34</label>
+      <label>siren</label>
       <direction>none</direction>
       <behavior>15</behavior>
       <type>freeitem</type>
     </item>
     <item x="3" y="0" z="0">
-      <label>12</label>
+      <label>bars-ns</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="3" y="0" z="1">
-      <label>12</label>
+      <label>bars-ns</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="3" y="0" z="2">
-      <label>12</label>
+      <label>bars-ns</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="4" y="0" z="0">
-      <label>13</label>
+      <label>drum</label>
       <direction>none</direction>
       <behavior>12</behavior>
       <type>freeitem</type>
     </item>
     <item x="3" y="1" z="0">
-      <label>12</label>
+      <label>bars-ns</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="3" y="1" z="1">
-      <label>12</label>
+      <label>bars-ns</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="3" y="1" z="2">
-      <label>12</label>
+      <label>bars-ns</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="3" y="2" z="0">
-      <label>12</label>
+      <label>bars-ns</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="3" y="2" z="1">
-      <label>12</label>
+      <label>bars-ns</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="3" y="2" z="2">
-      <label>12</label>
+      <label>bars-ns</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="3" y="3" z="0">
-      <label>12</label>
+      <label>bars-ns</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="3" y="3" z="1">
-      <label>12</label>
+      <label>bars-ns</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="3" y="3" z="2">
-      <label>12</label>
+      <label>bars-ns</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="3" y="4" z="0">
-      <label>12</label>
+      <label>bars-ns</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="3" y="4" z="1">
-      <label>12</label>
+      <label>bars-ns</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="3" y="4" z="2">
-      <label>12</label>
+      <label>bars-ns</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="4" y="4" z="0">
-      <label>2</label>
+      <label>vulcano</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="5" y="4" z="0">
-      <label>2</label>
+      <label>vulcano</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="5" z="0">
-      <label>39</label>
+      <label>mortal-cap</label>
       <direction>none</direction>
       <behavior>11</behavior>
       <type>freeitem</type>
     </item>
     <item x="3" y="5" z="1">
-      <label>12</label>
+      <label>bars-ns</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="3" y="5" z="2">
-      <label>12</label>
+      <label>bars-ns</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>freeitem</type>

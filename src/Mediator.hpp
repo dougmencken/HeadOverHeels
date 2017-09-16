@@ -152,11 +152,11 @@ public:
 
        /**
         * Busca un elemento en la sala
-        * @param label Etiqueta del elemento. En el caso de existir varios elementos con la misma etiqueta
-        * devolverá el primero que encuentre
-        * @return El elemento si se encontró ó 0 si no existe
+        * @param label Label of item
+        *              when there are several elements with this label return the first one
+        * @return item if found or 0 if not
         */
-        Item* findItemByLabel ( short label ) ;
+        Item* findItemByLabel ( const std::string& label ) ;
 
        /**
         * Busca un elemento en la sala
@@ -260,10 +260,9 @@ public:
 
        /**
         * Indica si un elemento ha chocado con otro de un tipo determinado
-        * @param id Etiqueta del elemento
         * @return El elemento con el que se ha producido la colisión ó 0 si no hay colisión
         */
-        Item* collisionWithByLabel ( short label ) ;
+        Item* collisionWithByLabel ( const std::string& label ) ;
 
        /**
         * Indica si un elemento ha chocado con otro de un comportamiento determinado
@@ -392,9 +391,9 @@ private:
         bool switchInRoomIsOn ;
 
        /**
-        * Último jugador controlado antes de hacer un cambio de jugador
+        * Player which was active just before change of players
         */
-        WhichPlayer lastControlledPlayer ;
+        std::string lastActivePlayer ;
 
        /**
         * Sala en la que negocia este mediador
@@ -524,9 +523,7 @@ public:
 
 };
 
-/**
- * Objeto-función usado como predicado en la búsqueda de un elemento por su identificador
- */
+
 class EqualItemId : public std::binary_function< Item *, int, bool >
 {
 
@@ -535,9 +532,6 @@ public:
 
 };
 
-/**
- * Objeto-función usado como predicado en la búsqueda de un jugador por su identificador
- */
 class EqualPlayerItemId : public std::binary_function< PlayerItem *, int, bool >
 {
 
@@ -546,20 +540,14 @@ public:
 
 };
 
-/**
- * Objeto-función usado como predicado en la búsqueda de un elemento por su etiqueta
- */
-class EqualItemLabel : public std::binary_function< Item *, short, bool >
+class EqualItemLabel : public std::binary_function< Item *, std::string, bool >
 {
 
 public:
-        bool operator() ( Item* item, short label ) const ;
+        bool operator() ( Item* item, const std::string& label ) const ;
 
 };
 
-/**
- * Objeto-función usado como predicado en la búsqueda de un elemento por su comportamiento
- */
 class EqualBehaviorOfItem : public std::binary_function< Item *, BehaviorOfItem, bool >
 {
 

@@ -264,19 +264,19 @@
 
   <items>
     <item x="0" y="0" z="-1">
-      <label>5033</label>
+      <label>themoon-door-west</label>
       <direction>east</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="2" y="4" z="-1">
-      <label>3033</label>
+      <label>themoon-door-south</label>
       <direction>south</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="0" y="9" z="-1">
-      <label>5033</label>
+      <label>themoon-door-west</label>
       <direction>west</direction>
       <behavior>0</behavior>
       <type>door</type>

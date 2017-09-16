@@ -359,61 +359,61 @@
 
   <items>
     <item x="0" y="0" z="0">
-      <label>301</label>
+      <label>safari-wall-y-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="1" z="0">
-      <label>303</label>
+      <label>safari-wall-y-2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="4" z="0">
-      <label>303</label>
+      <label>safari-wall-y-2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="5" z="0">
-      <label>301</label>
+      <label>safari-wall-y-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="2" z="-1">
-      <label>2077</label>
+      <label>safari-door-north</label>
       <direction>north</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="7" y="2" z="-1">
-      <label>3077</label>
+      <label>safari-door-south</label>
       <direction>south</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="3" y="0" z="0">
-      <label>28</label>
+      <label>elephant-head</label>
       <direction>south</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="4" y="2" z="0">
-      <label>28</label>
+      <label>elephant-head</label>
       <direction>south</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="3" y="4" z="0">
-      <label>28</label>
+      <label>elephant-head</label>
       <direction>south</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="6" y="5" z="0">
-      <label>41</label>
+      <label>elephant</label>
       <direction>none</direction>
       <behavior>14</behavior>
       <type>freeitem</type>

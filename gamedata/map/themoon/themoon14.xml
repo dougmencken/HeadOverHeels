@@ -532,67 +532,67 @@
 
   <items>
     <item x="6" y="3" z="-1">
-      <label>3033</label>
+      <label>themoon-door-south</label>
       <direction>south</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="2" y="8" z="-1">
-      <label>5033</label>
+      <label>themoon-door-west</label>
       <direction>west</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="3" y="0" z="0">
-      <label>21</label>
+      <label>bomb</label>
       <direction>none</direction>
       <behavior>4</behavior>
       <type>freeitem</type>
     </item>
     <item x="0" y="2" z="0">
-      <label>4</label>
+      <label>toaster</label>
       <direction>west</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="2" z="1">
-      <label>27</label>
+      <label>imperial-guard-head</label>
       <direction>south</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="0" y="3" z="0">
-      <label>4</label>
+      <label>toaster</label>
       <direction>west</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="3" z="1">
-      <label>27</label>
+      <label>imperial-guard-head</label>
       <direction>south</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="0" y="4" z="0">
-      <label>4</label>
+      <label>toaster</label>
       <direction>west</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="4" z="1">
-      <label>27</label>
+      <label>imperial-guard-head</label>
       <direction>south</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="0" y="5" z="0">
-      <label>4</label>
+      <label>toaster</label>
       <direction>west</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="5" z="1">
-      <label>27</label>
+      <label>imperial-guard-head</label>
       <direction>south</direction>
       <behavior>0</behavior>
       <type>freeitem</type>

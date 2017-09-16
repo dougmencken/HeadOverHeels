@@ -469,13 +469,13 @@
 
   <items>
     <item x="2" y="8" z="-1">
-      <label>5011</label>
+      <label>blacktooth-door-west</label>
       <direction>west</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="5" y="0" z="7">
-      <label>31</label>
+      <label>elevator</label>
       <direction>none</direction>
       <behavior>6</behavior>
       <type>freeitem</type>
@@ -484,7 +484,7 @@
       <extra>1</extra>
     </item>
     <item x="5" y="1" z="0">
-      <label>45</label>
+      <label>imperial-guard</label>
       <direction>none</direction>
       <behavior>7</behavior>
       <type>freeitem</type>

@@ -149,10 +149,9 @@ public:
         void calculateCoordinates ( bool hasNorthDoor, bool hasEastDoor, int deltaX, int deltaY ) ;
 
        /**
-        * Establece el jugador que controla el usuario
-        * @param playerId El identificador de alguno de los jugadores
+        * Set the active player
         */
-        void activatePlayer ( const WhichPlayer& playerId ) ;
+        void activatePlayer ( const std::string& player ) ;
 
        /**
         * Activa la sala. Implica la puesta en marcha de la actualización de los elementos y del dibujado

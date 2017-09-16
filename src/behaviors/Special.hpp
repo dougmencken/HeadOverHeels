@@ -51,16 +51,12 @@ public:
 protected:
 
         /**
-         * Comprueba si el elemento especial puede ser destruido. Depende del elemento en cuestión
-         * y del jugador que lo tome
-         * @param playerItem Jugador que toma el elemento
+         * Checks if magic item can be taken
+         * It depends on item and player who takes it
          */
-        bool checkDestruction ( Item* sender ) ;
+        bool mayTake ( Item* sender ) ;
 
-        /**
-         * Ejecuta la acción asociada a la toma del elemento especial
-         */
-        void takeSpecial ( PlayerItem* sender ) ;
+        void takeMagicItem ( PlayerItem* sender ) ;
 
 protected:
 

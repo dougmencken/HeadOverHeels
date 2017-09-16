@@ -494,343 +494,343 @@
 
   <items>
     <item x="0" y="1" z="0">
-      <label>257</label>
+      <label>moon-wall-y-4</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="2" z="0">
-      <label>251</label>
+      <label>moon-wall-y-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="3" z="0">
-      <label>255</label>
+      <label>moon-wall-y-3</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="6" z="0">
-      <label>255</label>
+      <label>moon-wall-y-3</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="7" z="0">
-      <label>251</label>
+      <label>moon-wall-y-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="8" z="0">
-      <label>253</label>
+      <label>moon-wall-y-2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="4" z="-1">
-      <label>258</label>
+      <label>moon-shaft-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="5" z="-1">
-      <label>258</label>
+      <label>moon-shaft-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="4" z="-1">
-      <label>258</label>
+      <label>moon-shaft-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="5" z="-1">
-      <label>258</label>
+      <label>moon-shaft-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="4" z="-1">
-      <label>258</label>
+      <label>moon-shaft-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="5" z="-1">
-      <label>258</label>
+      <label>moon-shaft-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="4" z="-1">
-      <label>258</label>
+      <label>moon-shaft-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="5" z="-1">
-      <label>258</label>
+      <label>moon-shaft-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="4" z="-1">
-      <label>259</label>
+      <label>moon-capital-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="5" z="-1">
-      <label>259</label>
+      <label>moon-capital-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="4" z="-1">
-      <label>3033</label>
+      <label>themoon-door-south</label>
       <direction>north</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="1" y="0" z="0">
-      <label>256</label>
+      <label>moon-wall-x-4</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="0" z="0">
-      <label>250</label>
+      <label>moon-wall-x-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="0" z="0">
-      <label>254</label>
+      <label>moon-wall-x-3</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="6" y="0" z="0">
-      <label>254</label>
+      <label>moon-wall-x-3</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="7" y="0" z="0">
-      <label>250</label>
+      <label>moon-wall-x-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="8" y="0" z="0">
-      <label>252</label>
+      <label>moon-wall-x-2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="0" z="-1">
-      <label>260</label>
+      <label>moon-shaft-east</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="5" y="0" z="-1">
-      <label>260</label>
+      <label>moon-shaft-east</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="0" z="-1">
-      <label>260</label>
+      <label>moon-shaft-east</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="5" y="0" z="-1">
-      <label>260</label>
+      <label>moon-shaft-east</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="0" z="-1">
-      <label>260</label>
+      <label>moon-shaft-east</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="5" y="0" z="-1">
-      <label>260</label>
+      <label>moon-shaft-east</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="0" z="-1">
-      <label>260</label>
+      <label>moon-shaft-east</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="5" y="0" z="-1">
-      <label>260</label>
+      <label>moon-shaft-east</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="0" z="-1">
-      <label>261</label>
+      <label>moon-capital-east</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="5" y="0" z="-1">
-      <label>261</label>
+      <label>moon-capital-east</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="0" z="-1">
-      <label>5033</label>
+      <label>themoon-door-west</label>
       <direction>east</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="5" y="1" z="3">
-      <label>1</label>
+      <label>brick1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="6" y="1" z="3">
-      <label>1</label>
+      <label>brick1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="7" y="1" z="0">
-      <label>1</label>
+      <label>brick1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="7" y="1" z="1">
-      <label>1</label>
+      <label>brick1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="7" y="1" z="3">
-      <label>1</label>
+      <label>brick1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="2" z="0">
-      <label>2</label>
+      <label>vulcano</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="7" y="2" z="0">
-      <label>2</label>
+      <label>vulcano</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="3" z="0">
-      <label>2</label>
+      <label>vulcano</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="5" y="3" z="0">
-      <label>2</label>
+      <label>vulcano</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="6" y="3" z="0">
-      <label>40</label>
+      <label>bighead-robot</label>
       <direction>none</direction>
       <behavior>14</behavior>
       <type>freeitem</type>
     </item>
     <item x="3" y="4" z="0">
-      <label>2</label>
+      <label>vulcano</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="6" y="4" z="0">
-      <label>2</label>
+      <label>vulcano</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="5" z="3">
-      <label>1</label>
+      <label>brick1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="5" z="0">
-      <label>2</label>
+      <label>vulcano</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="6" y="5" z="0">
-      <label>2</label>
+      <label>vulcano</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="6" z="2">
-      <label>1</label>
+      <label>brick1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="6" z="0">
-      <label>40</label>
+      <label>bighead-robot</label>
       <direction>none</direction>
       <behavior>14</behavior>
       <type>freeitem</type>
     </item>
     <item x="4" y="6" z="0">
-      <label>2</label>
+      <label>vulcano</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="5" y="6" z="0">
-      <label>2</label>
+      <label>vulcano</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="7" z="1">
-      <label>1</label>
+      <label>brick1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="7" z="0">
-      <label>2</label>
+      <label>vulcano</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="7" y="7" z="0">
-      <label>2</label>
+      <label>vulcano</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="8" z="0">
-      <label>1</label>
+      <label>brick1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>

@@ -327,73 +327,73 @@
 
   <items>
     <item x="0" y="0" z="0">
-      <label>271</label>
+      <label>byblos-wall-y-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="3" z="0">
-      <label>271</label>
+      <label>byblos-wall-y-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="1" z="-1">
-      <label>274</label>
+      <label>byblos-shaft-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="2" z="-1">
-      <label>274</label>
+      <label>byblos-shaft-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="1" z="-1">
-      <label>275</label>
+      <label>byblos-capital-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="2" z="-1">
-      <label>275</label>
+      <label>byblos-capital-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="1" z="-1">
-      <label>3044</label>
+      <label>byblos-door-south</label>
       <direction>north</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="9" y="1" z="1">
-      <label>278</label>
+      <label>byblos-capital-south</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="9" y="2" z="1">
-      <label>278</label>
+      <label>byblos-capital-south</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="9" y="1" z="-1">
-      <label>3044</label>
+      <label>byblos-door-south</label>
       <direction>south</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="5" y="1" z="0">
-      <label>34</label>
+      <label>siren</label>
       <direction>none</direction>
       <behavior>15</behavior>
       <type>freeitem</type>
     </item>
     <item x="4" y="2" z="0">
-      <label>34</label>
+      <label>siren</label>
       <direction>none</direction>
       <behavior>15</behavior>
       <type>freeitem</type>

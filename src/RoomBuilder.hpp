@@ -63,29 +63,26 @@ public:
         Room * buildRoom () ;
 
         /**
-         * Crea un jugador en la sala en construcción. La sala ya debe estar construida
-         * @param playerId Identificador del jugador
-         * @param behaviorId Comportamiento del jugador
+         * Create player in current room
+         * @param behaviorId Behavior of player
          * @param x Coordenada isométrica X donde se situará al jugador
          * @param y Coordenada isométrica Y donde se situará al jugador
          * @param z Coordenada isométrica Z donde se situará al jugador
          * @param direction Dirección inicial del jugador
          */
-        PlayerItem * buildPlayerInTheSameRoom ( const WhichPlayer& playerId, const BehaviorOfItem& behaviorId, int x, int y, int z, const Direction& direction ) ;
+        PlayerItem * buildPlayerInTheSameRoom ( const std::string& player, const BehaviorOfItem& behaviorId, int x, int y, int z, const Direction& direction ) ;
 
         /**
-         * Crea un jugador en la sala especificada. La sala ya debe estar construida
-         * @param room La sala donde se creará el jugador
-         * @param playerId Identificador del jugador. Puede cambiarse si se pretende crear al jugador compuesto
-         * cuando uno de los jugadores simples ya ha agotado sus vidas
-         * @param behaviorId Comportamiento del jugador
+         * Create player in given room
+         * @param room Room where to create player
+         * @param behaviorId Behavior of player
          * @param x Coordenada isométrica X donde se situará al jugador
          * @param y Coordenada isométrica Y donde se situará al jugador
          * @param z Coordenada isométrica Z donde se situará al jugador
          * @param direction Dirección inicial del jugador
-         * @param withItem Indica si el jugador llevaba un elemento en el bolso
+         * @param withItem Carry the player an item in bag?
          */
-        PlayerItem * buildPlayerInRoom ( Room* room, const WhichPlayer& playerId, const BehaviorOfItem& behaviorId, int x, int y, int z, const Direction& direction, bool withItem = false );
+        PlayerItem * buildPlayerInRoom ( Room* room, const std::string& player, const BehaviorOfItem& behaviorId, int x, int y, int z, const Direction& direction, bool withItem = false );
 
         static int getXCenterOfRoom ( ItemData* playerData, Room* theRoom ) ;
 

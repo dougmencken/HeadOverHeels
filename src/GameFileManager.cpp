@@ -13,14 +13,14 @@ namespace isomot
 {
 
 GameFileManager::GameFileManager( const GameManager* gameManager, const Isomot* isomot )
-: roomId( std::string() ),
-  label( 0 ),
-  x( 0 ),
-  y( 0 ),
-  z( 0 ),
-  direction( NoDirection ),
-  gameManager( const_cast< GameManager* >( gameManager ) ),
-  isomot( const_cast< Isomot* >( isomot ) )
+        : room( std::string() )
+        , nameOfCharacterWhoCaughtTheFish( "in~reincarnation" )
+        , x( 0 )
+        , y( 0 )
+        , z( 0 )
+        , direction( NoDirection )
+        , gameManager( const_cast< GameManager* >( gameManager ) )
+        , isomot( const_cast< Isomot* >( isomot ) )
 {
 
 }
@@ -30,10 +30,10 @@ GameFileManager::~GameFileManager()
 
 }
 
-void GameFileManager::assignFishData( const std::string& roomId, short label, int x, int y, int z, const Direction& direction )
+void GameFileManager::assignFishData( const std::string& room, const std::string& name, int x, int y, int z, const Direction& direction )
 {
-        this->roomId = roomId;
-        this->label = label;
+        this->room = room;
+        this->nameOfCharacterWhoCaughtTheFish = name;
         this->x = x;
         this->y = y;
         this->z = z;
@@ -73,9 +73,8 @@ void GameFileManager::loadGame( const std::string& fileName )
                         this->gameManager->liberatePlanet( Blacktooth, false );
                 }
 
-                // Asigna el estado de los jugadores
-                this->assignPlayerStatus( saveGameXML->players().player() );
-                // Crea las salas iniciales y la posición de los jugadores
+                this->updateAttributesOfPlayers( saveGameXML->players().player() );
+
                 this->isomot->beginOld( saveGameXML->players().player() );
         }
         catch ( const xml_schema::exception& e )
@@ -104,65 +103,62 @@ void GameFileManager::saveGame( const std::string& fileName )
                 sgxml::players players;
                 sgxml::players::player_sequence playerSequence( players.player() );
 
-                // El jugador activo
-                WhichPlayer whoPlaysYet = WhichPlayer( this->label );
+                // active player
+                std::string whoPlaysYet = nameOfCharacterWhoCaughtTheFish;
 
-                // Número de vidas
                 unsigned short lives = 0;
-                switch ( whoPlaysYet )
+                if ( ( whoPlaysYet == "head" ) || ( whoPlaysYet == "heels" ) )
                 {
-                        case Head:
-                        case Heels:
-                                lives = this->gameManager->getLives( whoPlaysYet );
-                                break;
-
-                        case HeadAndHeels:
-                                lives = this->gameManager->getLives( Head ) * 100 + this->gameManager->getLives( Heels );
-                                break;
-
-                        default:
-                                ;
+                        lives = this->gameManager->getLives( whoPlaysYet );
+                }
+                else if ( whoPlaysYet == "headoverheels"  )
+                {
+                        lives = this->gameManager->getLives( "head" ) * 100 + this->gameManager->getLives( "heels" );
                 }
 
-                // Posesión de objetos
-                std::vector< short > tools = this->gameManager->hasTool( whoPlaysYet );
+                // possession of objects
+                std::vector< std::string > tools = this->gameManager->playerTools( whoPlaysYet );
 
-                // Almacenamiento de todos los datos
+                // store all data
                 playerSequence.push_back(
                         sgxml::player
                         (
                                 true,
-                                this->roomId,
+                                this->room,
                                 this->x,
                                 this->y,
                                 this->z,
                                 int( this->direction ),
                                 Wait,
                                 lives,
-                                whoPlaysYet == Head || whoPlaysYet == HeadAndHeels ? std::find( tools.begin (), tools.end (), short( Horn ) ) != tools.end () : false,
-                                whoPlaysYet == Heels || whoPlaysYet == HeadAndHeels ? std::find( tools.begin (), tools.end (), short( Handbag ) ) != tools.end () : false,
+                                ( ( whoPlaysYet == "head" ) || ( whoPlaysYet == "headoverheels" ) )
+                                        ? std::find( tools.begin (), tools.end (), "horn" ) != tools.end ()
+                                        : false,
+                                ( ( whoPlaysYet == "heels" ) || ( whoPlaysYet == "headoverheels" ) )
+                                        ? std::find( tools.begin (), tools.end (), "handbag" ) != tools.end ()
+                                        : false,
                                 this->gameManager->getDonuts( whoPlaysYet ),
-                                this->label
+                                nameOfCharacterWhoCaughtTheFish
                         )
                 );
 
-                // Es posible que no haya más salas bien porque no haya más jugadores o porque el otro jugador
-                // se encuentre en la misma sala que el jugador activo
+                // there may be no more rooms because there are no more players
+                // or because other player is in the same room as active player
+
                 Room* hideRoom = this->isomot->getMapManager()->getHideRoom();
                 Room* activeRoom = this->isomot->getMapManager()->getActiveRoom();
                 PlayerItem* inactivePlayer = ( hideRoom != 0 ? hideRoom->getMediator()->getActivePlayer() : activeRoom->getMediator()->getHiddenPlayer() );
 
-                // Si hay algún otro jugador, se almacenan sus datos
                 if ( inactivePlayer != 0 )
                 {
-                        WhichPlayer whoWaitsToPlay = WhichPlayer( inactivePlayer->getLabel() );
-                        std::vector< short > tools = this->gameManager->hasTool( whoWaitsToPlay );
-                        PlayerStartPosition* initialPosition = this->isomot->getMapManager()->findPlayerPosition(
-                                hideRoom != 0 ? hideRoom->getIdentifier() : activeRoom->getIdentifier(), WhichPlayer( inactivePlayer->getLabel() )
+                        std::string whoWaitsToPlay = inactivePlayer->getLabel();
+                        std::vector< std::string > tools = this->gameManager->playerTools( whoWaitsToPlay );
+                        PlayerInitialPosition* initialPosition = this->isomot->getMapManager()->findPlayerPosition(
+                                hideRoom != 0 ? hideRoom->getIdentifier() : activeRoom->getIdentifier(), whoWaitsToPlay
                         );
                         if ( initialPosition == 0 )
                         {
-                                initialPosition = this->isomot->getMapManager()->findPlayerPosition( activeRoom->getIdentifier(), HeadAndHeels );
+                                initialPosition = this->isomot->getMapManager()->findPlayerPosition( activeRoom->getIdentifier(), "headoverheels" );
                         }
                         playerSequence.push_back(
                                 sgxml::player
@@ -175,15 +171,19 @@ void GameFileManager::saveGame( const std::string& fileName )
                                         int( inactivePlayer->getDirection() ),
                                         initialPosition->getEntry(),
                                         this->gameManager->getLives( whoWaitsToPlay ),
-                                        whoWaitsToPlay == Head || whoWaitsToPlay == HeadAndHeels ? std::find( tools.begin(), tools.end(), short( Horn ) ) != tools.end() : false,
-                                        whoWaitsToPlay == Heels || whoWaitsToPlay == HeadAndHeels ? std::find( tools.begin(), tools.end(), short( Handbag ) ) != tools.end() : false,
+                                        whoWaitsToPlay == "head" || whoWaitsToPlay == "headoverheels"
+                                                ? std::find( tools.begin(), tools.end(), "horn" ) != tools.end()
+                                                : false,
+                                        whoWaitsToPlay == "heels" || whoWaitsToPlay == "headoverheels"
+                                                ? std::find( tools.begin(), tools.end(), "handbag" ) != tools.end()
+                                                : false,
                                         this->gameManager->getDonuts( whoWaitsToPlay ),
                                         inactivePlayer->getLabel()
                                 )
                         ) ;
                 }
 
-                // Almacena los jugadores
+                // store players
                 players.player( playerSequence );
 
                 // Creación de la configuración
@@ -212,20 +212,20 @@ void GameFileManager::saveGame( const std::string& fileName )
         }
 }
 
-void GameFileManager::assignPlayerStatus( const sgxml::players::player_sequence& playerSequence )
+void GameFileManager::updateAttributesOfPlayers( const sgxml::players::player_sequence& players )
 {
-        for ( sgxml::players::player_const_iterator i = playerSequence.begin (); i != playerSequence.end (); ++i )
+        for ( sgxml::players::player_const_iterator i = players.begin (); i != players.end (); ++i )
         {
                 sgxml::player data = *i;
 
-                unsigned char headLives = 0;
-                unsigned char heelsLives = 0;
-
-                // Si se va a crear al jugador compuesto se obtienen las vidas de los jugadores simples
-                // Se utiliza la fórmula: Vidas H&H = Vidas Head * 100 + Vidas Heels
-                if ( data.label() == HeadAndHeels )
+                if ( data.label() == "headoverheels" )
                 {
+                        // formula for lives of composite character from lives of simple characters is
+                        // lives H & H = 100 * lives Head + lives Heels
+
                         unsigned short lives = data.lives();
+                        unsigned char headLives = 0;
+                        unsigned char heelsLives = 0;
 
                         while ( lives > 100 )
                         {
@@ -234,39 +234,31 @@ void GameFileManager::assignPlayerStatus( const sgxml::players::player_sequence&
                         }
 
                         heelsLives = static_cast< unsigned char >( lives );
+
+                        this->gameManager->setHeadLives( headLives );
+                        this->gameManager->setHorn( data.hasHorn() );
+                        this->gameManager->setDonuts( data.ammo() );
+                        this->gameManager->setHeelsLives( heelsLives );
+                        this->gameManager->setHandbag( data.hasHandbag() );
+                        this->gameManager->setHighSpeed( 0 );
+                        this->gameManager->setHighJumps( 0 );
+                        this->gameManager->setHeadShield( 0 );
+                        this->gameManager->setHeelsShield( 0 );
                 }
-
-                switch ( data.label() )
+                else if ( data.label() == "head" )
                 {
-                        case Head:
-
-                                this->gameManager->setHeadLives( data.lives() );
-                                this->gameManager->setHorn( data.hasHorn() );
-                                this->gameManager->setDonuts( data.ammo() );
-                                this->gameManager->setHighSpeed( 0 );
-                                this->gameManager->setHeadShield( 0 );
-                                break;
-
-                        case Heels:
-
-                                this->gameManager->setHeelsLives( data.lives() );
-                                this->gameManager->setHandbag( data.hasHandbag() );
-                                this->gameManager->setHighJumps( 0 );
-                                this->gameManager->setHeelsShield( 0 );
-                                break;
-
-                        case HeadAndHeels:
-
-                                this->gameManager->setHeadLives( headLives );
-                                this->gameManager->setHorn( data.hasHorn() );
-                                this->gameManager->setDonuts( data.ammo() );
-                                this->gameManager->setHeelsLives( heelsLives );
-                                this->gameManager->setHandbag( data.hasHandbag() );
-                                this->gameManager->setHighSpeed( 0 );
-                                this->gameManager->setHighJumps( 0 );
-                                this->gameManager->setHeadShield( 0 );
-                                this->gameManager->setHeelsShield( 0 );
-                                break;
+                        this->gameManager->setHeadLives( data.lives() );
+                        this->gameManager->setHorn( data.hasHorn() );
+                        this->gameManager->setDonuts( data.ammo() );
+                        this->gameManager->setHighSpeed( 0 );
+                        this->gameManager->setHeadShield( 0 );
+                }
+                else if ( data.label() == "heels" )
+                {
+                        this->gameManager->setHeelsLives( data.lives() );
+                        this->gameManager->setHandbag( data.hasHandbag() );
+                        this->gameManager->setHighJumps( 0 );
+                        this->gameManager->setHeelsShield( 0 );
                 }
         }
 }

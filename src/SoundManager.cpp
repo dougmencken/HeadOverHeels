@@ -83,7 +83,7 @@ void SoundManager::readListOfSounds( const std::string& fileName )
         }
 }
 
-void SoundManager::play( short label, const ActivityOfItem& activity, bool loop )
+void SoundManager::play( const std::string& label, const ActivityOfItem& activity, bool loop )
 {
         SampleData* sampleData = this->findSample( label, activity );
 
@@ -112,7 +112,7 @@ void SoundManager::play( short label, const ActivityOfItem& activity, bool loop 
         }
 }
 
-void SoundManager::stop( short label, const ActivityOfItem& activity )
+void SoundManager::stop( const std::string& label, const ActivityOfItem& activity )
 {
         SampleData* sampleData = this->findSample( label, activity );
 
@@ -205,7 +205,7 @@ void SoundManager::setVolumeOfMusic( unsigned int volume )
           set_volume( ( this->musicVolume * 255 ) / 100, 0 );
 }
 
-SampleData* SoundManager::findSample( short label, const ActivityOfItem& activity )
+SampleData* SoundManager::findSample( const std::string& label, const ActivityOfItem& activity )
 {
         std::list< SoundData >::iterator i = std::find_if( soundData.begin(), soundData.end(), std::bind2nd( EqualSoundData(), label ) );
 
@@ -346,7 +346,7 @@ std::string SoundManager::translateActivityOfItemToString ( const ActivityOfItem
         return stringOfActivity;
 }
 
-SoundData::SoundData( short label )
+SoundData::SoundData( const std::string& label )
         : label( label )
 {
         this->path = isomot::sharePath();
@@ -370,7 +370,7 @@ SampleData* SoundData::find( const std::string& state )
         return i != this->table.end () ? ( &( i->second ) ) : 0;
 }
 
-bool EqualSoundData::operator()( const SoundData& soundData, short label ) const
+bool EqualSoundData::operator()( const SoundData& soundData, const std::string& label ) const
 {
         return ( soundData.getLabel() == label );
 }

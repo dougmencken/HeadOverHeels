@@ -17,14 +17,16 @@
 #include <functional>
 #include "Ism.hpp"
 
+
 namespace isomot
 {
 
-class PlayerStartPosition;
+class PlayerInitialPosition ;
 
 /**
- * Registro que almacena la información de una sala del mapa leída de un archivo del disco
+ * Container for information of a map room read from a file with data for this room
  */
+
 class MapRoomData
 {
 
@@ -32,7 +34,7 @@ public:
 
         /**
          * Constructor
-         * @param Nombre completo del archivo que contiene los datos de esta sala
+         * @param Full path and name of file with data for this room
          */
         MapRoomData( const std::string& room ) ;
 
@@ -45,7 +47,7 @@ public:
          * darse la circunstancia de que la vía de entrada de ambos jugadores sea la misma. Para solventar
          * este conflicto se cambian los datos del jugador presente por sus datos de posición actuales
          */
-        void addPlayerPosition ( const PlayerStartPosition& playerPosition ) ;
+        void addPlayerPosition ( const PlayerInitialPosition& playerPosition ) ;
 
         /**
          * Asigna la posición inicial de un jugador en la sala
@@ -54,20 +56,17 @@ public:
          * darse la circunstancia de que la vía de entrada de ambos jugadores sea la misma. Para solventar
          * este conflicto se cambian los datos del jugador presente por sus datos de posición actuales
          */
-        void addPlayerPosition ( PlayerStartPosition& playerPosition, PlayerStartPosition& playerPresentPosition ) ;
+        void addPlayerPosition ( PlayerInitialPosition& playerPosition, PlayerInitialPosition& playerPresentPosition ) ;
 
         /**
-         * Elimina la posición inicial de un jugador de la sala
-         * @param player Identificador del jugador
+         * Bin initial position of player in room
          */
-        void removePlayerPosition ( const WhichPlayer& player ) ;
+        void removePlayerPosition ( const std::string& player ) ;
 
         /**
-         * Busca la posición inicial de un jugador en la sala
-         * @param player Identificador del jugador
-         * @return Datos con la posición inicial del jugador ó 0 si no existen datos para el jugador
+         * Search for initial position of player in room. Returns 0 if there’s no data for player
          */
-        PlayerStartPosition * findPlayerPosition ( const WhichPlayer& player ) ;
+        PlayerInitialPosition * findPlayerPosition ( const std::string& player ) ;
 
         /**
          * Indica si hay jugadores en la sala
@@ -117,15 +116,12 @@ private:
          */
         bool visited ;
 
-        /**
-         * El jugador activo, el que controla el usuario, cuando se crea la sala
-         */
-        WhichPlayer activePlayer ;
+        std::string activePlayer ;
 
         /**
          * Posición inicial de los jugadores que pudieran estar presentes en la sala cuando ésta se crea
          */
-        std::list < PlayerStartPosition > playersPosition ;
+        std::list < PlayerInitialPosition > playersPosition ;
 
         /**
          * Nombre completo del archivo de la sala situada al norte
@@ -247,21 +243,17 @@ public:
         bool isVisited () const {  return this->visited ;  }
 
         /**
-         * Establece el jugador activo, el que controla el usuario, cuando se crea la sala
+         * Set active player when room is created
          */
-        void setActivePlayer ( const WhichPlayer& activePlayer ) {  this->activePlayer = activePlayer ;  }
+        void setActivePlayer ( const std::string& player ) {  this->activePlayer = player ;  }
 
-        /**
-         * El jugador activo, el que controla el usuario, cuando se crea la sala
-         * @return El identificador de un jugador
-         */
-        WhichPlayer getActivePlayer () const {  return activePlayer ;  }
+        std::string getActivePlayer () const {  return activePlayer ;  }
 
         /**
          * Posición inicial de los jugadores que pudieran estar presentes en la sala cuando ésta se crea
          * @return Una lista con las posiciones iniciales de los jugadores
          */
-        std::list < PlayerStartPosition > & getPlayersPosition () {  return playersPosition ;  }
+        std::list < PlayerInitialPosition > & getPlayersPosition () {  return playersPosition ;  }
 
         /**
          * Establece la sala situada al norte
@@ -365,20 +357,17 @@ public:
 
 
 /**
- * Posición inicial de un jugador cuando se crea la sala
+ * Initial position of player when the room is created
  */
-class PlayerStartPosition
+
+class PlayerInitialPosition
 {
 
 public:
 
-        /**
-         * Constructor
-         * @param player Identificador del jugador
-         */
-        PlayerStartPosition( const WhichPlayer& player ) ;
+        PlayerInitialPosition( const std::string& player ) ;
 
-        virtual ~PlayerStartPosition( ) ;
+        virtual ~PlayerInitialPosition( ) ;
 
         /**
          * Establece la puerta por la que entra el jugador a la sala
@@ -399,9 +388,9 @@ public:
 private:
 
         /**
-         * Jugador que está presente en la sala cuando la sala se crea
+         * Player who is in room since its creation
          */
-        WhichPlayer player ;
+        std::string player ;
 
         /**
          * Camino de entrada del jugador: puerta, telepuerto, por el suelo o por el techo
@@ -431,9 +420,9 @@ private:
 public:
 
         /**
-         * Jugador que está presente en la sala cuando la sala se crea
+         * Player who is in room since creation of that room
          */
-        WhichPlayer getPlayer () const {  return player ;  }
+        std::string getPlayer () const {  return player ;  }
 
         /**
          * Camino de entrada del jugador: puerta, telepuerto, por el suelo o por el techo
@@ -462,12 +451,10 @@ public:
 
 };
 
-/**
- * Objeto-función usado como predicado en la búsqueda de la posición inicial de un jugador
- */
-struct EqualPlayerStartPosition : public std::binary_function< PlayerStartPosition, WhichPlayer, bool >
+
+struct EqualPlayerInitialPosition : public std::binary_function< PlayerInitialPosition, std::string, bool >
 {
-        bool operator() ( const PlayerStartPosition& position, const WhichPlayer& player ) const ;
+        bool operator() ( const PlayerInitialPosition& position, const std::string& player ) const ;
 };
 
 }

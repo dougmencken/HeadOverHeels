@@ -280,8 +280,8 @@ namespace sxml
     state (const state_sequence& s);
 
     // label
-    //
-    typedef ::xml_schema::short_ label_type;
+
+    typedef ::xml_schema::string label_type;
     typedef ::xsd::cxx::tree::traits< label_type, char > label_traits;
 
     const label_type&
@@ -292,6 +292,9 @@ namespace sxml
 
     void
     label (const label_type& x);
+
+    void
+    label (::std::auto_ptr< label_type > p);
 
     // Constructors
     //

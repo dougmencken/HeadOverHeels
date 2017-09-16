@@ -26,7 +26,7 @@ class ItemData ;
 class Behavior ;
 
 /**
- * Interface that defines attributes and operations for some item in some room
+ * Interface that defines attributes and operations for item in room
  */
 
 class Item : public Mediated
@@ -36,11 +36,11 @@ public:
 
        /**
         * Constructor
-        * @param itemData Datos invariables del elemento
+        * @param data Datos invariables del elemento
         * @param z Posición espacial Z o a qué distancia está el elemento del suelo
         * @param direction Dirección inicial del elemento
         */
-        Item( ItemData* itemData, int z, const Direction& direction ) ;
+        Item( ItemData* data, int z, const Direction& direction ) ;
 
        /**
         * Constructor copia. No copia los atributos que son punteros
@@ -141,11 +141,7 @@ protected:
          */
         int id ;
 
-        /**
-         * Etiqueta unívoca del elemento, es decir, no puede haber dos elementos de distinto tipo con la
-         * misma etiqueta. Las etiquetas son constantes y no cadenas de caracteres
-         */
-        short label ;
+        std::string label ;
 
         /**
          * Datos invariables del elemento, aquellos que definen sus características básicas
@@ -242,10 +238,9 @@ public:
         int getId () const {  return id ;  }
 
         /**
-         * La etiqueta, el tipo de elemento
-         * @return Un número positivo
+         * Unique label of item
          */
-        short getLabel () const {  return label ;  }
+        std::string getLabel () const {  return label ;  }
 
         /**
          * Posición espacial X en unidades isométricas

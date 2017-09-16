@@ -34,14 +34,14 @@ public:
 
        /**
         * Constructor
-        * @param itemDataManager Gestor de datos necesario para encontrar las tres partes de la puerta
-        * @param label Identificador de la puerta
-        * @param cx Celda que ocupa el elemento en el eje X
-        * @param cy Celda que ocupa el elemento en el eje Y
-        * @param z Posición espacial Z o a qué distancia está el elemento del suelo
-        * @param direction Dirección inicial del elemento
+        * @param itemDataManager Data manager to find three parts of door
+        * @param label Label of door
+        * @param cx Cell on X axis
+        * @param cy Cell on Y axis
+        * @param z Position on Z axis or how far is item from ground
+        * @param direction Initial direction of item
         */
-        Door( ItemDataManager* itemDataManager, short label, int cx, int cy, int z, const Direction& direction ) ;
+        Door( ItemDataManager* itemDataManager, const std::string& label, int cx, int cy, int z, const Direction& direction ) ;
 
         virtual ~Door( ) ;
 
@@ -54,10 +54,7 @@ private:
         */
         ItemDataManager * itemDataManager ;
 
-       /**
-        * Identificador de la puerta
-        */
-        short label ;
+        std::string labelOfDoor ;
 
        /**
         * Celda que ocupa el elemento en el eje X
@@ -89,19 +86,10 @@ private:
         */
         Direction direction ;
 
-       /**
-        * Jamba izquierda
-        */
         FreeItem * leftJamb ;
 
-       /**
-        * Jamba derecha
-        */
         FreeItem * rightJamb ;
 
-       /**
-        * Lintel
-        */
         FreeItem * lintel ;
 
 public:
@@ -121,22 +109,10 @@ public:
         */
         Direction getDirection () const {  return direction ;  }
 
-       /**
-        * La jamba izquierda de la puerta. Si no existe se crea
-        * @return Un elemento libre
-        */
         FreeItem * getLeftJamb () ;
 
-       /**
-        * La jamba derecha de la puerta. Si no existe se crea
-        * @return Un elemento libre
-        */
         FreeItem * getRightJamb () ;
 
-       /**
-        * The lintel of the door. If it is absent it would be created
-        * @return a free item
-        */
         FreeItem * getLintel () ;
 
 };

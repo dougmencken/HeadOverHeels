@@ -119,7 +119,7 @@ bool Volatile::update ()
                         // Es un perrito del silencio. Desaparece si Head o el jugador compuesto están en la sala
                         else if ( getBehaviorOfItem () == VolatilePuppyBehavior )
                         {
-                                if ( mediator->findItemByLabel( short( Head ) ) != 0 || mediator->findItemByLabel( short( HeadAndHeels ) ) != 0 )
+                                if ( mediator->findItemByLabel( "head" ) != 0 || mediator->findItemByLabel( "headoverheels" ) != 0 )
                                 {
                                         activity = Destroy;
                                         destroyTimer->reset();
@@ -151,7 +151,7 @@ bool Volatile::update ()
                                                 break;
 
                                         case VolatilePuppyBehavior:
-                                                if ( mediator->findItemByLabel( short( Head ) ) != 0 || mediator->findItemByLabel( short( HeadAndHeels ) ) != 0 )
+                                                if ( mediator->findItemByLabel( "head" ) != 0 || mediator->findItemByLabel( "headoverheels" ) != 0 )
                                                 {
                                                         activity = Destroy;
                                                 }

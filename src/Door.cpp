@@ -8,9 +8,9 @@
 namespace isomot
 {
 
-Door::Door( ItemDataManager * itemData, short label, int cx, int cy, int z, const Direction& direction )
+Door::Door( ItemDataManager * itemData, const std::string& label, int cx, int cy, int z, const Direction& direction )
         : itemDataManager( itemData )
-        , label( label )
+        , labelOfDoor( label )
         , cx( cx )
         , cy( cy )
         , z( z )
@@ -19,37 +19,33 @@ Door::Door( ItemDataManager * itemData, short label, int cx, int cy, int z, cons
         , rightJamb( 0 )
         , lintel( 0 )
 {
-
+        /* std::cout << "creation of door \"" << labelOfDoor << "\"" << std::endl ; */
 }
 
 Door::~Door()
 {
-        // La destrucción de las partes de la puerta la gestiona el mediador
+
 }
 
 FreeItem* Door::getLeftJamb()
 {
         if ( leftJamb == 0 )
         {
-                // Coordenadas libres
                 int x( 0 ), y( 0 );
-                // Tamaño de la loseta
                 int tileSize = mediator->getTileSize();
 
-                // Se buscan los datos del elemento
-                ItemData* itemData = itemDataManager->findItemByLabel( label );
+                ItemData* leftJambData = itemDataManager->findItemByLabel( labelOfDoor + "~leftjamb" );
 
-                // Si se han encontrado, se calculan sus coordenadas libres
-                if ( itemData != 0 )
+                if ( leftJambData != 0 )
                 {
                         switch ( direction )
                         {
                                 case North:
                                 case Northeast:
                                 case Northwest:
-                                        x = cx * tileSize + itemData->widthX - 2;
+                                        x = cx * tileSize + leftJambData->widthX - 2;
                                         y = ( cy + 2 ) * tileSize - 2;
-                                        leftLimit = y + itemData->widthY;
+                                        leftLimit = y + leftJambData->widthY;
                                         break;
 
                                 case South:
@@ -57,7 +53,7 @@ FreeItem* Door::getLeftJamb()
                                 case Southwest:
                                         x = cx * tileSize;
                                         y = ( cy + 2 ) * tileSize - 2;
-                                        leftLimit = y + itemData->widthY;
+                                        leftLimit = y + leftJambData->widthY;
                                         break;
 
                                 case East:
@@ -65,23 +61,22 @@ FreeItem* Door::getLeftJamb()
                                 case Eastsouth:
                                         x = cx * tileSize;
                                         y = ( cy + 1 ) * tileSize - 1;
-                                        leftLimit = x + itemData->widthX;
+                                        leftLimit = x + leftJambData->widthX;
                                         break;
 
                                 case West:
                                 case Westnorth:
                                 case Westsouth:
                                         x = cx * tileSize;
-                                        y = ( cy + 1 ) * tileSize - itemData->widthY + 1;
-                                        leftLimit = x + itemData->widthX;
+                                        y = ( cy + 1 ) * tileSize - leftJambData->widthY + 1;
+                                        leftLimit = x + leftJambData->widthX;
                                         break;
 
                                 default:
                                         ;
                         }
 
-                        // Creación de la jamba como elemento libre
-                        leftJamb = new FreeItem( itemData, x, y, Top, NoDirection );
+                        leftJamb = new FreeItem( leftJambData, x, y, Top, NoDirection );
                 }
         }
 
@@ -92,24 +87,20 @@ FreeItem* Door::getRightJamb()
 {
         if ( rightJamb == 0 )
         {
-                // Coordenadas libres
                 int x( 0 ), y( 0 );
-                // Tamaño de la loseta
                 int tileSize = mediator->getTileSize();
 
-                // Se buscan los datos del elemento
-                ItemData* itemData = itemDataManager->findItemByLabel( label + 1 );
+                ItemData* rightJambData = itemDataManager->findItemByLabel( labelOfDoor + "~rightjamb" );
 
-                // Si se han encontrado, se calculan sus coordenadas libres
-                if ( itemData != 0 )
+                if ( rightJambData != 0 )
                 {
                         switch ( direction )
                         {
                                 case North:
                                 case Northeast:
                                 case Northwest:
-                                        x = cx * tileSize + itemData->widthX - 2;
-                                        y = cy * tileSize + itemData->widthY - 1;
+                                        x = cx * tileSize + rightJambData->widthX - 2;
+                                        y = cy * tileSize + rightJambData->widthY - 1;
                                         rightLimit = y;
                                         break;
 
@@ -117,14 +108,14 @@ FreeItem* Door::getRightJamb()
                                 case Southeast:
                                 case Southwest:
                                         x = cx * tileSize;
-                                        y = cy * tileSize + itemData->widthY - 1;
+                                        y = cy * tileSize + rightJambData->widthY - 1;
                                         rightLimit = y;
                                         break;
 
                                 case East:
                                 case Eastnorth:
                                 case Eastsouth:
-                                        x = ( cx + 2 ) * tileSize - itemData->widthX - 2;
+                                        x = ( cx + 2 ) * tileSize - rightJambData->widthX - 2;
                                         y = ( cy + 1 ) * tileSize - 1;
                                         rightLimit = x;
                                         break;
@@ -132,8 +123,8 @@ FreeItem* Door::getRightJamb()
                                 case West:
                                 case Westnorth:
                                 case Westsouth:
-                                        x = ( cx + 2 ) * tileSize - itemData->widthX - 2;
-                                        y = ( cy + 1 ) * tileSize - itemData->widthY + 1;
+                                        x = ( cx + 2 ) * tileSize - rightJambData->widthX - 2;
+                                        y = ( cy + 1 ) * tileSize - rightJambData->widthY + 1;
                                         rightLimit = x;
                                         break;
 
@@ -141,8 +132,7 @@ FreeItem* Door::getRightJamb()
                                         ;
                         }
 
-                        // Creación de la jamba como elemento libre
-                        rightJamb = new FreeItem( itemData, x, y, Top, NoDirection );
+                        rightJamb = new FreeItem( rightJambData, x, y, Top, NoDirection );
                 }
         }
 
@@ -153,23 +143,19 @@ FreeItem* Door::getLintel()
 {
         if ( lintel == 0 )
         {
-                // Coordenadas libres
                 int x( 0 ), y( 0 );
-                // Tamaño de la loseta
                 int tileSize = mediator->getTileSize();
 
-                // Se buscan los datos del elemento
-                ItemData* itemData = itemDataManager->findItemByLabel( label + 2 );
+                ItemData* lintelData = itemDataManager->findItemByLabel( labelOfDoor + "~lintel" );
 
-                // Si se han encontrado, se calculan sus coordenadas libres
-                if ( itemData != 0 )
+                if ( lintelData != 0 )
                 {
                         switch ( direction )
                         {
                                 case North:
                                 case Northeast:
                                 case Northwest:
-                                        x = cx * tileSize + itemData->widthX - 2;
+                                        x = cx * tileSize + lintelData->widthX - 2;
                                         y = ( cy + 2 ) * tileSize - 1;
                                         break;
 
@@ -191,15 +177,14 @@ FreeItem* Door::getLintel()
                                 case Westnorth:
                                 case Westsouth:
                                         x = cx * tileSize;
-                                        y = ( cy + 1 ) * tileSize - itemData->widthY + 1;
+                                        y = ( cy + 1 ) * tileSize - lintelData->widthY + 1;
                                         break;
 
                                 default:
                                         ;
                         }
 
-                        // Creación del dintel como elemento libre
-                        lintel = new FreeItem( itemData, x, y, Top, NoDirection );
+                        lintel = new FreeItem( lintelData, x, y, Top, NoDirection );
                 }
         }
 
@@ -209,7 +194,7 @@ FreeItem* Door::getLintel()
 bool Door::isUnderDoor( int x, int y, int z )
 {
         bool result = false;
-        // La comprobación puede realizarse si el elemento está a ras del suelo
+
         z = ( z < 0 ? 0 : z );
 
         switch ( direction )

@@ -353,175 +353,175 @@
 
   <items>
     <item x="0" y="0" z="-1">
-      <label>5044</label>
+      <label>byblos-door-west</label>
       <direction>east</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="0" y="17" z="-1">
-      <label>5044</label>
+      <label>byblos-door-west</label>
       <direction>west</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="1" y="3" z="-1">
-      <label>6</label>
+      <label>book</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="3" z="-1">
-      <label>6</label>
+      <label>book</label>
       <direction>none</direction>
       <behavior>12</behavior>
       <type>freeitem</type>
     </item>
     <item x="0" y="6" z="-1">
-      <label>6</label>
+      <label>book</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="6" z="-1">
-      <label>6</label>
+      <label>book</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="6" z="-1">
-      <label>6</label>
+      <label>book</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="6" z="-1">
-      <label>6</label>
+      <label>book</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="6" z="-1">
-      <label>6</label>
+      <label>book</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="6" z="-1">
-      <label>6</label>
+      <label>book</label>
       <direction>none</direction>
       <behavior>12</behavior>
       <type>freeitem</type>
     </item>
     <item x="1" y="6" z="-1">
-      <label>6</label>
+      <label>book</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="7" z="0">
-      <label>17</label>
+      <label>high-jumps</label>
       <direction>west</direction>
       <behavior>20</behavior>
       <type>freeitem</type>
     </item>
     <item x="0" y="7" z="3">
-      <label>6</label>
+      <label>book</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="7" z="3">
-      <label>6</label>
+      <label>book</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="8" z="3">
-      <label>6</label>
+      <label>book</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="8" z="3">
-      <label>6</label>
+      <label>book</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="9" z="3">
-      <label>6</label>
+      <label>book</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="9" z="3">
-      <label>6</label>
+      <label>book</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="10" z="3">
-      <label>6</label>
+      <label>book</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="10" z="3">
-      <label>6</label>
+      <label>book</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="11" z="-1">
-      <label>6</label>
+      <label>book</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="11" z="-1">
-      <label>6</label>
+      <label>book</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="11" z="-1">
-      <label>6</label>
+      <label>book</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="11" z="-1">
-      <label>6</label>
+      <label>book</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="11" z="-1">
-      <label>6</label>
+      <label>book</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="11" z="-1">
-      <label>6</label>
+      <label>book</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="11" z="-1">
-      <label>6</label>
+      <label>book</label>
       <direction>none</direction>
       <behavior>12</behavior>
       <type>freeitem</type>
     </item>
     <item x="1" y="11" z="-1">
-      <label>6</label>
+      <label>book</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="12" z="-1">
-      <label>6</label>
+      <label>book</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>

@@ -642,163 +642,163 @@
 
   <items>
     <item x="0" y="0" z="0">
-      <label>257</label>
+      <label>moon-wall-y-4</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="1" z="0">
-      <label>251</label>
+      <label>moon-wall-y-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="2" z="0">
-      <label>255</label>
+      <label>moon-wall-y-3</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="5" z="0">
-      <label>255</label>
+      <label>moon-wall-y-3</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="6" z="0">
-      <label>251</label>
+      <label>moon-wall-y-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="7" z="0">
-      <label>253</label>
+      <label>moon-wall-y-2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="3" z="-1">
-      <label>2033</label>
+      <label>themoon-door-north</label>
       <direction>north</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="9" y="3" z="-1">
-      <label>3033</label>
+      <label>themoon-door-south</label>
       <direction>south</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="4" y="8" z="3">
-      <label>263</label>
+      <label>moon-capital-west</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="5" y="8" z="3">
-      <label>263</label>
+      <label>moon-capital-west</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="8" z="-1">
-      <label>5033</label>
+      <label>themoon-door-west</label>
       <direction>west</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="1" y="0" z="0">
-      <label>4</label>
+      <label>toaster</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="0" z="1">
-      <label>27</label>
+      <label>imperial-guard-head</label>
       <direction>west</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="2" y="0" z="0">
-      <label>4</label>
+      <label>toaster</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="0" z="1">
-      <label>27</label>
+      <label>imperial-guard-head</label>
       <direction>west</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="3" y="0" z="0">
-      <label>4</label>
+      <label>toaster</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="0" z="1">
-      <label>27</label>
+      <label>imperial-guard-head</label>
       <direction>west</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="6" y="0" z="0">
-      <label>4</label>
+      <label>toaster</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="6" y="0" z="1">
-      <label>27</label>
+      <label>imperial-guard-head</label>
       <direction>west</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="7" y="0" z="0">
-      <label>4</label>
+      <label>toaster</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="7" y="0" z="1">
-      <label>27</label>
+      <label>imperial-guard-head</label>
       <direction>west</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="8" y="0" z="0">
-      <label>4</label>
+      <label>toaster</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="8" y="0" z="1">
-      <label>27</label>
+      <label>imperial-guard-head</label>
       <direction>west</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="5" y="7" z="3">
-      <label>11</label>
+      <label>brick2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="6" y="7" z="0">
-      <label>11</label>
+      <label>brick2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="6" y="7" z="1">
-      <label>11</label>
+      <label>brick2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="6" y="7" z="3">
-      <label>11</label>
+      <label>brick2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>

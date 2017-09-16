@@ -443,139 +443,139 @@
 
   <items>
     <item x="0" y="0" z="0">
-      <label>290</label>
+      <label>penitentiary-wall-x-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="0" z="0">
-      <label>292</label>
+      <label>penitentiary-wall-x-2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="0" z="0">
-      <label>290</label>
+      <label>penitentiary-wall-x-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="5" y="0" z="0">
-      <label>290</label>
+      <label>penitentiary-wall-x-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="6" y="0" z="0">
-      <label>292</label>
+      <label>penitentiary-wall-x-2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="7" y="0" z="0">
-      <label>290</label>
+      <label>penitentiary-wall-x-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="0" z="-1">
-      <label>296</label>
+      <label>penitentiary-shaft-east</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="0" z="-1">
-      <label>296</label>
+      <label>penitentiary-shaft-east</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="0" z="-1">
-      <label>296</label>
+      <label>penitentiary-shaft-east</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="0" z="-1">
-      <label>296</label>
+      <label>penitentiary-shaft-east</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="0" z="-1">
-      <label>296</label>
+      <label>penitentiary-shaft-east</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="0" z="-1">
-      <label>296</label>
+      <label>penitentiary-shaft-east</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="0" z="-1">
-      <label>296</label>
+      <label>penitentiary-shaft-east</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="0" z="-1">
-      <label>296</label>
+      <label>penitentiary-shaft-east</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="0" z="-1">
-      <label>297</label>
+      <label>penitentiary-capital-east</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="0" z="-1">
-      <label>297</label>
+      <label>penitentiary-capital-east</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="0" z="-1">
-      <label>5066</label>
+      <label>penitentiary-door-west</label>
       <direction>east</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="8" y="3" z="-1">
-      <label>3066</label>
+      <label>penitentiary-door-south</label>
       <direction>south</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="2" y="1" z="0">
-      <label>44</label>
+      <label>bubble-robot</label>
       <direction>none</direction>
       <behavior>16</behavior>
       <type>freeitem</type>
     </item>
     <item x="3" y="1" z="0">
-      <label>1</label>
+      <label>brick1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="1" z="1">
-      <label>1</label>
+      <label>brick1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="1" z="3">
-      <label>1</label>
+      <label>brick1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="1" z="0">
-      <label>44</label>
+      <label>bubble-robot</label>
       <direction>none</direction>
       <behavior>16</behavior>
       <type>freeitem</type>

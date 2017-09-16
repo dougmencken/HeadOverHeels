@@ -74,10 +74,10 @@ public:
         void loseLife () ;
 
         /**
-         * El jugador coge un objeto de utilidad
-         * @label Etiqueta del elemento
+         * Player takes magic item
+         * @label Label of item
          */
-        void takeTool( short label ) ;
+        void takeTool( const std::string& label ) ;
 
         /**
          * Aumenta la cantidad de munición que tiene el jugador (rosquillas)
@@ -173,8 +173,7 @@ protected:
         virtual bool changeData ( int value, int x, int y, int z, const Datum& datum, const WhatToDo& how ) ;
 
         /**
-         * Comprueba si el jugador ha chocado con alguna puerta. En caso afirmativo moverá al jugador
-         * hacia el vado de la puerta
+         * Check if player hit a door, if yes then move player
          * @param direction Una puerta identificada por su posición en la sala
          * @param mediator El mediador de los elementos
          * @param id Identificador asignado por el motor de un elemento existente en la pila de colisiones
@@ -226,9 +225,9 @@ private:
         double shield ;
 
         /**
-         * Indica si el jugador tiene su útil (bocina o bolso)
+         * Tools of player
          */
-        std::vector< short > tools ;
+        std::vector< std::string > tools ;
 
         /**
          * Cantidad de munición que tiene el jugador (rosquillas)
@@ -307,15 +306,13 @@ public:
 
         /**
          * Asigna los objetos de utilidad que tiene el jugador
-         * @param hasTool true si lo posee o false en caso contrario
          */
-        void setTools ( const std::vector< short >& tools ) {  this->tools = tools ;  }
+        void setTools ( const std::vector< std::string >& tools ) {  this->tools = tools ;  }
 
         /**
-         * Indica si el jugador tiene su útil (bocina o bolso)
-         * @return true si tiene el útil o false en caso contrario
+         * Character has its magic item, horn or bag, or not
          */
-        bool hasTool ( const MagicItem& label ) const ;
+        bool hasTool ( const std::string& label ) const ;
 
         /**
          * Establece la cantidad de munición que tiene el jugador (rosquillas)

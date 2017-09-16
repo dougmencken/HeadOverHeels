@@ -333,55 +333,55 @@
 
   <items>
     <item x="4" y="1" z="0">
-      <label>22</label>
+      <label>another-portable-brick</label>
       <direction>none</direction>
       <behavior>12</behavior>
       <type>freeitem</type>
     </item>
     <item x="2" y="2" z="0">
-      <label>22</label>
+      <label>another-portable-brick</label>
       <direction>none</direction>
       <behavior>12</behavior>
       <type>freeitem</type>
     </item>
     <item x="3" y="2" z="0">
-      <label>22</label>
+      <label>another-portable-brick</label>
       <direction>none</direction>
       <behavior>12</behavior>
       <type>freeitem</type>
     </item>
     <item x="3" y="2" z="1">
-      <label>34</label>
+      <label>siren</label>
       <direction>none</direction>
       <behavior>15</behavior>
       <type>freeitem</type>
     </item>
     <item x="2" y="3" z="0">
-      <label>22</label>
+      <label>another-portable-brick</label>
       <direction>none</direction>
       <behavior>12</behavior>
       <type>freeitem</type>
     </item>
     <item x="2" y="3" z="1">
-      <label>37</label>
+      <label>trampoline</label>
       <direction>none</direction>
       <behavior>24</behavior>
       <type>freeitem</type>
     </item>
     <item x="3" y="3" z="0">
-      <label>22</label>
+      <label>another-portable-brick</label>
       <direction>none</direction>
       <behavior>12</behavior>
       <type>freeitem</type>
     </item>
     <item x="1" y="4" z="0">
-      <label>22</label>
+      <label>another-portable-brick</label>
       <direction>none</direction>
       <behavior>12</behavior>
       <type>freeitem</type>
     </item>
     <item x="4" y="4" z="0">
-      <label>22</label>
+      <label>another-portable-brick</label>
       <direction>none</direction>
       <behavior>12</behavior>
       <type>freeitem</type>

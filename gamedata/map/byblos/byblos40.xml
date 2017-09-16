@@ -523,49 +523,49 @@
 
   <items>
     <item x="0" y="0" z="0">
-      <label>270</label>
+      <label>byblos-wall-x-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="0" z="0">
-      <label>270</label>
+      <label>byblos-wall-x-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="0" z="0">
-      <label>272</label>
+      <label>byblos-wall-x-2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="5" y="0" z="0">
-      <label>272</label>
+      <label>byblos-wall-x-2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="6" y="0" z="0">
-      <label>270</label>
+      <label>byblos-wall-x-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="7" y="0" z="0">
-      <label>270</label>
+      <label>byblos-wall-x-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="0" z="-1">
-      <label>4044</label>
+      <label>byblos-door-east</label>
       <direction>east</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="7" y="8" z="0">
-      <label>31</label>
+      <label>elevator</label>
       <direction>none</direction>
       <behavior>6</behavior>
       <type>freeitem</type>

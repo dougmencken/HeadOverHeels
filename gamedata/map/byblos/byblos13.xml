@@ -201,13 +201,13 @@
 
   <items>
     <item x="0" y="0" z="-1">
-      <label>3044</label>
+      <label>byblos-door-south</label>
       <direction>north</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="9" y="0" z="-1">
-      <label>3044</label>
+      <label>byblos-door-south</label>
       <direction>south</direction>
       <behavior>0</behavior>
       <type>door</type>

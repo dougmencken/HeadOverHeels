@@ -453,109 +453,109 @@
 
   <items>
     <item x="0" y="0" z="0">
-      <label>211</label>
+      <label>blacktooth-wall-y-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="1" z="0">
-      <label>213</label>
+      <label>blacktooth-wall-y-2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="4" z="0">
-      <label>213</label>
+      <label>blacktooth-wall-y-2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="5" z="0">
-      <label>211</label>
+      <label>blacktooth-wall-y-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="2" z="-1">
-      <label>216</label>
+      <label>blacktooth-column-shaft-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="3" z="-1">
-      <label>216</label>
+      <label>blacktooth-column-shaft-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="2" z="-1">
-      <label>216</label>
+      <label>blacktooth-column-shaft-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="3" z="-1">
-      <label>216</label>
+      <label>blacktooth-column-shaft-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="2" z="-1">
-      <label>216</label>
+      <label>blacktooth-column-shaft-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="3" z="-1">
-      <label>216</label>
+      <label>blacktooth-column-shaft-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="2" z="-1">
-      <label>217</label>
+      <label>blacktooth-column-capital-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="3" z="-1">
-      <label>217</label>
+      <label>blacktooth-column-capital-north</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="2" z="-1">
-      <label>3011</label>
+      <label>blacktooth-door-south</label>
       <direction>north</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="9" y="2" z="-1">
-      <label>3011</label>
+      <label>blacktooth-door-south</label>
       <direction>south</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="4" y="2" z="0">
-      <label>43</label>
+      <label>diver</label>
       <direction>west</direction>
       <behavior>13</behavior>
       <type>freeitem</type>
     </item>
     <item x="5" y="2" z="0">
-      <label>6</label>
+      <label>book</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="5" y="2" z="1">
-      <label>6</label>
+      <label>book</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="5" y="2" z="2">
-      <label>22</label>
+      <label>another-portable-brick</label>
       <direction>none</direction>
       <behavior>12</behavior>
       <type>freeitem</type>

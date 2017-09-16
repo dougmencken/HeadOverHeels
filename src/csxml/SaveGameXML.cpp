@@ -318,6 +318,12 @@ namespace sgxml
     this->label_.set (label);
   }
 
+  void room::
+  label (::std::auto_ptr< label_type > label)
+  {
+    this->label_.set (label);
+  }
+
   const room::filename_type& room::
   filename () const
   {
@@ -566,6 +572,12 @@ namespace sgxml
   label ( const label_type& label )
   {
     this->label_.set ( label );
+  }
+
+  void player::
+  label (::std::auto_ptr< label_type > label)
+  {
+    this->label_.set (label);
   }
 }
 

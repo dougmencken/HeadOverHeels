@@ -605,157 +605,157 @@
 
   <items>
     <item x="8" y="3" z="0">
-      <label>220</label>
+      <label>blacktooth-column-capital-south</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="8" y="4" z="0">
-      <label>220</label>
+      <label>blacktooth-column-capital-south</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="8" y="3" z="-1">
-      <label>3011</label>
+      <label>blacktooth-door-south</label>
       <direction>south</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="2" y="0" z="0">
-      <label>11</label>
+      <label>brick2</label>
       <direction>none</direction>
       <behavior>29</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="0" z="1">
-      <label>11</label>
+      <label>brick2</label>
       <direction>none</direction>
       <behavior>29</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="0" z="2">
-      <label>11</label>
+      <label>brick2</label>
       <direction>none</direction>
       <behavior>29</behavior>
       <type>griditem</type>
     </item>
     <item x="7" y="0" z="0">
-      <label>11</label>
+      <label>brick2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="7" y="0" z="1">
-      <label>11</label>
+      <label>brick2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="7" y="0" z="3">
-      <label>11</label>
+      <label>brick2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="7" y="2" z="0">
-      <label>11</label>
+      <label>brick2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="7" y="3" z="0">
-      <label>11</label>
+      <label>brick2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="4" z="2">
-      <label>1</label>
+      <label>brick1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="4" z="0">
-      <label>11</label>
+      <label>brick2</label>
       <direction>none</direction>
       <behavior>29</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="4" z="1">
-      <label>11</label>
+      <label>brick2</label>
       <direction>none</direction>
       <behavior>29</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="4" z="2">
-      <label>11</label>
+      <label>brick2</label>
       <direction>none</direction>
       <behavior>29</behavior>
       <type>griditem</type>
     </item>
     <item x="7" y="4" z="0">
-      <label>11</label>
+      <label>brick2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="5" z="0">
-      <label>11</label>
+      <label>brick2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="5" z="1">
-      <label>35</label>
+      <label>teleport</label>
       <direction>none</direction>
       <behavior>23</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="5" z="2">
-      <label>1</label>
+      <label>brick1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="7" y="5" z="0">
-      <label>11</label>
+      <label>brick2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="6" z="2">
-      <label>1</label>
+      <label>brick1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="7" z="0">
-      <label>8</label>
+      <label>puppy</label>
       <direction>west</direction>
       <behavior>30</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="7" z="1">
-      <label>8</label>
+      <label>puppy</label>
       <direction>west</direction>
       <behavior>30</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="7" z="0">
-      <label>8</label>
+      <label>puppy</label>
       <direction>west</direction>
       <behavior>30</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="7" z="0">
-      <label>8</label>
+      <label>puppy</label>
       <direction>west</direction>
       <behavior>30</behavior>
       <type>griditem</type>
     </item>
     <item x="7" y="7" z="0">
-      <label>8</label>
+      <label>puppy</label>
       <direction>west</direction>
       <behavior>30</behavior>
       <type>griditem</type>

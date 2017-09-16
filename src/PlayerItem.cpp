@@ -294,8 +294,7 @@ bool PlayerItem::isCollidingWithDoor( const Direction& direction, Mediator* medi
         int oldX = this->x;
         int oldY = this->y;
 
-        // Acceso a la puerta
-        switch( direction )
+        switch ( direction )
         {
                 case North:
                 case Northeast:
@@ -303,17 +302,17 @@ bool PlayerItem::isCollidingWithDoor( const Direction& direction, Mediator* medi
                 case South:
                 case Southeast:
                 case Southwest:
-                        // Si la sala tiene puerta norte o sur se comprueba si ha chocado con alguna jamba
-                        if( door )
+                        // for rooms with north or south door
+                        if ( door )
                         {
-                                // Si choca contra la jamba izquierda desplaza al jugador a la derecha
-                                if( door->getLeftJamb()->getId() == id && this->y <= door->getLeftJamb()->getY() )
+                                // move player right when player hits left jamb
+                                if ( door->getLeftJamb()->getId() == id && this->y <= door->getLeftJamb()->getY() )
                                 {
                                         this->y--;
                                         this->x = previousPosition.getX();
                                 }
-                                // Si choca contra la jamba derecha desplaza al jugador a la izquierda
-                                else if( door->getRightJamb()->getId() == id && this->y - getDataOfFreeItem()->widthY >= door->getRightJamb()->getY() - door->getRightJamb()->getWidthY() )
+                                // move player left when player collides with right jamb
+                                else if ( door->getRightJamb()->getId() == id && this->y - getDataOfFreeItem()->widthY >= door->getRightJamb()->getY() - door->getRightJamb()->getWidthY() )
                                 {
                                         this->y++;
                                         this->x = previousPosition.getX();
@@ -327,17 +326,17 @@ bool PlayerItem::isCollidingWithDoor( const Direction& direction, Mediator* medi
                 case West:
                 case Westnorth:
                 case Westsouth:
-                        // Si la sala tiene puerta este u oeste se comprueba si ha chocado con alguna jamba
-                        if( door )
+                        // for rooms with east or west door
+                        if ( door )
                         {
-                                // Si choca contra la jamba izquierda desplaza al jugador a la derecha
-                                if( door->getLeftJamb()->getId() == id && this->x >= door->getLeftJamb()->getX() )
+                                // move player right when player hits left jamb
+                                if ( door->getLeftJamb()->getId() == id && this->x >= door->getLeftJamb()->getX() )
                                 {
                                         this->x++;
                                         this->y = previousPosition.getY();
                                 }
-                                // Si choca contra la jamba derecha desplaza al jugador a la izquierda
-                                else if( door->getRightJamb()->getId() == id && this->x - getDataOfFreeItem()->widthX <= door->getRightJamb()->getX() + door->getRightJamb()->getWidthX() )
+                                // move player left when player collides with right jamb
+                                else if ( door->getRightJamb()->getId() == id && this->x - getDataOfFreeItem()->widthX <= door->getRightJamb()->getX() + door->getRightJamb()->getWidthX() )
                                 {
                                         this->x--;
                                         this->y = previousPosition.getY();
@@ -371,7 +370,7 @@ bool PlayerItem::isNotUnderDoor( const Direction& direction, Mediator* mediator 
                 case West:
                 case Westnorth:
                 case Westsouth:
-                        result = ( ! door || ( door && !door->isUnderDoor( this->x, this->y, this->z ) ) );
+                        result = ( ! door || ( door && ! door->isUnderDoor( this->x, this->y, this->z ) ) );
                         break;
 
                 default:
@@ -482,7 +481,7 @@ void PlayerItem::addLives( unsigned char lives )
         if( this->lives < 100 )
         {
                 this->lives += lives;
-                GameManager::getInstance()->addLives( WhichPlayer( this->getLabel () ), lives );
+                GameManager::getInstance()->addLives( this->getLabel (), lives );
         }
 }
 
@@ -491,15 +490,15 @@ void PlayerItem::loseLife()
         if( this->lives > 0 )
         {
                 this->lives--;
-                GameManager::getInstance()->loseLife( WhichPlayer( this->getLabel () ) );
+                GameManager::getInstance()->loseLife( this->getLabel () );
         }
-        GameManager::getInstance()->emptyHandbag( WhichPlayer( this->getLabel () ) );
+        GameManager::getInstance()->emptyHandbag( this->getLabel () );
 }
 
-void PlayerItem::takeTool( short label )
+void PlayerItem::takeTool( const std::string& label )
 {
         this->tools.push_back( label );
-        GameManager::getInstance()->takeTool( MagicItem( label ) );
+        GameManager::getInstance()->takeMagicItem( label );
 }
 
 void PlayerItem::addAmmo( const unsigned short ammo )
@@ -520,7 +519,7 @@ void PlayerItem::consumeAmmo()
 void PlayerItem::activateHighSpeed()
 {
         this->highSpeed = 99;
-        GameManager::getInstance()->addHighSpeed( WhichPlayer( this->getLabel() ), 99 );
+        GameManager::getInstance()->addHighSpeed( this->getLabel(), 99 );
 }
 
 void PlayerItem::decreaseHighSpeed()
@@ -528,14 +527,14 @@ void PlayerItem::decreaseHighSpeed()
         if ( this->highSpeed > 0 )
         {
                 this->highSpeed--;
-                GameManager::getInstance()->decreaseHighSpeed( WhichPlayer( this->getLabel() ) );
+                GameManager::getInstance()->decreaseHighSpeed( this->getLabel() );
         }
 }
 
 void PlayerItem::addHighJumps( unsigned char highJumps )
 {
         this->highJumps += highJumps;
-        GameManager::getInstance()->addHighJumps( WhichPlayer( this->getLabel() ), highJumps );
+        GameManager::getInstance()->addHighJumps( this->getLabel(), highJumps );
 }
 
 void PlayerItem::decreaseHighJumps()
@@ -543,7 +542,7 @@ void PlayerItem::decreaseHighJumps()
         if ( this->highJumps > 0 )
         {
                 this->highJumps--;
-                GameManager::getInstance()->decreaseHighJumps( WhichPlayer( this->getLabel() ) );
+                GameManager::getInstance()->decreaseHighJumps( this->getLabel() );
         }
 }
 
@@ -553,7 +552,7 @@ void PlayerItem::activateShield()
         this->shieldTimer->start();
         this->shieldTime = 25.000;
         this->shield = shieldTime - shieldTimer->getValue();
-        GameManager::getInstance()->addShield( WhichPlayer( this->getLabel() ), this->shield );
+        GameManager::getInstance()->addShield( this->getLabel(), this->shield );
 }
 
 void PlayerItem::decreaseShield()
@@ -561,7 +560,7 @@ void PlayerItem::decreaseShield()
         if ( this->shieldTimer != 0 )
         {
                 this->shield = shieldTime - shieldTimer->getValue();
-                GameManager::getInstance()->decreaseShield( WhichPlayer( this->getLabel() ), this->shield );
+                GameManager::getInstance()->modifyShield( this->getLabel(), this->shield );
         }
 
         if ( this->shield < 0 )
@@ -630,16 +629,16 @@ void PlayerItem::setShieldTime ( double shield )
 {
         this->shieldTime = shield;
 
-        if( this->shieldTime > 0 && this->shieldTimer == 0 )
+        if ( this->shieldTime > 0 && this->shieldTimer == 0 )
         {
                 this->shieldTimer = new HPC();
                 this->shieldTimer->start();
         }
 }
 
-bool PlayerItem::hasTool( const MagicItem& label ) const
+bool PlayerItem::hasTool( const std::string& label ) const
 {
-        return std::find( this->tools.begin (), this->tools.end (), short( label ) ) != this->tools.end ();
+        return std::find( this->tools.begin (), this->tools.end (), label ) != this->tools.end ();
 }
 
 }

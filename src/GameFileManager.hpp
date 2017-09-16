@@ -43,14 +43,14 @@ public:
 
        /**
         * Guarda los datos necesarios para grabar la partida
-        * @param roomId Identificador de la sala donde se ha cogido el pez de la reencarnación
-        * @param label Etiqueta del jugador que ha cogido el pez
+        * @param room Room where reincarnation fish is caught
+        * @param label Name of character who caught the fish
         * @param x Coordenada X donde está situado el pez de la reencarnación
         * @param y Coordenada Y donde está situado el pez de la reencarnación
         * @param z Coordenada Z donde está situado el pez de la reencarnación
         * @param direction Dirección a la que mira el jugador en el momento de coger el pez
         */
-        void assignFishData ( const std::string& roomId, short label, int x, int y, int z, const Direction& direction ) ;
+        void assignFishData ( const std::string& room, const std::string& label, int x, int y, int z, const Direction& direction ) ;
 
        /**
         * Carga una partida de un archivo XML
@@ -69,22 +69,22 @@ public:
 private:
 
        /**
-        * Establece el estado de los jugadores (vidas, bocina, bolso y rosquillas)
-        * @param playerSequence Datos obtenidos de los jugadores de la partida cargada
+        * Updates attributes like number of lives, horn with donuts, bag
+        * @param players Data for players from loaded game file
         */
-        void assignPlayerStatus ( const sgxml::players::player_sequence& playerSequence ) ;
+        void updateAttributesOfPlayers ( const sgxml::players::player_sequence& players ) ;
 
 private:
 
        /**
-        * Identificador de la sala donde se ha cogido el pez de la reencarnación
+        * Room where reincarnation fish is caught
         */
-        std::string roomId ;
+        std::string room ;
 
        /**
-        * Label of player who has caught the fish
+        * Name of character who caught the fish
         */
-        short label ;
+        std::string nameOfCharacterWhoCaughtTheFish ;
 
        /**
         * Coordenada X donde está situado el pez de la reencarnación

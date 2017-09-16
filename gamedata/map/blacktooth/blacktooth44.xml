@@ -375,7 +375,7 @@
 
   <items>
     <item x="6" y="2" z="-1">
-      <label>3022</label>
+      <label>market-door-south</label>
       <direction>south</direction>
       <behavior>0</behavior>
       <type>door</type>

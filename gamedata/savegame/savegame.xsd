@@ -25,7 +25,7 @@
             <xsd:element name="room" maxOccurs="unbounded">
               <xsd:complexType>
                 <xsd:sequence>
-                  <xsd:element name="label" type="xsd:short"/>
+                  <xsd:element name="label" type="xsd:string"/>
                 </xsd:sequence>
                 <xsd:attribute name="filename" type="xsd:string" use="required"/>
               </xsd:complexType>
@@ -51,7 +51,7 @@
                   <xsd:element name="hasHandbag" type="xsd:boolean"/>
                   <xsd:element name="ammo" type="xsd:int"/>
                 </xsd:sequence>
-                <xsd:attribute name="label" type="xsd:short" use="required"/>
+                <xsd:attribute name="label" type="xsd:string" use="required"/>
               </xsd:complexType>
             </xsd:element>
           </xsd:sequence>

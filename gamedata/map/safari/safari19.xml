@@ -965,397 +965,397 @@
 
   <items>
     <item x="0" y="7" z="0">
-      <label>301</label>
+      <label>safari-wall-y-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="10" z="0">
-      <label>301</label>
+      <label>safari-wall-y-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="8" z="-1">
-      <label>2077</label>
+      <label>safari-door-north</label>
       <direction>northwest</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="9" y="0" z="0">
-      <label>300</label>
+      <label>safari-wall-x-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="10" y="0" z="0">
-      <label>304</label>
+      <label>safari-wall-x-3</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="11" y="0" z="0">
-      <label>300</label>
+      <label>safari-wall-x-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="14" y="0" z="0">
-      <label>300</label>
+      <label>safari-wall-x-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="15" y="0" z="0">
-      <label>304</label>
+      <label>safari-wall-x-3</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="16" y="0" z="0">
-      <label>300</label>
+      <label>safari-wall-x-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="12" y="0" z="-1">
-      <label>4077</label>
+      <label>safari-door-east</label>
       <direction>eastsouth</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="12" y="11" z="-1">
-      <label>5077</label>
+      <label>safari-door-west</label>
       <direction>westsouth</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="1" y="6" z="0">
-      <label>300</label>
+      <label>safari-wall-x-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="6" z="-1">
-      <label>312</label>
+      <label>hidden-wall-x</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="6" z="0">
-      <label>304</label>
+      <label>safari-wall-x-3</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="6" z="-1">
-      <label>312</label>
+      <label>hidden-wall-x</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="6" z="0">
-      <label>300</label>
+      <label>safari-wall-x-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="6" z="-1">
-      <label>312</label>
+      <label>hidden-wall-x</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="6" z="0">
-      <label>302</label>
+      <label>safari-wall-x-2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="6" z="-1">
-      <label>312</label>
+      <label>hidden-wall-x</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="5" y="6" z="0">
-      <label>302</label>
+      <label>safari-wall-x-2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="5" y="6" z="-1">
-      <label>312</label>
+      <label>hidden-wall-x</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="6" y="6" z="0">
-      <label>300</label>
+      <label>safari-wall-x-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="6" y="6" z="-1">
-      <label>312</label>
+      <label>hidden-wall-x</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="7" y="6" z="0">
-      <label>304</label>
+      <label>safari-wall-x-3</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="7" y="6" z="-1">
-      <label>312</label>
+      <label>hidden-wall-x</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="8" y="6" z="0">
-      <label>300</label>
+      <label>safari-wall-x-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="8" y="6" z="1">
-      <label>312</label>
+      <label>hidden-wall-x</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="8" y="6" z="0">
-      <label>303</label>
+      <label>safari-wall-y-2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="8" y="6" z="1">
-      <label>313</label>
+      <label>hidden-wall-y</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="8" y="5" z="0">
-      <label>301</label>
+      <label>safari-wall-y-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="8" y="5" z="-1">
-      <label>313</label>
+      <label>hidden-wall-y</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="8" y="4" z="0">
-      <label>305</label>
+      <label>safari-wall-y-3</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="8" y="4" z="-1">
-      <label>313</label>
+      <label>hidden-wall-y</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="8" y="3" z="0">
-      <label>305</label>
+      <label>safari-wall-y-3</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="8" y="3" z="-1">
-      <label>313</label>
+      <label>hidden-wall-y</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="8" y="2" z="0">
-      <label>301</label>
+      <label>safari-wall-y-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="8" y="2" z="-1">
-      <label>313</label>
+      <label>hidden-wall-y</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="8" y="1" z="0">
-      <label>303</label>
+      <label>safari-wall-y-2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="8" y="1" z="-1">
-      <label>313</label>
+      <label>hidden-wall-y</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="16" y="1" z="0">
-      <label>25</label>
+      <label>cylinder</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="16" y="1" z="1">
-      <label>25</label>
+      <label>cylinder</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="16" y="1" z="2">
-      <label>25</label>
+      <label>cylinder</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="16" y="1" z="3">
-      <label>25</label>
+      <label>cylinder</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="16" y="1" z="4">
-      <label>25</label>
+      <label>cylinder</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="16" y="1" z="5">
-      <label>25</label>
+      <label>cylinder</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="16" y="1" z="6">
-      <label>16</label>
+      <label>extra-life</label>
       <direction>west</direction>
       <behavior>20</behavior>
       <type>freeitem</type>
     </item>
     <item x="10" y="2" z="0">
-      <label>11</label>
+      <label>brick2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="10" y="3" z="0">
-      <label>11</label>
+      <label>brick2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="10" y="4" z="0">
-      <label>11</label>
+      <label>brick2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="10" y="2" z="1">
-      <label>13</label>
+      <label>drum</label>
       <direction>none</direction>
       <behavior>12</behavior>
       <type>freeitem</type>
     </item>
     <item x="10" y="4" z="1">
-      <label>13</label>
+      <label>drum</label>
       <direction>none</direction>
       <behavior>12</behavior>
       <type>freeitem</type>
     </item>
     <item x="10" y="3" z="1">
-      <label>37</label>
+      <label>trampoline</label>
       <direction>none</direction>
       <behavior>24</behavior>
       <type>freeitem</type>
     </item>
     <item x="3" y="7" z="0">
-      <label>12</label>
+      <label>bars-ns</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="3" y="7" z="1">
-      <label>12</label>
+      <label>bars-ns</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="3" y="7" z="2">
-      <label>12</label>
+      <label>bars-ns</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="3" y="8" z="0">
-      <label>12</label>
+      <label>bars-ns</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="3" y="8" z="1">
-      <label>12</label>
+      <label>bars-ns</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="3" y="8" z="2">
-      <label>12</label>
+      <label>bars-ns</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="3" y="9" z="0">
-      <label>12</label>
+      <label>bars-ns</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="3" y="9" z="1">
-      <label>12</label>
+      <label>bars-ns</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="3" y="9" z="2">
-      <label>12</label>
+      <label>bars-ns</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="3" y="10" z="0">
-      <label>12</label>
+      <label>bars-ns</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="3" y="10" z="1">
-      <label>12</label>
+      <label>bars-ns</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="3" y="10" z="2">
-      <label>12</label>
+      <label>bars-ns</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>freeitem</type>
     </item>
     <item x="4" y="10" z="0">
-      <label>34</label>
+      <label>siren</label>
       <direction>none</direction>
       <behavior>15</behavior>
       <type>freeitem</type>
     </item>
     <item x="4" y="10" z="1">
-      <label>13</label>
+      <label>drum</label>
       <direction>none</direction>
       <behavior>12</behavior>
       <type>freeitem</type>

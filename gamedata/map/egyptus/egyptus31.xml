@@ -483,13 +483,13 @@
 
   <items>
     <item x="6" y="3" z="-1">
-      <label>3055</label>
+      <label>egyptus-door-south</label>
       <direction>south</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="0" y="7" z="0">
-      <label>31</label>
+      <label>elevator</label>
       <direction>none</direction>
       <behavior>6</behavior>
       <type>freeitem</type>
@@ -498,7 +498,7 @@
       <extra>1</extra>
     </item>
     <item x="3" y="7" z="0">
-      <label>44</label>
+      <label>bubble-robot</label>
       <direction>none</direction>
       <behavior>16</behavior>
       <type>freeitem</type>

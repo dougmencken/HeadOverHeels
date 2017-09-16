@@ -138,10 +138,10 @@ public:
         /**
          * Busca la vía de entrada de un jugador a una sala
          * @param room El nombre del archivo de la sala
-         * @param playerId Un jugador
+         * @param thePlayer Un jugador
          * @return La dirección de entrada a la sala
          */
-        PlayerStartPosition* findPlayerPosition ( const std::string& room, const WhichPlayer& playerId ) ;
+        PlayerInitialPosition* findPlayerPosition ( const std::string& room, const std::string& thePlayer ) ;
 
 protected:
 

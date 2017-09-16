@@ -1716,9 +1716,10 @@ namespace rxml
   class item: public ::xml_schema::type
   {
     public:
+
     // label
-    //
-    typedef ::xml_schema::short_ label_type;
+
+    typedef ::xml_schema::string label_type;
     typedef ::xsd::cxx::tree::traits< label_type, char > label_traits;
 
     const label_type&
@@ -1729,6 +1730,9 @@ namespace rxml
 
     void
     label (const label_type& x);
+
+    void
+    label (::std::auto_ptr< label_type > p);
 
     // direction
     //
@@ -1862,11 +1866,13 @@ namespace rxml
     // Implementation
     //
     protected:
+
     void
     parse (::xsd::cxx::xml::dom::parser< char >&,
            ::xml_schema::flags);
 
     private:
+
     ::xsd::cxx::tree::one< label_type > label_;
     ::xsd::cxx::tree::one< direction_type > direction_;
     ::xsd::cxx::tree::one< behavior_type > behavior_;

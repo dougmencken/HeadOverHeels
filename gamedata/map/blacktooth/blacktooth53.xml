@@ -453,67 +453,67 @@
 
   <items>
     <item x="0" y="0" z="0">
-      <label>234</label>
+      <label>market-wall-x-3</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="0" z="0">
-      <label>232</label>
+      <label>market-wall-x-2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="0" z="0">
-      <label>234</label>
+      <label>market-wall-x-3</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="5" y="0" z="0">
-      <label>232</label>
+      <label>market-wall-x-2</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="0" z="-1">
-      <label>4022</label>
+      <label>market-door-east</label>
       <direction>east</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="2" y="9" z="-1">
-      <label>5022</label>
+      <label>market-door-west</label>
       <direction>west</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="3" y="2" z="0">
-      <label>3</label>
+      <label>spikes</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="4" z="0">
-      <label>3</label>
+      <label>spikes</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="4" z="0">
-      <label>32</label>
+      <label>helicopter-bug</label>
       <direction>none</direction>
       <behavior>10</behavior>
       <type>freeitem</type>
     </item>
     <item x="0" y="5" z="0">
-      <label>3</label>
+      <label>spikes</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="7" z="0">
-      <label>3</label>
+      <label>spikes</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>

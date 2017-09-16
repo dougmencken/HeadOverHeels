@@ -104,7 +104,7 @@ void UserControlled::wait( PlayerItem * player )
 
                 // Si el jugador se detiene entonces se para la cuenta atrás
                 // del conejo que proporciona doble velocidad
-                if ( player->getLabel() == WhichPlayer( Head ) && player->getHighSpeed() > 0 && this->highSpeedSteps < 4 )
+                if ( player->getLabel() == "head" && player->getHighSpeed() > 0 && this->highSpeedSteps < 4 )
                 {
                         this->highSpeedSteps = 0;
                 }
@@ -117,7 +117,7 @@ void UserControlled::move( PlayerItem * player )
         if ( ! player->isFrozen() )
         {
                 // Si el jugador ha cogido velocidad extra entonces se divide su velocidad habitual
-                double speed = player->getSpeed() / ( player->getLabel() == WhichPlayer( Head ) && player->getHighSpeed() > 0 ? 2 : 1 );
+                double speed = player->getSpeed() / ( player->getLabel() == "head" && player->getHighSpeed() > 0 ? 2 : 1 );
 
                 // Si ha llegado el momento de moverse
                 if ( speedTimer->getValue() > speed )
@@ -129,7 +129,7 @@ void UserControlled::move( PlayerItem * player )
                         bool moved = whatToDo->move( this, &activity, true );
 
                         // Si se ha movido y no ha cambiado de estado entonces se cuenta un paso
-                        if ( player->getLabel() == WhichPlayer( Head ) && player->getHighSpeed() > 0 && moved && activity != Fall )
+                        if ( player->getLabel() == "head" && player->getHighSpeed() > 0 && moved && activity != Fall )
                         {
                                 this->highSpeedSteps++;
 
@@ -152,7 +152,7 @@ void UserControlled::move( PlayerItem * player )
 void UserControlled::autoMove( PlayerItem * player )
 {
         // Si el jugador ha cogido velocidad extra entonces se divide su velocidad habitual
-        double speed = player->getSpeed() / ( player->getLabel() == WhichPlayer( Head ) && player->getHighSpeed() > 0 ? 2 : 1 );
+        double speed = player->getSpeed() / ( player->getLabel() == "head" && player->getHighSpeed() > 0 ? 2 : 1 );
 
         // Si el elemento está activo y ha llegado el momento de moverse, entonces:
         if ( speedTimer->getValue() > speed )
@@ -261,13 +261,13 @@ void UserControlled::jump( PlayerItem * player )
                         player->checkPosition( 0, 0, -1, Add );
                         // Si está sobre un trampolín o tiene el conejo de los grandes saltos, el jugador dará un gran salto
                         activity = ( player->getMediator()->collisionWithByBehavior( TrampolineBehavior ) ||
-                                        ( player->getHighJumps() > 0 && player->getLabel() == WhichPlayer( Heels ) )
+                                        ( player->getHighJumps() > 0 && player->getLabel() == "heels" )
                                 ? HighJump
                                 : RegularJump );
                         // Si está sobre el trampolín emite el sonido propio de este elemento
                         if ( activity == HighJump )
                         {
-                                if ( player->getLabel() == WhichPlayer( Heels ) )
+                                if ( player->getLabel() == "heels" )
                                 {
                                         player->decreaseHighJumps();
                                 }
@@ -346,7 +346,7 @@ void UserControlled::glide( PlayerItem * player )
         }
 
         // Si ha pasado el tiempo necesario para mover el elemento:
-        if ( speedTimer->getValue() > player->getSpeed() * ( player->getLabel() == WhichPlayer( HeadAndHeels ) ? 2 : 1 ) )
+        if ( speedTimer->getValue() > player->getSpeed() * ( player->getLabel() == "headoverheels" ? 2 : 1 ) )
         {
                 whatToDo = MoveKindOfActivity::getInstance();
                 ActivityOfItem subactivity;
@@ -398,14 +398,14 @@ void UserControlled::wayInTeletransport( PlayerItem * player )
         switch ( activity )
         {
                 case StartWayInTeletransport:
-                        // Almacena la orientación de entrada
+                        // preserve orientation of player
                         player->setOrientation( player->getDirection() );
-                        // Cambia a las burbujas pero conservando la etiqueta del jugador
+                        // change to bubbles preserving label of player
                         playerData = player->getDataOfFreeItem() ;
-                        player->changeItemData( itemDataManager->findItemByLabel( transitionDataLabel ), NoDirection );
-                        // Las burbujas se animarán marcha atrás
+                        player->changeItemData( itemDataManager->findItemByLabel( labelOfTransitionViaTeleport ), NoDirection );
+                        // backward animation of bubbles
                         player->setBackwardMotion();
-                        // Inicia el teletransporte
+                        // begin teleportation
                         activity = WayInTeletransport;
                         break;
 
@@ -435,7 +435,7 @@ void UserControlled::wayOutTeletransport( PlayerItem * player )
                         // Almacena la orientación de salida
                         player->setOrientation( player->getDirection() );
                         // Cambia a las burbujas pero conservando la etiqueta del jugador
-                        player->changeItemData( itemDataManager->findItemByLabel( transitionDataLabel ), NoDirection );
+                        player->changeItemData( itemDataManager->findItemByLabel( labelOfTransitionViaTeleport ), NoDirection );
                         // Inicia el teletransporte
                         activity = WayOutTeletransport;
                         break;
@@ -445,7 +445,7 @@ void UserControlled::wayOutTeletransport( PlayerItem * player )
                         if ( player->animate() )
                         {
                                 player->addToZ( -1 );
-                                player->setExit( player->getMediator()->collisionWithByLabel( TeleportLabel ) ? ByTeleport : ByTeleportToo );
+                                player->setExit( player->getMediator()->collisionWithByLabel( "teleport" ) ? ByTeleport : ByTeleportToo );
                         }
                         break;
 
@@ -464,7 +464,7 @@ void UserControlled::destroy( PlayerItem* player )
                         if ( player->getShieldTime() == 0 )
                         {
                                 // Cambia a las burbujas pero conservando la etiqueta del jugador
-                                player->changeItemData( itemDataManager->findItemByLabel( transitionDataLabel ), NoDirection );
+                                player->changeItemData( itemDataManager->findItemByLabel( labelOfTransitionViaTeleport ), NoDirection );
                                 // Inicia la destrucción
                                 activity = Destroy;
                         }
@@ -492,7 +492,7 @@ void UserControlled::destroy( PlayerItem* player )
 void UserControlled::useHooter( PlayerItem* player )
 {
         // El jugador puede disparar si tiene la bocina y rosquillas
-        if ( player->hasTool( Horn ) && player->getAmmo() > 0 )
+        if ( player->hasTool( "horn" ) && player->getAmmo() > 0 )
         {
                 this->fireFromHooterIsPresent = true;
 
@@ -535,7 +535,7 @@ void UserControlled::useHooter( PlayerItem* player )
 void UserControlled::take( PlayerItem * player )
 {
         // El jugador puede coger objetos si tiene el bolso
-        if ( player->hasTool( Handbag ) )
+        if ( player->hasTool( "handbag" ) )
         {
                 Mediator* mediator = player->getMediator();
                 Item* takenItem = 0;

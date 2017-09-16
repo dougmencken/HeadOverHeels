@@ -35,7 +35,7 @@ void ItemDataManager::loadItems ()
                 {
                         std::auto_ptr< ItemData > item( new ItemData );
 
-                        item->label = ( *i ).label();                           // unique label of this item
+                        item->label = ( *i ).label();                           // unique name of this item
                         item->directionFrames = ( *i ).directionFrames();       // number of frames for this direction of item
                         item->mortal = ( *i ).mortal();                         // offensive or harmless
                         item->weight = ( *i ).weight();                         // how long, in milliseconds, it falls
@@ -45,49 +45,49 @@ void ItemDataManager::loadItems ()
                         item->frameWidth = ( *i ).picture().frameWidth();       // width, in pixels, of frame
                         item->frameHeight = ( *i ).picture().frameHeight();     // height, in pixels, of frame
 
-                        // item's frames are stored in motion vector as long as item isn't door
+                         // item's frames are stored in motion vector as long as item isn’t door
                         if ( ! ( *i ).door ().present () )
                         {
+                                std::cout << "got frames for \"" << item->label << "\"" << std::endl ;
                                 createPictureFrames( item.get(), isomot::GameManager::getInstance()->getChosenGraphicSet() );
                         }
 
-                        // El elemento puede no tener sombra
+                        // element may have no shadow
                         if ( ( *i ).shadow ().present () )
                         {
-                                // Ruta a la sombra del elemento
                                 item->setNameOfShadowFile( ( *i ).shadow().get().file() );
-                                // Anchura en píxeles de un fotograma de sombra
                                 item->shadowWidth = ( *i ).shadow().get().shadowWidth();
-                                // Altura en píxeles de un fotograma de sombra
                                 item->shadowHeight = ( *i ).shadow().get().shadowHeight();
-                                // Se almacenan los fotogramas en el vector shadows
+
+                                // frames of shadow
                                 createShadowFrames( item.get(), isomot::GameManager::getInstance()->getChosenGraphicSet() );
                         }
 
-                        // Sólo unos pocos elementos tienen fotogramas extra
+                        // only few items have many frames
                         if ( ( *i ).extraFrames ().present () )
                         {
                                 item->extraFrames = ( *i ).extraFrames().get();
                         }
 
-                        // Secuencia de animación
+                        // sequence of animation
                         for ( ixml::item::frame_const_iterator j = ( *i ).frame().begin (); j != ( *i ).frame().end (); ++j )
                         {
                                 item->frames.push_back( *j );
                         }
 
-                        // Si el elemento es una puerta, tiene tres parámetros que definen sus dimensiones
+                        // door has three parameters which define its dimensions
                         if ( ( *i ).door ().present () )
                         {
-                                // Una puerta en realidad son tres elementos distintos: dintel, jamba izquierda y jamba derecha
+                                std::cout << "got door \"" << item->label << "\"" << std::endl ;
+
+                                // door is actually three items: lintel, left jamb and right jamb
                                 ItemData lintel( *item );
                                 ItemData leftJamb( *item );
                                 ItemData rightJamb( *item );
-                                // Dimensiones de las partes de una puerta
+
                                 DoorMeasures dm;
 
-                                // Anchura espacial en el eje X de las tres partes de la puerta
-                                // Se almacenan en el siguiente orden: jamba izquierda, jamba derecha y dintel
+                                // width at axis X of three parts ( left jamb, right jamb and lintel ) of door
                                 for ( ixml::item::widthX_const_iterator j = ( *i ).widthX().begin(); j != ( *i ).widthX().end(); ++j )
                                 {
                                         if ( dm.leftJambWidthX == 0 )
@@ -104,8 +104,7 @@ void ItemDataManager::loadItems ()
                                         }
                                 }
 
-                                // Anchura espacial en el eje Y de las tres partes de la puerta
-                                // Se almacenan en el siguiente orden: jamba izquierda, jamba derecha y dintel
+                                // width at axis Y of three parts ( left jamb, right jamb and lintel ) of door
                                 for ( ixml::item::widthY_const_iterator j = ( *i ).widthY().begin(); j != ( *i ).widthY().end(); ++j )
                                 {
                                         if ( dm.leftJambWidthY == 0 )
@@ -122,8 +121,7 @@ void ItemDataManager::loadItems ()
                                         }
                                 }
 
-                                // Altura espacial de las tres partes de la puerta
-                                // Se almacenan en el siguiente orden: jamba izquierda, jamba derecha y dintel
+                                // height of three parts ( left jamb, right jamb and lintel ) of door
                                 for ( ixml::item::height_const_iterator j = ( *i ).height().begin(); j != ( *i ).height().end(); ++j )
                                 {
                                         if ( dm.leftJambHeight == 0 )
@@ -140,7 +138,7 @@ void ItemDataManager::loadItems ()
                                         }
                                 }
 
-                                // load graphics for door as its three parts
+                                // load graphics for door
                                 BITMAP* picture = load_png( ( isomot::sharePath() + isomot::GameManager::getInstance()->getChosenGraphicSet() + "/" + item->getNameOfFile( ) ).c_str () , 0 );
                                 if ( picture == 0 )
                                 {
@@ -151,24 +149,25 @@ void ItemDataManager::loadItems ()
                                         throw "picture " + item->getNameOfFile( ) + " at " + isomot::GameManager::getInstance()->getChosenGraphicSet() + " is absent" ;
                                 }
 
-                                // Creación de la jamba izquierda
-                                BITMAP* left = cutOutLeftJamb( picture, dm, ( *i ).door().get() );
-                                leftJamb.motion.push_back( left );
+                                // cut out left jamb
+                                BITMAP* leftJambImage = cutOutLeftJamb( picture, dm, ( *i ).door().get() );
+                                leftJamb.label += "~leftjamb";
+                                leftJamb.motion.push_back( leftJambImage );
                                 this->itemData.push_back( leftJamb );
 
-                                // Creación de la jamba derecha
-                                BITMAP* right = cutOutRightJamb( picture, dm, ( *i ).door().get() );
-                                rightJamb.label += 1;
-                                rightJamb.motion.push_back( right );
+                                // cut out right jamb
+                                BITMAP* rightJambImage = cutOutRightJamb( picture, dm, ( *i ).door().get() );
+                                rightJamb.label += "~rightjamb";
+                                rightJamb.motion.push_back( rightJambImage );
                                 this->itemData.push_back( rightJamb );
 
-                                // Creación del dintel
-                                BITMAP* top = cutOutLintel( picture, dm, ( *i ).door().get() );
-                                lintel.label += 2;
-                                lintel.motion.push_back( top );
+                                // cut out lintel
+                                BITMAP* lintelImage = cutOutLintel( picture, dm, ( *i ).door().get() );
+                                lintel.label += "~lintel";
+                                lintel.motion.push_back( lintelImage );
                                 this->itemData.push_back( lintel );
 
-                                // La imagen original no se volverá a utilizar
+                                // bin original image
                                 destroy_bitmap( picture ) ;
                         }
                         else
@@ -202,10 +201,15 @@ void ItemDataManager::freeItems ()
         std::for_each( itemData.begin(), itemData.end(), destroyItemData );
 }
 
-ItemData* ItemDataManager::findItemByLabel( const short label )
+ItemData* ItemDataManager::findItemByLabel( const std::string& label )
 {
         std::list< ItemData >::iterator i = std::find_if( itemData.begin (), itemData.end (), std::bind2nd( EqualItemData(), label ) );
         ItemData* data = ( i != itemData.end() ? static_cast< ItemData * >( &( *i ) ) : 0 );
+
+        if ( data == 0 )
+        {
+                std::cerr << "item with label \"" << label << "\" is absent" << std::endl;
+        }
 
         return data;
 }
@@ -303,16 +307,14 @@ BITMAP* ItemDataManager::cutOutLintel( BITMAP* door, const DoorMeasures& dm, con
 {
         bool ns = ( type == ixml::door::north || type == ixml::door::south );
 
-        // Parte superior de la puerta
+        // top of door
         BITMAP* top = create_bitmap_ex( 32, ( dm.lintelWidthX << 1 ) + ( dm.lintelWidthY << 1 ),
                                               dm.lintelHeight + dm.lintelWidthY + dm.lintelWidthX );
-        // El color de fondo es magenta
-        clear_to_color( top, makecol( 255, 0, 255 ) );
 
-        // Copia la zona a recortar si la puerta está orientada al norte o al sur
+        clear_to_color( top, makecol( 255, 0, 255 ) ); // color of transparency
+
         if ( ns )
         {
-                // Copia la zona rectangular
                 blit( door, top, 0, 0, 0, 0, top->w, dm.lintelHeight + dm.lintelWidthX );
 
                 int delta = top->w - 1;
@@ -350,9 +352,7 @@ BITMAP* ItemDataManager::cutOutLintel( BITMAP* door, const DoorMeasures& dm, con
                 release_bitmap( top );
         }
         else
-        // Copia la zona a recortar si la puerta está orientada al este o al oeste
         {
-                // Copia la zona rectangular
                 blit( door, top, 0, 0, 0, 0, top->w, dm.lintelHeight + dm.lintelWidthY );
 
                 int delta = 0;
@@ -402,9 +402,8 @@ BITMAP* ItemDataManager::cutOutLeftJamb( BITMAP* door, const DoorMeasures& dm, c
         BITMAP* left = create_bitmap_ex ( 32, ( dm.leftJambWidthX << 1 ) + fixWidth + ( dm.leftJambWidthY << 1 ) ,
                                                 dm.leftJambHeight + dm.leftJambWidthY + dm.leftJambWidthX ) ;
 
-        // El color de fondo es magenta
-        clear_to_color( left, makecol( 255, 0, 255 ) );
-        // Copia la zona rectangular
+        clear_to_color( left, makecol( 255, 0, 255 ) ); // color of transparency
+
         blit( door, left, fixY, dm.lintelHeight + dm.lintelWidthY - dm.leftJambWidthY + fixY, 0, 0, left->w, left->h );
 
         return left;
@@ -419,9 +418,8 @@ BITMAP* ItemDataManager::cutOutRightJamb( BITMAP* door, const DoorMeasures& dm, 
         BITMAP* right = create_bitmap_ex ( 32, ( dm.rightJambWidthX << 1 ) + fixWidth + ( dm.rightJambWidthY << 1 ) ,
                                                  dm.rightJambHeight + dm.rightJambWidthY + dm.rightJambWidthX ) ;
 
-        // El color de fondo es magenta
-        clear_to_color( right, makecol( 255, 0, 255 ) );
-        // Copia la zona rectangular
+        clear_to_color( right, makecol( 255, 0, 255 ) );  // color of transparency
+
         blit( door, right, door->w - right->w, dm.lintelHeight + dm.lintelWidthX - dm.rightJambWidthY + fixY, 0, 0, right->w, right->h );
 
         return right;
@@ -436,9 +434,9 @@ void ItemDataManager::destroyItemData( ItemData& itemData )
         std::for_each( itemData.shadows.begin(), itemData.shadows.end(), destroy_bitmap );
 }
 
-bool EqualItemData::operator() ( const ItemData& itemData, short label ) const
+bool EqualItemData::operator() ( const ItemData& itemData, const std::string& label ) const
 {
-        return ( itemData.label == label );
+        return ( itemData.label.compare( label ) == 0 );
 }
 
 }

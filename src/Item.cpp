@@ -10,11 +10,11 @@
 namespace isomot
 {
 
-Item::Item( ItemData* itemData, int z, const Direction& direction )
+Item::Item( ItemData* data, int z, const Direction& direction )
 : Mediated(),
         id( 0 ),
-        label( itemData->label ),
-        dataOfItem( itemData ),
+        label( data->label ),
+        dataOfItem( data ),
         z( z ),
         direction( direction ),
         frameIndex( 0 ),
@@ -27,8 +27,8 @@ Item::Item( ItemData* itemData, int z, const Direction& direction )
 {
         this->offset.first = this->offset.second = 0;
 
-        // Si el elemento tiene más de un fotograma por dirección entonces tiene animación
-        if ( ( itemData->motion.size() - itemData->extraFrames ) / itemData->directionFrames > 1 )
+        // item with more than one frame per direction has animation
+        if ( ( data->motion.size() - data->extraFrames ) / data->directionFrames > 1 )
         {
                 motionTimer.start();
         }

@@ -3,14 +3,14 @@
 <sounds xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="sounds.xsd">
 
-  <item label="0">
+  <item label="gui">
     <state id="mistake">
       <file>sound/o-ou.wav</file>
     </state>
   </item>
 
-  <!-- Brick #1 -->
-  <item label="1">
+  <!-- Brick number one -->
+  <item label="brick1">
     <state id="destroy">
       <file>sound/destruction.wav</file>
     </state>
@@ -187,7 +187,7 @@
   </item>
 
   <!-- Ball -->
-  <item label="23">
+  <item label="ball">
     <state id="fall">
       <file>sound/fall.wav</file>
     </state>
@@ -258,14 +258,14 @@
   </item>
 
   <!-- Teleport -->
-  <item label="35">
+  <item label="teleport">
     <state id="active">
       <file>sound/teleport.wav</file>
     </state>
   </item>
 
-  <!-- Teleport2 -->
-  <item label="83">
+  <!-- Teleport too -->
+  <item label="teleport2">
     <state id="active">
       <file>sound/teleport.wav</file>
     </state>

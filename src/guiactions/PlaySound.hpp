@@ -28,8 +28,8 @@ public:
 
         void doIt ()
         {
-                isomot::SoundManager::getInstance()->stopEverySound (); //stop ( 0, whichSound );
-                isomot::SoundManager::getInstance()->play ( 0, whichSound, /* loop */ false );
+                isomot::SoundManager::getInstance()->stopEverySound (); //stop ( "gui", whichSound );
+                isomot::SoundManager::getInstance()->play ( "gui", whichSound, /* loop */ false );
         }
 
         std::string getNameOfAction ()  {  return "PlaySound" ;  }

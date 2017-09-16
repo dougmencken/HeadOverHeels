@@ -227,14 +227,14 @@ protected:
         bool fireFromHooterIsPresent ;
 
        /**
-        * Datos del elemento empleado como transición en el cambio de sala a través de un telepuerto
+        * Item used as transition when changing room via teleport
         */
-        short transitionDataLabel ;
+        std::string labelOfTransitionViaTeleport ;
 
        /**
         * Item used as fire from hooter
         */
-        short labelOfFireFromHooter ;
+        std::string labelOfFireFromHooter ;
 
        /**
         * Gestor de datos de los elementos del juego

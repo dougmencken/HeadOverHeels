@@ -327,37 +327,37 @@
 
   <items>
     <item x="0" y="0" z="0">
-      <label>270</label>
+      <label>byblos-wall-x-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="0" z="0">
-      <label>270</label>
+      <label>byblos-wall-x-1</label>
       <direction>none</direction>
       <behavior>0</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="0" z="-1">
-      <label>4044</label>
+      <label>byblos-door-east</label>
       <direction>east</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="1" y="9" z="-1">
-      <label>5044</label>
+      <label>byblos-door-west</label>
       <direction>west</direction>
       <behavior>0</behavior>
       <type>door</type>
     </item>
     <item x="1" y="4" z="0">
-      <label>32</label>
+      <label>helicopter-bug</label>
       <direction>none</direction>
       <behavior>16</behavior>
       <type>freeitem</type>
     </item>
     <item x="2" y="5" z="0">
-      <label>32</label>
+      <label>helicopter-bug</label>
       <direction>none</direction>
       <behavior>16</behavior>
       <type>freeitem</type>

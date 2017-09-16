@@ -81,18 +81,18 @@ public:
 
         /**
          * Reproduce un sonido
-         * @param label Identificador del elemento que emite el sonido
+         * @param label Item that gives out sound
          * @param activity Activity of item
          * @param loop Si vale true, el sonido se reproduce continuamente
          */
-        void play ( short label, const ActivityOfItem& activity, bool loop = false ) ;
+        void play ( const std::string& label, const ActivityOfItem& activity, bool loop = false ) ;
 
         /**
          * Detiene la reproducción de un sonido
-         * @param label Identificador del elemento que emite el sonido
+         * @param label Item that gives out sound
          * @param activity Activity of item
          */
-        void stop ( short label, const ActivityOfItem& activity ) ;
+        void stop ( const std::string& label, const ActivityOfItem& activity ) ;
 
         /**
          * Detiene la reproducción de todos los sonidos
@@ -121,11 +121,11 @@ private:
 
         /**
          * Busca un sonido en la tabla
-         * @param label Identificador del elemento que emite el sonido
+         * @param label Item that gives out sound
          * @param activity Activity of item
          * @return El sonido ó 0 si no se encontró
          */
-        SampleData* findSample ( short label, const ActivityOfItem& activity ) ;
+        SampleData* findSample ( const std::string& label, const ActivityOfItem& activity ) ;
 
         /**
          * Traduce el identificador de un estado empleado por Isomot a una cadena
@@ -234,13 +234,13 @@ public:
 
         /**
          * Constructor
-         * @param label Etiqueta unívoca de un elemento
+         * @param label Unique label of item
          */
-        SoundData( short label ) ;
+        SoundData( const std::string& label ) ;
 
         /**
          * Liga un sonido a un elemento del juego
-         * @param state Descripción textual del estado
+         * @param state Descripción del estado
          * @param sampleFileName Nombre del archivo de sonido
          */
         void add ( const std::string& state, const std::string& sampleFileName ) ;
@@ -255,10 +255,9 @@ public:
 public:
 
         /**
-         * Etiqueta unívoca del elemento, es decir, no puede haber dos elementos de distinto tipo con la
-         * misma etiqueta. Las etiquetas son constantes y no cadenas de caracteres
+         * Unique label of item
          */
-        short label ;
+        std::string label ;
 
         /**
          * Hash table of activity / sound pairs. Activity is string from XML file of sounds
@@ -272,20 +271,14 @@ public:
 
 public:
 
-        /**
-         * La etiqueta que identifica a un elemento
-         * @return Un número positivo
-         */
-        short getLabel () const {  return this->label ;  }
+        std::string getLabel () const {  return this->label ;  }
 
 };
 
-/**
- * Objeto-función usado como predicado en la búsqueda de los datos de un sonido del juego
- */
-struct EqualSoundData : public std::binary_function < SoundData, short, bool >
+
+struct EqualSoundData : public std::binary_function < SoundData, std::string, bool >
 {
-        bool operator()( const SoundData& soundData, short label ) const ;
+        bool operator()( const SoundData& soundData, const std::string& label ) const ;
 };
 
 }

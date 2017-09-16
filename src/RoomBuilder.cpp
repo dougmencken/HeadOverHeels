@@ -161,33 +161,33 @@ Room* RoomBuilder::buildRoom ()
                         if ( ( *i ).type () == rxml::type::wall )
                         {
                         }
-                        // Es una puerta
+                        // it’s a door
                         else if ( ( *i ).type () == rxml::type::door )
                         {
                                 Door* door = this->buildDoor( *i );
                                 if ( door == 0 )
                                 {
                                         std::ostringstream oss;
-                                        oss << "oops, can't build a door with coordinates " << ( *i ).x () << ", " << ( *i ).y () << ", " << ( *i ).z () ;
+                                        oss << "oops, can’t build a door with coordinates " << ( *i ).x () << ", " << ( *i ).y () << ", " << ( *i ).z () ;
                                         std::cout << oss.str () << std::endl ;
-                                        throw oss.str ();
+                                        /// throw oss.str ();
                                 }
                                 room->addDoor( door );
                         }
-                        // Es un elemento rejilla
+                        // it’s a grid item
                         else if( ( *i ).type () == rxml::type::griditem )
                         {
                                 GridItem* gridItem = this->buildGridItem( *i );
                                 if ( gridItem == 0 )
                                 {
                                         std::ostringstream oss;
-                                        oss << "oops, can't build a grid item with coordinates " << ( *i ).x () << ", " << ( *i ).y () << ", " << ( *i ).z () ;
+                                        oss << "oops, can’t build a grid item with coordinates " << ( *i ).x () << ", " << ( *i ).y () << ", " << ( *i ).z () ;
                                         std::cout << oss.str () << std::endl ;
-                                        throw oss.str ();
+                                        /// throw oss.str ();
                                 }
                                 room->addItem( gridItem );
                         }
-                        // Es un elemento libre
+                        // it is a free item
                         else if ( ( *i ).type () == rxml::type::freeitem )
                         {
                                 FreeItem* freeItem = this->buildFreeItem( *i );
@@ -206,14 +206,13 @@ Room* RoomBuilder::buildRoom ()
                         }
                 }
 
-                // Calcula los límites de la sala
                 room->calculateBounds();
         }
-        catch( const xml_schema::exception& e )
+        catch ( const xml_schema::exception& e )
         {
                 std::cout << e << std::endl ;
         }
-        catch( const Exception& e )
+        catch ( const Exception& e )
         {
                 std::cout << e.what () << std::endl ;
         }
@@ -221,91 +220,72 @@ Room* RoomBuilder::buildRoom ()
         return this->room;
 }
 
-PlayerItem* RoomBuilder::buildPlayerInTheSameRoom( const WhichPlayer& playerId, const BehaviorOfItem& behaviorId, int x, int y, int z, const Direction& direction )
+PlayerItem* RoomBuilder::buildPlayerInTheSameRoom( const std::string& player, const BehaviorOfItem& behaviorId, int x, int y, int z, const Direction& direction )
 {
-        return buildPlayerInRoom( this->room, playerId, behaviorId, x, y, z, direction );
+        return buildPlayerInRoom( this->room, player, behaviorId, x, y, z, direction );
 }
 
-PlayerItem* RoomBuilder::buildPlayerInRoom( Room* room, const WhichPlayer& playerId, const BehaviorOfItem& behaviorId, int x, int y, int z, const Direction& direction, bool withItem )
+PlayerItem* RoomBuilder::buildPlayerInRoom( Room* room, const std::string& player, const BehaviorOfItem& behaviorId, int x, int y, int z, const Direction& direction, bool withItem )
 {
         PlayerItem* playerItem = 0;
         GameManager* gameManager = GameManager::getInstance();
-        WhichPlayer newWhichPlayer = playerId;
-        BehaviorOfItem newBehaviorOfItem = behaviorId;
+        std::string newPlayer( player );
+        BehaviorOfItem newBehaviorOfPlayer = behaviorId;
 
-        // Si el jugador compuesto se ha quedado sin vidas, se comprueba si alguno de
-        // los jugadores conseva alguna, para crearlo en su lugar
-        if ( gameManager->getLives( playerId ) == 0 )
+        // when composite player ran out of lives, check if any of simple players still survive
+        if ( gameManager->getLives( player ) == 0 )
         {
-                if ( playerId == HeadAndHeels )
+                if ( player == "headoverheels" )
                 {
-                        // Jugador Superviviente
-                        if ( gameManager->getLives( Head ) > 0 )
+                        // jugador superviviente
+                        if ( gameManager->getLives( "head" ) > 0 )
                         {
-                                newWhichPlayer = Head;
-                                newBehaviorOfItem = HeadBehavior;
+                                newPlayer = "head";
+                                newBehaviorOfPlayer = HeadBehavior;
                         }
-                        else if ( gameManager->getLives( Heels ) > 0 )
+                        else if ( gameManager->getLives( "heels" ) > 0 )
                         {
-                                newWhichPlayer = Heels;
-                                newBehaviorOfItem = HeelsBehavior;
+                                newPlayer = "heels";
+                                newBehaviorOfPlayer = HeelsBehavior;
                         }
                         else
                         {
-                                newWhichPlayer = NoPlayer;
+                                newPlayer = "in~buildroom";
                         }
                 }
-                // Es posible que los dos jugadores se unieran en la sala y se hayan quedado sin vidas
+                // it is possible that two players join in room and have no lives
                 else
                 {
-                        if ( gameManager->getLives( Head ) == 0 && gameManager->getLives( Heels ) == 0 )
+                        if ( gameManager->getLives( "head" ) == 0 && gameManager->getLives( "heels" ) == 0 )
                         {
-                                newWhichPlayer = NoPlayer;
+                                newPlayer = "no~lives";
                         }
                 }
         }
 
-        // Se buscan los datos del elemento
-        ItemData* itemData = this->itemDataManager->findItemByLabel( short( newWhichPlayer ) );
+        ItemData* itemData = this->itemDataManager->findItemByLabel( newPlayer );
 
-        // Si se han encontrado y al jugador le quedan vidas, se coloca el elemento en la sala
-        if ( newWhichPlayer != NoPlayer && itemData != 0 )
+        // if it is found and has some lives left, place it in room
+        if ( ( newPlayer == "headoverheels" || newPlayer == "head" || newPlayer == "heels" ) && itemData != 0 )
         {
-                // Para poder crear el jugador le deben quedar vidas
-                if ( gameManager->getLives( newWhichPlayer ) > 0 )
+                if ( gameManager->getLives( newPlayer ) > 0 )
                 {
                         playerItem = new PlayerItem( itemData, x, y, z, direction );
 
-                        // No se pueden llevar elementos a otras salas
+                        // can’t move taken item to other room
                         if ( withItem )
                         {
                                 gameManager->setItemTaken( 0 );
                         }
 
-                        // Asigna las vidas
-                        playerItem->setLives( gameManager->getLives( newWhichPlayer ) );
-
-                        // Asigna la posesión de sus objetos
-                        playerItem->setTools( gameManager->hasTool( newWhichPlayer ) );
-
-                        // Asigna la cantidad de munición disponible
-                        playerItem->setAmmo( gameManager->getDonuts( newWhichPlayer ) );
-
-                        // Asigna la cantidad de grandes saltos disponibles
+                        playerItem->setLives( gameManager->getLives( newPlayer ) );
+                        playerItem->setTools( gameManager->playerTools( newPlayer ) );
+                        playerItem->setAmmo( gameManager->getDonuts( newPlayer ) );
                         playerItem->setHighJumps( gameManager->getHighJumps() );
-
-                        // Asigna el tiempo restante de doble velocidad
                         playerItem->setHighSpeed( gameManager->getHighSpeed() );
+                        playerItem->setShieldTime( gameManager->getShield( newPlayer ) );
+                        playerItem->assignBehavior( newBehaviorOfPlayer, reinterpret_cast< void * >( itemDataManager ) );
 
-                        // Asigna el tiempo restante de inmunidad
-                        playerItem->setShieldTime( gameManager->getShield( newWhichPlayer ) );
-
-                        // Un jugador necesita acceso a los datos de otros elementos dado que los
-                        // necesita para modelar su comportamiento. Por ejemplo: el disparo y el elemento
-                        // de transición entre los telepuertos
-                        playerItem->assignBehavior( newBehaviorOfItem, reinterpret_cast< void * >( itemDataManager ) );
-
-                        // Añade el jugador a la sala
                         room->addPlayer( playerItem );
                 }
         }
@@ -354,23 +334,20 @@ Wall* RoomBuilder::buildWall( const rxml::wall& wall, const char* gfxPrefix )
 GridItem* RoomBuilder::buildGridItem( const rxml::item& item )
 {
         GridItem* gridItem = 0;
-
-        // Se buscan los datos del elemento
         ItemData* itemData = this->itemDataManager->findItemByLabel( item.label () );
 
-        // Si se han encontrado, se coloca el elemento en la sala
+        // when found place item in room
         if ( itemData != 0 )
         {
-                // Hay diferencia entre los enumerados de dirección manejados por el archivo y por las salas
+                // deal with difference between position from file and position in room
                 gridItem = new GridItem( itemData, item.x(), item.y(), ( item.z() > Top ? item.z() * LayerHeight : Top ),
                 item.direction() == rxml::direction::none ? NoDirection : Direction( item.direction() - 1 ) );
 
-                // Datos extra necesarios para el comportamiento del elemento
                 if ( item.behavior() == VolatileTimeBehavior || item.behavior() == VolatileTouchBehavior ||
                      item.behavior() == VolatileWeightBehavior || item.behavior() == VolatileHeavyBehavior ||
                      item.behavior() == VolatilePuppyBehavior )
                 {
-                        gridItem->assignBehavior( BehaviorOfItem( item.behavior() ), reinterpret_cast< void * >( this->itemDataManager->findItemByLabel( BubblesLabel ) ) );
+                        gridItem->assignBehavior( BehaviorOfItem( item.behavior() ), reinterpret_cast< void * >( this->itemDataManager->findItemByLabel( "bubbles" ) ) );
                 }
                 else
                 {
@@ -432,7 +409,7 @@ FreeItem* RoomBuilder::buildFreeItem( const rxml::item& item )
                                 case HunterWaiting4Behavior:
                                         freeItem->assignBehavior(
                                                 BehaviorOfItem( item.behavior () ),
-                                                reinterpret_cast< void * >( this->itemDataManager->findItemByLabel( ImperialGuardLabel ) )
+                                                reinterpret_cast< void * >( this->itemDataManager->findItemByLabel( "imperial-guard" ) )
                                         );
                                         break;
 
@@ -443,7 +420,7 @@ FreeItem* RoomBuilder::buildFreeItem( const rxml::item& item )
                                 case CannonBallBehavior:
                                         freeItem->assignBehavior(
                                                 BehaviorOfItem( item.behavior () ),
-                                                reinterpret_cast< void * >( this->itemDataManager->findItemByLabel( BubblesLabel ) )
+                                                reinterpret_cast< void * >( this->itemDataManager->findItemByLabel( "bubbles" ) )
                                         );
                                         break;
 

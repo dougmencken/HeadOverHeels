@@ -580,9 +580,10 @@ namespace sgxml
   class room: public ::xml_schema::type
   {
     public:
+
     // label
-    //
-    typedef ::xml_schema::short_ label_type;
+
+    typedef ::xml_schema::string label_type;
     typedef ::xsd::cxx::tree::traits< label_type, char > label_traits;
 
     const label_type&
@@ -594,8 +595,11 @@ namespace sgxml
     void
     label (const label_type& x);
 
+    void
+    label (::std::auto_ptr< label_type > p);
+
     // filename
-    //
+
     typedef ::xml_schema::string filename_type;
     typedef ::xsd::cxx::tree::traits< filename_type, char > filename_traits;
 
@@ -631,11 +635,13 @@ namespace sgxml
     // Implementation
     //
     protected:
+
     void
     parse (::xsd::cxx::xml::dom::parser< char >&,
            ::xml_schema::flags);
 
     private:
+
     ::xsd::cxx::tree::one< label_type > label_;
     ::xsd::cxx::tree::one< filename_type > filename_;
   };
@@ -801,8 +807,8 @@ namespace sgxml
     ammo (const ammo_type& x);
 
     // label
-    //
-    typedef ::xml_schema::short_ label_type;
+
+    typedef ::xml_schema::string label_type;
     typedef ::xsd::cxx::tree::traits< label_type, char > label_traits;
 
     const label_type&
@@ -813,6 +819,9 @@ namespace sgxml
 
     void
     label (const label_type& x);
+
+    void
+    label (::std::auto_ptr< label_type > p);
 
     // Constructors
     //

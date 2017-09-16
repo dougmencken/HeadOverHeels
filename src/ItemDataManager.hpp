@@ -51,11 +51,11 @@ public:
         void freeItems () ;
 
         /**
-         * Busca un elemento en la lista
-         * @param label El identificador del elemento a encontrar
-         * @return Un registro con los datos del elemento ó 0 si la búsqueda fracasó
+         * Search for item in the list
+         * @param label Label of item
+         * @return Data of item or 0 when not found
          */
-        ItemData* findItemByLabel ( const short label ) ;
+        ItemData* findItemByLabel ( const std::string& label ) ;
 
 protected:
 
@@ -135,7 +135,7 @@ private:
         };
 
         /**
-         * Extrae el dintel de una puerta
+         * Get lintel from door
          * @param door Un gráfico con una puerta al completo
          * @param dm Medidas espaciales de las partes de la puerta
          * @param type Punto cardinal al que está orientado el vano de la puerta
@@ -144,7 +144,7 @@ private:
         BITMAP * cutOutLintel ( BITMAP * door, const DoorMeasures& dm, const ixml::door::value type ) ;
 
         /**
-         * Extrae la jamba izquierda de una puerta
+         * Get left jamb from door
          * @param door Un gráfico con una puerta al completo
          * @param dm Medidas espaciales de las partes de la puerta
          * @param type Punto cardinal al que está orientado el vano de la puerta
@@ -153,7 +153,7 @@ private:
         BITMAP * cutOutLeftJamb ( BITMAP * door, const DoorMeasures& dm, const ixml::door::value type ) ;
 
         /**
-         * Extrae la jamba derecha de una puerta
+         * Get right jamb from door
          * @param door Un gráfico con una puerta al completo
          * @param dm Medidas espaciales de las partes de la puerta
          * @param type Punto cardinal al que está orientado el vano de la puerta
@@ -181,12 +181,10 @@ protected:
 
 };
 
-/**
- * Objeto-función usado como predicado en la búsqueda de los datos de un elemento del juego
- */
-struct EqualItemData : public std::binary_function< ItemData, short, bool >
+
+struct EqualItemData : public std::binary_function< ItemData, std::string, bool >
 {
-        bool operator() ( const ItemData& itemData, short label ) const ;
+        bool operator() ( const ItemData& itemData, const std::string& label ) const ;
 };
 
 }

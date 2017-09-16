@@ -27,7 +27,7 @@ BonusManager* BonusManager::getInstance ()
         return instance;
 }
 
-void BonusManager::markBonusAsAbsent ( const std::string& fileName, const short label )
+void BonusManager::markBonusAsAbsent ( const std::string& fileName, const std::string& label )
 {
         // search in bonus rooms
         std::list< BonusRoom >::iterator result = std::find( bonusRooms.begin (), bonusRooms.end (), fileName );
@@ -46,7 +46,7 @@ void BonusManager::markBonusAsAbsent ( const std::string& fileName, const short 
         }
 }
 
-bool BonusManager::isPresent ( const std::string& fileName, const short label )
+bool BonusManager::isPresent ( const std::string& fileName, const std::string& label )
 {
         std::list< BonusRoom >::iterator result = std::find( bonusRooms.begin (), bonusRooms.end (), fileName ) ;
 
@@ -66,7 +66,7 @@ void BonusManager::save ( sgxml::bonus::room_sequence& roomSequence )
 {
         for ( std::list< BonusRoom >::iterator r = this->bonusRooms.begin (); r !=this->bonusRooms.end (); ++r )
         {
-                for ( std::list< short >::iterator b = ( *r ).getBonusItems().begin (); b != ( *r ).getBonusItems().end (); ++b )
+                for ( std::list< std::string >::iterator b = ( *r ).getBonusItems().begin (); b != ( *r ).getBonusItems().end (); ++b )
                 {
                         roomSequence.push_back( sgxml::room( *b, ( *r ).getNameOfFile() ) );
                 }
@@ -89,12 +89,12 @@ BonusRoom::~BonusRoom( )
         bonusItems.clear();
 }
 
-void BonusRoom::markBonusAsAbsent ( const short label )
+void BonusRoom::markBonusAsAbsent ( const std::string& label )
 {
         bonusItems.push_back( label ) ;
 }
 
-bool BonusRoom::isPresent ( short label )
+bool BonusRoom::isPresent ( const std::string& label )
 {
         return std::find( bonusItems.begin (), bonusItems.end (), label ) != bonusItems.end () ;
 }

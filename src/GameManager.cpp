@@ -243,9 +243,9 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
                                 draw_sprite( where, background, 0, 0 );
                 }
 
-                WhichPlayer playerId = static_cast< WhichPlayer >( this->isomot->getMapManager()->getActiveRoom()->getMediator()->getActivePlayer()->getLabel() );
-                draw_sprite( where, ( ( playerId == Head || playerId == HeadAndHeels ) ? pictureOfHead : grayPictureOfHead ), 161, 425 );
-                draw_sprite( where, ( ( playerId == Heels || playerId == HeadAndHeels ) ? pictureOfHeels : grayPictureOfHeels ), 431, 425 );
+                std::string player = this->isomot->getMapManager()->getActiveRoom()->getMediator()->getActivePlayer()->getLabel();
+                draw_sprite( where, ( (  player == "head" || player == "headoverheels" ) ? pictureOfHead : grayPictureOfHead ), 161, 425 );
+                draw_sprite( where, ( ( player == "heels" || player == "headoverheels" ) ? pictureOfHeels : grayPictureOfHeels ), 431, 425 );
 
                 draw_sprite( where, ( this->horn ? pictureOfHorn : grayPictureOfHorn ), 33, 425 );
 
@@ -357,263 +357,205 @@ void GameManager::saveGame ( const std::string& fileName )
         gameFileManager->saveGame( fileName );
 }
 
-void GameManager::addLives ( const WhichPlayer& player, unsigned char lives )
+void GameManager::addLives ( const std::string& player, unsigned char lives )
 {
-        switch( player )
+        if ( player == "head" )
         {
-                case Head:
-                        if( this->headLives < 100 )
-                        {
-                                this->headLives += lives;
-                        }
-                        break;
-
-                case Heels:
-                        if( this->heelsLives < 100 )
-                        {
-                                this->heelsLives += lives;
-                        }
-                        break;
-
-                case HeadAndHeels:
-                        if( this->headLives < 100 )
-                        {
-                                this->headLives += lives;
-                        }
-
-                        if( this->heelsLives < 100 )
-                        {
-                                this->heelsLives += lives;
-                        }
-
-                        break;
-
-                default:
-                        ;
-        }
-}
-
-void GameManager::loseLife ( const WhichPlayer& player )
-{
-        if ( ! vidasInfinitas )
-        {
-                switch ( player )
+                if ( this->headLives < 100 )
                 {
-                        case Head:
-                                if( this->headLives > 0 )
-                                {
-                                        this->headLives--;
-                                }
-                                break;
+                        this->headLives += lives;
+                }
+        }
+        else if ( player == "heels" )
+        {
+                if ( this->heelsLives < 100 )
+                {
+                        this->heelsLives += lives;
+                }
+        }
+        else if ( player == "headoverheels" )
+        {
+                if ( this->headLives < 100 )
+                {
+                        this->headLives += lives;
+                }
 
-                        case Heels:
-                                if( this->heelsLives > 0 )
-                                {
-                                        this->heelsLives--;
-                                }
-                                break;
-
-                        case HeadAndHeels:
-                                if( this->headLives > 0 )
-                                {
-                                        this->headLives--;
-                                }
-                                if( this->heelsLives > 0 )
-                                {
-                                        this->heelsLives--;
-                                }
-                                break;
-
-                        default:
-                                ;
+                if ( this->heelsLives < 100 )
+                {
+                        this->heelsLives += lives;
                 }
         }
 }
 
-void GameManager::takeTool ( const MagicItem& label )
+void GameManager::loseLife ( const std::string& player )
 {
-        switch( label )
+        if ( ! vidasInfinitas )
         {
-                case Horn:
-                        this->horn = true;
-                        break;
-
-                case Handbag:
-                        this->handbag = true;
-                        break;
-
-                default:
-                        ;
+                if ( player == "head" )
+                {
+                        if ( this->headLives > 0 )
+                        {
+                                this->headLives--;
+                        }
+                }
+                else if ( player == "heels" )
+                {
+                        if ( this->heelsLives > 0 )
+                        {
+                                this->heelsLives--;
+                        }
+                }
+                else if ( player == "headoverheels" )
+                {
+                        if ( this->headLives > 0 )
+                        {
+                                this->headLives--;
+                        }
+                        if ( this->heelsLives > 0 )
+                        {
+                                this->heelsLives--;
+                        }
+                }
         }
 }
 
-void GameManager::addHighSpeed ( const WhichPlayer& player, unsigned int highSpeed )
+void GameManager::takeMagicItem ( const std::string& label )
 {
-        switch( player )
+        if ( label == "horn" )
         {
-                case Head:
-                case HeadAndHeels:
-                        this->highSpeed += highSpeed;
-                        if( this->highSpeed > 99 )
-                        {
+                this->horn = true;
+        }
+        else if ( label == "handbag" )
+        {
+                this->handbag = true;
+        }
+}
+
+void GameManager::addHighSpeed ( const std::string& player, unsigned int highSpeed )
+{
+        if ( player == "head" || player == "headoverheels" )
+        {
+                this->highSpeed += highSpeed;
+                if ( this->highSpeed > 99 )
+                {
                         this->highSpeed = 99;
-                        }
-                        break;
-
-                default:
-                        ;
+                }
         }
 }
 
-void GameManager::decreaseHighSpeed ( const WhichPlayer& player )
+void GameManager::decreaseHighSpeed ( const std::string& player )
 {
-        switch(player)
+        if ( player == "head" || player == "headoverheels" )
         {
-                case Head:
-                case HeadAndHeels:
-                        if( this->highSpeed > 0 )
-                        {
-                                this->highSpeed--;
-                        }
-                        break;
-
-                default:
-                        ;
+                if ( this->highSpeed > 0 )
+                {
+                        this->highSpeed--;
+                }
         }
 }
 
-void GameManager::addHighJumps ( const WhichPlayer& player, unsigned int highJumps )
+void GameManager::addHighJumps ( const std::string& player, unsigned int highJumps )
 {
-        switch( player )
+        if ( player == "heels" || player == "headoverheels" )
         {
-                case Heels:
-                case HeadAndHeels:
-                        this->highJumps += highJumps;
-                        if( this->highJumps > 99 )
-                        {
+                this->highJumps += highJumps;
+                if ( this->highJumps > 99 )
+                {
                         this->highJumps = 99;
-                        }
-                        break;
-
-                default:
-                        ;
+                }
         }
 }
 
-void GameManager::decreaseHighJumps ( const WhichPlayer& player )
+void GameManager::decreaseHighJumps ( const std::string& player )
 {
-        switch( player )
+        if ( player == "heels" || player == "headoverheels" )
         {
-                case Heels:
-                case HeadAndHeels:
-                        if( this->highJumps > 0 )
-                        {
-                                this->highJumps--;
-                        }
-                        break;
-
-                default:
-                ;
+                if ( this->highJumps > 0 )
+                {
+                        this->highJumps--;
+                }
         }
 }
 
-void GameManager::addShield ( const WhichPlayer& player, double shield )
+void GameManager::addShield ( const std::string& player, double shield )
 {
-        switch( player )
+        if ( player == "head" )
         {
-                case Head:
-                        this->headShield += shield;
-                        if( this->headShield > 25.000 )
-                        {
-                                this->headShield = 25.000;
-                        }
-                        break;
+                this->headShield += shield;
+                if ( this->headShield > 25.0 )
+                {
+                        this->headShield = 25.0;
+                }
+        }
+        else if ( player == "heels" )
+        {
+                this->heelsShield += shield;
+                if ( this->heelsShield > 25.0 )
+                {
+                        this->heelsShield = 25.0;
+                }
+        }
+        else if ( player == "headoverheels" )
+        {
+                this->headShield += shield;
+                if ( this->headShield > 25.0 )
+                {
+                        this->headShield = 25.0;
+                }
 
-                case Heels:
-                        this->heelsShield += shield;
-                        if( this->heelsShield > 25.000 )
-                        {
-                                this->heelsShield = 25.000;
-                        }
-                        break;
-
-                case HeadAndHeels:
-                        this->headShield += shield;
-                        if( this->headShield > 25.000 )
-                        {
-                                this->headShield = 25.000;
-                        }
-
-                        this->heelsShield += shield;
-                        if( this->heelsShield > 25.000 )
-                        {
-                                this->heelsShield = 25.000;
-                        }
-
-                        break;
-
-                default:
-                ;
+                this->heelsShield += shield;
+                if ( this->heelsShield > 25.0 )
+                {
+                        this->heelsShield = 25.0;
+                }
         }
 }
 
-void GameManager::decreaseShield ( const WhichPlayer& player, double shield )
+void GameManager::modifyShield ( const std::string& player, double shield )
 {
-        switch( player )
+        if ( player == "head" )
         {
-                case Head:
-                        this->headShield = shield;
-                        if( this->headShield < 0 )
-                        {
-                                this->headShield = 0;
-                        }
-                        break;
+                this->headShield = shield;
+                if ( this->headShield < 0 )
+                {
+                        this->headShield = 0;
+                }
+        }
+        else if ( player == "heels" )
+        {
+                this->heelsShield = shield;
+                if ( this->heelsShield < 0 )
+                {
+                        this->heelsShield = 0;
+                }
+        }
+        else if ( player == "headoverheels" )
+        {
+                this->headShield = shield;
+                if ( this->headShield < 0 )
+                {
+                        this->headShield = 0;
+                }
 
-                case Heels:
-                        this->heelsShield = shield;
-                        if( this->heelsShield < 0 )
-                        {
-                                this->heelsShield = 0;
-                        }
-                        break;
-
-                case HeadAndHeels:
-                        this->headShield = shield;
-                        if( this->headShield < 0 )
-                        {
-                                this->headShield = 0;
-                        }
-
-                        this->heelsShield = shield;
-                        if( this->heelsShield < 0 )
-                        {
-                                this->heelsShield = 0;
-                        }
-
-                        break;
-
-                default:
-                ;
+                this->heelsShield = shield;
+                if ( this->heelsShield < 0 )
+                {
+                        this->heelsShield = 0;
+                }
         }
 }
 
-void GameManager::emptyHandbag ( const WhichPlayer& player )
+void GameManager::emptyHandbag ( const std::string& player )
 {
-        switch( player )
+        if ( player == "heels" || player == "headoverheels" )
         {
-                case Heels:
-                case HeadAndHeels:
-                        this->itemTaken = 0;
-                        break;
-
-                default:
-                        ;
+                this->itemTaken = 0;
         }
 }
 
 void GameManager::resetFreePlanets ()
 {
-        for( int i = Blacktooth; i < Safari; ++i )
+        for ( int i = Blacktooth; i < Safari; ++i )
         {
                 this->freePlanets[ i ] = false;
         }
@@ -621,7 +563,7 @@ void GameManager::resetFreePlanets ()
 
 void GameManager::liberatePlanet ( const PlanetId& planet, bool now )
 {
-        if( planet >= Blacktooth && planet <= Safari )
+        if ( planet >= Blacktooth && planet <= Safari )
         {
                 this->freePlanets[ planet ] = true;
                 this->takenCrown = now;
@@ -670,8 +612,7 @@ WhyPause GameManager::update ()
 {
         WhyPause why = Nevermind;
 
-        // mientras el usuario no pulse la tecla de abandono y lo confirme con Escape,
-        // el juego se actualiza periódicamente
+        // periodically update the game while user does not type pause key confirming it with ESCAPE
         while ( why == Nevermind )
         {
                 if ( ! key[ InputManager::getInstance()->getUserKey( "halt" ) ] && ! this->takenCrown && ! this->eatenFish && ! this->gameOver )
@@ -875,7 +816,6 @@ WhyPause GameManager::pause ()
                                 }
                         }
 
-                        // sondea la decisión del usuario cada 10 milisegundos
                         sleep( 10 );
                 }
         }
@@ -883,97 +823,78 @@ WhyPause GameManager::pause ()
         return why;
 }
 
-unsigned char GameManager::getLives ( const WhichPlayer& player ) const
+unsigned char GameManager::getLives ( const std::string& player ) const
 {
-        unsigned char lives = 0;
-
-        switch ( player )
+        if ( player == "headoverheels" )
         {
-                case Head:
-                        lives = this->headLives;
-                        break;
-
-                case Heels:
-                        lives = this->heelsLives;
-                        break;
-
-                case HeadAndHeels:
-                        lives = std::min( this->headLives, this->heelsLives );
-                        break;
-
-                default:
-                        ;
+                return std::min( this->headLives, this->heelsLives );
+        }
+        else if ( player == "head" )
+        {
+                return this->headLives;
+        }
+        else if ( player == "heels" )
+        {
+                return this->heelsLives;
         }
 
-        return lives;
+        return 0;
 }
 
-double GameManager::getShield ( const WhichPlayer& player ) const
+double GameManager::getShield ( const std::string& player ) const
 {
-        double time = 0.0;
-
-        switch ( player )
+        if ( player == "headoverheels" )
         {
-                case Head:
-                        time = this->headShield;
-                        break;
-
-                case Heels:
-                        time = this->heelsShield;
-                        break;
-
-                case HeadAndHeels:
-                        time = std::max( this->headShield, this->heelsShield );
-                        break;
-
-                default:
-                        ;
+                return std::max( this->headShield, this->heelsShield );
+        }
+        else if ( player == "head" )
+        {
+                return this->headShield;
+        }
+        else if ( player == "heels" )
+        {
+                return this->heelsShield;
         }
 
-        return time;
+        return 0.0;
 }
 
-std::vector< short > GameManager::hasTool ( const WhichPlayer& player ) const
+std::vector< std::string > GameManager::playerTools ( const std::string& player ) const
 {
-        std::vector< short > tools;
+        std::vector< std::string > tools;
 
-        switch ( player )
+        if ( player == "head" )
         {
-                case Head:
-                        if ( this->horn )
-                        {
-                                tools.push_back( Horn );
-                        }
-                        break;
-
-                case Heels:
-                        if ( this->handbag )
-                        {
-                                tools.push_back( Handbag );
-                        }
-                        break;
-
-                case HeadAndHeels:
-                        if ( this->horn )
-                        {
-                                tools.push_back( Horn );
-                        }
-                        if ( this->handbag )
-                        {
-                                tools.push_back( Handbag );
-                        }
-                        break;
-
-                default:
-                        ;
+                if ( this->horn )
+                {
+                        tools.push_back( "horn" );
+                }
+        }
+        else if ( player == "heels" )
+        {
+                if ( this->handbag )
+                {
+                        tools.push_back( "handbag" );
+                }
+        }
+        else if ( player == "headoverheels" )
+        {
+                if ( this->horn )
+                {
+                        tools.push_back( "horn" );
+                }
+                if ( this->handbag )
+                {
+                        tools.push_back( "handbag" );
+                }
         }
 
         return tools;
 }
 
-unsigned short GameManager::getDonuts ( const WhichPlayer& player ) const
+unsigned short GameManager::getDonuts ( const std::string& player ) const
 {
-        return ( player == Head || player == HeadAndHeels ? this->donuts : 0 );
+        return ( player == "head" || player == "headoverheels" ? this->donuts : 0 );
 }
 
 size_t GameManager::countFreePlanets () const

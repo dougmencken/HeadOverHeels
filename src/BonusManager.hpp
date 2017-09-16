@@ -53,14 +53,14 @@ public:
         * @param fileName Nombre del archivo de la sala donde estaba el bonus
         * @param label Etiqueta del bonus
         */
-        void markBonusAsAbsent ( const std::string& fileName, const short label ) ;
+        void markBonusAsAbsent ( const std::string& fileName, const std::string& label ) ;
 
        /**
         * Indica si un bonus determinado sigue estando en esta sala
         * @param fileName Nombre del archivo de la sala donde está el bonus
         * @param label Etiqueta del bonus
         */
-        bool isPresent ( const std::string& fileName, const short label ) ;
+        bool isPresent ( const std::string& fileName, const std::string& label ) ;
 
        /**
         * Carga a partir de los datos proporcionados, que han sido extraidos del archivo que
@@ -119,13 +119,13 @@ public:
         * Almacena un bonus para no volverse a mostrar nunca en esta sala
         * @param label Etiqueta del bonus
         */
-        void markBonusAsAbsent ( const short label ) ;
+        void markBonusAsAbsent ( const std::string& label ) ;
 
        /**
         * Indica si un bonus determinado sigue estando en esta sala
         * @param label Etiqueta del bonus
         */
-        bool isPresent ( short label ) ;
+        bool isPresent ( const std::string& label ) ;
 
        /**
         * Operador de igualdad
@@ -141,9 +141,9 @@ private:
         std::string nameOfFile ;
 
        /**
-        * Bonus que no deben aparecer en la sala
+        * Bonuses already taken in this room
         */
-        std::list < short > bonusItems ;
+        std::list < std::string > bonusItems ;
 
 public:
 
@@ -156,7 +156,7 @@ public:
         * Bonus que no deben aparecer en la sala
         * @return Una referencia a la lista
         */
-        std::list < short >& getBonusItems () {  return this->bonusItems ;  }
+        std::list < std::string >& getBonusItems () {  return this->bonusItems ;  }
 
 };
 

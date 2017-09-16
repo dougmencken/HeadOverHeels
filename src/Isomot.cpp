@@ -222,7 +222,7 @@ BITMAP* Isomot::update()
                 {
                         PlayerItem* player = activeRoom->getMediator()->getActivePlayer();
 
-                        if ( player->getLives() != 0 || ( WhichPlayer(player->getLabel ()) == HeadAndHeels && player->getLives() == 0 ) )
+                        if ( player->getLives() != 0 || ( player->getLabel() == "headoverheels" && player->getLives() == 0 ) )
                         {
                                 activeRoom = mapManager->restartRoom();
                         }
@@ -287,52 +287,52 @@ void Isomot::updateEndRoom()
 {
         Room* activeRoom = mapManager->getActiveRoom();
 
-        // Si aún no se ha preparado la sala final, se hace ahora
         if ( ! this->isEndRoom )
         {
-                short player = activeRoom->getMediator()->getActivePlayer()->getLabel();
+                std::string player = activeRoom->getMediator()->getActivePlayer()->getLabel();
                 activeRoom->getMediator()->removeItem( activeRoom->getMediator()->getActivePlayer() );
 
-                // Crea (como elemento libre) al jugador que ha llegado en la posición adecuada
+                // player who arrived here
                 FreeItem* freeItem = new FreeItem( this->itemDataManager->findItemByLabel( player ), 66, 92, Top, South );
                 activeRoom->addItem( freeItem );
 
-                // Crea las coronas recuperadas
+                // crea las coronas recuperadas
+
                 GameManager* gameManager = GameManager::getInstance();
                 int crowns = 0;
 
-                // La corona de Safari
+                // la corona de Safari
                 if ( gameManager->isFreePlanet( Safari ) )
                 {
-                        freeItem = new FreeItem( this->itemDataManager->findItemByLabel( short(Crown) ), 66, 75, Top, NoDirection );
+                        freeItem = new FreeItem( this->itemDataManager->findItemByLabel( "crown" ), 66, 75, Top, NoDirection );
                         activeRoom->addItem( freeItem );
                         crowns++;
                 }
-                // La corona de Egyptus
+                // la corona de Egyptus
                 if ( gameManager->isFreePlanet( Egyptus ) )
                 {
-                        freeItem = new FreeItem( this->itemDataManager->findItemByLabel( short(Crown) ), 66, 59, Top, NoDirection );
+                        freeItem = new FreeItem( this->itemDataManager->findItemByLabel( "crown" ), 66, 59, Top, NoDirection );
                         activeRoom->addItem( freeItem );
                         crowns++;
                 }
-                // La corona de Penitentiary
+                // la corona de Penitentiary
                 if ( gameManager->isFreePlanet( Penitentiary ) )
                 {
-                        freeItem = new FreeItem( this->itemDataManager->findItemByLabel( short(Crown) ), 65, 107, Top, NoDirection );
+                        freeItem = new FreeItem( this->itemDataManager->findItemByLabel( "crown" ), 65, 107, Top, NoDirection );
                         activeRoom->addItem( freeItem );
                         crowns++;
                 }
-                // La corona de Byblos
+                // la corona de Byblos
                 if ( gameManager->isFreePlanet( Byblos ) )
                 {
-                        freeItem = new FreeItem( this->itemDataManager->findItemByLabel( short(Crown) ), 65, 123, Top, NoDirection );
+                        freeItem = new FreeItem( this->itemDataManager->findItemByLabel( "crown" ), 65, 123, Top, NoDirection );
                         activeRoom->addItem( freeItem );
                         crowns++;
                 }
-                // La corona de Blacktooth
+                // la corona de Blacktooth
                 if ( gameManager->isFreePlanet( Blacktooth ) )
                 {
-                        freeItem = new FreeItem( this->itemDataManager->findItemByLabel( short(Crown) ), 65, 91, Top, NoDirection );
+                        freeItem = new FreeItem( this->itemDataManager->findItemByLabel( "crown" ), 65, 91, Top, NoDirection );
                         activeRoom->addItem( freeItem );
                         crowns++;
                 }
@@ -353,10 +353,10 @@ void Isomot::updateEndRoom()
         }
         else
         {
-                if ( activeRoom->getMediator()->findItemByLabel( CannonBallLabel ) == 0 && activeRoom->getMediator()->findItemByLabel( BubblesLabel ) == 0 )
+                if ( activeRoom->getMediator()->findItemByLabel( "ball" ) == 0 && activeRoom->getMediator()->findItemByLabel( "bubbles" ) == 0 )
                 {
-                        FreeItem* freeItem = new FreeItem( this->itemDataManager->findItemByLabel( CannonBallLabel ), 146, 93, LayerHeight, NoDirection );
-                        freeItem->assignBehavior( CannonBallBehavior, this->itemDataManager->findItemByLabel( BubblesLabel ) );
+                        FreeItem* freeItem = new FreeItem( this->itemDataManager->findItemByLabel( "ball" ), 146, 93, LayerHeight, NoDirection );
+                        freeItem->assignBehavior( CannonBallBehavior, this->itemDataManager->findItemByLabel( "bubbles" ) );
                         activeRoom->addItem( freeItem );
                 }
         }
