@@ -57,7 +57,7 @@ void CreateListOfSavedGames::doIt ()
         {
                 std::stringstream ss;
                 ss << fileCount;
-                std::string file = isomot::homePath() + "savegame/savegame" + ss.str () + ".xml";
+                std::string file = isomot::homePath() + "savegame/save" + ss.str () + ".xml";
 
                 if ( exists( file.c_str () ) )
                 {
@@ -73,7 +73,7 @@ void CreateListOfSavedGames::doIt ()
                                 label->setAction( new LoadGame( this->where, fileCount ) );
                         else
                                 label->setAction( new SaveGame( this->where, fileCount ) );
-                                // very funny to change to LoadGame here by the way to get many heads, just try it
+                                // very funny to change to LoadGame here by the way to get many heads/heels, just try it
 
                         menu->addOption( label );
                 }

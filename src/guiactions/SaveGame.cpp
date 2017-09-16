@@ -25,7 +25,7 @@ void SaveGame::doIt ()
         {
                 std::stringstream ss;
                 isomot::GameManager* gameManager = isomot::GameManager::getInstance();
-                ss << isomot::homePath() << "savegame/savegame" << slot << ".xml";
+                ss << isomot::homePath() << "savegame/save" << slot << ".xml";
                 gameManager->saveGame( ss.str() );
         }
 
