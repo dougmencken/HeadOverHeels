@@ -499,11 +499,10 @@ void Room::removeFloor( FloorTile * floorTile )
         delete floorTile;
 }
 
-void Room::removeItem( GridItem * gridItem )
+void Room::removeGridItem( GridItem * gridItem )
 {
         try
         {
-                // Elimina el elemento de la sala
                 mediator->removeItem( gridItem );
 
                 // Pone a sombrear los elementos afectados por la eliminación
@@ -524,14 +523,13 @@ void Room::removeItem( GridItem * gridItem )
         }
 }
 
-void Room::removeItem( FreeItem * freeItem )
+void Room::removeFreeItem( FreeItem * freeItem )
 {
         try
         {
                 // Se elimina de la tabla de transparencias
                 mediator->removeTransparency( freeItem->getTransparency() );
 
-                // Elimina el elemento de la sala
                 mediator->removeItem( freeItem );
 
                 // Pone a sombrear los elementos afectados por la eliminación
@@ -578,6 +576,24 @@ void Room::removePlayer( PlayerItem* playerItem )
         {
                 std::cout << e.what () << std::endl ;
         }
+}
+
+void Room::removeBars ()
+{
+        std::list< FreeItem * > freeItems = this->mediator->getFreeItems ();
+        unsigned int howManyBars = 0;
+
+        for ( std::list< FreeItem * >::iterator fi = freeItems.begin (); fi != freeItems.end (); ++fi )
+        {
+                if ( ( *fi )->getLabel() == "bars-ns" || ( *fi )->getLabel() == "bars-ew" )
+                {
+                        this->removeFreeItem( *fi );
+                        howManyBars ++;
+                }
+        }
+
+        if ( howManyBars != 0 )
+                std::cout << howManyBars << " bars are gone" << std::endl ;
 }
 
 void Room::draw( BITMAP* where )

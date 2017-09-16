@@ -103,7 +103,7 @@ void Mediator::update()
         while ( ! gridItemsToDelete.empty() )
         {
                 GridItem* gi = gridItemsToDelete.top();
-                room->removeItem( gi );
+                room->removeGridItem( gi );
                 gridItemsToDelete.pop();
         }
 
@@ -146,7 +146,7 @@ void Mediator::update()
         while ( ! freeItemsToDelete.empty() )
         {
                 FreeItem* fi = freeItemsToDelete.top();
-                room->removeItem( fi );
+                room->removeFreeItem( fi );
                 freeItemsToDelete.pop();
         }
 

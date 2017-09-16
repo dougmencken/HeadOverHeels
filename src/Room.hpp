@@ -104,19 +104,24 @@ public:
         * Elimina un elemento rejilla de la sala
         * @param gridItem Un elemento rejilla
         */
-        void removeItem ( GridItem * gridItem ) ;
+        void removeGridItem ( GridItem * gridItem ) ;
 
        /**
         * Elimina un elemento libre de la sala
         * @param gridItem Un elemento libre
         */
-        void removeItem ( FreeItem * freeItem ) ;
+        void removeFreeItem ( FreeItem * freeItem ) ;
 
        /**
         * Elimina un jugador de la sala
         * @param gridItem Un jugador
         */
         void removePlayer ( PlayerItem* playerItem ) ;
+
+        /**
+         * Removes any bar in this room
+         */
+        void removeBars () ;
 
        /**
         * Dibuja la sala
@@ -222,18 +227,18 @@ private:
         std::string identifier ;
 
        /**
-        * Identificador textual del escenario al que pertenece la sala: jail, blacktooth, marketplace,
-        * themoon, egyptus, penitentiary, safary o byblos
+        * Identificador textual del escenario al que pertenece la sala:
+        * jail, blacktooth, marketplace, themoon, egyptus, penitentiary, safary o byblos
         */
         std::string scenery ;
 
        /**
-        * Coordenadas de pantalla X e Y, respectivamente, donde está situada la coordenada origen de la sala
+        * Coordinates X and Y where the origin of room is
         */
         std::pair < int, int > coordinates ;
 
        /**
-        * Número de losetas de la sala en los ejes X e Y, respectivamente
+        * Number of room’s tiles both in X-way and in Y-way
         */
         std::pair < int, int > tilesNumber ;
 

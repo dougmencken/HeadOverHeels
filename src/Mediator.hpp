@@ -57,7 +57,7 @@ void* updateThread ( void* thisClass ) ;
 
 
 /**
- * Mediator for various items of the room. It collects requests sent by items at some events,
+ * Mediator for various items in one room. It collects requests sent by items at some events,
  * and forwards them to other items
  */
 
@@ -494,6 +494,8 @@ public:
         * @return Una sala
         */
         Room* getRoom () const {  return room ;  }
+
+        std::list < FreeItem * > getFreeItems () {  return freeItems ;  }
 
        /**
         * Establece el jugador controlado por el usuario

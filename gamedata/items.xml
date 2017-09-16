@@ -235,7 +235,7 @@
     <frame>0</frame>
   </item>
 
-  <!-- Bars N-S -->
+  <!-- Bars north-south -->
   <item label="bars-ns">
     <widthX>8</widthX>
     <widthY>16</widthY>
@@ -256,7 +256,7 @@
     <frame>0</frame>
   </item>
 
-  <!-- Bars E-W -->
+  <!-- Bars east-west -->
   <item label="bars-ew">
     <widthX>16</widthX>
     <widthY>8</widthY>
