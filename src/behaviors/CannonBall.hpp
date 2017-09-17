@@ -22,7 +22,7 @@ class Item ;
 class ItemData ;
 
 /**
- * La bola de cañón de la pantalla final. Se mueve hacia el norte y cuando colisiona desaparece
+ * The cannonball of the final screen. It moves northwards and disappears when it collides
  */
 
 class CannonBall : public Behavior
@@ -30,19 +30,10 @@ class CannonBall : public Behavior
 
 public:
 
-       /**
-        * Constructor
-        * @param item Elemento que tiene este comportamiento
-        * @param behavior Identificador de comportamiento
-        */
-        CannonBall( Item * item, const BehaviorOfItem & behavior ) ;
+        CannonBall( Item * item, const std::string & behavior ) ;
 
         virtual ~CannonBall( );
 
-       /**
-        * Actualiza el comportamiento del elemento en cada ciclo
-        * @return false si la actualización implica la destrucción del elemento o true en caso contrario
-        */
         virtual bool update () ;
 
 protected:

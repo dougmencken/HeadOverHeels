@@ -9,8 +9,8 @@
 namespace isomot
 {
 
-Sink::Sink( Item * item, const BehaviorOfItem & id ) :
-        Behavior( item, id )
+Sink::Sink( Item * item, const std::string & behavior ) :
+        Behavior( item, behavior )
 {
         fallTimer = new HPC();
         fallTimer->start();

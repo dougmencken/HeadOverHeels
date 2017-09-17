@@ -18,11 +18,10 @@
 namespace isomot
 {
 
-class Item;
+class Item ;
 
 /**
- * Mueve al elemento en un único sentido. El movimiento se produce por un desplazamiento de otro
- * elemento. Se detiene al chocar con algo
+ * Move item in one direction as result of displacement of another item. Stop when something is hit
  */
 
 class Impel : public Behavior
@@ -30,30 +29,21 @@ class Impel : public Behavior
 
 public:
 
-       /**
-        * Constructor
-        * @param item Elemento que tiene este comportamiento
-        * @param id Identificador del comportamiento
-        */
-        Impel( Item * item, const BehaviorOfItem & id ) ;
+        Impel( Item * item, const std::string & behavior ) ;
 
         virtual ~Impel( ) ;
 
-       /**
-        * Actualiza el comportamiento del elemento en cada ciclo
-        * @return false si la actualización implica la destrucción del elemento o true en caso contrario
-        */
         virtual bool update () ;
 
 private:
 
        /**
-        * Cronómetro que controla la velocidad de movimiento del elemento
+        * Timer that defines speed of movement
         */
         HPC * speedTimer ;
 
        /**
-        * Cronómetro que controla la velocidad de caída del elemento
+        * Timer that defines speed of fall
         */
         HPC * fallTimer ;
 

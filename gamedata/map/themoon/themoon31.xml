@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<room xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="room.xsd">
+<room xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
   <name>themoon/themoon31.xml</name>
 
@@ -377,31 +377,31 @@
     <item x="6" y="2" z="-1">
       <label>themoon-door-south</label>
       <direction>south</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="2" y="2" z="0">
       <label>teleport</label>
       <direction>none</direction>
-      <behavior>23</behavior>
+      <behavior>behavior of teletransport</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="2" z="0">
       <label>teleport</label>
       <direction>none</direction>
-      <behavior>23</behavior>
+      <behavior>behavior of teletransport</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="3" z="0">
       <label>teleport</label>
       <direction>none</direction>
-      <behavior>23</behavior>
+      <behavior>behavior of teletransport</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="3" z="0">
       <label>teleport</label>
       <direction>none</direction>
-      <behavior>23</behavior>
+      <behavior>behavior of teletransport</behavior>
       <type>griditem</type>
     </item>
   </items>

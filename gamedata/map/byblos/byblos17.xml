@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<room xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="room.xsd">
+<room xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
   <name>byblos/byblos17.xml</name>
 
@@ -413,97 +413,97 @@
     <item x="0" y="0" z="0">
       <label>byblos-wall-y-1</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="1" z="0">
       <label>byblos-wall-y-1</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="4" z="0">
       <label>byblos-wall-y-1</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="5" z="0">
       <label>byblos-wall-y-1</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="2" z="-1">
       <label>byblos-shaft-north</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="3" z="-1">
       <label>byblos-shaft-north</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="2" z="-1">
       <label>byblos-shaft-north</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="3" z="-1">
       <label>byblos-shaft-north</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="2" z="-1">
       <label>byblos-shaft-north</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="3" z="-1">
       <label>byblos-shaft-north</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="2" z="-1">
       <label>byblos-capital-north</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="3" z="-1">
       <label>byblos-capital-north</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="2" z="-1">
       <label>byblos-door-south</label>
       <direction>north</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="8" y="2" z="0">
       <label>siren</label>
       <direction>none</direction>
-      <behavior>15</behavior>
+      <behavior>behavior of random patroling in four secondary directions</behavior>
       <type>freeitem</type>
     </item>
     <item x="5" y="3" z="0">
       <label>siren</label>
       <direction>none</direction>
-      <behavior>15</behavior>
+      <behavior>behavior of random patroling in four secondary directions</behavior>
       <type>freeitem</type>
     </item>
     <item x="6" y="3" z="0">
       <label>trampoline</label>
       <direction>none</direction>
-      <behavior>24</behavior>
+      <behavior>behavior of big leap for player</behavior>
       <type>freeitem</type>
     </item>
   </items>

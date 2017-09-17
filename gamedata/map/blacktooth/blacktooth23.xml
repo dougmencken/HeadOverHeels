@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<room xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="room.xsd">
+<room xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
   <name>blacktooth/blacktooth23.xml</name>
 
@@ -525,235 +525,235 @@
     <item x="0" y="0" z="0">
       <label>jail-wall-y</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="1" z="0">
       <label>jail-wall-y</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="2" z="0">
       <label>jail-wall-y</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="5" z="0">
       <label>jail-wall-y</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="6" z="0">
       <label>jail-wall-y</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="7" z="0">
       <label>jail-wall-y</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="3" z="-1">
       <label>jail-door-north</label>
       <direction>north</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="4" y="0" z="0">
       <label>bars-ns</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="4" y="0" z="1">
       <label>bars-ns</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="4" y="0" z="2">
       <label>bars-ns</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="8" y="0" z="0">
       <label>vulcano</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="1" z="0">
       <label>bars-ns</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="4" y="1" z="1">
       <label>bars-ns</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="4" y="1" z="2">
       <label>bars-ns</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="8" y="1" z="0">
       <label>conveyor-belt</label>
       <direction>west</direction>
-      <behavior>2</behavior>
+      <behavior>behavior of conveyor in north or east</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="2" z="0">
       <label>bars-ns</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="4" y="2" z="1">
       <label>bars-ns</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="4" y="2" z="2">
       <label>bars-ns</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="8" y="2" z="0">
       <label>conveyor-belt</label>
       <direction>west</direction>
-      <behavior>2</behavior>
+      <behavior>behavior of conveyor in north or east</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="3" z="0">
       <label>bars-ns</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="4" y="3" z="1">
       <label>bars-ns</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="4" y="3" z="2">
       <label>bars-ns</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="8" y="3" z="0">
       <label>conveyor-belt</label>
       <direction>west</direction>
-      <behavior>2</behavior>
+      <behavior>behavior of conveyor in north or east</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="4" z="0">
       <label>bars-ns</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="4" y="4" z="1">
       <label>bars-ns</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="4" y="4" z="2">
       <label>bars-ns</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="8" y="4" z="0">
       <label>conveyor-belt</label>
       <direction>west</direction>
-      <behavior>2</behavior>
+      <behavior>behavior of conveyor in north or east</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="5" z="0">
       <label>bars-ns</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="4" y="5" z="1">
       <label>bars-ns</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="4" y="5" z="2">
       <label>bars-ns</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="8" y="5" z="0">
       <label>conveyor-belt</label>
       <direction>west</direction>
-      <behavior>2</behavior>
+      <behavior>behavior of conveyor in north or east</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="6" z="0">
       <label>bars-ns</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="4" y="6" z="1">
       <label>bars-ns</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="4" y="6" z="2">
       <label>bars-ns</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="8" y="6" z="0">
       <label>conveyor-belt</label>
       <direction>west</direction>
-      <behavior>2</behavior>
+      <behavior>behavior of conveyor in north or east</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="7" z="0">
       <label>bars-ns</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="4" y="7" z="1">
       <label>bars-ns</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="4" y="7" z="2">
       <label>bars-ns</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="8" y="7" z="0">
       <label>teleport</label>
       <direction>none</direction>
-      <behavior>23</behavior>
+      <behavior>behavior of teletransport</behavior>
       <type>griditem</type>
     </item>
   </items>

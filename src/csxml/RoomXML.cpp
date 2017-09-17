@@ -1353,6 +1353,12 @@ namespace rxml
     this->behavior_.set (behavior);
   }
 
+  void item::
+  behavior (::std::auto_ptr< behavior_type > behavior)
+  {
+    this->behavior_.set (behavior);
+  }
+
   const item::type_type& item::
   type () const
   {

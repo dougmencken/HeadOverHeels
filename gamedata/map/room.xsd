@@ -170,7 +170,7 @@
                     </xsd:restriction>
                   </xsd:simpleType>
                 </xsd:element>
-                <xsd:element name="behavior" type="xsd:int"/>
+                <xsd:element name="behavior" type="xsd:string"/>
                 <xsd:element name="type">
                   <xsd:simpleType>
                     <xsd:restriction base="xsd:string">

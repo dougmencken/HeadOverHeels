@@ -127,28 +127,22 @@ public:
         void liberatePlanet() ;
 
         /**
-         * Establece los datos del elemento que tiene el jugador en el bolso
-         * @param data Datos del elemento tomado por el jugador
-         * @param takenItemImage Imagen del elemento tomado por el jugador
-         * @param behavior Comportamiento del elemento tomado por el jugador
+         * Set data of item in handbag
          */
-        void assignTakenItem( ItemData* itemData, BITMAP* takenItemImage, const BehaviorOfItem& behavior ) ;
+        void assignTakenItem( ItemData* itemData, BITMAP* takenItemImage, const std::string& behavior ) ;
 
         /**
-         * Obtiene los datos del elemento que tiene el jugador en el bolso
-         * @param data Devuelve los datos del elemento tomado por el jugador
-         * @param behavior Devuelve el comportamiento del elemento tomado por el jugador
+         * Get data of item in bag
          */
-        ItemData* consultTakenItem( BehaviorOfItem* behavior ) ;
+        std::string consultTakenItem( ItemData* itemData ) ;
 
         /**
-         * Obtiene la imagen del elemento tomado por el jugador
-         * @return Una imagen ó 0 si el jugador no tiene ningún elemento
+         * Get image of item taken by player
          */
         BITMAP* consultTakenItemImage () ;
 
         /**
-         * Desencadena la grabación de la partida cuando este jugador coge el pez de la reencarnación
+         * Save game when player meets reincarnation fish
          */
         void save () ;
 

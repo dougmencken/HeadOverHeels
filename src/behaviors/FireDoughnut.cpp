@@ -10,8 +10,8 @@
 namespace isomot
 {
 
-FireDoughnut::FireDoughnut( Item * item, const BehaviorOfItem & id )
-        : Behavior( item, id )
+FireDoughnut::FireDoughnut( Item * item, const std::string & behavior )
+        : Behavior( item, behavior )
         , playerItem( 0 )
 {
         speedTimer = new HPC();

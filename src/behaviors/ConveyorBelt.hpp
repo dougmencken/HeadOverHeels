@@ -26,19 +26,10 @@ class ConveyorBelt : public Behavior
 
 public:
 
-       /**
-        * Constructor
-        * @param item Elemento que tiene este comportamiento
-        * @param id Identificador del comportamiento
-        */
-        ConveyorBelt( Item * item, const BehaviorOfItem & behavior ) ;
+        ConveyorBelt( Item * item, const std::string & behavior ) ;
 
         virtual ~ConveyorBelt( ) ;
 
-       /**
-        * Actualiza el comportamiento del elemento en cada ciclo
-        * @return false si la actualización implica la destrucción del elemento o true en caso contrario
-        */
         virtual bool update () ;
 
 private:

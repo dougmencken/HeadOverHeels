@@ -34,14 +34,14 @@
 namespace isomot
 {
 
-Behavior::Behavior( Item * whichItem, const BehaviorOfItem & behavior ) :
+Behavior::Behavior( Item * whichItem, const std::string & behavior ) :
           theBehavior( behavior )
         , item( whichItem )
         , whatToDo( 0 )
         , activity( Wait )
         , sender( 0 )
 {
-
+        std::cout << "creation of behavior \"" << behavior << "\" for item \"" << whichItem->getLabel() << "\"" << std::endl ;
 }
 
 Behavior::~Behavior( )
@@ -49,132 +49,131 @@ Behavior::~Behavior( )
 
 }
 
-Behavior* Behavior::createBehavior( Item * item, const BehaviorOfItem& id, void * extraData )
+Behavior* Behavior::createBehaviorByName( Item* item, const std::string& behavior, void* extraData )
 {
-        Behavior* behavior = 0;
+        Behavior* behaviorToReturn = 0;
 
-        switch ( id )
+        if ( behavior == "still" || behavior == "behavior of bubbles" )
         {
-                case NoBehavior:
-                        break;
-
-                case BubblesBehavior:
-                        break;
-
-                case ConveyorBeltNortheast:
-                case ConveyorBeltSouthwest:
-                        behavior = new ConveyorBelt( item, id );
-                        break;
-
-                case DetectorBehavior:
-                        behavior = new Detector( item, id );
-                        break;
-
-                case DriveBehavior:
-                        behavior = new Drive( item, id );
-                        break;
-
-                case ElevatorBehavior:
-                        behavior = new Elevator( item, id );
-                        behavior->setMoreData( extraData );
-                        break;
-
-                case Hunter4Behavior:
-                case HunterWaiting4Behavior:
-                case Hunter8Behavior:
-                case HunterWaiting8Behavior:
-                        behavior = new Hunter( item, id );
-                        if ( HunterWaiting4Behavior )
-                        {
-                                behavior->setMoreData( extraData );
-                        }
-                        break;
-
-                case ImpelBehavior:
-                        behavior = new Impel( item, id );
-                        break;
-
-                case TurnLeftBehavior:
-                case TurnRightBehavior:
-                        behavior = new Turn( item, id );
-                        break;
-
-                case MobileBehavior:
-                        behavior = new Mobile( item, id );
-                        break;
-
-                case OneWayBehavior:
-                case FlyingOneWayBehavior:
-                        behavior = new OneWay( item, id, id == FlyingOneWayBehavior );
-                        break;
-
-                case Patrol4cBehavior:
-                case Patrol4dBehavior:
-                case Patrol8Behavior:
-                        behavior = new Patrol( item, id );
-                        break;
-
-                case RemoteControlBehavior:
-                case SteerBehavior:
-                        behavior = new RemoteControl( item, id );
-                        break;
-
-                case SinkBehavior:
-                        behavior = new Sink( item, id );
-                        break;
-
-                case FireDoughnutBehavior:
-                        behavior = new FireDoughnut( item, id );
-                        break;
-
-                case SpecialBehavior:
-                        behavior = new Special( item, id );
-                        behavior->setMoreData( extraData );
-                        break;
-
-                case SwitchBehavior:
-                        behavior = new Switch( item, id );
-                        break;
-
-                case TeleportBehavior:
-                        behavior = new Teleport( item, id );
-                        break;
-
-                case TrampolineBehavior:
-                        behavior = new Trampoline( item, id );
-                        break;
-
-                case VolatileTimeBehavior:
-                case VolatileTouchBehavior:
-                case VolatileWeightBehavior:
-                case VolatilePuppyBehavior:
-                case VolatileHeavyBehavior:
-                        behavior = new Volatile( item, id );
-                        behavior->setMoreData( extraData );
-                        break;
-
-                case CannonBallBehavior:
-                        behavior = new CannonBall( item, id );
-                        behavior->setMoreData( extraData );
-                        break;
-
-                case HeadBehavior:
-                        behavior = new PlayerHead( item, id );
-                        behavior->setMoreData( extraData );
-                        break;
-
-                case HeelsBehavior:
-                        behavior = new PlayerHeels( item, id );
-                        behavior->setMoreData( extraData );
-                        break;
-
-                case HeadAndHeelsBehavior:
-                        behavior = new PlayerHeadAndHeels( item, id );
-                        behavior->setMoreData( extraData );
-                        break;
+                // yeah, do nothing
+        }
+        else if ( behavior == "behavior of conveyor in north or east" ||
+                        behavior == "behavior of conveyor in south or west" )
+        {
+                behaviorToReturn = new ConveyorBelt( item, behavior );
+        }
+        else if ( behavior == "behavior of detector" )
+        {
+                behaviorToReturn = new Detector( item, behavior );
+        }
+        else if ( behavior == "behavior of driver" )
+        {
+                behaviorToReturn = new Drive( item, behavior );
+        }
+        else if ( behavior == "behavior of elevator" )
+        {
+                behaviorToReturn = new Elevator( item, behavior );
+                behaviorToReturn->setMoreData( extraData );
+        }
+        else if ( behavior == "behavior of hunter in four directions" ||
+                        behavior == "behavior of waiting hunter in four directions" ||
+                        behavior == "behavior of hunter in eight directions" ||
+                        behavior == "behavior of waiting hunter in eight directions" )
+        {
+                behaviorToReturn = new Hunter( item, behavior );
+                if ( "behavior of waiting hunter in four directions" )
+                {
+                        behaviorToReturn->setMoreData( extraData );
+                }
+        }
+        else if ( behavior == "behavior of impel" )
+        {
+                behaviorToReturn = new Impel( item, behavior );
+        }
+        else if ( behavior == "behavior of move then turn left and move" ||
+                        behavior == "behavior of move then turn right and move" )
+        {
+                behaviorToReturn = new Turn( item, behavior );
+        }
+        else if ( behavior == "behavior of thing able to move by pushing" )
+        {
+                behaviorToReturn = new Mobile( item, behavior );
+        }
+        else if ( behavior == "behavior of there and back" )
+        {
+                behaviorToReturn = new OneWay( item, behavior, false );
+        }
+        else if ( behavior == "behavior of flying there and back" )
+        {
+                behaviorToReturn = new OneWay( item, behavior, true );
+        }
+        else if ( behavior == "behavior of random patroling in four primary directions" ||
+                        behavior == "behavior of random patroling in four secondary directions" ||
+                        behavior == "behavior of random patroling in eight directions" )
+        {
+                behaviorToReturn = new Patrol( item, behavior );
+        }
+        else if ( behavior == "behavior of remote control" ||
+                        behavior == "behavior of remotely controlled one" )
+        {
+                behaviorToReturn = new RemoteControl( item, behavior );
+        }
+        else if ( behavior == "behavior of sinking downward" )
+        {
+                behaviorToReturn = new Sink( item, behavior );
+        }
+        else if ( behavior == "behavior of freezing doughnut" )
+        {
+                behaviorToReturn = new FireDoughnut( item, behavior );
+        }
+        else if ( behavior == "behavior of something special" )
+        {
+                behaviorToReturn = new Special( item, behavior );
+                behaviorToReturn->setMoreData( extraData );
+        }
+        else if ( behavior == "behavior of switch" )
+        {
+                behaviorToReturn = new Switch( item, behavior );
+        }
+        else if ( behavior == "behavior of teletransport" )
+        {
+                behaviorToReturn = new Teleport( item, behavior );
+        }
+        else if ( behavior == "behavior of big leap for player" )
+        {
+                behaviorToReturn = new Trampoline( item, behavior );
+        }
+        else if ( behavior == "behavior of disappearance in time" ||
+                        behavior == "behavior of disappearance on touch" ||
+                        behavior == "behavior of disappearance on jump into" ||
+                        behavior == "behavior of disappearance as soon as Head appears" ||
+                        behavior == "behavior of slow disappearance on jump into" )
+        {
+                behaviorToReturn = new Volatile( item, behavior );
+                behaviorToReturn->setMoreData( extraData );
+        }
+        else if ( behavior == "behaivor of final ball" )
+        {
+                behaviorToReturn = new CannonBall( item, behavior );
+                behaviorToReturn->setMoreData( extraData );
+        }
+        else if ( behavior == "behavior of Head" )
+        {
+                behaviorToReturn = new PlayerHead( item, behavior );
+                behaviorToReturn->setMoreData( extraData );
+        }
+        else if ( behavior == "behavior of Heels" )
+        {
+                behaviorToReturn = new PlayerHeels( item, behavior );
+                behaviorToReturn->setMoreData( extraData );
+        }
+        else if ( behavior == "behavior of composite" )
+        {
+                behaviorToReturn = new PlayerHeadAndHeels( item, behavior );
+                behaviorToReturn->setMoreData( extraData );
         }
 
-        return behavior;
+        return behaviorToReturn;
 }
 
 void Behavior::changeActivityOfItem( const ActivityOfItem& activity, Item* sender )
@@ -225,18 +224,17 @@ void Behavior::propagateActivity( Item* sender, const ActivityOfItem& activity )
 {
         Mediator* mediator = sender->getMediator();
 
-        // Mientras haya elementos que hayan chocado con el emisor
+        // as long as there are elements collided with issuer
         while ( ! mediator->isStackOfCollisionsEmpty () )
         {
-                // Identificador del primer elemento de la pila de colisiones
                 int id = mediator->popCollision();
 
-                // El elemento tiene que se un elemento libre o uno rejilla
+                // item has to be free item or grid item
                 if ( ( id >= FirstFreeId && ( id & 1 )) || ( id >= FirstGridId && !( id & 1 ) ) )
                 {
                         Item* item = mediator->findItemById( id );
 
-                        // Si el elemento se ha encontrado y tiene comportamiento se cambia su estado
+                        // change activity for existing item with non-null behavior
                         if ( item != 0 && item->getBehavior() != 0 )
                         {
                                 item->getBehavior()->changeActivityOfItem( activity );

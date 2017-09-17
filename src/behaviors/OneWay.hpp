@@ -30,20 +30,10 @@ class OneWay : public Behavior
 
 public:
 
-       /**
-        * Constructor
-        * @param item Elemento que tiene este comportamiento
-        * @param id Identificador del comportamiento
-        * @param isFlying Indica si el elemento vuela
-        */
-        OneWay( Item * item, const BehaviorOfItem & id, bool isFlying ) ;
+        OneWay( Item * item, const std::string & behavior, bool isFlying ) ;
 
         virtual ~OneWay( ) ;
 
-       /**
-        * Actualiza el comportamiento del elemento en cada ciclo
-        * @return false si la actualización implica la destrucción del elemento o true en caso contrario
-        */
         virtual bool update () ;
 
 protected:

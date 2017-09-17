@@ -1753,7 +1753,7 @@ namespace rxml
 
     // behavior
     //
-    typedef ::xml_schema::int_ behavior_type;
+    typedef ::xml_schema::string behavior_type;
     typedef ::xsd::cxx::tree::traits< behavior_type, char > behavior_traits;
 
     const behavior_type&
@@ -1764,6 +1764,9 @@ namespace rxml
 
     void
     behavior (const behavior_type& x);
+
+    void
+    behavior (::std::auto_ptr< behavior_type > p);
 
     // type
     //

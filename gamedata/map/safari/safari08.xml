@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<room xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="room.xsd">
+<room xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
   <name>safari/safari08.xml</name>
 
@@ -203,37 +203,37 @@
     <item x="0" y="0" z="-1">
       <label>safari-capital-north</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="1" z="-1">
       <label>safari-capital-north</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="0" z="-1">
       <label>safari-door-south</label>
       <direction>north</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="9" y="0" z="0">
       <label>safari-capital-south</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="9" y="1" z="0">
       <label>safari-capital-south</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="9" y="0" z="-1">
       <label>safari-door-south</label>
       <direction>south</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>door</type>
     </item>
   </items>

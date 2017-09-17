@@ -15,8 +15,8 @@
 namespace isomot
 {
 
-Hunter::Hunter( Item * item, const BehaviorOfItem & id ) :
-        Behavior( item, id )
+Hunter::Hunter( Item * item, const std::string & behavior ) :
+        Behavior( item, behavior )
 {
         speedTimer = new HPC();
         speedTimer->start();
@@ -38,7 +38,7 @@ bool Hunter::update ()
         {
                 case Wait:
                 // Si el elemento no tiene que esperar la cercanía del jugador, se activa sin más
-                if ( theBehavior == Hunter4Behavior || theBehavior == Hunter8Behavior )
+                if ( theBehavior == "behavior of hunter in four directions" || theBehavior == "behavior of hunter in eight directions" )
                 {
                         SoundManager::getInstance()->play( freeItem->getLabel(), activity );
                         activity = calculateDirection( activity );
@@ -46,7 +46,7 @@ bool Hunter::update ()
                 // Se comprueba la cercanía del jugador para activar el elemento
                 else
                 {
-                        int delta = mediator->getTileSize() * 3;
+                        int delta = mediator->getSizeOfOneTile() * 3;
 
                         // Si el jugador está dentro del rectángulo definido en torno al cazador entonces el cazador se activa
                         if ( playerItem != 0  &&
@@ -59,7 +59,7 @@ bool Hunter::update ()
                         }
 
                         // Si se mueve en ocho direcciones emite sonido cuando está detenido
-                        if ( theBehavior == HunterWaiting8Behavior )
+                        if ( theBehavior == "behavior of waiting hunter in eight directions" )
                         {
                                 SoundManager::getInstance()->play( freeItem->getLabel(), activity );
                         }
@@ -74,7 +74,7 @@ bool Hunter::update ()
                 case MoveEast:
                 case MoveWest:
                         // Si se crea el guarda completo entonces el elemento actual debe destruirse
-                        if ( theBehavior == HunterWaiting4Behavior && createFullBody() )
+                        if ( theBehavior == "behavior of waiting hunter in four directions" && createFullBody() )
                         {
                                 alive = false;
                         }
@@ -201,11 +201,11 @@ bool Hunter::update ()
 
 ActivityOfItem Hunter::calculateDirection( const ActivityOfItem& activity )
 {
-        if ( theBehavior == Hunter4Behavior || theBehavior == HunterWaiting4Behavior )
+        if ( theBehavior == "behavior of hunter in four directions" || theBehavior == "behavior of waiting hunter in four directions" )
         {
                 return calculateDirection4( activity );
         }
-        else if ( theBehavior == Hunter8Behavior || theBehavior == HunterWaiting8Behavior )
+        else if ( theBehavior == "behavior of hunter in eight directions" || theBehavior == "behavior of waiting hunter in eight directions" )
         {
                 return calculateDirection8( activity );
         }
@@ -379,7 +379,7 @@ bool Hunter::createFullBody()
                                                   freeItem->getX(), freeItem->getY(), freeItem->getZ() - LayerHeight,
                                                   freeItem->getDirection() );
 
-                newItem->assignBehavior( Hunter4Behavior, 0 );
+                newItem->assignBehavior( "behavior of hunter in four directions", 0 );
 
                 // El elemento actual debe dejar de detectar colisiones porque,
                 // de lo contrariom no se podrá crear el guarda completo

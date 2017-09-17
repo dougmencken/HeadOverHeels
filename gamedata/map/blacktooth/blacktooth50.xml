@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<room xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="room.xsd">
+<room xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
   <name>blacktooth/blacktooth50.xml</name>
 
@@ -644,73 +644,73 @@
     <item x="0" y="0" z="0">
       <label>market-wall-y-1</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="1" z="0">
       <label>market-wall-y-3</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="2" z="0">
       <label>market-wall-y-2</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="5" z="0">
       <label>market-wall-y-3</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="6" z="0">
       <label>market-wall-y-2</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="7" z="0">
       <label>market-wall-y-1</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="3" z="-1">
       <label>market-door-north</label>
       <direction>north</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="9" y="3" z="-1">
       <label>market-door-south</label>
       <direction>south</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="4" y="8" z="-1">
       <label>market-door-west</label>
       <direction>west</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="4" y="0" z="0">
       <label>imperial-guard</label>
       <direction>none</direction>
-      <behavior>7</behavior>
+      <behavior>behavior of hunter in four directions</behavior>
       <type>freeitem</type>
     </item>
     <item x="1" y="7" z="0">
       <label>helicopter-bug</label>
       <direction>none</direction>
-      <behavior>16</behavior>
+      <behavior>behavior of random patroling in eight directions</behavior>
       <type>freeitem</type>
     </item>
     <item x="8" y="7" z="0">
       <label>helicopter-bug</label>
       <direction>none</direction>
-      <behavior>16</behavior>
+      <behavior>behavior of random patroling in eight directions</behavior>
       <type>freeitem</type>
     </item>
   </items>

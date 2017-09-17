@@ -12,7 +12,7 @@
 namespace isomot
 {
 
-ConveyorBelt::ConveyorBelt( Item* item, const BehaviorOfItem& behavior )
+ConveyorBelt::ConveyorBelt( Item* item, const std::string& behavior )
         : Behavior( item, behavior )
         , active( false )
 {
@@ -60,7 +60,7 @@ bool ConveyorBelt::update ()
                                                                 // El ancla del elemento debe ser esta cinta transportadora para proceder a arrastrarlo
                                                                 if ( topItem->getAnchor() == 0 || item->getId() == topItem->getAnchor()->getId() )
                                                                 {
-                                                                        if ( this->theBehavior == ConveyorBeltNortheast )
+                                                                        if ( this->theBehavior == "behavior of conveyor in north or east" )
                                                                         {
                                                                                 if ( item->getDirection() == South )
                                                                                 {
@@ -77,7 +77,7 @@ bool ConveyorBelt::update ()
                                                                                         }
                                                                                 }
                                                                         }
-                                                                        if ( this->theBehavior == ConveyorBeltSouthwest )
+                                                                        if ( this->theBehavior == "behavior of conveyor in south or west" )
                                                                         {
                                                                                 if ( item->getDirection() == South )
                                                                                 {

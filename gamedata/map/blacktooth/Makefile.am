@@ -86,5 +86,4 @@ gamedatamapblacktooth_DATA = blacktooth01.xml \
 			    blacktooth85.xml \
 			    blacktooth86.xml \
 			    blacktooth87.xml \
-			    blacktooth88.xml \
-			    room.xsd
+			    blacktooth88.xml

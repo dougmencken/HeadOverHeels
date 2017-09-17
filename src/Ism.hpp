@@ -192,47 +192,6 @@ namespace isomot
                 WestsouthBorder    /* En salas triples o cuádruples, el límite existente tras la puerta oeste-sur. Alcanzarlo implica el cambio de sala */
         } ;
 
-        enum BehaviorOfItem
-        {
-                NoBehavior = 0,                     /* Sin comportamiento */
-                BubblesBehavior = 1,                /* Representación del transporte de un jugador a través de un telepuerto */
-                ConveyorBeltNortheast = 2,          /* Arrastra al elemento que tiene encima en dirección norte o este */
-                ConveyorBeltSouthwest = 3,          /* Arrastra al elemento que tiene encima en dirección sur u oeste */
-                DetectorBehavior = 4,               /* Detecta al jugador y avanza en la dirección adecuada para darle caza */
-                DriveBehavior = 5,                  /* Movimiento en la dirección marcada por un elemento situado encima */
-                ElevatorBehavior = 6,               /* Un ascensor */
-                Hunter4Behavior = 7,                /* Persigue a un jugador hasta darle caza moviéndose en las direcciones norte, sur, este y oeste */
-                HunterWaiting4Behavior = 8,         /* Persigue a un jugador hasta darle caza moviéndose en las direcciones norte, sur, este y oeste. La caza se activa cuando el jugador está a una cierta distancia */
-                Hunter8Behavior = 9,                /* Persigue a un jugador hasta darle caza moviéndose en las ocho direcciones posibles */
-                HunterWaiting8Behavior = 10,        /* Persigue a un jugador hasta darle caza moviéndose en las ocho direcciones posibles. La caza se activa cuando el jugador está a una cierta distancia */
-                ImpelBehavior = 11,                 /* Movimiento en un único sentido provocado por un desplazamiento de otro elemento. Se detiene al chocar con algo */
-                MobileBehavior = 12,                /* Se mueve al ser empujado */
-                OneWayBehavior = 13,                /* Movimiento en un único sentido, cuando choca con algo gira 180º y prosigue en sentido contrario */
-                Patrol4cBehavior = 14,              /* Movimiento aleatorio en las direcciones norte, sur, este y oeste */
-                Patrol4dBehavior = 15,              /* Movimiento aleatorio en las direcciones noreste, noroeste, sudeste y sudoeste */
-                Patrol8Behavior = 16,               /* Movimiento aleatorio en cualquiera de las ocho direcciones */
-                RemoteControlBehavior = 17,         /* Control remoto de otro elemento */
-                SinkBehavior = 18,                  /* Movimiento descendente producido cuando un elemento está encima */
-                FireDoughnutBehavior = 19,          /* Movimiento en un único sentido, cuando choca con algo lo paraliza, sólo si es un elemento móvil y mortal, luego desaparece */
-                SpecialBehavior = 20,               /* Elementos volátiles que dan algún poder al jugador */
-                SteerBehavior = 21,                 /* Elemento controlado a distancia por un control remoto */
-                SwitchBehavior = 22,                /* Un conmutador que cambia el estado de elementos volátiles a no-volátiles y detiene a los elementos mortales */
-                TeleportBehavior = 23,              /* Transporta a un jugador de una sala a otra */
-                TrampolineBehavior = 24,            /* Provoca que el jugador que esté encima dé un gran salto */
-                TurnLeftBehavior = 25,              /* Movimiento en un único sentido, cuando choca con algo gira 90º a la izquierda y prosigue la marcha */
-                TurnRightBehavior = 26,             /* Movimiento en un único sentido, cuando choca con algo gira 90º a la derecha y prosigue la marcha */
-                VolatileTimeBehavior = 27,          /* Elemento que se crean al destruir uno volátil */
-                VolatileTouchBehavior = 28,         /* Se destruye cuando un jugador lo toca */
-                VolatileWeightBehavior = 29,        /* Se destruye cuando un elemento está encima */
-                VolatilePuppyBehavior = 30,         /* Se destruye cuando Head o el jugador compuesto está en la sala */
-                VolatileHeavyBehavior = 31,         /* Como un volátil por peso pero tarda más en destruirse */
-                FlyingOneWayBehavior = 32,          /* Movimiento en un único sentido, cuando choca con algo gira 180º y prosigue en sentido contrario. Flota en el aire */
-                CannonBallBehavior = 33,            /* Se mueve hacia el norte, cuando colisiona desaparece como un volátil */
-                HeadBehavior = 64,                  /* El jugador Head */
-                HeelsBehavior = 65,                 /* El jugador Heels */
-                HeadAndHeelsBehavior = 66           /* El jugador compuesto de Head y Heels */
-        } ;
-
         enum ActivityOfItem
         {
                 Wait,                           /* El elemento está quieto */

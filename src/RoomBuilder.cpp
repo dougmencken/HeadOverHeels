@@ -220,17 +220,18 @@ Room* RoomBuilder::buildRoom ()
         return this->room;
 }
 
-PlayerItem* RoomBuilder::buildPlayerInTheSameRoom( const std::string& player, const BehaviorOfItem& behaviorId, int x, int y, int z, const Direction& direction )
+PlayerItem* RoomBuilder::buildPlayerInTheSameRoom( const std::string& player, const std::string& behavior, int x, int y, int z, const Direction& direction )
 {
-        return buildPlayerInRoom( this->room, player, behaviorId, x, y, z, direction );
+        return buildPlayerInRoom( this->room, player, behavior, x, y, z, direction );
 }
 
-PlayerItem* RoomBuilder::buildPlayerInRoom( Room* room, const std::string& player, const BehaviorOfItem& behaviorId, int x, int y, int z, const Direction& direction, bool withItem )
+PlayerItem* RoomBuilder::buildPlayerInRoom( Room* room, const std::string& player, const std::string& behavior, int x, int y, int z, const Direction& direction, bool withItem )
 {
         PlayerItem* playerItem = 0;
         GameManager* gameManager = GameManager::getInstance();
+
         std::string newPlayer( player );
-        BehaviorOfItem newBehaviorOfPlayer = behaviorId;
+        std::string newBehaviorOfPlayer( behavior );
 
         // when composite player ran out of lives, check if any of simple players still survive
         if ( gameManager->getLives( player ) == 0 )
@@ -241,12 +242,12 @@ PlayerItem* RoomBuilder::buildPlayerInRoom( Room* room, const std::string& playe
                         if ( gameManager->getLives( "head" ) > 0 )
                         {
                                 newPlayer = "head";
-                                newBehaviorOfPlayer = HeadBehavior;
+                                newBehaviorOfPlayer = "behavior of Head";
                         }
                         else if ( gameManager->getLives( "heels" ) > 0 )
                         {
                                 newPlayer = "heels";
-                                newBehaviorOfPlayer = HeelsBehavior;
+                                newBehaviorOfPlayer = "behavior of Heels";
                         }
                         else
                         {
@@ -343,15 +344,15 @@ GridItem* RoomBuilder::buildGridItem( const rxml::item& item )
                 gridItem = new GridItem( itemData, item.x(), item.y(), ( item.z() > Top ? item.z() * LayerHeight : Top ),
                 item.direction() == rxml::direction::none ? NoDirection : Direction( item.direction() - 1 ) );
 
-                if ( item.behavior() == VolatileTimeBehavior || item.behavior() == VolatileTouchBehavior ||
-                     item.behavior() == VolatileWeightBehavior || item.behavior() == VolatileHeavyBehavior ||
-                     item.behavior() == VolatilePuppyBehavior )
+                if ( item.behavior() == "behavior of disappearance in time" || item.behavior() == "behavior of disappearance on touch" ||
+                     item.behavior() == "behavior of disappearance on jump into" || item.behavior() == "behavior of slow disappearance on jump into" ||
+                     item.behavior() == "behavior of disappearance as soon as Head appears" )
                 {
-                        gridItem->assignBehavior( BehaviorOfItem( item.behavior() ), reinterpret_cast< void * >( this->itemDataManager->findItemByLabel( "bubbles" ) ) );
+                        gridItem->assignBehavior( item.behavior(), reinterpret_cast< void * >( this->itemDataManager->findItemByLabel( "bubbles" ) ) );
                 }
                 else
                 {
-                        gridItem->assignBehavior( BehaviorOfItem( item.behavior() ), 0 );
+                        gridItem->assignBehavior( item.behavior(), 0 );
                 }
         }
 
@@ -369,8 +370,8 @@ FreeItem* RoomBuilder::buildFreeItem( const rxml::item& item )
         if ( itemData != 0 )
         {
                 // Coordenadas libres
-                int fx = item.x() * room->getTileSize() + ( ( room->getTileSize() - itemData->widthX ) >> 1 );
-                int fy = ( item.y() + 1 ) * room->getTileSize() - ( ( room->getTileSize() - itemData->widthY ) >> 1 ) - 1;
+                int fx = item.x() * room->getSizeOfOneTile() + ( ( room->getSizeOfOneTile() - itemData->widthX ) >> 1 );
+                int fy = ( item.y() + 1 ) * room->getSizeOfOneTile() - ( ( room->getSizeOfOneTile() - itemData->widthY ) >> 1 ) - 1;
                 int fz = item.z() != Top ? item.z() * LayerHeight : Top;
 
                 // La única excepción para colocar un elemento es que sea un bonus y ya se haya cogido
@@ -380,52 +381,48 @@ FreeItem* RoomBuilder::buildFreeItem( const rxml::item& item )
                         freeItem = new FreeItem( itemData, fx, fy, fz,
                                                  item.direction() == rxml::direction::none ? NoDirection : Direction( item.direction() - 1 ) );
 
-                        // Datos extra necesarios para el comportamiento del elemento
-                        switch ( item.behavior () )
+                        // extra data for behavior of item
+                        if ( item.behavior () == "behavior of elevator" )
                         {
-                                case ElevatorBehavior:
+                                int* data = new int[ 3 ];
+                                int foundData = 0;
+
+                                for ( rxml::item::extra_const_iterator i = item.extra().begin (); i != item.extra().end (); ++i )
                                 {
-                                        int* data = new int[ 3 ];
-                                        int foundData = 0;
-
-                                        // Extrae los datos extra asociados al ascensor
-                                        for ( rxml::item::extra_const_iterator i = item.extra().begin (); i != item.extra().end (); ++i )
-                                        {
-                                                data[ foundData++ ] = ( *i );
-                                        }
-
-                                        // Si los tres datos necesarios constan entonces se asigna el comportamiento
-                                        if ( foundData == 3 )
-                                        {
-                                                freeItem->assignBehavior(
-                                                        BehaviorOfItem( item.behavior () ),
-                                                        reinterpret_cast< void * >( data )
-                                                );
-                                                delete[] data;
-                                        }
+                                        data[ foundData++ ] = ( *i );
                                 }
-                                        break;
 
-                                case HunterWaiting4Behavior:
+                                // three entries are needed
+                                if ( foundData == 3 )
+                                {
                                         freeItem->assignBehavior(
-                                                BehaviorOfItem( item.behavior () ),
-                                                reinterpret_cast< void * >( this->itemDataManager->findItemByLabel( "imperial-guard" ) )
+                                                item.behavior (),
+                                                reinterpret_cast< void * >( data )
                                         );
-                                        break;
-
-                                case SpecialBehavior:
-                                case VolatileTimeBehavior:
-                                case VolatileTouchBehavior:
-                                case VolatileWeightBehavior:
-                                case CannonBallBehavior:
-                                        freeItem->assignBehavior(
-                                                BehaviorOfItem( item.behavior () ),
-                                                reinterpret_cast< void * >( this->itemDataManager->findItemByLabel( "bubbles" ) )
-                                        );
-                                        break;
-
-                                default:
-                                        freeItem->assignBehavior( BehaviorOfItem( item.behavior () ), 0 );
+                                        delete[] data;
+                                }
+                        }
+                        else if ( item.behavior () == "behavior of waiting hunter in four directions" )
+                        {
+                                freeItem->assignBehavior(
+                                        item.behavior (),
+                                        reinterpret_cast< void * >( this->itemDataManager->findItemByLabel( "imperial-guard" ) )
+                                );
+                        }
+                        else if ( item.behavior () == "behavior of something special" ||
+                                        item.behavior () == "behavior of disappearance in time" ||
+                                        item.behavior () == "behavior of disappearance on touch" ||
+                                        item.behavior () == "behavior of disappearance on jump into" ||
+                                        item.behavior () == "behaivor of final ball" )
+                        {
+                                freeItem->assignBehavior(
+                                        item.behavior (),
+                                        reinterpret_cast< void * >( this->itemDataManager->findItemByLabel( "bubbles" ) )
+                                );
+                        }
+                        else
+                        {
+                                freeItem->assignBehavior( item.behavior (), 0 );
                         }
                 }
         }
@@ -446,8 +443,8 @@ int RoomBuilder::getXCenterOfRoom( ItemData* playerData, Room* theRoom )
 {
         return
                 ( ( theRoom->getBound( South ) - theRoom->getBound( North ) + playerData->widthX ) >> 1 )
-                        + ( theRoom->getDoor( North ) != 0 ? theRoom->getTileSize() >> 1 : 0 )
-                                - ( theRoom->getDoor( South ) != 0 ? theRoom->getTileSize() >> 1 : 0 ) ;
+                        + ( theRoom->getDoor( North ) != 0 ? theRoom->getSizeOfOneTile() >> 1 : 0 )
+                                - ( theRoom->getDoor( South ) != 0 ? theRoom->getSizeOfOneTile() >> 1 : 0 ) ;
 
 }
 
@@ -456,8 +453,8 @@ int RoomBuilder::getYCenterOfRoom( ItemData* playerData, Room* theRoom )
 {
         return
                 ( ( theRoom->getBound( West ) - theRoom->getBound( East ) + playerData->widthY ) >> 1 )
-                        + ( theRoom->getDoor( East ) != 0 ? theRoom->getTileSize() >> 1 : 0 )
-                                - ( theRoom->getDoor( West ) != 0 ? theRoom->getTileSize() >> 1 : 0 )
+                        + ( theRoom->getDoor( East ) != 0 ? theRoom->getSizeOfOneTile() >> 1 : 0 )
+                                - ( theRoom->getDoor( West ) != 0 ? theRoom->getSizeOfOneTile() >> 1 : 0 )
                                         - 1 ;
 }
 

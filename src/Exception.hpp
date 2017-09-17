@@ -20,59 +20,47 @@
 namespace isomot
 {
 
-/**
- * Base para el manejo de excepciones en la aplicación
- */
 class Exception : public std::exception
 {
+
 public:
 
-  /**
-   * Constructor
-   * @param message Información sobre la excepción
-   */
-	explicit Exception(const std::string& message);
+        explicit Exception( const std::string& message ) ;
 
-	virtual ~Exception() throw();
+        virtual ~Exception( ) throw () ;
 
-	/**
-	 * Informa sobre la causa de la excepción
-	 * @return Una cadena con el texto informativo
-	 */
-	virtual const char* what() const throw();
+        /**
+         * Inform in case of exception
+         */
+        virtual const char * what () const throw () ;
 
-	/**
-	 * Levanta la excepción
-	 */
-	virtual void raise() const;
+        virtual void raise () const ;
 
-	/**
-	 * Copia el objeto
-	 */
-	virtual Exception* clone() const;
+        virtual Exception * clone () const ;
 
 private:
 
-  /**
-   * Información sobre la excepción
-   */
-  std::string message;
+        /**
+         * Information about exception
+         */
+        std::string message;
+
 };
 
 /**
- * Excepción para el tratamiento de punteros nulos
+ * Exception for handling null pointers
  */
 struct ENullPointer : public Exception
 {
-  explicit ENullPointer();
+        explicit ENullPointer () ;
 };
 
 /**
- * Función plantilla para la comprobación de errores
+ * Function template for asserting
  */
-template<class E, class C> inline void Assert(C condition)
+template < class E, class C > inline void Assert ( C condition )
 {
-  if(!condition) throw E();
+        if ( ! condition ) throw E () ;
 }
 
 }

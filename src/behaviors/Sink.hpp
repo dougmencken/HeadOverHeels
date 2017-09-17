@@ -29,19 +29,10 @@ class Sink : public Behavior
 
 public:
 
-       /**
-        * Constructor
-        * @param item Elemento que tiene este comportamiento
-        * @param id Identificador del comportamiento
-        */
-        Sink( Item * item, const BehaviorOfItem & id ) ;
+        Sink( Item * item, const std::string & behavior ) ;
 
         virtual ~Sink( ) ;
 
-       /**
-        * Actualiza el comportamiento del elemento en cada ciclo
-        * @return false si la actualización implica la destrucción del elemento o true en caso contrario
-        */
         virtual bool update () ;
 
 private:

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<room xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="room.xsd">
+<room xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
   <name>byblos/byblos19.xml</name>
 
@@ -203,55 +203,55 @@
     <item x="0" y="0" z="-1">
       <label>byblos-door-west</label>
       <direction>east</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="0" y="9" z="-1">
       <label>byblos-door-west</label>
       <direction>west</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="1" y="2" z="0">
       <label>diver</label>
       <direction>west</direction>
-      <behavior>13</behavior>
+      <behavior>behavior of there and back</behavior>
       <type>freeitem</type>
     </item>
     <item x="0" y="3" z="0">
       <label>toaster</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="4" z="0">
       <label>toaster</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="4" z="1">
       <label>toaster</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="5" z="0">
       <label>toaster</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="5" z="1">
       <label>toaster</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="6" z="0">
       <label>toaster</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
   </items>

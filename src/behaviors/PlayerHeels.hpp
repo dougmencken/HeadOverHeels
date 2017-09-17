@@ -13,11 +13,12 @@
 
 #include "UserControlled.hpp"
 
+
 namespace isomot
 {
 
-class Item;
-class ItemData;
+class Item ;
+class ItemData ;
 
 /**
  * Comportamiento del jugador Head. Dado que Head es uno de los elementos controlados por el usuario
@@ -30,24 +31,12 @@ class PlayerHeels : public UserControlled
 
 public:
 
-       /**
-        * Constructor
-        * @param item Elemento que tiene este comportamiento
-        * @param id Identificador del comportamiento
-        */
-        PlayerHeels( Item * item, const BehaviorOfItem & id ) ;
+        PlayerHeels( Item * item, const std::string & behavior ) ;
 
         virtual ~PlayerHeels( ) ;
 
-       /**
-        * Actualiza el comportamiento del elemento en cada ciclo
-        * @return false si la actualización implica la destrucción del elemento o true en caso contrario
-        */
         virtual bool update () ;
 
-       /**
-        * Actualiza el estado del jugador en función de las órdenes dadas por el usuario
-        */
         virtual void behave () ;
 
 };

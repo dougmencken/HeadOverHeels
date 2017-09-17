@@ -13,8 +13,8 @@
 namespace isomot
 {
 
-Detector::Detector( Item * item, const BehaviorOfItem & id ) :
-        Behavior( item, id )
+Detector::Detector( Item * item, const std::string & behavior ) :
+        Behavior( item, behavior )
 {
         speedTimer = new HPC();
         fallTimer = new HPC();

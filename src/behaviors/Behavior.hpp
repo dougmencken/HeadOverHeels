@@ -24,8 +24,8 @@ class Item ;
 class KindOfActivity ;
 
 /**
- * Abstraction of behavior of an element. Elements of the game change activity in each cycle
- * of update. The transition between activities is defined by different kinds of behavior
+ * Abstraction for behavior of item. Items of game change activity in each cycle of update.
+ * Different kinds of behavior define different ways of transition between activities
  */
 
 class Behavior
@@ -33,37 +33,23 @@ class Behavior
 
 protected:
 
-        /**
-         * Constructor
-         * @param whichItem Elemento que tiene este comportamiento
-         * @param behavior Identificador del comportamiento
-         */
-        Behavior( Item * whichItem, const BehaviorOfItem & behavior ) ;
+        Behavior( Item * whichItem, const std::string & behavior ) ;
 
 public:
 
         virtual ~Behavior( ) ;
 
-        /**
-         * Crea el comportamiento del elemento
-         * @param item Elemento que tiene este comportamiento
-         * @param id Identificador del comportamiento del elemento
-         * @param extraData Datos extra necesarios para configurar el comportamiento
-         * @return Un objeto de la clase con el comportamiento especificado
-         */
-        static Behavior* createBehavior ( Item* item, const BehaviorOfItem& id, void* extraData ) ;
+        static Behavior* createBehaviorByName ( Item* item, const std::string& behavior, void* extraData ) ;
 
         /**
-         * Updates behavior of the element in each cycle
-         * @return false if this update causes destruction of the element or true otherwise
+         * Updates behavior of item in each cycle
+         * @return false if this update destroys item or true otherwise
          */
         virtual bool update () = 0 ;
 
         /**
-         * Asigna el identificador del estado actual del comportamiento y cambia el estado
-         * del comportamiento según el identificador
-         * @param Activity of item
-         * @param Elemento que emite el cambio de estado
+         * @param activity Activity of item
+         * @param sender Item which changes activity
          */
         virtual void changeActivityOfItem ( const ActivityOfItem & activity, Item * sender = 0 ) ;
 
@@ -72,21 +58,21 @@ protected:
         friend class KindOfActivity ;
 
         /**
-         * Change the kind of activity
+         * Change kind of activity
          */
         void changeActivityTo ( KindOfActivity * kind ) {  this->whatToDo = kind ;  }
 
         /**
-         * Change activity of every item collided with the sender
+         * Change activity of every item collided with sender
          */
         void propagateActivity ( Item * sender, const ActivityOfItem & activity ) ;
 
 protected:
 
-        BehaviorOfItem theBehavior ;
+        std::string theBehavior ;
 
         /**
-         * Elemento que tiene este comportamiento
+         * Item with this behavior
          */
         Item * item ;
 
@@ -101,24 +87,20 @@ protected:
         ActivityOfItem activity ;
 
         /**
-         * Elemento que cambia el estado del elemento con este comportamiento
+         * Another item which changes activity of item with this behavior
          */
         Item * sender ;
 
 public:
 
-        BehaviorOfItem getBehaviorOfItem () const {  return theBehavior ;  }
+        std::string getBehaviorOfItem () const {  return theBehavior ;  }
 
         ActivityOfItem getActivityOfItem () const {  return activity ;  }
 
-        /**
-         * Elemento con este comportamiento
-         * @return Un elemento de la sala
-         */
         Item* getItem () {  return item ;  }
 
         /**
-         * Add some more data that may be needed for behavior
+         * Add some more data for behavior
          */
         virtual void setMoreData ( void * data ) { }
 

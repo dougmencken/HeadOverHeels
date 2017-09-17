@@ -30,19 +30,10 @@ class Hunter : public Behavior
 
 public:
 
-       /**
-        * Constructor
-        * @param item Elemento que tiene este comportamiento
-        * @param id Identificador del comportamiento
-        */
-        Hunter( Item * item, const BehaviorOfItem & id ) ;
+        Hunter( Item * item, const std::string & behavior ) ;
 
         virtual ~Hunter( ) ;
 
-       /**
-        * Actualiza el comportamiento del elemento en cada ciclo
-        * @return false si la actualización implica la destrucción del elemento o true en caso contrario
-        */
         virtual bool update () ;
 
 private:

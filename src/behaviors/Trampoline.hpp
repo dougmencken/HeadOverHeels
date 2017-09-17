@@ -29,19 +29,10 @@ class Trampoline : public Behavior
 
 public:
 
-       /**
-        * Constructor
-        * @param item Elemento que tiene este comportamiento
-        * @param id Identificador del comportamiento
-        */
-        Trampoline( Item * item, const BehaviorOfItem & id ) ;
+        Trampoline( Item * item, const std::string & behavior ) ;
 
         virtual ~Trampoline( ) ;
 
-       /**
-        * Actualiza el comportamiento del elemento en cada ciclo
-        * @return false si la actualización implica la destrucción del elemento o true en caso contrario
-        */
         virtual bool update () ;
 
 private:

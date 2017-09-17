@@ -37,5 +37,4 @@ gamedatamapegyptus_DATA = egyptus01.xml \
 			  egyptus36.xml \
 			  egyptus37.xml \
 			  egyptus38.xml \
-			  egyptus39.xml \
-			  room.xsd
+			  egyptus39.xml

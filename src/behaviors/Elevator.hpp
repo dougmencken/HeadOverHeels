@@ -29,19 +29,10 @@ class Elevator : public Behavior
 
 public:
 
-       /**
-        * Constructor
-        * @param item Elemento que tiene este comportamiento
-        * @param id Identificador del comportamiento
-        */
-        Elevator( Item * item, const BehaviorOfItem & id ) ;
+        Elevator( Item * item, const std::string & behavior ) ;
 
         virtual ~Elevator( ) ;
 
-       /**
-        * Actualiza el comportamiento del elemento en cada ciclo
-        * @return false si la actualización implica la destrucción del elemento o true en caso contrario
-        */
         virtual bool update () ;
 
 private:

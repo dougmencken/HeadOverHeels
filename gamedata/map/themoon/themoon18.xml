@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<room xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="room.xsd">
+<room xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
   <name>themoon/themoon18.xml</name>
 
@@ -319,55 +319,55 @@
     <item x="0" y="0" z="0">
       <label>moon-wall-y-4</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="1" z="0">
       <label>moon-wall-y-2</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="4" z="0">
       <label>moon-wall-y-2</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="5" z="0">
       <label>moon-wall-y-3</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="2" z="-1">
       <label>themoon-door-north</label>
       <direction>north</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="3" y="2" z="0">
       <label>teleport</label>
       <direction>none</direction>
-      <behavior>23</behavior>
+      <behavior>behavior of teletransport</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="2" z="0">
       <label>teleport</label>
       <direction>none</direction>
-      <behavior>23</behavior>
+      <behavior>behavior of teletransport</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="3" z="0">
       <label>teleport</label>
       <direction>none</direction>
-      <behavior>23</behavior>
+      <behavior>behavior of teletransport</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="3" z="0">
       <label>teleport</label>
       <direction>none</direction>
-      <behavior>23</behavior>
+      <behavior>behavior of teletransport</behavior>
       <type>griditem</type>
     </item>
   </items>

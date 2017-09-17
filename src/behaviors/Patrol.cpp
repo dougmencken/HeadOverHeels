@@ -13,8 +13,8 @@
 namespace isomot
 {
 
-Patrol::Patrol( Item * item, const BehaviorOfItem & id ) :
-        Behavior( item, id )
+Patrol::Patrol( Item * item, const std::string & behavior ) :
+        Behavior( item, behavior )
 {
         speedTimer = new HPC();
         fallTimer = new HPC();
@@ -153,35 +153,29 @@ void Patrol::changeDirection()
 {
         int direction = 0;
 
-        // En función del tipo las orientaciones a barajar son distintas
-        switch ( theBehavior )
+        if ( theBehavior == "behavior of random patroling in four primary directions" )
         {
-                case Patrol4cBehavior:
-                        direction = ( rand() % 4 );
-                        break;
-
-                case Patrol4dBehavior:
-                        direction = ( rand() % 4 ) + 4;
-                        break;
-
-                case Patrol8Behavior:
-                        direction = ( rand() % 8 );
-                        break;
-
-                default:
-                        ;
+                direction = ( rand() % 4 );
+        }
+        else if ( theBehavior == "behavior of random patroling in four secondary directions" )
+        {
+                direction = ( rand() % 4 ) + 4;
+        }
+        else if ( theBehavior == "behavior of random patroling in eight directions" )
+        {
+                direction = ( rand() % 8 );
         }
 
-        // Asigna el estado según el valor de la dirección aleatoria calculada
+        // change activity depending on value of calculated direction
         switch ( static_cast< Direction >( direction ) )
         {
                 case North:
-                activity = MoveNorth;
-                break;
+                        activity = MoveNorth;
+                        break;
 
                 case South:
-                activity = MoveSouth;
-                break;
+                        activity = MoveSouth;
+                        break;
 
                 case East:
                         activity = MoveEast;

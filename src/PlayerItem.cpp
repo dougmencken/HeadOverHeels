@@ -397,7 +397,7 @@ bool PlayerItem::isCollidingWithRoomBorder( const Direction& direction, Mediator
                         break;
 
                 case South:
-                        result = ( this->x + getDataOfFreeItem()->widthX > mediator->getTilesX() * mediator->getTileSize() );
+                        result = ( this->x + getDataOfFreeItem()->widthX > mediator->getTilesX() * mediator->getSizeOfOneTile() );
                         break;
 
                 case Southeast:
@@ -415,7 +415,7 @@ bool PlayerItem::isCollidingWithRoomBorder( const Direction& direction, Mediator
                         break;
 
                 case West:
-                        result = ( this->y >= mediator->getTilesY() * mediator->getTileSize() );
+                        result = ( this->y >= mediator->getTilesY() * mediator->getSizeOfOneTile() );
                         break;
 
                 case Westnorth:
@@ -599,15 +599,15 @@ void PlayerItem::liberatePlanet ()
         }
 }
 
-void PlayerItem::assignTakenItem ( ItemData* itemData, BITMAP* takenItemImage, const BehaviorOfItem& behaviorId )
+void PlayerItem::assignTakenItem ( ItemData* itemData, BITMAP* takenItemImage, const std::string& behavior )
 {
-        dynamic_cast< UserControlled* >( this->behavior )->assignTakenItem( itemData, takenItemImage, behaviorId );
+        dynamic_cast< UserControlled* >( this->behavior )->assignTakenItem( itemData, takenItemImage, behavior );
 }
 
-ItemData* PlayerItem::consultTakenItem ( BehaviorOfItem* behaviorId )
+std::string PlayerItem::consultTakenItem ( ItemData* itemData )
 {
-        *behaviorId = dynamic_cast< UserControlled * >( this->behavior )->getTakenItemBehavior ();
-        return dynamic_cast< UserControlled * >( this->behavior )->getTakenItemData ();
+        itemData = dynamic_cast< UserControlled * >( this->behavior )->getTakenItemData ();
+        return dynamic_cast< UserControlled * >( this->behavior )->getTakenItemBehavior ();
 }
 
 BITMAP* PlayerItem::consultTakenItemImage ()

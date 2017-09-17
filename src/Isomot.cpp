@@ -361,7 +361,7 @@ void Isomot::updateEndRoom()
                 if ( activeRoom->getMediator()->findItemByLabel( "ball" ) == 0 && activeRoom->getMediator()->findItemByLabel( "bubbles" ) == 0 )
                 {
                         FreeItem* freeItem = new FreeItem( this->itemDataManager->findItemByLabel( "ball" ), 146, 93, LayerHeight, NoDirection );
-                        freeItem->assignBehavior( CannonBallBehavior, this->itemDataManager->findItemByLabel( "bubbles" ) );
+                        freeItem->assignBehavior( "behaivor of final ball", this->itemDataManager->findItemByLabel( "bubbles" ) );
                         activeRoom->addItem( freeItem );
                 }
         }

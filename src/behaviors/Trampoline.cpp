@@ -13,8 +13,8 @@
 namespace isomot
 {
 
-Trampoline::Trampoline( Item * item, const BehaviorOfItem & id ) :
-        Behavior( item, id )
+Trampoline::Trampoline( Item * item, const std::string & behavior ) :
+        Behavior( item, behavior )
 {
         folded = rebounding = false;
         regularFrame = 0;

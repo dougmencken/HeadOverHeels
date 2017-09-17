@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<room xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="room.xsd">
+<room xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
   <name>byblos/byblos35.xml</name>
 
@@ -581,151 +581,151 @@
     <item x="0" y="0" z="0">
       <label>byblos-wall-y-1</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="1" z="0">
       <label>byblos-wall-y-1</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="2" z="0">
       <label>byblos-wall-y-2</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="5" z="0">
       <label>byblos-wall-y-2</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="6" z="0">
       <label>byblos-wall-y-1</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="7" z="0">
       <label>byblos-wall-y-1</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="3" z="-1">
       <label>byblos-door-north</label>
       <direction>north</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="9" y="3" z="4">
       <label>byblos-capital-south</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="9" y="4" z="4">
       <label>byblos-capital-south</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="9" y="3" z="-1">
       <label>byblos-door-south</label>
       <direction>south</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="3" y="0" z="4">
       <label>book</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="0" z="5">
       <label>charles-robot</label>
       <direction>south</direction>
-      <behavior>21</behavior>
+      <behavior>behavior of remotely controlled one</behavior>
       <type>freeitem</type>
     </item>
     <item x="5" y="0" z="3">
       <label>book</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="6" y="0" z="3">
       <label>book</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="7" y="0" z="3">
       <label>book</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="7" y="0" z="4">
       <label>trampoline</label>
       <direction>none</direction>
-      <behavior>24</behavior>
+      <behavior>behavior of big leap for player</behavior>
       <type>freeitem</type>
     </item>
     <item x="2" y="5" z="0">
       <label>brick2</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="5" z="1">
       <label>remote-control</label>
       <direction>none</direction>
-      <behavior>17</behavior>
+      <behavior>behavior of remote control</behavior>
       <type>freeitem</type>
     </item>
     <item x="1" y="6" z="0">
       <label>brick2</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="6" z="1">
       <label>remote-control</label>
       <direction>none</direction>
-      <behavior>17</behavior>
+      <behavior>behavior of remote control</behavior>
       <type>freeitem</type>
     </item>
     <item x="2" y="6" z="0">
       <label>brick2</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="6" z="0">
       <label>brick2</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="6" z="1">
       <label>remote-control</label>
       <direction>none</direction>
-      <behavior>17</behavior>
+      <behavior>behavior of remote control</behavior>
       <type>freeitem</type>
     </item>
     <item x="2" y="7" z="0">
       <label>brick2</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="7" z="1">
       <label>remote-control</label>
       <direction>none</direction>
-      <behavior>17</behavior>
+      <behavior>behavior of remote control</behavior>
       <type>freeitem</type>
     </item>
   </items>

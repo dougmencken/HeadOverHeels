@@ -32,5 +32,4 @@ gamedatamappenitentiary_DATA = penitentiary01.xml \
 			      penitentiary31.xml \
 			      penitentiary32.xml \
 			      penitentiary33.xml \
-			      penitentiary34.xml \
-			      room.xsd
+			      penitentiary34.xml

@@ -78,8 +78,8 @@ void GridItem::changeImage( BITMAP* newImage )
                         }
 
                         // how many pixels this image is from the origin of its room
-                        this->offset.first = ( ( mediator->getTileSize() * ( this->cell.first - this->cell.second ) ) << 1 ) - ( newImage->w >> 1 ) + 1;
-                        this->offset.second = mediator->getTileSize() * ( this->cell.first + this->cell.second + 2 ) - newImage->h - this->z - 1;
+                        this->offset.first = ( ( mediator->getSizeOfOneTile() * ( this->cell.first - this->cell.second ) ) << 1 ) - ( newImage->w >> 1 ) + 1;
+                        this->offset.second = mediator->getSizeOfOneTile() * ( this->cell.first + this->cell.second + 2 ) - newImage->h - this->z - 1;
                 }
                 else
                 {
@@ -549,7 +549,7 @@ bool GridItem::changeData( int value, const Datum& datum, const WhatToDo& what )
                         {
                                 // A cuántos píxeles está la imagen del punto origen de la sala. Sólo cambia el
                                 // valor en el eje Y pues es el que depende de la coordenada Z
-                                this->offset.second = mediator->getTileSize() * ( this->cell.first + this->cell.second + 2 ) - this->image->h - this->z - 1;
+                                this->offset.second = mediator->getSizeOfOneTile() * ( this->cell.first + this->cell.second + 2 ) - this->image->h - this->z - 1;
 
                                 mediator->markItemsForMasking( &oldGridItem );
                                 mediator->markItemsForMasking( this );

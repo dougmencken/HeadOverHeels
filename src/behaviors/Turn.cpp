@@ -13,8 +13,8 @@
 namespace isomot
 {
 
-Turn::Turn( Item * item, const BehaviorOfItem & id ) :
-        Behavior( item, id )
+Turn::Turn( Item * item, const std::string & behavior ) :
+        Behavior( item, behavior )
 {
         speedTimer = new HPC();
         fallTimer = new HPC();
@@ -164,34 +164,34 @@ void Turn::turn()
         switch ( freeItem->getDirection() )
         {
                 case North:
-                        activity = ( theBehavior == TurnLeftBehavior ? MoveWest : MoveEast );
+                        activity = ( theBehavior == "behavior of move then turn left and move" ? MoveWest : MoveEast );
                         if ( freeItem->getDirectionFrames() > 1 )
                         {
-                        freeItem->changeDirection( theBehavior == TurnLeftBehavior ? West : East );
+                        freeItem->changeDirection( theBehavior == "behavior of move then turn left and move" ? West : East );
                         }
                         break;
 
                 case South:
-                        activity = ( theBehavior == TurnLeftBehavior ? MoveEast : MoveWest );
+                        activity = ( theBehavior == "behavior of move then turn left and move" ? MoveEast : MoveWest );
                         if ( freeItem->getDirectionFrames() > 1 )
                         {
-                                freeItem->changeDirection( theBehavior == TurnLeftBehavior ? East : West );
+                                freeItem->changeDirection( theBehavior == "behavior of move then turn left and move" ? East : West );
                         }
                         break;
 
                 case East:
-                        activity = ( theBehavior == TurnLeftBehavior ? MoveNorth : MoveSouth );
+                        activity = ( theBehavior == "behavior of move then turn left and move" ? MoveNorth : MoveSouth );
                         if ( freeItem->getDirectionFrames() > 1 )
                         {
-                                freeItem->changeDirection( theBehavior == TurnLeftBehavior ? North : South );
+                                freeItem->changeDirection( theBehavior == "behavior of move then turn left and move" ? North : South );
                         }
                         break;
 
                 case West:
-                        activity = ( theBehavior == TurnLeftBehavior ? MoveSouth : MoveNorth );
+                        activity = ( theBehavior == "behavior of move then turn left and move" ? MoveSouth : MoveNorth );
                         if ( freeItem->getDirectionFrames() > 1 )
                         {
-                                freeItem->changeDirection( theBehavior == TurnLeftBehavior ? South : North );
+                                freeItem->changeDirection( theBehavior == "behavior of move then turn left and move" ? South : North );
                         }
                         break;
 

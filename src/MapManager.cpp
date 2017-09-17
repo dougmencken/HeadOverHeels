@@ -133,7 +133,7 @@ void MapManager::beginNewGame( const std::string& firstRoomFileName, const std::
                         firstRoomData->addPlayerPosition( firstPlayerPosition );
 
                         // create player
-                        roomBuilder->buildPlayerInTheSameRoom( "head", HeadBehavior, centerX, centerY, 0, West );
+                        roomBuilder->buildPlayerInTheSameRoom( "head", "behavior of Head", centerX, centerY, 0, West );
 
                         firstRoom->activatePlayer( "head" );
                         firstRoom->getCamera()->turnOn( firstRoom->getMediator()->getActivePlayer(), JustWait );
@@ -166,7 +166,7 @@ void MapManager::beginNewGame( const std::string& firstRoomFileName, const std::
                         secondRoomData->addPlayerPosition( secondPlayerPosition);
 
                         // create player
-                        roomBuilder->buildPlayerInTheSameRoom( "heels", HeelsBehavior, centerX, centerY, 0, South );
+                        roomBuilder->buildPlayerInTheSameRoom( "heels", "behavior of Heels", centerX, centerY, 0, South );
 
                         secondRoom->activatePlayer( "heels" );
                         secondRoom->getCamera()->turnOn( secondRoom->getMediator()->getActivePlayer(), JustWait );
@@ -201,14 +201,14 @@ void MapManager::beginOldGameWithPlayer( const sgxml::player& data )
                 if ( room != 0 )
                 {
                         std::string thePlayer = data.label();
-                        BehaviorOfItem behaviorId;
+                        std::string behavior;
 
                         if ( thePlayer == "head" )
-                                behaviorId = HeadBehavior;
+                                behavior = "behavior of Head";
                         else if ( thePlayer == "heels" )
-                                behaviorId = HeelsBehavior;
+                                behavior = "behavior of Heels";
                         else if ( thePlayer == "headoverheels" )
-                                behaviorId = HeadAndHeelsBehavior;
+                                behavior = "behavior of composite";
 
                         // store initial position of player in room’s data
                         PlayerInitialPosition playerPosition( thePlayer );
@@ -217,9 +217,9 @@ void MapManager::beginOldGameWithPlayer( const sgxml::player& data )
 
                         // create player
                         std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( isomot->getItemDataManager() ) );
-                        PlayerItem* player = roomBuilder->buildPlayerInRoom( room, thePlayer, behaviorId, data.x (), data.y (), data.z (), Direction( data.direction() ) );
+                        PlayerItem* player = roomBuilder->buildPlayerInRoom( room, thePlayer, behavior, data.x (), data.y (), data.z (), Direction( data.direction() ) );
 
-                        // Se cambia el estado del jugador en función de la vía de entrada
+                        // change activity of player according to way of entry
                         switch ( Direction( data.entry() ) )
                         {
                                 case North:
@@ -315,7 +315,7 @@ Room* MapManager::changeRoom( const Direction& exit )
         player = static_cast< PlayerItem* >( activeRoom->getMediator()->findItemByLabel( activePlayer ) );
         PlayerInitialPosition exitPosition( activePlayer );
         exitPosition.assignPosition( player->getExit(), player->getX(), player->getY(), player->getZ(), player->getOrientation() );
-        BehaviorOfItem playerBehavior = player->getBehavior()->getBehaviorOfItem ();
+        std::string behaviorOfPlayer = player->getBehavior()->getBehaviorOfItem ();
 
         // if player carries some item
         bool withItem = player->consultTakenItemImage() != 0;
@@ -400,7 +400,7 @@ Room* MapManager::changeRoom( const Direction& exit )
         {
                 z = Top;
         }
-        player = roomBuilder->buildPlayerInRoom( newRoom, activePlayer, playerBehavior, x, y, z, exitPosition.getOrientation(), withItem );
+        player = roomBuilder->buildPlayerInRoom( newRoom, activePlayer, behaviorOfPlayer, x, y, z, exitPosition.getOrientation(), withItem );
 
         // Se cambia el estado del jugador en función de la vía de entrada
         switch ( entry )
@@ -473,7 +473,7 @@ Room* MapManager::restartRoom()
         // Posición inicial de todos los jugadores presentes en la sala
         std::list< PlayerInitialPosition > playersPosition = activeRoomData->getPlayersPosition();
 
-        BehaviorOfItem playerBehavior = NoBehavior;
+        std::string playerBehavior = "still";
 
         // Para cada jugador presente en la sala:
         for ( std::list< PlayerInitialPosition >::iterator i = playersPosition.begin (); i != playersPosition.end (); ++i )
@@ -491,11 +491,11 @@ Room* MapManager::restartRoom()
                 else
                 {
                         if ( ( *i ).getPlayer() == "head" )
-                                playerBehavior = HeadBehavior;
+                                playerBehavior = "behavior of Head";
                         else if ( ( *i ).getPlayer() == "heels" )
-                                playerBehavior = HeelsBehavior;
+                                playerBehavior = "behavior of Heels";
                         else if ( ( *i ).getPlayer() == "headoverheels" )
-                                playerBehavior = HeadAndHeelsBehavior;
+                                playerBehavior = "behavior of composite";
                 }
 
                 // Se comprueba si éste es el jugador activo. En tal caso se recuperan sus datos de posición inicial

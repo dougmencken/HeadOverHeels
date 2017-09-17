@@ -31,18 +31,10 @@ class Volatile : public Behavior
 
 public:
 
-       /**
-        * @param item Elemento que tiene este comportamiento
-        * @param id Identificador de comportamiento
-        */
-        Volatile( Item * item, const BehaviorOfItem & id ) ;
+        Volatile( Item * item, const std::string & behavior ) ;
 
         virtual ~Volatile( ) ;
 
-       /**
-        * Actualiza el comportamiento del elemento en cada ciclo
-        * @return false si la actualización implica la destrucción del elemento o true en caso contrario
-        */
         virtual bool update () ;
 
        /**

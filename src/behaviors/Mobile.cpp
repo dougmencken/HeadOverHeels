@@ -12,8 +12,8 @@
 namespace isomot
 {
 
-Mobile::Mobile( Item * item, const BehaviorOfItem & id ) :
-        Behavior( item, id )
+Mobile::Mobile( Item * item, const std::string & behavior ) :
+        Behavior( item, behavior )
 {
         speedTimer = new HPC();
         fallTimer = new HPC();

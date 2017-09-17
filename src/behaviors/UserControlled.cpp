@@ -18,8 +18,8 @@
 namespace isomot
 {
 
-UserControlled::UserControlled( Item * item, const BehaviorOfItem & id )
-        : Behavior( item, id )
+UserControlled::UserControlled( Item * item, const std::string & behavior )
+        : Behavior( item, behavior )
         , jumpIndex( 0 )
         , jumpFrames( 0 )
         , highJumpFrames( 0 )
@@ -29,7 +29,7 @@ UserControlled::UserControlled( Item * item, const BehaviorOfItem & id )
         , shieldSteps( 0 )
         , takenItemData( 0 )
         , takenItemImage( 0 )
-        , takenItemBehavior( NoBehavior )
+        , takenItemBehavior( "still" )
         , speedTimer( 0 )
         , fallTimer( 0 )
         , glideTimer( 0 )
@@ -260,7 +260,7 @@ void UserControlled::jump( PlayerItem * player )
                         // Almacena en la pila de colisiones los elementos que tiene debajo
                         player->checkPosition( 0, 0, -1, Add );
                         // Si está sobre un trampolín o tiene el conejo de los grandes saltos, el jugador dará un gran salto
-                        activity = ( player->getMediator()->collisionWithByBehavior( TrampolineBehavior ) ||
+                        activity = ( player->getMediator()->collisionWithByBehavior( "behavior of big leap for player" ) ||
                                         ( player->getHighJumps() > 0 && player->getLabel() == "heels" )
                                 ? HighJump
                                 : RegularJump );
@@ -513,7 +513,7 @@ void UserControlled::useHooter( PlayerItem* player )
                                 player->getDirection()
                         );
 
-                        freeItem->assignBehavior( FireDoughnutBehavior, 0 );
+                        freeItem->assignBehavior( "behavior of freezing doughnut", 0 );
                         FireDoughnut * doughnutBehavior = dynamic_cast< FireDoughnut * >( freeItem->getBehavior() );
                         doughnutBehavior->setPlayerItem( player );
 
@@ -551,10 +551,11 @@ void UserControlled::take( PlayerItem * player )
                         {
                                 Item* bottomItem = mediator->findCollisionPop( );
 
-                                if ( bottomItem != 0 && bottomItem->getBehavior() != 0 &&
-                                        ( bottomItem->getBehavior()->getBehaviorOfItem() == MobileBehavior || bottomItem->getBehavior()->getBehaviorOfItem() == TrampolineBehavior ) &&
-                                                bottomItem->getWidthX() <= ( mediator->getTileSize() * 3 ) / 4 &&
-                                                bottomItem->getWidthY() <= ( mediator->getTileSize() * 3 ) / 4 )
+                                if ( bottomItem != 0 && bottomItem->getBehavior() != 0
+                                        && ( bottomItem->getBehavior()->getBehaviorOfItem() == "behavior of thing able to move by pushing" ||
+                                                bottomItem->getBehavior()->getBehaviorOfItem() == "behavior of big leap for player" )
+                                        && bottomItem->getWidthX() <= ( mediator->getSizeOfOneTile() * 3 ) / 4
+                                        && bottomItem->getWidthY() <= ( mediator->getSizeOfOneTile() * 3 ) / 4 )
                                 {
                                         if ( bottomItem->getX() + bottomItem->getY() > coordinates )
                                         {
@@ -611,7 +612,7 @@ void UserControlled::drop( PlayerItem* player )
                         // El jugador ya no tiene el elemento
                         takenItemData = 0;
                         takenItemImage = 0;
-                        takenItemBehavior = NoBehavior;
+                        takenItemBehavior = "still";
 
                         // Se actualiza el estado para que salte o se detenga
                         activity = ( activity == DropAndJump ? Jump : Wait );
@@ -641,7 +642,7 @@ void UserControlled::setMoreData( void * data )
         this->itemDataManager = reinterpret_cast< ItemDataManager * >( data );
 }
 
-void UserControlled::assignTakenItem( ItemData* itemData, BITMAP* takenItemImage, const BehaviorOfItem& behavior )
+void UserControlled::assignTakenItem( ItemData* itemData, BITMAP* takenItemImage, const std::string& behavior )
 {
         this->takenItemData = itemData;
         this->takenItemImage = takenItemImage;

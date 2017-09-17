@@ -117,11 +117,10 @@ public:
         virtual bool checkPosition ( int x, int y, int z, const WhatToDo& what ) ;
 
         /**
-         * Crea el comportamiento del elemento según el identificador
-         * @param behavior Identificador del comportamiento del elemento
-         * @param extra Datos extra necesarios para configurar el comportamiento
+         * @param behavior Name of item’s behavior
+         * @param extra Additional data to configure behavior
          */
-        void assignBehavior( const BehaviorOfItem& behavior, void* extraData ) ;
+        void assignBehavior( const std::string& behavior, void* extraData ) ;
 
         /**
          * Establece el sentido de la animación del primer al último fotograma (hacia adelante)

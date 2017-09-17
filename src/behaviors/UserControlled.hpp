@@ -38,11 +38,7 @@ class UserControlled : public Behavior
 
 public:
 
-       /**
-        * @param item Elemento que tiene este comportamiento
-        * @param id Identificador del comportamiento
-        */
-        UserControlled( Item * item, const BehaviorOfItem & id ) ;
+        UserControlled( Item * item, const std::string & behavior ) ;
 
         virtual ~UserControlled( ) ;
 
@@ -259,7 +255,7 @@ protected:
        /**
         * Behavior of item taken by player
         */
-        BehaviorOfItem takenItemBehavior ;
+        std::string takenItemBehavior ;
 
        /**
         * Cronómetro que controla la velocidad de movimiento del elemento
@@ -302,7 +298,7 @@ public:
         * @param takenItemImage Imagen del elemento tomado por el jugador
         * @param behavior Comportamiento del elemento tomado por el jugador
         */
-        void assignTakenItem ( ItemData * itemData, BITMAP * takenItemImage, const BehaviorOfItem & behavior ) ;
+        void assignTakenItem ( ItemData * itemData, BITMAP * takenItemImage, const std::string & behavior ) ;
 
        /**
         * Datos del elemento tomado por el jugador
@@ -316,7 +312,7 @@ public:
         */
         BITMAP* getTakenItemImage () const {  return this->takenItemImage ;  }
 
-        BehaviorOfItem getTakenItemBehavior () const {  return this->takenItemBehavior ;  }
+        std::string getTakenItemBehavior () const {  return this->takenItemBehavior ;  }
 
 };
 

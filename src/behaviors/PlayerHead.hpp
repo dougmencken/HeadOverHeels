@@ -30,24 +30,12 @@ class PlayerHead : public UserControlled
 
 public:
 
-       /**
-        * Constructor
-        * @param item Elemento que tiene este comportamiento
-        * @param id Identificador del comportamiento
-        */
-        PlayerHead( Item* item, const BehaviorOfItem& id ) ;
+        PlayerHead( Item* item, const std::string& behavior ) ;
 
         virtual ~PlayerHead( ) ;
 
-       /**
-        * Actualiza el comportamiento del elemento en cada ciclo
-        * @return false si la actualización implica la destrucción del elemento o true en caso contrario
-        */
         virtual bool update () ;
 
-       /**
-        * Actualiza el estado del jugador en función de las órdenes dadas por el usuario
-        */
         virtual void behave () ;
 
 protected:

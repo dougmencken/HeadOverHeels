@@ -9,8 +9,8 @@
 namespace isomot
 {
 
-Elevator::Elevator( Item * item, const BehaviorOfItem & id ) :
-        Behavior( item, id )
+Elevator::Elevator( Item * item, const std::string & behavior ) :
+        Behavior( item, behavior )
 {
         speedTimer = new HPC();
         stopTimer = new HPC();

@@ -382,7 +382,7 @@ public:
         * Longitud del lado de una loseta en unidades isométricas
         * @return Un número mayor que dos
         */
-        int getTileSize () const {  return tileSize ;  }
+        int getSizeOfOneTile () const {  return tileSize ;  }
 
        /**
         * Tipo de suelo de la sala

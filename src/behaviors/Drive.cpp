@@ -13,7 +13,8 @@
 namespace isomot
 {
 
-Drive::Drive( Item* item, const BehaviorOfItem& id ) : Behavior( item, id )
+Drive::Drive( Item* item, const std::string& behavior )
+        : Behavior( item, behavior )
 {
         running = false;
         speedTimer = new HPC();

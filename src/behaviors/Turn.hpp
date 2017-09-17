@@ -30,19 +30,10 @@ class Turn : public Behavior
 
 public:
 
-       /**
-        * Constructor
-        * @param item Elemento que tiene este comportamiento
-        * @param id Identificador del comportamiento: LeftTurnBehavior o RightTurnBehavior
-        */
-        Turn( Item * item, const BehaviorOfItem & id ) ;
+        Turn( Item * item, const std::string & behavior ) ;
 
         virtual ~Turn( ) ;
 
-       /**
-        * Actualiza el comportamiento del elemento en cada ciclo
-        * @return false si la actualización implica la destrucción del elemento o true en caso contrario
-        */
         virtual bool update () ;
 
 protected:

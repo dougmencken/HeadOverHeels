@@ -37,8 +37,8 @@ void FloorTile::calculateOffset()
 {
         if ( this->image )
         {
-                this->offset.first = mediator->getX0() + ( ( mediator->getTileSize() * ( coordinates.first - coordinates.second - 1 ) ) << 1 ) + 1;
-                this->offset.second = mediator->getY0() + mediator->getTileSize() * ( coordinates.first + coordinates.second );
+                this->offset.first = mediator->getX0() + ( ( mediator->getSizeOfOneTile() * ( coordinates.first - coordinates.second - 1 ) ) << 1 ) + 1;
+                this->offset.second = mediator->getY0() + mediator->getSizeOfOneTile() * ( coordinates.first + coordinates.second );
         }
 }
 

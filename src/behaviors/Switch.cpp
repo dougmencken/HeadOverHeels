@@ -9,8 +9,8 @@
 namespace isomot
 {
 
-Switch::Switch( Item * item, const BehaviorOfItem & id )
-        : Behavior( item, id )
+Switch::Switch( Item * item, const std::string & behavior )
+        : Behavior( item, behavior )
         , itemOver( false )
 {
 

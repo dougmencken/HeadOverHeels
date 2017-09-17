@@ -34,5 +34,4 @@ gamedatamapthemoon_DATA = themoon01.xml \
 			    themoon33.xml \
 			    themoon34.xml \
 			    themoon35.xml \
-			    themoon36.xml \
-			    room.xsd
+			    themoon36.xml

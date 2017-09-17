@@ -11,8 +11,8 @@
 namespace isomot
 {
 
-Impel::Impel( Item * item, const BehaviorOfItem & id ) :
-        Behavior( item, id )
+Impel::Impel( Item * item, const std::string & behavior ) :
+        Behavior( item, behavior )
 {
         activity = Wait;
         speedTimer = new HPC();

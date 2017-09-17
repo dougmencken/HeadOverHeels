@@ -15,8 +15,8 @@
 namespace isomot
 {
 
-Special::Special( Item * item, const BehaviorOfItem & id ) :
-        Behavior( item, id )
+Special::Special( Item * item, const std::string & behavior ) :
+        Behavior( item, behavior )
 {
         destroyTimer = new HPC();
         speedTimer = new HPC();
@@ -57,9 +57,9 @@ bool Special::update ()
                                         // y/o volátiles porque, de lo contrario, el elemento no se destruirá
                                         if ( mediator->depthOfStackOfCollisions() > 1 )
                                         {
-                                                destroy = ! mediator->collisionWithByBehavior( SpecialBehavior ) &&
-                                                                ! mediator->collisionWithByBehavior( VolatileWeightBehavior ) &&
-                                                                        ! mediator->collisionWithByBehavior( VolatileTouchBehavior );
+                                                destroy = ! mediator->collisionWithByBehavior( "behavior of something special" ) &&
+                                                                ! mediator->collisionWithByBehavior( "behavior of disappearance on jump into" ) &&
+                                                                        ! mediator->collisionWithByBehavior( "behavior of disappearance on touch" );
                                         }
 
                                         // Cambio de estado si se han cumplido las condiciones
@@ -169,7 +169,7 @@ bool Special::update ()
                                 // create item "bubbles" in the place of magic item
                                 freeItem = new FreeItem( bubblesData, item->getX(), item->getY(), item->getZ(), NoDirection );
 
-                                freeItem->assignBehavior( VolatileTimeBehavior, 0 );
+                                freeItem->assignBehavior( "behavior of disappearance in time", 0 );
                                 freeItem->setCollisionDetector( false );
 
                                 // add to current room

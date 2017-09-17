@@ -35,5 +35,4 @@ gamedatamapsafari_DATA = safari01.xml \
 			safari34.xml \
 			safari35.xml \
 			safari36.xml \
-			safari37.xml \
-			room.xsd
+			safari37.xml

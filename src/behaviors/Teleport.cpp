@@ -9,8 +9,8 @@
 namespace isomot
 {
 
-Teleport::Teleport( Item * item, const BehaviorOfItem & id ) :
-        Behavior( item, id ),
+Teleport::Teleport( Item * item, const std::string & behavior ) :
+        Behavior( item, behavior ),
         activated( false )
 {
 

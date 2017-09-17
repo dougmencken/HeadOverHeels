@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<room xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="room.xsd">
+<room xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
   <name>egyptus/egyptus39.xml</name>
 
@@ -607,91 +607,91 @@
     <item x="8" y="3" z="-1">
       <label>egyptus-door-south</label>
       <direction>south</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="4" y="0" z="0">
       <label>siren</label>
       <direction>none</direction>
-      <behavior>15</behavior>
+      <behavior>behavior of random patroling in four secondary directions</behavior>
       <type>freeitem</type>
     </item>
     <item x="3" y="4" z="0">
       <label>brick1</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="4" z="1">
       <label>brick1</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="4" z="2">
       <label>brick1</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="4" z="3">
       <label>brick1</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="4" z="4">
       <label>brick1</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="4" z="5">
       <label>brick1</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="4" z="6">
       <label>brick1</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="4" z="7">
       <label>crown</label>
       <direction>none</direction>
-      <behavior>20</behavior>
+      <behavior>behavior of something special</behavior>
       <type>freeitem</type>
     </item>
     <item x="4" y="4" z="0">
       <label>brick1</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="4" z="1">
       <label>brick1</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="4" z="2">
       <label>brick1</label>
       <direction>none</direction>
-      <behavior>0</behavior>
+      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="4" z="3">
       <label>another-portable-brick</label>
       <direction>none</direction>
-      <behavior>12</behavior>
+      <behavior>behavior of thing able to move by pushing</behavior>
       <type>freeitem</type>
     </item>
     <item x="4" y="7" z="0">
       <label>siren</label>
       <direction>none</direction>
-      <behavior>15</behavior>
+      <behavior>behavior of random patroling in four secondary directions</behavior>
       <type>freeitem</type>
     </item>
   </items>

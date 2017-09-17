@@ -13,8 +13,8 @@
 namespace isomot
 {
 
-OneWay::OneWay( Item * item, const BehaviorOfItem & id, bool isFlying ) :
-        Behavior( item, id )
+OneWay::OneWay( Item * item, const std::string & behavior, bool isFlying ) :
+        Behavior( item, behavior )
 {
         speedTimer = new HPC();
         speedTimer->start();

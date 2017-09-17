@@ -23,25 +23,23 @@ Mediator::Mediator( Room* room )
         this->switchInRoomIsOn = false;
         this->activePlayer = 0;
 
-        // Creación de los mútex para la protección de las listas de elementos
         pthread_mutex_init( &gridItemsMutex, 0 );
         pthread_mutex_init( &freeItemsMutex, 0 );
 
-        // Lista de elementos mortales afectados por la acción de un disparo
-        // o por el cambio de estado de una palanca presente en la sala
-        badBoys.push_back( DetectorBehavior );
-        badBoys.push_back( Hunter4Behavior );
-        badBoys.push_back( HunterWaiting4Behavior );
-        badBoys.push_back( HunterWaiting8Behavior );
-        badBoys.push_back( OneWayBehavior );
-        badBoys.push_back( Patrol4cBehavior );
-        badBoys.push_back( Patrol4dBehavior );
-        badBoys.push_back( Patrol8Behavior );
-        badBoys.push_back( TurnLeftBehavior );
-        badBoys.push_back( TurnRightBehavior );
-        badBoys.push_back( Patrol4dBehavior );
+        // mortal items which may be freezed by doughnut or switch
+        badBoys.push_back( "behavior of detector" );
+        badBoys.push_back( "behavior of hunter in four directions" );
+        badBoys.push_back( "behavior of waiting hunter in four directions" );
+        badBoys.push_back( "behavior of waiting hunter in eight directions" );
+        badBoys.push_back( "behavior of there and back" );
+        badBoys.push_back( "behavior of move then turn left and move" );
+        badBoys.push_back( "behavior of move then turn right and move" );
+        badBoys.push_back( "behavior of random patroling in four primary directions" );
+        badBoys.push_back( "behavior of random patroling in four secondary directions" );
+        badBoys.push_back( "behavior of random patroling in four secondary directions" );
+        badBoys.push_back( "behavior of random patroling in eight directions" );
 
-        // Creación de la estructura de la sala
+        // structure of room
         for ( int i = 0; i < room->getTilesX() * room->getTilesY() + 1; i++ )
         {
                 structure.push_back( Column() );
@@ -336,7 +334,7 @@ void Mediator::castShadowOnFloor( FloorTile* floorTile )
         int xCell = floorTile->getX();
         int yCell = floorTile->getY();
         int column = floorTile->getColumn();
-        int tileSize = room->getTileSize();
+        int tileSize = room->getSizeOfOneTile();
 
         // Se sombrea con todos los elementos rejilla que pueda tener por encima
         for ( std::list< GridItem * >::iterator g = structure[ column ].begin (); g != structure[ column ].end (); ++g )
@@ -399,7 +397,7 @@ void Mediator::castShadowOnFloor( FloorTile* floorTile )
 
 void Mediator::castShadowOnGrid( GridItem* gridItem )
 {
-        int tileSize = room->getTileSize();
+        int tileSize = room->getSizeOfOneTile();
         int column = gridItem->getColumn();
 
         // Se sombrea con todos los elementos rejilla que pueda tener por encima
@@ -411,7 +409,7 @@ void Mediator::castShadowOnGrid( GridItem* gridItem )
                 {
                         gridItem->castShadowImage (
                                 /* x */ gridItem->getOffsetX() + ( ( gridItem->getImage()->w - tempItem->getShadow()->w) >> 1 ),
-                                /* y */ gridItem->getOffsetY() + gridItem->getImage()->h - room->getTileSize() - gridItem->getHeight() - ( tempItem->getShadow()->h >> 1 ),
+                                /* y */ gridItem->getOffsetY() + gridItem->getImage()->h - room->getSizeOfOneTile() - gridItem->getHeight() - ( tempItem->getShadow()->h >> 1 ),
                                 /* shadow */ tempItem->getShadow(),
                                 /* shadingScale */ room->shadingScale
                                 /* transparency = 0 (default) */
@@ -462,7 +460,7 @@ void Mediator::castShadowOnGrid( GridItem* gridItem )
 
 void Mediator::castShadowOnFreeItem( FreeItem* freeItem )
 {
-        int tileSize = room->getTileSize();
+        int tileSize = room->getSizeOfOneTile();
 
         // Rango de columnas que interseccionan con el elemento
         int xStart = freeItem->getX() / tileSize;
@@ -577,10 +575,10 @@ void Mediator::mask( FreeItem* freeItem )
         }
 
         // Se compara freeItem con los elementos rejilla que tiene debajo para comprobar las ocultaciones
-        int xStart = freeItem->getX() / room->getTileSize();
-        int xEnd = ( ( freeItem->getX() + freeItem->getWidthX() - 1 ) / room->getTileSize() ) + 1;
-        int yStart = ( freeItem->getY() / room->getTileSize() ) + 1;
-        int yEnd = ( freeItem->getY() - freeItem->getWidthY() + 1 ) / room ->getTileSize();
+        int xStart = freeItem->getX() / room->getSizeOfOneTile();
+        int xEnd = ( ( freeItem->getX() + freeItem->getWidthX() - 1 ) / room->getSizeOfOneTile() ) + 1;
+        int yStart = ( freeItem->getY() / room->getSizeOfOneTile() ) + 1;
+        int yEnd = ( freeItem->getY() - freeItem->getWidthY() + 1 ) / room ->getSizeOfOneTile();
 
         // Si el elemento libre hay que enmascararlo, se procede a hacerlo con los elementos rejilla
         if ( freeItem->whichMask() != NoMask )
@@ -607,8 +605,8 @@ void Mediator::mask( FreeItem* freeItem )
                                                         ( gridItem->getOffsetY() + gridItem->getImage()->h > freeItem->getOffsetY() ) )
                                                 {
                                                         // freeItem está detrás de gridItem
-                                                        if ( ( freeItem->getX() + freeItem->getWidthX() <= ( xStart + i ) * room->getTileSize() ) ||
-                                                                ( freeItem->getY() <= (yStart + i + 1) * room->getTileSize() - 1 - room->getTileSize() ) ||
+                                                        if ( ( freeItem->getX() + freeItem->getWidthX() <= ( xStart + i ) * room->getSizeOfOneTile() ) ||
+                                                                ( freeItem->getY() <= (yStart + i + 1) * room->getSizeOfOneTile() - 1 - room->getSizeOfOneTile() ) ||
                                                                 ( freeItem->getZ() + freeItem->getHeight() <= gridItem->getZ() ) )
                                                         {
                                                                 freeItem->maskImage( gridItem->getOffsetX(), gridItem->getOffsetY(), gridItem->getImage() );
@@ -670,7 +668,7 @@ Item* Mediator::findItemByLabel( const std::string& label )
 {
         Item* item = 0;
 
-        // Búsqueda en la lista de elementos libres
+        // search in free items
         std::list< FreeItem * >::iterator f = std::find_if( freeItems.begin (), freeItems.end (), std::bind2nd( EqualItemLabel (), label ) );
 
         if ( f != freeItems.end () )
@@ -678,7 +676,7 @@ Item* Mediator::findItemByLabel( const std::string& label )
                 item = dynamic_cast< Item * >( *f );
         }
 
-        // Búsqueda en las listas de elementos rejilla si el elemento no era libre
+        // search in grid items
         if ( item == 0 )
         {
                 std::list< GridItem * >::iterator g;
@@ -698,26 +696,26 @@ Item* Mediator::findItemByLabel( const std::string& label )
         return item;
 }
 
-Item* Mediator::findItemByBehavior( const BehaviorOfItem& id )
+Item* Mediator::findItemByBehavior( const std::string& behavior )
 {
         Item* item = 0;
 
-        // Búsqueda en la lista de elementos libres
-        std::list< FreeItem * >::iterator f = std::find_if( freeItems.begin (), freeItems.end (), std::bind2nd( EqualBehaviorOfItem (), id ) );
+        // search in free items
+        std::list< FreeItem * >::iterator f = std::find_if( freeItems.begin (), freeItems.end (), std::bind2nd( EqualBehaviorOfItem (), behavior ) );
 
         if ( f != freeItems.end () )
         {
                 item = dynamic_cast< Item * >( *f );
         }
 
-        // Búsqueda en las listas de elementos rejilla si el elemento no era libre
+        // search in grid items
         if ( item == 0 )
         {
                 std::list< GridItem * >::iterator g;
 
                 for ( int i = 0; i < room->getTilesX() * room->getTilesY(); i++ )
                 {
-                        g = std::find_if( structure[ i ].begin (), structure[ i ].end (), std::bind2nd( EqualBehaviorOfItem (), id ) );
+                        g = std::find_if( structure[ i ].begin (), structure[ i ].end (), std::bind2nd( EqualBehaviorOfItem (), behavior ) );
 
                         if ( g != structure[ i ].end () )
                         {
@@ -862,10 +860,10 @@ int Mediator::findHighestZ( Item * item )
                 FreeItem* freeItem = dynamic_cast< FreeItem * >( item );
 
                 // Rango de columnas intersectadas por el elemento
-                int xStart = freeItem->getX() / room->getTileSize();
-                int xEnd = ( freeItem->getX() + freeItem->getWidthX() - 1 ) / room->getTileSize() + 1;
-                int yStart = ( freeItem->getY() - freeItem->getWidthY() + 1 ) / room->getTileSize();
-                int yEnd = freeItem->getY() / room->getTileSize() + 1;
+                int xStart = freeItem->getX() / room->getSizeOfOneTile();
+                int xEnd = ( freeItem->getX() + freeItem->getWidthX() - 1 ) / room->getSizeOfOneTile() + 1;
+                int yStart = ( freeItem->getY() - freeItem->getWidthY() + 1 ) / room->getSizeOfOneTile();
+                int yEnd = freeItem->getY() / room->getSizeOfOneTile() + 1;
 
                 // Se recorren los elementos de la columas intersectadas
                 for ( int i = xStart; i < xEnd; i++ )
@@ -998,13 +996,13 @@ Item* Mediator::collisionWithByLabel( const std::string& label )
         return 0;
 }
 
-Item* Mediator::collisionWithByBehavior( const BehaviorOfItem& id )
+Item* Mediator::collisionWithByBehavior( const std::string& behavior )
 {
         for ( unsigned int i = 0; i < collisions.size(); i++ )
         {
                 Item* item = findItemById( collisions[ i ] );
 
-                if ( item != 0 && item->getBehavior() != 0 && item->getBehavior()->getBehaviorOfItem () == id )
+                if ( item != 0 && item->getBehavior() != 0 && item->getBehavior()->getBehaviorOfItem () == behavior )
                         return item;
         }
 
@@ -1043,10 +1041,10 @@ bool Mediator::nextPlayer( ItemDataManager* itemDataManager )
         // Si se llegó al final se asigna el primero, sino el siguiente
         activePlayer = ( i != playerItems.end () ? ( *i ) : *playerItems.begin () );
 
-        // see if different players may join
+        // see if players may join
         if ( previousPlayer != activePlayer )
         {
-                const int delta = room->getTileSize() >> 1;
+                const int delta = room->getSizeOfOneTile() >> 1;
 
                 if ( ( previousPlayer->getLabel() == "head" && activePlayer->getLabel() == "heels" ) ||
                                 ( previousPlayer->getLabel() == "heels" && activePlayer->getLabel() == "head" ) )
@@ -1065,30 +1063,30 @@ bool Mediator::nextPlayer( ItemDataManager* itemDataManager )
                                 int z = reference->getZ();
                                 Direction direction = reference->getDirection();
 
-                                // Obtiene los datos del elemento que Heels pueda tener en el bolso
+                                // item that Heels may hold in handbag
                                 ItemData* takenItemData = 0;
                                 BITMAP* takenItemImage = 0;
-                                BehaviorOfItem takenItemBehavior = NoBehavior;
+                                std::string behaviorOfItemTaken = "still";
                                 if ( previousPlayer->getLabel() == "heels" )
                                 {
-                                        takenItemData = previousPlayer->consultTakenItem( &takenItemBehavior );
+                                        behaviorOfItemTaken = previousPlayer->consultTakenItem( takenItemData );
                                         takenItemImage = previousPlayer->consultTakenItemImage();
                                 }
                                 else
                                 {
-                                        takenItemData = activePlayer->consultTakenItem( &takenItemBehavior );
+                                        behaviorOfItemTaken = activePlayer->consultTakenItem( takenItemData );
                                         takenItemImage = activePlayer->consultTakenItemImage();
                                 }
 
-                                // Elimina a los jugadores simples
+                                // remove "simple" players
                                 this->room->removePlayer( previousPlayer );
                                 this->room->removePlayer( activePlayer );
 
-                                // Crea al jugador compuesto
+                                // create "composite" player
                                 std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( itemDataManager ) );
-                                activePlayer = roomBuilder->buildPlayerInRoom( this->room, "headoverheels", HeadAndHeelsBehavior, x, y, z, direction );
+                                activePlayer = roomBuilder->buildPlayerInRoom( this->room, "headoverheels", "behavior of composite", x, y, z, direction );
                                 // Le devuelve el elemento que tuviera en el bolso
-                                activePlayer->assignTakenItem( takenItemData, takenItemImage, takenItemBehavior );
+                                activePlayer->assignTakenItem( takenItemData, takenItemImage, behaviorOfItemTaken );
 
                                 // Libera el acceso exclusivo a la lista de elementos libres
                                 pthread_mutex_unlock( &freeItemsMutex );
@@ -1108,8 +1106,8 @@ bool Mediator::nextPlayer( ItemDataManager* itemDataManager )
                 // Obtiene los datos del elemento que pudiera haber en el bolso
                 ItemData* takenItemData = 0;
                 BITMAP* takenItemImage = 0;
-                BehaviorOfItem takenItemBehavior = NoBehavior;
-                takenItemData = activePlayer->consultTakenItem( &takenItemBehavior );
+                std::string behaviorOfItemTaken = "still";
+                behaviorOfItemTaken = activePlayer->consultTakenItem( takenItemData );
                 takenItemImage = activePlayer->consultTakenItemImage();
 
                 // Elimina al jugador compuesto
@@ -1117,9 +1115,9 @@ bool Mediator::nextPlayer( ItemDataManager* itemDataManager )
 
                 // Crea a Heels y a Head
                 std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( itemDataManager ) );
-                previousPlayer = roomBuilder->buildPlayerInRoom( this->room, "heels", HeelsBehavior, x, y, z, direction );
-                previousPlayer->assignTakenItem( takenItemData, takenItemImage, takenItemBehavior );
-                activePlayer = roomBuilder->buildPlayerInRoom( this->room, "head", HeadBehavior, x, y, z + LayerHeight, direction );
+                previousPlayer = roomBuilder->buildPlayerInRoom( this->room, "heels", "behavior of Heels", x, y, z, direction );
+                previousPlayer->assignTakenItem( takenItemData, takenItemImage, behaviorOfItemTaken );
+                activePlayer = roomBuilder->buildPlayerInRoom( this->room, "head", "behavior of Head", x, y, z + LayerHeight, direction );
 
                 if ( this->lastActivePlayer == "head" )
                 {
@@ -1166,10 +1164,10 @@ void Mediator::toggleSwitchInRoom ()
 
                 if ( freeItem != 0 && freeItem->getBehavior() != 0 )
                 {
-                        BehaviorOfItem behaviorId = freeItem->getBehavior()->getBehaviorOfItem ();
+                        std::string behavior = freeItem->getBehavior()->getBehaviorOfItem ();
 
-                        if ( behaviorId == VolatileTouchBehavior || behaviorId == VolatileWeightBehavior ||
-                                        std::find( badBoys.begin (), badBoys.end (), behaviorId ) != badBoys.end () )
+                        if ( behavior == "behavior of disappearance on touch" || behavior == "behavior of disappearance on jump into" ||
+                                        std::find( badBoys.begin (), badBoys.end (), behavior ) != badBoys.end () )
                         {
                                 freeItem->getBehavior()->changeActivityOfItem( this->switchInRoomIsOn ? Freeze : WakeUp );
                         }
@@ -1185,9 +1183,9 @@ void Mediator::toggleSwitchInRoom ()
 
                         if ( gridItem != 0 && gridItem->getBehavior() != 0 )
                         {
-                                BehaviorOfItem behaviorId = gridItem->getBehavior()->getBehaviorOfItem ();
+                                std::string behavior = gridItem->getBehavior()->getBehaviorOfItem ();
 
-                                if ( behaviorId == VolatileTouchBehavior || behaviorId == VolatileWeightBehavior )
+                                if ( behavior == "behavior of disappearance on touch" || behavior == "behavior of disappearance on jump into" )
                                 {
                                         gridItem->getBehavior()->changeActivityOfItem( this->switchInRoomIsOn ? Freeze : Wait );
                                 }
@@ -1253,7 +1251,7 @@ bool EqualItemLabel::operator() ( Item* item, const std::string& label ) const
         return ( item->getLabel() == label );
 }
 
-bool EqualBehaviorOfItem::operator() ( Item* item, BehaviorOfItem behavior ) const
+bool EqualBehaviorOfItem::operator() ( Item* item, const std::string& behavior ) const
 {
         return ( item->getBehavior() != 0 && item->getBehavior()->getBehaviorOfItem () == behavior );
 }

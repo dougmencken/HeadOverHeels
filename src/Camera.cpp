@@ -28,7 +28,7 @@ void Camera::turnOn( PlayerItem* player, const Direction& entry )
                 // Sala doble a lo largo del eje Y
                 if ( room->getTilesX() <= 10 && room->getTilesY() > 10 )
                 {
-                        if ( abs( player->getY() ) < room->getTilesY() * room->getTileSize() / 2 )
+                        if ( abs( player->getY() ) < room->getTilesY() * room->getSizeOfOneTile() / 2 )
                         {
                                 delta.first = room->getPicture()->w - ScreenWidth;
                                 delta.second = 0;
@@ -42,7 +42,7 @@ void Camera::turnOn( PlayerItem* player, const Direction& entry )
                 // Sala doble a lo largo del eje X
                 else if ( room->getTilesX() > 10 && room->getTilesY() <= 10 )
                 {
-                        if ( abs( player->getX() ) < room->getTilesX() * room->getTileSize() / 2 )
+                        if ( abs( player->getX() ) < room->getTilesX() * room->getSizeOfOneTile() / 2 )
                         {
                                 delta.first = 0;
                                 delta.second = 0;
@@ -67,8 +67,8 @@ void Camera::turnOn( PlayerItem* player, const Direction& entry )
                         { // exempli gratia on restore of a game which was saved in triple room
                                 int midX = RoomBuilder::getXCenterOfRoom( player->getDataOfFreeItem(), room );
                                 int midY = RoomBuilder::getYCenterOfRoom( player->getDataOfFreeItem(), room );
-                                delta.first = midX + ( 12 * room->getTileSize() );  // yeah, 12 is just some magic number
-                                delta.second = midY + ( 6 * room->getTileSize() );  // as well as 6
+                                delta.first = midX + ( 12 * room->getSizeOfOneTile() );  // yeah, 12 is just some magic number
+                                delta.second = midY + ( 6 * room->getSizeOfOneTile() );  // as well as 6
                         }
                 }
 
@@ -147,8 +147,8 @@ bool Camera::centerOn( PlayerItem* player )
                         int offsetX = player->getX() - reference.first;
 
                         // Límites de la sala para efectuar el desplazamiento de la cámara
-                        int minX = ( room->getTilesX() * room->getTileSize() ) / 4;
-                        int maxX = ( room->getTilesX() * room->getTileSize() * 3 ) / 4;
+                        int minX = ( room->getTilesX() * room->getSizeOfOneTile() ) / 4;
+                        int maxX = ( room->getTilesX() * room->getSizeOfOneTile() * 3 ) / 4;
 
                         // Hay desplazamiento al norte
                         if ( offsetX < 0 && player->getX() <= maxX - 1 && player->getX() >= minX - 1 )
@@ -181,8 +181,8 @@ bool Camera::centerOn( PlayerItem* player )
                         int offsetY = player->getY() - reference.second;
 
                         // Límites de la sala para efectuar el desplazamiento de la cámara
-                        int minY = ( room->getTilesY() * room->getTileSize() ) / 4;
-                        int maxY = ( room->getTilesY() * room->getTileSize() * 3 ) / 4;
+                        int minY = ( room->getTilesY() * room->getSizeOfOneTile() ) / 4;
+                        int maxY = ( room->getTilesY() * room->getSizeOfOneTile() * 3 ) / 4;
 
                         // Hay desplazamiento al este
                         if ( offsetY < 0 && player->getY() <= maxY - 1 && player->getY() >= minY - 1 )

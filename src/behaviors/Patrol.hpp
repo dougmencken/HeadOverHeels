@@ -21,9 +21,9 @@ namespace isomot
 class Item ;
 
 /**
- * Moves the item randomly depending on the type of behavior. In the case of patrolman-4c it moves
- * north, south, east or west. In the case of the patrolman-4d it moves northeast, northwest,
- * southeast and southwest. And in the case of the patrolman-8 it moves in all directions
+ * Moves item randomly. For "four primary directions" variant move north, south, east or west.
+ * For variant "four secondary directions" move northeast, northwest, southeast and southwest.
+ * And for "eight directions" variant move in all these eight directions
  */
 
 class Patrol : public Behavior
@@ -31,20 +31,10 @@ class Patrol : public Behavior
 
 public:
 
-       /**
-        * Constructor
-        * @param item Elemento que tiene este comportamiento
-        * @param id Identificador de comportamiento: Patrol4cBehavior, Patrol4dBehavior
-        * o Patrol8Behavior
-        */
-        Patrol( Item * item, const BehaviorOfItem & id ) ;
+        Patrol( Item * item, const std::string & behavior ) ;
 
         virtual ~Patrol( ) ;
 
-       /**
-        * Actualiza el comportamiento del elemento en cada ciclo
-        * @return false si la actualización implica la destrucción del elemento o true en caso contrario
-        */
         virtual bool update () ;
 
 protected:

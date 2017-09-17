@@ -150,13 +150,13 @@ void JumpKindOfActivity::lift( FreeItem* sender, FreeItem* freeItem, int z )
         if ( freeItem->getBehavior() != 0 )
         {
                 // Si el elemento es volátil se le comunica que se está empujando
-                if ( freeItem->getBehavior()->getBehaviorOfItem () == VolatileTouchBehavior ||
-                                freeItem->getBehavior()->getBehaviorOfItem () == SpecialBehavior )
+                if ( freeItem->getBehavior()->getBehaviorOfItem () == "behavior of disappearance on touch" ||
+                                freeItem->getBehavior()->getBehaviorOfItem () == "behavior of something special" )
                 {
                         freeItem->getBehavior()->changeActivityOfItem( DisplaceUp, sender );
                 }
                 // Si el elemento no es el ascensor entonces se levanta
-                else if ( freeItem->getBehavior()->getBehaviorOfItem () != ElevatorBehavior )
+                else if ( freeItem->getBehavior()->getBehaviorOfItem () != "behavior of elevator" )
                 {
                         // Si no se puede levantar, se toma el elemento con el que choca para levantarlo
                         if ( ! freeItem->addToZ( z ) )

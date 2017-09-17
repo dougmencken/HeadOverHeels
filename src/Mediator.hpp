@@ -152,19 +152,15 @@ public:
 
        /**
         * Busca un elemento en la sala
-        * @param label Label of item
-        *              when there are several elements with this label return the first one
+        * @param label Label of item, when there are several elements with this label return the first one
         * @return item if found or 0 if not
         */
         Item* findItemByLabel ( const std::string& label ) ;
 
        /**
         * Busca un elemento en la sala
-        * @param id Comportamiento del elemento. En el caso de existir varios elementos con el mismo comportamiento
-        * devolverá el primero que encuentre
-        * @return El elemento si se encontró ó 0 si no existe
         */
-        Item* findItemByBehavior ( const BehaviorOfItem& id ) ;
+        Item* findItemByBehavior ( const std::string& behavior ) ;
 
        /**
         * Busca colisiones entre un elemento y el resto de la sala. De haberlas se almacenarán en la pila
@@ -266,10 +262,9 @@ public:
 
        /**
         * Indica si un elemento ha chocado con otro de un comportamiento determinado
-        * @param id Identificador del comportamiento
         * @return El elemento con el que se ha producido la colisión ó 0 si no hay colisión
         */
-        Item* collisionWithByBehavior ( const BehaviorOfItem& id ) ;
+        Item* collisionWithByBehavior ( const std::string& behavior ) ;
 
         Item* findCollisionPop () {  return this->findItemById( this->popCollision() ) ;  }
 
@@ -418,10 +413,9 @@ private:
         std::vector < PlayerItem * > playerItems ;
 
        /**
-        * Lista de elementos capaces de eliminar al jugador y que pueden ser paralizados por la acción
-        * de un disparo o por el cambio de estado de una palanca
+        * Items that may take life from player and that may be freezed by doughnut or by switch
         */
-        std::vector < BehaviorOfItem > badBoys ;
+        std::vector < std::string > badBoys ;
 
        /**
         * Jugador controlado por el usuario
@@ -448,33 +442,28 @@ public:
 
        /**
         * Coordenadas de pantalla X donde está situada la coordenada origen de la sala
-        * @return Un número entero
         */
         int getX0 () const {  return room->getX0() ;  }
 
        /**
         * Coordenadas de pantalla Y donde está situada la coordenada origen de la sala
-        * @return Un número entero
         */
         int getY0 () const {  return room->getY0() ;  }
 
        /**
         * Devuelve el número de losetas de la sala en el eje X
-        * @return Una número positivo
         */
         int getTilesX () const {  return room->tilesNumber.first ;  }
 
        /**
         * Devuelve el número de losetas de la sala en el eje X
-        * @return Una número positivo
         */
         int getTilesY () const {  return room->tilesNumber.second ;  }
 
        /**
-        * Devuelve la longitud del lado de una loseta en unidades isométricas
-        * @return Un valor múltiplo de dos
+        * Returns length of side of single tile in isometric units, a multiple of two
         */
-        int getTileSize () const {  return room->tileSize ;  }
+        int getSizeOfOneTile () const {  return room->tileSize ;  }
 
        /**
         * Degree for opacity of shadows
@@ -483,15 +472,13 @@ public:
         short getDegreeOfShading () const {  return room->shadingScale ;  }
 
        /**
-        * Límite de la sala
+        * Returns limit of room in isometric units
         * @param direction Un punto cardinal indicativo del límite que se quiere obtener
-        * @return Un valor en unidades isométricas
         */
         unsigned short getBound ( const Direction& direction ) ;
 
        /**
         * Sala en la que negocia este mediador
-        * @return Una sala
         */
         Room* getRoom () const {  return room ;  }
 
@@ -499,7 +486,6 @@ public:
 
        /**
         * Establece el jugador controlado por el usuario
-        * @return playerItem Un jugador
         */
         void setActivePlayer ( PlayerItem* playerItem ) ;
 
@@ -550,11 +536,11 @@ public:
 
 };
 
-class EqualBehaviorOfItem : public std::binary_function< Item *, BehaviorOfItem, bool >
+class EqualBehaviorOfItem : public std::binary_function< Item *, std::string, bool >
 {
 
 public:
-        bool operator() ( Item* item, BehaviorOfItem behavior ) const ;
+        bool operator() ( Item* item, const std::string& behavior ) const ;
 
 };
 

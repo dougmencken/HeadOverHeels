@@ -30,19 +30,10 @@ class Teleport : public Behavior
 
 public:
 
-       /**
-        * Constructor
-        * @param item Elemento que tiene este comportamiento
-        * @param id Identificador de comportamiento
-        */
-        Teleport( Item * item, const BehaviorOfItem & id ) ;
+        Teleport( Item * item, const std::string & behavior ) ;
 
         virtual ~Teleport( ) ;
 
-       /**
-        * Actualiza el comportamiento del elemento en cada ciclo
-        * @return false si la actualización implica la destrucción del elemento o true en caso contrario
-        */
         virtual bool update () ;
 
 private:

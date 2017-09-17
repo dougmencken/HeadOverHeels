@@ -39,5 +39,4 @@ gamedatamapbyblos_DATA = byblos01.xml \
 			byblos38.xml \
 			byblos39.xml \
 			byblos40.xml \
-			byblos41.xml \
-			room.xsd
+			byblos41.xml

@@ -10,7 +10,7 @@
 namespace isomot
 {
 
-CannonBall::CannonBall( Item * item, const BehaviorOfItem & behavior ) :
+CannonBall::CannonBall( Item * item, const std::string & behavior ) :
         Behavior( item, behavior )
 {
         speedTimer = new HPC();
@@ -30,7 +30,6 @@ bool CannonBall::update ()
         switch ( activity )
         {
                 case Wait:
-                        // Asigna el estado de movimiento
                         this->changeActivityOfItem( MoveNorth );
                         break;
 
@@ -57,7 +56,7 @@ bool CannonBall::update ()
                                                 NoDirection
                                         );
 
-                                        freeItem->assignBehavior( VolatileTimeBehavior, 0 );
+                                        freeItem->assignBehavior( "behavior of disappearance in time", 0 );
                                         freeItem->setCollisionDetector( false );
 
                                         // Se añade a la sala actual

@@ -14,8 +14,8 @@
 namespace isomot
 {
 
-PlayerHead::PlayerHead( Item* item, const BehaviorOfItem& id ) :
-        UserControlled( item, id )
+PlayerHead::PlayerHead( Item* item, const std::string& behavior ) :
+        UserControlled( item, behavior )
 {
         // Fotogramas del salto
         jumpFrames = 20;
@@ -204,7 +204,7 @@ void PlayerHead::behave ()
                                 // Almacena en la pila de colisiones los elementos que tiene debajo
                                 playerItem->checkPosition(0, 0, -1, Add);
                                 // Si está sobre un telepuerto y salta entonces el jugador será teletransportado, sino saltará
-                                activity = ( playerItem->getMediator()->collisionWithByBehavior( TeleportBehavior ) ? StartWayOutTeletransport : Jump );
+                                activity = ( playerItem->getMediator()->collisionWithByBehavior( "behavior of teletransport" ) ? StartWayOutTeletransport : Jump );
                         }
                         // ...y ha pulsado la tecla de disparo entonces dispara
                         else if ( input->doughnut() && ! fireFromHooterIsPresent )
@@ -240,7 +240,7 @@ void PlayerHead::behave ()
                                 // Almacena en la pila de colisiones los elementos que tiene debajo
                                 playerItem->checkPosition( 0, 0, -1, Add );
                                 // Si está sobre un telepuerto y salta entonces el jugador será teletransportado, sino saltará
-                                activity = ( playerItem->getMediator()->collisionWithByBehavior( TeleportBehavior ) ? StartWayOutTeletransport : Jump );
+                                activity = ( playerItem->getMediator()->collisionWithByBehavior( "behavior of teletransport" ) ? StartWayOutTeletransport : Jump );
                         }
                         // ...y ha pulsado la tecla de disparo entonces dispara
                         else if ( input->doughnut() && ! fireFromHooterIsPresent )
