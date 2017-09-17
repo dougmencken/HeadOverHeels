@@ -607,19 +607,16 @@
     <item x="8" y="3" z="-1">
       <label>safari-door-south</label>
       <direction>south</direction>
-      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="0" y="0" z="1">
       <label>brick2</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="0" z="2">
       <label>brick2</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="6" y="0" z="3">
@@ -631,7 +628,6 @@
     <item x="7" y="0" z="4">
       <label>brick2</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="7" y="0" z="5">

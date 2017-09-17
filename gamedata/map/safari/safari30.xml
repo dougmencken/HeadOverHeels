@@ -262,25 +262,21 @@
     <item x="2" y="3" z="4">
       <label>safari-capital-south</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="4" z="4">
       <label>safari-capital-south</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="3" z="-1">
       <label>safari-door-south</label>
       <direction>south</direction>
-      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="0" y="8" z="-1">
       <label>safari-door-west</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>door</type>
     </item>
   </items>

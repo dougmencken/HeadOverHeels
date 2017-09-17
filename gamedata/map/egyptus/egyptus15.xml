@@ -377,19 +377,16 @@
     <item x="2" y="6" z="-1">
       <label>egyptus-door-west</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="0" y="0" z="0">
       <label>brick2</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="0" z="1">
       <label>brick2</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="0" z="4">
@@ -401,25 +398,21 @@
     <item x="3" y="0" z="3">
       <label>brick2</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="0" z="1">
       <label>brick2</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="0" z="5">
       <label>brick2</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="5" y="0" z="0">
       <label>spikes</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="5" y="0" z="2">
@@ -431,7 +424,6 @@
     <item x="5" y="0" z="6">
       <label>brick2</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="5" y="0" z="7">

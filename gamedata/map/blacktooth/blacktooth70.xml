@@ -203,121 +203,101 @@
     <item x="0" y="0" z="-1">
       <label>blacktooth-column-shaft-east</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="0" z="-1">
       <label>blacktooth-column-shaft-east</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="0" z="-1">
       <label>blacktooth-column-shaft-east</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="0" z="-1">
       <label>blacktooth-column-shaft-east</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="0" z="-1">
       <label>blacktooth-column-capital-east</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="0" z="-1">
       <label>blacktooth-column-capital-east</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="0" z="-1">
       <label>blacktooth-door-west</label>
       <direction>east</direction>
-      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="0" y="9" z="-1">
       <label>blacktooth-door-west</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="0" y="1" z="1">
       <label>brick2</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="1" z="1">
       <label>brick2</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="2" z="1">
       <label>brick2</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="2" z="1">
       <label>brick2</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="3" z="0">
       <label>brick2</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="3" z="1">
       <label>brick2</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="3" z="2">
       <label>vulcano</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="3" z="3">
       <label>vulcano</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="3" z="4">
       <label>vulcano</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="3" z="0">
       <label>brick2</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="3" z="1">
       <label>brick2</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="3" z="4">
       <label>vulcano</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
   </items>

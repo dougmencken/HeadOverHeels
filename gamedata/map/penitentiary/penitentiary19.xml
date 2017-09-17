@@ -329,61 +329,51 @@
     <item x="0" y="0" z="0">
       <label>penitentiary-wall-x-1</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="0" z="0">
       <label>penitentiary-wall-x-1</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="0" z="-1">
       <label>penitentiary-shaft-east</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="0" z="-1">
       <label>penitentiary-shaft-east</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="0" z="-1">
       <label>penitentiary-shaft-east</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="0" z="-1">
       <label>penitentiary-shaft-east</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="0" z="-1">
       <label>penitentiary-capital-east</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="0" z="-1">
       <label>penitentiary-capital-east</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="0" z="-1">
       <label>penitentiary-door-west</label>
       <direction>east</direction>
-      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="1" y="9" z="-1">
       <label>penitentiary-door-west</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="1" y="4" z="0">

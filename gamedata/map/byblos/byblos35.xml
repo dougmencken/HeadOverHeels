@@ -581,67 +581,56 @@
     <item x="0" y="0" z="0">
       <label>byblos-wall-y-1</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="1" z="0">
       <label>byblos-wall-y-1</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="2" z="0">
       <label>byblos-wall-y-2</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="5" z="0">
       <label>byblos-wall-y-2</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="6" z="0">
       <label>byblos-wall-y-1</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="7" z="0">
       <label>byblos-wall-y-1</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="3" z="-1">
       <label>byblos-door-north</label>
       <direction>north</direction>
-      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="9" y="3" z="4">
       <label>byblos-capital-south</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="9" y="4" z="4">
       <label>byblos-capital-south</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="9" y="3" z="-1">
       <label>byblos-door-south</label>
       <direction>south</direction>
-      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="3" y="0" z="4">
       <label>book</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="0" z="5">
@@ -653,19 +642,16 @@
     <item x="5" y="0" z="3">
       <label>book</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="6" y="0" z="3">
       <label>book</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="7" y="0" z="3">
       <label>book</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="7" y="0" z="4">
@@ -677,7 +663,6 @@
     <item x="2" y="5" z="0">
       <label>brick2</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="5" z="1">
@@ -689,7 +674,6 @@
     <item x="1" y="6" z="0">
       <label>brick2</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="6" z="1">
@@ -701,13 +685,11 @@
     <item x="2" y="6" z="0">
       <label>brick2</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="6" z="0">
       <label>brick2</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="6" z="1">
@@ -719,7 +701,6 @@
     <item x="2" y="7" z="0">
       <label>brick2</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="7" z="1">

@@ -377,43 +377,36 @@
     <item x="2" y="6" z="-1">
       <label>themoon-door-west</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="0" y="1" z="0">
       <label>toaster</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="1" z="1">
       <label>imperial-guard-head</label>
       <direction>south</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="5" y="1" z="0">
       <label>toaster</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="5" y="1" z="1">
       <label>imperial-guard-head</label>
       <direction>north</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="0" y="2" z="0">
       <label>toaster</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="2" z="1">
       <label>imperial-guard-head</label>
       <direction>south</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="2" y="2" z="0">
@@ -431,25 +424,21 @@
     <item x="5" y="2" z="0">
       <label>toaster</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="5" y="2" z="1">
       <label>imperial-guard-head</label>
       <direction>north</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="0" y="3" z="0">
       <label>toaster</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="3" z="1">
       <label>imperial-guard-head</label>
       <direction>south</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="2" y="3" z="0">
@@ -467,37 +456,31 @@
     <item x="5" y="3" z="0">
       <label>toaster</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="5" y="3" z="1">
       <label>imperial-guard-head</label>
       <direction>north</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="0" y="4" z="0">
       <label>toaster</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="4" z="1">
       <label>imperial-guard-head</label>
       <direction>south</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="5" y="4" z="0">
       <label>toaster</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="5" y="4" z="1">
       <label>imperial-guard-head</label>
       <direction>north</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
   </items>

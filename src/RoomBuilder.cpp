@@ -43,7 +43,6 @@ RoomBuilder::~RoomBuilder( )
 
 Room* RoomBuilder::buildRoom ()
 {
-        // Procesa el archivo XML especificado para construir la sala
         try
         {
                 std::auto_ptr< rxml::RoomXML > roomXML( rxml::room( fileName.c_str () ) );
@@ -185,7 +184,7 @@ Room* RoomBuilder::buildRoom ()
                                         std::cout << oss.str () << std::endl ;
                                         /// throw oss.str ();
                                 }
-                                room->addItem( gridItem );
+                                room->addGridItem( gridItem );
                         }
                         // it is a free item
                         else if ( ( *i ).type () == rxml::type::freeitem )
@@ -197,11 +196,11 @@ Room* RoomBuilder::buildRoom ()
                                         oss << "free item with coordinates " << ( *i ).x () << ", " << ( *i ).y () << ", " << ( *i ).z () << " is absent";
                                         std::cout << oss.str () << std::endl ;
                                         // don't throw an exception here
-                                        // there are bonus elements that may already be taken and thus absent
+                                        // there may be bonus item already taken and thus absent
                                 }
                                 else
                                 {
-                                        room->addItem( freeItem );
+                                        room->addFreeItem( freeItem );
                                 }
                         }
                 }
@@ -301,8 +300,8 @@ FloorTile* RoomBuilder::buildFloorTile( const rxml::tile& tile, const char* gfxP
         try {
                 BITMAP* picture = load_png( ( isomot::sharePath() + gfxPrefix + "/" + tile.bitmap() ).c_str(), 0 );
                 if ( picture == 0 ) {
-                        std::cerr << "Picture \"" << tile.bitmap() << "\" at \"" << gfxPrefix << "\" is absent" << std::endl ;
-                        throw "Picture " + tile.bitmap() + " at " + gfxPrefix + " is absent";
+                        std::cerr << "picture \"" << tile.bitmap() << "\" at \"" << gfxPrefix << "\" is absent" << std::endl ;
+                        throw "picture " + tile.bitmap() + " at " + gfxPrefix + " is absent";
                 }
                 int column = room->getTilesX() * tile.y() + tile.x();
                 floorTile = new FloorTile( column, tile.x(), tile.y(), picture );
@@ -321,8 +320,8 @@ Wall* RoomBuilder::buildWall( const rxml::wall& wall, const char* gfxPrefix )
         try {
                 BITMAP* picture = load_png( ( isomot::sharePath() + gfxPrefix + "/" + wall.bitmap() ).c_str(), 0 );
                 if ( picture == 0 ) {
-                        std::cerr << "Picture \"" << wall.bitmap() << "\" at \"" << gfxPrefix << "\" is absent" << std::endl ;
-                        throw "Picture " + wall.bitmap() + " at " + gfxPrefix + " is absent";
+                        std::cerr << "picture \"" << wall.bitmap() << "\" at \"" << gfxPrefix << "\" is absent" << std::endl ;
+                        throw "picture " + wall.bitmap() + " at " + gfxPrefix + " is absent";
                 }
                 roomWall = new Wall( wall.axis() == rxml::axis::x ? AxisX : AxisY, wall.index(), picture );
         } catch ( const Exception& e ) {
@@ -344,15 +343,21 @@ GridItem* RoomBuilder::buildGridItem( const rxml::item& item )
                 gridItem = new GridItem( itemData, item.x(), item.y(), ( item.z() > Top ? item.z() * LayerHeight : Top ),
                 item.direction() == rxml::direction::none ? NoDirection : Direction( item.direction() - 1 ) );
 
-                if ( item.behavior() == "behavior of disappearance in time" || item.behavior() == "behavior of disappearance on touch" ||
-                     item.behavior() == "behavior of disappearance on jump into" || item.behavior() == "behavior of slow disappearance on jump into" ||
-                     item.behavior() == "behavior of disappearance as soon as Head appears" )
+                std::string behaviorOfItem = item.behavior ();
+                if ( behaviorOfItem.empty () )
+                        behaviorOfItem = "still";
+
+                if ( behaviorOfItem == "behavior of disappearance in time" ||
+                        behaviorOfItem == "behavior of disappearance on touch" ||
+                        behaviorOfItem == "behavior of disappearance on jump into" ||
+                        behaviorOfItem == "behavior of slow disappearance on jump into" ||
+                        behaviorOfItem == "behavior of disappearance as soon as Head appears" )
                 {
-                        gridItem->assignBehavior( item.behavior(), reinterpret_cast< void * >( this->itemDataManager->findItemByLabel( "bubbles" ) ) );
+                        gridItem->assignBehavior( behaviorOfItem, reinterpret_cast< void * >( this->itemDataManager->findItemByLabel( "bubbles" ) ) );
                 }
                 else
                 {
-                        gridItem->assignBehavior( item.behavior(), 0 );
+                        gridItem->assignBehavior( behaviorOfItem, 0 );
                 }
         }
 
@@ -363,26 +368,28 @@ FreeItem* RoomBuilder::buildFreeItem( const rxml::item& item )
 {
         FreeItem* freeItem = 0;
 
-        // Se buscan los datos del elemento
         ItemData* itemData = this->itemDataManager->findItemByLabel( item.label () );
 
-        // Si se han encontrado, se coloca el elemento en la sala
+        // if item is here, place it in room
         if ( itemData != 0 )
         {
-                // Coordenadas libres
+                // in free coordinates
                 int fx = item.x() * room->getSizeOfOneTile() + ( ( room->getSizeOfOneTile() - itemData->widthX ) >> 1 );
                 int fy = ( item.y() + 1 ) * room->getSizeOfOneTile() - ( ( room->getSizeOfOneTile() - itemData->widthY ) >> 1 ) - 1;
                 int fz = item.z() != Top ? item.z() * LayerHeight : Top;
 
-                // La única excepción para colocar un elemento es que sea un bonus y ya se haya cogido
+                // don’t place an item if it is a bonus and has already been taken
                 if ( BonusManager::getInstance()->isPresent( room->getIdentifier(), itemData->label ) )
                 {
-                        // Hay diferencia entre los enumerados de dirección manejados por el archivo y por las salas
                         freeItem = new FreeItem( itemData, fx, fy, fz,
                                                  item.direction() == rxml::direction::none ? NoDirection : Direction( item.direction() - 1 ) );
 
+                        std::string behaviorOfItem = item.behavior ();
+                        if ( behaviorOfItem.empty () )
+                                behaviorOfItem = "still";
+
                         // extra data for behavior of item
-                        if ( item.behavior () == "behavior of elevator" )
+                        if ( behaviorOfItem == "behavior of elevator" )
                         {
                                 int* data = new int[ 3 ];
                                 int foundData = 0;
@@ -396,33 +403,33 @@ FreeItem* RoomBuilder::buildFreeItem( const rxml::item& item )
                                 if ( foundData == 3 )
                                 {
                                         freeItem->assignBehavior(
-                                                item.behavior (),
+                                                behaviorOfItem,
                                                 reinterpret_cast< void * >( data )
                                         );
                                         delete[] data;
                                 }
                         }
-                        else if ( item.behavior () == "behavior of waiting hunter in four directions" )
+                        else if ( behaviorOfItem == "behavior of waiting hunter in four directions" )
                         {
                                 freeItem->assignBehavior(
-                                        item.behavior (),
+                                        behaviorOfItem,
                                         reinterpret_cast< void * >( this->itemDataManager->findItemByLabel( "imperial-guard" ) )
                                 );
                         }
-                        else if ( item.behavior () == "behavior of something special" ||
-                                        item.behavior () == "behavior of disappearance in time" ||
-                                        item.behavior () == "behavior of disappearance on touch" ||
-                                        item.behavior () == "behavior of disappearance on jump into" ||
-                                        item.behavior () == "behaivor of final ball" )
+                        else if ( behaviorOfItem == "behavior of something special" ||
+                                        behaviorOfItem == "behavior of disappearance in time" ||
+                                        behaviorOfItem == "behavior of disappearance on touch" ||
+                                        behaviorOfItem == "behavior of disappearance on jump into" ||
+                                        behaviorOfItem == "behaivor of final ball" )
                         {
                                 freeItem->assignBehavior(
-                                        item.behavior (),
+                                        behaviorOfItem,
                                         reinterpret_cast< void * >( this->itemDataManager->findItemByLabel( "bubbles" ) )
                                 );
                         }
                         else
                         {
-                                freeItem->assignBehavior( item.behavior (), 0 );
+                                freeItem->assignBehavior( behaviorOfItem, 0 );
                         }
                 }
         }

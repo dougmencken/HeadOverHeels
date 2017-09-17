@@ -413,79 +413,66 @@
     <item x="0" y="0" z="0">
       <label>byblos-wall-y-1</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="1" z="0">
       <label>byblos-wall-y-1</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="4" z="0">
       <label>byblos-wall-y-1</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="5" z="0">
       <label>byblos-wall-y-1</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="2" z="-1">
       <label>byblos-shaft-north</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="3" z="-1">
       <label>byblos-shaft-north</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="2" z="-1">
       <label>byblos-shaft-north</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="3" z="-1">
       <label>byblos-shaft-north</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="2" z="-1">
       <label>byblos-shaft-north</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="3" z="-1">
       <label>byblos-shaft-north</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="2" z="-1">
       <label>byblos-capital-north</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="3" z="-1">
       <label>byblos-capital-north</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="2" z="-1">
       <label>byblos-door-south</label>
       <direction>north</direction>
-      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="8" y="2" z="0">

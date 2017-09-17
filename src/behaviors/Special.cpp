@@ -161,7 +161,7 @@ bool Special::update ()
                                 // play sound of taking
                                 SoundManager::getInstance()->play( item->getLabel(), activity );
 
-                                // bonuses disappear from room once they are got
+                                // bonus item disappears from room once it is got
                                 BonusManager::getInstance()->markBonusAsAbsent( item->getMediator()->getRoom()->getIdentifier(), item->getLabel() );
 
                                 takeMagicItem( static_cast< PlayerItem* >( sender ) );
@@ -173,7 +173,7 @@ bool Special::update ()
                                 freeItem->setCollisionDetector( false );
 
                                 // add to current room
-                                mediator->getRoom()->addItem( freeItem );
+                                mediator->getRoom()->addFreeItem( freeItem );
                         }
                         break;
 

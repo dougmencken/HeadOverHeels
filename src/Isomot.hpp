@@ -106,16 +106,8 @@ private:
 
 public:
 
-        /**
-         * Gestor de datos de los elementos del juego
-         * @return Un puntero al gestor
-         */
         ItemDataManager* getItemDataManager () const ;
 
-        /**
-         * Gestor del mapa
-         * @return Un puntero al gestor
-         */
         MapManager* getMapManager () const ;
 
 };

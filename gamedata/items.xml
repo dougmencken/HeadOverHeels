@@ -235,7 +235,7 @@
     <frame>0</frame>
   </item>
 
-  <!-- Bars north-south -->
+  <!-- Bars orthogonal to north-south X axis -->
   <item label="bars-ns">
     <widthX>8</widthX>
     <widthY>16</widthY>
@@ -256,7 +256,7 @@
     <frame>0</frame>
   </item>
 
-  <!-- Bars east-west -->
+  <!-- Bars orthogonal to east-west Y axis -->
   <item label="bars-ew">
     <widthX>16</widthX>
     <widthY>8</widthY>

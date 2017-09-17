@@ -496,85 +496,71 @@
     <item x="0" y="1" z="0">
       <label>blacktooth-wall-y-1</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="2" z="0">
       <label>blacktooth-wall-y-2</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="3" z="0">
       <label>blacktooth-wall-y-1</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="6" z="0">
       <label>blacktooth-wall-y-1</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="7" z="0">
       <label>blacktooth-wall-y-2</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="8" z="0">
       <label>blacktooth-wall-y-1</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="4" z="-1">
       <label>blacktooth-door-north</label>
       <direction>north</direction>
-      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="1" y="0" z="0">
       <label>blacktooth-wall-x-1</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="0" z="0">
       <label>blacktooth-wall-x-2</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="0" z="0">
       <label>blacktooth-wall-x-1</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="6" y="0" z="0">
       <label>blacktooth-wall-x-1</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="7" y="0" z="0">
       <label>blacktooth-wall-x-2</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="8" y="0" z="0">
       <label>blacktooth-wall-x-1</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="0" z="-1">
       <label>blacktooth-door-east</label>
       <direction>east</direction>
-      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="4" y="4" z="0">

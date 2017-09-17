@@ -361,109 +361,91 @@
     <item x="0" y="0" z="0">
       <label>market-wall-x-3</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="0" z="0">
       <label>market-wall-x-2</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="0" z="0">
       <label>market-wall-x-3</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="5" y="0" z="0">
       <label>market-wall-x-2</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="0" z="-1">
       <label>market-door-east</label>
       <direction>east</direction>
-      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="6" y="3" z="-1">
       <label>market-door-south</label>
       <direction>south</direction>
-      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="0" y="1" z="0">
       <label>vulcano</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="5" y="1" z="0">
       <label>vulcano</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="2" z="0">
       <label>vulcano</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="2" z="0">
       <label>vulcano</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="3" z="0">
       <label>vulcano</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="3" z="0">
       <label>vulcano</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="4" z="0">
       <label>vulcano</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="4" z="0">
       <label>vulcano</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="5" z="0">
       <label>vulcano</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="5" z="0">
       <label>vulcano</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="6" z="0">
       <label>vulcano</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="5" y="6" z="0">
       <label>vulcano</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
   </items>

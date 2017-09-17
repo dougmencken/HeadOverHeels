@@ -1121,379 +1121,316 @@
     <item x="8" y="9" z="0">
       <label>hidden-wall-y</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="9" y="9" z="0">
       <label>hidden-wall-y</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="10" y="9" z="0">
       <label>hidden-wall-y</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="11" y="9" z="0">
       <label>hidden-wall-y</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="12" y="9" z="0">
       <label>hidden-wall-y</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="7" y="9" z="0">
       <label>hidden-wall-y</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="7" y="10" z="0">
       <label>hidden-wall-y</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="7" y="11" z="0">
       <label>hidden-wall-y</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="7" y="12" z="0">
       <label>hidden-wall-y</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="7" y="13" z="0">
       <label>hidden-wall-y</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="7" y="14" z="0">
       <label>hidden-wall-y</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="7" y="15" z="0">
       <label>hidden-wall-y</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="7" y="16" z="0">
       <label>hidden-wall-y</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="1" z="0">
       <label>moon-wall-y-4</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="2" z="0">
       <label>moon-wall-y-1</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="3" z="0">
       <label>moon-wall-y-3</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="6" z="0">
       <label>moon-wall-y-3</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="7" z="0">
       <label>moon-wall-y-1</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="8" z="0">
       <label>moon-wall-y-2</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="9" z="0">
       <label>moon-wall-y-4</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="10" z="0">
       <label>moon-wall-y-2</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="11" z="0">
       <label>moon-wall-y-1</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="12" z="0">
       <label>moon-wall-y-2</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="13" z="0">
       <label>moon-wall-y-3</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="14" z="0">
       <label>moon-wall-y-1</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="15" z="0">
       <label>moon-wall-y-4</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="16" z="0">
       <label>moon-wall-y-2</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="4" z="-1">
       <label>themoon-door-north</label>
       <direction>northeast</direction>
-      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="1" y="0" z="0">
       <label>moon-wall-x-4</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="0" z="0">
       <label>moon-wall-x-1</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="0" z="0">
       <label>moon-wall-x-2</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="4" y="0" z="0">
       <label>moon-wall-x-3</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="5" y="0" z="0">
       <label>moon-wall-x-1</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="6" y="0" z="0">
       <label>moon-wall-x-4</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="7" y="0" z="0">
       <label>moon-wall-x-4</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="8" y="0" z="0">
       <label>moon-wall-x-2</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="11" y="0" z="0">
       <label>moon-wall-x-2</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="12" y="0" z="0">
       <label>moon-wall-x-3</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="9" y="0" z="-1">
       <label>themoon-door-east</label>
       <direction>eastsouth</direction>
-      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="3" y="17" z="-1">
       <label>themoon-door-west</label>
       <direction>westnorth</direction>
-      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="1" y="2" z="0">
       <label>toaster</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="7" z="0">
       <label>toaster</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="6" y="3" z="0">
       <label>toaster</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="6" y="4" z="0">
       <label>toaster</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="6" y="5" z="0">
       <label>toaster</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="6" y="6" z="0">
       <label>toaster</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="7" y="3" z="0">
       <label>toaster</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="7" y="4" z="0">
       <label>toaster</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="7" y="5" z="0">
       <label>toaster</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="7" y="6" z="0">
       <label>toaster</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="12" y="3" z="0">
       <label>toaster</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="12" y="4" z="0">
       <label>toaster</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="12" y="5" z="0">
       <label>toaster</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="12" y="6" z="0">
       <label>toaster</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="11" z="0">
       <label>toaster</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="12" z="0">
       <label>toaster</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="13" z="0">
       <label>toaster</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="14" z="0">
       <label>toaster</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="15" z="0">
       <label>toaster</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="6" y="11" z="0">
       <label>toaster</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="6" y="12" z="0">
       <label>toaster</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="6" y="13" z="0">
       <label>toaster</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="6" y="14" z="0">
       <label>toaster</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="2" z="1">
@@ -1505,79 +1442,66 @@
     <item x="1" y="7" z="1">
       <label>imperial-guard-head</label>
       <direction>south</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="6" y="3" z="1">
       <label>imperial-guard-head</label>
       <direction>north</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="6" y="4" z="1">
       <label>imperial-guard-head</label>
       <direction>north</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="6" y="5" z="1">
       <label>imperial-guard-head</label>
       <direction>north</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="6" y="6" z="1">
       <label>imperial-guard-head</label>
       <direction>north</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="7" y="3" z="1">
       <label>imperial-guard-head</label>
       <direction>south</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="7" y="4" z="1">
       <label>imperial-guard-head</label>
       <direction>south</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="7" y="5" z="1">
       <label>imperial-guard-head</label>
       <direction>south</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="7" y="6" z="1">
       <label>imperial-guard-head</label>
       <direction>south</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="12" y="3" z="1">
       <label>imperial-guard-head</label>
       <direction>north</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="12" y="4" z="1">
       <label>imperial-guard-head</label>
       <direction>north</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="12" y="5" z="1">
       <label>imperial-guard-head</label>
       <direction>north</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="12" y="6" z="1">
       <label>imperial-guard-head</label>
       <direction>north</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="1" y="11" z="1">
@@ -1589,49 +1513,41 @@
     <item x="1" y="12" z="1">
       <label>imperial-guard-head</label>
       <direction>south</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="1" y="13" z="1">
       <label>imperial-guard-head</label>
       <direction>south</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="1" y="14" z="1">
       <label>imperial-guard-head</label>
       <direction>south</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="1" y="15" z="1">
       <label>imperial-guard-head</label>
       <direction>south</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="6" y="11" z="1">
       <label>imperial-guard-head</label>
       <direction>north</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="6" y="12" z="1">
       <label>imperial-guard-head</label>
       <direction>north</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="6" y="13" z="1">
       <label>imperial-guard-head</label>
       <direction>north</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="6" y="14" z="1">
       <label>imperial-guard-head</label>
       <direction>north</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
   </items>

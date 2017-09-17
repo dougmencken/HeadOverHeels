@@ -59,14 +59,11 @@ bool CannonBall::update ()
                                         freeItem->assignBehavior( "behavior of disappearance in time", 0 );
                                         freeItem->setCollisionDetector( false );
 
-                                        // Se añade a la sala actual
-                                        item->getMediator()->getRoom()->addItem( freeItem );
+                                        item->getMediator()->getRoom()->addFreeItem( freeItem );
                                 }
 
-                                // Se pone a cero el cronómetro para el siguiente ciclo
                                 speedTimer->reset();
 
-                                // Anima el elemento
                                 freeItem->animate();
                         }
                         break;

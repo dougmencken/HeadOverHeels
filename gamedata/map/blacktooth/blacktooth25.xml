@@ -377,7 +377,6 @@
     <item x="6" y="2" z="-1">
       <label>blacktooth-door-south</label>
       <direction>south</direction>
-      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="4" y="0" z="1">
@@ -389,7 +388,6 @@
     <item x="5" y="0" z="0">
       <label>vulcano</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="5" z="7">

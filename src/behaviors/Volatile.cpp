@@ -188,8 +188,7 @@ bool Volatile::update ()
                                 freeItem->assignBehavior( "behavior of disappearance in time", 0 );
                                 freeItem->setCollisionDetector( false );
 
-                                // Se añade a la sala actual
-                                mediator->getRoom()->addItem( freeItem );
+                                mediator->getRoom()->addFreeItem( freeItem );
                         }
                         break;
 

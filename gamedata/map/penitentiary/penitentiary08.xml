@@ -199,31 +199,26 @@
     <item x="0" y="8" z="-1">
       <label>penitentiary-door-west</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="1" y="0" z="4">
       <label>brick1</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="1" z="4">
       <label>brick1</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="2" z="6">
       <label>brick1</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="3" z="7">
       <label>brick1</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="5" z="0">
@@ -241,7 +236,6 @@
     <item x="0" y="5" z="2">
       <label>brick1</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="5" z="3">

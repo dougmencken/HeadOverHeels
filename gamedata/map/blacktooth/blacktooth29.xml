@@ -471,7 +471,6 @@
     <item x="2" y="8" z="-1">
       <label>blacktooth-door-west</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="5" y="0" z="7">

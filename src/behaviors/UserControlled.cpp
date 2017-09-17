@@ -520,8 +520,7 @@ void UserControlled::useHooter( PlayerItem* player )
                         // En un primer momento no detecta colisiones ya que parte de la misma posición del jugador
                         freeItem->setCollisionDetector( false );
 
-                        // Se añade a la sala actual
-                        player->getMediator()->getRoom()->addItem( freeItem );
+                        player->getMediator()->getRoom()->addFreeItem( freeItem );
 
                         // Se gasta una rosquillas
                         player->consumeAmmo();
@@ -606,8 +605,7 @@ void UserControlled::drop( PlayerItem* player )
                         // Sólo pueden cogerse los elementos portátiles o el trampolín
                         freeItem->assignBehavior( takenItemBehavior, 0 );
 
-                        // Se añade a la sala actual
-                        player->getMediator()->getRoom()->addItem( freeItem );
+                        player->getMediator()->getRoom()->addFreeItem( freeItem );
 
                         // El jugador ya no tiene el elemento
                         takenItemData = 0;

@@ -3689,9 +3689,12 @@ namespace rxml
       //
       if (n.name () == "behavior" && n.namespace_ ().empty ())
       {
+        ::std::auto_ptr< behavior_type > r (
+          behavior_traits::create (i, f, this));
+
         if (!behavior_.present ())
         {
-          this->behavior (behavior_traits::create (i, f, this));
+          this->behavior (r);
           continue;
         }
       }
@@ -3737,9 +3740,8 @@ namespace rxml
 
     if (!behavior_.present ())
     {
-      throw ::xsd::cxx::tree::expected_element< char > (
-        "behavior",
-        "");
+       // it’s okay
+       behavior_.set( "" );
     }
 
     if (!type_.present ())

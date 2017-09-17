@@ -426,25 +426,21 @@
     <item x="6" y="2" z="3">
       <label>egyptus-capital-south</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="6" y="3" z="3">
       <label>egyptus-capital-south</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="6" y="2" z="-1">
       <label>egyptus-door-south</label>
       <direction>south</direction>
-      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="2" y="6" z="-1">
       <label>egyptus-door-west</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>door</type>
     </item>
   </items>

@@ -385,8 +385,7 @@ bool Hunter::createFullBody()
                 // de lo contrariom no se podrá crear el guarda completo
                 freeItem->setCollisionDetector( false );
 
-                // Se añade a la sala actual
-                freeItem->getMediator()->getRoom()->addItem( newItem );
+                freeItem->getMediator()->getRoom()->addFreeItem( newItem );
         }
 
         return created;

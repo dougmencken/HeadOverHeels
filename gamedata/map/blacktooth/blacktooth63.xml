@@ -203,73 +203,61 @@
     <item x="0" y="0" z="-1">
       <label>jail-shaft-north</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="1" z="-1">
       <label>jail-shaft-north</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="0" z="-1">
       <label>jail-shaft-north</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="1" z="-1">
       <label>jail-shaft-north</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="0" z="-1">
       <label>jail-shaft-north</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="1" z="-1">
       <label>jail-shaft-north</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="0" z="-1">
       <label>jail-shaft-north</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="1" z="-1">
       <label>jail-shaft-north</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="0" z="-1">
       <label>jail-capital-north</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="1" z="-1">
       <label>jail-capital-north</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="0" z="-1">
       <label>jail-door-south</label>
       <direction>north</direction>
-      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="9" y="0" z="-1">
       <label>jail-door-south</label>
       <direction>south</direction>
-      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="1" y="0" z="3">
@@ -281,7 +269,6 @@
     <item x="2" y="0" z="3">
       <label>brick1</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="0" z="2">
@@ -323,7 +310,6 @@
     <item x="2" y="1" z="3">
       <label>brick1</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="1" z="2">

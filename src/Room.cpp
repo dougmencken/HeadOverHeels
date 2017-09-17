@@ -183,9 +183,9 @@ void Room::addDoor( Door * door )
         this->doors[ door->getDirection() ] = door;
 
         // each door is actually three free items
-        this->addItem( door->getLeftJamb() );
-        this->addItem( door->getRightJamb() );
-        this->addItem( door->getLintel() );
+        this->addFreeItem( door->getLeftJamb() );
+        this->addFreeItem( door->getRightJamb() );
+        this->addFreeItem( door->getLintel() );
 }
 
 
@@ -196,7 +196,7 @@ void Room::addDoor( Door * door )
 #define ZERO_HEIGHT_GRIDITEM    "Height for grid item is zero or negative"
 #define COLLISION_GRIDITEM      "Collision with grid item"
 
-void Room::addItem( GridItem * gridItem )
+void Room::addGridItem( GridItem * gridItem )
 {
         try
         {
@@ -284,7 +284,7 @@ void Room::addItem( GridItem * gridItem )
 #define ZERO_WIDTH_FREEITEM     "One or more of dimensions for free item are zero or negative"
 #define COLLISION_FREEITEM      "Collision with free item"
 
-void Room::addItem( FreeItem * freeItem )
+void Room::addFreeItem( FreeItem * freeItem )
 {
         try
         {
@@ -714,16 +714,6 @@ void Room::draw( BITMAP* where )
         }
 }
 
-void Room::startUpdate()
-{
-        mediator->startUpdate();
-}
-
-void Room::stopUpdate()
-{
-        mediator->stopUpdate();
-}
-
 void Room::calculateBounds()
 {
         bounds[ North ] = doors[ North ] || doors[ Northeast ] || doors[ Northwest ] || this->floorType == NoFloor ? tileSize : 0;
@@ -790,13 +780,13 @@ void Room::activatePlayer( const std::string& player )
 
 void Room::activate()
 {
-        this->startUpdate();
+        this->mediator->startUpdate();
         this->active = true;
 }
 
 void Room::deactivate()
 {
-        this->stopUpdate();
+        this->mediator->stopUpdate();
         this->active = false;
 }
 
@@ -997,9 +987,9 @@ Camera* Room::getCamera() const
 }
 
 TripleRoomStartPoint::TripleRoomStartPoint( const Direction& direction, int x, int y )
-: direction( direction ),
-  x( x ),
-  y( y )
+        : direction( direction )
+        , x( x )
+        , y( y )
 {
 }
 

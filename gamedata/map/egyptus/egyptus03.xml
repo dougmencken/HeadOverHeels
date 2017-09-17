@@ -203,61 +203,51 @@
     <item x="0" y="0" z="-1">
       <label>egyptus-shaft-north</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="1" z="-1">
       <label>egyptus-shaft-north</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="0" z="-1">
       <label>egyptus-shaft-north</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="1" z="-1">
       <label>egyptus-shaft-north</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="0" z="-1">
       <label>egyptus-shaft-north</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="1" z="-1">
       <label>egyptus-shaft-north</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="0" z="-1">
       <label>egyptus-capital-north</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="1" z="-1">
       <label>egyptus-capital-north</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="0" y="0" z="-1">
       <label>egyptus-door-south</label>
       <direction>north</direction>
-      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="9" y="0" z="-1">
       <label>egyptus-door-south</label>
       <direction>south</direction>
-      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="4" y="0" z="0">

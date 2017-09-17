@@ -57,8 +57,7 @@ public:
         virtual ~RoomBuilder( ) ;
 
         /**
-         * Construye la sala a partir de los datos del archivo XML
-         * @return Una sala ó 0 si la sala no se pudo construir
+         * Construct room by data from file
          */
         Room * buildRoom () ;
 

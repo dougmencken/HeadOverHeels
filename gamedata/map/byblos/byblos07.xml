@@ -329,37 +329,31 @@
     <item x="0" y="0" z="0">
       <label>byblos-wall-x-1</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="0" z="0">
       <label>byblos-wall-x-1</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="0" z="-1">
       <label>byblos-door-east</label>
       <direction>east</direction>
-      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="1" y="9" z="3">
       <label>byblos-capital-west</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="9" z="3">
       <label>byblos-capital-west</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="9" z="-1">
       <label>byblos-door-west</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="1" y="8" z="2">

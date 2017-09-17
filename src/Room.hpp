@@ -78,15 +78,13 @@ public:
 
        /**
         * Añade un nuevo elemento rejilla de la sala
-        * @param gridItem Un elemento rejilla
         */
-        void addItem ( GridItem * gridItem ) ;
+        void addGridItem ( GridItem * gridItem ) ;
 
        /**
         * Añade un nuevo elemento libre de la sala
-        * @param gridItem Un elemento libre
         */
-        void addItem ( FreeItem * freeItem ) ;
+        void addFreeItem ( FreeItem * freeItem ) ;
 
        /**
         * Añade un nuevo jugador a la sala
@@ -128,16 +126,6 @@ public:
         * @param where Imagen donde se realizará el dibujo
         */
         void draw ( BITMAP* where = 0 ) ;
-
-       /**
-        * Inicia la actualización de los elementos de la sala
-        */
-        void startUpdate () ;
-
-       /**
-        * Detiene la actualización de los elementos de la sala
-        */
-        void stopUpdate () ;
 
        /**
         * Calcula los límites reales de la sala en función de su tamaño y las puertas existentes

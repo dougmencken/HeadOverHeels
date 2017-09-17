@@ -485,7 +485,6 @@
     <item x="6" y="3" z="-1">
       <label>jail-door-south</label>
       <direction>south</direction>
-      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="0" y="0" z="0">
@@ -497,25 +496,21 @@
     <item x="0" y="7" z="0">
       <label>bars-ns</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="0" y="7" z="2">
       <label>bars-ns</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="0" y="7" z="4">
       <label>bars-ns</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="0" y="7" z="6">
       <label>bars-ns</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="0" y="7" z="7">

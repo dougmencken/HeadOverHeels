@@ -41,7 +41,8 @@ Behavior::Behavior( Item * whichItem, const std::string & behavior ) :
         , activity( Wait )
         , sender( 0 )
 {
-        std::cout << "creation of behavior \"" << behavior << "\" for item \"" << whichItem->getLabel() << "\"" << std::endl ;
+        std::cout << "creation of behavior \"" << behavior << "\" for item \"" << whichItem->getLabel()
+                        << "\" on cell with x=" << whichItem->getX() << " y=" << whichItem->getY() << " z=" << whichItem->getZ() << std::endl ;
 }
 
 Behavior::~Behavior( )
@@ -53,11 +54,7 @@ Behavior* Behavior::createBehaviorByName( Item* item, const std::string& behavio
 {
         Behavior* behaviorToReturn = 0;
 
-        if ( behavior == "still" || behavior == "behavior of bubbles" )
-        {
-                // yeah, do nothing
-        }
-        else if ( behavior == "behavior of conveyor in north or east" ||
+        if ( behavior == "behavior of conveyor in north or east" ||
                         behavior == "behavior of conveyor in south or west" )
         {
                 behaviorToReturn = new ConveyorBelt( item, behavior );
@@ -171,6 +168,12 @@ Behavior* Behavior::createBehaviorByName( Item* item, const std::string& behavio
         {
                 behaviorToReturn = new PlayerHeadAndHeels( item, behavior );
                 behaviorToReturn->setMoreData( extraData );
+        }
+        else // if ( behavior == "still" || behavior == "behavior of bubbles" )
+        {
+                // yeah, do nothing
+                /* std::cout << "nil behavior \"" << behavior << "\" for item \"" << item->getLabel()
+                                << "\" on cell with x=" << item->getX() << " y=" << item->getY() << " z=" << item->getZ() << std::endl ; */
         }
 
         return behaviorToReturn;

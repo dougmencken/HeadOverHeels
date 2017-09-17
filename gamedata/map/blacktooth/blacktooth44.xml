@@ -377,7 +377,6 @@
     <item x="6" y="2" z="-1">
       <label>market-door-south</label>
       <direction>south</direction>
-      <behavior>still</behavior>
       <type>door</type>
     </item>
   </items>

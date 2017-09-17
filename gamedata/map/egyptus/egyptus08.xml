@@ -644,73 +644,61 @@
     <item x="0" y="0" z="0">
       <label>egyptus-wall-x-1</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="0" z="0">
       <label>egyptus-wall-x-2</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="0" z="0">
       <label>egyptus-wall-x-1</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="5" y="0" z="0">
       <label>egyptus-wall-x-1</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="6" y="0" z="0">
       <label>egyptus-wall-x-2</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="7" y="0" z="0">
       <label>egyptus-wall-x-1</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="0" z="-1">
       <label>egyptus-door-east</label>
       <direction>east</direction>
-      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="8" y="4" z="-1">
       <label>egyptus-door-south</label>
       <direction>south</direction>
-      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="3" y="9" z="-1">
       <label>egyptus-door-west</label>
       <direction>west</direction>
-      <behavior>still</behavior>
       <type>door</type>
     </item>
     <item x="1" y="2" z="0">
       <label>cylinder</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="1" y="2" z="1">
       <label>cylinder</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="1" y="2" z="2">
       <label>cylinder</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="1" y="2" z="3">
@@ -722,19 +710,16 @@
     <item x="6" y="2" z="0">
       <label>cylinder</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="6" y="2" z="1">
       <label>cylinder</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="6" y="2" z="2">
       <label>cylinder</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="6" y="2" z="3">
@@ -758,19 +743,16 @@
     <item x="1" y="7" z="0">
       <label>cylinder</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="1" y="7" z="1">
       <label>cylinder</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="1" y="7" z="2">
       <label>cylinder</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="1" y="7" z="3">
@@ -782,19 +764,16 @@
     <item x="6" y="7" z="0">
       <label>cylinder</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="6" y="7" z="1">
       <label>cylinder</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="6" y="7" z="2">
       <label>cylinder</label>
       <direction>none</direction>
-      <behavior>still</behavior>
       <type>freeitem</type>
     </item>
     <item x="6" y="7" z="3">
