@@ -43,23 +43,17 @@ public:
 
         /**
          * Constructor
-         * @param itemDataManager Gestor de datos de los elementos del juego
-         * @param fileName Nombre del archivo que contiene los datos de la sala
+         * @param manager Manager of data about game’s items
          */
-        RoomBuilder( ItemDataManager* itemDataManager, const std::string& fileName ) ;
-
-        /**
-         * Constructor para una sala que ya ha sido creada
-         * @param itemDataManager Gestor de datos de los elementos del juego
-         */
-        RoomBuilder( ItemDataManager* itemDataManager ) ;
+        RoomBuilder( ItemDataManager* manager ) ;
 
         virtual ~RoomBuilder( ) ;
 
         /**
          * Construct room by data from file
+         * @param fileName Name of file with data about room
          */
-        Room * buildRoom () ;
+        Room * buildRoom ( const std::string& fileName ) ;
 
         /**
          * Create player in current room
@@ -79,7 +73,7 @@ public:
          * @param y Coordenada isométrica Y donde se situará al jugador
          * @param z Coordenada isométrica Z donde se situará al jugador
          * @param direction Dirección inicial del jugador
-         * @param withItem Carry the player an item in bag?
+         * @param withItem Carries player some item in bag or not
          */
         PlayerItem * buildPlayerInRoom ( Room* room, const std::string& player, const std::string& behavior, int x, int y, int z, const Direction& direction, bool withItem = false );
 
@@ -124,17 +118,12 @@ private:
 private:
 
         /**
-         * Nombre del archivo XML que contiene los datos de la sala
-         */
-        std::string fileName ;
-
-        /**
-         * Gestor de los datos invariables de los elementos del juego
+         * Manager of data about game’s items
          */
         ItemDataManager * itemDataManager ;
 
         /**
-         * La sala en construcción
+         * Room in construction
          */
         Room * room ;
 

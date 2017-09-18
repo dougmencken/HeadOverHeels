@@ -192,7 +192,7 @@ public:
         * @param x Diferencia que se debe aplicar a la coordenada de pantalla X para centrar la cámara
         * @param y Diferencia que se debe aplicar a la coordenada de pantalla Y para centrar la cámara
         */
-        void addTripleRoomStartPoint ( const Direction& direction, int x, int y ) ;
+        void addTripleRoomInitialPoint ( const Direction& direction, int x, int y ) ;
 
        /**
         * Almacena los límites para el desplazamiento de la cámara en una sala triple

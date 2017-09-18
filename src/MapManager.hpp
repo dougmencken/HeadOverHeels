@@ -32,10 +32,6 @@ class Isomot;
 class Room;
 
 
-/**
- * El gestor del mapa
- */
-
 class MapManager
 {
 

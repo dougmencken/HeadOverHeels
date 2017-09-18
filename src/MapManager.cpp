@@ -110,14 +110,14 @@ void MapManager::loadMap ()
 
 void MapManager::beginNewGame( const std::string& firstRoomFileName, const std::string& secondRoomFileName )
 {
-        // get data of the first room
+        // get data of first room
         MapRoomData* firstRoomData = findRoomData( firstRoomFileName );
 
-        // create the first room
+        // create first room
         if ( firstRoomData != 0 )
         {
-                std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( isomot->getItemDataManager(), isomot::sharePath() + "map/" + firstRoomFileName ) );
-                Room* firstRoom = roomBuilder->buildRoom();
+                std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( isomot->getItemDataManager() ) );
+                Room* firstRoom = roomBuilder->buildRoom( isomot::sharePath() + "map/" + firstRoomFileName );
 
                 if ( firstRoom != 0 )
                 {
@@ -143,14 +143,14 @@ void MapManager::beginNewGame( const std::string& firstRoomFileName, const std::
                 }
         }
 
-        // get data of the second room
+        // get data of second room
         MapRoomData* secondRoomData = findRoomData( secondRoomFileName );
 
-        // create the second room
+        // create second room
         if ( secondRoomData != 0 )
         {
-                std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( isomot->getItemDataManager(), isomot::sharePath() + "map/" + secondRoomFileName ) );
-                Room* secondRoom = roomBuilder->buildRoom();
+                std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( isomot->getItemDataManager() ) );
+                Room* secondRoom = roomBuilder->buildRoom( isomot::sharePath() + "map/" + secondRoomFileName );
 
                 if ( secondRoom != 0 )
                 {
@@ -178,23 +178,20 @@ void MapManager::beginNewGame( const std::string& firstRoomFileName, const std::
 
 void MapManager::beginOldGameWithPlayer( const sgxml::player& data )
 {
-        // Datos de la sala en el mapa
         MapRoomData* roomData = findRoomData( data.roomFilename() );
-        // La sala a crear
         Room* room = 0;
 
-        // Creación de la sala
         if ( roomData != 0 )
         {
-                // Si ya hay una sala creada existe la posibilidad de que la sala del segundo jugador sea la misma
+                // if there is already created room it is when room of second player is the same as of first player
                 if ( this->activeRoom != 0 && this->activeRoom->getIdentifier().compare( roomData->getRoom() ) == 0 )
                 {
                         room = this->activeRoom;
                 }
                 else
                 {
-                        std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( isomot->getItemDataManager(), isomot::sharePath() + "map/" + data.roomFilename() ) );
-                        room = roomBuilder->buildRoom ();
+                        std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( isomot->getItemDataManager() ) );
+                        room = roomBuilder->buildRoom ( isomot::sharePath() + "map/" + data.roomFilename() );
                 }
 
                 // place character in room
@@ -208,7 +205,7 @@ void MapManager::beginOldGameWithPlayer( const sgxml::player& data )
                         else if ( thePlayer == "heels" )
                                 behavior = "behavior of Heels";
                         else if ( thePlayer == "headoverheels" )
-                                behavior = "behavior of composite";
+                                behavior = "behavior of Head over Heels";
 
                         // store initial position of player in room’s data
                         PlayerInitialPosition playerPosition( thePlayer );
@@ -320,8 +317,8 @@ Room* MapManager::changeRoom( const Direction& exit )
         // if player carries some item
         bool withItem = player->consultTakenItemImage() != 0;
 
-        // Almacena los límites sala para normalizar las coordenadas de salida o entrada a la nueva
-        // sala en en caso de que el jugador acceda a través del suelo, el techo o un telepuerto
+        // get limits of room
+        // there’s possibility to exit and to enter new room in cases when player travels through floor, roof or teleport
         int northBound = activeRoom->getBound( North );
         int eastBound = activeRoom->getBound( East );
         int southBound = activeRoom->getBound( South );
@@ -335,31 +332,28 @@ Room* MapManager::changeRoom( const Direction& exit )
                 previousRoomData->clearPlayersPosition();
                 delete activeRoom;
         }
-        // En caso contrario se elimina al jugador activo y se selecciona el nuevo
-        // jugador activo en la sala que se abandona
+        // otherwise remove active player and select new active player in abandoned room
         else
         {
                 activeRoom->removePlayer( player );
                 previousRoomData->removePlayerPosition( player->getLabel() );
         }
 
-        // Search the map for the next room and get the way to entry
+        // search the map for the next room and get the way to entry
         Direction entry;
         MapRoomData* nextRoomData = findRoomData( previousRoomData->findConnectedRoom( exit, &entry ) );
         assert( nextRoomData != 0 );
         nextRoomData->adjustEntry( &entry, previousRoomData->getRoom() );
 
-        // Si la sala existe entonces habrá un jugador en ella
         bool playerPresent = false;
 
-        // Si la sala no está creada entonces se crea
         if ( ! nextRoomData->remainPlayers() )
         {
-                std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( isomot->getItemDataManager(), isomot::sharePath() + "map/" + nextRoomData->getRoom() ) );
-                newRoom = roomBuilder->buildRoom();
+                std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( isomot->getItemDataManager() ) );
+                newRoom = roomBuilder->buildRoom( isomot::sharePath() + "map/" + nextRoomData->getRoom() );
                 rooms.push_back( newRoom );
         }
-        // Si ya existe se busca en el vector de salas
+        // if already exists
         else
         {
                 newRoom = findRoom( nextRoomData->getRoom() );
@@ -367,21 +361,20 @@ Room* MapManager::changeRoom( const Direction& exit )
                 playerPresent = true;
         }
 
-        // Datos del jugador activo
         ItemData* playerData = isomot->getItemDataManager()->findItemByLabel( activePlayer );
 
-        // Posición inicial del jugador
+        // get player’s exit position in old room to calculate entry position in new room
         int x = exitPosition.getX ();
         int y = exitPosition.getY ();
         int z = exitPosition.getZ ();
         newRoom->calculateEntryCoordinates( entry, playerData->widthX, playerData->widthY, northBound, eastBound, southBound, westBound, &x, &y, &z );
 
-        // Almacena en los datos de la sala en el mapa la posición inicial del jugador
+        // set entry position of player
         PlayerInitialPosition playerPosition( activePlayer );
         playerPosition.assignPosition( entry, x, y, z, exitPosition.getOrientation() );
 
-        // Si ya hay un jugador presente recupera sus datos por si se da la circunstancia de que
-        // la vía de entrada de ambos jugadores sea la misma
+        // if there is player already, get its data
+        // for case when way of entry of both players is the same
         if ( playerPresent )
         {
                 PlayerItem* player = newRoom->getMediator()->getActivePlayer();
@@ -394,7 +387,7 @@ Room* MapManager::changeRoom( const Direction& exit )
                 nextRoomData->addPlayerPosition( playerPosition );
         }
 
-        // Crea al jugador
+        // create player
         std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( isomot->getItemDataManager() ) );
         if ( entry == ByTeleport || entry == ByTeleportToo )
         {
@@ -402,7 +395,7 @@ Room* MapManager::changeRoom( const Direction& exit )
         }
         player = roomBuilder->buildPlayerInRoom( newRoom, activePlayer, behaviorOfPlayer, x, y, z, exitPosition.getOrientation(), withItem );
 
-        // Se cambia el estado del jugador en función de la vía de entrada
+        // change activity of player by way of entry
         switch ( entry )
         {
                 case North:
@@ -442,7 +435,6 @@ Room* MapManager::changeRoom( const Direction& exit )
                         ;
         }
 
-        // La sala destino es la sala activa
         nextRoomData->setActivePlayer( activePlayer );
         newRoom->activatePlayer( activePlayer );
         newRoom->getCamera()->turnOn( newRoom->getMediator()->getActivePlayer(), entry );
@@ -455,39 +447,33 @@ Room* MapManager::changeRoom( const Direction& exit )
 
 Room* MapManager::restartRoom()
 {
-        Room* newRoom = 0;
-        PlayerItem* player = 0;
-        std::string activePlayer = "in~restart";
-        Direction entry = NoDirection;
-
-        // Desactiva la sala activa
         activeRoom->deactivate();
 
-        // Busca en el mapa los datos de la sala activa
         MapRoomData* activeRoomData = findRoomData( activeRoom->getIdentifier() );
 
-        // Se vuelve a crear la sala
-        std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( isomot->getItemDataManager(), isomot::sharePath() + "map/" + activeRoomData->getRoom() ) );
-        newRoom = roomBuilder->buildRoom ();
+        std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( isomot->getItemDataManager() ) );
+        Room* newRoom = roomBuilder->buildRoom ( isomot::sharePath() + "map/" + activeRoomData->getRoom() );
 
-        // Posición inicial de todos los jugadores presentes en la sala
+        // initial position of all players in room
         std::list< PlayerInitialPosition > playersPosition = activeRoomData->getPlayersPosition();
 
+        std::string activePlayer = "in~restart";
         std::string playerBehavior = "still";
+        Direction entry = NoDirection;
+        PlayerItem* player = 0;
 
-        // Para cada jugador presente en la sala:
+        // for each player in room
         for ( std::list< PlayerInitialPosition >::iterator i = playersPosition.begin (); i != playersPosition.end (); ++i )
         {
-                // Recupera el comportamiento del jugador
                 player = dynamic_cast< PlayerItem* >( activeRoom->getMediator()->findItemByLabel( ( *i ).getPlayer() ) );
 
-                // Si hay un jugador presente en la sala, se recupera su comportamiento
+                // if there is player in room
                 if ( player != 0 )
                 {
                         playerBehavior = player->getBehavior()->getBehaviorOfItem ();
                 }
                 // when there are no players in room but are known to have entered
-                // then it is the case when simple player enters room with another player already in this room
+                // it is the case when simple player enters room with another player already in this room
                 else
                 {
                         if ( ( *i ).getPlayer() == "head" )
@@ -495,7 +481,7 @@ Room* MapManager::restartRoom()
                         else if ( ( *i ).getPlayer() == "heels" )
                                 playerBehavior = "behavior of Heels";
                         else if ( ( *i ).getPlayer() == "headoverheels" )
-                                playerBehavior = "behavior of composite";
+                                playerBehavior = "behavior of Head over Heels";
                 }
 
                 // Se comprueba si éste es el jugador activo. En tal caso se recuperan sus datos de posición inicial
@@ -646,8 +632,8 @@ Room* MapManager::restartRoom()
 
 Room* MapManager::createRoom( const std::string& fileName )
 {
-        std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( isomot->getItemDataManager(), isomot::sharePath() + "map/" + fileName ) );
-        return roomBuilder->buildRoom();
+        std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( isomot->getItemDataManager() ) );
+        return roomBuilder->buildRoom( isomot::sharePath() + "map/" + fileName );
 }
 
 Room* MapManager::swapRoom()

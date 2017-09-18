@@ -1084,7 +1084,7 @@ bool Mediator::nextPlayer( ItemDataManager* itemDataManager )
 
                                 // create "composite" player
                                 std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( itemDataManager ) );
-                                activePlayer = roomBuilder->buildPlayerInRoom( this->room, "headoverheels", "behavior of composite", x, y, z, direction );
+                                activePlayer = roomBuilder->buildPlayerInRoom( this->room, "headoverheels", "behavior of Head over Heels", x, y, z, direction );
                                 // Le devuelve el elemento que tuviera en el bolso
                                 activePlayer->assignTakenItem( takenItemData, takenItemImage, behaviorOfItemTaken );
 

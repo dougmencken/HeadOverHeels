@@ -17,23 +17,11 @@
 namespace isomot
 {
 
-RoomBuilder::RoomBuilder( ItemDataManager* itemDataManager, const std::string& fileName )
+RoomBuilder::RoomBuilder( ItemDataManager* manager ) :
+        itemDataManager( manager )
+      , room( 0 )
 {
-        // Nombre del archivo
-        this->fileName = fileName;
 
-        // El gestor de datos
-        this->itemDataManager = itemDataManager;
-        // La sala en construcción
-        this->room = 0;
-}
-
-RoomBuilder::RoomBuilder( ItemDataManager* itemDataManager )
-{
-        // El gestor de datos
-        this->itemDataManager = itemDataManager;
-        // La sala en construcción
-        this->room = 0;
 }
 
 RoomBuilder::~RoomBuilder( )
@@ -41,13 +29,13 @@ RoomBuilder::~RoomBuilder( )
 
 }
 
-Room* RoomBuilder::buildRoom ()
+Room* RoomBuilder::buildRoom ( const std::string& fileName )
 {
         try
         {
                 std::auto_ptr< rxml::RoomXML > roomXML( rxml::room( fileName.c_str () ) );
 
-                // Crea la sala con los parámetros básicos: identificador, dimensiones y existencia o no de suelo
+                // create room with basic parameters like scenery, dimensions, existence of floor
                 this->room = new Room( roomXML->name(), roomXML->scenery(), roomXML->xTiles(), roomXML->yTiles(), roomXML->width(), FloorId( int( roomXML->floorType() ) ) );
                 if ( this->room == 0 )
                 {
@@ -55,12 +43,11 @@ Room* RoomBuilder::buildRoom ()
                         throw "I can't create room \"" + fileName + "\"";
                 }
 
-                // Para calcular las coordenadas de pantalla donde se situará el origen del espacio isométrico,
-                // se necesita saber si la sala tiene puerta al norte y/o al este
+                // to calculate coordinates of origin in isometric space, need to know if room has a door to north and / or east
                 bool hasNorthDoor = false;
                 bool hasEastDoor = false;
 
-                // Recorre la lista de elementos buscando las puertas
+                // scroll through list of items to look for doors
                 for ( rxml::items::item_const_iterator i = roomXML->items().item().begin (); i != roomXML->items().item().end (); ++i )
                 {
                         if ( ( *i ).type() == rxml::type::door )
@@ -73,61 +60,61 @@ Room* RoomBuilder::buildRoom ()
                                 }
                                 else if ( ( *i ).direction() == rxml::direction::east ||
                                           ( *i ).direction() == rxml::direction::eastnorth ||
-                                          ( *i ).direction() == rxml::direction::eastsouth)
+                                          ( *i ).direction() == rxml::direction::eastsouth )
                                 {
                                         hasEastDoor = true;
                                 }
                         }
                 }
 
-                // Una vez que se sabe de la existencia o no de las puertas, se calculan las coordenadas
+                // with knowledge of existence of doors, calculate coordinates
                 room->calculateCoordinates( hasNorthDoor, hasEastDoor,
                                             roomXML->deltaX().present() ? roomXML->deltaX().get() : 0,
                                             roomXML->deltaY().present() ? roomXML->deltaY().get() : 0 );
 
-                // Si la sala es triple se almacenan los datos constantes para situar inicialmente la cámara
-                // y las coordenadas de la sala donde se realizará el desplazamiento de la cámara
+                // for "triple" room there’s data to position camera initially
+                // and dimensions of room where to move camera
                 if ( roomXML->triple_room_data().present() )
                 {
                         if ( roomXML->triple_room_data().get().northeast().present() )
                         {
                                 rxml::northeast d = roomXML->triple_room_data().get().northeast().get();
-                                room->addTripleRoomStartPoint( Northeast, d.x(), d.y() );
+                                room->addTripleRoomInitialPoint( Northeast, d.x(), d.y() );
                         }
                         if ( roomXML->triple_room_data().get().southeast().present() )
                         {
                                 rxml::southeast d = roomXML->triple_room_data().get().southeast().get();
-                                room->addTripleRoomStartPoint( Southeast, d.x(), d.y() );
+                                room->addTripleRoomInitialPoint( Southeast, d.x(), d.y() );
                         }
                         if ( roomXML->triple_room_data().get().northwest().present() )
                         {
                                 rxml::northwest d = roomXML->triple_room_data().get().northwest().get();
-                                room->addTripleRoomStartPoint( Northwest, d.x(), d.y() );
+                                room->addTripleRoomInitialPoint( Northwest, d.x(), d.y() );
                         }
                         if ( roomXML->triple_room_data().get().southwest().present() )
                         {
                                 rxml::southwest d = roomXML->triple_room_data().get().southwest().get();
-                                room->addTripleRoomStartPoint( Southwest, d.x(), d.y() );
+                                room->addTripleRoomInitialPoint( Southwest, d.x(), d.y() );
                         }
                         if ( roomXML->triple_room_data().get().eastnorth().present() )
                         {
                                 rxml::eastnorth d = roomXML->triple_room_data().get().eastnorth().get();
-                                room->addTripleRoomStartPoint( Eastnorth, d.x(), d.y() );
+                                room->addTripleRoomInitialPoint( Eastnorth, d.x(), d.y() );
                         }
                         if ( roomXML->triple_room_data().get().eastsouth().present() )
                         {
                                 rxml::eastsouth d = roomXML->triple_room_data().get().eastsouth().get();
-                                room->addTripleRoomStartPoint( Eastsouth, d.x(), d.y() );
+                                room->addTripleRoomInitialPoint( Eastsouth, d.x(), d.y() );
                         }
                         if ( roomXML->triple_room_data().get().westnorth().present() )
                         {
                                 rxml::westnorth d = roomXML->triple_room_data().get().westnorth().get();
-                                room->addTripleRoomStartPoint( Westnorth, d.x(), d.y() );
+                                room->addTripleRoomInitialPoint( Westnorth, d.x(), d.y() );
                         }
                         if ( roomXML->triple_room_data().get().westsouth().present() )
                         {
                                 rxml::westsouth d = roomXML->triple_room_data().get().westsouth().get();
-                                room->addTripleRoomStartPoint( Westsouth, d.x(), d.y() );
+                                room->addTripleRoomInitialPoint( Westsouth, d.x(), d.y() );
                         }
 
                         room->assignTripleRoomBounds( roomXML->triple_room_data().get().bound_x().minimum(),
@@ -136,14 +123,14 @@ Room* RoomBuilder::buildRoom ()
                                                       roomXML->triple_room_data().get().bound_y().maximum() );
                 }
 
-                // Crea el suelo a base de losetas
+                // build tile-based floor
                 for ( rxml::floor::tile_const_iterator i = roomXML->floor().tile().begin (); i != roomXML->floor().tile().end (); ++i )
                 {
                         FloorTile* floorTile = this->buildFloorTile( *i, isomot::GameManager::getInstance()->getChosenGraphicSet() );
                         room->addFloor( floorTile );
                 }
 
-                // Crea las paredes sin puertas
+                // build walls without doors
                 if ( roomXML->walls().present() )
                 {
                         for ( rxml::walls::wall_const_iterator i = roomXML->walls().get().wall().begin (); i != roomXML->walls().get().wall().end (); ++i )
@@ -153,10 +140,11 @@ Room* RoomBuilder::buildRoom ()
                         }
                 }
 
-                // Sitúa los elementos en la sala. Un elemento puede ser: un muro, una puerta, uno rejilla o uno libre
+                // place items in the room
+                // element may be a wall, a door, a grid one or a free one
                 for ( rxml::items::item_const_iterator i = roomXML->items().item().begin (); i != roomXML->items().item().end (); ++i )
                 {
-                        // Es una pared. Las paredes formadas por elementos son aquellas que tienen puertas
+                        // it’s a plain wall
                         if ( ( *i ).type () == rxml::type::wall )
                         {
                         }

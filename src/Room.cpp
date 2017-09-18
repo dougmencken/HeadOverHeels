@@ -954,7 +954,7 @@ bool Room::calculateEntryCoordinates( const Direction& entry, int widthX, int wi
         return result;
 }
 
-void Room::addTripleRoomStartPoint( const Direction& direction, int x, int y )
+void Room::addTripleRoomInitialPoint( const Direction& direction, int x, int y )
 {
         this->tripleRoomStartPoints.push_back( TripleRoomStartPoint( direction, x, y ) );
 }

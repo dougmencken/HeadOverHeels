@@ -164,7 +164,7 @@ Behavior* Behavior::createBehaviorByName( Item* item, const std::string& behavio
                 behaviorToReturn = new PlayerHeels( item, behavior );
                 behaviorToReturn->setMoreData( extraData );
         }
-        else if ( behavior == "behavior of composite" )
+        else if ( behavior == "behavior of Head over Heels" )
         {
                 behaviorToReturn = new PlayerHeadAndHeels( item, behavior );
                 behaviorToReturn->setMoreData( extraData );
