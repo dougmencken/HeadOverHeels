@@ -664,10 +664,9 @@ bool FreeItem::changeData( int value, int x, int y, int z, const Datum& datum, c
 {
         bool collisionFound = false;
 
-        // Vacía la pila de colisiones
         mediator->clearStackOfCollisions( );
 
-        // Copia el elemento antes de realizar el movimiento
+        // copy item before making the move
         FreeItem oldFreeItem( *this );
 
         switch ( datum )
@@ -703,7 +702,7 @@ bool FreeItem::changeData( int value, int x, int y, int z, const Datum& datum, c
                         break;
         }
 
-        // Se buscan colisiones con las paredes reales, aquellas que delimitan la sala
+        // look for collision with real wall, one which limits the room
         if ( this->x < mediator->getBound( North ) )
         {
                 mediator->pushCollision( NorthWall );
@@ -721,17 +720,16 @@ bool FreeItem::changeData( int value, int x, int y, int z, const Datum& datum, c
                 mediator->pushCollision( EastWall );
         }
 
-        // Se buscan colisiones con el suelo
+        // look for collision with floor
         if ( this->z < 0 )
         {
                 mediator->pushCollision( Floor );
         }
 
-        // Si ha habido colisión con algún elemento especial se detiene el proceso
-        if ( ! ( collisionFound = ! mediator->isStackOfCollisionsEmpty () ) )
+        collisionFound = ! mediator->isStackOfCollisionsEmpty ();
+        if ( ! collisionFound )
         {
-                // Busca colisiones con el resto de elementos de la sala
-                // Si hay colisión se interrumpe el proceso
+                // look for collision with the rest of items in room
                 if ( ! ( collisionFound = mediator->findCollisionWithItem( this ) ) )
                 {
                         // Si el elemento tiene imagen se marcan para enmascarar los elementos

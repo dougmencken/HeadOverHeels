@@ -57,32 +57,32 @@ private:
         std::string labelOfDoor ;
 
        /**
-        * Celda que ocupa el elemento en el eje X
+        * Cell on X axis of this door
         */
         int cx ;
 
        /**
-        * Celda que ocupa el elemento en el eje Y
+        * Cell on Y axis of this door
         */
         int cy ;
 
        /**
-        * Posición espacial Z o a qué distancia está el elemento del suelo
+        * Spatial position Z or how far is ground
         */
         int z ;
 
        /**
-        * Coordenada inicial del vado de la puerta
+        * Initial coordinate of entrance
         */
         int rightLimit ;
 
        /**
-        * Coordenada final del vado de la puerta
+        * Final coordinate of entrance
         */
         int leftLimit ;
 
        /**
-        * El tipo de puerta determinado por su posición en la sala
+        * Direction of door or its position in room
         */
         Direction direction ;
 
@@ -94,13 +94,6 @@ private:
 
 public:
 
-       /**
-        * Indica si un determinado elemento se encuentra en el vado de la puerta
-        * @param x Coordenada isométrica X del elemento
-        * @param y Coordenada isométrica Y del elemento
-        * @param z Coordenada isométrica Z del elemento
-        * @return true si el elemento está bajo la puerta o false en caso contrario
-        */
         bool isUnderDoor ( int x, int y, int z ) ;
 
        /**

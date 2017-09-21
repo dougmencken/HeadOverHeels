@@ -62,7 +62,7 @@ namespace isomot
         std::string sharePath () ;
 
         /**
-         * Objeto-función para la destrucción de los objetos de un contenedor de la STL
+         * Object-function for destruction of objects of Standard Template Library container
          */
         struct DeleteObject
         {
@@ -77,31 +77,31 @@ namespace isomot
         } ;
 
         /**
-         * Dirección en la que puede avanzar un elemento o punto de entrada o salida de una sala
+         * Direction in which you move an item or entry to room or exit from room
          */
         enum Direction
         {
-                NoDirection = 0,   /* Valor para elementos con dirección única */
-                South = 0,         /* Sur, parte inferior derecha de la pantalla */
-                West,              /* Oeste, parte inferior izquierda de la pantalla */
-                North,             /* Norte, parte superior izquierda de la pantalla */
-                East,              /* Este, parte superior derecha de la pantalla */
-                Northeast,         /* Noreste, parte superior de la pantalla */
-                Southeast,         /* Sureste, parte derecha de la pantalla */
-                Southwest,         /* Suroeste, parte inferior de la pantalla */
-                Northwest,         /* Noroeste, parte izquierda de la pantalla */
-                Eastnorth,         /* Puerta situada al este, parte superior */
-                Eastsouth,         /* Puerta situada al este, parte inferior */
-                Westnorth,         /* Puerta situada al oeste, parte superior */
-                Westsouth,         /* Puerta situada al oeste, parte inferior */
-                Up,                /* Arriba, incremento en el eje Z. Salida a una sala sin suelo */
-                Down,              /* Abajo, decremento en el eje Z. Salida por una sala sin suelo */
-                ByTeleport,        /* Telepuerto, salida a otra sala con telepuerto */
-                ByTeleportToo,     /* Segundo telepuerto, salida a otra sala con telepuerto */
-                NoEntry,           /* No hay entrada a la sala */
-                NoExit,            /* No hay salida de la sala */
-                Restart,           /* Se sale de la sala, reiniciándola. Se usa cuando el jugador es destruido */
-                JustWait           /* Ninguna, espera en la sala */
+                NoDirection = 0,   // used for items with only one direction
+                South = 0,         // south, bottom right of screen
+                West,              // west, bottom left of screen
+                North,             // north, top left of screen
+                East,              // east, top right of screen
+                Northeast,         // northeast, top of screen
+                Southeast,         // southeast, right side of screen
+                Southwest,         // southwest, bottom of screen
+                Northwest,         // northwest, left side of screen
+                Eastnorth,         // door located to the east, north
+                Eastsouth,         // door located to the east, south
+                Westnorth,         // door located to the west, north
+                Westsouth,         // door located to the west, south
+                Up,                // to room without floor
+                Down,              // to room without ceiling
+                ByTeleport,        // to another room via teleport
+                ByTeleportToo,     // to another room via second teleport
+                NoEntry,           // there is no entrance to this room
+                NoExit,            // there is no exit from this room
+                Restart,           // restart room when character loses its life
+                JustWait           // just wait in room
         } ;
 
         /**
@@ -152,8 +152,8 @@ namespace isomot
          */
         enum WhatToDo
         {
-                Change,   /* El valor especificado se cambiará por el valor actual */
-                Add       /* El valor especificado se sumará al valor actual */
+                Change,
+                Add
         } ;
 
         /**

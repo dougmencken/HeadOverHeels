@@ -195,7 +195,7 @@ bool Door::isUnderDoor( int x, int y, int z )
 {
         bool result = false;
 
-        z = ( z < 0 ? 0 : z );
+        if ( z < 0 ) z = 0;
 
         switch ( direction )
         {

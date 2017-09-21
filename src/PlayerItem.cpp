@@ -53,12 +53,16 @@ PlayerItem::~PlayerItem()
 
 bool PlayerItem::changeData( int value, int x, int y, int z, const Datum& datum, const WhatToDo& how )
 {
+        if ( ! this->isActivePlayer() )
+        {
+                return FreeItem::changeData( value, x, y, z, datum, how );
+        }
+
         bool collisionFound = false;
 
-        // Vacía la pila de colisiones
         mediator->clearStackOfCollisions( );
 
-        // Copia el elemento antes de realizar el movimiento
+        // copy item before moving
         PlayerItem oldPlayerItem( *this );
 
         switch ( datum )
@@ -94,11 +98,18 @@ bool PlayerItem::changeData( int value, int x, int y, int z, const Datum& datum,
                         break;
         }
 
-        // Busca colisiones con las puertas de la sala
+        // look for collision with door
+
+        const Direction directions[ 12 ] =
+                {  Northeast, Northwest, North, Southeast, Southwest, South,
+                        Eastnorth, Eastsouth, East, Westnorth, Westsouth, West  };
+
         bool doorCollision = false;
-        if ( ( collisionFound = mediator->findCollisionWithItem( this ) ) )
+
+        collisionFound = mediator->findCollisionWithItem( this );
+        if ( collisionFound )
         {
-                // Dirección de avance
+                // direction of movement
                 int wayX = ( datum == CoordinateX || x != 0 ? value : 0 );
                 int wayY = ( datum == CoordinateY || y != 0 ? value : 0 );
 
@@ -106,147 +117,129 @@ bool PlayerItem::changeData( int value, int x, int y, int z, const Datum& datum,
                 {
                         int id = mediator->popCollision();
 
-                        // Se ha movido en dirección al muro norte
+                        // case of move to north wall
                         if ( wayX < 0 )
                         {
-                                // Si la sala tiene puerta norte se comprueba si ha chocado con alguna jamba
-                                if ( ! ( doorCollision = isCollidingWithDoor( North, mediator, id, oldPlayerItem ) ) )
+                                // check for hit of north door’s jamb
+                                if ( ! ( doorCollision = isCollidingWithDoor( North, id, oldPlayerItem ) ) )
                                 {
-                                        // Si la sala tiene puerta noreste se comprueba si ha chocado con alguna jamba
-                                        if ( ! ( doorCollision = isCollidingWithDoor( Northeast, mediator, id, oldPlayerItem ) ) )
+                                        // check for hit of northeast door’s jamb
+                                        if ( ! ( doorCollision = isCollidingWithDoor( Northeast, id, oldPlayerItem ) ) )
                                         {
-                                                // Si la sala tiene puerta noroeste se comprueba si ha chocado con alguna jamba
-                                                isCollidingWithDoor( Northwest, mediator, id, oldPlayerItem );
+                                                // then it’s hit of northwest door’s jamb
+                                                isCollidingWithDoor( Northwest, id, oldPlayerItem );
                                         }
                                 }
                         }
-                        // Se ha movido en dirección al muro sur
+                        // case of move to south wall
                         else if ( wayX > 0 )
                         {
-                                // Si la sala tiene puerta sur se comprueba si ha chocado con alguna jamba
-                                if ( ! ( doorCollision = isCollidingWithDoor( South, mediator, id, oldPlayerItem ) ) )
+                                // check for hit of south door’s jamb
+                                if ( ! ( doorCollision = isCollidingWithDoor( South, id, oldPlayerItem ) ) )
                                 {
-                                        // Si la sala tiene puerta sureste se comprueba si ha chocado con alguna jamba
-                                        if ( ! ( doorCollision = isCollidingWithDoor( Southeast, mediator, id, oldPlayerItem ) ) )
+                                        // check for hit of southeast door’s jamb
+                                        if ( ! ( doorCollision = isCollidingWithDoor( Southeast, id, oldPlayerItem ) ) )
                                         {
-                                                // Si la sala tiene puerta suroeste se comprueba si ha chocado con alguna jamba
-                                                doorCollision = isCollidingWithDoor( Southwest, mediator, id, oldPlayerItem );
+                                                // then it’s hit of southwest door’s jamb
+                                                doorCollision = isCollidingWithDoor( Southwest, id, oldPlayerItem );
                                         }
                                 }
                         }
-                        // Se ha movido en dirección al muro este
+                        // case of move to east wall
                         else if ( wayY < 0 )
                         {
-                                // Si la sala tiene puerta este se comprueba si ha chocado con alguna jamba
-                                if ( ! ( doorCollision = isCollidingWithDoor( East, mediator, id, oldPlayerItem ) ) )
+                                // check for hit of east door’s jamb
+                                if ( ! ( doorCollision = isCollidingWithDoor( East, id, oldPlayerItem ) ) )
                                 {
-                                        // Si la sala tiene puerta este-norte se comprueba si ha chocado con alguna jamba
-                                        if ( ! ( doorCollision = isCollidingWithDoor( Eastnorth, mediator, id, oldPlayerItem ) ) )
+                                        // check for hit of east-north door’s jamb
+                                        if ( ! ( doorCollision = isCollidingWithDoor( Eastnorth, id, oldPlayerItem ) ) )
                                         {
-                                                // Si la sala tiene puerta este-sur se comprueba si ha chocado con alguna jamba
-                                                isCollidingWithDoor( Eastsouth, mediator, id, oldPlayerItem );
+                                                // so it’s hit of east-south door’s jamb
+                                                isCollidingWithDoor( Eastsouth, id, oldPlayerItem );
                                         }
                                 }
                         }
-                        // Se ha movido en dirección al muro oeste
+                        // case of move to west wall
                         else if ( wayY > 0 )
                         {
-                                // Si la sala tiene puerta este se comprueba si ha chocado con alguna jamba
-                                if ( ! ( doorCollision = isCollidingWithDoor( West, mediator, id, oldPlayerItem ) ) )
+                                // check for hit of west door’s jamb
+                                if ( ! ( doorCollision = isCollidingWithDoor( West, id, oldPlayerItem ) ) )
                                 {
-                                        // Si la sala tiene puerta este-norte se comprueba si ha chocado con alguna jamba
-                                        if ( ! ( doorCollision = isCollidingWithDoor( Westnorth, mediator, id, oldPlayerItem ) ) )
+                                        // check for hit of west-north door’s jamb
+                                        if ( ! ( doorCollision = isCollidingWithDoor( Westnorth, id, oldPlayerItem ) ) )
                                         {
-                                                // Si la sala tiene puerta este-sur se comprueba si ha chocado con alguna jamba
-                                                isCollidingWithDoor( Westsouth, mediator, id, oldPlayerItem );
+                                                // so it’s hit of west-south door’s jamb
+                                                isCollidingWithDoor( Westsouth, id, oldPlayerItem );
                                         }
                                 }
                         }
                 }
         }
 
-        // Se buscan colisiones con las paredes reales, aquellas que delimitan la sala
+        // look for collision with real wall, one which limits the room
         if ( this->x < mediator->getBound( North )
-                && isNotUnderDoor( North, mediator ) && isNotUnderDoor( Northeast, mediator ) && isNotUnderDoor( Northwest, mediator ) )
+                && isNotUnderDoor( North ) && isNotUnderDoor( Northeast ) && isNotUnderDoor( Northwest ) )
         {
                 mediator->pushCollision( NorthWall );
         }
         else if ( this->x + getDataOfFreeItem()->widthX > mediator->getBound( South )
-                && isNotUnderDoor( South, mediator ) && isNotUnderDoor( Southeast, mediator ) && isNotUnderDoor( Southwest, mediator ) )
+                && isNotUnderDoor( South ) && isNotUnderDoor( Southeast ) && isNotUnderDoor( Southwest ) )
         {
                 mediator->pushCollision( SouthWall );
         }
 
         if ( this->y - getDataOfFreeItem()->widthY + 1 < mediator->getBound( East )
-                && isNotUnderDoor( East, mediator ) && isNotUnderDoor( Eastnorth, mediator ) && isNotUnderDoor( Eastsouth, mediator ) )
+                && isNotUnderDoor( East ) && isNotUnderDoor( Eastnorth ) && isNotUnderDoor( Eastsouth ) )
         {
                 mediator->pushCollision( EastWall );
         }
         else if ( this->y >= mediator->getBound( West )
-                && isNotUnderDoor( West, mediator ) && isNotUnderDoor( Westnorth, mediator ) && isNotUnderDoor( Westsouth, mediator ) )
+                && isNotUnderDoor( West ) && isNotUnderDoor( Westnorth ) && isNotUnderDoor( Westsouth ) )
         {
                 mediator->pushCollision( WestWall );
         }
 
-        // Si ha habido colisión con alguna pared, se detiene el proceso
-        if ( ! ( collisionFound = ! mediator->isStackOfCollisionsEmpty () ) )
+        collisionFound = ! mediator->isStackOfCollisionsEmpty ();
+        if ( ! collisionFound )
         {
-                // Se buscan colisiones con los límites de la sala, ahora que se sabe que el jugador
-                // puede estar atravesando una puerta
-                Direction directions[] = {  Northeast, Northwest, North, Southeast, Southwest, South,
-                                                Eastnorth, Eastsouth, East, Westnorth, Westsouth, West  };
+                // now it is known that the player may go thru a door
+                // look for collision with limits of room
 
                 SpecialId borders[] = { NortheastBorder, NorthwestBorder, NorthBorder,
                                         SoutheastBorder, SouthwestBorder, SouthBorder,
                                         EastnorthBorder, EastsouthBorder, EastBorder,
                                         WestnorthBorder, WestsouthBorder, WestBorder };
 
-                // Se comprueba cada límite de la sala en el orden almacenado en los arrays
-
-                // Primero el grupo norte/sur
-                for ( int i = 0; i < 6; i++ )
+                // check each limit of room
+                for ( int i = 0; i < 12; i++ )
                 {
-                        if ( isCollidingWithRoomBorder( directions[ i ], mediator ) )
+                        if ( isCollidingWithRoomBorder( directions[ i ] ) )
                         {
                                 mediator->pushCollision( borders[ i ] );
-                                // No hace falta seguir comprobando límites
                                 break;
                         }
                 }
 
-                // Luego el grupo este/oeste
-                for ( int i = 6; i < 12; i++ )
-                {
-                        if ( isCollidingWithRoomBorder( directions[ i ], mediator ) )
-                        {
-                                mediator->pushCollision( borders[ i ] );
-                                // No hace falta seguir comprobando límites
-                                break;
-                        }
-                }
-
-                // Por último se buscan colisiones con el suelo
+                // collision with floor
                 if ( this->z < 0 )
                 {
                         mediator->pushCollision( Floor );
                 }
 
-                // Si se ha llegado a los límites de la sala se detiene el proceso
-                if ( ! ( collisionFound = ! mediator->isStackOfCollisionsEmpty () ) )
+                collisionFound = ! mediator->isStackOfCollisionsEmpty ();
+                if ( ! collisionFound )
                 {
-                        // Busca colisiones con el resto de elementos de la sala
-                        // Si hay colisión se interrumpe el proceso
+                        // look for collision with the rest of items in room
                         if ( ! ( collisionFound = mediator->findCollisionWithItem( this ) ) )
                         {
-                                // Si el elemento tiene imagen se marcan para enmascarar los elementos
-                                // libres cuyas imágenes se solapen con la suya. La operación se realiza
-                                // tanto para la posición anterior como la posición actual
+                                // for item with image, mark to mask free items whose images overlap with its image
                                 if ( this->image )
                                 {
-                                        // A cuántos píxeles está la imagen del punto origen de la sala
+                                        // get how many pixels is this image from point of room’s origin
                                         this->offset.first = ( ( this->x - this->y ) << 1 ) + getDataOfFreeItem()->widthX + getDataOfFreeItem()->widthY - ( image->w >> 1 ) - 1;
                                         this->offset.second = this->x + this->y + getDataOfFreeItem()->widthX - image->h - this->z;
 
+                                        // for both the previous position and the current position
                                         mediator->markItemsForMasking( &oldPlayerItem );
                                         mediator->markItemsForMasking( this );
                                 }
@@ -255,25 +248,25 @@ bool PlayerItem::changeData( int value, int x, int y, int z, const Datum& datum,
                                         this->offset.first = this->offset.second = 0;
                                 }
 
-                                // Si las sombras están activas se buscan qué elementos hay que volver a sombrear
-                                // La búsqueda se realiza tanto para la posición anterior como la posición actual
+                                // reshade items
                                 if ( mediator->getDegreeOfShading() < 256 )
                                 {
+                                        // for both the previous position and the current position
                                         mediator->markItemsForShady( &oldPlayerItem );
                                         mediator->markItemsForShady( this );
                                 }
 
-                                // El elemento debe volver a sombrearse y enmascararse tras el cambio de posición
+                                // reshade and remask
                                 this->myShady = WantShadow;
                                 this->myMask = WantMask;
 
-                                // La lista de elementos libres debe reordenarse
+                                // rearrange list of free items
                                 mediator->activateFreeItemsSorting();
                         }
                 }
         }
 
-        // Si hubo colisión se restauran los valores anteriores
+        // restore previous values for collision which is not collision with door
         if ( collisionFound && ! doorCollision )
         {
                 this->x = oldPlayerItem.getX();
@@ -288,7 +281,7 @@ bool PlayerItem::changeData( int value, int x, int y, int z, const Datum& datum,
         return ! collisionFound ;
 }
 
-bool PlayerItem::isCollidingWithDoor( const Direction& direction, Mediator* mediator, int id, const PlayerItem& previousPosition )
+bool PlayerItem::isCollidingWithDoor( const Direction& direction, int id, const PlayerItem& previousPosition )
 {
         Door* door = mediator->getDoor( direction );
         int oldX = this->x;
@@ -351,12 +344,12 @@ bool PlayerItem::isCollidingWithDoor( const Direction& direction, Mediator* medi
         return ( oldX != this->x || oldY != this->y );
 }
 
-bool PlayerItem::isNotUnderDoor( const Direction& direction, Mediator* mediator )
+bool PlayerItem::isNotUnderDoor( const Direction& direction )
 {
         bool result = false;
         Door* door = mediator->getDoor( direction );
 
-        switch( direction )
+        switch ( direction )
         {
                 case North:
                 case Northeast:
@@ -380,12 +373,12 @@ bool PlayerItem::isNotUnderDoor( const Direction& direction, Mediator* mediator 
         return result;
 }
 
-bool PlayerItem::isCollidingWithRoomBorder( const Direction& direction, Mediator* mediator )
+bool PlayerItem::isCollidingWithRoomBorder( const Direction& direction )
 {
         bool result = false;
         Door* door = mediator->getDoor( direction );
 
-        switch( direction )
+        switch ( direction )
         {
                 case North:
                         result = ( this->x < 0 );
@@ -474,6 +467,11 @@ void PlayerItem::wait ()
 
                 this->behavior->changeActivityOfItem( Wait );
         }
+}
+
+bool PlayerItem::isActivePlayer ()
+{
+        return mediator->getActivePlayer() == this ;
 }
 
 void PlayerItem::addLives( unsigned char lives )

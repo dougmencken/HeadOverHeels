@@ -20,7 +20,6 @@ namespace isomot
 {
 
 class ItemData ;
-class Mediator ;
 
 /**
  * Item of player controller by the user
@@ -167,29 +166,24 @@ protected:
         virtual bool changeData ( int value, int x, int y, int z, const Datum& datum, const WhatToDo& how ) ;
 
         /**
-         * Check if player hit a door, if yes then move player
+         * Check if player hits a door, if yes then move player
          * @param direction Una puerta identificada por su posición en la sala
-         * @param mediator El mediador de los elementos
-         * @param id Identificador asignado por el motor de un elemento existente en la pila de colisiones
-         * @return true si hubo colisión y por tanto desplazamiento del jugador o false en caso contrario
+         * @param id Assigned by engine identifier of item in stack of collisions
          */
-        bool isCollidingWithDoor ( const Direction& direction, Mediator* mediator, int id, const PlayerItem& previousPosition ) ;
+        bool isCollidingWithDoor ( const Direction& direction, int id, const PlayerItem& previousPosition ) ;
 
         /**
-         * Comprueba que el jugador no esté debajo de una puerta o bien que la puerta no exista
+         * See if player is not under a door or that door doesn’t exist
          * @param direction Una puerta identificada por su posición en la sala
-         * @param mediator El mediador de los elementos
-         * @return true si el jugador está bajo la puerta indicada o false en caso contrario
+         * @return true if the player is under that given door
          */
-        bool isNotUnderDoor( const Direction& direction, Mediator* mediator ) ;
+        bool isNotUnderDoor ( const Direction& direction ) ;
 
         /**
-         * Comprueba si el jugador ha chocado con los límites de la sala. Implicaría un cambio de sala
+         * See if player crosses limits of room, if yes then change rooms
          * @param direction Una puerta identificada por su posición en la sala
-         * @param mediator El mediador de los elementos
-         * @return true si ha alcanzado el límite de la sala o false en caso contrario
          */
-        bool isCollidingWithRoomBorder( const Direction& direction, Mediator* mediator ) ;
+        bool isCollidingWithRoomBorder( const Direction& direction ) ;
 
 private:
 
@@ -249,6 +243,8 @@ private:
         double shieldTime ;
 
 public:
+
+        bool isActivePlayer () ;
 
         /**
          * Establece el número de vidas del jugador
