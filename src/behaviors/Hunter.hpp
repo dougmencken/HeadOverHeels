@@ -39,45 +39,42 @@ public:
 private:
 
        /**
-        * Calcula el sentido en el que debe avanzar el elemento para poder cazar al jugador activo
-        * @return El estado que indica la dirección calculada
+        * Calculate direction in which item moves to hunt active player
         */
         ActivityOfItem calculateDirection ( const ActivityOfItem & activity ) ;
 
        /**
-        * Calcula el sentido en el que debe avanzar el elemento para poder cazar al jugador activo
-        * La dirección está restringida a los puntos cardinales básicos
-        * @return El estado que indica la dirección calculada
+        * Calculate direction in which item moves to hunt active player,
+        * direction may be north, south, east, and west
         */
         ActivityOfItem calculateDirection4 ( const ActivityOfItem & activity ) ;
 
        /**
-        * Calcula el sentido en el que debe avanzar el elemento para poder cazar al jugador activo
-        * La dirección puede ser cualquier de las ocho direcciones posibles
-        * @return El estado que indica la dirección calculada
+        * Calculate direction in which item moves to hunt active player,
+        * direction may be any of eight possible ones
         */
         ActivityOfItem calculateDirection8 ( const ActivityOfItem & activity ) ;
 
        /**
-        * Crea para los cazadores ocultos el guarda imperial completo
-        * @return true si se creó o false si todavía no se puede crear
+        * Morph hidden imperial guard to full-bodied hunter
+        * @return true if created or false if it still can’t be created
         */
         bool createFullBody () ;
 
        /**
-        * Asigna los datos del elemento usado como disparo
+        * Set additional data of full-bodied guard
         */
         void setMoreData ( void * data ) ;
 
 private:
 
        /**
-        * Cronómetro que controla la velocidad de movimiento del elemento
+        * Timer for item’s speed of movement
         */
         HPC * speedTimer ;
 
        /**
-        * Datos del guarda imperial
+        * Data of imperial guard
         */
         ItemData * guardData ;
 

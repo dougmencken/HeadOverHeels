@@ -26,7 +26,7 @@ FireDoughnut::~FireDoughnut( )
 bool FireDoughnut::update ()
 {
         FreeItem* freeItem = dynamic_cast< FreeItem * >( this->item );
-        bool destroy = false;
+        bool vanish = false;
 
         switch ( activity )
         {
@@ -79,7 +79,7 @@ bool FireDoughnut::update ()
 
                                         // En caso de colisión con cualquier elemento (excepto el jugador), el disparo desaparece
                                         dynamic_cast< UserControlled * >( playerItem->getBehavior() )->setFireFromHooter( false );
-                                        destroy = true;
+                                        vanish = true;
                                 }
 
                                 // Se pone a cero el cronómetro para el siguiente ciclo
@@ -112,7 +112,7 @@ bool FireDoughnut::update ()
 
                                         // En caso de colisión con cualquier elemento (excepto el jugador), el disparo desaparece
                                         dynamic_cast< UserControlled * >( playerItem->getBehavior() )->setFireFromHooter( false );
-                                        destroy = true;
+                                        vanish = true;
                                 }
 
                                 // Se pone a cero el cronómetro para el siguiente ciclo
@@ -145,7 +145,7 @@ bool FireDoughnut::update ()
 
                                         // En caso de colisión con cualquier elemento (excepto el jugador), el disparo desaparece
                                         dynamic_cast< UserControlled * >( playerItem->getBehavior() )->setFireFromHooter( false );
-                                        destroy = true;
+                                        vanish = true;
                                 }
 
                                 // Se pone a cero el cronómetro para el siguiente ciclo
@@ -178,7 +178,7 @@ bool FireDoughnut::update ()
 
                                         // En caso de colisión con cualquier elemento (excepto el jugador), el disparo desaparece
                                         dynamic_cast< UserControlled * >( playerItem->getBehavior() )->setFireFromHooter( false );
-                                        destroy = true;
+                                        vanish = true;
                                 }
 
                                 // Se pone a cero el cronómetro para el siguiente ciclo
@@ -193,7 +193,7 @@ bool FireDoughnut::update ()
                         ;
         }
 
-        return destroy;
+        return vanish;
 }
 
 void FireDoughnut::setPlayerItem( PlayerItem * player )

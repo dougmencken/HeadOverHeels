@@ -51,7 +51,7 @@ public:
         virtual ~Item( ) ;
 
         /**
-         * Actualiza el comportamiento del elemento
+         * Update item’s behavior
          */
         virtual bool update () ;
 
@@ -62,9 +62,7 @@ public:
         bool animate () ;
 
         /**
-         * Cambia todos los datos invariables del elemento. Se utiliza cuando hay una metamorfósis completa del
-         * elemento como, por ejemplo, cuando un jugador se teletransporta que cambia por completo su aspecto
-         * @param itemData Datos invariables del elemento
+         * Change data of item. It is used when there’s a metamorphosis such as when player teleports
          */
         void changeItemData ( ItemData * itemData, const Direction& direction ) ;
 
@@ -106,13 +104,13 @@ public:
         virtual bool addToZ ( int value ) = 0 ;
 
         /**
-         * Comprueba si el elemento puede moverse a la posición indicada
-         * @param x La nueva coordenada X
-         * @param y La nueva coordenada Y
-         * @param z La nueva coordenada Z
-         * @param what Modo para interpretar las coordenadas. Puede usarse Change para cambiarlas o Add para sumarlas
-         * @return true si la posición es válida o false si hay colisión. En este último caso
-         * la pila de colisiones almacenará los elementos que impiden el movimiento
+         * May this item move to given position
+         * @param x X coordinate
+         * @param y Y coordinate
+         * @param z Z coordinate
+         * @param what How to handle coordinates, just to change them or to add to existing values
+         * @return true if position is free or false if there’s a collision,
+         *         in the latter case place colliding items into stack of collisions
          */
         virtual bool checkPosition ( int x, int y, int z, const WhatToDo& what ) ;
 
@@ -212,13 +210,12 @@ protected:
         HPC motionTimer ;
 
         /**
-         * Comportamiento del elemento
+         * Behavior of item
          */
         Behavior* behavior ;
 
         /**
-         * Elemento que sirve de referencia para saber si éste debe ser movido cuando otros
-         * estén debajo
+         * Reference item used to know if it would move when others are below
          */
         Item* anchor ;
 
@@ -385,23 +382,13 @@ public:
          */
         int getOffsetY () const {  return offset.second ;  }
 
-        /**
-         * Comportamiento del elemento
-         * @return Un puntero a un comportamiento
-         */
         Behavior * getBehavior () const {  return behavior ;  }
 
-        /**
-         * Elemento que sirve de referencia para saber si éste debe ser movido cuando otros
-         * estén debajo
-         * @param Un elemento ó 0 si no hay ninguno
-         */
         void setAnchor ( Item * item ) ;
 
         /**
-         * Elemento que sirve de referencia para saber si éste debe ser movido cuando otros
-         * estén debajo
-         * @return Un elemento ó 0 si no hay ninguno
+         * Reference item used to know if it would move when others are below
+         * @return such item or 0 if there’s none
          */
         Item * getAnchor () const {  return this->anchor ;  }
 

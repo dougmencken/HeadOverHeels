@@ -7,7 +7,6 @@
 #include "FreeItem.hpp"
 #include "PlayerItem.hpp"
 #include "FloorTile.hpp"
-#include "TransparencyManager.hpp"
 #include "Behavior.hpp"
 
 
@@ -17,7 +16,7 @@ namespace isomot
 Mediator::Mediator( Room* room )
 {
         this->room = room;
-        this->transparencyManager = new TransparencyManager();
+        this->transparencies = new TableOfTransparencies() ;
         this->gridItemsSorting = false;
         this->freeItemsSorting = false;
         this->switchInRoomIsOn = false;
@@ -26,7 +25,7 @@ Mediator::Mediator( Room* room )
         pthread_mutex_init( &gridItemsMutex, 0 );
         pthread_mutex_init( &freeItemsMutex, 0 );
 
-        // mortal items which may be freezed by doughnut or switch
+        // items which may be freezed by doughnut or switch
         badBoys.push_back( "behavior of detector" );
         badBoys.push_back( "behavior of hunter in four directions" );
         badBoys.push_back( "behavior of waiting hunter in four directions" );
@@ -62,8 +61,7 @@ Mediator::~Mediator()
         pthread_mutex_destroy( &gridItemsMutex );
         pthread_mutex_destroy( &freeItemsMutex );
 
-        // Elimina el gestor de transparencias
-        delete transparencyManager;
+        delete transparencies;
 }
 
 void Mediator::update()
@@ -163,7 +161,7 @@ void Mediator::update()
         pthread_mutex_unlock( &freeItemsMutex );
 }
 
-void Mediator::startUpdate()
+void Mediator::beginUpdate()
 {
         this->threadRunning = true;
 
@@ -177,7 +175,7 @@ void Mediator::startUpdate()
         pthread_attr_destroy( &attr );
 }
 
-void Mediator::stopUpdate()
+void Mediator::endUpdate()
 {
         this->threadRunning = false;
         pthread_join( thread, 0 );
@@ -357,13 +355,13 @@ void Mediator::castShadowOnFloor( FloorTile* floorTile )
         // Se sombrea con los elementos libres que pueda tener por encima
         for ( int percent = 0; percent <= 100; percent++ )
         {
-                int itemsNumber = transparencyManager->countItemsWithDegreeOfTransparency( percent );
+                int howManyItems = transparencies->countItemsWithDegreeOfTransparency( percent );
 
                 // Tiene que haber elementos en el porcentaje de transparencia actual
-                if ( itemsNumber != 0 )
+                if ( howManyItems != 0 )
                 {
                         // Para todo elemento con ese grado de transparencia
-                        for ( int n = 0; n < itemsNumber; n++ )
+                        for ( int n = 0; n < howManyItems; n++ )
                         {
                                 // Recorre la lista de elementos libres para sombrear la loseta
                                 for ( std::list< FreeItem* >::iterator f = freeItems.begin (); f != freeItems.end (); ++f )
@@ -400,7 +398,7 @@ void Mediator::castShadowOnGrid( GridItem* gridItem )
         int tileSize = room->getSizeOfOneTile();
         int column = gridItem->getColumn();
 
-        // Se sombrea con todos los elementos rejilla que pueda tener por encima
+        // shade with grid items it may have above
         for ( std::list< GridItem* >::iterator g = structure[ column ].begin(); g != structure[ column ].end(); ++g )
         {
                 GridItem* tempItem = static_cast< GridItem* >( *g );
@@ -417,18 +415,17 @@ void Mediator::castShadowOnGrid( GridItem* gridItem )
                 }
         }
 
-        // Se sombrea con los elementos libres que pueda tener por encima
+        // shade with free items it may have above
         for ( int percent = 0; percent <= 100; percent++ )
         {
-                int itemsNumber = transparencyManager->countItemsWithDegreeOfTransparency( percent );
+                int howManyItems = transparencies->countItemsWithDegreeOfTransparency( percent );
 
-                // Tiene que haber elementos en el porcentaje de transparencia actual
-                if ( itemsNumber != 0 )
+                // there are items with current amount of transparency
+                if ( howManyItems != 0 )
                 {
-                        // Para todo elemento con ese grado de transparencia
-                        for ( int n = 0; n < itemsNumber; n++ )
+                        for ( int n = 0; n < howManyItems; n++ )
                         {
-                                // Recorre la lista de elementos libres para sombrear la loseta
+                                // scroll thru list of free items to shade this item
                                 for ( std::list< FreeItem* >::iterator f = freeItems.begin(); f != freeItems.end(); ++f )
                                 {
                                         FreeItem* freeItem = static_cast< FreeItem* >( *f );
@@ -496,7 +493,7 @@ void Mediator::castShadowOnFreeItem( FreeItem* freeItem )
         // shadow from free items it may have above
         for ( int percent = 0; percent <= 100; percent++ )
         {
-                int countOfItems = transparencyManager->countItemsWithDegreeOfTransparency( percent );
+                int countOfItems = transparencies->countItemsWithDegreeOfTransparency( percent );
 
                 // Tiene que haber elementos en el porcentaje de transparencia actual
                 if ( countOfItems != 0 )
@@ -732,17 +729,17 @@ bool Mediator::findCollisionWithItem( Item * item )
 {
         bool collisionFound = false;
 
-        // El elemento debe ser rejilla o libre con la capacidad de detectar colisiones
+        // for grid item or free item with ability to detect collisions
         if ( dynamic_cast< GridItem * >( item ) || ( dynamic_cast< FreeItem * >( item ) && dynamic_cast< FreeItem * >( item )->isCollisionDetector() ) )
         {
-                // Se recorre la lista de elementos libres buscando colisiones
+                // traverse list of free items looking for collisions
                 for ( std::list< FreeItem * >::iterator f = freeItems.begin (); f != freeItems.end (); ++f )
                 {
                         FreeItem* freeItem = static_cast< FreeItem * >( *f );
 
                         if ( freeItem->getId() != item->getId() && freeItem->isCollisionDetector() )
                         {
-                                // Se busca la intersección en los tres ejes
+                                // look for intersection
                                 if ( ( freeItem->getX() + freeItem->getWidthX() > item->getX() ) && ( freeItem->getX() < item->getX() + item->getWidthX() ) &&
                                         ( freeItem->getY() > item->getY() - item->getWidthX() ) && ( freeItem->getY() - freeItem->getWidthY() < item->getY() ) &&
                                         ( freeItem->getZ() + freeItem->getHeight() > item->getZ() ) && ( freeItem->getZ() < item->getZ() + item->getHeight() ) )
@@ -753,20 +750,20 @@ bool Mediator::findCollisionWithItem( Item * item )
                         }
                 }
 
-                // Caso de que el elemento sea rejilla
+                // for grid item
                 if ( dynamic_cast< GridItem * >( item ) )
                 {
                         GridItem* temp = dynamic_cast< GridItem * >( item );
                         int column = room->getTilesX() * temp->getCellY() + temp->getCellX();
 
-                        // Se recorren las listas de elementos rejilla buscando colisiones
+                        // scroll through lists of grid items looking for collisions
                         for ( std::list< GridItem * >::iterator g = this->structure[ column ].begin (); g != this->structure[ column ].end (); ++g )
                         {
                                 GridItem* gridItem = static_cast< GridItem * >( *g );
 
                                 if ( gridItem->getId() != item->getId() )
                                 {
-                                        // Se busca la intersección en los tres ejes
+                                        // look for intersection
                                         if ( ( gridItem->getX() + gridItem->getWidthX() > item->getX() ) && ( gridItem->getX() < item->getX() + item->getWidthX() ) &&
                                                 ( gridItem->getY() > item->getY() - item->getWidthX() ) && ( gridItem->getY() - gridItem->getWidthY() < item->getY() ) &&
                                                 ( gridItem->getZ() + gridItem->getHeight() > item->getZ() ) && ( gridItem->getZ() < item->getZ() + item->getHeight() ) )
@@ -777,7 +774,7 @@ bool Mediator::findCollisionWithItem( Item * item )
                                 }
                         }
                 }
-                // Caso de que el elemento sea libre
+                // for free item
                 else if( dynamic_cast< FreeItem * >( item ) )
                 {
                         int xStart = item->getX() / room->tileSize;
@@ -785,13 +782,13 @@ bool Mediator::findCollisionWithItem( Item * item )
                         int yStart = ( item->getY() - item->getWidthY() + 1 ) / room->tileSize;
                         int yEnd = item->getY() / room->tileSize + 1;
 
-                        // Correción de datos por si el elemento choca con alguna pared
+                        // in case when item collides with some wall
                         if ( xStart < 0 ) xStart = 0;
-                        if ( xEnd > room->getTilesX() ) room->getTilesX();
+                        if ( xEnd > room->getTilesX() ) xEnd = room->getTilesX();
                         if ( yStart < 0 ) yStart = 0;
                         if ( yEnd > room->getTilesY() ) yEnd = room->getTilesY();
 
-                        // Se buscan colisiones sólo en el rango de columnas que interseccionan con el elemento
+                        // see collision only in range of columns intersecting with item
                         for ( int i = xStart; i < xEnd; i++ )
                         {
                                 for ( int j = yStart; j < yEnd; j++ )
@@ -855,7 +852,7 @@ int Mediator::findHighestZ( Item * item )
                 }
         }
         // Búsqueda en la estructura de la sala en el caso de que sea un elemento libre
-        else if( dynamic_cast< FreeItem * >( item ) )
+        else if ( dynamic_cast< FreeItem * >( item ) )
         {
                 FreeItem* freeItem = dynamic_cast< FreeItem * >( item );
 
@@ -887,7 +884,7 @@ int Mediator::findHighestZ( Item * item )
         return z;
 }
 
-void Mediator::insertItem( GridItem* gridItem )
+void Mediator::addItem( GridItem* gridItem )
 {
         // Si es un elemento rejilla, se inserta al final de la lista de su columna correspondiente
         // y luego se ordena dicha lista
@@ -901,14 +898,14 @@ void Mediator::insertItem( GridItem* gridItem )
         pthread_mutex_unlock( &gridItemsMutex );
 }
 
-void Mediator::insertItem( FreeItem* freeItem )
+void Mediator::addItem( FreeItem* freeItem )
 {
         // Si es un elemento libre, se inserta al final de la lista y luego se realiza la ordenación
         freeItems.push_back( freeItem );
         freeItems.sort( sortFreeItemList );
 }
 
-void Mediator::insertItem( PlayerItem* playerItem )
+void Mediator::addItem( PlayerItem* playerItem )
 {
         // Si es un jugador, se inserta al final de la lista de elementos libres porque para dibujarlo
         // se trata como si fuera un elemento libre y luego se realiza la ordenación
@@ -952,16 +949,6 @@ void Mediator::removeItem( PlayerItem* playerItem )
                         std::bind2nd( EqualPlayerItemId(), playerItem->getId() ) ),
                 playerItems.end() );
         activePlayer = ( i != playerItems.end () ? *i : *playerItems.begin () );
-}
-
-void Mediator::addTransparency( unsigned char percent )
-{
-        transparencyManager->add( percent );
-}
-
-void Mediator::removeTransparency( unsigned char percent )
-{
-        transparencyManager->remove( percent );
 }
 
 void Mediator::pushCollision( int id )
@@ -1025,20 +1012,18 @@ Item* Mediator::collisionWithBadBoy()
         return 0;
 }
 
-bool Mediator::nextPlayer( ItemDataManager* itemDataManager )
+bool Mediator::selectNextPlayer( ItemDataManager* itemDataManager )
 {
-        // Acceso exclusivo a la lista de elementos libres
+        // get exclusive access to the list of free elements
         pthread_mutex_lock( &freeItemsMutex );
 
-        // Jugador activo actual
         PlayerItem* previousPlayer = activePlayer;
-        // Busca el jugador activo
+
+        // search for next player
         std::vector< PlayerItem * >::iterator i = std::find_if(
                 playerItems.begin (), playerItems.end (),
                 std::bind2nd( EqualPlayerItemId(), activePlayer->getId() ) );
-        // Se pasa al siguiente
         ++i;
-        // Si se llegó al final se asigna el primero, sino el siguiente
         activePlayer = ( i != playerItems.end () ? ( *i ) : *playerItems.begin () );
 
         // see if players may join
@@ -1084,18 +1069,18 @@ bool Mediator::nextPlayer( ItemDataManager* itemDataManager )
 
                                 // create "composite" player
                                 std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( itemDataManager ) );
-                                activePlayer = roomBuilder->buildPlayerInRoom( this->room, "headoverheels", "behavior of Head over Heels", x, y, z, direction );
-                                // Le devuelve el elemento que tuviera en el bolso
+                                activePlayer = roomBuilder->createPlayerInRoom( this->room, "headoverheels", "behavior of Head over Heels", x, y, z, direction, false );
+                                // transfer item in handbag
                                 activePlayer->assignTakenItem( takenItemData, takenItemImage, behaviorOfItemTaken );
 
-                                // Libera el acceso exclusivo a la lista de elementos libres
+                                // release exclusive access to the list of free items
                                 pthread_mutex_unlock( &freeItemsMutex );
 
                                 return true;
                         }
                 }
         }
-        // Si el jugador actual y el anterior es el mismo entonces debe ser el jugador compuesto
+        // if active player is the same as previous player then it is composite player
         else if ( activePlayer->getLabel() == "headoverheels" )
         {
                 int x = activePlayer->getX();
@@ -1103,21 +1088,21 @@ bool Mediator::nextPlayer( ItemDataManager* itemDataManager )
                 int z = activePlayer->getZ();
                 Direction direction = activePlayer->getDirection();
 
-                // Obtiene los datos del elemento que pudiera haber en el bolso
+                // get data of item in handbag
                 ItemData* takenItemData = 0;
                 BITMAP* takenItemImage = 0;
                 std::string behaviorOfItemTaken = "still";
                 behaviorOfItemTaken = activePlayer->consultTakenItem( takenItemData );
                 takenItemImage = activePlayer->consultTakenItemImage();
 
-                // Elimina al jugador compuesto
+                // remove "composite" player
                 this->room->removePlayer( activePlayer );
 
-                // Crea a Heels y a Head
+                // create "simple" players
                 std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( itemDataManager ) );
-                previousPlayer = roomBuilder->buildPlayerInRoom( this->room, "heels", "behavior of Heels", x, y, z, direction );
+                previousPlayer = roomBuilder->createPlayerInRoom( this->room, "heels", "behavior of Heels", x, y, z, direction, false );
                 previousPlayer->assignTakenItem( takenItemData, takenItemImage, behaviorOfItemTaken );
-                activePlayer = roomBuilder->buildPlayerInRoom( this->room, "head", "behavior of Head", x, y, z + LayerHeight, direction );
+                activePlayer = roomBuilder->createPlayerInRoom( this->room, "head", "behavior of Head", x, y, z + LayerHeight, direction, false );
 
                 if ( this->lastActivePlayer == "head" )
                 {
@@ -1125,31 +1110,26 @@ bool Mediator::nextPlayer( ItemDataManager* itemDataManager )
                 }
         }
 
-        // Libera el acceso exclusivo a la lista de elementos libres
+        // release exclusive access to the list of free items
         pthread_mutex_unlock( &freeItemsMutex );
 
-        // Indica si ha habido cambio de jugador
         return ( previousPlayer != activePlayer );
 }
 
-bool Mediator::alivePlayer( ItemDataManager* itemDataManager )
+bool Mediator::selectAlivePlayer( ItemDataManager* itemDataManager )
 {
-        // Jugador activo actual
         PlayerItem* previousPlayer = activePlayer;
-        // Busca el jugador activo
+
         std::vector< PlayerItem* >::iterator i = std::find_if( playerItems.begin (), playerItems.end (), std::bind2nd( EqualPlayerItemId(), activePlayer->getId() ) );
-        // Se pasa al siguiente
         ++i;
-        // Si se llegó al final se asigna el primero, sino el siguiente
         activePlayer = ( i != playerItems.end () ? ( *i ) : *playerItems.begin () );
-        // Elimina al jugador inactivo si se ha producido el cambio
+
         if ( previousPlayer != activePlayer )
         {
                 this->removeItem( previousPlayer );
                 previousPlayer = 0;
         }
 
-        // Indica si ha habido cambio de jugador
         return ( previousPlayer != activePlayer );
 }
 

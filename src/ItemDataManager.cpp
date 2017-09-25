@@ -198,7 +198,7 @@ void ItemDataManager::loadItems ()
 
 void ItemDataManager::freeItems ()
 {
-        std::for_each( itemData.begin(), itemData.end(), destroyItemData );
+        std::for_each( itemData.begin(), itemData.end(), finalizeData );
 }
 
 ItemData* ItemDataManager::findItemByLabel( const std::string& label )
@@ -425,7 +425,7 @@ BITMAP* ItemDataManager::cutOutRightJamb( BITMAP* door, const DoorMeasures& dm, 
         return right;
 }
 
-void ItemDataManager::destroyItemData( ItemData& itemData )
+void ItemDataManager::finalizeData( ItemData& itemData )
 {
         itemData.clearNameOfFile ();
         itemData.clearNameOfShadowFile ();

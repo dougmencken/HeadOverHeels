@@ -236,7 +236,7 @@ void UserControlled::fall( PlayerItem * player )
                 }
                 // Si hay colisión deja de caer y vuelve al estado inicial siempre que
                 // el jugador no haya sido destruido por la colisión con un elemento mortal
-                else if ( activity != StartDestroy || ( activity == StartDestroy && player->getShieldTime() > 0 ) )
+                else if ( activity != MeetMortalItem || ( activity == MeetMortalItem && player->getShieldTime() > 0 ) )
                 {
                         activity = Wait;
                 }
@@ -336,7 +336,7 @@ void UserControlled::glide( PlayerItem * player )
                 whatToDo = FallKindOfActivity::getInstance();
 
                 // Si hay colisión deja de caer y vuelve al estado inicial
-                if ( ! whatToDo->fall( this ) && ( activity != StartDestroy || ( activity == StartDestroy && player->getShieldTime() > 0 ) ) )
+                if ( ! whatToDo->fall( this ) && ( activity != MeetMortalItem || ( activity == MeetMortalItem && player->getShieldTime() > 0 ) ) )
                 {
                         activity = Wait;
                 }
@@ -405,19 +405,20 @@ void UserControlled::wayInTeletransport( PlayerItem * player )
                         player->changeItemData( itemDataManager->findItemByLabel( labelOfTransitionViaTeleport ), NoDirection );
                         // backward animation of bubbles
                         player->setBackwardMotion();
+
                         // begin teleportation
                         activity = WayInTeletransport;
                         break;
 
                 case WayInTeletransport:
-                        // Anima el elemento. Si ha llegado al final el jugador aparece
+                        // animate item, player appears in room when animation finishes
                         if ( player->animate() )
                         {
-                                // Cambia al aspecto original del jugador
+                                // back to original appearance of player
                                 player->changeItemData( playerData, NoDirection );
-                                // Se recupera su orientación original
+                                // restore original orientation
                                 player->changeDirection( player->getOrientation() );
-                                // Estado inicial
+
                                 activity = Wait;
                         }
                         break;
@@ -432,16 +433,16 @@ void UserControlled::wayOutTeletransport( PlayerItem * player )
         switch ( activity )
         {
                 case StartWayOutTeletransport:
-                        // Almacena la orientación de salida
+                        // preserve orientation of player
                         player->setOrientation( player->getDirection() );
-                        // Cambia a las burbujas pero conservando la etiqueta del jugador
+                        // change to bubbles retaining player’s label
                         player->changeItemData( itemDataManager->findItemByLabel( labelOfTransitionViaTeleport ), NoDirection );
-                        // Inicia el teletransporte
+                        // begin teleportation
                         activity = WayOutTeletransport;
                         break;
 
                 case WayOutTeletransport:
-                        // Anima el elemento. Si ha llegado al final hay cambio de sala
+                        // animate item, change room when animation finishes
                         if ( player->animate() )
                         {
                                 player->addToZ( -1 );
@@ -454,29 +455,28 @@ void UserControlled::wayOutTeletransport( PlayerItem * player )
         }
 }
 
-void UserControlled::destroy( PlayerItem* player )
+void UserControlled::collideWithMortalItem( PlayerItem* player )
 {
         switch ( activity )
         {
-                // El jugador ha sido destruido por un enemigo
-                case StartDestroy:
-                        // La destrucción se ejecuta siempre y cuando no tenga inmunidad
+                // player just met a bad guy
+                case MeetMortalItem:
+                        // do you have immunity
                         if ( player->getShieldTime() == 0 )
                         {
-                                // Cambia a las burbujas pero conservando la etiqueta del jugador
+                                // change to bubbles retaining player’s label
                                 player->changeItemData( itemDataManager->findItemByLabel( labelOfTransitionViaTeleport ), NoDirection );
-                                // Inicia la destrucción
-                                activity = Destroy;
+
+                                activity = Vanish;
                         }
-                        // Si tiene inmunidad vuelve al estado inicial
                         else
                         {
                                 activity = Wait;
                         }
                         break;
 
-                case Destroy:
-                        // Anima el elemento. Si ha llegado al final la sala se reinicia
+                case Vanish:
+                        // animate item, restart room when animation finishes
                         if ( player->animate() )
                         {
                                 player->setExit( Restart );
@@ -569,7 +569,7 @@ void UserControlled::take( PlayerItem * player )
                         if ( takenItem != 0 )
                         {
                                 takenItemData = itemDataManager->findItemByLabel( takenItem->getLabel() );
-                                takenItem->getBehavior()->changeActivityOfItem( Destroy );
+                                takenItem->getBehavior()->changeActivityOfItem( Vanish );
                                 activity = ( activity == TakeAndJump ? Jump : TakenItem );
 
                                 // Comunica al gestor del juego el elemento que se ha cogido

@@ -6,9 +6,9 @@ namespace isomot
 {
 
 MapRoomData::MapRoomData( const std::string& room )
-: room( room ),
-  visited( false ),
-  activePlayer( "in~room" )
+        : room( room )
+        , visited( false )
+        , nameOfActivePlayer( "in~room" )
 {
 }
 
@@ -46,17 +46,18 @@ void MapRoomData::removePlayerPosition( const std::string& player )
                 // ... if so, alter position of other simple player too
                 PlayerInitialPosition simplePlayerPosition( player == "head" ? "heels" : "head" );
                 simplePlayerPosition.assignPosition( ( *i ).getEntry(), ( *i ).getX(), ( *i ).getY(), ( *i ).getZ(), ( *i ).getOrientation() );
-                i = playersPosition.erase( std::remove_if( playersPosition.begin(), playersPosition.end(), std::bind2nd( EqualPlayerInitialPosition(), "headoverheels" ) ), playersPosition.end() );
+                i = playersPosition.erase( std::remove_if( playersPosition.begin (), playersPosition.end (), std::bind2nd( EqualPlayerInitialPosition(), "headoverheels" ) ), playersPosition.end () );
                 i = playersPosition.insert( i, simplePlayerPosition );
         }
         else
         {
                 // ... there was only one player or the two players are simple and leaves the same room together
-                i = playersPosition.erase(std::remove_if(playersPosition.begin(), playersPosition.end(), std::bind2nd(EqualPlayerInitialPosition(), player)), playersPosition.end());
-                // Si se ha eliminado al jugador activo y queda el otro habrá que seleccionarlo para asumir ese papel
-                if ( ! playersPosition.empty() && player == activePlayer && ! playersPosition.empty() )
+                i = playersPosition.erase( std::remove_if( playersPosition.begin (), playersPosition.end (), std::bind2nd( EqualPlayerInitialPosition(), player ) ), playersPosition.end () );
+
+                // when active player is over, activate other player
+                if ( ! playersPosition.empty() && player == nameOfActivePlayer && ! playersPosition.empty() )
                 {
-                        activePlayer = ( i != playersPosition.end() ? ( *i ).getPlayer() : ( *playersPosition.begin() ).getPlayer() );
+                        nameOfActivePlayer = ( i != playersPosition.end() ? ( *i ).getPlayer() : ( *playersPosition.begin() ).getPlayer() );
                 }
         }
 }

@@ -662,9 +662,9 @@ void FreeItem::maskImage( int x, int y, BITMAP* image )
 
 bool FreeItem::changeData( int value, int x, int y, int z, const Datum& datum, const WhatToDo& how )
 {
-        bool collisionFound = false;
-
         mediator->clearStackOfCollisions( );
+
+        bool collisionFound = false;
 
         // copy item before making the move
         FreeItem oldFreeItem( *this );
@@ -729,18 +729,18 @@ bool FreeItem::changeData( int value, int x, int y, int z, const Datum& datum, c
         collisionFound = ! mediator->isStackOfCollisionsEmpty ();
         if ( ! collisionFound )
         {
-                // look for collision with the rest of items in room
-                if ( ! ( collisionFound = mediator->findCollisionWithItem( this ) ) )
+                // look for collision with other items in room
+                collisionFound = mediator->findCollisionWithItem( this );
+                if ( ! collisionFound )
                 {
-                        // Si el elemento tiene imagen se marcan para enmascarar los elementos
-                        // libres cuyas imágenes se solapen con la suya. La operación se realiza
-                        // tanto para la posición anterior como la posición actual
+                        // for item with image, mark to mask free items whose images overlap with its image
                         if ( this->image )
                         {
-                                // A cuántos píxeles está la imagen del punto origen de la sala
+                                // get how many pixels is this image from point of room’s origin
                                 this->offset.first = ( ( this->x - this->y ) << 1 ) + getDataOfFreeItem()->widthX + getDataOfFreeItem()->widthY - ( image->w >> 1 ) - 1;
                                 this->offset.second = this->x + this->y + getDataOfFreeItem()->widthX - image->h - this->z;
 
+                                // for both the previous position and the current position
                                 mediator->markItemsForMasking( &oldFreeItem );
                                 mediator->markItemsForMasking( this );
                         }
@@ -749,24 +749,24 @@ bool FreeItem::changeData( int value, int x, int y, int z, const Datum& datum, c
                                 this->offset.first = this->offset.second = 0;
                         }
 
-                        // Si las sombras están activas se buscan qué elementos hay que volver a sombrear
-                        // La búsqueda se realiza tanto para la posición anterior como la posición actual
+                        // reshade items
                         if ( mediator->getDegreeOfShading() < 256 )
                         {
+                                // for both the previous position and the current position
                                 mediator->markItemsForShady( &oldFreeItem );
                                 mediator->markItemsForShady( this );
                         }
 
-                        // El elemento debe volver a sombrearse y enmascararse tras el cambio de posición
+                        // reshade and remask
                         this->myShady = WantShadow;
                         this->myMask = WantMask;
 
-                        // La lista de elementos libres debe reordenarse
+                        // rearrange list of free items
                         mediator->activateFreeItemsSorting();
                 }
         }
 
-        // Si hubo colisión se restauran los valores anteriores
+        // restore previous values when there’s a collision
         if ( collisionFound )
         {
                 this->x = oldFreeItem.getX();
@@ -807,24 +807,23 @@ bool FreeItem::changeTransparency( unsigned char value, const WhatToDo& how )
 {
         bool changed = false;
 
-        // Nuevo valor de la transparencia del elemento
+        // new value of item’s transparency
         unsigned char transpa = value + this->transparency * how;
 
-        // Comprobación de validez
         if ( transpa <= 100 && transpa != this->transparency )
         {
-                // ¿Hay qué enmascarar el elemento?
+                // remask item?
                 bool mask = this->image && ( this->transparency == 0 || transpa == 0 );
 
-                // Actualización de la tabla de transparencias
-                mediator->removeTransparency( this->transparency );
-                mediator->addTransparency( transpa );
+                // update table of transparencies
+                mediator->removeFromTableOfTransparencies( this->transparency );
+                mediator->addToTableOfTransparencies( transpa );
                 this->transparency = transpa;
 
-                // Marca para sombrear los elementos que pudiera tener debajo
+                // mark to shade items you might have underneath
                 mediator->markItemsForShady( this );
 
-                // Marca para enmascarar los elementos solapados
+                // mark to mask items which overlap
                 if ( mask )
                 {
                         mediator->markItemsForMasking( this ) ;

@@ -41,16 +41,9 @@ public:
 
         void prepare () ;
 
-        /**
-         * Crea las salas iniciales y pone en marcha el motor isométrico
-         */
-        void beginNew () ;
+        void beginNewGame () ;
 
-        /**
-         * Crea dos salas a partir de los datos contenidos en el archivo XML donde se guarda una partida
-         * y pone en marcha el motor isométrico
-         */
-        void beginOld ( const sgxml::players::player_sequence& playerSequence ) ;
+        void continueSavedGame ( const sgxml::players::player_sequence& playerSequence ) ;
 
         /**
          * Detiene el motor isométrico
@@ -94,14 +87,8 @@ private:
          */
         BITMAP* view ;
 
-        /**
-         * Gestor de datos de los elementos del juego
-         */
         ItemDataManager* itemDataManager ;
 
-        /**
-         * Gestor del mapa
-         */
         MapManager* mapManager ;
 
 public:

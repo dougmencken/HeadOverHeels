@@ -42,7 +42,7 @@ Behavior::Behavior( Item * whichItem, const std::string & behavior ) :
         , sender( 0 )
 {
         std::cout << "creation of behavior \"" << behavior << "\" for item \"" << whichItem->getLabel()
-                        << "\" on cell with x=" << whichItem->getX() << " y=" << whichItem->getY() << " z=" << whichItem->getZ() << std::endl ;
+                        << "\" at x=" << whichItem->getX() << " y=" << whichItem->getY() << " z=" << whichItem->getZ() << std::endl ;
 }
 
 Behavior::~Behavior( )
@@ -173,7 +173,7 @@ Behavior* Behavior::createBehaviorByName( Item* item, const std::string& behavio
         {
                 // yeah, do nothing
                 /* std::cout << "nil behavior \"" << behavior << "\" for item \"" << item->getLabel()
-                                << "\" on cell with x=" << item->getX() << " y=" << item->getY() << " z=" << item->getZ() << std::endl ; */
+                                << "\" at x=" << item->getX() << " y=" << item->getY() << " z=" << item->getZ() << std::endl ; */
         }
 
         return behaviorToReturn;

@@ -38,7 +38,7 @@ Isomot::~Isomot( )
         }
 }
 
-void Isomot::beginNew()
+void Isomot::beginNewGame ()
 {
         prepare() ;
         offVidasInfinitas() ;
@@ -55,7 +55,7 @@ void Isomot::beginNew()
         SoundManager::getInstance()->playOgg ( "music/begin.ogg", /* loop */ false );
 }
 
-void Isomot::beginOld( const sgxml::players::player_sequence& playerSequence )
+void Isomot::continueSavedGame ( const sgxml::players::player_sequence& playerSequence )
 {
         offVidasInfinitas() ;
         this->isEndRoom = false;
@@ -190,35 +190,33 @@ BITMAP* Isomot::update()
                 activeRoom->removeBars ();
         }
 
-        // Si se pulsa la tecla de intercambio se cambia de personaje y/o de sala
+        // swap key changes character and possibly room
         if ( ! this->isEndRoom && InputManager::getInstance()->swap() )
         {
-                // Antes de cambiar el jugador se detiene el actual
-                activeRoom->getMediator()->getActivePlayer()->wait();
+                activeRoom->getMediator()->getActivePlayer()->wait(); // stop active player
                 if ( activeRoom->getMediator()->getActivePlayer()->getBehavior()->getActivityOfItem() == Wait )
                 {
-                        // Si se puede cambiar de jugador en la misma sala hay que comunicar
-                        // al gestor del mapa este hecho
-                        if ( activeRoom->changePlayer( this->itemDataManager ) )
+                        // swap in the same room
+                        if ( activeRoom->swapPlayersInRoom( this->itemDataManager ) )
                         {
                                 mapManager->updateActivePlayer();
                         }
-                        // En caso contrario habrá que cambiar de sala
+                        // swap in different rooms
                         else
                         {
                                 activeRoom = mapManager->swapRoom();
                         }
                 }
-                // Las repeticiones de esta tecla no deben procesarse
+                // don’t repeat the key
                 InputManager::getInstance()->noRepeat( "swap" );
         }
 
-        // Si la sala está activa entonces se dibuja
         if ( activeRoom->isActive() )
         {
                 activeRoom->draw();
         }
-        // En caso contrario hay un cambio de sala o el jugador activo ha perdido una vida
+        // when "active" room is in fact inactive, there’s a change of room
+        // or active player lost its life
         else
         {
                 Direction exit = activeRoom->getExit();
@@ -233,16 +231,14 @@ BITMAP* Isomot::update()
                         }
                         else
                         {
-                                // Si se puede cambiar de jugador en la misma sala hay que comunicar
-                                // al gestor del mapa este hecho
-                                if( activeRoom->alivePlayer( this->itemDataManager ) )
+                                // when player is alive, just swap players
+                                if ( activeRoom->continueWithAlivePlayer( this->itemDataManager ) )
                                 {
                                         mapManager->updateActivePlayer();
                                 }
-                                // En caso contrario habrá que cambiar de sala
                                 else
                                 {
-                                        activeRoom = mapManager->destroyAndSwapRoom();
+                                        activeRoom = mapManager->removeRoomAndSwap ();
                                 }
                         }
                 }

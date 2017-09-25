@@ -129,7 +129,7 @@ bool DisplaceKindOfActivity::displace( Behavior* behavior, ActivityOfItem* activ
                 // que pueda tener encima
                 else
                 {
-                        this->propagateActivityToTopItems( freeItem, *activity );
+                        this->propagateActivityToItemsAbove( freeItem, *activity );
                 }
         }
 

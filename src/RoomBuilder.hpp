@@ -62,8 +62,9 @@ public:
          * @param y Coordenada isométrica Y donde se situará al jugador
          * @param z Coordenada isométrica Z donde se situará al jugador
          * @param direction Dirección inicial del jugador
+         * @param withItem Carries player some item in bag or not
          */
-        PlayerItem * buildPlayerInTheSameRoom ( const std::string& player, const std::string& behavior, int x, int y, int z, const Direction& direction ) ;
+        PlayerItem * createPlayerInTheSameRoom ( const std::string& player, const std::string& behavior, int x, int y, int z, const Direction& direction, bool withItem ) ;
 
         /**
          * Create player in given room
@@ -75,7 +76,7 @@ public:
          * @param direction Dirección inicial del jugador
          * @param withItem Carries player some item in bag or not
          */
-        PlayerItem * buildPlayerInRoom ( Room* room, const std::string& player, const std::string& behavior, int x, int y, int z, const Direction& direction, bool withItem = false );
+        PlayerItem * createPlayerInRoom ( Room* room, const std::string& player, const std::string& behavior, int x, int y, int z, const Direction& direction, bool withItem );
 
         static int getXCenterOfRoom ( ItemData* playerData, Room* theRoom ) ;
 

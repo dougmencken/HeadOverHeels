@@ -58,8 +58,8 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			Room.hpp \
 			SoundManager.cpp \
 			SoundManager.hpp \
-			TransparencyManager.cpp \
-			TransparencyManager.hpp \
+			TableOfTransparencies.cpp \
+			TableOfTransparencies.hpp \
 			Wall.cpp \
 			Wall.hpp \
 			Win32HPC.cpp \

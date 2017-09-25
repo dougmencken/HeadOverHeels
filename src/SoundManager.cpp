@@ -308,11 +308,11 @@ std::string SoundManager::translateActivityOfItemToString ( const ActivityOfItem
                         stringOfActivity = "move";
                         break;
 
-                case StartDestroy:
+                case MeetMortalItem:
                         break;
 
-                case Destroy:
-                        stringOfActivity = "destroy";
+                case Vanish:
+                        stringOfActivity = "vanish";
                         break;
 
                 case Doughnut:

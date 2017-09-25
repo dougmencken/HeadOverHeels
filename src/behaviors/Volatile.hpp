@@ -38,28 +38,28 @@ public:
         virtual bool update () ;
 
        /**
-        * Asigna los datos del elemento usado como transición en la destrucción del volátil
+        * Data used when volatile disappears
         */
         void setMoreData ( void * data ) ;
 
 protected:
 
        /**
-        * Datos del elemento empleado como disparo
+        * Used when volatile disappears
         */
         ItemData * bubblesData ;
+
+       /**
+        * Timer for disappearance of volatile item
+        */
+        HPC * disappearanceTimer ;
 
 private:
 
        /**
-        * Indica si el elemento deja de ser volátil por haber activado un interruptor en la sala
+        * True if item isn’t volatile yet by toggle of switch in room
         */
         bool solid ;
-
-       /**
-        * Cronómetro que controla el tiempo de existencia del elemento volátil
-        */
-        HPC * destroyTimer ;
 
 };
 

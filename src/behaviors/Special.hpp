@@ -19,13 +19,12 @@
 namespace isomot
 {
 
-class Item;
-class ItemData;
-class PlayerItem;
+class Item ;
+class ItemData ;
+class PlayerItem ;
 
 /**
- * Elemento que puede desplazarse sólo al ser empujado por otros, ya que
- * carece de movimiento autónomo
+ * Behavior of magic bonus item
  */
 
 class Special : public Behavior
@@ -42,8 +41,7 @@ public:
 protected:
 
         /**
-         * Checks if magic item can be taken
-         * It depends on item and player who takes it
+         * Checks if magic item can be taken, it depends on item and on player who takes it
          */
         bool mayTake ( Item* sender ) ;
 
@@ -51,33 +49,27 @@ protected:
 
 protected:
 
-        /**
-         * Datos del elemento empleado como disparo
-         */
         ItemData * bubblesData ;
 
 private:
 
         /**
-         * Cronómetro que controla el tiempo de existencia del elemento volátil
+         * Timer for disappearance of special item
          */
-        HPC * destroyTimer ;
+        HPC * disappearanceTimer ;
 
         /**
-         * Cronómetro que controla la velocidad de movimiento del elemento
+         * Timer for speed of item’s movement
          */
         HPC * speedTimer ;
 
         /**
-         * Cronómetro que controla la velocidad de caída del elemento
+         * Timer for speed of item’s drop
          */
         HPC * fallTimer ;
 
 public:
 
-        /**
-         * Asigna los datos del elemento usado como transición en la destrucción del volátil
-         */
         void setMoreData ( void * data ) ;
 };
 

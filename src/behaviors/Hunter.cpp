@@ -29,43 +29,45 @@ Hunter::~Hunter()
 
 bool Hunter::update ()
 {
-        FreeItem* freeItem = dynamic_cast< FreeItem * >( this->item );
-        PlayerItem* playerItem = freeItem->getMediator()->getActivePlayer();
-        Mediator* mediator = freeItem->getMediator();
+        FreeItem* thisItem = dynamic_cast< FreeItem * >( this->item );
+        PlayerItem* activePlayer = thisItem->getMediator()->getActivePlayer();
+        Mediator* mediator = thisItem->getMediator();
+
         bool alive = true;
 
         switch ( activity )
         {
                 case Wait:
-                // Si el elemento no tiene que esperar la cercanía del jugador, se activa sin más
-                if ( theBehavior == "behavior of hunter in four directions" || theBehavior == "behavior of hunter in eight directions" )
+                // if hunter is not a waiting one, activate it yet
+                if ( theBehavior == "behavior of hunter in four directions" ||
+                                theBehavior == "behavior of hunter in eight directions" )
                 {
-                        SoundManager::getInstance()->play( freeItem->getLabel(), activity );
+                        SoundManager::getInstance()->play( thisItem->getLabel(), activity );
                         activity = calculateDirection( activity );
                 }
-                // Se comprueba la cercanía del jugador para activar el elemento
+                // otherwise check if player is within defined rectangle near hunter to activate
                 else
                 {
-                        int delta = mediator->getSizeOfOneTile() * 3;
+                        const unsigned int sizeOfRectangleInTiles = 3;
+                        int delta = mediator->getSizeOfOneTile() * sizeOfRectangleInTiles;
 
-                        // Si el jugador está dentro del rectángulo definido en torno al cazador entonces el cazador se activa
-                        if ( playerItem != 0  &&
-                                playerItem->getX() > freeItem->getX() - delta  &&
-                                playerItem->getX() < freeItem->getX() + freeItem->getWidthX() + delta  &&
-                                playerItem->getY() > freeItem->getY() - delta  &&
-                                playerItem->getY() < freeItem->getY() + freeItem->getWidthY() + delta )
+                        if ( activePlayer != 0  &&
+                                activePlayer->getX() > thisItem->getX() - delta  &&
+                                activePlayer->getX() < thisItem->getX() + thisItem->getWidthX() + delta  &&
+                                activePlayer->getY() > thisItem->getY() - delta  &&
+                                activePlayer->getY() < thisItem->getY() + thisItem->getWidthY() + delta )
                         {
                                 activity = calculateDirection( activity );
                         }
 
-                        // Si se mueve en ocho direcciones emite sonido cuando está detenido
+                        // eight-directional waiting hunter emits sound when it waits
                         if ( theBehavior == "behavior of waiting hunter in eight directions" )
                         {
-                                SoundManager::getInstance()->play( freeItem->getLabel(), activity );
+                                SoundManager::getInstance()->play( thisItem->getLabel(), activity );
                         }
 
-                        // Anima el elemento aunque esté detenido
-                        freeItem->animate();
+                        // animate item, and when it waits too
+                        thisItem->animate();
                 }
                 break;
 
@@ -73,34 +75,35 @@ bool Hunter::update ()
                 case MoveSouth:
                 case MoveEast:
                 case MoveWest:
-                        // Si se crea el guarda completo entonces el elemento actual debe destruirse
-                        if ( theBehavior == "behavior of waiting hunter in four directions" && createFullBody() )
+                        // bin original item when full-bodied guard is created
+                        if ( theBehavior == "behavior of waiting hunter in four directions" && createFullBody () )
                         {
                                 alive = false;
                         }
-                        // item is active and it is time to move
-                        else if ( ! freeItem->isFrozen() )
+                        else if ( ! thisItem->isFrozen() ) // item is active and it’s time to move
                         {
-                                if ( speedTimer->getValue() > freeItem->getSpeed() )
+                                if ( speedTimer->getValue() > thisItem->getSpeed() )
                                 {
-                                        // El elemento se mueve
+                                        // move item
                                         whatToDo->move( this, &activity, false );
-                                        // Se pone a cero el cronómetro para el siguiente ciclo
+
+                                        // reset timer to next cycle
                                         speedTimer->reset();
-                                        // Comprueba si hay cambio de dirección
+
+                                        // see if direction changes
                                         activity = calculateDirection( activity );
-                                        // Cae si tiene que hacerlo
-                                        if ( freeItem->getWeight() > 0 )
+
+                                        // fall if you have to
+                                        if ( thisItem->getWeight() > 0 )
                                         {
                                                 FallKindOfActivity::getInstance()->fall( this );
                                         }
                                 }
 
-                                // Anima el elemento
-                                freeItem->animate();
+                                thisItem->animate();
 
-                                // Emite el sonido de movimiento
-                                SoundManager::getInstance()->play( freeItem->getLabel(), activity );
+                                // play sound of movement
+                                SoundManager::getInstance()->play( thisItem->getLabel(), activity );
                         }
                         break;
 
@@ -108,11 +111,11 @@ bool Hunter::update ()
                 case MoveNorthwest:
                 case MoveSoutheast:
                 case MoveSouthwest:
-                        if ( ! freeItem->isFrozen() )
+                        if ( ! thisItem->isFrozen() )
                         {
-                                if ( speedTimer->getValue() > freeItem->getSpeed() )
+                                if ( speedTimer->getValue() > thisItem->getSpeed() )
                                 {
-                                        // El elemento se mueve
+                                        // move item
                                         if ( ! whatToDo->move( this, &activity, false ) )
                                         {
                                                 if ( activity == MoveNortheast || activity == MoveNorthwest )
@@ -121,7 +124,7 @@ bool Hunter::update ()
                                                         if ( ! whatToDo->move( this, &tempActivity, false ) )
                                                         {
                                                                 activity = ( activity == MoveNortheast ? MoveEast : MoveWest );
-                                                                if ( freeItem->getWeight() > 0 )
+                                                                if ( thisItem->getWeight() > 0 )
                                                                 {
                                                                         FallKindOfActivity::getInstance()->fall( this );
                                                                 }
@@ -133,7 +136,7 @@ bool Hunter::update ()
                                                         if ( ! whatToDo->move( this, &tempActivity, false ) )
                                                         {
                                                                 activity = ( activity == MoveSoutheast ? MoveEast : MoveWest );
-                                                                if ( freeItem->getWeight() > 0 )
+                                                                if ( thisItem->getWeight() > 0 )
                                                                 {
                                                                         FallKindOfActivity::getInstance()->fall( this );
                                                                 }
@@ -142,19 +145,18 @@ bool Hunter::update ()
                                         }
                                         else
                                         {
-                                                // Comprueba si hay cambio de dirección
+                                                // see if direction changes
                                                 activity = calculateDirection( activity );
                                         }
 
-                                        // Se pone a cero el cronómetro para el siguiente ciclo
+                                        // reset timer to next cycle
                                         speedTimer->reset();
                                 }
 
-                                // Anima el elemento
-                                freeItem->animate();
+                                thisItem->animate();
 
-                                // Emite el sonido de movimiento
-                                SoundManager::getInstance()->play( freeItem->getLabel(), activity );
+                                // play sound of movement
+                                SoundManager::getInstance()->play( thisItem->getLabel(), activity );
                         }
                         break;
 
@@ -166,29 +168,27 @@ bool Hunter::update ()
                 case DisplaceNorthwest:
                 case DisplaceSoutheast:
                 case DisplaceSouthwest:
-                        // Si el elemento está activo y ha llegado el momento de moverse, entonces:
-                        if ( speedTimer->getValue() > freeItem->getSpeed() )
+                        // when item is active and it’s time to move
+                        if ( speedTimer->getValue() > thisItem->getSpeed() )
                         {
-                                // El elemento se mueve
-                                whatToDo->displace( this, &activity, false );
+                                whatToDo->displace( this, &activity, false ); // move item
                                 activity = Wait;
-                                // Se pone a cero el cronómetro para el siguiente ciclo
                                 speedTimer->reset();
                         }
 
                         // preserve inactivity for frozen item
-                        if ( freeItem->isFrozen() )
+                        if ( thisItem->isFrozen() )
                         {
                                 activity = Freeze;
                         }
                         break;
 
                 case Freeze:
-                        freeItem->setFrozen( true );
+                        thisItem->setFrozen( true );
                         break;
 
                 case WakeUp:
-                        freeItem->setFrozen( false );
+                        thisItem->setFrozen( false );
                         activity = Wait;
                         break;
 
@@ -196,16 +196,18 @@ bool Hunter::update ()
                         ;
         }
 
-        return !alive;
+        return ! alive;
 }
 
 ActivityOfItem Hunter::calculateDirection( const ActivityOfItem& activity )
 {
-        if ( theBehavior == "behavior of hunter in four directions" || theBehavior == "behavior of waiting hunter in four directions" )
+        if ( theBehavior == "behavior of hunter in four directions" ||
+                        theBehavior == "behavior of waiting hunter in four directions" )
         {
                 return calculateDirection4( activity );
         }
-        else if ( theBehavior == "behavior of hunter in eight directions" || theBehavior == "behavior of waiting hunter in eight directions" )
+        else if ( theBehavior == "behavior of hunter in eight directions" ||
+                        theBehavior == "behavior of waiting hunter in eight directions" )
         {
                 return calculateDirection8( activity );
         }
@@ -215,67 +217,48 @@ ActivityOfItem Hunter::calculateDirection( const ActivityOfItem& activity )
 
 ActivityOfItem Hunter::calculateDirection4( const ActivityOfItem& activity )
 {
-        FreeItem* freeItem = dynamic_cast< FreeItem * >( this->item );
-        PlayerItem* playerItem = freeItem->getMediator()->getActivePlayer();
+        FreeItem* thisItem = dynamic_cast< FreeItem * >( this->item );
+        PlayerItem* activePlayer = thisItem->getMediator()->getActivePlayer();
 
-        // Se comprueba si el jugador activo está en la sala
-        if ( playerItem != 0 )
+        if ( activePlayer != 0 ) // if there’s active player in room
         {
-                int dx = freeItem->getX() - playerItem->getX();
-                int dy = freeItem->getY() - playerItem->getY();
+                int dx = thisItem->getX() - activePlayer->getX();
+                int dy = thisItem->getY() - activePlayer->getY();
 
                 if ( abs( dy ) > abs( dx ) )
                 {
-                        // Se moverá al este o al oeste porque la distancia X al jugador es menor
                         if ( dx > 0 )
                         {
-                                // Si la distancia es positiva se mueve al norte
                                 changeActivityOfItem( MoveNorth );
                         }
                         else if ( dx < 0 )
                         {
-                                // Si la distancia es negativa se mueve al sur
                                 changeActivityOfItem( MoveSouth );
                         }
                         else
                         {
                                 if ( dy > 0 )
-                                {
-                                        // Si la distancia es positiva se mueve al este
                                         changeActivityOfItem( MoveEast );
-                                }
                                 else if ( dy < 0 )
-                                {
-                                        // Si la distancia es negativa se mueve al oeste
                                         changeActivityOfItem( MoveWest );
-                                }
                         }
                 }
                 else if ( abs( dy ) < abs( dx ) )
                 {
-                        // Se moverá al norte o al sur porque la distancia Y al jugador es menor
                         if ( dy > 0 )
                         {
-                                // Si la distancia es positiva se mueve al este
                                 changeActivityOfItem( MoveEast );
                         }
                         else if ( dy < 0 )
                         {
-                                // Si la distancia es negativa se mueve al oeste
                                 changeActivityOfItem( MoveWest );
                         }
                         else
                         {
                                 if ( dx > 0 )
-                                {
-                                        // Si la distancia es positiva se mueve al norte
                                         changeActivityOfItem( MoveNorth );
-                                }
                                 else if ( dx < 0 )
-                                {
-                                        // Si la distancia es negativa se mueve al sur
                                         changeActivityOfItem( MoveSouth );
-                                }
                         }
                 }
         }
@@ -285,20 +268,18 @@ ActivityOfItem Hunter::calculateDirection4( const ActivityOfItem& activity )
 
 ActivityOfItem Hunter::calculateDirection8( const ActivityOfItem& activity )
 {
-        FreeItem* freeItem = dynamic_cast< FreeItem* >( this->item );
-        PlayerItem* playerItem = freeItem->getMediator()->getActivePlayer();
+        FreeItem* thisItem = dynamic_cast< FreeItem* >( this->item );
+        PlayerItem* activePlayer = thisItem->getMediator()->getActivePlayer();
 
-        // Se comprueba si el jugador activo está en la sala
-        if ( playerItem != 0 )
+        if ( activePlayer != 0 ) // if there’s active player in room
         {
-                // Distancia del cazador al jugador en los ejes X e Y
-                int dx = freeItem->getX() - playerItem->getX();
-                int dy = freeItem->getY() - playerItem->getY();
+                int dx = thisItem->getX() - activePlayer->getX();
+                int dy = thisItem->getY() - activePlayer->getY();
 
-                // El siguiente algoritmo obtiene la dirección más adecuada, aquella que permita alcanzar al
-                // jugador lo más rápido posible, en función de las distancias en los ejes X e Y entre el
-                // cazador y el jugador
-                if ( abs(dy) > abs(dx) )
+                // get direction that allows to reach player as fast as possible
+                // look on distances in X and Y between hunter and player
+
+                if ( abs( dy ) > abs( dx ) )
                 {
                         if ( dx > 1 )
                         {
@@ -367,25 +348,25 @@ ActivityOfItem Hunter::calculateDirection8( const ActivityOfItem& activity )
 
 bool Hunter::createFullBody()
 {
-        FreeItem* freeItem = dynamic_cast< FreeItem* >( this->item );
+        FreeItem* thisItem = dynamic_cast< FreeItem* >( this->item );
         bool created = false;
 
-        if ( freeItem->getLabel() == "imperial-guard-head" && freeItem->checkPosition( 0, 0, -LayerHeight, Add ) )
+        if ( thisItem->getLabel() == "imperial-guard-head" && thisItem->checkPosition( 0, 0, -LayerHeight, Add ) )
         {
                 created = true;
 
-                // Crea el elemento en la misma posición que el jugador y a su misma altura
+                // create new item in the same location
                 FreeItem* newItem = new FreeItem( guardData,
-                                                  freeItem->getX(), freeItem->getY(), freeItem->getZ() - LayerHeight,
-                                                  freeItem->getDirection() );
+                                                  thisItem->getX(), thisItem->getY(), thisItem->getZ() - LayerHeight,
+                                                  thisItem->getDirection() );
 
                 newItem->assignBehavior( "behavior of hunter in four directions", 0 );
 
-                // El elemento actual debe dejar de detectar colisiones porque,
-                // de lo contrariom no se podrá crear el guarda completo
-                freeItem->setCollisionDetector( false );
+                // switch off collisions for this item
+                // otherwise it’s impossible to create full-bodied guard
+                thisItem->setCollisionDetector( false );
 
-                freeItem->getMediator()->getRoom()->addFreeItem( newItem );
+                thisItem->getMediator()->getRoom()->addFreeItem( newItem );
         }
 
         return created;

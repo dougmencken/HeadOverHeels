@@ -18,22 +18,23 @@ namespace isomot
 Special::Special( Item * item, const std::string & behavior ) :
         Behavior( item, behavior )
 {
-        destroyTimer = new HPC();
+        disappearanceTimer = new HPC();
         speedTimer = new HPC();
         fallTimer = new HPC();
-        destroyTimer->start();
+
+        disappearanceTimer->start();
         speedTimer->start();
         fallTimer->start();
 }
 
 Special::~Special( )
 {
-        delete destroyTimer;
+        delete disappearanceTimer;
 }
 
 bool Special::update ()
 {
-        bool destroy = false;
+        bool isTaken = false;
         FreeItem* freeItem = 0;
         Mediator* mediator = item->getMediator();
 
@@ -43,7 +44,7 @@ bool Special::update ()
                         // Si tiene un elemento encima entonces el elemento puede desaparecer
                         if ( ! item->checkPosition( 0, 0, 1, Add ) )
                         {
-                                bool destroy = true;
+                                bool isTaken = true;
                                 Item* topItem = mediator->findCollisionPop( );
 
                                 // El elemento situado encima debe ser un jugador y debe poder tomar el elemento
@@ -57,20 +58,20 @@ bool Special::update ()
                                         // y/o volátiles porque, de lo contrario, el elemento no se destruirá
                                         if ( mediator->depthOfStackOfCollisions() > 1 )
                                         {
-                                                destroy = ! mediator->collisionWithByBehavior( "behavior of something special" ) &&
+                                                isTaken = ! mediator->collisionWithByBehavior( "behavior of something special" ) &&
                                                                 ! mediator->collisionWithByBehavior( "behavior of disappearance on jump into" ) &&
                                                                         ! mediator->collisionWithByBehavior( "behavior of disappearance on touch" );
                                         }
 
                                         // Cambio de estado si se han cumplido las condiciones
-                                        if ( destroy )
+                                        if ( isTaken )
                                         {
-                                                activity = Destroy;
+                                                activity = Vanish;
                                                 // Almacena el elemento que ha provocado la destrucción
                                                 this->sender = topItem;
                                                 // Los elementos especiales si se cogen al posarse encima, da tiempo a saltar;
                                                 // es decir, en este caso se comportan como un volátil por peso
-                                                destroyTimer->reset();
+                                                disappearanceTimer->reset();
                                         }
                                 }
                         }
@@ -79,7 +80,7 @@ bool Special::update ()
                         item->animate();
 
                         // Se comprueba si el elemento debe caer
-                        if ( activity != Destroy )
+                        if ( activity != Vanish )
                         {
                                 activity = Fall;
                         }
@@ -97,7 +98,7 @@ bool Special::update ()
                         // Si el elemento es desplazado por un jugador y éste puede tomarlo entonces se destruye
                         if ( dynamic_cast< PlayerItem * >( sender ) && mayTake( sender ) )
                         {
-                                activity = Destroy;
+                                activity = Vanish;
                         }
                         // El elemento es deplazado por otro. Si el desplazamiento no se pudo realizar por
                         // colisión entonces el estado se propaga a los elementos con los que ha chocado
@@ -137,7 +138,7 @@ bool Special::update ()
                         if ( item->getZ() == 0 && item->getMediator()->getRoom()->getFloorType() == NoFloor )
                         {
                                 // El elemento desaparece
-                                destroy = true;
+                                isTaken = true;
                         }
                         // Si ha llegado el momento de caer entonces el elemento desciende una unidad
                         else if ( fallTimer->getValue() > item->getWeight() )
@@ -153,10 +154,10 @@ bool Special::update ()
                         }
                         break;
 
-                case Destroy:
-                        if ( destroyTimer->getValue() > 0.100 )
+                case Vanish:
+                        if ( disappearanceTimer->getValue() > 0.100 )
                         {
-                                destroy = true;
+                                isTaken = true;
 
                                 // play sound of taking
                                 SoundManager::getInstance()->play( item->getLabel(), activity );
@@ -181,7 +182,7 @@ bool Special::update ()
                         ;
         }
 
-        return destroy;
+        return isTaken;
 }
 
 bool Special::mayTake( Item* sender )

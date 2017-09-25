@@ -256,7 +256,7 @@ void Room::addGridItem( GridItem * gridItem )
                 // Añade el elemento a la sala
                 gridItem->setMediator( mediator );
                 gridItem->setColumn( this->tilesNumber.first * gridItem->getCellY() + gridItem->getCellX() );
-                mediator->insertItem( gridItem );
+                mediator->addItem( gridItem );
 
                 // Pone a sombrear los elementos afectados por la inserción
                 if ( this->shadingScale < 256 && gridItem->getShadow() )
@@ -348,18 +348,16 @@ void Room::addFreeItem( FreeItem * freeItem )
                         freeItem->setOffset( offset );
                 }
 
-                // Añade el elemento a la sala
-                mediator->addTransparency( 0 );
+                // add free item to room
+                mediator->addToTableOfTransparencies( 0 );
                 freeItem->setMediator( mediator );
-                mediator->insertItem( freeItem );
+                mediator->addItem( freeItem );
 
-                // Pone a sombrear los elementos afectados por la inserción
                 if ( this->shadingScale < 256 && freeItem->getShadow() )
                 {
                         mediator->markItemsForShady( freeItem );
                 }
 
-                // Marca para enmascarar los elementos libres afectados por la inserción
                 mediator->markItemsForMasking( freeItem );
 
                 // Nuevo valor del identificador para elementos rejilla
@@ -459,18 +457,16 @@ void Room::addPlayer( PlayerItem* playerItem )
                         playerItem->setOffset( offset );
                 }
 
-                // Añade el elemento a la sala
-                mediator->addTransparency( 0 );
+                // add player item to room
+                mediator->addToTableOfTransparencies( 0 );
                 playerItem->setMediator( mediator );
-                mediator->insertItem( playerItem );
+                mediator->addItem( playerItem );
 
-                // Pone a sombrear los elementos afectados por la inserción
                 if ( this->shadingScale < 256 && playerItem->getShadow() )
                 {
                         mediator->markItemsForShady( playerItem );
                 }
 
-                // Marca para enmascarar los elementos libres afectados por la inserción
                 mediator->markItemsForMasking( playerItem );
 
                 // Nuevo valor del identificador para elementos rejilla
@@ -527,8 +523,7 @@ void Room::removeFreeItem( FreeItem * freeItem )
 {
         try
         {
-                // Se elimina de la tabla de transparencias
-                mediator->removeTransparency( freeItem->getTransparency() );
+                mediator->removeFromTableOfTransparencies( freeItem->getTransparency() );
 
                 mediator->removeItem( freeItem );
 
@@ -554,10 +549,8 @@ void Room::removePlayer( PlayerItem* playerItem )
 {
         try
         {
-                // Se elimina de la tabla de transparencias
-                mediator->removeTransparency( playerItem->getTransparency() );
+                mediator->removeFromTableOfTransparencies( playerItem->getTransparency() );
 
-                // Elimina el elemento de la sala
                 mediator->removeItem( playerItem );
 
                 // Pone a sombrear los elementos afectados por la eliminación
@@ -780,24 +773,24 @@ void Room::activatePlayer( const std::string& player )
 
 void Room::activate()
 {
-        this->mediator->startUpdate();
+        this->mediator->beginUpdate();
         this->active = true;
 }
 
 void Room::deactivate()
 {
-        this->mediator->stopUpdate();
+        this->mediator->endUpdate();
         this->active = false;
 }
 
-bool Room::changePlayer( ItemDataManager* itemDataManager )
+bool Room::swapPlayersInRoom ( ItemDataManager * itemDataManager )
 {
-        return mediator->nextPlayer( itemDataManager );
+        return mediator->selectNextPlayer( itemDataManager );
 }
 
-bool Room::alivePlayer( ItemDataManager* itemDataManager )
+bool Room::continueWithAlivePlayer ( ItemDataManager * itemDataManager )
 {
-        if ( mediator->alivePlayer( itemDataManager ) )
+        if ( mediator->selectAlivePlayer( itemDataManager ) )
         {
                 this->activate();
                 return true;

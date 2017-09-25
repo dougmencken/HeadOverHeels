@@ -37,7 +37,7 @@ Trampoline::~Trampoline()
 bool Trampoline::update ()
 {
         FreeItem * freeItem = dynamic_cast< FreeItem * >( this->item );
-        bool destroy = false;
+        bool vanish = false;
 
         switch ( activity )
         {
@@ -119,8 +119,8 @@ bool Trampoline::update ()
                         // Se comprueba si ha topado con el suelo en una sala sin suelo
                         if ( item->getZ() == 0 && item->getMediator()->getRoom()->getFloorType() == NoFloor )
                         {
-                                // El elemento desaparece
-                                destroy = true;
+                                // item disappears
+                                vanish = true;
                         }
                         // Si ha llegado el momento de caer entonces el elemento desciende una unidad
                         else if ( fallTimer->getValue() > freeItem->getWeight() )
@@ -139,16 +139,15 @@ bool Trampoline::update ()
                         }
                         break;
 
-                case Destroy:
-                        // Se destruye cuando el elemento se coge
-                        destroy = true;
+                case Vanish:
+                        vanish = true;
                         break;
 
                 default:
                         ;
         }
 
-        return destroy;
+        return vanish;
 }
 
 }

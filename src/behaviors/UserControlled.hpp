@@ -64,14 +64,12 @@ protected:
        /**
         * Pone en espera al jugador. Implica la presentación del primer fotograma de la
         * secuencia de animación según la orientación del jugador
-        * @param player El jugador que va a cambiar su comportamiento
         */
         virtual void wait( PlayerItem * player ) ;
 
        /**
         * Mueve al jugador a la velocidad establecida en los datos del elemento y en la
         * dirección de alguno de los cuatro puntos cardinales
-        * @param player El jugador que va a cambiar su comportamiento
         */
         virtual void move( PlayerItem * player ) ;
 
@@ -79,7 +77,6 @@ protected:
         * Mueve automáticamente al jugador a la velocidad establecida en los datos del elemento
         * y en la dirección de alguno de los cuatro puntos cardinales, una distancia igual al
         * número definido en los pasos automáticos (automaticSteps)
-        * @param player El jugador que va a cambiar su comportamiento
         */
         virtual void autoMove( PlayerItem * player ) ;
 
@@ -87,7 +84,6 @@ protected:
         * Desplaza al jugador a la velocidad del elemento que lo empuja y en la dirección de alguno
         * de los cuatro puntos cardinales y sus puntos intermedios, es decir, en ocho direcciones
         * posibles
-        * @param player El jugador que va a cambiar su comportamiento
         */
         virtual void displace( PlayerItem * player ) ;
 
@@ -96,19 +92,16 @@ protected:
         * siendo desplazado. Tiene el efecto de dejarlo parado en un punto al contrarrestar la fuerza
         * de desplazamiento. Este estado se utiliza normalmente cuando el jugador es arrastrado por
         * una cinta transportadora o algún elemento similar
-        * @param player El jugador que va a cambiar su comportamiento
         */
         virtual void cancelDisplace( PlayerItem * player ) ;
 
        /**
         * El jugador cae hasta topar con algo a la velocidad establecida en los datos del elemento
-        * @param player El jugador que va a cambiar su comportamiento
         */
         virtual void fall( PlayerItem * player ) ;
 
        /**
         * Hace saltar al jugador según la definición del salto realizada en las subclases
-        * @param player El jugador que va a cambiar su comportamiento
         */
         virtual void jump( PlayerItem * player ) ;
 
@@ -116,44 +109,37 @@ protected:
         * Hace planear al jugador a la velocidad establecida en los datos del elemento
         * y en la dirección de alguno de los cuatro puntos cardinales
         * @pre El jugador debe estar en el aire porque esté cayendo o haya saltado
-        * @param player El jugador que va a cambiar su comportamiento
         */
         virtual void glide( PlayerItem * player ) ;
 
        /**
         * Teletransporta al jugador desde otra sala
-        * @param player El jugador que va a cambiar su comportamiento
         */
         virtual void wayInTeletransport( PlayerItem * player ) ;
 
        /**
         * Teletransporta al jugador hacia otra sala
-        * @param player El jugador que va a cambiar su comportamiento
         */
         virtual void wayOutTeletransport( PlayerItem * player ) ;
 
        /**
-        * Destruye al jugador por haber sido eliminado por un enemigo
-        * @param player El jugador que va a cambiar su comportamiento
+        * Player collides with a mortal item
         */
-        virtual void destroy( PlayerItem * player ) ;
+        virtual void collideWithMortalItem( PlayerItem * player ) ;
 
        /**
-        * El jugador dispara algo que paralizará a los elementos mortales móviles
-        * @param player El jugador que va a cambiar su comportamiento
+        * Player releases something that freezes moving items
         */
         virtual void useHooter( PlayerItem * player ) ;
 
        /**
         * El jugador toma el elemento que haya debajo de él
-        * @param player El jugador que va a cambiar su comportamiento
         */
         virtual void take( PlayerItem * player ) ;
 
        /**
         * El jugador deja un elemento justo debajo de él. Implica un ascenso del jugador en altura
         * @pre Debe tener un elemento que haya tomado con anterioridad
-        * @param player El jugador que va a cambiar su comportamiento
         */
         virtual void drop( PlayerItem * player ) ;
 

@@ -120,7 +120,7 @@ bool Mobile::update ()
                         }
                         break;
 
-                case Destroy:
+                case Vanish:
                         // Se destruye cuando el elemento se coge
                         freeze = true;
                         break;

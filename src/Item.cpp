@@ -71,12 +71,12 @@ Item::~Item( )
 
 bool Item::update()
 {
-        bool destroy = false;
+        bool isGone = false;
 
         if ( behavior != 0 )
-                destroy = behavior->update();
+                isGone = behavior->update();
 
-        return destroy;
+        return isGone;
 }
 
 bool Item::animate()
@@ -135,8 +135,6 @@ bool Item::animate()
 
 void Item::changeItemData( ItemData* itemData, const Direction& direction )
 {
-        // Cambia los datos del elemento excepto la etiqueta. De lo contrario se
-        // identificaría como un elemento totalmente distinto
         this->dataOfItem = itemData;
         this->direction = direction;
         this->frameIndex = 0;
@@ -190,21 +188,21 @@ void Item::changeFrame( const unsigned int frameIndex )
 
 bool Item::checkPosition( int x, int y, int z, const WhatToDo& what )
 {
-        bool collisionFound = false;
-        // Coordenadas del elemento antes del cambio
+        // coordinates before change
         int px = this->x;
         int py = this->y;
         int pz = this->z;
 
-        // Vacía la pila de colisiones
         mediator->clearStackOfCollisions( );
 
-        // Nuevas coordenadas
+        bool collisionFound = false;
+
+        // new coordinates
         this->x = x + this->x * what;
         this->y = y + this->y * what;
         this->z = z + this->z * what;
 
-        // Se buscan colisiones con las paredes reales, aquellas que delimitan la sala
+        // look for collision with wall
         if ( this->x < mediator->getBound( North ) )
         {
                 mediator->pushCollision( NorthWall );
@@ -222,20 +220,20 @@ bool Item::checkPosition( int x, int y, int z, const WhatToDo& what )
                 mediator->pushCollision( EastWall );
         }
 
-        // Se buscan colisiones con el suelo
+        // look for collision with floor
         if ( this->z < 0 )
         {
                 mediator->pushCollision( Floor );
         }
 
-        // Si ha habido colisión con algún elemento especial se detiene el proceso
-        if ( ! ( collisionFound = ! mediator->isStackOfCollisionsEmpty () ) )
+        collisionFound = ! mediator->isStackOfCollisionsEmpty ();
+        if ( ! collisionFound )
         {
-                // Busca colisiones con el resto de elementos de la sala
+                // look for collisions with other items in room
                 collisionFound = mediator->findCollisionWithItem( this );
         }
 
-        // Restaura las coordenadas originales
+        // restore original coordinates
         this->x = px;
         this->y = py;
         this->z = pz;

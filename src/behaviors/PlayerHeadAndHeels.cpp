@@ -83,33 +83,31 @@ PlayerHeadAndHeels::~PlayerHeadAndHeels( )
 
 bool PlayerHeadAndHeels::update ()
 {
-        PlayerItem* playerItem = dynamic_cast< PlayerItem * >( this->item );
+        PlayerItem* player = dynamic_cast< PlayerItem * >( this->item );
 
-        // Comprueba si tiene inmunidad y, en tal caso, si ha finalizado
-        if ( playerItem->getShieldTime() > 0 )
+        if ( player->getShieldTime() > 0 )
         {
-                playerItem->decreaseShield();
+                player->decreaseShield();
         }
 
-        // Acciones a realizar en función del estado actual del jugador
         switch ( activity )
         {
                 case Wait:
-                        wait( playerItem );
+                        wait( player );
                         break;
 
                 case AutoMoveNorth:
                 case AutoMoveSouth:
                 case AutoMoveEast:
                 case AutoMoveWest:
-                        autoMove( playerItem );
+                        autoMove( player );
                         break;
 
                 case MoveNorth:
                 case MoveSouth:
                 case MoveEast:
                 case MoveWest:
-                        move( playerItem );
+                        move( player );
                         break;
 
                 case DisplaceNorth:
@@ -124,70 +122,70 @@ bool PlayerHeadAndHeels::update ()
                 case ForceDisplaceSouth:
                 case ForceDisplaceEast:
                 case ForceDisplaceWest:
-                        displace( playerItem );
+                        displace( player );
                         break;
 
                 case CancelDisplaceNorth:
                 case CancelDisplaceSouth:
                 case CancelDisplaceEast:
                 case CancelDisplaceWest:
-                        cancelDisplace( playerItem );
+                        cancelDisplace( player );
                         break;
 
                 case Fall:
-                        fall( playerItem );
+                        fall( player );
                         break;
 
                 case Jump:
                 case RegularJump:
                 case HighJump:
-                        jump( playerItem );
+                        jump( player );
                         break;
 
                 case StartWayOutTeletransport:
                 case WayOutTeletransport:
-                        wayOutTeletransport( playerItem );
+                        wayOutTeletransport( player );
                         break;
 
                 case StartWayInTeletransport:
                 case WayInTeletransport:
-                        wayInTeletransport( playerItem );
+                        wayInTeletransport( player );
                         break;
 
-                case StartDestroy:
-                case Destroy:
-                        destroy( playerItem );
+                case MeetMortalItem:
+                case Vanish:
+                        collideWithMortalItem( player );
                         break;
 
                 case Glide:
-                        glide( playerItem );
+                        glide( player );
                         break;
 
                 case Blink:
-                        blink( playerItem );
+                        blink( player );
                         break;
 
                 case TakeItem:
                 case TakeAndJump:
-                        take( playerItem );
+                        take( player );
                         break;
 
                 case TakenItem:
-                        playerItem->addToZ( -LayerHeight );
+                        player->addToZ( -LayerHeight );
                         activity = Wait;
                         break;
 
                 case DropItem:
                 case DropAndJump:
-                        drop( playerItem );
+                        drop( player );
                         break;
 
                 default:
                         ;
         }
 
-        // Reproduce el sonido asociado al estado actual
-        SoundManager::getInstance()->play( playerItem->getLabel(), activity );
+        // play sound for current activity
+        SoundManager::getInstance()->play( player->getLabel(), activity );
 
         return false;
 }
@@ -197,12 +195,12 @@ void PlayerHeadAndHeels::behave ()
         PlayerItem* playerItem = dynamic_cast< PlayerItem * >( this->item );
         InputManager* input = InputManager::getInstance();
 
-        // Si no está en modo automático
+        // if it’s not a move by inertia
         if ( activity != AutoMoveNorth && activity != AutoMoveSouth && activity != AutoMoveEast && activity != AutoMoveWest &&
                 activity != StartWayOutTeletransport && activity != WayOutTeletransport && activity != StartWayInTeletransport && activity != WayInTeletransport &&
-                activity != StartDestroy && activity != Destroy )
+                activity != MeetMortalItem && activity != Vanish )
         {
-                // Si está esperando o parpadeando
+                // when waiting or blinking
                 if ( activity == Wait || activity == Blink )
                 {
                         // ...y se ha pulsado la tecla de salto entonces salta
@@ -253,7 +251,7 @@ void PlayerHeadAndHeels::behave ()
                                 activity = MoveWest;
                         }
                 }
-                // Si está moviéndose
+                // already moving
                 else if ( activity == MoveNorth || activity == MoveSouth || activity == MoveEast || activity == MoveWest )
                 {
                         // ...y se ha pulsado la tecla de salto entonces salta

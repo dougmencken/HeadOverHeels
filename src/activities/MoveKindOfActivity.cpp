@@ -232,7 +232,7 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
                 // se cambiaría el estado de los elementos situados encima de un ascensor
                 else if ( *activity != MoveUp && *activity != MoveDown )
                 {
-                        this->propagateActivityToTopItems( freeItem, displaceActivity );
+                        this->propagateActivityToItemsAbove( freeItem, displaceActivity );
                 }
         }
 

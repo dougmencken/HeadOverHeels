@@ -40,7 +40,7 @@ RemoteControl::~RemoteControl()
 bool RemoteControl::update ()
 {
         FreeItem* freeItem = dynamic_cast< FreeItem * >( this->item );
-        bool destroy = false;
+        bool vanish = false;
 
         // get controlled item
         if ( theBehavior == "behavior of remote control" && controlledItem == 0 )
@@ -148,8 +148,8 @@ bool RemoteControl::update ()
                         // Se comprueba si ha topado con el suelo en una sala sin suelo
                         if ( freeItem->getZ() == 0 && freeItem->getMediator()->getRoom()->getFloorType() == NoFloor )
                         {
-                                // El elemento desaparece
-                                destroy = true;
+                                // item disappears
+                                vanish = true;
                         }
                         // Si este es el elemento controlado y ha llegado el momento de caer entonces
                         // el elemento desciende una unidad
@@ -171,7 +171,7 @@ bool RemoteControl::update ()
                         ;
         }
 
-        return destroy;
+        return vanish;
 }
 
 }

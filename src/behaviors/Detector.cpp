@@ -32,7 +32,7 @@ bool Detector::update ()
 {
         FreeItem* freeItem = dynamic_cast< FreeItem * >( this->item );
         PlayerItem* playerItem = freeItem->getMediator()->getActivePlayer();
-        bool destroy = false;
+        bool isGone = false;
 
         if ( playerItem != 0 )
         {
@@ -133,7 +133,7 @@ bool Detector::update ()
                                 // Se comprueba si ha topado con el suelo en una sala sin suelo
                                 if ( freeItem->getZ() == 0 && freeItem->getMediator()->getRoom()->getFloorType() == NoFloor )
                                 {
-                                        destroy = true;
+                                        isGone = true;
                                 }
                                 // Si ha llegado el momento de caer entonces el elemento desciende una unidad
                                 else if ( fallTimer->getValue() > freeItem->getWeight() )
@@ -162,7 +162,7 @@ bool Detector::update ()
                 }
         }
 
-        return destroy;
+        return isGone;
 }
 
 }

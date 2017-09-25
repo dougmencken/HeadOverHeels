@@ -250,8 +250,8 @@ namespace isomot
                 WakeUp,                         /* El elemento se vuelve a activar por la desactivación del interruptor */
                 StopTop,                        /* El elemento ha alcanzado su altura máxima. Aplicado a elementos de movimiento vertical */
                 StopBottom,                     /* El elemento ha alcanzado su altura mínima. Aplicado a elementos de movimiento vertical */
-                StartDestroy,                   /* El elemento inicia su destrucción */
-                Destroy,                        /* El elemento se destruye */
+                MeetMortalItem,
+                Vanish,
                 Doughnut,
                 Rebound,                        /* El elemento rebota */
                 SwitchIt,                       /* El elemento (un interruptor) cambia de estado */

@@ -156,19 +156,9 @@ public:
         */
         void deactivate () ;
 
-       /**
-        * Cambia el jugador activo por el siguiente jugador presente en la sala
-        * @return true si se ha podido hacer el cambio o false si el jugador activo es el único presente
-        * en la sala. En este último caso, el cambio de jugador implica el cambio de la sala activa
-        */
-        bool changePlayer ( ItemDataManager * itemDataManager ) ;
+        bool swapPlayersInRoom ( ItemDataManager * itemDataManager ) ;
 
-       /**
-        * Selecciona al jugador que queda vivo en la sala tras la pérdida de las vidas del otro jugador
-        * @param itemDataManager Necesario para poder crear a un jugador simple a partir del compuesto
-        * @return true si se ha cambiado el control al otro jugador o false si ya no hay más jugadores
-        */
-        bool alivePlayer ( ItemDataManager * itemDataManager ) ;
+        bool continueWithAlivePlayer ( ItemDataManager * itemDataManager ) ;
 
        /**
         * Calcula las coordenadas en las que se debe situar a un jugador para entrar a la sala

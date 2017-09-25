@@ -162,10 +162,9 @@ private:
         BITMAP * cutOutRightJamb ( BITMAP * door, const DoorMeasures& dm, const ixml::door::value type ) ;
 
         /**
-         * Predicado unario de std::for_each para la destrucción de un elemento
-         * @param itemData Un elemento del contenedor
+         * Finalize data of item
          */
-        static void destroyItemData ( ItemData& itemData ) ;
+        static void finalizeData ( ItemData& itemData ) ;
 
 protected:
 

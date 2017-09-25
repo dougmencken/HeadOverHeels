@@ -76,7 +76,7 @@ bool FallKindOfActivity::fall( Behavior * behavior )
                                         {
                                                 if ( sender->checkPosition( 0, 0, -1, Add ) )
                                                 {
-                                                        item->getBehavior()->changeActivityOfItem( StartDestroy );
+                                                        item->getBehavior()->changeActivityOfItem( MeetMortalItem );
                                                 }
                                         }
                                         // Si el elemento es mortal y el emisor es un jugador entonces el jugador muere
@@ -86,7 +86,7 @@ bool FallKindOfActivity::fall( Behavior * behavior )
                                         {
                                                 if ( sender->checkPosition( 0, 0, -1, Add ) )
                                                 {
-                                                        sender->getBehavior()->changeActivityOfItem( StartDestroy );
+                                                        sender->getBehavior()->changeActivityOfItem( MeetMortalItem );
                                                 }
                                                 else
                                                 {
@@ -105,7 +105,7 @@ bool FallKindOfActivity::fall( Behavior * behavior )
                                                         // Si todos son mortales entonces el jugador muere
                                                         if ( allMortal )
                                                         {
-                                                                sender->getBehavior()->changeActivityOfItem( StartDestroy );
+                                                                sender->getBehavior()->changeActivityOfItem( MeetMortalItem );
                                                         }
                                                 }
                                         }
@@ -130,7 +130,7 @@ bool FallKindOfActivity::fall( Behavior * behavior )
 
                                         // Se comprueba si el suelo de la sala es mortal, porque en este caso el jugador perderá una vida
                                         case MortalFloor:
-                                                playerItem->getBehavior()->changeActivityOfItem( StartDestroy );
+                                                playerItem->getBehavior()->changeActivityOfItem( MeetMortalItem );
                                                 break;
                                 }
                         }

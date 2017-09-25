@@ -133,12 +133,12 @@ void MapManager::beginNewGame( const std::string& firstRoomFileName, const std::
                         firstRoomData->addPlayerPosition( firstPlayerPosition );
 
                         // create player
-                        roomBuilder->buildPlayerInTheSameRoom( "head", "behavior of Head", centerX, centerY, 0, West );
+                        roomBuilder->createPlayerInTheSameRoom( "head", "behavior of Head", centerX, centerY, 0, West, false );
 
                         firstRoom->activatePlayer( "head" );
                         firstRoom->getCamera()->turnOn( firstRoom->getMediator()->getActivePlayer(), JustWait );
                         activeRoom = firstRoom;
-                        firstRoomData->setActivePlayer( "head" );
+                        firstRoomData->setNameOfActivePlayer( "head" );
                         rooms.push_back( firstRoom );
                 }
         }
@@ -166,11 +166,11 @@ void MapManager::beginNewGame( const std::string& firstRoomFileName, const std::
                         secondRoomData->addPlayerPosition( secondPlayerPosition);
 
                         // create player
-                        roomBuilder->buildPlayerInTheSameRoom( "heels", "behavior of Heels", centerX, centerY, 0, South );
+                        roomBuilder->createPlayerInTheSameRoom( "heels", "behavior of Heels", centerX, centerY, 0, South, false );
 
                         secondRoom->activatePlayer( "heels" );
                         secondRoom->getCamera()->turnOn( secondRoom->getMediator()->getActivePlayer(), JustWait );
-                        secondRoomData->setActivePlayer( "heels" );
+                        secondRoomData->setNameOfActivePlayer( "heels" );
                         rooms.push_back( secondRoom );
                 }
         }
@@ -197,26 +197,26 @@ void MapManager::beginOldGameWithPlayer( const sgxml::player& data )
                 // place character in room
                 if ( room != 0 )
                 {
-                        std::string thePlayer = data.label();
+                        std::string nameOfCharacter = data.label();
                         std::string behavior;
 
-                        if ( thePlayer == "head" )
+                        if ( nameOfCharacter == "head" )
                                 behavior = "behavior of Head";
-                        else if ( thePlayer == "heels" )
+                        else if ( nameOfCharacter == "heels" )
                                 behavior = "behavior of Heels";
-                        else if ( thePlayer == "headoverheels" )
+                        else if ( nameOfCharacter == "headoverheels" )
                                 behavior = "behavior of Head over Heels";
 
                         // store initial position of player in room’s data
-                        PlayerInitialPosition playerPosition( thePlayer );
+                        PlayerInitialPosition playerPosition( nameOfCharacter );
                         playerPosition.assignPosition( Direction( data.entry() ), data.x (), data.y (), data.z (), Direction( data.direction() ) );
                         roomData->addPlayerPosition( playerPosition );
 
                         // create player
                         std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( isomot->getItemDataManager() ) );
-                        PlayerItem* player = roomBuilder->buildPlayerInRoom( room, thePlayer, behavior, data.x (), data.y (), data.z (), Direction( data.direction() ) );
+                        PlayerItem* player = roomBuilder->createPlayerInRoom( room, nameOfCharacter, behavior, data.x (), data.y (), data.z (), Direction( data.direction() ), false );
 
-                        // change activity of player according to way of entry
+                        // change activity of player by way of entry
                         switch ( Direction( data.entry() ) )
                         {
                                 case North:
@@ -257,7 +257,7 @@ void MapManager::beginOldGameWithPlayer( const sgxml::player& data )
                         // when other player is in the same room as active player then there’s no need to do anything more
                         if ( data.active() || this->activeRoom != room )
                         {
-                                room->activatePlayer( thePlayer );
+                                room->activatePlayer( nameOfCharacter );
                                 room->getCamera()->turnOn( room->getMediator()->getActivePlayer(), Direction( data.entry() ) );
                                 /////room->getCamera()->centerOn( room->getMediator()->getActivePlayer () );
 
@@ -267,7 +267,7 @@ void MapManager::beginOldGameWithPlayer( const sgxml::player& data )
                                         this->activeRoom = room;
                                 }
 
-                                roomData->setActivePlayer( thePlayer );
+                                roomData->setNameOfActivePlayer( nameOfCharacter );
                                 this->rooms.push_back( room );
                         }
                 }
@@ -294,9 +294,6 @@ void MapManager::reset()
 
 Room* MapManager::changeRoom( const Direction& exit )
 {
-        Room* newRoom = 0;
-        PlayerItem* player = 0;
-
         activeRoom->deactivate();
 
         SoundManager::getInstance()->stopEverySound ();
@@ -305,12 +302,12 @@ Room* MapManager::changeRoom( const Direction& exit )
         MapRoomData* previousRoomData = findRoomData( activeRoom->getIdentifier() );
 
         // bin position of player in previous room
-        std::string activePlayer = previousRoomData->getActivePlayer();
-        previousRoomData->removePlayerPosition( activePlayer );
+        std::string nameOfActivePlayer = previousRoomData->getNameOfActivePlayer();
+        previousRoomData->removePlayerPosition( nameOfActivePlayer );
 
         // get player’s position in new room
-        player = static_cast< PlayerItem* >( activeRoom->getMediator()->findItemByLabel( activePlayer ) );
-        PlayerInitialPosition exitPosition( activePlayer );
+        PlayerItem* player = static_cast< PlayerItem* >( activeRoom->getMediator()->findItemByLabel( nameOfActivePlayer ) );
+        PlayerInitialPosition exitPosition( nameOfActivePlayer );
         exitPosition.assignPosition( player->getExit(), player->getX(), player->getY(), player->getZ(), player->getOrientation() );
         std::string behaviorOfPlayer = player->getBehavior()->getBehaviorOfItem ();
 
@@ -325,7 +322,7 @@ Room* MapManager::changeRoom( const Direction& exit )
         int westBound = activeRoom->getBound( West );
 
         // when there’re no players left in the room
-        if ( ! previousRoomData->remainPlayers() || activePlayer == "headoverheels" )
+        if ( ! previousRoomData->remainPlayers() || nameOfActivePlayer == "headoverheels" )
         {
                 // bin previous room
                 rooms.erase( std::remove_if( rooms.begin (), rooms.end (), std::bind2nd( EqualRoom(), activeRoom->getIdentifier() ) ), rooms.end() );
@@ -347,6 +344,8 @@ Room* MapManager::changeRoom( const Direction& exit )
 
         bool playerPresent = false;
 
+        Room* newRoom = 0;
+
         if ( ! nextRoomData->remainPlayers() )
         {
                 std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( isomot->getItemDataManager() ) );
@@ -361,7 +360,7 @@ Room* MapManager::changeRoom( const Direction& exit )
                 playerPresent = true;
         }
 
-        ItemData* playerData = isomot->getItemDataManager()->findItemByLabel( activePlayer );
+        ItemData* playerData = isomot->getItemDataManager()->findItemByLabel( nameOfActivePlayer );
 
         // get player’s exit position in old room to calculate entry position in new room
         int x = exitPosition.getX ();
@@ -370,7 +369,7 @@ Room* MapManager::changeRoom( const Direction& exit )
         newRoom->calculateEntryCoordinates( entry, playerData->widthX, playerData->widthY, northBound, eastBound, southBound, westBound, &x, &y, &z );
 
         // set entry position of player
-        PlayerInitialPosition playerPosition( activePlayer );
+        PlayerInitialPosition playerPosition( nameOfActivePlayer );
         playerPosition.assignPosition( entry, x, y, z, exitPosition.getOrientation() );
 
         // if there is player already, get its data
@@ -393,7 +392,7 @@ Room* MapManager::changeRoom( const Direction& exit )
         {
                 z = Top;
         }
-        player = roomBuilder->buildPlayerInRoom( newRoom, activePlayer, behaviorOfPlayer, x, y, z, exitPosition.getOrientation(), withItem );
+        player = roomBuilder->createPlayerInRoom( newRoom, nameOfActivePlayer, behaviorOfPlayer, x, y, z, exitPosition.getOrientation(), withItem );
 
         // change activity of player by way of entry
         switch ( entry )
@@ -435,8 +434,8 @@ Room* MapManager::changeRoom( const Direction& exit )
                         ;
         }
 
-        nextRoomData->setActivePlayer( activePlayer );
-        newRoom->activatePlayer( activePlayer );
+        nextRoomData->setNameOfActivePlayer( nameOfActivePlayer );
+        newRoom->activatePlayer( nameOfActivePlayer );
         newRoom->getCamera()->turnOn( newRoom->getMediator()->getActivePlayer(), entry );
 
         activeRoom = newRoom;
@@ -457,7 +456,7 @@ Room* MapManager::restartRoom()
         // initial position of all players in room
         std::list< PlayerInitialPosition > playersPosition = activeRoomData->getPlayersPosition();
 
-        std::string activePlayer = "in~restart";
+        std::string nameOfActivePlayer = "in~restart";
         std::string playerBehavior = "still";
         Direction entry = NoDirection;
         PlayerItem* player = 0;
@@ -484,19 +483,18 @@ Room* MapManager::restartRoom()
                                 playerBehavior = "behavior of Head over Heels";
                 }
 
-                // Se comprueba si éste es el jugador activo. En tal caso se recuperan sus datos de posición inicial
-                if ( activeRoomData->getActivePlayer() == ( *i ).getPlayer() || player == 0 )
+                if ( activeRoomData->getNameOfActivePlayer() == ( *i ).getPlayer() || player == 0 )
                 {
-                        // Si no hay jugador activo se asigna a partir de los datos de posición
-                        activePlayer = player != 0 ? activeRoomData->getActivePlayer() : ( *i ).getPlayer();
+                        // if there’s no active player then get its name from initial position
+                        nameOfActivePlayer = player != 0 ? activeRoomData->getNameOfActivePlayer() : ( *i ).getPlayer();
 
-                        // Posición inicial del jugador
+                        // initial position
                         int x = ( *i ).getX();
                         int y = ( *i ).getY();
                         int z = ( *i ).getZ();
 
-                        // Crea al jugador
-                        player = roomBuilder->buildPlayerInRoom( newRoom, ( *i ).getPlayer(), playerBehavior, x, y, z, ( *i ).getOrientation() );
+                        // create player
+                        player = roomBuilder->createPlayerInRoom( newRoom, ( *i ).getPlayer(), playerBehavior, x, y, z, ( *i ).getOrientation(), false );
 
                         // Si se ha podido crear al jugador, la partida continua. De lo contrario quiere decir que ha terminado
                         if ( player != 0 )
@@ -504,12 +502,12 @@ Room* MapManager::restartRoom()
                                 entry = ( *i ).getEntry();
 
                                 // change player when it passed from the composite head~over~heels to a simple one
-                                if ( player->getLabel() != activePlayer )
+                                if ( player->getLabel() != nameOfActivePlayer )
                                 {
-                                        activePlayer = player->getLabel();
+                                        nameOfActivePlayer = player->getLabel();
 
                                         // update initial positions on change of player
-                                        PlayerInitialPosition newPlayerInitialPosition( activePlayer );
+                                        PlayerInitialPosition newPlayerInitialPosition( nameOfActivePlayer );
                                         newPlayerInitialPosition.assignPosition( entry, ( *i ).getX(), ( *i ).getY(), ( *i ).getZ(), ( *i ).getOrientation() );
                                         i = playersPosition.erase( i );
                                         i = playersPosition.insert( i, newPlayerInitialPosition );
@@ -555,16 +553,16 @@ Room* MapManager::restartRoom()
                 // momento que entró en la sala
                 else
                 {
-                        // Crea al jugador
                         PlayerInitialPosition* position = activeRoomData->findPlayerPosition( ( *i ).getPlayer() );
-                        player = roomBuilder->buildPlayerInRoom(
+                        player = roomBuilder->createPlayerInRoom(
                                 newRoom,
                                 ( *i ).getPlayer(),
                                 playerBehavior,
-                                position->getX(), position->getY(), position->getZ(), position->getOrientation()
+                                position->getX(), position->getY(), position->getZ(), position->getOrientation(),
+                                false
                         );
 
-                        // Se cambia el estado del jugador en función de la vía de entrada
+                        // change activity of player by way of entry
                         switch ( ( *i ).getEntry() )
                         {
                                 case North:
@@ -602,25 +600,23 @@ Room* MapManager::restartRoom()
                 }
         }
 
-        // Se destruye la sala
+        // remove existing room
         rooms.erase( std::remove_if( rooms.begin (), rooms.end (), std::bind2nd( EqualRoom(), activeRoom->getIdentifier() ) ), rooms.end() );
         delete activeRoom;
 
-        // Hay jugador
         if ( player != 0 )
         {
-                // Se añade la sala recién creada a la lista
+                // add room just created
                 rooms.push_back( newRoom );
 
-                // La primera sala es la sala activa
-                activeRoomData->setActivePlayer( activePlayer );
-                newRoom->activatePlayer( activePlayer );
+                activeRoomData->setNameOfActivePlayer( nameOfActivePlayer );
+                newRoom->activatePlayer( nameOfActivePlayer );
                 newRoom->getCamera()->turnOn( newRoom->getMediator()->getActivePlayer(), entry );
+
                 activeRoom = newRoom;
-                // Activa la nueva sala
                 activeRoom->activate();
         }
-        // No se ha podido crear el jugador, la partida termina
+        // could not create player, game over
         else
         {
                 delete newRoom;
@@ -636,60 +632,51 @@ Room* MapManager::createRoom( const std::string& fileName )
         return roomBuilder->buildRoom( isomot::sharePath() + "map/" + fileName );
 }
 
-Room* MapManager::swapRoom()
+Room* MapManager::swapRoom ()
 {
-        // Tiene que haber más de una sala para que se pueda hacer el cambio
+        // swap is possible when there are more than one room
         if ( rooms.size() > 1 )
         {
-                // Detiene todos los sonidos
                 SoundManager::getInstance()->stopEverySound ();
 
-                // Desactiva la sala actual
                 activeRoom->deactivate();
-                // Busca la sala
+
                 std::vector< Room* >::iterator i = std::find_if( rooms.begin (), rooms.end (), std::bind2nd( EqualRoom(), activeRoom->getIdentifier() ) );
-                // Se pasa a la siguiente
+                // get next room to swap with
                 ++i;
-                // Si se llegó al final se asigna la primera, sino la siguiente
+                // when it’s last one swap with first one
                 activeRoom = ( i != rooms.end() ? ( *i ) : *rooms.begin() );
-                // Activa la nueva sala
+
                 activeRoom->activate();
         }
 
         return activeRoom;
 }
 
-Room* MapManager::destroyAndSwapRoom()
+Room* MapManager::removeRoomAndSwap ()
 {
-        // Desactiva la sala actual
         activeRoom->deactivate();
-
-        // Busca en el mapa los datos de la sala activa para borrar de la sala
-        // los datos de entrada del jugador activo
-        MapRoomData* activeRoomData = findRoomData( activeRoom->getIdentifier() );
-        activeRoomData->removePlayerPosition( activeRoomData->getActivePlayer() );
-
-        // Busca la nueva sala
-        std::vector< Room* >::iterator i = std::find_if( rooms.begin (), rooms.end (), std::bind2nd( EqualRoom(), activeRoom->getIdentifier() ) );
-        // Se pasa a la siguiente
-        ++i;
-        // Si se llegó al final se asigna la primera, sino la siguiente
         Room* inactiveRoom = activeRoom;
+
+        MapRoomData* activeRoomData = findRoomData( activeRoom->getIdentifier() );
+        activeRoomData->removePlayerPosition( activeRoomData->getNameOfActivePlayer() );
+
+        std::vector< Room* >::iterator i = std::find_if( rooms.begin (), rooms.end (), std::bind2nd( EqualRoom(), activeRoom->getIdentifier() ) );
+        // get next room to swap with
+        ++i;
+        // when it’s last one swap with first one
         activeRoom = ( i != rooms.end() ? ( *i ) : *rooms.begin() );
 
-        // Si la sala inactiva es igual a la nueva sala activa quiere decir que sólo hay una
-        // sala activa, por tanto sólo hay un jugador con vidas y las acaba de perder todas:
-        // fin de la partida
+        // no more rooms, game over
         if ( inactiveRoom == activeRoom )
         {
                 activeRoom = 0;
         }
 
-        // Elimina la sala inactiva
+        // remove inactive room
         rooms.erase( std::remove_if( rooms.begin (), rooms.end (), std::bind2nd( EqualRoom(), inactiveRoom->getIdentifier() ) ), rooms.end() );
         delete inactiveRoom;
 
-        // Activa la nueva sala
         if ( activeRoom != 0 )
         {
                 activeRoom->activate();
@@ -701,7 +688,7 @@ Room* MapManager::destroyAndSwapRoom()
 void MapManager::updateActivePlayer()
 {
         MapRoomData* activeRoomData = findRoomData( activeRoom->getIdentifier () );
-        activeRoomData->setActivePlayer( activeRoom->getMediator()->getActivePlayer()->getLabel() );
+        activeRoomData->setNameOfActivePlayer( activeRoom->getMediator()->getActivePlayer()->getLabel() );
 }
 
 void MapManager::loadVisitedSequence( sgxml::exploredRooms::visited_sequence& visitedSequence )
@@ -753,16 +740,16 @@ Room* MapManager::findRoom( const std::string& room )
         return ( i != rooms.end() ? ( *i ) : 0 );
 }
 
-PlayerInitialPosition* MapManager::findPlayerPosition( const std::string& room, const std::string& thePlayer )
+PlayerInitialPosition* MapManager::findPlayerPosition( const std::string& room, const std::string& name )
 {
-        return this->findRoomData( room )->findPlayerPosition( thePlayer );
+        return this->findRoomData( room )->findPlayerPosition( name );
 }
 
-Room* MapManager::getHideRoom()
+Room* MapManager::getRoomOfInactivePlayer()
 {
         Room* room = 0;
 
-        for ( size_t i = 0; i < this->rooms.size(); ++i )
+        for ( size_t i = 0; i < this->rooms.size (); ++i )
         {
                 if ( this->rooms[ i ] != this->activeRoom )
                         room = this->rooms[ i ];

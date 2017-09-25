@@ -62,7 +62,7 @@ bool JumpKindOfActivity::jump( Behavior* behavior, ActivityOfItem* activity, con
                                         {
                                                 if ( item->isMortal() && playerItem->getShieldTime() <= 0 )
                                                 {
-                                                        playerItem->getBehavior()->changeActivityOfItem( StartDestroy );
+                                                        playerItem->getBehavior()->changeActivityOfItem( MeetMortalItem );
                                                 }
                                                 // Si no es mortal y es un elemento libre levanta a los elementos que pudiera tener encima
                                                 else
@@ -126,7 +126,7 @@ bool JumpKindOfActivity::jump( Behavior* behavior, ActivityOfItem* activity, con
         // jugador pueda librarse de un elemento que tenga encima
         else if ( changedData && *jumpIndex > 4 )
         {
-                this->propagateActivityToTopItems( playerItem, displaceActivity );
+                this->propagateActivityToItemsAbove( playerItem, displaceActivity );
         }
 
         // Se pasa a la siguiente fase del salto

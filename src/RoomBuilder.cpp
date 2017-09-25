@@ -207,12 +207,12 @@ Room* RoomBuilder::buildRoom ( const std::string& fileName )
         return this->room;
 }
 
-PlayerItem* RoomBuilder::buildPlayerInTheSameRoom( const std::string& player, const std::string& behavior, int x, int y, int z, const Direction& direction )
+PlayerItem* RoomBuilder::createPlayerInTheSameRoom( const std::string& player, const std::string& behavior, int x, int y, int z, const Direction& direction, bool withItem )
 {
-        return buildPlayerInRoom( this->room, player, behavior, x, y, z, direction );
+        return createPlayerInRoom( this->room, player, behavior, x, y, z, direction, withItem );
 }
 
-PlayerItem* RoomBuilder::buildPlayerInRoom( Room* room, const std::string& player, const std::string& behavior, int x, int y, int z, const Direction& direction, bool withItem )
+PlayerItem* RoomBuilder::createPlayerInRoom( Room* room, const std::string& player, const std::string& behavior, int x, int y, int z, const Direction& direction, bool withItem )
 {
         PlayerItem* playerItem = 0;
         GameManager* gameManager = GameManager::getInstance();

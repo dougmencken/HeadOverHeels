@@ -40,7 +40,7 @@ OneWay::~OneWay()
 
 bool OneWay::update ()
 {
-        bool destroy = false;
+        bool vanish = false;
         FreeItem * freeItem = dynamic_cast< FreeItem * >( this->item );
 
         switch ( activity )
@@ -113,8 +113,8 @@ bool OneWay::update ()
                                 // Se comprueba si ha topado con el suelo en una sala sin suelo
                                 if ( freeItem->getZ() == 0 && freeItem->getMediator()->getRoom()->getFloorType() == NoFloor )
                                 {
-                                        // El elemento desaparece
-                                        destroy = true;
+                                        // item disappears
+                                        vanish = true;
                                 }
                                 // Si ha llegado el momento de caer entonces el elemento desciende una unidad
                                 else if ( fallTimer->getValue() > freeItem->getWeight() )
@@ -149,7 +149,7 @@ bool OneWay::update ()
                         ;
         }
 
-        return destroy;
+        return vanish;
 }
 
 void OneWay::start()

@@ -58,9 +58,9 @@ bool PlayerItem::changeData( int value, int x, int y, int z, const Datum& datum,
                 return FreeItem::changeData( value, x, y, z, datum, how );
         }
 
-        bool collisionFound = false;
-
         mediator->clearStackOfCollisions( );
+
+        bool collisionFound = false;
 
         // copy item before moving
         PlayerItem oldPlayerItem( *this );
@@ -99,10 +99,6 @@ bool PlayerItem::changeData( int value, int x, int y, int z, const Datum& datum,
         }
 
         // look for collision with door
-
-        const Direction directions[ 12 ] =
-                {  Northeast, Northwest, North, Southeast, Southwest, South,
-                        Eastnorth, Eastsouth, East, Westnorth, Westsouth, West  };
 
         bool doorCollision = false;
 
@@ -205,10 +201,15 @@ bool PlayerItem::changeData( int value, int x, int y, int z, const Datum& datum,
                 // now it is known that the player may go thru a door
                 // look for collision with limits of room
 
-                SpecialId borders[] = { NortheastBorder, NorthwestBorder, NorthBorder,
-                                        SoutheastBorder, SouthwestBorder, SouthBorder,
+                const Direction directions[ 12 ] =
+                        {  Northeast, Northwest, North, Southeast, Southwest, South,
+                                Eastnorth, Eastsouth, East, Westnorth, Westsouth, West  };
+
+                const SpecialId borders[ 12 ] =
+                        { NortheastBorder, NorthwestBorder, NorthBorder,
+                                SoutheastBorder, SouthwestBorder, SouthBorder,
                                         EastnorthBorder, EastsouthBorder, EastBorder,
-                                        WestnorthBorder, WestsouthBorder, WestBorder };
+                                                WestnorthBorder, WestsouthBorder, WestBorder };
 
                 // check each limit of room
                 for ( int i = 0; i < 12; i++ )
@@ -230,7 +231,8 @@ bool PlayerItem::changeData( int value, int x, int y, int z, const Datum& datum,
                 if ( ! collisionFound )
                 {
                         // look for collision with the rest of items in room
-                        if ( ! ( collisionFound = mediator->findCollisionWithItem( this ) ) )
+                        collisionFound = mediator->findCollisionWithItem( this );
+                        if ( ! collisionFound )
                         {
                                 // for item with image, mark to mask free items whose images overlap with its image
                                 if ( this->image )
@@ -449,7 +451,7 @@ void PlayerItem::wait ()
         // Si el jugador se está teletransportando o está muriendo no se podrá detener
         if ( activity != StartWayOutTeletransport && activity != WayOutTeletransport &&
                 activity != StartWayInTeletransport && activity != WayInTeletransport &&
-                activity != StartDestroy && activity != Destroy )
+                activity != MeetMortalItem && activity != Vanish )
         {
                 // El fotograma de parada es distinto segn la orientación del elemento
                 int currentFrame = ( getDataOfFreeItem()->motion.size() - getDataOfFreeItem()->extraFrames ) / getDataOfFreeItem()->directionFrames * static_cast < int > ( direction );

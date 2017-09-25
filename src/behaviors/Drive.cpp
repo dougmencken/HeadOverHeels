@@ -33,7 +33,7 @@ bool Drive::update ()
 {
         FreeItem* freeItem = dynamic_cast< FreeItem * >( this->item );
         Mediator* mediator = freeItem->getMediator();
-        bool destroyOrNot = false;
+        bool isGone = false;
         bool playerFound = false;
 
         switch ( activity )
@@ -165,8 +165,8 @@ bool Drive::update ()
                         // Se comprueba si ha topado con el suelo en una sala sin suelo
                         if ( freeItem->getZ() == 0 && freeItem->getMediator()->getRoom()->getFloorType() == NoFloor )
                         {
-                                // El elemento desaparece
-                                destroyOrNot = true;
+                                // item disappears
+                                isGone = true;
                         }
                         // Si ha llegado el momento de caer entonces el elemento desciende una unidad
                         else if ( fallTimer->getValue() > freeItem->getWeight() )
@@ -194,7 +194,7 @@ bool Drive::update ()
                         ;
         }
 
-        return destroyOrNot;
+        return isGone;
 }
 
 }

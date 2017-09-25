@@ -84,7 +84,7 @@ protected:
        /**
         * Change activity of items above the sender
         */
-        virtual void propagateActivityToTopItems ( Item * sender, const ActivityOfItem & activity ) ;
+        virtual void propagateActivityToItemsAbove ( Item * sender, const ActivityOfItem & activity ) ;
 
 };
 

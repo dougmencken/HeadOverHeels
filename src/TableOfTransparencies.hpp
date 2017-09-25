@@ -8,8 +8,8 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef TransparencyManager_hpp_
-#define TransparencyManager_hpp_
+#ifndef TableOfTransparencies_hpp_
+#define TableOfTransparencies_hpp_
 
 #include <vector>
 
@@ -18,10 +18,10 @@ namespace isomot
 {
 
 /**
- * Manages transparency of free items
+ * Table of transparencies for free items
  */
 
-class TransparencyManager
+class TableOfTransparencies
 {
 
 public:
@@ -29,26 +29,23 @@ public:
        /**
         * Initialize table of transparencies
         */
-        TransparencyManager( ) ;
+        TableOfTransparencies( ) ;
 
-        virtual ~TransparencyManager( ) ;
-
-       /**
-        * Añade un nuevo elemento a la tabla
-        * @param amount Porcentaje de transparencia del elemento
-        */
-        void add ( const unsigned char amount ) ;
+        virtual ~TableOfTransparencies( ) ;
 
        /**
-        * Elimina un elemento de la tabla
-        * @param amount Porcentaje de transparencia del elemento
+        * @param amount percentage of item’s transparency
         */
-        void remove ( const unsigned char amount ) ;
+        void addToDegreeOfTransparency ( const unsigned char amount ) ;
+
+       /**
+        * @param amount percentage of item’s transparency
+        */
+        void removeFromDegreeOfTransparency ( const unsigned char amount ) ;
 
        /**
         * Count elements in the table with a given degree of transparency
-        * @param Porcentaje de transparencia consultado
-        * @return Número de elementos con ese porcentaje de transparencia
+        * @param percentage of transparency
         */
         unsigned int countItemsWithDegreeOfTransparency ( unsigned int degree ) const
         {
@@ -60,7 +57,7 @@ private:
        /**
         * Table of transparencies
         * It’s a vector of 101 elements where index means degree 0 to 100 of transparency,
-        * and value presents the number of items that have this degree in the room
+        * and value presents the number of items in room with this degree
         */
         std::vector < unsigned int > table ;
 

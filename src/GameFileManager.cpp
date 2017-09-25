@@ -46,10 +46,10 @@ void GameFileManager::loadGame( const std::string& fileName )
         {
                 std::auto_ptr< sgxml::SaveGameXML > saveGameXML( sgxml::savegame( fileName.c_str () ) );
 
-                // Establece las salas que ya han sido visitadas
+                // visited rooms
                 this->isomot->getMapManager()->loadVisitedSequence( saveGameXML->exploredRooms().visited() );
 
-                // Asigna los bonus que no deben aparecer en esta partida
+                // bonuses already taken
                 BonusManager::getInstance()->load( saveGameXML->bonus().room() );
 
                 if ( saveGameXML->freeByblos() )
@@ -75,7 +75,7 @@ void GameFileManager::loadGame( const std::string& fileName )
 
                 this->updateAttributesOfPlayers( saveGameXML->players().player() );
 
-                this->isomot->beginOld( saveGameXML->players().player() );
+                this->isomot->continueSavedGame( saveGameXML->players().player() );
         }
         catch ( const xml_schema::exception& e )
         {
@@ -145,7 +145,7 @@ void GameFileManager::saveGame( const std::string& fileName )
                 // there may be no more rooms because there are no more players
                 // or because other player is in the same room as active player
 
-                Room* hideRoom = this->isomot->getMapManager()->getHideRoom();
+                Room* hideRoom = this->isomot->getMapManager()->getRoomOfInactivePlayer();
                 Room* activeRoom = this->isomot->getMapManager()->getActiveRoom();
                 PlayerItem* inactivePlayer = ( hideRoom != 0 ? hideRoom->getMediator()->getActivePlayer() : activeRoom->getMediator()->getHiddenPlayer() );
 

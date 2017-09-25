@@ -152,7 +152,7 @@ WhyPause GameManager::begin ()
         refreshBackgroundFrames ();
 
         Assert< ENullPointer >( this->isomot );
-        this->isomot->beginNew ();
+        this->isomot->beginNewGame ();
 
         return this->update ();
 }

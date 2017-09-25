@@ -116,7 +116,7 @@ private:
          */
         bool visited ;
 
-        std::string activePlayer ;
+        std::string nameOfActivePlayer ;
 
         /**
          * Posición inicial de los jugadores que pudieran estar presentes en la sala cuando ésta se crea
@@ -242,12 +242,9 @@ public:
          */
         bool isVisited () const {  return this->visited ;  }
 
-        /**
-         * Set active player when room is created
-         */
-        void setActivePlayer ( const std::string& player ) {  this->activePlayer = player ;  }
+        void setNameOfActivePlayer ( const std::string& player ) {  this->nameOfActivePlayer = player ;  }
 
-        std::string getActivePlayer () const {  return activePlayer ;  }
+        std::string getNameOfActivePlayer () const {  return nameOfActivePlayer ;  }
 
         /**
          * Posición inicial de los jugadores que pudieran estar presentes en la sala cuando ésta se crea

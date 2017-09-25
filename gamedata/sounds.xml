@@ -11,7 +11,7 @@
 
   <!-- Brick number one -->
   <item label="brick1">
-    <state id="destroy">
+    <state id="vanish">
       <file>sound/destruction.wav</file>
     </state>
     <state id="fall">
@@ -30,7 +30,7 @@
     <state id="active">
       <file>sound/conveyor-belt.wav</file>
     </state>
-    <state id="destroy">
+    <state id="vanish">
       <file>sound/destruction.wav</file>
     </state>
   </item>
@@ -46,7 +46,7 @@
     <state id="collision">
       <file>sound/push.wav</file>
     </state>
-    <state id="destroy">
+    <state id="vanish">
       <file>sound/destruction.wav</file>
     </state>
   </item>
@@ -66,7 +66,7 @@
 
   <!-- Puppy -->
   <item label="puppy">
-    <state id="destroy">
+    <state id="vanish">
       <file>sound/silence-puppy.wav</file>
     </state>
   </item>
@@ -90,7 +90,7 @@
 
   <!-- Brick number two -->
   <item label="brick2">
-    <state id="destroy">
+    <state id="vanish">
       <file>sound/destruction.wav</file>
     </state>
     <state id="fall">
@@ -100,14 +100,14 @@
 
   <!-- Bars north-south -->
   <item label="bars-ns">
-    <state id="destroy">
+    <state id="vanish">
       <file>sound/destruction.wav</file>
     </state>
   </item>
 
   <!-- Bars east-west -->
   <item label="bars-ew">
-    <state id="destroy">
+    <state id="vanish">
       <file>sound/destruction.wav</file>
     </state>
   </item>
@@ -134,35 +134,35 @@
 
   <!-- Donuts -->
   <item label="donuts">
-    <state id="destroy">
+    <state id="vanish">
       <file>sound/tools.wav</file>
     </state>
   </item>
 
   <!-- Rabbit with extra lives -->
   <item label="extra-life">
-    <state id="destroy">
+    <state id="vanish">
       <file>sound/bonus.wav</file>
     </state>
   </item>
 
   <!-- Rabbit with high jumps -->
   <item label="high-jumps">
-    <state id="destroy">
+    <state id="vanish">
       <file>sound/bonus.wav</file>
     </state>
   </item>
 
   <!-- Rabbit with high speed -->
   <item label="high-speed">
-    <state id="destroy">
+    <state id="vanish">
       <file>sound/bonus.wav</file>
     </state>
   </item>
 
   <!-- Rabbit with immunity -->
   <item label="shield">
-    <state id="destroy">
+    <state id="vanish">
       <file>sound/bonus.wav</file>
     </state>
   </item>
@@ -202,7 +202,7 @@
 
   <!-- Horn -->
   <item label="horn">
-    <state id="destroy">
+    <state id="vanish">
       <file>sound/tools.wav</file>
     </state>
   </item>
@@ -215,7 +215,7 @@
 
   <!-- Handbag -->
   <item label="handbag">
-    <state id="destroy">
+    <state id="vanish">
       <file>sound/tools.wav</file>
     </state>
   </item>
@@ -239,7 +239,7 @@
 
   <!-- Reincarnation Fish -->
   <item label="reincarnation-fish">
-    <state id="destroy">
+    <state id="vanish">
       <file>sound/bonus.wav</file>
     </state>
   </item>
@@ -397,7 +397,7 @@
     <state id="fall">
       <file>sound/head-falling.wav</file>
     </state>
-    <state id="destroy">
+    <state id="vanish">
       <file>sound/hh-dying.wav</file>
     </state>
     <state id="shot">
@@ -425,7 +425,7 @@
     <state id="fall">
       <file>sound/heels-falling.wav</file>
     </state>
-    <state id="destroy">
+    <state id="vanish">
       <file>sound/hh-dying.wav</file>
     </state>
     <state id="rebound">
@@ -459,7 +459,7 @@
     <state id="fall">
       <file>sound/head-falling.wav</file>
     </state>
-    <state id="destroy">
+    <state id="vanish">
       <file>sound/hh-dying.wav</file>
     </state>
     <state id="shot">

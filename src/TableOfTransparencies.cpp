@@ -1,11 +1,11 @@
 
-#include "TransparencyManager.hpp"
+#include "TableOfTransparencies.hpp"
 
 
 namespace isomot
 {
 
-TransparencyManager::TransparencyManager()
+TableOfTransparencies::TableOfTransparencies()
 {
         for ( unsigned int i = 0; i <= 101; i++ )
         {
@@ -13,12 +13,12 @@ TransparencyManager::TransparencyManager()
         }
 }
 
-TransparencyManager::~TransparencyManager()
+TableOfTransparencies::~TableOfTransparencies()
 {
         this->table.clear() ;
 }
 
-void TransparencyManager::add( const unsigned char amount )
+void TableOfTransparencies::addToDegreeOfTransparency( const unsigned char amount )
 {
         if ( amount <= 100 )
         {
@@ -26,7 +26,7 @@ void TransparencyManager::add( const unsigned char amount )
         }
 }
 
-void TransparencyManager::remove( const unsigned char amount )
+void TableOfTransparencies::removeFromDegreeOfTransparency( const unsigned char amount )
 {
         if ( amount <= 100 )
         {

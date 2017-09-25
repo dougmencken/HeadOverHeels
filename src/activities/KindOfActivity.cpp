@@ -50,69 +50,69 @@ void KindOfActivity::propagateActivityToAdjacentItems( Item * sender, const Acti
 {
         Mediator* mediator = sender->getMediator();
 
-        // Mientras haya elementos que hayan chocado con el emisor
+        // as long as there are items collided with sender
         while ( ! mediator->isStackOfCollisionsEmpty() )
         {
-                // Identificador del primer elemento de la pila de colisiones
+                // pop item out of stack of collisions
                 int id = mediator->popCollision();
 
-                // El elemento tiene que ser un elemento libre o uno rejilla
+                // is it free item or grid item
                 if ( ( id >= FirstFreeId && ( id & 1 ) ) || ( id >= FirstGridId && ! ( id & 1 ) ) )
                 {
-                        Item * item = mediator->findItemById( id );
+                        Item * itemMeetsSender = mediator->findItemById( id );
 
-                        // Si el elemento se ha encontrado entonces:
-                        if ( item != 0 )
+                        if ( itemMeetsSender != 0 )
                         {
-                                // Si tiene comportamiento se cambia su estado
-                                if ( item->getBehavior() != 0 )
+                                // is it item with behavior
+                                if ( itemMeetsSender->getBehavior() != 0 )
                                 {
-                                        // Si el elemento es un jugador y el emisor es mortal entonces el jugador muere
-                                        if ( dynamic_cast< PlayerItem * >( item ) && sender->isMortal() && dynamic_cast< PlayerItem * >( item )->getShieldTime() <= 0 )
+                                        // if it’s player item and sender is mortal, then player loses its life
+                                        if ( dynamic_cast< PlayerItem * >( itemMeetsSender ) && sender->isMortal() &&
+                                                        dynamic_cast< PlayerItem * >( itemMeetsSender )->getShieldTime() <= 0 )
                                         {
-                                                // Si el emisor ha chocado con más elementos el jugador no morirá porque
-                                                // dichos elementos harán de tope
+                                                // is it direct contact
                                                 if ( mediator->depthOfStackOfCollisions() == 1 )
                                                 {
-                                                        if ( item->getBehavior()->getActivityOfItem() != StartDestroy &&
-                                                                item->getBehavior()->getActivityOfItem() != Destroy )
+                                                        if ( itemMeetsSender->getBehavior()->getActivityOfItem() != MeetMortalItem &&
+                                                                        itemMeetsSender->getBehavior()->getActivityOfItem() != Vanish )
                                                         {
-                                                                item->getBehavior()->changeActivityOfItem( StartDestroy );
+                                                                itemMeetsSender->getBehavior()->changeActivityOfItem( MeetMortalItem );
                                                         }
                                                 }
                                         }
-                                        // Si el emisor es un jugador y el elemento es mortal entonces el jugador muere
-                                        else if ( dynamic_cast< PlayerItem * >( sender ) && item->isMortal() &&
+                                        // if sender is player and colliding one is mortal, then player loses its life
+                                        else if ( dynamic_cast< PlayerItem * >( sender ) && itemMeetsSender->isMortal() &&
                                                         dynamic_cast< PlayerItem * >( sender )->getShieldTime() <= 0 )
                                         {
-                                                if ( sender->getBehavior()->getActivityOfItem() != StartDestroy && item->getBehavior()->getActivityOfItem() != Destroy )
+                                                if ( sender->getBehavior()->getActivityOfItem() != MeetMortalItem &&
+                                                                itemMeetsSender->getBehavior()->getActivityOfItem() != Vanish )
                                                 {
-                                                        sender->getBehavior()->changeActivityOfItem( StartDestroy );
-                                                        item->getBehavior()->changeActivityOfItem( activity, sender );
+                                                        sender->getBehavior()->changeActivityOfItem( MeetMortalItem );
+                                                        itemMeetsSender->getBehavior()->changeActivityOfItem( activity, sender );
                                                 }
                                         }
-                                        // Si no, se comunica el estado de desplazamiento al elemento
+                                        // if not, propagate activity to that item
                                         else
                                         {
-                                                if ( item->getBehavior()->getActivityOfItem() != Destroy )
+                                                if ( itemMeetsSender->getBehavior()->getActivityOfItem() != Vanish )
                                                 {
-                                                        item->getBehavior()->changeActivityOfItem( activity, sender );
+                                                        itemMeetsSender->getBehavior()->changeActivityOfItem( activity, sender );
                                                 }
                                         }
                                 }
-                                // Si no tiene comportamiento pero es mortal y el emisor es un jugador
-                                // entonces el que cambia de estado es el jugador, ya que muere
-                                else if ( dynamic_cast< PlayerItem * >( sender ) && item->isMortal() && dynamic_cast< PlayerItem * >( sender )->getShieldTime() <= 0 )
+                                // otherwise it is item without behavior, which may be mortal too
+                                else if ( dynamic_cast< PlayerItem * >( sender ) && itemMeetsSender->isMortal() &&
+                                                dynamic_cast< PlayerItem * >( sender )->getShieldTime() <= 0 )
                                 {
-                                        if ( sender->getBehavior()->getActivityOfItem() != StartDestroy && sender->getBehavior()->getActivityOfItem() != Destroy )
+                                        if ( sender->getBehavior()->getActivityOfItem() != MeetMortalItem &&
+                                                        sender->getBehavior()->getActivityOfItem() != Vanish )
                                         {
-                                                sender->getBehavior()->changeActivityOfItem( StartDestroy );
+                                                sender->getBehavior()->changeActivityOfItem( MeetMortalItem );
                                         }
                                 }
                         }
                 }
-                // Si es un elemento especial se comprueba si el elemento que propaga el estado es
-                // un jugador y si puede haber llegado a los límites de la sala
+                // is it player which leaves room via some door
                 else if ( dynamic_cast< PlayerItem * >( sender ) &&
                                 ( ( id == NorthBorder  &&  mediator->getRoom()->getDoor( North )  != 0 ) ||
                                   ( id == SouthBorder  &&  mediator->getRoom()->getDoor( South )  != 0 ) ||
@@ -129,11 +129,10 @@ void KindOfActivity::propagateActivityToAdjacentItems( Item * sender, const Acti
                 {
                         PlayerItem * player = dynamic_cast< PlayerItem * >( sender );
 
-                        // El jugador está saliendo de la sala. Se comunica la dirección de salida
                         switch ( id )
                         {
                                 case NorthBorder:
-                                        player->setExit( North);
+                                        player->setExit( North );
                                         player->setOrientation( North );
                                         break;
 
@@ -199,65 +198,59 @@ void KindOfActivity::propagateActivityToAdjacentItems( Item * sender, const Acti
         }
 }
 
-void KindOfActivity::propagateActivityToTopItems( Item * sender, const ActivityOfItem& activity )
+void KindOfActivity::propagateActivityToItemsAbove( Item * sender, const ActivityOfItem& activity )
 {
-        // Acceso al mediador
         Mediator* mediator = sender->getMediator();
 
-        // Almacena en la pila de colisiones los elementos que tiene encima
+        // is there anything above
         if ( ! sender->checkPosition( 0, 0, 1, Add ) )
         {
-                // Copia la pila de colisiones
-                std::stack< int > topItems;
+                // copy stack of collisions
+                std::stack< int > itemsAbove;
                 while ( ! mediator->isStackOfCollisionsEmpty() )
                 {
-                        topItems.push( mediator->popCollision() );
+                        itemsAbove.push( mediator->popCollision() );
                 }
 
-                // Mientras haya elementos encima de este elemento se comprobarán
-                // las condiciones para ver si pueden cambiar de estado
-                while ( ! topItems.empty() )
+                while ( ! itemsAbove.empty() )
                 {
-                        // Identificador del primer elemento de la pila de colisiones
-                        int id = topItems.top();
-                        topItems.pop();
+                        // get first item
+                        int id = itemsAbove.top();
+                        itemsAbove.pop();
 
-                        // El elemento tiene que ser un elemento libre
+                        // is it free item
                         if ( id >= FirstFreeId && ( id & 1 ) )
                         {
-                                FreeItem* topItem = dynamic_cast< FreeItem * >( mediator->findItemById( id ) );
+                                FreeItem* freeItemAbove = dynamic_cast< FreeItem * >( mediator->findItemById( id ) );
 
-                                // El elemento debe tener comportamiento
-                                if ( topItem != 0 && topItem->getBehavior() != 0 )
+                                // is it item with behavior
+                                if ( freeItemAbove != 0 && freeItemAbove->getBehavior() != 0 )
                                 {
-                                        // Si debajo del elemento que está encima del elemento que pretende propagar su estado hay
-                                        // más elementos, se busca el ancla
-                                        if ( ! topItem->checkPosition( 0, 0, -1, Add ) )
+                                        // look for collisions of that free item with items below it
+                                        if ( ! freeItemAbove->checkPosition( 0, 0, -1, Add ) )
                                         {
-                                                // Si sólo hay un elemento debajo o debajo está el ancla, el estado se propaga
-                                                if ( mediator->depthOfStackOfCollisions() == 1 || topItem->getAnchor() == sender )
+                                                // propagate activity when there’s only one item below or when sender is anchor of that item
+                                                if ( mediator->depthOfStackOfCollisions() == 1 || freeItemAbove->getAnchor() == sender )
                                                 {
-                                                        if ( topItem->getBehavior()->getActivityOfItem() != Destroy )
+                                                        if ( freeItemAbove->getBehavior()->getActivityOfItem() != Vanish )
                                                         {
-                                                                // Si el elemento es un jugador y el emisor es mortal entonces el jugador muere
-                                                                if ( dynamic_cast< PlayerItem * >( topItem ) && sender->isMortal() &&
-                                                                        dynamic_cast< PlayerItem * >( topItem )->getShieldTime() <= 0 )
+                                                                // if it’s player item above sender and sender is mortal, then player loses its life
+                                                                if ( dynamic_cast< PlayerItem * >( freeItemAbove ) && sender->isMortal() &&
+                                                                        dynamic_cast< PlayerItem * >( freeItemAbove )->getShieldTime() <= 0 )
                                                                 {
-                                                                        if ( topItem->getBehavior()->getActivityOfItem() != StartDestroy )
+                                                                        if ( freeItemAbove->getBehavior()->getActivityOfItem() != MeetMortalItem )
                                                                         {
-                                                                                topItem->getBehavior()->changeActivityOfItem( StartDestroy );
+                                                                                freeItemAbove->getBehavior()->changeActivityOfItem( MeetMortalItem );
                                                                         }
                                                                 }
-                                                                // Si no, se comunica el estado de desplazamiento al elemento
+                                                                // if not, propagate activity to that item above
                                                                 else
                                                                 {
-                                                                        // Se envía el propio elemento como emisor para saber que está
-                                                                        // siendo desplazado por un elemento situado debajo de él
-                                                                        ActivityOfItem currentActivity = topItem->getBehavior()->getActivityOfItem();
+                                                                        ActivityOfItem currentActivity = freeItemAbove->getBehavior()->getActivityOfItem();
                                                                         if ( currentActivity != DisplaceNorth && currentActivity != DisplaceSouth &&
                                                                                 currentActivity != DisplaceEast && currentActivity != DisplaceWest )
                                                                         {
-                                                                                topItem->getBehavior()->changeActivityOfItem( activity, topItem );
+                                                                                freeItemAbove->getBehavior()->changeActivityOfItem( activity, freeItemAbove );
                                                                         }
                                                                 }
                                                         }

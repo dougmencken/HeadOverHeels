@@ -29,6 +29,8 @@
 
 #include "Room.hpp"
 
+#include "TableOfTransparencies.hpp"
+
 
 namespace isomot
 {
@@ -40,18 +42,16 @@ class GridItem;
 class FreeItem;
 class PlayerItem;
 class Door;
-class TransparencyManager;
 class ItemDataManager;
 
 
 /**
- * En Isomot una columna es una lista de elementos rejilla que se dibujarán a lo largo del eje Z
+ * In Isomot, column is group of grid items to draw along Z axis
  */
 typedef std::list < GridItem* > Column ;
 
 /**
- * Subproceso de actualización de todos los elementos
- * @param thisClass Un objeto mediador
+ * Update for all items
  */
 void* updateThread ( void* thisClass ) ;
 
@@ -68,32 +68,31 @@ public:
 
        /**
         * Constructor
-        * @param room Sala en la que negocia este mediador
+        * @param room Room in which this mediator negotiates
         */
         Mediator( Room* room ) ;
 
         virtual ~Mediator( ) ;
 
        /**
-        * Actualiza el comportamiento de todos los elementos un ciclo
+        * Update behavior of every item for one cycle
         */
         void update () ;
 
        /**
-        * Inicia la actualización de los elementos en un subproceso separado del principal
+        * Begin update of items in separate thread
         */
-        void startUpdate () ;
+        void beginUpdate () ;
 
        /**
-        * Detiene la actualización de los elementos
+        * End update of items
         */
-        void stopUpdate () ;
+        void endUpdate () ;
 
        /**
         * Señala para el motor qué elementos libres deben volverse a enmascarar. Se usa cuando un elemento
         * libre cambia su imagen dado que el cambio afecta al resto de elementos cuyas imágenes se solapan con
         * la suya
-        * @param item Elemento que solicita la operación
         */
         void markItemsForMasking( FreeItem* item ) ;
 
@@ -101,129 +100,112 @@ public:
         * Señala para el motor qué elementos libres deben volverse a enmascarar. Se usa cuando un elemento
         * rejilla cambia su posición dado que el cambio afecta al resto de elementos cuyas imágenes se
         * solapan con la suya y espacialmente quedan detrás de él
-        * @param gridItem El elemento rejilla que solicita la operación
         */
         void markItemsForMasking( GridItem* gridItem ) ;
 
        /**
         * Señala para el motor qué elementos deben sombrearse. Se usa cuando un elemento rejilla es añadido a la
         * sala o cambia su sombra dado que el cambio afecta al resto de elementos que se encuentren debajo de él
-        * @param item Elemento rejilla que solicita la operación
         */
         void markItemsForShady( GridItem* gridItem ) ;
 
        /**
         * Señala para el motor qué elementos deben sombrearse. Se usa cuando un elemento libre es añadido a la
         * sala o cambia su sombra dado que el cambio afecta al resto de elementos que se encuentren debajo de él
-        * @param item Elemento libre que solicita la operación
         */
         void markItemsForShady( FreeItem* freeItem ) ;
 
        /**
         * Sombrea una loseta
-        * @param floorTile La loseta que solicita la operación
         */
         void castShadowOnFloor( FloorTile* floorTile ) ;
 
        /**
         * Sombrea un elemento rejilla
-        * @param gridItem El elemento rejilla que solicita la operación
         */
         void castShadowOnGrid( GridItem* gridItem ) ;
 
        /**
         * Sombrea un elemento libre
-        * @param freeItem El elemento libre que solicita la operación
         */
         void castShadowOnFreeItem( FreeItem* freeItem ) ;
 
        /**
         * Enmascara un elemento libre
-        * @param freeItem El elemento libre que solicita la operación
         */
         void mask ( FreeItem* freeItem ) ;
 
        /**
-        * Busca un elemento en la sala
-        * @param id Identificador del elemento asignado por el motor
-        * @return El elemento si se encontró ó 0 si no existe
+        * Find item in room by its identifier
+        * @param id Identifier of item given by engine
+        * @return item found or 0 if no such item
         */
         Item* findItemById ( int id ) ;
 
        /**
-        * Busca un elemento en la sala
-        * @param label Label of item, when there are several elements with this label return the first one
-        * @return item if found or 0 if not
+        * Find item in room by its label
+        * @param label Label of item, when there are several elements with this label return the first found one
+        * @return item found or 0 if no such item
         */
         Item* findItemByLabel ( const std::string& label ) ;
 
        /**
-        * Busca un elemento en la sala
+        * Find item in room by its behavior
         */
         Item* findItemByBehavior ( const std::string& behavior ) ;
 
        /**
-        * Busca colisiones entre un elemento y el resto de la sala. De haberlas se almacenarán en la pila
-        * @param item El elemento para el que se buscarán colisiones
-        * @return true si se encontraron colisiones o false en caso contrario
+        * Look for collisions between the given item and other items in room
+        * @return true if collisions were found or false otherwise
         */
         bool findCollisionWithItem ( Item* item ) ;
 
        /**
-        * Search for Z coordinate which is the highest position to place an element
-        * @param item El elemento para el que se busca la coordenada
-        * @return El nuevo valor de Z o cero si hubo colisión o no se pudo hallar
+        * Search for Z coordinate which is the highest position to place the given item
+        * @return value of Z or zero if can’t get it
         */
         int findHighestZ ( Item* item ) ;
 
        /**
         * Inserta un elemento rejilla en su estructura de datos correspondiente
-        * @param item Un nuevo elemento rejilla
         */
-        void insertItem ( GridItem* gridItem ) ;
+        void addItem ( GridItem* gridItem ) ;
 
        /**
         * Inserta un elemento libre en su estructura de datos correspondiente
-        * @param item Un nuevo elemento libre
         */
-        void insertItem ( FreeItem* freeItem ) ;
+        void addItem ( FreeItem* freeItem ) ;
 
        /**
         * Inserta un jugador en su estructura de datos correspondiente
-        * @param item Un nuevo jugador
         */
-        void insertItem ( PlayerItem* playerItem ) ;
+        void addItem ( PlayerItem* playerItem ) ;
 
        /**
         * Elimina un elemento rejilla de su lista correspondiente
-        * @param item Un elemento rejilla existente
         */
         void removeItem ( GridItem* gridItem ) ;
 
        /**
         * Elimina un elemento rejilla de su lista correspondiente
-        * @param item Un elemento libre existente
         */
         void removeItem ( FreeItem* freeItem ) ;
 
        /**
         * Elimina un jugador de su lista correspondiente. Además selecciona a otro jugador
         * como jugador activo
-        * @param item Un jugador existente
         */
         void removeItem ( PlayerItem* playerItem ) ;
 
-       /**
-        * Añade un nuevo elemento a la tabla de transparencias
-        * @param percent Grado de transparencia del elemento
-        */
-        void addTransparency ( unsigned char percent ) ;
+        void addToTableOfTransparencies ( unsigned char percent )
+        {
+                transparencies->addToDegreeOfTransparency( percent ) ;
+        }
 
-       /**
-        * Elimina un elemento de la tabla de transparencias
-        * @param percent Grado de transparencia del elemento
-        */
-        void removeTransparency ( unsigned char percent ) ;
+        void removeFromTableOfTransparencies ( unsigned char percent )
+        {
+                transparencies->removeFromDegreeOfTransparency( percent ) ;
+        }
 
        /**
         * Añade un elemento a la pila de colisiones
@@ -276,24 +258,23 @@ public:
         Item* collisionWithBadBoy () ;
 
        /**
-        * Selecciona al siguiente jugador presente en la sala
-        * @param itemDataManager Necesario para poder crear el jugador compuesto a partir de los simples
-        * o para crear a los jugadores simples a partir del compuesto
-        * @return true si se ha podido hacer el cambio o false si el jugador activo es el único
-        * presente en la sala
+        * Select next player present in room
+        * @param itemDataManager Needed to create composite player from simple ones
+        *                        or to create simple players from composite
+         * @return true if it’s possible to swap or false if there’s only one player in this room
         */
-        bool nextPlayer ( ItemDataManager* itemDataManager ) ;
+        bool selectNextPlayer ( ItemDataManager* itemDataManager ) ;
 
        /**
-        * Selecciona al jugador que queda vivo tras la pérdida de las vidas del otro jugador
-        * @param itemDataManager Necesario para poder crear a un jugador simple a partir del compuesto
-        * @return true si se ha cambiado el control al otro jugador o false si ya no hay más jugadores
+        * Select player which is alive after active player is over by loosing all its lives
+        * @param itemDataManager Needed to create simple player from composite
+        * @return true if there’s alive player to swap or false if there’re no more players
         */
-        bool alivePlayer ( ItemDataManager* itemDataManager ) ;
+        bool selectAlivePlayer ( ItemDataManager* itemDataManager ) ;
 
        /**
         * Toggle the switch if it is present in a room, most rooms do not have a switch. If it
-        * turns on then moving free items stop and volatile items are no longer volatile. If it
+        * turns on then free items stop moving and volatile items are no longer volatile. If it
         * goes off then such items restore their original behavior
         */
         void toggleSwitchInRoom () ;
@@ -311,22 +292,22 @@ public:
        /**
         * Activa el mútex de los elementos rejilla
         */
-        void lockGridItemMutex () {  pthread_mutex_lock(&gridItemsMutex) ;  }
+        void lockGridItemMutex () {  pthread_mutex_lock( &gridItemsMutex ) ;  }
 
        /**
         * Activa el mútex de los elementos libres
         */
-        void lockFreeItemMutex () {  pthread_mutex_lock(&freeItemsMutex) ;  }
+        void lockFreeItemMutex () {  pthread_mutex_lock( &freeItemsMutex ) ;  }
 
        /**
         * Desactiva el mútex de los elementos rejilla
         */
-        void unlockGridItemMutex () {  pthread_mutex_unlock(&gridItemsMutex) ;  }
+        void unlockGridItemMutex () {  pthread_mutex_unlock( &gridItemsMutex ) ;  }
 
        /**
         * Desactiva el mútex de los elementos libres
         */
-        void unlockFreeItemMutex () {  pthread_mutex_unlock(&freeItemsMutex) ;  }
+        void unlockFreeItemMutex () {  pthread_mutex_unlock( &freeItemsMutex ) ;  }
 
 protected:
 
@@ -427,10 +408,7 @@ private:
         */
         std::vector < int > collisions ;
 
-       /**
-        * Gestor de transparencias de los elementos
-        */
-        TransparencyManager * transparencyManager ;
+        TableOfTransparencies * transparencies ;
 
 public:
 

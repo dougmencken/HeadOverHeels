@@ -28,7 +28,7 @@ namespace gui
 void sleep ( unsigned long miliseconds ) ;
 
 /**
- * Objeto-función para la destrucción de los objetos de un contenedor de la STL
+ * Object-function for destruction of objects of Standard Template Library container
  */
 struct DeleteObject
 {

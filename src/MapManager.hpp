@@ -81,15 +81,15 @@ public:
         Room* createRoom ( const std::string& fileName ) ;
 
         /**
-         * Cambia la sala activa por la sala siguiente donde haya un jugador
+         * Change active room to next room
          */
         Room* swapRoom () ;
 
         /**
-         * Destruye la sala actual y establece como sala activa la sala donde se encuentra el
-         * otro jugador. Utilizada cuando uno de los jugadores se queda sin vidas
+         * Remove active room and activate room where the other player is. Used when player
+         * loses all its lives
          */
-        Room* destroyAndSwapRoom () ;
+        Room* removeRoomAndSwap () ;
 
         /**
          * Actualiza el jugador activo de la sala activa. El valor se obtiene a partir de
@@ -132,12 +132,12 @@ public:
         Room* findRoom ( const std::string& room ) ;
 
         /**
-         * Busca la vía de entrada de un jugador a una sala
-         * @param room El nombre del archivo de la sala
-         * @param thePlayer Un jugador
-         * @return La dirección de entrada a la sala
+         * Look for player’s way into this room
+         * @param room Name of file for room
+         * @param name Name of player
+         * @return Position of entrance into the room
          */
-        PlayerInitialPosition* findPlayerPosition ( const std::string& room, const std::string& thePlayer ) ;
+        PlayerInitialPosition* findPlayerPosition ( const std::string& room, const std::string& name ) ;
 
 protected:
 
@@ -169,16 +169,14 @@ protected:
 public:
 
         /**
-         * La sala que se está mostrando en pantalla
-         * @return Una sala
+         * The room being shown yet
          */
         Room * getActiveRoom () const {  return activeRoom ;  }
 
         /**
-         * La sala donde se encuentra el jugador que no está activo
-         * @return Una sala ó 0 si no hay más jugadores
+         * @return room or 0 if there’re no more players
          */
-        Room * getHideRoom () ;
+        Room * getRoomOfInactivePlayer () ;
 
 };
 

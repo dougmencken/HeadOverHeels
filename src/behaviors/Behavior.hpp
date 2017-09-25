@@ -43,7 +43,7 @@ public:
 
         /**
          * Updates behavior of item in each cycle
-         * @return false if this update destroys item or true otherwise
+         * @return true if item is still alive after this update or false otherwise
          */
         virtual bool update () = 0 ;
 
