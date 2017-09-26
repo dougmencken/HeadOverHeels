@@ -172,7 +172,7 @@ bool Volatile::update ()
 
                                 SoundManager::getInstance()->play( item->getLabel(), activity );
 
-                                // creates bubbles at the same position as volatile
+                                // create bubbles at the same position as volatile
                                 FreeItem* freeItem = new FreeItem(
                                         bubblesData,
                                         item->getX(), item->getY(), item->getZ(),

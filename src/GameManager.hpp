@@ -254,6 +254,10 @@ public:
 
         void toggleInfiniteLives () {  vidasInfinitas = ! vidasInfinitas ;  }
 
+        bool isImmuneToCollisionsWithMortalItems () {  return immunityToCollisions ;  }
+
+        void toggleImmunityToCollisionsWithMortalItems () {  immunityToCollisions = ! immunityToCollisions ;  }
+
         bool getDrawShadows () const {  return drawShadows ;  }
 
         void toggleDrawShadows () {  drawShadows = ! drawShadows ;  }
@@ -270,6 +274,8 @@ private:
          * Indica si se han activado las vidas infinitas
          */
         bool vidasInfinitas ;
+
+        bool immunityToCollisions ;
 
         bool drawShadows ;
 

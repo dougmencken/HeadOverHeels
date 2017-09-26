@@ -6,6 +6,7 @@
 #include "FreeItem.hpp"
 #include "PlayerItem.hpp"
 #include "Mediator.hpp"
+#include "GameManager.hpp"
 
 
 namespace isomot
@@ -62,7 +63,10 @@ bool JumpKindOfActivity::jump( Behavior* behavior, ActivityOfItem* activity, con
                                         {
                                                 if ( item->isMortal() && playerItem->getShieldTime() <= 0 )
                                                 {
-                                                        playerItem->getBehavior()->changeActivityOfItem( MeetMortalItem );
+                                                        if ( ! GameManager::getInstance()->isImmuneToCollisionsWithMortalItems () )
+                                                        {
+                                                                playerItem->getBehavior()->changeActivityOfItem( MeetMortalItem );
+                                                        }
                                                 }
                                                 // Si no es mortal y es un elemento libre levanta a los elementos que pudiera tener encima
                                                 else

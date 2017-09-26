@@ -42,6 +42,7 @@ void Isomot::beginNewGame ()
 {
         prepare() ;
         offVidasInfinitas() ;
+        offRightToInviolability() ;
         this->isEndRoom = false;
 
         // initial rooms
@@ -58,6 +59,7 @@ void Isomot::beginNewGame ()
 void Isomot::continueSavedGame ( const sgxml::players::player_sequence& playerSequence )
 {
         offVidasInfinitas() ;
+        offRightToInviolability() ;
         this->isEndRoom = false;
 
         for ( sgxml::players::player_const_iterator i = playerSequence.begin (); i != playerSequence.end (); ++i )
@@ -97,6 +99,14 @@ void Isomot::offVidasInfinitas ()
         if ( GameManager::getInstance()->areLivesInexhaustible () )
         {
                 GameManager::getInstance()->toggleInfiniteLives ();
+        }
+}
+
+void Isomot::offRightToInviolability ()
+{
+        if ( GameManager::getInstance()->isImmuneToCollisionsWithMortalItems () )
+        {
+                GameManager::getInstance()->toggleImmunityToCollisionsWithMortalItems ();
         }
 }
 
@@ -154,6 +164,12 @@ BITMAP* Isomot::update()
                 // Activa o desactiva las vidas infinitas
                 gameManager->toggleInfiniteLives ();
                 key[ KEY_I ] = 0;
+        }
+
+        if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_C ] )
+        {
+                gameManager->toggleImmunityToCollisionsWithMortalItems ();
+                key[ KEY_C ] = 0;
         }
 
         if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_B ] )
@@ -266,6 +282,11 @@ BITMAP* Isomot::update()
                 {
                         textout_ex( this->view, font, "VIDAS INFINITAS", 18, 10, makecol( 255, 255, 255 ), -1 );
                         textout_ex( this->view, font, "INFINITE LIVES", this->view->w - 128, 10, makecol( 255, 255, 255 ), -1 );
+                }
+
+                if ( GameManager::getInstance()->isImmuneToCollisionsWithMortalItems () )
+                {
+                        textout_ex( this->view, font, "RIGHT TO INVIOLABILITY", ( this->view->w >> 1 ) - 88, 10, makecol( 255, 255, 255 ), -1 );
                 }
 
                 // La sala final es muy especial

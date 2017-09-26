@@ -69,6 +69,8 @@ private:
 
         void offVidasInfinitas () ;
 
+        void offRightToInviolability () ;
+
         /**
          * Gestiona la sala final del juego. Es una sala muy especial porque el usuario no tiene el
          * control de ningún jugador

@@ -6,6 +6,7 @@
 #include "PlayerItem.hpp"
 #include "Room.hpp"
 #include "Mediator.hpp"
+#include "GameManager.hpp"
 
 
 namespace isomot
@@ -70,14 +71,20 @@ void KindOfActivity::propagateActivityToAdjacentItems( Item * sender, const Acti
                                         if ( dynamic_cast< PlayerItem * >( itemMeetsSender ) && sender->isMortal() &&
                                                         dynamic_cast< PlayerItem * >( itemMeetsSender )->getShieldTime() <= 0 )
                                         {
-                                                // is it direct contact
-                                                if ( mediator->depthOfStackOfCollisions() == 1 )
+                                                if ( itemMeetsSender->getBehavior()->getActivityOfItem() != MeetMortalItem &&
+                                                                itemMeetsSender->getBehavior()->getActivityOfItem() != Vanish )
                                                 {
-                                                        if ( itemMeetsSender->getBehavior()->getActivityOfItem() != MeetMortalItem &&
-                                                                        itemMeetsSender->getBehavior()->getActivityOfItem() != Vanish )
+                                                        if ( ! GameManager::getInstance()->isImmuneToCollisionsWithMortalItems () )
                                                         {
-                                                                itemMeetsSender->getBehavior()->changeActivityOfItem( MeetMortalItem );
+                                                                std::cout << "mortal item \"" << sender->getLabel() << "\" just met player" << std::endl ;
+
+                                                                // is it direct contact
+                                                                if ( mediator->depthOfStackOfCollisions() <= 1 )
+                                                                {
+                                                                        itemMeetsSender->getBehavior()->changeActivityOfItem( MeetMortalItem );
+                                                                }
                                                         }
+                                                        /* else std::cout << "right to inviolability granted when item \"" << sender->getLabel() << "\" met player" << std::endl ; */
                                                 }
                                         }
                                         // if sender is player and colliding one is mortal, then player loses its life
@@ -87,8 +94,14 @@ void KindOfActivity::propagateActivityToAdjacentItems( Item * sender, const Acti
                                                 if ( sender->getBehavior()->getActivityOfItem() != MeetMortalItem &&
                                                                 itemMeetsSender->getBehavior()->getActivityOfItem() != Vanish )
                                                 {
-                                                        sender->getBehavior()->changeActivityOfItem( MeetMortalItem );
-                                                        itemMeetsSender->getBehavior()->changeActivityOfItem( activity, sender );
+                                                        if ( ! GameManager::getInstance()->isImmuneToCollisionsWithMortalItems () )
+                                                        {
+                                                                std::cout << "player just met mortal item \"" << itemMeetsSender->getLabel() << "\"" << std::endl ;
+
+                                                                sender->getBehavior()->changeActivityOfItem( MeetMortalItem );
+                                                                itemMeetsSender->getBehavior()->changeActivityOfItem( activity, sender );
+                                                        }
+                                                        /* else std::cout << "right to inviolability granted when player met item \"" << itemMeetsSender->getLabel() << "\"" << std::endl ; */
                                                 }
                                         }
                                         // if not, propagate activity to that item
@@ -107,7 +120,10 @@ void KindOfActivity::propagateActivityToAdjacentItems( Item * sender, const Acti
                                         if ( sender->getBehavior()->getActivityOfItem() != MeetMortalItem &&
                                                         sender->getBehavior()->getActivityOfItem() != Vanish )
                                         {
-                                                sender->getBehavior()->changeActivityOfItem( MeetMortalItem );
+                                                if ( ! GameManager::getInstance()->isImmuneToCollisionsWithMortalItems () )
+                                                {
+                                                        sender->getBehavior()->changeActivityOfItem( MeetMortalItem );
+                                                }
                                         }
                                 }
                         }
@@ -240,7 +256,12 @@ void KindOfActivity::propagateActivityToItemsAbove( Item * sender, const Activit
                                                                 {
                                                                         if ( freeItemAbove->getBehavior()->getActivityOfItem() != MeetMortalItem )
                                                                         {
-                                                                                freeItemAbove->getBehavior()->changeActivityOfItem( MeetMortalItem );
+                                                                                if ( ! GameManager::getInstance()->isImmuneToCollisionsWithMortalItems () )
+                                                                                {
+                                                                                        std::cout << "player is above mortal item \"" << sender->getLabel() << "\"" << std::endl ;
+                                                                                        freeItemAbove->getBehavior()->changeActivityOfItem( MeetMortalItem );
+                                                                                }
+                                                                                /* else std::cout << "right to inviolability granted when player is above item \"" << sender->getLabel() << "\"" << std::endl ; */
                                                                         }
                                                                 }
                                                                 // if not, propagate activity to that item above

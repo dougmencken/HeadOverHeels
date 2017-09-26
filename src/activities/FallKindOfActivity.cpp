@@ -6,6 +6,7 @@
 #include "PlayerItem.hpp"
 #include "Mediator.hpp"
 #include "Room.hpp"
+#include "GameManager.hpp"
 
 
 namespace isomot
@@ -45,7 +46,7 @@ bool FallKindOfActivity::fall( Behavior * behavior )
                 Item* sender = behavior->getItem();
                 Mediator* mediator = sender->getMediator();
 
-                // Copia la pila de colisiones
+                // copy stack of collisions
                 std::stack< int > bottomItems;
                 while ( ! mediator->isStackOfCollisionsEmpty() )
                 {
@@ -58,42 +59,40 @@ bool FallKindOfActivity::fall( Behavior * behavior )
                 // Mientras haya elementos que hayan chocado con el emisor
                 while ( ! bottomItems.empty() )
                 {
-                        // Identificador del primer elemento de la pila de colisiones
                         int id = bottomItems.top();
                         bottomItems.pop();
 
-                        // El elemento tiene que ser un elemento libre o uno rejilla
+                        // is it free item or grid item
                         if ( ( id >= FirstFreeId && ( id & 1 )) || ( id >= FirstGridId && ! ( id & 1 ) ) )
                         {
                                 Item* item = mediator->findItemById( id );
 
-                                // Si el elemento se ha encontrado entonces:
                                 if ( item != 0 )
                                 {
-                                        // Si el elemento es un jugador y el emisor es mortal entonces el jugador muere
-                                        // siempre y cuando el emisor no esté sobre algún otro elemento
                                         if ( dynamic_cast< PlayerItem * >( item ) && sender->isMortal() )
                                         {
                                                 if ( sender->checkPosition( 0, 0, -1, Add ) )
                                                 {
-                                                        item->getBehavior()->changeActivityOfItem( MeetMortalItem );
+                                                        if ( ! GameManager::getInstance()->isImmuneToCollisionsWithMortalItems () )
+                                                        {
+                                                                item->getBehavior()->changeActivityOfItem( MeetMortalItem );
+                                                        }
                                                 }
                                         }
-                                        // Si el elemento es mortal y el emisor es un jugador entonces el jugador muere
-                                        // siempre y cuando el jugador esté únicamente sobre el elemento mortal y si está
-                                        // sobre más elementos que todos sean mortales
                                         else if ( dynamic_cast< PlayerItem * >( sender ) && item->isMortal() )
                                         {
                                                 if ( sender->checkPosition( 0, 0, -1, Add ) )
                                                 {
-                                                        sender->getBehavior()->changeActivityOfItem( MeetMortalItem );
+                                                        if ( ! GameManager::getInstance()->isImmuneToCollisionsWithMortalItems () )
+                                                        {
+                                                                sender->getBehavior()->changeActivityOfItem( MeetMortalItem );
+                                                        }
                                                 }
                                                 else
                                                 {
                                                         bool allMortal = true;
 
-                                                        // Comprueba para todos los elementos que haya debajo del jugador
-                                                        // si alguno no es mortal
+                                                        // look if some item underneath player is not mortal
                                                         while ( ! mediator->isStackOfCollisionsEmpty() )
                                                         {
                                                                 if ( ! mediator->findCollisionPop()->isMortal() )
@@ -102,33 +101,33 @@ bool FallKindOfActivity::fall( Behavior * behavior )
                                                                 }
                                                         }
 
-                                                        // Si todos son mortales entonces el jugador muere
+                                                        // if every one is mortal then player loses its life
                                                         if ( allMortal )
                                                         {
-                                                                sender->getBehavior()->changeActivityOfItem( MeetMortalItem );
+                                                                if ( ! GameManager::getInstance()->isImmuneToCollisionsWithMortalItems () )
+                                                                {
+                                                                        sender->getBehavior()->changeActivityOfItem( MeetMortalItem );
+                                                                }
                                                         }
                                                 }
                                         }
                                 }
                         }
-                        // Si el emisor es un jugador y ha chocado con el suelo:
+                        // player reaches floor
                         else if ( dynamic_cast< PlayerItem * >( sender ) && id == Floor )
                         {
                                 PlayerItem* playerItem = dynamic_cast< PlayerItem * >( sender );
 
                                 switch ( mediator->getRoom()->getFloorType() )
                                 {
-                                        // Se comprueba si la sala carece de suelo, porque en este caso el jugador cambiará de sala
                                         case NoFloor:
                                                 playerItem->setExit( Down );
                                                 playerItem->setOrientation( playerItem->getDirection() );
                                                 break;
 
-                                        // Si el suelo es normal no se hace nada
                                         case RegularFloor:
                                                 break;
 
-                                        // Se comprueba si el suelo de la sala es mortal, porque en este caso el jugador perderá una vida
                                         case MortalFloor:
                                                 playerItem->getBehavior()->changeActivityOfItem( MeetMortalItem );
                                                 break;
