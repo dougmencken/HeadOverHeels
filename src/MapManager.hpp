@@ -42,7 +42,7 @@ public:
          * @param isomot El motor isométrico
          * @param fileName Nombre del archivo XML que contiene los datos del mapa
          */
-        MapManager( Isomot* isomot, const std::string& fileName ) ;
+        MapManager( Isomot * isomot, const std::string& fileName ) ;
 
         virtual ~MapManager( ) ;
 
@@ -53,7 +53,7 @@ public:
 
         virtual void beginNewGame ( const std::string& firstRoomFileName, const std::string& secondRoomFileName ) ;
 
-        void beginOldGameWithPlayer ( const sgxml::player& data ) ;
+        void beginOldGameWithCharacter ( const sgxml::player& data ) ;
 
         /**
          * Limpia los datos almacenados relacionados con la partida en curso
@@ -65,31 +65,31 @@ public:
          * @param exit Salida tomada por el jugador
          * @return La nueva sala
          */
-        Room* changeRoom ( const Direction& exit ) ;
+        Room * changeRoom ( const Direction& exit ) ;
 
         /**
          * Reinicia la sala activa, es decir, se vuelve a crear la sala activa en el estado inicial
          * @return La nueva sala
          */
-        Room* restartRoom () ;
+        Room * restartRoom () ;
 
         /**
          * Construye una sala a partir de los datos de un archivo
          * @param fileName Nombre del archivo que contiene los datos de la sala
          * @return La sala creada ó 0 si no se pudo construir
          */
-        Room* createRoom ( const std::string& fileName ) ;
+        Room * createRoom ( const std::string& fileName ) ;
 
         /**
          * Change active room to next room
          */
-        Room* swapRoom () ;
+        Room * swapRoom () ;
 
         /**
          * Remove active room and activate room where the other player is. Used when player
          * loses all its lives
          */
-        Room* removeRoomAndSwap () ;
+        Room * removeRoomAndSwap () ;
 
         /**
          * Actualiza el jugador activo de la sala activa. El valor se obtiene a partir de
@@ -141,35 +141,29 @@ public:
 
 protected:
 
-        /**
-         * El motor isométrico
-         */
         Isomot* isomot ;
 
-        /**
-         * Las salas activas
-         */
-        std::vector< Room* > rooms ;
+        std::vector< Room * > rooms ;
 
         /**
-         * La sala que se está mostrando en pantalla
+         * The room to draw yet
          */
-        Room* activeRoom ;
+        Room * activeRoom ;
 
         /**
-         * Nombre del archivo XML que contiene los datos del mapa
+         * Name of XML file with map data
          */
         std::string fileName ;
 
         /**
-         * Datos de todas las salas en el mapa. Almacena la comunicación entre ellas
+         * Data of every room on map
          */
         std::list < MapRoomData > mapData ;
 
 public:
 
         /**
-         * The room being shown yet
+         * The room to draw yet
          */
         Room * getActiveRoom () const {  return activeRoom ;  }
 
@@ -181,9 +175,6 @@ public:
 };
 
 
-/**
- * Objeto-función usado como predicado en la búsqueda de los datos de una sala en el mapa
- */
 class EqualMapRoomData : public std::binary_function< MapRoomData, std::string, bool >
 {
 
@@ -192,14 +183,11 @@ public:
 
 };
 
-/**
- * Objeto-función usado como predicado en la búsqueda de una sala
- */
 class EqualRoom : public std::binary_function< Room*, std::string, bool >
 {
 
 public:
-        bool operator()( Room* room, const std::string& identifier ) const;
+        bool operator()( Room* room, const std::string& nameOfRoom ) const;
 
 };
 

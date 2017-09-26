@@ -176,7 +176,7 @@ void MapManager::beginNewGame( const std::string& firstRoomFileName, const std::
         }
 }
 
-void MapManager::beginOldGameWithPlayer( const sgxml::player& data )
+void MapManager::beginOldGameWithCharacter( const sgxml::player& data )
 {
         MapRoomData* roomData = findRoomData( data.roomFilename() );
         Room* room = 0;
@@ -184,7 +184,7 @@ void MapManager::beginOldGameWithPlayer( const sgxml::player& data )
         if ( roomData != 0 )
         {
                 // if there is already created room it is when room of second player is the same as of first player
-                if ( this->activeRoom != 0 && this->activeRoom->getIdentifier().compare( roomData->getRoom() ) == 0 )
+                if ( this->activeRoom != 0 && this->activeRoom->getNameOfFileWithDataAboutRoom().compare( roomData->getRoom() ) == 0 )
                 {
                         room = this->activeRoom;
                 }
@@ -245,8 +245,16 @@ void MapManager::beginOldGameWithPlayer( const sgxml::player& data )
 
                                 case ByTeleport:
                                 case ByTeleportToo:
+                                        player->getBehavior()->changeActivityOfItem( BeginWayInTeletransport );
+                                        break;
+
                                 case JustWait:
-                                        player->getBehavior()->changeActivityOfItem( StartWayInTeletransport );
+                                        // it’s the case of resume of saved game
+                                        // show bubbles only for active player
+                                        if ( data.active() )
+                                        {
+                                                player->getBehavior()->changeActivityOfItem( BeginWayInTeletransport );
+                                        }
                                         break;
 
                                 default:
@@ -276,8 +284,9 @@ void MapManager::beginOldGameWithPlayer( const sgxml::player& data )
 
 void MapManager::reset()
 {
-        // Elimina las salas
-        if ( this->rooms.size() == 2 && this->rooms[ 0 ]->getIdentifier().compare( this->rooms[ 1 ]->getIdentifier() ) == 0 )
+        // bin rooms
+        if ( this->rooms.size () == 2 &&
+                this->rooms[ 0 ]->getNameOfFileWithDataAboutRoom().compare( this->rooms[ 1 ]->getNameOfFileWithDataAboutRoom() ) == 0 )
         {
                 delete this->rooms[ 0 ];
         }
@@ -288,7 +297,7 @@ void MapManager::reset()
         this->rooms.clear();
         this->activeRoom = 0;
 
-        // Reestablece los datos de las salas
+        // reset data of room
         std::for_each( this->mapData.begin (), this->mapData.end (), std::mem_fun_ref( &MapRoomData::reset ) );
 }
 
@@ -299,7 +308,7 @@ Room* MapManager::changeRoom( const Direction& exit )
         SoundManager::getInstance()->stopEverySound ();
 
         // data of previous room
-        MapRoomData* previousRoomData = findRoomData( activeRoom->getIdentifier() );
+        MapRoomData* previousRoomData = findRoomData( activeRoom->getNameOfFileWithDataAboutRoom() );
 
         // bin position of player in previous room
         std::string nameOfActivePlayer = previousRoomData->getNameOfActivePlayer();
@@ -309,7 +318,7 @@ Room* MapManager::changeRoom( const Direction& exit )
         PlayerItem* player = static_cast< PlayerItem* >( activeRoom->getMediator()->findItemByLabel( nameOfActivePlayer ) );
         PlayerInitialPosition exitPosition( nameOfActivePlayer );
         exitPosition.assignPosition( player->getExit(), player->getX(), player->getY(), player->getZ(), player->getOrientation() );
-        std::string behaviorOfPlayer = player->getBehavior()->getBehaviorOfItem ();
+        std::string behaviorOfPlayer = player->getBehavior()->getNameOfBehavior ();
 
         // if player carries some item
         bool withItem = player->consultTakenItemImage() != 0;
@@ -325,7 +334,7 @@ Room* MapManager::changeRoom( const Direction& exit )
         if ( ! previousRoomData->remainPlayers() || nameOfActivePlayer == "headoverheels" )
         {
                 // bin previous room
-                rooms.erase( std::remove_if( rooms.begin (), rooms.end (), std::bind2nd( EqualRoom(), activeRoom->getIdentifier() ) ), rooms.end() );
+                rooms.erase( std::remove_if( rooms.begin (), rooms.end (), std::bind2nd( EqualRoom(), activeRoom->getNameOfFileWithDataAboutRoom() ) ), rooms.end() );
                 previousRoomData->clearPlayersPosition();
                 delete activeRoom;
         }
@@ -423,7 +432,7 @@ Room* MapManager::changeRoom( const Direction& exit )
 
                 case ByTeleport:
                 case ByTeleportToo:
-                        player->getBehavior()->changeActivityOfItem( StartWayInTeletransport );
+                        player->getBehavior()->changeActivityOfItem( BeginWayInTeletransport );
                         break;
 
                 case Up:
@@ -448,7 +457,7 @@ Room* MapManager::restartRoom()
 {
         activeRoom->deactivate();
 
-        MapRoomData* activeRoomData = findRoomData( activeRoom->getIdentifier() );
+        MapRoomData* activeRoomData = findRoomData( activeRoom->getNameOfFileWithDataAboutRoom() );
 
         std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( isomot->getItemDataManager() ) );
         Room* newRoom = roomBuilder->buildRoom ( isomot::sharePath() + "map/" + activeRoomData->getRoom() );
@@ -469,7 +478,7 @@ Room* MapManager::restartRoom()
                 // if there is player in room
                 if ( player != 0 )
                 {
-                        playerBehavior = player->getBehavior()->getBehaviorOfItem ();
+                        playerBehavior = player->getBehavior()->getNameOfBehavior ();
                 }
                 // when there are no players in room but are known to have entered
                 // it is the case when simple player enters room with another player already in this room
@@ -541,7 +550,7 @@ Room* MapManager::restartRoom()
 
                                         case ByTeleport:
                                         case ByTeleportToo:
-                                                player->getBehavior()->changeActivityOfItem( StartWayInTeletransport );
+                                                player->getBehavior()->changeActivityOfItem( BeginWayInTeletransport );
                                                 break;
 
                                         default:
@@ -591,7 +600,7 @@ Room* MapManager::restartRoom()
 
                                 case ByTeleport:
                                 case ByTeleportToo:
-                                        player->getBehavior()->changeActivityOfItem( StartWayInTeletransport );
+                                        player->getBehavior()->changeActivityOfItem( BeginWayInTeletransport );
                                         break;
 
                                 default:
@@ -601,7 +610,7 @@ Room* MapManager::restartRoom()
         }
 
         // remove existing room
-        rooms.erase( std::remove_if( rooms.begin (), rooms.end (), std::bind2nd( EqualRoom(), activeRoom->getIdentifier() ) ), rooms.end() );
+        rooms.erase( std::remove_if( rooms.begin (), rooms.end (), std::bind2nd( EqualRoom(), activeRoom->getNameOfFileWithDataAboutRoom() ) ), rooms.end() );
         delete activeRoom;
 
         if ( player != 0 )
@@ -641,7 +650,7 @@ Room* MapManager::swapRoom ()
 
                 activeRoom->deactivate();
 
-                std::vector< Room* >::iterator i = std::find_if( rooms.begin (), rooms.end (), std::bind2nd( EqualRoom(), activeRoom->getIdentifier() ) );
+                std::vector< Room* >::iterator i = std::find_if( rooms.begin (), rooms.end (), std::bind2nd( EqualRoom(), activeRoom->getNameOfFileWithDataAboutRoom() ) );
                 // get next room to swap with
                 ++i;
                 // when it’s last one swap with first one
@@ -658,10 +667,10 @@ Room* MapManager::removeRoomAndSwap ()
         activeRoom->deactivate();
         Room* inactiveRoom = activeRoom;
 
-        MapRoomData* activeRoomData = findRoomData( activeRoom->getIdentifier() );
+        MapRoomData* activeRoomData = findRoomData( activeRoom->getNameOfFileWithDataAboutRoom() );
         activeRoomData->removePlayerPosition( activeRoomData->getNameOfActivePlayer() );
 
-        std::vector< Room* >::iterator i = std::find_if( rooms.begin (), rooms.end (), std::bind2nd( EqualRoom(), activeRoom->getIdentifier() ) );
+        std::vector< Room* >::iterator i = std::find_if( rooms.begin (), rooms.end (), std::bind2nd( EqualRoom(), activeRoom->getNameOfFileWithDataAboutRoom() ) );
         // get next room to swap with
         ++i;
         // when it’s last one swap with first one
@@ -674,7 +683,7 @@ Room* MapManager::removeRoomAndSwap ()
         }
 
         // remove inactive room
-        rooms.erase( std::remove_if( rooms.begin (), rooms.end (), std::bind2nd( EqualRoom(), inactiveRoom->getIdentifier() ) ), rooms.end() );
+        rooms.erase( std::remove_if( rooms.begin (), rooms.end (), std::bind2nd( EqualRoom(), inactiveRoom->getNameOfFileWithDataAboutRoom() ) ), rooms.end() );
         delete inactiveRoom;
 
         if ( activeRoom != 0 )
@@ -687,7 +696,7 @@ Room* MapManager::removeRoomAndSwap ()
 
 void MapManager::updateActivePlayer()
 {
-        MapRoomData* activeRoomData = findRoomData( activeRoom->getIdentifier () );
+        MapRoomData* activeRoomData = findRoomData( activeRoom->getNameOfFileWithDataAboutRoom () );
         activeRoomData->setNameOfActivePlayer( activeRoom->getMediator()->getActivePlayer()->getLabel() );
 }
 
@@ -763,9 +772,9 @@ bool EqualMapRoomData::operator()( const MapRoomData& mapData, const std::string
         return ( mapData.getRoom().compare( room ) == 0 );
 }
 
-bool EqualRoom::operator()( Room* room, const std::string& identifier ) const
+bool EqualRoom::operator()( Room* room, const std::string& nameOfRoom ) const
 {
-        return ( room->getIdentifier().compare( identifier ) == 0 );
+        return ( room->getNameOfFileWithDataAboutRoom().compare( nameOfRoom ) == 0 );
 }
 
 }

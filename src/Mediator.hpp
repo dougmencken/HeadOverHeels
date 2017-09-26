@@ -35,14 +35,14 @@
 namespace isomot
 {
 
-class Mediated;
-class Item;
-class FloorTile;
-class GridItem;
-class FreeItem;
-class PlayerItem;
-class Door;
-class ItemDataManager;
+class Mediated ;
+class Item ;
+class FloorTile ;
+class GridItem ;
+class FreeItem ;
+class PlayerItem ;
+class Door ;
+class ItemDataManager ;
 
 
 /**
@@ -237,14 +237,14 @@ public:
         unsigned int depthOfStackOfCollisions () {  return collisions.size() ;  }
 
        /**
-        * Indica si un elemento ha chocado con otro de un tipo determinado
-        * @return El elemento con el que se ha producido la colisión ó 0 si no hay colisión
+        * Is there collision with item of a given label
+        * @return item with which collision happened or 0 if there’s no collision
         */
         Item* collisionWithByLabel ( const std::string& label ) ;
 
        /**
-        * Indica si un elemento ha chocado con otro de un comportamiento determinado
-        * @return El elemento con el que se ha producido la colisión ó 0 si no hay colisión
+        * Is there collision with item of a given behavior
+        * @return item with which collision happened or 0 if there’s no collision
         */
         Item* collisionWithByBehavior ( const std::string& behavior ) ;
 

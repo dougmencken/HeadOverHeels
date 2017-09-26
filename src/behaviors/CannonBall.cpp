@@ -46,20 +46,20 @@ bool CannonBall::update ()
                                 }
                                 else
                                 {
-                                        // disappear in case of collision with any item but player
+                                        // disappear in case of collision
                                         isGone = true;
 
-                                        // create “bubbles” item at the same position
-                                        FreeItem * freeItem = new FreeItem (
+                                        // create bubbles at the same position
+                                        FreeItem * bubbles = new FreeItem (
                                                 bubblesData,
                                                 item->getX(), item->getY(), item->getZ(),
                                                 NoDirection
                                         );
 
-                                        freeItem->assignBehavior( "behavior of disappearance in time", 0 );
-                                        freeItem->setCollisionDetector( false );
+                                        bubbles->assignBehavior( "behavior of disappearance in time", 0 );
+                                        bubbles->setCollisionDetector( false );
 
-                                        item->getMediator()->getRoom()->addFreeItem( freeItem );
+                                        item->getMediator()->getRoom()->addFreeItem( bubbles );
                                 }
 
                                 speedTimer->reset();

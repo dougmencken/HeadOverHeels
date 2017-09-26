@@ -133,8 +133,12 @@ bool Item::animate()
         return cycle;
 }
 
-void Item::changeItemData( ItemData* itemData, const Direction& direction )
+void Item::changeItemData( ItemData* itemData, const Direction& direction, const std::string& initiatedBy )
 {
+        std::cout << "metamorphosis of data for item with label \"" << getLabel()
+                        << "\" to data of \"" << itemData->label
+                        << "\" initiated by \"" << initiatedBy << "\"" << std::endl ;
+
         this->dataOfItem = itemData;
         this->direction = direction;
         this->frameIndex = 0;

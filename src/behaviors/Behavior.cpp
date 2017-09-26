@@ -35,7 +35,7 @@ namespace isomot
 {
 
 Behavior::Behavior( Item * whichItem, const std::string & behavior ) :
-          theBehavior( behavior )
+          nameOfBehavior( behavior )
         , item( whichItem )
         , whatToDo( 0 )
         , activity( Wait )

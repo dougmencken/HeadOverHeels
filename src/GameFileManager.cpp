@@ -123,13 +123,13 @@ void GameFileManager::saveGame( const std::string& fileName )
                 playerSequence.push_back(
                         sgxml::player
                         (
-                                true,
+                                true, // active player
                                 this->room,
                                 this->x,
                                 this->y,
                                 this->z,
                                 int( this->direction ),
-                                Wait,
+                                JustWait,
                                 lives,
                                 ( ( whoPlaysYet == "head" ) || ( whoPlaysYet == "headoverheels" ) )
                                         ? std::find( tools.begin (), tools.end (), "horn" ) != tools.end ()
@@ -145,26 +145,30 @@ void GameFileManager::saveGame( const std::string& fileName )
                 // there may be no more rooms because there are no more players
                 // or because other player is in the same room as active player
 
-                Room* hideRoom = this->isomot->getMapManager()->getRoomOfInactivePlayer();
                 Room* activeRoom = this->isomot->getMapManager()->getActiveRoom();
-                PlayerItem* inactivePlayer = ( hideRoom != 0 ? hideRoom->getMediator()->getActivePlayer() : activeRoom->getMediator()->getHiddenPlayer() );
+                Room* secondRoom = this->isomot->getMapManager()->getRoomOfInactivePlayer();
+
+                PlayerItem* inactivePlayer = ( secondRoom != 0 ? secondRoom->getMediator()->getActivePlayer() : activeRoom->getMediator()->getHiddenPlayer() );
 
                 if ( inactivePlayer != 0 )
                 {
                         std::string whoWaitsToPlay = inactivePlayer->getLabel();
                         std::vector< std::string > tools = this->gameManager->playerTools( whoWaitsToPlay );
                         PlayerInitialPosition* initialPosition = this->isomot->getMapManager()->findPlayerPosition(
-                                hideRoom != 0 ? hideRoom->getIdentifier() : activeRoom->getIdentifier(), whoWaitsToPlay
+                                secondRoom != 0 ?
+                                        secondRoom->getNameOfFileWithDataAboutRoom() :
+                                        activeRoom->getNameOfFileWithDataAboutRoom()
+                                , whoWaitsToPlay
                         );
                         if ( initialPosition == 0 )
                         {
-                                initialPosition = this->isomot->getMapManager()->findPlayerPosition( activeRoom->getIdentifier(), "headoverheels" );
+                                initialPosition = this->isomot->getMapManager()->findPlayerPosition( activeRoom->getNameOfFileWithDataAboutRoom(), "headoverheels" );
                         }
                         playerSequence.push_back(
                                 sgxml::player
                                 (
-                                        false,
-                                        hideRoom != 0 ? hideRoom->getIdentifier() : activeRoom->getIdentifier(),
+                                        false, // inactive player
+                                        secondRoom != 0 ? secondRoom->getNameOfFileWithDataAboutRoom() : activeRoom->getNameOfFileWithDataAboutRoom(),
                                         initialPosition->getX(),
                                         initialPosition->getY(),
                                         initialPosition->getZ(),

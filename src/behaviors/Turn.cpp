@@ -36,7 +36,7 @@ bool Turn::update ()
         switch ( activity )
         {
                 case Wait:
-                        start();
+                        begin();
                         break;
 
                 case MoveNorth:
@@ -130,7 +130,7 @@ bool Turn::update ()
         return freeze;
 }
 
-void Turn::start()
+void Turn::begin()
 {
         switch ( dynamic_cast< FreeItem * >( this->item )->getDirection() )
         {
@@ -164,34 +164,34 @@ void Turn::turn()
         switch ( freeItem->getDirection() )
         {
                 case North:
-                        activity = ( theBehavior == "behavior of move then turn left and move" ? MoveWest : MoveEast );
+                        activity = ( getNameOfBehavior() == "behavior of move then turn left and move" ? MoveWest : MoveEast );
                         if ( freeItem->getDirectionFrames() > 1 )
                         {
-                        freeItem->changeDirection( theBehavior == "behavior of move then turn left and move" ? West : East );
+                                freeItem->changeDirection( getNameOfBehavior() == "behavior of move then turn left and move" ? West : East );
                         }
                         break;
 
                 case South:
-                        activity = ( theBehavior == "behavior of move then turn left and move" ? MoveEast : MoveWest );
+                        activity = ( getNameOfBehavior() == "behavior of move then turn left and move" ? MoveEast : MoveWest );
                         if ( freeItem->getDirectionFrames() > 1 )
                         {
-                                freeItem->changeDirection( theBehavior == "behavior of move then turn left and move" ? East : West );
+                                freeItem->changeDirection( getNameOfBehavior() == "behavior of move then turn left and move" ? East : West );
                         }
                         break;
 
                 case East:
-                        activity = ( theBehavior == "behavior of move then turn left and move" ? MoveNorth : MoveSouth );
+                        activity = ( getNameOfBehavior() == "behavior of move then turn left and move" ? MoveNorth : MoveSouth );
                         if ( freeItem->getDirectionFrames() > 1 )
                         {
-                                freeItem->changeDirection( theBehavior == "behavior of move then turn left and move" ? North : South );
+                                freeItem->changeDirection( getNameOfBehavior() == "behavior of move then turn left and move" ? North : South );
                         }
                         break;
 
                 case West:
-                        activity = ( theBehavior == "behavior of move then turn left and move" ? MoveSouth : MoveNorth );
+                        activity = ( getNameOfBehavior() == "behavior of move then turn left and move" ? MoveSouth : MoveNorth );
                         if ( freeItem->getDirectionFrames() > 1 )
                         {
-                                freeItem->changeDirection( theBehavior == "behavior of move then turn left and move" ? South : North );
+                                freeItem->changeDirection( getNameOfBehavior() == "behavior of move then turn left and move" ? South : North );
                         }
                         break;
 

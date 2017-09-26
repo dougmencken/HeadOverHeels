@@ -284,12 +284,12 @@ std::string SoundManager::translateActivityOfItemToString ( const ActivityOfItem
                         stringOfActivity = "push";
                         break;
 
-                case StartWayOutTeletransport:
+                case BeginWayOutTeletransport:
                 case WayOutTeletransport:
                         stringOfActivity = "teleport-out";
                         break;
 
-                case StartWayInTeletransport:
+                case BeginWayInTeletransport:
                 case WayInTeletransport:
                         stringOfActivity = "teleport-in";
                         break;

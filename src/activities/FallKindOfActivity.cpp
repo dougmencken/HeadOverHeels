@@ -36,31 +36,28 @@ KindOfActivity* FallKindOfActivity::getInstance()
 
 bool FallKindOfActivity::fall( Behavior * behavior )
 {
-        bool isFalling = behavior->getItem()->addToZ( -1 );
-        /////behavior->getItem()->setAnchor( 0 );
+        bool fallsNow = behavior->getItem()->addToZ( -1 );
 
-        // Si ha dejado de caer se comprueba si elemento es un jugador y
-        // puede haber chocado con un elemento mortal
-        if ( ! isFalling )
+        // when don’t fall anymore see is this item a player and does it collide with some mortal item
+        if ( ! fallsNow )
         {
                 Item* sender = behavior->getItem();
                 Mediator* mediator = sender->getMediator();
 
                 // copy stack of collisions
-                std::stack< int > bottomItems;
+                std::stack< int > itemsBelow;
                 while ( ! mediator->isStackOfCollisionsEmpty() )
                 {
-                        bottomItems.push( mediator->popCollision() );
+                        itemsBelow.push( mediator->popCollision() );
                 }
 
-                // Asigna el elemento al que está anclado
-                this->assignAnchor( dynamic_cast< FreeItem * >( sender ), bottomItems );
+                this->assignAnchor( dynamic_cast< FreeItem * >( sender ), itemsBelow );
 
-                // Mientras haya elementos que hayan chocado con el emisor
-                while ( ! bottomItems.empty() )
+                // as long as there’re items collided with sender
+                while ( ! itemsBelow.empty() )
                 {
-                        int id = bottomItems.top();
-                        bottomItems.pop();
+                        int id = itemsBelow.top();
+                        itemsBelow.pop();
 
                         // is it free item or grid item
                         if ( ( id >= FirstFreeId && ( id & 1 )) || ( id >= FirstGridId && ! ( id & 1 ) ) )
@@ -136,33 +133,36 @@ bool FallKindOfActivity::fall( Behavior * behavior )
                 }
         }
 
-        return isFalling;
+        return fallsNow ;
 }
 
-void FallKindOfActivity::assignAnchor( FreeItem* freeItem, std::stack< int > bottomItems )
+void FallKindOfActivity::assignAnchor( FreeItem* freeItem, std::stack< int > items )
 {
         if ( freeItem != 0 )
         {
                 Mediator* mediator = freeItem->getMediator();
-                // El ancla se establecerá cuando un elemento caiga y se pose sobre algún otro (su ancla)
+
+                int count = 0;
+
+                // set anchor when item falls and is placed on some other one, its anchor
+
+                // in case when item falls on several items below it the priority to anchor is
+                //    grid item before free item
+                //    harmless item before mortal item
+                //    item with higher spatial coordinates
+
                 Item* anchor = 0;
                 Item* oldAnchor = freeItem->getAnchor();
-                // En el caso de que caiga sobre varios elementos tendrá prioridad:
-                int count = 0;
-                // 1. El elemento rejilla frente al libre
-                // 2. El elemento inofensivo frente al mortal
-                // 3. El elemento con unas coordenadas espaciales menores
 
-                // Búsqueda del ancla para este elemento:
-                while ( ! bottomItems.empty() )
+                // search for anchor of this item
+                while ( ! items.empty() )
                 {
-                        int id = bottomItems.top();
-                        bottomItems.pop();
+                        int id = items.top();
+                        items.pop();
                         Item* item = mediator->findItemById( id );
-                        count++;
+                        count++ ;
 
-                        // Si ha colisionado con el elemento que ya era ancla entonces éste
-                        // tiene prioridad sobre el resto
+                        // in case when item is already anchored
                         if ( oldAnchor != 0 && item != 0 && oldAnchor->getId() == item->getId() )
                         {
                                 anchor = oldAnchor;
@@ -171,35 +171,34 @@ void FallKindOfActivity::assignAnchor( FreeItem* freeItem, std::stack< int > bot
 
                         if ( count == 1 )
                         {
+                                // just pick that first item as first choice of anchor
                                 anchor = item;
                         }
                         else
                         {
-                                // Si es rejilla
+                                // if it is grid item
                                 if ( id >= FirstGridId && ! ( id & 1 ) )
                                 {
-                                        // ...y el ancla no es rejilla entonces se ha encontrado nuevo ancla
+                                        // when current anchor is not grid item then select this grid item as new anchor
                                         if ( ! ( anchor->getId() >= FirstGridId && ! ( anchor->getId() & 1 ) ) )
                                         {
                                                 anchor = item;
                                         }
                                 }
 
-                                // Si el ancla no ha cambiado
                                 if ( anchor != item )
                                 {
-                                        // Si no es mortal
                                         if ( ! item->isMortal() )
                                         {
-                                                // ...y el ancla sí es mortal entonces se ha encontrado nuevo ancla
+                                                // when current anchor is mortal then select this harmless item as new anchor
                                                 if ( anchor->isMortal() )
                                                 {
                                                         anchor = item;
                                                 }
-                                                // ...y el ancla también es mortal entonces se ve su posición
+                                                // current anchor is harmless too, so look at positions
                                                 else
                                                 {
-                                                        // Si tiene unas coordenadas menores entonces se ha encontrado nuevo ancla
+                                                        // if item has higher coordinates then select it as new anchor
                                                         if ( anchor->getX() + anchor->getY() < item->getX() + item->getY() )
                                                         {
                                                                 anchor = item;
@@ -210,8 +209,16 @@ void FallKindOfActivity::assignAnchor( FreeItem* freeItem, std::stack< int > bot
                         }
                 }
 
-                // Se establece el ancla
                 freeItem->setAnchor( anchor );
+
+                /* if ( anchor != 0 && anchor != oldAnchor )
+                {
+                        std::cout << "item \"" << anchor->getLabel() << "\" at" <<
+                                        " x=" << anchor->getX() << " y=" << anchor->getY() << " z=" << anchor->getZ() <<
+                                        " is set as anchor for item \"" << freeItem->getLabel() << "\" at" <<
+                                        " x=" << freeItem->getX() << " y=" << freeItem->getY() << " z=" << freeItem->getZ()
+                                  << std::endl ;
+                } */
         }
 }
 

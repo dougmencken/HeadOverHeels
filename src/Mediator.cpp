@@ -989,7 +989,7 @@ Item* Mediator::collisionWithByBehavior( const std::string& behavior )
         {
                 Item* item = findItemById( collisions[ i ] );
 
-                if ( item != 0 && item->getBehavior() != 0 && item->getBehavior()->getBehaviorOfItem () == behavior )
+                if ( item != 0 && item->getBehavior() != 0 && item->getBehavior()->getNameOfBehavior () == behavior )
                         return item;
         }
 
@@ -1003,7 +1003,7 @@ Item* Mediator::collisionWithBadBoy()
                 Item* item = findItemById( collisions[ i ] );
 
                 if ( item != 0 && item->getBehavior() != 0 && item->isMortal()
-                        && std::find( badBoys.begin(), badBoys.end(), item->getBehavior()->getBehaviorOfItem () ) != badBoys.end() )
+                        && std::find( badBoys.begin(), badBoys.end(), item->getBehavior()->getNameOfBehavior () ) != badBoys.end() )
                 {
                         return item;
                 }
@@ -1144,7 +1144,7 @@ void Mediator::toggleSwitchInRoom ()
 
                 if ( freeItem != 0 && freeItem->getBehavior() != 0 )
                 {
-                        std::string behavior = freeItem->getBehavior()->getBehaviorOfItem ();
+                        std::string behavior = freeItem->getBehavior()->getNameOfBehavior ();
 
                         if ( behavior == "behavior of disappearance on touch" || behavior == "behavior of disappearance on jump into" ||
                                         std::find( badBoys.begin (), badBoys.end (), behavior ) != badBoys.end () )
@@ -1163,7 +1163,7 @@ void Mediator::toggleSwitchInRoom ()
 
                         if ( gridItem != 0 && gridItem->getBehavior() != 0 )
                         {
-                                std::string behavior = gridItem->getBehavior()->getBehaviorOfItem ();
+                                std::string behavior = gridItem->getBehavior()->getNameOfBehavior ();
 
                                 if ( behavior == "behavior of disappearance on touch" || behavior == "behavior of disappearance on jump into" )
                                 {
@@ -1233,7 +1233,7 @@ bool EqualItemLabel::operator() ( Item* item, const std::string& label ) const
 
 bool EqualBehaviorOfItem::operator() ( Item* item, const std::string& behavior ) const
 {
-        return ( item->getBehavior() != 0 && item->getBehavior()->getBehaviorOfItem () == behavior );
+        return ( item->getBehavior() != 0 && item->getBehavior()->getNameOfBehavior () == behavior );
 }
 
 }

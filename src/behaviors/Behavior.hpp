@@ -24,7 +24,7 @@ class Item ;
 class KindOfActivity ;
 
 /**
- * Abstraction for behavior of item. Items of game change activity in each cycle of update.
+ * Abstraction for behavior of item. Item of game changes its activity in each cycle of update.
  * Different kinds of behavior define different ways of transition between activities
  */
 
@@ -69,7 +69,7 @@ protected:
 
 protected:
 
-        std::string theBehavior ;
+        std::string nameOfBehavior ;
 
         /**
          * Item with this behavior
@@ -93,7 +93,7 @@ protected:
 
 public:
 
-        std::string getBehaviorOfItem () const {  return theBehavior ;  }
+        std::string getNameOfBehavior () const {  return nameOfBehavior ;  }
 
         ActivityOfItem getActivityOfItem () const {  return activity ;  }
 

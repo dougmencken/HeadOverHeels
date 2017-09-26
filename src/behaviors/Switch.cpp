@@ -11,7 +11,7 @@ namespace isomot
 
 Switch::Switch( Item * item, const std::string & behavior )
         : Behavior( item, behavior )
-        , itemOver( false )
+        , isItemAbove( false )
 {
 
 }
@@ -55,44 +55,40 @@ bool Switch::update ()
                                 triggerItems.clear();
                         }
 
-                        // Comprueba si hay elementos encima
+                        // look for items above
                         if ( ! item->checkPosition( 0, 0, 1, Add ) )
                         {
-                                // Copia la pila de colisiones
-                                std::stack< int > topItems;
+                                // copy stack of collisions
+                                std::stack< int > aboveItems;
                                 while ( ! mediator->isStackOfCollisionsEmpty() )
                                 {
-                                        topItems.push( mediator->popCollision() );
+                                        aboveItems.push( mediator->popCollision() );
                                 }
 
-                                // Mientras haya elementos encima de este elemento se comprobarán
-                                // las condiciones para ver si se puede activar
-                                while ( ! topItems.empty() )
+                                // as long as there’re elements above this switch
+                                while ( ! aboveItems.empty() )
                                 {
-                                        // Identificador del primer elemento de la pila de colisiones
-                                        int id = topItems.top();
-                                        topItems.pop();
+                                        int id = aboveItems.top();
+                                        aboveItems.pop();
 
-                                        // El elemento tiene que ser un elemento libre
+                                        // is it free item
                                         if ( id >= FirstFreeId && ( id & 1 ) )
                                         {
-                                                Item* topItem = mediator->findItemById( id );
+                                                Item* itemAbove = mediator->findItemById( id );
 
-                                                // El elemento debe tener comportamiento y debe estar exclusivamente sobre el interruptor
-                                                // Además no puede activarse por el "roce" de un salto, sino que debe estar completamente posado
-                                                // sobre el interruptor
-                                                if ( topItem != 0 && topItem->getBehavior() != 0 && ! topItem->checkPosition( 0, 0, -1, Add ) &&
-                                                        topItem->getBehavior()->getActivityOfItem() != RegularJump &&
-                                                        topItem->getBehavior()->getActivityOfItem() != HighJump )
+                                                // yep, switch doesn’t toggle when player jumps
+                                                if ( itemAbove != 0 && itemAbove->getBehavior() != 0 &&
+                                                        ! itemAbove->checkPosition( 0, 0, -1, Add ) &&
+                                                                itemAbove->getBehavior()->getActivityOfItem() != RegularJump &&
+                                                                itemAbove->getBehavior()->getActivityOfItem() != HighJump )
                                                 {
-                                                        // Si sólo hay un elemento debajo entonces se activa
-                                                        if ( ! itemOver && mediator->depthOfStackOfCollisions() == 1 )
+                                                        // when there’s no more than one item below initiator of switch
+                                                        if ( ! isItemAbove && mediator->depthOfStackOfCollisions() <= 1 )
                                                         {
-                                                                itemOver = true;
+                                                                isItemAbove = true;
                                                                 item->animate();
-                                                                // Comunica a la sala el cambio de estado del interruptor
+
                                                                 mediator->toggleSwitchInRoom();
-                                                                // Activa el sonido de conmutación
                                                                 SoundManager::getInstance()->play( item->getLabel(), SwitchIt );
                                                         }
                                                 }
@@ -101,7 +97,7 @@ bool Switch::update ()
                         }
                         else
                         {
-                                itemOver = false;
+                                isItemAbove = false;
                         }
                         break;
 

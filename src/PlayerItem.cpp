@@ -449,8 +449,8 @@ void PlayerItem::wait ()
         ActivityOfItem activity = this->behavior->getActivityOfItem();
 
         // Si el jugador se está teletransportando o está muriendo no se podrá detener
-        if ( activity != StartWayOutTeletransport && activity != WayOutTeletransport &&
-                activity != StartWayInTeletransport && activity != WayInTeletransport &&
+        if ( activity != BeginWayOutTeletransport && activity != WayOutTeletransport &&
+                activity != BeginWayInTeletransport && activity != WayInTeletransport &&
                 activity != MeetMortalItem && activity != Vanish )
         {
                 // El fotograma de parada es distinto segn la orientación del elemento
@@ -550,7 +550,7 @@ void PlayerItem::activateShield()
 {
         this->shieldTimer = new HPC();
         this->shieldTimer->start();
-        this->shieldTime = 25.000;
+        this->shieldTime = 25.0;
         this->shield = shieldTime - shieldTimer->getValue();
         GameManager::getInstance()->addShield( this->getLabel(), this->shield );
 }
@@ -565,7 +565,7 @@ void PlayerItem::decreaseShield()
 
         if ( this->shield < 0 )
         {
-                this->shieldTime = 0.000;
+                this->shieldTime = 0.0;
                 this->shield = 0;
                 this->shieldTimer->stop();
                 delete this->shieldTimer;

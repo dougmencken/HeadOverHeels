@@ -42,7 +42,7 @@ void Isomot::beginNewGame ()
 {
         prepare() ;
         offVidasInfinitas() ;
-        offRightToInviolability() ;
+        offInviolability() ;
         this->isEndRoom = false;
 
         // initial rooms
@@ -59,12 +59,12 @@ void Isomot::beginNewGame ()
 void Isomot::continueSavedGame ( const sgxml::players::player_sequence& playerSequence )
 {
         offVidasInfinitas() ;
-        offRightToInviolability() ;
+        offInviolability() ;
         this->isEndRoom = false;
 
         for ( sgxml::players::player_const_iterator i = playerSequence.begin (); i != playerSequence.end (); ++i )
         {
-                this->mapManager->beginOldGameWithPlayer( *i );
+                this->mapManager->beginOldGameWithCharacter( *i );
         }
 
         std::cout << "continue previous game" << std::endl ;
@@ -102,7 +102,7 @@ void Isomot::offVidasInfinitas ()
         }
 }
 
-void Isomot::offRightToInviolability ()
+void Isomot::offInviolability ()
 {
         if ( GameManager::getInstance()->isImmuneToCollisionsWithMortalItems () )
         {
@@ -267,7 +267,7 @@ BITMAP* Isomot::update()
                 }
         }
 
-        // Si hay una sala activa, se dibuja
+        // draw active room, if there’s any
         if ( activeRoom != 0 )
         {
                 blit (
@@ -277,7 +277,6 @@ BITMAP* Isomot::update()
                         activeRoom->getPicture()->w, activeRoom->getPicture()->h
                 );
 
-                // Delata al tramposo
                 if ( GameManager::getInstance()->areLivesInexhaustible () )
                 {
                         textout_ex( this->view, font, "VIDAS INFINITAS", 18, 10, makecol( 255, 255, 255 ), -1 );
@@ -286,16 +285,16 @@ BITMAP* Isomot::update()
 
                 if ( GameManager::getInstance()->isImmuneToCollisionsWithMortalItems () )
                 {
-                        textout_ex( this->view, font, "RIGHT TO INVIOLABILITY", ( this->view->w >> 1 ) - 88, 10, makecol( 255, 255, 255 ), -1 );
+                        textout_ex( this->view, font, "INVIOLABILITY", ( this->view->w >> 1 ) - 50, 10, makecol( 255, 255, 255 ), -1 );
                 }
 
-                // La sala final es muy especial
-                if ( activeRoom->getIdentifier().compare( "blacktooth/blacktooth88.xml" ) == 0 )
+                // la sala final es muy especial
+                if ( activeRoom->getNameOfFileWithDataAboutRoom().compare( "blacktooth/blacktooth88.xml" ) == 0 )
                 {
                         this->updateEndRoom();
                 }
         }
-        // Si no hay sala activa es que la partida ha terminado
+        // there’s no active room, game over
         else
         {
                 destroy_bitmap( this->view );

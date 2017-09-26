@@ -605,8 +605,10 @@ void GameManager::eatFish ( PlayerItem* character, Room* room, int x, int y, int
         this->eatenFish = true;
 
         gameFileManager->assignFishData(
-                room->getIdentifier (), character->getLabel (),
-                        x, y, z, character->getDirection () ) ;
+                room->getNameOfFileWithDataAboutRoom (),
+                        character->getLabel (),
+                        x, y, z,
+                        character->getDirection () ) ;
 }
 
 WhyPause GameManager::update ()

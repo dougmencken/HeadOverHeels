@@ -83,7 +83,7 @@ void UserControlled::changeActivityOfItem( const ActivityOfItem & activityOf, It
                         whatToDo = FallKindOfActivity::getInstance();
                         break;
 
-                case StartWayInTeletransport:
+                case BeginWayInTeletransport:
                         this->item->changeFrame( this->nullFrame );
                         break;
 
@@ -397,12 +397,12 @@ void UserControlled::wayInTeletransport( PlayerItem * player )
 {
         switch ( activity )
         {
-                case StartWayInTeletransport:
+                case BeginWayInTeletransport:
                         // preserve orientation of player
                         player->setOrientation( player->getDirection() );
                         // change to bubbles preserving label of player
                         playerData = player->getDataOfFreeItem() ;
-                        player->changeItemData( itemDataManager->findItemByLabel( labelOfTransitionViaTeleport ), NoDirection );
+                        player->changeItemData( itemDataManager->findItemByLabel( labelOfTransitionViaTeleport ), NoDirection, "begin way in teletransport" );
                         // backward animation of bubbles
                         player->setBackwardMotion();
 
@@ -415,7 +415,7 @@ void UserControlled::wayInTeletransport( PlayerItem * player )
                         if ( player->animate() )
                         {
                                 // back to original appearance of player
-                                player->changeItemData( playerData, NoDirection );
+                                player->changeItemData( playerData, NoDirection, "way in teletransport" );
                                 // restore original orientation
                                 player->changeDirection( player->getOrientation() );
 
@@ -432,11 +432,11 @@ void UserControlled::wayOutTeletransport( PlayerItem * player )
 {
         switch ( activity )
         {
-                case StartWayOutTeletransport:
+                case BeginWayOutTeletransport:
                         // preserve orientation of player
                         player->setOrientation( player->getDirection() );
                         // change to bubbles retaining player’s label
-                        player->changeItemData( itemDataManager->findItemByLabel( labelOfTransitionViaTeleport ), NoDirection );
+                        player->changeItemData( itemDataManager->findItemByLabel( labelOfTransitionViaTeleport ), NoDirection, "begin way out teletransport" );
                         // begin teleportation
                         activity = WayOutTeletransport;
                         break;
@@ -465,7 +465,7 @@ void UserControlled::collideWithMortalItem( PlayerItem* player )
                         if ( player->getShieldTime() == 0 )
                         {
                                 // change to bubbles retaining player’s label
-                                player->changeItemData( itemDataManager->findItemByLabel( labelOfTransitionViaTeleport ), NoDirection );
+                                player->changeItemData( itemDataManager->findItemByLabel( labelOfTransitionViaTeleport ), NoDirection, "collide with mortal item" );
 
                                 activity = Vanish;
                         }
@@ -551,8 +551,8 @@ void UserControlled::take( PlayerItem * player )
                                 Item* bottomItem = mediator->findCollisionPop( );
 
                                 if ( bottomItem != 0 && bottomItem->getBehavior() != 0
-                                        && ( bottomItem->getBehavior()->getBehaviorOfItem() == "behavior of thing able to move by pushing" ||
-                                                bottomItem->getBehavior()->getBehaviorOfItem() == "behavior of big leap for player" )
+                                        && ( bottomItem->getBehavior()->getNameOfBehavior() == "behavior of thing able to move by pushing" ||
+                                                bottomItem->getBehavior()->getNameOfBehavior() == "behavior of big leap for player" )
                                         && bottomItem->getWidthX() <= ( mediator->getSizeOfOneTile() * 3 ) / 4
                                         && bottomItem->getWidthY() <= ( mediator->getSizeOfOneTile() * 3 ) / 4 )
                                 {
@@ -560,7 +560,7 @@ void UserControlled::take( PlayerItem * player )
                                         {
                                                 coordinates = bottomItem->getX() + bottomItem->getY();
                                                 takenItem = bottomItem;
-                                                takenItemBehavior = bottomItem->getBehavior()->getBehaviorOfItem ();
+                                                takenItemBehavior = bottomItem->getBehavior()->getNameOfBehavior ();
                                         }
                                 }
                         }

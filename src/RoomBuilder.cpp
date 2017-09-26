@@ -3,6 +3,7 @@
 #include "Exception.hpp"
 #include "ItemDataManager.hpp"
 #include "Room.hpp"
+#include "Behavior.hpp"
 #include "FloorTile.hpp"
 #include "Wall.hpp"
 #include "GridItem.hpp"
@@ -207,38 +208,36 @@ Room* RoomBuilder::buildRoom ( const std::string& fileName )
         return this->room;
 }
 
-PlayerItem* RoomBuilder::createPlayerInTheSameRoom( const std::string& player, const std::string& behavior, int x, int y, int z, const Direction& direction, bool withItem )
+PlayerItem* RoomBuilder::createPlayerInTheSameRoom( const std::string& nameOfPlayer, const std::string& behavior, int x, int y, int z, const Direction& direction, bool withItem )
 {
-        return createPlayerInRoom( this->room, player, behavior, x, y, z, direction, withItem );
+        return createPlayerInRoom( this->room, nameOfPlayer, behavior, x, y, z, direction, withItem );
 }
 
-PlayerItem* RoomBuilder::createPlayerInRoom( Room* room, const std::string& player, const std::string& behavior, int x, int y, int z, const Direction& direction, bool withItem )
+PlayerItem* RoomBuilder::createPlayerInRoom( Room* room, const std::string& nameOfPlayer, const std::string& behavior, int x, int y, int z, const Direction& direction, bool withItem )
 {
-        PlayerItem* playerItem = 0;
         GameManager* gameManager = GameManager::getInstance();
 
-        std::string newPlayer( player );
+        std::string newNameOfPlayer( nameOfPlayer );
         std::string newBehaviorOfPlayer( behavior );
 
         // when composite player ran out of lives, check if any of simple players still survive
-        if ( gameManager->getLives( player ) == 0 )
+        if ( gameManager->getLives( nameOfPlayer ) == 0 )
         {
-                if ( player == "headoverheels" )
+                if ( nameOfPlayer == "headoverheels" )
                 {
-                        // jugador superviviente
                         if ( gameManager->getLives( "head" ) > 0 )
                         {
-                                newPlayer = "head";
+                                newNameOfPlayer = "head";
                                 newBehaviorOfPlayer = "behavior of Head";
                         }
                         else if ( gameManager->getLives( "heels" ) > 0 )
                         {
-                                newPlayer = "heels";
+                                newNameOfPlayer = "heels";
                                 newBehaviorOfPlayer = "behavior of Heels";
                         }
                         else
                         {
-                                newPlayer = "in~buildroom";
+                                newNameOfPlayer = "in~buildroom";
                         }
                 }
                 // it is possible that two players join in room and have no lives
@@ -246,39 +245,43 @@ PlayerItem* RoomBuilder::createPlayerInRoom( Room* room, const std::string& play
                 {
                         if ( gameManager->getLives( "head" ) == 0 && gameManager->getLives( "heels" ) == 0 )
                         {
-                                newPlayer = "no~lives";
+                                newNameOfPlayer = "no~lives";
                         }
                 }
         }
 
-        ItemData* itemData = this->itemDataManager->findItemByLabel( newPlayer );
+        ItemData* itemData = this->itemDataManager->findItemByLabel( newNameOfPlayer );
+        PlayerItem* player = 0;
 
         // if it is found and has some lives left, place it in room
-        if ( ( newPlayer == "headoverheels" || newPlayer == "head" || newPlayer == "heels" ) && itemData != 0 )
+        if ( ( newNameOfPlayer == "headoverheels" || newNameOfPlayer == "head" || newNameOfPlayer == "heels" ) && itemData != 0 )
         {
-                if ( gameManager->getLives( newPlayer ) > 0 )
+                if ( gameManager->getLives( newNameOfPlayer ) > 0 )
                 {
-                        playerItem = new PlayerItem( itemData, x, y, z, direction );
+                        player = new PlayerItem( itemData, x, y, z, direction );
 
-                        // can’t move taken item to other room
+                        // don’t move taken item to other room
                         if ( withItem )
                         {
                                 gameManager->setItemTaken( 0 );
                         }
 
-                        playerItem->setLives( gameManager->getLives( newPlayer ) );
-                        playerItem->setTools( gameManager->playerTools( newPlayer ) );
-                        playerItem->setAmmo( gameManager->getDonuts( newPlayer ) );
-                        playerItem->setHighJumps( gameManager->getHighJumps() );
-                        playerItem->setHighSpeed( gameManager->getHighSpeed() );
-                        playerItem->setShieldTime( gameManager->getShield( newPlayer ) );
-                        playerItem->assignBehavior( newBehaviorOfPlayer, reinterpret_cast< void * >( itemDataManager ) );
+                        player->setLives( gameManager->getLives( newNameOfPlayer ) );
+                        player->setTools( gameManager->playerTools( newNameOfPlayer ) );
+                        player->setAmmo( gameManager->getDonuts( newNameOfPlayer ) );
+                        player->setHighJumps( gameManager->getHighJumps() );
+                        player->setHighSpeed( gameManager->getHighSpeed() );
+                        player->setShieldTime( gameManager->getShield( newNameOfPlayer ) );
+                        player->assignBehavior( newBehaviorOfPlayer, reinterpret_cast< void * >( itemDataManager ) );
 
-                        room->addPlayer( playerItem );
+                        room->addPlayer( player );
+
+                        std::cout << "created player \"" << player->getLabel() << "\" with behavior \"" << player->getBehavior()->getNameOfBehavior() << "\""
+                                        << " in room \"" << room->getNameOfFileWithDataAboutRoom() << "\"" << std::endl ;
                 }
         }
 
-        return playerItem;
+        return player;
 }
 
 FloorTile* RoomBuilder::buildFloorTile( const rxml::tile& tile, const char* gfxPrefix )
@@ -367,7 +370,7 @@ FreeItem* RoomBuilder::buildFreeItem( const rxml::item& item )
                 int fz = item.z() != Top ? item.z() * LayerHeight : Top;
 
                 // don’t place an item if it is a bonus and has already been taken
-                if ( BonusManager::getInstance()->isPresent( room->getIdentifier(), itemData->label ) )
+                if ( BonusManager::getInstance()->isPresent( room->getNameOfFileWithDataAboutRoom(), itemData->label ) )
                 {
                         freeItem = new FreeItem( itemData, fx, fy, fz,
                                                  item.direction() == rxml::direction::none ? NoDirection : Direction( item.direction() - 1 ) );

@@ -153,15 +153,15 @@ void Patrol::changeDirection()
 {
         int direction = 0;
 
-        if ( theBehavior == "behavior of random patroling in four primary directions" )
+        if ( getNameOfBehavior() == "behavior of random patroling in four primary directions" )
         {
                 direction = ( rand() % 4 );
         }
-        else if ( theBehavior == "behavior of random patroling in four secondary directions" )
+        else if ( getNameOfBehavior() == "behavior of random patroling in four secondary directions" )
         {
                 direction = ( rand() % 4 ) + 4;
         }
-        else if ( theBehavior == "behavior of random patroling in eight directions" )
+        else if ( getNameOfBehavior() == "behavior of random patroling in eight directions" )
         {
                 direction = ( rand() % 8 );
         }

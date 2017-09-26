@@ -39,32 +39,31 @@ class TripleRoomStartPoint;
  * Una sala dibujada en perspectiva isométrica. Se compone de una rejilla sobre la que se colocan la mayoría
  * de los elementos. Así mismo, pueden situarse losetas en el suelo y paredes en el perímetro de la sala
  */
+
 class Room : public Drawable, public Mediated
 {
 
 public:
 
-        /**
-        * Constructor. Los parámetros especificados definen las dimensiones de la sala
-        * @param identifier Identificador textual de la sala. Se hace coincidir con el nombre de su archivo
-        * @param scenery Identificador textual del escenario al que pertenece la sala: jail, blacktooth,
-        * marketplace, themoon, egyptus, penitentiary, safary o byblos
+       /**
+        * @param roomFile Name of file with data about this room
+        * @param scenery jail, blacktooth, marketplace, themoon, egyptus, penitentiary, safari, byblos
         * @param xTiles Número de losetas en el eje X
         * @param yTiles Número de losetas en el eje Y
         * @param tileSize Longitud del lado de una loseta en unidades isométricas
         * @param floorType Tipo de suelo
         */
-        Room( const std::string& identifier, const std::string& scenery, int xTiles, int yTiles, int tileSize, const FloorId& floorType ) ;
+        Room( const std::string& roomFile, const std::string& scenery, int xTiles, int yTiles, int tileSize, const FloorId& floorType ) ;
 
         virtual ~Room( ) ;
 
-        /**
+       /**
         * Añade un nueva loseta a la sala
         * @param floorTile La nueva loseta
         */
         void addFloor ( FloorTile * floorTile ) ;
 
-        /**
+       /**
         * Añade un nuevo segmento de muro a la sala
         * @param wall El nuevo segmento de muro
         */
@@ -199,10 +198,7 @@ private:
 
         friend class Mediator ;
 
-       /**
-        * Identificador textual de la sala. Se hace coincidir con el nombre de su archivo
-        */
-        std::string identifier ;
+        std::string nameOfFileWithDataAboutRoom ;
 
        /**
         * Identificador textual del escenario al que pertenece la sala:
@@ -320,11 +316,7 @@ private:
 
 public:
 
-       /**
-        * Identificador textual de la sala. Se hace coincidir con el nombre de su archivo
-        * @return Una cadena con el nombre del archivo y con la extensión ".xml" incluida
-        */
-        std::string getIdentifier () const {  return identifier ;  }
+        std::string getNameOfFileWithDataAboutRoom () const {  return nameOfFileWithDataAboutRoom ;  }
 
        /**
         * Identificador textual del escenario al que pertenece la sala

@@ -245,8 +245,8 @@ void KindOfActivity::propagateActivityToItemsAbove( Item * sender, const Activit
                                         // look for collisions of that free item with items below it
                                         if ( ! freeItemAbove->checkPosition( 0, 0, -1, Add ) )
                                         {
-                                                // propagate activity when there’s only one item below or when sender is anchor of that item
-                                                if ( mediator->depthOfStackOfCollisions() == 1 || freeItemAbove->getAnchor() == sender )
+                                                // propagate activity when there’s no more than one item below or when sender is anchor of that item
+                                                if ( mediator->depthOfStackOfCollisions() <= 1 || freeItemAbove->getAnchor() == sender )
                                                 {
                                                         if ( freeItemAbove->getBehavior()->getActivityOfItem() != Vanish )
                                                         {

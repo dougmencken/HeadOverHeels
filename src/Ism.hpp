@@ -100,8 +100,8 @@ namespace isomot
                 ByTeleportToo,     // to another room via second teleport
                 NoEntry,           // there is no entrance to this room
                 NoExit,            // there is no exit from this room
-                Restart,           // restart room when character loses its life
-                JustWait           // just wait in room
+                Restart = 51,      // restart room when character loses its life
+                JustWait = 99      // just wait in room
         } ;
 
         /**
@@ -228,10 +228,10 @@ namespace isomot
                 DisplaceNorthwest,              /* El elemento es desplazado al noroeste por otro elemento */
                 DisplaceUp,                     /* El elemento es desplazado hacia arriba por otro elemento */
                 DisplaceDown,                   /* El elemento es desplazado hacia abajo por otro elemento */
-                StartWayOutTeletransport,       /* El elemento inicia el teletransporte de ida */
-                WayOutTeletransport,            /* El elemento se está teletransportando a otra sala */
-                StartWayInTeletransport,        /* El elemento inicia el teletransporte de vuelta */
-                WayInTeletransport,             /* El elemento se está teletransportando desde otra sala */
+                BeginWayOutTeletransport,
+                WayOutTeletransport,
+                BeginWayInTeletransport,
+                WayInTeletransport,
                 AutoMove,                       /* El elemento se mueve automáticamente. Estado genérico usado por el gestor de sonido */
                 AutoMoveNorth,                  /* El elemento se mueve automáticamente al norte */
                 AutoMoveSouth,                  /* El elemento se mueve automáticamente al sur */

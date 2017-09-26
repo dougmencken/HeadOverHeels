@@ -19,7 +19,7 @@ RemoteControl::RemoteControl( Item * item, const std::string & behavior ) :
         controlledItem = 0;
 
         // move only controlled one but not controller
-        if ( theBehavior == "behavior of remotely controlled one" )
+        if ( getNameOfBehavior() == "behavior of remotely controlled one" )
         {
                 speedTimer = new HPC();
                 fallTimer = new HPC();
@@ -30,7 +30,7 @@ RemoteControl::RemoteControl( Item * item, const std::string & behavior ) :
 
 RemoteControl::~RemoteControl()
 {
-        if ( theBehavior == "behavior of remotely controlled one" )
+        if ( getNameOfBehavior() == "behavior of remotely controlled one" )
         {
                 delete speedTimer;
                 delete fallTimer;
@@ -43,7 +43,7 @@ bool RemoteControl::update ()
         bool vanish = false;
 
         // get controlled item
-        if ( theBehavior == "behavior of remote control" && controlledItem == 0 )
+        if ( getNameOfBehavior() == "behavior of remote control" && controlledItem == 0 )
         {
                 controlledItem = static_cast< FreeItem * >( freeItem->getMediator()->findItemByBehavior( "behavior of remotely controlled one" ) );
         }
@@ -57,7 +57,7 @@ bool RemoteControl::update ()
                 case MoveSouth:
                 case MoveEast:
                 case MoveWest:
-                        if ( theBehavior == "behavior of remotely controlled one" )
+                        if ( getNameOfBehavior() == "behavior of remotely controlled one" )
                         {
                                 if ( speedTimer->getValue() > freeItem->getSpeed() )
                                 {
@@ -84,7 +84,7 @@ bool RemoteControl::update ()
                 case DisplaceNorthwest:
                 case DisplaceSoutheast:
                 case DisplaceSouthwest:
-                        if ( theBehavior == "behavior of remotely controlled one" )
+                        if ( getNameOfBehavior() == "behavior of remotely controlled one" )
                         {
                                 if ( speedTimer->getValue() > freeItem->getSpeed() )
                                 {
@@ -112,7 +112,7 @@ bool RemoteControl::update ()
                         // del elemento controlado
                         if ( activity == DisplaceNorth || activity == DisplaceSouth || activity == DisplaceEast || activity == DisplaceWest )
                         {
-                                if ( theBehavior == "behavior of remote control" )
+                                if ( getNameOfBehavior() == "behavior of remote control" )
                                 {
                                         ActivityOfItem motionActivity = Wait;
 
@@ -153,7 +153,7 @@ bool RemoteControl::update ()
                         }
                         // Si este es el elemento controlado y ha llegado el momento de caer entonces
                         // el elemento desciende una unidad
-                        else if ( theBehavior == "behavior of remotely controlled one" && fallTimer->getValue() > freeItem->getWeight() )
+                        else if ( getNameOfBehavior() == "behavior of remotely controlled one" && fallTimer->getValue() > freeItem->getWeight() )
                         {
                                 if ( ! whatToDo->fall( this ) )
                                 {

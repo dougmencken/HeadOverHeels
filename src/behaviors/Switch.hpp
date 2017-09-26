@@ -44,10 +44,7 @@ private:
 
 private:
 
-       /**
-        * Indica que hay un elemento encima
-        */
-        bool itemOver ;
+        bool isItemAbove ;
 
        /**
         * Elementos que han accionado el interruptor

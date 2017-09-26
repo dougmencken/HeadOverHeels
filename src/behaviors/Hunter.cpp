@@ -39,8 +39,8 @@ bool Hunter::update ()
         {
                 case Wait:
                 // if hunter is not a waiting one, activate it yet
-                if ( theBehavior == "behavior of hunter in four directions" ||
-                                theBehavior == "behavior of hunter in eight directions" )
+                if ( getNameOfBehavior() == "behavior of hunter in four directions" ||
+                                getNameOfBehavior() == "behavior of hunter in eight directions" )
                 {
                         SoundManager::getInstance()->play( thisItem->getLabel(), activity );
                         activity = calculateDirection( activity );
@@ -61,7 +61,7 @@ bool Hunter::update ()
                         }
 
                         // eight-directional waiting hunter emits sound when it waits
-                        if ( theBehavior == "behavior of waiting hunter in eight directions" )
+                        if ( getNameOfBehavior() == "behavior of waiting hunter in eight directions" )
                         {
                                 SoundManager::getInstance()->play( thisItem->getLabel(), activity );
                         }
@@ -76,7 +76,7 @@ bool Hunter::update ()
                 case MoveEast:
                 case MoveWest:
                         // bin original item when full-bodied guard is created
-                        if ( theBehavior == "behavior of waiting hunter in four directions" && createFullBody () )
+                        if ( getNameOfBehavior() == "behavior of waiting hunter in four directions" && createFullBody () )
                         {
                                 alive = false;
                         }
@@ -201,13 +201,13 @@ bool Hunter::update ()
 
 ActivityOfItem Hunter::calculateDirection( const ActivityOfItem& activity )
 {
-        if ( theBehavior == "behavior of hunter in four directions" ||
-                        theBehavior == "behavior of waiting hunter in four directions" )
+        if ( getNameOfBehavior() == "behavior of hunter in four directions" ||
+                        getNameOfBehavior() == "behavior of waiting hunter in four directions" )
         {
                 return calculateDirection4( activity );
         }
-        else if ( theBehavior == "behavior of hunter in eight directions" ||
-                        theBehavior == "behavior of waiting hunter in eight directions" )
+        else if ( getNameOfBehavior() == "behavior of hunter in eight directions" ||
+                        getNameOfBehavior() == "behavior of waiting hunter in eight directions" )
         {
                 return calculateDirection8( activity );
         }

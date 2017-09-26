@@ -142,12 +142,12 @@ bool PlayerHeadAndHeels::update ()
                         jump( player );
                         break;
 
-                case StartWayOutTeletransport:
+                case BeginWayOutTeletransport:
                 case WayOutTeletransport:
                         wayOutTeletransport( player );
                         break;
 
-                case StartWayInTeletransport:
+                case BeginWayInTeletransport:
                 case WayInTeletransport:
                         wayInTeletransport( player );
                         break;
@@ -197,7 +197,7 @@ void PlayerHeadAndHeels::behave ()
 
         // if it’s not a move by inertia
         if ( activity != AutoMoveNorth && activity != AutoMoveSouth && activity != AutoMoveEast && activity != AutoMoveWest &&
-                activity != StartWayOutTeletransport && activity != WayOutTeletransport && activity != StartWayInTeletransport && activity != WayInTeletransport &&
+                activity != BeginWayOutTeletransport && activity != WayOutTeletransport && activity != BeginWayInTeletransport && activity != WayInTeletransport &&
                 activity != MeetMortalItem && activity != Vanish )
         {
                 // when waiting or blinking
@@ -209,7 +209,7 @@ void PlayerHeadAndHeels::behave ()
                                 // Almacena en la pila de colisiones los elementos que tiene debajo
                                 playerItem->checkPosition( 0, 0, -1, Add );
                                 // Si está sobre un telepuerto y salta entonces el jugador será teletransportado, sino saltará
-                                activity = ( playerItem->getMediator()->collisionWithByBehavior( "behavior of teletransport" ) ? StartWayOutTeletransport : Jump );
+                                activity = ( playerItem->getMediator()->collisionWithByBehavior( "behavior of teletransport" ) ? BeginWayOutTeletransport : Jump );
                         }
                         // ...y ha pulsado la tecla de disparo entonces dispara
                         else if ( input->doughnut() && ! fireFromHooterIsPresent )
@@ -260,7 +260,7 @@ void PlayerHeadAndHeels::behave ()
                                 // Almacena en la pila de colisiones los elementos que tiene debajo
                                 playerItem->checkPosition( 0, 0, -1, Add );
                                 // Si está sobre un telepuerto y salta entonces el jugador será teletransportado, sino saltará
-                                activity = ( playerItem->getMediator()->collisionWithByBehavior( "behavior of teletransport" ) ? StartWayOutTeletransport : Jump );
+                                activity = ( playerItem->getMediator()->collisionWithByBehavior( "behavior of teletransport" ) ? BeginWayOutTeletransport : Jump );
                         }
                         // ...y ha pulsado la tecla de disparo entonces dispara
                         else if ( input->doughnut() && ! fireFromHooterIsPresent )

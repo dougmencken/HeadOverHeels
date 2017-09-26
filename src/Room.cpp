@@ -16,9 +16,9 @@
 namespace isomot
 {
 
-Room::Room( const std::string& identifier, const std::string& scenery, int xTiles, int yTiles, int tileSize, const FloorId& floorType )
+Room::Room( const std::string& roomFile, const std::string& scenery, int xTiles, int yTiles, int tileSize, const FloorId& floorType )
 : Mediated( )
-        , identifier( identifier )
+        , nameOfFileWithDataAboutRoom( roomFile )
         , scenery( scenery )
         , tileSize( tileSize )
         , floorType( floorType )

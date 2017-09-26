@@ -256,7 +256,7 @@ void MoveKindOfActivity::ascent( FreeItem* freeItem, int z )
         if ( freeItem->getBehavior() != 0 )
         {
                 // Si el elemento no es el ascensor entonces se levanta
-                if ( freeItem->getBehavior()->getBehaviorOfItem () != "behavior of elevator" )
+                if ( freeItem->getBehavior()->getNameOfBehavior () != "behavior of elevator" )
                 {
                         // Si no se puede levantar, se toma el elemento con el que choca para levantarlo
                         if ( ! freeItem->addToZ( z ) )

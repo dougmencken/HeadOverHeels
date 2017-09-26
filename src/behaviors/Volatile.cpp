@@ -37,9 +37,9 @@ bool Volatile::update ()
                         this->solid = false;
 
                         // if it is volatile by contact and has an item above it
-                        if ( ( getBehaviorOfItem () == "behavior of disappearance on touch" ||
-                                        getBehaviorOfItem () == "behavior of disappearance on jump into" ||
-                                                getBehaviorOfItem () == "behavior of slow disappearance on jump into" )
+                        if ( ( getNameOfBehavior () == "behavior of disappearance on touch" ||
+                                        getNameOfBehavior () == "behavior of disappearance on jump into" ||
+                                                getNameOfBehavior () == "behavior of slow disappearance on jump into" )
                                 && ! item->checkPosition( 0, 0, 1, Add ) )
                         {
                                 bool isGone = false;
@@ -59,10 +59,10 @@ bool Volatile::update ()
                                                 // when item exists, look at whether it is volatile or special
                                                 // because that item would disappear unless it is leaning on another one
                                                 if ( item != 0 && item->getBehavior() != 0 &&
-                                                        item->getBehavior()->getBehaviorOfItem () != "behavior of disappearance on jump into" &&
-                                                        item->getBehavior()->getBehaviorOfItem () != "behavior of slow disappearance on jump into" &&
-                                                        item->getBehavior()->getBehaviorOfItem () != "behavior of disappearance on touch" &&
-                                                        item->getBehavior()->getBehaviorOfItem () != "behavior of something special" )
+                                                        item->getBehavior()->getNameOfBehavior () != "behavior of disappearance on jump into" &&
+                                                        item->getBehavior()->getNameOfBehavior () != "behavior of slow disappearance on jump into" &&
+                                                        item->getBehavior()->getNameOfBehavior () != "behavior of disappearance on touch" &&
+                                                        item->getBehavior()->getNameOfBehavior () != "behavior of something special" )
                                                 {
                                                         isGone = true;
                                                         topItems.push( item );
@@ -91,9 +91,9 @@ bool Volatile::update ()
                                                                 //   on item that disappears
                                                                 if ( ( bottomItem->getBehavior() == 0 ) ||
                                                                         ( bottomItem->getBehavior() != 0
-                                                                                && bottomItem->getBehavior()->getBehaviorOfItem () != "behavior of disappearance on jump into"
-                                                                                && bottomItem->getBehavior()->getBehaviorOfItem () != "behavior of disappearance on touch"
-                                                                                && bottomItem->getBehavior()->getBehaviorOfItem () != "behavior of something special" ) ||
+                                                                                && bottomItem->getBehavior()->getNameOfBehavior () != "behavior of disappearance on jump into"
+                                                                                && bottomItem->getBehavior()->getNameOfBehavior () != "behavior of disappearance on touch"
+                                                                                && bottomItem->getBehavior()->getNameOfBehavior () != "behavior of something special" ) ||
                                                                         ( bottomItem->getBehavior() != 0
                                                                                 && bottomItem->getBehavior()->getActivityOfItem() == Vanish ) )
                                                                 {
@@ -111,7 +111,7 @@ bool Volatile::update ()
                                 }
                         }
                         // if it is puppy which disappears when Head or composite player is in room
-                        else if ( getBehaviorOfItem () == "behavior of disappearance as soon as Head appears" )
+                        else if ( getNameOfBehavior () == "behavior of disappearance as soon as Head appears" )
                         {
                                 if ( mediator->findItemByLabel( "head" ) != 0 || mediator->findItemByLabel( "headoverheels" ) != 0 )
                                 {
@@ -120,7 +120,7 @@ bool Volatile::update ()
                                 }
                         }
                         // volatile in time item is created when some other volatile disappears
-                        else if ( getBehaviorOfItem () == "behavior of disappearance in time" )
+                        else if ( getNameOfBehavior () == "behavior of disappearance in time" )
                         {
                                 vanish = ( disappearanceTimer->getValue() > item->getFramesDelay() * double( item->countFrames() ) );
                                 item->animate();
@@ -138,11 +138,11 @@ bool Volatile::update ()
                         // if displacing item which is volatile on contact then bin it
                         if ( ! solid )
                         {
-                                if ( getBehaviorOfItem () == "behavior of disappearance on touch" )
+                                if ( getNameOfBehavior () == "behavior of disappearance on touch" )
                                 {
                                                 activity = Vanish;
                                 }
-                                else if ( getBehaviorOfItem () == "behavior of disappearance as soon as Head appears" )
+                                else if ( getNameOfBehavior () == "behavior of disappearance as soon as Head appears" )
                                 {
                                         if ( mediator->findItemByLabel( "head" ) != 0 || mediator->findItemByLabel( "headoverheels" ) != 0 )
                                         {
@@ -161,12 +161,12 @@ bool Volatile::update ()
                         break;
 
                 case Vanish:
-                        if ( ( getBehaviorOfItem () != "behavior of disappearance on jump into" &&
-                                        getBehaviorOfItem () != "behavior of slow disappearance on jump into" &&
-                                        getBehaviorOfItem () != "behavior of disappearance as soon as Head appears" ) ||
-                                ( getBehaviorOfItem () == "behavior of disappearance on jump into" && disappearanceTimer->getValue() > 0.030 ) ||
-                                ( getBehaviorOfItem () == "behavior of slow disappearance on jump into" && disappearanceTimer->getValue() > 0.600 ) ||
-                                ( getBehaviorOfItem () == "behavior of disappearance as soon as Head appears" && disappearanceTimer->getValue() > 0.500 ) )
+                        if ( ( getNameOfBehavior () != "behavior of disappearance on jump into" &&
+                                        getNameOfBehavior () != "behavior of slow disappearance on jump into" &&
+                                        getNameOfBehavior () != "behavior of disappearance as soon as Head appears" ) ||
+                                ( getNameOfBehavior () == "behavior of disappearance on jump into" && disappearanceTimer->getValue() > 0.030 ) ||
+                                ( getNameOfBehavior () == "behavior of slow disappearance on jump into" && disappearanceTimer->getValue() > 0.600 ) ||
+                                ( getNameOfBehavior () == "behavior of disappearance as soon as Head appears" && disappearanceTimer->getValue() > 0.500 ) )
                         {
                                 vanish = true;
 

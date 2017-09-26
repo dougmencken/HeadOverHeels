@@ -24,7 +24,7 @@ class FreeItem ;
 
 
 /**
- * Caída de un elemento
+ * Item falls
  */
 
 class FallKindOfActivity : public KindOfActivity
@@ -39,21 +39,15 @@ public:
         virtual ~FallKindOfActivity( ) ;
 
        /**
-        * Único objeto de esta clase para toda la aplicación
-        * @return Un puntero a la clase madre para hacer uso del polimorfismo de clase
-        */
-        static KindOfActivity * getInstance () ;
-
-       /**
-        * Estado que hace caer a un elemento
-        * @param behavior Comportamiento usuario del estado de caída
-        * @return true si se produjo la caída o false si hubo colisión
+        * @return true if item falls or false if there’s collision
         */
         virtual bool fall ( Behavior * behavior ) ;
 
+        static KindOfActivity * getInstance () ;
+
 private:
 
-        void assignAnchor ( FreeItem * freeItem, std::stack < int > bottomItems ) ;
+        void assignAnchor ( FreeItem * freeItem, std::stack < int > items ) ;
 
 private:
 

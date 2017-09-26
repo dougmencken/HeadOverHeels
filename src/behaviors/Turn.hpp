@@ -38,11 +38,7 @@ public:
 
 protected:
 
-       /**
-        * Acciones a realizar cuando el elemento está en un estado ajeno a los estados propios de su
-        * comportamiento
-        */
-        void start () ;
+        void begin () ;
 
        /**
         * El elemento da media vuelta

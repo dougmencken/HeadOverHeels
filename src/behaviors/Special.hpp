@@ -41,7 +41,7 @@ public:
 protected:
 
         /**
-         * Checks if magic item can be taken, it depends on item and on player who takes it
+         * Checks if magic item can be taken, it depends on item and on character who takes it
          */
         bool mayTake ( Item* sender ) ;
 
