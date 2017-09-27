@@ -140,10 +140,7 @@ public:
         */
         void calculateCoordinates ( bool hasNorthDoor, bool hasEastDoor, int deltaX, int deltaY ) ;
 
-       /**
-        * Set the active player
-        */
-        void activatePlayer ( const std::string& player ) ;
+        void activatePlayerByName ( const std::string& player ) ;
 
        /**
         * Activa la sala. Implica la puesta en marcha de la actualización de los elementos y del dibujado
@@ -325,14 +322,12 @@ public:
         std::string getScenery () const {  return this->scenery ;  }
 
        /**
-        * Coordenadas de pantalla X donde está situada la coordenada origen de la sala
-        * @return Un número entero
+        * Screen coordinate X of room’s origin
         */
         int getX0 () const {  return coordinates.first ;  }
 
        /**
-        * Coordenadas de pantalla Y donde está situada la coordenada origen de la sala
-        * @return Un número entero
+        * Screen coordinate Y of room’s origin
         */
         int getY0 () const {  return coordinates.second ;  }
 

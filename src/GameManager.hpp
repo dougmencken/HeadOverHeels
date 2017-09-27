@@ -25,18 +25,6 @@ class GameFileManager;
 class PlayerItem;
 
 /**
- * Planets to liberate
- */
-enum PlanetId
-{
-        Blacktooth,
-        Egyptus,
-        Penitentiary,
-        Byblos,
-        Safari
-};
-
-/**
  * Why the game was paused
  */
 enum WhyPause
@@ -48,6 +36,7 @@ enum WhyPause
         Sucess,
         GameOver
 };
+
 
 /**
  * Manages user interface and isometric engine. Also, it holds data for the game
@@ -180,27 +169,26 @@ public:
         /**
          * Establece todos los planetas como miembros del Imperio Blacktooth
          */
-        void resetFreePlanets () ;
+        void resetPlanets () ;
 
         /**
          * Libera un planeta
-         * @param planet El planeta liberado: Blacktooth, Egyptus, Penitentiary, Byblos o Safari
-         * @param now Indica si se acaba de liberar o bien ya estaba liberado de una partida anterior
+         * @param planet Planet to liberate
+         * @param now Whether is it just liberated or was already liberated in previous game
          */
-        void liberatePlanet ( const PlanetId& planet, bool now = true ) ;
+        void liberatePlanet ( const std::string& planet, bool now = true ) ;
 
         /**
          * Indica si un planeta es libre
-         * @param planet Un planeta: Blacktooth, Egyptus, Penitentiary, Byblos o Safari
-         * @return true si se tiene la corona correspondiente o false en caso contrario
+         * @param planet Planet in question
+         * @return true if you took planet’s crown or false otherwise
          */
-        bool isFreePlanet ( const PlanetId& planet ) const ;
+        bool isFreePlanet ( const std::string& planet ) const ;
 
         /**
-         * Número de planetas liberados hasta el momento
-         * @return Un número entre 0 y 5
+         * How many planets are already liberated
          */
-        unsigned short freePlanetsCount () const ;
+        unsigned short countFreePlanets () const ;
 
         /**
          * Come un pez, es decir, desencadena el proceso para guardar la partida
@@ -352,10 +340,9 @@ private:
         unsigned short visitedRooms ;
 
         /**
-         * Indica qué planetas han sido liberados. El orden de los mísmos viene dado por
-         * el enumerado PlanetId
+         * Stores name of planet with boolean of its liberation
          */
-        std::vector< bool > freePlanets ;
+        std::map < std::string, bool > planets ;
 
         /**
          * Si un jugador acaba de coger una corona se detiene la partida para mostrar la pantalla de los planetas
@@ -524,11 +511,6 @@ public:
          * @return Un número mayor que 2
          */
         unsigned short getVisitedRooms () const {  return this->visitedRooms ;  }
-
-        /**
-         * Número de planetas liberados
-         */
-        size_t countFreePlanets () const ;
 
 };
 

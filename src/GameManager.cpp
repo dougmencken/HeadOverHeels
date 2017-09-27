@@ -42,7 +42,6 @@ GameManager::GameManager( )
         , donuts( 0 )
         , itemTaken( 0 )
         , visitedRooms( 0 )
-        , freePlanets( std::vector< bool >( 5, false ) )
         , takenCrown( false )
         , eatenFish( false )
         , gameOver( false )
@@ -146,8 +145,7 @@ WhyPause GameManager::begin ()
         this->donuts = 0;
         this->itemTaken = 0;
         this->visitedRooms = 0;
-        this->freePlanets.clear();
-        this->freePlanets = std::vector< bool >( 5, false );
+        this->planets.clear();
 
         refreshImages ();
         refreshBackgroundFrames ();
@@ -216,7 +214,7 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
         std::string scenery = this->isomot->getMapManager()->getActiveRoom()->getScenery();
 
         // empty scenery means it is the final screen
-        if ( ! scenery.empty () )
+        if ( scenery != "" )
         {
                 if ( drawBackgroundPicture )
                 {
@@ -554,45 +552,49 @@ void GameManager::emptyHandbag ( const std::string& player )
         }
 }
 
-void GameManager::resetFreePlanets ()
+void GameManager::resetPlanets ()
 {
-        for ( int i = Blacktooth; i < Safari; ++i )
+        for ( std::map < std::string, bool >::iterator g = this->planets.begin (); g != this->planets.end (); ++g )
         {
-                this->freePlanets[ i ] = false;
+                this->planets[ g->first ] = false ;
         }
 }
 
-void GameManager::liberatePlanet ( const PlanetId& planet, bool now )
+void GameManager::liberatePlanet ( const std::string& planet, bool now )
 {
-        if ( planet >= Blacktooth && planet <= Safari )
+        if ( planet == "blacktooth" || planet == "safari" || planet == "egyptus" || planet == "penitentiary" || planet == "byblos" )
         {
-                this->freePlanets[ planet ] = true;
+                this->planets[ planet ] = true;
                 this->takenCrown = now;
         }
 }
 
-bool GameManager::isFreePlanet ( const PlanetId& planet ) const
+bool GameManager::isFreePlanet ( const std::string& planet ) const
 {
-        bool isFree = false;
-
-        if( planet >= Blacktooth && planet <= Safari )
+        for ( std::map < std::string, bool >::const_iterator i = this->planets.begin (); i != this->planets.end (); ++i )
         {
-                isFree = this->freePlanets[ planet ];
+                if ( planet == i->first )
+                {
+                        return i->second;
+                }
         }
 
-        return isFree;
+        return false;
 }
 
-unsigned short GameManager::freePlanetsCount () const
+unsigned short GameManager::countFreePlanets () const
 {
-        unsigned short number = 0;
+        unsigned short count = 0;
 
-        for( size_t i = 0; i < freePlanets.size(); ++i )
+        for ( std::map < std::string, bool >::const_iterator p = this->planets.begin (); p != this->planets.end (); ++p )
         {
-                number += freePlanets[ i ] ? 1 : 0;
+                if ( p->second )
+                {
+                        count++ ;
+                }
         }
 
-        return number;
+        return count;
 }
 
 void GameManager::eatFish ( PlayerItem* character, Room* room )
@@ -898,11 +900,6 @@ std::vector< std::string > GameManager::playerTools ( const std::string& player 
 unsigned short GameManager::getDonuts ( const std::string& player ) const
 {
         return ( player == "head" || player == "headoverheels" ? this->donuts : 0 );
-}
-
-size_t GameManager::countFreePlanets () const
-{
-        return std::count( this->freePlanets.begin (), this->freePlanets.end (), true );
 }
 
 }

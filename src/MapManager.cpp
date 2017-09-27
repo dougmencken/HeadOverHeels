@@ -135,7 +135,7 @@ void MapManager::beginNewGame( const std::string& firstRoomFileName, const std::
                         // create player
                         roomBuilder->createPlayerInTheSameRoom( "head", "behavior of Head", centerX, centerY, 0, West, false );
 
-                        firstRoom->activatePlayer( "head" );
+                        firstRoom->activatePlayerByName( "head" );
                         firstRoom->getCamera()->turnOn( firstRoom->getMediator()->getActivePlayer(), JustWait );
                         activeRoom = firstRoom;
                         firstRoomData->setNameOfActivePlayer( "head" );
@@ -168,7 +168,7 @@ void MapManager::beginNewGame( const std::string& firstRoomFileName, const std::
                         // create player
                         roomBuilder->createPlayerInTheSameRoom( "heels", "behavior of Heels", centerX, centerY, 0, South, false );
 
-                        secondRoom->activatePlayer( "heels" );
+                        secondRoom->activatePlayerByName( "heels" );
                         secondRoom->getCamera()->turnOn( secondRoom->getMediator()->getActivePlayer(), JustWait );
                         secondRoomData->setNameOfActivePlayer( "heels" );
                         rooms.push_back( secondRoom );
@@ -265,7 +265,7 @@ void MapManager::beginOldGameWithCharacter( const sgxml::player& data )
                         // when other player is in the same room as active player then there’s no need to do anything more
                         if ( data.active() || this->activeRoom != room )
                         {
-                                room->activatePlayer( nameOfCharacter );
+                                room->activatePlayerByName( nameOfCharacter );
                                 room->getCamera()->turnOn( room->getMediator()->getActivePlayer(), Direction( data.entry() ) );
                                 /////room->getCamera()->centerOn( room->getMediator()->getActivePlayer () );
 
@@ -444,7 +444,7 @@ Room* MapManager::changeRoom( const Direction& exit )
         }
 
         nextRoomData->setNameOfActivePlayer( nameOfActivePlayer );
-        newRoom->activatePlayer( nameOfActivePlayer );
+        newRoom->activatePlayerByName( nameOfActivePlayer );
         newRoom->getCamera()->turnOn( newRoom->getMediator()->getActivePlayer(), entry );
 
         activeRoom = newRoom;
@@ -619,7 +619,7 @@ Room* MapManager::restartRoom()
                 rooms.push_back( newRoom );
 
                 activeRoomData->setNameOfActivePlayer( nameOfActivePlayer );
-                newRoom->activatePlayer( nameOfActivePlayer );
+                newRoom->activatePlayerByName( nameOfActivePlayer );
                 newRoom->getCamera()->turnOn( newRoom->getMediator()->getActivePlayer(), entry );
 
                 activeRoom = newRoom;
@@ -639,6 +639,13 @@ Room* MapManager::createRoom( const std::string& fileName )
 {
         std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( isomot->getItemDataManager() ) );
         return roomBuilder->buildRoom( isomot::sharePath() + "map/" + fileName );
+}
+
+Room* MapManager::createRoomThenAddItToListOfRooms( const std::string& fileName )
+{
+        Room* room = createRoom( fileName );
+        rooms.push_back( room );
+        return room;
 }
 
 Room* MapManager::swapRoom ()
@@ -682,9 +689,7 @@ Room* MapManager::removeRoomAndSwap ()
                 activeRoom = 0;
         }
 
-        // remove inactive room
-        rooms.erase( std::remove_if( rooms.begin (), rooms.end (), std::bind2nd( EqualRoom(), inactiveRoom->getNameOfFileWithDataAboutRoom() ) ), rooms.end() );
-        delete inactiveRoom;
+        removeRoom( inactiveRoom );
 
         if ( activeRoom != 0 )
         {
@@ -692,6 +697,21 @@ Room* MapManager::removeRoomAndSwap ()
         }
 
         return activeRoom;
+}
+
+void MapManager::removeRoom( Room* whichRoom )
+{
+        if ( whichRoom != 0 )
+        {
+                if ( whichRoom->isActive() )
+                        whichRoom->deactivate();
+
+                if ( whichRoom == this->activeRoom )
+                        this->activeRoom = 0;
+
+                rooms.erase( std::remove_if( rooms.begin (), rooms.end (), std::bind2nd( EqualRoom(), whichRoom->getNameOfFileWithDataAboutRoom() ) ), rooms.end() );
+                delete whichRoom;
+        }
 }
 
 void MapManager::updateActivePlayer()

@@ -510,7 +510,6 @@ void Room::removeGridItem( GridItem * gridItem )
                 // Marca para enmascarar los elementos libres afectados por la eliminación
                 mediator->markItemsForMasking( gridItem );
 
-                // Destrucción del elemento
                 delete gridItem;
         }
         catch ( const Exception& e )
@@ -536,7 +535,6 @@ void Room::removeFreeItem( FreeItem * freeItem )
                 // Marca para enmascarar los elementos libres afectados por la eliminación
                 mediator->markItemsForMasking( freeItem );
 
-                // Destrucción del elemento
                 delete freeItem;
         }
         catch ( const Exception& e )
@@ -562,7 +560,6 @@ void Room::removePlayer( PlayerItem* playerItem )
                 // Marca para enmascarar los elementos libres afectados por la eliminación
                 mediator->markItemsForMasking( playerItem );
 
-                // Destrucción del elemento
                 delete playerItem;
         }
         catch ( const Exception& e )
@@ -762,7 +759,7 @@ void Room::calculateCoordinates( bool hasNorthDoor, bool hasEastDoor, int deltaX
         }
 }
 
-void Room::activatePlayer( const std::string& player )
+void Room::activatePlayerByName( const std::string& player )
 {
         Item* item = mediator->findItemByLabel( player );
         if ( item != 0 )

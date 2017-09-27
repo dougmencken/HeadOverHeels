@@ -39,9 +39,6 @@ public:
 
 private:
 
-        /**
-         * Imagen donde se dibujará la interfaz gráfica
-         */
         BITMAP* where ;
 
         /**

@@ -80,7 +80,7 @@ private:
 private:
 
         /**
-         * Indica si el motor está gestionando la sala final del juego
+         * Whether engine shows the final room of game
          */
         bool isEndRoom ;
 

@@ -579,23 +579,23 @@ void PlayerItem::liberatePlanet ()
 
         if ( scenery.compare( "jail" ) == 0 || scenery.compare( "blacktooth" ) == 0 || scenery.compare( "market" ) == 0 )
         {
-                GameManager::getInstance()->liberatePlanet( Blacktooth );
+                GameManager::getInstance()->liberatePlanet( "blacktooth" );
         }
         else if ( scenery.compare( "egyptus" ) == 0 )
         {
-                GameManager::getInstance()->liberatePlanet( Egyptus );
+                GameManager::getInstance()->liberatePlanet( "egyptus" );
         }
         else if ( scenery.compare( "penitentiary" ) == 0 )
         {
-                GameManager::getInstance()->liberatePlanet( Penitentiary );
+                GameManager::getInstance()->liberatePlanet( "penitentiary" );
         }
         else if ( scenery.compare( "safari" ) == 0 )
         {
-                GameManager::getInstance()->liberatePlanet( Safari );
+                GameManager::getInstance()->liberatePlanet( "safari" );
         }
         else if ( scenery.compare( "byblos" ) == 0 )
         {
-                GameManager::getInstance()->liberatePlanet( Byblos );
+                GameManager::getInstance()->liberatePlanet( "byblos" );
         }
 }
 

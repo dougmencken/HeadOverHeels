@@ -20,25 +20,25 @@ void LoadGame::doIt ()
 {
         std::stringstream ss;
         isomot::GameManager* gameManager = isomot::GameManager::getInstance();
-        gameManager->resetFreePlanets();
+        gameManager->resetPlanets();
         ss << isomot::homePath() << "savegame/save" << slot << ".xml";
         gameManager->loadGame( ss.str() );
 
         CreatePlanetsScreen * planetsAction = new CreatePlanetsScreen( this->where, true );
 
-        if ( gameManager->isFreePlanet( isomot::Blacktooth ) )
+        if ( gameManager->isFreePlanet( "blacktooth" ) )
                 planetsAction->liberateBlacktooth();
 
-        if ( gameManager->isFreePlanet( isomot::Egyptus ) )
+        if ( gameManager->isFreePlanet( "egyptus" ) )
                 planetsAction->liberateEgyptus();
 
-        if ( gameManager->isFreePlanet( isomot::Penitentiary ) )
+        if ( gameManager->isFreePlanet( "penitentiary" ) )
                 planetsAction->liberatePenitentiary();
 
-        if ( gameManager->isFreePlanet( isomot::Safari ) )
+        if ( gameManager->isFreePlanet( "safari" ) )
                 planetsAction->liberateSafari();
 
-        if ( gameManager->isFreePlanet( isomot::Byblos ) )
+        if ( gameManager->isFreePlanet( "byblos" ) )
                 planetsAction->liberateByblos();
 
         planetsAction->doIt ();

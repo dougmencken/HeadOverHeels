@@ -54,23 +54,23 @@ void GameFileManager::loadGame( const std::string& fileName )
 
                 if ( saveGameXML->freeByblos() )
                 {
-                        this->gameManager->liberatePlanet( Byblos, false );
+                        this->gameManager->liberatePlanet( "byblos", false );
                 }
                 if ( saveGameXML->freeEgyptus() )
                 {
-                        this->gameManager->liberatePlanet( Egyptus, false );
+                        this->gameManager->liberatePlanet( "egyptus", false );
                 }
                 if ( saveGameXML->freePenitentiary() )
                 {
-                        this->gameManager->liberatePlanet( Penitentiary, false );
+                        this->gameManager->liberatePlanet( "penitentiary", false );
                 }
                 if ( saveGameXML->freeSafari() )
                 {
-                        this->gameManager->liberatePlanet( Safari, false );
+                        this->gameManager->liberatePlanet( "safari", false );
                 }
                 if ( saveGameXML->freeBlacktooth() )
                 {
-                        this->gameManager->liberatePlanet( Blacktooth, false );
+                        this->gameManager->liberatePlanet( "blacktooth", false );
                 }
 
                 this->updateAttributesOfPlayers( saveGameXML->players().player() );
@@ -190,22 +190,19 @@ void GameFileManager::saveGame( const std::string& fileName )
                 // store players
                 players.player( playerSequence );
 
-                // Creación de la configuración
                 sgxml::SaveGameXML saveGameXML( exploredRooms,
-                    this->gameManager->isFreePlanet( Byblos ),
-                    this->gameManager->isFreePlanet( Egyptus ),
-                    this->gameManager->isFreePlanet( Penitentiary ),
-                    this->gameManager->isFreePlanet( Safari ),
-                    this->gameManager->isFreePlanet( Blacktooth ),
+                    this->gameManager->isFreePlanet( "byblos" ),
+                    this->gameManager->isFreePlanet( "egyptus" ),
+                    this->gameManager->isFreePlanet( "penitentiary" ),
+                    this->gameManager->isFreePlanet( "safari" ),
+                    this->gameManager->isFreePlanet( "blacktooth" ),
                     bonus,
                     players );
 
-                // Información del esquema que valida la corrección de los datos
                 xml_schema::namespace_infomap map;
                 map[ "" ].name = "";
                 map[ "" ].schema = "savegame.xsd";
 
-                // Creación del archivo
                 std::cout << "save game \"" << fileName.c_str() << "\"" << std::endl ;
                 std::ofstream outputFile( fileName.c_str() );
                 sgxml::savegame( outputFile, saveGameXML, map );

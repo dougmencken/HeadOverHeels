@@ -74,11 +74,12 @@ public:
         Room * restartRoom () ;
 
         /**
-         * Construye una sala a partir de los datos de un archivo
-         * @param fileName Nombre del archivo que contiene los datos de la sala
+         * Create room by data from file
          * @return La sala creada ó 0 si no se pudo construir
          */
         Room * createRoom ( const std::string& fileName ) ;
+
+        Room * createRoomThenAddItToListOfRooms ( const std::string& fileName ) ;
 
         /**
          * Change active room to next room
@@ -90,6 +91,8 @@ public:
          * loses all its lives
          */
         Room * removeRoomAndSwap () ;
+
+        void removeRoom ( Room* whichRoom ) ;
 
         /**
          * Actualiza el jugador activo de la sala activa. El valor se obtiene a partir de
@@ -166,6 +169,8 @@ public:
          * The room to draw yet
          */
         Room * getActiveRoom () const {  return activeRoom ;  }
+
+        void setActiveRoom ( Room * newRoom ) {  activeRoom = newRoom ;  }
 
         /**
          * @return room or 0 if there’re no more players

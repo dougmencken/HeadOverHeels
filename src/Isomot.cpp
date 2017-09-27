@@ -204,6 +204,66 @@ BITMAP* Isomot::update()
         if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_MINUS ] )
         {
                 activeRoom->removeBars ();
+                key[ KEY_MINUS ] = 0;
+        }
+
+        if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_L ] )
+        {
+                if ( gameManager->countFreePlanets() < 5 )
+                {
+                        if ( activeRoom->getMediator()->findItemByLabel( "crown" ) == 0 )
+                        {
+                                ItemData* chapeauData = this->itemDataManager->findItemByLabel( "crown" );
+
+                                int x = ( activeRoom->getBound( South ) - activeRoom->getBound( North ) + chapeauData->widthX ) >> 1 ;
+                                int y = ( activeRoom->getBound( West ) - activeRoom->getBound( East ) + chapeauData->widthY ) >> 1 ;
+
+                                FreeItem* chapeau = new FreeItem( chapeauData, x, y, 250, NoDirection );
+                                chapeau->assignBehavior( "behavior of something special", chapeauData );
+                                activeRoom->addFreeItem( chapeau );
+                        }
+                }
+                else
+                {
+                        PlayerItem* activePlayer = activeRoom->getMediator()->getActivePlayer();
+                        std::string nameOfPlayer = activePlayer->getLabel();
+
+                        PlayerItem* teleportedPlayer = new PlayerItem(
+                                this->itemDataManager->findItemByLabel( nameOfPlayer ),
+                                0, 95, 240,
+                                activePlayer->getDirection()
+                        ) ;
+
+                        std::string behaviorOfPlayer = "still";
+                        if ( nameOfPlayer == "head" ) behaviorOfPlayer = "behavior of Head";
+                        else if ( nameOfPlayer == "heels" ) behaviorOfPlayer = "behavior of Heels";
+                        else if ( nameOfPlayer == "headoverheels" ) behaviorOfPlayer = "behavior of Head over Heels";
+
+                        teleportedPlayer->assignBehavior( behaviorOfPlayer, reinterpret_cast< void * >( this->itemDataManager ) );
+
+                        teleportedPlayer->setLives( gameManager->getLives( nameOfPlayer ) );
+                        teleportedPlayer->setTools( gameManager->playerTools( nameOfPlayer ) );
+                        teleportedPlayer->setAmmo( gameManager->getDonuts( nameOfPlayer ) );
+                        teleportedPlayer->setHighJumps( gameManager->getHighJumps() );
+                        teleportedPlayer->setHighSpeed( gameManager->getHighSpeed() );
+                        teleportedPlayer->setShieldTime( gameManager->getShield( nameOfPlayer ) );
+
+                        Room* roomWithTeleportToFinalScene = this->mapManager->createRoomThenAddItToListOfRooms( "blacktooth/blacktooth83.xml" );
+                        roomWithTeleportToFinalScene->addPlayer( teleportedPlayer );
+                        teleportedPlayer->getBehavior()->changeActivityOfItem( BeginWayInTeletransport );
+
+                        activeRoom->removePlayer( activePlayer );
+                        this->mapManager->removeRoom( activeRoom );
+
+                        this->mapManager->setActiveRoom( roomWithTeleportToFinalScene );
+                        roomWithTeleportToFinalScene->activate();
+                        roomWithTeleportToFinalScene->getMediator()->setActivePlayer( teleportedPlayer );
+                        this->mapManager->updateActivePlayer();
+
+                        activeRoom = roomWithTeleportToFinalScene;
+                }
+
+                key[ KEY_L ] = 0;
         }
 
         // swap key changes character and possibly room
@@ -263,7 +323,10 @@ BITMAP* Isomot::update()
                         activeRoom = mapManager->changeRoom( exit );
 
                         std::string scenery = activeRoom->getScenery ();
-                        SoundManager::getInstance()->playOgg ( "music/" + scenery + ".ogg", /* loop */ false );
+                        if ( scenery != "" )
+                        {
+                                SoundManager::getInstance()->playOgg ( "music/" + scenery + ".ogg", /* loop */ false );
+                        }
                 }
         }
 
@@ -323,57 +386,62 @@ void Isomot::updateEndRoom()
                 int crowns = 0;
 
                 // la corona de Safari
-                if ( gameManager->isFreePlanet( Safari ) )
+                if ( gameManager->isFreePlanet( "safari" ) )
                 {
                         freeItem = new FreeItem( this->itemDataManager->findItemByLabel( "crown" ), 66, 75, Top, NoDirection );
                         activeRoom->addFreeItem( freeItem );
                         crowns++;
                 }
                 // la corona de Egyptus
-                if ( gameManager->isFreePlanet( Egyptus ) )
+                if ( gameManager->isFreePlanet( "egyptus" ) )
                 {
                         freeItem = new FreeItem( this->itemDataManager->findItemByLabel( "crown" ), 66, 59, Top, NoDirection );
                         activeRoom->addFreeItem( freeItem );
                         crowns++;
                 }
                 // la corona de Penitentiary
-                if ( gameManager->isFreePlanet( Penitentiary ) )
+                if ( gameManager->isFreePlanet( "penitentiary" ) )
                 {
                         freeItem = new FreeItem( this->itemDataManager->findItemByLabel( "crown" ), 65, 107, Top, NoDirection );
                         activeRoom->addFreeItem( freeItem );
                         crowns++;
                 }
                 // la corona de Byblos
-                if ( gameManager->isFreePlanet( Byblos ) )
+                if ( gameManager->isFreePlanet( "byblos" ) )
                 {
                         freeItem = new FreeItem( this->itemDataManager->findItemByLabel( "crown" ), 65, 123, Top, NoDirection );
                         activeRoom->addFreeItem( freeItem );
                         crowns++;
                 }
                 // la corona de Blacktooth
-                if ( gameManager->isFreePlanet( Blacktooth ) )
+                if ( gameManager->isFreePlanet( "blacktooth" ) )
                 {
                         freeItem = new FreeItem( this->itemDataManager->findItemByLabel( "crown" ), 65, 91, Top, NoDirection );
                         activeRoom->addFreeItem( freeItem );
                         crowns++;
                 }
 
-                // Si se han conseguido las cinco coronas se mostrará la pantalla de felicitación
                 if ( crowns == 5 )
                 {
+                        // all five crowns are taken, show the greeting screen
                         gameManager->success();
                 }
-                // Si no se saldrá directamente a la pantalla resumen
                 else
                 {
+                        // if not, just go to the summary screen
                         gameManager->arriveFreedom();
                 }
 
-                // Ahora la sala ya está lista
+                // final room is done
                 this->isEndRoom = true;
         }
         else
         {
+                std::string scenery = /* "finale" */ "begin" ;
+                SoundManager::getInstance()->playOgg ( "music/" + scenery + ".ogg", /* loop */ false );
+
+                /// sleep( 2340 );
+
                 if ( activeRoom->getMediator()->findItemByLabel( "ball" ) == 0 && activeRoom->getMediator()->findItemByLabel( "bubbles" ) == 0 )
                 {
                         FreeItem* freeItem = new FreeItem( this->itemDataManager->findItemByLabel( "ball" ), 146, 93, LayerHeight, NoDirection );

@@ -32,19 +32,19 @@ void ContinueGame::doIt ()
         {
                 CreatePlanetsScreen * planetsAction = new CreatePlanetsScreen( this->where, true );
 
-                if ( gameManager->isFreePlanet( isomot::Blacktooth ) )
+                if ( gameManager->isFreePlanet( "blacktooth" ) )
                         planetsAction->liberateBlacktooth();
 
-                if ( gameManager->isFreePlanet( isomot::Egyptus ) )
+                if ( gameManager->isFreePlanet( "egyptus" ) )
                         planetsAction->liberateEgyptus();
 
-                if ( gameManager->isFreePlanet( isomot::Penitentiary ) )
+                if ( gameManager->isFreePlanet( "penitentiary" ) )
                         planetsAction->liberatePenitentiary();
 
-                if ( gameManager->isFreePlanet( isomot::Safari ) )
+                if ( gameManager->isFreePlanet( "safari" ) )
                         planetsAction->liberateSafari();
 
-                if ( gameManager->isFreePlanet( isomot::Byblos ) )
+                if ( gameManager->isFreePlanet( "byblos" ) )
                         planetsAction->liberateByblos();
 
                 planetsAction->doIt ();
@@ -59,7 +59,7 @@ void ContinueGame::doIt ()
         {
                 CreateEndScreen * endScreenAction =
                         new CreateEndScreen(
-                                this->where, gameManager->getVisitedRooms(), gameManager->freePlanetsCount()
+                                this->where, gameManager->getVisitedRooms(), gameManager->countFreePlanets()
                         );
 
                 endScreenAction->doIt ();
@@ -68,7 +68,7 @@ void ContinueGame::doIt ()
         {
                 CreateCongratulationsScreen * congratulationsScreenAction =
                         new CreateCongratulationsScreen(
-                                this->where, gameManager->getVisitedRooms(), gameManager->freePlanetsCount()
+                                this->where, gameManager->getVisitedRooms(), gameManager->countFreePlanets()
                         );
 
                 congratulationsScreenAction->doIt ();

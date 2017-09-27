@@ -20,7 +20,6 @@ void SaveGame::doIt ()
 {
         clear_keybuf();
 
-        // Se graba la partida en la ubicación especificada
         if ( slot != 0 )
         {
                 std::stringstream ss;
