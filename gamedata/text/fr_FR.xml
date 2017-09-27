@@ -239,21 +239,6 @@
       <ustring> </ustring>
     </properties>
     <properties font="big" color="multicolor">
-      <ustring>Beta-testeurs</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Xavi Colomé</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Paco Santoyo López</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Santiago Acha Jiménez</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring> </ustring>
-    </properties>
-    <properties font="big" color="multicolor">
       <ustring>Version Afrikaans</ustring>
     </properties>
     <properties font="regular" color="white">
@@ -450,6 +435,12 @@
     </properties>
     <properties font="regular" color="white">
       <ustring>Nancy Loor Zambrano</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Paco Santoyo López</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Santiago Acha Jiménez</ustring>
     </properties>
     <properties font="regular" color="white">
       <ustring>Remakes Zone</ustring>

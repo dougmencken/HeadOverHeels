@@ -119,7 +119,7 @@
 
   <text id="confirm-quit">
     <properties font="big" color="cyan">
-      <ustring>Нажмите Esc, чтобы закончить игру</ustring>
+      <ustring>Нажмите Escape, чтобы закончить игру</ustring>
     </properties>
   </text>
 
@@ -231,21 +231,6 @@
     </properties>
     <properties font="regular" color="white">
       <ustring>Douglas Mencken</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring> </ustring>
-    </properties>
-    <properties font="big" color="multicolor">
-      <ustring>Бета тестирование</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Ксавь Коломе</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Пако Сантоио Лопес</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Сантьяго Ача Хименес</ustring>
     </properties>
     <properties font="regular" color="white">
       <ustring> </ustring>
@@ -446,13 +431,19 @@
       <ustring>Маркос Моралес</ustring>
     </properties>
     <properties font="regular" color="white">
+      <ustring>Nancy Loor Zambrano</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Paco Santoyo López</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Santiago Acha Jiménez</ustring>
+    </properties>
+    <properties font="regular" color="white">
       <ustring>Remakes Zone</ustring>
     </properties>
     <properties font="regular" color="white">
       <ustring>Computer Emuzone</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Нанси Лоор Самбрано</ustring>
     </properties>
     <properties font="regular" color="orange">
       <ustring>и</ustring>

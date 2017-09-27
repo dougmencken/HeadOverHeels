@@ -131,7 +131,7 @@
 
   <text id="confirm-quit">
     <properties font="big" color="cyan">
-      <ustring>Use Esc to quit game</ustring>
+      <ustring>Use Escape key to quit game</ustring>
     </properties>
   </text>
 
@@ -233,7 +233,7 @@
       <ustring> </ustring>
     </properties>
     <properties font="big" color="multicolor">
-      <ustring>Graphic design</ustring>
+      <ustring>Graphics</ustring>
     </properties>
     <properties font="regular" color="white">
       <ustring>Davit Masiá</ustring>
@@ -270,21 +270,6 @@
     </properties>
     <properties font="regular" color="white">
       <ustring>Douglas Mencken</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring> </ustring>
-    </properties>
-    <properties font="big" color="multicolor">
-      <ustring>Beta testers</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Xavi Colomé</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Paco Santoyo López</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Santiago Acha Jiménez</ustring>
     </properties>
     <properties font="regular" color="white">
       <ustring> </ustring>
@@ -498,6 +483,12 @@
     </properties>
     <properties font="regular" color="white">
       <ustring>Nancy Loor Zambrano</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Paco Santoyo López</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Santiago Acha Jiménez</ustring>
     </properties>
     <properties font="regular" color="white">
       <ustring>Remakes Zone</ustring>
