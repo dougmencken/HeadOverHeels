@@ -21,7 +21,7 @@ namespace isomot
 class Item ;
 
 /**
- * Mueve a los elementos situados encima hacia arriba o hacia abajo
+ * Moves item above it up and down
  */
 
 class Elevator : public Behavior
@@ -38,17 +38,17 @@ public:
 private:
 
        /**
-        * Altura máxima a la que asciende el ascensor
+        * Maximum height at which elevator ascends
         */
         int top ;
 
        /**
-        * Altura mínima a la que desciende el ascensor
+        * Minimum height at which elevator descends
         */
         int bottom ;
 
        /**
-        * Indica si el primer movimiento que realiza el ascensor es ascendente (true) o descendente (false)
+        * Is first movement of elevator ascending if true or descending if false
         */
         bool ascent ;
 

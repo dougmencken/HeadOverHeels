@@ -336,7 +336,7 @@ public:
          * @return Algún punto cardinal, arriba o abajo
          * @see Direction
          */
-        Direction getDirection () {  return direction ;  }
+        Direction getDirection () const {  return direction ;  }
 
         /**
          * Fotograma actual del elemento sin procesar
