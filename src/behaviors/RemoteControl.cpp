@@ -146,7 +146,7 @@ bool RemoteControl::update ()
 
                 case Fall:
                         // Se comprueba si ha topado con el suelo en una sala sin suelo
-                        if ( freeItem->getZ() == 0 && freeItem->getMediator()->getRoom()->getFloorType() == NoFloor )
+                        if ( freeItem->getZ() == 0 && freeItem->getMediator()->getRoom()->getKindOfFloor() == "none" )
                         {
                                 // item disappears
                                 vanish = true;

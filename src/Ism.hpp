@@ -157,16 +157,6 @@ namespace isomot
         } ;
 
         /**
-         * Tipo de suelo de una sala
-         */
-        enum FloorId
-        {
-                NoFloor,       /* Sin suelo */
-                RegularFloor,  /* Suelo normal */
-                MortalFloor    /* Suelo mortal */
-        } ;
-
-        /**
          * Identificador predefinido de los elementos especiales
          */
         enum SpecialId

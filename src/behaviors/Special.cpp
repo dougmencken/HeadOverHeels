@@ -128,7 +128,7 @@ bool Special::update ()
 
                 case Fall:
                         // is it fall in room without floor
-                        if ( item->getZ() == 0 && item->getMediator()->getRoom()->getFloorType() == NoFloor )
+                        if ( item->getZ() == 0 && item->getMediator()->getRoom()->getKindOfFloor() == "none" )
                         {
                                 isGone = true;
                         }

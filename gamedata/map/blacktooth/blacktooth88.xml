@@ -11,7 +11,7 @@
 
   <width>16</width>
 
-  <floorType>regular</floorType>
+  <floorType>plain</floorType>
 
   <deltaY>32</deltaY>
 

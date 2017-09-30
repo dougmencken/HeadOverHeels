@@ -195,7 +195,6 @@ namespace xml_schema
 namespace rxml
 {
   class RoomXML;
-  class floorType;
   class triple_room_data;
   class floor;
   class walls;
@@ -312,7 +311,7 @@ namespace rxml
 
     // floorType
     //
-    typedef ::rxml::floorType floorType_type;
+    typedef ::xml_schema::string floorType_type;
     typedef ::xsd::cxx::tree::traits< floorType_type, char > floorType_traits;
 
     const floorType_type&
@@ -482,59 +481,6 @@ namespace rxml
     ::xsd::cxx::tree::one< floor_type > floor_;
     walls_optional walls_;
     ::xsd::cxx::tree::one< items_type > items_;
-  };
-
-  class floorType: public ::xml_schema::string
-  {
-    public:
-    enum value
-    {
-      none,
-      regular,
-      mortal
-    };
-
-    floorType (value v);
-
-    floorType (const ::xml_schema::string& v);
-
-    floorType (const ::xercesc::DOMElement& e,
-               ::xml_schema::flags f = 0,
-               ::xml_schema::type* c = 0);
-
-    floorType (const ::xercesc::DOMAttr& a,
-               ::xml_schema::flags f = 0,
-               ::xml_schema::type* c = 0);
-
-    floorType (const ::std::string& s,
-               const ::xercesc::DOMElement* e,
-               ::xml_schema::flags f = 0,
-               ::xml_schema::type* c = 0);
-
-    floorType (const floorType& x,
-               ::xml_schema::flags f = 0,
-               ::xml_schema::type* c = 0);
-
-    virtual floorType*
-    _clone (::xml_schema::flags f = 0,
-            ::xml_schema::type* c = 0) const;
-
-    floorType&
-    operator= (value v);
-
-    virtual
-    operator value () const
-    {
-      return _xsd_floorType_convert ();
-    }
-
-    protected:
-    value
-    _xsd_floorType_convert () const;
-
-    public:
-    static const char* const _xsd_floorType_literals_[3];
-    static const value _xsd_floorType_indexes_[3];
   };
 
   class triple_room_data: public ::xml_schema::type

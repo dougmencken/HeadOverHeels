@@ -112,7 +112,7 @@ bool Patrol::update ()
 
                 case Fall:
                         // Se comprueba si ha topado con el suelo en una sala sin suelo
-                        if ( item->getZ() == 0 && item->getMediator()->getRoom()->getFloorType() == NoFloor )
+                        if ( item->getZ() == 0 && item->getMediator()->getRoom()->getKindOfFloor() == "none" )
                         {
                                 // El elemento desaparece
                                 alive = false;

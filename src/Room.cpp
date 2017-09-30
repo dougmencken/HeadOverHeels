@@ -16,12 +16,12 @@
 namespace isomot
 {
 
-Room::Room( const std::string& roomFile, const std::string& scenery, int xTiles, int yTiles, int tileSize, const FloorId& floorType )
+Room::Room( const std::string& roomFile, const std::string& scenery, int xTiles, int yTiles, int tileSize, const std::string& floor )
 : Mediated( )
         , nameOfFileWithDataAboutRoom( roomFile )
         , scenery( scenery )
         , tileSize( tileSize )
-        , floorType( floorType )
+        , kindOfFloor( floor )
         , exit( NoExit )
         , restart( false )
         , lastGridId( FirstGridId )
@@ -706,8 +706,8 @@ void Room::draw( BITMAP* where )
 
 void Room::calculateBounds()
 {
-        bounds[ North ] = doors[ North ] || doors[ Northeast ] || doors[ Northwest ] || this->floorType == NoFloor ? tileSize : 0;
-        bounds[ East ] = doors[ East ] || doors[ Eastnorth ] || doors[ Eastsouth ]  || this->floorType == NoFloor ? tileSize : 0;
+        bounds[ North ] = doors[ North ] || doors[ Northeast ] || doors[ Northwest ] || this->kindOfFloor == "none" ? tileSize : 0;
+        bounds[ East ] = doors[ East ] || doors[ Eastnorth ] || doors[ Eastsouth ]  || this->kindOfFloor == "none" ? tileSize : 0;
         bounds[ South ] = tileSize * tilesNumber.first - ( doors[ South ] || doors[ Southeast ] || doors[ Southwest ]  ? tileSize : 0 );
         bounds[ West ] = tileSize * tilesNumber.second - ( doors[ West ] || doors[ Westnorth ] || doors[ Westsouth ]  ? tileSize : 0 );
 
@@ -725,8 +725,8 @@ void Room::calculateBounds()
 void Room::calculateCoordinates( bool hasNorthDoor, bool hasEastDoor, int deltaX, int deltaY )
 {
         // Para calcular las coordenadas no se tiene en cuenta las losetas ocupadas por las puertas y sus muros
-        int xGrid = hasNorthDoor || this->floorType == NoFloor ? tilesNumber.first - 1 : tilesNumber.first;
-        int yGrid = hasEastDoor || this->floorType == NoFloor ? tilesNumber.second - 1 : tilesNumber.second;
+        int xGrid = hasNorthDoor || this->kindOfFloor == "none" ? tilesNumber.first - 1 : tilesNumber.first;
+        int yGrid = hasEastDoor || this->kindOfFloor == "none" ? tilesNumber.second - 1 : tilesNumber.second;
 
         // Si las variables son impares quiere decir que hay puertas al sur y/o al oeste
         // Se resta 1 en tal caso para obtener el número de losetas hábiles de la sala
@@ -739,11 +739,11 @@ void Room::calculateCoordinates( bool hasNorthDoor, bool hasEastDoor, int deltaX
         // izquierda respecto del punto origen
         int middlePointX = ( xGrid > 8 || yGrid > 8 ? picture->w : ScreenWidth ) >> 1;
         this->coordinates.first = middlePointX
-                                - ( hasNorthDoor || this->floorType == NoFloor ? ( tileSize << 1 ) : 0)
-                                + ( hasEastDoor || this->floorType == NoFloor ? ( tileSize << 1 ) : 0 );
+                                - ( hasNorthDoor || this->kindOfFloor == "none" ? ( tileSize << 1 ) : 0)
+                                + ( hasEastDoor || this->kindOfFloor == "none" ? ( tileSize << 1 ) : 0 );
         this->coordinates.second = ( ScreenHeight / 3 - deltaY )
-                                 - ( hasNorthDoor || this->floorType == NoFloor ? tileSize : 0 )
-                                 - ( hasEastDoor || this->floorType == NoFloor ? tileSize : 0 );
+                                 - ( hasNorthDoor || this->kindOfFloor == "none" ? tileSize : 0 )
+                                 - ( hasEastDoor || this->kindOfFloor == "none" ? tileSize : 0 );
 
         if ( xGrid <= 8 && yGrid <= 8 )
         {

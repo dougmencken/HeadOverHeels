@@ -37,7 +37,7 @@ Room* RoomBuilder::buildRoom ( const std::string& fileName )
                 std::auto_ptr< rxml::RoomXML > roomXML( rxml::room( fileName.c_str () ) );
 
                 // create room with basic parameters like scenery, dimensions, existence of floor
-                this->room = new Room( roomXML->name(), roomXML->scenery(), roomXML->xTiles(), roomXML->yTiles(), roomXML->width(), FloorId( int( roomXML->floorType() ) ) );
+                this->room = new Room( roomXML->name(), roomXML->scenery(), roomXML->xTiles(), roomXML->yTiles(), roomXML->width(), roomXML->floorType() );
                 if ( this->room == 0 )
                 {
                         std::cerr << "I can't create room \"" << fileName << "\"" << std::endl ;

@@ -51,9 +51,9 @@ public:
         * @param xTiles Número de losetas en el eje X
         * @param yTiles Número de losetas en el eje Y
         * @param tileSize Longitud del lado de una loseta en unidades isométricas
-        * @param floorType Tipo de suelo
+        * @param floor Kind of floor
         */
-        Room( const std::string& roomFile, const std::string& scenery, int xTiles, int yTiles, int tileSize, const FloorId& floorType ) ;
+        Room( const std::string& roomFile, const std::string& scenery, int xTiles, int yTiles, int tileSize, const std::string& floor ) ;
 
         virtual ~Room( ) ;
 
@@ -218,10 +218,7 @@ private:
         */
         int tileSize ;
 
-       /**
-        * Tipo de suelo de la sala
-        */
-        FloorId floorType ;
+        std::string kindOfFloor ;
 
        /**
         * Indica si la sala está activa, es decir, si debe dibujarse
@@ -350,10 +347,9 @@ public:
         int getSizeOfOneTile () const {  return tileSize ;  }
 
        /**
-        * Tipo de suelo de la sala
-        * @return El suelo puede se normal, inexistente o mortal
+        * @return kind of floor which may be "plain", "mortal", or absent "none"
         */
-        FloorId getFloorType () const {  return floorType ;  }
+        std::string getKindOfFloor () const {  return kindOfFloor ;  }
 
        /**
         * Activa o desactiva la sala. Una sala desactivada no se dibuja

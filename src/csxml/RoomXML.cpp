@@ -323,39 +323,6 @@ namespace rxml
   }
 
 
-  // floorType
-  //
-
-  floorType::
-  floorType (value v)
-  : ::xml_schema::string (_xsd_floorType_literals_[v])
-  {
-  }
-
-  floorType::
-  floorType (const ::xml_schema::string& v)
-  : ::xml_schema::string (v)
-  {
-  }
-
-  floorType::
-  floorType (const floorType& v,
-             ::xml_schema::flags f,
-             ::xml_schema::type* c)
-  : ::xml_schema::string (v, f, c)
-  {
-  }
-
-  floorType& floorType::
-  operator= (value v)
-  {
-    static_cast< ::xml_schema::string& > (*this) =
-    ::xml_schema::string (_xsd_floorType_literals_[v]);
-
-    return *this;
-  }
-
-
   // triple_room_data
   //
 
@@ -1861,78 +1828,6 @@ namespace rxml
   {
     return new RoomXML (*this, f, c);
   }
-
-  // floorType
-  //
-
-  floorType::
-  floorType (const ::xercesc::DOMElement& e,
-             ::xml_schema::flags f,
-             ::xml_schema::type* c)
-  : ::xml_schema::string (e, f, c)
-  {
-    _xsd_floorType_convert ();
-  }
-
-  floorType::
-  floorType (const ::xercesc::DOMAttr& a,
-             ::xml_schema::flags f,
-             ::xml_schema::type* c)
-  : ::xml_schema::string (a, f, c)
-  {
-    _xsd_floorType_convert ();
-  }
-
-  floorType::
-  floorType (const ::std::string& s,
-             const ::xercesc::DOMElement* e,
-             ::xml_schema::flags f,
-             ::xml_schema::type* c)
-  : ::xml_schema::string (s, e, f, c)
-  {
-    _xsd_floorType_convert ();
-  }
-
-  floorType* floorType::
-  _clone (::xml_schema::flags f,
-          ::xml_schema::type* c) const
-  {
-    return new floorType (*this, f, c);
-  }
-
-  floorType::value floorType::
-  _xsd_floorType_convert () const
-  {
-    ::xsd::cxx::tree::enum_comparator< char > c (_xsd_floorType_literals_);
-    const value* i (::std::lower_bound (
-                      _xsd_floorType_indexes_,
-                      _xsd_floorType_indexes_ + 3,
-                      *this,
-                      c));
-
-    if (i == _xsd_floorType_indexes_ + 3 || _xsd_floorType_literals_[*i] != *this)
-    {
-      throw ::xsd::cxx::tree::unexpected_enumerator < char > (*this);
-    }
-
-    return *i;
-  }
-
-  const char* const floorType::
-  _xsd_floorType_literals_[3] =
-  {
-    "none",
-    "regular",
-    "mortal"
-  };
-
-  const floorType::value floorType::
-  _xsd_floorType_indexes_[3] =
-  {
-    ::rxml::floorType::mortal,
-    ::rxml::floorType::none,
-    ::rxml::floorType::regular
-  };
 
   // triple_room_data
   //

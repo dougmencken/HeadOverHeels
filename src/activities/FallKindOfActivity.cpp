@@ -115,19 +115,20 @@ bool FallKindOfActivity::fall( Behavior * behavior )
                         {
                                 PlayerItem* playerItem = dynamic_cast< PlayerItem * >( sender );
 
-                                switch ( mediator->getRoom()->getFloorType() )
+                                if ( mediator->getRoom()->getKindOfFloor() == "none" )
                                 {
-                                        case NoFloor:
-                                                playerItem->setExit( Down );
-                                                playerItem->setOrientation( playerItem->getDirection() );
-                                                break;
-
-                                        case RegularFloor:
-                                                break;
-
-                                        case MortalFloor:
-                                                playerItem->getBehavior()->changeActivityOfItem( MeetMortalItem );
-                                                break;
+                                        playerItem->setExit( Down );
+                                        playerItem->setOrientation( playerItem->getDirection() );
+                                }
+                                else
+                                if ( mediator->getRoom()->getKindOfFloor() == "mortal" )
+                                {
+                                        playerItem->getBehavior()->changeActivityOfItem( MeetMortalItem );
+                                }
+                                else
+                                /* if ( mediator->getRoom()->getKindOfFloor() == "plain" ) */
+                                {
+                                        // nothing to do
                                 }
                         }
                 }
