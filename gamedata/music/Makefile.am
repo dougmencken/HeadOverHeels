@@ -10,4 +10,5 @@ gamedatamusic_DATA = CreditsTheme.ogg \
 		themoon.ogg \
 		byblos.ogg \
 		egyptus.ogg \
-		safari.ogg
+		safari.ogg \
+		penitentiary.ogg
