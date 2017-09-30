@@ -178,7 +178,7 @@ protected:
         bool frozen ;
 
         /**
-         * Fotograma actual del elemento sombreado pero sin enmascarar
+         * Current frame of this item shaded but not masked
          */
         BITMAP * shadyImage ;
 

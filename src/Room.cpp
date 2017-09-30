@@ -243,12 +243,12 @@ void Room::addGridItem( GridItem * gridItem )
                         throw Exception( COLLISION_GRIDITEM );
                 }
 
-                // Cálculo del desplazamiento de la imagen respecto del píxel que marca el punto ( 0, 0, 0 ) de la sala
-                if ( gridItem->getImage() )
+                // calculate offset of item’s image from origin of room
+                if ( gridItem->getRawImage() )
                 {
                         std::pair< int, int > offset (
-                                ( ( this->tileSize * ( gridItem->getCellX() - gridItem->getCellY() ) ) << 1 ) - ( gridItem->getImage()->w >> 1 ) + 1,
-                                this->tileSize * ( gridItem->getCellX() + gridItem->getCellY() + 2 ) - gridItem->getImage()->h - gridItem->getZ() - 1
+                                ( ( this->tileSize * ( gridItem->getCellX() - gridItem->getCellY() ) ) << 1 ) - ( gridItem->getRawImage()->w >> 1 ) + 1,
+                                this->tileSize * ( gridItem->getCellX() + gridItem->getCellY() + 2 ) - gridItem->getRawImage()->h - gridItem->getZ() - 1
                         ) ;
                         gridItem->setOffset( offset );
                 }
@@ -259,7 +259,7 @@ void Room::addGridItem( GridItem * gridItem )
                 mediator->addItem( gridItem );
 
                 // Pone a sombrear los elementos afectados por la inserción
-                if ( this->shadingScale < 256 && gridItem->getShadow() )
+                if ( this->shadingScale < 256 && gridItem->getImageOfShadow() )
                 {
                         mediator->markItemsForShady( gridItem );
                 }
@@ -338,12 +338,12 @@ void Room::addFreeItem( FreeItem * freeItem )
                         throw Exception( COLLISION_FREEITEM );
                 }
 
-                // Cálculo del desplazamiento de la imagen respecto del píxel que marca el punto ( 0, 0, 0 ) de la sala
-                if ( freeItem->getImage () )
+                // calculate offset of item’s image from origin of room
+                if ( freeItem->getRawImage () )
                 {
                         std::pair<int, int> offset (
-                                ( ( freeItem->getX() - freeItem->getY() ) << 1 ) + freeItem->getWidthX() + freeItem->getWidthY() - ( freeItem->getImage()->w >> 1 ) - 1,
-                                freeItem->getX() + freeItem->getY() + freeItem->getWidthX() - freeItem->getImage()->h - freeItem->getZ()
+                                ( ( freeItem->getX() - freeItem->getY() ) << 1 ) + freeItem->getWidthX() + freeItem->getWidthY() - ( freeItem->getRawImage()->w >> 1 ) - 1,
+                                freeItem->getX() + freeItem->getY() + freeItem->getWidthX() - freeItem->getRawImage()->h - freeItem->getZ()
                         ) ;
                         freeItem->setOffset( offset );
                 }
@@ -353,7 +353,7 @@ void Room::addFreeItem( FreeItem * freeItem )
                 freeItem->setMediator( mediator );
                 mediator->addItem( freeItem );
 
-                if ( this->shadingScale < 256 && freeItem->getShadow() )
+                if ( this->shadingScale < 256 && freeItem->getImageOfShadow() )
                 {
                         mediator->markItemsForShady( freeItem );
                 }
@@ -447,12 +447,12 @@ void Room::addPlayer( PlayerItem* playerItem )
                         throw Exception( COLLISION_PLAYER );
                 }
 
-                // Cálculo del desplazamiento de la imagen respecto del píxel que marca el punto (0,0,0) de la sala
-                if ( playerItem->getImage () )
+                // set offset of player’s image from origin of room
+                if ( playerItem->getRawImage () )
                 {
                         std::pair<int, int> offset (
-                                ( ( playerItem->getX() - playerItem->getY() ) << 1 ) + playerItem->getWidthX() + playerItem->getWidthY() - ( playerItem->getImage()->w >> 1 ) - 1,
-                                playerItem->getX() + playerItem->getY() + playerItem->getWidthX() - playerItem->getImage()->h - playerItem->getZ()
+                                ( ( playerItem->getX() - playerItem->getY() ) << 1 ) + playerItem->getWidthX() + playerItem->getWidthY() - ( playerItem->getRawImage()->w >> 1 ) - 1,
+                                playerItem->getX() + playerItem->getY() + playerItem->getWidthX() - playerItem->getRawImage()->h - playerItem->getZ()
                         ) ;
                         playerItem->setOffset( offset );
                 }
@@ -462,7 +462,7 @@ void Room::addPlayer( PlayerItem* playerItem )
                 playerItem->setMediator( mediator );
                 mediator->addItem( playerItem );
 
-                if ( this->shadingScale < 256 && playerItem->getShadow() )
+                if ( this->shadingScale < 256 && playerItem->getImageOfShadow() )
                 {
                         mediator->markItemsForShady( playerItem );
                 }
@@ -502,7 +502,7 @@ void Room::removeGridItem( GridItem * gridItem )
                 mediator->removeItem( gridItem );
 
                 // Pone a sombrear los elementos afectados por la eliminación
-                if ( this->shadingScale < 256 && gridItem->getShadow() )
+                if ( this->shadingScale < 256 && gridItem->getImageOfShadow() )
                 {
                         mediator->markItemsForShady( gridItem );
                 }
@@ -527,7 +527,7 @@ void Room::removeFreeItem( FreeItem * freeItem )
                 mediator->removeItem( freeItem );
 
                 // Pone a sombrear los elementos afectados por la eliminación
-                if( this->shadingScale < 256 && freeItem->getShadow() )
+                if( this->shadingScale < 256 && freeItem->getImageOfShadow() )
                 {
                         mediator->markItemsForShady( freeItem );
                 }
@@ -552,7 +552,7 @@ void Room::removePlayer( PlayerItem* playerItem )
                 mediator->removeItem( playerItem );
 
                 // Pone a sombrear los elementos afectados por la eliminación
-                if ( this->shadingScale < 256 && playerItem->getShadow() )
+                if ( this->shadingScale < 256 && playerItem->getImageOfShadow() )
                 {
                         mediator->markItemsForShady( playerItem );
                 }
@@ -657,7 +657,7 @@ void Room::draw( BITMAP* where )
                         {
                                 GridItem* gridItem = static_cast< GridItem * >( *g );
 
-                                if ( shadingScale < 256 && gridItem->getImage() )
+                                if ( shadingScale < 256 && gridItem->getRawImage() )
                                 {
                                         gridItem->requestCastShadow( drawIndex[ i ] );
                                 }
@@ -673,7 +673,7 @@ void Room::draw( BITMAP* where )
                 {
                         FreeItem* freeItem = static_cast< FreeItem * >( *f );
 
-                        if ( freeItem->getImage() )
+                        if ( freeItem->getRawImage() )
                         {
                                 // shade an item when shadows are on
                                 if ( shadingScale < 256 )
@@ -686,7 +686,7 @@ void Room::draw( BITMAP* where )
                 {
                         FreeItem* freeItem = static_cast< FreeItem * >( *f );
 
-                        if ( freeItem->getImage() )
+                        if ( freeItem->getRawImage() )
                         {
                                 freeItem->requestMask();
                                 freeItem->draw( where );

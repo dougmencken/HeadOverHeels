@@ -20,7 +20,7 @@ Item::Item( ItemData* data, int z, const Direction& direction )
         frameIndex( 0 ),
         backwardMotion( false ),
         myShady( WantShadow ),
-        image( 0 ),
+        rawImage( 0 ),
         shadow( 0 ),
         processedImage( 0 ),
         behavior( 0 )
@@ -46,7 +46,7 @@ Item::Item( const Item& item )
         frameIndex( item.frameIndex ),
         backwardMotion( item.backwardMotion ),
         myShady( item.myShady ),
-        image( item.image ),
+        rawImage( item.rawImage ),
         shadow( item.shadow ),
         processedImage( 0 ),
         offset( item.offset ),
@@ -83,26 +83,24 @@ bool Item::animate()
 {
         bool cycle = false;
 
-        // Si el elemento tiene más de un fotograma por dirección entonces se puede animar
+        // item with more than one frame per direction has animation
         if ( ( dataOfItem->motion.size() - dataOfItem->extraFrames ) / dataOfItem->directionFrames > 1 )
         {
-                // Si ha pasado el tiempo necesario para cambiar de fotograma
+                // is it time to change frames
                 if ( motionTimer.getValue() > dataOfItem->framesDelay )
                 {
-                        // Reproducción normal, hacia adelante
+                        // forward motion
                         if ( ! backwardMotion )
                         {
-                                // Incrementa el índice o vuelve al principio si se alcanzó el final
                                 if ( ++frameIndex >= dataOfItem->frames.size() )
                                 {
                                         frameIndex = 0;
                                         cycle = true;
                                 }
                         }
-                        // Reproducción hacia atrás
+                        // backward motion
                         else
                         {
-                                // Decrementa el índice o vuelve al final si se alcanzó el principio
                                 if ( frameIndex-- <= 0 )
                                 {
                                         frameIndex = dataOfItem->frames.size() - 1;
@@ -110,12 +108,12 @@ bool Item::animate()
                                 }
                         }
 
-                        // Calcula qué fotograma se tiene que mostrar
+                        // which frame to show yet
                         int framesNumber = ( dataOfItem->motion.size() - dataOfItem->extraFrames ) / dataOfItem->directionFrames;
                         int currentFrame = dataOfItem->frames[ frameIndex ] + ( dataOfItem->directionFrames > 1 ? framesNumber * direction : 0 );
 
-                        // Si la imagen actual es distinta a la nueva imagen entonces se cambia
-                        if ( this->image != 0 && this->image != dataOfItem->motion[ currentFrame ] )
+                        // change frame of animation
+                        if ( this->rawImage != 0 && this->rawImage != dataOfItem->motion[ currentFrame ] )
                         {
                                 changeImage( dataOfItem->motion[ currentFrame ] );
 
@@ -125,7 +123,6 @@ bool Item::animate()
                                 }
                         }
 
-                        // Reinicia el cronómetro
                         motionTimer.reset();
                 }
         }
@@ -155,7 +152,7 @@ void Item::changeDirection( const Direction& direction )
                 unsigned int currentFrame = ( ( dataOfItem->motion.size() - dataOfItem->extraFrames ) / dataOfItem->directionFrames ) * direction;
 
                 // Si la imagen actual es distinta a la nueva imagen entonces se cambia
-                if ( this->image != 0 && currentFrame < dataOfItem->motion.size() && this->image != dataOfItem->motion[ currentFrame ] )
+                if ( this->rawImage != 0 && currentFrame < dataOfItem->motion.size() && this->rawImage != dataOfItem->motion[ currentFrame ] )
                 {
                         // Actualiza la dirección
                         this->direction = direction;
@@ -172,18 +169,17 @@ void Item::changeDirection( const Direction& direction )
 
 void Item::changeFrame( const unsigned int frameIndex )
 {
-        // Si el índice especificado está dentro de los límites del vector que almacena la secuencia de
-        // animación, entonces se puede hacer el cambio
+        // if index of frame is within bounds of vector with sequence of animation
         if ( dataOfItem->motion.size() > frameIndex )
         {
                 this->frameIndex = frameIndex;
 
-                // Si la imagen actual es distinta a la nueva imagen entonces se cambia
-                if ( this->image != 0 && this->image != dataOfItem->motion[ frameIndex ] )
+                // change frame
+                if ( this->rawImage != 0 && this->rawImage != dataOfItem->motion[ frameIndex ] )
                 {
                         changeImage( dataOfItem->motion[ frameIndex ] );
 
-                        // Si cambia la imagen entonces cambia la sombra
+                        // update shadow too
                         if ( this->shadow != 0 )
                                 changeShadow( dataOfItem->shadows[ frameIndex ] );
                 }

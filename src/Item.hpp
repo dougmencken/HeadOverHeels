@@ -181,9 +181,9 @@ protected:
         WhichShade myShady ;
 
         /**
-         * Fotograma actual del elemento sin procesar
+         * Image of item, unprocessed, just read from file
          */
-        BITMAP * image ;
+        BITMAP * rawImage ;
 
         /**
          * Sombra del fotograma actual del elemento
@@ -191,8 +191,7 @@ protected:
         BITMAP * shadow ;
 
         /**
-         * Fotograma actual del elemento con las sombras de otros elementos proyectadas y, si procede,
-         * enmascarado
+         * Image of this item with shadows from other items and masked
          */
         BITMAP * processedImage ;
 
@@ -327,7 +326,6 @@ public:
          * Establece la dirección actual del elemento. Se usa únicamente si el elemento
          * no tiene más de un fotograma, en caso contrario, se emplea changeDirection
          * @return Algún punto cardinal, arriba o abajo
-         * @see Direction
          */
         void setDirection ( const Direction& direction ) {  this->direction = direction ;  }
 
@@ -338,17 +336,9 @@ public:
          */
         Direction getDirection () const {  return direction ;  }
 
-        /**
-         * Fotograma actual del elemento sin procesar
-         * @return Una imagen Allegro
-         */
-        BITMAP * getImage () {  return image ;  }
+        BITMAP * getRawImage () {  return rawImage ;  }
 
-        /**
-         * Sombra del fotograma actual del elemento
-         * @return Un imagen Allegro
-         */
-        BITMAP * getShadow () {  return shadow ;  }
+        BITMAP * getImageOfShadow () {  return shadow ;  }
 
         /**
          * Establece el estado del proceso de sombreado

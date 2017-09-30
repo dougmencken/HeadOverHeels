@@ -23,7 +23,7 @@ FreeItem::FreeItem( ItemData* itemData, int x, int y, int z, const Direction& di
         int howManyFrames = ( getDataOfFreeItem ()->motion.size() - getDataOfFreeItem ()->extraFrames ) / getDataOfFreeItem ()->directionFrames;
         int currentFrame = ( getDataOfFreeItem ()->directionFrames > 1 ? getDataOfFreeItem ()->frames[ frameIndex ] + howManyFrames * direction : getDataOfFreeItem ()->frames[ 0 ] );
 
-        this->image = getDataOfFreeItem ()->motion[ currentFrame ];
+        this->rawImage = getDataOfFreeItem ()->motion[ currentFrame ];
 
         // get shadow
         if ( getDataOfFreeItem ()->shadowWidth != 0 && getDataOfFreeItem ()->shadowHeight != 0 )
@@ -64,7 +64,7 @@ void FreeItem::draw( BITMAP* where )
 
                 draw_trans_sprite(
                         where,
-                        this->processedImage ? this->processedImage : ( this->shadyImage ? this->shadyImage : this->image ),
+                        this->processedImage ? this->processedImage : ( this->shadyImage ? this->shadyImage : this->rawImage ),
                         mediator->getX0 () + this->offset.first,
                         mediator->getY0 () + this->offset.second
                 ) ;
@@ -73,7 +73,7 @@ void FreeItem::draw( BITMAP* where )
         {
                 draw_sprite(
                         where,
-                        this->processedImage ? this->processedImage : ( this->shadyImage ? this->shadyImage : this->image ),
+                        this->processedImage ? this->processedImage : ( this->shadyImage ? this->shadyImage : this->rawImage ),
                         mediator->getX0 () + this->offset.first,
                         mediator->getY0 () + this->offset.second
                 ) ;
@@ -82,34 +82,28 @@ void FreeItem::draw( BITMAP* where )
 
 void FreeItem::changeImage( BITMAP* image )
 {
-        // Si el elemento no tiene ninguna imagen entonces simplemente se asigna. Se entiende que este
-        // caso sucede únicamente durante la creación del elemento
-        if ( this->image == 0 )
+        if ( this->rawImage == 0 )
         {
-                this->image = image;
+                this->rawImage = image;
         }
-        // En caso contrario se realiza el cambio
-        else if ( this->image != image )
+        else if ( this->rawImage != image )
         {
-                // Copia el elemento antes de realizar el cambio
                 FreeItem oldFreeItem( *this );
 
-                // Cambio de imagen
-                this->image = image;
+                this->rawImage = image;
                 this->myShady = WantShadow;
                 this->myMask = WantMask;
 
-                // Si la imagen no es nula se recalcula el desplazamiento y se vuelven a crear las
-                // imágenes procesadas si éstas tienen un tamaño distinto a la nueva imagen
-                if ( this->image )
+                // recalculate displacement and recreate processed images
+                if ( this->rawImage )
                 {
-                        // A cuántos píxeles está la imagen del punto origen de la sala
+                        // how many pixels is this image from point of room’s origin
                         this->offset.first = ( ( this->x - this->y ) << 1 ) + getDataOfFreeItem()->widthX + getDataOfFreeItem()->widthY - ( image->w >> 1 ) - 1;
                         this->offset.second = this->x + this->y + getDataOfFreeItem()->widthX - image->h - this->z;
 
                         if ( this->processedImage )
                         {
-                                if ( this->processedImage->w != this->image->w || this->processedImage->h != this->image->h )
+                                if ( this->processedImage->w != image->w || this->processedImage->h != image->h )
                                 {
                                         destroy_bitmap( this->processedImage );
                                         this->processedImage = 0;
@@ -118,14 +112,14 @@ void FreeItem::changeImage( BITMAP* image )
 
                         if ( this->shadyImage )
                         {
-                                if ( this->shadyImage->w != this->image->w || this->shadyImage->h != this->image->h )
+                                if ( this->shadyImage->w != image->w || this->shadyImage->h != image->h )
                                 {
                                         destroy_bitmap( this->shadyImage );
                                         this->shadyImage = 0;
                                 }
                         }
                 }
-                // Si la imagen es nula se destruyen las imágenes procesadas
+                // bin processed images when new raw image is nil
                 else
                 {
                         this->offset.first = this->offset.second = 0;
@@ -143,14 +137,14 @@ void FreeItem::changeImage( BITMAP* image )
                         }
                 }
 
-                // Se marcan para enmascar los elementos libres afectados por la antigua imagen
-                if ( oldFreeItem.getImage() )
+                // remask with old image
+                if ( oldFreeItem.getRawImage() )
                 {
                         mediator->markItemsForMasking( &oldFreeItem );
                 }
 
-                // Se marcan para enmascar los elementos libres afectados por la nueva imagen
-                if ( this->image )
+                // remask with new image
+                if ( this->rawImage )
                 {
                         mediator->markItemsForMasking( this );
                 }
@@ -159,23 +153,17 @@ void FreeItem::changeImage( BITMAP* image )
 
 void FreeItem::changeShadow( BITMAP* shadow )
 {
-        // Si el elemento no tiene ninguna sombra entonces simplemente se asigna. Se entiende que este
-        // caso sucede únicamente durante la creación del elemento
-        if ( this->shadow == NULL )
+        if ( this->shadow == 0 )
         {
-                // Asignación de la sombra
                 this->shadow = shadow;
         }
-        // En caso contrario se realiza el cambio
         else if ( this->shadow != shadow )
         {
-                // Cambio de la sombra
                 this->shadow = shadow;
 
-                // Hay que calcular a qué elementos se sombreará, a no ser que la nueva sombra sea nula
-                if ( this->image )
+                // reshade items
+                if ( this->rawImage )
                 {
-                        // Si las sombras están activas los elementos deben sombrearse
                         if ( mediator->getDegreeOfShading() < 256 )
                         {
                                 mediator->markItemsForShady( this );
@@ -186,7 +174,7 @@ void FreeItem::changeShadow( BITMAP* shadow )
 
 void FreeItem::requestCastShadow()
 {
-        if( this->image && this->myShady == WantShadow )
+        if( this->rawImage && this->myShady == WantShadow )
         {
                 mediator->castShadowOnFreeItem( this );
 
@@ -209,7 +197,7 @@ void FreeItem::requestCastShadow()
 
 void FreeItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale, unsigned char transparency )
 {
-        // El sombreado se realiza si el elemento que sombrea no es totalmente transparente
+        // is item not fully transparent
         if ( transparency < 100 )
         {
                 // Anchura del elemento
@@ -222,12 +210,12 @@ void FreeItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
                 if ( iniy < 0 ) iniy = 0;
                 // Coordenada final X
                 int endx = x - this->offset.first + shadow->w;
-                if ( endx > this->image->w ) endx = this->image->w;
+                if ( endx > this->rawImage->w ) endx = this->rawImage->w;
                 // Coordenada final Y
                 int endy = y - this->offset.second + shadow->h;
-                if ( endy > this->image->h ) endy = this->image->h;
+                if ( endy > this->rawImage->h ) endy = this->rawImage->h;
                 // Coordenada intermedia Y
-                int my = this->image->h - width - getDataOfFreeItem()->height;
+                int my = this->rawImage->h - width - getDataOfFreeItem()->height;
                 if ( endy < my ) my = endy;
                 if ( endy > my + width ) endy = my + width;
 
@@ -260,18 +248,18 @@ void FreeItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
                         // En principio, la imagen del elemento sombreado es la imagen del elemento sin sombrear
                         if ( ! this->shadyImage )
                         {
-                                this->shadyImage = create_bitmap_ex(bitmap_color_depth(this->image), this->image->w, this->image->h);
+                                this->shadyImage = create_bitmap_ex( bitmap_color_depth( this->rawImage ), this->rawImage->w, this->rawImage->h );
                         }
                         if ( this->myShady == WantShadow )
                         {
-                                blit( this->image, this->shadyImage, 0, 0, 0, 0, this->image->w, this->image->h );
+                                blit( this->rawImage, this->shadyImage, 0, 0, 0, 0, this->rawImage->w, this->rawImage->h );
                                 this->myShady = AlreadyShady;
                         }
 
                         // Incremento de los índices iRpx, iGpx e iBpx
-                        char iInc = ( bitmap_color_depth(this->image) == 32 ? 4 : 3 );
+                        char iInc = ( bitmap_color_depth( this->rawImage ) == 32 ? 4 : 3 );
                         // Incremento del índice sPixel
-                        char sInc = ( bitmap_color_depth(shadow) == 32 ? 4 : 3 );
+                        char sInc = ( bitmap_color_depth( shadow ) == 32 ? 4 : 3 );
 
                         // Grado de opacidad del sombreado desde 0 a 255, siendo 0 la opacidad total y 255
                         // casi la transparencia total
@@ -280,7 +268,7 @@ void FreeItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
                         endx *= iInc;
                         inix *= iInc;
                 #if IS_BIG_ENDIAN
-                        inix += bitmap_color_depth( this->image ) == 32 ? 1 : 0 ;
+                        inix += bitmap_color_depth( this->rawImage ) == 32 ? 1 : 0 ;
                 #endif
                         n2i *= sInc;
                 #if IS_BIG_ENDIAN
@@ -306,7 +294,7 @@ void FreeItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
                                 for ( iRow = iniy, sRow = iniy + this->offset.second - y; iRow < my; iRow++, sRow++ )
                                 {
                                         unsigned char* sln = shadow->line[ sRow ];
-                                        unsigned char* iln = this->image->line[ iRow ];
+                                        unsigned char* iln = this->rawImage->line[ iRow ];
                                         unsigned char* rln = this->shadyImage->line[ iRow ];
 
                                         // Se recorren los píxeles de cada fila según los límites calculados
@@ -327,22 +315,22 @@ void FreeItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
                                 // Hasta aquí el elemento se sombrea de forma horizontal hasta la línea marcada por la variable my
 
                                 // Sombreado de los laterales del elemento
-                                ltpx = ( ( this->image->w ) >> 1 ) - ( width << 1 ) + ( getDataOfFreeItem()->widthX - getDataOfFreeItem()->widthY ) + ( ( iRow - my ) << 1 );
-                                rtpx = ( ( this->image->w ) >> 1 ) + ( width << 1 ) + ( getDataOfFreeItem()->widthX - getDataOfFreeItem()->widthY ) - ( ( iRow - my ) << 1 ) - 2;
+                                ltpx = ( ( this->rawImage->w ) >> 1 ) - ( width << 1 ) + ( getDataOfFreeItem()->widthX - getDataOfFreeItem()->widthY ) + ( ( iRow - my ) << 1 );
+                                rtpx = ( ( this->rawImage->w ) >> 1 ) + ( width << 1 ) + ( getDataOfFreeItem()->widthX - getDataOfFreeItem()->widthY ) - ( ( iRow - my ) << 1 ) - 2;
                                 ltpx = ltpx * iInc;
                         #if IS_BIG_ENDIAN
-                                ltpx += bitmap_color_depth( this->image ) == 32 ? 1 : 0 ;
+                                ltpx += bitmap_color_depth( this->rawImage ) == 32 ? 1 : 0 ;
                         #endif
                                 rtpx = rtpx * iInc;
                         #if IS_BIG_ENDIAN
-                                rtpx += bitmap_color_depth( this->image ) == 32 ? 1 : 0 ;
+                                rtpx += bitmap_color_depth( this->rawImage ) == 32 ? 1 : 0 ;
                         #endif
 
                                 // Sombrea en escalera isométrica la parte izquierda y derecha del elemento
                                 for ( ltpx1 = ltpx + iInc, rtpx1 = rtpx + iInc; iRow < endy; iRow++, sRow++, ltpx += 2 * iInc, ltpx1 += 2 * iInc, rtpx -= 2 * iInc, rtpx1 -= 2 * iInc )
                                 {
                                         unsigned char* sln = shadow->line[ sRow ];
-                                        unsigned char* iln = this->image->line[ iRow ];
+                                        unsigned char* iln = this->rawImage->line[ iRow ];
                                         unsigned char* rln = this->shadyImage->line[ iRow ];
 
                                         if ( inix < ltpx )
@@ -370,9 +358,9 @@ void FreeItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
 
                                                         if ( iRpx == ltpx || iRpx == ltpx1 || iRpx == rtpx || iRpx == rtpx1 )
                                                         {
-                                                                for ( int yy = iRow + 1; yy < image->h; yy++ )
+                                                                for ( int yy = iRow + 1; yy < this->rawImage->h; yy++ )
                                                                 {
-                                                                        unsigned char* iln2 = this->image->line[yy];
+                                                                        unsigned char* iln2 = this->rawImage->line[yy];
                                                                         unsigned char* rln2 = this->shadyImage->line[yy];
 
                                                                         if ( ( iln2[ iRpx ] < 255 || iln2[ iGpx ] || iln2[ iBpx ] < 255 ) &&
@@ -399,7 +387,7 @@ void FreeItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
                                         {
                                                 unsigned short color;
                                                 unsigned char* sln = shadow->line[ sRow ];
-                                                unsigned char* iln = this->image->line[ iRow ];
+                                                unsigned char* iln = this->rawImage->line[ iRow ];
                                                 unsigned char* rln = this->shadyImage->line[ iRow ];
 
                                                 // Se recorren los píxeles de cada fila según los límites calculados
@@ -421,21 +409,21 @@ void FreeItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
                                                 }
                                         }
 
-                                        ltpx = ( ( this->image->w ) >> 1 ) - ( width << 1 ) + ( getDataOfFreeItem()->widthX - getDataOfFreeItem()->widthY ) + ( ( iRow - my ) << 1 );
-                                        rtpx = ( ( this->image->w ) >> 1 ) + ( width << 1 ) + ( getDataOfFreeItem()->widthX - getDataOfFreeItem()->widthY ) - ( ( iRow - my ) << 1 ) - 2;
+                                        ltpx = ( ( this->rawImage->w ) >> 1 ) - ( width << 1 ) + ( getDataOfFreeItem()->widthX - getDataOfFreeItem()->widthY ) + ( ( iRow - my ) << 1 );
+                                        rtpx = ( ( this->rawImage->w ) >> 1 ) + ( width << 1 ) + ( getDataOfFreeItem()->widthX - getDataOfFreeItem()->widthY ) - ( ( iRow - my ) << 1 ) - 2;
                                         ltpx = ltpx * iInc;
                                 #if IS_BIG_ENDIAN
-                                        ltpx += bitmap_color_depth( this->image ) == 32 ? 1 : 0 ;
+                                        ltpx += bitmap_color_depth( this->rawImage ) == 32 ? 1 : 0 ;
                                 #endif
                                         rtpx = rtpx * iInc;
                                 #if IS_BIG_ENDIAN
-                                        rtpx += bitmap_color_depth( this->image ) == 32 ? 1 : 0 ;
+                                        rtpx += bitmap_color_depth( this->rawImage ) == 32 ? 1 : 0 ;
                                 #endif
 
                                         for ( ltpx1 = ltpx + iInc, rtpx1 = rtpx + iInc; iRow < endy; iRow++, sRow++, ltpx += 2 * iInc, ltpx1 += 2 * iInc, rtpx -= 2 * iInc, rtpx1 -= 2 * iInc )
                                         {
                                                 unsigned char* sln = shadow->line[ sRow ];
-                                                unsigned char* iln = this->image->line[ iRow ];
+                                                unsigned char* iln = this->rawImage->line[ iRow ];
                                                 unsigned char* rln = this->shadyImage->line[ iRow ];
 
                                                 if ( inix < ltpx )
@@ -466,9 +454,9 @@ void FreeItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
 
                                                                         if ( iRpx == ltpx || iRpx == ltpx1 || iRpx == rtpx || iRpx == rtpx1 )
                                                                         {
-                                                                                for ( int yy = iRow + 1; yy < image->h; yy++ )
+                                                                                for ( int yy = iRow + 1; yy < this->rawImage->h; yy++ )
                                                                                 {
-                                                                                        unsigned char* iln2 = this->image->line[ yy ];
+                                                                                        unsigned char* iln2 = this->rawImage->line[ yy ];
                                                                                         unsigned char* rln2 = this->shadyImage->line[ yy ];
 
                                                                                         if ( ( iln2[ iRpx ] < 255 || iln2[ iGpx ] || iln2[ iBpx ] < 255 ) &&
@@ -495,7 +483,7 @@ void FreeItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
                                         for ( iRow = iniy, sRow = iniy + this->offset.second - y; iRow < my; iRow++, sRow++ )
                                         {
                                                 unsigned char* sln = shadow->line[ sRow ];
-                                                unsigned char* iln = this->image->line[ iRow ];
+                                                unsigned char* iln = this->rawImage->line[ iRow ];
                                                 unsigned char* rln = this->shadyImage->line[ iRow ];
 
                                                 // Se recorren los píxeles de cada fila según los límites calculados
@@ -512,21 +500,21 @@ void FreeItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
                                                 }
                                         }
 
-                                        ltpx = ( ( this->image->w ) >> 1 ) - ( width << 1 ) + ( getDataOfFreeItem()->widthX - getDataOfFreeItem()->widthY ) + ( ( iRow - my ) << 1 );
-                                        rtpx = ( ( this->image->w ) >> 1 ) + ( width << 1 ) + ( getDataOfFreeItem()->widthX - getDataOfFreeItem()->widthY ) - ( ( iRow - my ) << 1 ) - 2;
+                                        ltpx = ( ( this->rawImage->w ) >> 1 ) - ( width << 1 ) + ( getDataOfFreeItem()->widthX - getDataOfFreeItem()->widthY ) + ( ( iRow - my ) << 1 );
+                                        rtpx = ( ( this->rawImage->w ) >> 1 ) + ( width << 1 ) + ( getDataOfFreeItem()->widthX - getDataOfFreeItem()->widthY ) - ( ( iRow - my ) << 1 ) - 2;
                                         ltpx = ltpx * iInc;
                                 #if IS_BIG_ENDIAN
-                                        ltpx += bitmap_color_depth( this->image ) == 32 ? 1 : 0 ;
+                                        ltpx += bitmap_color_depth( this->rawImage ) == 32 ? 1 : 0 ;
                                 #endif
                                         rtpx = rtpx * iInc;
                                 #if IS_BIG_ENDIAN
-                                        rtpx += bitmap_color_depth( this->image ) == 32 ? 1 : 0 ;
+                                        rtpx += bitmap_color_depth( this->rawImage ) == 32 ? 1 : 0 ;
                                 #endif
 
                                         for ( ltpx1 = ltpx + iInc, rtpx1 = rtpx + iInc; iRow < endy; iRow++, sRow++, ltpx += 2 * iInc, ltpx1 += 2 * iInc, rtpx -= 2 * iInc, rtpx1 -= 2 * iInc )
                                         {
                                                 unsigned char* sln = shadow->line[ sRow ];
-                                                unsigned char* iln = this->image->line[ iRow ];
+                                                unsigned char* iln = this->rawImage->line[ iRow ];
                                                 unsigned char* rln = this->shadyImage->line[ iRow ];
 
                                                 if ( inix < ltpx )
@@ -551,9 +539,9 @@ void FreeItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
 
                                                                         if ( iRpx == ltpx || iRpx == ltpx1 || iRpx == rtpx || iRpx == rtpx1 )
                                                                         {
-                                                                                for ( int yy = iRow + 1; yy < this->image->h; yy++ )
+                                                                                for ( int yy = iRow + 1; yy < this->rawImage->h; yy++ )
                                                                                 {
-                                                                                        unsigned char* iln2 = this->image->line[ yy ];
+                                                                                        unsigned char* iln2 = this->rawImage->line[ yy ];
                                                                                         unsigned char* rln2 = this->shadyImage->line[ yy ];
 
                                                                                         if ( ( iln2[ iRpx ] < 255 || iln2[ iGpx ] || iln2[ iBpx ] < 255 ) &&
@@ -592,7 +580,7 @@ void FreeItem::requestMask()
 void FreeItem::maskImage( int x, int y, BITMAP* image )
 {
         // Se enmascarará la imagen sombreada. Si el elemento no está sombreado se hará con la imagen normal
-        BITMAP* currentImage = ( this->shadyImage ? this->shadyImage : this->image );
+        BITMAP* currentImage = ( this->shadyImage ? this->shadyImage : this->rawImage );
 
         // Coordenada inicial X
         int inix = x - this->offset.first;
@@ -734,11 +722,11 @@ bool FreeItem::changeData( int value, int x, int y, int z, const Datum& datum, c
                 if ( ! collisionFound )
                 {
                         // for item with image, mark to mask free items whose images overlap with its image
-                        if ( this->image )
+                        if ( this->rawImage )
                         {
                                 // get how many pixels is this image from point of room’s origin
-                                this->offset.first = ( ( this->x - this->y ) << 1 ) + getDataOfFreeItem()->widthX + getDataOfFreeItem()->widthY - ( image->w >> 1 ) - 1;
-                                this->offset.second = this->x + this->y + getDataOfFreeItem()->widthX - image->h - this->z;
+                                this->offset.first = ( ( this->x - this->y ) << 1 ) + getDataOfFreeItem()->widthX + getDataOfFreeItem()->widthY - ( this->rawImage->w >> 1 ) - 1;
+                                this->offset.second = this->x + this->y + getDataOfFreeItem()->widthX - this->rawImage->h - this->z;
 
                                 // for both the previous position and the current position
                                 mediator->markItemsForMasking( &oldFreeItem );
@@ -813,7 +801,7 @@ bool FreeItem::changeTransparency( unsigned char value, const WhatToDo& how )
         if ( transpa <= 100 && transpa != this->transparency )
         {
                 // remask item?
-                bool mask = this->image && ( this->transparency == 0 || transpa == 0 );
+                bool mask = this->rawImage && ( this->transparency == 0 || transpa == 0 );
 
                 // update table of transparencies
                 mediator->removeFromTableOfTransparencies( this->transparency );

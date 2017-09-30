@@ -235,11 +235,11 @@ bool PlayerItem::changeData( int value, int x, int y, int z, const Datum& datum,
                         if ( ! collisionFound )
                         {
                                 // for item with image, mark to mask free items whose images overlap with its image
-                                if ( this->image )
+                                if ( this->rawImage )
                                 {
                                         // get how many pixels is this image from point of room’s origin
-                                        this->offset.first = ( ( this->x - this->y ) << 1 ) + getDataOfFreeItem()->widthX + getDataOfFreeItem()->widthY - ( image->w >> 1 ) - 1;
-                                        this->offset.second = this->x + this->y + getDataOfFreeItem()->widthX - image->h - this->z;
+                                        this->offset.first = ( ( this->x - this->y ) << 1 ) + getDataOfFreeItem()->widthX + getDataOfFreeItem()->widthY - ( this->rawImage->w >> 1 ) - 1;
+                                        this->offset.second = this->x + this->y + getDataOfFreeItem()->widthX - this->rawImage->h - this->z;
 
                                         // for both the previous position and the current position
                                         mediator->markItemsForMasking( &oldPlayerItem );
@@ -456,8 +456,8 @@ void PlayerItem::wait ()
                 // El fotograma de parada es distinto segn la orientación del elemento
                 int currentFrame = ( getDataOfFreeItem()->motion.size() - getDataOfFreeItem()->extraFrames ) / getDataOfFreeItem()->directionFrames * static_cast < int > ( direction );
 
-                // Si la imagen actual es distinta a la nueva imagen entonces se cambia
-                if ( this->image != 0 && this->image != getDataOfFreeItem ()->motion[ currentFrame ] )
+                // if images differ
+                if ( this->rawImage != 0 && this->rawImage != getDataOfFreeItem ()->motion[ currentFrame ] )
                 {
                         changeImage( getDataOfFreeItem ()->motion[ currentFrame ] );
 

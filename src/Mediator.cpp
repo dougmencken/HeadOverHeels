@@ -198,18 +198,18 @@ void Mediator::markItemsForMasking( FreeItem* item )
 {
         if ( ! item ) return;
 
-        // Se recorre la lista de elementos libres para ver cúales hay que volver a enmascarar
+        // go through list of free item to see which ones to remask
         for ( std::list< FreeItem* >::iterator f = freeItems.begin (); f != freeItems.end (); ++f )
         {
                 FreeItem* thatFreeItem = *f;
 
-                if ( thatFreeItem->getId() != item->getId() && thatFreeItem->getImage() )
+                if ( thatFreeItem->getId() != item->getId() && thatFreeItem->getRawImage() )
                 {
-                        // El elemento debe enmascararse si hay solapamiento entre las imágenes
-                        if ( ( thatFreeItem->getOffsetX() < item->getOffsetX() + item->getImage()->w )
-                                && ( thatFreeItem->getOffsetX() + thatFreeItem->getImage()->w > item->getOffsetX() )
-                                && ( thatFreeItem->getOffsetY() < item->getOffsetY() + item->getImage()->h )
-                                && ( thatFreeItem->getOffsetY() + thatFreeItem->getImage()->h > item->getOffsetY() ) )
+                        // mask item if there’s overlap between images
+                        if ( ( thatFreeItem->getOffsetX() < item->getOffsetX() + item->getRawImage()->w )
+                                && ( thatFreeItem->getOffsetX() + thatFreeItem->getRawImage()->w > item->getOffsetX() )
+                                && ( thatFreeItem->getOffsetY() < item->getOffsetY() + item->getRawImage()->h )
+                                && ( thatFreeItem->getOffsetY() + thatFreeItem->getRawImage()->h > item->getOffsetY() ) )
                         {
                                 thatFreeItem->setWhichMask( WantMask );
                         }
@@ -221,21 +221,20 @@ void Mediator::markItemsForMasking( GridItem* gridItem )
 {
         if ( ! gridItem ) return;
 
-        // Se recorre la lista de elementos libres para ver cúales hay que volver a enmascarar
+        // go through list of free item to see which ones to remask
         for ( std::list< FreeItem* >::iterator f = freeItems.begin (); f != freeItems.end (); ++f )
         {
                 FreeItem* freeItem = *f;
 
-                if ( freeItem->getImage() )
+                if ( freeItem->getRawImage() )
                 {
-                        // El elemento debe enmascararse si hay solapamiento entre las imágenes
-                        if ( ( freeItem->getOffsetX() < gridItem->getOffsetX() + gridItem->getImage()->w )
-                                && ( freeItem->getOffsetX() + freeItem->getImage()->w > gridItem->getOffsetX() )
-                                && ( freeItem->getOffsetY() < gridItem->getOffsetY() + gridItem->getImage()->h )
-                                && ( freeItem->getOffsetY() + freeItem->getImage()->h > gridItem->getOffsetY() ) )
+                        // mask item if there’s overlap between images
+                        if ( ( freeItem->getOffsetX() < gridItem->getOffsetX() + gridItem->getRawImage()->w )
+                                && ( freeItem->getOffsetX() + freeItem->getRawImage()->w > gridItem->getOffsetX() )
+                                && ( freeItem->getOffsetY() < gridItem->getOffsetY() + gridItem->getRawImage()->h )
+                                && ( freeItem->getOffsetY() + freeItem->getRawImage()->h > gridItem->getOffsetY() ) )
                         {
-                                // Se comprueba si el elemento libre está espacialmente detrás del elemento rejilla
-                                // tanto antes como después del cambio de posición
+                                // see whether free item is behind grid item
                                 if ( ( freeItem->getX() < gridItem->getX() + gridItem->getWidthX() )
                                         && ( freeItem->getY() - freeItem->getWidthY() < gridItem->getY() )
                                         && ( freeItem->getZ() < gridItem->getZ() + gridItem->getHeight() ) )
@@ -340,12 +339,12 @@ void Mediator::castShadowOnFloor( FloorTile* floorTile )
                 GridItem* gridItem = static_cast< GridItem * >( *g );
 
                 // Si el elemento tiene sombra entonces se sombrea la imagen de la loseta
-                if(  gridItem->getShadow() )
+                if(  gridItem->getImageOfShadow() )
                 {
                         floorTile->castShadowImage (
-                                /* x */ ( tileSize << 1 ) * ( xCell - yCell ) - ( gridItem->getShadow()->w >> 1 ) + room->getX0() + 1,
-                                /* y */ tileSize * ( xCell + yCell + 1 ) - ( gridItem->getShadow()->h >> 1 ) + room->getY0() - 1,
-                                /* shadow */ gridItem->getShadow(),
+                                /* x */ ( tileSize << 1 ) * ( xCell - yCell ) - ( gridItem->getImageOfShadow()->w >> 1 ) + room->getX0() + 1,
+                                /* y */ tileSize * ( xCell + yCell + 1 ) - ( gridItem->getImageOfShadow()->h >> 1 ) + room->getY0() - 1,
+                                /* shadow */ gridItem->getImageOfShadow(),
                                 /* shadingScale */ room->shadingScale
                                 /* transparency = 0 (default) */
                         ) ;
@@ -368,7 +367,7 @@ void Mediator::castShadowOnFloor( FloorTile* floorTile )
                                 {
                                         FreeItem* freeItem = static_cast< FreeItem* >( *f );
 
-                                        if ( freeItem->getShadow() && freeItem->getTransparency() == percent )
+                                        if ( freeItem->getImageOfShadow() && freeItem->getTransparency() == percent )
                                         {
                                                 // Rango de columnas que interseccionan por el elemento
                                                 int xStart = freeItem->getX() / tileSize;
@@ -379,9 +378,9 @@ void Mediator::castShadowOnFloor( FloorTile* floorTile )
                                                 if ( xCell >= xStart && xCell <= xEnd && yCell >= yStart && yCell <= yEnd )
                                                 {
                                                         floorTile->castShadowImage (
-                                                                /* x */ ( ( freeItem->getX() - freeItem->getY() ) << 1 ) + room->getX0() + ( freeItem->getWidthX() + freeItem->getWidthY() ) - ( ( freeItem->getShadow()->w ) >> 1 ) - 1,
-                                                                /* y */ freeItem->getX() + freeItem->getY() + room->getY0() + ( ( freeItem->getWidthX() - freeItem->getWidthY() + 1 ) >> 1 ) - ( ( freeItem->getShadow()->h ) >> 1 ),
-                                                                /* shadow */ freeItem->getShadow(),
+                                                                /* x */ ( ( freeItem->getX() - freeItem->getY() ) << 1 ) + room->getX0() + ( freeItem->getWidthX() + freeItem->getWidthY() ) - ( ( freeItem->getImageOfShadow()->w ) >> 1 ) - 1,
+                                                                /* y */ freeItem->getX() + freeItem->getY() + room->getY0() + ( ( freeItem->getWidthX() - freeItem->getWidthY() + 1 ) >> 1 ) - ( ( freeItem->getImageOfShadow()->h ) >> 1 ),
+                                                                /* shadow */ freeItem->getImageOfShadow(),
                                                                 /* shadingScale */ room->shadingScale,
                                                                 /* transparency */ freeItem->getTransparency()
                                                         ) ;
@@ -403,12 +402,12 @@ void Mediator::castShadowOnGrid( GridItem* gridItem )
         {
                 GridItem* tempItem = static_cast< GridItem* >( *g );
 
-                if ( tempItem->getShadow() && tempItem->getZ() > gridItem->getZ() )
+                if ( tempItem->getImageOfShadow() && tempItem->getZ() > gridItem->getZ() )
                 {
                         gridItem->castShadowImage (
-                                /* x */ gridItem->getOffsetX() + ( ( gridItem->getImage()->w - tempItem->getShadow()->w) >> 1 ),
-                                /* y */ gridItem->getOffsetY() + gridItem->getImage()->h - room->getSizeOfOneTile() - gridItem->getHeight() - ( tempItem->getShadow()->h >> 1 ),
-                                /* shadow */ tempItem->getShadow(),
+                                /* x */ gridItem->getOffsetX() + ( ( gridItem->getRawImage()->w - tempItem->getImageOfShadow()->w) >> 1 ),
+                                /* y */ gridItem->getOffsetY() + gridItem->getRawImage()->h - room->getSizeOfOneTile() - gridItem->getHeight() - ( tempItem->getImageOfShadow()->h >> 1 ),
+                                /* shadow */ tempItem->getImageOfShadow(),
                                 /* shadingScale */ room->shadingScale
                                 /* transparency = 0 (default) */
                         ) ;
@@ -430,7 +429,7 @@ void Mediator::castShadowOnGrid( GridItem* gridItem )
                                 {
                                         FreeItem* freeItem = static_cast< FreeItem* >( *f );
 
-                                        if ( freeItem->getShadow() && freeItem->getTransparency() == percent && freeItem->getZ() > gridItem->getZ() )
+                                        if ( freeItem->getImageOfShadow() && freeItem->getTransparency() == percent && freeItem->getZ() > gridItem->getZ() )
                                         {
                                                 // Rango de columnas que interseccionan por el elemento
                                                 int xStart = freeItem->getX() / tileSize;
@@ -441,9 +440,9 @@ void Mediator::castShadowOnGrid( GridItem* gridItem )
                                                 if ( gridItem->getCellX() >= xStart && gridItem->getCellX() <= xEnd && gridItem->getCellY() >= yStart && gridItem->getCellY() <= yEnd )
                                                 {
                                                         gridItem->castShadowImage (
-                                                                /* x */ ( ( freeItem->getX() - freeItem->getY() ) << 1 ) + ( freeItem->getWidthX() + freeItem->getWidthY() ) - ( ( freeItem->getShadow()->w ) >> 1 ) - 1,
-                                                                /* y */ freeItem->getX() + freeItem->getY() + ( ( freeItem->getWidthX() - freeItem->getWidthY() + 1 ) >> 1 ) - ( ( freeItem->getShadow()->h ) >> 1 ) - gridItem->getZ() - gridItem->getHeight(),
-                                                                /* shadow */ freeItem->getShadow(),
+                                                                /* x */ ( ( freeItem->getX() - freeItem->getY() ) << 1 ) + ( freeItem->getWidthX() + freeItem->getWidthY() ) - ( ( freeItem->getImageOfShadow()->w ) >> 1 ) - 1,
+                                                                /* y */ freeItem->getX() + freeItem->getY() + ( ( freeItem->getWidthX() - freeItem->getWidthY() + 1 ) >> 1 ) - ( ( freeItem->getImageOfShadow()->h ) >> 1 ) - gridItem->getZ() - gridItem->getHeight(),
+                                                                /* shadow */ freeItem->getImageOfShadow(),
                                                                 /* shadingScale */ room->shadingScale,
                                                                 /* transparency */ freeItem->getTransparency()
                                                         ) ;
@@ -476,12 +475,12 @@ void Mediator::castShadowOnFreeItem( FreeItem* freeItem )
                         {
                                 GridItem* gridItem = static_cast< GridItem* >( *g );
 
-                                if ( gridItem->getShadow() && gridItem->getZ() > freeItem->getZ() )
+                                if ( gridItem->getImageOfShadow() && gridItem->getZ() > freeItem->getZ() )
                                 {
                                         freeItem->castShadowImage (
-                                                /* x */ ( tileSize << 1 ) * ( xCell - yCell ) - ( gridItem->getShadow()->w >> 1 ) + 1,
-                                                /* y */ tileSize * ( xCell + yCell + 1 ) - freeItem->getZ() - freeItem->getHeight() - ( gridItem->getShadow()->h >> 1 ) - 1,
-                                                /* shadow */ gridItem->getShadow(),
+                                                /* x */ ( tileSize << 1 ) * ( xCell - yCell ) - ( gridItem->getImageOfShadow()->w >> 1 ) + 1,
+                                                /* y */ tileSize * ( xCell + yCell + 1 ) - freeItem->getZ() - freeItem->getHeight() - ( gridItem->getImageOfShadow()->h >> 1 ) - 1,
+                                                /* shadow */ gridItem->getImageOfShadow(),
                                                 /* shadingScale */ room->shadingScale
                                                 /* transparency = 0 (default) */
                                         ) ;
@@ -506,16 +505,16 @@ void Mediator::castShadowOnFreeItem( FreeItem* freeItem )
                                 {
                                         FreeItem* tempItem = static_cast< FreeItem* >( *f );
 
-                                        if ( tempItem->getShadow() && tempItem->getTransparency() == percent && tempItem->getId() != freeItem->getId() )
+                                        if ( tempItem->getImageOfShadow() && tempItem->getTransparency() == percent && tempItem->getId() != freeItem->getId() )
                                         {
                                                 if ( freeItem->getZ() < tempItem->getZ() &&
                                                         freeItem->getX() < tempItem->getX() + tempItem->getWidthX() && tempItem->getX() < freeItem->getX() + freeItem->getWidthX() &&
                                                         freeItem->getY() > tempItem->getY() - tempItem->getWidthY() && tempItem->getY() > freeItem->getY() - freeItem->getWidthY() )
                                                 {
                                                         freeItem->castShadowImage(
-                                                                /* x */ ( ( tempItem->getX() - tempItem->getY() ) << 1 ) + tempItem->getWidthX() + tempItem->getWidthY() - ( tempItem->getShadow()->w >> 1 ) - 1,
-                                                                /* y */ tempItem->getX() + tempItem->getY() - freeItem->getZ() - freeItem->getHeight() + ( ( tempItem->getWidthX() - tempItem->getWidthY() - tempItem->getShadow()->h ) >> 1 ),
-                                                                /* shadow */ tempItem->getShadow(),
+                                                                /* x */ ( ( tempItem->getX() - tempItem->getY() ) << 1 ) + tempItem->getWidthX() + tempItem->getWidthY() - ( tempItem->getImageOfShadow()->w >> 1 ) - 1,
+                                                                /* y */ tempItem->getX() + tempItem->getY() - freeItem->getZ() - freeItem->getHeight() + ( ( tempItem->getWidthX() - tempItem->getWidthY() - tempItem->getImageOfShadow()->h ) >> 1 ),
+                                                                /* shadow */ tempItem->getImageOfShadow(),
                                                                 /* shadingScale */ room->shadingScale,
                                                                 /* transparency */ freeItem->getTransparency()
                                                         );
@@ -544,27 +543,27 @@ void Mediator::mask( FreeItem* freeItem )
 
                         // El otro elemento tiene que tener imagen y uno de los dos tiene que estar
                         // marcado para enmascararlo; además el otro no tiene que ser transparente
-                        if ( tempItem->getImage() &&
+                        if ( tempItem->getRawImage() &&
                                 ( ( freeItem->whichMask() != NoMask && tempItem->getTransparency() == 0 ) ||
                                 ( tempItem->whichMask() != NoMask && freeItem->getTransparency() == 0 ) ) )
                         {
                                 // Se comprueba si sus gráficos se solapan
-                                if ( ( tempItem->getOffsetX() < freeItem->getOffsetX() + freeItem->getImage()->w ) &&
-                                        ( tempItem->getOffsetX() + tempItem->getImage()->w > freeItem->getOffsetX() ) &&
-                                        ( tempItem->getOffsetY() < freeItem->getOffsetY() + freeItem->getImage()->h ) &&
-                                        ( tempItem->getOffsetY() + tempItem->getImage()->h > freeItem->getOffsetY() ) )
+                                if ( ( tempItem->getOffsetX() < freeItem->getOffsetX() + freeItem->getRawImage()->w ) &&
+                                        ( tempItem->getOffsetX() + tempItem->getRawImage()->w > freeItem->getOffsetX() ) &&
+                                        ( tempItem->getOffsetY() < freeItem->getOffsetY() + freeItem->getRawImage()->h ) &&
+                                        ( tempItem->getOffsetY() + tempItem->getRawImage()->h > freeItem->getOffsetY() ) )
                                 {
                                         // freeItem está detrás de tempItem
                                         if ( ( freeItem->getX() + freeItem->getWidthX() <= tempItem->getX() ) ||
                                                 ( freeItem->getY() <= tempItem->getY() - tempItem->getWidthY() ) ||
                                                 ( freeItem->getZ() + freeItem->getHeight() <= tempItem->getZ() ) )
                                         {
-                                                freeItem->maskImage( tempItem->getOffsetX(), tempItem->getOffsetY(), tempItem->getImage() );
+                                                freeItem->maskImage( tempItem->getOffsetX(), tempItem->getOffsetY(), tempItem->getRawImage() );
                                         }
                                         // tempItem está detrás de freeItem
                                         else
                                         {
-                                                tempItem->maskImage( freeItem->getOffsetX(), freeItem->getOffsetY(), freeItem->getImage() );
+                                                tempItem->maskImage( freeItem->getOffsetX(), freeItem->getOffsetY(), freeItem->getRawImage() );
                                         }
                                 }
                         }
@@ -592,21 +591,20 @@ void Mediator::mask( FreeItem* freeItem )
                                 {
                                         GridItem* gridItem = static_cast< GridItem * >( *g );
 
-                                        // El elemento rejilla tiene que tener una imagen
-                                        if ( gridItem->getImage() )
+                                        if ( gridItem->getRawImage() )
                                         {
-                                                // Se comprueba si sus gráficos se solapan
-                                                if ( ( gridItem->getOffsetX() < freeItem->getOffsetX() + freeItem->getImage()->w ) &&
-                                                        ( gridItem->getOffsetX() + gridItem->getImage()->w > freeItem->getOffsetX() ) &&
-                                                        ( gridItem->getOffsetY() < freeItem->getOffsetY() + freeItem->getImage()->h ) &&
-                                                        ( gridItem->getOffsetY() + gridItem->getImage()->h > freeItem->getOffsetY() ) )
+                                                // see if graphics overlap
+                                                if ( ( gridItem->getOffsetX() < freeItem->getOffsetX() + freeItem->getRawImage()->w ) &&
+                                                        ( gridItem->getOffsetX() + gridItem->getRawImage()->w > freeItem->getOffsetX() ) &&
+                                                        ( gridItem->getOffsetY() < freeItem->getOffsetY() + freeItem->getRawImage()->h ) &&
+                                                        ( gridItem->getOffsetY() + gridItem->getRawImage()->h > freeItem->getOffsetY() ) )
                                                 {
-                                                        // freeItem está detrás de gridItem
+                                                        // if free item is behind grid item
                                                         if ( ( freeItem->getX() + freeItem->getWidthX() <= ( xStart + i ) * room->getSizeOfOneTile() ) ||
                                                                 ( freeItem->getY() <= (yStart + i + 1) * room->getSizeOfOneTile() - 1 - room->getSizeOfOneTile() ) ||
                                                                 ( freeItem->getZ() + freeItem->getHeight() <= gridItem->getZ() ) )
                                                         {
-                                                                freeItem->maskImage( gridItem->getOffsetX(), gridItem->getOffsetY(), gridItem->getImage() );
+                                                                freeItem->maskImage( gridItem->getOffsetX(), gridItem->getOffsetY(), gridItem->getRawImage() );
                                                         }
                                                 }
                                         }

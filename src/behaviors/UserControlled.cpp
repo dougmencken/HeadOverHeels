@@ -565,17 +565,17 @@ void UserControlled::take( PlayerItem * player )
                                 }
                         }
 
-                        // Guarda el elemento seleccionado y lo hace desaparecer de la sala
+                        // take that item
                         if ( takenItem != 0 )
                         {
                                 takenItemData = itemDataManager->findItemByLabel( takenItem->getLabel() );
                                 takenItem->getBehavior()->changeActivityOfItem( Vanish );
                                 activity = ( activity == TakeAndJump ? Jump : TakenItem );
 
-                                // Comunica al gestor del juego el elemento que se ha cogido
-                                takenItemImage = takenItem->getImage();
+                                // get image of that item
+                                takenItemImage = takenItem->getRawImage();
                                 GameManager::getInstance()->setItemTaken( takenItemImage );
-                                // Emite el sonido correspondiente
+
                                 SoundManager::getInstance()->play( player->getLabel(), TakeItem );
                         }
                 }

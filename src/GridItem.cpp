@@ -13,13 +13,13 @@ GridItem::GridItem( ItemData* itemData, int cx, int cy, int z, const Direction& 
         this->cell.first = cx;
         this->cell.second = cy;
 
-        // Coordenadas libres del elemento rejilla
+        // free coordinates of grid item
         this->x = cx * this->dataOfItem->widthX;
         this->y = ( cy + 1 ) * this->dataOfItem->widthY - 1;
 
-        // Imágenes iniciales
-        this->image = itemData->motion[ itemData->motion.size() / itemData->directionFrames * direction ];
-        // Puede no tener sombra
+        this->rawImage = itemData->motion[ itemData->motion.size() / itemData->directionFrames * direction ];
+
+        // may have no shadow
         if ( itemData->shadowWidth != 0 && itemData->shadowHeight != 0 )
         {
                 this->shadow = itemData->shadows[ itemData->motion.size() / itemData->directionFrames * direction ];
@@ -33,15 +33,13 @@ GridItem::~GridItem( )
 
 void GridItem::draw( BITMAP* where )
 {
-        // El elemento está sombreado
         if ( this->processedImage )
         {
                 draw_sprite( where, this->processedImage, mediator->getX0() + this->offset.first, mediator->getY0() + this->offset.second );
         }
-        // El elemento no tiene sombra
-        else if ( this->image )
+        else if ( this->rawImage )
         {
-                draw_sprite( where, this->image, mediator->getX0() + this->offset.first, mediator->getY0() + this->offset.second );
+                draw_sprite( where, this->rawImage, mediator->getX0() + this->offset.first, mediator->getY0() + this->offset.second );
         }
 }
 
@@ -49,9 +47,9 @@ void GridItem::changeImage( BITMAP* newImage )
 {
         // when there's no image for this item, just assign it
         // such case usually happens during construction of the item
-        if ( this->image == 0 )
+        if ( this->rawImage == 0 )
         {
-                this->image = newImage;
+                this->rawImage = newImage;
         }
         // otherwise, change it
         else
@@ -61,14 +59,14 @@ void GridItem::changeImage( BITMAP* newImage )
 
                 if ( this->processedImage )
                 {
-                        // recreate a processed image
+                        // bin processed image
                         destroy_bitmap( this->processedImage );
                         this->processedImage = 0;
                 }
 
-                this->image = newImage;
+                this->rawImage = newImage;
 
-                // calculate displacement of new image unless it's nil
+                // calculate displacement of new image unless it’s nil
                 if ( newImage )
                 {
                         if ( mediator->getDegreeOfShading() < 256 )
@@ -77,7 +75,7 @@ void GridItem::changeImage( BITMAP* newImage )
                                 this->myShady = WantShadow;
                         }
 
-                        // how many pixels this image is from the origin of its room
+                        // how many pixels this image is from the origin of room
                         this->offset.first = ( ( mediator->getSizeOfOneTile() * ( this->cell.first - this->cell.second ) ) << 1 ) - ( newImage->w >> 1 ) + 1;
                         this->offset.second = mediator->getSizeOfOneTile() * ( this->cell.first + this->cell.second + 2 ) - newImage->h - this->z - 1;
                 }
@@ -87,11 +85,11 @@ void GridItem::changeImage( BITMAP* newImage )
                 }
 
                 // mark for masking every free item affected by previous image
-                if ( oldGridItem.getImage () )
+                if ( oldGridItem.getRawImage () )
                         mediator->markItemsForMasking( &oldGridItem );
 
                 // mark for masking every free item affected by new image
-                if ( this->image )
+                if ( this->rawImage )
                         mediator->markItemsForMasking( this );
         }
 }
@@ -112,25 +110,25 @@ void GridItem::changeShadow( BITMAP* newShadow )
 
 void GridItem::requestCastShadow( int column )
 {
-        if ( this->image && this->myShady == WantShadow )
+        if ( this->rawImage && this->myShady == WantShadow )
         {
                 mediator->castShadowOnGrid( this );
 
-                // Si no se ha podido sombrear entonces se destruye la imagen de sombreado
+                // bin already shaded image
                 if ( this->myShady != AlreadyShady && this->processedImage )
                 {
                         destroy_bitmap( this->processedImage );
                         this->processedImage = 0;
                 }
 
-                // Reinicia el atributo para el siguiente ciclo
+                // to reshade at next cycle
                 this->myShady = NoShadow;
         }
 }
 
 void GridItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale, unsigned char transparency )
 {
-        // El sombreado se realiza si el elemento que sombrea no es totalmente transparente
+        // is item not fully transparent
         if ( transparency < 100 )
         {
                 // Anchura del elemento
@@ -143,12 +141,12 @@ void GridItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
                 if ( iniy < 0 ) iniy = 0;
                 // Coordenada final X
                 int endx = x - this->offset.first + shadow->w;
-                if ( endx > this->image->w ) endx = this->image->w;
+                if ( endx > this->rawImage->w ) endx = this->rawImage->w;
                 // Coordenada final Y
                 int endy = y - this->offset.second + shadow->h;
-                if ( endy > this->image->h ) endy = this->image->h;
+                if ( endy > this->rawImage->h ) endy = this->rawImage->h;
                 // Coordenada intermedia Y
-                int my = this->image->h - width - this->dataOfItem->height + 1;
+                int my = this->rawImage->h - width - this->dataOfItem->height + 1;
                 if ( endy < my ) my = endy;
                 if ( endy > my + width ) endy = my + width;
 
@@ -181,16 +179,16 @@ void GridItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
                         // En principio, la imagen del elemento sombreado es la imagen del elemento sin sombrear
                         if ( ! this->processedImage )
                         {
-                                this->processedImage = create_bitmap_ex( bitmap_color_depth( this->image ), this->image->w, this->image->h );
+                                this->processedImage = create_bitmap_ex( bitmap_color_depth( this->rawImage ), this->rawImage->w, this->rawImage->h );
                         }
                         if ( this->myShady == WantShadow )
                         {
-                                blit( this->image, this->processedImage, 0, 0, 0, 0, this->image->w, this->image->h );
+                                blit( this->rawImage, this->processedImage, 0, 0, 0, 0, this->rawImage->w, this->rawImage->h );
                                 this->myShady = AlreadyShady;
                         }
 
                         // Incremento de los índices iRpx, iGpx e iBpx
-                        char iInc = ( bitmap_color_depth( this->image ) == 32 ? 4 : 3 );
+                        char iInc = ( bitmap_color_depth( this->rawImage ) == 32 ? 4 : 3 );
                         // Incremento del índice sPixel
                         char sInc = ( bitmap_color_depth( shadow ) == 32 ? 4 : 3 );
 
@@ -201,7 +199,7 @@ void GridItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
                         endx *= iInc;
                         inix *= iInc;
                 #if IS_BIG_ENDIAN
-                        inix += bitmap_color_depth( this->image ) == 32 ? 1 : 0 ;
+                        inix += bitmap_color_depth( this->rawImage ) == 32 ? 1 : 0 ;
                 #endif
                         n2i *= sInc;
                 #if IS_BIG_ENDIAN
@@ -230,7 +228,7 @@ void GridItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
                                 for ( iRow = iniy, sRow = iniy + this->offset.second - y; iRow < my; iRow++, sRow++ )
                                 {
                                         unsigned char* sln = shadow->line[ sRow ];
-                                        unsigned char* iln = this->image->line[ iRow ];
+                                        unsigned char* iln = this->rawImage->line[ iRow ];
                                         unsigned char* rln = this->processedImage->line[ iRow ];
 
                                         // Se recorren los píxeles de cada fila según los límites calculados
@@ -250,21 +248,21 @@ void GridItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
                                 }
 
                                 // Sombreado de los laterales del elemento
-                                ltpx = ( this->image->w >> 1 ) - ( width << 1 ) + ( ( iRow - my ) << 1 );
-                                rtpx = ( this->image->w >> 1 ) + ( width << 1 ) - ( ( iRow - my ) << 1 ) - 2;
+                                ltpx = ( this->rawImage->w >> 1 ) - ( width << 1 ) + ( ( iRow - my ) << 1 );
+                                rtpx = ( this->rawImage->w >> 1 ) + ( width << 1 ) - ( ( iRow - my ) << 1 ) - 2;
                                 ltpx = ltpx * iInc;
                         #if IS_BIG_ENDIAN
-                                ltpx += bitmap_color_depth( this->image ) == 32 ? 1 : 0 ;
+                                ltpx += bitmap_color_depth( this->rawImage ) == 32 ? 1 : 0 ;
                         #endif
                                 rtpx = rtpx * iInc;
                         #if IS_BIG_ENDIAN
-                                rtpx += bitmap_color_depth( this->image ) == 32 ? 1 : 0 ;
+                                rtpx += bitmap_color_depth( this->rawImage ) == 32 ? 1 : 0 ;
                         #endif
 
                                 for ( ltpx1 = ltpx + iInc, rtpx1 = rtpx + iInc; iRow < endy; iRow++, sRow++, ltpx += 2 * iInc, ltpx1 += 2 * iInc, rtpx -= 2 * iInc, rtpx1 -= 2 * iInc )
                                 {
                                         unsigned char* sln = shadow->line[ sRow ];
-                                        unsigned char* iln = this->image->line[ iRow ];
+                                        unsigned char* iln = this->rawImage->line[ iRow ];
                                         unsigned char* rln = this->processedImage->line[ iRow ];
 
                                         if ( inix < ltpx )
@@ -292,9 +290,9 @@ void GridItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
 
                                                         if ( iRpx == ltpx || iRpx == ltpx1 || iRpx == rtpx || iRpx == rtpx1 )
                                                         {
-                                                                for ( int yy = iRow + 1; yy < image->h; yy++ )
+                                                                for ( int yy = iRow + 1; yy < this->rawImage->h; yy++ )
                                                                 {
-                                                                        lm = this->image->line[ yy ];
+                                                                        lm = this->rawImage->line[ yy ];
                                                                         ln = this->processedImage->line[ yy ];
 
                                                                         if ( ( lm[ iRpx ] < 255 || lm[ iGpx ] || lm[ iBpx ] < 255 ) &&
@@ -321,7 +319,7 @@ void GridItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
                                         {
                                                 unsigned short color;
                                                 unsigned char* sln = shadow->line[ sRow ];
-                                                unsigned char* iln = this->image->line[ iRow ];
+                                                unsigned char* iln = this->rawImage->line[ iRow ];
                                                 unsigned char* rln = this->processedImage->line[ iRow ];
 
                                                 // Se recorren los píxeles de cada fila según los límites calculados
@@ -343,22 +341,22 @@ void GridItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
                                                 }
                                         }
 
-                                        ltpx = ( this->image->w >> 1 ) - 2 * width + 2 * ( iRow - my );
-                                        rtpx = ( this->image->w >> 1 ) + 2 * width - 2 * ( iRow - my ) - 2;
+                                        ltpx = ( this->rawImage->w >> 1 ) - 2 * width + 2 * ( iRow - my );
+                                        rtpx = ( this->rawImage->w >> 1 ) + 2 * width - 2 * ( iRow - my ) - 2;
                                         ltpx = ltpx * iInc;
                                         rtpx = rtpx * iInc;
                                 #if IS_BIG_ENDIAN
-                                        ltpx += bitmap_color_depth( this->image ) == 32 ? 1 : 0 ;
+                                        ltpx += bitmap_color_depth( this->rawImage ) == 32 ? 1 : 0 ;
                                 #endif
                                         rtpx = rtpx * iInc;
                                 #if IS_BIG_ENDIAN
-                                        rtpx += bitmap_color_depth( this->image ) == 32 ? 1 : 0 ;
+                                        rtpx += bitmap_color_depth( this->rawImage ) == 32 ? 1 : 0 ;
                                 #endif
 
                                         for ( ltpx1 = ltpx + iInc, rtpx1 = rtpx + iInc; iRow < endy; iRow++, sRow++, ltpx += 2 * iInc, ltpx1 += 2 * iInc, rtpx -= 2 * iInc, rtpx1 -= 2 * iInc )
                                         {
                                                 unsigned char* sln = shadow->line[ sRow ];
-                                                unsigned char* iln = this->image->line[ iRow ];
+                                                unsigned char* iln = this->rawImage->line[ iRow ];
                                                 unsigned char* rln = this->processedImage->line[ iRow ];
 
                                                 if ( inix < ltpx )
@@ -389,9 +387,9 @@ void GridItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
 
                                                                         if ( iRpx == ltpx || iRpx == ltpx1 || iRpx == rtpx || iRpx == rtpx1 )
                                                                         {
-                                                                                for ( int yy = iRow + 1; yy < image->h; yy++ )
+                                                                                for ( int yy = iRow + 1; yy < this->rawImage->h; yy++ )
                                                                                 {
-                                                                                        lm = this->image->line[ yy ];
+                                                                                        lm = this->rawImage->line[ yy ];
                                                                                         ln = this->processedImage->line[ yy ];
 
                                                                                         if ( ( lm[ iRpx ] < 255 || lm[ iGpx ] || lm[ iBpx ] < 255 ) &&
@@ -418,7 +416,7 @@ void GridItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
                                         for ( iRow = iniy, sRow = iniy + this->offset.second - y; iRow < my; iRow++, sRow++ )
                                         {
                                                 unsigned char* sln = shadow->line[ sRow ];
-                                                unsigned char* iln = this->image->line[ iRow ];
+                                                unsigned char* iln = this->rawImage->line[ iRow ];
                                                 unsigned char* rln = this->processedImage->line[ iRow ];
 
                                                 // Se recorren los píxeles de cada fila según los límites calculados
@@ -435,21 +433,21 @@ void GridItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
                                                 }
                                         }
 
-                                        ltpx = ( this->image->w >> 1 ) - 2 * width + 2 * ( iRow - my );
-                                        rtpx = ( this->image->w >> 1 ) + 2 * width - 2 * ( iRow - my ) - 2;
+                                        ltpx = ( this->rawImage->w >> 1 ) - 2 * width + 2 * ( iRow - my );
+                                        rtpx = ( this->rawImage->w >> 1 ) + 2 * width - 2 * ( iRow - my ) - 2;
                                         ltpx = ltpx * iInc;
                                 #if IS_BIG_ENDIAN
-                                        ltpx += bitmap_color_depth( this->image ) == 32 ? 1 : 0 ;
+                                        ltpx += bitmap_color_depth( this->rawImage ) == 32 ? 1 : 0 ;
                                 #endif
                                         rtpx = rtpx * iInc;
                                 #if IS_BIG_ENDIAN
-                                        rtpx += bitmap_color_depth( this->image ) == 32 ? 1 : 0 ;
+                                        rtpx += bitmap_color_depth( this->rawImage ) == 32 ? 1 : 0 ;
                                 #endif
 
                                         for ( ltpx1 = ltpx + iInc, rtpx1 = rtpx + iInc; iRow < endy; iRow++, sRow++, ltpx += 2 * iInc, ltpx1 += 2 * iInc, rtpx -= 2 * iInc, rtpx1 -= 2 * iInc )
                                         {
                                                 unsigned char* sln = shadow->line[ sRow ];
-                                                unsigned char* iln = this->image->line[ iRow ];
+                                                unsigned char* iln = this->rawImage->line[ iRow ];
                                                 unsigned char* rln = this->processedImage->line[ iRow ];
 
                                                 if ( inix < ltpx )
@@ -474,9 +472,9 @@ void GridItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
 
                                                                         if ( iRpx == ltpx || iRpx == ltpx1 || iRpx == rtpx || iRpx == rtpx1 )
                                                                         {
-                                                                                for ( int yy = iRow + 1; yy < this->image->h; yy++ )
+                                                                                for ( int yy = iRow + 1; yy < this->rawImage->h; yy++ )
                                                                                 {
-                                                                                        lm = this->image->line[ yy ];
+                                                                                        lm = this->rawImage->line[ yy ];
                                                                                         ln = this->processedImage->line[ yy ];
 
                                                                                         if ( ( lm[ iRpx ] < 255 || lm[ iGpx ] || lm[ iBpx ] < 255 ) &&
@@ -545,11 +543,11 @@ bool GridItem::changeData( int value, const Datum& datum, const WhatToDo& what )
                 {
                         // Si el elemento rejilla tiene imagen se marcan para enmascarar los elementos
                         // libres cuyas imágenes se solapen con la suya y espacialmente queden detrás suyo
-                        if ( this->image )
+                        if ( this->rawImage )
                         {
-                                // A cuántos píxeles está la imagen del punto origen de la sala. Sólo cambia el
-                                // valor en el eje Y pues es el que depende de la coordenada Z
-                                this->offset.second = mediator->getSizeOfOneTile() * ( this->cell.first + this->cell.second + 2 ) - this->image->h - this->z - 1;
+                                // how many pixels is image from origin of room
+                                // change only value on Y axis because it depends on Z coordinate
+                                this->offset.second = mediator->getSizeOfOneTile() * ( this->cell.first + this->cell.second + 2 ) - this->rawImage->h - this->z - 1;
 
                                 mediator->markItemsForMasking( &oldGridItem );
                                 mediator->markItemsForMasking( this );
