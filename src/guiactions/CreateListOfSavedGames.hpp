@@ -41,7 +41,7 @@ public:
          */
         void doIt () ;
 
-        std::string getNameOfAction ()  {  return "CreateListOfSavedGames" ;  }
+        std::string getNameOfAction () const {  return "CreateListOfSavedGames" ;  }
 
         bool isLoadMenu () {  return this->isMenuForLoad ;  }
 

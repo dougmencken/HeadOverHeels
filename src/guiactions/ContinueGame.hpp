@@ -35,7 +35,7 @@ public:
          */
         void doIt () ;
 
-        std::string getNameOfAction ()  {  return "ContinueGame" ;  }
+        std::string getNameOfAction () const {  return "ContinueGame" ;  }
 
 private:
 

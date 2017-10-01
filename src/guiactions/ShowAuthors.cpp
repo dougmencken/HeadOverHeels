@@ -43,6 +43,7 @@ void ShowAuthors::doIt ()
 
                 size_t howManyLines = langString->getLinesCount() ;
                 fprintf( stdout, "credits-text has %ld lines\n", howManyLines );
+
                 for ( size_t i = 0; i < howManyLines; i++ )
                 {
                         LanguageLine* line = langString->getLine( i );
@@ -53,20 +54,35 @@ void ShowAuthors::doIt ()
         }
         else
         {
-                // restore the initial position
+                // restore initial position
                 linesOfCredits->moveTo( linesOfCredits->getX(), initialY );
         }
 
         GuiManager::getInstance()->changeScreen( screen );
 
         // move text up
-        bool exit = false;
+
+        bool exit = false ;
+        const int whenToReloop = - ( linesOfCredits->getHeightOfField() + 200 ) ;
+
         while ( ! exit )
         {
                 int yNow = linesOfCredits->getY() - 1;
-                if ( yNow <= -5000 )
+
+                if ( keypressed() && key[ KEY_SPACE ] )
                 {
-                        // let it loop
+                        if ( key_shifts & KB_SHIFT_FLAG )
+                        {
+                                if ( key_shifts & KB_ALT_FLAG )
+                                        yNow += 2 ;
+                                else
+                                        yNow ++ ;
+                        }
+                }
+
+                if ( yNow <= whenToReloop )
+                {
+                        // loop it
                         yNow = initialY ;
                 }
 
@@ -80,6 +96,9 @@ void ShowAuthors::doIt ()
                         gui::GuiManager::getInstance()->toggleFullScreenVideo ();
                 }
 
-                sleep( 25 );
+                if ( ! ( keypressed() && key[ KEY_SPACE ] ) )
+                {
+                        sleep( 20 );
+                }
         }
 }

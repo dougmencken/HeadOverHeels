@@ -39,7 +39,7 @@ public:
          */
         void doIt () ;
 
-        std::string getNameOfAction ()  {  return "CreateKeyboardMenu" ;  }
+        std::string getNameOfAction () const {  return "CreateKeyboardMenu" ;  }
 
 private:
 

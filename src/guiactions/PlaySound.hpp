@@ -32,7 +32,7 @@ public:
                 isomot::SoundManager::getInstance()->play ( "gui", whichSound, /* loop */ false );
         }
 
-        std::string getNameOfAction ()  {  return "PlaySound" ;  }
+        std::string getNameOfAction () const {  return "PlaySound" ;  }
 
 private:
 

@@ -28,7 +28,7 @@ public:
 
         void bye () ;
 
-        std::string getNameOfAction ()  {  return "ExitApplication" ;  }
+        std::string getNameOfAction () const {  return "ExitApplication" ;  }
 
 };
 

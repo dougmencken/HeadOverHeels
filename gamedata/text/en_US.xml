@@ -201,27 +201,90 @@
     </properties>
   </text>
 
+  <text id="exit-game">
+    <properties>
+      <ustring>Exit</ustring>
+    </properties>
+  </text>
+
+  <text id="save-game">
+    <properties font="big" color="orange">
+      <ustring>Reincarnation Fish lets you</ustring>
+    </properties>
+    <properties font="big" color="orange">
+      <ustring>save the game</ustring>
+    </properties>
+    <properties font="big" color="orange">
+      <ustring>by touching SPACE</ustring>
+    </properties>
+  </text>
+
+  <text id="empty-slot">
+    <properties>
+      <ustring>Free</ustring>
+    </properties>
+  </text>
+
+  <text id="score">
+    <properties>
+      <ustring>Score</ustring>
+    </properties>
+  </text>
+
+  <text id="explored-rooms">
+    <properties>
+      <ustring>Explored %d rooms</ustring>
+    </properties>
+  </text>
+
+  <text id="liberated-planets">
+    <properties>
+      <ustring>Liberated %d planets</ustring>
+    </properties>
+  </text>
+
+  <text id="rooms">
+    <properties>
+      <ustring>rooms</ustring>
+    </properties>
+  </text>
+
+  <text id="planets">
+    <properties>
+      <ustring>planets</ustring>
+    </properties>
+  </text>
+
   <text id="credits-text">
     <properties font="big" color="multicolor">
-      <ustring>Original game</ustring>
-    </properties>
-    <properties font="big" color="white">
-      <ustring>Jon Ritman</ustring>
-    </properties>
-    <properties font="big" color="white">
-      <ustring>Bernie Drummond</ustring>
-    </properties>
-    <properties font="big" color="white">
-      <ustring>Guy Stevens</ustring>
-    </properties>
-    <properties font="big" color="white">
-      <ustring>F. David Thorpe</ustring>
+      <ustring>Head over Heels</ustring>
     </properties>
     <properties font="regular" color="white">
       <ustring> </ustring>
     </properties>
-    <properties font="big" color="multicolor">
-      <ustring>Programming</ustring>
+    <properties font="regular" color="cyan">
+      <ustring>the</ustring>
+    </properties>
+    <properties font="regular" color="yellow">
+      <ustring>free and open source</ustring>
+    </properties>
+    <properties font="regular" color="orange">
+      <ustring>remake</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="regular" color="multicolor">
+      <ustring>Coding</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
     </properties>
     <properties font="regular" color="white">
       <ustring>Jorge Rodríguez Santos</ustring>
@@ -232,8 +295,14 @@
     <properties font="regular" color="white">
       <ustring> </ustring>
     </properties>
-    <properties font="big" color="multicolor">
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="regular" color="multicolor">
       <ustring>Graphics</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
     </properties>
     <properties font="regular" color="white">
       <ustring>Davit Masiá</ustring>
@@ -250,8 +319,14 @@
     <properties font="regular" color="white">
       <ustring> </ustring>
     </properties>
-    <properties font="big" color="multicolor">
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="regular" color="multicolor">
       <ustring>Music &amp; Sound Effects</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
     </properties>
     <properties font="regular" color="white">
       <ustring>Chiastic</ustring>
@@ -274,8 +349,20 @@
     <properties font="regular" color="white">
       <ustring> </ustring>
     </properties>
-    <properties font="big" color="multicolor">
-      <ustring>Afrikaans translation</ustring>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="regular" color="multicolor">
+      <ustring>Authors of translation to</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="regular" color="yellow">
+      <ustring>Afrikaans af-ZA</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
     </properties>
     <properties font="regular" color="white">
       <ustring>Hendrik Bezuidenhout</ustring>
@@ -283,8 +370,11 @@
     <properties font="regular" color="white">
       <ustring> </ustring>
     </properties>
-    <properties font="big" color="multicolor">
-      <ustring>Asturian translation</ustring>
+    <properties font="regular" color="yellow">
+      <ustring>Asturian ast-ES Bable</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
     </properties>
     <properties font="regular" color="white">
       <ustring>Xavi García</ustring>
@@ -292,8 +382,11 @@
     <properties font="regular" color="white">
       <ustring> </ustring>
     </properties>
-    <properties font="big" color="multicolor">
-      <ustring>Basque translation</ustring>
+    <properties font="regular" color="yellow">
+      <ustring>Basque eu-ES Euskera</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
     </properties>
     <properties font="regular" color="white">
       <ustring>Xavi Colomé</ustring>
@@ -301,8 +394,11 @@
     <properties font="regular" color="white">
       <ustring> </ustring>
     </properties>
-    <properties font="big" color="multicolor">
-      <ustring>Catalan translation</ustring>
+    <properties font="regular" color="yellow">
+      <ustring>Catalan ca-ES Català</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
     </properties>
     <properties font="regular" color="white">
       <ustring>Efrén García</ustring>
@@ -313,8 +409,11 @@
     <properties font="regular" color="white">
       <ustring> </ustring>
     </properties>
-    <properties font="big" color="multicolor">
-      <ustring>Croatian translation</ustring>
+    <properties font="regular" color="yellow">
+      <ustring>Croatian hr-HR Hrvatski</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
     </properties>
     <properties font="regular" color="white">
       <ustring>Jakiša Tomić</ustring>
@@ -322,8 +421,11 @@
     <properties font="regular" color="white">
       <ustring> </ustring>
     </properties>
-    <properties font="big" color="multicolor">
-      <ustring>Danish translation</ustring>
+    <properties font="regular" color="yellow">
+      <ustring>Danish da-DK Dansk</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
     </properties>
     <properties font="regular" color="white">
       <ustring>Peter Behrend</ustring>
@@ -334,8 +436,11 @@
     <properties font="regular" color="white">
       <ustring> </ustring>
     </properties>
-    <properties font="big" color="multicolor">
-      <ustring>English translation</ustring>
+    <properties font="regular" color="yellow">
+      <ustring>English en-US</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
     </properties>
     <properties font="regular" color="white">
       <ustring>Enrique García</ustring>
@@ -346,8 +451,11 @@
     <properties font="regular" color="white">
       <ustring> </ustring>
     </properties>
-    <properties font="big" color="multicolor">
-      <ustring>Finnish translation</ustring>
+    <properties font="regular" color="yellow">
+      <ustring>Finnish fi-FI Suomi</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
     </properties>
     <properties font="regular" color="white">
       <ustring>Mikko Järvinen</ustring>
@@ -355,8 +463,11 @@
     <properties font="regular" color="white">
       <ustring> </ustring>
     </properties>
-    <properties font="big" color="multicolor">
-      <ustring>French translation</ustring>
+    <properties font="regular" color="yellow">
+      <ustring>French fr-FR Français</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
     </properties>
     <properties font="regular" color="white">
       <ustring>Jérôme Ginestet</ustring>
@@ -364,8 +475,11 @@
     <properties font="regular" color="white">
       <ustring> </ustring>
     </properties>
-    <properties font="big" color="multicolor">
-      <ustring>Galician translation</ustring>
+    <properties font="regular" color="yellow">
+      <ustring>Galician gl-ES Galego</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
     </properties>
     <properties font="regular" color="white">
       <ustring>Rubén Sánchez</ustring>
@@ -373,8 +487,11 @@
     <properties font="regular" color="white">
       <ustring> </ustring>
     </properties>
-    <properties font="big" color="multicolor">
-      <ustring>German translation</ustring>
+    <properties font="regular" color="yellow">
+      <ustring>German de-DE Deutsch</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
     </properties>
     <properties font="regular" color="white">
       <ustring>Beatrix Scharpenberg</ustring>
@@ -382,8 +499,11 @@
     <properties font="regular" color="white">
       <ustring> </ustring>
     </properties>
-    <properties font="big" color="multicolor">
-      <ustring>Hungarian translation</ustring>
+    <properties font="regular" color="yellow">
+      <ustring>Hungarian hu-HU Magyar</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
     </properties>
     <properties font="regular" color="white">
       <ustring>Attila Kiss</ustring>
@@ -391,8 +511,11 @@
     <properties font="regular" color="white">
       <ustring> </ustring>
     </properties>
-    <properties font="big" color="multicolor">
-      <ustring>Italian translation</ustring>
+    <properties font="regular" color="yellow">
+      <ustring>Italian it-IT Italiano</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
     </properties>
     <properties font="regular" color="white">
       <ustring>Claudio Vicari</ustring>
@@ -400,8 +523,11 @@
     <properties font="regular" color="white">
       <ustring> </ustring>
     </properties>
-    <properties font="big" color="multicolor">
-      <ustring>Latin translation</ustring>
+    <properties font="regular" color="yellow">
+      <ustring>Latin la-VA Lingua Latina</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
     </properties>
     <properties font="regular" color="white">
       <ustring>Rosa Roca</ustring>
@@ -409,8 +535,11 @@
     <properties font="regular" color="white">
       <ustring> </ustring>
     </properties>
-    <properties font="big" color="multicolor">
-      <ustring>Polish translation</ustring>
+    <properties font="regular" color="yellow">
+      <ustring>Polish pl-PL Polski</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
     </properties>
     <properties font="regular" color="white">
       <ustring>Marcin Drews</ustring>
@@ -418,8 +547,14 @@
     <properties font="regular" color="white">
       <ustring> </ustring>
     </properties>
-    <properties font="big" color="multicolor">
-      <ustring>Portuguese (Brazil) translation</ustring>
+    <properties font="regular" color="yellow">
+      <ustring>Brazilian Portuguese pt-BR</ustring>
+    </properties>
+    <properties font="regular" color="yellow">
+      <ustring>Português Brazil</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
     </properties>
     <properties font="regular" color="white">
       <ustring>Fábio Oliveira</ustring>
@@ -427,8 +562,14 @@
     <properties font="regular" color="white">
       <ustring> </ustring>
     </properties>
-    <properties font="big" color="multicolor">
-      <ustring>Portuguese (Portugal) translation</ustring>
+    <properties font="regular" color="yellow">
+      <ustring>European Portuguese pt-PT</ustring>
+    </properties>
+    <properties font="regular" color="yellow">
+      <ustring>Português Portugal</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
     </properties>
     <properties font="regular" color="white">
       <ustring>Filipe Silva</ustring>
@@ -436,26 +577,35 @@
     <properties font="regular" color="white">
       <ustring> </ustring>
     </properties>
-    <properties font="big" color="multicolor">
-      <ustring>Russian translation</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Dmitrii Sibarov</ustring>
+    <properties font="regular" color="yellow">
+      <ustring>Russian ru-RU Русский</ustring>
     </properties>
     <properties font="regular" color="white">
       <ustring> </ustring>
     </properties>
-    <properties font="big" color="multicolor">
-      <ustring>Serbian translation</ustring>
-    </properties>
     <properties font="regular" color="white">
-      <ustring>Milos Babović</ustring>
+      <ustring>Дмитрий Сибаров</ustring>
     </properties>
     <properties font="regular" color="white">
       <ustring> </ustring>
     </properties>
-    <properties font="big" color="multicolor">
-      <ustring>Slovak translation</ustring>
+    <properties font="regular" color="yellow">
+      <ustring>Serbian sr-SR Српски</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring>Милош Бабовић</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="regular" color="yellow">
+      <ustring>Slovak sk-SK Slovenčina</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
     </properties>
     <properties font="regular" color="white">
       <ustring>Vlado Makys</ustring>
@@ -463,8 +613,11 @@
     <properties font="regular" color="white">
       <ustring> </ustring>
     </properties>
-    <properties font="big" color="multicolor">
-      <ustring>Valencian translation</ustring>
+    <properties font="regular" color="yellow">
+      <ustring>Valencian val-ES Valencià</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
     </properties>
     <properties font="regular" color="white">
       <ustring>Davit Masiá</ustring>
@@ -472,8 +625,14 @@
     <properties font="regular" color="white">
       <ustring> </ustring>
     </properties>
-    <properties font="big" color="multicolor">
-      <ustring>Special Thanks</ustring>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="regular" color="multicolor">
+      <ustring>Special Thanks Go To</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
     </properties>
     <properties font="regular" color="white">
       <ustring>Ignacio Pérez Gil</ustring>
@@ -490,14 +649,17 @@
     <properties font="regular" color="white">
       <ustring>Santiago Acha Jiménez</ustring>
     </properties>
+    <properties font="regular" color="yellow">
+      <ustring> </ustring>
+    </properties>
     <properties font="regular" color="white">
       <ustring>Remakes Zone</ustring>
     </properties>
     <properties font="regular" color="white">
       <ustring>Computer Emuzone</ustring>
     </properties>
-    <properties font="regular" color="orange">
-      <ustring>And</ustring>
+    <properties font="regular" color="yellow">
+      <ustring> </ustring>
     </properties>
     <properties font="regular" color="white">
       <ustring>Alberto Rodríguez Santos</ustring>
@@ -601,59 +763,35 @@
     <properties font="regular" color="white">
       <ustring> </ustring>
     </properties>
-  </text>
-
-  <text id="exit-game">
-    <properties>
-      <ustring>Exit</ustring>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
     </properties>
-  </text>
-
-  <text id="save-game">
-    <properties font="big" color="orange">
-      <ustring>Reincarnation Fish lets you</ustring>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
     </properties>
-    <properties font="big" color="orange">
-      <ustring>save the game</ustring>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
     </properties>
-    <properties font="big" color="orange">
-      <ustring>by touching SPACE</ustring>
+    <properties font="regular" color="multicolor">
+      <ustring>Original game is made by</ustring>
     </properties>
-  </text>
-
-  <text id="empty-slot">
-    <properties>
-      <ustring>Free</ustring>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
     </properties>
-  </text>
-
-  <text id="score">
-    <properties>
-      <ustring>Score</ustring>
+    <properties font="regular" color="white">
+      <ustring>Jon Ritman</ustring>
     </properties>
-  </text>
-
-  <text id="explored-rooms">
-    <properties>
-      <ustring>Explored %d rooms</ustring>
+    <properties font="regular" color="white">
+      <ustring>Bernie Drummond</ustring>
     </properties>
-  </text>
-
-  <text id="liberated-planets">
-    <properties>
-      <ustring>Liberated %d planets</ustring>
+    <properties font="regular" color="white">
+      <ustring>Guy Stevens</ustring>
     </properties>
-  </text>
-
-  <text id="rooms">
-    <properties>
-      <ustring>rooms</ustring>
+    <properties font="regular" color="white">
+      <ustring>Frederick David Thorpe</ustring>
     </properties>
-  </text>
-
-  <text id="planets">
-    <properties>
-      <ustring>planets</ustring>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
     </properties>
   </text>
 

@@ -42,7 +42,7 @@ public:
          */
         void doIt () ;
 
-        std::string getNameOfAction ()  {  return "CreateCongratulationsScreen" ;  }
+        std::string getNameOfAction () const {  return "CreateCongratulationsScreen" ;  }
 
 private:
 

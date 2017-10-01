@@ -42,7 +42,7 @@ public:
          */
         void doIt () ;
 
-        std::string getNameOfAction ()  {  return "CreateEndScreen" ;  }
+        std::string getNameOfAction () const {  return "CreateEndScreen" ;  }
 
 private:
 

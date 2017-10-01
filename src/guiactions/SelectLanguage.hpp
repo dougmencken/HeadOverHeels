@@ -31,7 +31,7 @@ public:
          */
         void doIt () ;
 
-        std::string getNameOfAction ()  {  return "SelectLanguage" ;  }
+        std::string getNameOfAction () const {  return "SelectLanguage" ;  }
 
 private:
 

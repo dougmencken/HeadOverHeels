@@ -41,13 +41,13 @@
 
   <text id="es_ES">
     <properties>
-      <ustring>Español(ES)</ustring>
+      <ustring>Español ES</ustring>
     </properties>
   </text>
 
   <text id="es_LA">
     <properties>
-      <ustring>Español(LA)</ustring>
+      <ustring>Español LA</ustring>
     </properties>
   </text>
 
@@ -101,13 +101,13 @@
 
   <text id="pt_BR">
     <properties>
-      <ustring>Português(BR)</ustring>
+      <ustring>Português BR</ustring>
     </properties>
   </text>
 
   <text id="pt_PT">
     <properties>
-      <ustring>Português(PT)</ustring>
+      <ustring>Português PT</ustring>
     </properties>
   </text>
 

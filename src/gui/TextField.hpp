@@ -63,6 +63,8 @@ public:
         */
         void moveTo ( int x, int y ) ;
 
+        unsigned int getHeightOfField() {  return heightOfField ;  }
+
 private:
 
        /**

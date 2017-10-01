@@ -44,7 +44,7 @@ public:
          */
         void doIt () ;
 
-        std::string getNameOfAction ()  {  return "CreateMenuOfGraphicSets" ;  }
+        std::string getNameOfAction () const {  return "CreateMenuOfGraphicSets" ;  }
 
 private:
 

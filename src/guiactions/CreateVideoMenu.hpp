@@ -42,7 +42,7 @@ public:
          */
         void doIt () ;
 
-        std::string getNameOfAction ()  {  return "CreateVideoMenu" ;  }
+        std::string getNameOfAction () const {  return "CreateVideoMenu" ;  }
 
 private:
 

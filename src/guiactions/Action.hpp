@@ -28,7 +28,7 @@ public:
 
         virtual void doIt () = 0 ;
 
-        virtual std::string getNameOfAction () = 0 ;
+        virtual std::string getNameOfAction () const = 0 ;
 
 };
 
@@ -39,7 +39,7 @@ public:
 
         void doIt () {  }
 
-        std::string getNameOfAction ()  {  return "DoNothing" ;  }
+        std::string getNameOfAction () const {  return "DoNothing" ;  }
 
 };
 

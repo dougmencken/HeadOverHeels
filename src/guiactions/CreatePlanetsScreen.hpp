@@ -40,7 +40,7 @@ public:
          */
         void doIt () ;
 
-        std::string getNameOfAction ()  {  return "CreatePlanetsScreen" ;  }
+        std::string getNameOfAction () const {  return "CreatePlanetsScreen" ;  }
 
         void liberateBlacktooth() {  blacktoothFree = true ;  }
 

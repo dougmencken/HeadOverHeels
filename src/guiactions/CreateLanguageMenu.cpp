@@ -61,7 +61,7 @@ void CreateLanguageMenu::doIt ()
 
                 std::string language = GuiManager::getInstance()->getLanguage();
 
-                MenuWithMultipleColumns * menu = new MenuWithMultipleColumns( /* space between columns */ 40 );
+                MenuWithMultipleColumns * menu = new MenuWithMultipleColumns( /* space between columns */ 60 );
                 menu->setVerticalOffset( 50 ); // adjust for header over heelser
 
                 for ( std::list< LanguageText * >::iterator i = this->texts.begin (); i != this->texts.end (); ++i )

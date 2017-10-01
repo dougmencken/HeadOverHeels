@@ -18,7 +18,8 @@
 namespace gui
 {
 
-class TextField;
+class TextField ;
+
 
 /**
  * Show authors of this game
@@ -29,15 +30,11 @@ class ShowAuthors : public Action
 
 public:
 
-        /**
-         * Constructor
-         * @param picture Where to draw the graphical interface
-         */
         ShowAuthors( BITMAP* picture ) ;
 
         void doIt () ;
 
-        std::string getNameOfAction ()  {  return "ShowAuthors" ;  }
+        std::string getNameOfAction () const {  return "ShowAuthors" ;  }
 
 private:
 
