@@ -7,7 +7,6 @@
 #include "Font.hpp"
 #include "Screen.hpp"
 #include "Menu.hpp"
-#include "Icon.hpp"
 #include "Label.hpp"
 #include "CreateMainMenu.hpp"
 

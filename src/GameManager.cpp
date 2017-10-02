@@ -117,13 +117,10 @@ GameManager* GameManager::getInstance ()
         return instance;
 }
 
-BITMAP * GameManager::refreshPicture ( BITMAP * picture, const char * nameOfPicture )
+BITMAP * GameManager::refreshPicture ( BITMAP * oldBitmap, const char * nameOfPicture )
 {
-        if ( picture != 0 )
-        {
-                delete picture;
-                picture = 0;
-        }
+        if ( oldBitmap != 0 )
+                delete oldBitmap;
 
         return load_png( ( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + nameOfPicture ).c_str (), 0 );
 }

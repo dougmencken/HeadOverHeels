@@ -6,7 +6,7 @@
 #include "LanguageManager.hpp"
 #include "LanguageText.hpp"
 #include "Screen.hpp"
-#include "Icon.hpp"
+#include "Picture.hpp"
 #include "TextField.hpp"
 #include "CreateEndScreen.hpp"
 
@@ -15,17 +15,16 @@ using isomot::GameManager ;
 
 
 CreateCongratulationsScreen::CreateCongratulationsScreen( BITMAP* picture, unsigned short rooms, unsigned short planets ) : Action( )
-	, where( picture )
-	, rooms( rooms )
-	, planets( planets )
-	, pictureOfCrown( 0 )
+        , where( picture )
+        , rooms( rooms )
+        , planets( planets )
 {
 
 }
 
 CreateCongratulationsScreen::~CreateCongratulationsScreen( )
 {
-        delete pictureOfCrown ;
+
 }
 
 void CreateCongratulationsScreen::doIt ()
@@ -44,15 +43,13 @@ void CreateCongratulationsScreen::doIt ()
                 screen->freeWidgets() ;
         }
 
-        this->pictureOfCrown = GameManager::refreshPicture( pictureOfCrown, "crown.png" );
-
         // Head coronado
-        screen->addWidget( new Icon( 192, 50, pictureOfCrown ) );
-        screen->addIconOfHeadAt( 192, 100 );
+        screen->addWidget( new Picture( 192, 50, Screen::loadPicture( "crown.png" ), "crown.png" ) );
+        screen->addPictureOfHeadAt( 192, 100 );
 
         // Heels coronado
-        screen->addWidget( new Icon( 400, 50, pictureOfCrown ) );
-        screen->addIconOfHeelsAt( 400, 100 );
+        screen->addWidget( new Picture( 400, 50, Screen::loadPicture( "crown.png" ), "crown.png" ) );
+        screen->addPictureOfHeelsAt( 400, 100 );
 
         // Texto final
         langString = languageManager->findLanguageString( "final-text" );

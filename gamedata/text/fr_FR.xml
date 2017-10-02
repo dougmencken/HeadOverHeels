@@ -183,7 +183,7 @@
     </properties>
   </text>
 
-  <text id="empty-slot">
+  <text id="free-slot">
     <properties>
       <ustring>Disponible</ustring>
     </properties>

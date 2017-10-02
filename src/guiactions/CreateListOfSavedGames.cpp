@@ -6,7 +6,6 @@
 #include "Font.hpp"
 #include "Screen.hpp"
 #include "Menu.hpp"
-#include "Icon.hpp"
 #include "Label.hpp"
 #include "CreateMainMenu.hpp"
 #include "LoadGame.hpp"
@@ -80,7 +79,7 @@ void CreateListOfSavedGames::doIt ()
                 else
                 {
                         ss.str( std::string() );
-                        ss << languageManager->findLanguageString( "empty-slot" )->getText();
+                        ss << languageManager->findLanguageString( "free-slot" )->getText();
                         Label* labelOfFree = new Label( ss.str() );
                         if ( isLoadMenu() )
                         {

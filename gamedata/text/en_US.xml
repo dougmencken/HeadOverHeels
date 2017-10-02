@@ -219,7 +219,7 @@
     </properties>
   </text>
 
-  <text id="empty-slot">
+  <text id="free-slot">
     <properties>
       <ustring>Free</ustring>
     </properties>
@@ -773,7 +773,13 @@
       <ustring> </ustring>
     </properties>
     <properties font="regular" color="multicolor">
-      <ustring>Original game is made by</ustring>
+      <ustring>Original game</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="regular" color="cyan">
+      <ustring>coding</ustring>
     </properties>
     <properties font="regular" color="white">
       <ustring> </ustring>
@@ -782,10 +788,37 @@
       <ustring>Jon Ritman</ustring>
     </properties>
     <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="regular" color="cyan">
+      <ustring>graphics</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="regular" color="white">
       <ustring>Bernie Drummond</ustring>
     </properties>
     <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="regular" color="cyan">
+      <ustring>sound</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="regular" color="white">
       <ustring>Guy Stevens</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
+    </properties>
+    <properties font="regular" color="cyan">
+      <ustring>loading screen</ustring>
+    </properties>
+    <properties font="regular" color="white">
+      <ustring> </ustring>
     </properties>
     <properties font="regular" color="white">
       <ustring>Frederick David Thorpe</ustring>

@@ -7,7 +7,6 @@
 #include "Screen.hpp"
 #include "Menu.hpp"
 
-#include "Icon.hpp"
 #include "Label.hpp"
 #include "CreatePlanetsScreen.hpp"
 #include "CreateKeyboardMenu.hpp"

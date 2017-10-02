@@ -11,7 +11,7 @@
 #include "Font.hpp"
 #include "Screen.hpp"
 #include "Menu.hpp"
-#include "Icon.hpp"
+#include "Picture.hpp"
 #include "Label.hpp"
 #include "CreateLanguageMenu.hpp"
 
@@ -203,7 +203,7 @@ void GuiManager::refreshScreens ()
         {
                 if ( i->second )
                 {
-                        i->second->refreshIcons () ;
+                        i->second->refreshPictures () ;
                         i->second->refreshBackground () ;
                 }
         }

@@ -9,7 +9,6 @@
 #include "Screen.hpp"
 #include "MenuWithMultipleColumns.hpp"
 #include "Label.hpp"
-#include "Icon.hpp"
 #include "SelectLanguage.hpp"
 #include "CreateMainMenu.hpp"
 
@@ -54,8 +53,8 @@ void CreateLanguageMenu::doIt ()
                 label->moveTo( 360, 24 );
                 screen->addWidget( label );
 
-                screen->addIconOfHeadAt( 66, 24 );
-                screen->addIconOfHeelsAt( 518, 24 );
+                screen->addPictureOfHeadAt( 66, 24 );
+                screen->addPictureOfHeelsAt( 518, 24 );
 
                 // presenta los idiomas disponibles
 

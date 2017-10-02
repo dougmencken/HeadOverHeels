@@ -61,8 +61,6 @@ private:
          */
         unsigned short planets ;
 
-        BITMAP * pictureOfCrown ;
-
 };
 
 }

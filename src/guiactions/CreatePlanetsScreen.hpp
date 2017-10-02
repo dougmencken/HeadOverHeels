@@ -28,10 +28,10 @@ public:
 
         /**
          * Constructor
-         * @param picture Imagen donde se dibujará la interfaz gráfica
+         * @param where Imagen donde se dibujará la interfaz gráfica
          * @param gameInProgress Indica si hay una partida en curso o comienza una nueva
          */
-        CreatePlanetsScreen( BITMAP* picture, bool gameInProgress );
+        CreatePlanetsScreen( BITMAP* where, bool gameInProgress );
 
         virtual ~CreatePlanetsScreen( ) ;
 
@@ -55,7 +55,7 @@ public:
 private:
 
         /**
-         * Imagen donde se dibujará la interfaz gráfica
+         * Where graphical interface draws
          */
         BITMAP* where ;
 
@@ -88,20 +88,6 @@ private:
          * Indica si Safari ha sido liberado
          */
         bool safariFree ;
-
-        BITMAP * chapeau ;
-
-        BITMAP * chapeauTriste ;
-
-        BITMAP * planetBlacktooth ;
-
-        BITMAP * planetSafari ;
-
-        BITMAP * planetBookworld ;
-
-        BITMAP * planetEgyptus ;
-
-        BITMAP * planetPenitentiary ;
 
 };
 

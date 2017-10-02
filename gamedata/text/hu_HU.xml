@@ -219,7 +219,7 @@
     </properties>
   </text>
 
-  <text id="empty-slot">
+  <text id="free-slot">
     <properties>
       <ustring>üres hely</ustring>
     </properties>

@@ -50,9 +50,11 @@ private:
 
         GameManager( ) ;
 
-public:
+protected:
 
-        static BITMAP * refreshPicture ( BITMAP * picture, const char * nameOfPicture ) ;
+        static BITMAP * refreshPicture ( BITMAP * oldBitmap, const char * nameOfPicture ) ;
+
+public:
 
         virtual ~GameManager( ) ;
 

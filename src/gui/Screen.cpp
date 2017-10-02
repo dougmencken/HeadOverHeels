@@ -4,7 +4,7 @@
 #include "GuiManager.hpp"
 #include "Action.hpp"
 #include "Label.hpp"
-#include "Icon.hpp"
+#include "Picture.hpp"
 
 
 namespace gui
@@ -18,11 +18,11 @@ Screen::Screen( BITMAP* picture, Action* action ) :
         actionOfScreen( action ),
         escapeAction( 0 ),
         keyHandler( 0 ),
-        iconOfHead( 0 ),
-        iconOfHeels( 0 )
+        pictureOfHead( 0 ),
+        pictureOfHeels( 0 )
 {
         refreshBackground ();
-        refreshIcons ();
+        refreshPictures ();
 }
 
 Screen::~Screen( )
@@ -30,8 +30,9 @@ Screen::~Screen( )
         std::for_each( this->widgets.begin (), this->widgets.end (), DeleteObject() );
 
         delete backgroundPicture ;
-        delete iconOfHead ;
-        delete iconOfHeels ;
+
+        delete pictureOfHead ;
+        delete pictureOfHeels ;
 }
 
 void Screen::refreshBackground ()
@@ -48,46 +49,48 @@ void Screen::refreshBackground ()
                 setBackground( picture );
 }
 
-void Screen::refreshIcons ()
+void Screen::refreshPictures ()
 {
         int xHead = 0, yHead = 0;
-        if ( iconOfHead != 0 )
+        if ( pictureOfHead != 0 )
         {
-                xHead = iconOfHead->getX ();
-                yHead = iconOfHead->getY ();
+                xHead = pictureOfHead->getX ();
+                yHead = pictureOfHead->getY ();
 
-                delete iconOfHead;
-                iconOfHead = 0;
+                delete pictureOfHead;
+                pictureOfHead = 0;
         }
-        iconOfHead = new Icon( xHead, yHead, load_png( ( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + "head.png" ).c_str (), 0 ) );
+        std::string pathToHead = gui::GuiManager::getInstance()->getPathToPicturesOfGui() + "head.png" ;
+        pictureOfHead = new Picture( xHead, yHead, load_png( pathToHead.c_str (), 0 ), pathToHead );
 
         int xHeels = 0, yHeels = 0;
-        if ( iconOfHeels != 0 )
+        if ( pictureOfHeels != 0 )
         {
-                xHeels = iconOfHeels->getX ();
-                yHeels = iconOfHeels->getY ();
+                xHeels = pictureOfHeels->getX ();
+                yHeels = pictureOfHeels->getY ();
 
-                delete iconOfHeels;
-                iconOfHeels = 0;
+                delete pictureOfHeels;
+                pictureOfHeels = 0;
         }
-        iconOfHeels = new Icon( xHeels, yHeels, load_png( ( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + "heels.png" ).c_str (), 0 ) );
+        std::string pathToHeels = gui::GuiManager::getInstance()->getPathToPicturesOfGui() + "heels.png" ;
+        pictureOfHeels = new Picture( xHeels, yHeels, load_png( pathToHeels.c_str (), 0 ), pathToHeels );
 }
 
 void Screen::draw( BITMAP* where )
 {
-        // Pinta del color de fondo la imagen destino
+        // fill with color of background
         clear_to_color( where, backgroundColor );
 
-        // Si se definió una imagen de fondo entonces se vuelca
+        // draw background, if any
         if ( this->backgroundPicture != 0 )
         {
                 blit( backgroundPicture, where, 0, 0, 0, 0, backgroundPicture->w, backgroundPicture->h );
         }
 
-        // Dibuja cada componente en la pantalla
+        // draw each component
         std::for_each( widgets.begin (), widgets.end (), std::bind2nd( std::mem_fun( &Widget::draw ), where ) );
 
-        // Vuelca la imagen destino a la memoria de pantalla
+        // copy resulting image to screen
         blit( where, screen, 0, 0, 0, 0, where->w, where->h );
 }
 
@@ -121,24 +124,52 @@ void Screen::addWidget( Widget* widget )
         this->widgets.push_back( widget );
 }
 
+bool Screen::removeWidget( Widget* widget )
+{
+        for ( std::list< Widget* >::const_iterator it = widgets.begin (); it != widgets.end (); ++ it )
+        {
+                if ( ( *it ) == widget )
+                {
+                        widgets.remove( widget );
+                        delete widget;
+
+                        return true;
+                }
+        }
+
+        return false;
+}
+
 void Screen::freeWidgets ()
 {
-        widgets.clear() ;
+        while ( ! this->widgets.empty () )
+        {
+                Widget* w = *( widgets.begin () );
+                widgets.remove( w );
+                delete w;
+        }
+
+        pictureOfHead = 0;
+        pictureOfHeels = 0;
 }
 
-void Screen::addIconOfHeadAt ( int x, int y )
+void Screen::addPictureOfHeadAt ( int x, int y )
 {
-        iconOfHead->moveTo( x, y );
-        addWidget( iconOfHead );
+        if ( pictureOfHead == 0 ) refreshPictures ();
+
+        pictureOfHead->moveTo( x, y );
+        addWidget( pictureOfHead );
 }
 
-void Screen::addIconOfHeelsAt ( int x, int y )
+void Screen::addPictureOfHeelsAt ( int x, int y )
 {
-        iconOfHeels->moveTo( x, y );
-        addWidget( iconOfHeels );
+        if ( pictureOfHeels == 0 ) refreshPictures ();
+
+        pictureOfHeels->moveTo( x, y );
+        addWidget( pictureOfHeels );
 }
 
-void Screen::placeHeadAndHeels( bool iconsToo, bool copyrightsToo )
+void Screen::placeHeadAndHeels( bool picturesToo, bool copyrightsToo )
 {
         Label* label = 0;
 
@@ -170,10 +201,10 @@ void Screen::placeHeadAndHeels( bool iconsToo, bool copyrightsToo )
         label->moveTo( 360, 24 );
         addWidget( label );
 
-        if ( iconsToo )
+        if ( picturesToo )
         {
-                addIconOfHeadAt( 206, 84 );
-                addIconOfHeelsAt( 378, 84 );
+                addPictureOfHeadAt( 206, 84 );
+                addPictureOfHeelsAt( 378, 84 );
         }
 
         if ( copyrightsToo )
@@ -200,6 +231,12 @@ void Screen::placeHeadAndHeels( bool iconsToo, bool copyrightsToo )
                 label->moveTo( whereX, whereY - stepY - stepY );
                 addWidget( label );
         }
+}
+
+/* static */
+BITMAP * Screen::loadPicture ( const char * nameOfPicture )
+{
+        return load_png( ( GuiManager::getInstance()->getPathToPicturesOfGui() + nameOfPicture ).c_str (), 0 );
 }
 
 }

@@ -20,7 +20,7 @@ namespace gui
 {
 
 class Action ;
-class Icon ;
+class Picture ;
 
 /**
  * Container for elements of user interface
@@ -51,21 +51,21 @@ public:
          */
         void handleKey ( int key ) ;
 
-        /**
-         * Añade un nuevo componente a la pantalla
-         * @param widget Un componente de la interfaz de usuario
-         */
         void addWidget ( Widget* widget ) ;
+
+        bool removeWidget ( Widget* widget ) ;
 
         size_t countWidgets () {  return widgets.size () ;  }
 
         void freeWidgets () ;
 
-        void addIconOfHeadAt ( int x, int y ) ;
+        void addPictureOfHeadAt ( int x, int y ) ;
 
-        void addIconOfHeelsAt ( int x, int y ) ;
+        void addPictureOfHeelsAt ( int x, int y ) ;
 
-        void placeHeadAndHeels ( bool iconsToo, bool copyrightsToo ) ;
+        void placeHeadAndHeels ( bool imagesToo, bool copyrightsToo ) ;
+
+        static BITMAP * loadPicture ( const char * nameOfPicture ) ;
 
 private:
 
@@ -95,9 +95,9 @@ private:
 
         Widget * keyHandler ;
 
-        Icon * iconOfHead ;
+        Picture * pictureOfHead ;
 
-        Icon * iconOfHeels ;
+        Picture * pictureOfHeels ;
 
 public:
 
@@ -111,7 +111,7 @@ public:
 
         void refreshBackground () ;
 
-        void refreshIcons () ;
+        void refreshPictures () ;
 
         Action * getActionOfScreen () const {  return actionOfScreen ;  }
 

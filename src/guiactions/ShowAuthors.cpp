@@ -8,11 +8,13 @@
 #include "Font.hpp"
 #include "Screen.hpp"
 #include "Label.hpp"
+#include "Picture.hpp"
 #include "TextField.hpp"
 #include "CreateMainMenu.hpp"
 
 using gui::ShowAuthors;
 using gui::Label;
+using gui::Picture;
 using gui::TextField;
 using isomot::SoundManager;
 
@@ -60,10 +62,17 @@ void ShowAuthors::doIt ()
 
         GuiManager::getInstance()->changeScreen( screen );
 
+        Picture* widgetForLoadingScreen = 0;
+
         // move text up
 
+        const int heightOfCredits = ( ( linesOfCredits->getHeightOfField() + 1 ) >> 1 ) << 1;
+        const int verticalSpace = ( this->where->h * 3 ) >> 2;
+        const int whenToReloop = - ( heightOfCredits + verticalSpace ) ;
+
+        fprintf( stdout, "height of credits-text is %d\n", heightOfCredits );
+
         bool exit = false ;
-        const int whenToReloop = - ( linesOfCredits->getHeightOfField() + 200 ) ;
 
         while ( ! exit )
         {
@@ -87,9 +96,31 @@ void ShowAuthors::doIt ()
                 }
 
                 linesOfCredits->moveTo( linesOfCredits->getX(), yNow );
-                GuiManager::getInstance()->redraw ();
 
-                exit = ( keypressed() && key[ KEY_ESC ] );
+                if ( yNow == this->where->h - heightOfCredits && widgetForLoadingScreen == 0 )
+                {
+                        BITMAP* loadingScreen = load_png( ( isomot::sharePath() + "loading-screen.png" ).c_str () , 0 );
+                        if ( loadingScreen != 0 )
+                        {
+                                widgetForLoadingScreen = new Picture(
+                                                ( this->where->w - loadingScreen->w ) >> 1, this->where->h,
+                                                loadingScreen,
+                                                "loading screen from original speccy version"
+                                ) ;
+                                screen->addWidget( widgetForLoadingScreen );
+                        }
+                }
+                else if ( yNow < this->where->h - heightOfCredits && widgetForLoadingScreen != 0 )
+                {
+                        widgetForLoadingScreen->moveTo( widgetForLoadingScreen->getX(), yNow + heightOfCredits );
+                }
+                else if ( widgetForLoadingScreen != 0 )
+                {
+                        screen->removeWidget( widgetForLoadingScreen );
+                        widgetForLoadingScreen = 0;
+                }
+
+                GuiManager::getInstance()->redraw ();
 
                 if ( keypressed() && ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && ( key[ KEY_F ] ) )
                 {
@@ -100,5 +131,13 @@ void ShowAuthors::doIt ()
                 {
                         sleep( 20 );
                 }
+
+                exit = ( keypressed() && key[ KEY_ESC ] );
+        }
+
+        if ( widgetForLoadingScreen != 0 )
+        {
+                screen->removeWidget( widgetForLoadingScreen );
+                widgetForLoadingScreen = 0;
         }
 }

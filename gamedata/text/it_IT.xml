@@ -177,7 +177,7 @@
     </properties>
   </text>
 
-  <text id="empty-slot">
+  <text id="free-slot">
     <properties>
       <ustring>Disponibile</ustring>
     </properties>

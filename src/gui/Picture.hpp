@@ -8,20 +8,19 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef Icon_hpp_
-#define Icon_hpp_
+#ifndef Picture_hpp_
+#define Picture_hpp_
 
 #include <allegro.h>
+#include <string>
+
 #include "Widget.hpp"
 
 
 namespace gui
 {
 
-/**
- * Una imagen estática presente en la pantalla
- */
-class Icon : public Widget
+class Picture : public Widget
 {
 
 public:
@@ -29,11 +28,10 @@ public:
        /**
         * @param x horizontal offset
         * @param y vertical offset
-        * @param image la imagen a presentar
         */
-        Icon( int x, int y, BITMAP * image ) ;
+        Picture( int x, int y, BITMAP * image, std::string name ) ;
 
-        virtual ~Icon( ) ;
+        virtual ~Picture( ) ;
 
        /**
         * Dibuja el elemento
@@ -43,17 +41,17 @@ public:
 
         void handleKey ( int rawKey ) {  /* do nothing */  }
 
-        BITMAP * getPicture () const {  return icon ;  }
+        BITMAP * getPicture () const {  return picture ;  }
 
-        void setPicture ( BITMAP * newPicture ) {  delete icon ;  icon = newPicture ;  }
+        unsigned int getWidth () const {  return this->picture->w ;  }
 
-        unsigned int getWidth () const {  return this->icon->w ;  }
-
-        unsigned int getHeight () const {  return this->icon->h ;  }
+        unsigned int getHeight () const {  return this->picture->h ;  }
 
 private:
 
-        BITMAP * icon ;
+        BITMAP * picture ;
+
+        std::string nameOfPicture ;
 
 };
 
