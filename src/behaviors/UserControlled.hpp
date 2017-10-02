@@ -74,16 +74,15 @@ protected:
         virtual void move( PlayerItem * player ) ;
 
        /**
-        * Mueve automáticamente al jugador a la velocidad establecida en los datos del elemento
-        * y en la dirección de alguno de los cuatro puntos cardinales, una distancia igual al
-        * número definido en los pasos automáticos (automaticSteps)
+        * Move player automatically
+        * at distance equal to number of automatic steps,
+        * in direction of north or south or west or east,
+        * at speed specified in item’s data
         */
         virtual void autoMove( PlayerItem * player ) ;
 
        /**
-        * Desplaza al jugador a la velocidad del elemento que lo empuja y en la dirección de alguno
-        * de los cuatro puntos cardinales y sus puntos intermedios, es decir, en ocho direcciones
-        * posibles
+        * Move player at speed of item that pushes it in one of eight directions
         */
         virtual void displace( PlayerItem * player ) ;
 

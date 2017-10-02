@@ -49,7 +49,7 @@ void Isomot::beginNewGame ()
         mapManager->beginNewGame( "blacktooth/blacktooth01.xml", "blacktooth/blacktooth23.xml" );
         //mapManager->beginNewGame( "blacktooth/blacktooth85.xml", "blacktooth/blacktooth23.xml" );
 
-        // go to the initial room
+        // go to first room
         mapManager->getActiveRoom()->activate ();
 
         std::cout << "play new game" << std::endl ;
@@ -207,6 +207,53 @@ BITMAP* Isomot::update()
                 key[ KEY_MINUS ] = 0;
         }
 
+        if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_J ] )
+        {
+                PlayerItem* activePlayer = activeRoom->getMediator()->getActivePlayer();
+                PlayerItem* otherPlayer = 0;
+
+                Room* roomWithInactivePlayer = this->mapManager->getRoomOfInactivePlayer();
+                if ( roomWithInactivePlayer != 0 )
+                {
+                        otherPlayer = roomWithInactivePlayer->getMediator()->getActivePlayer();
+                }
+
+                if ( otherPlayer != 0 && roomWithInactivePlayer != activeRoom )
+                {
+                        std::cout << "join characters in active room \"" << activeRoom->getNameOfFileWithDataAboutRoom() << "\" via pure magic" << std::endl ;
+
+                        std::string nameOfAnotherPlayer = otherPlayer->getLabel();
+
+                        int playerX = activePlayer->getX();
+                        int playerY = activePlayer->getY();
+                        int playerZ = activePlayer->getZ() + 2 * LayerHeight;
+                        Direction way = otherPlayer->getDirection();
+
+                        PlayerItem* joinedPlayer = new PlayerItem(
+                                this->itemDataManager->findItemByLabel( nameOfAnotherPlayer ),
+                                playerX, playerY, playerZ, way
+                        ) ;
+
+                        std::string behavior = "still";
+                        if ( nameOfAnotherPlayer == "head" ) behavior = "behavior of Head";
+                        else if ( nameOfAnotherPlayer == "heels" ) behavior = "behavior of Heels";
+
+                        joinedPlayer->assignBehavior( behavior, reinterpret_cast< void * >( this->itemDataManager ) );
+
+                        joinedPlayer->fillWithData( gameManager );
+
+                        activeRoom->addPlayerToRoom( joinedPlayer, true );
+                        joinedPlayer->getBehavior()->changeActivityOfItem( BeginWayInTeletransport );
+
+                        roomWithInactivePlayer->removePlayerFromRoom( otherPlayer, true );
+                        this->mapManager->removeRoom( roomWithInactivePlayer );
+
+                        activeRoom->getMediator()->setActivePlayer( joinedPlayer );
+                }
+
+                key[ KEY_J ] = 0;
+        }
+
         if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_L ] )
         {
                 if ( gameManager->countFreePlanets() < 5 )
@@ -227,11 +274,15 @@ BITMAP* Isomot::update()
                 {
                         PlayerItem* activePlayer = activeRoom->getMediator()->getActivePlayer();
                         std::string nameOfPlayer = activePlayer->getLabel();
+                        Direction whichWay = activePlayer->getDirection();
+                        int teleportedX = 0;
+                        int teleportedY = 95;
+                        int teleportedZ = 240;
 
                         PlayerItem* teleportedPlayer = new PlayerItem(
                                 this->itemDataManager->findItemByLabel( nameOfPlayer ),
-                                0, 95, 240,
-                                activePlayer->getDirection()
+                                teleportedX, teleportedY, teleportedZ,
+                                whichWay
                         ) ;
 
                         std::string behaviorOfPlayer = "still";
@@ -241,24 +292,20 @@ BITMAP* Isomot::update()
 
                         teleportedPlayer->assignBehavior( behaviorOfPlayer, reinterpret_cast< void * >( this->itemDataManager ) );
 
-                        teleportedPlayer->setLives( gameManager->getLives( nameOfPlayer ) );
-                        teleportedPlayer->setTools( gameManager->playerTools( nameOfPlayer ) );
-                        teleportedPlayer->setAmmo( gameManager->getDonuts( nameOfPlayer ) );
-                        teleportedPlayer->setHighJumps( gameManager->getHighJumps() );
-                        teleportedPlayer->setHighSpeed( gameManager->getHighSpeed() );
-                        teleportedPlayer->setShieldTime( gameManager->getShield( nameOfPlayer ) );
+                        teleportedPlayer->fillWithData( gameManager );
 
-                        Room* roomWithTeleportToFinalScene = this->mapManager->createRoomThenAddItToListOfRooms( "blacktooth/blacktooth83.xml" );
-                        roomWithTeleportToFinalScene->addPlayer( teleportedPlayer );
+                        std::string nameOfRoomNearFinal = "blacktooth/blacktooth83.xml";
+                        Room* roomWithTeleportToFinalScene = this->mapManager->createRoomThenAddItToListOfRooms( nameOfRoomNearFinal );
+                        roomWithTeleportToFinalScene->addPlayerToRoom( teleportedPlayer, true );
                         teleportedPlayer->getBehavior()->changeActivityOfItem( BeginWayInTeletransport );
 
-                        activeRoom->removePlayer( activePlayer );
-                        this->mapManager->removeRoom( activeRoom );
+                        activeRoom->removePlayerFromRoom( activePlayer, true );
 
                         this->mapManager->setActiveRoom( roomWithTeleportToFinalScene );
+                        this->mapManager->removeRoom( activeRoom );
+
                         roomWithTeleportToFinalScene->activate();
                         roomWithTeleportToFinalScene->getMediator()->setActivePlayer( teleportedPlayer );
-                        this->mapManager->updateActivePlayer();
 
                         activeRoom = roomWithTeleportToFinalScene;
                 }
@@ -272,13 +319,8 @@ BITMAP* Isomot::update()
                 activeRoom->getMediator()->getActivePlayer()->wait(); // stop active player
                 if ( activeRoom->getMediator()->getActivePlayer()->getBehavior()->getActivityOfItem() == Wait )
                 {
-                        // swap in the same room
-                        if ( activeRoom->swapPlayersInRoom( this->itemDataManager ) )
-                        {
-                                mapManager->updateActivePlayer();
-                        }
-                        // swap in different rooms
-                        else
+                        // swap in the same room or between different rooms
+                        if ( ! activeRoom->swapPlayersInRoom( this->itemDataManager ) )
                         {
                                 activeRoom = mapManager->swapRoom();
                         }
@@ -295,7 +337,7 @@ BITMAP* Isomot::update()
         // or active player lost its life
         else
         {
-                Direction exit = activeRoom->getExit();
+                Direction exit = activeRoom->getWayOfExit();
 
                 if ( exit == Restart )
                 {
@@ -303,16 +345,11 @@ BITMAP* Isomot::update()
 
                         if ( player->getLives() != 0 || ( player->getLabel() == "headoverheels" && player->getLives() == 0 ) )
                         {
-                                activeRoom = mapManager->restartRoom();
+                                activeRoom = mapManager->rebuildRoom();
                         }
                         else
                         {
-                                // when player is alive, just swap players
-                                if ( activeRoom->continueWithAlivePlayer( this->itemDataManager ) )
-                                {
-                                        mapManager->updateActivePlayer();
-                                }
-                                else
+                                if ( ! activeRoom->continueWithAlivePlayer( ) )
                                 {
                                         activeRoom = mapManager->removeRoomAndSwap ();
                                 }
@@ -322,10 +359,13 @@ BITMAP* Isomot::update()
                 {
                         activeRoom = mapManager->changeRoom( exit );
 
-                        std::string scenery = activeRoom->getScenery ();
-                        if ( scenery != "" )
+                        if ( activeRoom != 0 )
                         {
-                                SoundManager::getInstance()->playOgg ( "music/" + scenery + ".ogg", /* loop */ false );
+                                std::string scenery = activeRoom->getScenery ();
+                                if ( scenery != "" )
+                                {
+                                        SoundManager::getInstance()->playOgg ( "music/" + scenery + ".ogg", /* loop */ false );
+                                }
                         }
                 }
         }

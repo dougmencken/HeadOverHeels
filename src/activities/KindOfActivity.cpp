@@ -148,62 +148,62 @@ void KindOfActivity::propagateActivityToAdjacentItems( Item * sender, const Acti
                         switch ( id )
                         {
                                 case NorthBorder:
-                                        player->setExit( North );
+                                        player->setDirectionOfExit( North );
                                         player->setOrientation( North );
                                         break;
 
                                 case SouthBorder:
-                                        player->setExit( South );
+                                        player->setDirectionOfExit( South );
                                         player->setOrientation( South );
                                         break;
 
                                 case EastBorder:
-                                        player->setExit( East );
+                                        player->setDirectionOfExit( East );
                                         player->setOrientation( East );
                                         break;
 
                                 case WestBorder:
-                                        player->setExit( West );
+                                        player->setDirectionOfExit( West );
                                         player->setOrientation( West );
                                         break;
 
                                 case NortheastBorder:
-                                        player->setExit( Northeast );
+                                        player->setDirectionOfExit( Northeast );
                                         player->setOrientation( North );
                                         break;
 
                                 case NorthwestBorder:
-                                        player->setExit( Northwest );
+                                        player->setDirectionOfExit( Northwest );
                                         player->setOrientation( North );
                                         break;
 
                                 case SoutheastBorder:
-                                        player->setExit( Southeast );
+                                        player->setDirectionOfExit( Southeast );
                                         player->setOrientation( South );
                                         break;
 
                                 case SouthwestBorder:
-                                        player->setExit( Southwest );
+                                        player->setDirectionOfExit( Southwest );
                                         player->setOrientation( South );
                                         break;
 
                                 case EastnorthBorder:
-                                        player->setExit( Eastnorth );
+                                        player->setDirectionOfExit( Eastnorth );
                                         player->setOrientation( East );
                                         break;
 
                                 case EastsouthBorder:
-                                        player->setExit( Eastsouth );
+                                        player->setDirectionOfExit( Eastsouth );
                                         player->setOrientation( East );
                                         break;
 
                                 case WestnorthBorder:
-                                        player->setExit( Westnorth );
+                                        player->setDirectionOfExit( Westnorth );
                                         player->setOrientation( West );
                                         break;
 
                                 case WestsouthBorder:
-                                        player->setExit( Westsouth );
+                                        player->setDirectionOfExit( Westsouth );
                                         player->setOrientation( West );
                                         break;
 

@@ -49,7 +49,7 @@ bool Hunter::update ()
                 else
                 {
                         const unsigned int sizeOfRectangleInTiles = 3;
-                        int delta = mediator->getSizeOfOneTile() * sizeOfRectangleInTiles;
+                        const int delta = mediator->getRoom()->getSizeOfOneTile() * sizeOfRectangleInTiles;
 
                         if ( activePlayer != 0  &&
                                 activePlayer->getX() > thisItem->getX() - delta  &&

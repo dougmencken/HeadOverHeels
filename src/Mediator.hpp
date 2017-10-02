@@ -50,9 +50,6 @@ class ItemDataManager ;
  */
 typedef std::list < GridItem* > Column ;
 
-/**
- * Update for all items
- */
 void* updateThread ( void* thisClass ) ;
 
 
@@ -89,31 +86,13 @@ public:
         */
         void endUpdate () ;
 
-       /**
-        * Señala para el motor qué elementos libres deben volverse a enmascarar. Se usa cuando un elemento
-        * libre cambia su imagen dado que el cambio afecta al resto de elementos cuyas imágenes se solapan con
-        * la suya
-        */
-        void markItemsForMasking( FreeItem* item ) ;
+        void remaskWithItem( FreeItem* item ) ;
 
-       /**
-        * Señala para el motor qué elementos libres deben volverse a enmascarar. Se usa cuando un elemento
-        * rejilla cambia su posición dado que el cambio afecta al resto de elementos cuyas imágenes se
-        * solapan con la suya y espacialmente quedan detrás de él
-        */
-        void markItemsForMasking( GridItem* gridItem ) ;
+        void remaskWithItem( GridItem* gridItem ) ;
 
-       /**
-        * Señala para el motor qué elementos deben sombrearse. Se usa cuando un elemento rejilla es añadido a la
-        * sala o cambia su sombra dado que el cambio afecta al resto de elementos que se encuentren debajo de él
-        */
-        void markItemsForShady( GridItem* gridItem ) ;
+        void reshadeWithItem( GridItem* gridItem ) ;
 
-       /**
-        * Señala para el motor qué elementos deben sombrearse. Se usa cuando un elemento libre es añadido a la
-        * sala o cambia su sombra dado que el cambio afecta al resto de elementos que se encuentren debajo de él
-        */
-        void markItemsForShady( FreeItem* freeItem ) ;
+        void reshadeWithItem( FreeItem* freeItem ) ;
 
        /**
         * Sombrea una loseta
@@ -166,36 +145,13 @@ public:
         */
         int findHighestZ ( Item* item ) ;
 
-       /**
-        * Inserta un elemento rejilla en su estructura de datos correspondiente
-        */
         void addItem ( GridItem* gridItem ) ;
 
-       /**
-        * Inserta un elemento libre en su estructura de datos correspondiente
-        */
         void addItem ( FreeItem* freeItem ) ;
 
-       /**
-        * Inserta un jugador en su estructura de datos correspondiente
-        */
-        void addItem ( PlayerItem* playerItem ) ;
-
-       /**
-        * Elimina un elemento rejilla de su lista correspondiente
-        */
         void removeItem ( GridItem* gridItem ) ;
 
-       /**
-        * Elimina un elemento rejilla de su lista correspondiente
-        */
         void removeItem ( FreeItem* freeItem ) ;
-
-       /**
-        * Elimina un jugador de su lista correspondiente. Además selecciona a otro jugador
-        * como jugador activo
-        */
-        void removeItem ( PlayerItem* playerItem ) ;
 
         void addToTableOfTransparencies ( unsigned char percent )
         {
@@ -266,13 +222,6 @@ public:
         bool selectNextPlayer ( ItemDataManager* itemDataManager ) ;
 
        /**
-        * Select player which is alive after active player is over by loosing all its lives
-        * @param itemDataManager Needed to create simple player from composite
-        * @return true if there’s alive player to swap or false if there’re no more players
-        */
-        bool selectAlivePlayer ( ItemDataManager* itemDataManager ) ;
-
-       /**
         * Toggle the switch if it is present in a room, most rooms do not have a switch. If it
         * turns on then free items stop moving and volatile items are no longer volatile. If it
         * goes off then such items restore their original behavior
@@ -289,34 +238,17 @@ public:
         */
         void activateFreeItemsSorting () {  this->freeItemsSorting = true ;  }
 
-       /**
-        * Activa el mútex de los elementos rejilla
-        */
         void lockGridItemMutex () {  pthread_mutex_lock( &gridItemsMutex ) ;  }
 
-       /**
-        * Activa el mútex de los elementos libres
-        */
         void lockFreeItemMutex () {  pthread_mutex_lock( &freeItemsMutex ) ;  }
 
-       /**
-        * Desactiva el mútex de los elementos rejilla
-        */
         void unlockGridItemMutex () {  pthread_mutex_unlock( &gridItemsMutex ) ;  }
 
-       /**
-        * Desactiva el mútex de los elementos libres
-        */
         void unlockFreeItemMutex () {  pthread_mutex_unlock( &freeItemsMutex ) ;  }
 
 protected:
 
-       /**
-        * Señala para el motor qué elementos libres deben sombrearse. Se usa cuando un elemento es añadido a la
-        * sala o cambia su sombra dado que el cambio afecta al resto de elementos que se encuentren debajo de él
-        * @param item Elemento que solicita la operación
-        */
-        void markFreeItemsForShady ( Item* item ) ;
+        void shadeFreeItemsBeneathItem ( Item* item ) ;
 
 private:
 
@@ -354,20 +286,14 @@ private:
         */
         bool threadRunning ;
 
-       /**
-        * Indica si las listas de elementos rejilla están ordenadas
-        */
         bool gridItemsSorting ;
 
-       /**
-        * Indica si la lista de elementos libres está ordenada
-        */
         bool freeItemsSorting ;
 
         bool switchInRoomIsOn ;
 
        /**
-        * Player which was active just before change of players
+        * Player which was active just before joining players
         */
         std::string lastActivePlayer ;
 
@@ -387,11 +313,6 @@ private:
         * Conjunto de elementos libres de una sala
         */
         std::list < FreeItem * > freeItems ;
-
-       /**
-        * Jugadores presentes en la sala
-        */
-        std::vector < PlayerItem * > playerItems ;
 
        /**
         * Items that may take life from player and that may be freezed by doughnut or by switch
@@ -418,30 +339,7 @@ public:
         */
         bool isThreadRunning () {  return threadRunning ;  }
 
-       /**
-        * Coordenadas de pantalla X donde está situada la coordenada origen de la sala
-        */
-        int getX0 () const {  return room->getX0() ;  }
-
-       /**
-        * Coordenadas de pantalla Y donde está situada la coordenada origen de la sala
-        */
-        int getY0 () const {  return room->getY0() ;  }
-
-       /**
-        * Devuelve el número de losetas de la sala en el eje X
-        */
-        int getTilesX () const {  return room->tilesNumber.first ;  }
-
-       /**
-        * Devuelve el número de losetas de la sala en el eje X
-        */
-        int getTilesY () const {  return room->tilesNumber.second ;  }
-
-       /**
-        * Returns length of side of single tile in isometric units, a multiple of two
-        */
-        int getSizeOfOneTile () const {  return room->tileSize ;  }
+        std::string getLastActivePlayerBeforeJoining () {  return lastActivePlayer ;  }
 
        /**
         * Degree for opacity of shadows
@@ -478,7 +376,7 @@ public:
         * Jugador inactivo, aquel que no está controlando el usuario
         * @return Un jugador ó 0 si no hay más jugadores
         */
-        PlayerItem* getHiddenPlayer () const ;
+        PlayerItem* getWaitingPlayer () const ;
 
        /**
         * Acceso a las puertas de la sala
@@ -498,15 +396,7 @@ public:
 
 };
 
-class EqualPlayerItemId : public std::binary_function< PlayerItem *, int, bool >
-{
-
-public:
-        bool operator() ( PlayerItem* playerItem, int id ) const ;
-
-};
-
-class EqualItemLabel : public std::binary_function< Item *, std::string, bool >
+class EqualLabelOfItem : public std::binary_function< Item *, std::string, bool >
 {
 
 public:

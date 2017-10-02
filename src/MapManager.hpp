@@ -56,22 +56,19 @@ public:
         void beginOldGameWithCharacter ( const sgxml::player& data ) ;
 
         /**
-         * Limpia los datos almacenados relacionados con la partida en curso
+         * Bin every room
          */
         void reset () ;
 
         /**
-         * Cambia la sala activa en función de la salida tomada por el jugador
-         * @param exit Salida tomada por el jugador
-         * @return La nueva sala
+         * Change active room by way of exit chosen
          */
         Room * changeRoom ( const Direction& exit ) ;
 
         /**
-         * Reinicia la sala activa, es decir, se vuelve a crear la sala activa en el estado inicial
-         * @return La nueva sala
+         * Recreate active room
          */
-        Room * restartRoom () ;
+        Room * rebuildRoom () ;
 
         /**
          * Create room by data from file
@@ -95,12 +92,6 @@ public:
         void removeRoom ( Room* whichRoom ) ;
 
         /**
-         * Actualiza el jugador activo de la sala activa. El valor se obtiene a partir de
-         * los datos de la sala activa
-         */
-        void updateActivePlayer () ;
-
-        /**
          * Lee del disco las salas visitadas por los jugadores
          * @param visitedSequence Estructura de datos empleada por el archivo XML para guardar
          * las salas visitadas
@@ -116,9 +107,10 @@ public:
 
         /**
          * Cuenta el número de salas visitadas por los jugadores
-         * @return Un número mayor que 2
          */
         unsigned short countVisitedRooms () ;
+
+        void resetVisitedRooms () ;
 
         /**
          * Busca los datos de una sala en el mapa en la lista
@@ -133,14 +125,6 @@ public:
          * @return Una sala ó 0 si la búsqueda fracasó
          */
         Room* findRoom ( const std::string& room ) ;
-
-        /**
-         * Look for player’s way into this room
-         * @param room Name of file for room
-         * @param name Name of player
-         * @return Position of entrance into the room
-         */
-        PlayerInitialPosition* findPlayerPosition ( const std::string& room, const std::string& name ) ;
 
 protected:
 

@@ -113,23 +113,22 @@ void UserControlled::wait( PlayerItem * player )
 
 void UserControlled::move( PlayerItem * player )
 {
-        // move when the item is active
+        // move when the item is not frozen
         if ( ! player->isFrozen() )
         {
-                // Si el jugador ha cogido velocidad extra entonces se divide su velocidad habitual
-                double speed = player->getSpeed() / ( player->getLabel() == "head" && player->getHighSpeed() > 0 ? 2 : 1 );
+                // apply effect of bunny of high speed
+                double speed = player->getSpeed() / ( player->getHighSpeed() > 0 ? 2 : 1 );
 
-                // Si ha llegado el momento de moverse
+                // is it time to move
                 if ( speedTimer->getValue() > speed )
                 {
                         whatToDo = MoveKindOfActivity::getInstance();
 
-                        // El elemento se mueve. Si el movimiento no se pudo realizar por colisión entonces
-                        // se desplaza a los elementos con los que pudiera haber chocado
+                        // move it
                         bool moved = whatToDo->move( this, &activity, true );
 
-                        // Si se ha movido y no ha cambiado de estado entonces se cuenta un paso
-                        if ( player->getLabel() == "head" && player->getHighSpeed() > 0 && moved && activity != Fall )
+                        // decrement high speed
+                        if ( player->getHighSpeed() > 0 && moved && activity != Fall )
                         {
                                 this->highSpeedSteps++;
 
@@ -140,10 +139,8 @@ void UserControlled::move( PlayerItem * player )
                                 }
                         }
 
-                        // Se pone a cero el cronómetro para el siguiente ciclo
                         speedTimer->reset();
 
-                        // Anima el elemento
                         player->animate();
                 }
         }
@@ -151,33 +148,30 @@ void UserControlled::move( PlayerItem * player )
 
 void UserControlled::autoMove( PlayerItem * player )
 {
-        // Si el jugador ha cogido velocidad extra entonces se divide su velocidad habitual
-        double speed = player->getSpeed() / ( player->getLabel() == "head" && player->getHighSpeed() > 0 ? 2 : 1 );
+        // apply effect of bunny of high speed
+        double speed = player->getSpeed() / ( player->getHighSpeed() > 0 ? 2 : 1 );
 
-        // Si el elemento está activo y ha llegado el momento de moverse, entonces:
+        // is it time to move
         if ( speedTimer->getValue() > speed )
         {
                 whatToDo = MoveKindOfActivity::getInstance();
 
-                // El elemento se mueve. Si el movimiento no se pudo realizar por colisión entonces
-                // se desplaza a los elementos con los que pudiera haber chocado
+                // move it
                 whatToDo->move( this, &activity, true );
 
-                // Se pone a cero el cronómetro para el siguiente ciclo
                 speedTimer->reset();
 
-                // Anima el elemento
                 player->animate();
 
-                // Se comprueba si seguirá moviéndose de forma automática
                 if ( --automaticStepsCounter < 0 )
                 {
+                        // done auto~moving
                         automaticStepsCounter = automaticSteps;
                         activity = Wait;
                 }
         }
 
-        // Si deja de moverse de forma automática se detiene el sonido correspondiente
+        // when done then stop playing sound of auto movement
         if ( activity == Wait )
         {
                 SoundManager::getInstance()->stop( player->getLabel(), AutoMove );
@@ -186,14 +180,15 @@ void UserControlled::autoMove( PlayerItem * player )
 
 void UserControlled::displace( PlayerItem * player )
 {
-        // El elemento es deplazado por otro. Si el desplazamiento no se pudo realizar por
-        // colisión entonces el estado se propaga a los elementos con los que ha chocado
+        // this item is moved by another one
+        // when displacement couldn’t be performed due to collision then activity propagates to collided items
         if ( speedTimer->getValue() > player->getSpeed() )
         {
                 whatToDo->displace( this, &activity, true );
-                // Una vez se ha completado el desplazamiento el elemento vuelve a su comportamiento normal
+
+                // displacement is done
                 activity = Wait;
-                // Se pone a cero el cronómetro para el siguiente ciclo
+
                 speedTimer->reset();
         }
 }
@@ -206,14 +201,11 @@ void UserControlled::cancelDisplace( PlayerItem * player )
                 {
                         whatToDo = MoveKindOfActivity::getInstance();
 
-                        // El elemento se mueve. Si el movimiento no se pudo realizar por colisión entonces
-                        // se desplaza a los elementos con los que pudiera haber chocado
+                        // move it
                         whatToDo->move( this, &activity, false );
 
-                        // Se pone a cero el cronómetro para el siguiente ciclo
                         speedTimer->reset();
 
-                        // Anima el elemento
                         player->animate();
                 }
         }
@@ -322,7 +314,7 @@ void UserControlled::jump( PlayerItem * player )
         // conduce a otra situada sobre ella
         if ( player->getZ() >= MaxLayers * LayerHeight )
         {
-                player->setExit( Up );
+                player->setDirectionOfExit( Up );
                 player->setOrientation( player->getDirection() );
         }
 }
@@ -446,7 +438,7 @@ void UserControlled::wayOutTeletransport( PlayerItem * player )
                         if ( player->animate() )
                         {
                                 player->addToZ( -1 );
-                                player->setExit( player->getMediator()->collisionWithByLabel( "teleport" ) ? ByTeleport : ByTeleportToo );
+                                player->setDirectionOfExit( player->getMediator()->collisionWithByLabel( "teleport" ) ? ByTeleport : ByTeleportToo );
                         }
                         break;
 
@@ -479,7 +471,7 @@ void UserControlled::collideWithMortalItem( PlayerItem* player )
                         // animate item, restart room when animation finishes
                         if ( player->animate() )
                         {
-                                player->setExit( Restart );
+                                player->setDirectionOfExit( Restart );
                                 player->loseLife();
                         }
                         break;
@@ -492,7 +484,7 @@ void UserControlled::collideWithMortalItem( PlayerItem* player )
 void UserControlled::useHooter( PlayerItem* player )
 {
         // El jugador puede disparar si tiene la bocina y rosquillas
-        if ( player->hasTool( "horn" ) && player->getAmmo() > 0 )
+        if ( player->hasTool( "horn" ) && player->getDoughnuts() > 0 )
         {
                 this->fireFromHooterIsPresent = true;
 
@@ -522,10 +514,8 @@ void UserControlled::useHooter( PlayerItem* player )
 
                         player->getMediator()->getRoom()->addFreeItem( freeItem );
 
-                        // Se gasta una rosquillas
-                        player->consumeAmmo();
+                        player->useDoughnut();
 
-                        // Emite el sonido del disparo
                         SoundManager::getInstance()->play( player->getLabel(), Doughnut );
                 }
         }
@@ -553,8 +543,8 @@ void UserControlled::take( PlayerItem * player )
                                 if ( bottomItem != 0 && bottomItem->getBehavior() != 0
                                         && ( bottomItem->getBehavior()->getNameOfBehavior() == "behavior of thing able to move by pushing" ||
                                                 bottomItem->getBehavior()->getNameOfBehavior() == "behavior of big leap for player" )
-                                        && bottomItem->getWidthX() <= ( mediator->getSizeOfOneTile() * 3 ) / 4
-                                        && bottomItem->getWidthY() <= ( mediator->getSizeOfOneTile() * 3 ) / 4 )
+                                        && bottomItem->getWidthX() <= static_cast< int >( mediator->getRoom()->getSizeOfOneTile() * 3 ) / 4
+                                        && bottomItem->getWidthY() <= static_cast< int >( mediator->getRoom()->getSizeOfOneTile() * 3 ) / 4 )
                                 {
                                         if ( bottomItem->getX() + bottomItem->getY() > coordinates )
                                         {

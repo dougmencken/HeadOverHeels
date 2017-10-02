@@ -41,7 +41,6 @@ GameManager::GameManager( )
         , handbag( false )
         , donuts( 0 )
         , itemTaken( 0 )
-        , visitedRooms( 0 )
         , takenCrown( false )
         , eatenFish( false )
         , gameOver( false )
@@ -144,7 +143,6 @@ WhyPause GameManager::begin ()
         this->handbag = false;
         this->donuts = 0;
         this->itemTaken = 0;
-        this->visitedRooms = 0;
         this->planets.clear();
 
         refreshImages ();
@@ -745,7 +743,6 @@ WhyPause GameManager::pause ()
         {
                 this->gameOver = false;
                 why = GameOver;
-                this->visitedRooms = this->isomot->getMapManager()->countVisitedRooms();
                 this->isomot->reset();
         }
         // el usuario ha llegado a Freedom pero le faltaron coronas
@@ -753,7 +750,6 @@ WhyPause GameManager::pause ()
         {
                 this->freedom = false;
                 why = Freedom;
-                this->visitedRooms = this->isomot->getMapManager()->countVisitedRooms();
                 this->isomot->reset();
         }
         // el usuario ha acabado el juego
@@ -761,7 +757,6 @@ WhyPause GameManager::pause ()
         {
                 this->emperator = false;
                 why = Sucess;
-                this->visitedRooms = this->isomot->getMapManager()->countVisitedRooms();
                 this->isomot->reset();
         }
         // el usuario ha pulsado la tecla de pausa
@@ -810,7 +805,6 @@ WhyPause GameManager::pause ()
                                 {
                                         exit = true;
                                         why = GameOver;
-                                        this->visitedRooms = this->isomot->getMapManager()->countVisitedRooms();
                                         this->isomot->reset();
                                 }
                                 // Si se pulsa cualquier otra tecla, prosigue la partida en curso
@@ -864,7 +858,7 @@ double GameManager::getShield ( const std::string& player ) const
         return 0.0;
 }
 
-std::vector< std::string > GameManager::playerTools ( const std::string& player ) const
+std::vector< std::string > GameManager::getToolsOwnedByPlayer ( const std::string& player ) const
 {
         std::vector< std::string > tools;
 
@@ -900,6 +894,11 @@ std::vector< std::string > GameManager::playerTools ( const std::string& player 
 unsigned short GameManager::getDonuts ( const std::string& player ) const
 {
         return ( player == "head" || player == "headoverheels" ? this->donuts : 0 );
+}
+
+unsigned short GameManager::getVisitedRooms () const
+{
+        return this->isomot->getMapManager()->countVisitedRooms() ;
 }
 
 }

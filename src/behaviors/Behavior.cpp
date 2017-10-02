@@ -41,8 +41,11 @@ Behavior::Behavior( Item * whichItem, const std::string & behavior ) :
         , activity( Wait )
         , sender( 0 )
 {
-        std::cout << "creation of behavior \"" << behavior << "\" for item \"" << whichItem->getLabel()
-                        << "\" at x=" << whichItem->getX() << " y=" << whichItem->getY() << " z=" << whichItem->getZ() << std::endl ;
+        if ( behavior != "behavior of Head" && behavior != "behavior of Heels" && behavior != "behavior of Head over Heels" )
+        {
+                std::cout << "creation of behavior \"" << behavior << "\" for item \"" << whichItem->getLabel()
+                                << "\" at x=" << whichItem->getX() << " y=" << whichItem->getY() << " z=" << whichItem->getZ() << std::endl ;
+        }
 }
 
 Behavior::~Behavior( )

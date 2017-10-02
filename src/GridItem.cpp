@@ -35,11 +35,11 @@ void GridItem::draw( BITMAP* where )
 {
         if ( this->processedImage )
         {
-                draw_sprite( where, this->processedImage, mediator->getX0() + this->offset.first, mediator->getY0() + this->offset.second );
+                draw_sprite( where, this->processedImage, mediator->getRoom()->getX0() + this->offset.first, mediator->getRoom()->getY0() + this->offset.second );
         }
         else if ( this->rawImage )
         {
-                draw_sprite( where, this->rawImage, mediator->getX0() + this->offset.first, mediator->getY0() + this->offset.second );
+                draw_sprite( where, this->rawImage, mediator->getRoom()->getX0() + this->offset.first, mediator->getRoom()->getY0() + this->offset.second );
         }
 }
 
@@ -76,8 +76,8 @@ void GridItem::changeImage( BITMAP* newImage )
                         }
 
                         // how many pixels this image is from the origin of room
-                        this->offset.first = ( ( mediator->getSizeOfOneTile() * ( this->cell.first - this->cell.second ) ) << 1 ) - ( newImage->w >> 1 ) + 1;
-                        this->offset.second = mediator->getSizeOfOneTile() * ( this->cell.first + this->cell.second + 2 ) - newImage->h - this->z - 1;
+                        this->offset.first = ( ( mediator->getRoom()->getSizeOfOneTile() * ( this->cell.first - this->cell.second ) ) << 1 ) - ( newImage->w >> 1 ) + 1;
+                        this->offset.second = mediator->getRoom()->getSizeOfOneTile() * ( this->cell.first + this->cell.second + 2 ) - newImage->h - this->z - 1;
                 }
                 else
                 {
@@ -86,11 +86,11 @@ void GridItem::changeImage( BITMAP* newImage )
 
                 // mark for masking every free item affected by previous image
                 if ( oldGridItem.getRawImage () )
-                        mediator->markItemsForMasking( &oldGridItem );
+                        mediator->remaskWithItem( &oldGridItem );
 
                 // mark for masking every free item affected by new image
                 if ( this->rawImage )
-                        mediator->markItemsForMasking( this );
+                        mediator->remaskWithItem( this );
         }
 }
 
@@ -103,7 +103,7 @@ void GridItem::changeShadow( BITMAP* newShadow )
                 if ( mediator->getDegreeOfShading() < 256 )
                 {
                         // reshade items when shadows are on
-                        mediator->markItemsForShady( this );
+                        mediator->reshadeWithItem( this );
                 }
         }
 }
@@ -547,10 +547,10 @@ bool GridItem::changeData( int value, const Datum& datum, const WhatToDo& what )
                         {
                                 // how many pixels is image from origin of room
                                 // change only value on Y axis because it depends on Z coordinate
-                                this->offset.second = mediator->getSizeOfOneTile() * ( this->cell.first + this->cell.second + 2 ) - this->rawImage->h - this->z - 1;
+                                this->offset.second = mediator->getRoom()->getSizeOfOneTile() * ( this->cell.first + this->cell.second + 2 ) - this->rawImage->h - this->z - 1;
 
-                                mediator->markItemsForMasking( &oldGridItem );
-                                mediator->markItemsForMasking( this );
+                                mediator->remaskWithItem( &oldGridItem );
+                                mediator->remaskWithItem( this );
                         }
                         else
                         {
@@ -562,9 +562,9 @@ bool GridItem::changeData( int value, const Datum& datum, const WhatToDo& what )
                         if ( datum == CoordinateZ && mediator->getDegreeOfShading() < 256 )
                         {
                                 if ( this->z > oldGridItem.getZ() )
-                                        mediator->markItemsForShady( this );
+                                        mediator->reshadeWithItem( this );
                                 else
-                                        mediator->markItemsForShady( &oldGridItem );
+                                        mediator->reshadeWithItem( &oldGridItem );
                         }
 
                         // Se ordena la columna de elementos rejilla

@@ -18,9 +18,10 @@ PlayerItem::PlayerItem( ItemData* itemData, int x, int y, int z, const Direction
         , highSpeed( 0 )
         , highJumps( 0 )
         , shield( 0 )
-        , ammo( 0 )
+        , howManyDoughnuts( 0 )
         , exit( NoExit )
         , orientation( NoDirection )
+        , entry( JustWait )
         , shieldTimer( 0 )
         , shieldTime( 25.0 )
 {
@@ -28,17 +29,18 @@ PlayerItem::PlayerItem( ItemData* itemData, int x, int y, int z, const Direction
 }
 
 PlayerItem::PlayerItem( const PlayerItem& playerItem )
-: FreeItem( playerItem ),
-        lives( playerItem.lives ),
-        highSpeed( playerItem.highSpeed ),
-        highJumps( playerItem.highJumps ),
-        shield( playerItem.shield ),
-        tools( playerItem.tools ),
-        ammo( playerItem.ammo ),
-        exit( playerItem.exit ),
-        orientation( playerItem.orientation ),
-        shieldTimer( 0 ),
-        shieldTime( playerItem.shieldTime )
+        : FreeItem( playerItem )
+        , lives( playerItem.lives )
+        , highSpeed( playerItem.highSpeed )
+        , highJumps( playerItem.highJumps )
+        , shield( playerItem.shield )
+        , tools( playerItem.tools )
+        , howManyDoughnuts( playerItem.howManyDoughnuts )
+        , exit( playerItem.exit )
+        , orientation( playerItem.orientation )
+        , entry( playerItem.entry )
+        , shieldTimer( 0 )
+        , shieldTime( playerItem.shieldTime )
 {
 
 }
@@ -48,6 +50,56 @@ PlayerItem::~PlayerItem()
         if ( this->shieldTimer != 0 )
         {
                 delete shieldTimer;
+        }
+}
+
+void PlayerItem::autoMoveOnEntry ( const Direction& entry )
+{
+        setDirectionOfEntry( entry );
+
+        if ( getBehavior() == 0 )
+        {
+                std::cerr << "nil behavior at PlayerItem::autoMoveOnEntry" << std::endl ;
+                return;
+        }
+
+        switch ( entry )
+        {
+                case North:
+                case Northeast:
+                case Northwest:
+                        getBehavior()->changeActivityOfItem( AutoMoveSouth );
+                        break;
+
+                case South:
+                case Southeast:
+                case Southwest:
+                        getBehavior()->changeActivityOfItem( AutoMoveNorth );
+                        break;
+
+                case East:
+                case Eastnorth:
+                case Eastsouth:
+                        getBehavior()->changeActivityOfItem( AutoMoveWest );
+                        break;
+
+                case West:
+                case Westnorth:
+                case Westsouth:
+                        getBehavior()->changeActivityOfItem( AutoMoveEast );
+                        break;
+
+                case ByTeleport:
+                case ByTeleportToo:
+                        getBehavior()->changeActivityOfItem( BeginWayInTeletransport );
+                        break;
+
+                case Up:
+                        getBehavior()->changeActivityOfItem( Fall );
+                        break;
+
+                default:
+                        ;
         }
 }
 
@@ -242,8 +294,8 @@ bool PlayerItem::changeData( int value, int x, int y, int z, const Datum& datum,
                                         this->offset.second = this->x + this->y + getDataOfFreeItem()->widthX - this->rawImage->h - this->z;
 
                                         // for both the previous position and the current position
-                                        mediator->markItemsForMasking( &oldPlayerItem );
-                                        mediator->markItemsForMasking( this );
+                                        mediator->remaskWithItem( &oldPlayerItem );
+                                        mediator->remaskWithItem( this );
                                 }
                                 else
                                 {
@@ -254,8 +306,8 @@ bool PlayerItem::changeData( int value, int x, int y, int z, const Datum& datum,
                                 if ( mediator->getDegreeOfShading() < 256 )
                                 {
                                         // for both the previous position and the current position
-                                        mediator->markItemsForShady( &oldPlayerItem );
-                                        mediator->markItemsForShady( this );
+                                        mediator->reshadeWithItem( &oldPlayerItem );
+                                        mediator->reshadeWithItem( this );
                                 }
 
                                 // reshade and remask
@@ -392,7 +444,7 @@ bool PlayerItem::isCollidingWithRoomBorder( const Direction& direction )
                         break;
 
                 case South:
-                        result = ( this->x + getDataOfFreeItem()->widthX > mediator->getTilesX() * mediator->getSizeOfOneTile() );
+                        result = ( this->x + getDataOfFreeItem()->widthX > static_cast< int >( mediator->getRoom()->getTilesX() * mediator->getRoom()->getSizeOfOneTile() ) );
                         break;
 
                 case Southeast:
@@ -410,7 +462,7 @@ bool PlayerItem::isCollidingWithRoomBorder( const Direction& direction )
                         break;
 
                 case West:
-                        result = ( this->y >= mediator->getTilesY() * mediator->getSizeOfOneTile() );
+                        result = ( this->y >= static_cast< int >( mediator->getRoom()->getTilesY() * mediator->getRoom()->getSizeOfOneTile() ) );
                         break;
 
                 case Westnorth:
@@ -476,6 +528,16 @@ bool PlayerItem::isActivePlayer ()
         return mediator->getActivePlayer() == this ;
 }
 
+void PlayerItem::fillWithData( const GameManager * data )
+{
+        setLives( data->getLives( getLabel() ) );
+        setHighJumps( data->getHighJumps() );
+        setHighSpeed( data->getHighSpeed() );
+        setShieldTime( data->getShield( getLabel() ) );
+        setTools( data->getToolsOwnedByPlayer( getLabel() ) );
+        setDoughnuts( data->getDonuts( getLabel() ) );
+}
+
 void PlayerItem::addLives( unsigned char lives )
 {
         if( this->lives < 100 )
@@ -501,25 +563,28 @@ void PlayerItem::takeTool( const std::string& label )
         GameManager::getInstance()->takeMagicItem( label );
 }
 
-void PlayerItem::addAmmo( const unsigned short ammo )
+void PlayerItem::addDoughnuts( const unsigned short howMany )
 {
-        this->ammo += ammo;
-        GameManager::getInstance()->setDonuts( this->ammo );
+        this->howManyDoughnuts += howMany;
+        GameManager::getInstance()->setDonuts( this->howManyDoughnuts );
 }
 
-void PlayerItem::consumeAmmo()
+void PlayerItem::useDoughnut()
 {
-        if ( this->ammo > 0 )
+        if ( this->howManyDoughnuts > 0 )
         {
-                this->ammo--;
+                this->howManyDoughnuts--;
                 GameManager::getInstance()->consumeDonut();
         }
 }
 
 void PlayerItem::activateHighSpeed()
 {
-        this->highSpeed = 99;
-        GameManager::getInstance()->addHighSpeed( this->getLabel(), 99 );
+        if ( this->getLabel() == "head" )
+        {
+                this->highSpeed = 99;
+                GameManager::getInstance()->addHighSpeed( this->getLabel(), 99 );
+        }
 }
 
 void PlayerItem::decreaseHighSpeed()
@@ -533,8 +598,11 @@ void PlayerItem::decreaseHighSpeed()
 
 void PlayerItem::addHighJumps( unsigned char highJumps )
 {
-        this->highJumps += highJumps;
-        GameManager::getInstance()->addHighJumps( this->getLabel(), highJumps );
+        if ( this->getLabel() == "heels" )
+        {
+                this->highJumps += highJumps;
+                GameManager::getInstance()->addHighJumps( this->getLabel(), highJumps );
+        }
 }
 
 void PlayerItem::decreaseHighJumps()

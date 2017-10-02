@@ -47,6 +47,8 @@ public:
 
         virtual ~GridItem( ) ;
 
+        virtual std::string whichKindOfItem () const {  return "grid item" ;  }
+
         /**
          * Draw this grid item
          */

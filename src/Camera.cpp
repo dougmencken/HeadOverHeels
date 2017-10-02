@@ -23,12 +23,18 @@ Camera::~Camera()
 
 void Camera::turnOn( PlayerItem* player, const Direction& entry )
 {
-        if ( delta.first == 0 && delta.second == 0 && player != 0 && ( room->getTilesX() > 10 || room->getTilesY() > 10 ) )
+        const unsigned int maxTilesOfSingleRoom = 10 ;
+
+        if ( delta.first == 0 && delta.second == 0 && player != 0 &&
+                        ( room->getTilesX() > maxTilesOfSingleRoom || room->getTilesY() > maxTilesOfSingleRoom ) )
         {
-                // Sala doble a lo largo del eje Y
-                if ( room->getTilesX() <= 10 && room->getTilesY() > 10 )
+                // is it double room along Y
+                if ( room->getTilesX() <= maxTilesOfSingleRoom && room->getTilesY() > maxTilesOfSingleRoom )
                 {
-                        if ( abs( player->getY() ) < room->getTilesY() * room->getSizeOfOneTile() / 2 )
+                        int playerY = player->getY ();
+                        unsigned int absoluteValueOfY = ( playerY >= 0 ? playerY : -playerY );
+
+                        if ( absoluteValueOfY < room->getTilesY() * room->getSizeOfOneTile() / 2 )
                         {
                                 delta.first = room->getPicture()->w - ScreenWidth;
                                 delta.second = 0;
@@ -39,10 +45,13 @@ void Camera::turnOn( PlayerItem* player, const Direction& entry )
                                 delta.second = room->getPicture()->h - ScreenHeight;
                         }
                 }
-                // Sala doble a lo largo del eje X
-                else if ( room->getTilesX() > 10 && room->getTilesY() <= 10 )
+                // is it double room along X
+                else if ( room->getTilesX() > maxTilesOfSingleRoom && room->getTilesY() <= maxTilesOfSingleRoom )
                 {
-                        if ( abs( player->getX() ) < room->getTilesX() * room->getSizeOfOneTile() / 2 )
+                        int playerX = player->getX ();
+                        unsigned int absoluteValueOfX = ( playerX >= 0 ? playerX : -playerX );
+
+                        if ( absoluteValueOfX < room->getTilesX() * room->getSizeOfOneTile() / 2 )
                         {
                                 delta.first = 0;
                                 delta.second = 0;
@@ -53,18 +62,17 @@ void Camera::turnOn( PlayerItem* player, const Direction& entry )
                                 delta.second = room->getPicture()->h - ScreenHeight;
                         }
                 }
-                // Sala triple
+                // it’s triple room then
                 else
                 {
-                        // Posición inicial
-                        TripleRoomStartPoint* startPoint = room->findTripleRoomStartPoint( entry );
-                        if ( startPoint != 0 )
+                        TripleRoomInitialPoint* initialPoint = room->findInitialPointOfEntryToTripleRoom( entry );
+                        if ( initialPoint != 0 )
                         {
-                                delta.first = startPoint->getX();
-                                delta.second = startPoint->getY();
+                                delta.first = initialPoint->getX();
+                                delta.second = initialPoint->getY();
                         }
                         else
-                        { // exempli gratia on restore of a game which was saved in triple room
+                        { // for example it’s resume of some game which was saved in triple room
                                 int midX = RoomBuilder::getXCenterOfRoom( player->getDataOfFreeItem(), room );
                                 int midY = RoomBuilder::getYCenterOfRoom( player->getDataOfFreeItem(), room );
                                 delta.first = midX + ( 12 * room->getSizeOfOneTile() );  // yeah, 12 is just some magic number
@@ -79,14 +87,16 @@ void Camera::turnOn( PlayerItem* player, const Direction& entry )
 
 bool Camera::centerOn( PlayerItem* player )
 {
-        // Indica si la cámara se ha desplazado
+        const unsigned int maxTilesOfSingleRoom = 10 ;
+
+        // whether camera has moved
         bool changed = false;
 
         // Sala triple
-        if ( ( room->getTilesX() > 10 && room->getTilesY() > 10 ) && player != 0 )
+        if ( ( room->getTilesX() > maxTilesOfSingleRoom && room->getTilesY() > maxTilesOfSingleRoom ) && player != 0 )
         {
                 // Debe haber cambio en el eje X para realizar los cálculos
-                if ( reference.first - player->getX() != 0 && room->getTilesX() > 10 )
+                if ( reference.first - player->getX() != 0 && room->getTilesX() > maxTilesOfSingleRoom )
                 {
                         // Diferencia en X respecto al último movimiento
                         int offsetX = player->getX() - reference.first;
@@ -112,7 +122,7 @@ bool Camera::centerOn( PlayerItem* player )
                 }
 
                 // Debe haber cambio en el eje Y para realizar los cálculos
-                if ( reference.second - player->getY() != 0 && room->getTilesY() > 10 )
+                if ( reference.second - player->getY() != 0 && room->getTilesY() > maxTilesOfSingleRoom )
                 {
                         // Diferencia en Y respecto al último movimiento
                         int offsetY = player->getY() - reference.second;
@@ -138,10 +148,10 @@ bool Camera::centerOn( PlayerItem* player )
                 }
         }
         // Sala doble
-        else if ( ( room->getTilesX() > 10 || room->getTilesY() > 10 ) && player != 0 )
+        else if ( ( room->getTilesX() > maxTilesOfSingleRoom || room->getTilesY() > maxTilesOfSingleRoom ) && player != 0 )
         {
                 // Debe haber cambio en el eje X para realizar los cálculos
-                if ( reference.first - player->getX() != 0 && room->getTilesX() > 10 )
+                if ( reference.first - player->getX() != 0 && room->getTilesX() > maxTilesOfSingleRoom )
                 {
                         // Diferencia en X respecto al último movimiento
                         int offsetX = player->getX() - reference.first;
@@ -175,7 +185,7 @@ bool Camera::centerOn( PlayerItem* player )
                 }
 
                 // Debe haber cambio en el eje Y para realizar los cálculos
-                if ( reference.second - player->getY() != 0 && room->getTilesY() > 10 )
+                if ( reference.second - player->getY() != 0 && room->getTilesY() > maxTilesOfSingleRoom )
                 {
                         // Diferencia en Y respecto al último movimiento
                         int offsetY = player->getY() - reference.second;

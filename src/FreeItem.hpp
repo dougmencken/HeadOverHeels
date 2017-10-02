@@ -54,6 +54,8 @@ public:
 
         virtual ~FreeItem( ) ;
 
+        virtual std::string whichKindOfItem () const {  return "free item" ;  }
+
         /**
          * Dibuja el elemento libre
          */

@@ -20,6 +20,7 @@ namespace isomot
 {
 
 class ItemData ;
+class GameManager ;
 
 /**
  * Item of player controller by the user
@@ -48,10 +49,17 @@ public:
 
         virtual ~PlayerItem( ) ;
 
+        virtual std::string whichKindOfItem () const {  return "player item" ;  }
+
+        /**
+         * Change activity of player by way of entry to room
+         */
+        void autoMoveOnEntry ( const Direction& entry ) ;
+
         virtual void behave () ;
 
         /**
-         * Actualiza el comportamiento del elemento
+         * Updates behavior of item
          */
         virtual bool update () ;
 
@@ -60,6 +68,10 @@ public:
          * es lo mismo, establecer el fotograma de parada
          */
         void wait () ;
+
+        void fillWithData ( const GameManager * data ) ;
+
+        bool isActivePlayer () ;
 
         /**
          * Añade vidas al jugador
@@ -78,16 +90,9 @@ public:
          */
         void takeTool( const std::string& label ) ;
 
-        /**
-         * Aumenta la cantidad de munición que tiene el jugador (rosquillas)
-         * @param ammo Un número mayor o igual que cero
-         */
-        void addAmmo( const unsigned short ammo ) ;
+        void addDoughnuts( const unsigned short howMany ) ;
 
-        /**
-         * El jugador consume una unidad de munición
-         */
-        void consumeAmmo () ;
+        void useDoughnut () ;
 
         /**
          * Activa el movimiento a doble velocidad del personaje
@@ -217,70 +222,48 @@ private:
          */
         std::vector< std::string > tools ;
 
-        /**
-         * Cantidad de munición que tiene el jugador (rosquillas)
-         */
-        unsigned short ammo ;
+        unsigned short howManyDoughnuts ;
 
         /**
-         * Dirección de salida del jugador al abandonar la sala
+         * Direction of player when it leaves room
          */
         Direction exit ;
 
         /**
-         * Orientación, dirección a la que mira el jugador al abandonar la sala
+         * Direction player looks at when it leaves room
          */
         Direction orientation ;
 
         /**
-         * Cronómetro de la inmunidad. Una vez se coja el conejo el jugador dispone de 25 segundos de inmunidad
+         * How player enters room: through door, or via teleport, or going below floor or above ceiling
+         */
+        Direction entry ;
+
+        /**
+         * Time of immunity, player gots 25 seconds of immunity when rabbit is caught
          */
         HPC* shieldTimer ;
 
         /**
-         * Tiempo en segundos que un jugador es inmune
+         * How many seconds left during which player is immune
          */
         double shieldTime ;
 
-public:
+protected:
 
-        bool isActivePlayer () ;
-
-        /**
-         * Establece el número de vidas del jugador
-         * @param lives Un número mayor o igual que cero
-         */
         void setLives ( unsigned char lives ) {  this->lives = lives ;  }
 
         /**
-         * Indica el número de vidas del jugador
-         * @return Un número mayor o igual que cero
-         */
-        unsigned char getLives () const {  return this->lives ;  }
-
-        /**
          * Tiempo restante de doble velocidad
-         * @param highSpeed Un número entre 0 y 99
+         * @param highSpeed Number between 0 and 99
          */
         void setHighSpeed ( unsigned int highSpeed ) {  this->highSpeed = highSpeed ;  }
 
         /**
-         * Devuelve el tiempo restante de doble velocidad
-         * @return Un número entre 0 y 99
-         */
-        unsigned int getHighSpeed () const {  return this->highSpeed ;  }
-
-        /**
          * Establece el número de grandes saltos del jugador
-         * @param highSpeed Un número entre 0 y 10
+         * @param highJumps Number between 0 and 10
          */
         void setHighJumps ( unsigned int highJumps ) {  this->highJumps = highJumps ;  }
-
-        /**
-         * Devuelve el número de grandes saltos del jugador
-         * @return Un número entre 0 y 10
-         */
-        unsigned int getHighJumps () const {  return this->highJumps ;  }
 
         /**
          * Establece el tiempo total de inmunidad y activa el cronómetro si está activado
@@ -289,56 +272,61 @@ public:
         void setShieldTime ( double shield ) ;
 
         /**
+         * Asigna los objetos de utilidad que tiene el jugador
+         */
+        void setTools ( const std::vector< std::string >& tools ) {  this->tools = tools ;  }
+
+        void setDoughnuts ( const unsigned short howMany ) {  this->howManyDoughnuts = howMany ;  }
+
+public:
+
+        unsigned char getLives () const {  return this->lives ;  }
+
+        /**
+         * Devuelve el tiempo restante de doble velocidad
+         * @return Number between 0 and 99
+         */
+        unsigned int getHighSpeed () const {  return this->highSpeed ;  }
+
+        /**
+         * Devuelve el número de grandes saltos del jugador
+         * @return Number between 0 and 10
+         */
+        unsigned int getHighJumps () const {  return this->highJumps ;  }
+
+        /**
          * Devuelve el tiempo total de inmunidad
          * @return Un número de segundos
          */
         double getShieldTime () const {  return this->shieldTime ;  }
 
         /**
-         * Asigna los objetos de utilidad que tiene el jugador
-         */
-        void setTools ( const std::vector< std::string >& tools ) {  this->tools = tools ;  }
-
-        /**
          * Character has its magic item, horn or bag, or not
          */
         bool hasTool ( const std::string& label ) const ;
 
-        /**
-         * Establece la cantidad de munición que tiene el jugador (rosquillas)
-         * @param ammo Un número mayor o igual que cero
-         */
-        void setAmmo ( const unsigned short ammo ) {  this->ammo = ammo ;  }
+        unsigned short getDoughnuts () const {  return this->howManyDoughnuts ;  }
 
         /**
-         * Indica la cantidad de munición que tiene el jugador (rosquillas)
-         * @return Un número mayor o igual que cero
+         * Direction of player when it leaves room
          */
-        unsigned short getAmmo () const {  return this->ammo ;  }
+        void setDirectionOfExit ( const Direction& direction ) {  this->exit = direction ;  }
+
+        Direction getDirectionOfExit () const {  return this->exit ;  }
 
         /**
-         * Establece la dirección de salida del jugador al abandonar la sala
-         * @param direction El suelo, el techo o la ubicación de alguna puerta
-         */
-        void setExit ( const Direction& direction ) {  this->exit = direction ;  }
-
-        /**
-         * Dirección de salida del jugador al abandonar la sala
-         * @return El suelo, el techo o la ubicación de alguna puerta
-         */
-        Direction getExit () const {  return this->exit ;  }
-
-        /**
-         * Establece la orientación, dirección a la que mira el jugador al abandonar la sala
-         * @param direction Algún punto cardinal
+         * Direction player looks at when it leaves room
          */
         void setOrientation ( const Direction& direction ) {  this->orientation = direction ;  }
 
-        /**
-         * Orientación, dirección a la que mira el jugador al abandonar la sala
-         * @return Algún punto cardinal
-         */
         Direction getOrientation () const {  return this->orientation ;  }
+
+        /**
+         * How player enters room
+         */
+        Direction getDirectionOfEntry () const {  return this->entry ;  }
+
+        void setDirectionOfEntry ( const Direction& direction ) {  this->entry = direction ;  }
 
 };
 

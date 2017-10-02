@@ -16,10 +16,10 @@ using isomot::SoundManager;
 
 
 CreateEndScreen::CreateEndScreen( BITMAP* picture, unsigned short rooms, unsigned short planets )
-: Action(),
-  where( picture ),
-  rooms( rooms ),
-  planets( planets )
+        : Action()
+        , where( picture )
+        , rooms( rooms )
+        , planets( planets )
 {
 }
 
@@ -72,17 +72,27 @@ void CreateEndScreen::doIt ()
         screen->addWidget( label );
 
         // range reached by player
-        unsigned int bounds[ ] = {  0, 8000, 20000, 30000, 55000, 84000, 0xffffffff  };
+        unsigned int bounds[ ] = {  0, 8000, 20000, 30000, 55000, 84000  };
         std::string ranges[ ] = {  "dummy", "novice", "spy", "master-spy", "hero", "emperor"  };
 
-        // Obtiene el rango en función de la puntuación conseguida
-        for ( int i = 0; i < 6; i++ )
+        if ( score == 0 )
         {
-                if ( score > bounds[ i ] && score <= bounds[ i + 1 ] )
+                label = new Label( "fix the game please", "big", "orange" );
+                label->moveTo( ( 640 - label->getWidth() ) >> 1, 180 );
+                screen->addWidget( label );
+        }
+        else
+        {
+                for ( int i = 5; i >= 0; i-- )
                 {
-                        label = new Label( languageManager->findLanguageString( ranges[ i ] )->getText(), "big", "multicolor" );
-                        label->moveTo( ( 640 - label->getWidth() ) >> 1, 180 );
-                        screen->addWidget( label );
+                        if ( score > bounds[ i ] )
+                        {
+                                label = new Label( languageManager->findLanguageString( ranges[ i ] )->getText(), "big", "multicolor" );
+                                label->moveTo( ( 640 - label->getWidth() ) >> 1, 180 );
+                                screen->addWidget( label );
+
+                                break;
+                        }
                 }
         }
 

@@ -21,15 +21,15 @@ void Wall::calculateOffset()
         switch( this->axis )
         {
                 case AxisX:
-                        this->offset.first = ( this->index << 1 ) * mediator->getSizeOfOneTile() + 1 + mediator->getX0();
+                        this->offset.first = ( this->index << 1 ) * mediator->getRoom()->getSizeOfOneTile() + 1 + mediator->getRoom()->getX0();
                         break;
 
                 case AxisY:
-                        this->offset.first = 1 - mediator->getSizeOfOneTile() * ( ( this->index + 2 ) << 1 ) + mediator->getX0();
+                        this->offset.first = 1 - mediator->getRoom()->getSizeOfOneTile() * ( ( this->index + 2 ) << 1 ) + mediator->getRoom()->getX0();
                         break;
         }
 
-        this->offset.second = ( this->index + 1 ) * mediator->getSizeOfOneTile() - this->image->h - 1 + mediator->getY0();
+        this->offset.second = ( this->index + 1 ) * mediator->getRoom()->getSizeOfOneTile() - this->image->h - 1 + mediator->getRoom()->getY0();
 }
 
 void Wall::draw( BITMAP* where )

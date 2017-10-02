@@ -57,26 +57,28 @@ public:
 
         /**
          * Create player in current room
-         * @param behavior Behavior of player
-         * @param x Coordenada isométrica X donde se situará al jugador
-         * @param y Coordenada isométrica Y donde se situará al jugador
-         * @param z Coordenada isométrica Z donde se situará al jugador
-         * @param direction Dirección inicial del jugador
+         * @param justEntered Make copy of player used to recreate it when rebuilding room or not
          * @param withItem Carries player some item in bag or not
          */
-        PlayerItem * createPlayerInTheSameRoom ( const std::string& nameOfPlayer, const std::string& behavior, int x, int y, int z, const Direction& direction, bool withItem ) ;
+        PlayerItem * createPlayerInTheSameRoom ( bool justEntered,
+                                                        const std::string& nameOfPlayer,
+                                                        const std::string& behavior,
+                                                        int x, int y, int z,
+                                                        bool withItem,
+                                                        const Direction& direction, const Direction& entry = JustWait ) ;
 
         /**
          * Create player in given room
+         * @param justEntered Make copy of player used to recreate it when rebuilding room or not
          * @param room Room where to create player
-         * @param behavior Behavior of player
-         * @param x Coordenada isométrica X donde se situará al jugador
-         * @param y Coordenada isométrica Y donde se situará al jugador
-         * @param z Coordenada isométrica Z donde se situará al jugador
-         * @param direction Dirección inicial del jugador
          * @param withItem Carries player some item in bag or not
          */
-        PlayerItem * createPlayerInRoom ( Room* room, const std::string& nameOfPlayer, const std::string& behavior, int x, int y, int z, const Direction& direction, bool withItem );
+        PlayerItem * createPlayerInRoom ( Room* room, bool justEntered,
+                                                        const std::string& nameOfPlayer,
+                                                        const std::string& behavior,
+                                                        int x, int y, int z,
+                                                        bool withItem,
+                                                        const Direction& direction, const Direction& entry = JustWait );
 
         static int getXCenterOfRoom ( ItemData* playerData, Room* theRoom ) ;
 

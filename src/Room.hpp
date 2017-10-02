@@ -24,20 +24,20 @@
 namespace isomot
 {
 
-class FloorTile;
-class Wall;
-class Item;
-class GridItem;
-class FreeItem;
-class PlayerItem;
-class Door;
-class Camera;
-class ItemDataManager;
-class TripleRoomStartPoint;
+class FloorTile ;
+class Wall ;
+class Item ;
+class GridItem ;
+class FreeItem ;
+class PlayerItem ;
+class Door ;
+class Camera ;
+class ItemDataManager ;
+class TripleRoomInitialPoint ;
+
 
 /**
- * Una sala dibujada en perspectiva isométrica. Se compone de una rejilla sobre la que se colocan la mayoría
- * de los elementos. Así mismo, pueden situarse losetas en el suelo y paredes en el perímetro de la sala
+ * A room drawn in isometric perspective. It is composed of grid on which most of items are placed
  */
 
 class Room : public Drawable, public Mediated
@@ -85,11 +85,7 @@ public:
         */
         void addFreeItem ( FreeItem * freeItem ) ;
 
-       /**
-        * Añade un nuevo jugador a la sala
-        * @param gridItem Un elemento libre
-        */
-        void addPlayer ( PlayerItem * playerItem ) ;
+        bool addPlayerToRoom ( PlayerItem * playerItem, bool playerEntersRoom ) ;
 
        /**
         * Elimina una loseta de la sala
@@ -109,11 +105,7 @@ public:
         */
         void removeFreeItem ( FreeItem * freeItem ) ;
 
-       /**
-        * Elimina un jugador de la sala
-        * @param gridItem Un jugador
-        */
-        void removePlayer ( PlayerItem* playerItem ) ;
+        bool removePlayerFromRoom ( PlayerItem* playerItem, bool playerExitsRoom ) ;
 
         /**
          * Removes any bar in this room
@@ -140,7 +132,7 @@ public:
         */
         void calculateCoordinates ( bool hasNorthDoor, bool hasEastDoor, int deltaX, int deltaY ) ;
 
-        void activatePlayerByName ( const std::string& player ) ;
+        bool activatePlayerByName ( const std::string& player ) ;
 
        /**
         * Activa la sala. Implica la puesta en marcha de la actualización de los elementos y del dibujado
@@ -154,23 +146,26 @@ public:
 
         bool swapPlayersInRoom ( ItemDataManager * itemDataManager ) ;
 
-        bool continueWithAlivePlayer ( ItemDataManager * itemDataManager ) ;
+        bool continueWithAlivePlayer ( ) ;
 
        /**
-        * Calcula las coordenadas en las que se debe situar a un jugador para entrar a la sala
-        * @param entry Entrada que toma el jugador
-        * @param widthX Anchura del jugador en el eje X
-        * @param widthY Anchura del jugador en el eje Y
-        * @param northBound Límite norte de la sala. Coordenada X donde están los muros norte o la puerta norte
-        * @param eastBound Límite este de la sala. Coordenada Y donde están los muros este o la puerta este
-        * @param southBound Límite sur de la sala. Coordenada X donde están los muros sur o la puerta sur
-        * @param westBound Límite oeste de la sala. Coordenada Y donde están los muros oeste o la puerta oeste
-        * @param x Devuelve la coordenada X resultante
-        * @param y Devuelve la coordenada Y resultante
-        * @param z Devuelve la coordenada Z resultante
-        * @return true si se pudieron calcular las coordenadas o false en contrario
+        * Calculate coordinates at which player enters room
+        * @param entry Way of entry
+        * @param widthX Size of player on X
+        * @param widthY Size of player on Y
+        * @param northBound North limit of room, it is X coordinate of north walls or north door
+        * @param eastBound East limit of room, it is Y coordinate of east walls or east door
+        * @param southBound South limit of room, it’s X coordinate of south walls or south door
+        * @param westBound West limit of room, it’s Y coordinate where are west walls or where’s west door
+        * @param x Resulting X coordinate to get
+        * @param y Resulting Y coordinate to get
+        * @param z Resulting Z coordinate to get
+        * @return true if coordinates are okay or false otherwise
         */
-        bool calculateEntryCoordinates ( const Direction& entry, int widthX, int widthY, int northBound, int eastBound, int southBound, int westBound, int * x, int * y, int * z ) ;
+        bool calculateEntryCoordinates ( const Direction& entry,
+                                                int widthX, int widthY,
+                                                int northBound, int eastBound, int southBound, int westBound,
+                                                int * x, int * y, int * z ) ;
 
        /**
         * Almacena una posición inicial de la cámara en una sala triple
@@ -189,11 +184,19 @@ public:
         * Busca una posición inicial de la cámara en una sala triple
         * @param direction Vía de entrada del jugador
         */
-        TripleRoomStartPoint * findTripleRoomStartPoint ( const Direction& direction ) ;
+        TripleRoomInitialPoint * findInitialPointOfEntryToTripleRoom ( const Direction& direction ) ;
+
+protected:
+
+        void copyAnotherCharacterAsEntered ( const std::string& name ) ;
 
 private:
 
         friend class Mediator ;
+
+        std::list < PlayerItem * > playersYetInRoom ;
+
+        std::list < const PlayerItem * > playersWhoEnteredRoom ;
 
         std::string nameOfFileWithDataAboutRoom ;
 
@@ -211,12 +214,12 @@ private:
        /**
         * Number of room’s tiles both in X-way and in Y-way
         */
-        std::pair < int, int > tilesNumber ;
+        std::pair < unsigned int, unsigned int > numberOfTiles ;
 
        /**
         * Longitud del lado de una loseta en unidades isométricas
         */
-        int tileSize ;
+        unsigned int tileSize ;
 
         std::string kindOfFloor ;
 
@@ -231,16 +234,9 @@ private:
         Direction exit ;
 
        /**
-        * Índices que especifican el orden en el que se dibujarán las columnas de elementos rejilla que forman
-        * la estructura de la sala. Se pintan en diagonales de derecha a izquierda
+        * Indices in sequence of how columns of grid items are drawn, diagonally from right to left
         */
         int * drawIndex ;
-
-       /**
-        * Indica si se debe reiniciar la sala, es decir, si debe volver al estado existente tras su creación
-        * El atributo normalmente se activa cuando un jugador pierde una vida
-        */
-        bool restart ;
 
        /**
         * Grado de opacidad de las sombras desde 0, sin sombras, hasta 256, sombras totalmente opacas
@@ -293,10 +289,7 @@ private:
         */
         BITMAP * picture ;
 
-       /**
-        * Posición inicial de la cámara en las salas triples según la vía de entrada
-        */
-        std::list < TripleRoomStartPoint > tripleRoomStartPoints ;
+        std::list < TripleRoomInitialPoint > listOfInitialPointsForTripleRoom ;
 
        /**
         * Límites para mover la cámara a lo largo del eje X en una sala triple
@@ -309,6 +302,12 @@ private:
         std::pair < int, int > tripleRoomBoundY ;
 
 public:
+
+        std::list < PlayerItem * > getPlayersYetInRoom () const ;
+
+        std::list < const PlayerItem * > getPlayersWhoEnteredRoom () const ;
+
+        bool isAnyPlayerStillInRoom () const ;
 
         std::string getNameOfFileWithDataAboutRoom () const {  return nameOfFileWithDataAboutRoom ;  }
 
@@ -330,21 +329,18 @@ public:
 
        /**
         * Número de losetas de la sala en el eje X
-        * @return Un número mayor o igual que dos
         */
-        int getTilesX () const {  return tilesNumber.first ;  }
+        unsigned int getTilesX () const {  return numberOfTiles.first ;  }
 
        /**
         * Número de losetas de la sala en el eje Y
-        * @return Un número mayor o igual que dos
         */
-        int getTilesY () const {  return tilesNumber.second ;  }
+        unsigned int getTilesY () const {  return numberOfTiles.second ;  }
 
        /**
-        * Longitud del lado de una loseta en unidades isométricas
-        * @return Un número mayor que dos
+        * Returns length of side of single tile in isometric units
         */
-        int getSizeOfOneTile () const {  return tileSize ;  }
+        unsigned int getSizeOfOneTile () const {  return tileSize ;  }
 
        /**
         * @return kind of floor which may be "plain", "mortal", or absent "none"
@@ -358,8 +354,7 @@ public:
         void setActive ( const bool active ) {  this->active = active ;  }
 
        /**
-        * Indica si la sala está activa
-        * @return true si se está dibujando la sala o false si la sala no está activa y no se está dibujando
+        * Is this room active
         */
         bool isActive () const {  return active ;  }
 
@@ -381,13 +376,13 @@ public:
         * Establece la salida por la que algún jugador abandona la sala
         * @param exit El suelo, el techo o la ubicación de alguna puerta
         */
-        void setExit ( const Direction& exit ) {  this->exit = exit ;  }
+        void setWayOfExit ( const Direction& exit ) {  this->exit = exit ;  }
 
        /**
         * Salida por la que algún jugador abandona la sala
         * @return El suelo, el techo o la ubicación de alguna puerta
         */
-        Direction getExit () const {  return exit ;  }
+        Direction getWayOfExit () const {  return exit ;  }
 
        /**
         * Cámara encargada de centrar una sala grande en pantalla
@@ -412,64 +407,48 @@ public:
 
 };
 
+
 /**
- * Registro para una terna de elementos compuesta por una dirección y un par de coordenadas
- * Se emplea para almacenar la posición inicial de la cámara en las salas triples en función
- * de la vía de entrada del jugador
+ * Way of entry with pair of coordinates used to store initial position of camera in triple room
  */
-class TripleRoomStartPoint
+
+class TripleRoomInitialPoint
 {
 
 public:
 
-        TripleRoomStartPoint( const Direction& direction, int x, int y ) ;
+        TripleRoomInitialPoint( const Direction& wayOfEntry, int x, int y ) ;
 
 private:
 
-       /**
-         * Dirección de entrada a la sala
-         */
-        Direction direction ;
+        Direction wayOfEntry ;
 
         /**
-         * Diferencia que se debe aplicar a la coordenada de pantalla X para centrar la cámara
+         * Difference to screen coordinate X to center camera
          */
         int x ;
 
         /**
-         * Diferencia que se debe aplicar a la coordenada de pantalla X para centrar la cámara
+         * Difference to screen coordinate Y to center camera
          */
         int y ;
 
 public:
 
-        /**
-         * Dirección de entrada a la sala
-         * @return Una dirección
-         */
-        Direction getDirection () const {  return this->direction ;  }
+        Direction getWayOfEntry () const {  return this->wayOfEntry ;  }
 
-        /**
-         * Diferencia que se debe aplicar a la coordenada de pantalla X para centrar la cámara
-         */
         int getX () const {  return this->x ;  }
 
-        /**
-         * Diferencia que se debe aplicar a la coordenada de pantalla Y para centrar la cámara
-         */
         int getY () const {  return this->y ;  }
 
 };
 
-/**
- * Objeto-función usado como predicado en la búsqueda de una posición inicial de la cámara
- * en una sala triple
- */
-class EqualTripleRoomStartPoint : public std::binary_function< TripleRoomStartPoint, Direction, bool >
+
+class EqualTripleRoomInitialPoint : public std::binary_function< TripleRoomInitialPoint, Direction, bool >
 {
 
 public:
-        bool operator()( TripleRoomStartPoint point, Direction direction ) const ;
+        bool operator()( TripleRoomInitialPoint point, Direction wayOfEntry ) const ;
 
 };
 

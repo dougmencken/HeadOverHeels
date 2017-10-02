@@ -50,6 +50,8 @@ public:
 
         virtual ~Item( ) ;
 
+        virtual std::string whichKindOfItem () const {  return "abstract item" ;  }
+
         /**
          * Update item’s behavior
          */
@@ -231,6 +233,8 @@ public:
          * @return Un número positivo
          */
         int getId () const {  return id ;  }
+
+        ItemData * getDataOfItem () const {  return dataOfItem ;  }
 
         /**
          * Unique label of item

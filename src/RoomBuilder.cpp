@@ -208,12 +208,22 @@ Room* RoomBuilder::buildRoom ( const std::string& fileName )
         return this->room;
 }
 
-PlayerItem* RoomBuilder::createPlayerInTheSameRoom( const std::string& nameOfPlayer, const std::string& behavior, int x, int y, int z, const Direction& direction, bool withItem )
+PlayerItem* RoomBuilder::createPlayerInTheSameRoom( bool justEntered,
+                                                        const std::string& nameOfPlayer,
+                                                        const std::string& behavior,
+                                                        int x, int y, int z,
+                                                        bool withItem,
+                                                        const Direction& direction, const Direction& entry )
 {
-        return createPlayerInRoom( this->room, nameOfPlayer, behavior, x, y, z, direction, withItem );
+        return createPlayerInRoom( this->room, justEntered, nameOfPlayer, behavior, x, y, z, withItem, direction, entry );
 }
 
-PlayerItem* RoomBuilder::createPlayerInRoom( Room* room, const std::string& nameOfPlayer, const std::string& behavior, int x, int y, int z, const Direction& direction, bool withItem )
+PlayerItem* RoomBuilder::createPlayerInRoom( Room* room, bool justEntered,
+                                                        const std::string& nameOfPlayer,
+                                                        const std::string& behavior,
+                                                        int x, int y, int z,
+                                                        bool withItem,
+                                                        const Direction& direction, const Direction& entry )
 {
         GameManager* gameManager = GameManager::getInstance();
 
@@ -266,18 +276,13 @@ PlayerItem* RoomBuilder::createPlayerInRoom( Room* room, const std::string& name
                                 gameManager->setItemTaken( 0 );
                         }
 
-                        player->setLives( gameManager->getLives( newNameOfPlayer ) );
-                        player->setTools( gameManager->playerTools( newNameOfPlayer ) );
-                        player->setAmmo( gameManager->getDonuts( newNameOfPlayer ) );
-                        player->setHighJumps( gameManager->getHighJumps() );
-                        player->setHighSpeed( gameManager->getHighSpeed() );
-                        player->setShieldTime( gameManager->getShield( newNameOfPlayer ) );
+                        player->fillWithData( gameManager );
+
                         player->assignBehavior( newBehaviorOfPlayer, reinterpret_cast< void * >( itemDataManager ) );
 
-                        room->addPlayer( player );
+                        player->setDirectionOfEntry( entry );
 
-                        std::cout << "created player \"" << player->getLabel() << "\" with behavior \"" << player->getBehavior()->getNameOfBehavior() << "\""
-                                        << " in room \"" << room->getNameOfFileWithDataAboutRoom() << "\"" << std::endl ;
+                        room->addPlayerToRoom( player, justEntered );
                 }
         }
 

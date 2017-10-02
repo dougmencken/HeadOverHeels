@@ -20,9 +20,9 @@
 namespace isomot
 {
 
-class Isomot;
-class GameFileManager;
-class PlayerItem;
+class Isomot ;
+class GameFileManager ;
+class PlayerItem ;
 
 /**
  * Why the game was paused
@@ -335,11 +335,6 @@ private:
         BITMAP* itemTaken ;
 
         /**
-         * Número de salas visitadas por los jugadores
-         */
-        unsigned short visitedRooms ;
-
-        /**
          * Stores name of planet with boolean of its liberation
          */
         std::map < std::string, bool > planets ;
@@ -478,9 +473,9 @@ public:
         void setHorn ( bool hasHorn ) {  this->horn = hasHorn ;  }
 
         /**
-         * @return Vector with tools owned by the player
+         * @return vector with tools owned by the player
          */
-        std::vector < std::string > playerTools ( const std::string& player ) const ;
+        std::vector < std::string > getToolsOwnedByPlayer ( const std::string& player ) const ;
 
         /**
          * Establece la posesión del bolso por Heels
@@ -508,9 +503,8 @@ public:
 
         /**
          * Número de salas visitadas por los jugadores
-         * @return Un número mayor que 2
          */
-        unsigned short getVisitedRooms () const {  return this->visitedRooms ;  }
+        unsigned short getVisitedRooms () const ;
 
 };
 

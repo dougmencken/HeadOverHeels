@@ -239,7 +239,7 @@ void Special::takeMagicItem( PlayerItem* who )
         if ( magicItem == "donuts" )
         {
                 const unsigned short DonutsPerBox = 6 ;
-                who->addAmmo( DonutsPerBox );
+                who->addDoughnuts( DonutsPerBox );
         }
         else if ( magicItem == "extra-life" )
         {

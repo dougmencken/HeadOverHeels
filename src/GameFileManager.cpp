@@ -104,20 +104,20 @@ void GameFileManager::saveGame( const std::string& fileName )
                 sgxml::players::player_sequence playerSequence( players.player() );
 
                 // active player
-                std::string whoPlaysYet = nameOfCharacterWhoCaughtTheFish;
+                std::string nameOfWhoPlaysYet = nameOfCharacterWhoCaughtTheFish;
 
                 unsigned short lives = 0;
-                if ( ( whoPlaysYet == "head" ) || ( whoPlaysYet == "heels" ) )
+                if ( nameOfWhoPlaysYet == "head" || nameOfWhoPlaysYet == "heels" )
                 {
-                        lives = this->gameManager->getLives( whoPlaysYet );
+                        lives = this->gameManager->getLives( nameOfWhoPlaysYet );
                 }
-                else if ( whoPlaysYet == "headoverheels"  )
+                else if ( nameOfWhoPlaysYet == "headoverheels"  )
                 {
                         lives = this->gameManager->getLives( "head" ) * 100 + this->gameManager->getLives( "heels" );
                 }
 
                 // possession of objects
-                std::vector< std::string > tools = this->gameManager->playerTools( whoPlaysYet );
+                std::vector< std::string > tools = this->gameManager->getToolsOwnedByPlayer( nameOfWhoPlaysYet );
 
                 // store all data
                 playerSequence.push_back(
@@ -131,58 +131,64 @@ void GameFileManager::saveGame( const std::string& fileName )
                                 int( this->direction ),
                                 JustWait,
                                 lives,
-                                ( ( whoPlaysYet == "head" ) || ( whoPlaysYet == "headoverheels" ) )
+                                ( nameOfWhoPlaysYet == "head" || nameOfWhoPlaysYet == "headoverheels" )
                                         ? std::find( tools.begin (), tools.end (), "horn" ) != tools.end ()
                                         : false,
-                                ( ( whoPlaysYet == "heels" ) || ( whoPlaysYet == "headoverheels" ) )
+                                ( nameOfWhoPlaysYet == "heels" || nameOfWhoPlaysYet == "headoverheels" )
                                         ? std::find( tools.begin (), tools.end (), "handbag" ) != tools.end ()
                                         : false,
-                                this->gameManager->getDonuts( whoPlaysYet ),
+                                this->gameManager->getDonuts( nameOfWhoPlaysYet ),
                                 nameOfCharacterWhoCaughtTheFish
                         )
                 );
 
-                // there may be no more rooms because there are no more players
-                // or because other player is in the same room as active player
-
                 Room* activeRoom = this->isomot->getMapManager()->getActiveRoom();
                 Room* secondRoom = this->isomot->getMapManager()->getRoomOfInactivePlayer();
 
-                PlayerItem* inactivePlayer = ( secondRoom != 0 ? secondRoom->getMediator()->getActivePlayer() : activeRoom->getMediator()->getHiddenPlayer() );
+                // there may be no more rooms because there are no more players
+                // or because other player is in the same room as active player
 
-                if ( inactivePlayer != 0 )
+                const PlayerItem* whoWaitsToPlay = 0 ;
+
+                std::string nameOfWhoWaitsToPlay = ( secondRoom != 0  ? secondRoom->getMediator()->getActivePlayer()->getLabel()
+                                                                      : activeRoom->getMediator()->getWaitingPlayer()->getLabel() );
+
+                std::list< const PlayerItem * > playersOnEntry = ( secondRoom != 0 ?
+                                                                        secondRoom->getPlayersWhoEnteredRoom() :
+                                                                        activeRoom->getPlayersWhoEnteredRoom() );
+
+                for ( std::list< const PlayerItem * >::const_iterator p = playersOnEntry.begin (); p != playersOnEntry.end (); ++p )
                 {
-                        std::string whoWaitsToPlay = inactivePlayer->getLabel();
-                        std::vector< std::string > tools = this->gameManager->playerTools( whoWaitsToPlay );
-                        PlayerInitialPosition* initialPosition = this->isomot->getMapManager()->findPlayerPosition(
-                                secondRoom != 0 ?
-                                        secondRoom->getNameOfFileWithDataAboutRoom() :
-                                        activeRoom->getNameOfFileWithDataAboutRoom()
-                                , whoWaitsToPlay
-                        );
-                        if ( initialPosition == 0 )
+                        if ( ( *p )->getLabel() == nameOfWhoWaitsToPlay )
                         {
-                                initialPosition = this->isomot->getMapManager()->findPlayerPosition( activeRoom->getNameOfFileWithDataAboutRoom(), "headoverheels" );
+                                whoWaitsToPlay = *p ;
+                                break;
                         }
+                }
+
+                if ( whoWaitsToPlay != 0 )
+                {
+                        std::vector< std::string > tools = this->gameManager->getToolsOwnedByPlayer( whoWaitsToPlay->getLabel() );
+
                         playerSequence.push_back(
                                 sgxml::player
                                 (
                                         false, // inactive player
                                         secondRoom != 0 ? secondRoom->getNameOfFileWithDataAboutRoom() : activeRoom->getNameOfFileWithDataAboutRoom(),
-                                        initialPosition->getX(),
-                                        initialPosition->getY(),
-                                        initialPosition->getZ(),
-                                        int( inactivePlayer->getDirection() ),
-                                        initialPosition->getEntry(),
-                                        this->gameManager->getLives( whoWaitsToPlay ),
-                                        whoWaitsToPlay == "head" || whoWaitsToPlay == "headoverheels"
+                                        whoWaitsToPlay->getX(),
+                                        whoWaitsToPlay->getY(),
+                                        whoWaitsToPlay->getZ(),
+                                        static_cast< int >( whoWaitsToPlay->getDirection() ),
+                                        whoWaitsToPlay->getDirectionOfEntry(),
+                                        whoWaitsToPlay->getLives(),
+                                        whoWaitsToPlay->getLabel() == "head"
                                                 ? std::find( tools.begin(), tools.end(), "horn" ) != tools.end()
                                                 : false,
-                                        whoWaitsToPlay == "heels" || whoWaitsToPlay == "headoverheels"
+                                        whoWaitsToPlay->getLabel() == "heels"
                                                 ? std::find( tools.begin(), tools.end(), "handbag" ) != tools.end()
                                                 : false,
-                                        this->gameManager->getDonuts( whoWaitsToPlay ),
-                                        inactivePlayer->getLabel()
+                                        this->gameManager->getDonuts( whoWaitsToPlay->getLabel() ),
+                                        whoWaitsToPlay->getLabel()
                                 )
                         ) ;
                 }

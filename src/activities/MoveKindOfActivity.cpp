@@ -39,12 +39,14 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
 {
         bool changedData = false;
         bool loading = false;
+
         ActivityOfItem displaceActivity = Wait;
+
         FreeItem* freeItem = 0;
         Mediator* mediator = 0;
 
-        // Acceso al elemento que hay que mover si dicho elemento es libre
-        if ( behavior->getItem()->getId() & 1 )
+        // is item free or player
+        if ( behavior->getItem()->whichKindOfItem() == "free item" || behavior->getItem()->whichKindOfItem() == "player item" )
         {
                 freeItem = dynamic_cast< FreeItem * >( behavior->getItem() );
                 mediator = freeItem->getMediator();
@@ -285,7 +287,7 @@ void MoveKindOfActivity::ascent( FreeItem* freeItem, int z )
                         PlayerItem* playerItem = dynamic_cast< PlayerItem * >( freeItem );
                         if ( playerItem != 0 && playerItem->getZ() >= MaxLayers * LayerHeight )
                         {
-                                playerItem->setExit( Up );
+                                playerItem->setDirectionOfExit( Up );
                                 playerItem->setOrientation( playerItem->getDirection() );
                         }
                 }
