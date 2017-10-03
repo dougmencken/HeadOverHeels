@@ -131,7 +131,10 @@ void MapManager::beginNewGame( const std::string& firstRoomFileName, const std::
                         // create player Head
                         roomBuilder->createPlayerInTheSameRoom( true, "head", "behavior of Head", centerX, centerY, 0, false, West );
 
+                        firstRoomData->setVisited( true );
+
                         firstRoom->activatePlayerByName( "head" );
+
                         firstRoom->getCamera()->turnOn( firstRoom->getMediator()->getActivePlayer(), JustWait );
                         activeRoom = firstRoom;
                         rooms.push_back( firstRoom );
@@ -157,7 +160,10 @@ void MapManager::beginNewGame( const std::string& firstRoomFileName, const std::
                         // create player Heels
                         roomBuilder->createPlayerInTheSameRoom( true, "heels", "behavior of Heels", centerX, centerY, 0, false, South );
 
+                        secondRoomData->setVisited( true );
+
                         secondRoom->activatePlayerByName( "heels" );
+
                         secondRoom->getCamera()->turnOn( secondRoom->getMediator()->getActivePlayer(), JustWait );
                         rooms.push_back( secondRoom );
                 }
@@ -206,6 +212,8 @@ void MapManager::beginOldGameWithCharacter( const sgxml::player& data )
                                                                 false,
                                                                 Direction( data.direction() ), Direction( data.entry() ) );
 
+                        roomData->setVisited( true );
+
                         Direction entry = static_cast< Direction >( data.entry() );
                         if ( entry == JustWait )
                         {
@@ -240,7 +248,7 @@ void MapManager::beginOldGameWithCharacter( const sgxml::player& data )
         }
 }
 
-void MapManager::reset()
+void MapManager::binEveryRoom()
 {
         // bin rooms
         if ( this->rooms.size () == 2 &&
@@ -252,7 +260,9 @@ void MapManager::reset()
         {
                 std::for_each( this->rooms.begin (), this->rooms.end (), DeleteObject() );
         }
+
         this->rooms.clear();
+
         this->activeRoom = 0;
 }
 
@@ -356,6 +366,8 @@ Room* MapManager::changeRoom( const Direction& exit )
         PlayerItem* newItemOfRoamer = roomBuilder->createPlayerInRoom( newRoom, true, nameOfRoamer, behaviorOfPlayer, entryX, entryY, entryZ, withItem, exitOrientation, entry );
 
         newItemOfRoamer->autoMoveOnEntry( entry );
+
+        nextRoomData->setVisited( true );
 
         newRoom->activatePlayerByName( nameOfRoamer );
         newRoom->getCamera()->turnOn( newRoom->getMediator()->getActivePlayer(), entry );
@@ -540,7 +552,7 @@ void MapManager::removeRoom( Room* whichRoom )
         }
 }
 
-void MapManager::loadVisitedSequence( sgxml::exploredRooms::visited_sequence& visitedSequence )
+void MapManager::readVisitedSequence( sgxml::exploredRooms::visited_sequence& visitedSequence )
 {
         resetVisitedRooms();
 
@@ -554,7 +566,7 @@ void MapManager::loadVisitedSequence( sgxml::exploredRooms::visited_sequence& vi
         }
 }
 
-void MapManager::saveVisitedSequence( sgxml::exploredRooms::visited_sequence& visitedSequence )
+void MapManager::storeVisitedSequence( sgxml::exploredRooms::visited_sequence& visitedSequence )
 {
         for ( std::list< MapRoomData >::iterator i = this->mapData.begin (); i != this->mapData.end (); ++i )
         {
@@ -565,9 +577,9 @@ void MapManager::saveVisitedSequence( sgxml::exploredRooms::visited_sequence& vi
         }
 }
 
-unsigned short MapManager::countVisitedRooms()
+unsigned int MapManager::countVisitedRooms()
 {
-        unsigned short number = 0;
+        unsigned int number = 0;
 
         for ( std::list< MapRoomData >::iterator i = this->mapData.begin (); i != this->mapData.end (); ++i )
         {

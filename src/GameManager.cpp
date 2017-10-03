@@ -893,7 +893,7 @@ unsigned short GameManager::getDonuts ( const std::string& player ) const
         return ( player == "head" || player == "headoverheels" ? this->donuts : 0 );
 }
 
-unsigned short GameManager::getVisitedRooms () const
+unsigned int GameManager::getVisitedRooms () const
 {
         return this->isomot->getMapManager()->countVisitedRooms() ;
 }

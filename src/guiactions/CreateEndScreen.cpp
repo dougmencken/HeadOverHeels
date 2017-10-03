@@ -14,7 +14,7 @@ using gui::CreateEndScreen;
 using isomot::SoundManager;
 
 
-CreateEndScreen::CreateEndScreen( BITMAP* picture, unsigned short rooms, unsigned short planets )
+CreateEndScreen::CreateEndScreen( BITMAP* picture, unsigned int rooms, unsigned short planets )
         : Action()
         , where( picture )
         , rooms( rooms )

@@ -122,9 +122,7 @@ void Isomot::pause ()
 
 void Isomot::resume ()
 {
-        // Reactiva la actualización de los estados de los elementos y
-        // la representación de la vista isométrica
-        if( mapManager->getActiveRoom() != 0 )
+        if ( mapManager->getActiveRoom() != 0 )
         {
                 mapManager->getActiveRoom()->activate();
         }
@@ -141,10 +139,9 @@ void Isomot::reset()
                 this->view = 0;
         }
 
-        // El gestor del mapa debe limpiar todos sus datos a excepción del propio mapa
-        this->mapManager->reset();
+        this->mapManager->binEveryRoom();
 
-        // Elimina los bonus marcados como ausentes en todas las salas
+        // bin taken bonuses
         BonusManager::getInstance()->reset();
 }
 

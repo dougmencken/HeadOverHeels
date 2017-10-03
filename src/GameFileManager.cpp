@@ -47,7 +47,7 @@ void GameFileManager::loadGame( const std::string& fileName )
                 std::auto_ptr< sgxml::SaveGameXML > saveGameXML( sgxml::savegame( fileName.c_str () ) );
 
                 // visited rooms
-                this->isomot->getMapManager()->loadVisitedSequence( saveGameXML->exploredRooms().visited() );
+                this->isomot->getMapManager()->readVisitedSequence( saveGameXML->exploredRooms().visited() );
 
                 // bonuses already taken
                 BonusManager::getInstance()->load( saveGameXML->bonus().room() );
@@ -87,19 +87,16 @@ void GameFileManager::saveGame( const std::string& fileName )
 {
         try
         {
-                // Se almacenan las salas visitadas
                 sgxml::exploredRooms exploredRooms;
                 sgxml::exploredRooms::visited_sequence& sequenceOfRooms( exploredRooms.visited() );
-                this->isomot->getMapManager()->saveVisitedSequence( sequenceOfRooms );
+                this->isomot->getMapManager()->storeVisitedSequence( sequenceOfRooms );
                 exploredRooms.visited( sequenceOfRooms );
 
-                // Se almacenan los bonus que se hallan cogido
                 sgxml::bonus bonus;
                 sgxml::bonus::room_sequence& roomSequence( bonus.room() );
                 BonusManager::getInstance()->save( roomSequence );
                 bonus.room( roomSequence );
 
-                // Se almacena el estado de los jugadores
                 sgxml::players players;
                 sgxml::players::player_sequence playerSequence( players.player() );
 

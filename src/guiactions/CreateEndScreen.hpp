@@ -35,7 +35,7 @@ public:
          * @param rooms Count of visited rooms
          * @param planets Count of liberated planets
          */
-        CreateEndScreen( BITMAP* picture, unsigned short rooms, unsigned short planets ) ;
+        CreateEndScreen( BITMAP* picture, unsigned int rooms, unsigned short planets ) ;
 
         /**
          * Show summary screen
@@ -51,7 +51,7 @@ private:
         /**
          * Count of visited rooms
          */
-        unsigned short rooms ;
+        unsigned int rooms ;
 
         /**
          * Count of liberated planets

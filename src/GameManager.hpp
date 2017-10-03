@@ -506,7 +506,7 @@ public:
         /**
          * Número de salas visitadas por los jugadores
          */
-        unsigned short getVisitedRooms () const ;
+        unsigned int getVisitedRooms () const ;
 
 };
 

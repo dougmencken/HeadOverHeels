@@ -55,10 +55,7 @@ public:
 
         void beginOldGameWithCharacter ( const sgxml::player& data ) ;
 
-        /**
-         * Bin every room
-         */
-        void reset () ;
+        void binEveryRoom () ;
 
         /**
          * Change active room by way of exit chosen
@@ -91,24 +88,14 @@ public:
 
         void removeRoom ( Room* whichRoom ) ;
 
-        /**
-         * Lee del disco las salas visitadas por los jugadores
-         * @param visitedSequence Estructura de datos empleada por el archivo XML para guardar
-         * las salas visitadas
-         */
-        void loadVisitedSequence ( sgxml::exploredRooms::visited_sequence& visitedSequence ) ;
+        void readVisitedSequence ( sgxml::exploredRooms::visited_sequence& visitedSequence ) ;
 
-        /**
-         * Guarda en disco las salas visitadas por los jugadores
-         * @param visitedSequence Estructura de datos empleada por el archivo XML para guardar
-         * las salas visitadas
-         */
-        void saveVisitedSequence ( sgxml::exploredRooms::visited_sequence& visitedSequence ) ;
+        void storeVisitedSequence ( sgxml::exploredRooms::visited_sequence& visitedSequence ) ;
 
         /**
          * Cuenta el número de salas visitadas por los jugadores
          */
-        unsigned short countVisitedRooms () ;
+        unsigned int countVisitedRooms () ;
 
         void resetVisitedRooms () ;
 
