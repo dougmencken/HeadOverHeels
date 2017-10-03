@@ -147,19 +147,31 @@ void GameFileManager::saveGame( const std::string& fileName )
 
                 const PlayerItem* whoWaitsToPlay = 0 ;
 
-                std::string nameOfWhoWaitsToPlay = ( secondRoom != 0  ? secondRoom->getMediator()->getActivePlayer()->getLabel()
-                                                                      : activeRoom->getMediator()->getWaitingPlayer()->getLabel() );
+                std::string nameOfWhoWaitsToPlay = "nobody";
 
-                std::list< const PlayerItem * > playersOnEntry = ( secondRoom != 0 ?
-                                                                        secondRoom->getPlayersWhoEnteredRoom() :
-                                                                        activeRoom->getPlayersWhoEnteredRoom() );
-
-                for ( std::list< const PlayerItem * >::const_iterator p = playersOnEntry.begin (); p != playersOnEntry.end (); ++p )
+                if ( secondRoom != 0 )
                 {
-                        if ( ( *p )->getLabel() == nameOfWhoWaitsToPlay )
+                        nameOfWhoWaitsToPlay = secondRoom->getMediator()->getActivePlayer()->getLabel();
+                }
+                else
+                if ( activeRoom->getMediator()->getWaitingPlayer() != 0 )
+                {
+                        nameOfWhoWaitsToPlay = activeRoom->getMediator()->getWaitingPlayer()->getLabel();
+                }
+
+                if ( nameOfWhoWaitsToPlay != "nobody" )
+                {
+                        std::list< const PlayerItem * > playersOnEntry = ( secondRoom != 0 ?
+                                                                                secondRoom->getPlayersWhoEnteredRoom() :
+                                                                                activeRoom->getPlayersWhoEnteredRoom() );
+
+                        for ( std::list< const PlayerItem * >::const_iterator p = playersOnEntry.begin (); p != playersOnEntry.end (); ++p )
                         {
-                                whoWaitsToPlay = *p ;
-                                break;
+                                if ( ( *p )->getLabel() == nameOfWhoWaitsToPlay )
+                                {
+                                        whoWaitsToPlay = *p ;
+                                        break;
+                                }
                         }
                 }
 

@@ -10,6 +10,7 @@
 #include "Camera.hpp"
 #include "Exception.hpp"
 #include "SoundManager.hpp"
+#include "GameManager.hpp"
 
 # include <xercesc/util/PlatformUtils.hpp>
 
@@ -112,6 +113,9 @@ void MapManager::beginNewGame( const std::string& firstRoomFileName, const std::
 {
         resetVisitedRooms();
 
+        GameManager::getInstance()->setHeadLives( 8 );
+        GameManager::getInstance()->setHeelsLives( 8 );
+
         // get data of first room
         MapRoomData* firstRoomData = findRoomData( firstRoomFileName );
 
@@ -129,7 +133,7 @@ void MapManager::beginNewGame( const std::string& firstRoomFileName, const std::
                         int centerY = RoomBuilder::getYCenterOfRoom( firstPlayerData, firstRoom );
 
                         // create player Head
-                        roomBuilder->createPlayerInTheSameRoom( true, "head", "behavior of Head", centerX, centerY, 0, false, West );
+                        roomBuilder->createPlayerInTheSameRoom( true, "head", centerX, centerY, 0, false, West );
 
                         firstRoomData->setVisited( true );
 
@@ -158,7 +162,7 @@ void MapManager::beginNewGame( const std::string& firstRoomFileName, const std::
                         int centerY = RoomBuilder::getYCenterOfRoom( secondPlayerData, secondRoom );
 
                         // create player Heels
-                        roomBuilder->createPlayerInTheSameRoom( true, "heels", "behavior of Heels", centerX, centerY, 0, false, South );
+                        roomBuilder->createPlayerInTheSameRoom( true, "heels", centerX, centerY, 0, false, South );
 
                         secondRoomData->setVisited( true );
 
@@ -192,14 +196,6 @@ void MapManager::beginOldGameWithCharacter( const sgxml::player& data )
                 if ( room != 0 )
                 {
                         std::string nameOfCharacter = data.label();
-                        std::string behavior;
-
-                        if ( nameOfCharacter == "head" )
-                                behavior = "behavior of Head";
-                        else if ( nameOfCharacter == "heels" )
-                                behavior = "behavior of Heels";
-                        else if ( nameOfCharacter == "headoverheels" )
-                                behavior = "behavior of Head over Heels";
 
                         // create player
                         std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( isomot->getItemDataManager() ) );
@@ -207,7 +203,6 @@ void MapManager::beginOldGameWithCharacter( const sgxml::player& data )
                                                                 room,
                                                                 true,
                                                                 nameOfCharacter,
-                                                                behavior,
                                                                 data.x (), data.y (), data.z (),
                                                                 false,
                                                                 Direction( data.direction() ), Direction( data.entry() ) );
@@ -303,8 +298,6 @@ Room* MapManager::changeRoom( const Direction& exit )
 
         const Direction exitOrientation = oldItemOfRoamer->getOrientation ();
 
-        std::string behaviorOfPlayer = oldItemOfRoamer->getBehavior()->getNameOfBehavior ();
-
         // get limits of room
         // there’s possibility to exit and to enter new room in cases when player travels through floor, roof or via teletransport
         int northBound = previousRoom->getBound( North );
@@ -363,7 +356,7 @@ Room* MapManager::changeRoom( const Direction& exit )
                 entryZ = Top;
         }
 
-        PlayerItem* newItemOfRoamer = roomBuilder->createPlayerInRoom( newRoom, true, nameOfRoamer, behaviorOfPlayer, entryX, entryY, entryZ, withItem, exitOrientation, entry );
+        PlayerItem* newItemOfRoamer = roomBuilder->createPlayerInRoom( newRoom, true, nameOfRoamer, entryX, entryY, entryZ, withItem, exitOrientation, entry );
 
         newItemOfRoamer->autoMoveOnEntry( entry );
 
@@ -391,7 +384,6 @@ Room* MapManager::rebuildRoom()
         std::string nameOfActivePlayer = activeRoom->getMediator()->getActivePlayer()->getLabel();
         std::string nameOfActivePlayerBeforeJoining = activeRoom->getMediator()->getLastActivePlayerBeforeJoining();
 
-        std::string playerBehavior = "still";
         Direction direction = NoDirection;
         PlayerItem* alivePlayer = 0;
 
@@ -400,37 +392,39 @@ Room* MapManager::rebuildRoom()
         for ( std::list< const PlayerItem * >::const_iterator it = playersOnEntry.begin (); it != playersOnEntry.end (); ++it )
         {
                 const PlayerItem* player = *it;
-                std::cout << "got player \"" << player->getLabel() << "\" who entered this room @ MapManager::rebuildRoom" << std::endl ;
 
-                // when joined character splits, then some simple character migrates to another room
-                // further via swap user changes to room of splitting, and loses life there
-                // so room rebuilds as fresh one with headoverheels in it
-                // and as surprise that simple character is still in another room
-                if ( player->getLabel() == "headoverheels" && rooms.size() > 1 )
+                if ( player->getLabel() == "headoverheels" || GameManager::getInstance()->getLives( player->getLabel() ) > 0 )
                 {
-                        // get that another room
-                        std::vector< Room* >::iterator ri = std::find_if( rooms.begin (), rooms.end (), std::bind2nd( EqualRoom(), activeRoom->getNameOfFileWithDataAboutRoom() ) );
-                        ++ri ;
-                        Room* roomToForget = ( ri != rooms.end() ? ( *ri ) : *rooms.begin() );
+                        std::cout << "got player \"" << player->getLabel() << "\" who entered this room @ MapManager::rebuildRoom" << std::endl ;
 
-                        // and forget it
-                        removeRoom( roomToForget );
+                        // when joined character splits, then some simple character migrates to another room
+                        // further via swap user changes to room of splitting, and loses life there
+                        // so room rebuilds as fresh one with headoverheels in it
+                        // and as surprise that simple character is still in another room
+                        if ( player->getLabel() == "headoverheels" && rooms.size() > 1 )
+                        {
+                                // get that another room
+                                std::vector< Room* >::iterator ri = std::find_if( rooms.begin (), rooms.end (), std::bind2nd( EqualRoom(), activeRoom->getNameOfFileWithDataAboutRoom() ) );
+                                ++ri ;
+                                Room* roomToForget = ( ri != rooms.end() ? ( *ri ) : *rooms.begin() );
+
+                                // and forget it
+                                removeRoom( roomToForget );
+                        }
+
+                        direction = player->getOrientation();
+
+                        Direction entry = player->getDirectionOfEntry();
+
+                        // create player
+                        alivePlayer = roomBuilder->createPlayerInRoom( newRoom,
+                                                                        true,
+                                                                        player->getLabel(),
+                                                                        player->getX(), player->getY(), player->getZ(),
+                                                                        false, direction, entry );
+
+                        alivePlayer->autoMoveOnEntry( entry );
                 }
-
-                playerBehavior = player->getBehavior()->getNameOfBehavior ();
-
-                direction = player->getOrientation();
-
-                Direction entry = player->getDirectionOfEntry();
-
-                // create player
-                alivePlayer = roomBuilder->createPlayerInRoom( newRoom,
-                                                                true,
-                                                                player->getLabel(), playerBehavior,
-                                                                player->getX(), player->getY(), player->getZ(),
-                                                                false, direction, entry );
-
-                alivePlayer->autoMoveOnEntry( entry );
         }
 
         // remove existing room

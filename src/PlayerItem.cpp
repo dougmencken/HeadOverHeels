@@ -105,7 +105,12 @@ void PlayerItem::autoMoveOnEntry ( const Direction& entry )
 
 bool PlayerItem::changeData( int value, int x, int y, int z, const Datum& datum, const WhatToDo& how )
 {
-        if ( ! this->isActivePlayer() )
+        bool itAutomoves = getBehavior()->getActivityOfItem() == AutoMoveNorth ||
+                                getBehavior()->getActivityOfItem() == AutoMoveSouth ||
+                                getBehavior()->getActivityOfItem() == AutoMoveEast ||
+                                getBehavior()->getActivityOfItem() == AutoMoveWest ;
+
+        if ( ! this->isActivePlayer() && ! itAutomoves )
         {
                 return FreeItem::changeData( value, x, y, z, datum, how );
         }

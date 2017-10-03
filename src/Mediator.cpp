@@ -1043,7 +1043,7 @@ bool Mediator::selectNextPlayer( ItemDataManager* itemDataManager )
 
                                 // create "composite" player
                                 std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( itemDataManager ) );
-                                activePlayer = roomBuilder->createPlayerInRoom( this->room, false, "headoverheels", "behavior of Head over Heels", x, y, z, false, direction );
+                                activePlayer = roomBuilder->createPlayerInRoom( this->room, false, "headoverheels", x, y, z, false, direction );
                                 // transfer item in handbag
                                 activePlayer->assignTakenItem( takenItemData, takenItemImage, behaviorOfItemTaken );
 
@@ -1077,10 +1077,10 @@ bool Mediator::selectNextPlayer( ItemDataManager* itemDataManager )
 
                 std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( itemDataManager ) );
 
-                PlayerItem* heelsPlayer = roomBuilder->createPlayerInRoom( this->room, false, "heels", "behavior of Heels", x, y, z, false, direction );
+                PlayerItem* heelsPlayer = roomBuilder->createPlayerInRoom( this->room, false, "heels", x, y, z, false, direction );
                 heelsPlayer->assignTakenItem( takenItemData, takenItemImage, behaviorOfItemTaken );
 
-                PlayerItem* headPlayer = roomBuilder->createPlayerInRoom( this->room, false, "head", "behavior of Head", x, y, z + LayerHeight, false, direction );
+                PlayerItem* headPlayer = roomBuilder->createPlayerInRoom( this->room, false, "head", x, y, z + LayerHeight, false, direction );
 
                 activePlayer = ( this->lastActivePlayer == "head" ) ? heelsPlayer : headPlayer;
                 previousPlayer = ( activePlayer == headPlayer ) ? heelsPlayer : headPlayer;

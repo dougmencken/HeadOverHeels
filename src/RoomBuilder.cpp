@@ -210,25 +210,22 @@ Room* RoomBuilder::buildRoom ( const std::string& fileName )
 
 PlayerItem* RoomBuilder::createPlayerInTheSameRoom( bool justEntered,
                                                         const std::string& nameOfPlayer,
-                                                        const std::string& behavior,
                                                         int x, int y, int z,
                                                         bool withItem,
                                                         const Direction& direction, const Direction& entry )
 {
-        return createPlayerInRoom( this->room, justEntered, nameOfPlayer, behavior, x, y, z, withItem, direction, entry );
+        return createPlayerInRoom( this->room, justEntered, nameOfPlayer, x, y, z, withItem, direction, entry );
 }
 
 PlayerItem* RoomBuilder::createPlayerInRoom( Room* room, bool justEntered,
                                                         const std::string& nameOfPlayer,
-                                                        const std::string& behavior,
                                                         int x, int y, int z,
                                                         bool withItem,
                                                         const Direction& direction, const Direction& entry )
 {
         GameManager* gameManager = GameManager::getInstance();
 
-        std::string newNameOfPlayer( nameOfPlayer );
-        std::string newBehaviorOfPlayer( behavior );
+        std::string nameOfPlayerToCreate( nameOfPlayer );
 
         // when composite player ran out of lives, check if any of simple players still survive
         if ( gameManager->getLives( nameOfPlayer ) == 0 )
@@ -237,17 +234,15 @@ PlayerItem* RoomBuilder::createPlayerInRoom( Room* room, bool justEntered,
                 {
                         if ( gameManager->getLives( "head" ) > 0 )
                         {
-                                newNameOfPlayer = "head";
-                                newBehaviorOfPlayer = "behavior of Head";
+                                nameOfPlayerToCreate = "head";
                         }
                         else if ( gameManager->getLives( "heels" ) > 0 )
                         {
-                                newNameOfPlayer = "heels";
-                                newBehaviorOfPlayer = "behavior of Heels";
+                                nameOfPlayerToCreate = "heels";
                         }
                         else
                         {
-                                newNameOfPlayer = "in~buildroom";
+                                nameOfPlayerToCreate = "nobody";
                         }
                 }
                 // it is possible that two players join in room and have no lives
@@ -255,18 +250,18 @@ PlayerItem* RoomBuilder::createPlayerInRoom( Room* room, bool justEntered,
                 {
                         if ( gameManager->getLives( "head" ) == 0 && gameManager->getLives( "heels" ) == 0 )
                         {
-                                newNameOfPlayer = "no~lives";
+                                nameOfPlayerToCreate = "game over";
                         }
                 }
         }
 
-        ItemData* itemData = this->itemDataManager->findItemByLabel( newNameOfPlayer );
+        ItemData* itemData = this->itemDataManager->findItemByLabel( nameOfPlayerToCreate );
         PlayerItem* player = 0;
 
         // if it is found and has some lives left, place it in room
-        if ( ( newNameOfPlayer == "headoverheels" || newNameOfPlayer == "head" || newNameOfPlayer == "heels" ) && itemData != 0 )
+        if ( ( nameOfPlayerToCreate == "headoverheels" || nameOfPlayerToCreate == "head" || nameOfPlayerToCreate == "heels" ) && itemData != 0 )
         {
-                if ( gameManager->getLives( newNameOfPlayer ) > 0 )
+                if ( gameManager->getLives( nameOfPlayerToCreate ) > 0 )
                 {
                         player = new PlayerItem( itemData, x, y, z, direction );
 
@@ -278,7 +273,22 @@ PlayerItem* RoomBuilder::createPlayerInRoom( Room* room, bool justEntered,
 
                         player->fillWithData( gameManager );
 
-                        player->assignBehavior( newBehaviorOfPlayer, reinterpret_cast< void * >( itemDataManager ) );
+                        std::string behaviorOfPlayer = "behavior of some player";
+
+                        if ( nameOfPlayerToCreate == "headoverheels" )
+                        {
+                                behaviorOfPlayer = "behavior of Head over Heels";
+                        }
+                        else if ( nameOfPlayerToCreate == "head" )
+                        {
+                                behaviorOfPlayer = "behavior of Head";
+                        }
+                        else if ( nameOfPlayerToCreate == "heels" )
+                        {
+                                behaviorOfPlayer = "behavior of Heels";
+                        }
+
+                        player->assignBehavior( behaviorOfPlayer, reinterpret_cast< void * >( itemDataManager ) );
 
                         player->setDirectionOfEntry( entry );
 

@@ -62,7 +62,6 @@ public:
          */
         PlayerItem * createPlayerInTheSameRoom ( bool justEntered,
                                                         const std::string& nameOfPlayer,
-                                                        const std::string& behavior,
                                                         int x, int y, int z,
                                                         bool withItem,
                                                         const Direction& direction, const Direction& entry = JustWait ) ;
@@ -75,7 +74,6 @@ public:
          */
         PlayerItem * createPlayerInRoom ( Room* room, bool justEntered,
                                                         const std::string& nameOfPlayer,
-                                                        const std::string& behavior,
                                                         int x, int y, int z,
                                                         bool withItem,
                                                         const Direction& direction, const Direction& entry = JustWait );
