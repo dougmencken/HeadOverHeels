@@ -242,12 +242,12 @@
 
   <items>
     <item x="0" y="1" z="0">
-      <label>penitentiary-wall-x-2</label>
+      <label>penitentiary-wall-y-1</label>
       <direction>none</direction>
       <type>griditem</type>
     </item>
     <item x="0" y="2" z="0">
-      <label>penitentiary-wall-x-2</label>
+      <label>penitentiary-wall-y-1</label>
       <direction>none</direction>
       <type>griditem</type>
     </item>
@@ -257,12 +257,12 @@
       <type>griditem</type>
     </item>
     <item x="0" y="4" z="0">
-      <label>penitentiary-wall-x-2</label>
+      <label>penitentiary-wall-y-1</label>
       <direction>none</direction>
       <type>griditem</type>
     </item>
     <item x="0" y="5" z="0">
-      <label>penitentiary-wall-x-2</label>
+      <label>penitentiary-wall-y-1</label>
       <direction>none</direction>
       <type>griditem</type>
     </item>
@@ -272,12 +272,12 @@
       <type>griditem</type>
     </item>
     <item x="0" y="7" z="0">
-      <label>penitentiary-wall-x-2</label>
+      <label>penitentiary-wall-y-1</label>
       <direction>none</direction>
       <type>griditem</type>
     </item>
     <item x="0" y="8" z="0">
-      <label>penitentiary-wall-x-2</label>
+      <label>penitentiary-wall-y-1</label>
       <direction>none</direction>
       <type>griditem</type>
     </item>
