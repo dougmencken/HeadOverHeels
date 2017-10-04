@@ -26,12 +26,14 @@ public:
 
         SelectLanguage( BITMAP* picture, const std::string& language ) ;
 
+        std::string getNameOfAction () const {  return "SelectLanguage" ;  }
+
+protected:
+
         /**
          * Set the language of the game
          */
-        void doIt () ;
-
-        std::string getNameOfAction () const {  return "SelectLanguage" ;  }
+        virtual void doAction () ;
 
 private:
 

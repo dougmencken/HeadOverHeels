@@ -115,7 +115,7 @@ public:
 
         Action * getActionOfScreen () const {  return actionOfScreen ;  }
 
-        void setEscapeAction ( Action * action ) {  escapeAction = action ;  }
+        void setEscapeAction ( Action * action ) ;
 
         Action * getEscapeAction () const {  return escapeAction ;  }
 

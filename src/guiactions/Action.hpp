@@ -22,13 +22,27 @@ class Action
 
 public:
 
-        Action( ) { }
+        Action( ) : begin( false ), done( false ) { }
 
         virtual ~Action( ) { }
 
-        virtual void doIt () = 0 ;
+        void doIt () {  begin = true ;  doAction() ;  done = true ;  }
 
         virtual std::string getNameOfAction () const = 0 ;
+
+        bool hasBegun() {  return begin ;  }
+
+        bool isDone() {  return done ;  }
+
+protected:
+
+        virtual void doAction () = 0 ;
+
+private:
+
+        bool begin ;
+
+        bool done ;
 
 };
 
@@ -37,9 +51,11 @@ class DoNothing : public Action
 
 public:
 
-        void doIt () {  }
-
         std::string getNameOfAction () const {  return "DoNothing" ;  }
+
+protected:
+
+        virtual void doAction () {  }
 
 };
 

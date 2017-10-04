@@ -27,7 +27,7 @@ CreateMainMenu::CreateMainMenu( BITMAP* picture ) :
 
 }
 
-void CreateMainMenu::doIt ()
+void CreateMainMenu::doAction ()
 {
         if ( ! SoundManager::getInstance()->isPlayingOgg( "music/MainTheme.ogg" ) )
         {

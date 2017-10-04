@@ -21,7 +21,7 @@ RedefineKey::RedefineKey( Menu* menu, std::string name )
 
 }
 
-void RedefineKey::doIt ()
+void RedefineKey::doAction ()
 {
         const size_t positionOfKey = 21;
 

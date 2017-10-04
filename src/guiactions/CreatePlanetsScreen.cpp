@@ -35,7 +35,7 @@ CreatePlanetsScreen::~CreatePlanetsScreen( )
 
 }
 
-void CreatePlanetsScreen::doIt ()
+void CreatePlanetsScreen::doAction ()
 {
         SoundManager::getInstance()->playOgg( "music/HeadOverHeels.ogg", /* loop */ false );
 

@@ -37,12 +37,14 @@ public:
          */
         CreateEndScreen( BITMAP* picture, unsigned int rooms, unsigned short planets ) ;
 
+        std::string getNameOfAction () const {  return "CreateEndScreen" ;  }
+
+protected:
+
         /**
          * Show summary screen
          */
-        void doIt () ;
-
-        std::string getNameOfAction () const {  return "CreateEndScreen" ;  }
+        virtual void doAction () ;
 
 private:
 

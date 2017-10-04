@@ -35,11 +35,6 @@ public:
 
         virtual ~CreatePlanetsScreen( ) ;
 
-        /**
-         * Crea la pantalla de los planetas
-         */
-        void doIt () ;
-
         std::string getNameOfAction () const {  return "CreatePlanetsScreen" ;  }
 
         void liberateBlacktooth() {  blacktoothFree = true ;  }
@@ -51,6 +46,13 @@ public:
         void liberateByblos() {  byblosFree = true ;  }
 
         void liberateSafari() {  safariFree = true ;  }
+
+protected:
+
+        /**
+         * Crea la pantalla de los planetas
+         */
+        virtual void doAction () ;
 
 private:
 

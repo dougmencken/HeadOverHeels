@@ -16,7 +16,7 @@ SaveGame::SaveGame( BITMAP* picture, int slot )
 
 }
 
-void SaveGame::doIt ()
+void SaveGame::doAction ()
 {
         clear_keybuf();
 

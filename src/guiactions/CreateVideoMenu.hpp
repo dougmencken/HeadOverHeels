@@ -37,12 +37,14 @@ public:
          */
         CreateVideoMenu( BITMAP* picture ) ;
 
+        std::string getNameOfAction () const {  return "CreateVideoMenu" ;  }
+
+protected:
+
         /**
          * Show this menu
          */
-        void doIt () ;
-
-        std::string getNameOfAction () const {  return "CreateVideoMenu" ;  }
+        virtual void doAction () ;
 
 private:
 

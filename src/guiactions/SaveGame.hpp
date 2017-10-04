@@ -35,12 +35,14 @@ public:
          */
         SaveGame( BITMAP* picture, int slot ) ;
 
+        std::string getNameOfAction () const {  return "SaveGame" ;  }
+
+protected:
+
         /**
          * Save the game and back to play
          */
-        void doIt () ;
-
-        std::string getNameOfAction () const {  return "SaveGame" ;  }
+        virtual void doAction () ;
 
 private:
 

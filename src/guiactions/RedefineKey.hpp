@@ -39,9 +39,11 @@ public:
         */
         RedefineKey( Menu* menu, std::string name ) ;
 
-        void doIt () ;
-
         std::string getNameOfAction () const {  return "RedefineKey" ;  }
+
+protected:
+
+        virtual void doAction () ;
 
 private:
 

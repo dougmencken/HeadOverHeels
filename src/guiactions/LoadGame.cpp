@@ -16,7 +16,7 @@ LoadGame::LoadGame( BITMAP* picture, int slot )
 
 }
 
-void LoadGame::doIt ()
+void LoadGame::doAction ()
 {
         std::stringstream ss;
         isomot::GameManager* gameManager = isomot::GameManager::getInstance();

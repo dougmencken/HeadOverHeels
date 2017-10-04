@@ -18,7 +18,7 @@ ContinueGame::ContinueGame( BITMAP* picture, bool gameInProgress )
 
 }
 
-void ContinueGame::doIt ()
+void ContinueGame::doAction ()
 {
         SoundManager::getInstance()->stopAnyOgg (); // or hear music of planets screen when playing after restore
 

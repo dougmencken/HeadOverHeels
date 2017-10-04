@@ -26,7 +26,7 @@ CreateListOfSavedGames::CreateListOfSavedGames( BITMAP* picture, bool isLoadMenu
 
 }
 
-void CreateListOfSavedGames::doIt ()
+void CreateListOfSavedGames::doAction ()
 {
         Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this, this->where );
         if ( screen->countWidgets() > 0 )

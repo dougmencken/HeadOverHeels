@@ -39,12 +39,14 @@ public:
 
         ~CreateLanguageMenu( ) ;
 
+        std::string getNameOfAction () const {  return "CreateLanguageMenu" ;  }
+
+protected:
+
         /**
          * Show the language menu
          */
-        void doIt () ;
-
-        std::string getNameOfAction () const {  return "CreateLanguageMenu" ;  }
+        virtual void doAction () ;
 
 private:
 
@@ -53,8 +55,6 @@ private:
          * @param fileName Archivo XML con los textos empleados en el juego
          */
         void parse ( const std::string& fileName ) ;
-
-private:
 
         /**
          * Imagen donde se dibujará la interfaz gráfica

@@ -14,7 +14,7 @@ SelectLanguage::SelectLanguage( BITMAP* picture, const std::string& language )
 
 }
 
-void SelectLanguage::doIt ()
+void SelectLanguage::doAction ()
 {
         GuiManager::getInstance()->setLanguage( language );
 

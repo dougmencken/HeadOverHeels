@@ -27,7 +27,7 @@ CreateMenuOfGraphicSets::CreateMenuOfGraphicSets( BITMAP* picture, Action* previ
         menuOfGraphicSets->setVerticalOffset( 50 );
 }
 
-void CreateMenuOfGraphicSets::doIt ()
+void CreateMenuOfGraphicSets::doAction ()
 {
         const size_t positionOfSecondColumn = 18;
 

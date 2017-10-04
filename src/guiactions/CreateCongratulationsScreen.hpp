@@ -37,12 +37,14 @@ public:
 
         virtual ~CreateCongratulationsScreen( ) ;
 
+        std::string getNameOfAction () const {  return "CreateCongratulationsScreen" ;  }
+
+protected:
+
         /**
          * Crea la pantalla con el texto
          */
-        void doIt () ;
-
-        std::string getNameOfAction () const {  return "CreateCongratulationsScreen" ;  }
+        virtual void doAction () ;
 
 private:
 

@@ -34,12 +34,14 @@ public:
          */
         CreateKeyboardMenu( BITMAP* picture ) ;
 
+        std::string getNameOfAction () const {  return "CreateKeyboardMenu" ;  }
+
+protected:
+
         /**
          * Show the keys menu
          */
-        void doIt () ;
-
-        std::string getNameOfAction () const {  return "CreateKeyboardMenu" ;  }
+        virtual void doAction () ;
 
 private:
 

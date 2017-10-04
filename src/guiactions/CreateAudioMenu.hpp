@@ -37,12 +37,14 @@ public:
          */
         CreateAudioMenu( BITMAP* picture ) ;
 
+        std::string getNameOfAction () const {  return "CreateAudioMenu" ;  }
+
+protected:
+
         /**
          * Show the audio menu
          */
-        void doIt () ;
-
-        std::string getNameOfAction () const {  return "CreateAudioMenu" ;  }
+        virtual void doAction () ;
 
 private:
 

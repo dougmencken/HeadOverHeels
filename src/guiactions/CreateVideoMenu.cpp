@@ -25,7 +25,7 @@ CreateVideoMenu::CreateVideoMenu( BITMAP* picture ) :
 
 }
 
-void CreateVideoMenu::doIt ()
+void CreateVideoMenu::doAction ()
 {
         const size_t positionOfSetting = 20;
 
@@ -41,8 +41,6 @@ void CreateVideoMenu::doIt ()
         Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this, this->where );
         if ( screen->countWidgets() == 0 )
         {
-                screen->setEscapeAction( new CreateMainMenu( this->where ) );
-
                 screen->placeHeadAndHeels( /* icons */ false, /* copyrights */ false );
 
                 std::string stringFullscreenSpaced ( textFullscreen->getText() );
@@ -76,6 +74,9 @@ void CreateVideoMenu::doIt ()
 
                 screen->addWidget( listOfOptions );
         }
+
+        screen->setEscapeAction( new CreateMainMenu( this->where ) );
+
         if ( screen->getKeyHandler() == 0 )
         {
                 screen->setKeyHandler( listOfOptions );
@@ -85,7 +86,7 @@ void CreateVideoMenu::doIt ()
 
         clear_keybuf();
 
-        while ( true )
+        while ( ! screen->getEscapeAction()->hasBegun() )
         {
                 if ( keypressed() )
                 {
@@ -151,8 +152,8 @@ void CreateVideoMenu::doIt ()
                                 listOfOptions->redraw ();
                         }
 
-                        // No te comas la CPU
-                        // Do not eat the CPU
+                        // no te comas la CPU
+                        // do not eat the CPU
                         sleep( 25 );
                 }
         }

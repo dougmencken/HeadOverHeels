@@ -32,7 +32,7 @@ CreateLanguageMenu::~CreateLanguageMenu( )
         this->texts.clear();
 }
 
-void CreateLanguageMenu::doIt ()
+void CreateLanguageMenu::doAction ()
 {
         Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this, this->where );
         if ( screen->countWidgets() == 0 )

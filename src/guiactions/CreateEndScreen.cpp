@@ -22,7 +22,7 @@ CreateEndScreen::CreateEndScreen( BITMAP* picture, unsigned int rooms, unsigned 
 {
 }
 
-void CreateEndScreen::doIt ()
+void CreateEndScreen::doAction ()
 {
         SoundManager::getInstance()->playOgg( "music/MainTheme.ogg", /* loop */ true );
 

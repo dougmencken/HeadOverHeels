@@ -36,14 +36,16 @@ public:
          */
         CreateListOfSavedGames( BITMAP* picture, bool isLoadMenu ) ;
 
-        /**
-         * Show the saved games
-         */
-        void doIt () ;
-
         std::string getNameOfAction () const {  return "CreateListOfSavedGames" ;  }
 
         bool isLoadMenu () {  return this->isMenuForLoad ;  }
+
+protected:
+
+        /**
+         * Show the saved games
+         */
+        virtual void doAction () ;
 
 private:
 
@@ -54,8 +56,6 @@ private:
          * @param planets Devuelve el número de planetas liberados
          */
         void readSomeInfoFromGamefile( const std::string& fileName, short* rooms, short* planets ) ;
-
-private:
 
         BITMAP* where ;
 

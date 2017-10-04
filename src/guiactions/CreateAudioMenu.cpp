@@ -26,7 +26,7 @@ CreateAudioMenu::CreateAudioMenu( BITMAP* picture ) :
 
 }
 
-void CreateAudioMenu::doIt ()
+void CreateAudioMenu::doAction ()
 {
         const size_t positionOfValue = 20;
 

@@ -26,13 +26,15 @@ public:
 
         virtual ~PlaySound( ) { }
 
-        void doIt ()
+        std::string getNameOfAction () const {  return "PlaySound" ;  }
+
+protected:
+
+        virtual void doAction ()
         {
                 isomot::SoundManager::getInstance()->stopEverySound (); //stop ( "gui", whichSound );
                 isomot::SoundManager::getInstance()->play ( "gui", whichSound, /* loop */ false );
         }
-
-        std::string getNameOfAction () const {  return "PlaySound" ;  }
 
 private:
 

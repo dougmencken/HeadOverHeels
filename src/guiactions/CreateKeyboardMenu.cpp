@@ -22,7 +22,7 @@ CreateKeyboardMenu::CreateKeyboardMenu( BITMAP* picture ) :
 
 }
 
-void CreateKeyboardMenu::doIt ()
+void CreateKeyboardMenu::doAction ()
 {
         const size_t positionOfKey = 21;
 

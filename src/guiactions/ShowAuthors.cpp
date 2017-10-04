@@ -26,7 +26,7 @@ ShowAuthors::ShowAuthors( BITMAP* picture )
 
 }
 
-void ShowAuthors::doIt ()
+void ShowAuthors::doAction ()
 {
         ///SoundManager::getInstance()->stopAnyOgg();
         SoundManager::getInstance()->playOgg( "music/CreditsTheme.ogg", /* loop */ true );
@@ -34,8 +34,6 @@ void ShowAuthors::doIt ()
         Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this, this->where );
         if ( screen->countWidgets() == 0 )
         {
-                screen->setEscapeAction( new CreateMainMenu( this->where ) );
-
                 LanguageText* langString = 0;
                 LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
 
@@ -60,6 +58,8 @@ void ShowAuthors::doIt ()
                 linesOfCredits->moveTo( linesOfCredits->getX(), initialY );
         }
 
+        screen->setEscapeAction( new CreateMainMenu( this->where ) );
+
         GuiManager::getInstance()->changeScreen( screen );
 
         Picture* widgetForLoadingScreen = 0;
@@ -72,9 +72,7 @@ void ShowAuthors::doIt ()
 
         fprintf( stdout, "height of credits-text is %d\n", heightOfCredits );
 
-        bool exit = false ;
-
-        while ( ! exit )
+        while ( ! screen->getEscapeAction()->hasBegun() )
         {
                 int yNow = linesOfCredits->getY() - 1;
 
@@ -132,7 +130,11 @@ void ShowAuthors::doIt ()
                         sleep( 20 );
                 }
 
-                exit = ( keypressed() && key[ KEY_ESC ] );
+                if ( keypressed() && key[ KEY_ESC ] )
+                {
+                        clear_keybuf();
+                        screen->handleKey( KEY_ESC << 8 );
+                }
         }
 
         if ( widgetForLoadingScreen != 0 )

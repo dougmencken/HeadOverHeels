@@ -30,12 +30,14 @@ public:
          */
         ContinueGame( BITMAP* picture, bool gameInProgress ) ;
 
+        std::string getNameOfAction () const {  return "ContinueGame" ;  }
+
+protected:
+
         /**
          * Begin the game
          */
-        void doIt () ;
-
-        std::string getNameOfAction () const {  return "ContinueGame" ;  }
+        virtual void doAction () ;
 
 private:
 

@@ -39,12 +39,14 @@ public:
          */
         CreateMenuOfGraphicSets( BITMAP * picture, Action * previous ) ;
 
+        std::string getNameOfAction () const {  return "CreateMenuOfGraphicSets" ;  }
+
+protected:
+
         /**
          * Show this menu
          */
-        void doIt () ;
-
-        std::string getNameOfAction () const {  return "CreateMenuOfGraphicSets" ;  }
+        virtual void doAction () ;
 
 private:
 

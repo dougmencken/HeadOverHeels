@@ -24,11 +24,15 @@ public:
 
         ExitApplication( );
 
-        void doIt () {  bye () ;  }
+        std::string getNameOfAction () const {  return "ExitApplication" ;  }
+
+protected:
+
+        virtual void doAction () {  bye () ;  }
+
+private:
 
         void bye () ;
-
-        std::string getNameOfAction () const {  return "ExitApplication" ;  }
 
 };
 

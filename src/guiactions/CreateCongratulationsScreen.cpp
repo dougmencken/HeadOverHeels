@@ -27,7 +27,7 @@ CreateCongratulationsScreen::~CreateCongratulationsScreen( )
 
 }
 
-void CreateCongratulationsScreen::doIt ()
+void CreateCongratulationsScreen::doAction ()
 {
         LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
         LanguageText* langString = 0;

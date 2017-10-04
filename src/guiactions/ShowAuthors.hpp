@@ -32,9 +32,11 @@ public:
 
         ShowAuthors( BITMAP* picture ) ;
 
-        void doIt () ;
-
         std::string getNameOfAction () const {  return "ShowAuthors" ;  }
+
+protected:
+
+        virtual void doAction () ;
 
 private:
 

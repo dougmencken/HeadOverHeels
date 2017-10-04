@@ -35,6 +35,12 @@ Screen::~Screen( )
         delete pictureOfHeels ;
 }
 
+void Screen::setEscapeAction ( Action * action )
+{
+        delete escapeAction ;
+        escapeAction = action ;
+}
+
 void Screen::refreshBackground ()
 {
         if ( backgroundPicture != 0 )

@@ -35,13 +35,14 @@ public:
          */
         LoadGame( BITMAP* picture, int slot ) ;
 
+        std::string getNameOfAction () const {  return "LoadGame" ;  }
+
+protected:
 
         /**
          * Load the game and begin it
          */
-        void doIt () ;
-
-        std::string getNameOfAction () const {  return "LoadGame" ;  }
+        virtual void doAction () ;
 
 private:
 

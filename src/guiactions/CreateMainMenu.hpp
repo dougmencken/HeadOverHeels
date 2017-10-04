@@ -36,12 +36,14 @@ public:
          */
         CreateMainMenu( BITMAP* picture ) ;
 
+        std::string getNameOfAction () const {  return "CreateMainMenu" ;  }
+
+protected:
+
         /**
          * Show the main menu of the game
          */
-        void doIt () ;
-
-        std::string getNameOfAction () const {  return "CreateMainMenu" ;  }
+        virtual void doAction () ;
 
 private:
 
