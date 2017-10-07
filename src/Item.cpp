@@ -130,37 +130,31 @@ bool Item::animate()
         return cycle;
 }
 
-void Item::changeItemData( ItemData* itemData, const Direction& direction, const std::string& initiatedBy )
+void Item::changeItemData( ItemData* itemData, const std::string& initiatedBy )
 {
         std::cout << "metamorphosis of data for item with label \"" << getLabel()
                         << "\" to data of \"" << itemData->label
                         << "\" initiated by \"" << initiatedBy << "\"" << std::endl ;
 
         this->dataOfItem = itemData;
-        this->direction = direction;
         this->frameIndex = 0;
         this->backwardMotion = false;
 }
 
 void Item::changeDirection( const Direction& direction )
 {
-        // Se cambia la dirección sólo si el elemento tiene distintos fotogramas para representar
-        // distintas direcciones
+        // direction is changed only when item has different frames for different directions
         if ( dataOfItem->directionFrames > 1 )
         {
-                // Cálculo del fotograma correspondiente a la nueva dirección
+                // get frame for new direction
                 unsigned int currentFrame = ( ( dataOfItem->motion.size() - dataOfItem->extraFrames ) / dataOfItem->directionFrames ) * direction;
 
-                // Si la imagen actual es distinta a la nueva imagen entonces se cambia
                 if ( this->rawImage != 0 && currentFrame < dataOfItem->motion.size() && this->rawImage != dataOfItem->motion[ currentFrame ] )
                 {
-                        // Actualiza la dirección
                         this->direction = direction;
 
-                        // Actualiza la imagen
                         changeImage( dataOfItem->motion[ currentFrame ] );
 
-                        // Si cambia la imagen entonces cambia la sombra
                         if ( this->shadow != 0 )
                                 changeShadow( dataOfItem->shadows[ currentFrame ] );
                 }

@@ -204,6 +204,14 @@ BITMAP* Isomot::update()
                 key[ KEY_MINUS ] = 0;
         }
 
+        if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_R ] )
+        {
+                playTuneForScenery( activeRoom->getScenery () );
+                activeRoom = mapManager->rebuildRoom();
+
+                key[ KEY_R ] = 0;
+        }
+
         if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_J ] )
         {
                 PlayerItem* activePlayer = activeRoom->getMediator()->getActivePlayer();
@@ -358,11 +366,7 @@ BITMAP* Isomot::update()
 
                         if ( activeRoom != 0 )
                         {
-                                std::string scenery = activeRoom->getScenery ();
-                                if ( scenery != "" )
-                                {
-                                        SoundManager::getInstance()->playOgg ( "music/" + scenery + ".ogg", /* loop */ false );
-                                }
+                                playTuneForScenery( activeRoom->getScenery () );
                         }
                 }
         }
@@ -402,6 +406,14 @@ BITMAP* Isomot::update()
         }
 
         return this->view;
+}
+
+void Isomot::playTuneForScenery ( const std::string& scenery )
+{
+        if ( scenery != "" )
+        {
+                SoundManager::getInstance()->playOgg ( "music/" + scenery + ".ogg", /* loop */ false );
+        }
 }
 
 void Isomot::updateEndRoom()

@@ -20,7 +20,6 @@ PlayerItem::PlayerItem( ItemData* itemData, int x, int y, int z, const Direction
         , shield( 0 )
         , howManyDoughnuts( 0 )
         , exit( NoExit )
-        , orientation( NoDirection )
         , entry( JustWait )
         , shieldTimer( 0 )
         , shieldTime( 25.0 )
@@ -37,7 +36,6 @@ PlayerItem::PlayerItem( const PlayerItem& playerItem )
         , tools( playerItem.tools )
         , howManyDoughnuts( playerItem.howManyDoughnuts )
         , exit( playerItem.exit )
-        , orientation( playerItem.orientation )
         , entry( playerItem.entry )
         , shieldTimer( 0 )
         , shieldTime( playerItem.shieldTime )
@@ -50,6 +48,44 @@ PlayerItem::~PlayerItem()
         if ( this->shieldTimer != 0 )
         {
                 delete shieldTimer;
+        }
+}
+
+void PlayerItem::setDirectionOfExit ( const Direction& direction )
+{
+        this->exit = direction;
+
+        switch ( direction )
+        {
+                case North:
+                case South:
+                case East:
+                case West:
+                        setDirection( direction );
+                        break;
+
+                case Northeast:
+                case Northwest:
+                        setDirection( North );
+                        break;
+
+                case Southeast:
+                case Southwest:
+                        setDirection( South );
+                        break;
+
+                case Eastnorth:
+                case Eastsouth:
+                        setDirection( East );
+                        break;
+
+                case Westnorth:
+                case Westsouth:
+                        setDirection( West );
+                        break;
+
+                default:
+                        ;
         }
 }
 

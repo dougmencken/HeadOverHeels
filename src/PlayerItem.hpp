@@ -22,6 +22,7 @@ namespace isomot
 class ItemData ;
 class GameManager ;
 
+
 /**
  * Item of player controller by the user
  */
@@ -230,11 +231,6 @@ private:
         Direction exit ;
 
         /**
-         * Direction player looks at when it leaves room
-         */
-        Direction orientation ;
-
-        /**
          * How player enters room: through door, or via teleport, or going below floor or above ceiling
          */
         Direction entry ;
@@ -310,16 +306,9 @@ public:
         /**
          * Direction of player when it leaves room
          */
-        void setDirectionOfExit ( const Direction& direction ) {  this->exit = direction ;  }
+        void setDirectionOfExit ( const Direction& direction ) ;
 
         Direction getDirectionOfExit () const {  return this->exit ;  }
-
-        /**
-         * Direction player looks at when it leaves room
-         */
-        void setOrientation ( const Direction& direction ) {  this->orientation = direction ;  }
-
-        Direction getOrientation () const {  return this->orientation ;  }
 
         /**
          * How player enters room

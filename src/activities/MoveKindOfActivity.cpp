@@ -288,7 +288,6 @@ void MoveKindOfActivity::ascent( FreeItem* freeItem, int z )
                         if ( playerItem != 0 && playerItem->getZ() >= MaxLayers * LayerHeight )
                         {
                                 playerItem->setDirectionOfExit( Up );
-                                playerItem->setOrientation( playerItem->getDirection() );
                         }
                 }
         }

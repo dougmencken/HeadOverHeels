@@ -66,7 +66,7 @@ public:
         /**
          * Change data of item preserving its label. Used when there’s a metamorphosis such as when player teleports
          */
-        void changeItemData ( ItemData * itemData, const Direction& direction, const std::string& initiatedBy ) ;
+        void changeItemData ( ItemData * itemData, const std::string& initiatedBy ) ;
 
         /**
          * Cambia la dirección del elemento y establece el fotograma adecuado

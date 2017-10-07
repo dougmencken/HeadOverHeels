@@ -315,7 +315,6 @@ void UserControlled::jump( PlayerItem * player )
         if ( player->getZ() >= MaxLayers * LayerHeight )
         {
                 player->setDirectionOfExit( Up );
-                player->setOrientation( player->getDirection() );
         }
 }
 
@@ -390,11 +389,10 @@ void UserControlled::wayInTeletransport( PlayerItem * player )
         switch ( activity )
         {
                 case BeginWayInTeletransport:
-                        // preserve orientation of player
-                        player->setOrientation( player->getDirection() );
                         // change to bubbles preserving label of player
                         playerData = player->getDataOfFreeItem() ;
-                        player->changeItemData( itemDataManager->findItemByLabel( labelOfTransitionViaTeleport ), NoDirection, "begin way in teletransport" );
+                        player->changeItemData( itemDataManager->findItemByLabel( labelOfTransitionViaTeleport ), "begin way in teletransport" );
+
                         // backward animation of bubbles
                         player->setBackwardMotion();
 
@@ -407,9 +405,7 @@ void UserControlled::wayInTeletransport( PlayerItem * player )
                         if ( player->animate() )
                         {
                                 // back to original appearance of player
-                                player->changeItemData( playerData, NoDirection, "way in teletransport" );
-                                // restore original orientation
-                                player->changeDirection( player->getOrientation() );
+                                player->changeItemData( playerData, "way in teletransport" );
 
                                 activity = Wait;
                         }
@@ -425,10 +421,9 @@ void UserControlled::wayOutTeletransport( PlayerItem * player )
         switch ( activity )
         {
                 case BeginWayOutTeletransport:
-                        // preserve orientation of player
-                        player->setOrientation( player->getDirection() );
                         // change to bubbles retaining player’s label
-                        player->changeItemData( itemDataManager->findItemByLabel( labelOfTransitionViaTeleport ), NoDirection, "begin way out teletransport" );
+                        player->changeItemData( itemDataManager->findItemByLabel( labelOfTransitionViaTeleport ), "begin way out teletransport" );
+
                         // begin teleportation
                         activity = WayOutTeletransport;
                         break;
@@ -457,7 +452,7 @@ void UserControlled::collideWithMortalItem( PlayerItem* player )
                         if ( player->getShieldTime() == 0 )
                         {
                                 // change to bubbles retaining player’s label
-                                player->changeItemData( itemDataManager->findItemByLabel( labelOfTransitionViaTeleport ), NoDirection, "collide with mortal item" );
+                                player->changeItemData( itemDataManager->findItemByLabel( labelOfTransitionViaTeleport ), "collide with mortal item" );
 
                                 activity = Vanish;
                         }

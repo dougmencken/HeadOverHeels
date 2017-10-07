@@ -296,7 +296,7 @@ Room* MapManager::changeRoom( const Direction& exit )
         const int exitY = oldItemOfRoamer->getY ();
         const int exitZ = oldItemOfRoamer->getZ ();
 
-        const Direction exitOrientation = oldItemOfRoamer->getOrientation ();
+        const Direction exitOrientation = oldItemOfRoamer->getDirection ();
 
         // get limits of room
         // there’s possibility to exit and to enter new room in cases when player travels through floor, roof or via teletransport
@@ -412,7 +412,7 @@ Room* MapManager::rebuildRoom()
                                 removeRoom( roomToForget );
                         }
 
-                        direction = player->getOrientation();
+                        direction = player->getDirection();
 
                         Direction entry = player->getDirectionOfEntry();
 

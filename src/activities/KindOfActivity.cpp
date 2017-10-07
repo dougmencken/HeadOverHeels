@@ -149,62 +149,50 @@ void KindOfActivity::propagateActivityToAdjacentItems( Item * sender, const Acti
                         {
                                 case NorthBorder:
                                         player->setDirectionOfExit( North );
-                                        player->setOrientation( North );
                                         break;
 
                                 case SouthBorder:
                                         player->setDirectionOfExit( South );
-                                        player->setOrientation( South );
                                         break;
 
                                 case EastBorder:
                                         player->setDirectionOfExit( East );
-                                        player->setOrientation( East );
                                         break;
 
                                 case WestBorder:
                                         player->setDirectionOfExit( West );
-                                        player->setOrientation( West );
                                         break;
 
                                 case NortheastBorder:
                                         player->setDirectionOfExit( Northeast );
-                                        player->setOrientation( North );
                                         break;
 
                                 case NorthwestBorder:
                                         player->setDirectionOfExit( Northwest );
-                                        player->setOrientation( North );
                                         break;
 
                                 case SoutheastBorder:
                                         player->setDirectionOfExit( Southeast );
-                                        player->setOrientation( South );
                                         break;
 
                                 case SouthwestBorder:
                                         player->setDirectionOfExit( Southwest );
-                                        player->setOrientation( South );
                                         break;
 
                                 case EastnorthBorder:
                                         player->setDirectionOfExit( Eastnorth );
-                                        player->setOrientation( East );
                                         break;
 
                                 case EastsouthBorder:
                                         player->setDirectionOfExit( Eastsouth );
-                                        player->setOrientation( East );
                                         break;
 
                                 case WestnorthBorder:
                                         player->setDirectionOfExit( Westnorth );
-                                        player->setOrientation( West );
                                         break;
 
                                 case WestsouthBorder:
                                         player->setDirectionOfExit( Westsouth );
-                                        player->setOrientation( West );
                                         break;
 
                                 default:

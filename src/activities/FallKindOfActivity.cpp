@@ -118,12 +118,14 @@ bool FallKindOfActivity::fall( Behavior * behavior )
                                 if ( mediator->getRoom()->getKindOfFloor() == "none" )
                                 {
                                         playerItem->setDirectionOfExit( Down );
-                                        playerItem->setOrientation( playerItem->getDirection() );
                                 }
                                 else
                                 if ( mediator->getRoom()->getKindOfFloor() == "mortal" )
                                 {
-                                        playerItem->getBehavior()->changeActivityOfItem( MeetMortalItem );
+                                        if ( ! GameManager::getInstance()->isImmuneToCollisionsWithMortalItems () )
+                                        {
+                                                playerItem->getBehavior()->changeActivityOfItem( MeetMortalItem );
+                                        }
                                 }
                                 else
                                 /* if ( mediator->getRoom()->getKindOfFloor() == "plain" ) */

@@ -67,6 +67,8 @@ public:
 
 private:
 
+        void playTuneForScenery ( const std::string& scenery ) ;
+
         void offVidasInfinitas () ;
 
         void offInviolability () ;
