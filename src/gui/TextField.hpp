@@ -11,6 +11,7 @@
 #ifndef TextField_hpp_
 #define TextField_hpp_
 
+#include <string>
 #include <list>
 #include <allegro.h>
 #include "Widget.hpp"
@@ -64,6 +65,10 @@ public:
         void moveTo ( int x, int y ) ;
 
         unsigned int getHeightOfField() {  return heightOfField ;  }
+
+        Alignment getAlignment () {  return alignment ;  }
+
+        void setAlignment( const Alignment& newAlignment ) ;
 
 private:
 

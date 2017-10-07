@@ -87,6 +87,32 @@ void ShowAuthors::doAction ()
                         }
                 }
 
+                if ( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_LEFT ] )
+                {
+                        linesOfCredits->moveTo( linesOfCredits->getX () - 1, linesOfCredits->getY () );
+                }
+                if ( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_RIGHT ] )
+                {
+                        linesOfCredits->moveTo( linesOfCredits->getX () + 1, linesOfCredits->getY () );
+                }
+                if ( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_0_PAD ] )
+                {
+                        linesOfCredits->moveTo( 0, linesOfCredits->getY () );
+                }
+
+                if ( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_L ] )
+                {
+                        linesOfCredits->setAlignment( LeftAlignment );
+                }
+                if ( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_C ] )
+                {
+                        linesOfCredits->setAlignment( CenterAlignment );
+                }
+                if ( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_R ] )
+                {
+                        linesOfCredits->setAlignment( RightAlignment );
+                }
+
                 if ( yNow <= whenToReloop )
                 {
                         // loop it

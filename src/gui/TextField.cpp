@@ -34,6 +34,8 @@ void TextField::draw( BITMAP* where )
 
 void TextField::addLine( const std::string& text, const std::string& font, const std::string& color )
 {
+        Label* label = new Label( text, font, color );
+
         int posX = 0;
 
         switch ( this->alignment )
@@ -42,25 +44,45 @@ void TextField::addLine( const std::string& text, const std::string& font, const
                         break;
 
                 case gui::CenterAlignment:
-                {
-                        std::auto_ptr< Label > label( new Label( text ) );
-                        posX = ( this->width - this->getX() - label->getWidth() ) >> 1;
-                }
+                        posX = ( this->width - label->getWidth() ) >> 1;
                         break;
 
                 case gui::RightAlignment:
-                {
-                        std::auto_ptr< Label > label( new Label( text ) );
                         posX = this->width - label->getWidth();
-                }
                         break;
         }
 
-        Label* label = new Label( text, font, color );
-        label->moveTo( posX, this->getY () + heightOfField );
+        label->moveTo( posX + this->getX (), this->getY () + heightOfField );
         this->heightOfField += label->getHeight();
 
         lines.push_back( label );
+}
+
+void TextField::setAlignment( const Alignment& newAlignment )
+{
+        for ( std::list< Label * >::iterator i = this->lines.begin (); i != this->lines.end (); ++i )
+        {
+                Label* label = ( *i );
+
+                int offsetX = 0;
+                switch ( newAlignment )
+                {
+                        case gui::CenterAlignment:
+                                offsetX = ( this->width - label->getWidth() ) >> 1;
+                                break;
+
+                        case gui::RightAlignment:
+                                offsetX = this->width - label->getWidth();
+                                break;
+
+                        default:
+                                break;
+                }
+
+                label->moveTo( offsetX + this->getX (), label->getY () );
+        }
+
+        this->alignment = newAlignment;
 }
 
 void TextField::moveTo( int x, int y )
