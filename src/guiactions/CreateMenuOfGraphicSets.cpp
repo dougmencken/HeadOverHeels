@@ -70,6 +70,15 @@ void CreateMenuOfGraphicSets::doAction ()
                 screen->setKeyHandler( menuOfGraphicSets );
         }
 
+        std::list< Label* > labels = menuOfGraphicSets->getEveryOption ();
+        for ( std::list< Label * >::iterator il = labels.begin (); il != labels.end (); ++il )
+        {
+                if ( ( *il )->getColor() == "yellow" )
+                {
+                        menuOfGraphicSets->setActiveOption( *il );
+                }
+        }
+
         gui::GuiManager::getInstance()->changeScreen( screen );
 
         clear_keybuf();
@@ -101,10 +110,10 @@ void CreateMenuOfGraphicSets::doAction ()
 
                                                 gui::GuiManager::getInstance()->refreshScreens ();
 
-                                                std::list < Label * > everySet = menuOfGraphicSets->getEveryOption ();
-                                                for ( std::list < Label * >::iterator i = everySet.begin (); i != everySet.end (); ++i )
+                                                std::list< Label * > everySet = menuOfGraphicSets->getEveryOption ();
+                                                for ( std::list< Label* >::iterator is = everySet.begin (); is != everySet.end (); ++is )
                                                 {
-                                                        ( * i )->changeFontAndColor( ( * i )->getFontName (), "cyan" );
+                                                        ( * is )->changeFontAndColor( ( * is )->getFontName (), "cyan" );
                                                 }
                                                 menuOfGraphicSets->getActiveOption()->changeFontAndColor( menuOfGraphicSets->getActiveOption()->getFontName (), "yellow" );
                                         }
