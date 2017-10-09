@@ -12,6 +12,7 @@
 
 using gui::CreateEndScreen;
 using isomot::SoundManager;
+using isomot::ScreenWidth;
 
 
 CreateEndScreen::CreateEndScreen( BITMAP* picture, unsigned int rooms, unsigned short planets )
@@ -47,7 +48,7 @@ void CreateEndScreen::doAction ()
         ss.str( std::string() );
         ss << score;
         label = new Label( languageManager->findLanguageString( "score" )->getText() + " " + ss.str(), "regular", "yellow" );
-        label->moveTo( ( 640 - label->getWidth() ) >> 1, 300 );
+        label->moveTo( ( ScreenWidth - label->getWidth() ) >> 1, 300 );
         screen->addWidget( label );
 
         // count of visited rooms
@@ -57,7 +58,7 @@ void CreateEndScreen::doAction ()
         size_t prooms = exploredRooms.find( "%d" );
         exploredRooms.replace( prooms, 2, ss.str() );
         label = new Label( exploredRooms, "regular", "cyan" );
-        label->moveTo( ( 640 - label->getWidth() ) >> 1, 340 );
+        label->moveTo( ( ScreenWidth - label->getWidth() ) >> 1, 340 );
         screen->addWidget( label );
 
         // count of liberated planets
@@ -67,7 +68,7 @@ void CreateEndScreen::doAction ()
         size_t pplanets = liberatedPlanets.find( "%d" );
         liberatedPlanets.replace( pplanets, 2, ss.str() );
         label = new Label( liberatedPlanets, "regular", "white" );
-        label->moveTo( ( 640 - label->getWidth() ) >> 1, 380 );
+        label->moveTo( ( ScreenWidth - label->getWidth() ) >> 1, 380 );
         screen->addWidget( label );
 
         // range reached by player
@@ -77,7 +78,7 @@ void CreateEndScreen::doAction ()
         if ( score == 0 )
         {
                 label = new Label( "fix the game please", "big", "orange" );
-                label->moveTo( ( 640 - label->getWidth() ) >> 1, 180 );
+                label->moveTo( ( ScreenWidth - label->getWidth() ) >> 1, 180 );
                 screen->addWidget( label );
         }
         else
@@ -87,7 +88,7 @@ void CreateEndScreen::doAction ()
                         if ( score > bounds[ i ] )
                         {
                                 label = new Label( languageManager->findLanguageString( ranges[ i ] )->getText(), "big", "multicolor" );
-                                label->moveTo( ( 640 - label->getWidth() ) >> 1, 180 );
+                                label->moveTo( ( ScreenWidth - label->getWidth() ) >> 1, 180 );
                                 screen->addWidget( label );
 
                                 break;

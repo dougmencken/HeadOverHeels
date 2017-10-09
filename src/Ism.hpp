@@ -152,8 +152,8 @@ namespace isomot
          */
         enum WhatToDo
         {
-                Change,
-                Add
+                Change = 0,
+                Add = 1
         } ;
 
         /**

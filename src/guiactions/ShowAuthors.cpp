@@ -39,7 +39,7 @@ void ShowAuthors::doAction ()
 
                 langString = languageManager->findLanguageString( "credits-text" );
                 this->initialY = where->h;
-                this->linesOfCredits = new TextField( 0, initialY, 640, 480, CenterAlignment );
+                this->linesOfCredits = new TextField( 0, initialY, isomot::ScreenWidth, isomot::ScreenHeight, CenterAlignment );
 
                 size_t howManyLines = langString->getLinesCount() ;
                 fprintf( stdout, "credits-text has %ld lines\n", howManyLines );

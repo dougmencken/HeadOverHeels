@@ -24,6 +24,8 @@ ItemDataManager::~ItemDataManager()
 
 void ItemDataManager::loadItems ()
 {
+        freeItems() ;
+
         xercesc::XMLPlatformUtils::Initialize ();
 
         // load items from XML file, and transfer this data to the list of items
@@ -430,6 +432,7 @@ void ItemDataManager::finalizeData( ItemData& itemData )
         itemData.clearNameOfFile ();
         itemData.clearNameOfShadowFile ();
         itemData.frames.clear ();
+
         std::for_each( itemData.motion.begin(), itemData.motion.end(), destroy_bitmap );
         std::for_each( itemData.shadows.begin(), itemData.shadows.end(), destroy_bitmap );
 }

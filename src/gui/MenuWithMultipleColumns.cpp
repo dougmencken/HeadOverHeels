@@ -58,8 +58,8 @@ void MenuWithMultipleColumns::draw( BITMAP* where )
 
         // update position of the whole menu to draw it centered
         int previousX = getX (); int previousY = getY ();
-        setX( previousX + ( ( 640 - previousX ) >> 1 ) - ( getWidthOfMenu () >> 1 ) );
-        setY( previousY + ( ( 480 - previousY ) >> 1 ) - ( getHeightOfMenu() >> 1 ) );
+        setX( previousX + ( ( isomot::ScreenWidth - previousX ) >> 1 ) - ( getWidthOfMenu () >> 1 ) );
+        setY( previousY + ( ( isomot::ScreenHeight - previousY ) >> 1 ) - ( getHeightOfMenu() >> 1 ) );
 
         int dx( this->optionImage->w );
         int dy( 0 );

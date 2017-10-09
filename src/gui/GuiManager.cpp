@@ -23,6 +23,8 @@ using gui::LanguageManager;
 using gui::ConfigurationManager;
 using isomot::InputManager;
 using isomot::SoundManager;
+using isomot::ScreenWidth;
+using isomot::ScreenHeight;
 
 
 GuiManager* GuiManager::instance = 0;
@@ -59,7 +61,7 @@ GuiManager::GuiManager( ) :
         gui::FontManager::getInstance()->createFont( "big-yellow", pathToFont + "font.png", makecol( 255, 255, 50 ), true );
 
         // create image to draw interface
-        this->picture = create_bitmap_ex( 32, 640, 480 );
+        this->picture = create_bitmap_ex( 32, ScreenWidth, ScreenHeight );
 
         configurationManager = new ConfigurationManager( isomot::homePath() + "preferences.xml" );
 
@@ -230,7 +232,7 @@ void GuiManager::allegroSetup()
         set_color_depth( 32 );
 
         int magicCard = this->atFullScreen ? GFX_AUTODETECT_FULLSCREEN : GFX_AUTODETECT_WINDOWED ;
-        set_gfx_mode( magicCard, 640, 480, 0, 0 );
+        set_gfx_mode( magicCard, ScreenWidth, ScreenHeight, 0, 0 );
 
 #ifdef __WIN32
         // when application loses focus, the game will continue in background
@@ -250,7 +252,7 @@ bool GuiManager::isAtFullScreen ()
 void GuiManager::toggleFullScreenVideo ()
 {
         int magicCardToggled = this->atFullScreen ? GFX_AUTODETECT_WINDOWED : GFX_AUTODETECT_FULLSCREEN ;
-        set_gfx_mode( magicCardToggled, 640, 480, 0, 0 );
+        set_gfx_mode( magicCardToggled, ScreenWidth, ScreenHeight, 0, 0 );
         this->atFullScreen = ! this->atFullScreen ;
 
         fprintf( stdout, "video is now %s\n", ( this->atFullScreen ? "at full screen" : "in window" ) );

@@ -52,7 +52,7 @@ void CreatePlanetsScreen::doAction ()
 
         // etiqueta fija “ El Imperio Blacktooth ”
         label = new Label( languageManager->findLanguageString( "blacktooth-empire" )->getText(), "big", "yellow" );
-        label->moveTo( ( 640 - label->getWidth() ) >> 1, 0 );
+        label->moveTo( ( isomot::ScreenWidth - label->getWidth() ) >> 1, 0 );
         label->setAction( new ContinueGame( this->where, gameInProgress ) );
 
         planets->addWidget( label );

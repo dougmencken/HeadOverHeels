@@ -74,19 +74,27 @@ void Isomot::continueSavedGame ( const sgxml::players::player_sequence& playerSe
 void Isomot::prepare ()
 {
         // image where the isometric view will be drawn
+
         if ( this->view == 0 )
         {
                 this->view = create_bitmap_ex( 32, ScreenWidth, ScreenHeight );
         }
 
         // data for elements of the game
-        if ( this->itemDataManager == 0 )
+
+        if ( this->itemDataManager != 0 )
         {
-                this->itemDataManager = new ItemDataManager( "items.xml" );
-                this->itemDataManager->loadItems ();
+                // set of graphics may change between games
+                // new ItemDataManager is needed to refresh pictures of items
+                delete this->itemDataManager;
+                this->itemDataManager = 0;
         }
 
+        this->itemDataManager = new ItemDataManager( "items.xml" );
+        this->itemDataManager->loadItems ();
+
         // data for map
+
         if ( this->mapManager == 0 )
         {
                 this->mapManager = new MapManager( this, "map.xml" );

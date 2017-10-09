@@ -704,7 +704,7 @@ WhyPause GameManager::pause ()
                 {
                         gui::LanguageLine* line = text->getLine( i );
                         gui::Label label( line->text, line->font, line->color );
-                        label.moveTo( ( 640 - label.getWidth() ) >> 1, deltaY );
+                        label.moveTo( ( ScreenWidth - label.getWidth() ) >> 1, deltaY );
                         deltaY += label.getHeight() * 3 / 4;
                         acquire_screen();
                         label.draw( screen );
@@ -718,7 +718,7 @@ WhyPause GameManager::pause ()
                 {
                         gui::LanguageLine* line = text->getLine( i );
                         gui::Label label( line->text, line->font, line->color );
-                        label.moveTo( ( 640 - label.getWidth() ) >> 1, deltaY );
+                        label.moveTo( ( ScreenWidth - label.getWidth() ) >> 1, deltaY );
                         deltaY += label.getHeight() * 3 / 4;
                         acquire_screen();
                         label.draw( screen );
@@ -792,13 +792,13 @@ WhyPause GameManager::pause ()
                 gui::LanguageManager* language = gui::GuiManager::getInstance()->getLanguageManager();
 
                 text = language->findLanguageString( "confirm-quit" );
-                int deltaY = 140;
+                int deltaY = ScreenHeight / 4;
 
                 for ( size_t i = 0; i < text->getLinesCount(); i++ )
                 {
                         gui::LanguageLine* line = text->getLine( i );
                         gui::Label label( line->text, line->font, line->color );
-                        label.moveTo( ( 640 - label.getWidth() ) >> 1, deltaY );
+                        label.moveTo( ( ScreenWidth - label.getWidth() ) >> 1, deltaY );
                         deltaY += label.getHeight() * 3 / 4;
                         acquire_screen();
                         label.draw( screen );
@@ -812,7 +812,7 @@ WhyPause GameManager::pause ()
                 {
                         gui::LanguageLine* line = text->getLine( i );
                         gui::Label label( line->text, line->font, line->color );
-                        label.moveTo( ( 640 - label.getWidth() ) >> 1, deltaY );
+                        label.moveTo( ( ScreenWidth - label.getWidth() ) >> 1, deltaY );
                         deltaY += label.getHeight() * 3 / 4;
                         acquire_screen();
                         label.draw( screen );
