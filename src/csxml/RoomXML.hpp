@@ -1525,22 +1525,22 @@ namespace rxml
     void
     offsetY (const offsetY_type& x);
 
-    // bitmap
+    // picture
     //
-    typedef ::xml_schema::string bitmap_type;
-    typedef ::xsd::cxx::tree::traits< bitmap_type, char > bitmap_traits;
+    typedef ::xml_schema::string picture_type;
+    typedef ::xsd::cxx::tree::traits< picture_type, char > picture_traits;
 
-    const bitmap_type&
-    bitmap () const;
+    const picture_type&
+    picture () const;
 
-    bitmap_type&
-    bitmap ();
-
-    void
-    bitmap (const bitmap_type& x);
+    picture_type&
+    picture ();
 
     void
-    bitmap (::std::auto_ptr< bitmap_type > p);
+    picture (const picture_type& x);
+
+    void
+    picture (::std::auto_ptr< picture_type > p);
 
     // Constructors
     //
@@ -1548,7 +1548,7 @@ namespace rxml
           const y_type&,
           const offsetX_type&,
           const offsetY_type&,
-          const bitmap_type&);
+          const picture_type&);
 
     tile (const ::xercesc::DOMElement& e,
           ::xml_schema::flags f = 0,
@@ -1574,7 +1574,7 @@ namespace rxml
     ::xsd::cxx::tree::one< y_type > y_;
     ::xsd::cxx::tree::one< offsetX_type > offsetX_;
     ::xsd::cxx::tree::one< offsetY_type > offsetY_;
-    ::xsd::cxx::tree::one< bitmap_type > bitmap_;
+    ::xsd::cxx::tree::one< picture_type > picture_;
   };
 
   class wall: public ::xml_schema::type
@@ -1611,28 +1611,28 @@ namespace rxml
     void
     index (const index_type& x);
 
-    // bitmap
+    // picture
     //
-    typedef ::xml_schema::string bitmap_type;
-    typedef ::xsd::cxx::tree::traits< bitmap_type, char > bitmap_traits;
+    typedef ::xml_schema::string picture_type;
+    typedef ::xsd::cxx::tree::traits< picture_type, char > picture_traits;
 
-    const bitmap_type&
-    bitmap () const;
+    const picture_type&
+    picture () const;
 
-    bitmap_type&
-    bitmap ();
-
-    void
-    bitmap (const bitmap_type& x);
+    picture_type&
+    picture ();
 
     void
-    bitmap (::std::auto_ptr< bitmap_type > p);
+    picture (const picture_type& x);
+
+    void
+    picture (::std::auto_ptr< picture_type > p);
 
     // Constructors
     //
     wall (const axis_type&,
           const index_type&,
-          const bitmap_type&);
+          const picture_type&);
 
     wall (const ::xercesc::DOMElement& e,
           ::xml_schema::flags f = 0,
@@ -1656,7 +1656,7 @@ namespace rxml
     private:
     ::xsd::cxx::tree::one< axis_type > axis_;
     ::xsd::cxx::tree::one< index_type > index_;
-    ::xsd::cxx::tree::one< bitmap_type > bitmap_;
+    ::xsd::cxx::tree::one< picture_type > picture_;
   };
 
   class item: public ::xml_schema::type

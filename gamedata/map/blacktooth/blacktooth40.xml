@@ -19,714 +19,714 @@
       <y>16</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-floor-west.png</bitmap>
+      <picture>blacktooth.png/blacktooth-floor-west.png</picture>
     </tile>
     <tile>
       <x>1</x>
       <y>16</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-floor-west.png</bitmap>
+      <picture>blacktooth.png/blacktooth-floor-west.png</picture>
     </tile>
     <tile>
       <x>2</x>
       <y>16</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-floor-west.png</bitmap>
+      <picture>blacktooth.png/blacktooth-floor-west.png</picture>
     </tile>
     <tile>
       <x>3</x>
       <y>16</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-floor-west.png</bitmap>
+      <picture>blacktooth.png/blacktooth-floor-west.png</picture>
     </tile>
     <tile>
       <x>4</x>
       <y>16</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-floor-west.png</bitmap>
+      <picture>blacktooth.png/blacktooth-floor-west.png</picture>
     </tile>
     <tile>
       <x>5</x>
       <y>16</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-floor-west.png</bitmap>
+      <picture>blacktooth.png/blacktooth-floor-west.png</picture>
     </tile>
     <tile>
       <x>0</x>
       <y>0</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>0</x>
       <y>1</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>0</x>
       <y>2</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>0</x>
       <y>3</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>0</x>
       <y>4</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>0</x>
       <y>5</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>0</x>
       <y>6</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>0</x>
       <y>7</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>0</x>
       <y>8</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>0</x>
       <y>9</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>0</x>
       <y>10</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>0</x>
       <y>11</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>0</x>
       <y>12</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>0</x>
       <y>13</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>0</x>
       <y>14</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>0</x>
       <y>15</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>1</x>
       <y>0</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>1</x>
       <y>1</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>1</x>
       <y>2</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>1</x>
       <y>3</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>1</x>
       <y>4</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>1</x>
       <y>5</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>1</x>
       <y>6</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>1</x>
       <y>7</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>1</x>
       <y>8</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>1</x>
       <y>9</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>1</x>
       <y>10</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>1</x>
       <y>11</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>1</x>
       <y>12</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>1</x>
       <y>13</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>1</x>
       <y>14</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>1</x>
       <y>15</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>2</x>
       <y>0</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>2</x>
       <y>1</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>2</x>
       <y>2</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>2</x>
       <y>3</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>2</x>
       <y>4</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>2</x>
       <y>5</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>2</x>
       <y>6</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>2</x>
       <y>7</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>2</x>
       <y>8</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>2</x>
       <y>9</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>2</x>
       <y>10</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>2</x>
       <y>11</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>2</x>
       <y>12</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>2</x>
       <y>13</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>2</x>
       <y>14</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>2</x>
       <y>15</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>3</x>
       <y>0</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>3</x>
       <y>1</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>3</x>
       <y>2</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>3</x>
       <y>3</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>3</x>
       <y>4</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>3</x>
       <y>5</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>3</x>
       <y>6</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>3</x>
       <y>7</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>3</x>
       <y>8</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>3</x>
       <y>9</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>3</x>
       <y>10</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>3</x>
       <y>11</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>3</x>
       <y>12</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>3</x>
       <y>13</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>3</x>
       <y>14</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>3</x>
       <y>15</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>4</x>
       <y>0</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>4</x>
       <y>1</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>4</x>
       <y>2</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>4</x>
       <y>3</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>4</x>
       <y>4</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>4</x>
       <y>5</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>4</x>
       <y>6</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>4</x>
       <y>7</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>4</x>
       <y>8</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>4</x>
       <y>9</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>4</x>
       <y>10</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>4</x>
       <y>11</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>4</x>
       <y>12</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>4</x>
       <y>13</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>4</x>
       <y>14</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>4</x>
       <y>15</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>5</x>
       <y>0</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>5</x>
       <y>1</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>5</x>
       <y>2</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>5</x>
       <y>3</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>5</x>
       <y>4</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>5</x>
       <y>5</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>5</x>
       <y>6</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>5</x>
       <y>7</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>5</x>
       <y>8</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>5</x>
       <y>9</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>5</x>
       <y>10</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>5</x>
       <y>11</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>5</x>
       <y>12</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>5</x>
       <y>13</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>5</x>
       <y>14</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
     <tile>
       <x>5</x>
       <y>15</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <bitmap>blacktooth.png/blacktooth-mortal-floor.png</bitmap>
+      <picture>blacktooth.png/blacktooth-mortal-floor.png</picture>
     </tile>
   </floor>
 
@@ -734,112 +734,112 @@
     <wall>
       <axis>y</axis>
       <index>0</index>
-      <bitmap>blacktooth.png/blacktooth-wall-y-1.png</bitmap>
+      <picture>blacktooth.png/blacktooth-wall-y-1.png</picture>
     </wall>
     <wall>
       <axis>y</axis>
       <index>1</index>
-      <bitmap>blacktooth.png/blacktooth-wall-y-3.png</bitmap>
+      <picture>blacktooth.png/blacktooth-wall-y-3.png</picture>
     </wall>
     <wall>
       <axis>y</axis>
       <index>2</index>
-      <bitmap>blacktooth.png/blacktooth-wall-y-1.png</bitmap>
+      <picture>blacktooth.png/blacktooth-wall-y-1.png</picture>
     </wall>
     <wall>
       <axis>y</axis>
       <index>3</index>
-      <bitmap>blacktooth.png/blacktooth-wall-y-2.png</bitmap>
+      <picture>blacktooth.png/blacktooth-wall-y-2.png</picture>
     </wall>
     <wall>
       <axis>y</axis>
       <index>4</index>
-      <bitmap>blacktooth.png/blacktooth-wall-y-2.png</bitmap>
+      <picture>blacktooth.png/blacktooth-wall-y-2.png</picture>
     </wall>
     <wall>
       <axis>y</axis>
       <index>5</index>
-      <bitmap>blacktooth.png/blacktooth-wall-y-1.png</bitmap>
+      <picture>blacktooth.png/blacktooth-wall-y-1.png</picture>
     </wall>
     <wall>
       <axis>y</axis>
       <index>6</index>
-      <bitmap>blacktooth.png/blacktooth-wall-y-3.png</bitmap>
+      <picture>blacktooth.png/blacktooth-wall-y-3.png</picture>
     </wall>
     <wall>
       <axis>y</axis>
       <index>7</index>
-      <bitmap>blacktooth.png/blacktooth-wall-y-1.png</bitmap>
+      <picture>blacktooth.png/blacktooth-wall-y-1.png</picture>
     </wall>
     <wall>
       <axis>y</axis>
       <index>8</index>
-      <bitmap>blacktooth.png/blacktooth-wall-y-1.png</bitmap>
+      <picture>blacktooth.png/blacktooth-wall-y-1.png</picture>
     </wall>
     <wall>
       <axis>y</axis>
       <index>9</index>
-      <bitmap>blacktooth.png/blacktooth-wall-y-3.png</bitmap>
+      <picture>blacktooth.png/blacktooth-wall-y-3.png</picture>
     </wall>
     <wall>
       <axis>y</axis>
       <index>10</index>
-      <bitmap>blacktooth.png/blacktooth-wall-y-1.png</bitmap>
+      <picture>blacktooth.png/blacktooth-wall-y-1.png</picture>
     </wall>
     <wall>
       <axis>y</axis>
       <index>11</index>
-      <bitmap>blacktooth.png/blacktooth-wall-y-2.png</bitmap>
+      <picture>blacktooth.png/blacktooth-wall-y-2.png</picture>
     </wall>
     <wall>
       <axis>y</axis>
       <index>12</index>
-      <bitmap>blacktooth.png/blacktooth-wall-y-2.png</bitmap>
+      <picture>blacktooth.png/blacktooth-wall-y-2.png</picture>
     </wall>
     <wall>
       <axis>y</axis>
       <index>13</index>
-      <bitmap>blacktooth.png/blacktooth-wall-y-1.png</bitmap>
+      <picture>blacktooth.png/blacktooth-wall-y-1.png</picture>
     </wall>
     <wall>
       <axis>y</axis>
       <index>14</index>
-      <bitmap>blacktooth.png/blacktooth-wall-y-3.png</bitmap>
+      <picture>blacktooth.png/blacktooth-wall-y-3.png</picture>
     </wall>
     <wall>
       <axis>y</axis>
       <index>15</index>
-      <bitmap>blacktooth.png/blacktooth-wall-y-1.png</bitmap>
+      <picture>blacktooth.png/blacktooth-wall-y-1.png</picture>
     </wall>
     <wall>
       <axis>x</axis>
       <index>0</index>
-      <bitmap>blacktooth.png/blacktooth-wall-x-1.png</bitmap>
+      <picture>blacktooth.png/blacktooth-wall-x-1.png</picture>
     </wall>
     <wall>
       <axis>x</axis>
       <index>1</index>
-      <bitmap>blacktooth.png/blacktooth-wall-x-3.png</bitmap>
+      <picture>blacktooth.png/blacktooth-wall-x-3.png</picture>
     </wall>
     <wall>
       <axis>x</axis>
       <index>2</index>
-      <bitmap>blacktooth.png/blacktooth-wall-x-2.png</bitmap>
+      <picture>blacktooth.png/blacktooth-wall-x-2.png</picture>
     </wall>
     <wall>
       <axis>x</axis>
       <index>3</index>
-      <bitmap>blacktooth.png/blacktooth-wall-x-2.png</bitmap>
+      <picture>blacktooth.png/blacktooth-wall-x-2.png</picture>
     </wall>
     <wall>
       <axis>x</axis>
       <index>4</index>
-      <bitmap>blacktooth.png/blacktooth-wall-x-3.png</bitmap>
+      <picture>blacktooth.png/blacktooth-wall-x-3.png</picture>
     </wall>
     <wall>
       <axis>x</axis>
       <index>5</index>
-      <bitmap>blacktooth.png/blacktooth-wall-x-1.png</bitmap>
+      <picture>blacktooth.png/blacktooth-wall-x-1.png</picture>
     </wall>
   </walls>
 

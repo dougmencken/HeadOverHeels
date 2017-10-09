@@ -39,6 +39,8 @@ public:
          */
         CreateMenuOfGraphicSets( BITMAP * picture, Action * previous ) ;
 
+        virtual ~CreateMenuOfGraphicSets( ) ;
+
         std::string getNameOfAction () const {  return "CreateMenuOfGraphicSets" ;  }
 
 protected:

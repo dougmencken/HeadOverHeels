@@ -17,7 +17,7 @@ Picture::~Picture()
 {
         /* std::cout << "forget picture with name \"" << nameOfPicture << "\"" << std::endl ; */
 
-        delete picture ;
+        destroy_bitmap( picture );
         picture = 0 ;
 }
 

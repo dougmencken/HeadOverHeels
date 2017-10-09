@@ -22,17 +22,14 @@ Screen::Screen( BITMAP* picture, Action* action ) :
         pictureOfHeels( 0 )
 {
         refreshBackground ();
-        refreshPictures ();
+        refreshPicturesOfHeadAndHeels ();
 }
 
 Screen::~Screen( )
 {
-        std::for_each( this->widgets.begin (), this->widgets.end (), DeleteObject() );
+        freeWidgets() ;
 
-        delete backgroundPicture ;
-
-        delete pictureOfHead ;
-        delete pictureOfHeels ;
+        destroy_bitmap( backgroundPicture );
 }
 
 void Screen::setEscapeAction ( Action * action )
@@ -45,7 +42,7 @@ void Screen::refreshBackground ()
 {
         if ( backgroundPicture != 0 )
         {
-                delete backgroundPicture;
+                destroy_bitmap( backgroundPicture );
                 backgroundPicture = 0;
         }
 
@@ -55,31 +52,53 @@ void Screen::refreshBackground ()
                 setBackground( picture );
 }
 
-void Screen::refreshPictures ()
+void Screen::refreshPicturesOfHeadAndHeels ()
 {
         int xHead = 0, yHead = 0;
+        bool headOnScreen = false;
+
         if ( pictureOfHead != 0 )
         {
                 xHead = pictureOfHead->getX ();
                 yHead = pictureOfHead->getY ();
 
-                delete pictureOfHead;
+                if ( pictureOfHead->isOnScreen() )
+                {
+                        headOnScreen = true;
+                        removeWidget( pictureOfHead );
+                }
+                else
+                        delete pictureOfHead ;
+
                 pictureOfHead = 0;
         }
-        std::string pathToHead = gui::GuiManager::getInstance()->getPathToPicturesOfGui() + "head.png" ;
-        pictureOfHead = new Picture( xHead, yHead, load_png( pathToHead.c_str (), 0 ), pathToHead );
+        pictureOfHead = new Picture( xHead, yHead, loadPicture( "head.png" ), "gui/head.png" );
+
+        if ( headOnScreen )
+                addWidget( pictureOfHead );
 
         int xHeels = 0, yHeels = 0;
+        bool heelsOnScreen = false;
+
         if ( pictureOfHeels != 0 )
         {
                 xHeels = pictureOfHeels->getX ();
                 yHeels = pictureOfHeels->getY ();
 
-                delete pictureOfHeels;
+                if ( pictureOfHeels->isOnScreen() )
+                {
+                        heelsOnScreen = true;
+                        removeWidget( pictureOfHeels );
+                }
+                else
+                        delete pictureOfHeels ;
+
                 pictureOfHeels = 0;
         }
-        std::string pathToHeels = gui::GuiManager::getInstance()->getPathToPicturesOfGui() + "heels.png" ;
-        pictureOfHeels = new Picture( xHeels, yHeels, load_png( pathToHeels.c_str (), 0 ), pathToHeels );
+        pictureOfHeels = new Picture( xHeels, yHeels, loadPicture( "heels.png" ), "gui/heels.png" );
+
+        if ( heelsOnScreen )
+                addWidget( pictureOfHeels );
 }
 
 void Screen::draw( BITMAP* where )
@@ -128,6 +147,7 @@ void Screen::handleKey( int rawKey )
 void Screen::addWidget( Widget* widget )
 {
         this->widgets.push_back( widget );
+        widget->setOnScreen( true );
 }
 
 bool Screen::removeWidget( Widget* widget )
@@ -148,6 +168,12 @@ bool Screen::removeWidget( Widget* widget )
 
 void Screen::freeWidgets ()
 {
+        if ( pictureOfHead != 0 && ! pictureOfHead->isOnScreen () )
+                delete pictureOfHead;
+
+        if ( pictureOfHeels != 0 && ! pictureOfHeels->isOnScreen () )
+                delete pictureOfHeels;
+
         while ( ! this->widgets.empty () )
         {
                 Widget* w = *( widgets.begin () );
@@ -161,17 +187,21 @@ void Screen::freeWidgets ()
 
 void Screen::addPictureOfHeadAt ( int x, int y )
 {
-        if ( pictureOfHead == 0 ) refreshPictures ();
+        if ( pictureOfHead == 0 )
+                pictureOfHead = new Picture( x, y, loadPicture( "head.png" ), "gui/head.png" );
+        else
+                pictureOfHead->moveTo( x, y );
 
-        pictureOfHead->moveTo( x, y );
         addWidget( pictureOfHead );
 }
 
 void Screen::addPictureOfHeelsAt ( int x, int y )
 {
-        if ( pictureOfHeels == 0 ) refreshPictures ();
+        if ( pictureOfHeels == 0 )
+                pictureOfHeels = new Picture( x, y, loadPicture( "heels.png" ), "gui/heels.png" );
+        else
+                pictureOfHeels->moveTo( x, y );
 
-        pictureOfHeels->moveTo( x, y );
         addWidget( pictureOfHeels );
 }
 

@@ -48,7 +48,8 @@ class ItemDataManager ;
 /**
  * In Isomot, column is group of grid items to draw along Z axis
  */
-typedef std::list < GridItem* > Column ;
+typedef std::list < GridItem * > Column ;
+
 
 void* updateThread ( void* thisClass ) ;
 

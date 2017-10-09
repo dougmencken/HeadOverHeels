@@ -143,6 +143,7 @@ Room* RoomBuilder::buildRoom ( const std::string& fileName )
 
                 // place items in the room
                 // element may be a wall, a door, a grid one or a free one
+
                 for ( rxml::items::item_const_iterator i = roomXML->items().item().begin (); i != roomXML->items().item().end (); ++i )
                 {
                         // it’s a plain wall
@@ -304,10 +305,10 @@ FloorTile* RoomBuilder::buildFloorTile( const rxml::tile& tile, const char* gfxP
         FloorTile* floorTile = 0;
 
         try {
-                BITMAP* picture = load_png( ( isomot::sharePath() + gfxPrefix + "/" + tile.bitmap() ).c_str(), 0 );
+                BITMAP* picture = load_png( ( isomot::sharePath() + gfxPrefix + "/" + tile.picture() ).c_str(), 0 );
                 if ( picture == 0 ) {
-                        std::cerr << "picture \"" << tile.bitmap() << "\" at \"" << gfxPrefix << "\" is absent" << std::endl ;
-                        throw "picture " + tile.bitmap() + " at " + gfxPrefix + " is absent";
+                        std::cerr << "picture \"" << tile.picture() << "\" at \"" << gfxPrefix << "\" is absent" << std::endl ;
+                        throw "picture " + tile.picture() + " at " + gfxPrefix + " is absent";
                 }
                 int column = room->getTilesX() * tile.y() + tile.x();
                 floorTile = new FloorTile( column, tile.x(), tile.y(), picture );
@@ -324,10 +325,10 @@ Wall* RoomBuilder::buildWall( const rxml::wall& wall, const char* gfxPrefix )
         Wall* roomWall = 0;
 
         try {
-                BITMAP* picture = load_png( ( isomot::sharePath() + gfxPrefix + "/" + wall.bitmap() ).c_str(), 0 );
+                BITMAP* picture = load_png( ( isomot::sharePath() + gfxPrefix + "/" + wall.picture() ).c_str(), 0 );
                 if ( picture == 0 ) {
-                        std::cerr << "picture \"" << wall.bitmap() << "\" at \"" << gfxPrefix << "\" is absent" << std::endl ;
-                        throw "picture " + wall.bitmap() + " at " + gfxPrefix + " is absent";
+                        std::cerr << "picture \"" << wall.picture() << "\" at \"" << gfxPrefix << "\" is absent" << std::endl ;
+                        throw "picture " + wall.picture() + " at " + gfxPrefix + " is absent";
                 }
                 roomWall = new Wall( wall.axis() == rxml::axis::x ? AxisX : AxisY, wall.index(), picture );
         } catch ( const Exception& e ) {

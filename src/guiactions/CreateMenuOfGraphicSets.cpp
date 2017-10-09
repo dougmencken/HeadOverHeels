@@ -13,7 +13,7 @@ using gui::CreateMenuOfGraphicSets ;
 
 
 CreateMenuOfGraphicSets::CreateMenuOfGraphicSets( BITMAP* picture, Action* previous ) :
-        Action(),
+        Action( ),
         where( picture ),
         actionOnEscape( previous ),
         menuOfGraphicSets( 0 )
@@ -25,6 +25,11 @@ CreateMenuOfGraphicSets::CreateMenuOfGraphicSets( BITMAP* picture, Action* previ
 
         menuOfGraphicSets = new Menu( );
         menuOfGraphicSets->setVerticalOffset( 50 );
+}
+
+CreateMenuOfGraphicSets::~CreateMenuOfGraphicSets( )
+{
+
 }
 
 void CreateMenuOfGraphicSets::doAction ()
@@ -116,8 +121,8 @@ void CreateMenuOfGraphicSets::doAction ()
                                 menuOfGraphicSets->redraw ();
                         }
 
-                        // No te comas la CPU
-                        // Do not eat the CPU
+                        // no te comas la CPU
+                        // do not eat the CPU
                         sleep( 25 );
                 }
         }

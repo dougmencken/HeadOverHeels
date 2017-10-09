@@ -17,6 +17,7 @@
 #include "Action.hpp"
 #include "csxml/LanguageXML.hpp"
 
+
 namespace gui
 {
 
@@ -51,19 +52,15 @@ protected:
 private:
 
         /**
-         * Analiza el archivo XML y extrae las cadenas ligándolas a un identificador textual
-         * @param fileName Archivo XML con los textos empleados en el juego
+         * Read list of languages for this game
+         * @param fileName XML file with list of languages
          */
         void parse ( const std::string& fileName ) ;
 
-        /**
-         * Imagen donde se dibujará la interfaz gráfica
-         */
         BITMAP* where ;
 
         /**
-         * Textos empleados en la interfaz de usuario. Cada elemento se compone de un identificador
-         * único, su posición en la pantalla y la cadena con el texto
+         * Strings for interface, each element contains its unique identifier and string of text
          */
         std::list< LanguageText* > texts ;
 

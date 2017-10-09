@@ -54,6 +54,8 @@ public:
          */
         void draw ( BITMAP* where ) ;
 
+        void binProcessedImage () ;
+
         /**
          * Change graphics of this item, replacing the current image, and pointing out what to remask
          * @param image Un fotograma del elemento

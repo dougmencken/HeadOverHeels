@@ -54,6 +54,8 @@ private:
          */
         std::pair < int, int > xy;
 
+        bool onScreen ;
+
 protected:
 
         void setX ( int x ) {  this->xy.first = x ;  }
@@ -67,6 +69,10 @@ public:
         int getX () const {  return this->xy.first ;  }
 
         int getY () const {  return this->xy.second ;  }
+
+        bool isOnScreen() const {  return this->onScreen ;  }
+
+        void setOnScreen( bool onscreen ) {  this->onScreen = onscreen ;  }
 
 };
 

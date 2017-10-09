@@ -203,7 +203,7 @@ void GuiManager::refreshScreens ()
         {
                 if ( i->second )
                 {
-                        i->second->refreshPictures () ;
+                        i->second->refreshPicturesOfHeadAndHeels () ;
                         i->second->refreshBackground () ;
                 }
         }

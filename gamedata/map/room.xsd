@@ -107,7 +107,7 @@
                   <xsd:element name="y" type="xsd:int"/>
                   <xsd:element name="offsetX" type="xsd:int"/>
                   <xsd:element name="offsetY" type="xsd:int"/>
-                  <xsd:element name="bitmap" type="xsd:string"/>
+                  <xsd:element name="picture" type="xsd:string"/>
                 </xsd:sequence>
               </xsd:complexType>
             </xsd:element>
@@ -129,7 +129,7 @@
                     </xsd:simpleType>
                   </xsd:element>
                   <xsd:element name="index" type="xsd:int"/>
-                  <xsd:element name="bitmap" type="xsd:string"/>
+                  <xsd:element name="picture" type="xsd:string"/>
                 </xsd:sequence>
               </xsd:complexType>
             </xsd:element>

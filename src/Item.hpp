@@ -123,13 +123,12 @@ public:
         void assignBehavior( const std::string& behavior, void* extraData ) ;
 
         /**
-         * Establece el sentido de la animación del primer al último fotograma (hacia adelante)
-         * Es el sentido establecido por defecto
+         * Set animation going from first to last frame, which is by default
          */
         void setForwardMotion () ;
 
         /**
-         * Establece el sentido de la animación del último al primer fotograma (hacia atrás)
+         * Set animation going from last to first frame, backwards
          */
         void setBackwardMotion () ;
 

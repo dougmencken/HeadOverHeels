@@ -1156,28 +1156,28 @@ namespace rxml
     this->offsetY_.set (offsetY);
   }
 
-  const tile::bitmap_type& tile::
-  bitmap () const
+  const tile::picture_type& tile::
+  picture () const
   {
-    return this->bitmap_.get ();
+    return this->picture_.get ();
   }
 
-  tile::bitmap_type& tile::
-  bitmap ()
+  tile::picture_type& tile::
+  picture ()
   {
-    return this->bitmap_.get ();
-  }
-
-  void tile::
-  bitmap (const bitmap_type& bitmap)
-  {
-    this->bitmap_.set (bitmap);
+    return this->picture_.get ();
   }
 
   void tile::
-  bitmap (::std::auto_ptr< bitmap_type > bitmap)
+  picture (const picture_type& picture)
   {
-    this->bitmap_.set (bitmap);
+    this->picture_.set (picture);
+  }
+
+  void tile::
+  picture (::std::auto_ptr< picture_type > picture)
+  {
+    this->picture_.set (picture);
   }
 
 
@@ -1226,28 +1226,28 @@ namespace rxml
     this->index_.set (index);
   }
 
-  const wall::bitmap_type& wall::
-  bitmap () const
+  const wall::picture_type& wall::
+  picture () const
   {
-    return this->bitmap_.get ();
+    return this->picture_.get ();
   }
 
-  wall::bitmap_type& wall::
-  bitmap ()
+  wall::picture_type& wall::
+  picture ()
   {
-    return this->bitmap_.get ();
-  }
-
-  void wall::
-  bitmap (const bitmap_type& bitmap)
-  {
-    this->bitmap_.set (bitmap);
+    return this->picture_.get ();
   }
 
   void wall::
-  bitmap (::std::auto_ptr< bitmap_type > bitmap)
+  picture (const picture_type& picture)
   {
-    this->bitmap_.set (bitmap);
+    this->picture_.set (picture);
+  }
+
+  void wall::
+  picture (::std::auto_ptr< picture_type > picture)
+  {
+    this->picture_.set (picture);
   }
 
 
@@ -3208,13 +3208,13 @@ namespace rxml
         const y_type& y,
         const offsetX_type& offsetX,
         const offsetY_type& offsetY,
-        const bitmap_type& bitmap)
+        const picture_type& picture)
   : ::xml_schema::type (),
     x_ (x, ::xml_schema::flags (), this),
     y_ (y, ::xml_schema::flags (), this),
     offsetX_ (offsetX, ::xml_schema::flags (), this),
     offsetY_ (offsetY, ::xml_schema::flags (), this),
-    bitmap_ (bitmap, ::xml_schema::flags (), this)
+    picture_ (picture, ::xml_schema::flags (), this)
   {
   }
 
@@ -3227,7 +3227,7 @@ namespace rxml
     y_ (x.y_, f, this),
     offsetX_ (x.offsetX_, f, this),
     offsetY_ (x.offsetY_, f, this),
-    bitmap_ (x.bitmap_, f, this)
+    picture_ (x.picture_, f, this)
   {
   }
 
@@ -3240,7 +3240,7 @@ namespace rxml
     y_ (f, this),
     offsetX_ (f, this),
     offsetY_ (f, this),
-    bitmap_ (f, this)
+    picture_ (f, this)
   {
     if ((f & ::xml_schema::flags::base) == 0)
     {
@@ -3303,16 +3303,16 @@ namespace rxml
         }
       }
 
-      // bitmap
+      // picture
       //
-      if (n.name () == "bitmap" && n.namespace_ ().empty ())
+      if (n.name () == "picture" && n.namespace_ ().empty ())
       {
-        ::std::auto_ptr< bitmap_type > r (
-          bitmap_traits::create (i, f, this));
+        ::std::auto_ptr< picture_type > r (
+          picture_traits::create (i, f, this));
 
-        if (!bitmap_.present ())
+        if (!picture_.present ())
         {
-          this->bitmap (r);
+          this->picture (r);
           continue;
         }
       }
@@ -3348,10 +3348,10 @@ namespace rxml
         "");
     }
 
-    if (!bitmap_.present ())
+    if (!picture_.present ())
     {
       throw ::xsd::cxx::tree::expected_element< char > (
-        "bitmap",
+        "picture",
         "");
     }
   }
@@ -3369,11 +3369,11 @@ namespace rxml
   wall::
   wall (const axis_type& axis,
         const index_type& index,
-        const bitmap_type& bitmap)
+        const picture_type& picture)
   : ::xml_schema::type (),
     axis_ (axis, ::xml_schema::flags (), this),
     index_ (index, ::xml_schema::flags (), this),
-    bitmap_ (bitmap, ::xml_schema::flags (), this)
+    picture_ (picture, ::xml_schema::flags (), this)
   {
   }
 
@@ -3384,7 +3384,7 @@ namespace rxml
   : ::xml_schema::type (x, f, c),
     axis_ (x.axis_, f, this),
     index_ (x.index_, f, this),
-    bitmap_ (x.bitmap_, f, this)
+    picture_ (x.picture_, f, this)
   {
   }
 
@@ -3395,7 +3395,7 @@ namespace rxml
   : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
     axis_ (f, this),
     index_ (f, this),
-    bitmap_ (f, this)
+    picture_ (f, this)
   {
     if ((f & ::xml_schema::flags::base) == 0)
     {
@@ -3439,16 +3439,16 @@ namespace rxml
         }
       }
 
-      // bitmap
+      // picture
       //
-      if (n.name () == "bitmap" && n.namespace_ ().empty ())
+      if (n.name () == "picture" && n.namespace_ ().empty ())
       {
-        ::std::auto_ptr< bitmap_type > r (
-          bitmap_traits::create (i, f, this));
+        ::std::auto_ptr< picture_type > r (
+          picture_traits::create (i, f, this));
 
-        if (!bitmap_.present ())
+        if (!picture_.present ())
         {
-          this->bitmap (r);
+          this->picture (r);
           continue;
         }
       }
@@ -3470,10 +3470,10 @@ namespace rxml
         "");
     }
 
-    if (!bitmap_.present ())
+    if (!picture_.present ())
     {
       throw ::xsd::cxx::tree::expected_element< char > (
-        "bitmap",
+        "picture",
         "");
     }
   }

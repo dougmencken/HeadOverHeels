@@ -38,7 +38,7 @@ public:
 
        /**
         * Constructor
-        * @param itemData Datos invariables del elemento
+        * @param itemData data about this item
         * @param x Posición espacial X
         * @param y Posición espacial Y
         * @param z Posición espacial Z o a qué distancia está el elemento del suelo
@@ -60,6 +60,8 @@ public:
          * Dibuja el elemento libre
          */
         void draw ( BITMAP* where ) ;
+
+        void binProcessedImages () ;
 
         /**
          * Cambia la presentación gráfica del elemento, destruyendo la imagen procesada y señalando qué elementos
@@ -170,7 +172,7 @@ protected:
         unsigned char transparency ;
 
         /**
-         * Indica si el elemento detecta colisiones
+         * Whether this item detects collisions
          */
         bool collisionDetector ;
 
@@ -227,9 +229,7 @@ public:
         bool isFrozen () const {  return frozen ;  }
 
         /**
-         * Datos invariables del elemento. Se emplea cuando el elemento cambia de aspecto y se desea
-         * conservar el actual
-         * @return Un registro con los datos que caracterizan al elemento
+         * @return data about this item
          */
         ItemData * getDataOfFreeItem () const {  return dataOfItem ;  }
 

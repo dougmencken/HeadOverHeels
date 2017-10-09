@@ -52,7 +52,7 @@ private:
 
 protected:
 
-        static BITMAP * refreshPicture ( BITMAP * oldBitmap, const char * nameOfPicture ) ;
+        static BITMAP * refreshPicture ( const char * nameOfPicture ) ;
 
 public:
 
@@ -62,7 +62,7 @@ public:
          * Único objeto de esta clase para toda la aplicación
          * @return Un puntero al objeto único
          */
-        static GameManager* getInstance () ;
+        static GameManager * getInstance () ;
 
         /**
          * Todo empieza aquí
@@ -234,7 +234,7 @@ private:
          */
         WhyPause pause () ;
 
-        void refreshImages () ;
+        void refreshAmbianceImages () ;
 
         void refreshBackgroundFrames () ;
 
@@ -274,17 +274,17 @@ private:
         /**
          * Único objeto de esta clase para toda la aplicación
          */
-        static GameManager* instance ;
+        static GameManager * instance ;
 
         /**
          * El motor isométrico del juego
          */
-        Isomot* isomot ;
+        Isomot * isomot ;
 
         /**
          * Gestor de la grabación y recuperación de una partida
          */
-        GameFileManager* gameFileManager ;
+        GameFileManager * gameFileManager ;
 
         /**
          * Vidas de Head
@@ -334,7 +334,7 @@ private:
         /**
          * Imagen del elemento que está dentro del bolso
          */
-        BITMAP* itemTaken ;
+        BITMAP * itemTaken ;
 
         /**
          * Stores name of planet with boolean of its liberation

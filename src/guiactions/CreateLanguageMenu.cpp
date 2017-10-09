@@ -35,50 +35,52 @@ CreateLanguageMenu::~CreateLanguageMenu( )
 void CreateLanguageMenu::doAction ()
 {
         Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this, this->where );
-        if ( screen->countWidgets() == 0 )
+        if ( screen->countWidgets() > 0 )
         {
-                screen->setEscapeAction( new gui::CreateMainMenu( this->where ) );
-
-                Label* label = 0;
-
-                label = new Label( "Head", "big", "yellow" );
-                label->moveTo( 200, 24 );
-                screen->addWidget( label );
-
-                label = new Label( "over", "regular", "multicolor" );
-                label->moveTo( 280, 45 );
-                screen->addWidget( label );
-
-                label = new Label( "Heels", "big", "yellow" );
-                label->moveTo( 360, 24 );
-                screen->addWidget( label );
-
-                screen->addPictureOfHeadAt( 66, 24 );
-                screen->addPictureOfHeelsAt( 518, 24 );
-
-                // presenta los idiomas disponibles
-
-                std::string language = GuiManager::getInstance()->getLanguage();
-
-                MenuWithMultipleColumns * menu = new MenuWithMultipleColumns( /* space between columns */ 60 );
-                menu->setVerticalOffset( 50 ); // adjust for header over heelser
-
-                for ( std::list< LanguageText * >::iterator i = this->texts.begin (); i != this->texts.end (); ++i )
-                {
-                        label = new Label( ( *i )->getText() );
-                        label->setAction( new SelectLanguage( this->where, ( *i )->getId() ) );
-
-                        menu->addOption( label );
-
-                        if ( ( language.empty() && i == this->texts.begin() ) || language.compare( ( *i )->getId() ) == 0 )
-                        {
-                                menu->setActiveOption( label );
-                        }
-                }
-
-                screen->addWidget( menu );
-                screen->setKeyHandler( menu );
+                screen->freeWidgets();
         }
+
+        screen->setEscapeAction( new gui::CreateMainMenu( this->where ) );
+
+        Label* label = 0;
+
+        label = new Label( "Head", "big", "yellow" );
+        label->moveTo( 200, 24 );
+        screen->addWidget( label );
+
+        label = new Label( "over", "regular", "multicolor" );
+        label->moveTo( 280, 45 );
+        screen->addWidget( label );
+
+        label = new Label( "Heels", "big", "yellow" );
+        label->moveTo( 360, 24 );
+        screen->addWidget( label );
+
+        screen->addPictureOfHeadAt( 66, 24 );
+        screen->addPictureOfHeelsAt( 518, 24 );
+
+        // presenta los idiomas disponibles
+
+        std::string language = GuiManager::getInstance()->getLanguage();
+
+        MenuWithMultipleColumns * menu = new MenuWithMultipleColumns( /* space between columns */ 60 );
+        menu->setVerticalOffset( 50 ); // adjust for header over heelser
+
+        for ( std::list< LanguageText * >::iterator i = this->texts.begin (); i != this->texts.end (); ++i )
+        {
+                label = new Label( ( *i )->getText() );
+                label->setAction( new SelectLanguage( this->where, ( *i )->getId() ) );
+
+                menu->addOption( label );
+
+                if ( ( language.empty() && i == this->texts.begin() ) || language.compare( ( *i )->getId() ) == 0 )
+                {
+                        menu->setActiveOption( label );
+                }
+        }
+
+        screen->addWidget( menu );
+        screen->setKeyHandler( menu );
 
         GuiManager::getInstance()->changeScreen( screen );
 }

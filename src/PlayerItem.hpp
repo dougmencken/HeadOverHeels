@@ -144,7 +144,7 @@ public:
         /**
          * Get image of item taken by player
          */
-        BITMAP* consultTakenItemImage () ;
+        BITMAP * consultTakenItemImage () ;
 
         /**
          * Save game when player meets reincarnation fish
@@ -238,7 +238,7 @@ private:
         /**
          * Time of immunity, player gots 25 seconds of immunity when rabbit is caught
          */
-        HPC* shieldTimer ;
+        HPC * shieldTimer ;
 
         /**
          * How many seconds left during which player is immune
@@ -279,20 +279,17 @@ public:
         unsigned char getLives () const {  return this->lives ;  }
 
         /**
-         * Devuelve el tiempo restante de doble velocidad
-         * @return Number between 0 and 99
+         * Returns remaining steps at double speed between 0 and 99
          */
         unsigned int getHighSpeed () const {  return this->highSpeed ;  }
 
         /**
-         * Devuelve el número de grandes saltos del jugador
-         * @return Number between 0 and 10
+         * Returns number of high jumps between 0 and 10
          */
         unsigned int getHighJumps () const {  return this->highJumps ;  }
 
         /**
-         * Devuelve el tiempo total de inmunidad
-         * @return Un número de segundos
+         * Returns time of immunity in seconds
          */
         double getShieldTime () const {  return this->shieldTime ;  }
 

@@ -111,7 +111,7 @@ public:
 
         void refreshBackground () ;
 
-        void refreshPictures () ;
+        void refreshPicturesOfHeadAndHeels () ;
 
         Action * getActionOfScreen () const {  return actionOfScreen ;  }
 

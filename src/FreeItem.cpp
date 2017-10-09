@@ -57,7 +57,7 @@ FreeItem::~FreeItem()
 
 void FreeItem::draw( BITMAP* where )
 {
-        // Dibujado del elemento transparente
+        // draw item with transparency
         if ( this->transparency > 0 && this->transparency < 100 )
         {
                 set_trans_blender( 0, 0, 0, static_cast < int > ( 256 - 2.56 * this->transparency ) );
@@ -80,6 +80,21 @@ void FreeItem::draw( BITMAP* where )
         }
 }
 
+void FreeItem::binProcessedImages()
+{
+        if ( this->processedImage )
+        {
+                destroy_bitmap( this->processedImage );
+                this->processedImage = 0;
+        }
+
+        if ( this->shadyImage )
+        {
+                destroy_bitmap( this->shadyImage );
+                this->shadyImage = 0;
+        }
+}
+
 void FreeItem::changeImage( BITMAP* image )
 {
         if ( this->rawImage == 0 )
@@ -94,48 +109,18 @@ void FreeItem::changeImage( BITMAP* image )
                 this->myShady = WantShadow;
                 this->myMask = WantMask;
 
-                // recalculate displacement and recreate processed images
+                // recalculate displacement, it is how many pixels is this image from point of room’s origin
                 if ( this->rawImage )
                 {
-                        // how many pixels is this image from point of room’s origin
                         this->offset.first = ( ( this->x - this->y ) << 1 ) + getDataOfFreeItem()->widthX + getDataOfFreeItem()->widthY - ( image->w >> 1 ) - 1;
                         this->offset.second = this->x + this->y + getDataOfFreeItem()->widthX - image->h - this->z;
-
-                        if ( this->processedImage )
-                        {
-                                if ( this->processedImage->w != image->w || this->processedImage->h != image->h )
-                                {
-                                        destroy_bitmap( this->processedImage );
-                                        this->processedImage = 0;
-                                }
-                        }
-
-                        if ( this->shadyImage )
-                        {
-                                if ( this->shadyImage->w != image->w || this->shadyImage->h != image->h )
-                                {
-                                        destroy_bitmap( this->shadyImage );
-                                        this->shadyImage = 0;
-                                }
-                        }
                 }
-                // bin processed images when new raw image is nil
                 else
                 {
                         this->offset.first = this->offset.second = 0;
-
-                        if ( this->processedImage )
-                        {
-                                destroy_bitmap( this->processedImage );
-                                this->processedImage = 0;
-                        }
-
-                        if ( this->shadyImage )
-                        {
-                                destroy_bitmap( this->shadyImage );
-                                this->shadyImage = 0;
-                        }
                 }
+
+                binProcessedImages() ;
 
                 // remask with old image
                 if ( oldFreeItem.getRawImage() )

@@ -43,6 +43,15 @@ void GridItem::draw( BITMAP* where )
         }
 }
 
+void GridItem::binProcessedImage()
+{
+        if ( this->processedImage )
+        {
+                destroy_bitmap( this->processedImage );
+                this->processedImage = 0;
+        }
+}
+
 void GridItem::changeImage( BITMAP* newImage )
 {
         // when there's no image for this item, just assign it
@@ -57,12 +66,7 @@ void GridItem::changeImage( BITMAP* newImage )
                 // get a copy of this item before modifying it
                 GridItem oldGridItem( *this );
 
-                if ( this->processedImage )
-                {
-                        // bin processed image
-                        destroy_bitmap( this->processedImage );
-                        this->processedImage = 0;
-                }
+                binProcessedImage();
 
                 this->rawImage = newImage;
 

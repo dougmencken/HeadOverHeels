@@ -76,33 +76,33 @@ GameManager::GameManager( )
 
 GameManager::~GameManager( )
 {
-        delete frameForMoon ;
-        delete frameForMarket ;
-        delete frameForBlacktooth ;
-        delete frameForJail ;
-        delete frameForPenitentiary ;
-        delete frameForEgyptus ;
-        delete frameForSafari ;
-        delete frameForByblos ;
+        destroy_bitmap( frameForMoon );
+        destroy_bitmap( frameForMarket );
+        destroy_bitmap( frameForBlacktooth );
+        destroy_bitmap( frameForJail );
+        destroy_bitmap( frameForPenitentiary );
+        destroy_bitmap( frameForEgyptus );
+        destroy_bitmap( frameForSafari );
+        destroy_bitmap( frameForByblos );
 
-        delete pictureOfHead ;
-        delete pictureOfHeels ;
-        delete grayPictureOfHead ;
-        delete grayPictureOfHeels ;
+        destroy_bitmap( pictureOfHead );
+        destroy_bitmap( pictureOfHeels );
+        destroy_bitmap( grayPictureOfHead );
+        destroy_bitmap( grayPictureOfHeels );
 
-        delete pictureOfBag ;
-        delete pictureOfHorn ;
-        delete grayPictureOfHorn ;
-        delete grayPictureOfBag ;
-        delete pictureOfDonuts ;
-        delete grayPictureOfDonuts ;
+        destroy_bitmap( pictureOfBag );
+        destroy_bitmap( pictureOfHorn );
+        destroy_bitmap( grayPictureOfHorn );
+        destroy_bitmap( grayPictureOfBag );
+        destroy_bitmap( pictureOfDonuts );
+        destroy_bitmap( grayPictureOfDonuts );
 
-        delete pictureOfGrandesSaltos ;
-        delete grayPictureOfGrandesSaltos ;
-        delete pictureOfGranVelocidad ;
-        delete grayPictureOfGranVelocidad ;
-        delete pictureOfEscudo ;
-        delete grayPictureOfEscudo ;
+        destroy_bitmap( pictureOfGrandesSaltos );
+        destroy_bitmap( grayPictureOfGrandesSaltos );
+        destroy_bitmap( pictureOfGranVelocidad );
+        destroy_bitmap( grayPictureOfGranVelocidad );
+        destroy_bitmap( pictureOfEscudo );
+        destroy_bitmap( grayPictureOfEscudo );
 
         delete isomot ;
 }
@@ -117,11 +117,8 @@ GameManager* GameManager::getInstance ()
         return instance;
 }
 
-BITMAP * GameManager::refreshPicture ( BITMAP * oldBitmap, const char * nameOfPicture )
+BITMAP * GameManager::refreshPicture ( const char * nameOfPicture )
 {
-        if ( oldBitmap != 0 )
-                delete oldBitmap;
-
         return load_png( ( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + nameOfPicture ).c_str (), 0 );
 }
 
@@ -142,7 +139,7 @@ WhyPause GameManager::begin ()
         this->itemTaken = 0;
         this->planets.clear();
 
-        refreshImages ();
+        refreshAmbianceImages ();
         refreshBackgroundFrames ();
 
         Assert< ENullPointer >( this->isomot );
@@ -155,7 +152,7 @@ WhyPause GameManager::resume ()
 {
         fprintf ( stdout, "GameManager::resume ()\n" ) ;
 
-        refreshImages ();
+        refreshAmbianceImages ();
         refreshBackgroundFrames ();
 
         Assert< ENullPointer >( this->isomot );
@@ -166,40 +163,70 @@ WhyPause GameManager::resume ()
 
 void GameManager::refreshBackgroundFrames ()
 {
-        frameForJail = refreshPicture( frameForJail, "jail-frame.png" );
-        frameForBlacktooth = refreshPicture( frameForBlacktooth, "blacktooth-frame.png" );
-        frameForMarket = refreshPicture( frameForMarket, "market-frame.png" );
-        frameForMoon = refreshPicture( frameForMoon, "themoon-frame.png" );
-        frameForSafari = refreshPicture( frameForSafari, "safari-frame.png" );
-        frameForByblos = refreshPicture( frameForByblos, "byblos-frame.png" );
-        frameForPenitentiary = refreshPicture( frameForPenitentiary, "penitentiary-frame.png" );
-        frameForEgyptus = refreshPicture( frameForEgyptus, "egyptus-frame.png" );
+        destroy_bitmap( frameForEgyptus );
+        destroy_bitmap( frameForPenitentiary );
+        destroy_bitmap( frameForByblos );
+        destroy_bitmap( frameForSafari );
+        destroy_bitmap( frameForMoon );
+        destroy_bitmap( frameForMarket );
+        destroy_bitmap( frameForJail );
+        destroy_bitmap( frameForBlacktooth );
+
+        frameForJail = refreshPicture( "jail-frame.png" );
+        frameForBlacktooth = refreshPicture( "blacktooth-frame.png" );
+        frameForMarket = refreshPicture( "market-frame.png" );
+        frameForMoon = refreshPicture( "themoon-frame.png" );
+        frameForSafari = refreshPicture( "safari-frame.png" );
+        frameForByblos = refreshPicture( "byblos-frame.png" );
+        frameForPenitentiary = refreshPicture( "penitentiary-frame.png" );
+        frameForEgyptus = refreshPicture( "egyptus-frame.png" );
 }
 
-void GameManager::refreshImages ()
+void GameManager::refreshAmbianceImages ()
 {
-        pictureOfHead = refreshPicture( pictureOfHead, "head.png" );
-        pictureOfHeels = refreshPicture( pictureOfHeels, "heels.png" );
-        grayPictureOfHead = refreshPicture( grayPictureOfHead, "grey-head.png" );
-        grayPictureOfHeels = refreshPicture( grayPictureOfHeels, "grey-heels.png" );
+        destroy_bitmap( pictureOfHead );
+        destroy_bitmap( grayPictureOfHead );
+        destroy_bitmap( pictureOfHeels );
+        destroy_bitmap( grayPictureOfHeels );
 
-        pictureOfBag = refreshPicture( pictureOfBag, "handbag.png" );
-        pictureOfHorn = refreshPicture( pictureOfHorn, "horn.png" );
-        pictureOfDonuts = refreshPicture( pictureOfDonuts, "donuts.png" );
-        grayPictureOfHorn = refreshPicture( grayPictureOfHorn, "grey-horn.png" );
-        grayPictureOfBag = refreshPicture( grayPictureOfBag, "grey-handbag.png" );
-        grayPictureOfDonuts = refreshPicture( grayPictureOfDonuts, "grey-donuts.png" );
+        pictureOfHead = refreshPicture( "head.png" );
+        pictureOfHeels = refreshPicture( "heels.png" );
+        grayPictureOfHead = refreshPicture( "grey-head.png" );
+        grayPictureOfHeels = refreshPicture( "grey-heels.png" );
 
-        pictureOfGrandesSaltos = refreshPicture( pictureOfGrandesSaltos, "high-jumps.png" );
-        grayPictureOfGrandesSaltos = refreshPicture( grayPictureOfGrandesSaltos, "high-jumps.gray.png" );
+        destroy_bitmap( pictureOfBag );
+        destroy_bitmap( grayPictureOfBag );
+        destroy_bitmap( pictureOfDonuts );
+        destroy_bitmap( grayPictureOfDonuts );
+        destroy_bitmap( pictureOfHorn );
+        destroy_bitmap( grayPictureOfHorn );
+
+        pictureOfBag = refreshPicture( "handbag.png" );
+        pictureOfHorn = refreshPicture( "horn.png" );
+        pictureOfDonuts = refreshPicture( "donuts.png" );
+        grayPictureOfHorn = refreshPicture( "grey-horn.png" );
+        grayPictureOfBag = refreshPicture( "grey-handbag.png" );
+        grayPictureOfDonuts = refreshPicture( "grey-donuts.png" );
+
+        if ( grayPictureOfGrandesSaltos != pictureOfGrandesSaltos ) destroy_bitmap( grayPictureOfGrandesSaltos );
+        destroy_bitmap( pictureOfGrandesSaltos );
+
+        pictureOfGrandesSaltos = refreshPicture( "high-jumps.png" );
+        grayPictureOfGrandesSaltos = refreshPicture( "high-jumps.gray.png" );
         if ( grayPictureOfGrandesSaltos == 0 ) grayPictureOfGrandesSaltos = pictureOfGrandesSaltos;
 
-        pictureOfGranVelocidad = refreshPicture( pictureOfGranVelocidad, "high-speed.png" );
-        grayPictureOfGranVelocidad = refreshPicture( grayPictureOfGranVelocidad, "high-speed.gray.png" );
+        if ( grayPictureOfGranVelocidad != pictureOfGranVelocidad ) destroy_bitmap( grayPictureOfGranVelocidad );
+        destroy_bitmap( pictureOfGranVelocidad );
+
+        pictureOfGranVelocidad = refreshPicture( "high-speed.png" );
+        grayPictureOfGranVelocidad = refreshPicture( "high-speed.gray.png" );
         if ( grayPictureOfGranVelocidad == 0 ) grayPictureOfGranVelocidad = pictureOfGranVelocidad;
 
-        pictureOfEscudo = refreshPicture( pictureOfEscudo, "shield.png" );
-        grayPictureOfEscudo = refreshPicture( grayPictureOfEscudo, "shield.gray.png" );
+        if ( grayPictureOfEscudo != pictureOfEscudo ) destroy_bitmap( grayPictureOfEscudo );
+        destroy_bitmap( pictureOfEscudo );
+
+        pictureOfEscudo = refreshPicture( "shield.png" );
+        grayPictureOfEscudo = refreshPicture( "shield.gray.png" );
         if ( grayPictureOfEscudo == 0 ) grayPictureOfEscudo = pictureOfEscudo;
 }
 
