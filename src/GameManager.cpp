@@ -347,7 +347,7 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
                         heelsShieldLabel.draw( where );
                 }
 
-                // elemento que hay dentro del bolso
+                // item in handbag
                 if( this->itemTaken != 0 )
                 {
                         draw_sprite( where, this->itemTaken, 559, 361 );
@@ -361,7 +361,6 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
                 freedomLabel.draw( where );
         }
 
-        // muestra todo en pantalla
         acquire_screen();
         blit( where, screen, 0, 0, 0, 0, where->w, where->h );
         release_screen();

@@ -57,9 +57,6 @@ PlayerHeels::PlayerHeels( Item* item, const std::string& behavior ) :
         fallTimer = new HPC ();
         speedTimer->start ();
         fallTimer->start ();
-
-        // En principio no se cogido ningún elemento
-        takenItemData = 0;
 }
 
 PlayerHeels::~PlayerHeels( )
@@ -185,16 +182,14 @@ void PlayerHeels::behave ()
                         // ...y ha pulsado la tecla para coger un elemento entonces intenta cogerlo / dejarlo
                         if ( input->take() )
                         {
-                                activity = ( takenItemData == 0 ? TakeItem : DropItem );
-                                // Las repeticiones de esta tecla no deben procesarse
+                                activity = ( playerItem->getTakenItemData() == 0 ? TakeItem : DropItem );
                                 input->noRepeat( "take" );
                         }
                         // ...y ha pulsado la tecla para coger un elemento y luego saltar entonces
                         // intenta cogerlo / dejarlo y luego salta
                         else if ( input->takeAndJump() )
                         {
-                                activity = ( takenItemData == 0 ? TakeAndJump : DropAndJump );
-                                // Las repeticiones de esta tecla no deben procesarse
+                                activity = ( playerItem->getTakenItemData() == 0 ? TakeAndJump : DropAndJump );
                                 input->noRepeat( "take-jump" );
                         }
                         // ...y se ha pulsado alguna tecla de movimiento entonces se mueve
@@ -237,16 +232,14 @@ void PlayerHeels::behave ()
                         // ...y ha pulsado la tecla para coger un elemento entonces intenta cogerlo / dejarlo
                         else if ( input->take() )
                         {
-                                activity = ( takenItemData == 0 ? TakeItem : DropItem );
-                                // Las repeticiones de esta tecla no deben procesarse
+                                activity = ( playerItem->getTakenItemData() == 0 ? TakeItem : DropItem );
                                 input->noRepeat( "take" );
                         }
                         // ...y ha pulsado la tecla para coger un elemento y luego saltar entonces
                         // intenta cogerlo / dejarlo y luego salta
                         else if ( input->takeAndJump() )
                         {
-                                activity = ( takenItemData == 0 ? TakeAndJump : DropAndJump );
-                                // Las repeticiones de esta tecla no deben procesarse
+                                activity = ( playerItem->getTakenItemData() == 0 ? TakeAndJump : DropAndJump );
                                 input->noRepeat( "take-jump" );
                         }
                         // ...y se ha pulsado alguna tecla de movimiento entonces sigue moviéndose
@@ -284,16 +277,14 @@ void PlayerHeels::behave ()
                         // ...y ha pulsado la tecla para coger un elemento entonces intenta cogerlo
                         else if ( input->take() )
                         {
-                                activity = ( takenItemData == 0 ? TakeItem : DropItem );
-                                // Las repeticiones de esta tecla no deben procesarse
+                                activity = ( playerItem->getTakenItemData() == 0 ? TakeItem : DropItem );
                                 input->noRepeat( "take" );
                         }
                         // ...y ha pulsado la tecla para coger un elemento y luego saltar entonces
                         // intenta cogerlo / dejarlo y luego salta
                         else if ( input->takeAndJump() )
                         {
-                                activity = ( takenItemData == 0 ? TakeAndJump : DropAndJump );
-                                // Las repeticiones de esta tecla no deben procesarse
+                                activity = ( playerItem->getTakenItemData() == 0 ? TakeAndJump : DropAndJump );
                                 input->noRepeat( "take-jump" );
                         }
                         // ...y se ha pulsado alguna tecla de movimiento entonces sigue moviéndose
@@ -353,8 +344,7 @@ void PlayerHeels::behave ()
                         // ...y ha pulsado la tecla para coger un elemento entonces intenta cogerlo / dejarlo
                         if ( input->take() )
                         {
-                                activity = ( takenItemData == 0 ? TakeItem : DropItem );
-                                // Las repeticiones de esta tecla no deben procesarse
+                                activity = ( playerItem->getTakenItemData() == 0 ? TakeItem : DropItem );
                                 input->noRepeat( "take" );
                         }
                 }

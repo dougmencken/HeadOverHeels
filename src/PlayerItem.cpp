@@ -23,6 +23,8 @@ PlayerItem::PlayerItem( ItemData* itemData, int x, int y, int z, const Direction
         , entry( JustWait )
         , shieldTimer( 0 )
         , shieldTime( 25.0 )
+        , takenItemData( 0 )
+        , takenItemImage( 0 )
 {
 
 }
@@ -39,6 +41,8 @@ PlayerItem::PlayerItem( const PlayerItem& playerItem )
         , entry( playerItem.entry )
         , shieldTimer( 0 )
         , shieldTime( playerItem.shieldTime )
+        , takenItemData( 0 )
+        , takenItemImage( 0 )
 {
 
 }
@@ -708,25 +712,13 @@ void PlayerItem::liberatePlanet ()
         }
 }
 
-void PlayerItem::assignTakenItem ( ItemData* itemData, BITMAP* takenItemImage, const std::string& behavior )
+void PlayerItem::assignTakenItem ( ItemData* itemData, BITMAP* itemImage, const std::string& behavior )
 {
-        GameManager::getInstance()->setItemTaken( takenItemImage );
-        dynamic_cast< UserControlled* >( this->behavior )->assignTakenItem( itemData, takenItemImage, behavior );
-}
+        GameManager::getInstance()->setItemTaken( itemImage );
 
-ItemData* PlayerItem::getTakenItemData ()
-{
-        return dynamic_cast< UserControlled * >( this->behavior )->getTakenItemData ();
-}
-
-BITMAP* PlayerItem::getTakenItemImage ()
-{
-        return dynamic_cast< UserControlled * >( this->behavior )->getTakenItemImage ();
-}
-
-std::string PlayerItem::getTakenItemBehavior ()
-{
-        return dynamic_cast< UserControlled * >( this->behavior )->getTakenItemBehavior ();
+        this->takenItemData = itemData;
+        this->takenItemImage = itemImage;
+        this->takenItemBehavior = behavior;
 }
 
 void PlayerItem::save ()

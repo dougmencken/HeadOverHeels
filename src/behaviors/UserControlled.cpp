@@ -27,9 +27,6 @@ UserControlled::UserControlled( Item * item, const std::string & behavior )
         , automaticStepsCounter( 0 )
         , highSpeedSteps( 0 )
         , shieldSteps( 0 )
-        , takenItemData( 0 )
-        , takenItemImage( 0 )
-        , takenItemBehavior( "still" )
         , speedTimer( 0 )
         , fallTimer( 0 )
         , glideTimer( 0 )
@@ -543,7 +540,6 @@ void UserControlled::takeItem( PlayerItem * player )
                                         {
                                                 coordinates = bottomItem->getX() + bottomItem->getY();
                                                 takenItem = bottomItem;
-                                                takenItemBehavior = bottomItem->getBehavior()->getNameOfBehavior ();
                                         }
                                 }
                         }
@@ -551,17 +547,20 @@ void UserControlled::takeItem( PlayerItem * player )
                         // take that item
                         if ( takenItem != 0 )
                         {
-                                takenItemData = itemDataManager->findItemByLabel( takenItem->getLabel() );
+                                // get image of that item
+                                BITMAP* takenItemImage = takenItem->getRawImage();
+                                GameManager::getInstance()->setItemTaken( takenItemImage );
+
+                                player->assignTakenItem( itemDataManager->findItemByLabel( takenItem->getLabel() ),
+                                                                takenItemImage,
+                                                                takenItem->getBehavior()->getNameOfBehavior () );
+
                                 takenItem->getBehavior()->changeActivityOfItem( Vanish );
                                 activity = ( activity == TakeAndJump ? Jump : TakenItem );
 
-                                // get image of that item
-                                takenItemImage = takenItem->getRawImage();
-                                GameManager::getInstance()->setItemTaken( takenItemImage );
-
                                 SoundManager::getInstance()->play( player->getLabel(), TakeItem );
 
-                                std::cout << "took item \"" << takenItemData->label << "\"" << std::endl ;
+                                std::cout << "took item \"" << takenItem->getLabel() << "\"" << std::endl ;
                         }
                 }
         }
@@ -574,30 +573,28 @@ void UserControlled::takeItem( PlayerItem * player )
 
 void UserControlled::dropItem( PlayerItem* player )
 {
-        if ( takenItemData != 0 )
+        if ( player->getTakenItemData() != 0 )
         {
-                std::cout << "drop item \"" << takenItemData->label << "\"" << std::endl ;
+                std::cout << "drop item \"" << player->getTakenItemData ()->label << "\"" << std::endl ;
 
                 // place dropped item just below player
                 if ( player->addToZ( LayerHeight ) )
                 {
-                        FreeItem* freeItem = new FreeItem( takenItemData,
+                        FreeItem* freeItem = new FreeItem( player->getTakenItemData(),
                                                            player->getX(), player->getY(),
                                                            player->getZ() - LayerHeight,
                                                            NoDirection );
 
-                        freeItem->assignBehavior( takenItemBehavior, 0 );
+                        freeItem->assignBehavior( player->getTakenItemBehavior(), 0 );
 
                         player->getMediator()->getRoom()->addFreeItem( freeItem );
 
-                        takenItemData = 0;
-                        takenItemImage = 0;
-                        takenItemBehavior = "still";
+                        player->assignTakenItem( 0, 0, "still" );
 
                         // update activity
                         activity = ( activity == DropAndJump ? Jump : Wait );
 
-                        GameManager::getInstance()->setItemTaken( takenItemImage );
+                        GameManager::getInstance()->setItemTaken( 0 );
 
                         SoundManager::getInstance()->stop( player->getLabel(), Fall );
                         SoundManager::getInstance()->play( player->getLabel(), DropItem );
@@ -618,13 +615,6 @@ void UserControlled::dropItem( PlayerItem* player )
 void UserControlled::setMoreData( void * data )
 {
         this->itemDataManager = reinterpret_cast< ItemDataManager * >( data );
-}
-
-void UserControlled::assignTakenItem( ItemData* itemData, BITMAP* takenItemImage, const std::string& behavior )
-{
-        this->takenItemData = itemData;
-        this->takenItemImage = takenItemImage;
-        this->takenItemBehavior = behavior;
 }
 
 }

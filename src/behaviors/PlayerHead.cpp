@@ -208,7 +208,6 @@ void PlayerHead::behave ()
                         else if ( input->doughnut() && ! fireFromHooterIsPresent )
                         {
                                 useHooter( playerItem );
-                                // Las repeticiones de esta tecla no deben procesarse
                                 input->noRepeat( "doughnut" );
                         }
                         // ...y se ha pulsado alguna tecla de movimiento entonces se mueve
@@ -244,7 +243,6 @@ void PlayerHead::behave ()
                         else if ( input->doughnut() && ! fireFromHooterIsPresent )
                         {
                                 useHooter( playerItem );
-                                // Las repeticiones de esta tecla no deben procesarse
                                 input->noRepeat( "doughnut" );
                         }
                         // ...y se ha pulsado alguna tecla de movimiento entonces sigue moviéndose
@@ -283,7 +281,6 @@ void PlayerHead::behave ()
                         else if ( input->doughnut() && ! fireFromHooterIsPresent )
                         {
                                 useHooter( playerItem );
-                                // Las repeticiones de esta tecla no deben procesarse
                                 input->noRepeat( "doughnut" );
                         }
                         // ...y se ha pulsado alguna tecla de movimiento entonces sigue moviéndose

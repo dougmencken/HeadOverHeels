@@ -132,23 +132,6 @@ public:
         void liberatePlanet() ;
 
         /**
-         * Set data of item in handbag
-         */
-        void assignTakenItem( ItemData* itemData, BITMAP* takenItemImage, const std::string& behavior ) ;
-
-        /**
-         * Get data of item in bag
-         */
-        ItemData * getTakenItemData () ;
-
-        /**
-         * Get image of item taken by player
-         */
-        BITMAP * getTakenItemImage () ;
-
-        std::string getTakenItemBehavior () ;
-
-        /**
          * Save game when player meets reincarnation fish
          */
         void save () ;
@@ -247,6 +230,12 @@ private:
          */
         double shieldTime ;
 
+        ItemData* takenItemData ;
+
+        BITMAP* takenItemImage ;
+
+        std::string takenItemBehavior ;
+
 protected:
 
         void setLives ( unsigned char lives ) {  this->lives = lives ;  }
@@ -277,6 +266,27 @@ protected:
         void setDoughnuts ( const unsigned short howMany ) {  this->howManyDoughnuts = howMany ;  }
 
 public:
+
+        /**
+         * Set data for item in player’s handbag
+         */
+        void assignTakenItem ( ItemData * itemData, BITMAP * itemImage, const std::string & behavior ) ;
+
+        /**
+         * Data of item in handbag
+         */
+        ItemData* getTakenItemData () const {  return this->takenItemData ;  }
+
+        /**
+         * Image of item taken by player
+         */
+        BITMAP* getTakenItemImage () const {  return this->takenItemImage ;  }
+
+        /**
+         * Behavior of item taken by player
+         */
+        std::string getTakenItemBehavior () const {  return this->takenItemBehavior ;  }
+
 
         unsigned char getLives () const {  return this->lives ;  }
 

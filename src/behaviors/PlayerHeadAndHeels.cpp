@@ -215,22 +215,19 @@ void PlayerHeadAndHeels::behave ()
                         else if ( input->doughnut() && ! fireFromHooterIsPresent )
                         {
                                 useHooter( dynamic_cast< PlayerItem * >( this->item ) );
-                                // Las repeticiones de esta tecla no deben procesarse
                                 input->noRepeat( "doughnut" );
                         }
                         // ...y ha pulsado la tecla para coger un elemento entonces intenta cogerlo / dejarlo
                         else if ( input->take() )
                         {
-                                activity = ( takenItemData == 0 ? TakeItem : DropItem );
-                                // Las repeticiones de esta tecla no deben procesarse
+                                activity = ( playerItem->getTakenItemData() == 0 ? TakeItem : DropItem );
                                 input->noRepeat( "take" );
                         }
                         // ...y ha pulsado la tecla para coger un elemento y luego saltar entonces
                         // intenta cogerlo / dejarlo y luego salta
                         else if ( input->takeAndJump() )
                         {
-                                activity = ( takenItemData == 0 ? TakeAndJump : DropAndJump );
-                                // Las repeticiones de esta tecla no deben procesarse
+                                activity = ( playerItem->getTakenItemData() == 0 ? TakeAndJump : DropAndJump );
                                 input->noRepeat( "take-jump" );
                         }
                         // ...y se ha pulsado alguna tecla de movimiento entonces se mueve
@@ -266,22 +263,19 @@ void PlayerHeadAndHeels::behave ()
                         else if ( input->doughnut() && ! fireFromHooterIsPresent )
                         {
                                 useHooter( dynamic_cast< PlayerItem * >( this->item ) );
-                                // Las repeticiones de esta tecla no deben procesarse
                                 input->noRepeat( "doughnut" );
                         }
                         // ...y ha pulsado la tecla para coger un elemento entonces intenta cogerlo / dejarlo
                         else if ( input->take() )
                         {
-                                activity = ( takenItemData == 0 ? TakeItem : DropItem );
-                                // Las repeticiones de esta tecla no deben procesarse
+                                activity = ( playerItem->getTakenItemData() == 0 ? TakeItem : DropItem );
                                 input->noRepeat( "take" );
                         }
                         // ...y ha pulsado la tecla para coger un elemento y luego saltar entonces
                         // intenta cogerlo / dejarlo y luego salta
                         else if ( input->takeAndJump() )
                         {
-                                activity = ( takenItemData == 0 ? TakeAndJump : DropAndJump );
-                                // Las repeticiones de esta tecla no deben procesarse
+                                activity = ( playerItem->getTakenItemData() == 0 ? TakeAndJump : DropAndJump );
                                 input->noRepeat( "take-jump" );
                         }
                         // ...y se ha pulsado alguna tecla de movimiento entonces sigue moviéndose
@@ -320,22 +314,19 @@ void PlayerHeadAndHeels::behave ()
                         else if ( input->doughnut() && ! fireFromHooterIsPresent )
                         {
                                 useHooter( dynamic_cast< PlayerItem * >( this->item ) );
-                                // Las repeticiones de esta tecla no deben procesarse
                                 input->noRepeat( "doughnut" );
                         }
                         // ...y ha pulsado la tecla para coger un elemento entonces intenta cogerlo
                         else if ( input->take() )
                         {
-                                activity = ( takenItemData == 0 ? TakeItem : DropItem );
-                                // Las repeticiones de esta tecla no deben procesarse
+                                activity = ( playerItem->getTakenItemData() == 0 ? TakeItem : DropItem );
                                 input->noRepeat( "take" );
                         }
                         // ...y ha pulsado la tecla para coger un elemento y luego saltar entonces
                         // intenta cogerlo / dejarlo y luego salta
                         else if ( input->takeAndJump() )
                         {
-                                activity = ( takenItemData == 0 ? TakeAndJump : DropAndJump );
-                                // Las repeticiones de esta tecla no deben procesarse
+                                activity = ( playerItem->getTakenItemData() == 0 ? TakeAndJump : DropAndJump );
                                 input->noRepeat( "take-jump" );
                         }
                         // ...y se ha pulsado alguna tecla de movimiento entonces sigue moviéndose

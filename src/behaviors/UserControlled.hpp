@@ -227,21 +227,6 @@ protected:
         ItemData* playerData ;
 
        /**
-        * Datos del elemento tomado por el jugador
-        */
-        ItemData* takenItemData ;
-
-       /**
-        * Imagen del elemento tomado por el jugador
-        */
-        BITMAP* takenItemImage ;
-
-       /**
-        * Behavior of item taken by player
-        */
-        std::string takenItemBehavior ;
-
-       /**
         * Cronómetro que controla la velocidad de movimiento del elemento
         */
         HPC* speedTimer ;
@@ -271,20 +256,6 @@ public:
         void setFireFromHooter ( bool isHere ) {  this->fireFromHooterIsPresent = isHere ;  }
 
         void setMoreData ( void * data ) ;
-
-       /**
-        * Set data for item in player’s handbag
-        */
-        void assignTakenItem ( ItemData * itemData, BITMAP * takenItemImage, const std::string & behavior ) ;
-
-       /**
-        * Get data of item in handbag
-        */
-        ItemData* getTakenItemData () const {  return this->takenItemData ;  }
-
-        BITMAP* getTakenItemImage () const {  return this->takenItemImage ;  }
-
-        std::string getTakenItemBehavior () const {  return this->takenItemBehavior ;  }
 
 };
 
