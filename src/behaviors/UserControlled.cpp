@@ -516,30 +516,28 @@ void UserControlled::useHooter( PlayerItem* player )
         }
 }
 
-void UserControlled::take( PlayerItem * player )
+void UserControlled::takeItem( PlayerItem * player )
 {
-        // El jugador puede coger objetos si tiene el bolso
         if ( player->hasTool( "handbag" ) )
         {
                 Mediator* mediator = player->getMediator();
                 Item* takenItem = 0;
 
-                // Comprueba si hay elementos debajo
+                // look for item below player
                 if ( ! player->checkPosition( 0, 0, -1, Add ) )
                 {
                         int coordinates = 0;
 
-                        // Selecciona elementos libres empujables de tamaño menor o igual a 3/4 el tamaño de la loseta
-                        // De haber varios se seleccionará aquel con las coordenadas espaciales mayores
                         while ( ! mediator->isStackOfCollisionsEmpty() )
                         {
                                 Item* bottomItem = mediator->findCollisionPop( );
 
+                                // choose free pushable item less than or equal to 3/4 of size of one tile
                                 if ( bottomItem != 0 && bottomItem->getBehavior() != 0
                                         && ( bottomItem->getBehavior()->getNameOfBehavior() == "behavior of thing able to move by pushing" ||
                                                 bottomItem->getBehavior()->getNameOfBehavior() == "behavior of big leap for player" )
-                                        && bottomItem->getWidthX() <= static_cast< int >( mediator->getRoom()->getSizeOfOneTile() * 3 ) / 4
-                                        && bottomItem->getWidthY() <= static_cast< int >( mediator->getRoom()->getSizeOfOneTile() * 3 ) / 4 )
+                                        && bottomItem->getWidthX() <= static_cast< int >( mediator->getRoom()->getSizeOfOneTile() * 3 ) >> 2
+                                        && bottomItem->getWidthY() <= static_cast< int >( mediator->getRoom()->getSizeOfOneTile() * 3 ) >> 2 )
                                 {
                                         if ( bottomItem->getX() + bottomItem->getY() > coordinates )
                                         {
@@ -562,58 +560,55 @@ void UserControlled::take( PlayerItem * player )
                                 GameManager::getInstance()->setItemTaken( takenItemImage );
 
                                 SoundManager::getInstance()->play( player->getLabel(), TakeItem );
+
+                                std::cout << "took item \"" << takenItemData->label << "\"" << std::endl ;
                         }
                 }
         }
 
-        // Estado inicial si no se ha cogido ningún elemento
         if ( activity != TakenItem && activity != Jump )
         {
                 activity = Wait;
         }
 }
 
-void UserControlled::drop( PlayerItem* player )
+void UserControlled::dropItem( PlayerItem* player )
 {
-        // El jugador debe haber cogido algún elemento
         if ( takenItemData != 0 )
         {
-                // El elemento se deja justo debajo. Si el jugador no puede ascender no es posible dejarlo
+                std::cout << "drop item \"" << takenItemData->label << "\"" << std::endl ;
+
+                // place dropped item just below player
                 if ( player->addToZ( LayerHeight ) )
                 {
-                        // Crea el elemento en la misma posición pero debajo del jugador
                         FreeItem* freeItem = new FreeItem( takenItemData,
                                                            player->getX(), player->getY(),
                                                            player->getZ() - LayerHeight,
                                                            NoDirection );
 
-                        // Sólo pueden cogerse los elementos portátiles o el trampolín
                         freeItem->assignBehavior( takenItemBehavior, 0 );
 
                         player->getMediator()->getRoom()->addFreeItem( freeItem );
 
-                        // El jugador ya no tiene el elemento
                         takenItemData = 0;
                         takenItemImage = 0;
                         takenItemBehavior = "still";
 
-                        // Se actualiza el estado para que salte o se detenga
+                        // update activity
                         activity = ( activity == DropAndJump ? Jump : Wait );
 
-                        // Comunica al gestor del juego que el bolso está vacío
                         GameManager::getInstance()->setItemTaken( takenItemImage );
-                        // Emite el sonido correspondiente
+
                         SoundManager::getInstance()->stop( player->getLabel(), Fall );
                         SoundManager::getInstance()->play( player->getLabel(), DropItem );
                 }
                 else
                 {
-                        // Se emite sonido de o~ ou
+                        // emit sound of o~ ou
                         SoundManager::getInstance()->play( player->getLabel(), Mistake );
                 }
         }
 
-        // Estado inicial si no se ha dejado ningún elemento
         if ( activity != Jump )
         {
                 activity = Wait;

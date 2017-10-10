@@ -139,12 +139,14 @@ public:
         /**
          * Get data of item in bag
          */
-        std::string consultTakenItem( ItemData* itemData ) ;
+        ItemData * getTakenItemData () ;
 
         /**
          * Get image of item taken by player
          */
-        BITMAP * consultTakenItemImage () ;
+        BITMAP * getTakenItemImage () ;
+
+        std::string getTakenItemBehavior () ;
 
         /**
          * Save game when player meets reincarnation fish

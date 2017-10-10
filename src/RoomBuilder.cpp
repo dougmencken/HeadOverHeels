@@ -212,16 +212,14 @@ Room* RoomBuilder::buildRoom ( const std::string& fileName )
 PlayerItem* RoomBuilder::createPlayerInTheSameRoom( bool justEntered,
                                                         const std::string& nameOfPlayer,
                                                         int x, int y, int z,
-                                                        bool withItem,
                                                         const Direction& direction, const Direction& entry )
 {
-        return createPlayerInRoom( this->room, justEntered, nameOfPlayer, x, y, z, withItem, direction, entry );
+        return createPlayerInRoom( this->room, justEntered, nameOfPlayer, x, y, z, direction, entry );
 }
 
 PlayerItem* RoomBuilder::createPlayerInRoom( Room* room, bool justEntered,
                                                         const std::string& nameOfPlayer,
                                                         int x, int y, int z,
-                                                        bool withItem,
                                                         const Direction& direction, const Direction& entry )
 {
         GameManager* gameManager = GameManager::getInstance();
@@ -266,11 +264,8 @@ PlayerItem* RoomBuilder::createPlayerInRoom( Room* room, bool justEntered,
                 {
                         player = new PlayerItem( itemData, x, y, z, direction );
 
-                        // don’t move taken item to other room
-                        if ( withItem )
-                        {
-                                gameManager->setItemTaken( 0 );
-                        }
+                        // forget taken item
+                        gameManager->emptyHandbag( nameOfPlayerToCreate );
 
                         player->fillWithData( gameManager );
 

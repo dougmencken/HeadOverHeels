@@ -498,8 +498,7 @@ public:
         unsigned short getDonuts ( const std::string& player ) const ;
 
         /**
-         * Imagen del elemento que está dentro del bolso
-         * @param bitmap Un fotograma del elemento
+         * Image of the item inside hand bag
          */
         void setItemTaken ( BITMAP* bitmap ) {  this->itemTaken = bitmap ;  }
 

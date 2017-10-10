@@ -581,7 +581,7 @@ void PlayerItem::fillWithData( const GameManager * data )
 
 void PlayerItem::addLives( unsigned char lives )
 {
-        if( this->lives < 100 )
+        if ( this->lives < 100 )
         {
                 this->lives += lives;
                 GameManager::getInstance()->addLives( this->getLabel (), lives );
@@ -590,7 +590,7 @@ void PlayerItem::addLives( unsigned char lives )
 
 void PlayerItem::loseLife()
 {
-        if( this->lives > 0 )
+        if ( this->lives > 0 )
         {
                 this->lives--;
                 GameManager::getInstance()->loseLife( this->getLabel () );
@@ -710,18 +710,23 @@ void PlayerItem::liberatePlanet ()
 
 void PlayerItem::assignTakenItem ( ItemData* itemData, BITMAP* takenItemImage, const std::string& behavior )
 {
+        GameManager::getInstance()->setItemTaken( takenItemImage );
         dynamic_cast< UserControlled* >( this->behavior )->assignTakenItem( itemData, takenItemImage, behavior );
 }
 
-std::string PlayerItem::consultTakenItem ( ItemData* itemData )
+ItemData* PlayerItem::getTakenItemData ()
 {
-        itemData = dynamic_cast< UserControlled * >( this->behavior )->getTakenItemData ();
-        return dynamic_cast< UserControlled * >( this->behavior )->getTakenItemBehavior ();
+        return dynamic_cast< UserControlled * >( this->behavior )->getTakenItemData ();
 }
 
-BITMAP* PlayerItem::consultTakenItemImage ()
+BITMAP* PlayerItem::getTakenItemImage ()
 {
         return dynamic_cast< UserControlled * >( this->behavior )->getTakenItemImage ();
+}
+
+std::string PlayerItem::getTakenItemBehavior ()
+{
+        return dynamic_cast< UserControlled * >( this->behavior )->getTakenItemBehavior ();
 }
 
 void PlayerItem::save ()

@@ -146,7 +146,7 @@ bool PlayerHeels::update()
 
                 case TakeItem:
                 case TakeAndJump:
-                        take( player );
+                        takeItem( player );
                         break;
 
                 case TakenItem:
@@ -156,7 +156,7 @@ bool PlayerHeels::update()
 
                 case DropItem:
                 case DropAndJump:
-                        drop( player );
+                        dropItem( player );
                         break;
 
                 default:

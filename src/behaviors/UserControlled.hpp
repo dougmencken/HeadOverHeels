@@ -132,15 +132,14 @@ protected:
         virtual void useHooter( PlayerItem * player ) ;
 
        /**
-        * El jugador toma el elemento que haya debajo de él
+        * Take item underneath player
         */
-        virtual void take( PlayerItem * player ) ;
+        virtual void takeItem( PlayerItem * player ) ;
 
        /**
-        * El jugador deja un elemento justo debajo de él. Implica un ascenso del jugador en altura
-        * @pre Debe tener un elemento que haya tomado con anterioridad
+        * Drop item just below player
         */
-        virtual void drop( PlayerItem * player ) ;
+        virtual void dropItem( PlayerItem * player ) ;
 
 protected:
 
@@ -265,36 +264,24 @@ protected:
 public:
 
        /**
-        * Número de fases de las que se compone el salto
+        * Number of phases of jump
         */
         int getJumpFrames () const {  return jumpFrames ;  }
 
         void setFireFromHooter ( bool isHere ) {  this->fireFromHooterIsPresent = isHere ;  }
 
-       /**
-        * Almacena el gestor de datos de los elementos del juego
-        * @param data Un puntero a un objeto o estructura de datos
-        */
         void setMoreData ( void * data ) ;
 
        /**
-        * Establece los datos del elemento que tiene el jugador en el bolso
-        * @param itemData Datos del elemento tomado por el jugador
-        * @param takenItemImage Imagen del elemento tomado por el jugador
-        * @param behavior Comportamiento del elemento tomado por el jugador
+        * Set data for item in player’s handbag
         */
         void assignTakenItem ( ItemData * itemData, BITMAP * takenItemImage, const std::string & behavior ) ;
 
        /**
-        * Datos del elemento tomado por el jugador
-        * @return Un registro de datos de un elemento
+        * Get data of item in handbag
         */
         ItemData* getTakenItemData () const {  return this->takenItemData ;  }
 
-       /**
-        * Imagen del elemento tomado por el jugador
-        * @return Una imagen ó 0 si el jugador no tiene ningún elemento
-        */
         BITMAP* getTakenItemImage () const {  return this->takenItemImage ;  }
 
         std::string getTakenItemBehavior () const {  return this->takenItemBehavior ;  }

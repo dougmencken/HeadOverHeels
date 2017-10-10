@@ -58,24 +58,20 @@ public:
         /**
          * Create player in current room
          * @param justEntered Make copy of player used to recreate it when rebuilding room or not
-         * @param withItem Carries player some item in bag or not
          */
         PlayerItem * createPlayerInTheSameRoom ( bool justEntered,
                                                         const std::string& nameOfPlayer,
                                                         int x, int y, int z,
-                                                        bool withItem,
                                                         const Direction& direction, const Direction& entry = JustWait ) ;
 
         /**
          * Create player in given room
-         * @param justEntered Make copy of player used to recreate it when rebuilding room or not
          * @param room Room where to create player
-         * @param withItem Carries player some item in bag or not
+         * @param justEntered Make copy of player used to recreate it when rebuilding room or not
          */
         PlayerItem * createPlayerInRoom ( Room* room, bool justEntered,
                                                         const std::string& nameOfPlayer,
                                                         int x, int y, int z,
-                                                        bool withItem,
                                                         const Direction& direction, const Direction& entry = JustWait );
 
         static int getXCenterOfRoom ( ItemData* playerData, Room* theRoom ) ;

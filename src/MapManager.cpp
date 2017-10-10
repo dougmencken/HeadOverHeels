@@ -133,7 +133,7 @@ void MapManager::beginNewGame( const std::string& firstRoomFileName, const std::
                         int centerY = RoomBuilder::getYCenterOfRoom( firstPlayerData, firstRoom );
 
                         // create player Head
-                        roomBuilder->createPlayerInTheSameRoom( true, "head", centerX, centerY, 0, false, West );
+                        roomBuilder->createPlayerInTheSameRoom( true, "head", centerX, centerY, 0, West );
 
                         firstRoomData->setVisited( true );
 
@@ -162,7 +162,7 @@ void MapManager::beginNewGame( const std::string& firstRoomFileName, const std::
                         int centerY = RoomBuilder::getYCenterOfRoom( secondPlayerData, secondRoom );
 
                         // create player Heels
-                        roomBuilder->createPlayerInTheSameRoom( true, "heels", centerX, centerY, 0, false, South );
+                        roomBuilder->createPlayerInTheSameRoom( true, "heels", centerX, centerY, 0, South );
 
                         secondRoomData->setVisited( true );
 
@@ -204,7 +204,6 @@ void MapManager::beginOldGameWithCharacter( const sgxml::player& data )
                                                                 true,
                                                                 nameOfCharacter,
                                                                 data.x (), data.y (), data.z (),
-                                                                false,
                                                                 Direction( data.direction() ), Direction( data.entry() ) );
 
                         roomData->setVisited( true );
@@ -305,9 +304,6 @@ Room* MapManager::changeRoom( const Direction& exit )
         int southBound = previousRoom->getBound( South );
         int westBound = previousRoom->getBound( West );
 
-        // if player carries some item
-        bool withItem = oldItemOfRoamer->consultTakenItemImage() != 0;
-
         // remove active player from previous room
         previousRoom->removePlayerFromRoom( oldItemOfRoamer, true );
         oldItemOfRoamer = 0;
@@ -356,7 +352,7 @@ Room* MapManager::changeRoom( const Direction& exit )
                 entryZ = Top;
         }
 
-        PlayerItem* newItemOfRoamer = roomBuilder->createPlayerInRoom( newRoom, true, nameOfRoamer, entryX, entryY, entryZ, withItem, exitOrientation, entry );
+        PlayerItem* newItemOfRoamer = roomBuilder->createPlayerInRoom( newRoom, true, nameOfRoamer, entryX, entryY, entryZ, exitOrientation, entry );
 
         newItemOfRoamer->autoMoveOnEntry( entry );
 
@@ -374,22 +370,23 @@ Room* MapManager::changeRoom( const Direction& exit )
 Room* MapManager::rebuildRoom()
 {
         activeRoom->deactivate();
+        Room* oldRoom = activeRoom;
 
-        MapRoomData* activeRoomData = findRoomData( activeRoom->getNameOfFileWithDataAboutRoom() );
+        MapRoomData* oldRoomData = findRoomData( oldRoom->getNameOfFileWithDataAboutRoom() );
 
         // rebuild room by data from map
         std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( isomot->getItemDataManager() ) );
-        Room* newRoom = roomBuilder->buildRoom ( isomot::sharePath() + "map/" + activeRoomData->getNameOfRoomFile() );
+        Room* newRoom = roomBuilder->buildRoom ( isomot::sharePath() + "map/" + oldRoomData->getNameOfRoomFile() );
 
-        std::string nameOfActivePlayer = activeRoom->getMediator()->getActivePlayer()->getLabel();
-        std::string nameOfActivePlayerBeforeJoining = activeRoom->getMediator()->getLastActivePlayerBeforeJoining();
+        std::string nameOfActivePlayer = oldRoom->getMediator()->getActivePlayer()->getLabel();
+        std::string nameOfActivePlayerBeforeJoining = oldRoom->getMediator()->getLastActivePlayerBeforeJoining();
 
         Direction direction = NoDirection;
         PlayerItem* alivePlayer = 0;
 
         // for each player entered this room
-        std::list < const PlayerItem * > playersOnEntry = activeRoom->getPlayersWhoEnteredRoom ();
-        for ( std::list< const PlayerItem * >::const_iterator it = playersOnEntry.begin (); it != playersOnEntry.end (); ++it )
+        std::list < const PlayerItem * > playersOnEntry = oldRoom->getPlayersWhoEnteredRoom ();
+        for ( std::list< const PlayerItem * >::const_iterator it = playersOnEntry.begin (); it != playersOnEntry.end (); )
         {
                 const PlayerItem* player = *it;
 
@@ -398,18 +395,32 @@ Room* MapManager::rebuildRoom()
                         std::cout << "got player \"" << player->getLabel() << "\" who entered this room @ MapManager::rebuildRoom" << std::endl ;
 
                         // when joined character splits, then some simple character migrates to another room
-                        // further via swap user changes to room of splitting, and loses life there
-                        // so room rebuilds as fresh one with headoverheels in it
-                        // and as surprise that simple character is still in another room
+                        // and further via swap user changes to room of splitting, and loses life there
+                        // then don’t rebuild room with headoverheels but with character left in this room
+
                         if ( player->getLabel() == "headoverheels" && rooms.size() > 1 )
                         {
-                                // get that another room
-                                std::vector< Room* >::iterator ri = std::find_if( rooms.begin (), rooms.end (), std::bind2nd( EqualRoom(), activeRoom->getNameOfFileWithDataAboutRoom() ) );
-                                ++ri ;
-                                Room* roomToForget = ( ri != rooms.end() ? ( *ri ) : *rooms.begin() );
+                                std::cout << "some character migrated to another room, and only \"" << nameOfActivePlayer << "\" is still here" << std::endl ;
 
-                                // and forget it
-                                removeRoom( roomToForget );
+                                int playerX = player->getX();
+                                int playerY = player->getY();
+                                int playerZ = player->getZ();
+                                Direction playerDirection = player->getDirection();
+                                Direction playerEntry = player->getDirectionOfEntry();
+
+                                // forget composite player
+                                oldRoom->removePlayerFromRoom( oldRoom->getMediator()->getActivePlayer(), true );
+
+                                // create simple player
+                                roomBuilder->createPlayerInRoom( oldRoom, true,
+                                                                        nameOfActivePlayer,
+                                                                        playerX, playerY, playerZ,
+                                                                        playerDirection, playerEntry );
+
+                                // update list of players and rewind iterator
+                                playersOnEntry = oldRoom->getPlayersWhoEnteredRoom ();
+                                it = playersOnEntry.begin ();
+                                continue;
                         }
 
                         direction = player->getDirection();
@@ -421,14 +432,16 @@ Room* MapManager::rebuildRoom()
                                                                         true,
                                                                         player->getLabel(),
                                                                         player->getX(), player->getY(), player->getZ(),
-                                                                        false, direction, entry );
+                                                                        direction, entry );
 
                         alivePlayer->autoMoveOnEntry( entry );
                 }
+
+                it++ ; // next player
         }
 
         // remove existing room
-        removeRoom( activeRoom );
+        removeRoom( oldRoom );
 
         if ( alivePlayer != 0 )
         {
@@ -472,10 +485,17 @@ Room* MapManager::createRoom( const std::string& fileName )
         return roomBuilder->buildRoom( isomot::sharePath() + "map/" + fileName );
 }
 
-Room* MapManager::createRoomThenAddItToListOfRooms( const std::string& fileName )
+Room* MapManager::createRoomThenAddItToListOfRooms( const std::string& fileName, bool markVisited )
 {
         Room* room = createRoom( fileName );
         rooms.push_back( room );
+
+        if ( markVisited )
+        {
+                MapRoomData* roomData = findRoomData( fileName );
+                roomData->setVisited( true );
+        }
+
         return room;
 }
 

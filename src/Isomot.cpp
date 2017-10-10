@@ -308,7 +308,7 @@ BITMAP* Isomot::update()
                         teleportedPlayer->fillWithData( gameManager );
 
                         std::string nameOfRoomNearFinal = "blacktooth/blacktooth83.xml";
-                        Room* roomWithTeleportToFinalScene = this->mapManager->createRoomThenAddItToListOfRooms( nameOfRoomNearFinal );
+                        Room* roomWithTeleportToFinalScene = this->mapManager->createRoomThenAddItToListOfRooms( nameOfRoomNearFinal, true );
                         roomWithTeleportToFinalScene->addPlayerToRoom( teleportedPlayer, true );
                         teleportedPlayer->getBehavior()->changeActivityOfItem( BeginWayInTeletransport );
 

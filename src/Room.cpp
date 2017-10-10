@@ -216,7 +216,6 @@ void Room::addDoor( Door * door )
 
 
 #define NULL_GRIDITEM           "Cannot add grid item which is nil"
-#define NO_ISOMOT_GRIDITEM      "Cannot add grid item because Isomot isn't active"
 #define OUT_OF_LIMITS_GRIDITEM  "Coordinates for grid item are out of limits"
 #define OUT_OF_ROOM_GRIDITEM    "Coordinates for grid item are out of room"
 #define ZERO_HEIGHT_GRIDITEM    "Height for grid item is zero or negative"
@@ -228,10 +227,6 @@ void Room::addGridItem( GridItem * gridItem )
         {
                 if ( ! gridItem )
                         throw Exception( NULL_GRIDITEM );
-
-                // La sala debe estar activa
-                if ( ! this->active )
-                        throw Exception( NO_ISOMOT_GRIDITEM );
 
                 // Las coordenadas deben estar dentro de los límites
                 if ( ( gridItem->getCellX() < 0 || gridItem->getCellY() < 0 ) ||
@@ -301,7 +296,6 @@ void Room::addGridItem( GridItem * gridItem )
 
 
 #define NULL_FREEITEM           "Cannot add free item which is nil"
-#define NO_ISOMOT_FREEITEM      "Cannot add free item because Isomot isn't active"
 #define OUT_OF_LIMITS_FREEITEM  "Coordinates for free item are out of limits"
 #define OUT_OF_ROOM_FREEITEM    "Coordinates for free item are out of room"
 #define ZERO_WIDTH_FREEITEM     "One or more of dimensions for free item are zero or negative"
@@ -313,10 +307,6 @@ void Room::addFreeItem( FreeItem * freeItem )
         {
                 if ( ! freeItem )
                         throw Exception( NULL_FREEITEM );
-
-                // La sala debe estar activa
-                if ( ! this->active )
-                        throw Exception( NO_ISOMOT_FREEITEM );
 
                 // Las coordenadas deben estar dentro de los límites
                 if ( freeItem->getX() < 0 || freeItem->getY() < 1 || freeItem->getZ() < Top )
@@ -402,7 +392,6 @@ void Room::addFreeItem( FreeItem * freeItem )
 }
 
 
-#define NO_ISOMOT_PLAYER        "Cannot add player because Isomot isn’t active"
 #define OUT_OF_LIMITS_PLAYER    "Coordinates for player are out of limits"
 #define OUT_OF_ROOM_PLAYER      "Coordinates for player are out of room"
 #define ZERO_WIDTH_PLAYER       "One or more of dimensions for player are zero or negative"
@@ -461,9 +450,6 @@ bool Room::addPlayerToRoom( PlayerItem* playerItem, bool playerEntersRoom )
 
         try
         {
-                if ( ! this->active )
-                        throw Exception( NO_ISOMOT_PLAYER );
-
                 if ( playerItem->getX() < 0 || playerItem->getY() < 1 || playerItem->getZ() < Top )
                 {
                         throw Exception( OUT_OF_LIMITS_PLAYER );
@@ -649,7 +635,7 @@ void Room::removeFreeItem( FreeItem * freeItem )
 
 bool Room::removePlayerFromRoom( PlayerItem* playerItem, bool playerExitsRoom )
 {
-        for ( std::list< PlayerItem * >::iterator pi = playersYetInRoom.begin (); pi != playersYetInRoom.end (); ++pi )
+        for ( std::list< PlayerItem * >::const_iterator pi = playersYetInRoom.begin (); pi != playersYetInRoom.end (); ++pi )
         {
                 if ( playerItem == *pi )
                 {

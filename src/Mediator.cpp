@@ -3,6 +3,7 @@
 #include "Mediated.hpp"
 #include "RoomBuilder.hpp"
 #include "Item.hpp"
+#include "ItemData.hpp"
 #include "GridItem.hpp"
 #include "FreeItem.hpp"
 #include "PlayerItem.hpp"
@@ -1022,30 +1023,26 @@ bool Mediator::selectNextPlayer( ItemDataManager* itemDataManager )
                                 int z = reference->getZ();
                                 Direction direction = reference->getDirection();
 
-                                // item that Heels may hold in handbag
-                                ItemData* takenItemData = 0;
-                                BITMAP* takenItemImage = 0;
-                                std::string behaviorOfItemTaken = "still";
-                                if ( previousPlayer->getLabel() == "heels" )
-                                {
-                                        behaviorOfItemTaken = previousPlayer->consultTakenItem( takenItemData );
-                                        takenItemImage = previousPlayer->consultTakenItemImage();
-                                }
-                                else
-                                {
-                                        behaviorOfItemTaken = activePlayer->consultTakenItem( takenItemData );
-                                        takenItemImage = activePlayer->consultTakenItemImage();
-                                }
+                                // item that Heels may have in handbag
+                                PlayerItem* heels = reference;
+                                ItemData* takenItemData = heels->getTakenItemData ();
+                                BITMAP* takenItemImage = heels->getTakenItemImage ();
+                                std::string behaviorOfItemTaken = heels->getTakenItemBehavior( );
 
-                                // remove "simple" players
+                                // remove simple players
                                 this->room->removePlayerFromRoom( previousPlayer, false );
                                 this->room->removePlayerFromRoom( activePlayer, false );
 
-                                // create "composite" player
+                                // create composite player
                                 std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( itemDataManager ) );
-                                activePlayer = roomBuilder->createPlayerInRoom( this->room, false, "headoverheels", x, y, z, false, direction );
+                                activePlayer = roomBuilder->createPlayerInRoom( this->room, false, "headoverheels", x, y, z, direction );
+
                                 // transfer item in handbag
-                                activePlayer->assignTakenItem( takenItemData, takenItemImage, behaviorOfItemTaken );
+                                if ( takenItemData != 0 )
+                                {
+                                        std::cout << "transfer item \"" << takenItemData->label << "\" to player \"" << activePlayer->getLabel() << "\"" << std::endl ;
+                                        activePlayer->assignTakenItem( takenItemData, takenItemImage, behaviorOfItemTaken );
+                                }
 
                                 // release exclusive access to the list of free items
                                 pthread_mutex_unlock( &freeItemsMutex );
@@ -1059,28 +1056,34 @@ bool Mediator::selectNextPlayer( ItemDataManager* itemDataManager )
         // is it composite player
         else if ( activePlayer->getLabel() == "headoverheels" )
         {
+                std::cout << "split \"" << activePlayer->getLabel() << "\" in room " << room->getNameOfFileWithDataAboutRoom() << std::endl ;
+
                 int x = activePlayer->getX();
                 int y = activePlayer->getY();
                 int z = activePlayer->getZ();
                 Direction direction = activePlayer->getDirection();
 
                 // get data of item in handbag
-                ItemData* takenItemData = 0;
-                std::string behaviorOfItemTaken = activePlayer->consultTakenItem( takenItemData );
-                BITMAP* takenItemImage = activePlayer->consultTakenItemImage();
+                ItemData* takenItemData = activePlayer->getTakenItemData ();
+                std::string behaviorOfItemTaken = activePlayer->getTakenItemBehavior( );
+                BITMAP* takenItemImage = activePlayer->getTakenItemImage ();
 
-                // remove "composite" player
-                std::cout << "split \"" << activePlayer->getLabel() << "\" in room " << room->getNameOfFileWithDataAboutRoom() << std::endl ;
+                // remove composite player
                 this->room->removePlayerFromRoom( activePlayer, false );
 
-                // create "simple" players
+                // create simple players
 
                 std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( itemDataManager ) );
 
-                PlayerItem* heelsPlayer = roomBuilder->createPlayerInRoom( this->room, false, "heels", x, y, z, false, direction );
-                heelsPlayer->assignTakenItem( takenItemData, takenItemImage, behaviorOfItemTaken );
+                PlayerItem* heelsPlayer = roomBuilder->createPlayerInRoom( this->room, false, "heels", x, y, z, direction );
 
-                PlayerItem* headPlayer = roomBuilder->createPlayerInRoom( this->room, false, "head", x, y, z + LayerHeight, false, direction );
+                if ( takenItemData != 0 )
+                {
+                        std::cout << "transfer item \"" << takenItemData->label << "\" to player \"" << heelsPlayer->getLabel() << "\"" << std::endl ;
+                        heelsPlayer->assignTakenItem( takenItemData, takenItemImage, behaviorOfItemTaken );
+                }
+
+                PlayerItem* headPlayer = roomBuilder->createPlayerInRoom( this->room, false, "head", x, y, z + LayerHeight, direction );
 
                 activePlayer = ( this->lastActivePlayer == "head" ) ? heelsPlayer : headPlayer;
                 previousPlayer = ( activePlayer == headPlayer ) ? heelsPlayer : headPlayer;

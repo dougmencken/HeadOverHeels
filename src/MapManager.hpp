@@ -73,7 +73,7 @@ public:
          */
         Room * createRoom ( const std::string& fileName ) ;
 
-        Room * createRoomThenAddItToListOfRooms ( const std::string& fileName ) ;
+        Room * createRoomThenAddItToListOfRooms ( const std::string& fileName, bool markVisited ) ;
 
         /**
          * Change active room to next room
