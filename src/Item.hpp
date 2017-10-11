@@ -25,18 +25,12 @@ namespace isomot
 class ItemData ;
 class Behavior ;
 
-/**
- * Data of item to change
- */
-enum Datum
+enum Coordinate
 {
-        CoordinateX,
-        CoordinateY,
-        CoordinateZ,
-        CoordinatesXYZ,
-        WidthX,
-        WidthY,
-        Height
+        CoordinateX = 1,
+        CoordinateY = 2,
+        CoordinateZ = 4,
+        CoordinatesXYZ = 7
 } ;
 
 enum ChangeOrAdd

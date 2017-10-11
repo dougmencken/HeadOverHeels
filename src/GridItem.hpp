@@ -92,23 +92,9 @@ public:
          */
         virtual bool addToZ ( int value ) ;
 
-        /**
-         * Cambia la altura del elemento
-         * @param value Nueva altura del elemento
-         * @return true si se pudo cambiar el dato o false si hubo colisión y no hubo cambio
-         */
-        virtual bool changeHeight ( int value ) ;
-
-        /**
-         * Cambia la altura del elemento
-         * @param value Valor que se sumará a la altura actual
-         * @return true si se pudo cambiar el dato o false si hubo colisión y no hubo cambio
-         */
-        virtual bool addHeight ( int value ) ;
-
 protected:
 
-        virtual bool changeData ( int value, const Datum& datum, const ChangeOrAdd& what ) ;
+        virtual bool updatePosition ( int newValue, const Coordinate& whatToChange, const ChangeOrAdd& what ) ;
 
 protected:
 

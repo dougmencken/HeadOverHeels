@@ -632,7 +632,7 @@ void FreeItem::maskImage( int x, int y, BITMAP* image )
         }
 }
 
-bool FreeItem::changeData( int newValue, int x, int y, int z, const Datum& datum, const ChangeOrAdd& how )
+bool FreeItem::updatePosition( int newX, int newY, int newZ, const Coordinate& whatToChange, const ChangeOrAdd& how )
 {
         mediator->clearStackOfCollisions( );
 
@@ -641,37 +641,17 @@ bool FreeItem::changeData( int newValue, int x, int y, int z, const Datum& datum
         // copy item before making the move
         FreeItem oldFreeItem( *this );
 
-        switch ( datum )
+        if ( whatToChange & CoordinateX )
         {
-                case CoordinateX:
-                        this->x = newValue + this->x * how;
-                        break;
-
-                case CoordinateY:
-                        this->y = newValue + this->y * how;
-                        break;
-
-                case CoordinateZ:
-                        this->z = newValue + this->z * how;
-                        break;
-
-                case CoordinatesXYZ:
-                        this->x = x + this->x * how;
-                        this->y = y + this->y * how;
-                        this->z = z + this->z * how;
-                        break;
-
-                case WidthX:
-                        this->dataOfItem->setWidthX( newValue + getDataOfItem()->getWidthX() * how );
-                        break;
-
-                case WidthY:
-                        this->dataOfItem->setWidthY( newValue + getDataOfItem()->getWidthY() * how );
-                        break;
-
-                case Height:
-                        this->dataOfItem->setHeight( newValue + getDataOfItem()->getHeight() * how );
-                        break;
+                this->x = newX + this->x * how;
+        }
+        if ( whatToChange & CoordinateY )
+        {
+                this->y = newY + this->y * how;
+        }
+        if ( whatToChange & CoordinateZ )
+        {
+                this->z = newZ + this->z * how;
         }
 
         // look for collision with real wall, one which limits the room
@@ -757,22 +737,22 @@ bool FreeItem::changeData( int newValue, int x, int y, int z, const Datum& datum
 
 bool FreeItem::addToX ( int value )
 {
-        return this->changeData( value, 0, 0, 0, CoordinateX, Add );
+        return this->updatePosition( value, 0, 0, CoordinateX, Add );
 }
 
 bool FreeItem::addToY ( int value )
 {
-        return this->changeData( value, 0, 0, 0, CoordinateY, Add );
+        return this->updatePosition( 0, value, 0, CoordinateY, Add );
 }
 
 bool FreeItem::addToZ ( int value )
 {
-        return this->changeData( value, 0, 0, 0, CoordinateZ, Add );
+        return this->updatePosition( 0, 0, value, CoordinateZ, Add );
 }
 
 bool FreeItem::addToPosition( int x, int y, int z )
 {
-        return this->changeData( 0, x, y, z, CoordinatesXYZ, Add );
+        return this->updatePosition( x, y, z, CoordinatesXYZ, Add );
 }
 
 bool FreeItem::changeTransparency( unsigned char value, const ChangeOrAdd& how )

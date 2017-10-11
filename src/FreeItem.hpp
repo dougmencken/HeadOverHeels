@@ -145,7 +145,7 @@ public:
 
 protected:
 
-        virtual bool changeData ( int newValue, int x, int y, int z, const Datum& datum, const ChangeOrAdd& addOrChange ) ;
+        virtual bool updatePosition ( int newX, int newY, int newZ, const Coordinate& whatToChange, const ChangeOrAdd& addOrChange ) ;
 
 protected:
 
@@ -194,7 +194,7 @@ public:
 
         /**
          * Establece la capacidad del elemento para detectar colisiones
-         * @param collisionDetector true si detecta colisiones (valor por defecto al crear el elemento) o false caso contrario
+         * @param collisionDetector true si detecta colisiones, valor por defecto al crear el elemento, o false caso contrario
          */
         void setCollisionDetector ( bool collisionDetector ) {  this->collisionDetector = collisionDetector ;  }
 

@@ -143,7 +143,7 @@ void PlayerItem::autoMoveOnEntry ( const Direction& entry )
         }
 }
 
-bool PlayerItem::changeData( int newValue, int x, int y, int z, const Datum& datum, const ChangeOrAdd& how )
+bool PlayerItem::updatePosition( int newX, int newY, int newZ, const Coordinate& whatToChange, const ChangeOrAdd& how )
 {
         bool itAutomoves = getBehavior()->getActivityOfItem() == AutoMoveNorth ||
                                 getBehavior()->getActivityOfItem() == AutoMoveSouth ||
@@ -152,7 +152,7 @@ bool PlayerItem::changeData( int newValue, int x, int y, int z, const Datum& dat
 
         if ( ! this->isActivePlayer() && ! itAutomoves )
         {
-                return FreeItem::changeData( newValue, x, y, z, datum, how );
+                return FreeItem::updatePosition( newX, newY, newZ, whatToChange, how );
         }
 
         mediator->clearStackOfCollisions( );
@@ -162,37 +162,17 @@ bool PlayerItem::changeData( int newValue, int x, int y, int z, const Datum& dat
         // copy item before moving
         PlayerItem oldPlayerItem( *this );
 
-        switch ( datum )
+        if ( whatToChange & CoordinateX )
         {
-                case CoordinateX:
-                        this->x = newValue + this->x * how;
-                        break;
-
-                case CoordinateY:
-                        this->y = newValue + this->y * how;
-                        break;
-
-                case CoordinateZ:
-                        this->z = newValue + this->z * how;
-                        break;
-
-                case CoordinatesXYZ:
-                        this->x = x + this->x * how;
-                        this->y = y + this->y * how;
-                        this->z = z + this->z * how;
-                        break;
-
-                case WidthX:
-                        getDataOfItem()->setWidthX( newValue + getDataOfItem()->getWidthX() * how );
-                        break;
-
-                case WidthY:
-                        getDataOfItem()->setWidthY( newValue + getDataOfItem()->getWidthY() * how );
-                        break;
-
-                case Height:
-                        getDataOfItem()->setHeight( newValue + getDataOfItem()->getHeight() * how );
-                        break;
+                this->x = newX + this->x * how;
+        }
+        if ( whatToChange & CoordinateY )
+        {
+                this->y = newY + this->y * how;
+        }
+        if ( whatToChange & CoordinateZ )
+        {
+                this->z = newZ + this->z * how;
         }
 
         // look for collision with door
@@ -203,8 +183,8 @@ bool PlayerItem::changeData( int newValue, int x, int y, int z, const Datum& dat
         if ( collisionFound )
         {
                 // direction of movement
-                int wayX = ( datum == CoordinateX || x != 0 ? newValue : 0 );
-                int wayY = ( datum == CoordinateY || y != 0 ? newValue : 0 );
+                int wayX = ( ( whatToChange & CoordinateX ) != 0 || x != 0 ? newX : 0 );
+                int wayY = ( ( whatToChange & CoordinateY ) != 0 || y != 0 ? newY : 0 );
 
                 while ( ! mediator->isStackOfCollisionsEmpty () )
                 {

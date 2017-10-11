@@ -500,53 +500,33 @@ void GridItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
 
 bool GridItem::addToZ( int value )
 {
-        return changeData( value, CoordinateZ, Add );
+        return updatePosition( value, CoordinateZ, Add );
 }
 
-bool GridItem::changeHeight( int value )
+bool GridItem::updatePosition( int newValue, const Coordinate& whatToChange, const ChangeOrAdd& what )
 {
-        return changeData( value, Height, Change );
-}
-
-bool GridItem::addHeight( int value )
-{
-        return changeData( value, Height, Add );
-}
-
-bool GridItem::changeData( int value, const Datum& datum, const ChangeOrAdd& what )
-{
+        mediator->clearStackOfCollisions( );
         bool collisionFound = false;
 
-        // Vacía la pila de colisiones
-        mediator->clearStackOfCollisions( );
-
-        // Copia el elemento antes de realizar el movimiento
         GridItem oldGridItem( *this );
 
-        // Calcula el nuevo valor dependiendo del dato y el modo elegidos
-        if ( datum == CoordinateZ )
+        if ( whatToChange & CoordinateZ )
         {
-                this->z = value + this->z * what;
-        }
-        else if ( datum == Height )
-        {
-                this->dataOfItem->setHeight( value + this->dataOfItem->getHeight() * what );
+                this->z = newValue + this->z * what;
         }
 
-        // Si ha habido colisión con el suelo se interrumpe el proceso
+        // is there collision with floor
         if ( this->z < 0 )
         {
                 mediator->pushCollision( Floor );
                 collisionFound = true;
         }
-        // En caso contrario se buscan colisiones con otros elementos
+        // or maybe with other items in room
         else
         {
-                // Si hay colisión se interrumpe el proceso
                 if ( ! ( collisionFound = mediator->findCollisionWithItem( this ) ) )
                 {
-                        // Si el elemento rejilla tiene imagen se marcan para enmascarar los elementos
-                        // libres cuyas imágenes se solapen con la suya y espacialmente queden detrás suyo
+                        // for grid element with image, mark to mask overlapping free items
                         if ( this->rawImage )
                         {
                                 // how many pixels is image from origin of room
@@ -561,9 +541,8 @@ bool GridItem::changeData( int value, const Datum& datum, const ChangeOrAdd& wha
                                 this->offset.first = this->offset.second = 0;
                         }
 
-                        // Si cambió la posición Z y las sombras están activas se buscan qué elementos hay que
-                        // volver a sombrear
-                        if ( datum == CoordinateZ && mediator->getDegreeOfShading() < 256 )
+                        // reshade items after change of position on Z
+                        if ( whatToChange & CoordinateZ && mediator->getDegreeOfShading() < 256 )
                         {
                                 if ( this->z > oldGridItem.getZ() )
                                         mediator->reshadeWithItem( this );
@@ -571,7 +550,6 @@ bool GridItem::changeData( int value, const Datum& datum, const ChangeOrAdd& wha
                                         mediator->reshadeWithItem( &oldGridItem );
                         }
 
-                        // Se ordena la columna de elementos rejilla
                         mediator->activateGridItemsSorting();
                 }
         }
