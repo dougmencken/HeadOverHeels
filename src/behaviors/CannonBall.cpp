@@ -24,7 +24,6 @@ CannonBall::~CannonBall( )
 
 bool CannonBall::update ()
 {
-        FreeItem* freeItem = dynamic_cast< FreeItem* >( this->item );
         bool isGone = false;
 
         switch ( activity )
@@ -34,13 +33,13 @@ bool CannonBall::update ()
                         break;
 
                 case MoveNorth:
-                        if ( speedTimer->getValue() > freeItem->getSpeed() )
+                        if ( speedTimer->getValue() > this->item->getSpeed() )
                         {
                                 // look for collisions with items that are to the north
-                                freeItem->checkPosition( -1, 0, 0, Add );
+                                this->item->checkPosition( -1, 0, 0, Add );
 
                                 // move ball when there’s no collision
-                                if ( freeItem->getMediator()->isStackOfCollisionsEmpty() )
+                                if ( this->item->getMediator()->isStackOfCollisionsEmpty() )
                                 {
                                         whatToDo->move( this, &activity, false );
                                 }
@@ -64,7 +63,7 @@ bool CannonBall::update ()
 
                                 speedTimer->reset();
 
-                                freeItem->animate();
+                                this->item->animate();
                         }
                         break;
 

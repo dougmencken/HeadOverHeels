@@ -14,15 +14,16 @@ GridItem::GridItem( ItemData* itemData, int cx, int cy, int z, const Direction& 
         this->cell.second = cy;
 
         // free coordinates of grid item
-        this->x = cx * this->dataOfItem->widthX;
-        this->y = ( cy + 1 ) * this->dataOfItem->widthY - 1;
+        this->x = cx * this->dataOfItem->getWidthX();
+        this->y = ( cy + 1 ) * this->dataOfItem->getWidthY() - 1;
 
-        this->rawImage = itemData->motion[ itemData->motion.size() / itemData->directionFrames * direction ];
+        unsigned int position = itemData->howManyMotions() / itemData->howManyDirectionFrames() * direction;
+        this->rawImage = itemData->getMotionAt( position );
 
         // may have no shadow
-        if ( itemData->shadowWidth != 0 && itemData->shadowHeight != 0 )
+        if ( itemData->getWidthOfShadow() > 0 && itemData->getHeightOfShadow() > 0 )
         {
-                this->shadow = itemData->shadows[ itemData->motion.size() / itemData->directionFrames * direction ];
+                this->shadow = itemData->getShadowAt( position );
         }
 }
 
@@ -135,8 +136,7 @@ void GridItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
         // is item not fully transparent
         if ( transparency < 100 )
         {
-                // Anchura del elemento
-                int width = this->dataOfItem->widthX;
+                int width = this->dataOfItem->getWidthX() ;
                 // Coordenada inicial X
                 int inix = x - this->offset.first;
                 if ( inix < 0 ) inix = 0;
@@ -150,7 +150,7 @@ void GridItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
                 int endy = y - this->offset.second + shadow->h;
                 if ( endy > this->rawImage->h ) endy = this->rawImage->h;
                 // Coordenada intermedia Y
-                int my = this->rawImage->h - width - this->dataOfItem->height + 1;
+                int my = this->rawImage->h - width - this->dataOfItem->getHeight() + 1;
                 if ( endy < my ) my = endy;
                 if ( endy > my + width ) endy = my + width;
 
@@ -513,7 +513,7 @@ bool GridItem::addHeight( int value )
         return changeData( value, Height, Add );
 }
 
-bool GridItem::changeData( int value, const Datum& datum, const WhatToDo& what )
+bool GridItem::changeData( int value, const Datum& datum, const ChangeOrAdd& what )
 {
         bool collisionFound = false;
 
@@ -530,7 +530,7 @@ bool GridItem::changeData( int value, const Datum& datum, const WhatToDo& what )
         }
         else if ( datum == Height )
         {
-                this->dataOfItem->height = value + this->dataOfItem->height * what;
+                this->dataOfItem->setHeight( value + this->dataOfItem->getHeight() * what );
         }
 
         // Si ha habido colisión con el suelo se interrumpe el proceso
@@ -576,11 +576,11 @@ bool GridItem::changeData( int value, const Datum& datum, const WhatToDo& what )
                 }
         }
 
-        // Si se hubo colisión se restauran los valores anteriores
+        // restore previous values on collision
         if ( collisionFound )
         {
                 this->z = oldGridItem.getZ();
-                this->dataOfItem->height = oldGridItem.getHeight();
+                this->dataOfItem->setHeight( oldGridItem.getHeight() );
                 this->offset.second = oldGridItem.getOffsetY();
         }
 

@@ -275,8 +275,8 @@ BITMAP* Isomot::update()
                         {
                                 ItemData* chapeauData = this->itemDataManager->findItemByLabel( "crown" );
 
-                                int x = ( activeRoom->getBound( South ) - activeRoom->getBound( North ) + chapeauData->widthX ) >> 1 ;
-                                int y = ( activeRoom->getBound( West ) - activeRoom->getBound( East ) + chapeauData->widthY ) >> 1 ;
+                                int x = ( activeRoom->getBound( South ) - activeRoom->getBound( North ) + chapeauData->getWidthX() ) >> 1 ;
+                                int y = ( activeRoom->getBound( West ) - activeRoom->getBound( East ) + chapeauData->getWidthY() ) >> 1 ;
 
                                 FreeItem* chapeau = new FreeItem( chapeauData, x, y, 250, NoDirection );
                                 chapeau->assignBehavior( "behavior of something special", chapeauData );

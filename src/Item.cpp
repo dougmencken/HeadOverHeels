@@ -11,24 +11,26 @@ namespace isomot
 {
 
 Item::Item( ItemData* data, int z, const Direction& direction )
-: Mediated(),
+      : Mediated(),
         id( 0 ),
-        label( data->label ),
+        label( data->getLabel() ),
         dataOfItem( data ),
+        x( 0 ),
+        y( 0 ),
         z( z ),
         direction( direction ),
-        frameIndex( 0 ),
-        backwardMotion( false ),
         myShady( WantShadow ),
         rawImage( 0 ),
         shadow( 0 ),
         processedImage( 0 ),
-        behavior( 0 )
+        behavior( 0 ),
+        frameIndex( 0 ),
+        backwardMotion( false )
 {
         this->offset.first = this->offset.second = 0;
 
         // item with more than one frame per direction has animation
-        if ( ( data->motion.size() - data->extraFrames ) / data->directionFrames > 1 )
+        if ( ( data->howManyMotions() - data->howManyExtraFrames() ) / data->howManyDirectionFrames() > 1 )
         {
                 motionTimer.start();
         }
@@ -43,15 +45,15 @@ Item::Item( const Item& item )
         y( item.y ),
         z( item.z ),
         direction( item.direction ),
-        frameIndex( item.frameIndex ),
-        backwardMotion( item.backwardMotion ),
         myShady( item.myShady ),
         rawImage( item.rawImage ),
         shadow( item.shadow ),
         processedImage( 0 ),
         offset( item.offset ),
         motionTimer( item.motionTimer ),
-        behavior( 0 )
+        behavior( 0 ),
+        frameIndex( item.frameIndex ),
+        backwardMotion( item.backwardMotion )
 {
         if ( item.processedImage != 0 )
         {
@@ -84,15 +86,15 @@ bool Item::animate()
         bool cycle = false;
 
         // item with more than one frame per direction has animation
-        if ( ( dataOfItem->motion.size() - dataOfItem->extraFrames ) / dataOfItem->directionFrames > 1 )
+        if ( ( dataOfItem->howManyMotions() - dataOfItem->howManyExtraFrames() ) / dataOfItem->howManyDirectionFrames() > 1 )
         {
                 // is it time to change frames
-                if ( motionTimer.getValue() > dataOfItem->framesDelay )
+                if ( motionTimer.getValue() > dataOfItem->getDelayBetweenFrames() )
                 {
                         // forward motion
                         if ( ! backwardMotion )
                         {
-                                if ( ++frameIndex >= dataOfItem->frames.size() )
+                                if ( ++frameIndex >= dataOfItem->howManyFrames() )
                                 {
                                         frameIndex = 0;
                                         cycle = true;
@@ -103,23 +105,23 @@ bool Item::animate()
                         {
                                 if ( frameIndex-- <= 0 )
                                 {
-                                        frameIndex = dataOfItem->frames.size() - 1;
+                                        frameIndex = dataOfItem->howManyFrames() - 1;
                                         cycle = true;
                                 }
                         }
 
                         // which frame to show yet
-                        int framesNumber = ( dataOfItem->motion.size() - dataOfItem->extraFrames ) / dataOfItem->directionFrames;
-                        int currentFrame = dataOfItem->frames[ frameIndex ] + ( dataOfItem->directionFrames > 1 ? framesNumber * direction : 0 );
+                        int framesNumber = ( dataOfItem->howManyMotions() - dataOfItem->howManyExtraFrames() ) / dataOfItem->howManyDirectionFrames();
+                        int currentFrame = dataOfItem->getFrameAt( frameIndex ) + ( dataOfItem->howManyDirectionFrames() > 1 ? framesNumber * direction : 0 );
 
                         // change frame of animation
-                        if ( this->rawImage != 0 && this->rawImage != dataOfItem->motion[ currentFrame ] )
+                        if ( this->rawImage != 0 && this->rawImage != dataOfItem->getMotionAt( currentFrame ) )
                         {
-                                changeImage( dataOfItem->motion[ currentFrame ] );
+                                changeImage( dataOfItem->getMotionAt( currentFrame ) );
 
                                 if ( this->shadow != 0 )
                                 {
-                                        changeShadow( dataOfItem->shadows[ currentFrame ] );
+                                        changeShadow( dataOfItem->getShadowAt( currentFrame ) );
                                 }
                         }
 
@@ -133,7 +135,7 @@ bool Item::animate()
 void Item::changeItemData( ItemData* itemData, const std::string& initiatedBy )
 {
         std::cout << "metamorphosis of data for item with label \"" << getLabel()
-                        << "\" to data of \"" << itemData->label
+                        << "\" to data of \"" << itemData->getLabel()
                         << "\" initiated by \"" << initiatedBy << "\"" << std::endl ;
 
         this->dataOfItem = itemData;
@@ -144,19 +146,19 @@ void Item::changeItemData( ItemData* itemData, const std::string& initiatedBy )
 void Item::changeDirection( const Direction& direction )
 {
         // direction is changed only when item has different frames for different directions
-        if ( dataOfItem->directionFrames > 1 )
+        if ( dataOfItem->howManyDirectionFrames() > 1 )
         {
                 // get frame for new direction
-                unsigned int currentFrame = ( ( dataOfItem->motion.size() - dataOfItem->extraFrames ) / dataOfItem->directionFrames ) * direction;
+                unsigned int currentFrame = ( ( dataOfItem->howManyMotions() - dataOfItem->howManyExtraFrames() ) / dataOfItem->howManyDirectionFrames() ) * direction;
 
-                if ( this->rawImage != 0 && currentFrame < dataOfItem->motion.size() && this->rawImage != dataOfItem->motion[ currentFrame ] )
+                if ( this->rawImage != 0 && currentFrame < dataOfItem->howManyMotions() && this->rawImage != dataOfItem->getMotionAt( currentFrame ) )
                 {
                         this->direction = direction;
 
-                        changeImage( dataOfItem->motion[ currentFrame ] );
+                        changeImage( dataOfItem->getMotionAt( currentFrame ) );
 
                         if ( this->shadow != 0 )
-                                changeShadow( dataOfItem->shadows[ currentFrame ] );
+                                changeShadow( dataOfItem->getShadowAt( currentFrame ) );
                 }
         }
 }
@@ -164,23 +166,23 @@ void Item::changeDirection( const Direction& direction )
 void Item::changeFrame( const unsigned int frameIndex )
 {
         // if index of frame is within bounds of vector with sequence of animation
-        if ( dataOfItem->motion.size() > frameIndex )
+        if ( dataOfItem->howManyMotions() > frameIndex )
         {
                 this->frameIndex = frameIndex;
 
                 // change frame
-                if ( this->rawImage != 0 && this->rawImage != dataOfItem->motion[ frameIndex ] )
+                if ( this->rawImage != 0 && this->rawImage != dataOfItem->getMotionAt( frameIndex ) )
                 {
-                        changeImage( dataOfItem->motion[ frameIndex ] );
+                        changeImage( dataOfItem->getMotionAt( frameIndex ) );
 
                         // update shadow too
                         if ( this->shadow != 0 )
-                                changeShadow( dataOfItem->shadows[ frameIndex ] );
+                                changeShadow( dataOfItem->getShadowAt( frameIndex ) );
                 }
         }
 }
 
-bool Item::checkPosition( int x, int y, int z, const WhatToDo& what )
+bool Item::checkPosition( int x, int y, int z, const ChangeOrAdd& what )
 {
         // coordinates before change
         int px = this->x;
@@ -201,7 +203,7 @@ bool Item::checkPosition( int x, int y, int z, const WhatToDo& what )
         {
                 mediator->pushCollision( NorthWall );
         }
-        else if ( this->x + this->dataOfItem->widthX > mediator->getBound( South ) )
+        else if ( this->x + this->dataOfItem->getWidthX() > mediator->getBound( South ) )
         {
                 mediator->pushCollision( SouthWall );
         }
@@ -209,7 +211,7 @@ bool Item::checkPosition( int x, int y, int z, const WhatToDo& what )
         {
                 mediator->pushCollision( WestWall );
         }
-        else if ( this->y - this->dataOfItem->widthY + 1 < mediator->getBound( East ) )
+        else if ( this->y - this->dataOfItem->getWidthY() + 1 < mediator->getBound( East ) )
         {
                 mediator->pushCollision( EastWall );
         }
@@ -240,66 +242,66 @@ void Item::assignBehavior( const std::string& behavior, void* extraData )
         this->behavior = Behavior::createBehaviorByName( this, behavior, extraData );
 }
 
-void Item::setForwardMotion()
+void Item::setForthMotion ()
 {
         this->backwardMotion = false;
         this->frameIndex = 0;
 }
 
-void Item::setBackwardMotion()
+void Item::setReverseMotion ()
 {
         this->backwardMotion = true;
-        this->frameIndex = dataOfItem->frames.size() - 1;
+        this->frameIndex = dataOfItem->howManyFrames() - 1;
 }
 
-int Item::getWidthX() const
+unsigned int Item::getWidthX() const
 {
-        return dataOfItem->widthX;
+        return dataOfItem->getWidthX() ;
 }
 
-int Item::getWidthY() const
+unsigned int Item::getWidthY() const
 {
-        return dataOfItem->widthY;
+        return dataOfItem->getWidthY() ;
+}
+
+unsigned int Item::getHeight() const
+{
+        return dataOfItem->getHeight() ;
 }
 
 void Item::setHeight( int height )
 {
-        dataOfItem->height = height;
-}
-
-int Item::getHeight() const
-{
-        return dataOfItem->height;
+        dataOfItem->setHeight( height );
 }
 
 bool Item::isMortal() const
 {
-        return dataOfItem->mortal;
+        return dataOfItem->isMortal() ;
 }
 
-unsigned char Item::getDirectionFrames() const
+unsigned char Item::countDirectionFrames() const
 {
-        return dataOfItem->directionFrames;
+        return dataOfItem->howManyDirectionFrames() ;
 }
 
 double Item::getSpeed() const
 {
-        return dataOfItem->speed;
+        return dataOfItem->getSpeed() ;
 }
 
 double Item::getWeight() const
 {
-        return dataOfItem->weight;
+        return dataOfItem->getWeight() ;
 }
 
-double Item::getFramesDelay() const
+double Item::getDelayBetweenFrames() const
 {
-        return dataOfItem->framesDelay;
+        return dataOfItem->getDelayBetweenFrames() ;
 }
 
 unsigned int Item::countFrames() const
 {
-        return dataOfItem->motion.size();
+        return dataOfItem->howManyMotions();
 }
 
 void Item::setAnchor( Item* item )

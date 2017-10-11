@@ -43,9 +43,9 @@ FreeItem* Door::getLeftJamb()
                                 case North:
                                 case Northeast:
                                 case Northwest:
-                                        x = cx * tileSize + leftJambData->widthX - 2;
+                                        x = cx * tileSize + leftJambData->getWidthX() - 2;
                                         y = ( cy + 2 ) * tileSize - 2;
-                                        leftLimit = y + leftJambData->widthY;
+                                        leftLimit = y + leftJambData->getWidthY();
                                         break;
 
                                 case South:
@@ -53,7 +53,7 @@ FreeItem* Door::getLeftJamb()
                                 case Southwest:
                                         x = cx * tileSize;
                                         y = ( cy + 2 ) * tileSize - 2;
-                                        leftLimit = y + leftJambData->widthY;
+                                        leftLimit = y + leftJambData->getWidthY();
                                         break;
 
                                 case East:
@@ -61,15 +61,15 @@ FreeItem* Door::getLeftJamb()
                                 case Eastsouth:
                                         x = cx * tileSize;
                                         y = ( cy + 1 ) * tileSize - 1;
-                                        leftLimit = x + leftJambData->widthX;
+                                        leftLimit = x + leftJambData->getWidthX();
                                         break;
 
                                 case West:
                                 case Westnorth:
                                 case Westsouth:
                                         x = cx * tileSize;
-                                        y = ( cy + 1 ) * tileSize - leftJambData->widthY + 1;
-                                        leftLimit = x + leftJambData->widthX;
+                                        y = ( cy + 1 ) * tileSize - leftJambData->getWidthY() + 1;
+                                        leftLimit = x + leftJambData->getWidthX();
                                         break;
 
                                 default:
@@ -99,8 +99,8 @@ FreeItem* Door::getRightJamb()
                                 case North:
                                 case Northeast:
                                 case Northwest:
-                                        x = cx * tileSize + rightJambData->widthX - 2;
-                                        y = cy * tileSize + rightJambData->widthY - 1;
+                                        x = cx * tileSize + rightJambData->getWidthX() - 2;
+                                        y = cy * tileSize + rightJambData->getWidthY() - 1;
                                         rightLimit = y;
                                         break;
 
@@ -108,14 +108,14 @@ FreeItem* Door::getRightJamb()
                                 case Southeast:
                                 case Southwest:
                                         x = cx * tileSize;
-                                        y = cy * tileSize + rightJambData->widthY - 1;
+                                        y = cy * tileSize + rightJambData->getWidthY() - 1;
                                         rightLimit = y;
                                         break;
 
                                 case East:
                                 case Eastnorth:
                                 case Eastsouth:
-                                        x = ( cx + 2 ) * tileSize - rightJambData->widthX - 2;
+                                        x = ( cx + 2 ) * tileSize - rightJambData->getWidthX() - 2;
                                         y = ( cy + 1 ) * tileSize - 1;
                                         rightLimit = x;
                                         break;
@@ -123,8 +123,8 @@ FreeItem* Door::getRightJamb()
                                 case West:
                                 case Westnorth:
                                 case Westsouth:
-                                        x = ( cx + 2 ) * tileSize - rightJambData->widthX - 2;
-                                        y = ( cy + 1 ) * tileSize - rightJambData->widthY + 1;
+                                        x = ( cx + 2 ) * tileSize - rightJambData->getWidthX() - 2;
+                                        y = ( cy + 1 ) * tileSize - rightJambData->getWidthY() + 1;
                                         rightLimit = x;
                                         break;
 
@@ -155,7 +155,7 @@ FreeItem* Door::getLintel()
                                 case North:
                                 case Northeast:
                                 case Northwest:
-                                        x = cx * tileSize + lintelData->widthX - 2;
+                                        x = cx * tileSize + lintelData->getWidthX() - 2;
                                         y = ( cy + 2 ) * tileSize - 1;
                                         break;
 
@@ -177,7 +177,7 @@ FreeItem* Door::getLintel()
                                 case Westnorth:
                                 case Westsouth:
                                         x = cx * tileSize;
-                                        y = ( cy + 1 ) * tileSize - lintelData->widthY + 1;
+                                        y = ( cy + 1 ) * tileSize - lintelData->getWidthY() + 1;
                                         break;
 
                                 default:

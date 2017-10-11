@@ -108,14 +108,7 @@ public:
 
 protected:
 
-        /**
-         * Cambia el dato solicitado del elemento
-         * @param value El nuevo valor
-         * @param datum El dato que se quiere modificar: CoordinateZ, la coordenada Z, o Height, la altura
-         * @param what Modo para interpretar el nuevo valor. Puede usarse Change para cambiarlo o Add para sumarlo
-         * @return true si se pudo cambiar el dato o false si hubo colisión y no hubo cambio
-         */
-        virtual bool changeData ( int value, const Datum& datum, const WhatToDo& what ) ;
+        virtual bool changeData ( int value, const Datum& datum, const ChangeOrAdd& what ) ;
 
 protected:
 

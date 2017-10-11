@@ -187,7 +187,7 @@ void OneWay::turnRound()
         {
                 case North:
                         activity = MoveSouth;
-                        if ( freeItem->getDirectionFrames() > 1 )
+                        if ( freeItem->countDirectionFrames() > 1 )
                         {
                                 freeItem->changeDirection( South );
                         }
@@ -195,7 +195,7 @@ void OneWay::turnRound()
 
                 case South:
                         activity = MoveNorth;
-                        if ( freeItem->getDirectionFrames() > 1 )
+                        if ( freeItem->countDirectionFrames() > 1 )
                         {
                                 freeItem->changeDirection( North );
                         }
@@ -203,7 +203,7 @@ void OneWay::turnRound()
 
                 case East:
                         activity = MoveWest;
-                        if ( freeItem->getDirectionFrames() > 1 )
+                        if ( freeItem->countDirectionFrames() > 1 )
                         {
                                 freeItem->changeDirection( West );
                         }
@@ -211,7 +211,7 @@ void OneWay::turnRound()
 
                 case West:
                         activity = MoveEast;
-                        if ( freeItem->getDirectionFrames() > 1 )
+                        if ( freeItem->countDirectionFrames() > 1 )
                         {
                                 freeItem->changeDirection( East );
                         }

@@ -53,9 +53,9 @@ bool Hunter::update ()
 
                         if ( activePlayer != 0  &&
                                 activePlayer->getX() > thisItem->getX() - delta  &&
-                                activePlayer->getX() < thisItem->getX() + thisItem->getWidthX() + delta  &&
+                                activePlayer->getX() < thisItem->getX() + static_cast< int >( thisItem->getWidthX() ) + delta  &&
                                 activePlayer->getY() > thisItem->getY() - delta  &&
-                                activePlayer->getY() < thisItem->getY() + thisItem->getWidthY() + delta )
+                                activePlayer->getY() < thisItem->getY() + static_cast< int >( thisItem->getWidthY() ) + delta )
                         {
                                 activity = calculateDirection( activity );
                         }

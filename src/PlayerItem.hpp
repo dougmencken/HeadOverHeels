@@ -141,38 +141,33 @@ public:
 protected:
 
         /**
-         * Cambia el dato solicitado del elemento
-         * @param value El nuevo valor
-         * @param x La nueva coordenada X. El parámetro se ignora si datum no es CoordinatesXYZ
-         * @param y La nueva coordenada Y. El parámetro se ignora si datum no es CoordinatesXYZ
-         * @param z La nueva coordenada Z. El parámetro se ignora si datum no es CoordinatesXYZ
-         * @param datum El dato que se quiere modificar: CoordinateX, la coordenada X; CoordinateY, la
-         * coordenada Y; CoordinateZ, la coordenada Z; WidthX, la anchura en el eje X; WidthY, la anchura en
-         * el eje Y; o, Height, la altura
-         * @param how Modo para interpretar el nuevo valor. Puede usarse Change para cambiarlo o Add para sumarlo
-         * @param jumpIndex Índice del salto utilizado para el desplazamiento de elementos situados encima
-         * del jugador durante el ascenso
-         * @return true si se pudo cambiar el dato o false si hubo colisión y no hubo cambio
+         * @param value new value
+         * @param x new X coordinate, ignored when datum is not CoordinatesXYZ
+         * @param y new Y coordinate, ignored when datum is not CoordinatesXYZ
+         * @param z new Z coordinate, ignored when datum is not CoordinatesXYZ
+         * @param datum what to change: CoordinatesXYZ, CoordinateX, CoordinateY, CoordinateZ, WidthX, WidthY, Height
+         * @param how how to interpret new value, change or add
+         * @return true if data may be changed or false when there’s a collision
          */
-        virtual bool changeData ( int value, int x, int y, int z, const Datum& datum, const WhatToDo& how ) ;
+        virtual bool changeData ( int newValue, int x, int y, int z, const Datum& datum, const ChangeOrAdd& how ) ;
 
         /**
          * Check if player hits a door, if yes then move player
-         * @param direction Una puerta identificada por su posición en la sala
-         * @param id Assigned by engine identifier of item in stack of collisions
+         * @param direction door mentioned by its position in room
+         * @param id identifier of item, assigned by engine, in stack of collisions
          */
         bool isCollidingWithDoor ( const Direction& direction, int id, const PlayerItem& previousPosition ) ;
 
         /**
          * See if player is not under a door or that door doesn’t exist
-         * @param direction Una puerta identificada por su posición en la sala
+         * @param direction door mentioned by its position in room
          * @return true if the player is under that given door
          */
         bool isNotUnderDoor ( const Direction& direction ) ;
 
         /**
          * See if player crosses limits of room, if yes then change rooms
-         * @param direction Una puerta identificada por su posición en la sala
+         * @param direction door mentioned by its position in room
          */
         bool isCollidingWithRoomBorder( const Direction& direction ) ;
 

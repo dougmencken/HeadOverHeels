@@ -280,8 +280,8 @@ Room* MapManager::changeRoom( const Direction& exit )
         }
 
         std::cout << "player \"" << previousRoom->getMediator()->getActivePlayer()->getLabel() << "\" migrates"
-                        << " from room \"" << previousRoomData->getNameOfRoomFile() << "\" with way of exit " << exit
-                        << " to room \"" << nextRoomData->getNameOfRoomFile() << "\" with way of entry " << entry << std::endl ;
+                        << " from room \"" << previousRoomData->getNameOfRoomFile() << "\" with way of exit \"" << wayToString( exit ) << "\""
+                        << " to room \"" << nextRoomData->getNameOfRoomFile() << "\" with way of entry \"" << wayToString( entry ) << "\"" << std::endl ;
 
         nextRoomData->adjustEntry( &entry, previousRoomData->getNameOfRoomFile() );
 
@@ -342,7 +342,7 @@ Room* MapManager::changeRoom( const Direction& exit )
         int entryZ = exitZ ;
 
         std::cout << "exit coordinates are x=" << exitX << " y=" << exitY << " z=" << exitZ << std::endl ;
-        newRoom->calculateEntryCoordinates( entry, dataOfRoamer->widthX, dataOfRoamer->widthY, northBound, eastBound, southBound, westBound, &entryX, &entryY, &entryZ );
+        newRoom->calculateEntryCoordinates( entry, dataOfRoamer->getWidthX(), dataOfRoamer->getWidthY(), northBound, eastBound, southBound, westBound, &entryX, &entryY, &entryZ );
         std::cout << "entry coordinates are x=" << entryX << " y=" << entryY << " z=" << entryZ << std::endl ;
 
         // create player

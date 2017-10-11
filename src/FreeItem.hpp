@@ -141,23 +141,11 @@ public:
          * @param mode Modo para interpretar el nuevo valor. Puede usarse Change para cambiarlo o Add para sumarlo
          * @return true si el cambio de transparencia tuvo efecto o false en caso contrario
          */
-        bool changeTransparency ( unsigned char value, const WhatToDo& changeOrAdd ) ;
+        bool changeTransparency ( unsigned char value, const ChangeOrAdd& changeOrAdd ) ;
 
 protected:
 
-        /**
-         * Cambia el dato solicitado del elemento
-         * @param value El nuevo valor
-         * @param x La nueva coordenada X. El parámetro se ignora si datum no es CoordinatesXYZ
-         * @param y La nueva coordenada Y. El parámetro se ignora si datum no es CoordinatesXYZ
-         * @param z La nueva coordenada Z. El parámetro se ignora si datum no es CoordinatesXYZ
-         * @param datum El dato que se quiere modificar: CoordinateX, la coordenada X; CoordinateY, la
-         *              coordenada Y; CoordinateZ, la coordenada Z; WidthX, la anchura en el eje X;
-         *              WidthY, la anchura en el eje Y; o, Height, la altura
-         * @param mode Modo para interpretar el nuevo valor. Puede usarse Change para cambiarlo o Add para sumarlo
-         * @return true si se pudo cambiar el dato o false si hubo colisión y no hubo cambio
-         */
-        virtual bool changeData ( int value, int x, int y, int z, const Datum& datum, const WhatToDo& addOrChange ) ;
+        virtual bool changeData ( int newValue, int x, int y, int z, const Datum& datum, const ChangeOrAdd& addOrChange ) ;
 
 protected:
 
@@ -227,11 +215,6 @@ public:
          * @return true si está detenido o false en caso contrario
          */
         bool isFrozen () const {  return frozen ;  }
-
-        /**
-         * @return data about this item
-         */
-        ItemData * getDataOfFreeItem () const {  return dataOfItem ;  }
 
 };
 

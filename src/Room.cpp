@@ -321,8 +321,8 @@ void Room::addFreeItem( FreeItem * freeItem )
                 }
 
                 // El elemento no puede estar fuera de la sala
-                if ( ( freeItem->getX() + freeItem->getWidthX() > static_cast< int >( this->numberOfTiles.first * this->tileSize ) )
-                        || ( freeItem->getY() - freeItem->getWidthY() < -1 )
+                if ( ( freeItem->getX() + static_cast< int >( freeItem->getWidthX() ) > static_cast< int >( this->numberOfTiles.first * this->tileSize ) )
+                        || ( freeItem->getY() - static_cast< int >( freeItem->getWidthY() ) < -1 )
                         || ( freeItem->getY() > static_cast< int >( this->numberOfTiles.second * this->tileSize ) - 1 ) )
                 {
                         throw Exception( OUT_OF_ROOM_FREEITEM );
@@ -460,8 +460,8 @@ bool Room::addPlayerToRoom( PlayerItem* playerItem, bool playerEntersRoom )
                         throw Exception( ZERO_WIDTH_PLAYER );
                 }
 
-                if ( ( playerItem->getX() + playerItem->getWidthX() > static_cast< int >( this->numberOfTiles.first * this->tileSize ) )
-                        || ( playerItem->getY() - playerItem->getWidthY() < -1 )
+                if ( ( playerItem->getX() + static_cast< int >( playerItem->getWidthX() ) > static_cast< int >( this->numberOfTiles.first * this->tileSize ) )
+                        || ( playerItem->getY() - static_cast< int >( playerItem->getWidthY() ) < -1 )
                         || ( playerItem->getY() > static_cast< int >( this->numberOfTiles.second * this->tileSize ) - 1 ) )
                 {
                         throw Exception( OUT_OF_ROOM_PLAYER );

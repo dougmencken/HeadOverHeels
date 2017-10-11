@@ -376,12 +376,12 @@ FreeItem* RoomBuilder::buildFreeItem( const rxml::item& item )
         if ( itemData != 0 )
         {
                 // in free coordinates
-                int fx = item.x() * room->getSizeOfOneTile() + ( ( room->getSizeOfOneTile() - itemData->widthX ) >> 1 );
-                int fy = ( item.y() + 1 ) * room->getSizeOfOneTile() - ( ( room->getSizeOfOneTile() - itemData->widthY ) >> 1 ) - 1;
+                int fx = item.x() * room->getSizeOfOneTile() + ( ( room->getSizeOfOneTile() - itemData->getWidthX() ) >> 1 );
+                int fy = ( item.y() + 1 ) * room->getSizeOfOneTile() - ( ( room->getSizeOfOneTile() - itemData->getWidthY() ) >> 1 ) - 1;
                 int fz = item.z() != Top ? item.z() * LayerHeight : Top;
 
                 // don’t place an item if it is a bonus and has already been taken
-                if ( BonusManager::getInstance()->isPresent( room->getNameOfFileWithDataAboutRoom(), itemData->label ) )
+                if ( BonusManager::getInstance()->isPresent( room->getNameOfFileWithDataAboutRoom(), itemData->getLabel() ) )
                 {
                         freeItem = new FreeItem( itemData, fx, fy, fz,
                                                  item.direction() == rxml::direction::none ? NoDirection : Direction( item.direction() - 1 ) );
@@ -451,7 +451,7 @@ Door* RoomBuilder::buildDoor( const rxml::item& item )
 int RoomBuilder::getXCenterOfRoom( ItemData* playerData, Room* theRoom )
 {
         return
-                ( ( theRoom->getBound( South ) - theRoom->getBound( North ) + playerData->widthX ) >> 1 )
+                ( ( theRoom->getBound( South ) - theRoom->getBound( North ) + playerData->getWidthX() ) >> 1 )
                         + ( theRoom->getDoor( North ) != 0 ? theRoom->getSizeOfOneTile() >> 1 : 0 )
                                 - ( theRoom->getDoor( South ) != 0 ? theRoom->getSizeOfOneTile() >> 1 : 0 ) ;
 
@@ -461,7 +461,7 @@ int RoomBuilder::getXCenterOfRoom( ItemData* playerData, Room* theRoom )
 int RoomBuilder::getYCenterOfRoom( ItemData* playerData, Room* theRoom )
 {
         return
-                ( ( theRoom->getBound( West ) - theRoom->getBound( East ) + playerData->widthY ) >> 1 )
+                ( ( theRoom->getBound( West ) - theRoom->getBound( East ) + playerData->getWidthY() ) >> 1 )
                         + ( theRoom->getDoor( East ) != 0 ? theRoom->getSizeOfOneTile() >> 1 : 0 )
                                 - ( theRoom->getDoor( West ) != 0 ? theRoom->getSizeOfOneTile() >> 1 : 0 )
                                         - 1 ;

@@ -104,6 +104,8 @@ namespace isomot
                 JustWait = 99      // just wait in room
         } ;
 
+        std::string wayToString( const Direction& way ) ;
+
         /**
          * Eje donde puede situarse una pared de la sala
          */
@@ -131,29 +133,6 @@ namespace isomot
                 NoMask,         /* Sin máscara */
                 WantMask,
                 AlreadyMasked   /* Enmascarado */
-        } ;
-
-        /**
-         * Datos de los elementos que pueden cambiarse
-         */
-        enum Datum
-        {
-                CoordinateX,    /* La coordenada espacial X */
-                CoordinateY,    /* La coordenada espacial Y */
-                CoordinateZ,    /* La coordenada espacial Z */
-                CoordinatesXYZ, /* La posición espacial */
-                WidthX,         /* La anchura en el eje X */
-                WidthY,         /* La anchura en el eje Y */
-                Height,         /* La altura */
-        } ;
-
-        /**
-         * Modo en que se cambian los datos de los elementos
-         */
-        enum WhatToDo
-        {
-                Change = 0,
-                Add = 1
         } ;
 
         /**

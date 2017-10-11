@@ -165,7 +165,7 @@ void Turn::turn()
         {
                 case North:
                         activity = ( getNameOfBehavior() == "behavior of move then turn left and move" ? MoveWest : MoveEast );
-                        if ( freeItem->getDirectionFrames() > 1 )
+                        if ( freeItem->countDirectionFrames() > 1 )
                         {
                                 freeItem->changeDirection( getNameOfBehavior() == "behavior of move then turn left and move" ? West : East );
                         }
@@ -173,7 +173,7 @@ void Turn::turn()
 
                 case South:
                         activity = ( getNameOfBehavior() == "behavior of move then turn left and move" ? MoveEast : MoveWest );
-                        if ( freeItem->getDirectionFrames() > 1 )
+                        if ( freeItem->countDirectionFrames() > 1 )
                         {
                                 freeItem->changeDirection( getNameOfBehavior() == "behavior of move then turn left and move" ? East : West );
                         }
@@ -181,7 +181,7 @@ void Turn::turn()
 
                 case East:
                         activity = ( getNameOfBehavior() == "behavior of move then turn left and move" ? MoveNorth : MoveSouth );
-                        if ( freeItem->getDirectionFrames() > 1 )
+                        if ( freeItem->countDirectionFrames() > 1 )
                         {
                                 freeItem->changeDirection( getNameOfBehavior() == "behavior of move then turn left and move" ? North : South );
                         }
@@ -189,7 +189,7 @@ void Turn::turn()
 
                 case West:
                         activity = ( getNameOfBehavior() == "behavior of move then turn left and move" ? MoveSouth : MoveNorth );
-                        if ( freeItem->getDirectionFrames() > 1 )
+                        if ( freeItem->countDirectionFrames() > 1 )
                         {
                                 freeItem->changeDirection( getNameOfBehavior() == "behavior of move then turn left and move" ? South : North );
                         }

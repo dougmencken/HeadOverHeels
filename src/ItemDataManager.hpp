@@ -13,9 +13,7 @@
 
 #include <string>
 #include <list>
-#include <algorithm>
 #include <iostream>
-#include <functional>
 #include <allegro.h>
 #include "ItemData.hpp"
 #include "csxml/ItemsXML.hpp"
@@ -78,8 +76,8 @@ protected:
 private:
 
         /**
-        * Dimensiones de las partes de una puerta
-        */
+         * Dimensiones de las partes de una puerta
+         */
         class DoorMeasures
         {
 
@@ -164,7 +162,7 @@ private:
         /**
          * Finalize data of item
          */
-        static void finalizeData ( ItemData& itemData ) ;
+        static void finalizeData ( ItemData * itemData ) ;
 
 protected:
 
@@ -176,14 +174,8 @@ protected:
         /**
          * Datos de todos los elementos del juego
          */
-        std::list < ItemData > itemData ;
+        std::list < ItemData * > itemData ;
 
-};
-
-
-struct EqualItemData : public std::binary_function< ItemData, std::string, bool >
-{
-        bool operator() ( const ItemData& itemData, const std::string& label ) const ;
 };
 
 }

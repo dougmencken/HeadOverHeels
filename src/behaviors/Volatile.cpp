@@ -122,7 +122,7 @@ bool Volatile::update ()
                         // volatile in time item is created when some other volatile disappears
                         else if ( getNameOfBehavior () == "behavior of disappearance in time" )
                         {
-                                vanish = ( disappearanceTimer->getValue() > item->getFramesDelay() * double( item->countFrames() ) );
+                                vanish = ( disappearanceTimer->getValue() > item->getDelayBetweenFrames() * double( item->countFrames() ) );
                                 item->animate();
                         }
                         break;

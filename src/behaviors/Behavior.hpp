@@ -60,7 +60,7 @@ protected:
         /**
          * Change kind of activity
          */
-        void changeActivityTo ( KindOfActivity * kind ) {  this->whatToDo = kind ;  }
+        void changeActivityTo ( KindOfActivity * activity ) {  whatToDo = activity ;  }
 
         /**
          * Change activity of every item collided with sender

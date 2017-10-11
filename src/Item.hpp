@@ -26,6 +26,27 @@ class ItemData ;
 class Behavior ;
 
 /**
+ * Data of item to change
+ */
+enum Datum
+{
+        CoordinateX,
+        CoordinateY,
+        CoordinateZ,
+        CoordinatesXYZ,
+        WidthX,
+        WidthY,
+        Height
+} ;
+
+enum ChangeOrAdd
+{
+        Change = 0,
+        Add = 1
+} ;
+
+
+/**
  * Interface that defines attributes and operations for item in room
  */
 
@@ -75,12 +96,11 @@ public:
         void changeDirection ( const Direction& direction ) ;
 
         /**
-         * Cambia el fotograma actual del elemento. El uso de esta operación es poco habitual ya que el
-         * cambio de fotogramas normalmente viene dado por un cambio de dirección o por un avance en la
-         * secuencia de animación. Sin embargo, hay casos donde es necesario su uso. Véase el comportamiento
-         * del trampolín donde estando en reposo muestra un fotograma y plegado muestra otro; situaciones
-         * que nada tienen que ver con direcciones y animaciones
-         * @param frameIndex Índice del nuevo fotograma
+         * Change current frame for item. Change of frames is usually done via change of direction
+         * or via looping in sequence of animation. However there’re some cases when it’s necessary
+         * to change frames manually, in situations not linked to animation or change of direction.
+         * As example, in behavior of trampoline one frame is for rest and another is for fold
+         * @param frameIndex index of new frame
          */
         void changeFrame ( const unsigned int frameIndex ) ;
 
@@ -114,7 +134,7 @@ public:
          * @return true if position is free or false if there’s a collision,
          *         in the latter case place colliding items into stack of collisions
          */
-        virtual bool checkPosition ( int x, int y, int z, const WhatToDo& what ) ;
+        virtual bool checkPosition ( int x, int y, int z, const ChangeOrAdd& what ) ;
 
         /**
          * @param behavior Name of item’s behavior
@@ -125,12 +145,12 @@ public:
         /**
          * Set animation going from first to last frame, which is by default
          */
-        void setForwardMotion () ;
+        void setForthMotion () ;
 
         /**
          * Set animation going from last to first frame, backwards
          */
-        void setBackwardMotion () ;
+        void setReverseMotion () ;
 
 protected:
 
@@ -167,16 +187,6 @@ protected:
         Direction direction ;
 
         /**
-         * Índice del vector que almacena todos los fotogramas. Señala el fotograma actual del elemento
-         */
-        unsigned int frameIndex ;
-
-        /**
-         * Indica si la secuencia de animación se realiza marcha atrás
-         */
-        bool backwardMotion ;
-
-        /**
          * Estado del proceso de sombreado
          */
         WhichShade myShady ;
@@ -195,8 +205,6 @@ protected:
          * Image of this item with shadows from other items and masked
          */
         BITMAP * processedImage ;
-
-protected:
 
         /**
          * Desplazamiento del fotograma procesado en los ejes X e Y, respectivamente, desde el píxel
@@ -218,6 +226,18 @@ protected:
          * Reference item used to know if it would move when others are below
          */
         Item* anchor ;
+
+private:
+
+        /**
+         * Current frame for item
+         */
+        unsigned int frameIndex ;
+
+        /**
+         * True to reverse sequence of animation
+         */
+        bool backwardMotion ;
 
 public:
 
@@ -242,51 +262,40 @@ public:
 
         /**
          * Posición espacial X en unidades isométricas
-         * @return Un número positivo
          */
         int getX () const {  return x ;  }
 
         /**
          * Posición espacial Y en unidades isométricas
-         * @return Un número positivo
          */
         int getY () const {  return y ;  }
 
         /**
          * Establece la posición espacial Z en unidades isométricas
-         * @param z Un número positivo
          */
         void setZ ( const int z ) {  this->z = z ;  }
 
         /**
          * Posición espacial Z en unidades isométricas
-         * @return Un número positivo
          */
         int getZ () const {  return z ;  }
 
         /**
          * Anchura del elemento en unidades isométricas en el eje X
-         * @return Un número mayor que 2
          */
-        int getWidthX () const ;
+        unsigned int getWidthX () const ;
 
         /**
          * Anchura del elemento en unidades isométricas en el eje Y
-         * @return Un número mayor que 2
          */
-        int getWidthY () const ;
+        unsigned int getWidthY () const ;
 
         /**
-         * Altura del elemento en unidades isométricas (anchura en el eje Z)
-         * @param height Un número mayor que 2
+         * Altura del elemento en unidades isométricas, anchura en el eje Z
          */
+        unsigned int getHeight () const ;
+
         void setHeight ( int height ) ;
-
-        /**
-         * Altura del elemento en unidades isométricas (anchura en el eje Z)
-         * @return Un número mayor que 2
-         */
-        int getHeight () const ;
 
         /**
          * El elemento quitará una vida al jugador si éste lo toca
@@ -299,7 +308,7 @@ public:
          * norte, sur, este y oeste
          * @return 1, 2 ó 4
          */
-        unsigned char getDirectionFrames () const ;
+        unsigned char countDirectionFrames () const ;
 
         /**
          * Tiempo en segundos necesario para que el elemento se mueva
@@ -309,19 +318,16 @@ public:
 
         /**
         * Tiempo en segundos necesario para que el elemento caiga
-        * @return Un número real positivo
         */
         double getWeight () const ;
 
         /**
          * Tiempo en segundos que será mostrado cada fotograma de la secuencia de animación
-         * @return Un número real positivo
          */
-        double getFramesDelay () const ;
+        double getDelayBetweenFrames () const ;
 
         /**
          * Número total de fotogramas de la secuencia de animación
-         * @return Un número positivo
          */
         unsigned int countFrames () const ;
 
@@ -384,6 +390,8 @@ public:
          * @return such item or 0 if there’s none
          */
         Item * getAnchor () const {  return this->anchor ;  }
+
+        unsigned int getIndexOfFrame() {  return this->frameIndex ;  }
 
 };
 

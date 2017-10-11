@@ -240,9 +240,9 @@ void Mediator::remaskWithItem( GridItem* gridItem )
                                 && ( freeItem->getOffsetY() + freeItem->getRawImage()->h > gridItem->getOffsetY() ) )
                         {
                                 // see whether free item is behind grid item
-                                if ( ( freeItem->getX() < gridItem->getX() + gridItem->getWidthX() )
-                                        && ( freeItem->getY() - freeItem->getWidthY() < gridItem->getY() )
-                                        && ( freeItem->getZ() < gridItem->getZ() + gridItem->getHeight() ) )
+                                if ( ( freeItem->getX() < gridItem->getX() + static_cast< int >( gridItem->getWidthX() ) )
+                                        && ( freeItem->getY() - static_cast< int >( freeItem->getWidthY() ) < gridItem->getY() )
+                                        && ( freeItem->getZ() < gridItem->getZ() + static_cast< int >( gridItem->getHeight() ) ) )
                                 {
                                         freeItem->setWhichMask( WantMask );
                                 }
@@ -320,8 +320,10 @@ void Mediator::shadeFreeItemsBeneathItem( Item* item )
 
                 if ( freeItem->getId () != item->getId () )
                 {
-                        if ( ( freeItem->getX() + freeItem->getWidthX() > item->getX() ) && ( freeItem->getX() < item->getX() + item->getWidthX() )
-                                && ( freeItem->getY() > freeItem->getY() - item->getWidthY() ) && ( freeItem->getY() - freeItem->getWidthY() < item->getY() )
+                        if ( ( freeItem->getX() + static_cast< int >( freeItem->getWidthX() ) > item->getX() )
+                                && ( freeItem->getX() < item->getX() + static_cast< int >( item->getWidthX() ) )
+                                && ( freeItem->getY() > freeItem->getY() - static_cast< int >( item->getWidthY() ) )
+                                && ( freeItem->getY() - static_cast< int >( freeItem->getWidthY() ) < item->getY() )
                                 && ( freeItem->getZ() < item->getZ() ) )
                         {
                                 freeItem->setWhichShade( WantShadow );
@@ -512,8 +514,10 @@ void Mediator::castShadowOnFreeItem( FreeItem* freeItem )
                                         if ( tempItem->getImageOfShadow() && tempItem->getTransparency() == percent && tempItem->getId() != freeItem->getId() )
                                         {
                                                 if ( freeItem->getZ() < tempItem->getZ() &&
-                                                        freeItem->getX() < tempItem->getX() + tempItem->getWidthX() && tempItem->getX() < freeItem->getX() + freeItem->getWidthX() &&
-                                                        freeItem->getY() > tempItem->getY() - tempItem->getWidthY() && tempItem->getY() > freeItem->getY() - freeItem->getWidthY() )
+                                                        freeItem->getX() < tempItem->getX() + static_cast< int >( tempItem->getWidthX() ) &&
+                                                                tempItem->getX() < freeItem->getX() + static_cast< int >( freeItem->getWidthX() ) &&
+                                                        freeItem->getY() > tempItem->getY() - static_cast< int >( tempItem->getWidthY() ) &&
+                                                                tempItem->getY() > freeItem->getY() - static_cast< int >( freeItem->getWidthY() ) )
                                                 {
                                                         freeItem->castShadowImage(
                                                                 /* x */ ( ( tempItem->getX() - tempItem->getY() ) << 1 ) + tempItem->getWidthX() + tempItem->getWidthY() - ( tempItem->getImageOfShadow()->w >> 1 ) - 1,
@@ -558,9 +562,9 @@ void Mediator::mask( FreeItem* freeItem )
                                         ( tempItem->getOffsetY() + tempItem->getRawImage()->h > freeItem->getOffsetY() ) )
                                 {
                                         // freeItem está detrás de tempItem
-                                        if ( ( freeItem->getX() + freeItem->getWidthX() <= tempItem->getX() ) ||
-                                                ( freeItem->getY() <= tempItem->getY() - tempItem->getWidthY() ) ||
-                                                ( freeItem->getZ() + freeItem->getHeight() <= tempItem->getZ() ) )
+                                        if ( ( freeItem->getX() + static_cast< int >( freeItem->getWidthX() ) <= tempItem->getX() ) ||
+                                                ( freeItem->getY() <= tempItem->getY() - static_cast< int >( tempItem->getWidthY() ) ) ||
+                                                ( freeItem->getZ() + static_cast< int >( freeItem->getHeight() ) <= tempItem->getZ() ) )
                                         {
                                                 freeItem->maskImage( tempItem->getOffsetX(), tempItem->getOffsetY(), tempItem->getRawImage() );
                                         }
@@ -604,15 +608,16 @@ void Mediator::mask( FreeItem* freeItem )
                                                         ( gridItem->getOffsetY() + gridItem->getRawImage()->h > freeItem->getOffsetY() ) )
                                                 {
                                                         // if free item is behind grid item
-                                                        if ( ( freeItem->getX() + freeItem->getWidthX() <= static_cast< int >( ( xStart + i ) * room->getSizeOfOneTile() ) ) ||
+                                                        if ( ( freeItem->getX() + static_cast< int >( freeItem->getWidthX() ) <= static_cast< int >( ( xStart + i ) * room->getSizeOfOneTile() ) ) ||
                                                                 ( freeItem->getY() <= static_cast< int >( ( yStart + i ) * room->getSizeOfOneTile() ) - 1 ) ||
-                                                                ( freeItem->getZ() + freeItem->getHeight() <= gridItem->getZ() ) )
+                                                                ( freeItem->getZ() + static_cast< int >( freeItem->getHeight() ) <= gridItem->getZ() ) )
                                                         {
                                                                 freeItem->maskImage( gridItem->getOffsetX(), gridItem->getOffsetY(), gridItem->getRawImage() );
                                                         }
                                                 }
                                         }
                                 }
+
                                 i++;
                         }
 
@@ -742,9 +747,12 @@ bool Mediator::findCollisionWithItem( Item * item )
                         if ( freeItem->getId() != item->getId() && freeItem->isCollisionDetector() )
                         {
                                 // look for intersection
-                                if ( ( freeItem->getX() + freeItem->getWidthX() > item->getX() ) && ( freeItem->getX() < item->getX() + item->getWidthX() ) &&
-                                        ( freeItem->getY() > item->getY() - item->getWidthX() ) && ( freeItem->getY() - freeItem->getWidthY() < item->getY() ) &&
-                                        ( freeItem->getZ() + freeItem->getHeight() > item->getZ() ) && ( freeItem->getZ() < item->getZ() + item->getHeight() ) )
+                                if ( ( freeItem->getX() + static_cast< int >( freeItem->getWidthX() ) > item->getX() ) &&
+                                                ( freeItem->getX() < item->getX() + static_cast< int >( item->getWidthX() ) ) &&
+                                        ( freeItem->getY() > item->getY() - static_cast< int >( item->getWidthX() ) ) &&
+                                                ( freeItem->getY() - static_cast< int >( freeItem->getWidthY() ) < item->getY() ) &&
+                                        ( freeItem->getZ() + static_cast< int >( freeItem->getHeight() ) > item->getZ() ) &&
+                                                ( freeItem->getZ() < item->getZ() + static_cast< int >( item->getHeight() ) ) )
                                 {
                                         collisions.push_back( freeItem->getId() );
                                         collisionFound = true;
@@ -766,9 +774,12 @@ bool Mediator::findCollisionWithItem( Item * item )
                                 if ( gridItem->getId() != item->getId() )
                                 {
                                         // look for intersection
-                                        if ( ( gridItem->getX() + gridItem->getWidthX() > item->getX() ) && ( gridItem->getX() < item->getX() + item->getWidthX() ) &&
-                                                ( gridItem->getY() > item->getY() - item->getWidthX() ) && ( gridItem->getY() - gridItem->getWidthY() < item->getY() ) &&
-                                                ( gridItem->getZ() + gridItem->getHeight() > item->getZ() ) && ( gridItem->getZ() < item->getZ() + item->getHeight() ) )
+                                        if ( ( gridItem->getX() + static_cast< int >( gridItem->getWidthX() ) > item->getX() ) &&
+                                                        ( gridItem->getX() < item->getX() + static_cast< int >( item->getWidthX() ) ) &&
+                                                ( gridItem->getY() > item->getY() - static_cast< int >( item->getWidthX() ) ) &&
+                                                        ( gridItem->getY() - static_cast< int >( gridItem->getWidthY() ) < item->getY() ) &&
+                                                ( gridItem->getZ() + static_cast< int >( gridItem->getHeight() ) > item->getZ() ) &&
+                                                        ( gridItem->getZ() < item->getZ() + static_cast< int >( item->getHeight() ) ) )
                                         {
                                                 collisions.push_back( gridItem->getId() );
                                                 collisionFound = true;
@@ -800,7 +811,8 @@ bool Mediator::findCollisionWithItem( Item * item )
                                         {
                                                 GridItem* gridItem = static_cast< GridItem * >( *g );
 
-                                                if ( ( gridItem->getZ() + gridItem->getHeight() > item->getZ() ) && ( gridItem->getZ() < item->getZ() + item->getHeight() ) )
+                                                if ( ( gridItem->getZ() + static_cast< int >( gridItem->getHeight() ) > item->getZ() ) &&
+                                                                ( gridItem->getZ() < item->getZ() + static_cast< int >( item->getHeight() ) ) )
                                                 {
                                                         collisions.push_back( gridItem->getId() );
                                                         collisionFound = true;
@@ -816,7 +828,7 @@ bool Mediator::findCollisionWithItem( Item * item )
 
 int Mediator::findHighestZ( Item * item )
 {
-        int z( 0 );
+        int z = 0 ;
 
         // Se recorre la lista de elementos libres buscando aquel que intersecta
         // con la columna y de mayor altura
@@ -827,11 +839,13 @@ int Mediator::findHighestZ( Item * item )
                 if ( freeItem->getId() != item->getId() && freeItem->isCollisionDetector() )
                 {
                         // Se busca la intersección en los ejes X e Y y la mayor Z
-                        if ( ( freeItem->getX() + freeItem->getWidthX() > item->getX() ) && ( freeItem->getX() < item->getX() + item->getWidthX() ) &&
-                                ( freeItem->getY() > item->getY() - item->getWidthX() ) && ( freeItem->getY() - freeItem->getWidthY() < item->getY() ) &&
-                                ( freeItem->getZ() + freeItem->getHeight() > item->getZ() ) )
+                        if ( ( freeItem->getX() + static_cast< int >( freeItem->getWidthX() ) > item->getX() ) &&
+                                        ( freeItem->getX() < item->getX() + static_cast< int >( item->getWidthX() ) ) &&
+                                ( freeItem->getY() > item->getY() - static_cast< int >( item->getWidthX() ) ) &&
+                                        ( freeItem->getY() - static_cast< int >( freeItem->getWidthY() ) < item->getY() ) &&
+                                ( freeItem->getZ() + static_cast< int >( freeItem->getHeight() ) > item->getZ() ) )
                         {
-                                z = freeItem->getZ() + freeItem->getHeight();
+                                z = freeItem->getZ() + static_cast< int >( freeItem->getHeight() );
                         }
                 }
         }
@@ -847,7 +861,7 @@ int Mediator::findHighestZ( Item * item )
                 {
                         GridItem* tempItem = static_cast< GridItem * >( *g );
 
-                        if ( tempItem->getZ() + tempItem->getHeight() > z )
+                        if ( tempItem->getZ() + static_cast< int >( tempItem->getHeight() ) > z )
                         {
                                 z = tempItem->getZ() + tempItem->getHeight();
                         }
@@ -874,7 +888,7 @@ int Mediator::findHighestZ( Item * item )
                                 {
                                         GridItem* gridItem = static_cast< GridItem * >( *g );
 
-                                        if ( gridItem->getZ() + gridItem->getHeight() > z )
+                                        if ( gridItem->getZ() + static_cast< int >( gridItem->getHeight() ) > z )
                                         {
                                                 z = gridItem->getZ() + gridItem->getHeight();
                                         }
@@ -1040,7 +1054,7 @@ bool Mediator::selectNextPlayer( ItemDataManager* itemDataManager )
                                 // transfer item in handbag
                                 if ( takenItemData != 0 )
                                 {
-                                        std::cout << "transfer item \"" << takenItemData->label << "\" to player \"" << activePlayer->getLabel() << "\"" << std::endl ;
+                                        std::cout << "transfer item \"" << takenItemData->getLabel() << "\" to player \"" << activePlayer->getLabel() << "\"" << std::endl ;
                                         activePlayer->assignTakenItem( takenItemData, takenItemImage, behaviorOfItemTaken );
                                 }
 
@@ -1079,7 +1093,7 @@ bool Mediator::selectNextPlayer( ItemDataManager* itemDataManager )
 
                 if ( takenItemData != 0 )
                 {
-                        std::cout << "transfer item \"" << takenItemData->label << "\" to player \"" << heelsPlayer->getLabel() << "\"" << std::endl ;
+                        std::cout << "transfer item \"" << takenItemData->getLabel() << "\" to player \"" << heelsPlayer->getLabel() << "\"" << std::endl ;
                         heelsPlayer->assignTakenItem( takenItemData, takenItemImage, behaviorOfItemTaken );
                 }
 
@@ -1145,15 +1159,15 @@ void Mediator::toggleSwitchInRoom ()
 
 bool Mediator::sortGridItemList( GridItem* g1, GridItem* g2 )
 {
-        return ( g1->getZ() < g2->getZ() + g2->getHeight() );
+        return ( g1->getZ() < g2->getZ() + static_cast< int >( g2->getHeight() ) );
 }
 
 bool Mediator::sortFreeItemList( FreeItem* f1, FreeItem* f2 )
 {
         return (
-                ( f1->getZ() < f2->getZ() + f2->getHeight() ) ||
-                ( f1->getX() < f2->getX() + f2->getWidthX() ) ||
-                ( f1->getY() - f1->getWidthY() < f2->getY() )
+                ( f1->getZ() < f2->getZ() + static_cast< int >( f2->getHeight() ) ) ||
+                ( f1->getX() < f2->getX() + static_cast< int >( f2->getWidthX() ) ) ||
+                ( f1->getY() - static_cast< int >( f1->getWidthY() ) < f2->getY() )
         );
 }
 

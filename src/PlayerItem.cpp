@@ -143,7 +143,7 @@ void PlayerItem::autoMoveOnEntry ( const Direction& entry )
         }
 }
 
-bool PlayerItem::changeData( int value, int x, int y, int z, const Datum& datum, const WhatToDo& how )
+bool PlayerItem::changeData( int newValue, int x, int y, int z, const Datum& datum, const ChangeOrAdd& how )
 {
         bool itAutomoves = getBehavior()->getActivityOfItem() == AutoMoveNorth ||
                                 getBehavior()->getActivityOfItem() == AutoMoveSouth ||
@@ -152,7 +152,7 @@ bool PlayerItem::changeData( int value, int x, int y, int z, const Datum& datum,
 
         if ( ! this->isActivePlayer() && ! itAutomoves )
         {
-                return FreeItem::changeData( value, x, y, z, datum, how );
+                return FreeItem::changeData( newValue, x, y, z, datum, how );
         }
 
         mediator->clearStackOfCollisions( );
@@ -165,15 +165,15 @@ bool PlayerItem::changeData( int value, int x, int y, int z, const Datum& datum,
         switch ( datum )
         {
                 case CoordinateX:
-                        this->x = value + this->x * how;
+                        this->x = newValue + this->x * how;
                         break;
 
                 case CoordinateY:
-                        this->y = value + this->y * how;
+                        this->y = newValue + this->y * how;
                         break;
 
                 case CoordinateZ:
-                        this->z = value + this->z * how;
+                        this->z = newValue + this->z * how;
                         break;
 
                 case CoordinatesXYZ:
@@ -183,15 +183,15 @@ bool PlayerItem::changeData( int value, int x, int y, int z, const Datum& datum,
                         break;
 
                 case WidthX:
-                        getDataOfFreeItem()->widthX = value + getDataOfFreeItem()->widthX * how;
+                        getDataOfItem()->setWidthX( newValue + getDataOfItem()->getWidthX() * how );
                         break;
 
                 case WidthY:
-                        getDataOfFreeItem()->widthY = value + getDataOfFreeItem()->widthY * how;
+                        getDataOfItem()->setWidthY( newValue + getDataOfItem()->getWidthY() * how );
                         break;
 
                 case Height:
-                        getDataOfFreeItem()->height = value + getDataOfFreeItem()->height * how;
+                        getDataOfItem()->setHeight( newValue + getDataOfItem()->getHeight() * how );
                         break;
         }
 
@@ -203,8 +203,8 @@ bool PlayerItem::changeData( int value, int x, int y, int z, const Datum& datum,
         if ( collisionFound )
         {
                 // direction of movement
-                int wayX = ( datum == CoordinateX || x != 0 ? value : 0 );
-                int wayY = ( datum == CoordinateY || y != 0 ? value : 0 );
+                int wayX = ( datum == CoordinateX || x != 0 ? newValue : 0 );
+                int wayY = ( datum == CoordinateY || y != 0 ? newValue : 0 );
 
                 while ( ! mediator->isStackOfCollisionsEmpty () )
                 {
@@ -271,23 +271,23 @@ bool PlayerItem::changeData( int value, int x, int y, int z, const Datum& datum,
 
         // look for collision with real wall, one which limits the room
         if ( this->x < mediator->getBound( North )
-                && isNotUnderDoor( North ) && isNotUnderDoor( Northeast ) && isNotUnderDoor( Northwest ) )
+                        && isNotUnderDoor( North ) && isNotUnderDoor( Northeast ) && isNotUnderDoor( Northwest ) )
         {
                 mediator->pushCollision( NorthWall );
         }
-        else if ( this->x + getDataOfFreeItem()->widthX > mediator->getBound( South )
-                && isNotUnderDoor( South ) && isNotUnderDoor( Southeast ) && isNotUnderDoor( Southwest ) )
+        else if ( this->x + static_cast< int >( getDataOfItem()->getWidthX() ) > mediator->getBound( South )
+                        && isNotUnderDoor( South ) && isNotUnderDoor( Southeast ) && isNotUnderDoor( Southwest ) )
         {
                 mediator->pushCollision( SouthWall );
         }
 
-        if ( this->y - getDataOfFreeItem()->widthY + 1 < mediator->getBound( East )
-                && isNotUnderDoor( East ) && isNotUnderDoor( Eastnorth ) && isNotUnderDoor( Eastsouth ) )
+        if ( this->y - static_cast< int >( getDataOfItem()->getWidthY() ) + 1 < mediator->getBound( East )
+                        && isNotUnderDoor( East ) && isNotUnderDoor( Eastnorth ) && isNotUnderDoor( Eastsouth ) )
         {
                 mediator->pushCollision( EastWall );
         }
         else if ( this->y >= mediator->getBound( West )
-                && isNotUnderDoor( West ) && isNotUnderDoor( Westnorth ) && isNotUnderDoor( Westsouth ) )
+                        && isNotUnderDoor( West ) && isNotUnderDoor( Westnorth ) && isNotUnderDoor( Westsouth ) )
         {
                 mediator->pushCollision( WestWall );
         }
@@ -335,8 +335,8 @@ bool PlayerItem::changeData( int value, int x, int y, int z, const Datum& datum,
                                 if ( this->rawImage )
                                 {
                                         // get how many pixels is this image from point of room’s origin
-                                        this->offset.first = ( ( this->x - this->y ) << 1 ) + getDataOfFreeItem()->widthX + getDataOfFreeItem()->widthY - ( this->rawImage->w >> 1 ) - 1;
-                                        this->offset.second = this->x + this->y + getDataOfFreeItem()->widthX - this->rawImage->h - this->z;
+                                        this->offset.first = ( ( this->x - this->y ) << 1 ) + getDataOfItem()->getWidthX() + getDataOfItem()->getWidthY() - ( this->rawImage->w >> 1 ) - 1;
+                                        this->offset.second = this->x + this->y + getDataOfItem()->getWidthX() - this->rawImage->h - this->z;
 
                                         // for both the previous position and the current position
                                         mediator->remaskWithItem( &oldPlayerItem );
@@ -371,9 +371,9 @@ bool PlayerItem::changeData( int value, int x, int y, int z, const Datum& datum,
                 this->x = oldPlayerItem.getX();
                 this->y = oldPlayerItem.getY();
                 this->z = oldPlayerItem.getZ();
-                this->dataOfItem->widthX = oldPlayerItem.getWidthX();
-                this->dataOfItem->widthY = oldPlayerItem.getWidthY();
-                this->dataOfItem->height = oldPlayerItem.getHeight();
+                this->dataOfItem->setWidthX( oldPlayerItem.getWidthX() );
+                this->dataOfItem->setWidthY( oldPlayerItem.getWidthY() );
+                this->dataOfItem->setHeight( oldPlayerItem.getHeight() );
                 this->offset = oldPlayerItem.getOffset();
         }
 
@@ -404,7 +404,9 @@ bool PlayerItem::isCollidingWithDoor( const Direction& direction, int id, const 
                                         this->x = previousPosition.getX();
                                 }
                                 // move player left when player collides with right jamb
-                                else if ( door->getRightJamb()->getId() == id && this->y - getDataOfFreeItem()->widthY >= door->getRightJamb()->getY() - door->getRightJamb()->getWidthY() )
+                                else if ( door->getRightJamb()->getId() == id &&
+                                                this->y - static_cast< int >( getDataOfItem()->getWidthY() )
+                                                        >= door->getRightJamb()->getY() - static_cast< int >( door->getRightJamb()->getWidthY() ) )
                                 {
                                         this->y++;
                                         this->x = previousPosition.getX();
@@ -428,7 +430,9 @@ bool PlayerItem::isCollidingWithDoor( const Direction& direction, int id, const 
                                         this->y = previousPosition.getY();
                                 }
                                 // move player left when player collides with right jamb
-                                else if ( door->getRightJamb()->getId() == id && this->x - getDataOfFreeItem()->widthX <= door->getRightJamb()->getX() + door->getRightJamb()->getWidthX() )
+                                else if ( door->getRightJamb()->getId() == id &&
+                                                this->x - static_cast< int >( getDataOfItem()->getWidthX() )
+                                                        <= door->getRightJamb()->getX() + static_cast< int >( door->getRightJamb()->getWidthX() ) )
                                 {
                                         this->x--;
                                         this->y = previousPosition.getY();
@@ -485,34 +489,44 @@ bool PlayerItem::isCollidingWithRoomBorder( const Direction& direction )
 
                 case Northeast:
                 case Northwest:
-                        result = ( door && this->x < mediator->getBound( direction ) && door->isUnderDoor( this->x, this->y, this->z ) );
+                        result = ( door &&
+                                        this->x < mediator->getBound( direction ) &&
+                                        door->isUnderDoor( this->x, this->y, this->z ) );
                         break;
 
                 case South:
-                        result = ( this->x + getDataOfFreeItem()->widthX > static_cast< int >( mediator->getRoom()->getTilesX() * mediator->getRoom()->getSizeOfOneTile() ) );
+                        result = ( this->x + static_cast< int >( getDataOfItem()->getWidthX() )
+                                        > static_cast< int >( mediator->getRoom()->getTilesX() * mediator->getRoom()->getSizeOfOneTile() ) );
                         break;
 
                 case Southeast:
                 case Southwest:
-                        result = ( door && this->x + getDataOfFreeItem()->widthX > mediator->getBound( direction ) && door->isUnderDoor( this->x, this->y, this->z ) );
+                        result = ( door &&
+                                        this->x + static_cast< int >( getDataOfItem()->getWidthX() ) > mediator->getBound( direction ) &&
+                                        door->isUnderDoor( this->x, this->y, this->z ) );
                         break;
 
                 case East:
-                        result = ( this->y - getDataOfFreeItem()->widthY + 1 < 0 );
+                        result = ( this->y - static_cast< int >( getDataOfItem()->getWidthY() ) + 1 < 0 );
                         break;
 
                 case Eastnorth:
                 case Eastsouth:
-                        result = ( door && this->y - getDataOfFreeItem()->widthY + 1 < mediator->getBound( direction ) && door->isUnderDoor( this->x, this->y, this->z ) );
+                        result = ( door &&
+                                        this->y - static_cast< int >( getDataOfItem()->getWidthY() ) + 1 < mediator->getBound( direction ) &&
+                                        door->isUnderDoor( this->x, this->y, this->z ) );
                         break;
 
                 case West:
-                        result = ( this->y >= static_cast< int >( mediator->getRoom()->getTilesY() * mediator->getRoom()->getSizeOfOneTile() ) );
+                        result = ( this->y
+                                        >= static_cast< int >( mediator->getRoom()->getTilesY() * mediator->getRoom()->getSizeOfOneTile() ) );
                         break;
 
                 case Westnorth:
                 case Westsouth:
-                        result = ( door && this->y + getDataOfFreeItem()->widthY > mediator->getBound( direction ) && door->isUnderDoor( this->x, this->y, this->z ) );
+                        result = ( door &&
+                                        this->y + static_cast< int >( getDataOfItem()->getWidthY() ) > mediator->getBound( direction ) &&
+                                        door->isUnderDoor( this->x, this->y, this->z ) );
                         break;
 
                 default:
@@ -551,16 +565,16 @@ void PlayerItem::wait ()
                 activity != MeetMortalItem && activity != Vanish )
         {
                 // El fotograma de parada es distinto segn la orientación del elemento
-                int currentFrame = ( getDataOfFreeItem()->motion.size() - getDataOfFreeItem()->extraFrames ) / getDataOfFreeItem()->directionFrames * static_cast < int > ( direction );
+                int currentFrame = ( getDataOfItem()->howManyMotions() - getDataOfItem()->howManyExtraFrames() ) / getDataOfItem()->howManyDirectionFrames() * static_cast< int >( direction );
 
                 // if images differ
-                if ( this->rawImage != 0 && this->rawImage != getDataOfFreeItem ()->motion[ currentFrame ] )
+                if ( this->rawImage != 0 && this->rawImage != getDataOfItem()->getMotionAt( currentFrame ) )
                 {
-                        changeImage( getDataOfFreeItem ()->motion[ currentFrame ] );
+                        changeImage( getDataOfItem()->getMotionAt( currentFrame ) );
 
                         if ( this->shadow != 0 )
                         {
-                                changeShadow( getDataOfFreeItem ()->shadows[ currentFrame ] );
+                                changeShadow( getDataOfItem()->getShadowAt( currentFrame ) );
                         }
                 }
 

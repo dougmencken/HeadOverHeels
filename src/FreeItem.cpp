@@ -7,7 +7,8 @@
 namespace isomot
 {
 
-FreeItem::FreeItem( ItemData* itemData, int x, int y, int z, const Direction& direction ) : Item ( itemData, z, direction )
+FreeItem::FreeItem( ItemData* itemData, int x, int y, int z, const Direction& direction )
+        : Item ( itemData, z, direction )
         , myMask ( WantMask )
         , transparency ( 0 )
         , collisionDetector ( true )
@@ -20,18 +21,20 @@ FreeItem::FreeItem( ItemData* itemData, int x, int y, int z, const Direction& di
         this->anchor = 0;
 
         // init frames
-        int howManyFrames = ( getDataOfFreeItem ()->motion.size() - getDataOfFreeItem ()->extraFrames ) / getDataOfFreeItem ()->directionFrames;
-        int currentFrame = ( getDataOfFreeItem ()->directionFrames > 1 ? getDataOfFreeItem ()->frames[ frameIndex ] + howManyFrames * direction : getDataOfFreeItem ()->frames[ 0 ] );
+        int howManyFrames = ( getDataOfItem()->howManyMotions() - getDataOfItem()->howManyExtraFrames() ) / getDataOfItem()->howManyDirectionFrames() ;
+        int currentFrame = ( getDataOfItem()->howManyDirectionFrames() > 1 ?
+                                        getDataOfItem()->getFrameAt( getIndexOfFrame() ) + howManyFrames * direction :
+                                        getDataOfItem()->getFrameAt( 0 ) );
 
-        this->rawImage = getDataOfFreeItem ()->motion[ currentFrame ];
+        this->rawImage = getDataOfItem()->getMotionAt( currentFrame );
 
         // get shadow
-        if ( getDataOfFreeItem ()->shadowWidth != 0 && getDataOfFreeItem ()->shadowHeight != 0 )
+        if ( getDataOfItem()->getWidthOfShadow() > 0 && getDataOfItem()->getHeightOfShadow() > 0 )
         {
-                this->shadow = getDataOfFreeItem ()->shadows[ currentFrame ];
+                this->shadow = getDataOfItem()->getShadowAt( currentFrame );
         }
 
-        /// fprintf( stdout, "meet new free item with graphics from %s\n", getDataOfFreeItem ()->getNameOfFile().c_str () ) ;
+        /// fprintf( stdout, "meet new free item with graphics from %s\n", getDataOfItem()->getNameOfFile().c_str () ) ;
 }
 
 FreeItem::FreeItem( const FreeItem& freeItem )
@@ -112,8 +115,8 @@ void FreeItem::changeImage( BITMAP* image )
                 // recalculate displacement, it is how many pixels is this image from point of room’s origin
                 if ( this->rawImage )
                 {
-                        this->offset.first = ( ( this->x - this->y ) << 1 ) + getDataOfFreeItem()->widthX + getDataOfFreeItem()->widthY - ( image->w >> 1 ) - 1;
-                        this->offset.second = this->x + this->y + getDataOfFreeItem()->widthX - image->h - this->z;
+                        this->offset.first = ( ( this->x - this->y ) << 1 ) + getDataOfItem()->getWidthX() + getDataOfItem()->getWidthY() - ( image->w >> 1 ) - 1;
+                        this->offset.second = this->x + this->y + getDataOfItem()->getWidthX() - image->h - this->z;
                 }
                 else
                 {
@@ -185,8 +188,7 @@ void FreeItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
         // is item not fully transparent
         if ( transparency < 100 )
         {
-                // Anchura del elemento
-                int width = ( getDataOfFreeItem()->widthX > getDataOfFreeItem()->widthY ? getDataOfFreeItem()->widthX : getDataOfFreeItem()->widthY );
+                int width = ( getDataOfItem()->getWidthX() > getDataOfItem()->getWidthY() ? getDataOfItem()->getWidthX() : getDataOfItem()->getWidthY() );
                 // Coordenada inicial X
                 int inix = x - this->offset.first;
                 if ( inix < 0 ) inix = 0;
@@ -200,7 +202,7 @@ void FreeItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
                 int endy = y - this->offset.second + shadow->h;
                 if ( endy > this->rawImage->h ) endy = this->rawImage->h;
                 // Coordenada intermedia Y
-                int my = this->rawImage->h - width - getDataOfFreeItem()->height;
+                int my = this->rawImage->h - width - getDataOfItem()->getHeight ();
                 if ( endy < my ) my = endy;
                 if ( endy > my + width ) endy = my + width;
 
@@ -300,8 +302,8 @@ void FreeItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
                                 // Hasta aquí el elemento se sombrea de forma horizontal hasta la línea marcada por la variable my
 
                                 // Sombreado de los laterales del elemento
-                                ltpx = ( ( this->rawImage->w ) >> 1 ) - ( width << 1 ) + ( getDataOfFreeItem()->widthX - getDataOfFreeItem()->widthY ) + ( ( iRow - my ) << 1 );
-                                rtpx = ( ( this->rawImage->w ) >> 1 ) + ( width << 1 ) + ( getDataOfFreeItem()->widthX - getDataOfFreeItem()->widthY ) - ( ( iRow - my ) << 1 ) - 2;
+                                ltpx = ( ( this->rawImage->w ) >> 1 ) - ( width << 1 ) + ( getDataOfItem()->getWidthX() - getDataOfItem()->getWidthY() ) + ( ( iRow - my ) << 1 );
+                                rtpx = ( ( this->rawImage->w ) >> 1 ) + ( width << 1 ) + ( getDataOfItem()->getWidthX() - getDataOfItem()->getWidthY() ) - ( ( iRow - my ) << 1 ) - 2;
                                 ltpx = ltpx * iInc;
                         #if IS_BIG_ENDIAN
                                 ltpx += bitmap_color_depth( this->rawImage ) == 32 ? 1 : 0 ;
@@ -394,8 +396,8 @@ void FreeItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
                                                 }
                                         }
 
-                                        ltpx = ( ( this->rawImage->w ) >> 1 ) - ( width << 1 ) + ( getDataOfFreeItem()->widthX - getDataOfFreeItem()->widthY ) + ( ( iRow - my ) << 1 );
-                                        rtpx = ( ( this->rawImage->w ) >> 1 ) + ( width << 1 ) + ( getDataOfFreeItem()->widthX - getDataOfFreeItem()->widthY ) - ( ( iRow - my ) << 1 ) - 2;
+                                        ltpx = ( ( this->rawImage->w ) >> 1 ) - ( width << 1 ) + ( getDataOfItem()->getWidthX() - getDataOfItem()->getWidthY() ) + ( ( iRow - my ) << 1 );
+                                        rtpx = ( ( this->rawImage->w ) >> 1 ) + ( width << 1 ) + ( getDataOfItem()->getWidthX() - getDataOfItem()->getWidthY() ) - ( ( iRow - my ) << 1 ) - 2;
                                         ltpx = ltpx * iInc;
                                 #if IS_BIG_ENDIAN
                                         ltpx += bitmap_color_depth( this->rawImage ) == 32 ? 1 : 0 ;
@@ -485,8 +487,8 @@ void FreeItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale
                                                 }
                                         }
 
-                                        ltpx = ( ( this->rawImage->w ) >> 1 ) - ( width << 1 ) + ( getDataOfFreeItem()->widthX - getDataOfFreeItem()->widthY ) + ( ( iRow - my ) << 1 );
-                                        rtpx = ( ( this->rawImage->w ) >> 1 ) + ( width << 1 ) + ( getDataOfFreeItem()->widthX - getDataOfFreeItem()->widthY ) - ( ( iRow - my ) << 1 ) - 2;
+                                        ltpx = ( ( this->rawImage->w ) >> 1 ) - ( width << 1 ) + ( getDataOfItem()->getWidthX() - getDataOfItem()->getWidthY() ) + ( ( iRow - my ) << 1 );
+                                        rtpx = ( ( this->rawImage->w ) >> 1 ) + ( width << 1 ) + ( getDataOfItem()->getWidthX() - getDataOfItem()->getWidthY() ) - ( ( iRow - my ) << 1 ) - 2;
                                         ltpx = ltpx * iInc;
                                 #if IS_BIG_ENDIAN
                                         ltpx += bitmap_color_depth( this->rawImage ) == 32 ? 1 : 0 ;
@@ -550,34 +552,31 @@ void FreeItem::requestMask()
 {
         mediator->mask( this );
 
-        // Si no se ha podido enmascarar se destruye la imagen final
         if ( this->myMask == WantMask && this->processedImage )
         {
                 destroy_bitmap( this->processedImage );
                 this->processedImage = 0;
         }
 
-        // Reinicia los atributos para el siguiente ciclo
         this->myShady = NoShadow;
         this->myMask = NoMask;
 }
 
 void FreeItem::maskImage( int x, int y, BITMAP* image )
 {
-        // Se enmascarará la imagen sombreada. Si el elemento no está sombreado se hará con la imagen normal
+        // mask shaded image or raw image when item is not shaded
         BITMAP* currentImage = ( this->shadyImage ? this->shadyImage : this->rawImage );
 
-        // Coordenada inicial X
-        int inix = x - this->offset.first;
+        int inix = x - this->offset.first;                      // initial X
         if ( inix < 0 ) inix = 0;
-        // Coordenada inicial Y
-        int iniy = y - this->offset.second;
+
+        int iniy = y - this->offset.second;                     // initial Y
         if ( iniy < 0 ) iniy = 0;
-        // Coordenada final X
-        int endx = x - this->offset.first + image->w;
+
+        int endx = x - this->offset.first + image->w;           // final X
         if ( endx > currentImage->w ) endx = currentImage->w;
-        // Coordenada final Y
-        int endy = y - this->offset.second + image->h;
+
+        int endy = y - this->offset.second + image->h;          // final Y
         if ( endy > currentImage->h ) endy = currentImage->h;
 
         // Índice para recorrer las filas de píxeles de la imagen currentImage
@@ -633,7 +632,7 @@ void FreeItem::maskImage( int x, int y, BITMAP* image )
         }
 }
 
-bool FreeItem::changeData( int value, int x, int y, int z, const Datum& datum, const WhatToDo& how )
+bool FreeItem::changeData( int newValue, int x, int y, int z, const Datum& datum, const ChangeOrAdd& how )
 {
         mediator->clearStackOfCollisions( );
 
@@ -645,15 +644,15 @@ bool FreeItem::changeData( int value, int x, int y, int z, const Datum& datum, c
         switch ( datum )
         {
                 case CoordinateX:
-                        this->x = value + this->x * how;
+                        this->x = newValue + this->x * how;
                         break;
 
                 case CoordinateY:
-                        this->y = value + this->y * how;
+                        this->y = newValue + this->y * how;
                         break;
 
                 case CoordinateZ:
-                        this->z = value + this->z * how;
+                        this->z = newValue + this->z * how;
                         break;
 
                 case CoordinatesXYZ:
@@ -663,15 +662,15 @@ bool FreeItem::changeData( int value, int x, int y, int z, const Datum& datum, c
                         break;
 
                 case WidthX:
-                        this->dataOfItem->widthX = value + getDataOfFreeItem()->widthX * how;
+                        this->dataOfItem->setWidthX( newValue + getDataOfItem()->getWidthX() * how );
                         break;
 
                 case WidthY:
-                        this->dataOfItem->widthY = value + getDataOfFreeItem()->widthY * how;
+                        this->dataOfItem->setWidthY( newValue + getDataOfItem()->getWidthY() * how );
                         break;
 
                 case Height:
-                        this->dataOfItem->height = value + getDataOfFreeItem()->height * how;
+                        this->dataOfItem->setHeight( newValue + getDataOfItem()->getHeight() * how );
                         break;
         }
 
@@ -680,7 +679,7 @@ bool FreeItem::changeData( int value, int x, int y, int z, const Datum& datum, c
         {
                 mediator->pushCollision( NorthWall );
         }
-        else if ( this->x + getDataOfFreeItem()->widthX > mediator->getBound( South ) )
+        else if ( this->x + static_cast< int >( getDataOfItem()->getWidthX() ) > mediator->getBound( South ) )
         {
                 mediator->pushCollision( SouthWall );
         }
@@ -688,7 +687,7 @@ bool FreeItem::changeData( int value, int x, int y, int z, const Datum& datum, c
         {
                 mediator->pushCollision( WestWall );
         }
-        else if ( this->y - getDataOfFreeItem()->widthY + 1 < mediator->getBound( East ) )
+        else if ( this->y - static_cast< int >( getDataOfItem()->getWidthY() ) + 1 < mediator->getBound( East ) )
         {
                 mediator->pushCollision( EastWall );
         }
@@ -710,8 +709,8 @@ bool FreeItem::changeData( int value, int x, int y, int z, const Datum& datum, c
                         if ( this->rawImage )
                         {
                                 // get how many pixels is this image from point of room’s origin
-                                this->offset.first = ( ( this->x - this->y ) << 1 ) + getDataOfFreeItem()->widthX + getDataOfFreeItem()->widthY - ( this->rawImage->w >> 1 ) - 1;
-                                this->offset.second = this->x + this->y + getDataOfFreeItem()->widthX - this->rawImage->h - this->z;
+                                this->offset.first = ( ( this->x - this->y ) << 1 ) + getDataOfItem()->getWidthX() + getDataOfItem()->getWidthY() - ( this->rawImage->w >> 1 ) - 1;
+                                this->offset.second = this->x + this->y + getDataOfItem()->getWidthX() - this->rawImage->h - this->z;
 
                                 // for both the previous position and the current position
                                 mediator->remaskWithItem( &oldFreeItem );
@@ -746,9 +745,9 @@ bool FreeItem::changeData( int value, int x, int y, int z, const Datum& datum, c
                 this->y = oldFreeItem.getY();
                 this->z = oldFreeItem.getZ();
 
-                this->dataOfItem->widthX = oldFreeItem.getWidthX();
-                this->dataOfItem->widthY = oldFreeItem.getWidthY();
-                this->dataOfItem->height = oldFreeItem.getHeight();
+                this->dataOfItem->setWidthX( oldFreeItem.getWidthX() );
+                this->dataOfItem->setWidthY( oldFreeItem.getWidthY() );
+                this->dataOfItem->setHeight( oldFreeItem.getHeight() );
 
                 this->offset = oldFreeItem.getOffset();
         }
@@ -776,7 +775,7 @@ bool FreeItem::addToPosition( int x, int y, int z )
         return this->changeData( 0, x, y, z, CoordinatesXYZ, Add );
 }
 
-bool FreeItem::changeTransparency( unsigned char value, const WhatToDo& how )
+bool FreeItem::changeTransparency( unsigned char value, const ChangeOrAdd& how )
 {
         bool changed = false;
 

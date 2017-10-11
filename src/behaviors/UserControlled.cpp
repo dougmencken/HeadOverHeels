@@ -387,11 +387,11 @@ void UserControlled::wayInTeletransport( PlayerItem * player )
         {
                 case BeginWayInTeletransport:
                         // change to bubbles preserving label of player
-                        playerData = player->getDataOfFreeItem() ;
+                        playerData = player->getDataOfItem() ;
                         player->changeItemData( itemDataManager->findItemByLabel( labelOfTransitionViaTeleport ), "begin way in teletransport" );
 
-                        // backward animation of bubbles
-                        player->setBackwardMotion();
+                        // reverse animation of bubbles
+                        player->setReverseMotion();
 
                         // begin teleportation
                         activity = WayInTeletransport;
@@ -488,7 +488,7 @@ void UserControlled::useHooter( PlayerItem* player )
                         SoundManager::getInstance()->stop( player->getLabel(), Doughnut );
 
                         // Crea el elemento en la misma posición que el jugador y a su misma altura
-                        int z = player->getZ() + player->getHeight() - hooterData->height;
+                        int z = player->getZ() + player->getHeight() - hooterData->getHeight();
                         FreeItem* freeItem = new FreeItem
                         (
                                 hooterData,
@@ -533,8 +533,8 @@ void UserControlled::takeItem( PlayerItem * player )
                                 if ( bottomItem != 0 && bottomItem->getBehavior() != 0
                                         && ( bottomItem->getBehavior()->getNameOfBehavior() == "behavior of thing able to move by pushing" ||
                                                 bottomItem->getBehavior()->getNameOfBehavior() == "behavior of big leap for player" )
-                                        && bottomItem->getWidthX() <= static_cast< int >( mediator->getRoom()->getSizeOfOneTile() * 3 ) >> 2
-                                        && bottomItem->getWidthY() <= static_cast< int >( mediator->getRoom()->getSizeOfOneTile() * 3 ) >> 2 )
+                                        && bottomItem->getWidthX() <= ( mediator->getRoom()->getSizeOfOneTile() * 3 ) >> 2
+                                        && bottomItem->getWidthY() <= ( mediator->getRoom()->getSizeOfOneTile() * 3 ) >> 2 )
                                 {
                                         if ( bottomItem->getX() + bottomItem->getY() > coordinates )
                                         {
@@ -575,7 +575,7 @@ void UserControlled::dropItem( PlayerItem* player )
 {
         if ( player->getTakenItemData() != 0 )
         {
-                std::cout << "drop item \"" << player->getTakenItemData ()->label << "\"" << std::endl ;
+                std::cout << "drop item \"" << player->getTakenItemData()->getLabel() << "\"" << std::endl ;
 
                 // place dropped item just below player
                 if ( player->addToZ( LayerHeight ) )

@@ -15,6 +15,7 @@
 #include <string>
 #include <allegro.h>
 
+
 namespace isomot
 {
 
@@ -25,11 +26,15 @@ namespace isomot
 class ItemData
 {
 
+friend class ItemDataManager ;
+
 public:
 
         ItemData( ) ;
 
         virtual ~ItemData( ) ;
+
+        static ItemData * clone ( ItemData * data ) ;
 
 public:
 
@@ -45,25 +50,86 @@ public:
 
         void clearNameOfShadowFile () {  this->nameOfShadowFile.clear() ;  }
 
+        std::string getLabel () const {  return label ;  }
+
+        unsigned int getWidthX () const {  return widthX ;  }
+
+        void setWidthX ( unsigned int newWidthX ) {  widthX = newWidthX ;  }
+
+        unsigned int getWidthY () const {  return widthY ;  }
+
+        void setWidthY ( unsigned int newWidthY ) {  widthY = newWidthY ;  }
+
+        unsigned int getHeight () const {  return height ;  }
+
+        void setHeight ( unsigned int newHeight ) {  height = newHeight ;  }
+
+        double getWeight() const {  return weight ;  }
+
+        double getSpeed() const {  return speed ;  }
+
+        double getDelayBetweenFrames () const {  return delayBetweenFrames ;  }
+
+        unsigned int getWidthOfFrame () const {  return widthOfFrame ;  }
+
+        unsigned int getHeightOfFrame () const {  return heightOfFrame ;  }
+
+        unsigned int getWidthOfShadow () const {  return widthOfShadow ;  }
+
+        unsigned int getHeightOfShadow () const {  return heightOfShadow ;  }
+
+        bool isMortal() const {  return mortal ;  }
+
+        unsigned char howManyDirectionFrames () const {  return directionFrames ;  }
+
+        unsigned int howManyExtraFrames () const {  return extraFrames ;  }
+
+        unsigned int howManyMotions () const {  return motion.size () ;  }
+
+        BITMAP * getMotionAt( size_t position ) const {  return motion[ position ] ;  }
+
+        unsigned int howManyShadows () const {  return shadows.size () ;  }
+
+        BITMAP * getShadowAt( size_t position ) const {  return shadows[ position ] ;  }
+
+        int getFrameAt( size_t index ) const
+        {
+                return ( index < frames.size () ? frames[ index ] : 0 ) ;
+        }
+
+        unsigned int howManyFrames () const {  return frames.size() ;  }
+
+private:
+
        /**
-        * Label names an item uniquely, there’s no two different items with the same label
+        * Label names item uniquely, there’s no two different items with one label
         */
         std::string label ;
 
        /**
-        * Anchura espacial del elemento en el eje X
+        * Spatial width of item along X axis
         */
-        int widthX ;
+        unsigned int widthX ;
 
        /**
-        * Anchura espacial del elemento en el eje Y
+        * Spatial width of item along Y axis
         */
-        int widthY ;
+        unsigned int widthY ;
 
        /**
-        * Altura espacial del elemento
+        * Spatial height of item
         */
-        int height ;
+        unsigned int height ;
+
+       /**
+        * Weight of item in milliseconds, higher for bigger speed of falling, 0 for don’t fall
+        */
+        double weight ;
+
+       /**
+        * Time in milliseconds needed for item to move
+        */
+        double speed ;
 
        /**
         * Indica cuántos fotogramas diferentes tiene el elemento para cada una de las direcciones
@@ -72,51 +138,39 @@ public:
         unsigned char directionFrames ;
 
        /**
+        * Time in milliseconds to show each frame of animation
+        */
+        double delayBetweenFrames ;
+
+       /**
+        * Width in pixels of each frame for item
+        */
+        unsigned int widthOfFrame ;
+
+       /**
+        * Height in pixels of each frame for item
+        */
+        unsigned int heightOfFrame ;
+
+       /**
+        * Width in pixels of each frame for item’s shadow
+        */
+        unsigned int widthOfShadow ;
+
+       /**
+        * Height in pixels of each frame for item’s shadow
+        */
+        unsigned int heightOfShadow ;
+
+       /**
         * Indica si el elemento es mortal, es decir, si al tocarlo el jugador perderá una vida
         */
         bool mortal ;
 
        /**
-        * El peso del elemento en segundos. Puede ser 0 para indicar que aunque quede suspendido en el
-        * aire no caerá o un valor distinto para indicar lo contrario. Cuanto mayor sea este valor mayor
-        * será la velocidad de caída
-        */
-        double weight ;
-
-       /**
-        * Tiempo en segundos que será mostrado cada fotograma de la secuencia de animación
-        */
-        double framesDelay ;
-
-       /**
-        * Tiempo en segundos necesario para que el elemento se mueva
-        */
-        double speed ;
-
-       /**
-        * Width in pixels of each frame for item
-        */
-        int frameWidth ;
-
-       /**
-        * Height in pixels of each frame for item
-        */
-        int frameHeight ;
-
-       /**
-        * Width in pixels of each frame for item’s shadow
-        */
-        int shadowWidth ;
-
-       /**
-        * Height in pixels of each frame for item’s shadow
-        */
-        int shadowHeight ;
-
-       /**
         * Extra frames are those that don’t relate to regular motion, such as frames of jump
         */
-        int extraFrames ;
+        unsigned int extraFrames ;
 
        /**
         * Frames that define sequence of animation
@@ -132,8 +186,6 @@ public:
         * Pictures of item’s shadow
         */
         std::vector< BITMAP * > shadows ;
-
-private:
 
        /**
         * Name of the file that contains the frames of this item

@@ -73,8 +73,8 @@ void Camera::turnOn( PlayerItem* player, const Direction& entry )
                         }
                         else
                         { // for example it’s resume of some game which was saved in triple room
-                                int midX = RoomBuilder::getXCenterOfRoom( player->getDataOfFreeItem(), room );
-                                int midY = RoomBuilder::getYCenterOfRoom( player->getDataOfFreeItem(), room );
+                                int midX = RoomBuilder::getXCenterOfRoom( player->getDataOfItem(), room );
+                                int midY = RoomBuilder::getYCenterOfRoom( player->getDataOfItem(), room );
                                 delta.first = midX + ( 12 * room->getSizeOfOneTile() );  // yeah, 12 is just some magic number
                                 delta.second = midY + ( 6 * room->getSizeOfOneTile() );  // as well as 6
                         }
