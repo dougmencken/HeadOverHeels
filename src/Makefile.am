@@ -9,8 +9,8 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			loadpng/savepng.c \
 			loadpng/regpng.c \
 			main.cpp \
-			BonusManager.cpp \
-			BonusManager.hpp \
+			Way.cpp \
+			Way.hpp \
 			Camera.cpp \
 			Camera.hpp \
 			Door.cpp \
@@ -56,6 +56,8 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			Mediated.hpp \
 			Room.cpp \
 			Room.hpp \
+			BonusManager.cpp \
+			BonusManager.hpp \
 			SoundManager.cpp \
 			SoundManager.hpp \
 			TableOfTransparencies.cpp \

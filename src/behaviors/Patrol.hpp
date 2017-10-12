@@ -42,7 +42,7 @@ protected:
        /**
         * El elemento cambia aleatoriamente de dirección
         */
-        void changeDirection () ;
+        void changeOrientation () ;
 
 private:
 

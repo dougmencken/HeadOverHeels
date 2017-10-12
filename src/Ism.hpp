@@ -77,45 +77,6 @@ namespace isomot
         } ;
 
         /**
-         * Direction in which you move an item or entry to room or exit from room
-         */
-        enum Direction
-        {
-                NoDirection = 0,   // used for items with only one direction
-                South = 0,         // south, bottom right of screen
-                West,              // west, bottom left of screen
-                North,             // north, top left of screen
-                East,              // east, top right of screen
-                Northeast,         // northeast, top of screen
-                Southeast,         // southeast, right side of screen
-                Southwest,         // southwest, bottom of screen
-                Northwest,         // northwest, left side of screen
-                Eastnorth,         // door located to the east, north
-                Eastsouth,         // door located to the east, south
-                Westnorth,         // door located to the west, north
-                Westsouth,         // door located to the west, south
-                Up,                // to room without floor
-                Down,              // to room without ceiling
-                ByTeleport,        // to another room via teleport
-                ByTeleportToo,     // to another room via second teleport
-                NoEntry,           // there is no entrance to this room
-                NoExit,            // there is no exit from this room
-                Restart = 51,      // restart room when character loses its life
-                JustWait = 99      // just wait in room
-        } ;
-
-        std::string wayToString( const Direction& way ) ;
-
-        /**
-         * Eje donde puede situarse una pared de la sala
-         */
-        enum Axis
-        {
-                AxisX,    /* Eje X, equivalente al muro este */
-                AxisY     /* Eje Y, equivalente al muro norte */
-        } ;
-
-        /**
          * Estado de un elemento respecto a la proyección de sombras
          */
         enum WhichShade

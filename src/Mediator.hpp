@@ -349,12 +349,6 @@ public:
         short getDegreeOfShading () const {  return room->shadingScale ;  }
 
        /**
-        * Returns limit of room in isometric units
-        * @param direction Un punto cardinal indicativo del límite que se quiere obtener
-        */
-        unsigned short getBound ( const Direction& direction ) ;
-
-       /**
         * Sala en la que negocia este mediador
         */
         Room* getRoom () const {  return room ;  }
@@ -378,13 +372,6 @@ public:
         * @return Un jugador ó 0 si no hay más jugadores
         */
         PlayerItem* getWaitingPlayer () const ;
-
-       /**
-        * Acceso a las puertas de la sala
-        * @param direction Un punto cardinal que señala el muro donde se encuentra la puerta
-        * @return Una puerta ó 0 si la puerta no existe para la dirección indicada
-        */
-        Door* getDoor ( const Direction& direction ) ;
 
 };
 

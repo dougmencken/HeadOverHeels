@@ -14,7 +14,9 @@
 #include <string>
 #include <utility>
 #include <allegro.h>
+
 #include "Ism.hpp"
+#include "Way.hpp"
 #include "HPC.hpp"
 #include "Mediated.hpp"
 
@@ -30,7 +32,7 @@ enum Coordinate
         CoordinateX = 1,
         CoordinateY = 2,
         CoordinateZ = 4,
-        CoordinatesXYZ = 7
+        CoordinatesXYZ = CoordinateX | CoordinateY | CoordinateZ
 } ;
 
 enum ChangeOrAdd
@@ -49,17 +51,10 @@ class Item : public Mediated
 
 public:
 
-       /**
-        * Constructor
-        * @param data Datos invariables del elemento
-        * @param z Posición espacial Z o a qué distancia está el elemento del suelo
-        * @param direction Dirección inicial del elemento
-        */
-        Item( ItemData* data, int z, const Direction& direction ) ;
+        Item( ItemData* data, int z, const Way& way ) ;
 
        /**
         * Constructor copia. No copia los atributos que son punteros
-        * @param item Un objeto de esta clase
         */
         Item( const Item& item ) ;
 
@@ -79,20 +74,16 @@ public:
         bool animate () ;
 
         /**
-         * Change data of item preserving its label. Used when there’s a metamorphosis such as when player teleports
+         * Change data of item preserving its label, used when there’s metamorphosis such as when player teleports
          */
         void changeItemData ( ItemData * itemData, const std::string& initiatedBy ) ;
 
-        /**
-         * Cambia la dirección del elemento y establece el fotograma adecuado
-         * @param orientation La nueva dirección
-         */
-        void changeDirection ( const Direction& direction ) ;
+        void changeOrientation ( const Way& way ) ;
 
         /**
-         * Change current frame for item. Change of frames is usually done via change of direction
+         * Change current frame for item. Change of frames is usually done via change of orientation
          * or via looping in sequence of animation. However there’re some cases when it’s necessary
-         * to change frames manually, in situations not linked to animation or change of direction.
+         * to change frames manually, in situations not linked to animation or change of orientation.
          * As example, in behavior of trampoline one frame is for rest and another is for fold
          * @param frameIndex index of new frame
          */
@@ -175,10 +166,7 @@ protected:
          */
         int z ;
 
-        /**
-         * Dirección actual del elemento
-         */
-        Direction direction ;
+        Way orientation ;
 
         /**
          * Estado del proceso de sombreado
@@ -326,18 +314,14 @@ public:
         unsigned int countFrames () const ;
 
         /**
-         * Establece la dirección actual del elemento. Se usa únicamente si el elemento
-         * no tiene más de un fotograma, en caso contrario, se emplea changeDirection
-         * @return Algún punto cardinal, arriba o abajo
+         * Set current orientation of item
          */
-        void setDirection ( const Direction& direction ) {  this->direction = direction ;  }
+        void setOrientation ( const Way& way ) {  this->orientation = way ;  }
 
         /**
          * La dirección actual del elemento
-         * @return Algún punto cardinal, arriba o abajo
-         * @see Direction
          */
-        Direction getDirection () const {  return direction ;  }
+        Way getOrientation () const {  return orientation ;  }
 
         BITMAP * getRawImage () {  return rawImage ;  }
 

@@ -10,7 +10,7 @@
 namespace isomot
 {
 
-Item::Item( ItemData* data, int z, const Direction& direction )
+Item::Item( ItemData* data, int z, const Way& way )
       : Mediated(),
         id( 0 ),
         label( data->getLabel() ),
@@ -18,7 +18,7 @@ Item::Item( ItemData* data, int z, const Direction& direction )
         x( 0 ),
         y( 0 ),
         z( z ),
-        direction( direction ),
+        orientation( way ),
         myShady( WantShadow ),
         rawImage( 0 ),
         shadow( 0 ),
@@ -44,7 +44,7 @@ Item::Item( const Item& item )
         x( item.x ),
         y( item.y ),
         z( item.z ),
-        direction( item.direction ),
+        orientation( item.orientation ),
         myShady( item.myShady ),
         rawImage( item.rawImage ),
         shadow( item.shadow ),
@@ -112,7 +112,8 @@ bool Item::animate()
 
                         // which frame to show yet
                         int framesNumber = ( dataOfItem->howManyMotions() - dataOfItem->howManyExtraFrames() ) / dataOfItem->howManyDirectionFrames();
-                        int currentFrame = dataOfItem->getFrameAt( frameIndex ) + ( dataOfItem->howManyDirectionFrames() > 1 ? framesNumber * direction : 0 );
+                        unsigned int orientOccident = ( orientation.getIntegerOfWay() == Nowhere ? 0 : orientation.getIntegerOfWay() );
+                        int currentFrame = dataOfItem->getFrameAt( frameIndex ) + ( dataOfItem->howManyDirectionFrames() > 1 ? framesNumber * orientOccident : 0 );
 
                         // change frame of animation
                         if ( this->rawImage != 0 && this->rawImage != dataOfItem->getMotionAt( currentFrame ) )
@@ -143,17 +144,24 @@ void Item::changeItemData( ItemData* itemData, const std::string& initiatedBy )
         this->backwardMotion = false;
 }
 
-void Item::changeDirection( const Direction& direction )
+void Item::changeOrientation( const Way& way )
 {
+        if ( this->orientation.getIntegerOfWay() == way.getIntegerOfWay() )
+        {
+                // nothing to change
+                return;
+        }
+
         // direction is changed only when item has different frames for different directions
         if ( dataOfItem->howManyDirectionFrames() > 1 )
         {
                 // get frame for new direction
-                unsigned int currentFrame = ( ( dataOfItem->howManyMotions() - dataOfItem->howManyExtraFrames() ) / dataOfItem->howManyDirectionFrames() ) * direction;
+                unsigned int orientOccident = ( orientation.getIntegerOfWay() == Nowhere ? 0 : orientation.getIntegerOfWay() );
+                unsigned int currentFrame = ( ( dataOfItem->howManyMotions() - dataOfItem->howManyExtraFrames() ) / dataOfItem->howManyDirectionFrames() ) * orientOccident;
 
                 if ( this->rawImage != 0 && currentFrame < dataOfItem->howManyMotions() && this->rawImage != dataOfItem->getMotionAt( currentFrame ) )
                 {
-                        this->direction = direction;
+                        this->orientation = way;
 
                         changeImage( dataOfItem->getMotionAt( currentFrame ) );
 
@@ -199,19 +207,19 @@ bool Item::checkPosition( int x, int y, int z, const ChangeOrAdd& what )
         this->z = z + this->z * what;
 
         // look for collision with wall
-        if ( this->x < mediator->getBound( North ) )
+        if ( this->x < mediator->getRoom()->getLimitAt( Way( "north" ) ) )
         {
                 mediator->pushCollision( NorthWall );
         }
-        else if ( this->x + this->dataOfItem->getWidthX() > mediator->getBound( South ) )
+        else if ( this->x + this->dataOfItem->getWidthX() > mediator->getRoom()->getLimitAt( Way( "south" ) ) )
         {
                 mediator->pushCollision( SouthWall );
         }
-        if ( this->y >= mediator->getBound( West ) )
+        if ( this->y >= mediator->getRoom()->getLimitAt( Way( "west" ) ) )
         {
                 mediator->pushCollision( WestWall );
         }
-        else if ( this->y - this->dataOfItem->getWidthY() + 1 < mediator->getBound( East ) )
+        else if ( this->y - this->dataOfItem->getWidthY() + 1 < mediator->getRoom()->getLimitAt( Way( "east" ) ) )
         {
                 mediator->pushCollision( EastWall );
         }

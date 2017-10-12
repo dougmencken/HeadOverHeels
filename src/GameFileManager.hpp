@@ -13,6 +13,7 @@
 
 #include <string>
 #include "Ism.hpp"
+#include "Way.hpp"
 #include "csxml/SaveGameXML.hpp"
 
 
@@ -50,7 +51,7 @@ public:
         * @param z Coordenada Z donde está situado el pez de la reencarnación
         * @param direction Dirección a la que mira el jugador en el momento de coger el pez
         */
-        void assignFishData ( const std::string& room, const std::string& label, int x, int y, int z, const Direction& direction ) ;
+        void assignFishData ( const std::string& room, const std::string& label, int x, int y, int z, const Way& way ) ;
 
        /**
         * Carga una partida de un archivo XML
@@ -101,10 +102,7 @@ private:
         */
         int z ;
 
-       /**
-        * Dirección a la que mira el jugador en el momento de coger el pez
-        */
-        Direction direction ;
+        Way catchFishWay ;
 
        /**
         * El gestor del juego

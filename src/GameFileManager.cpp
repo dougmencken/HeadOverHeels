@@ -18,7 +18,7 @@ GameFileManager::GameFileManager( const GameManager* gameManager, const Isomot* 
         , x( 0 )
         , y( 0 )
         , z( 0 )
-        , direction( NoDirection )
+        , catchFishWay( Nowhere )
         , gameManager( const_cast< GameManager* >( gameManager ) )
         , isomot( const_cast< Isomot* >( isomot ) )
 {
@@ -30,14 +30,14 @@ GameFileManager::~GameFileManager()
 
 }
 
-void GameFileManager::assignFishData( const std::string& room, const std::string& name, int x, int y, int z, const Direction& direction )
+void GameFileManager::assignFishData( const std::string& room, const std::string& name, int x, int y, int z, const Way& way )
 {
         this->room = room;
         this->nameOfCharacterWhoCaughtTheFish = name;
         this->x = x;
         this->y = y;
         this->z = z;
-        this->direction = direction;
+        this->catchFishWay = way;
 }
 
 void GameFileManager::loadGame( const std::string& fileName )
@@ -125,7 +125,7 @@ void GameFileManager::saveGame( const std::string& fileName )
                                 this->x,
                                 this->y,
                                 this->z,
-                                int( this->direction ),
+                                this->catchFishWay.getIntegerOfWay(),
                                 JustWait,
                                 lives,
                                 ( nameOfWhoPlaysYet == "head" || nameOfWhoPlaysYet == "headoverheels" )
@@ -187,8 +187,8 @@ void GameFileManager::saveGame( const std::string& fileName )
                                         whoWaitsToPlay->getX(),
                                         whoWaitsToPlay->getY(),
                                         whoWaitsToPlay->getZ(),
-                                        static_cast< int >( whoWaitsToPlay->getDirection() ),
-                                        whoWaitsToPlay->getDirectionOfEntry(),
+                                        whoWaitsToPlay->getOrientation().getIntegerOfWay(),
+                                        whoWaitsToPlay->getWayOfEntry().getIntegerOfWay(),
                                         whoWaitsToPlay->getLives(),
                                         whoWaitsToPlay->getLabel() == "head"
                                                 ? std::find( tools.begin(), tools.end(), "horn" ) != tools.end()

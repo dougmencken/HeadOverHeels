@@ -99,7 +99,7 @@
     </properties>
   </text>
 
-  <text id="take-jump">
+  <text id="takeandjump">
     <properties>
       <ustring>Agafar+Saltar</ustring>
     </properties>
@@ -111,7 +111,7 @@
     </properties>
   </text>
 
-  <text id="halt">
+  <text id="pause">
     <properties>
       <ustring>Detenir</ustring>
     </properties>

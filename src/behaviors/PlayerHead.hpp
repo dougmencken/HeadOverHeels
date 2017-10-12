@@ -56,12 +56,6 @@ protected:
 
 protected:
 
-        static const size_t howManyBlinkFrames = 4 ;
-
-       /**
-        * Fotogramas de parpadeo del jugador. Uno por cada punto cardinal, aunque aquellos fotogramas en los que
-        * el personaje está de espaldas no son diferentes a los habituales
-        */
         int blinkFrames[ howManyBlinkFrames ] ;
 
 };

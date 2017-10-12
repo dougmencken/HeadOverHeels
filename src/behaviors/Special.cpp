@@ -184,7 +184,7 @@ bool Special::update ()
                                 takeMagicItem( static_cast< PlayerItem* >( sender ) );
 
                                 // create item "bubbles" in the place of magic item
-                                FreeItem* bubbles = new FreeItem( bubblesData, item->getX(), item->getY(), item->getZ(), NoDirection );
+                                FreeItem* bubbles = new FreeItem( bubblesData, item->getX(), item->getY(), item->getZ(), Nowhere );
 
                                 bubbles->assignBehavior( "behavior of disappearance in time", 0 );
                                 bubbles->setCollisionDetector( false );

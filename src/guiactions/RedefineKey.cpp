@@ -50,12 +50,14 @@ void RedefineKey::doAction ()
                                 {
                                         // if this new key was already in use, change that previous one to "none"
                                         std::string nameOfPrevious = InputManager::getInstance()->findNameOfKeyByCode( newKey );
+                                        std::string nameForText = ( nameOfPrevious == "take&jump" ? "takeandjump" : nameOfPrevious );
+
                                         if ( nameOfPrevious != InputManager::nameOfAbsentKey )
                                         {
                                                 InputManager::getInstance()->changeUserKey( nameOfPrevious, 0 );
 
                                                 // update the menu now
-                                                std::string textOfThatKey = GuiManager::getInstance()->getLanguageManager()->findLanguageString( nameOfPrevious )->getText();
+                                                std::string textOfThatKey = GuiManager::getInstance()->getLanguageManager()->findLanguageString( nameForText )->getText();
                                                 std::list < Label * > everyLabel = menu->getEveryOption ();
                                                 for ( std::list< Label * >::iterator iter = everyLabel.begin (); iter != everyLabel.end (); ++iter )
                                                 {
@@ -79,7 +81,8 @@ void RedefineKey::doAction ()
                                                   << "now is " << scancode_to_name( newKey ) << " ( " << newKey << " )"
                                                   << std::endl ;
 
-                                        std::string textOfKey = GuiManager::getInstance()->getLanguageManager()->findLanguageString( this->nameOfKey )->getText();
+                                        nameForText = ( this->nameOfKey == "take&jump" ? "takeandjump" : this->nameOfKey );
+                                        std::string textOfKey = GuiManager::getInstance()->getLanguageManager()->findLanguageString( nameForText )->getText();
                                         std::string dottedTextOfKey( textOfKey );
                                         for ( size_t position = utf8StringLength( textOfKey ) ; position < positionOfKey ; ++position ) {
                                                 dottedTextOfKey = dottedTextOfKey + ".";

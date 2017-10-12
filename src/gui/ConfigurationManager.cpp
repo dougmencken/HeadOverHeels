@@ -18,7 +18,7 @@ ConfigurationManager::ConfigurationManager( const std::string& fileName )
 
 }
 
-void ConfigurationManager::read()
+bool ConfigurationManager::read ()
 {
         try
         {
@@ -37,9 +37,9 @@ void ConfigurationManager::read()
                 InputManager::getInstance()->changeUserKey( "take", configurationXML->keyboard().take() );
                 InputManager::getInstance()->changeUserKey( "jump", configurationXML->keyboard().jump() );
                 InputManager::getInstance()->changeUserKey( "doughnut", configurationXML->keyboard().doughnut() );
-                InputManager::getInstance()->changeUserKey( "take-jump", configurationXML->keyboard().takeandjump() );
+                InputManager::getInstance()->changeUserKey( "take&jump", configurationXML->keyboard().takeandjump() );
                 InputManager::getInstance()->changeUserKey( "swap", configurationXML->keyboard().swap() );
-                InputManager::getInstance()->changeUserKey( "halt", configurationXML->keyboard().halt() );
+                InputManager::getInstance()->changeUserKey( "pause", configurationXML->keyboard().pause() );
 
                 // preferences of audio
 
@@ -67,10 +67,13 @@ void ConfigurationManager::read()
                 }
 
                 GameManager::getInstance()->setChosenGraphicSet( configurationXML->video().graphics().c_str () ) ;
+
+                return true;
         }
         catch ( const xml_schema::exception& e )
         {
                 std::cout << e << std::endl;
+                return false;
         }
 }
 
@@ -86,9 +89,9 @@ void ConfigurationManager::write()
                         InputManager::getInstance()->getUserKey( "take" ),
                         InputManager::getInstance()->getUserKey( "jump" ),
                         InputManager::getInstance()->getUserKey( "doughnut" ),
-                        InputManager::getInstance()->getUserKey( "take-jump" ),
+                        InputManager::getInstance()->getUserKey( "take&jump" ),
                         InputManager::getInstance()->getUserKey( "swap" ),
-                        InputManager::getInstance()->getUserKey( "halt" )
+                        InputManager::getInstance()->getUserKey( "pause" )
                 );
 
                 cxml::audio audioPreferences (

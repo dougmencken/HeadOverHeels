@@ -44,7 +44,7 @@ public:
         * @param z Posición espacial Z o a qué distancia está el elemento del suelo
         * @param direction Dirección inicial del elemento
         */
-        FreeItem( ItemData* itemData, int x, int y, int z, const Direction& direction ) ;
+        FreeItem( ItemData* itemData, int x, int y, int z, const Way& way ) ;
 
        /**
         * Constructor copia. No copia los atributos que son punteros

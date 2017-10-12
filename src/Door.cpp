@@ -8,13 +8,13 @@
 namespace isomot
 {
 
-Door::Door( ItemDataManager * itemData, const std::string& label, int cx, int cy, int z, const Direction& direction )
+Door::Door( ItemDataManager * itemData, const std::string& label, int cx, int cy, int z, const Way& way )
         : itemDataManager( itemData )
         , labelOfDoor( label )
         , cx( cx )
         , cy( cy )
         , z( z )
-        , direction( direction )
+        , positionOfDoor( way )
         , leftJamb( 0 )
         , rightJamb( 0 )
         , lintel( 0 )
@@ -38,7 +38,7 @@ FreeItem* Door::getLeftJamb()
 
                 if ( leftJambData != 0 )
                 {
-                        switch ( direction )
+                        switch ( getWhereIsDoor().getIntegerOfWay() )
                         {
                                 case North:
                                 case Northeast:
@@ -76,7 +76,7 @@ FreeItem* Door::getLeftJamb()
                                         ;
                         }
 
-                        leftJamb = new FreeItem( leftJambData, x, y, Top, NoDirection );
+                        leftJamb = new FreeItem( leftJambData, x, y, Top, Nowhere );
                 }
         }
 
@@ -94,7 +94,7 @@ FreeItem* Door::getRightJamb()
 
                 if ( rightJambData != 0 )
                 {
-                        switch ( direction )
+                        switch ( getWhereIsDoor().getIntegerOfWay() )
                         {
                                 case North:
                                 case Northeast:
@@ -132,7 +132,7 @@ FreeItem* Door::getRightJamb()
                                         ;
                         }
 
-                        rightJamb = new FreeItem( rightJambData, x, y, Top, NoDirection );
+                        rightJamb = new FreeItem( rightJambData, x, y, Top, Nowhere );
                 }
         }
 
@@ -150,7 +150,7 @@ FreeItem* Door::getLintel()
 
                 if ( lintelData != 0 )
                 {
-                        switch ( direction )
+                        switch ( getWhereIsDoor().getIntegerOfWay() )
                         {
                                 case North:
                                 case Northeast:
@@ -184,7 +184,7 @@ FreeItem* Door::getLintel()
                                         ;
                         }
 
-                        lintel = new FreeItem( lintelData, x, y, Top, NoDirection );
+                        lintel = new FreeItem( lintelData, x, y, Top, Nowhere );
                 }
         }
 
@@ -197,7 +197,7 @@ bool Door::isUnderDoor( int x, int y, int z )
 
         if ( z < 0 ) z = 0;
 
-        switch ( direction )
+        switch ( getWhereIsDoor().getIntegerOfWay() )
         {
                 case North:
                 case Northeast:

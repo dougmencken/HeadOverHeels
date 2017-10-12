@@ -12,8 +12,8 @@
 namespace isomot
 {
 
-PlayerItem::PlayerItem( ItemData* itemData, int x, int y, int z, const Direction& direction )
-        : FreeItem( itemData, x, y, z, direction )
+PlayerItem::PlayerItem( ItemData* itemData, int x, int y, int z, const Way& way )
+        : FreeItem( itemData, x, y, z, way )
         , lives( 0 )
         , highSpeed( 0 )
         , highJumps( 0 )
@@ -55,37 +55,37 @@ PlayerItem::~PlayerItem()
         }
 }
 
-void PlayerItem::setDirectionOfExit ( const Direction& direction )
+void PlayerItem::setWayOfExit ( const Way& way )
 {
-        this->exit = direction;
+        this->exit = way;
 
-        switch ( direction )
+        switch ( way.getIntegerOfWay () )
         {
                 case North:
                 case South:
                 case East:
                 case West:
-                        setDirection( direction );
+                        setOrientation( way );
                         break;
 
                 case Northeast:
                 case Northwest:
-                        setDirection( North );
+                        setOrientation( North );
                         break;
 
                 case Southeast:
                 case Southwest:
-                        setDirection( South );
+                        setOrientation( South );
                         break;
 
                 case Eastnorth:
                 case Eastsouth:
-                        setDirection( East );
+                        setOrientation( East );
                         break;
 
                 case Westnorth:
                 case Westsouth:
-                        setDirection( West );
+                        setOrientation( West );
                         break;
 
                 default:
@@ -93,9 +93,9 @@ void PlayerItem::setDirectionOfExit ( const Direction& direction )
         }
 }
 
-void PlayerItem::autoMoveOnEntry ( const Direction& entry )
+void PlayerItem::autoMoveOnEntry ( const Way& wayOfEntry )
 {
-        setDirectionOfEntry( entry );
+        setWayOfEntry( wayOfEntry );
 
         if ( getBehavior() == 0 )
         {
@@ -103,7 +103,7 @@ void PlayerItem::autoMoveOnEntry ( const Direction& entry )
                 return;
         }
 
-        switch ( entry )
+        switch ( wayOfEntry.getIntegerOfWay () )
         {
                 case North:
                 case Northeast:
@@ -250,23 +250,23 @@ bool PlayerItem::updatePosition( int newX, int newY, int newZ, const Coordinate&
         }
 
         // look for collision with real wall, one which limits the room
-        if ( this->x < mediator->getBound( North )
+        if ( this->x < mediator->getRoom()->getLimitAt( Way( "north" ) )
                         && isNotUnderDoor( North ) && isNotUnderDoor( Northeast ) && isNotUnderDoor( Northwest ) )
         {
                 mediator->pushCollision( NorthWall );
         }
-        else if ( this->x + static_cast< int >( getDataOfItem()->getWidthX() ) > mediator->getBound( South )
+        else if ( this->x + static_cast< int >( getDataOfItem()->getWidthX() ) > mediator->getRoom()->getLimitAt( Way( "south" ) )
                         && isNotUnderDoor( South ) && isNotUnderDoor( Southeast ) && isNotUnderDoor( Southwest ) )
         {
                 mediator->pushCollision( SouthWall );
         }
 
-        if ( this->y - static_cast< int >( getDataOfItem()->getWidthY() ) + 1 < mediator->getBound( East )
+        if ( this->y - static_cast< int >( getDataOfItem()->getWidthY() ) + 1 < mediator->getRoom()->getLimitAt( Way( "east" ) )
                         && isNotUnderDoor( East ) && isNotUnderDoor( Eastnorth ) && isNotUnderDoor( Eastsouth ) )
         {
                 mediator->pushCollision( EastWall );
         }
-        else if ( this->y >= mediator->getBound( West )
+        else if ( this->y >= mediator->getRoom()->getLimitAt( Way( "west" ) )
                         && isNotUnderDoor( West ) && isNotUnderDoor( Westnorth ) && isNotUnderDoor( Westsouth ) )
         {
                 mediator->pushCollision( WestWall );
@@ -278,7 +278,7 @@ bool PlayerItem::updatePosition( int newX, int newY, int newZ, const Coordinate&
                 // now it is known that the player may go thru a door
                 // look for collision with limits of room
 
-                const Direction directions[ 12 ] =
+                const Way ways[ 12 ] =
                         {  Northeast, Northwest, North, Southeast, Southwest, South,
                                 Eastnorth, Eastsouth, East, Westnorth, Westsouth, West  };
 
@@ -291,7 +291,7 @@ bool PlayerItem::updatePosition( int newX, int newY, int newZ, const Coordinate&
                 // check each limit of room
                 for ( int i = 0; i < 12; i++ )
                 {
-                        if ( isCollidingWithRoomBorder( directions[ i ] ) )
+                        if ( isCollidingWithRoomBorder( ways[ i ] ) )
                         {
                                 mediator->pushCollision( borders[ i ] );
                                 break;
@@ -360,13 +360,13 @@ bool PlayerItem::updatePosition( int newX, int newY, int newZ, const Coordinate&
         return ! collisionFound ;
 }
 
-bool PlayerItem::isCollidingWithDoor( const Direction& direction, int id, const PlayerItem& previousPosition )
+bool PlayerItem::isCollidingWithDoor( const Way& way, int id, const PlayerItem& previousPosition )
 {
-        Door* door = mediator->getDoor( direction );
+        Door* door = mediator->getRoom()->getDoorAt( way );
         int oldX = this->x;
         int oldY = this->y;
 
-        switch ( direction )
+        switch ( way.getIntegerOfWay() )
         {
                 case North:
                 case Northeast:
@@ -427,12 +427,12 @@ bool PlayerItem::isCollidingWithDoor( const Direction& direction, int id, const 
         return ( oldX != this->x || oldY != this->y );
 }
 
-bool PlayerItem::isNotUnderDoor( const Direction& direction )
+bool PlayerItem::isNotUnderDoor( const Way& way )
 {
         bool result = false;
-        Door* door = mediator->getDoor( direction );
+        Door* door = mediator->getRoom()->getDoorAt( way );
 
-        switch ( direction )
+        switch ( way.getIntegerOfWay () )
         {
                 case North:
                 case Northeast:
@@ -456,12 +456,12 @@ bool PlayerItem::isNotUnderDoor( const Direction& direction )
         return result;
 }
 
-bool PlayerItem::isCollidingWithRoomBorder( const Direction& direction )
+bool PlayerItem::isCollidingWithRoomBorder( const Way& way )
 {
         bool result = false;
-        Door* door = mediator->getDoor( direction );
+        Door* door = mediator->getRoom()->getDoorAt( way );
 
-        switch ( direction )
+        switch ( way.getIntegerOfWay () )
         {
                 case North:
                         result = ( this->x < 0 );
@@ -470,7 +470,7 @@ bool PlayerItem::isCollidingWithRoomBorder( const Direction& direction )
                 case Northeast:
                 case Northwest:
                         result = ( door &&
-                                        this->x < mediator->getBound( direction ) &&
+                                        this->x < mediator->getRoom()->getLimitAt( way ) &&
                                         door->isUnderDoor( this->x, this->y, this->z ) );
                         break;
 
@@ -482,7 +482,7 @@ bool PlayerItem::isCollidingWithRoomBorder( const Direction& direction )
                 case Southeast:
                 case Southwest:
                         result = ( door &&
-                                        this->x + static_cast< int >( getDataOfItem()->getWidthX() ) > mediator->getBound( direction ) &&
+                                        this->x + static_cast< int >( getDataOfItem()->getWidthX() ) > mediator->getRoom()->getLimitAt( way ) &&
                                         door->isUnderDoor( this->x, this->y, this->z ) );
                         break;
 
@@ -493,7 +493,7 @@ bool PlayerItem::isCollidingWithRoomBorder( const Direction& direction )
                 case Eastnorth:
                 case Eastsouth:
                         result = ( door &&
-                                        this->y - static_cast< int >( getDataOfItem()->getWidthY() ) + 1 < mediator->getBound( direction ) &&
+                                        this->y - static_cast< int >( getDataOfItem()->getWidthY() ) + 1 < mediator->getRoom()->getLimitAt( way ) &&
                                         door->isUnderDoor( this->x, this->y, this->z ) );
                         break;
 
@@ -505,7 +505,7 @@ bool PlayerItem::isCollidingWithRoomBorder( const Direction& direction )
                 case Westnorth:
                 case Westsouth:
                         result = ( door &&
-                                        this->y + static_cast< int >( getDataOfItem()->getWidthY() ) > mediator->getBound( direction ) &&
+                                        this->y + static_cast< int >( getDataOfItem()->getWidthY() ) > mediator->getRoom()->getLimitAt( way ) &&
                                         door->isUnderDoor( this->x, this->y, this->z ) );
                         break;
 
@@ -544,8 +544,9 @@ void PlayerItem::wait ()
                 activity != BeginWayInTeletransport && activity != WayInTeletransport &&
                 activity != MeetMortalItem && activity != Vanish )
         {
-                // El fotograma de parada es distinto segn la orientación del elemento
-                int currentFrame = ( getDataOfItem()->howManyMotions() - getDataOfItem()->howManyExtraFrames() ) / getDataOfItem()->howManyDirectionFrames() * static_cast< int >( direction );
+                // get waiting frame by orientation of item
+                unsigned int orientOccident = ( orientation.getIntegerOfWay() == Nowhere ? 0 : orientation.getIntegerOfWay() );
+                int currentFrame = ( getDataOfItem()->howManyMotions() - getDataOfItem()->howManyExtraFrames() ) / getDataOfItem()->howManyDirectionFrames() * orientOccident ;
 
                 // if images differ
                 if ( this->rawImage != 0 && this->rawImage != getDataOfItem()->getMotionAt( currentFrame ) )

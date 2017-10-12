@@ -92,15 +92,19 @@ void GuiManager::readPreferences ()
 {
         if ( ! preferencesRead )
         {
-                configurationManager->read() ;
-                preferencesRead = true ;
+                preferencesRead = configurationManager->read() ;
+
+                if ( ! preferencesRead && instance != 0 )
+                {
+                        instance->setLanguage( "en_US" );
+                }
         }
 }
 
 void GuiManager::begin ()
 {
-        // Se presenta la lista de lenguas disponibles
-        // Present the list of languages
+        // se presenta la lista de lenguas disponibles
+        // show list of languages
         std::auto_ptr< CreateLanguageMenu > languageMenu( new CreateLanguageMenu( this->picture ) );
         languageMenu->doIt ();
 

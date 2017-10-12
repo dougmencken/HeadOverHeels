@@ -12,10 +12,9 @@
 #define MapRoomData_hpp_
 
 #include <string>
-#include <list>
-#include <algorithm>
-#include <functional>
+
 #include "Ism.hpp"
+#include "Way.hpp"
 
 
 namespace isomot
@@ -40,12 +39,8 @@ public:
 
         /**
          * Busca una sala conectada con ésta
-         * @param exit Salida de la sala actual que comunica con la sala destino
-         * @param entry Devuelve la entrada por la que se accederá a la sala
-         * @return El nombre del archivo de la sala destino o una cadena vacía si
-         * la salida no conduce a alguna parte
          */
-        std::string findConnectedRoom ( const Direction& exit, Direction* entry ) const ;
+        std::string findConnectedRoom ( const Way& wayOfExit, Way* wayOfEntry ) const ;
 
         /**
          * Comprueba que la entrada a la sala es correcta y la corrige si no lo es
@@ -53,10 +48,10 @@ public:
          * la entrada no es correcta porque por la estructura del mapa se devuelve
          * un punto cardinal simple y las puertas de las salas triple o cuádruples
          * no están situadas en esos puntos cardinales
-         * @param entry Dirección de entrada a comprobar
+         * @param wayOfEntry Dirección de entrada a comprobar
          * @param previousRoom Nombre de la sala desde la cual se ha entrado a ésta
          */
-        void adjustEntry ( Direction* entry, const std::string& previousRoom ) ;
+        void adjustEntry ( Way* wayOfEntry, const std::string& previousRoom ) ;
 
 private:
 

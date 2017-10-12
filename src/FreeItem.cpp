@@ -7,8 +7,8 @@
 namespace isomot
 {
 
-FreeItem::FreeItem( ItemData* itemData, int x, int y, int z, const Direction& direction )
-        : Item ( itemData, z, direction )
+FreeItem::FreeItem( ItemData* itemData, int x, int y, int z, const Way& way )
+        : Item ( itemData, z, way )
         , myMask ( WantMask )
         , transparency ( 0 )
         , collisionDetector ( true )
@@ -22,8 +22,9 @@ FreeItem::FreeItem( ItemData* itemData, int x, int y, int z, const Direction& di
 
         // init frames
         int howManyFrames = ( getDataOfItem()->howManyMotions() - getDataOfItem()->howManyExtraFrames() ) / getDataOfItem()->howManyDirectionFrames() ;
+        unsigned int orientation = ( way.getIntegerOfWay() == Nowhere ? 0 : way.getIntegerOfWay() );
         int currentFrame = ( getDataOfItem()->howManyDirectionFrames() > 1 ?
-                                        getDataOfItem()->getFrameAt( getIndexOfFrame() ) + howManyFrames * direction :
+                                        getDataOfItem()->getFrameAt( getIndexOfFrame() ) + howManyFrames * orientation :
                                         getDataOfItem()->getFrameAt( 0 ) );
 
         this->rawImage = getDataOfItem()->getMotionAt( currentFrame );
@@ -655,19 +656,19 @@ bool FreeItem::updatePosition( int newX, int newY, int newZ, const Coordinate& w
         }
 
         // look for collision with real wall, one which limits the room
-        if ( this->x < mediator->getBound( North ) )
+        if ( this->x < mediator->getRoom()->getLimitAt( Way( "north" ) ) )
         {
                 mediator->pushCollision( NorthWall );
         }
-        else if ( this->x + static_cast< int >( getDataOfItem()->getWidthX() ) > mediator->getBound( South ) )
+        else if ( this->x + static_cast< int >( getDataOfItem()->getWidthX() ) > mediator->getRoom()->getLimitAt( Way( "south" ) ) )
         {
                 mediator->pushCollision( SouthWall );
         }
-        if ( this->y >= mediator->getBound( West ) )
+        if ( this->y >= mediator->getRoom()->getLimitAt( Way( "west" ) ) )
         {
                 mediator->pushCollision( WestWall );
         }
-        else if ( this->y - static_cast< int >( getDataOfItem()->getWidthY() ) + 1 < mediator->getBound( East ) )
+        else if ( this->y - static_cast< int >( getDataOfItem()->getWidthY() ) + 1 < mediator->getRoom()->getLimitAt( Way( "east" ) ) )
         {
                 mediator->pushCollision( EastWall );
         }

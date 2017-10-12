@@ -12,6 +12,7 @@
 #define Door_hpp_
 
 #include "Ism.hpp"
+#include "Way.hpp"
 #include "Drawable.hpp"
 #include "Mediated.hpp"
 
@@ -19,8 +20,8 @@
 namespace isomot
 {
 
-class ItemDataManager;
-class FreeItem;
+class ItemDataManager ;
+class FreeItem ;
 
 
 /**
@@ -41,7 +42,7 @@ public:
         * @param z Position on Z axis or how far is item from ground
         * @param direction Initial direction of item
         */
-        Door( ItemDataManager* itemDataManager, const std::string& label, int cx, int cy, int z, const Direction& direction ) ;
+        Door( ItemDataManager* itemDataManager, const std::string& label, int cx, int cy, int z, const Way& way ) ;
 
         virtual ~Door( ) ;
 
@@ -82,9 +83,9 @@ private:
         int leftLimit ;
 
        /**
-        * Direction of door or its position in room
+        * Way of door or its position in room
         */
-        Direction direction ;
+        Way positionOfDoor ;
 
         FreeItem * leftJamb ;
 
@@ -96,11 +97,7 @@ public:
 
         bool isUnderDoor ( int x, int y, int z ) ;
 
-       /**
-        * El tipo de puerta determinado por su posición en la sala
-        * @return North, South, East o West
-        */
-        Direction getDirection () const {  return direction ;  }
+        Way getWhereIsDoor () const {  return positionOfDoor ;  }
 
         FreeItem * getLeftJamb () ;
 

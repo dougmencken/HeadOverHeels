@@ -57,11 +57,7 @@ protected:
 
 protected:
 
-       /**
-        * Fotogramas de parpadeo del jugador. Uno por cada punto cardinal, aunque aquellos fotogramas en los que
-        * el personaje está de espaldas no son diferentes a los habituales
-        */
-        int blinkFrames[ 4 ] ;
+        int blinkFrames[ howManyBlinkFrames ] ;
 
 };
 

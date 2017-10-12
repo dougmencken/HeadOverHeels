@@ -212,15 +212,15 @@ Room* RoomBuilder::buildRoom ( const std::string& fileName )
 PlayerItem* RoomBuilder::createPlayerInTheSameRoom( bool justEntered,
                                                         const std::string& nameOfPlayer,
                                                         int x, int y, int z,
-                                                        const Direction& direction, const Direction& entry )
+                                                        const Way& orientation, const Way& wayOfEntry )
 {
-        return createPlayerInRoom( this->room, justEntered, nameOfPlayer, x, y, z, direction, entry );
+        return createPlayerInRoom( this->room, justEntered, nameOfPlayer, x, y, z, orientation, wayOfEntry );
 }
 
 PlayerItem* RoomBuilder::createPlayerInRoom( Room* room, bool justEntered,
                                                         const std::string& nameOfPlayer,
                                                         int x, int y, int z,
-                                                        const Direction& direction, const Direction& entry )
+                                                        const Way& orientation, const Way& wayOfEntry )
 {
         GameManager* gameManager = GameManager::getInstance();
 
@@ -262,7 +262,7 @@ PlayerItem* RoomBuilder::createPlayerInRoom( Room* room, bool justEntered,
         {
                 if ( gameManager->getLives( nameOfPlayerToCreate ) > 0 )
                 {
-                        player = new PlayerItem( itemData, x, y, z, direction );
+                        player = new PlayerItem( itemData, x, y, z, orientation );
 
                         // forget taken item
                         gameManager->emptyHandbag( nameOfPlayerToCreate );
@@ -286,7 +286,7 @@ PlayerItem* RoomBuilder::createPlayerInRoom( Room* room, bool justEntered,
 
                         player->assignBehavior( behaviorOfPlayer, reinterpret_cast< void * >( itemDataManager ) );
 
-                        player->setDirectionOfEntry( entry );
+                        player->setWayOfEntry( wayOfEntry );
 
                         room->addPlayerToRoom( player, justEntered );
                 }
@@ -325,7 +325,7 @@ Wall* RoomBuilder::buildWall( const rxml::wall& wall, const char* gfxPrefix )
                         std::cerr << "picture \"" << wall.picture() << "\" at \"" << gfxPrefix << "\" is absent" << std::endl ;
                         throw "picture " + wall.picture() + " at " + gfxPrefix + " is absent";
                 }
-                roomWall = new Wall( wall.axis() == rxml::axis::x ? AxisX : AxisY, wall.index(), picture );
+                roomWall = new Wall( wall.axis() == rxml::axis::x ? true : false, wall.index(), picture );
         } catch ( const Exception& e ) {
                 std::cerr << e.what () << std::endl ;
         }
@@ -343,7 +343,7 @@ GridItem* RoomBuilder::buildGridItem( const rxml::item& item )
         {
                 // deal with difference between position from file and position in room
                 gridItem = new GridItem( itemData, item.x(), item.y(), ( item.z() > Top ? item.z() * LayerHeight : Top ),
-                item.direction() == rxml::direction::none ? NoDirection : Direction( item.direction() - 1 ) );
+                                                item.direction() == rxml::direction::none ? Way( "nowhere" ) : Way( item.direction() - 1 ) );
 
                 std::string behaviorOfItem = item.behavior ();
                 if ( behaviorOfItem.empty () )
@@ -384,7 +384,7 @@ FreeItem* RoomBuilder::buildFreeItem( const rxml::item& item )
                 if ( BonusManager::getInstance()->isPresent( room->getNameOfFileWithDataAboutRoom(), itemData->getLabel() ) )
                 {
                         freeItem = new FreeItem( itemData, fx, fy, fz,
-                                                 item.direction() == rxml::direction::none ? NoDirection : Direction( item.direction() - 1 ) );
+                                                 item.direction() == rxml::direction::none ? Way( "nowhere" ) : Way( item.direction() - 1 ) );
 
                         std::string behaviorOfItem = item.behavior ();
                         if ( behaviorOfItem.empty () )
@@ -444,26 +444,26 @@ Door* RoomBuilder::buildDoor( const rxml::item& item )
         return
                 new Door( this->itemDataManager, item.label(),
                                 item.x(), item.y(), ( item.z() > Top ? item.z() * LayerHeight : Top ),
-                                        Direction( item.direction() - 1 ) );
+                                        Way( item.direction() - 1 ) );
 }
 
 /* static */
-int RoomBuilder::getXCenterOfRoom( ItemData* playerData, Room* theRoom )
+int RoomBuilder::getXCenterOfRoom( ItemData* data, Room* theRoom )
 {
         return
-                ( ( theRoom->getBound( South ) - theRoom->getBound( North ) + playerData->getWidthX() ) >> 1 )
-                        + ( theRoom->getDoor( North ) != 0 ? theRoom->getSizeOfOneTile() >> 1 : 0 )
-                                - ( theRoom->getDoor( South ) != 0 ? theRoom->getSizeOfOneTile() >> 1 : 0 ) ;
+                ( ( theRoom->getLimitAt( Way( "south" ) ) - theRoom->getLimitAt( Way( "north" ) ) + data->getWidthX() ) >> 1 )
+                        + ( theRoom->hasDoorAt( Way( "north" ) ) ? theRoom->getSizeOfOneTile() >> 1 : 0 )
+                                - ( theRoom->hasDoorAt( Way( "south" ) ) ? theRoom->getSizeOfOneTile() >> 1 : 0 ) ;
 
 }
 
 /* static */
-int RoomBuilder::getYCenterOfRoom( ItemData* playerData, Room* theRoom )
+int RoomBuilder::getYCenterOfRoom( ItemData* data, Room* theRoom )
 {
         return
-                ( ( theRoom->getBound( West ) - theRoom->getBound( East ) + playerData->getWidthY() ) >> 1 )
-                        + ( theRoom->getDoor( East ) != 0 ? theRoom->getSizeOfOneTile() >> 1 : 0 )
-                                - ( theRoom->getDoor( West ) != 0 ? theRoom->getSizeOfOneTile() >> 1 : 0 )
+                ( ( theRoom->getLimitAt( Way( "west" ) ) - theRoom->getLimitAt( Way( "east" ) ) + data->getWidthY() ) >> 1 )
+                        + ( theRoom->hasDoorAt( Way( "east" ) ) ? theRoom->getSizeOfOneTile() >> 1 : 0 )
+                                - ( theRoom->hasDoorAt( Way( "west" ) ) ? theRoom->getSizeOfOneTile() >> 1 : 0 )
                                         - 1 ;
 }
 

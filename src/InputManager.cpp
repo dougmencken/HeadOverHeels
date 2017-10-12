@@ -10,24 +10,24 @@ InputManager* InputManager::instance = 0 ;
 const std::string InputManager::namesOfKeys[ ] =
 
                         {  "movenorth", "movesouth", "moveeast", "movewest",
-                           "take", "jump", "doughnut", "take-jump",
-                           "swap", "halt"  } ;
+                           "jump", "take", "take&jump", "doughnut",
+                           "swap", "pause"  } ;
 
 const std::string InputManager::nameOfAbsentKey = "unknown" ;
 
 
 InputManager::InputManager()
 {
-        userKeys.insert( std::pair< std::string, int >( "movenorth", KEY_LEFT ) );   // Tecla para mover el jugador al norte, izquierda
-        userKeys.insert( std::pair< std::string, int >( "movesouth", KEY_RIGHT ) );  // Tecla para mover el jugador al sur, derecha
-        userKeys.insert( std::pair< std::string, int >( "moveeast", KEY_UP ) );      // Tecla para mover el jugador al este, arriba
-        userKeys.insert( std::pair< std::string, int >( "movewest", KEY_DOWN ) );    // Tecla para mover el jugador al oeste, abajo
-        userKeys.insert( std::pair< std::string, int >( "take", KEY_C ) );           // Tecla para coger y dejar objetos
-        userKeys.insert( std::pair< std::string, int >( "jump", KEY_SPACE ) );       // Tecla para saltar
-        userKeys.insert( std::pair< std::string, int >( "doughnut", KEY_N ) );       // Tecla para disparar
-        userKeys.insert( std::pair< std::string, int >( "take-jump", KEY_B ) );      // Tecla para coger/dejar un objeto y saltar
-        userKeys.insert( std::pair< std::string, int >( "swap", KEY_X ) );           // Tecla para cambiar de jugador
-        userKeys.insert( std::pair< std::string, int >( "halt", KEY_M ) );           // Tecla para detener el juego
+        userKeys.insert( std::pair< std::string, int >( "movenorth", KEY_LEFT ) );   // tecla para mover el jugador al norte, izquierda
+        userKeys.insert( std::pair< std::string, int >( "movesouth", KEY_RIGHT ) );  // tecla para mover el jugador al sur, derecha
+        userKeys.insert( std::pair< std::string, int >( "moveeast", KEY_UP ) );      // tecla para mover el jugador al este, arriba
+        userKeys.insert( std::pair< std::string, int >( "movewest", KEY_DOWN ) );    // tecla para mover el jugador al oeste, abajo
+        userKeys.insert( std::pair< std::string, int >( "jump", KEY_SPACE ) );       // tecla para saltar
+        userKeys.insert( std::pair< std::string, int >( "take", KEY_C ) );           // tecla para coger y dejar objetos
+        userKeys.insert( std::pair< std::string, int >( "take&jump", KEY_B ) );      // tecla para coger/dejar un objeto y saltar
+        userKeys.insert( std::pair< std::string, int >( "doughnut", KEY_N ) );       // tecla para disparar
+        userKeys.insert( std::pair< std::string, int >( "swap", KEY_X ) );           // tecla para cambiar de jugador
+        userKeys.insert( std::pair< std::string, int >( "pause", KEY_M ) );          // tecla para detener el juego
 
         std::cout << "InputManager provides by default\n" ;
         for ( std::map< std::string, int >::const_iterator iter = userKeys.begin (); iter != userKeys.end (); ++iter )
@@ -85,14 +85,14 @@ bool InputManager::movewest()
         return key[ getUserKey( "movewest" ) ];
 }
 
-bool InputManager::take()
-{
-        return key[ getUserKey( "take" ) ];
-}
-
 bool InputManager::jump()
 {
         return key[ getUserKey( "jump" ) ];
+}
+
+bool InputManager::take()
+{
+        return key[ getUserKey( "take" ) ];
 }
 
 bool InputManager::doughnut()
@@ -102,7 +102,7 @@ bool InputManager::doughnut()
 
 bool InputManager::takeAndJump()
 {
-        return key[ getUserKey( "take-jump" ) ];
+        return key[ getUserKey( "take&jump" ) ];
 }
 
 bool InputManager::swap()
@@ -110,9 +110,9 @@ bool InputManager::swap()
         return key[ getUserKey( "swap" ) ];
 }
 
-bool InputManager::halt()
+bool InputManager::pause()
 {
-        return key[ getUserKey( "halt" ) ];
+        return key[ getUserKey( "pause" ) ];
 }
 
 void InputManager::noRepeat( const std::string& nameOfKey )

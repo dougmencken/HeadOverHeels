@@ -99,7 +99,7 @@
     </properties>
   </text>
 
-  <text id="take-jump">
+  <text id="takeandjump">
     <properties>
       <ustring>Prendi+Salto</ustring>
     </properties>
@@ -111,7 +111,7 @@
     </properties>
   </text>
 
-  <text id="halt">
+  <text id="pause">
     <properties>
       <ustring>Pausa</ustring>
     </properties>

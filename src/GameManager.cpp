@@ -381,26 +381,26 @@ void GameManager::addLives ( const std::string& player, unsigned char lives )
 {
         if ( player == "head" )
         {
-                if ( this->headLives < 100 )
+                if ( this->headLives + lives < 100 )
                 {
                         this->headLives += lives;
                 }
         }
         else if ( player == "heels" )
         {
-                if ( this->heelsLives < 100 )
+                if ( this->heelsLives + lives < 100 )
                 {
                         this->heelsLives += lives;
                 }
         }
         else if ( player == "headoverheels" )
         {
-                if ( this->headLives < 100 )
+                if ( this->headLives + lives < 100 )
                 {
                         this->headLives += lives;
                 }
 
-                if ( this->heelsLives < 100 )
+                if ( this->heelsLives + lives < 100 )
                 {
                         this->heelsLives += lives;
                 }
@@ -631,7 +631,7 @@ void GameManager::eatFish ( PlayerItem* character, Room* room, int x, int y, int
                 room->getNameOfFileWithDataAboutRoom (),
                         character->getLabel (),
                         x, y, z,
-                        character->getDirection () ) ;
+                        character->getOrientation () ) ;
 }
 
 WhyPause GameManager::update ()
@@ -641,7 +641,7 @@ WhyPause GameManager::update ()
         // periodically update the game while user does not type pause key confirming it with ESCAPE
         while ( why == Nevermind )
         {
-                if ( ! key[ InputManager::getInstance()->getUserKey( "halt" ) ] && ! this->takenCrown && ! this->eatenFish && ! this->gameOver )
+                if ( ! key[ InputManager::getInstance()->getUserKey( "pause" ) ] && ! this->takenCrown && ! this->eatenFish && ! this->gameOver )
                 {
                         // actualiza la vista isométrica
                         BITMAP* view = this->isomot->update();
@@ -745,10 +745,10 @@ WhyPause GameManager::pause ()
                                           key != inputManager->getUserKey( "movewest" ) &&
                                           key != inputManager->getUserKey( "jump" ) &&
                                           key != inputManager->getUserKey( "take" ) &&
-                                          key != inputManager->getUserKey( "take-jump" ) &&
+                                          key != inputManager->getUserKey( "take&jump" ) &&
                                           key != inputManager->getUserKey( "swap" ) &&
                                           key != inputManager->getUserKey( "doughnut" ) &&
-                                          key != inputManager->getUserKey( "halt" ) &&
+                                          key != inputManager->getUserKey( "pause" ) &&
                                           key != KEY_ESC )
                                 {
                                         confirm = true;

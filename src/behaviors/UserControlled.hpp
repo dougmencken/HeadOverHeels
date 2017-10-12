@@ -61,6 +61,8 @@ public:
 
 protected:
 
+        static const size_t howManyBlinkFrames = 4 ;
+
        /**
         * Pone en espera al jugador. Implica la presentación del primer fotograma de la
         * secuencia de animación según la orientación del jugador

@@ -44,12 +44,14 @@ void CreateKeyboardMenu::doAction ()
                 for ( size_t i = 0; i < InputManager::numberOfKeys; i++ )
                 {
                         std::string nameOfThisKey = InputManager::namesOfKeys[ i ];
+                        std::string nameOfTranslation = ( nameOfThisKey == "take&jump" ? "takeandjump" : nameOfThisKey );
 
                         // Código de la tecla asignada
                         int scancode = supportOfInput->getUserKey( nameOfThisKey );
 
                         // Descripción del uso de la tecla
-                        std::string textOfKey = languageManager->findLanguageString( nameOfThisKey )->getText();
+                        std::string textOfKey = languageManager->findLanguageString( nameOfTranslation )->getText();
+
                         std::string dottedTextOfKey( textOfKey );
                         for ( size_t position = utf8StringLength( textOfKey ) ; position < positionOfKey ; ++position ) {
                                 dottedTextOfKey = dottedTextOfKey + ".";

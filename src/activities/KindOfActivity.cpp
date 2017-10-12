@@ -69,7 +69,7 @@ void KindOfActivity::propagateActivityToAdjacentItems( Item * sender, const Acti
                                 {
                                         // if it’s player item and sender is mortal, then player loses its life
                                         if ( dynamic_cast< PlayerItem * >( itemMeetsSender ) && sender->isMortal() &&
-                                                        dynamic_cast< PlayerItem * >( itemMeetsSender )->getShieldTime() <= 0 )
+                                                        ! dynamic_cast< PlayerItem * >( itemMeetsSender )->hasShield() )
                                         {
                                                 if ( itemMeetsSender->getBehavior()->getActivityOfItem() != MeetMortalItem &&
                                                                 itemMeetsSender->getBehavior()->getActivityOfItem() != Vanish )
@@ -89,7 +89,7 @@ void KindOfActivity::propagateActivityToAdjacentItems( Item * sender, const Acti
                                         }
                                         // if sender is player and colliding one is mortal, then player loses its life
                                         else if ( dynamic_cast< PlayerItem * >( sender ) && itemMeetsSender->isMortal() &&
-                                                        dynamic_cast< PlayerItem * >( sender )->getShieldTime() <= 0 )
+                                                        ! dynamic_cast< PlayerItem * >( sender )->hasShield() )
                                         {
                                                 if ( sender->getBehavior()->getActivityOfItem() != MeetMortalItem &&
                                                                 itemMeetsSender->getBehavior()->getActivityOfItem() != Vanish )
@@ -115,7 +115,7 @@ void KindOfActivity::propagateActivityToAdjacentItems( Item * sender, const Acti
                                 }
                                 // otherwise it is item without behavior, which may be mortal too
                                 else if ( dynamic_cast< PlayerItem * >( sender ) && itemMeetsSender->isMortal() &&
-                                                dynamic_cast< PlayerItem * >( sender )->getShieldTime() <= 0 )
+                                                ! dynamic_cast< PlayerItem * >( sender )->hasShield() )
                                 {
                                         if ( sender->getBehavior()->getActivityOfItem() != MeetMortalItem &&
                                                         sender->getBehavior()->getActivityOfItem() != Vanish )
@@ -130,69 +130,69 @@ void KindOfActivity::propagateActivityToAdjacentItems( Item * sender, const Acti
                 }
                 // is it player which leaves room via some door
                 else if ( dynamic_cast< PlayerItem * >( sender ) &&
-                                ( ( id == NorthBorder  &&  mediator->getRoom()->getDoor( North )  != 0 ) ||
-                                  ( id == SouthBorder  &&  mediator->getRoom()->getDoor( South )  != 0 ) ||
-                                  ( id == EastBorder  &&  mediator->getRoom()->getDoor( East )  != 0 ) ||
-                                  ( id == WestBorder  &&  mediator->getRoom()->getDoor( West )  != 0 ) ||
-                                  ( id == NortheastBorder  &&  mediator->getRoom()->getDoor( Northeast )  != 0 ) ||
-                                  ( id == NorthwestBorder  &&  mediator->getRoom()->getDoor( Northwest )  != 0 ) ||
-                                  ( id == SoutheastBorder  &&  mediator->getRoom()->getDoor( Southeast )  != 0 ) ||
-                                  ( id == SouthwestBorder  &&  mediator->getRoom()->getDoor( Southwest )  != 0 ) ||
-                                  ( id == EastnorthBorder  &&  mediator->getRoom()->getDoor( Eastnorth )  != 0 ) ||
-                                  ( id == EastsouthBorder  &&  mediator->getRoom()->getDoor( Eastsouth )  != 0 ) ||
-                                  ( id == WestnorthBorder  &&  mediator->getRoom()->getDoor( Westnorth )  != 0 ) ||
-                                  ( id == WestsouthBorder  &&  mediator->getRoom()->getDoor( Westsouth )  != 0 ) ) )
+                                ( ( id == NorthBorder  &&  mediator->getRoom()->hasDoorAt( North ) ) ||
+                                  ( id == SouthBorder  &&  mediator->getRoom()->hasDoorAt( South ) ) ||
+                                  ( id == EastBorder  &&  mediator->getRoom()->hasDoorAt( East ) ) ||
+                                  ( id == WestBorder  &&  mediator->getRoom()->hasDoorAt( West ) ) ||
+                                  ( id == NortheastBorder  &&  mediator->getRoom()->hasDoorAt( Northeast ) ) ||
+                                  ( id == NorthwestBorder  &&  mediator->getRoom()->hasDoorAt( Northwest ) ) ||
+                                  ( id == SoutheastBorder  &&  mediator->getRoom()->hasDoorAt( Southeast ) ) ||
+                                  ( id == SouthwestBorder  &&  mediator->getRoom()->hasDoorAt( Southwest ) ) ||
+                                  ( id == EastnorthBorder  &&  mediator->getRoom()->hasDoorAt( Eastnorth ) ) ||
+                                  ( id == EastsouthBorder  &&  mediator->getRoom()->hasDoorAt( Eastsouth ) ) ||
+                                  ( id == WestnorthBorder  &&  mediator->getRoom()->hasDoorAt( Westnorth ) ) ||
+                                  ( id == WestsouthBorder  &&  mediator->getRoom()->hasDoorAt( Westsouth ) ) ) )
                 {
                         PlayerItem * player = dynamic_cast< PlayerItem * >( sender );
 
                         switch ( id )
                         {
                                 case NorthBorder:
-                                        player->setDirectionOfExit( North );
+                                        player->setWayOfExit( North );
                                         break;
 
                                 case SouthBorder:
-                                        player->setDirectionOfExit( South );
+                                        player->setWayOfExit( South );
                                         break;
 
                                 case EastBorder:
-                                        player->setDirectionOfExit( East );
+                                        player->setWayOfExit( East );
                                         break;
 
                                 case WestBorder:
-                                        player->setDirectionOfExit( West );
+                                        player->setWayOfExit( West );
                                         break;
 
                                 case NortheastBorder:
-                                        player->setDirectionOfExit( Northeast );
+                                        player->setWayOfExit( Northeast );
                                         break;
 
                                 case NorthwestBorder:
-                                        player->setDirectionOfExit( Northwest );
+                                        player->setWayOfExit( Northwest );
                                         break;
 
                                 case SoutheastBorder:
-                                        player->setDirectionOfExit( Southeast );
+                                        player->setWayOfExit( Southeast );
                                         break;
 
                                 case SouthwestBorder:
-                                        player->setDirectionOfExit( Southwest );
+                                        player->setWayOfExit( Southwest );
                                         break;
 
                                 case EastnorthBorder:
-                                        player->setDirectionOfExit( Eastnorth );
+                                        player->setWayOfExit( Eastnorth );
                                         break;
 
                                 case EastsouthBorder:
-                                        player->setDirectionOfExit( Eastsouth );
+                                        player->setWayOfExit( Eastsouth );
                                         break;
 
                                 case WestnorthBorder:
-                                        player->setDirectionOfExit( Westnorth );
+                                        player->setWayOfExit( Westnorth );
                                         break;
 
                                 case WestsouthBorder:
-                                        player->setDirectionOfExit( Westsouth );
+                                        player->setWayOfExit( Westsouth );
                                         break;
 
                                 default:
@@ -240,7 +240,7 @@ void KindOfActivity::propagateActivityToItemsAbove( Item * sender, const Activit
                                                         {
                                                                 // if it’s player item above sender and sender is mortal, then player loses its life
                                                                 if ( dynamic_cast< PlayerItem * >( freeItemAbove ) && sender->isMortal() &&
-                                                                        dynamic_cast< PlayerItem * >( freeItemAbove )->getShieldTime() <= 0 )
+                                                                        ! dynamic_cast< PlayerItem * >( freeItemAbove )->hasShield() )
                                                                 {
                                                                         if ( freeItemAbove->getBehavior()->getActivityOfItem() != MeetMortalItem )
                                                                         {

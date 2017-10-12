@@ -62,14 +62,14 @@ bool ConveyorBelt::update ()
                                                                 {
                                                                         if ( getNameOfBehavior() == "behavior of conveyor in north or east" )
                                                                         {
-                                                                                if ( item->getDirection() == South )
+                                                                                if ( item->getOrientation().toString() == "north" || item->getOrientation().toString() == "south" )
                                                                                 {
                                                                                         if ( topItem->getBehavior()->getActivityOfItem() != RegularJump && topItem->getBehavior()->getActivityOfItem() != HighJump )
                                                                                         {
                                                                                                 topItem->getBehavior()->changeActivityOfItem( ForceDisplaceNorth );
                                                                                         }
                                                                                 }
-                                                                                else if ( item->getDirection() == West )
+                                                                                else if ( item->getOrientation().toString() == "east" || item->getOrientation().toString() == "west" )
                                                                                 {
                                                                                         if ( topItem->getBehavior()->getActivityOfItem() != RegularJump && topItem->getBehavior()->getActivityOfItem() != HighJump )
                                                                                         {
@@ -77,16 +77,17 @@ bool ConveyorBelt::update ()
                                                                                         }
                                                                                 }
                                                                         }
+                                                                        else
                                                                         if ( getNameOfBehavior() == "behavior of conveyor in south or west" )
                                                                         {
-                                                                                if ( item->getDirection() == South )
+                                                                                if ( item->getOrientation().toString() == "south" || item->getOrientation().toString() == "north" )
                                                                                 {
                                                                                         if ( topItem->getBehavior()->getActivityOfItem() != RegularJump && topItem->getBehavior()->getActivityOfItem() != HighJump )
                                                                                         {
                                                                                                 topItem->getBehavior()->changeActivityOfItem( ForceDisplaceSouth );
                                                                                         }
                                                                                 }
-                                                                                else if ( item->getDirection() == West )
+                                                                                else if ( item->getOrientation().toString() == "west" || item->getOrientation().toString() == "east" )
                                                                                 {
                                                                                         if ( topItem->getBehavior()->getActivityOfItem() != RegularJump && topItem->getBehavior()->getActivityOfItem() != HighJump )
                                                                                         {
@@ -103,7 +104,6 @@ bool ConveyorBelt::update ()
                                         }
                                 }
 
-                                // Reinicia el cronómetro para el siguiente ciclo
                                 speedTimer->reset();
                         }
                         break;

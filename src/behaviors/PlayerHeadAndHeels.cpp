@@ -85,7 +85,7 @@ bool PlayerHeadAndHeels::update ()
 {
         PlayerItem* player = dynamic_cast< PlayerItem * >( this->item );
 
-        if ( player->getShieldTime() > 0 )
+        if ( player->hasShield() )
         {
                 player->decreaseShield();
         }
@@ -195,7 +195,7 @@ void PlayerHeadAndHeels::behave ()
         PlayerItem* playerItem = dynamic_cast< PlayerItem * >( this->item );
         InputManager* input = InputManager::getInstance();
 
-        // if it’s not a move by inertia
+        // if it’s not a move by inertia or some other exotic activity
         if ( activity != AutoMoveNorth && activity != AutoMoveSouth && activity != AutoMoveEast && activity != AutoMoveWest &&
                 activity != BeginWayOutTeletransport && activity != WayOutTeletransport && activity != BeginWayInTeletransport && activity != WayInTeletransport &&
                 activity != MeetMortalItem && activity != Vanish )
@@ -203,47 +203,40 @@ void PlayerHeadAndHeels::behave ()
                 // when waiting or blinking
                 if ( activity == Wait || activity == Blink )
                 {
-                        // ...y se ha pulsado la tecla de salto entonces salta
                         if ( input->jump() )
                         {
-                                // Almacena en la pila de colisiones los elementos que tiene debajo
+                                // is there teleport below
                                 playerItem->checkPosition( 0, 0, -1, Add );
-                                // Si está sobre un telepuerto y salta entonces el jugador será teletransportado, sino saltará
                                 activity = ( playerItem->getMediator()->collisionWithByBehavior( "behavior of teletransport" ) ? BeginWayOutTeletransport : Jump );
                         }
-                        // ...y ha pulsado la tecla de disparo entonces dispara
                         else if ( input->doughnut() && ! fireFromHooterIsPresent )
                         {
-                                useHooter( dynamic_cast< PlayerItem * >( this->item ) );
+                                useHooter( playerItem );
                                 input->noRepeat( "doughnut" );
                         }
-                        // ...y ha pulsado la tecla para coger un elemento entonces intenta cogerlo / dejarlo
                         else if ( input->take() )
                         {
                                 activity = ( playerItem->getTakenItemData() == 0 ? TakeItem : DropItem );
                                 input->noRepeat( "take" );
                         }
-                        // ...y ha pulsado la tecla para coger un elemento y luego saltar entonces
-                        // intenta cogerlo / dejarlo y luego salta
                         else if ( input->takeAndJump() )
                         {
                                 activity = ( playerItem->getTakenItemData() == 0 ? TakeAndJump : DropAndJump );
-                                input->noRepeat( "take-jump" );
+                                input->noRepeat( "take&jump" );
                         }
-                        // ...y se ha pulsado alguna tecla de movimiento entonces se mueve
-                        else if ( input->movenorth() && !input->movesouth() && !input->moveeast() && !input->movewest() )
+                        else if ( input->movenorth() && ! input->movesouth() && ! input->moveeast() && ! input->movewest() )
                         {
                                 activity = MoveNorth;
                         }
-                        else if ( ! input->movenorth() && input->movesouth() && !input->moveeast() && !input->movewest() )
+                        else if ( ! input->movenorth() && input->movesouth() && ! input->moveeast() && ! input->movewest() )
                         {
                                 activity = MoveSouth;
                         }
-                        else if ( ! input->movenorth() && !input->movesouth() && input->moveeast() && !input->movewest() )
+                        else if ( ! input->movenorth() && ! input->movesouth() && input->moveeast() && ! input->movewest() )
                         {
                                 activity = MoveEast;
                         }
-                        else if ( ! input->movenorth() && !input->movesouth() && !input->moveeast() && input->movewest() )
+                        else if ( ! input->movenorth() && ! input->movesouth() && ! input->moveeast() && input->movewest() )
                         {
                                 activity = MoveWest;
                         }
@@ -251,34 +244,27 @@ void PlayerHeadAndHeels::behave ()
                 // already moving
                 else if ( activity == MoveNorth || activity == MoveSouth || activity == MoveEast || activity == MoveWest )
                 {
-                        // ...y se ha pulsado la tecla de salto entonces salta
                         if ( input->jump() )
                         {
-                                // Almacena en la pila de colisiones los elementos que tiene debajo
+                                // jump or teleport
                                 playerItem->checkPosition( 0, 0, -1, Add );
-                                // Si está sobre un telepuerto y salta entonces el jugador será teletransportado, sino saltará
                                 activity = ( playerItem->getMediator()->collisionWithByBehavior( "behavior of teletransport" ) ? BeginWayOutTeletransport : Jump );
                         }
-                        // ...y ha pulsado la tecla de disparo entonces dispara
                         else if ( input->doughnut() && ! fireFromHooterIsPresent )
                         {
-                                useHooter( dynamic_cast< PlayerItem * >( this->item ) );
+                                useHooter( playerItem );
                                 input->noRepeat( "doughnut" );
                         }
-                        // ...y ha pulsado la tecla para coger un elemento entonces intenta cogerlo / dejarlo
                         else if ( input->take() )
                         {
                                 activity = ( playerItem->getTakenItemData() == 0 ? TakeItem : DropItem );
                                 input->noRepeat( "take" );
                         }
-                        // ...y ha pulsado la tecla para coger un elemento y luego saltar entonces
-                        // intenta cogerlo / dejarlo y luego salta
                         else if ( input->takeAndJump() )
                         {
                                 activity = ( playerItem->getTakenItemData() == 0 ? TakeAndJump : DropAndJump );
-                                input->noRepeat( "take-jump" );
+                                input->noRepeat( "take&jump" );
                         }
-                        // ...y se ha pulsado alguna tecla de movimiento entonces sigue moviéndose
                         else if ( input->movenorth() && ! input->movesouth() && ! input->moveeast() && ! input->movewest() )
                         {
                                 activity = MoveNorth;
@@ -295,41 +281,34 @@ void PlayerHeadAndHeels::behave ()
                         {
                                 activity = MoveWest;
                         }
-                        // Si por el contrario se han soltado las teclas de movimiento entonces se pone en espera
                         else if ( ! input->movenorth() && ! input->movesouth() && ! input->moveeast() && ! input->movewest() )
                         {
                                 SoundManager::getInstance()->stop( playerItem->getLabel(), activity );
                                 activity = Wait;
                         }
                 }
-                // Si está siendo desplazado
+                // character is being displaced
                 else if ( activity == DisplaceNorth || activity == DisplaceSouth || activity == DisplaceEast || activity == DisplaceWest )
                 {
-                        // ...y se ha pulsado la tecla de salto entonces salta
                         if ( input->jump() )
                         {
                                 activity = Jump;
                         }
-                        // ...y se ha pulsado la tecla de disparo entonces dispara
                         else if ( input->doughnut() && ! fireFromHooterIsPresent )
                         {
-                                useHooter( dynamic_cast< PlayerItem * >( this->item ) );
+                                useHooter( playerItem );
                                 input->noRepeat( "doughnut" );
                         }
-                        // ...y ha pulsado la tecla para coger un elemento entonces intenta cogerlo
                         else if ( input->take() )
                         {
                                 activity = ( playerItem->getTakenItemData() == 0 ? TakeItem : DropItem );
                                 input->noRepeat( "take" );
                         }
-                        // ...y ha pulsado la tecla para coger un elemento y luego saltar entonces
-                        // intenta cogerlo / dejarlo y luego salta
                         else if ( input->takeAndJump() )
                         {
                                 activity = ( playerItem->getTakenItemData() == 0 ? TakeAndJump : DropAndJump );
-                                input->noRepeat( "take-jump" );
+                                input->noRepeat( "take&jump" );
                         }
-                        // ...y se ha pulsado alguna tecla de movimiento entonces sigue moviéndose
                         else if ( input->movenorth() && ! input->movesouth() && ! input->moveeast() && ! input->movewest() )
                         {
                                 activity = MoveNorth;
@@ -347,17 +326,14 @@ void PlayerHeadAndHeels::behave ()
                                 activity = MoveWest;
                         }
                 }
-                // Si está siendo desplazado forzosamente
+                // character is being displaced forcibly
                 else if ( activity == ForceDisplaceNorth || activity == ForceDisplaceSouth || activity == ForceDisplaceEast || activity == ForceDisplaceWest )
                 {
-                        // ...y se ha pulsado la tecla de salto entonces salta
                         if ( input->jump() )
                         {
                                 activity = Jump;
                         }
-                        // ...y se ha pulsado alguna tecla de movimiento entonces: si pretende avanzar en la dirección
-                        // contraria a la que se está deplazando entonces se anula el desplazamiento; en caso contrario,
-                        // avanza en la dirección que se esté ordenando
+                        // cancel displace when moving in direction opposite to displacement
                         else if ( input->movenorth() && ! input->movesouth() && ! input->moveeast() && ! input->movewest() )
                         {
                                 activity = ( activity == ForceDisplaceSouth ? CancelDisplaceSouth : MoveNorth );
@@ -375,81 +351,82 @@ void PlayerHeadAndHeels::behave ()
                                 activity = ( activity == ForceDisplaceEast ? CancelDisplaceEast : MoveWest );
                         }
                 }
-                // Si está saltando
                 else if ( activity == Jump || activity == RegularJump || activity == HighJump )
                 {
-                        // ...y ha pulsado la tecla de disparo entonces dispara
                         if ( input->doughnut() && ! fireFromHooterIsPresent )
                         {
-                                useHooter( dynamic_cast< PlayerItem * >( this->item ) );
-                                // Las repeticiones de esta tecla no deben procesarse
+                                useHooter( playerItem );
                                 input->noRepeat( "doughnut" );
                         }
-                        // ...y se ha pulsado alguna tecla de movimiento entonces el salto cambia de orientación
-                        else if ( input->movenorth() && ! input->movesouth() && ! input->moveeast() && ! input->movewest() && playerItem->getDirection() != North )
+                        else if ( input->movenorth() && ! input->movesouth() && ! input->moveeast() && ! input->movewest() )
                         {
-                                playerItem->changeDirection( North );
+                                playerItem->changeOrientation( North );
                         }
-                        else if ( ! input->movenorth() && input->movesouth() && ! input->moveeast() && ! input->movewest() && playerItem->getDirection() != South )
+                        else if ( ! input->movenorth() && input->movesouth() && ! input->moveeast() && ! input->movewest() )
                         {
-                                playerItem->changeDirection( South );
+                                playerItem->changeOrientation( South );
                         }
-                        else if ( ! input->movenorth() && ! input->movesouth() && input->moveeast() && ! input->movewest() && playerItem->getDirection() != East )
+                        else if ( ! input->movenorth() && ! input->movesouth() && input->moveeast() && ! input->movewest() )
                         {
-                                playerItem->changeDirection( East );
+                                playerItem->changeOrientation( East );
                         }
-                        else if ( ! input->movenorth() && ! input->movesouth() && ! input->moveeast() && input->movewest() && playerItem->getDirection() != West )
+                        else if ( ! input->movenorth() && ! input->movesouth() && ! input->moveeast() && input->movewest() )
                         {
-                                playerItem->changeDirection( West );
+                                playerItem->changeOrientation( West );
                         }
                 }
-                // Si está cayendo
                 else if ( activity == Fall )
                 {
-                        // ...y ha pulsado la tecla de disparo entonces dispara
                         if ( input->doughnut() && ! fireFromHooterIsPresent )
                         {
-                                useHooter( dynamic_cast< PlayerItem * >( this->item ) );
-                                // Las repeticiones de esta tecla no deben procesarse
+                                useHooter( playerItem );
                                 input->noRepeat( "doughnut" );
                         }
-                        // ...y se intenta mover entonces Head y Heels planean
+                        // pick or drop an item when falling
+                        else if ( input->take() )
+                        {
+                                activity = ( playerItem->getTakenItemData() == 0 ? TakeItem : DropItem );
+                                input->noRepeat( "take" );
+                        }
+                        // entonces Head y Heels planean
                         else if ( input->movenorth() || input->movesouth() || input->moveeast() || input->movewest() )
                         {
                                 activity = Glide;
                         }
                 }
 
-                // Si está planeando se procesa sin necesidad de esperar al siguiente ciclo pues existe la posibilidad
-                // de que el estado provenga del estado de caída. En este caso un procesamiento posterior provocará
-                // que el personaje no sea capaz de entrar en los huecos existentes entre dos elementos rejilla
+                // for gliding, don’t wait for next cycle because there’s possibility
+                // that gliding comes from falling, and waiting for next cycle may prevent
+                // to enter gap between grid items
                 if ( activity == Glide )
                 {
-                        // ...y ha pulsado la tecla de disparo entonces dispara
                         if ( input->doughnut() && ! fireFromHooterIsPresent )
                         {
-                                useHooter( dynamic_cast< PlayerItem * >( this->item ) );
-                                // Las repeticiones de esta tecla no deben procesarse
+                                useHooter( playerItem );
                                 input->noRepeat( "doughnut" );
                         }
-                        // ...y se ha pulsado alguna tecla de movimiento entonces cambia la orientación
-                        else if ( input->movenorth() && !input->movesouth() && ! input->moveeast() && ! input->movewest() && playerItem->getDirection() != North)
+                        // pick or drop an item when gliding
+                        else if ( input->take() )
                         {
-                                playerItem->changeDirection( North );
+                                activity = ( playerItem->getTakenItemData() == 0 ? TakeItem : DropItem );
+                                input->noRepeat( "take" );
                         }
-                        else if ( ! input->movenorth() && input->movesouth() && ! input->moveeast() && ! input->movewest() && playerItem->getDirection() != South)
+                        else if ( input->movenorth() && ! input->movesouth() && ! input->moveeast() && ! input->movewest() )
                         {
-                                playerItem->changeDirection( South );
+                                playerItem->changeOrientation( North );
                         }
-                        else if ( ! input->movenorth() && ! input->movesouth() && input->moveeast() && ! input->movewest() && playerItem->getDirection() != East)
+                        else if ( ! input->movenorth() && input->movesouth() && ! input->moveeast() && ! input->movewest() )
                         {
-                                playerItem->changeDirection( East );
+                                playerItem->changeOrientation( South );
                         }
-                        else if ( ! input->movenorth() && ! input->movesouth() && ! input->moveeast() && input->movewest() && playerItem->getDirection() != West)
+                        else if ( ! input->movenorth() && ! input->movesouth() && input->moveeast() && ! input->movewest() )
                         {
-                                playerItem->changeDirection( West );
+                                playerItem->changeOrientation( East );
                         }
-                        // ...y deja de moverse con las teclas de dirección entonces simplemente cae
+                        else if ( ! input->movenorth() && ! input->movesouth() && ! input->moveeast() && input->movewest() )
+                        {
+                                playerItem->changeOrientation( West );
+                        }
                         else if ( ! input->movenorth() && ! input->movesouth() && ! input->moveeast() && ! input->movewest() )
                         {
                                 activity = Fall;
@@ -462,14 +439,12 @@ void PlayerHeadAndHeels::wait( PlayerItem * playerItem )
 {
         playerItem->wait();
 
-        // Si está detenido entre 4 y 9 segundos entonces parpadea
         if ( blinkingTimer->getValue() >= ( rand() % 4 ) + 5 )
         {
                 blinkingTimer->reset();
                 activity = Blink;
         }
 
-        // Se comprueba si el jugador debe empezar a caer
         if ( FallKindOfActivity::getInstance()->fall( this ) )
         {
                 speedTimer->reset();
@@ -481,17 +456,16 @@ void PlayerHeadAndHeels::blink( PlayerItem * playerItem )
 {
         double timeValue = blinkingTimer->getValue();
 
-        // Si el crono se encuentra entre los tiempos especificados, Head cierra los ojos
+        // close the eyes
         if ( ( timeValue > 0.0 && timeValue < 0.050 ) || ( timeValue > 0.400 && timeValue < 0.450 ) )
         {
-                playerItem->changeFrame( blinkFrames[ playerItem->getDirection() ] );
+                playerItem->changeFrame( blinkFrames[ playerItem->getOrientation().getIntegerOfWay () ] );
         }
-        // Si el crono se encuentra entre los tiempos especificados, Head abre los ojos
+        // open the eyes
         else if ( ( timeValue > 0.250 && timeValue < 0.300 ) || ( timeValue > 0.750 && timeValue < 0.800 ) )
         {
-                playerItem->changeDirection( playerItem->getDirection() );
         }
-        // Después de 0,8 segundos el parpadeo termina
+        // end blinking
         else if ( timeValue > 0.800 )
         {
                 blinkingTimer->reset();

@@ -69,7 +69,7 @@ bool PlayerHeels::update()
 {
         PlayerItem* player = dynamic_cast< PlayerItem* >( this->item );
 
-        if ( player->getShieldTime() > 0 )
+        if ( player->hasShield() )
         {
                 player->decreaseShield();
         }
@@ -171,7 +171,7 @@ void PlayerHeels::behave ()
         PlayerItem* playerItem = dynamic_cast< PlayerItem * >( this->item );
         InputManager* input = InputManager::getInstance();
 
-        // if it’s not a move by inertia
+        // if it’s not a move by inertia or some other exotic activity
         if ( activity != AutoMoveNorth && activity != AutoMoveSouth && activity != AutoMoveEast && activity != AutoMoveWest &&
                 activity != BeginWayOutTeletransport && activity != WayOutTeletransport && activity != BeginWayInTeletransport && activity != WayInTeletransport &&
                 activity != MeetMortalItem && activity != Vanish )
@@ -179,169 +179,148 @@ void PlayerHeels::behave ()
                 // when waiting or blinking
                 if ( activity == Wait || activity == Blink )
                 {
-                        // ...y ha pulsado la tecla para coger un elemento entonces intenta cogerlo / dejarlo
                         if ( input->take() )
                         {
                                 activity = ( playerItem->getTakenItemData() == 0 ? TakeItem : DropItem );
                                 input->noRepeat( "take" );
                         }
-                        // ...y ha pulsado la tecla para coger un elemento y luego saltar entonces
-                        // intenta cogerlo / dejarlo y luego salta
                         else if ( input->takeAndJump() )
                         {
                                 activity = ( playerItem->getTakenItemData() == 0 ? TakeAndJump : DropAndJump );
-                                input->noRepeat( "take-jump" );
+                                input->noRepeat( "take&jump" );
                         }
-                        // ...y se ha pulsado alguna tecla de movimiento entonces se mueve
-                        else if ( input->movenorth() && !input->movesouth() && !input->moveeast() && !input->movewest() )
+                        else if ( input->movenorth() && ! input->movesouth() && ! input->moveeast() && ! input->movewest() )
                         {
                                 activity = MoveNorth;
                         }
-                        else if ( !input->movenorth() && input->movesouth() && !input->moveeast() && !input->movewest() )
+                        else if ( ! input->movenorth() && input->movesouth() && ! input->moveeast() && ! input->movewest() )
                         {
                                 activity = MoveSouth;
                         }
-                        else if ( !input->movenorth() && !input->movesouth() && input->moveeast() && !input->movewest() )
+                        else if ( ! input->movenorth() && ! input->movesouth() && input->moveeast() && ! input->movewest() )
                         {
                                 activity = MoveEast;
                         }
-                        else if ( !input->movenorth() && !input->movesouth() && !input->moveeast() && input->movewest() )
+                        else if ( ! input->movenorth() && ! input->movesouth() && ! input->moveeast() && input->movewest() )
                         {
                                 activity = MoveWest;
                         }
-                        // ...y se ha pulsado la tecla de salto entonces salta
                         else if ( input->jump() )
                         {
-                                // Almacena en la pila de colisiones los elementos que tiene debajo
+                                // look for item below
                                 playerItem->checkPosition( 0, 0, -1, Add );
-                                // Si está sobre un telepuerto y salta entonces el jugador será teletransportado, sino saltará
+                                // key to teleport is the same as for jump
                                 activity = ( playerItem->getMediator()->collisionWithByBehavior( "behavior of teletransport" ) ? BeginWayOutTeletransport : Jump );
                         }
                 }
                 // already moving
                 else if ( activity == MoveNorth || activity == MoveSouth || activity == MoveEast || activity == MoveWest )
                 {
-                        // ...y se ha pulsado la tecla de salto entonces salta
                         if( input->jump() )
                         {
-                                // Almacena en la pila de colisiones los elementos que tiene debajo
+                                // teleport when teletransport is below
                                 playerItem->checkPosition( 0, 0, -1, Add );
-                                // Si está sobre un telepuerto y salta entonces el jugador será teletransportado, sino saltará
                                 activity = ( playerItem->getMediator()->collisionWithByBehavior( "behavior of teletransport" ) ? BeginWayOutTeletransport : Jump );
                         }
-                        // ...y ha pulsado la tecla para coger un elemento entonces intenta cogerlo / dejarlo
                         else if ( input->take() )
                         {
                                 activity = ( playerItem->getTakenItemData() == 0 ? TakeItem : DropItem );
                                 input->noRepeat( "take" );
                         }
-                        // ...y ha pulsado la tecla para coger un elemento y luego saltar entonces
-                        // intenta cogerlo / dejarlo y luego salta
                         else if ( input->takeAndJump() )
                         {
                                 activity = ( playerItem->getTakenItemData() == 0 ? TakeAndJump : DropAndJump );
-                                input->noRepeat( "take-jump" );
+                                input->noRepeat( "take&jump" );
                         }
-                        // ...y se ha pulsado alguna tecla de movimiento entonces sigue moviéndose
-                        else if ( input->movenorth() && !input->movesouth() && !input->moveeast() && !input->movewest() )
+                        else if ( input->movenorth() && ! input->movesouth() && ! input->moveeast() && ! input->movewest() )
                         {
                                 activity = MoveNorth;
                         }
-                        else if ( !input->movenorth() && input->movesouth() && !input->moveeast() && !input->movewest() )
+                        else if ( ! input->movenorth() && input->movesouth() && ! input->moveeast() && ! input->movewest() )
                         {
                                 activity = MoveSouth;
                         }
-                        else if ( !input->movenorth() && !input->movesouth() && input->moveeast() && !input->movewest() )
+                        else if ( ! input->movenorth() && ! input->movesouth() && input->moveeast() && ! input->movewest() )
                         {
                                 activity = MoveEast;
                         }
-                        else if ( !input->movenorth() && !input->movesouth() && !input->moveeast() && input->movewest() )
+                        else if ( ! input->movenorth() && ! input->movesouth() && ! input->moveeast() && input->movewest() )
                         {
                                 activity = MoveWest;
                         }
-                        // Si por el contrario se han soltado las teclas de movimiento entonces se pone en espera
-                        else if ( !input->movenorth() && !input->movesouth() && !input->moveeast() && !input->movewest() )
+                        else if ( ! input->movenorth() && ! input->movesouth() && ! input->moveeast() && ! input->movewest() )
                         {
                                 SoundManager::getInstance()->stop( playerItem->getLabel(), activity );
                                 activity = Wait;
                         }
                 }
-                // Si está siendo desplazado
+                // if you are being displaced
                 else if ( activity == DisplaceNorth || activity == DisplaceSouth || activity == DisplaceEast || activity == DisplaceWest )
                 {
-                        // ...y se ha pulsado la tecla de salto entonces salta
                         if ( input->jump() )
                         {
                                 activity = Jump;
                         }
-                        // ...y ha pulsado la tecla para coger un elemento entonces intenta cogerlo
                         else if ( input->take() )
                         {
                                 activity = ( playerItem->getTakenItemData() == 0 ? TakeItem : DropItem );
                                 input->noRepeat( "take" );
                         }
-                        // ...y ha pulsado la tecla para coger un elemento y luego saltar entonces
-                        // intenta cogerlo / dejarlo y luego salta
                         else if ( input->takeAndJump() )
                         {
                                 activity = ( playerItem->getTakenItemData() == 0 ? TakeAndJump : DropAndJump );
-                                input->noRepeat( "take-jump" );
+                                input->noRepeat( "take&jump" );
                         }
-                        // ...y se ha pulsado alguna tecla de movimiento entonces sigue moviéndose
-                        else if ( input->movenorth() && !input->movesouth() && !input->moveeast() && !input->movewest() )
+                        else if ( input->movenorth() && ! input->movesouth() && ! input->moveeast() && ! input->movewest() )
                         {
                                 activity = MoveNorth;
                         }
-                        else if ( !input->movenorth() && input->movesouth() && !input->moveeast() && !input->movewest() )
+                        else if ( ! input->movenorth() && input->movesouth() && ! input->moveeast() && ! input->movewest() )
                         {
                                 activity = MoveSouth;
                         }
-                        else if ( !input->movenorth() && !input->movesouth() && input->moveeast() && !input->movewest() )
+                        else if ( ! input->movenorth() && ! input->movesouth() && input->moveeast() && ! input->movewest() )
                         {
                                 activity = MoveEast;
                         }
-                        else if ( !input->movenorth() && !input->movesouth() && !input->moveeast() && input->movewest() )
+                        else if ( ! input->movenorth() && ! input->movesouth() && ! input->moveeast() && input->movewest() )
                         {
                                 activity = MoveWest;
                         }
                 }
-                // Si está siendo desplazado forzosamente
+                // if you are being forcibly displaced
                 else if ( activity == ForceDisplaceNorth || activity == ForceDisplaceSouth || activity == ForceDisplaceEast || activity == ForceDisplaceWest )
                 {
-                        // ...y se ha pulsado la tecla de salto entonces salta
                         if ( input->jump() )
                         {
                                 activity = Jump;
                         }
-                        // ...y se ha pulsado alguna tecla de movimiento entonces: si pretende avanzar en la dirección
-                        // contraria a la que se está deplazando entonces se anula el desplazamiento; en caso contrario,
-                        // avanza en la dirección que se esté ordenando
-                        else if ( input->movenorth() && !input->movesouth() && !input->moveeast() && !input->movewest() )
+                        // user moves while displacing
+                        // cancel displace when moving in direction opposite to displacement
+                        else if ( input->movenorth() && ! input->movesouth() && ! input->moveeast() && ! input->movewest() )
                         {
                                 activity = ( activity == ForceDisplaceSouth ? CancelDisplaceSouth : MoveNorth );
                         }
-                        else if ( !input->movenorth() && input->movesouth() && !input->moveeast() && !input->movewest() )
+                        else if ( ! input->movenorth() && input->movesouth() && ! input->moveeast() && ! input->movewest() )
                         {
                                 activity = ( activity == ForceDisplaceNorth ? CancelDisplaceNorth : MoveSouth );
                         }
-                        else if ( !input->movenorth() && !input->movesouth() && input->moveeast() && !input->movewest() )
+                        else if ( ! input->movenorth() && ! input->movesouth() && input->moveeast() && ! input->movewest() )
                         {
                                 activity = ( activity == ForceDisplaceWest ? CancelDisplaceWest : MoveEast );
                         }
-                        else if ( !input->movenorth() && !input->movesouth() && !input->moveeast() && input->movewest() )
+                        else if ( ! input->movenorth() && ! input->movesouth() && ! input->moveeast() && input->movewest() )
                         {
                                 activity = ( activity == ForceDisplaceEast ? CancelDisplaceEast : MoveWest );
                         }
                 }
-                // Si está saltando
                 else if ( activity == Jump || activity == RegularJump || activity == HighJump )
                 {
 
                 }
-                // Si está cayendo
                 else if ( activity == Fall )
                 {
-                        // ...y ha pulsado la tecla para coger un elemento entonces intenta cogerlo / dejarlo
+                        // pick or drop an item when falling
                         if ( input->take() )
                         {
                                 activity = ( playerItem->getTakenItemData() == 0 ? TakeItem : DropItem );

@@ -156,9 +156,9 @@ void Mediator::update()
         std::list< PlayerItem * > playersInRoom = room->getPlayersYetInRoom();
         for ( std::list< PlayerItem * >::iterator p = playersInRoom.begin (); p != playersInRoom.end (); ++p )
         {
-                if ( ( *p )->getDirectionOfExit() != NoExit )
+                if ( ( *p )->getWayOfExit().toString() != "no exit" )
                 {
-                        room->setWayOfExit( ( *p )->getDirectionOfExit() );
+                        room->setWayOfExit( ( *p )->getWayOfExit() );
                         room->setActive( false );
                 }
         }
@@ -231,7 +231,7 @@ void Mediator::remaskWithItem( GridItem* gridItem )
         {
                 FreeItem* freeItem = *f;
 
-                if ( freeItem->getRawImage() )
+                if ( freeItem != 0 && freeItem->getRawImage() )
                 {
                         // mask item if there’s overlap between images
                         if ( ( freeItem->getOffsetX() < gridItem->getOffsetX() + gridItem->getRawImage()->w )
@@ -1035,7 +1035,7 @@ bool Mediator::selectNextPlayer( ItemDataManager* itemDataManager )
                                 int x = reference->getX();
                                 int y = reference->getY();
                                 int z = reference->getZ();
-                                Direction direction = reference->getDirection();
+                                Way orientation = reference->getOrientation();
 
                                 // item that Heels may have in handbag
                                 PlayerItem* heels = reference;
@@ -1049,7 +1049,7 @@ bool Mediator::selectNextPlayer( ItemDataManager* itemDataManager )
 
                                 // create composite player
                                 std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( itemDataManager ) );
-                                activePlayer = roomBuilder->createPlayerInRoom( this->room, false, "headoverheels", x, y, z, direction );
+                                activePlayer = roomBuilder->createPlayerInRoom( this->room, false, "headoverheels", x, y, z, orientation );
 
                                 // transfer item in handbag
                                 if ( takenItemData != 0 )
@@ -1075,7 +1075,7 @@ bool Mediator::selectNextPlayer( ItemDataManager* itemDataManager )
                 int x = activePlayer->getX();
                 int y = activePlayer->getY();
                 int z = activePlayer->getZ();
-                Direction direction = activePlayer->getDirection();
+                Way orientation = activePlayer->getOrientation();
 
                 // get data of item in handbag
                 ItemData* takenItemData = activePlayer->getTakenItemData ();
@@ -1089,7 +1089,7 @@ bool Mediator::selectNextPlayer( ItemDataManager* itemDataManager )
 
                 std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( itemDataManager ) );
 
-                PlayerItem* heelsPlayer = roomBuilder->createPlayerInRoom( this->room, false, "heels", x, y, z, direction );
+                PlayerItem* heelsPlayer = roomBuilder->createPlayerInRoom( this->room, false, "heels", x, y, z, orientation );
 
                 if ( takenItemData != 0 )
                 {
@@ -1097,7 +1097,7 @@ bool Mediator::selectNextPlayer( ItemDataManager* itemDataManager )
                         heelsPlayer->assignTakenItem( takenItemData, takenItemImage, behaviorOfItemTaken );
                 }
 
-                PlayerItem* headPlayer = roomBuilder->createPlayerInRoom( this->room, false, "head", x, y, z + LayerHeight, direction );
+                PlayerItem* headPlayer = roomBuilder->createPlayerInRoom( this->room, false, "head", x, y, z + LayerHeight, orientation );
 
                 activePlayer = ( this->lastActivePlayer == "head" ) ? heelsPlayer : headPlayer;
                 previousPlayer = ( activePlayer == headPlayer ) ? heelsPlayer : headPlayer;
@@ -1171,11 +1171,6 @@ bool Mediator::sortFreeItemList( FreeItem* f1, FreeItem* f2 )
         );
 }
 
-unsigned short Mediator::getBound( const Direction& direction )
-{
-        return room->bounds[ direction ];
-}
-
 void Mediator::setActivePlayer( PlayerItem* playerItem )
 {
         this->activePlayer = playerItem;
@@ -1194,11 +1189,6 @@ PlayerItem* Mediator::getWaitingPlayer() const
         }
 
         return 0 ;
-}
-
-Door* Mediator::getDoor( const Direction& direction )
-{
-        return room->doors[ direction ];
 }
 
 bool EqualItemId::operator() ( Item* item, int id ) const

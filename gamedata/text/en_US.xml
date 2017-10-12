@@ -95,7 +95,7 @@
 
   <text id="take">
     <properties>
-      <ustring>Carry/Drop</ustring>
+      <ustring>Take or Drop</ustring>
     </properties>
   </text>
 
@@ -111,9 +111,9 @@
     </properties>
   </text>
 
-  <text id="take-jump">
+  <text id="takeandjump">
     <properties>
-      <ustring>Carry+Jump</ustring>
+      <ustring>Take &amp; Jump</ustring>
     </properties>
   </text>
 
@@ -123,7 +123,7 @@
     </properties>
   </text>
 
-  <text id="halt">
+  <text id="pause">
     <properties>
       <ustring>Pause</ustring>
     </properties>

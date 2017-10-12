@@ -30,41 +30,6 @@ void copyTextFile( const std::string& from, const std::string& to )
         }
 }
 
-std::string wayToString( const Direction& way )
-{
-        switch ( way )
-        {
-                case South:             return "south" ;
-                case West:              return "west" ;
-                case North:             return "north" ;
-                case East:              return "east" ;
-
-                case Northeast:         return "northeast" ;
-                case Southeast:         return "southeast" ;
-                case Southwest:         return "southwest" ;
-                case Northwest:         return "northwest" ;
-                case Eastnorth:         return "eastnorth" ;
-                case Eastsouth:         return "eastsouth" ;
-                case Westnorth:         return "westnorth" ;
-                case Westsouth:         return "westsouth" ;
-
-                case Up:                return "up" ;
-                case Down:              return "down" ;
-
-                case ByTeleport:        return "via teleport" ;
-                case ByTeleportToo:     return "via second teleport" ;
-
-                case NoEntry:           return "no entrance" ;
-                case NoExit:            return "no exit" ;
-
-                case Restart:           return "rebuild room" ;
-
-                case JustWait:          return "just wait" ;
-        }
-
-        return "unknown way" ;
-}
-
 std::string HomePath ;
 
 std::string homePath ()

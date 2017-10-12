@@ -30,7 +30,7 @@ cp /Developer/GCC/6.2/PowerPC/32bit/lib/libgcc_s.1.dylib "${headoverheelslibs}"/
 
 install_name_tool -change /Developer/GCC/6.2/PowerPC/32bit/lib/libstdc++.6.dylib "@executable_path/../Libraries/libstdc++.6.dylib" "${headoverheelsbin}"
 install_name_tool -change /Developer/GCC/6.2/PowerPC/32bit/lib/libgcc_s.1.dylib "@executable_path/../Libraries/libgcc_s.1.dylib" "${headoverheelsbin}"
-install_name_tool -change /usr/lib/libgcc_s.1.dylib "@executable_path/../Libraries/libgcc_s.1.dylib" "${headoverheelsbin}"
+## install_name_tool -change /usr/lib/libgcc_s.1.dylib "@executable_path/../Libraries/libgcc_s.1.dylib" "${headoverheelsbin}"
 
 cp /opt/allegro-4.4.2/lib/liballeg.4.4.dylib "${headoverheelslibs}"/
 install_name_tool -change /opt/allegro-4.4.2/lib/liballeg.4.4.dylib "@executable_path/../Libraries/liballeg.4.4.dylib" "${headoverheelsbin}"

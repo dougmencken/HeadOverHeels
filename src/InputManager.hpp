@@ -125,7 +125,7 @@ public:
         * El usuario está parando el juego
         * @return true si pulsa la tecla o el botón indicado
         */
-        bool halt () ;
+        bool pause () ;
 
        /**
         * Deletes stored keystrokes for a key

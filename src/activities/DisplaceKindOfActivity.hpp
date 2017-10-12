@@ -44,7 +44,6 @@ public:
        /**
         * Estado que desplaza a un elemento
         * @param behavior Comportamiento usuario del estado de desplazamiento
-        * @param activity Direction of travel
         * @param canFall Indica si el elemento puede caer. Si se dan las condiciones para la caída
         *                se producirá el cambio de estado correspondiente
         * @return true si se produjo el desplazamiento o el cambio de estado; o, false si hubo colisión

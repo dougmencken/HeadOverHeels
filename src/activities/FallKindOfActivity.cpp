@@ -117,7 +117,7 @@ bool FallKindOfActivity::fall( Behavior * behavior )
 
                                 if ( mediator->getRoom()->getKindOfFloor() == "none" )
                                 {
-                                        playerItem->setDirectionOfExit( Down );
+                                        playerItem->setWayOfExit( Down );
                                 }
                                 else
                                 if ( mediator->getRoom()->getKindOfFloor() == "mortal" )

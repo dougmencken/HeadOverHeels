@@ -7,8 +7,8 @@
 namespace isomot
 {
 
-GridItem::GridItem( ItemData* itemData, int cx, int cy, int z, const Direction& direction )
-: Item( itemData, z, direction )
+GridItem::GridItem( ItemData* itemData, int cx, int cy, int z, const Way& way )
+        : Item( itemData, z, way )
 {
         this->cell.first = cx;
         this->cell.second = cy;
@@ -17,7 +17,9 @@ GridItem::GridItem( ItemData* itemData, int cx, int cy, int z, const Direction& 
         this->x = cx * this->dataOfItem->getWidthX();
         this->y = ( cy + 1 ) * this->dataOfItem->getWidthY() - 1;
 
-        unsigned int position = itemData->howManyMotions() / itemData->howManyDirectionFrames() * direction;
+        unsigned int orientation = way.getIntegerOfWay();
+        if ( orientation == Nowhere ) orientation = 0;
+        unsigned int position = itemData->howManyMotions() / itemData->howManyDirectionFrames() * orientation;
         this->rawImage = itemData->getMotionAt( position );
 
         // may have no shadow

@@ -17,74 +17,64 @@
 #include "Drawable.hpp"
 #include "Mediated.hpp"
 
+
 namespace isomot
 {
 
 /**
  * Un segmento de una pared de la sala
  */
+
 class Wall : public Drawable, public Mediated
 {
+
 public:
 
-	/**
-	 * Constructor
-	 * @param axis Eje de la pared: AXIS_X para la pared este y AXIS_Y para la pared norte
-	 * @param index Posición que ocupa el segmento en la pared; cuanto menor sea el número
-	 *              más cerca estará del origen de coordenadas
-	 * @param image Imagen del segmento de la pared
-	 */
-	Wall( Axis axis, int index, BITMAP* image );
+        Wall( bool trueXfalseY, int index, BITMAP* image ) ;
 
-	virtual ~Wall();
+        virtual ~Wall( ) ;
 
-	/**
-	 * Calcula el desplazamiento de la imagen de la pared en función de los atributos actuales
-	 */
-	void calculateOffset();
+        /**
+         * Calcula el desplazamiento de la imagen de la pared en función de los atributos actuales
+         */
+        void calculateOffset () ;
 
-	/**
-	 * Dibuja el segmento de la pared
-	 */
-	void draw( BITMAP* where );
+        /**
+         * Dibuja el segmento de la pared
+         */
+        void draw ( BITMAP * where ) ;
 
 private:
 
-	/**
-	 * Eje de la pared: AXIS_X para la pared este y AXIS_Y para la pared norte
-	 */
-	Axis axis;
+        bool onX;
 
-	/**
-	 * Posición que ocupa el segmento en la pared; cuanto menor sea el número más cerca estará del
-	 * origen de coordenadas
-	 */
-	int index;
+        /**
+         * Posición que ocupa el segmento en la pared; cuanto menor sea el número más cerca estará del
+         * origen de coordenadas
+         */
+        int index ;
 
-	/**
-	 * Desplazamiento de la imagen del muro en los ejes X e Y, respectivamente
-	 */
-	std::pair<int, int> offset;
+        /**
+         * Desplazamiento de la imagen del muro en los ejes X e Y, respectivamente
+         */
+        std::pair < int, int > offset ;
 
-	/**
-	 * Gráfico del segmento de una pared
-	 */
-	BITMAP* image;
+        /**
+         * Gráfico del segmento de una pared
+         */
+        BITMAP * image ;
 
 public:
 
-	/**
-	 * Eje donde está situada la pared
-	 * @return AXIS_X, la pared este; y, AXIS_Y, la pared norte
-	 */
-	Axis getAxis() { return axis; }
+        bool isOnX () const {  return onX ;  }
 
-	/**
-	 * Posición que ocupa el segmento en la pared; cuanto menor sea el número más cerca estará del
-	 * origen de coordenadas
-	 * @return Un número positivo
-	 */
-	int getIndex() { return index; }
+        /**
+         * Posición que ocupa el segmento en la pared; cuanto menor sea el número más cerca estará del
+         * origen de coordenadas
+         * @return Un número positivo
+         */
+        int getIndex () {  return index ;  }
+
 };
 
 }

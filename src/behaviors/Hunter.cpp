@@ -358,7 +358,7 @@ bool Hunter::createFullBody()
                 // create new item in the same location
                 FreeItem* newItem = new FreeItem( guardData,
                                                   thisItem->getX(), thisItem->getY(), thisItem->getZ() - LayerHeight,
-                                                  thisItem->getDirection() );
+                                                  thisItem->getOrientation() );
 
                 newItem->assignBehavior( "behavior of hunter in four directions", 0 );
 

@@ -52,7 +52,7 @@ bool CannonBall::update ()
                                         FreeItem * bubbles = new FreeItem (
                                                 bubblesData,
                                                 item->getX(), item->getY(), item->getZ(),
-                                                NoDirection
+                                                Nowhere
                                         );
 
                                         bubbles->assignBehavior( "behavior of disappearance in time", 0 );

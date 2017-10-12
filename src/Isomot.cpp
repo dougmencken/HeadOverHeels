@@ -164,6 +164,12 @@ BITMAP* Isomot::update()
                 key[ KEY_F ] = 0;
         }
 
+        if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_EQUALS ] )
+        {
+                gameManager->addLives( activeRoom->getMediator()->getActivePlayer()->getLabel(), 1 );
+                key[ KEY_EQUALS ] = 0;
+        }
+
         if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_I ] )
         {
                 // Activa o desactiva las vidas infinitas
@@ -240,7 +246,7 @@ BITMAP* Isomot::update()
                         int playerX = activePlayer->getX();
                         int playerY = activePlayer->getY();
                         int playerZ = activePlayer->getZ() + 2 * LayerHeight;
-                        Direction way = otherPlayer->getDirection();
+                        Way way = otherPlayer->getOrientation();
 
                         PlayerItem* joinedPlayer = new PlayerItem(
                                 this->itemDataManager->findItemByLabel( nameOfAnotherPlayer ),
@@ -275,10 +281,10 @@ BITMAP* Isomot::update()
                         {
                                 ItemData* chapeauData = this->itemDataManager->findItemByLabel( "crown" );
 
-                                int x = ( activeRoom->getBound( South ) - activeRoom->getBound( North ) + chapeauData->getWidthX() ) >> 1 ;
-                                int y = ( activeRoom->getBound( West ) - activeRoom->getBound( East ) + chapeauData->getWidthY() ) >> 1 ;
+                                int x = ( activeRoom->getLimitAt( Way( "south" ) ) - activeRoom->getLimitAt( Way( "north" ) ) + chapeauData->getWidthX() ) >> 1 ;
+                                int y = ( activeRoom->getLimitAt( Way( "west" ) ) - activeRoom->getLimitAt( Way( "east" ) ) + chapeauData->getWidthY() ) >> 1 ;
 
-                                FreeItem* chapeau = new FreeItem( chapeauData, x, y, 250, NoDirection );
+                                FreeItem* chapeau = new FreeItem( chapeauData, x, y, 250, Nowhere );
                                 chapeau->assignBehavior( "behavior of something special", chapeauData );
                                 activeRoom->addFreeItem( chapeau );
                         }
@@ -287,7 +293,7 @@ BITMAP* Isomot::update()
                 {
                         PlayerItem* activePlayer = activeRoom->getMediator()->getActivePlayer();
                         std::string nameOfPlayer = activePlayer->getLabel();
-                        Direction whichWay = activePlayer->getDirection();
+                        Way whichWay = activePlayer->getOrientation();
                         int teleportedX = 0;
                         int teleportedY = 95;
                         int teleportedZ = 240;
@@ -350,9 +356,9 @@ BITMAP* Isomot::update()
         // or active player lost its life
         else
         {
-                Direction exit = activeRoom->getWayOfExit();
+                Way exit = activeRoom->getWayOfExit();
 
-                if ( exit == Restart )
+                if ( exit.toString() == "rebuild room" )
                 {
                         PlayerItem* player = activeRoom->getMediator()->getActivePlayer();
 
@@ -445,35 +451,35 @@ void Isomot::updateEndRoom()
                 // la corona de Safari
                 if ( gameManager->isFreePlanet( "safari" ) )
                 {
-                        freeItem = new FreeItem( this->itemDataManager->findItemByLabel( "crown" ), 66, 75, Top, NoDirection );
+                        freeItem = new FreeItem( this->itemDataManager->findItemByLabel( "crown" ), 66, 75, Top, Nowhere );
                         activeRoom->addFreeItem( freeItem );
                         crowns++;
                 }
                 // la corona de Egyptus
                 if ( gameManager->isFreePlanet( "egyptus" ) )
                 {
-                        freeItem = new FreeItem( this->itemDataManager->findItemByLabel( "crown" ), 66, 59, Top, NoDirection );
+                        freeItem = new FreeItem( this->itemDataManager->findItemByLabel( "crown" ), 66, 59, Top, Nowhere );
                         activeRoom->addFreeItem( freeItem );
                         crowns++;
                 }
                 // la corona de Penitentiary
                 if ( gameManager->isFreePlanet( "penitentiary" ) )
                 {
-                        freeItem = new FreeItem( this->itemDataManager->findItemByLabel( "crown" ), 65, 107, Top, NoDirection );
+                        freeItem = new FreeItem( this->itemDataManager->findItemByLabel( "crown" ), 65, 107, Top, Nowhere );
                         activeRoom->addFreeItem( freeItem );
                         crowns++;
                 }
                 // la corona de Byblos
                 if ( gameManager->isFreePlanet( "byblos" ) )
                 {
-                        freeItem = new FreeItem( this->itemDataManager->findItemByLabel( "crown" ), 65, 123, Top, NoDirection );
+                        freeItem = new FreeItem( this->itemDataManager->findItemByLabel( "crown" ), 65, 123, Top, Nowhere );
                         activeRoom->addFreeItem( freeItem );
                         crowns++;
                 }
                 // la corona de Blacktooth
                 if ( gameManager->isFreePlanet( "blacktooth" ) )
                 {
-                        freeItem = new FreeItem( this->itemDataManager->findItemByLabel( "crown" ), 65, 91, Top, NoDirection );
+                        freeItem = new FreeItem( this->itemDataManager->findItemByLabel( "crown" ), 65, 91, Top, Nowhere );
                         activeRoom->addFreeItem( freeItem );
                         crowns++;
                 }
@@ -501,7 +507,7 @@ void Isomot::updateEndRoom()
 
                 if ( activeRoom->getMediator()->findItemByLabel( "ball" ) == 0 && activeRoom->getMediator()->findItemByLabel( "bubbles" ) == 0 )
                 {
-                        FreeItem* freeItem = new FreeItem( this->itemDataManager->findItemByLabel( "ball" ), 146, 93, LayerHeight, NoDirection );
+                        FreeItem* freeItem = new FreeItem( this->itemDataManager->findItemByLabel( "ball" ), 146, 93, LayerHeight, Nowhere );
                         freeItem->assignBehavior( "behaivor of final ball", this->itemDataManager->findItemByLabel( "bubbles" ) );
                         activeRoom->addFreeItem( freeItem );
                 }

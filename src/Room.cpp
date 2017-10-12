@@ -7,7 +7,6 @@
 #include "GridItem.hpp"
 #include "FreeItem.hpp"
 #include "PlayerItem.hpp"
-#include "Door.hpp"
 #include "Mediator.hpp"
 #include "Camera.hpp"
 #include "GameManager.hpp"
@@ -23,7 +22,7 @@ Room::Room( const std::string& roomFile, const std::string& scenery, int xTiles,
         , scenery( scenery )
         , tileSize( tileSize )
         , kindOfFloor( floor )
-        , exit( NoExit )
+        , wayOfExit( NoExit )
         , lastGridId( FirstGridId )
         , lastFreeId( FirstFreeId )
 {
@@ -35,8 +34,33 @@ Room::Room( const std::string& roomFile, const std::string& scenery, int xTiles,
         this->mediator = new Mediator( this );
         this->camera = new Camera( this );
 
-        memset( this->bounds, 0xffff, 12 * sizeof( unsigned short ) );
-        memset( this->doors, 0, 12 * sizeof( Door * ) );
+        this->bounds.clear ();
+        this->bounds[ North ] = 64000;
+        this->bounds[ South ] = 64000;
+        this->bounds[ East ] = 64000;
+        this->bounds[ West ] = 64000;
+        this->bounds[ Northeast ] = 64000;
+        this->bounds[ Southeast ] = 64000;
+        this->bounds[ Southwest ] = 64000;
+        this->bounds[ Northwest ] = 64000;
+        this->bounds[ Eastnorth ] = 64000;
+        this->bounds[ Eastsouth ] = 64000;
+        this->bounds[ Westnorth ] = 64000;
+        this->bounds[ Westsouth ] = 64000;
+
+        this->doors.clear ();
+        this->doors[ North ] = 0;
+        this->doors[ South ] = 0;
+        this->doors[ East ] = 0;
+        this->doors[ West ] = 0;
+        this->doors[ Northeast ] = 0;
+        this->doors[ Southeast ] = 0;
+        this->doors[ Southwest ] = 0;
+        this->doors[ Northwest ] = 0;
+        this->doors[ Eastnorth ] = 0;
+        this->doors[ Eastsouth ] = 0;
+        this->doors[ Westnorth ] = 0;
+        this->doors[ Westsouth ] = 0;
 
         // create empty floor
         for ( int i = 0; i < xTiles * yTiles + 1; i++ )
@@ -126,12 +150,9 @@ Room::Room( const std::string& roomFile, const std::string& scenery, int xTiles,
 Room::~Room()
 {
         // bin doors
-        for ( int i = 0; i < 12; i++ )
+        for ( std::map< Way, Door * >::const_iterator mi = doors.begin (); mi != doors.end (); ++mi )
         {
-                if ( doors[ i ] != 0 )
-                {
-                        delete doors[ i ];
-                }
+                delete mi->second ;
         }
 
         // bin floor
@@ -187,26 +208,23 @@ void Room::addFloor( FloorTile * floorTile )
 
 void Room::addWall( Wall * wall )
 {
-        // Se añade un segmento de muro sin puerta
         wall->setMediator( mediator );
         wall->calculateOffset();
 
-        switch( wall->getAxis() )
+        if ( wall->isOnX() )
         {
-                case AxisX:
-                        this->wallX.push_back( wall );
-                        break;
-
-                case AxisY:
-                        this->wallY.push_back( wall );
-                        break;
+                this->wallX.push_back( wall );
+        }
+        else
+        {
+                this->wallY.push_back( wall );
         }
 }
 
 void Room::addDoor( Door * door )
 {
         door->setMediator( mediator );
-        this->doors[ door->getDirection() ] = door;
+        this->doors[ door->getWhereIsDoor() ] = door;
 
         // each door is actually three free items
         this->addFreeItem( door->getLeftJamb() );
@@ -214,34 +232,29 @@ void Room::addDoor( Door * door )
         this->addFreeItem( door->getLintel() );
 }
 
-
-#define NULL_GRIDITEM           "Cannot add grid item which is nil"
-#define OUT_OF_LIMITS_GRIDITEM  "Coordinates for grid item are out of limits"
-#define OUT_OF_ROOM_GRIDITEM    "Coordinates for grid item are out of room"
-#define ZERO_HEIGHT_GRIDITEM    "Height for grid item is zero or negative"
-#define COLLISION_GRIDITEM      "Collision with grid item"
-
 void Room::addGridItem( GridItem * gridItem )
 {
+        if ( gridItem == 0 )
+        {
+                std::cout << "can’t add grid item which is nil" << std::endl ;
+                return;
+        }
+
         try
         {
-                if ( ! gridItem )
-                        throw Exception( NULL_GRIDITEM );
-
-                // Las coordenadas deben estar dentro de los límites
                 if ( ( gridItem->getCellX() < 0 || gridItem->getCellY() < 0 ) ||
-                        ( gridItem->getCellX() >= static_cast< int >( this->numberOfTiles.first ) || gridItem->getCellY() >= static_cast< int >( this->numberOfTiles.second ) ) )
+                        ( gridItem->getCellX() >= static_cast< int >( this->numberOfTiles.first ) ||
+                                gridItem->getCellY() >= static_cast< int >( this->numberOfTiles.second ) ) )
                 {
-                        throw Exception( OUT_OF_LIMITS_GRIDITEM );
+                        throw Exception( "Coordinates for grid item are out of limits" );
                 }
 
-                // El elemento debe tener altura
                 if ( gridItem->getHeight() < 1 )
                 {
-                        throw Exception( ZERO_HEIGHT_GRIDITEM );
+                        std::cout << "can’t add grid item which height is zero" << std::endl ;
+                        return;
                 }
 
-                // Vacía la pila de colisiones
                 mediator->clearStackOfCollisions ();
 
                 // Asigna el identificador de Isomot
@@ -261,7 +274,7 @@ void Room::addGridItem( GridItem * gridItem )
                 // Si se encontraron colisiones el elemento no se puede añadir
                 if ( ! mediator->isStackOfCollisionsEmpty () )
                 {
-                        throw Exception( COLLISION_GRIDITEM );
+                        throw Exception( "Collision with grid item" );
                 }
 
                 // calculate offset of item’s image from origin of room
@@ -274,7 +287,8 @@ void Room::addGridItem( GridItem * gridItem )
                         gridItem->setOffset( offset );
                 }
 
-                // Añade el elemento a la sala
+                /* std::cout << "add grid item \"" << gridItem->getLabel() << "\" to room \"" << getNameOfFileWithDataAboutRoom() << "\"" << std::endl ; */
+
                 gridItem->setMediator( mediator );
                 gridItem->setColumn( this->numberOfTiles.first * gridItem->getCellY() + gridItem->getCellX() );
                 mediator->addItem( gridItem );
@@ -294,30 +308,25 @@ void Room::addGridItem( GridItem * gridItem )
         }
 }
 
-
-#define NULL_FREEITEM           "Cannot add free item which is nil"
-#define OUT_OF_LIMITS_FREEITEM  "Coordinates for free item are out of limits"
-#define OUT_OF_ROOM_FREEITEM    "Coordinates for free item are out of room"
-#define ZERO_WIDTH_FREEITEM     "One or more of dimensions for free item are zero or negative"
-#define COLLISION_FREEITEM      "Collision with free item"
-
 void Room::addFreeItem( FreeItem * freeItem )
 {
+        if ( freeItem == 0 )
+        {
+                std::cout << "can’t add free item which is nil" << std::endl ;
+                return;
+        }
+
         try
         {
-                if ( ! freeItem )
-                        throw Exception( NULL_FREEITEM );
-
-                // Las coordenadas deben estar dentro de los límites
                 if ( freeItem->getX() < 0 || freeItem->getY() < 1 || freeItem->getZ() < Top )
                 {
-                        throw Exception( OUT_OF_LIMITS_FREEITEM );
+                        throw Exception( "Coordinates for free item are out of limits" );
                 }
 
-                // El elemento debe tener volumen
                 if ( freeItem->getHeight() < 1 || freeItem->getWidthX() < 1 || freeItem->getWidthY() < 1 )
                 {
-                        throw Exception( ZERO_WIDTH_FREEITEM );
+                        std::cout << "can’t add free item which dimension is zero" << std::endl ;
+                        return;
                 }
 
                 // El elemento no puede estar fuera de la sala
@@ -325,7 +334,7 @@ void Room::addFreeItem( FreeItem * freeItem )
                         || ( freeItem->getY() - static_cast< int >( freeItem->getWidthY() ) < -1 )
                         || ( freeItem->getY() > static_cast< int >( this->numberOfTiles.second * this->tileSize ) - 1 ) )
                 {
-                        throw Exception( OUT_OF_ROOM_FREEITEM );
+                        throw Exception( "Coordinates for free item are out of room" );
                 }
 
                 // Vacía la pila de colisiones
@@ -348,7 +357,7 @@ void Room::addFreeItem( FreeItem * freeItem )
                 // Si se encontraron colisiones el elemento no se puede añadir
                 if ( ! mediator->isStackOfCollisionsEmpty () )
                 {
-                        throw Exception( COLLISION_FREEITEM );
+                        throw Exception( "Collision with free item" );
                 }
 
                 // calculate offset of item’s image from origin of room
@@ -390,12 +399,6 @@ void Room::addFreeItem( FreeItem * freeItem )
                         std::cout << e.what () << std::endl ;
         }
 }
-
-
-#define OUT_OF_LIMITS_PLAYER    "Coordinates for player are out of limits"
-#define OUT_OF_ROOM_PLAYER      "Coordinates for player are out of room"
-#define ZERO_WIDTH_PLAYER       "One or more of dimensions for player are zero or negative"
-#define COLLISION_PLAYER        "Collision with player"
 
 bool Room::addPlayerToRoom( PlayerItem* playerItem, bool playerEntersRoom )
 {
@@ -452,19 +455,20 @@ bool Room::addPlayerToRoom( PlayerItem* playerItem, bool playerEntersRoom )
         {
                 if ( playerItem->getX() < 0 || playerItem->getY() < 1 || playerItem->getZ() < Top )
                 {
-                        throw Exception( OUT_OF_LIMITS_PLAYER );
+                        throw Exception( "Coordinates for player are out of limits" );
                 }
 
                 if ( playerItem->getHeight() < 1 || playerItem->getWidthX() < 1 || playerItem->getWidthY() < 1 )
                 {
-                        throw Exception( ZERO_WIDTH_PLAYER );
+                        std::cout << "can’t add player item which dimension is zero" << std::endl ;
+                        return false;
                 }
 
                 if ( ( playerItem->getX() + static_cast< int >( playerItem->getWidthX() ) > static_cast< int >( this->numberOfTiles.first * this->tileSize ) )
                         || ( playerItem->getY() - static_cast< int >( playerItem->getWidthY() ) < -1 )
                         || ( playerItem->getY() > static_cast< int >( this->numberOfTiles.second * this->tileSize ) - 1 ) )
                 {
-                        throw Exception( OUT_OF_ROOM_PLAYER );
+                        throw Exception( "Coordinates for player are out of room" );
                 }
 
                 mediator->clearStackOfCollisions ();
@@ -492,7 +496,7 @@ bool Room::addPlayerToRoom( PlayerItem* playerItem, bool playerEntersRoom )
                 // collision is found, so can’t add this item
                 if ( ! mediator->isStackOfCollisionsEmpty () )
                 {
-                        throw Exception( COLLISION_PLAYER );
+                        throw Exception( "Collision with player" );
                 }
 
                 // set offset of player’s image from origin of room
@@ -574,7 +578,7 @@ void Room::copyAnotherCharacterAsEntered( const std::string& name )
                         {
                                 PlayerItem* copy = new PlayerItem( *( *pi ) );
                                 copy->assignBehavior( ( *pi )->getBehavior()->getNameOfBehavior(), ( *pi )->getDataOfItem() );
-                                copy->setDirectionOfEntry( JustWait );
+                                copy->setWayOfEntry( JustWait );
 
                                 playersWhoEnteredRoom.push_back( copy );
                         }
@@ -729,7 +733,7 @@ void Room::draw( BITMAP* where )
 {
         const unsigned int maxTilesOfSingleRoom = 10 ;
 
-        // draw room when it is active one
+        // draw room when it is active
         if ( active )
         {
                 // draw in picture of room itself when destination bitmap isn’t given
@@ -959,13 +963,14 @@ bool Room::continueWithAlivePlayer ( )
         return true;
 }
 
-bool Room::calculateEntryCoordinates( const Direction& entry, int widthX, int widthY, int northBound, int eastBound, int southBound, int westBound, int* x, int* y, int* z )
+bool Room::calculateEntryCoordinates( const Way& wayOfEntry, int widthX, int widthY, int northBound, int eastBound, int southBound, int westBound, int* x, int* y, int* z )
 {
         bool result = false;
         int differentSizeDeltaX = 0;
         int differentSizeDeltaY = 0;
 
-        if ( entry == Up || entry == Down || entry == ByTeleport || entry == ByTeleportToo )
+        if ( wayOfEntry.toString() == "up" || wayOfEntry.toString() == "down" ||
+                        wayOfEntry.toString() == "via teleport" || wayOfEntry.toString() == "via second teleport" )
         {
                 const unsigned int maxTilesOfSingleRoom = 10 ;
                 const int limitOfSingleRoom = maxTilesOfSingleRoom * tileSize ;
@@ -986,7 +991,7 @@ bool Room::calculateEntryCoordinates( const Direction& entry, int widthX, int wi
         }
 
         // calculate coordinates according to way of entry
-        switch ( entry )
+        switch ( wayOfEntry.getIntegerOfWay () )
         {
                 case North:
                         *x = bounds[ North ] - tileSize + 1;
@@ -1106,9 +1111,9 @@ bool Room::calculateEntryCoordinates( const Direction& entry, int widthX, int wi
         return result;
 }
 
-void Room::addTripleRoomInitialPoint( const Direction& direction, int x, int y )
+void Room::addTripleRoomInitialPoint( const Way& way, int x, int y )
 {
-        this->listOfInitialPointsForTripleRoom.push_back( TripleRoomInitialPoint( direction, x, y ) );
+        this->listOfInitialPointsForTripleRoom.push_back( TripleRoomInitialPoint( way, x, y ) );
 }
 
 void Room::assignTripleRoomBounds( int minX, int maxX, int minY, int maxY )
@@ -1119,36 +1124,26 @@ void Room::assignTripleRoomBounds( int minX, int maxX, int minY, int maxY )
         this->tripleRoomBoundY.second = maxY;
 }
 
-TripleRoomInitialPoint* Room::findInitialPointOfEntryToTripleRoom( const Direction& direction )
+TripleRoomInitialPoint* Room::findInitialPointOfEntryToTripleRoom( const Way& way )
 {
         std::list< TripleRoomInitialPoint >::iterator i = std::find_if(
                                                                 listOfInitialPointsForTripleRoom.begin (),
                                                                 listOfInitialPointsForTripleRoom.end (),
-                                                                std::bind2nd( EqualTripleRoomInitialPoint(), direction ) );
+                                                                std::bind2nd( EqualTripleRoomInitialPoint(), way ) );
 
         return ( i != listOfInitialPointsForTripleRoom.end () ? ( &( *i ) ) : 0 );
 }
 
-Door* Room::getDoor( const Direction& direction ) const
-{
-        return doors[ direction ];
-}
-
-Camera* Room::getCamera() const
-{
-        return camera;
-}
-
-TripleRoomInitialPoint::TripleRoomInitialPoint( const Direction& wayOfEntry, int x, int y )
-        : wayOfEntry( wayOfEntry )
+TripleRoomInitialPoint::TripleRoomInitialPoint( const Way& way, int x, int y )
+        : wayOfEntry( way )
         , x( x )
         , y( y )
 {
 }
 
-bool EqualTripleRoomInitialPoint::operator()( TripleRoomInitialPoint point, Direction wayOfEntry ) const
+bool EqualTripleRoomInitialPoint::operator()( TripleRoomInitialPoint point, const Way& wayOfEntry ) const
 {
-        return ( point.getWayOfEntry() == wayOfEntry );
+        return ( point.getWayOfEntry().getIntegerOfWay() == wayOfEntry.getIntegerOfWay() );
 }
 
 }

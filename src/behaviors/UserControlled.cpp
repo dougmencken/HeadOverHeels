@@ -220,12 +220,12 @@ void UserControlled::fall( PlayerItem * player )
                 {
                         if ( player->checkPosition( 0, 0, -1, Add ) )
                         {
-                                player->changeFrame( fallFrames[ player->getDirection() ] );
+                                player->changeFrame( fallFrames[ player->getOrientation().getIntegerOfWay () ] );
                         }
                 }
                 // Si hay colisión deja de caer y vuelve al estado inicial siempre que
                 // el jugador no haya sido destruido por la colisión con un elemento mortal
-                else if ( activity != MeetMortalItem || ( activity == MeetMortalItem && player->getShieldTime() > 0 ) )
+                else if ( activity != MeetMortalItem || ( activity == MeetMortalItem && player->hasShield() ) )
                 {
                         activity = Wait;
                 }
@@ -311,7 +311,7 @@ void UserControlled::jump( PlayerItem * player )
         // conduce a otra situada sobre ella
         if ( player->getZ() >= MaxLayers * LayerHeight )
         {
-                player->setDirectionOfExit( Up );
+                player->setWayOfExit( Up );
         }
 }
 
@@ -324,7 +324,7 @@ void UserControlled::glide( PlayerItem * player )
                 whatToDo = FallKindOfActivity::getInstance();
 
                 // Si hay colisión deja de caer y vuelve al estado inicial
-                if ( ! whatToDo->fall( this ) && ( activity != MeetMortalItem || ( activity == MeetMortalItem && player->getShieldTime() > 0 ) ) )
+                if ( ! whatToDo->fall( this ) && ( activity != MeetMortalItem || ( activity == MeetMortalItem && player->hasShield() ) ) )
                 {
                         activity = Wait;
                 }
@@ -339,8 +339,7 @@ void UserControlled::glide( PlayerItem * player )
                 whatToDo = MoveKindOfActivity::getInstance();
                 ActivityOfItem subactivity;
 
-                // Subestado para ejecutar el movimiento
-                switch ( player->getDirection() )
+                switch ( player->getOrientation().getIntegerOfWay () )
                 {
                         case North:
                                 subactivity = MoveNorth;
@@ -368,7 +367,7 @@ void UserControlled::glide( PlayerItem * player )
                 whatToDo->move( this, &subactivity, false );
 
                 // Selecciona el fotograma de caída del personaje
-                player->changeFrame( fallFrames[ player->getDirection() ] );
+                player->changeFrame( fallFrames[ player->getOrientation().getIntegerOfWay() ] );
 
                 // Se pone a cero el cronómetro para el siguiente ciclo
                 speedTimer->reset();
@@ -430,7 +429,7 @@ void UserControlled::wayOutTeletransport( PlayerItem * player )
                         if ( player->animate() )
                         {
                                 player->addToZ( -1 );
-                                player->setDirectionOfExit( player->getMediator()->collisionWithByLabel( "teleport" ) ? ByTeleport : ByTeleportToo );
+                                player->setWayOfExit( player->getMediator()->collisionWithByLabel( "teleport" ) ? ByTeleport : ByTeleportToo );
                         }
                         break;
 
@@ -446,7 +445,7 @@ void UserControlled::collideWithMortalItem( PlayerItem* player )
                 // player just met a bad guy
                 case MeetMortalItem:
                         // do you have immunity
-                        if ( player->getShieldTime() == 0 )
+                        if ( ! player->hasShield() )
                         {
                                 // change to bubbles retaining player’s label
                                 player->changeItemData( itemDataManager->findItemByLabel( labelOfTransitionViaTeleport ), "collide with mortal item" );
@@ -463,7 +462,7 @@ void UserControlled::collideWithMortalItem( PlayerItem* player )
                         // animate item, restart room when animation finishes
                         if ( player->animate() )
                         {
-                                player->setDirectionOfExit( Restart );
+                                player->setWayOfExit( Restart );
                                 player->loseLife();
                         }
                         break;
@@ -494,7 +493,7 @@ void UserControlled::useHooter( PlayerItem* player )
                                 hooterData,
                                 player->getX(), player->getY(),
                                 z < 0 ? 0 : z,
-                                player->getDirection()
+                                player->getOrientation()
                         );
 
                         freeItem->assignBehavior( "behavior of freezing doughnut", 0 );
@@ -583,7 +582,7 @@ void UserControlled::dropItem( PlayerItem* player )
                         FreeItem* freeItem = new FreeItem( player->getTakenItemData(),
                                                            player->getX(), player->getY(),
                                                            player->getZ() - LayerHeight,
-                                                           NoDirection );
+                                                           Nowhere );
 
                         freeItem->assignBehavior( player->getTakenItemBehavior(), 0 );
 

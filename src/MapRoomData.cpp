@@ -15,90 +15,90 @@ MapRoomData::~MapRoomData()
 {
 }
 
-std::string MapRoomData::findConnectedRoom( const Direction& exit, Direction* entry ) const
+std::string MapRoomData::findConnectedRoom( const Way& wayOfExit, Way* wayOfEntry ) const
 {
         std::string fileName;
 
-        switch ( exit )
+        switch ( wayOfExit.getIntegerOfWay () )
         {
                 case North:
                         fileName = north;
-                        *entry = South;
+                        *wayOfEntry = South;
                         break;
 
                 case South:
                         fileName = south;
-                        *entry = North;
+                        *wayOfEntry = North;
                         break;
 
                 case East:
                         fileName = east;
-                        *entry = West;
+                        *wayOfEntry = West;
                         break;
 
                 case West:
                         fileName = west;
-                        *entry = East;
+                        *wayOfEntry = East;
                         break;
 
                 case Northeast:
                         fileName = northEast;
-                        *entry = South;
+                        *wayOfEntry = South;
                         break;
 
                 case Southeast:
                         fileName = southEast;
-                        *entry = North;
+                        *wayOfEntry = North;
                         break;
 
                 case Southwest:
                         fileName = southWest;
-                        *entry = North;
+                        *wayOfEntry = North;
                         break;
 
                 case Northwest:
                         fileName = northWest;
-                        *entry = South;
+                        *wayOfEntry = South;
                         break;
 
                 case Eastnorth:
                         fileName = eastNorth;
-                        *entry = West;
+                        *wayOfEntry = West;
                         break;
 
                 case Eastsouth:
                         fileName = eastSouth;
-                        *entry = West;
+                        *wayOfEntry = West;
                         break;
 
                 case Westnorth:
                         fileName = westNorth;
-                        *entry = East;
+                        *wayOfEntry = East;
                         break;
 
                 case Westsouth:
                         fileName = westSouth;
-                        *entry = East;
+                        *wayOfEntry = East;
                         break;
 
                 case Up:
                         fileName = roof;
-                        *entry = Down;
+                        *wayOfEntry = Down;
                         break;
 
                 case Down:
                         fileName = floor;
-                        *entry = Up;
+                        *wayOfEntry = Up;
                         break;
 
                 case ByTeleport:
                         fileName = teleport;
-                        *entry = ByTeleport;
+                        *wayOfEntry = ByTeleport;
                         break;
 
                 case ByTeleportToo:
                         fileName = teleport2;
-                        *entry = ByTeleportToo;
+                        *wayOfEntry = ByTeleportToo;
                         break;
 
                 default:
@@ -108,9 +108,9 @@ std::string MapRoomData::findConnectedRoom( const Direction& exit, Direction* en
         return fileName;
 }
 
-void MapRoomData::adjustEntry( Direction* entry, const std::string& previousRoom )
+void MapRoomData::adjustEntry( Way* entry, const std::string& previousRoom )
 {
-        switch ( *entry )
+        switch ( entry->getIntegerOfWay() )
         {
                 case North:
                         if ( north.empty() )

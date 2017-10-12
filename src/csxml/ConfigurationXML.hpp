@@ -443,19 +443,19 @@ namespace cxml
     void
     swap (const swap_type& x);
 
-    // halt
+    // pause
     //
-    typedef ::xml_schema::int_ halt_type;
-    typedef ::xsd::cxx::tree::traits< halt_type, char > halt_traits;
+    typedef ::xml_schema::int_ pause_type;
+    typedef ::xsd::cxx::tree::traits< pause_type, char > pause_traits;
 
-    const halt_type&
-    halt () const;
+    const pause_type&
+    pause () const;
 
-    halt_type&
-    halt ();
+    pause_type&
+    pause ();
 
     void
-    halt (const halt_type& x);
+    pause (const pause_type& x);
 
     // Constructors
     //
@@ -468,7 +468,7 @@ namespace cxml
               const doughnut_type&,
               const takeandjump_type&,
               const swap_type&,
-              const halt_type&);
+              const pause_type&);
 
     keyboard (const ::xercesc::DOMElement& e,
               ::xml_schema::flags f = 0,
@@ -499,7 +499,7 @@ namespace cxml
     ::xsd::cxx::tree::one< doughnut_type > doughnut_;
     ::xsd::cxx::tree::one< takeandjump_type > takeandjump_;
     ::xsd::cxx::tree::one< swap_type > swap_;
-    ::xsd::cxx::tree::one< halt_type > halt_;
+    ::xsd::cxx::tree::one< pause_type > pause_;
   };
 
   class audio: public ::xml_schema::type

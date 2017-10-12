@@ -37,8 +37,7 @@ KindOfActivity* MoveKindOfActivity::getInstance()
 
 bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, bool canFall )
 {
-        bool changedData = false;
-        bool loading = false;
+        bool moved = false;
 
         ActivityOfItem displaceActivity = Wait;
 
@@ -58,12 +57,8 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
                 case AutoMoveNorth:
                         if ( freeItem != 0 )
                         {
-                                if ( freeItem->getDirection() != North )
-                                {
-                                        freeItem->changeDirection( North );
-                                }
-
-                                changedData = freeItem->addToX( -1 );
+                                freeItem->changeOrientation( North );
+                                moved = freeItem->addToX( -1 );
                                 displaceActivity = DisplaceNorth;
                         }
                         break;
@@ -72,12 +67,8 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
                 case AutoMoveSouth:
                         if ( freeItem != 0 )
                         {
-                                if ( freeItem->getDirection() != South )
-                                {
-                                        freeItem->changeDirection( South );
-                                }
-
-                                changedData = freeItem->addToX( 1 );
+                                freeItem->changeOrientation( South );
+                                moved = freeItem->addToX( 1 );
                                 displaceActivity = DisplaceSouth;
                         }
                         break;
@@ -86,12 +77,8 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
                 case AutoMoveEast:
                         if ( freeItem != 0 )
                         {
-                                if ( freeItem->getDirection() != East )
-                                {
-                                        freeItem->changeDirection( East );
-                                }
-
-                                changedData = freeItem->addToY( -1 );
+                                freeItem->changeOrientation( East );
+                                moved = freeItem->addToY( -1 );
                                 displaceActivity = DisplaceEast;
                         }
                         break;
@@ -100,12 +87,8 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
                 case AutoMoveWest:
                         if ( freeItem != 0 )
                         {
-                                if ( freeItem->getDirection() != West )
-                                {
-                                        freeItem->changeDirection( West );
-                                }
-
-                                changedData = freeItem->addToY( 1 );
+                                freeItem->changeOrientation( West );
+                                moved = freeItem->addToY( 1 );
                                 displaceActivity = DisplaceWest;
                         }
                         break;
@@ -113,7 +96,7 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
                 case MoveNortheast:
                         if ( freeItem != 0 )
                         {
-                                changedData = freeItem->addToPosition( -1, -1, 0 );
+                                moved = freeItem->addToPosition( -1, -1, 0 );
                                 displaceActivity = DisplaceNortheast;
                         }
                         break;
@@ -121,7 +104,7 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
                 case MoveNorthwest:
                         if ( freeItem != 0 )
                         {
-                                changedData = freeItem->addToPosition( -1, 1, 0 );
+                                moved = freeItem->addToPosition( -1, 1, 0 );
                                 displaceActivity = DisplaceNorthwest;
                         }
                         break;
@@ -129,7 +112,7 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
                 case MoveSoutheast:
                         if ( freeItem != 0 )
                         {
-                                changedData = freeItem->addToPosition( 1, -1, 0 );
+                                moved = freeItem->addToPosition( 1, -1, 0 );
                                 displaceActivity = DisplaceSoutheast;
                         }
                         break;
@@ -137,14 +120,16 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
                 case MoveSouthwest:
                         if ( freeItem != 0 )
                         {
-                                changedData = freeItem->addToPosition( 1, 1, 0 );
+                                moved = freeItem->addToPosition( 1, 1, 0 );
                                 displaceActivity = DisplaceSouthwest;
                         }
                         break;
 
                 case MoveUp:
-                        // Si no ha podido ascender, levanta a todos los elementos que pudiera tener encima
-                        if ( ! ( changedData = freeItem->addToZ( 1 ) ) )
+                        moved = freeItem->addToZ( 1 );
+
+                        // if can’t move up, raise items above
+                        if ( ! moved )
                         {
                                 while ( ! mediator->isStackOfCollisionsEmpty() )
                                 {
@@ -156,25 +141,27 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
                                         }
                                 }
 
-                                // Ahora ya puede ascender
-                                changedData = freeItem->addToZ( 1 );
+                                // now raise itself
+                                moved = freeItem->addToZ( 1 );
                         }
                         break;
 
                 case MoveDown:
                 {
-                        // Comprueba si tiene elementos encima
-                        loading = !freeItem->checkPosition( 0, 0, 2, Add );
+                        // is there any items above
+                        bool loading = ! freeItem->checkPosition( 0, 0, 2, Add );
 
-                        // Copia la pila de colisiones
+                        // copy stack of collisions
                         std::stack< int > topItems;
                         while ( ! mediator->isStackOfCollisionsEmpty() )
                         {
                                 topItems.push( mediator->popCollision() );
                         }
 
-                        // Si pudo descender entonces deben descender con él los elementos que tiene encima
-                        if ( ( changedData = freeItem->addToZ( -1 ) ) && loading )
+                        moved = freeItem->addToZ( -1 );
+
+                        // fall together with items above
+                        if ( moved && loading )
                         {
                                 while ( ! topItems.empty() )
                                 {
@@ -191,31 +178,19 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
                         break;
 
                 case CancelDisplaceNorth:
-                        if ( freeItem->getDirection() != South )
-                        {
-                                freeItem->changeDirection( South );
-                        }
+                        freeItem->changeOrientation( South );
                         break;
 
                 case CancelDisplaceSouth:
-                        if ( freeItem->getDirection() != North )
-                        {
-                                freeItem->changeDirection( North );
-                        }
+                        freeItem->changeOrientation( North );
                         break;
 
                 case CancelDisplaceEast:
-                        if ( freeItem->getDirection() != West )
-                        {
-                                freeItem->changeDirection( West );
-                        }
+                        freeItem->changeOrientation( West );
                         break;
 
                 case CancelDisplaceWest:
-                        if ( freeItem->getDirection() != East )
-                        {
-                                freeItem->changeDirection( East );
-                        }
+                        freeItem->changeOrientation( East );
                         break;
 
                 default:
@@ -224,32 +199,31 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
 
         if ( freeItem != 0 )
         {
-                // En caso de colisión en los ejes X o Y se desplaza a los elementos implicados
-                if ( ! changedData )
+                // move collided items when there’s collision at X or Y
+                if ( ! moved )
                 {
                         this->propagateActivityToAdjacentItems( freeItem, displaceActivity );
                 }
-                // En caso de que el elemento se haya movido se comprueba si hay que desplazar los elementos
-                // que pueda tener encima. La excepción es para el movimiento vertical porque de lo contrario
-                // se cambiaría el estado de los elementos situados encima de un ascensor
+                // see if is it necessary to move items above
+                // exception is for vertical movement to keep activity of items above elevator unchanged
                 else if ( *activity != MoveUp && *activity != MoveDown )
                 {
                         this->propagateActivityToItemsAbove( freeItem, displaceActivity );
                 }
         }
 
-        // Si el elemento puede caer entonces se comprueba si hay que cambiar el estado
+        // item may fall
         if ( canFall && *activity )
         {
                 if ( FallKindOfActivity::getInstance()->fall( behavior ) )
                 {
                         changeKindOfActivity( behavior, FallKindOfActivity::getInstance() );
                         *activity = Fall;
-                        changedData = true;
+                        moved = true;
                 }
         }
 
-        return changedData;
+        return moved ;
 }
 
 void MoveKindOfActivity::ascent( FreeItem* freeItem, int z )
@@ -287,7 +261,7 @@ void MoveKindOfActivity::ascent( FreeItem* freeItem, int z )
                         PlayerItem* playerItem = dynamic_cast< PlayerItem * >( freeItem );
                         if ( playerItem != 0 && playerItem->getZ() >= MaxLayers * LayerHeight )
                         {
-                                playerItem->setDirectionOfExit( Up );
+                                playerItem->setWayOfExit( Up );
                         }
                 }
         }

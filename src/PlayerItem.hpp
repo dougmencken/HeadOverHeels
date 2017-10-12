@@ -32,15 +32,7 @@ class PlayerItem : public FreeItem
 
 public:
 
-        /**
-         * Constructor
-         * @param itemData Datos invariables del elemento
-         * @param x Posición espacial X
-         * @param y Posición espacial Y
-         * @param z Posición espacial Z o a qué distancia está el elemento del suelo
-         * @param direction Dirección inicial del elemento
-         */
-        PlayerItem( ItemData* itemData, int x, int y, int z, const Direction& direction ) ;
+        PlayerItem( ItemData* itemData, int x, int y, int z, const Way& orientation ) ;
 
         /**
          * Constructor copia. No copia los atributos que son punteros
@@ -55,7 +47,7 @@ public:
         /**
          * Change activity of player by way of entry to room
          */
-        void autoMoveOnEntry ( const Direction& entry ) ;
+        void autoMoveOnEntry ( const Way& wayOfEntry ) ;
 
         virtual void behave () ;
 
@@ -152,23 +144,23 @@ protected:
 
         /**
          * Check if player hits a door, if yes then move player
-         * @param direction door mentioned by its position in room
+         * @param way door mentioned by its position in room
          * @param id identifier of item, assigned by engine, in stack of collisions
          */
-        bool isCollidingWithDoor ( const Direction& direction, int id, const PlayerItem& previousPosition ) ;
+        bool isCollidingWithDoor ( const Way& way, int id, const PlayerItem& previousPosition ) ;
 
         /**
          * See if player is not under a door or that door doesn’t exist
-         * @param direction door mentioned by its position in room
+         * @param way door mentioned by its position in room
          * @return true if the player is under that given door
          */
-        bool isNotUnderDoor ( const Direction& direction ) ;
+        bool isNotUnderDoor ( const Way& way ) ;
 
         /**
          * See if player crosses limits of room, if yes then change rooms
-         * @param direction door mentioned by its position in room
+         * @param way door mentioned by its position in room
          */
-        bool isCollidingWithRoomBorder( const Direction& direction ) ;
+        bool isCollidingWithRoomBorder( const Way& way ) ;
 
 private:
 
@@ -205,14 +197,14 @@ private:
         unsigned short howManyDoughnuts ;
 
         /**
-         * Direction of player when it leaves room
+         * Way of player when it leaves room
          */
-        Direction exit ;
+        Way exit ;
 
         /**
          * How player enters room: through door, or via teleport, or going below floor or above ceiling
          */
-        Direction entry ;
+        Way entry ;
 
         /**
          * Time of immunity, player gots 25 seconds of immunity when rabbit is caught
@@ -259,6 +251,8 @@ protected:
 
         void setDoughnuts ( const unsigned short howMany ) {  this->howManyDoughnuts = howMany ;  }
 
+        double getShieldTime () const {  return this->shieldTime ;  }
+
 public:
 
         /**
@@ -281,7 +275,6 @@ public:
          */
         std::string getTakenItemBehavior () const {  return this->takenItemBehavior ;  }
 
-
         unsigned char getLives () const {  return this->lives ;  }
 
         /**
@@ -294,10 +287,7 @@ public:
          */
         unsigned int getHighJumps () const {  return this->highJumps ;  }
 
-        /**
-         * Returns time of immunity in seconds
-         */
-        double getShieldTime () const {  return this->shieldTime ;  }
+        bool hasShield () const {  return this->shieldTime > 0 ;  }
 
         /**
          * Character has its magic item, horn or bag, or not
@@ -307,18 +297,18 @@ public:
         unsigned short getDoughnuts () const {  return this->howManyDoughnuts ;  }
 
         /**
-         * Direction of player when it leaves room
+         * Way of player when it leaves room
          */
-        void setDirectionOfExit ( const Direction& direction ) ;
+        void setWayOfExit ( const Way& way ) ;
 
-        Direction getDirectionOfExit () const {  return this->exit ;  }
+        Way getWayOfExit () const {  return this->exit ;  }
 
         /**
          * How player enters room
          */
-        Direction getDirectionOfEntry () const {  return this->entry ;  }
+        Way getWayOfEntry () const {  return this->entry ;  }
 
-        void setDirectionOfEntry ( const Direction& direction ) {  this->entry = direction ;  }
+        void setWayOfEntry ( const Way& way ) {  this->entry = way ;  }
 
 };
 

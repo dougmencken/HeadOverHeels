@@ -38,7 +38,7 @@ public:
          */
         ConfigurationManager( const std::string& fileName ) ;
 
-        void read () ;
+        bool read () ;
 
         void write () ;
 

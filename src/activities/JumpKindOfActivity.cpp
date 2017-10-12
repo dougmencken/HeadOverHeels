@@ -61,7 +61,7 @@ bool JumpKindOfActivity::jump( Behavior* behavior, ActivityOfItem* activity, con
                                         // Si el elemento se ha encontrado y es un elemento mortal entonces el jugador muere
                                         if ( item != 0 )
                                         {
-                                                if ( item->isMortal() && playerItem->getShieldTime() <= 0 )
+                                                if ( item->isMortal() && ! playerItem->hasShield() )
                                                 {
                                                         if ( ! GameManager::getInstance()->isImmuneToCollisionsWithMortalItems () )
                                                         {
@@ -88,29 +88,24 @@ bool JumpKindOfActivity::jump( Behavior* behavior, ActivityOfItem* activity, con
                 }
         }
 
-        // El salto es diferente dependiento de la dirección
-        switch ( playerItem->getDirection() )
+        switch ( playerItem->getOrientation().getIntegerOfWay() )
         {
                 case North:
-                        // Movimiento hacia el norte
                         changedData = playerItem->addToX( - jumpMatrix[ *jumpIndex ].first );
                         displaceActivity = DisplaceNorth;
                         break;
 
                 case South:
-                        // Movimiento hacia el sur
                         changedData = playerItem->addToX( jumpMatrix[ *jumpIndex ].first );
                         displaceActivity = DisplaceSouth;
                         break;
 
                 case East:
-                        // Movimiento hacia el este
                         changedData = playerItem->addToY( - jumpMatrix[ *jumpIndex ].first );
                         displaceActivity = DisplaceEast;
                         break;
 
                 case West:
-                        // Movimiento hacia el oeste
                         changedData = playerItem->addToY( jumpMatrix[ *jumpIndex ].first );
                         displaceActivity = DisplaceWest;
                         break;

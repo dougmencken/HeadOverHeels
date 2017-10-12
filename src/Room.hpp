@@ -15,10 +15,13 @@
 #include <string>
 #include <vector>
 #include <list>
-#include <utility>
+#include <map>
+
 #include "Ism.hpp"
+#include "Way.hpp"
 #include "Drawable.hpp"
 #include "Mediated.hpp"
+#include "Door.hpp"
 
 
 namespace isomot
@@ -30,7 +33,6 @@ class Item ;
 class GridItem ;
 class FreeItem ;
 class PlayerItem ;
-class Door ;
 class Camera ;
 class ItemDataManager ;
 class TripleRoomInitialPoint ;
@@ -162,18 +164,17 @@ public:
         * @param z Resulting Z coordinate to get
         * @return true if coordinates are okay or false otherwise
         */
-        bool calculateEntryCoordinates ( const Direction& entry,
+        bool calculateEntryCoordinates ( const Way& wayOfEntry,
                                                 int widthX, int widthY,
                                                 int northBound, int eastBound, int southBound, int westBound,
                                                 int * x, int * y, int * z ) ;
 
        /**
         * Almacena una posición inicial de la cámara en una sala triple
-        * @param direction Vía de entrada del jugador
         * @param x Diferencia que se debe aplicar a la coordenada de pantalla X para centrar la cámara
         * @param y Diferencia que se debe aplicar a la coordenada de pantalla Y para centrar la cámara
         */
-        void addTripleRoomInitialPoint ( const Direction& direction, int x, int y ) ;
+        void addTripleRoomInitialPoint ( const Way& way, int x, int y ) ;
 
        /**
         * Almacena los límites para el desplazamiento de la cámara en una sala triple
@@ -182,9 +183,8 @@ public:
 
        /**
         * Busca una posición inicial de la cámara en una sala triple
-        * @param direction Vía de entrada del jugador
         */
-        TripleRoomInitialPoint * findInitialPointOfEntryToTripleRoom ( const Direction& direction ) ;
+        TripleRoomInitialPoint * findInitialPointOfEntryToTripleRoom ( const Way& way ) ;
 
 protected:
 
@@ -231,7 +231,7 @@ private:
        /**
         * Salida por la que algún jugador abandona la sala
         */
-        Direction exit ;
+        Way wayOfExit ;
 
        /**
         * Indices in sequence of how columns of grid items are drawn, diagonally from right to left
@@ -254,11 +254,6 @@ private:
         int lastFreeId ;
 
        /**
-        * Coordenadas isométricas que delimitan la sala. Existe una por cada punto cardinal
-        */
-        unsigned short bounds[ 12 ] ;
-
-       /**
         * El suelo de la sala formado por losetas
         */
         std::vector < FloorTile * > floor ;
@@ -274,10 +269,14 @@ private:
         std::vector < Wall * > wallY ;
 
        /**
-        * Las puertas. Se almacenan es este orden: sur, oeste, norte, este y para las salas triples:
-        * noreste, sureste, noroeste, suroeste, este-norte, este-sur, oeste-norte y oeste-sur
+        * Las puertas
         */
-        Door * doors[ 12 ] ;
+        std::map < Way, Door * > doors ;
+
+       /**
+        * Isometric coordinates that limit this room
+        */
+        std::map < Way, unsigned short > bounds ;
 
        /**
         * Cámara encargada de centrar una sala grande en pantalla
@@ -360,34 +359,30 @@ public:
 
        /**
         * Límite de la sala
-        * @param direction Un punto cardinal indicativo del límite que se quiere obtener
-        * @return Un valor en unidades isométricas
         */
-        unsigned short getBound ( const Direction& direction ) const {  return bounds[ direction ] ;  }
+        unsigned short getLimitAt ( const Way& way ) {  return bounds[ way ] ;  }
 
        /**
         * Una puerta de la sala
-        * @param direction Un punto cardinal que indica dónde está la puerta
-        * @return Una puerta ó 0 si no hay puerta en el punto cardinal indicado
         */
-        Door * getDoor ( const Direction& direction ) const ;
+        Door * getDoorAt ( const Way& way ) {  return doors[ way ] ;  }
+
+        bool hasDoorAt ( const Way& way ) {  return ( doors[ way ] != 0 ) ;  }
 
        /**
         * Establece la salida por la que algún jugador abandona la sala
-        * @param exit El suelo, el techo o la ubicación de alguna puerta
         */
-        void setWayOfExit ( const Direction& exit ) {  this->exit = exit ;  }
+        void setWayOfExit ( const Way& exit ) {  this->wayOfExit = exit ;  }
 
        /**
         * Salida por la que algún jugador abandona la sala
-        * @return El suelo, el techo o la ubicación de alguna puerta
         */
-        Direction getWayOfExit () const {  return exit ;  }
+        Way getWayOfExit () const {  return wayOfExit ;  }
 
        /**
         * Cámara encargada de centrar una sala grande en pantalla
         */
-        Camera * getCamera () const ;
+        Camera * getCamera () const {  return camera ;  }
 
        /**
         * Imagen donde se dibuja la sala activa
@@ -417,25 +412,25 @@ class TripleRoomInitialPoint
 
 public:
 
-        TripleRoomInitialPoint( const Direction& wayOfEntry, int x, int y ) ;
+        TripleRoomInitialPoint( const Way& way, int x, int y ) ;
 
 private:
 
-        Direction wayOfEntry ;
+        Way wayOfEntry ;
 
         /**
-         * Difference to screen coordinate X to center camera
+         * Offset of camera to screen X
          */
         int x ;
 
         /**
-         * Difference to screen coordinate Y to center camera
+         * Offset of camera to screen Y
          */
         int y ;
 
 public:
 
-        Direction getWayOfEntry () const {  return this->wayOfEntry ;  }
+        Way getWayOfEntry () const {  return this->wayOfEntry ;  }
 
         int getX () const {  return this->x ;  }
 
@@ -444,11 +439,11 @@ public:
 };
 
 
-class EqualTripleRoomInitialPoint : public std::binary_function< TripleRoomInitialPoint, Direction, bool >
+class EqualTripleRoomInitialPoint : public std::binary_function< TripleRoomInitialPoint, Way, bool >
 {
 
 public:
-        bool operator()( TripleRoomInitialPoint point, Direction wayOfEntry ) const ;
+        bool operator()( TripleRoomInitialPoint point, const Way& wayOfEntry ) const ;
 
 };
 

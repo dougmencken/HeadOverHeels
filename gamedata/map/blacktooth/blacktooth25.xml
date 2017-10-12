@@ -381,7 +381,7 @@
     </item>
     <item x="4" y="0" z="1">
       <label>conveyor-belt</label>
-      <direction>none</direction>
+      <direction>south</direction>
       <behavior>behavior of conveyor in south or west</behavior>
       <type>griditem</type>
     </item>

@@ -21,7 +21,7 @@ Camera::~Camera()
 {
 }
 
-void Camera::turnOn( PlayerItem* player, const Direction& entry )
+void Camera::turnOn( PlayerItem* player, const Way& wayOfEntry )
 {
         const unsigned int maxTilesOfSingleRoom = 10 ;
 
@@ -65,7 +65,7 @@ void Camera::turnOn( PlayerItem* player, const Direction& entry )
                 // it’s triple room then
                 else
                 {
-                        TripleRoomInitialPoint* initialPoint = room->findInitialPointOfEntryToTripleRoom( entry );
+                        TripleRoomInitialPoint* initialPoint = room->findInitialPointOfEntryToTripleRoom( wayOfEntry );
                         if ( initialPoint != 0 )
                         {
                                 delta.first = initialPoint->getX();

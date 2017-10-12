@@ -43,7 +43,7 @@ public:
          * @param z Posición espacial Z o a qué distancia está el elemento del suelo
          * @param direction Dirección inicial del elemento
          */
-        GridItem( ItemData* itemData, int cx, int cy, int z, const Direction& direction ) ;
+        GridItem( ItemData* itemData, int cx, int cy, int z, const Way& way ) ;
 
         virtual ~GridItem( ) ;
 

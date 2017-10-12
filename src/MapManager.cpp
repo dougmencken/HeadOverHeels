@@ -204,12 +204,12 @@ void MapManager::beginOldGameWithCharacter( const sgxml::player& data )
                                                                 true,
                                                                 nameOfCharacter,
                                                                 data.x (), data.y (), data.z (),
-                                                                Direction( data.direction() ), Direction( data.entry() ) );
+                                                                Way( data.direction() ), Way( data.entry() ) );
 
                         roomData->setVisited( true );
 
-                        Direction entry = static_cast< Direction >( data.entry() );
-                        if ( entry == JustWait )
+                        Way entry( data.entry() );
+                        if ( entry.toString() == "just wait" )
                         {
                                 // it’s the case of resume of saved game
                                 // show bubbles only for active player
@@ -227,7 +227,7 @@ void MapManager::beginOldGameWithCharacter( const sgxml::player& data )
                         if ( data.active() || this->activeRoom != room )
                         {
                                 room->activatePlayerByName( nameOfCharacter );
-                                room->getCamera()->turnOn( room->getMediator()->getActivePlayer(), Direction( data.entry() ) );
+                                room->getCamera()->turnOn( room->getMediator()->getActivePlayer(), Way( data.entry() ) );
                                 //// room->getCamera()->centerOn( room->getMediator()->getActivePlayer () );
 
                                 if ( data.active() )
@@ -260,7 +260,7 @@ void MapManager::binEveryRoom()
         this->activeRoom = 0;
 }
 
-Room* MapManager::changeRoom( const Direction& exit )
+Room* MapManager::changeRoom( const Way& wayOfExit )
 {
         activeRoom->deactivate();
         Room* previousRoom = this->activeRoom;
@@ -269,10 +269,10 @@ Room* MapManager::changeRoom( const Direction& exit )
         // get data of previous room
         MapRoomData* previousRoomData = findRoomData( previousRoom->getNameOfFileWithDataAboutRoom() );
 
-        Direction entry ;
+        Way wayOfEntry( Nowhere ) ;
 
         // search the map for next room and get way of entry to it
-        MapRoomData* nextRoomData = findRoomData( previousRoomData->findConnectedRoom( exit, &entry ) );
+        MapRoomData* nextRoomData = findRoomData( previousRoomData->findConnectedRoom( wayOfExit, &wayOfEntry ) );
 
         if ( nextRoomData == 0 )
         {
@@ -280,10 +280,10 @@ Room* MapManager::changeRoom( const Direction& exit )
         }
 
         std::cout << "player \"" << previousRoom->getMediator()->getActivePlayer()->getLabel() << "\" migrates"
-                        << " from room \"" << previousRoomData->getNameOfRoomFile() << "\" with way of exit \"" << wayToString( exit ) << "\""
-                        << " to room \"" << nextRoomData->getNameOfRoomFile() << "\" with way of entry \"" << wayToString( entry ) << "\"" << std::endl ;
+                        << " from room \"" << previousRoomData->getNameOfRoomFile() << "\" with way of exit \"" << wayOfExit.toString() << "\""
+                        << " to room \"" << nextRoomData->getNameOfRoomFile() << "\" with way of entry \"" << wayOfEntry.toString() << "\"" << std::endl ;
 
-        nextRoomData->adjustEntry( &entry, previousRoomData->getNameOfRoomFile() );
+        nextRoomData->adjustEntry( &wayOfEntry, previousRoomData->getNameOfRoomFile() );
 
         SoundManager::getInstance()->stopEverySound ();
 
@@ -295,14 +295,14 @@ Room* MapManager::changeRoom( const Direction& exit )
         const int exitY = oldItemOfRoamer->getY ();
         const int exitZ = oldItemOfRoamer->getZ ();
 
-        const Direction exitOrientation = oldItemOfRoamer->getDirection ();
+        const Way exitOrientation = oldItemOfRoamer->getOrientation ();
 
         // get limits of room
         // there’s possibility to exit and to enter new room in cases when player travels through floor, roof or via teletransport
-        int northBound = previousRoom->getBound( North );
-        int eastBound = previousRoom->getBound( East );
-        int southBound = previousRoom->getBound( South );
-        int westBound = previousRoom->getBound( West );
+        int northBound = previousRoom->getLimitAt( Way( "north" ) );
+        int eastBound = previousRoom->getLimitAt( Way( "east" ) );
+        int southBound = previousRoom->getLimitAt( Way( "south" ) );
+        int westBound = previousRoom->getLimitAt( Way( "west" ) );
 
         // remove active player from previous room
         previousRoom->removePlayerFromRoom( oldItemOfRoamer, true );
@@ -342,24 +342,24 @@ Room* MapManager::changeRoom( const Direction& exit )
         int entryZ = exitZ ;
 
         std::cout << "exit coordinates are x=" << exitX << " y=" << exitY << " z=" << exitZ << std::endl ;
-        newRoom->calculateEntryCoordinates( entry, dataOfRoamer->getWidthX(), dataOfRoamer->getWidthY(), northBound, eastBound, southBound, westBound, &entryX, &entryY, &entryZ );
+        newRoom->calculateEntryCoordinates( wayOfEntry, dataOfRoamer->getWidthX(), dataOfRoamer->getWidthY(), northBound, eastBound, southBound, westBound, &entryX, &entryY, &entryZ );
         std::cout << "entry coordinates are x=" << entryX << " y=" << entryY << " z=" << entryZ << std::endl ;
 
         // create player
         std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( isomot->getItemDataManager() ) );
-        if ( entry == ByTeleport || entry == ByTeleportToo )
+        if ( wayOfEntry.toString() == "via teleport" || wayOfEntry.toString() == "via second teleport" )
         {
                 entryZ = Top;
         }
 
-        PlayerItem* newItemOfRoamer = roomBuilder->createPlayerInRoom( newRoom, true, nameOfRoamer, entryX, entryY, entryZ, exitOrientation, entry );
+        PlayerItem* newItemOfRoamer = roomBuilder->createPlayerInRoom( newRoom, true, nameOfRoamer, entryX, entryY, entryZ, exitOrientation, wayOfEntry );
 
-        newItemOfRoamer->autoMoveOnEntry( entry );
+        newItemOfRoamer->autoMoveOnEntry( wayOfEntry );
 
         nextRoomData->setVisited( true );
 
         newRoom->activatePlayerByName( nameOfRoamer );
-        newRoom->getCamera()->turnOn( newRoom->getMediator()->getActivePlayer(), entry );
+        newRoom->getCamera()->turnOn( newRoom->getMediator()->getActivePlayer(), wayOfEntry );
 
         activeRoom = newRoom;
         activeRoom->activate();
@@ -381,7 +381,7 @@ Room* MapManager::rebuildRoom()
         std::string nameOfActivePlayer = oldRoom->getMediator()->getActivePlayer()->getLabel();
         std::string nameOfActivePlayerBeforeJoining = oldRoom->getMediator()->getLastActivePlayerBeforeJoining();
 
-        Direction direction = NoDirection;
+        Way theWay = Nowhere;
         PlayerItem* alivePlayer = 0;
 
         // for each player entered this room
@@ -405,8 +405,8 @@ Room* MapManager::rebuildRoom()
                                 int playerX = player->getX();
                                 int playerY = player->getY();
                                 int playerZ = player->getZ();
-                                Direction playerDirection = player->getDirection();
-                                Direction playerEntry = player->getDirectionOfEntry();
+                                Way playerOrientation = player->getOrientation();
+                                Way playerEntry = player->getWayOfEntry();
 
                                 // forget composite player
                                 oldRoom->removePlayerFromRoom( oldRoom->getMediator()->getActivePlayer(), true );
@@ -415,7 +415,7 @@ Room* MapManager::rebuildRoom()
                                 roomBuilder->createPlayerInRoom( oldRoom, true,
                                                                         nameOfActivePlayer,
                                                                         playerX, playerY, playerZ,
-                                                                        playerDirection, playerEntry );
+                                                                        playerOrientation, playerEntry );
 
                                 // update list of players and rewind iterator
                                 playersOnEntry = oldRoom->getPlayersWhoEnteredRoom ();
@@ -423,16 +423,16 @@ Room* MapManager::rebuildRoom()
                                 continue;
                         }
 
-                        direction = player->getDirection();
+                        theWay = player->getOrientation();
 
-                        Direction entry = player->getDirectionOfEntry();
+                        Way entry = player->getWayOfEntry();
 
                         // create player
                         alivePlayer = roomBuilder->createPlayerInRoom( newRoom,
                                                                         true,
                                                                         player->getLabel(),
                                                                         player->getX(), player->getY(), player->getZ(),
-                                                                        direction, entry );
+                                                                        theWay, entry );
 
                         alivePlayer->autoMoveOnEntry( entry );
                 }
@@ -464,7 +464,7 @@ Room* MapManager::rebuildRoom()
                         }
                 }
 
-                newRoom->getCamera()->turnOn( newRoom->getMediator()->getActivePlayer(), direction );
+                newRoom->getCamera()->turnOn( newRoom->getMediator()->getActivePlayer(), theWay );
 
                 activeRoom = newRoom;
                 activeRoom->activate();

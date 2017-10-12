@@ -13,6 +13,7 @@
 
 #include <utility>
 #include "Ism.hpp"
+#include "Way.hpp"
 
 
 namespace isomot
@@ -48,7 +49,7 @@ public:
         * @param player El jugador activo
         * @param entry Vía de entrada a la sala
         */
-        void turnOn ( PlayerItem* player, const Direction& entry ) ;
+        void turnOn ( PlayerItem* player, const Way& wayOfEntry ) ;
 
         /**
          * Centra la sala en pantalla

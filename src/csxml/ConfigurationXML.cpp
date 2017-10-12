@@ -301,22 +301,22 @@ namespace cxml
     this->swap_.set (swap);
   }
 
-  const keyboard::halt_type& keyboard::
-  halt () const
+  const keyboard::pause_type& keyboard::
+  pause () const
   {
-    return this->halt_.get ();
+    return this->pause_.get ();
   }
 
-  keyboard::halt_type& keyboard::
-  halt ()
+  keyboard::pause_type& keyboard::
+  pause ()
   {
-    return this->halt_.get ();
+    return this->pause_.get ();
   }
 
   void keyboard::
-  halt (const halt_type& halt)
+  pause (const pause_type& pause)
   {
-    this->halt_.set (halt);
+    this->pause_.set (pause);
   }
 
 
@@ -580,7 +580,7 @@ namespace cxml
             const doughnut_type& doughnut,
             const takeandjump_type& takeandjump,
             const swap_type& swap,
-            const halt_type& halt)
+            const pause_type& pause)
   : ::xml_schema::type (),
     movenorth_ (movenorth, ::xml_schema::flags (), this),
     movesouth_ (movesouth, ::xml_schema::flags (), this),
@@ -591,7 +591,7 @@ namespace cxml
     doughnut_ (doughnut, ::xml_schema::flags (), this),
     takeandjump_ (takeandjump, ::xml_schema::flags (), this),
     swap_ (swap, ::xml_schema::flags (), this),
-    halt_ (halt, ::xml_schema::flags (), this)
+    pause_ (pause, ::xml_schema::flags (), this)
   {
   }
 
@@ -609,7 +609,7 @@ namespace cxml
     doughnut_ (x.doughnut_, f, this),
     takeandjump_ (x.takeandjump_, f, this),
     swap_ (x.swap_, f, this),
-    halt_ (x.halt_, f, this)
+    pause_ (x.pause_, f, this)
   {
   }
 
@@ -627,7 +627,7 @@ namespace cxml
     doughnut_ (f, this),
     takeandjump_ (f, this),
     swap_ (f, this),
-    halt_ (f, this)
+    pause_ (f, this)
   {
     if ((f & ::xml_schema::flags::base) == 0)
     {
@@ -745,13 +745,13 @@ namespace cxml
         }
       }
 
-      // halt
+      // pause
       //
-      if (n.name () == "halt" && n.namespace_ ().empty ())
+      if (n.name () == "pause" && n.namespace_ ().empty ())
       {
-        if (!halt_.present ())
+        if (!pause_.present ())
         {
-          this->halt (halt_traits::create (i, f, this));
+          this->pause (pause_traits::create (i, f, this));
           continue;
         }
       }
@@ -1350,15 +1350,15 @@ namespace cxml
       s << i.swap ();
     }
 
-    // halt
+    // pause
     //
     {
       ::xercesc::DOMElement& s (
         ::xsd::cxx::xml::dom::create_element (
-          "halt",
+          "pause",
           e));
 
-      s << i.halt ();
+      s << i.pause ();
     }
   }
 

@@ -45,7 +45,7 @@ public:
         /**
          * Estado que mueve a un elemento
          * @param behavior Comportamiento usuario del estado de movimiento
-         * @param activity Direction of movement
+         * @param activity Way of movement
          * @param canFall Indica si el elemento puede caer. Si se dan las condiciones para la caída
          *                se producirá el cambio de estado correspondiente
          * @return true si se produjo el movimiento o el cambio de estado; o, false si hubo colisión

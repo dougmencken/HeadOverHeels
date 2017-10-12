@@ -60,7 +60,7 @@ public:
         /**
          * Change active room by way of exit chosen
          */
-        Room * changeRoom ( const Direction& exit ) ;
+        Room * changeRoom ( const Way& wayOfExit ) ;
 
         /**
          * Recreate active room

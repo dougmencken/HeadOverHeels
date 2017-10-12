@@ -39,7 +39,7 @@ bool Patrol::update ()
         switch ( activity )
         {
                 case Wait:
-                        changeDirection();
+                        changeOrientation();
                         break;
 
                 case MoveNorth:
@@ -57,7 +57,7 @@ bool Patrol::update ()
                                         // ¿Cambio de dirección?
                                         if ( changeTimer->getValue() > ( double( rand() % 1000 ) + 400.0 ) / 1000.0 )
                                         {
-                                                changeDirection();
+                                                changeOrientation();
                                                 changeTimer->reset();
                                         }
 
@@ -67,7 +67,7 @@ bool Patrol::update ()
                                         if ( ! whatToDo->move( this, &activity, true ) )
                                         {
                                                 // Fuerza el cambio de dirección
-                                                changeDirection();
+                                                changeOrientation();
 
                                                 // Emite el sonido de colisión
                                                 SoundManager::getInstance()->play( freeItem->getLabel(), Collision );
@@ -149,25 +149,25 @@ bool Patrol::update ()
         return !alive ;
 }
 
-void Patrol::changeDirection()
+void Patrol::changeOrientation()
 {
-        int direction = 0;
+        unsigned int orientation = 0;
 
         if ( getNameOfBehavior() == "behavior of random patroling in four primary directions" )
         {
-                direction = ( rand() % 4 );
+                orientation = ( rand() % 4 );
         }
         else if ( getNameOfBehavior() == "behavior of random patroling in four secondary directions" )
         {
-                direction = ( rand() % 4 ) + 4;
+                orientation = ( rand() % 4 ) + 4;
         }
         else if ( getNameOfBehavior() == "behavior of random patroling in eight directions" )
         {
-                direction = ( rand() % 8 );
+                orientation = ( rand() % 8 );
         }
 
         // change activity depending on value of calculated direction
-        switch ( static_cast< Direction >( direction ) )
+        switch ( orientation )
         {
                 case North:
                         activity = MoveNorth;

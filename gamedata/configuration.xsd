@@ -16,7 +16,7 @@
             <xsd:element name="doughnut" type="xsd:int"/>
             <xsd:element name="takeandjump" type="xsd:int"/>
             <xsd:element name="swap" type="xsd:int"/>
-            <xsd:element name="halt" type="xsd:int"/>
+            <xsd:element name="pause" type="xsd:int"/>
           </xsd:sequence>
         </xsd:complexType>
       </xsd:element>

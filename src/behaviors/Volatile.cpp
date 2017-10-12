@@ -176,7 +176,7 @@ bool Volatile::update ()
                                 FreeItem* freeItem = new FreeItem(
                                         bubblesData,
                                         item->getX(), item->getY(), item->getZ(),
-                                        NoDirection );
+                                        Nowhere );
 
                                 freeItem->assignBehavior( "behavior of disappearance in time", 0 );
                                 freeItem->setCollisionDetector( false );

@@ -1,6 +1,7 @@
 
 #include "OneWay.hpp"
 #include "Item.hpp"
+#include "ItemData.hpp"
 #include "FreeItem.hpp"
 #include "MoveKindOfActivity.hpp"
 #include "DisplaceKindOfActivity.hpp"
@@ -68,11 +69,9 @@ bool OneWay::update ()
                                                 SoundManager::getInstance()->play( freeItem->getLabel(), Collision );
                                         }
 
-                                        // Se pone a cero el cronómetro para el siguiente ciclo
                                         speedTimer->reset();
                                 }
 
-                                // Anima el elemento
                                 freeItem->animate();
                         }
                         break;
@@ -126,7 +125,6 @@ bool OneWay::update ()
                                                 activity = Wait;
                                         }
 
-                                        // Se pone a cero el cronómetro para el siguiente ciclo
                                         fallTimer->reset();
                                 }
                         }
@@ -154,7 +152,7 @@ bool OneWay::update ()
 
 void OneWay::start()
 {
-        switch ( dynamic_cast< FreeItem * >( this->item )->getDirection() )
+        switch ( this->item->getOrientation().getIntegerOfWay () )
         {
                 case North:
                         activity = MoveNorth;
@@ -181,40 +179,26 @@ void OneWay::start()
 
 void OneWay::turnRound()
 {
-        FreeItem * freeItem = dynamic_cast< FreeItem * >( this->item );
-
-        switch ( freeItem->getDirection() )
+        switch ( this->item->getOrientation().getIntegerOfWay () )
         {
                 case North:
                         activity = MoveSouth;
-                        if ( freeItem->countDirectionFrames() > 1 )
-                        {
-                                freeItem->changeDirection( South );
-                        }
+                        this->item->changeOrientation( South );
                         break;
 
                 case South:
                         activity = MoveNorth;
-                        if ( freeItem->countDirectionFrames() > 1 )
-                        {
-                                freeItem->changeDirection( North );
-                        }
+                        this->item->changeOrientation( North );
                         break;
 
                 case East:
                         activity = MoveWest;
-                        if ( freeItem->countDirectionFrames() > 1 )
-                        {
-                                freeItem->changeDirection( West );
-                        }
+                        this->item->changeOrientation( West );
                         break;
 
                 case West:
                         activity = MoveEast;
-                        if ( freeItem->countDirectionFrames() > 1 )
-                        {
-                                freeItem->changeDirection( East );
-                        }
+                        this->item->changeOrientation( East );
                         break;
 
                 default:

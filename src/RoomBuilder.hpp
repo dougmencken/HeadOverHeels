@@ -17,6 +17,7 @@
 #include <allegro.h>
 #include "csxml/RoomXML.hpp"
 #include "Ism.hpp"
+#include "Way.hpp"
 
 
 namespace isomot
@@ -62,7 +63,7 @@ public:
         PlayerItem * createPlayerInTheSameRoom ( bool justEntered,
                                                         const std::string& nameOfPlayer,
                                                         int x, int y, int z,
-                                                        const Direction& direction, const Direction& entry = JustWait ) ;
+                                                        const Way& orientation, const Way& wayOfEntry = JustWait ) ;
 
         /**
          * Create player in given room
@@ -72,11 +73,11 @@ public:
         PlayerItem * createPlayerInRoom ( Room* room, bool justEntered,
                                                         const std::string& nameOfPlayer,
                                                         int x, int y, int z,
-                                                        const Direction& direction, const Direction& entry = JustWait );
+                                                        const Way& orientation, const Way& wayOfEntry = JustWait );
 
-        static int getXCenterOfRoom ( ItemData* playerData, Room* theRoom ) ;
+        static int getXCenterOfRoom ( ItemData* data, Room* theRoom ) ;
 
-        static int getYCenterOfRoom ( ItemData* playerData, Room* theRoom ) ;
+        static int getYCenterOfRoom ( ItemData* data, Room* theRoom ) ;
 
 private:
 

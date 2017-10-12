@@ -39,10 +39,9 @@ bool Drive::update ()
         switch ( activity )
         {
                 case Wait:
-                        // Si está en marcha sigue avanzando según su orientación actual
                         if ( running )
                         {
-                                switch ( freeItem->getDirection() )
+                                switch ( freeItem->getOrientation().getIntegerOfWay() )
                                 {
                                         case North:
                                                 changeActivityOfItem( MoveNorth );
@@ -78,7 +77,7 @@ bool Drive::update ()
                                                         playerFound = true;
                                                         running = true;
 
-                                                        switch ( dynamic_cast< PlayerItem * >( item )->getDirection() )
+                                                        switch ( item->getOrientation().getIntegerOfWay () )
                                                         {
                                                                 case North:
                                                                         changeActivityOfItem( MoveNorth );

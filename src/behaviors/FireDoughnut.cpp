@@ -30,9 +30,8 @@ bool FireDoughnut::update ()
 
         switch ( activity )
         {
-                // El estado inicial establece la dirección
                 case Wait:
-                        switch ( freeItem->getDirection() )
+                        switch ( this->item->getOrientation().getIntegerOfWay () )
                         {
                                 case North:
                                         activity = MoveNorth;
