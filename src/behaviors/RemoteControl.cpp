@@ -162,7 +162,6 @@ bool RemoteControl::update ()
                                         activity = Wait;
                                 }
 
-                                // Se pone a cero el cronómetro para el siguiente ciclo
                                 fallTimer->reset();
                         }
                         break;

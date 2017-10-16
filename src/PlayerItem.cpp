@@ -351,9 +351,7 @@ bool PlayerItem::updatePosition( int newX, int newY, int newZ, const Coordinate&
                 this->x = oldPlayerItem.getX();
                 this->y = oldPlayerItem.getY();
                 this->z = oldPlayerItem.getZ();
-                this->dataOfItem->setWidthX( oldPlayerItem.getWidthX() );
-                this->dataOfItem->setWidthY( oldPlayerItem.getWidthY() );
-                this->dataOfItem->setHeight( oldPlayerItem.getHeight() );
+
                 this->offset = oldPlayerItem.getOffset();
         }
 
@@ -546,7 +544,7 @@ void PlayerItem::wait ()
         {
                 // get waiting frame by orientation of item
                 unsigned int orientOccident = ( orientation.getIntegerOfWay() == Nowhere ? 0 : orientation.getIntegerOfWay() );
-                int currentFrame = ( getDataOfItem()->howManyMotions() - getDataOfItem()->howManyExtraFrames() ) / getDataOfItem()->howManyDirectionFrames() * orientOccident ;
+                int currentFrame = ( getDataOfItem()->howManyMotions() - getDataOfItem()->howManyExtraFrames() ) / getDataOfItem()->howManyFramesForOrientations() * orientOccident ;
 
                 // if images differ
                 if ( this->rawImage != 0 && this->rawImage != getDataOfItem()->getMotionAt( currentFrame ) )

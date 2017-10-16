@@ -30,7 +30,7 @@ Item::Item( ItemData* data, int z, const Way& way )
         this->offset.first = this->offset.second = 0;
 
         // item with more than one frame per direction has animation
-        if ( ( data->howManyMotions() - data->howManyExtraFrames() ) / data->howManyDirectionFrames() > 1 )
+        if ( ( data->howManyMotions() - data->howManyExtraFrames() ) / data->howManyFramesForOrientations() > 1 )
         {
                 motionTimer.start();
         }
@@ -86,7 +86,7 @@ bool Item::animate()
         bool cycle = false;
 
         // item with more than one frame per direction has animation
-        if ( ( dataOfItem->howManyMotions() - dataOfItem->howManyExtraFrames() ) / dataOfItem->howManyDirectionFrames() > 1 )
+        if ( ( dataOfItem->howManyMotions() - dataOfItem->howManyExtraFrames() ) / dataOfItem->howManyFramesForOrientations() > 1 )
         {
                 // is it time to change frames
                 if ( motionTimer.getValue() > dataOfItem->getDelayBetweenFrames() )
@@ -111,9 +111,9 @@ bool Item::animate()
                         }
 
                         // which frame to show yet
-                        int framesNumber = ( dataOfItem->howManyMotions() - dataOfItem->howManyExtraFrames() ) / dataOfItem->howManyDirectionFrames();
+                        int framesNumber = ( dataOfItem->howManyMotions() - dataOfItem->howManyExtraFrames() ) / dataOfItem->howManyFramesForOrientations();
                         unsigned int orientOccident = ( orientation.getIntegerOfWay() == Nowhere ? 0 : orientation.getIntegerOfWay() );
-                        int currentFrame = dataOfItem->getFrameAt( frameIndex ) + ( dataOfItem->howManyDirectionFrames() > 1 ? framesNumber * orientOccident : 0 );
+                        int currentFrame = dataOfItem->getFrameAt( frameIndex ) + ( dataOfItem->howManyFramesForOrientations() > 1 ? framesNumber * orientOccident : 0 );
 
                         // change frame of animation
                         if ( this->rawImage != 0 && this->rawImage != dataOfItem->getMotionAt( currentFrame ) )
@@ -152,21 +152,21 @@ void Item::changeOrientation( const Way& way )
                 return;
         }
 
-        // direction is changed only when item has different frames for different directions
-        if ( dataOfItem->howManyDirectionFrames() > 1 )
+        // change orientation only when item has different frames for different directions
+        if ( dataOfItem->howManyFramesForOrientations() > 1 )
         {
                 // get frame for new direction
-                unsigned int orientOccident = ( orientation.getIntegerOfWay() == Nowhere ? 0 : orientation.getIntegerOfWay() );
-                unsigned int currentFrame = ( ( dataOfItem->howManyMotions() - dataOfItem->howManyExtraFrames() ) / dataOfItem->howManyDirectionFrames() ) * orientOccident;
+                unsigned int orientOccident = ( way.getIntegerOfWay() == Nowhere ? 0 : way.getIntegerOfWay() );
+                unsigned int frame = ( ( dataOfItem->howManyMotions() - dataOfItem->howManyExtraFrames() ) / dataOfItem->howManyFramesForOrientations() ) * orientOccident;
 
-                if ( this->rawImage != 0 && currentFrame < dataOfItem->howManyMotions() && this->rawImage != dataOfItem->getMotionAt( currentFrame ) )
+                if ( this->rawImage != 0 && frame < dataOfItem->howManyMotions() && this->rawImage != dataOfItem->getMotionAt( frame ) )
                 {
                         this->orientation = way;
 
-                        changeImage( dataOfItem->getMotionAt( currentFrame ) );
+                        changeImage( dataOfItem->getMotionAt( frame ) );
 
                         if ( this->shadow != 0 )
-                                changeShadow( dataOfItem->getShadowAt( currentFrame ) );
+                                changeShadow( dataOfItem->getShadowAt( frame ) );
                 }
         }
 }
@@ -287,9 +287,9 @@ bool Item::isMortal() const
         return dataOfItem->isMortal() ;
 }
 
-unsigned char Item::countDirectionFrames() const
+unsigned short Item::howManyFramesForOrientations() const
 {
-        return dataOfItem->howManyDirectionFrames() ;
+        return dataOfItem->howManyFramesForOrientations() ;
 }
 
 double Item::getSpeed() const

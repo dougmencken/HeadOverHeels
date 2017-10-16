@@ -21,9 +21,9 @@ FreeItem::FreeItem( ItemData* itemData, int x, int y, int z, const Way& way )
         this->anchor = 0;
 
         // init frames
-        int howManyFrames = ( getDataOfItem()->howManyMotions() - getDataOfItem()->howManyExtraFrames() ) / getDataOfItem()->howManyDirectionFrames() ;
+        int howManyFrames = ( getDataOfItem()->howManyMotions() - getDataOfItem()->howManyExtraFrames() ) / getDataOfItem()->howManyFramesForOrientations() ;
         unsigned int orientation = ( way.getIntegerOfWay() == Nowhere ? 0 : way.getIntegerOfWay() );
-        int currentFrame = ( getDataOfItem()->howManyDirectionFrames() > 1 ?
+        int currentFrame = ( getDataOfItem()->howManyFramesForOrientations() > 1 ?
                                         getDataOfItem()->getFrameAt( getIndexOfFrame() ) + howManyFrames * orientation :
                                         getDataOfItem()->getFrameAt( 0 ) );
 
@@ -725,10 +725,6 @@ bool FreeItem::updatePosition( int newX, int newY, int newZ, const Coordinate& w
                 this->x = oldFreeItem.getX();
                 this->y = oldFreeItem.getY();
                 this->z = oldFreeItem.getZ();
-
-                this->dataOfItem->setWidthX( oldFreeItem.getWidthX() );
-                this->dataOfItem->setWidthY( oldFreeItem.getWidthY() );
-                this->dataOfItem->setHeight( oldFreeItem.getHeight() );
 
                 this->offset = oldFreeItem.getOffset();
         }

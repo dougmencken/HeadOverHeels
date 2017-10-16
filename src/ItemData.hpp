@@ -80,7 +80,7 @@ public:
 
         bool isMortal() const {  return mortal ;  }
 
-        unsigned char howManyDirectionFrames () const {  return directionFrames ;  }
+        unsigned short howManyFramesForOrientations () const {  return orientationFrames ;  }
 
         unsigned int howManyExtraFrames () const {  return extraFrames ;  }
 
@@ -132,10 +132,9 @@ private:
         double speed ;
 
        /**
-        * Indica cuántos fotogramas diferentes tiene el elemento para cada una de las direcciones
-        * posibles: norte, sur, este y oeste. Los valores posibles son 1, 2 y 4
+        * How many frames for orientations
         */
-        unsigned char directionFrames ;
+        unsigned short orientationFrames ;
 
        /**
         * Time in milliseconds to show each frame of animation

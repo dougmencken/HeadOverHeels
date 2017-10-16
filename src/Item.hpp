@@ -286,11 +286,13 @@ public:
         bool isMortal () const ;
 
         /**
-         * Cuántos fotogramas diferentes tiene el elemento para cada una de las direcciones posibles ~
-         * norte, sur, este y oeste
-         * @return 1, 2 ó 4
+         * How many different frames has item for four orientations ~
+         * south, west, north, and east
+         * @return 1 when there’s only one orientation,
+         *         2 for frames of south and west, or
+         *         4 for different frames of all of them
          */
-        unsigned char countDirectionFrames () const ;
+        unsigned short howManyFramesForOrientations () const ;
 
         /**
          * Tiempo en segundos necesario para que el elemento se mueva

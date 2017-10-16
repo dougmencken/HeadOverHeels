@@ -38,7 +38,7 @@ void ItemDataManager::loadItems ()
                         ItemData* item = new ItemData ();
 
                         item->label = ( *i ).label();                           // unique name of this item
-                        item->directionFrames = ( *i ).directionFrames();       // number of frames for this direction of item
+                        item->orientationFrames = ( *i ).directionFrames();     // number of frames for orientations of this item
                         item->mortal = ( *i ).mortal();                         // offensive or harmless
                         item->weight = ( *i ).weight();                         // how long, in milliseconds, it falls
                         item->delayBetweenFrames = ( *i ).framesDelay();        // delay, in milliseconds, between frames in animation sequence

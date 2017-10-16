@@ -19,7 +19,7 @@ GridItem::GridItem( ItemData* itemData, int cx, int cy, int z, const Way& way )
 
         unsigned int orientation = way.getIntegerOfWay();
         if ( orientation == Nowhere ) orientation = 0;
-        unsigned int position = itemData->howManyMotions() / itemData->howManyDirectionFrames() * orientation;
+        unsigned int position = itemData->howManyMotions() / itemData->howManyFramesForOrientations() * orientation;
         this->rawImage = itemData->getMotionAt( position );
 
         // may have no shadow
@@ -560,7 +560,7 @@ bool GridItem::updatePosition( int newValue, const Coordinate& whatToChange, con
         if ( collisionFound )
         {
                 this->z = oldGridItem.getZ();
-                this->dataOfItem->setHeight( oldGridItem.getHeight() );
+
                 this->offset.second = oldGridItem.getOffsetY();
         }
 

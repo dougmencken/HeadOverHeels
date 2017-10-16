@@ -13,7 +13,7 @@ ItemData::ItemData( ) :
         height( 0 ) ,
         weight( 0 ) ,
         speed( 0.0 ) ,
-        directionFrames( 0 ) ,
+        orientationFrames( 0 ) ,
         delayBetweenFrames( 0.0 ) ,
         widthOfFrame( 0 ) ,
         heightOfFrame( 0 ) ,
@@ -43,7 +43,7 @@ ItemData::~ItemData( )
         copyOfData->height = data->height;
         copyOfData->weight = data->weight;
         copyOfData->speed = data->speed;
-        copyOfData->directionFrames = data->directionFrames;
+        copyOfData->orientationFrames = data->orientationFrames;
         copyOfData->delayBetweenFrames = data->delayBetweenFrames;
         copyOfData->widthOfFrame = data->widthOfFrame;
         copyOfData->heightOfFrame = data->heightOfFrame;
