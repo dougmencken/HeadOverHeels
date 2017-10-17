@@ -336,6 +336,7 @@ BITMAP* Isomot::update()
         if ( ! this->isEndRoom && InputManager::getInstance()->swap() )
         {
                 activeRoom->getMediator()->getActivePlayer()->wait(); // stop active player
+
                 if ( activeRoom->getMediator()->getActivePlayer()->getBehavior()->getActivityOfItem() == Wait )
                 {
                         // swap in the same room or between different rooms
@@ -344,16 +345,15 @@ BITMAP* Isomot::update()
                                 activeRoom = mapManager->swapRoom();
                         }
                 }
-                // don’t repeat the key
+
                 InputManager::getInstance()->noRepeat( "swap" );
         }
 
-        if ( activeRoom->isActive() )
+        if ( activeRoom->getWayOfExit().toString() == "no exit" )
         {
                 activeRoom->draw();
         }
-        // when "active" room is in fact inactive, there’s a change of room
-        // or active player lost its life
+        // there’s a change of room or active player lost its life
         else
         {
                 Way exit = activeRoom->getWayOfExit();
@@ -362,7 +362,7 @@ BITMAP* Isomot::update()
                 {
                         PlayerItem* player = activeRoom->getMediator()->getActivePlayer();
 
-                        if ( player->getLives() != 0 || ( player->getLabel() == "headoverheels" && player->getLives() == 0 ) )
+                        if ( player->getLives() != 0 || player->getLabel() == "headoverheels" )
                         {
                                 activeRoom = mapManager->rebuildRoom();
                         }
@@ -376,12 +376,14 @@ BITMAP* Isomot::update()
                 }
                 else
                 {
-                        activeRoom = mapManager->changeRoom( exit );
+                        Room* newRoom = mapManager->changeRoom( exit );
 
-                        if ( activeRoom != 0 )
+                        if ( newRoom != 0 && newRoom != activeRoom )
                         {
-                                playTuneForScenery( activeRoom->getScenery () );
+                                playTuneForScenery( newRoom->getScenery () );
                         }
+
+                        activeRoom = newRoom;
                 }
         }
 
@@ -412,9 +414,10 @@ BITMAP* Isomot::update()
                         this->updateEndRoom();
                 }
         }
-        // there’s no active room, game over
+        // there’s no active room
         else
         {
+                std::cout << "no room, game over" << std::endl ;
                 destroy_bitmap( this->view );
                 this->view = 0;
         }

@@ -13,9 +13,7 @@
 
 #include <string>
 #include <list>
-#include <algorithm>
 #include <iostream>
-#include <functional>
 #include <allegro.h>
 #include "MapRoomData.hpp"
 #include "csxml/MapXML.hpp"
@@ -100,18 +98,16 @@ public:
         void resetVisitedRooms () ;
 
         /**
-         * Busca los datos de una sala en el mapa en la lista
-         * @param room El nombre del archivo de la sala
-         * @return Un registro con los datos de la sala en el mapa ó 0 si la búsqueda fracasó
+         * @param room name of file for room
          */
-        MapRoomData* findRoomData ( const std::string& room ) ;
+        MapRoomData * findRoomData ( const std::string& room ) ;
 
         /**
-         * Busca una sala en el conjunto de salas creadas
-         * @param room El nombre del archivo de la sala
-         * @return Una sala ó 0 si la búsqueda fracasó
+         * Look for room in list of created rooms
+         * @param room name of file for room
+         * @return found room or 0 if it’s absent
          */
-        Room* findRoom ( const std::string& room ) ;
+        Room * findRoom ( const std::string& room ) ;
 
 protected:
 
@@ -132,7 +128,7 @@ protected:
         /**
          * Data of every room on map
          */
-        std::list < MapRoomData > mapData ;
+        std::list < MapRoomData * > theMap ;
 
 public:
 
@@ -151,19 +147,19 @@ public:
 };
 
 
-class EqualMapRoomData : public std::binary_function< MapRoomData, std::string, bool >
+class EqualMapRoomData : public std::binary_function< MapRoomData *, std::string, bool >
 {
 
 public:
-        bool operator()( const MapRoomData& mapData, const std::string& room ) const;
+        bool operator()( const MapRoomData * mapData, const std::string& room ) const;
 
 };
 
-class EqualRoom : public std::binary_function< Room*, std::string, bool >
+class EqualRoom : public std::binary_function< Room *, std::string, bool >
 {
 
 public:
-        bool operator()( Room* room, const std::string& nameOfRoom ) const;
+        bool operator()( const Room * room, const std::string& nameOfRoom ) const;
 
 };
 

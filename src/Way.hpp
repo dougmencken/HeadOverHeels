@@ -35,8 +35,7 @@ namespace isomot
         const unsigned int ByTeleport = 24 ;            // to another room via teleport
         const unsigned int ByTeleportToo = 25 ;         // to another room via second teleport
 
-        const unsigned int NoEntry = 42 ;               // there’s no entrance to this room
-        const unsigned int NoExit = 43 ;                // there’s no exit from this room
+        const unsigned int NoExit = 44 ;                // player doesn’t exit from this room
 
         const unsigned int Restart = 51 ;               // restart room when character loses its life
 

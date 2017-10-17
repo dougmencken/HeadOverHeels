@@ -158,8 +158,10 @@ void Mediator::update()
         {
                 if ( ( *p )->getWayOfExit().toString() != "no exit" )
                 {
+                        // transfer way of exit from player to room
                         room->setWayOfExit( ( *p )->getWayOfExit() );
-                        room->setActive( false );
+                        ( *p )->setWayOfExit( NoExit );
+                        break;
                 }
         }
 

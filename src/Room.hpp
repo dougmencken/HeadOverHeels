@@ -347,12 +347,6 @@ public:
         std::string getKindOfFloor () const {  return kindOfFloor ;  }
 
        /**
-        * Activa o desactiva la sala. Una sala desactivada no se dibuja
-        * @return true para comenzar a dibujar la sala o false en caso contrario
-        */
-        void setActive ( const bool active ) {  this->active = active ;  }
-
-       /**
         * Is this room active
         */
         bool isActive () const {  return active ;  }

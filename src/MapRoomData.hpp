@@ -66,102 +66,79 @@ private:
         bool visited ;
 
         /**
-         * Nombre completo del archivo de la sala situada al norte
-         * Una cadena vacía indica que no hay sala en esa dirección
+         * File for room to the north of this room, empty string if no room there
          */
         std::string north ;
 
         /**
-         * Nombre completo del archivo de la sala situada al sur
-         * Una cadena vacía indica que no hay sala en esa dirección
+         * File for room to the south of this room, empty string if no room there
          */
         std::string south ;
 
         /**
-         * Nombre completo del archivo de la sala situada al este
-         * Una cadena vacía indica que no hay sala en esa dirección
+         * File for room to the east of this room, empty string if no room there
          */
         std::string east ;
 
         /**
-         * Nombre completo del archivo de la sala situada al oeste
-         * Una cadena vacía indica que no hay sala en esa dirección
+         * File for room to the west of this room, empty string if no room there
          */
         std::string west ;
 
         /**
-         * Nombre completo del archivo de la sala situada debajo
-         * La sala no puede tener suelo
-         * Una cadena vacía indica que no hay sala en esa dirección
+         * File for room below this room, empty string if no room there
          */
         std::string floor ;
 
         /**
-         * Nombre completo del archivo de la sala situada encima
-         * La sala superior no puede tener suelo
-         * Una cadena vacía indica que no hay sala en esa dirección
+         * File for room above this room, empty string if no room there
          */
         std::string roof ;
 
         /**
-         * Nombre completo del archivo de la sala a la que lleva el telepuerto
-         * La sala destino debe tener un telepuerto en la misma posición que la actual
-         * Una cadena vacía indica que no hay sala en esa dirección
+         * File for room to teleport from this room, empty string when no room to teleport to
          */
         std::string teleport ;
 
-        /**
-         * Nombre completo del archivo de la sala a la que lleva el segundo telepuerto
-         * La sala destino debe tener un telepuerto en la misma posición que la actual
-         * Una cadena vacía indica que no hay sala en esa dirección
-         */
         std::string teleport2 ;
 
         /**
-         * Nombre completo del archivo de la sala situada en la posición norte-este
-         * Sólo tiene sentido en sala triples o cuádruples. Una cadena vacía indica que no hay sala en esa dirección
+         * File for room located at north-east for triple or quadruple rooms, or empty string
          */
         std::string northEast ;
 
         /**
-         * Nombre completo del archivo de la sala situada en la posición norte-oeste
-         * Sólo tiene sentido en sala triples o cuádruples. Una cadena vacía indica que no hay sala en esa dirección
+         * File for room located at north-west for triple or quadruple rooms, or empty string
          */
         std::string northWest ;
 
         /**
-         * Nombre completo del archivo de la sala situada en la posición sur-este
-         * Sólo tiene sentido en sala triples o cuádruples. Una cadena vacía indica que no hay sala en esa dirección
+         * File for room located at south-east for triple or quadruple rooms, or empty string
          */
         std::string southEast ;
 
         /**
-         * Nombre completo del archivo de la sala situada en la posición sur-oeste
-         * Sólo tiene sentido en sala triples o cuádruples. Una cadena vacía indica que no hay sala en esa dirección
+         * File for room located at south-west for triple or quadruple rooms, or empty string
          */
         std::string southWest ;
 
         /**
-         * Nombre completo del archivo de la sala situada en la posición este-norte
-         * Sólo tiene sentido en sala triples o cuádruples. Una cadena vacía indica que no hay sala en esa dirección
+         * File for room located at east-north for triple or quadruple rooms, or empty string
          */
         std::string eastNorth ;
 
         /**
-         * Nombre completo del archivo de la sala situada en la posición este-sur
-         * Sólo tiene sentido en sala triples o cuádruples. Una cadena vacía indica que no hay sala en esa dirección
+         * File for room located at east-south for triple or quadruple rooms, or empty string
          */
         std::string eastSouth ;
 
         /**
-         * Nombre completo del archivo de la sala situada en la posición oeste-norte
-         * Sólo tiene sentido en sala triples o cuádruples. Una cadena vacía indica que no hay sala en esa dirección
+         * File for room located at west-north for triple or quadruple rooms, or empty string
          */
         std::string westNorth ;
 
         /**
-         * Nombre completo del archivo de la sala situada en la posición oeste-sur
-         * Sólo tiene sentido en sala triples o cuádruples. Una cadena vacía indica que no hay sala en esa dirección
+         * File for room located at west-south for triple or quadruple rooms, or empty string
          */
         std::string westSouth ;
 

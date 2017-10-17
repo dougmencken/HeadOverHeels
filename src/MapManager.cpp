@@ -37,13 +37,12 @@ void MapManager::loadMap ()
 
         try
         {
-                // read from the XML file
+                // read from XML file
                 std::auto_ptr< mxml::MapXML > mapXML( mxml::map( ( isomot::sharePath() + "map/" + fileName ).c_str () ) );
 
                 for ( mxml::MapXML::room_const_iterator i = mapXML->room().begin (); i != mapXML->room().end (); ++i )
                 {
-                        // Se crea la sala a partir del nombre de su archivo XML
-                        std::auto_ptr< MapRoomData > roomData( new MapRoomData( ( *i ).file() ) );
+                        MapRoomData* roomData = new MapRoomData( ( *i ).file() );
 
                         if ( ( *i ).north().present() )
                                 roomData->setNorth( ( *i ).north().get() );             // connection on north
@@ -94,7 +93,7 @@ void MapManager::loadMap ()
                                 roomData->setWestSouth( ( *i ).west_south().get() );    // west-south connection
 
                         // add data for this room to the list
-                        this->mapData.push_back( *roomData.get() );
+                        this->theMap.push_back( roomData );
                 }
         }
         catch ( const xml_schema::exception& e )
@@ -262,24 +261,27 @@ void MapManager::binEveryRoom()
 
 Room* MapManager::changeRoom( const Way& wayOfExit )
 {
-        activeRoom->deactivate();
         Room* previousRoom = this->activeRoom;
-        this->activeRoom = 0;
+        previousRoom->setWayOfExit( Way( "no exit" ) );
 
         // get data of previous room
         MapRoomData* previousRoomData = findRoomData( previousRoom->getNameOfFileWithDataAboutRoom() );
 
-        Way wayOfEntry( Nowhere ) ;
+        Way wayOfEntry( JustWait ) ;
 
         // search the map for next room and get way of entry to it
         MapRoomData* nextRoomData = findRoomData( previousRoomData->findConnectedRoom( wayOfExit, &wayOfEntry ) );
 
         if ( nextRoomData == 0 )
         {
-                return 0;
+                // no room there, so continue with current one
+                return previousRoom ;
         }
 
-        std::cout << "player \"" << previousRoom->getMediator()->getActivePlayer()->getLabel() << "\" migrates"
+        activeRoom->deactivate();
+        this->activeRoom = 0;
+
+        std::cout << "\"" << previousRoom->getMediator()->getActivePlayer()->getLabel() << "\" migrates"
                         << " from room \"" << previousRoomData->getNameOfRoomFile() << "\" with way of exit \"" << wayOfExit.toString() << "\""
                         << " to room \"" << nextRoomData->getNameOfRoomFile() << "\" with way of entry \"" << wayOfEntry.toString() << "\"" << std::endl ;
 
@@ -322,8 +324,7 @@ Room* MapManager::changeRoom( const Way& wayOfExit )
         if ( newRoom != 0 )
         {
                 std::cout << "room \"" << newRoom->getNameOfFileWithDataAboutRoom() << "\" is already created" << std::endl ;
-
-                newRoom->setActive( true );
+                newRoom->setWayOfExit( Way( "no exit" ) );
         }
         else
         {
@@ -434,7 +435,8 @@ Room* MapManager::rebuildRoom()
                                                                         player->getX(), player->getY(), player->getZ(),
                                                                         theWay, entry );
 
-                        alivePlayer->autoMoveOnEntry( entry );
+                        if ( alivePlayer != 0 )
+                                alivePlayer->autoMoveOnEntry( entry );
                 }
 
                 it++ ; // next player
@@ -572,21 +574,21 @@ void MapManager::readVisitedSequence( sgxml::exploredRooms::visited_sequence& vi
 
         for ( sgxml::exploredRooms::visited_const_iterator i = visitedSequence.begin (); i != visitedSequence.end (); ++i )
         {
-                std::list< MapRoomData >::iterator m = std::find_if( mapData.begin(), mapData.end(), std::bind2nd( EqualMapRoomData(), ( *i ).filename() ) );
-                if ( m != mapData.end() )
+                std::list< MapRoomData * >::iterator m = std::find_if( theMap.begin(), theMap.end(), std::bind2nd( EqualMapRoomData(), ( *i ).filename() ) );
+                if ( m != theMap.end() )
                 {
-                        ( *m ).setVisited( true );
+                        ( *m )->setVisited( true );
                 }
         }
 }
 
 void MapManager::storeVisitedSequence( sgxml::exploredRooms::visited_sequence& visitedSequence )
 {
-        for ( std::list< MapRoomData >::iterator i = this->mapData.begin (); i != this->mapData.end (); ++i )
+        for ( std::list< MapRoomData * >::iterator i = this->theMap.begin (); i != this->theMap.end (); ++i )
         {
-                if ( ( *i ).isVisited() )
+                if ( ( *i )->isVisited() )
                 {
-                        visitedSequence.push_back( sgxml::visited( ( *i ).getNameOfRoomFile() ) );
+                        visitedSequence.push_back( sgxml::visited( ( *i )->getNameOfRoomFile() ) );
                 }
         }
 }
@@ -595,9 +597,9 @@ unsigned int MapManager::countVisitedRooms()
 {
         unsigned int number = 0;
 
-        for ( std::list< MapRoomData >::iterator i = this->mapData.begin (); i != this->mapData.end (); ++i )
+        for ( std::list< MapRoomData * >::iterator i = this->theMap.begin (); i != this->theMap.end (); ++i )
         {
-                number += ( *i ).isVisited() ? 1 : 0;
+                number += ( *i )->isVisited() ? 1 : 0;
         }
 
         return number;
@@ -605,16 +607,21 @@ unsigned int MapManager::countVisitedRooms()
 
 void MapManager::resetVisitedRooms()
 {
-        for ( std::list< MapRoomData >::iterator i = this->mapData.begin (); i != this->mapData.end (); ++i )
+        for ( std::list< MapRoomData * >::iterator i = this->theMap.begin (); i != this->theMap.end (); ++i )
         {
-                ( *i ).setVisited( false );
+                ( *i )->setVisited( false );
         }
 }
 
 MapRoomData* MapManager::findRoomData( const std::string& room )
 {
-        std::list< MapRoomData >::iterator i = std::find_if( mapData.begin (), mapData.end (), std::bind2nd( EqualMapRoomData(), room ) );
-        MapRoomData* data = ( i != mapData.end() ? static_cast< MapRoomData* >( &( *i ) ) : 0 );
+        if ( room.empty() )
+                return 0;
+
+        /* std::cout << "lookin’ for data of room \"" << room << "\"" << std::endl ; */
+
+        std::list< MapRoomData * >::iterator i = std::find_if( theMap.begin (), theMap.end (), std::bind2nd( EqualMapRoomData(), room ) );
+        MapRoomData* data = ( i != theMap.end() ? *i : 0 );
 
         return data;
 }
@@ -638,12 +645,12 @@ Room* MapManager::getRoomOfInactivePlayer()
         return room;
 }
 
-bool EqualMapRoomData::operator()( const MapRoomData& mapData, const std::string& room ) const
+bool EqualMapRoomData::operator()( const MapRoomData* mapData, const std::string& room ) const
 {
-        return ( mapData.getNameOfRoomFile().compare( room ) == 0 );
+        return ( mapData->getNameOfRoomFile().compare( room ) == 0 );
 }
 
-bool EqualRoom::operator()( Room* room, const std::string& nameOfRoom ) const
+bool EqualRoom::operator()( const Room* room, const std::string& nameOfRoom ) const
 {
         return ( room->getNameOfFileWithDataAboutRoom().compare( nameOfRoom ) == 0 );
 }
