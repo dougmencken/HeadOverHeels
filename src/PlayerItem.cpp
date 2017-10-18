@@ -25,6 +25,7 @@ PlayerItem::PlayerItem( ItemData* itemData, int x, int y, int z, const Way& way 
         , shieldTime( 25.0 )
         , takenItemData( 0 )
         , takenItemImage( 0 )
+        , originalDataOfItem( itemData )
 {
 
 }
@@ -43,6 +44,7 @@ PlayerItem::PlayerItem( const PlayerItem& playerItem )
         , shieldTime( playerItem.shieldTime )
         , takenItemData( 0 )
         , takenItemImage( 0 )
+        , originalDataOfItem( playerItem.getOriginalDataOfItem() )
 {
 
 }
@@ -537,23 +539,23 @@ void PlayerItem::wait ()
 {
         ActivityOfItem activity = this->behavior->getActivityOfItem();
 
-        // Si el jugador se está teletransportando o está muriendo no se podrá detener
+        // don’t wait while teleporting or loosing life
         if ( activity != BeginWayOutTeletransport && activity != WayOutTeletransport &&
                 activity != BeginWayInTeletransport && activity != WayInTeletransport &&
                 activity != MeetMortalItem && activity != Vanish )
         {
                 // get waiting frame by orientation of item
                 unsigned int orientOccident = ( orientation.getIntegerOfWay() == Nowhere ? 0 : orientation.getIntegerOfWay() );
-                int currentFrame = ( getDataOfItem()->howManyMotions() - getDataOfItem()->howManyExtraFrames() ) / getDataOfItem()->howManyFramesForOrientations() * orientOccident ;
+                size_t frame = ( getDataOfItem()->howManyMotions() - getDataOfItem()->howManyExtraFrames() ) / getDataOfItem()->howManyFramesForOrientations() * orientOccident ;
+                if ( frame >= getDataOfItem()->howManyMotions() ) frame = 0;
 
-                // if images differ
-                if ( this->rawImage != 0 && this->rawImage != getDataOfItem()->getMotionAt( currentFrame ) )
+                if ( this->rawImage != 0 && /* if images differ */ this->rawImage != getDataOfItem()->getMotionAt( frame ) )
                 {
-                        changeImage( getDataOfItem()->getMotionAt( currentFrame ) );
+                        changeImage( getDataOfItem()->getMotionAt( frame ) );
 
                         if ( this->shadow != 0 )
                         {
-                                changeShadow( getDataOfItem()->getShadowAt( currentFrame ) );
+                                changeShadow( getDataOfItem()->getShadowAt( frame ) );
                         }
                 }
 

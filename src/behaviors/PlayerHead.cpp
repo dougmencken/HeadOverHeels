@@ -17,24 +17,21 @@ namespace isomot
 PlayerHead::PlayerHead( Item* item, const std::string& behavior ) :
         UserControlled( item, behavior )
 {
-        // Fotogramas del salto
         jumpFrames = 20;
         highJumpFrames = 19;
 
-        // Definición del salto normal
+        // salto normal
         for ( int i = 0; i < jumpFrames; i++ )
         {
-                // Unidades que se desplazará en el eje X o Y y en el eje Z, respectivamente
                 JumpMotion jumpMotion( 1, 3 );
-                jumpMatrix.push_back( jumpMotion );
+                jumpVector.push_back( jumpMotion );
         }
 
-        // Definición del salto largo
+        // salto largo
         for ( int i = 0; i < highJumpFrames; i++ )
         {
-                // Unidades que se desplazará en el eje X o Y y en el eje Z, respectivamente
                 JumpMotion jumpMotion( 1, 4 );
-                highJumpMatrix.push_back( jumpMotion );
+                highJumpVector.push_back( jumpMotion );
         }
 
         // La primera fase del salto
@@ -61,7 +58,7 @@ PlayerHead::PlayerHead( Item* item, const std::string& behavior ) :
         // Pasos automáticos
         automaticStepsCounter = 16;
 
-        // Creación y puesta en marcha de los cronómetros
+        // create and start chronometers
         speedTimer = new HPC ();
         fallTimer = new HPC ();
         glideTimer = new HPC ();
@@ -71,7 +68,6 @@ PlayerHead::PlayerHead( Item* item, const std::string& behavior ) :
         glideTimer->start ();
         blinkingTimer->start ();
 
-        // En principio no hay ningún disparo en la sala
         fireFromHooterIsPresent = false;
 }
 
@@ -81,9 +77,6 @@ PlayerHead::~PlayerHead( )
         delete fallTimer;
         delete glideTimer;
         delete blinkingTimer;
-
-        jumpMatrix.clear();
-        highJumpMatrix.clear();
 }
 
 bool PlayerHead::update ()

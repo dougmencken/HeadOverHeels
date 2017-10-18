@@ -135,7 +135,7 @@ bool Item::animate()
 
 void Item::changeItemData( ItemData* itemData, const std::string& initiatedBy )
 {
-        std::cout << "metamorphosis of data for item with label \"" << getLabel()
+        std::cout << "metamorphosis of data for item \"" << getLabel()
                         << "\" to data of \"" << itemData->getLabel()
                         << "\" initiated by \"" << initiatedBy << "\"" << std::endl ;
 
@@ -152,10 +152,10 @@ void Item::changeOrientation( const Way& way )
                 return;
         }
 
-        // change orientation only when item has different frames for different directions
+        // when item has different frames for orientations
         if ( dataOfItem->howManyFramesForOrientations() > 1 )
         {
-                // get frame for new direction
+                // get frame for new orientation
                 unsigned int orientOccident = ( way.getIntegerOfWay() == Nowhere ? 0 : way.getIntegerOfWay() );
                 unsigned int frame = ( ( dataOfItem->howManyMotions() - dataOfItem->howManyExtraFrames() ) / dataOfItem->howManyFramesForOrientations() ) * orientOccident;
 
@@ -168,6 +168,10 @@ void Item::changeOrientation( const Way& way )
                         if ( this->shadow != 0 )
                                 changeShadow( dataOfItem->getShadowAt( frame ) );
                 }
+        }
+        else
+        {
+                this->orientation = way;
         }
 }
 

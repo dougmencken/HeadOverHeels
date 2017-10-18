@@ -36,45 +36,49 @@ public:
         virtual ~KindOfActivity( ) ;
 
        /**
-        * Estado que mueve a un elemento
-        * @param behavior Comportamiento que emplea el estado de movimiento
-        * @param activity Un subestado que concreta la dirección de movimiento
-        * @param canFall Indica si el elemento puede caer. Si se dan las condiciones para la caída
-        *                se producirá el cambio de estado correspondiente
-        * @return true si se produjo el movimiento o el cambio de estado; o, false si hubo colisión
+        * Item moves
+        * @param activity specifies direction of movement
+        * @param canFall whether item may fall
+        * @return true for move or change of activity, false for collision
         */
-        virtual bool move ( Behavior * behavior, ActivityOfItem * activity, bool canFall ) ;
+        virtual bool move ( Behavior * behavior, ActivityOfItem * activity, bool canFall )
+        {
+                return true ;
+        }
 
        /**
-        * Estado que desplaza a un elemento
-        * @param behavior Comportamiento que emplea el estado de desplazamiento
-        * @param activity Un subestado que concreta la dirección de desplazamiento
-        * @param canFall Indica si el elemento puede caer. Si se dan las condiciones para la caída
-        *                se producirá el cambio de estado correspondiente
-        * @return true si se produjo el desplazamiento o el cambio de estado; o, false si hubo colisión
+        * Item is being displaced
+        * @param activity subactivity which specifies direction of movement
+        * @param canFall whether item may fall
+        * @return true for displace or change of activity, false for collision
         */
-        virtual bool displace ( Behavior * behavior, ActivityOfItem * activity, bool canFall ) ;
+        virtual bool displace ( Behavior * behavior, ActivityOfItem * activity, bool canFall )
+        {
+                return true ;
+        }
 
        /**
-        * Estado que hace caer a un elemento
-        * @param behavior Comportamiento que emplea el estado de caída
-        * @return true si se produjo la caída o false si hubo colisión
+        * Item falls
+        * @return true if fall or false when there’s collision
         */
-        virtual bool fall ( Behavior * behavior ) ;
+        virtual bool fall ( Behavior * behavior )
+        {
+                return true ;
+        }
 
        /**
-        * Estado que hace saltar a un elemento
-        * @param behavior Comportamiento que emplea el estado de salto
-        * @param jumpMatrix Matriz que define el salto del jugador. Cada par de valores define el desplazamiento
-        *                   en el eje X o Y y el desplazamiento en el eje Z por cada ciclo
-        * @param jumpIndex Índice que indica la fase del salto que se está ejecutando
-        * @return true si se produjo el salto o false si hubo colisión
+        * Item jumps
+        * @param jumpVector vector of pair of values ( offset on X or Y and offset on Z )
+        *                   for each cycle to define item’s jump
+        * @param jumpPhase phase of jump
+        * @return true if jump or false when there’s collision
         */
-        virtual bool jump ( Behavior * behavior, ActivityOfItem * activity, const std::vector< JumpMotion >& jumpMatrix, int * jumpIndex ) ;
+        virtual bool jump ( Behavior * behavior, ActivityOfItem * activity, const std::vector< JumpMotion >& jumpVector, int jumpPhase )
+        {
+                return true ;
+        }
 
 protected:
-
-        void changeKindOfActivity ( Behavior * behavior, KindOfActivity * newKind ) ;
 
        /**
         * Change activity of items that collide with the sender

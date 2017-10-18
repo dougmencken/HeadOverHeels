@@ -222,6 +222,11 @@ private:
 
         std::string takenItemBehavior ;
 
+        /**
+         * Used when morphing to bubbles and back
+         */
+        ItemData* originalDataOfItem ;
+
 protected:
 
         void setLives ( unsigned char lives ) {  this->lives = lives ;  }
@@ -259,6 +264,8 @@ public:
          * Set data for item in player’s handbag
          */
         void assignTakenItem ( ItemData * itemData, BITMAP * itemImage, const std::string & behavior ) ;
+
+        ItemData * getOriginalDataOfItem () const {  return originalDataOfItem ;  }
 
         /**
          * Data of item in handbag

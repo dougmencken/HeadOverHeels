@@ -34,33 +34,34 @@ KindOfActivity* JumpKindOfActivity::getInstance()
         return instance;
 }
 
-bool JumpKindOfActivity::jump( Behavior* behavior, ActivityOfItem* activity, const std::vector< JumpMotion >& jumpMatrix, int* jumpIndex )
+bool JumpKindOfActivity::jump( Behavior* behavior, ActivityOfItem* activity, const std::vector< JumpMotion >& jumpVector, int jumpPhase )
 {
-        bool changedData = false;
+        bool itemMoved = false;
         ActivityOfItem displaceActivity = Wait;
         PlayerItem* playerItem = dynamic_cast< PlayerItem * >( behavior->getItem() );
         Mediator* mediator = playerItem->getMediator();
 
-        // Movimiento vertical
-        if ( ! playerItem->addToZ( jumpMatrix[ *jumpIndex ].second ) )
+        const int deltaXY = jumpVector[ jumpPhase ].first ;
+        const int deltaZ = jumpVector[ jumpPhase ].second ;
+
+        // let’s move up
+        if ( ! playerItem->addToZ( deltaZ ) )
         {
-                // Si no ha podido ascender levanta a todos los elementos que pudiera tener encima
-                if ( jumpMatrix[ *jumpIndex ].second > 0 )
+                // if can’t, raise pile of items above
+                if ( deltaZ > 0 )
                 {
-                        // Para todo elemento que pueda tener encima
                         while ( ! mediator->isStackOfCollisionsEmpty() )
                         {
-                                // Identificador del primer elemento de la pila de colisiones
                                 int id = mediator->popCollision();
 
-                                // El elemento tiene que ser un elemento libre o uno rejilla
+                                // is it free item or grid item
                                 if ( ( id >= FirstFreeId && ( id & 1 ) ) || ( id >= FirstGridId && ! ( id & 1 ) ) )
                                 {
                                         Item* item = mediator->findItemById( id );
 
-                                        // Si el elemento se ha encontrado y es un elemento mortal entonces el jugador muere
                                         if ( item != 0 )
                                         {
+                                                // mortal thing is above
                                                 if ( item->isMortal() && ! playerItem->hasShield() )
                                                 {
                                                         if ( ! GameManager::getInstance()->isImmuneToCollisionsWithMortalItems () )
@@ -68,45 +69,45 @@ bool JumpKindOfActivity::jump( Behavior* behavior, ActivityOfItem* activity, con
                                                                 playerItem->getBehavior()->changeActivityOfItem( MeetMortalItem );
                                                         }
                                                 }
-                                                // Si no es mortal y es un elemento libre levanta a los elementos que pudiera tener encima
                                                 else
                                                 {
                                                         FreeItem* freeItem = dynamic_cast< FreeItem * >( item );
 
+                                                        // non mortal free item
                                                         if ( freeItem != 0 )
                                                         {
-                                                                // Levanta recursivamente a todos los elementos
-                                                                lift( playerItem, freeItem, jumpMatrix[ *jumpIndex ].second - ( *jumpIndex > 0 && *jumpIndex % 2 == 0 ? 1 : 2 ) );
+                                                                // raise items recursively
+                                                                lift( playerItem, freeItem, deltaZ - ( jumpPhase > 0 && jumpPhase % 2 == 0 ? 1 : 2 ) );
                                                         }
                                                 }
                                         }
                                 }
                         }
 
-                        // Ahora ya puede ascender
-                        playerItem->addToZ( jumpMatrix[ *jumpIndex ].second - ( *jumpIndex > 0 && *jumpIndex % 2 == 0 ? 1 : 2 ) );
+                        // yet you may ascend
+                        playerItem->addToZ( deltaZ - ( jumpPhase > 0 && jumpPhase % 2 == 0 ? 1 : 2 ) );
                 }
         }
 
         switch ( playerItem->getOrientation().getIntegerOfWay() )
         {
                 case North:
-                        changedData = playerItem->addToX( - jumpMatrix[ *jumpIndex ].first );
+                        itemMoved = playerItem->addToX( - deltaXY );
                         displaceActivity = DisplaceNorth;
                         break;
 
                 case South:
-                        changedData = playerItem->addToX( jumpMatrix[ *jumpIndex ].first );
+                        itemMoved = playerItem->addToX( deltaXY );
                         displaceActivity = DisplaceSouth;
                         break;
 
                 case East:
-                        changedData = playerItem->addToY( - jumpMatrix[ *jumpIndex ].first );
+                        itemMoved = playerItem->addToY( - deltaXY );
                         displaceActivity = DisplaceEast;
                         break;
 
                 case West:
-                        changedData = playerItem->addToY( jumpMatrix[ *jumpIndex ].first );
+                        itemMoved = playerItem->addToY( deltaXY );
                         displaceActivity = DisplaceWest;
                         break;
 
@@ -114,67 +115,59 @@ bool JumpKindOfActivity::jump( Behavior* behavior, ActivityOfItem* activity, con
                         ;
         }
 
-        // En caso de colisión en los ejes X o Y se desplaza a los elementos implicados
-        if ( ! changedData )
+        // displace adjacent items when there’s horizontal collision
+        if ( ! itemMoved )
         {
                 this->propagateActivityToAdjacentItems( playerItem, displaceActivity );
         }
-        // En caso de que el elemento se haya movido se comprueba si hay que desplazar los elementos
-        // que pueda tener encima
-        // El desplazamiento a partir de la cuarta fase del salto se establece para que el
-        // jugador pueda librarse de un elemento que tenga encima
-        else if ( changedData && *jumpIndex > 4 )
+        // is it okay to move items above
+        // it is okay after fourth phase of jump so player can get rid of item above
+        else if ( itemMoved && jumpPhase > 4 )
         {
                 this->propagateActivityToItemsAbove( playerItem, displaceActivity );
         }
 
-        // Se pasa a la siguiente fase del salto
-        ( *jumpIndex )++;
-
-        // Si se han completado todas las fases, el salto termina
-        if ( *jumpIndex >= int( jumpMatrix.size() ) )
+        // end jump when it’s last phase
+        if ( jumpPhase + 1 >= static_cast< int >( jumpVector.size() ) )
         {
-                changeKindOfActivity( behavior, FallKindOfActivity::getInstance() );
-
-                *jumpIndex = 0;
+                behavior->changeActivityTo( FallKindOfActivity::getInstance() );
                 *activity = Fall;
         }
 
-        return changedData;
+        return itemMoved ;
 }
 
 void JumpKindOfActivity::lift( FreeItem* sender, FreeItem* freeItem, int z )
 {
-        // El elemento debe poder cambiar de estado
+        // only for item with behavior
         if ( freeItem->getBehavior() != 0 )
         {
-                // Si el elemento es volátil se le comunica que se está empujando
+                // when item is volatile
                 if ( freeItem->getBehavior()->getNameOfBehavior () == "behavior of disappearance on touch" ||
                                 freeItem->getBehavior()->getNameOfBehavior () == "behavior of something special" )
                 {
                         freeItem->getBehavior()->changeActivityOfItem( DisplaceUp, sender );
                 }
-                // Si el elemento no es el ascensor entonces se levanta
+                // raise item when it is not elevator
                 else if ( freeItem->getBehavior()->getNameOfBehavior () != "behavior of elevator" )
                 {
-                        // Si no se puede levantar, se toma el elemento con el que choca para levantarlo
+                        // is there something above
                         if ( ! freeItem->addToZ( z ) )
                         {
                                 Mediator* mediator = freeItem->getMediator();
 
-                                // Para todo elemento que pueda tener encima
                                 while ( ! mediator->isStackOfCollisionsEmpty() )
                                 {
                                         FreeItem* topItem = dynamic_cast< FreeItem * >( mediator->findCollisionPop( ) );
 
                                         if ( topItem != 0 )
                                         {
-                                                // Levanta recursivamente a todos los elementos
+                                                // raise free items recursively
                                                 lift( sender, topItem, z );
                                         }
                                 }
 
-                                // Ahora ya puede ascender
+                                // ahora ya puede ascender
                                 freeItem->addToZ( z );
                         }
                 }

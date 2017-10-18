@@ -34,7 +34,7 @@ KindOfActivity* DisplaceKindOfActivity::getInstance()
 
 bool DisplaceKindOfActivity::displace( Behavior* behavior, ActivityOfItem* activity, bool canFall )
 {
-        bool changedData = false;
+        bool itemDisplaced = false;
         FreeItem* freeItem = 0;
         ActivityOfItem displaceActivity = *activity;
 
@@ -50,7 +50,7 @@ bool DisplaceKindOfActivity::displace( Behavior* behavior, ActivityOfItem* activ
                 case ForceDisplaceNorth:
                         if ( freeItem != 0 )
                         {
-                                changedData = freeItem->addToX( -1 );
+                                itemDisplaced = freeItem->addToX( -1 );
                         }
                         displaceActivity = DisplaceNorth;
                         break;
@@ -59,7 +59,7 @@ bool DisplaceKindOfActivity::displace( Behavior* behavior, ActivityOfItem* activ
                 case ForceDisplaceSouth:
                         if ( freeItem != 0 )
                         {
-                                changedData = freeItem->addToX( 1 );
+                                itemDisplaced = freeItem->addToX( 1 );
                         }
                         displaceActivity = DisplaceSouth;
                         break;
@@ -68,7 +68,7 @@ bool DisplaceKindOfActivity::displace( Behavior* behavior, ActivityOfItem* activ
                 case ForceDisplaceEast:
                         if ( freeItem != 0 )
                         {
-                                changedData = freeItem->addToY( -1 );
+                                itemDisplaced = freeItem->addToY( -1 );
                         }
                         displaceActivity = DisplaceEast;
                         break;
@@ -77,7 +77,7 @@ bool DisplaceKindOfActivity::displace( Behavior* behavior, ActivityOfItem* activ
                 case ForceDisplaceWest:
                         if ( freeItem != 0 )
                         {
-                                changedData = freeItem->addToY( 1 );
+                                itemDisplaced = freeItem->addToY( 1 );
                         }
                         displaceActivity = DisplaceWest;
                         break;
@@ -85,33 +85,33 @@ bool DisplaceKindOfActivity::displace( Behavior* behavior, ActivityOfItem* activ
                 case DisplaceNortheast:
                         if ( freeItem != 0 )
                         {
-                                changedData = freeItem->addToPosition( -1, -1, 0 );
+                                itemDisplaced = freeItem->addToPosition( -1, -1, 0 );
                         }
                         break;
 
                 case DisplaceNorthwest:
                         if ( freeItem != 0 )
                         {
-                                changedData = freeItem->addToPosition( -1, 1, 0 );
+                                itemDisplaced = freeItem->addToPosition( -1, 1, 0 );
                         }
                         break;
 
                 case DisplaceSoutheast:
                         if ( freeItem != 0 )
                         {
-                                changedData = freeItem->addToPosition( 1, -1, 0 );
+                                itemDisplaced = freeItem->addToPosition( 1, -1, 0 );
                         }
                         break;
 
                 case DisplaceSouthwest:
                         if ( freeItem != 0 )
                         {
-                                changedData = freeItem->addToPosition( 1, 1, 0 );
+                                itemDisplaced = freeItem->addToPosition( 1, 1, 0 );
                         }
                         break;
 
                 case DisplaceUp:
-                        changedData = behavior->getItem()->addToZ( 1 );
+                        itemDisplaced = behavior->getItem()->addToZ( 1 );
                         break;
 
                 default:
@@ -121,7 +121,7 @@ bool DisplaceKindOfActivity::displace( Behavior* behavior, ActivityOfItem* activ
         if ( freeItem != 0 )
         {
                 // En caso de colisión en los ejes X o Y se desplaza a los elementos implicados
-                if ( ! changedData )
+                if ( ! itemDisplaced )
                 {
                         this->propagateActivityToAdjacentItems( freeItem, displaceActivity );
                 }
@@ -138,13 +138,13 @@ bool DisplaceKindOfActivity::displace( Behavior* behavior, ActivityOfItem* activ
         {
                 if ( FallKindOfActivity::getInstance()->fall( behavior ) )
                 {
-                        changeKindOfActivity( behavior, FallKindOfActivity::getInstance() );
+                        behavior->changeActivityTo( FallKindOfActivity::getInstance() );
                         *activity = Fall;
-                        changedData = true;
+                        itemDisplaced = true;
                 }
         }
 
-        return changedData;
+        return itemDisplaced ;
 }
 
 }

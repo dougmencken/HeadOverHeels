@@ -146,17 +146,14 @@ protected:
 protected:
 
        /**
-        * Matriz que define el salto del jugador. Cada par de valores define el desplazamiento en el eje
-        * X o Y y el desplazamiento en el eje Z en cada ciclo
+        * Defines player’s jump using pairs of horizontal offset and vertical offset on each cycle
         */
-        std::vector < JumpMotion > jumpMatrix ;
+        std::vector < JumpMotion > jumpVector ;
 
        /**
-        * Matriz que define el salto largo del jugador: aquel producido por un trampolín o por un conejito
-        * de la velocidad. Cada par de valores define el desplazamiento en el eje X o Y y el desplazamiento
-        * en el eje Z en cada ciclo
+        * Defines long jump of player from trampoline or with speed bunny
         */
-        std::vector < JumpMotion > highJumpMatrix ;
+        std::vector < JumpMotion > highJumpVector ;
 
        /**
         * Índice de la fase del salto que se está ejecutando
@@ -222,11 +219,6 @@ protected:
         * Gestor de datos de los elementos del juego
         */
         ItemDataManager* itemDataManager ;
-
-       /**
-        * Datos del jugador
-        */
-        ItemData* playerData ;
 
        /**
         * Cronómetro que controla la velocidad de movimiento del elemento

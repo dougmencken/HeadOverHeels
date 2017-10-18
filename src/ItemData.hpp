@@ -13,6 +13,7 @@
 
 #include <vector>
 #include <string>
+#include <cassert>
 #include <allegro.h>
 
 
@@ -86,15 +87,25 @@ public:
 
         unsigned int howManyMotions () const {  return motion.size () ;  }
 
-        BITMAP * getMotionAt( size_t position ) const {  return motion[ position ] ;  }
+        BITMAP * getMotionAt( size_t at ) const
+        {
+                assert( at < motion.size () );
+                return motion[ at ] ;
+                /// return ( at < motion.size() ? motion[ at ] : 0 ) ;
+        }
 
         unsigned int howManyShadows () const {  return shadows.size () ;  }
 
-        BITMAP * getShadowAt( size_t position ) const {  return shadows[ position ] ;  }
-
-        int getFrameAt( size_t index ) const
+        BITMAP * getShadowAt( size_t at ) const
         {
-                return ( index < frames.size () ? frames[ index ] : 0 ) ;
+                assert( at < shadows.size () );
+                return shadows[ at ] ;
+                /// return ( at < shadows.size() ? shadows[ at ] : 0 ) ;
+        }
+
+        int getFrameAt( size_t at ) const
+        {
+                return ( at < frames.size () ? frames[ at ] : 0 ) ;
         }
 
         unsigned int howManyFrames () const {  return frames.size() ;  }
@@ -161,9 +172,6 @@ private:
         */
         unsigned int heightOfShadow ;
 
-       /**
-        * Indica si el elemento es mortal, es decir, si al tocarlo el jugador perderá una vida
-        */
         bool mortal ;
 
        /**

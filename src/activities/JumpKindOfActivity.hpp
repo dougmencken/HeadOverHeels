@@ -44,22 +44,21 @@ public:
         static KindOfActivity * getInstance() ;
 
        /**
-        * Estado que hace saltar a un elemento
-        * @param behavior Comportamiento que necesita el estado de salto
-        * @param jumpMatrix Matriz que define el salto del jugador. Cada par de valores define el desplazamiento
-        *                   en el eje X o Y y el desplazamiento en el eje Z por cada ciclo
-        * @param jumpIndex Índice que indica la fase del salto que se está ejecutando
-        * @return true si se produjo el salto o false si hubo colisión
+        * Item jumps
+        * @param jumpVector vector of pair of values ( offset on X or Y and offset on Z )
+        *                   for each cycle to define item’s jump
+        * @param jumpPhase phase of jump
+        * @return true if jump or false when there’s collision
         */
-        virtual bool jump ( Behavior * behavior, ActivityOfItem * activity, const std::vector < JumpMotion >& jumpMatrix, int * jumpIndex ) ;
+        virtual bool jump ( Behavior * behavior, ActivityOfItem * activity, const std::vector < JumpMotion >& jumpVector, int jumpPhase ) ;
 
 protected:
 
        /**
-        * Operación recursiva que levanta todos los elementos apilados sobre el jugador
-        * @param sender Jugador que desencadena el levantamiento de la pila
-        * @param freeItem Primer elemento de la pila
-        * @param z Unidades que ascenderá la pila de elementos
+        * Raise items stacked on player
+        * @param sender player that triggers lifting of pile
+        * @param freeItem first item of pile
+        * @param z units to ascend pile of items
         */
         void lift ( FreeItem * sender, FreeItem * freeItem, int z ) ;
 

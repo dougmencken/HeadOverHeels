@@ -39,6 +39,8 @@ public:
 
         std::string getNameOfAction () const {  return "CreateVideoMenu" ;  }
 
+        static const size_t positionOfSetting = 20 ;
+
 protected:
 
         /**
@@ -47,6 +49,8 @@ protected:
         virtual void doAction () ;
 
 private:
+
+        void updateLabels () ;
 
         BITMAP * where ;
 

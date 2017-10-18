@@ -34,8 +34,6 @@ FreeItem::FreeItem( ItemData* itemData, int x, int y, int z, const Way& way )
         {
                 this->shadow = getDataOfItem()->getShadowAt( currentFrame );
         }
-
-        /// fprintf( stdout, "meet new free item with graphics from %s\n", getDataOfItem()->getNameOfFile().c_str () ) ;
 }
 
 FreeItem::FreeItem( const FreeItem& freeItem )
@@ -101,6 +99,11 @@ void FreeItem::binProcessedImages()
 
 void FreeItem::changeImage( BITMAP* image )
 {
+        if ( image == 0 )
+        {
+                std::cout << "nil image at FreeItem.changeImage" << std::endl ;
+        }
+
         if ( this->rawImage == 0 )
         {
                 this->rawImage = image;
@@ -109,15 +112,13 @@ void FreeItem::changeImage( BITMAP* image )
         {
                 FreeItem oldFreeItem( *this );
 
-                this->rawImage = image;
-                this->myShady = WantShadow;
-                this->myMask = WantMask;
+                this->rawImage = 0;
 
                 // recalculate displacement, it is how many pixels is this image from point of room’s origin
-                if ( this->rawImage )
+                if ( image != 0 )
                 {
-                        this->offset.first = ( ( this->x - this->y ) << 1 ) + getDataOfItem()->getWidthX() + getDataOfItem()->getWidthY() - ( image->w >> 1 ) - 1;
-                        this->offset.second = this->x + this->y + getDataOfItem()->getWidthX() - image->h - this->z;
+                        this->offset.first = ( ( this->x - this->y ) << 1 ) + static_cast< int >( getDataOfItem()->getWidthX() + getDataOfItem()->getWidthY() ) - ( image->w >> 1 ) - 1;
+                        this->offset.second = this->x + this->y + static_cast< int >( getDataOfItem()->getWidthX() ) - image->h - this->z;
                 }
                 else
                 {
@@ -126,14 +127,18 @@ void FreeItem::changeImage( BITMAP* image )
 
                 binProcessedImages() ;
 
+                this->rawImage = image;
+                this->myShady = WantShadow;
+                this->myMask = WantMask;
+
                 // remask with old image
-                if ( oldFreeItem.getRawImage() )
+                if ( oldFreeItem.getRawImage() != 0 )
                 {
                         mediator->remaskWithItem( &oldFreeItem );
                 }
 
                 // remask with new image
-                if ( this->rawImage )
+                if ( image != 0 )
                 {
                         mediator->remaskWithItem( this );
                 }
@@ -565,8 +570,11 @@ void FreeItem::requestMask()
 
 void FreeItem::maskImage( int x, int y, BITMAP* image )
 {
-        // mask shaded image or raw image when item is not shaded
-        BITMAP* currentImage = ( this->shadyImage ? this->shadyImage : this->rawImage );
+        assert( image != 0 );
+
+        // mask shaded image or raw image when item is not yet shaded
+        BITMAP* currentImage = ( this->shadyImage != 0 ? this->shadyImage : this->rawImage );
+        assert( currentImage != 0 );
 
         int inix = x - this->offset.first;                      // initial X
         if ( inix < 0 ) inix = 0;
@@ -580,18 +588,8 @@ void FreeItem::maskImage( int x, int y, BITMAP* image )
         int endy = y - this->offset.second + image->h;          // final Y
         if ( endy > currentImage->h ) endy = currentImage->h;
 
-        // Índice para recorrer las filas de píxeles de la imagen currentImage
-        int cRow = 0;
-        // Índice para recorrer las filas de píxeles de la imagen image
-        int iRow = 0;
-        // Índice para recorrer los píxeles de una fila de la imagen currentImage
-        int cPixel = 0;
-        // Índice para recorrer los píxeles de una fila de la imagen image
-        int iPixel = 0;
-
-        // En principio, la imagen del elemento enmascarado es la imagen del elemento sin enmascarar,
-        // sombreada o sin sombrear
-        if ( ! this->processedImage )
+        // in principle, image of masked item is image of unmasked item, shaded or unshaded
+        if ( this->processedImage == 0 )
         {
                 this->processedImage = create_bitmap_ex( bitmap_color_depth( currentImage ), currentImage->w, currentImage->h );
         }
@@ -616,6 +614,11 @@ void FreeItem::maskImage( int x, int y, BITMAP* image )
         #if IS_BIG_ENDIAN
                 n2i += bitmap_color_depth( image ) == 32 ? 1 : 0;
         #endif
+
+        int cRow = 0;           // row of pixels in currentImage
+        int iRow = 0;           // row of pixels in image
+        int cPixel = 0;         // pixel in row of currentImage
+        int iPixel = 0;         // pixel in row of image
 
         for ( cRow = iniy, iRow = iniy + this->offset.second - y; cRow < endy; cRow++, iRow++ )
         {

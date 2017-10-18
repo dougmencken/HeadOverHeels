@@ -37,7 +37,8 @@ UserControlled::UserControlled( Item * item, const std::string & behavior )
 
 UserControlled::~UserControlled()
 {
-
+        jumpVector.clear();
+        highJumpVector.clear();
 }
 
 void UserControlled::changeActivityOfItem( const ActivityOfItem & activityOf, Item * sender )
@@ -246,14 +247,14 @@ void UserControlled::jump( PlayerItem * player )
         switch ( activity )
         {
                 case Jump:
-                        // Almacena en la pila de colisiones los elementos que tiene debajo
+                        // look for item below
                         player->checkPosition( 0, 0, -1, Add );
-                        // Si está sobre un trampolín o tiene el conejo de los grandes saltos, el jugador dará un gran salto
+                        // when on trampoline or with rabbit of high jumps, player makes big leap
                         activity = ( player->getMediator()->collisionWithByBehavior( "behavior of big leap for player" ) ||
                                         ( player->getHighJumps() > 0 && player->getLabel() == "heels" )
                                 ? HighJump
                                 : RegularJump );
-                        // Si está sobre el trampolín emite el sonido propio de este elemento
+
                         if ( activity == HighJump )
                         {
                                 if ( player->getLabel() == "heels" )
@@ -265,33 +266,35 @@ void UserControlled::jump( PlayerItem * player )
                         break;
 
                 case RegularJump:
-                        // Si ha llegado el momento de saltar:
+                        // is it time to jump
                         if ( speedTimer->getValue() > player->getSpeed() )
                         {
-                                // Salta en función del ciclo actual
                                 whatToDo = JumpKindOfActivity::getInstance();
-                                whatToDo->jump( this, &activity, jumpMatrix, &jumpIndex );
+                                whatToDo->jump( this, &activity, jumpVector, jumpIndex );
 
-                                // Se pone a cero el cronómetro para el siguiente ciclo
+                                // to next phase of jump
+                                jumpIndex++ ;
+                                if ( activity == Fall ) jumpIndex = 0;
+
                                 speedTimer->reset();
 
-                                // Anima el elemento
                                 player->animate();
                         }
                         break;
 
                 case HighJump:
-                        // Si ha llegado el momento de saltar:
+                        // is it time to jump
                         if ( speedTimer->getValue() > player->getSpeed() )
                         {
-                                // Salta en función del ciclo actual
                                 whatToDo = JumpKindOfActivity::getInstance();
-                                whatToDo->jump( this, &activity, highJumpMatrix, &jumpIndex );
+                                whatToDo->jump( this, &activity, highJumpVector, jumpIndex );
 
-                                // Se pone a cero el cronómetro para el siguiente ciclo
+                                // to next phase of jump
+                                jumpIndex++ ;
+                                if ( activity == Fall ) jumpIndex = 0;
+
                                 speedTimer->reset();
 
-                                // Anima el elemento
                                 player->animate();
                         }
                         break;
@@ -300,15 +303,13 @@ void UserControlled::jump( PlayerItem * player )
                         ;
         }
 
-        // Si deja de saltar se detiene el sonido correspondiente
+        // when jump ends, stop sound of jumping
         if ( activity != Jump && activity != RegularJump && activity != HighJump )
         {
                 SoundManager::getInstance()->stop( player->getLabel(), Jump );
         }
 
-        // Si el jugador supera la altura máxima de la sala entonces pasa a la sala de arriba
-        // Se supone que no hay posibilidad de alcanzar la altura máxima de una sala que no
-        // conduce a otra situada sobre ella
+        // when player is at maximum height of room it may go to room above
         if ( player->getZ() >= MaxLayers * LayerHeight )
         {
                 player->setWayOfExit( Up );
@@ -329,7 +330,6 @@ void UserControlled::glide( PlayerItem * player )
                         activity = Wait;
                 }
 
-                // Se pone a cero el cronómetro para el siguiente ciclo
                 glideTimer->reset();
         }
 
@@ -369,7 +369,6 @@ void UserControlled::glide( PlayerItem * player )
                 // Selecciona el fotograma de caída del personaje
                 player->changeFrame( fallFrames[ player->getOrientation().getIntegerOfWay() ] );
 
-                // Se pone a cero el cronómetro para el siguiente ciclo
                 speedTimer->reset();
         }
 
@@ -385,8 +384,7 @@ void UserControlled::wayInTeletransport( PlayerItem * player )
         switch ( activity )
         {
                 case BeginWayInTeletransport:
-                        // change to bubbles preserving label of player
-                        playerData = player->getDataOfItem() ;
+                        // change to bubbles
                         player->changeItemData( itemDataManager->findItemByLabel( labelOfTransitionViaTeleport ), "begin way in teletransport" );
 
                         // reverse animation of bubbles
@@ -401,7 +399,7 @@ void UserControlled::wayInTeletransport( PlayerItem * player )
                         if ( player->animate() )
                         {
                                 // back to original appearance of player
-                                player->changeItemData( playerData, "way in teletransport" );
+                                player->changeItemData( player->getOriginalDataOfItem(), "way in teletransport" );
 
                                 activity = Wait;
                         }
@@ -417,7 +415,7 @@ void UserControlled::wayOutTeletransport( PlayerItem * player )
         switch ( activity )
         {
                 case BeginWayOutTeletransport:
-                        // change to bubbles retaining player’s label
+                        // change to bubbles
                         player->changeItemData( itemDataManager->findItemByLabel( labelOfTransitionViaTeleport ), "begin way out teletransport" );
 
                         // begin teleportation
@@ -483,10 +481,9 @@ void UserControlled::useHooter( PlayerItem* player )
 
                 if ( hooterData != 0 )
                 {
-                        // Detiene el sonido del disparo
                         SoundManager::getInstance()->stop( player->getLabel(), Doughnut );
 
-                        // Crea el elemento en la misma posición que el jugador y a su misma altura
+                        // create item at the same position as player
                         int z = player->getZ() + player->getHeight() - hooterData->getHeight();
                         FreeItem* freeItem = new FreeItem
                         (
@@ -500,7 +497,7 @@ void UserControlled::useHooter( PlayerItem* player )
                         FireDoughnut * doughnutBehavior = dynamic_cast< FireDoughnut * >( freeItem->getBehavior() );
                         doughnutBehavior->setPlayerItem( player );
 
-                        // En un primer momento no detecta colisiones ya que parte de la misma posición del jugador
+                        // at first it shares same position as player so it does not detect collisions
                         freeItem->setCollisionDetector( false );
 
                         player->getMediator()->getRoom()->addFreeItem( freeItem );

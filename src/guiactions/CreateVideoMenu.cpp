@@ -27,21 +27,19 @@ CreateVideoMenu::CreateVideoMenu( BITMAP* picture ) :
 
 void CreateVideoMenu::doAction ()
 {
-        const size_t positionOfSetting = 20;
-
-        LanguageManager* languageManager = gui::GuiManager::getInstance()->getLanguageManager();
-
-        LanguageText* textFullscreen = languageManager->findLanguageString( "full-screen" );
-        LanguageText* textDrawShadows = languageManager->findLanguageString( "draw-shadows" );
-        LanguageText* textDrawBackground = languageManager->findLanguageString( "draw-background" );
-
-        std::string yeah = languageManager->findLanguageString( "yep" )-> getText ();
-        std::string nope = languageManager->findLanguageString( "nope" )->getText ();
-
         Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this, this->where );
         if ( screen->countWidgets() == 0 )
         {
                 screen->placeHeadAndHeels( /* icons */ false, /* copyrights */ false );
+
+                LanguageManager* languageManager = gui::GuiManager::getInstance()->getLanguageManager();
+
+                LanguageText* textFullscreen = languageManager->findLanguageString( "full-screen" );
+                LanguageText* textDrawShadows = languageManager->findLanguageString( "draw-shadows" );
+                LanguageText* textDrawBackground = languageManager->findLanguageString( "draw-background" );
+
+                std::string yeah = languageManager->findLanguageString( "yep" )-> getText ();
+                std::string nope = languageManager->findLanguageString( "nope" )->getText ();
 
                 std::string stringFullscreenSpaced ( textFullscreen->getText() );
                 for ( size_t position = utf8StringLength( stringFullscreenSpaced ) ; position < positionOfSetting ; ++position ) {
@@ -73,6 +71,10 @@ void CreateVideoMenu::doAction ()
                 listOfOptions->setVerticalOffset( 40 );
 
                 screen->addWidget( listOfOptions );
+        }
+        else
+        {
+                updateLabels();
         }
 
         screen->setEscapeAction( new CreateMainMenu( this->where ) );
@@ -130,26 +132,7 @@ void CreateVideoMenu::doAction ()
                                 clear_keybuf();
 
                                 // update labels of options now
-
-                                std::string stringFullscreenSpaced ( textFullscreen->getText() );
-                                for ( size_t position = utf8StringLength( stringFullscreenSpaced ) ; position < positionOfSetting ; ++position ) {
-                                        stringFullscreenSpaced = stringFullscreenSpaced + " ";
-                                }
-                                labelFullscreen->setText( stringFullscreenSpaced + ( gui::GuiManager::getInstance()->isAtFullScreen () ? yeah : nope ) );
-
-                                std::string stringDrawShadowsSpaced ( textDrawShadows->getText() );
-                                for ( size_t position = utf8StringLength( stringDrawShadowsSpaced ) ; position < positionOfSetting ; ++position ) {
-                                        stringDrawShadowsSpaced = stringDrawShadowsSpaced + " ";
-                                }
-                                labelDrawShadows->setText( stringDrawShadowsSpaced + ( isomot::GameManager::getInstance()->getDrawShadows () ? yeah : nope ) );
-
-                                std::string stringDrawBackgroundSpaced ( textDrawBackground->getText() );
-                                for ( size_t position = utf8StringLength( stringDrawBackgroundSpaced ) ; position < positionOfSetting ; ++position ) {
-                                        stringDrawBackgroundSpaced = stringDrawBackgroundSpaced + " ";
-                                }
-                                labelDrawBackground->setText( stringDrawBackgroundSpaced + ( isomot::GameManager::getInstance()->hasBackgroundPicture () ? yeah : nope ) );
-
-                                listOfOptions->redraw ();
+                                updateLabels();
                         }
 
                         // no te comas la CPU
@@ -157,4 +140,36 @@ void CreateVideoMenu::doAction ()
                         sleep( 25 );
                 }
         }
+}
+
+void CreateVideoMenu::updateLabels ()
+{
+        LanguageManager* languageManager = gui::GuiManager::getInstance()->getLanguageManager();
+
+        LanguageText* textFullscreen = languageManager->findLanguageString( "full-screen" );
+        LanguageText* textDrawShadows = languageManager->findLanguageString( "draw-shadows" );
+        LanguageText* textDrawBackground = languageManager->findLanguageString( "draw-background" );
+
+        std::string yeah = languageManager->findLanguageString( "yep" )-> getText ();
+        std::string nope = languageManager->findLanguageString( "nope" )->getText ();
+
+        std::string stringFullscreenSpaced ( textFullscreen->getText() );
+        for ( size_t position = utf8StringLength( stringFullscreenSpaced ) ; position < positionOfSetting ; ++position ) {
+                stringFullscreenSpaced = stringFullscreenSpaced + " ";
+        }
+        labelFullscreen->setText( stringFullscreenSpaced + ( gui::GuiManager::getInstance()->isAtFullScreen () ? yeah : nope ) );
+
+        std::string stringDrawShadowsSpaced ( textDrawShadows->getText() );
+        for ( size_t position = utf8StringLength( stringDrawShadowsSpaced ) ; position < positionOfSetting ; ++position ) {
+                stringDrawShadowsSpaced = stringDrawShadowsSpaced + " ";
+        }
+        labelDrawShadows->setText( stringDrawShadowsSpaced + ( isomot::GameManager::getInstance()->getDrawShadows () ? yeah : nope ) );
+
+        std::string stringDrawBackgroundSpaced ( textDrawBackground->getText() );
+        for ( size_t position = utf8StringLength( stringDrawBackgroundSpaced ) ; position < positionOfSetting ; ++position ) {
+                stringDrawBackgroundSpaced = stringDrawBackgroundSpaced + " ";
+        }
+        labelDrawBackground->setText( stringDrawBackgroundSpaced + ( isomot::GameManager::getInstance()->hasBackgroundPicture () ? yeah : nope ) );
+
+        listOfOptions->redraw ();
 }

@@ -53,14 +53,12 @@ public:
          */
         virtual void changeActivityOfItem ( const ActivityOfItem & activity, Item * sender = 0 ) ;
 
-protected:
-
-        friend class KindOfActivity ;
-
         /**
          * Change kind of activity
          */
         void changeActivityTo ( KindOfActivity * activity ) {  whatToDo = activity ;  }
+
+protected:
 
         /**
          * Change activity of every item collided with sender

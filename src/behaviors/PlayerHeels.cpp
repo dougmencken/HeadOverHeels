@@ -14,24 +14,21 @@ namespace isomot
 PlayerHeels::PlayerHeels( Item* item, const std::string& behavior ) :
         UserControlled( item, behavior )
 {
-        // Fotogramas del salto
         jumpFrames = 20;
         highJumpFrames = 21;
 
-        // Definición del salto normal
-        for( int i = 0; i < jumpFrames; i++ )
+        // salto normal
+        for ( int i = 0; i < jumpFrames; i++ )
         {
-                // Unidades que se desplazará en el eje X o Y y en el eje Z, respectivamente
                 JumpMotion jumpMotion( i == 9 || i == 19 ? 2 : 1 , ( i < jumpFrames / 2 ) ? 3 : -3 );
-                jumpMatrix.push_back( jumpMotion );
+                jumpVector.push_back( jumpMotion );
         }
 
-        // Definición del salto largo
-        for( int i = 0; i < highJumpFrames; i++ )
+        // salto largo
+        for ( int i = 0; i < highJumpFrames; i++ )
         {
-                // Unidades que se desplazará en el eje X o Y y en el eje Z, respectivamente
                 JumpMotion jumpMotion( 2 , ( i < 17 ) ? 3 : -3 );
-                highJumpMatrix.push_back( jumpMotion );
+                highJumpVector.push_back( jumpMotion );
         }
 
         // La primera fase del salto
@@ -52,7 +49,7 @@ PlayerHeels::PlayerHeels( Item* item, const std::string& behavior ) :
         // Pasos automáticos
         automaticStepsCounter = 16;
 
-        // Creación y puesta en marcha de los cronómetros
+        // create and start chronometers
         speedTimer = new HPC ();
         fallTimer = new HPC ();
         speedTimer->start ();

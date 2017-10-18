@@ -22,31 +22,6 @@ KindOfActivity::~KindOfActivity( )
 
 }
 
-bool KindOfActivity::move( Behavior * behavior, ActivityOfItem * activity, bool canFall )
-{
-        return true;
-}
-
-bool KindOfActivity::displace( Behavior * behavior, ActivityOfItem * activity, bool canFall )
-{
-        return true;
-}
-
-bool KindOfActivity::fall( Behavior * behavior )
-{
-        return true;
-}
-
-bool KindOfActivity::jump( Behavior * behavior, ActivityOfItem * activity, const std::vector< JumpMotion >& jumpMatrix, int * jumpIndex )
-{
-        return true;
-}
-
-void KindOfActivity::changeKindOfActivity ( Behavior * behavior, KindOfActivity * newKind )
-{
-        behavior->changeActivityTo( newKind ) ;
-}
-
 void KindOfActivity::propagateActivityToAdjacentItems( Item * sender, const ActivityOfItem& activity )
 {
         Mediator* mediator = sender->getMediator();

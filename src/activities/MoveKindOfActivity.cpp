@@ -199,7 +199,7 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
 
         if ( freeItem != 0 )
         {
-                // move collided items when there’s collision at X or Y
+                // move collided items when there’s horizontal collision
                 if ( ! moved )
                 {
                         this->propagateActivityToAdjacentItems( freeItem, displaceActivity );
@@ -217,7 +217,7 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
         {
                 if ( FallKindOfActivity::getInstance()->fall( behavior ) )
                 {
-                        changeKindOfActivity( behavior, FallKindOfActivity::getInstance() );
+                        behavior->changeActivityTo( FallKindOfActivity::getInstance() );
                         *activity = Fall;
                         moved = true;
                 }
