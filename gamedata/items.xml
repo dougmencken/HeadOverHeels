@@ -106,6 +106,9 @@
       <shadowHeight>31</shadowHeight>
     </shadow>
     <frame>0</frame>
+    <frame>1</frame>
+    <frame>2</frame>
+    <frame>3</frame>
   </item>
 
   <!-- Book -->

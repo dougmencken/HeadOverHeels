@@ -18,11 +18,15 @@ ConveyorBelt::ConveyorBelt( Item* item, const std::string& behavior )
 {
         speedTimer = new HPC();
         speedTimer->start();
+
+        animationTimer = new HPC();
+        animationTimer->start();
 }
 
 ConveyorBelt::~ConveyorBelt( )
 {
         delete speedTimer;
+        delete animationTimer;
 }
 
 bool ConveyorBelt::update ()
@@ -36,7 +40,6 @@ bool ConveyorBelt::update ()
                         {
                                 if ( ! item->checkPosition( 0, 0, 1, Add ) )
                                 {
-                                        // Copia la pila de colisiones
                                         std::stack< int > topItems;
                                         while ( ! mediator->isStackOfCollisionsEmpty() )
                                         {
@@ -49,50 +52,31 @@ bool ConveyorBelt::update ()
                                                 int top = topItems.top();
                                                 topItems.pop();
 
-                                                // El elemento tiene que ser un elemento libre
+                                                // is it free item
                                                 if ( top >= FirstFreeId && ( top & 1 ) )
                                                 {
                                                         FreeItem* topItem = dynamic_cast< FreeItem * >( mediator->findItemById( top ) );
 
-                                                        // El elemento debe tener comportamiento
+                                                        // is it item with behavior
                                                         if ( topItem != 0 && topItem->getBehavior() != 0 )
                                                         {
-                                                                // El ancla del elemento debe ser esta cinta transportadora para proceder a arrastrarlo
                                                                 if ( topItem->getAnchor() == 0 || item->getId() == topItem->getAnchor()->getId() )
                                                                 {
-                                                                        if ( getNameOfBehavior() == "behavior of conveyor in north or east" )
-                                                                        {
-                                                                                if ( item->getOrientation().toString() == "north" || item->getOrientation().toString() == "south" )
-                                                                                {
-                                                                                        if ( topItem->getBehavior()->getActivityOfItem() != RegularJump && topItem->getBehavior()->getActivityOfItem() != HighJump )
-                                                                                        {
-                                                                                                topItem->getBehavior()->changeActivityOfItem( ForceDisplaceNorth );
-                                                                                        }
+                                                                        if ( item->getOrientation().toString() == "south" ) {
+                                                                                if ( topItem->getBehavior()->getActivityOfItem() != RegularJump && topItem->getBehavior()->getActivityOfItem() != HighJump ) {
+                                                                                        topItem->getBehavior()->changeActivityOfItem( ForceDisplaceSouth );
                                                                                 }
-                                                                                else if ( item->getOrientation().toString() == "east" || item->getOrientation().toString() == "west" )
-                                                                                {
-                                                                                        if ( topItem->getBehavior()->getActivityOfItem() != RegularJump && topItem->getBehavior()->getActivityOfItem() != HighJump )
-                                                                                        {
-                                                                                                topItem->getBehavior()->changeActivityOfItem( ForceDisplaceEast );
-                                                                                        }
+                                                                        } else if ( item->getOrientation().toString() == "west" ) {
+                                                                                if ( topItem->getBehavior()->getActivityOfItem() != RegularJump && topItem->getBehavior()->getActivityOfItem() != HighJump ) {
+                                                                                        topItem->getBehavior()->changeActivityOfItem( ForceDisplaceWest );
                                                                                 }
-                                                                        }
-                                                                        else
-                                                                        if ( getNameOfBehavior() == "behavior of conveyor in south or west" )
-                                                                        {
-                                                                                if ( item->getOrientation().toString() == "south" || item->getOrientation().toString() == "north" )
-                                                                                {
-                                                                                        if ( topItem->getBehavior()->getActivityOfItem() != RegularJump && topItem->getBehavior()->getActivityOfItem() != HighJump )
-                                                                                        {
-                                                                                                topItem->getBehavior()->changeActivityOfItem( ForceDisplaceSouth );
-                                                                                        }
+                                                                        } else if ( item->getOrientation().toString() == "north" ) {
+                                                                                if ( topItem->getBehavior()->getActivityOfItem() != RegularJump && topItem->getBehavior()->getActivityOfItem() != HighJump ) {
+                                                                                        topItem->getBehavior()->changeActivityOfItem( ForceDisplaceNorth );
                                                                                 }
-                                                                                else if ( item->getOrientation().toString() == "west" || item->getOrientation().toString() == "east" )
-                                                                                {
-                                                                                        if ( topItem->getBehavior()->getActivityOfItem() != RegularJump && topItem->getBehavior()->getActivityOfItem() != HighJump )
-                                                                                        {
-                                                                                                topItem->getBehavior()->changeActivityOfItem( ForceDisplaceWest );
-                                                                                        }
+                                                                        } else if ( item->getOrientation().toString() == "east" ) {
+                                                                                if ( topItem->getBehavior()->getActivityOfItem() != RegularJump && topItem->getBehavior()->getActivityOfItem() != HighJump ) {
+                                                                                        topItem->getBehavior()->changeActivityOfItem( ForceDisplaceEast );
                                                                                 }
                                                                         }
 
@@ -106,6 +90,13 @@ bool ConveyorBelt::update ()
 
                                 speedTimer->reset();
                         }
+
+                        if ( animationTimer->getValue() > 2 * item->getSpeed() )
+                        {
+                                item->animate ();
+                                animationTimer->reset();
+                        }
+
                         break;
 
                 default:

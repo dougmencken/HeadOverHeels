@@ -713,31 +713,31 @@
     <item x="1" y="3" z="0">
       <label>conveyor-belt</label>
       <direction>east</direction>
-      <behavior>behavior of conveyor in north or east</behavior>
+      <behavior>behavior of conveyor</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="2" z="0">
       <label>conveyor-belt</label>
       <direction>east</direction>
-      <behavior>behavior of conveyor in north or east</behavior>
+      <behavior>behavior of conveyor</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="1" z="0">
       <label>conveyor-belt</label>
       <direction>east</direction>
-      <behavior>behavior of conveyor in north or east</behavior>
+      <behavior>behavior of conveyor</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="0" z="0">
       <label>conveyor-belt</label>
       <direction>south</direction>
-      <behavior>behavior of conveyor in south or west</behavior>
+      <behavior>behavior of conveyor</behavior>
       <type>griditem</type>
     </item>
     <item x="2" y="0" z="0">
       <label>conveyor-belt</label>
       <direction>south</direction>
-      <behavior>behavior of conveyor in south or west</behavior>
+      <behavior>behavior of conveyor</behavior>
       <type>griditem</type>
     </item>
     <item x="3" y="0" z="0">
@@ -749,37 +749,37 @@
     <item x="4" y="0" z="0">
       <label>conveyor-belt</label>
       <direction>south</direction>
-      <behavior>behavior of conveyor in south or west</behavior>
+      <behavior>behavior of conveyor</behavior>
       <type>griditem</type>
     </item>
     <item x="5" y="0" z="0">
       <label>conveyor-belt</label>
       <direction>south</direction>
-      <behavior>behavior of conveyor in south or west</behavior>
+      <behavior>behavior of conveyor</behavior>
       <type>griditem</type>
     </item>
     <item x="6" y="0" z="0">
       <label>conveyor-belt</label>
       <direction>south</direction>
-      <behavior>behavior of conveyor in south or west</behavior>
+      <behavior>behavior of conveyor</behavior>
       <type>griditem</type>
     </item>
     <item x="7" y="0" z="0">
       <label>conveyor-belt</label>
       <direction>south</direction>
-      <behavior>behavior of conveyor in south or west</behavior>
+      <behavior>behavior of conveyor</behavior>
       <type>griditem</type>
     </item>
     <item x="8" y="0" z="0">
       <label>conveyor-belt</label>
       <direction>west</direction>
-      <behavior>behavior of conveyor in south or west</behavior>
+      <behavior>behavior of conveyor</behavior>
       <type>griditem</type>
     </item>
     <item x="8" y="1" z="0">
       <label>conveyor-belt</label>
       <direction>west</direction>
-      <behavior>behavior of conveyor in south or west</behavior>
+      <behavior>behavior of conveyor</behavior>
       <type>griditem</type>
     </item>
     <item x="8" y="2" z="0">
@@ -791,25 +791,25 @@
     <item x="8" y="3" z="0">
       <label>conveyor-belt</label>
       <direction>west</direction>
-      <behavior>behavior of conveyor in south or west</behavior>
+      <behavior>behavior of conveyor</behavior>
       <type>griditem</type>
     </item>
     <item x="8" y="4" z="0">
       <label>conveyor-belt</label>
       <direction>west</direction>
-      <behavior>behavior of conveyor in south or west</behavior>
+      <behavior>behavior of conveyor</behavior>
       <type>griditem</type>
     </item>
     <item x="8" y="5" z="0">
       <label>conveyor-belt</label>
       <direction>south</direction>
-      <behavior>behavior of conveyor in south or west</behavior>
+      <behavior>behavior of conveyor</behavior>
       <type>griditem</type>
     </item>
     <item x="9" y="5" z="0">
       <label>conveyor-belt</label>
       <direction>south</direction>
-      <behavior>behavior of conveyor in south or west</behavior>
+      <behavior>behavior of conveyor</behavior>
       <type>griditem</type>
     </item>
     <item x="10" y="5" z="0">
@@ -821,25 +821,25 @@
     <item x="11" y="5" z="0">
       <label>conveyor-belt</label>
       <direction>south</direction>
-      <behavior>behavior of conveyor in south or west</behavior>
+      <behavior>behavior of conveyor</behavior>
       <type>griditem</type>
     </item>
     <item x="12" y="5" z="0">
       <label>conveyor-belt</label>
       <direction>east</direction>
-      <behavior>behavior of conveyor in north or east</behavior>
+      <behavior>behavior of conveyor</behavior>
       <type>griditem</type>
     </item>
     <item x="12" y="4" z="0">
       <label>conveyor-belt</label>
       <direction>east</direction>
-      <behavior>behavior of conveyor in north or east</behavior>
+      <behavior>behavior of conveyor</behavior>
       <type>griditem</type>
     </item>
     <item x="12" y="3" z="0">
       <label>conveyor-belt</label>
       <direction>east</direction>
-      <behavior>behavior of conveyor in north or east</behavior>
+      <behavior>behavior of conveyor</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="1" z="2">

@@ -585,7 +585,7 @@
     <item x="6" y="0" z="2">
       <label>conveyor-belt</label>
       <direction>south</direction>
-      <behavior>behavior of conveyor in south or west</behavior>
+      <behavior>behavior of conveyor</behavior>
       <type>griditem</type>
     </item>
     <item x="6" y="0" z="7">
@@ -603,13 +603,13 @@
     <item x="7" y="0" z="2">
       <label>conveyor-belt</label>
       <direction>south</direction>
-      <behavior>behavior of conveyor in south or west</behavior>
+      <behavior>behavior of conveyor</behavior>
       <type>griditem</type>
     </item>
     <item x="8" y="0" z="2">
       <label>conveyor-belt</label>
       <direction>south</direction>
-      <behavior>behavior of conveyor in south or west</behavior>
+      <behavior>behavior of conveyor</behavior>
       <type>griditem</type>
     </item>
     <item x="1" y="1" z="0">

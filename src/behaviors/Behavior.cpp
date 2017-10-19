@@ -59,8 +59,7 @@ Behavior* Behavior::createBehaviorByName( Item* item, const std::string& behavio
 {
         Behavior* behaviorToReturn = 0;
 
-        if ( behavior == "behavior of conveyor in north or east" ||
-                        behavior == "behavior of conveyor in south or west" )
+        if ( behavior == "behavior of conveyor" )
         {
                 behaviorToReturn = new ConveyorBelt( item, behavior );
         }

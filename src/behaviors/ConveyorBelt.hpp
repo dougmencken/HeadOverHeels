@@ -44,6 +44,8 @@ private:
         */
         HPC * speedTimer ;
 
+        HPC * animationTimer ;
+
 };
 
 }
