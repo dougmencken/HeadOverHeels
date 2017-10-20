@@ -35,49 +35,9 @@ AC_OUTPUT( \
             src/Makefile \
             gamedata/Makefile \
             gamedata/gfx/Makefile \
-            gamedata/gfx/blacktooth.png/Makefile \
-            gamedata/gfx/byblos.png/Makefile \
-            gamedata/gfx/egyptus.png/Makefile \
-            gamedata/gfx/gui.png/Makefile \
-            gamedata/gfx/item.png/Makefile \
-            gamedata/gfx/jail.png/Makefile \
-            gamedata/gfx/market.png/Makefile \
-            gamedata/gfx/themoon.png/Makefile \
-            gamedata/gfx/penitentiary.png/Makefile \
-            gamedata/gfx/safari.png/Makefile \
             gamedata/gfx.2009/Makefile \
-            gamedata/gfx.2009/blacktooth.png/Makefile \
-            gamedata/gfx.2009/byblos.png/Makefile \
-            gamedata/gfx.2009/egyptus.png/Makefile \
-            gamedata/gfx.2009/gui.png/Makefile \
-            gamedata/gfx.2009/item.png/Makefile \
-            gamedata/gfx.2009/jail.png/Makefile \
-            gamedata/gfx.2009/market.png/Makefile \
-            gamedata/gfx.2009/themoon.png/Makefile \
-            gamedata/gfx.2009/penitentiary.png/Makefile \
-            gamedata/gfx.2009/safari.png/Makefile \
             gamedata/gfx.riderx/Makefile \
-            gamedata/gfx.riderx/blacktooth.png/Makefile \
-            gamedata/gfx.riderx/byblos.png/Makefile \
-            gamedata/gfx.riderx/egyptus.png/Makefile \
-            gamedata/gfx.riderx/gui.png/Makefile \
-            gamedata/gfx.riderx/item.png/Makefile \
-            gamedata/gfx.riderx/jail.png/Makefile \
-            gamedata/gfx.riderx/market.png/Makefile \
-            gamedata/gfx.riderx/themoon.png/Makefile \
-            gamedata/gfx.riderx/penitentiary.png/Makefile \
-            gamedata/gfx.riderx/safari.png/Makefile \
             gamedata/gfx.2003/Makefile \
-            gamedata/gfx.2003/blacktooth.png/Makefile \
-            gamedata/gfx.2003/byblos.png/Makefile \
-            gamedata/gfx.2003/egyptus.png/Makefile \
-            gamedata/gfx.2003/gui.png/Makefile \
-            gamedata/gfx.2003/item.png/Makefile \
-            gamedata/gfx.2003/jail.png/Makefile \
-            gamedata/gfx.2003/market.png/Makefile \
-            gamedata/gfx.2003/themoon.png/Makefile \
-            gamedata/gfx.2003/penitentiary.png/Makefile \
-            gamedata/gfx.2003/safari.png/Makefile \
             gamedata/map/Makefile \
             gamedata/map/blacktooth/Makefile \
             gamedata/map/byblos/Makefile \

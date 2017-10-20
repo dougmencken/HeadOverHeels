@@ -39,13 +39,13 @@ public:
 
 public:
 
-        std::string getNameOfFile () {  return this->nameOfFile;  }
+        std::string getNameOfFile () const {  return this->nameOfFile;  }
 
         void setNameOfFile ( std::string newName ) {  this->nameOfFile = newName ;  }
 
         void clearNameOfFile () {  this->nameOfFile.clear() ;  }
 
-        std::string getNameOfShadowFile () {  return this->nameOfShadowFile;  }
+        std::string getNameOfShadowFile () const {  return this->nameOfShadowFile;  }
 
         void setNameOfShadowFile ( std::string newNameOfShadow ) {  this->nameOfShadowFile = newNameOfShadow ;  }
 

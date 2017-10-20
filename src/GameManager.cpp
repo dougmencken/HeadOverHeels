@@ -189,8 +189,8 @@ void GameManager::refreshAmbianceImages ()
         destroy_bitmap( pictureOfHeels );
         destroy_bitmap( grayPictureOfHeels );
 
-        pictureOfHead = refreshPicture( "head.png" );
-        pictureOfHeels = refreshPicture( "heels.png" );
+        pictureOfHead = refreshPicture( "gui-head.png" );
+        pictureOfHeels = refreshPicture( "gui-heels.png" );
         grayPictureOfHead = refreshPicture( "grey-head.png" );
         grayPictureOfHeels = refreshPicture( "grey-heels.png" );
 
@@ -201,9 +201,9 @@ void GameManager::refreshAmbianceImages ()
         destroy_bitmap( pictureOfHorn );
         destroy_bitmap( grayPictureOfHorn );
 
-        pictureOfBag = refreshPicture( "handbag.png" );
-        pictureOfHorn = refreshPicture( "horn.png" );
-        pictureOfDonuts = refreshPicture( "donuts.png" );
+        pictureOfBag = refreshPicture( "gui-handbag.png" );
+        pictureOfHorn = refreshPicture( "gui-horn.png" );
+        pictureOfDonuts = refreshPicture( "gui-donuts.png" );
         grayPictureOfHorn = refreshPicture( "grey-horn.png" );
         grayPictureOfBag = refreshPicture( "grey-handbag.png" );
         grayPictureOfDonuts = refreshPicture( "grey-donuts.png" );

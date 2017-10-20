@@ -281,7 +281,7 @@
 
     <room file="blacktooth/blacktooth51.xml">
         <east>blacktooth/blacktooth50.xml</east>
-        <teleport>themoon/themoon01.xml</teleport>
+        <teleport>themoon/moon01.xml</teleport>
     </room>
 
     <room file="blacktooth/blacktooth52.xml">
@@ -313,7 +313,7 @@
     <room file="blacktooth/blacktooth57.xml">
         <north>blacktooth/blacktooth56.xml</north>
         <east>blacktooth/blacktooth58.xml</east>
-        <teleport>themoon/themoon09.xml</teleport>
+        <teleport>themoon/moon09.xml</teleport>
     </room>
 
     <room file="blacktooth/blacktooth58.xml">
@@ -329,7 +329,7 @@
 
     <room file="blacktooth/blacktooth60.xml">
         <west>blacktooth/blacktooth59.xml</west>
-        <teleport>themoon/themoon08.xml</teleport>
+        <teleport>themoon/moon08.xml</teleport>
     </room>
 
     <room file="blacktooth/blacktooth61.xml">
@@ -347,199 +347,199 @@
         <south>blacktooth/blacktooth59.xml</south>
     </room>
 
-    <room file="themoon/themoon01.xml">
-        <north>themoon/themoon02.xml</north>
-        <south>themoon/themoon04.xml</south>
+    <room file="themoon/moon01.xml">
+        <north>themoon/moon02.xml</north>
+        <south>themoon/moon04.xml</south>
         <teleport>blacktooth/blacktooth51.xml</teleport>
     </room>
 
-    <room file="themoon/themoon02.xml">
-        <south>themoon/themoon01.xml</south>
-        <east>themoon/themoon03.xml</east>
+    <room file="themoon/moon02.xml">
+        <south>themoon/moon01.xml</south>
+        <east>themoon/moon03.xml</east>
     </room>
 
-    <room file="themoon/themoon03.xml">
-        <east>themoon/themoon13.xml</east>
-        <west>themoon/themoon02.xml</west>
+    <room file="themoon/moon03.xml">
+        <east>themoon/moon13.xml</east>
+        <west>themoon/moon02.xml</west>
     </room>
 
-    <room file="themoon/themoon04.xml">
-        <north>themoon/themoon01.xml</north>
-        <east>themoon/themoon05.xml</east>
+    <room file="themoon/moon04.xml">
+        <north>themoon/moon01.xml</north>
+        <east>themoon/moon05.xml</east>
     </room>
 
-    <room file="themoon/themoon05.xml">
-        <east>themoon/themoon06.xml</east>
-        <west>themoon/themoon04.xml</west>
+    <room file="themoon/moon05.xml">
+        <east>themoon/moon06.xml</east>
+        <west>themoon/moon04.xml</west>
     </room>
 
-    <room file="themoon/themoon06.xml">
-        <east>themoon/themoon07.xml</east>
-        <west>themoon/themoon05.xml</west>
+    <room file="themoon/moon06.xml">
+        <east>themoon/moon07.xml</east>
+        <west>themoon/moon05.xml</west>
     </room>
 
-    <room file="themoon/themoon07.xml">
-        <north>themoon/themoon15.xml</north>
-        <south>themoon/themoon08.xml</south>
-        <west>themoon/themoon06.xml</west>
+    <room file="themoon/moon07.xml">
+        <north>themoon/moon15.xml</north>
+        <south>themoon/moon08.xml</south>
+        <west>themoon/moon06.xml</west>
     </room>
 
-    <room file="themoon/themoon08.xml">
-        <north>themoon/themoon07.xml</north>
+    <room file="themoon/moon08.xml">
+        <north>themoon/moon07.xml</north>
         <teleport>blacktooth/blacktooth60.xml</teleport>
     </room>
 
-    <room file="themoon/themoon09.xml">
-        <north>themoon/themoon10.xml</north>
+    <room file="themoon/moon09.xml">
+        <north>themoon/moon10.xml</north>
         <teleport>blacktooth/blacktooth57.xml</teleport>
     </room>
 
-    <room file="themoon/themoon10.xml">
-        <south>themoon/themoon09.xml</south>
-        <east>themoon/themoon11.xml</east>
+    <room file="themoon/moon10.xml">
+        <south>themoon/moon09.xml</south>
+        <east>themoon/moon11.xml</east>
     </room>
 
-    <room file="themoon/themoon11.xml">
-        <north>themoon/themoon19.xml</north>
-        <east>themoon/themoon12.xml</east>
-        <west>themoon/themoon10.xml</west>
+    <room file="themoon/moon11.xml">
+        <north>themoon/moon19.xml</north>
+        <east>themoon/moon12.xml</east>
+        <west>themoon/moon10.xml</west>
     </room>
 
-    <room file="themoon/themoon12.xml">
-        <south>themoon/themoon18.xml</south>
-        <west>themoon/themoon11.xml</west>
+    <room file="themoon/moon12.xml">
+        <south>themoon/moon18.xml</south>
+        <west>themoon/moon11.xml</west>
     </room>
 
-    <room file="themoon/themoon13.xml">
-        <north>themoon/themoon16.xml</north>
-        <east>themoon/themoon14.xml</east>
-        <west>themoon/themoon03.xml</west>
+    <room file="themoon/moon13.xml">
+        <north>themoon/moon16.xml</north>
+        <east>themoon/moon14.xml</east>
+        <west>themoon/moon03.xml</west>
     </room>
 
-    <room file="themoon/themoon14.xml">
-        <south>themoon/themoon15.xml</south>
-        <west>themoon/themoon13.xml</west>
+    <room file="themoon/moon14.xml">
+        <south>themoon/moon15.xml</south>
+        <west>themoon/moon13.xml</west>
     </room>
 
-    <room file="themoon/themoon15.xml">
-        <north>themoon/themoon14.xml</north>
-        <south>themoon/themoon07.xml</south>
+    <room file="themoon/moon15.xml">
+        <north>themoon/moon14.xml</north>
+        <south>themoon/moon07.xml</south>
     </room>
 
-    <room file="themoon/themoon16.xml">
-        <south>themoon/themoon13.xml</south>
-        <west>themoon/themoon17.xml</west>
+    <room file="themoon/moon16.xml">
+        <south>themoon/moon13.xml</south>
+        <west>themoon/moon17.xml</west>
     </room>
 
-    <room file="themoon/themoon17.xml">
-        <east>themoon/themoon16.xml</east>
-        <teleport>themoon/themoon18.xml</teleport>
+    <room file="themoon/moon17.xml">
+        <east>themoon/moon16.xml</east>
+        <teleport>themoon/moon18.xml</teleport>
     </room>
 
-    <room file="themoon/themoon18.xml">
-        <north>themoon/themoon12.xml</north>
-        <teleport>themoon/themoon17.xml</teleport>
+    <room file="themoon/moon18.xml">
+        <north>themoon/moon12.xml</north>
+        <teleport>themoon/moon17.xml</teleport>
     </room>
 
-    <room file="themoon/themoon19.xml">
-        <north>themoon/themoon20.xml</north>
-        <south>themoon/themoon11.xml</south>
+    <room file="themoon/moon19.xml">
+        <north>themoon/moon20.xml</north>
+        <south>themoon/moon11.xml</south>
     </room>
 
-    <room file="themoon/themoon20.xml">
-        <north>themoon/themoon23.xml</north>
-        <south>themoon/themoon19.xml</south>
-        <east>themoon/themoon21.xml</east>
-        <west>themoon/themoon22.xml</west>
+    <room file="themoon/moon20.xml">
+        <north>themoon/moon23.xml</north>
+        <south>themoon/moon19.xml</south>
+        <east>themoon/moon21.xml</east>
+        <west>themoon/moon22.xml</west>
     </room>
 
-    <room file="themoon/themoon21.xml">
-        <west>themoon/themoon20.xml</west>
+    <room file="themoon/moon21.xml">
+        <west>themoon/moon20.xml</west>
         <teleport>safari/safari01.xml</teleport>
     </room>
 
-    <room file="themoon/themoon22.xml">
-        <east>themoon/themoon20.xml</east>
+    <room file="themoon/moon22.xml">
+        <east>themoon/moon20.xml</east>
         <teleport>penitentiary/penitentiary01.xml</teleport>
     </room>
 
-    <room file="themoon/themoon23.xml">
-        <north>themoon/themoon26.xml</north>
-        <south>themoon/themoon20.xml</south>
-        <east>themoon/themoon24.xml</east>
-        <west>themoon/themoon25.xml</west>
+    <room file="themoon/moon23.xml">
+        <north>themoon/moon26.xml</north>
+        <south>themoon/moon20.xml</south>
+        <east>themoon/moon24.xml</east>
+        <west>themoon/moon25.xml</west>
     </room>
 
-    <room file="themoon/themoon24.xml">
-        <west>themoon/themoon23.xml</west>
+    <room file="themoon/moon24.xml">
+        <west>themoon/moon23.xml</west>
         <teleport>egyptus/egyptus01.xml</teleport>
     </room>
 
-    <room file="themoon/themoon25.xml">
-        <east>themoon/themoon23.xml</east>
+    <room file="themoon/moon25.xml">
+        <east>themoon/moon23.xml</east>
         <teleport>byblos/byblos01.xml</teleport>
     </room>
 
-    <room file="themoon/themoon26.xml">
-        <north>themoon/themoon27.xml</north>
-        <south>themoon/themoon23.xml</south>
+    <room file="themoon/moon26.xml">
+        <north>themoon/moon27.xml</north>
+        <south>themoon/moon23.xml</south>
     </room>
 
-    <room file="themoon/themoon27.xml">
-        <south>themoon/themoon26.xml</south>
-        <east>themoon/themoon28.xml</east>
-        <west>themoon/themoon30.xml</west>
+    <room file="themoon/moon27.xml">
+        <south>themoon/moon26.xml</south>
+        <east>themoon/moon28.xml</east>
+        <west>themoon/moon30.xml</west>
     </room>
 
-    <room file="themoon/themoon28.xml">
-        <north>themoon/themoon29.xml</north>
-        <west>themoon/themoon27.xml</west>
+    <room file="themoon/moon28.xml">
+        <north>themoon/moon29.xml</north>
+        <west>themoon/moon27.xml</west>
     </room>
 
-    <room file="themoon/themoon29.xml">
-        <south>themoon/themoon28.xml</south>
-        <teleport>themoon/themoon32.xml</teleport>
+    <room file="themoon/moon29.xml">
+        <south>themoon/moon28.xml</south>
+        <teleport>themoon/moon32.xml</teleport>
     </room>
 
-    <room file="themoon/themoon30.xml">
-        <north>themoon/themoon31.xml</north>
-        <east>themoon/themoon27.xml</east>
+    <room file="themoon/moon30.xml">
+        <north>themoon/moon31.xml</north>
+        <east>themoon/moon27.xml</east>
     </room>
 
-    <room file="themoon/themoon31.xml">
-        <south>themoon/themoon30.xml</south>
+    <room file="themoon/moon31.xml">
+        <south>themoon/moon30.xml</south>
         <teleport>blacktooth/blacktooth64.xml</teleport>
     </room>
 
-    <room file="themoon/themoon32.xml">
-        <east>themoon/themoon33.xml</east>
-        <teleport>themoon/themoon29.xml</teleport>
+    <room file="themoon/moon32.xml">
+        <east>themoon/moon33.xml</east>
+        <teleport>themoon/moon29.xml</teleport>
     </room>
 
-    <room file="themoon/themoon33.xml">
-        <north-east>themoon/themoon34.xml</north-east>
-        <east-south>themoon/themoon36.xml</east-south>
-        <west-north>themoon/themoon32.xml</west-north>
+    <room file="themoon/moon33.xml">
+        <north-east>themoon/moon34.xml</north-east>
+        <east-south>themoon/moon36.xml</east-south>
+        <west-north>themoon/moon32.xml</west-north>
     </room>
 
-    <room file="themoon/themoon34.xml">
-        <south>themoon/themoon33.xml</south>
-        <east>themoon/themoon35.xml</east>
+    <room file="themoon/moon34.xml">
+        <south>themoon/moon33.xml</south>
+        <east>themoon/moon35.xml</east>
     </room>
 
-    <room file="themoon/themoon35.xml">
-        <west>themoon/themoon34.xml</west>
+    <room file="themoon/moon35.xml">
+        <west>themoon/moon34.xml</west>
         <teleport>blacktooth/blacktooth51.xml</teleport>
     </room>
 
-    <room file="themoon/themoon36.xml">
-        <west>themoon/themoon33.xml</west>
+    <room file="themoon/moon36.xml">
+        <west>themoon/moon33.xml</west>
         <teleport>blacktooth/blacktooth69.xml</teleport>
     </room>
 
     <room file="egyptus/egyptus01.xml">
         <north>egyptus/egyptus02.xml</north>
-        <teleport>themoon/themoon24.xml</teleport>
+        <teleport>themoon/moon24.xml</teleport>
     </room>
 
     <room file="egyptus/egyptus02.xml">
@@ -742,7 +742,7 @@
 
     <room file="penitentiary/penitentiary01.xml">
         <east>penitentiary/penitentiary02.xml</east>
-        <teleport>themoon/themoon22.xml</teleport>
+        <teleport>themoon/moon22.xml</teleport>
     </room>
 
     <room file="penitentiary/penitentiary02.xml">
@@ -919,7 +919,7 @@
     <room file="byblos/byblos01.xml">
         <south>byblos/byblos02.xml</south>
         <west>byblos/byblos07.xml</west>
-        <teleport>themoon/themoon25.xml</teleport>
+        <teleport>themoon/moon25.xml</teleport>
     </room>
 
     <room file="byblos/byblos02.xml">
@@ -1129,7 +1129,7 @@
 
     <room file="safari/safari01.xml">
         <east>safari/safari02.xml</east>
-        <teleport>themoon/themoon21.xml</teleport>
+        <teleport>themoon/moon21.xml</teleport>
     </room>
 
     <room file="safari/safari02.xml">
@@ -1324,7 +1324,7 @@
 
     <room file="blacktooth/blacktooth64.xml">
         <east>blacktooth/blacktooth65.xml</east>
-        <teleport>themoon/themoon31.xml</teleport>
+        <teleport>themoon/moon31.xml</teleport>
     </room>
 
     <room file="blacktooth/blacktooth65.xml">
@@ -1351,7 +1351,7 @@
 
     <room file="blacktooth/blacktooth69.xml">
         <north>blacktooth/blacktooth67.xml</north>
-        <teleport>themoon/themoon36.xml</teleport>
+        <teleport>themoon/moon36.xml</teleport>
     </room>
 
     <room file="blacktooth/blacktooth70.xml">

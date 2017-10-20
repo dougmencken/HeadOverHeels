@@ -19,217 +19,217 @@
       <y>1</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>penitentiary.png/penitentiary-floor-underground-north.png</picture>
+      <picture>penitentiary-floor-underground-north.png</picture>
     </tile>
     <tile>
       <x>0</x>
       <y>2</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>penitentiary.png/penitentiary-floor-underground-north.png</picture>
+      <picture>penitentiary-floor-underground-north.png</picture>
     </tile>
     <tile>
       <x>0</x>
       <y>3</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>penitentiary.png/penitentiary-floor-underground-north.png</picture>
+      <picture>penitentiary-floor-underground-north.png</picture>
     </tile>
     <tile>
       <x>0</x>
       <y>4</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>penitentiary.png/penitentiary-floor-underground-north.png</picture>
+      <picture>penitentiary-floor-underground-north.png</picture>
     </tile>
     <tile>
       <x>0</x>
       <y>5</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>penitentiary.png/penitentiary-floor-underground-north.png</picture>
+      <picture>penitentiary-floor-underground-north.png</picture>
     </tile>
     <tile>
       <x>0</x>
       <y>6</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>penitentiary.png/penitentiary-floor-underground-north.png</picture>
+      <picture>penitentiary-floor-underground-north.png</picture>
     </tile>
     <tile>
       <x>0</x>
       <y>7</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>penitentiary.png/penitentiary-floor-underground-north.png</picture>
+      <picture>penitentiary-floor-underground-north.png</picture>
     </tile>
     <tile>
       <x>0</x>
       <y>8</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>penitentiary.png/penitentiary-floor-underground-north.png</picture>
+      <picture>penitentiary-floor-underground-north.png</picture>
     </tile>
     <tile>
       <x>1</x>
       <y>0</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>penitentiary.png/penitentiary-floor-underground-east.png</picture>
+      <picture>penitentiary-floor-underground-east.png</picture>
     </tile>
     <tile>
       <x>2</x>
       <y>0</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>penitentiary.png/penitentiary-floor-underground-east.png</picture>
+      <picture>penitentiary-floor-underground-east.png</picture>
     </tile>
     <tile>
       <x>3</x>
       <y>0</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>penitentiary.png/penitentiary-floor-underground-east.png</picture>
+      <picture>penitentiary-floor-underground-east.png</picture>
     </tile>
     <tile>
       <x>4</x>
       <y>0</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>penitentiary.png/penitentiary-floor-underground-east.png</picture>
+      <picture>penitentiary-floor-underground-east.png</picture>
     </tile>
     <tile>
       <x>5</x>
       <y>0</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>penitentiary.png/penitentiary-floor-underground-east.png</picture>
+      <picture>penitentiary-floor-underground-east.png</picture>
     </tile>
     <tile>
       <x>6</x>
       <y>0</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>penitentiary.png/penitentiary-floor-underground-east.png</picture>
+      <picture>penitentiary-floor-underground-east.png</picture>
     </tile>
     <tile>
       <x>7</x>
       <y>0</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>penitentiary.png/penitentiary-floor-underground-east.png</picture>
+      <picture>penitentiary-floor-underground-east.png</picture>
     </tile>
     <tile>
       <x>8</x>
       <y>0</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>penitentiary.png/penitentiary-floor-underground-east.png</picture>
+      <picture>penitentiary-floor-underground-east.png</picture>
     </tile>
     <tile>
       <x>8</x>
       <y>1</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>penitentiary.png/penitentiary-nofloor-south.png</picture>
+      <picture>penitentiary-nofloor-south.png</picture>
     </tile>
     <tile>
       <x>8</x>
       <y>2</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>penitentiary.png/penitentiary-nofloor-south.png</picture>
+      <picture>penitentiary-nofloor-south.png</picture>
     </tile>
     <tile>
       <x>8</x>
       <y>3</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>penitentiary.png/penitentiary-nofloor-south.png</picture>
+      <picture>penitentiary-nofloor-south.png</picture>
     </tile>
     <tile>
       <x>8</x>
       <y>4</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>penitentiary.png/penitentiary-nofloor-south.png</picture>
+      <picture>penitentiary-nofloor-south.png</picture>
     </tile>
     <tile>
       <x>8</x>
       <y>5</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>penitentiary.png/penitentiary-nofloor-south.png</picture>
+      <picture>penitentiary-nofloor-south.png</picture>
     </tile>
     <tile>
       <x>8</x>
       <y>6</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>penitentiary.png/penitentiary-nofloor-south.png</picture>
+      <picture>penitentiary-nofloor-south.png</picture>
     </tile>
     <tile>
       <x>8</x>
       <y>7</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>penitentiary.png/penitentiary-nofloor-south.png</picture>
+      <picture>penitentiary-nofloor-south.png</picture>
     </tile>
     <tile>
       <x>1</x>
       <y>8</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>penitentiary.png/penitentiary-nofloor-west.png</picture>
+      <picture>penitentiary-nofloor-west.png</picture>
     </tile>
     <tile>
       <x>2</x>
       <y>8</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>penitentiary.png/penitentiary-nofloor-west.png</picture>
+      <picture>penitentiary-nofloor-west.png</picture>
     </tile>
     <tile>
       <x>3</x>
       <y>8</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>penitentiary.png/penitentiary-nofloor-west.png</picture>
+      <picture>penitentiary-nofloor-west.png</picture>
     </tile>
     <tile>
       <x>4</x>
       <y>8</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>penitentiary.png/penitentiary-nofloor-west.png</picture>
+      <picture>penitentiary-nofloor-west.png</picture>
     </tile>
     <tile>
       <x>5</x>
       <y>8</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>penitentiary.png/penitentiary-nofloor-west.png</picture>
+      <picture>penitentiary-nofloor-west.png</picture>
     </tile>
     <tile>
       <x>6</x>
       <y>8</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>penitentiary.png/penitentiary-nofloor-west.png</picture>
+      <picture>penitentiary-nofloor-west.png</picture>
     </tile>
     <tile>
       <x>7</x>
       <y>8</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>penitentiary.png/penitentiary-nofloor-west.png</picture>
+      <picture>penitentiary-nofloor-west.png</picture>
     </tile>
     <tile>
       <x>8</x>
       <y>8</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>penitentiary.png/penitentiary-nofloor-sw.png</picture>
+      <picture>penitentiary-nofloor-sw.png</picture>
     </tile>
   </floor>
 

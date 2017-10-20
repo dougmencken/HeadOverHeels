@@ -72,7 +72,7 @@ void Screen::refreshPicturesOfHeadAndHeels ()
 
                 pictureOfHead = 0;
         }
-        pictureOfHead = new Picture( xHead, yHead, loadPicture( "head.png" ), "gui/head.png" );
+        pictureOfHead = new Picture( xHead, yHead, loadPicture( "gui-head.png" ), "gui:head.png" );
 
         if ( headOnScreen )
                 addWidget( pictureOfHead );
@@ -95,7 +95,7 @@ void Screen::refreshPicturesOfHeadAndHeels ()
 
                 pictureOfHeels = 0;
         }
-        pictureOfHeels = new Picture( xHeels, yHeels, loadPicture( "heels.png" ), "gui/heels.png" );
+        pictureOfHeels = new Picture( xHeels, yHeels, loadPicture( "gui-heels.png" ), "gui:heels.png" );
 
         if ( heelsOnScreen )
                 addWidget( pictureOfHeels );
@@ -188,7 +188,7 @@ void Screen::freeWidgets ()
 void Screen::addPictureOfHeadAt ( int x, int y )
 {
         if ( pictureOfHead == 0 )
-                pictureOfHead = new Picture( x, y, loadPicture( "head.png" ), "gui/head.png" );
+                pictureOfHead = new Picture( x, y, loadPicture( "gui-head.png" ), "gui:head.png" );
         else
                 pictureOfHead->moveTo( x, y );
 
@@ -198,7 +198,7 @@ void Screen::addPictureOfHeadAt ( int x, int y )
 void Screen::addPictureOfHeelsAt ( int x, int y )
 {
         if ( pictureOfHeels == 0 )
-                pictureOfHeels = new Picture( x, y, loadPicture( "heels.png" ), "gui/heels.png" );
+                pictureOfHeels = new Picture( x, y, loadPicture( "gui-heels.png" ), "gui:heels.png" );
         else
                 pictureOfHeels->moveTo( x, y );
 

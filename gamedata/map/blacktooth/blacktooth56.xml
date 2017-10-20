@@ -19,140 +19,140 @@
       <y>0</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>jail.png/jail-floor-north.png</picture>
+      <picture>jail-floor-north.png</picture>
     </tile>
     <tile>
       <x>0</x>
       <y>1</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>jail.png/jail-floor-north.png</picture>
+      <picture>jail-floor-north.png</picture>
     </tile>
     <tile>
       <x>9</x>
       <y>0</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>jail.png/jail-floor-south.png</picture>
+      <picture>jail-floor-south.png</picture>
     </tile>
     <tile>
       <x>9</x>
       <y>1</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>jail.png/jail-floor-south.png</picture>
+      <picture>jail-floor-south.png</picture>
     </tile>
     <tile>
       <x>1</x>
       <y>0</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>jail.png/jail-floor.png</picture>
+      <picture>jail-floor.png</picture>
     </tile>
     <tile>
       <x>1</x>
       <y>1</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>jail.png/jail-floor.png</picture>
+      <picture>jail-floor.png</picture>
     </tile>
     <tile>
       <x>2</x>
       <y>0</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>jail.png/jail-floor.png</picture>
+      <picture>jail-floor.png</picture>
     </tile>
     <tile>
       <x>2</x>
       <y>1</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>jail.png/jail-floor.png</picture>
+      <picture>jail-floor.png</picture>
     </tile>
     <tile>
       <x>3</x>
       <y>0</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>jail.png/jail-floor.png</picture>
+      <picture>jail-floor.png</picture>
     </tile>
     <tile>
       <x>3</x>
       <y>1</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>jail.png/jail-floor.png</picture>
+      <picture>jail-floor.png</picture>
     </tile>
     <tile>
       <x>4</x>
       <y>0</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>jail.png/jail-floor.png</picture>
+      <picture>jail-floor.png</picture>
     </tile>
     <tile>
       <x>4</x>
       <y>1</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>jail.png/jail-floor.png</picture>
+      <picture>jail-floor.png</picture>
     </tile>
     <tile>
       <x>5</x>
       <y>0</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>jail.png/jail-floor.png</picture>
+      <picture>jail-floor.png</picture>
     </tile>
     <tile>
       <x>5</x>
       <y>1</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>jail.png/jail-floor.png</picture>
+      <picture>jail-floor.png</picture>
     </tile>
     <tile>
       <x>6</x>
       <y>0</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>jail.png/jail-floor.png</picture>
+      <picture>jail-floor.png</picture>
     </tile>
     <tile>
       <x>6</x>
       <y>1</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>jail.png/jail-floor.png</picture>
+      <picture>jail-floor.png</picture>
     </tile>
     <tile>
       <x>7</x>
       <y>0</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>jail.png/jail-floor.png</picture>
+      <picture>jail-floor.png</picture>
     </tile>
     <tile>
       <x>7</x>
       <y>1</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>jail.png/jail-floor.png</picture>
+      <picture>jail-floor.png</picture>
     </tile>
     <tile>
       <x>8</x>
       <y>0</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>jail.png/jail-floor.png</picture>
+      <picture>jail-floor.png</picture>
     </tile>
     <tile>
       <x>8</x>
       <y>1</y>
       <offsetX>0</offsetX>
       <offsetY>0</offsetY>
-      <picture>jail.png/jail-floor.png</picture>
+      <picture>jail-floor.png</picture>
     </tile>
   </floor>
 
@@ -160,42 +160,42 @@
     <wall>
       <axis>x</axis>
       <index>1</index>
-      <picture>jail.png/jail-wall-x.png</picture>
+      <picture>jail-wall-x.png</picture>
     </wall>
     <wall>
       <axis>x</axis>
       <index>2</index>
-      <picture>jail.png/jail-wall-x.png</picture>
+      <picture>jail-wall-x.png</picture>
     </wall>
     <wall>
       <axis>x</axis>
       <index>3</index>
-      <picture>jail.png/jail-wall-x.png</picture>
+      <picture>jail-wall-x.png</picture>
     </wall>
     <wall>
       <axis>x</axis>
       <index>4</index>
-      <picture>jail.png/jail-wall-x.png</picture>
+      <picture>jail-wall-x.png</picture>
     </wall>
     <wall>
       <axis>x</axis>
       <index>5</index>
-      <picture>jail.png/jail-wall-x.png</picture>
+      <picture>jail-wall-x.png</picture>
     </wall>
     <wall>
       <axis>x</axis>
       <index>6</index>
-      <picture>jail.png/jail-wall-x.png</picture>
+      <picture>jail-wall-x.png</picture>
     </wall>
     <wall>
       <axis>x</axis>
       <index>7</index>
-      <picture>jail.png/jail-wall-x.png</picture>
+      <picture>jail-wall-x.png</picture>
     </wall>
     <wall>
       <axis>x</axis>
       <index>8</index>
-      <picture>jail.png/jail-wall-x.png</picture>
+      <picture>jail-wall-x.png</picture>
     </wall>
   </walls>
 

@@ -225,7 +225,7 @@ void GuiManager::redraw()
 
 std::string GuiManager::getPathToPicturesOfGui ()
 {
-        return isomot::sharePath() + isomot::GameManager::getInstance()->getChosenGraphicSet() + "/" + "gui.png" + "/" ;
+        return isomot::sharePath() + isomot::GameManager::getInstance()->getChosenGraphicSet() + "/" ;
 }
 
 void GuiManager::allegroSetup()
