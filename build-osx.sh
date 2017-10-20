@@ -1,5 +1,6 @@
 #!/bin/sh
 
+[ -d ./m4 ] || mkdir m4
 [ -f ./configure ] || autoreconf -f -i
 
 installPrefix="/game"

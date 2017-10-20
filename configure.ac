@@ -1,12 +1,18 @@
-# Process this file with autoconf to get a configure script
+AC_PREREQ([2.65])
+AC_LANG(C++)
+AC_CONFIG_MACRO_DIRS([m4])
 
-AC_PREREQ([2.63])
 AC_INIT(headoverheels, 1.25, dougmencken@gmail.com)
-AM_INIT_AUTOMAKE(headoverheels, 1.25)
+
+AM_INIT_AUTOMAKE([subdir-objects])
+
+# use libtool
+LT_INIT
 
 # Checks for programs
 AC_PROG_CC
 AC_PROG_CXX
+AM_PROG_CC_C_O
 
 # Checks for libraries
 
