@@ -83,7 +83,6 @@ gamedatagfx_DATA = item.png/ball-shadows.png \
 			item.png/robot.png \
 			item.png/sandwich-shadows.png \
 			item.png/sandwich.png \
-			item.png/shadow-template.png \
 			item.png/siren-shadows.png \
 			item.png/siren.png \
 			item.png/spikes-shadows.png \

@@ -5,7 +5,8 @@ gamedata_DATA = configuration.xsd \
 		sounds.xml \
 		sounds.xsd \
 		font.png \
-		loading-screen.png
+		loading-screen.png \
+		shadow-template.png
 
 SUBDIRS = map music savegame sound text \
 		gfx gfx.2009 gfx.riderx gfx.2003
