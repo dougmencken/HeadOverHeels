@@ -244,9 +244,13 @@ public:
 
         void toggleInfiniteLives () {  vidasInfinitas = ! vidasInfinitas ;  }
 
-        bool isImmuneToCollisionsWithMortalItems () {  return immunityToCollisions ;  }
+        bool isImmuneToCollisionsWithMortalItems () const {  return immunityToCollisions ;  }
 
         void toggleImmunityToCollisionsWithMortalItems () {  immunityToCollisions = ! immunityToCollisions ;  }
+
+        bool playMelodyOfScenery () const {  return playTuneOfScenery ;  }
+
+        void togglePlayMelodyOfScenery () {  playTuneOfScenery = ! playTuneOfScenery ;  }
 
         bool getDrawShadows () const {  return drawShadows ;  }
 
@@ -266,6 +270,8 @@ private:
         bool vidasInfinitas ;
 
         bool immunityToCollisions ;
+
+        bool playTuneOfScenery ;
 
         bool drawShadows ;
 

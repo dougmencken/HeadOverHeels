@@ -39,6 +39,8 @@ public:
 
         std::string getNameOfAction () const {  return "CreateAudioMenu" ;  }
 
+        static const size_t positionOfSetting = 20 ;
+
 protected:
 
         /**
@@ -54,6 +56,8 @@ private:
 
         Label * labelEffects ;
         Label * labelMusic ;
+
+        Label * playRoomTunes ;
 
 };
 

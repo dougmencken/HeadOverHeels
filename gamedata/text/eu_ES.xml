@@ -153,12 +153,6 @@
     </properties>
   </text>
 
-  <text id="volume">
-    <properties>
-      <ustring>Bolumena</ustring>
-    </properties>
-  </text>
-
   <text id="show-credits">
     <properties>
       <ustring>Sinesgarritasunak</ustring>

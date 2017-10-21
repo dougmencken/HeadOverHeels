@@ -533,10 +533,25 @@ namespace cxml
     void
     music (const music_type& x);
 
+    // room tunes
+    //
+    typedef ::xml_schema::boolean roomtunes_type;
+    typedef ::xsd::cxx::tree::traits< roomtunes_type, char > roomtunes_traits;
+
+    const roomtunes_type&
+    roomtunes () const;
+
+    roomtunes_type&
+    roomtunes ();
+
+    void
+    roomtunes (const roomtunes_type& x);
+
     // Constructors
     //
     audio (const fx_type&,
-            const music_type&);
+            const music_type&,
+            const roomtunes_type&);
 
     audio (const ::xercesc::DOMElement& e,
             ::xml_schema::flags f = 0,
@@ -560,6 +575,7 @@ namespace cxml
     private:
     ::xsd::cxx::tree::one< fx_type > fx_;
     ::xsd::cxx::tree::one< music_type > music_;
+    ::xsd::cxx::tree::one< roomtunes_type > roomtunes_;
   };
 
   class video: public ::xml_schema::type
@@ -568,7 +584,7 @@ namespace cxml
 
     // fullscreen
 
-    typedef ::xml_schema::int_ fullscreen_type;
+    typedef ::xml_schema::boolean fullscreen_type;
     typedef ::xsd::cxx::tree::traits< fullscreen_type, char > fullscreen_traits;
 
     const fullscreen_type&
@@ -582,7 +598,7 @@ namespace cxml
 
     // shadows
 
-    typedef ::xml_schema::int_ shadows_type;
+    typedef ::xml_schema::boolean shadows_type;
     typedef ::xsd::cxx::tree::traits< shadows_type, char > shadows_traits;
 
     const shadows_type&
@@ -596,7 +612,7 @@ namespace cxml
 
     // background
 
-    typedef ::xml_schema::int_ background_type;
+    typedef ::xml_schema::boolean background_type;
     typedef ::xsd::cxx::tree::traits< background_type, char > background_traits;
 
     const background_type&

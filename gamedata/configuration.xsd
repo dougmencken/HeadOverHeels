@@ -25,15 +25,16 @@
           <xsd:sequence>
             <xsd:element name="fx" type="xsd:int"/>
             <xsd:element name="music" type="xsd:int"/>
+            <xsd:element name="roomtunes" type="xsd:boolean"/>
           </xsd:sequence>
         </xsd:complexType>
       </xsd:element>
       <xsd:element name="video">
         <xsd:complexType>
           <xsd:sequence>
-            <xsd:element name="fullscreen" type="xsd:int"/>
-            <xsd:element name="shadows" type="xsd:int"/>
-            <xsd:element name="background" type="xsd:int"/>
+            <xsd:element name="fullscreen" type="xsd:boolean"/>
+            <xsd:element name="shadows" type="xsd:boolean"/>
+            <xsd:element name="background" type="xsd:boolean"/>
             <xsd:element name="graphics" type="xsd:string"/>
           </xsd:sequence>
         </xsd:complexType>

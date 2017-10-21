@@ -179,19 +179,19 @@
 
   <text id="soundfx">
     <properties>
-      <ustring>Sound Effects</ustring>
+      <ustring>Volume of effects</ustring>
     </properties>
   </text>
 
   <text id="music">
     <properties>
-      <ustring>Music</ustring>
+      <ustring>Volume of music</ustring>
     </properties>
   </text>
 
-  <text id="volume">
-    <properties>
-      <ustring>Volume</ustring>
+  <text id="play-room-melodies">
+  <properties>
+      <ustring>Play room tunes</ustring>
     </properties>
   </text>
 

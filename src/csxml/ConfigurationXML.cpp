@@ -359,6 +359,24 @@ namespace cxml
     this->music_.set (music);
   }
 
+  const audio::roomtunes_type& audio::
+  roomtunes () const
+  {
+    return this->roomtunes_.get ();
+  }
+
+  audio::roomtunes_type& audio::
+  roomtunes ()
+  {
+    return this->roomtunes_.get ();
+  }
+
+  void audio::
+  roomtunes (const roomtunes_type& roomtunes)
+  {
+    this->roomtunes_.set (roomtunes);
+  }
+
   // video
   //
 
@@ -772,10 +790,12 @@ namespace cxml
 
   audio::
   audio ( const fx_type& fx,
-          const music_type& music)
+          const music_type& music,
+          const roomtunes_type& roomtunes)
   : ::xml_schema::type (),
     fx_ (fx, ::xml_schema::flags (), this),
-    music_ (music, ::xml_schema::flags (), this)
+    music_ (music, ::xml_schema::flags (), this),
+    roomtunes_ (roomtunes, ::xml_schema::flags (), this)
   {
   }
 
@@ -785,7 +805,8 @@ namespace cxml
           ::xml_schema::type* c)
   : ::xml_schema::type (x, f, c),
     fx_ (x.fx_, f, this),
-    music_ (x.music_, f, this)
+    music_ (x.music_, f, this),
+    roomtunes_ (x.roomtunes_, f, this)
   {
   }
 
@@ -795,7 +816,8 @@ namespace cxml
           ::xml_schema::type* c)
   : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
     fx_ (f, this),
-    music_ (f, this)
+    music_ (f, this),
+    roomtunes_ (f, this)
   {
     if ((f & ::xml_schema::flags::base) == 0)
     {
@@ -832,6 +854,17 @@ namespace cxml
         if (!music_.present ())
         {
           this->music (music_traits::create (i, f, this));
+          continue;
+        }
+      }
+
+      // room tunes
+      //
+      if (n.name () == "roomtunes" && n.namespace_ ().empty ())
+      {
+        if ( ! roomtunes_.present () )
+        {
+          this->roomtunes (roomtunes_traits::create (i, f, this));
           continue;
         }
       }
@@ -1387,6 +1420,17 @@ namespace cxml
           e));
 
       s << i.music ();
+    }
+
+    // room tunes
+    //
+    {
+      ::xercesc::DOMElement& s (
+        ::xsd::cxx::xml::dom::create_element (
+          "roomtunes",
+          e));
+
+      s << i.roomtunes ();
     }
   }
 

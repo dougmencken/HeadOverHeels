@@ -153,12 +153,6 @@
     </properties>
   </text>
 
-  <text id="volume">
-    <properties>
-      <ustring>Volume</ustring>
-    </properties>
-  </text>
-
   <text id="show-credits">
     <properties>
       <ustring>Krediete</ustring>

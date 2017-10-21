@@ -192,12 +192,6 @@
     </properties>
   </text>
 
-  <text id="volume">
-    <properties>
-      <ustring>hangerö</ustring>
-    </properties>
-  </text>
-
   <text id="show-credits">
     <properties>
       <ustring>alkotók</ustring>

@@ -46,22 +46,24 @@ bool ConfigurationManager::read ()
                 SoundManager::getInstance()->setVolumeOfEffects( configurationXML->audio().fx() ) ;
                 SoundManager::getInstance()->setVolumeOfMusic( configurationXML->audio().music() ) ;
 
+                if ( GameManager::getInstance()->playMelodyOfScenery () != configurationXML->audio().roomtunes() )
+                {
+                        GameManager::getInstance()->togglePlayMelodyOfScenery ();
+                }
+
                 // preferences of video
 
-                int nowAtFullScreen = GuiManager::getInstance()->isAtFullScreen () ? 1 : 0;
-                if ( nowAtFullScreen != configurationXML->video().fullscreen() )
+                if ( GuiManager::getInstance()->isAtFullScreen () != configurationXML->video().fullscreen() )
                 {
                         GuiManager::getInstance()->toggleFullScreenVideo ();
                 }
 
-                int drawShadowsNow = GameManager::getInstance()->getDrawShadows () ? 1 : 0;
-                if ( drawShadowsNow != configurationXML->video().shadows() )
+                if ( GameManager::getInstance()->getDrawShadows () != configurationXML->video().shadows() )
                 {
                         GameManager::getInstance()->toggleDrawShadows ();
                 }
 
-                int drawBackgroundPictureNow = GameManager::getInstance()->hasBackgroundPicture () ? 1 : 0;
-                if ( drawBackgroundPictureNow != configurationXML->video().background() )
+                if ( GameManager::getInstance()->hasBackgroundPicture () != configurationXML->video().background() )
                 {
                         GameManager::getInstance()->toggleBackgroundPicture ();
                 }
@@ -96,13 +98,14 @@ void ConfigurationManager::write()
 
                 cxml::audio audioPreferences (
                         SoundManager::getInstance()->getVolumeOfEffects (),
-                        SoundManager::getInstance()->getVolumeOfMusic ()
+                        SoundManager::getInstance()->getVolumeOfMusic (),
+                        GameManager::getInstance()->playMelodyOfScenery ()
                 );
 
                 cxml::video videoPreferences (
-                        GuiManager::getInstance()->isAtFullScreen () ? 1 : 0,
-                        GameManager::getInstance()->getDrawShadows () ? 1 : 0,
-                        GameManager::getInstance()->hasBackgroundPicture () ? 1 : 0,
+                        GuiManager::getInstance()->isAtFullScreen (),
+                        GameManager::getInstance()->getDrawShadows (),
+                        GameManager::getInstance()->hasBackgroundPicture (),
                         GameManager::getInstance()->getChosenGraphicSet()
                 );
 

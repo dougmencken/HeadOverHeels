@@ -150,12 +150,6 @@
     </properties>
   </text>
 
-  <text id="volume">
-    <properties>
-      <ustring>Głośność</ustring>
-    </properties>
-  </text>
-
   <text id="show-credits">
     <properties>
       <ustring>Autorów</ustring>

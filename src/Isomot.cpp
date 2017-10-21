@@ -189,6 +189,20 @@ BITMAP* Isomot::update()
                 key[ KEY_B ] = 0;
         }
 
+        if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_T ] )
+        {
+                GameManager::getInstance()->togglePlayMelodyOfScenery ();
+
+                if ( GameManager::getInstance()->playMelodyOfScenery() )
+                {
+                        std::cout << "room tunes on" << std::endl ;
+                        playTuneForScenery( activeRoom->getScenery () );
+                } else
+                        std::cout << "room tunes off" << std::endl ;
+
+                key[ KEY_T ] = 0;
+        }
+
         if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_S ] )
         {
                 gameManager->eatFish ( activeRoom->getMediator()->getActivePlayer(), activeRoom );
@@ -427,7 +441,7 @@ BITMAP* Isomot::update()
 
 void Isomot::playTuneForScenery ( const std::string& scenery )
 {
-        if ( scenery != "" )
+        if ( scenery != "" && GameManager::getInstance()->playMelodyOfScenery () )
         {
                 SoundManager::getInstance()->playOgg ( "music/" + scenery + ".ogg", /* loop */ false );
         }
