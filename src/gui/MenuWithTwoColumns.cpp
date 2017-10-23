@@ -1,5 +1,5 @@
 
-#include "MenuWithMultipleColumns.hpp"
+#include "MenuWithTwoColumns.hpp"
 
 #include "Gui.hpp"
 #include "GuiManager.hpp"
@@ -12,19 +12,19 @@
 namespace gui
 {
 
-MenuWithMultipleColumns::MenuWithMultipleColumns( unsigned int space )
+MenuWithTwoColumns::MenuWithTwoColumns( unsigned int space )
         : Menu( )
         , spaceBetweenColumns( space )
 {
 
 }
 
-MenuWithMultipleColumns::~MenuWithMultipleColumns( )
+MenuWithTwoColumns::~MenuWithTwoColumns( )
 {
 
 }
 
-void MenuWithMultipleColumns::draw( BITMAP* where )
+void MenuWithTwoColumns::draw( BITMAP* where )
 {
         if ( where == 0 ) return ;
 
@@ -32,8 +32,6 @@ void MenuWithMultipleColumns::draw( BITMAP* where )
         {
                 this->whereToDraw = where;
         }
-
-        refreshPictures ();
 
         if ( activeOption == 0 )
         {
@@ -76,11 +74,13 @@ void MenuWithMultipleColumns::draw( BITMAP* where )
                 // pick a font & color of text
                 if ( label == this->activeOption )
                 {
-                        label->changeFontAndColor( "regular", "orange" );
+                        if ( label->getColor() != "orange" )
+                                label->changeFontAndColor( "regular", "orange" );
                 }
                 else
                 {
-                        label->changeFontAndColor( "regular", "white" );
+                        if ( label->getColor() != "white" )
+                                label->changeFontAndColor( "regular", "white" );
                 }
 
                 BITMAP* mark = ( activeOption == label ) ? chosenOptionImageMini : optionImage ;
@@ -125,7 +125,7 @@ void MenuWithMultipleColumns::draw( BITMAP* where )
         setY ( previousY );
 }
 
-unsigned int MenuWithMultipleColumns::getWidthOfMenu () const
+unsigned int MenuWithTwoColumns::getWidthOfMenu () const
 {
         unsigned int widthOfFirstColumn = 0;
         unsigned int widthOfSecondColumn = 0;
@@ -152,7 +152,7 @@ unsigned int MenuWithMultipleColumns::getWidthOfMenu () const
         return widthOfFirstColumn + this->spaceBetweenColumns + widthOfSecondColumn;
 }
 
-unsigned int MenuWithMultipleColumns::getHeightOfMenu () const
+unsigned int MenuWithTwoColumns::getHeightOfMenu () const
 {
         unsigned int heightOfMenu = 0;
         unsigned int countOfRows = 0;

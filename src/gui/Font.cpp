@@ -19,7 +19,7 @@ Font::Font( const std::string& fontName, const std::string& fontFile, int color,
         BITMAP * bitmapFont = load_png( isomot::pathToFile( fontFile ), 0 );
         assert( bitmapFont );
 
-        // Duplica su tamaño, si procede
+        // double sized font
         if ( doubleSize )
         {
                 BITMAP* bigfont = create_bitmap_ex( bitmap_color_depth( bitmapFont ), bitmapFont->w, bitmapFont->h << 1 );
@@ -28,7 +28,7 @@ Font::Font( const std::string& fontName, const std::string& fontFile, int color,
                 bitmapFont = bigfont;
         }
 
-        // Colorea los caracteres, si procede
+        // colorize letters
         if ( color != makecol( 255, 255, 255 ) )
         {
                 for ( int x = 0; x < bitmapFont->w; x++ )
@@ -43,7 +43,7 @@ Font::Font( const std::string& fontName, const std::string& fontFile, int color,
                 }
         }
 
-        // Si se cargado correctamente entonces se inicia la descomposición de la imagen
+        // decompose letters
         if ( bitmapFont != 0 )
         {
                 this->charWidth = bitmapFont->w / CharactersPerRow;
@@ -60,7 +60,6 @@ Font::Font( const std::string& fontName, const std::string& fontFile, int color,
                 }
         }
 
-        // La creación ha finalizado
         destroy_bitmap( bitmapFont );
 }
 
@@ -69,18 +68,18 @@ Font::~Font( )
         std::for_each( charVector.begin(), charVector.end(), destroy_bitmap );
 }
 
-BITMAP* Font::getChar( const std::string& character )
+BITMAP* Font::getPictureOfLetter( const std::string& letter )
 {
-        for ( int i = 0; i < HowManyCharacters; i++ )
+        for ( int i = 0; i < HowManyLetters; i++ )
         {
-                if ( character.compare( gui::characters[ i ] ) == 0 )
+                if ( letter.compare( gui::letters[ i ] ) == 0 )
                 {
                         return charVector.at( i );
                 }
         }
 
-        // flow is here, because the character has not been found
-        // in such case, just return '?'
+        // flow is here because letter isn’t found
+        // in such case return '?'
         return charVector.at( '?' - 32 );
 }
 

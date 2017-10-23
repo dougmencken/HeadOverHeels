@@ -55,8 +55,6 @@ void Menu::draw( BITMAP* where )
                 resetActiveOption ();
         }
 
-        refreshPictures ();
-
         // adjust font of every option
         // font for chosen option is double-height
         for ( std::list< Label* >::iterator i = options.begin (); i != options.end (); ++i )
@@ -65,11 +63,13 @@ void Menu::draw( BITMAP* where )
 
                 if ( label == this->activeOption )
                 {
-                        label->changeFontAndColor( "big", label->getColor() );
+                        if ( label->getFontName() != "big" )
+                                label->changeFontAndColor( "big", label->getColor() );
                 }
                 else
                 {
-                        label->changeFontAndColor( "regular", label->getColor() );
+                        if ( label->getFontName() != "regular" )
+                                label->changeFontAndColor( "regular", label->getColor() );
                 }
         }
 

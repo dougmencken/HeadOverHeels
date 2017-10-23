@@ -48,12 +48,7 @@ public:
 
         virtual ~Font( ) ;
 
-        /**
-         * Devuelve el carácter especificado
-         * @param Un carácter UTF-8
-         * @return La imagen del carácter o la imagen del símbolo '?' si no se encontró
-         */
-        BITMAP * getChar ( const std::string & character ) ;
+        BITMAP * getPictureOfLetter ( const std::string & letter ) ;
 
 private:
 

@@ -47,6 +47,8 @@ public:
 
         virtual ~Label( ) ;
 
+        void update () ;
+
         /**
          * Change font and color of text
          */
@@ -66,9 +68,9 @@ protected:
          * @param text A string of characters in utf-8
          * @param font Name of font to draw these characters
          * @param color Color of text
-         * @return The image with magenta (key color) background and the text
+         * @return The image with magenta background and the text
          */
-        BITMAP * createBitmapOfLabel ( const std::string& text, const std::string& fontName, const std::string& color ) ;
+        BITMAP * createImageOfLabel ( const std::string& text, const std::string& fontName, const std::string& color ) ;
 
 private:
 
@@ -93,7 +95,7 @@ public:
 
         std::string getText () const {  return this->text ;  }
 
-        void setText( const std::string& newText ) {  this->text = newText ;  }
+        void setText( const std::string& newText ) {  this->text = newText ; update () ;  }
 
         std::string getFontName () const {  return this->fontName ;  }
 

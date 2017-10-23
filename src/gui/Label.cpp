@@ -19,7 +19,7 @@ Label::Label( const std::string& text )
         myAction( 0 )
 {
         this->font = FontManager::getInstance()->findFont( fontName, color );
-        this->createBitmapOfLabel( this->text, this->fontName, this->color );
+        this->createImageOfLabel( this->text, this->fontName, this->color );
 }
 
 Label::Label( const std::string& text, const std::string& fontName, const std::string& color, int spacing )
@@ -32,7 +32,7 @@ Label::Label( const std::string& text, const std::string& fontName, const std::s
         buffer( 0 )
 {
         this->font = FontManager::getInstance()->findFont( fontName, color.compare( "multicolor" ) == 0 ? "white" : color );
-        this->createBitmapOfLabel( this->text, this->fontName, this->color );
+        this->createImageOfLabel( this->text, this->fontName, this->color );
 }
 
 Label::~Label( )
@@ -40,12 +40,17 @@ Label::~Label( )
         destroy_bitmap( this->buffer );
 }
 
+void Label::update()
+{
+        this->createImageOfLabel( this->text, this->fontName, this->color );
+}
+
 void Label::changeFontAndColor( const std::string& fontName, const std::string& color )
 {
         this->fontName = fontName;
         this->color = color;
         this->font = FontManager::getInstance()->findFont( fontName, color.compare( "multicolor" ) == 0 ? "white" : color );
-        this->createBitmapOfLabel( this->text, this->fontName, this->color );
+        update ();
 }
 
 void Label::draw( BITMAP* where )
@@ -61,7 +66,7 @@ void Label::handleKey( int key )
         }
 }
 
-BITMAP * Label::createBitmapOfLabel( const std::string& text, const std::string& fontName, const std::string& color )
+BITMAP * Label::createImageOfLabel( const std::string& text, const std::string& fontName, const std::string& color )
 {
         // re-create buffer
         if ( this->buffer != 0 )
@@ -83,21 +88,22 @@ BITMAP * Label::createBitmapOfLabel( const std::string& text, const std::string&
         {
                 if ( color.compare( "multicolor" ) == 0 )
                 {
-                        // pick a color for this character
+                        // pick a color for this letter
                         this->font = FontManager::getInstance()->findFont( fontName, multiColors[ colorIndex ] );
                         assert( this->font );
 
-                        // cycle in the sequence of colors
+                        // cycle in sequence of colors
                         colorIndex++;
                         if ( colorIndex >= numberOfColors ) colorIndex = 0;
                 }
 
-                // draw this character
+                size_t from = std::distance( text.begin (), iter );
+                size_t howMany = incUtf8StringIterator ( iter, text.end () ) ; // string iterator increments here
+                std::string utf8letter = text.substr( from, howMany );
+
+                // draw letter
                 blit(
-                        this->font->getChar( text.substr(
-                                std::distance( text.begin (), iter ),
-                                incUtf8StringIterator ( iter, text.end () ) // string iterator increments here
-                        ) ),
+                        this->font->getPictureOfLetter( utf8letter ),
                         buffer,
                         0,
                         0,

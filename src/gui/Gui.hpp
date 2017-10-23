@@ -43,15 +43,14 @@ struct DeleteObject
 };
 
 /**
- * Número máximo de caracteres manejados por la aplicación
+ * Maximum number of letters
  */
-const int HowManyCharacters = 336;
+const int HowManyLetters = 336;
 
 /**
- * Tabla con los caracteres UTF-8 utilizados para presentar el texto en diferentes idiomas
- * El orden de los caracteres coincide con la disposición de los mísmos en archivo "font"
+ * Table of letters in UTF-8
  */
-const std::string characters[ HowManyCharacters ] =
+const std::string letters[ HowManyLetters ] =
 {
         " ",        "!",        "\"",       "",         "$",        "",         "&",        "'",
         "(",        ")",        "",         "+",        ",",        "-",        ".",        "/",
@@ -99,25 +98,27 @@ const std::string characters[ HowManyCharacters ] =
 
 /*
  * moves the iterator to next unicode character in the string, returns number of bytes skipped
- * from the code by Albert Zeyer and Dark Charlie licensed under LGPL https://sourceforge.net/p/openlierox/code/ci/master/tree/include/Unicode.h
+ * from code by Albert Zeyer and Dark Charlie licensed under LGPL https://sourceforge.net/p/openlierox/code/ci/master/tree/include/Unicode.h
  */
 template < typename _Iterator1, typename _Iterator2 >
 inline size_t incUtf8StringIterator( _Iterator1 & it, const _Iterator2 & last )
 {
         if ( it == last ) return 0;
         unsigned char c;
-        size_t res = 1;
-        for ( ++it; last != it; ++it, ++res ) {
+        it ++;
+        size_t inc = 1;
+        for ( ; last != it; ++inc ) {
                 c = *it;
                 if ( ! ( c & 0x80 ) || ( ( c & 0xC0 ) == 0xC0 ) ) break;
+                it++ ;
         }
 
-        return res;
+        return inc;
 }
 
 /*
  * gives the real length of UTF-8 encoded std::string
- * from the code by Albert Zeyer and Dark Charlie licensed under LGPL https://sourceforge.net/p/openlierox/code/ci/master/tree/include/Unicode.h
+ * from code by Albert Zeyer and Dark Charlie licensed under LGPL https://sourceforge.net/p/openlierox/code/ci/master/tree/include/Unicode.h
  */
 inline size_t utf8StringLength( const std::string& str )
 {

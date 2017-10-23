@@ -8,8 +8,8 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef MenuWithMultipleColumns_hpp_
-#define MenuWithMultipleColumns_hpp_
+#ifndef MenuWithTwoColumns_hpp_
+#define MenuWithTwoColumns_hpp_
 
 #include "Menu.hpp"
 
@@ -21,7 +21,7 @@ namespace gui
  * Two-column menu
  */
 
-class MenuWithMultipleColumns : public Menu
+class MenuWithTwoColumns : public Menu
 {
 
 public:
@@ -30,9 +30,9 @@ public:
          * Constructor
          * @param space Space between columns
          */
-        MenuWithMultipleColumns( unsigned int space );
+        MenuWithTwoColumns( unsigned int space );
 
-        virtual ~MenuWithMultipleColumns( );
+        virtual ~MenuWithTwoColumns( );
 
         void draw ( BITMAP* where ) ;
 
