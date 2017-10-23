@@ -103,12 +103,11 @@ void GuiManager::readPreferences ()
 
 void GuiManager::begin ()
 {
-        // se presenta la lista de lenguas disponibles
         // show list of languages
         std::auto_ptr< CreateLanguageMenu > languageMenu( new CreateLanguageMenu( this->picture ) );
         languageMenu->doIt ();
 
-        // Dibuja la interfaz de usuario y procesa la pulsación de teclas
+        // draw user interface and handle keys
         while ( this->active )
         {
                 this->screen->draw( this->picture );
@@ -225,7 +224,7 @@ void GuiManager::redraw()
 
 std::string GuiManager::getPathToPicturesOfGui ()
 {
-        return isomot::sharePath() + isomot::GameManager::getInstance()->getChosenGraphicSet() + "/" ;
+        return isomot::sharePath() + isomot::GameManager::getInstance()->getChosenGraphicSet() + pathSeparator ;
 }
 
 void GuiManager::allegroSetup()
@@ -273,6 +272,6 @@ void GuiManager::assignLanguage( const std::string& language )
         }
 
         fprintf( stdout, "language \"%s\"\n", language.c_str () );
-        std::string pathToTextInGameData = isomot::sharePath() + "text/";
+        std::string pathToTextInGameData = isomot::sharePath() + "text" + pathSeparator ;
         this->languageManager = new LanguageManager( pathToTextInGameData + language + ".xml", pathToTextInGameData + "en_US.xml" );
 }

@@ -38,7 +38,7 @@ void MapManager::loadMap ()
         try
         {
                 // read from XML file
-                std::auto_ptr< mxml::MapXML > mapXML( mxml::map( ( isomot::sharePath() + "map/" + fileName ).c_str () ) );
+                std::auto_ptr< mxml::MapXML > mapXML( mxml::map( ( isomot::sharePath() + "map" + pathSeparator + fileName ).c_str () ) );
 
                 for ( mxml::MapXML::room_const_iterator i = mapXML->room().begin (); i != mapXML->room().end (); ++i )
                 {
@@ -122,7 +122,7 @@ void MapManager::beginNewGame( const std::string& firstRoomFileName, const std::
         if ( firstRoomData != 0 )
         {
                 std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( isomot->getItemDataManager() ) );
-                Room* firstRoom = roomBuilder->buildRoom( isomot::sharePath() + "map/" + firstRoomFileName );
+                Room* firstRoom = roomBuilder->buildRoom( isomot::sharePath() + "map" + pathSeparator + firstRoomFileName );
 
                 if ( firstRoom != 0 )
                 {
@@ -151,7 +151,7 @@ void MapManager::beginNewGame( const std::string& firstRoomFileName, const std::
         if ( secondRoomData != 0 )
         {
                 std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( isomot->getItemDataManager() ) );
-                Room* secondRoom = roomBuilder->buildRoom( isomot::sharePath() + "map/" + secondRoomFileName );
+                Room* secondRoom = roomBuilder->buildRoom( isomot::sharePath() + "map" + pathSeparator + secondRoomFileName );
 
                 if ( secondRoom != 0 )
                 {
@@ -188,7 +188,7 @@ void MapManager::beginOldGameWithCharacter( const sgxml::player& data )
                 else
                 {
                         std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( isomot->getItemDataManager() ) );
-                        room = roomBuilder->buildRoom ( isomot::sharePath() + "map/" + data.roomFilename() );
+                        room = roomBuilder->buildRoom ( isomot::sharePath() + "map" + pathSeparator + data.roomFilename() );
                 }
 
                 // place character in room
@@ -331,7 +331,7 @@ Room* MapManager::changeRoom( const Way& wayOfExit )
                 std::cout << "going to create room \"" << nextRoomData->getNameOfRoomFile() << "\"" << std::endl ;
 
                 std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( isomot->getItemDataManager() ) );
-                newRoom = roomBuilder->buildRoom( isomot::sharePath() + "map/" + nextRoomData->getNameOfRoomFile() );
+                newRoom = roomBuilder->buildRoom( isomot::sharePath() + "map" + pathSeparator + nextRoomData->getNameOfRoomFile() );
                 rooms.push_back( newRoom );
         }
 
@@ -377,7 +377,7 @@ Room* MapManager::rebuildRoom()
 
         // rebuild room by data from map
         std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( isomot->getItemDataManager() ) );
-        Room* newRoom = roomBuilder->buildRoom ( isomot::sharePath() + "map/" + oldRoomData->getNameOfRoomFile() );
+        Room* newRoom = roomBuilder->buildRoom ( isomot::sharePath() + "map" + pathSeparator + oldRoomData->getNameOfRoomFile() );
 
         std::string nameOfActivePlayer = oldRoom->getMediator()->getActivePlayer()->getLabel();
         std::string nameOfActivePlayerBeforeJoining = oldRoom->getMediator()->getLastActivePlayerBeforeJoining();
@@ -484,7 +484,7 @@ Room* MapManager::rebuildRoom()
 Room* MapManager::createRoom( const std::string& fileName )
 {
         std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( isomot->getItemDataManager() ) );
-        return roomBuilder->buildRoom( isomot::sharePath() + "map/" + fileName );
+        return roomBuilder->buildRoom( isomot::sharePath() + "map" + pathSeparator + fileName );
 }
 
 Room* MapManager::createRoomThenAddItToListOfRooms( const std::string& fileName, bool markVisited )

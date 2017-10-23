@@ -1,12 +1,17 @@
 
 #include "Ism.hpp"
 
+#if defined ( __CYGWIN__ )
+    #include <sys/cygwin.h>
+#endif
+
+
 namespace isomot
 {
 
 void sleep( unsigned long miliseconds )
 {
-#ifdef __WIN32
+#if defined ( __WIN32 )
         Sleep( miliseconds );
 #else
         std::modulus< unsigned long > modulus;
@@ -18,16 +23,41 @@ void sleep( unsigned long miliseconds )
 #endif
 }
 
-void copyTextFile( const std::string& from, const std::string& to )
+const char * pathToFile( const std::string& in )
 {
-        std::ifstream inputStream( from.c_str () );
-        std::ofstream outputStream( to.c_str () );
-        std::string temp;
+#if defined ( __CYGWIN__ )
+        ssize_t length ;
+        char * windowsPath = 0;
 
-        while( getline( inputStream, temp ) )
+        /* ssize_t cygwin_conv_path( cygwin_conv_path_t what, const void * from, void * to, size_t size ) */
+        /* https://cygwin.com/cygwin-api/func-cygwin-conv-path.html */
+
+        length = cygwin_conv_path ( CCP_POSIX_TO_WIN_A | CCP_RELATIVE, in.c_str (), 0, 0 ) ;
+        if ( length >= 0 )
         {
-                outputStream << temp << std::endl;
+                windowsPath = static_cast< char * >( malloc( length ) );
+                cygwin_conv_path ( CCP_POSIX_TO_WIN_A | CCP_RELATIVE, in.c_str (), windowsPath, length ) ;
         }
+
+        /* fprintf( stdout, "cygwin converted path \"%s\" to \"%s\"\n", in.c_str (), windowsPath ) ; */
+
+        return windowsPath ;
+#else
+        return in.c_str ();
+#endif
+}
+
+std::string PathToGame( "no way" ) ;
+
+std::string pathToGame ()
+{
+        return PathToGame ;
+}
+
+void setPathToGame ( const char * pathToGame )
+{
+        PathToGame = pathToGame ;
+        fprintf( stdout, "PathToGame is \"%s\"\n", pathToGame );
 }
 
 std::string HomePath ;
@@ -62,8 +92,29 @@ std::string sharePath ()
 {
         if ( SharePath.empty () )
         {
-                char cpath[ 1024 ];
-                get_executable_name( cpath , 1024 );
+#if defined ( __CYGWIN__ ) || defined ( __WIN32 )
+                char * cpath = static_cast< char * >( malloc( 1024 ) );
+                get_executable_name( cpath , 1024 ); // invoke allegro’s get_executable_name
+
+        #if defined ( __CYGWIN__ )
+                ssize_t length ;
+                char * posixPath = 0;
+
+                /* ssize_t cygwin_conv_path( cygwin_conv_path_t what, const void * from, void * to, size_t size )
+                   https://cygwin.com/cygwin-api/func-cygwin-conv-path.html */
+
+                length = cygwin_conv_path ( CCP_WIN_A_TO_POSIX | CCP_ABSOLUTE, cpath, 0, 0 ) ;
+                if ( length >= 0 )
+                {
+                        posixPath = static_cast< char * >( malloc( length ) );
+                        cygwin_conv_path ( CCP_WIN_A_TO_POSIX | CCP_ABSOLUTE, cpath, posixPath, length ) ;
+                }
+
+                cpath = posixPath ;
+        #endif
+#else
+                const char* cpath = pathToGame().c_str ();
+#endif
                 char* filename = get_filename( cpath );
 
         #if defined ( __APPLE__ ) && defined ( __MACH__ )
@@ -93,7 +144,7 @@ std::string sharePath ()
                 }
         #else
                 SharePath = std::string( cpath, strlen( cpath ) - strlen( filename ) - ( 1 + strlen( containername ) ) );
-                SharePath += "share/headoverheels/";
+                SharePath += "share" + pathSeparator + "headoverheels" + pathSeparator;
         #endif
 
                 fprintf ( stdout, "SharePath is \"%s\"\n", SharePath.c_str () );

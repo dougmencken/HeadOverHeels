@@ -19,12 +19,19 @@
 #include <cassert>
 
 #include <allegro.h>
+
 #ifdef __WIN32
     #include <winalleg.h>
 #else
     #include <time.h>
     #include <sys/stat.h>
     #include <sys/types.h>
+#endif
+
+#if defined ( __WIN32 ) && ! defined ( __CYGWIN__ )
+    const std::string pathSeparator = "\\" ;
+#else
+    const std::string pathSeparator = "/" ;
 #endif
 
 #ifdef ALLEGRO_BIG_ENDIAN
@@ -44,12 +51,11 @@ namespace isomot
          */
         void sleep ( unsigned long miliseconds );
 
-        /**
-         * Copia un archivo
-         * @param from Ruta y nombre del archivo a copiar
-         * @param to Ruta y nombre del archivo copia
-         */
-        void copyFile ( const std::string& from, const std::string& to ) ;
+        const char * pathToFile( const std::string& in ) ;
+
+        std::string pathToGame () ;
+
+        void setPathToGame ( const char * pathToGame ) ;
 
         /**
          * Devuelve la ruta absoluta a la carpeta personal del usuario

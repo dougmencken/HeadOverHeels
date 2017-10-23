@@ -56,9 +56,13 @@ void CreateListOfSavedGames::doAction ()
         {
                 std::stringstream ss;
                 ss << fileCount;
-                std::string file = isomot::homePath() + "savegame/save" + ss.str () + ".xml";
+                std::string file = isomot::homePath() + "savegame" + pathSeparator + "save" + ss.str () + ".xml" ;
 
-                if ( exists( file.c_str () ) )
+                bool fileExists = false;
+                std::ifstream in( file.c_str() );
+                if ( in.good() ) fileExists = true;
+
+                if ( fileExists )
                 {
                         short rooms = 0;
                         short planets = 0;
@@ -78,6 +82,8 @@ void CreateListOfSavedGames::doAction ()
                 }
                 else
                 {
+                        std::cout << "save \"" << file << "\" is yet free" << std::endl ;
+
                         ss.str( std::string() );
                         ss << languageManager->findLanguageString( "free-slot" )->getText();
                         Label* labelOfFree = new Label( ss.str() );

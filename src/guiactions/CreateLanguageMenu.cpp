@@ -24,7 +24,7 @@ CreateLanguageMenu::CreateLanguageMenu( BITMAP* picture )
   where( picture )
 {
         // read list of languages available for this game
-        this->parse( isomot::sharePath() + "text/language.xml" );
+        this->parse( isomot::sharePath() + "text" + pathSeparator + "language.xml" );
 }
 
 CreateLanguageMenu::~CreateLanguageMenu( )

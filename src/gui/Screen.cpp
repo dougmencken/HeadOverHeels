@@ -5,6 +5,7 @@
 #include "Action.hpp"
 #include "Label.hpp"
 #include "Picture.hpp"
+#include "Ism.hpp"
 
 
 namespace gui
@@ -46,7 +47,7 @@ void Screen::refreshBackground ()
                 backgroundPicture = 0;
         }
 
-        BITMAP * picture = load_png( ( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + "background.png" ).c_str (), 0 );
+        BITMAP * picture = load_png( isomot::pathToFile( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + "background.png" ), 0 );
 
         if ( picture != 0 )
                 setBackground( picture );
@@ -272,7 +273,7 @@ void Screen::placeHeadAndHeels( bool picturesToo, bool copyrightsToo )
 /* static */
 BITMAP * Screen::loadPicture ( const char * nameOfPicture )
 {
-        return load_png( ( GuiManager::getInstance()->getPathToPicturesOfGui() + nameOfPicture ).c_str (), 0 );
+        return load_png( isomot::pathToFile( GuiManager::getInstance()->getPathToPicturesOfGui() + nameOfPicture ), 0 );
 }
 
 }

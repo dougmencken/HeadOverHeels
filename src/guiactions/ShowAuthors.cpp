@@ -42,7 +42,7 @@ void ShowAuthors::doAction ()
                 this->linesOfCredits = new TextField( 0, initialY, isomot::ScreenWidth, isomot::ScreenHeight, CenterAlignment );
 
                 size_t howManyLines = langString->getLinesCount() ;
-                fprintf( stdout, "credits-text has %ld lines\n", howManyLines );
+                std::cout << "credits-text has " << howManyLines << " lines" << std::endl ;
 
                 for ( size_t i = 0; i < howManyLines; i++ )
                 {
@@ -123,7 +123,7 @@ void ShowAuthors::doAction ()
 
                 if ( yNow == this->where->h - heightOfCredits && widgetForLoadingScreen == 0 )
                 {
-                        BITMAP* loadingScreen = load_png( ( isomot::sharePath() + "loading-screen.png" ).c_str () , 0 );
+                        BITMAP* loadingScreen = load_png( isomot::pathToFile( isomot::sharePath() + "loading-screen.png" ), 0 );
                         if ( loadingScreen != 0 )
                         {
                                 widgetForLoadingScreen = new Picture(

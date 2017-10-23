@@ -141,7 +141,7 @@ void ItemDataManager::loadItems ()
                                 }
 
                                 // load graphics for door
-                                BITMAP* picture = load_png( ( isomot::sharePath() + isomot::GameManager::getInstance()->getChosenGraphicSet() + "/" + item->getNameOfFile( ) ).c_str () , 0 );
+                                BITMAP* picture = load_png( isomot::pathToFile( isomot::sharePath() + isomot::GameManager::getInstance()->getChosenGraphicSet() + pathSeparator + item->getNameOfFile( ) ), 0 );
                                 if ( picture == 0 )
                                 {
                                         std::cerr <<
@@ -235,7 +235,7 @@ ItemData* ItemDataManager::createPictureFrames( ItemData * itemData, const char*
                 }
 
                 // Se cargan los gráficos del elemento y si es necesario se crean los distintos fotogramas
-                BITMAP* picture = load_png( ( isomot::sharePath() + gfxPrefix + "/" + itemData->getNameOfFile( ) ).c_str () , 0 );
+                BITMAP* picture = load_png( isomot::pathToFile( isomot::sharePath() + gfxPrefix + pathSeparator + itemData->getNameOfFile( ) ), 0 );
                 if ( picture == 0 )
                 {
                         std::cerr << "picture \"" << itemData->getNameOfFile( ) << "\" is absent at \"" << gfxPrefix << "\"" << std::endl ;
@@ -274,7 +274,7 @@ ItemData* ItemDataManager::createShadowFrames( ItemData * itemData, const char* 
                 }
 
                 // Se cargan los gráficos del elemento y si es necesario se crean los distintos fotogramas
-                BITMAP* picture = load_png( ( isomot::sharePath() + gfxPrefix + "/" + itemData->getNameOfShadowFile( ) ).c_str () , 0 );
+                BITMAP* picture = load_png( isomot::pathToFile( isomot::sharePath() + gfxPrefix + pathSeparator + itemData->getNameOfShadowFile( ) ), 0 );
                 if ( picture == 0 )
                 {
                         std::cerr << "file of shadows \"" << itemData->getNameOfShadowFile( ) << "\" is absent at \"" << gfxPrefix << "\"" << std::endl ;

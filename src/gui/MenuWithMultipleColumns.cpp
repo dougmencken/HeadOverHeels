@@ -43,6 +43,8 @@ void MenuWithMultipleColumns::draw( BITMAP* where )
         // rows in first column, after this number options go to second column
         unsigned int rowsInFirstColumn = options.size () >> 1;
 
+        unsigned int widthOfOption = ( this->optionImage != 0 ) ? this->optionImage->w : 0 ;
+
         // calculate position of second column
         unsigned int widthOfFirstColumn = 0;
         unsigned int countOfRows = 0;
@@ -50,7 +52,7 @@ void MenuWithMultipleColumns::draw( BITMAP* where )
         {
                 if ( countOfRows <= rowsInFirstColumn )
                 {
-                        unsigned int theWidth = ( *i )->getWidth() + this->optionImage->w;
+                        unsigned int theWidth = ( *i )->getWidth() + widthOfOption;
                         if ( theWidth > widthOfFirstColumn ) widthOfFirstColumn = theWidth ;
                 }
         }
@@ -61,7 +63,7 @@ void MenuWithMultipleColumns::draw( BITMAP* where )
         setX( previousX + ( ( isomot::ScreenWidth - previousX ) >> 1 ) - ( getWidthOfMenu () >> 1 ) );
         setY( previousY + ( ( isomot::ScreenHeight - previousY ) >> 1 ) - ( getHeightOfMenu() >> 1 ) );
 
-        int dx( this->optionImage->w );
+        int dx( widthOfOption );
         int dy( 0 );
 
         // for each label
@@ -86,7 +88,8 @@ void MenuWithMultipleColumns::draw( BITMAP* where )
                 // place option in first column
                 if ( countOfRows <= rowsInFirstColumn )
                 {
-                        draw_sprite( where, mark, getX (), getY () + dy );
+                        if ( mark != 0 )
+                                draw_sprite( where, mark, getX (), getY () + dy );
 
                         label->moveTo( getX () + dx, getY () + dy );
                         label->draw( where );
@@ -103,7 +106,8 @@ void MenuWithMultipleColumns::draw( BITMAP* where )
                         // dibuja la viñeta
                         // para cada etiqueta
                         // ( poems, no less )
-                        draw_sprite( where, mark, getX () + secondColumnX, getY () + dy );
+                        if ( mark != 0 )
+                                draw_sprite( where, mark, getX () + secondColumnX, getY () + dy );
 
                         label->moveTo( getX () + dx + secondColumnX, getY () + dy );
                         label->draw( where );
@@ -131,7 +135,7 @@ unsigned int MenuWithMultipleColumns::getWidthOfMenu () const
 
         for ( std::list< Label* >::const_iterator i = options.begin (); i != options.end (); ++i, countOfRows++ )
         {
-                unsigned int theWidth = ( *i )->getWidth() + this->optionImage->w;
+                unsigned int theWidth = ( *i )->getWidth() + ( this->optionImage != 0 ? this->optionImage->w : 0 );
 
                 if ( countOfRows <= rowsInFirstColumn )
                 {

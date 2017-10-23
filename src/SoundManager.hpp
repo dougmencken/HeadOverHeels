@@ -238,12 +238,7 @@ public:
          */
         SoundData( const std::string& label ) ;
 
-        /**
-         * Liga un sonido a un elemento del juego
-         * @param state Descripción del estado
-         * @param sampleFileName Nombre del archivo de sonido
-         */
-        void add ( const std::string& state, const std::string& sampleFileName ) ;
+        void addSound ( const std::string& activity, const std::string& sampleFileName ) ;
 
         /**
          * Busca un sonido

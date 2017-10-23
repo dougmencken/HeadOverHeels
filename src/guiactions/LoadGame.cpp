@@ -9,20 +9,21 @@ using gui::CreatePlanetsScreen;
 
 
 LoadGame::LoadGame( BITMAP* picture, int slot )
-: Action(),
-  where( picture ),
-  slot( slot )
+        : Action(),
+          where( picture ),
+          slot( slot )
 {
 
 }
 
 void LoadGame::doAction ()
 {
-        std::stringstream ss;
         isomot::GameManager* gameManager = isomot::GameManager::getInstance();
         gameManager->resetPlanets();
-        ss << isomot::homePath() << "savegame/save" << slot << ".xml";
-        gameManager->loadGame( ss.str() );
+
+        std::stringstream ss;
+        ss << slot;
+        gameManager->loadGame( isomot::homePath() + "savegame" + pathSeparator + "save" + ss.str() + ".xml" );
 
         CreatePlanetsScreen * planetsAction = new CreatePlanetsScreen( this->where, true );
 

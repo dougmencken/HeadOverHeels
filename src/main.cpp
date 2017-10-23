@@ -4,11 +4,14 @@
   #include <winalleg.h>
 #endif
 
+#include "Ism.hpp"
 #include "GuiManager.hpp"
 
 
-int main()
+int main( int argc, char** argv )
 {
+        if ( argc > 0 ) isomot::setPathToGame( argv[ 0 ] );
+
 #ifdef __WIN32
         timeBeginPeriod( 1 );
 #endif

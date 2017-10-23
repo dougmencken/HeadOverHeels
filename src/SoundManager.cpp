@@ -1,5 +1,7 @@
+
 #include "SoundManager.hpp"
 #include "Exception.hpp"
+#include "Ism.hpp"
 
 using isomot::SoundManager;
 using isomot::SampleData;
@@ -8,6 +10,7 @@ using isomot::Exception;
 using isomot::EqualSoundData;
 
 SoundManager* SoundManager::instance = 0;
+
 
 SoundManager::SoundManager( )
         : fileName( std::string() ),
@@ -65,7 +68,7 @@ void SoundManager::readListOfSounds( const std::string& fileName )
 
                         for ( sxml::item::state_const_iterator s = ( *i ).state().begin (); s != ( *i ).state().end (); ++s )
                         {
-                                soundData.add( ( *s ).id(), ( *s ).file() );
+                                soundData.addSound( ( *s ).id(), ( *s ).file() );
                         }
 
                         this->soundData.push_back( soundData );
@@ -142,15 +145,17 @@ void SoundManager::playOgg ( const std::string& fileName, bool loop )
 {
         if ( ! this->isPlayingOgg ( fileName ) ) // let’s play the same again? nope
         {
-                // Se crea un buffer de 40 KB
+                // create buffer of 40 KiB
                 const size_t lengthOfbuffer = 40 * 1024;
+
                 set_volume( ( this->musicVolume * 255 ) / 100, 0 );
-                this->oggStream = alogg_start_streaming( ( isomot::sharePath() + fileName ).c_str (), lengthOfbuffer );
+
+                this->oggStream = alogg_start_streaming( isomot::pathToFile( isomot::sharePath() + fileName ), lengthOfbuffer );
                 if ( this->oggStream )
                 {
                         alogg_thread* oggThread = 0;
                         if ( loop )
-                                oggThread = alogg_create_thread_which_loops( this->oggStream, ( isomot::sharePath() + fileName ).c_str (), lengthOfbuffer );
+                                oggThread = alogg_create_thread_which_loops( this->oggStream, isomot::pathToFile( isomot::sharePath() + fileName ), lengthOfbuffer );
                         else
                                 oggThread = alogg_create_thread( this->oggStream );
 
@@ -352,15 +357,16 @@ SoundData::SoundData( const std::string& label )
         this->path = isomot::sharePath();
 }
 
-void SoundData::add( const std::string& state, const std::string& sampleFileName )
+void SoundData::addSound( const std::string& activity, const std::string& sampleFileName )
 {
-        SAMPLE* sample = load_sample( ( this->path + sampleFileName ).c_str () );
+        SAMPLE* sample = load_sample( isomot::pathToFile( this->path + sampleFileName ) );
+
         assert( sample != 0 );
 
         SampleData sampleData;
         sampleData.sample = sample;
         sampleData.voice = -1;
-        this->table[ state ] = sampleData;
+        this->table[ activity ] = sampleData;
 }
 
 SampleData* SoundData::find( const std::string& state )

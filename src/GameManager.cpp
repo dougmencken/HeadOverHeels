@@ -120,7 +120,7 @@ GameManager* GameManager::getInstance ()
 
 BITMAP * GameManager::refreshPicture ( const char * nameOfPicture )
 {
-        return load_png( ( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + nameOfPicture ).c_str (), 0 );
+        return load_png( isomot::pathToFile( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + nameOfPicture ), 0 );
 }
 
 WhyPause GameManager::begin ()

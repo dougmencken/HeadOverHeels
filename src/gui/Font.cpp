@@ -1,5 +1,8 @@
 
 #include "Font.hpp"
+#include "Ism.hpp"
+
+#include <iostream>
 
 #include <loadpng.h>
 
@@ -10,8 +13,10 @@ namespace gui
 Font::Font( const std::string& fontName, const std::string& fontFile, int color, bool doubleSize ) :
         fontName( fontName )
 {
-        // Carga el archivo
-        BITMAP * bitmapFont = load_png( fontFile.c_str(), 0 );
+        std::string nameOfFile = fontFile;
+        std::cout << "reading from file \"" << nameOfFile << "\" to create font \"" << fontName << "\"" << std::endl ;
+
+        BITMAP * bitmapFont = load_png( isomot::pathToFile( fontFile ), 0 );
         assert( bitmapFont );
 
         // Duplica su tamaño, si procede

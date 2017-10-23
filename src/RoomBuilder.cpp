@@ -300,7 +300,7 @@ FloorTile* RoomBuilder::buildFloorTile( const rxml::tile& tile, const char* gfxP
         FloorTile* floorTile = 0;
 
         try {
-                BITMAP* picture = load_png( ( isomot::sharePath() + gfxPrefix + "/" + tile.picture() ).c_str(), 0 );
+                BITMAP* picture = load_png( isomot::pathToFile( isomot::sharePath() + gfxPrefix + pathSeparator + tile.picture() ), 0 );
                 if ( picture == 0 ) {
                         std::cerr << "picture \"" << tile.picture() << "\" at \"" << gfxPrefix << "\" is absent" << std::endl ;
                         throw "picture " + tile.picture() + " at " + gfxPrefix + " is absent";
@@ -320,7 +320,7 @@ Wall* RoomBuilder::buildWall( const rxml::wall& wall, const char* gfxPrefix )
         Wall* roomWall = 0;
 
         try {
-                BITMAP* picture = load_png( ( isomot::sharePath() + gfxPrefix + "/" + wall.picture() ).c_str(), 0 );
+                BITMAP* picture = load_png( isomot::pathToFile( isomot::sharePath() + gfxPrefix + pathSeparator + wall.picture() ), 0 );
                 if ( picture == 0 ) {
                         std::cerr << "picture \"" << wall.picture() << "\" at \"" << gfxPrefix << "\" is absent" << std::endl ;
                         throw "picture " + wall.picture() + " at " + gfxPrefix + " is absent";
