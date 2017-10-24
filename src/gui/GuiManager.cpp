@@ -40,9 +40,15 @@ GuiManager::GuiManager( ) :
         this->allegroSetup();
 
         std::string nameOfWindow = "Head over Heels";
+
 #ifdef PACKAGE_VERSION
-        nameOfWindow = nameOfWindow + " v" + PACKAGE_VERSION;
+        std::string version = "v" + std::string( PACKAGE_VERSION );
+        if ( version == "v1.30" )
+                version = "30th anniversary";
+
+        nameOfWindow = nameOfWindow + " " + version;
 #endif
+
         set_window_title ( nameOfWindow.c_str () );
 
         std::string pathToFont = isomot::sharePath();

@@ -2,21 +2,21 @@ AC_PREREQ([2.65])
 AC_LANG(C++)
 AC_CONFIG_MACRO_DIRS([m4])
 
-AC_INIT(headoverheels, 1.25, dougmencken@gmail.com)
+AC_INIT(headoverheels, 1.30, dougmencken@gmail.com)
 
 AM_INIT_AUTOMAKE([subdir-objects])
 
 # use libtool
 LT_INIT
 
-# Checks for programs
+# look for programs
 AC_PROG_CC
 AC_PROG_CXX
 AM_PROG_CC_C_O
 
-# Checks for libraries
+# look for libraries
 
-# Checks for header files
+# look for header files
 AC_CHECK_HEADERS(allegro.h,, [AC_MSG_ERROR(allegro headers not found)])
 AC_CHECK_HEADERS(zlib.h,, [AC_MSG_ERROR(zlib headers not found)])
 AC_CHECK_HEADERS(png.h,, [AC_MSG_ERROR(libpng headers not found)])
@@ -25,11 +25,11 @@ AC_CHECK_HEADERS(ogg/ogg.h,, [AC_MSG_ERROR(ogg headers not found)])
 AC_CHECK_HEADERS(xercesc/util/XercesVersion.hpp,, [AC_MSG_ERROR(xerces-c headers not found)])
 AC_CHECK_HEADERS(pthread.h,, [AC_MSG_ERROR(pthread.h not found)])
 
-# Checks for typedefs, structures, and compiler characteristics
+# look for typedefs, structures, and compiler characteristics
 
-# Checks for library functions
+# look for library functions
 
-# Makefiles
+# makefiles
 AC_OUTPUT( \
             Makefile \
             src/Makefile \

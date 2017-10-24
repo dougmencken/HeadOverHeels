@@ -119,7 +119,7 @@
 
   <text id="confirm-quit">
     <properties font="big" color="cyan">
-      <ustring>Prem Escape per a abandonar la partida</ustring>
+      <ustring>Prem Escape per a abandonar</ustring>
     </properties>
   </text>
 
