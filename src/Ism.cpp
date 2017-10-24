@@ -99,7 +99,7 @@ std::string homePath ()
 {
         if ( HomePath.empty () )
         {
-        #if defined ( __WIN32 )
+        #if defined ( __WIN32 ) || defined ( __CYGWIN__ )
                 HomePath = sharePath();
         #else /* #elif defined ( __gnu_linux__ ) */
                 char* home = getenv( "HOME" );
