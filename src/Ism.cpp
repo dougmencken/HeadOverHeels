@@ -1,5 +1,6 @@
 
 #include "Ism.hpp"
+#include <unistd.h>
 
 #if defined ( __CYGWIN__ )
     #include <sys/cygwin.h>
@@ -48,6 +49,7 @@ const char * pathToFile( const std::string& in )
 }
 
 std::string PathToGame( "no way" ) ;
+std::string FullPathToGame( "" ) ;
 
 std::string pathToGame ()
 {
@@ -57,7 +59,38 @@ std::string pathToGame ()
 void setPathToGame ( const char * pathToGame )
 {
         PathToGame = pathToGame ;
-        fprintf( stdout, "PathToGame is \"%s\"\n", pathToGame );
+        FullPathToGame = pathToGame ;
+
+#if defined ( __CYGWIN__ )
+        if ( PathToGame == "headoverheels" || PathToGame == "/usr/bin/headoverheels" )
+        {  // in case of double-clicking or running with gdb
+                FullPathToGame = "/bin/headoverheels" ;
+        }
+#endif
+
+        char* lastdot = strrchr ( get_filename( PathToGame.c_str () ) , '.' );
+        if ( lastdot != 0 && strlen( lastdot ) == 4 &&
+                        ( lastdot[ 1 ] == 'a' && lastdot[ 2 ] == 'p' && lastdot[ 3 ] == 'p' ) )
+        {  // game is in OS X bundle
+                FullPathToGame = PathToGame + pathSeparator + "Contents" + pathSeparator + "MacOS" + pathSeparator ;
+        }
+        else
+        {
+                if ( FullPathToGame[ 0 ] != pathSeparator[ 0 ] )
+                {  // pathToGame is not full path
+                        char folderOfGame[ 1024 ];
+                        getcwd( folderOfGame, 1024 ) ;
+
+                        size_t len = strlen( folderOfGame );
+                        if ( folderOfGame[ len - 1 ] == pathSeparator[ 0 ] )
+                                folderOfGame[ len - 1 ] = 0;
+
+                        FullPathToGame = std::string( folderOfGame ) + pathSeparator + PathToGame ;
+                }
+        }
+
+        fprintf( stdout, "PathToGame is \"%s\"\n", PathToGame.c_str () );
+        fprintf( stdout, "FullPathToGame is \"%s\"\n", FullPathToGame.c_str () );
 }
 
 std::string HomePath ;
@@ -76,9 +109,6 @@ std::string homePath ()
                 {
                         mkdir( HomePath.c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH );
                         mkdir( ( HomePath + "savegame/" ).c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH );
-
-                        /// copyTextFile( sharePath() + "configuration.xsd", HomePath + "configuration.xsd" );
-                        /// copyTextFile( sharePath() + "savegame/savegame.xsd", HomePath + "savegame/savegame.xsd" );
                 }
         #endif
         }
@@ -93,25 +123,7 @@ std::string sharePath ()
         if ( SharePath.empty () )
         {
 #if defined ( __CYGWIN__ ) || defined ( __WIN32 )
-                char * cpath = static_cast< char * >( malloc( 1024 ) );
-                get_executable_name( cpath , 1024 ); // invoke allegro’s get_executable_name
-
-        #if defined ( __CYGWIN__ )
-                ssize_t length ;
-                char * posixPath = 0;
-
-                /* ssize_t cygwin_conv_path( cygwin_conv_path_t what, const void * from, void * to, size_t size )
-                   https://cygwin.com/cygwin-api/func-cygwin-conv-path.html */
-
-                length = cygwin_conv_path ( CCP_WIN_A_TO_POSIX | CCP_ABSOLUTE, cpath, 0, 0 ) ;
-                if ( length >= 0 )
-                {
-                        posixPath = static_cast< char * >( malloc( length ) );
-                        cygwin_conv_path ( CCP_WIN_A_TO_POSIX | CCP_ABSOLUTE, cpath, posixPath, length ) ;
-                }
-
-                cpath = posixPath ;
-        #endif
+                const char* cpath = FullPathToGame.c_str ();
 #else
                 const char* cpath = pathToGame().c_str ();
 #endif
