@@ -110,7 +110,6 @@ gamedatagfx2003_DATA = item.png/ball-shadows.png \
 			gui.png/byblos.png \
 			gui.png/chosen-option-mini.png \
 			gui.png/chosen-option.png \
-			gui.png/crown.png \
 			gui.png/egyptus-frame.png \
 			gui.png/egyptus.png \
 			gui.png/grey-crown.png \
