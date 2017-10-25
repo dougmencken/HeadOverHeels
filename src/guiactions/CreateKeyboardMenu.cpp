@@ -6,7 +6,7 @@
 #include "InputManager.hpp"
 #include "Font.hpp"
 #include "Screen.hpp"
-#include "Menu.hpp"
+#include "MenuWithValues.hpp"
 #include "Label.hpp"
 #include "CreateMainMenu.hpp"
 #include "RedefineKey.hpp"
@@ -24,8 +24,6 @@ CreateKeyboardMenu::CreateKeyboardMenu( BITMAP* picture ) :
 
 void CreateKeyboardMenu::doAction ()
 {
-        const size_t positionOfKey = 21;
-
         Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this, this->where );
         if ( screen->countWidgets() == 0 )
         {
@@ -33,12 +31,10 @@ void CreateKeyboardMenu::doAction ()
 
                 screen->placeHeadAndHeels( /* icons */ false, /* copyrights */ false );
 
-                Label* label = 0;
                 LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
-                InputManager* supportOfInput = InputManager::getInstance();
 
-                this->menuOfKeys = new Menu( );
-                menuOfKeys->setVerticalOffset( 80 );
+                this->menuOfKeys = new MenuWithValues( '.', 5 );
+                menuOfKeys->setVerticalOffset( 78 );
 
                 // create one option for each key used in the game
                 for ( size_t i = 0; i < InputManager::numberOfKeys; i++ )
@@ -46,28 +42,19 @@ void CreateKeyboardMenu::doAction ()
                         std::string nameOfThisKey = InputManager::namesOfKeys[ i ];
                         std::string nameOfTranslation = ( nameOfThisKey == "take&jump" ? "takeandjump" : nameOfThisKey );
 
-                        // Código de la tecla asignada
-                        int scancode = supportOfInput->getUserKey( nameOfThisKey );
+                        Label* label = new Label( languageManager->findLanguageString( nameOfTranslation )->getText() );
 
-                        // Descripción del uso de la tecla
-                        std::string textOfKey = languageManager->findLanguageString( nameOfTranslation )->getText();
-
-                        std::string dottedTextOfKey( textOfKey );
-                        for ( size_t position = utf8StringLength( textOfKey ) ; position < positionOfKey ; ++position ) {
-                                dottedTextOfKey = dottedTextOfKey + ".";
-                        }
-
-                        // The menu option is made of the description of the key and the key itself
-                        label = new Label( dottedTextOfKey + scancode_to_name( scancode ) );
+                        int scancode = InputManager::getInstance()->getUserKey( nameOfThisKey );
                         if ( scancode == 0 )
                         {
                                 label->changeFontAndColor( label->getFontName (), "cyan" );
                         }
 
-                        // assign as action the possibility to change the key
+                        // action is possibility to change key
                         label->setAction( new RedefineKey( menuOfKeys, nameOfThisKey ) );
 
                         menuOfKeys->addOption( label );
+                        menuOfKeys->setValueOf( label, scancode_to_name( scancode ) );
                 }
 
                 screen->addWidget( menuOfKeys );

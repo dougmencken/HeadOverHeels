@@ -27,7 +27,6 @@ class MenuWithTwoColumns : public Menu
 public:
 
         /**
-         * Constructor
          * @param space Space between columns
          */
         MenuWithTwoColumns( unsigned int space );

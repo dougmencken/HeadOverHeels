@@ -18,7 +18,7 @@
 namespace gui
 {
 
-class Menu ;
+class MenuWithValues ;
 
 /**
  * Crea el menú de configuración del teclado y el joystick
@@ -50,7 +50,7 @@ private:
          */
         BITMAP * where ;
 
-        Menu * menuOfKeys ;
+        MenuWithValues * menuOfKeys ;
 
 };
 

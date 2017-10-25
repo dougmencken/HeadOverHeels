@@ -22,7 +22,7 @@
 namespace gui
 {
 
-class Menu;
+class MenuWithValues ;
 
 /**
  * Cambia una tecla para el control del juego por otra indicada por el usuario
@@ -34,10 +34,9 @@ class RedefineKey : public Action
 public:
 
        /**
-        * @param menu Menú de opciones donde se encuentra el texto de la tecla a cambiar
-        * @param name Name of the key like "jump" or "movesouth"
+        * @param name Name of key like "jump" or "movesouth"
         */
-        RedefineKey( Menu* menu, std::string name ) ;
+        RedefineKey( MenuWithValues * menu, std::string name ) ;
 
         std::string getNameOfAction () const {  return "RedefineKey" ;  }
 
@@ -47,14 +46,8 @@ protected:
 
 private:
 
-       /**
-        * Menú de opciones donde se encuentra el texto de la tecla a cambiar
-        */
-        Menu* menu ;
+        MenuWithValues * menu ;
 
-       /**
-        * Name of the key like "take" or "moveeast"
-        */
         std::string nameOfKey ;
 
 };

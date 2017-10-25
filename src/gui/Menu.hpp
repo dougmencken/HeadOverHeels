@@ -13,6 +13,7 @@
 
 #include <list>
 #include <string>
+#include <iostream>
 #include <allegro.h>
 #include "Widget.hpp"
 
@@ -64,25 +65,19 @@ public:
 
         virtual unsigned int getHeightOfMenu () const ;
 
-private:
-
-        Label* handlerOfKeys ;
-
 protected:
 
         /**
          * Choose the previous option of this menu
          */
-        void previousOption () ;
+        virtual void previousOption () ;
 
         /**
          * Choose the next option of this menu
          */
-        void nextOption () ;
+        virtual void nextOption () ;
 
         void refreshPictures () ;
-
-protected:
 
         /**
          * Options that make up the menu

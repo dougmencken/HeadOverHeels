@@ -6,7 +6,7 @@
 #include "LanguageText.hpp"
 #include "SoundManager.hpp"
 #include "Screen.hpp"
-#include "Menu.hpp"
+#include "MenuWithValues.hpp"
 #include "Label.hpp"
 #include "CreateMainMenu.hpp"
 
@@ -49,51 +49,42 @@ void CreateAudioMenu::doAction ()
 
                 screen->placeHeadAndHeels( /* icons */ false, /* copyrights */ false );
 
-                ss.str( std::string() ); // clear ss
-
                 // efectos sonoros
-                ss << SoundManager::getInstance()->getVolumeOfEffects();
-
-                std::string stringEffectsSpaced ( langStringEffects->getText() );
-                for ( size_t position = utf8StringLength( stringEffectsSpaced ) ; position < positionOfSetting ; ++position ) {
-                        stringEffectsSpaced = stringEffectsSpaced + " ";
-                }
-                this->labelEffects = new Label( stringEffectsSpaced + ss.str() );
-
-                ss.str( std::string() );
+                this->labelEffects = new Label( langStringEffects->getText() );
 
                 // música
-                ss << SoundManager::getInstance()->getVolumeOfMusic();
-
-                std::string stringMusicSpaced ( langStringMusic->getText() );
-                for ( size_t position = utf8StringLength( stringMusicSpaced ) ; position < positionOfSetting ; ++position ) {
-                        stringMusicSpaced = stringMusicSpaced + " ";
-                }
-                this->labelMusic = new Label( stringMusicSpaced + ss.str() );
+                this->labelMusic = new Label( langStringMusic->getText() );
 
                 // play melody of scenery on entry to room or don’t
-                std::string playTunesSpaced ( langStringRoomTunes->getText() );
-                for ( size_t position = utf8StringLength( playTunesSpaced ) ; position < positionOfSetting ; ++position ) {
-                        playTunesSpaced = playTunesSpaced + " ";
-                }
-                this->playRoomTunes = new Label( playTunesSpaced + ( isomot::GameManager::getInstance()->playMelodyOfScenery () ? yeah : nope ) );
+                this->playRoomTunes = new Label( langStringRoomTunes->getText() );
 
-                this->listOfOptions = new Menu( );
+                // create menu
+
+                this->listOfOptions = new MenuWithValues( );
+
                 listOfOptions->addOption( labelEffects );
+                ss.str( std::string() ); // clear ss
+                ss << SoundManager::getInstance()->getVolumeOfEffects();
+                listOfOptions->setValueOf( labelEffects, ss.str() );
+
                 listOfOptions->addOption( labelMusic );
+                ss.str( std::string() );
+                ss << SoundManager::getInstance()->getVolumeOfMusic();
+                listOfOptions->setValueOf( labelMusic, ss.str() );
+
                 listOfOptions->addOption( playRoomTunes );
-                listOfOptions->setVerticalOffset( 40 );
+                listOfOptions->setValueOf( playRoomTunes, isomot::GameManager::getInstance()->playMelodyOfScenery () ? yeah : nope );
+
+                listOfOptions->setVerticalOffset( 35 );
+
+                // add menu to screen
 
                 screen->addWidget( listOfOptions );
         }
         else
         {
                 // update labels
-                std::string playTunesSpaced ( langStringRoomTunes->getText() );
-                for ( size_t position = utf8StringLength( playTunesSpaced ) ; position < positionOfSetting ; ++position ) {
-                        playTunesSpaced = playTunesSpaced + " ";
-                }
-                playRoomTunes->setText( playTunesSpaced + ( isomot::GameManager::getInstance()->playMelodyOfScenery () ? yeah : nope ) );
+                listOfOptions->setValueOf( playRoomTunes, isomot::GameManager::getInstance()->playMelodyOfScenery () ? yeah : nope );
         }
 
         if ( screen->getKeyHandler() == 0 )
@@ -147,20 +138,12 @@ void CreateAudioMenu::doAction ()
 
                                                 if ( listOfOptions->getActiveOption () == labelMusic )
                                                 {
-                                                        std::string musicStringSpaced ( langStringMusic->getText() );
-                                                        for ( size_t position = utf8StringLength( musicStringSpaced ) ; position < positionOfSetting ; ++position ) {
-                                                                musicStringSpaced = musicStringSpaced + " ";
-                                                        }
-                                                        labelMusic->setText( musicStringSpaced + ss.str() );
+                                                        listOfOptions->setValueOf( labelMusic, ss.str() );
                                                         SoundManager::getInstance()->setVolumeOfMusic( value );
                                                 }
                                                 else if ( listOfOptions->getActiveOption () == labelEffects )
                                                 {
-                                                        std::string stringEffectsSpaced ( langStringEffects->getText() );
-                                                        for ( size_t position = utf8StringLength( stringEffectsSpaced ) ; position < positionOfSetting ; ++position ) {
-                                                                stringEffectsSpaced = stringEffectsSpaced + " ";
-                                                        }
-                                                        labelEffects->setText( stringEffectsSpaced + ss.str() );
+                                                        listOfOptions->setValueOf( labelEffects, ss.str() );
                                                         SoundManager::getInstance()->setVolumeOfEffects( value );
                                                 }
                                         }
@@ -170,13 +153,9 @@ void CreateAudioMenu::doAction ()
                                         if ( theKey == KEY_LEFT || theKey == KEY_RIGHT )
                                         {
                                                 isomot::GameManager::getInstance()->togglePlayMelodyOfScenery ();
-                                                doneWithKey = true;
+                                                listOfOptions->setValueOf( playRoomTunes, isomot::GameManager::getInstance()->playMelodyOfScenery () ? yeah : nope );
 
-                                                std::string playTunesSpaced ( langStringRoomTunes->getText() );
-                                                for ( size_t position = utf8StringLength( playTunesSpaced ) ; position < positionOfSetting ; ++position ) {
-                                                        playTunesSpaced = playTunesSpaced + " ";
-                                                }
-                                                playRoomTunes->setText( playTunesSpaced + ( isomot::GameManager::getInstance()->playMelodyOfScenery () ? yeah : nope ) );
+                                                doneWithKey = true;
                                         }
                                 }
 

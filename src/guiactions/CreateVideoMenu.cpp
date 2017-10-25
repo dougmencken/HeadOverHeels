@@ -6,7 +6,7 @@
 #include "LanguageText.hpp"
 #include "LanguageManager.hpp"
 #include "Screen.hpp"
-#include "Menu.hpp"
+#include "MenuWithValues.hpp"
 #include "Label.hpp"
 #include "CreateMainMenu.hpp"
 
@@ -41,33 +41,26 @@ void CreateVideoMenu::doAction ()
                 std::string yeah = languageManager->findLanguageString( "yep" )-> getText ();
                 std::string nope = languageManager->findLanguageString( "nope" )->getText ();
 
-                std::string stringFullscreenSpaced ( textFullscreen->getText() );
-                for ( size_t position = utf8StringLength( stringFullscreenSpaced ) ; position < positionOfSetting ; ++position ) {
-                        stringFullscreenSpaced = stringFullscreenSpaced + " ";
-                }
-                this->labelFullscreen = new Label( stringFullscreenSpaced + ( gui::GuiManager::getInstance()->isAtFullScreen () ? yeah : nope ) );
-
-                std::string stringDrawShadowsSpaced ( textDrawShadows->getText() );
-                for ( size_t position = utf8StringLength( stringDrawShadowsSpaced ) ; position < positionOfSetting ; ++position ) {
-                        stringDrawShadowsSpaced = stringDrawShadowsSpaced + " ";
-                }
-                this->labelDrawShadows = new Label( stringDrawShadowsSpaced + ( isomot::GameManager::getInstance()->getDrawShadows () ? yeah : nope ) );
-
-                std::string stringDrawBackgroundSpaced ( textDrawBackground->getText() );
-                for ( size_t position = utf8StringLength( stringDrawBackgroundSpaced ) ; position < positionOfSetting ; ++position ) {
-                        stringDrawBackgroundSpaced = stringDrawBackgroundSpaced + " ";
-                }
-                this->labelDrawBackground = new Label( stringDrawBackgroundSpaced + ( isomot::GameManager::getInstance()->hasBackgroundPicture () ? yeah : nope ) );
+                this->labelFullscreen = new Label( textFullscreen->getText() );
+                this->labelDrawShadows = new Label( textDrawShadows->getText() );
+                this->labelDrawBackground = new Label( textDrawBackground->getText() );
 
                 LanguageText* textGraphicSet = languageManager->findLanguageString( "graphic-set" );
                 this->labelGraphicSet = new Label( textGraphicSet->getText(), "regular", "yellow" );
                 labelGraphicSet->setAction( new CreateMenuOfGraphicSets( this->where, this ) );
 
-                this->listOfOptions = new Menu( );
+                this->listOfOptions = new MenuWithValues( ' ', 1 );
+
                 listOfOptions->addOption( labelFullscreen );
                 listOfOptions->addOption( labelDrawShadows );
                 listOfOptions->addOption( labelDrawBackground );
                 listOfOptions->addOption( labelGraphicSet );
+
+                ///listOfOptions->setValueOf( labelGraphicSet, "" ); // it has no value but action
+                listOfOptions->setValueOf( labelDrawBackground, isomot::GameManager::getInstance()->hasBackgroundPicture () ? yeah : nope );
+                listOfOptions->setValueOf( labelDrawShadows, isomot::GameManager::getInstance()->getDrawShadows () ? yeah : nope );
+                listOfOptions->setValueOf( labelFullscreen, gui::GuiManager::getInstance()->isAtFullScreen () ? yeah : nope );
+
                 listOfOptions->setVerticalOffset( 40 );
 
                 screen->addWidget( listOfOptions );
@@ -145,31 +138,12 @@ void CreateVideoMenu::doAction ()
 void CreateVideoMenu::updateLabels ()
 {
         LanguageManager* languageManager = gui::GuiManager::getInstance()->getLanguageManager();
-
-        LanguageText* textFullscreen = languageManager->findLanguageString( "full-screen" );
-        LanguageText* textDrawShadows = languageManager->findLanguageString( "draw-shadows" );
-        LanguageText* textDrawBackground = languageManager->findLanguageString( "draw-background" );
-
         std::string yeah = languageManager->findLanguageString( "yep" )-> getText ();
         std::string nope = languageManager->findLanguageString( "nope" )->getText ();
 
-        std::string stringFullscreenSpaced ( textFullscreen->getText() );
-        for ( size_t position = utf8StringLength( stringFullscreenSpaced ) ; position < positionOfSetting ; ++position ) {
-                stringFullscreenSpaced = stringFullscreenSpaced + " ";
-        }
-        labelFullscreen->setText( stringFullscreenSpaced + ( gui::GuiManager::getInstance()->isAtFullScreen () ? yeah : nope ) );
-
-        std::string stringDrawShadowsSpaced ( textDrawShadows->getText() );
-        for ( size_t position = utf8StringLength( stringDrawShadowsSpaced ) ; position < positionOfSetting ; ++position ) {
-                stringDrawShadowsSpaced = stringDrawShadowsSpaced + " ";
-        }
-        labelDrawShadows->setText( stringDrawShadowsSpaced + ( isomot::GameManager::getInstance()->getDrawShadows () ? yeah : nope ) );
-
-        std::string stringDrawBackgroundSpaced ( textDrawBackground->getText() );
-        for ( size_t position = utf8StringLength( stringDrawBackgroundSpaced ) ; position < positionOfSetting ; ++position ) {
-                stringDrawBackgroundSpaced = stringDrawBackgroundSpaced + " ";
-        }
-        labelDrawBackground->setText( stringDrawBackgroundSpaced + ( isomot::GameManager::getInstance()->hasBackgroundPicture () ? yeah : nope ) );
+        listOfOptions->setValueOf( labelDrawBackground, isomot::GameManager::getInstance()->hasBackgroundPicture () ? yeah : nope );
+        listOfOptions->setValueOf( labelDrawShadows, isomot::GameManager::getInstance()->getDrawShadows () ? yeah : nope );
+        listOfOptions->setValueOf( labelFullscreen, gui::GuiManager::getInstance()->isAtFullScreen () ? yeah : nope );
 
         listOfOptions->redraw ();
 }

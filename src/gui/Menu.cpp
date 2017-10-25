@@ -12,8 +12,7 @@ namespace gui
 {
 
 Menu::Menu( )
-: Widget( ),
-        handlerOfKeys( 0 ),
+        : Widget( ),
         activeOption( 0 ),
         whereToDraw( 0 ),
         optionImage( 0 ),
@@ -122,32 +121,27 @@ void Menu::handleKey( int rawKey )
                 return;
         }
 
-        switch ( theKey )
+        if ( this->activeOption != 0 )
         {
-                case KEY_UP:
-                        if ( this->activeOption != 0 )
-                        {
+                switch ( theKey )
+                {
+                        case KEY_UP:
                                 this->previousOption();
-                        }
-                        break;
+                                break;
 
-                case KEY_DOWN:
-                        if ( this->activeOption != 0 )
-                        {
+                        case KEY_DOWN:
                                 this->nextOption();
-                        }
-                        break;
+                                break;
 
-                default:
-                        if ( this->handlerOfKeys != 0 )
-                        {
-                                handlerOfKeys->handleKey( rawKey );
-                        }
+                        default:
+                                activeOption->handleKey( rawKey );
+                }
         }
 }
 
 void Menu::addOption( Label* label )
 {
+        assert( label != 0 );
         options.push_back( label );
 }
 
@@ -157,7 +151,6 @@ void Menu::setActiveOption ( Label* option )
         {
                 if ( ( *i ) == option )
                 {
-                        handlerOfKeys = option ;
                         activeOption = option ;
                         return;
                 }
@@ -165,7 +158,7 @@ void Menu::setActiveOption ( Label* option )
 
         if ( option != 0 )
         {
-                fprintf( stderr, "option \"%s\" isn't from this menu\n", option->getText().c_str () );
+                std::cerr << "option \"" << option->getText() << "\" isn’t from this menu" << std::endl ;
         }
 }
 
@@ -207,18 +200,19 @@ unsigned int Menu::getHeightOfMenu () const
 
 void Menu::previousOption ()
 {
-        std::list< Label* >::iterator i = std::find_if( options.begin (), options.end (), std::bind2nd( EqualXYOfLabel(), this->activeOption->getXY () ) );
+        std::list< Label* >::const_iterator i = std::find_if( options.begin (), options.end (), std::bind2nd( EqualXYOfLabel(), this->activeOption->getXY () ) );
         assert ( i != options.end () );
-        this->activeOption = ( i == options.begin() ? *options.rbegin() : *( --i ) );
-        this->handlerOfKeys = this->activeOption ;
+
+        this->activeOption = ( i == options.begin() ? *( --options.end() ) : *( --i ) );
 }
 
 void Menu::nextOption ()
 {
-        std::list< Label* >::iterator i = std::find_if( options.begin (), options.end (), std::bind2nd( EqualXYOfLabel(), this->activeOption->getXY () ) );
+        std::list< Label* >::const_iterator i = std::find_if( options.begin (), options.end (), std::bind2nd( EqualXYOfLabel(), this->activeOption->getXY () ) );
         assert ( i != options.end () );
-        this->activeOption = ( ++i == options.end() ? *options.begin() : *i );
-        this->handlerOfKeys = this->activeOption ;
+
+        ++i ;
+        this->activeOption = ( i == options.end() ? *options.begin() : *i );
 }
 
 }

@@ -19,11 +19,11 @@
 namespace gui
 {
 
-class Menu;
-class Label;
+class MenuWithValues ;
+class Label ;
 
 /**
- * Crea el menú de para el ajuste de los efectos sonidos y la música
+ * Create menu for adjusting music and sound effects of game
  */
 
 class CreateAudioMenu : public Action
@@ -39,8 +39,6 @@ public:
 
         std::string getNameOfAction () const {  return "CreateAudioMenu" ;  }
 
-        static const size_t positionOfSetting = 20 ;
-
 protected:
 
         /**
@@ -52,7 +50,7 @@ private:
 
         BITMAP * where ;
 
-        Menu * listOfOptions ;
+        MenuWithValues * listOfOptions ;
 
         Label * labelEffects ;
         Label * labelMusic ;

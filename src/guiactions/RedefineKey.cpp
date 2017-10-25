@@ -5,7 +5,7 @@
 #include "GuiManager.hpp"
 #include "LanguageManager.hpp"
 #include "LanguageText.hpp"
-#include "Menu.hpp"
+#include "MenuWithValues.hpp"
 #include "Label.hpp"
 
 using gui::RedefineKey;
@@ -13,18 +13,16 @@ using gui::ConfigurationManager;
 using isomot::InputManager;
 
 
-RedefineKey::RedefineKey( Menu* menu, std::string name )
-: Action(),
-  menu( menu ),
-  nameOfKey( name )
+RedefineKey::RedefineKey( MenuWithValues* menu, std::string name )
+        : Action(),
+        menu( menu ),
+        nameOfKey( name )
 {
 
 }
 
 void RedefineKey::doAction ()
 {
-        const size_t positionOfKey = 21;
-
         Label * activeLabel = menu->getActiveOption();
         activeLabel->changeFontAndColor( "big", "yellow" );
         menu->redraw ();
@@ -56,19 +54,16 @@ void RedefineKey::doAction ()
                                         {
                                                 InputManager::getInstance()->changeUserKey( nameOfPrevious, 0 );
 
-                                                // update the menu now
+                                                // update menu
                                                 std::string textOfThatKey = GuiManager::getInstance()->getLanguageManager()->findLanguageString( nameForText )->getText();
                                                 std::list < Label * > everyLabel = menu->getEveryOption ();
-                                                for ( std::list< Label * >::iterator iter = everyLabel.begin (); iter != everyLabel.end (); ++iter )
+                                                for ( std::list< Label * >::iterator o = everyLabel.begin (); o != everyLabel.end (); ++o )
                                                 {
-                                                        if ( ( *iter )->getText().find( textOfThatKey ) == 0 )
-                                                        {  // this label begins with the text of that previous key
-                                                                std::string dottedLabelForKey( textOfThatKey );
-                                                                for ( size_t position = utf8StringLength( textOfThatKey ) ; position < positionOfKey ; ++position ) {
-                                                                        dottedLabelForKey = dottedLabelForKey + ".";
-                                                                }
-                                                                ( *iter )->setText( dottedLabelForKey + scancode_to_name( 0 ) );
-                                                                ( *iter )->changeFontAndColor( ( *iter )->getFontName (), "cyan" );
+                                                        if ( ( *o )->getText() == textOfThatKey )
+                                                        {
+                                                                menu->setValueOf( *o, scancode_to_name( 0 ) );
+                                                                ( *o )->changeFontAndColor( ( *o )->getFontName (), "cyan" );
+
                                                                 std::cout << "key \"" << nameOfPrevious << "\" is now NONE ( 0 )" << std::endl ;
                                                                 break;
                                                         }
@@ -82,12 +77,8 @@ void RedefineKey::doAction ()
                                                   << std::endl ;
 
                                         nameForText = ( this->nameOfKey == "take&jump" ? "takeandjump" : this->nameOfKey );
-                                        std::string textOfKey = GuiManager::getInstance()->getLanguageManager()->findLanguageString( nameForText )->getText();
-                                        std::string dottedTextOfKey( textOfKey );
-                                        for ( size_t position = utf8StringLength( textOfKey ) ; position < positionOfKey ; ++position ) {
-                                                dottedTextOfKey = dottedTextOfKey + ".";
-                                        }
-                                        activeLabel->setText( dottedTextOfKey + scancode_to_name( newKey ) );
+
+                                        menu->setValueOf( activeLabel, scancode_to_name( newKey ) );
 
                                         InputManager::getInstance()->changeUserKey( this->nameOfKey, newKey );
                                 }
@@ -98,8 +89,8 @@ void RedefineKey::doAction ()
                         clear_keybuf();
                 }
 
-                // No te comas la CPU
-                // Do not eat the CPU
+                // no te comas la CPU
+                // do not eat the CPU
                 sleep( 20 );
         }
 
