@@ -3,6 +3,18 @@
 <language xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="language.xsd">
 
+  <text id="yep">
+    <properties>
+      <ustring>sí</ustring>
+    </properties>
+  </text>
+
+  <text id="nope">
+    <properties>
+      <ustring>no</ustring>
+    </properties>
+  </text>
+
   <text id="new-game">
     <properties>
       <ustring>Nou joc</ustring>
@@ -129,6 +141,36 @@
     </properties>
   </text>
 
+  <text id="video-menu">
+    <properties>
+      <ustring>Video</ustring>
+    </properties>
+  </text>
+
+  <text id="full-screen">
+    <properties>
+      <ustring>Pantalla sencera</ustring>
+    </properties>
+  </text>
+
+  <text id="draw-shadows">
+    <properties>
+      <ustring>Dibuixa ombres</ustring>
+    </properties>
+  </text>
+
+  <text id="draw-background">
+    <properties>
+      <ustring>Dibuixa fons</ustring>
+    </properties>
+  </text>
+
+  <text id="graphic-set">
+    <properties>
+      <ustring>Tria conjunt de gràfics</ustring>
+    </properties>
+  </text>
+
   <text id="audio-menu">
     <properties>
       <ustring>So</ustring>
@@ -144,6 +186,12 @@
   <text id="music">
     <properties>
       <ustring>Música</ustring>
+    </properties>
+  </text>
+
+  <text id="play-room-melodies">
+  <properties>
+      <ustring>Música en entrar a sala</ustring>
     </properties>
   </text>
 
