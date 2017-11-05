@@ -43,7 +43,7 @@ Behavior::Behavior( Item * whichItem, const std::string & behavior ) :
 {
         if ( behavior != "behavior of Head" && behavior != "behavior of Heels" && behavior != "behavior of Head over Heels" )
         {
-                std::cout << "creation of behavior \"" << behavior << "\" for item \"" << whichItem->getLabel()
+                std::cout << "creation of behavior \"" << behavior << "\" for " << whichItem->whichKindOfItem() << " \"" << whichItem->getLabel()
                                 << "\" at x=" << whichItem->getX() << " y=" << whichItem->getY() << " z=" << whichItem->getZ()
                                 << " with orientation \"" << whichItem->getOrientation().toString() << "\""
                                 << std::endl ;

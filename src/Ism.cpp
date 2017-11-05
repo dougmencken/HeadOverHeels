@@ -40,7 +40,9 @@ const char * pathToFile( const std::string& in )
                 cygwin_conv_path ( CCP_POSIX_TO_WIN_A | CCP_RELATIVE, in.c_str (), windowsPath, length ) ;
         }
 
-        /* fprintf( stdout, "cygwin converted path \"%s\" to \"%s\"\n", in.c_str (), windowsPath ) ; */
+#if defined( DEBUG ) && DEBUG
+        /// fprintf( stdout, "cygwin converted path \"%s\" to \"%s\"\n", in.c_str (), windowsPath ) ;
+#endif
 
         return windowsPath ;
 #else
@@ -101,7 +103,7 @@ std::string homePath ()
         {
         #if defined ( __WIN32 ) || defined ( __CYGWIN__ )
                 HomePath = sharePath();
-        #else /* #elif defined ( __gnu_linux__ ) */
+        #else /// #elif defined ( __gnu_linux__ )
                 char* home = getenv( "HOME" );
                 assert( home != 0 );
                 HomePath = std::string( home ) + "/.headoverheels/";

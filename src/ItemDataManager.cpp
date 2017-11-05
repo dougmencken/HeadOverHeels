@@ -8,6 +8,10 @@
 
 # include <xercesc/util/PlatformUtils.hpp>
 
+#ifdef DEBUG
+#  define DEBUG_ITEM_DATA         1
+#endif
+
 
 namespace isomot
 {
@@ -47,10 +51,13 @@ void ItemDataManager::loadItems ()
                         item->widthOfFrame = ( *i ).picture().frameWidth();     // width, in pixels, of frame
                         item->heightOfFrame = ( *i ).picture().frameHeight();   // height, in pixels, of frame
 
-                         // item's frames are stored in motion vector as long as item isn’t door
+                        // store item’s frames using motion vector, if item isn’t door
                         if ( ! ( *i ).door ().present () )
                         {
-                                /* std::cout << "got frames for \"" << item->label << "\"" << std::endl ; */
+                        # if  defined( DEBUG_ITEM_DATA )  &&  DEBUG_ITEM_DATA
+                                std::cout << "got item \"" << item->label << "\"" ;
+                        # endif
+
                                 createPictureFrames( item, isomot::GameManager::getInstance()->getChosenGraphicSet() );
                         }
 
@@ -80,7 +87,9 @@ void ItemDataManager::loadItems ()
                         // door has three parameters which define its dimensions
                         if ( ( *i ).door ().present () )
                         {
-                                /* std::cout << "got door \"" << item->label << "\"" << std::endl ; */
+                        # if  defined( DEBUG_ITEM_DATA )  &&  DEBUG_ITEM_DATA
+                                std::cout << "got door \"" << item->label << "\"" ;
+                        # endif
 
                                 // door is actually three items: lintel, left jamb and right jamb
                                 ItemData* lintel = ItemData::clone( item ) ;
@@ -169,6 +178,12 @@ void ItemDataManager::loadItems ()
                                 lintel->motion.push_back( lintelImage );
                                 this->itemData.push_back( lintel );
 
+                        # if  defined( DEBUG_ITEM_DATA )  &&  DEBUG_ITEM_DATA
+                                std::cout << ", three parts are \"" <<
+                                                leftJamb->label << "\" \"" << rightJamb->label << "\" \"" << lintel->label << "\""
+                                                << std::endl ;
+                        # endif
+
                                 // bin original image
                                 destroy_bitmap( picture ) ;
                         }
@@ -234,7 +249,7 @@ ItemData* ItemDataManager::createPictureFrames( ItemData * itemData, const char*
                         throw "either name of file is empty or zero width / height at ItemDataManager::createPictureFrames";
                 }
 
-                // Se cargan los gráficos del elemento y si es necesario se crean los distintos fotogramas
+                // load graphics for item
                 BITMAP* picture = load_png( isomot::pathToFile( isomot::sharePath() + gfxPrefix + pathSeparator + itemData->getNameOfFile( ) ), 0 );
                 if ( picture == 0 )
                 {
@@ -242,7 +257,7 @@ ItemData* ItemDataManager::createPictureFrames( ItemData * itemData, const char*
                         throw "picture " + itemData->getNameOfFile( ) + " is absent at " + gfxPrefix ;
                 }
 
-                // Trocea la imagen en los distintos fotogramas y se almacenan en el vector
+                // decompose image into frames and store them in vector
                 for ( unsigned int y = 0; y < picture->h / itemData->getHeightOfFrame(); y++ )
                 {
                         for ( unsigned int x = 0; x < picture->w / itemData->getWidthOfFrame(); x++ )
@@ -252,6 +267,11 @@ ItemData* ItemDataManager::createPictureFrames( ItemData * itemData, const char*
                                 itemData->motion.push_back( frame );
                         }
                 }
+
+                # if  defined( DEBUG_ITEM_DATA )  &&  DEBUG_ITEM_DATA
+                        size_t howManyFrames = itemData->motion.size();
+                        std::cout << " with " << howManyFrames << ( howManyFrames == 1 ? " frame" : " frames" ) << std::endl ;
+                # endif
 
                 destroy_bitmap( picture ) ;
         }
@@ -273,7 +293,7 @@ ItemData* ItemDataManager::createShadowFrames( ItemData * itemData, const char* 
                         throw "either name of file is empty or zero width / height at ItemDataManager::createShadowFrames";
                 }
 
-                // Se cargan los gráficos del elemento y si es necesario se crean los distintos fotogramas
+                // load graphics for shadow
                 BITMAP* picture = load_png( isomot::pathToFile( isomot::sharePath() + gfxPrefix + pathSeparator + itemData->getNameOfShadowFile( ) ), 0 );
                 if ( picture == 0 )
                 {
@@ -281,7 +301,7 @@ ItemData* ItemDataManager::createShadowFrames( ItemData * itemData, const char* 
                         throw "file of shadows " + itemData->getNameOfShadowFile( ) + " is absent at " + gfxPrefix ;
                 }
 
-                // Trocea la imagen en los distintos fotogramas y se almacenan en el vector
+                // decompose image into frames
                 for ( unsigned int y = 0; y < picture->h / itemData->getHeightOfShadow(); y++ )
                 {
                         for ( unsigned int x = 0; x < picture->w / itemData->getWidthOfShadow(); x++ )

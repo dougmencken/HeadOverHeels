@@ -75,11 +75,6 @@ private:
         int backgroundColor ;
 
         /**
-         * Imagen de fondo de la pantalla
-         */
-        BITMAP * backgroundPicture ;
-
-        /**
          * Imagen donde se volcarán la pantalla
          */
         BITMAP * where ;
@@ -99,17 +94,16 @@ private:
 
         Picture * pictureOfHeels ;
 
-public:
+protected:
 
         /**
-         * Establece la imagen de fondo de la pantalla
-         * @param image Una imagen
+         * Imagen de fondo de la pantalla
          */
-        void setBackground ( BITMAP * image ) {  backgroundPicture = image ;  }
+        static BITMAP * backgroundPicture ;
 
-        BITMAP * getBackground () const {  return backgroundPicture ;  }
+public:
 
-        void refreshBackground () ;
+        static void refreshBackground () ;
 
         void refreshPicturesOfHeadAndHeels () ;
 
@@ -120,7 +114,7 @@ public:
         Action * getEscapeAction () const {  return escapeAction ;  }
 
         /**
-         * Assign the successor of this component in the chain to handle of typing of a key
+         * Assign successor of this component in chain to handle typing of key
          */
         void setKeyHandler ( Widget* widget ) {  keyHandler = widget ;  }
 

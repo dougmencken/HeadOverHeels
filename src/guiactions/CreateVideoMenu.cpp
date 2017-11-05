@@ -61,7 +61,7 @@ void CreateVideoMenu::doAction ()
                 listOfOptions->setValueOf( labelDrawShadows, isomot::GameManager::getInstance()->getDrawShadows () ? yeah : nope );
                 listOfOptions->setValueOf( labelFullscreen, gui::GuiManager::getInstance()->isAtFullScreen () ? yeah : nope );
 
-                listOfOptions->setVerticalOffset( 40 );
+                listOfOptions->setVerticalOffset( 36 );
 
                 screen->addWidget( listOfOptions );
         }

@@ -87,27 +87,18 @@ public:
         */
         void endUpdate () ;
 
-        void remaskWithItem( FreeItem* item ) ;
+        void remaskFreeItem( FreeItem* item ) ;
 
-        void remaskWithItem( GridItem* gridItem ) ;
+        void remaskGridItem( GridItem* gridItem ) ;
 
-        void reshadeWithItem( GridItem* gridItem ) ;
+        void reshadeGridItem( GridItem* gridItem ) ;
 
-        void reshadeWithItem( FreeItem* freeItem ) ;
+        void reshadeFreeItem( FreeItem* freeItem ) ;
 
-       /**
-        * Sombrea una loseta
-        */
         void castShadowOnFloor( FloorTile* floorTile ) ;
 
-       /**
-        * Sombrea un elemento rejilla
-        */
-        void castShadowOnGrid( GridItem* gridItem ) ;
+        void castShadowOnGridItem( GridItem* gridItem ) ;
 
-       /**
-        * Sombrea un elemento libre
-        */
         void castShadowOnFreeItem( FreeItem* freeItem ) ;
 
        /**

@@ -6,40 +6,15 @@
 #include "Label.hpp"
 #include "Picture.hpp"
 #include "Ism.hpp"
+#include <iostream>
 
 
 namespace gui
 {
 
-Screen::Screen( BITMAP* picture, Action* action ) :
-        Widget( 0, 0 ),
-        backgroundColor( makecol( 0, 0, 0 ) ),
-        backgroundPicture( 0 ),
-        where( picture ),
-        actionOfScreen( action ),
-        escapeAction( 0 ),
-        keyHandler( 0 ),
-        pictureOfHead( 0 ),
-        pictureOfHeels( 0 )
-{
-        refreshBackground ();
-        refreshPicturesOfHeadAndHeels ();
-}
+/* static */ BITMAP * Screen::backgroundPicture = 0 ;
 
-Screen::~Screen( )
-{
-        freeWidgets() ;
-
-        destroy_bitmap( backgroundPicture );
-}
-
-void Screen::setEscapeAction ( Action * action )
-{
-        delete escapeAction ;
-        escapeAction = action ;
-}
-
-void Screen::refreshBackground ()
+/* static */ void Screen::refreshBackground ()
 {
         if ( backgroundPicture != 0 )
         {
@@ -47,10 +22,32 @@ void Screen::refreshBackground ()
                 backgroundPicture = 0;
         }
 
-        BITMAP * picture = load_png( isomot::pathToFile( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + "background.png" ), 0 );
+        Screen::backgroundPicture = Screen::loadPicture( "background.png" );
+}
 
-        if ( picture != 0 )
-                setBackground( picture );
+
+Screen::Screen( BITMAP* picture, Action* action ) :
+        Widget( 0, 0 ),
+        backgroundColor( makecol( 0, 0, 0 ) ),
+        where( picture ),
+        actionOfScreen( action ),
+        escapeAction( 0 ),
+        keyHandler( 0 ),
+        pictureOfHead( 0 ),
+        pictureOfHeels( 0 )
+{
+        refreshPicturesOfHeadAndHeels ();
+}
+
+Screen::~Screen( )
+{
+        freeWidgets() ;
+}
+
+void Screen::setEscapeAction ( Action * action )
+{
+        delete escapeAction ;
+        escapeAction = action ;
 }
 
 void Screen::refreshPicturesOfHeadAndHeels ()
@@ -71,11 +68,10 @@ void Screen::refreshPicturesOfHeadAndHeels ()
                 else
                         delete pictureOfHead ;
 
-                pictureOfHead = 0;
+                pictureOfHead = new Picture( xHead, yHead, loadPicture( "gui-head.png" ), "gui:head.png" );
         }
-        pictureOfHead = new Picture( xHead, yHead, loadPicture( "gui-head.png" ), "gui:head.png" );
 
-        if ( headOnScreen )
+        if ( headOnScreen && pictureOfHead != 0 )
                 addWidget( pictureOfHead );
 
         int xHeels = 0, yHeels = 0;
@@ -94,11 +90,10 @@ void Screen::refreshPicturesOfHeadAndHeels ()
                 else
                         delete pictureOfHeels ;
 
-                pictureOfHeels = 0;
+                pictureOfHeels = new Picture( xHeels, yHeels, loadPicture( "gui-heels.png" ), "gui:heels.png" );
         }
-        pictureOfHeels = new Picture( xHeels, yHeels, loadPicture( "gui-heels.png" ), "gui:heels.png" );
 
-        if ( heelsOnScreen )
+        if ( heelsOnScreen && pictureOfHeels != 0 )
                 addWidget( pictureOfHeels );
 }
 
@@ -108,7 +103,7 @@ void Screen::draw( BITMAP* where )
         clear_to_color( where, backgroundColor );
 
         // draw background, if any
-        if ( this->backgroundPicture != 0 )
+        if ( Screen::backgroundPicture != 0 )
         {
                 blit( backgroundPicture, where, 0, 0, 0, 0, backgroundPicture->w, backgroundPicture->h );
         }
@@ -132,9 +127,9 @@ void Screen::handleKey( int rawKey )
 
         if ( escapeAction != 0 && theKey == KEY_ESC )
         {
-                fprintf( stdout, "escape action %s ...\n", ( escapeAction != 0 ? escapeAction->getNameOfAction().c_str () : "nope" ) );
+                fprintf( stdout, "escape action %s ~~\n", ( escapeAction != 0 ? escapeAction->getNameOfAction().c_str () : "nope" ) );
                 this->escapeAction->doIt ();
-                fprintf( stdout, "... done with action %s\n", ( escapeAction != 0 ? escapeAction->getNameOfAction().c_str () : "nope" ) );
+                fprintf( stdout, "~~ done with action %s\n", ( escapeAction != 0 ? escapeAction->getNameOfAction().c_str () : "nope" ) );
         }
         else
         {
@@ -273,6 +268,9 @@ void Screen::placeHeadAndHeels( bool picturesToo, bool copyrightsToo )
 /* static */
 BITMAP * Screen::loadPicture ( const char * nameOfPicture )
 {
+#if defined( DEBUG ) && DEBUG
+        std::cout << "Screen::loadPicture( \"" << nameOfPicture << "\" )" << std::endl ;
+#endif
         return load_png( isomot::pathToFile( GuiManager::getInstance()->getPathToPicturesOfGui() + nameOfPicture ), 0 );
 }
 

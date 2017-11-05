@@ -25,6 +25,8 @@ class Picture : public Widget
 
 public:
 
+        static BITMAP * cloneImage ( BITMAP * original ) ;
+
        /**
         * @param x horizontal offset
         * @param y vertical offset

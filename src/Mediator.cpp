@@ -10,6 +10,10 @@
 #include "FloorTile.hpp"
 #include "Behavior.hpp"
 
+#ifdef DEBUG
+#  define DEBUG_SHADOWS         1
+#endif
+
 
 namespace isomot
 {
@@ -201,7 +205,7 @@ void* updateThread( void* thisClass )
         pthread_exit( 0 );
 }
 
-void Mediator::remaskWithItem( FreeItem* item )
+void Mediator::remaskFreeItem( FreeItem* item )
 {
         if ( ! item ) return;
 
@@ -224,7 +228,7 @@ void Mediator::remaskWithItem( FreeItem* item )
         }
 }
 
-void Mediator::remaskWithItem( GridItem* gridItem )
+void Mediator::remaskGridItem( GridItem* gridItem )
 {
         if ( ! gridItem ) return;
 
@@ -253,7 +257,7 @@ void Mediator::remaskWithItem( GridItem* gridItem )
         }
 }
 
-void Mediator::reshadeWithItem( GridItem* item )
+void Mediator::reshadeGridItem( GridItem* item )
 {
         // shade free items underneath
         this->shadeFreeItemsBeneathItem( item );
@@ -266,7 +270,7 @@ void Mediator::reshadeWithItem( GridItem* item )
                 std::list< GridItem * >::iterator g = this->structure[ column ].begin ();
                 GridItem* gridItem = *g;
 
-                while( g != this->structure[ column ].end() && item->getId() != gridItem->getId() )
+                while ( g != this->structure[ column ].end() && item->getId() != gridItem->getId() )
                 {
                         gridItem->setWhichShade( WantShadow );
                         // Siguiente elemento rejilla de la columna
@@ -279,7 +283,7 @@ void Mediator::reshadeWithItem( GridItem* item )
                 room->floor[ column ]->setWhichShade( WantShadow );
 }
 
-void Mediator::reshadeWithItem( FreeItem* item )
+void Mediator::reshadeFreeItem( FreeItem* item )
 {
         // shade free items underneath
         this->shadeFreeItemsBeneathItem( item );
@@ -341,13 +345,13 @@ void Mediator::castShadowOnFloor( FloorTile* floorTile )
         int column = floorTile->getColumn();
         int tileSize = room->getSizeOfOneTile();
 
-        // Se sombrea con todos los elementos rejilla que pueda tener por encima
+        // shade with every grid item above
         for ( std::list< GridItem * >::iterator g = structure[ column ].begin (); g != structure[ column ].end (); ++g )
         {
                 GridItem* gridItem = static_cast< GridItem * >( *g );
 
-                // Si el elemento tiene sombra entonces se sombrea la imagen de la loseta
-                if(  gridItem->getImageOfShadow() )
+                // shade image of tile when item has shadow
+                if ( gridItem->getImageOfShadow() != 0 )
                 {
                         floorTile->castShadowImage (
                                 /* x */ ( tileSize << 1 ) * ( xCell - yCell ) - ( gridItem->getImageOfShadow()->w >> 1 ) + room->getX0() + 1,
@@ -359,25 +363,23 @@ void Mediator::castShadowOnFloor( FloorTile* floorTile )
                 }
         }
 
-        // Se sombrea con los elementos libres que pueda tener por encima
+        // shade with every free item above
         for ( int percent = 0; percent <= 100; percent++ )
         {
                 int howManyItems = transparencies->countItemsWithDegreeOfTransparency( percent );
 
-                // Tiene que haber elementos en el porcentaje de transparencia actual
+                // are there items with this percentage of transparency
                 if ( howManyItems != 0 )
                 {
-                        // Para todo elemento con ese grado de transparencia
                         for ( int n = 0; n < howManyItems; n++ )
                         {
-                                // Recorre la lista de elementos libres para sombrear la loseta
+                                // scroll through list of free items to shade this tile
                                 for ( std::list< FreeItem* >::iterator f = freeItems.begin (); f != freeItems.end (); ++f )
                                 {
                                         FreeItem* freeItem = static_cast< FreeItem* >( *f );
 
-                                        if ( freeItem->getImageOfShadow() && freeItem->getTransparency() == percent )
+                                        if ( freeItem->getImageOfShadow() != 0 && freeItem->getTransparency() == percent )
                                         {
-                                                // Rango de columnas que interseccionan por el elemento
                                                 int xStart = freeItem->getX() / tileSize;
                                                 int xEnd = ( freeItem->getX() + freeItem->getWidthX() - 1 ) / tileSize;
                                                 int yStart = ( freeItem->getY() - freeItem->getWidthY() + 1 ) / tileSize;
@@ -400,7 +402,7 @@ void Mediator::castShadowOnFloor( FloorTile* floorTile )
         }
 }
 
-void Mediator::castShadowOnGrid( GridItem* gridItem )
+void Mediator::castShadowOnGridItem( GridItem* gridItem )
 {
         int tileSize = room->getSizeOfOneTile();
         int column = gridItem->getColumn();
@@ -410,10 +412,10 @@ void Mediator::castShadowOnGrid( GridItem* gridItem )
         {
                 GridItem* tempItem = static_cast< GridItem* >( *g );
 
-                if ( tempItem->getImageOfShadow() && tempItem->getZ() > gridItem->getZ() )
+                if ( tempItem->getImageOfShadow() != 0 && tempItem->getZ() > gridItem->getZ() )
                 {
                         gridItem->castShadowImage (
-                                /* x */ gridItem->getOffsetX() + ( ( gridItem->getRawImage()->w - tempItem->getImageOfShadow()->w) >> 1 ),
+                                /* x */ gridItem->getOffsetX() + ( ( gridItem->getRawImage()->w - tempItem->getImageOfShadow()->w ) >> 1 ),
                                 /* y */ gridItem->getOffsetY() + gridItem->getRawImage()->h - room->getSizeOfOneTile() - gridItem->getHeight() - ( tempItem->getImageOfShadow()->h >> 1 ),
                                 /* shadow */ tempItem->getImageOfShadow(),
                                 /* shadingScale */ room->shadingScale
@@ -437,7 +439,7 @@ void Mediator::castShadowOnGrid( GridItem* gridItem )
                                 {
                                         FreeItem* freeItem = static_cast< FreeItem* >( *f );
 
-                                        if ( freeItem->getImageOfShadow() && freeItem->getTransparency() == percent && freeItem->getZ() > gridItem->getZ() )
+                                        if ( freeItem->getImageOfShadow() != 0 && freeItem->getTransparency() == percent && freeItem->getZ() > gridItem->getZ() )
                                         {
                                                 // Rango de columnas que interseccionan por el elemento
                                                 int xStart = freeItem->getX() / tileSize;
@@ -472,7 +474,7 @@ void Mediator::castShadowOnFreeItem( FreeItem* freeItem )
         int yStart = ( freeItem->getY() - freeItem->getWidthY() + 1 ) / tileSize;
         int yEnd = freeItem->getY() / tileSize;
 
-        // shadow from grid items
+        // shadow from grid items above
         for ( int yCell = yStart; yCell <= yEnd; yCell++ )
         {
                 for ( int xCell = xStart; xCell <= xEnd; xCell++ )
@@ -483,8 +485,16 @@ void Mediator::castShadowOnFreeItem( FreeItem* freeItem )
                         {
                                 GridItem* gridItem = static_cast< GridItem* >( *g );
 
-                                if ( gridItem->getImageOfShadow() && gridItem->getZ() > freeItem->getZ() )
+                                if ( gridItem->getImageOfShadow() != 0 && gridItem->getZ() > freeItem->getZ() )
                                 {
+                                # if  defined( DEBUG_SHADOWS )  &&  DEBUG_SHADOWS
+                                        std::cout << "casting shadow from " << gridItem->whichKindOfItem() << " \"" << gridItem->getLabel() << "\"" <<
+                                                        " at x=" << gridItem->getX() << " y=" << gridItem->getY() << " z=" << gridItem->getZ() <<
+                                                        " on " << freeItem->whichKindOfItem() << " \"" << freeItem->getLabel() << "\"" <<
+                                                        " at x=" << freeItem->getX() << " y=" << freeItem->getY() << " z=" << freeItem->getZ()
+                                                        << std::endl ;
+                                # endif
+
                                         freeItem->castShadowImage (
                                                 /* x */ ( tileSize << 1 ) * ( xCell - yCell ) - ( gridItem->getImageOfShadow()->w >> 1 ) + 1,
                                                 /* y */ tileSize * ( xCell + yCell + 1 ) - freeItem->getZ() - freeItem->getHeight() - ( gridItem->getImageOfShadow()->h >> 1 ) - 1,
@@ -497,34 +507,42 @@ void Mediator::castShadowOnFreeItem( FreeItem* freeItem )
                 }
         }
 
-        // shadow from free items it may have above
+        // shadow from free items above
         for ( int percent = 0; percent <= 100; percent++ )
         {
                 int countOfItems = transparencies->countItemsWithDegreeOfTransparency( percent );
 
-                // Tiene que haber elementos en el porcentaje de transparencia actual
+                // are there items with this percentage of transparency
                 if ( countOfItems != 0 )
                 {
-                        // Para todo elemento con ese grado de transparencia
+                        // for each item with that degree of transparency
                         for ( int n = 0; n < countOfItems; n++ )
                         {
-                                // Recorre la lista de elementos libres para sombrear el elemento
+                                // scroll through list of free items
                                 for ( std::list< FreeItem* >::iterator f = freeItems.begin (); f != freeItems.end (); ++f )
                                 {
-                                        FreeItem* tempItem = static_cast< FreeItem* >( *f );
+                                        FreeItem* shadeItem = static_cast< FreeItem* >( *f );
 
-                                        if ( tempItem->getImageOfShadow() && tempItem->getTransparency() == percent && tempItem->getId() != freeItem->getId() )
+                                        if ( shadeItem->getImageOfShadow() != 0 && shadeItem->getTransparency() == percent && shadeItem->getId() != freeItem->getId() )
                                         {
-                                                if ( freeItem->getZ() < tempItem->getZ() &&
-                                                        freeItem->getX() < tempItem->getX() + static_cast< int >( tempItem->getWidthX() ) &&
-                                                                tempItem->getX() < freeItem->getX() + static_cast< int >( freeItem->getWidthX() ) &&
-                                                        freeItem->getY() > tempItem->getY() - static_cast< int >( tempItem->getWidthY() ) &&
-                                                                tempItem->getY() > freeItem->getY() - static_cast< int >( freeItem->getWidthY() ) )
+                                                if ( freeItem->getZ() < shadeItem->getZ() &&
+                                                        freeItem->getX() < shadeItem->getX() + static_cast< int >( shadeItem->getWidthX() ) &&
+                                                                shadeItem->getX() < freeItem->getX() + static_cast< int >( freeItem->getWidthX() ) &&
+                                                        freeItem->getY() > shadeItem->getY() - static_cast< int >( shadeItem->getWidthY() ) &&
+                                                                shadeItem->getY() > freeItem->getY() - static_cast< int >( freeItem->getWidthY() ) )
                                                 {
+                                                # if  defined( DEBUG_SHADOWS )  &&  DEBUG_SHADOWS
+                                                        std::cout << "casting shadow from " << shadeItem->whichKindOfItem() << " \"" << shadeItem->getLabel() << "\"" <<
+                                                                " at x=" << shadeItem->getX() << " y=" << shadeItem->getY() << " z=" << shadeItem->getZ() <<
+                                                                " on " << freeItem->whichKindOfItem() << " \"" << freeItem->getLabel() << "\"" <<
+                                                                " at x=" << freeItem->getX() << " y=" << freeItem->getY() << " z=" << freeItem->getZ()
+                                                                  << std::endl ;
+                                                # endif
+
                                                         freeItem->castShadowImage(
-                                                                /* x */ ( ( tempItem->getX() - tempItem->getY() ) << 1 ) + tempItem->getWidthX() + tempItem->getWidthY() - ( tempItem->getImageOfShadow()->w >> 1 ) - 1,
-                                                                /* y */ tempItem->getX() + tempItem->getY() - freeItem->getZ() - freeItem->getHeight() + ( ( tempItem->getWidthX() - tempItem->getWidthY() - tempItem->getImageOfShadow()->h ) >> 1 ),
-                                                                /* shadow */ tempItem->getImageOfShadow(),
+                                                                /* x */ ( ( shadeItem->getX() - shadeItem->getY() ) << 1 ) + shadeItem->getWidthX() + shadeItem->getWidthY() - ( shadeItem->getImageOfShadow()->w >> 1 ) - 1,
+                                                                /* y */ shadeItem->getX() + shadeItem->getY() - freeItem->getZ() - freeItem->getHeight() + ( ( shadeItem->getWidthX() - shadeItem->getWidthY() - shadeItem->getImageOfShadow()->h ) >> 1 ),
+                                                                /* shadow */ shadeItem->getImageOfShadow(),
                                                                 /* shadingScale */ room->shadingScale,
                                                                 /* transparency */ freeItem->getTransparency()
                                                         );
@@ -539,56 +557,53 @@ void Mediator::castShadowOnFreeItem( FreeItem* freeItem )
 void Mediator::mask( FreeItem* freeItem )
 {
         // look for item in list
-        // check cloaking only with next items
-        // for sorted list there’s no cloaking with previous items
+        // shade only with next items
+        // for sorted list there’s no shading with previous items
         std::list< FreeItem * >::iterator f = std::find_if( freeItems.begin (), freeItems.end (), std::bind2nd( EqualItemId(), freeItem->getId() ) );
 
-        // Si se ha encontrado el elemento se procede a enmascarar
+        // mask when item is found
         if ( f != freeItems.end () )
         {
-                // Se compara freeItem con los siguientes elementos libres de la lista para comprobar las ocultaciones
+                // is there any next item
                 while ( ++f != freeItems.end () )
                 {
-                        FreeItem* tempItem = static_cast< FreeItem * >( *f );
+                        FreeItem* itemToMaskWith = static_cast< FreeItem * >( *f );
 
-                        // El otro elemento tiene que tener imagen y uno de los dos tiene que estar
-                        // marcado para enmascararlo; además el otro no tiene que ser transparente
-                        if ( tempItem->getRawImage() &&
-                                ( ( freeItem->whichMask() != NoMask && tempItem->getTransparency() == 0 ) ||
-                                ( tempItem->whichMask() != NoMask && freeItem->getTransparency() == 0 ) ) )
-                        {
-                                // Se comprueba si sus gráficos se solapan
-                                if ( ( tempItem->getOffsetX() < freeItem->getOffsetX() + freeItem->getRawImage()->w ) &&
-                                        ( tempItem->getOffsetX() + tempItem->getRawImage()->w > freeItem->getOffsetX() ) &&
-                                        ( tempItem->getOffsetY() < freeItem->getOffsetY() + freeItem->getRawImage()->h ) &&
-                                        ( tempItem->getOffsetY() + tempItem->getRawImage()->h > freeItem->getOffsetY() ) )
+                        if ( itemToMaskWith->getRawImage() && (
+                                /* one of two is marked to mask and other of two isn’t transparent */
+                                ( freeItem->whichMask() != NoMask && itemToMaskWith->getTransparency() == 0 ) ||
+                                ( itemToMaskWith->whichMask() != NoMask && freeItem->getTransparency() == 0 ) )
+                        ) {
+                                // do graphics overlap
+                                if ( ( itemToMaskWith->getOffsetX() < freeItem->getOffsetX() + freeItem->getRawImage()->w ) &&
+                                        ( itemToMaskWith->getOffsetX() + itemToMaskWith->getRawImage()->w > freeItem->getOffsetX() ) &&
+                                        ( itemToMaskWith->getOffsetY() < freeItem->getOffsetY() + freeItem->getRawImage()->h ) &&
+                                        ( itemToMaskWith->getOffsetY() + itemToMaskWith->getRawImage()->h > freeItem->getOffsetY() ) )
                                 {
-                                        // freeItem está detrás de tempItem
-                                        if ( ( freeItem->getX() + static_cast< int >( freeItem->getWidthX() ) <= tempItem->getX() ) ||
-                                                ( freeItem->getY() <= tempItem->getY() - static_cast< int >( tempItem->getWidthY() ) ) ||
-                                                ( freeItem->getZ() + static_cast< int >( freeItem->getHeight() ) <= tempItem->getZ() ) )
+                                        // freeItem is behind itemToMaskWith
+                                        if ( ( freeItem->getX() + static_cast< int >( freeItem->getWidthX() ) <= itemToMaskWith->getX() ) ||
+                                                ( freeItem->getY() <= itemToMaskWith->getY() - static_cast< int >( itemToMaskWith->getWidthY() ) ) ||
+                                                ( freeItem->getZ() + static_cast< int >( freeItem->getHeight() ) <= itemToMaskWith->getZ() ) )
                                         {
-                                                freeItem->maskImage( tempItem->getOffsetX(), tempItem->getOffsetY(), tempItem->getRawImage() );
+                                                freeItem->maskImage( itemToMaskWith->getOffsetX(), itemToMaskWith->getOffsetY(), itemToMaskWith->getRawImage() );
                                         }
-                                        // tempItem está detrás de freeItem
+                                        // itemToMaskWith is behind freeItem
                                         else
                                         {
-                                                tempItem->maskImage( freeItem->getOffsetX(), freeItem->getOffsetY(), freeItem->getRawImage() );
+                                                itemToMaskWith->maskImage( freeItem->getOffsetX(), freeItem->getOffsetY(), freeItem->getRawImage() );
                                         }
                                 }
                         }
                 }
         }
 
-        // Se compara freeItem con los elementos rejilla que tiene debajo para comprobar las ocultaciones
         int xStart = freeItem->getX() / room->getSizeOfOneTile();
         int xEnd = ( ( freeItem->getX() + freeItem->getWidthX() - 1 ) / room->getSizeOfOneTile() ) + 1;
         int yStart = ( freeItem->getY() / room->getSizeOfOneTile() ) + 1;
         int yEnd = ( freeItem->getY() - freeItem->getWidthY() + 1 ) / room ->getSizeOfOneTile();
 
-        // Si el elemento libre hay que enmascararlo, se procede a hacerlo con los elementos rejilla
         if ( freeItem->whichMask() != NoMask )
-        {
+        {  // free item is to be masked
                 do
                 {
                         unsigned int i = 0;
@@ -597,6 +612,7 @@ void Mediator::mask( FreeItem* freeItem )
                         {
                                 int column = room->getTilesX() * ( yStart + i ) + xStart + i;
 
+                                // proceed with grid items
                                 for ( std::list< GridItem * >::iterator g = structure[ column ].begin (); g != structure[ column ].end (); ++g )
                                 {
                                         GridItem* gridItem = static_cast< GridItem * >( *g );

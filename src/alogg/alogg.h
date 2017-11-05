@@ -40,7 +40,7 @@
 #define DAT_OGG_VORBIS_QUALITY DAT_ID('O','G','G','Q')
 #endif
 
-#ifdef DEBUG
+#if defined( DEBUG ) && defined( WITH_DMALLOC )
 #include <dmalloc.h>
 #endif
 

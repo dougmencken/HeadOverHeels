@@ -58,11 +58,11 @@ void register_png_datafile_object(int id)
 
 
 /* loadpng_init:
- *  This is supposed to resemble jpgalleg_init in JPGalleg 2.0.
+ *  This is supposed to resemble jpgalleg_init in JPGalleg 2.0
  */
-int loadpng_init(void)
+int loadpng_init( void )
 {
-    register_png_datafile_object(DAT_ID('P','N','G',' '));
+    register_png_datafile_object( DAT_ID( 'P','N','G',' ' ) );
     register_png_file_type();
     return 0;
 }

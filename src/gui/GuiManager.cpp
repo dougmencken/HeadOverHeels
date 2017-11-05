@@ -15,7 +15,9 @@
 #include "Label.hpp"
 #include "CreateLanguageMenu.hpp"
 
-#define DEBUG_GUI       0
+#ifdef DEBUG
+/* #  define DEBUG_GUI       1 */
+#endif
 
 using gui::GuiManager;
 using gui::Screen;
@@ -89,6 +91,8 @@ GuiManager* GuiManager::getInstance ()
         {
                 instance = new GuiManager();
                 instance->readPreferences ();
+
+                Screen::refreshBackground ();
         }
 
         return instance;
@@ -177,7 +181,7 @@ void GuiManager::changeScreen( Screen* newScreen )
         }
         else
         {
-                fprintf( stderr, "there's no screen for action \" %s \", please create it before use\n",
+                fprintf( stderr, "there’s no screen for action \" %s \", please create it before use\n",
                                  newScreen->getActionOfScreen()->getNameOfAction().c_str () );
         }
 }
@@ -192,11 +196,11 @@ Screen * GuiManager::findOrCreateScreenForAction ( Action* action, BITMAP* pictu
         if ( listOfScreens.find( nameOfAction ) != listOfScreens.end () )
         {
                 Screen * theScreen = listOfScreens[ nameOfAction ];
-                fprintf( stdout, "here's existing screen for action \" %s \"\n", nameOfAction.c_str () );
+                std::cout << "here’s existing screen for action \" " << nameOfAction << " \"" << std::endl ;
                 return theScreen;
         }
 
-        fprintf( stdout, "going to create new screen for action \" %s \"\n", nameOfAction.c_str () );
+        std::cout << "going to create new screen for action \" " << nameOfAction << " \"" << std::endl ;
         Screen * newScreen = new Screen( picture, action );
         listOfScreens[ nameOfAction ] = newScreen;
         return newScreen;
@@ -205,7 +209,7 @@ Screen * GuiManager::findOrCreateScreenForAction ( Action* action, BITMAP* pictu
 void GuiManager::freeScreens ()
 {
         listOfScreens.clear() ;
-        fprintf( stdout, "now list of screens is empty\n" );
+        std::cout << "now list of screens is empty" << std::endl ;
 }
 
 void GuiManager::refreshScreens ()
@@ -215,9 +219,10 @@ void GuiManager::refreshScreens ()
                 if ( i->second )
                 {
                         i->second->refreshPicturesOfHeadAndHeels () ;
-                        i->second->refreshBackground () ;
                 }
         }
+
+        Screen::refreshBackground () ;
 }
 
 void GuiManager::redraw()

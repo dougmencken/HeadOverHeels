@@ -444,7 +444,8 @@ void Isomot::playTuneForScenery ( const std::string& scenery )
         if ( scenery != "" && GameManager::getInstance()->playMelodyOfScenery () )
         {
                 SoundManager::getInstance()->playOgg ( "music/" + scenery + ".ogg", /* loop */ false );
-        }
+        } else
+                std::cout << "( ignore melody for scenery \"" << scenery << "\" )" << std::endl ;
 }
 
 void Isomot::updateEndRoom()
@@ -517,9 +518,7 @@ void Isomot::updateEndRoom()
         }
         else
         {
-                std::string scenery = /* "finale" */ "begin" ;
-                SoundManager::getInstance()->playOgg ( "music/" + scenery + ".ogg", /* loop */ false );
-
+                SoundManager::getInstance()->playOgg ( "music/begin.ogg", /* loop */ false );
                 /// sleep( 2340 );
 
                 if ( activeRoom->getMediator()->findItemByLabel( "ball" ) == 0 && activeRoom->getMediator()->findItemByLabel( "bubbles" ) == 0 )

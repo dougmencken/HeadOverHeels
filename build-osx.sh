@@ -12,7 +12,7 @@ then
         LDFLAGS="-L/opt/xerces-c-3.2.0/lib -L/opt/ogg-vorbis/lib -L/opt/libpng-1.6.32/lib -L/opt/zlib-1.2.8/lib -L${pathToCompiler}/lib" \
         CPPFLAGS="-I/opt/xerces-c-3.2.0/include" \
         CC="${pathToCompiler}/bin/gcc" CXX="${pathToCompiler}/bin/g++ -std=c++03" \
-        ./configure --prefix=${installPrefix}
+        ./configure --prefix=${installPrefix} --enable-debug
 fi
 
 installPath=`pwd`/headoverheelsroot

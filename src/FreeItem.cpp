@@ -134,13 +134,13 @@ void FreeItem::changeImage( BITMAP* image )
                 // remask with old image
                 if ( oldFreeItem.getRawImage() != 0 )
                 {
-                        mediator->remaskWithItem( &oldFreeItem );
+                        mediator->remaskFreeItem( &oldFreeItem );
                 }
 
                 // remask with new image
                 if ( image != 0 )
                 {
-                        mediator->remaskWithItem( this );
+                        mediator->remaskFreeItem( this );
                 }
         }
 }
@@ -160,7 +160,7 @@ void FreeItem::changeShadow( BITMAP* shadow )
                 {
                         if ( mediator->getDegreeOfShading() < 256 )
                         {
-                                mediator->reshadeWithItem( this );
+                                mediator->reshadeFreeItem( this );
                         }
                 }
         }
@@ -697,8 +697,8 @@ bool FreeItem::updatePosition( int newX, int newY, int newZ, const Coordinate& w
                                 this->offset.second = this->x + this->y + getDataOfItem()->getWidthX() - this->rawImage->h - this->z;
 
                                 // for both the previous position and the current position
-                                mediator->remaskWithItem( &oldFreeItem );
-                                mediator->remaskWithItem( this );
+                                mediator->remaskFreeItem( &oldFreeItem );
+                                mediator->remaskFreeItem( this );
                         }
                         else
                         {
@@ -709,8 +709,8 @@ bool FreeItem::updatePosition( int newX, int newY, int newZ, const Coordinate& w
                         if ( mediator->getDegreeOfShading() < 256 )
                         {
                                 // for both the previous position and the current position
-                                mediator->reshadeWithItem( &oldFreeItem );
-                                mediator->reshadeWithItem( this );
+                                mediator->reshadeFreeItem( &oldFreeItem );
+                                mediator->reshadeFreeItem( this );
                         }
 
                         // reshade and remask
@@ -773,12 +773,12 @@ bool FreeItem::changeTransparency( unsigned char value, const ChangeOrAdd& how )
                 this->transparency = transpa;
 
                 // mark to shade items you might have underneath
-                mediator->reshadeWithItem( this );
+                mediator->reshadeFreeItem( this );
 
                 // mark to mask items which overlap
                 if ( mask )
                 {
-                        mediator->remaskWithItem( this ) ;
+                        mediator->remaskFreeItem( this ) ;
                 }
 
                 changed = true;

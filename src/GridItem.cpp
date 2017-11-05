@@ -93,11 +93,11 @@ void GridItem::changeImage( BITMAP* newImage )
 
                 // mark for masking every free item affected by previous image
                 if ( oldGridItem.getRawImage () )
-                        mediator->remaskWithItem( &oldGridItem );
+                        mediator->remaskGridItem( &oldGridItem );
 
                 // mark for masking every free item affected by new image
                 if ( this->rawImage )
-                        mediator->remaskWithItem( this );
+                        mediator->remaskGridItem( this );
         }
 }
 
@@ -110,7 +110,7 @@ void GridItem::changeShadow( BITMAP* newShadow )
                 if ( mediator->getDegreeOfShading() < 256 )
                 {
                         // reshade items when shadows are on
-                        mediator->reshadeWithItem( this );
+                        mediator->reshadeGridItem( this );
                 }
         }
 }
@@ -119,7 +119,7 @@ void GridItem::requestCastShadow( int column )
 {
         if ( this->rawImage && this->myShady == WantShadow )
         {
-                mediator->castShadowOnGrid( this );
+                mediator->castShadowOnGridItem( this );
 
                 // bin already shaded image
                 if ( this->myShady != AlreadyShady && this->processedImage )
@@ -535,8 +535,8 @@ bool GridItem::updatePosition( int newValue, const Coordinate& whatToChange, con
                                 // change only value on Y axis because it depends on Z coordinate
                                 this->offset.second = mediator->getRoom()->getSizeOfOneTile() * ( this->cell.first + this->cell.second + 2 ) - this->rawImage->h - this->z - 1;
 
-                                mediator->remaskWithItem( &oldGridItem );
-                                mediator->remaskWithItem( this );
+                                mediator->remaskGridItem( &oldGridItem );
+                                mediator->remaskGridItem( this );
                         }
                         else
                         {
@@ -547,9 +547,9 @@ bool GridItem::updatePosition( int newValue, const Coordinate& whatToChange, con
                         if ( whatToChange & CoordinateZ && mediator->getDegreeOfShading() < 256 )
                         {
                                 if ( this->z > oldGridItem.getZ() )
-                                        mediator->reshadeWithItem( this );
+                                        mediator->reshadeGridItem( this );
                                 else
-                                        mediator->reshadeWithItem( &oldGridItem );
+                                        mediator->reshadeGridItem( &oldGridItem );
                         }
 
                         mediator->activateGridItemsSorting();

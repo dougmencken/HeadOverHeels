@@ -14,9 +14,23 @@ AC_PROG_CC
 AC_PROG_CXX
 AM_PROG_CC_C_O
 
+# support for debug build
+AC_ARG_ENABLE(debug,
+        AS_HELP_STRING([--enable-debug], [make debug build]),
+        [case "${enableval}" in
+                     yes|true)  debug=true ; AC_MSG_NOTICE([debug build is on]) ;;
+                     no|false)  debug=false ;;
+                     *)  debug=false ; AC_MSG_WARN([unknown value ${enableval} for --enable-debug, assume no]) ;;
+        esac],
+        [debug=false])
+
+AM_CONDITIONAL([DEBUG], [test x"$debug" = x"true"])
+AC_SUBST([DEBUG])
+
 # look for libraries
 
 # look for header files
+AC_CHECK_HEADERS([execinfo.h])
 AC_CHECK_HEADERS(allegro.h,, [AC_MSG_ERROR(allegro headers not found)])
 AC_CHECK_HEADERS(zlib.h,, [AC_MSG_ERROR(zlib headers not found)])
 AC_CHECK_HEADERS(png.h,, [AC_MSG_ERROR(libpng headers not found)])

@@ -28,6 +28,11 @@
     #include <sys/types.h>
 #endif
 
+#if defined( DEBUG ) && defined( HAVE_EXECINFO_H ) && HAVE_EXECINFO_H
+    #include <execinfo.h>
+    #include <cxxabi.h>
+#endif
+
 #if defined ( __WIN32 ) && ! defined ( __CYGWIN__ )
     const std::string pathSeparator = "\\" ;
 #else
@@ -40,8 +45,39 @@
     # define IS_BIG_ENDIAN 0
 #endif
 
+
 namespace isomot
 {
+        /** print backtrace of caller */
+        inline void printBacktrace ( FILE * out = stdout, unsigned int howDeep = 80 )
+        {
+#if defined( DEBUG ) && defined( HAVE_EXECINFO_H ) && HAVE_EXECINFO_H
+                fprintf( out, "backtrace\n" );
+
+                // storage for data of backtrace addresses
+                void* addrlist[ howDeep + 1 ];
+
+                // get addresses of backtrace
+                size_t addrlen = backtrace( addrlist, sizeof( addrlist ) / sizeof( void * ) );
+
+                if ( addrlen == 0 ) {
+                        fprintf( out, "    < empty, possibly broken >\n" );
+                        return;
+                }
+
+                // convert addresses into strings
+                char** listOfSymbols = backtrace_symbols( addrlist, addrlen );
+
+                for ( size_t i = 0; i < addrlen; i++ )
+                {
+                        fprintf( out, "    %s\n", listOfSymbols[ i ] );
+                }
+
+                free( listOfSymbols );
+#else
+                fprintf( out, "no backtrace for non-debug build or when there’s no execinfo.h\n" );
+#endif
+        }
 
         typedef std::pair< int, int > JumpMotion;
 

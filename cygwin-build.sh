@@ -5,15 +5,13 @@
 
 installPrefix="/game"
 
-pathToCompiler="/usr"
-
 if [ ! -f src/Makefile ]
 then
-        CC="${pathToCompiler}/bin/gcc" CXX="${pathToCompiler}/bin/g++ -std=c++03" \
-        ./configure --prefix=${installPrefix}
+        ## CXX="/usr/bin/g++ -fsanitize=address -fno-omit-frame-pointer" \
+        ./configure --prefix=${installPrefix} --enable-debug=yes
 fi
 
 installPath=`pwd`/_rootdir
 rm -rf "${installPath}"
 
-make -j2 CFLAGS=-Werror CXXFLAGS=-Werror && make install DESTDIR="${installPath}"
+make && make install DESTDIR="${installPath}"
