@@ -15,7 +15,7 @@
 #include <unistd.h>
 
 /**
- * Cronómetro de alta precisión para sistemas Linux
+ * High precision timer for POSIX systems
  */
 
 class HPC
@@ -28,48 +28,41 @@ public:
         virtual ~HPC( ) ;
 
        /**
-        * Pone en marcha el cronómetro
+        * Start timer
         */
         void start () ;
 
        /**
-        * Devuelve el tiempo transcurrido desde que el cronómetro se puso en marcha
-        * @return Un valor en milisegundos
+        * Return milliseconds since timer was started
         */
         double getValue () ;
 
        /**
-        * Pone a cero el cronómetro
+        * Reset timer
         */
         void reset () ;
 
        /**
-        * Detiene el cronómetro
+        * Stop timer
         */
         void stop () ;
 
        /**
-        * Reinicia el cronómetro
+        * Restart timer
         */
         void restart () ;
 
 protected:
 
        /**
-        * Instante en el que se puso en marcha el cronómetro
+        * Moment in which chronometer was started
         */
         timeval trestart ;
 
        /**
-        * Instante en el que se detiene el cronómetro
+        * Moment in which stopwatch is stopped
         */
         timeval tstop ;
-
-       /**
-        * Periodo de tiempo transcurrido entre que el cronómetro se paró y se volvió a poner en
-        * marcha
-        */
-        double period ;
 
        /**
         * Huso horario

@@ -1,7 +1,7 @@
 /* browse.c
  *
  * This is not really an example but a program to help me test loadpng
- * on a large set of images.  It's not really well written.
+ * on a large set of images. It's not really well written
  *
  * Usage: browse [-bpp] *.png
  *

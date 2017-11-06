@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
 	return 1;
     }
 
-    /* Once loaded into memory, PNG datafile objects are just bitmaps. */
+    /* Once loaded into memory, PNG datafile objects are just bitmaps */
     pic = (BITMAP *)data[0].dat;
     draw_sprite(screen, pic, (SCREEN_W - pic->w) / 2, (SCREEN_H - pic->h) / 2);
 

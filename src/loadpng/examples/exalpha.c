@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
 	return 1;
     }
 
-    /* We can't lose the alpha channel when we load the image. */
+    /* We can't lose the alpha channel when we load the image */
     set_color_conversion(COLORCONV_NONE);
 
     fg = load_png(file, NULL);
@@ -74,13 +74,13 @@ int main(int argc, char *argv[])
 
     toilet(screen);
 
-    /* Enable alpha transparency, then draw onto the screen. */
+    /* Enable alpha transparency, then draw onto the screen */
     set_alpha_blender();
     draw_trans_sprite(screen, fg, (SCREEN_W - fg->w) / 2, (SCREEN_H - fg->h) / 2);
 
     release_screen();
 
-    /* Ooh, ahh. */
+    /* Ooh, ahh */
     readkey();
 
     destroy_bitmap(fg);

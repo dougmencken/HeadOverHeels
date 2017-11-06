@@ -13,9 +13,9 @@ namespace gui
 }
 
 Picture::Picture( int x, int y, BITMAP* image, std::string name ) :
-        Widget( x, y ) ,
-        picture( image ),
-        nameOfPicture( name )
+        Widget( x, y )
+        , picture( image )
+        , nameOfPicture( name )
 {
 
 }

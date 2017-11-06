@@ -17,8 +17,10 @@
 /**
  * Cronómetro de alta precisión para sistemas Windows
  */
+
 class HPC
 {
+
 public:
 
         HPC();
@@ -71,6 +73,7 @@ protected:
          * Periodo de tiempo transcurrido entre que el cronómetro se paró y se volvió a poner en marcha
          */
         LARGE_INTEGER period;
+
 };
 
 #endif

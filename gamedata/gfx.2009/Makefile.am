@@ -103,37 +103,6 @@ gamedatagfx2009_DATA = item.png/ball-shadows.png \
 			item.png/turtle.png \
 			item.png/vulcano-shadows.png \
 			item.png/vulcano.png \
-			gui.png/background.png \
-			gui.png/blacktooth-frame.png \
-			gui.png/blacktooth.png \
-			gui.png/byblos-frame.png \
-			gui.png/byblos.png \
-			gui.png/chosen-option-mini.png \
-			gui.png/chosen-option.png \
-			gui.png/egyptus-frame.png \
-			gui.png/egyptus.png \
-			gui.png/grey-crown.png \
-			gui.png/grey-donuts.png \
-			gui.png/grey-handbag.png \
-			gui.png/grey-head.png \
-			gui.png/grey-heels.png \
-			gui.png/grey-horn.png \
-			gui.png/gui-donuts.png \
-			gui.png/gui-handbag.png \
-			gui.png/gui-head.png \
-			gui.png/gui-heels.png \
-			gui.png/gui-horn.png \
-			gui.png/high-jumps.png \
-			gui.png/high-speed.png \
-			gui.png/jail-frame.png \
-			gui.png/market-frame.png \
-			gui.png/option.png \
-			gui.png/penitentiary-frame.png \
-			gui.png/penitentiary.png \
-			gui.png/safari-frame.png \
-			gui.png/safari.png \
-			gui.png/shield.png \
-			gui.png/themoon-frame.png \
 			blacktooth.png/blacktooth-column-capital-east.png \
 			blacktooth.png/blacktooth-column-capital-north.png \
 			blacktooth.png/blacktooth-column-capital-south.png \
@@ -343,4 +312,37 @@ gamedatagfx2009_DATA = item.png/ball-shadows.png \
 			safari.png/safari-wall-x-3.png \
 			safari.png/safari-wall-y-1.png \
 			safari.png/safari-wall-y-2.png \
-			safari.png/safari-wall-y-3.png
+			safari.png/safari-wall-y-3.png \
+			gui.gfx/background.png \
+			gui.gfx/blacktooth-frame.png \
+			gui.gfx/blacktooth.png \
+			gui.gfx/byblos-frame.png \
+			gui.gfx/byblos.png \
+			gui.gfx/chosen-option-mini.png \
+			gui.gfx/chosen-option.png \
+			gui.gfx/egyptus-frame.png \
+			gui.gfx/egyptus.png \
+			gui.gfx/grey-crown.png \
+			gui.gfx/grey-donuts.png \
+			gui.gfx/grey-handbag.png \
+			gui.gfx/grey-head.png \
+			gui.gfx/grey-heels.png \
+			gui.gfx/grey-horn.png \
+			gui.gfx/gui-donuts.png \
+			gui.gfx/gui-handbag.png \
+			gui.gfx/gui-head.png \
+			gui.gfx/gui-heels.png \
+			gui.gfx/gui-horn.png \
+			gui.gfx/head.gif \
+			gui.gfx/heels.gif \
+			gui.gfx/high-jumps.png \
+			gui.gfx/high-speed.png \
+			gui.gfx/jail-frame.png \
+			gui.gfx/market-frame.png \
+			gui.gfx/option.png \
+			gui.gfx/penitentiary-frame.png \
+			gui.gfx/penitentiary.png \
+			gui.gfx/safari-frame.png \
+			gui.gfx/safari.png \
+			gui.gfx/shield.png \
+			gui.gfx/themoon-frame.png

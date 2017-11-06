@@ -45,7 +45,7 @@ private:
         bool rebounding ;
 
        /**
-        * Fotograma del trampolín donde se representa en su estado normal.  Se espera que sea el fotograma 0
+        * Fotograma del trampolín donde se representa en su estado normal. Se espera que sea el fotograma 0
         */
         int regularFrame ;
 

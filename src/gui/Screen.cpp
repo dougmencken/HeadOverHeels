@@ -5,7 +5,9 @@
 #include "Action.hpp"
 #include "Label.hpp"
 #include "Picture.hpp"
+#include "AnimatedPicture.hpp"
 #include "Ism.hpp"
+#include <algif.h>
 #include <iostream>
 
 
@@ -68,7 +70,7 @@ void Screen::refreshPicturesOfHeadAndHeels ()
                 else
                         delete pictureOfHead ;
 
-                pictureOfHead = new Picture( xHead, yHead, loadPicture( "gui-head.png" ), "gui:head.png" );
+                pictureOfHead = new AnimatedPicture( xHead, yHead, loadAnimation( "head.gif" ), delayBetweenFrames, "animated Head" );
         }
 
         if ( headOnScreen && pictureOfHead != 0 )
@@ -90,7 +92,7 @@ void Screen::refreshPicturesOfHeadAndHeels ()
                 else
                         delete pictureOfHeels ;
 
-                pictureOfHeels = new Picture( xHeels, yHeels, loadPicture( "gui-heels.png" ), "gui:heels.png" );
+                pictureOfHeels = new AnimatedPicture( xHeels, yHeels, loadAnimation( "heels.gif" ), delayBetweenFrames, "animated Heels" );
         }
 
         if ( heelsOnScreen && pictureOfHeels != 0 )
@@ -184,7 +186,7 @@ void Screen::freeWidgets ()
 void Screen::addPictureOfHeadAt ( int x, int y )
 {
         if ( pictureOfHead == 0 )
-                pictureOfHead = new Picture( x, y, loadPicture( "gui-head.png" ), "gui:head.png" );
+                pictureOfHead = new AnimatedPicture( x, y, loadAnimation( "head.gif" ), delayBetweenFrames, "animated Head" );
         else
                 pictureOfHead->moveTo( x, y );
 
@@ -194,7 +196,7 @@ void Screen::addPictureOfHeadAt ( int x, int y )
 void Screen::addPictureOfHeelsAt ( int x, int y )
 {
         if ( pictureOfHeels == 0 )
-                pictureOfHeels = new Picture( x, y, loadPicture( "gui-heels.png" ), "gui:heels.png" );
+                pictureOfHeels = new AnimatedPicture( x, y, loadAnimation( "heels.gif" ), delayBetweenFrames, "animated Heels" );
         else
                 pictureOfHeels->moveTo( x, y );
 
@@ -272,6 +274,33 @@ BITMAP * Screen::loadPicture ( const char * nameOfPicture )
         std::cout << "Screen::loadPicture( \"" << nameOfPicture << "\" )" << std::endl ;
 #endif
         return load_png( isomot::pathToFile( GuiManager::getInstance()->getPathToPicturesOfGui() + nameOfPicture ), 0 );
+}
+
+/* static */
+std::vector< BITMAP * > Screen::loadAnimation ( const char * nameOfGif )
+{
+#if defined( DEBUG ) && DEBUG
+        std::cout << "Screen::loadAnimation( \"" << nameOfGif << "\" )" ;
+#endif
+        std::vector< BITMAP * > animation;
+        BITMAP** frames = 0;
+        int* durations = 0;
+
+        int howManyFrames = algif_load_animation( isomot::pathToFile( GuiManager::getInstance()->getPathToPicturesOfGui() + nameOfGif ), &frames, &durations );
+#if defined( DEBUG ) && DEBUG
+        std::cout << " got " << howManyFrames << ( howManyFrames == 1 ? " frame" : " frames" ) << std::endl ;
+#endif
+        if ( howManyFrames > 0 )
+        {
+                for ( int i = 0; i < howManyFrames; i++ )
+                {
+                        animation.push_back( frames[ i ] );
+                }
+
+                free( durations );
+        }
+
+        return animation;
 }
 
 }

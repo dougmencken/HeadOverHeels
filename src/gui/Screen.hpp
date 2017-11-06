@@ -12,6 +12,7 @@
 #define Screen_hpp_
 
 #include <list>
+#include <vector>
 #include <allegro.h>
 #include "Widget.hpp"
 
@@ -20,7 +21,7 @@ namespace gui
 {
 
 class Action ;
-class Picture ;
+class AnimatedPicture ;
 
 /**
  * Container for elements of user interface
@@ -67,6 +68,10 @@ public:
 
         static BITMAP * loadPicture ( const char * nameOfPicture ) ;
 
+        static std::vector < BITMAP * > loadAnimation ( const char * nameOfGif ) ;
+
+        static const double delayBetweenFrames = 0.1 ;
+
 private:
 
         /**
@@ -90,9 +95,9 @@ private:
 
         Widget * keyHandler ;
 
-        Picture * pictureOfHead ;
+        AnimatedPicture * pictureOfHead ;
 
-        Picture * pictureOfHeels ;
+        AnimatedPicture * pictureOfHeels ;
 
 protected:
 

@@ -27,10 +27,6 @@ public:
 
         static BITMAP * cloneImage ( BITMAP * original ) ;
 
-       /**
-        * @param x horizontal offset
-        * @param y vertical offset
-        */
         Picture( int x, int y, BITMAP * image, std::string name ) ;
 
         virtual ~Picture( ) ;

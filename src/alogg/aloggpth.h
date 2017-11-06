@@ -9,7 +9,7 @@
 
    The alogg library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
    Lesser General Public License for more details
 
    You should have received a copy of the GNU Lesser General Public
@@ -21,7 +21,7 @@
    program, you do not have to distribute the object files for this
    program
    This exception does not however invalidate any other reasons why
-   you would have to distribute the object files for this program.  */
+   you would have to distribute the object files for this program */
 
 
 #ifndef _ALOGG_PTHREAD_H_

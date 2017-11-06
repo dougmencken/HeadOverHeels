@@ -11,9 +11,9 @@
 #include <allegro/internal/aintern.h>
 #include "loadpng.h"
 
-/* We need internals _color_load_depth and _fixup_loaded_bitmap.  The
+/* We need internals _color_load_depth and _fixup_loaded_bitmap. The
  * first can be replaced by the new get_color_depth() function which
- * is in Allegro 4.1 branch.  But it's not worth it to break 4.0
+ * is in Allegro 4.1 branch. But it's not worth it to break 4.0
  * compatibility
  */
 
@@ -249,8 +249,8 @@ BITMAP *load_png_pf( PACKFILE *fp, RGB *pal )
     }
 
     /* Create and initialize the png_struct with the desired error handler
-     * functions.  If you want to use the default stderr and longjump method,
-     * you can supply NULL for the last three parameters.  Also supply
+     * functions. If you want to use the default stderr and longjump method,
+     * you can supply NULL for the last three parameters. Also supply
      * the compiler header file version, so that we know if the application
      * was compiled with a compatible version of the library
      */
@@ -268,7 +268,7 @@ BITMAP *load_png_pf( PACKFILE *fp, RGB *pal )
     }
 
     /* Set error handling if you are using the setjmp/longjmp method (this is
-     * the normal method of doing things with libpng).  REQUIRED unless you
+     * the normal method of doing things with libpng). REQUIRED unless you
      * set up your own error handlers in the png_create_read_struct() earlier
      */
 #if ( PNG_LIBPNG_VER < 10500 )
@@ -355,8 +355,8 @@ BITMAP *load_memory_png(AL_CONST void *buffer, int bufsize, RGB *pal)
         return NULL;
 
     /* Create and initialize the png_struct with the desired error handler
-     * functions.  If you want to use the default stderr and longjump method,
-     * you can supply NULL for the last three parameters.  We also supply the
+     * functions. If you want to use the default stderr and longjump method,
+     * you can supply NULL for the last three parameters. We also supply the
      * the compiler header file version, so that we know if the application
      * was compiled with a compatible version of the library
      */
@@ -373,7 +373,7 @@ BITMAP *load_memory_png(AL_CONST void *buffer, int bufsize, RGB *pal)
     }
 
     /* Set error handling if you are using the setjmp/longjmp method (this is
-     * the normal method of doing things with libpng).  REQUIRED unless you
+     * the normal method of doing things with libpng). REQUIRED unless you
      * set up your own error handlers in the png_create_read_struct() earlier
      */
 #if ( PNG_LIBPNG_VER < 10500 )

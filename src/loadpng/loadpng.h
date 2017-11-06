@@ -18,7 +18,7 @@ extern "C" {
 /* _png_screen_gamma is slightly overloaded (sorry):
  *
  * A value of 0.0 means: Don't do any gamma correction in load_png()
- * and load_memory_png().  This meaning was introduced in v1.4
+ * and load_memory_png(). This meaning was introduced in v1.4
  *
  * A value of -1.0 means: Use the value from the environment variable
  * SCREEN_GAMMA (if available), otherwise fallback to a value of 2.2

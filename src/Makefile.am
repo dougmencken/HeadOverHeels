@@ -8,7 +8,7 @@ else
     AM_CXXFLAGS = -O3
 endif
 
-headoverheels_CXXFLAGS = -Wall -Wno-deprecated -I. -Iloadpng -Igui -Iguiactions -Ibehaviors -Iactivities $(AM_CXXFLAGS)
+headoverheels_CXXFLAGS = -Wall -Wno-deprecated -I. -Iloadpng -Ialgif -Igui -Iguiactions -Ibehaviors -Iactivities $(AM_CXXFLAGS)
 
 AM_LDFLAGS = `allegro-config --libs release` -lvorbisfile -lvorbisenc -lvorbis -logg -lxerces-c -lpthread -lz -lpng
 
@@ -17,6 +17,9 @@ bin_PROGRAMS = headoverheels
 headoverheels_SOURCES = loadpng/loadpng.c \
 			loadpng/savepng.c \
 			loadpng/regpng.c \
+			algif/algif.c \
+			algif/gif.c \
+			algif/lzw.c \
 			main.cpp \
 			Way.cpp \
 			Way.hpp \
@@ -101,6 +104,8 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			gui/GuiManager.hpp \
 			gui/Picture.cpp \
 			gui/Picture.hpp \
+			gui/AnimatedPicture.cpp \
+			gui/AnimatedPicture.hpp \
 			gui/Label.cpp \
 			gui/Label.hpp \
 			gui/LanguageText.cpp \

@@ -161,7 +161,7 @@ static int save_rgba(png_structp png_ptr, BITMAP *picture)
 
 /* save_png:
  *  Writes a non-interlaced, no-frills PNG, taking the usual save_xyz
- *  parameters.  Returns non-zero on error.
+ *  parameters. Returns non-zero on error.
  */
 static int really_save_png(PACKFILE *fp, BITMAP *picture, AL_CONST RGB *pal)
 {
@@ -182,12 +182,12 @@ static int really_save_png(PACKFILE *fp, BITMAP *picture, AL_CONST RGB *pal)
     if (!png_ptr)
         goto Error;
 
-    /* Allocate/initialize the image information data. */
+    /* Allocate/initialize the image information data */
     info_ptr = png_create_info_struct(png_ptr);
     if (!info_ptr)
         goto Error;
 
-    /* Set error handling. */
+    /* Set error handling */
 #if ( PNG_LIBPNG_VER < 10500 )
     if ( setjmp( png_ptr->jmpbuf ) ) {
 #else
@@ -195,18 +195,18 @@ static int really_save_png(PACKFILE *fp, BITMAP *picture, AL_CONST RGB *pal)
        change setjmp(png_ptr->jmpbuf) to setjmp(png_jmpbuf(png_ptr)) */
     if ( setjmp( png_jmpbuf( png_ptr ) ) ) {
 #endif
-        /* If we get here, we had a problem reading the file. */
+        /* If we get here, we had a problem reading the file */
         goto Error;
     }
 
-    /* Use packfile routines. */
+    /* Use packfile routines */
     png_set_write_fn(png_ptr, fp, (png_rw_ptr)write_data, flush_data);
 
-    /* Set the image information here.  Width and height are up to 2^31,
+    /* Set the image information here. Width and height are up to 2^31,
      * bit_depth is one of 1, 2, 4, 8, or 16, but valid values also depend on
      * the color_type selected. color_type is one of PNG_COLOR_TYPE_GRAY,
      * PNG_COLOR_TYPE_GRAY_ALPHA, PNG_COLOR_TYPE_PALETTE, PNG_COLOR_TYPE_RGB,
-     * or PNG_COLOR_TYPE_RGB_ALPHA.  interlace is either PNG_INTERLACE_NONE or
+     * or PNG_COLOR_TYPE_RGB_ALPHA. interlace is either PNG_INTERLACE_NONE or
      * PNG_INTERLACE_ADAM7, and the compression_type and filter_type MUST
      * currently be PNG_COMPRESSION_TYPE_BASE and PNG_FILTER_TYPE_BASE.
      */
@@ -217,14 +217,14 @@ static int really_save_png(PACKFILE *fp, BITMAP *picture, AL_CONST RGB *pal)
     else
         colour_type = PNG_COLOR_TYPE_RGB;
 
-    /* Set compression level. */
+    /* Set compression level */
     png_set_compression_level(png_ptr, _png_compression_level);
 
     png_set_IHDR(png_ptr, info_ptr, picture->w, picture->h, 8, colour_type,
                  PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_BASE,
                  PNG_FILTER_TYPE_BASE);
 
-    /* Set the palette if there is one.  Required for indexed-color images. */
+    /* Set the palette if there is one. Required for indexed-color images */
     if (colour_type == PNG_COLOR_TYPE_PALETTE) {
         png_color palette[256];
         int i;
@@ -235,13 +235,13 @@ static int really_save_png(PACKFILE *fp, BITMAP *picture, AL_CONST RGB *pal)
             palette[i].blue  = _rgb_scale_6[pal[i].b];
         }
 
-        /* Set palette colors. */
+        /* Set palette colors */
         png_set_PLTE(png_ptr, info_ptr, palette, 256);
     }
 
-    /* Optionally write comments into the image ... Nah. */
+    /* Optionally write comments into the image ... Nah */
 
-    /* Write the file header information. */
+    /* Write the file header information */
     png_write_info(png_ptr, info_ptr);
 
     /* Once we write out the header, the compression type on the text
@@ -250,7 +250,7 @@ static int really_save_png(PACKFILE *fp, BITMAP *picture, AL_CONST RGB *pal)
      * at the end.
      */
 
-    /* Save the data. */
+    /* Save the data */
     switch (depth) {
         case 8:
             if (!save_indexed(png_ptr, picture))
