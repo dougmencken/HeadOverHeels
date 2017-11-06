@@ -190,6 +190,8 @@ protected:
 
         void copyAnotherCharacterAsEntered ( const std::string& name ) ;
 
+        void dumpItemInsideThisRoom ( const Item* item ) ;
+
 private:
 
         friend class Mediator ;

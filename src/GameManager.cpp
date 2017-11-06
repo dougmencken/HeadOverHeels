@@ -1,6 +1,5 @@
 
 #include "GameManager.hpp"
-#include "Exception.hpp"
 #include "Isomot.hpp"
 #include "Room.hpp"
 #include "Mediator.hpp"
@@ -143,7 +142,7 @@ WhyPause GameManager::begin ()
         refreshAmbianceImages ();
         refreshBackgroundFrames ();
 
-        Assert< ENullPointer >( this->isomot );
+        assert( this->isomot != 0 );
         this->isomot->beginNewGame ();
 
         return this->update ();
@@ -156,7 +155,7 @@ WhyPause GameManager::resume ()
         refreshAmbianceImages ();
         refreshBackgroundFrames ();
 
-        Assert< ENullPointer >( this->isomot );
+        assert( this->isomot != 0 );
         this->isomot->resume ();
 
         return this->update ();

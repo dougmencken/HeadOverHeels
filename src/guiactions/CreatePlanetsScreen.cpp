@@ -18,9 +18,9 @@ using isomot::GameManager ;
 using isomot::SoundManager ;
 
 
-CreatePlanetsScreen::CreatePlanetsScreen( BITMAP* where, bool gameInProgress ) : Action( )
+CreatePlanetsScreen::CreatePlanetsScreen( BITMAP* where, bool notNewGame ) : Action( )
         , where( where )
-        , gameInProgress( gameInProgress )
+        , gameInProgress( notNewGame )
         , blacktoothFree( false )
         , egyptusFree( false )
         , penitentiaryFree( false )

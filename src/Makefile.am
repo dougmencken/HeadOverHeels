@@ -24,8 +24,6 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			Camera.hpp \
 			Door.cpp \
 			Door.hpp \
-			Exception.cpp \
-			Exception.hpp \
 			FloorTile.cpp \
 			FloorTile.hpp \
 			FreeItem.cpp \

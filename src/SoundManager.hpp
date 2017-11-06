@@ -14,9 +14,7 @@
 #include <list>
 #include <string>
 #include <ext/hash_map>
-#include <algorithm>
 #include <iostream>
-#include <functional>
 #include <cassert>
 #include <allegro.h>
 #include "alogg/aloggpth.h"

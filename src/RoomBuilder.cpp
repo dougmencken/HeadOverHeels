@@ -1,6 +1,5 @@
 
 #include "RoomBuilder.hpp"
-#include "Exception.hpp"
 #include "ItemDataManager.hpp"
 #include "Room.hpp"
 #include "Behavior.hpp"
@@ -201,7 +200,7 @@ Room* RoomBuilder::buildRoom ( const std::string& fileName )
         {
                 std::cout << e << std::endl ;
         }
-        catch ( const Exception& e )
+        catch ( const std::exception& e )
         {
                 std::cout << e.what () << std::endl ;
         }
@@ -308,7 +307,7 @@ FloorTile* RoomBuilder::buildFloorTile( const rxml::tile& tile, const char* gfxP
                 int column = room->getTilesX() * tile.y() + tile.x();
                 floorTile = new FloorTile( column, tile.x(), tile.y(), picture );
                 floorTile->setOffset( tile.offsetX(), tile.offsetY() );
-        } catch ( const Exception& e ) {
+        } catch ( const std::exception& e ) {
                 std::cerr << e.what () << std::endl ;
         }
 
@@ -326,7 +325,7 @@ Wall* RoomBuilder::buildWall( const rxml::wall& wall, const char* gfxPrefix )
                         throw "picture " + wall.picture() + " at " + gfxPrefix + " is absent";
                 }
                 roomWall = new Wall( wall.axis() == rxml::axis::x ? true : false, wall.index(), picture );
-        } catch ( const Exception& e ) {
+        } catch ( const std::exception& e ) {
                 std::cerr << e.what () << std::endl ;
         }
 

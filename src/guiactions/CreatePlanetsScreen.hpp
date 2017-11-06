@@ -29,9 +29,9 @@ public:
         /**
          * Constructor
          * @param where Imagen donde se dibujará la interfaz gráfica
-         * @param gameInProgress Indica si hay una partida en curso o comienza una nueva
+         * @param notNewGame Indica si hay una partida en curso o comienza una nueva
          */
-        CreatePlanetsScreen( BITMAP* where, bool gameInProgress );
+        CreatePlanetsScreen( BITMAP* where, bool notNewGame );
 
         virtual ~CreatePlanetsScreen( ) ;
 

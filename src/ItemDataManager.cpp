@@ -1,10 +1,8 @@
 
 #include "ItemDataManager.hpp"
 #include "GameManager.hpp"
-#include "Exception.hpp"
 #include "Ism.hpp"
 #include <loadpng.h>
-#include <fstream>
 
 # include <xercesc/util/PlatformUtils.hpp>
 
@@ -205,7 +203,7 @@ void ItemDataManager::loadItems ()
         {
                 std::cerr << e << std::endl ;
         }
-        catch ( const Exception& e )
+        catch ( const std::exception& e )
         {
                 std::cerr << e.what () << std::endl ;
         }
@@ -275,7 +273,7 @@ ItemData* ItemDataManager::createPictureFrames( ItemData * itemData, const char*
 
                 destroy_bitmap( picture ) ;
         }
-        catch ( const Exception& e )
+        catch ( const std::exception& e )
         {
                 std::cerr << e.what () << std::endl ;
                 return 0;
@@ -314,7 +312,7 @@ ItemData* ItemDataManager::createShadowFrames( ItemData * itemData, const char* 
 
                 destroy_bitmap( picture ) ;
         }
-        catch ( const Exception& e )
+        catch ( const std::exception& e )
         {
                 std::cerr << e.what () << std::endl ;
                 return 0;

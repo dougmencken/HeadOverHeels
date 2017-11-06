@@ -1,12 +1,10 @@
 
 #include "SoundManager.hpp"
-#include "Exception.hpp"
 #include "Ism.hpp"
 
 using isomot::SoundManager;
 using isomot::SampleData;
 using isomot::SoundData;
-using isomot::Exception;
 using isomot::EqualSoundData;
 
 SoundManager* SoundManager::instance = 0;
@@ -80,7 +78,7 @@ void SoundManager::readListOfSounds( const std::string& fileName )
         {
                 std::cerr << e << std::endl ;
         }
-        catch ( const Exception& e )
+        catch ( const std::exception& e )
         {
                 std::cerr << e.what () << std::endl ;
         }

@@ -8,7 +8,6 @@
 #include "Behavior.hpp"
 #include "Mediator.hpp"
 #include "Camera.hpp"
-#include "Exception.hpp"
 #include "SoundManager.hpp"
 #include "GameManager.hpp"
 
@@ -100,7 +99,7 @@ void MapManager::loadMap ()
         {
                 std::cerr << e << std::endl ;
         }
-        catch ( const Exception& e )
+        catch ( const std::exception& e )
         {
                 std::cerr << e.what() << std::endl ;
         }
