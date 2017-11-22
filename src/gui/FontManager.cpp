@@ -1,7 +1,7 @@
 
 #include "FontManager.hpp"
-#include "Gui.hpp"
 #include "Font.hpp"
+#include "Ism.hpp"
 
 
 namespace gui
@@ -16,7 +16,7 @@ FontManager::FontManager( )
 
 FontManager::~FontManager( )
 {
-        std::for_each( this->fonts.begin (), this->fonts.end (), DeleteObject() );
+        std::for_each( this->fonts.begin (), this->fonts.end (), isomot::DeleteObject() );
         this->fonts.clear();
 }
 

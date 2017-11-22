@@ -87,7 +87,7 @@ namespace isomot
          */
         void sleep ( unsigned long miliseconds );
 
-        const char * pathToFile( const std::string& in ) ;
+        const char * pathToFile ( const std::string& in ) ;
 
         std::string pathToGame () ;
 
@@ -104,17 +104,14 @@ namespace isomot
         std::string sharePath () ;
 
         /**
-         * Object-function for destruction of objects of Standard Template Library container
+         * Object-function to finalize objects of Standard Template Library container
          */
         struct DeleteObject
         {
                 template < typename T >
-                void operator()( const T* ptr ) const
+                void operator() ( const T* ptr ) const
                 {
-                        if ( ptr != 0 )
-                        {
-                                delete ptr;
-                        }
+                        delete ptr;
                 }
         } ;
 

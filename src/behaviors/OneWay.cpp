@@ -14,29 +14,26 @@
 namespace isomot
 {
 
-OneWay::OneWay( Item * item, const std::string & behavior, bool isFlying ) :
+OneWay::OneWay( Item * item, const std::string & behavior, bool flying ) :
         Behavior( item, behavior )
+        , isFlying( flying )
+        , speedTimer( 0 )
+        , fallTimer( 0 )
 {
         speedTimer = new HPC();
         speedTimer->start();
 
-        if ( ! isFlying )
+        if ( ! flying )
         {
                 fallTimer = new HPC();
                 fallTimer->start();
         }
-
-        this->isFlying = isFlying;
 }
 
 OneWay::~OneWay()
 {
-        delete speedTimer;
-
-        if ( this->isFlying )
-        {
-                delete fallTimer;
-        }
+        delete speedTimer ;
+        delete fallTimer ;
 }
 
 bool OneWay::update ()

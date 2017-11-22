@@ -392,7 +392,9 @@ Room* MapManager::rebuildRoom()
 
                 if ( player->getLabel() == "headoverheels" || GameManager::getInstance()->getLives( player->getLabel() ) > 0 )
                 {
+                #ifdef DEBUG
                         std::cout << "got player \"" << player->getLabel() << "\" who entered this room @ MapManager::rebuildRoom" << std::endl ;
+                #endif
 
                         // when joined character splits, then some simple character migrates to another room
                         // and further via swap user changes to room of splitting, and loses life there

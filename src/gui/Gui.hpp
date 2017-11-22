@@ -28,21 +28,6 @@ namespace gui
 void sleep ( unsigned long miliseconds ) ;
 
 /**
- * Object-function for destruction of objects of Standard Template Library container
- */
-struct DeleteObject
-{
-        template < typename T >
-        void operator() ( const T * ptr ) const
-        {
-                if ( ptr != 0 )
-                {
-                        delete ptr;
-                }
-        }
-};
-
-/**
  * Maximum number of letters
  */
 const int HowManyLetters = 336;

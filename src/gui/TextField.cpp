@@ -2,6 +2,7 @@
 #include "TextField.hpp"
 #include "Font.hpp"
 #include "Label.hpp"
+#include "Ism.hpp"
 
 using gui::TextField;
 using gui::Alignment;
@@ -20,7 +21,7 @@ TextField::TextField( int x, int y, unsigned int width, unsigned int height, con
 
 TextField::~TextField()
 {
-        std::for_each( this->lines.begin (), this->lines.end (), DeleteObject() );
+        std::for_each( this->lines.begin (), this->lines.end (), isomot::DeleteObject() );
         this->lines.clear();
 }
 

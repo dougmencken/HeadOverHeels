@@ -2,7 +2,7 @@
 #include "csxml/LanguageXML.hpp"
 #include "LanguageText.hpp"
 #include "LanguageManager.hpp"
-#include "Gui.hpp" // for DeleteObject() in destructor
+#include "Ism.hpp" // for DeleteObject() in destructor
 #include <iostream>
 
 
@@ -16,7 +16,7 @@ LanguageManager::LanguageManager( const std::string& fileName, const std::string
 
 LanguageManager::~LanguageManager()
 {
-        std::for_each( texts.begin(), texts.end(), DeleteObject() );
+        std::for_each( texts.begin(), texts.end(), isomot::DeleteObject() );
         texts.clear();
 }
 

@@ -22,7 +22,7 @@ class Item ;
 
 /**
  * Moves item in only one direction. When it collides with something,
- * it rotates 180° and continues to move in the opposite direction
+ * it rotates 180° and continues to move in opposite way
  */
 
 class OneWay : public Behavior
@@ -30,7 +30,7 @@ class OneWay : public Behavior
 
 public:
 
-        OneWay( Item * item, const std::string & behavior, bool isFlying ) ;
+        OneWay( Item * item, const std::string & behavior, bool flying ) ;
 
         virtual ~OneWay( ) ;
 

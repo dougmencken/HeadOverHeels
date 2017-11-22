@@ -126,7 +126,7 @@ void MenuWithValues::draw( BITMAP* where )
         setX ( previousX );
         setY ( previousY );
 
-        std::for_each( optionsWithValues.begin (), optionsWithValues.end (), DeleteObject() );
+        std::for_each( optionsWithValues.begin (), optionsWithValues.end (), isomot::DeleteObject() );
         optionsWithValues.clear();
 }
 

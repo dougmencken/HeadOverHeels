@@ -24,7 +24,7 @@ Menu::Menu( )
 
 Menu::~Menu( )
 {
-        std::for_each( options.begin (), options.end (), DeleteObject() );
+        std::for_each( options.begin (), options.end (), isomot::DeleteObject() );
         options.clear();
 }
 
