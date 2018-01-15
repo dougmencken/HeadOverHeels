@@ -53,11 +53,6 @@ const char * pathToFile( const std::string& in )
 std::string PathToGame( "no way" ) ;
 std::string FullPathToGame( "" ) ;
 
-std::string pathToGame ()
-{
-        return PathToGame ;
-}
-
 void setPathToGame ( const char * pathToGame )
 {
         PathToGame = pathToGame ;
@@ -127,7 +122,7 @@ std::string sharePath ()
 #if defined ( __CYGWIN__ ) || defined ( __WIN32 )
                 const char* cpath = FullPathToGame.c_str ();
 #else
-                const char* cpath = pathToGame().c_str ();
+                const char* cpath = PathToGame.c_str ();
 #endif
                 char* filename = get_filename( cpath );
 

@@ -17,7 +17,11 @@ Font::Font( const std::string& fontName, const std::string& fontFile, int color,
         std::cout << "reading from file \"" << nameOfFile << "\" to create font \"" << fontName << "\"" << std::endl ;
 
         BITMAP * bitmapFont = load_png( isomot::pathToFile( fontFile ), 0 );
-        assert( bitmapFont );
+        if ( bitmapFont == 0 )
+        {
+                std::cerr << "can’t get font \"" << fontName << "\" from file \"" << nameOfFile << "\"" << std::endl ;
+                return;
+        }
 
         // double sized font
         if ( doubleSize )

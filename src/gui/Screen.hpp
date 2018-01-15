@@ -1,6 +1,6 @@
 // The free and open source remake of Head over Heels
 //
-// Copyright © 2017 Douglas Mencken dougmencken@gmail.com
+// Copyright © 2018 Douglas Mencken dougmencken@gmail.com
 // Copyright © 2008 Jorge Rodríguez Santos
 // Original game copyright © 1987 Ocean Software Ltd.
 //
@@ -69,8 +69,6 @@ public:
         static BITMAP * loadPicture ( const char * nameOfPicture ) ;
 
         static std::vector < BITMAP * > loadAnimation ( const char * nameOfGif ) ;
-
-        static const double delayBetweenFrames = 0.1 ;
 
 private:
 

@@ -1,6 +1,6 @@
 // The free and open source remake of Head over Heels
 //
-// Copyright © 2017 Douglas Mencken dougmencken@gmail.com
+// Copyright © 2018 Douglas Mencken dougmencken@gmail.com
 // Copyright © 2008 Jorge Rodríguez Santos
 // Original game copyright © 1987 Ocean Software Ltd.
 //
@@ -12,7 +12,6 @@
 #define Widget_hpp_
 
 #include <allegro.h>
-
 #include <utility>
 
 

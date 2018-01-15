@@ -1,6 +1,6 @@
 // The free and open source remake of Head over Heels
 //
-// Copyright © 2017 Douglas Mencken dougmencken@gmail.com
+// Copyright © 2018 Douglas Mencken dougmencken@gmail.com
 // Copyright © 2008 Jorge Rodríguez Santos
 // Original game copyright © 1987 Ocean Software Ltd.
 //
@@ -88,8 +88,6 @@ namespace isomot
         void sleep ( unsigned long miliseconds );
 
         const char * pathToFile ( const std::string& in ) ;
-
-        std::string pathToGame () ;
 
         void setPathToGame ( const char * pathToGame ) ;
 

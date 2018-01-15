@@ -1,6 +1,6 @@
 // The free and open source remake of Head over Heels
 //
-// Copyright © 2017 Douglas Mencken dougmencken@gmail.com
+// Copyright © 2018 Douglas Mencken dougmencken@gmail.com
 // Copyright © 2008 Jorge Rodríguez Santos
 // Original game copyright © 1987 Ocean Software Ltd.
 //
@@ -11,7 +11,6 @@
 #ifndef Camera_hpp_
 #define Camera_hpp_
 
-#include <utility>
 #include "Ism.hpp"
 #include "Way.hpp"
 
@@ -23,20 +22,18 @@ class Room;
 class PlayerItem;
 
 /**
- * Centra la sala. Si es una sala simple o pequeña simplemente calculará las
- * coordenadas de pantalla óptimas para situar el punto origen del espacio
- * Si es una sala múltiple, además centrará al personaje activo en pantalla y
- * calculará las coordenadas donde debe situarse el bitmap en el que se dibuja
- * la sala respecto de la pantalla
+ * Camera centers the room. If it’s simple or small room, it just calculates optimal coordinates.
+ * If it is a big room, it also centers active character on screen and calculates coordinates
+ * to draw part of such room on screen
  */
+
 class Camera
 {
 
 public:
 
         /**
-         * Constructor
-         * @param La sala objetivo de la cámara
+         * @param Room for this camera
          */
         Camera( Room* room ) ;
 

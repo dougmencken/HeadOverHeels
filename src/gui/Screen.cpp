@@ -10,6 +10,8 @@
 #include <algif.h>
 #include <iostream>
 
+const double delayBetweenFrames = 0.1 ;
+
 
 namespace gui
 {
@@ -259,8 +261,8 @@ void Screen::placeHeadAndHeels( bool picturesToo, bool copyrightsToo )
                 label->moveTo( whereX, whereY - stepY );
                 addWidget( label );
 
-                // (c) 2017 Douglas Mencken
-                copyrightString = "{ 2017 Douglas Mencken" ;
+                // (c) 2018 Douglas Mencken
+                copyrightString = "{ 2018 Douglas Mencken" ;
                 label = new Label( copyrightString, "regular", "yellow" );
                 label->moveTo( whereX, whereY - stepY - stepY );
                 addWidget( label );
