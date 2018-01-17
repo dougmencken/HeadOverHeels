@@ -656,8 +656,8 @@ void PlayerItem::decreaseHighJumps()
 
 void PlayerItem::activateShield()
 {
-        this->shieldTimer = new HPC();
-        this->shieldTimer->start();
+        this->shieldTimer = new Timer();
+        this->shieldTimer->go();
         this->shieldTime = 25.0;
         this->shield = shieldTime - shieldTimer->getValue();
         GameManager::getInstance()->addShield( this->getLabel(), this->shield );
@@ -732,8 +732,8 @@ void PlayerItem::setShieldTime ( double shield )
 
         if ( this->shieldTime > 0 && this->shieldTimer == 0 )
         {
-                this->shieldTimer = new HPC();
-                this->shieldTimer->start();
+                this->shieldTimer = new Timer();
+                this->shieldTimer->go();
         }
 }
 

@@ -14,7 +14,7 @@
 #include <vector>
 
 #include "Behavior.hpp"
-#include "HPC.hpp"
+#include "Timer.hpp"
 
 
 namespace isomot
@@ -222,22 +222,22 @@ protected:
        /**
         * Cronómetro que controla la velocidad de movimiento del elemento
         */
-        HPC* speedTimer ;
+        Timer* speedTimer ;
 
        /**
         * Cronómetro que controla la velocidad de caída del elemento
         */
-        HPC* fallTimer ;
+        Timer* fallTimer ;
 
        /**
         * Timer for gliding speed of item
         */
-        HPC* glideTimer ;
+        Timer* glideTimer ;
 
        /**
         * Timer for blinking of item
         */
-        HPC* blinkingTimer ;
+        Timer* blinkingTimer ;
 
 public:
 

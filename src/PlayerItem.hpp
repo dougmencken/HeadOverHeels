@@ -13,7 +13,7 @@
 
 #include <vector>
 #include "FreeItem.hpp"
-#include "HPC.hpp"
+#include "Timer.hpp"
 
 
 namespace isomot
@@ -209,7 +209,7 @@ private:
         /**
          * Time of immunity, player gots 25 seconds of immunity when rabbit is caught
          */
-        HPC * shieldTimer ;
+        Timer * shieldTimer ;
 
         /**
          * How many seconds left during which player is immune

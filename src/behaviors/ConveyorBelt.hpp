@@ -12,7 +12,7 @@
 #define ConveyorBelt_hpp_
 
 #include "Behavior.hpp"
-#include "HPC.hpp"
+#include "Timer.hpp"
 
 
 namespace isomot
@@ -42,9 +42,9 @@ private:
        /**
         * Cronómetro que controla la velocidad de arrastre de los elementos situados encima
         */
-        HPC * speedTimer ;
+        Timer * speedTimer ;
 
-        HPC * animationTimer ;
+        Timer * animationTimer ;
 
 };
 

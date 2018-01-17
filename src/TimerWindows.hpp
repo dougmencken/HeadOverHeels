@@ -8,28 +8,25 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef Win32HPC_hpp_
-#define Win32HPC_hpp_
+#ifndef TimerWindows_hpp_
+#define TimerWindows_hpp_
 
 #include <allegro.h>
 #include <winalleg.h>
 
+
 /**
- * Cronómetro de alta precisión para sistemas Windows
+ * High precision timer for Windows systems
  */
 
-class HPC
+class Timer
 {
 
 public:
 
-        HPC();
+        Timer();
 
-        /**
-         * Pone en marcha el cronómetro
-         * @return true si el sistema dispone de un cronómetro de alta precisión
-         */
-        bool start();
+        bool go();
 
         /**
          * Devuelve el número de segundos transcurridos desde que el cronómetro se puso en marcha

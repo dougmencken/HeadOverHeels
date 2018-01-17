@@ -12,7 +12,7 @@
 #define Sink_hpp_
 
 #include "Behavior.hpp"
-#include "HPC.hpp"
+#include "Timer.hpp"
 
 
 namespace isomot
@@ -40,7 +40,7 @@ private:
        /**
         * Cronómetro que controla la velocidad de caída del elemento
         */
-        HPC * fallTimer ;
+        Timer * fallTimer ;
 
 };
 

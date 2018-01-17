@@ -12,7 +12,7 @@
 #define RemoteControl_hpp_
 
 #include "Behavior.hpp"
-#include "HPC.hpp"
+#include "Timer.hpp"
 
 
 namespace isomot
@@ -47,12 +47,12 @@ private:
        /**
         * Cronómetro que controla la velocidad de movimiento del elemento
         */
-        HPC * speedTimer ;
+        Timer * speedTimer ;
 
        /**
         * Cronómetro que controla la velocidad de caída del elemento
         */
-        HPC * fallTimer ;
+        Timer * fallTimer ;
 
 };
 

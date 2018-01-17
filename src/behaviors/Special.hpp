@@ -12,8 +12,7 @@
 #define Special_hpp_
 
 #include "Behavior.hpp"
-#include "HPC.hpp"
-#include "Ism.hpp"
+#include "Timer.hpp"
 
 
 namespace isomot
@@ -56,17 +55,17 @@ private:
         /**
          * Timer for disappearance of special item
          */
-        HPC * disappearanceTimer ;
+        Timer * disappearanceTimer ;
 
         /**
          * Timer for speed of item’s movement
          */
-        HPC * speedTimer ;
+        Timer * speedTimer ;
 
         /**
          * Timer for speed of item’s drop
          */
-        HPC * fallTimer ;
+        Timer * fallTimer ;
 
 public:
 

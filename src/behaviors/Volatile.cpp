@@ -15,8 +15,8 @@ Volatile::Volatile( Item * item, const std::string & behavior )
         : Behavior( item, behavior )
         , solid( false )
 {
-        disappearanceTimer = new HPC();
-        disappearanceTimer->start();
+        disappearanceTimer = new Timer();
+        disappearanceTimer->go();
 }
 
 Volatile::~Volatile()

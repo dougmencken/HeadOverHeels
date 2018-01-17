@@ -58,15 +58,15 @@ PlayerHead::PlayerHead( Item* item, const std::string& behavior ) :
         // Pasos automáticos
         automaticStepsCounter = 16;
 
-        // create and start chronometers
-        speedTimer = new HPC ();
-        fallTimer = new HPC ();
-        glideTimer = new HPC ();
-        blinkingTimer = new HPC ();
-        speedTimer->start ();
-        fallTimer->start ();
-        glideTimer->start ();
-        blinkingTimer->start ();
+        // create and activate chronometers
+        speedTimer = new Timer ();
+        fallTimer = new Timer ();
+        glideTimer = new Timer ();
+        blinkingTimer = new Timer ();
+        speedTimer->go ();
+        fallTimer->go ();
+        glideTimer->go ();
+        blinkingTimer->go ();
 
         fireFromHooterIsPresent = false;
 }

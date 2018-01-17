@@ -20,13 +20,13 @@ OneWay::OneWay( Item * item, const std::string & behavior, bool flying ) :
         , speedTimer( 0 )
         , fallTimer( 0 )
 {
-        speedTimer = new HPC();
-        speedTimer->start();
+        speedTimer = new Timer();
+        speedTimer->go();
 
         if ( ! flying )
         {
-                fallTimer = new HPC();
-                fallTimer->start();
+                fallTimer = new Timer();
+                fallTimer->go();
         }
 }
 

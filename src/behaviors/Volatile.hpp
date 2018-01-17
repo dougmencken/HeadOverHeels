@@ -12,8 +12,7 @@
 #define Volatile_hpp_
 
 #include "Behavior.hpp"
-#include "HPC.hpp"
-#include "Ism.hpp"
+#include "Timer.hpp"
 
 
 namespace isomot
@@ -52,7 +51,7 @@ protected:
        /**
         * Timer for disappearance of volatile item
         */
-        HPC * disappearanceTimer ;
+        Timer * disappearanceTimer ;
 
 private:
 

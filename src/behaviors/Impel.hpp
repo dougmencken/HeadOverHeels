@@ -12,7 +12,7 @@
 #define Impel_hpp_
 
 #include "Behavior.hpp"
-#include "HPC.hpp"
+#include "Timer.hpp"
 
 
 namespace isomot
@@ -40,12 +40,12 @@ private:
        /**
         * Timer that defines speed of movement
         */
-        HPC * speedTimer ;
+        Timer * speedTimer ;
 
        /**
         * Timer that defines speed of fall
         */
-        HPC * fallTimer ;
+        Timer * fallTimer ;
 
 };
 

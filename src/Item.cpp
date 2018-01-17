@@ -32,7 +32,7 @@ Item::Item( ItemData* data, int z, const Way& way )
         // item with more than one frame per direction has animation
         if ( ( data->howManyMotions() - data->howManyExtraFrames() ) / data->howManyFramesForOrientations() > 1 )
         {
-                motionTimer.start();
+                motionTimer.go();
         }
 }
 

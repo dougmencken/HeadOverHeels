@@ -17,10 +17,11 @@ Drive::Drive( Item* item, const std::string& behavior )
         : Behavior( item, behavior )
 {
         running = false;
-        speedTimer = new HPC();
-        fallTimer = new HPC();
-        speedTimer->start();
-        fallTimer->start();
+
+        speedTimer = new Timer();
+        fallTimer = new Timer();
+        speedTimer->go();
+        fallTimer->go();
 }
 
 Drive::~Drive( )

@@ -12,7 +12,7 @@
 #define Hunter_hpp_
 
 #include "Behavior.hpp"
-#include "HPC.hpp"
+#include "Timer.hpp"
 
 
 namespace isomot
@@ -71,7 +71,7 @@ private:
        /**
         * Timer for item’s speed of movement
         */
-        HPC * speedTimer ;
+        Timer * speedTimer ;
 
        /**
         * Data of imperial guard

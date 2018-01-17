@@ -17,7 +17,7 @@
 #include <string>
 #include <vector>
 
-#include "HPC.hpp"
+#include "Timer.hpp"
 #include "Widget.hpp"
 
 
@@ -49,7 +49,7 @@ private:
 
         size_t theFrame ;
 
-        HPC * animationTimer ;
+        Timer * animationTimer ;
 
         std::string nameOfAnimation ;
 

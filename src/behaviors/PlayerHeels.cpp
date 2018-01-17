@@ -49,11 +49,11 @@ PlayerHeels::PlayerHeels( Item* item, const std::string& behavior ) :
         // Pasos automáticos
         automaticStepsCounter = 16;
 
-        // create and start chronometers
-        speedTimer = new HPC ();
-        fallTimer = new HPC ();
-        speedTimer->start ();
-        fallTimer->start ();
+        // create and activate chronometers
+        speedTimer = new Timer ();
+        fallTimer = new Timer ();
+        speedTimer->go ();
+        fallTimer->go ();
 }
 
 PlayerHeels::~PlayerHeels( )

@@ -16,12 +16,13 @@ namespace isomot
 Patrol::Patrol( Item * item, const std::string & behavior ) :
         Behavior( item, behavior )
 {
-        speedTimer = new HPC();
-        fallTimer = new HPC();
-        changeTimer = new HPC();
-        speedTimer->start();
-        fallTimer->start();
-        changeTimer->start();
+        speedTimer = new Timer();
+        fallTimer = new Timer();
+        changeTimer = new Timer();
+
+        speedTimer->go ();
+        fallTimer->go ();
+        changeTimer->go ();
 }
 
 Patrol::~Patrol()

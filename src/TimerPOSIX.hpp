@@ -8,29 +8,30 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef LinuxHPC_hpp_
-#define LinuxHPC_hpp_
+#ifndef TimerPOSIX_hpp_
+#define TimerPOSIX_hpp_
 
 #include <sys/time.h>
 #include <unistd.h>
+
 
 /**
  * High precision timer for POSIX systems
  */
 
-class HPC
+class Timer
 {
 
 public:
 
-        HPC( ) ;
+        Timer( ) ;
 
-        virtual ~HPC( ) ;
+        virtual ~Timer( ) ;
 
        /**
         * Start timer
         */
-        void start () ;
+        void go () ;
 
        /**
         * Return milliseconds since timer was started
@@ -55,18 +56,15 @@ public:
 protected:
 
        /**
-        * Moment in which chronometer was started
+        * Moment when chronometer was started
         */
         timeval trestart ;
 
        /**
-        * Moment in which stopwatch is stopped
+        * Moment when stopwatch is stopped
         */
         timeval tstop ;
 
-       /**
-        * Huso horario
-        */
         struct timezone tz ;
 
 };

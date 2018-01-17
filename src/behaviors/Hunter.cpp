@@ -18,8 +18,8 @@ namespace isomot
 Hunter::Hunter( Item * item, const std::string & behavior ) :
         Behavior( item, behavior )
 {
-        speedTimer = new HPC();
-        speedTimer->start();
+        speedTimer = new Timer();
+        speedTimer->go ();
 }
 
 Hunter::~Hunter()

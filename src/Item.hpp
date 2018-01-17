@@ -17,7 +17,7 @@
 
 #include "Ism.hpp"
 #include "Way.hpp"
-#include "HPC.hpp"
+#include "Timer.hpp"
 #include "Mediated.hpp"
 
 
@@ -197,7 +197,7 @@ protected:
         /**
          * Cronómetro para controlar la velocidad de la animación
          */
-        HPC motionTimer ;
+        Timer motionTimer ;
 
         /**
          * Behavior of item

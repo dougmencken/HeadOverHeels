@@ -16,11 +16,11 @@ ConveyorBelt::ConveyorBelt( Item* item, const std::string& behavior )
         : Behavior( item, behavior )
         , active( false )
 {
-        speedTimer = new HPC();
-        speedTimer->start();
+        speedTimer = new Timer();
+        speedTimer->go();
 
-        animationTimer = new HPC();
-        animationTimer->start();
+        animationTimer = new Timer();
+        animationTimer->go();
 }
 
 ConveyorBelt::~ConveyorBelt( )

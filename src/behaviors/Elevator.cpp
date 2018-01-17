@@ -12,10 +12,10 @@ namespace isomot
 Elevator::Elevator( Item * item, const std::string & behavior ) :
         Behavior( item, behavior )
 {
-        speedTimer = new HPC();
-        stopTimer = new HPC();
-        speedTimer->start();
-        stopTimer->start();
+        speedTimer = new Timer();
+        stopTimer = new Timer();
+        speedTimer->go ();
+        stopTimer->go ();
 }
 
 Elevator::~Elevator( )

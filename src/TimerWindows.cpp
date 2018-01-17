@@ -1,10 +1,10 @@
 
 #ifdef __WIN32
 
-#include "Win32HPC.hpp"
+#include "TimerWindows.hpp"
 
 
-HPC::HPC()
+Timer::Timer()
 {
         frequency.QuadPart = 0;
         startTime.QuadPart = 0;
@@ -12,17 +12,16 @@ HPC::HPC()
         period.QuadPart = 0;
 }
 
-bool HPC::start()
+bool Timer::go()
 {
         QueryPerformanceCounter( &startTime );
         if ( ! QueryPerformanceFrequency( &frequency ) ) return false;
 
-        // Pasa el dato a milisegundos
-        frequency.QuadPart /= 1000;
+        frequency.QuadPart /= 1000;     // to milliseconds
         return true;
 }
 
-double HPC::getValue()
+double Timer::getValue()
 {
         LARGE_INTEGER timer;
         QueryPerformanceCounter( &timer );
@@ -35,7 +34,7 @@ double HPC::getValue()
         return double( ( timer.QuadPart - period.QuadPart - startTime.QuadPart ) / frequency.QuadPart ) / 1000.0;
 }
 
-void HPC::reset()
+void Timer::reset()
 {
         LARGE_INTEGER timer, excess;
 
@@ -46,7 +45,7 @@ void HPC::reset()
         period.QuadPart = 0;
 }
 
-void HPC::stop()
+void Timer::stop()
 {
         LARGE_INTEGER timer;
         QueryPerformanceCounter( &timer );
@@ -54,7 +53,7 @@ void HPC::stop()
         stopTime.QuadPart = timer.QuadPart - period.QuadPart;
 }
 
-void HPC::restart()
+void Timer::restart()
 {
         LARGE_INTEGER timer;
         QueryPerformanceCounter( &timer );

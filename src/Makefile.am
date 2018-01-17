@@ -37,7 +37,11 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			GameManager.hpp \
 			GridItem.cpp \
 			GridItem.hpp \
-			HPC.hpp \
+			Timer.hpp \
+			TimerPOSIX.cpp \
+			TimerPOSIX.hpp \
+			TimerWindows.cpp \
+			TimerWindows.hpp \
 			InputManager.cpp \
 			InputManager.hpp \
 			Ism.cpp \
@@ -45,13 +49,11 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			Isomot.cpp \
 			Isomot.hpp \
 			Item.cpp \
+			Item.hpp \
 			ItemData.cpp \
 			ItemData.hpp \
 			ItemDataManager.cpp \
 			ItemDataManager.hpp \
-			Item.hpp \
-			LinuxHPC.cpp \
-			LinuxHPC.hpp \
 			MapManager.cpp \
 			MapManager.hpp \
 			MapRoomData.cpp \
@@ -74,8 +76,6 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			TableOfTransparencies.hpp \
 			Wall.cpp \
 			Wall.hpp \
-			Win32HPC.cpp \
-			Win32HPC.hpp \
 			alogg/alogg.c \
 			alogg/aloggcfg.h \
 			alogg/alogg.h \

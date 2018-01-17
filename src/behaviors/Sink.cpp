@@ -12,8 +12,8 @@ namespace isomot
 Sink::Sink( Item * item, const std::string & behavior ) :
         Behavior( item, behavior )
 {
-        fallTimer = new HPC();
-        fallTimer->start();
+        fallTimer = new Timer();
+        fallTimer->go();
 }
 
 Sink::~Sink()

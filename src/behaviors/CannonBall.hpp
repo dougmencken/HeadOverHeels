@@ -12,7 +12,7 @@
 #define CannonBall_hpp_
 
 #include "Behavior.hpp"
-#include "HPC.hpp"
+#include "Timer.hpp"
 
 
 namespace isomot
@@ -48,7 +48,7 @@ private:
        /**
         * Cronómetro que controla la velocidad de movimiento del elemento
         */
-        HPC * speedTimer ;
+        Timer * speedTimer ;
 
 public:
 

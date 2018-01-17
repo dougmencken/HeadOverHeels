@@ -17,10 +17,10 @@ namespace isomot
 Turn::Turn( Item * item, const std::string & behavior ) :
         Behavior( item, behavior )
 {
-        speedTimer = new HPC();
-        fallTimer = new HPC();
-        speedTimer->start();
-        fallTimer->start();
+        speedTimer = new Timer();
+        fallTimer = new Timer();
+        speedTimer->go();
+        fallTimer->go();
 }
 
 Turn::~Turn()

@@ -12,7 +12,7 @@
 #define Elevator_hpp_
 
 #include "Behavior.hpp"
-#include "HPC.hpp"
+#include "Timer.hpp"
 
 
 namespace isomot
@@ -57,12 +57,12 @@ private:
        /**
         * Cronómetro que controla la velocidad de movimiento del elemento
         */
-        HPC * speedTimer ;
+        Timer * speedTimer ;
 
        /**
         * Cronómetro que controla los tiempos de parada del ascensor. Suceden cuando cambia de dirección
         */
-        HPC * stopTimer ;
+        Timer * stopTimer ;
 
 public:
 

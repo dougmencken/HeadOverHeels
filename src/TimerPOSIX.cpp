@@ -1,10 +1,10 @@
 
 #ifndef __WIN32
 
-#include "LinuxHPC.hpp"
+#include "TimerPOSIX.hpp"
 
 
-HPC::HPC()
+Timer::Timer()
 {
         trestart.tv_sec = 0;
         trestart.tv_usec = 0;
@@ -12,17 +12,17 @@ HPC::HPC()
         tstop.tv_usec = 0;
 }
 
-HPC::~HPC()
+Timer::~Timer()
 {
 
 }
 
-void HPC::start()
+void Timer::go()
 {
         gettimeofday( &trestart, &tz );
 }
 
-double HPC::getValue()
+double Timer::getValue()
 {
         gettimeofday( &tstop, &tz );
 
@@ -32,17 +32,17 @@ double HPC::getValue()
         return t2 - t1;
 }
 
-void HPC::reset()
+void Timer::reset()
 {
         gettimeofday( &trestart, &tz );
 }
 
-void HPC::stop()
+void Timer::stop()
 {
         gettimeofday( &tstop, &tz );
 }
 
-void HPC::restart()
+void Timer::restart()
 {
         gettimeofday( &tstop, &tz );
 }

@@ -18,13 +18,13 @@ namespace isomot
 Special::Special( Item * item, const std::string & behavior ) :
         Behavior( item, behavior )
 {
-        disappearanceTimer = new HPC();
-        speedTimer = new HPC();
-        fallTimer = new HPC();
+        disappearanceTimer = new Timer();
+        speedTimer = new Timer();
+        fallTimer = new Timer();
 
-        disappearanceTimer->start();
-        speedTimer->start();
-        fallTimer->start();
+        disappearanceTimer->go();
+        speedTimer->go();
+        fallTimer->go();
 }
 
 Special::~Special( )

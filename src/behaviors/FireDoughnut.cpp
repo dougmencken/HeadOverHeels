@@ -14,8 +14,8 @@ FireDoughnut::FireDoughnut( Item * item, const std::string & behavior )
         : Behavior( item, behavior )
         , playerItem( 0 )
 {
-        speedTimer = new HPC();
-        speedTimer->start();
+        speedTimer = new Timer();
+        speedTimer->go();
 }
 
 FireDoughnut::~FireDoughnut( )

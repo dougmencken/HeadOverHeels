@@ -16,10 +16,11 @@ namespace isomot
 Detector::Detector( Item * item, const std::string & behavior ) :
         Behavior( item, behavior )
 {
-        speedTimer = new HPC();
-        fallTimer = new HPC();
-        speedTimer->start();
-        fallTimer->start();
+        speedTimer = new Timer();
+        speedTimer->go();
+
+        fallTimer = new Timer();
+        fallTimer->go();
 }
 
 Detector::~Detector( )

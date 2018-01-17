@@ -19,12 +19,14 @@ Trampoline::Trampoline( Item * item, const std::string & behavior ) :
         folded = rebounding = false;
         regularFrame = 0;
         foldedFrame = 1;
-        speedTimer = new HPC();
-        fallTimer = new HPC();
-        reboundTimer = new HPC();
-        speedTimer->start();
-        fallTimer->start();
-        reboundTimer->start();
+
+        speedTimer = new Timer();
+        fallTimer = new Timer();
+        reboundTimer = new Timer();
+
+        speedTimer->go();
+        fallTimer->go();
+        reboundTimer->go();
 }
 
 Trampoline::~Trampoline()

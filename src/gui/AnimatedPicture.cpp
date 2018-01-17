@@ -13,8 +13,8 @@ AnimatedPicture::AnimatedPicture( int x, int y, std::vector < BITMAP * > frames,
         , theFrame( 0 )
         , nameOfAnimation( name )
 {
-        animationTimer = new HPC();
-        animationTimer->start();
+        animationTimer = new Timer();
+        animationTimer->go();
 }
 
 AnimatedPicture::~AnimatedPicture()

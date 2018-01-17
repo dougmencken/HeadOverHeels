@@ -12,8 +12,6 @@
 #define Teleport_hpp_
 
 #include "Behavior.hpp"
-#include "HPC.hpp"
-#include "Ism.hpp"
 
 
 namespace isomot

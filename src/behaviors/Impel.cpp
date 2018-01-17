@@ -15,10 +15,10 @@ Impel::Impel( Item * item, const std::string & behavior ) :
         Behavior( item, behavior )
 {
         activity = Wait;
-        speedTimer = new HPC();
-        fallTimer = new HPC();
-        speedTimer->start();
-        fallTimer->start();
+        speedTimer = new Timer();
+        fallTimer = new Timer();
+        speedTimer->go();
+        fallTimer->go();
 }
 
 Impel::~Impel()

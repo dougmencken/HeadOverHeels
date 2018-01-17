@@ -18,13 +18,13 @@ RemoteControl::RemoteControl( Item * item, const std::string & behavior ) :
         activity = Wait;
         controlledItem = 0;
 
-        // move only controlled one but not controller
+        // move controlled one but not controller
         if ( getNameOfBehavior() == "behavior of remotely controlled one" )
         {
-                speedTimer = new HPC();
-                fallTimer = new HPC();
-                speedTimer->start();
-                fallTimer->start();
+                speedTimer = new Timer();
+                fallTimer = new Timer();
+                speedTimer->go();
+                fallTimer->go();
         }
 }
 
