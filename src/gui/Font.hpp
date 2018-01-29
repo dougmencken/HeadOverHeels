@@ -16,20 +16,13 @@
 #include <algorithm>
 #include <cassert>
 #include <allegro.h>
-#include "Gui.hpp"
 
 
 namespace gui
 {
 
-const unsigned short CharactersPerRow = 16;
-const unsigned short RowsPerBitmapFont = 21;
-
 /**
- * El juego utiliza tipos de letras basados en imágenes. La correspondencia entre los
- * caracteres almacenados en la imagen y su código octal UTF-8 se almacenan en la variable
- * gui::characters. Los caracteres pueden representarse de un determinado color y al doble
- * de su tamaño original
+ * Uses letters stored in picture file. Letters may have non-white color or~and double height
  */
 
 class Font
@@ -38,13 +31,12 @@ class Font
 public:
 
         /**
-         * Constructor
-         * @param fontName Nombre de la fuente tipográfica empleado como identificador
-         * @param fontFile Nombre del archivo de imagen que contienen la fuente tipográfica
-         * @param color Color de los caracteres. El color se puede cambiar sólo si los caracteres son blancos
-         * @param doubleSize Si vale true se doblará la altura de los caracteres
+         * @param fontName Name of this font to mention it
+         * @param fontFile Name of picture file with letters
+         * @param color Color of letters
+         * @param doubleHeight Double height of letters
          */
-        Font( const std::string& fontName, const std::string& fontFile, int color = makecol( 255, 255, 255 ), bool doubleSize = false ) ;
+        Font( const std::string& fontName, const std::string& fontFile, int color = makecol( 255, 255, 255 ), bool doubleHeight = false ) ;
 
         virtual ~Font( ) ;
 
@@ -52,44 +44,38 @@ public:
 
 private:
 
-        /**
-         * Nombre de la fuente tipográfica empleado como identificador
-         */
         std::string fontName ;
 
         /**
-         * Anchura de cada carácter en píxeles. Las fuentes caligráficas son monoespaciadas
+         * Width, in pixels, of each letter, game fonts are monospaced
          */
-        unsigned short charWidth ;
+        unsigned int charWidth ;
 
         /**
-         * Altura de cada carácter en píxeles. Las fuentes caligráficas son monoespaciadas
+         * Height, in pixels, of each letter
          */
-        unsigned short charHeight ;
+        unsigned int charHeight ;
 
         /**
-         * Conjunto de caracteres disponibles
+         * Images of letters
          */
-        std::vector< BITMAP * > charVector ;
+        std::vector< BITMAP * > letters ;
+
+        static unsigned int howManyLetters ;
+
+        /**
+         * Table of translation between letter in picture file and UTF-8 code of this letter,
+         * which is read from file
+         */
+        static std::string * tableOfLetters ;
 
 public:
 
-        /**
-         * Nombre de la fuente tipográfica empleado como identificador
-         * @return Una cadena con el nombre de la fuente
-         */
         std::string getFontName () const  {  return fontName ;  }
 
-        /**
-         * Anchura de cada carácter en píxeles. Las fuentes caligráficas son monoespaciadas
-         * @return Un número mayor que cero
-         */
-        unsigned short getCharWidth () const  {  return charWidth ;  }
+        unsigned int getCharWidth () const  {  return charWidth ;  }
 
-        /**
-         * Altura de cada carácter en píxeles. Las fuentes caligráficas son monoespaciadas
-         */
-        unsigned short getCharHeight () const  {  return charHeight ;  }
+        unsigned int getCharHeight () const  {  return charHeight ;  }
 
 };
 

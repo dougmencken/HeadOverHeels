@@ -10,7 +10,12 @@
 namespace gui
 {
 
-Font::Font( const std::string& fontName, const std::string& fontFile, int color, bool doubleSize ) :
+/* static */ unsigned int Font::howManyLetters = 0 ;
+
+/* static */ std::string * Font::tableOfLetters = 0 ;
+
+
+Font::Font( const std::string& fontName, const std::string& fontFile, int color, bool doubleHeight ) :
         fontName( fontName )
 {
         std::string nameOfFile = fontFile;
@@ -23,8 +28,8 @@ Font::Font( const std::string& fontName, const std::string& fontFile, int color,
                 return;
         }
 
-        // double sized font
-        if ( doubleSize )
+        // double height font
+        if ( doubleHeight )
         {
                 BITMAP* bigfont = create_bitmap_ex( bitmap_color_depth( bitmapFont ), bitmapFont->w, bitmapFont->h << 1 );
                 stretch_blit( bitmapFont, bigfont, 0, 0, bitmapFont->w, bitmapFont->h, 0, 0, bigfont->w, bigfont->h );
@@ -47,11 +52,83 @@ Font::Font( const std::string& fontName, const std::string& fontFile, int color,
                 }
         }
 
+        // read table of letters once for all fonts
+        if ( tableOfLetters == 0 )
+        {
+                howManyLetters = 0;
+
+                std::string file = isomot::sharePath() + "letters.utf8";
+                std::ifstream lettersFile ( isomot::pathToFile( file ), std::ifstream::binary );
+                if ( lettersFile != 0 )
+                {
+                        lettersFile.seekg( 0, lettersFile.end );
+                        unsigned int length = lettersFile.tellg();
+                        lettersFile.seekg( 0, lettersFile.beg );
+
+                        char * buffer = new char [ length ];
+                        lettersFile.read( buffer, length );
+                        lettersFile.close ();
+
+                        for ( unsigned int at = 0 ; at < length ; at ++ )
+                        {
+                                unsigned char c = static_cast< unsigned char >( buffer[ at ] );
+                                if ( ( c == 0 ) || ( ( c & 0x80 ) == 0 ) || ( ( c & 0xC0 ) == 0xC0 ) )
+                                {
+                                        howManyLetters++;
+                                }
+                        }
+
+                        std::cout << "file \"" << file << "\" has table for " << howManyLetters << " letters" << std::endl ;
+                        tableOfLetters = new std::string[ howManyLetters ];
+
+                        unsigned int inTable = 0;
+                        for ( unsigned int inBuf = 0 ; inBuf < length ; )
+                        {
+                                unsigned char c = static_cast< unsigned char >( buffer[ inBuf ] );
+
+                                if ( c == 0 )
+                                {
+                                        tableOfLetters[ inTable++ ] = "";
+                                        inBuf ++;
+                                }
+                                else
+                                {
+                                        char letter[ 5 ];
+                                        unsigned int bytesInLetter = 0;
+
+                                        do {
+                                                letter[ bytesInLetter++ ] = c;
+                                                c = static_cast< unsigned char >( buffer[ ++inBuf ] );
+                                        }
+                                        while ( ( ( c & 0x80 ) != 0 ) && ( ( c & 0xC0 ) != 0xC0 )
+                                                        && ( bytesInLetter < 4 ) && ( inBuf < length ) ) ;
+
+                                        letter[ bytesInLetter ] = 0;
+
+                                        tableOfLetters[ inTable ] = std::string( letter );
+                                        inTable++ ;
+                                }
+                        }
+
+                        delete[] buffer;
+                }
+                else
+                {
+                        std::cerr << "file \"" << file << "\" with table of letters is absent" << std::endl ;
+                }
+        }
+
         // decompose letters
         if ( bitmapFont != 0 )
         {
-                this->charWidth = bitmapFont->w / CharactersPerRow;
-                this->charHeight = bitmapFont->h / RowsPerBitmapFont;
+                const unsigned int lettersPerRow = 16;
+                const unsigned int rowsInFont = 21;
+
+                if ( rowsInFont * lettersPerRow != howManyLetters )
+                        std::cout << "hmmm, table of letters has more or less letters than picture of font" << std::endl ;
+
+                this->charWidth = bitmapFont->w / lettersPerRow;
+                this->charHeight = bitmapFont->h / rowsInFont;
 
                 for ( int y = 0; y < bitmapFont->h; y += this->charHeight )
                 {
@@ -59,7 +136,7 @@ Font::Font( const std::string& fontName, const std::string& fontFile, int color,
                         {
                                 BITMAP* bitmapChar = create_bitmap_ex( 32, charWidth, charHeight );
                                 blit( bitmapFont, bitmapChar, x, y, 0, 0, charWidth, charHeight );
-                                charVector.push_back( bitmapChar );
+                                letters.push_back( bitmapChar );
                         }
                 }
         }
@@ -69,22 +146,21 @@ Font::Font( const std::string& fontName, const std::string& fontFile, int color,
 
 Font::~Font( )
 {
-        std::for_each( charVector.begin(), charVector.end(), destroy_bitmap );
+        std::for_each( letters.begin(), letters.end(), destroy_bitmap );
 }
 
 BITMAP* Font::getPictureOfLetter( const std::string& letter )
 {
-        for ( int i = 0; i < HowManyLetters; i++ )
+        for ( unsigned int i = 0; i < howManyLetters; i++ )
         {
-                if ( letter.compare( gui::letters[ i ] ) == 0 )
+                if ( letter.compare( tableOfLetters[ i ] ) == 0 )
                 {
-                        return charVector.at( i );
+                        return letters.at( i );
                 }
         }
 
-        // flow is here because letter isn’t found
-        // in such case return '?'
-        return charVector.at( '?' - 32 );
+        // return '?' when letter isn’t found
+        return letters.at( '?' - 32 );
 }
 
 }

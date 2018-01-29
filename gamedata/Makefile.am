@@ -4,6 +4,7 @@ gamedata_DATA = configuration.xsd \
 		items.xsd \
 		sounds.xml \
 		sounds.xsd \
+		letters.utf8 \
 		font.png \
 		loading-screen.png \
 		shadow-template.png
