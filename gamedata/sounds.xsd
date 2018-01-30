@@ -6,7 +6,7 @@
       <xsd:element name="item" maxOccurs="unbounded">
         <xsd:complexType>
           <xsd:sequence>
-            <xsd:element name="state" maxOccurs="unbounded">
+            <xsd:element name="event" maxOccurs="unbounded">
               <xsd:complexType>
                 <xsd:sequence>
                   <xsd:element name="file" type="xsd:string"/>

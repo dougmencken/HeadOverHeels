@@ -62,22 +62,22 @@ namespace sxml
   // item
   //
 
-  const item::state_sequence& item::
-  state () const
+  const item::event_sequence& item::
+  event () const
   {
-    return this->state_;
+    return this->event_;
   }
 
-  item::state_sequence& item::
-  state ()
+  item::event_sequence& item::
+  event ()
   {
-    return this->state_;
+    return this->event_;
   }
 
   void item::
-  state (const state_sequence& state)
+  event (const event_sequence& event)
   {
-    this->state_ = state;
+    this->event_ = event;
   }
 
   const item::label_type& item::
@@ -105,52 +105,52 @@ namespace sxml
   }
 
 
-  // state
+  // event
   //
 
-  const state::file_type& state::
+  const event::file_type& event::
   file () const
   {
     return this->file_.get ();
   }
 
-  state::file_type& state::
+  event::file_type& event::
   file ()
   {
     return this->file_.get ();
   }
 
-  void state::
+  void event::
   file (const file_type& file)
   {
     this->file_.set (file);
   }
 
-  void state::
+  void event::
   file (::std::auto_ptr< file_type > file)
   {
     this->file_.set (file);
   }
 
-  const state::id_type& state::
+  const event::id_type& event::
   id () const
   {
     return this->id_.get ();
   }
 
-  state::id_type& state::
+  event::id_type& event::
   id ()
   {
     return this->id_.get ();
   }
 
-  void state::
+  void event::
   id (const id_type& id)
   {
     this->id_.set (id);
   }
 
-  void state::
+  void event::
   id (::std::auto_ptr< id_type > id)
   {
     this->id_.set (id);
@@ -232,7 +232,7 @@ namespace sxml
   item::
   item (const label_type& label)
   : ::xml_schema::type (),
-    state_ (::xml_schema::flags (), this),
+    event_ (::xml_schema::flags (), this),
     label_ (label, ::xml_schema::flags (), this)
   {
   }
@@ -242,7 +242,7 @@ namespace sxml
         ::xml_schema::flags f,
         ::xml_schema::type* c)
   : ::xml_schema::type (x, f, c),
-    state_ (x.state_, f, this),
+    event_ (x.event_, f, this),
     label_ (x.label_, f, this)
   {
   }
@@ -252,7 +252,7 @@ namespace sxml
         ::xml_schema::flags f,
         ::xml_schema::type* c)
   : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
-    state_ (f, this),
+    event_ (f, this),
     label_ (f, this)
   {
     if ((f & ::xml_schema::flags::base) == 0)
@@ -272,14 +272,14 @@ namespace sxml
       const ::xsd::cxx::xml::qualified_name< char > n (
         ::xsd::cxx::xml::dom::name< char > (i));
 
-      // state
+      // event
       //
-      if (n.name () == "state" && n.namespace_ ().empty ())
+      if (n.name () == "event" && n.namespace_ ().empty ())
       {
-        ::std::auto_ptr< state_type > r (
-          state_traits::create (i, f, this));
+        ::std::auto_ptr< event_type > r (
+          event_traits::create (i, f, this));
 
-        this->state ().push_back (r);
+        this->event ().push_back (r);
         continue;
       }
 
@@ -314,11 +314,11 @@ namespace sxml
     return new item (*this, f, c);
   }
 
-  // state
+  // event
   //
 
-  state::
-  state (const file_type& file,
+  event::
+  event (const file_type& file,
          const id_type& id)
   : ::xml_schema::type (),
     file_ (file, ::xml_schema::flags (), this),
@@ -326,8 +326,8 @@ namespace sxml
   {
   }
 
-  state::
-  state (const state& x,
+  event::
+  event (const event& x,
          ::xml_schema::flags f,
          ::xml_schema::type* c)
   : ::xml_schema::type (x, f, c),
@@ -336,8 +336,8 @@ namespace sxml
   {
   }
 
-  state::
-  state (const ::xercesc::DOMElement& e,
+  event::
+  event (const ::xercesc::DOMElement& e,
          ::xml_schema::flags f,
          ::xml_schema::type* c)
   : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
@@ -351,7 +351,7 @@ namespace sxml
     }
   }
 
-  void state::
+  void event::
   parse (::xsd::cxx::xml::dom::parser< char >& p,
          ::xml_schema::flags f)
   {
@@ -409,11 +409,11 @@ namespace sxml
     }
   }
 
-  state* state::
+  event* event::
   _clone (::xml_schema::flags f,
           ::xml_schema::type* c) const
   {
-    return new state (*this, f, c);
+    return new event (*this, f, c);
   }
 }
 

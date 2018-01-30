@@ -27,9 +27,8 @@ class PlayerItem ;
 
 
 /**
- * Abstraction for every element controlled by the user. Contains attributes and actions which
- * a player may do, and what are used in the "update" action which is nothing more than a state machine
- * that together with the "behave" action models the behavior of the player
+ * Models behavior of character, that is item controlled by user. Defines attributes
+ * and actions which every character may do
  */
 
 class UserControlled : public Behavior
@@ -53,8 +52,7 @@ public:
         virtual void behave () = 0 ;
 
        /**
-        * Asigna el identificador del estado actual del comportamiento y cambia el estado
-        * del comportamiento según el identificador
+        * Changes current activity of item’s behavior
         */
         virtual void changeActivityOfItem ( const ActivityOfItem& activityOf, Item* sender = 0 ) ;
 
@@ -63,19 +61,17 @@ protected:
         static const size_t howManyBlinkFrames = 4 ;
 
        /**
-        * Pone en espera al jugador. Implica la presentación del primer fotograma de la
-        * secuencia de animación según la orientación del jugador
+        * Character waits, game shows first frame of character’s animation for current orientation
         */
         virtual void wait( PlayerItem * player ) ;
 
        /**
-        * Mueve al jugador a la velocidad establecida en los datos del elemento y en la
-        * dirección de alguno de los cuatro puntos cardinales
+        * Character moves at speed specified in item’s data, in the direction of north or south or west or east
         */
         virtual void move( PlayerItem * player ) ;
 
        /**
-        * Move player automatically
+        * Character moves automatically
         * at distance equal to number of automatic steps,
         * in direction of north or south or west or east,
         * at speed specified in item’s data
@@ -88,47 +84,44 @@ protected:
         virtual void displace( PlayerItem * player ) ;
 
        /**
-        * Cancela el desplazamiento del jugador moviéndolo en la dirección contraria a la que está
-        * siendo desplazado. Tiene el efecto de dejarlo parado en un punto al contrarrestar la fuerza
-        * de desplazamiento. Este estado se utiliza normalmente cuando el jugador es arrastrado por
-        * una cinta transportadora o algún elemento similar
+        * Cancels movement by moving in the opposite direction of displacing, leaving item stopped
+        * at current point. Used when character is dragged by conveyor belt or some similar item
         */
         virtual void cancelDisplace( PlayerItem * player ) ;
 
        /**
-        * El jugador cae hasta topar con algo a la velocidad establecida en los datos del elemento
+        * Character falls down at speed from item’s data
         */
         virtual void fall( PlayerItem * player ) ;
 
        /**
-        * Hace saltar al jugador según la definición del salto realizada en las subclases
+        * Character jumps, details of jumping are in subclasses
         */
         virtual void jump( PlayerItem * player ) ;
 
        /**
-        * Hace planear al jugador a la velocidad establecida en los datos del elemento
-        * y en la dirección de alguno de los cuatro puntos cardinales
-        * @pre El jugador debe estar en el aire porque esté cayendo o haya saltado
+        * Character in air, falling or has jumped, glides at speed from item’s data
+        * in direction of north or south or west or east
         */
         virtual void glide( PlayerItem * player ) ;
 
        /**
-        * Teletransporta al jugador desde otra sala
+        * Character teleports from another room
         */
         virtual void wayInTeletransport( PlayerItem * player ) ;
 
        /**
-        * Teletransporta al jugador hacia otra sala
+        * Character teleports to another room
         */
         virtual void wayOutTeletransport( PlayerItem * player ) ;
 
        /**
-        * Player collides with a mortal item
+        * Character collides with a mortal item
         */
         virtual void collideWithMortalItem( PlayerItem * player ) ;
 
        /**
-        * Player releases something that freezes moving items
+        * Character releases something that freezes moving items
         */
         virtual void useHooter( PlayerItem * player ) ;
 
@@ -155,52 +148,52 @@ protected:
         std::vector < JumpMotion > highJumpVector ;
 
        /**
-        * Índice de la fase del salto que se está ejecutando
+        * Index of phase of jump
         */
         int jumpIndex ;
 
        /**
-        * Número de fases de las que se compone el salto normal
+        * Number of phases for normal jump
         */
         int jumpFrames ;
 
        /**
-        * Número de fases de las que se compone el salto largo
+        * Number of phases for long jump
         */
         int highJumpFrames ;
 
        /**
-        * Número total de pasos que dará el jugador en modo automático
+        * Number of steps to take when character moves automatically
         */
         int automaticSteps ;
 
        /**
-        * Pasos automáticos que le restan por dar al jugador cuando accede a la sala por una puerta
+        * Number of steps that remains after entering room through door
         */
-        int automaticStepsCounter ;
+        int automaticStepsThruDoor ;
 
        /**
-        * Número de pasos dado por el jugador a doble velocidad
+        * Number of steps at double speed
         */
         int highSpeedSteps ;
 
        /**
-        * Número de pasos dado por el jugador con inmunidad
+        * Number of steps for character with immunity
         */
         int shieldSteps ;
 
        /**
-        * Fotogramas de caída del jugador. Uno por cada punto cardinal
+        * Frames of falling, one for each of north south west east
         */
         int fallFrames[ 4 ] ;
 
        /**
-        * Fotograma en blanco del jugador. Se utiliza durante el cambio de sala a través de un telepuerto
+        * Blank frame, used during teleportation
         */
         int nullFrame ;
 
        /**
-        * Is there a fire from hooter in the room
+        * Is there a fire from hooter in room
         */
         bool fireFromHooterIsPresent ;
 
@@ -214,28 +207,25 @@ protected:
         */
         std::string labelOfFireFromHooter ;
 
-       /**
-        * Gestor de datos de los elementos del juego
-        */
         ItemDataManager* itemDataManager ;
 
        /**
-        * Cronómetro que controla la velocidad de movimiento del elemento
+        * Timer for speed of movement
         */
         Timer* speedTimer ;
 
        /**
-        * Cronómetro que controla la velocidad de caída del elemento
+        * Timer for speed of falling
         */
         Timer* fallTimer ;
 
        /**
-        * Timer for gliding speed of item
+        * Timer for speed of gliding
         */
         Timer* glideTimer ;
 
        /**
-        * Timer for blinking of item
+        * Timer for blinking
         */
         Timer* blinkingTimer ;
 

@@ -196,7 +196,7 @@ namespace sxml
 {
   class SoundsXML;
   class item;
-  class state;
+  class event;
 }
 
 
@@ -262,22 +262,22 @@ namespace sxml
   class item: public ::xml_schema::type
   {
     public:
-    // state
+    // event
     //
-    typedef ::sxml::state state_type;
-    typedef ::xsd::cxx::tree::sequence< state_type > state_sequence;
-    typedef state_sequence::iterator state_iterator;
-    typedef state_sequence::const_iterator state_const_iterator;
-    typedef ::xsd::cxx::tree::traits< state_type, char > state_traits;
+    typedef ::sxml::event event_type;
+    typedef ::xsd::cxx::tree::sequence< event_type > event_sequence;
+    typedef event_sequence::iterator event_iterator;
+    typedef event_sequence::const_iterator event_const_iterator;
+    typedef ::xsd::cxx::tree::traits< event_type, char > event_traits;
 
-    const state_sequence&
-    state () const;
+    const event_sequence&
+    event () const;
 
-    state_sequence&
-    state ();
+    event_sequence&
+    event ();
 
     void
-    state (const state_sequence& s);
+    event (const event_sequence& s);
 
     // label
 
@@ -320,11 +320,11 @@ namespace sxml
            ::xml_schema::flags);
 
     private:
-    state_sequence state_;
+    event_sequence event_;
     ::xsd::cxx::tree::one< label_type > label_;
   };
 
-  class state: public ::xml_schema::type
+  class event: public ::xml_schema::type
   {
     public:
     // file
@@ -363,18 +363,18 @@ namespace sxml
 
     // Constructors
     //
-    state (const file_type&,
+    event (const file_type&,
            const id_type&);
 
-    state (const ::xercesc::DOMElement& e,
+    event (const ::xercesc::DOMElement& e,
            ::xml_schema::flags f = 0,
            ::xml_schema::type* c = 0);
 
-    state (const state& x,
+    event (const event& x,
            ::xml_schema::flags f = 0,
            ::xml_schema::type* c = 0);
 
-    virtual state*
+    virtual event*
     _clone (::xml_schema::flags f = 0,
             ::xml_schema::type* c = 0) const;
 

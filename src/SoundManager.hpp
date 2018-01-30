@@ -44,15 +44,10 @@ template< > struct hash< std::string >
 namespace isomot
 {
 
-class SampleData;
-class SoundData;
+class SampleData ;
+class SoundData ;
 
-/**
- * Gestor de los efectos de sonido. Almacena todos los sonidos emitidos por los
- * diferentes elementos del juego en una tabla cuyo campo principal es la etiqueta
- * que identifica al elemento. Cada elemento tiene un sonido determinado asociado
- * a una acción que normalmente coincide con alguno de sus estados
- */
+
 class SoundManager
 {
 
@@ -202,53 +197,58 @@ public:
 
 };
 
+
 /**
- * Estructura que asocia cada muestra de sonido a un indicador de reproducción
+ * Associates sound sample with reproduction number
  */
+
 class SampleData
 {
 
 public:
 
         /**
-         * Sonido digital manejado por Allegro
+         * Digital sound sample
          */
-        SAMPLE* sample;
+        SAMPLE * sample ;
 
         /**
-         * Número de voz asignada a la reproducción del sonido
+         * Voice number for sound reproduction
          */
-        int voice;
+        int voice ;
 
 };
 
+
 /**
- * Almacena los sonidos del juego. Cada sonido está ligado a un par elemento/estado
+ * Data of sounds
  */
+
 class SoundData
 {
+
+        friend class SoundManager ;
 
 public:
 
         /**
          * Constructor
-         * @param label Unique label of item
+         * @param label Unique label of this sound
          */
         SoundData( const std::string& label ) ;
 
         void addSound ( const std::string& activity, const std::string& sampleFileName ) ;
 
         /**
-         * Busca un sonido
-         * @param state Estado asociado al sonido
-         * @return Sonido digital manejado por Allegro
+         * Look for sound
+         * @param event When to play that sound
          */
-        SampleData* find ( const std::string& state ) ;
+        SampleData* find ( const std::string& event ) ;
 
-public:
+private:
 
         /**
-         * Unique label of item
+         * Unique label of this sound
          */
         std::string label ;
 
@@ -256,11 +256,6 @@ public:
          * Hash table of activity / sound pairs. Activity is string from XML file of sounds
          */
         __gnu_cxx::hash_map< std::string, SampleData > table ;
-
-        /**
-         * Ruta al archivo ejecutable. Se necesita para cargar los sonidos
-         */
-        std::string path ;
 
 public:
 

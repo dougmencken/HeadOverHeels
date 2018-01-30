@@ -47,7 +47,7 @@ PlayerHeels::PlayerHeels( Item* item, const std::string& behavior ) :
         labelOfFireFromHooter = "bubbles";
 
         // Pasos automáticos
-        automaticStepsCounter = 16;
+        automaticStepsThruDoor = 16;
 
         // create and activate chronometers
         speedTimer = new Timer ();

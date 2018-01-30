@@ -4,19 +4,19 @@
         xsi:noNamespaceSchemaLocation="sounds.xsd">
 
   <item label="gui">
-    <state id="mistake">
+    <event id="mistake">
       <file>sound/o-ou.wav</file>
-    </state>
+    </event>
   </item>
 
   <!-- Brick number one -->
   <item label="brick1">
-    <state id="vanish">
+    <event id="vanish">
       <file>sound/destruction.wav</file>
-    </state>
-    <state id="fall">
+    </event>
+    <event id="fall">
       <file>sound/sink.wav</file>
-    </state>
+    </event>
   </item>
 
   <!-- Vulcano -->
@@ -27,173 +27,173 @@
 
   <!-- Conveyor belt -->
   <item label="conveyor-belt">
-    <state id="active">
+    <event id="active">
       <file>sound/conveyor-belt.wav</file>
-    </state>
-    <state id="vanish">
+    </event>
+    <event id="vanish">
       <file>sound/destruction.wav</file>
-    </state>
+    </event>
   </item>
 
   <!-- Book -->
   <item label="book">
-    <state id="fall">
+    <event id="fall">
       <file>sound/fall.wav</file>
-    </state>
-    <state id="push">
+    </event>
+    <event id="push">
       <file>sound/push.wav</file>
-    </state>
-    <state id="collision">
+    </event>
+    <event id="collision">
       <file>sound/push.wav</file>
-    </state>
-    <state id="vanish">
+    </event>
+    <event id="vanish">
       <file>sound/destruction.wav</file>
-    </state>
+    </event>
   </item>
 
   <!-- Stool -->
   <item label="stool">
-    <state id="fall">
+    <event id="fall">
       <file>sound/fall.wav</file>
-    </state>
-    <state id="push">
+    </event>
+    <event id="push">
       <file>sound/push.wav</file>
-    </state>
-    <state id="collision">
+    </event>
+    <event id="collision">
       <file>sound/push.wav</file>
-    </state>
+    </event>
   </item>
 
   <!-- Puppy -->
   <item label="puppy">
-    <state id="vanish">
+    <event id="vanish">
       <file>sound/silence-puppy.wav</file>
-    </state>
+    </event>
   </item>
 
   <!-- Sandwich -->
   <item label="sandwich">
-    <state id="fall">
+    <event id="fall">
       <file>sound/fall.wav</file>
-    </state>
-    <state id="collision">
+    </event>
+    <event id="collision">
       <file>sound/push.wav</file>
-    </state>
+    </event>
   </item>
 
   <!-- Switch -->
   <item label="switch">
-    <state id="switch">
+    <event id="switch">
       <file>sound/switch.wav</file>
-    </state>
+    </event>
   </item>
 
   <!-- Brick number two -->
   <item label="brick2">
-    <state id="vanish">
+    <event id="vanish">
       <file>sound/destruction.wav</file>
-    </state>
-    <state id="fall">
+    </event>
+    <event id="fall">
       <file>sound/sink.wav</file>
-    </state>
+    </event>
   </item>
 
   <!-- Bars north-south -->
   <item label="bars-ns">
-    <state id="vanish">
+    <event id="vanish">
       <file>sound/destruction.wav</file>
-    </state>
+    </event>
   </item>
 
   <!-- Bars east-west -->
   <item label="bars-ew">
-    <state id="vanish">
+    <event id="vanish">
       <file>sound/destruction.wav</file>
-    </state>
+    </event>
   </item>
 
   <!-- Drum -->
   <item label="drum">
-    <state id="fall">
+    <event id="fall">
       <file>sound/fall.wav</file>
-    </state>
-    <state id="push">
+    </event>
+    <event id="push">
       <file>sound/push.wav</file>
-    </state>
+    </event>
   </item>
 
   <!-- Portable brick -->
   <item label="portable-brick">
-    <state id="fall">
+    <event id="fall">
       <file>sound/fall.wav</file>
-    </state>
-    <state id="push">
+    </event>
+    <event id="push">
       <file>sound/push.wav</file>
-    </state>
+    </event>
   </item>
 
   <!-- Donuts -->
   <item label="donuts">
-    <state id="vanish">
+    <event id="vanish">
       <file>sound/tools.wav</file>
-    </state>
+    </event>
   </item>
 
   <!-- Rabbit with extra lives -->
   <item label="extra-life">
-    <state id="vanish">
+    <event id="vanish">
       <file>sound/bonus.wav</file>
-    </state>
+    </event>
   </item>
 
   <!-- Rabbit with high jumps -->
   <item label="high-jumps">
-    <state id="vanish">
+    <event id="vanish">
       <file>sound/bonus.wav</file>
-    </state>
+    </event>
   </item>
 
   <!-- Rabbit with high speed -->
   <item label="high-speed">
-    <state id="vanish">
+    <event id="vanish">
       <file>sound/bonus.wav</file>
-    </state>
+    </event>
   </item>
 
   <!-- Rabbit with immunity -->
   <item label="shield">
-    <state id="vanish">
+    <event id="vanish">
       <file>sound/bonus.wav</file>
-    </state>
+    </event>
   </item>
 
   <!-- Crown -->
 
   <!-- Bomb -->
   <item label="bomb">
-    <state id="move">
+    <event id="move">
       <file>sound/adjust.wav</file>
-    </state>
+    </event>
   </item>
 
   <!-- Another portable brick -->
   <item label="another-portable-brick">
-    <state id="fall">
+    <event id="fall">
       <file>sound/fall.wav</file>
-    </state>
-    <state id="push">
+    </event>
+    <event id="push">
       <file>sound/push.wav</file>
-    </state>
+    </event>
   </item>
 
   <!-- Ball -->
   <item label="ball">
-    <state id="fall">
+    <event id="fall">
       <file>sound/fall.wav</file>
-    </state>
-    <state id="push">
+    </event>
+    <event id="push">
       <file>sound/push.wav</file>
-    </state>
+    </event>
   </item>
 
   <!-- Remote control -->
@@ -202,9 +202,9 @@
 
   <!-- Horn -->
   <item label="horn">
-    <state id="vanish">
+    <event id="vanish">
       <file>sound/tools.wav</file>
-    </state>
+    </event>
   </item>
 
   <!-- Imperial guard head -->
@@ -215,86 +215,86 @@
 
   <!-- Handbag -->
   <item label="handbag">
-    <state id="vanish">
+    <event id="vanish">
       <file>sound/tools.wav</file>
-    </state>
+    </event>
   </item>
 
   <!-- Elevator -->
   <item label="elevator">
-    <state id="move">
+    <event id="move">
       <file>sound/blades.wav</file>
-    </state>
+    </event>
   </item>
 
   <!-- Helicopter bug -->
   <item label="helicopter-bug">
-    <state id="wait">
+    <event id="wait">
       <file>sound/blades.wav</file>
-    </state>
-    <state id="move">
+    </event>
+    <event id="move">
       <file>sound/blades.wav</file>
-    </state>
+    </event>
   </item>
 
   <!-- Reincarnation Fish -->
   <item label="reincarnation-fish">
-    <state id="vanish">
+    <event id="vanish">
       <file>sound/bonus.wav</file>
-    </state>
+    </event>
   </item>
 
   <!-- Siren -->
   <item label="siren">
-    <state id="fall">
+    <event id="fall">
       <file>sound/fall.wav</file>
-    </state>
-    <state id="push">
+    </event>
+    <event id="push">
       <file>sound/push.wav</file>
-    </state>
-    <state id="collision">
+    </event>
+    <event id="collision">
       <file>sound/siren.wav</file>
-    </state>
+    </event>
   </item>
 
   <!-- Teleport -->
   <item label="teleport">
-    <state id="active">
+    <event id="active">
       <file>sound/teleport.wav</file>
-    </state>
+    </event>
   </item>
 
   <!-- Teleport too -->
   <item label="teleport-too">
-    <state id="active">
+    <event id="active">
       <file>sound/teleport.wav</file>
-    </state>
+    </event>
   </item>
 
   <!-- Turtle -->
   <item label="turtle">
-    <state id="fall">
+    <event id="fall">
       <file>sound/fall.wav</file>
-    </state>
-    <state id="push">
+    </event>
+    <event id="push">
       <file>sound/push.wav</file>
-    </state>
-    <state id="collision">
+    </event>
+    <event id="collision">
       <file>sound/gamusino.wav</file>
-    </state>
+    </event>
   </item>
 
   <!-- Trampoline -->
   <item label="trampoline">
-    <state id="fall">
+    <event id="fall">
       <file>sound/fall.wav</file>
-    </state>
-    <state id="push">
+    </event>
+    <event id="push">
       <file>sound/push.wav</file>
-    </state>
-    <state id="active">
+    </event>
+    <event id="active">
       <file>sound/spring.wav</file>
-    </state>
+    </event>
   </item>
 
   <!-- Bubbles -->
@@ -303,186 +303,186 @@
 
   <!-- Big head robot -->
   <item label="bighead-robot">
-    <state id="fall">
+    <event id="fall">
       <file>sound/fall.wav</file>
-    </state>
-    <state id="push">
+    </event>
+    <event id="push">
       <file>sound/push.wav</file>
-    </state>
-    <state id="collision">
+    </event>
+    <event id="collision">
       <file>sound/bighead-robot.wav</file>
-    </state>
+    </event>
   </item>
 
   <!-- Elephant -->
   <item label="elephant">
-    <state id="fall">
+    <event id="fall">
       <file>sound/fall.wav</file>
-    </state>
-    <state id="push">
+    </event>
+    <event id="push">
       <file>sound/push.wav</file>
-    </state>
-    <state id="collision">
+    </event>
+    <event id="collision">
       <file>sound/elephant.wav</file>
-    </state>
+    </event>
   </item>
 
   <!-- Monkey -->
   <item label="monkey">
-    <state id="fall">
+    <event id="fall">
       <file>sound/fall.wav</file>
-    </state>
-    <state id="push">
+    </event>
+    <event id="push">
       <file>sound/push.wav</file>
-    </state>
-    <state id="collision">
+    </event>
+    <event id="collision">
       <file>sound/monkey.wav</file>
-    </state>
+    </event>
   </item>
 
   <!-- Diver -->
   <item label="diver">
-    <state id="fall">
+    <event id="fall">
       <file>sound/fall.wav</file>
-    </state>
-    <state id="push">
+    </event>
+    <event id="push">
       <file>sound/push.wav</file>
-    </state>
-    <state id="collision">
+    </event>
+    <event id="collision">
       <file>sound/robot-collision.wav</file>
-    </state>
+    </event>
   </item>
 
   <!-- Bubble robot -->
   <item label="bubble-robot">
-    <state id="fall">
+    <event id="fall">
       <file>sound/fall.wav</file>
-    </state>
-    <state id="push">
+    </event>
+    <event id="push">
       <file>sound/push.wav</file>
-    </state>
-    <state id="collision">
+    </event>
+    <event id="collision">
       <file>sound/bubbles-bug.wav</file>
-    </state>
+    </event>
   </item>
 
   <!-- Imperial guard -->
   <item label="imperial-guard">
-    <state id="wait">
+    <event id="wait">
       <file>sound/imperial-guard.wav</file>
-    </state>
+    </event>
   </item>
 
   <!-- Charles -->
   <item label="charles-robot">
-    <state id="fall">
+    <event id="fall">
       <file>sound/fall.wav</file>
-    </state>
-    <state id="push">
+    </event>
+    <event id="push">
       <file>sound/push.wav</file>
-    </state>
-    <state id="move">
+    </event>
+    <event id="move">
       <file>sound/robot.wav</file>
-    </state>
+    </event>
   </item>
 
   <!-- Head -->
   <item label="head">
-    <state id="move">
+    <event id="move">
       <file>sound/head-walking.wav</file>
-    </state>
-    <state id="jump">
+    </event>
+    <event id="jump">
       <file>sound/head-jumping.wav</file>
-    </state>
-    <state id="fall">
+    </event>
+    <event id="fall">
       <file>sound/head-falling.wav</file>
-    </state>
-    <state id="vanish">
+    </event>
+    <event id="vanish">
       <file>sound/hh-dying.wav</file>
-    </state>
-    <state id="shot">
+    </event>
+    <event id="shot">
       <file>sound/shot.wav</file>
-    </state>
-    <state id="rebound">
+    </event>
+    <event id="rebound">
       <file>sound/trampoline.wav</file>
-    </state>
-    <state id="teleport-in">
+    </event>
+    <event id="teleport-in">
       <file>sound/teleport-in.wav</file>
-    </state>
-    <state id="teleport-out">
+    </event>
+    <event id="teleport-out">
       <file>sound/teleport-out.wav</file>
-    </state>
+    </event>
   </item>
 
   <!-- Heels -->
   <item label="heels">
-    <state id="move">
+    <event id="move">
       <file>sound/heels-walking.wav</file>
-    </state>
-    <state id="jump">
+    </event>
+    <event id="jump">
       <file>sound/heels-jumping.wav</file>
-    </state>
-    <state id="fall">
+    </event>
+    <event id="fall">
       <file>sound/heels-falling.wav</file>
-    </state>
-    <state id="vanish">
+    </event>
+    <event id="vanish">
       <file>sound/hh-dying.wav</file>
-    </state>
-    <state id="rebound">
+    </event>
+    <event id="rebound">
       <file>sound/trampoline.wav</file>
-    </state>
-    <state id="teleport-in">
+    </event>
+    <event id="teleport-in">
       <file>sound/teleport-in.wav</file>
-    </state>
-    <state id="teleport-out">
+    </event>
+    <event id="teleport-out">
       <file>sound/teleport-out.wav</file>
-    </state>
-    <state id="take">
+    </event>
+    <event id="take">
       <file>sound/take.wav</file>
-    </state>
-    <state id="drop">
+    </event>
+    <event id="drop">
       <file>sound/drop.wav</file>
-    </state>
-    <state id="mistake">
+    </event>
+    <event id="mistake">
       <file>sound/o-ou.wav</file>
-    </state>
+    </event>
   </item>
 
   <!-- Head over Heels -->
   <item label="headoverheels">
-    <state id="move">
+    <event id="move">
       <file>sound/heels-walking.wav</file>
-    </state>
-    <state id="jump">
+    </event>
+    <event id="jump">
       <file>sound/head-jumping.wav</file>
-    </state>
-    <state id="fall">
+    </event>
+    <event id="fall">
       <file>sound/head-falling.wav</file>
-    </state>
-    <state id="vanish">
+    </event>
+    <event id="vanish">
       <file>sound/hh-dying.wav</file>
-    </state>
-    <state id="shot">
+    </event>
+    <event id="shot">
       <file>sound/shot.wav</file>
-    </state>
-    <state id="rebound">
+    </event>
+    <event id="rebound">
       <file>sound/trampoline.wav</file>
-    </state>
-    <state id="teleport-in">
+    </event>
+    <event id="teleport-in">
       <file>sound/teleport-in.wav</file>
-    </state>
-    <state id="teleport-out">
+    </event>
+    <event id="teleport-out">
       <file>sound/teleport-out.wav</file>
-    </state>
-    <state id="take">
+    </event>
+    <event id="take">
       <file>sound/take.wav</file>
-    </state>
-    <state id="drop">
+    </event>
+    <event id="drop">
       <file>sound/drop.wav</file>
-    </state>
-    <state id="mistake">
+    </event>
+    <event id="mistake">
       <file>sound/o-ou.wav</file>
-    </state>
+    </event>
   </item>
 
 </sounds>

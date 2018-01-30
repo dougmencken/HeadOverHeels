@@ -55,7 +55,7 @@ SoundManager* SoundManager::getInstance()
 
 void SoundManager::readListOfSounds( const std::string& fileName )
 {
-        // Carga el archivo XML especificado y almacena los datos XML en la lista
+        // read list of sounds from XML file
         try
         {
                 std::auto_ptr< sxml::SoundsXML > soundsXML( sxml::sounds( ( isomot::sharePath() + fileName ).c_str () ) );
@@ -64,7 +64,7 @@ void SoundManager::readListOfSounds( const std::string& fileName )
                 {
                         SoundData soundData( ( *i ).label() );
 
-                        for ( sxml::item::state_const_iterator s = ( *i ).state().begin (); s != ( *i ).state().end (); ++s )
+                        for ( sxml::item::event_const_iterator s = ( *i ).event().begin (); s != ( *i ).event().end (); ++s )
                         {
                                 soundData.addSound( ( *s ).id(), ( *s ).file() );
                         }
@@ -352,24 +352,28 @@ std::string SoundManager::translateActivityOfItemToString ( const ActivityOfItem
 SoundData::SoundData( const std::string& label )
         : label( label )
 {
-        this->path = isomot::sharePath();
+
 }
 
 void SoundData::addSound( const std::string& activity, const std::string& sampleFileName )
 {
-        SAMPLE* sample = load_sample( isomot::pathToFile( this->path + sampleFileName ) );
+        SAMPLE* sample = load_sample( isomot::pathToFile( isomot::sharePath() + sampleFileName ) );
 
-        assert( sample != 0 );
-
-        SampleData sampleData;
-        sampleData.sample = sample;
-        sampleData.voice = -1;
-        this->table[ activity ] = sampleData;
+        if ( sample != 0 ) {
+        #if defined( DEBUG ) && DEBUG
+                std::cout << "got sound \"" << sampleFileName << "\" for activity \"" << activity << "\" of \"" << label << "\"" << std::endl ;
+        #endif
+                SampleData sampleData;
+                sampleData.sample = sample;
+                sampleData.voice = -1;
+                this->table[ activity ] = sampleData;
+        } else
+                std::cerr << "can’t read sound \"" << sampleFileName << "\" for activity \"" << activity << "\" of \"" << label << "\"" << std::endl ;
 }
 
-SampleData* SoundData::find( const std::string& state )
+SampleData* SoundData::find( const std::string& event )
 {
-        __gnu_cxx::hash_map< std::string, SampleData >::iterator i = this->table.find( state );
+        __gnu_cxx::hash_map< std::string, SampleData >::iterator i = this->table.find( event );
 
         return i != this->table.end () ? ( &( i->second ) ) : 0;
 }

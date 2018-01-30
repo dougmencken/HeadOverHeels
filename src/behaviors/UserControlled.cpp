@@ -24,7 +24,7 @@ UserControlled::UserControlled( Item * item, const std::string & behavior )
         , jumpFrames( 0 )
         , highJumpFrames( 0 )
         , automaticSteps( 0 )
-        , automaticStepsCounter( 0 )
+        , automaticStepsThruDoor( 0 )
         , highSpeedSteps( 0 )
         , shieldSteps( 0 )
         , speedTimer( 0 )
@@ -161,10 +161,10 @@ void UserControlled::autoMove( PlayerItem * player )
 
                 player->animate();
 
-                if ( --automaticStepsCounter < 0 )
+                if ( --automaticStepsThruDoor < 0 )
                 {
                         // done auto~moving
-                        automaticStepsCounter = automaticSteps;
+                        automaticStepsThruDoor = automaticSteps;
                         activity = Wait;
                 }
         }
