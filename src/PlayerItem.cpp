@@ -6,6 +6,7 @@
 #include "Mediator.hpp"
 #include "Room.hpp"
 #include "GameManager.hpp"
+#include "SoundManager.hpp"
 #include "UserControlled.hpp"
 
 
@@ -424,7 +425,13 @@ bool PlayerItem::isCollidingWithDoor( const Way& way, int id, const PlayerItem& 
                         ;
         }
 
-        return ( oldX != this->x || oldY != this->y );
+        if ( oldX != this->x || oldY != this->y )
+        {
+                isomot::SoundManager::getInstance()->play ( "door", isomot::Collision, /* loop */ false );
+                return true ;
+        }
+
+        return false ;
 }
 
 bool PlayerItem::isNotUnderDoor( const Way& way )

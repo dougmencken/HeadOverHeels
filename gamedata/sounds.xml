@@ -9,6 +9,12 @@
     </event>
   </item>
 
+  <item label="door">
+    <event id="collision">
+      <file>sound/doorway.wav</file>
+    </event>
+  </item>
+
   <!-- Brick number one -->
   <item label="brick1">
     <event id="vanish">

@@ -1,5 +1,7 @@
 #!/bin/sh
 
+gccVersion="6.4"
+
 games="/Applications/Games"
 headoverheelsbin="${games}"/"Head over Heels".app/Contents/MacOS/headoverheels
 headoverheelslibs="${games}"/"Head over Heels".app/Contents/Libraries
@@ -25,11 +27,11 @@ install_name_tool -change /opt/ogg-vorbis/lib/libvorbis.0.dylib "@loader_path/li
 
 otool -L "${headoverheelslibs}"/*.dylib
 
-cp /Developer/GCC/6.2/PowerPC/32bit/lib/libstdc++.6.dylib "${headoverheelslibs}"/
-cp /Developer/GCC/6.2/PowerPC/32bit/lib/libgcc_s.1.dylib "${headoverheelslibs}"/
+cp /Developer/GCC/${gccVersion}/PowerPC/32bit/lib/libstdc++.6.dylib "${headoverheelslibs}"/
+cp /Developer/GCC/${gccVersion}/PowerPC/32bit/lib/libgcc_s.1.dylib "${headoverheelslibs}"/
 
-install_name_tool -change /Developer/GCC/6.2/PowerPC/32bit/lib/libstdc++.6.dylib "@executable_path/../Libraries/libstdc++.6.dylib" "${headoverheelsbin}"
-install_name_tool -change /Developer/GCC/6.2/PowerPC/32bit/lib/libgcc_s.1.dylib "@executable_path/../Libraries/libgcc_s.1.dylib" "${headoverheelsbin}"
+install_name_tool -change /Developer/GCC/${gccVersion}/PowerPC/32bit/lib/libstdc++.6.dylib "@executable_path/../Libraries/libstdc++.6.dylib" "${headoverheelsbin}"
+install_name_tool -change /Developer/GCC/${gccVersion}/PowerPC/32bit/lib/libgcc_s.1.dylib "@executable_path/../Libraries/libgcc_s.1.dylib" "${headoverheelsbin}"
 ## install_name_tool -change /usr/lib/libgcc_s.1.dylib "@executable_path/../Libraries/libgcc_s.1.dylib" "${headoverheelsbin}"
 
 cp /opt/allegro-4.4.2/lib/liballeg.4.4.dylib "${headoverheelslibs}"/

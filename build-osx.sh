@@ -3,9 +3,11 @@
 [ -d ./m4 ] || mkdir m4
 [ -f ./configure ] || autoreconf -f -i
 
+gccVersion="6.4"
+
 installPrefix="/game"
 
-pathToCompiler="/Developer/GCC/6.2/PowerPC/32bit" # ="/usr"
+pathToCompiler="/Developer/GCC/${gccVersion}/PowerPC/32bit" # ="/usr"
 
 if [ ! -f src/Makefile ]
 then

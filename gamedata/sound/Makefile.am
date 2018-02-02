@@ -6,6 +6,7 @@ gamedatasound_DATA = adjust.wav \
 		    bubbles-bug.wav \
 		    conveyor-belt.wav \
 		    destruction.wav \
+		    doorway.wav \
 		    drop.wav \
 		    elephant.wav \
 		    o-ou.wav \
