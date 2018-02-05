@@ -322,12 +322,6 @@ gamedatagfx_DATA = item.png/ball-shadows.png \
 			gui.gfx/chosen-option.png \
 			gui.gfx/egyptus-frame.png \
 			gui.gfx/egyptus.png \
-			gui.gfx/grey-crown.png \
-			gui.gfx/grey-donuts.png \
-			gui.gfx/grey-handbag.png \
-			gui.gfx/grey-head.png \
-			gui.gfx/grey-heels.png \
-			gui.gfx/grey-horn.png \
 			gui.gfx/gui-donuts.png \
 			gui.gfx/gui-handbag.png \
 			gui.gfx/gui-head.png \
@@ -335,9 +329,7 @@ gamedatagfx_DATA = item.png/ball-shadows.png \
 			gui.gfx/gui-horn.png \
 			gui.gfx/head.gif \
 			gui.gfx/heels.gif \
-			gui.gfx/high-jumps.gray.png \
 			gui.gfx/high-jumps.png \
-			gui.gfx/high-speed.gray.png \
 			gui.gfx/high-speed.png \
 			gui.gfx/jail-frame.png \
 			gui.gfx/market-frame.png \
@@ -346,6 +338,5 @@ gamedatagfx_DATA = item.png/ball-shadows.png \
 			gui.gfx/penitentiary.png \
 			gui.gfx/safari-frame.png \
 			gui.gfx/safari.png \
-			gui.gfx/shield.gray.png \
 			gui.gfx/shield.png \
 			gui.gfx/themoon-frame.png

@@ -322,12 +322,6 @@ gamedatagfxriderx_DATA = item.png/ball-shadows.png \
 			gui.gfx/chosen-option.png \
 			gui.gfx/egyptus-frame.png \
 			gui.gfx/egyptus.png \
-			gui.gfx/grey-crown.png \
-			gui.gfx/grey-donuts.png \
-			gui.gfx/grey-handbag.png \
-			gui.gfx/grey-head.png \
-			gui.gfx/grey-heels.png \
-			gui.gfx/grey-horn.png \
 			gui.gfx/gui-donuts.png \
 			gui.gfx/gui-handbag.png \
 			gui.gfx/gui-head.png \

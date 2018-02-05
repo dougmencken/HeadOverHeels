@@ -5,6 +5,7 @@
 #include "LanguageText.hpp"
 #include "SoundManager.hpp"
 #include "GuiManager.hpp"
+#include "GameManager.hpp"
 #include "Screen.hpp"
 #include "Picture.hpp"
 #include "Label.hpp"
@@ -51,7 +52,9 @@ void CreatePlanetsScreen::doAction ()
         Label* label = 0;
 
         // etiqueta fija “ El Imperio Blacktooth ”
-        label = new Label( languageManager->findLanguageString( "blacktooth-empire" )->getText(), "big", "yellow" );
+        std::string colorOfLabel = "yellow";
+        if ( GameManager::getInstance()->isSimpleGraphicSet () ) colorOfLabel = "green";
+        label = new Label( languageManager->findLanguageString( "blacktooth-empire" )->getText(), "big", colorOfLabel );
         label->moveTo( ( isomot::ScreenWidth - label->getWidth() ) >> 1, 0 );
         label->setAction( new ContinueGame( this->where, gameInProgress ) );
 
@@ -59,9 +62,21 @@ void CreatePlanetsScreen::doAction ()
         planets->setKeyHandler( label );
 
         Picture* imageOfChapeau = 0;
-        BITMAP* chapeauTriste = Screen::loadPicture( "grey-crown.png" );
-        const int halfOfChapeauWidth = chapeauTriste->w >> 1;
-        const int chapeauOffsetY = - ( chapeauTriste->h + 2 );
+
+        BITMAP* chapeau = Screen::loadPicture( "crown.png" );
+        BITMAP* chapeauTriste = 0;
+        if ( ! GameManager::getInstance()->isSimpleGraphicSet () )
+        {
+                chapeauTriste = GameManager::pictureToGrayscale( Picture::cloneImage( chapeau ) );
+        }
+        else
+        {
+                chapeauTriste = GameManager::colorizePicture( Picture::cloneImage( chapeau ), /* 50% gray */ 127, 127, 127 );
+                GameManager::colorizePicture( chapeau, /* yellow */ 255, 255, 50 );
+        }
+
+        const int halfOfChapeauWidth = chapeau->w >> 1;
+        const int chapeauOffsetY = - ( chapeau->h + 2 );
         const int labelOffsetY = 80;
 
         // Egyptus
@@ -72,7 +87,7 @@ void CreatePlanetsScreen::doAction ()
         imageOfChapeau = new Picture(
                 egyptusX + ( imageOfEgyptus->getWidth() >> 1 ) - halfOfChapeauWidth,
                 egyptusY + chapeauOffsetY,
-                egyptusFree ? Screen::loadPicture( "crown.png" ) : Picture::cloneImage( chapeauTriste ),
+                Picture::cloneImage( egyptusFree ? chapeau : chapeauTriste ),
                 "image of chapeau for egyptus"
         );
         planets->addWidget( imageOfChapeau );
@@ -89,7 +104,7 @@ void CreatePlanetsScreen::doAction ()
         imageOfChapeau = new Picture(
                 penitentiaryX + ( imageOfPenitentiary->getWidth() >> 1 ) - halfOfChapeauWidth,
                 penitentiaryY + chapeauOffsetY,
-                penitentiaryFree ? Screen::loadPicture( "crown.png" ) : Picture::cloneImage( chapeauTriste ),
+                Picture::cloneImage( penitentiaryFree ? chapeau : chapeauTriste ),
                 "image of chapeau for penitentiary"
         );
         planets->addWidget( imageOfChapeau );
@@ -106,7 +121,7 @@ void CreatePlanetsScreen::doAction ()
         imageOfChapeau = new Picture(
                 byblosX + ( imageOfByblos->getWidth() >> 1 ) - halfOfChapeauWidth,
                 byblosY + chapeauOffsetY,
-                byblosFree ? Screen::loadPicture( "crown.png" ) : Picture::cloneImage( chapeauTriste ),
+                Picture::cloneImage( byblosFree ? chapeau : chapeauTriste ),
                 "image of chapeau for byblos"
         );
         planets->addWidget( imageOfChapeau );
@@ -123,7 +138,7 @@ void CreatePlanetsScreen::doAction ()
         imageOfChapeau = new Picture(
                 safariX + ( imageOfSafari->getWidth() >> 1 ) - halfOfChapeauWidth,
                 safariY + chapeauOffsetY,
-                safariFree ? Screen::loadPicture( "crown.png" ) : Picture::cloneImage( chapeauTriste ),
+                Picture::cloneImage( safariFree ? chapeau : chapeauTriste ),
                 "image of chapeau for safari"
         );
         planets->addWidget( imageOfChapeau );
@@ -140,7 +155,7 @@ void CreatePlanetsScreen::doAction ()
         imageOfChapeau = new Picture(
                 blacktoothX + ( imageOfBlacktooth->getWidth() >> 1 ) - halfOfChapeauWidth,
                 blacktoothY + chapeauOffsetY,
-                blacktoothFree ? Screen::loadPicture( "crown.png" ) : Picture::cloneImage( chapeauTriste ),
+                Picture::cloneImage( blacktoothFree ? chapeau : chapeauTriste ),
                 "image of chapeau for blacktooth"
         );
         planets->addWidget( imageOfChapeau );
@@ -149,6 +164,8 @@ void CreatePlanetsScreen::doAction ()
         label->moveTo( blacktoothX + ( imageOfBlacktooth->getWidth() >> 1 ) - ( label->getWidth() >> 1 ), blacktoothY + labelOffsetY );
         planets->addWidget( label );
 
+        destroy_bitmap( chapeau );
         destroy_bitmap( chapeauTriste );
+
         GuiManager::getInstance()->changeScreen( planets );
 }

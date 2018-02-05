@@ -39,8 +39,8 @@ enum WhyPause
 
 
 /**
- * Manages user interface and isometric engine. Also, it holds data for the game
- * such as how many player's lives left, which planets are now free, et cetera
+ * Manages user interface and isometric engine. Plus, holds data for the game
+ * such as how many lives left for characters, which planets are now free, et cetera
  */
 
 class GameManager
@@ -55,6 +55,10 @@ protected:
         static BITMAP * refreshPicture ( const char * nameOfPicture ) ;
 
 public:
+
+        static BITMAP * colorizePicture ( BITMAP * picture, unsigned char red, unsigned char green, unsigned char blue ) ;
+
+        static BITMAP * pictureToGrayscale ( BITMAP * picture ) ;
 
         virtual ~GameManager( ) ;
 
@@ -88,13 +92,11 @@ public:
 
         /**
          * Carga una partida grabada en disco
-         * @param fileName Nombre del archivo que contiene los datos de la partida
          */
         void loadGame ( const std::string& fileName ) ;
 
         /**
          * Guarda en disco la partida actual
-         * @param fileName Nombre del archivo
          */
         void saveGame ( const std::string& fileName ) ;
 
@@ -214,9 +216,11 @@ public:
          */
         void success () {  this->emperator = true ;  }
 
-        const char* getChosenGraphicSet () {  return chosenGraphicSet.c_str () ;  }
+        const char* getChosenGraphicSet () const {  return chosenGraphicSet.c_str () ;  }
 
         void setChosenGraphicSet ( const char* newSet ) {  chosenGraphicSet = newSet ;  }
+
+        bool isSimpleGraphicSet () const {  return ( chosenGraphicSet == "gfx.simple" ) ;  }
 
 private:
 

@@ -68,6 +68,11 @@ GuiManager::GuiManager( ) :
         gui::FontManager::getInstance()->createFont( "big-cyan", pathToFont + "font.png", makecol( 0, 228, 231 ), true );
         gui::FontManager::getInstance()->createFont( "big-yellow", pathToFont + "font.png", makecol( 255, 255, 50 ), true );
 
+        gui::FontManager::getInstance()->createFont( "regular-green", pathToFont + "font.png", makecol( 50, 255, 50 ), false );
+        gui::FontManager::getInstance()->createFont( "big-green", pathToFont + "font.png", makecol( 50, 255, 50 ), true );
+        gui::FontManager::getInstance()->createFont( "regular-magenta", pathToFont + "font.png", makecol( 255, 50, 255 ), false );
+        gui::FontManager::getInstance()->createFont( "big-magenta", pathToFont + "font.png", makecol( 255, 50, 255 ), true );
+
         // create image to draw interface
         this->picture = create_bitmap_ex( 32, ScreenWidth, ScreenHeight );
 

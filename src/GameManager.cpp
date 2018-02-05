@@ -4,6 +4,7 @@
 #include "Room.hpp"
 #include "Mediator.hpp"
 #include "PlayerItem.hpp"
+#include "Picture.hpp"
 #include "Label.hpp"
 #include "GameFileManager.hpp"
 #include "GuiManager.hpp"
@@ -15,11 +16,13 @@
 #include "LanguageText.hpp"
 #include "LanguageManager.hpp"
 
+#include <cmath> // for sqrt
+
 
 namespace isomot
 {
 
-GameManager * GameManager::instance = 0;
+GameManager * GameManager::instance = 0 ;
 
 
 GameManager::GameManager( )
@@ -107,6 +110,7 @@ GameManager::~GameManager( )
         delete isomot ;
 }
 
+/* static */
 GameManager* GameManager::getInstance ()
 {
         if ( instance == 0 )
@@ -117,6 +121,61 @@ GameManager* GameManager::getInstance ()
         return instance;
 }
 
+/* static */
+BITMAP* GameManager::colorizePicture( BITMAP* picture, unsigned char red, unsigned char green, unsigned char blue )
+{
+        if ( picture == 0 ) return 0 ;
+        if ( red == 255 && green == 255 && blue == 255 ) return picture ;
+
+        for ( int x = 0; x < picture->w; x++ )
+        {
+                for ( int y = 0; y < picture->h; y++ )
+                {
+                        if ( ( ( int* )picture->line[ y ] )[ x ] == makecol( 255, 255, 255 ) )
+                        {
+                                ( ( int* )picture->line[ y ] )[ x ] = makecol( red, green, blue );
+                        }
+                }
+        }
+
+        return picture ;
+}
+
+/* static */
+BITMAP * GameManager::pictureToGrayscale ( BITMAP * picture )
+{
+        if ( picture == 0 ) return 0 ;
+
+        for ( int y = 0; y < picture->h; y++ )
+        {
+                for ( int x = 0; x < picture->w; x++ )
+                {
+                        // convert every color but the “ key ” one
+                        if ( ( ( int* )picture->line[ y ] )[ x ] != makecol( 255, 0, 255 ) )
+                        {
+                                /* imagine color as vector: c { r, g, b }
+                                   for each shade of gray r=g=b =w: b { w, w, w }
+                                   vector has length: c•c = rr + gg + bb and b•b = ww + ww + ww = 3ww
+                                   converted vector has the same length as original:
+                                        for the same lengths sqrt ( c•c ) = sqrt ( b•b )
+                                        sqrt( rr + gg + bb ) = sqrt( 3 ) * w
+                                        w = sqrt( ( rr + gg + bb ) / 3 )
+                                */
+                                int color = getpixel( picture, x, y );
+                                double red = static_cast< double >( getr( color ) );
+                                double green = static_cast< double >( getg( color ) );
+                                double blue = static_cast< double >( getb( color ) );
+                                double ww = ( red * red + green * green + blue * blue ) / 3.0;
+                                unsigned char gray = static_cast< unsigned char >( std::sqrt( ww ) );
+                                ( ( int* )picture->line[ y ] )[ x ] = makecol( gray, gray, gray );
+                        }
+                }
+        }
+
+        return picture ;
+}
+
+/* static */
 BITMAP * GameManager::refreshPicture ( const char * nameOfPicture )
 {
         return load_png( isomot::pathToFile( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + nameOfPicture ), 0 );
@@ -191,8 +250,17 @@ void GameManager::refreshAmbianceImages ()
 
         pictureOfHead = refreshPicture( "gui-head.png" );
         pictureOfHeels = refreshPicture( "gui-heels.png" );
-        grayPictureOfHead = refreshPicture( "grey-head.png" );
-        grayPictureOfHeels = refreshPicture( "grey-heels.png" );
+
+        if ( ! isSimpleGraphicSet () )
+        {
+                grayPictureOfHead = pictureToGrayscale( gui::Picture::cloneImage( pictureOfHead ) );
+                grayPictureOfHeels = pictureToGrayscale( gui::Picture::cloneImage( pictureOfHeels ) );
+        }
+        else
+        {
+                grayPictureOfHead = colorizePicture( gui::Picture::cloneImage( pictureOfHead ), 50, 255, 50 );
+                grayPictureOfHeels = colorizePicture( gui::Picture::cloneImage( pictureOfHeels ), 50, 255, 50 );
+        }
 
         destroy_bitmap( pictureOfBag );
         destroy_bitmap( grayPictureOfBag );
@@ -204,30 +272,52 @@ void GameManager::refreshAmbianceImages ()
         pictureOfBag = refreshPicture( "gui-handbag.png" );
         pictureOfHorn = refreshPicture( "gui-horn.png" );
         pictureOfDonuts = refreshPicture( "gui-donuts.png" );
-        grayPictureOfHorn = refreshPicture( "grey-horn.png" );
-        grayPictureOfBag = refreshPicture( "grey-handbag.png" );
-        grayPictureOfDonuts = refreshPicture( "grey-donuts.png" );
 
-        if ( grayPictureOfGrandesSaltos != pictureOfGrandesSaltos ) destroy_bitmap( grayPictureOfGrandesSaltos );
+        if ( ! isSimpleGraphicSet () )
+        {
+                grayPictureOfHorn = pictureToGrayscale( gui::Picture::cloneImage( pictureOfHorn ) );
+                grayPictureOfBag = pictureToGrayscale( gui::Picture::cloneImage( pictureOfBag ) );
+                grayPictureOfDonuts = pictureToGrayscale( gui::Picture::cloneImage( pictureOfDonuts ) );
+        }
+        else
+        {
+                grayPictureOfHorn = colorizePicture( gui::Picture::cloneImage( pictureOfHorn ), /* green */ 50, 255, 50 );
+                grayPictureOfBag = colorizePicture( gui::Picture::cloneImage( pictureOfBag ), 50, 255, 50 );
+                grayPictureOfDonuts = colorizePicture( gui::Picture::cloneImage( pictureOfDonuts ), 50, 255, 50 );
+
+                colorizePicture( pictureOfBag, /* yellow */ 255, 255, 50 );
+                colorizePicture( pictureOfHorn, 255, 255, 50 );
+                colorizePicture( pictureOfDonuts, 255, 255, 50 );
+        }
+
+        destroy_bitmap( grayPictureOfGrandesSaltos );
         destroy_bitmap( pictureOfGrandesSaltos );
-
-        pictureOfGrandesSaltos = refreshPicture( "high-jumps.png" );
-        grayPictureOfGrandesSaltos = refreshPicture( "high-jumps.gray.png" );
-        if ( grayPictureOfGrandesSaltos == 0 ) grayPictureOfGrandesSaltos = pictureOfGrandesSaltos;
-
-        if ( grayPictureOfGranVelocidad != pictureOfGranVelocidad ) destroy_bitmap( grayPictureOfGranVelocidad );
+        destroy_bitmap( grayPictureOfGranVelocidad );
         destroy_bitmap( pictureOfGranVelocidad );
-
-        pictureOfGranVelocidad = refreshPicture( "high-speed.png" );
-        grayPictureOfGranVelocidad = refreshPicture( "high-speed.gray.png" );
-        if ( grayPictureOfGranVelocidad == 0 ) grayPictureOfGranVelocidad = pictureOfGranVelocidad;
-
-        if ( grayPictureOfEscudo != pictureOfEscudo ) destroy_bitmap( grayPictureOfEscudo );
+        destroy_bitmap( grayPictureOfEscudo );
         destroy_bitmap( pictureOfEscudo );
 
+        pictureOfGrandesSaltos = refreshPicture( "high-jumps.png" );
+        pictureOfGranVelocidad = refreshPicture( "high-speed.png" );
         pictureOfEscudo = refreshPicture( "shield.png" );
-        grayPictureOfEscudo = refreshPicture( "shield.gray.png" );
-        if ( grayPictureOfEscudo == 0 ) grayPictureOfEscudo = pictureOfEscudo;
+
+        if ( ! isSimpleGraphicSet () )
+        {
+                grayPictureOfGrandesSaltos = pictureToGrayscale( gui::Picture::cloneImage( pictureOfGrandesSaltos ) );
+                grayPictureOfGranVelocidad = pictureToGrayscale( gui::Picture::cloneImage( pictureOfGranVelocidad ) );
+                grayPictureOfEscudo = pictureToGrayscale( gui::Picture::cloneImage( pictureOfEscudo ) );
+        }
+        else
+        {
+                grayPictureOfGrandesSaltos = colorizePicture( gui::Picture::cloneImage( pictureOfGrandesSaltos ), /* green */ 50, 255, 50 );
+                colorizePicture( pictureOfGrandesSaltos, /* yellow */ 255, 255, 50 );
+
+                grayPictureOfGranVelocidad = colorizePicture( gui::Picture::cloneImage( pictureOfGranVelocidad ), 50, 255, 50 );
+                colorizePicture( pictureOfGranVelocidad, 255, 255, 50 );
+
+                grayPictureOfEscudo = colorizePicture( gui::Picture::cloneImage( pictureOfEscudo ), 50, 255, 50 );
+                colorizePicture( pictureOfEscudo, 255, 255, 50 );
+        }
 }
 
 void GameManager::drawAmbianceOfGame ( BITMAP * where )
@@ -272,6 +362,9 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
 
                 draw_sprite( where, ( this->handbag ? pictureOfBag : grayPictureOfBag ), 559, 425 );
 
+                std::string colorOfLabels = "white";
+                /* if ( isSimpleGraphicSet () ) colorOfLabels = "magenta"; */
+
                 std::stringstream ss;
 
                 // vidas de Head
@@ -294,7 +387,7 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
                 {
                         ss.str( std::string() );
                         ss << this->donuts;
-                        gui::Label donutsLabel( ss.str (), "regular", "white", -2 );
+                        gui::Label donutsLabel( ss.str (), "regular", colorOfLabels, -2 );
                         donutsLabel.moveTo( this->donuts > 9 ? 42 : 49, 372 );
                         donutsLabel.draw( where );
                 }
@@ -305,7 +398,7 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
                 {
                         ss.str( std::string() );
                         ss << int( this->highJumps );
-                        gui::Label highJumpsLabel( ss.str (), "regular", "white", -2 );
+                        gui::Label highJumpsLabel( ss.str (), "regular", colorOfLabels, -2 );
                         highJumpsLabel.moveTo( this->highJumps > 9 ? 505 : 512, 393 );
                         highJumpsLabel.draw( where );
                 }
@@ -316,7 +409,7 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
                 {
                         ss.str( std::string () );
                         ss << int( this->highSpeed );
-                        gui::Label highSpeedLabel( ss.str (), "regular", "white", -2 );
+                        gui::Label highSpeedLabel( ss.str (), "regular", colorOfLabels, -2 );
                         highSpeedLabel.moveTo( this->highSpeed > 9 ? 107 : 114, 393 );
                         highSpeedLabel.draw( where );
                 }
@@ -329,7 +422,7 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
 
                         ss.str( std::string() );
                         ss << headShieldValue;
-                        gui::Label headShieldLabel( ss.str (), "regular", "white", -2 );
+                        gui::Label headShieldLabel( ss.str (), "regular", colorOfLabels, -2 );
                         headShieldLabel.moveTo( headShieldValue > 9 ? 107 : 114, 437 );
                         headShieldLabel.draw( where );
                 }
@@ -342,7 +435,7 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
 
                         ss.str( std::string() );
                         ss << heelsShieldValue;
-                        gui::Label heelsShieldLabel( ss.str (), "regular", "white", -2 );
+                        gui::Label heelsShieldLabel( ss.str (), "regular", colorOfLabels, -2 );
                         heelsShieldLabel.moveTo( heelsShieldValue > 9 ? 505 : 512, 437 );
                         heelsShieldLabel.draw( where );
                 }
