@@ -296,40 +296,26 @@ PlayerItem* RoomBuilder::createPlayerInRoom( Room* room, bool justEntered,
 
 FloorTile* RoomBuilder::buildFloorTile( const rxml::tile& tile, const char* gfxPrefix )
 {
-        FloorTile* floorTile = 0;
-
-        try {
-                BITMAP* picture = load_png( isomot::pathToFile( isomot::sharePath() + gfxPrefix + pathSeparator + tile.picture() ), 0 );
-                if ( picture == 0 ) {
-                        std::cerr << "picture \"" << tile.picture() << "\" at \"" << gfxPrefix << "\" is absent" << std::endl ;
-                        throw "picture " + tile.picture() + " at " + gfxPrefix + " is absent";
-                }
-                int column = room->getTilesX() * tile.y() + tile.x();
-                floorTile = new FloorTile( column, tile.x(), tile.y(), picture );
-                floorTile->setOffset( tile.offsetX(), tile.offsetY() );
-        } catch ( const std::exception& e ) {
-                std::cerr << e.what () << std::endl ;
+        BITMAP* picture = load_png( isomot::pathToFile( isomot::sharePath() + gfxPrefix + pathSeparator + tile.picture() ), 0 );
+        if ( picture == 0 ) {
+                std::cerr << "picture \"" << tile.picture() << "\" at \"" << gfxPrefix << "\" is absent" << std::endl ;
+                return 0;
         }
 
-        return floorTile;
+        int column = room->getTilesX() * tile.y() + tile.x();
+
+        return new FloorTile( column, tile.x(), tile.y(), picture );
 }
 
 Wall* RoomBuilder::buildWall( const rxml::wall& wall, const char* gfxPrefix )
 {
-        Wall* roomWall = 0;
-
-        try {
-                BITMAP* picture = load_png( isomot::pathToFile( isomot::sharePath() + gfxPrefix + pathSeparator + wall.picture() ), 0 );
-                if ( picture == 0 ) {
-                        std::cerr << "picture \"" << wall.picture() << "\" at \"" << gfxPrefix << "\" is absent" << std::endl ;
-                        throw "picture " + wall.picture() + " at " + gfxPrefix + " is absent";
-                }
-                roomWall = new Wall( wall.axis() == rxml::axis::x ? true : false, wall.index(), picture );
-        } catch ( const std::exception& e ) {
-                std::cerr << e.what () << std::endl ;
+        BITMAP* picture = load_png( isomot::pathToFile( isomot::sharePath() + gfxPrefix + pathSeparator + wall.picture() ), 0 );
+        if ( picture == 0 ) {
+                std::cerr << "picture \"" << wall.picture() << "\" at \"" << gfxPrefix << "\" is absent" << std::endl ;
+                return 0;
         }
 
-        return roomWall;
+        return new Wall( wall.axis() == rxml::axis::x ? true : false, wall.index(), picture );
 }
 
 GridItem* RoomBuilder::buildGridItem( const rxml::item& item )

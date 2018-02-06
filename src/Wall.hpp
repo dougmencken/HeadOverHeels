@@ -12,6 +12,7 @@
 #define Wall_hpp_
 
 #include <allegro.h>
+
 #include "Ism.hpp"
 #include "Drawable.hpp"
 #include "Mediated.hpp"
@@ -21,7 +22,7 @@ namespace isomot
 {
 
 /**
- * Un segmento de una pared de la sala
+ * Segment of room’s wall
  */
 
 class Wall : public Drawable, public Mediated
@@ -34,13 +35,10 @@ public:
         virtual ~Wall( ) ;
 
         /**
-         * Calcula el desplazamiento de la imagen de la pared en función de los atributos actuales
+         * Calculate offset for wall’s graphics
          */
         void calculateOffset () ;
 
-        /**
-         * Dibuja el segmento de la pared
-         */
         void draw ( BITMAP * where ) ;
 
 private:
@@ -48,18 +46,14 @@ private:
         bool onX;
 
         /**
-         * Posición que ocupa el segmento en la pared; cuanto menor sea el número más cerca estará del
-         * origen de coordenadas
+         * Position of this segment on wall, the smaller the closer to point of origin
          */
         int index ;
 
-        /**
-         * Desplazamiento de la imagen del muro en los ejes X e Y, respectivamente
-         */
         std::pair < int, int > offset ;
 
         /**
-         * Gráfico del segmento de una pared
+         * Graphics of wall’s segment
          */
         BITMAP * image ;
 
@@ -67,11 +61,6 @@ public:
 
         bool isOnX () const {  return onX ;  }
 
-        /**
-         * Posición que ocupa el segmento en la pared; cuanto menor sea el número más cerca estará del
-         * origen de coordenadas
-         * @return Un número positivo
-         */
         int getIndex () {  return index ;  }
 
 };

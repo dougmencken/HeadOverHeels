@@ -199,9 +199,9 @@ std::list < const PlayerItem * > Room::getPlayersWhoEnteredRoom () const
 
 void Room::addFloor( FloorTile * floorTile )
 {
-        // Se añade una nueva loseta
         floorTile->setMediator( mediator );
         floorTile->calculateOffset();
+
         this->floor[ floorTile->getColumn() ] = floorTile;
 }
 
@@ -737,12 +737,12 @@ void Room::draw( BITMAP* where )
                                 if ( floor[ column ] != 0 )  // if there is tile of floor here
                                 {
                                         // shade this tile when shadows are on
-                                        if ( shadingScale < 256 && floor[ column ]->getImage() )
+                                        if ( shadingScale < 256 && floor[ column ]->getRawImage() )
                                         {
                                                 mediator->lockGridItemMutex();
                                                 mediator->lockFreeItemMutex();
 
-                                                floor[ column ]->requestCastShadow();
+                                                floor[ column ]->requestShadow();
 
                                                 mediator->unlockGridItemMutex();
                                                 mediator->unlockFreeItemMutex();

@@ -1120,42 +1120,6 @@ namespace rxml
     this->y_.set (y);
   }
 
-  const tile::offsetX_type& tile::
-  offsetX () const
-  {
-    return this->offsetX_.get ();
-  }
-
-  tile::offsetX_type& tile::
-  offsetX ()
-  {
-    return this->offsetX_.get ();
-  }
-
-  void tile::
-  offsetX (const offsetX_type& offsetX)
-  {
-    this->offsetX_.set (offsetX);
-  }
-
-  const tile::offsetY_type& tile::
-  offsetY () const
-  {
-    return this->offsetY_.get ();
-  }
-
-  tile::offsetY_type& tile::
-  offsetY ()
-  {
-    return this->offsetY_.get ();
-  }
-
-  void tile::
-  offsetY (const offsetY_type& offsetY)
-  {
-    this->offsetY_.set (offsetY);
-  }
-
   const tile::picture_type& tile::
   picture () const
   {
@@ -3206,14 +3170,10 @@ namespace rxml
   tile::
   tile (const x_type& x,
         const y_type& y,
-        const offsetX_type& offsetX,
-        const offsetY_type& offsetY,
         const picture_type& picture)
   : ::xml_schema::type (),
     x_ (x, ::xml_schema::flags (), this),
     y_ (y, ::xml_schema::flags (), this),
-    offsetX_ (offsetX, ::xml_schema::flags (), this),
-    offsetY_ (offsetY, ::xml_schema::flags (), this),
     picture_ (picture, ::xml_schema::flags (), this)
   {
   }
@@ -3225,8 +3185,6 @@ namespace rxml
   : ::xml_schema::type (x, f, c),
     x_ (x.x_, f, this),
     y_ (x.y_, f, this),
-    offsetX_ (x.offsetX_, f, this),
-    offsetY_ (x.offsetY_, f, this),
     picture_ (x.picture_, f, this)
   {
   }
@@ -3238,8 +3196,6 @@ namespace rxml
   : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
     x_ (f, this),
     y_ (f, this),
-    offsetX_ (f, this),
-    offsetY_ (f, this),
     picture_ (f, this)
   {
     if ((f & ::xml_schema::flags::base) == 0)
@@ -3281,28 +3237,6 @@ namespace rxml
         }
       }
 
-      // offsetX
-      //
-      if (n.name () == "offsetX" && n.namespace_ ().empty ())
-      {
-        if (!offsetX_.present ())
-        {
-          this->offsetX (offsetX_traits::create (i, f, this));
-          continue;
-        }
-      }
-
-      // offsetY
-      //
-      if (n.name () == "offsetY" && n.namespace_ ().empty ())
-      {
-        if (!offsetY_.present ())
-        {
-          this->offsetY (offsetY_traits::create (i, f, this));
-          continue;
-        }
-      }
-
       // picture
       //
       if (n.name () == "picture" && n.namespace_ ().empty ())
@@ -3331,20 +3265,6 @@ namespace rxml
     {
       throw ::xsd::cxx::tree::expected_element< char > (
         "y",
-        "");
-    }
-
-    if (!offsetX_.present ())
-    {
-      throw ::xsd::cxx::tree::expected_element< char > (
-        "offsetX",
-        "");
-    }
-
-    if (!offsetY_.present ())
-    {
-      throw ::xsd::cxx::tree::expected_element< char > (
-        "offsetY",
         "");
     }
 

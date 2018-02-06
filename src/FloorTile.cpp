@@ -2,63 +2,55 @@
 #include "FloorTile.hpp"
 #include "Mediator.hpp"
 
+#include <cmath>
+
 
 namespace isomot
 {
 
-FloorTile::FloorTile() : Mediated ()
+FloorTile::FloorTile( int column, int x, int y, BITMAP* image )
+        : Mediated ()
+        , column( column )
+        , rawImage( image )
+        , shadyImage( 0 )
 {
-        this->column = 0;
-        this->coordinates.first = this->coordinates.second = 0;
-        this->offset.first = this->offset.second = 0;
-        this->image = 0;
-        this->shadyImage = 0;
-        this->shady = NoShadow;
-}
-
-FloorTile::FloorTile( int column, int x, int y, BITMAP* image ) : Mediated ()
-{
-        this->column = column;
         this->coordinates.first = x;
         this->coordinates.second = y;
         this->offset.first = this->offset.second = 0;
-        this->image = image;
-        this->shadyImage = 0;
         this->shady = NoShadow;
 }
 
 FloorTile::~FloorTile()
 {
-        if ( image != 0 ) destroy_bitmap( image );
-        if ( shadyImage != 0 ) destroy_bitmap( shadyImage );
+        destroy_bitmap( rawImage );
+        destroy_bitmap( shadyImage );
 }
 
 void FloorTile::calculateOffset()
 {
-        if ( this->image )
+        if ( mediator != 0 )
         {
-                this->offset.first = mediator->getRoom()->getX0() + ( ( mediator->getRoom()->getSizeOfOneTile() * ( coordinates.first - coordinates.second - 1 ) ) << 1 ) + 1;
-                this->offset.second = mediator->getRoom()->getY0() + mediator->getRoom()->getSizeOfOneTile() * ( coordinates.first + coordinates.second );
+                Room* room = mediator->getRoom();
+                this->offset.first = room->getX0() + ( ( room->getSizeOfOneTile() * ( coordinates.first - coordinates.second - 1 ) ) << 1 ) + 1;
+                this->offset.second = room->getY0() + room->getSizeOfOneTile() * ( coordinates.first + coordinates.second );
         }
 }
 
 void FloorTile::draw( BITMAP* where )
 {
-        // Lo loseta está sombreada
-        if ( this->shadyImage )
-        {
-                draw_sprite( where, this->shadyImage, this->offset.first, this->offset.second );
+        if ( shadyImage != 0 )
+        {       // draw tile with shadow
+                draw_sprite( where, shadyImage, offset.first, offset.second );
         }
-        // La loseta no tiene sombra
-        else if ( this->image )
-        {
-                draw_sprite( where, this->image, this->offset.first, this->offset.second );
+        else if ( rawImage != 0 )
+        {       // draw tile, just tile
+                draw_sprite( where, rawImage, offset.first, offset.second );
         }
 }
 
-void FloorTile::requestCastShadow()
+void FloorTile::requestShadow()
 {
-        if ( this->image && this->shady == WantShadow )
+        if ( this->rawImage && this->shady == WantShadow )
         {
                 mediator->castShadowOnFloor( this );
 
@@ -87,10 +79,10 @@ void FloorTile::castShadowImage( int x, int y, BITMAP* shadow, short shadingScal
                 if ( iniy < 0 ) iniy = 0;
                 // Coordenada final X
                 int endx = x - this->offset.first + shadow->w;
-                if ( endx > this->image->w ) endx = this->image->w;
+                if ( endx > this->rawImage->w ) endx = this->rawImage->w;
                 // Coordenada final Y
                 int endy = y - this->offset.second + shadow->h;
-                if ( endy > this->image->h ) endy = this->image->h;
+                if ( endy > this->rawImage->h ) endy = this->rawImage->h;
 
                 int iRow = 0;        // row in rows of pixels in the image and shadyImage images of the tile
                 int sRow = 0;        // row in rows of pixels in the image shading shadow
@@ -109,16 +101,16 @@ void FloorTile::castShadowImage( int x, int y, BITMAP* shadow, short shadingScal
                         // En principio, la imagen de la loseta sombreada es la imagen de la loseta sin sombrear
                         if ( ! this->shadyImage )
                         {
-                                this->shadyImage = create_bitmap_ex( bitmap_color_depth( this->image ), this->image->w, this->image->h );
+                                this->shadyImage = create_bitmap_ex( bitmap_color_depth( this->rawImage ), this->rawImage->w, this->rawImage->h );
                         }
                         if ( this->shady == WantShadow )
                         {
-                                blit( this->image, this->shadyImage, 0, 0, 0, 0, this->image->w, this->image->h );
+                                blit( this->rawImage, this->shadyImage, 0, 0, 0, 0, this->rawImage->w, this->rawImage->h );
                                 this->shady = AlreadyShady;
                         }
 
                         // Incremento de los índices iRpx, iGpx e iBpx
-                        char iInc = ( bitmap_color_depth( this->image ) == 32 ? 4 : 3 );
+                        char iInc = ( bitmap_color_depth( this->rawImage ) == 32 ? 4 : 3 );
                         // Incremento del índice sPixel
                         char sInc = ( bitmap_color_depth( shadow ) == 32 ? 4 : 3 );
 
@@ -129,7 +121,7 @@ void FloorTile::castShadowImage( int x, int y, BITMAP* shadow, short shadingScal
                         endx *= iInc;
                         inix *= iInc;
                         #if IS_BIG_ENDIAN
-                                inix += bitmap_color_depth( this->image ) == 32 ? 1 : 0 ;
+                                inix += bitmap_color_depth( this->rawImage ) == 32 ? 1 : 0 ;
                         #endif
                         n2i *= sInc;
                         #if IS_BIG_ENDIAN
@@ -137,7 +129,7 @@ void FloorTile::castShadowImage( int x, int y, BITMAP* shadow, short shadingScal
                         #endif
 
                         // La opacidad es potencia de dos en el intervalo [ 2, 128 ]
-                        if ( int( pow( 2, log10( opacity ) / log10( 2 ) ) ) == opacity )
+                        if ( int( std::pow( 2, std::log10( opacity ) / std::log10( 2 ) ) ) == opacity )
                         {
                                 // Divisor del píxel
                                 char pxDiv = 7;
@@ -154,7 +146,7 @@ void FloorTile::castShadowImage( int x, int y, BITMAP* shadow, short shadingScal
                                 for ( iRow = iniy, sRow = iniy + this->offset.second - y; iRow < endy; iRow++, sRow++ )
                                 {
                                         unsigned char* sln = shadow->line[ sRow ];
-                                        unsigned char* iln = this->image->line[ iRow ];
+                                        unsigned char* iln = this->rawImage->line[ iRow ];
                                         unsigned char* rln = this->shadyImage->line[ iRow ];
 
                                         // Se recorren los píxeles de cada fila según los límites calculados
@@ -186,7 +178,7 @@ void FloorTile::castShadowImage( int x, int y, BITMAP* shadow, short shadingScal
                                         {
                                                 unsigned short color;
                                                 unsigned char* sln = shadow->line[ sRow ];
-                                                unsigned char* iln = this->image->line[ iRow ];
+                                                unsigned char* iln = this->rawImage->line[ iRow ];
                                                 unsigned char* rln = this->shadyImage->line[ iRow ];
 
                                                 // Se recorren los píxeles de cada fila según los límites calculados
@@ -217,7 +209,7 @@ void FloorTile::castShadowImage( int x, int y, BITMAP* shadow, short shadingScal
                                         for ( iRow = iniy, sRow = iniy + this->offset.second - y; iRow < endy; iRow++, sRow++ )
                                         {
                                                 unsigned char* sln = shadow->line[ sRow ];
-                                                unsigned char* iln = this->image->line[ iRow ];
+                                                unsigned char* iln = this->rawImage->line[ iRow ];
                                                 unsigned char* rln = this->shadyImage->line[ iRow ];
 
                                                 // Se recorren los píxeles de cada fila según los límites calculados

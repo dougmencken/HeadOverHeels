@@ -17,281 +17,201 @@
     <tile>
       <x>0</x>
       <y>2</y>
-      <offsetX>0</offsetX>
-      <offsetY>0</offsetY>
       <picture>egyptus-floor-north.png</picture>
     </tile>
     <tile>
       <x>0</x>
       <y>3</y>
-      <offsetX>0</offsetX>
-      <offsetY>0</offsetY>
       <picture>egyptus-floor-north.png</picture>
     </tile>
     <tile>
       <x>4</x>
       <y>0</y>
-      <offsetX>0</offsetX>
-      <offsetY>0</offsetY>
       <picture>egyptus-floor-east.png</picture>
     </tile>
     <tile>
       <x>5</x>
       <y>0</y>
-      <offsetX>0</offsetX>
-      <offsetY>0</offsetY>
       <picture>egyptus-floor-east.png</picture>
     </tile>
     <tile>
       <x>9</x>
       <y>1</y>
-      <offsetX>0</offsetX>
-      <offsetY>0</offsetY>
       <picture>egyptus-floor-south.png</picture>
     </tile>
     <tile>
       <x>9</x>
       <y>2</y>
-      <offsetX>0</offsetX>
-      <offsetY>0</offsetY>
       <picture>egyptus-floor-south.png</picture>
     </tile>
     <tile>
       <x>9</x>
       <y>3</y>
-      <offsetX>0</offsetX>
-      <offsetY>0</offsetY>
       <picture>egyptus-floor-south.png</picture>
     </tile>
     <tile>
       <x>9</x>
       <y>4</y>
-      <offsetX>0</offsetX>
-      <offsetY>0</offsetY>
       <picture>egyptus-floor-south.png</picture>
     </tile>
     <tile>
       <x>1</x>
       <y>1</y>
-      <offsetX>0</offsetX>
-      <offsetY>0</offsetY>
       <picture>egyptus-floor.png</picture>
     </tile>
     <tile>
       <x>1</x>
       <y>2</y>
-      <offsetX>0</offsetX>
-      <offsetY>0</offsetY>
       <picture>egyptus-floor.png</picture>
     </tile>
     <tile>
       <x>1</x>
       <y>3</y>
-      <offsetX>0</offsetX>
-      <offsetY>0</offsetY>
       <picture>egyptus-floor.png</picture>
     </tile>
     <tile>
       <x>1</x>
       <y>4</y>
-      <offsetX>0</offsetX>
-      <offsetY>0</offsetY>
       <picture>egyptus-floor.png</picture>
     </tile>
     <tile>
       <x>2</x>
       <y>1</y>
-      <offsetX>0</offsetX>
-      <offsetY>0</offsetY>
       <picture>egyptus-floor.png</picture>
     </tile>
     <tile>
       <x>2</x>
       <y>2</y>
-      <offsetX>0</offsetX>
-      <offsetY>0</offsetY>
       <picture>egyptus-floor.png</picture>
     </tile>
     <tile>
       <x>2</x>
       <y>3</y>
-      <offsetX>0</offsetX>
-      <offsetY>0</offsetY>
       <picture>egyptus-floor.png</picture>
     </tile>
     <tile>
       <x>2</x>
       <y>4</y>
-      <offsetX>0</offsetX>
-      <offsetY>0</offsetY>
       <picture>egyptus-floor.png</picture>
     </tile>
     <tile>
       <x>3</x>
       <y>1</y>
-      <offsetX>0</offsetX>
-      <offsetY>0</offsetY>
       <picture>egyptus-floor.png</picture>
     </tile>
     <tile>
       <x>3</x>
       <y>2</y>
-      <offsetX>0</offsetX>
-      <offsetY>0</offsetY>
       <picture>egyptus-floor.png</picture>
     </tile>
     <tile>
       <x>3</x>
       <y>3</y>
-      <offsetX>0</offsetX>
-      <offsetY>0</offsetY>
       <picture>egyptus-floor.png</picture>
     </tile>
     <tile>
       <x>3</x>
       <y>4</y>
-      <offsetX>0</offsetX>
-      <offsetY>0</offsetY>
       <picture>egyptus-floor.png</picture>
     </tile>
     <tile>
       <x>4</x>
       <y>1</y>
-      <offsetX>0</offsetX>
-      <offsetY>0</offsetY>
       <picture>egyptus-floor.png</picture>
     </tile>
     <tile>
       <x>4</x>
       <y>2</y>
-      <offsetX>0</offsetX>
-      <offsetY>0</offsetY>
       <picture>egyptus-floor.png</picture>
     </tile>
     <tile>
       <x>4</x>
       <y>3</y>
-      <offsetX>0</offsetX>
-      <offsetY>0</offsetY>
       <picture>egyptus-floor.png</picture>
     </tile>
     <tile>
       <x>4</x>
       <y>4</y>
-      <offsetX>0</offsetX>
-      <offsetY>0</offsetY>
       <picture>egyptus-floor.png</picture>
     </tile>
     <tile>
       <x>5</x>
       <y>1</y>
-      <offsetX>0</offsetX>
-      <offsetY>0</offsetY>
       <picture>egyptus-floor.png</picture>
     </tile>
     <tile>
       <x>5</x>
       <y>2</y>
-      <offsetX>0</offsetX>
-      <offsetY>0</offsetY>
       <picture>egyptus-floor.png</picture>
     </tile>
     <tile>
       <x>5</x>
       <y>3</y>
-      <offsetX>0</offsetX>
-      <offsetY>0</offsetY>
       <picture>egyptus-floor.png</picture>
     </tile>
     <tile>
       <x>5</x>
       <y>4</y>
-      <offsetX>0</offsetX>
-      <offsetY>0</offsetY>
       <picture>egyptus-floor.png</picture>
     </tile>
     <tile>
       <x>6</x>
       <y>1</y>
-      <offsetX>0</offsetX>
-      <offsetY>0</offsetY>
       <picture>egyptus-floor.png</picture>
     </tile>
     <tile>
       <x>6</x>
       <y>2</y>
-      <offsetX>0</offsetX>
-      <offsetY>0</offsetY>
       <picture>egyptus-floor.png</picture>
     </tile>
     <tile>
       <x>6</x>
       <y>3</y>
-      <offsetX>0</offsetX>
-      <offsetY>0</offsetY>
       <picture>egyptus-floor.png</picture>
     </tile>
     <tile>
       <x>6</x>
       <y>4</y>
-      <offsetX>0</offsetX>
-      <offsetY>0</offsetY>
       <picture>egyptus-floor.png</picture>
     </tile>
     <tile>
       <x>7</x>
       <y>1</y>
-      <offsetX>0</offsetX>
-      <offsetY>0</offsetY>
       <picture>egyptus-floor.png</picture>
     </tile>
     <tile>
       <x>7</x>
       <y>2</y>
-      <offsetX>0</offsetX>
-      <offsetY>0</offsetY>
       <picture>egyptus-floor.png</picture>
     </tile>
     <tile>
       <x>7</x>
       <y>3</y>
-      <offsetX>0</offsetX>
-      <offsetY>0</offsetY>
       <picture>egyptus-floor.png</picture>
     </tile>
     <tile>
       <x>7</x>
       <y>4</y>
-      <offsetX>0</offsetX>
-      <offsetY>0</offsetY>
       <picture>egyptus-floor.png</picture>
     </tile>
     <tile>
       <x>8</x>
       <y>1</y>
-      <offsetX>0</offsetX>
-      <offsetY>0</offsetY>
       <picture>egyptus-floor.png</picture>
     </tile>
     <tile>
       <x>8</x>
       <y>2</y>
-      <offsetX>0</offsetX>
-      <offsetY>0</offsetY>
       <picture>egyptus-floor.png</picture>
     </tile>
     <tile>
       <x>8</x>
       <y>3</y>
-      <offsetX>0</offsetX>
-      <offsetY>0</offsetY>
       <picture>egyptus-floor.png</picture>
     </tile>
     <tile>
       <x>8</x>
       <y>4</y>
-      <offsetX>0</offsetX>
-      <offsetY>0</offsetY>
       <picture>egyptus-floor.png</picture>
     </tile>
   </floor>

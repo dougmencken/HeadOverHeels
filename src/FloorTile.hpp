@@ -11,9 +11,8 @@
 #ifndef FloorTile_hpp_
 #define FloorTile_hpp_
 
-#include <utility>
-#include <cmath>
 #include <allegro.h>
+
 #include "Ism.hpp"
 #include "Drawable.hpp"
 #include "Mediated.hpp"
@@ -23,7 +22,7 @@ namespace isomot
 {
 
 /**
- * Una loseta de una sala. Un conjunto de estos elementos forma el suelo
+ * Floor tile of room, set of such items forms room’s ground
  */
 
 class FloorTile : public Drawable, public Mediated
@@ -32,23 +31,18 @@ class FloorTile : public Drawable, public Mediated
 public:
 
        /**
-        * Constructor. Crea una loseta nula
-        */
-        FloorTile( ) ;
-
-       /**
         * Constructor
-        * @param Columna de la sala a la que pertenece la loseta
-        * @param x Coordenada X de la loseta en la rejilla
-        * @param y Coordenada Y de la loseta en la rejilla
-        * @param image Representación gráfica de la loseta
+        * @param column Room’s column to which this tile belongs
+        * @param x X coordinate on grid
+        * @param y Y coordinate on grid
+        * @param image Graphics of tile
         */
         FloorTile( int column, int x, int y, BITMAP* image ) ;
 
         virtual ~FloorTile( ) ;
 
         /**
-         * Calcula el desplazamiento de la imagen de la loseta en función de los atributos actuales
+         * Calculate offset for tile’s graphics
          */
         void calculateOffset () ;
 
@@ -57,12 +51,7 @@ public:
          */
         void draw ( BITMAP* where ) ;
 
-        /**
-         * Solicita el sombreado de la loseta
-         * @param xCell Coordenada X de la loseta en la rejilla de la sala
-         * @param yCell Coordenada Y de la loseta en la rejilla de la sala
-         */
-        void requestCastShadow () ;
+        void requestShadow () ;
 
         /**
          * Sombrea la imagen de la loseta con la sombra de otro elemento
@@ -78,27 +67,27 @@ public:
 private:
 
         /**
-         * Columna de la sala a la que pertenece la loseta
+         * Room’s column to which this tile belongs
          */
         int column ;
 
         /**
-         * Coordenadas X e Y, respectivamente, de la loseta en la rejilla
+         * X and Y coordinates on grid
          */
         std::pair < int, int > coordinates ;
 
         /**
-         * Desplazamiento de la loseta en los ejes X e Y, respectivamente
+         * Offset ( X, Y ) for tile’s graphics
          */
         std::pair < int, int > offset ;
 
         /**
-         * Gráfico de la loseta
+         * Picture of tile
          */
-        BITMAP * image ;
+        BITMAP * rawImage ;
 
         /**
-         * Gráfico de la loseta sombreada
+         * Picture of shaded tile
          */
         BITMAP * shadyImage ;
 
@@ -109,36 +98,17 @@ private:
 
 public:
 
-        /**
-         * Columna de la sala a la que pertenece la loseta
-         * @param Un valor entre cero y el producto del número de losetas de la sala en cada eje
-         */
         int getColumn () const {  return column ;  }
 
-        /**
-         * Coordenada X de la loseta en la rejilla
-         * @param Un número positivo
-         */
         int getX () const {  return coordinates.first ;  }
 
-        /**
-         * Coordenada Y de la loseta en la rejilla
-         * @param Un número positivo
-         */
         int getY () const {  return coordinates.second ;  }
 
-        /**
-         * Establece el desplazamiento espacial de la loseta
-         * @param x Desplazamiento de la loseta en el eje X
-         * @param y Desplazamiento de la loseta en el eje Y
-         */
-        void setOffset ( int x, int y ) {  offset.first = x;  offset.second = y;  }
+        int getOffsetX () const {  return offset.first ;  }
 
-        /**
-         * Gráfico de la loseta
-         * @return Devuelve una imagen de Allegro
-         */
-        BITMAP* getImage () {  return image ;  }
+        int getOffsetY () const {  return offset.second ;  }
+
+        BITMAP* getRawImage () const {  return rawImage ;  }
 
         /**
          * Establece el estado del proceso de sombreado

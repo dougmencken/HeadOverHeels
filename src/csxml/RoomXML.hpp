@@ -1497,34 +1497,6 @@ namespace rxml
     void
     y (const y_type& x);
 
-    // offsetX
-    //
-    typedef ::xml_schema::int_ offsetX_type;
-    typedef ::xsd::cxx::tree::traits< offsetX_type, char > offsetX_traits;
-
-    const offsetX_type&
-    offsetX () const;
-
-    offsetX_type&
-    offsetX ();
-
-    void
-    offsetX (const offsetX_type& x);
-
-    // offsetY
-    //
-    typedef ::xml_schema::int_ offsetY_type;
-    typedef ::xsd::cxx::tree::traits< offsetY_type, char > offsetY_traits;
-
-    const offsetY_type&
-    offsetY () const;
-
-    offsetY_type&
-    offsetY ();
-
-    void
-    offsetY (const offsetY_type& x);
-
     // picture
     //
     typedef ::xml_schema::string picture_type;
@@ -1546,8 +1518,6 @@ namespace rxml
     //
     tile (const x_type&,
           const y_type&,
-          const offsetX_type&,
-          const offsetY_type&,
           const picture_type&);
 
     tile (const ::xercesc::DOMElement& e,
@@ -1572,8 +1542,6 @@ namespace rxml
     private:
     ::xsd::cxx::tree::one< x_type > x_;
     ::xsd::cxx::tree::one< y_type > y_;
-    ::xsd::cxx::tree::one< offsetX_type > offsetX_;
-    ::xsd::cxx::tree::one< offsetY_type > offsetY_;
     ::xsd::cxx::tree::one< picture_type > picture_;
   };
 
