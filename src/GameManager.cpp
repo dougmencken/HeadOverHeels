@@ -365,83 +365,65 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
                 std::string colorOfLabels = "white";
                 /* if ( isSimpleGraphicSet () ) colorOfLabels = "magenta"; */
 
-                std::stringstream ss;
-
                 // vidas de Head
-                ss.str( std::string() );
-                ss << int( this->headLives );
-                gui::Label headLivesLabel( ss.str (), "big", "white", -2 );
+                gui::Label headLivesLabel( numberToString( this->headLives ), "big", "white", -2 );
                 headLivesLabel.moveTo( this->headLives > 9 ? 214 : 221, 424 );
                 headLivesLabel.draw( where );
 
                 // vidas de Heels
-                ss.str( std::string() );
-                ss << int( this->heelsLives );
-                gui::Label heelsLivesLabel( ss.str (), "big", "white", -2 );
+                gui::Label heelsLivesLabel( numberToString( this->heelsLives ), "big", "white", -2 );
                 heelsLivesLabel.moveTo( this->heelsLives > 9 ? 398 : 405, 424 );
                 heelsLivesLabel.draw( where );
 
                 // número de rosquillas
                 draw_sprite( where, ( this->donuts != 0 ? pictureOfDonuts : grayPictureOfDonuts ), 33, 361 );
-                if( this->donuts > 0 )
+                if ( this->donuts > 0 )
                 {
-                        ss.str( std::string() );
-                        ss << this->donuts;
-                        gui::Label donutsLabel( ss.str (), "regular", colorOfLabels, -2 );
+                        gui::Label donutsLabel( numberToString( this->donuts ), "regular", colorOfLabels, -2 );
                         donutsLabel.moveTo( this->donuts > 9 ? 42 : 49, 372 );
                         donutsLabel.draw( where );
                 }
 
                 // grandes saltos
                 draw_sprite( where, ( this->highJumps > 0 ? pictureOfGrandesSaltos : grayPictureOfGrandesSaltos ), 505, 392 );
-                if( this->highJumps > 0 )
+                if ( this->highJumps > 0 )
                 {
-                        ss.str( std::string() );
-                        ss << int( this->highJumps );
-                        gui::Label highJumpsLabel( ss.str (), "regular", colorOfLabels, -2 );
+                        gui::Label highJumpsLabel( numberToString( this->highJumps ), "regular", colorOfLabels, -2 );
                         highJumpsLabel.moveTo( this->highJumps > 9 ? 505 : 512, 393 );
                         highJumpsLabel.draw( where );
                 }
 
                 // gran velocidad
                 draw_sprite( where, ( this->highSpeed > 0 ? pictureOfGranVelocidad : grayPictureOfGranVelocidad ), 107, 392 );
-                if( this->highSpeed > 0 )
+                if ( this->highSpeed > 0 )
                 {
-                        ss.str( std::string () );
-                        ss << int( this->highSpeed );
-                        gui::Label highSpeedLabel( ss.str (), "regular", colorOfLabels, -2 );
+                        gui::Label highSpeedLabel( numberToString( this->highSpeed ), "regular", colorOfLabels, -2 );
                         highSpeedLabel.moveTo( this->highSpeed > 9 ? 107 : 114, 393 );
                         highSpeedLabel.draw( where );
                 }
 
                 // escudo de Head
                 draw_sprite( where, ( this->headShield > 0 ? pictureOfEscudo : grayPictureOfEscudo ), 107, 436 );
-                if( this->headShield > 0 )
+                if ( this->headShield > 0 )
                 {
-                        int headShieldValue = int( this->headShield * 99.0 / 25.0 );
-
-                        ss.str( std::string() );
-                        ss << headShieldValue;
-                        gui::Label headShieldLabel( ss.str (), "regular", colorOfLabels, -2 );
+                        int headShieldValue = static_cast< int >( this->headShield * 99.0 / 25.0 );
+                        gui::Label headShieldLabel( numberToString( headShieldValue ), "regular", colorOfLabels, -2 );
                         headShieldLabel.moveTo( headShieldValue > 9 ? 107 : 114, 437 );
                         headShieldLabel.draw( where );
                 }
 
                 // escudo de Heels
                 draw_sprite( where, ( this->headShield > 0 ? pictureOfEscudo : grayPictureOfEscudo ), 505, 436 );
-                if( this->heelsShield > 0 )
+                if ( this->heelsShield > 0 )
                 {
                         int heelsShieldValue = static_cast< int >( this->heelsShield * 99.0 / 25.0 );
-
-                        ss.str( std::string() );
-                        ss << heelsShieldValue;
-                        gui::Label heelsShieldLabel( ss.str (), "regular", colorOfLabels, -2 );
+                        gui::Label heelsShieldLabel( numberToString( heelsShieldValue ), "regular", colorOfLabels, -2 );
                         heelsShieldLabel.moveTo( heelsShieldValue > 9 ? 505 : 512, 437 );
                         heelsShieldLabel.draw( where );
                 }
 
                 // item in handbag
-                if( this->itemTaken != 0 )
+                if ( this->itemTaken != 0 )
                 {
                         draw_sprite( where, this->itemTaken, 559, 361 );
                 }

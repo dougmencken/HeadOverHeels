@@ -135,14 +135,6 @@ public:
          */
         virtual bool addToPosition ( int x, int y, int z ) ;
 
-        /**
-         * Cambia el grado de transparencia del elemento
-         * @param value Valor de transparencia en un porcentaje de 0 a 100
-         * @param mode Modo para interpretar el nuevo valor. Puede usarse Change para cambiarlo o Add para sumarlo
-         * @return true si el cambio de transparencia tuvo efecto o false en caso contrario
-         */
-        bool changeTransparency ( unsigned char value, const ChangeOrAdd& changeOrAdd ) ;
-
 protected:
 
         virtual bool updatePosition ( int newX, int newY, int newZ, const Coordinate& whatToChange, const ChangeOrAdd& addOrChange ) ;

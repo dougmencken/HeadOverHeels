@@ -72,8 +72,6 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			BonusManager.hpp \
 			SoundManager.cpp \
 			SoundManager.hpp \
-			TableOfTransparencies.cpp \
-			TableOfTransparencies.hpp \
 			Wall.cpp \
 			Wall.hpp \
 			alogg/alogg.c \

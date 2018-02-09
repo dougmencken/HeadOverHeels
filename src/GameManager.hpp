@@ -12,6 +12,8 @@
 #define GameManager_hpp_
 
 #include <string>
+#include <sstream> // for ostringstream
+
 #include "csxml/SaveGameXML.hpp"
 #include "Ism.hpp"
 #include "Room.hpp"
@@ -56,17 +58,22 @@ protected:
 
 public:
 
-        static BITMAP * colorizePicture ( BITMAP * picture, unsigned char red, unsigned char green, unsigned char blue ) ;
-
-        static BITMAP * pictureToGrayscale ( BITMAP * picture ) ;
-
-        virtual ~GameManager( ) ;
-
         /**
          * Único objeto de esta clase para toda la aplicación
          * @return Un puntero al objeto único
          */
         static GameManager * getInstance () ;
+
+        inline static std::string numberToString ( int number )
+        {
+                return static_cast< std::ostringstream * >( &( std::ostringstream() << std::dec << number ) )->str () ;
+        }
+
+        static BITMAP * colorizePicture ( BITMAP * picture, unsigned char red, unsigned char green, unsigned char blue ) ;
+
+        static BITMAP * pictureToGrayscale ( BITMAP * picture ) ;
+
+        virtual ~GameManager( ) ;
 
         /**
          * Todo empieza aquí

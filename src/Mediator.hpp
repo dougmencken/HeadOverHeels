@@ -23,10 +23,7 @@
 #include <sys/time.h>
 
 #include "Ism.hpp"
-
 #include "Room.hpp"
-
-#include "TableOfTransparencies.hpp"
 
 
 namespace isomot
@@ -141,16 +138,6 @@ public:
         void removeItem ( GridItem* gridItem ) ;
 
         void removeItem ( FreeItem* freeItem ) ;
-
-        void addToTableOfTransparencies ( unsigned char percent )
-        {
-                transparencies->addToDegreeOfTransparency( percent ) ;
-        }
-
-        void removeFromTableOfTransparencies ( unsigned char percent )
-        {
-                transparencies->removeFromDegreeOfTransparency( percent ) ;
-        }
 
        /**
         * Añade un elemento a la pila de colisiones
@@ -317,8 +304,6 @@ private:
         * Pila de colisiones de la sala. Almacena los identificadores de los elementos
         */
         std::vector < int > collisions ;
-
-        TableOfTransparencies * transparencies ;
 
 public:
 

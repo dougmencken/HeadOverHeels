@@ -361,7 +361,6 @@ void Room::addFreeItem( FreeItem * freeItem )
         }
 
         // add free item to room
-        mediator->addToTableOfTransparencies( 0 );
         freeItem->setMediator( mediator );
         mediator->addItem( freeItem );
 
@@ -486,7 +485,6 @@ bool Room::addPlayerToRoom( PlayerItem* playerItem, bool playerEntersRoom )
                 playerItem->setOffset( offset );
         }
 
-        mediator->addToTableOfTransparencies( 0 );
         playerItem->setMediator( mediator );
         mediator->addItem( playerItem );
 
@@ -590,8 +588,6 @@ void Room::removeFreeItem( FreeItem * freeItem )
 {
         try
         {
-                mediator->removeFromTableOfTransparencies( freeItem->getTransparency() );
-
                 mediator->removeItem( freeItem );
 
                 if ( this->shadingScale < 256 && freeItem->getImageOfShadow() )
@@ -615,8 +611,6 @@ bool Room::removePlayerFromRoom( PlayerItem* playerItem, bool playerExitsRoom )
         {
                 if ( playerItem == *pi )
                 {
-                        mediator->removeFromTableOfTransparencies( playerItem->getTransparency() );
-
                         mediator->removeItem( playerItem );
 
                         if ( this->shadingScale < 256 && playerItem->getImageOfShadow() )

@@ -755,36 +755,4 @@ bool FreeItem::addToPosition( int x, int y, int z )
         return this->updatePosition( x, y, z, CoordinatesXYZ, Add );
 }
 
-bool FreeItem::changeTransparency( unsigned char value, const ChangeOrAdd& how )
-{
-        bool changed = false;
-
-        // new value of item’s transparency
-        unsigned char transpa = value + this->transparency * how;
-
-        if ( transpa <= 100 && transpa != this->transparency )
-        {
-                // remask item?
-                bool mask = this->rawImage && ( this->transparency == 0 || transpa == 0 );
-
-                // update table of transparencies
-                mediator->removeFromTableOfTransparencies( this->transparency );
-                mediator->addToTableOfTransparencies( transpa );
-                this->transparency = transpa;
-
-                // mark to shade items you might have underneath
-                mediator->reshadeFreeItem( this );
-
-                // mark to mask items which overlap
-                if ( mask )
-                {
-                        mediator->remaskFreeItem( this ) ;
-                }
-
-                changed = true;
-        }
-
-        return changed;
-}
-
 }
