@@ -40,10 +40,10 @@ echo "    a Portable Network Graphics reference library which supports almost al
 echo
 
 cd "${pathToExternal}"/libpng
-tar xzf libpng-1.6.32.tar.gz
-cd libpng-1.6.32
+tar xzf libpng-1.6.34.tar.gz
+cd libpng-1.6.34
 
-LDFLAGS="-L/opt/zlib-1.2.8/lib" ./configure --prefix=/opt/libpng-1.6.32 --enable-static --enable-shared --with-zlib-prefix=/opt/zlib-1.2.8
+LDFLAGS="-L/opt/zlib-1.2.8/lib" ./configure --prefix=/opt/libpng-1.6.34 --enable-static --enable-shared --with-zlib-prefix=/opt/zlib-1.2.8
 make
 make install
 
@@ -58,8 +58,8 @@ echo "    libogg"
 echo
 
 cd "${pathToExternal}"/ogg-vorbis
-tar xzf libogg-1.3.2.tar.gz
-cd libogg-1.3.2
+tar xzf libogg-1.3.3.tar.gz
+cd libogg-1.3.3
 
 ./configure --prefix=/opt/ogg-vorbis && make
 make install
