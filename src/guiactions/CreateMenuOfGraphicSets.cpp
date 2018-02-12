@@ -22,9 +22,10 @@ CreateMenuOfGraphicSets::CreateMenuOfGraphicSets( BITMAP* picture, Action* previ
         graphicSets[ "gfx.2009" ] = "By Davit" ;
         graphicSets[ "gfx.riderx" ] = "By Ricardo" ;
         graphicSets[ "gfx.2003" ] = "Initial By Davit" ;
+        graphicSets[ "gfx.simple" ] = "Black & White" ;
 
         menuOfGraphicSets = new Menu( );
-        menuOfGraphicSets->setVerticalOffset( 50 );
+        menuOfGraphicSets->setVerticalOffset( 40 );
 }
 
 CreateMenuOfGraphicSets::~CreateMenuOfGraphicSets( )

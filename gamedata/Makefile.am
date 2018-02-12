@@ -10,4 +10,4 @@ gamedata_DATA = configuration.xsd \
 		shadow-template.png
 
 SUBDIRS = map music savegame sound text \
-		gfx gfx.2009 gfx.riderx gfx.2003
+		gfx gfx.2009 gfx.riderx gfx.2003 gfx.simple

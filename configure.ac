@@ -52,6 +52,7 @@ AC_OUTPUT( \
             gamedata/gfx.2009/Makefile \
             gamedata/gfx.riderx/Makefile \
             gamedata/gfx.2003/Makefile \
+            gamedata/gfx.simple/Makefile \
             gamedata/map/Makefile \
             gamedata/map/blacktooth/Makefile \
             gamedata/map/byblos/Makefile \
