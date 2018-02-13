@@ -57,11 +57,11 @@ void CreateMenuOfGraphicSets::doAction ()
                         Label * theLabel = new Label( nameOfSetSpaced + i->first );
                         if ( i->first.compare( isomot::GameManager::getInstance()->getChosenGraphicSet() ) != 0 )
                         {
-                                theLabel->changeFontAndColor( theLabel->getFontName (), "cyan" );
+                                theLabel->changeColor( "cyan" );
                         }
                         else
                         {
-                                theLabel->changeFontAndColor( theLabel->getFontName (), "yellow" );
+                                theLabel->changeColor( "yellow" );
                         }
 
                         menuOfGraphicSets->addOption( theLabel );
@@ -114,9 +114,9 @@ void CreateMenuOfGraphicSets::doAction ()
                                                 std::list< Label * > everySet = menuOfGraphicSets->getEveryOption ();
                                                 for ( std::list< Label* >::iterator is = everySet.begin (); is != everySet.end (); ++is )
                                                 {
-                                                        ( * is )->changeFontAndColor( ( * is )->getFontName (), "cyan" );
+                                                        ( * is )->changeColor( "cyan" );
                                                 }
-                                                menuOfGraphicSets->getActiveOption()->changeFontAndColor( menuOfGraphicSets->getActiveOption()->getFontName (), "yellow" );
+                                                menuOfGraphicSets->getActiveOption()->changeColor( "yellow" );
                                         }
 
                                         doneWithKey = true;

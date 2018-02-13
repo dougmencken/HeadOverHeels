@@ -4,7 +4,6 @@
 #include "Gui.hpp"
 #include "GuiManager.hpp"
 #include "InputManager.hpp"
-#include "FontManager.hpp"
 #include "Label.hpp"
 #include "Font.hpp"
 
@@ -75,12 +74,12 @@ void MenuWithTwoColumns::draw( BITMAP* where )
                 if ( label == this->activeOption )
                 {
                         if ( label->getColor() != "orange" )
-                                label->changeFontAndColor( "regular", "orange" );
+                                label->changeFontFamilyAndColor( "regular", "orange" );
                 }
                 else
                 {
                         if ( label->getColor() != "white" )
-                                label->changeFontAndColor( "regular", "white" );
+                                label->changeFontFamilyAndColor( "regular", "white" );
                 }
 
                 BITMAP* mark = ( activeOption == label ) ? chosenOptionImageMini : optionImage ;

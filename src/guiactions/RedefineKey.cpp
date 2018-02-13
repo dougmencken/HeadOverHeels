@@ -24,7 +24,7 @@ RedefineKey::RedefineKey( MenuWithValues* menu, std::string name )
 void RedefineKey::doAction ()
 {
         Label * activeLabel = menu->getActiveOption();
-        activeLabel->changeFontAndColor( "big", "yellow" );
+        activeLabel->changeFontFamilyAndColor( "big", "yellow" );
         menu->redraw ();
 
         clear_keybuf();
@@ -62,7 +62,7 @@ void RedefineKey::doAction ()
                                                         if ( ( *o )->getText() == textOfThatKey )
                                                         {
                                                                 menu->setValueOf( *o, scancode_to_name( 0 ) );
-                                                                ( *o )->changeFontAndColor( ( *o )->getFontName (), "cyan" );
+                                                                ( *o )->changeColor( "cyan" );
 
                                                                 std::cout << "key \"" << nameOfPrevious << "\" is now NONE ( 0 )" << std::endl ;
                                                                 break;
@@ -95,9 +95,9 @@ void RedefineKey::doAction ()
         }
 
         if ( InputManager::getInstance()->getUserKey( this->nameOfKey ) != 0 ) {
-                activeLabel->changeFontAndColor( "big", "white" );
+                activeLabel->changeFontFamilyAndColor( "big", "white" );
         } else {
-                activeLabel->changeFontAndColor( "big", "cyan" );
+                activeLabel->changeFontFamilyAndColor( "big", "cyan" );
         }
 
         menu->redraw ();

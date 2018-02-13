@@ -4,6 +4,8 @@
 #include "Label.hpp"
 #include "Ism.hpp"
 
+#include <algorithm> // std::for_each
+
 using gui::TextField;
 using gui::Alignment;
 using gui::Label;

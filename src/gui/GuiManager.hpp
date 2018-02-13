@@ -14,11 +14,12 @@
 #include <string>
 #include <list>
 #include <map>
-#include <cassert>
+
 #include <allegro.h>
 #include <loadpng.h>
 
 #include "Gui.hpp"
+#include "Font.hpp"
 
 
 namespace gui
@@ -77,6 +78,10 @@ public:
         */
         void toggleFullScreenVideo () ;
 
+        void addFont ( Font * font ) {  fonts.push_back( font ) ;  }
+
+        Font * findFontByFamilyAndColor ( const std::string& family, const std::string& color ) ;
+
 protected:
 
         void allegroSetup () ;
@@ -117,6 +122,8 @@ private:
         bool atFullScreen ;
 
         bool preferencesRead ;
+
+        std::list < Font * > fonts ;
 
 private:
 

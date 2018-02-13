@@ -1,8 +1,10 @@
 
 #include "Font.hpp"
+#include "Color.hpp"
 #include "Ism.hpp"
 
 #include <iostream>
+#include <algorithm> // std::for_each
 
 #include <loadpng.h>
 
@@ -15,16 +17,17 @@ namespace gui
 /* static */ std::string * Font::tableOfLetters = 0 ;
 
 
-Font::Font( const std::string& fontName, const std::string& fontFile, int color, bool doubleHeight ) :
-        fontName( fontName )
+Font::Font( const std::string& name, const std::string& fontFile, Color * color, bool doubleHeight ) :
+        fontName( name ),
+        fontColor( color )
 {
         std::string nameOfFile = fontFile;
-        std::cout << "reading from file \"" << nameOfFile << "\" to create font \"" << fontName << "\"" << std::endl ;
+        std::cout << "reading from file \"" << nameOfFile << "\" to create font \"" << name << "\"" << std::endl ;
 
         BITMAP * bitmapFont = load_png( isomot::pathToFile( fontFile ), 0 );
         if ( bitmapFont == 0 )
         {
-                std::cerr << "can’t get font \"" << fontName << "\" from file \"" << nameOfFile << "\"" << std::endl ;
+                std::cerr << "can’t get font \"" << name << "\" from file \"" << nameOfFile << "\"" << std::endl ;
                 return;
         }
 
@@ -38,18 +41,9 @@ Font::Font( const std::string& fontName, const std::string& fontFile, int color,
         }
 
         // colorize letters
-        if ( color != makecol( 255, 255, 255 ) )
+        if ( color != Color::whiteColor () )
         {
-                for ( int x = 0; x < bitmapFont->w; x++ )
-                {
-                        for ( int y = 0; y < bitmapFont->h; y++ )
-                        {
-                                if ( ( ( int* )bitmapFont->line[ y ] )[ x ] == makecol( 255, 255, 255 ) )
-                                {
-                                        ( ( int* )bitmapFont->line[ y ] )[ x ] = color;
-                                }
-                        }
-                }
+                Color::colorizePicture( bitmapFont, color ) ;
         }
 
         // read table of letters once for all fonts
@@ -147,6 +141,14 @@ Font::Font( const std::string& fontName, const std::string& fontFile, int color,
 Font::~Font( )
 {
         std::for_each( letters.begin(), letters.end(), destroy_bitmap );
+        delete fontColor ;
+}
+
+std::string Font::getFamily() const
+{
+        char* family = strrchr ( fontName.c_str () , '.' );
+        if ( family == 0 ) return fontName;
+        return std::string( family + /* to skip that dot */ 1 );
 }
 
 BITMAP* Font::getPictureOfLetter( const std::string& letter )

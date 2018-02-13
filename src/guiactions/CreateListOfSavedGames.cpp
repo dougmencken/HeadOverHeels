@@ -89,12 +89,12 @@ void CreateListOfSavedGames::doAction ()
                         Label* labelOfFree = new Label( ss.str() );
                         if ( isLoadMenu() )
                         {
-                                labelOfFree->changeFontAndColor( labelOfFree->getFontName (), "cyan" );
+                                labelOfFree->changeColor( "cyan" );
                                 labelOfFree->setAction( new PlaySound( isomot::Mistake ) );
                         }
                         else
                         {
-                                labelOfFree->changeFontAndColor( labelOfFree->getFontName (), "orange" );
+                                labelOfFree->changeColor( "orange" );
                                 labelOfFree->setAction( new SaveGame( this->where, fileCount ) );
                         }
 

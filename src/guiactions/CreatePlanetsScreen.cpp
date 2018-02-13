@@ -6,6 +6,7 @@
 #include "SoundManager.hpp"
 #include "GuiManager.hpp"
 #include "GameManager.hpp"
+#include "Color.hpp"
 #include "Screen.hpp"
 #include "Picture.hpp"
 #include "Label.hpp"
@@ -67,12 +68,12 @@ void CreatePlanetsScreen::doAction ()
         BITMAP* chapeauTriste = 0;
         if ( ! GameManager::getInstance()->isSimpleGraphicSet () )
         {
-                chapeauTriste = GameManager::pictureToGrayscale( Picture::cloneImage( chapeau ) );
+                chapeauTriste = Color::pictureToGrayscale( Picture::cloneImage( chapeau ) );
         }
         else
         {
-                chapeauTriste = GameManager::colorizePicture( Picture::cloneImage( chapeau ), /* 50% gray */ 127, 127, 127 );
-                GameManager::colorizePicture( chapeau, /* yellow */ 255, 255, 50 );
+                chapeauTriste = Color::colorizePicture( Picture::cloneImage( chapeau ), Color::gray50Color() );
+                Color::colorizePicture( chapeau, Color::yellowColor() );
         }
 
         const int halfOfChapeauWidth = chapeau->w >> 1;

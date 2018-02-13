@@ -13,9 +13,10 @@
 
 #include <string>
 #include <vector>
-#include <algorithm>
-#include <cassert>
+
 #include <allegro.h>
+
+class Color ;
 
 
 namespace gui
@@ -31,12 +32,12 @@ class Font
 public:
 
         /**
-         * @param fontName Name of this font to mention it
+         * @param name Name of this font to mention it
          * @param fontFile Name of picture file with letters
          * @param color Color of letters
          * @param doubleHeight Double height of letters
          */
-        Font( const std::string& fontName, const std::string& fontFile, int color = makecol( 255, 255, 255 ), bool doubleHeight = false ) ;
+        Font( const std::string& name, const std::string& fontFile, Color * color, bool doubleHeight = false ) ;
 
         virtual ~Font( ) ;
 
@@ -45,6 +46,8 @@ public:
 private:
 
         std::string fontName ;
+
+        Color * fontColor ;
 
         /**
          * Width, in pixels, of each letter, game fonts are monospaced
@@ -59,7 +62,7 @@ private:
         /**
          * Images of letters
          */
-        std::vector< BITMAP * > letters ;
+        std::vector < BITMAP * > letters ;
 
         static unsigned int howManyLetters ;
 
@@ -71,7 +74,12 @@ private:
 
 public:
 
-        std::string getFontName () const  {  return fontName ;  }
+        std::string getName () const  {  return fontName ;  }
+
+        /**
+         * Name of font is like color.family, use this to get just family
+         */
+        std::string getFamily () const ;
 
         unsigned int getCharWidth () const  {  return charWidth ;  }
 

@@ -1,6 +1,7 @@
 
 #include "ItemDataManager.hpp"
 #include "GameManager.hpp"
+#include "Color.hpp"
 #include "Ism.hpp"
 #include <loadpng.h>
 
@@ -329,7 +330,7 @@ BITMAP* ItemDataManager::cutOutLintel( BITMAP* door, const DoorMeasures& dm, con
         BITMAP* top = create_bitmap_ex( 32, ( dm.lintelWidthX << 1 ) + ( dm.lintelWidthY << 1 ),
                                               dm.lintelHeight + dm.lintelWidthY + dm.lintelWidthX );
 
-        clear_to_color( top, makecol( 255, 0, 255 ) ); // color of transparency
+        clear_to_color( top, Color::colorOfTransparency()->toAllegroColor () );
 
         if ( ns )
         {
@@ -420,7 +421,7 @@ BITMAP* ItemDataManager::cutOutLeftJamb( BITMAP* door, const DoorMeasures& dm, c
         BITMAP* left = create_bitmap_ex ( 32, ( dm.leftJambWidthX << 1 ) + fixWidth + ( dm.leftJambWidthY << 1 ) ,
                                                 dm.leftJambHeight + dm.leftJambWidthY + dm.leftJambWidthX ) ;
 
-        clear_to_color( left, makecol( 255, 0, 255 ) ); // color of transparency
+        clear_to_color( left, Color::colorOfTransparency()->toAllegroColor () );
 
         blit( door, left, fixY, dm.lintelHeight + dm.lintelWidthY - dm.leftJambWidthY + fixY, 0, 0, left->w, left->h );
 
@@ -429,14 +430,14 @@ BITMAP* ItemDataManager::cutOutLeftJamb( BITMAP* door, const DoorMeasures& dm, c
 
 BITMAP* ItemDataManager::cutOutRightJamb( BITMAP* door, const DoorMeasures& dm, const ixml::door::value type )
 {
-        bool ns = (type == ixml::door::north || type == ixml::door::south);
-        int fixWidth = (ns ? 0 : 7);
-        int fixY = (ns ? 0 : -2);
+        bool ns = ( type == ixml::door::north || type == ixml::door::south );
+        int fixWidth = ( ns ? 0 : 7 );
+        int fixY = ( ns ? 0 : -2 );
 
         BITMAP* right = create_bitmap_ex ( 32, ( dm.rightJambWidthX << 1 ) + fixWidth + ( dm.rightJambWidthY << 1 ) ,
                                                  dm.rightJambHeight + dm.rightJambWidthY + dm.rightJambWidthX ) ;
 
-        clear_to_color( right, makecol( 255, 0, 255 ) );  // color of transparency
+        clear_to_color( right, Color::colorOfTransparency()->toAllegroColor () );
 
         blit( door, right, door->w - right->w, dm.lintelHeight + dm.lintelWidthX - dm.rightJambWidthY + fixY, 0, 0, right->w, right->h );
 

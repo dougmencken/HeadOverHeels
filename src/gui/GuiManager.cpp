@@ -1,14 +1,12 @@
 
 #include "GuiManager.hpp"
 #include "Ism.hpp"
-#include "FontManager.hpp"
-
 #include "ConfigurationManager.hpp"
 #include "LanguageManager.hpp"
 #include "InputManager.hpp"
 #include "SoundManager.hpp"
 #include "GameManager.hpp"
-#include "Font.hpp"
+#include "Color.hpp"
 #include "Screen.hpp"
 #include "Menu.hpp"
 #include "Picture.hpp"
@@ -21,6 +19,7 @@
 
 using gui::GuiManager;
 using gui::Screen;
+using gui::Font;
 using gui::LanguageManager;
 using gui::ConfigurationManager;
 using isomot::InputManager;
@@ -55,23 +54,23 @@ GuiManager::GuiManager( ) :
 
         std::string pathToFont = isomot::sharePath();
 
-        // every font used in the game is created here
+        // create fonts to use in game
 
-        gui::FontManager::getInstance()->createFont( "regular-white", pathToFont + "font.png", makecol( 255, 255, 255 ) );
-        gui::FontManager::getInstance()->createFont( "big-white", pathToFont + "font.png", makecol( 255, 255, 255 ), true );
+        addFont( new Font( "white.regular", pathToFont + "font.png", Color::whiteColor() ) );
+        addFont( new Font( "white.big", pathToFont + "font.png", Color::whiteColor(), true ) );
 
-        gui::FontManager::getInstance()->createFont( "regular-orange", pathToFont + "font.png", makecol( 239, 129, 0 ) );
-        gui::FontManager::getInstance()->createFont( "regular-cyan", pathToFont + "font.png", makecol( 0, 228, 231 ) );
-        gui::FontManager::getInstance()->createFont( "regular-yellow", pathToFont + "font.png", makecol( 255, 255, 50 ) );
+        addFont( new Font( "orange.regular", pathToFont + "font.png", Color::orangeColor() ) );
+        addFont( new Font( "cyan.regular", pathToFont + "font.png", Color::cyanColor() ) );
+        addFont( new Font( "yellow.regular", pathToFont + "font.png", Color::yellowColor() ) );
 
-        gui::FontManager::getInstance()->createFont( "big-orange", pathToFont + "font.png", makecol( 239, 129, 0 ), true );
-        gui::FontManager::getInstance()->createFont( "big-cyan", pathToFont + "font.png", makecol( 0, 228, 231 ), true );
-        gui::FontManager::getInstance()->createFont( "big-yellow", pathToFont + "font.png", makecol( 255, 255, 50 ), true );
+        addFont( new Font( "orange.big", pathToFont + "font.png", Color::orangeColor(), true ) );
+        addFont( new Font( "cyan.big", pathToFont + "font.png", Color::cyanColor(), true ) );
+        addFont( new Font( "yellow.big", pathToFont + "font.png", Color::yellowColor(), true ) );
 
-        gui::FontManager::getInstance()->createFont( "regular-green", pathToFont + "font.png", makecol( 50, 255, 50 ), false );
-        gui::FontManager::getInstance()->createFont( "big-green", pathToFont + "font.png", makecol( 50, 255, 50 ), true );
-        gui::FontManager::getInstance()->createFont( "regular-magenta", pathToFont + "font.png", makecol( 255, 50, 255 ), false );
-        gui::FontManager::getInstance()->createFont( "big-magenta", pathToFont + "font.png", makecol( 255, 50, 255 ), true );
+        addFont( new Font( "green.regular", pathToFont + "font.png", Color::greenColor(), false ) );
+        addFont( new Font( "green.big", pathToFont + "font.png", Color::greenColor(), true ) );
+        addFont( new Font( "magenta.regular", pathToFont + "font.png", Color::magentaColor(), false ) );
+        addFont( new Font( "magenta.big", pathToFont + "font.png", Color::magentaColor(), true ) );
 
         // create image to draw interface
         this->picture = create_bitmap_ex( 32, ScreenWidth, ScreenHeight );
@@ -85,6 +84,9 @@ GuiManager::GuiManager( ) :
 GuiManager::~GuiManager( )
 {
         freeScreens () ;
+
+        std::for_each( this->fonts.begin (), this->fonts.end (), isomot::DeleteObject() );
+        this->fonts.clear();
 
         delete this->languageManager;
         delete this->configurationManager;
@@ -290,4 +292,17 @@ void GuiManager::assignLanguage( const std::string& language )
         fprintf( stdout, "language \"%s\"\n", language.c_str () );
         std::string pathToTextInGameData = isomot::sharePath() + "text" + pathSeparator ;
         this->languageManager = new LanguageManager( pathToTextInGameData + language + ".xml", pathToTextInGameData + "en_US.xml" );
+}
+
+Font* GuiManager::findFontByFamilyAndColor ( const std::string& family, const std::string& color )
+{
+        for (  std::list< Font * >::iterator i = fonts.begin (); i != fonts.end (); ++i )
+        {
+                if ( ( *i )->getName() == color + "." + family )
+                {
+                        return *i ;
+                }
+        }
+
+        return 0;
 }

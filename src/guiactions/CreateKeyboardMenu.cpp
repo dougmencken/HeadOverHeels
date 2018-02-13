@@ -47,7 +47,7 @@ void CreateKeyboardMenu::doAction ()
                         int scancode = InputManager::getInstance()->getUserKey( nameOfThisKey );
                         if ( scancode == 0 )
                         {
-                                label->changeFontAndColor( label->getFontName (), "cyan" );
+                                label->changeColor( "cyan" );
                         }
 
                         // action is possibility to change key

@@ -39,20 +39,21 @@ public:
         /**
          * Constructor
          * @param text The text of this label
-         * @param fontName Name of font to draw characters
+         * @param family Family of font to draw characters
          * @param color Color of text
          * @param spacing Space between characters
          */
-        Label( const std::string& text, const std::string& fontName, const std::string& color, int spacing = 0 ) ;
+        Label( const std::string& text, const std::string& family, const std::string& color, int spacing = 0 ) ;
 
         virtual ~Label( ) ;
 
         void update () ;
 
-        /**
-         * Change font and color of text
-         */
-        void changeFontAndColor ( const std::string& fontName, const std::string& color ) ;
+        void changeFontFamily ( const std::string& family ) ;
+
+        void changeColor ( const std::string& color ) ;
+
+        void changeFontFamilyAndColor ( const std::string& family, const std::string& color ) ;
 
         void draw ( BITMAP* where ) ;
 
@@ -63,24 +64,23 @@ public:
 
 protected:
 
+        static Font * getFontByFamilyAndColor ( const std::string& family, const std::string& color ) ;
+
         /**
          * Create image of label
-         * @param text A string of characters in utf-8
-         * @param font Name of font to draw these characters
-         * @param color Color of text
-         * @return The image with magenta background and the text
+         * @param text String of characters in utf-8
+         * @param font Font to draw these characters
+         * @return The image with pure magenta background and the text
          */
-        BITMAP * createImageOfLabel ( const std::string& text, const std::string& fontName, const std::string& color ) ;
+        BITMAP * createImageOfLabel ( const std::string& text, Font * font ) ;
 
 private:
 
         std::string text ;
 
-        std::string fontName ;
+        std::string fontFamily ;
 
         std::string color ;
-
-        Font* font ;
 
         int spacing ;
 
@@ -97,11 +97,11 @@ public:
 
         void setText( const std::string& newText ) {  this->text = newText ; update () ;  }
 
-        std::string getFontName () const {  return this->fontName ;  }
+        std::string getFontFamily () const {  return this->fontFamily ;  }
 
         std::string getColor () const {  return this->color ;  }
 
-        Font* getFont () const {  return this->font ;  }
+        Font * getFont () const {  return getFontByFamilyAndColor( fontFamily, color ) ;  }
 
         int getSpacing () const {  return this->spacing ;  }
 
@@ -110,10 +110,10 @@ public:
         unsigned int getWidth () const
         {
                 // symbols of game fonts are monospaced
-                return utf8StringLength( text ) * ( font->getCharWidth() + spacing ) ;
+                return utf8StringLength( text ) * ( getFont()->getCharWidth() + spacing ) ;
         }
 
-        unsigned int getHeight () const {  return font->getCharHeight() ;  }
+        unsigned int getHeight () const {  return getFont()->getCharHeight() ;  }
 
         Action* getAction ( ) const {  return myAction ;  }
 

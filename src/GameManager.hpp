@@ -69,10 +69,6 @@ public:
                 return static_cast< std::ostringstream * >( &( std::ostringstream() << std::dec << number ) )->str () ;
         }
 
-        static BITMAP * colorizePicture ( BITMAP * picture, unsigned char red, unsigned char green, unsigned char blue ) ;
-
-        static BITMAP * pictureToGrayscale ( BITMAP * picture ) ;
-
         virtual ~GameManager( ) ;
 
         /**

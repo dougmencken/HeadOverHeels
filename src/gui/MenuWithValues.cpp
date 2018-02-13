@@ -3,6 +3,8 @@
 #include "Label.hpp"
 #include "Ism.hpp"
 
+#include <algorithm> // std::for_each
+
 
 namespace gui
 {
@@ -54,13 +56,13 @@ void MenuWithValues::draw( BITMAP* where )
 
                 if ( option == this->activeOption )
                 {
-                        if ( option->getFontName() != "big" )
-                                option->changeFontAndColor( "big", option->getColor() );
+                        if ( option->getFontFamily() != "big" )
+                                option->changeFontFamily( "big" );
                 }
                 else
                 {
-                        if ( option->getFontName() != "regular" )
-                                option->changeFontAndColor( "regular", option->getColor() );
+                        if ( option->getFontFamily() != "regular" )
+                                option->changeFontFamily( "regular" );
                 }
         }
 
@@ -78,7 +80,7 @@ void MenuWithValues::draw( BITMAP* where )
                         textOfOption = textOfOption + symbolToFill;
                 }
 
-                Label* optionWithValue = new Label( textOfOption + getValueOf( option ), option->getFontName(), option->getColor(), option->getSpacing() );
+                Label* optionWithValue = new Label( textOfOption + getValueOf( option ), option->getFontFamily(), option->getColor(), option->getSpacing() );
                 optionsWithValues.push_back( optionWithValue );
 
                 if ( option == this->activeOption )
@@ -182,7 +184,7 @@ unsigned int MenuWithValues::getWidthOfMenu () const
                 for ( unsigned int i = utf8StringLength( textOfOption ); i < maxLetters + minSpacesBeforeValue; i++ )
                         textOfOption = textOfOption + symbolToFill;
 
-                Label optionWithValue( textOfOption + getValueOf( *o ), ( *o )->getFontName(), ( *o )->getColor(), ( *o )->getSpacing() );
+                Label optionWithValue( textOfOption + getValueOf( *o ), ( *o )->getFontFamily(), ( *o )->getColor(), ( *o )->getSpacing() );
                 unsigned int theWidth = optionWithValue.getWidth() + ( this->optionImage != 0 ? this->optionImage->w : 0 ) ;
                 if ( theWidth > widthOfMenu ) widthOfMenu = theWidth ;
         }

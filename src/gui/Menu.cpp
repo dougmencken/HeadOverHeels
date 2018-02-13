@@ -3,9 +3,10 @@
 #include "Gui.hpp"
 #include "GuiManager.hpp"
 #include "InputManager.hpp"
-#include "FontManager.hpp"
 #include "Label.hpp"
 #include "Font.hpp"
+
+#include <algorithm> // std::for_each
 
 
 namespace gui
@@ -62,13 +63,13 @@ void Menu::draw( BITMAP* where )
 
                 if ( label == this->activeOption )
                 {
-                        if ( label->getFontName() != "big" )
-                                label->changeFontAndColor( "big", label->getColor() );
+                        if ( label->getFontFamily() != "big" )
+                                label->changeFontFamily( "big" );
                 }
                 else
                 {
-                        if ( label->getFontName() != "regular" )
-                                label->changeFontAndColor( "regular", label->getColor() );
+                        if ( label->getFontFamily() != "regular" )
+                                label->changeFontFamily( "regular" );
                 }
         }
 

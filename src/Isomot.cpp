@@ -1,5 +1,6 @@
 
 #include "Isomot.hpp"
+#include "Color.hpp"
 #include "GameManager.hpp"
 #include "GuiManager.hpp"
 #include "ItemDataManager.hpp"
@@ -411,15 +412,17 @@ BITMAP* Isomot::update()
                         activeRoom->getPicture()->w, activeRoom->getPicture()->h
                 );
 
+                int whiteColor = Color::whiteColor()->toAllegroColor() ;
+
                 if ( GameManager::getInstance()->areLivesInexhaustible () )
                 {
-                        textout_ex( this->view, font, "VIDAS INFINITAS", 18, 10, makecol( 255, 255, 255 ), -1 );
-                        textout_ex( this->view, font, "INFINITE LIVES", this->view->w - 128, 10, makecol( 255, 255, 255 ), -1 );
+                        textout_ex( this->view, font, "VIDAS INFINITAS", 18, 10, whiteColor, -1 );
+                        textout_ex( this->view, font, "INFINITE LIVES", this->view->w - 128, 10, whiteColor, -1 );
                 }
 
                 if ( GameManager::getInstance()->isImmuneToCollisionsWithMortalItems () )
                 {
-                        textout_ex( this->view, font, "INVIOLABILITY", ( this->view->w >> 1 ) - 50, 10, makecol( 255, 255, 255 ), -1 );
+                        textout_ex( this->view, font, "INVIOLABILITY", ( this->view->w >> 1 ) - 50, 10, whiteColor, -1 );
                 }
 
                 // la sala final es muy especial

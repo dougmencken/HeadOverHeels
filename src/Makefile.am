@@ -23,6 +23,8 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			main.cpp \
 			Way.cpp \
 			Way.hpp \
+			Color.cpp \
+			Color.hpp \
 			Camera.cpp \
 			Camera.hpp \
 			Door.cpp \
@@ -94,8 +96,6 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			gui/ConfigurationManager.hpp \
 			gui/Font.cpp \
 			gui/Font.hpp \
-			gui/FontManager.cpp \
-			gui/FontManager.hpp \
 			gui/Gui.cpp \
 			gui/Gui.hpp \
 			gui/GuiManager.cpp \

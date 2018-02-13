@@ -15,8 +15,7 @@
 #include "InputManager.hpp"
 #include "LanguageText.hpp"
 #include "LanguageManager.hpp"
-
-#include <cmath> // for sqrt
+#include "Color.hpp"
 
 
 namespace isomot
@@ -122,60 +121,6 @@ GameManager* GameManager::getInstance ()
 }
 
 /* static */
-BITMAP* GameManager::colorizePicture( BITMAP* picture, unsigned char red, unsigned char green, unsigned char blue )
-{
-        if ( picture == 0 ) return 0 ;
-        if ( red == 255 && green == 255 && blue == 255 ) return picture ;
-
-        for ( int x = 0; x < picture->w; x++ )
-        {
-                for ( int y = 0; y < picture->h; y++ )
-                {
-                        if ( ( ( int* )picture->line[ y ] )[ x ] == makecol( 255, 255, 255 ) )
-                        {
-                                ( ( int* )picture->line[ y ] )[ x ] = makecol( red, green, blue );
-                        }
-                }
-        }
-
-        return picture ;
-}
-
-/* static */
-BITMAP * GameManager::pictureToGrayscale ( BITMAP * picture )
-{
-        if ( picture == 0 ) return 0 ;
-
-        for ( int y = 0; y < picture->h; y++ )
-        {
-                for ( int x = 0; x < picture->w; x++ )
-                {
-                        // convert every color but the “ key ” one
-                        if ( ( ( int* )picture->line[ y ] )[ x ] != makecol( 255, 0, 255 ) )
-                        {
-                                /* imagine color as vector: c { r, g, b }
-                                   for each shade of gray r=g=b =w: b { w, w, w }
-                                   vector has length: c•c = rr + gg + bb and b•b = ww + ww + ww = 3ww
-                                   converted vector has the same length as original:
-                                        for the same lengths sqrt ( c•c ) = sqrt ( b•b )
-                                        sqrt( rr + gg + bb ) = sqrt( 3 ) * w
-                                        w = sqrt( ( rr + gg + bb ) / 3 )
-                                */
-                                int color = getpixel( picture, x, y );
-                                double red = static_cast< double >( getr( color ) );
-                                double green = static_cast< double >( getg( color ) );
-                                double blue = static_cast< double >( getb( color ) );
-                                double ww = ( red * red + green * green + blue * blue ) / 3.0;
-                                unsigned char gray = static_cast< unsigned char >( std::sqrt( ww ) );
-                                ( ( int* )picture->line[ y ] )[ x ] = makecol( gray, gray, gray );
-                        }
-                }
-        }
-
-        return picture ;
-}
-
-/* static */
 BITMAP * GameManager::refreshPicture ( const char * nameOfPicture )
 {
         return load_png( isomot::pathToFile( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + nameOfPicture ), 0 );
@@ -253,13 +198,13 @@ void GameManager::refreshAmbianceImages ()
 
         if ( ! isSimpleGraphicSet () )
         {
-                grayPictureOfHead = pictureToGrayscale( gui::Picture::cloneImage( pictureOfHead ) );
-                grayPictureOfHeels = pictureToGrayscale( gui::Picture::cloneImage( pictureOfHeels ) );
+                grayPictureOfHead = Color::pictureToGrayscale( gui::Picture::cloneImage( pictureOfHead ) );
+                grayPictureOfHeels = Color::pictureToGrayscale( gui::Picture::cloneImage( pictureOfHeels ) );
         }
         else
         {
-                grayPictureOfHead = colorizePicture( gui::Picture::cloneImage( pictureOfHead ), 50, 255, 50 );
-                grayPictureOfHeels = colorizePicture( gui::Picture::cloneImage( pictureOfHeels ), 50, 255, 50 );
+                grayPictureOfHead = Color::colorizePicture( gui::Picture::cloneImage( pictureOfHead ), Color::greenColor() );
+                grayPictureOfHeels = Color::colorizePicture( gui::Picture::cloneImage( pictureOfHeels ), Color::greenColor() );
         }
 
         destroy_bitmap( pictureOfBag );
@@ -275,19 +220,19 @@ void GameManager::refreshAmbianceImages ()
 
         if ( ! isSimpleGraphicSet () )
         {
-                grayPictureOfHorn = pictureToGrayscale( gui::Picture::cloneImage( pictureOfHorn ) );
-                grayPictureOfBag = pictureToGrayscale( gui::Picture::cloneImage( pictureOfBag ) );
-                grayPictureOfDonuts = pictureToGrayscale( gui::Picture::cloneImage( pictureOfDonuts ) );
+                grayPictureOfHorn = Color::pictureToGrayscale( gui::Picture::cloneImage( pictureOfHorn ) );
+                grayPictureOfBag = Color::pictureToGrayscale( gui::Picture::cloneImage( pictureOfBag ) );
+                grayPictureOfDonuts = Color::pictureToGrayscale( gui::Picture::cloneImage( pictureOfDonuts ) );
         }
         else
         {
-                grayPictureOfHorn = colorizePicture( gui::Picture::cloneImage( pictureOfHorn ), /* green */ 50, 255, 50 );
-                grayPictureOfBag = colorizePicture( gui::Picture::cloneImage( pictureOfBag ), 50, 255, 50 );
-                grayPictureOfDonuts = colorizePicture( gui::Picture::cloneImage( pictureOfDonuts ), 50, 255, 50 );
+                grayPictureOfHorn = Color::colorizePicture( gui::Picture::cloneImage( pictureOfHorn ), Color::greenColor() );
+                grayPictureOfBag = Color::colorizePicture( gui::Picture::cloneImage( pictureOfBag ), Color::greenColor() );
+                grayPictureOfDonuts = Color::colorizePicture( gui::Picture::cloneImage( pictureOfDonuts ), Color::greenColor() );
 
-                colorizePicture( pictureOfBag, /* yellow */ 255, 255, 50 );
-                colorizePicture( pictureOfHorn, 255, 255, 50 );
-                colorizePicture( pictureOfDonuts, 255, 255, 50 );
+                Color::colorizePicture( pictureOfBag, Color::yellowColor() );
+                Color::colorizePicture( pictureOfHorn, Color::yellowColor() );
+                Color::colorizePicture( pictureOfDonuts, Color::yellowColor() );
         }
 
         destroy_bitmap( grayPictureOfGrandesSaltos );
@@ -303,20 +248,20 @@ void GameManager::refreshAmbianceImages ()
 
         if ( ! isSimpleGraphicSet () )
         {
-                grayPictureOfGrandesSaltos = pictureToGrayscale( gui::Picture::cloneImage( pictureOfGrandesSaltos ) );
-                grayPictureOfGranVelocidad = pictureToGrayscale( gui::Picture::cloneImage( pictureOfGranVelocidad ) );
-                grayPictureOfEscudo = pictureToGrayscale( gui::Picture::cloneImage( pictureOfEscudo ) );
+                grayPictureOfGrandesSaltos = Color::pictureToGrayscale( gui::Picture::cloneImage( pictureOfGrandesSaltos ) );
+                grayPictureOfGranVelocidad = Color::pictureToGrayscale( gui::Picture::cloneImage( pictureOfGranVelocidad ) );
+                grayPictureOfEscudo = Color::pictureToGrayscale( gui::Picture::cloneImage( pictureOfEscudo ) );
         }
         else
         {
-                grayPictureOfGrandesSaltos = colorizePicture( gui::Picture::cloneImage( pictureOfGrandesSaltos ), /* green */ 50, 255, 50 );
-                colorizePicture( pictureOfGrandesSaltos, /* yellow */ 255, 255, 50 );
+                grayPictureOfGrandesSaltos = Color::colorizePicture( gui::Picture::cloneImage( pictureOfGrandesSaltos ), Color::greenColor() );
+                Color::colorizePicture( pictureOfGrandesSaltos, Color::yellowColor() );
 
-                grayPictureOfGranVelocidad = colorizePicture( gui::Picture::cloneImage( pictureOfGranVelocidad ), 50, 255, 50 );
-                colorizePicture( pictureOfGranVelocidad, 255, 255, 50 );
+                grayPictureOfGranVelocidad = Color::colorizePicture( gui::Picture::cloneImage( pictureOfGranVelocidad ), Color::greenColor() );
+                Color::colorizePicture( pictureOfGranVelocidad, Color::yellowColor() );
 
-                grayPictureOfEscudo = colorizePicture( gui::Picture::cloneImage( pictureOfEscudo ), 50, 255, 50 );
-                colorizePicture( pictureOfEscudo, 255, 255, 50 );
+                grayPictureOfEscudo = Color::colorizePicture( gui::Picture::cloneImage( pictureOfEscudo ), Color::greenColor() );
+                Color::colorizePicture( pictureOfEscudo, Color::yellowColor() );
         }
 }
 

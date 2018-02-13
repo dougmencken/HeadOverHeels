@@ -1,8 +1,10 @@
 
 #include "Label.hpp"
-#include "Screen.hpp"
-#include "FontManager.hpp"
+#include "Color.hpp"
 #include "Action.hpp"
+#include "GuiManager.hpp"
+
+#include <iostream>
 
 
 namespace gui
@@ -11,28 +13,25 @@ namespace gui
 Label::Label( const std::string& text )
 : Widget( ),
         text( text ),
-        fontName( "regular" ),
+        fontFamily( "regular" ),
         color( "white" ),
-        font( 0 ),
         spacing( 0 ),
         buffer( 0 ),
         myAction( 0 )
 {
-        this->font = FontManager::getInstance()->findFont( fontName, color );
-        this->createImageOfLabel( this->text, this->fontName, this->color );
+        createImageOfLabel( text, Label::getFontByFamilyAndColor( fontFamily, color ) );
 }
 
-Label::Label( const std::string& text, const std::string& fontName, const std::string& color, int spacing )
+Label::Label( const std::string& text, const std::string& family, const std::string& color, int spacing )
 : Widget( ),
         text( text ),
-        fontName( fontName ),
+        fontFamily( family ),
         color( color ),
-        font( 0 ),
         spacing( spacing ),
-        buffer( 0 )
+        buffer( 0 ),
+        myAction( 0 )
 {
-        this->font = FontManager::getInstance()->findFont( fontName, color.compare( "multicolor" ) == 0 ? "white" : color );
-        this->createImageOfLabel( this->text, this->fontName, this->color );
+        createImageOfLabel( text, Label::getFontByFamilyAndColor( family, color ) );
 }
 
 Label::~Label( )
@@ -40,16 +39,33 @@ Label::~Label( )
         destroy_bitmap( this->buffer );
 }
 
-void Label::update()
+/* static */
+Font* Label::getFontByFamilyAndColor( const std::string& family, const std::string& color )
 {
-        this->createImageOfLabel( this->text, this->fontName, this->color );
+        return GuiManager::getInstance()->findFontByFamilyAndColor( family, color == "multicolor" ? "white" : color ) ;
 }
 
-void Label::changeFontAndColor( const std::string& fontName, const std::string& color )
+void Label::update()
 {
-        this->fontName = fontName;
+        createImageOfLabel( text, Label::getFontByFamilyAndColor( fontFamily, color ) );
+}
+
+void Label::changeFontFamily ( const std::string& family )
+{
+        this->fontFamily = family;
+        update ();
+}
+
+void Label::changeColor ( const std::string& color )
+{
         this->color = color;
-        this->font = FontManager::getInstance()->findFont( fontName, color.compare( "multicolor" ) == 0 ? "white" : color );
+        update ();
+}
+
+void Label::changeFontFamilyAndColor( const std::string& family, const std::string& color )
+{
+        this->fontFamily = family;
+        this->color = color;
         update ();
 }
 
@@ -66,7 +82,7 @@ void Label::handleKey( int key )
         }
 }
 
-BITMAP * Label::createImageOfLabel( const std::string& text, const std::string& fontName, const std::string& color )
+BITMAP * Label::createImageOfLabel( const std::string& text, Font * font )
 {
         // re-create buffer
         if ( this->buffer != 0 )
@@ -75,22 +91,31 @@ BITMAP * Label::createImageOfLabel( const std::string& text, const std::string& 
         }
 
         buffer = create_bitmap_ex( 32, getWidth(), getHeight() );
-        clear_to_color( buffer, makecol( 255, 0, 255 ) ); // magenta is “ key ” color used as transparency
+        clear_to_color( buffer, Color::colorOfTransparency()->toAllegroColor () );
 
         const size_t numberOfColors = 3;
         std::string multiColors[ numberOfColors ] = {  "cyan", "yellow", "orange"  }; // sequence of colors for multi~color labels
-        size_t colorIndex( 0 ); // index in that sequence for color of character to draw
+        /* if ( isomot::GameManager::getInstance()->isSimpleGraphicSet() )
+                multiColors[ 2 ] = "white"; // original speccy sequence is “ cyan yellow white ” */
+
+        size_t colorIndex( 0 ); // index in that sequence for character to draw
+        Font* fontToUse = font ;
 
         size_t charPos = 0; // position of character in the string which for utf-8 isn't always the same as character’s offset in bytes
 
         std::string::const_iterator iter = text.begin ();
         while ( iter != text.end () )
         {
-                if ( color.compare( "multicolor" ) == 0 )
+                if ( this->color == "multicolor" )
                 {
-                        // pick a color for this letter
-                        this->font = FontManager::getInstance()->findFont( fontName, multiColors[ colorIndex ] );
-                        assert( this->font );
+                        // pick new font with color for this letter
+                        fontToUse = Label::getFontByFamilyAndColor( font->getFamily(), multiColors[ colorIndex ] );
+                        if ( fontToUse == 0 )
+                        {
+                                std::cerr << "can’t get font with family \"" << font->getFamily() << "\"" <<
+                                                " for color \"" << multiColors[ colorIndex ] << "\"" << std::endl ;
+                                fontToUse = font ;
+                        }
 
                         // cycle in sequence of colors
                         colorIndex++;
@@ -103,14 +128,14 @@ BITMAP * Label::createImageOfLabel( const std::string& text, const std::string& 
 
                 // draw letter
                 blit(
-                        this->font->getPictureOfLetter( utf8letter ),
+                        fontToUse->getPictureOfLetter( utf8letter ),
                         buffer,
                         0,
                         0,
-                        charPos * ( this->font->getCharWidth() + spacing ),
+                        charPos * ( fontToUse->getCharWidth() + spacing ),
                         0,
-                        this->font->getCharWidth(),
-                        this->font->getCharHeight()
+                        fontToUse->getCharWidth(),
+                        fontToUse->getCharHeight()
                 );
 
                 charPos ++;

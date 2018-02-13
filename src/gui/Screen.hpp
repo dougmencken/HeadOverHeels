@@ -14,7 +14,9 @@
 #include <list>
 #include <vector>
 #include <allegro.h>
+
 #include "Widget.hpp"
+#include "Color.hpp"
 
 
 namespace gui
@@ -72,10 +74,7 @@ public:
 
 private:
 
-        /**
-         * Color de fondo
-         */
-        int backgroundColor ;
+        Color * backgroundColor ;
 
         /**
          * Imagen donde se volcarán la pantalla

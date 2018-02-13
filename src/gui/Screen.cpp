@@ -7,8 +7,12 @@
 #include "Picture.hpp"
 #include "AnimatedPicture.hpp"
 #include "Ism.hpp"
-#include <algif.h>
+
 #include <iostream>
+#include <algorithm> // std::for_each
+
+#include <algif.h>
+
 
 const double delayBetweenFrames = 0.1 ;
 
@@ -32,7 +36,7 @@ namespace gui
 
 Screen::Screen( BITMAP* picture, Action* action ) :
         Widget( 0, 0 ),
-        backgroundColor( makecol( 0, 0, 0 ) ),
+        backgroundColor( Color::redColor() ),
         where( picture ),
         actionOfScreen( action ),
         escapeAction( 0 ),
@@ -46,6 +50,7 @@ Screen::Screen( BITMAP* picture, Action* action ) :
 Screen::~Screen( )
 {
         freeWidgets() ;
+        delete backgroundColor ;
 }
 
 void Screen::setEscapeAction ( Action * action )
@@ -104,7 +109,7 @@ void Screen::refreshPicturesOfHeadAndHeels ()
 void Screen::draw( BITMAP* where )
 {
         // fill with color of background
-        clear_to_color( where, backgroundColor );
+        clear_to_color( where, backgroundColor->toAllegroColor() );
 
         // draw background, if any
         if ( Screen::backgroundPicture != 0 )
