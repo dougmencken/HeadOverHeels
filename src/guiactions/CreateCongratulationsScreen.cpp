@@ -14,8 +14,8 @@ using gui::CreateCongratulationsScreen ;
 using isomot::GameManager ;
 
 
-CreateCongratulationsScreen::CreateCongratulationsScreen( BITMAP* picture, unsigned short rooms, unsigned short planets ) : Action( )
-        , where( picture )
+CreateCongratulationsScreen::CreateCongratulationsScreen( BITMAP* picture, unsigned short rooms, unsigned short planets )
+        : Action( picture )
         , rooms( rooms )
         , planets( planets )
 {
@@ -32,11 +32,11 @@ void CreateCongratulationsScreen::doAction ()
         LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
         LanguageText* langString = 0;
 
-        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this, this->where );
+        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this );
 
         if ( screen->countWidgets() == 0 )
         {
-                screen->setEscapeAction( new CreateEndScreen( this->where, rooms, planets ) );
+                screen->setEscapeAction( new CreateEndScreen( getWhereToDraw(), rooms, planets ) );
         }
         else
         {
@@ -63,5 +63,5 @@ void CreateCongratulationsScreen::doAction ()
 
         screen->addWidget( textField );
 
-        GuiManager::getInstance()->changeScreen( screen );
+        GuiManager::getInstance()->changeScreen( screen, true );
 }

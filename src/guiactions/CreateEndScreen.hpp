@@ -11,8 +11,6 @@
 #ifndef CreateEndScreen_hpp_
 #define CreateEndScreen_hpp_
 
-#include <string>
-#include <allegro.h>
 #include "Action.hpp"
 
 
@@ -47,8 +45,6 @@ protected:
         virtual void doAction () ;
 
 private:
-
-        BITMAP* where ;
 
         /**
          * Count of visited rooms

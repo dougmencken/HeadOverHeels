@@ -11,8 +11,6 @@
 #ifndef CreateListOfSavedGames_hpp_
 #define CreateListOfSavedGames_hpp_
 
-#include <sstream>
-#include <allegro.h>
 #include "Action.hpp"
 #include "csxml/SaveGameXML.hpp"
 
@@ -56,8 +54,6 @@ private:
          * @param planets Devuelve el número de planetas liberados
          */
         void readSomeInfoFromGamefile( const std::string& fileName, short* rooms, short* planets ) ;
-
-        BITMAP* where ;
 
         bool isMenuForLoad ;
 

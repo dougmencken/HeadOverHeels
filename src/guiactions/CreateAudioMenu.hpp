@@ -13,8 +13,6 @@
 
 #include "Action.hpp"
 
-#include <allegro.h>
-
 
 namespace gui
 {
@@ -47,8 +45,6 @@ protected:
         virtual void doAction () ;
 
 private:
-
-        BITMAP * where ;
 
         MenuWithValues * listOfOptions ;
 

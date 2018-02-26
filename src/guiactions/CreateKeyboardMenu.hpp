@@ -11,8 +11,6 @@
 #ifndef CreateKeyboardMenu_hpp_
 #define CreateKeyboardMenu_hpp_
 
-#include <string>
-#include <allegro.h>
 #include "Action.hpp"
 
 namespace gui
@@ -44,11 +42,6 @@ protected:
         virtual void doAction () ;
 
 private:
-
-        /**
-         * Imagen donde se dibujará la interfaz gráfica
-         */
-        BITMAP * where ;
 
         MenuWithValues * menuOfKeys ;
 

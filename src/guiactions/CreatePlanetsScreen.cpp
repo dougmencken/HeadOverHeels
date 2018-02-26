@@ -20,8 +20,8 @@ using isomot::GameManager ;
 using isomot::SoundManager ;
 
 
-CreatePlanetsScreen::CreatePlanetsScreen( BITMAP* where, bool notNewGame ) : Action( )
-        , where( where )
+CreatePlanetsScreen::CreatePlanetsScreen( BITMAP* where, bool notNewGame )
+        : Action( where )
         , gameInProgress( notNewGame )
         , blacktoothFree( false )
         , egyptusFree( false )
@@ -43,7 +43,7 @@ void CreatePlanetsScreen::doAction ()
 
         LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
 
-        Screen* planets = GuiManager::getInstance()->findOrCreateScreenForAction( this, this->where );
+        Screen* planets = GuiManager::getInstance()->findOrCreateScreenForAction( this );
 
         if ( planets->countWidgets() > 0 )
         {
@@ -57,7 +57,7 @@ void CreatePlanetsScreen::doAction ()
         if ( GameManager::getInstance()->isSimpleGraphicSet () ) colorOfLabel = "green";
         label = new Label( languageManager->findLanguageString( "blacktooth-empire" )->getText(), "big", colorOfLabel );
         label->moveTo( ( isomot::ScreenWidth - label->getWidth() ) >> 1, 0 );
-        label->setAction( new ContinueGame( this->where, gameInProgress ) );
+        label->setAction( new ContinueGame( getWhereToDraw(), gameInProgress ) );
 
         planets->addWidget( label );
         planets->setKeyHandler( label );
@@ -168,5 +168,5 @@ void CreatePlanetsScreen::doAction ()
         destroy_bitmap( chapeau );
         destroy_bitmap( chapeauTriste );
 
-        GuiManager::getInstance()->changeScreen( planets );
+        GuiManager::getInstance()->changeScreen( planets, true );
 }

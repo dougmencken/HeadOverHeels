@@ -50,16 +50,13 @@ public:
         */
         void begin () ;
 
-       /**
-        * Change the current screen
-        */
-        void changeScreen ( Screen* newScreen ) ;
+        void changeScreen ( Screen* newScreen, bool dive ) ;
 
        /*
         * Search in list of screens for the one associated with this action
-        * When there's no such screen found, create a new one with a given picture
+        * When there’s no such screen found, create a new one
         */
-        Screen * findOrCreateScreenForAction ( Action * action, BITMAP * picture ) ;
+        Screen * findOrCreateScreenForAction ( Action * action ) ;
 
         void freeScreens () ;
 

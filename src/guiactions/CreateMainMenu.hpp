@@ -11,8 +11,6 @@
 #ifndef CreateMainMenu_hpp_
 #define CreateMainMenu_hpp_
 
-#include <string>
-#include <allegro.h>
 #include "Action.hpp"
 
 
@@ -34,7 +32,7 @@ public:
          * Constructor
          * @param picture Imagen donde se dibujará la interfaz gráfica
          */
-        CreateMainMenu( BITMAP* picture ) ;
+        CreateMainMenu( BITMAP * picture ) ;
 
         std::string getNameOfAction () const {  return "CreateMainMenu" ;  }
 
@@ -44,13 +42,6 @@ protected:
          * Show the main menu of the game
          */
         virtual void doAction () ;
-
-private:
-
-        /**
-         * Imagen donde se dibujará la interfaz gráfica
-         */
-        BITMAP* where ;
 
 };
 

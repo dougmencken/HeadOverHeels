@@ -16,8 +16,7 @@ using isomot::ScreenWidth;
 
 
 CreateEndScreen::CreateEndScreen( BITMAP* picture, unsigned int rooms, unsigned short planets )
-        : Action()
-        , where( picture )
+        : Action( picture )
         , rooms( rooms )
         , planets( planets )
 {
@@ -27,14 +26,14 @@ void CreateEndScreen::doAction ()
 {
         SoundManager::getInstance()->playOgg( "music/MainTheme.ogg", /* loop */ true );
 
-        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this, this->where );
+        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this );
         if ( screen->countWidgets() > 0 )
         {
                 screen->freeWidgets();
         }
         else
         {
-                screen->setEscapeAction( new CreateMainMenu( this->where ) );
+                screen->setEscapeAction( new CreateMainMenu( getWhereToDraw() ) );
         }
 
         screen->placeHeadAndHeels( /* icons */ true, /* copyrights */ false );
@@ -99,5 +98,5 @@ void CreateEndScreen::doAction ()
         label->setAction( screen->getEscapeAction () );
         screen->setKeyHandler( label );
 
-        GuiManager::getInstance()->changeScreen( screen );
+        GuiManager::getInstance()->changeScreen( screen, false );
 }

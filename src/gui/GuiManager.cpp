@@ -138,9 +138,9 @@ void GuiManager::begin ()
         }
 }
 
-void GuiManager::changeScreen( Screen* newScreen )
+void GuiManager::changeScreen( Screen* newScreen, bool dive )
 {
-        assert( newScreen );
+        if ( newScreen == 0 ) return ;
 
 # if  defined( DEBUG_GUI )  &&  DEBUG_GUI
 
@@ -183,6 +183,7 @@ void GuiManager::changeScreen( Screen* newScreen )
 
         if ( listOfScreens.find( newScreen->getActionOfScreen()->getNameOfAction() ) != listOfScreens.end () )
         {
+                Screen::barWipeHorizontally( this->screen, newScreen, dive );
                 this->screen = newScreen;
                 redraw() ;
         }
@@ -193,10 +194,13 @@ void GuiManager::changeScreen( Screen* newScreen )
         }
 }
 
-Screen * GuiManager::findOrCreateScreenForAction ( Action* action, BITMAP* picture )
+Screen * GuiManager::findOrCreateScreenForAction ( Action* action )
 {
-        assert( action );
-        assert( picture );
+        if ( action == 0 )
+        {
+                std::cerr << "screen for nil action is nil screen" << std::endl ;
+                return 0 ;
+        }
 
         std::string nameOfAction = action->getNameOfAction() ;
 
@@ -208,7 +212,7 @@ Screen * GuiManager::findOrCreateScreenForAction ( Action* action, BITMAP* pictu
         }
 
         std::cout << "going to create new screen for action \" " << nameOfAction << " \"" << std::endl ;
-        Screen * newScreen = new Screen( picture, action );
+        Screen * newScreen = new Screen( action );
         listOfScreens[ nameOfAction ] = newScreen;
         return newScreen;
 }

@@ -11,8 +11,6 @@
 #ifndef SelectLanguage_hpp_
 #define SelectLanguage_hpp_
 
-#include <string>
-#include <allegro.h>
 #include "Action.hpp"
 
 
@@ -24,7 +22,7 @@ class SelectLanguage: public Action
 
 public:
 
-        SelectLanguage( BITMAP* picture, const std::string& language ) ;
+        SelectLanguage( BITMAP * picture, const std::string& language ) ;
 
         std::string getNameOfAction () const {  return "SelectLanguage" ;  }
 
@@ -36,8 +34,6 @@ protected:
         virtual void doAction () ;
 
 private:
-
-        BITMAP* where ;
 
         std::string language ;
 

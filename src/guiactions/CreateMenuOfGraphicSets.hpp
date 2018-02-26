@@ -13,9 +13,7 @@
 
 #include "Action.hpp"
 
-#include <string>
 #include <map>
-#include <allegro.h>
 
 
 namespace gui
@@ -51,8 +49,6 @@ protected:
         virtual void doAction () ;
 
 private:
-
-        BITMAP * where ;
 
         Action * actionOnEscape ;
 

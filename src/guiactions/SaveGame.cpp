@@ -9,9 +9,8 @@ using gui::ContinueGame;
 
 
 SaveGame::SaveGame( BITMAP* picture, int slot )
-: Action(),
-  where( picture ),
-  slot( slot )
+        : Action( picture )
+        , slot( slot )
 {
 
 }
@@ -28,6 +27,6 @@ void SaveGame::doAction ()
                 gameManager->saveGame( ss.str() );
         }
 
-        ContinueGame * game = new ContinueGame( this->where, true );
+        ContinueGame * game = new ContinueGame( getWhereToDraw(), true );
         game->doIt ();
 }

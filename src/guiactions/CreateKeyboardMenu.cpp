@@ -16,18 +16,17 @@ using isomot::InputManager;
 
 
 CreateKeyboardMenu::CreateKeyboardMenu( BITMAP* picture ) :
-        Action( ) ,
-        where( picture )
+        Action( picture )
 {
 
 }
 
 void CreateKeyboardMenu::doAction ()
 {
-        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this, this->where );
+        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this );
         if ( screen->countWidgets() == 0 )
         {
-                screen->setEscapeAction( new CreateMainMenu( this->where ) );
+                screen->setEscapeAction( new CreateMainMenu( getWhereToDraw() ) );
 
                 screen->placeHeadAndHeels( /* icons */ false, /* copyrights */ false );
 
@@ -66,5 +65,5 @@ void CreateKeyboardMenu::doAction ()
                 menuOfKeys->resetActiveOption();
         }
 
-        GuiManager::getInstance()->changeScreen( screen );
+        GuiManager::getInstance()->changeScreen( screen, true );
 }

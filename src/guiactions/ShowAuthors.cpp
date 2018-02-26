@@ -19,9 +19,7 @@ using gui::TextField;
 using isomot::SoundManager;
 
 
-ShowAuthors::ShowAuthors( BITMAP* picture )
-: Action(),
-  where( picture )
+ShowAuthors::ShowAuthors( BITMAP* picture ) : Action( picture )
 {
 
 }
@@ -31,14 +29,16 @@ void ShowAuthors::doAction ()
         ///SoundManager::getInstance()->stopAnyOgg();
         SoundManager::getInstance()->playOgg( "music/CreditsTheme.ogg", /* loop */ true );
 
-        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this, this->where );
+        int heightOfWhereToDraw = getWhereToDraw()->h ;
+
+        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this );
         if ( screen->countWidgets() == 0 )
         {
                 LanguageText* langString = 0;
                 LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
 
                 langString = languageManager->findLanguageString( "credits-text" );
-                this->initialY = where->h;
+                this->initialY = heightOfWhereToDraw;
                 this->linesOfCredits = new TextField( 0, initialY, isomot::ScreenWidth, isomot::ScreenHeight, CenterAlignment );
 
                 size_t howManyLines = langString->getLinesCount() ;
@@ -58,16 +58,16 @@ void ShowAuthors::doAction ()
                 linesOfCredits->moveTo( linesOfCredits->getX(), initialY );
         }
 
-        screen->setEscapeAction( new CreateMainMenu( this->where ) );
+        screen->setEscapeAction( new CreateMainMenu( getWhereToDraw() ) );
 
-        GuiManager::getInstance()->changeScreen( screen );
+        GuiManager::getInstance()->changeScreen( screen, true );
 
         Picture* widgetForLoadingScreen = 0;
 
         // move text up
 
         const int heightOfCredits = ( ( linesOfCredits->getHeightOfField() + 1 ) >> 1 ) << 1;
-        const int verticalSpace = ( this->where->h * 3 ) >> 2;
+        const int verticalSpace = ( getWhereToDraw()->h * 3 ) >> 2;
         const int whenToReloop = - ( heightOfCredits + verticalSpace ) ;
 
         fprintf( stdout, "height of credits-text is %d\n", heightOfCredits );
@@ -121,20 +121,20 @@ void ShowAuthors::doAction ()
 
                 linesOfCredits->moveTo( linesOfCredits->getX(), yNow );
 
-                if ( yNow == this->where->h - heightOfCredits && widgetForLoadingScreen == 0 )
+                if ( yNow == heightOfWhereToDraw - heightOfCredits && widgetForLoadingScreen == 0 )
                 {
                         BITMAP* loadingScreen = load_png( isomot::pathToFile( isomot::sharePath() + "loading-screen.png" ), 0 );
                         if ( loadingScreen != 0 )
                         {
                                 widgetForLoadingScreen = new Picture(
-                                                ( this->where->w - loadingScreen->w ) >> 1, this->where->h,
+                                                ( getWhereToDraw()->w - loadingScreen->w ) >> 1, heightOfWhereToDraw,
                                                 loadingScreen,
                                                 "loading screen from original speccy version"
                                 ) ;
                                 screen->addWidget( widgetForLoadingScreen );
                         }
                 }
-                else if ( yNow < this->where->h - heightOfCredits && widgetForLoadingScreen != 0 )
+                else if ( yNow < heightOfWhereToDraw - heightOfCredits && widgetForLoadingScreen != 0 )
                 {
                         widgetForLoadingScreen->moveTo( widgetForLoadingScreen->getX(), yNow + heightOfCredits );
                 }

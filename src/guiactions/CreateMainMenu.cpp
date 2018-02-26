@@ -21,8 +21,7 @@ using isomot::SoundManager;
 
 
 CreateMainMenu::CreateMainMenu( BITMAP* picture ) :
-        Action(),
-        where( picture )
+        Action( picture )
 {
 
 }
@@ -35,7 +34,7 @@ void CreateMainMenu::doAction ()
                 SoundManager::getInstance()->playOgg( "music/MainTheme.ogg", /* loop */ true );
         }
 
-        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this, this->where );
+        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this );
         if ( screen->countWidgets() == 0 )
         {
                 screen->placeHeadAndHeels( /* icons */ true, /* copyrights */ true );
@@ -52,12 +51,12 @@ void CreateMainMenu::doAction ()
                 Label* showCredits = new Label( languageManager->findLanguageString( "show-credits" )->getText() );
                 Label* quitGame = new Label( languageManager->findLanguageString( "exit-game" )->getText() );
 
-                newGame->setAction( new CreatePlanetsScreen( this->where, false ) );
-                loadGame->setAction( new CreateListOfSavedGames( this->where, true ) );
-                defineKeys->setAction( new CreateKeyboardMenu( this->where ) );
-                adjustAudio->setAction( new CreateAudioMenu( this->where ) );
-                adjustVideo->setAction( new CreateVideoMenu( this->where ) );
-                showCredits->setAction( new ShowAuthors( this->where ) );
+                newGame->setAction( new CreatePlanetsScreen( getWhereToDraw(), false ) );
+                loadGame->setAction( new CreateListOfSavedGames( getWhereToDraw(), true ) );
+                defineKeys->setAction( new CreateKeyboardMenu( getWhereToDraw() ) );
+                adjustAudio->setAction( new CreateAudioMenu( getWhereToDraw() ) );
+                adjustVideo->setAction( new CreateVideoMenu( getWhereToDraw() ) );
+                showCredits->setAction( new ShowAuthors( getWhereToDraw() ) );
                 quitGame->setAction( new ExitApplication() );
 
                 Menu * menu = new Menu( );
@@ -75,5 +74,5 @@ void CreateMainMenu::doAction ()
                 screen->setKeyHandler( menu );
         }
 
-        GuiManager::getInstance()->changeScreen( screen );
+        GuiManager::getInstance()->changeScreen( screen, false );
 }

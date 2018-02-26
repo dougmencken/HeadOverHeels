@@ -11,17 +11,11 @@
 #ifndef LoadGame_hpp_
 #define LoadGame_hpp_
 
-#include <string>
-#include <allegro.h>
 #include "Action.hpp"
 
 
 namespace gui
 {
-
-/**
- * Carga una partida del disco y pone en marcha el juego
- */
 
 class LoadGame : public Action
 {
@@ -30,10 +24,10 @@ public:
 
         /**
          * Constructor
-         * @param picture Imagen donde se dibujará la interfaz gráfica
-         * @param slot Número del archivo a cargar
+         * @param picture Image where to draw user interface
+         * @param slot Number of file to load
          */
-        LoadGame( BITMAP* picture, int slot ) ;
+        LoadGame( BITMAP * picture, int slot ) ;
 
         std::string getNameOfAction () const {  return "LoadGame" ;  }
 
@@ -47,13 +41,7 @@ protected:
 private:
 
         /**
-         * Imagen donde se dibujará la interfaz gráfica
-         */
-        BITMAP* where ;
-
-        /**
-         * Número del archivo a cargar. Los archivos tienen un nombre de la forma savegameN.xml,
-         * donde N es este número
+         * Number of file to load
          */
         int slot ;
 

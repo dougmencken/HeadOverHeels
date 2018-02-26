@@ -11,17 +11,11 @@
 #ifndef SaveGame_hpp_
 #define SaveGame_hpp_
 
-#include <string>
-#include <allegro.h>
 #include "Action.hpp"
 
 
 namespace gui
 {
-
-/**
- * Graba la partida en curso y regresa al juego
- */
 
 class SaveGame : public Action
 {
@@ -30,10 +24,10 @@ public:
 
         /**
          * Constructor
-         * @param picture Imagen donde se dibujará la interfaz gráfica
-         * @param slot Número del archivo a grabar
+         * @param picture Image where to draw user interface
+         * @param slot Number of file to load
          */
-        SaveGame( BITMAP* picture, int slot ) ;
+        SaveGame( BITMAP * picture, int slot ) ;
 
         std::string getNameOfAction () const {  return "SaveGame" ;  }
 
@@ -47,13 +41,7 @@ protected:
 private:
 
         /**
-         * Imagen donde se dibujará la interfaz gráfica
-         */
-        BITMAP* where ;
-
-        /**
-         * Número del archivo a grabar. Los archivos tienen un nombre de la forma savegameN.xml,
-         * donde N es este número
+         * Number of file to load
          */
         int slot ;
 

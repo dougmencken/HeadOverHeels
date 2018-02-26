@@ -227,9 +227,9 @@ namespace isomot
                 Mistake                         /* Estado imposible, se utiliza en el gestor de sonido */
         } ;
 
-        const int ScreenWidth = 640 ;
+        const unsigned int ScreenWidth = 640 ;
 
-        const int ScreenHeight = 480 ;
+        const unsigned int ScreenHeight = 480 ;
 
         const int Top = -1 ;
 

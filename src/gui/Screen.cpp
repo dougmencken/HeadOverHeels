@@ -34,23 +34,25 @@ namespace gui
 }
 
 
-Screen::Screen( BITMAP* picture, Action* action ) :
+Screen::Screen( Action* action ) :
         Widget( 0, 0 ),
-        backgroundColor( Color::redColor() ),
-        where( picture ),
+        imageOfScreen( 0 ),
         actionOfScreen( action ),
         escapeAction( 0 ),
         keyHandler( 0 ),
         pictureOfHead( 0 ),
         pictureOfHeels( 0 )
 {
-        refreshPicturesOfHeadAndHeels ();
+        if ( action != 0 && action->getWhereToDraw() != 0 )
+        {
+                imageOfScreen = action->getWhereToDraw ();
+                refreshPicturesOfHeadAndHeels ();
+        }
 }
 
 Screen::~Screen( )
 {
         freeWidgets() ;
-        delete backgroundColor ;
 }
 
 void Screen::setEscapeAction ( Action * action )
@@ -108,20 +110,33 @@ void Screen::refreshPicturesOfHeadAndHeels ()
 
 void Screen::draw( BITMAP* where )
 {
+        this->imageOfScreen = where ;
+
+        redraw();
+        drawOnGlobalScreen( );
+}
+
+void Screen::redraw( )
+{
+        if ( imageOfScreen == 0 ) return ;
+
         // fill with color of background
-        clear_to_color( where, backgroundColor->toAllegroColor() );
+        clear_to_color( imageOfScreen, Color::redColor()->toAllegroColor() );
 
         // draw background, if any
         if ( Screen::backgroundPicture != 0 )
         {
-                blit( backgroundPicture, where, 0, 0, 0, 0, backgroundPicture->w, backgroundPicture->h );
+                blit( backgroundPicture, imageOfScreen, 0, 0, 0, 0, backgroundPicture->w, backgroundPicture->h );
         }
 
         // draw each component
-        std::for_each( widgets.begin (), widgets.end (), std::bind2nd( std::mem_fun( &Widget::draw ), where ) );
+        std::for_each( widgets.begin (), widgets.end (), std::bind2nd( std::mem_fun( &Widget::draw ), imageOfScreen ) );
+}
 
+void Screen::drawOnGlobalScreen( )
+{
         // copy resulting image to screen
-        blit( where, screen, 0, 0, 0, 0, where->w, where->h );
+        blit( imageOfScreen, /* allegro global variable */ screen, 0, 0, 0, 0, imageOfScreen->w, imageOfScreen->h );
 }
 
 void Screen::handleKey( int rawKey )
@@ -308,6 +323,138 @@ std::vector< BITMAP * > Screen::loadAnimation ( const char * nameOfGif )
         }
 
         return animation;
+}
+
+/* static */
+void Screen::scrollHorizontally( Screen* oldScreen, Screen* newScreen, bool rightToLeft )
+{
+        if ( oldScreen == 0 || newScreen == 0 ||
+                oldScreen == newScreen ||
+                oldScreen->imageOfScreen == 0 || newScreen->imageOfScreen == 0 ) return ;
+
+        BITMAP * oldPicture = create_bitmap( oldScreen->imageOfScreen->w, oldScreen->imageOfScreen->h );
+        blit( oldScreen->imageOfScreen, oldPicture, 0, 0, 0, 0, oldScreen->imageOfScreen->w, oldScreen->imageOfScreen->h );
+
+        newScreen->redraw ();
+        BITMAP * newPicture = newScreen->imageOfScreen ;
+
+        unsigned int step = 2;
+        for ( unsigned int x = step ; x < isomot::ScreenWidth ; x += step )
+        {
+                /* void blit( BITMAP* from, BITMAP* to, int fromX, int fromY, int toX, int toY, int width, int height ) */
+
+                if ( rightToLeft )
+                {
+                        blit( oldPicture, screen, x, 0, 0, 0, oldPicture->w - x, isomot::ScreenHeight );
+                        blit( newPicture, screen, 0, 0, oldPicture->w - x, 0, x, isomot::ScreenHeight );
+                }
+                else
+                {
+                        blit( newPicture, screen, newPicture->w - x, 0, 0, 0, x, isomot::ScreenHeight );
+                        blit( oldPicture, screen, 0, 0, x, 0, newPicture->w - x, isomot::ScreenHeight );
+                }
+
+                sleep( 1 );
+        }
+
+        destroy_bitmap( oldPicture );
+}
+
+/* static */
+void Screen::wipeHorizontally( Screen* oldScreen, Screen* newScreen, bool rightToLeft )
+{
+        if ( oldScreen == 0 || newScreen == 0 ||
+                oldScreen == newScreen || newScreen->imageOfScreen == 0 ) return ;
+
+        newScreen->redraw ();
+        BITMAP * newPicture = newScreen->imageOfScreen ;
+
+        unsigned int step = 2;
+        for ( unsigned int x = step ; x < isomot::ScreenWidth ; x += step )
+        {
+                /* void blit( BITMAP* from, BITMAP* to, int fromX, int fromY, int toX, int toY, int width, int height ) */
+
+                if ( rightToLeft )
+                {
+                        blit( newPicture, screen, newPicture->w - x, 0, newPicture->w - x, 0, x, isomot::ScreenHeight );
+                }
+                else
+                {
+                        blit( newPicture, screen, 0, 0, 0, 0, x, isomot::ScreenHeight );
+                }
+
+                sleep( 1 );
+        }
+}
+
+/* static */
+void Screen::barScrollHorizontally( Screen* oldScreen, Screen* newScreen, bool rightToLeft )
+{
+        if ( oldScreen == 0 || newScreen == 0 ||
+                oldScreen == newScreen ||
+                oldScreen->imageOfScreen == 0 || newScreen->imageOfScreen == 0 ) return ;
+
+        BITMAP * oldPicture = create_bitmap( oldScreen->imageOfScreen->w, oldScreen->imageOfScreen->h );
+        blit( oldScreen->imageOfScreen, oldPicture, 0, 0, 0, 0, oldScreen->imageOfScreen->w, oldScreen->imageOfScreen->h );
+
+        newScreen->redraw ();
+        BITMAP * newPicture = newScreen->imageOfScreen ;
+
+        unsigned int pieces = isomot::ScreenWidth >> 6 ;
+        unsigned int widthOfPiece = isomot::ScreenWidth / pieces ;
+
+        unsigned int step = 1;
+        for ( unsigned int x = step ; x < widthOfPiece ; x += step )
+        {
+                for ( unsigned int pieceX = 0 ; pieceX < isomot::ScreenWidth ; pieceX += widthOfPiece )
+                {
+                        if ( rightToLeft )
+                        {
+                                blit( oldPicture, screen, pieceX + x, 0, pieceX, 0, widthOfPiece - x, isomot::ScreenHeight );
+                                blit( newPicture, screen, pieceX, 0, pieceX + widthOfPiece - x, 0, x, isomot::ScreenHeight );
+                        }
+                        else
+                        {
+                                blit( newPicture, screen, pieceX + widthOfPiece - x, 0, pieceX, 0, x, isomot::ScreenHeight );
+                                blit( oldPicture, screen, pieceX, 0, pieceX + x, 0, widthOfPiece - x, isomot::ScreenHeight );
+                        }
+                }
+
+                sleep( 4 );
+        }
+
+        destroy_bitmap( oldPicture );
+}
+
+/* static */
+void Screen::barWipeHorizontally( Screen* oldScreen, Screen* newScreen, bool rightToLeft )
+{
+        if ( oldScreen == 0 || newScreen == 0 ||
+                oldScreen == newScreen || newScreen->imageOfScreen == 0 ) return ;
+
+        newScreen->redraw ();
+        BITMAP * newPicture = newScreen->imageOfScreen ;
+
+        unsigned int pieces = isomot::ScreenWidth >> 6 ;
+        unsigned int widthOfPiece = isomot::ScreenWidth / pieces ;
+
+        unsigned int step = 1;
+        for ( unsigned int x = step ; x < widthOfPiece ; x += step )
+        {
+                for ( unsigned int pieceX = 0 ; pieceX < isomot::ScreenWidth ; pieceX += widthOfPiece )
+                {
+                        if ( rightToLeft )
+                        {
+                                blit( newPicture, screen, pieceX + widthOfPiece - x, 0, pieceX + widthOfPiece - x, 0, x, isomot::ScreenHeight );
+                        }
+                        else
+                        {
+                                blit( newPicture, screen, pieceX, 0, pieceX, 0, x, isomot::ScreenHeight );
+                        }
+                }
+
+                sleep( 4 );
+        }
 }
 
 }

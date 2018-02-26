@@ -13,8 +13,6 @@
 
 #include "Action.hpp"
 
-#include <allegro.h>
-
 
 namespace gui
 {
@@ -36,7 +34,7 @@ public:
          * Constructor
          * @param picture Image where to draw
          */
-        CreateVideoMenu( BITMAP* picture ) ;
+        CreateVideoMenu( BITMAP * picture ) ;
 
         std::string getNameOfAction () const {  return "CreateVideoMenu" ;  }
 
@@ -50,8 +48,6 @@ protected:
 private:
 
         void updateLabels () ;
-
-        BITMAP * where ;
 
         MenuWithValues * listOfOptions ;
 

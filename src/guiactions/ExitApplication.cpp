@@ -1,3 +1,4 @@
+
 #include "ExitApplication.hpp"
 #include "GuiManager.hpp"
 #include "ConfigurationManager.hpp"
@@ -6,7 +7,7 @@ using gui::ExitApplication;
 
 
 ExitApplication::ExitApplication( )
-: Action( )
+        : Action( 0 )
 {
 
 }

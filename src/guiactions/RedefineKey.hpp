@@ -11,11 +11,6 @@
 #ifndef RedefineKey_hpp_
 #define RedefineKey_hpp_
 
-#include <string>
-#include <allegro.h>
-#ifdef __WIN32
-  #include <winalleg.h>
-#endif
 #include "Action.hpp"
 
 

@@ -12,6 +12,7 @@
 #define Action_hpp_
 
 #include <string>
+#include <allegro.h>
 
 
 namespace gui
@@ -22,7 +23,7 @@ class Action
 
 public:
 
-        Action( ) : begin( false ), done( false ) { }
+        Action( BITMAP * picture ) : whereToDraw( picture ), begin( false ), done( false ) { }
 
         virtual ~Action( ) { }
 
@@ -34,11 +35,15 @@ public:
 
         bool isDone() {  return done ;  }
 
+        BITMAP * getWhereToDraw () const {  return whereToDraw ;  }
+
 protected:
 
         virtual void doAction () = 0 ;
 
 private:
+
+        BITMAP * whereToDraw ;
 
         bool begin ;
 

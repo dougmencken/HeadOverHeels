@@ -11,7 +11,6 @@
 #ifndef ShowAuthors_hpp_
 #define ShowAuthors_hpp_
 
-#include <allegro.h>
 #include "Action.hpp"
 
 
@@ -30,7 +29,7 @@ class ShowAuthors : public Action
 
 public:
 
-        ShowAuthors( BITMAP* picture ) ;
+        ShowAuthors( BITMAP * picture ) ;
 
         std::string getNameOfAction () const {  return "ShowAuthors" ;  }
 
@@ -39,8 +38,6 @@ protected:
         virtual void doAction () ;
 
 private:
-
-        BITMAP * where ;
 
         TextField * linesOfCredits ;
 

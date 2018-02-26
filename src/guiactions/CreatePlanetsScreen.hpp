@@ -11,8 +11,8 @@
 #ifndef CreatePlanetsScreen_hpp_
 #define CreatePlanetsScreen_hpp_
 
-#include <allegro.h>
 #include "Action.hpp"
+
 
 namespace gui
 {
@@ -55,11 +55,6 @@ protected:
         virtual void doAction () ;
 
 private:
-
-        /**
-         * Where graphical interface draws
-         */
-        BITMAP* where ;
 
         /**
          * Indica si hay una partida en curso o comienza una nueva

@@ -11,7 +11,6 @@
 #ifndef ContinueGame_h_
 #define ContinueGame_h_
 
-#include <allegro.h>
 #include "Action.hpp"
 
 
@@ -40,8 +39,6 @@ protected:
         virtual void doAction () ;
 
 private:
-
-        BITMAP* where ;
 
         /**
          * Indica si hay una partida en curso o comienza una nueva

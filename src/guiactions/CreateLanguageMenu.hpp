@@ -11,9 +11,7 @@
 #ifndef CreateLanguageMenu_hpp_
 #define CreateLanguageMenu_hpp_
 
-#include <string>
 #include <list>
-#include <allegro.h>
 #include "Action.hpp"
 #include "csxml/LanguageXML.hpp"
 
@@ -36,7 +34,7 @@ public:
          * Constructor
          * @param picture Imagen donde se dibujará la interfaz gráfica
          */
-        CreateLanguageMenu( BITMAP* picture ) ;
+        CreateLanguageMenu( BITMAP * picture ) ;
 
         ~CreateLanguageMenu( ) ;
 
@@ -57,12 +55,10 @@ private:
          */
         void parse ( const std::string& fileName ) ;
 
-        BITMAP* where ;
-
         /**
          * Strings for interface, each element contains its unique identifier and string of text
          */
-        std::list< LanguageText* > texts ;
+        std::list < LanguageText * > texts ;
 
 };
 

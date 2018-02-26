@@ -36,22 +36,21 @@ public:
 
         /**
          * Constructor
-         * @param picture Where to draw this screen
          * @param action Action for which this screen is created
          */
-        Screen( BITMAP * picture, Action * action ) ;
+        Screen( Action * action ) ;
 
         virtual ~Screen( ) ;
 
         /**
-         * Dibuja todo el contenido de la pantalla
-         * @param where Imagen donde será dibujada
+         * Draw parts of screen
          */
         void draw ( BITMAP* where ) ;
 
-        /**
-         * Responde a la pulsación de una tecla
-         */
+        void redraw () ;
+
+        void drawOnGlobalScreen () ;
+
         void handleKey ( int key ) ;
 
         void addWidget ( Widget* widget ) ;
@@ -68,21 +67,29 @@ public:
 
         void placeHeadAndHeels ( bool imagesToo, bool copyrightsToo ) ;
 
+        static void refreshBackground () ;
+
         static BITMAP * loadPicture ( const char * nameOfPicture ) ;
 
         static std::vector < BITMAP * > loadAnimation ( const char * nameOfGif ) ;
 
+        static void scrollHorizontally ( Screen * oldScreen, Screen * newScreen, bool rightToLeft ) ;
+
+        static void wipeHorizontally ( Screen * oldScreen, Screen * newScreen, bool rightToLeft ) ;
+
+        static void barScrollHorizontally ( Screen * oldScreen, Screen * newScreen, bool rightToLeft ) ;
+
+        static void barWipeHorizontally ( Screen * oldScreen, Screen * newScreen, bool rightToLeft ) ;
+
 private:
 
-        Color * backgroundColor ;
-
         /**
-         * Imagen donde se volcarán la pantalla
+         * Image of this screen
          */
-        BITMAP * where ;
+        BITMAP * imageOfScreen ;
 
         /**
-         * Elementos de la interfaz de usuario contenidos en la pantalla
+         * Elements of interface to draw on screen
          */
         std::list < Widget * > widgets ;
 
@@ -104,8 +111,6 @@ protected:
         static BITMAP * backgroundPicture ;
 
 public:
-
-        static void refreshBackground () ;
 
         void refreshPicturesOfHeadAndHeels () ;
 

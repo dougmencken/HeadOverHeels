@@ -20,8 +20,7 @@ using gui::SelectLanguage;
 
 
 CreateLanguageMenu::CreateLanguageMenu( BITMAP* picture )
-: Action(),
-  where( picture )
+        : Action( picture )
 {
         // read list of languages available for this game
         this->parse( isomot::sharePath() + "text" + pathSeparator + "language.xml" );
@@ -34,13 +33,13 @@ CreateLanguageMenu::~CreateLanguageMenu( )
 
 void CreateLanguageMenu::doAction ()
 {
-        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this, this->where );
+        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this );
         if ( screen->countWidgets() > 0 )
         {
                 screen->freeWidgets();
         }
 
-        screen->setEscapeAction( new gui::CreateMainMenu( this->where ) );
+        screen->setEscapeAction( new gui::CreateMainMenu( getWhereToDraw() ) );
 
         Label* label = 0;
 
@@ -69,7 +68,7 @@ void CreateLanguageMenu::doAction ()
         for ( std::list< LanguageText * >::iterator i = this->texts.begin (); i != this->texts.end (); ++i )
         {
                 label = new Label( ( *i )->getText() );
-                label->setAction( new SelectLanguage( this->where, ( *i )->getId() ) );
+                label->setAction( new SelectLanguage( getWhereToDraw(), ( *i )->getId() ) );
 
                 menu->addOption( label );
 
@@ -82,7 +81,7 @@ void CreateLanguageMenu::doAction ()
         screen->addWidget( menu );
         screen->setKeyHandler( menu );
 
-        GuiManager::getInstance()->changeScreen( screen );
+        GuiManager::getInstance()->changeScreen( screen, true );
 }
 
 void CreateLanguageMenu::parse( const std::string& fileName )
@@ -108,7 +107,7 @@ void CreateLanguageMenu::parse( const std::string& fileName )
                         this->texts.push_back( lang );
                 }
         }
-        catch( const xml_schema::exception& e )
+        catch ( const xml_schema::exception& e )
         {
                 std::cerr << e << std::endl ;
         }

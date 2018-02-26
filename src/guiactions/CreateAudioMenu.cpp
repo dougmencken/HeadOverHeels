@@ -18,8 +18,7 @@ using isomot::SoundManager;
 
 
 CreateAudioMenu::CreateAudioMenu( BITMAP* picture ) :
-        Action(),
-        where( picture ),
+        Action( picture ),
         listOfOptions ( 0 ),
         labelEffects ( 0 ),
         labelMusic ( 0 ),
@@ -42,10 +41,10 @@ void CreateAudioMenu::doAction ()
 
         std::stringstream ss;
 
-        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this, this->where );
+        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this );
         if ( screen->countWidgets() == 0 )
         {
-                screen->setEscapeAction( new CreateMainMenu( this->where ) );
+                screen->setEscapeAction( new CreateMainMenu( getWhereToDraw() ) );
 
                 screen->placeHeadAndHeels( /* icons */ false, /* copyrights */ false );
 
@@ -92,7 +91,7 @@ void CreateAudioMenu::doAction ()
                 screen->setKeyHandler( listOfOptions );
         }
 
-        GuiManager::getInstance()->changeScreen( screen );
+        GuiManager::getInstance()->changeScreen( screen, true );
 
         clear_keybuf();
 

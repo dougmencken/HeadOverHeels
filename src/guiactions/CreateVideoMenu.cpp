@@ -15,8 +15,7 @@ using gui::CreateMenuOfGraphicSets ;
 
 
 CreateVideoMenu::CreateVideoMenu( BITMAP* picture ) :
-        Action(),
-        where( picture ),
+        Action( picture ),
         listOfOptions ( 0 ),
         labelFullscreen ( 0 ),
         labelDrawBackground ( 0 ),
@@ -27,7 +26,7 @@ CreateVideoMenu::CreateVideoMenu( BITMAP* picture ) :
 
 void CreateVideoMenu::doAction ()
 {
-        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this, this->where );
+        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this );
         if ( screen->countWidgets() == 0 )
         {
                 screen->placeHeadAndHeels( /* icons */ false, /* copyrights */ false );
@@ -47,7 +46,7 @@ void CreateVideoMenu::doAction ()
 
                 LanguageText* textGraphicSet = languageManager->findLanguageString( "graphic-set" );
                 this->labelGraphicSet = new Label( textGraphicSet->getText(), "regular", "yellow" );
-                labelGraphicSet->setAction( new CreateMenuOfGraphicSets( this->where, this ) );
+                labelGraphicSet->setAction( new CreateMenuOfGraphicSets( getWhereToDraw(), this ) );
 
                 this->listOfOptions = new MenuWithValues( ' ', 1 );
 
@@ -70,14 +69,14 @@ void CreateVideoMenu::doAction ()
                 updateLabels();
         }
 
-        screen->setEscapeAction( new CreateMainMenu( this->where ) );
+        screen->setEscapeAction( new CreateMainMenu( getWhereToDraw() ) );
 
         if ( screen->getKeyHandler() == 0 )
         {
                 screen->setKeyHandler( listOfOptions );
         }
 
-        gui::GuiManager::getInstance()->changeScreen( screen );
+        gui::GuiManager::getInstance()->changeScreen( screen, true );
 
         clear_keybuf();
 

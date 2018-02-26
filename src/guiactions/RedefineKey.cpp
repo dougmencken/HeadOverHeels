@@ -14,7 +14,7 @@ using isomot::InputManager;
 
 
 RedefineKey::RedefineKey( MenuWithValues* menu, std::string name )
-        : Action(),
+        : Action( 0 ),
         menu( menu ),
         nameOfKey( name )
 {

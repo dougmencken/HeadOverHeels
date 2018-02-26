@@ -13,8 +13,7 @@ using gui::CreateMenuOfGraphicSets ;
 
 
 CreateMenuOfGraphicSets::CreateMenuOfGraphicSets( BITMAP* picture, Action* previous ) :
-        Action( ),
-        where( picture ),
+        Action( picture ),
         actionOnEscape( previous ),
         menuOfGraphicSets( 0 )
 {
@@ -37,7 +36,7 @@ void CreateMenuOfGraphicSets::doAction ()
 {
         const size_t positionOfSecondColumn = 18;
 
-        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this, this->where );
+        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this );
 
         if ( screen->countWidgets() == 0 )
         {
@@ -80,7 +79,7 @@ void CreateMenuOfGraphicSets::doAction ()
                 }
         }
 
-        gui::GuiManager::getInstance()->changeScreen( screen );
+        gui::GuiManager::getInstance()->changeScreen( screen, true );
 
         clear_keybuf();
 

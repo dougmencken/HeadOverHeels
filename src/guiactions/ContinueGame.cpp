@@ -12,8 +12,8 @@ using isomot::SoundManager;
 
 
 ContinueGame::ContinueGame( BITMAP* picture, bool gameInProgress )
-: where( picture ),
-  gameInProgress( gameInProgress )
+        : Action( picture )
+        , gameInProgress( gameInProgress )
 {
 
 }
@@ -30,7 +30,7 @@ void ContinueGame::doAction ()
         // liberado, la pantalla para grabar la partida o la pantalla de fin del juego
         if ( why == isomot::FreePlanet )
         {
-                CreatePlanetsScreen * planetsAction = new CreatePlanetsScreen( this->where, true );
+                CreatePlanetsScreen * planetsAction = new CreatePlanetsScreen( getWhereToDraw(), true );
 
                 if ( gameManager->isFreePlanet( "blacktooth" ) )
                         planetsAction->liberateBlacktooth();
@@ -51,7 +51,7 @@ void ContinueGame::doAction ()
         }
         else if ( why == isomot::SaveGame )
         {
-                CreateListOfSavedGames * listOfGamesAction = new CreateListOfSavedGames( this->where, false );
+                CreateListOfSavedGames * listOfGamesAction = new CreateListOfSavedGames( getWhereToDraw(), false );
 
                 listOfGamesAction->doIt ();
         }
@@ -59,7 +59,7 @@ void ContinueGame::doAction ()
         {
                 CreateEndScreen * endScreenAction =
                         new CreateEndScreen(
-                                this->where, gameManager->getVisitedRooms(), gameManager->countFreePlanets()
+                                getWhereToDraw(), gameManager->getVisitedRooms(), gameManager->countFreePlanets()
                         );
 
                 endScreenAction->doIt ();
@@ -68,7 +68,7 @@ void ContinueGame::doAction ()
         {
                 CreateCongratulationsScreen * congratulationsScreenAction =
                         new CreateCongratulationsScreen(
-                                this->where, gameManager->getVisitedRooms(), gameManager->countFreePlanets()
+                                getWhereToDraw(), gameManager->getVisitedRooms(), gameManager->countFreePlanets()
                         );
 
                 congratulationsScreenAction->doIt ();

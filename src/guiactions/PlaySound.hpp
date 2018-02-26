@@ -22,7 +22,7 @@ class PlaySound : public Action
 
 public:
 
-        PlaySound( isomot::ActivityOfItem what ) : Action( ) {  whichSound = what ;  }
+        PlaySound( isomot::ActivityOfItem what ) : Action( 0 ) {  whichSound = what ;  }
 
         virtual ~PlaySound( ) { }
 

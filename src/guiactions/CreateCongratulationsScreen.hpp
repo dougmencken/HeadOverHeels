@@ -11,7 +11,6 @@
 #ifndef CreateCongratulationsScreen_hpp_
 #define CreateCongratulationsScreen_hpp_
 
-#include <allegro.h>
 #include "Action.hpp"
 
 
@@ -47,11 +46,6 @@ protected:
         virtual void doAction () ;
 
 private:
-
-        /**
-         * Imagen donde se dibujará la interfaz gráfica
-         */
-        BITMAP * where ;
 
         /**
          * Número de salas visitadas

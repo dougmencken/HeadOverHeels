@@ -19,8 +19,7 @@ using gui::ContinueGame;
 
 
 CreateListOfSavedGames::CreateListOfSavedGames( BITMAP* picture, bool isLoadMenu )
-        : Action( )
-        , where( picture )
+        : Action( picture )
         , isMenuForLoad( isLoadMenu )
 {
 
@@ -28,7 +27,7 @@ CreateListOfSavedGames::CreateListOfSavedGames( BITMAP* picture, bool isLoadMenu
 
 void CreateListOfSavedGames::doAction ()
 {
-        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this, this->where );
+        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this );
         if ( screen->countWidgets() > 0 )
         {
                 screen->freeWidgets() ;
@@ -37,12 +36,12 @@ void CreateListOfSavedGames::doAction ()
         if ( isLoadMenu() )
         {
                 // return to main menu
-                screen->setEscapeAction( new CreateMainMenu( this->where ) );
+                screen->setEscapeAction( new CreateMainMenu( getWhereToDraw() ) );
         }
         else
         {
                 // return to play
-                screen->setEscapeAction( new ContinueGame( this->where, true ) );
+                screen->setEscapeAction( new ContinueGame( getWhereToDraw(), true ) );
         }
 
         screen->placeHeadAndHeels( /* icons */ true, /* copyrights */ false );
@@ -73,9 +72,9 @@ void CreateListOfSavedGames::doAction ()
                         Label* label = new Label( ss.str() );
 
                         if ( isLoadMenu() )
-                                label->setAction( new LoadGame( this->where, fileCount ) );
+                                label->setAction( new LoadGame( getWhereToDraw(), fileCount ) );
                         else
-                                label->setAction( new SaveGame( this->where, fileCount ) );
+                                label->setAction( new SaveGame( getWhereToDraw(), fileCount ) );
                                 // very funny to change to LoadGame here by the way to get many heads/heels, just try it
 
                         menu->addOption( label );
@@ -95,7 +94,7 @@ void CreateListOfSavedGames::doAction ()
                         else
                         {
                                 labelOfFree->changeColor( "orange" );
-                                labelOfFree->setAction( new SaveGame( this->where, fileCount ) );
+                                labelOfFree->setAction( new SaveGame( getWhereToDraw(), fileCount ) );
                         }
 
                         menu->addOption( labelOfFree );
@@ -105,7 +104,7 @@ void CreateListOfSavedGames::doAction ()
         screen->addWidget( menu );
         screen->setKeyHandler( menu );
 
-        GuiManager::getInstance()->changeScreen( screen );
+        GuiManager::getInstance()->changeScreen( screen, true );
 }
 
 void CreateListOfSavedGames::readSomeInfoFromGamefile( const std::string& fileName, short* rooms, short* planets )
