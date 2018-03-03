@@ -34,7 +34,7 @@ void ShowAuthors::doAction ()
         Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this );
         if ( screen->countWidgets() == 0 )
         {
-                LanguageText* langString = 0;
+                LanguageText* langString = nilPointer;
                 LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
 
                 langString = languageManager->findLanguageString( "credits-text" );
@@ -62,7 +62,7 @@ void ShowAuthors::doAction ()
 
         GuiManager::getInstance()->changeScreen( screen, true );
 
-        Picture* widgetForLoadingScreen = 0;
+        Picture* widgetForLoadingScreen = nilPointer;
 
         // move text up
 
@@ -121,10 +121,10 @@ void ShowAuthors::doAction ()
 
                 linesOfCredits->moveTo( linesOfCredits->getX(), yNow );
 
-                if ( yNow == heightOfWhereToDraw - heightOfCredits && widgetForLoadingScreen == 0 )
+                if ( yNow == heightOfWhereToDraw - heightOfCredits && widgetForLoadingScreen == nilPointer )
                 {
-                        BITMAP* loadingScreen = load_png( isomot::pathToFile( isomot::sharePath() + "loading-screen.png" ), 0 );
-                        if ( loadingScreen != 0 )
+                        BITMAP* loadingScreen = load_png( isomot::pathToFile( isomot::sharePath() + "loading-screen.png" ), nilPointer );
+                        if ( loadingScreen != nilPointer )
                         {
                                 widgetForLoadingScreen = new Picture(
                                                 ( getWhereToDraw()->w - loadingScreen->w ) >> 1, heightOfWhereToDraw,
@@ -134,14 +134,14 @@ void ShowAuthors::doAction ()
                                 screen->addWidget( widgetForLoadingScreen );
                         }
                 }
-                else if ( yNow < heightOfWhereToDraw - heightOfCredits && widgetForLoadingScreen != 0 )
+                else if ( yNow < heightOfWhereToDraw - heightOfCredits && widgetForLoadingScreen != nilPointer )
                 {
                         widgetForLoadingScreen->moveTo( widgetForLoadingScreen->getX(), yNow + heightOfCredits );
                 }
-                else if ( widgetForLoadingScreen != 0 )
+                else if ( widgetForLoadingScreen != nilPointer )
                 {
                         screen->removeWidget( widgetForLoadingScreen );
-                        widgetForLoadingScreen = 0;
+                        widgetForLoadingScreen = nilPointer;
                 }
 
                 GuiManager::getInstance()->redraw ();
@@ -153,7 +153,7 @@ void ShowAuthors::doAction ()
 
                 if ( ! ( keypressed() && key[ KEY_SPACE ] ) )
                 {
-                        sleep( 20 );
+                        milliSleep( 20 );
                 }
 
                 if ( keypressed() && key[ KEY_ESC ] )
@@ -163,9 +163,9 @@ void ShowAuthors::doAction ()
                 }
         }
 
-        if ( widgetForLoadingScreen != 0 )
+        if ( widgetForLoadingScreen != nilPointer )
         {
                 screen->removeWidget( widgetForLoadingScreen );
-                widgetForLoadingScreen = 0;
+                widgetForLoadingScreen = nilPointer;
         }
 }

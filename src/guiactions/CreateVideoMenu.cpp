@@ -16,10 +16,10 @@ using gui::CreateMenuOfGraphicSets ;
 
 CreateVideoMenu::CreateVideoMenu( BITMAP* picture ) :
         Action( picture ),
-        listOfOptions ( 0 ),
-        labelFullscreen ( 0 ),
-        labelDrawBackground ( 0 ),
-        labelGraphicSet ( 0 )
+        listOfOptions ( nilPointer ),
+        labelFullscreen ( nilPointer ),
+        labelDrawBackground ( nilPointer ),
+        labelGraphicSet ( nilPointer )
 {
 
 }
@@ -71,7 +71,7 @@ void CreateVideoMenu::doAction ()
 
         screen->setEscapeAction( new CreateMainMenu( getWhereToDraw() ) );
 
-        if ( screen->getKeyHandler() == 0 )
+        if ( screen->getKeyHandler() == nilPointer )
         {
                 screen->setKeyHandler( listOfOptions );
         }
@@ -129,7 +129,7 @@ void CreateVideoMenu::doAction ()
 
                         // no te comas la CPU
                         // do not eat the CPU
-                        sleep( 25 );
+                        milliSleep( 25 );
                 }
         }
 }

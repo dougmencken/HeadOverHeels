@@ -12,7 +12,7 @@
 namespace isomot
 {
 
-KindOfActivity * FallKindOfActivity::instance = 0;
+KindOfActivity * FallKindOfActivity::instance = nilPointer ;
 
 FallKindOfActivity::FallKindOfActivity( ) : KindOfActivity()
 {
@@ -26,7 +26,7 @@ FallKindOfActivity::~FallKindOfActivity( )
 
 KindOfActivity* FallKindOfActivity::getInstance()
 {
-        if ( instance == 0 )
+        if ( instance == nilPointer )
         {
                 instance = new FallKindOfActivity();
         }
@@ -64,7 +64,7 @@ bool FallKindOfActivity::fall( Behavior * behavior )
                         {
                                 Item* item = mediator->findItemById( id );
 
-                                if ( item != 0 )
+                                if ( item != nilPointer )
                                 {
                                         if ( dynamic_cast< PlayerItem * >( item ) && sender->isMortal() )
                                         {
@@ -141,7 +141,7 @@ bool FallKindOfActivity::fall( Behavior * behavior )
 
 void FallKindOfActivity::assignAnchor( FreeItem* freeItem, std::stack< int > items )
 {
-        if ( freeItem != 0 )
+        if ( freeItem != nilPointer )
         {
                 Mediator* mediator = freeItem->getMediator();
 
@@ -154,7 +154,7 @@ void FallKindOfActivity::assignAnchor( FreeItem* freeItem, std::stack< int > ite
                 //    harmless item before mortal item
                 //    item with higher spatial coordinates
 
-                Item* anchor = 0;
+                Item* anchor = nilPointer;
                 Item* oldAnchor = freeItem->getAnchor();
 
                 // search for anchor of this item
@@ -166,7 +166,7 @@ void FallKindOfActivity::assignAnchor( FreeItem* freeItem, std::stack< int > ite
                         count++ ;
 
                         // in case when item is already anchored
-                        if ( oldAnchor != 0 && item != 0 && oldAnchor->getId() == item->getId() )
+                        if ( oldAnchor != nilPointer && item != nilPointer && oldAnchor->getId() == item->getId() )
                         {
                                 anchor = oldAnchor;
                                 break;
@@ -214,7 +214,7 @@ void FallKindOfActivity::assignAnchor( FreeItem* freeItem, std::stack< int > ite
 
                 freeItem->setAnchor( anchor );
 
-                /* if ( anchor != 0 && anchor != oldAnchor )
+                /* if ( anchor != nilPointer && anchor != oldAnchor )
                 {
                         std::cout << "item \"" << anchor->getLabel() << "\" at" <<
                                         " x=" << anchor->getX() << " y=" << anchor->getY() << " z=" << anchor->getZ() <<

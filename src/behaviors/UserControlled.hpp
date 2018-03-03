@@ -150,47 +150,47 @@ protected:
        /**
         * Index of phase of jump
         */
-        int jumpIndex ;
+        unsigned int jumpIndex ;
 
        /**
         * Number of phases for normal jump
         */
-        int jumpFrames ;
+        unsigned int jumpFrames ;
 
        /**
         * Number of phases for long jump
         */
-        int highJumpFrames ;
+        unsigned int highJumpFrames ;
 
        /**
         * Number of steps to take when character moves automatically
         */
-        int automaticSteps ;
+        unsigned int automaticSteps ;
 
        /**
         * Number of steps that remains after entering room through door
         */
-        int automaticStepsThruDoor ;
+        unsigned int automaticStepsThruDoor ;
 
        /**
         * Number of steps at double speed
         */
-        int highSpeedSteps ;
+        unsigned int highSpeedSteps ;
 
        /**
         * Number of steps for character with immunity
         */
-        int shieldSteps ;
+        unsigned int shieldSteps ;
 
        /**
         * Frames of falling, one for each of north south west east
         */
-        int fallFrames[ 4 ] ;
+        unsigned int fallFrames[ 4 ] ;
 
        /**
         * Blank frame, used during teleportation
         */
-        int nullFrame ;
+        unsigned int nullFrame ;
 
        /**
         * Is there a fire from hooter in room
@@ -234,7 +234,7 @@ public:
        /**
         * Number of phases of jump
         */
-        int getJumpFrames () const {  return jumpFrames ;  }
+        unsigned int getJumpFrames () const {  return jumpFrames ;  }
 
         void setFireFromHooter ( bool isHere ) {  this->fireFromHooterIsPresent = isHere ;  }
 

@@ -7,13 +7,13 @@ using isomot::SampleData;
 using isomot::SoundData;
 using isomot::EqualSoundData;
 
-SoundManager* SoundManager::instance = 0;
+SoundManager* SoundManager::instance = nilPointer ;
 
 
 SoundManager::SoundManager( )
         : fileName( std::string() ),
-          oggPlayer( 0 ),
-          oggStream( 0 ),
+          oggPlayer( nilPointer ),
+          oggStream( nilPointer ),
           effectsVolume( 80 ),
           musicVolume( 75 )
 {
@@ -45,7 +45,7 @@ SoundManager::~SoundManager( )
 
 SoundManager* SoundManager::getInstance()
 {
-        if ( instance == 0 )
+        if ( instance == nilPointer )
         {
                 instance = new SoundManager();
         }
@@ -88,7 +88,7 @@ void SoundManager::play( const std::string& label, const ActivityOfItem& activit
 {
         SampleData* sampleData = this->findSample( label, activity );
 
-        if ( sampleData != 0 && sampleData->voice == -1 )
+        if ( sampleData != nilPointer && sampleData->voice == -1 )
         {
                 sampleData->voice = allocate_voice( sampleData->sample );
                 voice_set_volume( sampleData->voice, ( this->effectsVolume * 255 ) / 100 );
@@ -117,7 +117,7 @@ void SoundManager::stop( const std::string& label, const ActivityOfItem& activit
 {
         SampleData* sampleData = this->findSample( label, activity );
 
-        if ( sampleData != 0 )
+        if ( sampleData != nilPointer )
         {
                 stop_sample( sampleData->sample );
         }
@@ -151,15 +151,15 @@ void SoundManager::playOgg ( const std::string& fileName, bool loop )
                 this->oggStream = alogg_start_streaming( isomot::pathToFile( isomot::sharePath() + fileName ), lengthOfbuffer );
                 if ( this->oggStream )
                 {
-                        alogg_thread* oggThread = 0;
+                        alogg_thread* oggThread = nilPointer;
                         if ( loop )
                                 oggThread = alogg_create_thread_which_loops( this->oggStream, isomot::pathToFile( isomot::sharePath() + fileName ), lengthOfbuffer );
                         else
                                 oggThread = alogg_create_thread( this->oggStream );
 
-                        if ( oggThread != 0 )
+                        if ( oggThread != nilPointer )
                         {
-                                if ( this->oggPlayer != 0 )
+                                if ( this->oggPlayer != nilPointer )
                                         this->stopAnyOgg (); // it is playback of just single Ogg yet
                                                              // or previous oggPlayer will be lost
                                                              // and if it is the one which loops forever it would never ever end
@@ -183,7 +183,7 @@ void SoundManager::playOgg ( const std::string& fileName, bool loop )
 
 void SoundManager::stopAnyOgg ()
 {
-        if ( oggPlayer != 0 )
+        if ( oggPlayer != nilPointer )
         {
                 if ( oggPlayer->stop == 0 )
                 {
@@ -196,15 +196,15 @@ void SoundManager::stopAnyOgg ()
                         std::cout << "Ogg playback is off" << std::endl ;
                 }
 
-                oggPlayer = 0;
-                oggStream = 0;
+                oggPlayer = nilPointer;
+                oggStream = nilPointer;
                 oggPlaying.clear();
         }
 }
 
 void SoundManager::setVolumeOfMusic( unsigned int volume )
 {
-          this->musicVolume = volume == 0 ? 1 : volume;
+          this->musicVolume = ( volume == 0 ? 1 : volume );
           set_volume( ( this->musicVolume * 255 ) / 100, 0 );
 }
 
@@ -212,7 +212,7 @@ SampleData* SoundManager::findSample( const std::string& label, const ActivityOf
 {
         std::list< SoundData >::iterator i = std::find_if( soundData.begin(), soundData.end(), std::bind2nd( EqualSoundData(), label ) );
 
-        return i != soundData.end () ? ( *i ).find( this->translateActivityOfItemToString( activity ) ) : 0;
+        return i != soundData.end () ? ( *i ).find( this->translateActivityOfItemToString( activity ) ) : nilPointer;
 }
 
 std::string SoundManager::translateActivityOfItemToString ( const ActivityOfItem& activity )
@@ -359,7 +359,7 @@ void SoundData::addSound( const std::string& activity, const std::string& sample
 {
         SAMPLE* sample = load_sample( isomot::pathToFile( isomot::sharePath() + sampleFileName ) );
 
-        if ( sample != 0 ) {
+        if ( sample != nilPointer ) {
         #if defined( DEBUG ) && DEBUG
                 std::cout << "got sound \"" << sampleFileName << "\" for activity \"" << activity << "\" of \"" << label << "\"" << std::endl ;
         #endif
@@ -375,7 +375,7 @@ SampleData* SoundData::find( const std::string& event )
 {
         __gnu_cxx::hash_map< std::string, SampleData >::iterator i = this->table.find( event );
 
-        return i != this->table.end () ? ( &( i->second ) ) : 0;
+        return i != this->table.end () ? ( &( i->second ) ) : nilPointer;
 }
 
 bool EqualSoundData::operator()( const SoundData& soundData, const std::string& label ) const

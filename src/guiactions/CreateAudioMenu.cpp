@@ -19,10 +19,10 @@ using isomot::SoundManager;
 
 CreateAudioMenu::CreateAudioMenu( BITMAP* picture ) :
         Action( picture ),
-        listOfOptions ( 0 ),
-        labelEffects ( 0 ),
-        labelMusic ( 0 ),
-        playRoomTunes ( 0 )
+        listOfOptions ( nilPointer ),
+        labelEffects ( nilPointer ),
+        labelMusic ( nilPointer ),
+        playRoomTunes ( nilPointer )
 {
 
 }
@@ -86,7 +86,7 @@ void CreateAudioMenu::doAction ()
                 listOfOptions->setValueOf( playRoomTunes, isomot::GameManager::getInstance()->playMelodyOfScenery () ? yeah : nope );
         }
 
-        if ( screen->getKeyHandler() == 0 )
+        if ( screen->getKeyHandler() == nilPointer )
         {
                 screen->setKeyHandler( listOfOptions );
         }
@@ -168,8 +168,8 @@ void CreateAudioMenu::doAction ()
                         }
                 }
 
-                // No te comas la CPU
-                // Do not eat the CPU
-                sleep( 25 );
+                // no te comas la CPU
+                // do not eat the CPU
+                milliSleep( 25 );
         }
 }

@@ -8,7 +8,7 @@ using gui::SaveGame;
 using gui::ContinueGame;
 
 
-SaveGame::SaveGame( BITMAP* picture, int slot )
+SaveGame::SaveGame( BITMAP* picture, unsigned int slot )
         : Action( picture )
         , slot( slot )
 {
@@ -19,7 +19,7 @@ void SaveGame::doAction ()
 {
         clear_keybuf();
 
-        if ( slot != 0 )
+        if ( slot > 0 )
         {
                 std::stringstream ss;
                 isomot::GameManager* gameManager = isomot::GameManager::getInstance();

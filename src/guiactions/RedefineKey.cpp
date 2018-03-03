@@ -91,7 +91,7 @@ void RedefineKey::doAction ()
 
                 // no te comas la CPU
                 // do not eat the CPU
-                sleep( 20 );
+                milliSleep( 20 );
         }
 
         if ( InputManager::getInstance()->getUserKey( this->nameOfKey ) != 0 ) {

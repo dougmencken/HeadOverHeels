@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=headoverheels
+GenericName=Head over Heels
+Comment=Solid 3d Game
+Comment[hu]=Klasszikus szobás játék
+Exec=headoverheels
+Icon=headoverheels
+StartupNotify=false
+Type=Application
+Categories=Game;ActionGame;PuzzleGame

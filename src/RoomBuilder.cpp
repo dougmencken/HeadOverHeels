@@ -19,7 +19,7 @@ namespace isomot
 
 RoomBuilder::RoomBuilder( ItemDataManager* manager ) :
         itemDataManager( manager )
-      , room( 0 )
+      , room( nilPointer )
 {
 
 }
@@ -37,7 +37,7 @@ Room* RoomBuilder::buildRoom ( const std::string& fileName )
 
                 // create room with basic parameters like scenery, dimensions, existence of floor
                 this->room = new Room( roomXML->name(), roomXML->scenery(), roomXML->xTiles(), roomXML->yTiles(), roomXML->width(), roomXML->floorType() );
-                if ( this->room == 0 )
+                if ( this->room == nilPointer )
                 {
                         std::cerr << "I can't create room \"" << fileName << "\"" << std::endl ;
                         throw "I can't create room \"" + fileName + "\"";
@@ -153,7 +153,7 @@ Room* RoomBuilder::buildRoom ( const std::string& fileName )
                         else if ( ( *i ).type () == rxml::type::door )
                         {
                                 Door* door = this->buildDoor( *i );
-                                if ( door == 0 )
+                                if ( door == nilPointer )
                                 {
                                         std::ostringstream oss;
                                         oss << "oops, can’t build a door with coordinates " << ( *i ).x () << ", " << ( *i ).y () << ", " << ( *i ).z () ;
@@ -166,7 +166,7 @@ Room* RoomBuilder::buildRoom ( const std::string& fileName )
                         else if( ( *i ).type () == rxml::type::griditem )
                         {
                                 GridItem* gridItem = this->buildGridItem( *i );
-                                if ( gridItem == 0 )
+                                if ( gridItem == nilPointer )
                                 {
                                         std::ostringstream oss;
                                         oss << "oops, can’t build a grid item with coordinates " << ( *i ).x () << ", " << ( *i ).y () << ", " << ( *i ).z () ;
@@ -179,7 +179,7 @@ Room* RoomBuilder::buildRoom ( const std::string& fileName )
                         else if ( ( *i ).type () == rxml::type::freeitem )
                         {
                                 FreeItem* freeItem = this->buildFreeItem( *i );
-                                if ( freeItem == 0 )
+                                if ( freeItem == nilPointer )
                                 {
                                         std::ostringstream oss;
                                         oss << "free item with coordinates " << ( *i ).x () << ", " << ( *i ).y () << ", " << ( *i ).z () << " is absent";
@@ -254,10 +254,11 @@ PlayerItem* RoomBuilder::createPlayerInRoom( Room* room, bool justEntered,
         }
 
         ItemData* itemData = this->itemDataManager->findItemByLabel( nameOfPlayerToCreate );
-        PlayerItem* player = 0;
+        PlayerItem* player = nilPointer;
 
         // if it is found and has some lives left, place it in room
-        if ( ( nameOfPlayerToCreate == "headoverheels" || nameOfPlayerToCreate == "head" || nameOfPlayerToCreate == "heels" ) && itemData != 0 )
+        if ( ( nameOfPlayerToCreate == "headoverheels" || nameOfPlayerToCreate == "head" || nameOfPlayerToCreate == "heels" )
+                && itemData != nilPointer )
         {
                 if ( gameManager->getLives( nameOfPlayerToCreate ) > 0 )
                 {
@@ -296,10 +297,10 @@ PlayerItem* RoomBuilder::createPlayerInRoom( Room* room, bool justEntered,
 
 FloorTile* RoomBuilder::buildFloorTile( const rxml::tile& tile, const char* gfxPrefix )
 {
-        BITMAP* picture = load_png( isomot::pathToFile( isomot::sharePath() + gfxPrefix + pathSeparator + tile.picture() ), 0 );
-        if ( picture == 0 ) {
+        BITMAP* picture = load_png( isomot::pathToFile( isomot::sharePath() + gfxPrefix + pathSeparator + tile.picture() ), nilPointer );
+        if ( picture == nilPointer ) {
                 std::cerr << "picture \"" << tile.picture() << "\" at \"" << gfxPrefix << "\" is absent" << std::endl ;
-                return 0;
+                return nilPointer;
         }
 
         int column = room->getTilesX() * tile.y() + tile.x();
@@ -309,10 +310,10 @@ FloorTile* RoomBuilder::buildFloorTile( const rxml::tile& tile, const char* gfxP
 
 Wall* RoomBuilder::buildWall( const rxml::wall& wall, const char* gfxPrefix )
 {
-        BITMAP* picture = load_png( isomot::pathToFile( isomot::sharePath() + gfxPrefix + pathSeparator + wall.picture() ), 0 );
-        if ( picture == 0 ) {
+        BITMAP* picture = load_png( isomot::pathToFile( isomot::sharePath() + gfxPrefix + pathSeparator + wall.picture() ), nilPointer );
+        if ( picture == nilPointer ) {
                 std::cerr << "picture \"" << wall.picture() << "\" at \"" << gfxPrefix << "\" is absent" << std::endl ;
-                return 0;
+                return nilPointer;
         }
 
         return new Wall( wall.axis() == rxml::axis::x ? true : false, wall.index(), picture );
@@ -320,11 +321,11 @@ Wall* RoomBuilder::buildWall( const rxml::wall& wall, const char* gfxPrefix )
 
 GridItem* RoomBuilder::buildGridItem( const rxml::item& item )
 {
-        GridItem* gridItem = 0;
+        GridItem* gridItem = nilPointer;
         ItemData* itemData = this->itemDataManager->findItemByLabel( item.label () );
 
         // when found place item in room
-        if ( itemData != 0 )
+        if ( itemData != nilPointer )
         {
                 // deal with difference between position from file and position in room
                 gridItem = new GridItem( itemData, item.x(), item.y(), ( item.z() > Top ? item.z() * LayerHeight : Top ),
@@ -344,7 +345,7 @@ GridItem* RoomBuilder::buildGridItem( const rxml::item& item )
                 }
                 else
                 {
-                        gridItem->assignBehavior( behaviorOfItem, 0 );
+                        gridItem->assignBehavior( behaviorOfItem, nilPointer );
                 }
         }
 
@@ -353,12 +354,12 @@ GridItem* RoomBuilder::buildGridItem( const rxml::item& item )
 
 FreeItem* RoomBuilder::buildFreeItem( const rxml::item& item )
 {
-        FreeItem* freeItem = 0;
+        FreeItem* freeItem = nilPointer;
 
         ItemData* itemData = this->itemDataManager->findItemByLabel( item.label () );
 
         // if item is here, place it in room
-        if ( itemData != 0 )
+        if ( itemData != nilPointer )
         {
                 // in free coordinates
                 int fx = item.x() * room->getSizeOfOneTile() + ( ( room->getSizeOfOneTile() - itemData->getWidthX() ) >> 1 );
@@ -416,7 +417,7 @@ FreeItem* RoomBuilder::buildFreeItem( const rxml::item& item )
                         }
                         else
                         {
-                                freeItem->assignBehavior( behaviorOfItem, 0 );
+                                freeItem->assignBehavior( behaviorOfItem, nilPointer );
                         }
                 }
         }

@@ -96,7 +96,6 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			gui/ConfigurationManager.hpp \
 			gui/Font.cpp \
 			gui/Font.hpp \
-			gui/Gui.cpp \
 			gui/Gui.hpp \
 			gui/GuiManager.cpp \
 			gui/GuiManager.hpp \

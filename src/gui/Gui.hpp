@@ -12,19 +12,10 @@
 #define Gui_hpp_
 
 #include <string>
-#include <allegro.h>
-#ifdef __WIN32
-  #include <winalleg.h>
-#endif
 
 
 namespace gui
 {
-
-/**
- * Pause subprocess for a given period of time in milliseconds
- */
-void sleep ( unsigned long miliseconds ) ;
 
 /*
  * moves the iterator to next unicode character in the string, returns number of bytes skipped

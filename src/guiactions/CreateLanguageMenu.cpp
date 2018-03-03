@@ -41,7 +41,7 @@ void CreateLanguageMenu::doAction ()
 
         screen->setEscapeAction( new gui::CreateMainMenu( getWhereToDraw() ) );
 
-        Label* label = 0;
+        Label* label = nilPointer;
 
         label = new Label( "Head", "big", "yellow" );
         label->moveTo( 200, 24 );
@@ -72,7 +72,7 @@ void CreateLanguageMenu::doAction ()
 
                 menu->addOption( label );
 
-                if ( ( language.empty() && i == this->texts.begin() ) || language.compare( ( *i )->getId() ) == 0 )
+                if ( ( language.empty() && i == this->texts.begin() ) || language == ( *i )->getId() )
                 {
                         menu->setActiveOption( label );
                 }

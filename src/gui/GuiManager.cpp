@@ -28,12 +28,12 @@ using isomot::ScreenWidth;
 using isomot::ScreenHeight;
 
 
-GuiManager* GuiManager::instance = 0;
+GuiManager* GuiManager::instance = nilPointer ;
 
 GuiManager::GuiManager( ) :
-        screen( 0 ),
+        screen( nilPointer ),
         language( "" ),
-        languageManager( 0 ),
+        languageManager( nilPointer ),
         active( true ),
         atFullScreen( false ),
         preferencesRead( false )
@@ -52,25 +52,36 @@ GuiManager::GuiManager( ) :
 
         set_window_title ( nameOfWindow.c_str () );
 
-        std::string pathToFont = isomot::sharePath();
-
         // create fonts to use in game
 
-        addFont( new Font( "white.regular", pathToFont + "font.png", Color::whiteColor() ) );
-        addFont( new Font( "white.big", pathToFont + "font.png", Color::whiteColor(), true ) );
+        std::string nameOfFontFile = isomot::sharePath() + "font.png" ;
+        std::cout << "reading from file \"" << nameOfFontFile << "\" to create fonts used in game" << std::endl ;
 
-        addFont( new Font( "orange.regular", pathToFont + "font.png", Color::orangeColor() ) );
-        addFont( new Font( "cyan.regular", pathToFont + "font.png", Color::cyanColor() ) );
-        addFont( new Font( "yellow.regular", pathToFont + "font.png", Color::yellowColor() ) );
+        BITMAP * pictureOfFont = load_png( isomot::pathToFile( nameOfFontFile.c_str () ), nilPointer );
+        if ( pictureOfFont != nilPointer )
+        {
+                addFont( new Font( "white.regular", pictureOfFont, Color::whiteColor() ) );
+                addFont( new Font( "white.big", pictureOfFont, Color::whiteColor(), true ) );
 
-        addFont( new Font( "orange.big", pathToFont + "font.png", Color::orangeColor(), true ) );
-        addFont( new Font( "cyan.big", pathToFont + "font.png", Color::cyanColor(), true ) );
-        addFont( new Font( "yellow.big", pathToFont + "font.png", Color::yellowColor(), true ) );
+                addFont( new Font( "orange.regular", pictureOfFont, Color::orangeColor() ) );
+                addFont( new Font( "cyan.regular", pictureOfFont, Color::cyanColor() ) );
+                addFont( new Font( "yellow.regular", pictureOfFont, Color::yellowColor() ) );
 
-        addFont( new Font( "green.regular", pathToFont + "font.png", Color::greenColor(), false ) );
-        addFont( new Font( "green.big", pathToFont + "font.png", Color::greenColor(), true ) );
-        addFont( new Font( "magenta.regular", pathToFont + "font.png", Color::magentaColor(), false ) );
-        addFont( new Font( "magenta.big", pathToFont + "font.png", Color::magentaColor(), true ) );
+                addFont( new Font( "orange.big", pictureOfFont, Color::orangeColor(), true ) );
+                addFont( new Font( "cyan.big", pictureOfFont, Color::cyanColor(), true ) );
+                addFont( new Font( "yellow.big", pictureOfFont, Color::yellowColor(), true ) );
+
+                addFont( new Font( "green.regular", pictureOfFont, Color::greenColor(), false ) );
+                addFont( new Font( "green.big", pictureOfFont, Color::greenColor(), true ) );
+                addFont( new Font( "magenta.regular", pictureOfFont, Color::magentaColor(), false ) );
+                addFont( new Font( "magenta.big", pictureOfFont, Color::magentaColor(), true ) );
+
+                destroy_bitmap( pictureOfFont );
+        }
+        else
+        {
+                std::cerr << "oops, can’t get letters of fonts from file \"" << nameOfFontFile << "\"" << std::endl ;
+        }
 
         // create image to draw interface
         this->picture = create_bitmap_ex( 32, ScreenWidth, ScreenHeight );
@@ -94,7 +105,7 @@ GuiManager::~GuiManager( )
 
 GuiManager* GuiManager::getInstance ()
 {
-        if ( instance == 0 )
+        if ( instance == nilPointer )
         {
                 instance = new GuiManager();
                 instance->readPreferences ();
@@ -111,7 +122,7 @@ void GuiManager::readPreferences ()
         {
                 preferencesRead = configurationManager->read() ;
 
-                if ( ! preferencesRead && instance != 0 )
+                if ( ! preferencesRead && instance != nilPointer )
                 {
                         instance->setLanguage( "en_US" );
                 }
@@ -134,13 +145,13 @@ void GuiManager::begin ()
                         this->screen->handleKey( readkey() );
                 }
 
-                sleep( 30 );
+                milliSleep( 30 );
         }
 }
 
 void GuiManager::changeScreen( Screen* newScreen, bool dive )
 {
-        if ( newScreen == 0 ) return ;
+        if ( newScreen == nilPointer ) return ;
 
 # if  defined( DEBUG_GUI )  &&  DEBUG_GUI
 
@@ -166,7 +177,7 @@ void GuiManager::changeScreen( Screen* newScreen, bool dive )
                 Action* escape = screen->getEscapeAction () ;
                 fprintf( stdout, ". previous screen was for action \" %s \" with escape action \" %s \"\n",
                                  action->getNameOfAction().c_str (),
-                                 ( escape != 0 ? escape->getNameOfAction().c_str () : "none" ) );
+                                 ( escape != nilPointer ? escape->getNameOfAction().c_str () : "none" ) );
         }
 
         if ( newScreen )
@@ -175,7 +186,7 @@ void GuiManager::changeScreen( Screen* newScreen, bool dive )
                 Action* escapeOfNewScreen = newScreen->getEscapeAction () ;
                 fprintf( stdout, ". new screen is for action \" %s \" with escape action \" %s \"\n",
                                  actionOfNewScreen->getNameOfAction().c_str (),
-                                 ( escapeOfNewScreen != 0 ? escapeOfNewScreen->getNameOfAction().c_str () : "none" )
+                                 ( escapeOfNewScreen != nilPointer ? escapeOfNewScreen->getNameOfAction().c_str () : "none" )
                 ) ;
         }
 
@@ -196,10 +207,10 @@ void GuiManager::changeScreen( Screen* newScreen, bool dive )
 
 Screen * GuiManager::findOrCreateScreenForAction ( Action* action )
 {
-        if ( action == 0 )
+        if ( action == nilPointer )
         {
                 std::cerr << "screen for nil action is nil screen" << std::endl ;
-                return 0 ;
+                return nilPointer ;
         }
 
         std::string nameOfAction = action->getNameOfAction() ;
@@ -238,7 +249,7 @@ void GuiManager::refreshScreens ()
 
 void GuiManager::redraw()
 {
-        if ( ( this->active ) && ( this->screen != 0 ) )
+        if ( ( this->active ) && ( this->screen != nilPointer ) )
         {
                 screen->draw( this->picture );
         }
@@ -281,16 +292,16 @@ void GuiManager::toggleFullScreenVideo ()
         this->atFullScreen = ! this->atFullScreen ;
 
         fprintf( stdout, "video is now %s\n", ( this->atFullScreen ? "at full screen" : "in window" ) );
-        sleep( 80 );
+        milliSleep( 80 );
         redraw ();
 }
 
 void GuiManager::assignLanguage( const std::string& language )
 {
-        if ( this->languageManager != 0 )
+        if ( this->languageManager != nilPointer )
         {
                 delete this->languageManager;
-                this->languageManager = 0;
+                this->languageManager = nilPointer;
         }
 
         fprintf( stdout, "language \"%s\"\n", language.c_str () );
@@ -308,5 +319,5 @@ Font* GuiManager::findFontByFamilyAndColor ( const std::string& family, const st
                 }
         }
 
-        return 0;
+        return nilPointer ;
 }

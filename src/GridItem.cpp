@@ -48,10 +48,10 @@ void GridItem::draw( BITMAP* where )
 
 void GridItem::binProcessedImage()
 {
-        if ( this->processedImage )
+        if ( this->processedImage != nilPointer )
         {
                 destroy_bitmap( this->processedImage );
-                this->processedImage = 0;
+                this->processedImage = nilPointer;
         }
 }
 
@@ -59,7 +59,7 @@ void GridItem::changeImage( BITMAP* newImage )
 {
         // when there's no image for this item, just assign it
         // such case usually happens during construction of the item
-        if ( this->rawImage == 0 )
+        if ( this->rawImage == nilPointer )
         {
                 this->rawImage = newImage;
         }
@@ -122,10 +122,10 @@ void GridItem::requestCastShadow( int column )
                 mediator->castShadowOnGridItem( this );
 
                 // bin already shaded image
-                if ( this->myShady != AlreadyShady && this->processedImage )
+                if ( this->myShady != AlreadyShady && this->processedImage != nilPointer )
                 {
                         destroy_bitmap( this->processedImage );
-                        this->processedImage = 0;
+                        this->processedImage = nilPointer;
                 }
 
                 // to reshade at next cycle

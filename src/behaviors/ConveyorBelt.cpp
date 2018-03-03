@@ -58,9 +58,9 @@ bool ConveyorBelt::update ()
                                                         FreeItem* topItem = dynamic_cast< FreeItem * >( mediator->findItemById( top ) );
 
                                                         // is it item with behavior
-                                                        if ( topItem != 0 && topItem->getBehavior() != 0 )
+                                                        if ( topItem != nilPointer && topItem->getBehavior() != nilPointer )
                                                         {
-                                                                if ( topItem->getAnchor() == 0 || item->getId() == topItem->getAnchor()->getId() )
+                                                                if ( topItem->getAnchor() == nilPointer || item->getId() == topItem->getAnchor()->getId() )
                                                                 {
                                                                         if ( item->getOrientation().toString() == "south" ) {
                                                                                 if ( topItem->getBehavior()->getActivityOfItem() != RegularJump && topItem->getBehavior()->getActivityOfItem() != HighJump ) {

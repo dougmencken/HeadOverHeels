@@ -5,7 +5,7 @@
 using isomot::InputManager;
 
 
-InputManager* InputManager::instance = 0 ;
+InputManager* InputManager::instance = nilPointer ;
 
 const std::string InputManager::namesOfKeys[ ] =
 
@@ -44,7 +44,7 @@ InputManager::~InputManager()
 
 InputManager* InputManager::getInstance()
 {
-        if ( instance == 0 )
+        if ( instance == nilPointer )
         {
                 instance = new InputManager();
         }
@@ -117,5 +117,5 @@ bool InputManager::pause()
 
 void InputManager::noRepeat( const std::string& nameOfKey )
 {
-        key[ getUserKey( nameOfKey ) ] = 0;
+        key[ getUserKey( nameOfKey ) ] = false;
 }

@@ -59,10 +59,6 @@ public:
 
         ~SoundManager( ) ;
 
-        /**
-         * Único objeto de esta clase para toda la aplicación
-         * @return Un puntero al objeto único
-         */
         static SoundManager* getInstance () ;
 
         /**
@@ -108,7 +104,7 @@ public:
          * @param fileName Nombre del archivo Ogg
          * @return true si está sonando o false en caso contrario
          */
-        bool isPlayingOgg ( const std::string& fileName ) {  return this->oggPlaying.compare( fileName ) == 0 && oggPlayer && oggPlayer->alive != 0 ;  }
+        bool isPlayingOgg ( const std::string& fileName ) {  return this->oggPlaying == fileName && oggPlayer != nilPointer && oggPlayer->alive != 0 ;  }
 
 private:
 
@@ -129,9 +125,6 @@ private:
 
 private:
 
-        /**
-         * Único objeto de esta clase para toda la aplicación
-         */
         static SoundManager* instance ;
 
         /**

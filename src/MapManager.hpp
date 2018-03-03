@@ -37,8 +37,7 @@ public:
 
         /**
          * Constructor
-         * @param isomot El motor isométrico
-         * @param fileName Nombre del archivo XML que contiene los datos del mapa
+         * @param fileName Name of XML file with data of game’s map
          */
         MapManager( Isomot * isomot, const std::string& fileName ) ;
 
@@ -67,7 +66,6 @@ public:
 
         /**
          * Create room by data from file
-         * @return La sala creada ó 0 si no se pudo construir
          */
         Room * createRoom ( const std::string& fileName ) ;
 
@@ -105,7 +103,7 @@ public:
         /**
          * Look for room in list of created rooms
          * @param room name of file for room
-         * @return found room or 0 if it’s absent
+         * @return found room or nil if it’s absent
          */
         Room * findRoom ( const std::string& room ) ;
 
@@ -140,7 +138,7 @@ public:
         void setActiveRoom ( Room * newRoom ) {  activeRoom = newRoom ;  }
 
         /**
-         * @return room or 0 if there’re no more players
+         * @return room or nil if there’re no more players
          */
         Room * getRoomOfInactivePlayer () ;
 

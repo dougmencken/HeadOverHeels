@@ -67,62 +67,58 @@ public:
         std::string findNameOfKeyByCode ( int scancode ) ;
 
        /**
-        * El usuario está moviendo al jugador a la izquierda
-        * @return true si pulsa la tecla indicada o mueve la palanca del joystick en ese sentido
+        * Move character to the north
+        * @return true if user types this key or moves joystick there
         */
         bool movenorth () ;
 
        /**
-        * El usuario está moviendo al jugador a la derecha
-        * @return true si pulsa la tecla indicada o mueve la palanca del joystick en ese sentido
+        * Move character to the south
+        * @return true if user types this key or moves joystick there
         */
         bool movesouth () ;
 
        /**
-        * El usuario está moviendo al jugador arriba
-        * @return true si pulsa la tecla indicada o mueve la palanca del joystick en ese sentido
+        * Move character to the east
+        * @return true if user types this key or moves joystick there
         */
         bool moveeast () ;
 
        /**
-        * El usuario está moviendo al jugador abajo
-        * @return true si pulsa la tecla indicada o mueve la palanca del joystick en ese sentido
+        * Move character to the west
+        * @return true if user types this key or moves joystick there
         */
         bool movewest () ;
 
        /**
-        * El usuario está cogiendo o dejando algún objeto
-        * @return true si pulsa la tecla o el botón indicado
+        * Take or drop some object
+        * @return true if user types this key or joystick button
         */
         bool take () ;
 
        /**
-        * El usuario está saltando
-        * @return true si pulsa la tecla o el botón indicado
+        * Character jumps
+        * @return true if user types this key or joystick button
         */
         bool jump () ;
 
+        bool takeAndJump () ;
+
        /**
-        * El usuario está disparando
-        * @return true si pulsa la tecla o el botón indicado
+        * Release doughnut
+        * @return true if user types this key or joystick button
         */
         bool doughnut () ;
 
        /**
-        * El usuario está cogiendo o dejando algún objeto y saltando
-        * @return true si pulsa la tecla o el botón indicado
-        */
-        bool takeAndJump () ;
-
-       /**
-        * El usuario está cogiendo cambiando de personaje
-        * @return true si pulsa la tecla o el botón indicado
+        * Change characters
+        * @return true if user types this key or joystick button
         */
         bool swap () ;
 
        /**
-        * El usuario está parando el juego
-        * @return true si pulsa la tecla o el botón indicado
+        * Pause game
+        * @return true if user types this key or joystick button
         */
         bool pause () ;
 

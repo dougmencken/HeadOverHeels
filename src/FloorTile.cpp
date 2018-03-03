@@ -12,7 +12,7 @@ FloorTile::FloorTile( int column, int x, int y, BITMAP* image )
         : Mediated ()
         , column( column )
         , rawImage( image )
-        , shadyImage( 0 )
+        , shadyImage( nilPointer )
 {
         this->coordinates.first = x;
         this->coordinates.second = y;
@@ -28,7 +28,7 @@ FloorTile::~FloorTile()
 
 void FloorTile::calculateOffset()
 {
-        if ( mediator != 0 )
+        if ( mediator != nilPointer )
         {
                 Room* room = mediator->getRoom();
                 this->offset.first = room->getX0() + ( ( room->getSizeOfOneTile() * ( coordinates.first - coordinates.second - 1 ) ) << 1 ) + 1;
@@ -38,11 +38,11 @@ void FloorTile::calculateOffset()
 
 void FloorTile::draw( BITMAP* where )
 {
-        if ( shadyImage != 0 )
+        if ( shadyImage != nilPointer )
         {       // draw tile with shadow
                 draw_sprite( where, shadyImage, offset.first, offset.second );
         }
-        else if ( rawImage != 0 )
+        else if ( rawImage != nilPointer )
         {       // draw tile, just tile
                 draw_sprite( where, rawImage, offset.first, offset.second );
         }
@@ -58,7 +58,7 @@ void FloorTile::requestShadow()
                 if ( this->shady != AlreadyShady && this->shadyImage )
                 {
                         destroy_bitmap( this->shadyImage );
-                        this->shadyImage = 0;
+                        this->shadyImage = nilPointer;
                 }
 
                 // Reinicia el atributo para el siguiente ciclo

@@ -6,34 +6,38 @@
     #include <sys/cygwin.h>
 #endif
 
+#ifndef PATH_MAX
+    #define PATH_MAX 4096
+#endif
+
+void milliSleep( unsigned long milliseconds )
+{
+#if defined ( __WIN32 )
+        Sleep( milliseconds );
+#else
+        std::modulus< unsigned long > modulus;
+        unsigned long remainder = modulus( milliseconds, 1000 );
+        timespec pause;
+        pause.tv_sec = milliseconds / 1000;
+        pause.tv_nsec = remainder * 1000000;
+        nanosleep( &pause, NULL );
+#endif
+}
+
 
 namespace isomot
 {
-
-void sleep( unsigned long miliseconds )
-{
-#if defined ( __WIN32 )
-        Sleep( miliseconds );
-#else
-        std::modulus< unsigned long > modulus;
-        unsigned long remainder = modulus( miliseconds, 1000 );
-        timespec pause;
-        pause.tv_sec = miliseconds / 1000;
-        pause.tv_nsec = remainder * 1000000;
-        nanosleep( &pause, 0 );
-#endif
-}
 
 const char * pathToFile( const std::string& in )
 {
 #if defined ( __CYGWIN__ )
         ssize_t length ;
-        char * windowsPath = 0;
+        char * windowsPath = nilPointer;
 
         /* ssize_t cygwin_conv_path( cygwin_conv_path_t what, const void * from, void * to, size_t size ) */
         /* https://cygwin.com/cygwin-api/func-cygwin-conv-path.html */
 
-        length = cygwin_conv_path ( CCP_POSIX_TO_WIN_A | CCP_RELATIVE, in.c_str (), 0, 0 ) ;
+        length = cygwin_conv_path ( CCP_POSIX_TO_WIN_A | CCP_RELATIVE, in.c_str (), nilPointer, 0 ) ;
         if ( length >= 0 )
         {
                 windowsPath = static_cast< char * >( malloc( length ) );
@@ -50,43 +54,50 @@ const char * pathToFile( const std::string& in )
 #endif
 }
 
-std::string PathToGame( "no way" ) ;
-std::string FullPathToGame( "" ) ;
+std::string FullPathToGame( "no way" ) ;
 
 void setPathToGame ( const char * pathToGame )
 {
-        PathToGame = pathToGame ;
         FullPathToGame = pathToGame ;
+        const std::string whereIsGame = pathToGame ;
 
+        // for cases when game is in PATH, when running with gdb or double-clicking
+        if ( whereIsGame == "headoverheels" || whereIsGame == "/usr/bin/headoverheels" )
+        {
 #if defined ( __CYGWIN__ )
-        if ( PathToGame == "headoverheels" || PathToGame == "/usr/bin/headoverheels" )
-        {  // in case of double-clicking or running with gdb
                 FullPathToGame = "/bin/headoverheels" ;
-        }
+#else
+                FullPathToGame = "/usr/bin/headoverheels" ;  /* hard-coded */
+                                                             /* for other paths like /usr/local
+                                                                and~or custom names of game
+                                                                it needs more sophiscated logic */
 #endif
+        }
 
-        char* lastdot = strrchr ( get_filename( PathToGame.c_str () ) , '.' );
-        if ( lastdot != 0 && strlen( lastdot ) == 4 &&
+#if defined ( __APPLE__ ) && defined ( __MACH__ )
+        char* lastdot = strrchr ( get_filename( pathToGame ) , '.' );
+        if ( lastdot != nilPointer && strlen( lastdot ) == 4 &&
                         ( lastdot[ 1 ] == 'a' && lastdot[ 2 ] == 'p' && lastdot[ 3 ] == 'p' ) )
-        {  // game is in OS X bundle
-                FullPathToGame = PathToGame + pathSeparator + "Contents" + pathSeparator + "MacOS" + pathSeparator ;
+        {       // game is in OS X bundle
+                // binary itself lives inside whereIsGame/Contents/MacOS
         }
         else
+#endif
         {
                 if ( FullPathToGame[ 0 ] != pathSeparator[ 0 ] )
-                {  // pathToGame is not full path
-                        char folderOfGame[ 1024 ];
-                        getcwd( folderOfGame, 1024 ) ;
+                {  // it’s not full path
+                        char folderOfGame[ PATH_MAX ];
+                        getcwd( folderOfGame, PATH_MAX ) ;
 
                         size_t len = strlen( folderOfGame );
                         if ( folderOfGame[ len - 1 ] == pathSeparator[ 0 ] )
-                                folderOfGame[ len - 1 ] = 0;
+                                folderOfGame[ len - 1 ] = '\0';
 
-                        FullPathToGame = std::string( folderOfGame ) + pathSeparator + PathToGame ;
+                        FullPathToGame = std::string( folderOfGame ) + pathSeparator + whereIsGame ;
                 }
         }
 
-        fprintf( stdout, "PathToGame is \"%s\"\n", PathToGame.c_str () );
+        fprintf( stdout, "whereIsGame is \"%s\"\n", whereIsGame.c_str () );
         fprintf( stdout, "FullPathToGame is \"%s\"\n", FullPathToGame.c_str () );
 }
 
@@ -100,9 +111,9 @@ std::string homePath ()
                 HomePath = sharePath();
         #else /// #elif defined ( __gnu_linux__ )
                 char* home = getenv( "HOME" );
-                assert( home != 0 );
+                assert( home != nilPointer );
                 HomePath = std::string( home ) + "/.headoverheels/";
-                if ( ! file_exists( HomePath.c_str(), FA_DIREC, 0 ) )
+                if ( ! file_exists( HomePath.c_str(), FA_DIREC, nilPointer ) )
                 {
                         mkdir( HomePath.c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH );
                         mkdir( ( HomePath + "savegame/" ).c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH );
@@ -119,11 +130,8 @@ std::string sharePath ()
 {
         if ( SharePath.empty () )
         {
-#if defined ( __CYGWIN__ ) || defined ( __WIN32 )
                 const char* cpath = FullPathToGame.c_str ();
-#else
-                const char* cpath = PathToGame.c_str ();
-#endif
+
                 char* filename = get_filename( cpath );
 
         #if defined ( __APPLE__ ) && defined ( __MACH__ )

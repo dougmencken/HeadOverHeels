@@ -192,6 +192,12 @@
     </properties>
   </text>
 
+  <text id="play-room-melodies">
+  <properties>
+      <ustring>helyiség dallamok</ustring>
+    </properties>
+  </text>
+
   <text id="show-credits">
     <properties>
       <ustring>alkotók</ustring>

@@ -363,13 +363,13 @@ public:
 
         Behavior * getBehavior () const {  return behavior ;  }
 
-        void setAnchor ( Item * item ) ;
-
         /**
          * Reference item used to know if it would move when others are below
          * @return such item or 0 if there’s none
          */
         Item * getAnchor () const {  return this->anchor ;  }
+
+        void setAnchor ( Item * item ) {  this->anchor = item ;  }
 
         unsigned int getIndexOfFrame() {  return this->frameIndex ;  }
 

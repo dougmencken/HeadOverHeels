@@ -20,9 +20,9 @@ namespace isomot
 
 Isomot::Isomot( ) :
         isEndRoom( false ),
-        view( 0 ),
-        itemDataManager( 0 ),
-        mapManager( 0 )
+        view( nilPointer ),
+        itemDataManager( nilPointer ),
+        mapManager( nilPointer )
 {
 
 }
@@ -32,10 +32,10 @@ Isomot::~Isomot( )
         delete this->mapManager;
         delete this->itemDataManager;
 
-        if ( this->view != 0 )
+        if ( this->view != nilPointer )
         {
                 destroy_bitmap( this->view );
-                this->view = 0;
+                this->view = nilPointer;
         }
 }
 
@@ -76,19 +76,19 @@ void Isomot::prepare ()
 {
         // image where the isometric view will be drawn
 
-        if ( this->view == 0 )
+        if ( this->view == nilPointer )
         {
                 this->view = create_bitmap_ex( 32, ScreenWidth, ScreenHeight );
         }
 
         // data for elements of the game
 
-        if ( this->itemDataManager != 0 )
+        if ( this->itemDataManager != nilPointer )
         {
                 // set of graphics may change between games
                 // new ItemDataManager is needed to refresh pictures of items
                 delete this->itemDataManager;
-                this->itemDataManager = 0;
+                this->itemDataManager = nilPointer ;
         }
 
         this->itemDataManager = new ItemDataManager( "items.xml" );
@@ -96,7 +96,7 @@ void Isomot::prepare ()
 
         // data for map
 
-        if ( this->mapManager == 0 )
+        if ( this->mapManager == nilPointer )
         {
                 this->mapManager = new MapManager( this, "map.xml" );
                 this->mapManager->loadMap ();
@@ -121,9 +121,7 @@ void Isomot::offInviolability ()
 
 void Isomot::pause ()
 {
-        // Detiene la actualización de los estados de los elementos y
-        // la representación de la vista isométrica
-        if ( mapManager->getActiveRoom() != 0 )
+        if ( mapManager->getActiveRoom() != nilPointer )
         {
                 mapManager->getActiveRoom()->deactivate();
         }
@@ -131,7 +129,7 @@ void Isomot::pause ()
 
 void Isomot::resume ()
 {
-        if ( mapManager->getActiveRoom() != 0 )
+        if ( mapManager->getActiveRoom() != nilPointer )
         {
                 mapManager->getActiveRoom()->activate();
         }
@@ -142,10 +140,10 @@ void Isomot::reset()
         this->isEndRoom = false;
 
         // Destruye la vista isométrica actual
-        if ( this->view != 0 )
+        if ( this->view != nilPointer )
         {
                 destroy_bitmap( this->view );
-                this->view = 0;
+                this->view = nilPointer;
         }
 
         this->mapManager->binEveryRoom();
@@ -244,15 +242,15 @@ BITMAP* Isomot::update()
         if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_J ] )
         {
                 PlayerItem* activePlayer = activeRoom->getMediator()->getActivePlayer();
-                PlayerItem* otherPlayer = 0;
+                PlayerItem* otherPlayer = nilPointer;
 
                 Room* roomWithInactivePlayer = this->mapManager->getRoomOfInactivePlayer();
-                if ( roomWithInactivePlayer != 0 )
+                if ( roomWithInactivePlayer != nilPointer )
                 {
                         otherPlayer = roomWithInactivePlayer->getMediator()->getActivePlayer();
                 }
 
-                if ( otherPlayer != 0 && roomWithInactivePlayer != activeRoom )
+                if ( otherPlayer != nilPointer && roomWithInactivePlayer != activeRoom )
                 {
                         std::cout << "join characters in active room \"" << activeRoom->getNameOfFileWithDataAboutRoom() << "\" via pure magic" << std::endl ;
 
@@ -292,7 +290,7 @@ BITMAP* Isomot::update()
         {
                 if ( gameManager->countFreePlanets() < 5 )
                 {
-                        if ( activeRoom->getMediator()->findItemByLabel( "crown" ) == 0 )
+                        if ( activeRoom->getMediator()->findItemByLabel( "crown" ) == nilPointer )
                         {
                                 ItemData* chapeauData = this->itemDataManager->findItemByLabel( "crown" );
 
@@ -393,7 +391,7 @@ BITMAP* Isomot::update()
                 {
                         Room* newRoom = mapManager->changeRoom( exit );
 
-                        if ( newRoom != 0 && newRoom != activeRoom )
+                        if ( newRoom != nilPointer && newRoom != activeRoom )
                         {
                                 playTuneForScenery( newRoom->getScenery () );
                         }
@@ -403,7 +401,7 @@ BITMAP* Isomot::update()
         }
 
         // draw active room, if there’s any
-        if ( activeRoom != 0 )
+        if ( activeRoom != nilPointer )
         {
                 blit (
                         activeRoom->getPicture(), this->view,
@@ -426,7 +424,7 @@ BITMAP* Isomot::update()
                 }
 
                 // la sala final es muy especial
-                if ( activeRoom->getNameOfFileWithDataAboutRoom().compare( "blacktooth/blacktooth88.xml" ) == 0 )
+                if ( activeRoom->getNameOfFileWithDataAboutRoom() == "blacktooth/blacktooth88.xml" )
                 {
                         this->updateEndRoom();
                 }
@@ -436,7 +434,7 @@ BITMAP* Isomot::update()
         {
                 std::cout << "no room, game over" << std::endl ;
                 destroy_bitmap( this->view );
-                this->view = 0;
+                this->view = nilPointer;
         }
 
         return this->view;
@@ -522,9 +520,9 @@ void Isomot::updateEndRoom()
         else
         {
                 SoundManager::getInstance()->playOgg ( "music/begin.ogg", /* loop */ false );
-                /// sleep( 2340 );
+                /// milliSleep( 2340 );
 
-                if ( activeRoom->getMediator()->findItemByLabel( "ball" ) == 0 && activeRoom->getMediator()->findItemByLabel( "bubbles" ) == 0 )
+                if ( activeRoom->getMediator()->findItemByLabel( "ball" ) == nilPointer && activeRoom->getMediator()->findItemByLabel( "bubbles" ) == nilPointer )
                 {
                         FreeItem* freeItem = new FreeItem( this->itemDataManager->findItemByLabel( "ball" ), 146, 93, LayerHeight, Nowhere );
                         freeItem->assignBehavior( "behaivor of final ball", this->itemDataManager->findItemByLabel( "bubbles" ) );

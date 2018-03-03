@@ -2,7 +2,7 @@
 #include "csxml/LanguageXML.hpp"
 #include "LanguageText.hpp"
 #include "LanguageManager.hpp"
-#include "Ism.hpp" // for DeleteObject() in destructor
+#include "Ism.hpp"
 #include <iostream>
 
 
@@ -47,7 +47,6 @@ void LanguageManager::parse( const std::string& fileName, const std::string& fil
         {
                 std::auto_ptr< lxml::LanguageXML > languageXML( lxml::language( fileName.c_str() ) );
 
-                // Almacena todos los registros del archivo en la lista
                 for ( lxml::LanguageXML::text_const_iterator t = languageXML->text().begin (); t != languageXML->text().end (); ++t )
                 {
                         LanguageText* lang = new LanguageText( ( *t ).id (), ( *t ).x (), ( *t ).y () );
@@ -75,7 +74,7 @@ void LanguageManager::parse( const std::string& fileName, const std::string& fil
                         this->texts.push_back( lang );
                 }
 
-                if ( fileName.compare( fileWithGuaranteedStrings ) != 0 )
+                if ( fileName != fileWithGuaranteedStrings )
                 { // file is not the same as backup file with more strings
                         std::auto_ptr< lxml::LanguageXML > backupLanguageXML( lxml::language( fileWithGuaranteedStrings.c_str() ) );
 
@@ -115,7 +114,7 @@ void LanguageManager::parse( const std::string& fileName, const std::string& fil
 
 inline bool EqualLanguageString::operator() ( const LanguageText* lang, const std::string& id ) const
 {
-        return ( lang->getId().compare( id ) == 0 );
+        return ( lang->getId() == id );
 }
 
 }

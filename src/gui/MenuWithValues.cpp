@@ -24,14 +24,14 @@ MenuWithValues::~MenuWithValues( )
 
 void MenuWithValues::draw( BITMAP* where )
 {
-        if ( where == 0 ) return ;
+        if ( where == nilPointer ) return ;
 
         if ( where != this->whereToDraw )
         {
                 this->whereToDraw = where;
         }
 
-        if ( activeOption == 0 )
+        if ( activeOption == nilPointer )
         {
                 resetActiveOption ();
         }
@@ -67,7 +67,7 @@ void MenuWithValues::draw( BITMAP* where )
         }
 
         std::list< Label * > optionsWithValues;
-        Label* activeOptionWithValue = 0;
+        Label* activeOptionWithValue = nilPointer;
 
         for ( std::list< Label* >::const_iterator i = options.begin (); i != options.end (); ++i )
         {
@@ -101,7 +101,7 @@ void MenuWithValues::draw( BITMAP* where )
         setX( previousX + ( ( isomot::ScreenWidth - previousX ) >> 1 ) - ( getWidthOfMenu () >> 1 ) );
         setY( previousY + ( ( isomot::ScreenHeight - previousY ) >> 1 ) - ( getHeightOfMenu() >> 1 ) );
 
-        int dx( this->optionImage != 0 ? this->optionImage->w : 0 );
+        int dx( this->optionImage != nilPointer ? this->optionImage->w : 0 );
         int dy( 0 );
 
         // for each label
@@ -111,7 +111,7 @@ void MenuWithValues::draw( BITMAP* where )
                 Label* label = *i;
 
                 BITMAP * mark = ( activeOptionWithValue == label ) ? this->chosenOptionImage : this->optionImage ;
-                if ( mark != 0 )
+                if ( mark != nilPointer )
                         draw_sprite( where, mark, getX (), getY () + dy );
 
                 label->moveTo( getX () + dx, getY () + dy );
@@ -185,7 +185,7 @@ unsigned int MenuWithValues::getWidthOfMenu () const
                         textOfOption = textOfOption + symbolToFill;
 
                 Label optionWithValue( textOfOption + getValueOf( *o ), ( *o )->getFontFamily(), ( *o )->getColor(), ( *o )->getSpacing() );
-                unsigned int theWidth = optionWithValue.getWidth() + ( this->optionImage != 0 ? this->optionImage->w : 0 ) ;
+                unsigned int theWidth = optionWithValue.getWidth() + ( this->optionImage != nilPointer ? this->optionImage->w : 0 ) ;
                 if ( theWidth > widthOfMenu ) widthOfMenu = theWidth ;
         }
 

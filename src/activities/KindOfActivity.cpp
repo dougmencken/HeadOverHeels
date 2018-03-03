@@ -37,10 +37,10 @@ void KindOfActivity::propagateActivityToAdjacentItems( Item * sender, const Acti
                 {
                         Item * itemMeetsSender = mediator->findItemById( id );
 
-                        if ( itemMeetsSender != 0 )
+                        if ( itemMeetsSender != nilPointer )
                         {
                                 // is it item with behavior
-                                if ( itemMeetsSender->getBehavior() != 0 )
+                                if ( itemMeetsSender->getBehavior() != nilPointer )
                                 {
                                         // if it’s player item and sender is mortal, then player loses its life
                                         if ( dynamic_cast< PlayerItem * >( itemMeetsSender ) && sender->isMortal() &&
@@ -203,7 +203,7 @@ void KindOfActivity::propagateActivityToItemsAbove( Item * sender, const Activit
                                 FreeItem* freeItemAbove = dynamic_cast< FreeItem * >( mediator->findItemById( id ) );
 
                                 // is it item with behavior
-                                if ( freeItemAbove != 0 && freeItemAbove->getBehavior() != 0 )
+                                if ( freeItemAbove != nilPointer && freeItemAbove->getBehavior() != nilPointer )
                                 {
                                         // look for collisions of that free item with items below it
                                         if ( ! freeItemAbove->checkPosition( 0, 0, -1, Add ) )

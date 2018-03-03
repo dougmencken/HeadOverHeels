@@ -39,7 +39,7 @@ public:
 
         virtual ~Behavior( ) ;
 
-        static Behavior* createBehaviorByName ( Item* item, const std::string& behavior, void* extraData ) ;
+        static Behavior * createBehaviorByName ( Item * item, const std::string& behavior, void * extraData ) ;
 
         /**
          * Updates behavior of item in each cycle
@@ -51,7 +51,7 @@ public:
          * @param activity Activity of item
          * @param sender Item which changes activity
          */
-        virtual void changeActivityOfItem ( const ActivityOfItem & activity, Item * sender = 0 ) ;
+        virtual void changeActivityOfItem ( const ActivityOfItem & activity, Item * sender = nilPointer ) ;
 
         /**
          * Change kind of activity

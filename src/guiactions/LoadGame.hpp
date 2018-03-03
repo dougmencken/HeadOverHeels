@@ -27,7 +27,7 @@ public:
          * @param picture Image where to draw user interface
          * @param slot Number of file to load
          */
-        LoadGame( BITMAP * picture, int slot ) ;
+        LoadGame( BITMAP * picture, unsigned int slot ) ;
 
         std::string getNameOfAction () const {  return "LoadGame" ;  }
 
@@ -43,7 +43,7 @@ private:
         /**
          * Number of file to load
          */
-        int slot ;
+        unsigned int slot ;
 
 };
 

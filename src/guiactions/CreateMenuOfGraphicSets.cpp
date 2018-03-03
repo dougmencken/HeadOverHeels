@@ -15,7 +15,7 @@ using gui::CreateMenuOfGraphicSets ;
 CreateMenuOfGraphicSets::CreateMenuOfGraphicSets( BITMAP* picture, Action* previous ) :
         Action( picture ),
         actionOnEscape( previous ),
-        menuOfGraphicSets( 0 )
+        menuOfGraphicSets( nilPointer )
 {
         graphicSets[ "gfx" ] = "Present" ;
         graphicSets[ "gfx.2009" ] = "By Davit" ;
@@ -54,7 +54,7 @@ void CreateMenuOfGraphicSets::doAction ()
                         }
 
                         Label * theLabel = new Label( nameOfSetSpaced + i->first );
-                        if ( i->first.compare( isomot::GameManager::getInstance()->getChosenGraphicSet() ) != 0 )
+                        if ( i->first != isomot::GameManager::getInstance()->getChosenGraphicSet() )
                         {
                                 theLabel->changeColor( "cyan" );
                         }
@@ -104,7 +104,7 @@ void CreateMenuOfGraphicSets::doAction ()
                                 {
                                         std::string chosenSet = menuOfGraphicSets->getActiveOption()->getText().substr( positionOfSecondColumn ) ;
 
-                                        if ( chosenSet.compare( isomot::GameManager::getInstance()->getChosenGraphicSet() ) != 0 )
+                                        if ( chosenSet != isomot::GameManager::getInstance()->getChosenGraphicSet() )
                                         { // new set is not the same as previous one
                                                 isomot::GameManager::getInstance()->setChosenGraphicSet( chosenSet.c_str () ) ;
 
@@ -132,7 +132,7 @@ void CreateMenuOfGraphicSets::doAction ()
 
                         // no te comas la CPU
                         // do not eat the CPU
-                        sleep( 25 );
+                        milliSleep( 25 );
                 }
         }
 }

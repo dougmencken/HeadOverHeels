@@ -14,11 +14,11 @@ namespace gui
 
 Menu::Menu( )
         : Widget( ),
-        activeOption( 0 ),
-        whereToDraw( 0 ),
-        optionImage( 0 ),
-        chosenOptionImage( 0 ),
-        chosenOptionImageMini( 0 )
+        activeOption( nilPointer ),
+        whereToDraw( nilPointer ),
+        optionImage( nilPointer ),
+        chosenOptionImage( nilPointer ),
+        chosenOptionImageMini( nilPointer )
 {
         refreshPictures ();
 }
@@ -31,26 +31,26 @@ Menu::~Menu( )
 
 void Menu::refreshPictures ()
 {
-        if ( optionImage != 0 ) destroy_bitmap( optionImage );
-        optionImage = load_png( isomot::pathToFile( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + "option.png" ), 0 );
+        if ( optionImage != nilPointer ) destroy_bitmap( optionImage );
+        optionImage = load_png( isomot::pathToFile( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + "option.png" ), nilPointer );
 
-        if ( chosenOptionImage != 0 ) destroy_bitmap( chosenOptionImage );
-        chosenOptionImage = load_png( isomot::pathToFile( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + "chosen-option.png" ), 0 );
+        if ( chosenOptionImage != nilPointer ) destroy_bitmap( chosenOptionImage );
+        chosenOptionImage = load_png( isomot::pathToFile( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + "chosen-option.png" ), nilPointer );
 
-        if ( chosenOptionImageMini != 0 ) destroy_bitmap( chosenOptionImageMini );
-        chosenOptionImageMini = load_png( isomot::pathToFile( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + "chosen-option-mini.png" ), 0 );
+        if ( chosenOptionImageMini != nilPointer ) destroy_bitmap( chosenOptionImageMini );
+        chosenOptionImageMini = load_png( isomot::pathToFile( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + "chosen-option-mini.png" ), nilPointer );
 }
 
 void Menu::draw( BITMAP* where )
 {
-        if ( where == 0 ) return ;
+        if ( where == nilPointer ) return ;
 
         if ( where != this->whereToDraw )
         {
                 this->whereToDraw = where;
         }
 
-        if ( activeOption == 0 )
+        if ( activeOption == nilPointer )
         {
                 resetActiveOption ();
         }
@@ -78,7 +78,7 @@ void Menu::draw( BITMAP* where )
         setX( previousX + ( ( isomot::ScreenWidth - previousX ) >> 1 ) - ( getWidthOfMenu () >> 1 ) );
         setY( previousY + ( ( isomot::ScreenHeight - previousY ) >> 1 ) - ( getHeightOfMenu() >> 1 ) );
 
-        int dx( this->optionImage != 0 ? this->optionImage->w : 0 );
+        int dx( this->optionImage != nilPointer ? this->optionImage->w : 0 );
         int dy( 0 );
 
         // for each label
@@ -88,7 +88,7 @@ void Menu::draw( BITMAP* where )
                 Label* label = *i;
 
                 BITMAP * mark = ( this->activeOption == label ) ? this->chosenOptionImage : this->optionImage ;
-                if ( mark != 0 )
+                if ( mark != nilPointer )
                         draw_sprite( where, mark, getX (), getY () + dy );
 
                 label->moveTo( getX () + dx, getY () + dy );
@@ -122,7 +122,7 @@ void Menu::handleKey( int rawKey )
                 return;
         }
 
-        if ( this->activeOption != 0 )
+        if ( this->activeOption != nilPointer )
         {
                 switch ( theKey )
                 {
@@ -142,8 +142,8 @@ void Menu::handleKey( int rawKey )
 
 void Menu::addOption( Label* label )
 {
-        assert( label != 0 );
-        options.push_back( label );
+        if ( label != nilPointer )
+                options.push_back( label );
 }
 
 void Menu::setActiveOption ( Label* option )
@@ -157,7 +157,7 @@ void Menu::setActiveOption ( Label* option )
                 }
         }
 
-        if ( option != 0 )
+        if ( option != nilPointer )
         {
                 std::cerr << "option \"" << option->getText() << "\" isn’t from this menu" << std::endl ;
         }
@@ -179,7 +179,7 @@ unsigned int Menu::getWidthOfMenu () const
 
         for ( std::list< Label * >::const_iterator i = options.begin () ; i != options.end () ; ++i )
         {
-                unsigned int theWidth = ( *i )->getWidth() + ( this->optionImage != 0 ? this->optionImage->w : 0 ) ;
+                unsigned int theWidth = ( *i )->getWidth() + ( this->optionImage != nilPointer ? this->optionImage->w : 0 ) ;
                 if ( theWidth > widthOfMenu ) widthOfMenu = theWidth ;
         }
 

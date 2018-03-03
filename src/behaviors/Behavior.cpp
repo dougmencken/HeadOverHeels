@@ -37,9 +37,9 @@ namespace isomot
 Behavior::Behavior( Item * whichItem, const std::string & behavior ) :
           nameOfBehavior( behavior )
         , item( whichItem )
-        , whatToDo( 0 )
+        , whatToDo( nilPointer )
         , activity( Wait )
-        , sender( 0 )
+        , sender( nilPointer )
 {
         if ( behavior != "behavior of Head" && behavior != "behavior of Heels" && behavior != "behavior of Head over Heels" )
         {
@@ -57,7 +57,7 @@ Behavior::~Behavior( )
 
 Behavior* Behavior::createBehaviorByName( Item* item, const std::string& behavior, void* extraData )
 {
-        Behavior* behaviorToReturn = 0;
+        Behavior* behaviorToReturn = nilPointer;
 
         if ( behavior == "behavior of conveyor" )
         {
@@ -242,7 +242,7 @@ void Behavior::propagateActivity( Item* sender, const ActivityOfItem& activity )
                         Item* item = mediator->findItemById( id );
 
                         // change activity for existing item with non-null behavior
-                        if ( item != 0 && item->getBehavior() != 0 )
+                        if ( item != nilPointer && item->getBehavior() != nilPointer )
                         {
                                 item->getBehavior()->changeActivityOfItem( activity );
                         }

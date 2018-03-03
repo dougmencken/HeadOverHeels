@@ -12,8 +12,8 @@ pathToCompiler="/Developer/GCC/${gccVersion}/PowerPC/32bit" # ="/usr"
 if [ ! -f src/Makefile ]
 then
         LDFLAGS="-L/opt/xerces-c-3.2.0/lib -L/opt/ogg-vorbis/lib -L/opt/libpng-1.6.34/lib -L/opt/zlib-1.2.8/lib -L${pathToCompiler}/lib" \
-        CPPFLAGS="-I/opt/xerces-c-3.2.0/include" \
-        CC="${pathToCompiler}/bin/gcc" CXX="${pathToCompiler}/bin/g++ -std=c++03" \
+        CPPFLAGS="-I/opt/libpng-1.6.34/include -I/opt/xerces-c-3.2.0/include -I/opt/allegro-4.4.2/include" \
+        CC="${pathToCompiler}/bin/gcc" CXX="${pathToCompiler}/bin/g++" \
         ./configure --prefix=${installPrefix} --enable-debug
 fi
 

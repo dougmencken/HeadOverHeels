@@ -57,9 +57,9 @@ bool Special::update ()
                                         // but when it’s on several items then look if all these items are also special or volatile
                                         if ( mediator->depthOfStackOfCollisions() > 1 )
                                         {
-                                                takeIt = ( mediator->collisionWithByBehavior( "behavior of something special" ) == 0 ) &&
-                                                                ( mediator->collisionWithByBehavior( "behavior of disappearance on jump into" ) == 0 ) &&
-                                                                ( mediator->collisionWithByBehavior( "behavior of disappearance on touch" ) == 0 ) ;
+                                                takeIt = ( mediator->collisionWithByBehavior( "behavior of something special" ) == nilPointer ) &&
+                                                                ( mediator->collisionWithByBehavior( "behavior of disappearance on jump into" ) == nilPointer ) &&
+                                                                ( mediator->collisionWithByBehavior( "behavior of disappearance on touch" ) == nilPointer ) ;
                                         }
 
                                         // disappear on take
@@ -186,7 +186,7 @@ bool Special::update ()
                                 // create item "bubbles" in the place of magic item
                                 FreeItem* bubbles = new FreeItem( bubblesData, item->getX(), item->getY(), item->getZ(), Nowhere );
 
-                                bubbles->assignBehavior( "behavior of disappearance in time", 0 );
+                                bubbles->assignBehavior( "behavior of disappearance in time", nilPointer );
                                 bubbles->setCollisionDetector( false );
 
                                 // add to current room

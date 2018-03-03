@@ -20,9 +20,6 @@ namespace isomot
 
 class Behavior ;
 
-/**
- * Desplazamiento de un elemento
- */
 
 class DisplaceKindOfActivity : public KindOfActivity
 {
@@ -35,26 +32,18 @@ public:
 
         virtual ~DisplaceKindOfActivity( ) ;
 
-       /**
-        * Único objeto de esta clase para toda la aplicación
-        * @return Un puntero a la clase madre para hacer uso del polimorfismo de clase
-        */
         static KindOfActivity * getInstance() ;
 
        /**
-        * Estado que desplaza a un elemento
-        * @param behavior Comportamiento usuario del estado de desplazamiento
-        * @param canFall Indica si el elemento puede caer. Si se dan las condiciones para la caída
-        *                se producirá el cambio de estado correspondiente
-        * @return true si se produjo el desplazamiento o el cambio de estado; o, false si hubo colisión
+        * Displace item
+        * @param behavior Behavior of item
+        * @param canFall true if item falls, false if it flies
+        * @return true when item displaced or changed activity, false when there’s collision
         */
         virtual bool displace ( Behavior * behavior, ActivityOfItem * activity, bool canFall ) ;
 
 private:
 
-       /**
-        * Único objeto de esta clase para toda la aplicación
-        */
         static KindOfActivity * instance ;
 
 };

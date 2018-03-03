@@ -243,6 +243,11 @@ private:
         friend class Room ;
 
        /**
+        * Room where this mediator deals
+        */
+        Room* room ;
+
+       /**
         * Identificador del subproceso de actualización de los elementos
         */
         pthread_t thread ;
@@ -272,11 +277,6 @@ private:
         * Player which was active just before joining players
         */
         std::string lastActivePlayer ;
-
-       /**
-        * Sala en la que negocia este mediador
-        */
-        Room* room ;
 
        /**
         * Conjunto de elementos que forman la estructura de una sala. Cada columna del vector está compuesta de

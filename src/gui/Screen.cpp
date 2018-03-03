@@ -20,14 +20,14 @@ const double delayBetweenFrames = 0.1 ;
 namespace gui
 {
 
-/* static */ BITMAP * Screen::backgroundPicture = 0 ;
+/* static */ BITMAP * Screen::backgroundPicture = nilPointer ;
 
 /* static */ void Screen::refreshBackground ()
 {
-        if ( backgroundPicture != 0 )
+        if ( backgroundPicture != nilPointer )
         {
                 destroy_bitmap( backgroundPicture );
-                backgroundPicture = 0;
+                backgroundPicture = nilPointer;
         }
 
         Screen::backgroundPicture = Screen::loadPicture( "background.png" );
@@ -36,14 +36,14 @@ namespace gui
 
 Screen::Screen( Action* action ) :
         Widget( 0, 0 ),
-        imageOfScreen( 0 ),
+        imageOfScreen( nilPointer ),
         actionOfScreen( action ),
-        escapeAction( 0 ),
-        keyHandler( 0 ),
-        pictureOfHead( 0 ),
-        pictureOfHeels( 0 )
+        escapeAction( nilPointer ),
+        keyHandler( nilPointer ),
+        pictureOfHead( nilPointer ),
+        pictureOfHeels( nilPointer )
 {
-        if ( action != 0 && action->getWhereToDraw() != 0 )
+        if ( action != nilPointer && action->getWhereToDraw() != nilPointer )
         {
                 imageOfScreen = action->getWhereToDraw ();
                 refreshPicturesOfHeadAndHeels ();
@@ -66,7 +66,7 @@ void Screen::refreshPicturesOfHeadAndHeels ()
         int xHead = 0, yHead = 0;
         bool headOnScreen = false;
 
-        if ( pictureOfHead != 0 )
+        if ( pictureOfHead != nilPointer )
         {
                 xHead = pictureOfHead->getX ();
                 yHead = pictureOfHead->getY ();
@@ -82,13 +82,13 @@ void Screen::refreshPicturesOfHeadAndHeels ()
                 pictureOfHead = new AnimatedPicture( xHead, yHead, loadAnimation( "head.gif" ), delayBetweenFrames, "animated Head" );
         }
 
-        if ( headOnScreen && pictureOfHead != 0 )
+        if ( headOnScreen && pictureOfHead != nilPointer )
                 addWidget( pictureOfHead );
 
         int xHeels = 0, yHeels = 0;
         bool heelsOnScreen = false;
 
-        if ( pictureOfHeels != 0 )
+        if ( pictureOfHeels != nilPointer )
         {
                 xHeels = pictureOfHeels->getX ();
                 yHeels = pictureOfHeels->getY ();
@@ -104,7 +104,7 @@ void Screen::refreshPicturesOfHeadAndHeels ()
                 pictureOfHeels = new AnimatedPicture( xHeels, yHeels, loadAnimation( "heels.gif" ), delayBetweenFrames, "animated Heels" );
         }
 
-        if ( heelsOnScreen && pictureOfHeels != 0 )
+        if ( heelsOnScreen && pictureOfHeels != nilPointer )
                 addWidget( pictureOfHeels );
 }
 
@@ -118,13 +118,13 @@ void Screen::draw( BITMAP* where )
 
 void Screen::redraw( )
 {
-        if ( imageOfScreen == 0 ) return ;
+        if ( imageOfScreen == nilPointer ) return ;
 
         // fill with color of background
         clear_to_color( imageOfScreen, Color::redColor()->toAllegroColor() );
 
         // draw background, if any
-        if ( Screen::backgroundPicture != 0 )
+        if ( Screen::backgroundPicture != nilPointer )
         {
                 blit( backgroundPicture, imageOfScreen, 0, 0, 0, 0, backgroundPicture->w, backgroundPicture->h );
         }
@@ -149,15 +149,15 @@ void Screen::handleKey( int rawKey )
                 return;
         }
 
-        if ( escapeAction != 0 && theKey == KEY_ESC )
+        if ( escapeAction != nilPointer && theKey == KEY_ESC )
         {
-                fprintf( stdout, "escape action %s ~~\n", ( escapeAction != 0 ? escapeAction->getNameOfAction().c_str () : "nope" ) );
+                fprintf( stdout, "escape action %s ~~\n", ( escapeAction != nilPointer ? escapeAction->getNameOfAction().c_str () : "nope" ) );
                 this->escapeAction->doIt ();
-                fprintf( stdout, "~~ done with action %s\n", ( escapeAction != 0 ? escapeAction->getNameOfAction().c_str () : "nope" ) );
+                fprintf( stdout, "~~ done with action %s\n", ( escapeAction != nilPointer ? escapeAction->getNameOfAction().c_str () : "nope" ) );
         }
         else
         {
-                if ( this->keyHandler != 0 )
+                if ( this->keyHandler != nilPointer )
                 {
                         this->keyHandler->handleKey( rawKey );
                 }
@@ -188,10 +188,10 @@ bool Screen::removeWidget( Widget* widget )
 
 void Screen::freeWidgets ()
 {
-        if ( pictureOfHead != 0 && ! pictureOfHead->isOnScreen () )
+        if ( pictureOfHead != nilPointer && ! pictureOfHead->isOnScreen () )
                 delete pictureOfHead;
 
-        if ( pictureOfHeels != 0 && ! pictureOfHeels->isOnScreen () )
+        if ( pictureOfHeels != nilPointer && ! pictureOfHeels->isOnScreen () )
                 delete pictureOfHeels;
 
         while ( ! this->widgets.empty () )
@@ -201,13 +201,13 @@ void Screen::freeWidgets ()
                 delete w;
         }
 
-        pictureOfHead = 0;
-        pictureOfHeels = 0;
+        pictureOfHead = nilPointer;
+        pictureOfHeels = nilPointer;
 }
 
 void Screen::addPictureOfHeadAt ( int x, int y )
 {
-        if ( pictureOfHead == 0 )
+        if ( pictureOfHead == nilPointer )
                 pictureOfHead = new AnimatedPicture( x, y, loadAnimation( "head.gif" ), delayBetweenFrames, "animated Head" );
         else
                 pictureOfHead->moveTo( x, y );
@@ -217,7 +217,7 @@ void Screen::addPictureOfHeadAt ( int x, int y )
 
 void Screen::addPictureOfHeelsAt ( int x, int y )
 {
-        if ( pictureOfHeels == 0 )
+        if ( pictureOfHeels == nilPointer )
                 pictureOfHeels = new AnimatedPicture( x, y, loadAnimation( "heels.gif" ), delayBetweenFrames, "animated Heels" );
         else
                 pictureOfHeels->moveTo( x, y );
@@ -227,7 +227,7 @@ void Screen::addPictureOfHeelsAt ( int x, int y )
 
 void Screen::placeHeadAndHeels( bool picturesToo, bool copyrightsToo )
 {
-        Label* label = 0;
+        Label* label = nilPointer;
 
         label = new Label( "Jon", "regular", "multicolor" );
         label->moveTo( 64, 22 );
@@ -295,7 +295,7 @@ BITMAP * Screen::loadPicture ( const char * nameOfPicture )
 #if defined( DEBUG ) && DEBUG
         std::cout << "Screen::loadPicture( \"" << nameOfPicture << "\" )" << std::endl ;
 #endif
-        return load_png( isomot::pathToFile( GuiManager::getInstance()->getPathToPicturesOfGui() + nameOfPicture ), 0 );
+        return load_png( isomot::pathToFile( GuiManager::getInstance()->getPathToPicturesOfGui() + nameOfPicture ), nilPointer );
 }
 
 /* static */
@@ -305,8 +305,8 @@ std::vector< BITMAP * > Screen::loadAnimation ( const char * nameOfGif )
         std::cout << "Screen::loadAnimation( \"" << nameOfGif << "\" )" ;
 #endif
         std::vector< BITMAP * > animation;
-        BITMAP** frames = 0;
-        int* durations = 0;
+        BITMAP** frames = nilPointer;
+        int* durations = nilPointer;
 
         int howManyFrames = algif_load_animation( isomot::pathToFile( GuiManager::getInstance()->getPathToPicturesOfGui() + nameOfGif ), &frames, &durations );
 #if defined( DEBUG ) && DEBUG
@@ -328,9 +328,9 @@ std::vector< BITMAP * > Screen::loadAnimation ( const char * nameOfGif )
 /* static */
 void Screen::scrollHorizontally( Screen* oldScreen, Screen* newScreen, bool rightToLeft )
 {
-        if ( oldScreen == 0 || newScreen == 0 ||
+        if ( oldScreen == nilPointer || newScreen == nilPointer ||
                 oldScreen == newScreen ||
-                oldScreen->imageOfScreen == 0 || newScreen->imageOfScreen == 0 ) return ;
+                oldScreen->imageOfScreen == nilPointer || newScreen->imageOfScreen == nilPointer ) return ;
 
         BITMAP * oldPicture = create_bitmap( oldScreen->imageOfScreen->w, oldScreen->imageOfScreen->h );
         blit( oldScreen->imageOfScreen, oldPicture, 0, 0, 0, 0, oldScreen->imageOfScreen->w, oldScreen->imageOfScreen->h );
@@ -354,7 +354,7 @@ void Screen::scrollHorizontally( Screen* oldScreen, Screen* newScreen, bool righ
                         blit( oldPicture, screen, 0, 0, x, 0, newPicture->w - x, isomot::ScreenHeight );
                 }
 
-                sleep( 1 );
+                milliSleep( 1 );
         }
 
         destroy_bitmap( oldPicture );
@@ -363,8 +363,8 @@ void Screen::scrollHorizontally( Screen* oldScreen, Screen* newScreen, bool righ
 /* static */
 void Screen::wipeHorizontally( Screen* oldScreen, Screen* newScreen, bool rightToLeft )
 {
-        if ( oldScreen == 0 || newScreen == 0 ||
-                oldScreen == newScreen || newScreen->imageOfScreen == 0 ) return ;
+        if ( oldScreen == nilPointer || newScreen == nilPointer ||
+                oldScreen == newScreen || newScreen->imageOfScreen == nilPointer ) return ;
 
         newScreen->redraw ();
         BITMAP * newPicture = newScreen->imageOfScreen ;
@@ -383,16 +383,16 @@ void Screen::wipeHorizontally( Screen* oldScreen, Screen* newScreen, bool rightT
                         blit( newPicture, screen, 0, 0, 0, 0, x, isomot::ScreenHeight );
                 }
 
-                sleep( 1 );
+                milliSleep( 1 );
         }
 }
 
 /* static */
 void Screen::barScrollHorizontally( Screen* oldScreen, Screen* newScreen, bool rightToLeft )
 {
-        if ( oldScreen == 0 || newScreen == 0 ||
+        if ( oldScreen == nilPointer || newScreen == nilPointer ||
                 oldScreen == newScreen ||
-                oldScreen->imageOfScreen == 0 || newScreen->imageOfScreen == 0 ) return ;
+                oldScreen->imageOfScreen == nilPointer || newScreen->imageOfScreen == nilPointer ) return ;
 
         BITMAP * oldPicture = create_bitmap( oldScreen->imageOfScreen->w, oldScreen->imageOfScreen->h );
         blit( oldScreen->imageOfScreen, oldPicture, 0, 0, 0, 0, oldScreen->imageOfScreen->w, oldScreen->imageOfScreen->h );
@@ -420,7 +420,7 @@ void Screen::barScrollHorizontally( Screen* oldScreen, Screen* newScreen, bool r
                         }
                 }
 
-                sleep( 4 );
+                milliSleep( 4 );
         }
 
         destroy_bitmap( oldPicture );
@@ -429,8 +429,8 @@ void Screen::barScrollHorizontally( Screen* oldScreen, Screen* newScreen, bool r
 /* static */
 void Screen::barWipeHorizontally( Screen* oldScreen, Screen* newScreen, bool rightToLeft )
 {
-        if ( oldScreen == 0 || newScreen == 0 ||
-                oldScreen == newScreen || newScreen->imageOfScreen == 0 ) return ;
+        if ( oldScreen == nilPointer || newScreen == nilPointer ||
+                oldScreen == newScreen || newScreen->imageOfScreen == nilPointer ) return ;
 
         newScreen->redraw ();
         BITMAP * newPicture = newScreen->imageOfScreen ;
@@ -453,7 +453,7 @@ void Screen::barWipeHorizontally( Screen* oldScreen, Screen* newScreen, bool rig
                         }
                 }
 
-                sleep( 4 );
+                milliSleep( 4 );
         }
 }
 

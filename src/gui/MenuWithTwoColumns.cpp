@@ -25,14 +25,14 @@ MenuWithTwoColumns::~MenuWithTwoColumns( )
 
 void MenuWithTwoColumns::draw( BITMAP* where )
 {
-        if ( where == 0 ) return ;
+        if ( where == nilPointer ) return ;
 
         if ( where != this->whereToDraw )
         {
                 this->whereToDraw = where;
         }
 
-        if ( activeOption == 0 )
+        if ( activeOption == nilPointer )
         {
                 resetActiveOption ();
         }
@@ -40,7 +40,7 @@ void MenuWithTwoColumns::draw( BITMAP* where )
         // rows in first column, after this number options go to second column
         unsigned int rowsInFirstColumn = options.size () >> 1;
 
-        unsigned int widthOfOption = ( this->optionImage != 0 ) ? this->optionImage->w : 0 ;
+        unsigned int widthOfOption = ( this->optionImage != nilPointer ) ? this->optionImage->w : 0 ;
 
         // calculate position of second column
         unsigned int widthOfFirstColumn = 0;
@@ -87,7 +87,7 @@ void MenuWithTwoColumns::draw( BITMAP* where )
                 // place option in first column
                 if ( countOfRows <= rowsInFirstColumn )
                 {
-                        if ( mark != 0 )
+                        if ( mark != nilPointer )
                                 draw_sprite( where, mark, getX (), getY () + dy );
 
                         label->moveTo( getX () + dx, getY () + dy );
@@ -105,7 +105,7 @@ void MenuWithTwoColumns::draw( BITMAP* where )
                         // dibuja la viñeta
                         // para cada etiqueta
                         // ( poems, no less )
-                        if ( mark != 0 )
+                        if ( mark != nilPointer )
                                 draw_sprite( where, mark, getX () + secondColumnX, getY () + dy );
 
                         label->moveTo( getX () + dx + secondColumnX, getY () + dy );
@@ -134,7 +134,7 @@ unsigned int MenuWithTwoColumns::getWidthOfMenu () const
 
         for ( std::list< Label* >::const_iterator i = options.begin (); i != options.end (); ++i, countOfRows++ )
         {
-                unsigned int theWidth = ( *i )->getWidth() + ( this->optionImage != 0 ? this->optionImage->w : 0 );
+                unsigned int theWidth = ( *i )->getWidth() + ( this->optionImage != nilPointer ? this->optionImage->w : 0 );
 
                 if ( countOfRows <= rowsInFirstColumn )
                 {

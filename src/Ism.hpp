@@ -28,6 +28,12 @@
     #include <sys/types.h>
 #endif
 
+#if __cplusplus > 199711L /* when complier supports c++11 */
+    #define nilPointer nullptr
+#else
+    #define nilPointer NULL
+#endif
+
 #if defined( DEBUG ) && defined( HAVE_EXECINFO_H ) && HAVE_EXECINFO_H
     #include <execinfo.h>
     #include <cxxabi.h>
@@ -44,6 +50,12 @@
 #else
     # define IS_BIG_ENDIAN 0
 #endif
+
+
+/**
+ * Pause subprocess for a given period of time in milliseconds
+ */
+void milliSleep ( unsigned long miliseconds );
 
 
 namespace isomot
@@ -80,12 +92,6 @@ namespace isomot
         }
 
         typedef std::pair< int, int > JumpMotion;
-
-        /**
-         * Detiene un subproceso durante un periodo de tiempo
-         * @param miliseconds Número de milisegundos que será detenido el subproceso
-         */
-        void sleep ( unsigned long miliseconds );
 
         const char * pathToFile ( const std::string& in ) ;
 

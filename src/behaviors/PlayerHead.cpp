@@ -21,14 +21,14 @@ PlayerHead::PlayerHead( Item* item, const std::string& behavior ) :
         highJumpFrames = 19;
 
         // salto normal
-        for ( int i = 0; i < jumpFrames; i++ )
+        for ( unsigned int i = 0; i < jumpFrames; i++ )
         {
                 JumpMotion jumpMotion( 1, 3 );
                 jumpVector.push_back( jumpMotion );
         }
 
         // salto largo
-        for ( int i = 0; i < highJumpFrames; i++ )
+        for ( unsigned int i = 0; i < highJumpFrames; i++ )
         {
                 JumpMotion jumpMotion( 1, 4 );
                 highJumpVector.push_back( jumpMotion );
@@ -73,10 +73,6 @@ PlayerHead::PlayerHead( Item* item, const std::string& behavior ) :
 
 PlayerHead::~PlayerHead( )
 {
-        delete speedTimer;
-        delete fallTimer;
-        delete glideTimer;
-        delete blinkingTimer;
 }
 
 bool PlayerHead::update ()

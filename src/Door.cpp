@@ -15,9 +15,9 @@ Door::Door( ItemDataManager * itemData, const std::string& label, int cx, int cy
         , cy( cy )
         , z( z )
         , positionOfDoor( way )
-        , leftJamb( 0 )
-        , rightJamb( 0 )
-        , lintel( 0 )
+        , leftJamb( nilPointer )
+        , rightJamb( nilPointer )
+        , lintel( nilPointer )
 {
         /* std::cout << "creation of door \"" << labelOfDoor << "\"" << std::endl ; */
 }
@@ -29,14 +29,14 @@ Door::~Door()
 
 FreeItem* Door::getLeftJamb()
 {
-        if ( leftJamb == 0 )
+        if ( leftJamb == nilPointer )
         {
                 int x( 0 ), y( 0 );
                 int tileSize = mediator->getRoom()->getSizeOfOneTile();
 
                 ItemData* leftJambData = itemDataManager->findItemByLabel( labelOfDoor + "~leftjamb" );
 
-                if ( leftJambData != 0 )
+                if ( leftJambData != nilPointer )
                 {
                         switch ( getWhereIsDoor().getIntegerOfWay() )
                         {
@@ -85,14 +85,14 @@ FreeItem* Door::getLeftJamb()
 
 FreeItem* Door::getRightJamb()
 {
-        if ( rightJamb == 0 )
+        if ( rightJamb == nilPointer )
         {
                 int x( 0 ), y( 0 );
                 int tileSize = mediator->getRoom()->getSizeOfOneTile();
 
                 ItemData* rightJambData = itemDataManager->findItemByLabel( labelOfDoor + "~rightjamb" );
 
-                if ( rightJambData != 0 )
+                if ( rightJambData != nilPointer )
                 {
                         switch ( getWhereIsDoor().getIntegerOfWay() )
                         {
@@ -141,14 +141,14 @@ FreeItem* Door::getRightJamb()
 
 FreeItem* Door::getLintel()
 {
-        if ( lintel == 0 )
+        if ( lintel == nilPointer )
         {
                 int x( 0 ), y( 0 );
                 int tileSize = mediator->getRoom()->getSizeOfOneTile();
 
                 ItemData* lintelData = itemDataManager->findItemByLabel( labelOfDoor + "~lintel" );
 
-                if ( lintelData != 0 )
+                if ( lintelData != nilPointer )
                 {
                         switch ( getWhereIsDoor().getIntegerOfWay() )
                         {

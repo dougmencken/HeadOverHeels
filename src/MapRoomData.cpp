@@ -115,11 +115,11 @@ void MapRoomData::adjustEntry( Way* entry, const std::string& previousRoom )
                 case North:
                         if ( north.empty() )
                         {
-                                if ( northEast.compare( previousRoom ) == 0 )
+                                if ( previousRoom == northEast )
                                 {
                                         *entry = Northeast;
                                 }
-                                else if ( northWest.compare( previousRoom ) == 0 )
+                                else if ( previousRoom == northWest )
                                 {
                                         *entry = Northwest;
                                 }
@@ -129,11 +129,11 @@ void MapRoomData::adjustEntry( Way* entry, const std::string& previousRoom )
                 case South:
                         if ( south.empty() )
                         {
-                                if ( southEast.compare( previousRoom ) == 0 )
+                                if ( previousRoom == southEast )
                                 {
                                         *entry = Southeast;
                                 }
-                                else if ( southWest.compare( previousRoom ) == 0 )
+                                else if ( previousRoom == southWest )
                                 {
                                         *entry = Southwest;
                                 }
@@ -143,11 +143,11 @@ void MapRoomData::adjustEntry( Way* entry, const std::string& previousRoom )
                 case East:
                         if ( east.empty() )
                         {
-                                if ( eastNorth.compare( previousRoom ) == 0 )
+                                if ( eastNorth == previousRoom )
                                 {
                                         *entry = Eastnorth;
                                 }
-                                else if ( eastSouth.compare( previousRoom ) == 0 )
+                                else if ( eastSouth == previousRoom )
                                 {
                                         *entry = Eastsouth;
                                 }
@@ -157,11 +157,11 @@ void MapRoomData::adjustEntry( Way* entry, const std::string& previousRoom )
                 case West:
                         if ( west.empty() )
                         {
-                                if ( westNorth.compare( previousRoom ) == 0 )
+                                if ( westNorth == previousRoom )
                                 {
                                         *entry = Westnorth;
                                 }
-                                else if ( westSouth.compare( previousRoom ) == 0 )
+                                else if ( westSouth == previousRoom )
                                 {
                                         *entry = Westsouth;
                                 }

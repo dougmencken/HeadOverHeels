@@ -19,14 +19,14 @@ PlayerHeadAndHeels::PlayerHeadAndHeels( Item * item, const std::string & behavio
         highJumpFrames = 28;
 
         // salto normal
-        for ( int i = 0; i < jumpFrames; i++ )
+        for ( unsigned int i = 0; i < jumpFrames; i++ )
         {
                 JumpMotion jumpMotion( 1, ( i < 4 ? 4 : ( i < 8 ? 3 : 2 ) ) );
                 jumpVector.push_back( jumpMotion );
         }
 
         // salto largo
-        for ( int i = 0; i < highJumpFrames; i++ )
+        for ( unsigned int i = 0; i < highJumpFrames; i++ )
         {
                 JumpMotion jumpMotion( 1, 3 );
                 highJumpVector.push_back( jumpMotion );
@@ -58,12 +58,12 @@ PlayerHeadAndHeels::PlayerHeadAndHeels( Item * item, const std::string & behavio
 
         // create and activate chronometers
         speedTimer = new Timer();
-        fallTimer = new Timer();
-        glideTimer = new Timer();
-        blinkingTimer = new Timer();
         speedTimer->go();
+        fallTimer = new Timer();
         fallTimer->go();
+        glideTimer = new Timer();
         glideTimer->go();
+        blinkingTimer = new Timer();
         blinkingTimer->go();
 
         fireFromHooterIsPresent = false;
@@ -71,10 +71,6 @@ PlayerHeadAndHeels::PlayerHeadAndHeels( Item * item, const std::string & behavio
 
 PlayerHeadAndHeels::~PlayerHeadAndHeels( )
 {
-        delete speedTimer;
-        delete fallTimer;
-        delete glideTimer;
-        delete blinkingTimer;
 }
 
 bool PlayerHeadAndHeels::update ()
@@ -212,12 +208,12 @@ void PlayerHeadAndHeels::behave ()
                         }
                         else if ( input->take() )
                         {
-                                activity = ( playerItem->getTakenItemData() == 0 ? TakeItem : DropItem );
+                                activity = ( playerItem->getTakenItemData() == nilPointer ? TakeItem : DropItem );
                                 input->noRepeat( "take" );
                         }
                         else if ( input->takeAndJump() )
                         {
-                                activity = ( playerItem->getTakenItemData() == 0 ? TakeAndJump : DropAndJump );
+                                activity = ( playerItem->getTakenItemData() == nilPointer ? TakeAndJump : DropAndJump );
                                 input->noRepeat( "take&jump" );
                         }
                         else if ( input->movenorth() && ! input->movesouth() && ! input->moveeast() && ! input->movewest() )
@@ -253,12 +249,12 @@ void PlayerHeadAndHeels::behave ()
                         }
                         else if ( input->take() )
                         {
-                                activity = ( playerItem->getTakenItemData() == 0 ? TakeItem : DropItem );
+                                activity = ( playerItem->getTakenItemData() == nilPointer ? TakeItem : DropItem );
                                 input->noRepeat( "take" );
                         }
                         else if ( input->takeAndJump() )
                         {
-                                activity = ( playerItem->getTakenItemData() == 0 ? TakeAndJump : DropAndJump );
+                                activity = ( playerItem->getTakenItemData() == nilPointer ? TakeAndJump : DropAndJump );
                                 input->noRepeat( "take&jump" );
                         }
                         else if ( input->movenorth() && ! input->movesouth() && ! input->moveeast() && ! input->movewest() )
@@ -297,12 +293,12 @@ void PlayerHeadAndHeels::behave ()
                         }
                         else if ( input->take() )
                         {
-                                activity = ( playerItem->getTakenItemData() == 0 ? TakeItem : DropItem );
+                                activity = ( playerItem->getTakenItemData() == nilPointer ? TakeItem : DropItem );
                                 input->noRepeat( "take" );
                         }
                         else if ( input->takeAndJump() )
                         {
-                                activity = ( playerItem->getTakenItemData() == 0 ? TakeAndJump : DropAndJump );
+                                activity = ( playerItem->getTakenItemData() == nilPointer ? TakeAndJump : DropAndJump );
                                 input->noRepeat( "take&jump" );
                         }
                         else if ( input->movenorth() && ! input->movesouth() && ! input->moveeast() && ! input->movewest() )
@@ -381,7 +377,7 @@ void PlayerHeadAndHeels::behave ()
                         // pick or drop an item when falling
                         else if ( input->take() )
                         {
-                                activity = ( playerItem->getTakenItemData() == 0 ? TakeItem : DropItem );
+                                activity = ( playerItem->getTakenItemData() == nilPointer ? TakeItem : DropItem );
                                 input->noRepeat( "take" );
                         }
                         // entonces Head y Heels planean
@@ -404,7 +400,7 @@ void PlayerHeadAndHeels::behave ()
                         // pick or drop an item when gliding
                         else if ( input->take() )
                         {
-                                activity = ( playerItem->getTakenItemData() == 0 ? TakeItem : DropItem );
+                                activity = ( playerItem->getTakenItemData() == nilPointer ? TakeItem : DropItem );
                                 input->noRepeat( "take" );
                         }
                         else if ( input->movenorth() && ! input->movesouth() && ! input->moveeast() && ! input->movewest() )

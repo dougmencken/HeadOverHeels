@@ -51,9 +51,6 @@ private:
 
 private:
 
-       /**
-        * Único objeto de esta clase para toda la aplicación
-        */
         static KindOfActivity * instance ;
 
 };

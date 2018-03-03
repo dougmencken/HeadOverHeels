@@ -52,7 +52,7 @@ bool Teleport::update ()
                                         Item * topItem = mediator->findItemById( id );
 
                                         // El elemento debe tener comportamiento
-                                        if ( topItem != 0 && topItem->getBehavior() != 0 )
+                                        if ( topItem != nilPointer && topItem->getBehavior() != nilPointer )
                                         {
                                                 // Si debajo del elemento que está encima del elemento superior hay más elementos,
                                                 // se busca cuál de estos últimos tiene unas coordenadas espaciales mayores
@@ -65,7 +65,7 @@ bool Teleport::update ()
                                                         {
                                                                 Item * downItem = mediator->findCollisionPop( );
 
-                                                                if ( downItem != 0 && item != downItem && item->getX() + item->getY() < item->getX() + item->getY() )
+                                                                if ( downItem != nilPointer && item != downItem && item->getX() + item->getY() < item->getX() + item->getY() )
                                                                 {
                                                                         closerItem = false;
                                                                 }

@@ -16,7 +16,7 @@ RemoteControl::RemoteControl( Item * item, const std::string & behavior ) :
         Behavior( item, behavior )
 {
         activity = Wait;
-        controlledItem = 0;
+        controlledItem = nilPointer;
 
         // move controlled one but not controller
         if ( getNameOfBehavior() == "behavior of remotely controlled one" )
@@ -43,7 +43,7 @@ bool RemoteControl::update ()
         bool vanish = false;
 
         // get controlled item
-        if ( getNameOfBehavior() == "behavior of remote control" && controlledItem == 0 )
+        if ( getNameOfBehavior() == "behavior of remote control" && controlledItem == nilPointer )
         {
                 controlledItem = static_cast< FreeItem * >( freeItem->getMediator()->findItemByBehavior( "behavior of remotely controlled one" ) );
         }
@@ -90,7 +90,7 @@ bool RemoteControl::update ()
                                 {
                                         // Emite el sonido de de desplazamiento si está siendo empujado, no desplazado
                                         // por un elemento que haya debajo
-                                        if ( this->sender == 0 || ( this->sender != 0 && this->sender != this->item ) )
+                                        if ( this->sender == nilPointer || ( this->sender != nilPointer && this->sender != this->item ) )
                                         {
                                                 SoundManager::getInstance()->play( freeItem->getLabel(), activity );
                                         }

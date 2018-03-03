@@ -19,15 +19,14 @@ namespace isomot
 {
 
 Mediator::Mediator( Room* room )
+        : room( room )
+        , gridItemsSorting( false )
+        , freeItemsSorting( false )
+        , switchInRoomIsOn( false )
+        , activePlayer( nilPointer )
 {
-        this->room = room;
-        this->gridItemsSorting = false;
-        this->freeItemsSorting = false;
-        this->switchInRoomIsOn = false;
-        this->activePlayer = 0;
-
-        pthread_mutex_init( &gridItemsMutex, 0 );
-        pthread_mutex_init( &freeItemsMutex, 0 );
+        pthread_mutex_init( &gridItemsMutex, nilPointer );
+        pthread_mutex_init( &freeItemsMutex, nilPointer );
 
         // items which may be freezed by doughnut or switch
         badBoys.push_back( "behavior of detector" );
@@ -131,7 +130,7 @@ void Mediator::update()
                 }
         }
 
-        if ( activePlayer != 0 )
+        if ( activePlayer != nilPointer )
         {
                 activePlayer->behave ();
         }
@@ -178,7 +177,7 @@ void Mediator::beginUpdate()
         pthread_attr_init( &attr );
         pthread_attr_setdetachstate( &attr, PTHREAD_CREATE_JOINABLE );
 
-        pthread_create( &thread, 0, updateThread, reinterpret_cast< void * >( this ) );
+        pthread_create( &thread, nilPointer, updateThread, reinterpret_cast< void * >( this ) );
 
         pthread_attr_destroy( &attr );
 }
@@ -186,7 +185,7 @@ void Mediator::beginUpdate()
 void Mediator::endUpdate()
 {
         this->threadRunning = false;
-        pthread_join( thread, 0 );
+        pthread_join( thread, nilPointer );
 }
 
 void* updateThread( void* thisClass )
@@ -196,10 +195,10 @@ void* updateThread( void* thisClass )
         while( mediator->isThreadRunning() )
         {
                 mediator->update();
-                sleep( 10 );
+                milliSleep( 10 );
         }
 
-        pthread_exit( 0 );
+        pthread_exit( nilPointer );
 }
 
 void Mediator::remaskFreeItem( FreeItem* item )
@@ -234,7 +233,7 @@ void Mediator::remaskGridItem( GridItem* gridItem )
         {
                 FreeItem* freeItem = *f;
 
-                if ( freeItem != 0 && freeItem->getRawImage() )
+                if ( freeItem != nilPointer && freeItem->getRawImage() )
                 {
                         // mask item if there’s overlap between images
                         if ( ( freeItem->getOffsetX() < gridItem->getOffsetX() + gridItem->getRawImage()->w )
@@ -275,8 +274,8 @@ void Mediator::reshadeGridItem( GridItem* item )
                 }
         }
 
-        // Marca para sombrear la loseta de la columna, si existe
-        if ( room->floor[ column ] != 0 )
+        // mark to shade floor tile of this column, si existe
+        if ( room->floor[ column ] != nilPointer )
                 room->floor[ column ]->setWhichShade( WantShadow );
 }
 
@@ -308,8 +307,8 @@ void Mediator::reshadeFreeItem( FreeItem* item )
                                 }
                         }
 
-                        // Marca para sombrear la loseta de la columna
-                        if ( room->floor[ column ] != 0 )
+                        // mark to shade floor tile of this column, si existe
+                        if ( room->floor[ column ] != nilPointer )
                                 room->floor[ column ]->setWhichShade( WantShadow );
                 }
         }
@@ -348,7 +347,7 @@ void Mediator::castShadowOnFloor( FloorTile* floorTile )
                 GridItem* gridItem = *g ;
 
                 // shade image of tile when item has shadow
-                if ( gridItem->getImageOfShadow() != 0 )
+                if ( gridItem->getImageOfShadow() != nilPointer )
                 {
                         floorTile->castShadowImage (
                                 /* x */ ( tileSize << 1 ) * ( xCell - yCell ) - ( gridItem->getImageOfShadow()->w >> 1 ) + room->getX0() + 1,
@@ -365,7 +364,7 @@ void Mediator::castShadowOnFloor( FloorTile* floorTile )
         {
                 FreeItem* freeItem = *f ;
 
-                if ( freeItem->getImageOfShadow() != 0 )
+                if ( freeItem->getImageOfShadow() != nilPointer )
                 {
                         int xStart = freeItem->getX() / tileSize;
                         int xEnd = ( freeItem->getX() + freeItem->getWidthX() - 1 ) / tileSize;
@@ -397,7 +396,7 @@ void Mediator::castShadowOnGridItem( GridItem* gridItem )
         {
                 GridItem* tempItem = *g ;
 
-                if ( tempItem->getImageOfShadow() != 0 && tempItem->getZ() > gridItem->getZ() )
+                if ( tempItem->getImageOfShadow() != nilPointer && tempItem->getZ() > gridItem->getZ() )
                 {
                         gridItem->castShadowImage (
                                 /* x */ gridItem->getOffsetX() + ( ( gridItem->getRawImage()->w - tempItem->getImageOfShadow()->w ) >> 1 ),
@@ -414,7 +413,7 @@ void Mediator::castShadowOnGridItem( GridItem* gridItem )
         {
                 FreeItem* freeItem = *f ;
 
-                if ( freeItem->getImageOfShadow() != 0 && freeItem->getZ() > gridItem->getZ() )
+                if ( freeItem->getImageOfShadow() != nilPointer && freeItem->getZ() > gridItem->getZ() )
                 {
                         // range of columns met with item
                         int xStart = freeItem->getX() / tileSize;
@@ -458,7 +457,7 @@ void Mediator::castShadowOnFreeItem( FreeItem* freeItem )
                         {
                                 GridItem* gridItem = *g ;
 
-                                if ( gridItem->getImageOfShadow() != 0 && gridItem->getZ() > freeItem->getZ() )
+                                if ( gridItem->getImageOfShadow() != nilPointer && gridItem->getZ() > freeItem->getZ() )
                                 {
                                 # if  defined( DEBUG_SHADOWS )  &&  DEBUG_SHADOWS
                                         std::cout << "casting shadow from " << gridItem->whichKindOfItem() << " \"" << gridItem->getLabel() << "\"" <<
@@ -485,7 +484,7 @@ void Mediator::castShadowOnFreeItem( FreeItem* freeItem )
         {
                 FreeItem* shadeItem = *f ;
 
-                if ( shadeItem->getImageOfShadow() != 0 && shadeItem->getId() != freeItem->getId() )
+                if ( shadeItem->getImageOfShadow() != nilPointer && shadeItem->getId() != freeItem->getId() )
                 {
                         // shadow with free item above
                         if ( freeItem->getZ() < shadeItem->getZ() &&
@@ -614,7 +613,7 @@ void Mediator::mask( FreeItem* freeItem )
 
 Item* Mediator::findItemById( int id )
 {
-        Item* item = 0;
+        Item* item = nilPointer;
 
         // look for free item
         if ( id & 1 )
@@ -648,7 +647,7 @@ Item* Mediator::findItemById( int id )
 
 Item* Mediator::findItemByLabel( const std::string& label )
 {
-        Item* item = 0;
+        Item* item = nilPointer;
 
         // look for free item
         std::list< FreeItem * >::iterator f = std::find_if( freeItems.begin (), freeItems.end (), std::bind2nd( EqualLabelOfItem (), label ) );
@@ -659,7 +658,7 @@ Item* Mediator::findItemByLabel( const std::string& label )
         }
 
         // look for grid item
-        if ( item == 0 )
+        if ( item == nilPointer )
         {
                 std::list< GridItem * >::iterator g;
 
@@ -680,7 +679,7 @@ Item* Mediator::findItemByLabel( const std::string& label )
 
 Item* Mediator::findItemByBehavior( const std::string& behavior )
 {
-        Item* item = 0;
+        Item* item = nilPointer;
 
         // look for free item
         std::list< FreeItem * >::iterator f = std::find_if( freeItems.begin (), freeItems.end (), std::bind2nd( EqualBehaviorOfItem (), behavior ) );
@@ -691,7 +690,7 @@ Item* Mediator::findItemByBehavior( const std::string& behavior )
         }
 
         // look for grid item
-        if ( item == 0 )
+        if ( item == nilPointer )
         {
                 std::list< GridItem * >::iterator g;
 
@@ -939,11 +938,11 @@ Item* Mediator::collisionWithByLabel( const std::string& label )
         {
                 Item* item = findItemById( collisions[ i ] );
 
-                if ( item != 0 && item->getLabel() == label )
+                if ( item != nilPointer && item->getLabel() == label )
                         return item;
         }
 
-        return 0;
+        return nilPointer;
 }
 
 Item* Mediator::collisionWithByBehavior( const std::string& behavior )
@@ -952,11 +951,14 @@ Item* Mediator::collisionWithByBehavior( const std::string& behavior )
         {
                 Item* item = findItemById( collisions[ i ] );
 
-                if ( item != 0 && item->getBehavior() != 0 && item->getBehavior()->getNameOfBehavior () == behavior )
+                if ( item != nilPointer && item->getBehavior() != nilPointer &&
+                        item->getBehavior()->getNameOfBehavior () == behavior )
+                {
                         return item;
+                }
         }
 
-        return 0;
+        return nilPointer;
 }
 
 Item* Mediator::collisionWithBadBoy()
@@ -965,14 +967,14 @@ Item* Mediator::collisionWithBadBoy()
         {
                 Item* item = findItemById( collisions[ i ] );
 
-                if ( item != 0 && item->getBehavior() != 0 && item->isMortal()
+                if ( item != nilPointer && item->getBehavior() != nilPointer && item->isMortal()
                         && std::find( badBoys.begin(), badBoys.end(), item->getBehavior()->getNameOfBehavior () ) != badBoys.end() )
                 {
                         return item;
                 }
         }
 
-        return 0;
+        return nilPointer;
 }
 
 bool Mediator::selectNextPlayer( ItemDataManager* itemDataManager )
@@ -1028,7 +1030,7 @@ bool Mediator::selectNextPlayer( ItemDataManager* itemDataManager )
                                 activePlayer = roomBuilder->createPlayerInRoom( this->room, false, "headoverheels", x, y, z, orientation );
 
                                 // transfer item in handbag
-                                if ( takenItemData != 0 )
+                                if ( takenItemData != nilPointer )
                                 {
                                         std::cout << "transfer item \"" << takenItemData->getLabel() << "\" to player \"" << activePlayer->getLabel() << "\"" << std::endl ;
                                         activePlayer->assignTakenItem( takenItemData, takenItemImage, behaviorOfItemTaken );
@@ -1067,7 +1069,7 @@ bool Mediator::selectNextPlayer( ItemDataManager* itemDataManager )
 
                 PlayerItem* heelsPlayer = roomBuilder->createPlayerInRoom( this->room, false, "heels", x, y, z, orientation );
 
-                if ( takenItemData != 0 )
+                if ( takenItemData != nilPointer )
                 {
                         std::cout << "transfer item \"" << takenItemData->getLabel() << "\" to player \"" << heelsPlayer->getLabel() << "\"" << std::endl ;
                         heelsPlayer->assignTakenItem( takenItemData, takenItemImage, behaviorOfItemTaken );
@@ -1101,7 +1103,7 @@ void Mediator::toggleSwitchInRoom ()
         {
                 FreeItem* freeItem = *f;
 
-                if ( freeItem != 0 && freeItem->getBehavior() != 0 )
+                if ( freeItem != nilPointer && freeItem->getBehavior() != nilPointer )
                 {
                         std::string behavior = freeItem->getBehavior()->getNameOfBehavior ();
 
@@ -1120,7 +1122,7 @@ void Mediator::toggleSwitchInRoom ()
                 {
                         GridItem* gridItem = *g;
 
-                        if ( gridItem != 0 && gridItem->getBehavior() != 0 )
+                        if ( gridItem != nilPointer && gridItem->getBehavior() != nilPointer )
                         {
                                 std::string behavior = gridItem->getBehavior()->getNameOfBehavior ();
 
@@ -1164,7 +1166,7 @@ PlayerItem* Mediator::getWaitingPlayer() const
                 }
         }
 
-        return 0 ;
+        return nilPointer ;
 }
 
 bool EqualItemId::operator() ( Item* item, int id ) const
@@ -1179,7 +1181,7 @@ bool EqualLabelOfItem::operator() ( Item* item, const std::string& label ) const
 
 bool EqualBehaviorOfItem::operator() ( Item* item, const std::string& behavior ) const
 {
-        return ( item->getBehavior() != 0 && item->getBehavior()->getNameOfBehavior () == behavior );
+        return ( item->getBehavior() != nilPointer && item->getBehavior()->getNameOfBehavior () == behavior );
 }
 
 }

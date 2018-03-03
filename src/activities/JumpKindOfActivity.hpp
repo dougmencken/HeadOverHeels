@@ -37,10 +37,6 @@ public:
 
         virtual ~JumpKindOfActivity();
 
-       /**
-        * Único objeto de esta clase para toda la aplicación
-        * @return Un puntero a la clase madre para hacer uso del polimorfismo de clase
-        */
         static KindOfActivity * getInstance() ;
 
        /**
@@ -64,9 +60,6 @@ protected:
 
 private:
 
-       /**
-        * Único objeto de esta clase para toda la aplicación
-        */
         static KindOfActivity * instance ;
 
 };

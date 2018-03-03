@@ -35,7 +35,7 @@ bool Detector::update ()
         PlayerItem* playerItem = freeItem->getMediator()->getActivePlayer();
         bool isGone = false;
 
-        if ( playerItem != 0 )
+        if ( playerItem != nilPointer )
         {
                 switch ( activity )
                 {

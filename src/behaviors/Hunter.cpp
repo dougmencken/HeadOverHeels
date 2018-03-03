@@ -51,7 +51,7 @@ bool Hunter::update ()
                         const unsigned int sizeOfRectangleInTiles = 3;
                         const int delta = mediator->getRoom()->getSizeOfOneTile() * sizeOfRectangleInTiles;
 
-                        if ( activePlayer != 0  &&
+                        if ( activePlayer != nilPointer  &&
                                 activePlayer->getX() > thisItem->getX() - delta  &&
                                 activePlayer->getX() < thisItem->getX() + static_cast< int >( thisItem->getWidthX() ) + delta  &&
                                 activePlayer->getY() > thisItem->getY() - delta  &&
@@ -220,7 +220,7 @@ ActivityOfItem Hunter::calculateDirection4( const ActivityOfItem& activity )
         FreeItem* thisItem = dynamic_cast< FreeItem * >( this->item );
         PlayerItem* activePlayer = thisItem->getMediator()->getActivePlayer();
 
-        if ( activePlayer != 0 ) // if there’s active player in room
+        if ( activePlayer != nilPointer ) // if there’s active player in room
         {
                 int dx = thisItem->getX() - activePlayer->getX();
                 int dy = thisItem->getY() - activePlayer->getY();
@@ -271,7 +271,7 @@ ActivityOfItem Hunter::calculateDirection8( const ActivityOfItem& activity )
         FreeItem* thisItem = dynamic_cast< FreeItem* >( this->item );
         PlayerItem* activePlayer = thisItem->getMediator()->getActivePlayer();
 
-        if ( activePlayer != 0 ) // if there’s active player in room
+        if ( activePlayer != nilPointer ) // if there’s active player in room
         {
                 int dx = thisItem->getX() - activePlayer->getX();
                 int dy = thisItem->getY() - activePlayer->getY();
@@ -360,7 +360,7 @@ bool Hunter::createFullBody()
                                                   thisItem->getX(), thisItem->getY(), thisItem->getZ() - LayerHeight,
                                                   thisItem->getOrientation() );
 
-                newItem->assignBehavior( "behavior of hunter in four directions", 0 );
+                newItem->assignBehavior( "behavior of hunter in four directions", nilPointer );
 
                 // switch off collisions for this item
                 // otherwise it’s impossible to create full-bodied guard

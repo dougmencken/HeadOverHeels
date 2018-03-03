@@ -363,7 +363,7 @@ public:
         */
         Door * getDoorAt ( const Way& way ) {  return doors[ way ] ;  }
 
-        bool hasDoorAt ( const Way& way ) {  return ( doors[ way ] != 0 ) ;  }
+        bool hasDoorAt ( const Way& way ) {  return ( doors[ way ] != nilPointer ) ;  }
 
        /**
         * Establece la salida por la que algún jugador abandona la sala

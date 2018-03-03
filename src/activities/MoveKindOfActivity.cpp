@@ -14,8 +14,17 @@
 namespace isomot
 {
 
-KindOfActivity * MoveKindOfActivity::instance = 0 ;
+KindOfActivity * MoveKindOfActivity::instance = nilPointer ;
 
+KindOfActivity* MoveKindOfActivity::getInstance()
+{
+        if ( instance == nilPointer )
+        {
+                instance = new MoveKindOfActivity();
+        }
+
+        return instance;
+}
 
 MoveKindOfActivity::MoveKindOfActivity( ) : KindOfActivity()
 {
@@ -24,25 +33,14 @@ MoveKindOfActivity::MoveKindOfActivity( ) : KindOfActivity()
 
 MoveKindOfActivity::~MoveKindOfActivity( )  { }
 
-
-KindOfActivity* MoveKindOfActivity::getInstance()
-{
-        if ( instance == 0 )
-        {
-                instance = new MoveKindOfActivity();
-        }
-
-        return instance;
-}
-
 bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, bool canFall )
 {
         bool moved = false;
 
         ActivityOfItem displaceActivity = Wait;
 
-        FreeItem* freeItem = 0;
-        Mediator* mediator = 0;
+        FreeItem* freeItem = nilPointer;
+        Mediator* mediator = nilPointer;
 
         // is item free or player
         if ( behavior->getItem()->whichKindOfItem() == "free item" || behavior->getItem()->whichKindOfItem() == "player item" )
@@ -55,7 +53,7 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
         {
                 case MoveNorth:
                 case AutoMoveNorth:
-                        if ( freeItem != 0 )
+                        if ( freeItem != nilPointer )
                         {
                                 freeItem->changeOrientation( North );
                                 moved = freeItem->addToX( -1 );
@@ -65,7 +63,7 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
 
                 case MoveSouth:
                 case AutoMoveSouth:
-                        if ( freeItem != 0 )
+                        if ( freeItem != nilPointer )
                         {
                                 freeItem->changeOrientation( South );
                                 moved = freeItem->addToX( 1 );
@@ -75,7 +73,7 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
 
                 case MoveEast:
                 case AutoMoveEast:
-                        if ( freeItem != 0 )
+                        if ( freeItem != nilPointer )
                         {
                                 freeItem->changeOrientation( East );
                                 moved = freeItem->addToY( -1 );
@@ -85,7 +83,7 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
 
                 case MoveWest:
                 case AutoMoveWest:
-                        if ( freeItem != 0 )
+                        if ( freeItem != nilPointer )
                         {
                                 freeItem->changeOrientation( West );
                                 moved = freeItem->addToY( 1 );
@@ -94,7 +92,7 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
                         break;
 
                 case MoveNortheast:
-                        if ( freeItem != 0 )
+                        if ( freeItem != nilPointer )
                         {
                                 moved = freeItem->addToPosition( -1, -1, 0 );
                                 displaceActivity = DisplaceNortheast;
@@ -102,7 +100,7 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
                         break;
 
                 case MoveNorthwest:
-                        if ( freeItem != 0 )
+                        if ( freeItem != nilPointer )
                         {
                                 moved = freeItem->addToPosition( -1, 1, 0 );
                                 displaceActivity = DisplaceNorthwest;
@@ -110,7 +108,7 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
                         break;
 
                 case MoveSoutheast:
-                        if ( freeItem != 0 )
+                        if ( freeItem != nilPointer )
                         {
                                 moved = freeItem->addToPosition( 1, -1, 0 );
                                 displaceActivity = DisplaceSoutheast;
@@ -118,7 +116,7 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
                         break;
 
                 case MoveSouthwest:
-                        if ( freeItem != 0 )
+                        if ( freeItem != nilPointer )
                         {
                                 moved = freeItem->addToPosition( 1, 1, 0 );
                                 displaceActivity = DisplaceSouthwest;
@@ -135,7 +133,7 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
                                 {
                                         FreeItem* topItem = dynamic_cast< FreeItem * >( mediator->findCollisionPop( ) );
 
-                                        if ( topItem != 0 && freeItem->getWidthX() + freeItem->getWidthY() >= topItem->getWidthX() + topItem->getWidthY() )
+                                        if ( topItem != nilPointer && freeItem->getWidthX() + freeItem->getWidthY() >= topItem->getWidthX() + topItem->getWidthY() )
                                         {
                                                 ascent( topItem, 1 );
                                         }
@@ -168,7 +166,7 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
                                         FreeItem* topItem = dynamic_cast< FreeItem * >( mediator->findItemById( topItems.top() ) );
                                         topItems.pop();
 
-                                        if ( topItem != 0 )
+                                        if ( topItem != nilPointer )
                                         {
                                                 descend( topItem, 2 );
                                         }
@@ -197,7 +195,7 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
                         ;
         }
 
-        if ( freeItem != 0 )
+        if ( freeItem != nilPointer )
         {
                 // move collided items when there’s horizontal collision
                 if ( ! moved )
@@ -213,7 +211,7 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
         }
 
         // item may fall
-        if ( canFall && *activity )
+        if ( canFall && *activity != Wait )
         {
                 if ( FallKindOfActivity::getInstance()->fall( behavior ) )
                 {
@@ -228,40 +226,41 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
 
 void MoveKindOfActivity::ascent( FreeItem* freeItem, int z )
 {
-        // El elemento debe poder cambiar de estado
-        if ( freeItem->getBehavior() != 0 )
+        if ( freeItem->getBehavior() != nilPointer )
         {
-                // Si el elemento no es el ascensor entonces se levanta
+                // don’t ascent elevator
                 if ( freeItem->getBehavior()->getNameOfBehavior () != "behavior of elevator" )
                 {
-                        // Si no se puede levantar, se toma el elemento con el que choca para levantarlo
+                        // when there’s something above this item
+                        // then raise every not bigger free item above
                         if ( ! freeItem->addToZ( z ) )
                         {
                                 Mediator* mediator = freeItem->getMediator();
 
-                                // Para todo elemento que pueda tener encima
                                 while ( ! mediator->isStackOfCollisionsEmpty() )
                                 {
                                         FreeItem* topItem = dynamic_cast< FreeItem * >( mediator->findCollisionPop( ) );
 
-                                        if ( topItem != 0 && freeItem->getWidthX() + freeItem->getWidthY() >= topItem->getWidthX() + topItem->getWidthY() )
+                                        if ( topItem != nilPointer &&
+                                                freeItem->getWidthX() + freeItem->getWidthY() >= topItem->getWidthX() + topItem->getWidthY() )
                                         {
-                                                // Levanta recursivamente a todos los elementos
+                                                // raise recursively
                                                 ascent( topItem, z );
                                         }
                                 }
 
-                                // Ahora ya puede ascender
+                                // yet it can ascend
                                 freeItem->addToZ( z );
                         }
 
-                        // Si el elemento es un jugador y supera la altura máxima de la sala entonces pasa a
-                        // la sala de arriba. Se supone que no hay posibilidad de alcanzar la altura máxima
-                        // de una sala que no conduce a otra situada sobre ella
-                        PlayerItem* playerItem = dynamic_cast< PlayerItem * >( freeItem );
-                        if ( playerItem != 0 && playerItem->getZ() >= MaxLayers * LayerHeight )
-                        {
-                                playerItem->setWayOfExit( Up );
+                        if ( freeItem->whichKindOfItem() == "player item" )
+                        {       // when item is player
+                                PlayerItem* playerItem = dynamic_cast< PlayerItem * >( freeItem );
+                                if ( playerItem->getZ() >= MaxLayers * LayerHeight )
+                                {
+                                        // player reaches maximum height of room to possibly go to room above it
+                                        playerItem->setWayOfExit( Up );
+                                }
                         }
                 }
         }
@@ -269,40 +268,38 @@ void MoveKindOfActivity::ascent( FreeItem* freeItem, int z )
 
 void MoveKindOfActivity::descend( FreeItem* freeItem, int z )
 {
-        // El elemento debe poder cambiar de estado
-        if ( freeItem->getBehavior() != 0 )
+        if ( freeItem->getBehavior() != nilPointer )
         {
-                Mediator* mediator = freeItem->getMediator();
-
-                // Comprueba si tiene elementos encima
+                // are there items on top
                 bool loading = ! freeItem->checkPosition( 0, 0, z, Add );
 
-                // Copia la pila de colisiones
-                std::stack< int > topItems;
-                while ( ! mediator->isStackOfCollisionsEmpty() )
-                {
-                        topItems.push( mediator->popCollision() );
-                }
-
-                // Si puede descender entonces hace bajar a todos los elementos apilados encima
+                // if item may descend itself then lower every item above it
                 if ( freeItem->addToZ( -1 ) && loading )
                 {
-                        // Desciende el resto de unidades. Se hace de una en una porque de lo contrario
-                        // se podría detectar colisión y no descendería ninguna unidad
+                        Mediator* mediator = freeItem->getMediator();
+
+                        // make copy of stack of collisions
+                        std::stack< int > topItems;
+                        while ( ! mediator->isStackOfCollisionsEmpty() )
+                        {
+                                topItems.push( mediator->popCollision() );
+                        }
+
+                        // descend by one at a time, otherwise there may be collision which hinders descend
                         for ( int i = 0; i < ( z - 1 ); i++ )
                         {
                                 freeItem->addToZ( -1 );
                         }
 
-                        // Para todo elemento que pueda tener encima
+                        // for each item above
                         while ( ! mediator->isStackOfCollisionsEmpty() )
                         {
                                 FreeItem* topItem = dynamic_cast< FreeItem * >( mediator->findItemById( topItems.top() ) );
                                 topItems.pop();
 
-                                if ( topItem != 0 )
+                                if ( topItem != nilPointer )
                                 {
-                                        // Desciende recursivamente a todos los elementos
+                                        // lower recursively
                                         descend( topItem, z );
                                 }
                         }

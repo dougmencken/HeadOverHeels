@@ -77,7 +77,7 @@ bool Switch::update ()
                                                 Item* itemAbove = mediator->findItemById( id );
 
                                                 // yep, switch doesn’t toggle when player jumps
-                                                if ( itemAbove != 0 && itemAbove->getBehavior() != 0 &&
+                                                if ( itemAbove != nilPointer && itemAbove->getBehavior() != nilPointer &&
                                                         ! itemAbove->checkPosition( 0, 0, -1, Add ) &&
                                                                 itemAbove->getBehavior()->getActivityOfItem() != RegularJump &&
                                                                 itemAbove->getBehavior()->getActivityOfItem() != HighJump )

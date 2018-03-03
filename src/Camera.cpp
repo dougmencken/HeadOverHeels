@@ -25,7 +25,7 @@ void Camera::turnOn( PlayerItem* player, const Way& wayOfEntry )
 {
         const unsigned int maxTilesOfSingleRoom = 10 ;
 
-        if ( delta.first == 0 && delta.second == 0 && player != 0 &&
+        if ( delta.first == 0 && delta.second == 0 && player != nilPointer &&
                         ( room->getTilesX() > maxTilesOfSingleRoom || room->getTilesY() > maxTilesOfSingleRoom ) )
         {
                 // is it double room along Y
@@ -66,7 +66,7 @@ void Camera::turnOn( PlayerItem* player, const Way& wayOfEntry )
                 else
                 {
                         TripleRoomInitialPoint* initialPoint = room->findInitialPointOfEntryToTripleRoom( wayOfEntry );
-                        if ( initialPoint != 0 )
+                        if ( initialPoint != nilPointer )
                         {
                                 delta.first = initialPoint->getX();
                                 delta.second = initialPoint->getY();
@@ -93,7 +93,7 @@ bool Camera::centerOn( PlayerItem* player )
         bool changed = false;
 
         // Sala triple
-        if ( ( room->getTilesX() > maxTilesOfSingleRoom && room->getTilesY() > maxTilesOfSingleRoom ) && player != 0 )
+        if ( ( room->getTilesX() > maxTilesOfSingleRoom && room->getTilesY() > maxTilesOfSingleRoom ) && player != nilPointer )
         {
                 // Debe haber cambio en el eje X para realizar los cálculos
                 if ( reference.first - player->getX() != 0 && room->getTilesX() > maxTilesOfSingleRoom )
@@ -148,7 +148,7 @@ bool Camera::centerOn( PlayerItem* player )
                 }
         }
         // Sala doble
-        else if ( ( room->getTilesX() > maxTilesOfSingleRoom || room->getTilesY() > maxTilesOfSingleRoom ) && player != 0 )
+        else if ( ( room->getTilesX() > maxTilesOfSingleRoom || room->getTilesY() > maxTilesOfSingleRoom ) && player != nilPointer )
         {
                 // Debe haber cambio en el eje X para realizar los cálculos
                 if ( reference.first - player->getX() != 0 && room->getTilesX() > maxTilesOfSingleRoom )

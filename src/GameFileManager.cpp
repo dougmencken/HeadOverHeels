@@ -145,23 +145,23 @@ void GameFileManager::saveGame( const std::string& fileName )
                 // there may be no more rooms because there are no more players
                 // or because other player is in the same room as active player
 
-                const PlayerItem* whoWaitsToPlay = 0 ;
+                const PlayerItem* whoWaitsToPlay = nilPointer ;
 
                 std::string nameOfWhoWaitsToPlay = "nobody";
 
-                if ( secondRoom != 0 )
+                if ( secondRoom != nilPointer )
                 {
                         nameOfWhoWaitsToPlay = secondRoom->getMediator()->getActivePlayer()->getLabel();
                 }
                 else
-                if ( activeRoom->getMediator()->getWaitingPlayer() != 0 )
+                if ( activeRoom->getMediator()->getWaitingPlayer() != nilPointer )
                 {
                         nameOfWhoWaitsToPlay = activeRoom->getMediator()->getWaitingPlayer()->getLabel();
                 }
 
                 if ( nameOfWhoWaitsToPlay != "nobody" )
                 {
-                        std::list< const PlayerItem * > playersOnEntry = ( secondRoom != 0 ?
+                        std::list< const PlayerItem * > playersOnEntry = ( secondRoom != nilPointer ?
                                                                                 secondRoom->getPlayersWhoEnteredRoom() :
                                                                                 activeRoom->getPlayersWhoEnteredRoom() );
 
@@ -175,7 +175,7 @@ void GameFileManager::saveGame( const std::string& fileName )
                         }
                 }
 
-                if ( whoWaitsToPlay != 0 )
+                if ( whoWaitsToPlay != nilPointer )
                 {
                         std::vector< std::string > tools = this->gameManager->getToolsOwnedByPlayer( whoWaitsToPlay->getLabel() );
 
@@ -183,7 +183,7 @@ void GameFileManager::saveGame( const std::string& fileName )
                                 sgxml::player
                                 (
                                         false, // inactive player
-                                        secondRoom != 0 ? secondRoom->getNameOfFileWithDataAboutRoom() : activeRoom->getNameOfFileWithDataAboutRoom(),
+                                        secondRoom != nilPointer ? secondRoom->getNameOfFileWithDataAboutRoom() : activeRoom->getNameOfFileWithDataAboutRoom(),
                                         whoWaitsToPlay->getX(),
                                         whoWaitsToPlay->getY(),
                                         whoWaitsToPlay->getZ(),

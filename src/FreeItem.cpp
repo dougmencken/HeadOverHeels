@@ -13,12 +13,11 @@ FreeItem::FreeItem( ItemData* itemData, int x, int y, int z, const Way& way )
         , transparency ( 0 )
         , collisionDetector ( true )
         , frozen ( false )
-        , shadyImage ( 0 )
+        , shadyImage ( nilPointer )
 {
         this->x = x;
         this->y = y;
         if ( y < 0 ) this->y = 0;
-        this->anchor = 0;
 
         // init frames
         int howManyFrames = ( getDataOfItem()->howManyMotions() - getDataOfItem()->howManyExtraFrames() ) / getDataOfItem()->howManyFramesForOrientations() ;
@@ -42,9 +41,9 @@ FreeItem::FreeItem( const FreeItem& freeItem )
         , transparency( freeItem.transparency )
         , collisionDetector( freeItem.collisionDetector )
         , frozen( freeItem.frozen )
-        , shadyImage( 0 )
+        , shadyImage( nilPointer )
 {
-        if ( freeItem.shadyImage != 0 )
+        if ( freeItem.shadyImage != nilPointer )
         {
                 this->shadyImage = create_bitmap_ex( 32, freeItem.shadyImage->w, freeItem.shadyImage->h );
                 blit( freeItem.shadyImage, this->shadyImage, 0, 0, 0, 0, this->shadyImage->w, this->shadyImage->h );
@@ -53,7 +52,7 @@ FreeItem::FreeItem( const FreeItem& freeItem )
 
 FreeItem::~FreeItem()
 {
-        if ( shadyImage != 0 )
+        if ( shadyImage != nilPointer )
                 destroy_bitmap( shadyImage );
 }
 
@@ -84,27 +83,27 @@ void FreeItem::draw( BITMAP* where )
 
 void FreeItem::binProcessedImages()
 {
-        if ( this->processedImage )
+        if ( this->processedImage != nilPointer )
         {
                 destroy_bitmap( this->processedImage );
-                this->processedImage = 0;
+                this->processedImage = nilPointer;
         }
 
-        if ( this->shadyImage )
+        if ( this->shadyImage != nilPointer )
         {
                 destroy_bitmap( this->shadyImage );
-                this->shadyImage = 0;
+                this->shadyImage = nilPointer;
         }
 }
 
 void FreeItem::changeImage( BITMAP* image )
 {
-        if ( image == 0 )
+        if ( image == nilPointer )
         {
                 std::cout << "nil image at FreeItem.changeImage" << std::endl ;
         }
 
-        if ( this->rawImage == 0 )
+        if ( this->rawImage == nilPointer )
         {
                 this->rawImage = image;
         }
@@ -112,10 +111,10 @@ void FreeItem::changeImage( BITMAP* image )
         {
                 FreeItem oldFreeItem( *this );
 
-                this->rawImage = 0;
+                this->rawImage = nilPointer;
 
                 // recalculate displacement, it is how many pixels is this image from point of room’s origin
-                if ( image != 0 )
+                if ( image != nilPointer )
                 {
                         this->offset.first = ( ( this->x - this->y ) << 1 ) + static_cast< int >( getDataOfItem()->getWidthX() + getDataOfItem()->getWidthY() ) - ( image->w >> 1 ) - 1;
                         this->offset.second = this->x + this->y + static_cast< int >( getDataOfItem()->getWidthX() ) - image->h - this->z;
@@ -132,13 +131,13 @@ void FreeItem::changeImage( BITMAP* image )
                 this->myMask = WantMask;
 
                 // remask with old image
-                if ( oldFreeItem.getRawImage() != 0 )
+                if ( oldFreeItem.getRawImage() != nilPointer )
                 {
                         mediator->remaskFreeItem( &oldFreeItem );
                 }
 
                 // remask with new image
-                if ( image != 0 )
+                if ( image != nilPointer )
                 {
                         mediator->remaskFreeItem( this );
                 }
@@ -147,7 +146,7 @@ void FreeItem::changeImage( BITMAP* image )
 
 void FreeItem::changeShadow( BITMAP* shadow )
 {
-        if ( this->shadow == 0 )
+        if ( this->shadow == nilPointer )
         {
                 this->shadow = shadow;
         }
@@ -183,7 +182,7 @@ void FreeItem::requestCastShadow()
                 if ( this->myShady == WantShadow && this->shadyImage )
                 {
                         destroy_bitmap( this->shadyImage );
-                        this->shadyImage = 0;
+                        this->shadyImage = nilPointer;
                         this->myMask = WantMask;
                 }
         }
@@ -561,7 +560,7 @@ void FreeItem::requestMask()
         if ( this->myMask == WantMask && this->processedImage )
         {
                 destroy_bitmap( this->processedImage );
-                this->processedImage = 0;
+                this->processedImage = nilPointer;
         }
 
         this->myShady = NoShadow;
@@ -570,11 +569,11 @@ void FreeItem::requestMask()
 
 void FreeItem::maskImage( int x, int y, BITMAP* image )
 {
-        assert( image != 0 );
+        assert( image != nilPointer );
 
         // mask shaded image or raw image when item is not yet shaded
-        BITMAP* currentImage = ( this->shadyImage != 0 ? this->shadyImage : this->rawImage );
-        assert( currentImage != 0 );
+        BITMAP* currentImage = ( this->shadyImage != nilPointer ? this->shadyImage : this->rawImage );
+        assert( currentImage != nilPointer );
 
         int inix = x - this->offset.first;                      // initial X
         if ( inix < 0 ) inix = 0;
@@ -589,7 +588,7 @@ void FreeItem::maskImage( int x, int y, BITMAP* image )
         if ( endy > currentImage->h ) endy = currentImage->h;
 
         // in principle, image of masked item is image of unmasked item, shaded or unshaded
-        if ( this->processedImage == 0 )
+        if ( this->processedImage == nilPointer )
         {
                 this->processedImage = create_bitmap_ex( bitmap_color_depth( currentImage ), currentImage->w, currentImage->h );
         }
@@ -606,12 +605,10 @@ void FreeItem::maskImage( int x, int y, BITMAP* image )
         int n2i = inix + this->offset.first - x;
 
         endx *= increase1;
-        inix = inix * increase1;
+        inix *= increase1;
+        n2i *= increase2;
         #if IS_BIG_ENDIAN
                 inix += bitmap_color_depth( currentImage ) == 32 ? 1 : 0 ;
-        #endif
-        n2i = n2i * increase2;
-        #if IS_BIG_ENDIAN
                 n2i += bitmap_color_depth( image ) == 32 ? 1 : 0;
         #endif
 

@@ -27,10 +27,10 @@ UserControlled::UserControlled( Item * item, const std::string & behavior )
         , automaticStepsThruDoor( 0 )
         , highSpeedSteps( 0 )
         , shieldSteps( 0 )
-        , speedTimer( 0 )
-        , fallTimer( 0 )
-        , glideTimer( 0 )
-        , blinkingTimer( 0 )
+        , speedTimer( nilPointer )
+        , fallTimer( nilPointer )
+        , glideTimer( nilPointer )
+        , blinkingTimer( nilPointer )
 {
         fallFrames[ North ] = fallFrames[ South ] = fallFrames[ East ] = fallFrames[ West ] = 0xffffffff; // wtf is this magic mask for ?
 }
@@ -39,6 +39,11 @@ UserControlled::~UserControlled()
 {
         jumpVector.clear();
         highJumpVector.clear();
+
+        delete speedTimer;
+        delete fallTimer;
+        delete glideTimer;
+        delete blinkingTimer;
 }
 
 void UserControlled::changeActivityOfItem( const ActivityOfItem & activityOf, Item * sender )
@@ -161,7 +166,11 @@ void UserControlled::autoMove( PlayerItem * player )
 
                 player->animate();
 
-                if ( --automaticStepsThruDoor < 0 )
+                if ( automaticStepsThruDoor > 0 )
+                {
+                        --automaticStepsThruDoor ;
+                }
+                else
                 {
                         // done auto~moving
                         automaticStepsThruDoor = automaticSteps;
@@ -479,7 +488,7 @@ void UserControlled::useHooter( PlayerItem* player )
 
                 ItemData* hooterData = this->itemDataManager->findItemByLabel( labelOfFireFromHooter );
 
-                if ( hooterData != 0 )
+                if ( hooterData != nilPointer )
                 {
                         SoundManager::getInstance()->stop( player->getLabel(), Doughnut );
 
@@ -493,7 +502,7 @@ void UserControlled::useHooter( PlayerItem* player )
                                 player->getOrientation()
                         );
 
-                        freeItem->assignBehavior( "behavior of freezing doughnut", 0 );
+                        freeItem->assignBehavior( "behavior of freezing doughnut", nilPointer );
                         FireDoughnut * doughnutBehavior = dynamic_cast< FireDoughnut * >( freeItem->getBehavior() );
                         doughnutBehavior->setPlayerItem( player );
 
@@ -514,7 +523,7 @@ void UserControlled::takeItem( PlayerItem * player )
         if ( player->hasTool( "handbag" ) )
         {
                 Mediator* mediator = player->getMediator();
-                Item* takenItem = 0;
+                Item* takenItem = nilPointer;
 
                 // look for item below player
                 if ( ! player->checkPosition( 0, 0, -1, Add ) )
@@ -526,7 +535,7 @@ void UserControlled::takeItem( PlayerItem * player )
                                 Item* bottomItem = mediator->findCollisionPop( );
 
                                 // choose free pushable item less than or equal to 3/4 of size of one tile
-                                if ( bottomItem != 0 && bottomItem->getBehavior() != 0
+                                if ( bottomItem != nilPointer && bottomItem->getBehavior() != nilPointer
                                         && ( bottomItem->getBehavior()->getNameOfBehavior() == "behavior of thing able to move by pushing" ||
                                                 bottomItem->getBehavior()->getNameOfBehavior() == "behavior of big leap for player" )
                                         && bottomItem->getWidthX() <= ( mediator->getRoom()->getSizeOfOneTile() * 3 ) >> 2
@@ -541,7 +550,7 @@ void UserControlled::takeItem( PlayerItem * player )
                         }
 
                         // take that item
-                        if ( takenItem != 0 )
+                        if ( takenItem != nilPointer )
                         {
                                 // get image of that item
                                 BITMAP* takenItemImage = takenItem->getRawImage();
@@ -569,7 +578,7 @@ void UserControlled::takeItem( PlayerItem * player )
 
 void UserControlled::dropItem( PlayerItem* player )
 {
-        if ( player->getTakenItemData() != 0 )
+        if ( player->getTakenItemData() != nilPointer )
         {
                 std::cout << "drop item \"" << player->getTakenItemData()->getLabel() << "\"" << std::endl ;
 
@@ -581,16 +590,16 @@ void UserControlled::dropItem( PlayerItem* player )
                                                            player->getZ() - LayerHeight,
                                                            Nowhere );
 
-                        freeItem->assignBehavior( player->getTakenItemBehavior(), 0 );
+                        freeItem->assignBehavior( player->getTakenItemBehavior(), nilPointer );
 
                         player->getMediator()->getRoom()->addFreeItem( freeItem );
 
-                        player->assignTakenItem( 0, 0, "still" );
+                        player->assignTakenItem( nilPointer, nilPointer, "still" );
 
                         // update activity
                         activity = ( activity == DropAndJump ? Jump : Wait );
 
-                        GameManager::getInstance()->setItemTaken( 0 );
+                        GameManager::getInstance()->setItemTaken( nilPointer );
 
                         SoundManager::getInstance()->stop( player->getLabel(), Fall );
                         SoundManager::getInstance()->play( player->getLabel(), DropItem );

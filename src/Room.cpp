@@ -64,7 +64,7 @@ Room::Room( const std::string& roomFile, const std::string& scenery, int xTiles,
         // create empty floor
         for ( int i = 0; i < xTiles * yTiles + 1; i++ )
         {
-                this->floor.push_back( 0 );
+                this->floor.push_back( nilPointer );
         }
 
         // Creación del vector de índices. Asigna el contenido de los elementos de la siguiente forma
@@ -104,7 +104,7 @@ Room::Room( const std::string& roomFile, const std::string& scenery, int xTiles,
         //              55  62
         //                63
 
-        int i( 0 );
+        int pos = 0;
         this->drawIndex = new int[ xTiles * yTiles ];
 
         for ( int f = 0; f <= ( xTiles + yTiles - 1 ); f++ )
@@ -114,7 +114,7 @@ Room::Room( const std::string& roomFile, const std::string& scenery, int xTiles,
                         int temp = n * ( xTiles - 1 ) + f;
                         if ( ( temp >= n * xTiles ) && ( temp < ( n + 1 ) * xTiles ) )
                         {
-                                this->drawIndex[ i++ ] = temp;
+                                this->drawIndex[ pos++ ] = temp;
                         }
                 }
         }
@@ -233,7 +233,7 @@ void Room::addDoor( Door * door )
 
 void Room::addGridItem( GridItem * gridItem )
 {
-        if ( gridItem == 0 ) return;
+        if ( gridItem == nilPointer ) return;
 
         if ( ( gridItem->getCellX() < 0 || gridItem->getCellY() < 0 ) ||
                 ( gridItem->getCellX() >= static_cast< int >( this->numberOfTiles.first ) ||
@@ -300,7 +300,7 @@ void Room::addGridItem( GridItem * gridItem )
 
 void Room::addFreeItem( FreeItem * freeItem )
 {
-        if ( freeItem == 0 ) return;
+        if ( freeItem == nilPointer ) return;
 
         if ( freeItem->getX() < 0 || freeItem->getY() < 1 || freeItem->getZ() < Top )
         {
@@ -376,7 +376,7 @@ void Room::addFreeItem( FreeItem * freeItem )
 
 bool Room::addPlayerToRoom( PlayerItem* playerItem, bool playerEntersRoom )
 {
-        if ( playerItem == 0 ) return false;
+        if ( playerItem == nilPointer ) return false;
 
         for ( std::list< PlayerItem * >::const_iterator pi = playersYetInRoom.begin (); pi != playersYetInRoom.end (); ++pi )
         {
@@ -558,8 +558,7 @@ void Room::copyAnotherCharacterAsEntered( const std::string& name )
 
 void Room::removeFloor( FloorTile * floorTile )
 {
-        // La eliminación es en realidad una sustitución por una loseta vacía
-        this->floor[ floorTile->getColumn () ] = 0;
+        this->floor[ floorTile->getColumn () ] = nilPointer;
         delete floorTile;
 }
 
@@ -624,7 +623,7 @@ bool Room::removePlayerFromRoom( PlayerItem* playerItem, bool playerExitsRoom )
                         {
                                 PlayerItem* nextPlayer = mediator->getWaitingPlayer();
 
-                                if ( nextPlayer != 0 )
+                                if ( nextPlayer != nilPointer )
                                 {
                                         // activate other player in room
                                         mediator->setActivePlayer( nextPlayer );
@@ -691,7 +690,7 @@ void Room::removeBars ()
                 }
         }
 
-        if ( howManyBars != 0 )
+        if ( howManyBars > 0 )
                 std::cout << howManyBars << " bars are gone" << std::endl ;
 }
 
@@ -703,7 +702,7 @@ void Room::draw( BITMAP* where )
         if ( active )
         {
                 // draw in picture of room itself when destination bitmap isn’t given
-                if ( where == 0 )
+                if ( where == nilPointer )
                         where = this->picture ;
 
                 // clean the image where to draw this room
@@ -728,7 +727,7 @@ void Room::draw( BITMAP* where )
                         {
                                 unsigned int column = this->numberOfTiles.first * yCell + xCell;
 
-                                if ( floor[ column ] != 0 )  // if there is tile of floor here
+                                if ( floor[ column ] != nilPointer )  // if there is tile of floor here
                                 {
                                         // shade this tile when shadows are on
                                         if ( shadingScale < 256 && floor[ column ]->getRawImage() )
@@ -818,7 +817,7 @@ void Room::draw( BITMAP* where )
 void Room::calculateBounds()
 {
         bounds[ North ] = doors[ North ] || doors[ Northeast ] || doors[ Northwest ] || this->kindOfFloor == "none" ? tileSize : 0;
-        bounds[ East ] = doors[ East ] || doors[ Eastnorth ] || doors[ Eastsouth ]  || this->kindOfFloor == "none" ? tileSize : 0;
+        bounds[ East ] = doors[ East ] || doors[ Eastnorth ] || doors[ Eastsouth ] || this->kindOfFloor == "none" ? tileSize : 0;
         bounds[ South ] = tileSize * numberOfTiles.first - ( doors[ South ] || doors[ Southeast ] || doors[ Southwest ]  ? tileSize : 0 );
         bounds[ West ] = tileSize * numberOfTiles.second - ( doors[ West ] || doors[ Westnorth ] || doors[ Westsouth ]  ? tileSize : 0 );
 
@@ -1097,7 +1096,7 @@ TripleRoomInitialPoint* Room::findInitialPointOfEntryToTripleRoom( const Way& wa
                                                                 listOfInitialPointsForTripleRoom.end (),
                                                                 std::bind2nd( EqualTripleRoomInitialPoint(), way ) );
 
-        return ( i != listOfInitialPointsForTripleRoom.end () ? ( &( *i ) ) : 0 );
+        return ( i != listOfInitialPointsForTripleRoom.end () ? ( &( *i ) ) : nilPointer );
 }
 
 TripleRoomInitialPoint::TripleRoomInitialPoint( const Way& way, int x, int y )

@@ -58,7 +58,7 @@ bool Mobile::update ()
                                 // Emite el sonido de de desplazamiento si está siendo empujado, no desplazado
                                 // por un elemento que haya debajo
                                 // TODO Hecho para portátiles y para Carlos ¿aplica a otros elementos?
-                                if ( this->sender == 0 || ( this->sender != 0 && this->sender != this->item ) )
+                                if ( this->sender == nilPointer || ( this->sender != nilPointer && this->sender != this->item ) )
                                 {
                                         SoundManager::getInstance()->play( freeItem->getLabel(), activity );
                                 }

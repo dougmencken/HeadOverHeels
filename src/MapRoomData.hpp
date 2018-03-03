@@ -38,30 +38,28 @@ public:
         virtual ~MapRoomData( ) ;
 
         /**
-         * Busca una sala conectada con ésta
+         * Find room connected to this one
          */
         std::string findConnectedRoom ( const Way& wayOfExit, Way* wayOfEntry ) const ;
 
         /**
-         * Comprueba que la entrada a la sala es correcta y la corrige si no lo es
-         * Cuando se accede a una sala triple o cuádruple desde una simple o doble
-         * la entrada no es correcta porque por la estructura del mapa se devuelve
-         * un punto cardinal simple y las puertas de las salas triple o cuádruples
-         * no están situadas en esos puntos cardinales
-         * @param wayOfEntry Dirección de entrada a comprobar
-         * @param previousRoom Nombre de la sala desde la cual se ha entrado a ésta
+         * See if entrance to this room is okay or fix it if it’s not
+         *
+         * When triple or quadruple room is entered from single or double room
+         * then entrance isn’t okay because map returns simple way like south or west
+         * but doors of triple and quadruple rooms are out of such ways
          */
         void adjustEntry ( Way* wayOfEntry, const std::string& previousRoom ) ;
 
 private:
 
         /**
-         * Nombre completo del archivo que contiene los datos de esta sala
+         * Name of file with data for this room
          */
         std::string room ;
 
         /**
-         * Indica si la sala ha sido visitada por alguno de los jugadores
+         * When this room is already visited by any of characters
          */
         bool visited ;
 
@@ -153,102 +151,36 @@ public:
 
         bool isVisited () const {  return this->visited ;  }
 
-        /**
-         * Establece la sala situada al norte
-         * @param room El nombre completo del archivo de la sala
-         */
         void setNorth ( const std::string& room ) {  this->north = room ;  }
 
-        /**
-         * Establece la sala situada al sur
-         * @param room El nombre completo del archivo de la sala
-         */
         void setSouth ( const std::string& room ) {  this->south = room ;  }
 
-        /**
-         * Establece la sala situada al este
-         * @param room El nombre completo del archivo de la sala
-         */
         void setEast ( const std::string& room ) {  this->east = room ;  }
 
-        /**
-         * Establece la sala situada al oeste
-         * @param room El nombre completo del archivo de la sala
-         */
         void setWest ( const std::string& room ) {  this->west = room ;  }
 
-        /**
-         * Establece la sala situada debajo. La sala no puede tener suelo
-         * @param room El nombre completo del archivo de la sala
-         */
         void setFloor ( const std::string& room ) {  this->floor = room ;  }
 
-        /**
-         * Establece la sala situada encima. Dicha sala no puede tener suelo
-         * @param room El nombre completo del archivo de la sala
-         */
         void setRoof ( const std::string& room ) {  this->roof = room ;  }
 
-        /**
-         * Establece la sala a la que conduce el telepuerto. La sala destino debe
-         * tener un telepuerto en la misma posición que la actual
-         * @param room El nombre completo del archivo de la sala
-         */
         void setTeleport ( const std::string& room ) {  this->teleport = room ;  }
 
-        /**
-         * Establece la sala a la que conduce el segundo telepuerto. La sala destino debe
-         * tener un telepuerto en la misma posición que la actual
-         * @param room El nombre completo del archivo de la sala
-         */
         void setTeleportToo ( const std::string& room ) {  this->teleport2 = room ;  }
 
-        /**
-         * Establece la sala situada en la posición norte-este
-         * @param room El nombre completo del archivo de la sala
-         */
         void setNorthEast ( const std::string& room ) {  this->northEast = room ;  }
 
-        /**
-         * Establece la sala situada en la posición norte-oeste
-         * @param room El nombre completo del archivo de la sala
-         */
         void setNorthWest ( const std::string& room ) {  this->northWest = room ;  }
 
-        /**
-         * Establece la sala situada en la posición sur-este
-         * @param room El nombre completo del archivo de la sala
-         */
         void setSouthEast ( const std::string& room ) {  this->southEast = room ;  }
 
-        /**
-         * Establece la sala situada en la posición sur-oeste
-         * @param room El nombre completo del archivo de la sala
-         */
         void setSouthWest ( const std::string& room ) {  this->southWest = room ;  }
 
-        /**
-         * Establece la sala situada en la posición este-norte
-         * @param room El nombre completo del archivo de la sala
-         */
         void setEastNorth ( const std::string& room ) {  this->eastNorth = room ;  }
 
-        /**
-         * Establece la sala situada en la posición este-sur
-         * @param room El nombre completo del archivo de la sala
-         */
         void setEastSouth ( const std::string& room ) {  this->eastSouth = room ;  }
 
-        /**
-         * Establece la sala situada en la posición oeste-norte
-         * @param room El nombre completo del archivo de la sala
-         */
         void setWestNorth ( const std::string& room ) {  this->westNorth = room ;  }
 
-        /**
-         * Establece la sala situada en la posición oeste-sur
-         * @param room El nombre completo del archivo de la sala
-         */
         void setWestSouth ( const std::string& room ) {  this->westSouth = room ;  }
 
 };

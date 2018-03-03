@@ -18,14 +18,14 @@ PlayerHeels::PlayerHeels( Item* item, const std::string& behavior ) :
         highJumpFrames = 21;
 
         // salto normal
-        for ( int i = 0; i < jumpFrames; i++ )
+        for ( unsigned int i = 0; i < jumpFrames; i++ )
         {
                 JumpMotion jumpMotion( i == 9 || i == 19 ? 2 : 1 , ( i < jumpFrames / 2 ) ? 3 : -3 );
                 jumpVector.push_back( jumpMotion );
         }
 
         // salto largo
-        for ( int i = 0; i < highJumpFrames; i++ )
+        for ( unsigned int i = 0; i < highJumpFrames; i++ )
         {
                 JumpMotion jumpMotion( 2 , ( i < 17 ) ? 3 : -3 );
                 highJumpVector.push_back( jumpMotion );
@@ -58,8 +58,6 @@ PlayerHeels::PlayerHeels( Item* item, const std::string& behavior ) :
 
 PlayerHeels::~PlayerHeels( )
 {
-        delete speedTimer;
-        delete fallTimer;
 }
 
 bool PlayerHeels::update()
@@ -178,12 +176,12 @@ void PlayerHeels::behave ()
                 {
                         if ( input->take() )
                         {
-                                activity = ( playerItem->getTakenItemData() == 0 ? TakeItem : DropItem );
+                                activity = ( playerItem->getTakenItemData() == nilPointer ? TakeItem : DropItem );
                                 input->noRepeat( "take" );
                         }
                         else if ( input->takeAndJump() )
                         {
-                                activity = ( playerItem->getTakenItemData() == 0 ? TakeAndJump : DropAndJump );
+                                activity = ( playerItem->getTakenItemData() == nilPointer ? TakeAndJump : DropAndJump );
                                 input->noRepeat( "take&jump" );
                         }
                         else if ( input->movenorth() && ! input->movesouth() && ! input->moveeast() && ! input->movewest() )
@@ -221,12 +219,12 @@ void PlayerHeels::behave ()
                         }
                         else if ( input->take() )
                         {
-                                activity = ( playerItem->getTakenItemData() == 0 ? TakeItem : DropItem );
+                                activity = ( playerItem->getTakenItemData() == nilPointer ? TakeItem : DropItem );
                                 input->noRepeat( "take" );
                         }
                         else if ( input->takeAndJump() )
                         {
-                                activity = ( playerItem->getTakenItemData() == 0 ? TakeAndJump : DropAndJump );
+                                activity = ( playerItem->getTakenItemData() == nilPointer ? TakeAndJump : DropAndJump );
                                 input->noRepeat( "take&jump" );
                         }
                         else if ( input->movenorth() && ! input->movesouth() && ! input->moveeast() && ! input->movewest() )
@@ -260,12 +258,12 @@ void PlayerHeels::behave ()
                         }
                         else if ( input->take() )
                         {
-                                activity = ( playerItem->getTakenItemData() == 0 ? TakeItem : DropItem );
+                                activity = ( playerItem->getTakenItemData() == nilPointer ? TakeItem : DropItem );
                                 input->noRepeat( "take" );
                         }
                         else if ( input->takeAndJump() )
                         {
-                                activity = ( playerItem->getTakenItemData() == 0 ? TakeAndJump : DropAndJump );
+                                activity = ( playerItem->getTakenItemData() == nilPointer ? TakeAndJump : DropAndJump );
                                 input->noRepeat( "take&jump" );
                         }
                         else if ( input->movenorth() && ! input->movesouth() && ! input->moveeast() && ! input->movewest() )
@@ -320,7 +318,7 @@ void PlayerHeels::behave ()
                         // pick or drop an item when falling
                         if ( input->take() )
                         {
-                                activity = ( playerItem->getTakenItemData() == 0 ? TakeItem : DropItem );
+                                activity = ( playerItem->getTakenItemData() == nilPointer ? TakeItem : DropItem );
                                 input->noRepeat( "take" );
                         }
                 }

@@ -33,11 +33,11 @@ public:
 
         /**
          * @param name Name of this font to mention it
-         * @param fontFile Name of picture file with letters
+         * @param pictureOfLetters Picture with letters
          * @param color Color of letters
          * @param doubleHeight Double height of letters
          */
-        Font( const std::string& name, const std::string& fontFile, Color * color, bool doubleHeight = false ) ;
+        Font( const std::string& name, const BITMAP * pictureOfLetters, Color * color, bool doubleHeight = false ) ;
 
         virtual ~Font( ) ;
 

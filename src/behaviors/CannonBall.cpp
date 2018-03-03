@@ -55,7 +55,7 @@ bool CannonBall::update ()
                                                 Nowhere
                                         );
 
-                                        bubbles->assignBehavior( "behavior of disappearance in time", 0 );
+                                        bubbles->assignBehavior( "behavior of disappearance in time", nilPointer );
                                         bubbles->setCollisionDetector( false );
 
                                         item->getMediator()->getRoom()->addFreeItem( bubbles );

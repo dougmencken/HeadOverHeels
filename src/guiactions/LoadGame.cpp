@@ -8,7 +8,7 @@ using gui::LoadGame;
 using gui::CreatePlanetsScreen;
 
 
-LoadGame::LoadGame( BITMAP* picture, int slot )
+LoadGame::LoadGame( BITMAP* picture, unsigned int slot )
         : Action( picture )
         , slot( slot )
 {

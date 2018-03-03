@@ -1,5 +1,6 @@
 
 #include "Color.hpp"
+#include "Ism.hpp"
 
 #include <cmath> // for sqrt
 
@@ -22,7 +23,7 @@ BITMAP* Color::colorizePicture( BITMAP* picture, Color* color )
 /* private static */
 BITMAP* Color::colorizePicture( BITMAP* picture, unsigned char red, unsigned char green, unsigned char blue )
 {
-        if ( picture == 0 ) return 0 ;
+        if ( picture == nilPointer ) return nilPointer ;
 
         for ( int x = 0; x < picture->w; x++ )
         {
@@ -41,7 +42,7 @@ BITMAP* Color::colorizePicture( BITMAP* picture, unsigned char red, unsigned cha
 /* public static */
 BITMAP * Color::pictureToGrayscale ( BITMAP * picture )
 {
-        if ( picture == 0 ) return 0 ;
+        if ( picture == nilPointer ) return nilPointer ;
 
         for ( int y = 0; y < picture->h; y++ )
         {

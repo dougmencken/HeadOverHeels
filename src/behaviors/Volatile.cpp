@@ -58,7 +58,7 @@ bool Volatile::update ()
 
                                                 // when item exists, look at whether it is volatile or special
                                                 // because that item would disappear unless it is leaning on another one
-                                                if ( item != 0 && item->getBehavior() != 0 &&
+                                                if ( item != nilPointer && item->getBehavior() != nilPointer &&
                                                         item->getBehavior()->getNameOfBehavior () != "behavior of disappearance on jump into" &&
                                                         item->getBehavior()->getNameOfBehavior () != "behavior of slow disappearance on jump into" &&
                                                         item->getBehavior()->getNameOfBehavior () != "behavior of disappearance on touch" &&
@@ -83,18 +83,18 @@ bool Volatile::update ()
                                                 {
                                                         Item* bottomItem = mediator->findCollisionPop( );
 
-                                                        if ( bottomItem != 0 )
+                                                        if ( bottomItem != nilPointer )
                                                         {
                                                                 // volatile doesn’t vanish if it is leaning~
                                                                 //   on item without behavior, or
                                                                 //   on item that is not volatile, or
                                                                 //   on item that disappears
-                                                                if ( ( bottomItem->getBehavior() == 0 ) ||
-                                                                        ( bottomItem->getBehavior() != 0
+                                                                if ( ( bottomItem->getBehavior() == nilPointer ) ||
+                                                                        ( bottomItem->getBehavior() != nilPointer
                                                                                 && bottomItem->getBehavior()->getNameOfBehavior () != "behavior of disappearance on jump into"
                                                                                 && bottomItem->getBehavior()->getNameOfBehavior () != "behavior of disappearance on touch"
                                                                                 && bottomItem->getBehavior()->getNameOfBehavior () != "behavior of something special" ) ||
-                                                                        ( bottomItem->getBehavior() != 0
+                                                                        ( bottomItem->getBehavior() != nilPointer
                                                                                 && bottomItem->getBehavior()->getActivityOfItem() == Vanish ) )
                                                                 {
                                                                         isGone = false;
@@ -113,7 +113,8 @@ bool Volatile::update ()
                         // if it is puppy which disappears when Head or composite player is in room
                         else if ( getNameOfBehavior () == "behavior of disappearance as soon as Head appears" )
                         {
-                                if ( mediator->findItemByLabel( "head" ) != 0 || mediator->findItemByLabel( "headoverheels" ) != 0 )
+                                if ( mediator->findItemByLabel( "head" ) != nilPointer ||
+                                        mediator->findItemByLabel( "headoverheels" ) != nilPointer )
                                 {
                                         activity = Vanish;
                                         disappearanceTimer->reset();
@@ -144,7 +145,8 @@ bool Volatile::update ()
                                 }
                                 else if ( getNameOfBehavior () == "behavior of disappearance as soon as Head appears" )
                                 {
-                                        if ( mediator->findItemByLabel( "head" ) != 0 || mediator->findItemByLabel( "headoverheels" ) != 0 )
+                                        if ( mediator->findItemByLabel( "head" ) != nilPointer ||
+                                                mediator->findItemByLabel( "headoverheels" ) != nilPointer )
                                         {
                                                 activity = Vanish;
                                         }
@@ -178,7 +180,7 @@ bool Volatile::update ()
                                         item->getX(), item->getY(), item->getZ(),
                                         Nowhere );
 
-                                freeItem->assignBehavior( "behavior of disappearance in time", 0 );
+                                freeItem->assignBehavior( "behavior of disappearance in time", nilPointer );
                                 freeItem->setCollisionDetector( false );
 
                                 mediator->getRoom()->addFreeItem( freeItem );

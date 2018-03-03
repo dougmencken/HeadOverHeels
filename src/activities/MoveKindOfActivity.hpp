@@ -21,9 +21,6 @@ namespace isomot
 class Behavior ;
 class FreeItem ;
 
-/**
- * Movimiento de un elemento
- */
 
 class MoveKindOfActivity : public KindOfActivity
 {
@@ -36,43 +33,35 @@ public:
 
         virtual ~MoveKindOfActivity( ) ;
 
-        /**
-         * Único objeto de esta clase para toda la aplicación
-         * @return Un puntero a la clase madre para hacer uso del polimorfismo de clase
-         */
         static KindOfActivity * getInstance () ;
 
         /**
-         * Estado que mueve a un elemento
-         * @param behavior Comportamiento usuario del estado de movimiento
+         * Move item
+         * @param behavior Behavior of item
          * @param activity Way of movement
-         * @param canFall Indica si el elemento puede caer. Si se dan las condiciones para la caída
-         *                se producirá el cambio de estado correspondiente
-         * @return true si se produjo el movimiento o el cambio de estado; o, false si hubo colisión
+         * @param canFall true if item falls, false if it flies
+         * @return when item displaced or changed activity, false when there’s collision
          */
         virtual bool move ( Behavior * behavior, ActivityOfItem * activity, bool canFall ) ;
 
 protected:
 
         /**
-         * Operación recursiva que levanta todos los elementos apilados sobre un elemento
-         * @param freeItem Primer elemento de la pila
-         * @param z Unidades que ascenderá la pila de elementos
+         * Recursively lift items stacked on this item
+         * @param freeItem Currently first item
+         * @param z Units to ascend
          */
         void ascent ( FreeItem * freeItem, int z ) ;
 
         /**
-         * Operación recursiva que hace descender todos los elementos apilados sobre un elemento
-         * @param freeItem Primer elemento de la pila
-         * @param z Unidades que descenderá la pila de elementos
+         * Recursively lower items stacked on this item
+         * @param freeItem Currently first item
+         * @param z Units to descend
          */
         void descend ( FreeItem * freeItem, int z ) ;
 
 private:
 
-        /**
-         * Único objeto de esta clase para toda la aplicación
-         */
         static KindOfActivity * instance ;
 
 };

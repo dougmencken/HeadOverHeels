@@ -1,5 +1,6 @@
 
 #include "BonusManager.hpp"
+#include "Ism.hpp"
 
 
 namespace isomot
@@ -15,11 +16,11 @@ BonusManager::~BonusManager( )
         bonusRooms.clear();
 }
 
-BonusManager * BonusManager::instance = 0 ;
+BonusManager * BonusManager::instance = nilPointer ;
 
 BonusManager* BonusManager::getInstance ()
 {
-        if ( instance == 0 )
+        if ( instance == nilPointer )
         {
                 instance = new BonusManager();
         }
@@ -101,7 +102,7 @@ bool BonusRoom::isPresent ( const std::string& label )
 
 bool BonusRoom::operator== ( const std::string& fileName )
 {
-        return ( this->nameOfFile.compare( fileName ) == 0 ) ;
+        return ( this->nameOfFile == fileName ) ;
 }
 
 }

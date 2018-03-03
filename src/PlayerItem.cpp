@@ -18,14 +18,14 @@ PlayerItem::PlayerItem( ItemData* itemData, int x, int y, int z, const Way& way 
         , lives( 0 )
         , highSpeed( 0 )
         , highJumps( 0 )
-        , shield( 0 )
+        , shield( 0.0 )
         , howManyDoughnuts( 0 )
         , exit( NoExit )
         , entry( JustWait )
-        , shieldTimer( 0 )
+        , shieldTimer( nilPointer )
         , shieldTime( 25.0 )
-        , takenItemData( 0 )
-        , takenItemImage( 0 )
+        , takenItemData( nilPointer )
+        , takenItemImage( nilPointer )
         , originalDataOfItem( itemData )
 {
 
@@ -41,10 +41,10 @@ PlayerItem::PlayerItem( const PlayerItem& playerItem )
         , howManyDoughnuts( playerItem.howManyDoughnuts )
         , exit( playerItem.exit )
         , entry( playerItem.entry )
-        , shieldTimer( 0 )
+        , shieldTimer( nilPointer )
         , shieldTime( playerItem.shieldTime )
-        , takenItemData( 0 )
-        , takenItemImage( 0 )
+        , takenItemData( nilPointer )
+        , takenItemImage( nilPointer )
         , originalDataOfItem( playerItem.getOriginalDataOfItem() )
 {
 
@@ -52,10 +52,7 @@ PlayerItem::PlayerItem( const PlayerItem& playerItem )
 
 PlayerItem::~PlayerItem()
 {
-        if ( this->shieldTimer != 0 )
-        {
-                delete shieldTimer;
-        }
+        delete shieldTimer;
 }
 
 void PlayerItem::setWayOfExit ( const Way& way )
@@ -100,7 +97,7 @@ void PlayerItem::autoMoveOnEntry ( const Way& wayOfEntry )
 {
         setWayOfEntry( wayOfEntry );
 
-        if ( getBehavior() == 0 )
+        if ( getBehavior() == nilPointer )
         {
                 std::cerr << "nil behavior at PlayerItem::autoMoveOnEntry" << std::endl ;
                 return;
@@ -292,7 +289,7 @@ bool PlayerItem::updatePosition( int newX, int newY, int newZ, const Coordinate&
                                                 WestnorthBorder, WestsouthBorder, WestBorder };
 
                 // check each limit of room
-                for ( int i = 0; i < 12; i++ )
+                for ( unsigned int i = 0; i < 12; i++ )
                 {
                         if ( isCollidingWithRoomBorder( ways[ i ] ) )
                         {
@@ -526,7 +523,7 @@ bool PlayerItem::isCollidingWithRoomBorder( const Way& way )
 void PlayerItem::behave ()
 {
         UserControlled* userBehavior = dynamic_cast< UserControlled* >( this->behavior );
-        if ( userBehavior != 0 )
+        if ( userBehavior != nilPointer )
         {
                 userBehavior->behave ( );
         }
@@ -534,7 +531,7 @@ void PlayerItem::behave ()
 
 bool PlayerItem::update ()
 {
-        if ( behavior != 0 )
+        if ( behavior != nilPointer )
         {
                 behavior->update ( );
         }
@@ -556,11 +553,11 @@ void PlayerItem::wait ()
                 size_t frame = ( getDataOfItem()->howManyMotions() - getDataOfItem()->howManyExtraFrames() ) / getDataOfItem()->howManyFramesForOrientations() * orientOccident ;
                 if ( frame >= getDataOfItem()->howManyMotions() ) frame = 0;
 
-                if ( this->rawImage != 0 && /* if images differ */ this->rawImage != getDataOfItem()->getMotionAt( frame ) )
+                if ( this->rawImage != nilPointer && /* if images differ */ this->rawImage != getDataOfItem()->getMotionAt( frame ) )
                 {
                         changeImage( getDataOfItem()->getMotionAt( frame ) );
 
-                        if ( this->shadow != 0 )
+                        if ( this->shadow != nilPointer )
                         {
                                 changeShadow( getDataOfItem()->getShadowAt( frame ) );
                         }
@@ -672,7 +669,7 @@ void PlayerItem::activateShield()
 
 void PlayerItem::decreaseShield()
 {
-        if ( this->shieldTimer != 0 )
+        if ( this->shieldTimer != nilPointer )
         {
                 this->shield = shieldTime - shieldTimer->getValue();
                 GameManager::getInstance()->modifyShield( this->getLabel(), this->shield );
@@ -684,7 +681,7 @@ void PlayerItem::decreaseShield()
                 this->shield = 0;
                 this->shieldTimer->stop();
                 delete this->shieldTimer;
-                this->shieldTimer = 0;
+                this->shieldTimer = nilPointer;
         }
 }
 
@@ -692,23 +689,23 @@ void PlayerItem::liberatePlanet ()
 {
         std::string scenery = this->mediator->getRoom()->getScenery();
 
-        if ( scenery.compare( "jail" ) == 0 || scenery.compare( "blacktooth" ) == 0 || scenery.compare( "market" ) == 0 )
+        if ( scenery == "jail" || scenery == "blacktooth" || scenery == "market" )
         {
                 GameManager::getInstance()->liberatePlanet( "blacktooth" );
         }
-        else if ( scenery.compare( "egyptus" ) == 0 )
+        else if ( scenery == "egyptus" )
         {
                 GameManager::getInstance()->liberatePlanet( "egyptus" );
         }
-        else if ( scenery.compare( "penitentiary" ) == 0 )
+        else if ( scenery == "penitentiary" )
         {
                 GameManager::getInstance()->liberatePlanet( "penitentiary" );
         }
-        else if ( scenery.compare( "safari" ) == 0 )
+        else if ( scenery == "safari" )
         {
                 GameManager::getInstance()->liberatePlanet( "safari" );
         }
-        else if ( scenery.compare( "byblos" ) == 0 )
+        else if ( scenery == "byblos" )
         {
                 GameManager::getInstance()->liberatePlanet( "byblos" );
         }
@@ -737,7 +734,7 @@ void PlayerItem::setShieldTime ( double shield )
 {
         this->shieldTime = shield;
 
-        if ( this->shieldTime > 0 && this->shieldTimer == 0 )
+        if ( this->shieldTime > 0 && this->shieldTimer == nilPointer )
         {
                 this->shieldTimer = new Timer();
                 this->shieldTimer->go();

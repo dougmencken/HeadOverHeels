@@ -10,7 +10,7 @@
 namespace isomot
 {
 
-KindOfActivity * DisplaceKindOfActivity::instance = 0 ;
+KindOfActivity * DisplaceKindOfActivity::instance = nilPointer ;
 
 
 DisplaceKindOfActivity::DisplaceKindOfActivity() : KindOfActivity()
@@ -24,7 +24,7 @@ DisplaceKindOfActivity::~DisplaceKindOfActivity()
 
 KindOfActivity* DisplaceKindOfActivity::getInstance()
 {
-        if ( instance == 0 )
+        if ( instance == nilPointer )
         {
                 instance = new DisplaceKindOfActivity();
         }
@@ -35,20 +35,17 @@ KindOfActivity* DisplaceKindOfActivity::getInstance()
 bool DisplaceKindOfActivity::displace( Behavior* behavior, ActivityOfItem* activity, bool canFall )
 {
         bool itemDisplaced = false;
-        FreeItem* freeItem = 0;
-        ActivityOfItem displaceActivity = *activity;
 
-        // Acceso al elemento que hay que mover si dicho elemento es libre
-        if ( behavior->getItem()->getId() & 1 )
-        {
-                freeItem = dynamic_cast < FreeItem * > ( behavior->getItem () );
-        }
+        // get free item to move from its behavior
+        FreeItem* freeItem = dynamic_cast < FreeItem * > ( behavior->getItem () );
+
+        ActivityOfItem displaceActivity = *activity;
 
         switch ( *activity )
         {
                 case DisplaceNorth:
                 case ForceDisplaceNorth:
-                        if ( freeItem != 0 )
+                        if ( freeItem != nilPointer )
                         {
                                 itemDisplaced = freeItem->addToX( -1 );
                         }
@@ -57,7 +54,7 @@ bool DisplaceKindOfActivity::displace( Behavior* behavior, ActivityOfItem* activ
 
                 case DisplaceSouth:
                 case ForceDisplaceSouth:
-                        if ( freeItem != 0 )
+                        if ( freeItem != nilPointer )
                         {
                                 itemDisplaced = freeItem->addToX( 1 );
                         }
@@ -66,7 +63,7 @@ bool DisplaceKindOfActivity::displace( Behavior* behavior, ActivityOfItem* activ
 
                 case DisplaceEast:
                 case ForceDisplaceEast:
-                        if ( freeItem != 0 )
+                        if ( freeItem != nilPointer )
                         {
                                 itemDisplaced = freeItem->addToY( -1 );
                         }
@@ -75,7 +72,7 @@ bool DisplaceKindOfActivity::displace( Behavior* behavior, ActivityOfItem* activ
 
                 case DisplaceWest:
                 case ForceDisplaceWest:
-                        if ( freeItem != 0 )
+                        if ( freeItem != nilPointer )
                         {
                                 itemDisplaced = freeItem->addToY( 1 );
                         }
@@ -83,28 +80,28 @@ bool DisplaceKindOfActivity::displace( Behavior* behavior, ActivityOfItem* activ
                         break;
 
                 case DisplaceNortheast:
-                        if ( freeItem != 0 )
+                        if ( freeItem != nilPointer )
                         {
                                 itemDisplaced = freeItem->addToPosition( -1, -1, 0 );
                         }
                         break;
 
                 case DisplaceNorthwest:
-                        if ( freeItem != 0 )
+                        if ( freeItem != nilPointer )
                         {
                                 itemDisplaced = freeItem->addToPosition( -1, 1, 0 );
                         }
                         break;
 
                 case DisplaceSoutheast:
-                        if ( freeItem != 0 )
+                        if ( freeItem != nilPointer )
                         {
                                 itemDisplaced = freeItem->addToPosition( 1, -1, 0 );
                         }
                         break;
 
                 case DisplaceSouthwest:
-                        if ( freeItem != 0 )
+                        if ( freeItem != nilPointer )
                         {
                                 itemDisplaced = freeItem->addToPosition( 1, 1, 0 );
                         }
@@ -118,24 +115,25 @@ bool DisplaceKindOfActivity::displace( Behavior* behavior, ActivityOfItem* activ
                         ;
         }
 
-        if ( freeItem != 0 )
+        if ( freeItem != nilPointer )
         {
-                // En caso de colisión en los ejes X o Y se desplaza a los elementos implicados
+                // when there’s collision
                 if ( ! itemDisplaced )
                 {
+                        // move involved items
                         this->propagateActivityToAdjacentItems( freeItem, displaceActivity );
                 }
-                // En caso de que el elemento se haya movido se comprueba si hay que desplazar los elementos
-                // que pueda tener encima
                 else
                 {
+                        // look if items on top of this item needs to move too
                         this->propagateActivityToItemsAbove( freeItem, *activity );
                 }
         }
 
-        // Si el elemento puede caer entonces se comprueba si hay que cambiar el estado
+        // when item can fall
         if ( canFall )
         {
+                // look if it falls yet
                 if ( FallKindOfActivity::getInstance()->fall( behavior ) )
                 {
                         behavior->changeActivityTo( FallKindOfActivity::getInstance() );

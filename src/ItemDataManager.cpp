@@ -149,8 +149,8 @@ void ItemDataManager::loadItems ()
                                 }
 
                                 // load graphics for door
-                                BITMAP* picture = load_png( isomot::pathToFile( isomot::sharePath() + isomot::GameManager::getInstance()->getChosenGraphicSet() + pathSeparator + item->getNameOfFile( ) ), 0 );
-                                if ( picture == 0 )
+                                BITMAP* picture = load_png( isomot::pathToFile( isomot::sharePath() + isomot::GameManager::getInstance()->getChosenGraphicSet() + pathSeparator + item->getNameOfFile( ) ), nilPointer );
+                                if ( picture == nilPointer )
                                 {
                                         std::cerr <<
                                                 "picture \"" << item->getNameOfFile( ) <<
@@ -228,7 +228,7 @@ ItemData* ItemDataManager::findItemByLabel( const std::string& label )
         }
 
         std::cerr << "item with label \"" << label << "\" is absent" << std::endl;
-        return 0;
+        return nilPointer ;
 }
 
 ItemDataManager::DoorMeasures::DoorMeasures()
@@ -249,8 +249,8 @@ ItemData* ItemDataManager::createPictureFrames( ItemData * itemData, const char*
                 }
 
                 // load graphics for item
-                BITMAP* picture = load_png( isomot::pathToFile( isomot::sharePath() + gfxPrefix + pathSeparator + itemData->getNameOfFile( ) ), 0 );
-                if ( picture == 0 )
+                BITMAP* picture = load_png( isomot::pathToFile( isomot::sharePath() + gfxPrefix + pathSeparator + itemData->getNameOfFile( ) ), nilPointer );
+                if ( picture == nilPointer )
                 {
                         std::cerr << "picture \"" << itemData->getNameOfFile( ) << "\" is absent at \"" << gfxPrefix << "\"" << std::endl ;
                         throw "picture " + itemData->getNameOfFile( ) + " is absent at " + gfxPrefix ;
@@ -277,7 +277,7 @@ ItemData* ItemDataManager::createPictureFrames( ItemData * itemData, const char*
         catch ( const std::exception& e )
         {
                 std::cerr << e.what () << std::endl ;
-                return 0;
+                return nilPointer;
         }
 
         return itemData;
@@ -293,8 +293,8 @@ ItemData* ItemDataManager::createShadowFrames( ItemData * itemData, const char* 
                 }
 
                 // load graphics for shadow
-                BITMAP* picture = load_png( isomot::pathToFile( isomot::sharePath() + gfxPrefix + pathSeparator + itemData->getNameOfShadowFile( ) ), 0 );
-                if ( picture == 0 )
+                BITMAP* picture = load_png( isomot::pathToFile( isomot::sharePath() + gfxPrefix + pathSeparator + itemData->getNameOfShadowFile( ) ), nilPointer );
+                if ( picture == nilPointer )
                 {
                         std::cerr << "file of shadows \"" << itemData->getNameOfShadowFile( ) << "\" is absent at \"" << gfxPrefix << "\"" << std::endl ;
                         throw "file of shadows " + itemData->getNameOfShadowFile( ) + " is absent at " + gfxPrefix ;
@@ -316,7 +316,7 @@ ItemData* ItemDataManager::createShadowFrames( ItemData * itemData, const char* 
         catch ( const std::exception& e )
         {
                 std::cerr << e.what () << std::endl ;
-                return 0;
+                return nilPointer;
         }
 
         return itemData;
@@ -446,7 +446,7 @@ BITMAP* ItemDataManager::cutOutRightJamb( BITMAP* door, const DoorMeasures& dm, 
 
 void ItemDataManager::finalizeData( ItemData* itemData )
 {
-        if ( itemData != 0 )
+        if ( itemData != nilPointer )
         {
                 itemData->clearNameOfFile ();
                 itemData->clearNameOfShadowFile ();

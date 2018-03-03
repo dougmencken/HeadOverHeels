@@ -3,7 +3,7 @@
 #include "Color.hpp"
 #include "Action.hpp"
 #include "GuiManager.hpp"
-
+#include "Ism.hpp"
 #include <iostream>
 
 
@@ -16,8 +16,8 @@ Label::Label( const std::string& text )
         fontFamily( "regular" ),
         color( "white" ),
         spacing( 0 ),
-        buffer( 0 ),
-        myAction( 0 )
+        buffer( nilPointer ),
+        myAction( nilPointer )
 {
         createImageOfLabel( text, Label::getFontByFamilyAndColor( fontFamily, color ) );
 }
@@ -28,8 +28,8 @@ Label::Label( const std::string& text, const std::string& family, const std::str
         fontFamily( family ),
         color( color ),
         spacing( spacing ),
-        buffer( 0 ),
-        myAction( 0 )
+        buffer( nilPointer ),
+        myAction( nilPointer )
 {
         createImageOfLabel( text, Label::getFontByFamilyAndColor( family, color ) );
 }
@@ -76,7 +76,7 @@ void Label::draw( BITMAP* where )
 
 void Label::handleKey( int key )
 {
-        if ( key >> 8 == KEY_ENTER && myAction != 0 )
+        if ( key >> 8 == KEY_ENTER && myAction != nilPointer )
         {
                 myAction->doIt ();
         }
@@ -85,7 +85,7 @@ void Label::handleKey( int key )
 BITMAP * Label::createImageOfLabel( const std::string& text, Font * font )
 {
         // re-create buffer
-        if ( this->buffer != 0 )
+        if ( this->buffer != nilPointer )
         {
                 destroy_bitmap( this->buffer );
         }
@@ -110,7 +110,7 @@ BITMAP * Label::createImageOfLabel( const std::string& text, Font * font )
                 {
                         // pick new font with color for this letter
                         fontToUse = Label::getFontByFamilyAndColor( font->getFamily(), multiColors[ colorIndex ] );
-                        if ( fontToUse == 0 )
+                        if ( fontToUse == nilPointer )
                         {
                                 std::cerr << "can’t get font with family \"" << font->getFamily() << "\"" <<
                                                 " for color \"" << multiColors[ colorIndex ] << "\"" << std::endl ;
@@ -151,7 +151,7 @@ bool EqualXYOfLabel::operator() ( const Label* label, std::pair < int, int > tha
 
 bool EqualTextOfLabel::operator() ( const Label* label, const std::string& text ) const
 {
-        return ( label->getText().compare( text ) == 0 );
+        return ( label->getText() == text );
 }
 
 }

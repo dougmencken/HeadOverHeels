@@ -1,5 +1,6 @@
 
 #include "ItemData.hpp"
+#include "Ism.hpp"
 #include <iostream>
 
 
@@ -32,7 +33,7 @@ ItemData::~ItemData( )
 
 /* static */ ItemData* ItemData::clone ( ItemData* data )
 {
-        if ( data == 0 ) return 0;
+        if ( data == nilPointer ) return nilPointer ;
 
         ItemData* copyOfData = new ItemData( );
 

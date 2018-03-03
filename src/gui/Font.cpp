@@ -14,46 +14,49 @@ namespace gui
 
 /* static */ unsigned int Font::howManyLetters = 0 ;
 
-/* static */ std::string * Font::tableOfLetters = 0 ;
+/* static */ std::string * Font::tableOfLetters = nilPointer ;
 
 
-Font::Font( const std::string& name, const std::string& fontFile, Color * color, bool doubleHeight ) :
+Font::Font( const std::string& name, const BITMAP * pictureOfLetters, Color * color, bool doubleHeight ) :
         fontName( name ),
         fontColor( color )
 {
-        std::string nameOfFile = fontFile;
-        std::cout << "reading from file \"" << nameOfFile << "\" to create font \"" << name << "\"" << std::endl ;
-
-        BITMAP * bitmapFont = load_png( isomot::pathToFile( fontFile ), 0 );
-        if ( bitmapFont == 0 )
+        if ( pictureOfLetters == nilPointer )
         {
-                std::cerr << "can’t get font \"" << name << "\" from file \"" << nameOfFile << "\"" << std::endl ;
+                std::cerr << "picture of letters is nil" << std::endl ;
                 return;
         }
+
+        BITMAP* lettersOfFont = create_bitmap( pictureOfLetters->w, pictureOfLetters->h );
+        blit( const_cast< BITMAP* >( pictureOfLetters ), lettersOfFont, 0, 0, 0, 0, lettersOfFont->w, lettersOfFont->h );
 
         // double height font
         if ( doubleHeight )
         {
-                BITMAP* bigfont = create_bitmap_ex( bitmap_color_depth( bitmapFont ), bitmapFont->w, bitmapFont->h << 1 );
-                stretch_blit( bitmapFont, bigfont, 0, 0, bitmapFont->w, bitmapFont->h, 0, 0, bigfont->w, bigfont->h );
-                destroy_bitmap( bitmapFont );
-                bitmapFont = bigfont;
+                BITMAP* bigfont = create_bitmap_ex( bitmap_color_depth( lettersOfFont ), lettersOfFont->w, lettersOfFont->h << 1 );
+                stretch_blit( lettersOfFont, bigfont, 0, 0, lettersOfFont->w, lettersOfFont->h, 0, 0, bigfont->w, bigfont->h );
+                destroy_bitmap( lettersOfFont );
+                lettersOfFont = bigfont;
         }
 
         // colorize letters
         if ( color != Color::whiteColor () )
         {
-                Color::colorizePicture( bitmapFont, color ) ;
+                Color::colorizePicture( lettersOfFont, color ) ;
         }
 
         // read table of letters once for all fonts
-        if ( tableOfLetters == 0 )
+        if ( tableOfLetters == nilPointer )
         {
                 howManyLetters = 0;
 
                 std::string file = isomot::sharePath() + "letters.utf8";
                 std::ifstream lettersFile ( isomot::pathToFile( file ), std::ifstream::binary );
-                if ( lettersFile != 0 )
+                if ( lettersFile )      /* no comparison with nil here, see https://gcc.gnu.org/gcc-6/porting_to.html
+                                         “ The change to iostream classes also affects code that tries
+                                           to check for stream errors by comparing to NULL or 0.
+                                           Such code should be changed to simply test the stream directly,
+                                           instead of comparing it to a null pointer ” */
                 {
                         lettersFile.seekg( 0, lettersFile.end );
                         unsigned int length = lettersFile.tellg();
@@ -113,41 +116,38 @@ Font::Font( const std::string& name, const std::string& fontFile, Color * color,
         }
 
         // decompose letters
-        if ( bitmapFont != 0 )
+        const unsigned int lettersPerRow = 16;
+        const unsigned int rowsInFont = 21;
+
+        if ( rowsInFont * lettersPerRow != howManyLetters )
+                std::cout << "hmmm, table of letters has more or less letters than picture of font" << std::endl ;
+
+        this->charWidth = lettersOfFont->w / lettersPerRow;
+        this->charHeight = lettersOfFont->h / rowsInFont;
+
+        for ( int y = 0; y < lettersOfFont->h; y += this->charHeight )
         {
-                const unsigned int lettersPerRow = 16;
-                const unsigned int rowsInFont = 21;
-
-                if ( rowsInFont * lettersPerRow != howManyLetters )
-                        std::cout << "hmmm, table of letters has more or less letters than picture of font" << std::endl ;
-
-                this->charWidth = bitmapFont->w / lettersPerRow;
-                this->charHeight = bitmapFont->h / rowsInFont;
-
-                for ( int y = 0; y < bitmapFont->h; y += this->charHeight )
+                for ( int x = 0; x < lettersOfFont->w; x += this->charWidth )
                 {
-                        for ( int x = 0; x < bitmapFont->w; x += this->charWidth )
-                        {
-                                BITMAP* bitmapChar = create_bitmap_ex( 32, charWidth, charHeight );
-                                blit( bitmapFont, bitmapChar, x, y, 0, 0, charWidth, charHeight );
-                                letters.push_back( bitmapChar );
-                        }
+                        BITMAP* letter = create_bitmap_ex( 32, charWidth, charHeight );
+                        blit( lettersOfFont, letter, x, y, 0, 0, charWidth, charHeight );
+                        letters.push_back( letter );
                 }
         }
 
-        destroy_bitmap( bitmapFont );
+        destroy_bitmap( lettersOfFont );
 }
 
 Font::~Font( )
 {
-        std::for_each( letters.begin(), letters.end(), destroy_bitmap );
+        std::for_each( letters.begin (), letters.end (), destroy_bitmap );
         delete fontColor ;
 }
 
 std::string Font::getFamily() const
 {
-        char* family = strrchr ( fontName.c_str () , '.' );
-        if ( family == 0 ) return fontName;
+        const char * family = strrchr ( fontName.c_str () , '.' );
+        if ( family == nilPointer ) return fontName;
         return std::string( family + /* to skip that dot */ 1 );
 }
 
@@ -155,7 +155,7 @@ BITMAP* Font::getPictureOfLetter( const std::string& letter )
 {
         for ( unsigned int i = 0; i < howManyLetters; i++ )
         {
-                if ( letter.compare( tableOfLetters[ i ] ) == 0 )
+                if ( letter == tableOfLetters[ i ] )
                 {
                         return letters.at( i );
                 }

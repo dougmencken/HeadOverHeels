@@ -20,10 +20,11 @@ Item::Item( ItemData* data, int z, const Way& way )
         z( z ),
         orientation( way ),
         myShady( WantShadow ),
-        rawImage( 0 ),
-        shadow( 0 ),
-        processedImage( 0 ),
-        behavior( 0 ),
+        rawImage( nilPointer ),
+        shadow( nilPointer ),
+        processedImage( nilPointer ),
+        behavior( nilPointer ),
+        anchor( nilPointer ),
         frameIndex( 0 ),
         backwardMotion( false )
 {
@@ -48,14 +49,15 @@ Item::Item( const Item& item )
         myShady( item.myShady ),
         rawImage( item.rawImage ),
         shadow( item.shadow ),
-        processedImage( 0 ),
+        processedImage( nilPointer ),
         offset( item.offset ),
         motionTimer( item.motionTimer ),
         behavior( 0 ),
+        anchor( item.anchor ),
         frameIndex( item.frameIndex ),
         backwardMotion( item.backwardMotion )
 {
-        if ( item.processedImage != 0 )
+        if ( item.processedImage != nilPointer )
         {
                 this->processedImage = create_bitmap_ex( 32, item.processedImage->w, item.processedImage->h );
                 blit( item.processedImage, this->processedImage, 0, 0, 0, 0, this->processedImage->w, this->processedImage->h );
@@ -64,18 +66,16 @@ Item::Item( const Item& item )
 
 Item::~Item( )
 {
-        if ( this->behavior != 0 )
-                delete this->behavior;
+        delete this->behavior;
 
-        if ( this->processedImage != 0 )
-                destroy_bitmap( this->processedImage );
+        destroy_bitmap( this->processedImage );
 }
 
 bool Item::update()
 {
         bool isGone = false;
 
-        if ( behavior != 0 )
+        if ( behavior != nilPointer )
                 isGone = behavior->update();
 
         return isGone;
@@ -116,11 +116,11 @@ bool Item::animate()
                         int currentFrame = dataOfItem->getFrameAt( frameIndex ) + ( dataOfItem->howManyFramesForOrientations() > 1 ? framesNumber * orientOccident : 0 );
 
                         // change frame of animation
-                        if ( this->rawImage != 0 && this->rawImage != dataOfItem->getMotionAt( currentFrame ) )
+                        if ( this->rawImage != nilPointer && this->rawImage != dataOfItem->getMotionAt( currentFrame ) )
                         {
                                 changeImage( dataOfItem->getMotionAt( currentFrame ) );
 
-                                if ( this->shadow != 0 )
+                                if ( this->shadow != nilPointer )
                                 {
                                         changeShadow( dataOfItem->getShadowAt( currentFrame ) );
                                 }
@@ -159,13 +159,13 @@ void Item::changeOrientation( const Way& way )
                 unsigned int orientOccident = ( way.getIntegerOfWay() == Nowhere ? 0 : way.getIntegerOfWay() );
                 unsigned int frame = ( ( dataOfItem->howManyMotions() - dataOfItem->howManyExtraFrames() ) / dataOfItem->howManyFramesForOrientations() ) * orientOccident;
 
-                if ( this->rawImage != 0 && frame < dataOfItem->howManyMotions() && this->rawImage != dataOfItem->getMotionAt( frame ) )
+                if ( this->rawImage != nilPointer && frame < dataOfItem->howManyMotions() && this->rawImage != dataOfItem->getMotionAt( frame ) )
                 {
                         this->orientation = way;
 
                         changeImage( dataOfItem->getMotionAt( frame ) );
 
-                        if ( this->shadow != 0 )
+                        if ( this->shadow != nilPointer )
                                 changeShadow( dataOfItem->getShadowAt( frame ) );
                 }
         }
@@ -183,12 +183,12 @@ void Item::changeFrame( const unsigned int frameIndex )
                 this->frameIndex = frameIndex;
 
                 // change frame
-                if ( this->rawImage != 0 && this->rawImage != dataOfItem->getMotionAt( frameIndex ) )
+                if ( this->rawImage != nilPointer && this->rawImage != dataOfItem->getMotionAt( frameIndex ) )
                 {
                         changeImage( dataOfItem->getMotionAt( frameIndex ) );
 
                         // update shadow too
-                        if ( this->shadow != 0 )
+                        if ( this->shadow != nilPointer )
                                 changeShadow( dataOfItem->getShadowAt( frameIndex ) );
                 }
         }
@@ -314,11 +314,6 @@ double Item::getDelayBetweenFrames() const
 unsigned int Item::countFrames() const
 {
         return dataOfItem->howManyMotions();
-}
-
-void Item::setAnchor( Item* item )
-{
-        this->anchor = item;
 }
 
 }

@@ -12,7 +12,7 @@
 namespace isomot
 {
 
-KindOfActivity * JumpKindOfActivity::instance = 0;
+KindOfActivity * JumpKindOfActivity::instance = nilPointer ;
 
 JumpKindOfActivity::JumpKindOfActivity( ) : KindOfActivity()
 {
@@ -26,7 +26,7 @@ JumpKindOfActivity::~JumpKindOfActivity( )
 
 KindOfActivity* JumpKindOfActivity::getInstance()
 {
-        if ( instance == 0 )
+        if ( instance == nilPointer )
         {
                 instance = new JumpKindOfActivity();
         }
@@ -59,7 +59,7 @@ bool JumpKindOfActivity::jump( Behavior* behavior, ActivityOfItem* activity, con
                                 {
                                         Item* item = mediator->findItemById( id );
 
-                                        if ( item != 0 )
+                                        if ( item != nilPointer )
                                         {
                                                 // mortal thing is above
                                                 if ( item->isMortal() && ! playerItem->hasShield() )
@@ -74,7 +74,7 @@ bool JumpKindOfActivity::jump( Behavior* behavior, ActivityOfItem* activity, con
                                                         FreeItem* freeItem = dynamic_cast< FreeItem * >( item );
 
                                                         // non mortal free item
-                                                        if ( freeItem != 0 )
+                                                        if ( freeItem != nilPointer )
                                                         {
                                                                 // raise items recursively
                                                                 lift( playerItem, freeItem, deltaZ - ( jumpPhase > 0 && jumpPhase % 2 == 0 ? 1 : 2 ) );
@@ -140,7 +140,7 @@ bool JumpKindOfActivity::jump( Behavior* behavior, ActivityOfItem* activity, con
 void JumpKindOfActivity::lift( FreeItem* sender, FreeItem* freeItem, int z )
 {
         // only for item with behavior
-        if ( freeItem->getBehavior() != 0 )
+        if ( freeItem->getBehavior() != nilPointer )
         {
                 // when item is volatile
                 if ( freeItem->getBehavior()->getNameOfBehavior () == "behavior of disappearance on touch" ||
@@ -160,7 +160,7 @@ void JumpKindOfActivity::lift( FreeItem* sender, FreeItem* freeItem, int z )
                                 {
                                         FreeItem* topItem = dynamic_cast< FreeItem * >( mediator->findCollisionPop( ) );
 
-                                        if ( topItem != 0 )
+                                        if ( topItem != nilPointer )
                                         {
                                                 // raise free items recursively
                                                 lift( sender, topItem, z );

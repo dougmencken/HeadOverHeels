@@ -21,7 +21,7 @@
 namespace isomot
 {
 
-GameManager * GameManager::instance = 0 ;
+GameManager * GameManager::instance = nilPointer ;
 
 
 GameManager::GameManager( )
@@ -42,36 +42,36 @@ GameManager::GameManager( )
         , horn( false )
         , handbag( false )
         , donuts( 0 )
-        , itemTaken( 0 )
+        , itemTaken( nilPointer )
         , takenCrown( false )
         , eatenFish( false )
         , gameOver( false )
         , freedom( false )
         , emperator( false )
-        , frameForJail( 0 )
-        , frameForBlacktooth( 0 )
-        , frameForMarket( 0 )
-        , frameForMoon( 0 )
-        , frameForByblos( 0 )
-        , frameForSafari( 0 )
-        , frameForEgyptus( 0 )
-        , frameForPenitentiary( 0 )
-        , pictureOfHead( 0 )
-        , grayPictureOfHead( 0 )
-        , pictureOfHeels( 0 )
-        , grayPictureOfHeels( 0 )
-        , pictureOfBag( 0 )
-        , grayPictureOfBag( 0 )
-        , pictureOfHorn( 0 )
-        , grayPictureOfHorn( 0 )
-        , pictureOfDonuts( 0 )
-        , grayPictureOfDonuts( 0 )
-        , pictureOfGrandesSaltos( 0 )
-        , grayPictureOfGrandesSaltos( 0 )
-        , pictureOfGranVelocidad( 0 )
-        , grayPictureOfGranVelocidad( 0 )
-        , pictureOfEscudo( 0 )
-        , grayPictureOfEscudo( 0 )
+        , frameForJail( nilPointer )
+        , frameForBlacktooth( nilPointer )
+        , frameForMarket( nilPointer )
+        , frameForMoon( nilPointer )
+        , frameForByblos( nilPointer )
+        , frameForSafari( nilPointer )
+        , frameForEgyptus( nilPointer )
+        , frameForPenitentiary( nilPointer )
+        , pictureOfHead( nilPointer )
+        , grayPictureOfHead( nilPointer )
+        , pictureOfHeels( nilPointer )
+        , grayPictureOfHeels( nilPointer )
+        , pictureOfBag( nilPointer )
+        , grayPictureOfBag( nilPointer )
+        , pictureOfHorn( nilPointer )
+        , grayPictureOfHorn( nilPointer )
+        , pictureOfDonuts( nilPointer )
+        , grayPictureOfDonuts( nilPointer )
+        , pictureOfGrandesSaltos( nilPointer )
+        , grayPictureOfGrandesSaltos( nilPointer )
+        , pictureOfGranVelocidad( nilPointer )
+        , grayPictureOfGranVelocidad( nilPointer )
+        , pictureOfEscudo( nilPointer )
+        , grayPictureOfEscudo( nilPointer )
 {
 
 }
@@ -112,7 +112,7 @@ GameManager::~GameManager( )
 /* static */
 GameManager* GameManager::getInstance ()
 {
-        if ( instance == 0 )
+        if ( instance == nilPointer )
         {
                 instance = new GameManager();
         }
@@ -123,7 +123,7 @@ GameManager* GameManager::getInstance ()
 /* static */
 BITMAP * GameManager::refreshPicture ( const char * nameOfPicture )
 {
-        return load_png( isomot::pathToFile( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + nameOfPicture ), 0 );
+        return load_png( isomot::pathToFile( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + nameOfPicture ), nilPointer );
 }
 
 WhyPause GameManager::begin ()
@@ -140,13 +140,13 @@ WhyPause GameManager::begin ()
         this->horn = false;
         this->handbag = false;
         this->donuts = 0;
-        this->itemTaken = 0;
+        this->itemTaken = nilPointer;
         this->planets.clear();
 
         refreshAmbianceImages ();
         refreshBackgroundFrames ();
 
-        assert( this->isomot != 0 );
+        assert( this->isomot != nilPointer );
         this->isomot->beginNewGame ();
 
         return this->update ();
@@ -159,7 +159,7 @@ WhyPause GameManager::resume ()
         refreshAmbianceImages ();
         refreshBackgroundFrames ();
 
-        assert( this->isomot != 0 );
+        assert( this->isomot != nilPointer );
         this->isomot->resume ();
 
         return this->update ();
@@ -276,7 +276,7 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
                 if ( drawBackgroundPicture )
                 {
                         // marco, varía en función del escenario
-                        BITMAP * background = 0;
+                        BITMAP * background = nilPointer;
 
                         if ( scenery == "blacktooth" )
                                 background = frameForBlacktooth;
@@ -295,7 +295,7 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
                         else if ( scenery == "egyptus" )
                                 background = frameForEgyptus;
 
-                        if ( background != 0 )
+                        if ( background != nilPointer )
                                 draw_sprite( where, background, 0, 0 );
                 }
 
@@ -368,7 +368,7 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
                 }
 
                 // item in handbag
-                if ( this->itemTaken != 0 )
+                if ( this->itemTaken != nilPointer )
                 {
                         draw_sprite( where, this->itemTaken, 559, 361 );
                 }
@@ -589,7 +589,7 @@ void GameManager::emptyHandbag ( const std::string& player )
 {
         if ( player == "heels" || player == "headoverheels" )
         {
-                this->itemTaken = 0;
+                this->itemTaken = nilPointer;
         }
 }
 
@@ -667,10 +667,10 @@ WhyPause GameManager::update ()
                         BITMAP* view = this->isomot->update();
 
                         // se ha podido actualizar
-                        if ( view != 0 )
+                        if ( view != nilPointer )
                         {
                                 this->drawAmbianceOfGame( view );
-                                sleep( 10 );
+                                milliSleep( 10 );
                         }
                         else
                         {
@@ -712,11 +712,8 @@ WhyPause GameManager::pause ()
                 this->eatenFish = false;
                 isomot::InputManager* inputManager = InputManager::getInstance();
 
-                // presenta las intrucciones en pantalla
-                gui::LanguageText* text = 0;
                 gui::LanguageManager* language = gui::GuiManager::getInstance()->getLanguageManager();
-
-                text = language->findLanguageString( "save-game" );
+                gui::LanguageText* text = language->findLanguageString( "save-game" );
                 int deltaY = 100;
 
                 for ( size_t i = 0; i < text->getLinesCount(); i++ )
@@ -776,9 +773,7 @@ WhyPause GameManager::pause ()
                                 }
                         }
 
-                        // sondea la decisión del usuario cada 10 milisegundos
-                        // poll the decision of user every 10 milliseconds
-                        sleep( 10 );
+                        milliSleep( 10 );
                 }
         }
         // el usuario ha acabado con las vidas de todos los jugadores
@@ -807,10 +802,8 @@ WhyPause GameManager::pause ()
         {
                 SoundManager::getInstance()->stopEverySound ();
 
-                gui::LanguageText* text = 0;
                 gui::LanguageManager* language = gui::GuiManager::getInstance()->getLanguageManager();
-
-                text = language->findLanguageString( "confirm-quit" );
+                gui::LanguageText* text = language->findLanguageString( "confirm-quit" );
                 int deltaY = ScreenHeight / 4;
 
                 for ( size_t i = 0; i < text->getLinesCount(); i++ )
@@ -858,7 +851,7 @@ WhyPause GameManager::pause ()
                                 }
                         }
 
-                        sleep( 10 );
+                        milliSleep( 10 );
                 }
         }
 

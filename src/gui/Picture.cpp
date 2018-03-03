@@ -1,5 +1,6 @@
 
 #include "Picture.hpp"
+#include "Ism.hpp"
 
 
 namespace gui
@@ -25,12 +26,12 @@ Picture::~Picture()
         /* std::cout << "forget picture with name \"" << nameOfPicture << "\"" << std::endl ; */
 
         destroy_bitmap( picture );
-        picture = 0 ;
+        picture = nilPointer ;
 }
 
 void Picture::draw( BITMAP* where )
 {
-        if ( picture != 0 )
+        if ( picture != nilPointer )
         {
                 draw_sprite( where, picture, getX(), getY() );
         }
