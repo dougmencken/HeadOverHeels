@@ -25,20 +25,30 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			Way.hpp \
 			Color.cpp \
 			Color.hpp \
+			Drawable.hpp \
+			Mediated.hpp \
 			Camera.cpp \
 			Camera.hpp \
 			Door.cpp \
 			Door.hpp \
 			FloorTile.cpp \
 			FloorTile.hpp \
+			Item.cpp \
+			Item.hpp \
+			GridItem.cpp \
+			GridItem.hpp \
 			FreeItem.cpp \
 			FreeItem.hpp \
+			PlayerItem.cpp \
+			PlayerItem.hpp \
+			Mediator.cpp \
+			Mediator.hpp \
+			ShadowCaster.cpp \
+			ShadowCaster.hpp \
 			GameFileManager.cpp \
 			GameFileManager.hpp \
 			GameManager.cpp \
 			GameManager.hpp \
-			GridItem.cpp \
-			GridItem.hpp \
 			Timer.hpp \
 			TimerPOSIX.cpp \
 			TimerPOSIX.hpp \
@@ -50,8 +60,6 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			Ism.hpp \
 			Isomot.cpp \
 			Isomot.hpp \
-			Item.cpp \
-			Item.hpp \
 			ItemData.cpp \
 			ItemData.hpp \
 			ItemDataManager.cpp \
@@ -60,14 +68,8 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			MapManager.hpp \
 			MapRoomData.cpp \
 			MapRoomData.hpp \
-			Mediator.cpp \
-			Mediator.hpp \
-			PlayerItem.cpp \
-			PlayerItem.hpp \
 			RoomBuilder.cpp \
 			RoomBuilder.hpp \
-			Drawable.hpp \
-			Mediated.hpp \
 			Room.cpp \
 			Room.hpp \
 			BonusManager.cpp \

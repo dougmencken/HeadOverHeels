@@ -319,8 +319,8 @@ bool PlayerItem::updatePosition( int newX, int newY, int newZ, const Coordinate&
                                         this->offset.second = this->x + this->y + getDataOfItem()->getWidthX() - this->rawImage->h - this->z;
 
                                         // for both the previous position and the current position
-                                        mediator->remaskFreeItem( &oldPlayerItem );
-                                        mediator->remaskFreeItem( this );
+                                        mediator->remaskWithFreeItem( &oldPlayerItem );
+                                        mediator->remaskWithFreeItem( this );
                                 }
                                 else
                                 {
@@ -331,8 +331,8 @@ bool PlayerItem::updatePosition( int newX, int newY, int newZ, const Coordinate&
                                 if ( mediator->getDegreeOfShading() < 256 )
                                 {
                                         // for both the previous position and the current position
-                                        mediator->reshadeFreeItem( &oldPlayerItem );
-                                        mediator->reshadeFreeItem( this );
+                                        mediator->reshadeWithFreeItem( &oldPlayerItem );
+                                        mediator->reshadeWithFreeItem( this );
                                 }
 
                                 // reshade and remask

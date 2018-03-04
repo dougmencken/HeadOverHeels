@@ -290,10 +290,10 @@ void Room::addGridItem( GridItem * gridItem )
 
         if ( this->shadingScale < 256 && gridItem->getImageOfShadow() )
         {
-                mediator->reshadeGridItem( gridItem );
+                mediator->reshadeWithGridItem( gridItem );
         }
 
-        mediator->remaskGridItem( gridItem );
+        mediator->remaskWithGridItem( gridItem );
 
         this->lastGridId += 2;
 }
@@ -366,10 +366,10 @@ void Room::addFreeItem( FreeItem * freeItem )
 
         if ( this->shadingScale < 256 && freeItem->getImageOfShadow() )
         {
-                mediator->reshadeFreeItem( freeItem );
+                mediator->reshadeWithFreeItem( freeItem );
         }
 
-        mediator->remaskFreeItem( freeItem );
+        mediator->remaskWithFreeItem( freeItem );
 
         this->lastFreeId += 2;
 }
@@ -490,10 +490,10 @@ bool Room::addPlayerToRoom( PlayerItem* playerItem, bool playerEntersRoom )
 
         if ( this->shadingScale < 256 && playerItem->getImageOfShadow() )
         {
-                mediator->reshadeFreeItem( playerItem );
+                mediator->reshadeWithFreeItem( playerItem );
         }
 
-        mediator->remaskFreeItem( playerItem );
+        mediator->remaskWithFreeItem( playerItem );
 
         // add player item to room
         this->playersYetInRoom.push_back( playerItem );
@@ -570,10 +570,10 @@ void Room::removeGridItem( GridItem * gridItem )
 
                 if ( this->shadingScale < 256 && gridItem->getImageOfShadow() )
                 {
-                        mediator->reshadeGridItem( gridItem );
+                        mediator->reshadeWithGridItem( gridItem );
                 }
 
-                mediator->remaskGridItem( gridItem );
+                mediator->remaskWithGridItem( gridItem );
 
                 delete gridItem;
         }
@@ -591,10 +591,10 @@ void Room::removeFreeItem( FreeItem * freeItem )
 
                 if ( this->shadingScale < 256 && freeItem->getImageOfShadow() )
                 {
-                        mediator->reshadeFreeItem( freeItem );
+                        mediator->reshadeWithFreeItem( freeItem );
                 }
 
-                mediator->remaskFreeItem( freeItem );
+                mediator->remaskWithFreeItem( freeItem );
 
                 delete freeItem;
         }
@@ -614,10 +614,10 @@ bool Room::removePlayerFromRoom( PlayerItem* playerItem, bool playerExitsRoom )
 
                         if ( this->shadingScale < 256 && playerItem->getImageOfShadow() )
                         {
-                                mediator->reshadeFreeItem( playerItem );
+                                mediator->reshadeWithFreeItem( playerItem );
                         }
 
-                        mediator->remaskFreeItem( playerItem );
+                        mediator->remaskWithFreeItem( playerItem );
 
                         if ( playerItem == mediator->getActivePlayer() )
                         {
@@ -769,7 +769,7 @@ void Room::draw( BITMAP* where )
 
                                 if ( shadingScale < 256 && gridItem->getRawImage() )
                                 {
-                                        gridItem->requestCastShadow( drawIndex[ i ] );
+                                        gridItem->requestShadow( drawIndex[ i ] );
                                 }
 
                                 gridItem->draw( where );
@@ -787,7 +787,7 @@ void Room::draw( BITMAP* where )
                         {
                                 // shade an item when shadows are on
                                 if ( shadingScale < 256 )
-                                        freeItem->requestCastShadow();
+                                        freeItem->requestShadow();
                         }
                 }
 

@@ -24,11 +24,11 @@
 namespace isomot
 {
 
-class ItemData;
+class ItemData ;
 
 /**
- * Free elements are those that can be anywhere and move freely around the room
- * such as players, enemies, or something which widths differ from widths of grid cells
+ * Free items are those that may be anywhere and move around the room such as
+ * players, enemies, or something which widths differ from widths of grid’s cells
  */
 
 class FreeItem : public Drawable, public Item
@@ -38,17 +38,16 @@ public:
 
        /**
         * Constructor
-        * @param itemData data about this item
-        * @param x Posición espacial X
-        * @param y Posición espacial Y
-        * @param z Posición espacial Z o a qué distancia está el elemento del suelo
-        * @param direction Dirección inicial del elemento
+        * @param itemData Data about this item
+        * @param x Position on X
+        * @param y Position on Y
+        * @param z Position on Z, or how far is floor
+        * @param way Initial orientation of item
         */
         FreeItem( ItemData* itemData, int x, int y, int z, const Way& way ) ;
 
        /**
-        * Constructor copia. No copia los atributos que son punteros
-        * @param freeItem Un objeto de esta clase
+        * Copy constructor
         */
         FreeItem( const FreeItem& freeItem ) ;
 
@@ -56,9 +55,6 @@ public:
 
         virtual std::string whichKindOfItem () const {  return "free item" ;  }
 
-        /**
-         * Dibuja el elemento libre
-         */
         void draw ( BITMAP* where ) ;
 
         void binProcessedImages () ;
@@ -68,33 +64,22 @@ public:
          * hay que volver a enmascarar
          * @param image Un fotograma del elemento
          */
-        void changeImage ( BITMAP* image ) ;
+        virtual void changeImage ( BITMAP* image ) ;
 
         /**
          * Cambia la sombra de la presentación gráfica del elemento, destruyendo la imagen procesada y señalando
          * qué elementos hay que volver a sombrear
          * @param image Una sombra de un fotograma del elemento
          */
-        void changeShadow ( BITMAP* shadow ) ;
+        virtual void changeShadow ( BITMAP* shadow ) ;
 
         /**
-         * Solicita el sombreado del elemento
+         * Request to shade item
          */
-        void requestCastShadow () ;
+        void requestShadow () ;
 
         /**
-         * Sombrea la imagen del elemento con la sombra de otro elemento
-         * @param x Coordenada X de pantalla donde está situada la base del elemento que sombrea
-         * @param y Coordenada Y de pantalla donde está situada la base del elemento que sombrea
-         * @param shadow La sombra que se proyecta sobre el elemento
-         * @param shadingScale Grado de opacidad de las sombras desde 0, sin sombras, hasta 256,
-         *                     sombras totalmente opacas
-         * @param transparency Grado de transparencia del elemento que sombrea
-         */
-        void castShadowImage ( int x, int y, BITMAP* shadow, short shadingScale, unsigned char transparency = 0 ) ;
-
-        /**
-         * Solicita enmascarar el elemento
+         * Request to mask this item
          */
         void requestMask () ;
 
@@ -141,13 +126,10 @@ protected:
 
 protected:
 
-        /**
-         * Estado del proceso de enmascarado
-         */
         WhichMask myMask ;
 
         /**
-         * Grado de transparencia del elemento en un porcentaje de 0 a 100
+         * Degree of item’s transparency in percentage 0 to 100
          */
         unsigned char transparency ;
 
@@ -157,25 +139,19 @@ protected:
         bool collisionDetector ;
 
         /**
-         * Indica si el elemento está inactivo
+         * Whether item is inactive
          */
         bool frozen ;
 
         /**
-         * Current frame of this item shaded but not masked
+         * Current frame of this item shaded but not masked yet
          */
-        BITMAP * shadyImage ;
+        BITMAP * shadedNonmaskedImage ;
 
 public:
 
-        /**
-         * Establece el estado del proceso de enmascarado
-         */
         void setWhichMask ( const WhichMask& mask ) {  myMask = mask ;  }
 
-        /**
-         * Devuelve el estado del proceso de enmascarado
-         */
         WhichMask whichMask () const {  return myMask ;  }
 
         /**
@@ -185,28 +161,22 @@ public:
         unsigned char getTransparency () const {  return transparency ;  }
 
         /**
-         * Establece la capacidad del elemento para detectar colisiones
-         * @param collisionDetector true si detecta colisiones, valor por defecto al crear el elemento, o false caso contrario
+         * Set item’s ability to detect collisions
          */
         void setCollisionDetector ( bool collisionDetector ) {  this->collisionDetector = collisionDetector ;  }
 
-        /**
-         * Indica si el elemento detecta colisiones
-         * @return true si detecta colisiones o false caso contrario
-         */
         bool isCollisionDetector () const {  return collisionDetector ;  }
 
         /**
-         * Establece si el elemento está inactivo
-         * @param frozen true si está detenido o false en caso contrario
+         * Set item’s inactivity
          */
         void setFrozen ( bool frozen ) {  this->frozen = frozen ;  }
 
-        /**
-         * Indica si el elemento está inactivo
-         * @return true si está detenido o false en caso contrario
-         */
         bool isFrozen () const {  return frozen ;  }
+
+        BITMAP * getShadedNonmaskedImage () const {  return shadedNonmaskedImage ;  }
+
+        void setShadedNonmaskedImage ( BITMAP * newImage ) ;
 
 };
 

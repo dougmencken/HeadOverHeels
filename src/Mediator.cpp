@@ -8,10 +8,12 @@
 #include "FreeItem.hpp"
 #include "PlayerItem.hpp"
 #include "FloorTile.hpp"
+#include "ShadowCaster.hpp"
 #include "Behavior.hpp"
 
 #ifdef DEBUG
-#  define DEBUG_SHADOWS         1
+#  define DEBUG_SHADOWS         0
+#  define DEBUG_MASKS           0
 #endif
 
 
@@ -201,7 +203,7 @@ void* updateThread( void* thisClass )
         pthread_exit( nilPointer );
 }
 
-void Mediator::remaskFreeItem( FreeItem* item )
+void Mediator::remaskWithFreeItem( FreeItem* item )
 {
         if ( ! item ) return;
 
@@ -224,7 +226,7 @@ void Mediator::remaskFreeItem( FreeItem* item )
         }
 }
 
-void Mediator::remaskGridItem( GridItem* gridItem )
+void Mediator::remaskWithGridItem( GridItem* gridItem )
 {
         if ( ! gridItem ) return;
 
@@ -253,7 +255,7 @@ void Mediator::remaskGridItem( GridItem* gridItem )
         }
 }
 
-void Mediator::reshadeGridItem( GridItem* item )
+void Mediator::reshadeWithGridItem( GridItem* item )
 {
         // shade free items underneath
         this->shadeFreeItemsBeneathItem( item );
@@ -269,28 +271,28 @@ void Mediator::reshadeGridItem( GridItem* item )
                 while ( g != this->structure[ column ].end() && item->getId() != gridItem->getId() )
                 {
                         gridItem->setWhichShade( WantShadow );
-                        // Siguiente elemento rejilla de la columna
+                        // next grid item in column
                         gridItem = *( ++g ) ;
                 }
         }
 
-        // mark to shade floor tile of this column, si existe
+        // shade floor in this column, if any
         if ( room->floor[ column ] != nilPointer )
                 room->floor[ column ]->setWhichShade( WantShadow );
 }
 
-void Mediator::reshadeFreeItem( FreeItem* item )
+void Mediator::reshadeWithFreeItem( FreeItem* item )
 {
         // shade free items underneath
         this->shadeFreeItemsBeneathItem( item );
 
-        // Rango de columnas interseccionadas por el elemento
+        // range of columns met with item
         int xStart = item->getX() / room->tileSize;
         int xEnd = ( item->getX() + item->getWidthX() - 1 ) / room->tileSize + 1;
         int yStart = ( item->getY() - item->getWidthY() + 1 ) / room->tileSize;
         int yEnd = item->getY() / room->tileSize + 1;
 
-        // Para toda columna que intersecciona con el elemento:
+        // for every column that item meets
         for ( int i = xStart; i < xEnd; i++ )
         {
                 for ( int j = yStart; j < yEnd; j++ )
@@ -307,7 +309,7 @@ void Mediator::reshadeFreeItem( FreeItem* item )
                                 }
                         }
 
-                        // mark to shade floor tile of this column, si existe
+                        // shade floor in this column, if any
                         if ( room->floor[ column ] != nilPointer )
                                 room->floor[ column ]->setWhichShade( WantShadow );
                 }
@@ -336,8 +338,8 @@ void Mediator::shadeFreeItemsBeneathItem( Item* item )
 
 void Mediator::castShadowOnFloor( FloorTile* floorTile )
 {
-        int xCell = floorTile->getX();
-        int yCell = floorTile->getY();
+        int xCell = floorTile->getCellX();
+        int yCell = floorTile->getCellY();
         int column = floorTile->getColumn();
         int tileSize = room->getSizeOfOneTile();
 
@@ -349,12 +351,22 @@ void Mediator::castShadowOnFloor( FloorTile* floorTile )
                 // shade image of tile when item has shadow
                 if ( gridItem->getImageOfShadow() != nilPointer )
                 {
-                        floorTile->castShadowImage (
+                # if  defined( DEBUG_SHADOWS )  &&  DEBUG_SHADOWS
+                        std::cout << "casting shadow from " << gridItem->whichKindOfItem() << " \"" << gridItem->getLabel() << "\"" <<
+                                " at x=" << gridItem->getX() << " y=" << gridItem->getY() << " z=" << gridItem->getZ() <<
+                                " on floor tile at" <<
+                                " x=" << tileSize << "*" << xCell << "=" << xCell * tileSize <<
+                                " y=" << tileSize << "*" << yCell << "=" << yCell * tileSize
+                                  << std::endl ;
+                # endif
+
+                        ShadowCaster::castShadowOnFloor (
+                                floorTile,
                                 /* x */ ( tileSize << 1 ) * ( xCell - yCell ) - ( gridItem->getImageOfShadow()->w >> 1 ) + room->getX0() + 1,
                                 /* y */ tileSize * ( xCell + yCell + 1 ) - ( gridItem->getImageOfShadow()->h >> 1 ) + room->getY0() - 1,
                                 /* shadow */ gridItem->getImageOfShadow(),
                                 /* shadingScale */ room->shadingScale
-                                /* transparency = 0 (default) */
+                                /* transparency = 0 */
                         ) ;
                 }
         }
@@ -374,7 +386,17 @@ void Mediator::castShadowOnFloor( FloorTile* floorTile )
                         // shade with free item above
                         if ( xCell >= xStart && xCell <= xEnd && yCell >= yStart && yCell <= yEnd )
                         {
-                                floorTile->castShadowImage (
+                        # if  defined( DEBUG_SHADOWS )  &&  DEBUG_SHADOWS
+                                std::cout << "casting shadow from " << freeItem->whichKindOfItem() << " \"" << freeItem->getLabel() << "\"" <<
+                                        " at x=" << freeItem->getX() << " y=" << freeItem->getY() << " z=" << freeItem->getZ() <<
+                                        " on floor tile at" <<
+                                        " x=" << tileSize << "*" << xCell << "=" << xCell * tileSize <<
+                                        " y=" << tileSize << "*" << yCell << "=" << yCell * tileSize
+                                          << std::endl ;
+                        # endif
+
+                                ShadowCaster::castShadowOnFloor (
+                                        floorTile,
                                         /* x */ ( ( freeItem->getX() - freeItem->getY() ) << 1 ) + room->getX0() + ( freeItem->getWidthX() + freeItem->getWidthY() ) - ( ( freeItem->getImageOfShadow()->w ) >> 1 ) - 1,
                                         /* y */ freeItem->getX() + freeItem->getY() + room->getY0() + ( ( freeItem->getWidthX() - freeItem->getWidthY() + 1 ) >> 1 ) - ( ( freeItem->getImageOfShadow()->h ) >> 1 ),
                                         /* shadow */ freeItem->getImageOfShadow(),
@@ -394,16 +416,25 @@ void Mediator::castShadowOnGridItem( GridItem* gridItem )
         // shade with grid items it may have above
         for ( std::list< GridItem* >::iterator g = structure[ column ].begin(); g != structure[ column ].end(); ++g )
         {
-                GridItem* tempItem = *g ;
+                GridItem* aboveItem = *g ;
 
-                if ( tempItem->getImageOfShadow() != nilPointer && tempItem->getZ() > gridItem->getZ() )
+                if ( aboveItem->getImageOfShadow() != nilPointer && aboveItem->getZ() > gridItem->getZ() )
                 {
-                        gridItem->castShadowImage (
-                                /* x */ gridItem->getOffsetX() + ( ( gridItem->getRawImage()->w - tempItem->getImageOfShadow()->w ) >> 1 ),
-                                /* y */ gridItem->getOffsetY() + gridItem->getRawImage()->h - room->getSizeOfOneTile() - gridItem->getHeight() - ( tempItem->getImageOfShadow()->h >> 1 ),
-                                /* shadow */ tempItem->getImageOfShadow(),
+                # if  defined( DEBUG_SHADOWS )  &&  DEBUG_SHADOWS
+                        std::cout << "casting shadow from " << aboveItem->whichKindOfItem() << " \"" << aboveItem->getLabel() << "\"" <<
+                                " at x=" << aboveItem->getX() << " y=" << aboveItem->getY() << " z=" << aboveItem->getZ() <<
+                                " on " << gridItem->whichKindOfItem() << " \"" << gridItem->getLabel() << "\"" <<
+                                " at x=" << gridItem->getX() << " y=" << gridItem->getY() << " z=" << gridItem->getZ()
+                                  << std::endl ;
+                # endif
+
+                        ShadowCaster::castShadowOnItem (
+                                gridItem,
+                                /* x */ gridItem->getOffsetX() + ( ( gridItem->getRawImage()->w - aboveItem->getImageOfShadow()->w ) >> 1 ),
+                                /* y */ gridItem->getOffsetY() + gridItem->getRawImage()->h - room->getSizeOfOneTile() - gridItem->getHeight() - ( aboveItem->getImageOfShadow()->h >> 1 ),
+                                /* shadow */ aboveItem->getImageOfShadow(),
                                 /* shadingScale */ room->shadingScale
-                                /* transparency = 0 (default) */
+                                /* transparency = 0 */
                         ) ;
                 }
         }
@@ -417,14 +448,23 @@ void Mediator::castShadowOnGridItem( GridItem* gridItem )
                 {
                         // range of columns met with item
                         int xStart = freeItem->getX() / tileSize;
-                        int xEnd = (freeItem->getX() + freeItem->getWidthX() - 1) / tileSize;
-                        int yStart = (freeItem->getY() - freeItem->getWidthY() + 1) / tileSize;
+                        int xEnd = ( freeItem->getX() + freeItem->getWidthX() - 1 ) / tileSize;
+                        int yStart = ( freeItem->getY() - freeItem->getWidthY() + 1 ) / tileSize;
                         int yEnd = freeItem->getY() / tileSize;
 
                         // shade with free item above
                         if ( gridItem->getCellX() >= xStart && gridItem->getCellX() <= xEnd && gridItem->getCellY() >= yStart && gridItem->getCellY() <= yEnd )
                         {
-                                gridItem->castShadowImage (
+                        # if  defined( DEBUG_SHADOWS )  &&  DEBUG_SHADOWS
+                                std::cout << "casting shadow from " << freeItem->whichKindOfItem() << " \"" << freeItem->getLabel() << "\"" <<
+                                        " at x=" << freeItem->getX() << " y=" << freeItem->getY() << " z=" << freeItem->getZ() <<
+                                        " on " << gridItem->whichKindOfItem() << " \"" << gridItem->getLabel() << "\"" <<
+                                        " at x=" << gridItem->getX() << " y=" << gridItem->getY() << " z=" << gridItem->getZ()
+                                          << std::endl ;
+                        # endif
+
+                                ShadowCaster::castShadowOnItem (
+                                        gridItem,
                                         /* x */ ( ( freeItem->getX() - freeItem->getY() ) << 1 ) + ( freeItem->getWidthX() + freeItem->getWidthY() ) - ( ( freeItem->getImageOfShadow()->w ) >> 1 ) - 1,
                                         /* y */ freeItem->getX() + freeItem->getY() + ( ( freeItem->getWidthX() - freeItem->getWidthY() + 1 ) >> 1 ) - ( ( freeItem->getImageOfShadow()->h ) >> 1 ) - gridItem->getZ() - gridItem->getHeight(),
                                         /* shadow */ freeItem->getImageOfShadow(),
@@ -467,12 +507,13 @@ void Mediator::castShadowOnFreeItem( FreeItem* freeItem )
                                                         << std::endl ;
                                 # endif
 
-                                        freeItem->castShadowImage (
+                                        ShadowCaster::castShadowOnItem (
+                                                freeItem,
                                                 /* x */ ( tileSize << 1 ) * ( xCell - yCell ) - ( gridItem->getImageOfShadow()->w >> 1 ) + 1,
                                                 /* y */ tileSize * ( xCell + yCell + 1 ) - freeItem->getZ() - freeItem->getHeight() - ( gridItem->getImageOfShadow()->h >> 1 ) - 1,
                                                 /* shadow */ gridItem->getImageOfShadow(),
                                                 /* shadingScale */ room->shadingScale
-                                                /* transparency = 0 (default) */
+                                                /* transparency = 0 */
                                         ) ;
                                 }
                         }
@@ -501,7 +542,8 @@ void Mediator::castShadowOnFreeItem( FreeItem* freeItem )
                                           << std::endl ;
                         # endif
 
-                                freeItem->castShadowImage(
+                                ShadowCaster::castShadowOnItem (
+                                        freeItem,
                                         /* x */ ( ( shadeItem->getX() - shadeItem->getY() ) << 1 ) + shadeItem->getWidthX() + shadeItem->getWidthY() - ( shadeItem->getImageOfShadow()->w >> 1 ) - 1,
                                         /* y */ shadeItem->getX() + shadeItem->getY() - freeItem->getZ() - freeItem->getHeight() + ( ( shadeItem->getWidthX() - shadeItem->getWidthY() - shadeItem->getImageOfShadow()->h ) >> 1 ),
                                         /* shadow */ shadeItem->getImageOfShadow(),
@@ -513,56 +555,68 @@ void Mediator::castShadowOnFreeItem( FreeItem* freeItem )
         }
 }
 
-void Mediator::mask( FreeItem* freeItem )
+void Mediator::maskFreeItem( FreeItem* freeItem )
 {
         // look for item in list
-        // shade only with next items
-        // for sorted list there’s no shading with previous items
+        // mask only with next items
+        // for sorted list there’s no masking with previous items
         std::list< FreeItem * >::iterator f = std::find_if( freeItems.begin (), freeItems.end (), std::bind2nd( EqualItemId(), freeItem->getId() ) );
+        if ( f == freeItems.end () ) /* there’s no such item in list */ return;
 
-        // mask when item is found
-        if ( f != freeItems.end () )
+        while ( ++f != freeItems.end () ) // when there’s any next item
         {
-                // is there any next item
-                while ( ++f != freeItems.end () )
-                {
-                        FreeItem* itemToMaskWith = *f ;
+                FreeItem* itemToMaskWith = *f ;
 
-                        if ( itemToMaskWith->getRawImage() && (
-                                /* one of two is marked to mask and other of two isn’t transparent */
-                                ( freeItem->whichMask() != NoMask && itemToMaskWith->getTransparency() == 0 ) ||
-                                ( itemToMaskWith->whichMask() != NoMask && freeItem->getTransparency() == 0 ) )
-                        ) {
-                                // do graphics overlap
-                                if ( ( itemToMaskWith->getOffsetX() < freeItem->getOffsetX() + freeItem->getRawImage()->w ) &&
-                                        ( itemToMaskWith->getOffsetX() + itemToMaskWith->getRawImage()->w > freeItem->getOffsetX() ) &&
-                                        ( itemToMaskWith->getOffsetY() < freeItem->getOffsetY() + freeItem->getRawImage()->h ) &&
-                                        ( itemToMaskWith->getOffsetY() + itemToMaskWith->getRawImage()->h > freeItem->getOffsetY() ) )
+                if ( itemToMaskWith->getRawImage() && (
+                        /* one of two is marked to mask and other of two isn’t transparent */
+                        ( freeItem->whichMask() != NoMask && itemToMaskWith->getTransparency() == 0 ) ||
+                        ( itemToMaskWith->whichMask() != NoMask && freeItem->getTransparency() == 0 ) )
+                ) {
+                        // do graphics overlap
+                        if ( ( itemToMaskWith->getOffsetX() < freeItem->getOffsetX() + freeItem->getRawImage()->w ) &&
+                                ( itemToMaskWith->getOffsetX() + itemToMaskWith->getRawImage()->w > freeItem->getOffsetX() ) &&
+                                ( itemToMaskWith->getOffsetY() < freeItem->getOffsetY() + freeItem->getRawImage()->h ) &&
+                                ( itemToMaskWith->getOffsetY() + itemToMaskWith->getRawImage()->h > freeItem->getOffsetY() ) )
+                        {
+                                // freeItem is behind itemToMaskWith
+                                if ( ( freeItem->getX() + static_cast< int >( freeItem->getWidthX() ) <= itemToMaskWith->getX() ) ||
+                                        ( freeItem->getY() <= itemToMaskWith->getY() - static_cast< int >( itemToMaskWith->getWidthY() ) ) ||
+                                        ( freeItem->getZ() + static_cast< int >( freeItem->getHeight() ) <= itemToMaskWith->getZ() ) )
                                 {
-                                        // freeItem is behind itemToMaskWith
-                                        if ( ( freeItem->getX() + static_cast< int >( freeItem->getWidthX() ) <= itemToMaskWith->getX() ) ||
-                                                ( freeItem->getY() <= itemToMaskWith->getY() - static_cast< int >( itemToMaskWith->getWidthY() ) ) ||
-                                                ( freeItem->getZ() + static_cast< int >( freeItem->getHeight() ) <= itemToMaskWith->getZ() ) )
-                                        {
-                                                freeItem->maskImage( itemToMaskWith->getOffsetX(), itemToMaskWith->getOffsetY(), itemToMaskWith->getRawImage() );
-                                        }
-                                        // itemToMaskWith is behind freeItem
-                                        else
-                                        {
-                                                itemToMaskWith->maskImage( freeItem->getOffsetX(), freeItem->getOffsetY(), freeItem->getRawImage() );
-                                        }
+                                # if  defined( DEBUG_MASKS )  &&  DEBUG_MASKS
+                                        std::cout << "masking " << freeItem->whichKindOfItem() << " \"" << freeItem->getLabel() << "\"" <<
+                                                " at x=" << freeItem->getX() << " y=" << freeItem->getY() << " z=" << freeItem->getZ() <<
+                                                " behind " << itemToMaskWith->whichKindOfItem() << " \"" << itemToMaskWith->getLabel() << "\"" <<
+                                                " at x=" << itemToMaskWith->getX() << " y=" << itemToMaskWith->getY() << " z=" << itemToMaskWith->getZ()
+                                                  << std::endl ;
+                                # endif
+
+                                        freeItem->maskImage( itemToMaskWith->getOffsetX(), itemToMaskWith->getOffsetY(), itemToMaskWith->getRawImage() );
+                                }
+                                // itemToMaskWith is behind freeItem
+                                else
+                                {
+                                # if  defined( DEBUG_MASKS )  &&  DEBUG_MASKS
+                                        std::cout << "masking " << itemToMaskWith->whichKindOfItem() << " \"" << itemToMaskWith->getLabel() << "\"" <<
+                                                " at x=" << itemToMaskWith->getX() << " y=" << itemToMaskWith->getY() << " z=" << itemToMaskWith->getZ() <<
+                                                " behind " << freeItem->whichKindOfItem() << " \"" << freeItem->getLabel() << "\"" <<
+                                                " at x=" << freeItem->getX() << " y=" << freeItem->getY() << " z=" << freeItem->getZ()
+                                                  << std::endl ;
+                                # endif
+
+                                        itemToMaskWith->maskImage( freeItem->getOffsetX(), freeItem->getOffsetY(), freeItem->getRawImage() );
                                 }
                         }
                 }
         }
 
-        int xStart = freeItem->getX() / room->getSizeOfOneTile();
-        int xEnd = ( ( freeItem->getX() + freeItem->getWidthX() - 1 ) / room->getSizeOfOneTile() ) + 1;
-        int yStart = ( freeItem->getY() / room->getSizeOfOneTile() ) + 1;
-        int yEnd = ( freeItem->getY() - freeItem->getWidthY() + 1 ) / room ->getSizeOfOneTile();
-
         if ( freeItem->whichMask() != NoMask )
-        {  // free item is to be masked
+        {
+                int xStart = freeItem->getX() / room->getSizeOfOneTile();
+                int xEnd = ( ( freeItem->getX() + freeItem->getWidthX() - 1 ) / room->getSizeOfOneTile() ) + 1;
+                int yStart = ( freeItem->getY() / room->getSizeOfOneTile() ) + 1;
+                int yEnd = ( freeItem->getY() - freeItem->getWidthY() + 1 ) / room ->getSizeOfOneTile();
+
                 do
                 {
                         unsigned int i = 0;
@@ -589,6 +643,14 @@ void Mediator::mask( FreeItem* freeItem )
                                                                 ( freeItem->getY() <= static_cast< int >( ( yStart + i ) * room->getSizeOfOneTile() ) - 1 ) ||
                                                                 ( freeItem->getZ() + static_cast< int >( freeItem->getHeight() ) <= gridItem->getZ() ) )
                                                         {
+                                                        # if  defined( DEBUG_MASKS )  &&  DEBUG_MASKS
+                                                                std::cout << "masking " << freeItem->whichKindOfItem() << " \"" << freeItem->getLabel() << "\"" <<
+                                                                        " at x=" << freeItem->getX() << " y=" << freeItem->getY() << " z=" << freeItem->getZ() <<
+                                                                        " behind " << gridItem->whichKindOfItem() << " \"" << gridItem->getLabel() << "\"" <<
+                                                                        " at x=" << gridItem->getX() << " y=" << gridItem->getY() << " z=" << gridItem->getZ()
+                                                                          << std::endl ;
+                                                        # endif
+
                                                                 freeItem->maskImage( gridItem->getOffsetX(), gridItem->getOffsetY(), gridItem->getRawImage() );
                                                         }
                                                 }
@@ -807,15 +869,14 @@ int Mediator::findHighestZ( Item * item )
 {
         int z = 0 ;
 
-        // Se recorre la lista de elementos libres buscando aquel que intersecta
-        // con la columna y de mayor altura
+        // go thru list of free items looking for highest in column
         for ( std::list< FreeItem * >::iterator f = freeItems.begin (); f != freeItems.end (); ++f )
         {
                 FreeItem* freeItem = *f ;
 
                 if ( freeItem->getId() != item->getId() && freeItem->isCollisionDetector() )
                 {
-                        // Se busca la intersección en los ejes X e Y y la mayor Z
+                        // look for intersection on X and Y with higher Z
                         if ( ( freeItem->getX() + static_cast< int >( freeItem->getWidthX() ) > item->getX() ) &&
                                         ( freeItem->getX() < item->getX() + static_cast< int >( item->getWidthX() ) ) &&
                                 ( freeItem->getY() > item->getY() - static_cast< int >( item->getWidthX() ) ) &&
@@ -827,12 +888,12 @@ int Mediator::findHighestZ( Item * item )
                 }
         }
 
-        if ( dynamic_cast< GridItem * >( item ) )
+        if ( item->whichKindOfItem() == "grid item" )
         {
                 GridItem* gridItem = dynamic_cast< GridItem * >( item );
-                int column( room->getTilesX() * gridItem->getCellY() + gridItem->getCellX() );
+                int column = room->getTilesX() * gridItem->getCellY() + gridItem->getCellX();
 
-                // Se recorren los elementos de la columna buscando el mayor
+                // look for highest Z in the column
                 for ( std::list< GridItem * >::iterator g = this->structure[ column ].begin (); g != this->structure[ column ].end (); ++g )
                 {
                         GridItem* tempItem = *g ;
@@ -843,17 +904,17 @@ int Mediator::findHighestZ( Item * item )
                         }
                 }
         }
-        else if ( dynamic_cast< FreeItem * >( item ) )
+        else if ( item->whichKindOfItem() == "free item" || item->whichKindOfItem() == "player item" )
         {
                 FreeItem* freeItem = dynamic_cast< FreeItem * >( item );
 
-                // Rango de columnas intersectadas por el elemento
+                // get columns where item is
                 int xStart = freeItem->getX() / room->getSizeOfOneTile();
                 int xEnd = ( freeItem->getX() + freeItem->getWidthX() - 1 ) / room->getSizeOfOneTile() + 1;
                 int yStart = ( freeItem->getY() - freeItem->getWidthY() + 1 ) / room->getSizeOfOneTile();
                 int yEnd = freeItem->getY() / room->getSizeOfOneTile() + 1;
 
-                // Se recorren los elementos de la columas intersectadas
+                // walk thru items in columns met by item
                 for ( int i = xStart; i < xEnd; i++ )
                 {
                         for ( int j = yStart; j < yEnd; j++ )

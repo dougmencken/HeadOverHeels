@@ -13,7 +13,7 @@ FreeItem::FreeItem( ItemData* itemData, int x, int y, int z, const Way& way )
         , transparency ( 0 )
         , collisionDetector ( true )
         , frozen ( false )
-        , shadyImage ( nilPointer )
+        , shadedNonmaskedImage ( nilPointer )
 {
         this->x = x;
         this->y = y;
@@ -41,40 +41,42 @@ FreeItem::FreeItem( const FreeItem& freeItem )
         , transparency( freeItem.transparency )
         , collisionDetector( freeItem.collisionDetector )
         , frozen( freeItem.frozen )
-        , shadyImage( nilPointer )
+        , shadedNonmaskedImage( nilPointer )
 {
-        if ( freeItem.shadyImage != nilPointer )
+        if ( freeItem.shadedNonmaskedImage != nilPointer )
         {
-                this->shadyImage = create_bitmap_ex( 32, freeItem.shadyImage->w, freeItem.shadyImage->h );
-                blit( freeItem.shadyImage, this->shadyImage, 0, 0, 0, 0, this->shadyImage->w, this->shadyImage->h );
+                this->shadedNonmaskedImage = create_bitmap_ex( 32, freeItem.shadedNonmaskedImage->w, freeItem.shadedNonmaskedImage->h );
+                blit( freeItem.shadedNonmaskedImage, this->shadedNonmaskedImage, 0, 0, 0, 0, this->shadedNonmaskedImage->w, this->shadedNonmaskedImage->h );
         }
 }
 
 FreeItem::~FreeItem()
 {
-        if ( shadyImage != nilPointer )
-                destroy_bitmap( shadyImage );
+        if ( shadedNonmaskedImage != nilPointer )
+                destroy_bitmap( shadedNonmaskedImage );
 }
 
 void FreeItem::draw( BITMAP* where )
 {
-        // draw item with transparency
-        if ( this->transparency > 0 && this->transparency < 100 )
-        {
-                set_trans_blender( 0, 0, 0, static_cast < int > ( 256 - 2.56 * this->transparency ) );
+        if ( transparency >= 100 ) /* item is fully transparent */ return ;
 
-                draw_trans_sprite(
+        if ( transparency == 0 )
+        {
+                draw_sprite(
                         where,
-                        this->processedImage ? this->processedImage : ( this->shadyImage ? this->shadyImage : this->rawImage ),
+                        this->processedImage ? this->processedImage : ( this->shadedNonmaskedImage ? this->shadedNonmaskedImage : this->rawImage ),
                         mediator->getRoom()->getX0 () + this->offset.first,
                         mediator->getRoom()->getY0 () + this->offset.second
                 ) ;
         }
         else
         {
-                draw_sprite(
+                // draw item with transparency
+                set_trans_blender( 0, 0, 0, static_cast < int > ( 256 - 2.56 * this->transparency ) );
+
+                draw_trans_sprite(
                         where,
-                        this->processedImage ? this->processedImage : ( this->shadyImage ? this->shadyImage : this->rawImage ),
+                        this->processedImage ? this->processedImage : ( this->shadedNonmaskedImage ? this->shadedNonmaskedImage : this->rawImage ),
                         mediator->getRoom()->getX0 () + this->offset.first,
                         mediator->getRoom()->getY0 () + this->offset.second
                 ) ;
@@ -89,10 +91,10 @@ void FreeItem::binProcessedImages()
                 this->processedImage = nilPointer;
         }
 
-        if ( this->shadyImage != nilPointer )
+        if ( this->shadedNonmaskedImage != nilPointer )
         {
-                destroy_bitmap( this->shadyImage );
-                this->shadyImage = nilPointer;
+                destroy_bitmap( this->shadedNonmaskedImage );
+                this->shadedNonmaskedImage = nilPointer;
         }
 }
 
@@ -116,8 +118,8 @@ void FreeItem::changeImage( BITMAP* image )
                 // recalculate displacement, it is how many pixels is this image from point of room’s origin
                 if ( image != nilPointer )
                 {
-                        this->offset.first = ( ( this->x - this->y ) << 1 ) + static_cast< int >( getDataOfItem()->getWidthX() + getDataOfItem()->getWidthY() ) - ( image->w >> 1 ) - 1;
-                        this->offset.second = this->x + this->y + static_cast< int >( getDataOfItem()->getWidthX() ) - image->h - this->z;
+                        this->offset.first = ( ( this->x - this->y ) << 1 ) + static_cast< int >( getWidthX() + getWidthY() ) - ( image->w >> 1 ) - 1;
+                        this->offset.second = this->x + this->y + static_cast< int >( getWidthX() ) - image->h - this->z;
                 }
                 else
                 {
@@ -133,13 +135,13 @@ void FreeItem::changeImage( BITMAP* image )
                 // remask with old image
                 if ( oldFreeItem.getRawImage() != nilPointer )
                 {
-                        mediator->remaskFreeItem( &oldFreeItem );
+                        mediator->remaskWithFreeItem( &oldFreeItem );
                 }
 
                 // remask with new image
                 if ( image != nilPointer )
                 {
-                        mediator->remaskFreeItem( this );
+                        mediator->remaskWithFreeItem( this );
                 }
         }
 }
@@ -159,13 +161,13 @@ void FreeItem::changeShadow( BITMAP* shadow )
                 {
                         if ( mediator->getDegreeOfShading() < 256 )
                         {
-                                mediator->reshadeFreeItem( this );
+                                mediator->reshadeWithFreeItem( this );
                         }
                 }
         }
 }
 
-void FreeItem::requestCastShadow()
+void FreeItem::requestShadow()
 {
         if( this->rawImage && this->myShady == WantShadow )
         {
@@ -179,383 +181,18 @@ void FreeItem::requestCastShadow()
 
                 // Si no se ha podido sombrear entonces se destruye la imagen de sombreado
                 // y se marca el elemento para enmascararlo
-                if ( this->myShady == WantShadow && this->shadyImage )
+                if ( this->myShady == WantShadow && this->shadedNonmaskedImage )
                 {
-                        destroy_bitmap( this->shadyImage );
-                        this->shadyImage = nilPointer;
+                        destroy_bitmap( this->shadedNonmaskedImage );
+                        this->shadedNonmaskedImage = nilPointer;
                         this->myMask = WantMask;
-                }
-        }
-}
-
-void FreeItem::castShadowImage( int x, int y, BITMAP* shadow, short shadingScale, unsigned char transparency )
-{
-        // is item not fully transparent
-        if ( transparency < 100 )
-        {
-                int width = ( getDataOfItem()->getWidthX() > getDataOfItem()->getWidthY() ? getDataOfItem()->getWidthX() : getDataOfItem()->getWidthY() );
-                // Coordenada inicial X
-                int inix = x - this->offset.first;
-                if ( inix < 0 ) inix = 0;
-                // Coordenada inicial Y
-                int iniy = y - this->offset.second;
-                if ( iniy < 0 ) iniy = 0;
-                // Coordenada final X
-                int endx = x - this->offset.first + shadow->w;
-                if ( endx > this->rawImage->w ) endx = this->rawImage->w;
-                // Coordenada final Y
-                int endy = y - this->offset.second + shadow->h;
-                if ( endy > this->rawImage->h ) endy = this->rawImage->h;
-                // Coordenada intermedia Y
-                int my = this->rawImage->h - width - getDataOfItem()->getHeight ();
-                if ( endy < my ) my = endy;
-                if ( endy > my + width ) endy = my + width;
-
-                // Índice para recorrer las filas de píxeles de la imágenes image y shadyImage del elemento
-                int iRow = 0;
-                // Índice para recorrer las filas de píxeles de la imagen shadow del elemento que sombrea
-                int sRow = 0;
-                // Índice para recorrer la componente roja de los píxeles de una fila de las imágenes image y shadyImage del elemento
-                int iRpx = 0;
-                // Índice para recorrer la componente verde de los píxeles de una fila de las imágenes image y shadyImage del elemento
-                int iGpx = 0;
-                // Índice para recorrer la componente azul de los píxeles de una fila de las imágenes image y shadyImage del elemento
-                int iBpx = 0;
-                // Índice para recorrer los píxeles de una fila de la imagen shadow del elemento que sombrea
-                int sPixel = 0;
-                // Primera componente del primer píxel (el situado más a la izquierda) donde comienza el sombreado lateral
-                int ltpx = 0;
-                // Segunda componente del primer píxel (el situado más a la izquierda) donde comienza el sombreado lateral
-                int ltpx1 = 0;
-                // Primera componente del último píxel (el situado más a la derecha) donde termina el sombreado lateral
-                int rtpx = 0;
-                // Segunda componente del último píxel (el situado más a la derecha) donde termina el sombreado lateral
-                int rtpx1 = 0;
-
-                // Las coordenadas iniciales tienen que ser menores a las finales
-                if ( iniy < endy && inix < endx )
-                {
-                        int n2i = inix + this->offset.first - x;
-
-                        // En principio, la imagen del elemento sombreado es la imagen del elemento sin sombrear
-                        if ( ! this->shadyImage )
-                        {
-                                this->shadyImage = create_bitmap_ex( bitmap_color_depth( this->rawImage ), this->rawImage->w, this->rawImage->h );
-                        }
-                        if ( this->myShady == WantShadow )
-                        {
-                                blit( this->rawImage, this->shadyImage, 0, 0, 0, 0, this->rawImage->w, this->rawImage->h );
-                                this->myShady = AlreadyShady;
-                        }
-
-                        // Incremento de los índices iRpx, iGpx e iBpx
-                        char iInc = ( bitmap_color_depth( this->rawImage ) == 32 ? 4 : 3 );
-                        // Incremento del índice sPixel
-                        char sInc = ( bitmap_color_depth( shadow ) == 32 ? 4 : 3 );
-
-                        // Grado de opacidad del sombreado desde 0 a 255, siendo 0 la opacidad total y 255
-                        // casi la transparencia total
-                        short opacity = short( ( ( 256.0 - shadingScale ) / 100 ) * transparency + shadingScale );
-
-                        endx *= iInc;
-                        inix *= iInc;
-                #if IS_BIG_ENDIAN
-                        inix += bitmap_color_depth( this->rawImage ) == 32 ? 1 : 0 ;
-                #endif
-                        n2i *= sInc;
-                #if IS_BIG_ENDIAN
-                        n2i += bitmap_color_depth( shadow ) == 32 ? 1 : 0 ;
-                #endif
-
-                        // Si la opacidad es potencia de 2 en el intervalo [2,128]
-                        if ( int ( pow( 2, log10( opacity ) / log10( 2 ) ) ) == opacity )
-                        {
-                                // Divisor del píxel
-                                char pxDiv = 7;
-
-                                // En función de la opacidad de la sombra se halla
-                                // el valor del divisor del píxel: píxel / 2^pxDiv
-                                while ( opacity != 2 )
-                                {
-                                        opacity = opacity >> 1;
-                                        pxDiv--;
-                                }
-
-                                // Sombreado de la superficie del elemento, la parte superior
-                                // Se recorren las filas de las tres imágenes entre los límites calculados
-                                for ( iRow = iniy, sRow = iniy + this->offset.second - y; iRow < my; iRow++, sRow++ )
-                                {
-                                        unsigned char* sln = shadow->line[ sRow ];
-                                        unsigned char* iln = this->rawImage->line[ iRow ];
-                                        unsigned char* rln = this->shadyImage->line[ iRow ];
-
-                                        // Se recorren los píxeles de cada fila según los límites calculados
-                                        for ( iRpx = inix, iGpx = inix + 1, iBpx = inix + 2, sPixel = n2i; iRpx < endx; iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc )
-                                        {
-                                                // Si el píxel de las tres imágenes no tiene el color clave (255,0,255)
-                                                // entonces el píxel de la imagen resultante se divide entre 2^pxDiv, es decir, se oscurece
-                                                if ( ( iln[ iRpx ] < 255 || iln[ iGpx ] || iln[ iBpx ] < 255 ) &&
-                                                        ( iln[ iRpx ] == rln[ iRpx ] && iln[ iGpx ] == rln[ iGpx ] && iln[ iBpx ] == rln[ iBpx ] ) &&
-                                                        ( sln[ sPixel ] < 255 || sln[ sPixel + 1 ] || sln[ sPixel + 2 ] < 255 ) )
-                                                {
-                                                        rln[ iRpx ] = iln[ iRpx ] >> pxDiv;
-                                                        rln[ iGpx ] = iln[ iGpx ] >> pxDiv;
-                                                        rln[ iBpx ] = iln[ iBpx ] >> pxDiv;
-                                                }
-                                        }
-                                }
-                                // Hasta aquí el elemento se sombrea de forma horizontal hasta la línea marcada por la variable my
-
-                                // Sombreado de los laterales del elemento
-                                ltpx = ( ( this->rawImage->w ) >> 1 ) - ( width << 1 ) + ( getDataOfItem()->getWidthX() - getDataOfItem()->getWidthY() ) + ( ( iRow - my ) << 1 );
-                                rtpx = ( ( this->rawImage->w ) >> 1 ) + ( width << 1 ) + ( getDataOfItem()->getWidthX() - getDataOfItem()->getWidthY() ) - ( ( iRow - my ) << 1 ) - 2;
-                                ltpx = ltpx * iInc;
-                        #if IS_BIG_ENDIAN
-                                ltpx += bitmap_color_depth( this->rawImage ) == 32 ? 1 : 0 ;
-                        #endif
-                                rtpx = rtpx * iInc;
-                        #if IS_BIG_ENDIAN
-                                rtpx += bitmap_color_depth( this->rawImage ) == 32 ? 1 : 0 ;
-                        #endif
-
-                                // Sombrea en escalera isométrica la parte izquierda y derecha del elemento
-                                for ( ltpx1 = ltpx + iInc, rtpx1 = rtpx + iInc; iRow < endy; iRow++, sRow++, ltpx += 2 * iInc, ltpx1 += 2 * iInc, rtpx -= 2 * iInc, rtpx1 -= 2 * iInc )
-                                {
-                                        unsigned char* sln = shadow->line[ sRow ];
-                                        unsigned char* iln = this->rawImage->line[ iRow ];
-                                        unsigned char* rln = this->shadyImage->line[ iRow ];
-
-                                        if ( inix < ltpx )
-                                        {
-                                                inix = ltpx;
-                                                n2i = inix + ( this->offset.first - x ) * sInc;
-                                        }
-
-                                        if ( endx > rtpx + 2 * iInc )
-                                        {
-                                                endx = rtpx + 2 * iInc;
-                                        }
-
-                                        for ( iRpx = inix, iGpx = inix + 1, iBpx = inix + 2, sPixel = n2i; iRpx < endx; iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc )
-                                        {
-                                                if ( sln[ sPixel ] < 255 || sln[ sPixel + 1 ] || sln[ sPixel + 2 ] < 255 )
-                                                {
-                                                        if ( ( iln[ iRpx ] < 255 || iln[ iGpx ] || iln[ iBpx ] < 255 ) &&
-                                                                ( iln[ iRpx ] == rln[ iRpx ] && iln[ iGpx ] == rln[ iGpx ] && iln[ iBpx ] == rln[ iBpx ] ) )
-                                                        {
-                                                                rln[ iRpx ] = iln[ iRpx ] >> pxDiv;
-                                                                rln[ iGpx ] = iln[ iGpx ] >> pxDiv;
-                                                                rln[ iBpx ] = iln[ iBpx ] >> pxDiv;
-                                                        }
-
-                                                        if ( iRpx == ltpx || iRpx == ltpx1 || iRpx == rtpx || iRpx == rtpx1 )
-                                                        {
-                                                                for ( int yy = iRow + 1; yy < this->rawImage->h; yy++ )
-                                                                {
-                                                                        unsigned char* iln2 = this->rawImage->line[yy];
-                                                                        unsigned char* rln2 = this->shadyImage->line[yy];
-
-                                                                        if ( ( iln2[ iRpx ] < 255 || iln2[ iGpx ] || iln2[ iBpx ] < 255 ) &&
-                                                                                ( iln2[ iRpx ] == rln2[ iRpx ] && iln2[ iGpx ] == rln2[ iGpx ] && iln2[ iBpx ] == rln2[ iBpx ] ) )
-                                                                        {
-                                                                                rln2[ iRpx ] = iln2[ iRpx ] >> pxDiv;
-                                                                                rln2[ iGpx ] = iln2[ iGpx ] >> pxDiv;
-                                                                                rln2[ iBpx ] = iln2[ iBpx ] >> pxDiv;
-                                                                        }
-                                                                }
-                                                        }
-                                                }
-                                        }
-                                }
-                        }
-                        // La opacidad no es potencia de dos
-                        else
-                        {
-                                // La opacidad no es cero, es decir, hay cierta transparencia
-                                if ( opacity )
-                                {
-                                        // Se recorren las filas de las tres imágenes entre los límites calculados
-                                        for ( iRow = iniy, sRow = iniy + this->offset.second - y; iRow < my; iRow++, sRow++ )
-                                        {
-                                                unsigned short color;
-                                                unsigned char* sln = shadow->line[ sRow ];
-                                                unsigned char* iln = this->rawImage->line[ iRow ];
-                                                unsigned char* rln = this->shadyImage->line[ iRow ];
-
-                                                // Se recorren los píxeles de cada fila según los límites calculados
-                                                for ( iRpx = inix, iGpx = inix + 1, iBpx = inix + 2, sPixel = n2i; iRpx < endx; iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc )
-                                                {
-                                                        // Si el píxel de las tres imágenes no tiene el color clave (255,0,255)
-                                                        // entonces el píxel de la imagen resultante se decrementa su valor para oscurecerlo
-                                                        if ( ( iln[ iRpx ] < 255 || iln[ iGpx ] || iln[ iBpx ] < 255 ) &&
-                                                                ( iln[ iRpx ] == rln[ iRpx ] && iln[ iGpx ] == rln[ iGpx ] && iln[ iBpx ] == rln[ iBpx ] ) &&
-                                                                ( sln[ sPixel ] < 255 || sln[ sPixel + 1 ] || sln[ sPixel + 2 ] < 255 ) )
-                                                        {
-                                                                color = iln[ iRpx ] * opacity;
-                                                                rln[ iRpx ] = ( unsigned char )( color >> 8 );
-                                                                color = iln[ iGpx ] * opacity;
-                                                                rln[ iGpx ] = ( unsigned char )( color >> 8 );
-                                                                color = iln[ iBpx ] * opacity;
-                                                                rln[ iBpx ] = ( unsigned char )( color >> 8 );
-                                                        }
-                                                }
-                                        }
-
-                                        ltpx = ( ( this->rawImage->w ) >> 1 ) - ( width << 1 ) + ( getDataOfItem()->getWidthX() - getDataOfItem()->getWidthY() ) + ( ( iRow - my ) << 1 );
-                                        rtpx = ( ( this->rawImage->w ) >> 1 ) + ( width << 1 ) + ( getDataOfItem()->getWidthX() - getDataOfItem()->getWidthY() ) - ( ( iRow - my ) << 1 ) - 2;
-                                        ltpx = ltpx * iInc;
-                                #if IS_BIG_ENDIAN
-                                        ltpx += bitmap_color_depth( this->rawImage ) == 32 ? 1 : 0 ;
-                                #endif
-                                        rtpx = rtpx * iInc;
-                                #if IS_BIG_ENDIAN
-                                        rtpx += bitmap_color_depth( this->rawImage ) == 32 ? 1 : 0 ;
-                                #endif
-
-                                        for ( ltpx1 = ltpx + iInc, rtpx1 = rtpx + iInc; iRow < endy; iRow++, sRow++, ltpx += 2 * iInc, ltpx1 += 2 * iInc, rtpx -= 2 * iInc, rtpx1 -= 2 * iInc )
-                                        {
-                                                unsigned char* sln = shadow->line[ sRow ];
-                                                unsigned char* iln = this->rawImage->line[ iRow ];
-                                                unsigned char* rln = this->shadyImage->line[ iRow ];
-
-                                                if ( inix < ltpx )
-                                                {
-                                                        inix = ltpx;
-                                                        n2i = inix + ( this->offset.first - x ) * sInc;
-                                                }
-
-                                                if ( endx > rtpx + 2 * iInc )
-                                                {
-                                                        endx = rtpx + 2 * iInc;
-                                                }
-
-                                                for ( iRpx = inix, iGpx = inix + 1, iBpx = inix + 2, sPixel = n2i; iRpx < endx; iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc )
-                                                {
-                                                        if ( sln[ sPixel ] < 255 || sln[ sPixel + 1 ] || sln[ sPixel + 2 ] < 255 )
-                                                        {
-                                                                if ( ( iln[ iRpx ] < 255 || iln[ iGpx ] || iln[ iBpx ] < 255 ) &&
-                                                                        ( iln[ iRpx ] == rln[ iRpx ] && iln[ iGpx ] == rln[ iGpx ] && iln[ iBpx ] == rln[ iBpx ] ) )
-                                                                {
-                                                                        unsigned short color;
-                                                                        color = iln[ iRpx ] * opacity;
-                                                                        rln[ iRpx ] = ( unsigned char )( color >> 8 );
-                                                                        color = iln[ iGpx ] * opacity;
-                                                                        rln[ iGpx ] = ( unsigned char )( color >> 8 );
-                                                                        color = iln[ iBpx ] * opacity;
-                                                                        rln[ iBpx ] = ( unsigned char )( color >> 8 );
-
-                                                                        if ( iRpx == ltpx || iRpx == ltpx1 || iRpx == rtpx || iRpx == rtpx1 )
-                                                                        {
-                                                                                for ( int yy = iRow + 1; yy < this->rawImage->h; yy++ )
-                                                                                {
-                                                                                        unsigned char* iln2 = this->rawImage->line[ yy ];
-                                                                                        unsigned char* rln2 = this->shadyImage->line[ yy ];
-
-                                                                                        if ( ( iln2[ iRpx ] < 255 || iln2[ iGpx ] || iln2[ iBpx ] < 255 ) &&
-                                                                                                ( iln2[ iRpx ] == rln2[ iRpx ] && iln2[ iGpx ] == rln2[ iGpx ] && iln2[ iBpx ] == rln2[ iBpx ] ) )
-                                                                                        {
-                                                                                                color = iln2[ iRpx ] * opacity;
-                                                                                                rln2[ iRpx ] = ( unsigned char )( color >> 8 );
-                                                                                                color = iln2[ iGpx ] * opacity;
-                                                                                                rln2[ iGpx ] = ( unsigned char )( color >> 8 );
-                                                                                                color = iln2[ iBpx ] * opacity;
-                                                                                                rln2[ iBpx ] = ( unsigned char )( color >> 8 );
-                                                                                        }
-                                                                                }
-                                                                        }
-                                                                }
-                                                        }
-                                                }
-                                        }
-                                }
-                                // La opacidad es cero, es decir, la opacidad es total
-                                else
-                                {
-                                        // Se recorren las filas de las tres imágenes entre los límites calculados
-                                        for ( iRow = iniy, sRow = iniy + this->offset.second - y; iRow < my; iRow++, sRow++ )
-                                        {
-                                                unsigned char* sln = shadow->line[ sRow ];
-                                                unsigned char* iln = this->rawImage->line[ iRow ];
-                                                unsigned char* rln = this->shadyImage->line[ iRow ];
-
-                                                // Se recorren los píxeles de cada fila según los límites calculados
-                                                for ( iRpx = inix, iGpx = inix + 1, iBpx = inix + 2, sPixel = n2i; iRpx < endx; iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc )
-                                                {
-                                                        // Si el píxel de las tres imágenes no tiene el color clave (255,0,255)
-                                                        // entonces el píxel de la imagen resultante se cero, totalmente negro
-                                                        if ( ( iln[ iRpx ] < 255 || iln[ iGpx ] || iln[ iBpx ] < 255 ) &&
-                                                                ( iln[ iRpx ] == rln[ iRpx ] && iln[ iGpx ] == rln[ iGpx ] && iln[ iBpx ] == rln[ iBpx ] ) &&
-                                                                ( sln[ sPixel ] < 255 || sln[ sPixel + 1 ] || sln[ sPixel + 2 ] < 255 ) )
-                                                        {
-                                                                rln[ iRpx ] = rln[ iGpx ] = rln[ iBpx ] = 0;
-                                                        }
-                                                }
-                                        }
-
-                                        ltpx = ( ( this->rawImage->w ) >> 1 ) - ( width << 1 ) + ( getDataOfItem()->getWidthX() - getDataOfItem()->getWidthY() ) + ( ( iRow - my ) << 1 );
-                                        rtpx = ( ( this->rawImage->w ) >> 1 ) + ( width << 1 ) + ( getDataOfItem()->getWidthX() - getDataOfItem()->getWidthY() ) - ( ( iRow - my ) << 1 ) - 2;
-                                        ltpx = ltpx * iInc;
-                                #if IS_BIG_ENDIAN
-                                        ltpx += bitmap_color_depth( this->rawImage ) == 32 ? 1 : 0 ;
-                                #endif
-                                        rtpx = rtpx * iInc;
-                                #if IS_BIG_ENDIAN
-                                        rtpx += bitmap_color_depth( this->rawImage ) == 32 ? 1 : 0 ;
-                                #endif
-
-                                        for ( ltpx1 = ltpx + iInc, rtpx1 = rtpx + iInc; iRow < endy; iRow++, sRow++, ltpx += 2 * iInc, ltpx1 += 2 * iInc, rtpx -= 2 * iInc, rtpx1 -= 2 * iInc )
-                                        {
-                                                unsigned char* sln = shadow->line[ sRow ];
-                                                unsigned char* iln = this->rawImage->line[ iRow ];
-                                                unsigned char* rln = this->shadyImage->line[ iRow ];
-
-                                                if ( inix < ltpx )
-                                                {
-                                                        inix = ltpx;
-                                                        n2i = inix + ( this->offset.first - x ) * sInc;
-                                                }
-
-                                                if ( endx > rtpx + 2 * iInc )
-                                                {
-                                                        endx = rtpx + 2 * iInc;
-                                                }
-
-                                                for ( iRpx = inix, iGpx = inix + 1, iBpx = inix + 2, sPixel = n2i; iRpx < endx; iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc )
-                                                {
-                                                        if ( sln[ sPixel ] < 255 || sln[ sPixel + 1 ] || sln[ sPixel + 2 ] < 255 )
-                                                        {
-                                                                if ( ( iln[ iRpx ] < 255 || iln[ iGpx ] || iln[ iBpx ] < 255 ) &&
-                                                                        ( iln[ iRpx ] == rln[ iRpx ] && iln[ iGpx ] == rln[ iGpx ] && iln[ iBpx ] == rln[ iBpx ] ) )
-                                                                {
-                                                                        rln[ iRpx ] = rln[ iGpx ] = rln[ iBpx ] = 0;
-
-                                                                        if ( iRpx == ltpx || iRpx == ltpx1 || iRpx == rtpx || iRpx == rtpx1 )
-                                                                        {
-                                                                                for ( int yy = iRow + 1; yy < this->rawImage->h; yy++ )
-                                                                                {
-                                                                                        unsigned char* iln2 = this->rawImage->line[ yy ];
-                                                                                        unsigned char* rln2 = this->shadyImage->line[ yy ];
-
-                                                                                        if ( ( iln2[ iRpx ] < 255 || iln2[ iGpx ] || iln2[ iBpx ] < 255 ) &&
-                                                                                                (iln2[ iRpx ] == rln2[ iRpx ] && iln2[ iGpx ] == rln2[ iGpx ] && iln2[ iBpx ] == rln2[ iBpx ] ) )
-                                                                                        {
-                                                                                                rln2[ iRpx ] = rln2[ iGpx ] = rln2[ iBpx ] = 0;
-                                                                                        }
-                                                                                }
-                                                                        }
-                                                                }
-                                                        }
-                                                }
-                                        }
-                                }
-                        }
                 }
         }
 }
 
 void FreeItem::requestMask()
 {
-        mediator->mask( this );
+        mediator->maskFreeItem( this );
 
         if ( this->myMask == WantMask && this->processedImage )
         {
@@ -572,7 +209,7 @@ void FreeItem::maskImage( int x, int y, BITMAP* image )
         assert( image != nilPointer );
 
         // mask shaded image or raw image when item is not yet shaded
-        BITMAP* currentImage = ( this->shadyImage != nilPointer ? this->shadyImage : this->rawImage );
+        BITMAP* currentImage = ( this->shadedNonmaskedImage != nilPointer ? this->shadedNonmaskedImage : this->rawImage );
         assert( currentImage != nilPointer );
 
         int inix = x - this->offset.first;                      // initial X
@@ -660,7 +297,7 @@ bool FreeItem::updatePosition( int newX, int newY, int newZ, const Coordinate& w
         {
                 mediator->pushCollision( NorthWall );
         }
-        else if ( this->x + static_cast< int >( getDataOfItem()->getWidthX() ) > mediator->getRoom()->getLimitAt( Way( "south" ) ) )
+        else if ( this->x + static_cast< int >( getWidthX() ) > mediator->getRoom()->getLimitAt( Way( "south" ) ) )
         {
                 mediator->pushCollision( SouthWall );
         }
@@ -668,7 +305,7 @@ bool FreeItem::updatePosition( int newX, int newY, int newZ, const Coordinate& w
         {
                 mediator->pushCollision( WestWall );
         }
-        else if ( this->y - static_cast< int >( getDataOfItem()->getWidthY() ) + 1 < mediator->getRoom()->getLimitAt( Way( "east" ) ) )
+        else if ( this->y - static_cast< int >( getWidthY() ) + 1 < mediator->getRoom()->getLimitAt( Way( "east" ) ) )
         {
                 mediator->pushCollision( EastWall );
         }
@@ -690,12 +327,12 @@ bool FreeItem::updatePosition( int newX, int newY, int newZ, const Coordinate& w
                         if ( this->rawImage )
                         {
                                 // get how many pixels is this image from point of room’s origin
-                                this->offset.first = ( ( this->x - this->y ) << 1 ) + getDataOfItem()->getWidthX() + getDataOfItem()->getWidthY() - ( this->rawImage->w >> 1 ) - 1;
-                                this->offset.second = this->x + this->y + getDataOfItem()->getWidthX() - this->rawImage->h - this->z;
+                                this->offset.first = ( ( this->x - this->y ) << 1 ) + getWidthX() + getWidthY() - ( this->rawImage->w >> 1 ) - 1;
+                                this->offset.second = this->x + this->y + getWidthX() - this->rawImage->h - this->z;
 
                                 // for both the previous position and the current position
-                                mediator->remaskFreeItem( &oldFreeItem );
-                                mediator->remaskFreeItem( this );
+                                mediator->remaskWithFreeItem( &oldFreeItem );
+                                mediator->remaskWithFreeItem( this );
                         }
                         else
                         {
@@ -706,8 +343,8 @@ bool FreeItem::updatePosition( int newX, int newY, int newZ, const Coordinate& w
                         if ( mediator->getDegreeOfShading() < 256 )
                         {
                                 // for both the previous position and the current position
-                                mediator->reshadeFreeItem( &oldFreeItem );
-                                mediator->reshadeFreeItem( this );
+                                mediator->reshadeWithFreeItem( &oldFreeItem );
+                                mediator->reshadeWithFreeItem( this );
                         }
 
                         // reshade and remask
@@ -750,6 +387,15 @@ bool FreeItem::addToZ ( int value )
 bool FreeItem::addToPosition( int x, int y, int z )
 {
         return this->updatePosition( x, y, z, CoordinatesXYZ, Add );
+}
+
+void FreeItem::setShadedNonmaskedImage( BITMAP* newImage )
+{
+        if ( shadedNonmaskedImage != newImage )
+        {
+                destroy_bitmap( shadedNonmaskedImage );
+                shadedNonmaskedImage = newImage;
+        }
 }
 
 }

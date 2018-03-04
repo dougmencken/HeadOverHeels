@@ -168,9 +168,6 @@ protected:
 
         Way orientation ;
 
-        /**
-         * Estado del proceso de sombreado
-         */
         WhichShade myShady ;
 
         /**
@@ -179,35 +176,34 @@ protected:
         BITMAP * rawImage ;
 
         /**
-         * Sombra del fotograma actual del elemento
+         * Image of item’s shadow
          */
         BITMAP * shadow ;
 
         /**
-         * Image of this item with shadows from other items and masked
+         * Image of this item with shadows from other items, for free item it is also masked
          */
         BITMAP * processedImage ;
 
         /**
-         * Desplazamiento del fotograma procesado en los ejes X e Y, respectivamente, desde el píxel
-         * que marca el punto origen de la sala ( 0, 0, 0 )
+         * Offset on ( X, Y ) from room’s point of origin
          */
         std::pair < int, int > offset ;
 
         /**
-         * Cronómetro para controlar la velocidad de la animación
+         * Timer for animation of item
          */
-        Timer motionTimer ;
+        Timer * motionTimer ;
 
         /**
          * Behavior of item
          */
-        Behavior* behavior ;
+        Behavior * behavior ;
 
         /**
          * Reference item used to know if it would move when others are below
          */
-        Item* anchor ;
+        Item * anchor ;
 
 private:
 
@@ -320,19 +316,19 @@ public:
          */
         void setOrientation ( const Way& way ) {  this->orientation = way ;  }
 
-        /**
-         * La dirección actual del elemento
-         */
         Way getOrientation () const {  return orientation ;  }
 
         BITMAP * getRawImage () {  return rawImage ;  }
 
         BITMAP * getImageOfShadow () {  return shadow ;  }
 
-        /**
-         * Establece el estado del proceso de sombreado
-         */
+        BITMAP * getProcessedImage () const {  return processedImage ;  }
+
+        void setProcessedImage ( BITMAP * newImage ) ;
+
         void setWhichShade ( const WhichShade& shady ) {  this->myShady = shady ;  }
+
+        WhichShade whichShade () const {  return this->myShady ;  }
 
         /**
          * Establece el desplazamiento del fotograma procesado desde el píxel que marca el punto origen

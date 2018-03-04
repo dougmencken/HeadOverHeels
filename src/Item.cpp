@@ -23,17 +23,18 @@ Item::Item( ItemData* data, int z, const Way& way )
         rawImage( nilPointer ),
         shadow( nilPointer ),
         processedImage( nilPointer ),
+        offset( std::pair< int, int >( 0, 0 ) ),
+        motionTimer( nilPointer ),
         behavior( nilPointer ),
         anchor( nilPointer ),
         frameIndex( 0 ),
         backwardMotion( false )
 {
-        this->offset.first = this->offset.second = 0;
-
         // item with more than one frame per direction has animation
         if ( ( data->howManyMotions() - data->howManyExtraFrames() ) / data->howManyFramesForOrientations() > 1 )
         {
-                motionTimer.go();
+                motionTimer = new Timer ();
+                motionTimer->go();
         }
 }
 
@@ -51,12 +52,18 @@ Item::Item( const Item& item )
         shadow( item.shadow ),
         processedImage( nilPointer ),
         offset( item.offset ),
-        motionTimer( item.motionTimer ),
-        behavior( 0 ),
+        motionTimer( nilPointer ),
+        behavior( nilPointer ),
         anchor( item.anchor ),
         frameIndex( item.frameIndex ),
         backwardMotion( item.backwardMotion )
 {
+        if ( item.motionTimer != nilPointer )
+        {
+                motionTimer = new Timer ();
+                motionTimer->go();
+        }
+
         if ( item.processedImage != nilPointer )
         {
                 this->processedImage = create_bitmap_ex( 32, item.processedImage->w, item.processedImage->h );
@@ -67,6 +74,7 @@ Item::Item( const Item& item )
 Item::~Item( )
 {
         delete this->behavior;
+        delete this->motionTimer;
 
         destroy_bitmap( this->processedImage );
 }
@@ -89,7 +97,7 @@ bool Item::animate()
         if ( ( dataOfItem->howManyMotions() - dataOfItem->howManyExtraFrames() ) / dataOfItem->howManyFramesForOrientations() > 1 )
         {
                 // is it time to change frames
-                if ( motionTimer.getValue() > dataOfItem->getDelayBetweenFrames() )
+                if ( motionTimer->getValue() > dataOfItem->getDelayBetweenFrames() )
                 {
                         // forward motion
                         if ( ! backwardMotion )
@@ -126,7 +134,7 @@ bool Item::animate()
                                 }
                         }
 
-                        motionTimer.reset();
+                        motionTimer->reset();
                 }
         }
 
@@ -142,6 +150,15 @@ void Item::changeItemData( ItemData* itemData, const std::string& initiatedBy )
         this->dataOfItem = itemData;
         this->frameIndex = 0;
         this->backwardMotion = false;
+}
+
+void Item::setProcessedImage( BITMAP* newImage )
+{
+        if ( processedImage != newImage )
+        {
+                destroy_bitmap( processedImage );
+                processedImage = newImage;
+        }
 }
 
 void Item::changeOrientation( const Way& way )

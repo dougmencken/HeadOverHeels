@@ -33,11 +33,11 @@ public:
        /**
         * Constructor
         * @param column Room’s column to which this tile belongs
-        * @param x X coordinate on grid
-        * @param y Y coordinate on grid
+        * @param cellX X coordinate on grid
+        * @param cellY Y coordinate on grid
         * @param image Graphics of tile
         */
-        FloorTile( int column, int x, int y, BITMAP* image ) ;
+        FloorTile( int column, int cellX, int cellY, BITMAP* image ) ;
 
         virtual ~FloorTile( ) ;
 
@@ -46,23 +46,9 @@ public:
          */
         void calculateOffset () ;
 
-        /**
-         * Dibuja la loseta
-         */
         void draw ( BITMAP* where ) ;
 
         void requestShadow () ;
-
-        /**
-         * Sombrea la imagen de la loseta con la sombra de otro elemento
-         * @param x Coordenada X de pantalla donde está situada la base del elemento que sombrea
-         * @param y Coordenada Y de pantalla donde está situada la base del elemento que sombrea
-         * @param shadow La sombra que se proyecta sobre la loseta
-         * @param shadingScale Grado de opacidad de las sombras desde 0, sin sombras, hasta 256,
-         *                     sombras totalmente opacas
-         * @param transparency Grado de transparencia del elemento que sombrea a la loseta
-         */
-        void castShadowImage ( int x, int y, BITMAP* shadow, short shadingScale, unsigned char transparency = 0 ) ;
 
 private:
 
@@ -91,33 +77,28 @@ private:
          */
         BITMAP * shadyImage ;
 
-        /**
-         * Estado de sombreado de la loseta
-         */
         WhichShade shady ;
 
 public:
 
         int getColumn () const {  return column ;  }
 
-        int getX () const {  return coordinates.first ;  }
+        int getCellX () const {  return coordinates.first ;  }
 
-        int getY () const {  return coordinates.second ;  }
+        int getCellY () const {  return coordinates.second ;  }
 
         int getOffsetX () const {  return offset.first ;  }
 
         int getOffsetY () const {  return offset.second ;  }
 
-        BITMAP* getRawImage () const {  return rawImage ;  }
+        BITMAP * getRawImage () const {  return rawImage ;  }
 
-        /**
-         * Establece el estado del proceso de sombreado
-         */
+        BITMAP * getShadyImage () const {  return shadyImage ;  }
+
+        void setShadyImage( BITMAP * newShady ) ;
+
         void setWhichShade ( const WhichShade& shade ) {  this->shady = shade ;  }
 
-        /**
-         * Estado del proceso de sombreado
-         */
         WhichShade whichShade () const {  return shady ;  }
 
 };

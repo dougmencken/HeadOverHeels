@@ -11,8 +11,6 @@
 #ifndef GridItem_hpp_
 #define GridItem_hpp_
 
-#include <utility>
-#include <cmath>
 #include <allegro.h>
 #include "Ism.hpp"
 #include "Item.hpp"
@@ -36,12 +34,11 @@ class GridItem : public Item, public Drawable
 public:
 
         /**
-         * Constructor
-         * @param itemData Datos invariables del elemento
-         * @param cx Celda que ocupa el elemento en el eje X
-         * @param cy Celda que ocupa el elemento en el eje Y
-         * @param z Posición espacial Z o a qué distancia está el elemento del suelo
-         * @param direction Dirección inicial del elemento
+         * @param itemData Data of item
+         * @param cx Position on X of the cell in room where this item is
+         * @param cy Position on Y of the cell in room where this item is
+         * @param z Position on Z, or how far is floor
+         * @param way Initial orientation of item
          */
         GridItem( ItemData* itemData, int cx, int cy, int z, const Way& way ) ;
 
@@ -56,39 +53,20 @@ public:
 
         void binProcessedImage () ;
 
-        /**
-         * Change graphics of this item, replacing the current image, and pointing out what to remask
-         * @param image Un fotograma del elemento
-         */
-        void changeImage ( BITMAP* newImage ) ;
+        virtual void changeImage ( BITMAP* newImage ) ;
+
+        virtual void changeShadow ( BITMAP* newShadow ) ;
 
         /**
-         * Change shadow for this item, replacing the current one, and figuring out what to reshadow
-         * @param image Una sombra de un fotograma del elemento
+         * Request to shade item
+         * @param column Grid column of this item
          */
-        void changeShadow ( BITMAP* newShadow ) ;
+        void requestShadow ( int column ) ;
 
         /**
-         * Solicita el sombreado del elemento
-         * @param column Columna de elementos rejilla a la que pertenece este elemento
-         */
-        void requestCastShadow ( int column ) ;
-
-        /**
-         * Sombrea la imagen del elemento con la sombra de otro elemento
-         * @param x Coordenada X de pantalla donde está situada la base del elemento que sombrea
-         * @param y Coordenada Y de pantalla donde está situada la base del elemento que sombrea
-         * @param shadow La sombra que se proyecta sobre el elemento
-         * @param shadingScale Grado de opacidad de las sombras desde 0, sin sombras, hasta 256,
-         *                     sombras totalmente opacas
-         * @param transparency Grado de transparencia del elemento que sombrea
-         */
-        void castShadowImage ( int x, int y, BITMAP* shadow, short shadingScale, unsigned char transparency = 0 ) ;
-
-        /**
-         * Cambia el valor de la coordenada Z
-         * @param value Valor que se sumará a la coordenada Z actual
-         * @return true si se pudo cambiar el dato o false si hubo colisión y no hubo cambio
+         * Change Z coordinate
+         * @param value Value to add to current Z coordinate
+         * @return true if Z is okay to change or false if there’s a collision
          */
         virtual bool addToZ ( int value ) ;
 
@@ -99,39 +77,29 @@ protected:
 protected:
 
         /**
-         * Posición en el eje X e Y, respectivamente, de la celda que ocupa el elemento en la sala
+         * Position ( X, Y ) of the cell in room where this item is
          */
         std::pair < int, int > cell ;
 
         /**
-         * Índice de la columna de elementos a los que pertenece el elemento rejilla
+         * Number of column of items to which this grid item belongs
          */
         int column ;
 
 public:
 
         /**
-         * Posición en el eje X de la celda que ocupa el elemento en la sala
-         * @return Un número positivo
+         * Position on X of the cell in room where this item is
          */
         int getCellX () const {  return cell.first ;  }
 
         /**
-         * Posición en el eje Y de la celda que ocupa el elemento en la sala
-         * @return Un número positivo
+         * Position on Y of the cell in room where this item is
          */
         int getCellY () const {  return cell.second ;  }
 
-        /**
-         * Establece el índice de la columna de elementos a los que pertenece el elemento rejilla
-         * @param Un número positivo
-         */
-        void setColumn (const int column) {  this->column = column ;  }
+        void setColumn ( int column ) {  this->column = column ;  }
 
-        /**
-         * Índice de la columna de elementos a los que pertenece el elemento rejilla
-         * @return Un número positivo
-         */
         int getColumn () const {  return column ;  }
 
 };

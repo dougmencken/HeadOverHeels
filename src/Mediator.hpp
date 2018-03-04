@@ -59,7 +59,6 @@ class Mediator
 public:
 
        /**
-        * Constructor
         * @param room Room in which this mediator negotiates
         */
         Mediator( Room* room ) ;
@@ -81,13 +80,13 @@ public:
         */
         void endUpdate () ;
 
-        void remaskFreeItem( FreeItem* item ) ;
+        void remaskWithFreeItem( FreeItem* item ) ;
 
-        void remaskGridItem( GridItem* gridItem ) ;
+        void remaskWithGridItem( GridItem* gridItem ) ;
 
-        void reshadeGridItem( GridItem* gridItem ) ;
+        void reshadeWithGridItem( GridItem* gridItem ) ;
 
-        void reshadeFreeItem( FreeItem* freeItem ) ;
+        void reshadeWithFreeItem( FreeItem* freeItem ) ;
 
         void castShadowOnFloor( FloorTile* floorTile ) ;
 
@@ -95,10 +94,7 @@ public:
 
         void castShadowOnFreeItem( FreeItem* freeItem ) ;
 
-       /**
-        * Enmascara un elemento libre
-        */
-        void mask ( FreeItem* freeItem ) ;
+        void maskFreeItem ( FreeItem* freeItem ) ;
 
        /**
         * Find item in room by its identifier
