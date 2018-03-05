@@ -55,10 +55,10 @@ void CreateVideoMenu::doAction ()
                 listOfOptions->addOption( labelDrawBackground );
                 listOfOptions->addOption( labelGraphicSet );
 
-                ///listOfOptions->setValueOf( labelGraphicSet, "" ); // it has no value but action
                 listOfOptions->setValueOf( labelDrawBackground, isomot::GameManager::getInstance()->hasBackgroundPicture () ? yeah : nope );
                 listOfOptions->setValueOf( labelDrawShadows, isomot::GameManager::getInstance()->getDrawShadows () ? yeah : nope );
                 listOfOptions->setValueOf( labelFullscreen, gui::GuiManager::getInstance()->isAtFullScreen () ? yeah : nope );
+                // and labelGraphicSet has no value but action
 
                 listOfOptions->setVerticalOffset( 36 );
 

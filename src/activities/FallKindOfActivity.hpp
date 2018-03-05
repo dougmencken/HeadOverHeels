@@ -39,11 +39,12 @@ public:
         virtual ~FallKindOfActivity( ) ;
 
        /**
-        * @return true if item falls or false if there’s collision
+        * Item falls
+        * @return true if fall or false when there’s collision
         */
         virtual bool fall ( Behavior * behavior ) ;
 
-        static KindOfActivity * getInstance () ;
+        static FallKindOfActivity * getInstance () ;
 
 private:
 
@@ -51,7 +52,7 @@ private:
 
 private:
 
-        static KindOfActivity * instance ;
+        static FallKindOfActivity * instance ;
 
 };
 

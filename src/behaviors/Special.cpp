@@ -99,8 +99,7 @@ bool Special::update ()
                         // some other item moves this bonus
                         else if ( speedTimer->getValue() > item->getSpeed() )
                         {
-                                whatToDo = DisplaceKindOfActivity::getInstance();
-                                whatToDo->displace( this, &activity, true );
+                                DisplaceKindOfActivity::getInstance()->displace( this, &activity, true );
 
                                 // after displacement, back to "fall" activity
                                 activity = Fall;
@@ -116,8 +115,7 @@ bool Special::update ()
                         // bonus item is on conveyor belt
                         if ( speedTimer->getValue() > item->getSpeed() )
                         {
-                                whatToDo = DisplaceKindOfActivity::getInstance();
-                                whatToDo->displace( this, &activity, true );
+                                DisplaceKindOfActivity::getInstance()->displace( this, &activity, true );
 
                                 // after displacement, back to "fall" activity
                                 activity = Fall;
@@ -135,8 +133,7 @@ bool Special::update ()
                         // is it time to fall
                         else if ( fallTimer->getValue() > item->getWeight() )
                         {
-                                whatToDo = FallKindOfActivity::getInstance();
-                                if ( ! whatToDo->fall( this ) )
+                                if ( ! FallKindOfActivity::getInstance()->fall( this ) )
                                 {
                                         activity = Wait;
                                 }

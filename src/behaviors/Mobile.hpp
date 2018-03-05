@@ -18,11 +18,10 @@
 namespace isomot
 {
 
-class Item;
+class Item ;
 
 /**
- * Elemento que puede desplazarse sólo al ser empujado por otros, ya que
- * carece de movimiento autónomo
+ * Item moves only when pushed by other item, and lacks autonomous movement
  */
 
 class Mobile : public Behavior
@@ -38,14 +37,8 @@ public:
 
 private:
 
-       /**
-        * Cronómetro que controla la velocidad de movimiento del elemento
-        */
         Timer * speedTimer ;
 
-       /**
-        * Cronómetro que controla la velocidad de caída del elemento
-        */
         Timer * fallTimer ;
 
 };

@@ -41,7 +41,7 @@ bool CannonBall::update ()
                                 // move ball when there’s no collision
                                 if ( this->item->getMediator()->isStackOfCollisionsEmpty() )
                                 {
-                                        whatToDo->move( this, &activity, false );
+                                        MoveKindOfActivity::getInstance()->move( this, &activity, false );
                                 }
                                 else
                                 {

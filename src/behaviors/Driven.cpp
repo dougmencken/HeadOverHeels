@@ -1,8 +1,9 @@
 
-#include "Drive.hpp"
+#include "Driven.hpp"
 #include "Item.hpp"
 #include "FreeItem.hpp"
 #include "PlayerItem.hpp"
+#include "MoveKindOfActivity.hpp"
 #include "DisplaceKindOfActivity.hpp"
 #include "FallKindOfActivity.hpp"
 #include "Mediator.hpp"
@@ -13,7 +14,7 @@
 namespace isomot
 {
 
-Drive::Drive( Item* item, const std::string& behavior )
+Driven::Driven( Item* item, const std::string& behavior )
         : Behavior( item, behavior )
 {
         running = false;
@@ -24,13 +25,13 @@ Drive::Drive( Item* item, const std::string& behavior )
         fallTimer->go();
 }
 
-Drive::~Drive( )
+Driven::~Driven( )
 {
         delete speedTimer;
         delete fallTimer;
 }
 
-bool Drive::update ()
+bool Driven::update ()
 {
         FreeItem* freeItem = dynamic_cast< FreeItem * >( this->item );
         Mediator* mediator = freeItem->getMediator();
@@ -64,7 +65,7 @@ bool Drive::update ()
                                                 ;
                                 }
                         }
-                        // Si está parado comprueba si hay un jugador encima y toma su orientación para empezar a avanzar
+                        // when stopped, see if there is a character on it and use its orientation to begin moving
                         else
                         {
                                 if ( ! freeItem->checkPosition( 0, 0, 1, Add ) )
@@ -114,21 +115,18 @@ bool Drive::update ()
                         {
                                 if ( speedTimer->getValue() > freeItem->getSpeed() )
                                 {
-                                        // El elemento se mueve. Si colisiona vuelve al estado inicial para tomar una nueva dirección
-                                        if ( ! whatToDo->move( this, &activity, true ) )
+                                        if ( ! MoveKindOfActivity::getInstance()->move( this, &activity, true ) )
                                         {
                                                 running = false;
                                                 activity = Wait;
 
-                                                // Emite el sonido de colisión
+                                                // emit sound of collision
                                                 SoundManager::getInstance()->play( freeItem->getLabel(), Collision );
                                         }
 
-                                        // Se pone a cero el cronómetro para el siguiente ciclo
                                         speedTimer->reset();
                                 }
 
-                                // Anima el elemento
                                 freeItem->animate();
                         }
                         break;
@@ -141,20 +139,18 @@ bool Drive::update ()
                 case DisplaceNorthwest:
                 case DisplaceSoutheast:
                 case DisplaceSouthwest:
-                        // Si el elemento está activo y ha llegado el momento de moverse, entonces:
+                        // is it time to move
                         if ( speedTimer->getValue() > freeItem->getSpeed() )
                         {
-                                // El elemento se mueve hasta detectar un colisión
-                                if ( ! whatToDo->displace( this, &activity, true ) )
+                                if ( ! DisplaceKindOfActivity::getInstance()->displace( this, &activity, true ) )
                                 {
                                         activity = Wait;
                                 }
 
-                                // Se pone a cero el cronómetro para el siguiente ciclo
                                 speedTimer->reset();
                         }
 
-                        // inactive item will continue to be inactive
+                        // inactive item continues to be inactive
                         if ( freeItem->isFrozen() )
                         {
                                 activity = Freeze;
@@ -162,21 +158,20 @@ bool Drive::update ()
                         break;
 
                 case Fall:
-                        // Se comprueba si ha topado con el suelo en una sala sin suelo
+                        // look for reaching floor in a room without floor
                         if ( freeItem->getZ() == 0 && freeItem->getMediator()->getRoom()->getKindOfFloor() == "none" )
                         {
                                 // item disappears
                                 isGone = true;
                         }
-                        // Si ha llegado el momento de caer entonces el elemento desciende una unidad
+                        // is it time to fall
                         else if ( fallTimer->getValue() > freeItem->getWeight() )
                         {
-                                if ( ! whatToDo->fall( this ) )
+                                if ( ! FallKindOfActivity::getInstance()->fall( this ) )
                                 {
                                         activity = Wait;
                                 }
 
-                                // Se pone a cero el cronómetro para el siguiente ciclo
                                 fallTimer->reset();
                         }
                         break;

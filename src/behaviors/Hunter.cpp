@@ -4,6 +4,7 @@
 #include "ItemData.hpp"
 #include "FreeItem.hpp"
 #include "PlayerItem.hpp"
+#include "MoveKindOfActivity.hpp"
 #include "DisplaceKindOfActivity.hpp"
 #include "FallKindOfActivity.hpp"
 #include "Mediator.hpp"
@@ -85,7 +86,7 @@ bool Hunter::update ()
                                 if ( speedTimer->getValue() > thisItem->getSpeed() )
                                 {
                                         // move item
-                                        whatToDo->move( this, &activity, false );
+                                        MoveKindOfActivity::getInstance()->move( this, &activity, false );
 
                                         // reset timer to next cycle
                                         speedTimer->reset();
@@ -116,12 +117,12 @@ bool Hunter::update ()
                                 if ( speedTimer->getValue() > thisItem->getSpeed() )
                                 {
                                         // move item
-                                        if ( ! whatToDo->move( this, &activity, false ) )
+                                        if ( ! MoveKindOfActivity::getInstance()->move( this, &activity, false ) )
                                         {
                                                 if ( activity == MoveNortheast || activity == MoveNorthwest )
                                                 {
                                                         ActivityOfItem tempActivity = MoveNorth;
-                                                        if ( ! whatToDo->move( this, &tempActivity, false ) )
+                                                        if ( ! MoveKindOfActivity::getInstance()->move( this, &tempActivity, false ) )
                                                         {
                                                                 activity = ( activity == MoveNortheast ? MoveEast : MoveWest );
                                                                 if ( thisItem->getWeight() > 0 )
@@ -133,7 +134,7 @@ bool Hunter::update ()
                                                 else
                                                 {
                                                         ActivityOfItem tempActivity = MoveSouth;
-                                                        if ( ! whatToDo->move( this, &tempActivity, false ) )
+                                                        if ( ! MoveKindOfActivity::getInstance()->move( this, &tempActivity, false ) )
                                                         {
                                                                 activity = ( activity == MoveSoutheast ? MoveEast : MoveWest );
                                                                 if ( thisItem->getWeight() > 0 )
@@ -171,7 +172,7 @@ bool Hunter::update ()
                         // when item is active and it’s time to move
                         if ( speedTimer->getValue() > thisItem->getSpeed() )
                         {
-                                whatToDo->displace( this, &activity, false ); // move item
+                                DisplaceKindOfActivity::getInstance()->displace( this, &activity, false );
                                 activity = Wait;
                                 speedTimer->reset();
                         }
@@ -277,7 +278,7 @@ ActivityOfItem Hunter::calculateDirection8( const ActivityOfItem& activity )
                 int dy = thisItem->getY() - activePlayer->getY();
 
                 // get direction that allows to reach player as fast as possible
-                // look on distances in X and Y between hunter and player
+                // look for distances on X and Y between hunter and player
 
                 if ( abs( dy ) > abs( dx ) )
                 {

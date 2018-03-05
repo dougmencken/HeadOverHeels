@@ -38,12 +38,11 @@ bool Elevator::update ()
                 case MoveUp:
                         if ( speedTimer->getValue() > freeItem->getSpeed() )
                         {
-                                whatToDo->move( this, &activity, false );
+                                MoveKindOfActivity::getInstance()->move( this, &activity, false );
 
-                                // Se pone a cero el cronómetro para el siguiente ciclo
                                 speedTimer->reset();
 
-                                // Si ha llegado el techo entonces empieza el descenso
+                                // elevator reached its top
                                 if ( freeItem->getZ() > top * LayerHeight )
                                 {
                                         activity = StopTop;
@@ -58,13 +57,11 @@ bool Elevator::update ()
                 case MoveDown:
                         if ( speedTimer->getValue() > freeItem->getSpeed() )
                         {
-                                // El elemento se mueve
-                                whatToDo->move( this, &activity, false );
+                                MoveKindOfActivity::getInstance()->move( this, &activity, false );
 
-                                // Se pone a cero el cronómetro para el siguiente ciclo
                                 speedTimer->reset();
 
-                                // Si ha llegado al suelo entonces empieza el ascenso
+                                // elevator reached its bottom
                                 if ( freeItem->getZ() <= bottom * LayerHeight )
                                 {
                                         activity = StopBottom;
@@ -76,7 +73,7 @@ bool Elevator::update ()
                         freeItem->animate();
                         break;
 
-                // Detiene el ascensor un instante cuando alcanza la altura mínima
+                // stop elevator for a moment when it reaches minimum height
                 case StopBottom:
                         if ( stopTimer->getValue() >= 0.250 )
                         {
@@ -87,7 +84,7 @@ bool Elevator::update ()
                         freeItem->animate();
                         break;
 
-                // Detiene el ascensor un instante cuando alcanza la altura máxima
+                // stop elevator for a moment when it reaches maximum height
                 case StopTop:
                         if ( stopTimer->getValue() >= 0.250 )
                         {
@@ -100,10 +97,9 @@ bool Elevator::update ()
 
                 default:
                         activity = lastActivity;
-                        whatToDo = MoveKindOfActivity::getInstance();
+                        break;
         }
 
-        // Emite el sonido correspondiente
         SoundManager::getInstance()->play( freeItem->getLabel(), activity );
 
         return false;

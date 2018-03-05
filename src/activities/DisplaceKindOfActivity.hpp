@@ -32,19 +32,20 @@ public:
 
         virtual ~DisplaceKindOfActivity( ) ;
 
-        static KindOfActivity * getInstance() ;
+        static DisplaceKindOfActivity * getInstance() ;
 
        /**
-        * Displace item
-        * @param behavior Behavior of item
-        * @param canFall true if item falls, false if it flies
-        * @return true when item displaced or changed activity, false when there’s collision
+        * Item is being displaced
+        * @param behavior behavior of item
+        * @param activity subactivity to get way of movement
+        * @param canFall whether item may fall, false if it flies
+        * @return true for displace or change of activity, false for collision
         */
         virtual bool displace ( Behavior * behavior, ActivityOfItem * activity, bool canFall ) ;
 
 private:
 
-        static KindOfActivity * instance ;
+        static DisplaceKindOfActivity * instance ;
 
 };
 

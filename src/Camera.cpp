@@ -36,13 +36,13 @@ void Camera::turnOn( PlayerItem* player, const Way& wayOfEntry )
 
                         if ( absoluteValueOfY < room->getTilesY() * room->getSizeOfOneTile() / 2 )
                         {
-                                delta.first = room->getPicture()->w - ScreenWidth;
+                                delta.first = room->getWhereToDraw()->w - ScreenWidth;
                                 delta.second = 0;
                         }
                         else
                         {
                                 delta.first = 0;
-                                delta.second = room->getPicture()->h - ScreenHeight;
+                                delta.second = room->getWhereToDraw()->h - ScreenHeight;
                         }
                 }
                 // is it double room along X
@@ -58,8 +58,8 @@ void Camera::turnOn( PlayerItem* player, const Way& wayOfEntry )
                         }
                         else
                         {
-                                delta.first = room->getPicture()->w - ScreenWidth;
-                                delta.second = room->getPicture()->h - ScreenHeight;
+                                delta.first = room->getWhereToDraw()->w - ScreenWidth;
+                                delta.second = room->getWhereToDraw()->h - ScreenHeight;
                         }
                 }
                 // it’s triple room then
@@ -175,8 +175,8 @@ bool Camera::centerOn( PlayerItem* player )
                         else if ( offsetX > 0 && player->getX() <= maxX && player->getX() >= minX )
                         {
                                 // Si no se han alcanzado los límites de la sala el desplazamiento al sur es posible
-                                if ( delta.first <= ( room->getPicture()->w - static_cast< int >( ScreenWidth ) ) &&
-                                        delta.second <= ( room->getPicture()->h - static_cast< int >( ScreenHeight ) ) )
+                                if ( delta.first <= ( room->getWhereToDraw()->w - static_cast< int >( ScreenWidth ) ) &&
+                                        delta.second <= ( room->getWhereToDraw()->h - static_cast< int >( ScreenHeight ) ) )
                                 {
                                         delta.first += ( offsetX << 1 );
                                         delta.second += offsetX;
@@ -199,7 +199,7 @@ bool Camera::centerOn( PlayerItem* player )
                         if ( offsetY < 0 && player->getY() <= maxY - 1 && player->getY() >= minY - 1 )
                         {
                                 // Si no se han alcanzado los límites de la sala el desplazamiento al este es posible
-                                if ( delta.first <= room->getPicture()->w - static_cast< int >( ScreenWidth ) && delta.second >= 0 )
+                                if ( delta.first <= room->getWhereToDraw()->w - static_cast< int >( ScreenWidth ) && delta.second >= 0 )
                                 {
                                         delta.first -= ( offsetY << 1 );
                                         delta.second += offsetY;
@@ -210,7 +210,7 @@ bool Camera::centerOn( PlayerItem* player )
                         else if ( offsetY > 0 && player->getY() <= maxY && player->getY() >= minY )
                         {
                                 // Si no se han alcanzado los límites de la sala el desplazamiento al oeste es posible
-                                if ( delta.first >= 0 && delta.second <= room->getPicture()->h - static_cast< int >( ScreenHeight ) )
+                                if ( delta.first >= 0 && delta.second <= room->getWhereToDraw()->h - static_cast< int >( ScreenHeight ) )
                                 {
                                         delta.first -= ( offsetY << 1 );
                                         delta.second += offsetY;

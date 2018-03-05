@@ -364,7 +364,7 @@ BITMAP* Isomot::update()
 
         if ( activeRoom->getWayOfExit().toString() == "no exit" )
         {
-                activeRoom->draw();
+                activeRoom->drawRoom();
         }
         // there’s a change of room or active player lost its life
         else
@@ -404,10 +404,10 @@ BITMAP* Isomot::update()
         if ( activeRoom != nilPointer )
         {
                 blit (
-                        activeRoom->getPicture(), this->view,
+                        activeRoom->getWhereToDraw(), this->view,
                         activeRoom->getCamera()->getDeltaX(), activeRoom->getCamera()->getDeltaY(),
                         0, 0,
-                        activeRoom->getPicture()->w, activeRoom->getPicture()->h
+                        activeRoom->getWhereToDraw()->w, activeRoom->getWhereToDraw()->h
                 );
 
                 int whiteColor = Color::whiteColor()->toAllegroColor() ;

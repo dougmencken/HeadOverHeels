@@ -21,7 +21,7 @@ namespace isomot
 class Item ;
 
 /**
- * Detecta a un jugador y avanza en la dirección adecuada para darle caza
+ * Detect player and move to hunt it
  */
 
 class Detector : public Behavior
@@ -38,12 +38,12 @@ public:
 private:
 
        /**
-        * Cronómetro que controla la velocidad de movimiento del elemento
+        * Timer for speed of movement
         */
         Timer * speedTimer ;
 
        /**
-        * Cronómetro que controla la velocidad de caída del elemento
+        * Timer for speed of falling
         */
         Timer * fallTimer ;
 

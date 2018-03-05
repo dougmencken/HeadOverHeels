@@ -225,7 +225,7 @@ namespace isomot
                 StopBottom,                     /* El elemento ha alcanzado su altura mínima. Aplicado a elementos de movimiento vertical */
                 MeetMortalItem,
                 Vanish,
-                Doughnut,
+                FireDoughnut,
                 Rebound,                        /* El elemento rebota */
                 SwitchIt,                       /* El elemento (un interruptor) cambia de estado */
                 Collision,                      /* El elemento choca con algo */

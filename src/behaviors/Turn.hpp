@@ -41,20 +41,14 @@ protected:
         void begin () ;
 
        /**
-        * El elemento da media vuelta
+        * When item turns around
         */
         void turn () ;
 
 private:
 
-       /**
-        * Cronómetro que controla la velocidad de movimiento del elemento
-        */
         Timer * speedTimer ;
 
-       /**
-        * Cronómetro que controla la velocidad de caída del elemento
-        */
         Timer * fallTimer ;
 
 };

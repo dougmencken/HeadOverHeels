@@ -31,7 +31,7 @@ Turn::~Turn()
 
 bool Turn::update ()
 {
-        bool freeze = false;
+        bool isGone = false;
         FreeItem* freeItem = dynamic_cast< FreeItem * >( this->item );
 
         switch ( activity )
@@ -48,22 +48,16 @@ bool Turn::update ()
                         {
                                 if ( speedTimer->getValue() > freeItem->getSpeed() )
                                 {
-                                        // El elemento se mueve. Si el movimiento no se pudo realizar por colisión entonces
-                                        // se desplaza a los elementos con los que pudiera haber chocado y el elemento da media
-                                        // vuelta cambiando su estado a otro de movimiento
-                                        if ( ! whatToDo->move( this, &activity, true ) )
+                                        if ( ! MoveKindOfActivity::getInstance()->move( this, &activity, true ) )
                                         {
                                                 turn();
 
-                                                // Emite el sonido de colisión
                                                 SoundManager::getInstance()->play( freeItem->getLabel(), Collision );
                                         }
 
-                                        // Se pone a cero el cronómetro para el siguiente ciclo
                                         speedTimer->reset();
                                 }
 
-                                // Anima el elemento
                                 freeItem->animate();
                         }
                         break;
@@ -76,17 +70,13 @@ bool Turn::update ()
                 case DisplaceSoutheast:
                 case DisplaceSouthwest:
                 case DisplaceNorthwest:
-                        // Emite el sonido de de desplazamiento
                         SoundManager::getInstance()->play( freeItem->getLabel(), activity );
 
-                        // El elemento es deplazado por otro. Si el desplazamiento no se pudo realizar por
-                        // colisión entonces el estado se propaga a los elementos con los que ha chocado
-                        whatToDo->displace( this, &activity, true );
+                        DisplaceKindOfActivity::getInstance()->displace( this, &activity, true );
 
-                        // Una vez se ha completado el desplazamiento el elemento vuelve a su comportamiento normal
                         activity = Wait;
 
-                        // inactive item will continue to be inactive
+                        // inactive item continues to be inactive
                         if ( freeItem->isFrozen() )
                         {
                                 activity = Freeze;
@@ -94,23 +84,20 @@ bool Turn::update ()
                         break;
 
                 case Fall:
-                        // Se comprueba si ha topado con el suelo en una sala sin suelo
+                        // look for reaching floor in a room without floor
                         if ( freeItem->getZ() == 0 && freeItem->getMediator()->getRoom()->getKindOfFloor() == "none" )
                         {
-                                // El elemento desaparece
-                                freeze = true;
+                                isGone = true;
                         }
-                        // Si ha llegado el momento de caer entonces el elemento desciende una unidad
+                        // is it time to lower by one unit
                         else if ( fallTimer->getValue() > freeItem->getWeight() )
                         {
-                                if ( ! whatToDo->fall( this ) )
+                                if ( ! FallKindOfActivity::getInstance()->fall( this ) )
                                 {
-                                        // Emite el sonido de caída
                                         SoundManager::getInstance()->play( freeItem->getLabel(), activity );
                                         activity = Wait;
                                 }
 
-                                // Se pone a cero el cronómetro para el siguiente ciclo
                                 fallTimer->reset();
                         }
                         break;
@@ -128,7 +115,7 @@ bool Turn::update ()
                         ;
         }
 
-        return freeze;
+        return isGone;
 }
 
 void Turn::begin()
@@ -154,8 +141,6 @@ void Turn::begin()
                 default:
                         ;
         }
-
-        whatToDo = MoveKindOfActivity::getInstance();
 }
 
 void Turn::turn()

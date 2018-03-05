@@ -38,32 +38,16 @@ public:
 
 protected:
 
-       /**
-        * Acciones a realizar cuando el elemento está en un estado ajeno a los estados propios de su
-        * comportamiento
-        */
-        void start () ;
+        void letsMove () ;
 
-       /**
-        * El elemento da media vuelta
-        */
         void turnRound () ;
 
 private:
 
-       /**
-        * Indica si el elemento vuela
-        */
         bool isFlying ;
 
-       /**
-        * Cronómetro que controla la velocidad de movimiento del elemento
-        */
         Timer * speedTimer ;
 
-       /**
-        * Cronómetro que controla la velocidad de caída del elemento
-        */
         Timer * fallTimer ;
 
 };

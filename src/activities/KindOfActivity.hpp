@@ -35,49 +35,6 @@ public:
 
         virtual ~KindOfActivity( ) ;
 
-       /**
-        * Item moves
-        * @param activity specifies direction of movement
-        * @param canFall whether item may fall
-        * @return true for move or change of activity, false for collision
-        */
-        virtual bool move ( Behavior * behavior, ActivityOfItem * activity, bool canFall )
-        {
-                return true ;
-        }
-
-       /**
-        * Item is being displaced
-        * @param activity subactivity which specifies direction of movement
-        * @param canFall whether item may fall
-        * @return true for displace or change of activity, false for collision
-        */
-        virtual bool displace ( Behavior * behavior, ActivityOfItem * activity, bool canFall )
-        {
-                return true ;
-        }
-
-       /**
-        * Item falls
-        * @return true if fall or false when there’s collision
-        */
-        virtual bool fall ( Behavior * behavior )
-        {
-                return true ;
-        }
-
-       /**
-        * Item jumps
-        * @param jumpVector vector of pair of values ( offset on X or Y and offset on Z )
-        *                   for each cycle to define item’s jump
-        * @param jumpPhase phase of jump
-        * @return true if jump or false when there’s collision
-        */
-        virtual bool jump ( Behavior * behavior, ActivityOfItem * activity, const std::vector< JumpMotion >& jumpVector, int jumpPhase )
-        {
-                return true ;
-        }
-
 protected:
 
        /**

@@ -35,37 +35,37 @@ public:
 private:
 
        /**
-        * Indica si el trampolín está plegado debido al peso de un elemento
+        * Is trampoline folded due to weight of item on top of it
         */
         bool folded ;
 
        /**
-        * Indica si el trampolín está rebotando
+        * Does trampoline bounce
         */
         bool rebounding ;
 
        /**
-        * Fotograma del trampolín donde se representa en su estado normal. Se espera que sea el fotograma 0
+        * Frame of undeformed trampoline, usually frame 0
         */
         int regularFrame ;
 
        /**
-        * Fotograma del trampolín donde se representa plegado. Se espera que sea el fotograma 1
+        * Frame of folded trampoline, usually frame 1
         */
         int foldedFrame ;
 
        /**
-        * Cronómetro que controla la velocidad de movimiento del elemento
+        * Timer for speed of movement
         */
         Timer* speedTimer ;
 
        /**
-        * Cronómetro que controla la velocidad de caída del elemento
+        * Timer for speed of falling
         */
         Timer* fallTimer ;
 
        /**
-        * Cronometro que controla el tiempo que el trampolín está rebotando
+        * Chronometer for time of bouncing
         */
         Timer* reboundTimer ;
 

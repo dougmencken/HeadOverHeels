@@ -22,7 +22,7 @@ class Item ;
 class ItemData ;
 
 /**
- * Try to hunt for player by moving wherever it is
+ * Hunts for player by moving wherever it is
  */
 
 class Hunter : public Behavior

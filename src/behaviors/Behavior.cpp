@@ -6,7 +6,7 @@
 #include "CannonBall.hpp"
 #include "ConveyorBelt.hpp"
 #include "Detector.hpp"
-#include "Drive.hpp"
+#include "Driven.hpp"
 #include "Elevator.hpp"
 #include "Hunter.hpp"
 #include "Impel.hpp"
@@ -15,7 +15,7 @@
 #include "Patrol.hpp"
 #include "RemoteControl.hpp"
 #include "Sink.hpp"
-#include "FireDoughnut.hpp"
+#include "Doughnut.hpp"
 #include "Special.hpp"
 #include "Switch.hpp"
 #include "Teleport.hpp"
@@ -37,7 +37,6 @@ namespace isomot
 Behavior::Behavior( Item * whichItem, const std::string & behavior ) :
           nameOfBehavior( behavior )
         , item( whichItem )
-        , whatToDo( nilPointer )
         , activity( Wait )
         , sender( nilPointer )
 {
@@ -67,9 +66,9 @@ Behavior* Behavior::createBehaviorByName( Item* item, const std::string& behavio
         {
                 behaviorToReturn = new Detector( item, behavior );
         }
-        else if ( behavior == "behavior of driver" )
+        else if ( behavior == "behavior of driven" )
         {
-                behaviorToReturn = new Drive( item, behavior );
+                behaviorToReturn = new Driven( item, behavior );
         }
         else if ( behavior == "behavior of elevator" )
         {
@@ -125,7 +124,7 @@ Behavior* Behavior::createBehaviorByName( Item* item, const std::string& behavio
         }
         else if ( behavior == "behavior of freezing doughnut" )
         {
-                behaviorToReturn = new FireDoughnut( item, behavior );
+                behaviorToReturn = new Doughnut( item, behavior );
         }
         else if ( behavior == "behavior of something special" )
         {
@@ -187,44 +186,6 @@ void Behavior::changeActivityOfItem( const ActivityOfItem& activity, Item* sende
 {
         this->activity = activity;
         this->sender = sender;
-
-        switch ( activity )
-        {
-                case MoveNorth:
-                case MoveSouth:
-                case MoveEast:
-                case MoveWest:
-                case MoveNortheast:
-                case MoveNorthwest:
-                case MoveSoutheast:
-                case MoveSouthwest:
-                case MoveUp:
-                case MoveDown:
-                        whatToDo = MoveKindOfActivity::getInstance();
-                        break;
-
-                case DisplaceNorth:
-                case DisplaceSouth:
-                case DisplaceEast:
-                case DisplaceWest:
-                case DisplaceNortheast:
-                case DisplaceSoutheast:
-                case DisplaceSouthwest:
-                case DisplaceNorthwest:
-                case ForceDisplaceNorth:
-                case ForceDisplaceSouth:
-                case ForceDisplaceEast:
-                case ForceDisplaceWest:
-                        whatToDo = DisplaceKindOfActivity::getInstance();
-                        break;
-
-                case Fall:
-                        whatToDo = FallKindOfActivity::getInstance();
-                        break;
-
-                default:
-                        ;
-        }
 }
 
 void Behavior::propagateActivity( Item* sender, const ActivityOfItem& activity )
@@ -236,7 +197,7 @@ void Behavior::propagateActivity( Item* sender, const ActivityOfItem& activity )
         {
                 int id = mediator->popCollision();
 
-                // item has to be free item or grid item
+                // is it free item or grid item
                 if ( ( id >= FirstFreeId && ( id & 1 )) || ( id >= FirstGridId && !( id & 1 ) ) )
                 {
                         Item* item = mediator->findItemById( id );

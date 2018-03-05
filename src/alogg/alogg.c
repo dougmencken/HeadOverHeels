@@ -138,13 +138,15 @@ static int file_seek(void *datasource,ogg_int64_t offset,int whence)
   return fseek(f,offset,whence);
 }
 
-static int file_close(void *datasource)
+static int file_close( void * datasource )
 {
+  (void)( datasource );
+
   /* Let the caller do it, in case it doesn't want to close it just yet */
   return 0;
 }
 
-static long file_tell(void *datasource)
+static long file_tell ( void * datasource )
 {
   FILE *f=(FILE*)datasource;
   ASSERT(f);
@@ -166,18 +168,26 @@ static size_t packfile_read(void *ptr,size_t size,size_t nelts,void *datasource)
   return (size_t)pack_fread(ptr,size*nelts,f);
 }
 
-static int packfile_seek(void *datasource,ogg_int64_t offset,int whence)
+static int packfile_seek( void * datasource, ogg_int64_t offset, int whence )
 {
+  (void)( datasource );
+  (void)( offset );
+  (void)( whence );
+
   return -1;
 }
 
-static int packfile_close(void *datasource)
+static int packfile_close( void * datasource )
 {
+  (void)( datasource );
+
   return 0;
 }
 
-static long packfile_tell(void *datasource)
+static long packfile_tell( void * datasource )
 {
+  (void)( datasource );
+
   return -1;
 }
 
@@ -286,7 +296,7 @@ static SAMPLE *load_ov(OggVorbis_File *vf)
   sample=create_sample(16,stereo,info->rate,num_samples>0?num_samples:1);
   if (!sample) {
     TRACE(
-      "Failed creating a sample (%d channels, %ld Hz, %u samples",
+      "Failed creating a sample (%d channels, %ld Hz, %lu samples",
       info->channels,info->rate,(size_t)num_samples
     );
     goto load_error_file;
@@ -297,7 +307,7 @@ static SAMPLE *load_ov(OggVorbis_File *vf)
     if (num_samples<0) {
       /* If we could not determine the size of the sample, allocate as we go */
       if (offset+max_read>buffer_size) {
-        TRACE("Buffer too small: adding %u bytes\n",buffer_inc);
+        TRACE("Buffer too small: adding %lu bytes\n",buffer_inc);
         buffer_size+=buffer_inc;
         buffer_inc+=buffer_inc/2;
 #ifdef FORTIFY
@@ -462,9 +472,10 @@ SAMPLE *alogg_load_ogg(AL_CONST char *filename)
 }
 
 
-
-int aloggint_basic_streamer_update(alogg_stream *stream,void *datasource)
+int aloggint_basic_streamer_update( alogg_stream * stream, void * datasource )
 {
+  (void)( datasource );
+
   void *block;
 
   ASSERT(stream);
@@ -596,7 +607,7 @@ int alogg_read_stream_data(alogg_stream *stream,void *block,size_t size)
   ASSERT(stream);
   ASSERT(block);
 
-  TRACE("Reading stream data: %u bytes at %p\n",size,block);
+  TRACE("Reading stream data: %lu bytes at %p\n",size,block);
   /* decode the encoded data */
   for (;size-read_size>0;) {
     int ret=read_ogg_data(
@@ -607,7 +618,7 @@ int alogg_read_stream_data(alogg_stream *stream,void *block,size_t size)
       break;
     }
     if (ret<0) {
-      TRACE("read_ogg_data returned %d, read size %u\n",ret,read_size);
+      TRACE("read_ogg_data returned %d, read size %lu\n",ret,read_size);
       if (read_size) break;
       TRACE("read_ogg_data failed: %d\n",ret);
       alogg_error_code=ret;
@@ -615,7 +626,7 @@ int alogg_read_stream_data(alogg_stream *stream,void *block,size_t size)
     }
     read_size+=ret;
   }
-  TRACE("%u bytes actually read\n",read_size);
+  TRACE("%lu bytes actually read\n",read_size);
   if (size!=read_size) {
     /* fill with silence to make sure old data doesn't get played */
     size_t n;
@@ -762,7 +773,7 @@ static int encode_buffers(
       ret=encode_buffers_16(buffers,data,num_samples,channels);
       break;
     default:
-      TRACE("Unsupported sample size: %d\n",bits);
+      TRACE("Unsupported sample size: %ld\n",bits);
       ret=0;
       break;
   }
@@ -873,16 +884,16 @@ int alogg_update_encoding(
 {
   float **buffers;
   int ret;
-  int eos=0;
-  size_t size;
+  int eos = 0;
+  // size_t length;
 
   ASSERT(data);
   ASSERT(buffer);
 
   /* encode */
-  size=num_samples*channels*bits/8;
-  buffers=vorbis_analysis_buffer(&data->vd,num_samples);
-  ret=encode_buffers(buffers,buffer,num_samples,channels,bits);
+  // length = num_samples*channels*bits/8; /* unused */
+  buffers = vorbis_analysis_buffer(&data->vd,num_samples);
+  ret = encode_buffers(buffers,buffer,num_samples,channels,bits);
   if (!ret) {
     TRACE("encode_buffers failed: %d\n",ret);
     return 0;

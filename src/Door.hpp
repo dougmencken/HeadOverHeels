@@ -13,7 +13,6 @@
 
 #include "Ism.hpp"
 #include "Way.hpp"
-#include "Drawable.hpp"
 #include "Mediated.hpp"
 
 
@@ -25,10 +24,10 @@ class FreeItem ;
 
 
 /**
- * A door to the room. It is really three free elements: two jambs and lintel
+ * A door to the room. It is really three free items: two jambs and lintel
  */
 
-class Door : public Drawable, public Mediated
+class Door : public Mediated
 {
 
 public:
@@ -45,8 +44,6 @@ public:
         Door( ItemDataManager* itemDataManager, const std::string& label, int cx, int cy, int z, const Way& way ) ;
 
         virtual ~Door( ) ;
-
-        void draw ( BITMAP* where ) { }
 
 private:
 

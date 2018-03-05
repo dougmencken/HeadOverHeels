@@ -52,7 +52,7 @@ public:
 
         virtual void draw ( BITMAP * where ) ;
 
-        void handleKey ( int rawKey ) { /* do nothing */ }
+        void handleKey ( int /* rawKey */ ) { /* do nothing */ }
 
        /**
         * Añade una nueva línea al campo de texto

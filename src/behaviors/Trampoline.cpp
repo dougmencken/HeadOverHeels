@@ -15,11 +15,11 @@ namespace isomot
 
 Trampoline::Trampoline( Item * item, const std::string & behavior ) :
         Behavior( item, behavior )
+        , folded( false )
+        , rebounding( false )
+        , regularFrame( 0 )
+        , foldedFrame( 1 )
 {
-        folded = rebounding = false;
-        regularFrame = 0;
-        foldedFrame = 1;
-
         speedTimer = new Timer();
         fallTimer = new Timer();
         reboundTimer = new Timer();
@@ -44,7 +44,7 @@ bool Trampoline::update ()
         switch ( activity )
         {
                 case Wait:
-                        // Si hay elementos encima el trampolín se pliega
+                        // fold trampoline when there are items on top of it
                         if ( ! freeItem->checkPosition( 0, 0, 1, Add ) )
                         {
                                 folded = true;
@@ -53,12 +53,12 @@ bool Trampoline::update ()
                         }
                         else
                         {
-                                // Si el trampolín está rebotando se anima hasta que finalice el tiempo
+                                // continue to bounce trampoline
                                 if ( rebounding && reboundTimer->getValue() < 0.600 )
                                 {
                                         freeItem->animate();
 
-                                        // Emite el sonido de rebote
+                                        // play sound of bouncing
                                         if ( reboundTimer->getValue() > 0.100 )
                                         {
                                                 SoundManager::getInstance()->play( freeItem->getLabel(), IsActive );
@@ -66,21 +66,21 @@ bool Trampoline::update ()
                                 }
                                 else
                                 {
-                                        // Si no hay elementos encima pero los había entonces el trampolín rebota
+                                        // begin bouncing when item on top moves away
                                         if ( folded )
                                         {
                                                 rebounding = true;
                                                 reboundTimer->reset();
                                         }
 
-                                        // Ya no está pleglado
+                                        // it is no longer folded
                                         folded = false;
 
                                         freeItem->changeFrame(regularFrame);
                                 }
                         }
 
-                        // Se comprueba si el elemento debe empezar a caer
+                        // look if it falls down
                         if ( FallKindOfActivity::getInstance()->fall( this ) )
                         {
                                 fallTimer->reset();
@@ -96,47 +96,43 @@ bool Trampoline::update ()
                 case DisplaceNorthwest:
                 case DisplaceSoutheast:
                 case DisplaceSouthwest:
-                        // Si el elemento está activo y ha llegado el momento de moverse, entonces:
+                        // is it time to move
                         if ( speedTimer->getValue() > freeItem->getSpeed() )
                         {
-                                // Emite el sonido de de desplazamiento
+                                // play sound of displacing
                                 SoundManager::getInstance()->play( freeItem->getLabel(), activity );
 
-                                // Actualiza el estado
                                 this->changeActivityOfItem( activity );
-                                whatToDo->displace( this, &activity, true );
+                                DisplaceKindOfActivity::getInstance()->displace( this, &activity, true );
 
-                                // Si no está cayendo entonces vuelve al estado inicial
                                 if ( activity != Fall )
                                 {
                                         activity = Wait;
                                 }
 
-                                // Se pone a cero el cronómetro para el siguiente ciclo
                                 speedTimer->reset();
                         }
                         break;
 
                 case Fall:
-                        // Se comprueba si ha topado con el suelo en una sala sin suelo
+                        // look for reaching floor in a room without floor
                         if ( item->getZ() == 0 && item->getMediator()->getRoom()->getKindOfFloor() == "none" )
                         {
                                 // item disappears
                                 vanish = true;
                         }
-                        // Si ha llegado el momento de caer entonces el elemento desciende una unidad
+                        // is it time to lower by one unit
                         else if ( fallTimer->getValue() > freeItem->getWeight() )
                         {
-                                // El elemento cae
+                                // item falls
                                 this->changeActivityOfItem( activity );
-                                if ( ! whatToDo->fall( this ) )
+                                if ( ! FallKindOfActivity::getInstance()->fall( this ) )
                                 {
-                                        // Emite el sonido de caída
+                                        // play sound of falling down
                                         SoundManager::getInstance()->play( freeItem->getLabel(), activity );
                                         activity = Wait;
                                 }
 
-                                // Se pone a cero el cronómetro para el siguiente ciclo
                                 fallTimer->reset();
                         }
                         break;

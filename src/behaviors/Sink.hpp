@@ -18,10 +18,10 @@
 namespace isomot
 {
 
-class Item;
+class Item ;
 
 /**
- * El elemento se hunde cuando otro elemento se sitúa encima
+ * Sink when another item is on top of this one
  */
 
 class Sink : public Behavior
@@ -38,7 +38,7 @@ public:
 private:
 
        /**
-        * Cronómetro que controla la velocidad de caída del elemento
+        * Timer for speed of falling
         */
         Timer * fallTimer ;
 

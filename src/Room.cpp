@@ -121,14 +121,14 @@ Room::Room( const std::string& roomFile, const std::string& scenery, int xTiles,
 
         // Crea la imagen with suitable dimensions to draw the active room
         // single room ( id est up to 10 x 10 tiles ) just fits to the screen
-        // but the image for double or triple room is larger
+        // but image of double or triple room is larger
         if ( xTiles <= 10 && yTiles <= 10 )
         {
-                picture = create_bitmap_ex( 32, ScreenWidth, ScreenHeight );
+                whereToDraw = create_bitmap_ex( 32, ScreenWidth, ScreenHeight );
         }
         else if ( xTiles > 10 && yTiles > 10 )
         {
-                picture = create_bitmap_ex( 32, ScreenWidth + 20 * ( tileSize << 1 ), ScreenHeight + 20 * tileSize );
+                whereToDraw = create_bitmap_ex( 32, ScreenWidth + 20 * ( tileSize << 1 ), ScreenHeight + 20 * tileSize );
         }
         else if ( xTiles > 10 || yTiles > 10 )
         {
@@ -136,7 +136,8 @@ Room::Room( const std::string& roomFile, const std::string& scenery, int xTiles,
                                         + ( yTiles > 10 ? ( ( yTiles - 10 ) * ( tileSize << 1 ) ) : 0 );
                 int h = ScreenHeight + ( xTiles > 10 ? ( ( xTiles - 10 ) * tileSize) : 0 )
                                         + ( yTiles > 10 ? ( ( yTiles - 10 ) * tileSize) : 0 );
-                picture = create_bitmap_ex( 32, w, h );
+
+                whereToDraw = create_bitmap_ex( 32, w, h );
         }
 
         // 128 for 50% opacity of shading or 256 for no shadows
@@ -184,7 +185,7 @@ Room::~Room()
                 delete player;
         }
 
-        destroy_bitmap( picture );
+        destroy_bitmap( whereToDraw );
 }
 
 std::list < PlayerItem * > Room::getPlayersYetInRoom () const
@@ -698,13 +699,9 @@ void Room::draw( BITMAP* where )
 {
         const unsigned int maxTilesOfSingleRoom = 10 ;
 
-        // draw room when it is active
-        if ( active )
+        // draw room when it is active and image to draw it isn’t nil
+        if ( active && where != nilPointer )
         {
-                // draw in picture of room itself when destination bitmap isn’t given
-                if ( where == nilPointer )
-                        where = this->picture ;
-
                 // clean the image where to draw this room
                 clear_bitmap( where );
 
@@ -769,7 +766,7 @@ void Room::draw( BITMAP* where )
 
                                 if ( shadingScale < 256 && gridItem->getRawImage() )
                                 {
-                                        gridItem->requestShadow( drawIndex[ i ] );
+                                        gridItem->requestShadow( );
                                 }
 
                                 gridItem->draw( where );
@@ -834,26 +831,26 @@ void Room::calculateBounds()
 
 void Room::calculateCoordinates( bool hasNorthDoor, bool hasEastDoor, int deltaX, int deltaY )
 {
-        // Para calcular las coordenadas no se tiene en cuenta las losetas ocupadas por las puertas y sus muros
-        int xGrid = hasNorthDoor || this->kindOfFloor == "none" ? numberOfTiles.first - 1 : numberOfTiles.first;
-        int yGrid = hasEastDoor || this->kindOfFloor == "none" ? numberOfTiles.second - 1 : numberOfTiles.second;
+        bool hasNoFloor = ( this->kindOfFloor == "none" );
 
-        // Si las variables son impares quiere decir que hay puertas al sur y/o al oeste
-        // Se resta 1 en tal caso para obtener el número de losetas hábiles de la sala
+        // don’t count tiles taken by doors
+        int xGrid = hasNorthDoor || hasNoFloor ? numberOfTiles.first - 1 : numberOfTiles.first;
+        int yGrid = hasEastDoor || hasNoFloor ? numberOfTiles.second - 1 : numberOfTiles.second;
+
+        // if there’s south or west door then variable is odd, in this case subtract one more 1
         xGrid += ( xGrid & 1 ? -1 : 0 );
         yGrid += ( yGrid & 1 ? -1 : 0 );
 
-        // Para una sala de 8x8 (sin contar las puertas) el punto origen es x = anchura_imagen/2 e y = altura_imagen/3
-        // Para una sala de dimensiones menores se desplaza el punto origen de tal manera que quede centrado
-        // en la rejilla de 8x8. Por ejemplo: para una sala de 8x6, se desplaza la coordenada Y una loseta a la
-        // izquierda respecto del punto origen
-        int middlePointX = ( xGrid > 8 || yGrid > 8 ? picture->w : ScreenWidth ) >> 1;
-        this->coordinates.first = middlePointX
-                                - ( hasNorthDoor || this->kindOfFloor == "none" ? ( tileSize << 1 ) : 0)
-                                + ( hasEastDoor || this->kindOfFloor == "none" ? ( tileSize << 1 ) : 0 );
-        this->coordinates.second = ( ScreenHeight / 3 - deltaY )
-                                 - ( hasNorthDoor || this->kindOfFloor == "none" ? tileSize : 0 )
-                                 - ( hasEastDoor || this->kindOfFloor == "none" ? tileSize : 0 );
+        // the origin for 8 x 8, that’s without doors, room is at ( width / 2, height / 3 )
+        // for smaller room the origin moves to center on 8 x 8 grid, as example for 6 x 8 room X moves one tile
+        int middlePointX = ( xGrid > 8 || yGrid > 8 ? getWhereToDraw()->w : ScreenWidth ) >> 1 ;
+        int middlePointY = ScreenHeight / 3 ;
+        this->coordinates.first = middlePointX - deltaX
+                                - ( hasNorthDoor || hasNoFloor ? ( tileSize << 1 ) : 0)
+                                + ( hasEastDoor || hasNoFloor ? ( tileSize << 1 ) : 0 );
+        this->coordinates.second = middlePointY - deltaY
+                                 - ( hasNorthDoor || hasNoFloor ? tileSize : 0 )
+                                 - ( hasEastDoor || hasNoFloor ? tileSize : 0 );
 
         if ( xGrid <= 8 && yGrid <= 8 )
         {
@@ -862,7 +859,7 @@ void Room::calculateCoordinates( bool hasNorthDoor, bool hasEastDoor, int deltaX
         }
         else
         {
-                this->coordinates.first = ( picture->w - ( ( xGrid + yGrid ) * ( tileSize << 1 ) ) ) / 2
+                this->coordinates.first = ( getWhereToDraw()->w - ( ( xGrid + yGrid ) * ( tileSize << 1 ) ) ) / 2
                                         + ( yGrid * ( tileSize << 1 ) )
                                         - ( hasNorthDoor ? ( tileSize << 1 ) : 0 )
                                         + ( hasEastDoor ? ( tileSize << 1 ) : 0 );

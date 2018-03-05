@@ -59,9 +59,8 @@ public:
 
         /**
          * Request to shade item
-         * @param column Grid column of this item
          */
-        void requestShadow ( int column ) ;
+        void requestShadow () ;
 
         /**
          * Change Z coordinate

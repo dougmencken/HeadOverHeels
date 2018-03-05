@@ -87,7 +87,7 @@ static BITMAP * really_load_png( png_structp png_ptr, png_infop info_ptr, RGB *p
     double image_gamma, screen_gamma;
     int intent;
     int bpp, dest_bpp;
-    int tRNS_to_alpha = FALSE;
+    // int tRNS_to_alpha = FALSE; /* unused */
     int number_passes, pass;
 
     ASSERT( png_ptr && info_ptr && rgb );
@@ -109,7 +109,7 @@ static BITMAP * really_load_png( png_structp png_ptr, png_infop info_ptr, RGB *p
     /* Adds a full alpha channel if there is transparency information in tRNS chunk */
     if ( png_get_valid( png_ptr, info_ptr, PNG_INFO_tRNS ) ) {
         png_set_tRNS_to_alpha( png_ptr );
-        tRNS_to_alpha = TRUE;
+        // tRNS_to_alpha = TRUE;
     }
 
     /* Convert 16-bits per colour component to 8-bits per colour component */

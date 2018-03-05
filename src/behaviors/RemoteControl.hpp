@@ -22,8 +22,7 @@ class Item ;
 class FreeItem ;
 
 /**
- * Representa a un par de elementos controlador/controlado. Cuando un elemento choca con un elemento
- * controlador, éste recoge el sentido de la colisión y mueve al elemento controlado en dicho sentido
+ * A pair of controller & controlled item
  */
 
 class RemoteControl : public Behavior
@@ -40,18 +39,12 @@ public:
 private:
 
        /**
-        * El elemento controlado por el mando a distancia
+        * Item to move by remote control
         */
         FreeItem * controlledItem ;
 
-       /**
-        * Cronómetro que controla la velocidad de movimiento del elemento
-        */
         Timer * speedTimer ;
 
-       /**
-        * Cronómetro que controla la velocidad de caída del elemento
-        */
         Timer * fallTimer ;
 
 };

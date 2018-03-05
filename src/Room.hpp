@@ -50,99 +50,64 @@ public:
        /**
         * @param roomFile Name of file with data about this room
         * @param scenery jail, blacktooth, marketplace, themoon, egyptus, penitentiary, safari, byblos
-        * @param xTiles Número de losetas en el eje X
-        * @param yTiles Número de losetas en el eje Y
-        * @param tileSize Longitud del lado de una loseta en unidades isométricas
+        * @param xTiles How many tiles on X
+        * @param yTiles How many tiles on Y
+        * @param tileSize Length of side of single tile
         * @param floor Kind of floor
         */
         Room( const std::string& roomFile, const std::string& scenery, int xTiles, int yTiles, int tileSize, const std::string& floor ) ;
 
         virtual ~Room( ) ;
 
-       /**
-        * Añade un nueva loseta a la sala
-        * @param floorTile La nueva loseta
-        */
         void addFloor ( FloorTile * floorTile ) ;
 
-       /**
-        * Añade un nuevo segmento de muro a la sala
-        * @param wall El nuevo segmento de muro
-        */
         void addWall ( Wall * wall ) ;
 
-       /**
-        * Añade una nueva puerta a la sala
-        * @param door La nueva puerta
-        */
         void addDoor ( Door * door ) ;
 
-       /**
-        * Añade un nuevo elemento rejilla de la sala
-        */
         void addGridItem ( GridItem * gridItem ) ;
 
-       /**
-        * Añade un nuevo elemento libre de la sala
-        */
         void addFreeItem ( FreeItem * freeItem ) ;
 
         bool addPlayerToRoom ( PlayerItem * playerItem, bool playerEntersRoom ) ;
 
-       /**
-        * Elimina una loseta de la sala
-        * @param floorTile La loseta a eliminar
-        */
         void removeFloor ( FloorTile * floorTile ) ;
 
-       /**
-        * Elimina un elemento rejilla de la sala
-        * @param gridItem Un elemento rejilla
-        */
         void removeGridItem ( GridItem * gridItem ) ;
 
-       /**
-        * Elimina un elemento libre de la sala
-        * @param gridItem Un elemento libre
-        */
         void removeFreeItem ( FreeItem * freeItem ) ;
 
-        bool removePlayerFromRoom ( PlayerItem* playerItem, bool playerExitsRoom ) ;
+        bool removePlayerFromRoom ( PlayerItem * playerItem, bool playerExitsRoom ) ;
 
         /**
          * Removes any bar in this room
          */
         void removeBars () ;
 
-       /**
-        * Dibuja la sala
-        * @param where Imagen donde se realizará el dibujo
-        */
-        void draw ( BITMAP* where = 0 ) ;
+        void draw ( BITMAP * where ) ;
+
+        void drawRoom () {  draw( whereToDraw ) ;  }
 
        /**
-        * Calcula los límites reales de la sala en función de su tamaño y las puertas existentes
+        * Calculate boundaries of room from its size and its doors
         */
         void calculateBounds () ;
 
        /**
-        * Calcula las coordenadas de pantalla donde se sitúa el origen del espacio isométrico
-        * @param hasNorthDoor La sala tiene una puerta al norte
-        * @param hasNorthEast La sala tiene una puerta al este
-        * @param deltaX Diferencia en el eje X a aplicar para ajustar la posición de la sala en pantalla
-        * @param deltaY Diferencia en el eje Y a aplicar para ajustar la posición de la sala en pantalla
+        * Calculate coordinates on screen of isometric space’s origin
+        * @param hasNorthDoor Room has door at north
+        * @param hasNorthEast Room has door at east
+        * @param deltaX Difference on X for position of room on screen
+        * @param deltaY Difference on Y for position of room on screen
         */
-        void calculateCoordinates ( bool hasNorthDoor, bool hasEastDoor, int deltaX, int deltaY ) ;
+        void calculateCoordinates ( bool hasNorthDoor, bool hasEastDoor, int deltaX = 0, int deltaY = 0 ) ;
 
         bool activatePlayerByName ( const std::string& player ) ;
 
-       /**
-        * Activa la sala. Implica la puesta en marcha de la actualización de los elementos y del dibujado
-        */
         void activate () ;
 
        /**
-        * Desactiva la sala. Implica la suspensión de la actualización de los elementos y del dibujado
+        * Suspend updating items and drawing
         */
         void deactivate () ;
 
@@ -219,14 +184,14 @@ private:
         std::pair < unsigned int, unsigned int > numberOfTiles ;
 
        /**
-        * Longitud del lado de una loseta en unidades isométricas
+        * Length of tile’s side
         */
         unsigned int tileSize ;
 
         std::string kindOfFloor ;
 
        /**
-        * Indica si la sala está activa, es decir, si debe dibujarse
+        * Is this room active, that is the one to draw
         */
         bool active ;
 
@@ -286,9 +251,9 @@ private:
         Camera * camera ;
 
        /**
-        * Imagen donde se dibuja la sala activa
+        * Where to draw active room
         */
-        BITMAP * picture ;
+        BITMAP * whereToDraw ;
 
         std::list < TripleRoomInitialPoint > listOfInitialPointsForTripleRoom ;
 
@@ -348,43 +313,21 @@ public:
         */
         std::string getKindOfFloor () const {  return kindOfFloor ;  }
 
-       /**
-        * Is this room active
-        */
         bool isActive () const {  return active ;  }
 
-       /**
-        * Límite de la sala
-        */
         unsigned short getLimitAt ( const Way& way ) {  return bounds[ way ] ;  }
 
-       /**
-        * Una puerta de la sala
-        */
         Door * getDoorAt ( const Way& way ) {  return doors[ way ] ;  }
 
         bool hasDoorAt ( const Way& way ) {  return ( doors[ way ] != nilPointer ) ;  }
 
-       /**
-        * Establece la salida por la que algún jugador abandona la sala
-        */
         void setWayOfExit ( const Way& exit ) {  this->wayOfExit = exit ;  }
 
-       /**
-        * Salida por la que algún jugador abandona la sala
-        */
         Way getWayOfExit () const {  return wayOfExit ;  }
 
-       /**
-        * Cámara encargada de centrar una sala grande en pantalla
-        */
         Camera * getCamera () const {  return camera ;  }
 
-       /**
-        * Imagen donde se dibuja la sala activa
-        * @return Un bitmap de Allegro
-        */
-        BITMAP * getPicture () {  return picture ;  }
+        BITMAP * getWhereToDraw () {  return whereToDraw ;  }
 
        /**
         * Límites para mover la cámara a lo largo del eje X en una sala triple

@@ -188,7 +188,7 @@ load_object (PACKFILE * file, long size)
     int i, j;
     GIF_ANIMATION *gif = calloc (1, sizeof *gif);
     GIF_FRAME frame;
-    int have_global_palette = 0;
+    // int have_global_palette = 0; /* unused */
 
     (void) size;
 
@@ -227,7 +227,7 @@ load_object (PACKFILE * file, long size)
     if (gif->palette.colors_count)
     {
         read_palette (file, &gif->palette);
-        have_global_palette = 1;
+        // have_global_palette = 1;
     }
 
     memset(&frame, 0, sizeof frame); /* For first frame */

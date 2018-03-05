@@ -12,7 +12,18 @@
 namespace isomot
 {
 
-KindOfActivity * FallKindOfActivity::instance = nilPointer ;
+FallKindOfActivity * FallKindOfActivity::instance = nilPointer ;
+
+FallKindOfActivity* FallKindOfActivity::getInstance()
+{
+        if ( instance == nilPointer )
+        {
+                instance = new FallKindOfActivity();
+        }
+
+        return instance;
+}
+
 
 FallKindOfActivity::FallKindOfActivity( ) : KindOfActivity()
 {
@@ -22,16 +33,6 @@ FallKindOfActivity::FallKindOfActivity( ) : KindOfActivity()
 FallKindOfActivity::~FallKindOfActivity( )
 {
 
-}
-
-KindOfActivity* FallKindOfActivity::getInstance()
-{
-        if ( instance == nilPointer )
-        {
-                instance = new FallKindOfActivity();
-        }
-
-        return instance;
 }
 
 bool FallKindOfActivity::fall( Behavior * behavior )

@@ -53,11 +53,6 @@ public:
          */
         virtual void changeActivityOfItem ( const ActivityOfItem & activity, Item * sender = nilPointer ) ;
 
-        /**
-         * Change kind of activity
-         */
-        void changeActivityTo ( KindOfActivity * activity ) {  whatToDo = activity ;  }
-
 protected:
 
         /**
@@ -73,11 +68,6 @@ protected:
          * Item with this behavior
          */
         Item * item ;
-
-        /**
-         * Current kind of activity
-         */
-        KindOfActivity * whatToDo ;
 
         /**
          * Current variant of activity
@@ -100,7 +90,7 @@ public:
         /**
          * Add some more data for behavior
          */
-        virtual void setMoreData ( void * data ) { }
+        virtual void setMoreData ( void * data ) {  ( void )data ;  }
 
 };
 

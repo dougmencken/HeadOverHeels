@@ -10,7 +10,17 @@
 namespace isomot
 {
 
-KindOfActivity * DisplaceKindOfActivity::instance = nilPointer ;
+DisplaceKindOfActivity * DisplaceKindOfActivity::instance = nilPointer ;
+
+DisplaceKindOfActivity* DisplaceKindOfActivity::getInstance()
+{
+        if ( instance == nilPointer )
+        {
+                instance = new DisplaceKindOfActivity();
+        }
+
+        return instance;
+}
 
 
 DisplaceKindOfActivity::DisplaceKindOfActivity() : KindOfActivity()
@@ -20,16 +30,6 @@ DisplaceKindOfActivity::DisplaceKindOfActivity() : KindOfActivity()
 
 DisplaceKindOfActivity::~DisplaceKindOfActivity()
 {
-}
-
-KindOfActivity* DisplaceKindOfActivity::getInstance()
-{
-        if ( instance == nilPointer )
-        {
-                instance = new DisplaceKindOfActivity();
-        }
-
-        return instance;
 }
 
 bool DisplaceKindOfActivity::displace( Behavior* behavior, ActivityOfItem* activity, bool canFall )
@@ -136,7 +136,6 @@ bool DisplaceKindOfActivity::displace( Behavior* behavior, ActivityOfItem* activ
                 // look if it falls yet
                 if ( FallKindOfActivity::getInstance()->fall( behavior ) )
                 {
-                        behavior->changeActivityTo( FallKindOfActivity::getInstance() );
                         *activity = Fall;
                         itemDisplaced = true;
                 }

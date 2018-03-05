@@ -17,8 +17,8 @@ namespace isomot
 OneWay::OneWay( Item * item, const std::string & behavior, bool flying ) :
         Behavior( item, behavior )
         , isFlying( flying )
-        , speedTimer( 0 )
-        , fallTimer( 0 )
+        , speedTimer( nilPointer )
+        , fallTimer( nilPointer )
 {
         speedTimer = new Timer();
         speedTimer->go();
@@ -44,7 +44,7 @@ bool OneWay::update ()
         switch ( activity )
         {
                 case Wait:
-                        start();
+                        letsMove();
                         break;
 
                 case MoveNorth:
@@ -55,14 +55,12 @@ bool OneWay::update ()
                         {
                                 if ( speedTimer->getValue() > freeItem->getSpeed() )
                                 {
-                                        // El elemento se mueve. Si el movimiento no se pudo realizar por colisión entonces
-                                        // se desplaza a los elementos con los que pudiera haber chocado y el elemento da media
-                                        // vuelta cambiando su estado a otro de movimiento
-                                        if ( ! whatToDo->move( this, &activity, true ) )
+                                        // move it
+                                        if ( ! MoveKindOfActivity::getInstance()->move( this, &activity, true ) )
                                         {
                                                 turnRound();
 
-                                                // Emite el sonido de colisión
+                                                // play sound of colliding
                                                 SoundManager::getInstance()->play( freeItem->getLabel(), Collision );
                                         }
 
@@ -83,14 +81,12 @@ bool OneWay::update ()
                 case DisplaceNorthwest:
                         if ( ! this->isFlying )
                         {
-                                // Emite el sonido de de desplazamiento
+                                // emit sound of displacing
                                 SoundManager::getInstance()->play( freeItem->getLabel(), activity );
 
-                                // El elemento es deplazado por otro. Si el desplazamiento no se pudo realizar por
-                                // colisión entonces el estado se propaga a los elementos con los que ha chocado
-                                whatToDo->displace( this, &activity, true );
+                                // displace this item by other one
+                                DisplaceKindOfActivity::getInstance()->displace( this, &activity, true );
 
-                                // Una vez se ha completado el desplazamiento el elemento vuelve a su comportamiento normal
                                 activity = Wait;
 
                                 // preserve inactivity for frozen item
@@ -106,18 +102,18 @@ bool OneWay::update ()
                 case Fall:
                         if ( ! this->isFlying )
                         {
-                                // Se comprueba si ha topado con el suelo en una sala sin suelo
+                                // look for reaching floor in a room without floor
                                 if ( freeItem->getZ() == 0 && freeItem->getMediator()->getRoom()->getKindOfFloor() == "none" )
                                 {
                                         // item disappears
                                         vanish = true;
                                 }
-                                // Si ha llegado el momento de caer entonces el elemento desciende una unidad
+                                // is it time to fall
                                 else if ( fallTimer->getValue() > freeItem->getWeight() )
                                 {
-                                        if ( ! whatToDo->fall( this ) )
+                                        if ( ! FallKindOfActivity::getInstance()->fall( this ) )
                                         {
-                                                // Emite el sonido de caída
+                                                // emit sound of falling down
                                                 SoundManager::getInstance()->play( freeItem->getLabel(), activity );
                                                 activity = Wait;
                                         }
@@ -147,7 +143,7 @@ bool OneWay::update ()
         return vanish;
 }
 
-void OneWay::start()
+void OneWay::letsMove()
 {
         switch ( this->item->getOrientation().getIntegerOfWay () )
         {
@@ -170,8 +166,6 @@ void OneWay::start()
                 default:
                         ;
         }
-
-        whatToDo = MoveKindOfActivity::getInstance();
 }
 
 void OneWay::turnRound()

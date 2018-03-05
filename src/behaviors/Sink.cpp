@@ -28,7 +28,7 @@ bool Sink::update ()
         switch ( activity )
         {
                 case Wait:
-                        // Si tiene un elemento encima entonces el elemento empieza a descender
+                        // begin to fall when there’s an item on top
                         if ( ! gridItem->checkPosition( 0, 0, 1, Add ) )
                         {
                                 this->changeActivityOfItem( Fall );
@@ -36,16 +36,16 @@ bool Sink::update ()
                         break;
 
                 case Fall:
-                        // Si ha llegado el momento de caer entonces el elemento desciende una unidad
+                        // is it time to lower one unit yet
                         if ( fallTimer->getValue() > gridItem->getWeight() )
                         {
-                                // Si no puede seguir descendiendo o ya no hay ningún elemento encima entonces se detiene
-                                if ( ! whatToDo->fall( this ) || gridItem->checkPosition( 0, 0, 1, Add ) )
+                                // when can’t fall any more or when there’s no item on top any longer
+                                if ( ! FallKindOfActivity::getInstance()->fall( this )
+                                        || gridItem->checkPosition( 0, 0, 1, Add ) )
                                 {
                                         activity = Wait;
                                 }
 
-                                // Se pone a cero el cronómetro para el siguiente ciclo
                                 fallTimer->reset();
                         }
                         break;
@@ -54,7 +54,6 @@ bool Sink::update ()
                         activity = Wait;
         }
 
-        // Emite el sonido acorde al estado
         SoundManager::getInstance()->play( gridItem->getLabel(), activity );
 
         return false;

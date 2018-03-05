@@ -45,39 +45,35 @@ bool Impel::update ()
                 case DisplaceNorthwest:
                 case DisplaceSoutheast:
                 case DisplaceSouthwest:
-                        // Si el elemento está activo y ha llegado el momento de moverse, entonces:
+                        // is it time to move
                         if ( speedTimer->getValue() > freeItem->getSpeed() )
                         {
-                                // El elemento se mueve hasta detectar un colisión
-                                if ( ! whatToDo->displace( this, &activity, true ) )
+                                if ( ! DisplaceKindOfActivity::getInstance()->displace( this, &activity, true ) )
                                 {
                                         activity = Wait;
                                 }
 
-                                // Se pone a cero el cronómetro para el siguiente ciclo
                                 speedTimer->reset();
                         }
 
-                        // Anima el elemento
                         freeItem->animate();
                         break;
 
                 case Fall:
-                        // Se comprueba si ha topado con el suelo en una sala sin suelo
+                        // look for reaching floor in a room without floor
                         if ( freeItem->getZ() == 0 && freeItem->getMediator()->getRoom()->getKindOfFloor() == "none" )
                         {
                                 // item disappears
                                 vanish = true;
                         }
-                        // Si ha llegado el momento de caer entonces el elemento desciende una unidad
+                        // is it time to fall
                         else if ( fallTimer->getValue() > freeItem->getWeight() )
                         {
-                                if ( ! whatToDo->fall( this ) )
+                                if ( ! FallKindOfActivity::getInstance()->fall( this ) )
                                 {
                                         activity = Wait;
                                 }
 
-                                // Se pone a cero el cronómetro para el siguiente ciclo
                                 fallTimer->reset();
                         }
                         break;

@@ -37,7 +37,7 @@ public:
 
         virtual ~JumpKindOfActivity();
 
-        static KindOfActivity * getInstance() ;
+        static JumpKindOfActivity * getInstance() ;
 
        /**
         * Item jumps
@@ -60,7 +60,7 @@ protected:
 
 private:
 
-        static KindOfActivity * instance ;
+        static JumpKindOfActivity * instance ;
 
 };
 

@@ -318,7 +318,7 @@ std::string SoundManager::translateActivityOfItemToString ( const ActivityOfItem
                         stringOfActivity = "vanish";
                         break;
 
-                case Doughnut:
+                case FireDoughnut:
                         stringOfActivity = "shot";
                         break;
 

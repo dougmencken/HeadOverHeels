@@ -165,8 +165,8 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			behaviors/ConveyorBelt.hpp \
 			behaviors/Detector.cpp \
 			behaviors/Detector.hpp \
-			behaviors/Drive.cpp \
-			behaviors/Drive.hpp \
+			behaviors/Driven.cpp \
+			behaviors/Driven.hpp \
 			behaviors/Elevator.cpp \
 			behaviors/Elevator.hpp \
 			behaviors/Hunter.cpp \
@@ -187,8 +187,8 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			behaviors/PlayerHeels.hpp \
 			behaviors/RemoteControl.cpp \
 			behaviors/RemoteControl.hpp \
-			behaviors/FireDoughnut.cpp \
-			behaviors/FireDoughnut.hpp \
+			behaviors/Doughnut.cpp \
+			behaviors/Doughnut.hpp \
 			behaviors/Sink.cpp \
 			behaviors/Sink.hpp \
 			behaviors/Special.cpp \

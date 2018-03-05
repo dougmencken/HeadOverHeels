@@ -35,7 +35,7 @@ public:
 
         void draw ( BITMAP * where ) ;
 
-        void handleKey ( int rawKey ) {  /* do nothing */  }
+        void handleKey ( int /* rawKey */ ) {  /* do nothing */  }
 
         unsigned int getWidth () const ;
 

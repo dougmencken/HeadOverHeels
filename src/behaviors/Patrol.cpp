@@ -35,7 +35,7 @@ Patrol::~Patrol()
 bool Patrol::update ()
 {
         FreeItem * freeItem = dynamic_cast< FreeItem * >( this->item );
-        bool alive = true;
+        bool isGone = false;
 
         switch ( activity )
         {
@@ -55,33 +55,27 @@ bool Patrol::update ()
                         {
                                 if ( speedTimer->getValue() > freeItem->getSpeed())
                                 {
-                                        // ¿Cambio de dirección?
+                                        // ¿ cambio de dirección ?
                                         if ( changeTimer->getValue() > ( double( rand() % 1000 ) + 400.0 ) / 1000.0 )
                                         {
                                                 changeOrientation();
                                                 changeTimer->reset();
                                         }
 
-                                        // El elemento se mueve. Si el movimiento no se pudo realizar por colisión entonces
-                                        // se desplaza a los elementos con los que pudiera haber chocado y el elemento da media
-                                        // vuelta cambiando su estado a otro de movimiento
-                                        if ( ! whatToDo->move( this, &activity, true ) )
+                                        // move item
+                                        if ( ! MoveKindOfActivity::getInstance()->move( this, &activity, true ) )
                                         {
-                                                // Fuerza el cambio de dirección
                                                 changeOrientation();
 
-                                                // Emite el sonido de colisión
                                                 SoundManager::getInstance()->play( freeItem->getLabel(), Collision );
                                         }
 
-                                        // Emite el sonido de movimiento
+                                        // play sound of moving
                                         SoundManager::getInstance()->play( freeItem->getLabel(), activity );
 
-                                        // Se pone a cero el cronómetro para el siguiente ciclo
                                         speedTimer->reset();
                                 }
 
-                                // Anima el elemento
                                 freeItem->animate();
                         }
                         break;
@@ -94,14 +88,12 @@ bool Patrol::update ()
                 case DisplaceSoutheast:
                 case DisplaceSouthwest:
                 case DisplaceNorthwest:
-                        // Emite el sonido de de desplazamiento
+                        // play sound of displacing
                         SoundManager::getInstance()->play( freeItem->getLabel(), activity );
 
-                        // El elemento es deplazado por otro. Si el desplazamiento no se pudo realizar por
-                        // colisión entonces el estado se propaga a los elementos con los que ha chocado
-                        whatToDo->displace( this, &activity, true );
+                        // displace this item by some other one
+                        DisplaceKindOfActivity::getInstance()->displace( this, &activity, true );
 
-                        // Una vez se ha completado el desplazamiento el elemento vuelve a su comportamiento normal
                         activity = Wait;
 
                         // preserve inactivity for frozen item
@@ -112,24 +104,20 @@ bool Patrol::update ()
                         break;
 
                 case Fall:
-                        // Se comprueba si ha topado con el suelo en una sala sin suelo
+                        // look for reaching floor in a room without floor
                         if ( item->getZ() == 0 && item->getMediator()->getRoom()->getKindOfFloor() == "none" )
                         {
-                                // El elemento desaparece
-                                alive = false;
+                                isGone = true;
                         }
-                        // Si ha llegado el momento de caer entonces el elemento desciende una unidad
+                        // is it time to fall
                         else if ( fallTimer->getValue() > freeItem->getWeight() )
                         {
-                                // Si termina de caer vuelve al estado inicial
-                                if ( ! whatToDo->fall( this ) )
+                                if ( ! FallKindOfActivity::getInstance()->fall( this ) )
                                 {
-                                        // Emite el sonido de caída
                                         SoundManager::getInstance()->play( freeItem->getLabel(), activity );
                                         activity = Wait;
                                 }
 
-                                // Se pone a cero el cronómetro para el siguiente ciclo
                                 fallTimer->reset();
                         }
                         break;
@@ -147,7 +135,7 @@ bool Patrol::update ()
                         ;
         }
 
-        return !alive ;
+        return isGone ;
 }
 
 void Patrol::changeOrientation()
@@ -205,8 +193,6 @@ void Patrol::changeOrientation()
                 default:
                         ;
         }
-
-        whatToDo = MoveKindOfActivity::getInstance();
 }
 
 }

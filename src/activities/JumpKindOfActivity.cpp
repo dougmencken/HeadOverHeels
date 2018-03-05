@@ -12,7 +12,18 @@
 namespace isomot
 {
 
-KindOfActivity * JumpKindOfActivity::instance = nilPointer ;
+JumpKindOfActivity * JumpKindOfActivity::instance = nilPointer ;
+
+JumpKindOfActivity* JumpKindOfActivity::getInstance()
+{
+        if ( instance == nilPointer )
+        {
+                instance = new JumpKindOfActivity();
+        }
+
+        return instance;
+}
+
 
 JumpKindOfActivity::JumpKindOfActivity( ) : KindOfActivity()
 {
@@ -22,16 +33,6 @@ JumpKindOfActivity::JumpKindOfActivity( ) : KindOfActivity()
 JumpKindOfActivity::~JumpKindOfActivity( )
 {
 
-}
-
-KindOfActivity* JumpKindOfActivity::getInstance()
-{
-        if ( instance == nilPointer )
-        {
-                instance = new JumpKindOfActivity();
-        }
-
-        return instance;
 }
 
 bool JumpKindOfActivity::jump( Behavior* behavior, ActivityOfItem* activity, const std::vector< JumpMotion >& jumpVector, int jumpPhase )
@@ -130,7 +131,6 @@ bool JumpKindOfActivity::jump( Behavior* behavior, ActivityOfItem* activity, con
         // end jump when it’s last phase
         if ( jumpPhase + 1 >= static_cast< int >( jumpVector.size() ) )
         {
-                behavior->changeActivityTo( FallKindOfActivity::getInstance() );
                 *activity = Fall;
         }
 

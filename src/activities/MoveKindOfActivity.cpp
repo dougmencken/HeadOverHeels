@@ -14,9 +14,9 @@
 namespace isomot
 {
 
-KindOfActivity * MoveKindOfActivity::instance = nilPointer ;
+MoveKindOfActivity * MoveKindOfActivity::instance = nilPointer ;
 
-KindOfActivity* MoveKindOfActivity::getInstance()
+MoveKindOfActivity* MoveKindOfActivity::getInstance()
 {
         if ( instance == nilPointer )
         {
@@ -26,12 +26,15 @@ KindOfActivity* MoveKindOfActivity::getInstance()
         return instance;
 }
 
+
 MoveKindOfActivity::MoveKindOfActivity( ) : KindOfActivity()
 {
 
 }
 
-MoveKindOfActivity::~MoveKindOfActivity( )  { }
+MoveKindOfActivity::~MoveKindOfActivity( )
+{
+}
 
 bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, bool canFall )
 {
@@ -215,7 +218,6 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
         {
                 if ( FallKindOfActivity::getInstance()->fall( behavior ) )
                 {
-                        behavior->changeActivityTo( FallKindOfActivity::getInstance() );
                         *activity = Fall;
                         moved = true;
                 }

@@ -33,15 +33,15 @@ public:
 
         virtual ~MoveKindOfActivity( ) ;
 
-        static KindOfActivity * getInstance () ;
+        static MoveKindOfActivity * getInstance () ;
 
-        /**
-         * Move item
-         * @param behavior Behavior of item
-         * @param activity Way of movement
-         * @param canFall true if item falls, false if it flies
-         * @return when item displaced or changed activity, false when there’s collision
-         */
+       /**
+        * Item moves
+        * @param behavior behavior of item
+        * @param activity to get way of movement
+        * @param canFall whether item may fall, false if it flies
+        * @return true for move or change of activity, false for collision
+        */
         virtual bool move ( Behavior * behavior, ActivityOfItem * activity, bool canFall ) ;
 
 protected:
@@ -62,7 +62,7 @@ protected:
 
 private:
 
-        static KindOfActivity * instance ;
+        static MoveKindOfActivity * instance ;
 
 };
 

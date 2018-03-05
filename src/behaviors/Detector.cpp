@@ -3,6 +3,7 @@
 #include "Item.hpp"
 #include "FreeItem.hpp"
 #include "PlayerItem.hpp"
+#include "MoveKindOfActivity.hpp"
 #include "DisplaceKindOfActivity.hpp"
 #include "FallKindOfActivity.hpp"
 #include "Mediator.hpp"
@@ -39,39 +40,34 @@ bool Detector::update ()
         {
                 switch ( activity )
                 {
-                        // Si está parado intenta detectar a un jugador
                         case Wait:
-                                // Un jugador se cruza en el eje X del "perseguidor"
+                                // player meets detector on X way
                                 if ( freeItem->getX() >= playerItem->getX() - 1 && freeItem->getX() <= playerItem->getX() + 1 )
                                 {
-                                        // ...a la derecha de él
                                         if ( playerItem->getY() <= freeItem->getY() )
                                         {
                                                 changeActivityOfItem( MoveEast );
                                         }
-                                        // ...a la izquierda de él
                                         else if ( playerItem->getY() >= freeItem->getY() )
                                         {
                                                 changeActivityOfItem( MoveWest );
                                         }
                                 }
-                                // Un jugador se cruza en el eje Y del "perseguidor"
-                                else if ( freeItem->getY() >= playerItem->getY()-1 && freeItem->getY() <= playerItem->getY() + 1 )
+                                // player meets detector on Y way
+                                else if ( freeItem->getY() >= playerItem->getY() - 1 && freeItem->getY() <= playerItem->getY() + 1 )
                                 {
-                                        // ...a la derecha de él
                                         if ( playerItem->getX() <= freeItem->getX() )
                                         {
                                                 changeActivityOfItem( MoveNorth );
                                         }
                                         else
-                                        // ...a la izquierda de él
                                         if ( playerItem->getX() >= freeItem->getX() )
                                         {
                                                 changeActivityOfItem( MoveSouth );
                                         }
                                 }
 
-                                // Emite el sonido de activación del movimiento
+                                // play sound on change of activity
                                 if ( activity != Wait )
                                 {
                                         SoundManager::getInstance()->play( freeItem->getLabel(), activity );
@@ -82,22 +78,21 @@ bool Detector::update ()
                         case MoveSouth:
                         case MoveEast:
                         case MoveWest:
-                                // item is active and it is time to move
+                                // is item active
                                 if ( ! freeItem->isFrozen() )
                                 {
+                                        // is it time to move
                                         if ( speedTimer->getValue() > freeItem->getSpeed() )
                                         {
-                                                // El elemento se mueve. Si colisiona vuelve al estado inicial para tomar una nueva dirección
-                                                if ( ! whatToDo->move( this, &activity, true ) )
+                                                // move item, if there’s collision let’s wait
+                                                if ( ! MoveKindOfActivity::getInstance()->move( this, &activity, true ) )
                                                 {
                                                         activity = Wait;
                                                 }
 
-                                                // Se pone a cero el cronómetro para el siguiente ciclo
                                                 speedTimer->reset();
                                         }
 
-                                        // Anima el elemento
                                         freeItem->animate();
                                 }
                                 break;
@@ -110,16 +105,14 @@ bool Detector::update ()
                         case DisplaceNorthwest:
                         case DisplaceSoutheast:
                         case DisplaceSouthwest:
-                                // Si el elemento está activo y ha llegado el momento de moverse, entonces:
+                                // is it time to move
                                 if ( speedTimer->getValue() > freeItem->getSpeed() )
                                 {
-                                        // El elemento se mueve hasta detectar un colisión
-                                        if ( ! whatToDo->displace( this, &activity, true ) )
+                                        if ( ! DisplaceKindOfActivity::getInstance()->displace( this, &activity, true ) )
                                         {
                                                 activity = Wait;
                                         }
 
-                                        // Se pone a cero el cronómetro para el siguiente ciclo
                                         speedTimer->reset();
                                 }
 
@@ -131,20 +124,19 @@ bool Detector::update ()
                                 break;
 
                         case Fall:
-                                // Se comprueba si ha topado con el suelo en una sala sin suelo
+                                // look for reaching floor in a room without floor
                                 if ( freeItem->getZ() == 0 && freeItem->getMediator()->getRoom()->getKindOfFloor() == "none" )
                                 {
                                         isGone = true;
                                 }
-                                // Si ha llegado el momento de caer entonces el elemento desciende una unidad
+                                // is it time to fall
                                 else if ( fallTimer->getValue() > freeItem->getWeight() )
                                 {
-                                        if ( ! whatToDo->fall( this ) )
+                                        if ( ! FallKindOfActivity::getInstance()->fall( this ) )
                                         {
                                                 activity = Wait;
                                         }
 
-                                        // Se pone a cero el cronómetro para el siguiente ciclo
                                         fallTimer->reset();
                                 }
                                 break;

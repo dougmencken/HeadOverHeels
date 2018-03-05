@@ -218,7 +218,7 @@
     <item x="2" y="1" z="0">
       <label>sandwich</label>
       <direction>south</direction>
-      <behavior>behavior of driver</behavior>
+      <behavior>behavior of driven</behavior>
       <type>freeitem</type>
     </item>
     <item x="5" y="1" z="1">

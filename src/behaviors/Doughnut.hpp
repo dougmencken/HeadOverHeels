@@ -8,8 +8,8 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef Drive_hpp_
-#define Drive_hpp_
+#ifndef Doughnut_hpp_
+#define Doughnut_hpp_
 
 #include "Behavior.hpp"
 #include "Timer.hpp"
@@ -19,40 +19,32 @@ namespace isomot
 {
 
 class Item ;
+class PlayerItem ;
 
-/**
- * Mueve al elemento en la dirección marcada por el elemento que tiene encima
- */
 
-class Drive : public Behavior
+class Doughnut : public Behavior
 {
 
 public:
 
-        Drive( Item * item, const std::string & behavior ) ;
+        Doughnut( Item * item, const std::string & behavior ) ;
 
-        virtual ~Drive( ) ;
+        virtual ~Doughnut( ) ;
 
         virtual bool update () ;
 
+        void setPlayerItem ( PlayerItem * player ) {  this->playerItem = player ;  }
+
 private:
 
-       /**
-        * Indica si el elemento está en marcha o parado
-        */
-        bool running ;
+        PlayerItem * playerItem ;
 
        /**
-        * Cronómetro que controla la velocidad de movimiento del elemento
+        * Time for speed of movement
         */
         Timer * speedTimer ;
 
-       /**
-        * Cronómetro que controla la velocidad de caída del elemento
-        */
-        Timer * fallTimer ;
-
-};
+} ;
 
 }
 

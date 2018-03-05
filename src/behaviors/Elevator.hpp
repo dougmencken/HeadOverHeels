@@ -55,19 +55,19 @@ private:
         ActivityOfItem lastActivity ;
 
        /**
-        * Cronómetro que controla la velocidad de movimiento del elemento
+        * Timer for speed of movement
         */
         Timer * speedTimer ;
 
        /**
-        * Cronómetro que controla los tiempos de parada del ascensor. Suceden cuando cambia de dirección
+        * Timer for delays on change of direction
         */
         Timer * stopTimer ;
 
 public:
 
        /**
-        * Asigna los datos de altura máxima y mínima, así como el movimiento inicial del ascensor
+        * Set maximum and minimum height, and initial position of this elevator
         */
         void setMoreData ( void * data ) ;
 

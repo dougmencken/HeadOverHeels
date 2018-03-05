@@ -2,6 +2,7 @@
 #include "RemoteControl.hpp"
 #include "Item.hpp"
 #include "FreeItem.hpp"
+#include "MoveKindOfActivity.hpp"
 #include "DisplaceKindOfActivity.hpp"
 #include "FallKindOfActivity.hpp"
 #include "Mediator.hpp"
@@ -45,7 +46,7 @@ bool RemoteControl::update ()
         // get controlled item
         if ( getNameOfBehavior() == "behavior of remote control" && controlledItem == nilPointer )
         {
-                controlledItem = static_cast< FreeItem * >( freeItem->getMediator()->findItemByBehavior( "behavior of remotely controlled one" ) );
+                controlledItem = dynamic_cast< FreeItem * >( freeItem->getMediator()->findItemByBehavior( "behavior of remotely controlled one" ) );
         }
 
         switch ( activity )
@@ -62,7 +63,7 @@ bool RemoteControl::update ()
                                 if ( speedTimer->getValue() > freeItem->getSpeed() )
                                 {
                                         // move item
-                                        whatToDo->move( this, &activity, true );
+                                        MoveKindOfActivity::getInstance()->move( this, &activity, true );
 
                                         if ( activity != Fall )
                                         {
@@ -88,15 +89,14 @@ bool RemoteControl::update ()
                         {
                                 if ( speedTimer->getValue() > freeItem->getSpeed() )
                                 {
-                                        // Emite el sonido de de desplazamiento si está siendo empujado, no desplazado
-                                        // por un elemento que haya debajo
-                                        if ( this->sender == nilPointer || ( this->sender != nilPointer && this->sender != this->item ) )
+                                        // emit sound of displacement if item is pushed but not displaced by item below it
+                                        if ( this->sender == nilPointer || this->sender != this->item )
                                         {
                                                 SoundManager::getInstance()->play( freeItem->getLabel(), activity );
                                         }
 
-                                        // Desplaza el elemento una unidad
-                                        whatToDo->displace( this, &activity, true );
+                                        DisplaceKindOfActivity::getInstance()->displace( this, &activity, true );
+
                                         if ( activity != Fall )
                                         {
                                                 activity = Wait;
@@ -108,8 +108,7 @@ bool RemoteControl::update ()
                                 freeItem->animate();
                         }
 
-                        // Para los cuatro puntos cardinales básicos el elemento controlador debe cambiar el estado
-                        // del elemento controlado
+                        // controller changes movement of controlled item
                         if ( activity == DisplaceNorth || activity == DisplaceSouth || activity == DisplaceEast || activity == DisplaceWest )
                         {
                                 if ( getNameOfBehavior() == "behavior of remote control" )
@@ -145,19 +144,18 @@ bool RemoteControl::update ()
                         break;
 
                 case Fall:
-                        // Se comprueba si ha topado con el suelo en una sala sin suelo
+                        // look for reaching floor in a room without floor
                         if ( freeItem->getZ() == 0 && freeItem->getMediator()->getRoom()->getKindOfFloor() == "none" )
                         {
                                 // item disappears
                                 vanish = true;
                         }
-                        // Si este es el elemento controlado y ha llegado el momento de caer entonces
-                        // el elemento desciende una unidad
+                        // is it time to fall for controlled item
                         else if ( getNameOfBehavior() == "behavior of remotely controlled one" && fallTimer->getValue() > freeItem->getWeight() )
                         {
-                                if ( ! whatToDo->fall( this ) )
+                                if ( ! FallKindOfActivity::getInstance()->fall( this ) )
                                 {
-                                        // Emite el sonido de caída
+                                        // play sound of falling down
                                         SoundManager::getInstance()->play( freeItem->getLabel(), activity );
                                         activity = Wait;
                                 }

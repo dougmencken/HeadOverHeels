@@ -10,7 +10,7 @@
 #include "DisplaceKindOfActivity.hpp"
 #include "FallKindOfActivity.hpp"
 #include "JumpKindOfActivity.hpp"
-#include "FireDoughnut.hpp"
+#include "Doughnut.hpp"
 #include "GameManager.hpp"
 #include "SoundManager.hpp"
 
@@ -48,50 +48,11 @@ UserControlled::~UserControlled()
 
 void UserControlled::changeActivityOfItem( const ActivityOfItem & activityOf, Item * sender )
 {
-        this->activity = activityOf;
-        this->sender = sender;
+        Behavior::changeActivityOfItem( activityOf, sender );
 
-        // Asigna el estado en función del identificador
-        switch ( activityOf )
+        if ( activityOf == BeginWayInTeletransport )
         {
-                case MoveNorth:
-                case MoveSouth:
-                case MoveEast:
-                case MoveWest:
-                case MoveNortheast:
-                case MoveNorthwest:
-                case MoveSoutheast:
-                case MoveSouthwest:
-                case MoveUp:
-                case MoveDown:
-                        whatToDo = MoveKindOfActivity::getInstance();
-                        break;
-
-                case DisplaceNorth:
-                case DisplaceSouth:
-                case DisplaceEast:
-                case DisplaceWest:
-                case DisplaceNortheast:
-                case DisplaceSoutheast:
-                case DisplaceSouthwest:
-                case DisplaceNorthwest:
-                case ForceDisplaceNorth:
-                case ForceDisplaceSouth:
-                case ForceDisplaceEast:
-                case ForceDisplaceWest:
-                        whatToDo = DisplaceKindOfActivity::getInstance();
-                        break;
-
-                case Fall:
-                        whatToDo = FallKindOfActivity::getInstance();
-                        break;
-
-                case BeginWayInTeletransport:
-                        this->item->changeFrame( this->nullFrame );
-                        break;
-
-                default:
-                        ;
+                this->item->changeFrame( this->nullFrame );
         }
 }
 
@@ -105,8 +66,7 @@ void UserControlled::wait( PlayerItem * player )
                 speedTimer->reset();
                 activity = Fall;
 
-                // Si el jugador se detiene entonces se para la cuenta atrás
-                // del conejo que proporciona doble velocidad
+                // Si el jugador se detiene entonces se para la cuenta atrás del conejo que proporciona doble velocidad
                 if ( player->getLabel() == "head" && player->getHighSpeed() > 0 && this->highSpeedSteps < 4 )
                 {
                         this->highSpeedSteps = 0;
@@ -116,7 +76,7 @@ void UserControlled::wait( PlayerItem * player )
 
 void UserControlled::move( PlayerItem * player )
 {
-        // move when the item is not frozen
+        // move when character isn’t frozen
         if ( ! player->isFrozen() )
         {
                 // apply effect of bunny of high speed
@@ -125,10 +85,8 @@ void UserControlled::move( PlayerItem * player )
                 // is it time to move
                 if ( speedTimer->getValue() > speed )
                 {
-                        whatToDo = MoveKindOfActivity::getInstance();
-
                         // move it
-                        bool moved = whatToDo->move( this, &activity, true );
+                        bool moved = MoveKindOfActivity::getInstance()->move( this, &activity, true );
 
                         // decrement high speed
                         if ( player->getHighSpeed() > 0 && moved && activity != Fall )
@@ -157,10 +115,8 @@ void UserControlled::autoMove( PlayerItem * player )
         // is it time to move
         if ( speedTimer->getValue() > speed )
         {
-                whatToDo = MoveKindOfActivity::getInstance();
-
                 // move it
-                whatToDo->move( this, &activity, true );
+                MoveKindOfActivity::getInstance()->move( this, &activity, true );
 
                 speedTimer->reset();
 
@@ -191,9 +147,8 @@ void UserControlled::displace( PlayerItem * player )
         // when displacement couldn’t be performed due to collision then activity propagates to collided items
         if ( speedTimer->getValue() > player->getSpeed() )
         {
-                whatToDo->displace( this, &activity, true );
+                DisplaceKindOfActivity::getInstance()->displace( this, &activity, true );
 
-                // displacement is done
                 activity = Wait;
 
                 speedTimer->reset();
@@ -206,10 +161,8 @@ void UserControlled::cancelDisplace( PlayerItem * player )
         {
                 if ( speedTimer->getValue() > player->getSpeed() )
                 {
-                        whatToDo = MoveKindOfActivity::getInstance();
-
                         // move it
-                        whatToDo->move( this, &activity, false );
+                        MoveKindOfActivity::getInstance()->move( this, &activity, false );
 
                         speedTimer->reset();
 
@@ -220,31 +173,25 @@ void UserControlled::cancelDisplace( PlayerItem * player )
 
 void UserControlled::fall( PlayerItem * player )
 {
-        // Si ha llegado el momento de caer entonces el elemento desciende una unidad
+        // is it time to lower by one unit
         if ( fallTimer->getValue() > player->getWeight() )
         {
-                whatToDo = FallKindOfActivity::getInstance();
-
-                // Si no hay colisión ahora ni en el siguiente ciclo, selecciona el fotograma de caída del personaje
-                if ( whatToDo->fall( this ) )
+                if ( FallKindOfActivity::getInstance()->fall( this ) )
                 {
+                        // change character’s image to frame of falling when there’s no collision yet
                         if ( player->checkPosition( 0, 0, -1, Add ) )
                         {
                                 player->changeFrame( fallFrames[ player->getOrientation().getIntegerOfWay () ] );
                         }
                 }
-                // Si hay colisión deja de caer y vuelve al estado inicial siempre que
-                // el jugador no haya sido destruido por la colisión con un elemento mortal
                 else if ( activity != MeetMortalItem || ( activity == MeetMortalItem && player->hasShield() ) )
                 {
                         activity = Wait;
                 }
 
-                // Se pone a cero el cronómetro para el siguiente ciclo
                 fallTimer->reset();
         }
 
-        // Si deja de caer se detiene el sonido correspondiente
         if ( activity != Fall )
         {
                 SoundManager::getInstance()->stop( player->getLabel(), Fall );
@@ -278,8 +225,7 @@ void UserControlled::jump( PlayerItem * player )
                         // is it time to jump
                         if ( speedTimer->getValue() > player->getSpeed() )
                         {
-                                whatToDo = JumpKindOfActivity::getInstance();
-                                whatToDo->jump( this, &activity, jumpVector, jumpIndex );
+                                JumpKindOfActivity::getInstance()->jump( this, &activity, jumpVector, jumpIndex );
 
                                 // to next phase of jump
                                 jumpIndex++ ;
@@ -295,8 +241,7 @@ void UserControlled::jump( PlayerItem * player )
                         // is it time to jump
                         if ( speedTimer->getValue() > player->getSpeed() )
                         {
-                                whatToDo = JumpKindOfActivity::getInstance();
-                                whatToDo->jump( this, &activity, highJumpVector, jumpIndex );
+                                JumpKindOfActivity::getInstance()->jump( this, &activity, highJumpVector, jumpIndex );
 
                                 // to next phase of jump
                                 jumpIndex++ ;
@@ -327,14 +272,12 @@ void UserControlled::jump( PlayerItem * player )
 
 void UserControlled::glide( PlayerItem * player )
 {
-        // Si ha pasado el tiempo necesario para que el elemento descienda:
-        //if ( glideTimer->getValue() > player->getSpeed() / 2.0 )
+        ///if ( glideTimer->getValue() > player->getSpeed() / 2.0 )
         if ( glideTimer->getValue() > player->getWeight() )
         {
-                whatToDo = FallKindOfActivity::getInstance();
-
-                // Si hay colisión deja de caer y vuelve al estado inicial
-                if ( ! whatToDo->fall( this ) && ( activity != MeetMortalItem || ( activity == MeetMortalItem && player->hasShield() ) ) )
+                // when there’s a collision then stop falling and return to waiting
+                if ( ! FallKindOfActivity::getInstance()->fall( this ) &&
+                        ( activity != MeetMortalItem || ( activity == MeetMortalItem && player->hasShield() ) ) )
                 {
                         activity = Wait;
                 }
@@ -342,10 +285,8 @@ void UserControlled::glide( PlayerItem * player )
                 glideTimer->reset();
         }
 
-        // Si ha pasado el tiempo necesario para mover el elemento:
         if ( speedTimer->getValue() > player->getSpeed() * ( player->getLabel() == "headoverheels" ? 2 : 1 ) )
         {
-                whatToDo = MoveKindOfActivity::getInstance();
                 ActivityOfItem subactivity;
 
                 switch ( player->getOrientation().getIntegerOfWay () )
@@ -370,20 +311,17 @@ void UserControlled::glide( PlayerItem * player )
                                 ;
                 }
 
-                // El elemento se mueve. Si el movimiento no se pudo realizar por colisión entonces
-                // se desplaza a los elementos con los que pudiera haber chocado y el elemento da media
-                // vuelta cambiando su estado a otro de movimiento
-                whatToDo->move( this, &subactivity, false );
+                MoveKindOfActivity::getInstance()->move( this, &subactivity, false );
 
-                // Selecciona el fotograma de caída del personaje
+                // pick picture of falling
                 player->changeFrame( fallFrames[ player->getOrientation().getIntegerOfWay() ] );
 
                 speedTimer->reset();
         }
 
-        // Si deja de planear se detiene el sonido correspondiente
         if ( activity != Glide )
         {
+                // no gliding yet, so stop its sound
                 SoundManager::getInstance()->stop( player->getLabel(), Glide );
         }
 }
@@ -490,11 +428,11 @@ void UserControlled::useHooter( PlayerItem* player )
 
                 if ( hooterData != nilPointer )
                 {
-                        SoundManager::getInstance()->stop( player->getLabel(), Doughnut );
+                        SoundManager::getInstance()->stop( player->getLabel(), FireDoughnut );
 
                         // create item at the same position as player
                         int z = player->getZ() + player->getHeight() - hooterData->getHeight();
-                        FreeItem* freeItem = new FreeItem
+                        FreeItem* donut = new FreeItem
                         (
                                 hooterData,
                                 player->getX(), player->getY(),
@@ -502,18 +440,19 @@ void UserControlled::useHooter( PlayerItem* player )
                                 player->getOrientation()
                         );
 
-                        freeItem->assignBehavior( "behavior of freezing doughnut", nilPointer );
-                        FireDoughnut * doughnutBehavior = dynamic_cast< FireDoughnut * >( freeItem->getBehavior() );
-                        doughnutBehavior->setPlayerItem( player );
+                        donut->assignBehavior( "behavior of freezing doughnut", nilPointer );
 
-                        // at first it shares same position as player so it does not detect collisions
-                        freeItem->setCollisionDetector( false );
+                        Doughnut * behaviorOfDonut = dynamic_cast< Doughnut * >( donut->getBehavior() );
+                        behaviorOfDonut->setPlayerItem( player );
 
-                        player->getMediator()->getRoom()->addFreeItem( freeItem );
+                        // at first it shares the same position as player so it does not detect collisions
+                        donut->setCollisionDetector( false );
+
+                        player->getMediator()->getRoom()->addFreeItem( donut );
 
                         player->useDoughnut();
 
-                        SoundManager::getInstance()->play( player->getLabel(), Doughnut );
+                        SoundManager::getInstance()->play( player->getLabel(), FireDoughnut );
                 }
         }
 }

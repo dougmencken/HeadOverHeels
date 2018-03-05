@@ -67,7 +67,7 @@ Room* RoomBuilder::buildRoom ( const std::string& fileName )
                         }
                 }
 
-                // with knowledge of existence of doors, calculate coordinates
+                // with knowledge about doors, calculate coordinates of origin
                 room->calculateCoordinates( hasNorthDoor, hasEastDoor,
                                             roomXML->deltaX().present() ? roomXML->deltaX().get() : 0,
                                             roomXML->deltaY().present() ? roomXML->deltaY().get() : 0 );

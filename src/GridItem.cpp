@@ -115,7 +115,7 @@ void GridItem::changeShadow( BITMAP* newShadow )
         }
 }
 
-void GridItem::requestShadow( int column )
+void GridItem::requestShadow( )
 {
         if ( this->rawImage && this->myShady == WantShadow )
         {

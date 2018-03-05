@@ -8,8 +8,8 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef FireDoughnut_hpp_
-#define FireDoughnut_hpp_
+#ifndef Driven_hpp_
+#define Driven_hpp_
 
 #include "Behavior.hpp"
 #include "Timer.hpp"
@@ -19,32 +19,37 @@ namespace isomot
 {
 
 class Item ;
-class PlayerItem ;
 
+/**
+ * Move item in the direction set by item above it
+ */
 
-class FireDoughnut : public Behavior
+class Driven : public Behavior
 {
 
 public:
 
-        FireDoughnut( Item * item, const std::string & behavior ) ;
+        Driven( Item * item, const std::string & behavior ) ;
 
-        virtual ~FireDoughnut( ) ;
+        virtual ~Driven( ) ;
 
         virtual bool update () ;
 
-        void setPlayerItem ( PlayerItem * player ) ;
-
 private:
 
-        PlayerItem * playerItem ;
+        bool running ;
 
        /**
-        * Cronómetro que controla la velocidad de movimiento del elemento
+        * Timer for speed of movement
         */
         Timer * speedTimer ;
 
-} ;
+       /**
+        * Timer for speed of falling
+        */
+        Timer * fallTimer ;
+
+};
 
 }
 

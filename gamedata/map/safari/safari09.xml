@@ -340,7 +340,7 @@
     <item x="8" y="5" z="3">
       <label>sandwich</label>
       <direction>north</direction>
-      <behavior>behavior of driver</behavior>
+      <behavior>behavior of driven</behavior>
       <type>freeitem</type>
     </item>
   </items>
