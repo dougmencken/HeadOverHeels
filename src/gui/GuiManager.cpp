@@ -31,7 +31,7 @@ using isomot::ScreenHeight;
 GuiManager* GuiManager::instance = nilPointer ;
 
 GuiManager::GuiManager( ) :
-        screen( nilPointer ),
+        activeScreen( nilPointer ),
         language( "" ),
         languageManager( nilPointer ),
         active( true ),
@@ -138,11 +138,11 @@ void GuiManager::begin ()
         // draw user interface and handle keys
         while ( this->active )
         {
-                this->screen->draw( this->picture );
+                this->activeScreen->draw( this->picture );
 
                 if ( keypressed() )
                 {
-                        this->screen->handleKey( readkey() );
+                        this->activeScreen->handleKey( readkey() );
                 }
 
                 milliSleep( 30 );
@@ -194,8 +194,8 @@ void GuiManager::changeScreen( Screen* newScreen, bool dive )
 
         if ( listOfScreens.find( newScreen->getActionOfScreen()->getNameOfAction() ) != listOfScreens.end () )
         {
-                Screen::barWipeHorizontally( this->screen, newScreen, dive );
-                this->screen = newScreen;
+                Screen::barWipeHorizontally( this->activeScreen, newScreen, dive );
+                this->activeScreen = newScreen;
                 redraw() ;
         }
         else
@@ -249,9 +249,9 @@ void GuiManager::refreshScreens ()
 
 void GuiManager::redraw()
 {
-        if ( ( this->active ) && ( this->screen != nilPointer ) )
+        if ( this->active && ( this->activeScreen != nilPointer ) )
         {
-                screen->draw( this->picture );
+                activeScreen->draw( this->picture );
         }
 }
 

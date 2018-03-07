@@ -57,6 +57,20 @@
  */
 void milliSleep ( unsigned long miliseconds );
 
+#ifndef __WIN32
+
+/**
+ * Pause subprocess for a given period of time in microseconds
+ */
+void microSleep ( unsigned long microseconds );
+
+/**
+ * Pause subprocess for a given period of time in nanoseconds.
+ * But implementation may sleep longer than given period
+ */
+void nanoSleep ( unsigned long nanoseconds );
+
+#endif
 
 namespace isomot
 {

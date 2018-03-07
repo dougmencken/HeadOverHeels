@@ -81,6 +81,7 @@ void CreateLanguageMenu::doAction ()
         screen->addWidget( menu );
         screen->setKeyHandler( menu );
 
+        Screen::randomPixelFadeIn( Color::blackColor(), screen );
         GuiManager::getInstance()->changeScreen( screen, true );
 }
 

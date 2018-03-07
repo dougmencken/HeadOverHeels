@@ -2,6 +2,8 @@
 #include "ExitApplication.hpp"
 #include "GuiManager.hpp"
 #include "ConfigurationManager.hpp"
+#include "Screen.hpp"
+#include "Color.hpp"
 
 using gui::ExitApplication;
 
@@ -18,4 +20,5 @@ void ExitApplication::bye ()
         GuiManager::getInstance()->getConfigurationManager()->write();
         GuiManager::getInstance()->suspend();
 
+        Screen::randomPixelFadeOut( GuiManager::getInstance()->getActiveScreen(), Color::blackColor() );
 }

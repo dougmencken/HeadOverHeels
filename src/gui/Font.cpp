@@ -107,7 +107,7 @@ Font::Font( const std::string& name, const BITMAP * pictureOfLetters, Color * co
                                 }
                         }
 
-                        delete[] buffer;
+                        delete buffer;
                 }
                 else
                 {

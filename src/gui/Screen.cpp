@@ -110,7 +110,15 @@ void Screen::refreshPicturesOfHeadAndHeels ()
 
 void Screen::draw( BITMAP* where )
 {
-        this->imageOfScreen = where ;
+        if ( imageOfScreen != where )
+        {
+                std::cout << "change image to draw gui.Screen for \"" <<
+                        ( actionOfScreen != nilPointer ? actionOfScreen->getNameOfAction() : "nil" ) <<
+                        "\" action" << std::endl ;
+
+                destroy_bitmap( this->imageOfScreen );
+                this->imageOfScreen = where ;
+        }
 
         redraw();
         drawOnGlobalScreen( );
@@ -420,7 +428,7 @@ void Screen::barScrollHorizontally( Screen* oldScreen, Screen* newScreen, bool r
                         }
                 }
 
-                milliSleep( 4 );
+                milliSleep( 2 );
         }
 
         destroy_bitmap( oldPicture );
@@ -453,8 +461,80 @@ void Screen::barWipeHorizontally( Screen* oldScreen, Screen* newScreen, bool rig
                         }
                 }
 
-                milliSleep( 4 );
+                milliSleep( 2 );
         }
+}
+
+///#define MAKE_LIST_OF_RANDOM_POINTS
+
+/* static */
+void Screen::randomPixelFade( bool fadeIn, Screen * slide, Color * color )
+{
+        if ( slide == nilPointer || slide->imageOfScreen == nilPointer ) return;
+        if ( color == nilPointer ) color = Color::colorOfTransparency();
+
+        // refresh screen before fading
+        slide->redraw();
+
+        const unsigned int screenWidth = slide->imageOfScreen->w ;
+        const unsigned int screenHeight = slide->imageOfScreen->h ;
+
+        int allegroColor = color->toAllegroColor() ;
+
+        if ( fadeIn )
+        {
+                BITMAP* fill = create_bitmap_ex( 32, screenWidth, screenHeight );
+                clear_to_color( fill, allegroColor );
+                blit( fill, /* allegro global */ screen, 0, 0, 0, 0, screenWidth, screenHeight );
+                destroy_bitmap( fill );
+        }
+
+        const size_t howManyPixels = screenWidth * screenHeight;
+
+        std::vector< bool > bits( howManyPixels, false ); // bit map of howManyPixels bits
+
+#ifdef MAKE_LIST_OF_RANDOM_POINTS
+        short * pointsX = new short[ howManyPixels ];
+        short * pointsY = new short[ howManyPixels ];
+#endif
+
+        for ( size_t yet = 0 ; yet < howManyPixels ; )
+        {
+                int x = rand() % screenWidth ;  /* random between 0 and screenWidth - 1 */
+                int y =  rand() % screenHeight ; /* random between 0 and screenHeight - 1 */
+
+                if ( ! bits[ x + y * screenWidth ] )
+                {
+#ifdef MAKE_LIST_OF_RANDOM_POINTS
+                        pointsX[ yet ] = static_cast< short >( x );
+                        pointsY[ yet ] = static_cast< short >( y );
+#else
+                        if ( fadeIn )
+                                putpixel( /* allegro global */ screen, x, y, getpixel( slide->imageOfScreen, x, y ) );
+                        else
+                                putpixel( /* allegro global */ screen, x, y, allegroColor );
+#endif
+
+                        bits[ x + y * screenWidth ] = true;
+                        yet ++;
+                }
+        }
+
+#ifdef MAKE_LIST_OF_RANDOM_POINTS
+        for ( size_t i = 0 ; i < howManyPixels ; i ++ )
+        {
+                short x = pointsX[ i ];
+                short y = pointsY[ i ];
+
+                if ( fadeIn )
+                        putpixel( screen, x, y, getpixel( slide->imageOfScreen, x, y ) );
+                else
+                        putpixel( screen, x, y, allegroColor );
+        }
+
+        delete pointsX ;
+        delete pointsY ;
+#endif
 }
 
 }

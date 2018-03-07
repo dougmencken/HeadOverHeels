@@ -96,16 +96,19 @@ namespace xsd
                 r[i + 3] = C ((u | 0x80UL) & 0xBFUL);
                 u >>= 6;
               }
+              /* fallthru */
             case 3:
               {
                 r[i + 2] = C ((u | 0x80UL) & 0xBFUL);
                 u >>= 6;
               }
+              /* fallthru */
             case 2:
               {
                 r[i + 1] = C ((u | 0x80UL) & 0xBFUL);
                 u >>= 6;
               }
+              /* fallthru */
             case 1:
               {
                 r[i] = C (u | first_byte_mask_[count]);

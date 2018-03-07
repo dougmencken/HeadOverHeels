@@ -81,6 +81,10 @@ public:
 
         static void barWipeHorizontally ( Screen * oldScreen, Screen * newScreen, bool rightToLeft ) ;
 
+        static void randomPixelFadeIn( Color * fadeFrom, Screen * screen ) {  randomPixelFade( true, screen, fadeFrom ) ;  }
+
+        static void randomPixelFadeOut( Screen * screen, Color * fadeTo ) {  randomPixelFade( false, screen, fadeTo ) ;  }
+
 private:
 
         /**
@@ -102,6 +106,8 @@ private:
         AnimatedPicture * pictureOfHead ;
 
         AnimatedPicture * pictureOfHeels ;
+
+        static void randomPixelFade( bool fadeIn, Screen * slide, Color * color ) ;
 
 protected:
 

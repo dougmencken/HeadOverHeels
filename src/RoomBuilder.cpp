@@ -394,7 +394,7 @@ FreeItem* RoomBuilder::buildFreeItem( const rxml::item& item )
                                                 behaviorOfItem,
                                                 reinterpret_cast< void * >( data )
                                         );
-                                        delete[] data;
+                                        delete data;
                                 }
                         }
                         else if ( behaviorOfItem == "behavior of waiting hunter in four directions" )

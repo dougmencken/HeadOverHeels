@@ -93,7 +93,7 @@ private:
        /**
         * Screen to display by interface
         */
-        Screen * screen ;
+        Screen * activeScreen ;
 
         std::map < std::string, Screen * > listOfScreens;
 
@@ -144,6 +144,8 @@ public:
         ConfigurationManager* getConfigurationManager () const {  return this->configurationManager ;  }
 
         LanguageManager* getLanguageManager () const {  return this->languageManager ;  }
+
+        Screen * getActiveScreen () const {  return this->activeScreen ;  }
 
 };
 
