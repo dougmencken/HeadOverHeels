@@ -19,6 +19,26 @@
 namespace isomot
 {
 
+/**
+ * When player reaches limit of room, it moves to other room
+ */
+enum LimitsOfRoom
+{
+        NoLimit = 0,
+        EastLimit = 10,         /* eastern limit of room */
+        NorthLimit,             /* northern limit of room */
+        WestLimit,              /* western limit of room */
+        SouthLimit,             /* southern limit of room */
+        NortheastLimit = 20,    /* limit behind northeast gate of triple or quad room */
+        NorthwestLimit,         /* limit behind northwest gate of triple or quad room */
+        SoutheastLimit,         /* limit behind southeast gate of triple or quad room */
+        SouthwestLimit,         /* limit behind southwest gate of triple or quad room */
+        EastnorthLimit,         /* limit behind eastnorth gate of triple or quad room */
+        EastsouthLimit,         /* limit behind eastsouth gate of triple or quad room */
+        WestnorthLimit,         /* limit behind westnorth gate of triple or quad room */
+        WestsouthLimit          /* limit behind westsouth gate of triple or quad room */
+} ;
+
 class ItemData ;
 class GameManager ;
 

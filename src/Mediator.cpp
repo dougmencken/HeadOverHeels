@@ -128,7 +128,7 @@ void Mediator::update()
                 // los solapamientos habrán cambiado
                 for ( std::list< FreeItem * >::iterator f = freeItems.begin (); f != freeItems.end (); ++f )
                 {
-                        ( *f )->setWhichMask( WantMask );
+                        ( *f )->setWhichMask( WantRemask );
                 }
         }
 
@@ -220,7 +220,7 @@ void Mediator::remaskWithFreeItem( FreeItem* item )
                                 && ( thatFreeItem->getOffsetY() < item->getOffsetY() + item->getRawImage()->h )
                                 && ( thatFreeItem->getOffsetY() + thatFreeItem->getRawImage()->h > item->getOffsetY() ) )
                         {
-                                thatFreeItem->setWhichMask( WantMask );
+                                thatFreeItem->setWhichMask( WantRemask );
                         }
                 }
         }
@@ -248,7 +248,7 @@ void Mediator::remaskWithGridItem( GridItem* gridItem )
                                         && ( freeItem->getY() - static_cast< int >( freeItem->getWidthY() ) < gridItem->getY() )
                                         && ( freeItem->getZ() < gridItem->getZ() + static_cast< int >( gridItem->getHeight() ) ) )
                                 {
-                                        freeItem->setWhichMask( WantMask );
+                                        freeItem->setWhichMask( WantRemask );
                                 }
                         }
                 }
@@ -270,7 +270,7 @@ void Mediator::reshadeWithGridItem( GridItem* item )
 
                 while ( g != this->structure[ column ].end() && item->getId() != gridItem->getId() )
                 {
-                        gridItem->setWhichShade( WantShadow );
+                        gridItem->setWhichShade( WantReshadow );
                         // next grid item in column
                         gridItem = *( ++g ) ;
                 }
@@ -278,7 +278,10 @@ void Mediator::reshadeWithGridItem( GridItem* item )
 
         // shade floor in this column, if any
         if ( room->floor[ column ] != nilPointer )
-                room->floor[ column ]->setWhichShade( WantShadow );
+        {
+                room->floor[ column ]->binShadyImage();
+                room->floor[ column ]->setWantShadow( true );
+        }
 }
 
 void Mediator::reshadeWithFreeItem( FreeItem* item )
@@ -305,13 +308,16 @@ void Mediator::reshadeWithFreeItem( FreeItem* item )
 
                                 if ( item->getZ () > gridItem->getZ () )
                                 {
-                                        gridItem->setWhichShade( WantShadow );
+                                        gridItem->setWhichShade( WantReshadow );
                                 }
                         }
 
                         // shade floor in this column, if any
                         if ( room->floor[ column ] != nilPointer )
-                                room->floor[ column ]->setWhichShade( WantShadow );
+                        {
+                                room->floor[ column ]->binShadyImage();
+                                room->floor[ column ]->setWantShadow( true );
+                        }
                 }
         }
 }
@@ -330,7 +336,7 @@ void Mediator::shadeFreeItemsBeneathItem( Item* item )
                                 && ( freeItem->getY() - static_cast< int >( freeItem->getWidthY() ) < item->getY() )
                                 && ( freeItem->getZ() < item->getZ() ) )
                         {
-                                freeItem->setWhichShade( WantShadow );
+                                freeItem->setWhichShade( WantReshadow );
                         }
                 }
         }

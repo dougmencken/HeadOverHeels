@@ -24,8 +24,19 @@
 namespace isomot
 {
 
-class ItemData ;
-class Behavior ;
+/**
+ * Special things
+ */
+enum SpecialStuff
+{
+        None = 0,
+        EastWall,       /* some segment of east wall */
+        NorthWall,      /* some segment of north wall */
+        WestWall,       /* some segment of west wall */
+        SouthWall,      /* some segment of south wall */
+        Floor,          /* some tile of floor */
+        Roof            /* some tile of ceiling */
+} ;
 
 enum Coordinate
 {
@@ -40,6 +51,9 @@ enum ChangeOrAdd
         Change = 0,
         Add = 1
 } ;
+
+class ItemData ;
+class Behavior ;
 
 
 /**

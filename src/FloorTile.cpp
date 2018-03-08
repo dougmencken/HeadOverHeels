@@ -7,7 +7,7 @@ namespace isomot
 {
 
 FloorTile::FloorTile( int column, int cellX, int cellY, BITMAP* image )
-        : Mediated ()
+        : Mediated (), Shady ()
         , column( column )
         , rawImage( image )
         , shadyImage( nilPointer )
@@ -15,7 +15,6 @@ FloorTile::FloorTile( int column, int cellX, int cellY, BITMAP* image )
         this->coordinates.first = cellX;
         this->coordinates.second = cellY;
         this->offset.first = this->offset.second = 0;
-        this->shady = NoShadow;
 }
 
 FloorTile::~FloorTile()
@@ -43,24 +42,6 @@ void FloorTile::draw( BITMAP* where )
         else if ( rawImage != nilPointer )
         {       // draw tile, just tile
                 draw_sprite( where, rawImage, offset.first, offset.second );
-        }
-}
-
-void FloorTile::requestShadow()
-{
-        if ( this->rawImage && this->shady == WantShadow )
-        {
-                mediator->castShadowOnFloor( this );
-
-                // Si no se ha podido sombrear entonces se destruye la imagen de sombreado
-                if ( this->shady != AlreadyShady && this->shadyImage )
-                {
-                        destroy_bitmap( this->shadyImage );
-                        this->shadyImage = nilPointer;
-                }
-
-                // Reinicia el atributo para el siguiente ciclo
-                this->shady = NoShadow;
         }
 }
 

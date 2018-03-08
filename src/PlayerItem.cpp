@@ -282,18 +282,18 @@ bool PlayerItem::updatePosition( int newX, int newY, int newZ, const Coordinate&
                         {  Northeast, Northwest, North, Southeast, Southwest, South,
                                 Eastnorth, Eastsouth, East, Westnorth, Westsouth, West  };
 
-                const SpecialId borders[ 12 ] =
-                        { NortheastBorder, NorthwestBorder, NorthBorder,
-                                SoutheastBorder, SouthwestBorder, SouthBorder,
-                                        EastnorthBorder, EastsouthBorder, EastBorder,
-                                                WestnorthBorder, WestsouthBorder, WestBorder };
+                const LimitsOfRoom limits[ 12 ] =
+                        { NortheastLimit, NorthwestLimit, NorthLimit,
+                                SoutheastLimit, SouthwestLimit, SouthLimit,
+                                        EastnorthLimit, EastsouthLimit, EastLimit,
+                                                WestnorthLimit, WestsouthLimit, WestLimit };
 
                 // check each limit of room
                 for ( unsigned int i = 0; i < 12; i++ )
                 {
                         if ( isCollidingWithRoomBorder( ways[ i ] ) )
                         {
-                                mediator->pushCollision( borders[ i ] );
+                                mediator->pushCollision( limits[ i ] );
                                 break;
                         }
                 }
@@ -336,8 +336,8 @@ bool PlayerItem::updatePosition( int newX, int newY, int newZ, const Coordinate&
                                 }
 
                                 // reshade and remask
-                                this->myShady = WantShadow;
-                                this->myMask = WantMask;
+                                this->myShady = WantReshadow;
+                                this->myMask = WantRemask;
 
                                 // rearrange list of free items
                                 mediator->activateFreeItemsSorting();

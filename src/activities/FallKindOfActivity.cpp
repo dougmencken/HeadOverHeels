@@ -61,7 +61,7 @@ bool FallKindOfActivity::fall( Behavior * behavior )
                         itemsBelow.pop();
 
                         // is it free item or grid item
-                        if ( ( id >= FirstFreeId && ( id & 1 )) || ( id >= FirstGridId && ! ( id & 1 ) ) )
+                        if ( ( id >= FirstFreeId && ( id & 1 ) ) || ( id >= FirstGridId && ! ( id & 1 ) ) )
                         {
                                 Item* item = mediator->findItemById( id );
 

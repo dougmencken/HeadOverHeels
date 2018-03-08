@@ -28,8 +28,9 @@
     #include <sys/types.h>
 #endif
 
-#if __cplusplus > 199711L /* when complier supports c++11 */
+#if __cplusplus >= 201103L /* when complier supports c++11 */
     #define nilPointer nullptr
+    #define __Cxx11__
 #else
     #define nilPointer NULL
 #endif
@@ -133,50 +134,12 @@ namespace isomot
                 }
         } ;
 
-        /**
-         * Estado de un elemento respecto a la proyección de sombras
-         */
+        // ~TO~DO~ bin it completely
         enum WhichShade
         {
-                NoShadow,
-                WantShadow,
-                AlreadyShady
-        } ;
-
-        /**
-         * Estado de un elemento respecto a la creación de su máscara
-         */
-        enum WhichMask
-        {
-                NoMask,         /* Sin máscara */
-                WantMask,
-                AlreadyMasked   /* Enmascarado */
-        } ;
-
-        /**
-         * Identificador predefinido de los elementos especiales
-         */
-        enum SpecialId
-        {
-                NoSpecialId,       /* Sin identificador */
-                EastWall,          /* El muro este, cualquier segmento */
-                NorthWall,         /* El muro norte, cualquier segmento */
-                WestWall,          /* El muro oeste, cualquier segmento */
-                SouthWall,         /* El muro sur, cualquier segmento */
-                Floor,             /* El suelo, cualquier loseta */
-                Roof,              /* El techo */
-                EastBorder,        /* El límite este de la sala. Alcanzarlo implica el cambio de sala */
-                NorthBorder,       /* El límite norte de la sala. Alcanzarlo implica el cambio de sala */
-                WestBorder,        /* El límite oeste de la sala. Alcanzarlo implica el cambio de sala */
-                SouthBorder,       /* El límite sur de la sala. Alcanzarlo implica el cambio de sala */
-                NortheastBorder,   /* En salas triples o cuádruples, el límite existente tras la puerta noreste. Alcanzarlo implica el cambio de sala.*/
-                NorthwestBorder,   /* En salas triples o cuádruples, el límite existente tras la puerta noroeste. Alcanzarlo implica el cambio de sala */
-                SoutheastBorder,   /* En salas triples o cuádruples, el límite existente tras la puerta sureste. Alcanzarlo implica el cambio de sala.*/
-                SouthwestBorder,   /* En salas triples o cuádruples, el límite existente tras la puerta suroeste. Alcanzarlo implica el cambio de sala */
-                EastnorthBorder,   /* En salas triples o cuádruples, el límite existente tras la puerta este-norte. Alcanzarlo implica el cambio de sala.*/
-                EastsouthBorder,   /* En salas triples o cuádruples, el límite existente tras la puerta este-sur. Alcanzarlo implica el cambio de sala */
-                WestnorthBorder,   /* En salas triples o cuádruples, el límite existente tras la puerta oeste-norte. Alcanzarlo implica el cambio de sala.*/
-                WestsouthBorder    /* En salas triples o cuádruples, el límite existente tras la puerta oeste-sur. Alcanzarlo implica el cambio de sala */
+                NoShadow,       /* shady image is nil, wantShadow is true or false */
+                WantReshadow,   /* shady image is not nil and wantShadow is true */
+                AlreadyShady    /* shady image is not nil and wantShadow is false */
         } ;
 
         enum ActivityOfItem
@@ -269,7 +232,7 @@ namespace isomot
          * Identifier of first free element assigned by engine
          * Supposed to be an odd number
          */
-        const int FirstFreeId = 21 ;
+        const int FirstFreeId = 2211 ;
 
         /**
          * Identifier of first grid element assigned by engine

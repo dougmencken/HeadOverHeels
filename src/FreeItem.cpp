@@ -9,7 +9,7 @@ namespace isomot
 
 FreeItem::FreeItem( ItemData* itemData, int x, int y, int z, const Way& way )
         : Item ( itemData, z, way )
-        , myMask ( WantMask )
+        , myMask ( WantRemask )
         , transparency ( 0 )
         , collisionDetector ( true )
         , frozen ( false )
@@ -129,8 +129,8 @@ void FreeItem::changeImage( BITMAP* image )
                 binProcessedImages() ;
 
                 this->rawImage = image;
-                this->myShady = WantShadow;
-                this->myMask = WantMask;
+                this->myShady = WantReshadow;
+                this->myMask = WantRemask;
 
                 // remask with old image
                 if ( oldFreeItem.getRawImage() != nilPointer )
@@ -169,23 +169,23 @@ void FreeItem::changeShadow( BITMAP* shadow )
 
 void FreeItem::requestShadow()
 {
-        if( this->rawImage && this->myShady == WantShadow )
+        if( this->rawImage && this->myShady == WantReshadow )
         {
                 mediator->castShadowOnFreeItem( this );
 
                 // Si el elemento se ha sombreado se marca para enmascararlo
                 if ( this->myShady == AlreadyShady )
                 {
-                        this->myMask = WantMask;
+                        this->myMask = WantRemask;
                 }
 
                 // Si no se ha podido sombrear entonces se destruye la imagen de sombreado
                 // y se marca el elemento para enmascararlo
-                if ( this->myShady == WantShadow && this->shadedNonmaskedImage )
+                if ( this->myShady == WantReshadow && this->shadedNonmaskedImage )
                 {
                         destroy_bitmap( this->shadedNonmaskedImage );
                         this->shadedNonmaskedImage = nilPointer;
-                        this->myMask = WantMask;
+                        this->myMask = WantRemask;
                 }
         }
 }
@@ -194,7 +194,7 @@ void FreeItem::requestMask()
 {
         mediator->maskFreeItem( this );
 
-        if ( this->myMask == WantMask && this->processedImage )
+        if ( this->myMask == WantRemask && this->processedImage )
         {
                 destroy_bitmap( this->processedImage );
                 this->processedImage = nilPointer;
@@ -230,7 +230,7 @@ void FreeItem::maskImage( int x, int y, BITMAP* image )
                 this->processedImage = create_bitmap_ex( bitmap_color_depth( currentImage ), currentImage->w, currentImage->h );
         }
 
-        if ( this->myMask == WantMask )
+        if ( this->myMask == WantRemask )
         {
                 blit( currentImage, this->processedImage, 0, 0, 0, 0, currentImage->w, currentImage->h );
                 this->myMask = AlreadyMasked;
@@ -348,8 +348,8 @@ bool FreeItem::updatePosition( int newX, int newY, int newZ, const Coordinate& w
                         }
 
                         // reshade and remask
-                        this->myShady = WantShadow;
-                        this->myMask = WantMask;
+                        this->myShady = WantReshadow;
+                        this->myMask = WantRemask;
 
                         // rearrange list of free items
                         mediator->activateFreeItemsSorting();

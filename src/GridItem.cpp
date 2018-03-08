@@ -79,7 +79,7 @@ void GridItem::changeImage( BITMAP* newImage )
                         if ( mediator->getDegreeOfShading() < 256 )
                         {
                                 // shadows are on, then reshade this item
-                                this->myShady = WantShadow;
+                                this->myShady = WantReshadow;
                         }
 
                         // how many pixels this image is from the origin of room
@@ -117,7 +117,7 @@ void GridItem::changeShadow( BITMAP* newShadow )
 
 void GridItem::requestShadow( )
 {
-        if ( this->rawImage && this->myShady == WantShadow )
+        if ( this->rawImage && this->myShady == WantReshadow )
         {
                 mediator->castShadowOnGridItem( this );
 

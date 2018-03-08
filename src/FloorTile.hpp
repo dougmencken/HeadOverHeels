@@ -16,6 +16,7 @@
 #include "Ism.hpp"
 #include "Drawable.hpp"
 #include "Mediated.hpp"
+#include "Shady.hpp"
 
 
 namespace isomot
@@ -25,7 +26,7 @@ namespace isomot
  * Floor tile of room, set of such items forms room’s ground
  */
 
-class FloorTile : public Drawable, public Mediated
+class FloorTile : public Drawable, public Mediated, public Shady
 {
 
 public:
@@ -47,8 +48,6 @@ public:
         void calculateOffset () ;
 
         void draw ( BITMAP* where ) ;
-
-        void requestShadow () ;
 
 private:
 
@@ -77,8 +76,6 @@ private:
          */
         BITMAP * shadyImage ;
 
-        WhichShade shady ;
-
 public:
 
         int getColumn () const {  return column ;  }
@@ -97,9 +94,7 @@ public:
 
         void setShadyImage( BITMAP * newShady ) ;
 
-        void setWhichShade ( const WhichShade& shade ) {  this->shady = shade ;  }
-
-        WhichShade whichShade () const {  return shady ;  }
+        void binShadyImage () {  setShadyImage( nilPointer ) ;  }
 
 };
 

@@ -24,6 +24,14 @@
 namespace isomot
 {
 
+// ~TO~DO~ bin it completely
+enum WhichMask
+{
+        NoMask,         /* masked image is nil, wantMask is true or false */
+        WantRemask,     /* masked image is not nil and wantMask is true */
+        AlreadyMasked   /* masked image is not nil and wantMask is false */
+} ;
+
 class ItemData ;
 
 /**

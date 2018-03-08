@@ -105,68 +105,68 @@ void KindOfActivity::propagateActivityToAdjacentItems( Item * sender, const Acti
                 }
                 // is it player which leaves room via some door
                 else if ( dynamic_cast< PlayerItem * >( sender ) &&
-                                ( ( id == NorthBorder  &&  mediator->getRoom()->hasDoorAt( North ) ) ||
-                                  ( id == SouthBorder  &&  mediator->getRoom()->hasDoorAt( South ) ) ||
-                                  ( id == EastBorder  &&  mediator->getRoom()->hasDoorAt( East ) ) ||
-                                  ( id == WestBorder  &&  mediator->getRoom()->hasDoorAt( West ) ) ||
-                                  ( id == NortheastBorder  &&  mediator->getRoom()->hasDoorAt( Northeast ) ) ||
-                                  ( id == NorthwestBorder  &&  mediator->getRoom()->hasDoorAt( Northwest ) ) ||
-                                  ( id == SoutheastBorder  &&  mediator->getRoom()->hasDoorAt( Southeast ) ) ||
-                                  ( id == SouthwestBorder  &&  mediator->getRoom()->hasDoorAt( Southwest ) ) ||
-                                  ( id == EastnorthBorder  &&  mediator->getRoom()->hasDoorAt( Eastnorth ) ) ||
-                                  ( id == EastsouthBorder  &&  mediator->getRoom()->hasDoorAt( Eastsouth ) ) ||
-                                  ( id == WestnorthBorder  &&  mediator->getRoom()->hasDoorAt( Westnorth ) ) ||
-                                  ( id == WestsouthBorder  &&  mediator->getRoom()->hasDoorAt( Westsouth ) ) ) )
+                                ( ( id == NorthLimit  &&  mediator->getRoom()->hasDoorAt( North ) ) ||
+                                  ( id == SouthLimit  &&  mediator->getRoom()->hasDoorAt( South ) ) ||
+                                  ( id == EastLimit  &&  mediator->getRoom()->hasDoorAt( East ) ) ||
+                                  ( id == WestLimit  &&  mediator->getRoom()->hasDoorAt( West ) ) ||
+                                  ( id == NortheastLimit  &&  mediator->getRoom()->hasDoorAt( Northeast ) ) ||
+                                  ( id == NorthwestLimit  &&  mediator->getRoom()->hasDoorAt( Northwest ) ) ||
+                                  ( id == SoutheastLimit  &&  mediator->getRoom()->hasDoorAt( Southeast ) ) ||
+                                  ( id == SouthwestLimit  &&  mediator->getRoom()->hasDoorAt( Southwest ) ) ||
+                                  ( id == EastnorthLimit  &&  mediator->getRoom()->hasDoorAt( Eastnorth ) ) ||
+                                  ( id == EastsouthLimit  &&  mediator->getRoom()->hasDoorAt( Eastsouth ) ) ||
+                                  ( id == WestnorthLimit  &&  mediator->getRoom()->hasDoorAt( Westnorth ) ) ||
+                                  ( id == WestsouthLimit  &&  mediator->getRoom()->hasDoorAt( Westsouth ) ) ) )
                 {
                         PlayerItem * player = dynamic_cast< PlayerItem * >( sender );
 
                         switch ( id )
                         {
-                                case NorthBorder:
+                                case NorthLimit:
                                         player->setWayOfExit( North );
                                         break;
 
-                                case SouthBorder:
+                                case SouthLimit:
                                         player->setWayOfExit( South );
                                         break;
 
-                                case EastBorder:
+                                case EastLimit:
                                         player->setWayOfExit( East );
                                         break;
 
-                                case WestBorder:
+                                case WestLimit:
                                         player->setWayOfExit( West );
                                         break;
 
-                                case NortheastBorder:
+                                case NortheastLimit:
                                         player->setWayOfExit( Northeast );
                                         break;
 
-                                case NorthwestBorder:
+                                case NorthwestLimit:
                                         player->setWayOfExit( Northwest );
                                         break;
 
-                                case SoutheastBorder:
+                                case SoutheastLimit:
                                         player->setWayOfExit( Southeast );
                                         break;
 
-                                case SouthwestBorder:
+                                case SouthwestLimit:
                                         player->setWayOfExit( Southwest );
                                         break;
 
-                                case EastnorthBorder:
+                                case EastnorthLimit:
                                         player->setWayOfExit( Eastnorth );
                                         break;
 
-                                case EastsouthBorder:
+                                case EastsouthLimit:
                                         player->setWayOfExit( Eastsouth );
                                         break;
 
-                                case WestnorthBorder:
+                                case WestnorthLimit:
                                         player->setWayOfExit( Westnorth );
                                         break;
 
-                                case WestsouthBorder:
+                                case WestsouthLimit:
                                         player->setWayOfExit( Westsouth );
                                         break;
 

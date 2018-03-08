@@ -27,6 +27,7 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			Color.hpp \
 			Drawable.hpp \
 			Mediated.hpp \
+			Shady.hpp \
 			Camera.cpp \
 			Camera.hpp \
 			Door.cpp \
@@ -165,6 +166,8 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			behaviors/ConveyorBelt.hpp \
 			behaviors/Detector.cpp \
 			behaviors/Detector.hpp \
+			behaviors/Doughnut.cpp \
+			behaviors/Doughnut.hpp \
 			behaviors/Driven.cpp \
 			behaviors/Driven.hpp \
 			behaviors/Elevator.cpp \
@@ -187,8 +190,6 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			behaviors/PlayerHeels.hpp \
 			behaviors/RemoteControl.cpp \
 			behaviors/RemoteControl.hpp \
-			behaviors/Doughnut.cpp \
-			behaviors/Doughnut.hpp \
 			behaviors/Sink.cpp \
 			behaviors/Sink.hpp \
 			behaviors/Special.cpp \

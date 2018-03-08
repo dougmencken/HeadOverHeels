@@ -723,23 +723,27 @@ void Room::draw( BITMAP* where )
                         for ( unsigned int yCell = 0; yCell < this->numberOfTiles.second; yCell++ )
                         {
                                 unsigned int column = this->numberOfTiles.first * yCell + xCell;
+                                FloorTile* tile = floor[ column ];
 
-                                if ( floor[ column ] != nilPointer )  // if there is tile of floor here
+                                if ( tile != nilPointer )  // if there is tile of floor here
                                 {
                                         // shade this tile when shadows are on
-                                        if ( shadingScale < 256 && floor[ column ]->getRawImage() )
+                                        if ( shadingScale < 256 && tile->getRawImage() != nilPointer )
                                         {
                                                 mediator->lockGridItemMutex();
                                                 mediator->lockFreeItemMutex();
 
-                                                floor[ column ]->requestShadow();
+                                                if ( tile->getWantShadow() )
+                                                {
+                                                        mediator->castShadowOnFloor( tile );
+                                                }
 
                                                 mediator->unlockGridItemMutex();
                                                 mediator->unlockFreeItemMutex();
                                         }
 
                                         // draw this tile o’floor
-                                        floor[ column ]->draw( where );
+                                        tile->draw( where );
                                 }
                         }
                 }

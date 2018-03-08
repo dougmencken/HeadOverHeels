@@ -19,7 +19,7 @@ Item::Item( ItemData* data, int z, const Way& way )
         y( 0 ),
         z( z ),
         orientation( way ),
-        myShady( WantShadow ),
+        myShady( WantReshadow ),
         rawImage( nilPointer ),
         shadow( nilPointer ),
         processedImage( nilPointer ),

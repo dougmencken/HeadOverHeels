@@ -84,7 +84,7 @@ void ShadowCaster::castShadowOnItem( Item* item, int x, int y, BITMAP* shadow, u
                 shadyImage = create_bitmap_ex( colorDepthRaw, rawImage->w, rawImage->h );
         }
 
-        if ( item->whichShade() == WantShadow )
+        if ( item->whichShade() == WantReshadow )
         {
                 blit( rawImage, shadyImage, 0, 0, 0, 0, rawImage->w, rawImage->h );
                 item->setWhichShade( AlreadyShady );
@@ -112,7 +112,7 @@ void ShadowCaster::castShadowOnItem( Item* item, int x, int y, BITMAP* shadow, u
         // when opacity is power of 2 in interval [ 2 ... 128 ]
         if ( static_cast< int >( std::pow( 2, std::log10( opacity ) / std::log10( 2 ) ) ) == opacity )
         {
-                char pxDiv = 7;         // 2 ^ pxDiv is divisor for shaded pixels
+                char pxDiv = 7;  // 2 ^ pxDiv is divisor for shaded pixels
 
                 // tune divisor by opacity of shadow
                 while ( opacity != 2 )
@@ -456,10 +456,11 @@ void ShadowCaster::castShadowOnFloor( FloorTile* tile, int x, int y, BITMAP* sha
                 shadyImage = create_bitmap_ex( colorDepthTile, tileImage->w, tileImage->h );
         }
 
-        if ( tile->whichShade() == WantShadow )
+        if ( tile->getWantShadow() )
         {
+                // when there’s only one shading item, begin with fresh image of tile
                 blit( tileImage, shadyImage, 0, 0, 0, 0, tileImage->w, tileImage->h );
-                tile->setWhichShade( AlreadyShady );
+                tile->setWantShadow( false );
         }
 
         char iInc = ( colorDepthTile == 32 ? 4 : 3 );           // increment for iRpx, iGpx and iBpx
@@ -479,7 +480,7 @@ void ShadowCaster::castShadowOnFloor( FloorTile* tile, int x, int y, BITMAP* sha
         // when opacity is power of 2 in interval [ 2 ... 128 ]
         if ( static_cast< int >( std::pow( 2, std::log10( opacity ) / std::log10( 2 ) ) ) == opacity )
         {
-                char pxDiv = 7;         // 2 ^ pxDiv is divisor for shaded pixels
+                char pxDiv = 7;  // 2 ^ pxDiv is divisor for shaded pixels
 
                 // tune divisor by opacity of shadow
                 while ( opacity != 2 )
