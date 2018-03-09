@@ -195,15 +195,14 @@ void Behavior::propagateActivity( Item* sender, const ActivityOfItem& activity )
         // as long as there are elements collided with issuer
         while ( ! mediator->isStackOfCollisionsEmpty () )
         {
-                int id = mediator->popCollision();
+                Item* item = mediator->findCollisionPop( );
 
                 // is it free item or grid item
-                if ( ( id >= FirstFreeId && ( id & 1 )) || ( id >= FirstGridId && !( id & 1 ) ) )
+                if ( item != nilPointer &&
+                        ( item->whichKindOfItem() == "grid item" || item->whichKindOfItem() == "free item" || item->whichKindOfItem() == "player item" ) )
                 {
-                        Item* item = mediator->findItemById( id );
-
-                        // change activity for existing item with non-null behavior
-                        if ( item != nilPointer && item->getBehavior() != nilPointer )
+                        // change activity for item with behavior
+                        if ( item->getBehavior() != nilPointer )
                         {
                                 item->getBehavior()->changeActivityOfItem( activity );
                         }

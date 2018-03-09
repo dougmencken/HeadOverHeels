@@ -29,15 +29,14 @@ void KindOfActivity::propagateActivityToAdjacentItems( Item * sender, const Acti
         // as long as there are items collided with sender
         while ( ! mediator->isStackOfCollisionsEmpty() )
         {
-                // pop item out of stack of collisions
-                int id = mediator->popCollision();
+                std::string nameOfCollision = mediator->popCollision();
+                Item * itemMeetsSender = mediator->findItemByUniqueName( nameOfCollision );
 
-                // is it free item or grid item
-                if ( ( id >= FirstFreeId && ( id & 1 ) ) || ( id >= FirstGridId && ! ( id & 1 ) ) )
+                if ( itemMeetsSender != nilPointer )
                 {
-                        Item * itemMeetsSender = mediator->findItemById( id );
-
-                        if ( itemMeetsSender != nilPointer )
+                        // is it free item or grid item
+                        if ( itemMeetsSender->whichKindOfItem() == "grid item" ||
+                                itemMeetsSender->whichKindOfItem() == "free item" || itemMeetsSender->whichKindOfItem() == "player item" )
                         {
                                 // is it item with behavior
                                 if ( itemMeetsSender->getBehavior() != nilPointer )
@@ -104,75 +103,46 @@ void KindOfActivity::propagateActivityToAdjacentItems( Item * sender, const Acti
                         }
                 }
                 // is it player which leaves room via some door
-                else if ( dynamic_cast< PlayerItem * >( sender ) &&
-                                ( ( id == NorthLimit  &&  mediator->getRoom()->hasDoorAt( North ) ) ||
-                                  ( id == SouthLimit  &&  mediator->getRoom()->hasDoorAt( South ) ) ||
-                                  ( id == EastLimit  &&  mediator->getRoom()->hasDoorAt( East ) ) ||
-                                  ( id == WestLimit  &&  mediator->getRoom()->hasDoorAt( West ) ) ||
-                                  ( id == NortheastLimit  &&  mediator->getRoom()->hasDoorAt( Northeast ) ) ||
-                                  ( id == NorthwestLimit  &&  mediator->getRoom()->hasDoorAt( Northwest ) ) ||
-                                  ( id == SoutheastLimit  &&  mediator->getRoom()->hasDoorAt( Southeast ) ) ||
-                                  ( id == SouthwestLimit  &&  mediator->getRoom()->hasDoorAt( Southwest ) ) ||
-                                  ( id == EastnorthLimit  &&  mediator->getRoom()->hasDoorAt( Eastnorth ) ) ||
-                                  ( id == EastsouthLimit  &&  mediator->getRoom()->hasDoorAt( Eastsouth ) ) ||
-                                  ( id == WestnorthLimit  &&  mediator->getRoom()->hasDoorAt( Westnorth ) ) ||
-                                  ( id == WestsouthLimit  &&  mediator->getRoom()->hasDoorAt( Westsouth ) ) ) )
+                else if ( sender->whichKindOfItem() == "player item" &&
+                        ( ( nameOfCollision == "north limit"  &&  mediator->getRoom()->hasDoorAt( "north" ) ) ||
+                          ( nameOfCollision == "south limit"  &&  mediator->getRoom()->hasDoorAt( "south" ) ) ||
+                          ( nameOfCollision == "east limit"  &&  mediator->getRoom()->hasDoorAt( "east" ) ) ||
+                          ( nameOfCollision == "west limit"  &&  mediator->getRoom()->hasDoorAt( "west" ) ) ||
+                          ( nameOfCollision == "northeast limit"  &&  mediator->getRoom()->hasDoorAt( "northeast" ) ) ||
+                          ( nameOfCollision == "northwest limit"  &&  mediator->getRoom()->hasDoorAt( "northwest" ) ) ||
+                          ( nameOfCollision == "southeast limit"  &&  mediator->getRoom()->hasDoorAt( "southeast" ) ) ||
+                          ( nameOfCollision == "southwest limit"  &&  mediator->getRoom()->hasDoorAt( "southwest" ) ) ||
+                          ( nameOfCollision == "eastnorth limit"  &&  mediator->getRoom()->hasDoorAt( "eastnorth" ) ) ||
+                          ( nameOfCollision == "eastsouth limit"  &&  mediator->getRoom()->hasDoorAt( "eastsouth" ) ) ||
+                          ( nameOfCollision == "westnorth limit"  &&  mediator->getRoom()->hasDoorAt( "westnorth" ) ) ||
+                          ( nameOfCollision == "westsouth limit"  &&  mediator->getRoom()->hasDoorAt( "westsouth" ) ) ) )
                 {
-                        PlayerItem * player = dynamic_cast< PlayerItem * >( sender );
+                        PlayerItem * character = dynamic_cast< PlayerItem * >( sender );
 
-                        switch ( id )
-                        {
-                                case NorthLimit:
-                                        player->setWayOfExit( North );
-                                        break;
-
-                                case SouthLimit:
-                                        player->setWayOfExit( South );
-                                        break;
-
-                                case EastLimit:
-                                        player->setWayOfExit( East );
-                                        break;
-
-                                case WestLimit:
-                                        player->setWayOfExit( West );
-                                        break;
-
-                                case NortheastLimit:
-                                        player->setWayOfExit( Northeast );
-                                        break;
-
-                                case NorthwestLimit:
-                                        player->setWayOfExit( Northwest );
-                                        break;
-
-                                case SoutheastLimit:
-                                        player->setWayOfExit( Southeast );
-                                        break;
-
-                                case SouthwestLimit:
-                                        player->setWayOfExit( Southwest );
-                                        break;
-
-                                case EastnorthLimit:
-                                        player->setWayOfExit( Eastnorth );
-                                        break;
-
-                                case EastsouthLimit:
-                                        player->setWayOfExit( Eastsouth );
-                                        break;
-
-                                case WestnorthLimit:
-                                        player->setWayOfExit( Westnorth );
-                                        break;
-
-                                case WestsouthLimit:
-                                        player->setWayOfExit( Westsouth );
-                                        break;
-
-                                default:
-                                        ;
-                        }
+                        if ( nameOfCollision == "north limit" )
+                                character->setWayOfExit( "north" );
+                        else if ( nameOfCollision == "south limit" )
+                                character->setWayOfExit( "south" );
+                        else if ( nameOfCollision == "east limit" )
+                                character->setWayOfExit( "east" );
+                        else if ( nameOfCollision == "west limit" )
+                                character->setWayOfExit( "west" );
+                        else if ( nameOfCollision == "northeast limit" )
+                                character->setWayOfExit( "northeast" );
+                        else if ( nameOfCollision == "northwest limit" )
+                                character->setWayOfExit( "northwest" );
+                        else if ( nameOfCollision == "southeast limit" )
+                                character->setWayOfExit( "southeast" );
+                        else if ( nameOfCollision == "southwest limit" )
+                                character->setWayOfExit( "southwest" );
+                        else if ( nameOfCollision == "eastnorth limit" )
+                                character->setWayOfExit( "eastnorth" );
+                        else if ( nameOfCollision == "eastsouth limit" )
+                                character->setWayOfExit( "eastsouth" );
+                        else if ( nameOfCollision == "westnorth limit" )
+                                character->setWayOfExit( "westnorth" );
+                        else if ( nameOfCollision == "westsouth limit" )
+                                character->setWayOfExit( "westsouth" );
                 }
         }
 }
@@ -185,7 +155,7 @@ void KindOfActivity::propagateActivityToItemsAbove( Item * sender, const Activit
         if ( ! sender->checkPosition( 0, 0, 1, Add ) )
         {
                 // copy stack of collisions
-                std::stack< int > itemsAbove;
+                std::stack< std::string > itemsAbove;
                 while ( ! mediator->isStackOfCollisionsEmpty() )
                 {
                         itemsAbove.push( mediator->popCollision() );
@@ -194,13 +164,16 @@ void KindOfActivity::propagateActivityToItemsAbove( Item * sender, const Activit
                 while ( ! itemsAbove.empty() )
                 {
                         // get first item
-                        int id = itemsAbove.top();
+                        std::string uniqueName = itemsAbove.top();
                         itemsAbove.pop();
 
+                        Item* itemAbove = mediator->findItemByUniqueName( uniqueName );
+
                         // is it free item
-                        if ( id >= FirstFreeId && ( id & 1 ) )
+                        if ( itemAbove != nilPointer &&
+                                ( itemAbove->whichKindOfItem() == "free item" || itemAbove->whichKindOfItem() == "player item" ) )
                         {
-                                FreeItem* freeItemAbove = dynamic_cast< FreeItem * >( mediator->findItemById( id ) );
+                                FreeItem* freeItemAbove = dynamic_cast< FreeItem * >( itemAbove );
 
                                 // is it item with behavior
                                 if ( freeItemAbove != nilPointer && freeItemAbove->getBehavior() != nilPointer )

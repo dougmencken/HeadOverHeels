@@ -12,8 +12,8 @@ namespace isomot
 
 Item::Item( ItemData* data, int z, const Way& way )
       : Mediated(),
-        id( 0 ),
         label( data->getLabel() ),
+        uniqueName( label + "." + makeRandomString( 12 ) ),
         dataOfItem( data ),
         x( 0 ),
         y( 0 ),
@@ -36,12 +36,14 @@ Item::Item( ItemData* data, int z, const Way& way )
                 motionTimer = new Timer ();
                 motionTimer->go();
         }
+
+        ///std::cout << "created item with unique random name \"" << uniqueName << "\"" << std::endl ;
 }
 
 Item::Item( const Item& item )
 : Mediated( item ),
-        id( item.id ),
         label( item.label ),
+        uniqueName( item.uniqueName + " copy" ),
         dataOfItem( item.dataOfItem ),
         x( item.x ),
         y( item.y ),
@@ -143,7 +145,7 @@ bool Item::animate()
 
 void Item::changeItemData( ItemData* itemData, const std::string& initiatedBy )
 {
-        std::cout << "metamorphosis of data for item \"" << getLabel()
+        std::cout << "metamorphosis of data for item \"" << getUniqueName()
                         << "\" to data of \"" << itemData->getLabel()
                         << "\" initiated by \"" << initiatedBy << "\"" << std::endl ;
 
@@ -228,27 +230,27 @@ bool Item::checkPosition( int x, int y, int z, const ChangeOrAdd& what )
         this->z = z + this->z * what;
 
         // look for collision with wall
-        if ( this->x < mediator->getRoom()->getLimitAt( Way( "north" ) ) )
+        if ( this->x < mediator->getRoom()->getLimitAt( "north" ) )
         {
-                mediator->pushCollision( NorthWall );
+                mediator->pushCollision( "some segment of north wall" );
         }
-        else if ( this->x + this->dataOfItem->getWidthX() > mediator->getRoom()->getLimitAt( Way( "south" ) ) )
+        else if ( this->x + static_cast< int >( this->getWidthX() ) > mediator->getRoom()->getLimitAt( "south" ) )
         {
-                mediator->pushCollision( SouthWall );
+                mediator->pushCollision( "some segment of south wall" );
         }
-        if ( this->y >= mediator->getRoom()->getLimitAt( Way( "west" ) ) )
+        if ( this->y >= mediator->getRoom()->getLimitAt( "west" ) )
         {
-                mediator->pushCollision( WestWall );
+                mediator->pushCollision( "some segment of west wall" );
         }
-        else if ( this->y - this->dataOfItem->getWidthY() + 1 < mediator->getRoom()->getLimitAt( Way( "east" ) ) )
+        else if ( this->y - static_cast< int >( this->getWidthY() ) + 1 < mediator->getRoom()->getLimitAt( "east" ) )
         {
-                mediator->pushCollision( EastWall );
+                mediator->pushCollision( "some segment of east wall" );
         }
 
         // look for collision with floor
         if ( this->z < 0 )
         {
-                mediator->pushCollision( Floor );
+                mediator->pushCollision( "some tile of floor" );
         }
 
         collisionFound = ! mediator->isStackOfCollisionsEmpty ();

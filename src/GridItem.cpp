@@ -153,7 +153,7 @@ bool GridItem::updatePosition( int newValue, const Coordinate& whatToChange, con
         // is there collision with floor
         if ( this->z < 0 )
         {
-                mediator->pushCollision( Floor );
+                mediator->pushCollision( "some tile of floor" );
                 collisionFound = true;
         }
         // or maybe with other items in room

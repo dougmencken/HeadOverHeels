@@ -286,7 +286,7 @@ PlayerItem* RoomBuilder::createPlayerInRoom( Room* room, bool justEntered,
 
                         player->assignBehavior( behaviorOfPlayer, reinterpret_cast< void * >( itemDataManager ) );
 
-                        player->setWayOfEntry( wayOfEntry );
+                        player->setWayOfEntry( wayOfEntry.toString() );
 
                         room->addPlayerToRoom( player, justEntered );
                 }
@@ -437,9 +437,9 @@ Door* RoomBuilder::buildDoor( const rxml::item& item )
 int RoomBuilder::getXCenterOfRoom( ItemData* data, Room* theRoom )
 {
         return
-                ( ( theRoom->getLimitAt( Way( "south" ) ) - theRoom->getLimitAt( Way( "north" ) ) + data->getWidthX() ) >> 1 )
-                        + ( theRoom->hasDoorAt( Way( "north" ) ) ? theRoom->getSizeOfOneTile() >> 1 : 0 )
-                                - ( theRoom->hasDoorAt( Way( "south" ) ) ? theRoom->getSizeOfOneTile() >> 1 : 0 ) ;
+                ( ( theRoom->getLimitAt( "south" ) - theRoom->getLimitAt( "north" ) + data->getWidthX() ) >> 1 )
+                        + ( theRoom->hasDoorAt( "north" ) ? theRoom->getSizeOfOneTile() >> 1 : 0 )
+                                - ( theRoom->hasDoorAt( "south" ) ? theRoom->getSizeOfOneTile() >> 1 : 0 ) ;
 
 }
 
@@ -447,9 +447,9 @@ int RoomBuilder::getXCenterOfRoom( ItemData* data, Room* theRoom )
 int RoomBuilder::getYCenterOfRoom( ItemData* data, Room* theRoom )
 {
         return
-                ( ( theRoom->getLimitAt( Way( "west" ) ) - theRoom->getLimitAt( Way( "east" ) ) + data->getWidthY() ) >> 1 )
-                        + ( theRoom->hasDoorAt( Way( "east" ) ) ? theRoom->getSizeOfOneTile() >> 1 : 0 )
-                                - ( theRoom->hasDoorAt( Way( "west" ) ) ? theRoom->getSizeOfOneTile() >> 1 : 0 )
+                ( ( theRoom->getLimitAt( "west" ) - theRoom->getLimitAt( "east" ) + data->getWidthY() ) >> 1 )
+                        + ( theRoom->hasDoorAt( "east" ) ? theRoom->getSizeOfOneTile() >> 1 : 0 )
+                                - ( theRoom->hasDoorAt( "west" ) ? theRoom->getSizeOfOneTile() >> 1 : 0 )
                                         - 1 ;
 }
 

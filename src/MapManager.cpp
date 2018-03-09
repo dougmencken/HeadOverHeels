@@ -218,7 +218,7 @@ void MapManager::beginOldGameWithCharacter( const sgxml::player& data )
                         }
 
                         // change activity of player by way of entry
-                        player->autoMoveOnEntry( entry );
+                        player->autoMoveOnEntry( Way( entry ).toString() );
 
                         // for active player or for other player when it is created in another room
                         // when other player is in the same room as active player then there’s no need to do anything more
@@ -261,7 +261,7 @@ void MapManager::binEveryRoom()
 Room* MapManager::changeRoom( const Way& wayOfExit )
 {
         Room* previousRoom = this->activeRoom;
-        previousRoom->setWayOfExit( Way( "no exit" ) );
+        previousRoom->setWayOfExit( "no exit" );
 
         // get data of previous room
         MapRoomData* previousRoomData = findRoomData( previousRoom->getNameOfFileWithDataAboutRoom() );
@@ -299,11 +299,11 @@ Room* MapManager::changeRoom( const Way& wayOfExit )
         const Way exitOrientation = oldItemOfRoamer->getOrientation ();
 
         // get limits of room
-        // there’s possibility to exit and to enter new room in cases when player travels through floor, roof or via teletransport
-        int northBound = previousRoom->getLimitAt( Way( "north" ) );
-        int eastBound = previousRoom->getLimitAt( Way( "east" ) );
-        int southBound = previousRoom->getLimitAt( Way( "south" ) );
-        int westBound = previousRoom->getLimitAt( Way( "west" ) );
+        int northBound = previousRoom->getLimitAt( "north" );
+        int eastBound = previousRoom->getLimitAt( "east" );
+        int southBound = previousRoom->getLimitAt( "south" );
+        int westBound = previousRoom->getLimitAt( "west" );
+        // plus there’s possibility to exit and to enter room via floor, roof or teletransport
 
         // remove active player from previous room
         previousRoom->removePlayerFromRoom( oldItemOfRoamer, true );
@@ -323,7 +323,7 @@ Room* MapManager::changeRoom( const Way& wayOfExit )
         if ( newRoom != nilPointer )
         {
                 std::cout << "room \"" << newRoom->getNameOfFileWithDataAboutRoom() << "\" is already created" << std::endl ;
-                newRoom->setWayOfExit( Way( "no exit" ) );
+                newRoom->setWayOfExit( "no exit" );
         }
         else
         {
@@ -354,7 +354,7 @@ Room* MapManager::changeRoom( const Way& wayOfExit )
 
         PlayerItem* newItemOfRoamer = roomBuilder->createPlayerInRoom( newRoom, true, nameOfRoamer, entryX, entryY, entryZ, exitOrientation, wayOfEntry );
 
-        newItemOfRoamer->autoMoveOnEntry( wayOfEntry );
+        newItemOfRoamer->autoMoveOnEntry( wayOfEntry.toString() );
 
         nextRoomData->setVisited( true );
 
@@ -437,7 +437,7 @@ Room* MapManager::rebuildRoom()
                                                                         theWay, entry );
 
                         if ( alivePlayer != nilPointer )
-                                alivePlayer->autoMoveOnEntry( entry );
+                                alivePlayer->autoMoveOnEntry( entry.toString() );
                 }
 
                 it++ ; // next player

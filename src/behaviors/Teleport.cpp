@@ -27,55 +27,45 @@ bool Teleport::update ()
 
         switch ( activity )
         {
-                case Wait:
-                // Comprueba si hay elementos encima
+        case Wait:
+                // is there items above
                 if ( ! item->checkPosition( 0, 0, 1, Add ) )
                 {
-                        // Copia la pila de colisiones
-                        std::stack< int > topItems;
+                        // copy stack of collisions
+                        std::stack< std::string > topItems;
                         while ( ! mediator->isStackOfCollisionsEmpty() )
                         {
                                 topItems.push( mediator->popCollision() );
                         }
 
-                        // Mientras haya elementos encima de este elemento se comprobarán
-                        // las condiciones para ver si se puede activar
+                        // as long as there are items above teleport
                         while ( ! topItems.empty() )
                         {
-                                // Identificador del primer elemento de la pila de colisiones
-                                int id = topItems.top();
+                                Item * aboveItem = mediator->findItemByUniqueName( topItems.top() );
                                 topItems.pop();
 
-                                // El elemento tiene que ser un elemento libre
-                                if ( id >= FirstFreeId && ( id & 1 ) )
+                                // is it free item with behavior
+                                if ( aboveItem != nilPointer &&
+                                        ( aboveItem->whichKindOfItem() == "free item" || aboveItem->whichKindOfItem() == "player item" ) &&
+                                                aboveItem->getBehavior() != nilPointer )
                                 {
-                                        Item * topItem = mediator->findItemById( id );
-
-                                        // El elemento debe tener comportamiento
-                                        if ( topItem != nilPointer && topItem->getBehavior() != nilPointer )
+                                        // look for items below
+                                        if ( ! aboveItem->checkPosition( 0, 0, -1, Add ) )
                                         {
-                                                // Si debajo del elemento que está encima del elemento superior hay más elementos,
-                                                // se busca cuál de estos últimos tiene unas coordenadas espaciales mayores
-                                                if ( ! topItem->checkPosition( 0, 0, -1, Add ) )
+                                                bool playerAboveTeleport = false;
+
+                                                while ( ! mediator->isStackOfCollisionsEmpty() )
                                                 {
-                                                        int stackSize = 0;
-                                                        bool closerItem = true;
+                                                        Item * belowItem = mediator->findCollisionPop( );
 
-                                                        while ( ! mediator->isStackOfCollisionsEmpty() )
+                                                        if ( aboveItem->whichKindOfItem() == "player item" && belowItem == this->item )
                                                         {
-                                                                Item * downItem = mediator->findCollisionPop( );
-
-                                                                if ( downItem != nilPointer && item != downItem && item->getX() + item->getY() < item->getX() + item->getY() )
-                                                                {
-                                                                        closerItem = false;
-                                                                }
-
-                                                                stackSize++;
+                                                                playerAboveTeleport = true;
+                                                                break;
                                                         }
-
-                                                        // Si sólo hay un elemento debajo o se encontró el más cercano a la cámara entonces se activa
-                                                        activated = ( stackSize == 1 || closerItem );
                                                 }
+
+                                                activated = playerAboveTeleport;
                                         }
                                 }
                         }
@@ -85,7 +75,7 @@ bool Teleport::update ()
                         activated = false;
                 }
 
-                // Si está activo se pone en funcionamiento
+                // animate activated teleport
                 if ( activated )
                 {
                         item->animate();
@@ -93,8 +83,8 @@ bool Teleport::update ()
                 }
                 break;
 
-                default:
-                        activity = Wait;
+        default:
+                activity = Wait;
         }
 
         return false;

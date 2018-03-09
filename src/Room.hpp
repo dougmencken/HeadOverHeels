@@ -165,6 +165,12 @@ private:
 
         std::list < const PlayerItem * > playersWhoEnteredRoom ;
 
+        /**
+         * Pairs label of item with next number for such item,
+         * it’s used to uniquely name each item in room to deal with collisions
+         */
+        std::map < std::string , unsigned int > nextNumbers ;
+
         std::string nameOfFileWithDataAboutRoom ;
 
        /**
@@ -196,9 +202,9 @@ private:
         bool active ;
 
        /**
-        * Salida por la que algún jugador abandona la sala
+        * Way by which player leaves room
         */
-        Way wayOfExit ;
+        std::string wayOfExit ;
 
        /**
         * Indices in sequence of how columns of grid items are drawn, diagonally from right to left
@@ -209,16 +215,6 @@ private:
         * Grado de opacidad de las sombras desde 0, sin sombras, hasta 256, sombras totalmente opacas
         */
         short shadingScale ;
-
-       /**
-        * Último identificador del motor asignado a un elemento rejilla
-        */
-        int lastGridId ;
-
-       /**
-        * Último identificador del motor asignado a un elemento rejilla
-        */
-        int lastFreeId ;
 
        /**
         * El suelo de la sala formado por losetas
@@ -243,7 +239,7 @@ private:
        /**
         * Isometric coordinates that limit this room
         */
-        std::map < Way, unsigned short > bounds ;
+        std::map < std::string, unsigned short > bounds ;
 
        /**
         * Cámara encargada de centrar una sala grande en pantalla
@@ -315,15 +311,15 @@ public:
 
         bool isActive () const {  return active ;  }
 
-        unsigned short getLimitAt ( const Way& way ) {  return bounds[ way ] ;  }
+        unsigned short getLimitAt ( const std::string& way ) {  return bounds[ way ] ;  }
 
-        Door * getDoorAt ( const Way& way ) {  return doors[ way ] ;  }
+        Door * getDoorAt ( const std::string& way ) {  return doors[ Way( way ) ] ;  }
 
-        bool hasDoorAt ( const Way& way ) {  return ( doors[ way ] != nilPointer ) ;  }
+        bool hasDoorAt ( const std::string& way ) {  return ( doors[ Way( way ) ] != nilPointer ) ;  }
 
-        void setWayOfExit ( const Way& exit ) {  this->wayOfExit = exit ;  }
+        void setWayOfExit ( const std::string& exit ) {  this->wayOfExit = exit ;  }
 
-        Way getWayOfExit () const {  return wayOfExit ;  }
+        std::string getWayOfExit () const {  return wayOfExit ;  }
 
         Camera * getCamera () const {  return camera ;  }
 

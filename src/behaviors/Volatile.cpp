@@ -49,16 +49,15 @@ bool Volatile::update ()
                                 // look for every item above it
                                 while ( ! mediator->isStackOfCollisionsEmpty() )
                                 {
-                                        int id = mediator->popCollision();
+                                        Item* item = mediator->findCollisionPop( );
 
                                         // is it free item
-                                        if ( id >= FirstFreeId && ( id & 1 ) )
+                                        if ( item != nilPointer &&
+                                                ( item->whichKindOfItem() == "free item" || item->whichKindOfItem() == "player item" ) )
                                         {
-                                                Item* item = mediator->findItemById( id );
-
-                                                // when item exists, look at whether it is volatile or special
+                                                // look at whether above item is volatile or special
                                                 // because that item would disappear unless it is leaning on another one
-                                                if ( item != nilPointer && item->getBehavior() != nilPointer &&
+                                                if ( item->getBehavior() != nilPointer &&
                                                         item->getBehavior()->getNameOfBehavior () != "behavior of disappearance on jump into" &&
                                                         item->getBehavior()->getNameOfBehavior () != "behavior of slow disappearance on jump into" &&
                                                         item->getBehavior()->getNameOfBehavior () != "behavior of disappearance on touch" &&
@@ -88,7 +87,7 @@ bool Volatile::update ()
                                                                 // volatile doesn’t vanish if it is leaning~
                                                                 //   on item without behavior, or
                                                                 //   on item that is not volatile, or
-                                                                //   on item that disappears
+                                                                //   on item that disappears too
                                                                 if ( ( bottomItem->getBehavior() == nilPointer ) ||
                                                                         ( bottomItem->getBehavior() != nilPointer
                                                                                 && bottomItem->getBehavior()->getNameOfBehavior () != "behavior of disappearance on jump into"

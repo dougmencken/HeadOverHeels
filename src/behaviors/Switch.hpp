@@ -35,9 +35,9 @@ public:
 private:
 
        /**
-        * Comprueba si hay elementos junto al interruptor
-        * @param Un vector donde almacenar el conjunto de elementos
-        * @return true si se encontró algún elemento o false en caso contrario
+        * Check if there are items near switch
+        * @param Where to store items
+        * @return true if any item was found or false otherwise
         */
         bool checkSideItems ( std::vector< Item * > & sideItems ) ;
 
@@ -46,7 +46,7 @@ private:
         bool isItemAbove ;
 
        /**
-        * Elementos que han accionado el interruptor
+        * Items that triggered this switch
         */
         std::vector< Item * > triggerItems ;
 

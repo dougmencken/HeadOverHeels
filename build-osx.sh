@@ -32,6 +32,7 @@ then
         otool -L "${headoverheelsbin}"
 
         games="/Applications/Games"
+        mkdir -p "${games}"
         rm -r -f "${games}"/Head\ over\ Heels.app
         cp -r extras/Head\ over\ Heels.app "${games}"/
         mkdir -p "${games}"/Head\ over\ Heels.app/Contents/MacOS/

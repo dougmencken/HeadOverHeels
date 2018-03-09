@@ -29,23 +29,23 @@ bool Switch::update ()
         switch ( activity )
         {
                 case Wait:
-                        // Comprueba si hay elementos a los lados
+                        // look if there’re items on sides
                         if ( checkSideItems( sideItems ) )
                         {
-                                // Si algún elemento que cambió el estado del interruptor ya no está junto a él, o bien
-                                // ese elemento está junto a él pero es un jugador y está detenido, entonces se elimina de
-                                // la lista de activadores para que dicho elemento pueda volver a activar el interruptor
+                                // when some item that made switch is no longer near,
+                                // or that item is near but it’s a character which yet waits,
+                                // then remove such item from list of triggers so that it may re~switch
                                 for ( size_t i = 0; i < triggerItems.size(); i++ )
                                 {
-                                        Item* tempItem = triggerItems[ i ];
+                                        Item* trigger = triggerItems[ i ];
 
                                         if ( std::find_if( sideItems.begin (), sideItems.end (),
-                                                std::bind2nd( EqualItemId(), tempItem->getId() ) ) == sideItems.end() ||
-                                                ( dynamic_cast< PlayerItem * >( tempItem ) && tempItem->getBehavior()->getActivityOfItem() == Wait ) )
+                                                std::bind2nd( EqualUniqueNameOfItem(), trigger->getUniqueName() ) ) == sideItems.end () ||
+                                                ( dynamic_cast< PlayerItem * >( trigger ) && trigger->getBehavior()->getActivityOfItem() == Wait ) )
                                         {
                                                 triggerItems.erase( std::remove_if(
                                                         triggerItems.begin (), triggerItems.end (),
-                                                        std::bind2nd( EqualItemId(), tempItem->getId() )
+                                                        std::bind2nd( EqualUniqueNameOfItem(), trigger->getUniqueName() )
                                                 ), triggerItems.end () );
                                         }
                                 }
@@ -59,7 +59,7 @@ bool Switch::update ()
                         if ( ! item->checkPosition( 0, 0, 1, Add ) )
                         {
                                 // copy stack of collisions
-                                std::stack< int > aboveItems;
+                                std::stack< std::string > aboveItems;
                                 while ( ! mediator->isStackOfCollisionsEmpty() )
                                 {
                                         aboveItems.push( mediator->popCollision() );
@@ -68,17 +68,16 @@ bool Switch::update ()
                                 // as long as there’re elements above this switch
                                 while ( ! aboveItems.empty() )
                                 {
-                                        int id = aboveItems.top();
+                                        Item* itemAbove = mediator->findItemByUniqueName( aboveItems.top() );
                                         aboveItems.pop();
 
                                         // is it free item
-                                        if ( id >= FirstFreeId && ( id & 1 ) )
+                                        if ( itemAbove != nilPointer &&
+                                                ( itemAbove->whichKindOfItem() == "free item" || itemAbove->whichKindOfItem() == "player item" ) )
                                         {
-                                                Item* itemAbove = mediator->findItemById( id );
-
-                                                // yep, switch doesn’t toggle when player jumps
-                                                if ( itemAbove != nilPointer && itemAbove->getBehavior() != nilPointer &&
+                                                if ( itemAbove->getBehavior() != nilPointer &&
                                                         ! itemAbove->checkPosition( 0, 0, -1, Add ) &&
+                                                                // yep, switch doesn’t toggle when player jumps
                                                                 itemAbove->getBehavior()->getActivityOfItem() != RegularJump &&
                                                                 itemAbove->getBehavior()->getActivityOfItem() != HighJump )
                                                 {
@@ -86,9 +85,12 @@ bool Switch::update ()
                                                         if ( ! isItemAbove && mediator->depthOfStackOfCollisions() <= 1 )
                                                         {
                                                                 isItemAbove = true;
-                                                                item->animate();
+
+                                                                this->item->animate();
 
                                                                 mediator->toggleSwitchInRoom();
+
+                                                                // play sound of switching
                                                                 SoundManager::getInstance()->play( item->getLabel(), SwitchIt );
                                                         }
                                                 }
@@ -109,19 +111,18 @@ bool Switch::update ()
                 case DisplaceSoutheast:
                 case DisplaceSouthwest:
                 case DisplaceNorthwest:
-                        // Si el elemento no estaba junto al interruptor entonces ahora lo activa y ya no lo podrá
-                        // volver a activar a no ser que se cumplan las condiciones fijadas en el estado inicial
-                        if ( std::find_if( triggerItems.begin (), triggerItems.end (), std::bind2nd( EqualItemId(), sender->getId() ) ) == triggerItems.end () )
+                        if ( std::find_if( triggerItems.begin (), triggerItems.end (),
+                                std::bind2nd( EqualUniqueNameOfItem(), sender->getUniqueName() ) ) == triggerItems.end () )
                         {
                                 triggerItems.push_back( sender );
                                 item->animate();
-                                // Comunica a la sala el cambio de estado del interruptor
+
                                 mediator->toggleSwitchInRoom();
-                                // Activa el sonido de conmutación
+
+                                // play sound of switching
                                 SoundManager::getInstance()->play( item->getLabel(), SwitchIt );
                         }
 
-                        // Vuelta al estado inicial
                         activity = Wait;
                         break;
 

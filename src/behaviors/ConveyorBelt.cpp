@@ -14,7 +14,6 @@ namespace isomot
 
 ConveyorBelt::ConveyorBelt( Item* item, const std::string& behavior )
         : Behavior( item, behavior )
-        , active( false )
 {
         speedTimer = new Timer();
         speedTimer->go();
@@ -40,7 +39,7 @@ bool ConveyorBelt::update ()
                         {
                                 if ( ! item->checkPosition( 0, 0, 1, Add ) )
                                 {
-                                        std::stack< int > topItems;
+                                        std::stack< std::string > topItems;
                                         while ( ! mediator->isStackOfCollisionsEmpty() )
                                         {
                                                 topItems.push( mediator->popCollision() );
@@ -49,34 +48,43 @@ bool ConveyorBelt::update ()
                                         // check conditions as long as there are items on top
                                         while ( ! topItems.empty () )
                                         {
-                                                int top = topItems.top();
+                                                Item* collision = mediator->findItemByUniqueName( topItems.top() );
                                                 topItems.pop();
 
                                                 // is it free item
-                                                if ( top >= FirstFreeId && ( top & 1 ) )
+                                                if ( collision != nilPointer &&
+                                                        ( collision->whichKindOfItem() == "free item" || collision->whichKindOfItem() == "player item" ) )
                                                 {
-                                                        FreeItem* topItem = dynamic_cast< FreeItem * >( mediator->findItemById( top ) );
+                                                        FreeItem* itemAbove = dynamic_cast< FreeItem * >( collision );
 
                                                         // is it item with behavior
-                                                        if ( topItem != nilPointer && topItem->getBehavior() != nilPointer )
+                                                        if ( itemAbove->getBehavior() != nilPointer )
                                                         {
-                                                                if ( topItem->getAnchor() == nilPointer || item->getId() == topItem->getAnchor()->getId() )
+                                                                if ( itemAbove->getAnchor() == nilPointer || this->item->getUniqueName() == itemAbove->getAnchor()->getUniqueName() )
                                                                 {
                                                                         if ( item->getOrientation().toString() == "south" ) {
-                                                                                if ( topItem->getBehavior()->getActivityOfItem() != RegularJump && topItem->getBehavior()->getActivityOfItem() != HighJump ) {
-                                                                                        topItem->getBehavior()->changeActivityOfItem( ForceDisplaceSouth );
+                                                                                if ( itemAbove->getBehavior()->getActivityOfItem() != RegularJump &&
+                                                                                                itemAbove->getBehavior()->getActivityOfItem() != HighJump )
+                                                                                {
+                                                                                        itemAbove->getBehavior()->changeActivityOfItem( ForceDisplaceSouth );
                                                                                 }
                                                                         } else if ( item->getOrientation().toString() == "west" ) {
-                                                                                if ( topItem->getBehavior()->getActivityOfItem() != RegularJump && topItem->getBehavior()->getActivityOfItem() != HighJump ) {
-                                                                                        topItem->getBehavior()->changeActivityOfItem( ForceDisplaceWest );
+                                                                                if ( itemAbove->getBehavior()->getActivityOfItem() != RegularJump &&
+                                                                                                itemAbove->getBehavior()->getActivityOfItem() != HighJump )
+                                                                                {
+                                                                                        itemAbove->getBehavior()->changeActivityOfItem( ForceDisplaceWest );
                                                                                 }
                                                                         } else if ( item->getOrientation().toString() == "north" ) {
-                                                                                if ( topItem->getBehavior()->getActivityOfItem() != RegularJump && topItem->getBehavior()->getActivityOfItem() != HighJump ) {
-                                                                                        topItem->getBehavior()->changeActivityOfItem( ForceDisplaceNorth );
+                                                                                if ( itemAbove->getBehavior()->getActivityOfItem() != RegularJump &&
+                                                                                                itemAbove->getBehavior()->getActivityOfItem() != HighJump )
+                                                                                {
+                                                                                        itemAbove->getBehavior()->changeActivityOfItem( ForceDisplaceNorth );
                                                                                 }
                                                                         } else if ( item->getOrientation().toString() == "east" ) {
-                                                                                if ( topItem->getBehavior()->getActivityOfItem() != RegularJump && topItem->getBehavior()->getActivityOfItem() != HighJump ) {
-                                                                                        topItem->getBehavior()->changeActivityOfItem( ForceDisplaceEast );
+                                                                                if ( itemAbove->getBehavior()->getActivityOfItem() != RegularJump &&
+                                                                                                itemAbove->getBehavior()->getActivityOfItem() != HighJump )
+                                                                                {
+                                                                                        itemAbove->getBehavior()->changeActivityOfItem( ForceDisplaceEast );
                                                                                 }
                                                                         }
 

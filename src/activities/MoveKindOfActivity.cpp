@@ -153,7 +153,7 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
                         bool loading = ! freeItem->checkPosition( 0, 0, 2, Add );
 
                         // copy stack of collisions
-                        std::stack< int > topItems;
+                        std::stack< std::string > topItems;
                         while ( ! mediator->isStackOfCollisionsEmpty() )
                         {
                                 topItems.push( mediator->popCollision() );
@@ -166,7 +166,7 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
                         {
                                 while ( ! topItems.empty() )
                                 {
-                                        FreeItem* topItem = dynamic_cast< FreeItem * >( mediator->findItemById( topItems.top() ) );
+                                        FreeItem* topItem = dynamic_cast< FreeItem * >( mediator->findItemByUniqueName( topItems.top() ) );
                                         topItems.pop();
 
                                         if ( topItem != nilPointer )
@@ -261,7 +261,7 @@ void MoveKindOfActivity::ascent( FreeItem* freeItem, int z )
                                 if ( playerItem->getZ() >= MaxLayers * LayerHeight )
                                 {
                                         // player reaches maximum height of room to possibly go to room above it
-                                        playerItem->setWayOfExit( Up );
+                                        playerItem->setWayOfExit( "up" );
                                 }
                         }
                 }
@@ -281,7 +281,7 @@ void MoveKindOfActivity::descend( FreeItem* freeItem, int z )
                         Mediator* mediator = freeItem->getMediator();
 
                         // make copy of stack of collisions
-                        std::stack< int > topItems;
+                        std::stack< std::string > topItems;
                         while ( ! mediator->isStackOfCollisionsEmpty() )
                         {
                                 topItems.push( mediator->popCollision() );
@@ -296,7 +296,7 @@ void MoveKindOfActivity::descend( FreeItem* freeItem, int z )
                         // for each item above
                         while ( ! mediator->isStackOfCollisionsEmpty() )
                         {
-                                FreeItem* topItem = dynamic_cast< FreeItem * >( mediator->findItemById( topItems.top() ) );
+                                FreeItem* topItem = dynamic_cast< FreeItem * >( mediator->findItemByUniqueName( topItems.top() ) );
                                 topItems.pop();
 
                                 if ( topItem != nilPointer )

@@ -294,8 +294,8 @@ BITMAP* Isomot::update()
                         {
                                 ItemData* chapeauData = this->itemDataManager->findItemByLabel( "crown" );
 
-                                int x = ( activeRoom->getLimitAt( Way( "south" ) ) - activeRoom->getLimitAt( Way( "north" ) ) + chapeauData->getWidthX() ) >> 1 ;
-                                int y = ( activeRoom->getLimitAt( Way( "west" ) ) - activeRoom->getLimitAt( Way( "east" ) ) + chapeauData->getWidthY() ) >> 1 ;
+                                int x = ( activeRoom->getLimitAt( "south" ) - activeRoom->getLimitAt( "north" ) + chapeauData->getWidthX() ) >> 1 ;
+                                int y = ( activeRoom->getLimitAt( "west" ) - activeRoom->getLimitAt( "east" ) + chapeauData->getWidthY() ) >> 1 ;
 
                                 FreeItem* chapeau = new FreeItem( chapeauData, x, y, 250, Nowhere );
                                 chapeau->assignBehavior( "behavior of something special", chapeauData );
@@ -362,16 +362,14 @@ BITMAP* Isomot::update()
                 InputManager::getInstance()->noRepeat( "swap" );
         }
 
-        if ( activeRoom->getWayOfExit().toString() == "no exit" )
+        if ( activeRoom->getWayOfExit() == "no exit" )
         {
                 activeRoom->drawRoom();
         }
         // there’s a change of room or active player lost its life
         else
         {
-                Way exit = activeRoom->getWayOfExit();
-
-                if ( exit.toString() == "rebuild room" )
+                if ( activeRoom->getWayOfExit() == "rebuild room" )
                 {
                         PlayerItem* player = activeRoom->getMediator()->getActivePlayer();
 
@@ -389,7 +387,7 @@ BITMAP* Isomot::update()
                 }
                 else
                 {
-                        Room* newRoom = mapManager->changeRoom( exit );
+                        Room* newRoom = mapManager->changeRoom( activeRoom->getWayOfExit() );
 
                         if ( newRoom != nilPointer && newRoom != activeRoom )
                         {

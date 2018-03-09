@@ -45,11 +45,11 @@ bool FallKindOfActivity::fall( Behavior * behavior )
                 Item* sender = behavior->getItem();
                 Mediator* mediator = sender->getMediator();
 
-                // copy stack of collisions
-                std::stack< int > itemsBelow;
+                // copy stack of collisions into vector
+                std::vector< std::string > itemsBelow;
                 while ( ! mediator->isStackOfCollisionsEmpty() )
                 {
-                        itemsBelow.push( mediator->popCollision() );
+                        itemsBelow.push_back( mediator->popCollision() );
                 }
 
                 this->assignAnchor( dynamic_cast< FreeItem * >( sender ), itemsBelow );
@@ -57,27 +57,28 @@ bool FallKindOfActivity::fall( Behavior * behavior )
                 // as long as there’re items collided with sender
                 while ( ! itemsBelow.empty() )
                 {
-                        int id = itemsBelow.top();
-                        itemsBelow.pop();
+                        std::string name = itemsBelow.back();
+                        itemsBelow.pop_back();
 
-                        // is it free item or grid item
-                        if ( ( id >= FirstFreeId && ( id & 1 ) ) || ( id >= FirstGridId && ! ( id & 1 ) ) )
+                        Item* itemBelow = mediator->findItemByUniqueName( name );
+
+                        if ( itemBelow != nilPointer )
                         {
-                                Item* item = mediator->findItemById( id );
-
-                                if ( item != nilPointer )
+                                // is it free item or grid item
+                                if ( itemBelow->whichKindOfItem() == "grid item" ||
+                                        itemBelow->whichKindOfItem() == "free item" || itemBelow->whichKindOfItem() == "player item" )
                                 {
-                                        if ( dynamic_cast< PlayerItem * >( item ) && sender->isMortal() )
+                                        if ( dynamic_cast< PlayerItem * >( itemBelow ) && sender->isMortal() )
                                         {
                                                 if ( sender->checkPosition( 0, 0, -1, Add ) )
                                                 {
                                                         if ( ! GameManager::getInstance()->isImmuneToCollisionsWithMortalItems () )
                                                         {
-                                                                item->getBehavior()->changeActivityOfItem( MeetMortalItem );
+                                                                itemBelow->getBehavior()->changeActivityOfItem( MeetMortalItem );
                                                         }
                                                 }
                                         }
-                                        else if ( dynamic_cast< PlayerItem * >( sender ) && item->isMortal() )
+                                        else if ( dynamic_cast< PlayerItem * >( sender ) && itemBelow->isMortal() )
                                         {
                                                 if ( sender->checkPosition( 0, 0, -1, Add ) )
                                                 {
@@ -112,13 +113,13 @@ bool FallKindOfActivity::fall( Behavior * behavior )
                                 }
                         }
                         // player reaches floor
-                        else if ( dynamic_cast< PlayerItem * >( sender ) && id == Floor )
+                        else if ( dynamic_cast< PlayerItem * >( sender ) && name == "some tile of floor" )
                         {
                                 PlayerItem* playerItem = dynamic_cast< PlayerItem * >( sender );
 
                                 if ( mediator->getRoom()->getKindOfFloor() == "none" )
                                 {
-                                        playerItem->setWayOfExit( Down );
+                                        playerItem->setWayOfExit( "down" );
                                 }
                                 else
                                 if ( mediator->getRoom()->getKindOfFloor() == "mortal" )
@@ -140,17 +141,15 @@ bool FallKindOfActivity::fall( Behavior * behavior )
         return fallsNow ;
 }
 
-void FallKindOfActivity::assignAnchor( FreeItem* freeItem, std::stack< int > items )
+void FallKindOfActivity::assignAnchor( FreeItem* freeItem, const std::vector< std::string >& items )
 {
         if ( freeItem != nilPointer )
         {
                 Mediator* mediator = freeItem->getMediator();
 
-                int count = 0;
-
                 // set anchor when item falls and is placed on some other one, its anchor
 
-                // in case when item falls on several items below it the priority to anchor is
+                // when item falls on several items below it, priority to choose anchor is
                 //    grid item before free item
                 //    harmless item before mortal item
                 //    item with higher spatial coordinates
@@ -158,16 +157,16 @@ void FallKindOfActivity::assignAnchor( FreeItem* freeItem, std::stack< int > ite
                 Item* anchor = nilPointer;
                 Item* oldAnchor = freeItem->getAnchor();
 
+                unsigned int count = 0;
+
                 // search for anchor of this item
-                while ( ! items.empty() )
+                for ( std::vector< std::string >::const_iterator it = items.begin () ; it != items.end () ; ++ it )
                 {
-                        int id = items.top();
-                        items.pop();
-                        Item* item = mediator->findItemById( id );
+                        Item* item = mediator->findItemByUniqueName( *it );
                         count++ ;
 
-                        // in case when item is already anchored
-                        if ( oldAnchor != nilPointer && item != nilPointer && oldAnchor->getId() == item->getId() )
+                        // in case when item is anchored previously
+                        if ( oldAnchor != nilPointer && item != nilPointer && oldAnchor->getUniqueName() == item->getUniqueName() )
                         {
                                 anchor = oldAnchor;
                                 break;
@@ -181,10 +180,10 @@ void FallKindOfActivity::assignAnchor( FreeItem* freeItem, std::stack< int > ite
                         else
                         {
                                 // if it is grid item
-                                if ( id >= FirstGridId && ! ( id & 1 ) )
+                                if ( item->whichKindOfItem() == "grid item" )
                                 {
-                                        // when current anchor is not grid item then select this grid item as new anchor
-                                        if ( ! ( anchor->getId() >= FirstGridId && ! ( anchor->getId() & 1 ) ) )
+                                        // when current anchor is not grid item then pick this grid item as new anchor
+                                        if ( anchor->whichKindOfItem() != "grid item" )
                                         {
                                                 anchor = item;
                                         }
@@ -217,9 +216,9 @@ void FallKindOfActivity::assignAnchor( FreeItem* freeItem, std::stack< int > ite
 
                 /* if ( anchor != nilPointer && anchor != oldAnchor )
                 {
-                        std::cout << "item \"" << anchor->getLabel() << "\" at" <<
+                        std::cout << "item \"" << anchor->getUniqueName() << "\" at" <<
                                         " x=" << anchor->getX() << " y=" << anchor->getY() << " z=" << anchor->getZ() <<
-                                        " is set as anchor for item \"" << freeItem->getLabel() << "\" at" <<
+                                        " is set as anchor for item \"" << freeItem->getUniqueName() << "\" at" <<
                                         " x=" << freeItem->getX() << " y=" << freeItem->getY() << " z=" << freeItem->getZ()
                                   << std::endl ;
                 } */

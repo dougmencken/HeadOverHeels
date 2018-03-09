@@ -42,6 +42,24 @@ void nanoSleep ( unsigned long nanoseconds )
 namespace isomot
 {
 
+std::string makeRandomString( const size_t length )
+{
+        static const char alphanum[] =  "0123456789"
+                                        "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                                        "abcdefghijklmnopqrstuvwxyz" ;
+        static const size_t howManyChars = sizeof( alphanum );
+
+        std::string result( length, ' ' );
+
+        for ( size_t i = 0 ; i < length; ++ i )
+        {
+                result[ i ] = alphanum[ rand() % ( howManyChars - 1 ) ];
+        }
+
+        return result;
+
+}
+
 const char * pathToFile( const std::string& in )
 {
 #if defined ( __CYGWIN__ )

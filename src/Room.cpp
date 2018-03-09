@@ -11,6 +11,8 @@
 #include "GameManager.hpp"
 #include "Behavior.hpp"
 
+#include <sstream> // for ostringstream
+
 
 namespace isomot
 {
@@ -21,9 +23,7 @@ Room::Room( const std::string& roomFile, const std::string& scenery, int xTiles,
         , scenery( scenery )
         , tileSize( tileSize )
         , kindOfFloor( floor )
-        , wayOfExit( NoExit )
-        , lastGridId( FirstGridId )
-        , lastFreeId( FirstFreeId )
+        , wayOfExit( "no exit" )
 {
         playersYetInRoom.clear ();
         playersWhoEnteredRoom.clear ();
@@ -33,33 +33,35 @@ Room::Room( const std::string& roomFile, const std::string& scenery, int xTiles,
         this->mediator = new Mediator( this );
         this->camera = new Camera( this );
 
-        this->bounds.clear ();
-        this->bounds[ North ] = 64000;
-        this->bounds[ South ] = 64000;
-        this->bounds[ East ] = 64000;
-        this->bounds[ West ] = 64000;
-        this->bounds[ Northeast ] = 64000;
-        this->bounds[ Southeast ] = 64000;
-        this->bounds[ Southwest ] = 64000;
-        this->bounds[ Northwest ] = 64000;
-        this->bounds[ Eastnorth ] = 64000;
-        this->bounds[ Eastsouth ] = 64000;
-        this->bounds[ Westnorth ] = 64000;
-        this->bounds[ Westsouth ] = 64000;
+        nextNumbers.clear ();
 
-        this->doors.clear ();
-        this->doors[ North ] = 0;
-        this->doors[ South ] = 0;
-        this->doors[ East ] = 0;
-        this->doors[ West ] = 0;
-        this->doors[ Northeast ] = 0;
-        this->doors[ Southeast ] = 0;
-        this->doors[ Southwest ] = 0;
-        this->doors[ Northwest ] = 0;
-        this->doors[ Eastnorth ] = 0;
-        this->doors[ Eastsouth ] = 0;
-        this->doors[ Westnorth ] = 0;
-        this->doors[ Westsouth ] = 0;
+        bounds.clear ();
+        bounds[ "north" ] = 64000;
+        bounds[ "south" ] = 64000;
+        bounds[ "rast" ] = 64000;
+        bounds[ "west" ] = 64000;
+        bounds[ "northeast" ] = 64000;
+        bounds[ "southeast" ] = 64000;
+        bounds[ "southwest" ] = 64000;
+        bounds[ "northwest" ] = 64000;
+        bounds[ "eastnorth" ] = 64000;
+        bounds[ "eastsouth" ] = 64000;
+        bounds[ "westnorth" ] = 64000;
+        bounds[ "westsouth" ] = 64000;
+
+        doors.clear ();
+        doors[ North ] = 0;
+        doors[ South ] = 0;
+        doors[ East ] = 0;
+        doors[ West ] = 0;
+        doors[ Northeast ] = 0;
+        doors[ Southeast ] = 0;
+        doors[ Southwest ] = 0;
+        doors[ Northwest ] = 0;
+        doors[ Eastnorth ] = 0;
+        doors[ Eastsouth ] = 0;
+        doors[ Westnorth ] = 0;
+        doors[ Westsouth ] = 0;
 
         // create empty floor
         for ( int i = 0; i < xTiles * yTiles + 1; i++ )
@@ -252,8 +254,17 @@ void Room::addGridItem( GridItem * gridItem )
 
         mediator->clearStackOfCollisions ();
 
-        // Asigna el identificador de Isomot
-        gridItem->setId( this->lastGridId );
+        std::string labelOfItem = gridItem->getLabel() ;
+        unsigned int uniqueNumberOfItem = nextNumbers[ labelOfItem ] ;
+        if ( uniqueNumberOfItem == 0 ) // is it new label
+        {
+                 uniqueNumberOfItem = 1;
+        }
+        nextNumbers[ labelOfItem ] = uniqueNumberOfItem + 1;
+
+        std::ostringstream name;
+        name << labelOfItem << " " << uniqueNumberOfItem ;
+        gridItem->setUniqueName( name.str() );
 
         // Si el elemento se va a colocar a una altura específica se buscan colisiones
         if ( gridItem->getZ() != Top )
@@ -283,7 +294,7 @@ void Room::addGridItem( GridItem * gridItem )
                 gridItem->setOffset( offset );
         }
 
-        /* std::cout << "add " << gridItem->whichKindOfItem() << " \"" << gridItem->getLabel() << "\" to room \"" << getNameOfFileWithDataAboutRoom() << "\"" << std::endl ; */
+        /* std::cout << "add " << gridItem->whichKindOfItem() << " \"" << labelOfItem << "\" to room \"" << getNameOfFileWithDataAboutRoom() << "\"" << std::endl ; */
 
         gridItem->setMediator( mediator );
         gridItem->setColumn( this->numberOfTiles.first * gridItem->getCellY() + gridItem->getCellX() );
@@ -295,8 +306,6 @@ void Room::addGridItem( GridItem * gridItem )
         }
 
         mediator->remaskWithGridItem( gridItem );
-
-        this->lastGridId += 2;
 }
 
 void Room::addFreeItem( FreeItem * freeItem )
@@ -326,11 +335,19 @@ void Room::addFreeItem( FreeItem * freeItem )
                 return;
         }
 
-        // Vacía la pila de colisiones
         mediator->clearStackOfCollisions ();
 
-        // Asigna el identificador de Isomot
-        freeItem->setId( this->lastFreeId );
+        std::string labelOfItem = freeItem->getLabel() ;
+        unsigned int uniqueNumberOfItem = nextNumbers[ labelOfItem ] ;
+        if ( uniqueNumberOfItem == 0 ) // is it new label
+        {
+                 uniqueNumberOfItem = 1;
+        }
+        nextNumbers[ labelOfItem ] = uniqueNumberOfItem + 1;
+
+        std::ostringstream name;
+        name << labelOfItem << " " << uniqueNumberOfItem ;
+        freeItem->setUniqueName( name.str() );
 
         // Si el elemento se va a colocar a una altura específica se buscan colisiones
         if ( freeItem->getZ() > Top )
@@ -371,8 +388,6 @@ void Room::addFreeItem( FreeItem * freeItem )
         }
 
         mediator->remaskWithFreeItem( freeItem );
-
-        this->lastFreeId += 2;
 }
 
 bool Room::addPlayerToRoom( PlayerItem* playerItem, bool playerEntersRoom )
@@ -397,7 +412,7 @@ bool Room::addPlayerToRoom( PlayerItem* playerItem, bool playerEntersRoom )
                         if ( enteredPlayer->getLabel() == "headoverheels" && playerItem->getLabel() != "headoverheels" )
                         {
                                 // case when joined character enters room, splits in this room, and one of characters exits & re~enters
-                                std::cout << "player \"" << playerItem->getLabel() << "\" enters but joined \"headoverheels\" entered the same room before" << std::endl ;
+                                std::cout << "character \"" << playerItem->getLabel() << "\" enters but joined \"headoverheels\" entered the same room before" << std::endl ;
 
                                 // bin joined character
                                 this->playersWhoEnteredRoom.remove( enteredPlayer );
@@ -413,7 +428,7 @@ bool Room::addPlayerToRoom( PlayerItem* playerItem, bool playerEntersRoom )
                         if ( enteredPlayer->getLabel() == playerItem->getLabel() )
                         {
                                 // case when character returns back to this room, maybe via different way
-                                std::cout << "player \"" << playerItem->getLabel() << "\" already entered this room some time ago" << std::endl ;
+                                std::cout << "character \"" << playerItem->getLabel() << "\" already entered this room some time ago" << std::endl ;
 
                                 // bin previous entry
                                 this->playersWhoEnteredRoom.remove( enteredPlayer );
@@ -448,8 +463,16 @@ bool Room::addPlayerToRoom( PlayerItem* playerItem, bool playerEntersRoom )
 
         mediator->clearStackOfCollisions ();
 
-        // assign identifier for item
-        playerItem->setId( this->lastFreeId );
+        std::string labelOfItem = playerItem->getLabel() ;
+        unsigned int uniqueNumberOfItem = nextNumbers[ labelOfItem ] ;
+        if ( uniqueNumberOfItem > 0 ) // is there some player with the same label
+        {
+                 std::cerr << "oops, can’t add the second character \"" << labelOfItem << "\" to room" << std::endl ;
+                 return false;
+        }
+        nextNumbers[ labelOfItem ] = uniqueNumberOfItem + 1;
+
+        playerItem->setUniqueName( labelOfItem + " @ " + getNameOfFileWithDataAboutRoom() );
 
         // for item which is placed at some height, look for collisions
         if ( playerItem->getZ() > Top )
@@ -498,7 +521,7 @@ bool Room::addPlayerToRoom( PlayerItem* playerItem, bool playerEntersRoom )
 
         // add player item to room
         this->playersYetInRoom.push_back( playerItem );
-        std::cout << "player \"" << playerItem->getLabel() << "\" is now in room \"" << nameOfFileWithDataAboutRoom << "\"" << std::endl ;
+        std::cout << "character \"" << playerItem->getLabel() << "\" is now in room \"" << nameOfFileWithDataAboutRoom << "\"" << std::endl ;
 
         if ( playerEntersRoom )
         {
@@ -506,12 +529,10 @@ bool Room::addPlayerToRoom( PlayerItem* playerItem, bool playerEntersRoom )
                 copyOfPlayer->assignBehavior( playerItem->getBehavior()->getNameOfBehavior(), playerItem->getDataOfItem() );
                 this->playersWhoEnteredRoom.push_back( copyOfPlayer );
 
-                std::cout << "copy of player \"" << copyOfPlayer->getLabel() << "\""
+                std::cout << "copy of character \"" << copyOfPlayer->getLabel() << "\""
                                 << " with behavior \"" << copyOfPlayer->getBehavior()->getNameOfBehavior() << "\""
                                 << " is created to rebuild this room" << std::endl ;
         }
-
-        this->lastFreeId += 2;
 
         return true;
 }
@@ -549,7 +570,7 @@ void Room::copyAnotherCharacterAsEntered( const std::string& name )
                         {
                                 PlayerItem* copy = new PlayerItem( *( *pi ) );
                                 copy->assignBehavior( ( *pi )->getBehavior()->getNameOfBehavior(), ( *pi )->getDataOfItem() );
-                                copy->setWayOfEntry( JustWait );
+                                copy->setWayOfEntry( "just wait" );
 
                                 playersWhoEnteredRoom.push_back( copy );
                         }
@@ -612,6 +633,7 @@ bool Room::removePlayerFromRoom( PlayerItem* playerItem, bool playerExitsRoom )
                 if ( playerItem == *pi )
                 {
                         mediator->removeItem( playerItem );
+                        nextNumbers[ playerItem->getLabel() ] -- ;
 
                         if ( this->shadingScale < 256 && playerItem->getImageOfShadow() )
                         {
@@ -629,7 +651,7 @@ bool Room::removePlayerFromRoom( PlayerItem* playerItem, bool playerExitsRoom )
                                         // activate other player in room
                                         mediator->setActivePlayer( nextPlayer );
 
-                                        std::cout << "player \"" << nextPlayer->getLabel() << "\""
+                                        std::cout << "character \"" << nextPlayer->getLabel() << "\""
                                                         << " is yet active in room \"" << getNameOfFileWithDataAboutRoom() << "\""
                                                         << std::endl ;
                                 }
@@ -637,7 +659,7 @@ bool Room::removePlayerFromRoom( PlayerItem* playerItem, bool playerExitsRoom )
 
                         std::string nameOfPlayer = playerItem->getLabel();
 
-                        std::cout << "removing player \"" << nameOfPlayer << "\""
+                        std::cout << "removing character \"" << nameOfPlayer << "\""
                                         << " from room \"" << getNameOfFileWithDataAboutRoom() << "\""
                                                 << std::endl ;
 
@@ -655,7 +677,7 @@ bool Room::removePlayerFromRoom( PlayerItem* playerItem, bool playerExitsRoom )
 
                                         if ( enteredPlayer->getLabel() == nameOfPlayer )
                                         {
-                                                std::cout << "also removing copy of player \"" << nameOfPlayer << "\" created on entry to this room" << std::endl ;
+                                                std::cout << "also removing copy of character \"" << nameOfPlayer << "\" created on entry to this room" << std::endl ;
 
                                                 this->playersWhoEnteredRoom.remove( enteredPlayer );
                                                 /// epi-- ; // not needed because of "break"
@@ -817,20 +839,20 @@ void Room::draw( BITMAP* where )
 
 void Room::calculateBounds()
 {
-        bounds[ North ] = doors[ North ] || doors[ Northeast ] || doors[ Northwest ] || this->kindOfFloor == "none" ? tileSize : 0;
-        bounds[ East ] = doors[ East ] || doors[ Eastnorth ] || doors[ Eastsouth ] || this->kindOfFloor == "none" ? tileSize : 0;
-        bounds[ South ] = tileSize * numberOfTiles.first - ( doors[ South ] || doors[ Southeast ] || doors[ Southwest ]  ? tileSize : 0 );
-        bounds[ West ] = tileSize * numberOfTiles.second - ( doors[ West ] || doors[ Westnorth ] || doors[ Westsouth ]  ? tileSize : 0 );
+        bounds[ "north" ] = doors[ North ] || doors[ Northeast ] || doors[ Northwest ] || this->kindOfFloor == "none" ? tileSize : 0;
+        bounds[ "east" ] = doors[ East ] || doors[ Eastnorth ] || doors[ Eastsouth ] || this->kindOfFloor == "none" ? tileSize : 0;
+        bounds[ "south" ] = tileSize * numberOfTiles.first - ( doors[ South ] || doors[ Southeast ] || doors[ Southwest ]  ? tileSize : 0 );
+        bounds[ "west" ] = tileSize * numberOfTiles.second - ( doors[ West ] || doors[ Westnorth ] || doors[ Westsouth ]  ? tileSize : 0 );
 
         // door limits of triple room
-        bounds[ Northeast ] = doors[ Northeast ] ? doors[ Northeast ]->getLintel()->getX() + doors[ Northeast ]->getLintel()->getWidthX() - tileSize : bounds[ North ];
-        bounds[ Northwest ] = doors[ Northwest ] ? doors[ Northwest ]->getLintel()->getX() + doors[ Northwest ]->getLintel()->getWidthX() - tileSize : bounds[ North ];
-        bounds[ Southeast ] = doors[ Southeast ] ? doors[ Southeast ]->getLintel()->getX() + tileSize : bounds[ South ];
-        bounds[ Southwest ] = doors[ Southwest ] ? doors[ Southwest ]->getLintel()->getX() + tileSize : bounds[ South ];
-        bounds[ Eastnorth ] = doors[ Eastnorth ] ? doors[ Eastnorth ]->getLintel()->getY() + doors[ Eastnorth ]->getLintel()->getWidthY() - tileSize : bounds[ East ];
-        bounds[ Eastsouth ] = doors[ Eastsouth ] ? doors[ Eastsouth ]->getLintel()->getY() + doors[ Eastsouth ]->getLintel()->getWidthY() - tileSize : bounds[ East ];
-        bounds[ Westnorth ] = doors[ Westnorth ] ? doors[ Westnorth ]->getLintel()->getY() + tileSize : bounds[ West ];
-        bounds[ Westsouth ] = doors[ Westsouth ] ? doors[ Westsouth ]->getLintel()->getY() + tileSize : bounds[ West ];
+        bounds[ "northeast" ] = doors[ Northeast ] ? doors[ Northeast ]->getLintel()->getX() + doors[ Northeast ]->getLintel()->getWidthX() - tileSize : bounds[ "north" ];
+        bounds[ "northwest" ] = doors[ Northwest ] ? doors[ Northwest ]->getLintel()->getX() + doors[ Northwest ]->getLintel()->getWidthX() - tileSize : bounds[ "north" ];
+        bounds[ "southeast" ] = doors[ Southeast ] ? doors[ Southeast ]->getLintel()->getX() + tileSize : bounds[ "south" ];
+        bounds[ "southwest" ] = doors[ Southwest ] ? doors[ Southwest ]->getLintel()->getX() + tileSize : bounds[ "south" ];
+        bounds[ "eastnorth" ] = doors[ Eastnorth ] ? doors[ Eastnorth ]->getLintel()->getY() + doors[ Eastnorth ]->getLintel()->getWidthY() - tileSize : bounds[ "east" ];
+        bounds[ "eastsouth" ] = doors[ Eastsouth ] ? doors[ Eastsouth ]->getLintel()->getY() + doors[ Eastsouth ]->getLintel()->getWidthY() - tileSize : bounds[ "east" ];
+        bounds[ "westnorth" ] = doors[ Westnorth ] ? doors[ Westnorth ]->getLintel()->getY() + tileSize : bounds[ "west" ];
+        bounds[ "westsouth" ] = doors[ Westsouth ] ? doors[ Westsouth ]->getLintel()->getY() + tileSize : bounds[ "west" ];
 }
 
 void Room::calculateCoordinates( bool hasNorthDoor, bool hasEastDoor, int deltaX, int deltaY )
@@ -942,17 +964,17 @@ bool Room::calculateEntryCoordinates( const Way& wayOfEntry, int widthX, int wid
                 const int limitOfSingleRoom = maxTilesOfSingleRoom * tileSize ;
 
                 // calculate the difference on X axis when moving from single room to double room or vice versa
-                if ( ( bounds[ South ] - bounds[ North ] > limitOfSingleRoom && southBound - northBound <= limitOfSingleRoom ) ||
-                        ( bounds[ South ] - bounds[ North ] <= limitOfSingleRoom && southBound - northBound > limitOfSingleRoom ) )
+                if ( ( bounds[ "south" ] - bounds[ "north" ] > limitOfSingleRoom && southBound - northBound <= limitOfSingleRoom ) ||
+                        ( bounds[ "south" ] - bounds[ "north" ] <= limitOfSingleRoom && southBound - northBound > limitOfSingleRoom ) )
                 {
-                        differentSizeDeltaX = ( bounds[ South ] - bounds[ North ] - southBound + northBound ) >> 1;
+                        differentSizeDeltaX = ( bounds[ "south" ] - bounds[ "north" ] - southBound + northBound ) >> 1;
                 }
 
                 // calculate the difference on Y axis when moving from single room to double room or vice versa
-                if ( ( bounds[ West ] - bounds[ East ] > limitOfSingleRoom && westBound - eastBound <= limitOfSingleRoom ) ||
-                        ( bounds[ West ] - bounds[ East ] <= limitOfSingleRoom && westBound - eastBound > limitOfSingleRoom ) )
+                if ( ( bounds[ "west" ] - bounds[ "east" ] > limitOfSingleRoom && westBound - eastBound <= limitOfSingleRoom ) ||
+                        ( bounds[ "west" ] - bounds[ "east" ] <= limitOfSingleRoom && westBound - eastBound > limitOfSingleRoom ) )
                 {
-                        differentSizeDeltaY = ( bounds[ West ] - bounds[ East ] - westBound + eastBound ) >> 1;
+                        differentSizeDeltaY = ( bounds[ "west" ] - bounds[ "east" ] - westBound + eastBound ) >> 1;
                 }
         }
 
@@ -960,14 +982,14 @@ bool Room::calculateEntryCoordinates( const Way& wayOfEntry, int widthX, int wid
         switch ( wayOfEntry.getIntegerOfWay () )
         {
                 case North:
-                        *x = bounds[ North ] - tileSize + 1;
+                        *x = bounds[ "north" ] - tileSize + 1;
                         *y = doors[ North ]->getLeftJamb()->getY() - doors[ North ]->getLeftJamb()->getWidthY();
                         *z = doors[ North ]->getLeftJamb()->getZ();
                         result = true;
                         break;
 
                 case South:
-                        *x = bounds[ South ] + tileSize - widthX;
+                        *x = bounds[ "south" ] + tileSize - widthX;
                         *y = doors[ South ]->getLeftJamb()->getY() - doors[ South ]->getLeftJamb()->getWidthY();
                         *z = doors[ South ]->getLeftJamb()->getZ();
                         result = true;
@@ -975,41 +997,41 @@ bool Room::calculateEntryCoordinates( const Way& wayOfEntry, int widthX, int wid
 
                 case East:
                         *x = doors[ East ]->getLeftJamb()->getX() + doors[ East ]->getLeftJamb()->getWidthX();
-                        *y = bounds[ East ] - tileSize + widthY;
+                        *y = bounds[ "east" ] - tileSize + widthY;
                         *z = doors[ East ]->getLeftJamb()->getZ();
                         result = true;
                         break;
 
                 case West:
                         *x = doors[ West ]->getLeftJamb()->getX() + doors[ West ]->getLeftJamb()->getWidthX();
-                        *y = bounds[ West ] + tileSize - 1;
+                        *y = bounds[ "west" ] + tileSize - 1;
                         *z = doors[ West ]->getLeftJamb()->getZ();
                         result = true;
                         break;
 
                 case Northeast:
-                        *x = bounds[ Northeast ];
+                        *x = bounds[ "northeast" ];
                         *y = doors[ Northeast ]->getLeftJamb()->getY() - doors[ Northeast ]->getLeftJamb()->getWidthY();
                         *z = doors[ Northeast ]->getLeftJamb()->getZ();
                         result = true;
                         break;
 
                 case Northwest:
-                        *x = bounds[ Northwest ];
+                        *x = bounds[ "northwest" ];
                         *y = doors[ Northwest ]->getLeftJamb()->getY() - doors[ Northwest ]->getLeftJamb()->getWidthY();
                         *z = doors[ Northwest ]->getLeftJamb()->getZ();
                         result = true;
                         break;
 
                 case Southeast:
-                        *x = bounds[ Southeast ] - widthX;
+                        *x = bounds[ "southeast" ] - widthX;
                         *y = doors[ Southeast ]->getLeftJamb()->getY() - doors[ Southeast ]->getLeftJamb()->getWidthY();
                         *z = doors[ Southeast ]->getLeftJamb()->getZ();
                         result = true;
                         break;
 
                 case Southwest:
-                        *x = bounds[ Southwest ] - widthX;
+                        *x = bounds[ "southwest" ] - widthX;
                         *y = doors[ Southwest ]->getLeftJamb()->getY() - doors[ Southwest ]->getLeftJamb()->getWidthY();
                         *z = doors[ Southwest ]->getLeftJamb()->getZ();
                         result = true;
@@ -1017,56 +1039,56 @@ bool Room::calculateEntryCoordinates( const Way& wayOfEntry, int widthX, int wid
 
                 case Eastnorth:
                         *x = doors[ Eastnorth ]->getLeftJamb()->getX() + doors[ Eastnorth ]->getLeftJamb()->getWidthX();
-                        *y = bounds[ Eastnorth ] + widthY;
+                        *y = bounds[ "eastnorth" ] + widthY;
                         *z = doors[ Eastnorth ]->getLeftJamb()->getZ();
                         result = true;
                         break;
 
                 case Eastsouth:
                         *x = doors[ Eastsouth ]->getLeftJamb()->getX() + doors[ Eastsouth ]->getLeftJamb()->getWidthX();
-                        *y = bounds[ Eastsouth ] + widthY;
+                        *y = bounds[ "eastsouth" ] + widthY;
                         *z = doors[ Eastsouth ]->getLeftJamb()->getZ();
                         result = true;
                         break;
 
                 case Westnorth:
                         *x = doors[ Westnorth ]->getLeftJamb()->getX() + doors[ Westnorth ]->getLeftJamb()->getWidthX();
-                        *y = bounds[ Westnorth ] - widthY;
+                        *y = bounds[ "westnorth" ] - widthY;
                         *z = doors[ Westnorth ]->getLeftJamb()->getZ();
                         result = true;
                         break;
 
                 case Westsouth:
                         *x = doors[ Westsouth ]->getLeftJamb()->getX() + doors[ Westsouth ]->getLeftJamb()->getWidthX();
-                        *y = bounds[ Westsouth ] - widthY;
+                        *y = bounds[ "westsouth" ] - widthY;
                         *z = doors[ Westsouth ]->getLeftJamb()->getZ();
                         result = true;
                         break;
 
                 case Up:
-                        *x += bounds[ North ] - northBound + ( ( bounds[ South ] - bounds[ North ] - southBound + northBound ) >> 1 );
-                        *x += ( *x < ( ( bounds[ South ] - bounds[ North ] ) >> 1 ) ? -differentSizeDeltaX : differentSizeDeltaX );
-                        *y += bounds[ East ] - eastBound + ( ( bounds[West] - bounds[East] - westBound + eastBound ) >> 1 );
-                        *y += ( *y < ( ( bounds[ West ] - bounds[ East ] ) >> 1 ) ? -differentSizeDeltaY : differentSizeDeltaY );
+                        *x += bounds[ "north" ] - northBound + ( ( bounds[ "south" ] - bounds[ "north" ] - southBound + northBound ) >> 1 );
+                        *x += ( *x < ( ( bounds[ "south" ] - bounds[ "north" ] ) >> 1 ) ? -differentSizeDeltaX : differentSizeDeltaX );
+                        *y += bounds[ "east" ] - eastBound + ( ( bounds[ "west" ] - bounds[ "east" ] - westBound + eastBound ) >> 1 );
+                        *y += ( *y < ( ( bounds[ "west" ] - bounds[ "east" ] ) >> 1 ) ? -differentSizeDeltaY : differentSizeDeltaY );
                         *z = MaxLayers * LayerHeight;
                         result = true;
                         break;
 
                 case Down:
-                        *x += bounds[ North ] - northBound + ( ( bounds[ South ] - bounds[ North ] - southBound + northBound ) >> 1 );
-                        *x += ( *x < ( ( bounds[ South ] - bounds[ North ] ) >> 1 ) ? -differentSizeDeltaX : differentSizeDeltaX );
-                        *y += bounds[ East ] - eastBound + ( ( bounds[ West ] - bounds[ East ] - westBound + eastBound) >> 1 );
-                        *y += ( *y < ( ( bounds[ West ] - bounds[ East ]) >> 1 ) ? -differentSizeDeltaY : differentSizeDeltaY );
+                        *x += bounds[ "north" ] - northBound + ( ( bounds[ "south" ] - bounds[ "north" ] - southBound + northBound ) >> 1 );
+                        *x += ( *x < ( ( bounds[ "south" ] - bounds[ "north" ] ) >> 1 ) ? -differentSizeDeltaX : differentSizeDeltaX );
+                        *y += bounds[ "east" ] - eastBound + ( ( bounds[ "west" ] - bounds[ "east" ] - westBound + eastBound) >> 1 );
+                        *y += ( *y < ( ( bounds[ "west" ] - bounds[ "east" ]) >> 1 ) ? -differentSizeDeltaY : differentSizeDeltaY );
                         *z = LayerHeight;
                         result = true;
                         break;
 
                 case ByTeleport:
                 case ByTeleportToo:
-                        *x += bounds[ North ] - northBound + ( ( bounds[ South ] - bounds[ North ] - southBound + northBound ) >> 1 );
-                        *x += ( *x < ( ( bounds[ South ] - bounds[ North ] ) >> 1 ) ? -differentSizeDeltaX : differentSizeDeltaX );
-                        *y += differentSizeDeltaY + bounds[ East ] - eastBound + ( ( bounds[ West ] - bounds[ East ] - westBound + eastBound ) >> 1 );
-                        *y += ( *y < ( ( bounds[ West ] - bounds[ East ] ) >> 1 ) ? -differentSizeDeltaY : differentSizeDeltaY );
+                        *x += bounds[ "north" ] - northBound + ( ( bounds[ "south" ] - bounds[ "north" ] - southBound + northBound ) >> 1 );
+                        *x += ( *x < ( ( bounds[ "south" ] - bounds[ "north" ] ) >> 1 ) ? -differentSizeDeltaX : differentSizeDeltaX );
+                        *y += differentSizeDeltaY + bounds[ "east" ] - eastBound + ( ( bounds[ "west" ] - bounds[ "east" ] - westBound + eastBound ) >> 1 );
+                        *y += ( *y < ( ( bounds[ "west" ] - bounds[ "east" ] ) >> 1 ) ? -differentSizeDeltaY : differentSizeDeltaY );
                         result = true;
                         break;
 

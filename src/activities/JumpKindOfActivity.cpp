@@ -53,14 +53,14 @@ bool JumpKindOfActivity::jump( Behavior* behavior, ActivityOfItem* activity, con
                 {
                         while ( ! mediator->isStackOfCollisionsEmpty() )
                         {
-                                int id = mediator->popCollision();
+                                std::string nameOfCollision = mediator->popCollision();
+                                Item* item = mediator->findItemByUniqueName( nameOfCollision );
 
-                                // is it free item or grid item
-                                if ( ( id >= FirstFreeId && ( id & 1 ) ) || ( id >= FirstGridId && ! ( id & 1 ) ) )
+                                if ( item != nilPointer )
                                 {
-                                        Item* item = mediator->findItemById( id );
-
-                                        if ( item != nilPointer )
+                                        // is it free item or grid item
+                                        if ( item->whichKindOfItem() == "grid item" ||
+                                                item->whichKindOfItem() == "free item" || item->whichKindOfItem() == "player item" )
                                         {
                                                 // mortal thing is above
                                                 if ( item->isMortal() && ! playerItem->hasShield() )

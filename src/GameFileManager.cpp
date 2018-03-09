@@ -188,7 +188,7 @@ void GameFileManager::saveGame( const std::string& fileName )
                                         whoWaitsToPlay->getY(),
                                         whoWaitsToPlay->getZ(),
                                         whoWaitsToPlay->getOrientation().getIntegerOfWay(),
-                                        whoWaitsToPlay->getWayOfEntry().getIntegerOfWay(),
+                                        Way( whoWaitsToPlay->getWayOfEntry() ).getIntegerOfWay(),
                                         whoWaitsToPlay->getLives(),
                                         whoWaitsToPlay->getLabel() == "head"
                                                 ? std::find( tools.begin(), tools.end(), "horn" ) != tools.end()

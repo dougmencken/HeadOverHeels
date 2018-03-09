@@ -19,26 +19,6 @@
 namespace isomot
 {
 
-/**
- * When player reaches limit of room, it moves to other room
- */
-enum LimitsOfRoom
-{
-        NoLimit = 0,
-        EastLimit = 10,         /* eastern limit of room */
-        NorthLimit,             /* northern limit of room */
-        WestLimit,              /* western limit of room */
-        SouthLimit,             /* southern limit of room */
-        NortheastLimit = 20,    /* limit behind northeast gate of triple or quad room */
-        NorthwestLimit,         /* limit behind northwest gate of triple or quad room */
-        SoutheastLimit,         /* limit behind southeast gate of triple or quad room */
-        SouthwestLimit,         /* limit behind southwest gate of triple or quad room */
-        EastnorthLimit,         /* limit behind eastnorth gate of triple or quad room */
-        EastsouthLimit,         /* limit behind eastsouth gate of triple or quad room */
-        WestnorthLimit,         /* limit behind westnorth gate of triple or quad room */
-        WestsouthLimit          /* limit behind westsouth gate of triple or quad room */
-} ;
-
 class ItemData ;
 class GameManager ;
 
@@ -67,7 +47,7 @@ public:
         /**
          * Change activity of player by way of entry to room
          */
-        void autoMoveOnEntry ( const Way& wayOfEntry ) ;
+        void autoMoveOnEntry ( const std::string& wayOfEntry ) ;
 
         virtual void behave () ;
 
@@ -165,22 +145,21 @@ protected:
         /**
          * Check if player hits a door, if yes then move player
          * @param way door mentioned by its position in room
-         * @param id identifier of item, assigned by engine, in stack of collisions
+         * @param name unique name of item from stack of collisions
          */
-        bool isCollidingWithDoor ( const Way& way, int id, const PlayerItem& previousPosition ) ;
+        bool isCollidingWithDoor ( const std::string& way, const std::string& name, const PlayerItem& previousPosition ) ;
 
         /**
          * See if player is not under a door or that door doesn’t exist
          * @param way door mentioned by its position in room
          * @return true if the player is under that given door
          */
-        bool isNotUnderDoor ( const Way& way ) ;
+        bool isNotUnderDoor ( const std::string& way ) ;
 
         /**
          * See if player crosses limits of room, if yes then change rooms
-         * @param way door mentioned by its position in room
          */
-        bool isCollidingWithRoomBorder( const Way& way ) ;
+        bool isCollidingWithLimitOfRoom( const std::string& onWhichWay ) ;
 
 private:
 
@@ -219,12 +198,12 @@ private:
         /**
          * Way of player when it leaves room
          */
-        Way exit ;
+        std::string exit ;
 
         /**
          * How player enters room: through door, or via teleport, or going below floor or above ceiling
          */
-        Way entry ;
+        std::string entry ;
 
         /**
          * Time of immunity, player gots 25 seconds of immunity when rabbit is caught
@@ -326,16 +305,16 @@ public:
         /**
          * Way of player when it leaves room
          */
-        void setWayOfExit ( const Way& way ) ;
+        void setWayOfExit ( const std::string& way ) ;
 
-        Way getWayOfExit () const {  return this->exit ;  }
+        std::string getWayOfExit () const {  return this->exit ;  }
 
         /**
          * How player enters room
          */
-        Way getWayOfEntry () const {  return this->entry ;  }
+        std::string getWayOfEntry () const {  return this->entry ;  }
 
-        void setWayOfEntry ( const Way& way ) {  this->entry = way ;  }
+        void setWayOfEntry ( const std::string& way ) {  this->entry = way ;  }
 
 };
 

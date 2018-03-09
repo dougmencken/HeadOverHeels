@@ -11,7 +11,7 @@
 #ifndef FallKindOfActivity_hpp_
 #define FallKindOfActivity_hpp_
 
-#include <stack>
+#include <vector>
 #include "Ism.hpp"
 #include "KindOfActivity.hpp"
 
@@ -48,7 +48,7 @@ public:
 
 private:
 
-        void assignAnchor ( FreeItem * freeItem, std::stack < int > items ) ;
+        void assignAnchor ( FreeItem * freeItem, const std::vector < std::string > & items ) ;
 
 private:
 

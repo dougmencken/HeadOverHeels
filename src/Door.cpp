@@ -77,6 +77,7 @@ FreeItem* Door::getLeftJamb()
                         }
 
                         leftJamb = new FreeItem( leftJambData, x, y, Top, Nowhere );
+                        leftJamb->setUniqueName( leftJamb->getLabel() + " " + makeRandomString( 8 ) );
                 }
         }
 
@@ -133,6 +134,7 @@ FreeItem* Door::getRightJamb()
                         }
 
                         rightJamb = new FreeItem( rightJambData, x, y, Top, Nowhere );
+                        rightJamb->setUniqueName( rightJamb->getLabel() + " " + makeRandomString( 8 ) );
                 }
         }
 
@@ -185,6 +187,7 @@ FreeItem* Door::getLintel()
                         }
 
                         lintel = new FreeItem( lintelData, x, y, Top, Nowhere );
+                        lintel->setUniqueName( lintel->getLabel() + " " + makeRandomString( 8 ) );
                 }
         }
 

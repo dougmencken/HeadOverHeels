@@ -75,6 +75,9 @@ void nanoSleep ( unsigned long nanoseconds );
 
 namespace isomot
 {
+
+        std::string makeRandomString( const size_t length ) ;
+
         /** print backtrace of caller */
         inline void printBacktrace ( FILE * out = stdout, unsigned int howDeep = 80 )
         {
@@ -227,17 +230,6 @@ namespace isomot
          * In isometric units maximum height of room is LayerHeight * MaxLayers
          */
         const int MaxLayers = 10 ;
-
-        /**
-         * Identifier of first free element assigned by engine
-         * Supposed to be an odd number
-         */
-        const int FirstFreeId = 2211 ;
-
-        /**
-         * Identifier of first grid element assigned by engine
-         */
-        const int FirstGridId = FirstFreeId + 1 ;
 
 }
 

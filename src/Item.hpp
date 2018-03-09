@@ -24,20 +24,6 @@
 namespace isomot
 {
 
-/**
- * Special things
- */
-enum SpecialStuff
-{
-        None = 0,
-        EastWall,       /* some segment of east wall */
-        NorthWall,      /* some segment of north wall */
-        WestWall,       /* some segment of west wall */
-        SouthWall,      /* some segment of south wall */
-        Floor,          /* some tile of floor */
-        Roof            /* some tile of ceiling */
-} ;
-
 enum Coordinate
 {
         CoordinateX = 1,
@@ -153,30 +139,24 @@ public:
 
 protected:
 
-        /**
-         * Identificador único del elemento asignado por el motor
-         */
-        int id ;
-
         std::string label ;
 
-        /**
-         * Datos invariables del elemento, aquellos que definen sus características básicas
-         */
+        std::string uniqueName ;
+
         ItemData * dataOfItem ;
 
         /**
-         * Posición espacial X en unidades isométricas
+         * Spacial position X in isometric units
          */
         int x ;
 
         /**
-         * Posición espacial Y en unidades isométricas
+         * Spacial position Y in isometric units
          */
         int y ;
 
         /**
-         * Posición espacial Z en unidades isométricas
+         * Spacial position Z in isometric units
          */
         int z ;
 
@@ -233,17 +213,9 @@ private:
 
 public:
 
-        /**
-         * Establece el identificador único del elemento asignado por el motor
-         * @param id Un número positivo
-         */
-        void setId ( const int id ) {  this->id = id ;  }
+        std::string getUniqueName () const {  return uniqueName ;  }
 
-        /**
-         * Identificador único del elemento asignado por el motor
-         * @return Un número positivo
-         */
-        int getId () const {  return id ;  }
+        void setUniqueName ( const std::string& name ) {  this->uniqueName = name ;  }
 
         ItemData * getDataOfItem () const {  return dataOfItem ;  }
 
@@ -375,7 +347,7 @@ public:
 
         /**
          * Reference item used to know if it would move when others are below
-         * @return such item or 0 if there’s none
+         * @return such item or nil if there’s none
          */
         Item * getAnchor () const {  return this->anchor ;  }
 

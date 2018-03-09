@@ -266,7 +266,7 @@ void UserControlled::jump( PlayerItem * player )
         // when player is at maximum height of room it may go to room above
         if ( player->getZ() >= MaxLayers * LayerHeight )
         {
-                player->setWayOfExit( Up );
+                player->setWayOfExit( "up" );
         }
 }
 
@@ -374,7 +374,7 @@ void UserControlled::wayOutTeletransport( PlayerItem * player )
                         if ( player->animate() )
                         {
                                 player->addToZ( -1 );
-                                player->setWayOfExit( player->getMediator()->collisionWithByLabel( "teleport" ) ? ByTeleport : ByTeleportToo );
+                                player->setWayOfExit( player->getMediator()->collisionWithByLabel( "teleport" ) ? "via teleport" : "via second teleport" );
                         }
                         break;
 
@@ -407,7 +407,7 @@ void UserControlled::collideWithMortalItem( PlayerItem* player )
                         // animate item, restart room when animation finishes
                         if ( player->animate() )
                         {
-                                player->setWayOfExit( Restart );
+                                player->setWayOfExit( "rebuild room" );
                                 player->loseLife();
                         }
                         break;

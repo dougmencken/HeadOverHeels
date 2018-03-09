@@ -97,23 +97,22 @@ public:
         void maskFreeItem ( FreeItem* freeItem ) ;
 
        /**
-        * Find item in room by its identifier
-        * @param id Identifier of item given by engine
-        * @return item found or 0 if no such item
+        * Find item in room by its unique name
+        * @return item found or nil if no such item
         */
-        Item* findItemById ( int id ) ;
+        Item * findItemByUniqueName ( const std::string& uniqueName ) ;
 
        /**
         * Find item in room by its label
-        * @param label Label of item, when there are several elements with this label return the first found one
-        * @return item found or 0 if no such item
+        * @param label Label of item, when there are several elements with this label return the first one found
+        * @return item found or nil if no such item
         */
-        Item* findItemByLabel ( const std::string& label ) ;
+        Item * findItemByLabel ( const std::string& label ) ;
 
        /**
         * Find item in room by its behavior
         */
-        Item* findItemByBehavior ( const std::string& behavior ) ;
+        Item * findItemByBehavior ( const std::string& behavior ) ;
 
        /**
         * Look for collisions between the given item and other items in room
@@ -135,58 +134,37 @@ public:
 
         void removeItem ( FreeItem* freeItem ) ;
 
-       /**
-        * Añade un elemento a la pila de colisiones
-        * @param id Identificador del elemento
-        */
-        void pushCollision ( int id ) ;
+        void pushCollision ( const std::string& uniqueName ) ;
 
        /**
-        * Saca el primer elemento de la pila de colisiones
-        * @return Un identificador de un elemento asignado por el motor ó 0 si la pila está vacía
+        * @return unique name of item or empty string when stack is empty
         */
-        int popCollision () ;
+        std::string popCollision () ;
 
-       /**
-        * Vacía la pila de colisiones
-        */
         void clearStackOfCollisions () {  collisions.clear() ;  }
 
-       /**
-        * Indica si la pila de colisiones está vacía
-        * @return true si está vacía o false en caso contrario
-        */
         bool isStackOfCollisionsEmpty () {  return collisions.empty() ;  }
 
-       /**
-        * Número de elementos en la pila de colisiones
-        * @return Un número positivo ó 0 si la pila está vacía
-        */
         unsigned int depthOfStackOfCollisions () {  return collisions.size() ;  }
+
+        Item * findCollisionPop () {  return this->findItemByUniqueName( this->popCollision() ) ;  }
 
        /**
         * Is there collision with item of a given label
-        * @return item with which collision happened or 0 if there’s no collision
+        * @return item with which collision happened or nil if there’s no collision
         */
-        Item* collisionWithByLabel ( const std::string& label ) ;
+        Item * collisionWithByLabel ( const std::string& label ) ;
 
        /**
         * Is there collision with item of a given behavior
-        * @return item with which collision happened or 0 if there’s no collision
+        * @return item with which collision happened or nil if there’s no collision
         */
-        Item* collisionWithByBehavior ( const std::string& behavior ) ;
+        Item * collisionWithByBehavior ( const std::string& behavior ) ;
 
-        Item* findCollisionPop () {  return this->findItemById( this->popCollision() ) ;  }
+        Item * collisionWithBadBoy () ;
 
        /**
-        * Indica si un elemento ha chocado con otro capaz de quitar vida a un jugador y que pueda
-        * ser detenido por la acción de un disparo
-        * @return El elemento con el que se ha producido la colisión ó 0 si no hay colisión
-        */
-        Item* collisionWithBadBoy () ;
-
-       /**
-        * Select next player present in room
+        * Select next player in room
         * @param itemDataManager Needed to create composite player from simple ones
         *                        or to create simple players from composite
          * @return true if it’s possible to swap or false if there’s only one player in this room
@@ -194,20 +172,14 @@ public:
         bool selectNextPlayer ( ItemDataManager* itemDataManager ) ;
 
        /**
-        * Toggle the switch if it is present in a room, most rooms do not have a switch. If it
-        * turns on then free items stop moving and volatile items are no longer volatile. If it
-        * goes off then such items restore their original behavior
+        * Toggle the switch if it is in room, most rooms do not have a switch. If it turns on
+        * then free items stop moving and volatile items are no longer volatile. If it goes off
+        * then such items restore their original behavior
         */
         void toggleSwitchInRoom () ;
 
-       /**
-        * Activa la ordenación de las listas de elementos rejilla
-        */
         void activateGridItemsSorting () {  this->gridItemsSorting = true ;  }
 
-       /**
-        * Activa la ordenación de la lista de elementos libres
-        */
         void activateFreeItemsSorting () {  this->freeItemsSorting = true ;  }
 
         void lockGridItemMutex () {  pthread_mutex_lock( &gridItemsMutex ) ;  }
@@ -220,19 +192,13 @@ public:
 
 protected:
 
-        void shadeFreeItemsBeneathItem ( Item* item ) ;
+        void shadeFreeItemsBeneathItem ( Item * item ) ;
 
 private:
 
-       /**
-        * Predicado binario para la ordenación una lista de elementos rejilla
-        */
-        static bool sortGridItemList ( GridItem* g1, GridItem* g2 ) ;
+        static bool sortGridItemList ( GridItem * g1, GridItem * g2 ) ;
 
-       /**
-        * Predicado binario para la ordenación la lista de elementos libres
-        */
-        static bool sortFreeItemList ( FreeItem* f1, FreeItem* f2 ) ;
+        static bool sortFreeItemList ( FreeItem * f1, FreeItem * f2 ) ;
 
 private:
 
@@ -241,27 +207,18 @@ private:
        /**
         * Room where this mediator deals
         */
-        Room* room ;
+        Room * room ;
 
        /**
-        * Identificador del subproceso de actualización de los elementos
+        * Thread for update of items
         */
         pthread_t thread ;
 
-       /**
-        * Mútex para controlar el acceso a los elementos rejilla
-        */
+        bool threadRunning ;
+
         pthread_mutex_t gridItemsMutex ;
 
-       /**
-        * Mútex para controlar el acceso a los elementos libres
-        */
         pthread_mutex_t freeItemsMutex ;
-
-       /**
-        * Indica si el subproceso de actualización elementos está o no ejecutándose
-        */
-        bool threadRunning ;
 
         bool gridItemsSorting ;
 
@@ -297,16 +254,12 @@ private:
         PlayerItem * activePlayer ;
 
        /**
-        * Pila de colisiones de la sala. Almacena los identificadores de los elementos
+        * Collisions happened in room, stores unique names of items
         */
-        std::vector < int > collisions ;
+        std::vector < std::string > collisions ;
 
 public:
 
-       /**
-        * Indica si el subproceso de actualización de elementos está ejecutándose
-        * @return true si está en ejecución o false si está detenido
-        */
         bool isThreadRunning () {  return threadRunning ;  }
 
         std::string getLastActivePlayerBeforeJoining () {  return lastActivePlayer ;  }
@@ -317,9 +270,6 @@ public:
         */
         short getDegreeOfShading () const {  return room->shadingScale ;  }
 
-       /**
-        * Sala en la que negocia este mediador
-        */
         Room* getRoom () const {  return room ;  }
 
         std::list < FreeItem * > getFreeItems () {  return freeItems ;  }
@@ -331,8 +281,6 @@ public:
 
        /**
         * Jugador controlado por el usuario
-        * @return Un jugador ó 0 si no hay ninguno en la sala. El segundo caso puede darse durante
-        * la transición entre salas
         */
         PlayerItem* getActivePlayer () const {  return this->activePlayer ;  }
 
@@ -345,11 +293,11 @@ public:
 };
 
 
-class EqualItemId : public std::binary_function< Item *, int, bool >
+class EqualUniqueNameOfItem : public std::binary_function< Item *, std::string, bool >
 {
 
 public:
-        bool operator() ( Item* item, int id ) const ;
+        bool operator() ( Item* item, const std::string& uniqueName ) const ;
 
 };
 

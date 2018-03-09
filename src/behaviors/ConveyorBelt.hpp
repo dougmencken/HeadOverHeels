@@ -35,12 +35,7 @@ public:
 private:
 
        /**
-        * Indica si la cinta está en marcha o detenida
-        */
-        bool active ;
-
-       /**
-        * Cronómetro que controla la velocidad de arrastre de los elementos situados encima
+        * Time for speed of dragging items above conveyor
         */
         Timer * speedTimer ;
 
