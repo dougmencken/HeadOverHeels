@@ -273,32 +273,32 @@
     <item x="4" y="0" z="0">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="4" y="0" z="1">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="4" y="0" z="2">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="4" y="0" z="3">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="4" y="0" z="4">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="4" y="0" z="5">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="5" y="0" z="0">
       <label>another-portable-brick</label>
@@ -309,57 +309,57 @@
     <item x="4" y="1" z="0">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="4" y="1" z="1">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="4" y="1" z="2">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="4" y="1" z="3">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="4" y="1" z="4">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="4" y="1" z="5">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="4" y="2" z="0">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="4" y="2" z="1">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="4" y="2" z="2">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="4" y="2" z="3">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="4" y="2" z="5">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="5" y="2" z="0">
       <label>stool</label>
@@ -370,33 +370,33 @@
     <item x="4" y="3" z="0">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="4" y="3" z="1">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="4" y="3" z="2">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="4" y="3" z="3">
       <label>bars-ns</label>
       <direction>none</direction>
       <behavior>behavior of disappearance on touch</behavior>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="4" y="3" z="4">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="4" y="3" z="5">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="4" y="3" z="6">
       <label>another-portable-brick</label>

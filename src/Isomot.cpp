@@ -227,7 +227,11 @@ BITMAP* Isomot::update()
 
         if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_MINUS ] )
         {
-                activeRoom->removeBars ();
+                unsigned int howManyBars = activeRoom->removeBars ();
+
+                if ( howManyBars > 0 )
+                        std::cout << howManyBars << " bars are gone" << std::endl ;
+
                 key[ KEY_MINUS ] = 0;
         }
 

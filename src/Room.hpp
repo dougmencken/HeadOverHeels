@@ -81,8 +81,9 @@ public:
 
         /**
          * Removes any bar in this room
+         * @return how many bars are gone
          */
-        void removeBars () ;
+        unsigned int removeBars () ;
 
         void draw ( BITMAP * where ) ;
 

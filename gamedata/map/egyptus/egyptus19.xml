@@ -279,17 +279,17 @@
     <item x="1" y="5" z="2">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="1" y="5" z="4">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="1" y="5" z="6">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="1" y="7" z="0">
       <label>brick2</label>

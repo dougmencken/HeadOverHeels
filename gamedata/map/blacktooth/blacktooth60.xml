@@ -480,17 +480,17 @@
     <item x="4" y="0" z="0">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="4" y="0" z="1">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="4" y="0" z="2">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="6" y="0" z="0">
       <label>teleport</label>
@@ -519,17 +519,17 @@
     <item x="4" y="1" z="0">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="4" y="1" z="1">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="4" y="1" z="2">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="6" y="1" z="0">
       <label>teleport</label>
@@ -546,77 +546,77 @@
     <item x="4" y="2" z="0">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="4" y="2" z="1">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="4" y="2" z="2">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="4" y="3" z="0">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="4" y="3" z="1">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="4" y="3" z="2">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="5" y="4" z="0">
       <label>bars-ew</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="5" y="4" z="1">
       <label>bars-ew</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="5" y="4" z="2">
       <label>bars-ew</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="6" y="4" z="0">
       <label>bars-ew</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="6" y="4" z="1">
       <label>bars-ew</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="6" y="4" z="2">
       <label>bars-ew</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="7" y="4" z="0">
       <label>bars-ew</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="7" y="4" z="1">
       <label>bars-ew</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="7" y="4" z="2">
       <label>bars-ew</label>
       <direction>none</direction>
-      <type>griditem</type>
+      <type>freeitem</type>
     </item>
     <item x="7" y="3" z="0">
       <label>extra-life</label>

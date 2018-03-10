@@ -698,16 +698,18 @@ bool Room::isAnyPlayerStillInRoom () const
         return ! this->playersYetInRoom.empty () ;
 }
 
-void Room::removeBars ()
+unsigned int Room::removeBars ()
 {
-        std::vector < std::list < GridItem * > > gridItems = mediator->getGridItems ();
         unsigned int howManyBars = 0;
+
+        std::vector < std::list < GridItem * > > gridItems = mediator->getGridItems ();
+        std::list< FreeItem * > freeItems = mediator->getFreeItems ();
 
         for ( unsigned int column = 0; column < gridItems.size(); column ++ )
         {
                 std::list < GridItem * > columnOfItems = gridItems[ column ];
 
-                for ( std::list< GridItem * >::iterator gi = columnOfItems.begin (); gi != columnOfItems.end (); ++ gi )
+                for ( std::list< GridItem * >::const_iterator gi = columnOfItems.begin (); gi != columnOfItems.end (); ++ gi )
                 {
                         if ( ( *gi )->getLabel() == "bars-ns" || ( *gi )->getLabel() == "bars-ew" )
                         {
@@ -717,8 +719,16 @@ void Room::removeBars ()
                 }
         }
 
-        if ( howManyBars > 0 )
-                std::cout << howManyBars << " bars are gone" << std::endl ;
+        for ( std::list< FreeItem * >::const_iterator fi = freeItems.begin (); fi != freeItems.end (); ++fi )
+        {
+                if ( ( *fi )->getLabel() == "bars-ns" || ( *fi )->getLabel() == "bars-ew" )
+                {
+                        this->removeFreeItem( *fi );
+                        howManyBars ++;
+                }
+        }
+
+        return howManyBars;
 }
 
 void Room::draw( BITMAP* where )
