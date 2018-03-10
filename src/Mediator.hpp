@@ -39,13 +39,7 @@ class Door ;
 class ItemDataManager ;
 
 
-/**
- * In Isomot, column is group of grid items to draw along Z axis
- */
-typedef std::list < GridItem * > Column ;
-
-
-void* updateThread ( void* thisClass ) ;
+void * updateThread ( void * thisClass ) ;
 
 
 /**
@@ -202,8 +196,6 @@ private:
 
 private:
 
-        friend class Room ;
-
        /**
         * Room where this mediator deals
         */
@@ -232,14 +224,13 @@ private:
         std::string lastActivePlayer ;
 
        /**
-        * Conjunto de elementos que forman la estructura de una sala. Cada columna del vector está compuesta de
-        * una lista de elementos rejilla cuya coordenada Z es mayor que la coordenada del elemento precedente,
-        * es decir, forman una pila, aunque dicha pila puede tener huecos
+        * Set of grid items that form structure of room. Each column is list of grid items
+        * sorted thus next item’s Z is greater than preceding item’s Z
         */
-        std::vector < Column > structure ;
+        std::vector < std::list < GridItem * > > gridItems ;
 
        /**
-        * Conjunto de elementos libres de una sala
+        * List of free items in room
         */
         std::list < FreeItem * > freeItems ;
 
@@ -272,23 +263,22 @@ public:
 
         Room* getRoom () const {  return room ;  }
 
-        std::list < FreeItem * > getFreeItems () {  return freeItems ;  }
+        std::vector < std::list < GridItem * > > getGridItems () const {  return gridItems ;  }
+
+        std::list < FreeItem * > getFreeItems () const {  return freeItems ;  }
 
        /**
-        * Establece el jugador controlado por el usuario
+        * Character yet controlled by user
         */
+        PlayerItem * getActivePlayer () const {  return this->activePlayer ;  }
+
         void setActivePlayer ( PlayerItem* playerItem ) ;
 
        /**
-        * Jugador controlado por el usuario
+        * Waiting character
+        * @return player item or nil if there’re no more players in this room
         */
-        PlayerItem* getActivePlayer () const {  return this->activePlayer ;  }
-
-       /**
-        * Jugador inactivo, aquel que no está controlando el usuario
-        * @return Un jugador ó 0 si no hay más jugadores
-        */
-        PlayerItem* getWaitingPlayer () const ;
+        PlayerItem * getWaitingPlayer () const ;
 
 };
 

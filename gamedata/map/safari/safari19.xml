@@ -967,62 +967,62 @@
     <item x="3" y="7" z="0">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>freeitem</type>
+      <type>griditem</type>
     </item>
     <item x="3" y="7" z="1">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>freeitem</type>
+      <type>griditem</type>
     </item>
     <item x="3" y="7" z="2">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>freeitem</type>
+      <type>griditem</type>
     </item>
     <item x="3" y="8" z="0">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>freeitem</type>
+      <type>griditem</type>
     </item>
     <item x="3" y="8" z="1">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>freeitem</type>
+      <type>griditem</type>
     </item>
     <item x="3" y="8" z="2">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>freeitem</type>
+      <type>griditem</type>
     </item>
     <item x="3" y="9" z="0">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>freeitem</type>
+      <type>griditem</type>
     </item>
     <item x="3" y="9" z="1">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>freeitem</type>
+      <type>griditem</type>
     </item>
     <item x="3" y="9" z="2">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>freeitem</type>
+      <type>griditem</type>
     </item>
     <item x="3" y="10" z="0">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>freeitem</type>
+      <type>griditem</type>
     </item>
     <item x="3" y="10" z="1">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>freeitem</type>
+      <type>griditem</type>
     </item>
     <item x="3" y="10" z="2">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>freeitem</type>
+      <type>griditem</type>
     </item>
     <item x="4" y="10" z="0">
       <label>siren</label>

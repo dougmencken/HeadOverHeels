@@ -158,9 +158,11 @@ Room* RoomBuilder::buildRoom ( const std::string& fileName )
                                         std::ostringstream oss;
                                         oss << "oops, can’t build a door with coordinates " << ( *i ).x () << ", " << ( *i ).y () << ", " << ( *i ).z () ;
                                         std::cout << oss.str () << std::endl ;
-                                        /// throw oss.str ();
                                 }
-                                room->addDoor( door );
+                                else
+                                {
+                                        room->addDoor( door );
+                                }
                         }
                         // it’s a grid item
                         else if( ( *i ).type () == rxml::type::griditem )
@@ -171,21 +173,23 @@ Room* RoomBuilder::buildRoom ( const std::string& fileName )
                                         std::ostringstream oss;
                                         oss << "oops, can’t build a grid item with coordinates " << ( *i ).x () << ", " << ( *i ).y () << ", " << ( *i ).z () ;
                                         std::cout << oss.str () << std::endl ;
-                                        /// throw oss.str ();
                                 }
-                                room->addGridItem( gridItem );
+                                else
+                                {
+                                        room->addGridItem( gridItem );
+                                }
                         }
                         // it is a free item
                         else if ( ( *i ).type () == rxml::type::freeitem )
                         {
                                 FreeItem* freeItem = this->buildFreeItem( *i );
+
+                                // there may be bonus item already taken and thus absent
                                 if ( freeItem == nilPointer )
                                 {
                                         std::ostringstream oss;
                                         oss << "free item with coordinates " << ( *i ).x () << ", " << ( *i ).y () << ", " << ( *i ).z () << " is absent";
                                         std::cout << oss.str () << std::endl ;
-                                        // don't throw an exception here
-                                        // there may be bonus item already taken and thus absent
                                 }
                                 else
                                 {

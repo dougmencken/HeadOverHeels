@@ -69,10 +69,8 @@ Room::Room( const std::string& roomFile, const std::string& scenery, int xTiles,
                 this->floor.push_back( nilPointer );
         }
 
-        // Creación del vector de índices. Asigna el contenido de los elementos de la siguiente forma
-        // para, por ejemplo, una rejilla de 8 x 8, donde la longitud de "drawIndex" es 64
+        // create sequence of drawing, as example for 8 x 8 grid
         //
-        // Elemento del vector
         //                00
         //              02  01
         //            05  04  03
@@ -89,7 +87,8 @@ Room::Room( const std::string& roomFile, const std::string& scenery, int xTiles,
         //              62  61
         //                63
         //
-        // Contenido del elemento
+        // sequence of drawing is
+        //
         //                00
         //              01  08
         //            02  09  16
@@ -107,21 +106,21 @@ Room::Room( const std::string& roomFile, const std::string& scenery, int xTiles,
         //                63
 
         int pos = 0;
-        this->drawIndex = new int[ xTiles * yTiles ];
+        this->drawSequence = new int[ xTiles * yTiles ];
 
         for ( int f = 0; f <= ( xTiles + yTiles - 1 ); f++ )
         {
                 for ( int n = yTiles - 1; n >= 0; n-- )
                 {
-                        int temp = n * ( xTiles - 1 ) + f;
-                        if ( ( temp >= n * xTiles ) && ( temp < ( n + 1 ) * xTiles ) )
+                        int index = n * ( xTiles - 1 ) + f;
+                        if ( ( index >= n * xTiles ) && ( index < ( n + 1 ) * xTiles ) )
                         {
-                                this->drawIndex[ pos++ ] = temp;
+                                this->drawSequence[ pos++ ] = index;
                         }
                 }
         }
 
-        // Crea la imagen with suitable dimensions to draw the active room
+        // crea la imagen with suitable dimensions to draw the active room,
         // single room ( id est up to 10 x 10 tiles ) just fits to the screen
         // but image of double or triple room is larger
         if ( xTiles <= 10 && yTiles <= 10 )
@@ -142,10 +141,10 @@ Room::Room( const std::string& roomFile, const std::string& scenery, int xTiles,
                 whereToDraw = create_bitmap_ex( 32, w, h );
         }
 
-        // 128 for 50% opacity of shading or 256 for no shadows
+        // 128 for 50% opacity of shadows, or 256 for no shadows
         this->shadingScale = isomot::GameManager::getInstance()->getDrawShadows () ? 128 : 256 ;
 
-        // Ahora la sala ya está activa
+        // since yet room is active
         this->active = true;
 }
 
@@ -165,7 +164,7 @@ Room::~Room()
         std::for_each( wallY.begin (), wallY.end (), DeleteObject() );
 
         // bin sequence of drawing
-        delete[ ] drawIndex;
+        delete drawSequence;
 
         delete camera;
 
@@ -266,20 +265,20 @@ void Room::addGridItem( GridItem * gridItem )
         name << labelOfItem << " " << uniqueNumberOfItem ;
         gridItem->setUniqueName( name.str() );
 
-        // Si el elemento se va a colocar a una altura específica se buscan colisiones
         if ( gridItem->getZ() != Top )
         {
+                // when item goes lower than top, look for collisions
                 mediator->findCollisionWithItem( gridItem );
         }
-        // Si el elemento se va en los más alto de la columna se busca el valor de Z
         else
         {
+                // whem item goes to top, modify its position on Z
                 gridItem->setZ( mediator->findHighestZ( gridItem ) );
         }
 
-        // Si se encontraron colisiones el elemento no se puede añadir
         if ( ! mediator->isStackOfCollisionsEmpty () )
         {
+                // can’t add item when there’s some collision
                 std::cerr << "collision with " << gridItem->whichKindOfItem() << std::endl ;
                 return;
         }
@@ -701,15 +700,20 @@ bool Room::isAnyPlayerStillInRoom () const
 
 void Room::removeBars ()
 {
-        std::list< FreeItem * > freeItems = this->mediator->getFreeItems ();
+        std::vector < std::list < GridItem * > > gridItems = mediator->getGridItems ();
         unsigned int howManyBars = 0;
 
-        for ( std::list< FreeItem * >::iterator fi = freeItems.begin (); fi != freeItems.end (); ++fi )
+        for ( unsigned int column = 0; column < gridItems.size(); column ++ )
         {
-                if ( ( *fi )->getLabel() == "bars-ns" || ( *fi )->getLabel() == "bars-ew" )
+                std::list < GridItem * > columnOfItems = gridItems[ column ];
+
+                for ( std::list< GridItem * >::iterator gi = columnOfItems.begin (); gi != columnOfItems.end (); ++ gi )
                 {
-                        this->removeFreeItem( *fi );
-                        howManyBars ++;
+                        if ( ( *gi )->getLabel() == "bars-ns" || ( *gi )->getLabel() == "bars-ew" )
+                        {
+                                this->removeGridItem( *gi );
+                                howManyBars ++;
+                        }
                 }
         }
 
@@ -784,45 +788,45 @@ void Room::draw( BITMAP* where )
                 mediator->lockFreeItemMutex();
 
                 // draw grid items
-                for ( unsigned int i = 0; i < this->numberOfTiles.first * this->numberOfTiles.second; i++ )
-                {
-                        for ( std::list< GridItem * >::iterator g = mediator->structure[ drawIndex[ i ] ].begin (); g != mediator->structure[ drawIndex[ i ] ].end (); ++g )
-                        {
-                                GridItem* gridItem = static_cast< GridItem * >( *g );
+                std::vector < std::list < GridItem * > > gridItems = mediator->getGridItems ();
 
-                                if ( shadingScale < 256 && gridItem->getRawImage() )
+                for ( unsigned int i = 0; i < numberOfTiles.first * numberOfTiles.second; i ++ )
+                {
+                        for ( std::list< GridItem * >::const_iterator gi = gridItems[ drawSequence[ i ] ].begin () ;
+                                gi != gridItems[ drawSequence[ i ] ].end () ; ++ gi )
+                        {
+                                if ( shadingScale < 256 && ( *gi )->getRawImage() != nilPointer )
                                 {
-                                        gridItem->requestShadow( );
+                                        ( *gi )->requestShadow( );
                                 }
 
-                                gridItem->draw( where );
+                                ( *gi )->draw( where );
                         }
                 }
 
                 // for free items there’re two steps of drawing
+                std::list< FreeItem * > freeItems = mediator->getFreeItems ();
 
-                // at first shade them with both of grid items and other free items
-                for ( std::list< FreeItem * >::iterator f = mediator->freeItems.begin (); f != mediator->freeItems.end (); ++f )
+                // at first shade every free item with grid items and other free items
+                for ( std::list< FreeItem * >::const_iterator fi = freeItems.begin (); fi != freeItems.end (); ++ fi )
                 {
-                        FreeItem* freeItem = static_cast< FreeItem * >( *f );
-
-                        if ( freeItem->getRawImage() )
+                        if ( ( *fi )->getRawImage() != nilPointer )
                         {
                                 // shade an item when shadows are on
                                 if ( shadingScale < 256 )
-                                        freeItem->requestShadow();
+                                {
+                                        ( *fi )->requestShadow();
+                                }
                         }
                 }
 
-                // then mask them and finally draw them
-                for ( std::list< FreeItem * >::iterator f = mediator->freeItems.begin (); f != mediator->freeItems.end (); ++f )
+                // then mask it and finally draw it
+                for ( std::list< FreeItem * >::const_iterator fi = freeItems.begin (); fi != freeItems.end (); ++ fi )
                 {
-                        FreeItem* freeItem = static_cast< FreeItem * >( *f );
-
-                        if ( freeItem->getRawImage() )
+                        if ( ( *fi )->getRawImage() != nilPointer )
                         {
-                                freeItem->requestMask();
-                                freeItem->draw( where );
+                                ( *fi )->requestMask();
+                                ( *fi )->draw( where );
                         }
                 }
 

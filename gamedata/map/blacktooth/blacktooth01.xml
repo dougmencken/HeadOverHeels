@@ -384,22 +384,22 @@
     <item x="0" y="7" z="0">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>freeitem</type>
+      <type>griditem</type>
     </item>
     <item x="0" y="7" z="2">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>freeitem</type>
+      <type>griditem</type>
     </item>
     <item x="0" y="7" z="4">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>freeitem</type>
+      <type>griditem</type>
     </item>
     <item x="0" y="7" z="6">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>freeitem</type>
+      <type>griditem</type>
     </item>
     <item x="0" y="7" z="7">
       <label>extra-life</label>

@@ -373,47 +373,47 @@
     <item x="5" y="1" z="0">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>freeitem</type>
+      <type>griditem</type>
     </item>
     <item x="5" y="1" z="1">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>freeitem</type>
+      <type>griditem</type>
     </item>
     <item x="5" y="1" z="2">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>freeitem</type>
+      <type>griditem</type>
     </item>
     <item x="5" y="2" z="0">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>freeitem</type>
+      <type>griditem</type>
     </item>
     <item x="5" y="2" z="1">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>freeitem</type>
+      <type>griditem</type>
     </item>
     <item x="5" y="2" z="2">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>freeitem</type>
+      <type>griditem</type>
     </item>
     <item x="5" y="3" z="0">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>freeitem</type>
+      <type>griditem</type>
     </item>
     <item x="5" y="3" z="1">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>freeitem</type>
+      <type>griditem</type>
     </item>
     <item x="5" y="3" z="2">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>freeitem</type>
+      <type>griditem</type>
     </item>
     <item x="3" y="4" z="0">
       <label>helicopter-bug</label>
@@ -424,17 +424,17 @@
     <item x="5" y="4" z="0">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>freeitem</type>
+      <type>griditem</type>
     </item>
     <item x="5" y="4" z="1">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>freeitem</type>
+      <type>griditem</type>
     </item>
     <item x="5" y="4" z="2">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>freeitem</type>
+      <type>griditem</type>
     </item>
     <item x="3" y="6" z="0">
       <label>siren</label>

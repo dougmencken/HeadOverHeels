@@ -380,7 +380,7 @@
     <item x="2" y="3" z="0">
       <label>bars-ns</label>
       <direction>none</direction>
-      <type>freeitem</type>
+      <type>griditem</type>
     </item>
     <item x="2" y="3" z="1">
       <label>book</label>

@@ -43,20 +43,20 @@ Mediator::Mediator( Room* room )
         badBoys.push_back( "behavior of random patroling in four secondary directions" );
         badBoys.push_back( "behavior of random patroling in eight directions" );
 
-        // structure of room
+        // make structure of room
         for ( unsigned int i = 0; i < room->getTilesX() * room->getTilesY() + 1; i++ )
         {
-                structure.push_back( Column() );
+                gridItems.push_back( std::list< GridItem * > () );
         }
 }
 
 Mediator::~Mediator()
 {
         // bin grid items
-        for ( size_t i = 0; i < structure.size(); i++ )
+        for ( size_t i = 0; i < gridItems.size(); i++ )
         {
-                std::for_each( structure[ i ].begin(), structure[ i ].end (), DeleteObject() );
-                structure[ i ].clear();
+                std::for_each( gridItems[ i ].begin(), gridItems[ i ].end (), DeleteObject() );
+                gridItems[ i ].clear();
         }
 
         // bin free items
@@ -80,16 +80,16 @@ void Mediator::update()
 {
         pthread_mutex_lock( &gridItemsMutex );
 
-        // Ordenación de las listas de elementos rejilla, si procede
         if ( this->gridItemsSorting )
         {
-                for ( unsigned int i = 0; i < structure.size(); i++ )
+                for ( unsigned int i = 0; i < gridItems.size(); i++ )
                 {
-                        if ( ! structure[ i ].empty() )
+                        if ( ! gridItems[ i ].empty() )
                         {
-                                structure[ i ].sort( sortGridItemList );
+                                gridItems[ i ].sort( sortGridItemList );
                         }
                 }
+
                 this->gridItemsSorting = false;
         }
 
@@ -97,9 +97,9 @@ void Mediator::update()
         std::stack< GridItem * > vanishedGridItems ;
 
         // update grid items
-        for ( unsigned int i = 0; i < structure.size(); i++ )
+        for ( unsigned int i = 0; i < gridItems.size(); i++ )
         {
-                for ( std::list< GridItem* >::iterator g = structure[ i ].begin (); g != structure[ i ].end (); ++g )
+                for ( std::list< GridItem* >::iterator g = gridItems[ i ].begin (); g != gridItems[ i ].end (); ++g )
                 {
                         if ( ( *g )->update() )
                                 vanishedGridItems.push( *g );
@@ -259,12 +259,12 @@ void Mediator::reshadeWithGridItem( GridItem* item )
         // shade grid items below
         int column = room->getTilesX() * item->getCellY() + item->getCellX();
 
-        if ( ! this->structure[ column ].empty() )
+        if ( ! this->gridItems[ column ].empty() )
         {
-                std::list< GridItem * >::iterator g = this->structure[ column ].begin ();
+                std::list< GridItem * >::iterator g = this->gridItems[ column ].begin ();
                 GridItem* gridItem = *g;
 
-                while ( g != this->structure[ column ].end() && item->getUniqueName() != gridItem->getUniqueName() )
+                while ( g != this->gridItems[ column ].end() && item->getUniqueName() != gridItem->getUniqueName() )
                 {
                         gridItem->setWhichShade( WantReshadow );
                         // next grid item in column
@@ -298,7 +298,7 @@ void Mediator::reshadeWithFreeItem( FreeItem* item )
                 {
                         // mark to shade every item in this column that is below free item
                         int column = room->getTilesX() * j + i;
-                        for ( std::list< GridItem* >::iterator g = structure[ column ]. begin (); g != structure[ column ]. end (); ++g )
+                        for ( std::list< GridItem* >::iterator g = gridItems[ column ]. begin (); g != gridItems[ column ]. end (); ++g )
                         {
                                 GridItem* gridItem = *g ;
 
@@ -358,7 +358,7 @@ void Mediator::castShadowOnFloor( FloorTile* floorTile )
         int tileSize = room->getSizeOfOneTile();
 
         // shade with every grid item above
-        for ( std::list< GridItem * >::iterator g = structure[ column ].begin (); g != structure[ column ].end (); ++g )
+        for ( std::list< GridItem * >::iterator g = gridItems[ column ].begin (); g != gridItems[ column ].end (); ++g )
         {
                 GridItem* gridItem = *g ;
 
@@ -428,7 +428,7 @@ void Mediator::castShadowOnGridItem( GridItem* gridItem )
         int column = gridItem->getColumn();
 
         // shade with grid items it may have above
-        for ( std::list< GridItem* >::iterator g = structure[ column ].begin(); g != structure[ column ].end(); ++g )
+        for ( std::list< GridItem* >::iterator g = gridItems[ column ].begin(); g != gridItems[ column ].end(); ++g )
         {
                 GridItem* aboveItem = *g ;
 
@@ -507,7 +507,7 @@ void Mediator::castShadowOnFreeItem( FreeItem* freeItem )
                 {
                         int column = yCell * room->getTilesX() + xCell;
 
-                        for ( std::list< GridItem* >::iterator g = structure[ column ].begin (); g != structure[ column ].end (); ++g )
+                        for ( std::list< GridItem* >::iterator g = gridItems[ column ].begin (); g != gridItems[ column ].end (); ++g )
                         {
                                 GridItem* gridItem = *g ;
 
@@ -640,7 +640,7 @@ void Mediator::maskFreeItem( FreeItem* freeItem )
                                 int column = room->getTilesX() * ( yStart + i ) + xStart + i;
 
                                 // proceed with grid items
-                                for ( std::list< GridItem * >::iterator g = structure[ column ].begin (); g != structure[ column ].end (); ++g )
+                                for ( std::list< GridItem * >::iterator g = gridItems[ column ].begin (); g != gridItems[ column ].end (); ++g )
                                 {
                                         GridItem* gridItem = *g ;
 
@@ -706,9 +706,9 @@ Item* Mediator::findItemByUniqueName( const std::string& uniqueName )
 
                 for ( unsigned int i = 0; i < room->getTilesX() * room->getTilesY(); i++ )
                 {
-                        g = std::find_if( structure[ i ].begin (), structure[ i ].end (), std::bind2nd( EqualUniqueNameOfItem (), uniqueName ) );
+                        g = std::find_if( gridItems[ i ].begin (), gridItems[ i ].end (), std::bind2nd( EqualUniqueNameOfItem (), uniqueName ) );
 
-                        if ( g != structure[ i ].end() )
+                        if ( g != gridItems[ i ].end() )
                         {
                                 item = dynamic_cast< Item * >( *g );
                                 i = room->getTilesX() * room->getTilesY();
@@ -738,9 +738,9 @@ Item* Mediator::findItemByLabel( const std::string& label )
 
                 for ( unsigned int i = 0; i < room->getTilesX() * room->getTilesY(); i++ )
                 {
-                        g = std::find_if( structure[ i ].begin (), structure[ i ].end (), std::bind2nd( EqualLabelOfItem (), label ) );
+                        g = std::find_if( gridItems[ i ].begin (), gridItems[ i ].end (), std::bind2nd( EqualLabelOfItem (), label ) );
 
-                        if ( g != structure[ i ].end () )
+                        if ( g != gridItems[ i ].end () )
                         {
                                 item = dynamic_cast< Item * >( *g );
                                 i = room->getTilesX() * room->getTilesY();
@@ -770,9 +770,9 @@ Item* Mediator::findItemByBehavior( const std::string& behavior )
 
                 for ( unsigned int i = 0; i < room->getTilesX() * room->getTilesY(); i++ )
                 {
-                        g = std::find_if( structure[ i ].begin (), structure[ i ].end (), std::bind2nd( EqualBehaviorOfItem (), behavior ) );
+                        g = std::find_if( gridItems[ i ].begin (), gridItems[ i ].end (), std::bind2nd( EqualBehaviorOfItem (), behavior ) );
 
-                        if ( g != structure[ i ].end () )
+                        if ( g != gridItems[ i ].end () )
                         {
                                 item = dynamic_cast< Item * >( *g );
                                 i = room->getTilesX() * room->getTilesY();
@@ -818,7 +818,7 @@ bool Mediator::findCollisionWithItem( Item * item )
                         int column = room->getTilesX() * temp->getCellY() + temp->getCellX();
 
                         // scroll through lists of grid items looking for collisions
-                        for ( std::list< GridItem * >::iterator g = this->structure[ column ].begin (); g != this->structure[ column ].end (); ++g )
+                        for ( std::list< GridItem * >::iterator g = this->gridItems[ column ].begin (); g != this->gridItems[ column ].end (); ++g )
                         {
                                 GridItem* gridItem = *g ;
 
@@ -857,8 +857,8 @@ bool Mediator::findCollisionWithItem( Item * item )
                         {
                                 for ( int j = yStart; j < yEnd; j++ )
                                 {
-                                        for ( std::list< GridItem * >::iterator g = this->structure[ room->getTilesX() * j + i ].begin ();
-                                                g != this->structure[ room->getTilesX() * j + i ].end (); ++g )
+                                        for ( std::list< GridItem * >::iterator g = this->gridItems[ room->getTilesX() * j + i ].begin ();
+                                                g != this->gridItems[ room->getTilesX() * j + i ].end (); ++g )
                                         {
                                                 GridItem* gridItem = static_cast< GridItem * >( *g );
 
@@ -906,7 +906,7 @@ int Mediator::findHighestZ( Item * item )
                 int column = room->getTilesX() * gridItem->getCellY() + gridItem->getCellX();
 
                 // look for highest Z in the column
-                for ( std::list< GridItem * >::iterator g = this->structure[ column ].begin (); g != this->structure[ column ].end (); ++g )
+                for ( std::list< GridItem * >::iterator g = this->gridItems[ column ].begin (); g != this->gridItems[ column ].end (); ++g )
                 {
                         GridItem* tempItem = *g ;
 
@@ -932,7 +932,7 @@ int Mediator::findHighestZ( Item * item )
                         for ( int j = yStart; j < yEnd; j++ )
                         {
                                 int column( room->getTilesX() * j + i );
-                                for ( std::list< GridItem * >::iterator g = structure[ column ].begin (); g != structure[ column ].end (); ++g )
+                                for ( std::list< GridItem * >::iterator g = gridItems[ column ].begin (); g != gridItems[ column ].end (); ++g )
                                 {
                                         GridItem* gridItem = *g ;
 
@@ -952,10 +952,10 @@ void Mediator::addItem( GridItem* gridItem )
 {
         pthread_mutex_lock( &gridItemsMutex );
 
-        int column( room->getTilesX() * gridItem->getCellY() + gridItem->getCellX() );
+        int column = room->getTilesX() * gridItem->getCellY() + gridItem->getCellX() ;
 
-        structure[ column ].push_back( gridItem );
-        structure[ column ].sort( sortGridItemList );
+        gridItems[ column ].push_back( gridItem );
+        gridItems[ column ].sort( sortGridItemList );
 
         pthread_mutex_unlock( &gridItemsMutex );
 }
@@ -969,12 +969,12 @@ void Mediator::addItem( FreeItem* freeItem )
 void Mediator::removeItem( GridItem* gridItem )
 {
         int column( room->getTilesX() * gridItem->getCellY() + gridItem->getCellX() );
-        structure[ column ].erase(
+        gridItems[ column ].erase(
                 std::remove_if(
-                        structure[ column ].begin(),
-                        structure[ column ].end (),
+                        gridItems[ column ].begin(),
+                        gridItems[ column ].end (),
                         std::bind2nd( EqualUniqueNameOfItem(), gridItem->getUniqueName () ) ),
-                structure[ column ].end () );
+                gridItems[ column ].end () );
 }
 
 void Mediator::removeItem( FreeItem* freeItem )
@@ -1193,7 +1193,7 @@ void Mediator::toggleSwitchInRoom ()
         // look for volatile grid items to freeze them
         for ( unsigned int i = 0; i < room->getTilesX() * room->getTilesY(); i++ )
         {
-                for ( std::list< GridItem* >::iterator g = structure[ i ].begin (); g != structure[ i ].end (); ++g )
+                for ( std::list< GridItem* >::iterator g = gridItems[ i ].begin (); g != gridItems[ i ].end (); ++g )
                 {
                         GridItem* gridItem = *g;
 

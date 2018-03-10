@@ -209,10 +209,11 @@ private:
        /**
         * Indices in sequence of how columns of grid items are drawn, diagonally from right to left
         */
-        int * drawIndex ;
+        int * drawSequence ;
 
        /**
-        * Grado de opacidad de las sombras desde 0, sin sombras, hasta 256, sombras totalmente opacas
+        * Degree of shadows’ opacity
+        * from 0, without shadows, up to 256, fully opaque shadows
         */
         short shadingScale ;
 
