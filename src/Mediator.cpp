@@ -208,7 +208,7 @@ void Mediator::remaskWithFreeItem( FreeItem* item )
         {
                 FreeItem* thatFreeItem = *f;
 
-                if ( thatFreeItem->getUniqueName() != item->getUniqueName() && thatFreeItem->getRawImage() )
+                if ( thatFreeItem->getUniqueName() != item->getUniqueName() && thatFreeItem->getRawImage() != nilPointer )
                 {
                         // mask item if there’s overlap between images
                         if ( ( thatFreeItem->getOffsetX() < item->getOffsetX() + item->getRawImage()->w )
@@ -231,7 +231,7 @@ void Mediator::remaskWithGridItem( GridItem* gridItem )
         {
                 FreeItem* freeItem = *f;
 
-                if ( freeItem != nilPointer && freeItem->getRawImage() )
+                if ( freeItem != nilPointer && freeItem->getRawImage() != nilPointer )
                 {
                         // mask item if there’s overlap between images
                         if ( ( freeItem->getOffsetX() < gridItem->getOffsetX() + gridItem->getRawImage()->w )
@@ -266,7 +266,9 @@ void Mediator::reshadeWithGridItem( GridItem* item )
 
                 while ( g != this->gridItems[ column ].end() && item->getUniqueName() != gridItem->getUniqueName() )
                 {
-                        gridItem->setWhichShade( WantReshadow );
+                        gridItem->binProcessedImage();
+                        gridItem->setWantShadow( true );
+
                         // next grid item in column
                         gridItem = *( ++g ) ;
                 }
@@ -304,7 +306,8 @@ void Mediator::reshadeWithFreeItem( FreeItem* item )
 
                                 if ( item->getZ () > gridItem->getZ () )
                                 {
-                                        gridItem->setWhichShade( WantReshadow );
+                                        gridItem->binProcessedImage();
+                                        gridItem->setWantShadow( true );
                                 }
                         }
 

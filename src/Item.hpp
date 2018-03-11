@@ -19,6 +19,7 @@
 #include "Way.hpp"
 #include "Timer.hpp"
 #include "Mediated.hpp"
+#include "Shady.hpp"
 
 
 namespace isomot
@@ -46,7 +47,7 @@ class Behavior ;
  * Interface that defines attributes and operations for item in room
  */
 
-class Item : public Mediated
+class Item : public Mediated, public Shady
 {
 
 public:
@@ -90,18 +91,14 @@ public:
         void changeFrame ( const unsigned int frameIndex ) ;
 
         /**
-         * Cambia la presentación gráfica del elemento, destruyendo la imagen procesada y señalando qué elementos
-         * hay que volver a enmascarar
-         * @param image Un fotograma del elemento
+         * Change graphics of item
          */
         virtual void changeImage ( BITMAP* image ) = 0 ;
 
         /**
-         * Cambia la sombra de la presentación gráfica del elemento, destruyendo la imagen procesada y señalando
-         * qué elementos hay que volver a sombrear
-         * @param image Una sombra de un fotograma del elemento
+         * Change graphics of item’s shadow
          */
-        virtual void changeShadow ( BITMAP* shadow ) = 0 ;
+        virtual void changeShadow ( BITMAP* shadow ) ;
 
         /**
          * Cambia el valor de la coordenada Z
@@ -161,8 +158,6 @@ protected:
         int z ;
 
         Way orientation ;
-
-        WhichShade myShady ;
 
         /**
          * Image of item, unprocessed, just read from file
@@ -224,46 +219,33 @@ public:
          */
         std::string getLabel () const {  return label ;  }
 
-        /**
-         * Posición espacial X en unidades isométricas
-         */
         int getX () const {  return x ;  }
 
-        /**
-         * Posición espacial Y en unidades isométricas
-         */
         int getY () const {  return y ;  }
 
-        /**
-         * Establece la posición espacial Z en unidades isométricas
-         */
+        int getZ () const {  return z ;  }
+
         void setZ ( const int z ) {  this->z = z ;  }
 
         /**
-         * Posición espacial Z en unidades isométricas
-         */
-        int getZ () const {  return z ;  }
-
-        /**
-         * Anchura del elemento en unidades isométricas en el eje X
+         * Width of item on X in isometric units
          */
         unsigned int getWidthX () const ;
 
         /**
-         * Anchura del elemento en unidades isométricas en el eje Y
+         * Width of item on Y in isometric units
          */
         unsigned int getWidthY () const ;
 
         /**
-         * Altura del elemento en unidades isométricas, anchura en el eje Z
+         * Height, or width on Z, of item in isometric units
          */
         unsigned int getHeight () const ;
 
         void setHeight ( int height ) ;
 
         /**
-         * El elemento quitará una vida al jugador si éste lo toca
-         * @return true si mata al jugador o false si es inofensivo
+         * If true, item takes one life of character on touch
          */
         bool isMortal () const ;
 
@@ -277,23 +259,22 @@ public:
         unsigned short howManyFramesForOrientations () const ;
 
         /**
-         * Tiempo en segundos necesario para que el elemento se mueva
-         * @return Un número positivo
+         * Time in seconds to move item
          */
         double getSpeed () const ;
 
         /**
-        * Tiempo en segundos necesario para que el elemento caiga
-        */
+         * Time in seconds to fall item
+         */
         double getWeight () const ;
 
         /**
-         * Tiempo en segundos que será mostrado cada fotograma de la secuencia de animación
+         * Time in seconds between each frame of item’s animation
          */
         double getDelayBetweenFrames () const ;
 
         /**
-         * Número total de fotogramas de la secuencia de animación
+         * How many frames has item’s animation sequence
          */
         unsigned int countFrames () const ;
 
@@ -312,34 +293,22 @@ public:
 
         void setProcessedImage ( BITMAP * newImage ) ;
 
-        void setWhichShade ( const WhichShade& shady ) {  this->myShady = shady ;  }
-
-        WhichShade whichShade () const {  return this->myShady ;  }
+        void binProcessedImage() {  setProcessedImage( nilPointer ) ;  }
 
         /**
-         * Establece el desplazamiento del fotograma procesado desde el píxel que marca el punto origen
-         * de la sala ( 0, 0, 0 )
-         * @return Un par de valores, siendo el primero el desplazamiento en el eje X y el segundo en el eje Y
-         */
-        void setOffset ( const std::pair < int, int >& offset ) {  this->offset = offset ;  }
-
-        /**
-         * Desplazamiento del fotograma procesado desde el píxel que marca el punto origen de la sala ( 0, 0, 0 )
-         * @return Un par de valores, siendo el primero el desplazamiento en el eje X y el segundo en el eje Y
+         * Distance of processed image from room’s origin ( 0, 0, 0 )
          */
         std::pair < int, int > getOffset () const {  return offset ;  }
 
+        void setOffset ( const std::pair < int, int >& offset ) {  this->offset = offset ;  }
+
         /**
-         * Desplazamiento del fotograma procesado en el eje X, desde el píxel que marca el punto origen
-         * de la sala ( 0, 0, 0 )
-         * @return Un número entero
+         * Distance of processed image from room’s origin ( 0, 0, 0 ) on X
          */
         int getOffsetX () const {  return offset.first ;  }
 
         /**
-         * Desplazamiento del fotograma procesado en el eje X, desde el píxel que marca el punto origen
-         * de la sala ( 0, 0, 0 )
-         * @return Un número entero
+         * Distance of processed image from room’s origin ( 0, 0, 0 ) on Y
          */
         int getOffsetY () const {  return offset.second ;  }
 

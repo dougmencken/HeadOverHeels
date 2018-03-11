@@ -147,12 +147,12 @@ protected:
          * @param way door mentioned by its position in room
          * @param name unique name of item from stack of collisions
          */
-        bool isCollidingWithDoor ( const std::string& way, const std::string& name, const PlayerItem& previousPosition ) ;
+        bool isCollidingWithDoor ( const std::string& way, const std::string& name, const int previousX, const int previousY ) ;
 
         /**
          * See if player is not under a door or that door doesn’t exist
          * @param way door mentioned by its position in room
-         * @return true if the player is under that given door
+         * @return true if the player is under that door
          */
         bool isNotUnderDoor ( const std::string& way ) ;
 

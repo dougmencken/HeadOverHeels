@@ -20,9 +20,9 @@ fi
 installPath=`pwd`/headoverheelsroot
 rm -rf "${installPath}"
 
-makeCOptions="-Wall -Werror" # ="-Wextra -Werror"
+makeCOptions="-Wextra -Werror" # ="-Wall -Werror"
 
-make -j2 CFLAGS="${makeCOptions}" CXXFLAGS="${makeCOptions}" && make install DESTDIR="${installPath}"
+time make -j2 CFLAGS="${makeCOptions}" CXXFLAGS="${makeCOptions}" && make install DESTDIR="${installPath}"
 
 headoverheelsbin="${installPath}${installPrefix}"/bin/headoverheels
 if [ -f "${headoverheelsbin}" ]

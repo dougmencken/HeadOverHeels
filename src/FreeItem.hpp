@@ -25,6 +25,14 @@ namespace isomot
 {
 
 // ~TO~DO~ bin it completely
+enum WhichShade
+{
+        NoShadow,       /* shady image is nil, wantShadow is true or false */
+        WantReshadow,   /* shady image is not nil and wantShadow is true */
+        AlreadyShady    /* shady image is not nil and wantShadow is false */
+} ;
+
+// ~TO~DO~ bin it completely
 enum WhichMask
 {
         NoMask,         /* masked image is nil, wantMask is true or false */
@@ -68,18 +76,14 @@ public:
         void binProcessedImages () ;
 
         /**
-         * Cambia la presentación gráfica del elemento, destruyendo la imagen procesada y señalando qué elementos
-         * hay que volver a enmascarar
-         * @param image Un fotograma del elemento
+         * Change graphics of item
          */
-        virtual void changeImage ( BITMAP* image ) ;
+        virtual void changeImage ( BITMAP* newImage ) ;
 
         /**
-         * Cambia la sombra de la presentación gráfica del elemento, destruyendo la imagen procesada y señalando
-         * qué elementos hay que volver a sombrear
-         * @param image Una sombra de un fotograma del elemento
+         * Change graphics of item’s shadow
          */
-        virtual void changeShadow ( BITMAP* shadow ) ;
+        virtual void changeShadow ( BITMAP* newShadow ) ;
 
         /**
          * Request to shade item
@@ -128,11 +132,17 @@ public:
          */
         virtual bool addToPosition ( int x, int y, int z ) ;
 
+        void setWhichShade ( const WhichShade& shady ) {  this->myShady = shady ;  }
+
+        WhichShade whichShade () const {  return this->myShady ;  }
+
 protected:
 
         virtual bool updatePosition ( int newX, int newY, int newZ, const Coordinate& whatToChange, const ChangeOrAdd& addOrChange ) ;
 
 protected:
+
+        WhichShade myShady ;
 
         WhichMask myMask ;
 

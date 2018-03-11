@@ -49,18 +49,11 @@ public:
         /**
          * Draw this grid item
          */
-        void draw ( BITMAP* where ) ;
+        void draw ( BITMAP * where ) ;
 
-        void binProcessedImage () ;
+        virtual void changeImage ( BITMAP * newImage ) ;
 
-        virtual void changeImage ( BITMAP* newImage ) ;
-
-        virtual void changeShadow ( BITMAP* newShadow ) ;
-
-        /**
-         * Request to shade item
-         */
-        void requestShadow () ;
+        virtual void changeShadow ( BITMAP * newShadow ) ;
 
         /**
          * Change Z coordinate

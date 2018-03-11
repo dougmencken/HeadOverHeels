@@ -9,6 +9,7 @@ namespace isomot
 
 FreeItem::FreeItem( ItemData* itemData, int x, int y, int z, const Way& way )
         : Item ( itemData, z, way )
+        , myShady ( WantReshadow )
         , myMask ( WantRemask )
         , transparency ( 0 )
         , collisionDetector ( true )
@@ -37,6 +38,7 @@ FreeItem::FreeItem( ItemData* itemData, int x, int y, int z, const Way& way )
 
 FreeItem::FreeItem( const FreeItem& freeItem )
         : Item( freeItem )
+        , myShady( freeItem.myShady )
         , myMask( freeItem.myMask )
         , transparency( freeItem.transparency )
         , collisionDetector( freeItem.collisionDetector )
@@ -85,11 +87,7 @@ void FreeItem::draw( BITMAP* where )
 
 void FreeItem::binProcessedImages()
 {
-        if ( this->processedImage != nilPointer )
-        {
-                destroy_bitmap( this->processedImage );
-                this->processedImage = nilPointer;
-        }
+        Item::binProcessedImage ();
 
         if ( this->shadedNonmaskedImage != nilPointer )
         {
@@ -98,28 +96,31 @@ void FreeItem::binProcessedImages()
         }
 }
 
-void FreeItem::changeImage( BITMAP* image )
+void FreeItem::changeImage( BITMAP* newImage )
 {
-        if ( image == nilPointer )
+        if ( newImage == nilPointer )
         {
                 std::cout << "nil image at FreeItem.changeImage" << std::endl ;
         }
 
         if ( this->rawImage == nilPointer )
         {
-                this->rawImage = image;
+                this->rawImage = newImage;
+                return;
         }
-        else if ( this->rawImage != image )
+
+        if ( this->rawImage != newImage )
         {
+                // copy this item before modifying it
                 FreeItem oldFreeItem( *this );
 
                 this->rawImage = nilPointer;
 
-                // recalculate displacement, it is how many pixels is this image from point of room’s origin
-                if ( image != nilPointer )
+                if ( newImage != nilPointer )
                 {
-                        this->offset.first = ( ( this->x - this->y ) << 1 ) + static_cast< int >( getWidthX() + getWidthY() ) - ( image->w >> 1 ) - 1;
-                        this->offset.second = this->x + this->y + static_cast< int >( getWidthX() ) - image->h - this->z;
+                        // recalculate how many pixels is this image from point of room’s origin
+                        this->offset.first = ( ( this->x - this->y ) << 1 ) + static_cast< int >( getWidthX() + getWidthY() ) - ( newImage->w >> 1 ) - 1;
+                        this->offset.second = this->x + this->y + static_cast< int >( getWidthX() ) - newImage->h - this->z;
                 }
                 else
                 {
@@ -128,36 +129,32 @@ void FreeItem::changeImage( BITMAP* image )
 
                 binProcessedImages() ;
 
-                this->rawImage = image;
+                this->rawImage = newImage;
                 this->myShady = WantReshadow;
                 this->myMask = WantRemask;
 
                 // remask with old image
                 if ( oldFreeItem.getRawImage() != nilPointer )
-                {
                         mediator->remaskWithFreeItem( &oldFreeItem );
-                }
 
                 // remask with new image
-                if ( image != nilPointer )
-                {
+                if ( newImage != nilPointer )
                         mediator->remaskWithFreeItem( this );
-                }
         }
 }
 
-void FreeItem::changeShadow( BITMAP* shadow )
+void FreeItem::changeShadow( BITMAP* newShadow )
 {
         if ( this->shadow == nilPointer )
         {
-                this->shadow = shadow;
+                this->shadow = newShadow;
         }
-        else if ( this->shadow != shadow )
+        else if ( this->shadow != newShadow )
         {
-                this->shadow = shadow;
+                this->shadow = newShadow;
 
                 // reshade items
-                if ( this->rawImage )
+                if ( this->rawImage != nilPointer )
                 {
                         if ( mediator->getDegreeOfShading() < 256 )
                         {
@@ -169,19 +166,16 @@ void FreeItem::changeShadow( BITMAP* shadow )
 
 void FreeItem::requestShadow()
 {
-        if( this->rawImage && this->myShady == WantReshadow )
+        if ( this->rawImage != nilPointer && this->myShady == WantReshadow )
         {
                 mediator->castShadowOnFreeItem( this );
 
-                // Si el elemento se ha sombreado se marca para enmascararlo
                 if ( this->myShady == AlreadyShady )
                 {
                         this->myMask = WantRemask;
                 }
 
-                // Si no se ha podido sombrear entonces se destruye la imagen de sombreado
-                // y se marca el elemento para enmascararlo
-                if ( this->myShady == WantReshadow && this->shadedNonmaskedImage )
+                if ( this->myShady == WantReshadow && this->shadedNonmaskedImage != nilPointer )
                 {
                         destroy_bitmap( this->shadedNonmaskedImage );
                         this->shadedNonmaskedImage = nilPointer;
@@ -194,7 +188,7 @@ void FreeItem::requestMask()
 {
         mediator->maskFreeItem( this );
 
-        if ( this->myMask == WantRemask && this->processedImage )
+        if ( this->myMask == WantRemask && this->processedImage != nilPointer )
         {
                 destroy_bitmap( this->processedImage );
                 this->processedImage = nilPointer;

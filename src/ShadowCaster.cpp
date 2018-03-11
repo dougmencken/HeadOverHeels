@@ -80,14 +80,14 @@ void ShadowCaster::castShadowOnItem( Item* item, int x, int y, BITMAP* shadow, u
 
         if ( shadyImage == nilPointer )
         {
-                // initially, image of shaded item is just copy of unshaded item’s image
                 shadyImage = create_bitmap_ex( colorDepthRaw, rawImage->w, rawImage->h );
         }
 
-        if ( item->whichShade() == WantReshadow )
+        if ( item->getWantShadow() )
         {
+                // initially, image of shaded item is just copy of unshaded item’s image
                 blit( rawImage, shadyImage, 0, 0, 0, 0, rawImage->w, rawImage->h );
-                item->setWhichShade( AlreadyShady );
+                item->setWantShadow( false );
         }
 
         char iInc = ( colorDepthRaw == 32 ? 4 : 3 );            // increment for iRpx, iGpx and iBpx

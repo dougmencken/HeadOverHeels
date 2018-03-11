@@ -9,13 +9,11 @@ namespace isomot
 
 GridItem::GridItem( ItemData* itemData, int cx, int cy, int z, const Way& way )
         : Item( itemData, z, way )
+        , cell( std::pair< int, int >( cx, cy ) )
 {
-        this->cell.first = cx;
-        this->cell.second = cy;
-
         // free coordinates of grid item
-        this->x = cx * this->dataOfItem->getWidthX();
-        this->y = ( cy + 1 ) * this->dataOfItem->getWidthY() - 1;
+        this->x = cx * this->getWidthX();
+        this->y = ( cy + 1 ) * this->getWidthY() - 1;
 
         unsigned int orientation = way.getIntegerOfWay();
         if ( orientation == Nowhere ) orientation = 0;
@@ -36,100 +34,72 @@ GridItem::~GridItem( )
 
 void GridItem::draw( BITMAP* where )
 {
-        if ( this->processedImage )
+        if ( this->processedImage != nilPointer )
         {
                 draw_sprite( where, this->processedImage, mediator->getRoom()->getX0() + this->offset.first, mediator->getRoom()->getY0() + this->offset.second );
         }
-        else if ( this->rawImage )
+        else if ( this->rawImage != nilPointer )
         {
                 draw_sprite( where, this->rawImage, mediator->getRoom()->getX0() + this->offset.first, mediator->getRoom()->getY0() + this->offset.second );
         }
 }
 
-void GridItem::binProcessedImage()
-{
-        if ( this->processedImage != nilPointer )
-        {
-                destroy_bitmap( this->processedImage );
-                this->processedImage = nilPointer;
-        }
-}
-
 void GridItem::changeImage( BITMAP* newImage )
 {
-        // when there's no image for this item, just assign it
-        // such case usually happens during construction of the item
         if ( this->rawImage == nilPointer )
         {
+                // when there's no image for this item, just assign it
+                // such case usually happens during construction of the item
                 this->rawImage = newImage;
+                return;
         }
-        // otherwise, change it
+
+        // get a copy of this item before modifying it
+        GridItem oldGridItem( *this );
+
+        binProcessedImage();
+
+        this->rawImage = newImage;
+
+        // calculate displacement of new image unless it’s nil
+        if ( newImage != nilPointer )
+        {
+                if ( mediator->getDegreeOfShading() < 256 )
+                {
+                        // shadows are on, then reshade this item
+                        binProcessedImage();
+                        setWantShadow( true );
+                }
+
+                // how many pixels is this image from the origin of room
+                this->offset.first = ( ( mediator->getRoom()->getSizeOfOneTile() * ( this->cell.first - this->cell.second ) ) << 1 ) - ( newImage->w >> 1 ) + 1;
+                this->offset.second = mediator->getRoom()->getSizeOfOneTile() * ( this->cell.first + this->cell.second + 2 ) - newImage->h - this->z - 1;
+        }
         else
         {
-                // get a copy of this item before modifying it
-                GridItem oldGridItem( *this );
-
-                binProcessedImage();
-
-                this->rawImage = newImage;
-
-                // calculate displacement of new image unless it’s nil
-                if ( newImage )
-                {
-                        if ( mediator->getDegreeOfShading() < 256 )
-                        {
-                                // shadows are on, then reshade this item
-                                this->myShady = WantReshadow;
-                        }
-
-                        // how many pixels this image is from the origin of room
-                        this->offset.first = ( ( mediator->getRoom()->getSizeOfOneTile() * ( this->cell.first - this->cell.second ) ) << 1 ) - ( newImage->w >> 1 ) + 1;
-                        this->offset.second = mediator->getRoom()->getSizeOfOneTile() * ( this->cell.first + this->cell.second + 2 ) - newImage->h - this->z - 1;
-                }
-                else
-                {
-                        this->offset.first = this->offset.second = 0;
-                }
-
-                // mark for masking every free item affected by previous image
-                if ( oldGridItem.getRawImage () )
-                        mediator->remaskWithGridItem( &oldGridItem );
-
-                // mark for masking every free item affected by new image
-                if ( this->rawImage )
-                        mediator->remaskWithGridItem( this );
+                this->offset.first = this->offset.second = 0;
         }
+
+        // remask every free item affected by previous image
+        if ( oldGridItem.getRawImage () )
+                mediator->remaskWithGridItem( &oldGridItem );
+
+        // remask every free item affected by new image
+        if ( newImage != nilPointer )
+                mediator->remaskWithGridItem( this );
 }
 
 void GridItem::changeShadow( BITMAP* newShadow )
 {
-        this->shadow = newShadow;
+        Item::changeShadow( newShadow );
 
-        if ( newShadow )
-        {       // it's time to figure out which items to shade
+        if ( newShadow != nilPointer )
+        {
                 if ( mediator->getDegreeOfShading() < 256 )
                 {
                         // reshade items when shadows are on
                         mediator->reshadeWithGridItem( this );
                 }
-        }
-}
-
-void GridItem::requestShadow( )
-{
-        if ( this->rawImage && this->myShady == WantReshadow )
-        {
-                mediator->castShadowOnGridItem( this );
-
-                // bin already shaded image
-                if ( this->myShady != AlreadyShady && this->processedImage != nilPointer )
-                {
-                        destroy_bitmap( this->processedImage );
-                        this->processedImage = nilPointer;
-                }
-
-                // to reshade at next cycle
-                this->myShady = NoShadow;
         }
 }
 

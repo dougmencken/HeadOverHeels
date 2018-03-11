@@ -805,12 +805,18 @@ void Room::draw( BITMAP* where )
                         for ( std::list< GridItem * >::const_iterator gi = gridItems[ drawSequence[ i ] ].begin () ;
                                 gi != gridItems[ drawSequence[ i ] ].end () ; ++ gi )
                         {
-                                if ( shadingScale < 256 && ( *gi )->getRawImage() != nilPointer )
+                                GridItem* gridItem = *gi ;
+
+                                if ( shadingScale < 256 && gridItem->getRawImage() != nilPointer )
                                 {
-                                        ( *gi )->requestShadow( );
+                                        // cast shadow
+                                        if ( gridItem->getWantShadow() )
+                                        {
+                                                mediator->castShadowOnGridItem( gridItem );
+                                        }
                                 }
 
-                                ( *gi )->draw( where );
+                                gridItem->draw( where );
                         }
                 }
 

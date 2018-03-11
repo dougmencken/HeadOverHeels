@@ -190,19 +190,22 @@ bool PlayerItem::updatePosition( int newX, int newY, int newZ, const Coordinate&
                 {
                         std::string what = mediator->popCollision();
 
+                        int oldX = oldPlayerItem.getX();
+                        int oldY = oldPlayerItem.getY();
+
                         // case of move to north wall
                         if ( wayX < 0 )
                         {
                                 // check for hit of north door’s jamb
-                                doorCollision = isCollidingWithDoor( "north", what, oldPlayerItem );
+                                doorCollision = isCollidingWithDoor( "north", what, oldX, oldY );
                                 if ( ! doorCollision )
                                 {
                                         // check for hit of northeast door’s jamb
-                                        doorCollision = isCollidingWithDoor( "northeast", what, oldPlayerItem );
+                                        doorCollision = isCollidingWithDoor( "northeast", what, oldX, oldY );
                                         if ( ! doorCollision )
                                         {
                                                 // then it’s hit of northwest door’s jamb
-                                                doorCollision = isCollidingWithDoor( "northwest", what, oldPlayerItem );
+                                                doorCollision = isCollidingWithDoor( "northwest", what, oldX, oldY );
                                         }
                                 }
                         }
@@ -210,47 +213,47 @@ bool PlayerItem::updatePosition( int newX, int newY, int newZ, const Coordinate&
                         else if ( wayX > 0 )
                         {
                                 // check for hit of south door’s jamb
-                                doorCollision = isCollidingWithDoor( "south", what, oldPlayerItem );
+                                doorCollision = isCollidingWithDoor( "south", what, oldX, oldY );
                                 if ( ! doorCollision )
                                 {
                                         // check for hit of southeast door’s jamb
-                                        doorCollision = isCollidingWithDoor( "southeast", what, oldPlayerItem );
+                                        doorCollision = isCollidingWithDoor( "southeast", what, oldX, oldY );
                                         if ( ! doorCollision )
                                         {
                                                 // then it’s hit of southwest door’s jamb
-                                                doorCollision = isCollidingWithDoor( "southwest", what, oldPlayerItem );
+                                                doorCollision = isCollidingWithDoor( "southwest", what, oldX, oldY );
                                         }
                                 }
                         }
                         // case of move to east wall
                         else if ( wayY < 0 )
                         {
-                                doorCollision = isCollidingWithDoor( "east", what, oldPlayerItem );
+                                doorCollision = isCollidingWithDoor( "east", what, oldX, oldY );
                                 // check for hit of east door’s jamb
                                 if ( ! doorCollision )
                                 {
                                         // check for hit of east-north door’s jamb
-                                        doorCollision = isCollidingWithDoor( "eastnorth", what, oldPlayerItem );
+                                        doorCollision = isCollidingWithDoor( "eastnorth", what, oldX, oldY );
                                         if ( ! doorCollision )
                                         {
                                                 // so it’s hit of east-south door’s jamb
-                                                doorCollision = isCollidingWithDoor( "eastsouth", what, oldPlayerItem );
+                                                doorCollision = isCollidingWithDoor( "eastsouth", what, oldX, oldY );
                                         }
                                 }
                         }
                         // case of move to west wall
                         else if ( wayY > 0 )
                         {
-                                doorCollision = isCollidingWithDoor( "west", what, oldPlayerItem );
+                                doorCollision = isCollidingWithDoor( "west", what, oldX, oldY );
                                 // check for hit of west door’s jamb
                                 if ( ! doorCollision )
                                 {
                                         // check for hit of west-north door’s jamb
-                                        doorCollision = isCollidingWithDoor( "westnorth", what, oldPlayerItem );
+                                        doorCollision = isCollidingWithDoor( "westnorth", what, oldX, oldY );
                                         if ( ! doorCollision )
                                         {
                                                 // so it’s hit of west-south door’s jamb
-                                                doorCollision = isCollidingWithDoor( "westsouth", what, oldPlayerItem );
+                                                doorCollision = isCollidingWithDoor( "westsouth", what, oldX, oldY );
                                         }
                                 }
                         }
@@ -360,7 +363,7 @@ bool PlayerItem::updatePosition( int newX, int newY, int newZ, const Coordinate&
         return ! collisionFound ;
 }
 
-bool PlayerItem::isCollidingWithDoor( const std::string& way, const std::string& name, const PlayerItem& previousPosition )
+bool PlayerItem::isCollidingWithDoor( const std::string& way, const std::string& name, const int previousX, const int previousY )
 {
         Door* door = mediator->getRoom()->getDoorAt( way );
         int oldX = this->x;
@@ -381,7 +384,7 @@ bool PlayerItem::isCollidingWithDoor( const std::string& way, const std::string&
                                 if ( door->getLeftJamb()->getUniqueName() == name && this->y <= door->getLeftJamb()->getY() )
                                 {
                                         this->y--;
-                                        this->x = previousPosition.getX();
+                                        this->x = previousX;
                                 }
                                 // move player left when player collides with right jamb
                                 else if ( door->getRightJamb()->getUniqueName() == name &&
@@ -389,7 +392,7 @@ bool PlayerItem::isCollidingWithDoor( const std::string& way, const std::string&
                                                         >= door->getRightJamb()->getY() - static_cast< int >( door->getRightJamb()->getWidthY() ) )
                                 {
                                         this->y++;
-                                        this->x = previousPosition.getX();
+                                        this->x = previousX;
                                 }
                         }
                         break;
@@ -407,7 +410,7 @@ bool PlayerItem::isCollidingWithDoor( const std::string& way, const std::string&
                                 if ( door->getLeftJamb()->getUniqueName() == name && this->x >= door->getLeftJamb()->getX() )
                                 {
                                         this->x++;
-                                        this->y = previousPosition.getY();
+                                        this->y = previousY;
                                 }
                                 // move player left when player collides with right jamb
                                 else if ( door->getRightJamb()->getUniqueName() == name &&
@@ -415,7 +418,7 @@ bool PlayerItem::isCollidingWithDoor( const std::string& way, const std::string&
                                                         <= door->getRightJamb()->getX() + static_cast< int >( door->getRightJamb()->getWidthX() ) )
                                 {
                                         this->x--;
-                                        this->y = previousPosition.getY();
+                                        this->y = previousY;
                                 }
                         }
                         break;

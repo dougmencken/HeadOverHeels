@@ -11,7 +11,7 @@ namespace isomot
 {
 
 Item::Item( ItemData* data, int z, const Way& way )
-      : Mediated(),
+      : Mediated(), Shady(),
         label( data->getLabel() ),
         uniqueName( label + "." + makeRandomString( 12 ) ),
         dataOfItem( data ),
@@ -19,12 +19,11 @@ Item::Item( ItemData* data, int z, const Way& way )
         y( 0 ),
         z( z ),
         orientation( way ),
-        myShady( WantReshadow ),
         rawImage( nilPointer ),
         shadow( nilPointer ),
         processedImage( nilPointer ),
         offset( std::pair< int, int >( 0, 0 ) ),
-        motionTimer( nilPointer ),
+        motionTimer( /* more in body */ nilPointer ),
         behavior( nilPointer ),
         anchor( nilPointer ),
         frameIndex( 0 ),
@@ -41,7 +40,7 @@ Item::Item( ItemData* data, int z, const Way& way )
 }
 
 Item::Item( const Item& item )
-: Mediated( item ),
+      : Mediated( item ), Shady( item.wantShadow ),
         label( item.label ),
         uniqueName( item.uniqueName + " copy" ),
         dataOfItem( item.dataOfItem ),
@@ -49,12 +48,11 @@ Item::Item( const Item& item )
         y( item.y ),
         z( item.z ),
         orientation( item.orientation ),
-        myShady( item.myShady ),
         rawImage( item.rawImage ),
         shadow( item.shadow ),
-        processedImage( nilPointer ),
+        processedImage( /* more in body */ nilPointer ),
         offset( item.offset ),
-        motionTimer( nilPointer ),
+        motionTimer( /* more in body */ nilPointer ),
         behavior( nilPointer ),
         anchor( item.anchor ),
         frameIndex( item.frameIndex ),
@@ -152,6 +150,15 @@ void Item::changeItemData( ItemData* itemData, const std::string& initiatedBy )
         this->dataOfItem = itemData;
         this->frameIndex = 0;
         this->backwardMotion = false;
+}
+
+void Item::changeShadow( BITMAP* newShadow )
+{
+        if ( this->shadow != newShadow )
+        {
+                this->shadow = newShadow;
+                // don’t bin old shadow, it may be re~used
+        }
 }
 
 void Item::setProcessedImage( BITMAP* newImage )

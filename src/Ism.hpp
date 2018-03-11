@@ -137,14 +137,6 @@ namespace isomot
                 }
         } ;
 
-        // ~TO~DO~ bin it completely
-        enum WhichShade
-        {
-                NoShadow,       /* shady image is nil, wantShadow is true or false */
-                WantReshadow,   /* shady image is not nil and wantShadow is true */
-                AlreadyShady    /* shady image is not nil and wantShadow is false */
-        } ;
-
         enum ActivityOfItem
         {
                 Wait,                           /* El elemento está quieto */
