@@ -112,7 +112,7 @@ public:
         */
         void deactivate () ;
 
-        bool swapPlayersInRoom ( ItemDataManager * itemDataManager ) ;
+        bool swapCharactersInRoom ( ItemDataManager * itemDataManager ) ;
 
         bool continueWithAlivePlayer ( ) ;
 

@@ -154,12 +154,25 @@ void Mediator::update()
         std::list< PlayerItem * > playersInRoom = room->getPlayersYetInRoom();
         for ( std::list< PlayerItem * >::iterator p = playersInRoom.begin (); p != playersInRoom.end (); ++p )
         {
-                if ( ( *p )->getWayOfExit() != "no exit" )
+                // when inactive character falls down to room below this one
+                // then make it active to let it fall
+                if ( ( *p )->getWayOfExit() == "down" && ! ( *p )->isActivePlayer() )
                 {
-                        // transfer way of exit from player to room
-                        room->setWayOfExit( ( *p )->getWayOfExit() );
-                        ( *p )->setWayOfExit( "no exit" );
-                        break; // only one character may exit room at one time
+                        std::cout << "inactive character \"" << ( *p )->getLabel() << "\" falls down to another room, swap characters to make it active" << std::endl ;
+                        activePlayer->setWayOfExit( "no exit" );
+                        this->pickNextCharacter( nilPointer );
+                }
+
+                if ( ( *p )->isActivePlayer() )
+                {
+                        if ( ( *p )->getWayOfExit() != "no exit" )
+                        {
+                                // transfer way of exit from player to room
+                                room->setWayOfExit( ( *p )->getWayOfExit() );
+                                ( *p )->setWayOfExit( "no exit" );
+                        }
+
+                        break; // only active character may exit room
                 }
         }
 
@@ -1055,11 +1068,8 @@ Item* Mediator::collisionWithBadBoy()
         return nilPointer;
 }
 
-bool Mediator::selectNextPlayer( ItemDataManager* itemDataManager )
+bool Mediator::pickNextCharacter( ItemDataManager* itemDataManager )
 {
-        // get exclusive access to the list of free elements
-        pthread_mutex_lock( &freeItemsMutex );
-
         PlayerItem* previousPlayer = activePlayer;
 
         // search for next player
@@ -1067,11 +1077,11 @@ bool Mediator::selectNextPlayer( ItemDataManager* itemDataManager )
         std::list< PlayerItem * >::iterator i = std::find_if(
                 playersInRoom.begin (), playersInRoom.end (),
                 std::bind2nd( EqualLabelOfItem(), activePlayer->getLabel() ) );
-        ++i;
+        ++ i;
         activePlayer = ( i != playersInRoom.end () ? *i : *playersInRoom.begin () );
 
         // see if players may join here
-        if ( previousPlayer != activePlayer )
+        if ( previousPlayer != activePlayer && itemDataManager != nilPointer )
         {
                 const int delta = room->getSizeOfOneTile() >> 1;
 
@@ -1085,6 +1095,8 @@ bool Mediator::selectNextPlayer( ItemDataManager* itemDataManager )
                                 && ( ( previousPlayer->getLabel() == "head" && previousPlayer->getZ() - LayerHeight == activePlayer->getZ() ) ||
                                         ( previousPlayer->getLabel() == "heels" && activePlayer->getZ() - LayerHeight == previousPlayer->getZ() ) ) )
                         {
+                                lockFreeItemMutex ();
+
                                 PlayerItem* reference = previousPlayer->getLabel() == "heels" ? previousPlayer : activePlayer;
                                 this->lastActivePlayer = previousPlayer->getLabel() == "heels" ? "heels" : "head";
 
@@ -1114,8 +1126,7 @@ bool Mediator::selectNextPlayer( ItemDataManager* itemDataManager )
                                         activePlayer->assignTakenItem( takenItemData, takenItemImage, behaviorOfItemTaken );
                                 }
 
-                                // release exclusive access to the list of free items
-                                pthread_mutex_unlock( &freeItemsMutex );
+                                unlockFreeItemMutex ();
 
                                 std::cout << "join both characters into \"" << activePlayer->getLabel() << "\""
                                                 << " in room " << room->getNameOfFileWithDataAboutRoom() << std::endl ;
@@ -1124,7 +1135,7 @@ bool Mediator::selectNextPlayer( ItemDataManager* itemDataManager )
                 }
         }
         // is it composite player
-        else if ( activePlayer->getLabel() == "headoverheels" )
+        else if ( activePlayer->getLabel() == "headoverheels" && itemDataManager != nilPointer )
         {
                 std::cout << "split \"" << activePlayer->getLabel() << "\" in room " << room->getNameOfFileWithDataAboutRoom() << std::endl ;
 
@@ -1132,6 +1143,8 @@ bool Mediator::selectNextPlayer( ItemDataManager* itemDataManager )
                 int y = activePlayer->getY();
                 int z = activePlayer->getZ();
                 Way orientation = activePlayer->getOrientation();
+
+                lockFreeItemMutex ();
 
                 // get data of item in handbag
                 ItemData* takenItemData = activePlayer->getTakenItemData ();
@@ -1157,10 +1170,9 @@ bool Mediator::selectNextPlayer( ItemDataManager* itemDataManager )
 
                 activePlayer = ( this->lastActivePlayer == "head" ) ? heelsPlayer : headPlayer;
                 previousPlayer = ( activePlayer == headPlayer ) ? heelsPlayer : headPlayer;
-        }
 
-        // release exclusive access to the list of free items
-        pthread_mutex_unlock( &freeItemsMutex );
+                unlockFreeItemMutex ();
+        }
 
         if ( previousPlayer == activePlayer )
         {

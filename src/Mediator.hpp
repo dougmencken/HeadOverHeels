@@ -158,12 +158,13 @@ public:
         Item * collisionWithBadBoy () ;
 
        /**
-        * Select next player in room
+        * Activate next character in room
         * @param itemDataManager Needed to create composite player from simple ones
-        *                        or to create simple players from composite
-         * @return true if it’s possible to swap or false if there’s only one player in this room
+        *                        or to create simple players from composite,
+        *                        you may use nil when you’re sure that there’s no joining or splitting
+        * @return true if it’s possible to swap or false if there’s only one player in this room
         */
-        bool selectNextPlayer ( ItemDataManager* itemDataManager ) ;
+        bool pickNextCharacter ( ItemDataManager* itemDataManager ) ;
 
        /**
         * Toggle the switch if it is in room, most rooms do not have a switch. If it turns on

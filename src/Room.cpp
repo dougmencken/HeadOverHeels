@@ -938,9 +938,9 @@ void Room::deactivate()
         this->active = false;
 }
 
-bool Room::swapPlayersInRoom ( ItemDataManager * itemDataManager )
+bool Room::swapCharactersInRoom ( ItemDataManager * itemDataManager )
 {
-        return mediator->selectNextPlayer( itemDataManager );
+        return mediator->pickNextCharacter( itemDataManager );
 }
 
 bool Room::continueWithAlivePlayer ( )

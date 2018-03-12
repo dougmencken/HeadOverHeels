@@ -357,7 +357,7 @@ BITMAP* Isomot::update()
                 if ( activeRoom->getMediator()->getActivePlayer()->getBehavior()->getActivityOfItem() == Wait )
                 {
                         // swap in the same room or between different rooms
-                        if ( ! activeRoom->swapPlayersInRoom( this->itemDataManager ) )
+                        if ( ! activeRoom->swapCharactersInRoom( this->itemDataManager ) )
                         {
                                 activeRoom = mapManager->swapRoom();
                         }

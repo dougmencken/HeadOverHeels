@@ -263,8 +263,8 @@ void UserControlled::jump( PlayerItem * player )
                 SoundManager::getInstance()->stop( player->getLabel(), Jump );
         }
 
-        // when player is at maximum height of room it may go to room above
-        if ( player->getZ() >= MaxLayers * LayerHeight )
+        // when player is active and is at maximum height of room it may go to room above
+        if ( player->isActivePlayer() && player->getZ() >= MaxLayers * LayerHeight )
         {
                 player->setWayOfExit( "up" );
         }
