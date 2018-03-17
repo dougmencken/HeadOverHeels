@@ -6,6 +6,9 @@ AC_INIT(headoverheels, 1.30, dougmencken@gmail.com)
 
 AM_INIT_AUTOMAKE([subdir-objects])
 
+# default output looks too verbose
+AM_SILENT_RULES([yes])
+
 # use libtool
 LT_INIT
 

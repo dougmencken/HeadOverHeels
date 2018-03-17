@@ -22,7 +22,7 @@ rm -rf "${installPath}"
 
 makeCOptions="-Wextra -Werror" # ="-Wall -Werror"
 
-time make -j2 CFLAGS="${makeCOptions}" CXXFLAGS="${makeCOptions}" && make install DESTDIR="${installPath}"
+time make -j2 CFLAGS="${makeCOptions}" CXXFLAGS="${makeCOptions}" && echo && make install DESTDIR="${installPath}"
 
 headoverheelsbin="${installPath}${installPrefix}"/bin/headoverheels
 if [ -f "${headoverheelsbin}" ]
