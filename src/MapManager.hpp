@@ -98,14 +98,16 @@ public:
         /**
          * @param room name of file for room
          */
-        MapRoomData * findRoomData ( const std::string& room ) ;
+        MapRoomData * findRoomData ( const std::string& room ) const ;
+
+        MapRoomData * findRoomData ( const Room * room ) const {  return findRoomData( room->getNameOfFileWithDataAboutRoom() ) ;  }
 
         /**
          * Look for room in list of created rooms
          * @param room name of file for room
          * @return found room or nil if it’s absent
          */
-        Room * findRoom ( const std::string& room ) ;
+        Room * findRoom ( const std::string& room ) const ;
 
 protected:
 
@@ -140,7 +142,7 @@ public:
         /**
          * @return room or nil if there’re no more players
          */
-        Room * getRoomOfInactivePlayer () ;
+        Room * getRoomOfInactivePlayer () const ;
 
 };
 

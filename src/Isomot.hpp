@@ -18,12 +18,13 @@
 
 #include "csxml/SaveGameXML.hpp"
 
+class Color ;
 
 namespace isomot
 {
 
-class ItemDataManager;
-class MapManager;
+class ItemDataManager ;
+class MapManager ;
 
 
 /**
@@ -87,19 +88,21 @@ private:
         bool isEndRoom ;
 
         /**
-         * Imagen donde se dibuja la vista isométrica
+         * Where to draw isometric view
          */
-        BITMAP* view ;
+        BITMAP * view ;
 
-        ItemDataManager* itemDataManager ;
+        ItemDataManager * itemDataManager ;
 
-        MapManager* mapManager ;
+        MapManager * mapManager ;
 
 public:
 
-        ItemDataManager* getItemDataManager () const ;
+        static void fillIsoTile ( BITMAP * where, int x0, int y0, int tileX, int tileY, unsigned int sizeOfTile, const Color * color ) ;
 
-        MapManager* getMapManager () const ;
+        ItemDataManager * getItemDataManager () const {  return itemDataManager ;  }
+
+        MapManager * getMapManager () const {  return mapManager ;  }
 
 };
 

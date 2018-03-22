@@ -10,6 +10,7 @@
 #include "SoundManager.hpp"
 #include "Room.hpp"
 #include "Mediator.hpp"
+#include "GridItem.hpp"
 #include "Camera.hpp"
 #include "PlayerItem.hpp"
 #include "Behavior.hpp"
@@ -412,11 +413,261 @@ BITMAP* Isomot::update()
                         activeRoom->getWhereToDraw()->w, activeRoom->getWhereToDraw()->h
                 );
 
+                std::string roomFile = activeRoom->getNameOfFileWithDataAboutRoom() ;
+                const char* fromLastSlash = std::strrchr( roomFile.c_str (), '/' );
+                if ( fromLastSlash != nilPointer )
+                        roomFile = std::string( fromLastSlash + 1 );
+
+                int tilesX = activeRoom->getTilesX();
+                int tilesY = activeRoom->getTilesY();
+
+                std::ostringstream roomTiles;
+                roomTiles << tilesX << "x" << tilesY;
+
+                std::ostringstream roomConnections1;
+                std::ostringstream roomConnections2;
+
+                MapRoomData* connections = this->getMapManager()->findRoomData( activeRoom );
+                Way wayOfEntryToNextRoom( "nowhere" );
+
+                std::string roomOnNorth = connections->findConnectedRoom( Way( "north" ), &wayOfEntryToNextRoom );
+                std::string roomOnSouth = connections->findConnectedRoom( Way( "south" ), &wayOfEntryToNextRoom );
+                std::string roomOnEast = connections->findConnectedRoom( Way( "east" ), &wayOfEntryToNextRoom );
+                std::string roomOnWest = connections->findConnectedRoom( Way( "west" ), &wayOfEntryToNextRoom );
+
+                if ( ! roomOnSouth.empty() ) roomConnections1 << "S" ;
+                if ( ! roomOnWest.empty() ) roomConnections1 << "W" ;
+                if ( ! roomOnNorth.empty() ) roomConnections1 << "N" ;
+                if ( ! roomOnEast.empty() ) roomConnections1 << "E" ;
+
+                std::string roomAbove = connections->findConnectedRoom( Way( "up" ), &wayOfEntryToNextRoom );
+                std::string roomBelow = connections->findConnectedRoom( Way( "down" ), &wayOfEntryToNextRoom );
+                std::string roomToTeleport = connections->findConnectedRoom( Way( "via teleport" ), &wayOfEntryToNextRoom );
+                std::string roomToTeleportToo = connections->findConnectedRoom( Way( "via second teleport" ), &wayOfEntryToNextRoom );
+
+                if ( ! roomAbove.empty() ) roomConnections2 << "A" ;
+                if ( ! roomBelow.empty() ) roomConnections2 << "B" ;
+                if ( ! roomToTeleport.empty() ) roomConnections2 << "T" ;
+                if ( ! roomToTeleportToo.empty() ) roomConnections2 << "t" ;
+
                 int whiteColor = Color::whiteColor()->toAllegroColor() ;
+                int gray50Color = Color::gray50Color()->toAllegroColor() ;
+
+                textout_ex( this->view, font, roomFile.c_str (), 12, 8, whiteColor, -1 );
+                textout_ex( this->view, font, ( roomTiles.str() + "  " + roomConnections1.str() + " " + roomConnections2.str() ).c_str (), 12, 20, whiteColor, -1 );
+
+                // draw miniature of room
+
+                const unsigned int sizeOfTileForMap = 3;
+
+                const unsigned int leftXmap = 24;
+                const unsigned int topYmap = 36;
+                const unsigned int iniPosX = leftXmap + ( tilesY * ( sizeOfTileForMap << 1 ) );
+                const unsigned int iniPosY = topYmap + 4;
+
+                unsigned int posX = iniPosX ;
+                unsigned int posY = iniPosY ;
+
+                int doorXmid = tilesX >> 1;
+                int doorYmid = tilesY >> 1;
+
+                Door* eastDoor = activeRoom->getDoorAt( "east" );
+                Door* southDoor = activeRoom->getDoorAt( "south" );
+                Door* westDoor = activeRoom->getDoorAt( "west" );
+                Door* northDoor = activeRoom->getDoorAt( "north" );
+
+                if ( eastDoor != nilPointer && westDoor == nilPointer ) doorYmid ++;
+                if ( northDoor != nilPointer && southDoor == nilPointer ) doorXmid ++;
+
+                for ( int tile = 0 ; tile < tilesX ; tile ++ )
+                {
+                        if ( eastDoor != nilPointer && eastDoor->getCellX() + 1 != doorXmid )
+                        {
+                                doorXmid = eastDoor->getCellX() + 1;
+                        }
+
+                        if ( ! ( ( tile == doorXmid || tile + 1 == doorXmid )
+                                && eastDoor != nilPointer ) )
+                        {
+                                for ( unsigned int pix = 0 ; pix < sizeOfTileForMap ; pix ++ )
+                                {
+                                        putpixel( this->view, posX++, posY, whiteColor );
+                                        putpixel( this->view, posX++, posY++, whiteColor );
+                                }
+                        }
+                        else
+                        {
+                                if ( eastDoor != nilPointer && ( tile + 1 == doorXmid ) )
+                                {
+                                        if ( tile > 0 /* not first tile */ )
+                                                putpixel( this->view, posX, posY, gray50Color );
+                                        else
+                                                putpixel( this->view, posX + 2, posY + 1, gray50Color );
+                                }
+
+                                posX += sizeOfTileForMap << 1;
+                                posY += sizeOfTileForMap;
+
+                                if ( eastDoor != nilPointer && ( tile == doorXmid ) )
+                                {
+                                        if ( tile + 1 < tilesX /* not last tile */ )
+                                                putpixel( this->view, posX - 1, posY - 1, gray50Color );
+                                        else
+                                                putpixel( this->view, posX - 3, posY - 2, gray50Color );
+                                }
+                        }
+                }
+
+                posX--; posY--;
+
+                for ( int tile = 0 ; tile < tilesY ; tile ++ )
+                {
+                        if ( southDoor != nilPointer && southDoor->getCellY() + 1 != doorYmid )
+                        {
+                                doorYmid = southDoor->getCellY() + 1;
+                        }
+
+                        if ( ! ( ( tile == doorYmid || tile + 1 == doorYmid )
+                                && southDoor != nilPointer ) )
+                        {
+                                for ( unsigned int pix = 0 ; pix < sizeOfTileForMap ; pix ++ )
+                                {
+                                        putpixel( this->view, posX--, posY, whiteColor );
+                                        putpixel( this->view, posX--, posY++, whiteColor );
+                                }
+                        }
+                        else
+                        {
+                                if ( southDoor != nilPointer && ( tile + 1 == doorYmid ) )
+                                {
+                                        if ( tile > 0 /* not first tile */ )
+                                                putpixel( this->view, posX, posY, gray50Color );
+                                        else
+                                                putpixel( this->view, posX - 2, posY + 1, gray50Color );
+                                }
+
+                                posX -= sizeOfTileForMap << 1;
+                                posY += sizeOfTileForMap;
+
+                                if ( southDoor != nilPointer && ( tile == doorYmid ) )
+                                {
+                                        if ( tile + 1 < tilesY /* not last tile */ )
+                                                putpixel( this->view, posX + 1, posY - 1, gray50Color );
+                                        else
+                                                putpixel( this->view, posX + 3, posY - 2, gray50Color  );
+                                }
+                        }
+                }
+
+                posX = iniPosX + 1 ;
+                posY = iniPosY ;
+
+                for ( int tile = 0 ; tile < tilesY ; tile ++ )
+                {
+                        if ( northDoor != nilPointer && northDoor->getCellY() + 1 != doorYmid )
+                        {
+                                doorYmid = northDoor->getCellY() + 1;
+                        }
+
+                        if ( ! ( ( tile == doorYmid || tile + 1 == doorYmid )
+                                && northDoor != nilPointer ) )
+                        {
+                                for ( unsigned int pix = 0 ; pix < sizeOfTileForMap ; pix ++ )
+                                {
+                                        putpixel( this->view, posX--, posY, whiteColor );
+                                        putpixel( this->view, posX--, posY++, whiteColor );
+                                }
+                        }
+                        else
+                        {
+                                if ( northDoor != nilPointer && ( tile + 1 == doorYmid ) )
+                                {
+                                        if ( tile > 0 /* not first tile */ )
+                                                putpixel( this->view, posX, posY, gray50Color );
+                                        else
+                                                putpixel( this->view, posX - 2, posY + 1, gray50Color );
+                                }
+
+                                posX -= sizeOfTileForMap << 1;
+                                posY += sizeOfTileForMap;
+
+                                if ( northDoor != nilPointer && ( tile == doorYmid ) )
+                                {
+                                        if ( tile + 1 < tilesY /* not last tile */ )
+                                                putpixel( this->view, posX + 1, posY - 1, gray50Color );
+                                        else
+                                                putpixel( this->view, posX + 3, posY - 2, gray50Color );
+                                }
+                        }
+                }
+
+                posX++; posY--;
+
+                for ( int tile = 0 ; tile < tilesX ; tile ++ )
+                {
+                        if ( westDoor != nilPointer && westDoor->getCellX() + 1 != doorXmid )
+                        {
+                                doorXmid = westDoor->getCellX() + 1;
+                        }
+
+                        if ( ! ( ( tile == doorXmid || tile + 1 == doorXmid )
+                                && westDoor != nilPointer ) )
+                        {
+                                for ( unsigned int pix = 0 ; pix < sizeOfTileForMap ; pix ++ )
+                                {
+                                        putpixel( this->view, posX++, posY, whiteColor );
+                                        putpixel( this->view, posX++, posY++, whiteColor );
+                                }
+                        }
+                        else
+                        {
+                                if ( westDoor != nilPointer && ( tile + 1 == doorXmid ) )
+                                {
+                                        if ( tile > 0 /* not first tile */ )
+                                                putpixel( this->view, posX, posY, gray50Color );
+                                        else
+                                                putpixel( this->view, posX + 2, posY + 1, gray50Color );
+                                }
+
+                                posX += sizeOfTileForMap << 1;
+                                posY += sizeOfTileForMap;
+
+                                if ( westDoor != nilPointer && ( tile == doorXmid ) )
+                                {
+                                        if ( tile + 1 < tilesX /* not last tile */ )
+                                                putpixel( this->view, posX - 1, posY - 1, gray50Color );
+                                        else
+                                                putpixel( this->view, posX - 3, posY - 2, gray50Color );
+                                }
+                        }
+                }
+
+                // show teleports on miniature
+
+                std::vector< std::list< GridItem* > > gridItemsInRoom = activeRoom->getMediator()->getGridItems();
+
+                for ( unsigned int column = 0; column < gridItemsInRoom.size(); column ++ )
+                {
+                        std::list < GridItem * > columnOfItems = gridItemsInRoom[ column ];
+
+                        for ( std::list< GridItem * >::const_iterator gi = columnOfItems.begin (); gi != columnOfItems.end (); ++ gi )
+                        {
+                                if ( ( *gi )->getLabel() == "teleport" && ! roomToTeleport.empty() )
+                                {
+                                        fillIsoTile( this->view, iniPosX, iniPosY, ( *gi )->getCellX(), ( *gi )->getCellY(), sizeOfTileForMap, Color::yellowColor() );
+                                }
+                                else if ( ( *gi )->getLabel() == "teleport-too" && ! roomToTeleportToo.empty() )
+                                {
+                                        fillIsoTile( this->view, iniPosX, iniPosY, ( *gi )->getCellX(), ( *gi )->getCellY(), sizeOfTileForMap, Color::magentaColor() );
+                                }
+                        }
+                }
+
+                // cheats
 
                 if ( GameManager::getInstance()->areLivesInexhaustible () )
                 {
-                        textout_ex( this->view, font, "VIDAS INFINITAS", 18, 10, whiteColor, -1 );
+                        ////textout_ex( this->view, font, "VIDAS INFINITAS", 18, 10, whiteColor, -1 );
                         textout_ex( this->view, font, "INFINITE LIVES", this->view->w - 128, 10, whiteColor, -1 );
                 }
 
@@ -426,7 +677,7 @@ BITMAP* Isomot::update()
                 }
 
                 // la sala final es muy especial
-                if ( activeRoom->getNameOfFileWithDataAboutRoom() == "blacktooth/blacktooth88.xml" )
+                if ( roomFile == "blacktooth88.xml" )
                 {
                         this->updateEndRoom();
                 }
@@ -533,14 +784,20 @@ void Isomot::updateEndRoom()
         }
 }
 
-ItemDataManager* Isomot::getItemDataManager() const
+/* static */
+void Isomot::fillIsoTile( BITMAP* where, int x0, int y0, int tileX, int tileY, unsigned int sizeOfTile, const Color* color )
 {
-        return itemDataManager;
-}
+        for ( unsigned int piw = 0 ; piw < sizeOfTile ; piw ++ )
+        {
+                int x = x0 + ( tileX - tileY ) * ( sizeOfTile << 1 ) - ( piw << 1 ) ;
+                int y = y0 + ( tileY + tileX ) * sizeOfTile + piw ;
 
-MapManager* Isomot::getMapManager() const
-{
-        return mapManager;
+                for ( unsigned int pix = 0 ; pix < sizeOfTile ; pix ++ )
+                {
+                        putpixel( where, x++, y, color->toAllegroColor() );
+                        putpixel( where, x++, y++, color->toAllegroColor() );
+                }
+        }
 }
 
 }

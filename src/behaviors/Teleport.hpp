@@ -20,7 +20,7 @@ namespace isomot
 class Item ;
 
 /**
- * Elemento que se activa al detectar un elemento encima. Permite el teletransporte entre salas
+ * Teleports item between rooms, activates when item is above it
  */
 
 class Teleport : public Behavior
@@ -36,9 +36,6 @@ public:
 
 private:
 
-       /**
-        * Indica si el telepuerto está activo
-        */
         bool activated ;
 
 };

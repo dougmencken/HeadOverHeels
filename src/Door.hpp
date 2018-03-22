@@ -57,12 +57,12 @@ private:
        /**
         * Cell on X axis of this door
         */
-        int cx ;
+        int cellX ;
 
        /**
         * Cell on Y axis of this door
         */
-        int cy ;
+        int cellY ;
 
        /**
         * Spatial position Z or how far is ground
@@ -101,6 +101,10 @@ public:
         FreeItem * getRightJamb () ;
 
         FreeItem * getLintel () ;
+
+        int getCellX () const {  return cellX ;  }
+
+        int getCellY () const {  return cellY ;  }
 
 };
 

@@ -123,7 +123,7 @@ Room::Room( const std::string& roomFile, const std::string& scenery, int xTiles,
         // crea la imagen with suitable dimensions to draw the active room,
         // single room ( id est up to 10 x 10 tiles ) just fits to the screen
         // but image of double or triple room is larger
-        if ( xTiles <= 10 && yTiles <= 10 )
+        if ( isSingleRoom() )
         {
                 whereToDraw = create_bitmap_ex( 32, ScreenWidth, ScreenHeight );
         }

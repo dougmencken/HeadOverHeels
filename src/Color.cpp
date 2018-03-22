@@ -5,6 +5,29 @@
 #include <cmath> // for sqrt
 
 
+Color * Color::theBlack = new Color( 0, 0, 0 ) ;
+
+Color * Color::theBlue = new Color( 50, 50, 255 ) ;
+
+Color * Color::theRed = new Color( 255, 50, 50 ) ;
+
+Color * Color::theMagenta = new Color( 255, 50, 255 ) ;
+
+Color * Color::theGreen = new Color( 50, 255, 50 ) ;
+
+Color * Color::theCyan = new Color( 0, 228, 231 ) ;
+
+Color * Color::theYellow = new Color( 255, 255, 50 ) ;
+
+Color * Color::theWhite = new Color( 255, 255, 255 ) ;
+
+Color * Color::theOrange = new Color( 239, 129, 0 ) ;
+
+Color * Color::the50Gray = new Color( 127, 127, 127 ) ;
+
+Color * Color::theTransparency = new Color( 255, 0, 255 ) ;
+
+
 Color::Color( unsigned char r, unsigned char g, unsigned char b )
         : red( r )
         , green( g )
@@ -13,7 +36,7 @@ Color::Color( unsigned char r, unsigned char g, unsigned char b )
 }
 
 /* public static */
-BITMAP* Color::colorizePicture( BITMAP* picture, Color* color )
+BITMAP* Color::colorizePicture( BITMAP* picture, const Color* color )
 {
         if ( color == Color::whiteColor() ) return picture ;
 

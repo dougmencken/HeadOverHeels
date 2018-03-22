@@ -614,36 +614,36 @@ void MapManager::resetVisitedRooms()
         }
 }
 
-MapRoomData* MapManager::findRoomData( const std::string& room )
+MapRoomData* MapManager::findRoomData( const std::string& room ) const
 {
         if ( room.empty() )
                 return nilPointer;
 
-        /* std::cout << "lookin’ for data of room \"" << room << "\"" << std::endl ; */
+        /* std::cout << "lookin’ for data about connections of room \"" << room << "\"" << std::endl ; */
 
-        std::list< MapRoomData * >::iterator i = std::find_if( theMap.begin (), theMap.end (), std::bind2nd( EqualMapRoomData(), room ) );
+        std::list< MapRoomData * >::const_iterator i = std::find_if( theMap.begin (), theMap.end (), std::bind2nd( EqualMapRoomData(), room ) );
         MapRoomData* data = ( i != theMap.end() ? *i : nilPointer );
 
         return data;
 }
 
-Room* MapManager::findRoom( const std::string& room )
+Room* MapManager::findRoom( const std::string& room ) const
 {
-        std::vector< Room* >::iterator i = std::find_if( rooms.begin (), rooms.end (), std::bind2nd( EqualRoom(), room ) );
+        std::vector< Room* >::const_iterator i = std::find_if( rooms.begin (), rooms.end (), std::bind2nd( EqualRoom(), room ) );
         return ( i != rooms.end() ? *i : nilPointer );
 }
 
-Room* MapManager::getRoomOfInactivePlayer()
+Room* MapManager::getRoomOfInactivePlayer() const
 {
-        Room* room = nilPointer;
-
         for ( size_t i = 0; i < this->rooms.size (); ++i )
         {
                 if ( this->rooms[ i ] != this->activeRoom )
-                        room = this->rooms[ i ];
+                {
+                        return this->rooms[ i ];
+                }
         }
 
-        return room;
+        return nilPointer;
 }
 
 bool EqualMapRoomData::operator()( const MapRoomData* mapData, const std::string& room ) const

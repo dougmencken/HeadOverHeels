@@ -21,7 +21,7 @@ namespace isomot
 {
 
 /**
- * Container for information of a map room read from a file with data for this room
+ * Connections of this room with another rooms of map
  */
 
 class MapRoomData

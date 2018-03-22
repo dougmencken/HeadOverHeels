@@ -166,7 +166,7 @@ void FallKindOfActivity::assignAnchor( FreeItem* freeItem, const std::vector< st
                         count++ ;
 
                         // in case when item is anchored previously
-                        if ( oldAnchor != nilPointer && item != nilPointer && oldAnchor->getUniqueName() == item->getUniqueName() )
+                        if ( oldAnchor != nilPointer && item != nilPointer && oldAnchor == item )
                         {
                                 anchor = oldAnchor;
                                 break;
@@ -179,14 +179,10 @@ void FallKindOfActivity::assignAnchor( FreeItem* freeItem, const std::vector< st
                         }
                         else
                         {
-                                // if it is grid item
-                                if ( item->whichKindOfItem() == "grid item" )
+                                // if it is grid item and current anchor is not grid item then pick grid item as anchor
+                                if ( item->whichKindOfItem() == "grid item" && anchor->whichKindOfItem() != "grid item" )
                                 {
-                                        // when current anchor is not grid item then pick this grid item as new anchor
-                                        if ( anchor->whichKindOfItem() != "grid item" )
-                                        {
-                                                anchor = item;
-                                        }
+                                        anchor = item;
                                 }
 
                                 if ( anchor != item )
@@ -214,14 +210,16 @@ void FallKindOfActivity::assignAnchor( FreeItem* freeItem, const std::vector< st
 
                 freeItem->setAnchor( anchor );
 
-                /* if ( anchor != nilPointer && anchor != oldAnchor )
+        #ifdef DEBUG
+                if ( anchor != nilPointer && anchor != oldAnchor )
                 {
-                        std::cout << "item \"" << anchor->getUniqueName() << "\" at" <<
+                        std::cout << anchor->whichKindOfItem() << " \"" << anchor->getUniqueName() << "\" at" <<
                                         " x=" << anchor->getX() << " y=" << anchor->getY() << " z=" << anchor->getZ() <<
-                                        " is set as anchor for item \"" << freeItem->getUniqueName() << "\" at" <<
-                                        " x=" << freeItem->getX() << " y=" << freeItem->getY() << " z=" << freeItem->getZ()
+                                        " is set as anchor for " << freeItem->whichKindOfItem() << " \"" << freeItem->getUniqueName() <<
+                                        "\" at" << " x=" << freeItem->getX() << " y=" << freeItem->getY() << " z=" << freeItem->getZ()
                                   << std::endl ;
-                } */
+                }
+        #endif
         }
 }
 

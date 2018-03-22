@@ -301,6 +301,8 @@ public:
         */
         unsigned int getTilesY () const {  return numberOfTiles.second ;  }
 
+        bool isSingleRoom () const {  return getTilesX() <= 10 && getTilesY() <= 10 ;  }
+
        /**
         * Returns length of side of single tile in isometric units
         */
