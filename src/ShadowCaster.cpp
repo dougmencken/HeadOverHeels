@@ -28,27 +28,28 @@ void ShadowCaster::castShadowOnItem( Item* item, int x, int y, BITMAP* shadow, u
         int colorDepthRaw = bitmap_color_depth( rawImage ) ;
         int colorDepthShadow = bitmap_color_depth( shadow ) ;
 
-        int width = item->getWidthX() ;
+        int height = static_cast< int >( item->getHeight() );
+        int width = static_cast< int >( item->getWidthX() );
         int deltaW = 0 ;  // widths of grid item are always equal
 
         if ( isFreeItem )
         {
                 if ( item->getWidthY() > item->getWidthX() )
-                        width = item->getWidthY();
+                        width = static_cast< int >( item->getWidthY() );
 
                 deltaW = static_cast< int >( item->getWidthX() ) - static_cast< int >( item->getWidthY() );
         }
 
-        int inix = x - item->getOffsetX();                      // initial X
+        int inix = x - item->getOffsetX();              // initial X
+        int endx = inix + shadow->w;                    // final X
+        int iniy = y - item->getOffsetY();              // initial Y
+        int endy = iniy + shadow->h;                    // final Y
         if ( inix < 0 ) inix = 0;
-        int iniy = y - item->getOffsetY();                      // initial Y
         if ( iniy < 0 ) iniy = 0;
-        int endx = x - item->getOffsetX() + shadow->w;          // final X
         if ( endx > rawImage->w ) endx = rawImage->w;
-        int endy = y - item->getOffsetY() + shadow->h;          // final Y
         if ( endy > rawImage->h ) endy = rawImage->h;
-        int my = rawImage->h - width - item->getHeight();       // intermediate Y
-        if ( isGridItem ) my ++;                                // for better shadow on sides of grid item
+        int my = rawImage->h - width - height;          // intermediate Y
+        if ( isGridItem ) my ++;                        // for better shadow on sides of grid item
         if ( endy < my ) my = endy;
         if ( endy > my + width ) endy = my + width;
 
@@ -81,6 +82,7 @@ void ShadowCaster::castShadowOnItem( Item* item, int x, int y, BITMAP* shadow, u
         if ( shadyImage == nilPointer )
         {
                 shadyImage = create_bitmap_ex( colorDepthRaw, rawImage->w, rawImage->h );
+                item->setWantShadow( true );
         }
 
         if ( item->getWantShadow() )
@@ -104,10 +106,10 @@ void ShadowCaster::castShadowOnItem( Item* item, int x, int y, BITMAP* shadow, u
                 n2i += colorDepthShadow == 32 ? 1 : 0 ;
         #endif
 
-        int ltpx = 0;   // first component of first pixel, the one furthest to the left, where lateral shading begins
-        int ltpx1 = 0;  // second component of first pixel, the one furthest to the left, where lateral shading begins
-        int rtpx = 0;   // first component of last pixel, the one furthest to the right, where lateral shading ends
-        int rtpx1 = 0;  // second component of last pixel, the one furthest to the right, where lateral shading ends
+        int ltpx = 0;   // first component of first pixel, the one furthest to the left, where shading of sides begins
+        int ltpx1 = 0;  // second component of first pixel, the one furthest to the left, where shading of sides begins
+        int rtpx = 0;   // first component of last pixel, the one furthest to the right, where shading of sides ends
+        int rtpx1 = 0;  // second component of last pixel, the one furthest to the right, where shading of sides ends
 
         // when opacity is power of 2 in interval [ 2 ... 128 ]
         if ( static_cast< int >( std::pow( 2, std::log10( opacity ) / std::log10( 2 ) ) ) == opacity )
@@ -425,13 +427,13 @@ void ShadowCaster::castShadowOnFloor( FloorTile* tile, int x, int y, BITMAP* sha
         int colorDepthTile = bitmap_color_depth( tileImage ) ;
         int colorDepthShadow = bitmap_color_depth( shadow ) ;
 
-        int inix = x - tile->getOffsetX();                      // initial X
+        int inix = x - tile->getOffsetX();      // initial X
+        int iniy = y - tile->getOffsetY();      // initial Y
+        int endx = inix + shadow->w;            // final X
+        int endy = iniy + shadow->h;            // final Y
         if ( inix < 0 ) inix = 0;
-        int iniy = y - tile->getOffsetY();                      // initial Y
         if ( iniy < 0 ) iniy = 0;
-        int endx = x - tile->getOffsetX() + shadow->w;          // final X
         if ( endx > tileImage->w ) endx = tileImage->w;
-        int endy = y - tile->getOffsetY() + shadow->h;          // final Y
         if ( endy > tileImage->h ) endy = tileImage->h;
 
         // continue when initial coordinates are less than final coordinates
@@ -449,11 +451,12 @@ void ShadowCaster::castShadowOnFloor( FloorTile* tile, int x, int y, BITMAP* sha
 
         int n2i = inix + tile->getOffsetX() - x;
 
-        BITMAP* shadyImage = tile->getShadyImage();             // graphics of shaded item
+        BITMAP* shadyImage = tile->getShadyImage(); // graphics of shaded item
 
         if ( shadyImage == nilPointer )
         {
                 shadyImage = create_bitmap_ex( colorDepthTile, tileImage->w, tileImage->h );
+                tile->setWantShadow( true );
         }
 
         if ( tile->getWantShadow() )

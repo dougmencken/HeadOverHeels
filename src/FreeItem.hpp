@@ -25,14 +25,6 @@ namespace isomot
 {
 
 // ~TO~DO~ bin it completely
-enum WhichShade
-{
-        NoShadow,       /* shady image is nil, wantShadow is true or false */
-        WantReshadow,   /* shady image is not nil and wantShadow is true */
-        AlreadyShady    /* shady image is not nil and wantShadow is false */
-} ;
-
-// ~TO~DO~ bin it completely
 enum WhichMask
 {
         NoMask,         /* masked image is nil, wantMask is true or false */
@@ -73,7 +65,7 @@ public:
 
         void draw ( BITMAP* where ) ;
 
-        void binProcessedImages () ;
+        void binBothProcessedImages () ;
 
         /**
          * Change graphics of item
@@ -132,17 +124,11 @@ public:
          */
         virtual bool addToPosition ( int x, int y, int z ) ;
 
-        void setWhichShade ( const WhichShade& shady ) {  this->myShady = shady ;  }
-
-        WhichShade whichShade () const {  return this->myShady ;  }
-
 protected:
 
         virtual bool updatePosition ( int newX, int newY, int newZ, const Coordinate& whatToChange, const ChangeOrAdd& addOrChange ) ;
 
 protected:
-
-        WhichShade myShady ;
 
         WhichMask myMask ;
 

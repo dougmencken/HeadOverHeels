@@ -95,7 +95,7 @@ void GridItem::changeShadow( BITMAP* newShadow )
 {
         Item::changeShadow( newShadow );
 
-        if ( newShadow != nilPointer )
+        if ( newShadow != nilPointer && this->shadow != newShadow && this->rawImage != nilPointer )
         {
                 if ( mediator->getDegreeOfShading() < 256 )
                 {
@@ -131,10 +131,11 @@ bool GridItem::updatePosition( int newValue, const Coordinate& whatToChange, con
         // or maybe with other items in room
         else
         {
-                if ( ! ( collisionFound = mediator->findCollisionWithItem( this ) ) )
+                collisionFound = mediator->findCollisionWithItem( this );
+                if ( ! collisionFound )
                 {
                         // for grid element with image, mark to mask overlapping free items
-                        if ( this->rawImage )
+                        if ( this->rawImage != nilPointer )
                         {
                                 // how many pixels is image from origin of room
                                 // change only value on Y axis because it depends on Z coordinate

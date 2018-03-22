@@ -191,9 +191,9 @@ protected:
 
 private:
 
-        static bool sortGridItemList ( GridItem * g1, GridItem * g2 ) ;
+        static bool sortColumnOfGridItems ( GridItem * g1, GridItem * g2 ) ;
 
-        static bool sortFreeItemList ( FreeItem * f1, FreeItem * f2 ) ;
+        static bool sortListOfFreeItems ( FreeItem * f1, FreeItem * f2 ) ;
 
 private:
 

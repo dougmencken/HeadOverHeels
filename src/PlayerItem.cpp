@@ -160,7 +160,7 @@ bool PlayerItem::updatePosition( int newX, int newY, int newZ, const Coordinate&
         bool collisionFound = false;
 
         // copy item before moving
-        PlayerItem oldPlayerItem( *this );
+        PlayerItem copyOfItem( *this );
 
         if ( whatToChange & CoordinateX )
         {
@@ -190,8 +190,8 @@ bool PlayerItem::updatePosition( int newX, int newY, int newZ, const Coordinate&
                 {
                         std::string what = mediator->popCollision();
 
-                        int oldX = oldPlayerItem.getX();
-                        int oldY = oldPlayerItem.getY();
+                        int oldX = copyOfItem.getX();
+                        int oldY = copyOfItem.getY();
 
                         // case of move to north wall
                         if ( wayX < 0 )
@@ -316,15 +316,20 @@ bool PlayerItem::updatePosition( int newX, int newY, int newZ, const Coordinate&
                         collisionFound = mediator->findCollisionWithItem( this );
                         if ( ! collisionFound )
                         {
+                                // reshade and remask
+                                binBothProcessedImages();
+                                setWantShadow( true );
+                                this->myMask = WantRemask;
+
                                 // for item with image, mark to mask free items whose images overlap with its image
-                                if ( this->rawImage )
+                                if ( this->rawImage != nilPointer )
                                 {
                                         // get how many pixels is this image from point of room’s origin
                                         this->offset.first = ( ( this->x - this->y ) << 1 ) + getWidthX() + getDataOfItem()->getWidthY() - ( this->rawImage->w >> 1 ) - 1;
                                         this->offset.second = this->x + this->y + getWidthX() - this->rawImage->h - this->z;
 
                                         // for both the previous position and the current position
-                                        mediator->remaskWithFreeItem( &oldPlayerItem );
+                                        mediator->remaskWithFreeItem( &copyOfItem );
                                         mediator->remaskWithFreeItem( this );
                                 }
                                 else
@@ -336,13 +341,9 @@ bool PlayerItem::updatePosition( int newX, int newY, int newZ, const Coordinate&
                                 if ( mediator->getDegreeOfShading() < 256 )
                                 {
                                         // for both the previous position and the current position
-                                        mediator->reshadeWithFreeItem( &oldPlayerItem );
+                                        mediator->reshadeWithFreeItem( &copyOfItem );
                                         mediator->reshadeWithFreeItem( this );
                                 }
-
-                                // reshade and remask
-                                this->myShady = WantReshadow;
-                                this->myMask = WantRemask;
 
                                 // rearrange list of free items
                                 mediator->activateFreeItemsSorting();
@@ -353,11 +354,11 @@ bool PlayerItem::updatePosition( int newX, int newY, int newZ, const Coordinate&
         // restore previous values for collision which is not collision with door
         if ( collisionFound && ! doorCollision )
         {
-                this->x = oldPlayerItem.getX();
-                this->y = oldPlayerItem.getY();
-                this->z = oldPlayerItem.getZ();
+                this->x = copyOfItem.getX();
+                this->y = copyOfItem.getY();
+                this->z = copyOfItem.getZ();
 
-                this->offset = oldPlayerItem.getOffset();
+                this->offset = copyOfItem.getOffset();
         }
 
         return ! collisionFound ;
