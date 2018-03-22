@@ -418,52 +418,45 @@ BITMAP* Isomot::update()
                 if ( fromLastSlash != nilPointer )
                         roomFile = std::string( fromLastSlash + 1 );
 
+                int whiteColor = Color::whiteColor()->toAllegroColor() ;
+
+        if ( ! GameManager::getInstance()->hasBackgroundPicture () )
+        {
+                // show information about room
+
                 int tilesX = activeRoom->getTilesX();
                 int tilesY = activeRoom->getTilesY();
 
                 std::ostringstream roomTiles;
                 roomTiles << tilesX << "x" << tilesY;
 
-                std::ostringstream roomConnections1;
-                std::ostringstream roomConnections2;
-
                 MapRoomData* connections = this->getMapManager()->findRoomData( activeRoom );
-                Way wayOfEntryToNextRoom( "nowhere" );
+                Way wayToNextRoom( "nowhere" );
 
-                std::string roomOnNorth = connections->findConnectedRoom( Way( "north" ), &wayOfEntryToNextRoom );
-                std::string roomOnSouth = connections->findConnectedRoom( Way( "south" ), &wayOfEntryToNextRoom );
-                std::string roomOnEast = connections->findConnectedRoom( Way( "east" ), &wayOfEntryToNextRoom );
-                std::string roomOnWest = connections->findConnectedRoom( Way( "west" ), &wayOfEntryToNextRoom );
+             /* std::string roomOnNorth = connections->findConnectedRoom( Way( "north" ), &wayToNextRoom );
+                std::string roomOnSouth = connections->findConnectedRoom( Way( "south" ), &wayToNextRoom );
+                std::string roomOnEast = connections->findConnectedRoom( Way( "east" ), &wayToNextRoom );
+                std::string roomOnWest = connections->findConnectedRoom( Way( "west" ), &wayToNextRoom ); */
 
-                if ( ! roomOnSouth.empty() ) roomConnections1 << "S" ;
-                if ( ! roomOnWest.empty() ) roomConnections1 << "W" ;
-                if ( ! roomOnNorth.empty() ) roomConnections1 << "N" ;
-                if ( ! roomOnEast.empty() ) roomConnections1 << "E" ;
+                std::string roomAbove = connections->findConnectedRoom( Way( "up" ), &wayToNextRoom );
+                std::string roomBelow = connections->findConnectedRoom( Way( "down" ), &wayToNextRoom );
+                std::string roomToTeleport = connections->findConnectedRoom( Way( "via teleport" ), &wayToNextRoom );
+                std::string roomToTeleportToo = connections->findConnectedRoom( Way( "via second teleport" ), &wayToNextRoom );
 
-                std::string roomAbove = connections->findConnectedRoom( Way( "up" ), &wayOfEntryToNextRoom );
-                std::string roomBelow = connections->findConnectedRoom( Way( "down" ), &wayOfEntryToNextRoom );
-                std::string roomToTeleport = connections->findConnectedRoom( Way( "via teleport" ), &wayOfEntryToNextRoom );
-                std::string roomToTeleportToo = connections->findConnectedRoom( Way( "via second teleport" ), &wayOfEntryToNextRoom );
-
-                if ( ! roomAbove.empty() ) roomConnections2 << "A" ;
-                if ( ! roomBelow.empty() ) roomConnections2 << "B" ;
-                if ( ! roomToTeleport.empty() ) roomConnections2 << "T" ;
-                if ( ! roomToTeleportToo.empty() ) roomConnections2 << "t" ;
-
-                int whiteColor = Color::whiteColor()->toAllegroColor() ;
                 int gray50Color = Color::gray50Color()->toAllegroColor() ;
 
                 textout_ex( this->view, font, roomFile.c_str (), 12, 8, whiteColor, -1 );
-                textout_ex( this->view, font, ( roomTiles.str() + "  " + roomConnections1.str() + " " + roomConnections2.str() ).c_str (), 12, 20, whiteColor, -1 );
+                textout_ex( this->view, font, roomTiles.str().c_str (), 12, 20, whiteColor, -1 );
 
                 // draw miniature of room
 
-                const unsigned int sizeOfTileForMap = 3;
+                const unsigned int sizeOfTileForMap = 3 ;
 
                 const unsigned int leftXmap = 24;
-                const unsigned int topYmap = 36;
+                const unsigned int topYmap = roomAbove.empty() ? 28 : 24 + ( 3 * sizeOfTileForMap );
+
                 const unsigned int iniPosX = leftXmap + ( tilesY * ( sizeOfTileForMap << 1 ) );
-                const unsigned int iniPosY = topYmap + 4;
+                const unsigned int iniPosY = topYmap + ( sizeOfTileForMap << 1 );
 
                 unsigned int posX = iniPosX ;
                 unsigned int posY = iniPosY ;
@@ -662,6 +655,51 @@ BITMAP* Isomot::update()
                                 }
                         }
                 }
+
+                // show when there’s a room above or below
+
+                if ( ! roomAbove.empty() || ! roomBelow.empty() )
+                {
+                        int miniatureMidX = leftXmap + ( tilesY + tilesX ) * sizeOfTileForMap;
+                        int abovePointerY = iniPosY - 2;
+                        int belowPointerY = iniPosY + ( tilesY + tilesX ) * sizeOfTileForMap;
+                        abovePointerY -= sizeOfTileForMap << 1;
+                        belowPointerY += sizeOfTileForMap << 1;
+
+                        ///if ( ! roomAbove.empty() ) putpixel( this->view, miniatureMidX, abovePointerY, Color::blueColor()->toAllegroColor() );
+                        ///if ( ! roomBelow.empty() ) putpixel( this->view, miniatureMidX, belowPointerY, Color::blueColor()->toAllegroColor() );
+
+                        int greenColor = Color::greenColor()->toAllegroColor() ;
+
+                        const unsigned int linesEven = ( ( sizeOfTileForMap + 1 ) >> 1 ) << 1;
+
+                        if ( ! roomAbove.empty() )
+                        {
+                                // draw middle line
+                                line( this->view, miniatureMidX, abovePointerY - linesEven + 1, miniatureMidX, abovePointerY - ( linesEven << 1 ), greenColor );
+
+                                int pos = 0;
+                                for ( unsigned int off = linesEven ; off > 0 ; off -- , pos ++ )
+                                {
+                                        line( this->view, miniatureMidX - off, abovePointerY - pos, miniatureMidX - off, abovePointerY - pos - linesEven, greenColor );
+                                        line( this->view, miniatureMidX + off, abovePointerY - pos, miniatureMidX + off, abovePointerY - pos - linesEven, greenColor );
+                                }
+                        }
+
+                        if ( ! roomBelow.empty() )
+                        {
+                                // draw middle line
+                                line( this->view, miniatureMidX, belowPointerY + linesEven - 1, miniatureMidX, belowPointerY + ( linesEven << 1 ), greenColor );
+
+                                int pos = 0;
+                                for ( unsigned int off = linesEven ; off > 0 ; off -- , pos ++ )
+                                {
+                                        line( this->view, miniatureMidX - off, belowPointerY + pos, miniatureMidX - off, belowPointerY + pos + linesEven, greenColor );
+                                        line( this->view, miniatureMidX + off, belowPointerY + pos, miniatureMidX + off, belowPointerY + pos + linesEven, greenColor );
+                                }
+                        }
+                }
+        }
 
                 // cheats
 
