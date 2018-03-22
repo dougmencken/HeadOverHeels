@@ -78,7 +78,7 @@ Mediator::~Mediator()
 
 void Mediator::update()
 {
-        pthread_mutex_lock( &gridItemsMutex );
+        lockGridItemMutex ();
 
         if ( this->gridItemsSorting )
         {
@@ -113,9 +113,9 @@ void Mediator::update()
                 vanishedGridItems.pop();
         }
 
-        pthread_mutex_unlock( &gridItemsMutex );
+        unlockGridItemMutex ();
 
-        pthread_mutex_lock( &freeItemsMutex );
+        lockFreeItemMutex ();
 
         if ( this->freeItemsSorting )
         {
@@ -176,7 +176,7 @@ void Mediator::update()
                 }
         }
 
-        pthread_mutex_unlock( &freeItemsMutex );
+        unlockFreeItemMutex ();
 }
 
 void Mediator::beginUpdate()
@@ -203,7 +203,7 @@ void* updateThread( void* thisClass )
 {
         Mediator* mediator = reinterpret_cast< Mediator* >( thisClass );
 
-        while( mediator->isThreadRunning() )
+        while ( mediator->isThreadRunning() )
         {
                 mediator->update();
                 milliSleep( 10 );
@@ -214,14 +214,15 @@ void* updateThread( void* thisClass )
 
 void Mediator::remaskWithFreeItem( FreeItem* item )
 {
-        if ( ! item ) return;
+        if ( item == nilPointer ) return;
 
         // go through list of free items to see which ones to remask
         for ( std::list< FreeItem* >::iterator f = freeItems.begin (); f != freeItems.end (); ++f )
         {
                 FreeItem* thatFreeItem = *f;
 
-                if ( thatFreeItem->getUniqueName() != item->getUniqueName() && thatFreeItem->getRawImage() != nilPointer )
+                if ( thatFreeItem != nilPointer && thatFreeItem->getRawImage() != nilPointer &&
+                        thatFreeItem != item && thatFreeItem->getUniqueName() + " copy" != item->getUniqueName() )
                 {
                         // mask item if there’s overlap between images
                         if ( ( thatFreeItem->getOffsetX() < item->getOffsetX() + item->getRawImage()->w )
@@ -237,7 +238,7 @@ void Mediator::remaskWithFreeItem( FreeItem* item )
 
 void Mediator::remaskWithGridItem( GridItem* gridItem )
 {
-        if ( ! gridItem ) return;
+        if ( gridItem == nilPointer ) return;
 
         // go through list of free items to see which ones to remask
         for ( std::list< FreeItem* >::iterator f = freeItems.begin (); f != freeItems.end (); ++f )
@@ -269,9 +270,9 @@ void Mediator::reshadeWithGridItem( GridItem* item )
         // shade free items underneath
         this->shadeFreeItemsBeneathItem( item );
 
-        // shade grid items below
-        int column = room->getTilesX() * item->getCellY() + item->getCellX();
+        int column = item->getColumnOfGrid();
 
+        // shade grid items below
         if ( ! this->gridItems[ column ].empty() )
         {
                 std::list< GridItem * >::iterator g = this->gridItems[ column ].begin ();
@@ -441,7 +442,7 @@ void Mediator::castShadowOnFloor( FloorTile* floorTile )
 void Mediator::castShadowOnGridItem( GridItem* gridItem )
 {
         int tileSize = room->getSizeOfOneTile();
-        int column = gridItem->getColumn();
+        int column = gridItem->getColumnOfGrid();
 
         // shade with grid items it may have above
         for ( std::list< GridItem* >::iterator g = gridItems[ column ].begin(); g != gridItems[ column ].end(); ++g )
@@ -964,25 +965,25 @@ int Mediator::findHighestZ( Item * item )
         return z;
 }
 
-void Mediator::addItem( GridItem* gridItem )
+void Mediator::addGridItem( GridItem* gridItem )
 {
-        pthread_mutex_lock( &gridItemsMutex );
+        lockGridItemMutex ();
 
         int column = room->getTilesX() * gridItem->getCellY() + gridItem->getCellX() ;
 
         gridItems[ column ].push_back( gridItem );
         gridItems[ column ].sort( sortGridItemList );
 
-        pthread_mutex_unlock( &gridItemsMutex );
+        unlockGridItemMutex ();
 }
 
-void Mediator::addItem( FreeItem* freeItem )
+void Mediator::addFreeItem( FreeItem* freeItem )
 {
         freeItems.push_back( freeItem );
         freeItems.sort( sortFreeItemList );
 }
 
-void Mediator::removeItem( GridItem* gridItem )
+void Mediator::removeGridItem( GridItem* gridItem )
 {
         int column( room->getTilesX() * gridItem->getCellY() + gridItem->getCellX() );
         gridItems[ column ].erase(
@@ -993,7 +994,7 @@ void Mediator::removeItem( GridItem* gridItem )
                 gridItems[ column ].end () );
 }
 
-void Mediator::removeItem( FreeItem* freeItem )
+void Mediator::removeFreeItem( FreeItem* freeItem )
 {
         freeItems.erase(
                 std::remove_if(

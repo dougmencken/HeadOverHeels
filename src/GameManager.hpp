@@ -198,24 +198,24 @@ public:
         unsigned short countFreePlanets () const ;
 
         /**
-         * Come un pez, es decir, desencadena el proceso para guardar la partida
+         * Eat fish, that is, begin process to save the game
          */
         void eatFish ( PlayerItem* character, Room* room ) ;
 
         void eatFish ( PlayerItem* character, Room* room, int x, int y, int z ) ;
 
         /**
-         * Finaliza la partida porque los jugadores han perdido todas sus vidas
+         * End game because characters have lost all their lives
          */
         void end () {  this->gameOver = true ;  }
 
         /**
-         * Finaliza la partida porque los jugadores han llegado a Freedom
+         * End game because characters have reached Freedom
          */
         void arriveFreedom () {  this->freedom = true ;  }
 
         /**
-         * Finaliza la partida porque los jugadores se han proclamado emperadores
+         * End game because characters have been proclaimed emperors
          */
         void success () {  this->emperator = true ;  }
 
@@ -228,16 +228,14 @@ public:
 private:
 
         /**
-         * Actualiza el juego de forma periódica. Implica redibujar la vista isométrica,
-         * que a su vez, actualiza el estado de todos los elementos
-         * @return Razón por la que se ha detenido la actualización
+         * Update game periodically by redrawing isometric view and updating items
+         * @return reason why update was paused
          */
         WhyPause update () ;
 
         /**
-         * Detiene el juego en curso. Si el usuario pulsa ESC abandonará la partida
-         * en curso y si pulsa cualquier otra tecla el juego continuará
-         * @return Razón por la que se ha detenido la actualización
+         * Pause game in progress
+         * @return reason why update was paused
          */
         WhyPause pause () ;
 
@@ -271,9 +269,6 @@ private:
 
         std::string chosenGraphicSet ;
 
-        /**
-         * Indica si se han activado las vidas infinitas
-         */
         bool vidasInfinitas ;
 
         bool immunityToCollisions ;
@@ -284,18 +279,12 @@ private:
 
         bool drawBackgroundPicture ;
 
-        /**
-         * Único objeto de esta clase para toda la aplicación
-         */
         static GameManager * instance ;
 
-        /**
-         * El motor isométrico del juego
-         */
         Isomot * isomot ;
 
         /**
-         * Gestor de la grabación y recuperación de una partida
+         * To manage saving and restoring of games
          */
         GameFileManager * gameFileManager ;
 
@@ -354,29 +343,14 @@ private:
          */
         std::map < std::string, bool > planets ;
 
-        /**
-         * Si un jugador acaba de coger una corona se detiene la partida para mostrar la pantalla de los planetas
-         */
         bool takenCrown ;
 
-        /**
-         * Si un jugador acaba de comer un pez se detiene la partida para dar la opción de grabar la partida
-         */
         bool eatenFish ;
 
-        /**
-         * Los jugadores han perdido todas las vidas
-         */
         bool gameOver ;
 
-        /**
-         * Los jugadores han llegado a Freedom
-         */
         bool freedom ;
 
-        /**
-         * Los jugadores se han proclamado Emperadores de Blacktooth
-         */
         bool emperator ;
 
         BITMAP * frameForJail ;

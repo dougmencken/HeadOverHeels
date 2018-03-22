@@ -251,6 +251,8 @@ void Room::addGridItem( GridItem * gridItem )
                 return;
         }
 
+        gridItem->setMediator( mediator );
+
         mediator->clearStackOfCollisions ();
 
         std::string labelOfItem = gridItem->getLabel() ;
@@ -262,7 +264,9 @@ void Room::addGridItem( GridItem * gridItem )
         nextNumbers[ labelOfItem ] = uniqueNumberOfItem + 1;
 
         std::ostringstream name;
-        name << labelOfItem << " " << uniqueNumberOfItem ;
+        name << labelOfItem << " " << toStringWithOrdinalSuffix( uniqueNumberOfItem ) <<
+                " @" << gridItem->getX() << "," << gridItem->getY() << "," << gridItem->getZ() ;
+
         gridItem->setUniqueName( name.str() );
 
         if ( gridItem->getZ() != Top )
@@ -279,12 +283,12 @@ void Room::addGridItem( GridItem * gridItem )
         if ( ! mediator->isStackOfCollisionsEmpty () )
         {
                 // can’t add item when there’s some collision
-                std::cerr << "collision with " << gridItem->whichKindOfItem() << std::endl ;
+                std::cerr << "there’s collision with " << gridItem->whichKindOfItem() << std::endl ;
                 return;
         }
 
         // calculate offset of item’s image from origin of room
-        if ( gridItem->getRawImage() )
+        if ( gridItem->getRawImage() != nilPointer )
         {
                 std::pair< int, int > offset (
                         ( ( this->tileSize * ( gridItem->getCellX() - gridItem->getCellY() ) ) << 1 ) - ( gridItem->getRawImage()->w >> 1 ) + 1,
@@ -293,18 +297,18 @@ void Room::addGridItem( GridItem * gridItem )
                 gridItem->setOffset( offset );
         }
 
-        /* std::cout << "add " << gridItem->whichKindOfItem() << " \"" << labelOfItem << "\" to room \"" << getNameOfFileWithDataAboutRoom() << "\"" << std::endl ; */
+        mediator->addGridItem( gridItem );
 
-        gridItem->setMediator( mediator );
-        gridItem->setColumn( this->numberOfTiles.first * gridItem->getCellY() + gridItem->getCellX() );
-        mediator->addItem( gridItem );
-
-        if ( this->shadingScale < 256 && gridItem->getImageOfShadow() )
+        if ( this->shadingScale < 256 && gridItem->getImageOfShadow() != nilPointer )
         {
                 mediator->reshadeWithGridItem( gridItem );
         }
 
         mediator->remaskWithGridItem( gridItem );
+
+#if defined( DEBUG ) && DEBUG
+        std::cout << gridItem->whichKindOfItem() << " \"" << gridItem->getUniqueName() << "\" is yet part of room \"" << getNameOfFileWithDataAboutRoom() << "\"" << std::endl ;
+#endif
 }
 
 void Room::addFreeItem( FreeItem * freeItem )
@@ -324,15 +328,16 @@ void Room::addFreeItem( FreeItem * freeItem )
                 return;
         }
 
-        // El elemento no puede estar fuera de la sala
         if ( ( freeItem->getX() + static_cast< int >( freeItem->getWidthX() ) > static_cast< int >( this->numberOfTiles.first * this->tileSize ) )
-                || ( freeItem->getY() - static_cast< int >( freeItem->getWidthY() ) < -1 )
+                || ( freeItem->getY() - static_cast< int >( freeItem->getWidthY() ) + 1 < 0 )
                 || ( freeItem->getY() > static_cast< int >( this->numberOfTiles.second * this->tileSize ) - 1 ) )
         {
                 std::cerr << "coordinates for " << freeItem->whichKindOfItem() << " are out of room" << std::endl ;
                 dumpItemInsideThisRoom( freeItem );
                 return;
         }
+
+        freeItem->setMediator( mediator );
 
         mediator->clearStackOfCollisions ();
 
@@ -344,31 +349,29 @@ void Room::addFreeItem( FreeItem * freeItem )
         }
         nextNumbers[ labelOfItem ] = uniqueNumberOfItem + 1;
 
-        std::ostringstream name;
-        name << labelOfItem << " " << uniqueNumberOfItem ;
-        freeItem->setUniqueName( name.str() );
+        freeItem->setUniqueName( labelOfItem + " " + toStringWithOrdinalSuffix( uniqueNumberOfItem ) );
 
-        // Si el elemento se va a colocar a una altura específica se buscan colisiones
+        // for item which is placed at some height, look for collisions
         if ( freeItem->getZ() > Top )
         {
                 mediator->findCollisionWithItem( freeItem );
         }
-        // Si el elemento se va en los más alto de la columna se busca el valor de Z
+        // for item at the top of column
         else
         {
                 freeItem->setZ( mediator->findHighestZ( freeItem ) );
         }
 
-        // Si se encontraron colisiones el elemento no se puede añadir
+        // collision is found, so can’t add this item
         if ( ! mediator->isStackOfCollisionsEmpty () )
         {
-                std::cerr << "collision with " << freeItem->whichKindOfItem() << std::endl ;
+                std::cerr << "there’s collision with " << freeItem->whichKindOfItem() << std::endl ;
                 dumpItemInsideThisRoom( freeItem );
                 return;
         }
 
         // calculate offset of item’s image from origin of room
-        if ( freeItem->getRawImage () )
+        if ( freeItem->getRawImage () != nilPointer )
         {
                 std::pair< int, int > offset (
                         ( ( freeItem->getX() - freeItem->getY() ) << 1 ) + freeItem->getWidthX() + freeItem->getWidthY() - ( freeItem->getRawImage()->w >> 1 ) - 1,
@@ -378,15 +381,18 @@ void Room::addFreeItem( FreeItem * freeItem )
         }
 
         // add free item to room
-        freeItem->setMediator( mediator );
-        mediator->addItem( freeItem );
+        mediator->addFreeItem( freeItem );
 
-        if ( this->shadingScale < 256 && freeItem->getImageOfShadow() )
+        if ( this->shadingScale < 256 && freeItem->getImageOfShadow() != nilPointer )
         {
                 mediator->reshadeWithFreeItem( freeItem );
         }
 
         mediator->remaskWithFreeItem( freeItem );
+
+#if defined( DEBUG ) && DEBUG
+        std::cout << freeItem->whichKindOfItem() << " \"" << freeItem->getUniqueName() << "\" is yet in room \"" << getNameOfFileWithDataAboutRoom() << "\"" << std::endl ;
+#endif
 }
 
 bool Room::addPlayerToRoom( PlayerItem* playerItem, bool playerEntersRoom )
@@ -452,7 +458,7 @@ bool Room::addPlayerToRoom( PlayerItem* playerItem, bool playerEntersRoom )
         }
 
         if ( ( playerItem->getX() + static_cast< int >( playerItem->getWidthX() ) > static_cast< int >( this->numberOfTiles.first * this->tileSize ) )
-                || ( playerItem->getY() - static_cast< int >( playerItem->getWidthY() ) < -1 )
+                || ( playerItem->getY() - static_cast< int >( playerItem->getWidthY() ) + 1 < 0 )
                 || ( playerItem->getY() > static_cast< int >( this->numberOfTiles.second * this->tileSize ) - 1 ) )
         {
                 std::cerr << "coordinates for " << playerItem->whichKindOfItem() << " are out of room" << std::endl ;
@@ -460,13 +466,15 @@ bool Room::addPlayerToRoom( PlayerItem* playerItem, bool playerEntersRoom )
                 return false;
         }
 
+        playerItem->setMediator( mediator );
+
         mediator->clearStackOfCollisions ();
 
         std::string labelOfItem = playerItem->getLabel() ;
         unsigned int uniqueNumberOfItem = nextNumbers[ labelOfItem ] ;
         if ( uniqueNumberOfItem > 0 ) // is there some player with the same label
         {
-                 std::cerr << "oops, can’t add the second character \"" << labelOfItem << "\" to room" << std::endl ;
+                 std::cerr << "oops, can’t add the second character \"" << labelOfItem << "\" to this room" << std::endl ;
                  return false;
         }
         nextNumbers[ labelOfItem ] = uniqueNumberOfItem + 1;
@@ -493,13 +501,13 @@ bool Room::addPlayerToRoom( PlayerItem* playerItem, bool playerEntersRoom )
         // collision is found, so can’t add this item
         if ( ! mediator->isStackOfCollisionsEmpty () )
         {
-                std::cerr << "collision with " << playerItem->whichKindOfItem() << std::endl ;
+                std::cerr << "there’s collision with " << playerItem->whichKindOfItem() << std::endl ;
                 dumpItemInsideThisRoom( playerItem );
                 return false;
         }
 
         // set offset of player’s image from origin of room
-        if ( playerItem->getRawImage () )
+        if ( playerItem->getRawImage () != nilPointer )
         {
                 std::pair< int, int > offset (
                         ( ( playerItem->getX() - playerItem->getY() ) << 1 ) + playerItem->getWidthX() + playerItem->getWidthY() - ( playerItem->getRawImage()->w >> 1 ) - 1,
@@ -508,10 +516,9 @@ bool Room::addPlayerToRoom( PlayerItem* playerItem, bool playerEntersRoom )
                 playerItem->setOffset( offset );
         }
 
-        playerItem->setMediator( mediator );
-        mediator->addItem( playerItem );
+        mediator->addFreeItem( playerItem );
 
-        if ( this->shadingScale < 256 && playerItem->getImageOfShadow() )
+        if ( this->shadingScale < 256 && playerItem->getImageOfShadow() != nilPointer )
         {
                 mediator->reshadeWithFreeItem( playerItem );
         }
@@ -520,7 +527,7 @@ bool Room::addPlayerToRoom( PlayerItem* playerItem, bool playerEntersRoom )
 
         // add player item to room
         this->playersYetInRoom.push_back( playerItem );
-        std::cout << "character \"" << playerItem->getLabel() << "\" is now in room \"" << nameOfFileWithDataAboutRoom << "\"" << std::endl ;
+        std::cout << "character \"" << playerItem->getLabel() << "\" is yet in room \"" << getNameOfFileWithDataAboutRoom() << "\"" << std::endl ;
 
         if ( playerEntersRoom )
         {
@@ -585,44 +592,30 @@ void Room::removeFloor( FloorTile * floorTile )
 
 void Room::removeGridItem( GridItem * gridItem )
 {
-        try
+        mediator->removeGridItem( gridItem );
+
+        if ( this->shadingScale < 256 && gridItem->getImageOfShadow() != nilPointer )
         {
-                mediator->removeItem( gridItem );
-
-                if ( this->shadingScale < 256 && gridItem->getImageOfShadow() )
-                {
-                        mediator->reshadeWithGridItem( gridItem );
-                }
-
-                mediator->remaskWithGridItem( gridItem );
-
-                delete gridItem;
+                mediator->reshadeWithGridItem( gridItem );
         }
-        catch ( const std::exception& e )
-        {
-                std::cout << e.what () << std::endl ;
-        }
+
+        mediator->remaskWithGridItem( gridItem );
+
+        delete gridItem;
 }
 
 void Room::removeFreeItem( FreeItem * freeItem )
 {
-        try
+        mediator->removeFreeItem( freeItem );
+
+        if ( this->shadingScale < 256 && freeItem->getImageOfShadow() != nilPointer )
         {
-                mediator->removeItem( freeItem );
-
-                if ( this->shadingScale < 256 && freeItem->getImageOfShadow() )
-                {
-                        mediator->reshadeWithFreeItem( freeItem );
-                }
-
-                mediator->remaskWithFreeItem( freeItem );
-
-                delete freeItem;
+                mediator->reshadeWithFreeItem( freeItem );
         }
-        catch ( const std::exception& e )
-        {
-                std::cout << e.what () << std::endl ;
-        }
+
+        mediator->remaskWithFreeItem( freeItem );
+
+        delete freeItem;
 }
 
 bool Room::removePlayerFromRoom( PlayerItem* playerItem, bool playerExitsRoom )
@@ -631,7 +624,7 @@ bool Room::removePlayerFromRoom( PlayerItem* playerItem, bool playerExitsRoom )
         {
                 if ( playerItem == *pi )
                 {
-                        mediator->removeItem( playerItem );
+                        mediator->removeFreeItem( playerItem );
                         nextNumbers[ playerItem->getLabel() ] -- ;
 
                         if ( this->shadingScale < 256 && playerItem->getImageOfShadow() )
@@ -820,7 +813,7 @@ void Room::draw( BITMAP* where )
                         }
                 }
 
-                // for free items there’re two steps of drawing
+                // for free items there’re two steps before drawing
                 std::list< FreeItem * > freeItems = mediator->getFreeItems ();
 
                 // at first shade every free item with grid items and other free items

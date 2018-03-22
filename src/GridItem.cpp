@@ -3,6 +3,8 @@
 #include "ItemData.hpp"
 #include "Mediator.hpp"
 
+#include <cassert>
+
 
 namespace isomot
 {
@@ -55,7 +57,7 @@ void GridItem::changeImage( BITMAP* newImage )
         }
 
         // get a copy of this item before modifying it
-        GridItem oldGridItem( *this );
+        GridItem copyOfItem( *this );
 
         binProcessedImage();
 
@@ -81,8 +83,8 @@ void GridItem::changeImage( BITMAP* newImage )
         }
 
         // remask every free item affected by previous image
-        if ( oldGridItem.getRawImage () )
-                mediator->remaskWithGridItem( &oldGridItem );
+        if ( copyOfItem.getRawImage () )
+                mediator->remaskWithGridItem( &copyOfItem );
 
         // remask every free item affected by new image
         if ( newImage != nilPointer )
@@ -113,7 +115,7 @@ bool GridItem::updatePosition( int newValue, const Coordinate& whatToChange, con
         mediator->clearStackOfCollisions( );
         bool collisionFound = false;
 
-        GridItem oldGridItem( *this );
+        GridItem copyOfItem( *this );
 
         if ( whatToChange & CoordinateZ )
         {
@@ -138,7 +140,7 @@ bool GridItem::updatePosition( int newValue, const Coordinate& whatToChange, con
                                 // change only value on Y axis because it depends on Z coordinate
                                 this->offset.second = mediator->getRoom()->getSizeOfOneTile() * ( this->cell.first + this->cell.second + 2 ) - this->rawImage->h - this->z - 1;
 
-                                mediator->remaskWithGridItem( &oldGridItem );
+                                mediator->remaskWithGridItem( &copyOfItem );
                                 mediator->remaskWithGridItem( this );
                         }
                         else
@@ -149,10 +151,10 @@ bool GridItem::updatePosition( int newValue, const Coordinate& whatToChange, con
                         // reshade items after change of position on Z
                         if ( whatToChange & CoordinateZ && mediator->getDegreeOfShading() < 256 )
                         {
-                                if ( this->z > oldGridItem.getZ() )
+                                if ( this->z > copyOfItem.getZ() )
                                         mediator->reshadeWithGridItem( this );
                                 else
-                                        mediator->reshadeWithGridItem( &oldGridItem );
+                                        mediator->reshadeWithGridItem( &copyOfItem );
                         }
 
                         mediator->activateGridItemsSorting();
@@ -162,12 +164,18 @@ bool GridItem::updatePosition( int newValue, const Coordinate& whatToChange, con
         // restore previous values on collision
         if ( collisionFound )
         {
-                this->z = oldGridItem.getZ();
+                this->z = copyOfItem.getZ();
 
-                this->offset.second = oldGridItem.getOffsetY();
+                this->offset = copyOfItem.getOffset();
         }
 
         return ! collisionFound;
+}
+
+int GridItem::getColumnOfGrid () const
+{
+        assert( mediator != nilPointer );
+        return mediator->getRoom()->getTilesX() * getCellY() + getCellX();
 }
 
 }

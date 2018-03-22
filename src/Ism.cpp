@@ -1,6 +1,7 @@
 
 #include "Ism.hpp"
 #include <unistd.h>
+#include <sstream>
 
 #if defined ( __CYGWIN__ )
     #include <sys/cygwin.h>
@@ -9,6 +10,7 @@
 #ifndef PATH_MAX
     #define PATH_MAX 4096
 #endif
+
 
 void milliSleep( unsigned long milliseconds )
 {
@@ -58,6 +60,34 @@ std::string makeRandomString( const size_t length )
 
         return result;
 
+}
+
+std::string toStringWithOrdinalSuffix( unsigned int number )
+{
+        unsigned int mod10 = number % 10;
+        unsigned int mod100 = number % 100;
+
+        std::ostringstream result ;
+        result << number ;
+
+        if ( mod10 == 1 && mod100 != 11 )
+        {
+                result << "st";
+        }
+        else if ( mod10 == 2 && mod100 != 12 )
+        {
+                result << "nd";
+        }
+        else if ( mod10 == 3 && mod100 != 13 )
+        {
+                result << "rd";
+        }
+        else
+        {
+                result << "th";
+        }
+
+        return result.str() ;
 }
 
 const char * pathToFile( const std::string& in )
@@ -143,12 +173,18 @@ std::string homePath ()
                 HomePath = sharePath();
         #else /// #elif defined ( __gnu_linux__ )
                 char* home = getenv( "HOME" );
-                assert( home != nilPointer );
-                HomePath = std::string( home ) + "/.headoverheels/";
-                if ( ! file_exists( HomePath.c_str(), FA_DIREC, nilPointer ) )
+                if ( home != nilPointer )
                 {
-                        mkdir( HomePath.c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH );
-                        mkdir( ( HomePath + "savegame/" ).c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH );
+                        HomePath = std::string( home ) + "/.headoverheels/";
+                        if ( ! file_exists( HomePath.c_str(), FA_DIREC, nilPointer ) )
+                        {
+                                mkdir( HomePath.c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH );
+                                mkdir( ( HomePath + "savegame/" ).c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH );
+                        }
+                }
+                else
+                {
+                        HomePath = sharePath();
                 }
         #endif
         }

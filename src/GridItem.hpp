@@ -73,11 +73,6 @@ protected:
          */
         std::pair < int, int > cell ;
 
-        /**
-         * Number of column of items to which this grid item belongs
-         */
-        int column ;
-
 public:
 
         /**
@@ -90,9 +85,7 @@ public:
          */
         int getCellY () const {  return cell.second ;  }
 
-        void setColumn ( int column ) {  this->column = column ;  }
-
-        int getColumn () const {  return column ;  }
+        int getColumnOfGrid () const ;
 
 };
 

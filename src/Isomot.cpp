@@ -709,7 +709,7 @@ void Isomot::updateEndRoom()
         if ( ! this->isEndRoom )
         {
                 std::string player = activeRoom->getMediator()->getActivePlayer()->getLabel();
-                activeRoom->getMediator()->removeItem( activeRoom->getMediator()->getActivePlayer() );
+                activeRoom->getMediator()->removeFreeItem( activeRoom->getMediator()->getActivePlayer() );
 
                 // player who arrived here
                 FreeItem* freeItem = new FreeItem( this->itemDataManager->findItemByLabel( player ), 66, 92, Top, South );

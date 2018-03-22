@@ -7,6 +7,7 @@
 #include "Font.hpp"
 
 #include <algorithm> // std::for_each
+#include <cassert>
 
 
 namespace gui

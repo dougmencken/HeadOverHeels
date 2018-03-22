@@ -12,11 +12,8 @@
 #define Ism_hpp_
 
 #include <string>
-#include <utility>
-#include <functional>
 #include <fstream>
 #include <cstdlib>
-#include <cassert>
 
 #include <allegro.h>
 
@@ -77,6 +74,8 @@ namespace isomot
 {
 
         std::string makeRandomString( const size_t length ) ;
+
+        std::string toStringWithOrdinalSuffix( unsigned int number ) ;
 
         /** print backtrace of caller */
         inline void printBacktrace ( FILE * out = stdout, unsigned int howDeep = 80 )

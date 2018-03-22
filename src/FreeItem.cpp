@@ -62,11 +62,16 @@ void FreeItem::draw( BITMAP* where )
 {
         if ( transparency >= 100 ) /* item is fully transparent */ return ;
 
+        BITMAP* imageToDraw = this->rawImage;
+        if ( this->shadedNonmaskedImage != nilPointer ) imageToDraw = this->shadedNonmaskedImage;
+        if ( this->processedImage != nilPointer ) imageToDraw = this->processedImage;
+        if ( imageToDraw == nilPointer ) return;
+
         if ( transparency == 0 )
         {
                 draw_sprite(
                         where,
-                        this->processedImage ? this->processedImage : ( this->shadedNonmaskedImage ? this->shadedNonmaskedImage : this->rawImage ),
+                        imageToDraw,
                         mediator->getRoom()->getX0 () + this->offset.first,
                         mediator->getRoom()->getY0 () + this->offset.second
                 ) ;
@@ -78,7 +83,7 @@ void FreeItem::draw( BITMAP* where )
 
                 draw_trans_sprite(
                         where,
-                        this->processedImage ? this->processedImage : ( this->shadedNonmaskedImage ? this->shadedNonmaskedImage : this->rawImage ),
+                        imageToDraw,
                         mediator->getRoom()->getX0 () + this->offset.first,
                         mediator->getRoom()->getY0 () + this->offset.second
                 ) ;
@@ -112,7 +117,7 @@ void FreeItem::changeImage( BITMAP* newImage )
         if ( this->rawImage != newImage )
         {
                 // copy this item before modifying it
-                FreeItem oldFreeItem( *this );
+                FreeItem copyOfItem( *this );
 
                 this->rawImage = nilPointer;
 
@@ -134,8 +139,8 @@ void FreeItem::changeImage( BITMAP* newImage )
                 this->myMask = WantRemask;
 
                 // remask with old image
-                if ( oldFreeItem.getRawImage() != nilPointer )
-                        mediator->remaskWithFreeItem( &oldFreeItem );
+                if ( copyOfItem.getRawImage() != nilPointer )
+                        mediator->remaskWithFreeItem( &copyOfItem );
 
                 // remask with new image
                 if ( newImage != nilPointer )
@@ -270,8 +275,8 @@ bool FreeItem::updatePosition( int newX, int newY, int newZ, const Coordinate& w
 
         bool collisionFound = false;
 
-        // copy item before making the move
-        FreeItem oldFreeItem( *this );
+        // copy item before moving
+        FreeItem copyOfItem( *this );
 
         if ( whatToChange & CoordinateX )
         {
@@ -325,7 +330,7 @@ bool FreeItem::updatePosition( int newX, int newY, int newZ, const Coordinate& w
                                 this->offset.second = this->x + this->y + getWidthX() - this->rawImage->h - this->z;
 
                                 // for both the previous position and the current position
-                                mediator->remaskWithFreeItem( &oldFreeItem );
+                                mediator->remaskWithFreeItem( &copyOfItem );
                                 mediator->remaskWithFreeItem( this );
                         }
                         else
@@ -337,7 +342,7 @@ bool FreeItem::updatePosition( int newX, int newY, int newZ, const Coordinate& w
                         if ( mediator->getDegreeOfShading() < 256 )
                         {
                                 // for both the previous position and the current position
-                                mediator->reshadeWithFreeItem( &oldFreeItem );
+                                mediator->reshadeWithFreeItem( &copyOfItem );
                                 mediator->reshadeWithFreeItem( this );
                         }
 
@@ -353,11 +358,11 @@ bool FreeItem::updatePosition( int newX, int newY, int newZ, const Coordinate& w
         // restore previous values when there’s a collision
         if ( collisionFound )
         {
-                this->x = oldFreeItem.getX();
-                this->y = oldFreeItem.getY();
-                this->z = oldFreeItem.getZ();
+                this->x = copyOfItem.getX();
+                this->y = copyOfItem.getY();
+                this->z = copyOfItem.getZ();
 
-                this->offset = oldFreeItem.getOffset();
+                this->offset = copyOfItem.getOffset();
         }
 
         return ! collisionFound;

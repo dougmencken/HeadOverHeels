@@ -120,13 +120,13 @@ public:
         */
         int findHighestZ ( Item* item ) ;
 
-        void addItem ( GridItem* gridItem ) ;
+        void addGridItem ( GridItem* gridItem ) ;
 
-        void addItem ( FreeItem* freeItem ) ;
+        void addFreeItem ( FreeItem* freeItem ) ;
 
-        void removeItem ( GridItem* gridItem ) ;
+        void removeGridItem ( GridItem* gridItem ) ;
 
-        void removeItem ( FreeItem* freeItem ) ;
+        void removeFreeItem ( FreeItem* freeItem ) ;
 
         void pushCollision ( const std::string& uniqueName ) ;
 
