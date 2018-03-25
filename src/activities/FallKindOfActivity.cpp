@@ -52,7 +52,8 @@ bool FallKindOfActivity::fall( Behavior * behavior )
                         itemsBelow.push_back( mediator->popCollision() );
                 }
 
-                this->assignAnchor( dynamic_cast< FreeItem * >( sender ), itemsBelow );
+                if ( sender->whichKindOfItem() == "free item" || sender->whichKindOfItem() == "player item" )
+                        this->assignAnchor( dynamic_cast< FreeItem * >( sender ), itemsBelow );
 
                 // as long as there’re items collided with sender
                 while ( ! itemsBelow.empty() )
@@ -78,7 +79,7 @@ bool FallKindOfActivity::fall( Behavior * behavior )
                                                         }
                                                 }
                                         }
-                                        else if ( dynamic_cast< PlayerItem * >( sender ) && itemBelow->isMortal() )
+                                        else if ( sender->whichKindOfItem() == "player item" && itemBelow->isMortal() )
                                         {
                                                 if ( sender->checkPosition( 0, 0, -1, Add ) )
                                                 {
@@ -113,7 +114,7 @@ bool FallKindOfActivity::fall( Behavior * behavior )
                                 }
                         }
                         // player reaches floor
-                        else if ( dynamic_cast< PlayerItem * >( sender ) && name == "some tile of floor" )
+                        else if ( sender->whichKindOfItem() == "player item" && name == "some tile of floor" )
                         {
                                 PlayerItem* playerItem = dynamic_cast< PlayerItem * >( sender );
 

@@ -52,8 +52,7 @@ FreeItem::FreeItem( const FreeItem& freeItem )
 
 FreeItem::~FreeItem()
 {
-        if ( shadedNonmaskedImage != nilPointer )
-                destroy_bitmap( shadedNonmaskedImage );
+        allegro::destroyBitmap( shadedNonmaskedImage );
 }
 
 void FreeItem::draw( BITMAP* where )
@@ -67,7 +66,7 @@ void FreeItem::draw( BITMAP* where )
 
         if ( transparency == 0 )
         {
-                draw_sprite(
+                allegro::drawSprite(
                         where,
                         imageToDraw,
                         mediator->getRoom()->getX0 () + this->offset.first,
@@ -92,11 +91,7 @@ void FreeItem::binBothProcessedImages()
 {
         Item::binProcessedImage ();
 
-        if ( this->shadedNonmaskedImage != nilPointer )
-        {
-                destroy_bitmap( this->shadedNonmaskedImage );
-                this->shadedNonmaskedImage = nilPointer;
-        }
+        if ( shadedNonmaskedImage != nilPointer ) setShadedNonmaskedImage( nilPointer );
 }
 
 void FreeItem::changeImage( BITMAP* newImage )
@@ -175,12 +170,6 @@ void FreeItem::requestShadow()
                 {
                         this->myMask = WantRemask;
                 }
-
-                if ( getWantShadow() && this->shadedNonmaskedImage != nilPointer )
-                {
-                        destroy_bitmap( this->shadedNonmaskedImage );
-                        this->shadedNonmaskedImage = nilPointer;
-                }
         }
 }
 
@@ -189,10 +178,7 @@ void FreeItem::requestMask()
         mediator->maskFreeItem( this );
 
         if ( this->myMask == WantRemask && this->processedImage != nilPointer )
-        {
-                destroy_bitmap( this->processedImage );
-                this->processedImage = nilPointer;
-        }
+                binProcessedImage();
 
         this->myMask = NoMask;
 }
@@ -387,7 +373,7 @@ void FreeItem::setShadedNonmaskedImage( BITMAP* newImage )
 {
         if ( shadedNonmaskedImage != newImage )
         {
-                destroy_bitmap( shadedNonmaskedImage );
+                allegro::destroyBitmap( shadedNonmaskedImage );
                 shadedNonmaskedImage = newImage;
         }
 }

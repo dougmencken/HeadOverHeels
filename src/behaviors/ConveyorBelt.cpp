@@ -60,7 +60,7 @@ bool ConveyorBelt::update ()
                                                         // is it item with behavior
                                                         if ( itemAbove->getBehavior() != nilPointer )
                                                         {
-                                                                if ( itemAbove->getAnchor() == nilPointer || this->item->getUniqueName() == itemAbove->getAnchor()->getUniqueName() )
+                                                                if ( itemAbove->getAnchor() == nilPointer || this->item == itemAbove->getAnchor() )
                                                                 {
                                                                         if ( item->getOrientation().toString() == "south" ) {
                                                                                 if ( itemAbove->getBehavior()->getActivityOfItem() != RegularJump &&

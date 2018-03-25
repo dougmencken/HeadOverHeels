@@ -25,7 +25,7 @@ Mediator::Mediator( Room* room )
         , gridItemsSorting( false )
         , freeItemsSorting( false )
         , switchInRoomIsOn( false )
-        , activePlayer( nilPointer )
+        , activeCharacter( nilPointer )
 {
         pthread_mutex_init( &gridItemsMutex, nilPointer );
         pthread_mutex_init( &freeItemsMutex, nilPointer );
@@ -129,9 +129,9 @@ void Mediator::update()
                 }
         }
 
-        if ( activePlayer != nilPointer )
+        if ( activeCharacter != nilPointer )
         {
-                activePlayer->behave ();
+                activeCharacter->behave ();
         }
 
         // free items to remove after update
@@ -159,7 +159,7 @@ void Mediator::update()
                 if ( ( *p )->getWayOfExit() == "down" && ! ( *p )->isActivePlayer() )
                 {
                         std::cout << "inactive character \"" << ( *p )->getLabel() << "\" falls down to another room, swap characters to make it active" << std::endl ;
-                        activePlayer->setWayOfExit( "no exit" );
+                        activeCharacter->setWayOfExit( "no exit" );
                         this->pickNextCharacter( nilPointer );
                 }
 
@@ -278,7 +278,7 @@ void Mediator::reshadeWithGridItem( GridItem* item )
                 std::list< GridItem * >::iterator g = this->gridItems[ column ].begin ();
                 GridItem* gridItem = *g;
 
-                while ( g != this->gridItems[ column ].end() && item->getUniqueName() != gridItem->getUniqueName() )
+                while ( g != this->gridItems[ column ].end() && item->getUniqueName() != gridItem->getUniqueName() + " copy" )
                 {
                         gridItem->binProcessedImage();
                         gridItem->setWantShadow( true );
@@ -291,7 +291,7 @@ void Mediator::reshadeWithGridItem( GridItem* item )
         // shade floor in this column, if any
         if ( room->floor[ column ] != nilPointer )
         {
-                room->floor[ column ]->binShadyImage();
+                room->floor[ column ]->freshShadyImage();
                 room->floor[ column ]->setWantShadow( true );
         }
 }
@@ -328,7 +328,7 @@ void Mediator::reshadeWithFreeItem( FreeItem* item )
                         // shade floor in this column, if any
                         if ( room->floor[ column ] != nilPointer )
                         {
-                                room->floor[ column ]->binShadyImage();
+                                room->floor[ column ]->freshShadyImage ();
                                 room->floor[ column ]->setWantShadow( true );
                         }
                 }
@@ -469,7 +469,7 @@ void Mediator::castShadowOnGridItem( GridItem* gridItem )
                         ShadowCaster::castShadowOnItem (
                                 gridItem,
                                 /* x */ gridItem->getOffsetX() + ( ( gridItem->getRawImage()->w - aboveItem->getImageOfShadow()->w ) >> 1 ),
-                                /* y */ gridItem->getOffsetY() + gridItem->getRawImage()->h - room->getSizeOfOneTile() - gridItem->getHeight() - ( aboveItem->getImageOfShadow()->h >> 1 ),
+                                /* y */ gridItem->getOffsetY() + gridItem->getRawImage()->h - tileSize - gridItem->getHeight() - ( aboveItem->getImageOfShadow()->h >> 1 ),
                                 /* shadow */ aboveItem->getImageOfShadow(),
                                 /* shadingScale */ room->shadingScale
                                 /* transparency = 0 */
@@ -747,7 +747,7 @@ Item* Mediator::findItemByUniqueName( const std::string& uniqueName )
         {
                 std::list< GridItem * >::iterator g;
 
-                for ( unsigned int column = 0; column < room->getTilesX() * room->getTilesY(); column ++ )
+                for ( unsigned int column = 0; column < gridItems.size(); column ++ )
                 {
                         g = std::find_if( gridItems[ column ].begin (), gridItems[ column ].end (), std::bind2nd( EqualUniqueNameOfItem (), uniqueName ) );
 
@@ -779,7 +779,7 @@ Item* Mediator::findItemByLabel( const std::string& label )
         {
                 std::list< GridItem * >::iterator g;
 
-                for ( unsigned int column = 0; column < room->getTilesX() * room->getTilesY(); column ++ )
+                for ( unsigned int column = 0; column < gridItems.size(); column ++ )
                 {
                         g = std::find_if( gridItems[ column ].begin (), gridItems[ column ].end (), std::bind2nd( EqualLabelOfItem (), label ) );
 
@@ -811,7 +811,7 @@ Item* Mediator::findItemByBehavior( const std::string& behavior )
         {
                 std::list< GridItem * >::iterator g;
 
-                for ( unsigned int column = 0; column < room->getTilesX() * room->getTilesY(); column ++ )
+                for ( unsigned int column = 0; column < gridItems.size(); column ++ )
                 {
                         g = std::find_if( gridItems[ column ].begin (), gridItems[ column ].end (), std::bind2nd( EqualBehaviorOfItem (), behavior ) );
 
@@ -989,7 +989,7 @@ int Mediator::findHighestZ( Item * item )
         return z;
 }
 
-void Mediator::addGridItem( GridItem* gridItem )
+void Mediator::addGridItemToList( GridItem* gridItem )
 {
         lockGridItemMutex ();
 
@@ -1001,18 +1001,18 @@ void Mediator::addGridItem( GridItem* gridItem )
         unlockGridItemMutex ();
 }
 
-void Mediator::addFreeItem( FreeItem* freeItem )
+void Mediator::addFreeItemToList( FreeItem* freeItem )
 {
         freeItems.push_back( freeItem );
         freeItems.sort( sortListOfFreeItems );
 }
 
-void Mediator::removeGridItem( GridItem* gridItem )
+void Mediator::removeGridItemFromList( GridItem* gridItem )
 {
         gridItems[ gridItem->getColumnOfGrid() ].remove( gridItem );
 }
 
-void Mediator::removeFreeItem( FreeItem* freeItem )
+void Mediator::removeFreeItemFromList( FreeItem* freeItem )
 {
         freeItems.remove( freeItem );
 }
@@ -1083,37 +1083,52 @@ Item* Mediator::collisionWithBadBoy()
         return nilPointer;
 }
 
+void Mediator::setActiveCharacter ( PlayerItem * character )
+{
+        if ( this->activeCharacter != character )
+        {
+                this->activeCharacter = character ;
+
+                if ( character != nilPointer )
+                        this->labelOfActiveCharacter = character->getLabel ();
+                else
+                        this->labelOfActiveCharacter.clear();
+
+                std::cout << "character \"" << labelOfActiveCharacter << "\" is yet active in room \"" << room->getNameOfFileWithDataAboutRoom() << "\"" << std::endl ;
+        }
+}
+
 bool Mediator::pickNextCharacter( ItemDataManager* itemDataManager )
 {
-        PlayerItem* previousPlayer = activePlayer;
+        PlayerItem* previousCharacter = activeCharacter;
 
         // search for next player
         std::list< PlayerItem * > playersInRoom = room->getPlayersYetInRoom();
         std::list< PlayerItem * >::iterator i = std::find_if(
                 playersInRoom.begin (), playersInRoom.end (),
-                std::bind2nd( EqualLabelOfItem(), activePlayer->getLabel() ) );
+                std::bind2nd( EqualLabelOfItem(), activeCharacter->getLabel() ) );
         ++ i;
-        activePlayer = ( i != playersInRoom.end () ? *i : *playersInRoom.begin () );
+        setActiveCharacter( i != playersInRoom.end () ? *i : *playersInRoom.begin () );
 
         // see if players may join here
-        if ( previousPlayer != activePlayer && itemDataManager != nilPointer )
+        if ( previousCharacter != activeCharacter && itemDataManager != nilPointer )
         {
                 const int delta = room->getSizeOfOneTile() >> 1;
 
-                if ( ( previousPlayer->getLabel() == "head" && activePlayer->getLabel() == "heels" ) ||
-                                ( previousPlayer->getLabel() == "heels" && activePlayer->getLabel() == "head" ) )
+                if ( ( previousCharacter->getLabel() == "head" && activeCharacter->getLabel() == "heels" ) ||
+                                ( previousCharacter->getLabel() == "heels" && activeCharacter->getLabel() == "head" ) )
                 {
-                        if ( ( previousPlayer->getX() + delta >= activePlayer->getX() )
-                                && ( previousPlayer->getX() + previousPlayer->getWidthX() - delta <= activePlayer->getX() + activePlayer->getWidthX() )
-                                && ( previousPlayer->getY() + delta >= activePlayer->getY() )
-                                && ( previousPlayer->getY() + previousPlayer->getWidthY() - delta <= activePlayer->getY() + activePlayer->getWidthY() )
-                                && ( ( previousPlayer->getLabel() == "head" && previousPlayer->getZ() - LayerHeight == activePlayer->getZ() ) ||
-                                        ( previousPlayer->getLabel() == "heels" && activePlayer->getZ() - LayerHeight == previousPlayer->getZ() ) ) )
+                        if ( ( previousCharacter->getX() + delta >= activeCharacter->getX() )
+                                && ( previousCharacter->getX() + previousCharacter->getWidthX() - delta <= activeCharacter->getX() + activeCharacter->getWidthX() )
+                                && ( previousCharacter->getY() + delta >= activeCharacter->getY() )
+                                && ( previousCharacter->getY() + previousCharacter->getWidthY() - delta <= activeCharacter->getY() + activeCharacter->getWidthY() )
+                                && ( ( previousCharacter->getLabel() == "head" && previousCharacter->getZ() - LayerHeight == activeCharacter->getZ() ) ||
+                                        ( previousCharacter->getLabel() == "heels" && activeCharacter->getZ() - LayerHeight == previousCharacter->getZ() ) ) )
                         {
                                 lockFreeItemMutex ();
 
-                                PlayerItem* reference = previousPlayer->getLabel() == "heels" ? previousPlayer : activePlayer;
-                                this->lastActivePlayer = previousPlayer->getLabel() == "heels" ? "heels" : "head";
+                                PlayerItem* reference = previousCharacter->getLabel() == "heels" ? previousCharacter : activeCharacter;
+                                this->lastActiveCharacterBeforeJoining = previousCharacter->getLabel() == "heels" ? "heels" : "head";
 
                                 int x = reference->getX();
                                 int y = reference->getY();
@@ -1127,47 +1142,47 @@ bool Mediator::pickNextCharacter( ItemDataManager* itemDataManager )
                                 std::string behaviorOfItemTaken = heels->getTakenItemBehavior( );
 
                                 // remove simple players
-                                this->room->removePlayerFromRoom( previousPlayer, false );
-                                this->room->removePlayerFromRoom( activePlayer, false );
+                                this->room->removePlayerFromRoom( previousCharacter, false );
+                                this->room->removePlayerFromRoom( activeCharacter, false );
 
                                 // create composite player
                                 std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( itemDataManager ) );
-                                activePlayer = roomBuilder->createPlayerInRoom( this->room, false, "headoverheels", x, y, z, orientation );
+                                setActiveCharacter( roomBuilder->createPlayerInRoom( this->room, false, "headoverheels", x, y, z, orientation ) );
 
                                 // transfer item in handbag
                                 if ( takenItemData != nilPointer )
                                 {
-                                        std::cout << "transfer item \"" << takenItemData->getLabel() << "\" to player \"" << activePlayer->getLabel() << "\"" << std::endl ;
-                                        activePlayer->assignTakenItem( takenItemData, takenItemImage, behaviorOfItemTaken );
+                                        std::cout << "transfer item \"" << takenItemData->getLabel() << "\" to player \"" << activeCharacter->getLabel() << "\"" << std::endl ;
+                                        activeCharacter->assignTakenItem( takenItemData, takenItemImage, behaviorOfItemTaken );
                                 }
 
                                 unlockFreeItemMutex ();
 
-                                std::cout << "join both characters into \"" << activePlayer->getLabel() << "\""
+                                std::cout << "join both characters into \"" << activeCharacter->getLabel() << "\""
                                                 << " in room " << room->getNameOfFileWithDataAboutRoom() << std::endl ;
                                 return true;
                         }
                 }
         }
         // is it composite player
-        else if ( activePlayer->getLabel() == "headoverheels" && itemDataManager != nilPointer )
+        else if ( activeCharacter->getLabel() == "headoverheels" && itemDataManager != nilPointer )
         {
-                std::cout << "split \"" << activePlayer->getLabel() << "\" in room " << room->getNameOfFileWithDataAboutRoom() << std::endl ;
+                std::cout << "split \"" << activeCharacter->getLabel() << "\" in room " << room->getNameOfFileWithDataAboutRoom() << std::endl ;
 
-                int x = activePlayer->getX();
-                int y = activePlayer->getY();
-                int z = activePlayer->getZ();
-                Way orientation = activePlayer->getOrientation();
+                int x = activeCharacter->getX();
+                int y = activeCharacter->getY();
+                int z = activeCharacter->getZ();
+                Way orientation = activeCharacter->getOrientation();
 
                 lockFreeItemMutex ();
 
                 // get data of item in handbag
-                ItemData* takenItemData = activePlayer->getTakenItemData ();
-                std::string behaviorOfItemTaken = activePlayer->getTakenItemBehavior( );
-                BITMAP* takenItemImage = activePlayer->getTakenItemImage ();
+                ItemData* takenItemData = activeCharacter->getTakenItemData ();
+                std::string behaviorOfItemTaken = activeCharacter->getTakenItemBehavior( );
+                BITMAP* takenItemImage = activeCharacter->getTakenItemImage ();
 
                 // remove composite player
-                this->room->removePlayerFromRoom( activePlayer, false );
+                this->room->removePlayerFromRoom( activeCharacter, false );
 
                 // create simple players
 
@@ -1183,18 +1198,18 @@ bool Mediator::pickNextCharacter( ItemDataManager* itemDataManager )
 
                 PlayerItem* headPlayer = roomBuilder->createPlayerInRoom( this->room, false, "head", x, y, z + LayerHeight, orientation );
 
-                activePlayer = ( this->lastActivePlayer == "head" ) ? heelsPlayer : headPlayer;
-                previousPlayer = ( activePlayer == headPlayer ) ? heelsPlayer : headPlayer;
+                setActiveCharacter( ( this->lastActiveCharacterBeforeJoining == "head" ) ? heelsPlayer : headPlayer );
+                previousCharacter = ( activeCharacter == headPlayer ) ? heelsPlayer : headPlayer;
 
                 unlockFreeItemMutex ();
         }
 
-        if ( previousPlayer == activePlayer )
+        if ( previousCharacter == activeCharacter )
         {
                 return false;
         }
 
-        std::cout << "swop character \"" << previousPlayer->getLabel() << "\" to character \"" << activePlayer->getLabel() << "\""
+        std::cout << "swop character \"" << previousCharacter->getLabel() << "\" to character \"" << activeCharacter->getLabel() << "\""
                         << " in room " << room->getNameOfFileWithDataAboutRoom() << std::endl ;
         return true;
 }
@@ -1221,9 +1236,9 @@ void Mediator::toggleSwitchInRoom ()
         }
 
         // look for volatile grid items to freeze them
-        for ( unsigned int i = 0; i < room->getTilesX() * room->getTilesY(); i++ )
+        for ( unsigned int column = 0; column < gridItems.size(); column ++ )
         {
-                for ( std::list< GridItem* >::iterator g = gridItems[ i ].begin (); g != gridItems[ i ].end (); ++g )
+                for ( std::list< GridItem* >::iterator g = gridItems[ column ].begin (); g != gridItems[ column ].end (); ++g )
                 {
                         GridItem* gridItem = *g;
 
@@ -1256,18 +1271,13 @@ bool Mediator::sortListOfFreeItems( FreeItem* f1, FreeItem* f2 )
         );
 }
 
-void Mediator::setActivePlayer( PlayerItem* playerItem )
-{
-        this->activePlayer = playerItem;
-}
-
-PlayerItem* Mediator::getWaitingPlayer() const
+PlayerItem* Mediator::getWaitingCharacter() const
 {
         std::list< PlayerItem * > playersInRoom = room->getPlayersYetInRoom();
 
         for ( std::list< PlayerItem * >::iterator p = playersInRoom.begin (); p != playersInRoom.end (); ++p )
         {
-                if ( ( *p ) != this->activePlayer )
+                if ( ( *p ) != this->activeCharacter )
                 {
                         return ( *p ) ;
                 }

@@ -257,7 +257,7 @@ PlayerItem* RoomBuilder::createPlayerInRoom( Room* room, bool justEntered,
                 }
         }
 
-        ItemData* itemData = this->itemDataManager->findItemByLabel( nameOfPlayerToCreate );
+        ItemData* itemData = this->itemDataManager->findDataByLabel( nameOfPlayerToCreate );
         PlayerItem* player = nilPointer;
 
         // if it is found and has some lives left, place it in room
@@ -307,9 +307,7 @@ FloorTile* RoomBuilder::buildFloorTile( const rxml::tile& tile, const char* gfxP
                 return nilPointer;
         }
 
-        int column = room->getTilesX() * tile.y() + tile.x();
-
-        return new FloorTile( column, tile.x(), tile.y(), picture );
+        return new FloorTile( tile.x(), tile.y(), picture );
 }
 
 Wall* RoomBuilder::buildWall( const rxml::wall& wall, const char* gfxPrefix )
@@ -326,7 +324,7 @@ Wall* RoomBuilder::buildWall( const rxml::wall& wall, const char* gfxPrefix )
 GridItem* RoomBuilder::buildGridItem( const rxml::item& item )
 {
         GridItem* gridItem = nilPointer;
-        ItemData* itemData = this->itemDataManager->findItemByLabel( item.label () );
+        ItemData* itemData = this->itemDataManager->findDataByLabel( item.label () );
 
         // when found place item in room
         if ( itemData != nilPointer )
@@ -345,7 +343,7 @@ GridItem* RoomBuilder::buildGridItem( const rxml::item& item )
                         behaviorOfItem == "behavior of slow disappearance on jump into" ||
                         behaviorOfItem == "behavior of disappearance as soon as Head appears" )
                 {
-                        gridItem->assignBehavior( behaviorOfItem, reinterpret_cast< void * >( this->itemDataManager->findItemByLabel( "bubbles" ) ) );
+                        gridItem->assignBehavior( behaviorOfItem, reinterpret_cast< void * >( this->itemDataManager->findDataByLabel( "bubbles" ) ) );
                 }
                 else
                 {
@@ -360,7 +358,7 @@ FreeItem* RoomBuilder::buildFreeItem( const rxml::item& item )
 {
         FreeItem* freeItem = nilPointer;
 
-        ItemData* itemData = this->itemDataManager->findItemByLabel( item.label () );
+        ItemData* itemData = this->itemDataManager->findDataByLabel( item.label () );
 
         // if item is here, place it in room
         if ( itemData != nilPointer )
@@ -405,7 +403,7 @@ FreeItem* RoomBuilder::buildFreeItem( const rxml::item& item )
                         {
                                 freeItem->assignBehavior(
                                         behaviorOfItem,
-                                        reinterpret_cast< void * >( this->itemDataManager->findItemByLabel( "imperial-guard" ) )
+                                        reinterpret_cast< void * >( this->itemDataManager->findDataByLabel( "imperial-guard" ) )
                                 );
                         }
                         else if ( behaviorOfItem == "behavior of something special" ||
@@ -416,7 +414,7 @@ FreeItem* RoomBuilder::buildFreeItem( const rxml::item& item )
                         {
                                 freeItem->assignBehavior(
                                         behaviorOfItem,
-                                        reinterpret_cast< void * >( this->itemDataManager->findItemByLabel( "bubbles" ) )
+                                        reinterpret_cast< void * >( this->itemDataManager->findDataByLabel( "bubbles" ) )
                                 );
                         }
                         else

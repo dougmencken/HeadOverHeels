@@ -25,15 +25,14 @@ Picture::~Picture()
 {
         /* std::cout << "forget picture with name \"" << nameOfPicture << "\"" << std::endl ; */
 
-        destroy_bitmap( picture );
-        picture = nilPointer ;
+        allegro::destroyBitmap( picture );
 }
 
 void Picture::draw( BITMAP* where )
 {
         if ( picture != nilPointer )
         {
-                draw_sprite( where, picture, getX(), getY() );
+                allegro::drawSprite( where, picture, getX(), getY() );
         }
 }
 

@@ -16,6 +16,8 @@
   #include <winalleg.h>
 #endif
 
+#include "Timer.hpp"
+
 #include "csxml/SaveGameXML.hpp"
 
 class Color ;
@@ -74,18 +76,9 @@ private:
 
         void offInviolability () ;
 
-        /**
-         * Gestiona la sala final del juego. Es una sala muy especial porque el usuario no tiene el
-         * control de ningún jugador
-         */
-        void updateEndRoom () ;
+        void updateFinalRoom () ;
 
 private:
-
-        /**
-         * Whether engine shows the final room of game
-         */
-        bool isEndRoom ;
 
         /**
          * Where to draw isometric view
@@ -95,6 +88,10 @@ private:
         ItemDataManager * itemDataManager ;
 
         MapManager * mapManager ;
+
+        Timer * finalRoomTimer ;
+
+        bool finalRoomBuilt ;
 
 public:
 

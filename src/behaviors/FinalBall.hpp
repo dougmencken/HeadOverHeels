@@ -8,8 +8,8 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef CannonBall_hpp_
-#define CannonBall_hpp_
+#ifndef FinalBall_hpp_
+#define FinalBall_hpp_
 
 #include "Behavior.hpp"
 #include "Timer.hpp"
@@ -22,39 +22,31 @@ class Item ;
 class ItemData ;
 
 /**
- * The cannonball of the final screen. It moves northwards and disappears when it collides
+ * The ball of the final screen. It moves northwards and disappears when it collides
  */
 
-class CannonBall : public Behavior
+class FinalBall : public Behavior
 {
 
 public:
 
-        CannonBall( Item * item, const std::string & behavior ) ;
+        FinalBall( Item * item, const std::string & behavior ) ;
 
-        virtual ~CannonBall( );
+        virtual ~FinalBall( );
 
         virtual bool update () ;
 
-protected:
-
-       /**
-        * Datos del elemento empleado como disparo
-        */
-        ItemData * bubblesData ;
-
 private:
 
+        ItemData * bubblesData ;
+
        /**
-        * Cronómetro que controla la velocidad de movimiento del elemento
+        * Timer for speed of movement
         */
         Timer * speedTimer ;
 
 public:
 
-       /**
-        * Asigna los datos del elemento usado para representar la explosión de la bola
-        */
         void setMoreData ( void * data ) ;
 
 };

@@ -25,9 +25,7 @@ void ContinueGame::doAction ()
         isomot::GameManager * gameManager = isomot::GameManager::getInstance();
         isomot::WhyPause why = gameInProgress ? gameManager->resume () : gameManager->begin () ;
 
-        // Cuando el gestor del juego finalice se alcanzará este punto
-        // Dependiendo de la situación deberá mostrarse la pantalla de los planetas con el nuevo planeta
-        // liberado, la pantalla para grabar la partida o la pantalla de fin del juego
+        // when some planet is set free, show screen with planets
         if ( why == isomot::FreePlanet )
         {
                 CreatePlanetsScreen * planetsAction = new CreatePlanetsScreen( getWhereToDraw(), true );
@@ -49,12 +47,14 @@ void ContinueGame::doAction ()
 
                 planetsAction->doIt ();
         }
+        // show screen to save game
         else if ( why == isomot::SaveGame )
         {
                 CreateListOfSavedGames * listOfGamesAction = new CreateListOfSavedGames( getWhereToDraw(), false );
 
                 listOfGamesAction->doIt ();
         }
+        // it’s end of game
         else if ( why == isomot::GameOver || why == isomot::Freedom )
         {
                 CreateEndScreen * endScreenAction =

@@ -1,9 +1,4 @@
 
-#include <allegro.h>
-#ifdef __WIN32
-  #include <winalleg.h>
-#endif
-
 #include "Ism.hpp"
 #include "GuiManager.hpp"
 

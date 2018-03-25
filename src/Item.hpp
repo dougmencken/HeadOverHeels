@@ -134,13 +134,25 @@ public:
          */
         void setReverseMotion () ;
 
-protected:
-
-        std::string label ;
+private:
 
         std::string uniqueName ;
 
+        std::string originalLabel ;
+
+        /**
+         * Current frame for item
+         */
+        unsigned int frameIndex ;
+
+        /**
+         * True to reverse sequence of animation
+         */
+        bool backwardMotion ;
+
         ItemData * dataOfItem ;
+
+protected:
 
         /**
          * Spacial position X in isometric units
@@ -160,6 +172,11 @@ protected:
         Way orientation ;
 
         /**
+         * Offset on ( X, Y ) from room’s point of origin
+         */
+        std::pair < int, int > offset ;
+
+        /**
          * Image of item, unprocessed, just read from file
          */
         BITMAP * rawImage ;
@@ -173,11 +190,6 @@ protected:
          * Image of this item with shadows from other items, for free item it is also masked
          */
         BITMAP * processedImage ;
-
-        /**
-         * Offset on ( X, Y ) from room’s point of origin
-         */
-        std::pair < int, int > offset ;
 
         /**
          * Timer for animation of item
@@ -194,30 +206,20 @@ protected:
          */
         Item * anchor ;
 
-private:
-
-        /**
-         * Current frame for item
-         */
-        unsigned int frameIndex ;
-
-        /**
-         * True to reverse sequence of animation
-         */
-        bool backwardMotion ;
-
 public:
 
-        std::string getUniqueName () const {  return uniqueName ;  }
+        const std::string& getUniqueName () const {  return uniqueName ;  }
 
         void setUniqueName ( const std::string& name ) {  this->uniqueName = name ;  }
 
+        /**
+         * Gives original label of item, because label from item’s data may change via metamorphosis
+         */
+        const std::string& getOriginalLabel () const {  return originalLabel ;  }
+
         ItemData * getDataOfItem () const {  return dataOfItem ;  }
 
-        /**
-         * Unique label of item
-         */
-        std::string getLabel () const {  return label ;  }
+        const std::string& getLabel () const ;
 
         int getX () const {  return x ;  }
 
@@ -293,7 +295,7 @@ public:
 
         void setProcessedImage ( BITMAP * newImage ) ;
 
-        void binProcessedImage() {  setProcessedImage( nilPointer ) ;  }
+        void binProcessedImage() {  if ( processedImage != nilPointer ) setProcessedImage( nilPointer ) ;  }
 
         /**
          * Distance of processed image from room’s origin ( 0, 0, 0 )

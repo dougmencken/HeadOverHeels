@@ -23,7 +23,7 @@ AnimatedPicture::~AnimatedPicture()
 
         for ( std::vector< BITMAP * >::iterator bb = animation.begin (); bb != animation.end (); ++bb )
         {
-                destroy_bitmap( *bb );
+                allegro::destroyBitmap( *bb );
         }
         animation.clear();
 
@@ -34,7 +34,7 @@ void AnimatedPicture::draw( BITMAP* where )
 {
         if ( animation.size() > 0 )
         {
-                draw_sprite( where, animation[ theFrame ], getX(), getY() );
+                allegro::drawSprite( where, animation[ theFrame ], getX(), getY() );
         }
 
         if ( animationTimer->getValue() > delayBetweenFrames )

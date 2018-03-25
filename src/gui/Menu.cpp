@@ -32,13 +32,13 @@ Menu::~Menu( )
 
 void Menu::refreshPictures ()
 {
-        if ( optionImage != nilPointer ) destroy_bitmap( optionImage );
+        if ( optionImage != nilPointer ) allegro::destroyBitmap( optionImage );
         optionImage = load_png( isomot::pathToFile( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + "option.png" ), nilPointer );
 
-        if ( chosenOptionImage != nilPointer ) destroy_bitmap( chosenOptionImage );
+        if ( chosenOptionImage != nilPointer ) allegro::destroyBitmap( chosenOptionImage );
         chosenOptionImage = load_png( isomot::pathToFile( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + "chosen-option.png" ), nilPointer );
 
-        if ( chosenOptionImageMini != nilPointer ) destroy_bitmap( chosenOptionImageMini );
+        if ( chosenOptionImageMini != nilPointer ) allegro::destroyBitmap( chosenOptionImageMini );
         chosenOptionImageMini = load_png( isomot::pathToFile( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + "chosen-option-mini.png" ), nilPointer );
 }
 
@@ -90,7 +90,7 @@ void Menu::draw( BITMAP* where )
 
                 BITMAP * mark = ( this->activeOption == label ) ? this->chosenOptionImage : this->optionImage ;
                 if ( mark != nilPointer )
-                        draw_sprite( where, mark, getX (), getY () + dy );
+                        allegro::drawSprite( where, mark, getX (), getY () + dy );
 
                 label->moveTo( getX () + dx, getY () + dy );
                 label->draw( where );

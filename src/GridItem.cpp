@@ -38,11 +38,11 @@ void GridItem::draw( BITMAP* where )
 {
         if ( this->processedImage != nilPointer )
         {
-                draw_sprite( where, this->processedImage, mediator->getRoom()->getX0() + this->offset.first, mediator->getRoom()->getY0() + this->offset.second );
+                allegro::drawSprite( where, this->processedImage, mediator->getRoom()->getX0() + this->offset.first, mediator->getRoom()->getY0() + this->offset.second );
         }
         else if ( this->rawImage != nilPointer )
         {
-                draw_sprite( where, this->rawImage, mediator->getRoom()->getX0() + this->offset.first, mediator->getRoom()->getY0() + this->offset.second );
+                allegro::drawSprite( where, this->rawImage, mediator->getRoom()->getX0() + this->offset.first, mediator->getRoom()->getY0() + this->offset.second );
         }
 }
 

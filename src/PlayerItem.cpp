@@ -576,7 +576,7 @@ void PlayerItem::wait ()
 
 bool PlayerItem::isActivePlayer ()
 {
-        return mediator->getActivePlayer() == this ;
+        return mediator->getActiveCharacter() == this ;
 }
 
 void PlayerItem::fillWithData( const GameManager * data )

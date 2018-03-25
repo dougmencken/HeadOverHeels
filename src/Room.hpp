@@ -103,7 +103,7 @@ public:
         */
         void calculateCoordinates ( bool hasNorthDoor, bool hasEastDoor, int deltaX = 0, int deltaY = 0 ) ;
 
-        bool activatePlayerByName ( const std::string& player ) ;
+        bool activateCharacterByLabel ( const std::string& player ) ;
 
         void activate () ;
 

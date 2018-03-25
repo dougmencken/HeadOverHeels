@@ -17,7 +17,7 @@ Wall::Wall( bool trueXfalseY, int index, BITMAP* image )
 
 Wall::~Wall()
 {
-          destroy_bitmap( image );
+          allegro::destroyBitmap( image );
 }
 
 void Wall::calculateOffset()
@@ -34,7 +34,7 @@ void Wall::draw( BITMAP* where )
 {
         if ( this->image )
         {
-                draw_sprite( where, this->image, this->offset.first, this->offset.second );
+                allegro::drawSprite( where, this->image, this->offset.first, this->offset.second );
         }
 }
 

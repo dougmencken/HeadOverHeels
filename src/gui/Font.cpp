@@ -35,7 +35,7 @@ Font::Font( const std::string& name, const BITMAP * pictureOfLetters, Color * co
         {
                 BITMAP* bigfont = create_bitmap_ex( bitmap_color_depth( lettersOfFont ), lettersOfFont->w, lettersOfFont->h << 1 );
                 stretch_blit( lettersOfFont, bigfont, 0, 0, lettersOfFont->w, lettersOfFont->h, 0, 0, bigfont->w, bigfont->h );
-                destroy_bitmap( lettersOfFont );
+                allegro::destroyBitmap( lettersOfFont );
                 lettersOfFont = bigfont;
         }
 
@@ -135,13 +135,15 @@ Font::Font( const std::string& name, const BITMAP * pictureOfLetters, Color * co
                 }
         }
 
-        destroy_bitmap( lettersOfFont );
+        allegro::destroyBitmap( lettersOfFont );
 }
 
 Font::~Font( )
 {
-        std::for_each( letters.begin (), letters.end (), destroy_bitmap );
-        delete fontColor ;
+        for ( std::vector < BITMAP * >::iterator it = letters.begin () ; it != letters.end () ; ++ it )
+        {
+                allegro::destroyBitmap( *it );
+        }
 }
 
 std::string Font::getFamily() const

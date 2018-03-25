@@ -34,7 +34,7 @@ FreeItem* Door::getLeftJamb()
                 int x( 0 ), y( 0 );
                 int tileSize = mediator->getRoom()->getSizeOfOneTile();
 
-                ItemData* leftJambData = itemDataManager->findItemByLabel( labelOfDoor + "~leftjamb" );
+                ItemData* leftJambData = itemDataManager->findDataByLabel( labelOfDoor + "~leftjamb" );
 
                 if ( leftJambData != nilPointer )
                 {
@@ -91,7 +91,7 @@ FreeItem* Door::getRightJamb()
                 int x( 0 ), y( 0 );
                 int tileSize = mediator->getRoom()->getSizeOfOneTile();
 
-                ItemData* rightJambData = itemDataManager->findItemByLabel( labelOfDoor + "~rightjamb" );
+                ItemData* rightJambData = itemDataManager->findDataByLabel( labelOfDoor + "~rightjamb" );
 
                 if ( rightJambData != nilPointer )
                 {
@@ -148,7 +148,7 @@ FreeItem* Door::getLintel()
                 int x( 0 ), y( 0 );
                 int tileSize = mediator->getRoom()->getSizeOfOneTile();
 
-                ItemData* lintelData = itemDataManager->findItemByLabel( labelOfDoor + "~lintel" );
+                ItemData* lintelData = itemDataManager->findDataByLabel( labelOfDoor + "~lintel" );
 
                 if ( lintelData != nilPointer )
                 {

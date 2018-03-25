@@ -677,12 +677,6 @@
       <direction>none</direction>
       <type>griditem</type>
     </item>
-    <item x="9" y="5" z="1">
-      <label>ball</label>
-      <direction>none</direction>
-      <behavior>behaivor of final ball</behavior>
-      <type>freeitem</type>
-    </item>
     <item x="2" y="0" z="0">
       <label>static-heels</label>
       <direction>west</direction>

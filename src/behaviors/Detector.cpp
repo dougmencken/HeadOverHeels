@@ -33,35 +33,35 @@ Detector::~Detector( )
 bool Detector::update ()
 {
         FreeItem* freeItem = dynamic_cast< FreeItem * >( this->item );
-        PlayerItem* playerItem = freeItem->getMediator()->getActivePlayer();
+        PlayerItem* activeCharacter = freeItem->getMediator()->getActiveCharacter();
         bool isGone = false;
 
-        if ( playerItem != nilPointer )
+        if ( activeCharacter != nilPointer )
         {
                 switch ( activity )
                 {
                         case Wait:
                                 // player meets detector on X way
-                                if ( freeItem->getX() >= playerItem->getX() - 1 && freeItem->getX() <= playerItem->getX() + 1 )
+                                if ( freeItem->getX() >= activeCharacter->getX() - 1 && freeItem->getX() <= activeCharacter->getX() + 1 )
                                 {
-                                        if ( playerItem->getY() <= freeItem->getY() )
+                                        if ( activeCharacter->getY() <= freeItem->getY() )
                                         {
                                                 changeActivityOfItem( MoveEast );
                                         }
-                                        else if ( playerItem->getY() >= freeItem->getY() )
+                                        else if ( activeCharacter->getY() >= freeItem->getY() )
                                         {
                                                 changeActivityOfItem( MoveWest );
                                         }
                                 }
                                 // player meets detector on Y way
-                                else if ( freeItem->getY() >= playerItem->getY() - 1 && freeItem->getY() <= playerItem->getY() + 1 )
+                                else if ( freeItem->getY() >= activeCharacter->getY() - 1 && freeItem->getY() <= activeCharacter->getY() + 1 )
                                 {
-                                        if ( playerItem->getX() <= freeItem->getX() )
+                                        if ( activeCharacter->getX() <= freeItem->getX() )
                                         {
                                                 changeActivityOfItem( MoveNorth );
                                         }
                                         else
-                                        if ( playerItem->getX() >= freeItem->getX() )
+                                        if ( activeCharacter->getX() >= freeItem->getX() )
                                         {
                                                 changeActivityOfItem( MoveSouth );
                                         }

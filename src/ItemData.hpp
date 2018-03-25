@@ -39,19 +39,19 @@ public:
 
 public:
 
-        std::string getNameOfFile () const {  return this->nameOfFile;  }
+        const std::string& getNameOfFile () const {  return this->nameOfFile;  }
 
         void setNameOfFile ( std::string newName ) {  this->nameOfFile = newName ;  }
 
         void clearNameOfFile () {  this->nameOfFile.clear() ;  }
 
-        std::string getNameOfShadowFile () const {  return this->nameOfShadowFile;  }
+        const std::string& getNameOfShadowFile () const {  return this->nameOfShadowFile;  }
 
         void setNameOfShadowFile ( std::string newNameOfShadow ) {  this->nameOfShadowFile = newNameOfShadow ;  }
 
         void clearNameOfShadowFile () {  this->nameOfShadowFile.clear() ;  }
 
-        std::string getLabel () const {  return label ;  }
+        const std::string& getLabel () const {  return label ;  }
 
         unsigned int getWidthX () const {  return widthX ;  }
 

@@ -36,7 +36,7 @@ Label::Label( const std::string& text, const std::string& family, const std::str
 
 Label::~Label( )
 {
-        destroy_bitmap( this->buffer );
+        allegro::destroyBitmap( this->buffer );
 }
 
 /* static */
@@ -71,7 +71,7 @@ void Label::changeFontFamilyAndColor( const std::string& family, const std::stri
 
 void Label::draw( BITMAP* where )
 {
-        draw_sprite( where, this->buffer, this->getX (), this->getY () );
+        allegro::drawSprite( where, this->buffer, this->getX (), this->getY () );
 }
 
 void Label::handleKey( int key )
@@ -87,7 +87,7 @@ BITMAP * Label::createImageOfLabel( const std::string& text, Font * font )
         // re-create buffer
         if ( this->buffer != nilPointer )
         {
-                destroy_bitmap( this->buffer );
+                allegro::destroyBitmap( this->buffer );
         }
 
         buffer = create_bitmap_ex( 32, getWidth(), getHeight() );

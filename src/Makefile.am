@@ -21,6 +21,9 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			algif/gif.c \
 			algif/lzw.c \
 			main.cpp \
+			Ism.cpp \
+			Ism.hpp \
+			WrappersAllegro.hpp \
 			Way.cpp \
 			Way.hpp \
 			Color.cpp \
@@ -57,8 +60,6 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			TimerWindows.hpp \
 			InputManager.cpp \
 			InputManager.hpp \
-			Ism.cpp \
-			Ism.hpp \
 			Isomot.cpp \
 			Isomot.hpp \
 			ItemData.cpp \
@@ -160,8 +161,6 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			guiactions/SelectLanguage.hpp \
 			guiactions/ShowAuthors.cpp \
 			guiactions/ShowAuthors.hpp \
-			behaviors/CannonBall.cpp \
-			behaviors/CannonBall.hpp \
 			behaviors/ConveyorBelt.cpp \
 			behaviors/ConveyorBelt.hpp \
 			behaviors/Detector.cpp \
@@ -172,6 +171,8 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			behaviors/Driven.hpp \
 			behaviors/Elevator.cpp \
 			behaviors/Elevator.hpp \
+			behaviors/FinalBall.cpp \
+			behaviors/FinalBall.hpp \
 			behaviors/Hunter.cpp \
 			behaviors/Hunter.hpp \
 			behaviors/Impel.cpp \

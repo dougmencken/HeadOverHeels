@@ -51,9 +51,9 @@ public:
         /**
          * Search for item in the list
          * @param label Label of item
-         * @return Data of item or 0 when not found
+         * @return data of item or nil when not found
          */
-        ItemData* findItemByLabel ( const std::string& label ) ;
+        ItemData* findDataByLabel ( const std::string& label ) ;
 
 protected:
 
@@ -158,11 +158,6 @@ private:
          * @return Un gráfico con la jamba derecha de la puerta ó 0 si se produjo algún error
          */
         BITMAP * cutOutRightJamb ( BITMAP * door, const DoorMeasures& dm, const ixml::door::value type ) ;
-
-        /**
-         * Finalize data of item
-         */
-        static void finalizeData ( ItemData * itemData ) ;
 
 protected:
 

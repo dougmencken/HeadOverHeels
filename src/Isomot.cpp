@@ -20,10 +20,11 @@ namespace isomot
 {
 
 Isomot::Isomot( ) :
-        isEndRoom( false ),
         view( nilPointer ),
         itemDataManager( nilPointer ),
-        mapManager( nilPointer )
+        mapManager( nilPointer ),
+        finalRoomTimer( nilPointer ),
+        finalRoomBuilt( false )
 {
 
 }
@@ -32,12 +33,9 @@ Isomot::~Isomot( )
 {
         delete this->mapManager;
         delete this->itemDataManager;
+        delete this->finalRoomTimer;
 
-        if ( this->view != nilPointer )
-        {
-                destroy_bitmap( this->view );
-                this->view = nilPointer;
-        }
+        allegro::destroyBitmap( this->view );
 }
 
 void Isomot::beginNewGame ()
@@ -45,7 +43,9 @@ void Isomot::beginNewGame ()
         prepare() ;
         offVidasInfinitas() ;
         offInviolability() ;
-        this->isEndRoom = false;
+
+        finalRoomBuilt = false;
+        if ( finalRoomTimer != nilPointer ) finalRoomTimer->stop();
 
         // initial rooms
         mapManager->beginNewGame( "blacktooth/blacktooth01.xml", "blacktooth/blacktooth23.xml" );
@@ -55,14 +55,16 @@ void Isomot::beginNewGame ()
         mapManager->getActiveRoom()->activate ();
 
         std::cout << "play new game" << std::endl ;
-        SoundManager::getInstance()->playOgg ( "music/begin.ogg", /* loop */ false );
+        ////SoundManager::getInstance()->playOgg ( "music/begin.ogg", /* loop */ false );
 }
 
 void Isomot::continueSavedGame ( const sgxml::players::player_sequence& playerSequence )
 {
         offVidasInfinitas() ;
         offInviolability() ;
-        this->isEndRoom = false;
+
+        finalRoomBuilt = false;
+        if ( finalRoomTimer != nilPointer ) finalRoomTimer->stop();
 
         for ( sgxml::players::player_const_iterator i = playerSequence.begin (); i != playerSequence.end (); ++i )
         {
@@ -70,7 +72,7 @@ void Isomot::continueSavedGame ( const sgxml::players::player_sequence& playerSe
         }
 
         std::cout << "continue previous game" << std::endl ;
-        // no begin.ogg here
+        /// no begin.ogg here
 }
 
 void Isomot::prepare ()
@@ -138,14 +140,11 @@ void Isomot::resume ()
 
 void Isomot::reset()
 {
-        this->isEndRoom = false;
+        finalRoomBuilt = false;
+        if ( finalRoomTimer != nilPointer ) finalRoomTimer->stop();
 
-        // Destruye la vista isométrica actual
-        if ( this->view != nilPointer )
-        {
-                destroy_bitmap( this->view );
-                this->view = nilPointer;
-        }
+        // bin isometric view
+        allegro::destroyBitmap( this->view );
 
         this->mapManager->binEveryRoom();
 
@@ -166,7 +165,7 @@ BITMAP* Isomot::update()
 
         if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_EQUALS ] )
         {
-                gameManager->addLives( activeRoom->getMediator()->getActivePlayer()->getLabel(), 1 );
+                gameManager->addLives( activeRoom->getMediator()->getLabelOfActiveCharacter(), 1 );
                 key[ KEY_EQUALS ] = 0;
         }
 
@@ -205,7 +204,7 @@ BITMAP* Isomot::update()
 
         if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_S ] )
         {
-                gameManager->eatFish ( activeRoom->getMediator()->getActivePlayer(), activeRoom );
+                gameManager->eatFish ( activeRoom->getMediator()->getActiveCharacter(), activeRoom );
                 key[ KEY_S ] = 0;
         }
 
@@ -246,13 +245,13 @@ BITMAP* Isomot::update()
 
         if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_J ] )
         {
-                PlayerItem* activePlayer = activeRoom->getMediator()->getActivePlayer();
+                PlayerItem* activePlayer = activeRoom->getMediator()->getActiveCharacter();
                 PlayerItem* otherPlayer = nilPointer;
 
                 Room* roomWithInactivePlayer = this->mapManager->getRoomOfInactivePlayer();
                 if ( roomWithInactivePlayer != nilPointer )
                 {
-                        otherPlayer = roomWithInactivePlayer->getMediator()->getActivePlayer();
+                        otherPlayer = roomWithInactivePlayer->getMediator()->getActiveCharacter();
                 }
 
                 if ( otherPlayer != nilPointer && roomWithInactivePlayer != activeRoom )
@@ -267,7 +266,7 @@ BITMAP* Isomot::update()
                         Way way = otherPlayer->getOrientation();
 
                         PlayerItem* joinedPlayer = new PlayerItem(
-                                this->itemDataManager->findItemByLabel( nameOfAnotherPlayer ),
+                                this->itemDataManager->findDataByLabel( nameOfAnotherPlayer ),
                                 playerX, playerY, playerZ, way
                         ) ;
 
@@ -284,8 +283,6 @@ BITMAP* Isomot::update()
 
                         roomWithInactivePlayer->removePlayerFromRoom( otherPlayer, true );
                         this->mapManager->removeRoom( roomWithInactivePlayer );
-
-                        activeRoom->getMediator()->setActivePlayer( joinedPlayer );
                 }
 
                 key[ KEY_J ] = 0;
@@ -297,7 +294,7 @@ BITMAP* Isomot::update()
                 {
                         if ( activeRoom->getMediator()->findItemByLabel( "crown" ) == nilPointer )
                         {
-                                ItemData* chapeauData = this->itemDataManager->findItemByLabel( "crown" );
+                                ItemData* chapeauData = this->itemDataManager->findDataByLabel( "crown" );
 
                                 int x = ( activeRoom->getLimitAt( "south" ) - activeRoom->getLimitAt( "north" ) + chapeauData->getWidthX() ) >> 1 ;
                                 int y = ( activeRoom->getLimitAt( "west" ) - activeRoom->getLimitAt( "east" ) + chapeauData->getWidthY() ) >> 1 ;
@@ -309,7 +306,7 @@ BITMAP* Isomot::update()
                 }
                 else
                 {
-                        PlayerItem* activePlayer = activeRoom->getMediator()->getActivePlayer();
+                        PlayerItem* activePlayer = activeRoom->getMediator()->getActiveCharacter();
                         std::string nameOfPlayer = activePlayer->getLabel();
                         Way whichWay = activePlayer->getOrientation();
                         int teleportedX = 0;
@@ -317,7 +314,7 @@ BITMAP* Isomot::update()
                         int teleportedZ = 240;
 
                         PlayerItem* teleportedPlayer = new PlayerItem(
-                                this->itemDataManager->findItemByLabel( nameOfPlayer ),
+                                this->itemDataManager->findDataByLabel( nameOfPlayer ),
                                 teleportedX, teleportedY, teleportedZ,
                                 whichWay
                         ) ;
@@ -342,8 +339,6 @@ BITMAP* Isomot::update()
                         this->mapManager->removeRoom( activeRoom );
 
                         roomWithTeleportToFinalScene->activate();
-                        roomWithTeleportToFinalScene->getMediator()->setActivePlayer( teleportedPlayer );
-
                         activeRoom = roomWithTeleportToFinalScene;
                 }
 
@@ -351,11 +346,11 @@ BITMAP* Isomot::update()
         }
 
         // swap key changes character and possibly room
-        if ( ! this->isEndRoom && InputManager::getInstance()->swap() )
+        if ( ! this->finalRoomBuilt && InputManager::getInstance()->swap() )
         {
-                activeRoom->getMediator()->getActivePlayer()->wait(); // stop active player
+                activeRoom->getMediator()->getActiveCharacter()->wait(); // stop active player
 
-                if ( activeRoom->getMediator()->getActivePlayer()->getBehavior()->getActivityOfItem() == Wait )
+                if ( activeRoom->getMediator()->getActiveCharacter()->getBehavior()->getActivityOfItem() == Wait )
                 {
                         // swap in the same room or between different rooms
                         if ( ! activeRoom->swapCharactersInRoom( this->itemDataManager ) )
@@ -376,7 +371,7 @@ BITMAP* Isomot::update()
         {
                 if ( activeRoom->getWayOfExit() == "rebuild room" )
                 {
-                        PlayerItem* player = activeRoom->getMediator()->getActivePlayer();
+                        PlayerItem* player = activeRoom->getMediator()->getActiveCharacter();
 
                         if ( player->getLives() != 0 || player->getLabel() == "headoverheels" )
                         {
@@ -414,7 +409,7 @@ BITMAP* Isomot::update()
                 );
 
                 std::string roomFile = activeRoom->getNameOfFileWithDataAboutRoom() ;
-                const char* fromLastSlash = std::strrchr( roomFile.c_str (), '/' );
+                const char* fromLastSlash = std::strrchr( roomFile.c_str (), pathSeparator[ 0 ] );
                 if ( fromLastSlash != nilPointer )
                         roomFile = std::string( fromLastSlash + 1 );
 
@@ -717,15 +712,14 @@ BITMAP* Isomot::update()
                 // la sala final es muy especial
                 if ( roomFile == "blacktooth88.xml" )
                 {
-                        this->updateEndRoom();
+                        this->updateFinalRoom();
                 }
         }
         // there’s no active room
         else
         {
                 std::cout << "no room, game over" << std::endl ;
-                destroy_bitmap( this->view );
-                this->view = nilPointer;
+                allegro::destroyBitmap( this->view );
         }
 
         return this->view;
@@ -740,59 +734,78 @@ void Isomot::playTuneForScenery ( const std::string& scenery )
                 std::cout << "( ignore melody for scenery \"" << scenery << "\" )" << std::endl ;
 }
 
-void Isomot::updateEndRoom()
+void Isomot::updateFinalRoom()
 {
         Room* activeRoom = mapManager->getActiveRoom();
+        assert( activeRoom != nilPointer );
+        Mediator* mediator = activeRoom->getMediator();
+        assert( mediator != nilPointer );
 
-        if ( ! this->isEndRoom )
+        if ( ! this->finalRoomBuilt )
         {
-                std::string player = activeRoom->getMediator()->getActivePlayer()->getLabel();
-                activeRoom->getMediator()->removeFreeItem( activeRoom->getMediator()->getActivePlayer() );
+                mediator->endUpdate();
 
-                // player who arrived here
-                FreeItem* freeItem = new FreeItem( this->itemDataManager->findItemByLabel( player ), 66, 92, Top, South );
-                activeRoom->addFreeItem( freeItem );
+                if ( mediator->getActiveCharacter() != nilPointer )
+                {
+                        std::string arrivedCharacter = mediator->getActiveCharacter()->getOriginalLabel();
+
+                        activeRoom->removePlayerFromRoom( mediator->getActiveCharacter(), true );
+
+                        std::cout << "character \"" << arrivedCharacter << "\" arrived to final room" << std::endl ;
+
+                        ItemData* dataOfArrived = this->itemDataManager->findDataByLabel( arrivedCharacter );
+
+                        if ( dataOfArrived != nilPointer )
+                        {
+                                FreeItem* character = new FreeItem( dataOfArrived, 66, 92, Top, South );
+                                activeRoom->addFreeItem( character );
+                        }
+                }
 
                 // crea las coronas recuperadas
 
                 GameManager* gameManager = GameManager::getInstance();
-                int crowns = 0;
+                unsigned int crowns = 0;
+
+                ItemData* dataForChapeau = this->itemDataManager->findDataByLabel( "crown" );
 
                 // la corona de Safari
                 if ( gameManager->isFreePlanet( "safari" ) )
                 {
-                        freeItem = new FreeItem( this->itemDataManager->findItemByLabel( "crown" ), 66, 75, Top, Nowhere );
-                        activeRoom->addFreeItem( freeItem );
+                        FreeItem* chapeau = new FreeItem( dataForChapeau, 66, 75, Top, Nowhere );
+                        activeRoom->addFreeItem( chapeau );
                         crowns++;
                 }
                 // la corona de Egyptus
                 if ( gameManager->isFreePlanet( "egyptus" ) )
                 {
-                        freeItem = new FreeItem( this->itemDataManager->findItemByLabel( "crown" ), 66, 59, Top, Nowhere );
-                        activeRoom->addFreeItem( freeItem );
+                        FreeItem* chapeau = new FreeItem( dataForChapeau, 66, 59, Top, Nowhere );
+                        activeRoom->addFreeItem( chapeau );
                         crowns++;
                 }
                 // la corona de Penitentiary
                 if ( gameManager->isFreePlanet( "penitentiary" ) )
                 {
-                        freeItem = new FreeItem( this->itemDataManager->findItemByLabel( "crown" ), 65, 107, Top, Nowhere );
-                        activeRoom->addFreeItem( freeItem );
+                        FreeItem* chapeau = new FreeItem( dataForChapeau, 65, 107, Top, Nowhere );
+                        activeRoom->addFreeItem( chapeau );
                         crowns++;
                 }
                 // la corona de Byblos
                 if ( gameManager->isFreePlanet( "byblos" ) )
                 {
-                        freeItem = new FreeItem( this->itemDataManager->findItemByLabel( "crown" ), 65, 123, Top, Nowhere );
-                        activeRoom->addFreeItem( freeItem );
+                        FreeItem* chapeau = new FreeItem( dataForChapeau, 65, 123, Top, Nowhere );
+                        activeRoom->addFreeItem( chapeau );
                         crowns++;
                 }
                 // la corona de Blacktooth
                 if ( gameManager->isFreePlanet( "blacktooth" ) )
                 {
-                        freeItem = new FreeItem( this->itemDataManager->findItemByLabel( "crown" ), 65, 91, Top, Nowhere );
-                        activeRoom->addFreeItem( freeItem );
+                        FreeItem* chapeau = new FreeItem( dataForChapeau, 65, 91, Top, Nowhere );
+                        activeRoom->addFreeItem( chapeau );
                         crowns++;
                 }
+
+                mediator->beginUpdate();
 
                 if ( crowns == 5 )
                 {
@@ -805,19 +818,24 @@ void Isomot::updateEndRoom()
                         gameManager->arriveFreedom();
                 }
 
-                // final room is done
-                this->isEndRoom = true;
+                if ( finalRoomTimer == nilPointer ) finalRoomTimer = new Timer() ;
+                finalRoomTimer->reset();
+                finalRoomTimer->go();
+
+                this->finalRoomBuilt = true;
+                std::cout << "final room is okay" << std::endl ;
         }
         else
         {
-                SoundManager::getInstance()->playOgg ( "music/begin.ogg", /* loop */ false );
-                /// milliSleep( 2340 );
+                //////////SoundManager::getInstance()->playOgg ( "music/begin.ogg", /* loop */ false );
 
-                if ( activeRoom->getMediator()->findItemByLabel( "ball" ) == nilPointer && activeRoom->getMediator()->findItemByLabel( "bubbles" ) == nilPointer )
+                if ( finalRoomTimer->getValue() > 4 /* each 4 seconds */ )
                 {
-                        FreeItem* freeItem = new FreeItem( this->itemDataManager->findItemByLabel( "ball" ), 146, 93, LayerHeight, Nowhere );
-                        freeItem->assignBehavior( "behaivor of final ball", this->itemDataManager->findItemByLabel( "bubbles" ) );
-                        activeRoom->addFreeItem( freeItem );
+                        FreeItem* finalBall = new FreeItem( this->itemDataManager->findDataByLabel( "ball" ), 146, 93, LayerHeight, Nowhere );
+                        finalBall->assignBehavior( "behaivor of final ball", this->itemDataManager->findDataByLabel( "bubbles" ) );
+                        activeRoom->addFreeItem( finalBall );
+
+                        finalRoomTimer->reset();
                 }
         }
 }

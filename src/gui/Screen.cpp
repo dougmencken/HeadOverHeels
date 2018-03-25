@@ -24,11 +24,7 @@ namespace gui
 
 /* static */ void Screen::refreshBackground ()
 {
-        if ( backgroundPicture != nilPointer )
-        {
-                destroy_bitmap( backgroundPicture );
-                backgroundPicture = nilPointer;
-        }
+        allegro::destroyBitmap( backgroundPicture );
 
         Screen::backgroundPicture = Screen::loadPicture( "background.png" );
 }
@@ -116,7 +112,7 @@ void Screen::draw( BITMAP* where )
                         ( actionOfScreen != nilPointer ? actionOfScreen->getNameOfAction() : "nil" ) <<
                         "\" action" << std::endl ;
 
-                destroy_bitmap( this->imageOfScreen );
+                allegro::destroyBitmap( this->imageOfScreen );
                 this->imageOfScreen = where ;
         }
 
@@ -365,7 +361,7 @@ void Screen::scrollHorizontally( Screen* oldScreen, Screen* newScreen, bool righ
                 milliSleep( 1 );
         }
 
-        destroy_bitmap( oldPicture );
+        allegro::destroyBitmap( oldPicture );
 }
 
 /* static */
@@ -431,7 +427,7 @@ void Screen::barScrollHorizontally( Screen* oldScreen, Screen* newScreen, bool r
                 milliSleep( 2 );
         }
 
-        destroy_bitmap( oldPicture );
+        allegro::destroyBitmap( oldPicture );
 }
 
 /* static */
@@ -486,7 +482,7 @@ void Screen::randomPixelFade( bool fadeIn, Screen * slide, Color * color )
                 BITMAP* fill = create_bitmap_ex( 32, screenWidth, screenHeight );
                 clear_to_color( fill, allegroColor );
                 blit( fill, /* allegro global */ screen, 0, 0, 0, 0, screenWidth, screenHeight );
-                destroy_bitmap( fill );
+                allegro::destroyBitmap( fill );
         }
 
         const size_t howManyPixels = screenWidth * screenHeight;

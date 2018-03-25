@@ -40,7 +40,7 @@ void ItemDataManager::loadItems ()
                 {
                         ItemData* item = new ItemData ();
 
-                        item->label = ( *i ).label();                           // unique name of this item
+                        item->label = ( *i ).label();                           // label of this item
                         item->orientationFrames = ( *i ).directionFrames();     // number of frames for orientations of this item
                         item->mortal = ( *i ).mortal();                         // offensive or harmless
                         item->weight = ( *i ).weight();                         // how long, in milliseconds, it falls
@@ -54,7 +54,7 @@ void ItemDataManager::loadItems ()
                         if ( ! ( *i ).door ().present () )
                         {
                         # if  defined( DEBUG_ITEM_DATA )  &&  DEBUG_ITEM_DATA
-                                std::cout << "got item \"" << item->label << "\"" ;
+                                std::cout << "got item \"" << item->getLabel() << "\"" ;
                         # endif
 
                                 createPictureFrames( item, isomot::GameManager::getInstance()->getChosenGraphicSet() );
@@ -87,7 +87,7 @@ void ItemDataManager::loadItems ()
                         if ( ( *i ).door ().present () )
                         {
                         # if  defined( DEBUG_ITEM_DATA )  &&  DEBUG_ITEM_DATA
-                                std::cout << "got door \"" << item->label << "\"" ;
+                                std::cout << "got door \"" << item->getLabel() << "\"" ;
                         # endif
 
                                 // door is actually three items: lintel, left jamb and right jamb
@@ -184,7 +184,7 @@ void ItemDataManager::loadItems ()
                         # endif
 
                                 // bin original image
-                                destroy_bitmap( picture ) ;
+                                allegro::destroyBitmap( picture ) ;
                         }
                         else
                         {
@@ -214,10 +214,13 @@ void ItemDataManager::loadItems ()
 
 void ItemDataManager::freeItems ()
 {
-        std::for_each( itemData.begin(), itemData.end(), finalizeData );
+        for ( std::list< ItemData * >::iterator i = itemData.begin (); i != itemData.end (); ++ i )
+        {
+                delete ( *i );
+        }
 }
 
-ItemData* ItemDataManager::findItemByLabel( const std::string& label )
+ItemData* ItemDataManager::findDataByLabel( const std::string& label )
 {
         for ( std::list< ItemData * >::iterator i = this->itemData.begin (); i != this->itemData.end (); ++i )
         {
@@ -272,7 +275,7 @@ ItemData* ItemDataManager::createPictureFrames( ItemData * itemData, const char*
                         std::cout << " with " << howManyFrames << ( howManyFrames == 1 ? " frame" : " frames" ) << std::endl ;
                 # endif
 
-                destroy_bitmap( picture ) ;
+                allegro::destroyBitmap( picture ) ;
         }
         catch ( const std::exception& e )
         {
@@ -311,7 +314,7 @@ ItemData* ItemDataManager::createShadowFrames( ItemData * itemData, const char* 
                         }
                 }
 
-                destroy_bitmap( picture ) ;
+                allegro::destroyBitmap( picture ) ;
         }
         catch ( const std::exception& e )
         {
@@ -442,19 +445,6 @@ BITMAP* ItemDataManager::cutOutRightJamb( BITMAP* door, const DoorMeasures& dm, 
         blit( door, right, door->w - right->w, dm.lintelHeight + dm.lintelWidthX - dm.rightJambWidthY + fixY, 0, 0, right->w, right->h );
 
         return right;
-}
-
-void ItemDataManager::finalizeData( ItemData* itemData )
-{
-        if ( itemData != nilPointer )
-        {
-                itemData->clearNameOfFile ();
-                itemData->clearNameOfShadowFile ();
-                itemData->frames.clear ();
-
-                std::for_each( itemData->motion.begin(), itemData->motion.end(), destroy_bitmap );
-                std::for_each( itemData->shadows.begin(), itemData->shadows.end(), destroy_bitmap );
-        }
 }
 
 }

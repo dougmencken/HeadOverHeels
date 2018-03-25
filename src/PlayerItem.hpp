@@ -279,7 +279,7 @@ public:
         /**
          * Behavior of item taken by player
          */
-        std::string getTakenItemBehavior () const {  return this->takenItemBehavior ;  }
+        const std::string& getTakenItemBehavior () const {  return this->takenItemBehavior ;  }
 
         unsigned char getLives () const {  return this->lives ;  }
 
@@ -307,12 +307,12 @@ public:
          */
         void setWayOfExit ( const std::string& way ) ;
 
-        std::string getWayOfExit () const {  return this->exit ;  }
+        const std::string& getWayOfExit () const {  return this->exit ;  }
 
         /**
          * How player enters room
          */
-        std::string getWayOfEntry () const {  return this->entry ;  }
+        const std::string& getWayOfEntry () const {  return this->entry ;  }
 
         void setWayOfEntry ( const std::string& way ) {  this->entry = way ;  }
 

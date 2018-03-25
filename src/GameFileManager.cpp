@@ -151,12 +151,12 @@ void GameFileManager::saveGame( const std::string& fileName )
 
                 if ( secondRoom != nilPointer )
                 {
-                        nameOfWhoWaitsToPlay = secondRoom->getMediator()->getActivePlayer()->getLabel();
+                        nameOfWhoWaitsToPlay = secondRoom->getMediator()->getLabelOfActiveCharacter();
                 }
                 else
-                if ( activeRoom->getMediator()->getWaitingPlayer() != nilPointer )
+                if ( activeRoom->getMediator()->getWaitingCharacter() != nilPointer )
                 {
-                        nameOfWhoWaitsToPlay = activeRoom->getMediator()->getWaitingPlayer()->getLabel();
+                        nameOfWhoWaitsToPlay = activeRoom->getMediator()->getWaitingCharacter()->getLabel();
                 }
 
                 if ( nameOfWhoWaitsToPlay != "nobody" )

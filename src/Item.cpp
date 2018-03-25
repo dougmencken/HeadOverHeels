@@ -12,22 +12,22 @@ namespace isomot
 
 Item::Item( ItemData* data, int z, const Way& way )
       : Mediated(), Shady(),
-        label( data->getLabel() ),
-        uniqueName( label + "." + makeRandomString( 12 ) ),
+        uniqueName( data->getLabel() + "." + makeRandomString( 12 ) ),
+        originalLabel( data->getLabel() ),
+        frameIndex( 0 ),
+        backwardMotion( false ),
         dataOfItem( data ),
         x( 0 ),
         y( 0 ),
         z( z ),
         orientation( way ),
+        offset( std::pair< int, int >( 0, 0 ) ),
         rawImage( nilPointer ),
         shadow( nilPointer ),
         processedImage( nilPointer ),
-        offset( std::pair< int, int >( 0, 0 ) ),
         motionTimer( /* more in body */ nilPointer ),
         behavior( nilPointer ),
-        anchor( nilPointer ),
-        frameIndex( 0 ),
-        backwardMotion( false )
+        anchor( nilPointer )
 {
         // item with more than one frame per direction has animation
         if ( ( data->howManyMotions() - data->howManyExtraFrames() ) / data->howManyFramesForOrientations() > 1 )
@@ -41,22 +41,22 @@ Item::Item( ItemData* data, int z, const Way& way )
 
 Item::Item( const Item& item )
       : Mediated( item ), Shady( item.wantShadow ),
-        label( item.label ),
         uniqueName( item.uniqueName + " copy" ),
+        originalLabel( item.originalLabel ),
+        frameIndex( item.frameIndex ),
+        backwardMotion( item.backwardMotion ),
         dataOfItem( item.dataOfItem ),
         x( item.x ),
         y( item.y ),
         z( item.z ),
         orientation( item.orientation ),
+        offset( item.offset ),
         rawImage( item.rawImage ),
         shadow( item.shadow ),
         processedImage( /* more in body */ nilPointer ),
-        offset( item.offset ),
         motionTimer( /* more in body */ nilPointer ),
         behavior( nilPointer ),
-        anchor( item.anchor ),
-        frameIndex( item.frameIndex ),
-        backwardMotion( item.backwardMotion )
+        anchor( item.anchor )
 {
         if ( item.motionTimer != nilPointer )
         {
@@ -76,7 +76,7 @@ Item::~Item( )
         delete this->behavior;
         delete this->motionTimer;
 
-        destroy_bitmap( this->processedImage );
+        allegro::destroyBitmap( this->processedImage );
 }
 
 bool Item::update()
@@ -154,7 +154,7 @@ void Item::changeItemData( ItemData* itemData, const std::string& initiatedBy )
 
 void Item::changeShadow( BITMAP* newShadow )
 {
-        if ( this->shadow != newShadow )
+        if ( shadow != newShadow )
         {
                 this->shadow = newShadow;
                 // don’t bin old shadow, it may be re~used
@@ -165,7 +165,7 @@ void Item::setProcessedImage( BITMAP* newImage )
 {
         if ( processedImage != newImage )
         {
-                destroy_bitmap( processedImage );
+                allegro::destroyBitmap( processedImage );
                 processedImage = newImage;
         }
 }
@@ -290,6 +290,11 @@ void Item::setReverseMotion ()
 {
         this->backwardMotion = true;
         this->frameIndex = dataOfItem->howManyFrames() - 1;
+}
+
+const std::string& Item::getLabel() const
+{
+        return dataOfItem->getLabel() ;
 }
 
 unsigned int Item::getWidthX() const

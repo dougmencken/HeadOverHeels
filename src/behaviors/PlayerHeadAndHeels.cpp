@@ -32,19 +32,19 @@ PlayerHeadAndHeels::PlayerHeadAndHeels( Item * item, const std::string & behavio
                 highJumpVector.push_back( jumpMotion );
         }
 
-        // La primera fase del salto
+        // la primera fase del salto
         jumpIndex = 0;
 
-        // Fotogramas de caída
+        // fotogramas de caída
         fallFrames[ North ] = 8;
         fallFrames[ South ] = 16;
         fallFrames[ East ] = 12;
         fallFrames[ West ] = 17;
 
-        // Fotograma en blanco
+        // fotograma en blanco
         nullFrame = 20;
 
-        // Fotogramas de parpadeo
+        // fotogramas de parpadeo
         blinkFrames[ North ] = 8;
         blinkFrames[ South ] = 18;
         blinkFrames[ East ] = 12;
@@ -53,7 +53,7 @@ PlayerHeadAndHeels::PlayerHeadAndHeels( Item * item, const std::string & behavio
         labelOfTransitionViaTeleport = "double-bubbles";
         labelOfFireFromHooter = "bubbles";
 
-        // Pasos automáticos
+        // pasos automáticos
         automaticStepsThruDoor = 16;
 
         // create and activate chronometers
@@ -177,7 +177,7 @@ bool PlayerHeadAndHeels::update ()
         }
 
         // play sound for current activity
-        SoundManager::getInstance()->play( player->getLabel(), activity );
+        SoundManager::getInstance()->play( player->getOriginalLabel(), activity );
 
         return false;
 }

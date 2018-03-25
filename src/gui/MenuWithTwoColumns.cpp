@@ -88,7 +88,7 @@ void MenuWithTwoColumns::draw( BITMAP* where )
                 if ( countOfRows <= rowsInFirstColumn )
                 {
                         if ( mark != nilPointer )
-                                draw_sprite( where, mark, getX (), getY () + dy );
+                                allegro::drawSprite( where, mark, getX (), getY () + dy );
 
                         label->moveTo( getX () + dx, getY () + dy );
                         label->draw( where );
@@ -106,7 +106,7 @@ void MenuWithTwoColumns::draw( BITMAP* where )
                         // para cada etiqueta
                         // ( poems, no less )
                         if ( mark != nilPointer )
-                                draw_sprite( where, mark, getX () + secondColumnX, getY () + dy );
+                                allegro::drawSprite( where, mark, getX () + secondColumnX, getY () + dy );
 
                         label->moveTo( getX () + dx + secondColumnX, getY () + dy );
                         label->draw( where );

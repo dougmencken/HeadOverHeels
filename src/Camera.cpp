@@ -220,9 +220,12 @@ bool Camera::centerOn( PlayerItem* player )
                 }
         }
 
-        // refresh point of reference
-        reference.first = player->getX();
-        reference.second = player->getY();
+        if ( player != nilPointer )
+        {
+                // refresh point of reference
+                reference.first = player->getX();
+                reference.second = player->getY();
+        }
 
         return changed;
 }

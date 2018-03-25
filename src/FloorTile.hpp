@@ -33,12 +33,11 @@ public:
 
        /**
         * Constructor
-        * @param column Room’s column to which this tile belongs
         * @param cellX X coordinate on grid
         * @param cellY Y coordinate on grid
         * @param image Graphics of tile
         */
-        FloorTile( int column, int cellX, int cellY, BITMAP* image ) ;
+        FloorTile( int cellX, int cellY, BITMAP* image ) ;
 
         virtual ~FloorTile( ) ;
 
@@ -51,10 +50,7 @@ public:
 
 private:
 
-        /**
-         * Room’s column to which this tile belongs
-         */
-        int column ;
+        std::string uniqueName;
 
         /**
          * X and Y coordinates on grid
@@ -78,7 +74,12 @@ private:
 
 public:
 
-        int getColumn () const {  return column ;  }
+        /**
+         * Room’s column to which this tile belongs
+         */
+        int getColumn () const ;
+
+        std::string getUniqueName () const {  return uniqueName ;  }
 
         int getCellX () const {  return coordinates.first ;  }
 
@@ -94,7 +95,7 @@ public:
 
         void setShadyImage( BITMAP * newShady ) ;
 
-        void binShadyImage () {  setShadyImage( nilPointer ) ;  }
+        void freshShadyImage () ;
 
 };
 

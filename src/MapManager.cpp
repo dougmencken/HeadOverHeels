@@ -125,7 +125,7 @@ void MapManager::beginNewGame( const std::string& firstRoomFileName, const std::
 
                 if ( firstRoom != nilPointer )
                 {
-                        ItemData* firstPlayerData = isomot->getItemDataManager()->findItemByLabel( "head" );
+                        ItemData* firstPlayerData = isomot->getItemDataManager()->findDataByLabel( "head" );
 
                         int centerX = RoomBuilder::getXCenterOfRoom( firstPlayerData, firstRoom );
                         int centerY = RoomBuilder::getYCenterOfRoom( firstPlayerData, firstRoom );
@@ -135,9 +135,9 @@ void MapManager::beginNewGame( const std::string& firstRoomFileName, const std::
 
                         firstRoomData->setVisited( true );
 
-                        firstRoom->activatePlayerByName( "head" );
+                        firstRoom->activateCharacterByLabel( "head" );
 
-                        firstRoom->getCamera()->turnOn( firstRoom->getMediator()->getActivePlayer(), JustWait );
+                        firstRoom->getCamera()->turnOn( firstRoom->getMediator()->getActiveCharacter(), JustWait );
                         activeRoom = firstRoom;
                         rooms.push_back( firstRoom );
                 }
@@ -154,7 +154,7 @@ void MapManager::beginNewGame( const std::string& firstRoomFileName, const std::
 
                 if ( secondRoom != nilPointer )
                 {
-                        ItemData* secondPlayerData = isomot->getItemDataManager()->findItemByLabel( "heels" );
+                        ItemData* secondPlayerData = isomot->getItemDataManager()->findDataByLabel( "heels" );
 
                         int centerX = RoomBuilder::getXCenterOfRoom( secondPlayerData, secondRoom );
                         int centerY = RoomBuilder::getYCenterOfRoom( secondPlayerData, secondRoom );
@@ -164,9 +164,9 @@ void MapManager::beginNewGame( const std::string& firstRoomFileName, const std::
 
                         secondRoomData->setVisited( true );
 
-                        secondRoom->activatePlayerByName( "heels" );
+                        secondRoom->activateCharacterByLabel( "heels" );
 
-                        secondRoom->getCamera()->turnOn( secondRoom->getMediator()->getActivePlayer(), JustWait );
+                        secondRoom->getCamera()->turnOn( secondRoom->getMediator()->getActiveCharacter(), JustWait );
                         rooms.push_back( secondRoom );
                 }
         }
@@ -224,9 +224,9 @@ void MapManager::beginOldGameWithCharacter( const sgxml::player& data )
                         // when other player is in the same room as active player then there’s no need to do anything more
                         if ( data.active() || this->activeRoom != room )
                         {
-                                room->activatePlayerByName( nameOfCharacter );
-                                room->getCamera()->turnOn( room->getMediator()->getActivePlayer(), Way( data.entry() ) );
-                                //// room->getCamera()->centerOn( room->getMediator()->getActivePlayer () );
+                                room->activateCharacterByLabel( nameOfCharacter );
+                                room->getCamera()->turnOn( room->getMediator()->getActiveCharacter(), Way( data.entry() ) );
+                                //// room->getCamera()->centerOn( room->getMediator()->getActiveCharacter () );
 
                                 if ( data.active() )
                                 {
@@ -280,17 +280,17 @@ Room* MapManager::changeRoom( const Way& wayOfExit )
         activeRoom->deactivate();
         this->activeRoom = nilPointer;
 
-        std::cout << "\"" << previousRoom->getMediator()->getActivePlayer()->getLabel() << "\" migrates"
-                        << " from room \"" << previousRoomData->getNameOfRoomFile() << "\" with way of exit \"" << wayOfExit.toString() << "\""
-                        << " to room \"" << nextRoomData->getNameOfRoomFile() << "\" with way of entry \"" << wayOfEntry.toString() << "\"" << std::endl ;
-
         nextRoomData->adjustEntry( &wayOfEntry, previousRoomData->getNameOfRoomFile() );
 
         SoundManager::getInstance()->stopEverySound ();
 
-        PlayerItem* oldItemOfRoamer = previousRoom->getMediator()->getActivePlayer( );
+        PlayerItem* oldItemOfRoamer = previousRoom->getMediator()->getActiveCharacter( );
 
-        std::string nameOfRoamer = oldItemOfRoamer->getLabel() ;
+        std::string nameOfRoamer = oldItemOfRoamer->getOriginalLabel() ; // current label may be "bubbles" when teleporting
+
+        std::cout << "\"" << nameOfRoamer << "\" migrates"
+                        << " from room \"" << previousRoomData->getNameOfRoomFile() << "\" with way of exit \"" << wayOfExit.toString() << "\""
+                        << " to room \"" << nextRoomData->getNameOfRoomFile() << "\" with way of entry \"" << wayOfEntry.toString() << "\"" << std::endl ;
 
         const int exitX = oldItemOfRoamer->getX ();
         const int exitY = oldItemOfRoamer->getY ();
@@ -334,7 +334,7 @@ Room* MapManager::changeRoom( const Way& wayOfExit )
                 rooms.push_back( newRoom );
         }
 
-        ItemData* dataOfRoamer = isomot->getItemDataManager()->findItemByLabel( nameOfRoamer );
+        ItemData* dataOfRoamer = isomot->getItemDataManager()->findDataByLabel( nameOfRoamer );
 
         // get player’s exit position in old room to calculate entry position in new room
         int entryX = exitX ;
@@ -354,12 +354,15 @@ Room* MapManager::changeRoom( const Way& wayOfExit )
 
         PlayerItem* newItemOfRoamer = roomBuilder->createPlayerInRoom( newRoom, true, nameOfRoamer, entryX, entryY, entryZ, exitOrientation, wayOfEntry );
 
-        newItemOfRoamer->autoMoveOnEntry( wayOfEntry.toString() );
+        if ( newItemOfRoamer != nilPointer )
+        {
+                newItemOfRoamer->autoMoveOnEntry( wayOfEntry.toString() );
+        }
 
         nextRoomData->setVisited( true );
 
-        newRoom->activatePlayerByName( nameOfRoamer );
-        newRoom->getCamera()->turnOn( newRoom->getMediator()->getActivePlayer(), wayOfEntry );
+        newRoom->activateCharacterByLabel( nameOfRoamer );
+        newRoom->getCamera()->turnOn( newRoom->getMediator()->getActiveCharacter(), wayOfEntry );
 
         activeRoom = newRoom;
         activeRoom->activate();
@@ -378,8 +381,8 @@ Room* MapManager::rebuildRoom()
         std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( isomot->getItemDataManager() ) );
         Room* newRoom = roomBuilder->buildRoom ( isomot::sharePath() + "map" + pathSeparator + oldRoomData->getNameOfRoomFile() );
 
-        std::string nameOfActivePlayer = oldRoom->getMediator()->getActivePlayer()->getLabel();
-        std::string nameOfActivePlayerBeforeJoining = oldRoom->getMediator()->getLastActivePlayerBeforeJoining();
+        std::string nameOfActivePlayer = oldRoom->getMediator()->getLabelOfActiveCharacter();
+        std::string nameOfActivePlayerBeforeJoining = oldRoom->getMediator()->getLastActiveCharacterBeforeJoining();
 
         Way theWay = Nowhere;
         PlayerItem* alivePlayer = nilPointer;
@@ -411,7 +414,7 @@ Room* MapManager::rebuildRoom()
                                 Way playerEntry = player->getWayOfEntry();
 
                                 // forget composite player
-                                oldRoom->removePlayerFromRoom( oldRoom->getMediator()->getActivePlayer(), true );
+                                oldRoom->removePlayerFromRoom( oldRoom->getMediator()->getActiveCharacter(), true );
 
                                 // create simple player
                                 roomBuilder->createPlayerInRoom( oldRoom, true,
@@ -451,23 +454,23 @@ Room* MapManager::rebuildRoom()
                 // add room just created
                 rooms.push_back( newRoom );
 
-                bool activePlayerIsHere = newRoom->activatePlayerByName( nameOfActivePlayer );
+                bool activePlayerIsHere = newRoom->activateCharacterByLabel( nameOfActivePlayer );
 
                 if ( ! activePlayerIsHere )
                 {
                         // case when composite player joined in this room loses life and splits back into two players
-                        activePlayerIsHere = newRoom->activatePlayerByName( nameOfActivePlayerBeforeJoining );
+                        activePlayerIsHere = newRoom->activateCharacterByLabel( nameOfActivePlayerBeforeJoining );
 
                         if ( ! activePlayerIsHere ) // unlucky to happen
                         {
                                 if ( newRoom->isAnyPlayerStillInRoom() )
                                 {
-                                        newRoom->getMediator()->setActivePlayer( * newRoom->getPlayersYetInRoom().begin () );
+                                        newRoom->getMediator()->setActiveCharacter( * newRoom->getPlayersYetInRoom().begin () );
                                 }
                         }
                 }
 
-                newRoom->getCamera()->turnOn( newRoom->getMediator()->getActivePlayer(), theWay );
+                newRoom->getCamera()->turnOn( newRoom->getMediator()->getActiveCharacter(), theWay );
 
                 activeRoom = newRoom;
                 activeRoom->activate();

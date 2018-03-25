@@ -15,7 +15,7 @@
 #include <fstream>
 #include <cstdlib>
 
-#include <allegro.h>
+#include "WrappersAllegro.hpp"
 
 #ifdef __WIN32
     #include <winalleg.h>

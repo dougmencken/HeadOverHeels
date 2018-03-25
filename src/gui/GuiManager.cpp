@@ -76,7 +76,7 @@ GuiManager::GuiManager( ) :
                 addFont( new Font( "magenta.regular", pictureOfFont, Color::magentaColor(), false ) );
                 addFont( new Font( "magenta.big", pictureOfFont, Color::magentaColor(), true ) );
 
-                destroy_bitmap( pictureOfFont );
+                allegro::destroyBitmap( pictureOfFont );
         }
         else
         {

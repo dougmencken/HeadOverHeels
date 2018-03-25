@@ -1,5 +1,5 @@
 
-#include "CannonBall.hpp"
+#include "FinalBall.hpp"
 #include "FreeItem.hpp"
 #include "Mediator.hpp"
 #include "MoveKindOfActivity.hpp"
@@ -10,19 +10,19 @@
 namespace isomot
 {
 
-CannonBall::CannonBall( Item * item, const std::string & behavior ) :
+FinalBall::FinalBall( Item * item, const std::string & behavior ) :
         Behavior( item, behavior )
 {
         speedTimer = new Timer();
         speedTimer->go();
 }
 
-CannonBall::~CannonBall( )
+FinalBall::~FinalBall( )
 {
         delete speedTimer;
 }
 
-bool CannonBall::update ()
+bool FinalBall::update ()
 {
         bool isGone = false;
 
@@ -74,7 +74,7 @@ bool CannonBall::update ()
         return isGone;
 }
 
-void CannonBall::setMoreData( void * data )
+void FinalBall::setMoreData( void * data )
 {
         this->bubblesData = reinterpret_cast< ItemData * >( data );
 }

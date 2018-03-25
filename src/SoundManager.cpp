@@ -149,7 +149,7 @@ void SoundManager::playOgg ( const std::string& fileName, bool loop )
                 set_volume( ( this->musicVolume * 255 ) / 100, 0 );
 
                 this->oggStream = alogg_start_streaming( isomot::pathToFile( isomot::sharePath() + fileName ), lengthOfbuffer );
-                if ( this->oggStream )
+                if ( this->oggStream != nilPointer )
                 {
                         alogg_thread* oggThread = nilPointer;
                         if ( loop )

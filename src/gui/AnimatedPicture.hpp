@@ -11,7 +11,7 @@
 #ifndef AnimatedPicture_hpp_
 #define AnimatedPicture_hpp_
 
-#include <allegro.h>
+#include "Ism.hpp"
 #include <algif.h>
 
 #include <string>

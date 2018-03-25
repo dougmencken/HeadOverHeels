@@ -217,7 +217,7 @@ void UserControlled::jump( PlayerItem * player )
                                 {
                                         player->decreaseHighJumps();
                                 }
-                                SoundManager::getInstance()->play( player->getLabel(), Rebound );
+                                SoundManager::getInstance()->play( player->getOriginalLabel(), Rebound );
                         }
                         break;
 
@@ -332,7 +332,7 @@ void UserControlled::wayInTeletransport( PlayerItem * player )
         {
                 case BeginWayInTeletransport:
                         // change to bubbles
-                        player->changeItemData( itemDataManager->findItemByLabel( labelOfTransitionViaTeleport ), "begin way in teletransport" );
+                        player->changeItemData( itemDataManager->findDataByLabel( labelOfTransitionViaTeleport ), "begin way in teletransport" );
 
                         // reverse animation of bubbles
                         player->setReverseMotion();
@@ -363,7 +363,7 @@ void UserControlled::wayOutTeletransport( PlayerItem * player )
         {
                 case BeginWayOutTeletransport:
                         // change to bubbles
-                        player->changeItemData( itemDataManager->findItemByLabel( labelOfTransitionViaTeleport ), "begin way out teletransport" );
+                        player->changeItemData( itemDataManager->findDataByLabel( labelOfTransitionViaTeleport ), "begin way out teletransport" );
 
                         // begin teleportation
                         activity = WayOutTeletransport;
@@ -393,7 +393,7 @@ void UserControlled::collideWithMortalItem( PlayerItem* player )
                         if ( ! player->hasShield() )
                         {
                                 // change to bubbles retaining player’s label
-                                player->changeItemData( itemDataManager->findItemByLabel( labelOfTransitionViaTeleport ), "collide with mortal item" );
+                                player->changeItemData( itemDataManager->findDataByLabel( labelOfTransitionViaTeleport ), "collide with mortal item" );
 
                                 activity = Vanish;
                         }
@@ -424,7 +424,7 @@ void UserControlled::useHooter( PlayerItem* player )
         {
                 this->fireFromHooterIsPresent = true;
 
-                ItemData* hooterData = this->itemDataManager->findItemByLabel( labelOfFireFromHooter );
+                ItemData* hooterData = this->itemDataManager->findDataByLabel( labelOfFireFromHooter );
 
                 if ( hooterData != nilPointer )
                 {
@@ -452,7 +452,7 @@ void UserControlled::useHooter( PlayerItem* player )
 
                         player->useDoughnut();
 
-                        SoundManager::getInstance()->play( player->getLabel(), FireDoughnut );
+                        SoundManager::getInstance()->play( player->getOriginalLabel(), FireDoughnut );
                 }
         }
 }
@@ -495,14 +495,14 @@ void UserControlled::takeItem( PlayerItem * player )
                                 BITMAP* takenItemImage = takenItem->getRawImage();
                                 GameManager::getInstance()->setItemTaken( takenItemImage );
 
-                                player->assignTakenItem( itemDataManager->findItemByLabel( takenItem->getLabel() ),
+                                player->assignTakenItem( itemDataManager->findDataByLabel( takenItem->getLabel() ),
                                                                 takenItemImage,
                                                                 takenItem->getBehavior()->getNameOfBehavior () );
 
                                 takenItem->getBehavior()->changeActivityOfItem( Vanish );
                                 activity = ( activity == TakeAndJump ? Jump : TakenItem );
 
-                                SoundManager::getInstance()->play( player->getLabel(), TakeItem );
+                                SoundManager::getInstance()->play( player->getOriginalLabel(), TakeItem );
 
                                 std::cout << "took item \"" << takenItem->getLabel() << "\"" << std::endl ;
                         }
@@ -540,13 +540,13 @@ void UserControlled::dropItem( PlayerItem* player )
 
                         GameManager::getInstance()->setItemTaken( nilPointer );
 
-                        SoundManager::getInstance()->stop( player->getLabel(), Fall );
-                        SoundManager::getInstance()->play( player->getLabel(), DropItem );
+                        SoundManager::getInstance()->stop( player->getOriginalLabel(), Fall );
+                        SoundManager::getInstance()->play( player->getOriginalLabel(), DropItem );
                 }
                 else
                 {
                         // emit sound of o~ ou
-                        SoundManager::getInstance()->play( player->getLabel(), Mistake );
+                        SoundManager::getInstance()->play( player->getOriginalLabel(), Mistake );
                 }
         }
 

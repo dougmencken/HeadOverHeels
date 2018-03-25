@@ -186,7 +186,7 @@ Room::~Room()
                 delete player;
         }
 
-        destroy_bitmap( whereToDraw );
+        allegro::destroyBitmap( whereToDraw );
 }
 
 std::list < PlayerItem * > Room::getPlayersYetInRoom () const
@@ -297,7 +297,7 @@ void Room::addGridItem( GridItem * gridItem )
                 gridItem->setOffset( offset );
         }
 
-        mediator->addGridItem( gridItem );
+        mediator->addGridItemToList( gridItem );
 
         if ( this->shadingScale < 256 && gridItem->getImageOfShadow() != nilPointer )
         {
@@ -381,7 +381,7 @@ void Room::addFreeItem( FreeItem * freeItem )
         }
 
         // add free item to room
-        mediator->addFreeItem( freeItem );
+        mediator->addFreeItemToList( freeItem );
 
         if ( this->shadingScale < 256 && freeItem->getImageOfShadow() != nilPointer )
         {
@@ -516,7 +516,14 @@ bool Room::addPlayerToRoom( PlayerItem* playerItem, bool playerEntersRoom )
                 playerItem->setOffset( offset );
         }
 
-        mediator->addFreeItem( playerItem );
+        std::cout << "adding character \"" << playerItem->getLabel() << "\" to room \"" << getNameOfFileWithDataAboutRoom() << "\"" << std::endl ;
+
+        mediator->addFreeItemToList( playerItem );
+
+        if ( mediator->getActiveCharacter() == nilPointer )
+        {
+                mediator->setActiveCharacter( playerItem );
+        }
 
         if ( this->shadingScale < 256 && playerItem->getImageOfShadow() != nilPointer )
         {
@@ -527,7 +534,6 @@ bool Room::addPlayerToRoom( PlayerItem* playerItem, bool playerEntersRoom )
 
         // add player item to room
         this->playersYetInRoom.push_back( playerItem );
-        std::cout << "character \"" << playerItem->getLabel() << "\" is yet in room \"" << getNameOfFileWithDataAboutRoom() << "\"" << std::endl ;
 
         if ( playerEntersRoom )
         {
@@ -592,7 +598,10 @@ void Room::removeFloor( FloorTile * floorTile )
 
 void Room::removeGridItem( GridItem * gridItem )
 {
-        mediator->removeGridItem( gridItem );
+        std::cout << "removing " << gridItem->whichKindOfItem() << " \"" << gridItem->getUniqueName() <<
+                        "\" from room \"" << getNameOfFileWithDataAboutRoom() << "\"" << std::endl ;
+
+        mediator->removeGridItemFromList( gridItem );
 
         if ( this->shadingScale < 256 && gridItem->getImageOfShadow() != nilPointer )
         {
@@ -606,7 +615,10 @@ void Room::removeGridItem( GridItem * gridItem )
 
 void Room::removeFreeItem( FreeItem * freeItem )
 {
-        mediator->removeFreeItem( freeItem );
+        std::cout << "removing " << freeItem->whichKindOfItem() << " \"" << freeItem->getUniqueName() <<
+                        "\" from room \"" << getNameOfFileWithDataAboutRoom() << "\"" << std::endl ;
+
+        mediator->removeFreeItemFromList( freeItem );
 
         if ( this->shadingScale < 256 && freeItem->getImageOfShadow() != nilPointer )
         {
@@ -620,40 +632,32 @@ void Room::removeFreeItem( FreeItem * freeItem )
 
 bool Room::removePlayerFromRoom( PlayerItem* playerItem, bool playerExitsRoom )
 {
+        if ( playerItem == nilPointer ) return false ;
+
         for ( std::list< PlayerItem * >::const_iterator pi = playersYetInRoom.begin (); pi != playersYetInRoom.end (); ++pi )
         {
                 if ( playerItem == *pi )
                 {
-                        mediator->removeFreeItem( playerItem );
+                        std::cout << "removing " << playerItem->whichKindOfItem() << " \"" << playerItem->getUniqueName() <<
+                                        "\" from room \"" << getNameOfFileWithDataAboutRoom() << "\"" << std::endl ;
+
+                        mediator->removeFreeItemFromList( playerItem );
                         nextNumbers[ playerItem->getLabel() ] -- ;
 
-                        if ( this->shadingScale < 256 && playerItem->getImageOfShadow() )
+                        if ( this->shadingScale < 256 && playerItem->getImageOfShadow() != nilPointer )
                         {
                                 mediator->reshadeWithFreeItem( playerItem );
                         }
 
                         mediator->remaskWithFreeItem( playerItem );
 
-                        if ( playerItem == mediator->getActivePlayer() )
+                        if ( playerItem->isActivePlayer() )
                         {
-                                PlayerItem* nextPlayer = mediator->getWaitingPlayer();
-
-                                if ( nextPlayer != nilPointer )
-                                {
-                                        // activate other player in room
-                                        mediator->setActivePlayer( nextPlayer );
-
-                                        std::cout << "character \"" << nextPlayer->getLabel() << "\""
-                                                        << " is yet active in room \"" << getNameOfFileWithDataAboutRoom() << "\""
-                                                        << std::endl ;
-                                }
+                                // activate other character, or set it to nil when there’s no other character in room
+                                mediator->setActiveCharacter( mediator->getWaitingCharacter() );
                         }
 
                         std::string nameOfPlayer = playerItem->getLabel();
-
-                        std::cout << "removing character \"" << nameOfPlayer << "\""
-                                        << " from room \"" << getNameOfFileWithDataAboutRoom() << "\""
-                                                << std::endl ;
 
                         this->playersYetInRoom.remove( playerItem );
                         /// pi --; // not needed, this iteration is last one due to "return" below
@@ -743,7 +747,7 @@ void Room::draw( BITMAP* where )
                 // adjust position of camera
                 if ( numberOfTiles.first > maxTilesOfSingleRoom || numberOfTiles.second > maxTilesOfSingleRoom )
                 {
-                        camera->centerOn( mediator->getActivePlayer () );
+                        camera->centerOn( mediator->getActiveCharacter () );
                 }
 
                 // draw tiles of room
@@ -905,13 +909,13 @@ void Room::calculateCoordinates( bool hasNorthDoor, bool hasEastDoor, int deltaX
         }
 }
 
-bool Room::activatePlayerByName( const std::string& player )
+bool Room::activateCharacterByLabel( const std::string& player )
 {
         for ( std::list< PlayerItem * >::const_iterator pi = playersYetInRoom.begin (); pi != playersYetInRoom.end (); ++pi )
         {
                 if ( player == ( *pi )->getLabel() )
                 {
-                        mediator->setActivePlayer( *pi );
+                        mediator->setActiveCharacter( *pi );
                         return true;
                 }
         }
@@ -938,7 +942,7 @@ bool Room::swapCharactersInRoom ( ItemDataManager * itemDataManager )
 
 bool Room::continueWithAlivePlayer ( )
 {
-        PlayerItem* previouslyAlivePlayer = mediator->getActivePlayer();
+        PlayerItem* previouslyAlivePlayer = mediator->getActiveCharacter();
 
         if ( previouslyAlivePlayer->getLives() == 0 )
         {
@@ -947,10 +951,10 @@ bool Room::continueWithAlivePlayer ( )
                                 std::find_if( this->playersYetInRoom.begin (), this->playersYetInRoom.end (),
                                                 std::bind2nd( EqualLabelOfItem(), previouslyAlivePlayer->getLabel() ) );
                 ++i ;
-                mediator->setActivePlayer( i != this->playersYetInRoom.end () ? ( *i ) : *this->playersYetInRoom.begin () );
+                mediator->setActiveCharacter( i != this->playersYetInRoom.end () ? ( *i ) : *this->playersYetInRoom.begin () );
 
                 // is there other alive player in room
-                if ( previouslyAlivePlayer != mediator->getActivePlayer() )
+                if ( previouslyAlivePlayer != mediator->getActiveCharacter() )
                 {
                         removePlayerFromRoom( previouslyAlivePlayer, true );
 

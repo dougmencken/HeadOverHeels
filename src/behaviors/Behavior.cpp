@@ -3,7 +3,6 @@
 #include "Item.hpp"
 #include "FreeItem.hpp"
 #include "Mediator.hpp"
-#include "CannonBall.hpp"
 #include "ConveyorBelt.hpp"
 #include "Detector.hpp"
 #include "Driven.hpp"
@@ -22,6 +21,7 @@
 #include "Trampoline.hpp"
 #include "Turn.hpp"
 #include "Volatile.hpp"
+#include "FinalBall.hpp"
 #include "PlayerHead.hpp"
 #include "PlayerHeels.hpp"
 #include "PlayerHeadAndHeels.hpp"
@@ -154,7 +154,7 @@ Behavior* Behavior::createBehaviorByName( Item* item, const std::string& behavio
         }
         else if ( behavior == "behaivor of final ball" )
         {
-                behaviorToReturn = new CannonBall( item, behavior );
+                behaviorToReturn = new FinalBall( item, behavior );
                 behaviorToReturn->setMoreData( extraData );
         }
         else if ( behavior == "behavior of Head" )

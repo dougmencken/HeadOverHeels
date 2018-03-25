@@ -112,7 +112,7 @@ void MenuWithValues::draw( BITMAP* where )
 
                 BITMAP * mark = ( activeOptionWithValue == label ) ? this->chosenOptionImage : this->optionImage ;
                 if ( mark != nilPointer )
-                        draw_sprite( where, mark, getX (), getY () + dy );
+                        allegro::drawSprite( where, mark, getX (), getY () + dy );
 
                 label->moveTo( getX () + dx, getY () + dy );
                 label->draw( where );

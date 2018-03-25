@@ -120,13 +120,13 @@ public:
         */
         int findHighestZ ( Item* item ) ;
 
-        void addGridItem ( GridItem* gridItem ) ;
+        void addGridItemToList ( GridItem* gridItem ) ;
 
-        void addFreeItem ( FreeItem* freeItem ) ;
+        void addFreeItemToList ( FreeItem* freeItem ) ;
 
-        void removeGridItem ( GridItem* gridItem ) ;
+        void removeGridItemFromList ( GridItem* gridItem ) ;
 
-        void removeFreeItem ( FreeItem* freeItem ) ;
+        void removeFreeItemFromList ( FreeItem* freeItem ) ;
 
         void pushCollision ( const std::string& uniqueName ) ;
 
@@ -220,11 +220,6 @@ private:
         bool switchInRoomIsOn ;
 
        /**
-        * Player which was active just before joining players
-        */
-        std::string lastActivePlayer ;
-
-       /**
         * Set of grid items that form structure of room. Each column is list of grid items
         * sorted thus next item’s Z is greater than preceding item’s Z
         */
@@ -241,9 +236,16 @@ private:
         std::vector < std::string > badBoys ;
 
        /**
-        * Jugador controlado por el usuario
+        * Character yet controlled by user
         */
-        PlayerItem * activePlayer ;
+        PlayerItem * activeCharacter ;
+
+        std::string labelOfActiveCharacter ;
+
+       /**
+        * Character which was active just before joining them
+        */
+        std::string lastActiveCharacterBeforeJoining ;
 
        /**
         * Collisions happened in room, stores unique names of items
@@ -254,7 +256,7 @@ public:
 
         bool isThreadRunning () {  return threadRunning ;  }
 
-        std::string getLastActivePlayerBeforeJoining () {  return lastActivePlayer ;  }
+        const std::string& getLastActiveCharacterBeforeJoining () {  return lastActiveCharacterBeforeJoining ;  }
 
        /**
         * Degree for opacity of shadows
@@ -264,22 +266,21 @@ public:
 
         Room* getRoom () const {  return room ;  }
 
-        std::vector < std::list < GridItem * > > getGridItems () const {  return gridItems ;  }
+        const std::vector < std::list < GridItem * > > & getGridItems () const {  return gridItems ;  }
 
-        std::list < FreeItem * > getFreeItems () const {  return freeItems ;  }
+        const std::list < FreeItem * > & getFreeItems () const {  return freeItems ;  }
 
-       /**
-        * Character yet controlled by user
-        */
-        PlayerItem * getActivePlayer () const {  return this->activePlayer ;  }
+        PlayerItem * getActiveCharacter () const {  return this->activeCharacter ;  }
 
-        void setActivePlayer ( PlayerItem* playerItem ) ;
+        const std::string& getLabelOfActiveCharacter () const {  return labelOfActiveCharacter ;  }
+
+        void setActiveCharacter ( PlayerItem * character ) ;
 
        /**
         * Waiting character
         * @return player item or nil if there’re no more players in this room
         */
-        PlayerItem * getWaitingPlayer () const ;
+        PlayerItem * getWaitingCharacter () const ;
 
 };
 

@@ -165,8 +165,8 @@ void CreatePlanetsScreen::doAction ()
         label->moveTo( blacktoothX + ( imageOfBlacktooth->getWidth() >> 1 ) - ( label->getWidth() >> 1 ), blacktoothY + labelOffsetY );
         planets->addWidget( label );
 
-        destroy_bitmap( chapeau );
-        destroy_bitmap( chapeauTriste );
+        allegro::destroyBitmap( chapeau );
+        allegro::destroyBitmap( chapeauTriste );
 
         GuiManager::getInstance()->changeScreen( planets, true );
 }
