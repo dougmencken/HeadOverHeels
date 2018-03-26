@@ -68,9 +68,7 @@ Room* RoomBuilder::buildRoom ( const std::string& fileName )
                 }
 
                 // with knowledge about doors, calculate coordinates of origin
-                room->calculateCoordinates( hasNorthDoor, hasEastDoor,
-                                            roomXML->deltaX().present() ? roomXML->deltaX().get() : 0,
-                                            roomXML->deltaY().present() ? roomXML->deltaY().get() : 0 );
+                room->calculateCoordinates( hasNorthDoor, hasEastDoor );
 
                 // for "triple" room there’s data to position camera initially
                 // and dimensions of room where to move camera

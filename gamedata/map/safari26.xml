@@ -13,8 +13,6 @@
 
   <floorType>plain</floorType>
 
-  <deltaY>16</deltaY>
-
   <floor>
     <tile>
       <x>0</x>

@@ -1203,48 +1203,6 @@
     <frame>1</frame>
   </item>
 
-  <!-- Static Head -->
-  <item label="static-head">
-    <widthX>12</widthX>
-    <widthY>12</widthY>
-    <height>24</height>
-    <directionFrames>2</directionFrames>
-    <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
-    <picture file="freedonian-head.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>48</frameHeight>
-    </picture>
-    <shadow file="freedonian-head-shadows.png">
-      <shadowWidth>48</shadowWidth>
-      <shadowHeight>25</shadowHeight>
-    </shadow>
-    <frame>0</frame>
-  </item>
-
-  <!-- Static Heels -->
-  <item label="static-heels">
-    <widthX>12</widthX>
-    <widthY>12</widthY>
-    <height>24</height>
-    <directionFrames>2</directionFrames>
-    <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
-    <picture file="freedonian-heels.png">
-      <frameWidth>48</frameWidth>
-      <frameHeight>48</frameHeight>
-    </picture>
-    <shadow file="freedonian-heels-shadows.png">
-      <shadowWidth>48</shadowWidth>
-      <shadowHeight>25</shadowHeight>
-    </shadow>
-    <frame>0</frame>
-  </item>
-
   <!-- Jail Wall X -->
   <item label="jail-wall-x">
     <widthX>16</widthX>

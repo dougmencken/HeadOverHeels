@@ -96,12 +96,10 @@ public:
 
        /**
         * Calculate coordinates on screen of isometric space’s origin
-        * @param hasNorthDoor Room has door at north
-        * @param hasNorthEast Room has door at east
-        * @param deltaX Difference on X for position of room on screen
-        * @param deltaY Difference on Y for position of room on screen
+        * @param hasNorthDoor when room has door at north
+        * @param hasNorthEast when room has door at east
         */
-        void calculateCoordinates ( bool hasNorthDoor, bool hasEastDoor, int deltaX = 0, int deltaY = 0 ) ;
+        void calculateCoordinates ( bool hasNorthDoor, bool hasEastDoor ) ;
 
         bool activateCharacterByLabel ( const std::string& player ) ;
 

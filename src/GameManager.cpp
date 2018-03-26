@@ -377,7 +377,7 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
         {
                 // draw FREEDOM in the final screen
                 gui::Label freedomLabel( "FREEDOM", "big", "multicolor" );
-                freedomLabel.moveTo( 84, 362 );
+                freedomLabel.moveTo( ScreenWidth / 10, ScreenHeight - 100 );
                 freedomLabel.draw( where );
         }
 

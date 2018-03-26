@@ -478,7 +478,7 @@ bool Room::addPlayerToRoom( PlayerItem* playerItem, bool playerEntersRoom )
 
         mediator->clearStackOfCollisions ();
 
-        std::string labelOfItem = playerItem->getLabel() ;
+        std::string labelOfItem = "character " + playerItem->getOriginalLabel() ;
         unsigned int uniqueNumberOfItem = nextNumbers[ labelOfItem ] ;
         if ( uniqueNumberOfItem > 0 ) // is there some player with the same label
         {
@@ -650,7 +650,7 @@ bool Room::removePlayerFromRoom( PlayerItem* playerItem, bool playerExitsRoom )
                                         "\" from room \"" << getNameOfFileWithDataAboutRoom() << "\"" << std::endl ;
 
                         mediator->removeFreeItemFromList( playerItem );
-                        nextNumbers[ playerItem->getLabel() ] -- ;
+                        nextNumbers[ "character " + playerItem->getOriginalLabel() ] -- ;
 
                         if ( this->shadingScale < 256 && playerItem->getImageOfShadow() != nilPointer )
                         {
@@ -880,7 +880,7 @@ void Room::calculateBounds()
         bounds[ "westsouth" ] = doors[ Westsouth ] ? doors[ Westsouth ]->getLintel()->getY() + tileSize : bounds[ "west" ];
 }
 
-void Room::calculateCoordinates( bool hasNorthDoor, bool hasEastDoor, int deltaX, int deltaY )
+void Room::calculateCoordinates( bool hasNorthDoor, bool hasEastDoor )
 {
         bool hasNoFloor = ( this->kindOfFloor == "none" );
 
@@ -888,7 +888,7 @@ void Room::calculateCoordinates( bool hasNorthDoor, bool hasEastDoor, int deltaX
         int xGrid = hasNorthDoor || hasNoFloor ? numberOfTiles.first - 1 : numberOfTiles.first;
         int yGrid = hasEastDoor || hasNoFloor ? numberOfTiles.second - 1 : numberOfTiles.second;
 
-        // if there’s south or west door then variable is odd, in this case subtract one more 1
+        // if there’s south or west door then variable is odd, in such case subtract one more 1
         xGrid += ( xGrid & 1 ? -1 : 0 );
         yGrid += ( yGrid & 1 ? -1 : 0 );
 
@@ -896,10 +896,10 @@ void Room::calculateCoordinates( bool hasNorthDoor, bool hasEastDoor, int deltaX
         // for smaller room the origin moves to center on 8 x 8 grid, as example for 6 x 8 room X moves one tile
         int middlePointX = ( xGrid > 8 || yGrid > 8 ? getWhereToDraw()->w : ScreenWidth ) >> 1 ;
         int middlePointY = ScreenHeight / 3 ;
-        this->coordinates.first = middlePointX - deltaX
+        this->coordinates.first = middlePointX
                                 - ( hasNorthDoor || hasNoFloor ? ( tileSize << 1 ) : 0)
                                 + ( hasEastDoor || hasNoFloor ? ( tileSize << 1 ) : 0 );
-        this->coordinates.second = middlePointY - deltaY
+        this->coordinates.second = middlePointY
                                  - ( hasNorthDoor || hasNoFloor ? tileSize : 0 )
                                  - ( hasEastDoor || hasNoFloor ? tileSize : 0 );
 

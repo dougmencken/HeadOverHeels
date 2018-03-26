@@ -9,8 +9,6 @@
       <xsd:element name="yTiles" type="xsd:int"/>
       <xsd:element name="width" type="xsd:int"/>
       <xsd:element name="floorType" type="xsd:string"/>
-      <xsd:element name="deltaX" type="xsd:int" minOccurs="0"/>
-      <xsd:element name="deltaY" type="xsd:int" minOccurs="0"/>
       <xsd:element name="triple-room-data" minOccurs="0">
         <xsd:complexType>
           <xsd:sequence>

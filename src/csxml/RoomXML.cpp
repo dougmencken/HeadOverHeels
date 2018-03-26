@@ -166,54 +166,6 @@ namespace rxml
     this->floorType_.set (floorType);
   }
 
-  const RoomXML::deltaX_optional& RoomXML::
-  deltaX () const
-  {
-    return this->deltaX_;
-  }
-
-  RoomXML::deltaX_optional& RoomXML::
-  deltaX ()
-  {
-    return this->deltaX_;
-  }
-
-  void RoomXML::
-  deltaX (const deltaX_type& deltaX)
-  {
-    this->deltaX_.set (deltaX);
-  }
-
-  void RoomXML::
-  deltaX (const deltaX_optional& deltaX)
-  {
-    this->deltaX_ = deltaX;
-  }
-
-  const RoomXML::deltaY_optional& RoomXML::
-  deltaY () const
-  {
-    return this->deltaY_;
-  }
-
-  RoomXML::deltaY_optional& RoomXML::
-  deltaY ()
-  {
-    return this->deltaY_;
-  }
-
-  void RoomXML::
-  deltaY (const deltaY_type& deltaY)
-  {
-    this->deltaY_.set (deltaY);
-  }
-
-  void RoomXML::
-  deltaY (const deltaY_optional& deltaY)
-  {
-    this->deltaY_ = deltaY;
-  }
-
   const RoomXML::triple_room_data_optional& RoomXML::
   triple_room_data () const
   {
@@ -1509,8 +1461,6 @@ namespace rxml
     yTiles_ (yTiles, ::xml_schema::flags (), this),
     width_ (width, ::xml_schema::flags (), this),
     floorType_ (floorType, ::xml_schema::flags (), this),
-    deltaX_ (::xml_schema::flags (), this),
-    deltaY_ (::xml_schema::flags (), this),
     triple_room_data_ (::xml_schema::flags (), this),
     floor_ (floor, ::xml_schema::flags (), this),
     walls_ (::xml_schema::flags (), this),
@@ -1529,8 +1479,6 @@ namespace rxml
     yTiles_ (x.yTiles_, f, this),
     width_ (x.width_, f, this),
     floorType_ (x.floorType_, f, this),
-    deltaX_ (x.deltaX_, f, this),
-    deltaY_ (x.deltaY_, f, this),
     triple_room_data_ (x.triple_room_data_, f, this),
     floor_ (x.floor_, f, this),
     walls_ (x.walls_, f, this),
@@ -1549,8 +1497,6 @@ namespace rxml
     yTiles_ (f, this),
     width_ (f, this),
     floorType_ (f, this),
-    deltaX_ (f, this),
-    deltaY_ (f, this),
     triple_room_data_ (f, this),
     floor_ (f, this),
     walls_ (f, this),
@@ -1644,28 +1590,6 @@ namespace rxml
         if (!floorType_.present ())
         {
           this->floorType (r);
-          continue;
-        }
-      }
-
-      // deltaX
-      //
-      if (n.name () == "deltaX" && n.namespace_ ().empty ())
-      {
-        if (!this->deltaX ())
-        {
-          this->deltaX (deltaX_traits::create (i, f, this));
-          continue;
-        }
-      }
-
-      // deltaY
-      //
-      if (n.name () == "deltaY" && n.namespace_ ().empty ())
-      {
-        if (!this->deltaY ())
-        {
-          this->deltaY (deltaY_traits::create (i, f, this));
           continue;
         }
       }

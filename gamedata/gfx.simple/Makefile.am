@@ -44,10 +44,6 @@ gamedatagfxsimple_DATA = item.png/ball-shadows.png \
 			item.png/emperor.png \
 			item.png/fish-shadows.png \
 			item.png/fish.png \
-			item.png/freedonian-head-shadows.png \
-			item.png/freedonian-head.png \
-			item.png/freedonian-heels-shadows.png \
-			item.png/freedonian-heels.png \
 			item.png/handbag.png \
 			item.png/head-shadows.png \
 			item.png/head.png \

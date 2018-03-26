@@ -326,42 +326,6 @@ namespace rxml
     void
     floorType (::std::auto_ptr< floorType_type > p);
 
-    // deltaX
-    //
-    typedef ::xml_schema::int_ deltaX_type;
-    typedef ::xsd::cxx::tree::optional< deltaX_type > deltaX_optional;
-    typedef ::xsd::cxx::tree::traits< deltaX_type, char > deltaX_traits;
-
-    const deltaX_optional&
-    deltaX () const;
-
-    deltaX_optional&
-    deltaX ();
-
-    void
-    deltaX (const deltaX_type& x);
-
-    void
-    deltaX (const deltaX_optional& x);
-
-    // deltaY
-    //
-    typedef ::xml_schema::int_ deltaY_type;
-    typedef ::xsd::cxx::tree::optional< deltaY_type > deltaY_optional;
-    typedef ::xsd::cxx::tree::traits< deltaY_type, char > deltaY_traits;
-
-    const deltaY_optional&
-    deltaY () const;
-
-    deltaY_optional&
-    deltaY ();
-
-    void
-    deltaY (const deltaY_type& x);
-
-    void
-    deltaY (const deltaY_optional& x);
-
     // triple-room-data
     //
     typedef ::rxml::triple_room_data triple_room_data_type;
@@ -475,8 +439,6 @@ namespace rxml
     ::xsd::cxx::tree::one< yTiles_type > yTiles_;
     ::xsd::cxx::tree::one< width_type > width_;
     ::xsd::cxx::tree::one< floorType_type > floorType_;
-    deltaX_optional deltaX_;
-    deltaY_optional deltaY_;
     triple_room_data_optional triple_room_data_;
     ::xsd::cxx::tree::one< floor_type > floor_;
     walls_optional walls_;
