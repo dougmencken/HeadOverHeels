@@ -287,9 +287,9 @@ public:
 
         Way getOrientation () const {  return orientation ;  }
 
-        BITMAP * getRawImage () {  return rawImage ;  }
+        BITMAP * getRawImage () const {  return rawImage ;  }
 
-        BITMAP * getImageOfShadow () {  return shadow ;  }
+        BITMAP * getImageOfShadow () const {  return shadow ;  }
 
         BITMAP * getProcessedImage () const {  return processedImage ;  }
 

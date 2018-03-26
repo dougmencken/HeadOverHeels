@@ -48,7 +48,7 @@ private:
         /**
          * Position of this segment on wall, the smaller the closer to point of origin
          */
-        int index ;
+        int position ;
 
         std::pair < int, int > offset ;
 
@@ -61,7 +61,9 @@ public:
 
         bool isOnX () const {  return onX ;  }
 
-        int getIndex () {  return index ;  }
+        bool isOnY () const {  return ! onX ;  }
+
+        int getPosition () {  return position ;  }
 
 };
 

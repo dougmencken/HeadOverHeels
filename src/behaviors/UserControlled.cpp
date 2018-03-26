@@ -504,7 +504,7 @@ void UserControlled::takeItem( PlayerItem * player )
 
                                 SoundManager::getInstance()->play( player->getOriginalLabel(), TakeItem );
 
-                                std::cout << "took item \"" << takenItem->getLabel() << "\"" << std::endl ;
+                                std::cout << "took item \"" << takenItem->getUniqueName() << "\"" << std::endl ;
                         }
                 }
         }

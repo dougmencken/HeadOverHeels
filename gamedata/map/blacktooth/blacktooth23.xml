@@ -387,39 +387,39 @@
       <index>8</index>
       <picture>jail-wall-x.png</picture>
     </wall>
+    <wall>
+      <axis>y</axis>
+      <index>0</index>
+      <picture>jail-wall-y.png</picture>
+    </wall>
+    <wall>
+      <axis>y</axis>
+      <index>1</index>
+      <picture>jail-wall-y.png</picture>
+    </wall>
+    <wall>
+      <axis>y</axis>
+      <index>2</index>
+      <picture>jail-wall-y.png</picture>
+    </wall>
+    <wall>
+      <axis>y</axis>
+      <index>5</index>
+      <picture>jail-wall-y.png</picture>
+    </wall>
+    <wall>
+      <axis>y</axis>
+      <index>6</index>
+      <picture>jail-wall-y.png</picture>
+    </wall>
+    <wall>
+      <axis>y</axis>
+      <index>7</index>
+      <picture>jail-wall-y.png</picture>
+    </wall>
   </walls>
 
   <items>
-    <item x="0" y="0" z="0">
-      <label>jail-wall-y</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="0" y="1" z="0">
-      <label>jail-wall-y</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="0" y="2" z="0">
-      <label>jail-wall-y</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="0" y="5" z="0">
-      <label>jail-wall-y</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="0" y="6" z="0">
-      <label>jail-wall-y</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="0" y="7" z="0">
-      <label>jail-wall-y</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
     <item x="0" y="3" z="-1">
       <label>jail-door-north</label>
       <direction>north</direction>

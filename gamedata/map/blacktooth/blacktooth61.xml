@@ -247,19 +247,19 @@
       <index>8</index>
       <picture>jail-wall-y.png</picture>
     </wall>
+    <wall>
+      <axis>x</axis>
+      <index>0</index>
+      <picture>jail-wall-x.png</picture>
+    </wall>
+    <wall>
+      <axis>x</axis>
+      <index>3</index>
+      <picture>jail-wall-x.png</picture>
+    </wall>
   </walls>
 
   <items>
-    <item x="0" y="0" z="0">
-      <label>jail-wall-x</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="3" y="0" z="0">
-      <label>jail-wall-x</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
     <item x="1" y="0" z="-1">
       <label>jail-shaft-east</label>
       <direction>none</direction>

@@ -247,19 +247,19 @@
       <index>8</index>
       <picture>safari-wall-x-1.png</picture>
     </wall>
+    <wall>
+      <axis>y</axis>
+      <index>0</index>
+      <picture>safari-wall-y-1.png</picture>
+    </wall>
+    <wall>
+      <axis>y</axis>
+      <index>3</index>
+      <picture>safari-wall-y-1.png</picture>
+    </wall>
   </walls>
 
   <items>
-    <item x="0" y="0" z="0">
-      <label>safari-wall-y-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="0" y="3" z="0">
-      <label>safari-wall-y-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
     <item x="0" y="1" z="-1">
       <label>safari-shaft-north</label>
       <direction>none</direction>

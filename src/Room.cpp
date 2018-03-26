@@ -227,6 +227,14 @@ void Room::addDoor( Door * door )
         door->setMediator( mediator );
         this->doors[ door->getWhereIsDoor() ] = door;
 
+        // update position of walls
+        for ( std::vector< Wall * >::iterator wx = this->wallX.begin (); wx != this->wallX.end (); ++wx ) {
+                ( *wx )->calculateOffset();
+        }
+        for ( std::vector< Wall * >::iterator wy = this->wallY.begin (); wy != this->wallY.end (); ++wy ) {
+                ( *wy )->calculateOffset();
+        }
+
         // each door is actually three free items
         this->addFreeItem( door->getLeftJamb() );
         this->addFreeItem( door->getRightJamb() );
@@ -750,7 +758,7 @@ void Room::draw( BITMAP* where )
                         camera->centerOn( mediator->getActiveCharacter () );
                 }
 
-                // draw tiles of room
+                // draw tiles of floor
                 for ( unsigned int xCell = 0; xCell < this->numberOfTiles.first; xCell++ )
                 {
                         for ( unsigned int yCell = 0; yCell < this->numberOfTiles.second; yCell++ )
