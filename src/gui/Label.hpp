@@ -14,6 +14,7 @@
 #include <string>
 #include <allegro.h>
 
+#include "Ism.hpp"
 #include "Gui.hpp"
 #include "Widget.hpp"
 #include "Font.hpp"
@@ -38,10 +39,10 @@ public:
 
         /**
          * Constructor
-         * @param text The text of this label
-         * @param family Family of font to draw characters
-         * @param color Color of text
-         * @param spacing Space between characters
+         * @param text the text of this label
+         * @param family family of font to draw characters
+         * @param color color of text
+         * @param spacing space between letters
          */
         Label( const std::string& text, const std::string& family, const std::string& color, int spacing = 0 ) ;
 
@@ -55,7 +56,7 @@ public:
 
         void changeFontFamilyAndColor ( const std::string& family, const std::string& color ) ;
 
-        void draw ( BITMAP* where ) ;
+        virtual void draw ( BITMAP * where ) ;
 
         /**
          * Responde a la pulsación de una tecla
@@ -68,11 +69,12 @@ protected:
 
         /**
          * Create image of label
-         * @param text String of characters in utf-8
-         * @param font Font to draw these characters
-         * @return The image with pure magenta background and the text
+         * @param text string of characters in utf-8
+         * @param font font to draw these characters
          */
-        BITMAP * createImageOfLabel ( const std::string& text, Font * font ) ;
+        virtual void createImageOfLabel ( const std::string& text, Font * font ) ;
+
+        BITMAP * imageOfLetters ;
 
 private:
 
@@ -84,22 +86,17 @@ private:
 
         int spacing ;
 
-        /**
-         * Image made as composition of characters
-         */
-        BITMAP* buffer ;
-
-        Action* myAction ;
+        Action * myAction ;
 
 public:
 
-        std::string getText () const {  return this->text ;  }
+        const std::string& getText () const {  return this->text ;  }
 
         void setText( const std::string& newText ) {  this->text = newText ; update () ;  }
 
-        std::string getFontFamily () const {  return this->fontFamily ;  }
+        const std::string& getFontFamily () const {  return this->fontFamily ;  }
 
-        std::string getColor () const {  return this->color ;  }
+        const std::string& getColor () const {  return this->color ;  }
 
         Font * getFont () const {  return getFontByFamilyAndColor( fontFamily, color ) ;  }
 

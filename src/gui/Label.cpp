@@ -3,7 +3,8 @@
 #include "Color.hpp"
 #include "Action.hpp"
 #include "GuiManager.hpp"
-#include "Ism.hpp"
+#include "GameManager.hpp"
+
 #include <iostream>
 
 
@@ -12,11 +13,11 @@ namespace gui
 
 Label::Label( const std::string& text )
 : Widget( ),
+        imageOfLetters( nilPointer ),
         text( text ),
         fontFamily( "regular" ),
         color( "white" ),
         spacing( 0 ),
-        buffer( nilPointer ),
         myAction( nilPointer )
 {
         createImageOfLabel( text, Label::getFontByFamilyAndColor( fontFamily, color ) );
@@ -24,11 +25,11 @@ Label::Label( const std::string& text )
 
 Label::Label( const std::string& text, const std::string& family, const std::string& color, int spacing )
 : Widget( ),
+        imageOfLetters( nilPointer ),
         text( text ),
         fontFamily( family ),
         color( color ),
         spacing( spacing ),
-        buffer( nilPointer ),
         myAction( nilPointer )
 {
         createImageOfLabel( text, Label::getFontByFamilyAndColor( family, color ) );
@@ -36,7 +37,7 @@ Label::Label( const std::string& text, const std::string& family, const std::str
 
 Label::~Label( )
 {
-        allegro::destroyBitmap( this->buffer );
+        allegro::destroyBitmap( imageOfLetters );
 }
 
 /* static */
@@ -71,7 +72,7 @@ void Label::changeFontFamilyAndColor( const std::string& family, const std::stri
 
 void Label::draw( BITMAP* where )
 {
-        allegro::drawSprite( where, this->buffer, this->getX (), this->getY () );
+        allegro::drawSprite( where, imageOfLetters, getX(), getY() );
 }
 
 void Label::handleKey( int key )
@@ -82,23 +83,23 @@ void Label::handleKey( int key )
         }
 }
 
-BITMAP * Label::createImageOfLabel( const std::string& text, Font * font )
+void Label::createImageOfLabel( const std::string& text, Font * font )
 {
-        // re-create buffer
-        if ( this->buffer != nilPointer )
+        // re-create image of letters
+        if ( imageOfLetters != nilPointer )
         {
-                allegro::destroyBitmap( this->buffer );
+                allegro::destroyBitmap( imageOfLetters );
         }
 
-        buffer = create_bitmap_ex( 32, getWidth(), getHeight() );
-        clear_to_color( buffer, Color::colorOfTransparency()->toAllegroColor () );
+        imageOfLetters = create_bitmap_ex( 32, getWidth(), getHeight() );
+        clear_to_color( imageOfLetters, Color::colorOfTransparency()->toAllegroColor () );
 
         const size_t numberOfColors = 3;
         std::string multiColors[ numberOfColors ] = {  "cyan", "yellow", "orange"  }; // sequence of colors for multi~color labels
         /* if ( isomot::GameManager::getInstance()->isSimpleGraphicSet() )
                 multiColors[ 2 ] = "white"; // original speccy sequence is “ cyan yellow white ” */
 
-        size_t colorIndex( 0 ); // index in that sequence for character to draw
+        unsigned short cycle = 0; // position in that sequence for character to draw
         Font* fontToUse = font ;
 
         size_t charPos = 0; // position of character in the string which for utf-8 isn't always the same as character’s offset in bytes
@@ -109,17 +110,17 @@ BITMAP * Label::createImageOfLabel( const std::string& text, Font * font )
                 if ( this->color == "multicolor" )
                 {
                         // pick new font with color for this letter
-                        fontToUse = Label::getFontByFamilyAndColor( font->getFamily(), multiColors[ colorIndex ] );
+                        fontToUse = Label::getFontByFamilyAndColor( font->getFamily(), multiColors[ cycle ] );
                         if ( fontToUse == nilPointer )
                         {
                                 std::cerr << "can’t get font with family \"" << font->getFamily() << "\"" <<
-                                                " for color \"" << multiColors[ colorIndex ] << "\"" << std::endl ;
+                                                " for color \"" << multiColors[ cycle ] << "\"" << std::endl ;
                                 fontToUse = font ;
                         }
 
                         // cycle in sequence of colors
-                        colorIndex++;
-                        if ( colorIndex >= numberOfColors ) colorIndex = 0;
+                        cycle++;
+                        if ( cycle >= numberOfColors ) cycle = 0;
                 }
 
                 size_t from = std::distance( text.begin (), iter );
@@ -129,10 +130,10 @@ BITMAP * Label::createImageOfLabel( const std::string& text, Font * font )
                 // draw letter
                 blit(
                         fontToUse->getPictureOfLetter( utf8letter ),
-                        buffer,
+                        imageOfLetters,
                         0,
                         0,
-                        charPos * ( fontToUse->getCharWidth() + spacing ),
+                        charPos * ( fontToUse->getCharWidth() + getSpacing() ),
                         0,
                         fontToUse->getCharWidth(),
                         fontToUse->getCharHeight()
@@ -140,8 +141,6 @@ BITMAP * Label::createImageOfLabel( const std::string& text, Font * font )
 
                 charPos ++;
         }
-
-        return this->buffer;
 }
 
 bool EqualXYOfLabel::operator() ( const Label* label, std::pair < int, int > thatXY ) const

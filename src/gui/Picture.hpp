@@ -31,11 +31,7 @@ public:
 
         virtual ~Picture( ) ;
 
-       /**
-        * Dibuja el elemento
-        * @param where Imagen donde será dibujado
-        */
-        void draw ( BITMAP * where ) ;
+        virtual void draw ( BITMAP * where ) ;
 
         void handleKey ( int /* rawKey */ ) {  /* do nothing */  }
 

@@ -12,11 +12,11 @@
 #define GameManager_hpp_
 
 #include <string>
-#include <sstream> // for ostringstream
 
 #include "csxml/SaveGameXML.hpp"
 #include "Ism.hpp"
 #include "Room.hpp"
+#include "ColorCyclingLabel.hpp"
 
 
 namespace isomot
@@ -266,6 +266,8 @@ public:
         void toggleBackgroundPicture () {  drawBackgroundPicture = ! drawBackgroundPicture ;  }
 
 private:
+
+        gui::ColorCyclingLabel * freedomLabel ;
 
         std::string chosenGraphicSet ;
 

@@ -33,7 +33,7 @@ public:
 
         virtual ~AnimatedPicture( ) ;
 
-        void draw ( BITMAP * where ) ;
+        virtual void draw ( BITMAP * where ) ;
 
         void handleKey ( int /* rawKey */ ) {  /* do nothing */  }
 

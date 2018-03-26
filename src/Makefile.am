@@ -109,6 +109,8 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			gui/AnimatedPicture.hpp \
 			gui/Label.cpp \
 			gui/Label.hpp \
+			gui/ColorCyclingLabel.cpp \
+			gui/ColorCyclingLabel.hpp \
 			gui/LanguageText.cpp \
 			gui/LanguageText.hpp \
 			gui/LanguageManager.cpp \

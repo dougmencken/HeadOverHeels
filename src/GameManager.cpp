@@ -6,6 +6,7 @@
 #include "PlayerItem.hpp"
 #include "Picture.hpp"
 #include "Label.hpp"
+#include "ColorCyclingLabel.hpp"
 #include "GameFileManager.hpp"
 #include "GuiManager.hpp"
 #include "MapManager.hpp"
@@ -25,7 +26,8 @@ GameManager * GameManager::instance = nilPointer ;
 
 
 GameManager::GameManager( )
-        : chosenGraphicSet( "gfx" )
+        : freedomLabel( nilPointer )
+        , chosenGraphicSet( "gfx" )
         , vidasInfinitas( false )
         , immunityToCollisions( false )
         , playTuneOfScenery( true )
@@ -105,6 +107,8 @@ GameManager::~GameManager( )
         allegro::destroyBitmap( grayPictureOfGranVelocidad );
         allegro::destroyBitmap( pictureOfEscudo );
         allegro::destroyBitmap( grayPictureOfEscudo );
+
+        delete freedomLabel ;
 
         delete isomot ;
 }
@@ -270,7 +274,7 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
         // scenery of this room
         std::string scenery = this->isomot->getMapManager()->getActiveRoom()->getScenery();
 
-        // empty scenery means it is the final screen
+        // empty scenery means that it is the final room
         if ( scenery != "" )
         {
                 if ( drawBackgroundPicture )
@@ -375,10 +379,14 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
         }
         else
         {
-                // draw FREEDOM in the final screen
-                gui::Label freedomLabel( "FREEDOM", "big", "multicolor" );
-                freedomLabel.moveTo( ScreenWidth / 10, ScreenHeight - 100 );
-                freedomLabel.draw( where );
+                // draw color~cycling FREEDOM on the final scene
+                if ( freedomLabel == nilPointer )
+                {
+                        freedomLabel = new gui::ColorCyclingLabel( "FREEDOM", "big" );
+                        freedomLabel->moveTo( ScreenWidth / 10, ScreenHeight - 100 );
+                }
+
+                freedomLabel->draw( where );
         }
 
         acquire_screen();
