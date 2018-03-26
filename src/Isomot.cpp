@@ -824,11 +824,11 @@ void Isomot::updateFinalRoom()
 
                 this->finalRoomBuilt = true;
                 std::cout << "final room is okay" << std::endl ;
+
+                SoundManager::getInstance()->playOgg ( "music/freedom.ogg", /* loop */ true );
         }
         else
         {
-                //////////SoundManager::getInstance()->playOgg ( "music/begin.ogg", /* loop */ false );
-
                 if ( finalRoomTimer->getValue() > 4 /* each 4 seconds */ )
                 {
                         FreeItem* finalBall = new FreeItem( this->itemDataManager->findDataByLabel( "ball" ), 146, 93, LayerHeight, Nowhere );

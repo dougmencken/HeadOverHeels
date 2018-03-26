@@ -4,6 +4,7 @@ gamedatamusic_DATA = CreditsTheme.ogg \
 		HeadOverHeels.ogg \
 		MainTheme.ogg \
 		begin.ogg \
+		freedom.ogg \
 		market.ogg \
 		blacktooth.ogg \
 		jail.ogg \
