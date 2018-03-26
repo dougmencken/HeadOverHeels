@@ -23,1427 +23,1427 @@
     </room>
     -->
 
-    <room file="blacktooth/blacktooth01.xml">
-        <south>blacktooth/blacktooth23.xml</south>
-        <teleport>blacktooth/blacktooth02.xml</teleport>
+    <room file="blacktooth1head.xml">
+        <south>blacktooth23heels.xml</south>
+        <teleport>blacktooth2.xml</teleport>
     </room>
 
-    <room file="blacktooth/blacktooth02.xml">
-        <west>blacktooth/blacktooth03.xml</west>
-        <teleport>blacktooth/blacktooth01.xml</teleport>
+    <room file="blacktooth2.xml">
+        <west>blacktooth3.xml</west>
+        <teleport>blacktooth1head.xml</teleport>
     </room>
 
-    <room file="blacktooth/blacktooth03.xml">
-        <east>blacktooth/blacktooth02.xml</east>
-        <floor>blacktooth/blacktooth04.xml</floor>
+    <room file="blacktooth3.xml">
+        <east>blacktooth2.xml</east>
+        <floor>blacktooth4.xml</floor>
     </room>
 
-    <room file="blacktooth/blacktooth04.xml">
-        <west>blacktooth/blacktooth05.xml</west>
-        <roof>blacktooth/blacktooth03.xml</roof>
+    <room file="blacktooth4.xml">
+        <west>blacktooth5.xml</west>
+        <roof>blacktooth3.xml</roof>
     </room>
 
-    <room file="blacktooth/blacktooth05.xml">
-        <north>blacktooth/blacktooth06.xml</north>
-        <east>blacktooth/blacktooth04.xml</east>
-        <west>blacktooth/blacktooth07.xml</west>
+    <room file="blacktooth5.xml">
+        <north>blacktooth6.xml</north>
+        <east>blacktooth4.xml</east>
+        <west>blacktooth7.xml</west>
     </room>
 
-    <room file="blacktooth/blacktooth06.xml">
-        <south>blacktooth/blacktooth05.xml</south>
+    <room file="blacktooth6.xml">
+        <south>blacktooth5.xml</south>
     </room>
 
-    <room file="blacktooth/blacktooth07.xml">
-        <north>blacktooth/blacktooth10.xml</north>
-        <east>blacktooth/blacktooth05.xml</east>
-        <west>blacktooth/blacktooth08.xml</west>
+    <room file="blacktooth7.xml">
+        <north>blacktooth10.xml</north>
+        <east>blacktooth5.xml</east>
+        <west>blacktooth8fish.xml</west>
     </room>
 
-    <room file="blacktooth/blacktooth08.xml">
-        <south>blacktooth/blacktooth09.xml</south>
-        <east>blacktooth/blacktooth07.xml</east>
+    <room file="blacktooth8fish.xml">
+        <south>blacktooth9.xml</south>
+        <east>blacktooth7.xml</east>
     </room>
 
-    <room file="blacktooth/blacktooth09.xml">
-        <north>blacktooth/blacktooth08.xml</north>
+    <room file="blacktooth9.xml">
+        <north>blacktooth8fish.xml</north>
     </room>
 
-    <room file="blacktooth/blacktooth10.xml">
-        <north>blacktooth/blacktooth11.xml</north>
-        <south>blacktooth/blacktooth07.xml</south>
+    <room file="blacktooth10.xml">
+        <north>blacktooth11.xml</north>
+        <south>blacktooth7.xml</south>
     </room>
 
-    <room file="blacktooth/blacktooth11.xml">
-        <north>blacktooth/blacktooth12.xml</north>
-        <south>blacktooth/blacktooth10.xml</south>
-        <east>blacktooth/blacktooth32.xml</east>
-        <west>blacktooth/blacktooth31.xml</west>
+    <room file="blacktooth11.xml">
+        <north>blacktooth12.xml</north>
+        <south>blacktooth10.xml</south>
+        <east>blacktooth32.xml</east>
+        <west>blacktooth31.xml</west>
     </room>
 
-    <room file="blacktooth/blacktooth12.xml">
-        <north>blacktooth/blacktooth13.xml</north>
-        <south>blacktooth/blacktooth11.xml</south>
+    <room file="blacktooth12.xml">
+        <north>blacktooth13.xml</north>
+        <south>blacktooth11.xml</south>
     </room>
 
-    <room file="blacktooth/blacktooth13.xml">
-        <north>blacktooth/blacktooth14.xml</north>
-        <south>blacktooth/blacktooth12.xml</south>
-        <east>blacktooth/blacktooth15.xml</east>
+    <room file="blacktooth13.xml">
+        <north>blacktooth14.xml</north>
+        <south>blacktooth12.xml</south>
+        <east>blacktooth15.xml</east>
     </room>
 
-    <room file="blacktooth/blacktooth14.xml">
-        <south>blacktooth/blacktooth13.xml</south>
+    <room file="blacktooth14.xml">
+        <south>blacktooth13.xml</south>
     </room>
 
-    <room file="blacktooth/blacktooth15.xml">
-        <east>blacktooth/blacktooth16.xml</east>
-        <west>blacktooth/blacktooth13.xml</west>
+    <room file="blacktooth15.xml">
+        <east>blacktooth16.xml</east>
+        <west>blacktooth13.xml</west>
     </room>
 
-    <room file="blacktooth/blacktooth16.xml">
-        <north>blacktooth/blacktooth17.xml</north>
-        <west>blacktooth/blacktooth15.xml</west>
+    <room file="blacktooth16.xml">
+        <north>blacktooth17.xml</north>
+        <west>blacktooth15.xml</west>
     </room>
 
-    <room file="blacktooth/blacktooth17.xml">
-        <north-east>blacktooth/blacktooth18.xml</north-east>
-        <north-west>blacktooth/blacktooth19.xml</north-west>
-        <south-west>blacktooth/blacktooth16.xml</south-west>
+    <room file="blacktooth17.xml">
+        <north-east>blacktooth18.xml</north-east>
+        <north-west>blacktooth19.xml</north-west>
+        <south-west>blacktooth16.xml</south-west>
     </room>
 
-    <room file="blacktooth/blacktooth18.xml">
-        <north>blacktooth/blacktooth20.xml</north>
-        <south>blacktooth/blacktooth17.xml</south>
+    <room file="blacktooth18.xml">
+        <north>blacktooth20.xml</north>
+        <south>blacktooth17.xml</south>
     </room>
 
-    <room file="blacktooth/blacktooth19.xml">
-        <south>blacktooth/blacktooth17.xml</south>
-        <east>blacktooth/blacktooth20.xml</east>
+    <room file="blacktooth19.xml">
+        <south>blacktooth17.xml</south>
+        <east>blacktooth20.xml</east>
     </room>
 
-    <room file="blacktooth/blacktooth20.xml">
-        <south>blacktooth/blacktooth18.xml</south>
-        <east>blacktooth/blacktooth21.xml</east>
-        <west>blacktooth/blacktooth19.xml</west>
+    <room file="blacktooth20.xml">
+        <south>blacktooth18.xml</south>
+        <east>blacktooth21fish.xml</east>
+        <west>blacktooth19.xml</west>
     </room>
 
-    <room file="blacktooth/blacktooth21.xml">
-        <east>blacktooth/blacktooth22.xml</east>
-        <west>blacktooth/blacktooth20.xml</west>
+    <room file="blacktooth21fish.xml">
+        <east>blacktooth22.xml</east>
+        <west>blacktooth20.xml</west>
     </room>
 
-    <room file="blacktooth/blacktooth22.xml">
-        <west>blacktooth/blacktooth21.xml</west>
-        <floor>blacktooth/blacktooth44.xml</floor>
+    <room file="blacktooth22.xml">
+        <west>blacktooth21fish.xml</west>
+        <floor>blacktooth44market.xml</floor>
     </room>
 
-    <room file="blacktooth/blacktooth23.xml">
-        <north>blacktooth/blacktooth01.xml</north>
-        <teleport>blacktooth/blacktooth24.xml</teleport>
+    <room file="blacktooth23heels.xml">
+        <north>blacktooth1head.xml</north>
+        <teleport>blacktooth24.xml</teleport>
     </room>
 
-    <room file="blacktooth/blacktooth24.xml">
-        <north>blacktooth/blacktooth25.xml</north>
-        <teleport>blacktooth/blacktooth23.xml</teleport>
+    <room file="blacktooth24.xml">
+        <north>blacktooth25.xml</north>
+        <teleport>blacktooth23heels.xml</teleport>
     </room>
 
-    <room file="blacktooth/blacktooth25.xml">
-        <south>blacktooth/blacktooth24.xml</south>
-        <roof>blacktooth/blacktooth26.xml</roof>
+    <room file="blacktooth25.xml">
+        <south>blacktooth24.xml</south>
+        <roof>blacktooth26.xml</roof>
     </room>
 
-    <room file="blacktooth/blacktooth26.xml">
-        <east>blacktooth/blacktooth27.xml</east>
-        <floor>blacktooth/blacktooth25.xml</floor>
+    <room file="blacktooth26.xml">
+        <east>blacktooth27fish.xml</east>
+        <floor>blacktooth25.xml</floor>
     </room>
 
-    <room file="blacktooth/blacktooth27.xml">
-        <south>blacktooth/blacktooth28.xml</south>
-        <east>blacktooth/blacktooth29.xml</east>
-        <west>blacktooth/blacktooth26.xml</west>
+    <room file="blacktooth27fish.xml">
+        <south>blacktooth28.xml</south>
+        <east>blacktooth29.xml</east>
+        <west>blacktooth26.xml</west>
     </room>
 
-    <room file="blacktooth/blacktooth28.xml">
-        <north>blacktooth/blacktooth27.xml</north>
+    <room file="blacktooth28.xml">
+        <north>blacktooth27fish.xml</north>
     </room>
 
-    <room file="blacktooth/blacktooth29.xml">
-        <west>blacktooth/blacktooth27.xml</west>
-        <roof>blacktooth/blacktooth30.xml</roof>
+    <room file="blacktooth29.xml">
+        <west>blacktooth27fish.xml</west>
+        <roof>blacktooth30.xml</roof>
     </room>
 
-    <room file="blacktooth/blacktooth30.xml">
-        <south>blacktooth/blacktooth31.xml</south>
-        <floor>blacktooth/blacktooth29.xml</floor>
+    <room file="blacktooth30.xml">
+        <south>blacktooth31.xml</south>
+        <floor>blacktooth29.xml</floor>
     </room>
 
-    <room file="blacktooth/blacktooth31.xml">
-        <north>blacktooth/blacktooth30.xml</north>
-        <east>blacktooth/blacktooth11.xml</east>
+    <room file="blacktooth31.xml">
+        <north>blacktooth30.xml</north>
+        <east>blacktooth11.xml</east>
     </room>
 
-    <room file="blacktooth/blacktooth32.xml">
-        <east>blacktooth/blacktooth33.xml</east>
-        <west>blacktooth/blacktooth11.xml</west>
+    <room file="blacktooth32.xml">
+        <east>blacktooth33.xml</east>
+        <west>blacktooth11.xml</west>
     </room>
 
-    <room file="blacktooth/blacktooth33.xml">
-        <west>blacktooth/blacktooth32.xml</west>
-        <roof>blacktooth/blacktooth34.xml</roof>
+    <room file="blacktooth33.xml">
+        <west>blacktooth32.xml</west>
+        <roof>blacktooth34.xml</roof>
     </room>
 
-    <room file="blacktooth/blacktooth34.xml">
-        <east>blacktooth/blacktooth35.xml</east>
-        <floor>blacktooth/blacktooth33.xml</floor>
+    <room file="blacktooth34.xml">
+        <east>blacktooth35.xml</east>
+        <floor>blacktooth33.xml</floor>
     </room>
 
-    <room file="blacktooth/blacktooth35.xml">
-        <north>blacktooth/blacktooth36.xml</north>
-        <west>blacktooth/blacktooth34.xml</west>
+    <room file="blacktooth35.xml">
+        <north>blacktooth36.xml</north>
+        <west>blacktooth34.xml</west>
     </room>
 
-    <room file="blacktooth/blacktooth36.xml">
-        <south>blacktooth/blacktooth35.xml</south>
-        <east>blacktooth/blacktooth37.xml</east>
+    <room file="blacktooth36.xml">
+        <south>blacktooth35.xml</south>
+        <east>blacktooth37.xml</east>
     </room>
 
-    <room file="blacktooth/blacktooth37.xml">
-        <east>blacktooth/blacktooth38.xml</east>
-        <west>blacktooth/blacktooth36.xml</west>
+    <room file="blacktooth37.xml">
+        <east>blacktooth38.xml</east>
+        <west>blacktooth36.xml</west>
     </room>
 
-    <room file="blacktooth/blacktooth38.xml">
-        <west>blacktooth/blacktooth37.xml</west>
-        <floor>blacktooth/blacktooth39.xml</floor>
+    <room file="blacktooth38.xml">
+        <west>blacktooth37.xml</west>
+        <floor>blacktooth39.xml</floor>
     </room>
 
-    <room file="blacktooth/blacktooth39.xml">
-        <north>blacktooth/blacktooth41.xml</north>
-        <east>blacktooth/blacktooth40.xml</east>
-        <roof>blacktooth/blacktooth38.xml</roof>
+    <room file="blacktooth39.xml">
+        <north>blacktooth41.xml</north>
+        <east>blacktooth40fish.xml</east>
+        <roof>blacktooth38.xml</roof>
     </room>
 
-    <room file="blacktooth/blacktooth40.xml">
-        <west>blacktooth/blacktooth39.xml</west>
+    <room file="blacktooth40fish.xml">
+        <west>blacktooth39.xml</west>
     </room>
 
-    <room file="blacktooth/blacktooth41.xml">
-        <north>blacktooth/blacktooth42.xml</north>
-        <south>blacktooth/blacktooth39.xml</south>
+    <room file="blacktooth41.xml">
+        <north>blacktooth42.xml</north>
+        <south>blacktooth39.xml</south>
     </room>
 
-    <room file="blacktooth/blacktooth42.xml">
-        <north>blacktooth/blacktooth43.xml</north>
-        <south>blacktooth/blacktooth41.xml</south>
+    <room file="blacktooth42.xml">
+        <north>blacktooth43.xml</north>
+        <south>blacktooth41.xml</south>
     </room>
 
-    <room file="blacktooth/blacktooth43.xml">
-        <south>blacktooth/blacktooth42.xml</south>
-        <floor>blacktooth/blacktooth46.xml</floor>
+    <room file="blacktooth43.xml">
+        <south>blacktooth42.xml</south>
+        <floor>blacktooth46market.xml</floor>
     </room>
 
-    <room file="blacktooth/blacktooth44.xml">
-        <south>blacktooth/blacktooth45.xml</south>
-        <roof>blacktooth/blacktooth22.xml</roof>
+    <room file="blacktooth44market.xml">
+        <south>blacktooth45market.xml</south>
+        <roof>blacktooth22.xml</roof>
     </room>
 
-    <room file="blacktooth/blacktooth45.xml">
-        <north>blacktooth/blacktooth44.xml</north>
-        <east>blacktooth/blacktooth46.xml</east>
+    <room file="blacktooth45market.xml">
+        <north>blacktooth44market.xml</north>
+        <east>blacktooth46market.xml</east>
     </room>
 
-    <room file="blacktooth/blacktooth46.xml">
-        <east>blacktooth/blacktooth47.xml</east>
-        <west>blacktooth/blacktooth45.xml</west>
-        <roof>blacktooth/blacktooth43.xml</roof>
+    <room file="blacktooth46market.xml">
+        <east>blacktooth47market.xml</east>
+        <west>blacktooth45market.xml</west>
+        <roof>blacktooth43.xml</roof>
     </room>
 
-    <room file="blacktooth/blacktooth47.xml">
-        <east>blacktooth/blacktooth48.xml</east>
-        <west>blacktooth/blacktooth46.xml</west>
+    <room file="blacktooth47market.xml">
+        <east>blacktooth48market.xml</east>
+        <west>blacktooth46market.xml</west>
     </room>
 
-    <room file="blacktooth/blacktooth48.xml">
-        <north>blacktooth/blacktooth49.xml</north>
-        <west>blacktooth/blacktooth47.xml</west>
+    <room file="blacktooth48market.xml">
+        <north>blacktooth49market.xml</north>
+        <west>blacktooth47market.xml</west>
     </room>
 
-    <room file="blacktooth/blacktooth49.xml">
-        <north>blacktooth/blacktooth50.xml</north>
-        <south>blacktooth/blacktooth48.xml</south>
+    <room file="blacktooth49market.xml">
+        <north>blacktooth50market.xml</north>
+        <south>blacktooth48market.xml</south>
     </room>
 
-    <room file="blacktooth/blacktooth50.xml">
-        <north>blacktooth/blacktooth52.xml</north>
-        <south>blacktooth/blacktooth49.xml</south>
-        <west>blacktooth/blacktooth51.xml</west>
+    <room file="blacktooth50market.xml">
+        <north>blacktooth52market.xml</north>
+        <south>blacktooth49market.xml</south>
+        <west>blacktooth51.xml</west>
     </room>
 
-    <room file="blacktooth/blacktooth51.xml">
-        <east>blacktooth/blacktooth50.xml</east>
-        <teleport>themoon/moon01.xml</teleport>
+    <room file="blacktooth51.xml">
+        <east>blacktooth50market.xml</east>
+        <teleport>moon1.xml</teleport>
     </room>
 
-    <room file="blacktooth/blacktooth52.xml">
-        <south>blacktooth/blacktooth50.xml</south>
-        <east>blacktooth/blacktooth53.xml</east>
+    <room file="blacktooth52market.xml">
+        <south>blacktooth50market.xml</south>
+        <east>blacktooth53market.xml</east>
     </room>
 
-    <room file="blacktooth/blacktooth53.xml">
-        <east>blacktooth/blacktooth54.xml</east>
-        <west>blacktooth/blacktooth52.xml</west>
+    <room file="blacktooth53market.xml">
+        <east>blacktooth54.xml</east>
+        <west>blacktooth52market.xml</west>
     </room>
 
-    <room file="blacktooth/blacktooth54.xml">
-        <west>blacktooth/blacktooth53.xml</west>
-        <floor>blacktooth/blacktooth55.xml</floor>
+    <room file="blacktooth54.xml">
+        <west>blacktooth53market.xml</west>
+        <floor>blacktooth55.xml</floor>
     </room>
 
-    <room file="blacktooth/blacktooth55.xml">
-        <south>blacktooth/blacktooth56.xml</south>
-        <east>blacktooth/blacktooth61.xml</east>
-        <roof>blacktooth/blacktooth54.xml</roof>
+    <room file="blacktooth55.xml">
+        <south>blacktooth56.xml</south>
+        <east>blacktooth61.xml</east>
+        <roof>blacktooth54.xml</roof>
     </room>
 
-    <room file="blacktooth/blacktooth56.xml">
-        <north>blacktooth/blacktooth55.xml</north>
-        <south>blacktooth/blacktooth57.xml</south>
+    <room file="blacktooth56.xml">
+        <north>blacktooth55.xml</north>
+        <south>blacktooth57.xml</south>
     </room>
 
-    <room file="blacktooth/blacktooth57.xml">
-        <north>blacktooth/blacktooth56.xml</north>
-        <east>blacktooth/blacktooth58.xml</east>
-        <teleport>themoon/moon09.xml</teleport>
+    <room file="blacktooth57.xml">
+        <north>blacktooth56.xml</north>
+        <east>blacktooth58.xml</east>
+        <teleport>moon9.xml</teleport>
     </room>
 
-    <room file="blacktooth/blacktooth58.xml">
-        <east-south>blacktooth/blacktooth59.xml</east-south>
-        <west-south>blacktooth/blacktooth57.xml</west-south>
+    <room file="blacktooth58.xml">
+        <east-south>blacktooth59.xml</east-south>
+        <west-south>blacktooth57.xml</west-south>
     </room>
 
-    <room file="blacktooth/blacktooth59.xml">
-        <north>blacktooth/blacktooth63.xml</north>
-        <east>blacktooth/blacktooth60.xml</east>
-        <west>blacktooth/blacktooth58.xml</west>
+    <room file="blacktooth59.xml">
+        <north>blacktooth63.xml</north>
+        <east>blacktooth60.xml</east>
+        <west>blacktooth58.xml</west>
     </room>
 
-    <room file="blacktooth/blacktooth60.xml">
-        <west>blacktooth/blacktooth59.xml</west>
-        <teleport>themoon/moon08.xml</teleport>
+    <room file="blacktooth60.xml">
+        <west>blacktooth59.xml</west>
+        <teleport>moon8.xml</teleport>
     </room>
 
-    <room file="blacktooth/blacktooth61.xml">
-        <east>blacktooth/blacktooth62.xml</east>
-        <west>blacktooth/blacktooth55.xml</west>
+    <room file="blacktooth61.xml">
+        <east>blacktooth62fish.xml</east>
+        <west>blacktooth55.xml</west>
     </room>
 
-    <room file="blacktooth/blacktooth62.xml">
-        <south>blacktooth/blacktooth63.xml</south>
-        <west>blacktooth/blacktooth61.xml</west>
+    <room file="blacktooth62fish.xml">
+        <south>blacktooth63.xml</south>
+        <west>blacktooth61.xml</west>
     </room>
 
-    <room file="blacktooth/blacktooth63.xml">
-        <north>blacktooth/blacktooth62.xml</north>
-        <south>blacktooth/blacktooth59.xml</south>
+    <room file="blacktooth63.xml">
+        <north>blacktooth62fish.xml</north>
+        <south>blacktooth59.xml</south>
     </room>
 
-    <room file="themoon/moon01.xml">
-        <north>themoon/moon02.xml</north>
-        <south>themoon/moon04.xml</south>
-        <teleport>blacktooth/blacktooth51.xml</teleport>
+    <room file="moon1.xml">
+        <north>moon2.xml</north>
+        <south>moon4.xml</south>
+        <teleport>blacktooth51.xml</teleport>
     </room>
 
-    <room file="themoon/moon02.xml">
-        <south>themoon/moon01.xml</south>
-        <east>themoon/moon03.xml</east>
+    <room file="moon2.xml">
+        <south>moon1.xml</south>
+        <east>moon3.xml</east>
     </room>
 
-    <room file="themoon/moon03.xml">
-        <east>themoon/moon13.xml</east>
-        <west>themoon/moon02.xml</west>
+    <room file="moon3.xml">
+        <east>moon13.xml</east>
+        <west>moon2.xml</west>
     </room>
 
-    <room file="themoon/moon04.xml">
-        <north>themoon/moon01.xml</north>
-        <east>themoon/moon05.xml</east>
+    <room file="moon4.xml">
+        <north>moon1.xml</north>
+        <east>moon5.xml</east>
     </room>
 
-    <room file="themoon/moon05.xml">
-        <east>themoon/moon06.xml</east>
-        <west>themoon/moon04.xml</west>
+    <room file="moon5.xml">
+        <east>moon6.xml</east>
+        <west>moon4.xml</west>
     </room>
 
-    <room file="themoon/moon06.xml">
-        <east>themoon/moon07.xml</east>
-        <west>themoon/moon05.xml</west>
+    <room file="moon6.xml">
+        <east>moon7.xml</east>
+        <west>moon5.xml</west>
     </room>
 
-    <room file="themoon/moon07.xml">
-        <north>themoon/moon15.xml</north>
-        <south>themoon/moon08.xml</south>
-        <west>themoon/moon06.xml</west>
+    <room file="moon7.xml">
+        <north>moon15.xml</north>
+        <south>moon8.xml</south>
+        <west>moon6.xml</west>
     </room>
 
-    <room file="themoon/moon08.xml">
-        <north>themoon/moon07.xml</north>
-        <teleport>blacktooth/blacktooth60.xml</teleport>
+    <room file="moon8.xml">
+        <north>moon7.xml</north>
+        <teleport>blacktooth60.xml</teleport>
     </room>
 
-    <room file="themoon/moon09.xml">
-        <north>themoon/moon10.xml</north>
-        <teleport>blacktooth/blacktooth57.xml</teleport>
+    <room file="moon9.xml">
+        <north>moon10.xml</north>
+        <teleport>blacktooth57.xml</teleport>
     </room>
 
-    <room file="themoon/moon10.xml">
-        <south>themoon/moon09.xml</south>
-        <east>themoon/moon11.xml</east>
+    <room file="moon10.xml">
+        <south>moon9.xml</south>
+        <east>moon11.xml</east>
     </room>
 
-    <room file="themoon/moon11.xml">
-        <north>themoon/moon19.xml</north>
-        <east>themoon/moon12.xml</east>
-        <west>themoon/moon10.xml</west>
+    <room file="moon11.xml">
+        <north>moon19.xml</north>
+        <east>moon12.xml</east>
+        <west>moon10.xml</west>
     </room>
 
-    <room file="themoon/moon12.xml">
-        <south>themoon/moon18.xml</south>
-        <west>themoon/moon11.xml</west>
+    <room file="moon12.xml">
+        <south>moon18.xml</south>
+        <west>moon11.xml</west>
     </room>
 
-    <room file="themoon/moon13.xml">
-        <north>themoon/moon16.xml</north>
-        <east>themoon/moon14.xml</east>
-        <west>themoon/moon03.xml</west>
+    <room file="moon13.xml">
+        <north>moon16.xml</north>
+        <east>moon14.xml</east>
+        <west>moon3.xml</west>
     </room>
 
-    <room file="themoon/moon14.xml">
-        <south>themoon/moon15.xml</south>
-        <west>themoon/moon13.xml</west>
+    <room file="moon14.xml">
+        <south>moon15.xml</south>
+        <west>moon13.xml</west>
     </room>
 
-    <room file="themoon/moon15.xml">
-        <north>themoon/moon14.xml</north>
-        <south>themoon/moon07.xml</south>
+    <room file="moon15.xml">
+        <north>moon14.xml</north>
+        <south>moon7.xml</south>
     </room>
 
-    <room file="themoon/moon16.xml">
-        <south>themoon/moon13.xml</south>
-        <west>themoon/moon17.xml</west>
+    <room file="moon16.xml">
+        <south>moon13.xml</south>
+        <west>moon17.xml</west>
     </room>
 
-    <room file="themoon/moon17.xml">
-        <east>themoon/moon16.xml</east>
-        <teleport>themoon/moon18.xml</teleport>
+    <room file="moon17.xml">
+        <east>moon16.xml</east>
+        <teleport>moon18.xml</teleport>
     </room>
 
-    <room file="themoon/moon18.xml">
-        <north>themoon/moon12.xml</north>
-        <teleport>themoon/moon17.xml</teleport>
+    <room file="moon18.xml">
+        <north>moon12.xml</north>
+        <teleport>moon17.xml</teleport>
     </room>
 
-    <room file="themoon/moon19.xml">
-        <north>themoon/moon20.xml</north>
-        <south>themoon/moon11.xml</south>
+    <room file="moon19.xml">
+        <north>moon20.xml</north>
+        <south>moon11.xml</south>
     </room>
 
-    <room file="themoon/moon20.xml">
-        <north>themoon/moon23.xml</north>
-        <south>themoon/moon19.xml</south>
-        <east>themoon/moon21.xml</east>
-        <west>themoon/moon22.xml</west>
+    <room file="moon20.xml">
+        <north>moon23.xml</north>
+        <south>moon19.xml</south>
+        <east>moon21tosafari.xml</east>
+        <west>moon22topenitentiary.xml</west>
     </room>
 
-    <room file="themoon/moon21.xml">
-        <west>themoon/moon20.xml</west>
-        <teleport>safari/safari01.xml</teleport>
+    <room file="moon21tosafari.xml">
+        <west>moon20.xml</west>
+        <teleport>safari1.xml</teleport>
     </room>
 
-    <room file="themoon/moon22.xml">
-        <east>themoon/moon20.xml</east>
-        <teleport>penitentiary/penitentiary01.xml</teleport>
+    <room file="moon22topenitentiary.xml">
+        <east>moon20.xml</east>
+        <teleport>penitentiary1.xml</teleport>
     </room>
 
-    <room file="themoon/moon23.xml">
-        <north>themoon/moon26.xml</north>
-        <south>themoon/moon20.xml</south>
-        <east>themoon/moon24.xml</east>
-        <west>themoon/moon25.xml</west>
+    <room file="moon23.xml">
+        <north>moon26.xml</north>
+        <south>moon20.xml</south>
+        <east>moon24toegyptus.xml</east>
+        <west>moon25tobyblos.xml</west>
     </room>
 
-    <room file="themoon/moon24.xml">
-        <west>themoon/moon23.xml</west>
-        <teleport>egyptus/egyptus01.xml</teleport>
+    <room file="moon24toegyptus.xml">
+        <west>moon23.xml</west>
+        <teleport>egyptus1.xml</teleport>
     </room>
 
-    <room file="themoon/moon25.xml">
-        <east>themoon/moon23.xml</east>
-        <teleport>byblos/byblos01.xml</teleport>
+    <room file="moon25tobyblos.xml">
+        <east>moon23.xml</east>
+        <teleport>byblos1.xml</teleport>
     </room>
 
-    <room file="themoon/moon26.xml">
-        <north>themoon/moon27.xml</north>
-        <south>themoon/moon23.xml</south>
+    <room file="moon26.xml">
+        <north>moon27.xml</north>
+        <south>moon23.xml</south>
     </room>
 
-    <room file="themoon/moon27.xml">
-        <south>themoon/moon26.xml</south>
-        <east>themoon/moon28.xml</east>
-        <west>themoon/moon30.xml</west>
+    <room file="moon27.xml">
+        <south>moon26.xml</south>
+        <east>moon28.xml</east>
+        <west>moon30.xml</west>
     </room>
 
-    <room file="themoon/moon28.xml">
-        <north>themoon/moon29.xml</north>
-        <west>themoon/moon27.xml</west>
+    <room file="moon28.xml">
+        <north>moon29.xml</north>
+        <west>moon27.xml</west>
     </room>
 
-    <room file="themoon/moon29.xml">
-        <south>themoon/moon28.xml</south>
-        <teleport>themoon/moon32.xml</teleport>
+    <room file="moon29.xml">
+        <south>moon28.xml</south>
+        <teleport>moon32.xml</teleport>
     </room>
 
-    <room file="themoon/moon30.xml">
-        <north>themoon/moon31.xml</north>
-        <east>themoon/moon27.xml</east>
+    <room file="moon30.xml">
+        <north>moon31.xml</north>
+        <east>moon27.xml</east>
     </room>
 
-    <room file="themoon/moon31.xml">
-        <south>themoon/moon30.xml</south>
-        <teleport>blacktooth/blacktooth64.xml</teleport>
+    <room file="moon31.xml">
+        <south>moon30.xml</south>
+        <teleport>blacktooth64.xml</teleport>
     </room>
 
-    <room file="themoon/moon32.xml">
-        <east>themoon/moon33.xml</east>
-        <teleport>themoon/moon29.xml</teleport>
+    <room file="moon32.xml">
+        <east>moon33.xml</east>
+        <teleport>moon29.xml</teleport>
     </room>
 
-    <room file="themoon/moon33.xml">
-        <north-east>themoon/moon34.xml</north-east>
-        <east-south>themoon/moon36.xml</east-south>
-        <west-north>themoon/moon32.xml</west-north>
+    <room file="moon33.xml">
+        <north-east>moon34.xml</north-east>
+        <east-south>moon36.xml</east-south>
+        <west-north>moon32.xml</west-north>
     </room>
 
-    <room file="themoon/moon34.xml">
-        <south>themoon/moon33.xml</south>
-        <east>themoon/moon35.xml</east>
+    <room file="moon34.xml">
+        <south>moon33.xml</south>
+        <east>moon35.xml</east>
     </room>
 
-    <room file="themoon/moon35.xml">
-        <west>themoon/moon34.xml</west>
-        <teleport>blacktooth/blacktooth51.xml</teleport>
+    <room file="moon35.xml">
+        <west>moon34.xml</west>
+        <teleport>blacktooth51.xml</teleport>
     </room>
 
-    <room file="themoon/moon36.xml">
-        <west>themoon/moon33.xml</west>
-        <teleport>blacktooth/blacktooth69.xml</teleport>
+    <room file="moon36.xml">
+        <west>moon33.xml</west>
+        <teleport>blacktooth69.xml</teleport>
     </room>
 
-    <room file="egyptus/egyptus01.xml">
-        <north>egyptus/egyptus02.xml</north>
-        <teleport>themoon/moon24.xml</teleport>
+    <room file="egyptus1.xml">
+        <north>egyptus2.xml</north>
+        <teleport>moon24toegyptus.xml</teleport>
     </room>
 
-    <room file="egyptus/egyptus02.xml">
-        <north>egyptus/egyptus03.xml</north>
-        <south>egyptus/egyptus01.xml</south>
+    <room file="egyptus2.xml">
+        <north>egyptus3.xml</north>
+        <south>egyptus1.xml</south>
     </room>
 
-    <room file="egyptus/egyptus03.xml">
-        <north>egyptus/egyptus04.xml</north>
-        <south>egyptus/egyptus02.xml</south>
+    <room file="egyptus3.xml">
+        <north>egyptus4.xml</north>
+        <south>egyptus2.xml</south>
     </room>
 
-    <room file="egyptus/egyptus04.xml">
-        <south>egyptus/egyptus03.xml</south>
-        <east>egyptus/egyptus05.xml</east>
+    <room file="egyptus4.xml">
+        <south>egyptus3.xml</south>
+        <east>egyptus5.xml</east>
     </room>
 
-    <room file="egyptus/egyptus05.xml">
-        <north>egyptus/egyptus06.xml</north>
-        <east>egyptus/egyptus07.xml</east>
-        <west>egyptus/egyptus04.xml</west>
+    <room file="egyptus5.xml">
+        <north>egyptus6.xml</north>
+        <east>egyptus7.xml</east>
+        <west>egyptus4.xml</west>
     </room>
 
-    <room file="egyptus/egyptus06.xml">
-        <south>egyptus/egyptus05.xml</south>
-        <east>egyptus/egyptus08.xml</east>
+    <room file="egyptus6.xml">
+        <south>egyptus5.xml</south>
+        <east>egyptus8.xml</east>
     </room>
 
-    <room file="egyptus/egyptus07.xml">
-        <north>egyptus/egyptus08.xml</north>
-        <west>egyptus/egyptus05.xml</west>
+    <room file="egyptus7.xml">
+        <north>egyptus8.xml</north>
+        <west>egyptus5.xml</west>
     </room>
 
-    <room file="egyptus/egyptus08.xml">
-        <south>egyptus/egyptus07.xml</south>
-        <east>egyptus/egyptus09.xml</east>
-        <west>egyptus/egyptus06.xml</west>
+    <room file="egyptus8.xml">
+        <south>egyptus7.xml</south>
+        <east>egyptus9fish.xml</east>
+        <west>egyptus6.xml</west>
     </room>
 
-    <room file="egyptus/egyptus09.xml">
-        <east>egyptus/egyptus10.xml</east>
-        <west>egyptus/egyptus08.xml</west>
-        <teleport>egyptus/egyptus13.xml</teleport>
+    <room file="egyptus9fish.xml">
+        <east>egyptus10.xml</east>
+        <west>egyptus8.xml</west>
+        <teleport>egyptus13.xml</teleport>
     </room>
 
-    <room file="egyptus/egyptus10.xml">
-        <north>egyptus/egyptus11.xml</north>
-        <east>egyptus/egyptus15.xml</east>
-        <west>egyptus/egyptus09.xml</west>
+    <room file="egyptus10.xml">
+        <north>egyptus11.xml</north>
+        <east>egyptus15.xml</east>
+        <west>egyptus9fish.xml</west>
     </room>
 
-    <room file="egyptus/egyptus11.xml">
-        <north>egyptus/egyptus12.xml</north>
-        <south>egyptus/egyptus10.xml</south>
+    <room file="egyptus11.xml">
+        <north>egyptus12.xml</north>
+        <south>egyptus10.xml</south>
     </room>
 
-    <room file="egyptus/egyptus12.xml">
-        <south>egyptus/egyptus11.xml</south>
-        <east>egyptus/egyptus13.xml</east>
+    <room file="egyptus12.xml">
+        <south>egyptus11.xml</south>
+        <east>egyptus13.xml</east>
     </room>
 
-    <room file="egyptus/egyptus13.xml">
-        <west>egyptus/egyptus12.xml</west>
-        <roof>egyptus/egyptus14.xml</roof>
-        <teleport>egyptus/egyptus09.xml</teleport>
+    <room file="egyptus13.xml">
+        <west>egyptus12.xml</west>
+        <roof>egyptus14.xml</roof>
+        <teleport>egyptus9fish.xml</teleport>
     </room>
 
-    <room file="egyptus/egyptus14.xml">
-        <east>egyptus/egyptus18.xml</east>
-        <floor>egyptus/egyptus13.xml</floor>
-        <roof>egyptus/egyptus19.xml</roof>
+    <room file="egyptus14.xml">
+        <east>egyptus18.xml</east>
+        <floor>egyptus13.xml</floor>
+        <roof>egyptus19.xml</roof>
     </room>
 
-    <room file="egyptus/egyptus15.xml">
-        <west>egyptus/egyptus10.xml</west>
-        <roof>egyptus/egyptus16.xml</roof>
+    <room file="egyptus15.xml">
+        <west>egyptus10.xml</west>
+        <roof>egyptus16.xml</roof>
     </room>
 
-    <room file="egyptus/egyptus16.xml">
-        <east>egyptus/egyptus17.xml</east>
-        <floor>egyptus/egyptus15.xml</floor>
+    <room file="egyptus16.xml">
+        <east>egyptus17.xml</east>
+        <floor>egyptus15.xml</floor>
     </room>
 
-    <room file="egyptus/egyptus17.xml">
-        <north>egyptus/egyptus18.xml</north>
-        <west>egyptus/egyptus16.xml</west>
+    <room file="egyptus17.xml">
+        <north>egyptus18.xml</north>
+        <west>egyptus16.xml</west>
     </room>
 
-    <room file="egyptus/egyptus18.xml">
-        <south>egyptus/egyptus17.xml</south>
-        <west>egyptus/egyptus14.xml</west>
+    <room file="egyptus18.xml">
+        <south>egyptus17.xml</south>
+        <west>egyptus14.xml</west>
     </room>
 
-    <room file="egyptus/egyptus19.xml">
-        <floor>egyptus/egyptus14.xml</floor>
-        <roof>egyptus/egyptus20.xml</roof>
+    <room file="egyptus19.xml">
+        <floor>egyptus14.xml</floor>
+        <roof>egyptus20.xml</roof>
     </room>
 
-    <room file="egyptus/egyptus20.xml">
-        <north>egyptus/egyptus21.xml</north>
-        <floor>egyptus/egyptus19.xml</floor>
+    <room file="egyptus20.xml">
+        <north>egyptus21.xml</north>
+        <floor>egyptus19.xml</floor>
     </room>
 
-    <room file="egyptus/egyptus21.xml">
-        <north>egyptus/egyptus22.xml</north>
-        <south>egyptus/egyptus20.xml</south>
+    <room file="egyptus21.xml">
+        <north>egyptus22.xml</north>
+        <south>egyptus20.xml</south>
     </room>
 
-    <room file="egyptus/egyptus22.xml">
-        <south>egyptus/egyptus21.xml</south>
-        <east>egyptus/egyptus23.xml</east>
+    <room file="egyptus22.xml">
+        <south>egyptus21.xml</south>
+        <east>egyptus23.xml</east>
     </room>
 
-    <room file="egyptus/egyptus23.xml">
-        <east>egyptus/egyptus24.xml</east>
-        <west>egyptus/egyptus22.xml</west>
+    <room file="egyptus23.xml">
+        <east>egyptus24.xml</east>
+        <west>egyptus22.xml</west>
     </room>
 
-    <room file="egyptus/egyptus24.xml">
-        <south>egyptus/egyptus25.xml</south>
-        <west>egyptus/egyptus23.xml</west>
+    <room file="egyptus24.xml">
+        <south>egyptus25.xml</south>
+        <west>egyptus23.xml</west>
     </room>
 
-    <room file="egyptus/egyptus25.xml">
-        <north>egyptus/egyptus24.xml</north>
-        <south>egyptus/egyptus27.xml</south>
-        <east>egyptus/egyptus26.xml</east>
+    <room file="egyptus25.xml">
+        <north>egyptus24.xml</north>
+        <south>egyptus27.xml</south>
+        <east>egyptus26.xml</east>
     </room>
 
-    <room file="egyptus/egyptus26.xml">
-        <south>egyptus/egyptus28.xml</south>
-        <west>egyptus/egyptus25.xml</west>
+    <room file="egyptus26.xml">
+        <south>egyptus28.xml</south>
+        <west>egyptus25.xml</west>
     </room>
 
-    <room file="egyptus/egyptus27.xml">
-        <north>egyptus/egyptus25.xml</north>
-        <east>egyptus/egyptus28.xml</east>
+    <room file="egyptus27.xml">
+        <north>egyptus25.xml</north>
+        <east>egyptus28.xml</east>
     </room>
 
-    <room file="egyptus/egyptus28.xml">
-        <north>egyptus/egyptus26.xml</north>
-        <south>egyptus/egyptus29.xml</south>
-        <west>egyptus/egyptus27.xml</west>
+    <room file="egyptus28.xml">
+        <north>egyptus26.xml</north>
+        <south>egyptus29.xml</south>
+        <west>egyptus27.xml</west>
     </room>
 
-    <room file="egyptus/egyptus29.xml">
-        <north>egyptus/egyptus28.xml</north>
-        <floor>egyptus/egyptus30.xml</floor>
+    <room file="egyptus29.xml">
+        <north>egyptus28.xml</north>
+        <floor>egyptus30.xml</floor>
     </room>
 
-    <room file="egyptus/egyptus30.xml">
-        <floor>egyptus/egyptus31.xml</floor>
-        <roof>egyptus/egyptus29.xml</roof>
+    <room file="egyptus30.xml">
+        <floor>egyptus31.xml</floor>
+        <roof>egyptus29.xml</roof>
     </room>
 
-    <room file="egyptus/egyptus31.xml">
-        <south>egyptus/egyptus32.xml</south>
-        <roof>egyptus/egyptus30.xml</roof>
+    <room file="egyptus31.xml">
+        <south>egyptus32.xml</south>
+        <roof>egyptus30.xml</roof>
     </room>
 
-    <room file="egyptus/egyptus32.xml">
-        <north>egyptus/egyptus31.xml</north>
-        <floor>egyptus/egyptus33.xml</floor>
+    <room file="egyptus32.xml">
+        <north>egyptus31.xml</north>
+        <floor>egyptus33.xml</floor>
     </room>
 
-    <room file="egyptus/egyptus33.xml">
-        <east>egyptus/egyptus34.xml</east>
-        <roof>egyptus/egyptus32.xml</roof>
+    <room file="egyptus33.xml">
+        <east>egyptus34fish.xml</east>
+        <roof>egyptus32.xml</roof>
     </room>
 
-    <room file="egyptus/egyptus34.xml">
-        <east>egyptus/egyptus35.xml</east>
-        <west>egyptus/egyptus33.xml</west>
+    <room file="egyptus34fish.xml">
+        <east>egyptus35.xml</east>
+        <west>egyptus33.xml</west>
     </room>
 
-    <room file="egyptus/egyptus35.xml">
-        <west>egyptus/egyptus34.xml</west>
-        <roof>egyptus/egyptus36.xml</roof>
+    <room file="egyptus35.xml">
+        <west>egyptus34fish.xml</west>
+        <roof>egyptus36.xml</roof>
     </room>
 
-    <room file="egyptus/egyptus36.xml">
-        <floor>egyptus/egyptus35.xml</floor>
-        <roof>egyptus/egyptus37.xml</roof>
+    <room file="egyptus36.xml">
+        <floor>egyptus35.xml</floor>
+        <roof>egyptus37.xml</roof>
     </room>
 
-    <room file="egyptus/egyptus37.xml">
-        <north>egyptus/egyptus38.xml</north>
-        <floor>egyptus/egyptus36.xml</floor>
+    <room file="egyptus37.xml">
+        <north>egyptus38.xml</north>
+        <floor>egyptus36.xml</floor>
     </room>
 
-    <room file="egyptus/egyptus38.xml">
-        <north>egyptus/egyptus39.xml</north>
-        <south>egyptus/egyptus37.xml</south>
-        <teleport>egyptus/egyptus04.xml</teleport>
+    <room file="egyptus38.xml">
+        <north>egyptus39crown.xml</north>
+        <south>egyptus37.xml</south>
+        <teleport>egyptus4.xml</teleport>
     </room>
 
-    <room file="egyptus/egyptus39.xml">
-        <south>egyptus/egyptus38.xml</south>
+    <room file="egyptus39crown.xml">
+        <south>egyptus38.xml</south>
     </room>
 
-    <room file="penitentiary/penitentiary01.xml">
-        <east>penitentiary/penitentiary02.xml</east>
-        <teleport>themoon/moon22.xml</teleport>
+    <room file="penitentiary1.xml">
+        <east>penitentiary2.xml</east>
+        <teleport>moon22topenitentiary.xml</teleport>
     </room>
 
-    <room file="penitentiary/penitentiary02.xml">
-        <north>penitentiary/penitentiary03.xml</north>
-        <east>penitentiary/penitentiary13.xml</east>
-        <west>penitentiary/penitentiary01.xml</west>
+    <room file="penitentiary2.xml">
+        <north>penitentiary3.xml</north>
+        <east>penitentiary13.xml</east>
+        <west>penitentiary1.xml</west>
     </room>
 
-    <room file="penitentiary/penitentiary03.xml">
-        <north>penitentiary/penitentiary04.xml</north>
-        <south>penitentiary/penitentiary02.xml</south>
+    <room file="penitentiary3.xml">
+        <north>penitentiary4.xml</north>
+        <south>penitentiary2.xml</south>
     </room>
 
-    <room file="penitentiary/penitentiary04.xml">
-        <south>penitentiary/penitentiary03.xml</south>
-        <roof>penitentiary/penitentiary05.xml</roof>
+    <room file="penitentiary4.xml">
+        <south>penitentiary3.xml</south>
+        <roof>penitentiary5.xml</roof>
     </room>
 
-    <room file="penitentiary/penitentiary05.xml">
-        <floor>penitentiary/penitentiary04.xml</floor>
-        <roof>penitentiary/penitentiary06.xml</roof>
+    <room file="penitentiary5.xml">
+        <floor>penitentiary4.xml</floor>
+        <roof>penitentiary6.xml</roof>
     </room>
 
-    <room file="penitentiary/penitentiary06.xml">
-        <north>penitentiary/penitentiary07.xml</north>
-        <floor>penitentiary/penitentiary05.xml</floor>
+    <room file="penitentiary6.xml">
+        <north>penitentiary7.xml</north>
+        <floor>penitentiary5.xml</floor>
     </room>
 
-    <room file="penitentiary/penitentiary07.xml">
-        <south>penitentiary/penitentiary06.xml</south>
-        <east>penitentiary/penitentiary08.xml</east>
+    <room file="penitentiary7.xml">
+        <south>penitentiary6.xml</south>
+        <east>penitentiary8.xml</east>
     </room>
 
-    <room file="penitentiary/penitentiary08.xml">
-        <west>penitentiary/penitentiary07.xml</west>
-        <roof>penitentiary/penitentiary09.xml</roof>
+    <room file="penitentiary8.xml">
+        <west>penitentiary7.xml</west>
+        <roof>penitentiary9.xml</roof>
     </room>
 
-    <room file="penitentiary/penitentiary09.xml">
-        <floor>penitentiary/penitentiary08.xml</floor>
-        <roof>penitentiary/penitentiary10.xml</roof>
+    <room file="penitentiary9.xml">
+        <floor>penitentiary8.xml</floor>
+        <roof>penitentiary10.xml</roof>
     </room>
 
-    <room file="penitentiary/penitentiary10.xml">
-        <east>penitentiary/penitentiary11.xml</east>
-        <floor>penitentiary/penitentiary09.xml</floor>
+    <room file="penitentiary10.xml">
+        <east>penitentiary11.xml</east>
+        <floor>penitentiary9.xml</floor>
     </room>
 
-    <room file="penitentiary/penitentiary11.xml">
-        <south>penitentiary/penitentiary12.xml</south>
-        <west>penitentiary/penitentiary10.xml</west>
+    <room file="penitentiary11.xml">
+        <south>penitentiary12.xml</south>
+        <west>penitentiary10.xml</west>
     </room>
 
-    <room file="penitentiary/penitentiary12.xml">
-        <north>penitentiary/penitentiary11.xml</north>
-        <south>penitentiary/penitentiary18.xml</south>
-        <east>penitentiary/penitentiary19.xml</east>
+    <room file="penitentiary12.xml">
+        <north>penitentiary11.xml</north>
+        <south>penitentiary18fish.xml</south>
+        <east>penitentiary19.xml</east>
     </room>
 
-    <room file="penitentiary/penitentiary13.xml">
-        <west>penitentiary/penitentiary02.xml</west>
-        <roof>penitentiary/penitentiary14.xml</roof>
+    <room file="penitentiary13.xml">
+        <west>penitentiary2.xml</west>
+        <roof>penitentiary14.xml</roof>
     </room>
 
-    <room file="penitentiary/penitentiary14.xml">
-        <floor>penitentiary/penitentiary13.xml</floor>
-        <roof>penitentiary/penitentiary15.xml</roof>
+    <room file="penitentiary14.xml">
+        <floor>penitentiary13.xml</floor>
+        <roof>penitentiary15.xml</roof>
     </room>
 
-    <room file="penitentiary/penitentiary15.xml">
-        <floor>penitentiary/penitentiary14.xml</floor>
-        <roof>penitentiary/penitentiary16.xml</roof>
+    <room file="penitentiary15.xml">
+        <floor>penitentiary14.xml</floor>
+        <roof>penitentiary16.xml</roof>
     </room>
 
-    <room file="penitentiary/penitentiary16.xml">
-        <floor>penitentiary/penitentiary15.xml</floor>
-        <roof>penitentiary/penitentiary17.xml</roof>
+    <room file="penitentiary16.xml">
+        <floor>penitentiary15.xml</floor>
+        <roof>penitentiary17.xml</roof>
     </room>
 
-    <room file="penitentiary/penitentiary17.xml">
-        <east>penitentiary/penitentiary18.xml</east>
-        <floor>penitentiary/penitentiary16.xml</floor>
+    <room file="penitentiary17.xml">
+        <east>penitentiary18fish.xml</east>
+        <floor>penitentiary16.xml</floor>
     </room>
 
-    <room file="penitentiary/penitentiary18.xml">
-        <north>penitentiary/penitentiary12.xml</north>
-        <west>penitentiary/penitentiary17.xml</west>
-        <teleport>penitentiary/penitentiary30.xml</teleport>
-        <teleport2>penitentiary/penitentiary34.xml</teleport2>
+    <room file="penitentiary18fish.xml">
+        <north>penitentiary12.xml</north>
+        <west>penitentiary17.xml</west>
+        <teleport>penitentiary30.xml</teleport>
+        <teleport2>penitentiary34crown.xml</teleport2>
     </room>
 
-    <room file="penitentiary/penitentiary19.xml">
-        <east>penitentiary/penitentiary21.xml</east>
-        <west>penitentiary/penitentiary12.xml</west>
+    <room file="penitentiary19.xml">
+        <east>penitentiary21.xml</east>
+        <west>penitentiary12.xml</west>
     </room>
 
-    <room file="penitentiary/penitentiary20.xml">
-        <roof>penitentiary/penitentiary21.xml</roof>
+    <room file="penitentiary20.xml">
+        <roof>penitentiary21.xml</roof>
     </room>
 
-    <room file="penitentiary/penitentiary21.xml">
-        <west>penitentiary/penitentiary19.xml</west>
-        <floor>penitentiary/penitentiary20.xml</floor>
-        <roof>penitentiary/penitentiary22.xml</roof>
+    <room file="penitentiary21.xml">
+        <west>penitentiary19.xml</west>
+        <floor>penitentiary20.xml</floor>
+        <roof>penitentiary22.xml</roof>
     </room>
 
-    <room file="penitentiary/penitentiary22.xml">
-        <floor>penitentiary/penitentiary21.xml</floor>
-        <roof>penitentiary/penitentiary23.xml</roof>
+    <room file="penitentiary22.xml">
+        <floor>penitentiary21.xml</floor>
+        <roof>penitentiary23.xml</roof>
     </room>
 
-    <room file="penitentiary/penitentiary23.xml">
-        <floor>penitentiary/penitentiary22.xml</floor>
-        <roof>penitentiary/penitentiary24.xml</roof>
+    <room file="penitentiary23.xml">
+        <floor>penitentiary22.xml</floor>
+        <roof>penitentiary24.xml</roof>
     </room>
 
-    <room file="penitentiary/penitentiary24.xml">
-        <east>penitentiary/penitentiary25.xml</east>
-        <floor>penitentiary/penitentiary23.xml</floor>
+    <room file="penitentiary24.xml">
+        <east>penitentiary25.xml</east>
+        <floor>penitentiary23.xml</floor>
     </room>
 
-    <room file="penitentiary/penitentiary25.xml">
-        <east>penitentiary/penitentiary26.xml</east>
-        <west>penitentiary/penitentiary24.xml</west>
+    <room file="penitentiary25.xml">
+        <east>penitentiary26.xml</east>
+        <west>penitentiary24.xml</west>
     </room>
 
-    <room file="penitentiary/penitentiary26.xml">
-        <south>penitentiary/penitentiary27.xml</south>
-        <west>penitentiary/penitentiary25.xml</west>
+    <room file="penitentiary26.xml">
+        <south>penitentiary27.xml</south>
+        <west>penitentiary25.xml</west>
     </room>
 
-    <room file="penitentiary/penitentiary27.xml">
-        <north>penitentiary/penitentiary26.xml</north>
-        <south>penitentiary/penitentiary28.xml</south>
+    <room file="penitentiary27.xml">
+        <north>penitentiary26.xml</north>
+        <south>penitentiary28.xml</south>
     </room>
 
-    <room file="penitentiary/penitentiary28.xml">
-        <north>penitentiary/penitentiary27.xml</north>
-        <south>penitentiary/penitentiary29.xml</south>
-        <west>penitentiary/penitentiary30.xml</west>
+    <room file="penitentiary28.xml">
+        <north>penitentiary27.xml</north>
+        <south>penitentiary29.xml</south>
+        <west>penitentiary30.xml</west>
     </room>
 
-    <room file="penitentiary/penitentiary29.xml">
-        <north>penitentiary/penitentiary28.xml</north>
-        <floor>penitentiary/penitentiary31.xml</floor>
+    <room file="penitentiary29.xml">
+        <north>penitentiary28.xml</north>
+        <floor>penitentiary31.xml</floor>
     </room>
 
-    <room file="penitentiary/penitentiary30.xml">
-        <east>penitentiary/penitentiary28.xml</east>
-        <teleport>penitentiary/penitentiary18.xml</teleport>
+    <room file="penitentiary30.xml">
+        <east>penitentiary28.xml</east>
+        <teleport>penitentiary18fish.xml</teleport>
     </room>
 
-    <room file="penitentiary/penitentiary31.xml">
-        <floor>penitentiary/penitentiary32.xml</floor>
-        <roof>penitentiary/penitentiary30.xml</roof>
+    <room file="penitentiary31.xml">
+        <floor>penitentiary32.xml</floor>
+        <roof>penitentiary30.xml</roof>
     </room>
 
-    <room file="penitentiary/penitentiary32.xml">
-        <west>penitentiary/penitentiary33.xml</west>
-        <roof>penitentiary/penitentiary31.xml</roof>
+    <room file="penitentiary32.xml">
+        <west>penitentiary33.xml</west>
+        <roof>penitentiary31.xml</roof>
     </room>
 
-    <room file="penitentiary/penitentiary33.xml">
-        <east>penitentiary/penitentiary32.xml</east>
-        <west>penitentiary/penitentiary34.xml</west>
-        <teleport>penitentiary/penitentiary02.xml</teleport>
+    <room file="penitentiary33.xml">
+        <east>penitentiary32.xml</east>
+        <west>penitentiary34crown.xml</west>
+        <teleport>penitentiary2.xml</teleport>
     </room>
 
-    <room file="penitentiary/penitentiary34.xml">
-        <east>penitentiary/penitentiary33.xml</east>
-        <teleport2>penitentiary/penitentiary18.xml</teleport2>
+    <room file="penitentiary34crown.xml">
+        <east>penitentiary33.xml</east>
+        <teleport2>penitentiary18fish.xml</teleport2>
     </room>
 
-    <room file="byblos/byblos01.xml">
-        <south>byblos/byblos02.xml</south>
-        <west>byblos/byblos07.xml</west>
-        <teleport>themoon/moon25.xml</teleport>
+    <room file="byblos1.xml">
+        <south>byblos2.xml</south>
+        <west>byblos7.xml</west>
+        <teleport>moon25tobyblos.xml</teleport>
     </room>
 
-    <room file="byblos/byblos02.xml">
-        <north>byblos/byblos01.xml</north>
-        <south>byblos/byblos03.xml</south>
+    <room file="byblos2.xml">
+        <north>byblos1.xml</north>
+        <south>byblos3.xml</south>
     </room>
 
-    <room file="byblos/byblos03.xml">
-        <north>byblos/byblos02.xml</north>
-        <south>byblos/byblos04.xml</south>
+    <room file="byblos3.xml">
+        <north>byblos2.xml</north>
+        <south>byblos4.xml</south>
     </room>
 
-    <room file="byblos/byblos04.xml">
-        <north>byblos/byblos03.xml</north>
-        <east>byblos/byblos12.xml</east>
-        <west>byblos/byblos05.xml</west>
+    <room file="byblos4.xml">
+        <north>byblos3.xml</north>
+        <east>byblos12fish.xml</east>
+        <west>byblos5.xml</west>
     </room>
 
-    <room file="byblos/byblos05.xml">
-        <east>byblos/byblos04.xml</east>
-        <west>byblos/byblos06.xml</west>
+    <room file="byblos5.xml">
+        <east>byblos4.xml</east>
+        <west>byblos6.xml</west>
     </room>
 
-    <room file="byblos/byblos06.xml">
-        <north>byblos/byblos11.xml</north>
-        <east>byblos/byblos05.xml</east>
+    <room file="byblos6.xml">
+        <north>byblos11.xml</north>
+        <east>byblos5.xml</east>
     </room>
 
-    <room file="byblos/byblos07.xml">
-        <east>byblos/byblos01.xml</east>
-        <west>byblos/byblos08.xml</west>
+    <room file="byblos7.xml">
+        <east>byblos1.xml</east>
+        <west>byblos8.xml</west>
     </room>
 
-    <room file="byblos/byblos08.xml">
-        <south>byblos/byblos09.xml</south>
-        <east>byblos/byblos07.xml</east>
+    <room file="byblos8.xml">
+        <south>byblos9.xml</south>
+        <east>byblos7.xml</east>
     </room>
 
-    <room file="byblos/byblos09.xml">
-        <north>byblos/byblos08.xml</north>
-        <south>byblos/byblos10.xml</south>
-        <west>byblos/byblos21.xml</west>
+    <room file="byblos9.xml">
+        <north>byblos8.xml</north>
+        <south>byblos10.xml</south>
+        <west>byblos21.xml</west>
     </room>
 
-    <room file="byblos/byblos10.xml">
-        <north>byblos/byblos09.xml</north>
-        <south>byblos/byblos11.xml</south>
+    <room file="byblos10.xml">
+        <north>byblos9.xml</north>
+        <south>byblos11.xml</south>
     </room>
 
-    <room file="byblos/byblos11.xml">
-        <north>byblos/byblos10.xml</north>
-        <south>byblos/byblos06.xml</south>
+    <room file="byblos11.xml">
+        <north>byblos10.xml</north>
+        <south>byblos6.xml</south>
     </room>
 
-    <room file="byblos/byblos12.xml">
-        <south>byblos/byblos13.xml</south>
-        <west>byblos/byblos04.xml</west>
+    <room file="byblos12fish.xml">
+        <south>byblos13.xml</south>
+        <west>byblos4.xml</west>
     </room>
 
-    <room file="byblos/byblos13.xml">
-        <north>byblos/byblos12.xml</north>
-        <south>byblos/byblos14.xml</south>
+    <room file="byblos13.xml">
+        <north>byblos12fish.xml</north>
+        <south>byblos14.xml</south>
     </room>
 
-    <room file="byblos/byblos14.xml">
-        <north>byblos/byblos13.xml</north>
-        <west>byblos/byblos15.xml</west>
+    <room file="byblos14.xml">
+        <north>byblos13.xml</north>
+        <west>byblos15.xml</west>
     </room>
 
-    <room file="byblos/byblos15.xml">
-        <east>byblos/byblos14.xml</east>
-        <west>byblos/byblos16.xml</west>
+    <room file="byblos15.xml">
+        <east>byblos14.xml</east>
+        <west>byblos16.xml</west>
     </room>
 
-    <room file="byblos/byblos16.xml">
-        <south>byblos/byblos17.xml</south>
-        <east>byblos/byblos15.xml</east>
-        <west>byblos/byblos18.xml</west>
+    <room file="byblos16.xml">
+        <south>byblos17.xml</south>
+        <east>byblos15.xml</east>
+        <west>byblos18.xml</west>
     </room>
 
-    <room file="byblos/byblos17.xml">
-        <north>byblos/byblos16.xml</north>
+    <room file="byblos17.xml">
+        <north>byblos16.xml</north>
     </room>
 
-    <room file="byblos/byblos18.xml">
-        <east>byblos/byblos16.xml</east>
-        <west>byblos/byblos19.xml</west>
+    <room file="byblos18.xml">
+        <east>byblos16.xml</east>
+        <west>byblos19.xml</west>
     </room>
 
-    <room file="byblos/byblos19.xml">
-        <east>byblos/byblos18.xml</east>
-        <west>byblos/byblos20.xml</west>
+    <room file="byblos19.xml">
+        <east>byblos18.xml</east>
+        <west>byblos20.xml</west>
     </room>
 
-    <room file="byblos/byblos20.xml">
-        <north>byblos/byblos26.xml</north>
-        <east>byblos/byblos19.xml</east>
-        <west>byblos/byblos34.xml</west>
+    <room file="byblos20.xml">
+        <north>byblos26.xml</north>
+        <east>byblos19.xml</east>
+        <west>byblos34.xml</west>
     </room>
 
-    <room file="byblos/byblos21.xml">
-        <east>byblos/byblos09.xml</east>
-        <west>byblos/byblos22.xml</west>
+    <room file="byblos21.xml">
+        <east>byblos9.xml</east>
+        <west>byblos22.xml</west>
     </room>
 
-    <room file="byblos/byblos22.xml">
-        <south>byblos/byblos23.xml</south>
-        <east>byblos/byblos21.xml</east>
+    <room file="byblos22.xml">
+        <south>byblos23.xml</south>
+        <east>byblos21.xml</east>
     </room>
 
-    <room file="byblos/byblos23.xml">
-        <north>byblos/byblos22.xml</north>
-        <south>byblos/byblos24.xml</south>
-        <west>byblos/byblos27.xml</west>
+    <room file="byblos23.xml">
+        <north>byblos22.xml</north>
+        <south>byblos24.xml</south>
+        <west>byblos27.xml</west>
     </room>
 
-    <room file="byblos/byblos24.xml">
-        <north>byblos/byblos23.xml</north>
-        <south>byblos/byblos25.xml</south>
+    <room file="byblos24.xml">
+        <north>byblos23.xml</north>
+        <south>byblos25.xml</south>
     </room>
 
-    <room file="byblos/byblos25.xml">
-        <north>byblos/byblos24.xml</north>
-        <south>byblos/byblos26.xml</south>
+    <room file="byblos25.xml">
+        <north>byblos24.xml</north>
+        <south>byblos26.xml</south>
     </room>
 
-    <room file="byblos/byblos26.xml">
-        <north>byblos/byblos25.xml</north>
-        <south>byblos/byblos20.xml</south>
+    <room file="byblos26.xml">
+        <north>byblos25.xml</north>
+        <south>byblos20.xml</south>
     </room>
 
-    <room file="byblos/byblos27.xml">
-        <east>byblos/byblos23.xml</east>
-        <west>byblos/byblos28.xml</west>
+    <room file="byblos27.xml">
+        <east>byblos23.xml</east>
+        <west>byblos28.xml</west>
     </room>
 
-    <room file="byblos/byblos28.xml">
-        <east>byblos/byblos27.xml</east>
-        <roof>byblos/byblos29.xml</roof>
+    <room file="byblos28.xml">
+        <east>byblos27.xml</east>
+        <roof>byblos29.xml</roof>
     </room>
 
-    <room file="byblos/byblos29.xml">
-        <south>byblos/byblos30.xml</south>
-        <floor>byblos/byblos28.xml</floor>
+    <room file="byblos29.xml">
+        <south>byblos30.xml</south>
+        <floor>byblos28.xml</floor>
     </room>
 
-    <room file="byblos/byblos30.xml">
-        <north>byblos/byblos29.xml</north>
-        <south>byblos/byblos31.xml</south>
+    <room file="byblos30.xml">
+        <north>byblos29.xml</north>
+        <south>byblos31.xml</south>
     </room>
 
-    <room file="byblos/byblos31.xml">
-        <north>byblos/byblos30.xml</north>
-        <south>byblos/byblos32.xml</south>
+    <room file="byblos31.xml">
+        <north>byblos30.xml</north>
+        <south>byblos32.xml</south>
     </room>
 
-    <room file="byblos/byblos32.xml">
-        <north>byblos/byblos31.xml</north>
-        <floor>byblos/byblos33.xml</floor>
+    <room file="byblos32.xml">
+        <north>byblos31.xml</north>
+        <floor>byblos33.xml</floor>
     </room>
 
-    <room file="byblos/byblos33.xml">
-        <south>byblos/byblos35.xml</south>
-        <east>byblos/byblos34.xml</east>
-        <roof>byblos/byblos32.xml</roof>
+    <room file="byblos33.xml">
+        <south>byblos35.xml</south>
+        <east>byblos34.xml</east>
+        <roof>byblos32.xml</roof>
     </room>
 
-    <room file="byblos/byblos34.xml">
-        <east>byblos/byblos20.xml</east>
-        <west>byblos/byblos33.xml</west>
+    <room file="byblos34.xml">
+        <east>byblos20.xml</east>
+        <west>byblos33.xml</west>
     </room>
 
-    <room file="byblos/byblos35.xml">
-        <north>byblos/byblos33.xml</north>
-        <south>byblos/byblos36.xml</south>
+    <room file="byblos35.xml">
+        <north>byblos33.xml</north>
+        <south>byblos36.xml</south>
     </room>
 
-    <room file="byblos/byblos36.xml">
-        <north>byblos/byblos35.xml</north>
-        <east>byblos/byblos37.xml</east>
+    <room file="byblos36.xml">
+        <north>byblos35.xml</north>
+        <east>byblos37.xml</east>
     </room>
 
-    <room file="byblos/byblos37.xml">
-        <east>byblos/byblos38.xml</east>
-        <west>byblos/byblos36.xml</west>
+    <room file="byblos37.xml">
+        <east>byblos38.xml</east>
+        <west>byblos36.xml</west>
     </room>
 
-    <room file="byblos/byblos38.xml">
-        <west>byblos/byblos37.xml</west>
-        <floor>byblos/byblos39.xml</floor>
+    <room file="byblos38.xml">
+        <west>byblos37.xml</west>
+        <floor>byblos39.xml</floor>
     </room>
 
-    <room file="byblos/byblos39.xml">
-        <floor>byblos/byblos40.xml</floor>
-        <roof>byblos/byblos38.xml</roof>
-        <teleport>byblos/byblos01.xml</teleport>
+    <room file="byblos39.xml">
+        <floor>byblos40.xml</floor>
+        <roof>byblos38.xml</roof>
+        <teleport>byblos1.xml</teleport>
     </room>
 
-    <room file="byblos/byblos40.xml">
-        <east>byblos/byblos41.xml</east>
-        <roof>byblos/byblos39.xml</roof>
+    <room file="byblos40.xml">
+        <east>byblos41crown.xml</east>
+        <roof>byblos39.xml</roof>
     </room>
 
-    <room file="byblos/byblos41.xml">
-        <west>byblos/byblos40.xml</west>
+    <room file="byblos41crown.xml">
+        <west>byblos40.xml</west>
     </room>
 
-    <room file="safari/safari01.xml">
-        <east>safari/safari02.xml</east>
-        <teleport>themoon/moon21.xml</teleport>
+    <room file="safari1.xml">
+        <east>safari2.xml</east>
+        <teleport>moon21tosafari.xml</teleport>
     </room>
 
-    <room file="safari/safari02.xml">
-        <east>safari/safari03.xml</east>
-        <west>safari/safari01.xml</west>
+    <room file="safari2.xml">
+        <east>safari3.xml</east>
+        <west>safari1.xml</west>
     </room>
 
-    <room file="safari/safari03.xml">
-        <east>safari/safari04.xml</east>
-        <west>safari/safari02.xml</west>
+    <room file="safari3.xml">
+        <east>safari4.xml</east>
+        <west>safari2.xml</west>
     </room>
 
-    <room file="safari/safari04.xml">
-        <north>safari/safari05.xml</north>
-        <east>safari/safari18.xml</east>
-        <west>safari/safari03.xml</west>
+    <room file="safari4.xml">
+        <north>safari5.xml</north>
+        <east>safari18.xml</east>
+        <west>safari3.xml</west>
     </room>
 
-    <room file="safari/safari05.xml">
-        <north>safari/safari06.xml</north>
-        <south>safari/safari04.xml</south>
+    <room file="safari5.xml">
+        <north>safari6.xml</north>
+        <south>safari4.xml</south>
     </room>
 
-    <room file="safari/safari06.xml">
-        <north-east>safari/safari07.xml</north-east>
-        <south-west>safari/safari05.xml</south-west>
-        <east-north>safari/safari07.xml</east-north>
+    <room file="safari6.xml">
+        <north-east>safari7.xml</north-east>
+        <south-west>safari5.xml</south-west>
+        <east-north>safari7.xml</east-north>
     </room>
 
-    <room file="safari/safari07.xml">
-        <north>safari/safari08.xml</north>
-        <south>safari/safari06.xml</south>
-        <west>safari/safari06.xml</west>
+    <room file="safari7.xml">
+        <north>safari8.xml</north>
+        <south>safari6.xml</south>
+        <west>safari6.xml</west>
     </room>
 
-    <room file="safari/safari08.xml">
-        <north>safari/safari09.xml</north>
-        <south>safari/safari07.xml</south>
+    <room file="safari8.xml">
+        <north>safari9.xml</north>
+        <south>safari7.xml</south>
     </room>
 
-    <room file="safari/safari09.xml">
-        <north>safari/safari14.xml</north>
-        <south>safari/safari08.xml</south>
-        <floor>safari/safari10.xml</floor>
+    <room file="safari9.xml">
+        <north>safari14.xml</north>
+        <south>safari8.xml</south>
+        <floor>safari10.xml</floor>
     </room>
 
-    <room file="safari/safari10.xml">
-        <north>safari/safari11.xml</north>
-        <roof>safari/safari09.xml</roof>
+    <room file="safari10.xml">
+        <north>safari11.xml</north>
+        <roof>safari9.xml</roof>
     </room>
 
-    <room file="safari/safari11.xml">
-        <north>safari/safari12.xml</north>
-        <south>safari/safari10.xml</south>
+    <room file="safari11.xml">
+        <north>safari12.xml</north>
+        <south>safari10.xml</south>
     </room>
 
-    <room file="safari/safari12.xml">
-        <south>safari/safari11.xml</south>
-        <roof>safari/safari13.xml</roof>
+    <room file="safari12.xml">
+        <south>safari11.xml</south>
+        <roof>safari13.xml</roof>
     </room>
 
-    <room file="safari/safari13.xml">
-        <south>safari/safari14.xml</south>
-        <east>safari/safari15.xml</east>
-        <floor>safari/safari12.xml</floor>
+    <room file="safari13.xml">
+        <south>safari14.xml</south>
+        <east>safari15.xml</east>
+        <floor>safari12.xml</floor>
     </room>
 
-    <room file="safari/safari14.xml">
-        <north>safari/safari13.xml</north>
-        <south>safari/safari09.xml</south>
+    <room file="safari14.xml">
+        <north>safari13.xml</north>
+        <south>safari9.xml</south>
     </room>
 
-    <room file="safari/safari15.xml">
-        <east>safari/safari16.xml</east>
-        <west>safari/safari13.xml</west>
+    <room file="safari15.xml">
+        <east>safari16.xml</east>
+        <west>safari13.xml</west>
     </room>
 
-    <room file="safari/safari16.xml">
-        <east>safari/safari17.xml</east>
-        <west>safari/safari15.xml</west>
+    <room file="safari16.xml">
+        <east>safari17fish.xml</east>
+        <west>safari15.xml</west>
     </room>
 
-    <room file="safari/safari17.xml">
-        <north>safari/safari31.xml</north>
-        <east>safari/safari30.xml</east>
-        <west>safari/safari16.xml</west>
+    <room file="safari17fish.xml">
+        <north>safari31.xml</north>
+        <east>safari30.xml</east>
+        <west>safari16.xml</west>
     </room>
 
-    <room file="safari/safari18.xml">
-        <east>safari/safari19.xml</east>
-        <west>safari/safari04.xml</west>
+    <room file="safari18.xml">
+        <east>safari19.xml</east>
+        <west>safari4.xml</west>
     </room>
 
-    <room file="safari/safari19.xml">
-        <north-west>safari/safari20.xml</north-west>
-        <east-south>safari/safari25.xml</east-south>
-        <west-south>safari/safari18.xml</west-south>
+    <room file="safari19.xml">
+        <north-west>safari20.xml</north-west>
+        <east-south>safari25.xml</east-south>
+        <west-south>safari18.xml</west-south>
     </room>
 
-    <room file="safari/safari20.xml">
-        <north>safari/safari21.xml</north>
-        <south>safari/safari19.xml</south>
-        <east>safari/safari22.xml</east>
+    <room file="safari20.xml">
+        <north>safari21.xml</north>
+        <south>safari19.xml</south>
+        <east>safari22.xml</east>
     </room>
 
-    <room file="safari/safari21.xml">
-        <south>safari/safari20.xml</south>
+    <room file="safari21.xml">
+        <south>safari20.xml</south>
     </room>
 
-    <room file="safari/safari22.xml">
-        <east>safari/safari23.xml</east>
-        <west>safari/safari20.xml</west>
+    <room file="safari22.xml">
+        <east>safari23.xml</east>
+        <west>safari20.xml</west>
     </room>
 
-    <room file="safari/safari23.xml">
-        <north>safari/safari26.xml</north>
-        <south>safari/safari24.xml</south>
-        <west>safari/safari22.xml</west>
+    <room file="safari23.xml">
+        <north>safari26.xml</north>
+        <south>safari24.xml</south>
+        <west>safari22.xml</west>
     </room>
 
-    <room file="safari/safari24.xml">
-        <north>safari/safari23.xml</north>
-        <south>safari/safari25.xml</south>
+    <room file="safari24.xml">
+        <north>safari23.xml</north>
+        <south>safari25.xml</south>
     </room>
 
-    <room file="safari/safari25.xml">
-        <north>safari/safari24.xml</north>
-        <west>safari/safari19.xml</west>
+    <room file="safari25.xml">
+        <north>safari24.xml</north>
+        <west>safari19.xml</west>
     </room>
 
-    <room file="safari/safari26.xml">
-        <north>safari/safari27.xml</north>
-        <south>safari/safari23.xml</south>
+    <room file="safari26.xml">
+        <north>safari27.xml</north>
+        <south>safari23.xml</south>
     </room>
 
-    <room file="safari/safari27.xml">
-        <north>safari/safari28.xml</north>
-        <south>safari/safari26.xml</south>
+    <room file="safari27.xml">
+        <north>safari28.xml</north>
+        <south>safari26.xml</south>
     </room>
 
-    <room file="safari/safari28.xml">
-        <north>safari/safari29.xml</north>
-        <south>safari/safari27.xml</south>
+    <room file="safari28.xml">
+        <north>safari29.xml</north>
+        <south>safari27.xml</south>
     </room>
 
-    <room file="safari/safari29.xml">
-        <north>safari/safari30.xml</north>
-        <south>safari/safari28.xml</south>
+    <room file="safari29.xml">
+        <north>safari30.xml</north>
+        <south>safari28.xml</south>
     </room>
 
-    <room file="safari/safari30.xml">
-        <south>safari/safari29.xml</south>
-        <west>safari/safari17.xml</west>
+    <room file="safari30.xml">
+        <south>safari29.xml</south>
+        <west>safari17fish.xml</west>
     </room>
 
-    <room file="safari/safari31.xml">
-        <north>safari/safari32.xml</north>
-        <south>safari/safari17.xml</south>
+    <room file="safari31.xml">
+        <north>safari32.xml</north>
+        <south>safari17fish.xml</south>
     </room>
 
-    <room file="safari/safari32.xml">
-        <north>safari/safari33.xml</north>
-        <south>safari/safari31.xml</south>
+    <room file="safari32.xml">
+        <north>safari33.xml</north>
+        <south>safari31.xml</south>
     </room>
 
-    <room file="safari/safari33.xml">
-        <north>safari/safari34.xml</north>
-        <south>safari/safari32.xml</south>
-        <east>safari/safari37.xml</east>
-        <roof>safari/safari36.xml</roof>
+    <room file="safari33.xml">
+        <north>safari34.xml</north>
+        <south>safari32.xml</south>
+        <east>safari37crown.xml</east>
+        <roof>safari36.xml</roof>
     </room>
 
-    <room file="safari/safari34.xml">
-        <south>safari/safari33.xml</south>
-        <roof>safari/safari35.xml</roof>
-        <teleport>safari/safari01.xml</teleport>
+    <room file="safari34.xml">
+        <south>safari33.xml</south>
+        <roof>safari35.xml</roof>
+        <teleport>safari1.xml</teleport>
     </room>
 
-    <room file="safari/safari35.xml">
-        <south>safari/safari36.xml</south>
-        <floor>safari/safari34.xml</floor>
+    <room file="safari35.xml">
+        <south>safari36.xml</south>
+        <floor>safari34.xml</floor>
     </room>
 
-    <room file="safari/safari36.xml">
-        <north>safari/safari35.xml</north>
-        <floor>safari/safari33.xml</floor>
+    <room file="safari36.xml">
+        <north>safari35.xml</north>
+        <floor>safari33.xml</floor>
     </room>
 
-    <room file="safari/safari37.xml">
-        <west>safari/safari33.xml</west>
+    <room file="safari37crown.xml">
+        <west>safari33.xml</west>
     </room>
 
-    <room file="blacktooth/blacktooth64.xml">
-        <east>blacktooth/blacktooth65.xml</east>
-        <teleport>themoon/moon31.xml</teleport>
+    <room file="blacktooth64.xml">
+        <east>blacktooth65.xml</east>
+        <teleport>moon31.xml</teleport>
     </room>
 
-    <room file="blacktooth/blacktooth65.xml">
-        <east>blacktooth/blacktooth66.xml</east>
-        <west>blacktooth/blacktooth64.xml</west>
+    <room file="blacktooth65.xml">
+        <east>blacktooth66.xml</east>
+        <west>blacktooth64.xml</west>
     </room>
 
-    <room file="blacktooth/blacktooth66.xml">
-        <south>blacktooth/blacktooth67.xml</south>
-        <east>blacktooth/blacktooth68.xml</east>
-        <west>blacktooth/blacktooth65.xml</west>
+    <room file="blacktooth66.xml">
+        <south>blacktooth67.xml</south>
+        <east>blacktooth68.xml</east>
+        <west>blacktooth65.xml</west>
     </room>
 
-    <room file="blacktooth/blacktooth67.xml">
-        <north>blacktooth/blacktooth66.xml</north>
-        <south>blacktooth/blacktooth69.xml</south>
-        <east>blacktooth/blacktooth70.xml</east>
+    <room file="blacktooth67.xml">
+        <north>blacktooth66.xml</north>
+        <south>blacktooth69.xml</south>
+        <east>blacktooth70.xml</east>
     </room>
 
-    <room file="blacktooth/blacktooth68.xml">
-        <north>blacktooth/blacktooth76.xml</north>
-        <west>blacktooth/blacktooth66.xml</west>
+    <room file="blacktooth68.xml">
+        <north>blacktooth76.xml</north>
+        <west>blacktooth66.xml</west>
     </room>
 
-    <room file="blacktooth/blacktooth69.xml">
-        <north>blacktooth/blacktooth67.xml</north>
-        <teleport>themoon/moon36.xml</teleport>
+    <room file="blacktooth69.xml">
+        <north>blacktooth67.xml</north>
+        <teleport>moon36.xml</teleport>
     </room>
 
-    <room file="blacktooth/blacktooth70.xml">
-        <east>blacktooth/blacktooth71.xml</east>
-        <west>blacktooth/blacktooth67.xml</west>
+    <room file="blacktooth70.xml">
+        <east>blacktooth71.xml</east>
+        <west>blacktooth67.xml</west>
     </room>
 
-    <room file="blacktooth/blacktooth71.xml">
-        <south>blacktooth/blacktooth77.xml</south>
-        <east>blacktooth/blacktooth72.xml</east>
-        <west>blacktooth/blacktooth70.xml</west>
+    <room file="blacktooth71.xml">
+        <south>blacktooth77.xml</south>
+        <east>blacktooth72.xml</east>
+        <west>blacktooth70.xml</west>
     </room>
 
-    <room file="blacktooth/blacktooth72.xml">
-        <north>blacktooth/blacktooth73.xml</north>
-        <south>blacktooth/blacktooth78.xml</south>
-        <west>blacktooth/blacktooth71.xml</west>
+    <room file="blacktooth72.xml">
+        <north>blacktooth73.xml</north>
+        <south>blacktooth78.xml</south>
+        <west>blacktooth71.xml</west>
     </room>
 
-    <room file="blacktooth/blacktooth73.xml">
-        <north>blacktooth/blacktooth74.xml</north>
-        <south>blacktooth/blacktooth72.xml</south>
+    <room file="blacktooth73.xml">
+        <north>blacktooth74.xml</north>
+        <south>blacktooth72.xml</south>
     </room>
 
-    <room file="blacktooth/blacktooth74.xml">
-        <south>blacktooth/blacktooth73.xml</south>
-        <west>blacktooth/blacktooth75.xml</west>
+    <room file="blacktooth74.xml">
+        <south>blacktooth73.xml</south>
+        <west>blacktooth75.xml</west>
     </room>
 
-    <room file="blacktooth/blacktooth75.xml">
-        <east>blacktooth/blacktooth74.xml</east>
-        <west>blacktooth/blacktooth76.xml</west>
+    <room file="blacktooth75.xml">
+        <east>blacktooth74.xml</east>
+        <west>blacktooth76.xml</west>
     </room>
 
-    <room file="blacktooth/blacktooth76.xml">
-        <south>blacktooth/blacktooth68.xml</south>
-        <east>blacktooth/blacktooth75.xml</east>
+    <room file="blacktooth76.xml">
+        <south>blacktooth68.xml</south>
+        <east>blacktooth75.xml</east>
     </room>
 
-    <room file="blacktooth/blacktooth77.xml">
-        <north>blacktooth/blacktooth71.xml</north>
-        <south>blacktooth/blacktooth84.xml</south>
+    <room file="blacktooth77.xml">
+        <north>blacktooth71.xml</north>
+        <south>blacktooth84.xml</south>
     </room>
 
-    <room file="blacktooth/blacktooth78.xml">
-        <north>blacktooth/blacktooth72.xml</north>
-        <east>blacktooth/blacktooth80.xml</east>
-        <roof>blacktooth/blacktooth79.xml</roof>
+    <room file="blacktooth78.xml">
+        <north>blacktooth72.xml</north>
+        <east>blacktooth80.xml</east>
+        <roof>blacktooth79fish.xml</roof>
     </room>
 
-    <room file="blacktooth/blacktooth79.xml">
-        <floor>blacktooth/blacktooth78.xml</floor>
+    <room file="blacktooth79fish.xml">
+        <floor>blacktooth78.xml</floor>
     </room>
 
-    <room file="blacktooth/blacktooth80.xml">
-        <east>blacktooth/blacktooth81.xml</east>
-        <west>blacktooth/blacktooth78.xml</west>
+    <room file="blacktooth80.xml">
+        <east>blacktooth81.xml</east>
+        <west>blacktooth78.xml</west>
     </room>
 
-    <room file="blacktooth/blacktooth81.xml">
-        <north>blacktooth/blacktooth82.xml</north>
-        <west>blacktooth/blacktooth80.xml</west>
+    <room file="blacktooth81.xml">
+        <north>blacktooth82.xml</north>
+        <west>blacktooth80.xml</west>
     </room>
 
-    <room file="blacktooth/blacktooth82.xml">
-        <north>blacktooth/blacktooth83.xml</north>
-        <south>blacktooth/blacktooth81.xml</south>
+    <room file="blacktooth82.xml">
+        <north>blacktooth83tofreedom.xml</north>
+        <south>blacktooth81.xml</south>
     </room>
 
-    <room file="blacktooth/blacktooth83.xml">
-        <south>blacktooth/blacktooth82.xml</south>
-        <teleport>blacktooth/blacktooth88.xml</teleport>
+    <room file="blacktooth83tofreedom.xml">
+        <south>blacktooth82.xml</south>
+        <teleport>finalroom.xml</teleport>
     </room>
 
-    <room file="blacktooth/blacktooth84.xml">
-        <north>blacktooth/blacktooth77.xml</north>
-        <south>blacktooth/blacktooth85.xml</south>
+    <room file="blacktooth84.xml">
+        <north>blacktooth77.xml</north>
+        <south>blacktooth85.xml</south>
     </room>
 
-    <room file="blacktooth/blacktooth85.xml">
-        <north>blacktooth/blacktooth84.xml</north>
-        <west>blacktooth/blacktooth86.xml</west>
+    <room file="blacktooth85.xml">
+        <north>blacktooth84.xml</north>
+        <west>blacktooth86.xml</west>
     </room>
 
-    <room file="blacktooth/blacktooth86.xml">
-        <east>blacktooth/blacktooth85.xml</east>
-        <west>blacktooth/blacktooth87.xml</west>
+    <room file="blacktooth86.xml">
+        <east>blacktooth85.xml</east>
+        <west>blacktooth87crown.xml</west>
     </room>
 
-    <room file="blacktooth/blacktooth87.xml">
-        <east>blacktooth/blacktooth86.xml</east>
+    <room file="blacktooth87crown.xml">
+        <east>blacktooth86.xml</east>
     </room>
 
-    <room file="blacktooth/blacktooth88.xml"/>
+    <room file="finalroom.xml"/>
 </map>

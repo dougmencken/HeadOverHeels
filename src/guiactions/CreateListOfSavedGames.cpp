@@ -55,7 +55,7 @@ void CreateListOfSavedGames::doAction ()
         {
                 std::stringstream ss;
                 ss << fileCount;
-                std::string file = isomot::homePath() + "savegame" + pathSeparator + "save" + ss.str () + ".xml" ;
+                std::string file = isomot::homePath() + "savegame" + pathSeparator + "saved" + ss.str () + ".xml" ;
 
                 bool fileExists = false;
                 std::ifstream in( file.c_str() );

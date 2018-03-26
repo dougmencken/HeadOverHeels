@@ -15,9 +15,9 @@ namespace isomot
 GameFileManager::GameFileManager( const GameManager* gameManager, const Isomot* isomot )
         : room( std::string() )
         , nameOfCharacterWhoCaughtTheFish( "in~reincarnation" )
-        , x( 0 )
-        , y( 0 )
-        , z( 0 )
+        , xFish( 0 )
+        , yFish( 0 )
+        , zFish( 0 )
         , catchFishWay( Nowhere )
         , gameManager( const_cast< GameManager* >( gameManager ) )
         , isomot( const_cast< Isomot* >( isomot ) )
@@ -34,9 +34,9 @@ void GameFileManager::assignFishData( const std::string& room, const std::string
 {
         this->room = room;
         this->nameOfCharacterWhoCaughtTheFish = name;
-        this->x = x;
-        this->y = y;
-        this->z = z;
+        this->xFish = x;
+        this->yFish = y;
+        this->zFish = z;
         this->catchFishWay = way;
 }
 
@@ -122,9 +122,9 @@ void GameFileManager::saveGame( const std::string& fileName )
                         (
                                 true, // active player
                                 this->room,
-                                this->x,
-                                this->y,
-                                this->z,
+                                this->xFish,
+                                this->yFish,
+                                this->zFish,
                                 this->catchFishWay.getIntegerOfWay(),
                                 JustWait,
                                 lives,

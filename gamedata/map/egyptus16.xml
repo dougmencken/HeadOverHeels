@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<room xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <name>egyptus16.xml</name>
+
+  <scenery>egyptus</scenery>
+
+  <xTiles>7</xTiles>
+
+  <yTiles>7</yTiles>
+
+  <width>16</width>
+
+  <floorType>none</floorType>
+
+  <floor>
+    <tile>
+      <x>0</x>
+      <y>1</y>
+      <picture>egyptus-floor-underground-north.png</picture>
+    </tile>
+    <tile>
+      <x>0</x>
+      <y>2</y>
+      <picture>egyptus-floor-underground-north.png</picture>
+    </tile>
+    <tile>
+      <x>0</x>
+      <y>3</y>
+      <picture>egyptus-floor-underground-north.png</picture>
+    </tile>
+    <tile>
+      <x>0</x>
+      <y>4</y>
+      <picture>egyptus-floor-underground-north.png</picture>
+    </tile>
+    <tile>
+      <x>0</x>
+      <y>5</y>
+      <picture>egyptus-floor-underground-north.png</picture>
+    </tile>
+    <tile>
+      <x>0</x>
+      <y>6</y>
+      <picture>egyptus-floor-underground-north.png</picture>
+    </tile>
+    <tile>
+      <x>3</x>
+      <y>0</y>
+      <picture>egyptus-floor-east.png</picture>
+    </tile>
+    <tile>
+      <x>4</x>
+      <y>0</y>
+      <picture>egyptus-floor-east.png</picture>
+    </tile>
+    <tile>
+      <x>1</x>
+      <y>0</y>
+      <picture>egyptus-floor-underground-east.png</picture>
+    </tile>
+    <tile>
+      <x>2</x>
+      <y>0</y>
+      <picture>egyptus-floor-underground-east.png</picture>
+    </tile>
+    <tile>
+      <x>5</x>
+      <y>0</y>
+      <picture>egyptus-floor-underground-east.png</picture>
+    </tile>
+    <tile>
+      <x>6</x>
+      <y>0</y>
+      <picture>egyptus-floor-underground-east.png</picture>
+    </tile>
+    <tile>
+      <x>6</x>
+      <y>1</y>
+      <picture>egyptus-nofloor-south.png</picture>
+    </tile>
+    <tile>
+      <x>6</x>
+      <y>2</y>
+      <picture>egyptus-nofloor-south.png</picture>
+    </tile>
+    <tile>
+      <x>6</x>
+      <y>3</y>
+      <picture>egyptus-nofloor-south.png</picture>
+    </tile>
+    <tile>
+      <x>6</x>
+      <y>4</y>
+      <picture>egyptus-nofloor-south.png</picture>
+    </tile>
+    <tile>
+      <x>6</x>
+      <y>5</y>
+      <picture>egyptus-nofloor-south.png</picture>
+    </tile>
+    <tile>
+      <x>1</x>
+      <y>6</y>
+      <picture>egyptus-nofloor-west.png</picture>
+    </tile>
+    <tile>
+      <x>2</x>
+      <y>6</y>
+      <picture>egyptus-nofloor-west.png</picture>
+    </tile>
+    <tile>
+      <x>3</x>
+      <y>6</y>
+      <picture>egyptus-nofloor-west.png</picture>
+    </tile>
+    <tile>
+      <x>4</x>
+      <y>6</y>
+      <picture>egyptus-nofloor-west.png</picture>
+    </tile>
+    <tile>
+      <x>5</x>
+      <y>6</y>
+      <picture>egyptus-nofloor-west.png</picture>
+    </tile>
+    <tile>
+      <x>6</x>
+      <y>6</y>
+      <picture>egyptus-nofloor-sw.png</picture>
+    </tile>
+  </floor>
+
+  <items>
+    <item x="0" y="1" z="0">
+      <label>egyptus-wall-y-1</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="2" z="0">
+      <label>egyptus-wall-y-2</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="3" z="0">
+      <label>egyptus-wall-y-1</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="4" z="0">
+      <label>egyptus-wall-y-1</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="5" z="0">
+      <label>egyptus-wall-y-2</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="6" z="0">
+      <label>egyptus-wall-y-1</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="1" y="0" z="0">
+      <label>egyptus-wall-x-1</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="2" y="0" z="0">
+      <label>egyptus-wall-x-1</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="5" y="0" z="0">
+      <label>egyptus-wall-x-1</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="6" y="0" z="0">
+      <label>egyptus-wall-x-1</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="3" y="0" z="-1">
+      <label>egyptus-capital-east</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="4" y="0" z="-1">
+      <label>egyptus-capital-east</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="3" y="0" z="-1">
+      <label>egyptus-door-west</label>
+      <direction>east</direction>
+      <type>door</type>
+    </item>
+    <item x="1" y="1" z="0">
+      <label>brick2</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="2" y="1" z="0">
+      <label>brick2</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="3" y="1" z="0">
+      <label>brick2</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="4" y="1" z="0">
+      <label>brick2</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="5" y="1" z="0">
+      <label>brick2</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="6" y="1" z="0">
+      <label>brick2</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+  </items>
+
+</room>

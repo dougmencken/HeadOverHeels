@@ -48,8 +48,8 @@ void Isomot::beginNewGame ()
         if ( finalRoomTimer != nilPointer ) finalRoomTimer->stop();
 
         // initial rooms
-        mapManager->beginNewGame( "blacktooth/blacktooth01.xml", "blacktooth/blacktooth23.xml" );
-        //mapManager->beginNewGame( "blacktooth/blacktooth85.xml", "blacktooth/blacktooth23.xml" );
+        mapManager->beginNewGame( "blacktooth1head.xml", "blacktooth23heels.xml" );
+        //mapManager->beginNewGame( "blacktooth85.xml", "blacktooth23heels.xml" );
 
         // go to first room
         mapManager->getActiveRoom()->activate ();
@@ -328,7 +328,7 @@ BITMAP* Isomot::update()
 
                         teleportedPlayer->fillWithData( gameManager );
 
-                        std::string nameOfRoomNearFinal = "blacktooth/blacktooth83.xml";
+                        std::string nameOfRoomNearFinal = "blacktooth83tofreedom.xml";
                         Room* roomWithTeleportToFinalScene = this->mapManager->createRoomThenAddItToListOfRooms( nameOfRoomNearFinal, true );
                         roomWithTeleportToFinalScene->addPlayerToRoom( teleportedPlayer, true );
                         teleportedPlayer->getBehavior()->changeActivityOfItem( BeginWayInTeletransport );
@@ -710,7 +710,7 @@ BITMAP* Isomot::update()
                 }
 
                 // la sala final es muy especial
-                if ( roomFile == "blacktooth88.xml" )
+                if ( roomFile == "finalroom.xml" )
                 {
                         this->updateFinalRoom();
                 }

@@ -1,0 +1,722 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<room xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <name>byblos2.xml</name>
+
+  <scenery>byblos</scenery>
+
+  <xTiles>14</xTiles>
+
+  <yTiles>6</yTiles>
+
+  <width>16</width>
+
+  <floorType>mortal</floorType>
+
+  <floor>
+    <tile>
+      <x>0</x>
+      <y>2</y>
+      <picture>byblos-floor-north.png</picture>
+    </tile>
+    <tile>
+      <x>0</x>
+      <y>3</y>
+      <picture>byblos-floor-north.png</picture>
+    </tile>
+    <tile>
+      <x>13</x>
+      <y>0</y>
+      <picture>byblos-floor-south.png</picture>
+    </tile>
+    <tile>
+      <x>13</x>
+      <y>1</y>
+      <picture>byblos-floor-south.png</picture>
+    </tile>
+    <tile>
+      <x>13</x>
+      <y>2</y>
+      <picture>byblos-floor-south.png</picture>
+    </tile>
+    <tile>
+      <x>13</x>
+      <y>3</y>
+      <picture>byblos-floor-south.png</picture>
+    </tile>
+    <tile>
+      <x>13</x>
+      <y>4</y>
+      <picture>byblos-floor-south.png</picture>
+    </tile>
+    <tile>
+      <x>13</x>
+      <y>5</y>
+      <picture>byblos-floor-south.png</picture>
+    </tile>
+    <tile>
+      <x>1</x>
+      <y>0</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>1</x>
+      <y>1</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>1</x>
+      <y>2</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>1</x>
+      <y>3</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>1</x>
+      <y>4</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>1</x>
+      <y>5</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>2</x>
+      <y>0</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>2</x>
+      <y>1</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>2</x>
+      <y>2</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>2</x>
+      <y>3</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>2</x>
+      <y>4</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>2</x>
+      <y>5</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>3</x>
+      <y>0</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>3</x>
+      <y>1</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>3</x>
+      <y>2</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>3</x>
+      <y>3</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>3</x>
+      <y>4</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>3</x>
+      <y>5</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>4</x>
+      <y>0</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>4</x>
+      <y>1</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>4</x>
+      <y>2</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>4</x>
+      <y>3</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>4</x>
+      <y>4</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>4</x>
+      <y>5</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>5</x>
+      <y>0</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>5</x>
+      <y>1</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>5</x>
+      <y>2</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>5</x>
+      <y>3</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>5</x>
+      <y>4</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>5</x>
+      <y>5</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>6</x>
+      <y>0</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>6</x>
+      <y>1</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>6</x>
+      <y>2</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>6</x>
+      <y>3</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>6</x>
+      <y>4</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>6</x>
+      <y>5</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>7</x>
+      <y>0</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>7</x>
+      <y>1</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>7</x>
+      <y>2</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>7</x>
+      <y>3</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>7</x>
+      <y>4</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>7</x>
+      <y>5</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>8</x>
+      <y>0</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>8</x>
+      <y>1</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>8</x>
+      <y>2</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>8</x>
+      <y>3</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>8</x>
+      <y>4</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>8</x>
+      <y>5</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>9</x>
+      <y>0</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>9</x>
+      <y>1</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>9</x>
+      <y>2</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>9</x>
+      <y>3</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>9</x>
+      <y>4</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>9</x>
+      <y>5</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>10</x>
+      <y>0</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>10</x>
+      <y>1</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>10</x>
+      <y>2</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>10</x>
+      <y>3</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>10</x>
+      <y>4</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>10</x>
+      <y>5</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>11</x>
+      <y>0</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>11</x>
+      <y>1</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>11</x>
+      <y>2</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>11</x>
+      <y>3</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>11</x>
+      <y>4</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>11</x>
+      <y>5</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>12</x>
+      <y>0</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>12</x>
+      <y>1</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>12</x>
+      <y>2</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>12</x>
+      <y>3</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>12</x>
+      <y>4</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+    <tile>
+      <x>12</x>
+      <y>5</y>
+      <picture>byblos-mortal-floor.png</picture>
+    </tile>
+  </floor>
+
+  <walls>
+    <wall>
+      <axis>x</axis>
+      <index>1</index>
+      <picture>byblos-wall-x-1.png</picture>
+    </wall>
+    <wall>
+      <axis>x</axis>
+      <index>2</index>
+      <picture>byblos-wall-x-2.png</picture>
+    </wall>
+    <wall>
+      <axis>x</axis>
+      <index>3</index>
+      <picture>byblos-wall-x-1.png</picture>
+    </wall>
+    <wall>
+      <axis>x</axis>
+      <index>4</index>
+      <picture>byblos-wall-x-1.png</picture>
+    </wall>
+    <wall>
+      <axis>x</axis>
+      <index>5</index>
+      <picture>byblos-wall-x-2.png</picture>
+    </wall>
+    <wall>
+      <axis>x</axis>
+      <index>6</index>
+      <picture>byblos-wall-x-1.png</picture>
+    </wall>
+    <wall>
+      <axis>x</axis>
+      <index>7</index>
+      <picture>byblos-wall-x-1.png</picture>
+    </wall>
+    <wall>
+      <axis>x</axis>
+      <index>8</index>
+      <picture>byblos-wall-x-2.png</picture>
+    </wall>
+    <wall>
+      <axis>x</axis>
+      <index>9</index>
+      <picture>byblos-wall-x-1.png</picture>
+    </wall>
+    <wall>
+      <axis>x</axis>
+      <index>10</index>
+      <picture>byblos-wall-x-1.png</picture>
+    </wall>
+    <wall>
+      <axis>x</axis>
+      <index>11</index>
+      <picture>byblos-wall-x-2.png</picture>
+    </wall>
+    <wall>
+      <axis>x</axis>
+      <index>12</index>
+      <picture>byblos-wall-x-1.png</picture>
+    </wall>
+  </walls>
+
+  <items>
+    <item x="0" y="0" z="0">
+      <label>byblos-wall-y-1</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="1" z="0">
+      <label>byblos-wall-y-1</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="4" z="0">
+      <label>byblos-wall-y-1</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="5" z="0">
+      <label>byblos-wall-y-1</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="2" z="-1">
+      <label>byblos-shaft-north</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="3" z="-1">
+      <label>byblos-shaft-north</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="2" z="-1">
+      <label>byblos-shaft-north</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="3" z="-1">
+      <label>byblos-shaft-north</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="2" z="-1">
+      <label>byblos-capital-north</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="3" z="-1">
+      <label>byblos-capital-north</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="2" z="-1">
+      <label>byblos-door-south</label>
+      <direction>north</direction>
+      <type>door</type>
+    </item>
+    <item x="13" y="2" z="2">
+      <label>byblos-capital-south</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="13" y="3" z="2">
+      <label>byblos-capital-south</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="13" y="2" z="-1">
+      <label>byblos-door-south</label>
+      <direction>south</direction>
+      <type>door</type>
+    </item>
+    <item x="1" y="3" z="0">
+      <label>conveyor-belt</label>
+      <direction>east</direction>
+      <behavior>behavior of conveyor</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="1" y="2" z="0">
+      <label>conveyor-belt</label>
+      <direction>east</direction>
+      <behavior>behavior of conveyor</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="1" y="1" z="0">
+      <label>conveyor-belt</label>
+      <direction>east</direction>
+      <behavior>behavior of conveyor</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="1" y="0" z="0">
+      <label>conveyor-belt</label>
+      <direction>south</direction>
+      <behavior>behavior of conveyor</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="2" y="0" z="0">
+      <label>conveyor-belt</label>
+      <direction>south</direction>
+      <behavior>behavior of conveyor</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="3" y="0" z="0">
+      <label>conveyor-belt</label>
+      <direction>south</direction>
+      <behavior>behavior of disappearance on jump into</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="4" y="0" z="0">
+      <label>conveyor-belt</label>
+      <direction>south</direction>
+      <behavior>behavior of conveyor</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="5" y="0" z="0">
+      <label>conveyor-belt</label>
+      <direction>south</direction>
+      <behavior>behavior of conveyor</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="6" y="0" z="0">
+      <label>conveyor-belt</label>
+      <direction>south</direction>
+      <behavior>behavior of conveyor</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="7" y="0" z="0">
+      <label>conveyor-belt</label>
+      <direction>south</direction>
+      <behavior>behavior of conveyor</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="8" y="0" z="0">
+      <label>conveyor-belt</label>
+      <direction>west</direction>
+      <behavior>behavior of conveyor</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="8" y="1" z="0">
+      <label>conveyor-belt</label>
+      <direction>west</direction>
+      <behavior>behavior of conveyor</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="8" y="2" z="0">
+      <label>conveyor-belt</label>
+      <direction>west</direction>
+      <behavior>behavior of disappearance on jump into</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="8" y="3" z="0">
+      <label>conveyor-belt</label>
+      <direction>west</direction>
+      <behavior>behavior of conveyor</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="8" y="4" z="0">
+      <label>conveyor-belt</label>
+      <direction>west</direction>
+      <behavior>behavior of conveyor</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="8" y="5" z="0">
+      <label>conveyor-belt</label>
+      <direction>south</direction>
+      <behavior>behavior of conveyor</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="9" y="5" z="0">
+      <label>conveyor-belt</label>
+      <direction>south</direction>
+      <behavior>behavior of conveyor</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="10" y="5" z="0">
+      <label>conveyor-belt</label>
+      <direction>south</direction>
+      <behavior>behavior of disappearance on jump into</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="11" y="5" z="0">
+      <label>conveyor-belt</label>
+      <direction>south</direction>
+      <behavior>behavior of conveyor</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="12" y="5" z="0">
+      <label>conveyor-belt</label>
+      <direction>east</direction>
+      <behavior>behavior of conveyor</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="12" y="4" z="0">
+      <label>conveyor-belt</label>
+      <direction>east</direction>
+      <behavior>behavior of conveyor</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="12" y="3" z="0">
+      <label>conveyor-belt</label>
+      <direction>east</direction>
+      <behavior>behavior of conveyor</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="1" y="1" z="2">
+      <label>toaster</label>
+      <direction>south</direction>
+      <type>griditem</type>
+    </item>
+    <item x="1" y="0" z="2">
+      <label>toaster</label>
+      <direction>south</direction>
+      <type>griditem</type>
+    </item>
+    <item x="5" y="0" z="2">
+      <label>toaster</label>
+      <direction>south</direction>
+      <type>griditem</type>
+    </item>
+    <item x="6" y="0" z="2">
+      <label>toaster</label>
+      <direction>south</direction>
+      <type>griditem</type>
+    </item>
+    <item x="7" y="0" z="2">
+      <label>toaster</label>
+      <direction>south</direction>
+      <type>griditem</type>
+    </item>
+    <item x="8" y="5" z="2">
+      <label>toaster</label>
+      <direction>south</direction>
+      <type>griditem</type>
+    </item>
+    <item x="12" y="5" z="2">
+      <label>toaster</label>
+      <direction>south</direction>
+      <type>griditem</type>
+    </item>
+  </items>
+
+</room>

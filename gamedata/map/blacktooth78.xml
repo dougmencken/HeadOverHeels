@@ -1,0 +1,614 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<room xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <name>blacktooth78.xml</name>
+
+  <scenery>blacktooth</scenery>
+
+  <xTiles>9</xTiles>
+
+  <yTiles>9</yTiles>
+
+  <width>16</width>
+
+  <floorType>plain</floorType>
+
+  <floor>
+    <tile>
+      <x>0</x>
+      <y>4</y>
+      <picture>blacktooth-floor-north.png</picture>
+    </tile>
+    <tile>
+      <x>0</x>
+      <y>5</y>
+      <picture>blacktooth-floor-north.png</picture>
+    </tile>
+    <tile>
+      <x>4</x>
+      <y>0</y>
+      <picture>blacktooth-floor-east.png</picture>
+    </tile>
+    <tile>
+      <x>5</x>
+      <y>0</y>
+      <picture>blacktooth-floor-east.png</picture>
+    </tile>
+    <tile>
+      <x>1</x>
+      <y>1</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>1</x>
+      <y>2</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>1</x>
+      <y>3</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>1</x>
+      <y>4</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>1</x>
+      <y>5</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>1</x>
+      <y>6</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>1</x>
+      <y>7</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>1</x>
+      <y>8</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>2</x>
+      <y>1</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>2</x>
+      <y>2</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>2</x>
+      <y>3</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>2</x>
+      <y>4</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>2</x>
+      <y>5</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>2</x>
+      <y>6</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>2</x>
+      <y>7</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>2</x>
+      <y>8</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>3</x>
+      <y>1</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>3</x>
+      <y>2</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>3</x>
+      <y>3</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>3</x>
+      <y>4</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>3</x>
+      <y>5</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>3</x>
+      <y>6</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>3</x>
+      <y>7</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>3</x>
+      <y>8</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>4</x>
+      <y>1</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>4</x>
+      <y>2</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>4</x>
+      <y>3</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>4</x>
+      <y>4</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>4</x>
+      <y>5</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>4</x>
+      <y>6</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>4</x>
+      <y>7</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>4</x>
+      <y>8</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>5</x>
+      <y>1</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>5</x>
+      <y>2</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>5</x>
+      <y>3</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>5</x>
+      <y>4</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>5</x>
+      <y>5</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>5</x>
+      <y>6</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>5</x>
+      <y>7</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>5</x>
+      <y>8</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>6</x>
+      <y>1</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>6</x>
+      <y>2</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>6</x>
+      <y>3</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>6</x>
+      <y>4</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>6</x>
+      <y>5</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>6</x>
+      <y>6</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>6</x>
+      <y>7</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>6</x>
+      <y>8</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>7</x>
+      <y>1</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>7</x>
+      <y>2</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>7</x>
+      <y>3</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>7</x>
+      <y>4</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>7</x>
+      <y>5</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>7</x>
+      <y>6</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>7</x>
+      <y>7</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>7</x>
+      <y>8</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>8</x>
+      <y>1</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>8</x>
+      <y>2</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>8</x>
+      <y>3</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>8</x>
+      <y>4</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>8</x>
+      <y>5</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>8</x>
+      <y>6</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>8</x>
+      <y>7</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+    <tile>
+      <x>8</x>
+      <y>8</y>
+      <picture>blacktooth-floor.png</picture>
+    </tile>
+  </floor>
+
+  <items>
+    <item x="0" y="1" z="0">
+      <label>blacktooth-wall-y-1</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="2" z="0">
+      <label>blacktooth-wall-y-2</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="3" z="0">
+      <label>blacktooth-wall-y-1</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="6" z="0">
+      <label>blacktooth-wall-y-1</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="7" z="0">
+      <label>blacktooth-wall-y-2</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="8" z="0">
+      <label>blacktooth-wall-y-1</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="4" z="-1">
+      <label>blacktooth-column-shaft-north</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="5" z="-1">
+      <label>blacktooth-column-shaft-north</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="4" z="-1">
+      <label>blacktooth-column-shaft-north</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="5" z="-1">
+      <label>blacktooth-column-shaft-north</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="4" z="-1">
+      <label>blacktooth-column-shaft-north</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="5" z="-1">
+      <label>blacktooth-column-shaft-north</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="4" z="-1">
+      <label>blacktooth-column-shaft-north</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="5" z="-1">
+      <label>blacktooth-column-shaft-north</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="4" z="-1">
+      <label>blacktooth-column-capital-north</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="5" z="-1">
+      <label>blacktooth-column-capital-north</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="4" z="-1">
+      <label>blacktooth-door-south</label>
+      <direction>north</direction>
+      <type>door</type>
+    </item>
+    <item x="1" y="0" z="0">
+      <label>blacktooth-wall-x-1</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="2" y="0" z="0">
+      <label>blacktooth-wall-x-2</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="3" y="0" z="0">
+      <label>blacktooth-wall-x-1</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="6" y="0" z="0">
+      <label>blacktooth-wall-x-1</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="7" y="0" z="0">
+      <label>blacktooth-wall-x-2</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="8" y="0" z="0">
+      <label>blacktooth-wall-x-1</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="4" y="0" z="-1">
+      <label>blacktooth-column-shaft-east</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="5" y="0" z="-1">
+      <label>blacktooth-column-shaft-east</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="4" y="0" z="-1">
+      <label>blacktooth-column-shaft-east</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="5" y="0" z="-1">
+      <label>blacktooth-column-shaft-east</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="4" y="0" z="-1">
+      <label>blacktooth-column-shaft-east</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="5" y="0" z="-1">
+      <label>blacktooth-column-shaft-east</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="4" y="0" z="-1">
+      <label>blacktooth-column-shaft-east</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="5" y="0" z="-1">
+      <label>blacktooth-column-shaft-east</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="4" y="0" z="-1">
+      <label>blacktooth-column-capital-east</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="5" y="0" z="-1">
+      <label>blacktooth-column-capital-east</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="4" y="0" z="-1">
+      <label>blacktooth-door-west</label>
+      <direction>east</direction>
+      <type>door</type>
+    </item>
+    <item x="4" y="1" z="3">
+      <label>brick2</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="5" y="1" z="3">
+      <label>brick2</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="4" y="4" z="0">
+      <label>siren</label>
+      <direction>none</direction>
+      <behavior>behavior of random patroling in four secondary directions</behavior>
+      <type>freeitem</type>
+    </item>
+    <item x="1" y="5" z="2">
+      <label>brick2</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="1" y="6" z="0">
+      <label>brick2</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="7" y="6" z="0">
+      <label>vulcano</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="7" y="6" z="1">
+      <label>vulcano</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="6" y="7" z="0">
+      <label>vulcano</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="6" y="7" z="1">
+      <label>vulcano</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="7" y="7" z="0">
+      <label>elevator</label>
+      <direction>none</direction>
+      <behavior>behavior of elevator</behavior>
+      <type>freeitem</type>
+      <extra>9</extra>
+      <extra>0</extra>
+      <extra>1</extra>
+    </item>
+    <item x="7" y="7" z="1">
+      <label>stool</label>
+      <direction>none</direction>
+      <behavior>behavior of flying there and back</behavior>
+      <type>freeitem</type>
+    </item>
+    <item x="8" y="7" z="0">
+      <label>brick2</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="8" y="7" z="1">
+      <label>stool</label>
+      <direction>none</direction>
+      <behavior>behavior of thing able to move by pushing</behavior>
+      <type>freeitem</type>
+    </item>
+    <item x="7" y="8" z="0">
+      <label>vulcano</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="7" y="8" z="1">
+      <label>vulcano</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+  </items>
+
+</room>

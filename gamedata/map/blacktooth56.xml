@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<room xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <name>blacktooth56.xml</name>
+
+  <scenery>jail</scenery>
+
+  <xTiles>10</xTiles>
+
+  <yTiles>2</yTiles>
+
+  <width>16</width>
+
+  <floorType>plain</floorType>
+
+  <floor>
+    <tile>
+      <x>0</x>
+      <y>0</y>
+      <picture>jail-floor-north.png</picture>
+    </tile>
+    <tile>
+      <x>0</x>
+      <y>1</y>
+      <picture>jail-floor-north.png</picture>
+    </tile>
+    <tile>
+      <x>9</x>
+      <y>0</y>
+      <picture>jail-floor-south.png</picture>
+    </tile>
+    <tile>
+      <x>9</x>
+      <y>1</y>
+      <picture>jail-floor-south.png</picture>
+    </tile>
+    <tile>
+      <x>1</x>
+      <y>0</y>
+      <picture>jail-floor.png</picture>
+    </tile>
+    <tile>
+      <x>1</x>
+      <y>1</y>
+      <picture>jail-floor.png</picture>
+    </tile>
+    <tile>
+      <x>2</x>
+      <y>0</y>
+      <picture>jail-floor.png</picture>
+    </tile>
+    <tile>
+      <x>2</x>
+      <y>1</y>
+      <picture>jail-floor.png</picture>
+    </tile>
+    <tile>
+      <x>3</x>
+      <y>0</y>
+      <picture>jail-floor.png</picture>
+    </tile>
+    <tile>
+      <x>3</x>
+      <y>1</y>
+      <picture>jail-floor.png</picture>
+    </tile>
+    <tile>
+      <x>4</x>
+      <y>0</y>
+      <picture>jail-floor.png</picture>
+    </tile>
+    <tile>
+      <x>4</x>
+      <y>1</y>
+      <picture>jail-floor.png</picture>
+    </tile>
+    <tile>
+      <x>5</x>
+      <y>0</y>
+      <picture>jail-floor.png</picture>
+    </tile>
+    <tile>
+      <x>5</x>
+      <y>1</y>
+      <picture>jail-floor.png</picture>
+    </tile>
+    <tile>
+      <x>6</x>
+      <y>0</y>
+      <picture>jail-floor.png</picture>
+    </tile>
+    <tile>
+      <x>6</x>
+      <y>1</y>
+      <picture>jail-floor.png</picture>
+    </tile>
+    <tile>
+      <x>7</x>
+      <y>0</y>
+      <picture>jail-floor.png</picture>
+    </tile>
+    <tile>
+      <x>7</x>
+      <y>1</y>
+      <picture>jail-floor.png</picture>
+    </tile>
+    <tile>
+      <x>8</x>
+      <y>0</y>
+      <picture>jail-floor.png</picture>
+    </tile>
+    <tile>
+      <x>8</x>
+      <y>1</y>
+      <picture>jail-floor.png</picture>
+    </tile>
+  </floor>
+
+  <walls>
+    <wall>
+      <axis>x</axis>
+      <index>1</index>
+      <picture>jail-wall-x.png</picture>
+    </wall>
+    <wall>
+      <axis>x</axis>
+      <index>2</index>
+      <picture>jail-wall-x.png</picture>
+    </wall>
+    <wall>
+      <axis>x</axis>
+      <index>3</index>
+      <picture>jail-wall-x.png</picture>
+    </wall>
+    <wall>
+      <axis>x</axis>
+      <index>4</index>
+      <picture>jail-wall-x.png</picture>
+    </wall>
+    <wall>
+      <axis>x</axis>
+      <index>5</index>
+      <picture>jail-wall-x.png</picture>
+    </wall>
+    <wall>
+      <axis>x</axis>
+      <index>6</index>
+      <picture>jail-wall-x.png</picture>
+    </wall>
+    <wall>
+      <axis>x</axis>
+      <index>7</index>
+      <picture>jail-wall-x.png</picture>
+    </wall>
+    <wall>
+      <axis>x</axis>
+      <index>8</index>
+      <picture>jail-wall-x.png</picture>
+    </wall>
+  </walls>
+
+  <items>
+    <item x="0" y="0" z="-1">
+      <label>jail-door-south</label>
+      <direction>north</direction>
+      <type>door</type>
+    </item>
+    <item x="9" y="0" z="3">
+      <label>jail-capital-south</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="9" y="1" z="3">
+      <label>jail-capital-south</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="9" y="0" z="-1">
+      <label>jail-door-south</label>
+      <direction>south</direction>
+      <type>door</type>
+    </item>
+    <item x="5" y="0" z="0">
+      <label>brick2</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="5" y="0" z="1">
+      <label>brick2</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="5" y="0" z="2">
+      <label>brick2</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="5" y="0" z="3">
+      <label>brick2</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="8" y="0" z="0">
+      <label>spikes</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="5" y="1" z="0">
+      <label>brick2</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="5" y="1" z="1">
+      <label>brick2</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="5" y="1" z="3">
+      <label>brick2</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="8" y="1" z="0">
+      <label>spikes</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+  </items>
+
+</room>

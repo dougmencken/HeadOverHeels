@@ -22,7 +22,7 @@ void LoadGame::doAction ()
 
         std::stringstream ss;
         ss << slot;
-        gameManager->loadGame( isomot::homePath() + "savegame" + pathSeparator + "save" + ss.str() + ".xml" );
+        gameManager->loadGame( isomot::homePath() + "savegame" + pathSeparator + "saved" + ss.str() + ".xml" );
 
         CreatePlanetsScreen * planetsAction = new CreatePlanetsScreen( getWhereToDraw(), true );
 

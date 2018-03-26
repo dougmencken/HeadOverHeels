@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<savegame xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="savegame.xsd">
+
+  <exploredRooms>
+    <visited filename="blacktooth1head.xml"/>
+    <visited filename="blacktooth2.xml"/>
+    <visited filename="blacktooth3.xml"/>
+    <visited filename="blacktooth4.xml"/>
+    <visited filename="blacktooth5.xml"/>
+    <visited filename="blacktooth6.xml"/>
+    <visited filename="blacktooth7.xml"/>
+    <visited filename="blacktooth8fish.xml"/>
+    <visited filename="blacktooth9.xml"/>
+    <visited filename="blacktooth10.xml"/>
+    <visited filename="blacktooth11.xml"/>
+    <visited filename="blacktooth12.xml"/>
+    <visited filename="blacktooth13.xml"/>
+    <visited filename="blacktooth14.xml"/>
+    <visited filename="blacktooth15.xml"/>
+    <visited filename="blacktooth16.xml"/>
+    <visited filename="blacktooth17.xml"/>
+    <visited filename="blacktooth19.xml"/>
+    <visited filename="blacktooth20.xml"/>
+    <visited filename="blacktooth21fish.xml"/>
+    <visited filename="blacktooth23heels.xml"/>
+    <visited filename="blacktooth24.xml"/>
+    <visited filename="blacktooth25.xml"/>
+    <visited filename="blacktooth26.xml"/>
+    <visited filename="blacktooth27fish.xml"/>
+    <visited filename="blacktooth28.xml"/>
+    <visited filename="blacktooth29.xml"/>
+    <visited filename="blacktooth30.xml"/>
+    <visited filename="blacktooth31.xml"/>
+    <visited filename="blacktooth32.xml"/>
+    <visited filename="blacktooth33.xml"/>
+    <visited filename="blacktooth34.xml"/>
+    <visited filename="blacktooth35.xml"/>
+    <visited filename="blacktooth36.xml"/>
+    <visited filename="blacktooth37.xml"/>
+    <visited filename="blacktooth38.xml"/>
+    <visited filename="blacktooth39.xml"/>
+    <visited filename="blacktooth40fish.xml"/>
+    <visited filename="blacktooth41.xml"/>
+    <visited filename="blacktooth42.xml"/>
+    <visited filename="blacktooth43.xml"/>
+    <visited filename="blacktooth46market.xml"/>
+  </exploredRooms>
+
+  <freeByblos>false</freeByblos>
+
+  <freeEgyptus>false</freeEgyptus>
+
+  <freePenitentiary>false</freePenitentiary>
+
+  <freeSafari>false</freeSafari>
+
+  <freeBlacktooth>false</freeBlacktooth>
+
+  <bonus>
+    <room filename="blacktooth1head.xml">
+      <label>extra-life</label>
+    </room>
+    <room filename="blacktooth6.xml">
+      <label>donuts</label>
+    </room>
+    <room filename="blacktooth27fish.xml">
+      <label>reincarnation-fish</label>
+    </room>
+    <room filename="blacktooth28.xml">
+      <label>handbag</label>
+    </room>
+    <room filename="blacktooth9.xml">
+      <label>horn</label>
+    </room>
+    <room filename="blacktooth8fish.xml">
+      <label>reincarnation-fish</label>
+    </room>
+    <room filename="blacktooth14.xml">
+      <label>donuts</label>
+    </room>
+    <room filename="blacktooth14.xml">
+      <label>high-speed</label>
+    </room>
+    <room filename="blacktooth33.xml">
+      <label>high-jumps</label>
+    </room>
+    <room filename="blacktooth21fish.xml">
+      <label>reincarnation-fish</label>
+    </room>
+  </bonus>
+
+  <players>
+    <player label="head">
+      <active>true</active>
+      <roomFilename>blacktooth21fish.xml</roomFilename>
+      <x>2</x>
+      <y>77</y>
+      <z>72</z>
+      <direction>2</direction>
+      <entry>99</entry>
+      <lives>8</lives>
+      <hasHorn>true</hasHorn>
+      <hasHandbag>false</hasHandbag>
+      <ammo>12</ammo>
+    </player>
+    <player label="heels">
+      <active>false</active>
+      <roomFilename>blacktooth46market.xml</roomFilename>
+      <x>68</x>
+      <y>69</y>
+      <z>240</z>
+      <direction>1</direction>
+      <entry>12</entry>
+      <lives>8</lives>
+      <hasHorn>false</hasHorn>
+      <hasHandbag>true</hasHandbag>
+      <ammo>0</ammo>
+    </player>
+  </players>
+
+</savegame>

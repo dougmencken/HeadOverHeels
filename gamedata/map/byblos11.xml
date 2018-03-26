@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<room xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <name>byblos11.xml</name>
+
+  <scenery>byblos</scenery>
+
+  <xTiles>10</xTiles>
+
+  <yTiles>2</yTiles>
+
+  <width>16</width>
+
+  <floorType>plain</floorType>
+
+  <floor>
+    <tile>
+      <x>0</x>
+      <y>0</y>
+      <picture>byblos-floor-north.png</picture>
+    </tile>
+    <tile>
+      <x>0</x>
+      <y>1</y>
+      <picture>byblos-floor-north.png</picture>
+    </tile>
+    <tile>
+      <x>9</x>
+      <y>0</y>
+      <picture>byblos-floor-south.png</picture>
+    </tile>
+    <tile>
+      <x>9</x>
+      <y>1</y>
+      <picture>byblos-floor-south.png</picture>
+    </tile>
+    <tile>
+      <x>1</x>
+      <y>0</y>
+      <picture>byblos-floor.png</picture>
+    </tile>
+    <tile>
+      <x>1</x>
+      <y>1</y>
+      <picture>byblos-floor.png</picture>
+    </tile>
+    <tile>
+      <x>2</x>
+      <y>0</y>
+      <picture>byblos-floor.png</picture>
+    </tile>
+    <tile>
+      <x>2</x>
+      <y>1</y>
+      <picture>byblos-floor.png</picture>
+    </tile>
+    <tile>
+      <x>3</x>
+      <y>0</y>
+      <picture>byblos-floor.png</picture>
+    </tile>
+    <tile>
+      <x>3</x>
+      <y>1</y>
+      <picture>byblos-floor.png</picture>
+    </tile>
+    <tile>
+      <x>4</x>
+      <y>0</y>
+      <picture>byblos-floor.png</picture>
+    </tile>
+    <tile>
+      <x>4</x>
+      <y>1</y>
+      <picture>byblos-floor.png</picture>
+    </tile>
+    <tile>
+      <x>5</x>
+      <y>0</y>
+      <picture>byblos-floor.png</picture>
+    </tile>
+    <tile>
+      <x>5</x>
+      <y>1</y>
+      <picture>byblos-floor.png</picture>
+    </tile>
+    <tile>
+      <x>6</x>
+      <y>0</y>
+      <picture>byblos-floor.png</picture>
+    </tile>
+    <tile>
+      <x>6</x>
+      <y>1</y>
+      <picture>byblos-floor.png</picture>
+    </tile>
+    <tile>
+      <x>7</x>
+      <y>0</y>
+      <picture>byblos-floor.png</picture>
+    </tile>
+    <tile>
+      <x>7</x>
+      <y>1</y>
+      <picture>byblos-floor.png</picture>
+    </tile>
+    <tile>
+      <x>8</x>
+      <y>0</y>
+      <picture>byblos-floor.png</picture>
+    </tile>
+    <tile>
+      <x>8</x>
+      <y>1</y>
+      <picture>byblos-floor.png</picture>
+    </tile>
+  </floor>
+
+  <walls>
+    <wall>
+      <axis>x</axis>
+      <index>1</index>
+      <picture>byblos-wall-x-1.png</picture>
+    </wall>
+    <wall>
+      <axis>x</axis>
+      <index>2</index>
+      <picture>byblos-wall-x-1.png</picture>
+    </wall>
+    <wall>
+      <axis>x</axis>
+      <index>3</index>
+      <picture>byblos-wall-x-2.png</picture>
+    </wall>
+    <wall>
+      <axis>x</axis>
+      <index>4</index>
+      <picture>byblos-wall-x-1.png</picture>
+    </wall>
+    <wall>
+      <axis>x</axis>
+      <index>5</index>
+      <picture>byblos-wall-x-1.png</picture>
+    </wall>
+    <wall>
+      <axis>x</axis>
+      <index>6</index>
+      <picture>byblos-wall-x-2.png</picture>
+    </wall>
+    <wall>
+      <axis>x</axis>
+      <index>7</index>
+      <picture>byblos-wall-x-1.png</picture>
+    </wall>
+    <wall>
+      <axis>x</axis>
+      <index>8</index>
+      <picture>byblos-wall-x-1.png</picture>
+    </wall>
+  </walls>
+
+  <items>
+    <item x="0" y="0" z="-1">
+      <label>byblos-shaft-north</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="1" z="-1">
+      <label>byblos-shaft-north</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="0" z="-1">
+      <label>byblos-shaft-north</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="1" z="-1">
+      <label>byblos-shaft-north</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="0" z="-1">
+      <label>byblos-shaft-north</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="1" z="-1">
+      <label>byblos-shaft-north</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="0" z="-1">
+      <label>byblos-capital-north</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="1" z="-1">
+      <label>byblos-capital-north</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="0" y="0" z="-1">
+      <label>byblos-door-south</label>
+      <direction>north</direction>
+      <type>door</type>
+    </item>
+    <item x="9" y="0" z="-1">
+      <label>byblos-door-south</label>
+      <direction>south</direction>
+      <type>door</type>
+    </item>
+    <item x="1" y="0" z="2">
+      <label>puppy</label>
+      <direction>west</direction>
+      <behavior>behavior of disappearance as soon as Head appears</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="2" y="0" z="1">
+      <label>puppy</label>
+      <direction>west</direction>
+      <behavior>behavior of disappearance as soon as Head appears</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="3" y="0" z="0">
+      <label>puppy</label>
+      <direction>west</direction>
+      <behavior>behavior of disappearance as soon as Head appears</behavior>
+      <type>griditem</type>
+    </item>
+  </items>
+
+</room>

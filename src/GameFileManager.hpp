@@ -33,11 +33,6 @@ class GameFileManager
 
 public:
 
-       /**
-        * Constructor
-        * @param gameManager El gestor del juego
-        * @param isomot El motor isométrico del juego
-        */
         GameFileManager( const GameManager * gameManager, const Isomot * isomot ) ;
 
         ~GameFileManager( ) ;
@@ -45,25 +40,17 @@ public:
        /**
         * Guarda los datos necesarios para grabar la partida
         * @param room Room where reincarnation fish is caught
-        * @param label Name of character who caught the fish
-        * @param x Coordenada X donde está situado el pez de la reencarnación
-        * @param y Coordenada Y donde está situado el pez de la reencarnación
-        * @param z Coordenada Z donde está situado el pez de la reencarnación
-        * @param direction Dirección a la que mira el jugador en el momento de coger el pez
+        * @param label Character who caught the fish
         */
         void assignFishData ( const std::string& room, const std::string& label, int x, int y, int z, const Way& way ) ;
 
        /**
         * Carga una partida de un archivo XML
-        * @param fileName Nombre del archivo
         */
         void loadGame ( const std::string& fileName ) ;
 
        /**
         * Guarda una partida en un archivo XML
-        * @param fileName Nombre del archivo
-        * @pre El jugador ha tenido que comerse el pez, es decir, la partida se graba en disco sólo
-        * si se han asignado los datos necesarios a través de assignFishData
         */
         void saveGame ( const std::string& fileName ) ;
 
@@ -87,31 +74,16 @@ private:
         */
         std::string nameOfCharacterWhoCaughtTheFish ;
 
-       /**
-        * Coordenada X donde está situado el pez de la reencarnación
-        */
-        int x ;
+        int xFish ;
 
-       /**
-        * Coordenada Y donde está situado el pez de la reencarnación
-        */
-        int y ;
+        int yFish ;
 
-       /**
-        * Coordenada Z donde está situado el pez de la reencarnación
-        */
-        int z ;
+        int zFish ;
 
         Way catchFishWay ;
 
-       /**
-        * El gestor del juego
-        */
         GameManager * gameManager ;
 
-       /**
-        * El motor isométrico del juego
-        */
         Isomot * isomot ;
 
 };

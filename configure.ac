@@ -57,12 +57,6 @@ AC_OUTPUT( \
             gamedata/gfx.2003/Makefile \
             gamedata/gfx.simple/Makefile \
             gamedata/map/Makefile \
-            gamedata/map/blacktooth/Makefile \
-            gamedata/map/byblos/Makefile \
-            gamedata/map/egyptus/Makefile \
-            gamedata/map/themoon/Makefile \
-            gamedata/map/penitentiary/Makefile \
-            gamedata/map/safari/Makefile \
             gamedata/music/Makefile \
             gamedata/savegame/Makefile \
             gamedata/sound/Makefile \

@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<room xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <name>blacktooth26.xml</name>
+
+  <scenery>jail</scenery>
+
+  <xTiles>7</xTiles>
+
+  <yTiles>7</yTiles>
+
+  <width>16</width>
+
+  <floorType>none</floorType>
+
+  <floor>
+    <tile>
+      <x>0</x>
+      <y>1</y>
+      <picture>jail-floor-underground-north.png</picture>
+    </tile>
+    <tile>
+      <x>0</x>
+      <y>2</y>
+      <picture>jail-floor-underground-north.png</picture>
+    </tile>
+    <tile>
+      <x>0</x>
+      <y>3</y>
+      <picture>jail-floor-underground-north.png</picture>
+    </tile>
+    <tile>
+      <x>0</x>
+      <y>4</y>
+      <picture>jail-floor-underground-north.png</picture>
+    </tile>
+    <tile>
+      <x>0</x>
+      <y>5</y>
+      <picture>jail-floor-underground-north.png</picture>
+    </tile>
+    <tile>
+      <x>0</x>
+      <y>6</y>
+      <picture>jail-floor-underground-north.png</picture>
+    </tile>
+    <tile>
+      <x>3</x>
+      <y>0</y>
+      <picture>jail-floor-east.png</picture>
+    </tile>
+    <tile>
+      <x>4</x>
+      <y>0</y>
+      <picture>jail-floor-east.png</picture>
+    </tile>
+    <tile>
+      <x>1</x>
+      <y>0</y>
+      <picture>jail-floor-underground-east.png</picture>
+    </tile>
+    <tile>
+      <x>2</x>
+      <y>0</y>
+      <picture>jail-floor-underground-east.png</picture>
+    </tile>
+    <tile>
+      <x>5</x>
+      <y>0</y>
+      <picture>jail-floor-underground-east.png</picture>
+    </tile>
+    <tile>
+      <x>6</x>
+      <y>0</y>
+      <picture>jail-floor-underground-east.png</picture>
+    </tile>
+    <tile>
+      <x>6</x>
+      <y>1</y>
+      <picture>jail-nofloor-south.png</picture>
+    </tile>
+    <tile>
+      <x>6</x>
+      <y>2</y>
+      <picture>jail-nofloor-south.png</picture>
+    </tile>
+    <tile>
+      <x>6</x>
+      <y>3</y>
+      <picture>jail-nofloor-south.png</picture>
+    </tile>
+    <tile>
+      <x>6</x>
+      <y>4</y>
+      <picture>jail-nofloor-south.png</picture>
+    </tile>
+    <tile>
+      <x>6</x>
+      <y>5</y>
+      <picture>jail-nofloor-south.png</picture>
+    </tile>
+    <tile>
+      <x>1</x>
+      <y>6</y>
+      <picture>jail-nofloor-west.png</picture>
+    </tile>
+    <tile>
+      <x>2</x>
+      <y>6</y>
+      <picture>jail-nofloor-west.png</picture>
+    </tile>
+    <tile>
+      <x>3</x>
+      <y>6</y>
+      <picture>jail-nofloor-west.png</picture>
+    </tile>
+    <tile>
+      <x>4</x>
+      <y>6</y>
+      <picture>jail-nofloor-west.png</picture>
+    </tile>
+    <tile>
+      <x>5</x>
+      <y>6</y>
+      <picture>jail-nofloor-west.png</picture>
+    </tile>
+    <tile>
+      <x>6</x>
+      <y>6</y>
+      <picture>jail-nofloor-sw.png</picture>
+    </tile>
+  </floor>
+
+  <walls>
+    <wall>
+      <axis>y</axis>
+      <index>1</index>
+      <picture>jail-wall-y.png</picture>
+    </wall>
+    <wall>
+      <axis>y</axis>
+      <index>2</index>
+      <picture>jail-wall-y.png</picture>
+    </wall>
+    <wall>
+      <axis>y</axis>
+      <index>3</index>
+      <picture>jail-wall-y.png</picture>
+    </wall>
+    <wall>
+      <axis>y</axis>
+      <index>4</index>
+      <picture>jail-wall-y.png</picture>
+    </wall>
+    <wall>
+      <axis>y</axis>
+      <index>5</index>
+      <picture>jail-wall-y.png</picture>
+    </wall>
+    <wall>
+      <axis>y</axis>
+      <index>6</index>
+      <picture>jail-wall-y.png</picture>
+    </wall>
+    <wall>
+      <axis>x</axis>
+      <index>1</index>
+      <picture>jail-wall-x.png</picture>
+    </wall>
+    <wall>
+      <axis>x</axis>
+      <index>2</index>
+      <picture>jail-wall-x.png</picture>
+    </wall>
+    <wall>
+      <axis>x</axis>
+      <index>5</index>
+      <picture>jail-wall-x.png</picture>
+    </wall>
+    <wall>
+      <axis>x</axis>
+      <index>6</index>
+      <picture>jail-wall-x.png</picture>
+    </wall>
+  </walls>
+
+  <items>
+    <item x="3" y="0" z="-1">
+      <label>jail-shaft-east</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="4" y="0" z="-1">
+      <label>jail-shaft-east</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="3" y="0" z="-1">
+      <label>jail-capital-east</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="4" y="0" z="-1">
+      <label>jail-capital-east</label>
+      <direction>none</direction>
+      <type>griditem</type>
+    </item>
+    <item x="3" y="0" z="-1">
+      <label>jail-door-west</label>
+      <direction>east</direction>
+      <type>door</type>
+    </item>
+    <item x="1" y="1" z="0">
+      <label>conveyor-belt</label>
+      <direction>south</direction>
+      <behavior>behavior of conveyor</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="2" y="1" z="0">
+      <label>conveyor-belt</label>
+      <direction>south</direction>
+      <behavior>behavior of conveyor</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="3" y="1" z="0">
+      <label>conveyor-belt</label>
+      <direction>south</direction>
+      <behavior>behavior of conveyor</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="4" y="1" z="0">
+      <label>conveyor-belt</label>
+      <direction>south</direction>
+      <behavior>behavior of conveyor</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="1" y="2" z="0">
+      <label>conveyor-belt</label>
+      <direction>east</direction>
+      <behavior>behavior of conveyor</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="1" y="3" z="0">
+      <label>conveyor-belt</label>
+      <direction>east</direction>
+      <behavior>behavior of conveyor</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="1" y="4" z="0">
+      <label>conveyor-belt</label>
+      <direction>east</direction>
+      <behavior>behavior of conveyor</behavior>
+      <type>griditem</type>
+    </item>
+    <item x="1" y="6" z="0">
+      <label>elevator</label>
+      <direction>none</direction>
+      <behavior>behavior of elevator</behavior>
+      <type>freeitem</type>
+      <extra>7</extra>
+      <extra>0</extra>
+      <extra>1</extra>
+    </item>
+  </items>
+
+</room>
