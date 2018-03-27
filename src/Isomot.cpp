@@ -41,6 +41,8 @@ Isomot::~Isomot( )
 void Isomot::beginNewGame ()
 {
         prepare() ;
+
+        offRecording() ;
         offVidasInfinitas() ;
         offInviolability() ;
 
@@ -60,6 +62,7 @@ void Isomot::beginNewGame ()
 
 void Isomot::continueSavedGame ( const sgxml::players::player_sequence& playerSequence )
 {
+        offRecording() ;
         offVidasInfinitas() ;
         offInviolability() ;
 
@@ -103,6 +106,14 @@ void Isomot::prepare ()
         {
                 this->mapManager = new MapManager( this, "map.xml" );
                 this->mapManager->loadMap ();
+        }
+}
+
+void Isomot::offRecording ()
+{
+        if ( GameManager::getInstance()->recordingCaptures () )
+        {
+                GameManager::getInstance()->toggleRecordingCaptures ();
         }
 }
 
@@ -156,6 +167,12 @@ BITMAP* Isomot::update()
 {
         Room* activeRoom = mapManager->getActiveRoom();
         GameManager* gameManager = GameManager::getInstance();
+
+        if ( key[ KEY_PRTSCR ] )
+        {
+                gameManager->toggleRecordingCaptures ();
+                key[ KEY_PRTSCR ] = 0;
+        }
 
         if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_F ] )
         {

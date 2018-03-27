@@ -17,6 +17,7 @@
 #include "Ism.hpp"
 #include "Room.hpp"
 #include "ColorCyclingLabel.hpp"
+#include "Timer.hpp"
 
 
 namespace isomot
@@ -265,9 +266,30 @@ public:
 
         void toggleBackgroundPicture () {  drawBackgroundPicture = ! drawBackgroundPicture ;  }
 
+        bool recordingCaptures () const {  return recordCaptures ;  }
+
+        void toggleRecordingCaptures ()
+        {
+                recordingTimer->reset () ;
+                recordCaptures = ! recordCaptures ;
+
+                if ( recordCaptures )
+                        prefixOfCaptures = makeRandomString( 10 );
+                else
+                        numberOfCapture += 1000 ;
+        }
+
 private:
 
         gui::ColorCyclingLabel * freedomLabel ;
+
+        Timer * recordingTimer ;
+
+        unsigned int numberOfCapture ;
+
+        std::string prefixOfCaptures ;
+
+        std::string capturePath ;
 
         std::string chosenGraphicSet ;
 
@@ -280,6 +302,8 @@ private:
         bool drawShadows ;
 
         bool drawBackgroundPicture ;
+
+        bool recordCaptures ;
 
         static GameManager * instance ;
 

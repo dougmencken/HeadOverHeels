@@ -72,6 +72,8 @@ private:
 
         void playTuneForScenery ( const std::string& scenery ) ;
 
+        void offRecording () ;
+
         void offVidasInfinitas () ;
 
         void offInviolability () ;

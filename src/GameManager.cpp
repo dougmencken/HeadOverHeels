@@ -18,6 +18,8 @@
 #include "LanguageManager.hpp"
 #include "Color.hpp"
 
+#include <sstream>
+
 
 namespace isomot
 {
@@ -27,12 +29,17 @@ GameManager * GameManager::instance = nilPointer ;
 
 GameManager::GameManager( )
         : freedomLabel( nilPointer )
+        , recordingTimer( nilPointer )
+        , numberOfCapture( 0 )
+        , prefixOfCaptures( makeRandomString( 10 ) )
+        , capturePath( isomot::homePath() + "capture" + pathSeparator )
         , chosenGraphicSet( "gfx" )
         , vidasInfinitas( false )
         , immunityToCollisions( false )
         , playTuneOfScenery( true )
         , drawShadows( true )
         , drawBackgroundPicture( true )
+        , recordCaptures( false )
         , isomot( new Isomot() )
         , gameFileManager( new GameFileManager( this, isomot ) )
         , headLives( 0 )
@@ -75,7 +82,11 @@ GameManager::GameManager( )
         , pictureOfEscudo( nilPointer )
         , grayPictureOfEscudo( nilPointer )
 {
+        if ( ! file_exists( capturePath.c_str (), FA_DIREC, nilPointer ) )
+                mkdir( capturePath.c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH );
 
+        recordingTimer = new Timer();
+        recordingTimer->go ();
 }
 
 GameManager::~GameManager( )
@@ -109,6 +120,8 @@ GameManager::~GameManager( )
         allegro::destroyBitmap( grayPictureOfEscudo );
 
         delete freedomLabel ;
+
+        delete recordingTimer ;
 
         delete isomot ;
 }
@@ -389,8 +402,33 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
                 freedomLabel->draw( where );
         }
 
+        if ( recordCaptures )
+        {
+                // record game’s screen
+                if ( recordingTimer->getValue() > 0.1 /* 10 times per one second */ )
+                {
+                        numberOfCapture++ ;
+                        std::ostringstream file;
+                        file << prefixOfCaptures << numberOfCapture << ".pcx";
+
+                        save_bitmap( ( capturePath + file.str() ).c_str (), where, nilPointer );
+
+                        recordingTimer->reset ();
+                }
+        }
+
         acquire_screen();
+
         blit( where, screen, 0, 0, 0, 0, where->w, where->h );
+
+        if ( recordCaptures )
+        {
+                if ( ! drawBackgroundPicture ) rectfill( screen, 11, 18, 19, 30, Color::blackColor()->toAllegroColor() );
+                rectfill( screen, 19, 18, 80, 30, Color::gray50Color()->toAllegroColor() );
+                circlefill( screen, 34, 24, 5, Color::redColor()->toAllegroColor() );
+                textout_ex( screen, font, "REC", 48, 21, Color::redColor()->toAllegroColor(), -1 );
+        }
+
         release_screen();
 }
 
