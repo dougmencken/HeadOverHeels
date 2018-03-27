@@ -255,8 +255,8 @@ ItemData* ItemDataManager::createPictureFrames( ItemData * itemData, const char*
                 BITMAP* picture = load_png( isomot::pathToFile( isomot::sharePath() + gfxPrefix + pathSeparator + itemData->getNameOfFile( ) ), nilPointer );
                 if ( picture == nilPointer )
                 {
-                        std::cerr << "picture \"" << itemData->getNameOfFile( ) << "\" is absent at \"" << gfxPrefix << "\"" << std::endl ;
-                        throw "picture " + itemData->getNameOfFile( ) + " is absent at " + gfxPrefix ;
+                        std::cerr << "picture \"" << itemData->getNameOfFile( ) << "\" of set \"" << gfxPrefix << "\" is absent" << std::endl ;
+                        throw "picture " + itemData->getNameOfFile( ) + " is absent" ;
                 }
 
                 // decompose image into frames and store them in vector

@@ -309,6 +309,9 @@ gamedatagfx2003_DATA = item.png/ball-shadows.png \
 			safari.png/safari-wall-y-1.png \
 			safari.png/safari-wall-y-2.png \
 			safari.png/safari-wall-y-3.png \
+			freedom.png/grass+flowers.png \
+			freedom.png/trees-x-1.png \
+			freedom.png/trees-y-1.png \
 			gui.gfx/background.png \
 			gui.gfx/blacktooth-frame.png \
 			gui.gfx/blacktooth.png \
