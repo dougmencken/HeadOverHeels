@@ -659,7 +659,7 @@ bool Room::removePlayerFromRoom( PlayerItem* playerItem, bool playerExitsRoom )
 
                         mediator->remaskWithFreeItem( playerItem );
 
-                        if ( playerItem->isActivePlayer() )
+                        if ( playerItem->isActiveCharacter() )
                         {
                                 // activate other character, or set it to nil when there’s no other character in room
                                 mediator->setActiveCharacter( mediator->getWaitingCharacter() );

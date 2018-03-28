@@ -258,7 +258,7 @@ void MoveKindOfActivity::ascent( FreeItem* freeItem, int z )
                         if ( freeItem->whichKindOfItem() == "player item" )
                         {
                                 PlayerItem* playerItem = dynamic_cast< PlayerItem * >( freeItem );
-                                if ( playerItem->isActivePlayer() && playerItem->getZ() >= MaxLayers * LayerHeight )
+                                if ( playerItem->isActiveCharacter() && playerItem->getZ() >= MaxLayers * LayerHeight )
                                 {
                                         // active player reaches maximum height of room to possibly go to room above it
                                         playerItem->setWayOfExit( "up" );

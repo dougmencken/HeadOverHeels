@@ -150,7 +150,7 @@ bool PlayerItem::updatePosition( int newX, int newY, int newZ, const Coordinate&
                                 getBehavior()->getActivityOfItem() == AutoMoveEast ||
                                 getBehavior()->getActivityOfItem() == AutoMoveWest ;
 
-        if ( ! this->isActivePlayer() && ! itAutomoves )
+        if ( ! this->isActiveCharacter() && ! itAutomoves )
         {
                 return FreeItem::updatePosition( newX, newY, newZ, whatToChange, how );
         }
@@ -574,7 +574,7 @@ void PlayerItem::wait ()
         }
 }
 
-bool PlayerItem::isActivePlayer ()
+bool PlayerItem::isActiveCharacter ()
 {
         return mediator->getActiveCharacter() == this ;
 }
@@ -603,9 +603,9 @@ void PlayerItem::loseLife()
         if ( this->lives > 0 )
         {
                 this->lives--;
-                GameManager::getInstance()->loseLife( this->getLabel () );
+                GameManager::getInstance()->loseLife( getOriginalLabel () /* current label is "bubbles" */ );
         }
-        GameManager::getInstance()->emptyHandbag( this->getLabel () );
+        GameManager::getInstance()->emptyHandbag( getOriginalLabel () );
 }
 
 void PlayerItem::takeTool( const std::string& label )

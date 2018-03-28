@@ -264,7 +264,7 @@ void UserControlled::jump( PlayerItem * player )
         }
 
         // when player is active and is at maximum height of room it may go to room above
-        if ( player->isActivePlayer() && player->getZ() >= MaxLayers * LayerHeight )
+        if ( player->isActiveCharacter() && player->getZ() >= MaxLayers * LayerHeight )
         {
                 player->setWayOfExit( "up" );
         }
@@ -387,7 +387,7 @@ void UserControlled::collideWithMortalItem( PlayerItem* player )
 {
         switch ( activity )
         {
-                // player just met a bad guy
+                // player just met mortal guy
                 case MeetMortalItem:
                         // do you have immunity
                         if ( ! player->hasShield() )
@@ -404,8 +404,14 @@ void UserControlled::collideWithMortalItem( PlayerItem* player )
                         break;
 
                 case Vanish:
+                        if ( ! player->isActiveCharacter() )
+                        {
+                                std::cout << "inactive " << player->getUniqueName() << " is going to vanish, activate it" << std::endl ;
+                                player->getMediator()->pickNextCharacter( nilPointer );
+                        }
+
                         // animate item, restart room when animation finishes
-                        if ( player->animate() )
+                        if ( player->isActiveCharacter() && player->animate() )
                         {
                                 player->setWayOfExit( "rebuild room" );
                                 player->loseLife();

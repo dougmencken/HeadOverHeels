@@ -156,14 +156,14 @@ void Mediator::update()
         {
                 // when inactive character falls down to room below this one
                 // then make it active to let it fall
-                if ( ( *p )->getWayOfExit() == "down" && ! ( *p )->isActivePlayer() )
+                if ( ( *p )->getWayOfExit() == "down" && ! ( *p )->isActiveCharacter() )
                 {
                         std::cout << "inactive character \"" << ( *p )->getLabel() << "\" falls down to another room, swap characters to make it active" << std::endl ;
                         activeCharacter->setWayOfExit( "no exit" );
                         this->pickNextCharacter( nilPointer );
                 }
 
-                if ( ( *p )->isActivePlayer() )
+                if ( ( *p )->isActiveCharacter() )
                 {
                         if ( ( *p )->getWayOfExit() != "no exit" )
                         {

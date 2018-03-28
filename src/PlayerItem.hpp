@@ -64,17 +64,10 @@ public:
 
         void fillWithData ( const GameManager * data ) ;
 
-        bool isActivePlayer () ;
+        bool isActiveCharacter () ;
 
-        /**
-         * Añade vidas al jugador
-         * @param lives Número de vidas a sumar
-         */
         void addLives( unsigned char lives ) ;
 
-        /**
-         * El jugador pierde una vida
-         */
         void loseLife () ;
 
         /**
