@@ -11,7 +11,7 @@ cp /opt/ogg-vorbis/lib/libvorbis.0.dylib "${headoverheelslibs}"/
 cp /opt/ogg-vorbis/lib/libvorbisfile.3.dylib "${headoverheelslibs}"/
 cp /opt/ogg-vorbis/lib/libvorbisenc.2.dylib "${headoverheelslibs}"/
 cp /opt/ogg-vorbis/lib/libogg.0.dylib "${headoverheelslibs}"/
-cp /opt/xerces-c-3.2.0/lib/libxerces-c-3.2.dylib "${headoverheelslibs}"/
+cp /opt/xerces-c-3.2.1/lib/libxerces-c-3.2.dylib "${headoverheelslibs}"/
 cp /opt/libpng-1.6.34/lib/libpng16.16.dylib "${headoverheelslibs}"/
 cp /opt/zlib-1.2.8/lib/libz.1.2.8.dylib "${headoverheelslibs}"/
 
@@ -42,7 +42,7 @@ install_name_tool -change /opt/ogg-vorbis/lib/libvorbisfile.3.dylib "@executable
 install_name_tool -change /opt/ogg-vorbis/lib/libvorbisenc.2.dylib "@executable_path/../Libraries/libvorbisenc.2.dylib" "${headoverheelsbin}"
 install_name_tool -change /opt/ogg-vorbis/lib/libvorbis.0.dylib "@executable_path/../Libraries/libvorbis.0.dylib" "${headoverheelsbin}"
 install_name_tool -change /opt/ogg-vorbis/lib/libogg.0.dylib "@executable_path/../Libraries/libogg.0.dylib" "${headoverheelsbin}"
-install_name_tool -change /opt/xerces-c-3.2.0/lib/libxerces-c-3.2.dylib "@executable_path/../Libraries/libxerces-c-3.2.dylib" "${headoverheelsbin}"
+install_name_tool -change /opt/xerces-c-3.2.1/lib/libxerces-c-3.2.dylib "@executable_path/../Libraries/libxerces-c-3.2.dylib" "${headoverheelsbin}"
 install_name_tool -change /opt/zlib-1.2.8/lib/libz.1.dylib "@executable_path/../Libraries/libz.1.2.8.dylib" "${headoverheelsbin}"
 
 otool -L "${headoverheelsbin}"

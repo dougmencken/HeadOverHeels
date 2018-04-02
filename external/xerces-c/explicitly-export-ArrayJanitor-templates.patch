@@ -1,0 +1,172 @@
+From 61095e54f0dabb7d6c57eb88d1287edd77a93d6e Mon Sep 17 00:00:00 2001
+From: Roger Leigh <rleigh@dundee.ac.uk>
+Date: Fri, 9 Mar 2018 13:36:14 +0000
+Subject: [PATCH] Explicitly export ArrayJanitor templates
+
+---
+ cmake/XercesDLL.cmake                              |  4 ++++
+ configure.ac                                       |  3 +++
+ src/CMakeLists.txt                                 |  1 +
+ src/Makefile.am                                    |  1 +
+ src/xercesc/util/Janitor.hpp                       |  2 ++
+ src/xercesc/util/JanitorExports.cpp                | 25 ++++++++++++++++++++++
+ src/xercesc/util/TransService.hpp                  |  3 ---
+ .../util/Xerces_autoconf_config.hpp.cmake.in       |  1 +
+ src/xercesc/util/Xerces_autoconf_config.hpp.in     |  1 +
+ 9 files changed, 38 insertions(+), 3 deletions(-)
+ create mode 100644 src/xercesc/util/JanitorExports.cpp
+
+diff --git a/cmake/XercesDLL.cmake b/cmake/XercesDLL.cmake
+index f6c16bbb6..8ebb8aa09 100644
+--- a/cmake/XercesDLL.cmake
++++ b/cmake/XercesDLL.cmake
+@@ -32,6 +32,7 @@ endif()
+ 
+ set(XERCES_PLATFORM_EXPORT)
+ set(XERCES_PLATFORM_IMPORT)
++set(XERCES_TEMPLATE_EXTERN extern)
+ set(XERCES_DLL_EXPORT)
+ set(XERCES_STATIC_LIBRARY)
+ if(NOT BUILD_SHARED_LIBS)
+@@ -40,6 +41,9 @@ else()
+   if(WIN32)
+     set(XERCES_PLATFORM_EXPORT "__declspec(dllexport)")
+     set(XERCES_PLATFORM_IMPORT "__declspec(dllimport)")
++    if (MSVC)
++      set(XERCES_TEMPLATE_EXTERN)
++    endif()
+     set(XERCES_DLL_EXPORT 1)
+   endif()
+ endif()
+diff --git a/configure.ac b/configure.ac
+index 5b6885187..873ac2fa2 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -350,15 +350,18 @@ case $host in
+ *-*-msdos* | *-*-mingw32* | *-*-cygwin* | *-*-windows* )
+ 	platform_export="__declspec(dllexport)"
+ 	platform_import="__declspec(dllimport)"
++        template_extern=""
+ 	;;
+ * )
+ 	platform_export=""
+ 	platform_import=""
++        template_extern="extern"
+ 	;;
+ esac
+ 
+ AC_DEFINE_UNQUOTED([XERCES_PLATFORM_EXPORT], [$platform_export], [Define as the platform's export attribute])
+ AC_DEFINE_UNQUOTED([XERCES_PLATFORM_IMPORT], [$platform_import], [Define as the platform's import attribute])
++AC_DEFINE_UNQUOTED([XERCES_TEMPLATE_EXTERN], [$template_extern], [Define as the platform's template extern attribute])
+ 
+ AS_IF([test ! $ac_cv_cxx_have_bool],
+ 	AC_DEFINE([XERCES_NO_NATIVE_BOOL], 1, [Define if there is no native bool support in this environment]))
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index f79f45850..12149f91e 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -603,6 +603,7 @@ set(util_sources
+   xercesc/util/EncodingValidator.cpp
+   xercesc/util/HeaderDummy.cpp
+   xercesc/util/HexBin.cpp
++  xercesc/util/JanitorExports.cpp
+   xercesc/util/KVStringPair.cpp
+   xercesc/util/Mutexes.cpp
+   xercesc/util/PanicHandler.cpp
+diff --git a/src/Makefile.am b/src/Makefile.am
+index cc879f5a0..89b3d4982 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -743,6 +743,7 @@ util_sources = \
+ 	xercesc/util/EncodingValidator.cpp \
+ 	xercesc/util/HeaderDummy.cpp \
+ 	xercesc/util/HexBin.cpp \
++        xercesc/util/JanitorExports.cpp \
+ 	xercesc/util/KVStringPair.cpp \
+ 	xercesc/util/Mutexes.cpp \
+ 	xercesc/util/PanicHandler.cpp \
+diff --git a/src/xercesc/util/Janitor.hpp b/src/xercesc/util/Janitor.hpp
+index 2f3ce0a92..24ff372a0 100644
+--- a/src/xercesc/util/Janitor.hpp
++++ b/src/xercesc/util/Janitor.hpp
+@@ -155,6 +155,8 @@ private :
+ };
+ 
+ 
++template class XMLUTIL_EXPORT ArrayJanitor<XMLByte>;
++template class XMLUTIL_EXPORT ArrayJanitor<XMLCh>;
+ 
+ 
+ XERCES_CPP_NAMESPACE_END
+diff --git a/src/xercesc/util/JanitorExports.cpp b/src/xercesc/util/JanitorExports.cpp
+new file mode 100644
+index 000000000..ec35bea76
+--- /dev/null
++++ b/src/xercesc/util/JanitorExports.cpp
+@@ -0,0 +1,25 @@
++/*
++ * Licensed to the Apache Software Foundation (ASF) under one or more
++ * contributor license agreements.  See the NOTICE file distributed with
++ * this work for additional information regarding copyright ownership.
++ * The ASF licenses this file to You under the Apache License, Version 2.0
++ * (the "License"); you may not use this file except in compliance with
++ * the License.  You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++#include <xercesc/util/Janitor.hpp>
++
++XERCES_CPP_NAMESPACE_BEGIN
++
++template class ArrayJanitor<XMLByte>;
++template class ArrayJanitor<XMLCh>;
++
++XERCES_CPP_NAMESPACE_END
+diff --git a/src/xercesc/util/TransService.hpp b/src/xercesc/util/TransService.hpp
+index 209cff8e3..337a89a18 100644
+--- a/src/xercesc/util/TransService.hpp
++++ b/src/xercesc/util/TransService.hpp
+@@ -461,9 +461,6 @@ private :
+     XMLLCPTranscoder& operator=(const XMLLCPTranscoder&);
+ };
+ 
+-template class XMLUTIL_EXPORT ArrayJanitor<XMLByte>;
+-template class XMLUTIL_EXPORT ArrayJanitor<XMLCh>;
+-
+ //
+ // This class can be used to transcode to a target encoding. It manages the
+ // memory allocated for the transcode in an exception safe manner, automatically
+diff --git a/src/xercesc/util/Xerces_autoconf_config.hpp.cmake.in b/src/xercesc/util/Xerces_autoconf_config.hpp.cmake.in
+index 70ef8dbe2..e849e0884 100644
+--- a/src/xercesc/util/Xerces_autoconf_config.hpp.cmake.in
++++ b/src/xercesc/util/Xerces_autoconf_config.hpp.cmake.in
+@@ -84,6 +84,7 @@
+ #cmakedefine XERCES_STATIC_LIBRARY 1
+ #define XERCES_PLATFORM_EXPORT @XERCES_PLATFORM_EXPORT@
+ #define XERCES_PLATFORM_IMPORT @XERCES_PLATFORM_IMPORT@
++#define XERCES_TEMPLATE_EXTERN @XERCES_TEMPLATE_EXTERN@
+ #ifdef XERCES_DLL_EXPORT
+ #  define DLL_EXPORT
+ #endif
+diff --git a/src/xercesc/util/Xerces_autoconf_config.hpp.in b/src/xercesc/util/Xerces_autoconf_config.hpp.in
+index 5e9dd7912..aaf70fb98 100644
+--- a/src/xercesc/util/Xerces_autoconf_config.hpp.in
++++ b/src/xercesc/util/Xerces_autoconf_config.hpp.in
+@@ -80,6 +80,7 @@
+ 
+ #undef XERCES_PLATFORM_EXPORT
+ #undef XERCES_PLATFORM_IMPORT
++#undef XERCES_TEMPLATE_EXTERN
+ 
+ #undef XERCES_NO_MATCHING_DELETE_OPERATOR
+ 
+-- 
+2.15.1
+

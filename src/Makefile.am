@@ -8,7 +8,7 @@ else
     AM_CXXFLAGS = -O3
 endif
 
-headoverheels_CXXFLAGS = -Wall -Wno-deprecated -I. -Iloadpng -Ialgif -Igui -Iguiactions -Ibehaviors -Iactivities $(AM_CXXFLAGS)
+headoverheels_CXXFLAGS = -I. -Iloadpng -Ialgif -Igui -Iguiactions -Ibehaviors -Iactivities -Wall $(AM_CXXFLAGS)
 
 AM_LDFLAGS = `allegro-config --libs release` -lvorbisfile -lvorbisenc -lvorbis -logg -lxerces-c -lpthread -lz -lpng
 

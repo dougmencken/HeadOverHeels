@@ -154,10 +154,16 @@ echo "    xerces-c"
 echo "    a validating XML parser written in a portable subset of C++"
 echo
 
-xercesc_version="3.2.0"
+xercesc_version="3.2.1"
 
 cd "${pathToExternal}"/xerces-c
-[ -d xerces-c-"$xercesc_version" ] || tar xjf xerces-c-"$xercesc_version".tar.bz2
+if [ ! -d xerces-c-"$xercesc_version" ]; then
+    tar xjf xerces-c-"$xercesc_version".tar.bz2
+    cd xerces-c-"$xercesc_version"
+    patch -p1 < ../gcc_diagnostic.patch
+    patch -p1 < ../explicitly-export-ArrayJanitor-templates.patch
+    cd ..
+fi
 cd xerces-c-"$xercesc_version"
 
 if [ ! -f ./okay ]; then
@@ -196,11 +202,13 @@ if [ -x "$( command -v cmake )" ]; then
     cd TheBuild
 
     if [ ! -f ./Makefile ]; then
-        # export CC=`command -v gcc` CXX=`command -v g++`
+        export CC=`command -v gcc`
+        export CXX=`command -v g++`
         cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH=/opt/allegro-"$allegro4_version" -DCMAKE_C_FLAGS:STRING="-fno-common" ..
     fi
 
     make
+
     mkdir -p docs/txt ; cp ./docs/build/* ./docs/txt/ && make install
 
     cd ..
