@@ -4,8 +4,7 @@
 #include "Color.hpp"
 #include "Ism.hpp"
 #include <loadpng.h>
-
-# include <xercesc/util/PlatformUtils.hpp>
+#include <tinyxml2.h>
 
 #ifdef DEBUG
 #  define DEBUG_ITEM_DATA         1
@@ -29,187 +28,234 @@ void ItemDataManager::loadItems ()
 {
         freeItems() ;
 
-        xercesc::XMLPlatformUtils::Initialize ();
+        // load items from XML file, and transfer this data to the list of items namely this->itemData
 
-        // load items from XML file, and transfer this data to the list of items
-        try
+        tinyxml2::XMLDocument itemsXml;
+        tinyxml2::XMLError result = itemsXml.LoadFile( ( isomot::sharePath() + nameOfXMLFile ).c_str () );
+        if ( result != tinyxml2::XML_SUCCESS )
         {
-                std::auto_ptr< ixml::ItemsXML > itemsXML( ixml::items( ( isomot::sharePath() + nameOfXMLFile ) .c_str() ) );
+                return;
+        }
 
-                for ( ixml::ItemsXML::item_const_iterator i = itemsXML->item().begin (); i != itemsXML->item().end (); ++i )
+        tinyxml2::XMLElement* root = itemsXml.FirstChildElement( "items" );
+
+        for ( tinyxml2::XMLElement* item = root->FirstChildElement( "item" ) ;
+                        item != nilPointer ;
+                        item = item->NextSiblingElement( "item" ) )
+        {
+                ItemData* newItem = new ItemData ();
+
+                // label of item
+                newItem->label = item->Attribute( "label" ) ;
+
+                bool isDoor = false;
+                tinyxml2::XMLElement* door = item->FirstChildElement( "door" ) ;
+                if ( door != nilPointer ) isDoor = true;
+
+                // number of frames for orientations of item
+                tinyxml2::XMLElement* directionFrames = item->FirstChildElement( "directionFrames" ) ;
+                newItem->orientationFrames = std::atoi( directionFrames->FirstChild()->ToText()->Value() ) ;
+
+                // offensive or harmless
+                tinyxml2::XMLElement* mortal = item->FirstChildElement( "mortal" ) ;
+                newItem->mortal = ( std::string( mortal->FirstChild()->ToText()->Value() ) == "true" ) ? true : false ;
+
+                // how long, in milliseconds, it falls
+                tinyxml2::XMLElement* weight = item->FirstChildElement( "weight" ) ;
+                if ( weight != nilPointer )
+                        newItem->weight = static_cast< double >( std::atoi( weight->FirstChild()->ToText()->Value() ) ) / 1000.0 ;
+                else
+                        newItem->weight = 0.0 ;
+
+                // delay, in milliseconds, between frames in animation sequence
+                tinyxml2::XMLElement* framesDelay = item->FirstChildElement( "framesDelay" ) ;
+                if ( framesDelay != nilPointer )
+                        newItem->delayBetweenFrames = static_cast< double >( std::atoi( framesDelay->FirstChild()->ToText()->Value() ) ) / 1000.0 ;
+                else
+                        newItem->delayBetweenFrames = 0.0 ;
+
+                // how many milliseconds this item moves one single isometric unit
+                tinyxml2::XMLElement* speed = item->FirstChildElement( "speed" ) ;
+                if ( speed != nilPointer )
+                        newItem->speed = static_cast< double >( std::atoi( speed->FirstChild()->ToText()->Value() ) ) / 1000.0 ;
+                else
+                        newItem->speed = 0.0 ;
+
                 {
-                        ItemData* item = new ItemData ();
+                        tinyxml2::XMLElement* picture = item->FirstChildElement( "picture" ) ;
 
-                        item->label = ( *i ).label();                           // label of this item
-                        item->orientationFrames = ( *i ).directionFrames();     // number of frames for orientations of this item
-                        item->mortal = ( *i ).mortal();                         // offensive or harmless
-                        item->weight = ( *i ).weight();                         // how long, in milliseconds, it falls
-                        item->delayBetweenFrames = ( *i ).framesDelay();        // delay, in milliseconds, between frames in animation sequence
-                        item->speed = ( *i ).speed();                           // how many milliseconds this item moves one single isometric unit
-                        item->setNameOfFile( ( *i ).picture().file() );         // name of file with item's graphics
-                        item->widthOfFrame = ( *i ).picture().frameWidth();     // width, in pixels, of frame
-                        item->heightOfFrame = ( *i ).picture().frameHeight();   // height, in pixels, of frame
+                        // name of file with item's graphics
+                        newItem->setNameOfFile( picture->Attribute( "file" ) );
 
-                        // store item’s frames using motion vector, if item isn’t door
-                        if ( ! ( *i ).door ().present () )
+                        // width and height, in pixels, of single frame
+                        tinyxml2::XMLElement* frameWidth = picture->FirstChildElement( "frameWidth" ) ;
+                        newItem->widthOfFrame = std::atoi( frameWidth->FirstChild()->ToText()->Value() ) ;
+                        tinyxml2::XMLElement* frameHeight = picture->FirstChildElement( "frameHeight" ) ;
+                        newItem->heightOfFrame = std::atoi( frameHeight->FirstChild()->ToText()->Value() ) ;
+                }
+
+                // create frames of item’s animation if item isn’t door
+                if ( ! isDoor )
+                {
+                # if  defined( DEBUG_ITEM_DATA )  &&  DEBUG_ITEM_DATA
+                        std::cout << "got item \"" << newItem->getLabel() << "\"" ;
+                # endif
+
+                        createPictureFrames( newItem, isomot::GameManager::getInstance()->getChosenGraphicSet() );
+                }
+
+                {
+                        tinyxml2::XMLElement* shadow = item->FirstChildElement( "shadow" ) ;
+                        if ( shadow != nilPointer ) // item may have no shadow
                         {
-                        # if  defined( DEBUG_ITEM_DATA )  &&  DEBUG_ITEM_DATA
-                                std::cout << "got item \"" << item->getLabel() << "\"" ;
-                        # endif
+                                newItem->setNameOfShadowFile( shadow->Attribute( "file" ) );
 
-                                createPictureFrames( item, isomot::GameManager::getInstance()->getChosenGraphicSet() );
-                        }
+                                tinyxml2::XMLElement* shadowWidth = shadow->FirstChildElement( "shadowWidth" ) ;
+                                newItem->widthOfShadow = std::atoi( shadowWidth->FirstChild()->ToText()->Value() ) ;
+                                tinyxml2::XMLElement* shadowHeight = shadow->FirstChildElement( "shadowHeight" ) ;
+                                newItem->heightOfShadow = std::atoi( shadowHeight->FirstChild()->ToText()->Value() ) ;
 
-                        // element may have no shadow
-                        if ( ( *i ).shadow ().present () )
-                        {
-                                item->setNameOfShadowFile( ( *i ).shadow().get().file() );
-                                item->widthOfShadow = ( *i ).shadow().get().shadowWidth();
-                                item->heightOfShadow = ( *i ).shadow().get().shadowHeight();
-
-                                // frames of shadow
-                                createShadowFrames( item, isomot::GameManager::getInstance()->getChosenGraphicSet() );
-                        }
-
-                        // only few items have extra frames
-                        if ( ( *i ).extraFrames ().present () )
-                        {
-                                item->extraFrames = ( *i ).extraFrames().get () ;
-                        }
-
-                        // sequence of animation
-                        for ( ixml::item::frame_const_iterator j = ( *i ).frame().begin (); j != ( *i ).frame().end (); ++j )
-                        {
-                                item->frames.push_back( *j );
-                        }
-
-                        // door has three parameters which define its dimensions
-                        if ( ( *i ).door ().present () )
-                        {
-                        # if  defined( DEBUG_ITEM_DATA )  &&  DEBUG_ITEM_DATA
-                                std::cout << "got door \"" << item->getLabel() << "\"" ;
-                        # endif
-
-                                // door is actually three items: lintel, left jamb and right jamb
-                                ItemData* lintel = ItemData::clone( item ) ;
-                                ItemData* leftJamb = ItemData::clone( item ) ;
-                                ItemData* rightJamb = ItemData::clone( item ) ;
-
-                                DoorMeasures dm;
-
-                                // width at axis X of three parts ( left jamb, right jamb and lintel ) of door
-                                for ( ixml::item::widthX_const_iterator j = ( *i ).widthX().begin(); j != ( *i ).widthX().end(); ++j )
-                                {
-                                        if ( dm.leftJambWidthX == 0 )
-                                        {
-                                                leftJamb->widthX = dm.leftJambWidthX = *j;
-                                        }
-                                        else if ( dm.rightJambWidthX == 0 )
-                                        {
-                                                rightJamb->widthX = dm.rightJambWidthX = *j;
-                                        }
-                                        else if ( dm.lintelWidthX == 0 )
-                                        {
-                                                lintel->widthX = dm.lintelWidthX = *j;
-                                        }
-                                }
-
-                                // width at axis Y of three parts ( left jamb, right jamb and lintel ) of door
-                                for ( ixml::item::widthY_const_iterator j = ( *i ).widthY().begin(); j != ( *i ).widthY().end(); ++j )
-                                {
-                                        if ( dm.leftJambWidthY == 0 )
-                                        {
-                                                leftJamb->widthY = dm.leftJambWidthY = *j;
-                                        }
-                                        else if ( dm.rightJambWidthY == 0 )
-                                        {
-                                                rightJamb->widthY = dm.rightJambWidthY = *j;
-                                        }
-                                        else if ( dm.lintelWidthY == 0 )
-                                        {
-                                                lintel->widthY = dm.lintelWidthY = *j;
-                                        }
-                                }
-
-                                // height of three parts ( left jamb, right jamb and lintel ) of door
-                                for ( ixml::item::height_const_iterator j = ( *i ).height().begin(); j != ( *i ).height().end(); ++j )
-                                {
-                                        if ( dm.leftJambHeight == 0 )
-                                        {
-                                                leftJamb->height = dm.leftJambHeight = *j;
-                                        }
-                                        else if ( dm.rightJambHeight == 0 )
-                                        {
-                                                rightJamb->height = dm.rightJambHeight = *j;
-                                        }
-                                        else if ( dm.lintelHeight == 0 )
-                                        {
-                                                lintel->height = dm.lintelHeight = *j;
-                                        }
-                                }
-
-                                // load graphics for door
-                                BITMAP* picture = load_png( isomot::pathToFile( isomot::sharePath() + isomot::GameManager::getInstance()->getChosenGraphicSet() + pathSeparator + item->getNameOfFile( ) ), nilPointer );
-                                if ( picture == nilPointer )
-                                {
-                                        std::cerr <<
-                                                "picture \"" << item->getNameOfFile( ) <<
-                                                "\" at \"" << isomot::GameManager::getInstance()->getChosenGraphicSet() <<
-                                                "\" is absent" << std::endl ;
-                                        throw "picture " + item->getNameOfFile( ) + " at " + isomot::GameManager::getInstance()->getChosenGraphicSet() + " is absent" ;
-                                }
-
-                                // cut out left jamb
-                                BITMAP* leftJambImage = cutOutLeftJamb( picture, dm, ( *i ).door().get() );
-                                leftJamb->label += "~leftjamb";
-                                leftJamb->motion.push_back( leftJambImage );
-                                this->itemData.push_back( leftJamb );
-
-                                // cut out right jamb
-                                BITMAP* rightJambImage = cutOutRightJamb( picture, dm, ( *i ).door().get() );
-                                rightJamb->label += "~rightjamb";
-                                rightJamb->motion.push_back( rightJambImage );
-                                this->itemData.push_back( rightJamb );
-
-                                // cut out lintel
-                                BITMAP* lintelImage = cutOutLintel( picture, dm, ( *i ).door().get() );
-                                lintel->label += "~lintel";
-                                lintel->motion.push_back( lintelImage );
-                                this->itemData.push_back( lintel );
-
-                        # if  defined( DEBUG_ITEM_DATA )  &&  DEBUG_ITEM_DATA
-                                std::cout << ", three parts are \"" <<
-                                                leftJamb->label << "\" \"" << rightJamb->label << "\" \"" << lintel->label << "\""
-                                                << std::endl ;
-                        # endif
-
-                                // bin original image
-                                allegro::destroyBitmap( picture ) ;
-                        }
-                        else
-                        {
-                                // width at axis X in isometric units
-                                item->widthX = *( ( *i ).widthX() ).begin ();
-                                // width at axis Y in isometric units
-                                item->widthY = *( ( *i ).widthY() ).begin ();
-                                // width at axis Z, or height, in isometric units
-                                item->height = *( ( *i ).height() ).begin ();
-
-                                // add data to the list
-                                this->itemData.push_back( item );
+                                // creates frames for item’s shadow
+                                createShadowFrames( newItem, isomot::GameManager::getInstance()->getChosenGraphicSet() );
                         }
                 }
-        }
-        catch ( const xml_schema::exception& e )
-        {
-                std::cerr << e << std::endl ;
-        }
-        catch ( const std::exception& e )
-        {
-                std::cerr << e.what () << std::endl ;
-        }
 
-        xercesc::XMLPlatformUtils::Terminate ();
+                tinyxml2::XMLElement* extraFrames = item->FirstChildElement( "extraFrames" ) ;
+                // only few items have extra frames
+                if ( extraFrames != nilPointer )
+                {
+                        newItem->extraFrames = std::atoi( extraFrames->FirstChild()->ToText()->Value() ) ;
+                }
+
+                // sequence of animation
+                for ( tinyxml2::XMLElement* frame = item->FirstChildElement( "frame" ) ;
+                                frame != nilPointer ;
+                                frame = frame->NextSiblingElement( "frame" ) )
+                {
+                        newItem->frames.push_back( std::atoi( frame->FirstChild()->ToText()->Value() ) );
+                }
+
+                // door has three parameters for its dimensions
+                if ( isDoor )
+                {
+                        std::string doorAt = door->FirstChild()->ToText()->Value() ;
+
+                # if  defined( DEBUG_ITEM_DATA )  &&  DEBUG_ITEM_DATA
+                        std::cout << "got door \"" << newItem->getLabel() << "\" at \"" << doorAt << "\"" ;
+                # endif
+
+                        // door is actually three items: lintel, left jamb and right jamb
+                        ItemData* lintel = ItemData::clone( newItem ) ;
+                        lintel->label += "~lintel";
+                        ItemData* leftJamb = ItemData::clone( newItem ) ;
+                        leftJamb->label += "~leftjamb";
+                        ItemData* rightJamb = ItemData::clone( newItem ) ;
+                        rightJamb->label += "~rightjamb";
+
+                        unsigned int leftJambWidthX = 0;
+                        unsigned int leftJambWidthY = 0;
+                        unsigned int leftJambHeight = 0;
+
+                        unsigned int rightJambWidthX = 0;
+                        unsigned int rightJambWidthY = 0;
+                        unsigned int rightJambHeight = 0;
+
+                        unsigned int lintelWidthX = 0;
+                        unsigned int lintelWidthY = 0;
+                        unsigned int lintelHeight = 0;
+
+                        // width at axis X of three parts ( left jamb, right jamb and lintel ) of door
+                        for ( tinyxml2::XMLElement* widthX = item->FirstChildElement( "widthX" ) ;
+                                        widthX != nilPointer ;
+                                        widthX = widthX->NextSiblingElement( "widthX" ) )
+                        {
+                                int wx = std::atoi( widthX->FirstChild()->ToText()->Value() ) ;
+
+                                if ( leftJambWidthX == 0 )
+                                        leftJamb->widthX = leftJambWidthX = wx ;
+                                else if ( rightJambWidthX == 0 )
+                                        rightJamb->widthX = rightJambWidthX = wx ;
+                                else if ( lintelWidthX == 0 )
+                                        lintel->widthX = lintelWidthX = wx ;
+                        }
+
+                        // width at axis Y of three parts ( left jamb, right jamb and lintel ) of door
+                        for ( tinyxml2::XMLElement* widthY = item->FirstChildElement( "widthY" ) ;
+                                        widthY != nilPointer ;
+                                        widthY = widthY->NextSiblingElement( "widthY" ) )
+                        {
+                                int wy = std::atoi( widthY->FirstChild()->ToText()->Value() ) ;
+
+                                if ( leftJambWidthY == 0 )
+                                        leftJamb->widthY = leftJambWidthY = wy ;
+                                else if ( rightJambWidthY == 0 )
+                                        rightJamb->widthY = rightJambWidthY = wy ;
+                                else if ( lintelWidthY == 0 )
+                                        lintel->widthY = lintelWidthY = wy ;
+                        }
+
+                        // height of three parts ( left jamb, right jamb and lintel ) of door
+                        for ( tinyxml2::XMLElement* height = item->FirstChildElement( "height" ) ;
+                                        height != nilPointer ;
+                                        height = height->NextSiblingElement( "height" ) )
+                        {
+                                int wz = std::atoi( height->FirstChild()->ToText()->Value() ) ;
+
+                                if ( leftJambHeight == 0 )
+                                        leftJamb->height = leftJambHeight = wz ;
+                                else if ( rightJambHeight == 0 )
+                                        rightJamb->height = rightJambHeight = wz ;
+                                else if ( lintelHeight == 0 )
+                                        lintel->height = lintelHeight = wz ;
+                        }
+
+                        // load graphics of door
+                        BITMAP* pictureOfDoor = load_png(
+                                        isomot::pathToFile( isomot::sharePath() + isomot::GameManager::getInstance()->getChosenGraphicSet() + pathSeparator + newItem->getNameOfFile( ) ),
+                                        nilPointer
+                        );
+                        if ( pictureOfDoor == nilPointer )
+                        {
+                                std::cerr <<
+                                        "picture of door \"" << newItem->getNameOfFile( ) <<
+                                        "\" for \"" << isomot::GameManager::getInstance()->getChosenGraphicSet() <<
+                                        "\" is absent" << std::endl ;
+                        }
+
+                        // cut out left jamb
+                        BITMAP* leftJambImage = cutOutLeftJamb( pictureOfDoor, leftJambWidthX, leftJambWidthY, leftJambHeight, lintelWidthY, lintelHeight, doorAt );
+                        leftJamb->motion.push_back( leftJambImage );
+                        this->itemData.push_back( leftJamb );
+
+                        // cut out right jamb
+                        BITMAP* rightJambImage = cutOutRightJamb( pictureOfDoor, rightJambWidthX, rightJambWidthY, rightJambHeight, lintelWidthX, lintelHeight, doorAt );
+                        rightJamb->motion.push_back( rightJambImage );
+                        this->itemData.push_back( rightJamb );
+
+                        // cut out lintel
+                        BITMAP* lintelImage = cutOutLintel( pictureOfDoor, lintelWidthX, lintelWidthY, lintelHeight, leftJambWidthX, leftJambWidthY, rightJambWidthX, rightJambWidthY, doorAt );
+                        lintel->motion.push_back( lintelImage );
+                        this->itemData.push_back( lintel );
+
+                # if  defined( DEBUG_ITEM_DATA )  &&  DEBUG_ITEM_DATA
+                        std::cout << ", three parts are \"" <<
+                                        leftJamb->getLabel() << "\" \"" << rightJamb->getLabel() << "\" \"" << lintel->getLabel() << "\""
+                                        << std::endl ;
+                # endif
+
+                        // bin original image
+                        allegro::destroyBitmap( pictureOfDoor ) ;
+                }
+                else
+                {
+                        newItem->widthX = std::atoi( item->FirstChildElement( "widthX" )->FirstChild()->ToText()->Value() ) ;
+                        newItem->widthY = std::atoi( item->FirstChildElement( "widthY" )->FirstChild()->ToText()->Value() ) ;
+                        newItem->height = std::atoi( item->FirstChildElement( "height" )->FirstChild()->ToText()->Value() ) ;
+
+                        // add data to the list
+                        this->itemData.push_back( newItem );
+                }
+        }
 }
 
 void ItemDataManager::freeItems ()
@@ -232,14 +278,6 @@ ItemData* ItemDataManager::findDataByLabel( const std::string& label )
 
         std::cerr << "item with label \"" << label << "\" is absent" << std::endl;
         return nilPointer ;
-}
-
-ItemDataManager::DoorMeasures::DoorMeasures()
-        :  lintelWidthX( 0 ), lintelWidthY( 0 ), lintelHeight( 0 )
-        ,  leftJambWidthX( 0 ), leftJambWidthY( 0 ), leftJambHeight( 0 )
-        ,  rightJambWidthX( 0 ), rightJambWidthY( 0 ), rightJambHeight( 0 )
-{
-
 }
 
 ItemData* ItemDataManager::createPictureFrames( ItemData * itemData, const char* gfxPrefix )
@@ -325,46 +363,50 @@ ItemData* ItemDataManager::createShadowFrames( ItemData * itemData, const char* 
         return itemData;
 }
 
-BITMAP* ItemDataManager::cutOutLintel( BITMAP* door, const DoorMeasures& dm, const ixml::door::value type )
+BITMAP* ItemDataManager::cutOutLintel( BITMAP* door, unsigned int widthX, unsigned int widthY, unsigned int height,
+                                       unsigned int leftJambWidthX, unsigned int leftJambWidthY,
+                                       unsigned int rightJambWidthX, unsigned int rightJambWidthY,
+                                       const std::string& at )
 {
-        bool ns = ( type == ixml::door::north || type == ixml::door::south );
+        bool ns = ( at == "north" || at == "south" );
 
         // top of door
-        BITMAP* top = create_bitmap_ex( 32, ( dm.lintelWidthX << 1 ) + ( dm.lintelWidthY << 1 ),
-                                              dm.lintelHeight + dm.lintelWidthY + dm.lintelWidthX );
+        unsigned int topWidth = ( widthX << 1 ) + ( widthY << 1 );
+        unsigned int topHeight = height + widthY + widthX;
+        BITMAP* top = create_bitmap_ex( 32, topWidth, topHeight );
 
         clear_to_color( top, Color::colorOfTransparency()->toAllegroColor () );
 
         if ( ns )
         {
-                blit( door, top, 0, 0, 0, 0, top->w, dm.lintelHeight + dm.lintelWidthX );
+                blit( door, top, 0, 0, 0, 0, topWidth, height + widthX );
 
-                int delta = top->w - 1;
-                int noPixelIndex = top->w - ( ( dm.rightJambWidthX + dm.rightJambWidthY ) << 1 ) + 1;
-                int yStart = noPixelIndex;
-                int yEnd = noPixelIndex - 1;
+                unsigned int delta = topWidth;
+                int noPixel = topWidth - ( ( rightJambWidthX + rightJambWidthY ) << 1 ) + 1;
+                int yStart = noPixel;
+                int yEnd = noPixel - 1;
 
                 acquire_bitmap( top );
 
-                for ( int x = dm.lintelHeight + dm.lintelWidthX; x < top->h; x++ )
+                for ( unsigned int x = height + widthX; x < topHeight; x++ )
                 {
-                        for ( int y = delta; y >= 0; y-- )
+                        for ( unsigned int y = delta; y > 0; y-- )
                         {
-                                if ( x != dm.lintelHeight + dm.lintelWidthX && y == noPixelIndex )
+                                if ( x != height + widthX && ( static_cast< int >( y ) - 1 ) == noPixel )
                                 {
-                                        if ( noPixelIndex > yEnd )
+                                        if ( noPixel > yEnd )
                                         {
-                                                noPixelIndex--;
+                                                noPixel--;
                                         }
                                         else
                                         {
                                                 yStart += 2;
-                                                noPixelIndex = yStart;
+                                                noPixel = yStart;
                                         }
                                 }
-                                else if ( x < dm.lintelHeight + ( dm.lintelWidthX << 1 ) || y < yEnd )
+                                else if ( x < height + ( widthX << 1 ) || ( static_cast< int >( y ) - 1 ) < yEnd )
                                 {
-                                        ( ( int * )top->line[ x ] )[ y ] = ( ( int * )door->line[ x ] )[ y ];
+                                        ( ( int * )top->line[ x ] )[ y - 1 ] = ( ( int * )door->line[ x ] )[ y - 1 ];
                                 }
                         }
 
@@ -375,32 +417,32 @@ BITMAP* ItemDataManager::cutOutLintel( BITMAP* door, const DoorMeasures& dm, con
         }
         else
         {
-                blit( door, top, 0, 0, 0, 0, top->w, dm.lintelHeight + dm.lintelWidthY );
+                blit( door, top, 0, 0, 0, 0, topWidth, height + widthY );
 
-                int delta = 0;
-                int noPixelIndex = ( ( dm.leftJambWidthX + dm.leftJambWidthY ) << 1 ) - 2;
-                int yStart = noPixelIndex;
-                int yEnd = noPixelIndex + 1;
+                unsigned int delta = 0;
+                int noPixel = ( ( leftJambWidthX + leftJambWidthY ) << 1 ) - 2;
+                int yStart = noPixel;
+                int yEnd = noPixel + 1;
 
                 acquire_bitmap( top );
 
-                for ( int x = dm.lintelHeight + dm.lintelWidthY; x < top->h; x++ )
+                for ( unsigned int x = height + widthY; x < topHeight; x++ )
                 {
-                        for ( int y = delta; y < top->w; y++ )
+                        for ( unsigned int y = delta; y < topWidth; y++ )
                         {
-                                if ( x != dm.lintelHeight + dm.lintelWidthY && y == noPixelIndex )
+                                if ( x != height + widthY && static_cast< int >( y ) == noPixel )
                                 {
-                                        if ( noPixelIndex < yEnd )
+                                        if ( noPixel < yEnd )
                                         {
-                                                noPixelIndex++;
+                                                noPixel++;
                                         }
                                         else
                                         {
                                                 yStart -= 2;
-                                                noPixelIndex = yStart;
+                                                noPixel = yStart;
                                         }
                                 }
-                                else if ( x < dm.lintelHeight + ( dm.lintelWidthY << 1 ) || y > yEnd )
+                                else if ( x < height + ( widthY << 1 ) || static_cast< int >( y ) > yEnd )
                                 {
                                         ( ( int * )top->line[ x ] )[ y ] = ( ( int * )door->line[ x ] )[ y ];
                                 }
@@ -415,34 +457,36 @@ BITMAP* ItemDataManager::cutOutLintel( BITMAP* door, const DoorMeasures& dm, con
         return top;
 }
 
-BITMAP* ItemDataManager::cutOutLeftJamb( BITMAP* door, const DoorMeasures& dm, const ixml::door::value type )
+BITMAP* ItemDataManager::cutOutLeftJamb( BITMAP* door, unsigned int widthX, unsigned int widthY, unsigned int height,
+                                         /* unsigned int lintelWidthX, */ unsigned int lintelWidthY, unsigned int lintelHeight,
+                                         const std::string& at )
 {
-        bool ns = ( type == ixml::door::north || type == ixml::door::south );
-        int fixWidth = ( ns ? 7 : 0 );
+        bool ns = ( at == "north" || at == "south" );
+        unsigned int fixWidth = ( ns ? 7 : 0 );
         int fixY = ( ns ? -1 : 0 );
 
-        BITMAP* left = create_bitmap_ex ( 32, ( dm.leftJambWidthX << 1 ) + fixWidth + ( dm.leftJambWidthY << 1 ) ,
-                                                dm.leftJambHeight + dm.leftJambWidthY + dm.leftJambWidthX ) ;
+        BITMAP* left = create_bitmap_ex ( 32, ( widthX << 1 ) + fixWidth + ( widthY << 1 ) , height + widthY + widthX ) ;
 
         clear_to_color( left, Color::colorOfTransparency()->toAllegroColor () );
 
-        blit( door, left, fixY, dm.lintelHeight + dm.lintelWidthY - dm.leftJambWidthY + fixY, 0, 0, left->w, left->h );
+        blit( door, left, fixY, lintelHeight + lintelWidthY - widthY + fixY, 0, 0, left->w, left->h );
 
         return left;
 }
 
-BITMAP* ItemDataManager::cutOutRightJamb( BITMAP* door, const DoorMeasures& dm, const ixml::door::value type )
+BITMAP* ItemDataManager::cutOutRightJamb( BITMAP* door, unsigned int widthX, unsigned int widthY, unsigned int height,
+                                          unsigned int lintelWidthX, /* unsigned int lintelWidthY, */ unsigned int lintelHeight,
+                                          const std::string& at )
 {
-        bool ns = ( type == ixml::door::north || type == ixml::door::south );
-        int fixWidth = ( ns ? 0 : 7 );
+        bool ns = ( at == "north" || at == "south" );
+        unsigned int fixWidth = ( ns ? 0 : 7 );
         int fixY = ( ns ? 0 : -2 );
 
-        BITMAP* right = create_bitmap_ex ( 32, ( dm.rightJambWidthX << 1 ) + fixWidth + ( dm.rightJambWidthY << 1 ) ,
-                                                 dm.rightJambHeight + dm.rightJambWidthY + dm.rightJambWidthX ) ;
+        BITMAP* right = create_bitmap_ex ( 32, ( widthX << 1 ) + fixWidth + ( widthY << 1 ) , height + widthY + widthX ) ;
 
         clear_to_color( right, Color::colorOfTransparency()->toAllegroColor () );
 
-        blit( door, right, door->w - right->w, dm.lintelHeight + dm.lintelWidthX - dm.rightJambWidthY + fixY, 0, 0, right->w, right->h );
+        blit( door, right, door->w - right->w, lintelHeight + lintelWidthX - widthY + fixY, 0, 0, right->w, right->h );
 
         return right;
 }

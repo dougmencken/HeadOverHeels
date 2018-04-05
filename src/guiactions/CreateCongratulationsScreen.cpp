@@ -52,8 +52,9 @@ void CreateCongratulationsScreen::doAction ()
         screen->addPictureOfHeelsAt( 400, 100 );
 
         // Texto final
-        langString = languageManager->findLanguageString( "final-text" );
-        TextField* textField = new TextField( langString->getX(), langString->getY(), isomot::ScreenWidth, isomot::ScreenHeight, CenterAlignment );
+        langString = languageManager->findLanguageStringForAlias( "final-text" );
+        TextField* textField = new TextField( isomot::ScreenWidth, CenterAlignment );
+        textField->moveTo( 0, 180 );
 
         for ( size_t i = 0; i < langString->getLinesCount(); i++ )
         {

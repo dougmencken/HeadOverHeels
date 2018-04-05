@@ -37,9 +37,10 @@ void ShowAuthors::doAction ()
                 LanguageText* langString = nilPointer;
                 LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
 
-                langString = languageManager->findLanguageString( "credits-text" );
+                langString = languageManager->findLanguageStringForAlias( "credits-text" );
                 this->initialY = heightOfWhereToDraw;
-                this->linesOfCredits = new TextField( 0, initialY, isomot::ScreenWidth, isomot::ScreenHeight, CenterAlignment );
+                this->linesOfCredits = new TextField( isomot::ScreenWidth, CenterAlignment );
+                this->linesOfCredits->moveTo( 0, initialY );
 
                 size_t howManyLines = langString->getLinesCount() ;
                 std::cout << "credits-text has " << howManyLines << " lines" << std::endl ;

@@ -1,263 +1,262 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<language xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="language.xsd">
+<language>
 
-  <text id="new-game">
+  <text alias="new-game">
     <properties>
-      <ustring>Нова игра</ustring>
+      <string>Нова игра</string>
     </properties>
   </text>
 
-  <text id="blacktooth-empire">
+  <text alias="blacktooth-empire">
     <properties>
-      <ustring>Краљевство Блактутих</ustring>
+      <string>Краљевство Блактутих</string>
     </properties>
   </text>
 
-  <text id="blacktooth">
+  <text alias="blacktooth">
     <properties>
-      <ustring>Блактут</ustring>
+      <string>Блактут</string>
     </properties>
   </text>
 
-  <text id="egyptus">
+  <text alias="egyptus">
     <properties>
-      <ustring>Египтус</ustring>
+      <string>Египтус</string>
     </properties>
   </text>
 
-  <text id="penitentiary">
+  <text alias="penitentiary">
     <properties>
-      <ustring>Казнионица</ustring>
+      <string>Казнионица</string>
     </properties>
   </text>
 
-  <text id="byblos">
+  <text alias="byblos">
     <properties>
-      <ustring>Библос</ustring>
+      <string>Библос</string>
     </properties>
   </text>
 
-  <text id="safari">
+  <text alias="safari">
     <properties>
-      <ustring>Сафари</ustring>
+      <string>Сафари</string>
     </properties>
   </text>
 
-  <text id="load-game">
+  <text alias="load-game">
     <properties>
-      <ustring>Учитај игру</ustring>
+      <string>Учитај игру</string>
     </properties>
   </text>
 
-  <text id="keyboard-menu">
+  <text alias="keyboard-menu">
     <properties>
-      <ustring>Тастатура</ustring>
+      <string>Тастатура</string>
     </properties>
   </text>
 
-  <text id="movenorth">
+  <text alias="movenorth">
     <properties>
-      <ustring>Лево</ustring>
+      <string>Лево</string>
     </properties>
   </text>
 
-  <text id="movesouth">
+  <text alias="movesouth">
     <properties>
-      <ustring>Десно</ustring>
+      <string>Десно</string>
     </properties>
   </text>
 
-  <text id="moveeast">
+  <text alias="moveeast">
     <properties>
-      <ustring>Горе</ustring>
+      <string>Горе</string>
     </properties>
   </text>
 
-  <text id="movewest">
+  <text alias="movewest">
     <properties>
-      <ustring>Доле</ustring>
+      <string>Доле</string>
     </properties>
   </text>
 
-  <text id="take">
+  <text alias="take">
     <properties>
-      <ustring>Носити</ustring>
+      <string>Носити</string>
     </properties>
   </text>
 
-  <text id="jump">
+  <text alias="jump">
     <properties>
-      <ustring>Скок</ustring>
+      <string>Скок</string>
     </properties>
   </text>
 
-  <text id="doughnut">
+  <text alias="doughnut">
     <properties>
-      <ustring>Пуцање</ustring>
+      <string>Пуцање</string>
     </properties>
   </text>
 
-  <text id="takeandjump">
+  <text alias="takeandjump">
     <properties>
-      <ustring>Носити+Скок</ustring>
+      <string>Носити+Скок</string>
     </properties>
   </text>
 
-  <text id="swap">
+  <text alias="swap">
     <properties>
-      <ustring>Замена</ustring>
+      <string>Замена</string>
     </properties>
   </text>
 
-  <text id="pause">
+  <text alias="pause">
     <properties>
-      <ustring>Пауза</ustring>
+      <string>Пауза</string>
     </properties>
   </text>
 
-  <text id="confirm-quit">
+  <text alias="confirm-quit">
     <properties font="big" color="cyan">
-      <ustring>Притисните Escape за крај игре</ustring>
+      <string>Притисните Escape за крај игре</string>
     </properties>
   </text>
 
-  <text id="confirm-resume">
+  <text alias="confirm-resume">
     <properties font="big" color="yellow">
-      <ustring>Притисните било који други</ustring>
+      <string>Притисните било који други</string>
     </properties>
     <properties font="big" color="yellow">
-      <ustring>тастер за рестарт</ustring>
+      <string>тастер за рестарт</string>
     </properties>
   </text>
 
-  <text id="audio-menu">
+  <text alias="audio-menu">
     <properties>
-      <ustring>Звук</ustring>
+      <string>Звук</string>
     </properties>
   </text>
 
-  <text id="soundfx">
+  <text alias="soundfx">
     <properties>
-      <ustring>Звучни ефекти</ustring>
+      <string>Звучни ефекти</string>
     </properties>
   </text>
 
-  <text id="music">
+  <text alias="music">
     <properties>
-      <ustring>Музика</ustring>
+      <string>Музика</string>
     </properties>
   </text>
 
-  <text id="show-credits">
+  <text alias="show-credits">
     <properties>
-      <ustring>Ко је ко</ustring>
+      <string>Ко је ко</string>
     </properties>
   </text>
 
-  <text id="exit-game">
+  <text alias="exit-game">
     <properties>
-      <ustring>Повратак</ustring>
+      <string>Повратак</string>
     </properties>
   </text>
 
-  <text id="save-game">
+  <text alias="save-game">
     <properties font="big" color="orange">
-      <ustring>Риба реинкарнације вам даје могућност</ustring>
+      <string>Риба реинкарнације вам даје могућност</string>
     </properties>
     <properties font="big" color="orange">
-      <ustring>да сачувате позицију притиском SPACE</ustring>
+      <string>да сачувате позицију притиском SPACE</string>
     </properties>
   </text>
 
-  <text id="free-slot">
+  <text alias="free-slot">
     <properties>
-      <ustring>Доступан</ustring>
+      <string>Доступан</string>
     </properties>
   </text>
 
-  <text id="score">
+  <text alias="score">
     <properties>
-      <ustring>Резултат</ustring>
+      <string>Резултат</string>
     </properties>
   </text>
 
-  <text id="explored-rooms">
+  <text alias="explored-rooms">
     <properties>
-      <ustring>Претражено %d соба</ustring>
+      <string>Претражено %d соба</string>
     </properties>
   </text>
 
-  <text id="liberated-planets">
+  <text alias="liberated-planets">
     <properties>
-      <ustring>Ослобођено %d планета</ustring>
+      <string>Ослобођено %d планета</string>
     </properties>
   </text>
 
-  <text id="rooms">
+  <text alias="rooms">
     <properties>
-      <ustring>соба</ustring>
+      <string>соба</string>
     </properties>
   </text>
 
-  <text id="planets">
+  <text alias="planets">
     <properties>
-      <ustring>планета</ustring>
+      <string>планета</string>
     </properties>
   </text>
 
-  <text id="final-text" x="0" y="200">
+  <text alias="final-text">
     <properties font="big" color="yellow">
-      <ustring>Народ слави ваше јунаштво и</ustring>
+      <string>Народ слави ваше јунаштво и</string>
     </properties>
     <properties font="big" color="yellow">
-      <ustring>проглашава вас</ustring>
+      <string>проглашава вас</string>
     </properties>
     <properties font="regular" color="cyan">
-      <ustring>На овај начин, драги пријатељу, наша</ustring>
+      <string>На овај начин, драги пријатељу, наша</string>
     </properties>
     <properties font="regular" color="cyan">
-      <ustring>два јунака коначно стављају тачку на</ustring>
+      <string>два јунака коначно стављају тачку на</string>
     </properties>
     <properties font="regular" color="multicolor">
-      <ustring>тиранију Блактутог Императора</ustring>
+      <string>тиранију Блактутог Императора</string>
     </properties>
   </text>
 
-  <text id="dummy">
+  <text alias="dummy">
     <properties>
-      <ustring>Тука</ustring>
+      <string>Тука</string>
     </properties>
   </text>
 
-  <text id="novice">
+  <text alias="novice">
     <properties>
-      <ustring>Почетник</ustring>
+      <string>Почетник</string>
     </properties>
   </text>
 
-  <text id="spy">
+  <text alias="spy">
     <properties>
-      <ustring>Шпијун</ustring>
+      <string>Шпијун</string>
     </properties>
   </text>
 
-  <text id="master-spy">
+  <text alias="master-spy">
     <properties>
-      <ustring>Мајстор шпијун</ustring>
+      <string>Мајстор шпијун</string>
     </properties>
   </text>
 
-  <text id="hero">
+  <text alias="hero">
     <properties>
-      <ustring>Јунак</ustring>
+      <string>Јунак</string>
     </properties>
   </text>
 
-  <text id="emperor">
+  <text alias="emperor">
     <properties>
-      <ustring>Цар</ustring>
+      <string>Цар</string>
     </properties>
   </text>
 

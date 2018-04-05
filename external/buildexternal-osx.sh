@@ -150,7 +150,9 @@ echo "already built"
 fi
 
 echo
-echo "    xerces-c"
+echo "    xerces-c ~~"
+echo "    ~~ to disappear soon"
+echo
 echo "    a validating XML parser written in a portable subset of C++"
 echo
 
@@ -179,6 +181,57 @@ echo "okay" > ./okay
 else
 
 echo "already built"
+
+fi
+
+echo
+echo "    tinyxml2"
+echo "    a simple, small, C++ XML parser that can be easily integrated into other programs"
+echo
+
+tinyxml2_version="6.0.0"
+
+if [ -x "$( command -v cmake )" ]; then
+
+    cd "${pathToExternal}"/tinyxml2
+    [ -d tinyxml2-"$tinyxml2_version" ] || tar xzf tinyxml2-"$tinyxml2_version".tar.gz
+    cd tinyxml2-"$tinyxml2_version"
+
+    if [ ! -f ./okay ]; then
+
+    if [ ! -f xmltest.cpp.orig ]; then
+        mv xmltest.cpp xmltest.cpp.orig
+        cat xmltest.cpp.orig | sed s/123456789012345678/123456789012345678LL/ > xmltest.cpp
+    fi
+
+    [ -d Boo ] || mkdir Boo
+
+    cd Boo
+
+    if [ ! -f ./Makefile ]; then
+        export CC=`command -v gcc`
+        export CXX=`command -v g++`
+        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH=/opt/tinyxml2-"$tinyxml2_version" -DBUILD_TESTS:BOOL=ON ..
+    fi
+
+    make
+
+    make install
+    rm -r /opt/tinyxml2-"$tinyxml2_version"/lib/cmake
+
+    cd ..
+
+    echo "okay" > ./okay
+
+    else
+
+    echo "already built"
+
+    fi
+
+else
+
+    echo "can’t build tinyxml2, it needs cmake to build"
 
 fi
 

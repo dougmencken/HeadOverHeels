@@ -7,7 +7,7 @@
 #define XSD_CXX_PARSER_NON_VALIDATING_XML_SCHEMA_PSKEL_HXX
 
 #include <string>
-#include <memory> // auto_ptr
+#include <memory>
 
 #include <xsd/cxx/parser/xml-schema.hxx>
 #include <xsd/cxx/parser/non-validating/parser.hxx>
@@ -301,14 +301,14 @@ namespace xsd
         template <typename C>
         struct base64_binary_pskel: virtual simple_content<C>
         {
-          virtual std::auto_ptr<buffer>
+          virtual smartptr<buffer>
           post_base64_binary () = 0;
         };
 
         template <typename C>
         struct hex_binary_pskel: virtual simple_content<C>
         {
-          virtual std::auto_ptr<buffer>
+          virtual smartptr<buffer>
           post_hex_binary () = 0;
         };
 

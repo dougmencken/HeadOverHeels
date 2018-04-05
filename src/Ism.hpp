@@ -12,6 +12,7 @@
 #define Ism_hpp_
 
 #include <string>
+#include <memory>
 #include <fstream>
 #include <cstdlib>
 
@@ -26,10 +27,26 @@
 #endif
 
 #if __cplusplus >= 201103L /* when complier supports c++11 */
-    #define nilPointer nullptr
     #define __Cxx11__
+    #ifndef nilPointer
+        #define nilPointer nullptr
+    #endif
+    #ifndef smartptr
+        #define smartptr std::unique_ptr
+    #endif
+    #ifndef sharedsmartptr
+        #define sharedsmartptr std::shared_ptr
+    #endif
 #else
-    #define nilPointer NULL
+    #ifndef nilPointer
+        #define nilPointer NULL
+    #endif
+    #ifndef smartptr
+        #define smartptr std::auto_ptr
+    #endif
+    #ifndef sharedsmartptr
+        #define sharedsmartptr std::auto_ptr
+    #endif
 #endif
 
 #if defined( DEBUG ) && defined( HAVE_EXECINFO_H ) && HAVE_EXECINFO_H

@@ -9,6 +9,7 @@
 #include "Menu.hpp"
 #include "Label.hpp"
 #include "CreateMainMenu.hpp"
+#include <sstream>
 
 using gui::CreateEndScreen;
 using isomot::SoundManager;
@@ -40,18 +41,18 @@ void CreateEndScreen::doAction ()
 
         LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
         Label* label = 0;
-        std::stringstream ss;
+        std::ostringstream ss;
 
         // score reached by the player
         unsigned int score = this->rooms * 160 + this->planets * 10000;
         ss.str( std::string() );
         ss << score;
-        label = new Label( languageManager->findLanguageString( "score" )->getText() + " " + ss.str(), "regular", "yellow" );
+        label = new Label( languageManager->findLanguageStringForAlias( "score" )->getText() + " " + ss.str(), "regular", "yellow" );
         label->moveTo( ( ScreenWidth - label->getWidth() ) >> 1, 300 );
         screen->addWidget( label );
 
         // count of visited rooms
-        std::string exploredRooms = languageManager->findLanguageString( "explored-rooms" )->getText();
+        std::string exploredRooms = languageManager->findLanguageStringForAlias( "explored-rooms" )->getText();
         ss.str( std::string() );
         ss << this->rooms;
         size_t prooms = exploredRooms.find( "%d" );
@@ -61,7 +62,7 @@ void CreateEndScreen::doAction ()
         screen->addWidget( label );
 
         // count of liberated planets
-        std::string liberatedPlanets = languageManager->findLanguageString( "liberated-planets" )->getText();
+        std::string liberatedPlanets = languageManager->findLanguageStringForAlias( "liberated-planets" )->getText();
         ss.str( std::string() );
         ss << this->planets;
         size_t pplanets = liberatedPlanets.find( "%d" );
@@ -86,7 +87,7 @@ void CreateEndScreen::doAction ()
                 {
                         if ( score > bounds[ i ] )
                         {
-                                label = new Label( languageManager->findLanguageString( ranges[ i ] )->getText(), "big", "multicolor" );
+                                label = new Label( languageManager->findLanguageStringForAlias( ranges[ i ] )->getText(), "big", "multicolor" );
                                 label->moveTo( ( ScreenWidth - label->getWidth() ) >> 1, 180 );
                                 screen->addWidget( label );
 

@@ -59,7 +59,7 @@ namespace sgxml
   }
 
   void SaveGameXML::
-  exploredRooms ( ::std::auto_ptr< exploredRooms_type > exploredRooms )
+  exploredRooms ( sharedsmartptr< exploredRooms_type > exploredRooms )
   {
     this->exploredRooms_.set ( exploredRooms );
   }
@@ -173,7 +173,7 @@ namespace sgxml
   }
 
   void SaveGameXML::
-  bonus ( ::std::auto_ptr< bonus_type > bonus )
+  bonus ( sharedsmartptr< bonus_type > bonus )
   {
     this->bonus_.set ( bonus );
   }
@@ -197,7 +197,7 @@ namespace sgxml
   }
 
   void SaveGameXML::
-  players ( ::std::auto_ptr< players_type > players )
+  players ( sharedsmartptr< players_type > players )
   {
     this->players_.set ( players );
   }
@@ -291,7 +291,7 @@ namespace sgxml
   }
 
   void visited::
-  filename ( ::std::auto_ptr< filename_type > filename )
+  filename ( sharedsmartptr< filename_type > filename )
   {
     this->filename_.set ( filename );
   }
@@ -319,7 +319,7 @@ namespace sgxml
   }
 
   void room::
-  label (::std::auto_ptr< label_type > label)
+  label (sharedsmartptr< label_type > label)
   {
     this->label_.set (label);
   }
@@ -343,7 +343,7 @@ namespace sgxml
   }
 
   void room::
-  filename ( ::std::auto_ptr< filename_type > filename )
+  filename ( sharedsmartptr< filename_type > filename )
   {
     this->filename_.set ( filename );
   }
@@ -389,7 +389,7 @@ namespace sgxml
   }
 
   void player::
-  roomFilename ( ::std::auto_ptr< roomFilename_type > roomFilename )
+  roomFilename ( sharedsmartptr< roomFilename_type > roomFilename )
   {
     this->roomFilename_.set ( roomFilename );
   }
@@ -575,7 +575,7 @@ namespace sgxml
   }
 
   void player::
-  label (::std::auto_ptr< label_type > label)
+  label (sharedsmartptr< label_type > label)
   {
     this->label_.set (label);
   }
@@ -660,7 +660,7 @@ namespace sgxml
       //
       if (n.name () == "exploredRooms" && n.namespace_ ().empty ())
       {
-        ::std::auto_ptr< exploredRooms_type > r (
+        sharedsmartptr< exploredRooms_type > r (
           exploredRooms_traits::create (i, f, this));
 
         if (!exploredRooms_.present ())
@@ -729,7 +729,7 @@ namespace sgxml
       //
       if (n.name () == "bonus" && n.namespace_ ().empty ())
       {
-        ::std::auto_ptr< bonus_type > r (
+        sharedsmartptr< bonus_type > r (
           bonus_traits::create (i, f, this));
 
         if (!bonus_.present ())
@@ -743,7 +743,7 @@ namespace sgxml
       //
       if (n.name () == "players" && n.namespace_ ().empty ())
       {
-        ::std::auto_ptr< players_type > r (
+        sharedsmartptr< players_type > r (
           players_traits::create (i, f, this));
 
         if (!players_.present ())
@@ -867,7 +867,7 @@ namespace sgxml
       //
       if (n.name () == "visited" && n.namespace_ ().empty ())
       {
-        ::std::auto_ptr< visited_type > r (
+        sharedsmartptr< visited_type > r (
           visited_traits::create (i, f, this));
 
         this->visited ().push_back (r);
@@ -932,7 +932,7 @@ namespace sgxml
       //
       if (n.name () == "room" && n.namespace_ ().empty ())
       {
-        ::std::auto_ptr< room_type > r (
+        sharedsmartptr< room_type > r (
           room_traits::create (i, f, this));
 
         this->room ().push_back (r);
@@ -998,7 +998,7 @@ namespace sgxml
       //
       if ( n.name () == "player" && n.namespace_ ().empty () )
       {
-        ::std::auto_ptr< player_type > r ( player_traits::create ( i, f, this ) );
+        sharedsmartptr< player_type > r ( player_traits::create ( i, f, this ) );
 
         this->player ().push_back ( r );
         continue;
@@ -1060,7 +1060,7 @@ namespace sgxml
 
       if (n.name () == "filename" && n.namespace_ ().empty ())
       {
-        ::std::auto_ptr< filename_type > r (
+        sharedsmartptr< filename_type > r (
           filename_traits::create (i, f, this));
 
         this->filename (r);
@@ -1159,7 +1159,7 @@ namespace sgxml
 
       if (n.name () == "filename" && n.namespace_ ().empty ())
       {
-        ::std::auto_ptr< filename_type > r (
+        sharedsmartptr< filename_type > r (
           filename_traits::create (i, f, this));
 
         this->filename (r);
@@ -1284,7 +1284,7 @@ namespace sgxml
       //
       if (n.name () == "roomFilename" && n.namespace_ ().empty ())
       {
-        ::std::auto_ptr< roomFilename_type > r (
+        sharedsmartptr< roomFilename_type > r (
           roomFilename_traits::create (i, f, this));
 
         if (!roomFilename_.present ())
@@ -1509,7 +1509,7 @@ namespace sgxml
 
 namespace sgxml
 {
-  ::std::auto_ptr< ::sgxml::SaveGameXML >
+  sharedsmartptr< ::sgxml::SaveGameXML >
   savegame (const ::std::string& u,
             ::xml_schema::flags f,
             const ::xml_schema::properties& p)
@@ -1523,7 +1523,7 @@ namespace sgxml
 
     if ( ! d ) throw ::xsd::cxx::tree::parsing< char > ();
 
-    ::std::auto_ptr< ::sgxml::SaveGameXML > r (
+    sharedsmartptr< ::sgxml::SaveGameXML > r (
       ::sgxml::savegame (
         d.get (), f | ::xml_schema::flags::own_dom, p));
 
@@ -1533,7 +1533,7 @@ namespace sgxml
     return r;
   }
 
-  ::std::auto_ptr< ::sgxml::SaveGameXML >
+  sharedsmartptr< ::sgxml::SaveGameXML >
   savegame (::std::istream& is,
             ::xml_schema::flags f,
             const ::xml_schema::properties& p)
@@ -1547,7 +1547,7 @@ namespace sgxml
     return ::sgxml::savegame (wrap, f, p);
   }
 
-  ::std::auto_ptr< ::sgxml::SaveGameXML >
+  sharedsmartptr< ::sgxml::SaveGameXML >
   savegame (::std::istream& is,
             const ::std::string& sid,
             ::xml_schema::flags f,
@@ -1562,7 +1562,7 @@ namespace sgxml
     return ::sgxml::savegame (wrap, f, p);
   }
 
-  ::std::auto_ptr< ::sgxml::SaveGameXML >
+  sharedsmartptr< ::sgxml::SaveGameXML >
   savegame (const ::xercesc::DOMLSInput& i,
             ::xml_schema::flags f,
             const ::xml_schema::properties& p)
@@ -1573,7 +1573,7 @@ namespace sgxml
     if ( ! d )
       throw ::xsd::cxx::tree::parsing< char > ();
 
-    ::std::auto_ptr< ::sgxml::SaveGameXML > r (
+    sharedsmartptr< ::sgxml::SaveGameXML > r (
       ::sgxml::savegame (
         d.get (), f | ::xml_schema::flags::own_dom, p));
 
@@ -1583,7 +1583,7 @@ namespace sgxml
     return r;
   }
 
-  ::std::auto_ptr< ::sgxml::SaveGameXML >
+  sharedsmartptr< ::sgxml::SaveGameXML >
   savegame (const ::xercesc::DOMDocument& d,
             ::xml_schema::flags f,
             const ::xml_schema::properties& p)
@@ -1593,7 +1593,7 @@ namespace sgxml
       ::xsd::cxx::xml::dom::auto_ptr< ::xercesc::DOMDocument > c (
         static_cast< ::xercesc::DOMDocument* > (d.cloneNode (true)));
 
-      ::std::auto_ptr< ::sgxml::SaveGameXML > r (
+      sharedsmartptr< ::sgxml::SaveGameXML > r (
         ::sgxml::savegame (
           c.get (), f | ::xml_schema::flags::own_dom, p));
 
@@ -1608,7 +1608,7 @@ namespace sgxml
     if (n.name () == "savegame" &&
         n.namespace_ () == "")
     {
-      ::std::auto_ptr< ::sgxml::SaveGameXML > r (
+      sharedsmartptr< ::sgxml::SaveGameXML > r (
         ::xsd::cxx::tree::traits< ::sgxml::SaveGameXML, char >::create (
           e, f, 0));
       return r;
@@ -1621,7 +1621,7 @@ namespace sgxml
       "");
   }
 
-  ::std::auto_ptr< ::sgxml::SaveGameXML >
+  sharedsmartptr< ::sgxml::SaveGameXML >
   savegame (::xercesc::DOMDocument* d,
             ::xml_schema::flags f,
             const ::xml_schema::properties&)
@@ -1642,7 +1642,7 @@ namespace sgxml
     if (n.name () == "savegame" &&
         n.namespace_ () == "")
     {
-      ::std::auto_ptr< ::sgxml::SaveGameXML > r (
+      sharedsmartptr< ::sgxml::SaveGameXML > r (
         ::xsd::cxx::tree::traits< ::sgxml::SaveGameXML, char >::create (
           e, f, 0));
       c.release ();

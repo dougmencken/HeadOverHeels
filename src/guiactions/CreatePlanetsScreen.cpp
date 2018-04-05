@@ -55,7 +55,7 @@ void CreatePlanetsScreen::doAction ()
         // etiqueta fija “ El Imperio Blacktooth ”
         std::string colorOfLabel = "yellow";
         if ( GameManager::getInstance()->isSimpleGraphicSet () ) colorOfLabel = "green";
-        label = new Label( languageManager->findLanguageString( "blacktooth-empire" )->getText(), "big", colorOfLabel );
+        label = new Label( languageManager->findLanguageStringForAlias( "blacktooth-empire" )->getText(), "big", colorOfLabel );
         label->moveTo( ( isomot::ScreenWidth - label->getWidth() ) >> 1, 0 );
         label->setAction( new ContinueGame( getWhereToDraw(), gameInProgress ) );
 
@@ -93,7 +93,7 @@ void CreatePlanetsScreen::doAction ()
         );
         planets->addWidget( imageOfChapeau );
 
-        label = new Label( languageManager->findLanguageString( "egyptus" )->getText() );
+        label = new Label( languageManager->findLanguageStringForAlias( "egyptus" )->getText() );
         label->moveTo( egyptusX + ( imageOfEgyptus->getWidth() >> 1 ) - ( label->getWidth() >> 1 ), egyptusY + labelOffsetY );
         planets->addWidget( label );
 
@@ -110,7 +110,7 @@ void CreatePlanetsScreen::doAction ()
         );
         planets->addWidget( imageOfChapeau );
 
-        label = new Label( languageManager->findLanguageString( "penitentiary" )->getText() );
+        label = new Label( languageManager->findLanguageStringForAlias( "penitentiary" )->getText() );
         label->moveTo( penitentiaryX + ( imageOfPenitentiary->getWidth() >> 1 ) - ( label->getWidth() >> 1 ), penitentiaryY + labelOffsetY );
         planets->addWidget( label );
 
@@ -127,7 +127,7 @@ void CreatePlanetsScreen::doAction ()
         );
         planets->addWidget( imageOfChapeau );
 
-        label = new Label( languageManager->findLanguageString( "byblos" )->getText() );
+        label = new Label( languageManager->findLanguageStringForAlias( "byblos" )->getText() );
         label->moveTo( byblosX + ( imageOfByblos->getWidth() >> 1 ) - ( label->getWidth() >> 1 ), byblosY + labelOffsetY );
         planets->addWidget( label );
 
@@ -144,7 +144,7 @@ void CreatePlanetsScreen::doAction ()
         );
         planets->addWidget( imageOfChapeau );
 
-        label = new Label( languageManager->findLanguageString( "safari" )->getText() );
+        label = new Label( languageManager->findLanguageStringForAlias( "safari" )->getText() );
         label->moveTo( safariX + ( imageOfSafari->getWidth() >> 1 ) - ( label->getWidth() >> 1 ), safariY + labelOffsetY );
         planets->addWidget( label );
 
@@ -161,7 +161,7 @@ void CreatePlanetsScreen::doAction ()
         );
         planets->addWidget( imageOfChapeau );
 
-        label = new Label( languageManager->findLanguageString( "blacktooth" )->getText() );
+        label = new Label( languageManager->findLanguageStringForAlias( "blacktooth" )->getText() );
         label->moveTo( blacktoothX + ( imageOfBlacktooth->getWidth() >> 1 ) - ( label->getWidth() >> 1 ), blacktoothY + labelOffsetY );
         planets->addWidget( label );
 

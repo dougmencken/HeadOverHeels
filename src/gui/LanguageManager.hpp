@@ -12,7 +12,7 @@
 #define LanguageManager_hpp_
 
 #include <string>
-#include <list>
+#include <vector>
 
 
 namespace gui
@@ -29,38 +29,25 @@ class LanguageManager
 
 public:
 
-       /**
-        * Constructor
-        * @param fileName XML file with localized strings used in the game
-        * @param fileWithGuaranteedStrings The file with more strings than in fileName
-        */
-        LanguageManager( const std::string & fileName, const std::string& fileWithGuaranteedStrings ) ;
+        LanguageManager( const std::string & file, const std::string& fileWithGuaranteedStrings ) ;
 
         ~LanguageManager( );
 
-        LanguageText * findLanguageString ( const std::string & id ) ;
+        LanguageText * findLanguageStringForAlias ( const std::string & alias ) ;
 
 private:
 
        /**
-        * Parse the XML file so each string pairs with its identifier
-        * @param fileName XML file with localized strings used in the game
-        * @param fileWithGuaranteedStrings The file with more strings than in fileName
+        * Parse the XML file so each string pairs with its alias
         */
-        void parse ( const std::string & fileName, const std::string& fileWithGuaranteedStrings ) ;
+        void parse ( const std::string & file, const std::string& fileWithGuaranteedStrings ) ;
 
-        std::list< LanguageText * > texts ;
+        void parseFile ( const std::string & fileName, std::vector < LanguageText * > & strings ) ;
 
-        std::list< LanguageText * > backupTexts ;
+        std::vector< LanguageText * > strings ;
 
-};
+        std::vector< LanguageText * > backupStrings ;
 
-/**
- * Object-function used as a predicate in the search for a language string
- */
-struct EqualLanguageString : public std::binary_function< LanguageText *, std::string, bool >
-{
-        bool operator() ( const LanguageText* lang, const std::string& id ) const;
 };
 
 }

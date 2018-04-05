@@ -1,9 +1,6 @@
 gamedatadir = $(datadir)/@PACKAGE@
-gamedata_DATA = configuration.xsd \
-		items.xml \
-		items.xsd \
+gamedata_DATA = items.xml \
 		sounds.xml \
-		sounds.xsd \
 		letters.utf8 \
 		font.png \
 		loading-screen.png \

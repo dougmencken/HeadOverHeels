@@ -212,7 +212,7 @@ namespace sgxml
 }
 
 
-#include <memory>    // std::auto_ptr
+#include <memory>    // std::auto_ptr and std::unique_ptr
 #include <algorithm> // std::binary_search
 
 #include <xsd/cxx/tree/exceptions.hxx>
@@ -242,7 +242,7 @@ namespace sgxml
     exploredRooms (const exploredRooms_type& x);
 
     void
-    exploredRooms (::std::auto_ptr< exploredRooms_type > p);
+    exploredRooms (sharedsmartptr< exploredRooms_type > p);
 
     // freeByblos
     //
@@ -329,7 +329,7 @@ namespace sgxml
     bonus (const bonus_type& x);
 
     void
-    bonus (::std::auto_ptr< bonus_type > p);
+    bonus (sharedsmartptr< bonus_type > p);
 
     // players
     //
@@ -346,7 +346,7 @@ namespace sgxml
     players (const players_type& x);
 
     void
-    players (::std::auto_ptr< players_type > p);
+    players (sharedsmartptr< players_type > p);
 
     // Constructors
     //
@@ -548,7 +548,7 @@ namespace sgxml
     filename (const filename_type& x);
 
     void
-    filename (::std::auto_ptr< filename_type > p);
+    filename (sharedsmartptr< filename_type > p);
 
     // Constructors
     //
@@ -596,7 +596,7 @@ namespace sgxml
     label (const label_type& x);
 
     void
-    label (::std::auto_ptr< label_type > p);
+    label (sharedsmartptr< label_type > p);
 
     // filename
 
@@ -613,7 +613,7 @@ namespace sgxml
     filename (const filename_type& x);
 
     void
-    filename (::std::auto_ptr< filename_type > p);
+    filename (sharedsmartptr< filename_type > p);
 
     // Constructors
     //
@@ -678,7 +678,7 @@ namespace sgxml
     roomFilename (const roomFilename_type& x);
 
     void
-    roomFilename (::std::auto_ptr< roomFilename_type > p);
+    roomFilename (sharedsmartptr< roomFilename_type > p);
 
     // x
     //
@@ -821,7 +821,7 @@ namespace sgxml
     label (const label_type& x);
 
     void
-    label (::std::auto_ptr< label_type > p);
+    label (sharedsmartptr< label_type > p);
 
     // Constructors
     //
@@ -883,7 +883,7 @@ namespace sgxml
   // Parse a URI or a local file
   //
 
-  ::std::auto_ptr< ::sgxml::SaveGameXML >
+  sharedsmartptr< ::sgxml::SaveGameXML >
   savegame (const ::std::string& uri,
             ::xml_schema::flags f = 0,
             const ::xml_schema::properties& p = ::xml_schema::properties ());
@@ -891,12 +891,12 @@ namespace sgxml
   // Parse std::istream
   //
 
-  ::std::auto_ptr< ::sgxml::SaveGameXML >
+  sharedsmartptr< ::sgxml::SaveGameXML >
   savegame (::std::istream& is,
             ::xml_schema::flags f = 0,
             const ::xml_schema::properties& p = ::xml_schema::properties ());
 
-  ::std::auto_ptr< ::sgxml::SaveGameXML >
+  sharedsmartptr< ::sgxml::SaveGameXML >
   savegame (::std::istream& is,
             const ::std::string& id,
             ::xml_schema::flags f = 0,
@@ -905,7 +905,7 @@ namespace sgxml
   // Parse xercesc::DOMLSInput
   //
 
-  ::std::auto_ptr< ::sgxml::SaveGameXML >
+  sharedsmartptr< ::sgxml::SaveGameXML >
   savegame (const ::xercesc::DOMLSInput& is,
             ::xml_schema::flags f = 0,
             const ::xml_schema::properties& p = ::xml_schema::properties ());
@@ -913,12 +913,12 @@ namespace sgxml
   // Parse xercesc::DOMDocument
   //
 
-  ::std::auto_ptr< ::sgxml::SaveGameXML >
+  sharedsmartptr< ::sgxml::SaveGameXML >
   savegame (const ::xercesc::DOMDocument& d,
             ::xml_schema::flags f = 0,
             const ::xml_schema::properties& p = ::xml_schema::properties ());
 
-  ::std::auto_ptr< ::sgxml::SaveGameXML >
+  sharedsmartptr< ::sgxml::SaveGameXML >
   savegame (::xercesc::DOMDocument* d,
             ::xml_schema::flags f = 0,
             const ::xml_schema::properties& p = ::xml_schema::properties ());

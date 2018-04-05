@@ -67,8 +67,8 @@ void CreateListOfSavedGames::doAction ()
                         short planets = 0;
                         readSomeInfoFromGamefile( file, &rooms, &planets );
                         ss.str( std::string() );
-                        ss << rooms << " " << languageManager->findLanguageString( "rooms" )->getText() << " "
-                                << planets << " " << languageManager->findLanguageString( "planets" )->getText();
+                        ss << rooms << " " << languageManager->findLanguageStringForAlias( "rooms" )->getText() << " "
+                                << planets << " " << languageManager->findLanguageStringForAlias( "planets" )->getText();
                         Label* label = new Label( ss.str() );
 
                         if ( isLoadMenu() )
@@ -84,7 +84,7 @@ void CreateListOfSavedGames::doAction ()
                         std::cout << "save \"" << file << "\" is yet free" << std::endl ;
 
                         ss.str( std::string() );
-                        ss << languageManager->findLanguageString( "free-slot" )->getText();
+                        ss << languageManager->findLanguageStringForAlias( "free-slot" )->getText();
                         Label* labelOfFree = new Label( ss.str() );
                         if ( isLoadMenu() )
                         {
@@ -111,7 +111,7 @@ void CreateListOfSavedGames::readSomeInfoFromGamefile( const std::string& fileNa
 {
         try
         {
-                std::auto_ptr< sgxml::SaveGameXML > saveGameXML( sgxml::savegame( fileName.c_str() ) );
+                sharedsmartptr< sgxml::SaveGameXML > saveGameXML( sgxml::savegame( fileName.c_str() ) );
 
                 *rooms = saveGameXML->exploredRooms().visited().size();
                 *planets = ( saveGameXML->freeByblos() ? 1 : 0 ) +

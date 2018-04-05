@@ -11,10 +11,10 @@
 #ifndef BonusManager_hpp_
 #define BonusManager_hpp_
 
+#include "csxml/SaveGameXML.hpp"
+
 #include <list>
 #include <string>
-#include <algorithm>
-#include "csxml/SaveGameXML.hpp"
 
 
 namespace isomot

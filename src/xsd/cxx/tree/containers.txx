@@ -14,12 +14,14 @@ namespace xsd
     {
       // one
       //
+      /*
       template<typename X>
       one<X, false>::
       ~one ()
       {
         delete x_;
       }
+      */
 
       template<typename X>
       one<X, false>::
@@ -38,7 +40,7 @@ namespace xsd
 
       template<typename X>
       one<X, false>::
-      one (std::auto_ptr<X> x, flags f, type* container)
+      one (sharedsmartptr<X> x, flags f, type* container)
           : x_ (0), flags_ (f), container_ (container)
       {
         set (x);
@@ -86,15 +88,12 @@ namespace xsd
 
       template<typename X>
       void one<X, false>::
-      set (std::auto_ptr<X> x)
+      set (sharedsmartptr<X> x)
       {
         X* r (0);
 
         if (x.get () != 0)
         {
-          if (x->_container () == container_)
-            r = x.release ();
-          else
             r = x->_clone (flags_, container_);
         }
 
@@ -104,12 +103,14 @@ namespace xsd
 
       // optional
       //
+      /*
       template <typename X>
       optional<X, false>::
       ~optional ()
       {
         delete x_;
       }
+      */
 
       template <typename X>
       optional<X, false>::
@@ -128,7 +129,7 @@ namespace xsd
 
       template <typename X>
       optional<X, false>::
-      optional (std::auto_ptr<X> x, flags f, type* c)
+      optional (sharedsmartptr<X> x, flags f, type* c)
           : x_ (0), flags_ (f), container_ (c)
       {
         set (x);
@@ -185,15 +186,12 @@ namespace xsd
 
       template <typename X>
       void optional<X, false>::
-      set (std::auto_ptr<X> x)
+      set (sharedsmartptr<X> x)
       {
         X* r (0);
 
         if (x.get () != 0)
         {
-          if (x->_container () == container_)
-            r = x.release ();
-          else
             r = x->_clone (flags_, container_);
         }
 

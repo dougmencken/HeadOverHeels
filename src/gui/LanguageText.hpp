@@ -34,17 +34,11 @@ class LanguageText
 
 public:
 
-        LanguageText( const std::string& id ) ;
-
-        LanguageText( const std::string& id, unsigned int x, unsigned int y ) ;
+        LanguageText( const std::string& alias ) ;
 
 private:
 
-        std::string id ;
-
-        unsigned int x ;
-
-        unsigned int y ;
+        std::string alias ;
 
         std::vector< LanguageLine > lines ;
 
@@ -54,11 +48,7 @@ public:
 
         void addLine ( const std::string& text, const std::string& font, const std::string& color ) ;
 
-        std::string getId () const {  return this->id ;  }
-
-        unsigned int getX () const {  return this->x ;  }
-
-        unsigned int getY () const {  return this->y ;  }
+        std::string getAlias () const {  return this->alias ;  }
 
         std::string getFirstLineText () const {  return this->lines[ 0 ].text ;  }
 

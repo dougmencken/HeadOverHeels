@@ -13,9 +13,14 @@ External dependencies
 
         a completely open, patent-free audio encoding and streaming technology
 
-    xerces-c
+    xerces-c ~~
+    ~~ to disappear soon
 
         a validating XML parser written in a portable subset of C++
+
+    tinyxml2
+
+        a simple, small, C++ XML parser that can be easily integrated into other programs
 
     allegro 4
 

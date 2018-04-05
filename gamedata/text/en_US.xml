@@ -1,884 +1,751 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<language xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="language.xsd">
+<language>
 
-  <text id="yep">
+  <text alias="yep">
     <properties>
-      <ustring>yes</ustring>
+      <string>yes</string>
     </properties>
   </text>
 
-  <text id="nope">
+  <text alias="nope">
     <properties>
-      <ustring>no</ustring>
+      <string>no</string>
     </properties>
   </text>
 
-  <text id="new-game">
+  <text alias="new-game">
     <properties>
-      <ustring>New game</ustring>
+      <string>New game</string>
     </properties>
   </text>
 
-  <text id="blacktooth-empire">
+  <text alias="blacktooth-empire">
     <properties>
-      <ustring>The Blacktooth Empire</ustring>
+      <string>The Blacktooth Empire</string>
     </properties>
   </text>
 
-  <text id="blacktooth">
+  <text alias="blacktooth">
     <properties>
-      <ustring>Blacktooth</ustring>
+      <string>Blacktooth</string>
     </properties>
   </text>
 
-  <text id="egyptus">
+  <text alias="egyptus">
     <properties>
-      <ustring>Egyptus</ustring>
+      <string>Egyptus</string>
     </properties>
   </text>
 
-  <text id="penitentiary">
+  <text alias="penitentiary">
     <properties>
-      <ustring>Penitentiary</ustring>
+      <string>Penitentiary</string>
     </properties>
   </text>
 
-  <text id="byblos">
+  <text alias="byblos">
     <properties>
-      <ustring>Byblos</ustring>
+      <string>Byblos</string>
     </properties>
   </text>
 
-  <text id="safari">
+  <text alias="safari">
     <properties>
-      <ustring>Safari</ustring>
+      <string>Safari</string>
     </properties>
   </text>
 
-  <text id="load-game">
+  <text alias="load-game">
     <properties>
-      <ustring>Old game</ustring>
+      <string>Old game</string>
     </properties>
   </text>
 
-  <text id="keyboard-menu">
+  <text alias="keyboard-menu">
     <properties>
-      <ustring>Keyboard</ustring>
+      <string>Keyboard</string>
     </properties>
   </text>
 
-  <text id="movenorth">
+  <text alias="movenorth">
     <properties>
-      <ustring>Move North</ustring>
+      <string>Move North</string>
     </properties>
   </text>
 
-  <text id="movesouth">
+  <text alias="movesouth">
     <properties>
-      <ustring>Move South</ustring>
+      <string>Move South</string>
     </properties>
   </text>
 
-  <text id="moveeast">
+  <text alias="moveeast">
     <properties>
-      <ustring>Move East</ustring>
+      <string>Move East</string>
     </properties>
   </text>
 
-  <text id="movewest">
+  <text alias="movewest">
     <properties>
-      <ustring>Move West</ustring>
+      <string>Move West</string>
     </properties>
   </text>
 
-  <text id="take">
+  <text alias="take">
     <properties>
-      <ustring>Take or Drop</ustring>
+      <string>Take or Drop</string>
     </properties>
   </text>
 
-  <text id="jump">
+  <text alias="jump">
     <properties>
-      <ustring>Jump</ustring>
+      <string>Jump</string>
     </properties>
   </text>
 
-  <text id="doughnut">
+  <text alias="doughnut">
     <properties>
-      <ustring>Fire Doughnut</ustring>
+      <string>Fire Doughnut</string>
     </properties>
   </text>
 
-  <text id="takeandjump">
+  <text alias="takeandjump">
     <properties>
-      <ustring>Take &amp; Jump</ustring>
+      <string>Take &amp; Jump</string>
     </properties>
   </text>
 
-  <text id="swap">
+  <text alias="swap">
     <properties>
-      <ustring>Swop</ustring>
+      <string>Swop</string>
     </properties>
   </text>
 
-  <text id="pause">
+  <text alias="pause">
     <properties>
-      <ustring>Pause</ustring>
+      <string>Pause</string>
     </properties>
   </text>
 
-  <text id="confirm-quit">
+  <text alias="confirm-quit">
     <properties font="big" color="cyan">
-      <ustring>Use Escape key to quit game</ustring>
+      <string>Use Escape key to quit game</string>
     </properties>
   </text>
 
-  <text id="confirm-resume">
+  <text alias="confirm-resume">
     <properties font="big" color="yellow">
-      <ustring>and another key to resume</ustring>
+      <string>and another key to resume</string>
     </properties>
   </text>
 
-  <text id="video-menu">
+  <text alias="video-menu">
     <properties>
-      <ustring>Video</ustring>
+      <string>Video</string>
     </properties>
   </text>
 
-  <text id="full-screen">
+  <text alias="full-screen">
     <properties>
-      <ustring>Full Screen</ustring>
+      <string>Full Screen</string>
     </properties>
   </text>
 
-  <text id="draw-shadows">
+  <text alias="draw-shadows">
     <properties>
-      <ustring>Draw Shadows</ustring>
+      <string>Draw Shadows</string>
     </properties>
   </text>
 
-  <text id="draw-background">
+  <text alias="draw-background">
     <properties>
-      <ustring>Draw Background</ustring>
+      <string>Draw Background</string>
     </properties>
   </text>
 
-  <text id="graphic-set">
+  <text alias="graphic-set">
     <properties>
-      <ustring>Choose Set of Graphics</ustring>
+      <string>Choose Set of Graphics</string>
     </properties>
   </text>
 
-  <text id="audio-menu">
+  <text alias="audio-menu">
     <properties>
-      <ustring>Audio</ustring>
+      <string>Audio</string>
     </properties>
   </text>
 
-  <text id="soundfx">
+  <text alias="soundfx">
     <properties>
-      <ustring>Volume of effects</ustring>
+      <string>Volume of effects</string>
     </properties>
   </text>
 
-  <text id="music">
+  <text alias="music">
     <properties>
-      <ustring>Volume of music</ustring>
+      <string>Volume of music</string>
     </properties>
   </text>
 
-  <text id="play-room-melodies">
+  <text alias="play-room-melodies">
   <properties>
-      <ustring>Play room tunes</ustring>
+      <string>Play room tunes</string>
     </properties>
   </text>
 
-  <text id="show-credits">
+  <text alias="show-credits">
     <properties>
-      <ustring>Credits</ustring>
+      <string>Credits</string>
     </properties>
   </text>
 
-  <text id="exit-game">
+  <text alias="exit-game">
     <properties>
-      <ustring>Exit</ustring>
+      <string>Exit</string>
     </properties>
   </text>
 
-  <text id="save-game">
+  <text alias="save-game">
     <properties font="big" color="orange">
-      <ustring>Reincarnation Fish lets you</ustring>
-    </properties>
-    <properties font="big" color="orange">
-      <ustring>save the game</ustring>
+      <string>Reincarnation Fish lets you</string>
     </properties>
     <properties font="big" color="orange">
-      <ustring>by touching SPACE</ustring>
+      <string>save the game</string>
+    </properties>
+    <properties font="big" color="orange">
+      <string>by touching SPACE</string>
     </properties>
   </text>
 
-  <text id="free-slot">
+  <text alias="free-slot">
     <properties>
-      <ustring>Free</ustring>
+      <string>Free</string>
     </properties>
   </text>
 
-  <text id="score">
+  <text alias="score">
     <properties>
-      <ustring>Score</ustring>
+      <string>Score</string>
     </properties>
   </text>
 
-  <text id="explored-rooms">
+  <text alias="explored-rooms">
     <properties>
-      <ustring>Explored %d rooms</ustring>
+      <string>Explored %d rooms</string>
     </properties>
   </text>
 
-  <text id="liberated-planets">
+  <text alias="liberated-planets">
     <properties>
-      <ustring>Liberated %d planets</ustring>
+      <string>Liberated %d planets</string>
     </properties>
   </text>
 
-  <text id="rooms">
+  <text alias="rooms">
     <properties>
-      <ustring>rooms</ustring>
+      <string>rooms</string>
     </properties>
   </text>
 
-  <text id="planets">
+  <text alias="planets">
     <properties>
-      <ustring>planets</ustring>
+      <string>planets</string>
     </properties>
   </text>
 
-  <text id="credits-text">
+  <text alias="credits-text">
     <properties font="big" color="multicolor">
-      <ustring>Head over Heels</ustring>
+      <string>Head over Heels</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="cyan">
-      <ustring>the</ustring>
+      <string>the</string>
     </properties>
     <properties font="regular" color="yellow">
-      <ustring>free and open source</ustring>
+      <string>free and open source</string>
     </properties>
     <properties font="regular" color="orange">
-      <ustring>remake</ustring>
+      <string>remake</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring> </ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
+      <string></string>
+      <string></string>
     </properties>
     <properties font="regular" color="multicolor">
-      <ustring>Coding</ustring>
+      <string>Coding</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="white">
-      <ustring>Jorge Rodríguez Santos</ustring>
+      <string>Jorge Rodríguez Santos</string>
+      <string>Douglas Mencken</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring>Douglas Mencken</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring> </ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
+      <string></string>
     </properties>
     <properties font="regular" color="multicolor">
-      <ustring>Graphics</ustring>
+      <string>Graphics</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="white">
-      <ustring>Davit Masiá</ustring>
+      <string>Davit Masiá</string>
+      <string>Xavi Colomé</string>
+      <string>Ricardo Oyón</string>
+      <string>Douglas Mencken</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring>Xavi Colomé</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Ricardo Oyón</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Douglas Mencken</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring> </ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
+      <string></string>
     </properties>
     <properties font="regular" color="multicolor">
-      <ustring>Music &amp; Sound Effects</ustring>
+      <string>Music &amp; Sound Effects</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="white">
-      <ustring>Chiastic</ustring>
+      <string>Chiastic</string>
+      <string>Ben Duckworth</string>
+      <string>Octavio Molano</string>
+      <string>Jorge Rodríguez Santos</string>
+      <string>Xavi Colomé</string>
+      <string>Douglas Mencken</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring>Ben Duckworth</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Octavio Molano</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Jorge Rodríguez Santos</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Xavi Colomé</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Douglas Mencken</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring> </ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
+      <string></string>
     </properties>
     <properties font="regular" color="multicolor">
-      <ustring>Authors of translation to</ustring>
+      <string>Authors of translation to</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
-    </properties>
-    <properties font="regular" color="yellow">
-      <ustring>Afrikaans af-ZA</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring> </ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Hendrik Bezuidenhout</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="yellow">
-      <ustring>Asturian ast-ES Bable</ustring>
+      <string>Afrikaans af-ZA</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="white">
-      <ustring>Xavi García</ustring>
+      <string>Hendrik Bezuidenhout</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
-    </properties>
-    <properties font="regular" color="yellow">
-      <ustring>Basque eu-ES Euskera</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring> </ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Xavi Colomé</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="yellow">
-      <ustring>Catalan ca-ES Català</ustring>
+      <string>Asturian ast-ES Bable</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="white">
-      <ustring>Efrén García</ustring>
+      <string>Xavi García</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring>Xavi Colomé</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="yellow">
-      <ustring>Croatian hr-HR Hrvatski</ustring>
+      <string>Basque eu-ES Euskera</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="white">
-      <ustring>Jakiša Tomić</ustring>
+      <string>Xavi Colomé</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="yellow">
-      <ustring>Danish da-DK Dansk</ustring>
+      <string>Catalan ca-ES Català</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="white">
-      <ustring>Peter Behrend</ustring>
+      <string>Efrén García</string>
+      <string>Xavi Colomé</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring>Jacob Gunness</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="yellow">
-      <ustring>English en-US</ustring>
+      <string>Croatian hr-HR Hrvatski</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="white">
-      <ustring>Enrique García</ustring>
+      <string>Jakiša Tomić</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring>Douglas Mencken</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="yellow">
-      <ustring>Finnish fi-FI Suomi</ustring>
+      <string>Danish da-DK Dansk</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="white">
-      <ustring>Mikko Järvinen</ustring>
+      <string>Peter Behrend</string>
+      <string>Jacob Gunness</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="yellow">
-      <ustring>French fr-FR Français</ustring>
+      <string>English en-US</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="white">
-      <ustring>Jérôme Ginestet</ustring>
+      <string>Enrique García</string>
+      <string>Douglas Mencken</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="yellow">
-      <ustring>Galician gl-ES Galego</ustring>
+      <string>Finnish fi-FI Suomi</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="white">
-      <ustring>Rubén Sánchez</ustring>
+      <string>Mikko Järvinen</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="yellow">
-      <ustring>German de-DE Deutsch</ustring>
+      <string>French fr-FR Français</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="white">
-      <ustring>Beatrix Scharpenberg</ustring>
+      <string>Jérôme Ginestet</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="yellow">
-      <ustring>Hungarian hu-HU Magyar</ustring>
+      <string>Galician gl-ES Galego</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="white">
-      <ustring>Attila Kiss</ustring>
+      <string>Rubén Sánchez</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="yellow">
-      <ustring>Italian it-IT Italiano</ustring>
+      <string>German de-DE Deutsch</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="white">
-      <ustring>Claudio Vicari</ustring>
+      <string>Beatrix Scharpenberg</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="yellow">
-      <ustring>Latin la-VA Lingua Latina</ustring>
+      <string>Hungarian hu-HU Magyar</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="white">
-      <ustring>Rosa Roca</ustring>
+      <string>Attila Kiss</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="yellow">
-      <ustring>Polish pl-PL Polski</ustring>
+      <string>Italian it-IT Italiano</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="white">
-      <ustring>Marcin Drews</ustring>
+      <string>Claudio Vicari</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="yellow">
-      <ustring>Brazilian Portuguese pt-BR</ustring>
+      <string>Latin la-VA Lingua Latina</string>
+    </properties>
+    <properties font="regular" color="white">
+      <string></string>
+    </properties>
+    <properties font="regular" color="white">
+      <string>Rosa Roca</string>
+    </properties>
+    <properties font="regular" color="white">
+      <string></string>
     </properties>
     <properties font="regular" color="yellow">
-      <ustring>Português Brazil</ustring>
+      <string>Polish pl-PL Polski</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="white">
-      <ustring>Fábio Oliveira</ustring>
+      <string>Marcin Drews</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="yellow">
-      <ustring>European Portuguese pt-PT</ustring>
+      <string>Brazilian Portuguese pt-BR</string>
+      <string>Português Brazil</string>
+    </properties>
+    <properties font="regular" color="white">
+      <string></string>
+    </properties>
+    <properties font="regular" color="white">
+      <string>Fábio Oliveira</string>
+    </properties>
+    <properties font="regular" color="white">
+      <string></string>
     </properties>
     <properties font="regular" color="yellow">
-      <ustring>Português Portugal</ustring>
+      <string>European Portuguese pt-PT</string>
+      <string>Português Portugal</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="white">
-      <ustring>Filipe Silva</ustring>
+      <string>Filipe Silva</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="yellow">
-      <ustring>Russian ru-RU Русский</ustring>
+      <string>Russian ru-RU Русский</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="white">
-      <ustring>Дмитрий Сибаров</ustring>
+      <string>Дмитрий Сибаров</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="yellow">
-      <ustring>Serbian sr-SR Српски</ustring>
+      <string>Serbian sr-SR Српски</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="white">
-      <ustring>Милош Бабовић</ustring>
+      <string>Милош Бабовић</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="yellow">
-      <ustring>Slovak sk-SK Slovenčina</ustring>
+      <string>Slovak sk-SK Slovenčina</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="white">
-      <ustring>Vlado Makys</ustring>
+      <string>Vlado Makys</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="yellow">
-      <ustring>Valencian val-ES Valencià</ustring>
+      <string>Valencian val-ES Valencià</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="white">
-      <ustring>Davit Masiá</ustring>
+      <string>Davit Masiá</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
+      <string></string>
     </properties>
     <properties font="regular" color="multicolor">
-      <ustring>Special Thanks Go To</ustring>
+      <string>Special Thanks Go To</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="white">
-      <ustring>Ignacio Pérez Gil</ustring>
+      <string>Ignacio Pérez Gil</string>
+      <string>Marcos Morales</string>
+      <string>Nancy Loor Zambrano</string>
+      <string>Paco Santoyo López</string>
+      <string>Santiago Acha Jiménez</string>
+      <string></string>
+      <string>Remakes Zone</string>
+      <string>Computer Emuzone</string>
+      <string></string>
+      <string>Alberto Rodríguez Santos</string>
+      <string>Arturo Tuya</string>
+      <string>Benito Nemesio</string>
+      <string>Caleb</string>
+      <string>Carlos Hernández</string>
+      <string>Carlos Herrero</string>
+      <string>Craig Laycock</string>
+      <string>Dan Harper</string>
+      <string>Darryl LeCount</string>
+      <string>David C.</string>
+      <string>Fabián Álvarez</string>
+      <string>George Wood</string>
+      <string>Henri</string>
+      <string>Ivan García</string>
+      <string>James Manners</string>
+      <string>Javi "Objeto"</string>
+      <string>Jérôme M.</string>
+      <string>Jorge Mateo</string>
+      <string>Jorge Moreno</string>
+      <string>José Luis Sáez</string>
+      <string>Juan Luis Martínez</string>
+      <string>Luis Cargnelutti</string>
+      <string>Luke Barlow</string>
+      <string>Luke Tweedy</string>
+      <string>Marcial</string>
+      <string>Miguel Ángel Espinosa</string>
+      <string>Pedro J. Guillén</string>
+      <string>ReuWen</string>
+      <string>Rob</string>
+      <string>Scott Wightman</string>
+      <string>Simon Burgess</string>
+      <string>Tony Brazil</string>
+      <string>Z80 User</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring>Marcos Morales</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Nancy Loor Zambrano</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Paco Santoyo López</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Santiago Acha Jiménez</ustring>
-    </properties>
-    <properties font="regular" color="yellow">
-      <ustring> </ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Remakes Zone</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Computer Emuzone</ustring>
-    </properties>
-    <properties font="regular" color="yellow">
-      <ustring> </ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Alberto Rodríguez Santos</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Arturo Tuya</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Benito Nemesio</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Caleb</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Carlos Hernández</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Carlos Herrero</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Craig Laycock</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Dan Harper</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Darryl LeCount</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>David C.</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Fabián Álvarez</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>George Wood</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Henri</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Ivan García</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>James Manners</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Javi "Objeto"</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Jérôme M.</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Jorge Mateo</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Jorge Moreno</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>José Luis Sáez</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Juan Luis Martínez</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Luis Cargnelutti</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Luke Barlow</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Luke Tweedy</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Marcial</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Miguel Ángel Espinosa</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Pedro J. Guillén</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>ReuWen</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Rob</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Scott Wightman</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Simon Burgess</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Tony Brazil</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring>Z80 User</ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring> </ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring> </ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring> </ustring>
-    </properties>
-    <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
+      <string></string>
+      <string></string>
+      <string></string>
     </properties>
     <properties font="regular" color="multicolor">
-      <ustring>Original game</ustring>
+      <string>Original game</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="cyan">
-      <ustring>coding</ustring>
+      <string>coding</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="white">
-      <ustring>Jon Ritman</ustring>
+      <string>Jon Ritman</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="cyan">
-      <ustring>graphics</ustring>
+      <string>graphics</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="white">
-      <ustring>Bernie Drummond</ustring>
+      <string>Bernie Drummond</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="cyan">
-      <ustring>sound</ustring>
+      <string>sound</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="white">
-      <ustring>Guy Stevens</ustring>
+      <string>Guy Stevens</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="cyan">
-      <ustring>loading screen</ustring>
+      <string>loading screen</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
     <properties font="regular" color="white">
-      <ustring>Frederick David Thorpe</ustring>
+      <string>Frederick David Thorpe</string>
     </properties>
     <properties font="regular" color="white">
-      <ustring> </ustring>
+      <string></string>
     </properties>
   </text>
 
-  <text id="final-text" x="0" y="200">
+  <text alias="final-text">
     <properties font="big" color="yellow">
-      <ustring>The people praised and preaches</ustring>
-    </properties>
-    <properties font="big" color="yellow">
-      <ustring>your heroism</ustring>
+      <string>The people praised and preaches</string>
+      <string>your heroism</string>
     </properties>
     <properties font="regular" color="cyan">
-      <ustring>This way, my dear friend, our two</ustring>
-    </properties>
-    <properties font="regular" color="cyan">
-      <ustring>heroes finished once for all with the</ustring>
+      <string>This way, my dear friend, our two</string>
+      <string>heroes finished once for all with the</string>
     </properties>
     <properties font="regular" color="multicolor">
-      <ustring>Blacktooth Emperor's tyranny</ustring>
+      <string>Blacktooth Emperor's tyranny</string>
     </properties>
   </text>
 
-  <text id="dummy">
+  <text alias="dummy">
     <properties>
-      <ustring>Dummy</ustring>
+      <string>Dummy</string>
     </properties>
   </text>
 
-  <text id="novice">
+  <text alias="novice">
     <properties>
-      <ustring>Novice</ustring>
+      <string>Novice</string>
     </properties>
   </text>
 
-  <text id="spy">
+  <text alias="spy">
     <properties>
-      <ustring>Spy</ustring>
+      <string>Spy</string>
     </properties>
   </text>
 
-  <text id="master-spy">
+  <text alias="master-spy">
     <properties>
-      <ustring>Master Spy</ustring>
+      <string>Master Spy</string>
     </properties>
   </text>
 
-  <text id="hero">
+  <text alias="hero">
     <properties>
-      <ustring>Hero</ustring>
+      <string>Hero</string>
     </properties>
   </text>
 
-  <text id="emperor">
+  <text alias="emperor">
     <properties>
-      <ustring>Emperor</ustring>
+      <string>Emperor</string>
     </properties>
   </text>
 

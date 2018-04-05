@@ -20,6 +20,7 @@
 
 #include "csxml/SaveGameXML.hpp"
 
+
 class Color ;
 
 namespace isomot
@@ -87,8 +88,6 @@ private:
          */
         BITMAP * view ;
 
-        ItemDataManager * itemDataManager ;
-
         MapManager * mapManager ;
 
         Timer * finalRoomTimer ;
@@ -98,8 +97,6 @@ private:
 public:
 
         static void fillIsoTile ( BITMAP * where, int x0, int y0, int tileX, int tileY, unsigned int sizeOfTile, const Color * color ) ;
-
-        ItemDataManager * getItemDataManager () const {  return itemDataManager ;  }
 
         MapManager * getMapManager () const {  return mapManager ;  }
 

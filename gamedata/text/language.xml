@@ -1,144 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<language xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="language.xsd">
+<languages>
 
-  <text id="af_ZA">
-    <properties>
-      <ustring>Afrikaans</ustring>
-    </properties>
-  </text>
+  <language iso="af_ZA">
+    <text>Afrikaans</text>
+  </language>
 
-  <text id="ast_ES">
-    <properties>
-      <ustring>Bable</ustring>
-    </properties>
-  </text>
+  <language iso="ast_ES">
+    <text>Bable</text>
+  </language>
 
-  <text id="ca_ES">
-    <properties>
-      <ustring>Català</ustring>
-    </properties>
-  </text>
+  <language iso="ca_ES">
+    <text>Català</text>
+  </language>
 
-  <text id="da_DK">
-    <properties>
-      <ustring>Dansk</ustring>
-    </properties>
-  </text>
+  <language iso="da_DK">
+    <text>Dansk</text>
+  </language>
 
-  <text id="de_DE">
-    <properties>
-      <ustring>Deutsch</ustring>
-    </properties>
-  </text>
+  <language iso="de_DE">
+    <text>Deutsch</text>
+  </language>
 
-  <text id="en_US">
-    <properties>
-      <ustring>English</ustring>
-    </properties>
-  </text>
+  <language iso="en_US">
+    <text>English</text>
+  </language>
 
-  <text id="es_ES">
-    <properties>
-      <ustring>Español ES</ustring>
-    </properties>
-  </text>
+  <language iso="es_ES">
+    <text>Español ES</text>
+  </language>
 
-  <text id="es_LA">
-    <properties>
-      <ustring>Español LA</ustring>
-    </properties>
-  </text>
+  <language iso="es_LA">
+    <text>Español LA</text>
+  </language>
 
-  <text id="eu_ES">
-    <properties>
-      <ustring>Euskera</ustring>
-    </properties>
-  </text>
+  <language iso="eu_ES">
+    <text>Euskera</text>
+  </language>
 
-  <text id="fr_FR">
-    <properties>
-      <ustring>Français</ustring>
-    </properties>
-  </text>
+  <language iso="fr_FR">
+    <text>Français</text>
+  </language>
 
-  <text id="gl_ES">
-    <properties>
-      <ustring>Galego</ustring>
-    </properties>
-  </text>
+  <language iso="gl_ES">
+    <text>Galego</text>
+  </language>
 
-  <text id="hr_HR">
-    <properties>
-      <ustring>Hrvatski</ustring>
-    </properties>
-  </text>
+  <language iso="hr_HR">
+    <text>Hrvatski</text>
+  </language>
 
-  <text id="hu_HU">
-    <properties>
-      <ustring>Magyar</ustring>
-    </properties>
-  </text>
+  <language iso="hu_HU">
+    <text>Magyar</text>
+  </language>
 
-  <text id="it_IT">
-    <properties>
-      <ustring>Italiano</ustring>
-    </properties>
-  </text>
+  <language iso="it_IT">
+    <text>Italiano</text>
+  </language>
 
-  <text id="la_VA">
-    <properties>
-      <ustring>Latin</ustring>
-    </properties>
-  </text>
+  <language iso="la_VA">
+    <text>Latin</text>
+  </language>
 
-  <text id="pl_PL">
-    <properties>
-      <ustring>Polski</ustring>
-    </properties>
-  </text>
+  <language iso="pl_PL">
+    <text>Polski</text>
+  </language>
 
-  <text id="pt_BR">
-    <properties>
-      <ustring>Português BR</ustring>
-    </properties>
-  </text>
+  <language iso="pt_BR">
+    <text>Português BR</text>
+  </language>
 
-  <text id="pt_PT">
-    <properties>
-      <ustring>Português PT</ustring>
-    </properties>
-  </text>
+  <language iso="pt_PT">
+    <text>Português PT</text>
+  </language>
 
-  <text id="ru_RU">
-    <properties>
-      <ustring>Русский</ustring>
-    </properties>
-  </text>
+  <language iso="ru_RU">
+    <text>Русский</text>
+  </language>
 
-  <text id="sk_SK">
-    <properties>
-      <ustring>Slovenčina</ustring>
-    </properties>
-  </text>
+  <language iso="sk_SK">
+    <text>Slovenčina</text>
+  </language>
 
-  <text id="fi_FI">
-    <properties>
-      <ustring>Suomi</ustring>
-    </properties>
-  </text>
+  <language iso="fi_FI">
+    <text>Suomi</text>
+  </language>
 
-  <text id="sr_SR">
-    <properties>
-      <ustring>Српски</ustring>
-    </properties>
-  </text>
+  <language iso="sr_SR">
+    <text>Српски</text>
+  </language>
 
-  <text id="val_ES">
-    <properties>
-      <ustring>Valencià</ustring>
-    </properties>
-  </text>
+  <language iso="val_ES">
+    <text>Valencià</text>
+  </language>
 
-</language>
+</languages>

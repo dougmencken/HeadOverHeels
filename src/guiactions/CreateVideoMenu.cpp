@@ -33,18 +33,18 @@ void CreateVideoMenu::doAction ()
 
                 LanguageManager* languageManager = gui::GuiManager::getInstance()->getLanguageManager();
 
-                LanguageText* textFullscreen = languageManager->findLanguageString( "full-screen" );
-                LanguageText* textDrawShadows = languageManager->findLanguageString( "draw-shadows" );
-                LanguageText* textDrawBackground = languageManager->findLanguageString( "draw-background" );
+                LanguageText* textFullscreen = languageManager->findLanguageStringForAlias( "full-screen" );
+                LanguageText* textDrawShadows = languageManager->findLanguageStringForAlias( "draw-shadows" );
+                LanguageText* textDrawBackground = languageManager->findLanguageStringForAlias( "draw-background" );
 
-                std::string yeah = languageManager->findLanguageString( "yep" )-> getText ();
-                std::string nope = languageManager->findLanguageString( "nope" )->getText ();
+                std::string yeah = languageManager->findLanguageStringForAlias( "yep" )-> getText ();
+                std::string nope = languageManager->findLanguageStringForAlias( "nope" )->getText ();
 
                 this->labelFullscreen = new Label( textFullscreen->getText() );
                 this->labelDrawShadows = new Label( textDrawShadows->getText() );
                 this->labelDrawBackground = new Label( textDrawBackground->getText() );
 
-                LanguageText* textGraphicSet = languageManager->findLanguageString( "graphic-set" );
+                LanguageText* textGraphicSet = languageManager->findLanguageStringForAlias( "graphic-set" );
                 this->labelGraphicSet = new Label( textGraphicSet->getText(), "regular", "yellow" );
                 labelGraphicSet->setAction( new CreateMenuOfGraphicSets( getWhereToDraw(), this ) );
 
@@ -137,8 +137,8 @@ void CreateVideoMenu::doAction ()
 void CreateVideoMenu::updateLabels ()
 {
         LanguageManager* languageManager = gui::GuiManager::getInstance()->getLanguageManager();
-        std::string yeah = languageManager->findLanguageString( "yep" )-> getText ();
-        std::string nope = languageManager->findLanguageString( "nope" )->getText ();
+        std::string yeah = languageManager->findLanguageStringForAlias( "yep" )-> getText ();
+        std::string nope = languageManager->findLanguageStringForAlias( "nope" )->getText ();
 
         listOfOptions->setValueOf( labelDrawBackground, isomot::GameManager::getInstance()->hasBackgroundPicture () ? yeah : nope );
         listOfOptions->setValueOf( labelDrawShadows, isomot::GameManager::getInstance()->getDrawShadows () ? yeah : nope );

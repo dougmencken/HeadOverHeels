@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<room xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<room>
 
-  <name>safari6.xml</name>
+  <name>safari6triple.xml</name>
 
   <scenery>safari</scenery>
 
@@ -14,26 +14,11 @@
   <floorType>mortal</floorType>
 
   <triple-room-data>
-    <northeast>
-      <x>320</x>
-      <y>46</y>
-    </northeast>
-    <southwest>
-      <x>320</x>
-      <y>144</y>
-    </southwest>
-    <eastnorth>
-      <x>248</x>
-      <y>80</y>
-    </eastnorth>
-    <bound-x>
-      <minimum>96</minimum>
-      <maximum>144</maximum>
-    </bound-x>
-    <bound-y>
-      <minimum>80</minimum>
-      <maximum>128</maximum>
-    </bound-y>
+    <northeast x="320" y="46" />
+    <southwest x="320" y="144" />
+    <eastnorth x="248" y="80" />
+    <bound-x minimum="96" maximum="144" />
+    <bound-y minimum="80" maximum="128" />
   </triple-room-data>
 
   <floor>

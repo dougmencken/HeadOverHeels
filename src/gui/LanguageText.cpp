@@ -5,18 +5,8 @@
 namespace gui
 {
 
-LanguageText::LanguageText( const std::string& id, unsigned int x, unsigned int y ) :
-        id( id ) ,
-        x( x ) ,
-        y( y )
-{
-
-}
-
-LanguageText::LanguageText( const std::string& id ) :
-        id( id ) ,
-        x( 0 ) ,
-        y( 0 )
+LanguageText::LanguageText( const std::string& alias )
+        : alias( alias )
 {
 
 }

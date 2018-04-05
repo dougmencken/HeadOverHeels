@@ -10,7 +10,7 @@ endif
 
 headoverheels_CXXFLAGS = -I. -Iloadpng -Ialgif -Igui -Iguiactions -Ibehaviors -Iactivities -Wall $(AM_CXXFLAGS)
 
-AM_LDFLAGS = `allegro-config --libs release` -lvorbisfile -lvorbisenc -lvorbis -logg -lxerces-c -lpthread -lz -lpng
+AM_LDFLAGS = `allegro-config --libs release` -lvorbisfile -lvorbisenc -lvorbis -logg -ltinyxml2 -lxerces-c -lpthread -lz -lpng
 
 bin_PROGRAMS = headoverheels
 
@@ -96,8 +96,6 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			activities/JumpKindOfActivity.hpp \
 			activities/MoveKindOfActivity.cpp \
 			activities/MoveKindOfActivity.hpp \
-			gui/ConfigurationManager.cpp \
-			gui/ConfigurationManager.hpp \
 			gui/Font.cpp \
 			gui/Font.hpp \
 			gui/Gui.hpp \
@@ -211,17 +209,5 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			behaviors/Volatile.hpp \
 			behaviors/Behavior.cpp \
 			behaviors/Behavior.hpp \
-			csxml/ConfigurationXML.cpp \
-			csxml/ConfigurationXML.hpp \
-			csxml/ItemsXML.cpp \
-			csxml/ItemsXML.hpp \
-			csxml/LanguageXML.cpp \
-			csxml/LanguageXML.hpp \
-			csxml/MapXML.cpp \
-			csxml/MapXML.hpp \
-			csxml/RoomXML.cpp \
-			csxml/RoomXML.hpp \
 			csxml/SaveGameXML.cpp \
-			csxml/SaveGameXML.hpp \
-			csxml/SoundsXML.cpp \
-			csxml/SoundsXML.hpp
+			csxml/SaveGameXML.hpp

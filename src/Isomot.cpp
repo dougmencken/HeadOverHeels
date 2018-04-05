@@ -21,7 +21,6 @@ namespace isomot
 
 Isomot::Isomot( ) :
         view( nilPointer ),
-        itemDataManager( nilPointer ),
         mapManager( nilPointer ),
         finalRoomTimer( nilPointer ),
         finalRoomBuilt( false )
@@ -32,7 +31,6 @@ Isomot::Isomot( ) :
 Isomot::~Isomot( )
 {
         delete this->mapManager;
-        delete this->itemDataManager;
         delete this->finalRoomTimer;
 
         allegro::destroyBitmap( this->view );
@@ -49,11 +47,10 @@ void Isomot::beginNewGame ()
         finalRoomBuilt = false;
         if ( finalRoomTimer != nilPointer ) finalRoomTimer->stop();
 
-        // initial rooms
-        mapManager->beginNewGame( "blacktooth1head.xml", "blacktooth23heels.xml" );
-        //mapManager->beginNewGame( "blacktooth85.xml", "blacktooth23heels.xml" );
+        assert( mapManager != nilPointer );
+        mapManager->beginNewGame( "blacktooth1head.xml", "blacktooth23heels.xml" ); ///( "blacktooth85.xml", "blacktooth23heels.xml" );
 
-        // go to first room
+        assert( mapManager->getActiveRoom() != nilPointer );
         mapManager->getActiveRoom()->activate ();
 
         std::cout << "play new game" << std::endl ;
@@ -80,32 +77,25 @@ void Isomot::continueSavedGame ( const sgxml::players::player_sequence& playerSe
 
 void Isomot::prepare ()
 {
-        // image where the isometric view will be drawn
-
         if ( this->view == nilPointer )
         {
+                // image where the isometric view will be drawn
                 this->view = create_bitmap_ex( 32, ScreenWidth, ScreenHeight );
         }
 
-        // data for elements of the game
+        // set of graphics may change between games
+        // new ItemDataManager is needed to refresh pictures of items
+        GameManager::getInstance()->binItemDataManager();
 
-        if ( this->itemDataManager != nilPointer )
-        {
-                // set of graphics may change between games
-                // new ItemDataManager is needed to refresh pictures of items
-                delete this->itemDataManager;
-                this->itemDataManager = nilPointer ;
-        }
-
-        this->itemDataManager = new ItemDataManager( "items.xml" );
-        this->itemDataManager->loadItems ();
-
-        // data for map
+        ItemDataManager* itemDataManager = new ItemDataManager( "items.xml" );
+        itemDataManager->loadItems ();
+        GameManager::getInstance()->setItemDataManager( itemDataManager );
 
         if ( this->mapManager == nilPointer )
         {
-                this->mapManager = new MapManager( this, "map.xml" );
-                this->mapManager->loadMap ();
+                // map of game
+                this->mapManager = new MapManager( this );
+                this->mapManager->loadMap ( isomot::sharePath() + "map" + pathSeparator + "map.xml" );
         }
 }
 
@@ -283,7 +273,7 @@ BITMAP* Isomot::update()
                         Way way = otherPlayer->getOrientation();
 
                         PlayerItem* joinedPlayer = new PlayerItem(
-                                this->itemDataManager->findDataByLabel( nameOfAnotherPlayer ),
+                                GameManager::getInstance()->getItemDataManager()->findDataByLabel( nameOfAnotherPlayer ),
                                 playerX, playerY, playerZ, way
                         ) ;
 
@@ -291,7 +281,7 @@ BITMAP* Isomot::update()
                         if ( nameOfAnotherPlayer == "head" ) behavior = "behavior of Head";
                         else if ( nameOfAnotherPlayer == "heels" ) behavior = "behavior of Heels";
 
-                        joinedPlayer->assignBehavior( behavior, reinterpret_cast< void * >( this->itemDataManager ) );
+                        joinedPlayer->assignBehavior( behavior, reinterpret_cast< void * >( GameManager::getInstance()->getItemDataManager() ) );
 
                         joinedPlayer->fillWithData( gameManager );
 
@@ -311,7 +301,7 @@ BITMAP* Isomot::update()
                 {
                         if ( activeRoom->getMediator()->findItemByLabel( "crown" ) == nilPointer )
                         {
-                                ItemData* chapeauData = this->itemDataManager->findDataByLabel( "crown" );
+                                ItemData* chapeauData = GameManager::getInstance()->getItemDataManager()->findDataByLabel( "crown" );
 
                                 int x = ( activeRoom->getLimitAt( "south" ) - activeRoom->getLimitAt( "north" ) + chapeauData->getWidthX() ) >> 1 ;
                                 int y = ( activeRoom->getLimitAt( "west" ) - activeRoom->getLimitAt( "east" ) + chapeauData->getWidthY() ) >> 1 ;
@@ -331,7 +321,7 @@ BITMAP* Isomot::update()
                         int teleportedZ = 240;
 
                         PlayerItem* teleportedPlayer = new PlayerItem(
-                                this->itemDataManager->findDataByLabel( nameOfPlayer ),
+                                GameManager::getInstance()->getItemDataManager()->findDataByLabel( nameOfPlayer ),
                                 teleportedX, teleportedY, teleportedZ,
                                 whichWay
                         ) ;
@@ -341,7 +331,7 @@ BITMAP* Isomot::update()
                         else if ( nameOfPlayer == "heels" ) behaviorOfPlayer = "behavior of Heels";
                         else if ( nameOfPlayer == "headoverheels" ) behaviorOfPlayer = "behavior of Head over Heels";
 
-                        teleportedPlayer->assignBehavior( behaviorOfPlayer, reinterpret_cast< void * >( this->itemDataManager ) );
+                        teleportedPlayer->assignBehavior( behaviorOfPlayer, reinterpret_cast< void * >( GameManager::getInstance()->getItemDataManager() ) );
 
                         teleportedPlayer->fillWithData( gameManager );
 
@@ -370,7 +360,7 @@ BITMAP* Isomot::update()
                 if ( activeRoom->getMediator()->getActiveCharacter()->getBehavior()->getActivityOfItem() == Wait )
                 {
                         // swap in the same room or between different rooms
-                        if ( ! activeRoom->swapCharactersInRoom( this->itemDataManager ) )
+                        if ( ! activeRoom->swapCharactersInRoom( GameManager::getInstance()->getItemDataManager() ) )
                         {
                                 activeRoom = mapManager->swapRoom();
                         }
@@ -770,7 +760,7 @@ void Isomot::updateFinalRoom()
 
                         std::cout << "character \"" << arrivedCharacter << "\" arrived to final room" << std::endl ;
 
-                        ItemData* dataOfArrived = this->itemDataManager->findDataByLabel( arrivedCharacter );
+                        ItemData* dataOfArrived = GameManager::getInstance()->getItemDataManager()->findDataByLabel( arrivedCharacter );
 
                         if ( dataOfArrived != nilPointer )
                         {
@@ -784,7 +774,7 @@ void Isomot::updateFinalRoom()
                 GameManager* gameManager = GameManager::getInstance();
                 unsigned int crowns = 0;
 
-                ItemData* dataForChapeau = this->itemDataManager->findDataByLabel( "crown" );
+                ItemData* dataForChapeau = GameManager::getInstance()->getItemDataManager()->findDataByLabel( "crown" );
 
                 // la corona de Safari
                 if ( gameManager->isFreePlanet( "safari" ) )
@@ -848,8 +838,8 @@ void Isomot::updateFinalRoom()
         {
                 if ( finalRoomTimer->getValue() > 4 /* each 4 seconds */ )
                 {
-                        FreeItem* finalBall = new FreeItem( this->itemDataManager->findDataByLabel( "ball" ), 146, 93, LayerHeight, Nowhere );
-                        finalBall->assignBehavior( "behaivor of final ball", this->itemDataManager->findDataByLabel( "bubbles" ) );
+                        FreeItem* finalBall = new FreeItem( GameManager::getInstance()->getItemDataManager()->findDataByLabel( "ball" ), 146, 93, LayerHeight, Nowhere );
+                        finalBall->assignBehavior( "behaivor of final ball", GameManager::getInstance()->getItemDataManager()->findDataByLabel( "bubbles" ) );
                         activeRoom->addFreeItem( finalBall );
 
                         finalRoomTimer->reset();

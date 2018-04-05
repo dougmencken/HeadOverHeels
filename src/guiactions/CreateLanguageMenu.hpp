@@ -11,15 +11,12 @@
 #ifndef CreateLanguageMenu_hpp_
 #define CreateLanguageMenu_hpp_
 
-#include <list>
+#include <map>
 #include "Action.hpp"
-#include "csxml/LanguageXML.hpp"
 
 
 namespace gui
 {
-
-class LanguageText ;
 
 /**
  * Crea el menú de selección de idioma
@@ -30,10 +27,6 @@ class CreateLanguageMenu : public Action
 
 public:
 
-        /**
-         * Constructor
-         * @param picture Imagen donde se dibujará la interfaz gráfica
-         */
         CreateLanguageMenu( BITMAP * picture ) ;
 
         ~CreateLanguageMenu( ) ;
@@ -55,10 +48,7 @@ private:
          */
         void parse ( const std::string& fileName ) ;
 
-        /**
-         * Strings for interface, each element contains its unique identifier and string of text
-         */
-        std::list < LanguageText * > texts ;
+        std::map < std::string /* iso */, std::string /* text */ > languages ;
 
 };
 

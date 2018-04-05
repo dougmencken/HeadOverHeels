@@ -16,7 +16,6 @@
 #include <iostream>
 #include <allegro.h>
 #include "MapRoomData.hpp"
-#include "csxml/MapXML.hpp"
 #include "csxml/SaveGameXML.hpp"
 
 # include "Room.hpp"
@@ -35,18 +34,14 @@ class MapManager
 
 public:
 
-        /**
-         * Constructor
-         * @param fileName Name of XML file with data of game’s map
-         */
-        MapManager( Isomot * isomot, const std::string& fileName ) ;
+        MapManager( Isomot * isomot ) ;
 
         virtual ~MapManager( ) ;
 
         /**
          * Compose data for map from XML file
          */
-        void loadMap () ;
+        void loadMap ( const std::string& fileName ) ;
 
         virtual void beginNewGame ( const std::string& firstRoomFileName, const std::string& secondRoomFileName ) ;
 
@@ -88,42 +83,26 @@ public:
 
         void storeVisitedSequence ( sgxml::exploredRooms::visited_sequence& visitedSequence ) ;
 
-        /**
-         * Cuenta el número de salas visitadas por los jugadores
-         */
         unsigned int countVisitedRooms () ;
 
         void resetVisitedRooms () ;
 
-        /**
-         * @param room name of file for room
-         */
-        MapRoomData * findRoomData ( const std::string& room ) const ;
+        MapRoomData * findRoomData ( const std::string& roomFile ) const ;
 
         MapRoomData * findRoomData ( const Room * room ) const {  return findRoomData( room->getNameOfFileWithDataAboutRoom() ) ;  }
 
-        /**
-         * Look for room in list of created rooms
-         * @param room name of file for room
-         * @return found room or nil if it’s absent
-         */
-        Room * findRoom ( const std::string& room ) const ;
+        Room * findRoomByFile ( const std::string& roomFile ) const ;
 
 protected:
 
         Isomot* isomot ;
 
-        std::vector< Room * > rooms ;
+        std::list< Room * > rooms ;
 
         /**
          * The room to draw yet
          */
         Room * activeRoom ;
-
-        /**
-         * Name of XML file with map data
-         */
-        std::string fileName ;
 
         /**
          * Data of every room on map
@@ -143,23 +122,6 @@ public:
          * @return room or nil if there’re no more players
          */
         Room * getRoomOfInactivePlayer () const ;
-
-};
-
-
-class EqualMapRoomData : public std::binary_function< MapRoomData *, std::string, bool >
-{
-
-public:
-        bool operator()( const MapRoomData * mapData, const std::string& room ) const;
-
-};
-
-class EqualRoom : public std::binary_function< Room *, std::string, bool >
-{
-
-public:
-        bool operator()( const Room * room, const std::string& nameOfRoom ) const;
 
 };
 

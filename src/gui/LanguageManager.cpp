@@ -1,120 +1,135 @@
 
-#include "csxml/LanguageXML.hpp"
 #include "LanguageText.hpp"
 #include "LanguageManager.hpp"
 #include "Ism.hpp"
+
 #include <iostream>
+#include <algorithm> // std::for_each
+#include <tinyxml2.h>
+
+#if defined( DEBUG ) && DEBUG
+    # define DEBUG_XML          0
+#endif
 
 
 namespace gui
 {
 
-LanguageManager::LanguageManager( const std::string& fileName, const std::string& fileWithGuaranteedStrings )
+LanguageManager::LanguageManager( const std::string& file, const std::string& fileWithGuaranteedStrings )
 {
-        this->parse( fileName, fileWithGuaranteedStrings );
+        this->parse( file, fileWithGuaranteedStrings );
 }
 
 LanguageManager::~LanguageManager()
 {
-        std::for_each( texts.begin(), texts.end(), isomot::DeleteObject() );
-        texts.clear();
+        std::for_each( strings.begin(), strings.end(), isomot::DeleteObject() );
+        strings.clear();
+
+        std::for_each( backupStrings.begin(), backupStrings.end(), isomot::DeleteObject() );
+        backupStrings.clear();
 }
 
-LanguageText* LanguageManager::findLanguageString( const std::string& id )
+LanguageText* LanguageManager::findLanguageStringForAlias( const std::string& alias )
 {
-        std::list< LanguageText * >::iterator i = std::find_if( texts.begin (), texts.end (), std::bind2nd( EqualLanguageString(), id ) );
-        if ( i == texts.end () )
+        for ( size_t i = 0 ; i < strings.size () ; i ++ )
         {
-                i = std::find_if( backupTexts.begin (), backupTexts.end (), std::bind2nd( EqualLanguageString(), id ) );
-                if ( i != backupTexts.end () )
-                {
-                        return *i ;
-                }
-                else
-                {
-                        LanguageText* text = new LanguageText( id ) ;
-                        text->addLine( "(" + id + ")" );
-                        return text ;
-                }
+                if ( strings[ i ]->getAlias() == alias ) return strings[ i ];
         }
 
-        return *i ;
+        for ( size_t i = 0 ; i < backupStrings.size () ; i ++ )
+        {
+                if ( backupStrings[ i ]->getAlias() == alias ) return backupStrings[ i ];
+        }
+
+        LanguageText* translated = new LanguageText( alias ) ;
+        translated->addLine( "(" + alias + ")" );
+        return translated ;
 }
 
-void LanguageManager::parse( const std::string& fileName, const std::string& fileWithGuaranteedStrings )
+void LanguageManager::parse( const std::string& file, const std::string& fileWithGuaranteedStrings )
 {
-        try
+        parseFile( file, this->strings );
+
+        if ( file != fileWithGuaranteedStrings ) // file is not the same as backup file with more strings
         {
-                std::auto_ptr< lxml::LanguageXML > languageXML( lxml::language( fileName.c_str() ) );
+                parseFile( fileWithGuaranteedStrings, this->backupStrings );
+        }
+}
 
-                for ( lxml::LanguageXML::text_const_iterator t = languageXML->text().begin (); t != languageXML->text().end (); ++t )
+void LanguageManager::parseFile( const std::string& fileName, std::vector< LanguageText * >& strings )
+{
+        std::cout << "parsing \"" << fileName << "\"" << std::endl ;
+
+        tinyxml2::XMLDocument languageXml;
+        tinyxml2::XMLError result = languageXml.LoadFile( fileName.c_str () );
+        if ( result != tinyxml2::XML_SUCCESS )
+        {
+                return;
+        }
+
+        tinyxml2::XMLElement* root = languageXml.FirstChildElement( "language" );
+        #if defined( DEBUG_XML ) && DEBUG_XML
+                std::cout << "   <language>" << std::endl ;
+        #endif
+
+        for ( tinyxml2::XMLElement* text = root->FirstChildElement( "text" ) ;
+                        text != nilPointer ;
+                        text = text->NextSiblingElement( "text" ) )
+        {
+                std::string alias = text->Attribute( "alias" );
+                LanguageText* langText = new LanguageText( alias );
+
+                #if defined( DEBUG_XML ) && DEBUG_XML
+                        std::cout << "     <text alias=\"" << alias << "\">" << std::endl ;
+                #endif
+
+                for ( tinyxml2::XMLElement* properties = text->FirstChildElement( "properties" ) ;
+                                properties != nilPointer ;
+                                properties = properties->NextSiblingElement( "properties" ) )
                 {
-                        LanguageText* lang = new LanguageText( ( *t ).id (), ( *t ).x (), ( *t ).y () );
+                        const char * font = properties->Attribute( "font" );
+                        const char * color = properties->Attribute( "color" );
 
-                        for ( lxml::text::properties_const_iterator p = ( *t ).properties().begin (); p != ( *t ).properties().end (); ++p )
+                        #if defined( DEBUG_XML ) && DEBUG_XML
+                                std::cout << "       <properties" <<
+                                                ( font != nilPointer ? std::string( " font=\"" ) + font + "\"" : "" ) <<
+                                                ( color != nilPointer ? std::string( " color=\"" ) + color + "\"" : "" ) <<
+                                                ">" << std::endl ;
+                        #endif
+
+                        for ( tinyxml2::XMLElement* string = properties->FirstChildElement( "string" ) ;
+                                        string != nilPointer ;
+                                        string = string->NextSiblingElement( "string" ) )
                         {
-                                std::string font;
-                                if ( ( *p ).font().present() )
+                                if ( string->FirstChild() != nilPointer )
                                 {
-                                        font = ( *p ).font().get();
+                                #if defined( DEBUG_XML ) && DEBUG_XML
+                                        std::cout << "         <string>" << string->FirstChild()->ToText()->Value() << "</string>" << std::endl ;
+                                #endif
+                                        langText->addLine( string->FirstChild()->ToText()->Value(),
+                                                           font != nilPointer ? font : "", color != nilPointer ? color : "" );
                                 }
-
-                                std::string color;
-                                if ( ( *p ).color().present() )
+                                else
                                 {
-                                        color = ( *p ).color().get();
-                                }
-
-                                for ( lxml::properties::ustring_const_iterator u = ( *p ).ustring().begin (); u != ( *p ).ustring().end (); ++u )
-                                {
-                                        lang->addLine( *u, font, color );
+                                #if defined( DEBUG_XML ) && DEBUG_XML
+                                        std::cout << "         <string></string>" << std::endl ;
+                                #endif
+                                        langText->addLine( "" );
                                 }
                         }
-
-                        this->texts.push_back( lang );
+                        #if defined( DEBUG_XML ) && DEBUG_XML
+                                std::cout << "       </properties>" << std::endl ;
+                        #endif
                 }
+                #if defined( DEBUG_XML ) && DEBUG_XML
+                        std::cout << "     </text>" << std::endl ;
+                #endif
 
-                if ( fileName != fileWithGuaranteedStrings )
-                { // file is not the same as backup file with more strings
-                        std::auto_ptr< lxml::LanguageXML > backupLanguageXML( lxml::language( fileWithGuaranteedStrings.c_str() ) );
-
-                        for ( lxml::LanguageXML::text_const_iterator t = backupLanguageXML->text().begin (); t != backupLanguageXML->text().end (); ++t )
-                        {
-                                LanguageText* lang = new LanguageText( ( *t ).id (), ( *t ).x (), ( *t ).y () );
-
-                                for ( lxml::text::properties_const_iterator p = ( *t ).properties().begin (); p != ( *t ).properties().end (); ++p )
-                                {
-                                        std::string font;
-                                        if ( ( *p ).font().present() )
-                                        {
-                                                font = ( *p ).font().get();
-                                        }
-
-                                        std::string color;
-                                        if ( ( *p ).color().present() )
-                                        {
-                                                color = ( *p ).color().get();
-                                        }
-
-                                        for ( lxml::properties::ustring_const_iterator u = ( *p ).ustring().begin (); u != ( *p ).ustring().end (); ++u )
-                                        {
-                                                lang->addLine( *u, font, color );
-                                        }
-                                }
-
-                                this->backupTexts.push_back( lang );
-                        }
-                }
+                strings.push_back( langText );
         }
-        catch ( const xml_schema::exception& e )
-        {
-                std::cerr << e << std::endl ;
-        }
-}
-
-inline bool EqualLanguageString::operator() ( const LanguageText* lang, const std::string& id ) const
-{
-        return ( lang->getId() == id );
+        #if defined( DEBUG_XML ) && DEBUG_XML
+                std::cout << "   </language>" << std::endl ;
+        #endif
 }
 
 }

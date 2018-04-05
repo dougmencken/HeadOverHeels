@@ -1,269 +1,268 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<language xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="language.xsd">
+<language>
 
-  <text id="new-game">
+  <text alias="new-game">
     <properties>
-      <ustring>Nouveau jeu</ustring>
+      <string>Nouveau jeu</string>
     </properties>
   </text>
 
-  <text id="blacktooth-empire">
+  <text alias="blacktooth-empire">
     <properties>
-      <ustring>L'Empire Blacktooth</ustring>
+      <string>L'Empire Blacktooth</string>
     </properties>
   </text>
 
-  <text id="blacktooth">
+  <text alias="blacktooth">
     <properties>
-      <ustring>Blacktooth</ustring>
+      <string>Blacktooth</string>
     </properties>
   </text>
 
-  <text id="egyptus">
+  <text alias="egyptus">
     <properties>
-      <ustring>Egyptus</ustring>
+      <string>Egyptus</string>
     </properties>
   </text>
 
-  <text id="penitentiary">
+  <text alias="penitentiary">
     <properties>
-      <ustring>Penitentiary</ustring>
+      <string>Penitentiary</string>
     </properties>
   </text>
 
-  <text id="byblos">
+  <text alias="byblos">
     <properties>
-      <ustring>Byblos</ustring>
+      <string>Byblos</string>
     </properties>
   </text>
 
-  <text id="safari">
+  <text alias="safari">
     <properties>
-      <ustring>Safari</ustring>
+      <string>Safari</string>
     </properties>
   </text>
 
-  <text id="load-game">
+  <text alias="load-game">
     <properties>
-      <ustring>Charger jeu</ustring>
+      <string>Charger jeu</string>
     </properties>
   </text>
 
-  <text id="keyboard-menu">
+  <text alias="keyboard-menu">
     <properties>
-      <ustring>Clavier</ustring>
+      <string>Clavier</string>
     </properties>
   </text>
 
-  <text id="movenorth">
+  <text alias="movenorth">
     <properties>
-      <ustring>Gauche</ustring>
+      <string>Gauche</string>
     </properties>
   </text>
 
-  <text id="movesouth">
+  <text alias="movesouth">
     <properties>
-      <ustring>Droite</ustring>
+      <string>Droite</string>
     </properties>
   </text>
 
-  <text id="moveeast">
+  <text alias="moveeast">
     <properties>
-      <ustring>Haut</ustring>
+      <string>Haut</string>
     </properties>
   </text>
 
-  <text id="movewest">
+  <text alias="movewest">
     <properties>
-      <ustring>Bas</ustring>
+      <string>Bas</string>
     </properties>
   </text>
 
-  <text id="take">
+  <text alias="take">
     <properties>
-      <ustring>Porter</ustring>
+      <string>Porter</string>
     </properties>
   </text>
 
-  <text id="jump">
+  <text alias="jump">
     <properties>
-      <ustring>Sauter</ustring>
+      <string>Sauter</string>
     </properties>
   </text>
 
-  <text id="doughnut">
+  <text alias="doughnut">
     <properties>
-      <ustring>Feu</ustring>
+      <string>Feu</string>
     </properties>
   </text>
 
-  <text id="takeandjump">
+  <text alias="takeandjump">
     <properties>
-      <ustring>Porter+Sauter</ustring>
+      <string>Porter+Sauter</string>
     </properties>
   </text>
 
-  <text id="swap">
+  <text alias="swap">
     <properties>
-      <ustring>Echanger</ustring>
+      <string>Echanger</string>
     </properties>
   </text>
 
-  <text id="pause">
+  <text alias="pause">
     <properties>
-      <ustring>Pause</ustring>
+      <string>Pause</string>
     </properties>
   </text>
 
-  <text id="confirm-quit">
+  <text alias="confirm-quit">
     <properties font="big" color="cyan">
-      <ustring>Appuyer sur Echap pour</ustring>
+      <string>Appuyer sur Echap pour</string>
     </properties>
     <properties font="big" color="cyan">
-      <ustring>terminer le jeu</ustring>
+      <string>terminer le jeu</string>
     </properties>
   </text>
 
-  <text id="confirm-resume">
+  <text alias="confirm-resume">
     <properties font="big" color="yellow">
-      <ustring>Appuyer sur une autre touche</ustring>
+      <string>Appuyer sur une autre touche</string>
     </properties>
     <properties font="big" color="yellow">
-      <ustring>pour revenir au jeu</ustring>
+      <string>pour revenir au jeu</string>
     </properties>
   </text>
 
-  <text id="audio-menu">
+  <text alias="audio-menu">
     <properties>
-      <ustring>Audio</ustring>
+      <string>Audio</string>
     </properties>
   </text>
 
-  <text id="soundfx">
+  <text alias="soundfx">
     <properties>
-      <ustring>Effets sonores</ustring>
+      <string>Effets sonores</string>
     </properties>
   </text>
 
-  <text id="music">
+  <text alias="music">
     <properties>
-      <ustring>Musique</ustring>
+      <string>Musique</string>
     </properties>
   </text>
 
-  <text id="show-credits">
+  <text alias="show-credits">
     <properties>
-      <ustring>Générique</ustring>
+      <string>Générique</string>
     </properties>
   </text>
 
-  <text id="exit-game">
+  <text alias="exit-game">
     <properties>
-      <ustring>Laisser</ustring>
+      <string>Laisser</string>
     </properties>
   </text>
 
-  <text id="save-game">
+  <text alias="save-game">
     <properties font="big" color="orange">
-      <ustring>Le poisson de réincarnation vous</ustring>
-    </properties>
-    <properties font="big" color="orange">
-      <ustring>donne la possibilité de sauvegarder</ustring>
+      <string>Le poisson de réincarnation vous</string>
     </properties>
     <properties font="big" color="orange">
-      <ustring>le jeu en appuyant sur SPACE</ustring>
+      <string>donne la possibilité de sauvegarder</string>
+    </properties>
+    <properties font="big" color="orange">
+      <string>le jeu en appuyant sur SPACE</string>
     </properties>
   </text>
 
-  <text id="free-slot">
+  <text alias="free-slot">
     <properties>
-      <ustring>Disponible</ustring>
+      <string>Disponible</string>
     </properties>
   </text>
 
-  <text id="score">
+  <text alias="score">
     <properties>
-      <ustring>Score</ustring>
+      <string>Score</string>
     </properties>
   </text>
 
-  <text id="explored-rooms">
+  <text alias="explored-rooms">
     <properties>
-      <ustring>%d salles explorées</ustring>
+      <string>%d salles explorées</string>
     </properties>
   </text>
 
-  <text id="liberated-planets">
+  <text alias="liberated-planets">
     <properties>
-      <ustring>%d planètes libérées</ustring>
+      <string>%d planètes libérées</string>
     </properties>
   </text>
 
-  <text id="rooms">
+  <text alias="rooms">
     <properties>
-      <ustring>salles</ustring>
+      <string>salles</string>
     </properties>
   </text>
 
-  <text id="planets">
+  <text alias="planets">
     <properties>
-      <ustring>planètes</ustring>
+      <string>planètes</string>
     </properties>
   </text>
 
-  <text id="final-text" x="0" y="200">
+  <text alias="final-text">
     <properties font="big" color="yellow">
-      <ustring>Les gens saluent votre héroïsme</ustring>
+      <string>Les gens saluent votre héroïsme</string>
     </properties>
     <properties font="big" color="yellow">
-      <ustring>et vous acclament</ustring>
+      <string>et vous acclament</string>
     </properties>
     <properties font="regular" color="cyan">
-      <ustring>De cette façon, mon ami, nos deux</ustring>
+      <string>De cette façon, mon ami, nos deux</string>
     </properties>
     <properties font="regular" color="cyan">
-      <ustring>héros ont mis une fin définitive à la</ustring>
+      <string>héros ont mis une fin définitive à la</string>
     </properties>
     <properties font="regular" color="multicolor">
-      <ustring>tyrannie de l'Empereur de Blacktooth</ustring>
+      <string>tyrannie de l'Empereur de Blacktooth</string>
     </properties>
   </text>
 
-  <text id="dummy">
+  <text alias="dummy">
     <properties>
-      <ustring>Bidon</ustring>
+      <string>Bidon</string>
     </properties>
   </text>
 
-  <text id="novice">
+  <text alias="novice">
     <properties>
-      <ustring>Novice</ustring>
+      <string>Novice</string>
     </properties>
   </text>
 
-  <text id="spy">
+  <text alias="spy">
     <properties>
-      <ustring>Espion</ustring>
+      <string>Espion</string>
     </properties>
   </text>
 
-  <text id="master-spy">
+  <text alias="master-spy">
     <properties>
-      <ustring>Maître espion</ustring>
+      <string>Maître espion</string>
     </properties>
   </text>
 
-  <text id="hero">
+  <text alias="hero">
     <properties>
-      <ustring>Héro</ustring>
+      <string>Héro</string>
     </properties>
   </text>
 
-  <text id="emperor">
+  <text alias="emperor">
     <properties>
-      <ustring>Empereur</ustring>
+      <string>Empereur</string>
     </properties>
   </text>
 

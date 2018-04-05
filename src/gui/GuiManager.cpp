@@ -1,7 +1,6 @@
 
 #include "GuiManager.hpp"
 #include "Ism.hpp"
-#include "ConfigurationManager.hpp"
 #include "LanguageManager.hpp"
 #include "InputManager.hpp"
 #include "SoundManager.hpp"
@@ -21,7 +20,7 @@ using gui::GuiManager;
 using gui::Screen;
 using gui::Font;
 using gui::LanguageManager;
-using gui::ConfigurationManager;
+using isomot::GameManager;
 using isomot::InputManager;
 using isomot::SoundManager;
 using isomot::ScreenWidth;
@@ -86,8 +85,6 @@ GuiManager::GuiManager( ) :
         // create image to draw interface
         this->picture = create_bitmap_ex( 32, ScreenWidth, ScreenHeight );
 
-        configurationManager = new ConfigurationManager( isomot::homePath() + "preferences.xml" );
-
         // initialize sound manager
         SoundManager::getInstance()->readListOfSounds( "sounds.xml" );
 }
@@ -100,7 +97,6 @@ GuiManager::~GuiManager( )
         this->fonts.clear();
 
         delete this->languageManager;
-        delete this->configurationManager;
 }
 
 GuiManager* GuiManager::getInstance ()
@@ -120,7 +116,7 @@ void GuiManager::readPreferences ()
 {
         if ( ! preferencesRead )
         {
-                preferencesRead = configurationManager->read() ;
+                preferencesRead = GameManager::readPreferences( isomot::homePath() + "preferences.xml" ) ;
 
                 if ( ! preferencesRead && instance != nilPointer )
                 {
@@ -132,7 +128,7 @@ void GuiManager::readPreferences ()
 void GuiManager::begin ()
 {
         // show list of languages
-        std::auto_ptr< CreateLanguageMenu > languageMenu( new CreateLanguageMenu( this->picture ) );
+        smartptr< CreateLanguageMenu > languageMenu( new CreateLanguageMenu( this->picture ) );
         languageMenu->doIt ();
 
         // draw user interface and handle keys
@@ -257,7 +253,7 @@ void GuiManager::redraw()
 
 std::string GuiManager::getPathToPicturesOfGui ()
 {
-        return isomot::sharePath() + isomot::GameManager::getInstance()->getChosenGraphicSet() + pathSeparator ;
+        return isomot::sharePath() + GameManager::getInstance()->getChosenGraphicSet() + pathSeparator ;
 }
 
 void GuiManager::allegroSetup()

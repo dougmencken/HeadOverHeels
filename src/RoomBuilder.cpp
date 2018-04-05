@@ -11,218 +11,235 @@
 #include "Door.hpp"
 #include "BonusManager.hpp"
 #include "GameManager.hpp"
+
 #include <loadpng.h>
 
 
 namespace isomot
 {
 
-RoomBuilder::RoomBuilder( ItemDataManager* manager ) :
-        itemDataManager( manager )
-      , room( nilPointer )
-{
-
-}
-
-RoomBuilder::~RoomBuilder( )
-{
-
-}
-
+/* static */
 Room* RoomBuilder::buildRoom ( const std::string& fileName )
 {
-        try
+        tinyxml2::XMLDocument roomXml;
+        tinyxml2::XMLError result = roomXml.LoadFile( fileName.c_str () );
+        if ( result != tinyxml2::XML_SUCCESS )
         {
-                std::auto_ptr< rxml::RoomXML > roomXML( rxml::room( fileName.c_str () ) );
-
-                // create room with basic parameters like scenery, dimensions, existence of floor
-                this->room = new Room( roomXML->name(), roomXML->scenery(), roomXML->xTiles(), roomXML->yTiles(), roomXML->width(), roomXML->floorType() );
-                if ( this->room == nilPointer )
-                {
-                        std::cerr << "I can't create room \"" << fileName << "\"" << std::endl ;
-                        throw "I can't create room \"" + fileName + "\"";
-                }
-
-                // to calculate coordinates of origin in isometric space, need to know if room has a door to north and / or east
-                bool hasNorthDoor = false;
-                bool hasEastDoor = false;
-
-                // scroll through list of items to look for doors
-                for ( rxml::items::item_const_iterator i = roomXML->items().item().begin (); i != roomXML->items().item().end (); ++i )
-                {
-                        if ( ( *i ).type() == rxml::type::door )
-                        {
-                                if ( ( *i ).direction() == rxml::direction::north ||
-                                     ( *i ).direction() == rxml::direction::northeast ||
-                                     ( *i ).direction() == rxml::direction::northwest )
-                                {
-                                        hasNorthDoor = true;
-                                }
-                                else if ( ( *i ).direction() == rxml::direction::east ||
-                                          ( *i ).direction() == rxml::direction::eastnorth ||
-                                          ( *i ).direction() == rxml::direction::eastsouth )
-                                {
-                                        hasEastDoor = true;
-                                }
-                        }
-                }
-
-                // with knowledge about doors, calculate coordinates of origin
-                room->calculateCoordinates( hasNorthDoor, hasEastDoor );
-
-                // for "triple" room there’s data to position camera initially
-                // and dimensions of room where to move camera
-                if ( roomXML->triple_room_data().present() )
-                {
-                        if ( roomXML->triple_room_data().get().northeast().present() )
-                        {
-                                rxml::northeast d = roomXML->triple_room_data().get().northeast().get();
-                                room->addTripleRoomInitialPoint( Northeast, d.x(), d.y() );
-                        }
-                        if ( roomXML->triple_room_data().get().southeast().present() )
-                        {
-                                rxml::southeast d = roomXML->triple_room_data().get().southeast().get();
-                                room->addTripleRoomInitialPoint( Southeast, d.x(), d.y() );
-                        }
-                        if ( roomXML->triple_room_data().get().northwest().present() )
-                        {
-                                rxml::northwest d = roomXML->triple_room_data().get().northwest().get();
-                                room->addTripleRoomInitialPoint( Northwest, d.x(), d.y() );
-                        }
-                        if ( roomXML->triple_room_data().get().southwest().present() )
-                        {
-                                rxml::southwest d = roomXML->triple_room_data().get().southwest().get();
-                                room->addTripleRoomInitialPoint( Southwest, d.x(), d.y() );
-                        }
-                        if ( roomXML->triple_room_data().get().eastnorth().present() )
-                        {
-                                rxml::eastnorth d = roomXML->triple_room_data().get().eastnorth().get();
-                                room->addTripleRoomInitialPoint( Eastnorth, d.x(), d.y() );
-                        }
-                        if ( roomXML->triple_room_data().get().eastsouth().present() )
-                        {
-                                rxml::eastsouth d = roomXML->triple_room_data().get().eastsouth().get();
-                                room->addTripleRoomInitialPoint( Eastsouth, d.x(), d.y() );
-                        }
-                        if ( roomXML->triple_room_data().get().westnorth().present() )
-                        {
-                                rxml::westnorth d = roomXML->triple_room_data().get().westnorth().get();
-                                room->addTripleRoomInitialPoint( Westnorth, d.x(), d.y() );
-                        }
-                        if ( roomXML->triple_room_data().get().westsouth().present() )
-                        {
-                                rxml::westsouth d = roomXML->triple_room_data().get().westsouth().get();
-                                room->addTripleRoomInitialPoint( Westsouth, d.x(), d.y() );
-                        }
-
-                        room->assignTripleRoomBounds( roomXML->triple_room_data().get().bound_x().minimum(),
-                                                      roomXML->triple_room_data().get().bound_x().maximum(),
-                                                      roomXML->triple_room_data().get().bound_y().minimum(),
-                                                      roomXML->triple_room_data().get().bound_y().maximum() );
-                }
-
-                // build tile-based floor
-                for ( rxml::floor::tile_const_iterator i = roomXML->floor().tile().begin (); i != roomXML->floor().tile().end (); ++i )
-                {
-                        FloorTile* floorTile = this->buildFloorTile( *i, isomot::GameManager::getInstance()->getChosenGraphicSet() );
-                        room->addFloor( floorTile );
-                }
-
-                // build walls without doors
-                if ( roomXML->walls().present() )
-                {
-                        for ( rxml::walls::wall_const_iterator i = roomXML->walls().get().wall().begin (); i != roomXML->walls().get().wall().end (); ++i )
-                        {
-                                Wall* wall = this->buildWall( *i, isomot::GameManager::getInstance()->getChosenGraphicSet() );
-                                room->addWall( wall );
-                        }
-                }
-
-                // place items in the room
-                // element may be a wall, a door, a grid one or a free one
-
-                for ( rxml::items::item_const_iterator i = roomXML->items().item().begin (); i != roomXML->items().item().end (); ++i )
-                {
-                        // it’s a plain wall
-                        if ( ( *i ).type () == rxml::type::wall )
-                        {
-                        }
-                        // it’s a door
-                        else if ( ( *i ).type () == rxml::type::door )
-                        {
-                                Door* door = this->buildDoor( *i );
-                                if ( door == nilPointer )
-                                {
-                                        std::ostringstream oss;
-                                        oss << "oops, can’t build a door with coordinates " << ( *i ).x () << ", " << ( *i ).y () << ", " << ( *i ).z () ;
-                                        std::cout << oss.str () << std::endl ;
-                                }
-                                else
-                                {
-                                        room->addDoor( door );
-                                }
-                        }
-                        // it’s a grid item
-                        else if( ( *i ).type () == rxml::type::griditem )
-                        {
-                                GridItem* gridItem = this->buildGridItem( *i );
-                                if ( gridItem == nilPointer )
-                                {
-                                        std::ostringstream oss;
-                                        oss << "oops, can’t build a grid item with coordinates " << ( *i ).x () << ", " << ( *i ).y () << ", " << ( *i ).z () ;
-                                        std::cout << oss.str () << std::endl ;
-                                }
-                                else
-                                {
-                                        room->addGridItem( gridItem );
-                                }
-                        }
-                        // it is a free item
-                        else if ( ( *i ).type () == rxml::type::freeitem )
-                        {
-                                FreeItem* freeItem = this->buildFreeItem( *i );
-
-                                // there may be bonus item already taken and thus absent
-                                if ( freeItem == nilPointer )
-                                {
-                                        std::ostringstream oss;
-                                        oss << "free item with coordinates " << ( *i ).x () << ", " << ( *i ).y () << ", " << ( *i ).z () << " is absent";
-                                        std::cout << oss.str () << std::endl ;
-                                }
-                                else
-                                {
-                                        room->addFreeItem( freeItem );
-                                }
-                        }
-                }
-
-                room->calculateBounds();
-        }
-        catch ( const xml_schema::exception& e )
-        {
-                std::cout << e << std::endl ;
-        }
-        catch ( const std::exception& e )
-        {
-                std::cout << e.what () << std::endl ;
+                std::cerr << "can’t read file " << fileName.c_str () << std::endl ;
+                return nilPointer;
         }
 
-        return this->room;
+        std::cout << "building room via data from " << fileName.c_str () << std::endl ;
+
+        tinyxml2::XMLElement* root = roomXml.FirstChildElement( "room" );
+
+        tinyxml2::XMLElement* name = root->FirstChildElement( "name" ) ;
+        tinyxml2::XMLElement* scenery = root->FirstChildElement( "scenery" ) ;
+        std::string sceneryString = ( scenery != nilPointer ? scenery->FirstChild()->ToText()->Value() : "" );
+        tinyxml2::XMLElement* xTiles = root->FirstChildElement( "xTiles" ) ;
+        tinyxml2::XMLElement* yTiles = root->FirstChildElement( "yTiles" ) ;
+        tinyxml2::XMLElement* width = root->FirstChildElement( "width" ) ;
+        tinyxml2::XMLElement* floorType = root->FirstChildElement( "floorType" ) ;
+
+        // create room with initial parameters like scenery, dimensions, type of floor
+        Room * theRoom = new Room (
+                name->FirstChild()->ToText()->Value() ,
+                sceneryString ,
+                std::atoi( xTiles->FirstChild()->ToText()->Value() ),
+                std::atoi( yTiles->FirstChild()->ToText()->Value() ),
+                std::atoi( width->FirstChild()->ToText()->Value() ),
+                floorType->FirstChild()->ToText()->Value()
+        );
+
+        if ( theRoom == nilPointer )
+        {
+                std::cerr << "can’t create room \"" << fileName << "\"" << std::endl ;
+                return nilPointer;
+        }
+
+        // to calculate coordinates of origin in isometric space, need to know if room has a door to north and / or east
+        bool hasNorthDoor = false;
+        bool hasEastDoor = false;
+
+        tinyxml2::XMLElement* items = root->FirstChildElement( "items" );
+
+        // scroll through list of items to look for doors
+        for ( tinyxml2::XMLElement* item = items->FirstChildElement( "item" ) ;
+                        item != nilPointer ;
+                        item = item->NextSiblingElement( "item" ) )
+        {
+                std::string type = item->FirstChildElement( "type" )->FirstChild()->ToText()->Value() ;
+
+                if ( type == "door" )
+                {
+                        std::string direction = item->FirstChildElement( "direction" )->FirstChild()->ToText()->Value() ;
+
+                        if ( direction == "north" || direction == "northeast" || direction == "northwest" )
+                        {
+                                hasNorthDoor = true;
+                        }
+                        else if ( direction == "east" || direction == "eastnorth" || direction == "eastsouth" )
+                        {
+                                hasEastDoor = true;
+                        }
+                }
+        }
+
+        // with knowledge about doors, calculate coordinates of origin
+        theRoom->calculateCoordinates( hasNorthDoor, hasEastDoor );
+
+        // for “ triple ” room there’s more data
+        tinyxml2::XMLElement* tripleRoomData = root->FirstChildElement( "triple-room-data" );
+        if ( tripleRoomData != nilPointer )
+        {
+                tinyxml2::XMLElement* northeast = tripleRoomData->FirstChildElement( "northeast" );
+                tinyxml2::XMLElement* southeast = tripleRoomData->FirstChildElement( "southeast" );
+                tinyxml2::XMLElement* northwest = tripleRoomData->FirstChildElement( "northwest" );
+                tinyxml2::XMLElement* southwest = tripleRoomData->FirstChildElement( "southwest" );
+                tinyxml2::XMLElement* eastnorth = tripleRoomData->FirstChildElement( "eastnorth" );
+                tinyxml2::XMLElement* eastsouth = tripleRoomData->FirstChildElement( "eastsouth" );
+                tinyxml2::XMLElement* westnorth = tripleRoomData->FirstChildElement( "westnorth" );
+                tinyxml2::XMLElement* westsouth = tripleRoomData->FirstChildElement( "westsouth" );
+
+                if ( northeast != nilPointer )
+                {
+                        theRoom->addTripleRoomInitialPoint( Northeast, std::atoi( northeast->Attribute( "x" ) ), std::atoi( northeast->Attribute( "y" ) ) );
+                }
+                if ( southeast != nilPointer )
+                {
+                        theRoom->addTripleRoomInitialPoint( Southeast, std::atoi( southeast->Attribute( "x" ) ), std::atoi( southeast->Attribute( "y" ) ) );
+                }
+                if ( northwest != nilPointer )
+                {
+                        theRoom->addTripleRoomInitialPoint( Northwest, std::atoi( northwest->Attribute( "x" ) ), std::atoi( northwest->Attribute( "y" ) ) );
+                }
+                if ( southwest != nilPointer )
+                {
+                        theRoom->addTripleRoomInitialPoint( Southwest, std::atoi( southwest->Attribute( "x" ) ), std::atoi( southwest->Attribute( "y" ) ) );
+                }
+                if ( eastnorth != nilPointer )
+                {
+                        theRoom->addTripleRoomInitialPoint( Eastnorth, std::atoi( eastnorth->Attribute( "x" ) ), std::atoi( eastnorth->Attribute( "y" ) ) );
+                }
+                if ( eastsouth != nilPointer )
+                {
+                        theRoom->addTripleRoomInitialPoint( Eastsouth, std::atoi( eastsouth->Attribute( "x" ) ), std::atoi( eastsouth->Attribute( "y" ) ) );
+                }
+                if ( westnorth != nilPointer )
+                {
+                        theRoom->addTripleRoomInitialPoint( Westnorth, std::atoi( westnorth->Attribute( "x" ) ), std::atoi( westnorth->Attribute( "y" ) ) );
+                }
+                if ( westsouth != nilPointer )
+                {
+                        theRoom->addTripleRoomInitialPoint( Westsouth, std::atoi( westsouth->Attribute( "x" ) ), std::atoi( westsouth->Attribute( "y" ) ) );
+                }
+
+                tinyxml2::XMLElement* boundX = tripleRoomData->FirstChildElement( "bound-x" );
+                tinyxml2::XMLElement* boundY = tripleRoomData->FirstChildElement( "bound-y" );
+
+                theRoom->assignTripleRoomBounds( std::atoi( boundX->Attribute( "minimum" ) ), std::atoi( boundX->Attribute( "maximum" ) ),
+                                                 std::atoi( boundY->Attribute( "minimum" ) ), std::atoi( boundY->Attribute( "maximum" ) ) );
+        }
+
+        // build floor
+
+        tinyxml2::XMLElement* floor = root->FirstChildElement( "floor" );
+        if ( floor != nilPointer )
+        {
+                for ( tinyxml2::XMLElement* tile = floor->FirstChildElement( "tile" ) ;
+                                tile != nilPointer ;
+                                tile = tile->NextSiblingElement( "tile" ) )
+                {
+                        FloorTile* floorTile = buildFloorTile( tile, isomot::GameManager::getInstance()->getChosenGraphicSet() );
+                        theRoom->addFloor( floorTile );
+                }
+        }
+
+        // build walls without doors
+
+        tinyxml2::XMLElement* walls = root->FirstChildElement( "walls" );
+        if ( walls != nilPointer )
+        {
+                for ( tinyxml2::XMLElement* wall = walls->FirstChildElement( "wall" ) ;
+                                wall != nilPointer ;
+                                wall = wall->NextSiblingElement( "wall" ) )
+                {
+                        Wall* wallSegment = buildWall( wall, isomot::GameManager::getInstance()->getChosenGraphicSet() );
+                        theRoom->addWall( wallSegment );
+                }
+        }
+
+        // add items to room
+
+        items = root->FirstChildElement( "items" );
+
+        for ( tinyxml2::XMLElement* item = items->FirstChildElement( "item" ) ;
+                        item != nilPointer ;
+                        item = item->NextSiblingElement( "item" ) )
+        {
+                int itemX = std::atoi( item->Attribute( "x" ) );
+                int itemY = std::atoi( item->Attribute( "y" ) );
+                int itemZ = std::atoi( item->Attribute( "z" ) );
+
+                std::string type = item->FirstChildElement( "type" )->FirstChild()->ToText()->Value() ;
+
+                // it’s a door
+                if ( type == "door" )
+                {
+                        Door* door = buildDoor( item );
+                        if ( door == nilPointer )
+                        {
+                                std::cout << "oops, can’t build a door with coordinates " << itemX << ", " << itemY << ", " << itemZ << std::endl ;
+                        }
+                        else
+                        {
+                                theRoom->addDoor( door );
+                        }
+                }
+                // it’s a grid item
+                else if( type == "griditem" )
+                {
+                        GridItem* gridItem = buildGridItem( item );
+                        if ( gridItem == nilPointer )
+                        {
+                                std::cout << "oops, can’t build a grid item with coordinates " << itemX << ", " << itemY << ", " << itemZ << std::endl ;
+                        }
+                        else
+                        {
+                                theRoom->addGridItem( gridItem );
+                        }
+                }
+                // it is a free item
+                else if ( type == "freeitem" )
+                {
+                        FreeItem* freeItem = buildFreeItem( item, theRoom );
+
+                        // there may be bonus item already taken and thus absent
+                        if ( freeItem == nilPointer )
+                        {
+                                std::cout << "free item with coordinates " << itemX << ", " << itemY << ", " << itemZ << " is absent" << std::endl ;
+                        }
+                        else
+                        {
+                                theRoom->addFreeItem( freeItem );
+                        }
+                }
+        }
+
+        theRoom->calculateBounds();
+
+        return theRoom ;
 }
 
-PlayerItem* RoomBuilder::createPlayerInTheSameRoom( bool justEntered,
-                                                        const std::string& nameOfPlayer,
-                                                        int x, int y, int z,
-                                                        const Way& orientation, const Way& wayOfEntry )
+/* static */
+PlayerItem* RoomBuilder::createPlayerInRoom( Room* room,
+                                             const std::string& nameOfPlayer,
+                                             bool justEntered,
+                                             int x, int y, int z,
+                                             const Way& orientation, const Way& wayOfEntry )
 {
-        return createPlayerInRoom( this->room, justEntered, nameOfPlayer, x, y, z, orientation, wayOfEntry );
-}
+        if ( room == nilPointer ) return nilPointer ;
 
-PlayerItem* RoomBuilder::createPlayerInRoom( Room* room, bool justEntered,
-                                                        const std::string& nameOfPlayer,
-                                                        int x, int y, int z,
-                                                        const Way& orientation, const Way& wayOfEntry )
-{
         GameManager* gameManager = GameManager::getInstance();
 
         std::string nameOfPlayerToCreate( nameOfPlayer );
@@ -255,7 +272,7 @@ PlayerItem* RoomBuilder::createPlayerInRoom( Room* room, bool justEntered,
                 }
         }
 
-        ItemData* itemData = this->itemDataManager->findDataByLabel( nameOfPlayerToCreate );
+        ItemData* itemData = GameManager::getInstance()->getItemDataManager()->findDataByLabel( nameOfPlayerToCreate );
         PlayerItem* player = nilPointer;
 
         // if it is found and has some lives left, place it in room
@@ -286,7 +303,7 @@ PlayerItem* RoomBuilder::createPlayerInRoom( Room* room, bool justEntered,
                                 behaviorOfPlayer = "behavior of Heels";
                         }
 
-                        player->assignBehavior( behaviorOfPlayer, reinterpret_cast< void * >( itemDataManager ) );
+                        player->assignBehavior( behaviorOfPlayer, reinterpret_cast< void * >( GameManager::getInstance()->getItemDataManager() ) );
 
                         player->setWayOfEntry( wayOfEntry.toString() );
 
@@ -297,43 +314,65 @@ PlayerItem* RoomBuilder::createPlayerInRoom( Room* room, bool justEntered,
         return player;
 }
 
-FloorTile* RoomBuilder::buildFloorTile( const rxml::tile& tile, const char* gfxPrefix )
+/* static */
+FloorTile* RoomBuilder::buildFloorTile( tinyxml2::XMLElement* tile, const char* gfxPrefix )
 {
-        BITMAP* picture = load_png( isomot::pathToFile( isomot::sharePath() + gfxPrefix + pathSeparator + tile.picture() ), nilPointer );
+        tinyxml2::XMLElement* x = tile->FirstChildElement( "x" );
+        tinyxml2::XMLElement* y = tile->FirstChildElement( "y" );
+        std::string pictureString = tile->FirstChildElement( "picture" )->FirstChild()->ToText()->Value();
+
+        BITMAP* picture = load_png( isomot::pathToFile( isomot::sharePath() + gfxPrefix + pathSeparator + pictureString ), nilPointer );
         if ( picture == nilPointer ) {
-                std::cerr << "picture \"" << tile.picture() << "\" at \"" << gfxPrefix << "\" is absent" << std::endl ;
+                std::cerr << "picture \"" << pictureString << "\" from \"" << gfxPrefix << "\" is absent" << std::endl ;
                 return nilPointer;
         }
 
-        return new FloorTile( tile.x(), tile.y(), picture );
+        return new FloorTile( std::atoi( x->FirstChild()->ToText()->Value() ), std::atoi( y->FirstChild()->ToText()->Value() ), picture );
 }
 
-Wall* RoomBuilder::buildWall( const rxml::wall& wall, const char* gfxPrefix )
+/* static */
+Wall* RoomBuilder::buildWall( tinyxml2::XMLElement* wall, const char* gfxPrefix )
 {
-        BITMAP* picture = load_png( isomot::pathToFile( isomot::sharePath() + gfxPrefix + pathSeparator + wall.picture() ), nilPointer );
+        tinyxml2::XMLElement* index = wall->FirstChildElement( "index" );
+        std::string axisString = wall->FirstChildElement( "axis" )->FirstChild()->ToText()->Value();
+        std::string pictureString = wall->FirstChildElement( "picture" )->FirstChild()->ToText()->Value();
+
+        BITMAP* picture = load_png( isomot::pathToFile( isomot::sharePath() + gfxPrefix + pathSeparator + pictureString ), nilPointer );
         if ( picture == nilPointer ) {
-                std::cerr << "picture \"" << wall.picture() << "\" at \"" << gfxPrefix << "\" is absent" << std::endl ;
+                std::cerr << "picture \"" << pictureString << "\" from \"" << gfxPrefix << "\" is absent" << std::endl ;
                 return nilPointer;
         }
 
-        return new Wall( wall.axis() == rxml::axis::x ? true : false, wall.index(), picture );
+        return new Wall( axisString == "x" ? true : false, std::atoi( index->FirstChild()->ToText()->Value() ), picture );
 }
 
-GridItem* RoomBuilder::buildGridItem( const rxml::item& item )
+/* static */
+GridItem* RoomBuilder::buildGridItem( tinyxml2::XMLElement* item )
 {
         GridItem* gridItem = nilPointer;
-        ItemData* itemData = this->itemDataManager->findDataByLabel( item.label () );
 
-        // when found place item in room
+        std::string label = item->FirstChildElement( "label" )->FirstChild()->ToText()->Value();
+
+        ItemData* itemData = GameManager::getInstance()->getItemDataManager()->findDataByLabel( label );
+
         if ( itemData != nilPointer )
         {
-                // deal with difference between position from file and position in room
-                gridItem = new GridItem( itemData, item.x(), item.y(), ( item.z() > Top ? item.z() * LayerHeight : Top ),
-                                                item.direction() == rxml::direction::none ? Way( "nowhere" ) : Way( item.direction() - 1 ) );
+                int itemX = std::atoi( item->Attribute( "x" ) );
+                int itemY = std::atoi( item->Attribute( "y" ) );
+                int itemZ = std::atoi( item->Attribute( "z" ) );
 
-                std::string behaviorOfItem = item.behavior ();
-                if ( behaviorOfItem.empty () )
-                        behaviorOfItem = "still";
+                std::string direction = item->FirstChildElement( "direction" )->FirstChild()->ToText()->Value();
+
+                // deal with difference between position from file and position in room
+                gridItem = new GridItem( itemData, itemX, itemY, itemZ > Top ? itemZ * LayerHeight : Top ,
+                                                direction == "none" ? Way( "nowhere" ) : Way( direction ) );
+
+                std::string behaviorOfItem = "still";
+                tinyxml2::XMLElement* behavior = item->FirstChildElement( "behavior" );
+                if ( behavior != nilPointer )
+                {
+                        behaviorOfItem = behavior->FirstChild()->ToText()->Value() ;
+                }
 
                 if ( behaviorOfItem == "behavior of disappearance in time" ||
                         behaviorOfItem == "behavior of disappearance on touch" ||
@@ -341,7 +380,7 @@ GridItem* RoomBuilder::buildGridItem( const rxml::item& item )
                         behaviorOfItem == "behavior of slow disappearance on jump into" ||
                         behaviorOfItem == "behavior of disappearance as soon as Head appears" )
                 {
-                        gridItem->assignBehavior( behaviorOfItem, reinterpret_cast< void * >( this->itemDataManager->findDataByLabel( "bubbles" ) ) );
+                        gridItem->assignBehavior( behaviorOfItem, reinterpret_cast< void * >( GameManager::getInstance()->getItemDataManager()->findDataByLabel( "bubbles" ) ) );
                 }
                 else
                 {
@@ -352,39 +391,53 @@ GridItem* RoomBuilder::buildGridItem( const rxml::item& item )
         return gridItem;
 }
 
-FreeItem* RoomBuilder::buildFreeItem( const rxml::item& item )
+/* static */
+FreeItem* RoomBuilder::buildFreeItem( tinyxml2::XMLElement* item, Room* room )
 {
         FreeItem* freeItem = nilPointer;
 
-        ItemData* itemData = this->itemDataManager->findDataByLabel( item.label () );
+        std::string label = item->FirstChildElement( "label" )->FirstChild()->ToText()->Value();
 
-        // if item is here, place it in room
+        ItemData* itemData = GameManager::getInstance()->getItemDataManager()->findDataByLabel( label );
+
         if ( itemData != nilPointer )
         {
+                int itemX = std::atoi( item->Attribute( "x" ) );
+                int itemY = std::atoi( item->Attribute( "y" ) );
+                int itemZ = std::atoi( item->Attribute( "z" ) );
+
                 // in free coordinates
-                int fx = item.x() * room->getSizeOfOneTile() + ( ( room->getSizeOfOneTile() - itemData->getWidthX() ) >> 1 );
-                int fy = ( item.y() + 1 ) * room->getSizeOfOneTile() - ( ( room->getSizeOfOneTile() - itemData->getWidthY() ) >> 1 ) - 1;
-                int fz = item.z() != Top ? item.z() * LayerHeight : Top;
+                int fx = itemX * room->getSizeOfOneTile() + ( ( room->getSizeOfOneTile() - itemData->getWidthX() ) >> 1 );
+                int fy = ( itemY + 1 ) * room->getSizeOfOneTile() - ( ( room->getSizeOfOneTile() - itemData->getWidthY() ) >> 1 ) - 1;
+                int fz = itemZ != Top ? itemZ * LayerHeight : Top;
 
                 // don’t place an item if it is a bonus and has already been taken
                 if ( BonusManager::getInstance()->isPresent( room->getNameOfFileWithDataAboutRoom(), itemData->getLabel() ) )
                 {
+                        std::string direction = item->FirstChildElement( "direction" )->FirstChild()->ToText()->Value();
+
                         freeItem = new FreeItem( itemData, fx, fy, fz,
-                                                 item.direction() == rxml::direction::none ? Way( "nowhere" ) : Way( item.direction() - 1 ) );
+                                                 direction == "none" ? Way( "nowhere" ) : Way( direction ) );
 
-                        std::string behaviorOfItem = item.behavior ();
-                        if ( behaviorOfItem.empty () )
-                                behaviorOfItem = "still";
+                        std::string behaviorOfItem = "still";
+                        tinyxml2::XMLElement* behavior = item->FirstChildElement( "behavior" );
+                        if ( behavior != nilPointer )
+                        {
+                                behaviorOfItem = behavior->FirstChild()->ToText()->Value() ;
+                        }
 
-                        // extra data for behavior of item
+                        // extra data for behavior of elevator
                         if ( behaviorOfItem == "behavior of elevator" )
                         {
                                 int* data = new int[ 3 ];
                                 int foundData = 0;
 
-                                for ( rxml::item::extra_const_iterator i = item.extra().begin (); i != item.extra().end (); ++i )
+                                for ( tinyxml2::XMLElement* extra = item->FirstChildElement( "extra" ) ;
+                                                extra != nilPointer ;
+                                                extra = extra->NextSiblingElement( "extra" ) )
                                 {
-                                        data[ foundData++ ] = ( *i );
+                                        data[ foundData++ ] = std::atoi( extra->FirstChild()->ToText()->Value() );
+                                        if ( foundData == 3 ) break ;
                                 }
 
                                 // three entries are needed
@@ -394,14 +447,15 @@ FreeItem* RoomBuilder::buildFreeItem( const rxml::item& item )
                                                 behaviorOfItem,
                                                 reinterpret_cast< void * >( data )
                                         );
-                                        delete data;
                                 }
+
+                                delete data;
                         }
                         else if ( behaviorOfItem == "behavior of waiting hunter in four directions" )
                         {
                                 freeItem->assignBehavior(
                                         behaviorOfItem,
-                                        reinterpret_cast< void * >( this->itemDataManager->findDataByLabel( "imperial-guard" ) )
+                                        reinterpret_cast< void * >( GameManager::getInstance()->getItemDataManager()->findDataByLabel( "imperial-guard" ) )
                                 );
                         }
                         else if ( behaviorOfItem == "behavior of something special" ||
@@ -412,7 +466,7 @@ FreeItem* RoomBuilder::buildFreeItem( const rxml::item& item )
                         {
                                 freeItem->assignBehavior(
                                         behaviorOfItem,
-                                        reinterpret_cast< void * >( this->itemDataManager->findDataByLabel( "bubbles" ) )
+                                        reinterpret_cast< void * >( GameManager::getInstance()->getItemDataManager()->findDataByLabel( "bubbles" ) )
                                 );
                         }
                         else
@@ -425,12 +479,21 @@ FreeItem* RoomBuilder::buildFreeItem( const rxml::item& item )
         return freeItem;
 }
 
-Door* RoomBuilder::buildDoor( const rxml::item& item )
+/* static */
+Door* RoomBuilder::buildDoor( tinyxml2::XMLElement* item )
 {
+        std::string label = item->FirstChildElement( "label" )->FirstChild()->ToText()->Value();
+
+        int itemX = std::atoi( item->Attribute( "x" ) );
+        int itemY = std::atoi( item->Attribute( "y" ) );
+        int itemZ = std::atoi( item->Attribute( "z" ) );
+
+        std::string direction = item->FirstChildElement( "direction" )->FirstChild()->ToText()->Value();
+
         return
-                new Door( this->itemDataManager, item.label(),
-                                item.x(), item.y(), ( item.z() > Top ? item.z() * LayerHeight : Top ),
-                                        Way( item.direction() - 1 ) );
+                new Door( GameManager::getInstance()->getItemDataManager(), label,
+                                itemX, itemY, ( itemZ > Top ? itemZ * LayerHeight : Top ),
+                                        Way( direction ) );
 }
 
 /* static */

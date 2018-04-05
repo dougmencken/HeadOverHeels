@@ -1,266 +1,265 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<language xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="language.xsd">
+<language>
 
-  <text id="new-game">
+  <text alias="new-game">
     <properties>
-      <ustring>Nuwe speletjie</ustring>
+      <string>Nuwe speletjie</string>
     </properties>
   </text>
 
-  <text id="blacktooth-empire">
+  <text alias="blacktooth-empire">
     <properties>
-      <ustring>Die Blacktooth Keiserryk</ustring>
+      <string>Die Blacktooth Keiserryk</string>
     </properties>
   </text>
 
-  <text id="blacktooth">
+  <text alias="blacktooth">
     <properties>
-      <ustring>Blacktooth</ustring>
+      <string>Blacktooth</string>
     </properties>
   </text>
 
-  <text id="egyptus">
+  <text alias="egyptus">
     <properties>
-      <ustring>Egyptus</ustring>
+      <string>Egyptus</string>
     </properties>
   </text>
 
-  <text id="penitentiary">
+  <text alias="penitentiary">
     <properties>
-      <ustring>Penitentiary</ustring>
+      <string>Penitentiary</string>
     </properties>
   </text>
 
-  <text id="byblos">
+  <text alias="byblos">
     <properties>
-      <ustring>Byblos</ustring>
+      <string>Byblos</string>
     </properties>
   </text>
 
-  <text id="safari">
+  <text alias="safari">
     <properties>
-      <ustring>Safari</ustring>
+      <string>Safari</string>
     </properties>
   </text>
 
-  <text id="load-game">
+  <text alias="load-game">
     <properties>
-      <ustring>Laai speletjie</ustring>
+      <string>Laai speletjie</string>
     </properties>
   </text>
 
-  <text id="keyboard-menu">
+  <text alias="keyboard-menu">
     <properties>
-      <ustring>Sleutelbord</ustring>
+      <string>Sleutelbord</string>
     </properties>
   </text>
 
-  <text id="movenorth">
+  <text alias="movenorth">
     <properties>
-      <ustring>Links</ustring>
+      <string>Links</string>
     </properties>
   </text>
 
-  <text id="movesouth">
+  <text alias="movesouth">
     <properties>
-      <ustring>Regs</ustring>
+      <string>Regs</string>
     </properties>
   </text>
 
-  <text id="moveeast">
+  <text alias="moveeast">
     <properties>
-      <ustring>Op</ustring>
+      <string>Op</string>
     </properties>
   </text>
 
-  <text id="movewest">
+  <text alias="movewest">
     <properties>
-      <ustring>Af</ustring>
+      <string>Af</string>
     </properties>
   </text>
 
-  <text id="take">
+  <text alias="take">
     <properties>
-      <ustring>Dra</ustring>
+      <string>Dra</string>
     </properties>
   </text>
 
-  <text id="jump">
+  <text alias="jump">
     <properties>
-      <ustring>Spring</ustring>
+      <string>Spring</string>
     </properties>
   </text>
 
-  <text id="doughnut">
+  <text alias="doughnut">
     <properties>
-      <ustring>Vuur</ustring>
+      <string>Vuur</string>
     </properties>
   </text>
 
-  <text id="takeandjump">
+  <text alias="takeandjump">
     <properties>
-      <ustring>Dra+Spring</ustring>
+      <string>Dra+Spring</string>
     </properties>
   </text>
 
-  <text id="swap">
+  <text alias="swap">
     <properties>
-      <ustring>Ruil</ustring>
+      <string>Ruil</string>
     </properties>
   </text>
 
-  <text id="pause">
+  <text alias="pause">
     <properties>
-      <ustring>Pouse</ustring>
+      <string>Pouse</string>
     </properties>
   </text>
 
-  <text id="confirm-quit">
+  <text alias="confirm-quit">
     <properties font="big" color="cyan">
-      <ustring>Druk Escape om speletjie</ustring>
+      <string>Druk Escape om speletjie</string>
     </properties>
     <properties font="big" color="cyan">
-      <ustring>klaar te maak</ustring>
+      <string>klaar te maak</string>
     </properties>
   </text>
 
-  <text id="confirm-resume">
+  <text alias="confirm-resume">
     <properties font="big" color="yellow">
-      <ustring>Druk enige ander sleutel om</ustring>
+      <string>Druk enige ander sleutel om</string>
     </properties>
     <properties font="big" color="yellow">
-      <ustring>weer te begin</ustring>
+      <string>weer te begin</string>
     </properties>
   </text>
 
-  <text id="audio-menu">
+  <text alias="audio-menu">
     <properties>
-      <ustring>Audio</ustring>
+      <string>Audio</string>
     </properties>
   </text>
 
-  <text id="soundfx">
+  <text alias="soundfx">
     <properties>
-      <ustring>Klank effekte</ustring>
+      <string>Klank effekte</string>
     </properties>
   </text>
 
-  <text id="music">
+  <text alias="music">
     <properties>
-      <ustring>Musiek</ustring>
+      <string>Musiek</string>
     </properties>
   </text>
 
-  <text id="show-credits">
+  <text alias="show-credits">
     <properties>
-      <ustring>Krediete</ustring>
+      <string>Krediete</string>
     </properties>
   </text>
 
-  <text id="exit-game">
+  <text alias="exit-game">
     <properties>
-      <ustring>Klaar</ustring>
+      <string>Klaar</string>
     </properties>
   </text>
 
-  <text id="save-game">
+  <text alias="save-game">
     <properties font="big" color="orange">
-      <ustring>Reinkanasie Vis gee jou kans om</ustring>
+      <string>Reinkanasie Vis gee jou kans om</string>
     </properties>
     <properties font="big" color="orange">
-      <ustring>jou speletjie met SPACE te stoor</ustring>
+      <string>jou speletjie met SPACE te stoor</string>
     </properties>
   </text>
 
-  <text id="free-slot">
+  <text alias="free-slot">
     <properties>
-      <ustring>Beskikbaar</ustring>
+      <string>Beskikbaar</string>
     </properties>
   </text>
 
-  <text id="score">
+  <text alias="score">
     <properties>
-      <ustring>Telling</ustring>
+      <string>Telling</string>
     </properties>
   </text>
 
-  <text id="explored-rooms">
+  <text alias="explored-rooms">
     <properties>
-      <ustring>%d Kamers verken</ustring>
+      <string>%d Kamers verken</string>
     </properties>
   </text>
 
-  <text id="liberated-planets">
+  <text alias="liberated-planets">
     <properties>
-      <ustring>Skommel %d planete</ustring>
+      <string>Skommel %d planete</string>
     </properties>
   </text>
 
-  <text id="rooms">
+  <text alias="rooms">
     <properties>
-      <ustring>kamers</ustring>
+      <string>kamers</string>
     </properties>
   </text>
 
-  <text id="planets">
+  <text alias="planets">
     <properties>
-      <ustring>planete</ustring>
+      <string>planete</string>
     </properties>
   </text>
 
-  <text id="final-text" x="0" y="200">
+  <text alias="final-text">
     <properties font="big" color="yellow">
-      <ustring>Mense salueer jou heldedaad en</ustring>
+      <string>Mense salueer jou heldedaad en</string>
     </properties>
     <properties font="regular" color="cyan">
-      <ustring>proklameer jou. Hiena toe, liewe</ustring>
+      <string>proklameer jou. Hiena toe, liewe</string>
     </properties>
     <properties font="regular" color="cyan">
-      <ustring>friend, on twee helde sit 'n</ustring>
+      <string>friend, on twee helde sit 'n</string>
     </properties>
     <properties font="regular" color="cyan">
-      <ustring>definitiewe einde aan</ustring>
+      <string>definitiewe einde aan</string>
     </properties>
     <properties font="regular" color="multicolor">
-      <ustring>Blacktooth Emperor's tirannie</ustring>
+      <string>Blacktooth Emperor's tirannie</string>
     </properties>
   </text>
 
-  <text id="dummy">
+  <text alias="dummy">
     <properties>
-      <ustring>Skyn</ustring>
+      <string>Skyn</string>
     </properties>
   </text>
 
-  <text id="novice">
+  <text alias="novice">
     <properties>
-      <ustring>Nuweling</ustring>
+      <string>Nuweling</string>
     </properties>
   </text>
 
-  <text id="spy">
+  <text alias="spy">
     <properties>
-      <ustring>Spioen</ustring>
+      <string>Spioen</string>
     </properties>
   </text>
 
-  <text id="master-spy">
+  <text alias="master-spy">
     <properties>
-      <ustring>Baasspioen</ustring>
+      <string>Baasspioen</string>
     </properties>
   </text>
 
-  <text id="hero">
+  <text alias="hero">
     <properties>
-      <ustring>Held</ustring>
+      <string>Held</string>
     </properties>
   </text>
 
-  <text id="emperor">
+  <text alias="emperor">
     <properties>
-      <ustring>Keiser</ustring>
+      <string>Keiser</string>
     </properties>
   </text>
 

@@ -14,8 +14,11 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+
 #include <allegro.h>
-#include "csxml/RoomXML.hpp"
+
+#include <tinyxml2.h>
+
 #include "Ism.hpp"
 #include "Way.hpp"
 
@@ -23,7 +26,6 @@
 namespace isomot
 {
 
-class ItemDataManager ;
 class ItemData ;
 class Room ;
 class FloorTile ;
@@ -43,37 +45,20 @@ class RoomBuilder
 public:
 
         /**
-         * Constructor
-         * @param manager Manager of data about game’s items
-         */
-        RoomBuilder( ItemDataManager* manager ) ;
-
-        virtual ~RoomBuilder( ) ;
-
-        /**
          * Construct room by data from file
-         * @param fileName Name of file with data about room
          */
-        Room * buildRoom ( const std::string& fileName ) ;
-
-        /**
-         * Create player in current room
-         * @param justEntered Make copy of player used to recreate it when rebuilding room or not
-         */
-        PlayerItem * createPlayerInTheSameRoom ( bool justEntered,
-                                                        const std::string& nameOfPlayer,
-                                                        int x, int y, int z,
-                                                        const Way& orientation, const Way& wayOfEntry = JustWait ) ;
+        static Room * buildRoom ( const std::string& fileName ) ;
 
         /**
          * Create player in given room
          * @param room Room where to create player
          * @param justEntered Make copy of player used to recreate it when rebuilding room or not
          */
-        PlayerItem * createPlayerInRoom ( Room* room, bool justEntered,
-                                                        const std::string& nameOfPlayer,
-                                                        int x, int y, int z,
-                                                        const Way& orientation, const Way& wayOfEntry = JustWait );
+        static PlayerItem * createPlayerInRoom ( Room* room,
+                                                 const std::string& nameOfPlayer,
+                                                 bool justEntered,
+                                                 int x, int y, int z,
+                                                 const Way& orientation, const Way& wayOfEntry = JustWait );
 
         static int getXCenterOfRoom ( ItemData* data, Room* theRoom ) ;
 
@@ -81,49 +66,17 @@ public:
 
 private:
 
-        /**
-         * Crea una loseta
-         * @param tile data from XML file about the floor tile in the room
-         * @param gfxPrefix where to search for picture of the floor tile
-         */
-        FloorTile* buildFloorTile ( const rxml::tile& tile, const char* gfxPrefix ) ;
+        RoomBuilder( ) { }
 
-        /**
-         * Crea un segmento de muro
-         * @param wall data from XML file about the wall segment in the room
-         * @param gfxPrefix where to search for picture of the wall segment
-         */
-        Wall* buildWall ( const rxml::wall& wall, const char* gfxPrefix ) ;
+        static FloorTile* buildFloorTile ( tinyxml2::XMLElement * tile, const char* gfxPrefix ) ;
 
-        /**
-         * Crea un elemento rejilla
-         * @param Datos del archivo XML para crear el elemento rejilla en la sala
-         */
-        GridItem* buildGridItem ( const rxml::item& item ) ;
+        static Wall* buildWall ( tinyxml2::XMLElement * wall, const char* gfxPrefix ) ;
 
-        /**
-         * Crea un elemento libre
-         * @param Datos del archivo XML para crear el elemento libre en la sala
-         */
-        FreeItem* buildFreeItem ( const rxml::item& item ) ;
+        static GridItem* buildGridItem ( tinyxml2::XMLElement * item ) ;
 
-        /**
-         * Crea una puerta
-         * @param Datos del archivo XML para crear la puerta en la sala
-         */
-        Door* buildDoor ( const rxml::item& item ) ;
+        static FreeItem* buildFreeItem ( tinyxml2::XMLElement * item, Room* room ) ;
 
-private:
-
-        /**
-         * Manager of data about game’s items
-         */
-        ItemDataManager * itemDataManager ;
-
-        /**
-         * Room in construction
-         */
-        Room * room ;
+        static Door* buildDoor ( tinyxml2::XMLElement * item ) ;
 
 };
 

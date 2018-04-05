@@ -18,6 +18,8 @@
 #include "LanguageManager.hpp"
 #include "Color.hpp"
 
+#include <tinyxml2.h>
+
 #include <sstream>
 
 
@@ -28,7 +30,8 @@ GameManager * GameManager::instance = nilPointer ;
 
 
 GameManager::GameManager( )
-        : freedomLabel( nilPointer )
+        : itemDataManager( nilPointer )
+        , freedomLabel( nilPointer )
         , recordingTimer( nilPointer )
         , numberOfCapture( 0 )
         , prefixOfCaptures( makeRandomString( 10 ) )
@@ -124,6 +127,8 @@ GameManager::~GameManager( )
         delete recordingTimer ;
 
         delete isomot ;
+
+        delete itemDataManager;
 }
 
 /* static */
@@ -163,8 +168,8 @@ WhyPause GameManager::begin ()
         refreshAmbianceImages ();
         refreshBackgroundFrames ();
 
-        assert( this->isomot != nilPointer );
-        this->isomot->beginNewGame ();
+        assert( isomot != nilPointer );
+        isomot->beginNewGame ();
 
         return this->update ();
 }
@@ -176,8 +181,8 @@ WhyPause GameManager::resume ()
         refreshAmbianceImages ();
         refreshBackgroundFrames ();
 
-        assert( this->isomot != nilPointer );
-        this->isomot->resume ();
+        assert( isomot != nilPointer );
+        isomot->resume ();
 
         return this->update ();
 }
@@ -285,7 +290,7 @@ void GameManager::refreshAmbianceImages ()
 void GameManager::drawAmbianceOfGame ( BITMAP * where )
 {
         // scenery of this room
-        std::string scenery = this->isomot->getMapManager()->getActiveRoom()->getScenery();
+        std::string scenery = isomot->getMapManager()->getActiveRoom()->getScenery();
 
         // empty scenery means that it is the final room
         if ( scenery != "" )
@@ -316,7 +321,7 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
                                 allegro::drawSprite( where, background, 0, 0 );
                 }
 
-                std::string player = this->isomot->getMapManager()->getActiveRoom()->getMediator()->getLabelOfActiveCharacter();
+                std::string player = isomot->getMapManager()->getActiveRoom()->getMediator()->getLabelOfActiveCharacter();
                 allegro::drawSprite( where, ( (  player == "head" || player == "headoverheels" ) ? pictureOfHead : grayPictureOfHead ), 161, 425 );
                 allegro::drawSprite( where, ( ( player == "heels" || player == "headoverheels" ) ? pictureOfHeels : grayPictureOfHeels ), 431, 425 );
 
@@ -710,7 +715,7 @@ WhyPause GameManager::update ()
                 if ( ! key[ InputManager::getInstance()->getUserKey( "pause" ) ] && ! this->takenCrown && ! this->eatenFish && ! this->gameOver )
                 {
                         // actualiza la vista isométrica
-                        BITMAP* view = this->isomot->update();
+                        BITMAP* view = isomot->update();
 
                         // se ha podido actualizar
                         if ( view != nilPointer )
@@ -741,7 +746,7 @@ WhyPause GameManager::pause ()
         WhyPause why = Nevermind;
 
         // detiene el motor isométrico
-        this->isomot->pause();
+        isomot->pause();
 
         // da tiempo a que el usuario vea la parada
         clear_keybuf();
@@ -759,7 +764,7 @@ WhyPause GameManager::pause ()
                 isomot::InputManager* inputManager = InputManager::getInstance();
 
                 gui::LanguageManager* language = gui::GuiManager::getInstance()->getLanguageManager();
-                gui::LanguageText* text = language->findLanguageString( "save-game" );
+                gui::LanguageText* text = language->findLanguageStringForAlias( "save-game" );
                 int deltaY = 100;
 
                 for ( size_t i = 0; i < text->getLinesCount(); i++ )
@@ -773,7 +778,7 @@ WhyPause GameManager::pause ()
                         release_screen();
                 }
 
-                text = language->findLanguageString( "confirm-resume" );
+                text = language->findLanguageStringForAlias( "confirm-resume" );
                 deltaY += 20;
 
                 for ( size_t i = 0; i < text->getLinesCount(); i++ )
@@ -815,7 +820,7 @@ WhyPause GameManager::pause ()
                                           key != KEY_ESC )
                                 {
                                         confirm = true;
-                                        this->isomot->resume();
+                                        isomot->resume();
                                 }
                         }
 
@@ -827,21 +832,21 @@ WhyPause GameManager::pause ()
         {
                 this->gameOver = false;
                 why = GameOver;
-                this->isomot->reset();
+                isomot->reset();
         }
         // el usuario ha llegado a Freedom pero le faltaron coronas
         else if ( this->freedom )
         {
                 this->freedom = false;
                 why = Freedom;
-                this->isomot->reset();
+                isomot->reset();
         }
         // el usuario ha acabado el juego
         else if ( this->emperator )
         {
                 this->emperator = false;
                 why = Sucess;
-                this->isomot->reset();
+                isomot->reset();
         }
         // el usuario ha pulsado la tecla de pausa
         else
@@ -849,7 +854,7 @@ WhyPause GameManager::pause ()
                 SoundManager::getInstance()->stopEverySound ();
 
                 gui::LanguageManager* language = gui::GuiManager::getInstance()->getLanguageManager();
-                gui::LanguageText* text = language->findLanguageString( "confirm-quit" );
+                gui::LanguageText* text = language->findLanguageStringForAlias( "confirm-quit" );
                 int deltaY = ScreenHeight / 4;
 
                 for ( size_t i = 0; i < text->getLinesCount(); i++ )
@@ -863,7 +868,7 @@ WhyPause GameManager::pause ()
                         release_screen();
                 }
 
-                text = language->findLanguageString( "confirm-resume" );
+                text = language->findLanguageStringForAlias( "confirm-resume" );
                 deltaY += 20;
 
                 for ( size_t i = 0; i < text->getLinesCount(); i++ )
@@ -887,13 +892,13 @@ WhyPause GameManager::pause ()
                                 {
                                         exit = true;
                                         why = GameOver;
-                                        this->isomot->reset();
+                                        isomot->reset();
                                 }
                                 // Si se pulsa cualquier otra tecla, prosigue la partida en curso
                                 else
                                 {
                                         confirm = true;
-                                        this->isomot->resume();
+                                        isomot->resume();
                                 }
                         }
 
@@ -980,7 +985,272 @@ unsigned short GameManager::getDonuts ( const std::string& player ) const
 
 unsigned int GameManager::getVisitedRooms () const
 {
-        return this->isomot->getMapManager()->countVisitedRooms() ;
+        return isomot->getMapManager()->countVisitedRooms() ;
+}
+
+void GameManager::binItemDataManager ()
+{
+        if ( this->itemDataManager != nilPointer )
+        {
+                delete this->itemDataManager;
+                this->itemDataManager = nilPointer ;
+        }
+}
+
+/* static */
+bool GameManager::readPreferences( const std::string& fileName )
+{
+        // read list of sounds from XML file
+        tinyxml2::XMLDocument preferences;
+        tinyxml2::XMLError result = preferences.LoadFile( fileName.c_str () );
+        if ( result != tinyxml2::XML_SUCCESS )
+        {
+                std::cerr << "can’t read game’s preferences from \"" << fileName << "\"" << std::endl ;
+                return false;
+        }
+
+        std::cout << "read game’s preferences" << std::endl ;
+
+        tinyxml2::XMLElement* root = preferences.FirstChildElement( "preferences" );
+
+        // chosen language
+
+        tinyxml2::XMLElement* language = root->FirstChildElement( "language" ) ;
+        std::string languageString = "en_US";
+        if ( language != nilPointer )
+        {
+                languageString = language->FirstChild()->ToText()->Value();
+        }
+        gui::GuiManager::getInstance()->setLanguage( languageString );
+
+        // chosen keys
+
+        tinyxml2::XMLElement* keyboard = root->FirstChildElement( "keyboard" ) ;
+        if ( keyboard != nilPointer )
+        {
+                tinyxml2::XMLElement* movenorth = keyboard->FirstChildElement( "movenorth" ) ;
+                if ( movenorth != nilPointer )
+                        InputManager::getInstance()->changeUserKey( "movenorth", std::atoi( movenorth->FirstChild()->ToText()->Value() ) );
+
+                tinyxml2::XMLElement* movesouth = keyboard->FirstChildElement( "movesouth" ) ;
+                if ( movesouth != nilPointer )
+                        InputManager::getInstance()->changeUserKey( "movesouth", std::atoi( movesouth->FirstChild()->ToText()->Value() ) );
+
+                tinyxml2::XMLElement* moveeast = keyboard->FirstChildElement( "moveeast" ) ;
+                if ( moveeast != nilPointer )
+                        InputManager::getInstance()->changeUserKey( "moveeast", std::atoi( moveeast->FirstChild()->ToText()->Value() ) );
+
+                tinyxml2::XMLElement* movewest = keyboard->FirstChildElement( "movewest" ) ;
+                if ( movewest != nilPointer )
+                        InputManager::getInstance()->changeUserKey( "movewest", std::atoi( movewest->FirstChild()->ToText()->Value() ) );
+
+                tinyxml2::XMLElement* take = keyboard->FirstChildElement( "take" ) ;
+                if ( take != nilPointer )
+                        InputManager::getInstance()->changeUserKey( "take", std::atoi( take->FirstChild()->ToText()->Value() ) );
+
+                tinyxml2::XMLElement* jump = keyboard->FirstChildElement( "jump" ) ;
+                if ( jump != nilPointer )
+                        InputManager::getInstance()->changeUserKey( "jump", std::atoi( jump->FirstChild()->ToText()->Value() ) );
+
+                tinyxml2::XMLElement* doughnut = keyboard->FirstChildElement( "doughnut" ) ;
+                if ( doughnut != nilPointer )
+                        InputManager::getInstance()->changeUserKey( "doughnut", std::atoi( doughnut->FirstChild()->ToText()->Value() ) );
+
+                tinyxml2::XMLElement* takeandjump = keyboard->FirstChildElement( "takeandjump" ) ;
+                if ( takeandjump != nilPointer )
+                        InputManager::getInstance()->changeUserKey( "take&jump", std::atoi( takeandjump->FirstChild()->ToText()->Value() ) );
+
+                tinyxml2::XMLElement* swap = keyboard->FirstChildElement( "swap" ) ;
+                if ( swap != nilPointer )
+                        InputManager::getInstance()->changeUserKey( "swap", std::atoi( swap->FirstChild()->ToText()->Value() ) );
+
+                tinyxml2::XMLElement* pause = keyboard->FirstChildElement( "pause" ) ;
+                if ( pause != nilPointer )
+                        InputManager::getInstance()->changeUserKey( "pause", std::atoi( pause->FirstChild()->ToText()->Value() ) );
+        }
+
+        // preferences for audio
+
+        tinyxml2::XMLElement* audio = root->FirstChildElement( "audio" ) ;
+        if ( audio != nilPointer )
+        {
+                tinyxml2::XMLElement* fx = audio->FirstChildElement( "fx" ) ;
+                if ( fx != nilPointer )
+                {
+                        SoundManager::getInstance()->setVolumeOfEffects( std::atoi( fx->FirstChild()->ToText()->Value() ) ) ;
+                }
+
+                tinyxml2::XMLElement* music = audio->FirstChildElement( "music" ) ;
+                if ( music != nilPointer )
+                {
+                        SoundManager::getInstance()->setVolumeOfMusic( std::atoi( music->FirstChild()->ToText()->Value() ) ) ;
+                }
+
+                tinyxml2::XMLElement* roomtunes = audio->FirstChildElement( "roomtunes" ) ;
+                if ( roomtunes != nilPointer )
+                {
+                        bool playRoomTunes = ( std::string( roomtunes->FirstChild()->ToText()->Value() ) == "true" ) ? true : false ;
+
+                        if ( GameManager::getInstance()->playMelodyOfScenery () != playRoomTunes )
+                                GameManager::getInstance()->togglePlayMelodyOfScenery ();
+                }
+        }
+
+        // preferences for video
+
+        tinyxml2::XMLElement* video = root->FirstChildElement( "video" ) ;
+        if ( video != nilPointer )
+        {
+                tinyxml2::XMLElement* fullscreen = video->FirstChildElement( "fullscreen" ) ;
+                if ( fullscreen != nilPointer )
+                {
+                        bool atFullScreen = ( std::string( fullscreen->FirstChild()->ToText()->Value() ) == "true" ) ? true : false ;
+
+                        if ( gui::GuiManager::getInstance()->isAtFullScreen () != atFullScreen )
+                                gui::GuiManager::getInstance()->toggleFullScreenVideo ();
+                }
+
+                tinyxml2::XMLElement* shadows = video->FirstChildElement( "shadows" ) ;
+                if ( shadows != nilPointer )
+                {
+                        bool drawShadows = ( std::string( shadows->FirstChild()->ToText()->Value() ) == "true" ) ? true : false ;
+
+                        if ( GameManager::getInstance()->getDrawShadows () != drawShadows )
+                                GameManager::getInstance()->toggleDrawShadows ();
+                }
+
+                tinyxml2::XMLElement* background = video->FirstChildElement( "background" ) ;
+                if ( background != nilPointer )
+                {
+                        bool drawBackground = ( std::string( background->FirstChild()->ToText()->Value() ) == "true" ) ? true : false ;
+
+                        if ( GameManager::getInstance()->hasBackgroundPicture () != drawBackground )
+                                GameManager::getInstance()->toggleBackgroundPicture ();
+                }
+
+                tinyxml2::XMLElement* graphics = video->FirstChildElement( "graphics" ) ;
+                if ( graphics != nilPointer )
+                {
+                        GameManager::getInstance()->setChosenGraphicSet( graphics->FirstChild()->ToText()->Value() ) ;
+                }
+        }
+
+        return true;
+}
+
+/* static */
+bool GameManager::writePreferences( const std::string& fileName )
+{
+
+        tinyxml2::XMLDocument preferences;
+
+        tinyxml2::XMLNode * root = preferences.NewElement( "preferences" );
+        preferences.InsertFirstChild( root );
+
+        // language
+
+        tinyxml2::XMLElement * language = preferences.NewElement( "language" );
+        language->SetText( gui::GuiManager::getInstance()->getLanguage().c_str () );
+        root->InsertEndChild( language );
+
+        // keys
+        {
+                tinyxml2::XMLNode * keyboard = preferences.NewElement( "keyboard" );
+
+                tinyxml2::XMLElement * movenorth = preferences.NewElement( "movenorth" );
+                movenorth->SetText( InputManager::getInstance()->getUserKey( "movenorth" ) );
+                keyboard->InsertEndChild( movenorth );
+
+                tinyxml2::XMLElement * movesouth = preferences.NewElement( "movesouth" );
+                movesouth->SetText( InputManager::getInstance()->getUserKey( "movesouth" ) );
+                keyboard->InsertEndChild( movesouth );
+
+                tinyxml2::XMLElement * moveeast = preferences.NewElement( "moveeast" );
+                moveeast->SetText( InputManager::getInstance()->getUserKey( "moveeast" ) );
+                keyboard->InsertEndChild( moveeast );
+
+                tinyxml2::XMLElement * movewest = preferences.NewElement( "movewest" );
+                movewest->SetText( InputManager::getInstance()->getUserKey( "movewest" ) );
+                keyboard->InsertEndChild( movewest );
+
+                tinyxml2::XMLElement * take = preferences.NewElement( "take" );
+                take->SetText( InputManager::getInstance()->getUserKey( "take" ) );
+                keyboard->InsertEndChild( take );
+
+                tinyxml2::XMLElement * jump = preferences.NewElement( "jump" );
+                jump->SetText( InputManager::getInstance()->getUserKey( "jump" ) );
+                keyboard->InsertEndChild( jump );
+
+                tinyxml2::XMLElement * doughnut = preferences.NewElement( "doughnut" );
+                doughnut->SetText( InputManager::getInstance()->getUserKey( "doughnut" ) );
+                keyboard->InsertEndChild( doughnut );
+
+                tinyxml2::XMLElement * takeandjump = preferences.NewElement( "takeandjump" );
+                takeandjump->SetText( InputManager::getInstance()->getUserKey( "take&jump" ) );
+                keyboard->InsertEndChild( takeandjump );
+
+                tinyxml2::XMLElement * swap = preferences.NewElement( "swap" );
+                swap->SetText( InputManager::getInstance()->getUserKey( "swap" ) );
+                keyboard->InsertEndChild( swap );
+
+                tinyxml2::XMLElement * pause = preferences.NewElement( "pause" );
+                pause->SetText( InputManager::getInstance()->getUserKey( "pause" ) );
+                keyboard->InsertEndChild( pause );
+
+                root->InsertEndChild( keyboard );
+        }
+
+        // audio
+        {
+                tinyxml2::XMLNode * audio = preferences.NewElement( "audio" );
+
+                tinyxml2::XMLElement * fx = preferences.NewElement( "fx" );
+                fx->SetText( SoundManager::getInstance()->getVolumeOfEffects () );
+                audio->InsertEndChild( fx );
+
+                tinyxml2::XMLElement * music = preferences.NewElement( "music" );
+                music->SetText( SoundManager::getInstance()->getVolumeOfMusic () );
+                audio->InsertEndChild( music );
+
+                tinyxml2::XMLElement * roomtunes = preferences.NewElement( "roomtunes" );
+                roomtunes->SetText( GameManager::getInstance()->playMelodyOfScenery () ? "true" : "false" );
+                audio->InsertEndChild( roomtunes );
+
+                root->InsertEndChild( audio );
+        }
+
+        // video
+        {
+                tinyxml2::XMLNode * video = preferences.NewElement( "video" );
+
+                tinyxml2::XMLElement * fullscreen = preferences.NewElement( "fullscreen" );
+                fullscreen->SetText( gui::GuiManager::getInstance()->isAtFullScreen () ? "true" : "false" );
+                video->InsertEndChild( fullscreen );
+
+                tinyxml2::XMLElement * shadows = preferences.NewElement( "shadows" );
+                shadows->SetText( GameManager::getInstance()->getDrawShadows () ? "true" : "false" );
+                video->InsertEndChild( shadows );
+
+                tinyxml2::XMLElement * background = preferences.NewElement( "background" );
+                background->SetText( GameManager::getInstance()->hasBackgroundPicture () ? "true" : "false" );
+                video->InsertEndChild( background );
+
+                tinyxml2::XMLElement * graphics = preferences.NewElement( "graphics" );
+                graphics->SetText( GameManager::getInstance()->getChosenGraphicSet() );
+                video->InsertEndChild( graphics );
+
+                root->InsertEndChild( video );
+        }
+
+        tinyxml2::XMLError result = preferences.SaveFile( fileName.c_str () );
+        if ( result != tinyxml2::XML_SUCCESS )
+        {
+                std::cerr << "can’t write game’s preferences to \"" << fileName << "\"" << std::endl ;
+                return false;
+        }
+
+        std::cout << "wrote game’s preferences" << std::endl ;
+        return true;
 }
 
 }

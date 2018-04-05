@@ -11,6 +11,8 @@
 #include "ShadowCaster.hpp"
 #include "Behavior.hpp"
 
+#include <algorithm> // std::for_each
+
 #ifdef DEBUG
 #  define DEBUG_SHADOWS         0
 #  define DEBUG_MASKS           0
@@ -1146,8 +1148,7 @@ bool Mediator::pickNextCharacter( ItemDataManager* itemDataManager )
                                 this->room->removePlayerFromRoom( activeCharacter, false );
 
                                 // create composite player
-                                std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( itemDataManager ) );
-                                setActiveCharacter( roomBuilder->createPlayerInRoom( this->room, false, "headoverheels", x, y, z, orientation ) );
+                                setActiveCharacter( RoomBuilder::createPlayerInRoom( this->room, "headoverheels", false, x, y, z, orientation ) );
 
                                 // transfer item in handbag
                                 if ( takenItemData != nilPointer )
@@ -1186,9 +1187,7 @@ bool Mediator::pickNextCharacter( ItemDataManager* itemDataManager )
 
                 // create simple players
 
-                std::auto_ptr< RoomBuilder > roomBuilder( new RoomBuilder( itemDataManager ) );
-
-                PlayerItem* heelsPlayer = roomBuilder->createPlayerInRoom( this->room, false, "heels", x, y, z, orientation );
+                PlayerItem* heelsPlayer = RoomBuilder::createPlayerInRoom( this->room, "heels", false, x, y, z, orientation );
 
                 if ( takenItemData != nilPointer )
                 {
@@ -1196,7 +1195,7 @@ bool Mediator::pickNextCharacter( ItemDataManager* itemDataManager )
                         heelsPlayer->assignTakenItem( takenItemData, takenItemImage, behaviorOfItemTaken );
                 }
 
-                PlayerItem* headPlayer = roomBuilder->createPlayerInRoom( this->room, false, "head", x, y, z + LayerHeight, orientation );
+                PlayerItem* headPlayer = RoomBuilder::createPlayerInRoom( this->room, "head", false, x, y, z + LayerHeight, orientation );
 
                 setActiveCharacter( ( this->lastActiveCharacterBeforeJoining == "head" ) ? heelsPlayer : headPlayer );
                 previousCharacter = ( activeCharacter == headPlayer ) ? heelsPlayer : headPlayer;

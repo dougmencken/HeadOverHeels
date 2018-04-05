@@ -634,12 +634,12 @@ namespace xsd
           virtual void
           _post ();
 
-          virtual std::auto_ptr<buffer>
+          virtual smartptr<buffer>
           post_base64_binary ();
 
         protected:
           std::basic_string<C> str_;
-          std::auto_ptr<buffer> buf_;
+          smartptr<buffer> buf_;
         };
 
         // hexBinary
@@ -656,12 +656,12 @@ namespace xsd
           virtual void
           _post ();
 
-          virtual std::auto_ptr<buffer>
+          virtual smartptr<buffer>
           post_hex_binary ();
 
         protected:
           std::basic_string<C> str_;
-          std::auto_ptr<buffer> buf_;
+          smartptr<buffer> buf_;
         };
 
         // gday

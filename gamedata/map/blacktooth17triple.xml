@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<room xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<room>
 
-  <name>blacktooth17.xml</name>
+  <name>blacktooth17triple.xml</name>
 
   <scenery>blacktooth</scenery>
 
@@ -14,26 +14,11 @@
   <floorType>plain</floorType>
 
   <triple-room-data>
-    <northeast>
-      <x>324</x>
-      <y>46</y>
-    </northeast>
-    <northwest>
-      <x>226</x>
-      <y>95</y>
-    </northwest>
-    <southwest>
-      <x>320</x>
-      <y>144</y>
-    </southwest>
-    <bound-x>
-      <minimum>96</minimum>
-      <maximum>144</maximum>
-    </bound-x>
-    <bound-y>
-      <minimum>80</minimum>
-      <maximum>128</maximum>
-    </bound-y>
+    <northeast x="324" y="46" />
+    <northwest x="226" y="95" />
+    <southwest x="320" y="144" />
+    <bound-x minimum="96" maximum="144" />
+    <bound-y minimum="80" maximum="128" />
   </triple-room-data>
 
   <floor>

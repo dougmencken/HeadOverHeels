@@ -8,7 +8,24 @@
 
 #include <map>
 #include <string>
-#include <memory>  // std::auto_ptr
+#include <memory>
+
+#ifndef smartptr
+#  if __cplusplus >= 201103L /* when complier supports c++11 */
+    #  define smartptr ::std::unique_ptr
+#  else
+    #  define smartptr ::std::auto_ptr
+#  endif
+#endif
+
+#ifndef sharedsmartptr
+#  if __cplusplus >= 201103L /* when complier supports c++11 */
+    #  define sharedsmartptr ::std::shared_ptr
+#  else
+    #  define sharedsmartptr ::std::auto_ptr
+#  endif
+#endif
+
 #include <istream>
 #include <sstream>
 #include <cassert>
@@ -213,7 +230,7 @@ namespace xsd
         {
           if (t.dom_info_.get ())
           {
-            std::auto_ptr<dom_info> r (t.dom_info_->clone (*this, container));
+            sharedsmartptr<dom_info> r (t.dom_info_->clone (*this, container));
             dom_info_ = r;
           }
         }
@@ -386,7 +403,7 @@ namespace xsd
                         n->getOwnerDocument ());
               }
 
-              std::auto_ptr<dom_info> r (
+              sharedsmartptr<dom_info> r (
                 dom_info_factory::create (
                   *static_cast<xercesc::DOMElement*> (n),
                   *this,
@@ -404,7 +421,7 @@ namespace xsd
               assert (_root ()->_node ()->getOwnerDocument () ==
                       n->getOwnerDocument ());
 
-              std::auto_ptr<dom_info> r (
+              sharedsmartptr<dom_info> r (
                 dom_info_factory::create (
                   *static_cast<xercesc::DOMAttr*> (n),
                   *this));
@@ -431,7 +448,7 @@ namespace xsd
           {
           }
 
-          virtual std::auto_ptr<dom_info>
+          virtual sharedsmartptr<dom_info>
           clone (type& tree_node, type* container) const = 0;
 
           virtual xercesc::DOMNode*
@@ -453,11 +470,9 @@ namespace xsd
             e_.setUserData (user_data_keys::node, &n, 0);
           }
 
-          virtual std::auto_ptr<dom_info>
+          virtual sharedsmartptr<dom_info>
           clone (type& tree_node, type* c) const
           {
-            using std::auto_ptr;
-
             // Check if we are a document root
             //
             if (c == 0)
@@ -466,9 +481,9 @@ namespace xsd
               // copies from root
               //
               if (doc_.get () == 0)
-                return auto_ptr<dom_info> (0);
+                return sharedsmartptr<dom_info> (0);
 
-              return auto_ptr<dom_info> (
+              return sharedsmartptr<dom_info> (
                 new dom_element_info (*doc_, tree_node));
             }
 
@@ -480,7 +495,7 @@ namespace xsd
             DOMNode* cn (c->_node ());
 
             if (cn == 0)
-              return auto_ptr<dom_info> (0);
+              return sharedsmartptr<dom_info> (0);
 
 
             // Now we are going to find the corresponding element in
@@ -513,7 +528,7 @@ namespace xsd
 
               assert (dn->getNodeType () == DOMNode::ELEMENT_NODE);
 
-              return auto_ptr<dom_info> (
+              return sharedsmartptr<dom_info> (
                 new dom_element_info (static_cast<DOMElement&> (*dn),
                                       tree_node,
                                       false));
@@ -549,11 +564,9 @@ namespace xsd
             a_.setUserData (user_data_keys::node, &n, 0);
           }
 
-          virtual std::auto_ptr<dom_info>
+          virtual sharedsmartptr<dom_info>
           clone (type& tree_node, type* c) const
           {
-            using std::auto_ptr;
-
             // Check if we are a document root
             //
             if (c == 0)
@@ -561,7 +574,7 @@ namespace xsd
               // We preserver DOM associations only in complete
               // copies from root
               //
-              return auto_ptr<dom_info> (0);
+              return sharedsmartptr<dom_info> (0);
             }
 
             // Check if our container does not have DOM association (e.g.,
@@ -572,7 +585,7 @@ namespace xsd
             DOMNode* cn (c->_node ());
 
             if (cn == 0)
-              return auto_ptr<dom_info> (0);
+              return sharedsmartptr<dom_info> (0);
 
             // We are going to find the corresponding attribute in
             // the new tree
@@ -599,7 +612,7 @@ namespace xsd
             DOMNode& n (*cn->getAttributes ()->item (i));
             assert (n.getNodeType () == DOMNode::ATTRIBUTE_NODE);
 
-            return auto_ptr<dom_info> (
+            return sharedsmartptr<dom_info> (
               new dom_attribute_info (static_cast<DOMAttr&> (n), tree_node));
           }
 
@@ -620,25 +633,25 @@ namespace xsd
 
         struct dom_info_factory
         {
-          static std::auto_ptr<dom_info>
+          static sharedsmartptr<dom_info>
           create (const xercesc::DOMElement& e, type& n, bool root)
           {
-            return std::auto_ptr<dom_info> (
+            return sharedsmartptr<dom_info> (
               new dom_element_info (
                 const_cast<xercesc::DOMElement&> (e), n, root));
           }
 
-          static std::auto_ptr<dom_info>
+          static sharedsmartptr<dom_info>
           create (const xercesc::DOMAttr& a, type& n)
           {
-            return std::auto_ptr<dom_info> (
+            return sharedsmartptr<dom_info> (
               new dom_attribute_info (
                 const_cast<xercesc::DOMAttr&> (a), n));
           }
         };
 
 
-        std::auto_ptr<dom_info> dom_info_;
+        sharedsmartptr<dom_info> dom_info_;
 
 
         // ID/IDREF map
@@ -656,7 +669,7 @@ namespace xsd
         std::map<const identity*, type*, identity_comparator>
         map;
 
-        std::auto_ptr<map> map_;
+        smartptr<map> map_;
 
       private:
         type* container_;
@@ -705,25 +718,25 @@ namespace xsd
       {
         typedef T type;
 
-        static std::auto_ptr<T>
+        static smartptr<T>
         create (const xercesc::DOMElement& e, flags f, tree::type* container)
         {
-          return std::auto_ptr<T> (new T (e, f, container));
+          return smartptr<T> (new T (e, f, container));
         }
 
-        static std::auto_ptr<T>
+        static smartptr<T>
         create (const xercesc::DOMAttr& a, flags f, tree::type* container)
         {
-          return std::auto_ptr<T> (new T (a, f, container));
+          return smartptr<T> (new T (a, f, container));
         }
 
-        static std::auto_ptr<T>
+        static smartptr<T>
         create (const std::basic_string<C>& s,
                 const xercesc::DOMElement* e,
                 flags f,
                 tree::type* container)
         {
-          return std::auto_ptr<T> (new T (s, e, f, container));
+          return smartptr<T> (new T (s, e, f, container));
         }
       };
 

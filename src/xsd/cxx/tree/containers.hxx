@@ -10,7 +10,7 @@
 #include <cstddef>   // std::ptrdiff_t
 #include <string>
 #include <vector>
-#include <memory>    // std::auto_ptr
+#include <memory>
 #include <iterator>  // std::iterator_traits
 #include <algorithm> // std::equal, std::lexicographical_compare
 #include <iosfwd>
@@ -131,13 +131,13 @@ namespace xsd
       class one<X, false>
       {
       public:
-        ~one ();
+        /* ~one (); */
 
         one (flags, type* container);
 
         one (const X&, flags, type* container);
 
-        one (std::auto_ptr<X>, flags, type* container);
+        one (sharedsmartptr<X>, flags, type* container);
 
         one (const one&, flags, type* container);
 
@@ -161,7 +161,7 @@ namespace xsd
         set (const X&);
 
         void
-        set (std::auto_ptr<X>);
+        set (sharedsmartptr<X>);
 
         bool
         present () const
@@ -248,7 +248,7 @@ namespace xsd
       class optional<X, false>
       {
       public:
-        ~optional ();
+        /* ~optional (); */
 
         explicit
         optional (flags = 0, type* container = 0);
@@ -257,7 +257,7 @@ namespace xsd
         optional (const X&, flags = 0, type* container = 0);
 
         explicit
-        optional (std::auto_ptr<X>, flags = 0, type* container = 0);
+        optional (sharedsmartptr<X>, flags = 0, type* container = 0);
 
         optional (const optional&, flags = 0, type* container = 0);
 
@@ -327,7 +327,7 @@ namespace xsd
         set (const X&);
 
         void
-        set (std::auto_ptr<X>);
+        set (sharedsmartptr<X>);
 
         void
         reset ();
@@ -767,10 +767,12 @@ namespace xsd
         //
         struct ptr
         {
+          /*
           ~ptr ()
           {
             delete x_;
           }
+          */
 
           explicit
           ptr (type* x = 0)
@@ -1207,12 +1209,10 @@ namespace xsd
         }
 
         void
-        push_back (std::auto_ptr<X> x)
+        push_back (sharedsmartptr<X> x)
         {
           v_.push_back (
-            ptr (x->_container () == container_
-                 ? x.release ()
-                 : x->_clone (flags_, container_)));
+            ptr ( x->_clone (flags_, container_)) );
         }
 
         void
@@ -1230,7 +1230,7 @@ namespace xsd
         }
 
         iterator
-        insert (iterator position, std::auto_ptr<X> x)
+        insert (iterator position, sharedsmartptr<X> x)
         {
           return iterator (
             v_.insert (
@@ -1266,7 +1266,7 @@ namespace xsd
         }
 
         // Note that the container object of the two sequences being
-	// swapped should be the same
+        // swapped should be the same
         //
         void
         swap (sequence& x)

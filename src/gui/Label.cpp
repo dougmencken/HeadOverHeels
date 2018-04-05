@@ -32,6 +32,9 @@ Label::Label( const std::string& text, const std::string& family, const std::str
         spacing( spacing ),
         myAction( nilPointer )
 {
+        if ( family.empty() ) this->fontFamily = "regular";
+        if ( color.empty() ) this->color = "white";
+
         createImageOfLabel( text, Label::getFontByFamilyAndColor( family, color ) );
 }
 
@@ -94,52 +97,55 @@ void Label::createImageOfLabel( const std::string& text, Font * font )
         imageOfLetters = create_bitmap_ex( 32, getWidth(), getHeight() );
         clear_to_color( imageOfLetters, Color::colorOfTransparency()->toAllegroColor () );
 
-        const size_t numberOfColors = 3;
-        std::string multiColors[ numberOfColors ] = {  "cyan", "yellow", "orange"  }; // sequence of colors for multi~color labels
-        /* if ( isomot::GameManager::getInstance()->isSimpleGraphicSet() )
-                multiColors[ 2 ] = "white"; // original speccy sequence is “ cyan yellow white ” */
-
-        unsigned short cycle = 0; // position in that sequence for character to draw
-        Font* fontToUse = font ;
-
-        size_t charPos = 0; // position of character in the string which for utf-8 isn't always the same as character’s offset in bytes
-
-        std::string::const_iterator iter = text.begin ();
-        while ( iter != text.end () )
+        if ( ! text.empty() )
         {
-                if ( this->color == "multicolor" )
+                const size_t numberOfColors = 3;
+                std::string multiColors[ numberOfColors ] = {  "cyan", "yellow", "orange"  }; // sequence of colors for multi~color labels
+                /* if ( isomot::GameManager::getInstance()->isSimpleGraphicSet() )
+                        multiColors[ 2 ] = "white"; // original speccy sequence is “ cyan yellow white ” */
+
+                unsigned short cycle = 0; // position in that sequence for character to draw
+                Font* fontToUse = font ;
+
+                size_t charPos = 0; // position of character in the string which for utf-8 isn't always the same as character’s offset in bytes
+
+                std::string::const_iterator iter = text.begin ();
+                while ( iter != text.end () )
                 {
-                        // pick new font with color for this letter
-                        fontToUse = Label::getFontByFamilyAndColor( font->getFamily(), multiColors[ cycle ] );
-                        if ( fontToUse == nilPointer )
+                        if ( this->color == "multicolor" )
                         {
-                                std::cerr << "can’t get font with family \"" << font->getFamily() << "\"" <<
-                                                " for color \"" << multiColors[ cycle ] << "\"" << std::endl ;
-                                fontToUse = font ;
+                                // pick new font with color for this letter
+                                fontToUse = Label::getFontByFamilyAndColor( font->getFamily(), multiColors[ cycle ] );
+                                if ( fontToUse == nilPointer )
+                                {
+                                        std::cerr << "can’t get font with family \"" << font->getFamily() << "\"" <<
+                                                        " for color \"" << multiColors[ cycle ] << "\"" << std::endl ;
+                                        fontToUse = font ;
+                                }
+
+                                // cycle in sequence of colors
+                                cycle++;
+                                if ( cycle >= numberOfColors ) cycle = 0;
                         }
 
-                        // cycle in sequence of colors
-                        cycle++;
-                        if ( cycle >= numberOfColors ) cycle = 0;
+                        size_t from = std::distance( text.begin (), iter );
+                        size_t howMany = incUtf8StringIterator ( iter, text.end () ) ; // string iterator increments here
+                        std::string utf8letter = text.substr( from, howMany );
+
+                        // draw letter
+                        blit(
+                                fontToUse->getPictureOfLetter( utf8letter ),
+                                imageOfLetters,
+                                0,
+                                0,
+                                charPos * ( fontToUse->getCharWidth() + getSpacing() ),
+                                0,
+                                fontToUse->getCharWidth(),
+                                fontToUse->getCharHeight()
+                        );
+
+                        charPos ++;
                 }
-
-                size_t from = std::distance( text.begin (), iter );
-                size_t howMany = incUtf8StringIterator ( iter, text.end () ) ; // string iterator increments here
-                std::string utf8letter = text.substr( from, howMany );
-
-                // draw letter
-                blit(
-                        fontToUse->getPictureOfLetter( utf8letter ),
-                        imageOfLetters,
-                        0,
-                        0,
-                        charPos * ( fontToUse->getCharWidth() + getSpacing() ),
-                        0,
-                        fontToUse->getCharWidth(),
-                        fontToUse->getCharHeight()
-                );
-
-                charPos ++;
         }
 }
 

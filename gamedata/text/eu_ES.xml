@@ -1,272 +1,271 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<language xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="language.xsd">
+<language>
 
-  <text id="new-game">
+  <text alias="new-game">
     <properties>
-      <ustring>Joku berria</ustring>
+      <string>Joku berria</string>
     </properties>
   </text>
 
-  <text id="blacktooth-empire">
+  <text alias="blacktooth-empire">
     <properties>
-      <ustring>Blacktooth-eko inperioa</ustring>
+      <string>Blacktooth-eko inperioa</string>
     </properties>
   </text>
 
-  <text id="blacktooth">
+  <text alias="blacktooth">
     <properties>
-      <ustring>Blacktooth</ustring>
+      <string>Blacktooth</string>
     </properties>
   </text>
 
-  <text id="egyptus">
+  <text alias="egyptus">
     <properties>
-      <ustring>Egyptus</ustring>
+      <string>Egyptus</string>
     </properties>
   </text>
 
-  <text id="penitentiary">
+  <text alias="penitentiary">
     <properties>
-      <ustring>Penitentiary</ustring>
+      <string>Penitentiary</string>
     </properties>
   </text>
 
-  <text id="byblos">
+  <text alias="byblos">
     <properties>
-      <ustring>Byblos</ustring>
+      <string>Byblos</string>
     </properties>
   </text>
 
-  <text id="safari">
+  <text alias="safari">
     <properties>
-      <ustring>Safari</ustring>
+      <string>Safari</string>
     </properties>
   </text>
 
-  <text id="load-game">
+  <text alias="load-game">
     <properties>
-      <ustring>Jolasa leporatzea</ustring>
+      <string>Jolasa leporatzea</string>
     </properties>
   </text>
 
-  <text id="keyboard-menu">
+  <text alias="keyboard-menu">
     <properties>
-      <ustring>Teklatua</ustring>
+      <string>Teklatua</string>
     </properties>
   </text>
 
-  <text id="movenorth">
+  <text alias="movenorth">
     <properties>
-      <ustring>Ezkerraldea</ustring>
+      <string>Ezkerraldea</string>
     </properties>
   </text>
 
-  <text id="movesouth">
+  <text alias="movesouth">
     <properties>
-      <ustring>Eskuinaldea</ustring>
+      <string>Eskuinaldea</string>
     </properties>
   </text>
 
-  <text id="moveeast">
+  <text alias="moveeast">
     <properties>
-      <ustring>Goian</ustring>
+      <string>Goian</string>
     </properties>
   </text>
 
-  <text id="movewest">
+  <text alias="movewest">
     <properties>
-      <ustring>Behean</ustring>
+      <string>Behean</string>
     </properties>
   </text>
 
-  <text id="take">
+  <text alias="take">
     <properties>
-      <ustring>Hartu/Utzi</ustring>
+      <string>Hartu/Utzi</string>
     </properties>
   </text>
 
-  <text id="jump">
+  <text alias="jump">
     <properties>
-      <ustring>Jauzi egitea</ustring>
+      <string>Jauzi egitea</string>
     </properties>
   </text>
 
-  <text id="doughnut">
+  <text alias="doughnut">
     <properties>
-      <ustring>Tiro egitea</ustring>
+      <string>Tiro egitea</string>
     </properties>
   </text>
 
-  <text id="takeandjump">
+  <text alias="takeandjump">
     <properties>
-      <ustring>Hartu+Jauzi egitea</ustring>
+      <string>Hartu+Jauzi egitea</string>
     </properties>
   </text>
 
-  <text id="swap">
+  <text alias="swap">
     <properties>
-      <ustring>Aldatzea</ustring>
+      <string>Aldatzea</string>
     </properties>
   </text>
 
-  <text id="pause">
+  <text alias="pause">
     <properties>
-      <ustring>Gelditzea</ustring>
+      <string>Gelditzea</string>
     </properties>
   </text>
 
-  <text id="confirm-quit">
+  <text alias="confirm-quit">
     <properties font="big" color="cyan">
-      <ustring>Edo Pulsa Escape-entzat abandonatzeko</ustring>
+      <string>Edo Pulsa Escape-entzat abandonatzeko</string>
     </properties>
     <properties font="big" color="cyan">
-      <ustring>partidarentzat</ustring>
+      <string>partidarentzat</string>
     </properties>
   </text>
 
-  <text id="confirm-resume">
+  <text alias="confirm-resume">
     <properties font="big" color="yellow">
-      <ustring>Edo Pulsa-ri beste tekla bati</ustring>
+      <string>Edo Pulsa-ri beste tekla bati</string>
     </properties>
     <properties font="big" color="yellow">
-      <ustring>itzultzeko jolasari</ustring>
+      <string>itzultzeko jolasari</string>
     </properties>
   </text>
 
-  <text id="audio-menu">
+  <text alias="audio-menu">
     <properties>
-      <ustring>Audio-a</ustring>
+      <string>Audio-a</string>
     </properties>
   </text>
 
-  <text id="soundfx">
+  <text alias="soundfx">
     <properties>
-      <ustring>Efektu soinudunak</ustring>
+      <string>Efektu soinudunak</string>
     </properties>
   </text>
 
-  <text id="music">
+  <text alias="music">
     <properties>
-      <ustring>Musika</ustring>
+      <string>Musika</string>
     </properties>
   </text>
 
-  <text id="show-credits">
+  <text alias="show-credits">
     <properties>
-      <ustring>Sinesgarritasunak</ustring>
+      <string>Sinesgarritasunak</string>
     </properties>
   </text>
 
-  <text id="exit-game">
+  <text alias="exit-game">
     <properties>
-      <ustring>Ateratzea</ustring>
+      <string>Ateratzea</string>
     </properties>
   </text>
 
-  <text id="save-game">
+  <text alias="save-game">
     <properties font="big" color="orange">
-      <ustring>Renkarnazioaren arraina jokuak</ustring>
-    </properties>
-    <properties font="big" color="orange">
-      <ustring>grabatzeko oportunitatea emoten dizu</ustring>
+      <string>Renkarnazioaren arraina jokuak</string>
     </properties>
     <properties font="big" color="orange">
-      <ustring>SPACE teclari emoten</ustring>
+      <string>grabatzeko oportunitatea emoten dizu</string>
+    </properties>
+    <properties font="big" color="orange">
+      <string>SPACE teclari emoten</string>
     </properties>
   </text>
 
-  <text id="free-slot">
+  <text alias="free-slot">
     <properties>
-      <ustring>Librea</ustring>
+      <string>Librea</string>
     </properties>
   </text>
 
-  <text id="score">
+  <text alias="score">
     <properties>
-      <ustring>Puntuaketa</ustring>
+      <string>Puntuaketa</string>
     </properties>
   </text>
 
-  <text id="explored-rooms">
+  <text alias="explored-rooms">
     <properties>
-      <ustring>%d gelak exploratu dituzu</ustring>
+      <string>%d gelak exploratu dituzu</string>
     </properties>
   </text>
 
-  <text id="liberated-planets">
+  <text alias="liberated-planets">
     <properties>
-      <ustring>%d planetak askatu dituzu</ustring>
+      <string>%d planetak askatu dituzu</string>
     </properties>
   </text>
 
-  <text id="rooms">
+  <text alias="rooms">
     <properties>
-      <ustring>gelak</ustring>
+      <string>gelak</string>
     </properties>
   </text>
 
-  <text id="planets">
+  <text alias="planets">
     <properties>
-      <ustring>planetak</ustring>
+      <string>planetak</string>
     </properties>
   </text>
 
-  <text id="final-text" x="0" y="160">
+  <text alias="final-text">
     <properties font="big" color="yellow">
-      <ustring>Herria alabatzen eta pregonatzen du</ustring>
+      <string>Herria alabatzen eta pregonatzen du</string>
     </properties>
     <properties font="big" color="yellow">
-      <ustring>zure heroitasuna</ustring>
+      <string>zure heroitasuna</string>
     </properties>
     <properties font="regular" color="cyan">
-      <ustring>Honela eta izan zen, adiskide</ustring>
+      <string>Honela eta izan zen, adiskide</string>
     </properties>
     <properties font="regular" color="cyan">
-      <ustring>estimatuak, gure 2 heroi betiko</ustring>
+      <string>estimatuak, gure 2 heroi betiko</string>
     </properties>
     <properties font="regular" color="cyan">
-      <ustring>bukatu zuten tiraniarekin</ustring>
+      <string>bukatu zuten tiraniarekin</string>
     </properties>
     <properties font="regular" color="multicolor">
-      <ustring>Enperadore Blacktooth-en</ustring>
+      <string>Enperadore Blacktooth-en</string>
     </properties>
   </text>
 
-  <text id="dummy">
+  <text alias="dummy">
     <properties>
-      <ustring>Mutil</ustring>
+      <string>Mutil</string>
     </properties>
   </text>
 
-  <text id="novice">
+  <text alias="novice">
     <properties>
-      <ustring>Hasiberri</ustring>
+      <string>Hasiberri</string>
     </properties>
   </text>
 
-  <text id="spy">
+  <text alias="spy">
     <properties>
-      <ustring>Zelatari</ustring>
+      <string>Zelatari</string>
     </properties>
   </text>
 
-  <text id="master-spy">
+  <text alias="master-spy">
     <properties>
-      <ustring>Zelatari Maisutza</ustring>
+      <string>Zelatari Maisutza</string>
     </properties>
   </text>
 
-  <text id="hero">
+  <text alias="hero">
     <properties>
-      <ustring>Heroi</ustring>
+      <string>Heroi</string>
     </properties>
   </text>
 
-  <text id="emperor">
+  <text alias="emperor">
     <properties>
-      <ustring>Enperadore</ustring>
+      <string>Enperadore</string>
     </properties>
   </text>
 

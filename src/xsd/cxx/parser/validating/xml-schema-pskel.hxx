@@ -301,14 +301,14 @@ namespace xsd
         template <typename C>
         struct base64_binary_pskel: virtual simple_content<C>
         {
-          virtual std::auto_ptr<buffer>
+          virtual smartptr<buffer>
           post_base64_binary () = 0;
         };
 
         template <typename C>
         struct hex_binary_pskel: virtual simple_content<C>
         {
-          virtual std::auto_ptr<buffer>
+          virtual smartptr<buffer>
           post_hex_binary () = 0;
         };
 

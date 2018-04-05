@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<room xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<room>
 
-  <name>moon33.xml</name>
+  <name>moon33triple.xml</name>
 
   <scenery>themoon</scenery>
 
@@ -14,26 +14,11 @@
   <floorType>plain</floorType>
 
   <triple-room-data>
-    <northeast>
-      <x>384</x>
-      <y>0</y>
-    </northeast>
-    <eastsouth>
-      <x>484</x>
-      <y>44</y>
-    </eastsouth>
-    <westnorth>
-      <x>130</x>
-      <y>125</y>
-    </westnorth>
-    <bound-x>
-      <minimum>80</minimum>
-      <maximum>128</maximum>
-    </bound-x>
-    <bound-y>
-      <minimum>80</minimum>
-      <maximum>208</maximum>
-    </bound-y>
+    <northeast x="384" y="0" />
+    <eastsouth x="484" y="44" />
+    <westnorth x="130" y="125" />
+    <bound-x minimum="80" maximum="128" />
+    <bound-y minimum="80" maximum="208" />
   </triple-room-data>
 
   <floor>

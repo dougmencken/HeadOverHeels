@@ -1,266 +1,265 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<language xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="language.xsd">
+<language>
 
-  <text id="new-game">
+  <text alias="new-game">
     <properties>
-      <ustring>Новая игра</ustring>
+      <string>Новая игра</string>
     </properties>
   </text>
 
-  <text id="blacktooth-empire">
+  <text alias="blacktooth-empire">
     <properties>
-      <ustring>Империя Блактут</ustring>
+      <string>Империя Блактут</string>
     </properties>
   </text>
 
-  <text id="blacktooth">
+  <text alias="blacktooth">
     <properties>
-      <ustring>Блактут</ustring>
+      <string>Блактут</string>
     </properties>
   </text>
 
-  <text id="egyptus">
+  <text alias="egyptus">
     <properties>
-      <ustring>Египтус</ustring>
+      <string>Египтус</string>
     </properties>
   </text>
 
-  <text id="penitentiary">
+  <text alias="penitentiary">
     <properties>
-      <ustring>Пенитенциарные</ustring>
+      <string>Пенитенциарные</string>
     </properties>
   </text>
 
-  <text id="byblos">
+  <text alias="byblos">
     <properties>
-      <ustring>Библос</ustring>
+      <string>Библос</string>
     </properties>
   </text>
 
-  <text id="safari">
+  <text alias="safari">
     <properties>
-      <ustring>Сафари</ustring>
+      <string>Сафари</string>
     </properties>
   </text>
 
-  <text id="load-game">
+  <text alias="load-game">
     <properties>
-      <ustring>Загрузить игру</ustring>
+      <string>Загрузить игру</string>
     </properties>
   </text>
 
-  <text id="keyboard-menu">
+  <text alias="keyboard-menu">
     <properties>
-      <ustring>Клавиатура</ustring>
+      <string>Клавиатура</string>
     </properties>
   </text>
 
-  <text id="movenorth">
+  <text alias="movenorth">
     <properties>
-      <ustring>Лево</ustring>
+      <string>Лево</string>
     </properties>
   </text>
 
-  <text id="movesouth">
+  <text alias="movesouth">
     <properties>
-      <ustring>Право</ustring>
+      <string>Право</string>
     </properties>
   </text>
 
-  <text id="moveeast">
+  <text alias="moveeast">
     <properties>
-      <ustring>Верх</ustring>
+      <string>Верх</string>
     </properties>
   </text>
 
-  <text id="movewest">
+  <text alias="movewest">
     <properties>
-      <ustring>Низ</ustring>
+      <string>Низ</string>
     </properties>
   </text>
 
-  <text id="take">
+  <text alias="take">
     <properties>
-      <ustring>Нести</ustring>
+      <string>Нести</string>
     </properties>
   </text>
 
-  <text id="jump">
+  <text alias="jump">
     <properties>
-      <ustring>Прыгнуть</ustring>
+      <string>Прыгнуть</string>
     </properties>
   </text>
 
-  <text id="doughnut">
+  <text alias="doughnut">
     <properties>
-      <ustring>Огонь</ustring>
+      <string>Огонь</string>
     </properties>
   </text>
 
-  <text id="takeandjump">
+  <text alias="takeandjump">
     <properties>
-      <ustring>Нести+Прыгнуть</ustring>
+      <string>Нести+Прыгнуть</string>
     </properties>
   </text>
 
-  <text id="swap">
+  <text alias="swap">
     <properties>
-      <ustring>Сменить</ustring>
+      <string>Сменить</string>
     </properties>
   </text>
 
-  <text id="pause">
+  <text alias="pause">
     <properties>
-      <ustring>Пауза</ustring>
+      <string>Пауза</string>
     </properties>
   </text>
 
-  <text id="confirm-quit">
+  <text alias="confirm-quit">
     <properties font="big" color="cyan">
-      <ustring>Нажмите Escape, чтобы закончить игру</ustring>
+      <string>Нажмите Escape, чтобы закончить игру</string>
     </properties>
   </text>
 
-  <text id="confirm-resume">
+  <text alias="confirm-resume">
     <properties font="big" color="yellow">
-      <ustring>Нажмите любую другую клавишу, </ustring>
+      <string>Нажмите любую другую клавишу, </string>
     </properties>
     <properties font="big" color="yellow">
-      <ustring>чтобы перезапустить игру</ustring>
+      <string>чтобы перезапустить игру</string>
     </properties>
   </text>
 
-  <text id="audio-menu">
+  <text alias="audio-menu">
     <properties>
-      <ustring>Звук</ustring>
+      <string>Звук</string>
     </properties>
   </text>
 
-  <text id="soundfx">
+  <text alias="soundfx">
     <properties>
-      <ustring>Звуковые эффекты</ustring>
+      <string>Звуковые эффекты</string>
     </properties>
   </text>
 
-  <text id="music">
+  <text alias="music">
     <properties>
-      <ustring>Музыка</ustring>
+      <string>Музыка</string>
     </properties>
   </text>
 
-  <text id="show-credits">
+  <text alias="show-credits">
     <properties>
-      <ustring>Титры</ustring>
+      <string>Титры</string>
     </properties>
   </text>
 
-  <text id="exit-game">
+  <text alias="exit-game">
     <properties>
-      <ustring>Выход</ustring>
+      <string>Выход</string>
     </properties>
   </text>
 
-  <text id="save-game">
+  <text alias="save-game">
     <properties font="big" color="orange">
-      <ustring>Реинкарнационная Рыба дает Вам</ustring>
+      <string>Реинкарнационная Рыба дает Вам</string>
     </properties>
     <properties font="big" color="orange">
-      <ustring>возможность сохранить игру нажав SPACE</ustring>
+      <string>возможность сохранить игру нажав SPACE</string>
     </properties>
   </text>
 
-  <text id="free-slot">
+  <text alias="free-slot">
     <properties>
-      <ustring>Доступный</ustring>
+      <string>Доступный</string>
     </properties>
   </text>
 
-  <text id="score">
+  <text alias="score">
     <properties>
-      <ustring>Счет</ustring>
+      <string>Счет</string>
     </properties>
   </text>
 
-  <text id="explored-rooms">
+  <text alias="explored-rooms">
     <properties>
-      <ustring>Исследовано %d комнат</ustring>
+      <string>Исследовано %d комнат</string>
     </properties>
   </text>
 
-  <text id="liberated-planets">
+  <text alias="liberated-planets">
     <properties>
-      <ustring>Освобождено %d планет</ustring>
+      <string>Освобождено %d планет</string>
     </properties>
   </text>
 
-  <text id="rooms">
+  <text alias="rooms">
     <properties>
-      <ustring>комнат</ustring>
+      <string>комнат</string>
     </properties>
   </text>
 
-  <text id="planets">
+  <text alias="planets">
     <properties>
-      <ustring>планет</ustring>
+      <string>планет</string>
     </properties>
   </text>
 
-  <text id="final-text" x="0" y="160">
+  <text alias="final-text">
     <properties font="big" color="yellow">
-      <ustring>Люди салютуют Вашему героизму и</ustring>
+      <string>Люди салютуют Вашему героизму и</string>
     </properties>
     <properties font="big" color="yellow">
-      <ustring>прославляют Вас</ustring>
+      <string>прославляют Вас</string>
     </properties>
     <properties font="regular" color="cyan">
-      <ustring>Продолжая в таком духе, дорогой друг,</ustring>
+      <string>Продолжая в таком духе, дорогой друг,</string>
     </properties>
     <properties font="regular" color="cyan">
-      <ustring>два наших героя определенно положат</ustring>
+      <string>два наших героя определенно положат</string>
     </properties>
     <properties font="regular" color="cyan">
-      <ustring>конец тирании</ustring>
+      <string>конец тирании</string>
     </properties>
     <properties font="regular" color="multicolor">
-      <ustring>Императора Блактут</ustring>
+      <string>Императора Блактут</string>
     </properties>
   </text>
 
-  <text id="dummy">
+  <text alias="dummy">
     <properties>
-      <ustring>Глупышка</ustring>
+      <string>Глупышка</string>
     </properties>
   </text>
 
-  <text id="novice">
+  <text alias="novice">
     <properties>
-      <ustring>Новичок</ustring>
+      <string>Новичок</string>
     </properties>
   </text>
 
-  <text id="spy">
+  <text alias="spy">
     <properties>
-      <ustring>Шпион</ustring>
+      <string>Шпион</string>
     </properties>
   </text>
 
-  <text id="master-spy">
+  <text alias="master-spy">
     <properties>
-      <ustring>Шпион асс</ustring>
+      <string>Шпион асс</string>
     </properties>
   </text>
 
-  <text id="hero">
+  <text alias="hero">
     <properties>
-      <ustring>Герой</ustring>
+      <string>Герой</string>
     </properties>
   </text>
 
-  <text id="emperor">
+  <text alias="emperor">
     <properties>
-      <ustring>Император</ustring>
+      <string>Император</string>
     </properties>
   </text>
 

@@ -16,16 +16,14 @@
 #include <iostream>
 #include <allegro.h>
 #include "ItemData.hpp"
-#include "csxml/ItemsXML.hpp"
 
 
 namespace isomot
 {
 
 /**
- * Gestor de datos de los elementos del juego. Extrae la información a partir de la lectura de un
- * archivo XML, creando una lista de datos que incluye también los gráficos y las sombras de cada
- * elemento
+ * Manages items of game. Extracts information from XML file, creating list of data that includes
+ * graphics and shadows of each item
  */
 
 class ItemDataManager
@@ -76,99 +74,31 @@ protected:
 private:
 
         /**
-         * Dimensiones de las partes de una puerta
-         */
-        class DoorMeasures
-        {
-
-        public:
-
-                DoorMeasures( ) ;
-
-                /**
-                 * Anchura espacial del dintel en el eje X
-                 */
-                int lintelWidthX ;
-
-                /**
-                 * Anchura espacial del dintel en el eje Y
-                 */
-                int lintelWidthY ;
-
-                /**
-                 * Altura espacial del dintel
-                 */
-                int lintelHeight ;
-
-                /**
-                 * Anchura espacial de la jamba izquierda en el eje X
-                 */
-                int leftJambWidthX ;
-
-                /**
-                 * Anchura espacial de la jamba izquierda en el eje Y
-                 */
-                int leftJambWidthY ;
-
-                /**
-                 * Altura espacial de la jamba izquierda
-                 */
-                int leftJambHeight ;
-
-                /**
-                 * Anchura espacial de la jamba derecha en el eje X
-                 */
-                int rightJambWidthX ;
-
-                /**
-                 * Anchura espacial de la jamba derecha en el eje Y
-                 */
-                int rightJambWidthY ;
-
-                /**
-                 * Altura espacial de la jamba derecha
-                 */
-                int rightJambHeight ;
-
-        };
-
-        /**
          * Get lintel from door
-         * @param door Un gráfico con una puerta al completo
-         * @param dm Medidas espaciales de las partes de la puerta
-         * @param type Punto cardinal al que está orientado el vano de la puerta
-         * @return Un gráfico con el dintel de la puerta ó 0 si se produjo algún error
          */
-        BITMAP * cutOutLintel ( BITMAP * door, const DoorMeasures& dm, const ixml::door::value type ) ;
+        BITMAP * cutOutLintel ( BITMAP * door, unsigned int widthX, unsigned int widthY, unsigned int height,
+                                unsigned int leftJambWidthX, unsigned int leftJambWidthY,
+                                unsigned int rightJambWidthX, unsigned int rightJambWidthY,
+                                const std::string& at ) ;
 
         /**
          * Get left jamb from door
-         * @param door Un gráfico con una puerta al completo
-         * @param dm Medidas espaciales de las partes de la puerta
-         * @param type Punto cardinal al que está orientado el vano de la puerta
-         * @return Un gráfico con la jamba izquierda de la puerta ó 0 si se produjo algún error
          */
-        BITMAP * cutOutLeftJamb ( BITMAP * door, const DoorMeasures& dm, const ixml::door::value type ) ;
+        BITMAP * cutOutLeftJamb ( BITMAP * door, unsigned int widthX, unsigned int widthY, unsigned int height,
+                                  /* unsigned int lintelWidthX, */ unsigned int lintelWidthY, unsigned int lintelHeight,
+                                  const std::string& at ) ;
 
         /**
          * Get right jamb from door
-         * @param door Un gráfico con una puerta al completo
-         * @param dm Medidas espaciales de las partes de la puerta
-         * @param type Punto cardinal al que está orientado el vano de la puerta
-         * @return Un gráfico con la jamba derecha de la puerta ó 0 si se produjo algún error
          */
-        BITMAP * cutOutRightJamb ( BITMAP * door, const DoorMeasures& dm, const ixml::door::value type ) ;
+        BITMAP * cutOutRightJamb ( BITMAP * door, unsigned int widthX, unsigned int widthY, unsigned int height,
+                                   unsigned int lintelWidthX, /* unsigned int lintelWidthY, */ unsigned int lintelHeight,
+                                   const std::string& at ) ;
 
 protected:
 
-        /**
-         * Nombre del archivo XML que contiene los datos de los elementos
-         */
         std::string nameOfXMLFile ;
 
-        /**
-         * Datos de todos los elementos del juego
-         */
         std::list < ItemData * > itemData ;
 
 };

@@ -41,7 +41,7 @@ void CreateKeyboardMenu::doAction ()
                         std::string nameOfThisKey = InputManager::namesOfKeys[ i ];
                         std::string nameOfTranslation = ( nameOfThisKey == "take&jump" ? "takeandjump" : nameOfThisKey );
 
-                        Label* label = new Label( languageManager->findLanguageString( nameOfTranslation )->getText() );
+                        Label* label = new Label( languageManager->findLanguageStringForAlias( nameOfTranslation )->getText() );
 
                         int scancode = InputManager::getInstance()->getUserKey( nameOfThisKey );
                         if ( scancode == 0 )

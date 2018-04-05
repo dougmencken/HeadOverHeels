@@ -11,34 +11,14 @@
 #ifndef SoundManager_hpp_
 #define SoundManager_hpp_
 
-#include <list>
 #include <string>
-#include <ext/hash_map>
+#include <list>
+#include <map>
 #include <iostream>
-#include <cassert>
 #include <allegro.h>
 #include "alogg/aloggpth.h"
 #include "alogg/aloggint.h"
-#include "csxml/SoundsXML.hpp"
 #include "Ism.hpp"
-
-
-/**
- * Definición de la función hash para poder emplear std::string en plantillas __gnu_cxx::hash_map
- * Código de Stefan Olsson
- */
-namespace __gnu_cxx
-{
-
-template< > struct hash< std::string >
-{
-        size_t operator()( const std::string& x ) const
-        {
-                return hash< const char* >() ( x.c_str() );
-        }
-};
-
-}
 
 
 namespace isomot
@@ -248,18 +228,12 @@ private:
         /**
          * Hash table of activity / sound pairs. Activity is string from XML file of sounds
          */
-        __gnu_cxx::hash_map< std::string, SampleData > table ;
+        std::map< std::string, SampleData > table ;
 
 public:
 
         std::string getLabel () const {  return this->label ;  }
 
-};
-
-
-struct EqualSoundData : public std::binary_function < SoundData, std::string, bool >
-{
-        bool operator()( const SoundData& soundData, const std::string& label ) const ;
 };
 
 }

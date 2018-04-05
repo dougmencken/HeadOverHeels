@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<items xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="items.xsd">
+<items>
 
   <!-- Brick number one -->
   <item label="brick1">
@@ -10,9 +9,7 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0.032</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
+    <weight>32</weight>
     <picture file="brick1.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
@@ -31,9 +28,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>true</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="vulcano.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
@@ -52,9 +46,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>true</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="spikes.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
@@ -73,9 +64,6 @@
     <height>24</height>
     <directionFrames>2</directionFrames>
     <mortal>true</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="toaster.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
@@ -94,9 +82,7 @@
     <height>24</height>
     <directionFrames>4</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0.040</speed>
+    <speed>40</speed>
     <picture file="conveyor-belt.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
@@ -118,9 +104,8 @@
     <height>24</height>
     <directionFrames>2</directionFrames>
     <mortal>false</mortal>
-    <weight>0.020</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0.040</speed>
+    <weight>20</weight>
+    <speed>40</speed>
     <picture file="book.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
@@ -139,9 +124,8 @@
     <height>24</height>
     <directionFrames>4</directionFrames>
     <mortal>false</mortal>
-    <weight>0.020</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0.040</speed>
+    <weight>20</weight>
+    <speed>40</speed>
     <picture file="stool.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
@@ -160,9 +144,6 @@
     <height>24</height>
     <directionFrames>2</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="puppy.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
@@ -181,9 +162,8 @@
     <height>24</height>
     <directionFrames>4</directionFrames>
     <mortal>false</mortal>
-    <weight>0.010</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0.040</speed>
+    <weight>10</weight>
+    <speed>40</speed>
     <picture file="sandwich.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
@@ -202,9 +182,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="switch.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
@@ -224,9 +201,7 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0.032</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
+    <weight>32</weight>
     <picture file="brick2.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
@@ -245,9 +220,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="bars-ns.png">
       <frameWidth>42</frameWidth>
       <frameHeight>44</frameHeight>
@@ -266,9 +238,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="bars-ew.png">
       <frameWidth>42</frameWidth>
       <frameHeight>44</frameHeight>
@@ -287,9 +256,8 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0.010</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0.040</speed>
+    <weight>10</weight>
+    <speed>40</speed>
     <picture file="drum.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
@@ -308,9 +276,8 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0.010</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0.040</speed>
+    <weight>10</weight>
+    <speed>40</speed>
     <picture file="portable-brick.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
@@ -329,9 +296,7 @@
     <height>24</height>
     <directionFrames>2</directionFrames>
     <mortal>false</mortal>
-    <weight>0.010</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
+    <weight>10</weight>
     <picture file="donuts.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
@@ -350,9 +315,8 @@
     <height>24</height>
     <directionFrames>2</directionFrames>
     <mortal>false</mortal>
-    <weight>0.010</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0.040</speed>
+    <weight>10</weight>
+    <speed>40</speed>
     <picture file="rabbit-gold.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
@@ -371,9 +335,8 @@
     <height>24</height>
     <directionFrames>2</directionFrames>
     <mortal>false</mortal>
-    <weight>0.010</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0.040</speed>
+    <weight>10</weight>
+    <speed>40</speed>
     <picture file="rabbit-bronze.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
@@ -392,9 +355,8 @@
     <height>24</height>
     <directionFrames>2</directionFrames>
     <mortal>false</mortal>
-    <weight>0.010</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0.040</speed>
+    <weight>10</weight>
+    <speed>40</speed>
     <picture file="rabbit-bronze.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
@@ -413,9 +375,8 @@
     <height>24</height>
     <directionFrames>2</directionFrames>
     <mortal>false</mortal>
-    <weight>0.010</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0.040</speed>
+    <weight>10</weight>
+    <speed>40</speed>
     <picture file="rabbit-silver.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
@@ -434,9 +395,8 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0.010</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0.040</speed>
+    <weight>10</weight>
+    <speed>40</speed>
     <picture file="crown.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
@@ -455,9 +415,8 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>true</mortal>
-    <weight>0.010</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0.020</speed>
+    <weight>10</weight>
+    <speed>20</speed>
     <picture file="bomb.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
@@ -476,9 +435,8 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0.010</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0.040</speed>
+    <weight>10</weight>
+    <speed>40</speed>
     <picture file="portable-brick2.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
@@ -497,9 +455,8 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0.010</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0.020</speed>
+    <weight>10</weight>
+    <speed>20</speed>
     <picture file="ball.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
@@ -518,9 +475,7 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0.010</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
+    <weight>10</weight>
     <picture file="remote-control.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
@@ -539,9 +494,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="cylinder.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
@@ -556,9 +508,7 @@
     <height>28</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0.010</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
+    <weight>10</weight>
     <picture file="horn.png">
       <frameWidth>48</frameWidth>
       <frameHeight>52</frameHeight>
@@ -573,9 +523,7 @@
     <height>24</height>
     <directionFrames>4</directionFrames>
     <mortal>true</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0.040</speed>
+    <speed>40</speed>
     <picture file="imperial-guard-head.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
@@ -590,9 +538,6 @@
     <height>24</height>
     <directionFrames>4</directionFrames>
     <mortal>true</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="elephant-head.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
@@ -607,9 +552,6 @@
     <height>24</height>
     <directionFrames>4</directionFrames>
     <mortal>true</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="monkey-head.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
@@ -624,9 +566,7 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0.010</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
+    <weight>10</weight>
     <picture file="handbag.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
@@ -641,9 +581,8 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0.100</framesDelay>
-    <speed>0.020</speed>
+    <framesDelay>100</framesDelay>
+    <speed>20</speed>
     <picture file="elevator.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
@@ -665,9 +604,9 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>true</mortal>
-    <weight>0.010</weight>
-    <framesDelay>0.100</framesDelay>
-    <speed>0.030</speed>
+    <weight>10</weight>
+    <framesDelay>100</framesDelay>
+    <speed>30</speed>
     <picture file="helicopter-bug.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
@@ -689,9 +628,8 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0.010</weight>
-    <framesDelay>0.200</framesDelay>
-    <speed>0</speed>
+    <weight>10</weight>
+    <framesDelay>200</framesDelay>
     <picture file="fish.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
@@ -711,9 +649,7 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>true</mortal>
-    <weight>0.010</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
+    <weight>10</weight>
     <picture file="fish.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
@@ -732,9 +668,9 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>true</mortal>
-    <weight>0.010</weight>
-    <framesDelay>0.040</framesDelay>
-    <speed>0.040</speed>
+    <weight>10</weight>
+    <framesDelay>40</framesDelay>
+    <speed>40</speed>
     <picture file="siren.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
@@ -754,9 +690,7 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0.150</framesDelay>
-    <speed>0</speed>
+    <framesDelay>150</framesDelay>
     <picture file="teleport.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
@@ -776,9 +710,7 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0.150</framesDelay>
-    <speed>0</speed>
+    <framesDelay>150</framesDelay>
     <picture file="teleport.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
@@ -798,9 +730,9 @@
     <height>24</height>
     <directionFrames>4</directionFrames>
     <mortal>true</mortal>
-    <weight>0.010</weight>
-    <framesDelay>0.150</framesDelay>
-    <speed>0.040</speed>
+    <weight>10</weight>
+    <framesDelay>150</framesDelay>
+    <speed>40</speed>
     <picture file="turtle.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
@@ -820,9 +752,9 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0.010</weight>
-    <framesDelay>0.080</framesDelay>
-    <speed>0.040</speed>
+    <weight>10</weight>
+    <framesDelay>80</framesDelay>
+    <speed>40</speed>
     <picture file="trampoline.png">
       <frameWidth>48</frameWidth>
       <frameHeight>56</frameHeight>
@@ -842,9 +774,8 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0.130</framesDelay>
-    <speed>0.010</speed>
+    <framesDelay>130</framesDelay>
+    <speed>10</speed>
     <picture file="bubbles.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
@@ -868,9 +799,8 @@
     <height>48</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0.130</framesDelay>
-    <speed>0.010</speed>
+    <framesDelay>130</framesDelay>
+    <speed>10</speed>
     <picture file="double-bubbles.png">
       <frameWidth>48</frameWidth>
       <frameHeight>80</frameHeight>
@@ -894,9 +824,8 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>true</mortal>
-    <weight>0.010</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0.020</speed>
+    <weight>10</weight>
+    <speed>20</speed>
     <picture file="cap.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
@@ -915,9 +844,8 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0.010</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0.020</speed>
+    <weight>10</weight>
+    <speed>20</speed>
     <picture file="cap.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
@@ -936,9 +864,9 @@
     <height>48</height>
     <directionFrames>4</directionFrames>
     <mortal>true</mortal>
-    <weight>0.010</weight>
-    <framesDelay>0.150</framesDelay>
-    <speed>0.040</speed>
+    <weight>10</weight>
+    <framesDelay>150</framesDelay>
+    <speed>40</speed>
     <picture file="big-head-robot.png">
       <frameWidth>48</frameWidth>
       <frameHeight>80</frameHeight>
@@ -957,9 +885,9 @@
     <height>48</height>
     <directionFrames>4</directionFrames>
     <mortal>true</mortal>
-    <weight>0.010</weight>
-    <framesDelay>0.150</framesDelay>
-    <speed>0.040</speed>
+    <weight>10</weight>
+    <framesDelay>150</framesDelay>
+    <speed>40</speed>
     <picture file="elephant.png">
       <frameWidth>48</frameWidth>
       <frameHeight>80</frameHeight>
@@ -978,9 +906,9 @@
     <height>48</height>
     <directionFrames>4</directionFrames>
     <mortal>true</mortal>
-    <weight>0.010</weight>
-    <framesDelay>0.150</framesDelay>
-    <speed>0.040</speed>
+    <weight>10</weight>
+    <framesDelay>150</framesDelay>
+    <speed>40</speed>
     <picture file="monkey.png">
       <frameWidth>48</frameWidth>
       <frameHeight>80</frameHeight>
@@ -999,9 +927,9 @@
     <height>48</height>
     <directionFrames>4</directionFrames>
     <mortal>true</mortal>
-    <weight>0.010</weight>
-    <framesDelay>0.150</framesDelay>
-    <speed>0.040</speed>
+    <weight>10</weight>
+    <framesDelay>150</framesDelay>
+    <speed>40</speed>
     <picture file="diver.png">
       <frameWidth>48</frameWidth>
       <frameHeight>80</frameHeight>
@@ -1020,9 +948,9 @@
     <height>48</height>
     <directionFrames>1</directionFrames>
     <mortal>true</mortal>
-    <weight>0.010</weight>
-    <framesDelay>0.100</framesDelay>
-    <speed>0.040</speed>
+    <weight>10</weight>
+    <framesDelay>100</framesDelay>
+    <speed>40</speed>
     <picture file="bubble-robot.png">
       <frameWidth>48</frameWidth>
       <frameHeight>80</frameHeight>
@@ -1044,9 +972,8 @@
     <height>48</height>
     <directionFrames>4</directionFrames>
     <mortal>true</mortal>
-    <weight>0</weight>
-    <framesDelay>0.100</framesDelay>
-    <speed>0.040</speed>
+    <framesDelay>100</framesDelay>
+    <speed>40</speed>
     <picture file="imperial-guard.png">
       <frameWidth>48</frameWidth>
       <frameHeight>80</frameHeight>
@@ -1068,9 +995,9 @@
     <height>48</height>
     <directionFrames>4</directionFrames>
     <mortal>false</mortal>
-    <weight>0.010</weight>
-    <framesDelay>0.150</framesDelay>
-    <speed>0.040</speed>
+    <weight>10</weight>
+    <framesDelay>150</framesDelay>
+    <speed>40</speed>
     <picture file="robot.png">
       <frameWidth>48</frameWidth>
       <frameHeight>80</frameHeight>
@@ -1089,9 +1016,9 @@
     <height>23</height>
     <directionFrames>4</directionFrames>
     <mortal>false</mortal>
-    <weight>0.020</weight>
-    <framesDelay>0.090</framesDelay>
-    <speed>0.040</speed>
+    <weight>20</weight>
+    <framesDelay>90</framesDelay>
+    <speed>40</speed>
     <picture file="head.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
@@ -1114,9 +1041,9 @@
     <height>24</height>
     <directionFrames>4</directionFrames>
     <mortal>false</mortal>
-    <weight>0.010</weight>
-    <framesDelay>0.090</framesDelay>
-    <speed>0.020</speed>
+    <weight>10</weight>
+    <framesDelay>90</framesDelay>
+    <speed>20</speed>
     <picture file="heels.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
@@ -1139,9 +1066,9 @@
     <height>47</height>
     <directionFrames>4</directionFrames>
     <mortal>false</mortal>
-    <weight>0.020</weight>
-    <framesDelay>0.100</framesDelay>
-    <speed>0.020</speed>
+    <weight>20</weight>
+    <framesDelay>100</framesDelay>
+    <speed>20</speed>
     <picture file="headoverheels.png">
       <frameWidth>48</frameWidth>
       <frameHeight>80</frameHeight>
@@ -1164,9 +1091,9 @@
     <height>48</height>
     <directionFrames>1</directionFrames>
     <mortal>true</mortal>
-    <weight>0.010</weight>
-    <framesDelay>0.100</framesDelay>
-    <speed>0.020</speed>
+    <weight>10</weight>
+    <framesDelay>100</framesDelay>
+    <speed>20</speed>
     <picture file="throne-guard.png">
       <frameWidth>48</frameWidth>
       <frameHeight>80</frameHeight>
@@ -1188,9 +1115,9 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>true</mortal>
-    <weight>0.010</weight>
-    <framesDelay>0.200</framesDelay>
-    <speed>0.020</speed>
+    <weight>10</weight>
+    <framesDelay>200</framesDelay>
+    <speed>20</speed>
     <picture file="emperor.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
@@ -1210,9 +1137,6 @@
     <height>101</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="jail-wall-x.png">
       <frameWidth>64</frameWidth>
       <frameHeight>117</frameHeight>
@@ -1227,9 +1151,6 @@
     <height>101</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="jail-wall-y.png">
       <frameWidth>64</frameWidth>
       <frameHeight>117</frameHeight>
@@ -1244,9 +1165,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="jail-column-shaft-north.png">
       <frameWidth>64</frameWidth>
       <frameHeight>39</frameHeight>
@@ -1261,9 +1179,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="jail-column-capital-north.png">
       <frameWidth>64</frameWidth>
       <frameHeight>49</frameHeight>
@@ -1278,9 +1193,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="jail-column-shaft-east.png">
       <frameWidth>64</frameWidth>
       <frameHeight>39</frameHeight>
@@ -1295,9 +1207,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="jail-column-capital-east.png">
       <frameWidth>64</frameWidth>
       <frameHeight>49</frameHeight>
@@ -1312,9 +1221,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="jail-column-capital-south.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
@@ -1329,9 +1235,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="jail-column-capital-west.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
@@ -1346,9 +1249,6 @@
     <height>99</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="blacktooth-wall-x-1.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
@@ -1363,9 +1263,6 @@
     <height>99</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="blacktooth-wall-y-1.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
@@ -1380,9 +1277,6 @@
     <height>99</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="blacktooth-wall-x-2.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
@@ -1397,9 +1291,6 @@
     <height>99</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="blacktooth-wall-y-2.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
@@ -1414,9 +1305,6 @@
     <height>99</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="blacktooth-wall-x-3.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
@@ -1431,9 +1319,6 @@
     <height>99</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="blacktooth-wall-y-3.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
@@ -1448,9 +1333,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="blacktooth-column-shaft-north.png">
       <frameWidth>64</frameWidth>
       <frameHeight>39</frameHeight>
@@ -1465,9 +1347,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="blacktooth-column-capital-north.png">
       <frameWidth>64</frameWidth>
       <frameHeight>49</frameHeight>
@@ -1482,9 +1361,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="blacktooth-column-shaft-east.png">
       <frameWidth>64</frameWidth>
       <frameHeight>39</frameHeight>
@@ -1499,9 +1375,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="blacktooth-column-capital-east.png">
       <frameWidth>64</frameWidth>
       <frameHeight>49</frameHeight>
@@ -1516,9 +1389,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="blacktooth-column-capital-south.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
@@ -1533,9 +1403,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="blacktooth-column-capital-west.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
@@ -1550,9 +1417,6 @@
     <height>100</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="market-wall-x-1.png">
       <frameWidth>64</frameWidth>
       <frameHeight>116</frameHeight>
@@ -1567,9 +1431,6 @@
     <height>100</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="market-wall-y-1.png">
       <frameWidth>64</frameWidth>
       <frameHeight>116</frameHeight>
@@ -1584,9 +1445,6 @@
     <height>100</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="market-wall-x-2.png">
       <frameWidth>64</frameWidth>
       <frameHeight>116</frameHeight>
@@ -1601,9 +1459,6 @@
     <height>100</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="market-wall-y-2.png">
       <frameWidth>64</frameWidth>
       <frameHeight>116</frameHeight>
@@ -1618,9 +1473,6 @@
     <height>100</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="market-wall-x-3.png">
       <frameWidth>64</frameWidth>
       <frameHeight>116</frameHeight>
@@ -1635,9 +1487,6 @@
     <height>100</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="market-wall-y-3.png">
       <frameWidth>64</frameWidth>
       <frameHeight>116</frameHeight>
@@ -1652,9 +1501,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="market-column-shaft-north.png">
       <frameWidth>64</frameWidth>
       <frameHeight>39</frameHeight>
@@ -1669,9 +1515,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="market-column-capital-north.png">
       <frameWidth>64</frameWidth>
       <frameHeight>49</frameHeight>
@@ -1686,9 +1529,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="market-column-shaft-east.png">
       <frameWidth>64</frameWidth>
       <frameHeight>39</frameHeight>
@@ -1703,9 +1543,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="market-column-capital-east.png">
       <frameWidth>64</frameWidth>
       <frameHeight>49</frameHeight>
@@ -1720,9 +1557,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="market-column-capital-south.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
@@ -1737,9 +1571,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="market-column-capital-west.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
@@ -1754,9 +1585,6 @@
     <height>99</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="moon-wall-x-1.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
@@ -1771,9 +1599,6 @@
     <height>99</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="moon-wall-y-1.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
@@ -1788,9 +1613,6 @@
     <height>99</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="moon-wall-x-2.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
@@ -1805,9 +1627,6 @@
     <height>99</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="moon-wall-y-2.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
@@ -1822,9 +1641,6 @@
     <height>99</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="moon-wall-x-3.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
@@ -1839,9 +1655,6 @@
     <height>99</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="moon-wall-y-3.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
@@ -1856,9 +1669,6 @@
     <height>99</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="moon-wall-x-4.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
@@ -1873,9 +1683,6 @@
     <height>99</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="moon-wall-y-4.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
@@ -1890,9 +1697,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="moon-column-shaft-north.png">
       <frameWidth>64</frameWidth>
       <frameHeight>39</frameHeight>
@@ -1907,9 +1711,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="moon-column-capital-north.png">
       <frameWidth>64</frameWidth>
       <frameHeight>49</frameHeight>
@@ -1924,9 +1725,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="moon-column-shaft-east.png">
       <frameWidth>64</frameWidth>
       <frameHeight>39</frameHeight>
@@ -1941,9 +1739,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="moon-column-capital-east.png">
       <frameWidth>64</frameWidth>
       <frameHeight>49</frameHeight>
@@ -1958,9 +1753,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="moon-column-capital-south.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
@@ -1975,9 +1767,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="moon-column-capital-west.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
@@ -1992,9 +1781,6 @@
     <height>100</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="byblos-wall-x-1.png">
       <frameWidth>64</frameWidth>
       <frameHeight>116</frameHeight>
@@ -2009,9 +1795,6 @@
     <height>100</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="byblos-wall-y-1.png">
       <frameWidth>64</frameWidth>
       <frameHeight>116</frameHeight>
@@ -2026,9 +1809,6 @@
     <height>100</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="byblos-wall-x-2.png">
       <frameWidth>64</frameWidth>
       <frameHeight>116</frameHeight>
@@ -2043,9 +1823,6 @@
     <height>100</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="byblos-wall-y-2.png">
       <frameWidth>64</frameWidth>
       <frameHeight>116</frameHeight>
@@ -2060,9 +1837,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="byblos-column-shaft-north.png">
       <frameWidth>64</frameWidth>
       <frameHeight>39</frameHeight>
@@ -2077,9 +1851,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="byblos-column-capital-north.png">
       <frameWidth>64</frameWidth>
       <frameHeight>49</frameHeight>
@@ -2094,9 +1865,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="byblos-column-shaft-east.png">
       <frameWidth>64</frameWidth>
       <frameHeight>39</frameHeight>
@@ -2111,9 +1879,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="byblos-column-capital-east.png">
       <frameWidth>64</frameWidth>
       <frameHeight>49</frameHeight>
@@ -2128,9 +1893,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="byblos-column-capital-south.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
@@ -2145,9 +1907,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="byblos-column-capital-west.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
@@ -2162,9 +1921,6 @@
     <height>100</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="egyptus-wall-x-1.png">
       <frameWidth>64</frameWidth>
       <frameHeight>116</frameHeight>
@@ -2179,9 +1935,6 @@
     <height>100</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="egyptus-wall-y-1.png">
       <frameWidth>64</frameWidth>
       <frameHeight>116</frameHeight>
@@ -2196,9 +1949,6 @@
     <height>99</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="egyptus-wall-x-2.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
@@ -2213,9 +1963,6 @@
     <height>99</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="egyptus-wall-y-2.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
@@ -2230,9 +1977,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="egyptus-column-shaft-north.png">
       <frameWidth>64</frameWidth>
       <frameHeight>39</frameHeight>
@@ -2247,9 +1991,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="egyptus-column-capital-north.png">
       <frameWidth>64</frameWidth>
       <frameHeight>49</frameHeight>
@@ -2264,9 +2005,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="egyptus-column-shaft-east.png">
       <frameWidth>64</frameWidth>
       <frameHeight>39</frameHeight>
@@ -2281,9 +2019,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="egyptus-column-capital-east.png">
       <frameWidth>64</frameWidth>
       <frameHeight>49</frameHeight>
@@ -2298,9 +2033,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="egyptus-column-capital-south.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
@@ -2315,9 +2047,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="egyptus-column-capital-west.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
@@ -2332,9 +2061,6 @@
     <height>99</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="penitentiary-wall-x-1.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
@@ -2349,9 +2075,6 @@
     <height>99</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="penitentiary-wall-y-1.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
@@ -2366,9 +2089,6 @@
     <height>99</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="penitentiary-wall-x-2.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
@@ -2383,9 +2103,6 @@
     <height>99</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="penitentiary-wall-y-2.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
@@ -2400,9 +2117,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="penitentiary-column-shaft-north.png">
       <frameWidth>64</frameWidth>
       <frameHeight>39</frameHeight>
@@ -2417,9 +2131,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="penitentiary-column-capital-north.png">
       <frameWidth>64</frameWidth>
       <frameHeight>49</frameHeight>
@@ -2434,9 +2145,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="penitentiary-column-shaft-east.png">
       <frameWidth>64</frameWidth>
       <frameHeight>39</frameHeight>
@@ -2451,9 +2159,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="penitentiary-column-capital-east.png">
       <frameWidth>64</frameWidth>
       <frameHeight>49</frameHeight>
@@ -2468,9 +2173,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="penitentiary-column-capital-south.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
@@ -2485,9 +2187,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="penitentiary-column-capital-west.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
@@ -2502,9 +2201,6 @@
     <height>100</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="safari-wall-x-1.png">
       <frameWidth>64</frameWidth>
       <frameHeight>116</frameHeight>
@@ -2519,9 +2215,6 @@
     <height>100</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="safari-wall-y-1.png">
       <frameWidth>64</frameWidth>
       <frameHeight>116</frameHeight>
@@ -2536,9 +2229,6 @@
     <height>100</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="safari-wall-x-2.png">
       <frameWidth>64</frameWidth>
       <frameHeight>116</frameHeight>
@@ -2553,9 +2243,6 @@
     <height>100</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="safari-wall-y-2.png">
       <frameWidth>64</frameWidth>
       <frameHeight>116</frameHeight>
@@ -2570,9 +2257,6 @@
     <height>100</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="safari-wall-x-3.png">
       <frameWidth>64</frameWidth>
       <frameHeight>116</frameHeight>
@@ -2587,9 +2271,6 @@
     <height>100</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="safari-wall-y-3.png">
       <frameWidth>64</frameWidth>
       <frameHeight>116</frameHeight>
@@ -2604,9 +2285,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="safari-column-shaft-north.png">
       <frameWidth>64</frameWidth>
       <frameHeight>39</frameHeight>
@@ -2621,9 +2299,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="safari-column-capital-north.png">
       <frameWidth>64</frameWidth>
       <frameHeight>49</frameHeight>
@@ -2638,9 +2313,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="safari-column-shaft-east.png">
       <frameWidth>64</frameWidth>
       <frameHeight>39</frameHeight>
@@ -2655,9 +2327,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="safari-column-capital-east.png">
       <frameWidth>64</frameWidth>
       <frameHeight>49</frameHeight>
@@ -2672,9 +2341,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="safari-column-capital-south.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
@@ -2689,9 +2355,6 @@
     <height>24</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="safari-column-capital-west.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
@@ -2706,9 +2369,6 @@
     <height>224</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="hidden-wall.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
@@ -2723,9 +2383,6 @@
     <height>224</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="hidden-wall.png">
       <frameWidth>64</frameWidth>
       <frameHeight>115</frameHeight>
@@ -2747,9 +2404,6 @@
     <height>51</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="jail-door-north.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2771,9 +2425,6 @@
     <height>51</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="blacktooth-door-north.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2795,9 +2446,6 @@
     <height>51</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="market-door-north.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2819,9 +2467,6 @@
     <height>51</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="moon-door-north.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2843,9 +2488,6 @@
     <height>51</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="byblos-door-north.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2867,9 +2509,6 @@
     <height>51</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="egyptus-door-north.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2891,9 +2530,6 @@
     <height>51</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="penitentiary-door-north.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2915,9 +2551,6 @@
     <height>51</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="safari-door-north.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2939,9 +2572,6 @@
     <height>51</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="jail-door-south.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2963,9 +2593,6 @@
     <height>51</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="blacktooth-door-south.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -2987,9 +2614,6 @@
     <height>51</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="market-door-south.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -3011,9 +2635,6 @@
     <height>51</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="moon-door-south.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -3035,9 +2656,6 @@
     <height>51</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="byblos-door-south.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -3059,9 +2677,6 @@
     <height>51</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="egyptus-door-south.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -3083,9 +2698,6 @@
     <height>51</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="penitentiary-door-south.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -3107,9 +2719,6 @@
     <height>51</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="safari-door-south.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -3131,9 +2740,6 @@
     <height>51</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="jail-door-east.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -3155,9 +2761,6 @@
     <height>51</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="blacktooth-door-east.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -3179,9 +2782,6 @@
     <height>51</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="market-door-east.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -3203,9 +2803,6 @@
     <height>51</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="moon-door-east.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -3227,9 +2824,6 @@
     <height>51</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="byblos-door-east.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -3251,9 +2845,6 @@
     <height>51</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="egyptus-door-east.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -3275,9 +2866,6 @@
     <height>51</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="penitentiary-door-east.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -3299,9 +2887,6 @@
     <height>51</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="safari-door-east.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -3323,9 +2908,6 @@
     <height>51</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="jail-door-west.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -3347,9 +2929,6 @@
     <height>51</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="blacktooth-door-west.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -3371,9 +2950,6 @@
     <height>51</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="market-door-west.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -3395,9 +2971,6 @@
     <height>51</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="moon-door-west.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -3419,9 +2992,6 @@
     <height>51</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="byblos-door-west.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -3443,9 +3013,6 @@
     <height>51</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="egyptus-door-west.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -3467,9 +3034,6 @@
     <height>51</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="penitentiary-door-west.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
@@ -3491,9 +3055,6 @@
     <height>51</height>
     <directionFrames>1</directionFrames>
     <mortal>false</mortal>
-    <weight>0</weight>
-    <framesDelay>0</framesDelay>
-    <speed>0</speed>
     <picture file="safari-door-west.png">
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>

@@ -31,13 +31,13 @@ void CreateAudioMenu::doAction ()
 {
         LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
 
-        LanguageText* langStringEffects = languageManager->findLanguageString( "soundfx" );
-        LanguageText* langStringMusic = languageManager->findLanguageString( "music" );
+        LanguageText* langStringEffects = languageManager->findLanguageStringForAlias( "soundfx" );
+        LanguageText* langStringMusic = languageManager->findLanguageStringForAlias( "music" );
 
-        LanguageText* langStringRoomTunes = languageManager->findLanguageString( "play-room-melodies" );
+        LanguageText* langStringRoomTunes = languageManager->findLanguageStringForAlias( "play-room-melodies" );
 
-        std::string yeah = languageManager->findLanguageString( "yep" )-> getText ();
-        std::string nope = languageManager->findLanguageString( "nope" )->getText ();
+        std::string yeah = languageManager->findLanguageStringForAlias( "yep" )-> getText ();
+        std::string nope = languageManager->findLanguageStringForAlias( "nope" )->getText ();
 
         std::stringstream ss;
 

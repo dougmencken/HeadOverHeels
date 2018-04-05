@@ -73,6 +73,16 @@ public:
         virtual ~GameManager( ) ;
 
         /**
+         * Read preferences of game from XML file
+         */
+        static bool readPreferences ( const std::string& fileName ) ;
+
+        /**
+         * Write preferences of game to XML file
+         */
+        static bool writePreferences ( const std::string& fileName ) ;
+
+        /**
          * Todo empieza aquí
          * @return Razón por la que se ha detenido el juego
          */
@@ -280,6 +290,8 @@ public:
         }
 
 private:
+
+        ItemDataManager * itemDataManager ;
 
         gui::ColorCyclingLabel * freedomLabel ;
 
@@ -519,6 +531,12 @@ public:
          * Número de salas visitadas por los jugadores
          */
         unsigned int getVisitedRooms () const ;
+
+        ItemDataManager * getItemDataManager () const {  return itemDataManager ;  }
+
+        void binItemDataManager () ;
+
+        void setItemDataManager ( ItemDataManager* manager ) {  itemDataManager = manager ;  }
 
 };
 

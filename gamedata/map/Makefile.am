@@ -8,7 +8,7 @@ gamedatamap_DATA = blacktooth10.xml \
 			blacktooth14.xml \
 			blacktooth15.xml \
 			blacktooth16.xml \
-			blacktooth17.xml \
+			blacktooth17triple.xml \
 			blacktooth18.xml \
 			blacktooth19.xml \
 			blacktooth1head.xml \
@@ -54,7 +54,7 @@ gamedatamap_DATA = blacktooth10.xml \
 			blacktooth55.xml \
 			blacktooth56.xml \
 			blacktooth57.xml \
-			blacktooth58.xml \
+			blacktooth58triple.xml \
 			blacktooth59.xml \
 			blacktooth6.xml \
 			blacktooth60.xml \
@@ -170,7 +170,6 @@ gamedatamap_DATA = blacktooth10.xml \
 			egyptus9fish.xml \
 			finalroom.xml \
 			map.xml \
-			map.xsd \
 			moon1.xml \
 			moon10.xml \
 			moon11.xml \
@@ -197,7 +196,7 @@ gamedatamap_DATA = blacktooth10.xml \
 			moon30.xml \
 			moon31.xml \
 			moon32.xml \
-			moon33.xml \
+			moon33triple.xml \
 			moon34.xml \
 			moon35.xml \
 			moon36.xml \
@@ -241,7 +240,6 @@ gamedatamap_DATA = blacktooth10.xml \
 			penitentiary7.xml \
 			penitentiary8.xml \
 			penitentiary9.xml \
-			room.xsd \
 			safari1.xml \
 			safari10.xml \
 			safari11.xml \
@@ -252,7 +250,7 @@ gamedatamap_DATA = blacktooth10.xml \
 			safari16.xml \
 			safari17fish.xml \
 			safari18.xml \
-			safari19.xml \
+			safari19triple.xml \
 			safari2.xml \
 			safari20.xml \
 			safari21.xml \
@@ -275,7 +273,7 @@ gamedatamap_DATA = blacktooth10.xml \
 			safari37crown.xml \
 			safari4.xml \
 			safari5.xml \
-			safari6.xml \
+			safari6triple.xml \
 			safari7.xml \
 			safari8.xml \
 			safari9.xml

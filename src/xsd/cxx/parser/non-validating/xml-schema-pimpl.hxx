@@ -546,7 +546,7 @@ namespace xsd
           virtual void
           _characters (const ro_string<C>&);
 
-          virtual std::auto_ptr<buffer>
+          virtual smartptr<buffer>
           post_base64_binary ();
 
         protected:
@@ -564,7 +564,7 @@ namespace xsd
           virtual void
           _characters (const ro_string<C>&);
 
-          virtual std::auto_ptr<buffer>
+          virtual smartptr<buffer>
           post_hex_binary ();
 
         protected:

@@ -38,15 +38,11 @@ class TextField : public Widget
 
 public:
 
-        /**
-        * Constructor
-        * @param x Coordenada X de pantalla donde situar el elemento
-        * @param x Coordenada X de pantalla donde situar el elemento
+       /**
         * @param width Anchura del campo de texto
-        * @param height Altura del campo de texto
         * @param alignment Alineación horizontal del texto: izquierda, centro o derecha
         */
-        TextField( int x, int y, unsigned int width, unsigned int height, const Alignment& alignment ) ;
+        TextField( unsigned int width, const Alignment& alignment ) ;
 
         virtual ~TextField( ) ;
 
@@ -72,15 +68,7 @@ public:
 
 private:
 
-       /**
-        * Anchura del campo de texto
-        */
         unsigned int width ;
-
-       /**
-        * Altura del campo de texto
-        */
-        unsigned int height ;
 
        /**
         * Alineación horizontal del texto: izquierda, centro o derecha

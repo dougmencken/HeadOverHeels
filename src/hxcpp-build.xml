@@ -8,6 +8,7 @@
         <compilerflag value="-Ibehaviors" />
         <compilerflag value="-Iactivities" />
         <compilerflag value="-I/opt/libpng-1.6.34/include" />
+        <compilerflag value="-I/opt/tinyxml2-6.0.0/include" />
         <compilerflag value="-I/opt/xerces-c-3.2.1/include" />
         <compilerflag value="-I/opt/allegro-4.4.2/include" />
         <compilerflag value="-Wall" />
@@ -52,7 +53,6 @@
         <file name="activities/FallKindOfActivity.cpp" />
         <file name="activities/JumpKindOfActivity.cpp" />
         <file name="activities/MoveKindOfActivity.cpp" />
-        <file name="gui/ConfigurationManager.cpp" />
         <file name="gui/Font.cpp" />
         <file name="gui/GuiManager.cpp" />
         <file name="gui/Picture.cpp" />
@@ -108,16 +108,11 @@
         <file name="behaviors/UserControlled.cpp" />
         <file name="behaviors/Volatile.cpp" />
         <file name="behaviors/Behavior.cpp" />
-        <file name="csxml/ConfigurationXML.cpp" />
-        <file name="csxml/ItemsXML.cpp" />
-        <file name="csxml/LanguageXML.cpp" />
-        <file name="csxml/MapXML.cpp" />
-        <file name="csxml/RoomXML.cpp" />
         <file name="csxml/SaveGameXML.cpp" />
-        <file name="csxml/SoundsXML.cpp" />
     </files>
     <target id="default" tool="linker" toolid="exe" output="headoverheels">
         <files id="sources" />
+        <flag value="-L/opt/tinyxml2-6.0.0/lib" />
         <flag value="-L/opt/xerces-c-3.2.1/lib" />
         <flag value="-L/opt/ogg-vorbis/lib" />
         <flag value="-L/opt/libpng-1.6.34/lib" />
@@ -127,6 +122,7 @@
         <flag value="-lvorbisenc" />
         <flag value="-lvorbis" />
         <flag value="-logg" />
+        <flag value="-ltinyxml2" />
         <flag value="-lxerces-c" />
         <flag value="-lpthread" />
         <flag value="-lz" />

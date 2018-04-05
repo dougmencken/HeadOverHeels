@@ -133,22 +133,22 @@ private:
         unsigned int height ;
 
        /**
-        * Weight of item in milliseconds, higher for bigger speed of falling, 0 for don’t fall
+        * Weight of item in seconds, higher for bigger speed of falling, zero for don’t fall
         */
         double weight ;
 
        /**
-        * Time in milliseconds needed for item to move
+        * Time in seconds needed for item to move
         */
         double speed ;
 
        /**
-        * How many frames for orientations
+        * How many frames are for orientations
         */
         unsigned short orientationFrames ;
 
        /**
-        * Time in milliseconds to show each frame of animation
+        * Time in seconds between each frame of animation
         */
         double delayBetweenFrames ;
 

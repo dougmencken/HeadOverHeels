@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<room xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<room>
 
-  <name>blacktooth58.xml</name>
+  <name>blacktooth58triple.xml</name>
 
   <scenery>jail</scenery>
 
@@ -14,22 +14,10 @@
   <floorType>mortal</floorType>
 
   <triple-room-data>
-    <eastsouth>
-      <x>480</x>
-      <y>128</y>
-    </eastsouth>
-    <westsouth>
-      <x>320</x>
-      <y>208</y>
-    </westsouth>
-    <bound-x>
-      <minimum>64</minimum>
-      <maximum>144</maximum>
-    </bound-x>
-    <bound-y>
-      <minimum>80</minimum>
-      <maximum>160</maximum>
-    </bound-y>
+    <eastsouth x="480" y="128" />
+    <westsouth x="320" y="208" />
+    <bound-x minimum="64" maximum="144" />
+    <bound-y minimum="80" maximum="160" />
   </triple-room-data>
 
   <floor>

@@ -1,260 +1,259 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<language xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="language.xsd">
+<language>
 
-  <text id="new-game">
+  <text alias="new-game">
     <properties>
-      <ustring>Nová hra</ustring>
+      <string>Nová hra</string>
     </properties>
   </text>
 
-  <text id="blacktooth-empire">
+  <text alias="blacktooth-empire">
     <properties>
-      <ustring>Ríša Blacktooth</ustring>
+      <string>Ríša Blacktooth</string>
     </properties>
   </text>
 
-  <text id="blacktooth">
+  <text alias="blacktooth">
     <properties>
-      <ustring>Blacktooth</ustring>
+      <string>Blacktooth</string>
     </properties>
   </text>
 
-  <text id="egyptus">
+  <text alias="egyptus">
     <properties>
-      <ustring>Egyptus</ustring>
+      <string>Egyptus</string>
     </properties>
   </text>
 
-  <text id="penitentiary">
+  <text alias="penitentiary">
     <properties>
-      <ustring>Penitentiary</ustring>
+      <string>Penitentiary</string>
     </properties>
   </text>
 
-  <text id="byblos">
+  <text alias="byblos">
     <properties>
-      <ustring>Byblos</ustring>
+      <string>Byblos</string>
     </properties>
   </text>
 
-  <text id="safari">
+  <text alias="safari">
     <properties>
-      <ustring>Safari</ustring>
+      <string>Safari</string>
     </properties>
   </text>
 
-  <text id="load-game">
+  <text alias="load-game">
     <properties>
-      <ustring>Načítaj hru</ustring>
+      <string>Načítaj hru</string>
     </properties>
   </text>
 
-  <text id="keyboard-menu">
+  <text alias="keyboard-menu">
     <properties>
-      <ustring>Klávesnica</ustring>
+      <string>Klávesnica</string>
     </properties>
   </text>
 
-  <text id="movenorth">
+  <text alias="movenorth">
     <properties>
-      <ustring>Vľavo</ustring>
+      <string>Vľavo</string>
     </properties>
   </text>
 
-  <text id="movesouth">
+  <text alias="movesouth">
     <properties>
-      <ustring>Vpravo</ustring>
+      <string>Vpravo</string>
     </properties>
   </text>
 
-  <text id="moveeast">
+  <text alias="moveeast">
     <properties>
-      <ustring>Nahor</ustring>
+      <string>Nahor</string>
     </properties>
   </text>
 
-  <text id="movewest">
+  <text alias="movewest">
     <properties>
-      <ustring>Nadol</ustring>
+      <string>Nadol</string>
     </properties>
   </text>
 
-  <text id="take">
+  <text alias="take">
     <properties>
-      <ustring>Nes</ustring>
+      <string>Nes</string>
     </properties>
   </text>
 
-  <text id="jump">
+  <text alias="jump">
     <properties>
-      <ustring>Skoč</ustring>
+      <string>Skoč</string>
     </properties>
   </text>
 
-  <text id="doughnut">
+  <text alias="doughnut">
     <properties>
-      <ustring>Strieľaj</ustring>
+      <string>Strieľaj</string>
     </properties>
   </text>
 
-  <text id="takeandjump">
+  <text alias="takeandjump">
     <properties>
-      <ustring>Nes+Skoč</ustring>
+      <string>Nes+Skoč</string>
     </properties>
   </text>
 
-  <text id="swap">
+  <text alias="swap">
     <properties>
-      <ustring>Vymeň</ustring>
+      <string>Vymeň</string>
     </properties>
   </text>
 
-  <text id="pause">
+  <text alias="pause">
     <properties>
-      <ustring>Pauza</ustring>
+      <string>Pauza</string>
     </properties>
   </text>
 
-  <text id="confirm-quit">
+  <text alias="confirm-quit">
     <properties font="big" color="cyan">
-      <ustring>Stlačním Escape ukonči hru</ustring>
+      <string>Stlačním Escape ukonči hru</string>
     </properties>
   </text>
 
-  <text id="confirm-resume">
+  <text alias="confirm-resume">
     <properties font="big" color="yellow">
-      <ustring>Stlačením inej klávesy obnov hru</ustring>
+      <string>Stlačením inej klávesy obnov hru</string>
     </properties>
   </text>
 
-  <text id="audio-menu">
+  <text alias="audio-menu">
     <properties>
-      <ustring>Audio</ustring>
+      <string>Audio</string>
     </properties>
   </text>
 
-  <text id="soundfx">
+  <text alias="soundfx">
     <properties>
-      <ustring>Zvukové efekty</ustring>
+      <string>Zvukové efekty</string>
     </properties>
   </text>
 
-  <text id="music">
+  <text alias="music">
     <properties>
-      <ustring>Hudba</ustring>
+      <string>Hudba</string>
     </properties>
   </text>
 
-  <text id="show-credits">
+  <text alias="show-credits">
     <properties>
-      <ustring>Poďakovania</ustring>
+      <string>Poďakovania</string>
     </properties>
   </text>
 
-  <text id="exit-game">
+  <text alias="exit-game">
     <properties>
-      <ustring>Návrat</ustring>
+      <string>Návrat</string>
     </properties>
   </text>
 
-  <text id="save-game">
+  <text alias="save-game">
     <properties font="big" color="orange">
-      <ustring>Ryba znovuzrodenia vám dáva</ustring>
+      <string>Ryba znovuzrodenia vám dáva</string>
     </properties>
     <properties font="big" color="orange">
-      <ustring>možnosť uchovať hru stlačením SPACE</ustring>
+      <string>možnosť uchovať hru stlačením SPACE</string>
     </properties>
   </text>
 
-  <text id="free-slot">
+  <text alias="free-slot">
     <properties>
-      <ustring>Dostupné</ustring>
+      <string>Dostupné</string>
     </properties>
   </text>
 
-  <text id="score">
+  <text alias="score">
     <properties>
-      <ustring>Skóre</ustring>
+      <string>Skóre</string>
     </properties>
   </text>
 
-  <text id="explored-rooms">
+  <text alias="explored-rooms">
     <properties>
-      <ustring>Navštívených %d miestností</ustring>
+      <string>Navštívených %d miestností</string>
     </properties>
   </text>
 
-  <text id="liberated-planets">
+  <text alias="liberated-planets">
     <properties>
-      <ustring>Oslobodených: %d planét</ustring>
+      <string>Oslobodených: %d planét</string>
     </properties>
   </text>
 
-  <text id="rooms">
+  <text alias="rooms">
     <properties>
-      <ustring>miestností</ustring>
+      <string>miestností</string>
     </properties>
   </text>
 
-  <text id="planets">
+  <text alias="planets">
     <properties>
-      <ustring>planét</ustring>
+      <string>planét</string>
     </properties>
   </text>
 
-  <text id="final-text" x="0" y="200">
+  <text alias="final-text">
     <properties font="big" color="yellow">
-      <ustring>Ľudia verejne oslavujú</ustring>
+      <string>Ľudia verejne oslavujú</string>
     </properties>
     <properties font="big" color="yellow">
-      <ustring>tvoje hrdinstvo</ustring>
+      <string>tvoje hrdinstvo</string>
     </properties>
     <properties font="regular" color="cyan">
-      <ustring>Takto, drahý priateľu, naši dvaja</ustring>
+      <string>Takto, drahý priateľu, naši dvaja</string>
     </properties>
     <properties font="regular" color="cyan">
-      <ustring>hrdinovia definitívne ukončili</ustring>
+      <string>hrdinovia definitívne ukončili</string>
     </properties>
     <properties font="regular" color="multicolor">
-      <ustring>tyraniu Blacktoothskeho imperátora</ustring>
+      <string>tyraniu Blacktoothskeho imperátora</string>
     </properties>
   </text>
 
-  <text id="dummy">
+  <text alias="dummy">
     <properties>
-      <ustring>Hlupák</ustring>
+      <string>Hlupák</string>
     </properties>
   </text>
 
-  <text id="novice">
+  <text alias="novice">
     <properties>
-      <ustring>Nováčik</ustring>
+      <string>Nováčik</string>
     </properties>
   </text>
 
-  <text id="spy">
+  <text alias="spy">
     <properties>
-      <ustring>Špión</ustring>
+      <string>Špión</string>
     </properties>
   </text>
 
-  <text id="master-spy">
+  <text alias="master-spy">
     <properties>
-      <ustring>Majster Špión</ustring>
+      <string>Majster Špión</string>
     </properties>
   </text>
 
-  <text id="hero">
+  <text alias="hero">
     <properties>
-      <ustring>Hrdina</ustring>
+      <string>Hrdina</string>
     </properties>
   </text>
 
-  <text id="emperor">
+  <text alias="emperor">
     <properties>
-      <ustring>Imperátor</ustring>
+      <string>Imperátor</string>
     </properties>
   </text>
 

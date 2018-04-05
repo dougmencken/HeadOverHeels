@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<map xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-     xsi:noNamespaceSchemaLocation="map.xsd">
+<map>
 
     <!-- Template
     <room file="room.xml">
@@ -9,14 +8,14 @@
         <south></south>
         <east></east>
         <west></west>
-        <north-east></north-east>
-        <north-west></north-west>
-        <south-east></south-east>
-        <south-west></south-west>
-        <east-north></east-north>
-        <east-south></east-south>
-        <west-north></west-north>
-        <west-south></west-south>
+        <northeast></northeast>
+        <northwest></northwest>
+        <southeast></southeast>
+        <southwest></southwest>
+        <eastnorth></eastnorth>
+        <eastsouth></eastsouth>
+        <westnorth></westnorth>
+        <westsouth></westsouth>
         <floor></floor>
         <roof></roof>
         <teleport></teleport>
@@ -101,23 +100,23 @@
     </room>
 
     <room file="blacktooth16.xml">
-        <north>blacktooth17.xml</north>
+        <north>blacktooth17triple.xml</north>
         <west>blacktooth15.xml</west>
     </room>
 
-    <room file="blacktooth17.xml">
-        <north-east>blacktooth18.xml</north-east>
-        <north-west>blacktooth19.xml</north-west>
-        <south-west>blacktooth16.xml</south-west>
+    <room file="blacktooth17triple.xml">
+        <northeast>blacktooth18.xml</northeast>
+        <northwest>blacktooth19.xml</northwest>
+        <southwest>blacktooth16.xml</southwest>
     </room>
 
     <room file="blacktooth18.xml">
         <north>blacktooth20.xml</north>
-        <south>blacktooth17.xml</south>
+        <south>blacktooth17triple.xml</south>
     </room>
 
     <room file="blacktooth19.xml">
-        <south>blacktooth17.xml</south>
+        <south>blacktooth17triple.xml</south>
         <east>blacktooth20.xml</east>
     </room>
 
@@ -312,19 +311,19 @@
 
     <room file="blacktooth57.xml">
         <north>blacktooth56.xml</north>
-        <east>blacktooth58.xml</east>
+        <east>blacktooth58triple.xml</east>
         <teleport>moon9.xml</teleport>
     </room>
 
-    <room file="blacktooth58.xml">
-        <east-south>blacktooth59.xml</east-south>
-        <west-south>blacktooth57.xml</west-south>
+    <room file="blacktooth58triple.xml">
+        <eastsouth>blacktooth59.xml</eastsouth>
+        <westsouth>blacktooth57.xml</westsouth>
     </room>
 
     <room file="blacktooth59.xml">
         <north>blacktooth63.xml</north>
         <east>blacktooth60.xml</east>
-        <west>blacktooth58.xml</west>
+        <west>blacktooth58triple.xml</west>
     </room>
 
     <room file="blacktooth60.xml">
@@ -512,18 +511,18 @@
     </room>
 
     <room file="moon32.xml">
-        <east>moon33.xml</east>
+        <east>moon33triple.xml</east>
         <teleport>moon29.xml</teleport>
     </room>
 
-    <room file="moon33.xml">
-        <north-east>moon34.xml</north-east>
-        <east-south>moon36.xml</east-south>
-        <west-north>moon32.xml</west-north>
+    <room file="moon33triple.xml">
+        <northeast>moon34.xml</northeast>
+        <eastsouth>moon36.xml</eastsouth>
+        <westnorth>moon32.xml</westnorth>
     </room>
 
     <room file="moon34.xml">
-        <south>moon33.xml</south>
+        <south>moon33triple.xml</south>
         <east>moon35.xml</east>
     </room>
 
@@ -533,7 +532,7 @@
     </room>
 
     <room file="moon36.xml">
-        <west>moon33.xml</west>
+        <west>moon33triple.xml</west>
         <teleport>blacktooth69.xml</teleport>
     </room>
 
@@ -1149,20 +1148,20 @@
     </room>
 
     <room file="safari5.xml">
-        <north>safari6.xml</north>
+        <north>safari6triple.xml</north>
         <south>safari4.xml</south>
     </room>
 
-    <room file="safari6.xml">
-        <north-east>safari7.xml</north-east>
-        <south-west>safari5.xml</south-west>
-        <east-north>safari7.xml</east-north>
+    <room file="safari6triple.xml">
+        <northeast>safari7.xml</northeast>
+        <southwest>safari5.xml</southwest>
+        <eastnorth>safari7.xml</eastnorth>
     </room>
 
     <room file="safari7.xml">
         <north>safari8.xml</north>
-        <south>safari6.xml</south>
-        <west>safari6.xml</west>
+        <south>safari6triple.xml</south>
+        <west>safari6triple.xml</west>
     </room>
 
     <room file="safari8.xml">
@@ -1219,19 +1218,19 @@
     </room>
 
     <room file="safari18.xml">
-        <east>safari19.xml</east>
+        <east>safari19triple.xml</east>
         <west>safari4.xml</west>
     </room>
 
-    <room file="safari19.xml">
-        <north-west>safari20.xml</north-west>
-        <east-south>safari25.xml</east-south>
-        <west-south>safari18.xml</west-south>
+    <room file="safari19triple.xml">
+        <northwest>safari20.xml</northwest>
+        <eastsouth>safari25.xml</eastsouth>
+        <westsouth>safari18.xml</westsouth>
     </room>
 
     <room file="safari20.xml">
         <north>safari21.xml</north>
-        <south>safari19.xml</south>
+        <south>safari19triple.xml</south>
         <east>safari22.xml</east>
     </room>
 
@@ -1257,7 +1256,7 @@
 
     <room file="safari25.xml">
         <north>safari24.xml</north>
-        <west>safari19.xml</west>
+        <west>safari19triple.xml</west>
     </room>
 
     <room file="safari26.xml">

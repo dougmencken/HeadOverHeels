@@ -28,7 +28,7 @@ namespace gui
 class Screen ;
 class Action ;
 class LanguageManager ;
-class ConfigurationManager ;
+
 
 class GuiManager
 {
@@ -104,8 +104,6 @@ private:
         */
         std::string language ;
 
-        ConfigurationManager * configurationManager ;
-
         LanguageManager * languageManager ;
 
        /**
@@ -140,8 +138,6 @@ public:
                 this->language = language ;
                 assignLanguage( language );
         }
-
-        ConfigurationManager* getConfigurationManager () const {  return this->configurationManager ;  }
 
         LanguageManager* getLanguageManager () const {  return this->languageManager ;  }
 

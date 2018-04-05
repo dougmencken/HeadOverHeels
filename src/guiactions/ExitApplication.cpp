@@ -1,7 +1,7 @@
 
 #include "ExitApplication.hpp"
 #include "GuiManager.hpp"
-#include "ConfigurationManager.hpp"
+#include "GameManager.hpp"
 #include "Screen.hpp"
 #include "Color.hpp"
 
@@ -16,8 +16,7 @@ ExitApplication::ExitApplication( )
 
 void ExitApplication::bye ()
 {
-
-        GuiManager::getInstance()->getConfigurationManager()->write();
+        isomot::GameManager::writePreferences( isomot::homePath() + "preferences.xml" );
         GuiManager::getInstance()->suspend();
 
         Screen::randomPixelFadeOut( GuiManager::getInstance()->getActiveScreen(), Color::blackColor() );

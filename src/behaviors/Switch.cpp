@@ -5,6 +5,8 @@
 #include "Mediator.hpp"
 #include "SoundManager.hpp"
 
+#include <algorithm>  // std::find_if
+
 
 namespace isomot
 {

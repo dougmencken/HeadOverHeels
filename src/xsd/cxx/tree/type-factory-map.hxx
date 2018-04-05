@@ -8,7 +8,7 @@
 
 #include <map>
 #include <string>
-#include <memory> // std::auto_ptr
+#include <memory>
 
 #include <xercesc/dom/DOMElement.hpp>
 
@@ -25,7 +25,7 @@ namespace xsd
       struct type_factory_map
       {
         typedef xml::qualified_name<C> qualified_name;
-        typedef std::auto_ptr<type> (*factory) (const xercesc::DOMElement&,
+        typedef smartptr<type> (*factory) (const xercesc::DOMElement&,
                                                 flags,
                                                 type*);
       public:
@@ -41,7 +41,7 @@ namespace xsd
                           const qualified_name& subst,
                           factory);
 
-        std::auto_ptr<type>
+        smartptr<type>
         create (const C* name, // element name
                 const C* ns,   // element namespace
                 factory static_type,
@@ -58,7 +58,7 @@ namespace xsd
 
       private:
         template <typename X>
-        static std::auto_ptr<type>
+        static smartptr<type>
         traits_adapter (const xercesc::DOMElement&, flags, type*);
 
       private:
@@ -124,7 +124,7 @@ namespace xsd
       //
       //
       template<typename X>
-      std::auto_ptr<type>
+      smartptr<type>
       factory_impl (const xercesc::DOMElement& e, flags f, type* c);
 
       //

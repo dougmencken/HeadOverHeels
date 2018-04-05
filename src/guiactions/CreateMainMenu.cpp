@@ -43,13 +43,13 @@ void CreateMainMenu::doAction ()
 
                 // Las opciones del menú
 
-                Label* newGame = new Label( languageManager->findLanguageString( "new-game" )->getText() );
-                Label* loadGame = new Label( languageManager->findLanguageString( "load-game" )->getText() );
-                Label* defineKeys = new Label( languageManager->findLanguageString( "keyboard-menu" )->getText() );
-                Label* adjustAudio = new Label( languageManager->findLanguageString( "audio-menu" )->getText() );
-                Label* adjustVideo = new Label( languageManager->findLanguageString( "video-menu" )->getText() );
-                Label* showCredits = new Label( languageManager->findLanguageString( "show-credits" )->getText() );
-                Label* quitGame = new Label( languageManager->findLanguageString( "exit-game" )->getText() );
+                Label* newGame = new Label( languageManager->findLanguageStringForAlias( "new-game" )->getText() );
+                Label* loadGame = new Label( languageManager->findLanguageStringForAlias( "load-game" )->getText() );
+                Label* defineKeys = new Label( languageManager->findLanguageStringForAlias( "keyboard-menu" )->getText() );
+                Label* adjustAudio = new Label( languageManager->findLanguageStringForAlias( "audio-menu" )->getText() );
+                Label* adjustVideo = new Label( languageManager->findLanguageStringForAlias( "video-menu" )->getText() );
+                Label* showCredits = new Label( languageManager->findLanguageStringForAlias( "show-credits" )->getText() );
+                Label* quitGame = new Label( languageManager->findLanguageStringForAlias( "exit-game" )->getText() );
 
                 newGame->setAction( new CreatePlanetsScreen( getWhereToDraw(), false ) );
                 loadGame->setAction( new CreateListOfSavedGames( getWhereToDraw(), true ) );

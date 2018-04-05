@@ -1,7 +1,6 @@
 
 #include "RedefineKey.hpp"
 #include "InputManager.hpp"
-#include "ConfigurationManager.hpp"
 #include "GuiManager.hpp"
 #include "LanguageManager.hpp"
 #include "LanguageText.hpp"
@@ -9,7 +8,6 @@
 #include "Label.hpp"
 
 using gui::RedefineKey;
-using gui::ConfigurationManager;
 using isomot::InputManager;
 
 
@@ -55,7 +53,7 @@ void RedefineKey::doAction ()
                                                 InputManager::getInstance()->changeUserKey( nameOfPrevious, 0 );
 
                                                 // update menu
-                                                std::string textOfThatKey = GuiManager::getInstance()->getLanguageManager()->findLanguageString( nameForText )->getText();
+                                                std::string textOfThatKey = GuiManager::getInstance()->getLanguageManager()->findLanguageStringForAlias( nameForText )->getText();
                                                 std::list < Label * > everyLabel = menu->getEveryOption ();
                                                 for ( std::list< Label * >::iterator o = everyLabel.begin (); o != everyLabel.end (); ++o )
                                                 {

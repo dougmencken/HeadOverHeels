@@ -67,7 +67,7 @@ namespace xsd
 
           while (size--)
           {
-            std::auto_ptr<X> p (new X (s, f, container));
+            smartptr<X> p (new X (s, f, container));
             push_back (p);
           }
         }

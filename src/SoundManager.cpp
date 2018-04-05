@@ -2,10 +2,12 @@
 #include "SoundManager.hpp"
 #include "Ism.hpp"
 
+#include <tinyxml2.h>
+
 using isomot::SoundManager;
 using isomot::SampleData;
 using isomot::SoundData;
-using isomot::EqualSoundData;
+
 
 SoundManager* SoundManager::instance = nilPointer ;
 
@@ -56,32 +58,37 @@ SoundManager* SoundManager::getInstance()
 void SoundManager::readListOfSounds( const std::string& fileName )
 {
         // read list of sounds from XML file
-        try
+        tinyxml2::XMLDocument sounds;
+        tinyxml2::XMLError result = sounds.LoadFile( ( isomot::sharePath() + fileName ).c_str () );
+        if ( result != tinyxml2::XML_SUCCESS )
         {
-                std::auto_ptr< sxml::SoundsXML > soundsXML( sxml::sounds( ( isomot::sharePath() + fileName ).c_str () ) );
+                std::cerr << "can’t read list of sounds from \"" << fileName << "\"" << std::endl ;
+                return;
+        }
 
-                for ( sxml::SoundsXML::item_const_iterator i = soundsXML->item().begin (); i != soundsXML->item().end (); ++i )
+        tinyxml2::XMLElement* root = sounds.FirstChildElement( "sounds" );
+
+        for ( tinyxml2::XMLElement* item = root->FirstChildElement( "item" ) ;
+                        item != nilPointer ;
+                        item = item->NextSiblingElement( "item" ) )
+        {
+                std::string label = item->Attribute( "label" );
+                SoundData soundDataForLabel( label );
+
+                for ( tinyxml2::XMLElement* event = item->FirstChildElement( "event" ) ;
+                                event != nilPointer ;
+                                event = event->NextSiblingElement( "event" ) )
                 {
-                        SoundData soundData( ( *i ).label() );
+                        std::string activity = event->Attribute( "activity" );
+                        std::string file = event->FirstChildElement( "file" )->FirstChild()->ToText()->Value();
 
-                        for ( sxml::item::event_const_iterator s = ( *i ).event().begin (); s != ( *i ).event().end (); ++s )
-                        {
-                                soundData.addSound( ( *s ).id(), ( *s ).file() );
-                        }
-
-                        this->soundData.push_back( soundData );
+                        soundDataForLabel.addSound( activity, file );
                 }
 
-                std::cout << "read list of sounds from " << fileName << std::endl ;
+                this->soundData.push_back( soundDataForLabel );
         }
-        catch ( const xml_schema::exception& e )
-        {
-                std::cerr << e << std::endl ;
-        }
-        catch ( const std::exception& e )
-        {
-                std::cerr << e.what () << std::endl ;
-        }
+
+        std::cout << "read list of sounds from " << fileName << std::endl ;
 }
 
 void SoundManager::play( const std::string& label, const ActivityOfItem& activity, bool loop )
@@ -102,7 +109,7 @@ void SoundManager::play( const std::string& label, const ActivityOfItem& activit
 
         for ( std::list< SoundData >::iterator i = soundData.begin (); i != soundData.end (); ++i )
         {
-                for ( __gnu_cxx::hash_map< std::string, SampleData >::iterator j = ( *i ).table.begin (); j != ( *i ).table.end (); ++j )
+                for ( std::map< std::string, SampleData >::iterator j = ( *i ).table.begin (); j != ( *i ).table.end (); ++j )
                 {
                         if ( voice_get_position( j->second.voice ) == -1 )
                         {
@@ -127,7 +134,7 @@ void SoundManager::stopEverySound ()
 {
         for ( std::list< SoundData >::iterator i = soundData.begin (); i != soundData.end (); ++i )
         {
-                for ( __gnu_cxx::hash_map< std::string, SampleData >::iterator j = ( *i ).table.begin (); j != ( *i ).table.end (); ++j )
+                for ( std::map< std::string, SampleData >::iterator j = ( *i ).table.begin (); j != ( *i ).table.end (); ++j )
                 {
                         stop_sample( j->second.sample );
                         if ( voice_get_position( j->second.voice ) == -1 )
@@ -210,9 +217,15 @@ void SoundManager::setVolumeOfMusic( unsigned int volume )
 
 SampleData* SoundManager::findSample( const std::string& label, const ActivityOfItem& activity )
 {
-        std::list< SoundData >::iterator i = std::find_if( soundData.begin(), soundData.end(), std::bind2nd( EqualSoundData(), label ) );
+        for ( std::list< SoundData >::iterator i = soundData.begin () ; i != soundData.end () ; ++ i )
+        {
+                if ( ( *i ).getLabel() == label )
+                {
+                        return ( *i ).find( translateActivityOfItemToString( activity ) ) ;
+                }
+        }
 
-        return i != soundData.end () ? ( *i ).find( this->translateActivityOfItemToString( activity ) ) : nilPointer;
+        return nilPointer ;
 }
 
 std::string SoundManager::translateActivityOfItemToString ( const ActivityOfItem& activity )
@@ -373,12 +386,7 @@ void SoundData::addSound( const std::string& activity, const std::string& sample
 
 SampleData* SoundData::find( const std::string& event )
 {
-        __gnu_cxx::hash_map< std::string, SampleData >::iterator i = this->table.find( event );
+        std::map< std::string, SampleData >::iterator i = this->table.find( event );
 
         return i != this->table.end () ? ( &( i->second ) ) : nilPointer;
-}
-
-bool EqualSoundData::operator()( const SoundData& soundData, const std::string& label ) const
-{
-        return ( soundData.getLabel() == label );
 }

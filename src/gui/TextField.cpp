@@ -11,12 +11,11 @@ using gui::Alignment;
 using gui::Label;
 
 
-TextField::TextField( int x, int y, unsigned int width, unsigned int height, const Alignment& alignment )
-: Widget( x, y ),
-        width( width ),
-        height( height ),
-        alignment( alignment ),
-        heightOfField( 0 )
+TextField::TextField( unsigned int width, const Alignment& alignment )
+        : Widget( )
+        , width( width )
+        , alignment( alignment )
+        , heightOfField( 0 )
 {
 
 }

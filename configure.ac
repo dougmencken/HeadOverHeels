@@ -40,6 +40,9 @@ AC_CHECK_HEADERS(png.h,, [AC_MSG_ERROR(libpng headers not found)])
 AC_CHECK_HEADERS(vorbis/codec.h vorbis/vorbisenc.h vorbis/vorbisfile.h,, [AC_MSG_ERROR(vorbis headers not found)])
 AC_CHECK_HEADERS(ogg/ogg.h,, [AC_MSG_ERROR(ogg headers not found)])
 AC_CHECK_HEADERS(xercesc/util/XercesVersion.hpp,, [AC_MSG_ERROR(xerces-c headers not found)])
+AC_LANG_PUSH([C++]) # tinyxml2.h is C++ header
+AC_CHECK_HEADERS(tinyxml2.h,, [AC_MSG_ERROR(tinyxml2 header not found)])
+AC_LANG_POP([C++])
 AC_CHECK_HEADERS(pthread.h,, [AC_MSG_ERROR(pthread.h not found)])
 
 # look for typedefs, structures, and compiler characteristics

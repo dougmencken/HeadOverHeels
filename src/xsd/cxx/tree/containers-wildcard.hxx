@@ -314,11 +314,13 @@ namespace xsd
         //
         struct ptr
         {
+          /*
           ~ptr ()
           {
             if (x_)
               x_->release ();
           }
+          */
 
           explicit
           ptr (xercesc::DOMElement* x = 0)

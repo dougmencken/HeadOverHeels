@@ -39,7 +39,7 @@ namespace xsd
       {
         if (f & flags::keep_dom)
         {
-          std::auto_ptr<dom_info> r (
+          sharedsmartptr<dom_info> r (
             dom_info_factory::create (e, *this, c == 0));
           dom_info_ = r;
         }
@@ -51,7 +51,7 @@ namespace xsd
       {
         if (f & flags::keep_dom)
         {
-          std::auto_ptr<dom_info> r (dom_info_factory::create (a, *this));
+          sharedsmartptr<dom_info> r (dom_info_factory::create (a, *this));
           dom_info_ = r;
         }
       }

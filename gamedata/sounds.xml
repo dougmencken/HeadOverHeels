@@ -1,492 +1,493 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<sounds xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="sounds.xsd">
+<sounds>
 
+  <!-- interface -->
   <item label="gui">
-    <event id="mistake">
+    <event activity="mistake">
       <file>sound/o-ou.wav</file>
     </event>
   </item>
 
+  <!-- door -->
   <item label="door">
-    <event id="collision">
+    <event activity="collision">
       <file>sound/doorway.wav</file>
     </event>
   </item>
 
-  <!-- Brick number one -->
+  <!-- brick number one -->
   <item label="brick1">
-    <event id="vanish">
+    <event activity="vanish">
       <file>sound/destruction.wav</file>
     </event>
-    <event id="fall">
+    <event activity="fall">
       <file>sound/sink.wav</file>
     </event>
   </item>
 
-  <!-- Vulcano -->
+  <!-- vulcano -->
 
-  <!-- Spikes -->
+  <!-- spikes -->
 
-  <!-- Toaster -->
+  <!-- toaster -->
 
-  <!-- Conveyor belt -->
+  <!-- conveyor belt -->
   <item label="conveyor-belt">
-    <event id="active">
+    <event activity="active">
       <file>sound/conveyor-belt.wav</file>
     </event>
-    <event id="vanish">
+    <event activity="vanish">
       <file>sound/destruction.wav</file>
     </event>
   </item>
 
-  <!-- Book -->
+  <!-- book -->
   <item label="book">
-    <event id="fall">
+    <event activity="fall">
       <file>sound/fall.wav</file>
     </event>
-    <event id="push">
+    <event activity="push">
       <file>sound/push.wav</file>
     </event>
-    <event id="collision">
+    <event activity="collision">
       <file>sound/push.wav</file>
     </event>
-    <event id="vanish">
+    <event activity="vanish">
       <file>sound/destruction.wav</file>
     </event>
   </item>
 
-  <!-- Stool -->
+  <!-- stool -->
   <item label="stool">
-    <event id="fall">
+    <event activity="fall">
       <file>sound/fall.wav</file>
     </event>
-    <event id="push">
+    <event activity="push">
       <file>sound/push.wav</file>
     </event>
-    <event id="collision">
+    <event activity="collision">
       <file>sound/push.wav</file>
     </event>
   </item>
 
-  <!-- Puppy -->
+  <!-- puppy -->
   <item label="puppy">
-    <event id="vanish">
+    <event activity="vanish">
       <file>sound/silence-puppy.wav</file>
     </event>
   </item>
 
-  <!-- Sandwich -->
+  <!-- sandwich -->
   <item label="sandwich">
-    <event id="fall">
+    <event activity="fall">
       <file>sound/fall.wav</file>
     </event>
-    <event id="collision">
+    <event activity="collision">
       <file>sound/push.wav</file>
     </event>
   </item>
 
-  <!-- Switch -->
+  <!-- switch -->
   <item label="switch">
-    <event id="switch">
+    <event activity="switch">
       <file>sound/switch.wav</file>
     </event>
   </item>
 
-  <!-- Brick number two -->
+  <!-- brick number two -->
   <item label="brick2">
-    <event id="vanish">
+    <event activity="vanish">
       <file>sound/destruction.wav</file>
     </event>
-    <event id="fall">
+    <event activity="fall">
       <file>sound/sink.wav</file>
     </event>
   </item>
 
-  <!-- Bars north-south -->
+  <!-- bars north-south -->
   <item label="bars-ns">
-    <event id="vanish">
+    <event activity="vanish">
       <file>sound/destruction.wav</file>
     </event>
   </item>
 
-  <!-- Bars east-west -->
+  <!-- bars east-west -->
   <item label="bars-ew">
-    <event id="vanish">
+    <event activity="vanish">
       <file>sound/destruction.wav</file>
     </event>
   </item>
 
-  <!-- Drum -->
+  <!-- drum -->
   <item label="drum">
-    <event id="fall">
+    <event activity="fall">
       <file>sound/fall.wav</file>
     </event>
-    <event id="push">
+    <event activity="push">
       <file>sound/push.wav</file>
     </event>
   </item>
 
-  <!-- Portable brick -->
+  <!-- portable brick -->
   <item label="portable-brick">
-    <event id="fall">
+    <event activity="fall">
       <file>sound/fall.wav</file>
     </event>
-    <event id="push">
+    <event activity="push">
       <file>sound/push.wav</file>
     </event>
   </item>
 
-  <!-- Donuts -->
+  <!-- donuts -->
   <item label="donuts">
-    <event id="vanish">
+    <event activity="vanish">
       <file>sound/tools.wav</file>
     </event>
   </item>
 
-  <!-- Rabbit with extra lives -->
+  <!-- rabbit with extra lives -->
   <item label="extra-life">
-    <event id="vanish">
+    <event activity="vanish">
       <file>sound/bonus.wav</file>
     </event>
   </item>
 
-  <!-- Rabbit with high jumps -->
+  <!-- rabbit with high jumps -->
   <item label="high-jumps">
-    <event id="vanish">
+    <event activity="vanish">
       <file>sound/bonus.wav</file>
     </event>
   </item>
 
-  <!-- Rabbit with high speed -->
+  <!-- rabbit with high speed -->
   <item label="high-speed">
-    <event id="vanish">
+    <event activity="vanish">
       <file>sound/bonus.wav</file>
     </event>
   </item>
 
-  <!-- Rabbit with immunity -->
+  <!-- rabbit with immunity -->
   <item label="shield">
-    <event id="vanish">
+    <event activity="vanish">
       <file>sound/bonus.wav</file>
     </event>
   </item>
 
-  <!-- Crown -->
+  <!-- crown -->
 
-  <!-- Bomb -->
+  <!-- bomb -->
   <item label="bomb">
-    <event id="move">
+    <event activity="move">
       <file>sound/adjust.wav</file>
     </event>
   </item>
 
-  <!-- Another portable brick -->
+  <!-- another portable brick -->
   <item label="another-portable-brick">
-    <event id="fall">
+    <event activity="fall">
       <file>sound/fall.wav</file>
     </event>
-    <event id="push">
+    <event activity="push">
       <file>sound/push.wav</file>
     </event>
   </item>
 
-  <!-- Ball -->
+  <!-- ball -->
   <item label="ball">
-    <event id="fall">
+    <event activity="fall">
       <file>sound/fall.wav</file>
     </event>
-    <event id="push">
+    <event activity="push">
       <file>sound/push.wav</file>
     </event>
   </item>
 
-  <!-- Remote control -->
+  <!-- remote control -->
 
-  <!-- Brick cylinder -->
+  <!-- brick cylinder -->
 
-  <!-- Horn -->
+  <!-- horn -->
   <item label="horn">
-    <event id="vanish">
+    <event activity="vanish">
       <file>sound/tools.wav</file>
     </event>
   </item>
 
-  <!-- Imperial guard head -->
+  <!-- imperial guard head -->
 
-  <!-- Elephant head -->
+  <!-- elephant head -->
 
-  <!-- Monkey head -->
+  <!-- monkey head -->
 
-  <!-- Handbag -->
+  <!-- handbag -->
   <item label="handbag">
-    <event id="vanish">
+    <event activity="vanish">
       <file>sound/tools.wav</file>
     </event>
   </item>
 
-  <!-- Elevator -->
+  <!-- elevator -->
   <item label="elevator">
-    <event id="move">
+    <event activity="move">
       <file>sound/blades.wav</file>
     </event>
   </item>
 
-  <!-- Helicopter bug -->
+  <!-- helicopter bug -->
   <item label="helicopter-bug">
-    <event id="wait">
+    <event activity="wait">
       <file>sound/blades.wav</file>
     </event>
-    <event id="move">
+    <event activity="move">
       <file>sound/blades.wav</file>
     </event>
   </item>
 
-  <!-- Reincarnation Fish -->
+  <!-- reincarnation Fish -->
   <item label="reincarnation-fish">
-    <event id="vanish">
+    <event activity="vanish">
       <file>sound/bonus.wav</file>
     </event>
   </item>
 
-  <!-- Siren -->
+  <!-- siren -->
   <item label="siren">
-    <event id="fall">
+    <event activity="fall">
       <file>sound/fall.wav</file>
     </event>
-    <event id="push">
+    <event activity="push">
       <file>sound/push.wav</file>
     </event>
-    <event id="collision">
+    <event activity="collision">
       <file>sound/siren.wav</file>
     </event>
   </item>
 
-  <!-- Teleport -->
+  <!-- teleport -->
   <item label="teleport">
-    <event id="active">
+    <event activity="active">
       <file>sound/teleport.wav</file>
     </event>
   </item>
 
-  <!-- Teleport too -->
+  <!-- teleport too -->
   <item label="teleport-too">
-    <event id="active">
+    <event activity="active">
       <file>sound/teleport.wav</file>
     </event>
   </item>
 
-  <!-- Turtle -->
+  <!-- turtle -->
   <item label="turtle">
-    <event id="fall">
+    <event activity="fall">
       <file>sound/fall.wav</file>
     </event>
-    <event id="push">
+    <event activity="push">
       <file>sound/push.wav</file>
     </event>
-    <event id="collision">
+    <event activity="collision">
       <file>sound/gamusino.wav</file>
     </event>
   </item>
 
-  <!-- Trampoline -->
+  <!-- trampoline -->
   <item label="trampoline">
-    <event id="fall">
+    <event activity="fall">
       <file>sound/fall.wav</file>
     </event>
-    <event id="push">
+    <event activity="push">
       <file>sound/push.wav</file>
     </event>
-    <event id="active">
+    <event activity="active">
       <file>sound/spring.wav</file>
     </event>
   </item>
 
-  <!-- Bubbles -->
+  <!-- bubbles -->
 
-  <!-- Double Bubbles -->
+  <!-- double bubbles -->
 
-  <!-- Big head robot -->
+  <!-- big head robot -->
   <item label="bighead-robot">
-    <event id="fall">
+    <event activity="fall">
       <file>sound/fall.wav</file>
     </event>
-    <event id="push">
+    <event activity="push">
       <file>sound/push.wav</file>
     </event>
-    <event id="collision">
+    <event activity="collision">
       <file>sound/bighead-robot.wav</file>
     </event>
   </item>
 
-  <!-- Elephant -->
+  <!-- elephant -->
   <item label="elephant">
-    <event id="fall">
+    <event activity="fall">
       <file>sound/fall.wav</file>
     </event>
-    <event id="push">
+    <event activity="push">
       <file>sound/push.wav</file>
     </event>
-    <event id="collision">
+    <event activity="collision">
       <file>sound/elephant.wav</file>
     </event>
   </item>
 
-  <!-- Monkey -->
+  <!-- monkey -->
   <item label="monkey">
-    <event id="fall">
+    <event activity="fall">
       <file>sound/fall.wav</file>
     </event>
-    <event id="push">
+    <event activity="push">
       <file>sound/push.wav</file>
     </event>
-    <event id="collision">
+    <event activity="collision">
       <file>sound/monkey.wav</file>
     </event>
   </item>
 
-  <!-- Diver -->
+  <!-- diver -->
   <item label="diver">
-    <event id="fall">
+    <event activity="fall">
       <file>sound/fall.wav</file>
     </event>
-    <event id="push">
+    <event activity="push">
       <file>sound/push.wav</file>
     </event>
-    <event id="collision">
+    <event activity="collision">
       <file>sound/robot-collision.wav</file>
     </event>
   </item>
 
-  <!-- Bubble robot -->
+  <!-- bubble robot -->
   <item label="bubble-robot">
-    <event id="fall">
+    <event activity="fall">
       <file>sound/fall.wav</file>
     </event>
-    <event id="push">
+    <event activity="push">
       <file>sound/push.wav</file>
     </event>
-    <event id="collision">
+    <event activity="collision">
       <file>sound/bubbles-bug.wav</file>
     </event>
   </item>
 
-  <!-- Imperial guard -->
+  <!-- imperial guard -->
   <item label="imperial-guard">
-    <event id="wait">
+    <event activity="wait">
       <file>sound/imperial-guard.wav</file>
     </event>
   </item>
 
-  <!-- Charles -->
+  <!-- charles -->
   <item label="charles-robot">
-    <event id="fall">
+    <event activity="fall">
       <file>sound/fall.wav</file>
     </event>
-    <event id="push">
+    <event activity="push">
       <file>sound/push.wav</file>
     </event>
-    <event id="move">
+    <event activity="move">
       <file>sound/robot.wav</file>
     </event>
   </item>
 
-  <!-- Head -->
+  <!-- head -->
   <item label="head">
-    <event id="move">
+    <event activity="move">
       <file>sound/head-walking.wav</file>
     </event>
-    <event id="jump">
+    <event activity="jump">
       <file>sound/head-jumping.wav</file>
     </event>
-    <event id="fall">
+    <event activity="fall">
       <file>sound/head-falling.wav</file>
     </event>
-    <event id="vanish">
+    <event activity="vanish">
       <file>sound/hh-dying.wav</file>
     </event>
-    <event id="shot">
+    <event activity="shot">
       <file>sound/shot.wav</file>
     </event>
-    <event id="rebound">
+    <event activity="rebound">
       <file>sound/trampoline.wav</file>
     </event>
-    <event id="teleport-in">
+    <event activity="teleport-in">
       <file>sound/teleport-in.wav</file>
     </event>
-    <event id="teleport-out">
+    <event activity="teleport-out">
       <file>sound/teleport-out.wav</file>
     </event>
   </item>
 
-  <!-- Heels -->
+  <!-- heels -->
   <item label="heels">
-    <event id="move">
+    <event activity="move">
       <file>sound/heels-walking.wav</file>
     </event>
-    <event id="jump">
+    <event activity="jump">
       <file>sound/heels-jumping.wav</file>
     </event>
-    <event id="fall">
+    <event activity="fall">
       <file>sound/heels-falling.wav</file>
     </event>
-    <event id="vanish">
+    <event activity="vanish">
       <file>sound/hh-dying.wav</file>
     </event>
-    <event id="rebound">
+    <event activity="rebound">
       <file>sound/trampoline.wav</file>
     </event>
-    <event id="teleport-in">
+    <event activity="teleport-in">
       <file>sound/teleport-in.wav</file>
     </event>
-    <event id="teleport-out">
+    <event activity="teleport-out">
       <file>sound/teleport-out.wav</file>
     </event>
-    <event id="take">
+    <event activity="take">
       <file>sound/take.wav</file>
     </event>
-    <event id="drop">
+    <event activity="drop">
       <file>sound/drop.wav</file>
     </event>
-    <event id="mistake">
+    <event activity="mistake">
       <file>sound/o-ou.wav</file>
     </event>
   </item>
 
-  <!-- Head over Heels -->
+  <!-- head over heels -->
   <item label="headoverheels">
-    <event id="move">
+    <event activity="move">
       <file>sound/heels-walking.wav</file>
     </event>
-    <event id="jump">
+    <event activity="jump">
       <file>sound/head-jumping.wav</file>
     </event>
-    <event id="fall">
+    <event activity="fall">
       <file>sound/head-falling.wav</file>
     </event>
-    <event id="vanish">
+    <event activity="vanish">
       <file>sound/hh-dying.wav</file>
     </event>
-    <event id="shot">
+    <event activity="shot">
       <file>sound/shot.wav</file>
     </event>
-    <event id="rebound">
+    <event activity="rebound">
       <file>sound/trampoline.wav</file>
     </event>
-    <event id="teleport-in">
+    <event activity="teleport-in">
       <file>sound/teleport-in.wav</file>
     </event>
-    <event id="teleport-out">
+    <event activity="teleport-out">
       <file>sound/teleport-out.wav</file>
     </event>
-    <event id="take">
+    <event activity="take">
       <file>sound/take.wav</file>
     </event>
-    <event id="drop">
+    <event activity="drop">
       <file>sound/drop.wav</file>
     </event>
-    <event id="mistake">
+    <event activity="mistake">
       <file>sound/o-ou.wav</file>
     </event>
   </item>

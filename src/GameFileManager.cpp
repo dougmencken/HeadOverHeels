@@ -44,7 +44,7 @@ void GameFileManager::loadGame( const std::string& fileName )
 {
         try
         {
-                std::auto_ptr< sgxml::SaveGameXML > saveGameXML( sgxml::savegame( fileName.c_str () ) );
+                sharedsmartptr< sgxml::SaveGameXML > saveGameXML( sgxml::savegame( fileName.c_str () ) );
 
                 // visited rooms
                 this->isomot->getMapManager()->readVisitedSequence( saveGameXML->exploredRooms().visited() );
