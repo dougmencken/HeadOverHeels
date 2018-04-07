@@ -181,9 +181,6 @@ private:
          */
         double shield ;
 
-        /**
-         * Tools of player
-         */
         std::vector< std::string > tools ;
 
         unsigned short howManyDoughnuts ;
@@ -240,11 +237,6 @@ protected:
          * @param shield Un número de segundos
          */
         void setShieldTime ( double shield ) ;
-
-        /**
-         * Asigna los objetos de utilidad que tiene el jugador
-         */
-        void setTools ( const std::vector< std::string >& tools ) {  this->tools = tools ;  }
 
         void setDoughnuts ( const unsigned short howMany ) {  this->howManyDoughnuts = howMany ;  }
 

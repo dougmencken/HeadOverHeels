@@ -16,10 +16,9 @@
 #include <iostream>
 #include <allegro.h>
 #include "MapRoomData.hpp"
-#include "csxml/SaveGameXML.hpp"
 
-# include "Room.hpp"
-# include "ItemDataManager.hpp"
+#include "Room.hpp"
+#include "ItemDataManager.hpp"
 
 
 namespace isomot
@@ -45,7 +44,8 @@ public:
 
         virtual void beginNewGame ( const std::string& firstRoomFileName, const std::string& secondRoomFileName ) ;
 
-        void beginOldGameWithCharacter ( const sgxml::player& data ) ;
+        void beginOldGameWithCharacter ( const std::string& roomFile, const std::string& character,
+                                         int x, int y, int z, const Way& direction, const std::string& entry, bool active ) ;
 
         void binEveryRoom () ;
 
@@ -79,9 +79,9 @@ public:
 
         void removeRoom ( Room* whichRoom ) ;
 
-        void readVisitedSequence ( sgxml::exploredRooms::visited_sequence& visitedSequence ) ;
+        void parseVisitedRooms ( const std::vector< std::string >& visitedRooms ) ;
 
-        void storeVisitedSequence ( sgxml::exploredRooms::visited_sequence& visitedSequence ) ;
+        void fillVisitedRooms ( std::vector< std::string >& visitedSequence ) ;
 
         unsigned int countVisitedRooms () ;
 

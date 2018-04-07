@@ -57,7 +57,7 @@ void Isomot::beginNewGame ()
         ////SoundManager::getInstance()->playOgg ( "music/begin.ogg", /* loop */ false );
 }
 
-void Isomot::continueSavedGame ( const sgxml::players::player_sequence& playerSequence )
+void Isomot::continueSavedGame ( tinyxml2::XMLElement* characters )
 {
         offRecording() ;
         offVidasInfinitas() ;
@@ -66,9 +66,111 @@ void Isomot::continueSavedGame ( const sgxml::players::player_sequence& playerSe
         finalRoomBuilt = false;
         if ( finalRoomTimer != nilPointer ) finalRoomTimer->stop();
 
-        for ( sgxml::players::player_const_iterator i = playerSequence.begin (); i != playerSequence.end (); ++i )
+        if ( characters != nilPointer )
         {
-                this->mapManager->beginOldGameWithCharacter( *i );
+                for ( tinyxml2::XMLElement* player = characters->FirstChildElement( "player" ) ;
+                                player != nilPointer ;
+                                player = player->NextSiblingElement( "player" ) )
+                {
+                        std::string label = player->Attribute( "label" );
+
+                        bool isActiveCharacter = false;
+                        tinyxml2::XMLElement* active = player->FirstChildElement( "active" );
+                        if ( active != nilPointer && std::string( active->FirstChild()->ToText()->Value() ) == "true" )
+                                isActiveCharacter = true;
+
+                        std::string room = "no room";
+                        tinyxml2::XMLElement* roomFile = player->FirstChildElement( "room" );
+                        if ( roomFile != nilPointer )
+                                room = roomFile->FirstChild()->ToText()->Value();
+
+                        tinyxml2::XMLElement* xElement = player->FirstChildElement( "x" );
+                        tinyxml2::XMLElement* yElement = player->FirstChildElement( "y" );
+                        tinyxml2::XMLElement* zElement = player->FirstChildElement( "z" );
+                        int x = 0;
+                        int y = 0;
+                        int z = 0;
+                        if ( xElement != nilPointer )
+                                x = std::atoi( xElement->FirstChild()->ToText()->Value() );
+                        if ( yElement != nilPointer )
+                                y = std::atoi( yElement->FirstChild()->ToText()->Value() );
+                        if ( zElement != nilPointer )
+                                z = std::atoi( zElement->FirstChild()->ToText()->Value() );
+
+			unsigned int howManyLives = 0;
+                        tinyxml2::XMLElement* lives = player->FirstChildElement( "lives" );
+                        if ( lives != nilPointer )
+                                howManyLives = std::atoi( lives->FirstChild()->ToText()->Value() );
+
+                        std::string directionString = "nowhere";
+                        tinyxml2::XMLElement* direction = player->FirstChildElement( "direction" );
+                        if ( direction != nilPointer )
+                                directionString = direction->FirstChild()->ToText()->Value() ;
+
+                        std::string entryString = "just wait";
+                        tinyxml2::XMLElement* entry = player->FirstChildElement( "entry" );
+                        if ( entry != nilPointer )
+                                entryString = entry->FirstChild()->ToText()->Value() ;
+
+                        bool hasHorn = false;
+                        tinyxml2::XMLElement* horn = player->FirstChildElement( "hasHorn" );
+                        if ( horn != nilPointer && std::string( horn->FirstChild()->ToText()->Value() ) == "yes" )
+                                hasHorn = true;
+
+                        bool hasHandbag = false;
+                        tinyxml2::XMLElement* handbag = player->FirstChildElement( "hasHandbag" );
+                        if ( handbag != nilPointer && std::string( handbag->FirstChild()->ToText()->Value() ) == "yes" )
+                                hasHandbag = true;
+
+                        unsigned int howManyDoughnuts = 0;
+                        tinyxml2::XMLElement* donuts = player->FirstChildElement( "donuts" );
+                        if ( donuts != nilPointer )
+                                howManyDoughnuts = std::atoi( donuts->FirstChild()->ToText()->Value() );
+
+                        if ( label == "headoverheels" )
+                        {
+                                // formula for lives of composite character from lives of simple characters is
+                                // lives H & H = 100 * lives Head + lives Heels
+
+                                unsigned char headLives = 0;
+                                unsigned char heelsLives = 0;
+
+                                while ( howManyLives > 100 )
+                                {
+                                        howManyLives -= 100;
+                                        headLives++;
+                                }
+
+                                heelsLives = static_cast< unsigned char >( howManyLives );
+
+                                GameManager::getInstance()->setHeadLives( headLives );
+                                GameManager::getInstance()->setHorn( hasHorn );
+                                GameManager::getInstance()->setDonuts( howManyDoughnuts );
+                                GameManager::getInstance()->setHeelsLives( heelsLives );
+                                GameManager::getInstance()->setHandbag( hasHandbag );
+                                GameManager::getInstance()->setHighSpeed( 0 );
+                                GameManager::getInstance()->setHighJumps( 0 );
+                                GameManager::getInstance()->setHeadShield( 0 );
+                                GameManager::getInstance()->setHeelsShield( 0 );
+                        }
+                        else if ( label == "head" )
+                        {
+                                GameManager::getInstance()->setHeadLives( howManyLives );
+                                GameManager::getInstance()->setHorn( hasHorn );
+                                GameManager::getInstance()->setDonuts( howManyDoughnuts );
+                                GameManager::getInstance()->setHighSpeed( 0 );
+                                GameManager::getInstance()->setHeadShield( 0 );
+                        }
+                        else if ( label == "heels" )
+                        {
+                                GameManager::getInstance()->setHeelsLives( howManyLives );
+                                GameManager::getInstance()->setHandbag( hasHandbag );
+                                GameManager::getInstance()->setHighJumps( 0 );
+                                GameManager::getInstance()->setHeelsShield( 0 );
+                        }
+
+                        mapManager->beginOldGameWithCharacter( room, label, x, y, z, Way( directionString ), entryString, isActiveCharacter );
+                }
         }
 
         std::cout << "continue previous game" << std::endl ;

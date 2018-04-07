@@ -8,8 +8,8 @@
         <compilerflag value="-Ibehaviors" />
         <compilerflag value="-Iactivities" />
         <compilerflag value="-I/opt/libpng-1.6.34/include" />
+        <compilerflag value="-I/opt/ogg-vorbis/include" />
         <compilerflag value="-I/opt/tinyxml2-6.0.0/include" />
-        <compilerflag value="-I/opt/xerces-c-3.2.1/include" />
         <compilerflag value="-I/opt/allegro-4.4.2/include" />
         <compilerflag value="-Wall" />
         <file name="loadpng/loadpng.c" />
@@ -31,7 +31,7 @@
         <file name="PlayerItem.cpp" />
         <file name="Mediator.cpp" />
         <file name="ShadowCaster.cpp" />
-        <file name="GameFileManager.cpp" />
+        <file name="GameSaverAndLoader.cpp" />
         <file name="GameManager.cpp" />
         <file name="TimerPOSIX.cpp" />
         <file name="TimerWindows.cpp" />
@@ -108,22 +108,19 @@
         <file name="behaviors/UserControlled.cpp" />
         <file name="behaviors/Volatile.cpp" />
         <file name="behaviors/Behavior.cpp" />
-        <file name="csxml/SaveGameXML.cpp" />
     </files>
     <target id="default" tool="linker" toolid="exe" output="headoverheels">
         <files id="sources" />
         <flag value="-L/opt/tinyxml2-6.0.0/lib" />
-        <flag value="-L/opt/xerces-c-3.2.1/lib" />
         <flag value="-L/opt/ogg-vorbis/lib" />
         <flag value="-L/opt/libpng-1.6.34/lib" />
-        <flag value="-L/opt/zlib-1.2.8/lib" />
         <flag value="-L/opt/allegro-4.4.2/lib" />
+        <flag value="-L/opt/zlib-1.2.8/lib" />
         <flag value="-lvorbisfile" />
         <flag value="-lvorbisenc" />
         <flag value="-lvorbis" />
         <flag value="-logg" />
         <flag value="-ltinyxml2" />
-        <flag value="-lxerces-c" />
         <flag value="-lpthread" />
         <flag value="-lz" />
         <flag value="-lpng" />

@@ -13,6 +13,8 @@
 
 #include <tinyxml2.h>
 
+#include <algorithm>
+
 
 namespace isomot
 {
@@ -187,9 +189,10 @@ void MapManager::beginNewGame( const std::string& firstRoomFileName, const std::
         }
 }
 
-void MapManager::beginOldGameWithCharacter( const sgxml::player& data )
+void MapManager::beginOldGameWithCharacter( const std::string& roomFile, const std::string& character,
+                                            int x, int y, int z, const Way& direction, const std::string& entry, bool active )
 {
-        MapRoomData* roomData = findRoomData( data.roomFilename() );
+        MapRoomData* roomData = findRoomData( roomFile );
         Room* room = nilPointer;
 
         if ( roomData != nilPointer )
@@ -201,47 +204,43 @@ void MapManager::beginOldGameWithCharacter( const sgxml::player& data )
                 }
                 else
                 {
-                        room = RoomBuilder::buildRoom ( isomot::sharePath() + "map" + pathSeparator + data.roomFilename() );
+                        room = RoomBuilder::buildRoom ( isomot::sharePath() + "map" + pathSeparator + roomFile );
                 }
 
                 // place character in room
                 if ( room != nilPointer )
                 {
-                        std::string nameOfCharacter = data.label();
-
                         // create player
                         PlayerItem* player = RoomBuilder::createPlayerInRoom(
-                                                        room,
-                                                        nameOfCharacter,
-                                                        true,
-                                                        data.x (), data.y (), data.z (),
-                                                        Way( data.direction() ), Way( data.entry() ) );
+                                                        room, character, true,
+                                                        x, y, z, direction, Way( entry ) );
 
                         roomData->setVisited( true );
 
-                        Way entry( data.entry() );
-                        if ( entry.toString() == "just wait" )
+                        std::string realEntry = entry ;
+
+                        if ( realEntry == "just wait" )
                         {
                                 // it’s the case of resume of saved game
                                 // show bubbles only for active player
-                                if ( data.active() )
+                                if ( active )
                                 {
-                                        entry = ByTeleportToo;
+                                        realEntry = "via second teleport";
                                 }
                         }
 
                         // change activity of player by way of entry
-                        player->autoMoveOnEntry( Way( entry ).toString() );
+                        player->autoMoveOnEntry( realEntry );
 
                         // for active player or for other player when it is created in another room
                         // when other player is in the same room as active player then there’s no need to do anything more
-                        if ( data.active() || this->activeRoom != room )
+                        if ( active || this->activeRoom != room )
                         {
-                                room->activateCharacterByLabel( nameOfCharacter );
-                                room->getCamera()->turnOn( room->getMediator()->getActiveCharacter(), Way( data.entry() ) );
+                                room->activateCharacterByLabel( character );
+                                room->getCamera()->turnOn( room->getMediator()->getActiveCharacter(), realEntry );
                                 //// room->getCamera()->centerOn( room->getMediator()->getActiveCharacter () );
 
-                                if ( data.active() )
+                                if ( active )
                                 {
                                         // for active player this room is active one
                                         this->activeRoom = room;
@@ -588,15 +587,15 @@ void MapManager::removeRoom( Room* whichRoom )
         }
 }
 
-void MapManager::readVisitedSequence( sgxml::exploredRooms::visited_sequence& visitedSequence )
+void MapManager::parseVisitedRooms( const std::vector< std::string >& visitedRooms )
 {
         resetVisitedRooms();
 
-        for ( sgxml::exploredRooms::visited_const_iterator i = visitedSequence.begin () ; i != visitedSequence.end () ; ++i )
+        for ( std::vector< std::string >::const_iterator i = visitedRooms.begin () ; i != visitedRooms.end () ; ++ i )
         {
                 for ( std::list< MapRoomData * >::iterator m = theMap.begin() ; m != theMap.end() ; ++ m )
                 {
-                        if ( ( *m )->getNameOfRoomFile() == ( *i ).filename() )
+                        if ( ( *m )->getNameOfRoomFile() == *i )
                         {
                                 ( *m )->setVisited( true );
                                 break;
@@ -605,13 +604,13 @@ void MapManager::readVisitedSequence( sgxml::exploredRooms::visited_sequence& vi
         }
 }
 
-void MapManager::storeVisitedSequence( sgxml::exploredRooms::visited_sequence& visitedSequence )
+void MapManager::fillVisitedRooms( std::vector< std::string >& visitedRooms )
 {
-        for ( std::list< MapRoomData * >::iterator i = theMap.begin () ; i != theMap.end () ; ++ i )
+        for ( std::list< MapRoomData * >::iterator m = theMap.begin () ; m != theMap.end () ; ++ m )
         {
-                if ( ( *i )->isVisited() )
+                if ( ( *m )->isVisited() )
                 {
-                        visitedSequence.push_back( sgxml::visited( ( *i )->getNameOfRoomFile() ) );
+                        visitedRooms.push_back( ( *m )->getNameOfRoomFile() );
                 }
         }
 }

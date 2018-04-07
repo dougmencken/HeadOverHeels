@@ -16,9 +16,12 @@
   #include <winalleg.h>
 #endif
 
-#include "Timer.hpp"
+#include <list>
+#include <string>
 
-#include "csxml/SaveGameXML.hpp"
+#include <tinyxml2.h>
+
+#include "Timer.hpp"
 
 
 class Color ;
@@ -47,7 +50,7 @@ public:
 
         void beginNewGame () ;
 
-        void continueSavedGame ( const sgxml::players::player_sequence& playerSequence ) ;
+        void continueSavedGame ( tinyxml2::XMLElement * characters ) ;
 
         /**
          * Detiene el motor isométrico

@@ -13,7 +13,6 @@
 
 #include <string>
 
-#include "csxml/SaveGameXML.hpp"
 #include "Ism.hpp"
 #include "Room.hpp"
 #include "ColorCyclingLabel.hpp"
@@ -24,7 +23,7 @@ namespace isomot
 {
 
 class Isomot ;
-class GameFileManager ;
+class GameSaverAndLoader ;
 class PlayerItem ;
 
 /**
@@ -59,16 +58,7 @@ protected:
 
 public:
 
-        /**
-         * Único objeto de esta clase para toda la aplicación
-         * @return Un puntero al objeto único
-         */
         static GameManager * getInstance () ;
-
-        inline static std::string numberToString ( int number )
-        {
-                return static_cast< std::ostringstream * >( &( std::ostringstream() << std::dec << number ) )->str () ;
-        }
 
         virtual ~GameManager( ) ;
 
@@ -322,9 +312,9 @@ private:
         Isomot * isomot ;
 
         /**
-         * To manage saving and restoring of games
+         * To save and restore games
          */
-        GameFileManager * gameFileManager ;
+        GameSaverAndLoader * saverAndLoader ;
 
         /**
          * Vidas de Head
@@ -476,50 +466,27 @@ public:
 
         /**
          * Establece el tiempo restante de inmunidad para Head
-         * @param Un número de milisegundos
          */
         void setHeadShield ( unsigned int shield ) {  this->headShield = shield ;  }
 
         /**
          * Establece el tiempo restante de inmunidad para Heels
-         * @param Un número de milisegundos
          */
         void setHeelsShield ( unsigned int shield ) {  this->heelsShield = shield ;  }
 
         /**
          * Devuelve el tiempo restante de inmunidad de un jugador
-         * @param player El jugador
-         * @return Un número de milisegundos
          */
         double getShield ( const std::string& player ) const ;
 
-        /**
-         * Establece la posesión de la bocina por Head
-         * @param hasHorn true si tiene la bocina o false en caso contrario
-         */
         void setHorn ( bool hasHorn ) {  this->horn = hasHorn ;  }
 
-        /**
-         * @return vector with tools owned by the player
-         */
-        std::vector < std::string > getToolsOwnedByPlayer ( const std::string& player ) const ;
-
-        /**
-         * Establece la posesión del bolso por Heels
-         * @param hasHorn true si tiene el bolso o false en caso contrario
-         */
         void setHandbag ( bool hasHandbag ) {  this->handbag = hasHandbag ;  }
 
-        /**
-         * Establece el número de rosquillas que tiene Head
-         * @param Un número mayor o igual que 0
-         */
+        void toolsOwnedByCharacter ( const std::string& player, std::vector< std::string >& tools ) const ;
+
         void setDonuts ( unsigned short number ) {  this->donuts = number ;  }
 
-        /**
-         * Devuelve el número de rosquillas que tiene Head
-         * @return Un número mayor o igual que 0
-         */
         unsigned short getDonuts ( const std::string& player ) const ;
 
         /**
@@ -527,9 +494,6 @@ public:
          */
         void setItemTaken ( BITMAP* bitmap ) {  this->itemTaken = bitmap ;  }
 
-        /**
-         * Número de salas visitadas por los jugadores
-         */
         unsigned int getVisitedRooms () const ;
 
         ItemDataManager * getItemDataManager () const {  return itemDataManager ;  }

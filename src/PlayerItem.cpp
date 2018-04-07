@@ -9,6 +9,8 @@
 #include "SoundManager.hpp"
 #include "UserControlled.hpp"
 
+#include <algorithm> // std::find
+
 
 namespace isomot
 {
@@ -582,10 +584,11 @@ bool PlayerItem::isActiveCharacter ()
 void PlayerItem::fillWithData( const GameManager * data )
 {
         setLives( data->getLives( getLabel() ) );
+
         setHighJumps( data->getHighJumps() );
         setHighSpeed( data->getHighSpeed() );
         setShieldTime( data->getShield( getLabel() ) );
-        setTools( data->getToolsOwnedByPlayer( getLabel() ) );
+        data->toolsOwnedByCharacter( getLabel(), this->tools );
         setDoughnuts( data->getDonuts( getLabel() ) );
 }
 
@@ -605,6 +608,7 @@ void PlayerItem::loseLife()
                 this->lives--;
                 GameManager::getInstance()->loseLife( getOriginalLabel () /* current label is "bubbles" */ );
         }
+
         GameManager::getInstance()->emptyHandbag( getOriginalLabel () );
 }
 

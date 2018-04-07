@@ -22,10 +22,7 @@ void SaveGame::doAction ()
         if ( slot > 0 )
         {
                 isomot::GameManager* gameManager = isomot::GameManager::getInstance();
-
-                std::stringstream ss;
-                ss << slot;
-                gameManager->saveGame( isomot::homePath() + "savegame" + pathSeparator + "saved" + ss.str() + ".xml" );
+                gameManager->saveGame( isomot::homePath() + "savegame" + pathSeparator + "saved." + isomot::numberToString( slot ) );
         }
 
         ContinueGame * game = new ContinueGame( getWhereToDraw(), true );

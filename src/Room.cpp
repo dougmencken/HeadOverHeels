@@ -11,7 +11,7 @@
 #include "GameManager.hpp"
 #include "Behavior.hpp"
 
-#include <sstream> // for ostringstream
+#include <algorithm>
 
 
 namespace isomot

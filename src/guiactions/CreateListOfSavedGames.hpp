@@ -12,7 +12,6 @@
 #define CreateListOfSavedGames_hpp_
 
 #include "Action.hpp"
-#include "csxml/SaveGameXML.hpp"
 
 
 namespace gui
@@ -29,7 +28,7 @@ public:
 
         /**
          * Constructor
-         * @param picture Image where to draw
+         * @param picture where to draw
          * @param isLoadMenu true for "load game", false for "save game"
          */
         CreateListOfSavedGames( BITMAP* picture, bool isLoadMenu ) ;
@@ -49,11 +48,8 @@ private:
 
         /**
          * Read some information from a file of saved game to display it
-         * @param fileName Nombre del archivo XML que contiene los datos de la partida
-         * @param rooms Devuelve el número de salas visitadas
-         * @param planets Devuelve el número de planetas liberados
          */
-        void readSomeInfoFromGamefile( const std::string& fileName, short* rooms, short* planets ) ;
+        bool readSomeInfoFromGamefile( const std::string& fileName, unsigned short * visitedRooms, unsigned short * freePlanets ) ;
 
         bool isMenuForLoad ;
 

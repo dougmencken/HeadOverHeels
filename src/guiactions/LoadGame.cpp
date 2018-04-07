@@ -19,10 +19,7 @@ void LoadGame::doAction ()
 {
         isomot::GameManager* gameManager = isomot::GameManager::getInstance();
         gameManager->resetPlanets();
-
-        std::stringstream ss;
-        ss << slot;
-        gameManager->loadGame( isomot::homePath() + "savegame" + pathSeparator + "saved" + ss.str() + ".xml" );
+        gameManager->loadGame( isomot::homePath() + "savegame" + pathSeparator + "saved." + isomot::numberToString( slot ) );
 
         CreatePlanetsScreen * planetsAction = new CreatePlanetsScreen( getWhereToDraw(), true );
 

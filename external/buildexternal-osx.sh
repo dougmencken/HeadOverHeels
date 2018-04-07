@@ -150,41 +150,6 @@ echo "already built"
 fi
 
 echo
-echo "    xerces-c ~~"
-echo "    ~~ to disappear soon"
-echo
-echo "    a validating XML parser written in a portable subset of C++"
-echo
-
-xercesc_version="3.2.1"
-
-cd "${pathToExternal}"/xerces-c
-if [ ! -d xerces-c-"$xercesc_version" ]; then
-    tar xjf xerces-c-"$xercesc_version".tar.bz2
-    cd xerces-c-"$xercesc_version"
-    patch -p1 < ../gcc_diagnostic.patch
-    patch -p1 < ../explicitly-export-ArrayJanitor-templates.patch
-    cd ..
-fi
-cd xerces-c-"$xercesc_version"
-
-if [ ! -f ./okay ]; then
-
-if [ ! -f ./Makefile ]; then
-    ./configure --prefix=/opt/xerces-c-"$xercesc_version"
-fi
-make
-make install
-
-echo "okay" > ./okay
-
-else
-
-echo "already built"
-
-fi
-
-echo
 echo "    tinyxml2"
 echo "    a simple, small, C++ XML parser that can be easily integrated into other programs"
 echo

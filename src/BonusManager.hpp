@@ -11,9 +11,8 @@
 #ifndef BonusManager_hpp_
 #define BonusManager_hpp_
 
-#include "csxml/SaveGameXML.hpp"
-
 #include <list>
+#include <map>
 #include <string>
 
 
@@ -42,55 +41,37 @@ public:
 
         virtual ~BonusManager( ) ;
 
-       /**
-        * Operación de acceso al único objeto de la clase
-        * @return Un objeto de esta clase
-        */
         static BonusManager * getInstance () ;
 
        /**
-        * Marca en el mapa del juego como ausente el bonus especificado
-        * @param fileName Nombre del archivo de la sala donde estaba el bonus
-        * @param label Etiqueta del bonus
+        * Mark the given bonus as absent on game’s map
+        * @param roomFile room where this bonus was
+        * @param label label of bonus
         */
-        void markBonusAsAbsent ( const std::string& fileName, const std::string& label ) ;
+        void markBonusAsAbsent ( const std::string& roomFile, const std::string& label ) ;
 
        /**
-        * Indica si un bonus determinado sigue estando en esta sala
-        * @param fileName Nombre del archivo de la sala donde está el bonus
-        * @param label Etiqueta del bonus
+        * Is a certain bonus still in this room
+        * @param roomFile room with bonus
+        * @param label label of bonus
         */
-        bool isPresent ( const std::string& fileName, const std::string& label ) ;
+        bool isPresent ( const std::string& roomFile, const std::string& label ) ;
+
+        void parseAbsentBonuses ( const std::multimap < std::string /* room */, std::string /* bonus */ > & bonusesInRooms ) ;
+
+        void fillAbsentBonuses ( std::multimap < std::string /* room */, std::string /* bonus */ > & bonusesInRooms ) ;
 
        /**
-        * Carga a partir de los datos proporcionados, que han sido extraidos del archivo que
-        * guarda la partida en curso, los bonus ausentes en la partida
-        * @param roomSequence Estructura de datos empleada por el archivo XML para guardar
-        * los datos de los bonus ausentes
-        */
-        void load ( const sgxml::bonus::room_sequence& roomSequence ) ;
-
-       /**
-        * Almacena los bonus ausentes en el archivo que guarda la partida en curso
-        * @param roomSequence Estructura de datos empleada por el archivo XML para guardar
-        * los datos de los bonus ausentes
-        */
-        void save ( sgxml::bonus::room_sequence& roomSequence ) ;
-
-       /**
-        * Elimina los bonus marcados como ausentes en todas las salas
+        * Every bonus in every room is not absent after that
         */
         void reset () ;
 
 private:
 
-       /**
-        * El único objeto de esta clase
-        */
         static BonusManager * instance ;
 
        /**
-        * Lista de las salas con bonus ausentes
+        * List of rooms with taken bonuses
         */
         std::list < BonusRoom > bonusRooms ;
 

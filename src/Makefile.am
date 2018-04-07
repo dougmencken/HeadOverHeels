@@ -10,7 +10,7 @@ endif
 
 headoverheels_CXXFLAGS = -I. -Iloadpng -Ialgif -Igui -Iguiactions -Ibehaviors -Iactivities -Wall $(AM_CXXFLAGS)
 
-AM_LDFLAGS = `allegro-config --libs release` -lvorbisfile -lvorbisenc -lvorbis -logg -ltinyxml2 -lxerces-c -lpthread -lz -lpng
+AM_LDFLAGS = `allegro-config --libs release` -lvorbisfile -lvorbisenc -lvorbis -logg -ltinyxml2 -lpthread -lz -lpng
 
 bin_PROGRAMS = headoverheels
 
@@ -49,8 +49,8 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			Mediator.hpp \
 			ShadowCaster.cpp \
 			ShadowCaster.hpp \
-			GameFileManager.cpp \
-			GameFileManager.hpp \
+			GameSaverAndLoader.cpp \
+			GameSaverAndLoader.hpp \
 			GameManager.cpp \
 			GameManager.hpp \
 			Timer.hpp \
@@ -208,6 +208,4 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			behaviors/Volatile.cpp \
 			behaviors/Volatile.hpp \
 			behaviors/Behavior.cpp \
-			behaviors/Behavior.hpp \
-			csxml/SaveGameXML.cpp \
-			csxml/SaveGameXML.hpp
+			behaviors/Behavior.hpp

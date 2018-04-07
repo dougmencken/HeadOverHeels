@@ -14,6 +14,8 @@
 #include "PlaySound.hpp"
 #include "Ism.hpp"
 
+#include <tinyxml2.h>
+
 using gui::CreateListOfSavedGames;
 using gui::ContinueGame;
 
@@ -53,9 +55,7 @@ void CreateListOfSavedGames::doAction ()
         menu->setVerticalOffset( 112 );
         for ( unsigned int fileCount = 1; fileCount <= howManySaves; fileCount++ )
         {
-                std::stringstream ss;
-                ss << fileCount;
-                std::string file = isomot::homePath() + "savegame" + pathSeparator + "saved" + ss.str () + ".xml" ;
+                std::string file = isomot::homePath() + "savegame" + pathSeparator + "saved." + isomot::numberToString( fileCount ) ;
 
                 bool fileExists = false;
                 std::ifstream in( file.c_str() );
@@ -63,10 +63,11 @@ void CreateListOfSavedGames::doAction ()
 
                 if ( fileExists )
                 {
-                        short rooms = 0;
-                        short planets = 0;
+                        unsigned short rooms = 0;
+                        unsigned short planets = 0;
                         readSomeInfoFromGamefile( file, &rooms, &planets );
-                        ss.str( std::string() );
+
+                        std::ostringstream ss;
                         ss << rooms << " " << languageManager->findLanguageStringForAlias( "rooms" )->getText() << " "
                                 << planets << " " << languageManager->findLanguageStringForAlias( "planets" )->getText();
                         Label* label = new Label( ss.str() );
@@ -83,7 +84,7 @@ void CreateListOfSavedGames::doAction ()
                 {
                         std::cout << "save \"" << file << "\" is yet free" << std::endl ;
 
-                        ss.str( std::string() );
+                        std::ostringstream ss;
                         ss << languageManager->findLanguageStringForAlias( "free-slot" )->getText();
                         Label* labelOfFree = new Label( ss.str() );
                         if ( isLoadMenu() )
@@ -107,21 +108,62 @@ void CreateListOfSavedGames::doAction ()
         GuiManager::getInstance()->changeScreen( screen, true );
 }
 
-void CreateListOfSavedGames::readSomeInfoFromGamefile( const std::string& fileName, short* rooms, short* planets )
+bool CreateListOfSavedGames::readSomeInfoFromGamefile( const std::string& fileName,
+                                                       unsigned short* visitedRooms, unsigned short* freePlanets )
 {
-        try
+        tinyxml2::XMLDocument saveXml;
+        tinyxml2::XMLError result = saveXml.LoadFile( fileName.c_str () );
+        if ( result != tinyxml2::XML_SUCCESS )
         {
-                sharedsmartptr< sgxml::SaveGameXML > saveGameXML( sgxml::savegame( fileName.c_str() ) );
+                std::cerr << "can’t load file \"" << fileName << "\" with saved game" << std::endl ;
+                return false;
+        }
 
-                *rooms = saveGameXML->exploredRooms().visited().size();
-                *planets = ( saveGameXML->freeByblos() ? 1 : 0 ) +
-                                ( saveGameXML->freeEgyptus() ? 1 : 0 ) +
-                                ( saveGameXML->freePenitentiary() ? 1 : 0 ) +
-                                ( saveGameXML->freeSafari() ? 1 : 0 ) +
-                                ( saveGameXML->freeBlacktooth() ? 1 : 0 );
-        }
-        catch ( const xml_schema::exception& e )
+        tinyxml2::XMLElement* root = saveXml.FirstChildElement( "savegame" );
+        tinyxml2::XMLElement* exploredRooms = root->FirstChildElement( "exploredRooms" ) ;
+
+        unsigned short howManyRoomsExplored = 0;
+
+        if ( exploredRooms != nilPointer )
         {
-                std::cout << "CreateListOfSavedGames::readSomeInfoFromGamefile got " << e << std::endl ;
+                for ( tinyxml2::XMLElement* visited = exploredRooms->FirstChildElement( "visited" ) ;
+                                visited != nilPointer ;
+                                visited = visited->NextSiblingElement( "visited" ) )
+                {
+                        howManyRoomsExplored ++;
+                }
         }
+
+        *visitedRooms = howManyRoomsExplored;
+
+        unsigned short howManyPlanetsLiberated = 0;
+
+        tinyxml2::XMLElement* freeByblos = root->FirstChildElement( "freeByblos" ) ;
+        if ( freeByblos != nilPointer )
+                if ( std::string( freeByblos->FirstChild()->ToText()->Value() ) == "true" )
+                        howManyPlanetsLiberated ++;
+
+        tinyxml2::XMLElement* freeEgyptus = root->FirstChildElement( "freeEgyptus" ) ;
+        if ( freeEgyptus != nilPointer )
+                if ( std::string( freeEgyptus->FirstChild()->ToText()->Value() ) == "true" )
+                        howManyPlanetsLiberated ++;
+
+        tinyxml2::XMLElement* freePenitentiary = root->FirstChildElement( "freePenitentiary" ) ;
+        if ( freePenitentiary != nilPointer )
+                if ( std::string( freePenitentiary->FirstChild()->ToText()->Value() ) == "true" )
+                        howManyPlanetsLiberated ++;
+
+        tinyxml2::XMLElement* freeSafari = root->FirstChildElement( "freeSafari" ) ;
+        if ( freeSafari != nilPointer )
+                if ( std::string( freeSafari->FirstChild()->ToText()->Value() ) == "true" )
+                        howManyPlanetsLiberated ++;
+
+        tinyxml2::XMLElement* freeBlacktooth = root->FirstChildElement( "freeBlacktooth" ) ;
+        if ( freeBlacktooth != nilPointer )
+                if ( std::string( freeBlacktooth->FirstChild()->ToText()->Value() ) == "true" )
+                        howManyPlanetsLiberated ++;
+
+        *freePlanets = howManyPlanetsLiberated;
+
+        return true;
 }

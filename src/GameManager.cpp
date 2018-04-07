@@ -7,7 +7,7 @@
 #include "Picture.hpp"
 #include "Label.hpp"
 #include "ColorCyclingLabel.hpp"
-#include "GameFileManager.hpp"
+#include "GameSaverAndLoader.hpp"
 #include "GuiManager.hpp"
 #include "MapManager.hpp"
 #include "InputManager.hpp"
@@ -44,7 +44,7 @@ GameManager::GameManager( )
         , drawBackgroundPicture( true )
         , recordCaptures( false )
         , isomot( new Isomot() )
-        , gameFileManager( new GameFileManager( this, isomot ) )
+        , saverAndLoader( new GameSaverAndLoader( this, isomot ) )
         , headLives( 0 )
         , heelsLives( 0 )
         , highSpeed( 0 )
@@ -440,12 +440,12 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
 void GameManager::loadGame ( const std::string& fileName )
 {
         isomot->prepare() ;
-        gameFileManager->loadGame( fileName );
+        saverAndLoader->loadGame( fileName );
 }
 
 void GameManager::saveGame ( const std::string& fileName )
 {
-        gameFileManager->saveGame( fileName );
+        saverAndLoader->saveGame( fileName );
 }
 
 void GameManager::addLives ( const std::string& player, unsigned char lives )
@@ -698,11 +698,12 @@ void GameManager::eatFish ( PlayerItem* character, Room* room, int x, int y, int
 {
         this->eatenFish = true;
 
-        gameFileManager->assignFishData(
+        saverAndLoader->ateFish (
                 room->getNameOfFileWithDataAboutRoom (),
-                        character->getLabel (),
-                        x, y, z,
-                        character->getOrientation () ) ;
+                character->getLabel (),
+                x, y, z,
+                character->getOrientation ()
+        );
 }
 
 WhyPause GameManager::update ()
@@ -945,37 +946,19 @@ double GameManager::getShield ( const std::string& player ) const
         return 0.0;
 }
 
-std::vector< std::string > GameManager::getToolsOwnedByPlayer ( const std::string& player ) const
+void GameManager::toolsOwnedByCharacter ( const std::string& player, std::vector< std::string >& tools ) const
 {
-        std::vector< std::string > tools;
+        tools.clear ();
 
-        if ( player == "head" )
+        if ( player == "head" || player == "headoverheels" )
         {
-                if ( this->horn )
-                {
-                        tools.push_back( "horn" );
-                }
-        }
-        else if ( player == "heels" )
-        {
-                if ( this->handbag )
-                {
-                        tools.push_back( "handbag" );
-                }
-        }
-        else if ( player == "headoverheels" )
-        {
-                if ( this->horn )
-                {
-                        tools.push_back( "horn" );
-                }
-                if ( this->handbag )
-                {
-                        tools.push_back( "handbag" );
-                }
+                if ( this->horn ) tools.push_back( "horn" );
         }
 
-        return tools;
+        if ( player == "heels" || player == "headoverheels" )
+        {
+                if ( this->handbag ) tools.push_back( "handbag" );
+        }
 }
 
 unsigned short GameManager::getDonuts ( const std::string& player ) const

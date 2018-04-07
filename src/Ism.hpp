@@ -12,8 +12,9 @@
 #define Ism_hpp_
 
 #include <string>
-#include <memory>
+#include <sstream>
 #include <fstream>
+#include <memory>
 #include <cstdlib>
 
 #include "WrappersAllegro.hpp"
@@ -28,25 +29,11 @@
 
 #if __cplusplus >= 201103L /* when complier supports c++11 */
     #define __Cxx11__
-    #ifndef nilPointer
-        #define nilPointer nullptr
-    #endif
-    #ifndef smartptr
-        #define smartptr std::unique_ptr
-    #endif
-    #ifndef sharedsmartptr
-        #define sharedsmartptr std::shared_ptr
-    #endif
+    #define nilPointer nullptr
+    #define smartptr std::unique_ptr
 #else
-    #ifndef nilPointer
-        #define nilPointer NULL
-    #endif
-    #ifndef smartptr
-        #define smartptr std::auto_ptr
-    #endif
-    #ifndef sharedsmartptr
-        #define sharedsmartptr std::auto_ptr
-    #endif
+    #define nilPointer NULL
+    #define smartptr std::auto_ptr
 #endif
 
 #if defined( DEBUG ) && defined( HAVE_EXECINFO_H ) && HAVE_EXECINFO_H
@@ -93,6 +80,11 @@ namespace isomot
         std::string makeRandomString( const size_t length ) ;
 
         std::string toStringWithOrdinalSuffix( unsigned int number ) ;
+
+        inline static std::string numberToString ( int number )
+        {
+                return static_cast< std::ostringstream * >( &( std::ostringstream() << std::dec << number ) )->str () ;
+        }
 
         /** print backtrace of caller */
         inline void printBacktrace ( FILE * out = stdout, unsigned int howDeep = 80 )

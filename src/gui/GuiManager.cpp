@@ -12,6 +12,8 @@
 #include "Label.hpp"
 #include "CreateLanguageMenu.hpp"
 
+#include <algorithm>
+
 #ifdef DEBUG
 /* #  define DEBUG_GUI       1 */
 #endif
