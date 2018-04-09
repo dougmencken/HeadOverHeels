@@ -64,6 +64,8 @@ public:
 
         static BITMAP * colorizePicture ( BITMAP * picture, const Color * color ) ;
 
+        static BITMAP * multiplyWithColor ( BITMAP * picture, const Color * color ) ;
+
         static BITMAP * pictureToGrayscale ( BITMAP * picture ) ;
 
 private:
@@ -75,6 +77,8 @@ private:
         unsigned char blue ;
 
         static BITMAP * colorizePicture ( BITMAP * picture, unsigned char red, unsigned char green, unsigned char blue ) ;
+
+        static BITMAP * multiplyWithColor ( BITMAP * picture, unsigned char red, unsigned char green, unsigned char blue ) ;
 
         static Color * theBlack ;
 

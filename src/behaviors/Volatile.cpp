@@ -7,6 +7,9 @@
 #include "Mediator.hpp"
 #include "SoundManager.hpp"
 
+const double delayBeforeDisappearance = 0.04;
+const double longDelayBeforeDisappearance = delayBeforeDisappearance * 20;
+
 
 namespace isomot
 {
@@ -122,7 +125,7 @@ bool Volatile::update ()
                         // volatile in time item is created when some other volatile disappears
                         else if ( getNameOfBehavior () == "behavior of disappearance in time" )
                         {
-                                vanish = ( disappearanceTimer->getValue() > item->getDelayBetweenFrames() * double( item->countFrames() ) );
+                                vanish = ( disappearanceTimer->getValue() > item->getDelayBetweenFrames() * item->countFrames() );
                                 item->animate();
                         }
                         break;
@@ -165,9 +168,9 @@ bool Volatile::update ()
                         if ( ( getNameOfBehavior () != "behavior of disappearance on jump into" &&
                                         getNameOfBehavior () != "behavior of slow disappearance on jump into" &&
                                         getNameOfBehavior () != "behavior of disappearance as soon as Head appears" ) ||
-                                ( getNameOfBehavior () == "behavior of disappearance on jump into" && disappearanceTimer->getValue() > 0.030 ) ||
-                                ( getNameOfBehavior () == "behavior of slow disappearance on jump into" && disappearanceTimer->getValue() > 0.600 ) ||
-                                ( getNameOfBehavior () == "behavior of disappearance as soon as Head appears" && disappearanceTimer->getValue() > 0.500 ) )
+                                ( getNameOfBehavior () == "behavior of disappearance on jump into" && disappearanceTimer->getValue() > delayBeforeDisappearance ) ||
+                                ( getNameOfBehavior () == "behavior of slow disappearance on jump into" && disappearanceTimer->getValue() > longDelayBeforeDisappearance ) ||
+                                ( getNameOfBehavior () == "behavior of disappearance as soon as Head appears" && disappearanceTimer->getValue() > 0.5 ) )
                         {
                                 vanish = true;
 

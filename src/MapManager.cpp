@@ -126,34 +126,46 @@ void MapManager::loadMap ( const std::string& fileName )
         std::cout << "read map of rooms from " << fileName << std::endl ;
 }
 
-void MapManager::beginNewGame( const std::string& firstRoomFileName, const std::string& secondRoomFileName )
+void MapManager::beginNewGame( const std::string& headRoom, const std::string& heelsRoom )
 {
         resetVisitedRooms();
 
         GameManager::getInstance()->setHeadLives( 8 );
         GameManager::getInstance()->setHeelsLives( 8 );
 
-        // get data of first room
-        MapRoomData* firstRoomData = findRoomData( firstRoomFileName );
+        // head’s room
 
-        // create first room
-        if ( firstRoomData != nilPointer )
+        MapRoomData* headRoomData = findRoomData( headRoom );
+
+        if ( headRoomData != nilPointer )
         {
-                Room* firstRoom = RoomBuilder::buildRoom( isomot::sharePath() + "map" + pathSeparator + firstRoomFileName );
+                Room* firstRoom = RoomBuilder::buildRoom( isomot::sharePath() + "map" + pathSeparator + headRoom );
 
                 if ( firstRoom != nilPointer )
                 {
-                        ItemData* firstPlayerData = GameManager::getInstance()->getItemDataManager()->findDataByLabel( "head" );
+                        ItemData* headData = GameManager::getInstance()->getItemDataManager()->findDataByLabel( "head" );
 
-                        int centerX = RoomBuilder::getXCenterOfRoom( firstPlayerData, firstRoom );
-                        int centerY = RoomBuilder::getYCenterOfRoom( firstPlayerData, firstRoom );
+                        int centerX = RoomBuilder::getXCenterOfRoom( headData, firstRoom );
+                        int centerY = RoomBuilder::getYCenterOfRoom( headData, firstRoom );
 
-                        // create player Head
-                        RoomBuilder::createPlayerInRoom( firstRoom, "head", true, centerX, centerY, 0, West );
+                        if ( headRoom != heelsRoom )
+                        {
+                                // create character Head
+                                RoomBuilder::createPlayerInRoom( firstRoom, "head", true, centerX, centerY, 0, West );
 
-                        firstRoomData->setVisited( true );
+                                headRoomData->setVisited( true );
 
-                        firstRoom->activateCharacterByLabel( "head" );
+                                firstRoom->activateCharacterByLabel( "head" );
+                        }
+                        else
+                        {
+                                // create character Head over Heels
+                                RoomBuilder::createPlayerInRoom( firstRoom, "headoverheels", true, centerX, centerY, 0, West );
+
+                                headRoomData->setVisited( true );
+
+                                firstRoom->activateCharacterByLabel( "headoverheels" );
+                        }
 
                         firstRoom->getCamera()->turnOn( firstRoom->getMediator()->getActiveCharacter(), JustWait );
                         activeRoom = firstRoom;
@@ -161,30 +173,33 @@ void MapManager::beginNewGame( const std::string& firstRoomFileName, const std::
                 }
         }
 
-        // get data of second room
-        MapRoomData* secondRoomData = findRoomData( secondRoomFileName );
-
-        // create second room
-        if ( secondRoomData != nilPointer )
+        if ( headRoom != heelsRoom )
         {
-                Room* secondRoom = RoomBuilder::buildRoom( isomot::sharePath() + "map" + pathSeparator + secondRoomFileName );
+                // heels’ room
 
-                if ( secondRoom != nilPointer )
+                MapRoomData* heelsRoomData = findRoomData( heelsRoom );
+
+                if ( heelsRoomData != nilPointer )
                 {
-                        ItemData* secondPlayerData = GameManager::getInstance()->getItemDataManager()->findDataByLabel( "heels" );
+                        Room* secondRoom = RoomBuilder::buildRoom( isomot::sharePath() + "map" + pathSeparator + heelsRoom );
 
-                        int centerX = RoomBuilder::getXCenterOfRoom( secondPlayerData, secondRoom );
-                        int centerY = RoomBuilder::getYCenterOfRoom( secondPlayerData, secondRoom );
+                        if ( secondRoom != nilPointer )
+                        {
+                                ItemData* heelsData = GameManager::getInstance()->getItemDataManager()->findDataByLabel( "heels" );
 
-                        // create player Heels
-                        RoomBuilder::createPlayerInRoom( secondRoom, "heels", true, centerX, centerY, 0, South );
+                                int centerX = RoomBuilder::getXCenterOfRoom( heelsData, secondRoom );
+                                int centerY = RoomBuilder::getYCenterOfRoom( heelsData, secondRoom );
 
-                        secondRoomData->setVisited( true );
+                                // create character Heels
+                                RoomBuilder::createPlayerInRoom( secondRoom, "heels", true, centerX, centerY, 0, South );
 
-                        secondRoom->activateCharacterByLabel( "heels" );
+                                heelsRoomData->setVisited( true );
 
-                        secondRoom->getCamera()->turnOn( secondRoom->getMediator()->getActiveCharacter(), JustWait );
-                        rooms.push_back( secondRoom );
+                                secondRoom->activateCharacterByLabel( "heels" );
+
+                                secondRoom->getCamera()->turnOn( secondRoom->getMediator()->getActiveCharacter(), JustWait );
+                                rooms.push_back( secondRoom );
+                        }
                 }
         }
 }

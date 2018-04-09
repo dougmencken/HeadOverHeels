@@ -260,7 +260,7 @@ std::string GuiManager::getPathToPicturesOfGui ()
 
 void GuiManager::allegroSetup()
 {
-        allegro_init ();
+        allegro::init ();
 
         // 8 bits for each of three colors with 8 bits for alpha channel
         set_color_depth( 32 );

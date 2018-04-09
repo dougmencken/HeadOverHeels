@@ -16,6 +16,9 @@
 #include <fstream>
 #include <memory>
 #include <cstdlib>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 #include "WrappersAllegro.hpp"
 
@@ -76,6 +79,18 @@ void nanoSleep ( unsigned long nanoseconds );
 
 namespace isomot
 {
+
+        inline bool folderExists( const std::string& path )
+        {
+                struct stat info;
+
+                if ( stat( path.c_str (), &info ) < 0 )
+                        return false;
+                else if ( ( info.st_mode & S_IFDIR ) != 0 )
+                        return true;
+
+                return false;
+        }
 
         std::string makeRandomString( const size_t length ) ;
 

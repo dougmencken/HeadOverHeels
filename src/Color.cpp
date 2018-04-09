@@ -63,6 +63,39 @@ BITMAP* Color::colorizePicture( BITMAP* picture, unsigned char red, unsigned cha
 }
 
 /* public static */
+BITMAP* Color::multiplyWithColor( BITMAP* picture, const Color* color )
+{
+        if ( color == Color::whiteColor() ) return picture ;
+
+        return multiplyWithColor( picture, color->getRed (), color->getGreen (), color->getBlue () );
+}
+
+/* private static */
+BITMAP * Color::multiplyWithColor( BITMAP * picture, unsigned char red, unsigned char green, unsigned char blue )
+{
+        if ( picture == nilPointer ) return nilPointer ;
+
+        for ( int x = 0; x < picture->w; x++ )
+        {
+                for ( int y = 0; y < picture->h; y++ )
+                {
+                        int color = getpixel( picture, x, y );
+                        int r = getr( color );
+                        int g = getg( color );
+                        int b = getb( color );
+
+                        // don’t touch pixels with color of transparency
+                        if ( r != 255 || g != 0 || b != 255 )
+                        {
+                                ( ( int* )picture->line[ y ] )[ x ] = makecol( r & red, g & green, b & blue );
+                        }
+                }
+        }
+
+        return picture ;
+}
+
+/* public static */
 BITMAP * Color::pictureToGrayscale ( BITMAP * picture )
 {
         if ( picture == nilPointer ) return nilPointer ;

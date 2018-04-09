@@ -316,6 +316,8 @@ public:
 
         Behavior * getBehavior () const {  return behavior ;  }
 
+        void setBehavior ( Behavior * newBehavior ) {  behavior = newBehavior ;  }
+
         /**
          * Reference item used to know if it would move when others are below
          * @return such item or nil if there’s none

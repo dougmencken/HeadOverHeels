@@ -13,12 +13,17 @@
 
 #include <allegro.h>
 
-#include <string>
-#include <iostream>
-
 
 namespace allegro
 {
+
+
+/* int allegro_init()
+ *
+ * Macro to initialize Allegro library. Is the same as install_allegro( SYSTEM_AUTODETECT, &errno, atexit )
+ */
+void init ( /*~ const std::string& printMe = "" ~*/ ) ;
+
 
 /* void draw_sprite( BITMAP* view, BITMAP* sprite, int x, int y )
  *
@@ -26,14 +31,8 @@ namespace allegro
  * as blit( sprite, view, 0, 0, x, y, sprite->w, sprite->h ), but it uses masked drawing
  * where transparent pixels are skipped
  */
-inline void drawSprite( BITMAP* view, BITMAP* sprite, int x, int y /*~ const std::string& printMe = "" ~*/ )
-{
-        if ( sprite == NULL ) return ;
+void drawSprite ( BITMAP* view, BITMAP* sprite, int x, int y /*~ const std::string& printMe = "" ~*/ ) ;
 
-        /*~ if ( ! printMe.empty() ) std::cout << "( allegro::drawSprite ) " << printMe << std::endl; ~*/
-
-        draw_sprite( view, sprite, x, y );
-}
 
 /* void destroy_bitmap( BITMAP* bitmap )
  *
@@ -42,20 +41,8 @@ inline void drawSprite( BITMAP* view, BITMAP* sprite, int x, int y /*~ const std
  * Wrapper’s note: BITMAP* as well as any other pointer itself is passed as a copy. To nullify
  * pointer beyond this function, you need to take a reference to it, BITMAP*&
  */
-inline void destroyBitmap( BITMAP*& bitmap /*~ , const std::string& printMe = "" ~*/ )
-{
-        if ( bitmap == NULL ) return ;
+void destroyBitmap( BITMAP*& bitmap /*~ , const std::string& printMe = "" ~*/ ) ;
 
-        /*~ if ( ! printMe.empty() ) std::cout << "( allegro::destroyBitmap ) " << printMe << std::endl; ~*/
-
-        // nullify it first, then invoke destroy_bitmap
-        // to avoid drawing of being-destroyed thing when there’re many threads
-
-        BITMAP* toBin = bitmap;
-        bitmap = NULL ;
-
-        destroy_bitmap( toBin );
-}
 
 }
 

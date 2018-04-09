@@ -42,7 +42,7 @@ public:
          */
         void loadMap ( const std::string& fileName ) ;
 
-        virtual void beginNewGame ( const std::string& firstRoomFileName, const std::string& secondRoomFileName ) ;
+        virtual void beginNewGame ( const std::string& headRoom, const std::string& heelsRoom ) ;
 
         void beginOldGameWithCharacter ( const std::string& roomFile, const std::string& character,
                                          int x, int y, int z, const Way& direction, const std::string& entry, bool active ) ;

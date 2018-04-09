@@ -10,6 +10,7 @@
 #include "Camera.hpp"
 #include "GameManager.hpp"
 #include "Behavior.hpp"
+#include "Color.hpp"
 
 #include <algorithm>
 
@@ -734,6 +735,71 @@ unsigned int Room::removeBars ()
         }
 
         return howManyBars;
+}
+
+void Room::dontDisappearOnJump ()
+{
+        std::vector < std::list < GridItem * > > gridItems = mediator->getGridItems ();
+        std::list< FreeItem * > freeItems = mediator->getFreeItems ();
+
+        for ( unsigned int column = 0; column < gridItems.size(); column ++ )
+        {
+                std::list < GridItem * > columnOfItems = gridItems[ column ];
+
+                for ( std::list< GridItem * >::const_iterator gi = columnOfItems.begin (); gi != columnOfItems.end (); ++ gi )
+                {
+                        GridItem* gridItem = *gi;
+                        if ( gridItem->getBehavior() != nilPointer )
+                        {
+                                std::string behavior = gridItem->getBehavior()->getNameOfBehavior();
+                                if ( behavior == "behavior of disappearance on jump into" ||
+                                                behavior == "behavior of slow disappearance on jump into" )
+                                {
+                                        Behavior* thatBehavior = gridItem->getBehavior();
+                                        gridItem->setBehavior( nilPointer );
+                                        delete thatBehavior ;
+
+                                        BITMAP* original = gridItem->getRawImage();
+                                        BITMAP* copy = create_bitmap( original->w, original->h );
+                                        blit( original, copy, 0, 0, 0, 0, original->w, original->h );
+
+                                        gridItem->changeImage( Color::multiplyWithColor(
+                                                copy,
+                                                ( behavior == "behavior of slow disappearance on jump into" ) ?
+                                                        Color::magentaColor() :
+                                                        Color::redColor() )
+                                        );
+                                }
+                        }
+                }
+        }
+
+        for ( std::list< FreeItem * >::const_iterator fi = freeItems.begin (); fi != freeItems.end (); ++fi )
+        {
+                FreeItem* freeItem = *fi;
+                if ( freeItem->getBehavior() != nilPointer )
+                {
+                        std::string behavior = freeItem->getBehavior()->getNameOfBehavior();
+                        if ( behavior == "behavior of disappearance on jump into" ||
+                                        behavior == "behavior of slow disappearance on jump into" )
+                        {
+                                Behavior* thatBehavior = freeItem->getBehavior();
+                                freeItem->setBehavior( nilPointer );
+                                delete thatBehavior ;
+
+                                BITMAP* original = freeItem->getRawImage();
+                                BITMAP* copy = create_bitmap( original->w, original->h );
+                                blit( original, copy, 0, 0, 0, 0, original->w, original->h );
+
+                                freeItem->changeImage( Color::multiplyWithColor(
+                                        copy,
+                                        ( behavior == "behavior of slow disappearance on jump into" ) ?
+                                                Color::magentaColor() :
+                                                Color::redColor() )
+                                );
+                        }
+                }
+        }
 }
 
 void Room::draw( BITMAP* where )

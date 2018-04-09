@@ -20,6 +20,7 @@
         <file name="algif/lzw.c" />
         <file name="main.cpp" />
         <file name="Ism.cpp" />
+        <file name="WrappersAllegro.cpp" />
         <file name="Way.cpp" />
         <file name="Color.cpp" />
         <file name="Camera.cpp" />

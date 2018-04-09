@@ -85,6 +85,14 @@ public:
          */
         WhyPause resume () ;
 
+        std::string getHeadRoom () const {  return headRoom ;  }
+
+        void setHeadRoom( const std::string& room ) {  headRoom = room ;  }
+
+        std::string getHeelsRoom () const {  return heelsRoom ;  }
+
+        void setHeelsRoom( const std::string& room ) {  heelsRoom = room ;  }
+
         /**
          * Dibuja en pantalla la información relativa al juego actual compuesta de:
          * un marco, vidas disponibles, herramientas disponibles, objeto guardado en el
@@ -282,6 +290,10 @@ public:
 private:
 
         ItemDataManager * itemDataManager ;
+
+        std::string headRoom ;
+
+        std::string heelsRoom ;
 
         gui::ColorCyclingLabel * freedomLabel ;
 

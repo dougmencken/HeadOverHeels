@@ -23,6 +23,7 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			main.cpp \
 			Ism.cpp \
 			Ism.hpp \
+			WrappersAllegro.cpp \
 			WrappersAllegro.hpp \
 			Way.cpp \
 			Way.hpp \

@@ -2,6 +2,8 @@
 #include "ColorCyclingLabel.hpp"
 #include "Color.hpp"
 
+#include <iostream>
+
 
 namespace gui
 {

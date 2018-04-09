@@ -31,6 +31,8 @@ GameManager * GameManager::instance = nilPointer ;
 
 GameManager::GameManager( )
         : itemDataManager( nilPointer )
+        , headRoom( "blacktooth1head.xml" )
+        , heelsRoom( "blacktooth23heels.xml" )
         , freedomLabel( nilPointer )
         , recordingTimer( nilPointer )
         , numberOfCapture( 0 )
@@ -85,7 +87,7 @@ GameManager::GameManager( )
         , pictureOfEscudo( nilPointer )
         , grayPictureOfEscudo( nilPointer )
 {
-        if ( ! file_exists( capturePath.c_str (), FA_DIREC, nilPointer ) )
+        if ( ! isomot::folderExists( capturePath ) )
                 mkdir( capturePath.c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH );
 
         recordingTimer = new Timer();

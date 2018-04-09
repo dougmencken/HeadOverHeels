@@ -176,7 +176,7 @@ std::string homePath ()
                 if ( home != nilPointer )
                 {
                         HomePath = std::string( home ) + "/.headoverheels/";
-                        if ( ! file_exists( HomePath.c_str(), FA_DIREC, nilPointer ) )
+                        if ( ! isomot::folderExists( HomePath ) )
                         {
                                 mkdir( HomePath.c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH );
                                 mkdir( ( HomePath + "savegame/" ).c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH );

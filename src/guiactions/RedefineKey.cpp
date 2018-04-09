@@ -42,7 +42,7 @@ void RedefineKey::doAction ()
                         else
                         {
                                 int codeOfKey = InputManager::getInstance()->getUserKey( this->nameOfKey );
-                                if ( codeOfKey != newKey )
+                                if ( codeOfKey != newKey && /* print screen is used to toggle recording of game */ newKey != KEY_PRTSCR )
                                 {
                                         // if this new key was already in use, change that previous one to "none"
                                         std::string nameOfPrevious = InputManager::getInstance()->findNameOfKeyByCode( newKey );

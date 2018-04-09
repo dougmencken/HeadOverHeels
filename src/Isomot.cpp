@@ -48,7 +48,7 @@ void Isomot::beginNewGame ()
         if ( finalRoomTimer != nilPointer ) finalRoomTimer->stop();
 
         assert( mapManager != nilPointer );
-        mapManager->beginNewGame( "blacktooth1head.xml", "blacktooth23heels.xml" ); ///( "blacktooth85.xml", "blacktooth23heels.xml" );
+        mapManager->beginNewGame( GameManager::getInstance()->getHeadRoom(), GameManager::getInstance()->getHeelsRoom() );
 
         assert( mapManager->getActiveRoom() != nilPointer );
         mapManager->getActiveRoom()->activate ();
@@ -97,7 +97,7 @@ void Isomot::continueSavedGame ( tinyxml2::XMLElement* characters )
                         if ( zElement != nilPointer )
                                 z = std::atoi( zElement->FirstChild()->ToText()->Value() );
 
-			unsigned int howManyLives = 0;
+                        unsigned int howManyLives = 0;
                         tinyxml2::XMLElement* lives = player->FirstChildElement( "lives" );
                         if ( lives != nilPointer )
                                 howManyLives = std::atoi( lives->FirstChild()->ToText()->Value() );
@@ -342,6 +342,12 @@ BITMAP* Isomot::update()
                         std::cout << howManyBars << " bars are gone" << std::endl ;
 
                 key[ KEY_MINUS ] = 0;
+        }
+
+        if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_V ] )
+        {
+                activeRoom->dontDisappearOnJump ();
+                key[ KEY_V ] = 0;
         }
 
         if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_R ] )

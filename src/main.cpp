@@ -1,11 +1,52 @@
 
 #include "Ism.hpp"
+#include "GameManager.hpp"
 #include "GuiManager.hpp"
 
 
 int main( int argc, char** argv )
 {
         if ( argc > 0 ) isomot::setPathToGame( argv[ 0 ] );
+
+        if ( argc > 1 )
+        {
+                std::map < std::string /* option */, std::string /* value */ > options;
+
+                for ( int a = 1 ; a < argc ; ++ a )
+                {
+                        const char* arg = argv[ a ];
+                        if ( arg[ 0 ] == '-' && arg[ 1 ] == '-' )
+                        {
+                                std::string option = std::string( arg + 2 );
+                                std::string value = "";
+
+                                size_t whereIsEqu = option.find( "=" );
+                                if ( whereIsEqu != std::string::npos )
+                                {
+                                        value = option.substr( whereIsEqu + 1 );
+                                        if ( value.at( 0 ) == '\"' && value.at( value.size() - 1 ) == '\"' )
+                                                value = value.substr( 1, value.size() - 2 );
+
+                                        option = option.substr( 0, whereIsEqu );
+                                }
+
+                                options[ option ] = value ;
+                        }
+                }
+
+        #if DEBUG
+                for ( std::map< std::string, std::string >::const_iterator it = options.begin () ; it != options.end () ; ++ it )
+                {
+                        std::cout << "got option \"" << ( *it ).first << "\" with value \"" << ( *it ).second << "\"" << std::endl ;
+                }
+        #endif
+
+                if ( options.count( "head-room" ) > 0 )
+                        isomot::GameManager::getInstance()->setHeadRoom( options[ "head-room" ] );
+
+                if ( options.count( "heels-room" ) > 0 )
+                        isomot::GameManager::getInstance()->setHeelsRoom( options[ "heels-room" ] );
+        }
 
 #ifdef __WIN32
         timeBeginPeriod( 1 );

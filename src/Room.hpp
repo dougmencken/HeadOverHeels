@@ -85,6 +85,11 @@ public:
          */
         unsigned int removeBars () ;
 
+        /**
+         * After that, no item in this room would disappear on jump
+         */
+        void dontDisappearOnJump () ;
+
         void draw ( BITMAP * where ) ;
 
         void drawRoom () {  draw( whereToDraw ) ;  }
