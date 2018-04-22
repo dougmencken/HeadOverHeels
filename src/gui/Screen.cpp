@@ -11,7 +11,6 @@
 
 #include <iostream>
 #include <algorithm> // std::for_each
-#include <cmath>
 
 #include <algif.h>
 
@@ -382,7 +381,7 @@ void Screen::scrollHorizontally( Screen* oldScreen, Screen* newScreen, bool righ
         newScreen->redraw ();
         BITMAP * newPicture = newScreen->imageOfScreen ;
 
-        unsigned int step = static_cast< int >( std::round( static_cast< double >( isomot::ScreenWidth() >> 6 ) / 10.0 ) ) << 1;
+        unsigned int step = ( ( ( isomot::ScreenWidth() >> 6 ) + 5 ) / 10 ) << 1 ;
 
         for ( unsigned int x = step ; x < isomot::ScreenWidth() ; x += step )
         {
@@ -414,7 +413,7 @@ void Screen::wipeHorizontally( Screen* oldScreen, Screen* newScreen, bool rightT
         newScreen->redraw ();
         BITMAP * newPicture = newScreen->imageOfScreen ;
 
-        unsigned int step = static_cast< int >( std::round( static_cast< double >( isomot::ScreenWidth() >> 6 ) / 10.0 ) ) << 1;
+        unsigned int step = ( ( ( isomot::ScreenWidth() >> 6 ) + 5 ) / 10 ) << 1 ;
 
         for ( unsigned int x = step ; x < isomot::ScreenWidth() ; x += step )
         {
@@ -445,7 +444,7 @@ void Screen::barWipeHorizontally( Screen* oldScreen, Screen* newScreen, bool rig
         unsigned int pieces = isomot::ScreenWidth() >> 6 ;
         unsigned int widthOfPiece = isomot::ScreenWidth() / pieces ;
 
-        unsigned int step = static_cast< int >( std::round( static_cast< double >( pieces ) / 10.0 ) );
+        unsigned int step = ( pieces + 5 ) / 10 ;
 
         for ( unsigned int x = step ; x < widthOfPiece ; x += step )
         {

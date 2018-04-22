@@ -2,7 +2,7 @@ AC_PREREQ([2.65])
 AC_LANG(C++)
 AC_CONFIG_MACRO_DIRS([m4])
 
-AC_INIT(headoverheels, 1.30, dougmencken@gmail.com)
+AC_INIT(headoverheels, 1.31, dougmencken@gmail.com)
 
 AM_INIT_AUTOMAKE([subdir-objects])
 

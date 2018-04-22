@@ -43,8 +43,13 @@ GuiManager::GuiManager( ) :
 
 #ifdef PACKAGE_VERSION
         std::string version = "v" + std::string( PACKAGE_VERSION );
+
         if ( version == "v1.30" )
                 version = "30th anniversary";
+        else if ( version == "v1.31" )
+                version = "31st anniversary";
+        else if ( version == "v1.32" )
+                version = "32nd anniversary";
 
         nameOfWindow = nameOfWindow + " " + version;
 #endif
