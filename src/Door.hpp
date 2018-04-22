@@ -33,15 +33,14 @@ class Door : public Mediated
 public:
 
        /**
-        * Constructor
-        * @param itemDataManager Data manager to find three parts of door
-        * @param label Label of door
-        * @param cx Cell on X axis
-        * @param cy Cell on Y axis
-        * @param z Position on Z axis or how far is item from ground
-        * @param direction Initial direction of item
+        * @param itemDataManager to find three parts of door
+        * @param label label of door
+        * @param cx cell on X
+        * @param cy cell on Y
+        * @param z position on Z or how far is item from ground
+        * @param way orientation of door
         */
-        Door( ItemDataManager* itemDataManager, const std::string& label, int cx, int cy, int z, const Way& way ) ;
+        Door( ItemDataManager* itemDataManager, const std::string& label, int cx, int cy, int z, const std::string& way ) ;
 
         virtual ~Door( ) ;
 
@@ -79,10 +78,7 @@ private:
         */
         int leftLimit ;
 
-       /**
-        * Way of door or its position in room
-        */
-        Way positionOfDoor ;
+        std::string positionOfDoor ;
 
         FreeItem * leftJamb ;
 
@@ -94,7 +90,7 @@ public:
 
         bool isUnderDoor ( int x, int y, int z ) ;
 
-        Way getWhereIsDoor () const {  return positionOfDoor ;  }
+        std::string getWhereIsDoor () const {  return positionOfDoor ;  }
 
         FreeItem * getLeftJamb () ;
 

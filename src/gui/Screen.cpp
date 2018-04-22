@@ -4,12 +4,14 @@
 #include "GuiManager.hpp"
 #include "Action.hpp"
 #include "Label.hpp"
+#include "TextField.hpp"
 #include "Picture.hpp"
 #include "AnimatedPicture.hpp"
 #include "Ism.hpp"
 
 #include <iostream>
 #include <algorithm> // std::for_each
+#include <cmath>
 
 #include <algif.h>
 
@@ -125,12 +127,52 @@ void Screen::redraw( )
         if ( imageOfScreen == nilPointer ) return ;
 
         // fill with color of background
-        clear_to_color( imageOfScreen, Color::redColor()->toAllegroColor() );
+        allegro::clearToColor( imageOfScreen, Color::redColor()->toAllegroColor() );
 
         // draw background, if any
         if ( Screen::backgroundPicture != nilPointer )
         {
-                blit( backgroundPicture, imageOfScreen, 0, 0, 0, 0, backgroundPicture->w, backgroundPicture->h );
+                unsigned int backgroundWidth = static_cast< unsigned int >( backgroundPicture->w );
+                unsigned int backgroundHeight = static_cast< unsigned int >( backgroundPicture->h );
+
+                if ( backgroundWidth == isomot::ScreenWidth() && backgroundHeight == isomot::ScreenHeight() )
+                {
+                        blit( backgroundPicture, imageOfScreen, 0, 0, 0, 0, backgroundWidth, backgroundHeight );
+                }
+                else
+                {
+                        double ratioX = static_cast< double >( isomot::ScreenWidth() ) / static_cast< double >( backgroundWidth ) ;
+                        double ratioY = static_cast< double >( isomot::ScreenHeight() ) / static_cast< double >( backgroundHeight ) ;
+
+                        if ( ratioX == ratioY )
+                        {
+                                stretch_blit( backgroundPicture, imageOfScreen,
+                                                0, 0, backgroundWidth, backgroundHeight,
+                                                0, 0, isomot::ScreenWidth(), isomot::ScreenHeight() );
+                        }
+                        else if ( ratioX > ratioY ) /* horizontal over~stretching */
+                        {
+                                unsigned int proportionalWidth = static_cast< unsigned int >( backgroundWidth * ratioY );
+                                unsigned int offsetX = ( isomot::ScreenWidth() - proportionalWidth ) >> 1;
+
+                                allegro::clearToColor( imageOfScreen, Color::blackColor()->toAllegroColor() );
+
+                                stretch_blit( backgroundPicture, imageOfScreen,
+                                                0, 0, backgroundWidth, backgroundHeight,
+                                                offsetX, 0, proportionalWidth, isomot::ScreenHeight() );
+                        }
+                        else /* if ( ratioY > ratioX ) */ /* vertical over~stretching */
+                        {
+                                unsigned int proportionalHeight = static_cast< unsigned int >( backgroundHeight * ratioX );
+                                unsigned int offsetY = ( isomot::ScreenHeight() - proportionalHeight ) >> 1;
+
+                                allegro::clearToColor( imageOfScreen, Color::blackColor()->toAllegroColor() );
+
+                                stretch_blit( backgroundPicture, imageOfScreen,
+                                                0, 0, backgroundWidth, backgroundHeight,
+                                                0, offsetY, isomot::ScreenWidth(), proportionalHeight );
+                        }
+                }
         }
 
         // draw each component
@@ -231,65 +273,63 @@ void Screen::addPictureOfHeelsAt ( int x, int y )
 
 void Screen::placeHeadAndHeels( bool picturesToo, bool copyrightsToo )
 {
-        Label* label = nilPointer;
+        const unsigned int screenWidth = isomot::ScreenWidth();
+        const unsigned int space = ( screenWidth / 20 ) - 10;
 
-        label = new Label( "Jon", "regular", "multicolor" );
-        label->moveTo( 64, 22 );
-        addWidget( label );
+        Label* Head = new Label( "Head", "big", "yellow" );
+        Label* over = new Label( "over", "regular", "multicolor" );
+        Label* Heels = new Label( "Heels", "big", "yellow" );
 
-        label = new Label( "Ritman", "regular", "multicolor" );
-        label->moveTo( 40, 52 );
-        addWidget( label );
+        over->moveTo( ( screenWidth - over->getWidth() - 20 ) >> 1, space + Head->getHeight() - over->getHeight() - 8 );
+        addWidget( over );
 
-        label = new Label( "Bernie", "regular", "multicolor" );
-        label->moveTo( 500, 22 );
-        addWidget( label );
+        Head->moveTo( over->getX() - Head->getWidth() - over->getFont()->getCharWidth() + 4, space );
+        addWidget( Head );
 
-        label = new Label( "Drummond", "regular", "multicolor" );
-        label->moveTo( 483, 52 );
-        addWidget( label );
+        Heels->moveTo( over->getX() + over->getWidth() + over->getFont()->getCharWidth() - 4, space );
+        addWidget( Heels );
 
-        label = new Label( "Head", "big", "yellow" );
-        label->moveTo( 200, 24 );
-        addWidget( label );
+        TextField* JonRitman = new TextField( screenWidth >> 2, "center" ) ;
+        JonRitman->addLine( "Jon", "regular", "multicolor" );
+        JonRitman->addLine( "Ritman", "regular", "multicolor" );
+        JonRitman->moveTo( Head->getX() - JonRitman->getWidthOfField() - space, space );
+        addWidget( JonRitman );
 
-        label = new Label( "over", "regular", "multicolor" );
-        label->moveTo( 280, 45 );
-        addWidget( label );
-
-        label = new Label( "Heels", "big", "yellow" );
-        label->moveTo( 360, 24 );
-        addWidget( label );
+        TextField* BernieDrummond = new TextField( screenWidth >> 2, "center" ) ;
+        BernieDrummond->addLine( "Bernie", "regular", "multicolor" );
+        BernieDrummond->addLine( "Drummond", "regular", "multicolor" );
+        BernieDrummond->moveTo( Heels->getX() + Heels->getWidth() + space, space );
+        addWidget( BernieDrummond );
 
         if ( picturesToo )
         {
-                addPictureOfHeadAt( 206, 84 );
-                addPictureOfHeelsAt( 378, 84 );
+                const unsigned int widthOfSprite = 48;
+                addPictureOfHeadAt( Head->getX() + ( ( Head->getWidth() - widthOfSprite ) >> 1 ), Head->getY() + Head->getHeight() );
+                addPictureOfHeelsAt( Heels->getX() + ( ( Heels->getWidth() - widthOfSprite ) >> 1 ), Heels->getY() + Heels->getHeight() );
         }
 
         if ( copyrightsToo )
         {
-                const int whereX = 72;
-                const int whereY = 440;
-                const int stepY = 28;
+                Label* ocean = new Label( "{ 1987 Ocean Software Ltd.", "regular", "cyan" );
+                Label* Jorge = new Label( "{ 2009 Jorge Rodríguez Santos", "regular", "orange" );
+                Label* Douglas = new Label( "{ 2018 Douglas Mencken", "regular", "yellow" );
+
+                const unsigned int screenHeight = isomot::ScreenHeight();
+                const int leading = 28;
+                const int whereY = screenHeight - space - leading + 4;
+                const int whereX = ( screenWidth - Jorge->getWidth() ) >> 1 ;
 
                 // (c) 1987 Ocean Software Ltd.
-                std::string copyrightString ( "{ 1987 Ocean Software Ltd." );
-                label = new Label( copyrightString, "regular", "cyan" );
-                label->moveTo( whereX, whereY );
-                addWidget( label );
+                ocean->moveTo( whereX, whereY );
+                addWidget( ocean );
 
                 // (c) 2009 Jorge Rodríguez Santos
-                copyrightString = "{ 2009 Jorge Rodríguez Santos" ;
-                label = new Label( copyrightString, "regular", "orange" );
-                label->moveTo( whereX, whereY - stepY );
-                addWidget( label );
+                Jorge->moveTo( whereX, whereY - leading );
+                addWidget( Jorge );
 
                 // (c) 2018 Douglas Mencken
-                copyrightString = "{ 2018 Douglas Mencken" ;
-                label = new Label( copyrightString, "regular", "yellow" );
-                label->moveTo( whereX, whereY - stepY - stepY );
-                addWidget( label );
+                Douglas->moveTo( whereX, whereY - leading - leading );
+                addWidget( Douglas );
         }
 }
 
@@ -342,20 +382,21 @@ void Screen::scrollHorizontally( Screen* oldScreen, Screen* newScreen, bool righ
         newScreen->redraw ();
         BITMAP * newPicture = newScreen->imageOfScreen ;
 
-        unsigned int step = 2;
-        for ( unsigned int x = step ; x < isomot::ScreenWidth ; x += step )
+        unsigned int step = static_cast< int >( std::round( static_cast< double >( isomot::ScreenWidth() >> 6 ) / 10.0 ) ) << 1;
+
+        for ( unsigned int x = step ; x < isomot::ScreenWidth() ; x += step )
         {
                 /* void blit( BITMAP* from, BITMAP* to, int fromX, int fromY, int toX, int toY, int width, int height ) */
 
                 if ( rightToLeft )
                 {
-                        blit( oldPicture, screen, x, 0, 0, 0, oldPicture->w - x, isomot::ScreenHeight );
-                        blit( newPicture, screen, 0, 0, oldPicture->w - x, 0, x, isomot::ScreenHeight );
+                        blit( oldPicture, screen, x, 0, 0, 0, oldPicture->w - x, isomot::ScreenHeight() );
+                        blit( newPicture, screen, 0, 0, oldPicture->w - x, 0, x, isomot::ScreenHeight() );
                 }
                 else
                 {
-                        blit( newPicture, screen, newPicture->w - x, 0, 0, 0, x, isomot::ScreenHeight );
-                        blit( oldPicture, screen, 0, 0, x, 0, newPicture->w - x, isomot::ScreenHeight );
+                        blit( newPicture, screen, newPicture->w - x, 0, 0, 0, x, isomot::ScreenHeight() );
+                        blit( oldPicture, screen, 0, 0, x, 0, newPicture->w - x, isomot::ScreenHeight() );
                 }
 
                 milliSleep( 1 );
@@ -373,61 +414,23 @@ void Screen::wipeHorizontally( Screen* oldScreen, Screen* newScreen, bool rightT
         newScreen->redraw ();
         BITMAP * newPicture = newScreen->imageOfScreen ;
 
-        unsigned int step = 2;
-        for ( unsigned int x = step ; x < isomot::ScreenWidth ; x += step )
+        unsigned int step = static_cast< int >( std::round( static_cast< double >( isomot::ScreenWidth() >> 6 ) / 10.0 ) ) << 1;
+
+        for ( unsigned int x = step ; x < isomot::ScreenWidth() ; x += step )
         {
                 /* void blit( BITMAP* from, BITMAP* to, int fromX, int fromY, int toX, int toY, int width, int height ) */
 
                 if ( rightToLeft )
                 {
-                        blit( newPicture, screen, newPicture->w - x, 0, newPicture->w - x, 0, x, isomot::ScreenHeight );
+                        blit( newPicture, screen, newPicture->w - x, 0, newPicture->w - x, 0, x, isomot::ScreenHeight() );
                 }
                 else
                 {
-                        blit( newPicture, screen, 0, 0, 0, 0, x, isomot::ScreenHeight );
+                        blit( newPicture, screen, 0, 0, 0, 0, x, isomot::ScreenHeight() );
                 }
 
                 milliSleep( 1 );
         }
-}
-
-/* static */
-void Screen::barScrollHorizontally( Screen* oldScreen, Screen* newScreen, bool rightToLeft )
-{
-        if ( oldScreen == nilPointer || newScreen == nilPointer ||
-                oldScreen == newScreen ||
-                oldScreen->imageOfScreen == nilPointer || newScreen->imageOfScreen == nilPointer ) return ;
-
-        BITMAP * oldPicture = create_bitmap( oldScreen->imageOfScreen->w, oldScreen->imageOfScreen->h );
-        blit( oldScreen->imageOfScreen, oldPicture, 0, 0, 0, 0, oldScreen->imageOfScreen->w, oldScreen->imageOfScreen->h );
-
-        newScreen->redraw ();
-        BITMAP * newPicture = newScreen->imageOfScreen ;
-
-        unsigned int pieces = isomot::ScreenWidth >> 6 ;
-        unsigned int widthOfPiece = isomot::ScreenWidth / pieces ;
-
-        unsigned int step = 1;
-        for ( unsigned int x = step ; x < widthOfPiece ; x += step )
-        {
-                for ( unsigned int pieceX = 0 ; pieceX < isomot::ScreenWidth ; pieceX += widthOfPiece )
-                {
-                        if ( rightToLeft )
-                        {
-                                blit( oldPicture, screen, pieceX + x, 0, pieceX, 0, widthOfPiece - x, isomot::ScreenHeight );
-                                blit( newPicture, screen, pieceX, 0, pieceX + widthOfPiece - x, 0, x, isomot::ScreenHeight );
-                        }
-                        else
-                        {
-                                blit( newPicture, screen, pieceX + widthOfPiece - x, 0, pieceX, 0, x, isomot::ScreenHeight );
-                                blit( oldPicture, screen, pieceX, 0, pieceX + x, 0, widthOfPiece - x, isomot::ScreenHeight );
-                        }
-                }
-
-                milliSleep( 2 );
-        }
-
-        allegro::destroyBitmap( oldPicture );
 }
 
 /* static */
@@ -439,21 +442,22 @@ void Screen::barWipeHorizontally( Screen* oldScreen, Screen* newScreen, bool rig
         newScreen->redraw ();
         BITMAP * newPicture = newScreen->imageOfScreen ;
 
-        unsigned int pieces = isomot::ScreenWidth >> 6 ;
-        unsigned int widthOfPiece = isomot::ScreenWidth / pieces ;
+        unsigned int pieces = isomot::ScreenWidth() >> 6 ;
+        unsigned int widthOfPiece = isomot::ScreenWidth() / pieces ;
 
-        unsigned int step = 1;
+        unsigned int step = static_cast< int >( std::round( static_cast< double >( pieces ) / 10.0 ) );
+
         for ( unsigned int x = step ; x < widthOfPiece ; x += step )
         {
-                for ( unsigned int pieceX = 0 ; pieceX < isomot::ScreenWidth ; pieceX += widthOfPiece )
+                for ( unsigned int pieceX = 0 ; pieceX < isomot::ScreenWidth() ; pieceX += widthOfPiece )
                 {
                         if ( rightToLeft )
                         {
-                                blit( newPicture, screen, pieceX + widthOfPiece - x, 0, pieceX + widthOfPiece - x, 0, x, isomot::ScreenHeight );
+                                blit( newPicture, screen, pieceX + widthOfPiece - x, 0, pieceX + widthOfPiece - x, 0, x, isomot::ScreenHeight() );
                         }
                         else
                         {
-                                blit( newPicture, screen, pieceX, 0, pieceX, 0, x, isomot::ScreenHeight );
+                                blit( newPicture, screen, pieceX, 0, pieceX, 0, x, isomot::ScreenHeight() );
                         }
                 }
 
@@ -480,7 +484,7 @@ void Screen::randomPixelFade( bool fadeIn, Screen * slide, Color * color )
         if ( fadeIn )
         {
                 BITMAP* fill = create_bitmap_ex( 32, screenWidth, screenHeight );
-                clear_to_color( fill, allegroColor );
+                allegro::clearToColor( fill, allegroColor );
                 blit( fill, /* allegro global */ screen, 0, 0, 0, 0, screenWidth, screenHeight );
                 allegro::destroyBitmap( fill );
         }

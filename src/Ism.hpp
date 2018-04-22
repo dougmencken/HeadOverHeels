@@ -92,9 +92,17 @@ namespace isomot
                 return false;
         }
 
-        std::string makeRandomString( const size_t length ) ;
+        unsigned int ScreenWidth () ;
 
-        std::string toStringWithOrdinalSuffix( unsigned int number ) ;
+        void setScreenWidth ( unsigned int w ) ;
+
+        unsigned int ScreenHeight () ;
+
+        void setScreenHeight ( unsigned int h ) ;
+
+        std::string makeRandomString ( const size_t length ) ;
+
+        std::string toStringWithOrdinalSuffix ( unsigned int number ) ;
 
         inline static std::string numberToString ( int number )
         {
@@ -131,8 +139,6 @@ namespace isomot
                 fprintf( out, "no backtrace for non-debug build or when there’s no execinfo.h\n" );
 #endif
         }
-
-        typedef std::pair< int, int > JumpMotion;
 
         const char * pathToFile ( const std::string& in ) ;
 
@@ -227,10 +233,6 @@ namespace isomot
                 IsActive,
                 Mistake                         /* Estado imposible, se utiliza en el gestor de sonido */
         } ;
-
-        const unsigned int ScreenWidth = 640 ;
-
-        const unsigned int ScreenHeight = 480 ;
 
         const int Top = -1 ;
 

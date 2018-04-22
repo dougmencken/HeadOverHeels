@@ -17,6 +17,7 @@ using gui::CreateMenuOfGraphicSets ;
 CreateVideoMenu::CreateVideoMenu( BITMAP* picture ) :
         Action( picture ),
         listOfOptions ( nilPointer ),
+        labelScreenSize ( nilPointer ),
         labelFullscreen ( nilPointer ),
         labelDrawBackground ( nilPointer ),
         labelGraphicSet ( nilPointer )
@@ -33,6 +34,7 @@ void CreateVideoMenu::doAction ()
 
                 LanguageManager* languageManager = gui::GuiManager::getInstance()->getLanguageManager();
 
+                LanguageText* textScreenSize = languageManager->findLanguageStringForAlias( "screen-size" );
                 LanguageText* textFullscreen = languageManager->findLanguageStringForAlias( "full-screen" );
                 LanguageText* textDrawShadows = languageManager->findLanguageStringForAlias( "draw-shadows" );
                 LanguageText* textDrawBackground = languageManager->findLanguageStringForAlias( "draw-background" );
@@ -40,6 +42,7 @@ void CreateVideoMenu::doAction ()
                 std::string yeah = languageManager->findLanguageStringForAlias( "yep" )-> getText ();
                 std::string nope = languageManager->findLanguageStringForAlias( "nope" )->getText ();
 
+                this->labelScreenSize = new Label( textScreenSize->getText() );
                 this->labelFullscreen = new Label( textFullscreen->getText() );
                 this->labelDrawShadows = new Label( textDrawShadows->getText() );
                 this->labelDrawBackground = new Label( textDrawBackground->getText() );
@@ -50,17 +53,15 @@ void CreateVideoMenu::doAction ()
 
                 this->listOfOptions = new MenuWithValues( ' ', 1 );
 
+                listOfOptions->addOption( labelScreenSize );
                 listOfOptions->addOption( labelFullscreen );
                 listOfOptions->addOption( labelDrawShadows );
                 listOfOptions->addOption( labelDrawBackground );
                 listOfOptions->addOption( labelGraphicSet );
 
-                listOfOptions->setValueOf( labelDrawBackground, isomot::GameManager::getInstance()->hasBackgroundPicture () ? yeah : nope );
-                listOfOptions->setValueOf( labelDrawShadows, isomot::GameManager::getInstance()->getDrawShadows () ? yeah : nope );
-                listOfOptions->setValueOf( labelFullscreen, gui::GuiManager::getInstance()->isAtFullScreen () ? yeah : nope );
-                // and labelGraphicSet has no value but action
+                updateLabels ();
 
-                listOfOptions->setVerticalOffset( 36 );
+                listOfOptions->setVerticalOffset( 33 );
 
                 screen->addWidget( listOfOptions );
         }
@@ -143,6 +144,10 @@ void CreateVideoMenu::updateLabels ()
         listOfOptions->setValueOf( labelDrawBackground, isomot::GameManager::getInstance()->hasBackgroundPicture () ? yeah : nope );
         listOfOptions->setValueOf( labelDrawShadows, isomot::GameManager::getInstance()->getDrawShadows () ? yeah : nope );
         listOfOptions->setValueOf( labelFullscreen, gui::GuiManager::getInstance()->isAtFullScreen () ? yeah : nope );
+        // labelGraphicSet has no value but action
+
+        std::string screenSize = languageManager->findLanguageStringForAlias( "screen-size" )->getText ();
+        labelScreenSize->setText( screenSize + " " + isomot::numberToString( isomot::ScreenWidth() ) + " x " + isomot::numberToString( isomot::ScreenHeight() ) );
 
         listOfOptions->redraw ();
 }

@@ -210,7 +210,13 @@ allegro4_version="4.4.2"
 if [ -x "$( command -v cmake )" ]; then
 
     cd "${pathToExternal}"/allegro
-    [ -d allegro-"$allegro4_version" ] || tar xzf allegro-"$allegro4_version".tar.gz
+    if [ ! -d allegro-"$allegro4_version" ]; then
+        tar xzf allegro-"$allegro4_version".tar.gz
+        cd allegro-"$allegro4_version"
+        patch -p1 < ../false_three_finger.patch
+        cd ..
+    fi
+
     cd allegro-"$allegro4_version"
 
     if [ ! -f ./okay ]; then

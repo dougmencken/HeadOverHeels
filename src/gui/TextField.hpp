@@ -22,12 +22,6 @@ namespace gui
 
 class Label ;
 
-enum Alignment
-{
-        LeftAlignment,
-        CenterAlignment,
-        RightAlignment
-};
 
 /**
  * Stores text in multiple lines aligned left, center or right
@@ -39,10 +33,10 @@ class TextField : public Widget
 public:
 
        /**
-        * @param width Anchura del campo de texto
-        * @param alignment Alineación horizontal del texto: izquierda, centro o derecha
+        * @param width of field
+        * @param align horizontal alignment: left, center, or right
         */
-        TextField( unsigned int width, const Alignment& alignment ) ;
+        TextField( unsigned int width, const std::string& align ) ;
 
         virtual ~TextField( ) ;
 
@@ -62,18 +56,17 @@ public:
 
         unsigned int getHeightOfField() {  return heightOfField ;  }
 
-        Alignment getAlignment () {  return alignment ;  }
+        unsigned int getWidthOfField() {  return width ;  }
 
-        void setAlignment( const Alignment& newAlignment ) ;
+        std::string getAlignment () {  return alignment ;  }
+
+        void setAlignment( const std::string& newAlignment ) ;
 
 private:
 
         unsigned int width ;
 
-       /**
-        * Alineación horizontal del texto: izquierda, centro o derecha
-        */
-        Alignment alignment ;
+        std::string alignment ;
 
         unsigned int heightOfField ;
 

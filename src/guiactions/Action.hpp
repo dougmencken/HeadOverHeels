@@ -12,7 +12,8 @@
 #define Action_hpp_
 
 #include <string>
-#include <allegro.h>
+
+#include "WrappersAllegro.hpp"
 
 
 namespace gui

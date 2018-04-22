@@ -23,15 +23,13 @@ PlayerHead::PlayerHead( Item* item, const std::string& behavior ) :
         // salto normal
         for ( unsigned int i = 0; i < jumpFrames; i++ )
         {
-                JumpMotion jumpMotion( 1, 3 );
-                jumpVector.push_back( jumpMotion );
+                jumpVector.push_back( std::pair< int /* xy */, int /* z */ >( 1, 3 ) );
         }
 
         // salto largo
         for ( unsigned int i = 0; i < highJumpFrames; i++ )
         {
-                JumpMotion jumpMotion( 1, 4 );
-                highJumpVector.push_back( jumpMotion );
+                highJumpVector.push_back( std::pair< int /* xy */, int /* z */ >( 1, 4 ) );
         }
 
         // la primera fase del salto
@@ -67,8 +65,6 @@ PlayerHead::PlayerHead( Item* item, const std::string& behavior ) :
         fallTimer->go ();
         glideTimer->go ();
         blinkingTimer->go ();
-
-        fireFromHooterIsPresent = false;
 }
 
 PlayerHead::~PlayerHead( )

@@ -20,21 +20,21 @@ PlayerHeels::PlayerHeels( Item* item, const std::string& behavior ) :
         // salto normal
         for ( unsigned int i = 0; i < jumpFrames; i++ )
         {
-                JumpMotion jumpMotion( i == 9 || i == 19 ? 2 : 1 , ( i < jumpFrames / 2 ) ? 3 : -3 );
-                jumpVector.push_back( jumpMotion );
+                std::pair< int /* xy */, int /* z */ > jumpPhase( i == 9 || i == 19 ? 2 : 1 , ( i < jumpFrames / 2 ) ? 3 : -3 );
+                jumpVector.push_back( jumpPhase );
         }
 
         // salto largo
         for ( unsigned int i = 0; i < highJumpFrames; i++ )
         {
-                JumpMotion jumpMotion( 2 , ( i < 17 ) ? 3 : -3 );
-                highJumpVector.push_back( jumpMotion );
+                std::pair< int /* xy */, int /* z */ > jumpPhase( 2 , ( i < 17 ) ? 3 : -3 );
+                highJumpVector.push_back( jumpPhase );
         }
 
         // la primera fase del salto
         jumpIndex = 0;
 
-        // Fotogramas de caída
+        // fotogramas de caída
         fallFrames[ North ] = 6;
         fallFrames[ South ] = 0;
         fallFrames[  East ] = 9;

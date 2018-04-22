@@ -7,14 +7,13 @@
 #include <algorithm> // std::for_each
 
 using gui::TextField;
-using gui::Alignment;
 using gui::Label;
 
 
-TextField::TextField( unsigned int width, const Alignment& alignment )
+TextField::TextField( unsigned int width, const std::string& align )
         : Widget( )
         , width( width )
-        , alignment( alignment )
+        , alignment( align )
         , heightOfField( 0 )
 {
 
@@ -30,7 +29,13 @@ void TextField::draw( BITMAP* where )
 {
         for ( std::list< Label* >::iterator i = this->lines.begin (); i != this->lines.end (); ++i )
         {
-                ( *i )->draw( where );
+                Label* label = *i ;
+
+                if ( ( label->getY() + static_cast< int >( label->getWidth() ) >= 0 ) &&
+                                ( label->getY() < where->h ) )
+                {
+                        label->draw( where );
+                }
         }
 }
 
@@ -38,21 +43,13 @@ void TextField::addLine( const std::string& text, const std::string& font, const
 {
         Label* label = new Label( text, font, color );
 
+        const int deltaW = static_cast< int >( this->width ) - static_cast< int >( label->getWidth() );
         int posX = 0;
 
-        switch ( this->alignment )
-        {
-                case gui::LeftAlignment:
-                        break;
-
-                case gui::CenterAlignment:
-                        posX = ( this->width - label->getWidth() ) >> 1;
-                        break;
-
-                case gui::RightAlignment:
-                        posX = this->width - label->getWidth();
-                        break;
-        }
+        if ( alignment == "center" )
+                posX = deltaW >> 1;
+        else if ( alignment == "right" )
+                posX = deltaW;
 
         label->moveTo( posX + this->getX (), this->getY () + heightOfField );
         this->heightOfField += label->getHeight();
@@ -60,26 +57,18 @@ void TextField::addLine( const std::string& text, const std::string& font, const
         lines.push_back( label );
 }
 
-void TextField::setAlignment( const Alignment& newAlignment )
+void TextField::setAlignment( const std::string& newAlignment )
 {
         for ( std::list< Label * >::iterator i = this->lines.begin (); i != this->lines.end (); ++i )
         {
                 Label* label = ( *i );
 
                 int offsetX = 0;
-                switch ( newAlignment )
-                {
-                        case gui::CenterAlignment:
-                                offsetX = ( this->width - label->getWidth() ) >> 1;
-                                break;
 
-                        case gui::RightAlignment:
-                                offsetX = this->width - label->getWidth();
-                                break;
-
-                        default:
-                                break;
-                }
+                if ( newAlignment == "center" )
+                        offsetX = ( this->width - label->getWidth() ) >> 1;
+                else if ( newAlignment == "right" )
+                        offsetX = this->width - label->getWidth();
 
                 label->moveTo( offsetX + this->getX (), label->getY () );
         }

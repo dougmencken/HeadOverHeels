@@ -493,7 +493,7 @@ Door* RoomBuilder::buildDoor( tinyxml2::XMLElement* item )
         return
                 new Door( GameManager::getInstance()->getItemDataManager(), label,
                                 itemX, itemY, ( itemZ > Top ? itemZ * LayerHeight : Top ),
-                                        Way( direction ) );
+                                        direction );
 }
 
 /* static */

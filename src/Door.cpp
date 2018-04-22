@@ -8,7 +8,7 @@
 namespace isomot
 {
 
-Door::Door( ItemDataManager * itemData, const std::string& label, int cx, int cy, int z, const Way& way )
+Door::Door( ItemDataManager * itemData, const std::string& label, int cx, int cy, int z, const std::string& way )
         : itemDataManager( itemData )
         , labelOfDoor( label )
         , cellX( cx )
@@ -38,7 +38,7 @@ FreeItem* Door::getLeftJamb()
 
                 if ( leftJambData != nilPointer )
                 {
-                        switch ( getWhereIsDoor().getIntegerOfWay() )
+                        switch ( Way( getWhereIsDoor() ).getIntegerOfWay() )
                         {
                                 case North:
                                 case Northeast:
@@ -95,7 +95,7 @@ FreeItem* Door::getRightJamb()
 
                 if ( rightJambData != nilPointer )
                 {
-                        switch ( getWhereIsDoor().getIntegerOfWay() )
+                        switch ( Way( getWhereIsDoor() ).getIntegerOfWay() )
                         {
                                 case North:
                                 case Northeast:
@@ -152,7 +152,7 @@ FreeItem* Door::getLintel()
 
                 if ( lintelData != nilPointer )
                 {
-                        switch ( getWhereIsDoor().getIntegerOfWay() )
+                        switch ( Way( getWhereIsDoor() ).getIntegerOfWay() )
                         {
                                 case North:
                                 case Northeast:
@@ -200,7 +200,7 @@ bool Door::isUnderDoor( int x, int y, int z )
 
         if ( z < 0 ) z = 0;
 
-        switch ( getWhereIsDoor().getIntegerOfWay() )
+        switch ( Way( getWhereIsDoor() ).getIntegerOfWay() )
         {
                 case North:
                 case Northeast:

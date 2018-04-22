@@ -146,6 +146,12 @@
     </properties>
   </text>
 
+  <text alias="screen-size">
+    <properties>
+      <string>Size of Screen</string>
+    </properties>
+  </text>
+
   <text alias="full-screen">
     <properties>
       <string>Full Screen</string>

@@ -239,7 +239,7 @@ private:
        /**
         * Las puertas
         */
-        std::map < Way, Door * > doors ;
+        std::map < std::string, Door * > doors ;
 
        /**
         * Isometric coordinates that limit this room
@@ -320,9 +320,9 @@ public:
 
         unsigned short getLimitAt ( const std::string& way ) {  return bounds[ way ] ;  }
 
-        Door * getDoorAt ( const std::string& way ) {  return doors[ Way( way ) ] ;  }
+        Door * getDoorAt ( const std::string& way ) {  return doors[ way ] ;  }
 
-        bool hasDoorAt ( const std::string& way ) {  return ( doors[ Way( way ) ] != nilPointer ) ;  }
+        bool hasDoorAt ( const std::string& way ) {  return ( doors[ way ] != nilPointer ) ;  }
 
         void setWayOfExit ( const std::string& exit ) {  this->wayOfExit = exit ;  }
 

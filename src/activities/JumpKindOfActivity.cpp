@@ -1,6 +1,5 @@
 
 #include "JumpKindOfActivity.hpp"
-#include "FallKindOfActivity.hpp"
 #include "Behavior.hpp"
 #include "Item.hpp"
 #include "FreeItem.hpp"
@@ -35,15 +34,25 @@ JumpKindOfActivity::~JumpKindOfActivity( )
 
 }
 
-bool JumpKindOfActivity::jump( Behavior* behavior, ActivityOfItem* activity, const std::vector< JumpMotion >& jumpVector, int jumpPhase )
+bool JumpKindOfActivity::jump( Behavior* behavior, ActivityOfItem* activity, unsigned int jumpPhase, const std::vector< std::pair< int /* xy */, int /* z */ > >& jumpVector )
 {
         bool itemMoved = false;
         ActivityOfItem displaceActivity = Wait;
         PlayerItem* playerItem = dynamic_cast< PlayerItem * >( behavior->getItem() );
         Mediator* mediator = playerItem->getMediator();
 
-        const int deltaXY = jumpVector[ jumpPhase ].first ;
-        const int deltaZ = jumpVector[ jumpPhase ].second ;
+        int deltaXY = jumpVector[ jumpPhase ].first ;
+        int deltaZ = jumpVector[ jumpPhase ].second ;
+
+        if ( GameManager::getInstance()->charactersFly() )
+        {
+                deltaXY = 0;
+
+                if ( deltaZ < 0 ) deltaZ = 0;
+                else deltaZ = 2;
+
+                *activity = Fall;
+        }
 
         // let’s move up
         if ( ! playerItem->addToZ( deltaZ ) )
@@ -129,7 +138,7 @@ bool JumpKindOfActivity::jump( Behavior* behavior, ActivityOfItem* activity, con
         }
 
         // end jump when it’s last phase
-        if ( jumpPhase + 1 >= static_cast< int >( jumpVector.size() ) )
+        if ( ( jumpPhase + 1 ) >= jumpVector.size() )
         {
                 *activity = Fall;
         }
@@ -148,10 +157,10 @@ void JumpKindOfActivity::lift( FreeItem* sender, FreeItem* freeItem, int z )
                 {
                         freeItem->getBehavior()->changeActivityOfItem( DisplaceUp, sender );
                 }
-                // raise item when it is not elevator
+                // raise item when it’s not elevator
                 else if ( freeItem->getBehavior()->getNameOfBehavior () != "behavior of elevator" )
                 {
-                        // is there something above
+                        // is there’s something above
                         if ( ! freeItem->addToZ( z ) )
                         {
                                 Mediator* mediator = freeItem->getMediator();

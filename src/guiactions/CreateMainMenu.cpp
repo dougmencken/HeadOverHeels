@@ -60,7 +60,7 @@ void CreateMainMenu::doAction ()
                 quitGame->setAction( new ExitApplication() );
 
                 Menu * menu = new Menu( );
-                menu->setVerticalOffset( 20 );
+                menu->setVerticalOffset( 12 );
 
                 menu->addOption( newGame );
                 menu->addOption( loadGame );

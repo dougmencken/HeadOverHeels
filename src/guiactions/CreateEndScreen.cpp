@@ -8,12 +8,11 @@
 #include "Screen.hpp"
 #include "Menu.hpp"
 #include "Label.hpp"
+#include "TextField.hpp"
 #include "CreateMainMenu.hpp"
-#include <sstream>
 
 using gui::CreateEndScreen;
 using isomot::SoundManager;
-using isomot::ScreenWidth;
 
 
 CreateEndScreen::CreateEndScreen( BITMAP* picture, unsigned int rooms, unsigned short planets )
@@ -39,37 +38,34 @@ void CreateEndScreen::doAction ()
 
         screen->placeHeadAndHeels( /* icons */ true, /* copyrights */ false );
 
+        const unsigned int leading = 40 ;
+        const unsigned int screenWidth = isomot::ScreenWidth();
+        const unsigned int screenHeight = isomot::ScreenHeight();
+        const unsigned int space = ( screenWidth / 20 ) - 10;
+        const unsigned int labelsY = screenHeight - ( leading * 3 ) - ( space << 1 ) ;
+        const unsigned int resultY = ( screenHeight >> 1 ) - ( screenHeight >> 4 ) - 20 ;
+
         LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
-        Label* label = 0;
-        std::ostringstream ss;
 
         // score reached by the player
         unsigned int score = this->rooms * 160 + this->planets * 10000;
-        ss.str( std::string() );
-        ss << score;
-        label = new Label( languageManager->findLanguageStringForAlias( "score" )->getText() + " " + ss.str(), "regular", "yellow" );
-        label->moveTo( ( ScreenWidth - label->getWidth() ) >> 1, 300 );
-        screen->addWidget( label );
+        Label* scoreLabel = new Label( languageManager->findLanguageStringForAlias( "score" )->getText() + " " + isomot::numberToString( score ), "regular", "yellow" );
+        scoreLabel->moveTo( ( screenWidth - scoreLabel->getWidth() ) >> 1, labelsY );
+        screen->addWidget( scoreLabel );
 
         // count of visited rooms
         std::string exploredRooms = languageManager->findLanguageStringForAlias( "explored-rooms" )->getText();
-        ss.str( std::string() );
-        ss << this->rooms;
-        size_t prooms = exploredRooms.find( "%d" );
-        exploredRooms.replace( prooms, 2, ss.str() );
-        label = new Label( exploredRooms, "regular", "cyan" );
-        label->moveTo( ( ScreenWidth - label->getWidth() ) >> 1, 340 );
-        screen->addWidget( label );
+        exploredRooms.replace( exploredRooms.find( "%d" ), 2, isomot::numberToString( this->rooms ) );
+        Label* rooms = new Label( exploredRooms, "regular", "cyan" );
+        rooms->moveTo( ( screenWidth - rooms->getWidth() ) >> 1, labelsY + leading );
+        screen->addWidget( rooms );
 
         // count of liberated planets
         std::string liberatedPlanets = languageManager->findLanguageStringForAlias( "liberated-planets" )->getText();
-        ss.str( std::string() );
-        ss << this->planets;
-        size_t pplanets = liberatedPlanets.find( "%d" );
-        liberatedPlanets.replace( pplanets, 2, ss.str() );
-        label = new Label( liberatedPlanets, "regular", "white" );
-        label->moveTo( ( ScreenWidth - label->getWidth() ) >> 1, 380 );
-        screen->addWidget( label );
+        liberatedPlanets.replace( liberatedPlanets.find( "%d" ), 2, isomot::numberToString( this->planets ) );
+        Label* planets = new Label( liberatedPlanets, "regular", "white" );
+        planets->moveTo( ( screenWidth - planets->getWidth() ) >> 1, labelsY + leading + leading );
+        screen->addWidget( planets );
 
         // range reached by player
         unsigned int bounds[ ] = {  0, 8000, 20000, 30000, 55000, 84000  };
@@ -77,9 +73,10 @@ void CreateEndScreen::doAction ()
 
         if ( score == 0 )
         {
-                label = new Label( "fix the game please", "big", "orange" );
-                label->moveTo( ( ScreenWidth - label->getWidth() ) >> 1, 180 );
-                screen->addWidget( label );
+                TextField* result = new TextField( screenWidth, "center" );
+                result->addLine( "fix the game please", "big", "orange" );
+                result->moveTo( 0, resultY );
+                screen->addWidget( result );
         }
         else
         {
@@ -87,17 +84,18 @@ void CreateEndScreen::doAction ()
                 {
                         if ( score > bounds[ i ] )
                         {
-                                label = new Label( languageManager->findLanguageStringForAlias( ranges[ i ] )->getText(), "big", "multicolor" );
-                                label->moveTo( ( ScreenWidth - label->getWidth() ) >> 1, 180 );
-                                screen->addWidget( label );
+                                TextField* result = new TextField( screenWidth, "center" );
+                                result->addLine( languageManager->findLanguageStringForAlias( ranges[ i ] )->getText(), "big", "multicolor" );
+                                result->moveTo( 0, resultY );
+                                screen->addWidget( result );
 
                                 break;
                         }
                 }
         }
 
-        label->setAction( screen->getEscapeAction () );
-        screen->setKeyHandler( label );
+        scoreLabel->setAction( screen->getEscapeAction () );
+        screen->setKeyHandler( scoreLabel );
 
         GuiManager::getInstance()->changeScreen( screen, false );
 }

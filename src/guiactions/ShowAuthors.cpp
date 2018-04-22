@@ -39,7 +39,7 @@ void ShowAuthors::doAction ()
 
                 langString = languageManager->findLanguageStringForAlias( "credits-text" );
                 this->initialY = heightOfWhereToDraw;
-                this->linesOfCredits = new TextField( isomot::ScreenWidth, CenterAlignment );
+                this->linesOfCredits = new TextField( isomot::ScreenWidth(), "center" );
                 this->linesOfCredits->moveTo( 0, initialY );
 
                 size_t howManyLines = langString->getLinesCount() ;
@@ -103,15 +103,15 @@ void ShowAuthors::doAction ()
 
                 if ( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_L ] )
                 {
-                        linesOfCredits->setAlignment( LeftAlignment );
+                        linesOfCredits->setAlignment( "left" );
                 }
                 if ( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_C ] )
                 {
-                        linesOfCredits->setAlignment( CenterAlignment );
+                        linesOfCredits->setAlignment( "center" );
                 }
                 if ( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_R ] )
                 {
-                        linesOfCredits->setAlignment( RightAlignment );
+                        linesOfCredits->setAlignment( "right" );
                 }
 
                 if ( yNow <= whenToReloop )

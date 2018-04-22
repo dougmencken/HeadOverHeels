@@ -41,6 +41,20 @@ int main( int argc, char** argv )
                 }
         #endif
 
+                if ( options.count( "width" ) > 0 )
+                {
+                        int width = std::atoi( options[ "width" ].c_str () );
+                        if ( width < 640 ) width = 640;
+                        isomot::setScreenWidth( static_cast< unsigned int >( width ) );
+                }
+
+                if ( options.count( "height" ) > 0 )
+                {
+                        int height = std::atoi( options[ "height" ].c_str () );
+                        if ( height < 480 ) height = 480;
+                        isomot::setScreenHeight( static_cast< unsigned int >( height ) );
+                }
+
                 if ( options.count( "head-room" ) > 0 )
                         isomot::GameManager::getInstance()->setHeadRoom( options[ "head-room" ] );
 

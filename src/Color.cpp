@@ -7,6 +7,8 @@
 
 Color * Color::theBlack = new Color( 0, 0, 0 ) ;
 
+Color * Color::theDarkBlue = new Color( 0, 0, 127 ) ;
+
 Color * Color::theBlue = new Color( 50, 50, 255 ) ;
 
 Color * Color::theRed = new Color( 255, 50, 50 ) ;

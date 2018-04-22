@@ -35,7 +35,7 @@ void ColorCyclingLabel::updateImageOfLabel( const std::string& text, Font * font
         {
                 allegro::destroyBitmap( imageOfLetters );
                 imageOfLetters = create_bitmap_ex( 32, getWidth(), getHeight() );
-                clear_to_color( imageOfLetters, Color::colorOfTransparency()->toAllegroColor () );
+                allegro::clearToColor( imageOfLetters, Color::colorOfTransparency()->toAllegroColor () );
 
 		if ( ! text.empty() )
 		{

@@ -120,6 +120,8 @@ private:
 
         std::list < Font * > fonts ;
 
+        std::multimap< unsigned int, unsigned int > sizesOfScreen ;
+
 private:
 
         void assignLanguage ( const std::string& language ) ;

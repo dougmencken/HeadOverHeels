@@ -25,8 +25,6 @@ using gui::LanguageManager;
 using isomot::GameManager;
 using isomot::InputManager;
 using isomot::SoundManager;
-using isomot::ScreenWidth;
-using isomot::ScreenHeight;
 
 
 GuiManager* GuiManager::instance = nilPointer ;
@@ -85,7 +83,7 @@ GuiManager::GuiManager( ) :
         }
 
         // create image to draw interface
-        this->picture = create_bitmap_ex( 32, ScreenWidth, ScreenHeight );
+        this->picture = create_bitmap_ex( 32, isomot::ScreenWidth(), isomot::ScreenHeight() );
 
         // initialize sound manager
         SoundManager::getInstance()->readListOfSounds( "sounds.xml" );
@@ -265,8 +263,26 @@ void GuiManager::allegroSetup()
         // 8 bits for each of three colors with 8 bits for alpha channel
         set_color_depth( 32 );
 
+        // fill list of screen’s sizes
+
+        sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 640, 480 ) );
+
+        /*  if ( allegro::setGraphicsMode( GFX_AUTODETECT_FULLSCREEN, 800, 600 ) )
+                sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 800, 600 ) ); */
+
+        sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 800, 600 ) );
+        sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 1024, 576 ) );
+        sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 1024, 600 ) );
+        sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 1024, 768 ) );
+        sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 1280, 720 ) );
+        sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 1280, 1024 ) );
+
+        // switch to chosen size of screen
+
         int magicCard = this->atFullScreen ? GFX_AUTODETECT_FULLSCREEN : GFX_AUTODETECT_WINDOWED ;
-        set_gfx_mode( magicCard, ScreenWidth, ScreenHeight, 0, 0 );
+
+        if ( ! allegro::setGraphicsMode( magicCard, isomot::ScreenWidth(), isomot::ScreenHeight() ) )
+                toggleFullScreenVideo ();
 
 #ifdef __WIN32
         // when application loses focus, the game will continue in background
@@ -286,12 +302,20 @@ bool GuiManager::isAtFullScreen ()
 void GuiManager::toggleFullScreenVideo ()
 {
         int magicCardToggled = this->atFullScreen ? GFX_AUTODETECT_WINDOWED : GFX_AUTODETECT_FULLSCREEN ;
-        set_gfx_mode( magicCardToggled, ScreenWidth, ScreenHeight, 0, 0 );
-        this->atFullScreen = ! this->atFullScreen ;
 
-        fprintf( stdout, "video is now %s\n", ( this->atFullScreen ? "at full screen" : "in window" ) );
-        milliSleep( 80 );
-        redraw ();
+        if ( allegro::setGraphicsMode( magicCardToggled, isomot::ScreenWidth(), isomot::ScreenHeight() ) )
+        {
+                this->atFullScreen = ! this->atFullScreen ;
+
+                fprintf( stdout, "video is now %s\n", ( this->atFullScreen ? "at full screen" : "in window" ) );
+                milliSleep( 80 );
+                redraw ();
+        }
+        else
+        {
+                int magicCard = this->atFullScreen ? GFX_AUTODETECT_FULLSCREEN : GFX_AUTODETECT_WINDOWED ;
+                allegro::setGraphicsMode( magicCard, isomot::ScreenWidth(), isomot::ScreenHeight() ) ;
+        }
 }
 
 void GuiManager::assignLanguage( const std::string& language )

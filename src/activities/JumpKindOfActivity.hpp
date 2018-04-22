@@ -41,12 +41,12 @@ public:
 
        /**
         * Item jumps
-        * @param jumpVector vector of pair of values ( offset on X or Y and offset on Z )
+        * @param jumpVector vector of pair of values ( offset on X or Y, offset on Z )
         *                   for each cycle to define item’s jump
         * @param jumpPhase phase of jump
         * @return true if jump or false when there’s collision
         */
-        virtual bool jump ( Behavior * behavior, ActivityOfItem * activity, const std::vector < JumpMotion >& jumpVector, int jumpPhase ) ;
+        virtual bool jump ( Behavior * behavior, ActivityOfItem * activity, unsigned int jumpPhase, const std::vector < std::pair< int /* xy */, int /* z */ > >& jumpVector ) ;
 
 protected:
 

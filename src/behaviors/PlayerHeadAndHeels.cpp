@@ -21,15 +21,15 @@ PlayerHeadAndHeels::PlayerHeadAndHeels( Item * item, const std::string & behavio
         // salto normal
         for ( unsigned int i = 0; i < jumpFrames; i++ )
         {
-                JumpMotion jumpMotion( 1, ( i < 4 ? 4 : ( i < 8 ? 3 : 2 ) ) );
-                jumpVector.push_back( jumpMotion );
+                std::pair< int /* xy */, int /* z */ > jumpPhase( 1, ( i < 4 ? 4 : ( i < 8 ? 3 : 2 ) ) );
+                jumpVector.push_back( jumpPhase );
         }
 
         // salto largo
         for ( unsigned int i = 0; i < highJumpFrames; i++ )
         {
-                JumpMotion jumpMotion( 1, 3 );
-                highJumpVector.push_back( jumpMotion );
+                std::pair< int /* xy */, int /* z */ > jumpPhase( 1, 3 );
+                highJumpVector.push_back( jumpPhase );
         }
 
         // la primera fase del salto
@@ -65,8 +65,6 @@ PlayerHeadAndHeels::PlayerHeadAndHeels( Item * item, const std::string & behavio
         glideTimer->go();
         blinkingTimer = new Timer();
         blinkingTimer->go();
-
-        fireFromHooterIsPresent = false;
 }
 
 PlayerHeadAndHeels::~PlayerHeadAndHeels( )

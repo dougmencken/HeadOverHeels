@@ -232,6 +232,8 @@ public:
 
         void setChosenGraphicSet ( const char* newSet ) {  chosenGraphicSet = newSet ;  }
 
+        bool isPresentGraphicSet () const {  return ( chosenGraphicSet == "gfx" ) ;  }
+
         bool isSimpleGraphicSet () const {  return ( chosenGraphicSet == "gfx.simple" ) ;  }
 
 private:
@@ -261,6 +263,10 @@ public:
         bool isImmuneToCollisionsWithMortalItems () const {  return immunityToCollisions ;  }
 
         void toggleImmunityToCollisionsWithMortalItems () {  immunityToCollisions = ! immunityToCollisions ;  }
+
+        bool charactersFly () const {  return noFallingDown ;  }
+
+        void setCharactersFly ( bool fly ) {  noFallingDown = fly ;  }
 
         bool playMelodyOfScenery () const {  return playTuneOfScenery ;  }
 
@@ -310,6 +316,8 @@ private:
         bool vidasInfinitas ;
 
         bool immunityToCollisions ;
+
+        bool noFallingDown ;
 
         bool playTuneOfScenery ;
 

@@ -95,7 +95,7 @@ void Label::createImageOfLabel( const std::string& text, Font * font )
         }
 
         imageOfLetters = create_bitmap_ex( 32, getWidth(), getHeight() );
-        clear_to_color( imageOfLetters, Color::colorOfTransparency()->toAllegroColor () );
+        allegro::clearToColor( imageOfLetters, Color::colorOfTransparency()->toAllegroColor () );
 
         if ( ! text.empty() )
         {

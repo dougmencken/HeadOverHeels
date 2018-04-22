@@ -53,7 +53,7 @@ void CreateCongratulationsScreen::doAction ()
 
         // Texto final
         langString = languageManager->findLanguageStringForAlias( "final-text" );
-        TextField* textField = new TextField( isomot::ScreenWidth, CenterAlignment );
+        TextField* textField = new TextField( isomot::ScreenWidth(), "center" );
         textField->moveTo( 0, 180 );
 
         for ( size_t i = 0; i < langString->getLinesCount(); i++ )

@@ -44,6 +44,26 @@ void nanoSleep ( unsigned long nanoseconds )
 namespace isomot
 {
 
+unsigned int screenWidth = 640 ;
+
+unsigned int screenHeight = 480 ;
+
+unsigned int ScreenWidth() {  return screenWidth ;  }
+
+unsigned int ScreenHeight() {  return screenHeight ;  }
+
+void setScreenWidth( unsigned int width )
+{
+        if ( width < 640 ) width = 640;
+        screenWidth = width;
+}
+
+void setScreenHeight( unsigned int height )
+{
+        if ( height < 480 ) height = 480;
+        screenHeight = height;
+}
+
 std::string makeRandomString( const size_t length )
 {
         static const char alphanum[] =  "0123456789"

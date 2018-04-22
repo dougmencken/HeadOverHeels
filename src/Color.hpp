@@ -56,6 +56,8 @@ public:
 
         static Color * whiteColor () {  return theWhite ;  }                    /* speccy color 7 */
 
+        static Color * darkBlueColor () {  return theDarkBlue ;  }
+
         static Color * orangeColor () {  return theOrange ;  }
 
         static Color * gray50Color () {  return the50Gray ;  }                  /* 50% gray */
@@ -81,6 +83,8 @@ private:
         static BITMAP * multiplyWithColor ( BITMAP * picture, unsigned char red, unsigned char green, unsigned char blue ) ;
 
         static Color * theBlack ;
+
+        static Color * theDarkBlue ;
 
         static Color * theBlue ;
 

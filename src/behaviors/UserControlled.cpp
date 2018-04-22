@@ -27,12 +27,13 @@ UserControlled::UserControlled( Item * item, const std::string & behavior )
         , automaticStepsThruDoor( 0 )
         , highSpeedSteps( 0 )
         , shieldSteps( 0 )
+        , fireFromHooterIsPresent( false )
         , speedTimer( nilPointer )
         , fallTimer( nilPointer )
         , glideTimer( nilPointer )
         , blinkingTimer( nilPointer )
 {
-        fallFrames[ North ] = fallFrames[ South ] = fallFrames[ East ] = fallFrames[ West ] = 0xffffffff; // wtf is this magic mask for ?
+
 }
 
 UserControlled::~UserControlled()
@@ -60,15 +61,14 @@ void UserControlled::wait( PlayerItem * player )
 {
         player->wait();
 
-        // Se comprueba si el jugador debe empezar a caer
         if ( FallKindOfActivity::getInstance()->fall( this ) )
         {
                 speedTimer->reset();
                 activity = Fall;
 
-                // Si el jugador se detiene entonces se para la cuenta atrás del conejo que proporciona doble velocidad
                 if ( player->getLabel() == "head" && player->getHighSpeed() > 0 && this->highSpeedSteps < 4 )
                 {
+                        // reset double speed counter
                         this->highSpeedSteps = 0;
                 }
         }
@@ -222,26 +222,14 @@ void UserControlled::jump( PlayerItem * player )
                         break;
 
                 case RegularJump:
-                        // is it time to jump
-                        if ( speedTimer->getValue() > player->getSpeed() )
-                        {
-                                JumpKindOfActivity::getInstance()->jump( this, &activity, jumpVector, jumpIndex );
-
-                                // to next phase of jump
-                                jumpIndex++ ;
-                                if ( activity == Fall ) jumpIndex = 0;
-
-                                speedTimer->reset();
-
-                                player->animate();
-                        }
-                        break;
-
                 case HighJump:
                         // is it time to jump
                         if ( speedTimer->getValue() > player->getSpeed() )
                         {
-                                JumpKindOfActivity::getInstance()->jump( this, &activity, highJumpVector, jumpIndex );
+                                if ( activity == RegularJump )
+                                        JumpKindOfActivity::getInstance()->jump( this, &activity, jumpIndex, jumpVector );
+                                else if ( activity == HighJump )
+                                        JumpKindOfActivity::getInstance()->jump( this, &activity, jumpIndex, highJumpVector );
 
                                 // to next phase of jump
                                 jumpIndex++ ;
@@ -272,8 +260,7 @@ void UserControlled::jump( PlayerItem * player )
 
 void UserControlled::glide( PlayerItem * player )
 {
-        ///if ( glideTimer->getValue() > player->getSpeed() / 2.0 )
-        if ( glideTimer->getValue() > player->getWeight() )
+        if ( glideTimer->getValue() > player->getWeight() /* player->getSpeed() / 2.0 */ )
         {
                 // when there’s a collision then stop falling and return to waiting
                 if ( ! FallKindOfActivity::getInstance()->fall( this ) &&

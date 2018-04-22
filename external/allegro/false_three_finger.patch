@@ -1,0 +1,11 @@
+--- a/src/keyboard.c
++++ b/src/keyboard.c
+@@ -27,7 +27,7 @@
+ 
+ static int keyboard_polled = FALSE;          /* are we in polling mode? */
+ 
+-int three_finger_flag = TRUE;                /* mode flags */
++int three_finger_flag = FALSE;
+ int key_led_flag = TRUE;
+ 
+ volatile char key[KEY_MAX];                  /* key pressed flags */

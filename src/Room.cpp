@@ -51,18 +51,18 @@ Room::Room( const std::string& roomFile, const std::string& scenery, int xTiles,
         bounds[ "westsouth" ] = 64000;
 
         doors.clear ();
-        doors[ North ] = 0;
-        doors[ South ] = 0;
-        doors[ East ] = 0;
-        doors[ West ] = 0;
-        doors[ Northeast ] = 0;
-        doors[ Southeast ] = 0;
-        doors[ Southwest ] = 0;
-        doors[ Northwest ] = 0;
-        doors[ Eastnorth ] = 0;
-        doors[ Eastsouth ] = 0;
-        doors[ Westnorth ] = 0;
-        doors[ Westsouth ] = 0;
+        doors[ "north" ] = 0;
+        doors[ "south" ] = 0;
+        doors[ "east" ] = 0;
+        doors[ "west" ] = 0;
+        doors[ "northeast" ] = 0;
+        doors[ "southeast" ] = 0;
+        doors[ "southwest" ] = 0;
+        doors[ "northwest" ] = 0;
+        doors[ "eastnorth" ] = 0;
+        doors[ "eastsouth" ] = 0;
+        doors[ "westnorth" ] = 0;
+        doors[ "westsouth" ] = 0;
 
         // create empty floor
         for ( int i = 0; i < xTiles * yTiles + 1; i++ )
@@ -126,17 +126,17 @@ Room::Room( const std::string& roomFile, const std::string& scenery, int xTiles,
         // but image of double or triple room is larger
         if ( isSingleRoom() )
         {
-                whereToDraw = create_bitmap_ex( 32, ScreenWidth, ScreenHeight );
+                whereToDraw = create_bitmap_ex( 32, ScreenWidth(), ScreenHeight() );
         }
         else if ( xTiles > 10 && yTiles > 10 )
         {
-                whereToDraw = create_bitmap_ex( 32, ScreenWidth + 20 * ( tileSize << 1 ), ScreenHeight + 20 * tileSize );
+                whereToDraw = create_bitmap_ex( 32, ScreenWidth() + 20 * ( tileSize << 1 ), ScreenHeight() + 20 * tileSize );
         }
         else if ( xTiles > 10 || yTiles > 10 )
         {
-                int w = ScreenWidth + ( xTiles > 10 ? ( ( xTiles - 10 ) * ( tileSize << 1 ) ) : 0 )
+                int w = ScreenWidth() + ( xTiles > 10 ? ( ( xTiles - 10 ) * ( tileSize << 1 ) ) : 0 )
                                         + ( yTiles > 10 ? ( ( yTiles - 10 ) * ( tileSize << 1 ) ) : 0 );
-                int h = ScreenHeight + ( xTiles > 10 ? ( ( xTiles - 10 ) * tileSize) : 0 )
+                int h = ScreenHeight() + ( xTiles > 10 ? ( ( xTiles - 10 ) * tileSize) : 0 )
                                         + ( yTiles > 10 ? ( ( yTiles - 10 ) * tileSize) : 0 );
 
                 whereToDraw = create_bitmap_ex( 32, w, h );
@@ -152,7 +152,7 @@ Room::Room( const std::string& roomFile, const std::string& scenery, int xTiles,
 Room::~Room()
 {
         // bin doors
-        for ( std::map< Way, Door * >::const_iterator mi = doors.begin (); mi != doors.end (); ++mi )
+        for ( std::map< std::string, Door * >::const_iterator mi = doors.begin (); mi != doors.end (); ++mi )
         {
                 delete mi->second ;
         }
@@ -226,7 +226,14 @@ void Room::addWall( Wall * wall )
 void Room::addDoor( Door * door )
 {
         door->setMediator( mediator );
-        this->doors[ door->getWhereIsDoor() ] = door;
+
+        std::string doorAt = door->getWhereIsDoor();
+        this->doors[ doorAt ] = door;
+
+        // each door is actually three free items
+        this->addFreeItem( door->getLeftJamb() );
+        this->addFreeItem( door->getRightJamb() );
+        this->addFreeItem( door->getLintel() );
 
         // update position of walls
         for ( std::vector< Wall * >::iterator wx = this->wallX.begin (); wx != this->wallX.end (); ++wx ) {
@@ -235,11 +242,6 @@ void Room::addDoor( Door * door )
         for ( std::vector< Wall * >::iterator wy = this->wallY.begin (); wy != this->wallY.end (); ++wy ) {
                 ( *wy )->calculateOffset();
         }
-
-        // each door is actually three free items
-        this->addFreeItem( door->getLeftJamb() );
-        this->addFreeItem( door->getRightJamb() );
-        this->addFreeItem( door->getLintel() );
 }
 
 void Room::addGridItem( GridItem * gridItem )
@@ -809,8 +811,11 @@ void Room::draw( BITMAP* where )
         // draw room when it is active and image to draw it isn’t nil
         if ( active && where != nilPointer )
         {
-                // clean the image where to draw this room
-                clear_bitmap( where );
+                // clear image of room
+                if ( GameManager::getInstance()->charactersFly() )
+                        allegro::clearToColor( where, Color::darkBlueColor()->toAllegroColor() );
+                else
+                        allegro::clearToColor( where, Color::blackColor()->toAllegroColor() );
 
                 // acquire video memory before drawing
                 if ( is_video_bitmap( where ) )
@@ -930,20 +935,20 @@ void Room::draw( BITMAP* where )
 
 void Room::calculateBounds()
 {
-        bounds[ "north" ] = doors[ North ] || doors[ Northeast ] || doors[ Northwest ] || this->kindOfFloor == "none" ? tileSize : 0;
-        bounds[ "east" ] = doors[ East ] || doors[ Eastnorth ] || doors[ Eastsouth ] || this->kindOfFloor == "none" ? tileSize : 0;
-        bounds[ "south" ] = tileSize * numberOfTiles.first - ( doors[ South ] || doors[ Southeast ] || doors[ Southwest ]  ? tileSize : 0 );
-        bounds[ "west" ] = tileSize * numberOfTiles.second - ( doors[ West ] || doors[ Westnorth ] || doors[ Westsouth ]  ? tileSize : 0 );
+        bounds[ "north" ] = doors[ "north" ] || doors[ "northeast" ] || doors[ "northwest" ] || this->kindOfFloor == "none" ? tileSize : 0;
+        bounds[ "east" ] = doors[ "east" ] || doors[ "eastnorth" ] || doors[ "eastsouth" ] || this->kindOfFloor == "none" ? tileSize : 0;
+        bounds[ "south" ] = tileSize * numberOfTiles.first - ( doors[ "south" ] || doors[ "southeast" ] || doors[ "southwest" ]  ? tileSize : 0 );
+        bounds[ "west" ] = tileSize * numberOfTiles.second - ( doors[ "west" ] || doors[ "westnorth" ] || doors[ "westsouth" ]  ? tileSize : 0 );
 
         // door limits of triple room
-        bounds[ "northeast" ] = doors[ Northeast ] ? doors[ Northeast ]->getLintel()->getX() + doors[ Northeast ]->getLintel()->getWidthX() - tileSize : bounds[ "north" ];
-        bounds[ "northwest" ] = doors[ Northwest ] ? doors[ Northwest ]->getLintel()->getX() + doors[ Northwest ]->getLintel()->getWidthX() - tileSize : bounds[ "north" ];
-        bounds[ "southeast" ] = doors[ Southeast ] ? doors[ Southeast ]->getLintel()->getX() + tileSize : bounds[ "south" ];
-        bounds[ "southwest" ] = doors[ Southwest ] ? doors[ Southwest ]->getLintel()->getX() + tileSize : bounds[ "south" ];
-        bounds[ "eastnorth" ] = doors[ Eastnorth ] ? doors[ Eastnorth ]->getLintel()->getY() + doors[ Eastnorth ]->getLintel()->getWidthY() - tileSize : bounds[ "east" ];
-        bounds[ "eastsouth" ] = doors[ Eastsouth ] ? doors[ Eastsouth ]->getLintel()->getY() + doors[ Eastsouth ]->getLintel()->getWidthY() - tileSize : bounds[ "east" ];
-        bounds[ "westnorth" ] = doors[ Westnorth ] ? doors[ Westnorth ]->getLintel()->getY() + tileSize : bounds[ "west" ];
-        bounds[ "westsouth" ] = doors[ Westsouth ] ? doors[ Westsouth ]->getLintel()->getY() + tileSize : bounds[ "west" ];
+        bounds[ "northeast" ] = doors[ "northeast" ] ? doors[ "northeast" ]->getLintel()->getX() + doors[ "northeast" ]->getLintel()->getWidthX() - tileSize : bounds[ "north" ];
+        bounds[ "northwest" ] = doors[ "northwest" ] ? doors[ "northwest" ]->getLintel()->getX() + doors[ "northwest" ]->getLintel()->getWidthX() - tileSize : bounds[ "north" ];
+        bounds[ "southeast" ] = doors[ "southeast" ] ? doors[ "southeast" ]->getLintel()->getX() + tileSize : bounds[ "south" ];
+        bounds[ "southwest" ] = doors[ "southwest" ] ? doors[ "southwest" ]->getLintel()->getX() + tileSize : bounds[ "south" ];
+        bounds[ "eastnorth" ] = doors[ "eastnorth" ] ? doors[ "eastnorth" ]->getLintel()->getY() + doors[ "eastnorth" ]->getLintel()->getWidthY() - tileSize : bounds[ "east" ];
+        bounds[ "eastsouth" ] = doors[ "eastsouth" ] ? doors[ "eastsouth" ]->getLintel()->getY() + doors[ "eastsouth" ]->getLintel()->getWidthY() - tileSize : bounds[ "east" ];
+        bounds[ "westnorth" ] = doors[ "westnorth" ] ? doors[ "westnorth" ]->getLintel()->getY() + tileSize : bounds[ "west" ];
+        bounds[ "westsouth" ] = doors[ "westsouth" ] ? doors[ "westsouth" ]->getLintel()->getY() + tileSize : bounds[ "west" ];
 }
 
 void Room::calculateCoordinates( bool hasNorthDoor, bool hasEastDoor )
@@ -960,8 +965,8 @@ void Room::calculateCoordinates( bool hasNorthDoor, bool hasEastDoor )
 
         // the origin for 8 x 8, that’s without doors, room is at ( width / 2, height / 3 )
         // for smaller room the origin moves to center on 8 x 8 grid, as example for 6 x 8 room X moves one tile
-        int middlePointX = ( xGrid > 8 || yGrid > 8 ? getWhereToDraw()->w : ScreenWidth ) >> 1 ;
-        int middlePointY = ScreenHeight / 3 ;
+        int middlePointX = ( xGrid > 8 || yGrid > 8 ? getWhereToDraw()->w : ScreenWidth() ) >> 1 ;
+        int middlePointY = ScreenHeight() / 3 ;
         this->coordinates.first = middlePointX
                                 - ( hasNorthDoor || hasNoFloor ? ( tileSize << 1 ) : 0)
                                 + ( hasEastDoor || hasNoFloor ? ( tileSize << 1 ) : 0 );
@@ -1074,85 +1079,85 @@ bool Room::calculateEntryCoordinates( const Way& wayOfEntry, int widthX, int wid
         {
                 case North:
                         *x = bounds[ "north" ] - tileSize + 1;
-                        *y = doors[ North ]->getLeftJamb()->getY() - doors[ North ]->getLeftJamb()->getWidthY();
-                        *z = doors[ North ]->getLeftJamb()->getZ();
+                        *y = doors[ "north" ]->getLeftJamb()->getY() - doors[ "north" ]->getLeftJamb()->getWidthY();
+                        *z = doors[ "north" ]->getLeftJamb()->getZ();
                         result = true;
                         break;
 
                 case South:
                         *x = bounds[ "south" ] + tileSize - widthX;
-                        *y = doors[ South ]->getLeftJamb()->getY() - doors[ South ]->getLeftJamb()->getWidthY();
-                        *z = doors[ South ]->getLeftJamb()->getZ();
+                        *y = doors[ "south" ]->getLeftJamb()->getY() - doors[ "south" ]->getLeftJamb()->getWidthY();
+                        *z = doors[ "south" ]->getLeftJamb()->getZ();
                         result = true;
                         break;
 
                 case East:
-                        *x = doors[ East ]->getLeftJamb()->getX() + doors[ East ]->getLeftJamb()->getWidthX();
+                        *x = doors[ "east" ]->getLeftJamb()->getX() + doors[ "east" ]->getLeftJamb()->getWidthX();
                         *y = bounds[ "east" ] - tileSize + widthY;
-                        *z = doors[ East ]->getLeftJamb()->getZ();
+                        *z = doors[ "east" ]->getLeftJamb()->getZ();
                         result = true;
                         break;
 
                 case West:
-                        *x = doors[ West ]->getLeftJamb()->getX() + doors[ West ]->getLeftJamb()->getWidthX();
+                        *x = doors[ "west" ]->getLeftJamb()->getX() + doors[ "west" ]->getLeftJamb()->getWidthX();
                         *y = bounds[ "west" ] + tileSize - 1;
-                        *z = doors[ West ]->getLeftJamb()->getZ();
+                        *z = doors[ "west" ]->getLeftJamb()->getZ();
                         result = true;
                         break;
 
                 case Northeast:
                         *x = bounds[ "northeast" ];
-                        *y = doors[ Northeast ]->getLeftJamb()->getY() - doors[ Northeast ]->getLeftJamb()->getWidthY();
-                        *z = doors[ Northeast ]->getLeftJamb()->getZ();
+                        *y = doors[ "northeast" ]->getLeftJamb()->getY() - doors[ "northeast" ]->getLeftJamb()->getWidthY();
+                        *z = doors[ "northeast" ]->getLeftJamb()->getZ();
                         result = true;
                         break;
 
                 case Northwest:
                         *x = bounds[ "northwest" ];
-                        *y = doors[ Northwest ]->getLeftJamb()->getY() - doors[ Northwest ]->getLeftJamb()->getWidthY();
-                        *z = doors[ Northwest ]->getLeftJamb()->getZ();
+                        *y = doors[ "northwest" ]->getLeftJamb()->getY() - doors[ "northwest" ]->getLeftJamb()->getWidthY();
+                        *z = doors[ "northwest" ]->getLeftJamb()->getZ();
                         result = true;
                         break;
 
                 case Southeast:
                         *x = bounds[ "southeast" ] - widthX;
-                        *y = doors[ Southeast ]->getLeftJamb()->getY() - doors[ Southeast ]->getLeftJamb()->getWidthY();
-                        *z = doors[ Southeast ]->getLeftJamb()->getZ();
+                        *y = doors[ "southeast" ]->getLeftJamb()->getY() - doors[ "southeast" ]->getLeftJamb()->getWidthY();
+                        *z = doors[ "southeast" ]->getLeftJamb()->getZ();
                         result = true;
                         break;
 
                 case Southwest:
                         *x = bounds[ "southwest" ] - widthX;
-                        *y = doors[ Southwest ]->getLeftJamb()->getY() - doors[ Southwest ]->getLeftJamb()->getWidthY();
-                        *z = doors[ Southwest ]->getLeftJamb()->getZ();
+                        *y = doors[ "southwest" ]->getLeftJamb()->getY() - doors[ "southwest" ]->getLeftJamb()->getWidthY();
+                        *z = doors[ "southwest" ]->getLeftJamb()->getZ();
                         result = true;
                         break;
 
                 case Eastnorth:
-                        *x = doors[ Eastnorth ]->getLeftJamb()->getX() + doors[ Eastnorth ]->getLeftJamb()->getWidthX();
+                        *x = doors[ "eastnorth" ]->getLeftJamb()->getX() + doors[ "eastnorth" ]->getLeftJamb()->getWidthX();
                         *y = bounds[ "eastnorth" ] + widthY;
-                        *z = doors[ Eastnorth ]->getLeftJamb()->getZ();
+                        *z = doors[ "eastnorth" ]->getLeftJamb()->getZ();
                         result = true;
                         break;
 
                 case Eastsouth:
-                        *x = doors[ Eastsouth ]->getLeftJamb()->getX() + doors[ Eastsouth ]->getLeftJamb()->getWidthX();
+                        *x = doors[ "eastsouth" ]->getLeftJamb()->getX() + doors[ "eastsouth" ]->getLeftJamb()->getWidthX();
                         *y = bounds[ "eastsouth" ] + widthY;
-                        *z = doors[ Eastsouth ]->getLeftJamb()->getZ();
+                        *z = doors[ "eastsouth" ]->getLeftJamb()->getZ();
                         result = true;
                         break;
 
                 case Westnorth:
-                        *x = doors[ Westnorth ]->getLeftJamb()->getX() + doors[ Westnorth ]->getLeftJamb()->getWidthX();
+                        *x = doors[ "westnorth" ]->getLeftJamb()->getX() + doors[ "westnorth" ]->getLeftJamb()->getWidthX();
                         *y = bounds[ "westnorth" ] - widthY;
-                        *z = doors[ Westnorth ]->getLeftJamb()->getZ();
+                        *z = doors[ "westnorth" ]->getLeftJamb()->getZ();
                         result = true;
                         break;
 
                 case Westsouth:
-                        *x = doors[ Westsouth ]->getLeftJamb()->getX() + doors[ Westsouth ]->getLeftJamb()->getWidthX();
+                        *x = doors[ "westsouth" ]->getLeftJamb()->getX() + doors[ "westsouth" ]->getLeftJamb()->getWidthX();
                         *y = bounds[ "westsouth" ] - widthY;
-                        *z = doors[ Westsouth ]->getLeftJamb()->getZ();
+                        *z = doors[ "westsouth" ]->getLeftJamb()->getZ();
                         result = true;
                         break;
 

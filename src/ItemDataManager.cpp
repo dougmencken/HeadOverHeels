@@ -375,7 +375,7 @@ BITMAP* ItemDataManager::cutOutLintel( BITMAP* door, unsigned int widthX, unsign
         unsigned int topHeight = height + widthY + widthX;
         BITMAP* top = create_bitmap_ex( 32, topWidth, topHeight );
 
-        clear_to_color( top, Color::colorOfTransparency()->toAllegroColor () );
+        allegro::clearToColor( top, Color::colorOfTransparency()->toAllegroColor () );
 
         if ( ns )
         {
@@ -467,7 +467,7 @@ BITMAP* ItemDataManager::cutOutLeftJamb( BITMAP* door, unsigned int widthX, unsi
 
         BITMAP* left = create_bitmap_ex ( 32, ( widthX << 1 ) + fixWidth + ( widthY << 1 ) , height + widthY + widthX ) ;
 
-        clear_to_color( left, Color::colorOfTransparency()->toAllegroColor () );
+        allegro::clearToColor( left, Color::colorOfTransparency()->toAllegroColor () );
 
         blit( door, left, fixY, lintelHeight + lintelWidthY - widthY + fixY, 0, 0, left->w, left->h );
 
@@ -484,7 +484,7 @@ BITMAP* ItemDataManager::cutOutRightJamb( BITMAP* door, unsigned int widthX, uns
 
         BITMAP* right = create_bitmap_ex ( 32, ( widthX << 1 ) + fixWidth + ( widthY << 1 ) , height + widthY + widthX ) ;
 
-        clear_to_color( right, Color::colorOfTransparency()->toAllegroColor () );
+        allegro::clearToColor( right, Color::colorOfTransparency()->toAllegroColor () );
 
         blit( door, right, door->w - right->w, lintelHeight + lintelWidthX - widthY + fixY, 0, 0, right->w, right->h );
 

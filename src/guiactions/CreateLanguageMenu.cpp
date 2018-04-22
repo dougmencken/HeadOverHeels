@@ -40,40 +40,43 @@ void CreateLanguageMenu::doAction ()
 
         screen->setEscapeAction( new gui::CreateMainMenu( getWhereToDraw() ) );
 
-        Label* label = nilPointer;
+        const unsigned int screenWidth = isomot::ScreenWidth();
+        const unsigned int space = ( screenWidth / 20 ) - 10;
 
-        label = new Label( "Head", "big", "yellow" );
-        label->moveTo( 200, 24 );
-        screen->addWidget( label );
+        Label* Head = new Label( "Head", "big", "yellow" );
+        Label* over = new Label( "over", "regular", "multicolor" );
+        Label* Heels = new Label( "Heels", "big", "yellow" );
 
-        label = new Label( "over", "regular", "multicolor" );
-        label->moveTo( 280, 45 );
-        screen->addWidget( label );
+        over->moveTo( ( screenWidth - over->getWidth() - 20 ) >> 1, space + Head->getHeight() - over->getHeight() - 8 );
+        screen->addWidget( over );
 
-        label = new Label( "Heels", "big", "yellow" );
-        label->moveTo( 360, 24 );
-        screen->addWidget( label );
+        Head->moveTo( over->getX() - Head->getWidth() - over->getFont()->getCharWidth() + 4, space );
+        screen->addWidget( Head );
 
-        screen->addPictureOfHeadAt( 66, 24 );
-        screen->addPictureOfHeelsAt( 518, 24 );
+        Heels->moveTo( over->getX() + over->getWidth() + over->getFont()->getCharWidth() - 4, space );
+        screen->addWidget( Heels );
+
+        const unsigned int headHeelsWidth = 48;
+        screen->addPictureOfHeadAt( Head->getX() - ( headHeelsWidth << 1 ) - space, space + 5 );
+        screen->addPictureOfHeelsAt( Heels->getX() + Heels->getWidth() + headHeelsWidth + space, space + 5 );
 
         // presenta los idiomas disponibles
 
         std::string language = GuiManager::getInstance()->getLanguage();
 
-        MenuWithTwoColumns * menu = new MenuWithTwoColumns( /* space between columns */ 60 );
+        MenuWithTwoColumns * menu = new MenuWithTwoColumns( /* space between columns */ ( screenWidth >> 3 ) - 20 );
         menu->setVerticalOffset( 50 ); // adjust for header over heelser
 
         for ( std::map< std::string, std::string >::const_iterator it = languages.begin () ; it != languages.end () ; ++ it )
         {
-                label = new Label( ( *it ).second );
-                label->setAction( new SelectLanguage( getWhereToDraw(), ( *it ).first ) );
+                Label* tongue = new Label( ( *it ).second );
+                tongue->setAction( new SelectLanguage( getWhereToDraw(), ( *it ).first ) );
 
-                menu->addOption( label );
+                menu->addOption( tongue );
 
                 if ( ( language.empty() && it == languages.begin() ) || language == ( *it ).first )
                 {
-                        menu->setActiveOption( label );
+                        menu->setActiveOption( tongue );
                 }
         }
 

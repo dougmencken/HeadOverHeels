@@ -43,6 +43,7 @@ void Isomot::beginNewGame ()
         offRecording() ;
         offVidasInfinitas() ;
         offInviolability() ;
+        GameManager::getInstance()->setCharactersFly( false );
 
         finalRoomBuilt = false;
         if ( finalRoomTimer != nilPointer ) finalRoomTimer->stop();
@@ -62,6 +63,7 @@ void Isomot::continueSavedGame ( tinyxml2::XMLElement* characters )
         offRecording() ;
         offVidasInfinitas() ;
         offInviolability() ;
+        GameManager::getInstance()->setCharactersFly( false );
 
         finalRoomBuilt = false;
         if ( finalRoomTimer != nilPointer ) finalRoomTimer->stop();
@@ -182,7 +184,7 @@ void Isomot::prepare ()
         if ( this->view == nilPointer )
         {
                 // image where the isometric view will be drawn
-                this->view = create_bitmap_ex( 32, ScreenWidth, ScreenHeight );
+                this->view = create_bitmap_ex( 32, ScreenWidth(), ScreenHeight() );
         }
 
         // set of graphics may change between games
@@ -272,6 +274,25 @@ BITMAP* Isomot::update()
                 key[ KEY_F ] = 0;
         }
 
+        if ( ( key_shifts & KB_ALT_FLAG ) && key[ KEY_PGUP ] )
+        {
+                if ( ! gameManager->charactersFly() )
+                {
+                        gameManager->setCharactersFly( true );
+                        std::cout << "characters fly and don’t fall" << std::endl ;
+                }
+                key[ KEY_PGUP ] = 0;
+        }
+        if ( ( key_shifts & KB_ALT_FLAG ) && key[ KEY_PGDN ] )
+        {
+                if ( gameManager->charactersFly() )
+                {
+                        gameManager->setCharactersFly( false );
+                        std::cout << "characters feel gravity again" << std::endl ;
+                }
+                key[ KEY_PGDN ] = 0;
+        }
+
         if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_EQUALS ] )
         {
                 gameManager->addLives( activeRoom->getMediator()->getLabelOfActiveCharacter(), 1 );
@@ -280,7 +301,6 @@ BITMAP* Isomot::update()
 
         if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_I ] )
         {
-                // Activa o desactiva las vidas infinitas
                 gameManager->toggleInfiniteLives ();
                 key[ KEY_I ] = 0;
         }

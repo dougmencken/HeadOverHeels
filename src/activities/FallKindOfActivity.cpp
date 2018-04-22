@@ -37,9 +37,17 @@ FallKindOfActivity::~FallKindOfActivity( )
 
 bool FallKindOfActivity::fall( Behavior * behavior )
 {
+        if ( behavior == nilPointer ) return false ;
+
+        if ( behavior->getItem()->whichKindOfItem() == "player item" &&
+                GameManager::getInstance()->charactersFly() && ! ( ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_PGDN ] ) )
+        {
+                return false ;
+        }
+
         bool fallsNow = behavior->getItem()->addToZ( -1 );
 
-        // when don’t fall anymore see is this item a player and does it collide with some mortal item
+        // when there’s something below
         if ( ! fallsNow )
         {
                 Item* sender = behavior->getItem();

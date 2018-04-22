@@ -77,8 +77,6 @@ public:
 
         static void wipeHorizontally ( Screen * oldScreen, Screen * newScreen, bool rightToLeft ) ;
 
-        static void barScrollHorizontally ( Screen * oldScreen, Screen * newScreen, bool rightToLeft ) ;
-
         static void barWipeHorizontally ( Screen * oldScreen, Screen * newScreen, bool rightToLeft ) ;
 
         static void randomPixelFadeIn( Color * fadeFrom, Screen * screen ) {  randomPixelFade( true, screen, fadeFrom ) ;  }

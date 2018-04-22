@@ -41,6 +41,7 @@ GameManager::GameManager( )
         , chosenGraphicSet( "gfx" )
         , vidasInfinitas( false )
         , immunityToCollisions( false )
+        , noFallingDown( false )
         , playTuneOfScenery( true )
         , drawShadows( true )
         , drawBackgroundPicture( true )
@@ -297,6 +298,12 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
         // empty scenery means that it is the final room
         if ( scenery != "" )
         {
+                const unsigned int diffX = isomot::ScreenWidth() - 640 ;
+                const unsigned int diffY = isomot::ScreenHeight() - 480 ;
+
+                if ( ( diffX > 0 || diffY > 0 ) && ! isPresentGraphicSet() && ! isSimpleGraphicSet() )
+                        drawBackgroundPicture = false ;
+
                 if ( drawBackgroundPicture )
                 {
                         // marco, varía en función del escenario
@@ -319,82 +326,92 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
                         else if ( scenery == "egyptus" )
                                 background = frameForEgyptus;
 
-                        if ( background != nilPointer )
-                                allegro::drawSprite( where, background, 0, 0 );
+                        allegro::drawSprite( where, background, diffX >> 1, diffY );
                 }
 
+                const unsigned int headHeelsAmbianceY = 425 + diffY ;
+                const unsigned int charStuffAmbianceY = 361 + diffY ;
+                const unsigned int bonusAmbianceY = 392 + diffY ;
+                const unsigned int immunityAmbianceY = 436 + diffY ;
+
+                const unsigned int dx = diffX >> 1 ;
+                const unsigned int leftAmbianceX = 107 + dx ;
+                const unsigned int rightAmbianceX = 505 + dx ;
+                const unsigned int leftTooAmbianceX = 33 + dx ;
+                const unsigned int rightTooAmbianceX = 559 + dx ;
+
                 std::string player = isomot->getMapManager()->getActiveRoom()->getMediator()->getLabelOfActiveCharacter();
-                allegro::drawSprite( where, ( (  player == "head" || player == "headoverheels" ) ? pictureOfHead : grayPictureOfHead ), 161, 425 );
-                allegro::drawSprite( where, ( ( player == "heels" || player == "headoverheels" ) ? pictureOfHeels : grayPictureOfHeels ), 431, 425 );
+                allegro::drawSprite( where, ( (  player == "head" || player == "headoverheels" ) ? pictureOfHead : grayPictureOfHead ), 161 + dx, headHeelsAmbianceY );
+                allegro::drawSprite( where, ( ( player == "heels" || player == "headoverheels" ) ? pictureOfHeels : grayPictureOfHeels ), 431 + dx, headHeelsAmbianceY );
 
-                allegro::drawSprite( where, ( this->horn ? pictureOfHorn : grayPictureOfHorn ), 33, 425 );
+                allegro::drawSprite( where, ( this->horn ? pictureOfHorn : grayPictureOfHorn ), leftTooAmbianceX, headHeelsAmbianceY );
 
-                allegro::drawSprite( where, ( this->handbag ? pictureOfBag : grayPictureOfBag ), 559, 425 );
+                allegro::drawSprite( where, ( this->handbag ? pictureOfBag : grayPictureOfBag ), rightTooAmbianceX, headHeelsAmbianceY );
 
                 std::string colorOfLabels = "white";
                 /* if ( isSimpleGraphicSet () ) colorOfLabels = "magenta"; */
 
                 // vidas de Head
                 gui::Label headLivesLabel( numberToString( this->headLives ), "big", "white", -2 );
-                headLivesLabel.moveTo( this->headLives > 9 ? 214 : 221, 424 );
+                headLivesLabel.moveTo( ( this->headLives > 9 ? 214 : 221 ) + dx, headHeelsAmbianceY - 1 );
                 headLivesLabel.draw( where );
 
                 // vidas de Heels
                 gui::Label heelsLivesLabel( numberToString( this->heelsLives ), "big", "white", -2 );
-                heelsLivesLabel.moveTo( this->heelsLives > 9 ? 398 : 405, 424 );
+                heelsLivesLabel.moveTo( ( this->heelsLives > 9 ? 398 : 405 ) + dx, headHeelsAmbianceY - 1 );
                 heelsLivesLabel.draw( where );
 
                 // número de rosquillas
-                allegro::drawSprite( where, ( this->donuts != 0 ? pictureOfDonuts : grayPictureOfDonuts ), 33, 361 );
+                allegro::drawSprite( where, ( this->donuts != 0 ? pictureOfDonuts : grayPictureOfDonuts ), leftTooAmbianceX, charStuffAmbianceY );
                 if ( this->donuts > 0 )
                 {
                         gui::Label donutsLabel( numberToString( this->donuts ), "regular", colorOfLabels, -2 );
-                        donutsLabel.moveTo( this->donuts > 9 ? 42 : 49, 372 );
+                        donutsLabel.moveTo( ( this->donuts > 9 ? 42 : 49 ) + dx, charStuffAmbianceY + 11 );
                         donutsLabel.draw( where );
                 }
 
                 // grandes saltos
-                allegro::drawSprite( where, ( this->highJumps > 0 ? pictureOfGrandesSaltos : grayPictureOfGrandesSaltos ), 505, 392 );
+                allegro::drawSprite( where, ( this->highJumps > 0 ? pictureOfGrandesSaltos : grayPictureOfGrandesSaltos ), rightAmbianceX, bonusAmbianceY );
                 if ( this->highJumps > 0 )
                 {
                         gui::Label highJumpsLabel( numberToString( this->highJumps ), "regular", colorOfLabels, -2 );
-                        highJumpsLabel.moveTo( this->highJumps > 9 ? 505 : 512, 393 );
+                        highJumpsLabel.moveTo( ( this->highJumps > 9 ? 505 : 512 ) + dx, bonusAmbianceY + 1 );
                         highJumpsLabel.draw( where );
                 }
 
                 // gran velocidad
-                allegro::drawSprite( where, ( this->highSpeed > 0 ? pictureOfGranVelocidad : grayPictureOfGranVelocidad ), 107, 392 );
+                allegro::drawSprite( where, ( this->highSpeed > 0 ? pictureOfGranVelocidad : grayPictureOfGranVelocidad ), leftAmbianceX, bonusAmbianceY );
                 if ( this->highSpeed > 0 )
                 {
                         gui::Label highSpeedLabel( numberToString( this->highSpeed ), "regular", colorOfLabels, -2 );
-                        highSpeedLabel.moveTo( this->highSpeed > 9 ? 107 : 114, 393 );
+                        highSpeedLabel.moveTo( ( this->highSpeed > 9 ? 107 : 114 ) + dx, bonusAmbianceY + 1 );
                         highSpeedLabel.draw( where );
                 }
 
                 // escudo de Head
-                allegro::drawSprite( where, ( this->headShield > 0 ? pictureOfEscudo : grayPictureOfEscudo ), 107, 436 );
+                allegro::drawSprite( where, ( this->headShield > 0 ? pictureOfEscudo : grayPictureOfEscudo ), leftAmbianceX, immunityAmbianceY );
                 if ( this->headShield > 0 )
                 {
                         int headShieldValue = static_cast< int >( this->headShield * 99.0 / 25.0 );
                         gui::Label headShieldLabel( numberToString( headShieldValue ), "regular", colorOfLabels, -2 );
-                        headShieldLabel.moveTo( headShieldValue > 9 ? 107 : 114, 437 );
+                        headShieldLabel.moveTo( ( headShieldValue > 9 ? 107 : 114 ) + dx, immunityAmbianceY + 1 );
                         headShieldLabel.draw( where );
                 }
 
                 // escudo de Heels
-                allegro::drawSprite( where, ( this->headShield > 0 ? pictureOfEscudo : grayPictureOfEscudo ), 505, 436 );
+                allegro::drawSprite( where, ( this->headShield > 0 ? pictureOfEscudo : grayPictureOfEscudo ), rightAmbianceX, immunityAmbianceY );
                 if ( this->heelsShield > 0 )
                 {
                         int heelsShieldValue = static_cast< int >( this->heelsShield * 99.0 / 25.0 );
                         gui::Label heelsShieldLabel( numberToString( heelsShieldValue ), "regular", colorOfLabels, -2 );
-                        heelsShieldLabel.moveTo( heelsShieldValue > 9 ? 505 : 512, 437 );
+                        heelsShieldLabel.moveTo( ( heelsShieldValue > 9 ? 505 : 512 ) + dx, immunityAmbianceY + 1 );
                         heelsShieldLabel.draw( where );
                 }
 
                 // item in handbag
                 if ( this->itemTaken != nilPointer )
                 {
-                        allegro::drawSprite( where, this->itemTaken, 559, 361 );
+                        allegro::drawSprite( where, this->itemTaken, rightTooAmbianceX, charStuffAmbianceY );
                 }
         }
         else
@@ -403,7 +420,7 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
                 if ( freedomLabel == nilPointer )
                 {
                         freedomLabel = new gui::ColorCyclingLabel( "FREEDOM", "big" );
-                        freedomLabel->moveTo( ScreenWidth / 10, ScreenHeight - 100 );
+                        freedomLabel->moveTo( ScreenWidth() / 10, ScreenHeight() - 100 );
                 }
 
                 freedomLabel->draw( where );
@@ -768,13 +785,13 @@ WhyPause GameManager::pause ()
 
                 gui::LanguageManager* language = gui::GuiManager::getInstance()->getLanguageManager();
                 gui::LanguageText* text = language->findLanguageStringForAlias( "save-game" );
-                int deltaY = 100;
+                int deltaY = ( isomot::ScreenHeight() >> 2 ) - 60 ;
 
                 for ( size_t i = 0; i < text->getLinesCount(); i++ )
                 {
                         gui::LanguageLine* line = text->getLine( i );
                         gui::Label label( line->text, line->font, line->color );
-                        label.moveTo( ( ScreenWidth - label.getWidth() ) >> 1, deltaY );
+                        label.moveTo( ( ScreenWidth() - label.getWidth() ) >> 1, deltaY );
                         deltaY += label.getHeight() * 3 / 4;
                         acquire_screen();
                         label.draw( screen );
@@ -788,7 +805,7 @@ WhyPause GameManager::pause ()
                 {
                         gui::LanguageLine* line = text->getLine( i );
                         gui::Label label( line->text, line->font, line->color );
-                        label.moveTo( ( ScreenWidth - label.getWidth() ) >> 1, deltaY );
+                        label.moveTo( ( ScreenWidth() - label.getWidth() ) >> 1, deltaY );
                         deltaY += label.getHeight() * 3 / 4;
                         acquire_screen();
                         label.draw( screen );
@@ -858,13 +875,13 @@ WhyPause GameManager::pause ()
 
                 gui::LanguageManager* language = gui::GuiManager::getInstance()->getLanguageManager();
                 gui::LanguageText* text = language->findLanguageStringForAlias( "confirm-quit" );
-                int deltaY = ScreenHeight / 4;
+                int deltaY = ( isomot::ScreenHeight() >> 2 );
 
                 for ( size_t i = 0; i < text->getLinesCount(); i++ )
                 {
                         gui::LanguageLine* line = text->getLine( i );
                         gui::Label label( line->text, line->font, line->color );
-                        label.moveTo( ( ScreenWidth - label.getWidth() ) >> 1, deltaY );
+                        label.moveTo( ( ScreenWidth() - label.getWidth() ) >> 1, deltaY );
                         deltaY += label.getHeight() * 3 / 4;
                         acquire_screen();
                         label.draw( screen );
@@ -878,7 +895,7 @@ WhyPause GameManager::pause ()
                 {
                         gui::LanguageLine* line = text->getLine( i );
                         gui::Label label( line->text, line->font, line->color );
-                        label.moveTo( ( ScreenWidth - label.getWidth() ) >> 1, deltaY );
+                        label.moveTo( ( ScreenWidth() - label.getWidth() ) >> 1, deltaY );
                         deltaY += label.getHeight() * 3 / 4;
                         acquire_screen();
                         label.draw( screen );

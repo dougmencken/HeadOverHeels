@@ -51,6 +51,7 @@ private:
 
         MenuWithValues * listOfOptions ;
 
+        Label * labelScreenSize ;
         Label * labelFullscreen ;
         Label * labelDrawShadows ;
         Label * labelDrawBackground ;

@@ -138,14 +138,14 @@ protected:
 protected:
 
        /**
-        * Defines player’s jump using pairs of horizontal offset and vertical offset on each cycle
+        * Defines player’s jump by pairs of horizontal and vertical offsets on each cycle
         */
-        std::vector < JumpMotion > jumpVector ;
+        std::vector < std::pair< int /* xy */, int /* z */ > > jumpVector ;
 
        /**
-        * Defines long jump of player from trampoline or with speed bunny
+        * Defines long jump of player from trampoline or with bunny
         */
-        std::vector < JumpMotion > highJumpVector ;
+        std::vector < std::pair< int /* xy */, int /* z */ > > highJumpVector ;
 
        /**
         * Index of phase of jump
