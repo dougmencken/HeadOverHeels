@@ -288,7 +288,7 @@ Room* MapManager::changeRoom( const Way& wayOfExit )
         Way wayOfEntry( JustWait ) ;
 
         // search the map for next room and get way of entry to it
-        MapRoomData* nextRoomData = findRoomData( previousRoomData->findConnectedRoom( wayOfExit, &wayOfEntry ) );
+        MapRoomData* nextRoomData = findRoomData( previousRoomData->findConnectedRoom( wayOfExit.toString(), &wayOfEntry ) );
 
         if ( nextRoomData == nilPointer )
         {

@@ -39,7 +39,7 @@ class ItemData ;
  * players, enemies, or something which widths differ from widths of grid’s cells
  */
 
-class FreeItem : public Drawable, public Item
+class FreeItem : public Item, public Drawable
 {
 
 public:
@@ -152,6 +152,8 @@ protected:
          */
         BITMAP * shadedNonmaskedImage ;
 
+        bool partOfDoor ;
+
 public:
 
         void setWhichMask ( const WhichMask& mask ) {  myMask = mask ;  }
@@ -181,6 +183,10 @@ public:
         BITMAP * getShadedNonmaskedImage () const {  return shadedNonmaskedImage ;  }
 
         void setShadedNonmaskedImage ( BITMAP * newImage ) ;
+
+        bool isPartOfDoor () const {  return partOfDoor ;  }
+
+        void setPartOfDoor ( bool isPart ) {  partOfDoor = isPart ;  }
 
 };
 

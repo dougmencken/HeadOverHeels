@@ -544,9 +544,6 @@ BITMAP* Isomot::update()
                 );
 
                 std::string roomFile = activeRoom->getNameOfFileWithDataAboutRoom() ;
-                const char* fromLastSlash = std::strrchr( roomFile.c_str (), pathSeparator[ 0 ] );
-                if ( fromLastSlash != nilPointer )
-                        roomFile = std::string( fromLastSlash + 1 );
 
                 int whiteColor = Color::whiteColor()->toAllegroColor() ;
 
@@ -560,18 +557,20 @@ BITMAP* Isomot::update()
                 std::ostringstream roomTiles;
                 roomTiles << tilesX << "x" << tilesY;
 
+                std::string roomAbove = "";
+                std::string roomBelow = "";
+                std::string roomToTeleport = "";
+                std::string roomToTeleportToo = "";
+
                 MapRoomData* connections = this->getMapManager()->findRoomData( activeRoom );
+                assert( connections != nilPointer );
+
                 Way wayToNextRoom( "nowhere" );
 
-             /* std::string roomOnNorth = connections->findConnectedRoom( Way( "north" ), &wayToNextRoom );
-                std::string roomOnSouth = connections->findConnectedRoom( Way( "south" ), &wayToNextRoom );
-                std::string roomOnEast = connections->findConnectedRoom( Way( "east" ), &wayToNextRoom );
-                std::string roomOnWest = connections->findConnectedRoom( Way( "west" ), &wayToNextRoom ); */
-
-                std::string roomAbove = connections->findConnectedRoom( Way( "up" ), &wayToNextRoom );
-                std::string roomBelow = connections->findConnectedRoom( Way( "down" ), &wayToNextRoom );
-                std::string roomToTeleport = connections->findConnectedRoom( Way( "via teleport" ), &wayToNextRoom );
-                std::string roomToTeleportToo = connections->findConnectedRoom( Way( "via second teleport" ), &wayToNextRoom );
+                roomAbove = connections->findConnectedRoom( "up", &wayToNextRoom );
+                roomBelow = connections->findConnectedRoom( "down", &wayToNextRoom );
+                roomToTeleport = connections->findConnectedRoom( "via teleport", &wayToNextRoom );
+                roomToTeleportToo = connections->findConnectedRoom( "via second teleport", &wayToNextRoom );
 
                 int gray50Color = Color::gray50Color()->toAllegroColor() ;
 

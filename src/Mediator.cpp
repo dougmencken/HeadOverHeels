@@ -620,6 +620,8 @@ void Mediator::maskFreeItem( FreeItem* freeItem )
         {
                 FreeItem* itemToMaskWith = *f ;
 
+                if ( freeItem->isPartOfDoor() && itemToMaskWith->isPartOfDoor() ) continue ;
+
                 if ( itemToMaskWith->getRawImage() && (
                         /* one of two is marked to mask and other of two isn’t transparent */
                         ( freeItem->whichMask() != NoMask && itemToMaskWith->getTransparency() == 0 ) ||

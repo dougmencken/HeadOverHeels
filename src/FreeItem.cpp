@@ -14,6 +14,7 @@ FreeItem::FreeItem( ItemData* itemData, int x, int y, int z, const Way& way )
         , collisionDetector ( true )
         , frozen ( false )
         , shadedNonmaskedImage ( nilPointer )
+        , partOfDoor( false )
 {
         this->x = x;
         this->y = y;
@@ -36,12 +37,13 @@ FreeItem::FreeItem( ItemData* itemData, int x, int y, int z, const Way& way )
 }
 
 FreeItem::FreeItem( const FreeItem& freeItem )
-        : Item( freeItem )
+        : Item( freeItem ), Drawable()
         , myMask( freeItem.myMask )
         , transparency( freeItem.transparency )
         , collisionDetector( freeItem.collisionDetector )
         , frozen( freeItem.frozen )
         , shadedNonmaskedImage( nilPointer )
+        , partOfDoor( freeItem.partOfDoor )
 {
         if ( freeItem.shadedNonmaskedImage != nilPointer )
         {
@@ -91,7 +93,7 @@ void FreeItem::binBothProcessedImages()
 {
         Item::binProcessedImage ();
 
-        if ( shadedNonmaskedImage != nilPointer ) setShadedNonmaskedImage( nilPointer );
+        setShadedNonmaskedImage( nilPointer );
 }
 
 void FreeItem::changeImage( BITMAP* newImage )

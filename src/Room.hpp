@@ -65,6 +65,8 @@ public:
 
         void addDoor ( Door * door ) ;
 
+        void updateWallsWithDoors () ;
+
         void addGridItem ( GridItem * gridItem ) ;
 
         void addFreeItem ( FreeItem * freeItem ) ;

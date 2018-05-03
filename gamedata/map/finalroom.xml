@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <room>
 
-  <name>finalroom.xml</name>
-
   <xTiles>12</xTiles>
 
   <yTiles>8</yTiles>

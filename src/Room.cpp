@@ -147,6 +147,8 @@ Room::Room( const std::string& roomFile, const std::string& scenery, int xTiles,
 
         // since yet room is active
         this->active = true;
+
+        std::cout << "created room \"" << nameOfFileWithDataAboutRoom << "\"" << std::endl ;
 }
 
 Room::~Room()
@@ -227,19 +229,31 @@ void Room::addDoor( Door * door )
 {
         door->setMediator( mediator );
 
-        std::string doorAt = door->getWhereIsDoor();
-        this->doors[ doorAt ] = door;
+        this->doors[ door->getWhereIsDoor() ] = door;
 
         // each door is actually three free items
-        this->addFreeItem( door->getLeftJamb() );
-        this->addFreeItem( door->getRightJamb() );
-        this->addFreeItem( door->getLintel() );
+        FreeItem* leftJamb = door->getLeftJamb() ;
+        FreeItem* rightJamb = door->getRightJamb() ;
+        FreeItem* lintel = door->getLintel() ;
 
+        leftJamb->setPartOfDoor( true );
+        rightJamb->setPartOfDoor( true );
+        lintel->setPartOfDoor( true );
+
+        addFreeItem( leftJamb );
+        addFreeItem( rightJamb );
+        addFreeItem( lintel );
+}
+
+void Room::updateWallsWithDoors ()
+{
         // update position of walls
-        for ( std::vector< Wall * >::iterator wx = this->wallX.begin (); wx != this->wallX.end (); ++wx ) {
+        for ( std::vector< Wall * >::iterator wx = this->wallX.begin (); wx != this->wallX.end (); ++wx )
+        {
                 ( *wx )->calculateOffset();
         }
-        for ( std::vector< Wall * >::iterator wy = this->wallY.begin (); wy != this->wallY.end (); ++wy ) {
+        for ( std::vector< Wall * >::iterator wy = this->wallY.begin (); wy != this->wallY.end (); ++wy )
+        {
                 ( *wy )->calculateOffset();
         }
 }

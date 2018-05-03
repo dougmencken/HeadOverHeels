@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <room>
 
-  <name>moon8.xml</name>
-
   <scenery>themoon</scenery>
 
   <xTiles>9</xTiles>

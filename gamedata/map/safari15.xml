@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <room>
 
-  <name>safari15.xml</name>
-
   <scenery>safari</scenery>
 
   <xTiles>4</xTiles>

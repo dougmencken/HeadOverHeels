@@ -40,7 +40,7 @@ public:
         /**
          * Find room connected to this one
          */
-        std::string findConnectedRoom ( const Way& wayOfExit, Way* wayOfEntry ) const ;
+        std::string findConnectedRoom ( const std::string& wayOfExit, Way* wayOfEntry ) const ;
 
         /**
          * See if entrance to this room is okay or fix it if it’s not

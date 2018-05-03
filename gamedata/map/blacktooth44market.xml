@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <room>
 
-  <name>blacktooth44market.xml</name>
-
   <scenery>market</scenery>
 
   <xTiles>7</xTiles>

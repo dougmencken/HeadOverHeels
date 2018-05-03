@@ -47,7 +47,7 @@ public:
         /**
          * Construct room by data from file
          */
-        static Room * buildRoom ( const std::string& fileName ) ;
+        static Room * buildRoom ( const std::string& roomFile ) ;
 
         /**
          * Create player in given room
@@ -72,7 +72,7 @@ private:
 
         static Wall* buildWall ( tinyxml2::XMLElement * wall, const char* gfxPrefix ) ;
 
-        static GridItem* buildGridItem ( tinyxml2::XMLElement * item ) ;
+        static GridItem* buildGridItem ( tinyxml2::XMLElement * item, Room* room ) ;
 
         static FreeItem* buildFreeItem ( tinyxml2::XMLElement * item, Room* room ) ;
 

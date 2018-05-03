@@ -19,21 +19,20 @@ namespace isomot
 {
 
 /* static */
-Room* RoomBuilder::buildRoom ( const std::string& fileName )
+Room* RoomBuilder::buildRoom ( const std::string& roomFile )
 {
         tinyxml2::XMLDocument roomXml;
-        tinyxml2::XMLError result = roomXml.LoadFile( fileName.c_str () );
+        tinyxml2::XMLError result = roomXml.LoadFile( roomFile.c_str () );
         if ( result != tinyxml2::XML_SUCCESS )
         {
-                std::cerr << "can’t read file " << fileName.c_str () << std::endl ;
+                std::cerr << "can’t read file " << roomFile.c_str () << std::endl ;
                 return nilPointer;
         }
 
-        std::cout << "building room via data from " << fileName.c_str () << std::endl ;
+        std::cout << "building room via data from " << roomFile.c_str () << std::endl ;
 
         tinyxml2::XMLElement* root = roomXml.FirstChildElement( "room" );
 
-        tinyxml2::XMLElement* name = root->FirstChildElement( "name" ) ;
         tinyxml2::XMLElement* scenery = root->FirstChildElement( "scenery" ) ;
         std::string sceneryString = ( scenery != nilPointer ? scenery->FirstChild()->ToText()->Value() : "" );
         tinyxml2::XMLElement* xTiles = root->FirstChildElement( "xTiles" ) ;
@@ -41,9 +40,14 @@ Room* RoomBuilder::buildRoom ( const std::string& fileName )
         tinyxml2::XMLElement* width = root->FirstChildElement( "width" ) ;
         tinyxml2::XMLElement* floorType = root->FirstChildElement( "floorType" ) ;
 
+        std::string roomName = roomFile;
+        const char* fromLastSlash = std::strrchr( roomFile.c_str (), pathSeparator[ 0 ] );
+        if ( fromLastSlash != nilPointer )
+                roomName = std::string( fromLastSlash + 1 );
+
         // create room with initial parameters like scenery, dimensions, type of floor
         Room * theRoom = new Room (
-                name->FirstChild()->ToText()->Value() ,
+                roomName ,
                 sceneryString ,
                 std::atoi( xTiles->FirstChild()->ToText()->Value() ),
                 std::atoi( yTiles->FirstChild()->ToText()->Value() ),
@@ -53,7 +57,7 @@ Room* RoomBuilder::buildRoom ( const std::string& fileName )
 
         if ( theRoom == nilPointer )
         {
-                std::cerr << "can’t create room \"" << fileName << "\"" << std::endl ;
+                std::cerr << "can’t create room \"" << roomFile << "\"" << std::endl ;
                 return nilPointer;
         }
 
@@ -187,46 +191,36 @@ Room* RoomBuilder::buildRoom ( const std::string& fileName )
                 if ( type == "door" )
                 {
                         Door* door = buildDoor( item );
-                        if ( door == nilPointer )
-                        {
-                                std::cout << "oops, can’t build a door with coordinates " << itemX << ", " << itemY << ", " << itemZ << std::endl ;
-                        }
-                        else
-                        {
+
+                        if ( door != nilPointer )
                                 theRoom->addDoor( door );
-                        }
+                        else
+                                std::cout << "oops, can’t build a door with coordinates " << itemX << ", " << itemY << ", " << itemZ << std::endl ;
                 }
                 // it’s a grid item
-                else if( type == "griditem" )
+                else if ( type == "griditem" )
                 {
-                        GridItem* gridItem = buildGridItem( item );
-                        if ( gridItem == nilPointer )
-                        {
-                                std::cout << "oops, can’t build a grid item with coordinates " << itemX << ", " << itemY << ", " << itemZ << std::endl ;
-                        }
-                        else
-                        {
+                        GridItem* gridItem = buildGridItem( item, theRoom );
+
+                        if ( gridItem != nilPointer )
                                 theRoom->addGridItem( gridItem );
-                        }
+                        else
+                                std::cout << "oops, can’t build a grid item with coordinates " << itemX << ", " << itemY << ", " << itemZ << std::endl ;
                 }
                 // it is a free item
                 else if ( type == "freeitem" )
                 {
                         FreeItem* freeItem = buildFreeItem( item, theRoom );
 
-                        // there may be bonus item already taken and thus absent
-                        if ( freeItem == nilPointer )
-                        {
-                                std::cout << "free item with coordinates " << itemX << ", " << itemY << ", " << itemZ << " is absent" << std::endl ;
-                        }
-                        else
-                        {
+                        if ( freeItem != nilPointer )
                                 theRoom->addFreeItem( freeItem );
-                        }
+                        else // there may be bonus item already taken and thus absent
+                                std::cout << "free item with coordinates " << itemX << ", " << itemY << ", " << itemZ << " is absent" << std::endl ;
                 }
         }
 
         theRoom->calculateBounds();
+        theRoom->updateWallsWithDoors();
 
         return theRoom ;
 }
@@ -347,11 +341,14 @@ Wall* RoomBuilder::buildWall( tinyxml2::XMLElement* wall, const char* gfxPrefix 
 }
 
 /* static */
-GridItem* RoomBuilder::buildGridItem( tinyxml2::XMLElement* item )
+GridItem* RoomBuilder::buildGridItem( tinyxml2::XMLElement* item, Room* room )
 {
         GridItem* gridItem = nilPointer;
 
         std::string label = item->FirstChildElement( "label" )->FirstChild()->ToText()->Value();
+
+        if ( label.find( "wall" ) != std::string::npos )
+                std::cout << "grid item \"" << label << "\" is wall of room \"" << room->getNameOfFileWithDataAboutRoom() << "\"" << std::endl ;
 
         ItemData* itemData = GameManager::getInstance()->getItemDataManager()->findDataByLabel( label );
 

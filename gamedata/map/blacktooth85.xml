@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <room>
 
-  <name>blacktooth85.xml</name>
-
   <scenery>blacktooth</scenery>
 
   <xTiles>9</xTiles>
