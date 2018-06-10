@@ -349,7 +349,7 @@ bool Hunter::createFullBody()
         FreeItem* thisItem = dynamic_cast< FreeItem* >( this->item );
         bool created = false;
 
-        if ( thisItem->getLabel() == "imperial-guard-head" && thisItem->checkPosition( 0, 0, -LayerHeight, Add ) )
+        if ( thisItem->getLabel() == "imperial-guard-head" && thisItem->canAdvanceTo( 0, 0, -LayerHeight ) )
         {
                 created = true;
 

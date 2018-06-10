@@ -105,22 +105,20 @@ void GridItem::changeShadow( BITMAP* newShadow )
         }
 }
 
-bool GridItem::addToZ( int value )
-{
-        return updatePosition( value, CoordinateZ, Add );
-}
-
-bool GridItem::updatePosition( int newValue, const Coordinate& whatToChange, const ChangeOrAdd& what )
+bool GridItem::addToPosition( int x, int y, int z )
 {
         mediator->clearStackOfCollisions( );
+
         bool collisionFound = false;
 
         GridItem copyOfItem( *this );
 
-        if ( whatToChange & CoordinateZ )
-        {
-                this->z = newValue + this->z * what;
-        }
+        if ( x != 0 )
+                std::cout << "can’t change position on X for grid item, ignoring x = " << x << std::endl ;
+        if ( y != 0 )
+                std::cout << "can’t change position on Y for grid item, ignoring y = " << y << std::endl ;
+
+        this->z += z;
 
         // is there collision with floor
         if ( this->z < 0 )
@@ -149,12 +147,12 @@ bool GridItem::updatePosition( int newValue, const Coordinate& whatToChange, con
                                 this->offset.first = this->offset.second = 0;
                         }
 
-                        // reshade items after change of position on Z
-                        if ( whatToChange & CoordinateZ && mediator->getDegreeOfShading() < 256 )
+                        // reshade items
+                        if ( mediator->getDegreeOfShading() < 256 )
                         {
                                 if ( this->z > copyOfItem.getZ() )
                                         mediator->reshadeWithGridItem( this );
-                                else
+                                else if ( this->z < copyOfItem.getZ() )
                                         mediator->reshadeWithGridItem( &copyOfItem );
                         }
 

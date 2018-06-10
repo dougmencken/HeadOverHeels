@@ -29,7 +29,7 @@ bool Teleport::update ()
         {
         case Wait:
                 // is there items above
-                if ( ! item->checkPosition( 0, 0, 1, Add ) )
+                if ( ! item->canAdvanceTo( 0, 0, 1 ) )
                 {
                         // copy stack of collisions
                         std::stack< std::string > topItems;
@@ -50,7 +50,7 @@ bool Teleport::update ()
                                                 aboveItem->getBehavior() != nilPointer )
                                 {
                                         // look for items below
-                                        if ( ! aboveItem->checkPosition( 0, 0, -1, Add ) )
+                                        if ( ! aboveItem->canAdvanceTo( 0, 0, -1 ) )
                                         {
                                                 bool playerAboveTeleport = false;
 

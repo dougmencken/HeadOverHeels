@@ -203,7 +203,7 @@ void PlayerHeels::behave ()
                         else if ( input->jump() )
                         {
                                 // look for item below
-                                playerItem->checkPosition( 0, 0, -1, Add );
+                                playerItem->canAdvanceTo( 0, 0, -1 );
                                 // key to teleport is the same as for jump
                                 activity = ( playerItem->getMediator()->collisionWithByBehavior( "behavior of teletransport" ) ? BeginWayOutTeletransport : Jump );
                         }
@@ -214,7 +214,7 @@ void PlayerHeels::behave ()
                         if( input->jump() )
                         {
                                 // teleport when teletransport is below
-                                playerItem->checkPosition( 0, 0, -1, Add );
+                                playerItem->canAdvanceTo( 0, 0, -1 );
                                 activity = ( playerItem->getMediator()->collisionWithByBehavior( "behavior of teletransport" ) ? BeginWayOutTeletransport : Jump );
                         }
                         else if ( input->take() )

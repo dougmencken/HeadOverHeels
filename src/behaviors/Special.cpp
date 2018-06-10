@@ -42,7 +42,7 @@ bool Special::update ()
         {
                 case Wait:
                         // is there an item above this one
-                        if ( ! item->checkPosition( 0, 0, 1, Add ) )
+                        if ( ! item->canAdvanceTo( 0, 0, 1 ) )
                         {
                                 bool takeIt = true;
                                 Item* itemAbove = mediator->findCollisionPop( );
@@ -51,7 +51,7 @@ bool Special::update ()
                                 if ( dynamic_cast< PlayerItem * >( itemAbove ) && mayTake( itemAbove ) )
                                 {
                                         // get collisions of player item with items below it
-                                        itemAbove->checkPosition( 0, 0, -1, Add );
+                                        itemAbove->canAdvanceTo( 0, 0, -1 );
 
                                         // if that player item is just above bonus then it’s okay to take it
                                         // but when it’s on several items then look if all these items are also special or volatile
@@ -141,7 +141,7 @@ bool Special::update ()
                                 fallTimer->reset();
 
                                 // look if bonus falls on player
-                                if ( ! item->checkPosition( 0, 0, -1, Add ) )
+                                if ( ! item->canAdvanceTo( 0, 0, -1 ) )
                                 {
                                         Item* itemBelow = mediator->findCollisionPop( );
 
@@ -149,7 +149,7 @@ bool Special::update ()
                                         if ( dynamic_cast< PlayerItem * >( itemBelow ) && mayTake( itemBelow ) )
                                         {
                                                 // get collisions of player item with items above it
-                                                itemBelow->checkPosition( 0, 0, 1, Add );
+                                                itemBelow->canAdvanceTo( 0, 0, 1 );
 
                                                 // if that player item is just below bonus then it’s okay to take it
                                                 bool takeIt = ( mediator->depthOfStackOfCollisions() <= 1 );

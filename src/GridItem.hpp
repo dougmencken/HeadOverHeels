@@ -55,16 +55,7 @@ public:
 
         virtual void changeShadow ( BITMAP * newShadow ) ;
 
-        /**
-         * Change Z coordinate
-         * @param value Value to add to current Z coordinate
-         * @return true if Z is okay to change or false if there’s a collision
-         */
-        virtual bool addToZ ( int value ) ;
-
-protected:
-
-        virtual bool updatePosition ( int newValue, const Coordinate& whatToChange, const ChangeOrAdd& what ) ;
+        virtual bool addToPosition ( int x, int y, int z ) ;
 
 protected:
 

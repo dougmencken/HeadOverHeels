@@ -45,7 +45,7 @@ bool Trampoline::update ()
         {
                 case Wait:
                         // fold trampoline when there are items on top of it
-                        if ( ! freeItem->checkPosition( 0, 0, 1, Add ) )
+                        if ( ! freeItem->canAdvanceTo( 0, 0, 1 ) )
                         {
                                 folded = true;
                                 rebounding = false;

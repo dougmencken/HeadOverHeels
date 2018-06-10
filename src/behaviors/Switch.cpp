@@ -41,14 +41,10 @@ bool Switch::update ()
                                 {
                                         Item* trigger = triggerItems[ i ];
 
-                                        if ( std::find_if( sideItems.begin (), sideItems.end (),
-                                                std::bind2nd( EqualUniqueNameOfItem(), trigger->getUniqueName() ) ) == sideItems.end () ||
-                                                ( dynamic_cast< PlayerItem * >( trigger ) && trigger->getBehavior()->getActivityOfItem() == Wait ) )
+                                        if ( std::find( sideItems.begin (), sideItems.end (), trigger ) == sideItems.end () ||
+                                                ( trigger->whichKindOfItem() == "player item" && trigger->getBehavior()->getActivityOfItem() == Wait ) )
                                         {
-                                                triggerItems.erase( std::remove_if(
-                                                        triggerItems.begin (), triggerItems.end (),
-                                                        std::bind2nd( EqualUniqueNameOfItem(), trigger->getUniqueName() )
-                                                ), triggerItems.end () );
+                                                triggerItems.erase( std::remove( triggerItems.begin (), triggerItems.end (), trigger ), triggerItems.end () );
                                         }
                                 }
                         }
@@ -58,7 +54,7 @@ bool Switch::update ()
                         }
 
                         // look for items above
-                        if ( ! item->checkPosition( 0, 0, 1, Add ) )
+                        if ( ! item->canAdvanceTo( 0, 0, 1 ) )
                         {
                                 // copy stack of collisions
                                 std::stack< std::string > aboveItems;
@@ -78,7 +74,7 @@ bool Switch::update ()
                                                 ( itemAbove->whichKindOfItem() == "free item" || itemAbove->whichKindOfItem() == "player item" ) )
                                         {
                                                 if ( itemAbove->getBehavior() != nilPointer &&
-                                                        ! itemAbove->checkPosition( 0, 0, -1, Add ) &&
+                                                        ! itemAbove->canAdvanceTo( 0, 0, -1 ) &&
                                                                 // yep, switch doesn’t toggle when player jumps
                                                                 itemAbove->getBehavior()->getActivityOfItem() != RegularJump &&
                                                                 itemAbove->getBehavior()->getActivityOfItem() != HighJump )
@@ -113,8 +109,7 @@ bool Switch::update ()
                 case DisplaceSoutheast:
                 case DisplaceSouthwest:
                 case DisplaceNorthwest:
-                        if ( std::find_if( triggerItems.begin (), triggerItems.end (),
-                                std::bind2nd( EqualUniqueNameOfItem(), sender->getUniqueName() ) ) == triggerItems.end () )
+                        if ( std::find( triggerItems.begin (), triggerItems.end (), sender ) == triggerItems.end () )
                         {
                                 triggerItems.push_back( sender );
                                 item->animate();
@@ -139,8 +134,8 @@ bool Switch::checkSideItems( std::vector< Item * >& sideItems )
 {
         Mediator* mediator = item->getMediator();
 
-        // Comprueba si hay elementos al norte
-        if ( ! item->checkPosition( -1, 0, 0, Add ) )
+        // is there item at north
+        if ( ! item->canAdvanceTo( -1, 0, 0 ) )
         {
                 while ( ! mediator->isStackOfCollisionsEmpty() )
                 {
@@ -148,8 +143,8 @@ bool Switch::checkSideItems( std::vector< Item * >& sideItems )
                 }
         }
 
-        // Comprueba si hay elementos al sur
-        if ( ! item->checkPosition( 1, 0, 0, Add ) )
+        // is there item at south
+        if ( ! item->canAdvanceTo( 1, 0, 0 ) )
         {
                 while ( ! mediator->isStackOfCollisionsEmpty() )
                 {
@@ -157,8 +152,8 @@ bool Switch::checkSideItems( std::vector< Item * >& sideItems )
                 }
         }
 
-        // Comprueba si hay elementos al este
-        if ( ! item->checkPosition( 0, -1, 0, Add ) )
+        // is there item at east
+        if ( ! item->canAdvanceTo( 0, -1, 0 ) )
         {
                 while ( ! mediator->isStackOfCollisionsEmpty() )
                 {
@@ -166,8 +161,8 @@ bool Switch::checkSideItems( std::vector< Item * >& sideItems )
                 }
         }
 
-        // Comprueba si hay elementos al oeste
-        if ( ! item->checkPosition( 0, 1, 0, Add ) )
+        // is there item at west
+        if ( ! item->canAdvanceTo( 0, 1, 0 ) )
         {
                 while ( ! mediator->isStackOfCollisionsEmpty() )
                 {

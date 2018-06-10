@@ -179,7 +179,7 @@ void UserControlled::fall( PlayerItem * player )
                 if ( FallKindOfActivity::getInstance()->fall( this ) )
                 {
                         // change character’s image to frame of falling when there’s no collision yet
-                        if ( player->checkPosition( 0, 0, -1, Add ) )
+                        if ( player->canAdvanceTo( 0, 0, -1 ) )
                         {
                                 player->changeFrame( fallFrames[ player->getOrientation().getIntegerOfWay () ] );
                         }
@@ -204,7 +204,7 @@ void UserControlled::jump( PlayerItem * player )
         {
                 case Jump:
                         // look for item below
-                        player->checkPosition( 0, 0, -1, Add );
+                        player->canAdvanceTo( 0, 0, -1 );
                         // when on trampoline or with rabbit of high jumps, player makes big leap
                         activity = ( player->getMediator()->collisionWithByBehavior( "behavior of big leap for player" ) ||
                                         ( player->getHighJumps() > 0 && player->getLabel() == "heels" )
@@ -458,7 +458,7 @@ void UserControlled::takeItem( PlayerItem * player )
                 Item* takenItem = nilPointer;
 
                 // look for item below player
-                if ( ! player->checkPosition( 0, 0, -1, Add ) )
+                if ( ! player->canAdvanceTo( 0, 0, -1 ) )
                 {
                         int coordinates = 0;
 

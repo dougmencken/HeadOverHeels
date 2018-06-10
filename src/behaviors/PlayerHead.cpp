@@ -184,7 +184,7 @@ void PlayerHead::behave ()
                         if ( input->jump() )
                         {
                                 // jump or teleport
-                                playerItem->checkPosition( 0, 0, -1, Add );
+                                playerItem->canAdvanceTo( 0, 0, -1 );
                                 activity = ( playerItem->getMediator()->collisionWithByBehavior( "behavior of teletransport" ) ? BeginWayOutTeletransport : Jump );
                         }
                         else if ( input->doughnut() && ! fireFromHooterIsPresent )
@@ -215,7 +215,7 @@ void PlayerHead::behave ()
                         if ( input->jump() )
                         {
                                 // look for teletransport below
-                                playerItem->checkPosition( 0, 0, -1, Add );
+                                playerItem->canAdvanceTo( 0, 0, -1 );
                                 activity = ( playerItem->getMediator()->collisionWithByBehavior( "behavior of teletransport" ) ? BeginWayOutTeletransport : Jump );
                         }
                         else if ( input->doughnut() && ! fireFromHooterIsPresent )

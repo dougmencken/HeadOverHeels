@@ -145,7 +145,7 @@ void PlayerItem::autoMoveOnEntry ( const std::string& wayOfEntry )
         }
 }
 
-bool PlayerItem::updatePosition( int newX, int newY, int newZ, const Coordinate& whatToChange, const ChangeOrAdd& how )
+bool PlayerItem::addToPosition( int x, int y, int z )
 {
         bool itAutomoves = getBehavior()->getActivityOfItem() == AutoMoveNorth ||
                                 getBehavior()->getActivityOfItem() == AutoMoveSouth ||
@@ -154,40 +154,26 @@ bool PlayerItem::updatePosition( int newX, int newY, int newZ, const Coordinate&
 
         if ( ! this->isActiveCharacter() && ! itAutomoves )
         {
-                return FreeItem::updatePosition( newX, newY, newZ, whatToChange, how );
+                return FreeItem::addToPosition( x, y, z );
         }
 
         mediator->clearStackOfCollisions( );
 
-        bool collisionFound = false;
-
         // copy item before moving
         PlayerItem copyOfItem( *this );
 
-        if ( whatToChange & CoordinateX )
-        {
-                this->x = newX + this->x * how;
-        }
-        if ( whatToChange & CoordinateY )
-        {
-                this->y = newY + this->y * how;
-        }
-        if ( whatToChange & CoordinateZ )
-        {
-                this->z = newZ + this->z * how;
-        }
+        this->x += x;
+        this->y += y;
+        this->z += z;
 
         // look for collision with door
 
         bool doorCollision = false;
 
-        collisionFound = mediator->findCollisionWithItem( this );
+        bool collisionFound = mediator->findCollisionWithItem( this );
+
         if ( collisionFound )
         {
-                // direction of movement
-                int wayX = ( ( whatToChange & CoordinateX ) != 0 || x != 0 ? newX : 0 );
-                int wayY = ( ( whatToChange & CoordinateY ) != 0 || y != 0 ? newY : 0 );
-
                 while ( ! mediator->isStackOfCollisionsEmpty () )
                 {
                         std::string what = mediator->popCollision();
@@ -196,7 +182,7 @@ bool PlayerItem::updatePosition( int newX, int newY, int newZ, const Coordinate&
                         int oldY = copyOfItem.getY();
 
                         // case of move to north wall
-                        if ( wayX < 0 )
+                        if ( x < 0 )
                         {
                                 // check for hit of north door’s jamb
                                 doorCollision = isCollidingWithDoor( "north", what, oldX, oldY );
@@ -212,7 +198,7 @@ bool PlayerItem::updatePosition( int newX, int newY, int newZ, const Coordinate&
                                 }
                         }
                         // case of move to south wall
-                        else if ( wayX > 0 )
+                        else if ( x > 0 )
                         {
                                 // check for hit of south door’s jamb
                                 doorCollision = isCollidingWithDoor( "south", what, oldX, oldY );
@@ -228,7 +214,7 @@ bool PlayerItem::updatePosition( int newX, int newY, int newZ, const Coordinate&
                                 }
                         }
                         // case of move to east wall
-                        else if ( wayY < 0 )
+                        else if ( y < 0 )
                         {
                                 doorCollision = isCollidingWithDoor( "east", what, oldX, oldY );
                                 // check for hit of east door’s jamb
@@ -244,7 +230,7 @@ bool PlayerItem::updatePosition( int newX, int newY, int newZ, const Coordinate&
                                 }
                         }
                         // case of move to west wall
-                        else if ( wayY > 0 )
+                        else if ( y > 0 )
                         {
                                 doorCollision = isCollidingWithDoor( "west", what, oldX, oldY );
                                 // check for hit of west door’s jamb

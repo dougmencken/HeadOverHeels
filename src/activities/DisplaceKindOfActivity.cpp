@@ -36,97 +36,77 @@ bool DisplaceKindOfActivity::displace( Behavior* behavior, ActivityOfItem* activ
 {
         bool itemDisplaced = false;
 
-        // get free item to move from its behavior
-        FreeItem* freeItem = dynamic_cast < FreeItem * > ( behavior->getItem () );
+        Item* item = behavior->getItem ();
+        if ( item == nilPointer ) return false ;
 
-        ActivityOfItem displaceActivity = *activity;
+        ActivityOfItem activityToPropagate = *activity;
 
         switch ( *activity )
         {
-                case DisplaceNorth:
                 case ForceDisplaceNorth:
-                        if ( freeItem != nilPointer )
-                        {
-                                itemDisplaced = freeItem->addToX( -1 );
-                        }
-                        displaceActivity = DisplaceNorth;
+                        activityToPropagate = DisplaceNorth;
+                        // fallthru
+                case DisplaceNorth:
+                        itemDisplaced = item->addToX( -1 );
                         break;
 
-                case DisplaceSouth:
                 case ForceDisplaceSouth:
-                        if ( freeItem != nilPointer )
-                        {
-                                itemDisplaced = freeItem->addToX( 1 );
-                        }
-                        displaceActivity = DisplaceSouth;
+                        activityToPropagate = DisplaceSouth;
+                        // fallthru
+                case DisplaceSouth:
+                        itemDisplaced = item->addToX( 1 );
                         break;
 
-                case DisplaceEast:
                 case ForceDisplaceEast:
-                        if ( freeItem != nilPointer )
-                        {
-                                itemDisplaced = freeItem->addToY( -1 );
-                        }
-                        displaceActivity = DisplaceEast;
+                        activityToPropagate = DisplaceEast;
+                        // fallthru
+                case DisplaceEast:
+                        itemDisplaced = item->addToY( -1 );
                         break;
 
-                case DisplaceWest:
                 case ForceDisplaceWest:
-                        if ( freeItem != nilPointer )
-                        {
-                                itemDisplaced = freeItem->addToY( 1 );
-                        }
-                        displaceActivity = DisplaceWest;
+                        activityToPropagate = DisplaceWest;
+                        // fallthru
+                case DisplaceWest:
+                        itemDisplaced = item->addToY( 1 );
                         break;
 
                 case DisplaceNortheast:
-                        if ( freeItem != nilPointer )
-                        {
-                                itemDisplaced = freeItem->addToPosition( -1, -1, 0 );
-                        }
+                        itemDisplaced = item->addToPosition( -1, -1, 0 );
                         break;
 
                 case DisplaceNorthwest:
-                        if ( freeItem != nilPointer )
-                        {
-                                itemDisplaced = freeItem->addToPosition( -1, 1, 0 );
-                        }
+                        itemDisplaced = item->addToPosition( -1, 1, 0 );
                         break;
 
                 case DisplaceSoutheast:
-                        if ( freeItem != nilPointer )
-                        {
-                                itemDisplaced = freeItem->addToPosition( 1, -1, 0 );
-                        }
+                        itemDisplaced = item->addToPosition( 1, -1, 0 );
                         break;
 
                 case DisplaceSouthwest:
-                        if ( freeItem != nilPointer )
-                        {
-                                itemDisplaced = freeItem->addToPosition( 1, 1, 0 );
-                        }
+                        itemDisplaced = item->addToPosition( 1, 1, 0 );
                         break;
 
                 case DisplaceUp:
-                        itemDisplaced = behavior->getItem()->addToZ( 1 );
+                        itemDisplaced = item->addToZ( 1 );
                         break;
 
                 default:
                         ;
         }
 
-        if ( freeItem != nilPointer )
+        if ( item->whichKindOfItem() == "free item" || item->whichKindOfItem() == "player item" )
         {
                 // when there’s collision
                 if ( ! itemDisplaced )
                 {
                         // move involved items
-                        this->propagateActivityToAdjacentItems( freeItem, displaceActivity );
+                        this->propagateActivityToAdjacentItems( item, activityToPropagate );
                 }
                 else
                 {
                         // look if items on top of this item needs to move too
-                        this->propagateActivityToItemsAbove( freeItem, *activity );
+                        this->propagateActivityToItemsAbove( item, *activity );
                 }
         }
 

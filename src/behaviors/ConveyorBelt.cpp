@@ -37,7 +37,7 @@ bool ConveyorBelt::update ()
                 case Wait:
                         if ( speedTimer->getValue() > item->getSpeed() )
                         {
-                                if ( ! item->checkPosition( 0, 0, 1, Add ) )
+                                if ( ! item->canAdvanceTo( 0, 0, 1 ) )
                                 {
                                         std::stack< std::string > topItems;
                                         while ( ! mediator->isStackOfCollisionsEmpty() )

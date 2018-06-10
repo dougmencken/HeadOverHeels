@@ -251,7 +251,7 @@ void FreeItem::maskImage( int x, int y, BITMAP* image )
         }
 }
 
-bool FreeItem::updatePosition( int newX, int newY, int newZ, const Coordinate& whatToChange, const ChangeOrAdd& how )
+bool FreeItem::addToPosition( int x, int y, int z )
 {
         mediator->clearStackOfCollisions( );
 
@@ -260,18 +260,9 @@ bool FreeItem::updatePosition( int newX, int newY, int newZ, const Coordinate& w
         // copy item before moving
         FreeItem copyOfItem( *this );
 
-        if ( whatToChange & CoordinateX )
-        {
-                this->x = newX + this->x * how;
-        }
-        if ( whatToChange & CoordinateY )
-        {
-                this->y = newY + this->y * how;
-        }
-        if ( whatToChange & CoordinateZ )
-        {
-                this->z = newZ + this->z * how;
-        }
+        this->x += x;
+        this->y += y;
+        this->z += z;
 
         // look for collision with real wall, one which limits the room
         if ( this->x < mediator->getRoom()->getLimitAt( "north" ) )
@@ -349,26 +340,6 @@ bool FreeItem::updatePosition( int newX, int newY, int newZ, const Coordinate& w
         }
 
         return ! collisionFound;
-}
-
-bool FreeItem::addToX ( int value )
-{
-        return this->updatePosition( value, 0, 0, CoordinateX, Add );
-}
-
-bool FreeItem::addToY ( int value )
-{
-        return this->updatePosition( 0, value, 0, CoordinateY, Add );
-}
-
-bool FreeItem::addToZ ( int value )
-{
-        return this->updatePosition( 0, 0, value, CoordinateZ, Add );
-}
-
-bool FreeItem::addToPosition( int x, int y, int z )
-{
-        return this->updatePosition( x, y, z, CoordinatesXYZ, Add );
 }
 
 void FreeItem::setShadedNonmaskedImage( BITMAP* newImage )

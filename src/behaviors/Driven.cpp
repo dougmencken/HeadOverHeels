@@ -68,7 +68,7 @@ bool Driven::update ()
                         // when stopped, see if there is a character on it and use its orientation to begin moving
                         else
                         {
-                                if ( ! freeItem->checkPosition( 0, 0, 1, Add ) )
+                                if ( ! freeItem->canAdvanceTo( 0, 0, 1 ) )
                                 {
                                         while ( ! mediator->isStackOfCollisionsEmpty() && ! playerFound )
                                         {

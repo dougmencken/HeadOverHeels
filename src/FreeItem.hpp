@@ -63,6 +63,8 @@ public:
 
         virtual std::string whichKindOfItem () const {  return "free item" ;  }
 
+        virtual bool addToPosition ( int x, int y, int z ) ;
+
         void draw ( BITMAP* where ) ;
 
         void binBothProcessedImages () ;
@@ -93,40 +95,6 @@ public:
          * @param y Coordenada Y de pantalla donde está situada la imagen del elemento que servirá de máscara
          */
         void maskImage ( int x, int y, BITMAP* image ) ;
-
-        /**
-         * Cambia el valor de la coordenada X
-         * @param value Valor que se sumará a la coordenada X actual
-         * @return true si se pudo cambiar el dato o false si hubo colisión y no hubo cambio
-         */
-        virtual bool addToX ( int value ) ;
-
-        /**
-         * Cambia el valor de la coordenada Y
-         * @param value Valor que se sumará a la coordenada Y actual
-         * @return true si se pudo cambiar el dato o false si hubo colisión y no hubo cambio
-         */
-        virtual bool addToY ( int value ) ;
-
-        /**
-         * Cambia el valor de la coordenada Z
-         * @param value Valor que se sumará a la coordenada Z actual
-         * @return true si se pudo cambiar el dato o false si hubo colisión y no hubo cambio
-         */
-        virtual bool addToZ ( int value ) ;
-
-        /**
-         * Cambia la posición del elemento
-         * @param x Valor que se sumará a la coordenada X actual
-         * @param y Valor que se sumará a la coordenada Y actual
-         * @param z Valor que se sumará a la coordenada Z actual
-         * @return true si se pudo cambiar el dato o false si hubo colisión y no hubo cambio
-         */
-        virtual bool addToPosition ( int x, int y, int z ) ;
-
-protected:
-
-        virtual bool updatePosition ( int newX, int newY, int newZ, const Coordinate& whatToChange, const ChangeOrAdd& addOrChange ) ;
 
 protected:
 

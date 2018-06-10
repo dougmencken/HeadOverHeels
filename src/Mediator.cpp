@@ -610,15 +610,16 @@ void Mediator::castShadowOnFreeItem( FreeItem* freeItem )
 
 void Mediator::maskFreeItem( FreeItem* freeItem )
 {
-        // look for item in list
         // mask only with next items
         // for sorted list there’s no masking with previous items
-        std::list< FreeItem * >::iterator f = std::find_if( freeItems.begin (), freeItems.end (), std::bind2nd( EqualUniqueNameOfItem(), freeItem->getUniqueName() ) );
-        if ( f == freeItems.end () ) /* there’s no such item in list */ return;
 
-        while ( ++f != freeItems.end () ) // when there’s any next item
+        // look for item in list
+        std::list< FreeItem * >::iterator fi = std::find( freeItems.begin (), freeItems.end (), freeItem );
+        if ( fi == freeItems.end () ) /* there’s no such item in list */ return;
+
+        while ( ++fi != freeItems.end () ) // when there’s any next item
         {
-                FreeItem* itemToMaskWith = *f ;
+                FreeItem* itemToMaskWith = *fi ;
 
                 if ( freeItem->isPartOfDoor() && itemToMaskWith->isPartOfDoor() ) continue ;
 

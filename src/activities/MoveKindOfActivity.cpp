@@ -42,115 +42,92 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
 
         ActivityOfItem displaceActivity = Wait;
 
-        FreeItem* freeItem = nilPointer;
-        Mediator* mediator = nilPointer;
+        Item* item = behavior->getItem();
+        if ( item == nilPointer ) return false ;
+        Mediator* mediator = item->getMediator();
 
-        // is item free or player
-        if ( behavior->getItem()->whichKindOfItem() == "free item" || behavior->getItem()->whichKindOfItem() == "player item" )
-        {
-                freeItem = dynamic_cast< FreeItem * >( behavior->getItem() );
-                mediator = freeItem->getMediator();
-        }
+        FreeItem* freeItem = nilPointer;
+        if ( item->whichKindOfItem() == "free item" || item->whichKindOfItem() == "player item" )
+                freeItem = dynamic_cast< FreeItem * >( item );
 
         switch ( *activity )
         {
                 case MoveNorth:
                 case AutoMoveNorth:
-                        if ( freeItem != nilPointer )
-                        {
-                                freeItem->changeOrientation( North );
-                                moved = freeItem->addToX( -1 );
-                                displaceActivity = DisplaceNorth;
-                        }
+                        item->changeOrientation( North );
+                        moved = item->addToX( -1 );
+                        displaceActivity = DisplaceNorth;
                         break;
 
                 case MoveSouth:
                 case AutoMoveSouth:
-                        if ( freeItem != nilPointer )
-                        {
-                                freeItem->changeOrientation( South );
-                                moved = freeItem->addToX( 1 );
-                                displaceActivity = DisplaceSouth;
-                        }
+                        item->changeOrientation( South );
+                        moved = item->addToX( 1 );
+                        displaceActivity = DisplaceSouth;
                         break;
 
                 case MoveEast:
                 case AutoMoveEast:
-                        if ( freeItem != nilPointer )
-                        {
-                                freeItem->changeOrientation( East );
-                                moved = freeItem->addToY( -1 );
-                                displaceActivity = DisplaceEast;
-                        }
+                        item->changeOrientation( East );
+                        moved = item->addToY( -1 );
+                        displaceActivity = DisplaceEast;
                         break;
 
                 case MoveWest:
                 case AutoMoveWest:
-                        if ( freeItem != nilPointer )
-                        {
-                                freeItem->changeOrientation( West );
-                                moved = freeItem->addToY( 1 );
-                                displaceActivity = DisplaceWest;
-                        }
+                        item->changeOrientation( West );
+                        moved = item->addToY( 1 );
+                        displaceActivity = DisplaceWest;
                         break;
 
                 case MoveNortheast:
-                        if ( freeItem != nilPointer )
-                        {
-                                moved = freeItem->addToPosition( -1, -1, 0 );
-                                displaceActivity = DisplaceNortheast;
-                        }
+                        moved = item->addToPosition( -1, -1, 0 );
+                        displaceActivity = DisplaceNortheast;
                         break;
 
                 case MoveNorthwest:
-                        if ( freeItem != nilPointer )
-                        {
-                                moved = freeItem->addToPosition( -1, 1, 0 );
-                                displaceActivity = DisplaceNorthwest;
-                        }
+                        moved = item->addToPosition( -1, 1, 0 );
+                        displaceActivity = DisplaceNorthwest;
                         break;
 
                 case MoveSoutheast:
-                        if ( freeItem != nilPointer )
-                        {
-                                moved = freeItem->addToPosition( 1, -1, 0 );
-                                displaceActivity = DisplaceSoutheast;
-                        }
+                        moved = item->addToPosition( 1, -1, 0 );
+                        displaceActivity = DisplaceSoutheast;
                         break;
 
                 case MoveSouthwest:
-                        if ( freeItem != nilPointer )
-                        {
-                                moved = freeItem->addToPosition( 1, 1, 0 );
-                                displaceActivity = DisplaceSouthwest;
-                        }
+                        moved = item->addToPosition( 1, 1, 0 );
+                        displaceActivity = DisplaceSouthwest;
                         break;
 
                 case MoveUp:
-                        moved = freeItem->addToZ( 1 );
+                        moved = item->addToZ( 1 );
 
-                        // if can’t move up, raise items above
+                        // if can’t move up, raise free items above
                         if ( ! moved )
                         {
                                 while ( ! mediator->isStackOfCollisionsEmpty() )
                                 {
-                                        FreeItem* topItem = dynamic_cast< FreeItem * >( mediator->findCollisionPop( ) );
+                                        Item* topItem = mediator->findCollisionPop( );
+                                        FreeItem* topFreeItem = nilPointer;
+                                        if ( topItem->whichKindOfItem() == "free item" || topItem->whichKindOfItem() == "player item" )
+                                                topFreeItem = dynamic_cast< FreeItem * >( topItem );
 
-                                        if ( topItem != nilPointer && freeItem->getWidthX() + freeItem->getWidthY() >= topItem->getWidthX() + topItem->getWidthY() )
+                                        if ( topFreeItem != nilPointer && item->getWidthX() + item->getWidthY() >= topItem->getWidthX() + topItem->getWidthY() )
                                         {
-                                                ascent( topItem, 1 );
+                                                ascent( topFreeItem, 1 );
                                         }
                                 }
 
                                 // now raise itself
-                                moved = freeItem->addToZ( 1 );
+                                moved = item->addToZ( 1 );
                         }
                         break;
 
                 case MoveDown:
                 {
                         // is there any items above
-                        bool loading = ! freeItem->checkPosition( 0, 0, 2, Add );
+                        bool loading = ! item->canAdvanceTo( 0, 0, 2 );
 
                         // copy stack of collisions
                         std::stack< std::string > topItems;
@@ -159,19 +136,23 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
                                 topItems.push( mediator->popCollision() );
                         }
 
-                        moved = freeItem->addToZ( -1 );
+                        moved = item->addToZ( -1 );
 
                         // fall together with items above
                         if ( moved && loading )
                         {
                                 while ( ! topItems.empty() )
                                 {
-                                        FreeItem* topItem = dynamic_cast< FreeItem * >( mediator->findItemByUniqueName( topItems.top() ) );
+                                        Item* topItem = mediator->findItemByUniqueName( topItems.top() );
                                         topItems.pop();
 
-                                        if ( topItem != nilPointer )
+                                        FreeItem* topFreeItem = nilPointer;
+                                        if ( topItem->whichKindOfItem() == "free item" || topItem->whichKindOfItem() == "player item" )
+                                                topFreeItem = dynamic_cast< FreeItem * >( topItem );
+
+                                        if ( topFreeItem != nilPointer )
                                         {
-                                                descend( topItem, 2 );
+                                                descend( topFreeItem, 2 );
                                         }
                                 }
                         }
@@ -179,19 +160,19 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
                         break;
 
                 case CancelDisplaceNorth:
-                        freeItem->changeOrientation( South );
+                        item->changeOrientation( South );
                         break;
 
                 case CancelDisplaceSouth:
-                        freeItem->changeOrientation( North );
+                        item->changeOrientation( North );
                         break;
 
                 case CancelDisplaceEast:
-                        freeItem->changeOrientation( West );
+                        item->changeOrientation( West );
                         break;
 
                 case CancelDisplaceWest:
-                        freeItem->changeOrientation( East );
+                        item->changeOrientation( East );
                         break;
 
                 default:
@@ -273,7 +254,7 @@ void MoveKindOfActivity::descend( FreeItem* freeItem, int z )
         if ( freeItem->getBehavior() != nilPointer )
         {
                 // are there items on top
-                bool loading = ! freeItem->checkPosition( 0, 0, z, Add );
+                bool loading = ! freeItem->canAdvanceTo( 0, 0, z );
 
                 // if item may descend itself then lower every item above it
                 if ( freeItem->addToZ( -1 ) && loading )

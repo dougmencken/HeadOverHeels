@@ -79,7 +79,7 @@ bool FallKindOfActivity::fall( Behavior * behavior )
                                 {
                                         if ( dynamic_cast< PlayerItem * >( itemBelow ) && sender->isMortal() )
                                         {
-                                                if ( sender->checkPosition( 0, 0, -1, Add ) )
+                                                if ( sender->canAdvanceTo( 0, 0, -1 ) )
                                                 {
                                                         if ( ! GameManager::getInstance()->isImmuneToCollisionsWithMortalItems () )
                                                         {
@@ -89,7 +89,7 @@ bool FallKindOfActivity::fall( Behavior * behavior )
                                         }
                                         else if ( sender->whichKindOfItem() == "player item" && itemBelow->isMortal() )
                                         {
-                                                if ( sender->checkPosition( 0, 0, -1, Add ) )
+                                                if ( sender->canAdvanceTo( 0, 0, -1 ) )
                                                 {
                                                         if ( ! GameManager::getInstance()->isImmuneToCollisionsWithMortalItems () )
                                                         {

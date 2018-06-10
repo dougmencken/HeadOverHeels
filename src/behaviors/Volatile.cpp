@@ -43,7 +43,7 @@ bool Volatile::update ()
                         if ( ( getNameOfBehavior () == "behavior of disappearance on touch" ||
                                         getNameOfBehavior () == "behavior of disappearance on jump into" ||
                                                 getNameOfBehavior () == "behavior of slow disappearance on jump into" )
-                                && ! item->checkPosition( 0, 0, 1, Add ) )
+                                && ! item->canAdvanceTo( 0, 0, 1 ) )
                         {
                                 bool isGone = false;
 
@@ -52,22 +52,22 @@ bool Volatile::update ()
                                 // look for every item above it
                                 while ( ! mediator->isStackOfCollisionsEmpty() )
                                 {
-                                        Item* item = mediator->findCollisionPop( );
+                                        Item* topItem = mediator->findCollisionPop( );
 
                                         // is it free item
-                                        if ( item != nilPointer &&
-                                                ( item->whichKindOfItem() == "free item" || item->whichKindOfItem() == "player item" ) )
+                                        if ( topItem != nilPointer &&
+                                                ( topItem->whichKindOfItem() == "free item" || topItem->whichKindOfItem() == "player item" ) )
                                         {
                                                 // look at whether above item is volatile or special
                                                 // because that item would disappear unless it is leaning on another one
-                                                if ( item->getBehavior() != nilPointer &&
-                                                        item->getBehavior()->getNameOfBehavior () != "behavior of disappearance on jump into" &&
-                                                        item->getBehavior()->getNameOfBehavior () != "behavior of slow disappearance on jump into" &&
-                                                        item->getBehavior()->getNameOfBehavior () != "behavior of disappearance on touch" &&
-                                                        item->getBehavior()->getNameOfBehavior () != "behavior of something special" )
+                                                if ( topItem->getBehavior() != nilPointer &&
+                                                        topItem->getBehavior()->getNameOfBehavior () != "behavior of disappearance on jump into" &&
+                                                        topItem->getBehavior()->getNameOfBehavior () != "behavior of slow disappearance on jump into" &&
+                                                        topItem->getBehavior()->getNameOfBehavior () != "behavior of disappearance on touch" &&
+                                                        topItem->getBehavior()->getNameOfBehavior () != "behavior of something special" )
                                                 {
                                                         isGone = true;
-                                                        topItems.push( item );
+                                                        topItems.push( topItem );
                                                 }
                                         }
                                 }
@@ -76,9 +76,9 @@ bool Volatile::update ()
                                 {
                                         Item* topItem = topItems.top();
                                         topItems.pop();
-                                        topItem->checkPosition( 0, 0, -1, Add );
+                                        topItem->canAdvanceTo( 0, 0, -1 );
 
-                                        // when item that triggers disappearance is only on this volatile then it’s okay to vanish
+                                        // when item that triggers disappearance is just on this volatile then it’s okay to vanish
                                         if ( mediator->depthOfStackOfCollisions() > 1 )
                                         {
                                                 while ( ! mediator->isStackOfCollisionsEmpty() )

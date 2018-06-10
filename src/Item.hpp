@@ -25,20 +25,6 @@
 namespace isomot
 {
 
-enum Coordinate
-{
-        CoordinateX = 1,
-        CoordinateY = 2,
-        CoordinateZ = 4,
-        CoordinatesXYZ = CoordinateX | CoordinateY | CoordinateZ
-} ;
-
-enum ChangeOrAdd
-{
-        Change = 0,
-        Add = 1
-} ;
-
 class ItemData ;
 class Behavior ;
 
@@ -101,22 +87,38 @@ public:
         virtual void changeShadow ( BITMAP* shadow ) ;
 
         /**
-         * Cambia el valor de la coordenada Z
-         * @param value Valor que se sumará a la coordenada Z actual
-         * @return true si se pudo cambiar el dato o false si hubo colisión y no hubo cambio
+         * Add value to coordinate X
+         * @return true on change or false when there’s collision
          */
-        virtual bool addToZ ( int value ) = 0 ;
+        virtual bool addToX ( int value ) {  return addToPosition( value, 0, 0 ) ;  }
 
         /**
-         * May this item move to given position
-         * @param x X coordinate
-         * @param y Y coordinate
-         * @param z Z coordinate
-         * @param what How to handle coordinates, just to change them or to add to existing values
+         * Add value to coordinate Y
+         * @return true on change or false when there’s collision
+         */
+        virtual bool addToY ( int value ) {  return addToPosition( 0, value, 0 ) ;  }
+
+        /**
+         * Add value to coordinate Z
+         * @return true on change or false when there’s collision
+         */
+        virtual bool addToZ ( int value ) {  return addToPosition( 0, 0, value ) ;  }
+
+        /**
+         * Change position of item
+         * @param x Value to add to coordinate X
+         * @param y Value to add to coordinate Y
+         * @param z Value to add to coordinate Z
+         * @return true on change or false when there’s collision
+         */
+        virtual bool addToPosition ( int x, int y, int z ) = 0 ;
+
+        /**
+         * May this item advance to given offset
          * @return true if position is free or false if there’s a collision,
          *         in the latter case place colliding items into stack of collisions
          */
-        virtual bool checkPosition ( int x, int y, int z, const ChangeOrAdd& what ) ;
+        virtual bool canAdvanceTo ( int x, int y, int z ) ;
 
         /**
          * @param behavior Name of item’s behavior

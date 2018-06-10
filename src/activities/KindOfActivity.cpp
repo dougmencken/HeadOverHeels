@@ -152,7 +152,7 @@ void KindOfActivity::propagateActivityToItemsAbove( Item * sender, const Activit
         Mediator* mediator = sender->getMediator();
 
         // is there anything above
-        if ( ! sender->checkPosition( 0, 0, 1, Add ) )
+        if ( ! sender->canAdvanceTo( 0, 0, 1 ) )
         {
                 // copy stack of collisions
                 std::stack< std::string > itemsAbove;
@@ -179,7 +179,7 @@ void KindOfActivity::propagateActivityToItemsAbove( Item * sender, const Activit
                                 if ( freeItemAbove != nilPointer && freeItemAbove->getBehavior() != nilPointer )
                                 {
                                         // look for collisions of that free item with items below it
-                                        if ( ! freeItemAbove->checkPosition( 0, 0, -1, Add ) )
+                                        if ( ! freeItemAbove->canAdvanceTo( 0, 0, -1 ) )
                                         {
                                                 // propagate activity when there’s no more than one item below or when sender is anchor of that item
                                                 if ( mediator->depthOfStackOfCollisions() <= 1 || freeItemAbove->getAnchor() == sender )

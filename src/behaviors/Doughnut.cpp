@@ -65,17 +65,17 @@ bool Doughnut::update ()
                                 freeItem->setCollisionDetector( true );
 
                                 if ( activity == MoveNorth ) {
-                                        // -1, 0, 0 is for collisions at north
-                                        freeItem->checkPosition( -1, 0, 0, Add );
+                                        // -1, 0, 0 for collisions at north
+                                        freeItem->canAdvanceTo( -1, 0, 0 );
                                 } else if ( activity == MoveSouth ) {
-                                        // 1, 0, 0 is for collisions at south
-                                        freeItem->checkPosition( 1, 0, 0, Add );
+                                        // 1, 0, 0 for collisions at south
+                                        freeItem->canAdvanceTo( 1, 0, 0 );
                                 } else if ( activity == MoveEast ) {
-                                        // 0, -1, 0 is for collisions at east
-                                        freeItem->checkPosition( 0, -1, 0, Add );
+                                        // 0, -1, 0 for collisions at east
+                                        freeItem->canAdvanceTo( 0, -1, 0 );
                                 } else if ( activity == MoveWest ) {
-                                        // 0, 1, 0 is for collisions at west
-                                        freeItem->checkPosition( 0, 1, 0, Add );
+                                        // 0, 1, 0 for collisions at west
+                                        freeItem->canAdvanceTo( 0, 1, 0 );
                                 }
 
                                 // if there’s no collision or collision is with player, move doughnut

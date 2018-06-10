@@ -123,17 +123,9 @@ public:
 
         void saveAt ( int x, int y, int z ) ;
 
-protected:
+        virtual bool addToPosition ( int x, int y, int z ) ;
 
-        /**
-         * @param newX new X coordinate, ignored when whatToChange doesn’t have CoordinateX
-         * @param newY new Y coordinate, ignored when whatToChange doesn’t have CoordinateY
-         * @param newZ new Z coordinate, ignored when whatToChange doesn’t have CoordinateZ
-         * @param whatToChange what to change: CoordinateX, CoordinateY, CoordinateZ, or any sum of them like CoordinatesXYZ
-         * @param how how to interpret new value, change or add
-         * @return true if data may be changed or false when there’s a collision
-         */
-        virtual bool updatePosition ( int newX, int newY, int newZ, const Coordinate& whatToChange, const ChangeOrAdd& how ) ;
+protected:
 
         /**
          * Check if player hits a door, if yes then move player

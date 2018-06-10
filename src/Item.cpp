@@ -220,21 +220,21 @@ void Item::changeFrame( const unsigned int frameIndex )
         }
 }
 
-bool Item::checkPosition( int x, int y, int z, const ChangeOrAdd& what )
+bool Item::canAdvanceTo( int x, int y, int z )
 {
         // coordinates before change
-        int px = this->x;
-        int py = this->y;
-        int pz = this->z;
+        int originalX = this->x;
+        int originalY = this->y;
+        int originalZ = this->z;
 
         mediator->clearStackOfCollisions( );
 
         bool collisionFound = false;
 
         // new coordinates
-        this->x = x + this->x * what;
-        this->y = y + this->y * what;
-        this->z = z + this->z * what;
+        this->x += x;
+        this->y += y;
+        this->z += z;
 
         // look for collision with wall
         if ( this->x < mediator->getRoom()->getLimitAt( "north" ) )
@@ -268,9 +268,9 @@ bool Item::checkPosition( int x, int y, int z, const ChangeOrAdd& what )
         }
 
         // restore original coordinates
-        this->x = px;
-        this->y = py;
-        this->z = pz;
+        this->x = originalX;
+        this->y = originalY;
+        this->z = originalZ;
 
         return ! collisionFound;
 }

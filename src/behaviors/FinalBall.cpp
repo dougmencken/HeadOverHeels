@@ -36,7 +36,7 @@ bool FinalBall::update ()
                         if ( speedTimer->getValue() > this->item->getSpeed() )
                         {
                                 // look for collisions with items that are to the north
-                                this->item->checkPosition( -1, 0, 0, Add );
+                                this->item->canAdvanceTo( -1, 0, 0 );
 
                                 // move ball when there’s no collision
                                 if ( this->item->getMediator()->isStackOfCollisionsEmpty() )
