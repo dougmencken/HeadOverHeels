@@ -14,7 +14,7 @@ echo "    zlib"
 echo "    a Massively Spiffy Yet Delicately Unobtrusive Compression Library"
 echo
 
-zlib_version="1.2.8"
+zlib_version="1.2.11"
 
 cd "${pathToExternal}"/zlib
 [ -d "zlib-$zlib_version" ] || tar xzf zlib-"$zlib_version".tar.gz
@@ -42,7 +42,7 @@ echo "    libpng"
 echo "    a Portable Network Graphics reference library which supports almost all PNG features"
 echo
 
-libpng_version="1.6.34"
+libpng_version="1.6.35"
 
 cd "${pathToExternal}"/libpng
 [ -d libpng-"$libpng_version" ] || tar xzf libpng-"$libpng_version".tar.gz
@@ -100,7 +100,7 @@ echo
 echo "    libvorbis"
 echo
 
-libvorbis_version="1.3.5"
+libvorbis_version="1.3.6"
 
 cd "${pathToExternal}"/ogg-vorbis
 [ -d libvorbis-"$libvorbis_version" ] || tar xzf libvorbis-"$libvorbis_version".tar.gz
@@ -154,7 +154,7 @@ echo "    tinyxml2"
 echo "    a simple, small, C++ XML parser that can be easily integrated into other programs"
 echo
 
-tinyxml2_version="6.0.0"
+tinyxml2_version="6.2.0"
 
 if [ -x "$( command -v cmake )" ]; then
 
