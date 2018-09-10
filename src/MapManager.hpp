@@ -14,9 +14,10 @@
 #include <string>
 #include <list>
 #include <iostream>
-#include <allegro.h>
-#include "MapRoomData.hpp"
 
+#include <WrappersAllegro.hpp>
+
+#include "MapRoomData.hpp"
 #include "Room.hpp"
 #include "ItemDataManager.hpp"
 

@@ -11,7 +11,7 @@
 #ifndef Color_hpp_
 #define Color_hpp_
 
-#include <allegro.h>
+#include "WrappersAllegro.hpp"
 
 
 /**
@@ -64,11 +64,11 @@ public:
 
         static Color * colorOfTransparency () {  return theTransparency ;  }    /* “ key ” color of transparency, pure magenta */
 
-        static BITMAP * colorizePicture ( BITMAP * picture, const Color * color ) ;
+        static allegro::Pict * colorizePicture ( allegro::Pict * picture, const Color * color ) ;
 
-        static BITMAP * multiplyWithColor ( BITMAP * picture, const Color * color ) ;
+        static allegro::Pict * multiplyWithColor ( allegro::Pict * picture, const Color * color ) ;
 
-        static BITMAP * pictureToGrayscale ( BITMAP * picture ) ;
+        static allegro::Pict * pictureToGrayscale ( allegro::Pict * picture ) ;
 
 private:
 
@@ -78,9 +78,9 @@ private:
 
         unsigned char blue ;
 
-        static BITMAP * colorizePicture ( BITMAP * picture, unsigned char red, unsigned char green, unsigned char blue ) ;
+        static allegro::Pict * colorizePicture ( allegro::Pict * picture, unsigned char red, unsigned char green, unsigned char blue ) ;
 
-        static BITMAP * multiplyWithColor ( BITMAP * picture, unsigned char red, unsigned char green, unsigned char blue ) ;
+        static allegro::Pict * multiplyWithColor ( allegro::Pict * picture, unsigned char red, unsigned char green, unsigned char blue ) ;
 
         static Color * theBlack ;
 

@@ -12,7 +12,8 @@
 #define Label_hpp_
 
 #include <string>
-#include <allegro.h>
+
+#include <WrappersAllegro.hpp>
 
 #include "Ism.hpp"
 #include "Gui.hpp"
@@ -23,7 +24,6 @@
 namespace gui
 {
 
-class Screen ;
 class Action ;
 
 class Label : public Widget
@@ -56,7 +56,7 @@ public:
 
         void changeFontFamilyAndColor ( const std::string& family, const std::string& color ) ;
 
-        virtual void draw ( BITMAP * where ) ;
+        virtual void draw ( allegro::Pict * where ) ;
 
         /**
          * Responde a la pulsación de una tecla
@@ -74,7 +74,7 @@ protected:
          */
         virtual void createImageOfLabel ( const std::string& text, Font * font ) ;
 
-        BITMAP * imageOfLetters ;
+        Picture * imageOfLetters ;
 
 private:
 

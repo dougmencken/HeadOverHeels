@@ -11,7 +11,7 @@
 #ifndef ShadowCaster_hpp_
 #define ShadowCaster_hpp_
 
-#include <allegro.h>
+#include <WrappersAllegro.hpp>
 
 namespace isomot
 {
@@ -34,9 +34,9 @@ class ShadowCaster
 
 public:
 
-        static void castShadowOnItem ( Item* item, int x, int y, BITMAP* shadow, unsigned short shading, unsigned char transparency = 0 ) ;
+        static void castShadowOnItem ( Item* item, int x, int y, allegro::Pict* shadow, unsigned short shading, unsigned char transparency = 0 ) ;
 
-        static void castShadowOnFloor ( FloorTile* tile, int x, int y, BITMAP* shadow, unsigned short shading, unsigned char transparency = 0 ) ;
+        static void castShadowOnFloor ( FloorTile* tile, int x, int y, allegro::Pict* shadow, unsigned short shading, unsigned char transparency = 0 ) ;
 
 protected:
 

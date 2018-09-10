@@ -66,8 +66,8 @@ Item::Item( const Item& item )
 
         if ( item.processedImage != nilPointer )
         {
-                this->processedImage = create_bitmap_ex( 32, item.processedImage->w, item.processedImage->h );
-                blit( item.processedImage, this->processedImage, 0, 0, 0, 0, this->processedImage->w, this->processedImage->h );
+                this->processedImage = allegro::createPicture( item.processedImage->w, item.processedImage->h, allegro::colorDepthOf( item.processedImage ) );
+                allegro::bitBlit( item.processedImage, this->processedImage );
         }
 }
 
@@ -76,7 +76,7 @@ Item::~Item( )
         delete this->behavior;
         delete this->motionTimer;
 
-        allegro::destroyBitmap( this->processedImage );
+        allegro::binPicture( this->processedImage );
 }
 
 bool Item::update()
@@ -152,7 +152,7 @@ void Item::changeItemData( ItemData* itemData, const std::string& initiatedBy )
         this->backwardMotion = false;
 }
 
-void Item::changeShadow( BITMAP* newShadow )
+void Item::changeShadow( allegro::Pict* newShadow )
 {
         if ( shadow != newShadow )
         {
@@ -161,11 +161,11 @@ void Item::changeShadow( BITMAP* newShadow )
         }
 }
 
-void Item::setProcessedImage( BITMAP* newImage )
+void Item::setProcessedImage( allegro::Pict* newImage )
 {
         if ( processedImage != newImage )
         {
-                allegro::destroyBitmap( processedImage );
+                allegro::binPicture( processedImage );
                 processedImage = newImage;
         }
 }

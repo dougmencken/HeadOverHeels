@@ -15,7 +15,7 @@ using gui::CreateKeyboardMenu;
 using isomot::InputManager;
 
 
-CreateKeyboardMenu::CreateKeyboardMenu( BITMAP* picture ) :
+CreateKeyboardMenu::CreateKeyboardMenu( allegro::Pict* picture ) :
         Action( picture )
 {
 

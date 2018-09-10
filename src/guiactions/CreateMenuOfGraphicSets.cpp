@@ -12,7 +12,7 @@
 using gui::CreateMenuOfGraphicSets ;
 
 
-CreateMenuOfGraphicSets::CreateMenuOfGraphicSets( BITMAP* picture, Action* previous ) :
+CreateMenuOfGraphicSets::CreateMenuOfGraphicSets( allegro::Pict* picture, Action* previous ) :
         Action( picture ),
         actionOnEscape( previous ),
         menuOfGraphicSets( nilPointer )

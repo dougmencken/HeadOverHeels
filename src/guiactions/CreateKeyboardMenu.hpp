@@ -30,7 +30,7 @@ public:
          * Constructor
          * @param picture Imagen donde se dibujará la interfaz gráfica
          */
-        CreateKeyboardMenu( BITMAP* picture ) ;
+        CreateKeyboardMenu( allegro::Pict* picture ) ;
 
         std::string getNameOfAction () const {  return "CreateKeyboardMenu" ;  }
 

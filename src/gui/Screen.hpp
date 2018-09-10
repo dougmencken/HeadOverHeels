@@ -13,17 +13,20 @@
 
 #include <list>
 #include <vector>
-#include <allegro.h>
+
+#include <WrappersAllegro.hpp>
 
 #include "Widget.hpp"
-#include "Color.hpp"
+
+class Color ;
+class Picture ;
 
 
 namespace gui
 {
 
 class Action ;
-class AnimatedPicture ;
+class AnimatedPictureWidget ;
 
 /**
  * Container for elements of user interface
@@ -45,7 +48,7 @@ public:
         /**
          * Draw parts of screen
          */
-        void draw ( BITMAP* where ) ;
+        void draw ( allegro::Pict* where ) ;
 
         void redraw () ;
 
@@ -69,9 +72,9 @@ public:
 
         static void refreshBackground () ;
 
-        static BITMAP * loadPicture ( const char * nameOfPicture ) ;
+        static allegro::Pict * loadPicture ( const char * nameOfPicture ) ;
 
-        static std::vector < BITMAP * > loadAnimation ( const char * nameOfGif ) ;
+        static std::vector < allegro::Pict * > loadAnimation ( const char * nameOfGif ) ;
 
         static void scrollHorizontally ( Screen * oldScreen, Screen * newScreen, bool rightToLeft ) ;
 
@@ -88,7 +91,7 @@ private:
         /**
          * Image of this screen
          */
-        BITMAP * imageOfScreen ;
+        Picture * imageOfScreen ;
 
         /**
          * Elements of interface to draw on screen
@@ -101,9 +104,9 @@ private:
 
         Widget * keyHandler ;
 
-        AnimatedPicture * pictureOfHead ;
+        AnimatedPictureWidget * pictureOfHead ;
 
-        AnimatedPicture * pictureOfHeels ;
+        AnimatedPictureWidget * pictureOfHeels ;
 
         static void randomPixelFade( bool fadeIn, Screen * slide, Color * color ) ;
 
@@ -112,7 +115,7 @@ protected:
         /**
          * Imagen de fondo de la pantalla
          */
-        static BITMAP * backgroundPicture ;
+        static Picture * backgroundPicture ;
 
 public:
 

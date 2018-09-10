@@ -47,21 +47,21 @@ FreeItem::FreeItem( const FreeItem& freeItem )
 {
         if ( freeItem.shadedNonmaskedImage != nilPointer )
         {
-                this->shadedNonmaskedImage = create_bitmap_ex( 32, freeItem.shadedNonmaskedImage->w, freeItem.shadedNonmaskedImage->h );
-                blit( freeItem.shadedNonmaskedImage, this->shadedNonmaskedImage, 0, 0, 0, 0, this->shadedNonmaskedImage->w, this->shadedNonmaskedImage->h );
+                this->shadedNonmaskedImage = allegro::createPicture( freeItem.shadedNonmaskedImage->w, freeItem.shadedNonmaskedImage->h );
+                allegro::bitBlit( freeItem.shadedNonmaskedImage, this->shadedNonmaskedImage );
         }
 }
 
 FreeItem::~FreeItem()
 {
-        allegro::destroyBitmap( shadedNonmaskedImage );
+        allegro::binPicture( shadedNonmaskedImage );
 }
 
-void FreeItem::draw( BITMAP* where )
+void FreeItem::draw( allegro::Pict* where )
 {
         if ( transparency >= 100 ) /* item is fully transparent */ return ;
 
-        BITMAP* imageToDraw = this->rawImage;
+        allegro::Pict* imageToDraw = this->rawImage;
         if ( this->shadedNonmaskedImage != nilPointer ) imageToDraw = this->shadedNonmaskedImage;
         if ( this->processedImage != nilPointer ) imageToDraw = this->processedImage;
         if ( imageToDraw == nilPointer ) return;
@@ -96,7 +96,7 @@ void FreeItem::binBothProcessedImages()
         setShadedNonmaskedImage( nilPointer );
 }
 
-void FreeItem::changeImage( BITMAP* newImage )
+void FreeItem::changeImage( allegro::Pict* newImage )
 {
         if ( newImage == nilPointer )
         {
@@ -141,7 +141,7 @@ void FreeItem::changeImage( BITMAP* newImage )
         }
 }
 
-void FreeItem::changeShadow( BITMAP* newShadow )
+void FreeItem::changeShadow( allegro::Pict* newShadow )
 {
         if ( this->shadow == nilPointer )
         {
@@ -185,12 +185,12 @@ void FreeItem::requestMask()
         this->myMask = NoMask;
 }
 
-void FreeItem::maskImage( int x, int y, BITMAP* image )
+void FreeItem::maskImage( int x, int y, allegro::Pict* image )
 {
         assert( image != nilPointer );
 
         // mask shaded image or raw image when item is not yet shaded
-        BITMAP* currentImage = ( this->shadedNonmaskedImage != nilPointer ? this->shadedNonmaskedImage : this->rawImage );
+        allegro::Pict* currentImage = ( this->shadedNonmaskedImage != nilPointer ? this->shadedNonmaskedImage : this->rawImage );
         assert( currentImage != nilPointer );
 
         int inix = x - this->offset.first;                      // initial X
@@ -208,17 +208,17 @@ void FreeItem::maskImage( int x, int y, BITMAP* image )
         // in principle, image of masked item is image of unmasked item, shaded or unshaded
         if ( this->processedImage == nilPointer )
         {
-                this->processedImage = create_bitmap_ex( bitmap_color_depth( currentImage ), currentImage->w, currentImage->h );
+                this->processedImage = allegro::createPicture( currentImage->w, currentImage->h, allegro::colorDepthOf( currentImage ) );
         }
 
         if ( this->myMask == WantRemask )
         {
-                blit( currentImage, this->processedImage, 0, 0, 0, 0, currentImage->w, currentImage->h );
+                allegro::bitBlit( currentImage, this->processedImage );
                 this->myMask = AlreadyMasked;
         }
 
-        char increase1 = ( bitmap_color_depth( this->processedImage ) == 32 ? 4 : 3 );
-        char increase2 = ( bitmap_color_depth( image ) == 32 ? 4 : 3 );
+        char increase1 = ( allegro::colorDepthOf( this->processedImage ) == 32 ? 4 : 3 );
+        char increase2 = ( allegro::colorDepthOf( image ) == 32 ? 4 : 3 );
 
         int n2i = inix + this->offset.first - x;
 
@@ -226,8 +226,8 @@ void FreeItem::maskImage( int x, int y, BITMAP* image )
         inix *= increase1;
         n2i *= increase2;
         #if IS_BIG_ENDIAN
-                inix += bitmap_color_depth( currentImage ) == 32 ? 1 : 0 ;
-                n2i += bitmap_color_depth( image ) == 32 ? 1 : 0;
+                inix += allegro::colorDepthOf( currentImage ) == 32 ? 1 : 0 ;
+                n2i += allegro::colorDepthOf( image ) == 32 ? 1 : 0;
         #endif
 
         int cRow = 0;           // row of pixels in currentImage
@@ -342,11 +342,11 @@ bool FreeItem::addToPosition( int x, int y, int z )
         return ! collisionFound;
 }
 
-void FreeItem::setShadedNonmaskedImage( BITMAP* newImage )
+void FreeItem::setShadedNonmaskedImage( allegro::Pict* newImage )
 {
         if ( shadedNonmaskedImage != newImage )
         {
-                allegro::destroyBitmap( shadedNonmaskedImage );
+                allegro::binPicture( shadedNonmaskedImage );
                 shadedNonmaskedImage = newImage;
         }
 }

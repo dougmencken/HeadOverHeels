@@ -20,7 +20,7 @@ using gui::CreateMainMenu;
 using isomot::SoundManager;
 
 
-CreateMainMenu::CreateMainMenu( BITMAP* picture ) :
+CreateMainMenu::CreateMainMenu( allegro::Pict* picture ) :
         Action( picture )
 {
 

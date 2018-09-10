@@ -9,7 +9,7 @@
 namespace isomot
 {
 
-FloorTile::FloorTile( int cellX, int cellY, BITMAP* image )
+FloorTile::FloorTile( int cellX, int cellY, allegro::Pict* image )
         : Mediated (), Shady ()
         , rawImage( image )
         , shadyImage( nilPointer )
@@ -25,8 +25,8 @@ FloorTile::FloorTile( int cellX, int cellY, BITMAP* image )
 
 FloorTile::~FloorTile()
 {
-        allegro::destroyBitmap( rawImage );
-        allegro::destroyBitmap( shadyImage );
+        allegro::binPicture( rawImage );
+        allegro::binPicture( shadyImage );
 }
 
 void FloorTile::calculateOffset()
@@ -39,7 +39,7 @@ void FloorTile::calculateOffset()
         }
 }
 
-void FloorTile::draw( BITMAP* where )
+void FloorTile::draw( allegro::Pict* where )
 {
         if ( shadyImage != nilPointer )
         {       // draw tile with shadow
@@ -51,11 +51,11 @@ void FloorTile::draw( BITMAP* where )
         }
 }
 
-void FloorTile::setShadyImage( BITMAP* newShady )
+void FloorTile::setShadyImage( allegro::Pict* newShady )
 {
         if ( shadyImage != newShady )
         {
-                allegro::destroyBitmap( shadyImage /*~ , "shady image of " + uniqueName + " via FloorTile::setShadyImage" ~*/ );
+                allegro::binPicture( shadyImage );
                 shadyImage = newShady;
         }
 }
@@ -64,10 +64,10 @@ void FloorTile::freshShadyImage ()
 {
         if ( shadyImage != nilPointer )
         {
-                allegro::destroyBitmap( shadyImage /*~ , "shady image of " + uniqueName + " via FloorTile::freshShadyImage" ~*/ );
+                allegro::binPicture( shadyImage );
 
-                BITMAP* shady = create_bitmap_ex( 32, rawImage->w, rawImage->h );
-                blit( rawImage, shady, 0, 0, 0, 0, rawImage->w, rawImage->h );
+                allegro::Pict* shady = allegro::createPicture( rawImage->w, rawImage->h );
+                allegro::bitBlit( rawImage, shady );
                 shadyImage = shady;
         }
 }

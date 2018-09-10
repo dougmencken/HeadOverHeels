@@ -34,7 +34,7 @@ GridItem::~GridItem( )
 
 }
 
-void GridItem::draw( BITMAP* where )
+void GridItem::draw( allegro::Pict* where )
 {
         if ( this->processedImage != nilPointer )
         {
@@ -46,7 +46,7 @@ void GridItem::draw( BITMAP* where )
         }
 }
 
-void GridItem::changeImage( BITMAP* newImage )
+void GridItem::changeImage( allegro::Pict* newImage )
 {
         if ( this->rawImage == nilPointer )
         {
@@ -91,7 +91,7 @@ void GridItem::changeImage( BITMAP* newImage )
                 mediator->remaskWithGridItem( this );
 }
 
-void GridItem::changeShadow( BITMAP* newShadow )
+void GridItem::changeShadow( allegro::Pict* newShadow )
 {
         Item::changeShadow( newShadow );
 

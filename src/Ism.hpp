@@ -11,23 +11,21 @@
 #ifndef Ism_hpp_
 #define Ism_hpp_
 
-#include <string>
-#include <sstream>
-#include <fstream>
-#include <memory>
 #include <cstdlib>
+#include <cstring>
 #include <unistd.h>
+
 #include <sys/stat.h>
 #include <sys/types.h>
 
+#include <memory>
+#include <string>
+#include <sstream>
+
 #include "WrappersAllegro.hpp"
 
-#ifdef __WIN32
-    #include <winalleg.h>
-#else
+#ifndef __WIN32
     #include <time.h>
-    #include <sys/stat.h>
-    #include <sys/types.h>
 #endif
 
 #if __cplusplus >= 201103L /* when complier supports c++11 */
@@ -139,6 +137,20 @@ namespace isomot
                 fprintf( out, "no backtrace for non-debug build or when there’s no execinfo.h\n" );
 #endif
         }
+
+#ifdef __WIN32
+        struct IsPathSeparator
+        {
+                bool operator() ( char c ) const {  return c == '\\' || c == '/' ;  }
+        };
+#else
+        struct IsPathSeparator
+        {
+                bool operator() ( char c ) const {  return c == '/' ;  }
+        };
+#endif
+
+        std::string nameFromPath ( std::string const& path ) ;
 
         const char * pathToFile ( const std::string& in ) ;
 

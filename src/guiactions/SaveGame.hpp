@@ -27,7 +27,7 @@ public:
          * @param picture Image where to draw user interface
          * @param slot Number of file to load
          */
-        SaveGame( BITMAP * picture, unsigned int slot ) ;
+        SaveGame( allegro::Pict * picture, unsigned int slot ) ;
 
         std::string getNameOfAction () const {  return "SaveGame" ;  }
 

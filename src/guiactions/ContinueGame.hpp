@@ -27,7 +27,7 @@ public:
          * @param picture Imagen donde se dibujará la interfaz gráfica
          * @param gameInProgress Indica si hay una partida en curso o comienza una nueva
          */
-        ContinueGame( BITMAP* picture, bool gameInProgress ) ;
+        ContinueGame( allegro::Pict* picture, bool gameInProgress ) ;
 
         std::string getNameOfAction () const {  return "ContinueGame" ;  }
 

@@ -8,7 +8,7 @@
 #include "Color.hpp"
 #include "Screen.hpp"
 #include "Menu.hpp"
-#include "Picture.hpp"
+#include "PictureWidget.hpp"
 #include "Label.hpp"
 #include "CreateLanguageMenu.hpp"
 
@@ -61,7 +61,7 @@ GuiManager::GuiManager( ) :
         std::string nameOfFontFile = isomot::sharePath() + "font.png" ;
         std::cout << "reading from file \"" << nameOfFontFile << "\" to create fonts used in game" << std::endl ;
 
-        BITMAP * pictureOfFont = load_png( isomot::pathToFile( nameOfFontFile.c_str () ), nilPointer );
+        allegro::Pict * pictureOfFont = allegro::loadPNG( isomot::pathToFile( nameOfFontFile.c_str () ) );
         if ( pictureOfFont != nilPointer )
         {
                 addFont( new Font( "white.regular", pictureOfFont, Color::whiteColor() ) );
@@ -80,7 +80,7 @@ GuiManager::GuiManager( ) :
                 addFont( new Font( "magenta.regular", pictureOfFont, Color::magentaColor(), false ) );
                 addFont( new Font( "magenta.big", pictureOfFont, Color::magentaColor(), true ) );
 
-                allegro::destroyBitmap( pictureOfFont );
+                allegro::binPicture( pictureOfFont );
         }
         else
         {
@@ -88,7 +88,7 @@ GuiManager::GuiManager( ) :
         }
 
         // create image to draw interface
-        this->picture = create_bitmap_ex( 32, isomot::ScreenWidth(), isomot::ScreenHeight() );
+        this->picture = allegro::createPicture( isomot::ScreenWidth(), isomot::ScreenHeight() );
 
         // initialize sound manager
         SoundManager::getInstance()->readListOfSounds( "sounds.xml" );

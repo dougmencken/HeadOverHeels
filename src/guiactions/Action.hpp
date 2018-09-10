@@ -24,7 +24,7 @@ class Action
 
 public:
 
-        Action( BITMAP * picture ) : whereToDraw( picture ), begin( false ), done( false ) { }
+        Action( allegro::Pict * picture ) : whereToDraw( picture ), begin( false ), done( false ) { }
 
         virtual ~Action( ) { }
 
@@ -36,7 +36,7 @@ public:
 
         bool isDone() {  return done ;  }
 
-        BITMAP * getWhereToDraw () const {  return whereToDraw ;  }
+        allegro::Pict * getWhereToDraw () const {  return whereToDraw ;  }
 
 protected:
 
@@ -44,7 +44,7 @@ protected:
 
 private:
 
-        BITMAP * whereToDraw ;
+        allegro::Pict * whereToDraw ;
 
         bool begin ;
 

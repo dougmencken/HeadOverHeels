@@ -15,9 +15,12 @@
 #include <list>
 #include <map>
 #include <iostream>
-#include <allegro.h>
+
+#include <WrappersAllegro.hpp>
+
 #include "alogg/aloggpth.h"
 #include "alogg/aloggint.h"
+
 #include "Ism.hpp"
 
 

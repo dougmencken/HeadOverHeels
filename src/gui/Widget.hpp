@@ -11,7 +11,10 @@
 #ifndef Widget_hpp_
 #define Widget_hpp_
 
-#include <allegro.h>
+#include "WrappersAllegro.hpp"
+
+#include "Drawable.hpp"
+
 #include <utility>
 
 
@@ -22,7 +25,7 @@ namespace gui
  * Foundation for creating elements of the user interface
  */
 
-class Widget
+class Widget : public Drawable
 {
 
 public:
@@ -33,7 +36,7 @@ public:
 
         virtual ~Widget( ) ;
 
-        virtual void draw ( BITMAP * where ) = 0 ;
+        virtual void draw ( allegro::Pict * where ) = 0 ;
 
         /**
          * Subclasses may respond to this event or notify other component

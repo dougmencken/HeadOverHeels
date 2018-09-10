@@ -1143,7 +1143,7 @@ bool Mediator::pickNextCharacter( ItemDataManager* itemDataManager )
                                 // item that Heels may have in handbag
                                 PlayerItem* heels = reference;
                                 ItemData* takenItemData = heels->getTakenItemData ();
-                                BITMAP* takenItemImage = heels->getTakenItemImage ();
+                                Picture* takenItemImage = heels->getTakenItemImage ();
                                 std::string behaviorOfItemTaken = heels->getTakenItemBehavior( );
 
                                 // remove simple players
@@ -1183,7 +1183,7 @@ bool Mediator::pickNextCharacter( ItemDataManager* itemDataManager )
                 // get data of item in handbag
                 ItemData* takenItemData = activeCharacter->getTakenItemData ();
                 std::string behaviorOfItemTaken = activeCharacter->getTakenItemBehavior( );
-                BITMAP* takenItemImage = activeCharacter->getTakenItemImage ();
+                Picture* takenItemImage = activeCharacter->getTakenItemImage ();
 
                 // remove composite player
                 this->room->removePlayerFromRoom( activeCharacter, false );

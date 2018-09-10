@@ -315,7 +315,7 @@ FloorTile* RoomBuilder::buildFloorTile( tinyxml2::XMLElement* tile, const char* 
         tinyxml2::XMLElement* y = tile->FirstChildElement( "y" );
         std::string pictureString = tile->FirstChildElement( "picture" )->FirstChild()->ToText()->Value();
 
-        BITMAP* picture = load_png( isomot::pathToFile( isomot::sharePath() + gfxPrefix + pathSeparator + pictureString ), nilPointer );
+        allegro::Pict* picture = allegro::loadPNG( isomot::pathToFile( isomot::sharePath() + gfxPrefix + pathSeparator + pictureString ) );
         if ( picture == nilPointer ) {
                 std::cerr << "picture \"" << pictureString << "\" from \"" << gfxPrefix << "\" is absent" << std::endl ;
                 return nilPointer;
@@ -331,7 +331,7 @@ Wall* RoomBuilder::buildWall( tinyxml2::XMLElement* wall, const char* gfxPrefix 
         std::string axisString = wall->FirstChildElement( "axis" )->FirstChild()->ToText()->Value();
         std::string pictureString = wall->FirstChildElement( "picture" )->FirstChild()->ToText()->Value();
 
-        BITMAP* picture = load_png( isomot::pathToFile( isomot::sharePath() + gfxPrefix + pathSeparator + pictureString ), nilPointer );
+        allegro::Pict* picture = allegro::loadPNG( isomot::pathToFile( isomot::sharePath() + gfxPrefix + pathSeparator + pictureString ) );
         if ( picture == nilPointer ) {
                 std::cerr << "picture \"" << pictureString << "\" from \"" << gfxPrefix << "\" is absent" << std::endl ;
                 return nilPointer;

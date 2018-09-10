@@ -35,7 +35,7 @@ public:
          * @param picture Image where to draw
          * @param previous Instance of action to do on escape
          */
-        CreateMenuOfGraphicSets( BITMAP * picture, Action * previous ) ;
+        CreateMenuOfGraphicSets( allegro::Pict * picture, Action * previous ) ;
 
         virtual ~CreateMenuOfGraphicSets( ) ;
 

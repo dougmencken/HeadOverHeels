@@ -15,7 +15,7 @@
 #include <iostream>
 #include <sstream>
 
-#include <allegro.h>
+#include <WrappersAllegro.hpp>
 
 #include <tinyxml2.h>
 

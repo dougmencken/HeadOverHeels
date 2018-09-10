@@ -32,14 +32,14 @@ ItemData::~ItemData( )
         clearNameOfShadowFile ();
         frames.clear ();
 
-        for ( std::vector< BITMAP * >::iterator it = motion.begin (); it != motion.end (); ++ it )
+        for ( std::vector< allegro::Pict * >::iterator it = motion.begin (); it != motion.end (); ++ it )
         {
-                allegro::destroyBitmap( *it );
+                allegro::binPicture( *it );
         }
 
-        for ( std::vector< BITMAP * >::iterator it = shadows.begin (); it != shadows.end (); ++ it )
+        for ( std::vector< allegro::Pict * >::iterator it = shadows.begin (); it != shadows.end (); ++ it )
         {
-                allegro::destroyBitmap( *it );
+                allegro::binPicture( *it );
         }
 }
 

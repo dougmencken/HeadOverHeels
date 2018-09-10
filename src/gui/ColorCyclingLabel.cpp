@@ -22,7 +22,7 @@ ColorCyclingLabel::~ColorCyclingLabel( )
         delete colorCyclingTimer ;
 }
 
-void ColorCyclingLabel::draw( BITMAP* where )
+void ColorCyclingLabel::draw( allegro::Pict* where )
 {
         updateImageOfLabel( getText(), Label::getFontByFamilyAndColor( getFontFamily(), getColor() ) );
 
@@ -33,53 +33,52 @@ void ColorCyclingLabel::updateImageOfLabel( const std::string& text, Font * font
 {
         if ( colorCyclingTimer->getValue() > 0.2 || imageOfLetters == nilPointer )
         {
-                allegro::destroyBitmap( imageOfLetters );
-                imageOfLetters = create_bitmap_ex( 32, getWidth(), getHeight() );
-                allegro::clearToColor( imageOfLetters, Color::colorOfTransparency()->toAllegroColor () );
+                delete imageOfLetters;
+                imageOfLetters = new Picture( getWidth(), getHeight() );
 
-		if ( ! text.empty() )
-		{
-			const size_t numberOfColors = 3;
-			const std::string cyclingColors[ numberOfColors ] = {  "cyan", "magenta", "green"  }; // original speccy sequence
+                if ( ! text.empty() )
+                {
+                        const size_t numberOfColors = 3;
+                        const std::string cyclingColors[ numberOfColors ] = {  "cyan", "magenta", "green"  }; // original speccy sequence
 
-			Font* fontToUse = font ;
+                        Font* fontToUse = font ;
 
-			size_t charPos = 0; // position of character in the string which for utf-8 isn't always the same as character’s offset in bytes
+                        size_t charPos = 0; // position of character in the string which for utf-8 isn't always the same as character’s offset in bytes
 
-			std::string::const_iterator iter = text.begin ();
-			while ( iter != text.end () )
+                        std::string::const_iterator iter = text.begin ();
+                        while ( iter != text.end () )
                         {
-				// pick new font with color for this letter
-				fontToUse = Label::getFontByFamilyAndColor( font->getFamily(), cyclingColors[ cycle ] );
-				if ( fontToUse == nilPointer )
-				{
-					std::cerr << "can’t get font with family \"" << font->getFamily() << "\"" <<
-							" for color \"" << cyclingColors[ cycle ] << "\"" << std::endl ;
-					fontToUse = font ;
-				}
+                                // pick new font with color for this letter
+                                fontToUse = Label::getFontByFamilyAndColor( font->getFamily(), cyclingColors[ cycle ] );
+                                if ( fontToUse == nilPointer )
+                                {
+                                        std::cerr << "can’t get font with family \"" << font->getFamily() << "\"" <<
+                                                        " for color \"" << cyclingColors[ cycle ] << "\"" << std::endl ;
+                                        fontToUse = font ;
+                                }
 
-				// cycle in sequence of colors
-				cycle++ ;
-				if ( cycle >= numberOfColors ) cycle = 0;
+                                // cycle in sequence of colors
+                                cycle++ ;
+                                if ( cycle >= numberOfColors ) cycle = 0;
 
-				size_t from = std::distance( text.begin (), iter );
-				size_t howMany = incUtf8StringIterator ( iter, text.end () ) ; // string iterator increments here
-				std::string utf8letter = text.substr( from, howMany );
+                                size_t from = std::distance( text.begin (), iter );
+                                size_t howMany = incUtf8StringIterator ( iter, text.end () ) ; // string iterator increments here
+                                std::string utf8letter = text.substr( from, howMany );
 
-				// draw letter
-				blit(
-					fontToUse->getPictureOfLetter( utf8letter ),
-					imageOfLetters,
-					0,
-					0,
-					charPos * ( fontToUse->getCharWidth() + getSpacing() ),
-					0,
-					fontToUse->getCharWidth(),
-					fontToUse->getCharHeight()
-				);
+                                // draw letter
+                                allegro::bitBlit(
+                                        fontToUse->getPictureOfLetter( utf8letter )->getAllegroPict(),
+                                        imageOfLetters->getAllegroPict(),
+                                        0,
+                                        0,
+                                        charPos * ( fontToUse->getCharWidth() + getSpacing() ),
+                                        0,
+                                        fontToUse->getCharWidth(),
+                                        fontToUse->getCharHeight()
+                                );
 
-				charPos ++;
-			}
+                                charPos ++;
+                        }
                 }
 
                 colorCyclingTimer->reset ();

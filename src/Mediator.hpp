@@ -15,10 +15,8 @@
 #include <list>
 #include <vector>
 
-#include <allegro.h>
-#ifdef __WIN32
-  #include <winalleg.h>
-#endif
+#include <WrappersAllegro.hpp>
+
 #include <pthread.h>
 #include <sys/time.h>
 

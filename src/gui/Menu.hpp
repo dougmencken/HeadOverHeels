@@ -14,7 +14,10 @@
 #include <list>
 #include <string>
 #include <iostream>
-#include <allegro.h>
+
+#include <WrappersAllegro.hpp>
+
+#include "Picture.hpp"
 #include "Widget.hpp"
 
 
@@ -37,7 +40,7 @@ public:
 
         virtual ~Menu( );
 
-        void draw ( BITMAP* where ) ;
+        void draw ( allegro::Pict* where ) ;
 
         void redraw () ;
 
@@ -89,22 +92,22 @@ protected:
          */
         Label* activeOption ;
 
-        BITMAP * whereToDraw ;
+        allegro::Pict * whereToDraw ;
 
         /**
          * Image before each option of menu
          */
-        BITMAP* optionImage ;
+        Picture* optionImage ;
 
         /**
          * Image for the chosen option which is double sized
          */
-        BITMAP* chosenOptionImage ;
+        Picture* chosenOptionImage ;
 
         /**
          * Image for the chosen option which is single sized
          */
-        BITMAP* chosenOptionImageMini ;
+        Picture* chosenOptionImageMini ;
 
 };
 

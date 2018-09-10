@@ -29,6 +29,8 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			Way.hpp \
 			Color.cpp \
 			Color.hpp \
+			Picture.cpp \
+			Picture.hpp \
 			Drawable.hpp \
 			Mediated.hpp \
 			Shady.hpp \
@@ -102,10 +104,10 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			gui/Gui.hpp \
 			gui/GuiManager.cpp \
 			gui/GuiManager.hpp \
-			gui/Picture.cpp \
-			gui/Picture.hpp \
-			gui/AnimatedPicture.cpp \
-			gui/AnimatedPicture.hpp \
+			gui/PictureWidget.cpp \
+			gui/PictureWidget.hpp \
+			gui/AnimatedPictureWidget.cpp \
+			gui/AnimatedPictureWidget.hpp \
 			gui/Label.cpp \
 			gui/Label.hpp \
 			gui/ColorCyclingLabel.cpp \

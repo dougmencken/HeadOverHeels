@@ -34,7 +34,7 @@ public:
          * Constructor
          * @param picture Image where to draw
          */
-        CreateVideoMenu( BITMAP * picture ) ;
+        CreateVideoMenu( allegro::Pict * picture ) ;
 
         std::string getNameOfAction () const {  return "CreateVideoMenu" ;  }
 

@@ -40,7 +40,7 @@ Label::Label( const std::string& text, const std::string& family, const std::str
 
 Label::~Label( )
 {
-        allegro::destroyBitmap( imageOfLetters );
+        delete imageOfLetters ;
 }
 
 /* static */
@@ -73,9 +73,16 @@ void Label::changeFontFamilyAndColor( const std::string& family, const std::stri
         update ();
 }
 
-void Label::draw( BITMAP* where )
+void Label::draw( allegro::Pict* where )
 {
-        allegro::drawSprite( where, imageOfLetters, getX(), getY() );
+        if ( imageOfLetters != nilPointer )
+        {
+                /* std::string whereToSave = isomot::homePath() + imageOfLetters->getName() + ".pcx" ;
+                std::cout << "saving it to " << whereToSave << std::endl ;
+                save_bitmap( whereToSave.c_str(), imageOfLetters->getAllegroPict(), nilPointer ); */
+
+                allegro::drawSprite( where, imageOfLetters->getAllegroPict(), getX(), getY() );
+        }
 }
 
 void Label::handleKey( int key )
@@ -88,14 +95,13 @@ void Label::handleKey( int key )
 
 void Label::createImageOfLabel( const std::string& text, Font * font )
 {
-        // re-create image of letters
-        if ( imageOfLetters != nilPointer )
-        {
-                allegro::destroyBitmap( imageOfLetters );
-        }
+        std::string nameOfImage = "image of label \"" + text + "\" using " + this->fontFamily + " font colored " + this->color ;
+        /* std::cout << "creating " << nameOfImage << std::endl ; */
 
-        imageOfLetters = create_bitmap_ex( 32, getWidth(), getHeight() );
-        allegro::clearToColor( imageOfLetters, Color::colorOfTransparency()->toAllegroColor () );
+        // re-create image of letters
+        delete imageOfLetters ;
+        imageOfLetters = new Picture( getWidth(), getHeight() );
+        imageOfLetters->setName( nameOfImage );
 
         if ( ! text.empty() )
         {
@@ -133,9 +139,9 @@ void Label::createImageOfLabel( const std::string& text, Font * font )
                         std::string utf8letter = text.substr( from, howMany );
 
                         // draw letter
-                        blit(
-                                fontToUse->getPictureOfLetter( utf8letter ),
-                                imageOfLetters,
+                        allegro::bitBlit(
+                                fontToUse->getPictureOfLetter( utf8letter )->getAllegroPict(),
+                                imageOfLetters->getAllegroPict(),
                                 0,
                                 0,
                                 charPos * ( fontToUse->getCharWidth() + getSpacing() ),

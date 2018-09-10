@@ -11,8 +11,7 @@
 #ifndef TimerWindows_hpp_
 #define TimerWindows_hpp_
 
-#include <allegro.h>
-#include <winalleg.h>
+#include <WrappersAllegro.hpp>
 
 
 /**

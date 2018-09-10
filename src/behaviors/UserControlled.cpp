@@ -485,7 +485,7 @@ void UserControlled::takeItem( PlayerItem * player )
                         if ( takenItem != nilPointer )
                         {
                                 // get image of that item
-                                BITMAP* takenItemImage = takenItem->getRawImage();
+                                Picture* takenItemImage = new Picture( takenItem->getRawImage() );
                                 GameManager::getInstance()->setItemTaken( takenItemImage );
 
                                 player->assignTakenItem( itemDataManager->findDataByLabel( takenItem->getLabel() ),

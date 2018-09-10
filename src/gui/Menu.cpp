@@ -32,17 +32,17 @@ Menu::~Menu( )
 
 void Menu::refreshPictures ()
 {
-        if ( optionImage != nilPointer ) allegro::destroyBitmap( optionImage );
-        optionImage = load_png( isomot::pathToFile( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + "option.png" ), nilPointer );
+        delete optionImage ;
+        optionImage = new Picture( allegro::loadPNG( isomot::pathToFile( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + "option.png" ) ) );
 
-        if ( chosenOptionImage != nilPointer ) allegro::destroyBitmap( chosenOptionImage );
-        chosenOptionImage = load_png( isomot::pathToFile( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + "chosen-option.png" ), nilPointer );
+        delete chosenOptionImage ;
+        chosenOptionImage = new Picture( allegro::loadPNG( isomot::pathToFile( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + "chosen-option.png" ) ) );
 
-        if ( chosenOptionImageMini != nilPointer ) allegro::destroyBitmap( chosenOptionImageMini );
-        chosenOptionImageMini = load_png( isomot::pathToFile( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + "chosen-option-mini.png" ), nilPointer );
+        delete chosenOptionImageMini ;
+        chosenOptionImageMini = new Picture( allegro::loadPNG( isomot::pathToFile( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + "chosen-option-mini.png" ) ) );
 }
 
-void Menu::draw( BITMAP* where )
+void Menu::draw( allegro::Pict* where )
 {
         if ( where == nilPointer ) return ;
 
@@ -79,7 +79,7 @@ void Menu::draw( BITMAP* where )
         setX( previousX + ( ( isomot::ScreenWidth() - previousX ) >> 1 ) - ( getWidthOfMenu () >> 1 ) );
         setY( previousY + ( ( isomot::ScreenHeight() - previousY ) >> 1 ) - ( getHeightOfMenu() >> 1 ) );
 
-        int dx( this->optionImage != nilPointer ? this->optionImage->w : 0 );
+        int dx( this->optionImage != nilPointer ? this->optionImage->getWidth() : 0 );
         int dy( 0 );
 
         // for each label
@@ -88,9 +88,9 @@ void Menu::draw( BITMAP* where )
         {
                 Label* label = *i;
 
-                BITMAP * mark = ( this->activeOption == label ) ? this->chosenOptionImage : this->optionImage ;
+                Picture * mark = ( this->activeOption == label ) ? this->chosenOptionImage : this->optionImage ;
                 if ( mark != nilPointer )
-                        allegro::drawSprite( where, mark, getX (), getY () + dy );
+                        allegro::drawSprite( where, mark->getAllegroPict(), getX (), getY () + dy );
 
                 label->moveTo( getX () + dx, getY () + dy );
                 label->draw( where );
@@ -180,7 +180,7 @@ unsigned int Menu::getWidthOfMenu () const
 
         for ( std::list< Label * >::const_iterator i = options.begin () ; i != options.end () ; ++i )
         {
-                unsigned int theWidth = ( *i )->getWidth() + ( this->optionImage != nilPointer ? this->optionImage->w : 0 ) ;
+                unsigned int theWidth = ( *i )->getWidth() + ( this->optionImage != nilPointer ? this->optionImage->getWidth() : 0 ) ;
                 if ( theWidth > widthOfMenu ) widthOfMenu = theWidth ;
         }
 

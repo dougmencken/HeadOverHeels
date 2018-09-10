@@ -33,7 +33,7 @@ Isomot::~Isomot( )
         delete this->mapManager;
         delete this->finalRoomTimer;
 
-        allegro::destroyBitmap( this->view );
+        allegro::binPicture( this->view );
 }
 
 void Isomot::beginNewGame ()
@@ -184,7 +184,7 @@ void Isomot::prepare ()
         if ( this->view == nilPointer )
         {
                 // image where the isometric view will be drawn
-                this->view = create_bitmap_ex( 32, ScreenWidth(), ScreenHeight() );
+                this->view = allegro::createPicture( ScreenWidth(), ScreenHeight() );
         }
 
         // set of graphics may change between games
@@ -249,7 +249,7 @@ void Isomot::reset()
         if ( finalRoomTimer != nilPointer ) finalRoomTimer->stop();
 
         // bin isometric view
-        allegro::destroyBitmap( this->view );
+        allegro::binPicture( this->view );
 
         this->mapManager->binEveryRoom();
 
@@ -257,7 +257,7 @@ void Isomot::reset()
         BonusManager::getInstance()->reset();
 }
 
-BITMAP* Isomot::update()
+allegro::Pict* Isomot::update()
 {
         Room* activeRoom = mapManager->getActiveRoom();
         GameManager* gameManager = GameManager::getInstance();
@@ -536,7 +536,7 @@ BITMAP* Isomot::update()
         // draw active room, if there’s any
         if ( activeRoom != nilPointer )
         {
-                blit (
+                allegro::bitBlit (
                         activeRoom->getWhereToDraw(), this->view,
                         activeRoom->getCamera()->getDeltaX(), activeRoom->getCamera()->getDeltaY(),
                         0, 0,
@@ -853,7 +853,7 @@ BITMAP* Isomot::update()
         else
         {
                 std::cout << "no room, game over" << std::endl ;
-                allegro::destroyBitmap( this->view );
+                allegro::binPicture( this->view );
         }
 
         return this->view;
@@ -975,7 +975,7 @@ void Isomot::updateFinalRoom()
 }
 
 /* static */
-void Isomot::fillIsoTile( BITMAP* where, int x0, int y0, int tileX, int tileY, unsigned int sizeOfTile, const Color* color )
+void Isomot::fillIsoTile( allegro::Pict* where, int x0, int y0, int tileX, int tileY, unsigned int sizeOfTile, const Color* color )
 {
         for ( unsigned int piw = 0 ; piw < sizeOfTile ; piw ++ )
         {

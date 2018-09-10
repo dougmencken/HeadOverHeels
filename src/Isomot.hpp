@@ -11,10 +11,7 @@
 #ifndef Isomot_hpp_
 #define Isomot_hpp_
 
-#include <allegro.h>
-#ifdef __WIN32
-  #include <winalleg.h>
-#endif
+#include <WrappersAllegro.hpp>
 
 #include <list>
 #include <string>
@@ -70,7 +67,7 @@ public:
          * lado se dibuja la sala activa
          * @return La imagen donde se ha dibujado la vista isométrica
          */
-        BITMAP* update () ;
+        allegro::Pict* update () ;
 
 private:
 
@@ -89,7 +86,7 @@ private:
         /**
          * Where to draw isometric view
          */
-        BITMAP * view ;
+        allegro::Pict * view ;
 
         MapManager * mapManager ;
 
@@ -99,7 +96,7 @@ private:
 
 public:
 
-        static void fillIsoTile ( BITMAP * where, int x0, int y0, int tileX, int tileY, unsigned int sizeOfTile, const Color * color ) ;
+        static void fillIsoTile ( allegro::Pict * where, int x0, int y0, int tileX, int tileY, unsigned int sizeOfTile, const Color * color ) ;
 
         MapManager * getMapManager () const {  return mapManager ;  }
 

@@ -31,7 +31,7 @@ public:
          * @param picture where to draw
          * @param isLoadMenu true for "load game", false for "save game"
          */
-        CreateListOfSavedGames( BITMAP* picture, bool isLoadMenu ) ;
+        CreateListOfSavedGames( allegro::Pict* picture, bool isLoadMenu ) ;
 
         std::string getNameOfAction () const {  return "CreateListOfSavedGames" ;  }
 

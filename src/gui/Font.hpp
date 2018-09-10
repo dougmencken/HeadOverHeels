@@ -14,9 +14,10 @@
 #include <string>
 #include <vector>
 
-#include <allegro.h>
+#include "WrappersAllegro.hpp"
 
-class Color ;
+#include "Color.hpp"
+#include "Picture.hpp"
 
 
 namespace gui
@@ -33,15 +34,15 @@ public:
 
         /**
          * @param name Name of this font to mention it
-         * @param pictureOfLetters Picture with letters
+         * @param pictOfLetters Picture with letters
          * @param color Color of letters
          * @param doubleHeight Double height of letters
          */
-        Font( const std::string& name, const BITMAP * pictureOfLetters, Color * color, bool doubleHeight = false ) ;
+        Font( const std::string& name, const allegro::Pict * pictOfLetters, Color * color, bool doubleHeight = false ) ;
 
         virtual ~Font( ) ;
 
-        BITMAP * getPictureOfLetter ( const std::string & letter ) ;
+        Picture * getPictureOfLetter ( const std::string & letter ) ;
 
 private:
 
@@ -62,7 +63,7 @@ private:
         /**
          * Images of letters
          */
-        std::vector < BITMAP * > letters ;
+        std::vector < Picture * > letters ;
 
         static unsigned int howManyLetters ;
 
@@ -79,7 +80,9 @@ public:
         /**
          * Name of font is like color.family, use this to get just family
          */
-        std::string getFamily () const ;
+        std::string getFamily () const {  return fontName.substr( fontName.find( "." ) + 1 ) ;  }
+
+        std::string getColor () const {  return fontName.substr( 0, fontName.find( "." ) ) ;  }
 
         unsigned int getCharWidth () const  {  return charWidth ;  }
 

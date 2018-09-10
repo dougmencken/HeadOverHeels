@@ -15,7 +15,7 @@ using gui::CreateEndScreen;
 using isomot::SoundManager;
 
 
-CreateEndScreen::CreateEndScreen( BITMAP* picture, unsigned int rooms, unsigned short planets )
+CreateEndScreen::CreateEndScreen( allegro::Pict* picture, unsigned int rooms, unsigned short planets )
         : Action( picture )
         , rooms( rooms )
         , planets( planets )

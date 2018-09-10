@@ -1,7 +1,8 @@
 
 #include "Ism.hpp"
-#include <unistd.h>
-#include <sstream>
+
+#include <algorithm>
+
 
 #if defined ( __CYGWIN__ )
     #include <sys/cygwin.h>
@@ -110,6 +111,13 @@ std::string toStringWithOrdinalSuffix( unsigned int number )
         return result.str() ;
 }
 
+std::string nameFromPath( std::string const& path )
+{
+        return std::string (
+                std::find_if( path.rbegin(), path.rend(), IsPathSeparator() ).base(),
+                path.end() );
+}
+
 const char * pathToFile( const std::string& in )
 {
 #if defined ( __CYGWIN__ )
@@ -157,7 +165,7 @@ void setPathToGame ( const char * pathToGame )
         }
 
 #if defined ( __APPLE__ ) && defined ( __MACH__ )
-        char* lastdot = strrchr ( get_filename( pathToGame ) , '.' );
+        char* lastdot = std::strrchr ( nameFromPath( pathToGame ).c_str(), '.' );
         if ( lastdot != nilPointer && strlen( lastdot ) == 4 &&
                         ( lastdot[ 1 ] == 'a' && lastdot[ 2 ] == 'p' && lastdot[ 3 ] == 'p' ) )
         {       // game is in OS X bundle
@@ -218,37 +226,36 @@ std::string sharePath ()
 {
         if ( SharePath.empty () )
         {
-                const char* cpath = FullPathToGame.c_str ();
-
-                char* filename = get_filename( cpath );
+                std::string cpath = FullPathToGame ;
+                std::string filename = nameFromPath( cpath ) ;
 
         #if defined ( __APPLE__ ) && defined ( __MACH__ )
                 /* when binary is inside application bundle
                    get_executable_name gives something like
                    /Applications/Games/Head over Heels.app
-                   and get_filename in its turn gives
+                   and nameFromPath in its turn gives
                    Head over Heels.app */
                 bool inBundle = false;
-                char* lastdot = strrchr ( filename , '.' );
+                char* lastdot = std::strrchr ( filename.c_str() , '.' );
                 if ( lastdot != NULL && strlen( lastdot ) == 4 )
                         if ( lastdot[ 1 ] == 'a' && lastdot[ 2 ] == 'p' && lastdot[ 3 ] == 'p' )
                                 inBundle = true;
         #endif
 
-                std::string container = std::string( cpath, strlen( cpath ) - strlen( filename ) - 1 );
-                char* containername = get_filename( container.c_str () );
+                std::string container = cpath.substr( 0, cpath.length() - filename.length() - 1 );
+                std::string containername = nameFromPath( container ) ;
 
         #if defined ( __APPLE__ ) && defined ( __MACH__ )
                 if ( inBundle ) {
-                        SharePath = std::string( cpath );
+                        SharePath = cpath ;
                         SharePath += "/Contents/Resources/";
                 } else {
                         /* not in bundle? okay so go the linux way */
-                        SharePath = std::string( cpath, strlen( cpath ) - 1 - strlen( containername ) - 1 - strlen( filename ) );
+                        SharePath = cpath.substr( 0, cpath.length() - 1 - containername.length() - 1 - filename.length() );
                         SharePath += "/share/headoverheels/";
                 }
         #else
-                SharePath = std::string( cpath, strlen( cpath ) - strlen( filename ) - ( 1 + strlen( containername ) ) );
+                SharePath = cpath.substr( 0, cpath.length() - filename.length() - ( 1 + containername.length() ) );
                 SharePath += "share" + pathSeparator + "headoverheels" + pathSeparator;
         #endif
 

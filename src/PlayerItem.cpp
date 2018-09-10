@@ -708,7 +708,7 @@ void PlayerItem::liberatePlanet ()
         }
 }
 
-void PlayerItem::assignTakenItem ( ItemData* itemData, BITMAP* itemImage, const std::string& behavior )
+void PlayerItem::assignTakenItem ( ItemData* itemData, Picture* itemImage, const std::string& behavior )
 {
         GameManager::getInstance()->setItemTaken( itemImage );
 

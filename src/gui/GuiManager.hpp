@@ -15,7 +15,7 @@
 #include <list>
 #include <map>
 
-#include <allegro.h>
+#include <WrappersAllegro.hpp>
 #include <loadpng.h>
 
 #include "Gui.hpp"
@@ -50,7 +50,7 @@ public:
         */
         void begin () ;
 
-        void changeScreen ( Screen* newScreen, bool dive ) ;
+        void changeScreen ( Screen * newScreen, bool dive ) ;
 
        /*
         * Search in list of screens for the one associated with this action
@@ -97,7 +97,7 @@ private:
 
         std::map < std::string, Screen * > listOfScreens;
 
-        BITMAP * picture ;
+        allegro::Pict * picture ;
 
        /**
         * Language for user interface

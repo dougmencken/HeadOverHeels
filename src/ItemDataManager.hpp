@@ -14,7 +14,9 @@
 #include <string>
 #include <list>
 #include <iostream>
-#include <allegro.h>
+
+#include <WrappersAllegro.hpp>
+
 #include "ItemData.hpp"
 
 
@@ -76,7 +78,7 @@ private:
         /**
          * Get lintel from door
          */
-        BITMAP * cutOutLintel ( BITMAP * door, unsigned int widthX, unsigned int widthY, unsigned int height,
+        allegro::Pict * cutOutLintel ( allegro::Pict * door, unsigned int widthX, unsigned int widthY, unsigned int height,
                                 unsigned int leftJambWidthX, unsigned int leftJambWidthY,
                                 unsigned int rightJambWidthX, unsigned int rightJambWidthY,
                                 const std::string& at ) ;
@@ -84,14 +86,14 @@ private:
         /**
          * Get left jamb from door
          */
-        BITMAP * cutOutLeftJamb ( BITMAP * door, unsigned int widthX, unsigned int widthY, unsigned int height,
+        allegro::Pict * cutOutLeftJamb ( allegro::Pict * door, unsigned int widthX, unsigned int widthY, unsigned int height,
                                   /* unsigned int lintelWidthX, */ unsigned int lintelWidthY, unsigned int lintelHeight,
                                   const std::string& at ) ;
 
         /**
          * Get right jamb from door
          */
-        BITMAP * cutOutRightJamb ( BITMAP * door, unsigned int widthX, unsigned int widthY, unsigned int height,
+        allegro::Pict * cutOutRightJamb ( allegro::Pict * door, unsigned int widthX, unsigned int widthY, unsigned int height,
                                    unsigned int lintelWidthX, /* unsigned int lintelWidthY, */ unsigned int lintelHeight,
                                    const std::string& at ) ;
 

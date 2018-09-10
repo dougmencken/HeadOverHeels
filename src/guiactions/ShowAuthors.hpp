@@ -29,7 +29,7 @@ class ShowAuthors : public Action
 
 public:
 
-        ShowAuthors( BITMAP * picture ) ;
+        ShowAuthors( allegro::Pict * picture ) ;
 
         std::string getNameOfAction () const {  return "ShowAuthors" ;  }
 

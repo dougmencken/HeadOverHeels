@@ -31,7 +31,7 @@ public:
          * @param where Imagen donde se dibujará la interfaz gráfica
          * @param notNewGame Indica si hay una partida en curso o comienza una nueva
          */
-        CreatePlanetsScreen( BITMAP* where, bool notNewGame );
+        CreatePlanetsScreen( allegro::Pict* where, bool notNewGame );
 
         virtual ~CreatePlanetsScreen( ) ;
 

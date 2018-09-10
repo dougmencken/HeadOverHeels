@@ -14,13 +14,15 @@
 #include "PlaySound.hpp"
 #include "Ism.hpp"
 
+#include <fstream>
+
 #include <tinyxml2.h>
 
 using gui::CreateListOfSavedGames;
 using gui::ContinueGame;
 
 
-CreateListOfSavedGames::CreateListOfSavedGames( BITMAP* picture, bool isLoadMenu )
+CreateListOfSavedGames::CreateListOfSavedGames( allegro::Pict* picture, bool isLoadMenu )
         : Action( picture )
         , isMenuForLoad( isLoadMenu )
 {

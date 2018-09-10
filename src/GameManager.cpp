@@ -4,7 +4,7 @@
 #include "Room.hpp"
 #include "Mediator.hpp"
 #include "PlayerItem.hpp"
-#include "Picture.hpp"
+#include "PictureWidget.hpp"
 #include "Label.hpp"
 #include "ColorCyclingLabel.hpp"
 #include "GameSaverAndLoader.hpp"
@@ -97,33 +97,33 @@ GameManager::GameManager( )
 
 GameManager::~GameManager( )
 {
-        allegro::destroyBitmap( frameForMoon );
-        allegro::destroyBitmap( frameForMarket );
-        allegro::destroyBitmap( frameForBlacktooth );
-        allegro::destroyBitmap( frameForJail );
-        allegro::destroyBitmap( frameForPenitentiary );
-        allegro::destroyBitmap( frameForEgyptus );
-        allegro::destroyBitmap( frameForSafari );
-        allegro::destroyBitmap( frameForByblos );
+        delete frameForMoon ;
+        delete frameForMarket ;
+        delete frameForBlacktooth ;
+        delete frameForJail ;
+        delete frameForPenitentiary ;
+        delete frameForEgyptus ;
+        delete frameForSafari ;
+        delete frameForByblos ;
 
-        allegro::destroyBitmap( pictureOfHead );
-        allegro::destroyBitmap( pictureOfHeels );
-        allegro::destroyBitmap( grayPictureOfHead );
-        allegro::destroyBitmap( grayPictureOfHeels );
+        delete pictureOfHead ;
+        delete pictureOfHeels ;
+        delete grayPictureOfHead ;
+        delete grayPictureOfHeels ;
 
-        allegro::destroyBitmap( pictureOfBag );
-        allegro::destroyBitmap( pictureOfHorn );
-        allegro::destroyBitmap( grayPictureOfHorn );
-        allegro::destroyBitmap( grayPictureOfBag );
-        allegro::destroyBitmap( pictureOfDonuts );
-        allegro::destroyBitmap( grayPictureOfDonuts );
+        delete pictureOfBag ;
+        delete pictureOfHorn ;
+        delete grayPictureOfHorn ;
+        delete grayPictureOfBag ;
+        delete pictureOfDonuts ;
+        delete grayPictureOfDonuts ;
 
-        allegro::destroyBitmap( pictureOfGrandesSaltos );
-        allegro::destroyBitmap( grayPictureOfGrandesSaltos );
-        allegro::destroyBitmap( pictureOfGranVelocidad );
-        allegro::destroyBitmap( grayPictureOfGranVelocidad );
-        allegro::destroyBitmap( pictureOfEscudo );
-        allegro::destroyBitmap( grayPictureOfEscudo );
+        delete pictureOfGrandesSaltos ;
+        delete grayPictureOfGrandesSaltos ;
+        delete pictureOfGranVelocidad ;
+        delete grayPictureOfGranVelocidad ;
+        delete pictureOfEscudo ;
+        delete grayPictureOfEscudo ;
 
         delete freedomLabel ;
 
@@ -146,9 +146,9 @@ GameManager* GameManager::getInstance ()
 }
 
 /* static */
-BITMAP * GameManager::refreshPicture ( const char * nameOfPicture )
+Picture * GameManager::refreshPicture ( const char * nameOfPicture )
 {
-        return load_png( isomot::pathToFile( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + nameOfPicture ), nilPointer );
+        return new Picture( allegro::loadPNG( isomot::pathToFile( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + nameOfPicture ) ) );
 }
 
 WhyPause GameManager::begin ()
@@ -192,14 +192,14 @@ WhyPause GameManager::resume ()
 
 void GameManager::refreshBackgroundFrames ()
 {
-        allegro::destroyBitmap( frameForEgyptus );
-        allegro::destroyBitmap( frameForPenitentiary );
-        allegro::destroyBitmap( frameForByblos );
-        allegro::destroyBitmap( frameForSafari );
-        allegro::destroyBitmap( frameForMoon );
-        allegro::destroyBitmap( frameForMarket );
-        allegro::destroyBitmap( frameForJail );
-        allegro::destroyBitmap( frameForBlacktooth );
+        delete frameForEgyptus ;
+        delete frameForPenitentiary ;
+        delete frameForByblos ;
+        delete frameForSafari ;
+        delete frameForMoon ;
+        delete frameForMarket ;
+        delete frameForJail ;
+        delete frameForBlacktooth ;
 
         frameForJail = refreshPicture( "jail-frame.png" );
         frameForBlacktooth = refreshPicture( "blacktooth-frame.png" );
@@ -213,31 +213,31 @@ void GameManager::refreshBackgroundFrames ()
 
 void GameManager::refreshAmbianceImages ()
 {
-        allegro::destroyBitmap( pictureOfHead );
-        allegro::destroyBitmap( grayPictureOfHead );
-        allegro::destroyBitmap( pictureOfHeels );
-        allegro::destroyBitmap( grayPictureOfHeels );
+        delete pictureOfHead ;
+        delete grayPictureOfHead ;
+        delete pictureOfHeels ;
+        delete grayPictureOfHeels ;
 
         pictureOfHead = refreshPicture( "gui-head.png" );
         pictureOfHeels = refreshPicture( "gui-heels.png" );
 
         if ( ! isSimpleGraphicSet () )
         {
-                grayPictureOfHead = Color::pictureToGrayscale( gui::Picture::cloneImage( pictureOfHead ) );
-                grayPictureOfHeels = Color::pictureToGrayscale( gui::Picture::cloneImage( pictureOfHeels ) );
+                grayPictureOfHead = pictureOfHead->makeGrayscaleCopy();
+                grayPictureOfHeels = pictureOfHeels->makeGrayscaleCopy();
         }
         else
         {
-                grayPictureOfHead = Color::colorizePicture( gui::Picture::cloneImage( pictureOfHead ), Color::greenColor() );
-                grayPictureOfHeels = Color::colorizePicture( gui::Picture::cloneImage( pictureOfHeels ), Color::greenColor() );
+                grayPictureOfHead = pictureOfHead->makeColorizedCopy( Color::greenColor() );
+                grayPictureOfHeels = pictureOfHeels->makeColorizedCopy( Color::greenColor() );
         }
 
-        allegro::destroyBitmap( pictureOfBag );
-        allegro::destroyBitmap( grayPictureOfBag );
-        allegro::destroyBitmap( pictureOfDonuts );
-        allegro::destroyBitmap( grayPictureOfDonuts );
-        allegro::destroyBitmap( pictureOfHorn );
-        allegro::destroyBitmap( grayPictureOfHorn );
+        delete pictureOfBag ;
+        delete grayPictureOfBag ;
+        delete pictureOfDonuts ;
+        delete grayPictureOfDonuts ;
+        delete pictureOfHorn ;
+        delete grayPictureOfHorn ;
 
         pictureOfBag = refreshPicture( "gui-handbag.png" );
         pictureOfHorn = refreshPicture( "gui-horn.png" );
@@ -245,27 +245,27 @@ void GameManager::refreshAmbianceImages ()
 
         if ( ! isSimpleGraphicSet () )
         {
-                grayPictureOfHorn = Color::pictureToGrayscale( gui::Picture::cloneImage( pictureOfHorn ) );
-                grayPictureOfBag = Color::pictureToGrayscale( gui::Picture::cloneImage( pictureOfBag ) );
-                grayPictureOfDonuts = Color::pictureToGrayscale( gui::Picture::cloneImage( pictureOfDonuts ) );
+                grayPictureOfHorn = pictureOfHorn->makeGrayscaleCopy();
+                grayPictureOfBag = pictureOfBag->makeGrayscaleCopy();
+                grayPictureOfDonuts = pictureOfDonuts->makeGrayscaleCopy();
         }
         else
         {
-                grayPictureOfHorn = Color::colorizePicture( gui::Picture::cloneImage( pictureOfHorn ), Color::greenColor() );
-                grayPictureOfBag = Color::colorizePicture( gui::Picture::cloneImage( pictureOfBag ), Color::greenColor() );
-                grayPictureOfDonuts = Color::colorizePicture( gui::Picture::cloneImage( pictureOfDonuts ), Color::greenColor() );
+                grayPictureOfHorn = pictureOfHorn->makeColorizedCopy( Color::greenColor() );
+                grayPictureOfBag = pictureOfBag->makeColorizedCopy( Color::greenColor() );
+                grayPictureOfDonuts = pictureOfDonuts->makeColorizedCopy( Color::greenColor() );
 
-                Color::colorizePicture( pictureOfBag, Color::yellowColor() );
-                Color::colorizePicture( pictureOfHorn, Color::yellowColor() );
-                Color::colorizePicture( pictureOfDonuts, Color::yellowColor() );
+                pictureOfBag->colorize( Color::yellowColor() );
+                pictureOfHorn->colorize( Color::yellowColor() );
+                pictureOfDonuts->colorize( Color::yellowColor() );
         }
 
-        allegro::destroyBitmap( grayPictureOfGrandesSaltos );
-        allegro::destroyBitmap( pictureOfGrandesSaltos );
-        allegro::destroyBitmap( grayPictureOfGranVelocidad );
-        allegro::destroyBitmap( pictureOfGranVelocidad );
-        allegro::destroyBitmap( grayPictureOfEscudo );
-        allegro::destroyBitmap( pictureOfEscudo );
+        delete grayPictureOfGrandesSaltos ;
+        delete pictureOfGrandesSaltos ;
+        delete grayPictureOfGranVelocidad ;
+        delete pictureOfGranVelocidad ;
+        delete grayPictureOfEscudo ;
+        delete pictureOfEscudo ;
 
         pictureOfGrandesSaltos = refreshPicture( "high-jumps.png" );
         pictureOfGranVelocidad = refreshPicture( "high-speed.png" );
@@ -273,24 +273,24 @@ void GameManager::refreshAmbianceImages ()
 
         if ( ! isSimpleGraphicSet () )
         {
-                grayPictureOfGrandesSaltos = Color::pictureToGrayscale( gui::Picture::cloneImage( pictureOfGrandesSaltos ) );
-                grayPictureOfGranVelocidad = Color::pictureToGrayscale( gui::Picture::cloneImage( pictureOfGranVelocidad ) );
-                grayPictureOfEscudo = Color::pictureToGrayscale( gui::Picture::cloneImage( pictureOfEscudo ) );
+                grayPictureOfGrandesSaltos = pictureOfGrandesSaltos->makeGrayscaleCopy();
+                grayPictureOfGranVelocidad = pictureOfGranVelocidad->makeGrayscaleCopy();
+                grayPictureOfEscudo = pictureOfEscudo->makeGrayscaleCopy();
         }
         else
         {
-                grayPictureOfGrandesSaltos = Color::colorizePicture( gui::Picture::cloneImage( pictureOfGrandesSaltos ), Color::greenColor() );
-                Color::colorizePicture( pictureOfGrandesSaltos, Color::yellowColor() );
+                grayPictureOfGrandesSaltos = pictureOfGrandesSaltos->makeColorizedCopy( Color::greenColor() );
+                pictureOfGrandesSaltos->colorize( Color::yellowColor() );
 
-                grayPictureOfGranVelocidad = Color::colorizePicture( gui::Picture::cloneImage( pictureOfGranVelocidad ), Color::greenColor() );
-                Color::colorizePicture( pictureOfGranVelocidad, Color::yellowColor() );
+                grayPictureOfGranVelocidad = pictureOfGranVelocidad->makeColorizedCopy( Color::greenColor() );
+                pictureOfGranVelocidad->colorize( Color::yellowColor() );
 
-                grayPictureOfEscudo = Color::colorizePicture( gui::Picture::cloneImage( pictureOfEscudo ), Color::greenColor() );
-                Color::colorizePicture( pictureOfEscudo, Color::yellowColor() );
+                grayPictureOfEscudo = pictureOfEscudo->makeColorizedCopy( Color::greenColor() );
+                pictureOfEscudo->colorize( Color::yellowColor() );
         }
 }
 
-void GameManager::drawAmbianceOfGame ( BITMAP * where )
+void GameManager::drawAmbianceOfGame ( allegro::Pict * where )
 {
         // scenery of this room
         std::string scenery = isomot->getMapManager()->getActiveRoom()->getScenery();
@@ -307,7 +307,7 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
                 if ( drawBackgroundPicture )
                 {
                         // marco, varía en función del escenario
-                        BITMAP * background = nilPointer;
+                        Picture * background = nilPointer;
 
                         if ( scenery == "blacktooth" )
                                 background = frameForBlacktooth;
@@ -326,7 +326,7 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
                         else if ( scenery == "egyptus" )
                                 background = frameForEgyptus;
 
-                        allegro::drawSprite( where, background, diffX >> 1, diffY );
+                        allegro::drawSprite( where, background->getAllegroPict(), diffX >> 1, diffY );
                 }
 
                 const unsigned int headHeelsAmbianceY = 425 + diffY ;
@@ -341,12 +341,12 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
                 const unsigned int rightTooAmbianceX = 559 + dx ;
 
                 std::string player = isomot->getMapManager()->getActiveRoom()->getMediator()->getLabelOfActiveCharacter();
-                allegro::drawSprite( where, ( (  player == "head" || player == "headoverheels" ) ? pictureOfHead : grayPictureOfHead ), 161 + dx, headHeelsAmbianceY );
-                allegro::drawSprite( where, ( ( player == "heels" || player == "headoverheels" ) ? pictureOfHeels : grayPictureOfHeels ), 431 + dx, headHeelsAmbianceY );
+                allegro::drawSprite( where, ( (  player == "head" || player == "headoverheels" ) ? pictureOfHead : grayPictureOfHead )->getAllegroPict(), 161 + dx, headHeelsAmbianceY );
+                allegro::drawSprite( where, ( ( player == "heels" || player == "headoverheels" ) ? pictureOfHeels : grayPictureOfHeels )->getAllegroPict(), 431 + dx, headHeelsAmbianceY );
 
-                allegro::drawSprite( where, ( this->horn ? pictureOfHorn : grayPictureOfHorn ), leftTooAmbianceX, headHeelsAmbianceY );
+                allegro::drawSprite( where, ( this->horn ? pictureOfHorn : grayPictureOfHorn )->getAllegroPict(), leftTooAmbianceX, headHeelsAmbianceY );
 
-                allegro::drawSprite( where, ( this->handbag ? pictureOfBag : grayPictureOfBag ), rightTooAmbianceX, headHeelsAmbianceY );
+                allegro::drawSprite( where, ( this->handbag ? pictureOfBag : grayPictureOfBag )->getAllegroPict(), rightTooAmbianceX, headHeelsAmbianceY );
 
                 std::string colorOfLabels = "white";
                 /* if ( isSimpleGraphicSet () ) colorOfLabels = "magenta"; */
@@ -362,7 +362,7 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
                 heelsLivesLabel.draw( where );
 
                 // número de rosquillas
-                allegro::drawSprite( where, ( this->donuts != 0 ? pictureOfDonuts : grayPictureOfDonuts ), leftTooAmbianceX, charStuffAmbianceY );
+                allegro::drawSprite( where, ( this->donuts != 0 ? pictureOfDonuts : grayPictureOfDonuts )->getAllegroPict(), leftTooAmbianceX, charStuffAmbianceY );
                 if ( this->donuts > 0 )
                 {
                         gui::Label donutsLabel( numberToString( this->donuts ), "regular", colorOfLabels, -2 );
@@ -371,7 +371,7 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
                 }
 
                 // grandes saltos
-                allegro::drawSprite( where, ( this->highJumps > 0 ? pictureOfGrandesSaltos : grayPictureOfGrandesSaltos ), rightAmbianceX, bonusAmbianceY );
+                allegro::drawSprite( where, ( this->highJumps > 0 ? pictureOfGrandesSaltos : grayPictureOfGrandesSaltos )->getAllegroPict(), rightAmbianceX, bonusAmbianceY );
                 if ( this->highJumps > 0 )
                 {
                         gui::Label highJumpsLabel( numberToString( this->highJumps ), "regular", colorOfLabels, -2 );
@@ -380,7 +380,7 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
                 }
 
                 // gran velocidad
-                allegro::drawSprite( where, ( this->highSpeed > 0 ? pictureOfGranVelocidad : grayPictureOfGranVelocidad ), leftAmbianceX, bonusAmbianceY );
+                allegro::drawSprite( where, ( this->highSpeed > 0 ? pictureOfGranVelocidad : grayPictureOfGranVelocidad )->getAllegroPict(), leftAmbianceX, bonusAmbianceY );
                 if ( this->highSpeed > 0 )
                 {
                         gui::Label highSpeedLabel( numberToString( this->highSpeed ), "regular", colorOfLabels, -2 );
@@ -389,7 +389,7 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
                 }
 
                 // escudo de Head
-                allegro::drawSprite( where, ( this->headShield > 0 ? pictureOfEscudo : grayPictureOfEscudo ), leftAmbianceX, immunityAmbianceY );
+                allegro::drawSprite( where, ( this->headShield > 0 ? pictureOfEscudo : grayPictureOfEscudo )->getAllegroPict(), leftAmbianceX, immunityAmbianceY );
                 if ( this->headShield > 0 )
                 {
                         int headShieldValue = static_cast< int >( this->headShield * 99.0 / 25.0 );
@@ -399,7 +399,7 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
                 }
 
                 // escudo de Heels
-                allegro::drawSprite( where, ( this->headShield > 0 ? pictureOfEscudo : grayPictureOfEscudo ), rightAmbianceX, immunityAmbianceY );
+                allegro::drawSprite( where, ( this->headShield > 0 ? pictureOfEscudo : grayPictureOfEscudo )->getAllegroPict(), rightAmbianceX, immunityAmbianceY );
                 if ( this->heelsShield > 0 )
                 {
                         int heelsShieldValue = static_cast< int >( this->heelsShield * 99.0 / 25.0 );
@@ -411,7 +411,7 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
                 // item in handbag
                 if ( this->itemTaken != nilPointer )
                 {
-                        allegro::drawSprite( where, this->itemTaken, rightTooAmbianceX, charStuffAmbianceY );
+                        allegro::drawSprite( where, this->itemTaken->getAllegroPict(), rightTooAmbianceX, charStuffAmbianceY );
                 }
         }
         else
@@ -443,7 +443,7 @@ void GameManager::drawAmbianceOfGame ( BITMAP * where )
 
         acquire_screen();
 
-        blit( where, screen, 0, 0, 0, 0, where->w, where->h );
+        allegro::bitBlit( where, screen );
 
         if ( recordCaptures )
         {
@@ -735,7 +735,7 @@ WhyPause GameManager::update ()
                 if ( ! key[ InputManager::getInstance()->getUserKey( "pause" ) ] && ! this->takenCrown && ! this->eatenFish && ! this->gameOver )
                 {
                         // actualiza la vista isométrica
-                        BITMAP* view = isomot->update();
+                        allegro::Pict* view = isomot->update();
 
                         // se ha podido actualizar
                         if ( view != nilPointer )

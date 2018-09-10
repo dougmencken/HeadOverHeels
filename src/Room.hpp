@@ -92,7 +92,7 @@ public:
          */
         void dontDisappearOnJump () ;
 
-        void draw ( BITMAP * where ) ;
+        void draw ( allegro::Pict * where ) ;
 
         void drawRoom () {  draw( whereToDraw ) ;  }
 
@@ -256,7 +256,7 @@ private:
        /**
         * Where to draw active room
         */
-        BITMAP * whereToDraw ;
+        allegro::Pict * whereToDraw ;
 
         std::list < TripleRoomInitialPoint > listOfInitialPointsForTripleRoom ;
 
@@ -332,7 +332,7 @@ public:
 
         Camera * getCamera () const {  return camera ;  }
 
-        BITMAP * getWhereToDraw () {  return whereToDraw ;  }
+        allegro::Pict * getWhereToDraw () {  return whereToDraw ;  }
 
        /**
         * Límites para mover la cámara a lo largo del eje X en una sala triple

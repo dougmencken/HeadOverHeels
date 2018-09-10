@@ -11,7 +11,8 @@
 #ifndef GridItem_hpp_
 #define GridItem_hpp_
 
-#include <allegro.h>
+#include <WrappersAllegro.hpp>
+
 #include "Ism.hpp"
 #include "Item.hpp"
 #include "Drawable.hpp"
@@ -49,11 +50,11 @@ public:
         /**
          * Draw this grid item
          */
-        void draw ( BITMAP * where ) ;
+        void draw ( allegro::Pict * where ) ;
 
-        virtual void changeImage ( BITMAP * newImage ) ;
+        virtual void changeImage ( allegro::Pict * newImage ) ;
 
-        virtual void changeShadow ( BITMAP * newShadow ) ;
+        virtual void changeShadow ( allegro::Pict * newShadow ) ;
 
         virtual bool addToPosition ( int x, int y, int z ) ;
 

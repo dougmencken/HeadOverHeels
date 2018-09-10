@@ -38,7 +38,7 @@ Color::Color( unsigned char r, unsigned char g, unsigned char b )
 }
 
 /* public static */
-BITMAP* Color::colorizePicture( BITMAP* picture, const Color* color )
+allegro::Pict* Color::colorizePicture( allegro::Pict* picture, const Color* color )
 {
         if ( color == Color::whiteColor() ) return picture ;
 
@@ -46,7 +46,7 @@ BITMAP* Color::colorizePicture( BITMAP* picture, const Color* color )
 }
 
 /* private static */
-BITMAP* Color::colorizePicture( BITMAP* picture, unsigned char red, unsigned char green, unsigned char blue )
+allegro::Pict* Color::colorizePicture( allegro::Pict* picture, unsigned char red, unsigned char green, unsigned char blue )
 {
         if ( picture == nilPointer ) return nilPointer ;
 
@@ -65,7 +65,7 @@ BITMAP* Color::colorizePicture( BITMAP* picture, unsigned char red, unsigned cha
 }
 
 /* public static */
-BITMAP* Color::multiplyWithColor( BITMAP* picture, const Color* color )
+allegro::Pict* Color::multiplyWithColor( allegro::Pict* picture, const Color* color )
 {
         if ( color == Color::whiteColor() ) return picture ;
 
@@ -73,7 +73,7 @@ BITMAP* Color::multiplyWithColor( BITMAP* picture, const Color* color )
 }
 
 /* private static */
-BITMAP * Color::multiplyWithColor( BITMAP * picture, unsigned char red, unsigned char green, unsigned char blue )
+allegro::Pict * Color::multiplyWithColor( allegro::Pict * picture, unsigned char red, unsigned char green, unsigned char blue )
 {
         if ( picture == nilPointer ) return nilPointer ;
 
@@ -98,7 +98,7 @@ BITMAP * Color::multiplyWithColor( BITMAP * picture, unsigned char red, unsigned
 }
 
 /* public static */
-BITMAP * Color::pictureToGrayscale ( BITMAP * picture )
+allegro::Pict * Color::pictureToGrayscale ( allegro::Pict * picture )
 {
         if ( picture == nilPointer ) return nilPointer ;
 

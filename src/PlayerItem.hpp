@@ -12,8 +12,10 @@
 #define PlayerItem_hpp_
 
 #include <vector>
+
 #include "FreeItem.hpp"
 #include "Timer.hpp"
+#include "Picture.hpp"
 
 
 namespace isomot
@@ -199,7 +201,7 @@ private:
 
         ItemData* takenItemData ;
 
-        BITMAP* takenItemImage ;
+        Picture* takenItemImage ;
 
         std::string takenItemBehavior ;
 
@@ -239,7 +241,7 @@ public:
         /**
          * Set data for item in player’s handbag
          */
-        void assignTakenItem ( ItemData * itemData, BITMAP * itemImage, const std::string & behavior ) ;
+        void assignTakenItem ( ItemData * itemData, Picture * itemImage, const std::string & behavior ) ;
 
         ItemData * getOriginalDataOfItem () const {  return originalDataOfItem ;  }
 
@@ -251,7 +253,7 @@ public:
         /**
          * Image of item taken by player
          */
-        BITMAP* getTakenItemImage () const {  return this->takenItemImage ;  }
+        Picture* getTakenItemImage () const {  return this->takenItemImage ;  }
 
         /**
          * Behavior of item taken by player

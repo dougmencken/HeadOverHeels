@@ -11,7 +11,7 @@
 #ifndef FloorTile_hpp_
 #define FloorTile_hpp_
 
-#include <allegro.h>
+#include <WrappersAllegro.hpp>
 
 #include "Ism.hpp"
 #include "Drawable.hpp"
@@ -37,7 +37,7 @@ public:
         * @param cellY Y coordinate on grid
         * @param image Graphics of tile
         */
-        FloorTile( int cellX, int cellY, BITMAP* image ) ;
+        FloorTile( int cellX, int cellY, allegro::Pict* image ) ;
 
         virtual ~FloorTile( ) ;
 
@@ -46,7 +46,7 @@ public:
          */
         void calculateOffset () ;
 
-        void draw ( BITMAP* where ) ;
+        void draw ( allegro::Pict* where ) ;
 
 private:
 
@@ -65,12 +65,12 @@ private:
         /**
          * Picture of tile
          */
-        BITMAP * rawImage ;
+        allegro::Pict * rawImage ;
 
         /**
          * Picture of shaded tile
          */
-        BITMAP * shadyImage ;
+        allegro::Pict * shadyImage ;
 
 public:
 
@@ -89,11 +89,11 @@ public:
 
         int getOffsetY () const {  return offset.second ;  }
 
-        BITMAP * getRawImage () const {  return rawImage ;  }
+        allegro::Pict * getRawImage () const {  return rawImage ;  }
 
-        BITMAP * getShadyImage () const {  return shadyImage ;  }
+        allegro::Pict * getShadyImage () const {  return shadyImage ;  }
 
-        void setShadyImage( BITMAP * newShady ) ;
+        void setShadyImage( allegro::Pict * newShady ) ;
 
         void freshShadyImage () ;
 

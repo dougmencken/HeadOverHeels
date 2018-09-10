@@ -17,7 +17,7 @@ using gui::CreateAudioMenu;
 using isomot::SoundManager;
 
 
-CreateAudioMenu::CreateAudioMenu( BITMAP* picture ) :
+CreateAudioMenu::CreateAudioMenu( allegro::Pict* picture ) :
         Action( picture ),
         listOfOptions ( nilPointer ),
         labelEffects ( nilPointer ),

@@ -11,10 +11,7 @@
 #ifndef Drawable_hpp_
 #define Drawable_hpp_
 
-# include <allegro.h>
-
-namespace isomot
-{
+#include "WrappersAllegro.hpp"
 
 class Drawable
 {
@@ -25,10 +22,8 @@ public:
 
         virtual ~Drawable() { }
 
-        virtual void draw( BITMAP* where ) = 0;
+        virtual void draw( allegro::Pict * where ) = 0;
 
 };
-
-}
 
 #endif

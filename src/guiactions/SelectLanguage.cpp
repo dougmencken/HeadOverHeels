@@ -6,7 +6,7 @@
 using gui::SelectLanguage ;
 
 
-SelectLanguage::SelectLanguage( BITMAP* picture, const std::string& language )
+SelectLanguage::SelectLanguage( allegro::Pict* picture, const std::string& language )
         : Action( picture )
         , language( language )
 {

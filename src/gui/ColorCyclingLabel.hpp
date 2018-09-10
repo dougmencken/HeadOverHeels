@@ -27,7 +27,7 @@ public:
 
         virtual ~ColorCyclingLabel( ) ;
 
-        virtual void draw ( BITMAP * where ) ;
+        virtual void draw ( allegro::Pict * where ) ;
 
 private:
 

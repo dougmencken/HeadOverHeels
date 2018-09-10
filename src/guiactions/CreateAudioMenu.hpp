@@ -33,7 +33,7 @@ public:
          * Constructor
          * @param picture Image where to draw
          */
-        CreateAudioMenu( BITMAP* picture ) ;
+        CreateAudioMenu( allegro::Pict* picture ) ;
 
         std::string getNameOfAction () const {  return "CreateAudioMenu" ;  }
 

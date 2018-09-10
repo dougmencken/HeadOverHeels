@@ -22,7 +22,7 @@ MenuWithValues::~MenuWithValues( )
         listOfValues.clear();
 }
 
-void MenuWithValues::draw( BITMAP* where )
+void MenuWithValues::draw( allegro::Pict* where )
 {
         if ( where == nilPointer ) return ;
 
@@ -101,7 +101,7 @@ void MenuWithValues::draw( BITMAP* where )
         setX( previousX + ( ( isomot::ScreenWidth() - previousX ) >> 1 ) - ( getWidthOfMenu () >> 1 ) );
         setY( previousY + ( ( isomot::ScreenHeight() - previousY ) >> 1 ) - ( getHeightOfMenu() >> 1 ) );
 
-        int dx( this->optionImage != nilPointer ? this->optionImage->w : 0 );
+        int dx( this->optionImage != nilPointer ? this->optionImage->getWidth() : 0 );
         int dy( 0 );
 
         // for each label
@@ -110,9 +110,9 @@ void MenuWithValues::draw( BITMAP* where )
         {
                 Label* label = *i;
 
-                BITMAP * mark = ( activeOptionWithValue == label ) ? this->chosenOptionImage : this->optionImage ;
+                Picture * mark = ( activeOptionWithValue == label ) ? this->chosenOptionImage : this->optionImage ;
                 if ( mark != nilPointer )
-                        allegro::drawSprite( where, mark, getX (), getY () + dy );
+                        allegro::drawSprite( where, mark->getAllegroPict(), getX (), getY () + dy );
 
                 label->moveTo( getX () + dx, getY () + dy );
                 label->draw( where );
@@ -185,7 +185,7 @@ unsigned int MenuWithValues::getWidthOfMenu () const
                         textOfOption = textOfOption + symbolToFill;
 
                 Label optionWithValue( textOfOption + getValueOf( *o ), ( *o )->getFontFamily(), ( *o )->getColor(), ( *o )->getSpacing() );
-                unsigned int theWidth = optionWithValue.getWidth() + ( this->optionImage != nilPointer ? this->optionImage->w : 0 ) ;
+                unsigned int theWidth = optionWithValue.getWidth() + ( this->optionImage != nilPointer ? this->optionImage->getWidth() : 0 ) ;
                 if ( theWidth > widthOfMenu ) widthOfMenu = theWidth ;
         }
 

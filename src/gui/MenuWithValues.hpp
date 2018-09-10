@@ -37,7 +37,7 @@ public:
 
         virtual ~MenuWithValues( );
 
-        void draw ( BITMAP* where ) ;
+        void draw ( allegro::Pict* where ) ;
 
         std::vector < std::string > getValues () {  return this->listOfValues ;  }
 

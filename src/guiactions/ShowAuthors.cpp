@@ -8,18 +8,18 @@
 #include "Font.hpp"
 #include "Screen.hpp"
 #include "Label.hpp"
-#include "Picture.hpp"
+#include "PictureWidget.hpp"
 #include "TextField.hpp"
 #include "CreateMainMenu.hpp"
 
 using gui::ShowAuthors;
 using gui::Label;
-using gui::Picture;
+using gui::PictureWidget;
 using gui::TextField;
 using isomot::SoundManager;
 
 
-ShowAuthors::ShowAuthors( BITMAP* picture ) : Action( picture )
+ShowAuthors::ShowAuthors( allegro::Pict* picture ) : Action( picture )
 {
 
 }
@@ -63,7 +63,7 @@ void ShowAuthors::doAction ()
 
         GuiManager::getInstance()->changeScreen( screen, true );
 
-        Picture* widgetForLoadingScreen = nilPointer;
+        PictureWidget* widgetForLoadingScreen = nilPointer;
 
         // move text up
 
@@ -124,11 +124,13 @@ void ShowAuthors::doAction ()
 
                 if ( yNow == heightOfWhereToDraw - heightOfCredits && widgetForLoadingScreen == nilPointer )
                 {
-                        BITMAP* loadingScreen = load_png( isomot::pathToFile( isomot::sharePath() + "loading-screen.png" ), nilPointer );
-                        if ( loadingScreen != nilPointer )
+                        Picture* loadingScreen = new Picture( allegro::loadPNG( isomot::pathToFile( isomot::sharePath() + "loading-screen.png" ) ) );
+                        loadingScreen->setName( "image of loading screen from original speccy version" );
+
+                        if ( loadingScreen->getAllegroPict() != nilPointer )
                         {
-                                widgetForLoadingScreen = new Picture(
-                                                ( getWhereToDraw()->w - loadingScreen->w ) >> 1, heightOfWhereToDraw,
+                                widgetForLoadingScreen = new PictureWidget(
+                                                ( getWhereToDraw()->w - loadingScreen->getWidth() ) >> 1, heightOfWhereToDraw,
                                                 loadingScreen,
                                                 "loading screen from original speccy version"
                                 ) ;

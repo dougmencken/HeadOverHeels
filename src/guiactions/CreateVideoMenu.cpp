@@ -14,7 +14,7 @@ using gui::CreateVideoMenu ;
 using gui::CreateMenuOfGraphicSets ;
 
 
-CreateVideoMenu::CreateVideoMenu( BITMAP* picture ) :
+CreateVideoMenu::CreateVideoMenu( allegro::Pict* picture ) :
         Action( picture ),
         listOfOptions ( nilPointer ),
         labelScreenSize ( nilPointer ),

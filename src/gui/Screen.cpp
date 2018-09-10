@@ -5,12 +5,13 @@
 #include "Action.hpp"
 #include "Label.hpp"
 #include "TextField.hpp"
+#include "PictureWidget.hpp"
+#include "AnimatedPictureWidget.hpp"
+#include "Color.hpp"
 #include "Picture.hpp"
-#include "AnimatedPicture.hpp"
-#include "Ism.hpp"
 
 #include <iostream>
-#include <algorithm> // std::for_each
+//#include <algorithm> // std::for_each
 
 #include <algif.h>
 
@@ -21,13 +22,14 @@ const double delayBetweenFrames = 0.1 ;
 namespace gui
 {
 
-/* static */ BITMAP * Screen::backgroundPicture = nilPointer ;
+/* static */ Picture * Screen::backgroundPicture = nilPointer ;
 
 /* static */ void Screen::refreshBackground ()
 {
-        allegro::destroyBitmap( backgroundPicture );
+        delete Screen::backgroundPicture ;
 
-        Screen::backgroundPicture = Screen::loadPicture( "background.png" );
+        Screen::backgroundPicture = new Picture( Screen::loadPicture( "background.png" ) );
+        Screen::backgroundPicture->setName( "background for slides of user interface" );
 }
 
 
@@ -42,7 +44,9 @@ Screen::Screen( Action* action ) :
 {
         if ( action != nilPointer && action->getWhereToDraw() != nilPointer )
         {
-                imageOfScreen = action->getWhereToDraw ();
+                imageOfScreen = new Picture( action->getWhereToDraw () );
+                imageOfScreen->setName( "image of screen for action " + action->getNameOfAction() );
+
                 refreshPicturesOfHeadAndHeels ();
         }
 }
@@ -76,7 +80,7 @@ void Screen::refreshPicturesOfHeadAndHeels ()
                 else
                         delete pictureOfHead ;
 
-                pictureOfHead = new AnimatedPicture( xHead, yHead, loadAnimation( "head.gif" ), delayBetweenFrames, "animated Head" );
+                pictureOfHead = new AnimatedPictureWidget( xHead, yHead, loadAnimation( "head.gif" ), delayBetweenFrames, "animated Head" );
         }
 
         if ( headOnScreen && pictureOfHead != nilPointer )
@@ -98,23 +102,23 @@ void Screen::refreshPicturesOfHeadAndHeels ()
                 else
                         delete pictureOfHeels ;
 
-                pictureOfHeels = new AnimatedPicture( xHeels, yHeels, loadAnimation( "heels.gif" ), delayBetweenFrames, "animated Heels" );
+                pictureOfHeels = new AnimatedPictureWidget( xHeels, yHeels, loadAnimation( "heels.gif" ), delayBetweenFrames, "animated Heels" );
         }
 
         if ( heelsOnScreen && pictureOfHeels != nilPointer )
                 addWidget( pictureOfHeels );
 }
 
-void Screen::draw( BITMAP* where )
+void Screen::draw( allegro::Pict* where )
 {
-        if ( imageOfScreen != where )
+        if ( imageOfScreen->getAllegroPict() != where )
         {
                 std::cout << "change image to draw gui.Screen for \"" <<
                         ( actionOfScreen != nilPointer ? actionOfScreen->getNameOfAction() : "nil" ) <<
                         "\" action" << std::endl ;
 
-                allegro::destroyBitmap( this->imageOfScreen );
-                this->imageOfScreen = where ;
+                delete this->imageOfScreen ;
+                this->imageOfScreen = new Picture( where );
         }
 
         redraw();
@@ -125,18 +129,18 @@ void Screen::redraw( )
 {
         if ( imageOfScreen == nilPointer ) return ;
 
-        // fill with color of background
-        allegro::clearToColor( imageOfScreen, Color::redColor()->toAllegroColor() );
+        imageOfScreen->fillWithColor( Color::redColor() );
 
         // draw background, if any
+
         if ( Screen::backgroundPicture != nilPointer )
         {
-                unsigned int backgroundWidth = static_cast< unsigned int >( backgroundPicture->w );
-                unsigned int backgroundHeight = static_cast< unsigned int >( backgroundPicture->h );
+                unsigned int backgroundWidth = backgroundPicture->getWidth();
+                unsigned int backgroundHeight = backgroundPicture->getHeight();
 
                 if ( backgroundWidth == isomot::ScreenWidth() && backgroundHeight == isomot::ScreenHeight() )
                 {
-                        blit( backgroundPicture, imageOfScreen, 0, 0, 0, 0, backgroundWidth, backgroundHeight );
+                        allegro::bitBlit( backgroundPicture->getAllegroPict(), imageOfScreen->getAllegroPict() );
                 }
                 else
                 {
@@ -145,7 +149,7 @@ void Screen::redraw( )
 
                         if ( ratioX == ratioY )
                         {
-                                stretch_blit( backgroundPicture, imageOfScreen,
+                                allegro::stretchBlit( backgroundPicture->getAllegroPict(), imageOfScreen->getAllegroPict(),
                                                 0, 0, backgroundWidth, backgroundHeight,
                                                 0, 0, isomot::ScreenWidth(), isomot::ScreenHeight() );
                         }
@@ -154,9 +158,9 @@ void Screen::redraw( )
                                 unsigned int proportionalWidth = static_cast< unsigned int >( backgroundWidth * ratioY );
                                 unsigned int offsetX = ( isomot::ScreenWidth() - proportionalWidth ) >> 1;
 
-                                allegro::clearToColor( imageOfScreen, Color::blackColor()->toAllegroColor() );
+                                imageOfScreen->fillWithColor( Color::blackColor() );
 
-                                stretch_blit( backgroundPicture, imageOfScreen,
+                                allegro::stretchBlit( backgroundPicture->getAllegroPict(), imageOfScreen->getAllegroPict(),
                                                 0, 0, backgroundWidth, backgroundHeight,
                                                 offsetX, 0, proportionalWidth, isomot::ScreenHeight() );
                         }
@@ -165,9 +169,9 @@ void Screen::redraw( )
                                 unsigned int proportionalHeight = static_cast< unsigned int >( backgroundHeight * ratioX );
                                 unsigned int offsetY = ( isomot::ScreenHeight() - proportionalHeight ) >> 1;
 
-                                allegro::clearToColor( imageOfScreen, Color::blackColor()->toAllegroColor() );
+                                imageOfScreen->fillWithColor( Color::blackColor() );
 
-                                stretch_blit( backgroundPicture, imageOfScreen,
+                                allegro::stretchBlit( backgroundPicture->getAllegroPict(), imageOfScreen->getAllegroPict(),
                                                 0, 0, backgroundWidth, backgroundHeight,
                                                 0, offsetY, isomot::ScreenWidth(), proportionalHeight );
                         }
@@ -175,13 +179,19 @@ void Screen::redraw( )
         }
 
         // draw each component
-        std::for_each( widgets.begin (), widgets.end (), std::bind2nd( std::mem_fun( &Widget::draw ), imageOfScreen ) );
+
+        /* std::for_each( widgets.begin (), widgets.end (), std::bind2nd( std::mem_fun( &Widget::draw ), imageOfScreen->getAllegroPict() ) ); */
+
+        for ( std::list< Widget * >::iterator it = widgets.begin () ; it != widgets.end () ; ++it )
+        {
+                ( *it )->draw( imageOfScreen->getAllegroPict() );
+        }
 }
 
 void Screen::drawOnGlobalScreen( )
 {
         // copy resulting image to screen
-        blit( imageOfScreen, /* allegro global variable */ screen, 0, 0, 0, 0, imageOfScreen->w, imageOfScreen->h );
+        allegro::bitBlit( imageOfScreen->getAllegroPict(), /* allegro global variable */ screen );
 }
 
 void Screen::handleKey( int rawKey )
@@ -253,7 +263,7 @@ void Screen::freeWidgets ()
 void Screen::addPictureOfHeadAt ( int x, int y )
 {
         if ( pictureOfHead == nilPointer )
-                pictureOfHead = new AnimatedPicture( x, y, loadAnimation( "head.gif" ), delayBetweenFrames, "animated Head" );
+                pictureOfHead = new AnimatedPictureWidget( x, y, loadAnimation( "head.gif" ), delayBetweenFrames, "animated Head" );
         else
                 pictureOfHead->moveTo( x, y );
 
@@ -263,7 +273,7 @@ void Screen::addPictureOfHeadAt ( int x, int y )
 void Screen::addPictureOfHeelsAt ( int x, int y )
 {
         if ( pictureOfHeels == nilPointer )
-                pictureOfHeels = new AnimatedPicture( x, y, loadAnimation( "heels.gif" ), delayBetweenFrames, "animated Heels" );
+                pictureOfHeels = new AnimatedPictureWidget( x, y, loadAnimation( "heels.gif" ), delayBetweenFrames, "animated Heels" );
         else
                 pictureOfHeels->moveTo( x, y );
 
@@ -333,22 +343,22 @@ void Screen::placeHeadAndHeels( bool picturesToo, bool copyrightsToo )
 }
 
 /* static */
-BITMAP * Screen::loadPicture ( const char * nameOfPicture )
+allegro::Pict * Screen::loadPicture ( const char * nameOfPicture )
 {
 #if defined( DEBUG ) && DEBUG
         std::cout << "Screen::loadPicture( \"" << nameOfPicture << "\" )" << std::endl ;
 #endif
-        return load_png( isomot::pathToFile( GuiManager::getInstance()->getPathToPicturesOfGui() + nameOfPicture ), nilPointer );
+        return allegro::loadPNG( isomot::pathToFile( GuiManager::getInstance()->getPathToPicturesOfGui() + nameOfPicture ) );
 }
 
 /* static */
-std::vector< BITMAP * > Screen::loadAnimation ( const char * nameOfGif )
+std::vector< allegro::Pict * > Screen::loadAnimation ( const char * nameOfGif )
 {
 #if defined( DEBUG ) && DEBUG
         std::cout << "Screen::loadAnimation( \"" << nameOfGif << "\" )" ;
 #endif
-        std::vector< BITMAP * > animation;
-        BITMAP** frames = nilPointer;
+        std::vector< allegro::Pict * > animation;
+        allegro::Pict** frames = nilPointer;
         int* durations = nilPointer;
 
         int howManyFrames = algif_load_animation( isomot::pathToFile( GuiManager::getInstance()->getPathToPicturesOfGui() + nameOfGif ), &frames, &durations );
@@ -375,33 +385,33 @@ void Screen::scrollHorizontally( Screen* oldScreen, Screen* newScreen, bool righ
                 oldScreen == newScreen ||
                 oldScreen->imageOfScreen == nilPointer || newScreen->imageOfScreen == nilPointer ) return ;
 
-        BITMAP * oldPicture = create_bitmap( oldScreen->imageOfScreen->w, oldScreen->imageOfScreen->h );
-        blit( oldScreen->imageOfScreen, oldPicture, 0, 0, 0, 0, oldScreen->imageOfScreen->w, oldScreen->imageOfScreen->h );
+        Picture * oldPicture = new Picture( oldScreen->imageOfScreen->getWidth(), oldScreen->imageOfScreen->getHeight() );
+        allegro::bitBlit( oldScreen->imageOfScreen->getAllegroPict(), oldPicture->getAllegroPict() );
 
         newScreen->redraw ();
-        BITMAP * newPicture = newScreen->imageOfScreen ;
+        allegro::Pict * newPicture = newScreen->imageOfScreen->getAllegroPict();
 
         unsigned int step = ( ( ( isomot::ScreenWidth() >> 6 ) + 5 ) / 10 ) << 1 ;
 
         for ( unsigned int x = step ; x < isomot::ScreenWidth() ; x += step )
         {
-                /* void blit( BITMAP* from, BITMAP* to, int fromX, int fromY, int toX, int toY, int width, int height ) */
+                /* bitBlit( from, to, fromX, fromY, toX, toY, width, height ) */
 
                 if ( rightToLeft )
                 {
-                        blit( oldPicture, screen, x, 0, 0, 0, oldPicture->w - x, isomot::ScreenHeight() );
-                        blit( newPicture, screen, 0, 0, oldPicture->w - x, 0, x, isomot::ScreenHeight() );
+                        allegro::bitBlit( oldPicture->getAllegroPict(), screen, x, 0, 0, 0, oldPicture->getWidth() - x, isomot::ScreenHeight() );
+                        allegro::bitBlit( newPicture, screen, 0, 0, oldPicture->getWidth() - x, 0, x, isomot::ScreenHeight() );
                 }
                 else
                 {
-                        blit( newPicture, screen, newPicture->w - x, 0, 0, 0, x, isomot::ScreenHeight() );
-                        blit( oldPicture, screen, 0, 0, x, 0, newPicture->w - x, isomot::ScreenHeight() );
+                        allegro::bitBlit( newPicture, screen, newPicture->w - x, 0, 0, 0, x, isomot::ScreenHeight() );
+                        allegro::bitBlit( oldPicture->getAllegroPict(), screen, 0, 0, x, 0, newPicture->w - x, isomot::ScreenHeight() );
                 }
 
                 milliSleep( 1 );
         }
 
-        allegro::destroyBitmap( oldPicture );
+        delete oldPicture ;
 }
 
 /* static */
@@ -411,21 +421,19 @@ void Screen::wipeHorizontally( Screen* oldScreen, Screen* newScreen, bool rightT
                 oldScreen == newScreen || newScreen->imageOfScreen == nilPointer ) return ;
 
         newScreen->redraw ();
-        BITMAP * newPicture = newScreen->imageOfScreen ;
+        allegro::Pict * newPicture = newScreen->imageOfScreen->getAllegroPict() ;
 
         unsigned int step = ( ( ( isomot::ScreenWidth() >> 6 ) + 5 ) / 10 ) << 1 ;
 
         for ( unsigned int x = step ; x < isomot::ScreenWidth() ; x += step )
         {
-                /* void blit( BITMAP* from, BITMAP* to, int fromX, int fromY, int toX, int toY, int width, int height ) */
-
                 if ( rightToLeft )
                 {
-                        blit( newPicture, screen, newPicture->w - x, 0, newPicture->w - x, 0, x, isomot::ScreenHeight() );
+                        allegro::bitBlit( newPicture, screen, newPicture->w - x, 0, newPicture->w - x, 0, x, isomot::ScreenHeight() );
                 }
                 else
                 {
-                        blit( newPicture, screen, 0, 0, 0, 0, x, isomot::ScreenHeight() );
+                        allegro::bitBlit( newPicture, screen, 0, 0, 0, 0, x, isomot::ScreenHeight() );
                 }
 
                 milliSleep( 1 );
@@ -439,7 +447,7 @@ void Screen::barWipeHorizontally( Screen* oldScreen, Screen* newScreen, bool rig
                 oldScreen == newScreen || newScreen->imageOfScreen == nilPointer ) return ;
 
         newScreen->redraw ();
-        BITMAP * newPicture = newScreen->imageOfScreen ;
+        allegro::Pict * newPicture = newScreen->imageOfScreen->getAllegroPict() ;
 
         unsigned int pieces = isomot::ScreenWidth() >> 6 ;
         unsigned int widthOfPiece = isomot::ScreenWidth() / pieces ;
@@ -452,11 +460,11 @@ void Screen::barWipeHorizontally( Screen* oldScreen, Screen* newScreen, bool rig
                 {
                         if ( rightToLeft )
                         {
-                                blit( newPicture, screen, pieceX + widthOfPiece - x, 0, pieceX + widthOfPiece - x, 0, x, isomot::ScreenHeight() );
+                                allegro::bitBlit( newPicture, screen, pieceX + widthOfPiece - x, 0, pieceX + widthOfPiece - x, 0, x, isomot::ScreenHeight() );
                         }
                         else
                         {
-                                blit( newPicture, screen, pieceX, 0, pieceX, 0, x, isomot::ScreenHeight() );
+                                allegro::bitBlit( newPicture, screen, pieceX, 0, pieceX, 0, x, isomot::ScreenHeight() );
                         }
                 }
 
@@ -475,17 +483,12 @@ void Screen::randomPixelFade( bool fadeIn, Screen * slide, Color * color )
         // refresh screen before fading
         slide->redraw();
 
-        const unsigned int screenWidth = slide->imageOfScreen->w ;
-        const unsigned int screenHeight = slide->imageOfScreen->h ;
-
-        int allegroColor = color->toAllegroColor() ;
+        const unsigned int screenWidth = slide->imageOfScreen->getWidth() ;
+        const unsigned int screenHeight = slide->imageOfScreen->getHeight() ;
 
         if ( fadeIn )
         {
-                BITMAP* fill = create_bitmap_ex( 32, screenWidth, screenHeight );
-                allegro::clearToColor( fill, allegroColor );
-                blit( fill, /* allegro global */ screen, 0, 0, 0, 0, screenWidth, screenHeight );
-                allegro::destroyBitmap( fill );
+                allegro::bitBlit( Picture( screenWidth, screenHeight, color ).getAllegroPict(), /* allegro global */ screen );
         }
 
         const size_t howManyPixels = screenWidth * screenHeight;
@@ -496,6 +499,8 @@ void Screen::randomPixelFade( bool fadeIn, Screen * slide, Color * color )
         short * pointsX = new short[ howManyPixels ];
         short * pointsY = new short[ howManyPixels ];
 #endif
+
+        int allegroColor = color->toAllegroColor() ;
 
         for ( size_t yet = 0 ; yet < howManyPixels ; )
         {
@@ -509,9 +514,9 @@ void Screen::randomPixelFade( bool fadeIn, Screen * slide, Color * color )
                         pointsY[ yet ] = static_cast< short >( y );
 #else
                         if ( fadeIn )
-                                putpixel( /* allegro global */ screen, x, y, getpixel( slide->imageOfScreen, x, y ) );
+                                allegro::putPixel( /* allegro global */ screen, x, y, allegro::getPixel( slide->imageOfScreen->getAllegroPict(), x, y ) );
                         else
-                                putpixel( /* allegro global */ screen, x, y, allegroColor );
+                                allegro::putPixel( /* allegro global */ screen, x, y, allegroColor );
 #endif
 
                         bits[ x + y * screenWidth ] = true;
@@ -526,9 +531,9 @@ void Screen::randomPixelFade( bool fadeIn, Screen * slide, Color * color )
                 short y = pointsY[ i ];
 
                 if ( fadeIn )
-                        putpixel( screen, x, y, getpixel( slide->imageOfScreen, x, y ) );
+                        allegro::putPixel( screen, x, y, allegro::getPixel( slide->imageOfScreen->getAllegroPict(), x, y ) );
                 else
-                        putpixel( screen, x, y, allegroColor );
+                        allegro::putPixel( screen, x, y, allegroColor );
         }
 
         delete pointsX ;

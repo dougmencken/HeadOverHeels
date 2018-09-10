@@ -23,7 +23,7 @@ MenuWithTwoColumns::~MenuWithTwoColumns( )
 
 }
 
-void MenuWithTwoColumns::draw( BITMAP* where )
+void MenuWithTwoColumns::draw( allegro::Pict* where )
 {
         if ( where == nilPointer ) return ;
 
@@ -40,7 +40,7 @@ void MenuWithTwoColumns::draw( BITMAP* where )
         // rows in first column, after this number options go to second column
         unsigned int rowsInFirstColumn = options.size () >> 1;
 
-        unsigned int widthOfOption = ( this->optionImage != nilPointer ) ? this->optionImage->w : 0 ;
+        unsigned int widthOfOption = ( this->optionImage != nilPointer ) ? this->optionImage->getWidth() : 0 ;
 
         // calculate position of second column
         unsigned int widthOfFirstColumn = 0;
@@ -82,13 +82,13 @@ void MenuWithTwoColumns::draw( BITMAP* where )
                                 label->changeFontFamilyAndColor( "regular", "white" );
                 }
 
-                BITMAP* mark = ( activeOption == label ) ? chosenOptionImageMini : optionImage ;
+                Picture* mark = ( activeOption == label ) ? chosenOptionImageMini : optionImage ;
 
                 // place option in first column
                 if ( countOfRows <= rowsInFirstColumn )
                 {
                         if ( mark != nilPointer )
-                                allegro::drawSprite( where, mark, getX (), getY () + dy );
+                                allegro::drawSprite( where, mark->getAllegroPict(), getX (), getY () + dy );
 
                         label->moveTo( getX () + dx, getY () + dy );
                         label->draw( where );
@@ -106,7 +106,7 @@ void MenuWithTwoColumns::draw( BITMAP* where )
                         // para cada etiqueta
                         // ( poems, no less )
                         if ( mark != nilPointer )
-                                allegro::drawSprite( where, mark, getX () + secondColumnX, getY () + dy );
+                                allegro::drawSprite( where, mark->getAllegroPict(), getX () + secondColumnX, getY () + dy );
 
                         label->moveTo( getX () + dx + secondColumnX, getY () + dy );
                         label->draw( where );
@@ -134,7 +134,7 @@ unsigned int MenuWithTwoColumns::getWidthOfMenu () const
 
         for ( std::list< Label* >::const_iterator i = options.begin (); i != options.end (); ++i, countOfRows++ )
         {
-                unsigned int theWidth = ( *i )->getWidth() + ( this->optionImage != nilPointer ? this->optionImage->w : 0 );
+                unsigned int theWidth = ( *i )->getWidth() + ( this->optionImage != nilPointer ? this->optionImage->getWidth() : 0 );
 
                 if ( countOfRows <= rowsInFirstColumn )
                 {

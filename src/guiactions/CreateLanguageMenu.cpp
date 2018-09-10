@@ -18,7 +18,7 @@ using gui::LanguageManager;
 using gui::SelectLanguage;
 
 
-CreateLanguageMenu::CreateLanguageMenu( BITMAP* picture )
+CreateLanguageMenu::CreateLanguageMenu( allegro::Pict* picture )
         : Action( picture )
 {
         // read list of languages available for this game

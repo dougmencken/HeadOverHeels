@@ -8,7 +8,7 @@
 #include "GameManager.hpp"
 #include "Color.hpp"
 #include "Screen.hpp"
-#include "Picture.hpp"
+#include "PictureWidget.hpp"
 #include "Label.hpp"
 #include "CreateMainMenu.hpp"
 #include "ContinueGame.hpp"
@@ -20,7 +20,7 @@ using isomot::GameManager ;
 using isomot::SoundManager ;
 
 
-CreatePlanetsScreen::CreatePlanetsScreen( BITMAP* where, bool notNewGame )
+CreatePlanetsScreen::CreatePlanetsScreen( allegro::Pict* where, bool notNewGame )
         : Action( where )
         , gameInProgress( notNewGame )
         , blacktoothFree( false )
@@ -63,40 +63,40 @@ void CreatePlanetsScreen::doAction ()
         planets->addWidget( empire );
         planets->setKeyHandler( empire );
 
-        Picture* imageOfChapeau = 0;
+        PictureWidget* imageOfChapeau = nilPointer;
 
-        BITMAP* chapeau = Screen::loadPicture( "crown.png" );
-        BITMAP* chapeauTriste = 0;
+        Picture* chapeau = new Picture( Screen::loadPicture( "crown.png" ) );
+        Picture* chapeauTriste = nilPointer;
         if ( ! GameManager::getInstance()->isSimpleGraphicSet () )
         {
-                chapeauTriste = Color::pictureToGrayscale( Picture::cloneImage( chapeau ) );
+                chapeauTriste = chapeau->makeGrayscaleCopy();
         }
         else
         {
-                chapeauTriste = Color::colorizePicture( Picture::cloneImage( chapeau ), Color::gray50Color() );
-                Color::colorizePicture( chapeau, Color::yellowColor() );
+                chapeauTriste = chapeau->makeColorizedCopy( Color::gray50Color() );
+                chapeau->colorize( Color::yellowColor() );
         }
 
-        const int halfOfChapeauWidth = chapeau->w >> 1;
-        const int chapeauOffsetY = - ( chapeau->h + ( screenHeight >> 7 ) ) ;
+        const int halfOfChapeauWidth = chapeau->getWidth() >> 1;
+        const int chapeauOffsetY = - ( chapeau->getHeight() + ( screenHeight >> 7 ) ) ;
         const int labelOffsetY = 80;
         const int topOffsetY = 60;
 
         // Blacktooth
 
-        BITMAP* planetBlacktooth = Screen::loadPicture( "blacktooth.png" );
-        if ( planetBlacktooth != nilPointer )
+        Picture* planetBlacktooth = new Picture( Screen::loadPicture( "blacktooth.png" ) );
+        if ( planetBlacktooth->getAllegroPict() != nilPointer )
         {
-                const int blacktoothX = ( screenWidth - planetBlacktooth->w ) >> 1 ;
-                const int blacktoothY = ( ( screenHeight - planetBlacktooth->h ) >> 1 ) + ( topOffsetY >> 1 ) ;
+                const int blacktoothX = ( screenWidth - planetBlacktooth->getWidth() ) >> 1 ;
+                const int blacktoothY = ( ( screenHeight - planetBlacktooth->getHeight() ) >> 1 ) + ( topOffsetY >> 1 ) ;
 
-                Picture* imageOfBlacktooth = new Picture( blacktoothX, blacktoothY, planetBlacktooth, "planet Blacktooth" );
+                PictureWidget* imageOfBlacktooth = new PictureWidget( blacktoothX, blacktoothY, planetBlacktooth, "planet Blacktooth" );
                 planets->addWidget( imageOfBlacktooth );
 
-                imageOfChapeau = new Picture(
+                imageOfChapeau = new PictureWidget(
                         blacktoothX + ( imageOfBlacktooth->getWidth() >> 1 ) - halfOfChapeauWidth,
                         blacktoothY + chapeauOffsetY,
-                        Picture::cloneImage( blacktoothFree ? chapeau : chapeauTriste ),
+                        new Picture( blacktoothFree ? *chapeau : *chapeauTriste ),
                         "image of chapeau for blacktooth"
                 );
                 planets->addWidget( imageOfChapeau );
@@ -108,19 +108,19 @@ void CreatePlanetsScreen::doAction ()
 
         // Egyptus
 
-        BITMAP* planetEgyptus = Screen::loadPicture( "egyptus.png" );
-        if ( planetEgyptus != nilPointer )
+        Picture* planetEgyptus = new Picture( Screen::loadPicture( "egyptus.png" ) );
+        if ( planetEgyptus->getAllegroPict() != nilPointer )
         {
-                const int egyptusX = ( screenWidth >> 2 ) - ( screenWidth >> 4 ) - ( planetEgyptus->w >> 1 ) ;
-                const int egyptusY = ( screenHeight >> 2 ) - ( planetEgyptus->h >> 1 ) + ( topOffsetY >> 1 ) ;
+                const int egyptusX = ( screenWidth >> 2 ) - ( screenWidth >> 4 ) - ( planetEgyptus->getWidth() >> 1 ) ;
+                const int egyptusY = ( screenHeight >> 2 ) - ( planetEgyptus->getHeight() >> 1 ) + ( topOffsetY >> 1 ) ;
 
-                Picture* imageOfEgyptus = new Picture( egyptusX, egyptusY, planetEgyptus, "planet Egyptus" );
+                PictureWidget* imageOfEgyptus = new PictureWidget( egyptusX, egyptusY, planetEgyptus, "planet Egyptus" );
                 planets->addWidget( imageOfEgyptus );
 
-                imageOfChapeau = new Picture(
+                imageOfChapeau = new PictureWidget(
                         egyptusX + ( imageOfEgyptus->getWidth() >> 1 ) - halfOfChapeauWidth,
                         egyptusY + chapeauOffsetY,
-                        Picture::cloneImage( egyptusFree ? chapeau : chapeauTriste ),
+                        new Picture( egyptusFree ? *chapeau : *chapeauTriste ),
                         "image of chapeau for egyptus"
                 );
                 planets->addWidget( imageOfChapeau );
@@ -132,19 +132,19 @@ void CreatePlanetsScreen::doAction ()
 
         // Penitentiary
 
-        BITMAP* planetPenitentiary = Screen::loadPicture( "penitentiary.png" );
-        if ( planetPenitentiary != nilPointer )
+        Picture* planetPenitentiary = new Picture( Screen::loadPicture( "penitentiary.png" ) );
+        if ( planetPenitentiary->getAllegroPict() != nilPointer )
         {
-                const int penitentiaryX = ( screenWidth >> 1 ) + ( screenWidth >> 2 ) + ( screenWidth >> 4 ) - ( planetPenitentiary->w >> 1 );
-                const int penitentiaryY = ( screenHeight >> 2 ) - ( planetPenitentiary->h >> 1 ) + ( topOffsetY >> 1 ) ;
+                const int penitentiaryX = ( screenWidth >> 1 ) + ( screenWidth >> 2 ) + ( screenWidth >> 4 ) - ( planetPenitentiary->getWidth() >> 1 );
+                const int penitentiaryY = ( screenHeight >> 2 ) - ( planetPenitentiary->getHeight() >> 1 ) + ( topOffsetY >> 1 ) ;
 
-                Picture* imageOfPenitentiary = new Picture( penitentiaryX, penitentiaryY, planetPenitentiary, "planet Penitentiary" );
+                PictureWidget* imageOfPenitentiary = new PictureWidget( penitentiaryX, penitentiaryY, planetPenitentiary, "planet Penitentiary" );
                 planets->addWidget( imageOfPenitentiary );
 
-                imageOfChapeau = new Picture(
+                imageOfChapeau = new PictureWidget(
                         penitentiaryX + ( imageOfPenitentiary->getWidth() >> 1 ) - halfOfChapeauWidth,
                         penitentiaryY + chapeauOffsetY,
-                        Picture::cloneImage( penitentiaryFree ? chapeau : chapeauTriste ),
+                        new Picture( penitentiaryFree ? *chapeau : *chapeauTriste ),
                         "image of chapeau for penitentiary"
                 );
                 planets->addWidget( imageOfChapeau );
@@ -156,19 +156,19 @@ void CreatePlanetsScreen::doAction ()
 
         // Byblos
 
-        BITMAP* planetByblos = Screen::loadPicture( "byblos.png" );
-        if ( planetByblos != nilPointer )
+        Picture* planetByblos = new Picture( Screen::loadPicture( "byblos.png" ) );
+        if ( planetByblos->getAllegroPict() != nilPointer )
         {
-                const int byblosX = ( screenWidth >> 2 ) - ( screenWidth >> 4 ) - ( planetByblos->w >> 1 ) ;
-                const int byblosY = ( screenHeight >> 1 ) + ( screenHeight >> 2 ) - ( planetByblos->h >> 1 ) + ( topOffsetY >> 1 ) ;
+                const int byblosX = ( screenWidth >> 2 ) - ( screenWidth >> 4 ) - ( planetByblos->getWidth() >> 1 ) ;
+                const int byblosY = ( screenHeight >> 1 ) + ( screenHeight >> 2 ) - ( planetByblos->getHeight() >> 1 ) + ( topOffsetY >> 1 ) ;
 
-                Picture* imageOfByblos = new Picture( byblosX, byblosY, planetByblos, "planet Bookworld" );
+                PictureWidget* imageOfByblos = new PictureWidget( byblosX, byblosY, planetByblos, "planet Bookworld" );
                 planets->addWidget( imageOfByblos );
 
-                imageOfChapeau = new Picture(
+                imageOfChapeau = new PictureWidget(
                         byblosX + ( imageOfByblos->getWidth() >> 1 ) - halfOfChapeauWidth,
                         byblosY + chapeauOffsetY,
-                        Picture::cloneImage( byblosFree ? chapeau : chapeauTriste ),
+                        new Picture( byblosFree ? *chapeau : *chapeauTriste ),
                         "image of chapeau for byblos"
                 );
                 planets->addWidget( imageOfChapeau );
@@ -180,19 +180,19 @@ void CreatePlanetsScreen::doAction ()
 
         // Safari
 
-        BITMAP* planetSafari = Screen::loadPicture( "safari.png" );
-        if ( planetSafari != nilPointer )
+        Picture* planetSafari = new Picture( Screen::loadPicture( "safari.png" ) );
+        if ( planetSafari->getAllegroPict() != nilPointer )
         {
-                const int safariX = ( screenWidth >> 1 ) + ( screenWidth >> 2 ) + ( screenWidth >> 4 ) - ( planetSafari->w >> 1 );
-                const int safariY = ( screenHeight >> 1 ) + ( screenHeight >> 2 ) - ( planetSafari->h >> 1 ) + ( topOffsetY >> 1 );
+                const int safariX = ( screenWidth >> 1 ) + ( screenWidth >> 2 ) + ( screenWidth >> 4 ) - ( planetSafari->getWidth() >> 1 );
+                const int safariY = ( screenHeight >> 1 ) + ( screenHeight >> 2 ) - ( planetSafari->getHeight() >> 1 ) + ( topOffsetY >> 1 );
 
-                Picture* imageOfSafari = new Picture( safariX, safariY, planetSafari, "planet Safari" );
+                PictureWidget* imageOfSafari = new PictureWidget( safariX, safariY, planetSafari, "planet Safari" );
                 planets->addWidget( imageOfSafari );
 
-                imageOfChapeau = new Picture(
+                imageOfChapeau = new PictureWidget(
                         safariX + ( imageOfSafari->getWidth() >> 1 ) - halfOfChapeauWidth,
                         safariY + chapeauOffsetY,
-                        Picture::cloneImage( safariFree ? chapeau : chapeauTriste ),
+                        new Picture( safariFree ? *chapeau : *chapeauTriste ),
                         "image of chapeau for safari"
                 );
                 planets->addWidget( imageOfChapeau );
@@ -202,8 +202,8 @@ void CreatePlanetsScreen::doAction ()
                 planets->addWidget( nameOfPlanet );
         }
 
-        allegro::destroyBitmap( chapeau );
-        allegro::destroyBitmap( chapeauTriste );
+        delete chapeau ;
+        delete chapeauTriste ;
 
         GuiManager::getInstance()->changeScreen( planets, true );
 }

@@ -13,7 +13,7 @@ namespace isomot
 {
 
 /* static */
-void ShadowCaster::castShadowOnItem( Item* item, int x, int y, BITMAP* shadow, unsigned short shading, unsigned char transparency )
+void ShadowCaster::castShadowOnItem( Item* item, int x, int y, allegro::Pict* shadow, unsigned short shading, unsigned char transparency )
 {
         // fully transparent stuff doesn’t drop any shadow
         if ( transparency >= 100 ) return;
@@ -23,10 +23,10 @@ void ShadowCaster::castShadowOnItem( Item* item, int x, int y, BITMAP* shadow, u
 
         if ( ! isFreeItem && ! isGridItem ) return;
 
-        BITMAP* rawImage = item->getRawImage() ;
+        allegro::Pict* rawImage = item->getRawImage() ;
 
-        int colorDepthRaw = bitmap_color_depth( rawImage ) ;
-        int colorDepthShadow = bitmap_color_depth( shadow ) ;
+        int colorDepthRaw = allegro::colorDepthOf( rawImage ) ;
+        int colorDepthShadow = allegro::colorDepthOf( shadow ) ;
 
         int height = static_cast< int >( item->getHeight() );
         int width = static_cast< int >( item->getWidthX() );
@@ -68,7 +68,7 @@ void ShadowCaster::castShadowOnItem( Item* item, int x, int y, BITMAP* shadow, u
 
         int n2i = inix + item->getOffsetX() - x;
 
-        BITMAP* shadyImage = nilPointer; // graphics of shaded item
+        allegro::Pict* shadyImage = nilPointer; // graphics of shaded item
 
         if ( isFreeItem )
         {
@@ -81,14 +81,14 @@ void ShadowCaster::castShadowOnItem( Item* item, int x, int y, BITMAP* shadow, u
 
         if ( shadyImage == nilPointer )
         {
-                shadyImage = create_bitmap_ex( colorDepthRaw, rawImage->w, rawImage->h );
+                shadyImage = allegro::createPicture( rawImage->w, rawImage->h, colorDepthRaw );
                 item->setWantShadow( true );
         }
 
         if ( item->getWantShadow() )
         {
                 // initially, image of shaded item is just copy of unshaded item’s image
-                blit( rawImage, shadyImage, 0, 0, 0, 0, rawImage->w, rawImage->h );
+                allegro::bitBlit( rawImage, shadyImage );
                 item->setWantShadow( false );
         }
 
@@ -417,15 +417,15 @@ void ShadowCaster::castShadowOnItem( Item* item, int x, int y, BITMAP* shadow, u
 }
 
 /* static */
-void ShadowCaster::castShadowOnFloor( FloorTile* tile, int x, int y, BITMAP* shadow, unsigned short shading, unsigned char transparency )
+void ShadowCaster::castShadowOnFloor( FloorTile* tile, int x, int y, allegro::Pict* shadow, unsigned short shading, unsigned char transparency )
 {
         // fully transparent stuff doesn’t drop any shadow
         if ( transparency >= 100 ) return;
 
-        BITMAP* tileImage = tile->getRawImage() ;
+        allegro::Pict* tileImage = tile->getRawImage() ;
 
-        int colorDepthTile = bitmap_color_depth( tileImage ) ;
-        int colorDepthShadow = bitmap_color_depth( shadow ) ;
+        int colorDepthTile = allegro::colorDepthOf( tileImage ) ;
+        int colorDepthShadow = allegro::colorDepthOf( shadow ) ;
 
         int inix = x - tile->getOffsetX();      // initial X
         int iniy = y - tile->getOffsetY();      // initial Y
@@ -451,18 +451,18 @@ void ShadowCaster::castShadowOnFloor( FloorTile* tile, int x, int y, BITMAP* sha
 
         int n2i = inix + tile->getOffsetX() - x;
 
-        BITMAP* shadyImage = tile->getShadyImage(); // graphics of shaded item
+        allegro::Pict* shadyImage = tile->getShadyImage(); // graphics of shaded item
 
         if ( shadyImage == nilPointer )
         {
-                shadyImage = create_bitmap_ex( colorDepthTile, tileImage->w, tileImage->h );
+                shadyImage = allegro::createPicture( tileImage->w, tileImage->h, colorDepthTile );
                 tile->setWantShadow( true );
         }
 
         if ( tile->getWantShadow() )
         {
                 // when there’s only one shading item, begin with fresh image of tile
-                blit( tileImage, shadyImage, 0, 0, 0, 0, tileImage->w, tileImage->h );
+                allegro::bitBlit( tileImage, shadyImage );
                 tile->setWantShadow( false );
         }
 

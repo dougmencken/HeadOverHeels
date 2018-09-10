@@ -8,7 +8,7 @@
 namespace isomot
 {
 
-Wall::Wall( bool trueXfalseY, int index, BITMAP* image )
+Wall::Wall( bool trueXfalseY, int index, allegro::Pict* image )
         : Mediated()
         , onX( trueXfalseY )
         , position( index )
@@ -19,7 +19,7 @@ Wall::Wall( bool trueXfalseY, int index, BITMAP* image )
 
 Wall::~Wall()
 {
-          allegro::destroyBitmap( image );
+          allegro::binPicture( image );
 }
 
 void Wall::calculateOffset()
@@ -48,7 +48,7 @@ void Wall::calculateOffset()
         }
 }
 
-void Wall::draw( BITMAP* where )
+void Wall::draw( allegro::Pict* where )
 {
         if ( this->image )
         {

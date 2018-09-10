@@ -13,7 +13,8 @@
 
 #include <utility>
 #include <cmath>
-#include <allegro.h>
+
+#include <WrappersAllegro.hpp>
 
 #include "Ism.hpp"
 
@@ -65,19 +66,19 @@ public:
 
         virtual bool addToPosition ( int x, int y, int z ) ;
 
-        void draw ( BITMAP* where ) ;
+        void draw ( allegro::Pict* where ) ;
 
         void binBothProcessedImages () ;
 
         /**
          * Change graphics of item
          */
-        virtual void changeImage ( BITMAP* newImage ) ;
+        virtual void changeImage ( allegro::Pict* newImage ) ;
 
         /**
          * Change graphics of item’s shadow
          */
-        virtual void changeShadow ( BITMAP* newShadow ) ;
+        virtual void changeShadow ( allegro::Pict* newShadow ) ;
 
         /**
          * Request to shade item
@@ -94,7 +95,7 @@ public:
          * @param x Coordenada X de pantalla donde está situada la imagen del elemento que servirá de máscara
          * @param y Coordenada Y de pantalla donde está situada la imagen del elemento que servirá de máscara
          */
-        void maskImage ( int x, int y, BITMAP* image ) ;
+        void maskImage ( int x, int y, allegro::Pict* image ) ;
 
 protected:
 
@@ -118,7 +119,7 @@ protected:
         /**
          * Current frame of this item shaded but not masked yet
          */
-        BITMAP * shadedNonmaskedImage ;
+        allegro::Pict * shadedNonmaskedImage ;
 
         bool partOfDoor ;
 
@@ -148,9 +149,9 @@ public:
 
         bool isFrozen () const {  return frozen ;  }
 
-        BITMAP * getShadedNonmaskedImage () const {  return shadedNonmaskedImage ;  }
+        allegro::Pict * getShadedNonmaskedImage () const {  return shadedNonmaskedImage ;  }
 
-        void setShadedNonmaskedImage ( BITMAP * newImage ) ;
+        void setShadedNonmaskedImage ( allegro::Pict * newImage ) ;
 
         bool isPartOfDoor () const {  return partOfDoor ;  }
 

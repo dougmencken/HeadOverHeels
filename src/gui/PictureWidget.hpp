@@ -8,42 +8,42 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef Picture_hpp_
-#define Picture_hpp_
+#ifndef PictureWidget_hpp_
+#define PictureWidget_hpp_
 
-#include <allegro.h>
 #include <string>
 
+#include "WrappersAllegro.hpp"
+
 #include "Widget.hpp"
+#include "Picture.hpp"
 
 
 namespace gui
 {
 
-class Picture : public Widget
+class PictureWidget : public Widget
 {
 
 public:
 
-        static BITMAP * cloneImage ( BITMAP * original ) ;
+        PictureWidget( int x, int y, Picture * image, std::string name ) ;
 
-        Picture( int x, int y, BITMAP * image, std::string name ) ;
+        virtual ~PictureWidget( ) ;
 
-        virtual ~Picture( ) ;
-
-        virtual void draw ( BITMAP * where ) ;
+        virtual void draw ( allegro::Pict * where ) ;
 
         void handleKey ( int /* rawKey */ ) {  /* do nothing */  }
 
-        BITMAP * getPicture () const {  return picture ;  }
+        Picture * getPicture () const {  return picture ;  }
 
-        unsigned int getWidth () const {  return this->picture->w ;  }
+        unsigned int getWidth () const {  return this->picture->getWidth() ;  }
 
-        unsigned int getHeight () const {  return this->picture->h ;  }
+        unsigned int getHeight () const {  return this->picture->getHeight() ;  }
 
 private:
 
-        BITMAP * picture ;
+        Picture * picture ;
 
         std::string nameOfPicture ;
 

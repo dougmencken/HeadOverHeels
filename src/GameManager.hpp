@@ -14,6 +14,7 @@
 #include <string>
 
 #include "Ism.hpp"
+#include "Picture.hpp"
 #include "Room.hpp"
 #include "ColorCyclingLabel.hpp"
 #include "Timer.hpp"
@@ -54,7 +55,7 @@ private:
 
 protected:
 
-        static BITMAP * refreshPicture ( const char * nameOfPicture ) ;
+        static Picture * refreshPicture ( const char * nameOfPicture ) ;
 
 public:
 
@@ -100,7 +101,7 @@ public:
          * disponibles
          * @param where Imagen donde se dibujará toda la información
          */
-        void drawAmbianceOfGame ( BITMAP* where ) ;
+        void drawAmbianceOfGame ( allegro::Pict* where ) ;
 
         /**
          * Carga una partida grabada en disco
@@ -384,7 +385,7 @@ private:
         /**
          * Imagen del elemento que está dentro del bolso
          */
-        BITMAP * itemTaken ;
+        Picture * itemTaken ;
 
         /**
          * Stores name of planet with boolean of its liberation
@@ -401,53 +402,53 @@ private:
 
         bool emperator ;
 
-        BITMAP * frameForJail ;
+        Picture * frameForJail ;
 
-        BITMAP * frameForBlacktooth ;
+        Picture * frameForBlacktooth ;
 
-        BITMAP * frameForMarket ;
+        Picture * frameForMarket ;
 
-        BITMAP * frameForMoon ;
+        Picture * frameForMoon ;
 
-        BITMAP * frameForByblos ;
+        Picture * frameForByblos ;
 
-        BITMAP * frameForSafari ;
+        Picture * frameForSafari ;
 
-        BITMAP * frameForEgyptus ;
+        Picture * frameForEgyptus ;
 
-        BITMAP * frameForPenitentiary ;
+        Picture * frameForPenitentiary ;
 
-        BITMAP * pictureOfHead ;
+        Picture * pictureOfHead ;
 
-        BITMAP * grayPictureOfHead ;
+        Picture * grayPictureOfHead ;
 
-        BITMAP * pictureOfHeels ;
+        Picture * pictureOfHeels ;
 
-        BITMAP * grayPictureOfHeels ;
+        Picture * grayPictureOfHeels ;
 
-        BITMAP * pictureOfBag ;
+        Picture * pictureOfBag ;
 
-        BITMAP * grayPictureOfBag ;
+        Picture * grayPictureOfBag ;
 
-        BITMAP * pictureOfHorn ;
+        Picture * pictureOfHorn ;
 
-        BITMAP * grayPictureOfHorn ;
+        Picture * grayPictureOfHorn ;
 
-        BITMAP * pictureOfDonuts ;
+        Picture * pictureOfDonuts ;
 
-        BITMAP * grayPictureOfDonuts ;
+        Picture * grayPictureOfDonuts ;
 
-        BITMAP * pictureOfGrandesSaltos ;
+        Picture * pictureOfGrandesSaltos ;
 
-        BITMAP * grayPictureOfGrandesSaltos ;
+        Picture * grayPictureOfGrandesSaltos ;
 
-        BITMAP * pictureOfGranVelocidad ;
+        Picture * pictureOfGranVelocidad ;
 
-        BITMAP * grayPictureOfGranVelocidad ;
+        Picture * grayPictureOfGranVelocidad ;
 
-        BITMAP * pictureOfEscudo ;
+        Picture * pictureOfEscudo ;
 
-        BITMAP * grayPictureOfEscudo ;
+        Picture * grayPictureOfEscudo ;
 
 public:
 
@@ -512,7 +513,7 @@ public:
         /**
          * Image of the item inside hand bag
          */
-        void setItemTaken ( BITMAP* bitmap ) {  this->itemTaken = bitmap ;  }
+        void setItemTaken ( Picture* pic ) {  delete this->itemTaken ;  this->itemTaken = pic ;  }
 
         unsigned int getVisitedRooms () const ;
 

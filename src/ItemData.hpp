@@ -14,7 +14,8 @@
 #include <vector>
 #include <string>
 #include <cassert>
-#include <allegro.h>
+
+#include <WrappersAllegro.hpp>
 
 
 namespace isomot
@@ -87,7 +88,7 @@ public:
 
         unsigned int howManyMotions () const {  return motion.size () ;  }
 
-        BITMAP * getMotionAt( size_t at ) const
+        allegro::Pict * getMotionAt( size_t at ) const
         {
                 assert( at < motion.size () );
                 return motion[ at ] ;
@@ -96,7 +97,7 @@ public:
 
         unsigned int howManyShadows () const {  return shadows.size () ;  }
 
-        BITMAP * getShadowAt( size_t at ) const
+        allegro::Pict * getShadowAt( size_t at ) const
         {
                 assert( at < shadows.size () );
                 return shadows[ at ] ;
@@ -187,12 +188,12 @@ private:
        /**
         * Pictures of item
         */
-        std::vector< BITMAP * > motion ;
+        std::vector< allegro::Pict * > motion ;
 
        /**
         * Pictures of item’s shadow
         */
-        std::vector< BITMAP * > shadows ;
+        std::vector< allegro::Pict * > shadows ;
 
        /**
         * Name of the file that contains the frames of this item

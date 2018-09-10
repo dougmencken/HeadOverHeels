@@ -8,7 +8,7 @@ using gui::SaveGame;
 using gui::ContinueGame;
 
 
-SaveGame::SaveGame( BITMAP* picture, unsigned int slot )
+SaveGame::SaveGame( allegro::Pict* picture, unsigned int slot )
         : Action( picture )
         , slot( slot )
 {

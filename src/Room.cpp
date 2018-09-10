@@ -126,11 +126,11 @@ Room::Room( const std::string& roomFile, const std::string& scenery, int xTiles,
         // but image of double or triple room is larger
         if ( isSingleRoom() )
         {
-                whereToDraw = create_bitmap_ex( 32, ScreenWidth(), ScreenHeight() );
+                whereToDraw = allegro::createPicture( ScreenWidth(), ScreenHeight() );
         }
         else if ( xTiles > 10 && yTiles > 10 )
         {
-                whereToDraw = create_bitmap_ex( 32, ScreenWidth() + 20 * ( tileSize << 1 ), ScreenHeight() + 20 * tileSize );
+                whereToDraw = allegro::createPicture( ScreenWidth() + 20 * ( tileSize << 1 ), ScreenHeight() + 20 * tileSize );
         }
         else if ( xTiles > 10 || yTiles > 10 )
         {
@@ -139,7 +139,7 @@ Room::Room( const std::string& roomFile, const std::string& scenery, int xTiles,
                 int h = ScreenHeight() + ( xTiles > 10 ? ( ( xTiles - 10 ) * tileSize) : 0 )
                                         + ( yTiles > 10 ? ( ( yTiles - 10 ) * tileSize) : 0 );
 
-                whereToDraw = create_bitmap_ex( 32, w, h );
+                whereToDraw = allegro::createPicture( w, h );
         }
 
         // 128 for 50% opacity of shadows, or 256 for no shadows
@@ -189,7 +189,7 @@ Room::~Room()
                 delete player;
         }
 
-        allegro::destroyBitmap( whereToDraw );
+        allegro::binPicture( whereToDraw );
 }
 
 std::list < PlayerItem * > Room::getPlayersYetInRoom () const
@@ -775,9 +775,9 @@ void Room::dontDisappearOnJump ()
                                         gridItem->setBehavior( nilPointer );
                                         delete thatBehavior ;
 
-                                        BITMAP* original = gridItem->getRawImage();
-                                        BITMAP* copy = create_bitmap( original->w, original->h );
-                                        blit( original, copy, 0, 0, 0, 0, original->w, original->h );
+                                        allegro::Pict* original = gridItem->getRawImage();
+                                        allegro::Pict* copy = allegro::createPicture( original->w, original->h, allegro::colorDepthOf( original ) );
+                                        allegro::bitBlit( original, copy );
 
                                         gridItem->changeImage( Color::multiplyWithColor(
                                                 copy,
@@ -803,9 +803,9 @@ void Room::dontDisappearOnJump ()
                                 freeItem->setBehavior( nilPointer );
                                 delete thatBehavior ;
 
-                                BITMAP* original = freeItem->getRawImage();
-                                BITMAP* copy = create_bitmap( original->w, original->h );
-                                blit( original, copy, 0, 0, 0, 0, original->w, original->h );
+                                allegro::Pict* original = freeItem->getRawImage();
+                                allegro::Pict* copy = allegro::createPicture( original->w, original->h, allegro::colorDepthOf( original ) );
+                                allegro::bitBlit( original, copy );
 
                                 freeItem->changeImage( Color::multiplyWithColor(
                                         copy,
@@ -818,7 +818,7 @@ void Room::dontDisappearOnJump ()
         }
 }
 
-void Room::draw( BITMAP* where )
+void Room::draw( allegro::Pict* where )
 {
         const unsigned int maxTilesOfSingleRoom = 10 ;
 

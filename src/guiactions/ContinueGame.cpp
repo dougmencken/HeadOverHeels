@@ -11,7 +11,7 @@ using gui::ContinueGame;
 using isomot::SoundManager;
 
 
-ContinueGame::ContinueGame( BITMAP* picture, bool gameInProgress )
+ContinueGame::ContinueGame( allegro::Pict* picture, bool gameInProgress )
         : Action( picture )
         , gameInProgress( gameInProgress )
 {

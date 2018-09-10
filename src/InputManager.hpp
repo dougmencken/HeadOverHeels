@@ -13,7 +13,9 @@
 
 #include <map>
 #include <string>
-#include <allegro.h>
+
+#include <WrappersAllegro.hpp>
+
 #include "Ism.hpp"
 
 

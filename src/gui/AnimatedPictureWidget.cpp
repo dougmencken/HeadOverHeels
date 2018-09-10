@@ -1,12 +1,12 @@
 
-#include "AnimatedPicture.hpp"
+#include "AnimatedPictureWidget.hpp"
 #include <iostream>
 
 
 namespace gui
 {
 
-AnimatedPicture::AnimatedPicture( int x, int y, std::vector < BITMAP * > frames, double delay, std::string name ) :
+AnimatedPictureWidget::AnimatedPictureWidget( int x, int y, std::vector < allegro::Pict * > frames, double delay, std::string name ) :
         Widget( x, y )
         , animation( frames )
         , delayBetweenFrames( delay )
@@ -17,20 +17,18 @@ AnimatedPicture::AnimatedPicture( int x, int y, std::vector < BITMAP * > frames,
         animationTimer->go();
 }
 
-AnimatedPicture::~AnimatedPicture()
+AnimatedPictureWidget::~AnimatedPictureWidget()
 {
-        /// std::cout << "forget animation with name \"" << nameOfAnimation << "\"" << std::endl ;
-
-        for ( std::vector< BITMAP * >::iterator bb = animation.begin (); bb != animation.end (); ++bb )
+        for ( std::vector< allegro::Pict * >::iterator bb = animation.begin (); bb != animation.end (); ++bb )
         {
-                allegro::destroyBitmap( *bb );
+                allegro::binPicture( *bb );
         }
         animation.clear();
 
         delete animationTimer;
 }
 
-void AnimatedPicture::draw( BITMAP* where )
+void AnimatedPictureWidget::draw( allegro::Pict* where )
 {
         if ( animation.size() > 0 )
         {
@@ -45,7 +43,7 @@ void AnimatedPicture::draw( BITMAP* where )
         }
 }
 
-unsigned int AnimatedPicture::getWidth () const
+unsigned int AnimatedPictureWidget::getWidth () const
 {
         if ( animation.size() > 0 )
                 return ( * animation.begin () )->w ;
@@ -53,7 +51,7 @@ unsigned int AnimatedPicture::getWidth () const
                 return 0 ;
 }
 
-unsigned int AnimatedPicture::getHeight () const
+unsigned int AnimatedPictureWidget::getHeight () const
 {
         if ( animation.size() > 0 )
                 return ( * animation.begin () )->h ;

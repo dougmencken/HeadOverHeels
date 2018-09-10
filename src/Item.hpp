@@ -13,7 +13,8 @@
 
 #include <string>
 #include <utility>
-#include <allegro.h>
+
+#include <WrappersAllegro.hpp>
 
 #include "Ism.hpp"
 #include "Way.hpp"
@@ -79,12 +80,12 @@ public:
         /**
          * Change graphics of item
          */
-        virtual void changeImage ( BITMAP* image ) = 0 ;
+        virtual void changeImage ( allegro::Pict* image ) = 0 ;
 
         /**
          * Change graphics of item’s shadow
          */
-        virtual void changeShadow ( BITMAP* shadow ) ;
+        virtual void changeShadow ( allegro::Pict* shadow ) ;
 
         /**
          * Add value to coordinate X
@@ -181,17 +182,17 @@ protected:
         /**
          * Image of item, unprocessed, just read from file
          */
-        BITMAP * rawImage ;
+        allegro::Pict * rawImage ;
 
         /**
          * Image of item’s shadow
          */
-        BITMAP * shadow ;
+        allegro::Pict * shadow ;
 
         /**
          * Image of this item with shadows from other items, for free item it is also masked
          */
-        BITMAP * processedImage ;
+        allegro::Pict * processedImage ;
 
         /**
          * Timer for animation of item
@@ -289,13 +290,13 @@ public:
 
         Way getOrientation () const {  return orientation ;  }
 
-        BITMAP * getRawImage () const {  return rawImage ;  }
+        allegro::Pict * getRawImage () const {  return rawImage ;  }
 
-        BITMAP * getImageOfShadow () const {  return shadow ;  }
+        allegro::Pict * getImageOfShadow () const {  return shadow ;  }
 
-        BITMAP * getProcessedImage () const {  return processedImage ;  }
+        allegro::Pict * getProcessedImage () const {  return processedImage ;  }
 
-        void setProcessedImage ( BITMAP * newImage ) ;
+        void setProcessedImage ( allegro::Pict * newImage ) ;
 
         void binProcessedImage() {  if ( processedImage != nilPointer ) setProcessedImage( nilPointer ) ;  }
 

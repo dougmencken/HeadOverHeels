@@ -13,7 +13,9 @@
 
 #include <string>
 #include <list>
-#include <allegro.h>
+
+#include <WrappersAllegro.hpp>
+
 #include "Widget.hpp"
 
 
@@ -40,7 +42,7 @@ public:
 
         virtual ~TextField( ) ;
 
-        virtual void draw ( BITMAP * where ) ;
+        virtual void draw ( allegro::Pict * where ) ;
 
         void handleKey ( int /* rawKey */ ) { /* do nothing */ }
 

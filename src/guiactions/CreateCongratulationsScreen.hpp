@@ -32,7 +32,7 @@ public:
          * @param rooms Número de salas visitadas
          * @param planets Número de planetas liberados
          */
-        CreateCongratulationsScreen( BITMAP* picture, unsigned short rooms, unsigned short planets ) ;
+        CreateCongratulationsScreen( allegro::Pict* picture, unsigned short rooms, unsigned short planets ) ;
 
         virtual ~CreateCongratulationsScreen( ) ;
 

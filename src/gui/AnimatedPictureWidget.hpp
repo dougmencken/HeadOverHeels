@@ -8,8 +8,8 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef AnimatedPicture_hpp_
-#define AnimatedPicture_hpp_
+#ifndef AnimatedPictureWidget_hpp_
+#define AnimatedPictureWidget_hpp_
 
 #include "Ism.hpp"
 #include <algif.h>
@@ -24,16 +24,16 @@
 namespace gui
 {
 
-class AnimatedPicture : public Widget
+class AnimatedPictureWidget : public Widget
 {
 
 public:
 
-        AnimatedPicture( int x, int y, std::vector < BITMAP * > frames, double delay, std::string name ) ;
+        AnimatedPictureWidget( int x, int y, std::vector < allegro::Pict * > frames, double delay, std::string name ) ;
 
-        virtual ~AnimatedPicture( ) ;
+        virtual ~AnimatedPictureWidget( ) ;
 
-        virtual void draw ( BITMAP * where ) ;
+        virtual void draw ( allegro::Pict * where ) ;
 
         void handleKey ( int /* rawKey */ ) {  /* do nothing */  }
 
@@ -43,7 +43,7 @@ public:
 
 private:
 
-        std::vector < BITMAP * > animation ;
+        std::vector < allegro::Pict * > animation ;
 
         double delayBetweenFrames ;
 

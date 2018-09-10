@@ -25,7 +25,7 @@ TextField::~TextField()
         this->lines.clear();
 }
 
-void TextField::draw( BITMAP* where )
+void TextField::draw( allegro::Pict* where )
 {
         for ( std::list< Label* >::iterator i = this->lines.begin (); i != this->lines.end (); ++i )
         {
