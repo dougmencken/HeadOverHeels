@@ -557,20 +557,15 @@ allegro::Pict* Isomot::update()
                 std::ostringstream roomTiles;
                 roomTiles << tilesX << "x" << tilesY;
 
-                std::string roomAbove = "";
-                std::string roomBelow = "";
-                std::string roomToTeleport = "";
-                std::string roomToTeleportToo = "";
-
                 MapRoomData* connections = this->getMapManager()->findRoomData( activeRoom );
                 assert( connections != nilPointer );
 
                 Way wayToNextRoom( "nowhere" );
 
-                roomAbove = connections->findConnectedRoom( "up", &wayToNextRoom );
-                roomBelow = connections->findConnectedRoom( "down", &wayToNextRoom );
-                roomToTeleport = connections->findConnectedRoom( "via teleport", &wayToNextRoom );
-                roomToTeleportToo = connections->findConnectedRoom( "via second teleport", &wayToNextRoom );
+                std::string roomAbove = connections->findConnectedRoom( "up", &wayToNextRoom );
+                std::string roomBelow = connections->findConnectedRoom( "down", &wayToNextRoom );
+                std::string roomToTeleport = connections->findConnectedRoom( "via teleport", &wayToNextRoom );
+                std::string roomToTeleportToo = connections->findConnectedRoom( "via second teleport", &wayToNextRoom );
 
                 int gray50Color = Color::gray50Color()->toAllegroColor() ;
 

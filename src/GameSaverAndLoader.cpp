@@ -248,9 +248,10 @@ bool GameSaverAndLoader::saveGame( const std::string& fileName )
                 std::vector< std::string > tools;
                 gameManager->toolsOwnedByCharacter( whoPlaysYet, tools );
 
-                bool hasHorn = false;
                 if ( whoPlaysYet == "head" || whoPlaysYet == "headoverheels" )
                 {
+                        bool hasHorn = false;
+
                         if ( std::find( tools.begin (), tools.end (), "horn" ) != tools.end () )
                                 hasHorn = true;
 
@@ -263,9 +264,10 @@ bool GameSaverAndLoader::saveGame( const std::string& fileName )
                         activeCharacter->InsertEndChild( donuts );
                 }
 
-                bool hasHandbag = false;
                 if ( whoPlaysYet == "heels" || whoPlaysYet == "headoverheels" )
                 {
+                        bool hasHandbag = false;
+
                         if ( std::find( tools.begin (), tools.end (), "handbag" ) != tools.end () )
                                 hasHandbag = true;
 
@@ -351,9 +353,10 @@ bool GameSaverAndLoader::saveGame( const std::string& fileName )
                         std::vector< std::string > toolsToo;
                         gameManager->toolsOwnedByCharacter( whoWaitsToPlay, toolsToo );
 
-                        bool hasHorn = false;
                         if ( whoWaitsToPlay == "head" )
                         {
+                                bool hasHorn = false;
+
                                 if ( std::find( toolsToo.begin (), toolsToo.end (), "horn" ) != toolsToo.end () )
                                         hasHorn = true;
 
@@ -366,9 +369,10 @@ bool GameSaverAndLoader::saveGame( const std::string& fileName )
                                 inactiveCharacter->InsertEndChild( donuts );
                         }
 
-                        bool hasHandbag = false;
                         if ( whoWaitsToPlay == "heels" )
                         {
+                                bool hasHandbag = false;
+
                                 if ( std::find( toolsToo.begin (), toolsToo.end (), "handbag" ) != toolsToo.end () )
                                         hasHandbag = true;
 

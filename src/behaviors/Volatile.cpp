@@ -16,6 +16,7 @@ namespace isomot
 
 Volatile::Volatile( Item * item, const std::string & behavior )
         : Behavior( item, behavior )
+        , bubblesData( nilPointer )
         , solid( false )
 {
         disappearanceTimer = new Timer();

@@ -39,8 +39,7 @@ public:
         virtual ~FallKindOfActivity( ) ;
 
        /**
-        * Item falls
-        * @return true if fall or false when there’s collision
+        * @return true if item may fall or false when there’s collision
         */
         virtual bool fall ( Behavior * behavior ) ;
 
@@ -48,6 +47,9 @@ public:
 
 private:
 
+       /**
+        * When item falls on some other one, that one becomes item’s anchor
+        */
         void assignAnchor ( FreeItem * freeItem, const std::vector < std::string > & items ) ;
 
 private:

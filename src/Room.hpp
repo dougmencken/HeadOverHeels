@@ -326,6 +326,8 @@ public:
 
         bool hasDoorAt ( const std::string& way ) {  return ( doors[ way ] != nilPointer ) ;  }
 
+        const std::map < std::string, Door * >& getDoors () const {  return doors ;  }
+
         void setWayOfExit ( const std::string& exit ) {  this->wayOfExit = exit ;  }
 
         std::string getWayOfExit () const {  return wayOfExit ;  }

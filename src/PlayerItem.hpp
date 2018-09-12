@@ -130,20 +130,6 @@ public:
 protected:
 
         /**
-         * Check if player hits a door, if yes then move player
-         * @param way door mentioned by its position in room
-         * @param name unique name of item from stack of collisions
-         */
-        bool isCollidingWithDoor ( const std::string& way, const std::string& name, const int previousX, const int previousY ) ;
-
-        /**
-         * See if player is not under a door or that door doesn’t exist
-         * @param way door mentioned by its position in room
-         * @return true if the player is under that door
-         */
-        bool isNotUnderDoor ( const std::string& way ) ;
-
-        /**
          * See if player crosses limits of room, if yes then change rooms
          */
         bool isCollidingWithLimitOfRoom( const std::string& onWhichWay ) ;

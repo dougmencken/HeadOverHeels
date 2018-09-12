@@ -460,7 +460,7 @@ Room* MapManager::rebuildRoom()
                                 alivePlayer->autoMoveOnEntry( entry.toString() );
                 }
 
-                it++ ; // next player
+                ++it ; // next player
         }
 
         // remove existing room

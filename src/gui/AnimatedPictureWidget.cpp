@@ -6,7 +6,7 @@
 namespace gui
 {
 
-AnimatedPictureWidget::AnimatedPictureWidget( int x, int y, std::vector < allegro::Pict * > frames, double delay, std::string name ) :
+AnimatedPictureWidget::AnimatedPictureWidget( int x, int y, const std::vector< allegro::Pict* >& frames, double delay, const std::string& name ) :
         Widget( x, y )
         , animation( frames )
         , delayBetweenFrames( delay )

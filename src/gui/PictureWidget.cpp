@@ -6,7 +6,7 @@
 namespace gui
 {
 
-PictureWidget::PictureWidget( int x, int y, Picture* image, std::string name ) :
+PictureWidget::PictureWidget( int x, int y, Picture* image, const std::string& name ) :
         Widget( x, y )
         , picture( image )
         , nameOfPicture( name )

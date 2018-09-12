@@ -42,13 +42,13 @@ public:
 
         const std::string& getNameOfFile () const {  return this->nameOfFile;  }
 
-        void setNameOfFile ( std::string newName ) {  this->nameOfFile = newName ;  }
+        void setNameOfFile ( const std::string& newName ) {  this->nameOfFile = newName ;  }
 
         void clearNameOfFile () {  this->nameOfFile.clear() ;  }
 
         const std::string& getNameOfShadowFile () const {  return this->nameOfShadowFile;  }
 
-        void setNameOfShadowFile ( std::string newNameOfShadow ) {  this->nameOfShadowFile = newNameOfShadow ;  }
+        void setNameOfShadowFile ( const std::string& newNameOfShadow ) {  this->nameOfShadowFile = newNameOfShadow ;  }
 
         void clearNameOfShadowFile () {  this->nameOfShadowFile.clear() ;  }
 
@@ -92,7 +92,7 @@ public:
         {
                 assert( at < motion.size () );
                 return motion[ at ] ;
-                /// return ( at < motion.size() ? motion[ at ] : 0 ) ;
+                /// return ( at < motion.size() ? motion[ at ] : nilPointer ) ;
         }
 
         unsigned int howManyShadows () const {  return shadows.size () ;  }
@@ -101,7 +101,7 @@ public:
         {
                 assert( at < shadows.size () );
                 return shadows[ at ] ;
-                /// return ( at < shadows.size() ? shadows[ at ] : 0 ) ;
+                /// return ( at < shadows.size() ? shadows[ at ] : nilPointer ) ;
         }
 
         int getFrameAt( size_t at ) const

@@ -2,7 +2,6 @@
 #include "FloorTile.hpp"
 #include "Mediator.hpp"
 
-#include <sstream>
 #include <cassert>
 
 
@@ -11,16 +10,13 @@ namespace isomot
 
 FloorTile::FloorTile( int cellX, int cellY, allegro::Pict* image )
         : Mediated (), Shady ()
+        , uniqueName( "floor tile at cx=" + isomot::numberToString( cellX ) + " cy=" + isomot::numberToString( cellY ) )
         , rawImage( image )
         , shadyImage( nilPointer )
 {
         this->coordinates.first = cellX;
         this->coordinates.second = cellY;
         this->offset.first = this->offset.second = 0;
-
-        std::ostringstream at;
-        at << "cx=" << coordinates.first << " cy=" << coordinates.second;
-        this->uniqueName = "floor tile at " + at.str();
 }
 
 FloorTile::~FloorTile()

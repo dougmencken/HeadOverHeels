@@ -27,7 +27,7 @@ class PictureWidget : public Widget
 
 public:
 
-        PictureWidget( int x, int y, Picture * image, std::string name ) ;
+        PictureWidget( int x, int y, Picture * image, const std::string & name ) ;
 
         virtual ~PictureWidget( ) ;
 

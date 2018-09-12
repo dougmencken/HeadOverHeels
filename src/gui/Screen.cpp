@@ -64,13 +64,12 @@ void Screen::setEscapeAction ( Action * action )
 
 void Screen::refreshPicturesOfHeadAndHeels ()
 {
-        int xHead = 0, yHead = 0;
         bool headOnScreen = false;
 
         if ( pictureOfHead != nilPointer )
         {
-                xHead = pictureOfHead->getX ();
-                yHead = pictureOfHead->getY ();
+                int xHead = pictureOfHead->getX ();
+                int yHead = pictureOfHead->getY ();
 
                 if ( pictureOfHead->isOnScreen() )
                 {
@@ -86,13 +85,12 @@ void Screen::refreshPicturesOfHeadAndHeels ()
         if ( headOnScreen && pictureOfHead != nilPointer )
                 addWidget( pictureOfHead );
 
-        int xHeels = 0, yHeels = 0;
         bool heelsOnScreen = false;
 
         if ( pictureOfHeels != nilPointer )
         {
-                xHeels = pictureOfHeels->getX ();
-                yHeels = pictureOfHeels->getY ();
+                int xHeels = pictureOfHeels->getX ();
+                int yHeels = pictureOfHeels->getY ();
 
                 if ( pictureOfHeels->isOnScreen() )
                 {

@@ -25,11 +25,10 @@ template < typename _Iterator1, typename _Iterator2 >
 inline size_t incUtf8StringIterator( _Iterator1 & it, const _Iterator2 & last )
 {
         if ( it == last ) return 0;
-        unsigned char c;
         it ++;
         size_t inc = 1;
         for ( ; last != it; ++inc ) {
-                c = *it;
+                unsigned char c = *it;
                 if ( ! ( c & 0x80 ) || ( ( c & 0xC0 ) == 0xC0 ) ) break;
                 it++ ;
         }

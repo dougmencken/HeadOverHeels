@@ -31,13 +31,14 @@ FreeItem* Door::getLeftJamb()
 {
         if ( leftJamb == nilPointer )
         {
-                int x( 0 ), y( 0 );
-                int tileSize = mediator->getRoom()->getSizeOfOneTile();
-
                 ItemData* leftJambData = itemDataManager->findDataByLabel( labelOfDoor + "~leftjamb" );
+
+                int tileSize = mediator->getRoom()->getSizeOfOneTile();
 
                 if ( leftJambData != nilPointer )
                 {
+                        int x = 0 ; int y = 0 ;
+
                         switch ( Way( getWhereIsDoor() ).getIntegerOfWay() )
                         {
                                 case North:
@@ -194,7 +195,7 @@ FreeItem* Door::getLintel()
         return lintel;
 }
 
-bool Door::isUnderDoor( int x, int y, int z )
+bool Door::isUnderDoor( int x, int y, int z ) const
 {
         bool result = false;
 

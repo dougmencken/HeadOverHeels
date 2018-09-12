@@ -36,19 +36,19 @@ PlayerHead::PlayerHead( Item* item, const std::string& behavior ) :
         jumpIndex = 0;
 
         // fotogramas de caída
-        fallFrames[ North ] = 6;
-        fallFrames[ South ] = 12;
-        fallFrames[ East ] = 9;
-        fallFrames[ West ] = 13;
+        fallFrames[ "north" ] = 6;
+        fallFrames[ "south" ] = 12;
+        fallFrames[ "east" ] = 9;
+        fallFrames[ "west" ] = 13;
 
         // fotograma en blanco
         nullFrame = 14;
 
         // fotogramas de parpadeo
-        blinkFrames[ North ] = 6;
-        blinkFrames[ South ] = 15;
-        blinkFrames[ East ] = 9;
-        blinkFrames[ West ] = 16;
+        blinkFrames[ "north" ] = 6;
+        blinkFrames[ "south" ] = 15;
+        blinkFrames[ "east" ] = 9;
+        blinkFrames[ "west" ] = 16;
 
         labelOfTransitionViaTeleport = "bubbles";
         labelOfFireFromHooter = "bubbles";
@@ -399,7 +399,7 @@ void PlayerHead::blink( PlayerItem* playerItem )
 
         if( ( timeValue > 0.0 && timeValue < 0.050 ) || ( timeValue > 0.400 && timeValue < 0.450 ) )
         {
-                playerItem->changeFrame( blinkFrames[ playerItem->getOrientation().getIntegerOfWay () ] );
+                playerItem->changeFrame( blinkFrames[ playerItem->getOrientation().toString () ] );
         }
         else if( ( timeValue > 0.250 && timeValue < 0.300 ) || ( timeValue > 0.750 && timeValue < 0.800 ) )
         {

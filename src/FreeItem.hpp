@@ -90,41 +90,6 @@ public:
          */
         void requestMask () ;
 
-        /**
-         * Enmascara la imagen del elemento con la imagen de otro elemento
-         * @param x Coordenada X de pantalla donde está situada la imagen del elemento que servirá de máscara
-         * @param y Coordenada Y de pantalla donde está situada la imagen del elemento que servirá de máscara
-         */
-        void maskImage ( int x, int y, allegro::Pict* image ) ;
-
-protected:
-
-        WhichMask myMask ;
-
-        /**
-         * Degree of item’s transparency in percentage 0 to 100
-         */
-        unsigned char transparency ;
-
-        /**
-         * Whether this item detects collisions
-         */
-        bool collisionDetector ;
-
-        /**
-         * Whether item is inactive
-         */
-        bool frozen ;
-
-        /**
-         * Current frame of this item shaded but not masked yet
-         */
-        allegro::Pict * shadedNonmaskedImage ;
-
-        bool partOfDoor ;
-
-public:
-
         void setWhichMask ( const WhichMask& mask ) {  myMask = mask ;  }
 
         WhichMask whichMask () const {  return myMask ;  }
@@ -156,6 +121,55 @@ public:
         bool isPartOfDoor () const {  return partOfDoor ;  }
 
         void setPartOfDoor ( bool isPart ) {  partOfDoor = isPart ;  }
+
+        /**
+         * Mask image of item behind image of another item
+         * @param x X coordinate where image of masking item is
+         * @param y Y coordinate where image of masking item is
+         */
+        static void maskItemBehindImage ( FreeItem * item, allegro::Pict * upwardImage, int x, int y ) ;
+
+protected:
+
+        /**
+         * Check if item hits a door, when yes then move it
+         * @param way door mentioned by its position in room
+         * @param name unique name of item from stack of collisions
+         */
+        bool isCollidingWithDoor ( const std::string& way, const std::string& name, const int previousX, const int previousY ) ;
+
+        /**
+         * See if item is not under that door or that door doesn’t exist
+         * @param way door mentioned by its position in room
+         * @return true if item is under that door
+         */
+        bool isNotUnderDoorAt ( const std::string& way ) ;
+
+        bool isUnderSomeDoor () ;
+
+        WhichMask myMask ;
+
+        /**
+         * Degree of item’s transparency in percentage 0 to 100
+         */
+        unsigned char transparency ;
+
+        /**
+         * Whether this item detects collisions
+         */
+        bool collisionDetector ;
+
+        /**
+         * Whether item is inactive
+         */
+        bool frozen ;
+
+        /**
+         * Current frame of this item shaded but not masked yet
+         */
+        allegro::Pict * shadedNonmaskedImage ;
+
+        bool partOfDoor ;
 
 };
 

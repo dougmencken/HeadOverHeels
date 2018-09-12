@@ -88,7 +88,7 @@ private:
 
 public:
 
-        bool isUnderDoor ( int x, int y, int z ) ;
+        bool isUnderDoor ( int x, int y, int z ) const ;
 
         std::string getWhereIsDoor () const {  return positionOfDoor ;  }
 

@@ -18,6 +18,7 @@ namespace isomot
 
 Hunter::Hunter( Item * item, const std::string & behavior ) :
         Behavior( item, behavior )
+        , guardData( nilPointer )
 {
         speedTimer = new Timer();
         speedTimer->go ();

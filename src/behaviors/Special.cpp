@@ -17,6 +17,7 @@ namespace isomot
 
 Special::Special( Item * item, const std::string & behavior ) :
         Behavior( item, behavior )
+        , bubblesData( nilPointer )
 {
         disappearanceTimer = new Timer();
         speedTimer = new Timer();
@@ -44,12 +45,13 @@ bool Special::update ()
                         // is there an item above this one
                         if ( ! item->canAdvanceTo( 0, 0, 1 ) )
                         {
-                                bool takeIt = true;
                                 Item* itemAbove = mediator->findCollisionPop( );
 
                                 // is that above item a player which may take this bonus
                                 if ( dynamic_cast< PlayerItem * >( itemAbove ) && mayTake( itemAbove ) )
                                 {
+                                        bool takeIt = true;
+
                                         // get collisions of player item with items below it
                                         itemAbove->canAdvanceTo( 0, 0, -1 );
 

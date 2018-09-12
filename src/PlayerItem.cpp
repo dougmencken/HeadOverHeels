@@ -6,7 +6,6 @@
 #include "Mediator.hpp"
 #include "Room.hpp"
 #include "GameManager.hpp"
-#include "SoundManager.hpp"
 #include "UserControlled.hpp"
 
 #include <algorithm> // std::find
@@ -152,7 +151,9 @@ bool PlayerItem::addToPosition( int x, int y, int z )
                                 getBehavior()->getActivityOfItem() == AutoMoveEast ||
                                 getBehavior()->getActivityOfItem() == AutoMoveWest ;
 
-        if ( ! this->isActiveCharacter() && ! itAutomoves )
+        bool itFallsUnderDoor = ( x == 0 && y == 0 && z < 0 && this->isUnderSomeDoor () );
+
+        if ( ! this->isActiveCharacter() && ! itAutomoves && ! itFallsUnderDoor )
         {
                 return FreeItem::addToPosition( x, y, z );
         }
@@ -250,25 +251,25 @@ bool PlayerItem::addToPosition( int x, int y, int z )
 
         // look for collision with real wall, one which limits the room
         if ( this->x < mediator->getRoom()->getLimitAt( "north" )
-                        && isNotUnderDoor( "north" ) && isNotUnderDoor( "northeast" ) && isNotUnderDoor( "northwest" ) )
+                        && isNotUnderDoorAt( "north" ) && isNotUnderDoorAt( "northeast" ) && isNotUnderDoorAt( "northwest" ) )
         {
-                mediator->pushCollision( "some segment of north wall" );
+                mediator->pushCollision( "some segment of wall at north" );
         }
         else if ( this->x + static_cast< int >( getDataOfItem()->getWidthX() ) > mediator->getRoom()->getLimitAt( "south" )
-                        && isNotUnderDoor( "south" ) && isNotUnderDoor( "southeast" ) && isNotUnderDoor( "southwest" ) )
+                        && isNotUnderDoorAt( "south" ) && isNotUnderDoorAt( "southeast" ) && isNotUnderDoorAt( "southwest" ) )
         {
-                mediator->pushCollision( "some segment of south wall" );
+                mediator->pushCollision( "some segment of wall at south" );
         }
 
         if ( this->y - static_cast< int >( getDataOfItem()->getWidthY() ) + 1 < mediator->getRoom()->getLimitAt( "east" )
-                        && isNotUnderDoor( "east" ) && isNotUnderDoor( "eastnorth" ) && isNotUnderDoor( "eastsouth" ) )
+                        && isNotUnderDoorAt( "east" ) && isNotUnderDoorAt( "eastnorth" ) && isNotUnderDoorAt( "eastsouth" ) )
         {
-                mediator->pushCollision( "some segment of east wall" );
+                mediator->pushCollision( "some segment of wall at east" );
         }
         else if ( this->y >= mediator->getRoom()->getLimitAt( "west" )
-                        && isNotUnderDoor( "west" ) && isNotUnderDoor( "westnorth" ) && isNotUnderDoor( "westsouth" ) )
+                        && isNotUnderDoorAt( "west" ) && isNotUnderDoorAt( "westnorth" ) && isNotUnderDoorAt( "westsouth" ) )
         {
-                mediator->pushCollision( "some segment of west wall" );
+                mediator->pushCollision( "some segment of wall at west" );
         }
 
         collisionFound = ! mediator->isStackOfCollisionsEmpty ();
@@ -352,108 +353,6 @@ bool PlayerItem::addToPosition( int x, int y, int z )
         return ! collisionFound ;
 }
 
-bool PlayerItem::isCollidingWithDoor( const std::string& way, const std::string& name, const int previousX, const int previousY )
-{
-        Door* door = mediator->getRoom()->getDoorAt( way );
-        int oldX = this->x;
-        int oldY = this->y;
-
-        switch ( Way( way ).getIntegerOfWay() )
-        {
-                case North:
-                case Northeast:
-                case Northwest:
-                case South:
-                case Southeast:
-                case Southwest:
-                        // for rooms with north or south door
-                        if ( door )
-                        {
-                                // move player right when player hits left jamb
-                                if ( door->getLeftJamb()->getUniqueName() == name && this->y <= door->getLeftJamb()->getY() )
-                                {
-                                        this->y--;
-                                        this->x = previousX;
-                                }
-                                // move player left when player collides with right jamb
-                                else if ( door->getRightJamb()->getUniqueName() == name &&
-                                                this->y - static_cast< int >( getDataOfItem()->getWidthY() )
-                                                        >= door->getRightJamb()->getY() - static_cast< int >( door->getRightJamb()->getWidthY() ) )
-                                {
-                                        this->y++;
-                                        this->x = previousX;
-                                }
-                        }
-                        break;
-
-                case East:
-                case Eastnorth:
-                case Eastsouth:
-                case West:
-                case Westnorth:
-                case Westsouth:
-                        // for rooms with east or west door
-                        if ( door )
-                        {
-                                // move player right when player hits left jamb
-                                if ( door->getLeftJamb()->getUniqueName() == name && this->x >= door->getLeftJamb()->getX() )
-                                {
-                                        this->x++;
-                                        this->y = previousY;
-                                }
-                                // move player left when player collides with right jamb
-                                else if ( door->getRightJamb()->getUniqueName() == name &&
-                                                this->x - static_cast< int >( getDataOfItem()->getWidthX() )
-                                                        <= door->getRightJamb()->getX() + static_cast< int >( door->getRightJamb()->getWidthX() ) )
-                                {
-                                        this->x--;
-                                        this->y = previousY;
-                                }
-                        }
-                        break;
-
-                default:
-                        ;
-        }
-
-        if ( oldX != this->x || oldY != this->y )
-        {
-                isomot::SoundManager::getInstance()->play ( "door", isomot::Collision, /* loop */ false );
-                return true ;
-        }
-
-        return false ;
-}
-
-bool PlayerItem::isNotUnderDoor( const std::string& way )
-{
-        bool result = false;
-        Door* door = mediator->getRoom()->getDoorAt( way );
-
-        switch ( Way( way ).getIntegerOfWay () )
-        {
-                case North:
-                case Northeast:
-                case Northwest:
-                case East:
-                case Eastnorth:
-                case Eastsouth:
-                case South:
-                case Southeast:
-                case Southwest:
-                case West:
-                case Westnorth:
-                case Westsouth:
-                        result = ( ! door || ( door && ! door->isUnderDoor( this->x, this->y, this->z ) ) );
-                        break;
-
-                default:
-                        ;
-        }
-
-        return result;
-}
-
 bool PlayerItem::isCollidingWithLimitOfRoom( const std::string& onWhichWay )
 {
         bool result = false;
@@ -468,7 +367,7 @@ bool PlayerItem::isCollidingWithLimitOfRoom( const std::string& onWhichWay )
 
                 case Northeast:
                 case Northwest:
-                        result = ( door &&
+                        result = ( door != nilPointer &&
                                         this->x < mediator->getRoom()->getLimitAt( onWhichWay ) &&
                                         door->isUnderDoor( this->x, this->y, this->z ) );
                         break;
@@ -480,7 +379,7 @@ bool PlayerItem::isCollidingWithLimitOfRoom( const std::string& onWhichWay )
 
                 case Southeast:
                 case Southwest:
-                        result = ( door &&
+                        result = ( door != nilPointer &&
                                         this->x + static_cast< int >( getDataOfItem()->getWidthX() ) > mediator->getRoom()->getLimitAt( onWhichWay ) &&
                                         door->isUnderDoor( this->x, this->y, this->z ) );
                         break;
@@ -491,7 +390,7 @@ bool PlayerItem::isCollidingWithLimitOfRoom( const std::string& onWhichWay )
 
                 case Eastnorth:
                 case Eastsouth:
-                        result = ( door &&
+                        result = ( door != nilPointer &&
                                         this->y - static_cast< int >( getDataOfItem()->getWidthY() ) + 1 < mediator->getRoom()->getLimitAt( onWhichWay ) &&
                                         door->isUnderDoor( this->x, this->y, this->z ) );
                         break;
@@ -503,7 +402,7 @@ bool PlayerItem::isCollidingWithLimitOfRoom( const std::string& onWhichWay )
 
                 case Westnorth:
                 case Westsouth:
-                        result = ( door &&
+                        result = ( door != nilPointer &&
                                         this->y + static_cast< int >( getDataOfItem()->getWidthY() ) > mediator->getRoom()->getLimitAt( onWhichWay ) &&
                                         door->isUnderDoor( this->x, this->y, this->z ) );
                         break;

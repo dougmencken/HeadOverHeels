@@ -12,6 +12,7 @@
 #define UserControlled_hpp_
 
 #include <vector>
+#include <map>
 
 #include "Behavior.hpp"
 #include "Timer.hpp"
@@ -57,8 +58,6 @@ public:
         virtual void changeActivityOfItem ( const ActivityOfItem& activityOf, Item* sender = 0 ) ;
 
 protected:
-
-        static const size_t howManyBlinkFrames = 4 ;
 
        /**
         * Character waits, game shows first frame of character’s animation for current orientation
@@ -185,7 +184,7 @@ protected:
        /**
         * Frames of falling, one for each of north south west east
         */
-        unsigned int fallFrames[ 4 ] ;
+        std::map < std::string, unsigned int > fallFrames ;
 
        /**
         * Blank frame, used during teleportation

@@ -34,10 +34,9 @@ void ShowAuthors::doAction ()
         Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this );
         if ( screen->countWidgets() == 0 )
         {
-                LanguageText* langString = nilPointer;
                 LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
+                LanguageText* langString = languageManager->findLanguageStringForAlias( "credits-text" );
 
-                langString = languageManager->findLanguageStringForAlias( "credits-text" );
                 this->initialY = heightOfWhereToDraw;
                 this->linesOfCredits = new TextField( isomot::ScreenWidth(), "center" );
                 this->linesOfCredits->moveTo( 0, initialY );
@@ -169,6 +168,5 @@ void ShowAuthors::doAction ()
         if ( widgetForLoadingScreen != nilPointer )
         {
                 screen->removeWidget( widgetForLoadingScreen );
-                widgetForLoadingScreen = nilPointer;
         }
 }

@@ -181,7 +181,7 @@ void UserControlled::fall( PlayerItem * player )
                         // change character’s image to frame of falling when there’s no collision yet
                         if ( player->canAdvanceTo( 0, 0, -1 ) )
                         {
-                                player->changeFrame( fallFrames[ player->getOrientation().getIntegerOfWay () ] );
+                                player->changeFrame( fallFrames[ player->getOrientation().toString () ] );
                         }
                 }
                 else if ( activity != MeetMortalItem || ( activity == MeetMortalItem && player->hasShield() ) )
@@ -301,7 +301,7 @@ void UserControlled::glide( PlayerItem * player )
                 MoveKindOfActivity::getInstance()->move( this, &subactivity, false );
 
                 // pick picture of falling
-                player->changeFrame( fallFrames[ player->getOrientation().getIntegerOfWay() ] );
+                player->changeFrame( fallFrames[ player->getOrientation().toString() ] );
 
                 speedTimer->reset();
         }

@@ -12,6 +12,7 @@ namespace isomot
 
 FinalBall::FinalBall( Item * item, const std::string & behavior ) :
         Behavior( item, behavior )
+        , bubblesData( nilPointer )
 {
         speedTimer = new Timer();
         speedTimer->go();

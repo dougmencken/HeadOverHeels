@@ -24,6 +24,7 @@ namespace isomot
 
 Mediator::Mediator( Room* room )
         : room( room )
+        , threadRunning( false )
         , gridItemsSorting( false )
         , freeItemsSorting( false )
         , switchInRoomIsOn( false )
@@ -649,7 +650,7 @@ void Mediator::maskFreeItem( FreeItem* freeItem )
                                                         " behind \"" << itemToMaskWith->getUniqueName() << "\" at " << positionOfItem.str() << std::endl ;
                                 # endif
 
-                                        freeItem->maskImage( itemToMaskWith->getOffsetX(), itemToMaskWith->getOffsetY(), itemToMaskWith->getRawImage() );
+                                        FreeItem::maskItemBehindImage( freeItem, itemToMaskWith->getRawImage(), itemToMaskWith->getOffsetX(), itemToMaskWith->getOffsetY() );
                                 }
                                 // itemToMaskWith is behind freeItem
                                 else
@@ -664,7 +665,7 @@ void Mediator::maskFreeItem( FreeItem* freeItem )
                                                         " behind \"" << freeItem->getUniqueName() << "\" at " << positionOfItem.str() << std::endl ;
                                 # endif
 
-                                        itemToMaskWith->maskImage( freeItem->getOffsetX(), freeItem->getOffsetY(), freeItem->getRawImage() );
+                                        FreeItem::maskItemBehindImage( itemToMaskWith, freeItem->getRawImage(), freeItem->getOffsetX(), freeItem->getOffsetY() );
                                 }
                         }
                 }
@@ -713,7 +714,7 @@ void Mediator::maskFreeItem( FreeItem* freeItem )
                                                                                 " behind \"" << gridItem->getUniqueName() << "\" at " << positionOfItem.str() << std::endl ;
                                                         # endif
 
-                                                                freeItem->maskImage( gridItem->getOffsetX(), gridItem->getOffsetY(), gridItem->getRawImage() );
+                                                                FreeItem::maskItemBehindImage( freeItem, gridItem->getRawImage(), gridItem->getOffsetX(), gridItem->getOffsetY() );
                                                         }
                                                 }
                                         }

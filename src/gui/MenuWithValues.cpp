@@ -149,7 +149,7 @@ std::string MenuWithValues::getValueOf( Label* option ) const
         return "";
 }
 
-void MenuWithValues::setValueOf( Label* option, std::string value )
+void MenuWithValues::setValueOf( Label* option, const std::string& value )
 {
         while ( listOfValues.size() < options.size() )
         {

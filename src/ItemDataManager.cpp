@@ -15,8 +15,8 @@ namespace isomot
 {
 
 ItemDataManager::ItemDataManager( const std::string& name )
+        : nameOfXMLFile( name )
 {
-        this->nameOfXMLFile = name;
 }
 
 ItemDataManager::~ItemDataManager()

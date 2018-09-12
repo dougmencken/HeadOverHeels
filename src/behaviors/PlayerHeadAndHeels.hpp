@@ -57,7 +57,7 @@ protected:
 
 protected:
 
-        int blinkFrames[ howManyBlinkFrames ] ;
+        std::map < std::string, unsigned int > blinkFrames ;
 
 };
 

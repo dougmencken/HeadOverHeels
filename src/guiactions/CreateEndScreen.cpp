@@ -67,10 +67,6 @@ void CreateEndScreen::doAction ()
         planets->moveTo( ( screenWidth - planets->getWidth() ) >> 1, labelsY + leading + leading );
         screen->addWidget( planets );
 
-        // range reached by player
-        unsigned int bounds[ ] = {  0, 8000, 20000, 30000, 55000, 84000  };
-        std::string ranges[ ] = {  "dummy", "novice", "spy", "master-spy", "hero", "emperor"  };
-
         if ( score == 0 )
         {
                 TextField* result = new TextField( screenWidth, "center" );
@@ -80,6 +76,10 @@ void CreateEndScreen::doAction ()
         }
         else
         {
+                // range reached by player
+                unsigned int bounds[ ] = {  0, 8000, 20000, 30000, 55000, 84000  };
+                std::string ranges[ ] = {  "dummy", "novice", "spy", "master-spy", "hero", "emperor"  };
+
                 for ( int i = 5; i >= 0; i-- )
                 {
                         if ( score > bounds[ i ] )

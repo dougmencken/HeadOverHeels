@@ -35,10 +35,10 @@ PlayerHeels::PlayerHeels( Item* item, const std::string& behavior ) :
         jumpIndex = 0;
 
         // fotogramas de caída
-        fallFrames[ North ] = 6;
-        fallFrames[ South ] = 0;
-        fallFrames[  East ] = 9;
-        fallFrames[  West ] = 3;
+        fallFrames[ "north" ] = 6;
+        fallFrames[ "south" ] = 0;
+        fallFrames[ "east" ] = 9;
+        fallFrames[ "west" ] = 3;
 
         // fotograma en blanco
         nullFrame = 12;

@@ -29,7 +29,7 @@ class AnimatedPictureWidget : public Widget
 
 public:
 
-        AnimatedPictureWidget( int x, int y, std::vector < allegro::Pict * > frames, double delay, std::string name ) ;
+        AnimatedPictureWidget( int x, int y, const std::vector < allegro::Pict * > & frames, double delay, const std::string& name ) ;
 
         virtual ~AnimatedPictureWidget( ) ;
 

@@ -36,19 +36,19 @@ PlayerHeadAndHeels::PlayerHeadAndHeels( Item * item, const std::string & behavio
         jumpIndex = 0;
 
         // fotogramas de caída
-        fallFrames[ North ] = 8;
-        fallFrames[ South ] = 16;
-        fallFrames[ East ] = 12;
-        fallFrames[ West ] = 17;
+        fallFrames[ "north" ] = 8;
+        fallFrames[ "south" ] = 16;
+        fallFrames[ "east" ] = 12;
+        fallFrames[ "west" ] = 17;
 
         // fotograma en blanco
         nullFrame = 20;
 
         // fotogramas de parpadeo
-        blinkFrames[ North ] = 8;
-        blinkFrames[ South ] = 18;
-        blinkFrames[ East ] = 12;
-        blinkFrames[ West ] = 19;
+        blinkFrames[ "north" ] = 8;
+        blinkFrames[ "south" ] = 18;
+        blinkFrames[ "east" ] = 12;
+        blinkFrames[ "west" ] = 19;
 
         labelOfTransitionViaTeleport = "double-bubbles";
         labelOfFireFromHooter = "bubbles";
@@ -449,7 +449,7 @@ void PlayerHeadAndHeels::blink( PlayerItem * playerItem )
         // close the eyes
         if ( ( timeValue > 0.0 && timeValue < 0.050 ) || ( timeValue > 0.400 && timeValue < 0.450 ) )
         {
-                playerItem->changeFrame( blinkFrames[ playerItem->getOrientation().getIntegerOfWay () ] );
+                playerItem->changeFrame( blinkFrames[ playerItem->getOrientation().toString () ] );
         }
         // open the eyes
         else if ( ( timeValue > 0.250 && timeValue < 0.300 ) || ( timeValue > 0.750 && timeValue < 0.800 ) )
