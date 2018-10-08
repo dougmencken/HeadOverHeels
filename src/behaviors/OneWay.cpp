@@ -43,14 +43,14 @@ bool OneWay::update ()
 
         switch ( activity )
         {
-                case Wait:
+                case Activity::Wait:
                         letsMove();
                         break;
 
-                case MoveNorth:
-                case MoveSouth:
-                case MoveEast:
-                case MoveWest:
+                case Activity::MoveNorth:
+                case Activity::MoveSouth:
+                case Activity::MoveEast:
+                case Activity::MoveWest:
                         if ( ! freeItem->isFrozen() )
                         {
                                 if ( speedTimer->getValue() > freeItem->getSpeed() )
@@ -61,7 +61,7 @@ bool OneWay::update ()
                                                 turnRound();
 
                                                 // play sound of colliding
-                                                SoundManager::getInstance()->play( freeItem->getLabel(), Collision );
+                                                SoundManager::getInstance()->play( freeItem->getLabel(), Activity::Collision );
                                         }
 
                                         speedTimer->reset();
@@ -71,14 +71,14 @@ bool OneWay::update ()
                         }
                         break;
 
-                case DisplaceNorth:
-                case DisplaceSouth:
-                case DisplaceEast:
-                case DisplaceWest:
-                case DisplaceNortheast:
-                case DisplaceSoutheast:
-                case DisplaceSouthwest:
-                case DisplaceNorthwest:
+                case Activity::DisplaceNorth:
+                case Activity::DisplaceSouth:
+                case Activity::DisplaceEast:
+                case Activity::DisplaceWest:
+                case Activity::DisplaceNortheast:
+                case Activity::DisplaceSoutheast:
+                case Activity::DisplaceSouthwest:
+                case Activity::DisplaceNorthwest:
                         if ( ! this->isFlying )
                         {
                                 // emit sound of displacing
@@ -87,19 +87,19 @@ bool OneWay::update ()
                                 // displace this item by other one
                                 DisplaceKindOfActivity::getInstance()->displace( this, &activity, true );
 
-                                activity = Wait;
+                                activity = Activity::Wait;
 
                                 // preserve inactivity for frozen item
                                 if ( freeItem->isFrozen() )
-                                        activity = Freeze;
+                                        activity = Activity::Freeze;
                         }
                         else
                         {
-                                activity = Wait;
+                                activity = Activity::Wait;
                         }
                         break;
 
-                case Fall:
+                case Activity::Fall:
                         if ( ! this->isFlying )
                         {
                                 // look for reaching floor in a room without floor
@@ -115,7 +115,7 @@ bool OneWay::update ()
                                         {
                                                 // emit sound of falling down
                                                 SoundManager::getInstance()->play( freeItem->getLabel(), activity );
-                                                activity = Wait;
+                                                activity = Activity::Wait;
                                         }
 
                                         fallTimer->reset();
@@ -123,17 +123,17 @@ bool OneWay::update ()
                         }
                         else
                         {
-                                activity = Wait;
+                                activity = Activity::Wait;
                         }
                         break;
 
-                case Freeze:
+                case Activity::Freeze:
                         freeItem->setFrozen( true );
                         break;
 
-                case WakeUp:
+                case Activity::WakeUp:
                         freeItem->setFrozen( false );
-                        activity = Wait;
+                        activity = Activity::Wait;
                         break;
 
                 default:
@@ -147,20 +147,20 @@ void OneWay::letsMove()
 {
         switch ( this->item->getOrientation().getIntegerOfWay () )
         {
-                case North:
-                        activity = MoveNorth;
+                case Way::North:
+                        activity = Activity::MoveNorth;
                         break;
 
-                case South:
-                        activity = MoveSouth;
+                case Way::South:
+                        activity = Activity::MoveSouth;
                         break;
 
-                case East:
-                        activity = MoveEast;
+                case Way::East:
+                        activity = Activity::MoveEast;
                         break;
 
-                case West:
-                        activity = MoveWest;
+                case Way::West:
+                        activity = Activity::MoveWest;
                         break;
 
                 default:
@@ -172,24 +172,24 @@ void OneWay::turnRound()
 {
         switch ( this->item->getOrientation().getIntegerOfWay () )
         {
-                case North:
-                        activity = MoveSouth;
-                        this->item->changeOrientation( South );
+                case Way::North:
+                        activity = Activity::MoveSouth;
+                        this->item->changeOrientation( Way::South );
                         break;
 
-                case South:
-                        activity = MoveNorth;
-                        this->item->changeOrientation( North );
+                case Way::South:
+                        activity = Activity::MoveNorth;
+                        this->item->changeOrientation( Way::North );
                         break;
 
-                case East:
-                        activity = MoveWest;
-                        this->item->changeOrientation( West );
+                case Way::East:
+                        activity = Activity::MoveWest;
+                        this->item->changeOrientation( Way::West );
                         break;
 
-                case West:
-                        activity = MoveEast;
-                        this->item->changeOrientation( East );
+                case Way::West:
+                        activity = Activity::MoveEast;
+                        this->item->changeOrientation( Way::East );
                         break;
 
                 default:

@@ -11,7 +11,8 @@
 #ifndef Isomot_hpp_
 #define Isomot_hpp_
 
-#include <WrappersAllegro.hpp>
+#include "WrappersAllegro.hpp"
+#include "Picture.hpp"
 
 #include <list>
 #include <string>
@@ -28,6 +29,7 @@ namespace isomot
 
 class ItemDataManager ;
 class MapManager ;
+class Room ;
 
 
 /**
@@ -62,12 +64,15 @@ public:
         void reset () ;
 
         /**
-         * Actualiza el motor isométrico. La actualización se realiza en dos subprocesos diferenciados:
-         * Por un lado se actualizan todas las maquinas de estados de los elementos del juegos y por otro
-         * lado se dibuja la sala activa
-         * @return La imagen donde se ha dibujado la vista isométrica
+         * Update isometric engine
          */
-        allegro::Pict* update () ;
+        Picture * update () ;
+
+        MapManager * getMapManager () const {  return mapManager ;  }
+
+        static void drawMiniatureOfRoom ( Room * room, MapManager * mapManager, const Picture * where, const unsigned int sizeOfTile ) ;
+
+        static void fillIsoTile ( const allegro::Pict & where, int x0, int y0, int tileX, int tileY, const unsigned int sizeOfTile, const Color & color ) ;
 
 private:
 
@@ -81,24 +86,16 @@ private:
 
         void updateFinalRoom () ;
 
-private:
-
         /**
          * Where to draw isometric view
          */
-        allegro::Pict * view ;
+        Picture * view ;
 
         MapManager * mapManager ;
 
         Timer * finalRoomTimer ;
 
         bool finalRoomBuilt ;
-
-public:
-
-        static void fillIsoTile ( allegro::Pict * where, int x0, int y0, int tileX, int tileY, unsigned int sizeOfTile, const Color * color ) ;
-
-        MapManager * getMapManager () const {  return mapManager ;  }
 
 };
 

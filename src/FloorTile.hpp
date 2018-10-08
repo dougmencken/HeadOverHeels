@@ -17,6 +17,7 @@
 #include "Drawable.hpp"
 #include "Mediated.hpp"
 #include "Shady.hpp"
+#include "Picture.hpp"
 
 
 namespace isomot
@@ -32,12 +33,11 @@ class FloorTile : public Drawable, public Mediated, public Shady
 public:
 
        /**
-        * Constructor
         * @param cellX X coordinate on grid
         * @param cellY Y coordinate on grid
         * @param image Graphics of tile
         */
-        FloorTile( int cellX, int cellY, allegro::Pict* image ) ;
+        FloorTile( int cellX, int cellY, Picture * image ) ;
 
         virtual ~FloorTile( ) ;
 
@@ -46,7 +46,7 @@ public:
          */
         void calculateOffset () ;
 
-        void draw ( allegro::Pict* where ) ;
+        void draw ( const allegro::Pict& where ) ;
 
 private:
 
@@ -65,12 +65,12 @@ private:
         /**
          * Picture of tile
          */
-        allegro::Pict * rawImage ;
+        Picture * rawImage ;
 
         /**
          * Picture of shaded tile
          */
-        allegro::Pict * shadyImage ;
+        Picture * shadyImage ;
 
 public:
 
@@ -89,11 +89,11 @@ public:
 
         int getOffsetY () const {  return offset.second ;  }
 
-        allegro::Pict * getRawImage () const {  return rawImage ;  }
+        Picture * getRawImage () const {  return rawImage ;  }
 
-        allegro::Pict * getShadyImage () const {  return shadyImage ;  }
+        Picture * getShadyImage () const {  return shadyImage ;  }
 
-        void setShadyImage( allegro::Pict * newShady ) ;
+        void setShadyImage( Picture * newShady ) ;
 
         void freshShadyImage () ;
 

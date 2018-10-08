@@ -11,8 +11,9 @@
 #ifndef FallKindOfActivity_hpp_
 #define FallKindOfActivity_hpp_
 
+#include <string>
 #include <vector>
-#include "Ism.hpp"
+
 #include "KindOfActivity.hpp"
 
 

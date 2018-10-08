@@ -12,8 +12,8 @@
 #define JumpKindOfActivity_hpp_
 
 #include <vector>
+
 #include "KindOfActivity.hpp"
-#include "Ism.hpp"
 
 
 namespace isomot

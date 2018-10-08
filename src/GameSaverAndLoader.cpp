@@ -20,7 +20,7 @@ GameSaverAndLoader::GameSaverAndLoader( GameManager* gameManager, Isomot* isomot
         , xFish( 0 )
         , yFish( 0 )
         , zFish( 0 )
-        , catchFishWay( Nowhere )
+        , catchFishWay( Way::Nowhere )
         , gameManager( gameManager )
         , isomot( isomot )
 {

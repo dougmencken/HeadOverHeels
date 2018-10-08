@@ -41,33 +41,33 @@ FreeItem* Door::getLeftJamb()
 
                         switch ( Way( getWhereIsDoor() ).getIntegerOfWay() )
                         {
-                                case North:
-                                case Northeast:
-                                case Northwest:
+                                case Way::North:
+                                case Way::Northeast:
+                                case Way::Northwest:
                                         x = cellX * tileSize + leftJambData->getWidthX() - 2;
                                         y = ( cellY + 2 ) * tileSize - 2;
                                         leftLimit = y + leftJambData->getWidthY();
                                         break;
 
-                                case South:
-                                case Southeast:
-                                case Southwest:
+                                case Way::South:
+                                case Way::Southeast:
+                                case Way::Southwest:
                                         x = cellX * tileSize;
                                         y = ( cellY + 2 ) * tileSize - 2;
                                         leftLimit = y + leftJambData->getWidthY();
                                         break;
 
-                                case East:
-                                case Eastnorth:
-                                case Eastsouth:
+                                case Way::East:
+                                case Way::Eastnorth:
+                                case Way::Eastsouth:
                                         x = cellX * tileSize;
                                         y = ( cellY + 1 ) * tileSize - 1;
                                         leftLimit = x + leftJambData->getWidthX();
                                         break;
 
-                                case West:
-                                case Westnorth:
-                                case Westsouth:
+                                case Way::West:
+                                case Way::Westnorth:
+                                case Way::Westsouth:
                                         x = cellX * tileSize;
                                         y = ( cellY + 1 ) * tileSize - leftJambData->getWidthY() + 1;
                                         leftLimit = x + leftJambData->getWidthX();
@@ -77,7 +77,7 @@ FreeItem* Door::getLeftJamb()
                                         ;
                         }
 
-                        leftJamb = new FreeItem( leftJambData, x, y, Top, Nowhere );
+                        leftJamb = new FreeItem( leftJambData, x, y, Top, Way::Nowhere );
                         leftJamb->setUniqueName( leftJamb->getLabel() + " " + makeRandomString( 8 ) );
                 }
         }
@@ -98,33 +98,33 @@ FreeItem* Door::getRightJamb()
                 {
                         switch ( Way( getWhereIsDoor() ).getIntegerOfWay() )
                         {
-                                case North:
-                                case Northeast:
-                                case Northwest:
+                                case Way::North:
+                                case Way::Northeast:
+                                case Way::Northwest:
                                         x = cellX * tileSize + rightJambData->getWidthX() - 2;
                                         y = cellY * tileSize + rightJambData->getWidthY() - 1;
                                         rightLimit = y;
                                         break;
 
-                                case South:
-                                case Southeast:
-                                case Southwest:
+                                case Way::South:
+                                case Way::Southeast:
+                                case Way::Southwest:
                                         x = cellX * tileSize;
                                         y = cellY * tileSize + rightJambData->getWidthY() - 1;
                                         rightLimit = y;
                                         break;
 
-                                case East:
-                                case Eastnorth:
-                                case Eastsouth:
+                                case Way::East:
+                                case Way::Eastnorth:
+                                case Way::Eastsouth:
                                         x = ( cellX + 2 ) * tileSize - rightJambData->getWidthX() - 2;
                                         y = ( cellY + 1 ) * tileSize - 1;
                                         rightLimit = x;
                                         break;
 
-                                case West:
-                                case Westnorth:
-                                case Westsouth:
+                                case Way::West:
+                                case Way::Westnorth:
+                                case Way::Westsouth:
                                         x = ( cellX + 2 ) * tileSize - rightJambData->getWidthX() - 2;
                                         y = ( cellY + 1 ) * tileSize - rightJambData->getWidthY() + 1;
                                         rightLimit = x;
@@ -134,7 +134,7 @@ FreeItem* Door::getRightJamb()
                                         ;
                         }
 
-                        rightJamb = new FreeItem( rightJambData, x, y, Top, Nowhere );
+                        rightJamb = new FreeItem( rightJambData, x, y, Top, Way::Nowhere );
                         rightJamb->setUniqueName( rightJamb->getLabel() + " " + makeRandomString( 8 ) );
                 }
         }
@@ -155,30 +155,30 @@ FreeItem* Door::getLintel()
                 {
                         switch ( Way( getWhereIsDoor() ).getIntegerOfWay() )
                         {
-                                case North:
-                                case Northeast:
-                                case Northwest:
+                                case Way::North:
+                                case Way::Northeast:
+                                case Way::Northwest:
                                         x = cellX * tileSize + lintelData->getWidthX() - 2;
                                         y = ( cellY + 2 ) * tileSize - 1;
                                         break;
 
-                                case South:
-                                case Southeast:
-                                case Southwest:
+                                case Way::South:
+                                case Way::Southeast:
+                                case Way::Southwest:
                                         x = cellX * tileSize;
                                         y = ( cellY + 2 ) * tileSize - 1;
                                         break;
 
-                                case East:
-                                case Eastnorth:
-                                case Eastsouth:
+                                case Way::East:
+                                case Way::Eastnorth:
+                                case Way::Eastsouth:
                                         x = cellX * tileSize;
                                         y = ( cellY + 1 ) * tileSize - 1;
                                         break;
 
-                                case West:
-                                case Westnorth:
-                                case Westsouth:
+                                case Way::West:
+                                case Way::Westnorth:
+                                case Way::Westsouth:
                                         x = cellX * tileSize;
                                         y = ( cellY + 1 ) * tileSize - lintelData->getWidthY() + 1;
                                         break;
@@ -187,7 +187,7 @@ FreeItem* Door::getLintel()
                                         ;
                         }
 
-                        lintel = new FreeItem( lintelData, x, y, Top, Nowhere );
+                        lintel = new FreeItem( lintelData, x, y, Top, Way::Nowhere );
                         lintel->setUniqueName( lintel->getLabel() + " " + makeRandomString( 8 ) );
                 }
         }
@@ -203,21 +203,21 @@ bool Door::isUnderDoor( int x, int y, int z ) const
 
         switch ( Way( getWhereIsDoor() ).getIntegerOfWay() )
         {
-                case North:
-                case Northeast:
-                case Northwest:
-                case South:
-                case Southeast:
-                case Southwest:
+                case Way::North:
+                case Way::Northeast:
+                case Way::Northwest:
+                case Way::South:
+                case Way::Southeast:
+                case Way::Southwest:
                         result = ( y >= rightLimit && y <= leftLimit && z >= leftJamb->getZ () && z <= lintel->getZ () );
                         break;
 
-                case East:
-                case Eastnorth:
-                case Eastsouth:
-                case West:
-                case Westnorth:
-                case Westsouth:
+                case Way::East:
+                case Way::Eastnorth:
+                case Way::Eastsouth:
+                case Way::West:
+                case Way::Westnorth:
+                case Way::Westsouth:
                         result = ( x <= rightLimit && x >= leftLimit && z >= leftJamb->getZ () && z <= lintel->getZ () );
                         break;
 

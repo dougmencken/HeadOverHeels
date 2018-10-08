@@ -16,7 +16,7 @@ namespace isomot
 RemoteControl::RemoteControl( Item * item, const std::string & behavior ) :
         Behavior( item, behavior )
 {
-        activity = Wait;
+        activity = Activity::Wait;
         controlledItem = nilPointer;
 
         // move controlled one but not controller
@@ -51,13 +51,13 @@ bool RemoteControl::update ()
 
         switch ( activity )
         {
-                case Wait:
+                case Activity::Wait:
                         break;
 
-                case MoveNorth:
-                case MoveSouth:
-                case MoveEast:
-                case MoveWest:
+                case Activity::MoveNorth:
+                case Activity::MoveSouth:
+                case Activity::MoveEast:
+                case Activity::MoveWest:
                         if ( getNameOfBehavior() == "behavior of remotely controlled one" )
                         {
                                 if ( speedTimer->getValue() > freeItem->getSpeed() )
@@ -65,9 +65,9 @@ bool RemoteControl::update ()
                                         // move item
                                         MoveKindOfActivity::getInstance()->move( this, &activity, true );
 
-                                        if ( activity != Fall )
+                                        if ( activity != Activity::Fall )
                                         {
-                                                activity = Wait;
+                                                activity = Activity::Wait;
                                         }
 
                                         speedTimer->reset();
@@ -77,14 +77,14 @@ bool RemoteControl::update ()
                         }
                         break;
 
-                case DisplaceNorth:
-                case DisplaceSouth:
-                case DisplaceEast:
-                case DisplaceWest:
-                case DisplaceNortheast:
-                case DisplaceNorthwest:
-                case DisplaceSoutheast:
-                case DisplaceSouthwest:
+                case Activity::DisplaceNorth:
+                case Activity::DisplaceSouth:
+                case Activity::DisplaceEast:
+                case Activity::DisplaceWest:
+                case Activity::DisplaceNortheast:
+                case Activity::DisplaceNorthwest:
+                case Activity::DisplaceSoutheast:
+                case Activity::DisplaceSouthwest:
                         if ( getNameOfBehavior() == "behavior of remotely controlled one" )
                         {
                                 if ( speedTimer->getValue() > freeItem->getSpeed() )
@@ -97,9 +97,9 @@ bool RemoteControl::update ()
 
                                         DisplaceKindOfActivity::getInstance()->displace( this, &activity, true );
 
-                                        if ( activity != Fall )
+                                        if ( activity != Activity::Fall )
                                         {
-                                                activity = Wait;
+                                                activity = Activity::Wait;
                                         }
 
                                         speedTimer->reset();
@@ -109,28 +109,29 @@ bool RemoteControl::update ()
                         }
 
                         // controller changes movement of controlled item
-                        if ( activity == DisplaceNorth || activity == DisplaceSouth || activity == DisplaceEast || activity == DisplaceWest )
+                        if ( activity == Activity::DisplaceNorth || activity == Activity::DisplaceSouth ||
+                                activity == Activity::DisplaceEast || activity == Activity::DisplaceWest )
                         {
                                 if ( getNameOfBehavior() == "behavior of remote control" )
                                 {
-                                        ActivityOfItem motionActivity = Wait;
+                                        ActivityOfItem motionActivity = Activity::Wait;
 
                                         switch ( activity )
                                         {
-                                                case DisplaceNorth:
-                                                        motionActivity = MoveNorth;
+                                                case Activity::DisplaceNorth:
+                                                        motionActivity = Activity::MoveNorth;
                                                         break;
 
-                                                case DisplaceSouth:
-                                                        motionActivity = MoveSouth;
+                                                case Activity::DisplaceSouth:
+                                                        motionActivity = Activity::MoveSouth;
                                                         break;
 
-                                                case DisplaceEast:
-                                                        motionActivity = MoveEast;
+                                                case Activity::DisplaceEast:
+                                                        motionActivity = Activity::MoveEast;
                                                         break;
 
-                                                case DisplaceWest:
-                                                        motionActivity = MoveWest;
+                                                case Activity::DisplaceWest:
+                                                        motionActivity = Activity::MoveWest;
                                                         break;
 
                                                 default:
@@ -138,12 +139,12 @@ bool RemoteControl::update ()
                                         }
 
                                         dynamic_cast< RemoteControl * >( controlledItem->getBehavior() )->changeActivityOfItem( motionActivity );
-                                        activity = Wait;
+                                        activity = Activity::Wait;
                                 }
                         }
                         break;
 
-                case Fall:
+                case Activity::Fall:
                         // look for reaching floor in a room without floor
                         if ( freeItem->getZ() == 0 && freeItem->getMediator()->getRoom()->getKindOfFloor() == "none" )
                         {
@@ -157,7 +158,7 @@ bool RemoteControl::update ()
                                 {
                                         // play sound of falling down
                                         SoundManager::getInstance()->play( freeItem->getLabel(), activity );
-                                        activity = Wait;
+                                        activity = Activity::Wait;
                                 }
 
                                 fallTimer->reset();

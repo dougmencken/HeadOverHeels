@@ -216,13 +216,13 @@
     <properties font="big" color="yellow">
       <string>udnævner dig til</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>Kære ven, på denne måde satte vore to</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>to helte en stopper for Kejseren</string>
     </properties>
-    <properties font="regular" color="multicolor">
+    <properties font="plain" color="multicolor">
       <string>Af Blacktooths tyranni</string>
     </properties>
   </text>

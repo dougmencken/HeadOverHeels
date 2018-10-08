@@ -207,16 +207,16 @@
     <properties font="big" color="cyan">
       <string>El pueblu allabate y pregona'l to</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>heroísmu. Y ansí foi, queríu</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>collaciu, como los nuesos dos héroes</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>finaron dafechu cola tiranía del</string>
     </properties>
-    <properties font="regular" color="multicolor">
+    <properties font="plain" color="multicolor">
       <string>Emperaor Blacktooth</string>
     </properties>
   </text>

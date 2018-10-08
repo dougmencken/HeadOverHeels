@@ -31,11 +31,10 @@ class CreateMenuOfGraphicSets : public Action
 public:
 
         /**
-         * Constructor
          * @param picture Image where to draw
          * @param previous Instance of action to do on escape
          */
-        CreateMenuOfGraphicSets( allegro::Pict * picture, Action * previous ) ;
+        CreateMenuOfGraphicSets( Picture * picture, Action * previous ) ;
 
         virtual ~CreateMenuOfGraphicSets( ) ;
 

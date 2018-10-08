@@ -27,12 +27,11 @@ class CreateCongratulationsScreen : public Action
 public:
 
         /**
-         * Constructor
          * @param picture Imagen donde se dibujará la interfaz gráfica
          * @param rooms Número de salas visitadas
          * @param planets Número de planetas liberados
          */
-        CreateCongratulationsScreen( allegro::Pict* picture, unsigned short rooms, unsigned short planets ) ;
+        CreateCongratulationsScreen( Picture * picture, unsigned short rooms, unsigned short planets ) ;
 
         virtual ~CreateCongratulationsScreen( ) ;
 

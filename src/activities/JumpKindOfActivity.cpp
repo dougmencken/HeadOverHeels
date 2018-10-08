@@ -37,7 +37,7 @@ JumpKindOfActivity::~JumpKindOfActivity( )
 bool JumpKindOfActivity::jump( Behavior* behavior, ActivityOfItem* activity, unsigned int jumpPhase, const std::vector< std::pair< int /* xy */, int /* z */ > >& jumpVector )
 {
         bool itemMoved = false;
-        ActivityOfItem displaceActivity = Wait;
+        ActivityOfItem displaceActivity = Activity::Wait;
         PlayerItem* playerItem = dynamic_cast< PlayerItem * >( behavior->getItem() );
         Mediator* mediator = playerItem->getMediator();
 
@@ -51,7 +51,7 @@ bool JumpKindOfActivity::jump( Behavior* behavior, ActivityOfItem* activity, uns
                 if ( deltaZ < 0 ) deltaZ = 0;
                 else deltaZ = 2;
 
-                *activity = Fall;
+                *activity = Activity::Fall;
         }
 
         // let’s move up
@@ -76,7 +76,7 @@ bool JumpKindOfActivity::jump( Behavior* behavior, ActivityOfItem* activity, uns
                                                 {
                                                         if ( ! GameManager::getInstance()->isImmuneToCollisionsWithMortalItems () )
                                                         {
-                                                                playerItem->getBehavior()->changeActivityOfItem( MeetMortalItem );
+                                                                playerItem->getBehavior()->changeActivityOfItem( Activity::MeetMortalItem );
                                                         }
                                                 }
                                                 else
@@ -101,24 +101,24 @@ bool JumpKindOfActivity::jump( Behavior* behavior, ActivityOfItem* activity, uns
 
         switch ( playerItem->getOrientation().getIntegerOfWay() )
         {
-                case North:
+                case Way::North:
                         itemMoved = playerItem->addToX( - deltaXY );
-                        displaceActivity = DisplaceNorth;
+                        displaceActivity = Activity::DisplaceNorth;
                         break;
 
-                case South:
+                case Way::South:
                         itemMoved = playerItem->addToX( deltaXY );
-                        displaceActivity = DisplaceSouth;
+                        displaceActivity = Activity::DisplaceSouth;
                         break;
 
-                case East:
+                case Way::East:
                         itemMoved = playerItem->addToY( - deltaXY );
-                        displaceActivity = DisplaceEast;
+                        displaceActivity = Activity::DisplaceEast;
                         break;
 
-                case West:
+                case Way::West:
                         itemMoved = playerItem->addToY( deltaXY );
-                        displaceActivity = DisplaceWest;
+                        displaceActivity = Activity::DisplaceWest;
                         break;
 
                 default:
@@ -140,7 +140,7 @@ bool JumpKindOfActivity::jump( Behavior* behavior, ActivityOfItem* activity, uns
         // end jump when it’s last phase
         if ( ( jumpPhase + 1 ) >= jumpVector.size() )
         {
-                *activity = Fall;
+                *activity = Activity::Fall;
         }
 
         return itemMoved ;
@@ -155,7 +155,7 @@ void JumpKindOfActivity::lift( FreeItem* sender, FreeItem* freeItem, int z )
                 if ( freeItem->getBehavior()->getNameOfBehavior () == "behavior of disappearance on touch" ||
                                 freeItem->getBehavior()->getNameOfBehavior () == "behavior of something special" )
                 {
-                        freeItem->getBehavior()->changeActivityOfItem( DisplaceUp, sender );
+                        freeItem->getBehavior()->changeActivityOfItem( Activity::DisplaceUp, sender );
                 }
                 // raise item when it’s not elevator
                 else if ( freeItem->getBehavior()->getNameOfBehavior () != "behavior of elevator" )

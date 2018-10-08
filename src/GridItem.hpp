@@ -14,6 +14,7 @@
 #include <WrappersAllegro.hpp>
 
 #include "Ism.hpp"
+#include "Picture.hpp"
 #include "Item.hpp"
 #include "Drawable.hpp"
 
@@ -50,11 +51,11 @@ public:
         /**
          * Draw this grid item
          */
-        void draw ( allegro::Pict * where ) ;
+        void draw ( const allegro::Pict & where ) ;
 
-        virtual void changeImage ( allegro::Pict * newImage ) ;
+        virtual void changeImage ( Picture * newImage ) ;
 
-        virtual void changeShadow ( allegro::Pict * newShadow ) ;
+        virtual void changeShadow ( Picture * newShadow ) ;
 
         virtual bool addToPosition ( int x, int y, int z ) ;
 

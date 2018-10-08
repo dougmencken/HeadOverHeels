@@ -40,20 +40,26 @@ public:
 
         virtual ~Menu( );
 
-        void draw ( allegro::Pict* where ) ;
+        virtual bool isMenu () {  return true ;  }
+
+        void draw ( const allegro::Pict& where ) ;
 
         void redraw () ;
 
-        void handleKey ( int key ) ;
+        Picture * getWhereToDraw () const {  return whereToDraw ;  }
+
+        void setWhereToDraw ( Picture * where ) {  whereToDraw = where ;  }
+
+        void handleKey ( const std::string& key ) ;
 
         /**
          * Add option to menu
          */
-        void addOption ( Label* label ) ;
+        void addOption ( Label * label ) ;
 
-        Label* getActiveOption () const {  return this->activeOption ;  }
+        Label * getActiveOption () const {  return this->activeOption ;  }
 
-        void setActiveOption ( Label* option ) ;
+        void setActiveOption ( Label * option ) ;
 
         /**
          * Make the first option active
@@ -82,6 +88,8 @@ protected:
 
         void refreshPictures () ;
 
+        Picture * whereToDraw ;
+
         /**
          * Options that make up the menu
          */
@@ -90,24 +98,22 @@ protected:
         /**
          * The chosen option
          */
-        Label* activeOption ;
-
-        allegro::Pict * whereToDraw ;
+        Label * activeOption ;
 
         /**
          * Image before each option of menu
          */
-        Picture* optionImage ;
+        Picture * optionImage ;
 
         /**
          * Image for the chosen option which is double sized
          */
-        Picture* chosenOptionImage ;
+        Picture * chosenOptionImage ;
 
         /**
          * Image for the chosen option which is single sized
          */
-        Picture* chosenOptionImageMini ;
+        Picture * chosenOptionImageMini ;
 
 };
 

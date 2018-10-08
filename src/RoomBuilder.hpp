@@ -58,7 +58,7 @@ public:
                                                  const std::string& nameOfPlayer,
                                                  bool justEntered,
                                                  int x, int y, int z,
-                                                 const Way& orientation, const Way& wayOfEntry = JustWait );
+                                                 const Way& orientation, const Way& wayOfEntry = Way::JustWait );
 
         static int getXCenterOfRoom ( ItemData* data, Room* theRoom ) ;
 

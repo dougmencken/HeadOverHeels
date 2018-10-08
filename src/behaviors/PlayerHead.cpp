@@ -81,80 +81,80 @@ bool PlayerHead::update ()
         }
 
         // change height for climbing bars easily
-        player->setHeight( activity == Fall || activity == Glide ? 23 : 24 );
+        player->setHeight( activity == Activity::Fall || activity == Activity::Glide ? 23 : 24 );
 
         switch ( activity )
         {
-                case Wait:
+                case Activity::Wait:
                         wait( player );
                         break;
 
-                case AutoMoveNorth:
-                case AutoMoveSouth:
-                case AutoMoveEast:
-                case AutoMoveWest:
+                case Activity::AutoMoveNorth:
+                case Activity::AutoMoveSouth:
+                case Activity::AutoMoveEast:
+                case Activity::AutoMoveWest:
                         autoMove( player );
                         break;
 
-                case MoveNorth:
-                case MoveSouth:
-                case MoveEast:
-                case MoveWest:
+                case Activity::MoveNorth:
+                case Activity::MoveSouth:
+                case Activity::MoveEast:
+                case Activity::MoveWest:
                         move( player );
                         break;
 
-                case DisplaceNorth:
-                case DisplaceSouth:
-                case DisplaceEast:
-                case DisplaceWest:
-                case DisplaceNortheast:
-                case DisplaceSoutheast:
-                case DisplaceSouthwest:
-                case DisplaceNorthwest:
-                case ForceDisplaceNorth:
-                case ForceDisplaceSouth:
-                case ForceDisplaceEast:
-                case ForceDisplaceWest:
+                case Activity::DisplaceNorth:
+                case Activity::DisplaceSouth:
+                case Activity::DisplaceEast:
+                case Activity::DisplaceWest:
+                case Activity::DisplaceNortheast:
+                case Activity::DisplaceSoutheast:
+                case Activity::DisplaceSouthwest:
+                case Activity::DisplaceNorthwest:
+                case Activity::ForceDisplaceNorth:
+                case Activity::ForceDisplaceSouth:
+                case Activity::ForceDisplaceEast:
+                case Activity::ForceDisplaceWest:
                         displace( player );
                         break;
 
-                case CancelDisplaceNorth:
-                case CancelDisplaceSouth:
-                case CancelDisplaceEast:
-                case CancelDisplaceWest:
+                case Activity::CancelDisplaceNorth:
+                case Activity::CancelDisplaceSouth:
+                case Activity::CancelDisplaceEast:
+                case Activity::CancelDisplaceWest:
                         cancelDisplace( player );
                         break;
 
-                case Fall:
+                case Activity::Fall:
                         fall( player );
                         break;
 
-                case Jump:
-                case RegularJump:
-                case HighJump:
+                case Activity::Jump:
+                case Activity::RegularJump:
+                case Activity::HighJump:
                         jump( player );
                         break;
 
-                case BeginWayOutTeletransport:
-                case WayOutTeletransport:
+                case Activity::BeginWayOutTeletransport:
+                case Activity::WayOutTeletransport:
                         wayOutTeletransport( player );
                         break;
 
-                case BeginWayInTeletransport:
-                case WayInTeletransport:
+                case Activity::BeginWayInTeletransport:
+                case Activity::WayInTeletransport:
                         wayInTeletransport( player );
                         break;
 
-                case MeetMortalItem:
-                case Vanish:
+                case Activity::MeetMortalItem:
+                case Activity::Vanish:
                         collideWithMortalItem( player );
                         break;
 
-                case Glide:
+                case Activity::Glide:
                         glide( player );
                         break;
 
-                case Blink:
+                case Activity::Blink:
                         blink( player );
                         break;
 
@@ -174,201 +174,210 @@ void PlayerHead::behave ()
         InputManager* input = InputManager::getInstance();
 
         // if it’s not a move by inertia or some other exotic activity
-        if ( activity != AutoMoveNorth && activity != AutoMoveSouth && activity != AutoMoveEast && activity != AutoMoveWest &&
-                activity != BeginWayOutTeletransport && activity != WayOutTeletransport && activity != BeginWayInTeletransport && activity != WayInTeletransport &&
-                activity != MeetMortalItem && activity != Vanish )
+        if ( activity != Activity::AutoMoveNorth && activity != Activity::AutoMoveSouth &&
+                activity != Activity::AutoMoveEast && activity != Activity::AutoMoveWest &&
+                activity != Activity::BeginWayOutTeletransport && activity != Activity::WayOutTeletransport &&
+                activity != Activity::BeginWayInTeletransport && activity != Activity::WayInTeletransport &&
+                activity != Activity::MeetMortalItem && activity != Activity::Vanish )
         {
                 // when waiting or blinking
-                if ( activity == Wait || activity == Blink )
+                if ( activity == Activity::Wait || activity == Activity::Blink )
                 {
-                        if ( input->jump() )
+                        if ( input->jumpTyped() )
                         {
                                 // jump or teleport
                                 playerItem->canAdvanceTo( 0, 0, -1 );
-                                activity = ( playerItem->getMediator()->collisionWithByBehavior( "behavior of teletransport" ) ? BeginWayOutTeletransport : Jump );
+                                activity =
+                                        playerItem->getMediator()->collisionWithByBehavior( "behavior of teletransport" ) ?
+                                                Activity::BeginWayOutTeletransport : Activity::Jump ;
                         }
-                        else if ( input->doughnut() && ! fireFromHooterIsPresent )
+                        else if ( input->doughnutTyped() && ! donutFromHooterIsHere )
                         {
                                 useHooter( playerItem );
-                                input->noRepeat( "doughnut" );
+                                input->releaseKeyFor( "doughnut" );
                         }
-                        else if ( input->movenorth() && ! input->movesouth() && ! input->moveeast() && ! input->movewest() )
+                        else if ( input->movenorthTyped() )
                         {
-                                activity = MoveNorth;
+                                activity = Activity::MoveNorth;
                         }
-                        else if ( ! input->movenorth() && input->movesouth() && ! input->moveeast() && ! input->movewest() )
+                        else if ( input->movesouthTyped() )
                         {
-                                activity = MoveSouth;
+                                activity = Activity::MoveSouth;
                         }
-                        else if ( ! input->movenorth() && ! input->movesouth() && input->moveeast() && ! input->movewest() )
+                        else if ( input->moveeastTyped() )
                         {
-                                activity = MoveEast;
+                                activity = Activity::MoveEast;
                         }
-                        else if ( ! input->movenorth() && ! input->movesouth() && ! input->moveeast() && input->movewest() )
+                        else if ( input->movewestTyped() )
                         {
-                                activity = MoveWest;
+                                activity = Activity::MoveWest;
                         }
                 }
                 // already moving
-                else if ( activity == MoveNorth || activity == MoveSouth || activity == MoveEast || activity == MoveWest )
+                else if ( activity == Activity::MoveNorth || activity == Activity::MoveSouth ||
+                        activity == Activity::MoveEast || activity == Activity::MoveWest )
                 {
-                        if ( input->jump() )
+                        if ( input->jumpTyped() )
                         {
                                 // look for teletransport below
                                 playerItem->canAdvanceTo( 0, 0, -1 );
-                                activity = ( playerItem->getMediator()->collisionWithByBehavior( "behavior of teletransport" ) ? BeginWayOutTeletransport : Jump );
+                                activity =
+                                        playerItem->getMediator()->collisionWithByBehavior( "behavior of teletransport" ) ?
+                                                Activity::BeginWayOutTeletransport : Activity::Jump ;
                         }
-                        else if ( input->doughnut() && ! fireFromHooterIsPresent )
+                        else if ( input->doughnutTyped() && ! donutFromHooterIsHere )
                         {
                                 useHooter( playerItem );
-                                input->noRepeat( "doughnut" );
+                                input->releaseKeyFor( "doughnut" );
                         }
-                        else if ( input->movenorth() && ! input->movesouth() && ! input->moveeast() && ! input->movewest() )
+                        else if ( input->movenorthTyped() )
                         {
-                                activity = MoveNorth;
+                                activity = Activity::MoveNorth;
                         }
-                        else if ( ! input->movenorth() && input->movesouth() && ! input->moveeast() && ! input->movewest() )
+                        else if ( input->movesouthTyped() )
                         {
-                                activity = MoveSouth;
+                                activity = Activity::MoveSouth;
                         }
-                        else if ( ! input->movenorth() && ! input->movesouth() && input->moveeast() && ! input->movewest() )
+                        else if ( input->moveeastTyped() )
                         {
-                                activity = MoveEast;
+                                activity = Activity::MoveEast;
                         }
-                        else if ( ! input->movenorth() && ! input->movesouth() && ! input->moveeast() && input->movewest() )
+                        else if ( input->movewestTyped() )
                         {
-                                activity = MoveWest;
+                                activity = Activity::MoveWest;
                         }
-                        else if ( ! input->movenorth() && ! input->movesouth() && ! input->moveeast() && ! input->movewest() )
+                        else if ( ! input->anyMoveTyped() )
                         {
                                 SoundManager::getInstance()->stop( playerItem->getLabel(), activity );
-                                activity = Wait;
+                                activity = Activity::Wait;
                         }
                 }
                 // if you are being displaced
-                else if ( activity == DisplaceNorth || activity == DisplaceSouth || activity == DisplaceEast || activity == DisplaceWest )
+                else if ( activity == Activity::DisplaceNorth || activity == Activity::DisplaceSouth ||
+                        activity == Activity::DisplaceEast || activity == Activity::DisplaceWest )
                 {
-                        if ( input->jump() )
+                        if ( input->jumpTyped() )
                         {
-                                activity = Jump;
+                                activity = Activity::Jump;
                         }
-                        else if ( input->doughnut() && ! fireFromHooterIsPresent )
+                        else if ( input->doughnutTyped() && ! donutFromHooterIsHere )
                         {
                                 useHooter( playerItem );
-                                input->noRepeat( "doughnut" );
+                                input->releaseKeyFor( "doughnut" );
                         }
-                        else if ( input->movenorth() && ! input->movesouth() && ! input->moveeast() && ! input->movewest() )
+                        else if ( input->movenorthTyped() )
                         {
-                                activity = MoveNorth;
+                                activity = Activity::MoveNorth;
                         }
-                        else if ( ! input->movenorth() && input->movesouth() && ! input->moveeast() && ! input->movewest() )
+                        else if ( input->movesouthTyped() )
                         {
-                                activity = MoveSouth;
+                                activity = Activity::MoveSouth;
                         }
-                        else if ( ! input->movenorth() && ! input->movesouth() && input->moveeast() && ! input->movewest() )
+                        else if ( input->moveeastTyped() )
                         {
-                                activity = MoveEast;
+                                activity = Activity::MoveEast;
                         }
-                        else if ( ! input->movenorth() && ! input->movesouth() && ! input->moveeast() && input->movewest() )
+                        else if ( input->movewestTyped() )
                         {
-                                activity = MoveWest;
+                                activity = Activity::MoveWest;
                         }
                 }
                 // if you are being forcibly displaced
-                else if ( activity == ForceDisplaceNorth || activity == ForceDisplaceSouth || activity == ForceDisplaceEast || activity == ForceDisplaceWest )
+                else if ( activity == Activity::ForceDisplaceNorth || activity == Activity::ForceDisplaceSouth ||
+                        activity == Activity::ForceDisplaceEast || activity == Activity::ForceDisplaceWest )
                 {
-                        if ( input->jump() )
+                        if ( input->jumpTyped() )
                         {
-                                activity = Jump;
+                                activity = Activity::Jump;
                         }
                         // user moves while displacing
                         // cancel displace when moving in direction opposite to displacement
-                        else if ( input->movenorth() && ! input->movesouth() && ! input->moveeast() && ! input->movewest() )
+                        else if ( input->movenorthTyped() )
                         {
-                                activity = ( activity == ForceDisplaceSouth ? CancelDisplaceSouth : MoveNorth );
+                                activity = ( activity == Activity::ForceDisplaceSouth ? Activity::CancelDisplaceSouth : Activity::MoveNorth );
                         }
-                        else if ( ! input->movenorth() && input->movesouth() && ! input->moveeast() && ! input->movewest() )
+                        else if ( input->movesouthTyped() )
                         {
-                                activity = ( activity == ForceDisplaceNorth ? CancelDisplaceNorth : MoveSouth );
+                                activity = ( activity == Activity::ForceDisplaceNorth ? Activity::CancelDisplaceNorth : Activity::MoveSouth );
                         }
-                        else if ( ! input->movenorth() && ! input->movesouth() && input->moveeast() && ! input->movewest() )
+                        else if ( input->moveeastTyped() )
                         {
-                                activity = ( activity == ForceDisplaceWest ? CancelDisplaceWest : MoveEast );
+                                activity = ( activity == Activity::ForceDisplaceWest ? Activity::CancelDisplaceWest : Activity::MoveEast );
                         }
-                        else if ( ! input->movenorth() && ! input->movesouth() && ! input->moveeast() && input->movewest() )
+                        else if ( input->movewestTyped() )
                         {
-                                activity = ( activity == ForceDisplaceEast ? CancelDisplaceEast : MoveWest );
+                                activity = ( activity == Activity::ForceDisplaceEast ? Activity::CancelDisplaceEast : Activity::MoveWest );
                         }
                 }
-                else if ( activity == Jump || activity == RegularJump || activity == HighJump )
+                else if ( activity == Activity::Jump || activity == Activity::RegularJump || activity == Activity::HighJump )
                 {
-                        if ( input->doughnut() && ! fireFromHooterIsPresent )
+                        if ( input->doughnutTyped() && ! donutFromHooterIsHere )
                         {
                                 useHooter( playerItem );
-                                input->noRepeat( "doughnut" );
+                                input->releaseKeyFor( "doughnut" );
                         }
                         // Head may change direction when jumping
-                        else if ( input->movenorth() && ! input->movesouth() && ! input->moveeast() && ! input->movewest() )
+                        else if ( input->movenorthTyped() )
                         {
-                                playerItem->changeOrientation( North );
+                                playerItem->changeOrientation( Way( "north" ) );
                         }
-                        else if ( ! input->movenorth() && input->movesouth() && ! input->moveeast() && ! input->movewest() )
+                        else if ( input->movesouthTyped() )
                         {
-                                playerItem->changeOrientation( South );
+                                playerItem->changeOrientation( Way( "south" ) );
                         }
-                        else if ( ! input->movenorth() && ! input->movesouth() && input->moveeast() && ! input->movewest() )
+                        else if ( input->moveeastTyped() )
                         {
-                                playerItem->changeOrientation( East );
+                                playerItem->changeOrientation( Way( "east" ) );
                         }
-                        else if ( ! input->movenorth() && ! input->movesouth() && ! input->moveeast() && input->movewest() )
+                        else if ( input->movewestTyped() )
                         {
-                                playerItem->changeOrientation( West );
+                                playerItem->changeOrientation( Way( "west" ) );
                         }
                 }
-                else if ( activity == Fall )
+                else if ( activity == Activity::Fall )
                 {
-                        if ( input->doughnut() && ! fireFromHooterIsPresent )
+                        if ( input->doughnutTyped() && ! donutFromHooterIsHere )
                         {
                                 useHooter( playerItem );
-                                input->noRepeat( "doughnut" );
+                                input->releaseKeyFor( "doughnut" );
                         }
                         // entonces Head planea
-                        else if ( input->movenorth() || input->movesouth() || input->moveeast() || input->movewest() )
+                        else if ( input->anyMoveTyped() )
                         {
-                                activity = Glide;
+                                activity = Activity::Glide;
                         }
                 }
 
                 // for gliding, don’t wait for next cycle because there’s possibility
                 // that gliding comes from falling, and waiting for next cycle may prevent
                 // to enter gap between two grid items
-                if ( activity == Glide )
+                if ( activity == Activity::Glide )
                 {
-                        if ( input->doughnut() && ! fireFromHooterIsPresent )
+                        if ( input->doughnutTyped() && ! donutFromHooterIsHere )
                         {
                                 useHooter( playerItem );
-                                input->noRepeat( "doughnut" );
+                                input->releaseKeyFor( "doughnut" );
                         }
                         // Head may change direction when gliding
-                        else if ( input->movenorth() && ! input->movesouth() && ! input->moveeast() && ! input->movewest() )
+                        else if ( input->movenorthTyped() )
                         {
-                                playerItem->changeOrientation( North );
+                                playerItem->changeOrientation( Way( "north" ) );
                         }
-                        else if ( ! input->movenorth() && input->movesouth() && ! input->moveeast() && ! input->movewest() )
+                        else if ( input->movesouthTyped() )
                         {
-                                playerItem->changeOrientation( South );
+                                playerItem->changeOrientation( Way( "south" ) );
                         }
-                        else if ( ! input->movenorth() && ! input->movesouth() && input->moveeast() && ! input->movewest() )
+                        else if ( input->moveeastTyped() )
                         {
-                                playerItem->changeOrientation( East );
+                                playerItem->changeOrientation( Way( "east" ) );
                         }
-                        else if ( ! input->movenorth() && ! input->movesouth() && ! input->moveeast() && input->movewest() )
+                        else if ( input->movewestTyped() )
                         {
-                                playerItem->changeOrientation( West );
+                                playerItem->changeOrientation( Way( "west" ) );
                         }
-                        else if ( ! input->movenorth() && ! input->movesouth() && ! input->moveeast() && ! input->movewest() )
+                        else if ( ! input->anyMoveTyped() )
                         {
-                                activity = Fall;
+                                activity = Activity::Fall;
                         }
                 }
         }
@@ -382,14 +391,14 @@ void PlayerHead::wait( PlayerItem* playerItem )
         if( blinkingTimer->getValue() >= ( rand() % 4 ) + 5 )
         {
                 blinkingTimer->reset();
-                activity = Blink;
+                activity = Activity::Blink;
         }
 
         // Se comprueba si el jugador debe empezar a caer
         if( FallKindOfActivity::getInstance()->fall( this ) )
         {
                 speedTimer->reset();
-                activity = Fall;
+                activity = Activity::Fall;
         }
 }
 
@@ -407,7 +416,7 @@ void PlayerHead::blink( PlayerItem* playerItem )
         else if( timeValue > 0.800 )
         {
                 blinkingTimer->reset();
-                activity = Wait;
+                activity = Activity::Wait;
         }
 }
 

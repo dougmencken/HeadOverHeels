@@ -14,6 +14,7 @@
 #include <WrappersAllegro.hpp>
 
 #include "Ism.hpp"
+#include "Picture.hpp"
 #include "Drawable.hpp"
 #include "Mediated.hpp"
 
@@ -30,7 +31,7 @@ class Wall : public Drawable, public Mediated
 
 public:
 
-        Wall( bool trueXfalseY, int index, allegro::Pict* image ) ;
+        Wall( bool trueXfalseY, int index, Picture* image ) ;
 
         virtual ~Wall( ) ;
 
@@ -39,7 +40,7 @@ public:
          */
         void calculateOffset () ;
 
-        void draw ( allegro::Pict * where ) ;
+        void draw ( const allegro::Pict & where ) ;
 
 private:
 
@@ -55,7 +56,7 @@ private:
         /**
          * Graphics of wall’s segment
          */
-        allegro::Pict * image ;
+        Picture * image ;
 
 public:
 

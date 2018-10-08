@@ -14,7 +14,7 @@
 #include <map>
 #include <string>
 
-#include <WrappersAllegro.hpp>
+#include "WrappersAllegro.hpp"
 
 #include "Ism.hpp"
 
@@ -34,9 +34,7 @@ public:
 
         static const size_t numberOfKeys = 10 ;
 
-        static const std::string namesOfKeys[ ] ;
-
-        static const std::string nameOfAbsentKey ;
+        static const std::string actionsOfKeys[ ] ;
 
 private:
 
@@ -53,82 +51,64 @@ public:
         static InputManager * getInstance () ;
 
        /**
-        * Asigna el código de una tecla definida por el usuario para el control del juego
-        * @param gameKey Tipo de tecla
-        * @param scancode Un código Allegro de una tecla
+        * Returns name of key defined by user for given action
         */
-        void changeUserKey ( const std::string& nameOfKey, int scancode ) {  this->userKeys[ nameOfKey ] = scancode ;  }
+        std::string getUserKeyFor ( const std::string& action ) {  return this->userKeys[ action ] ;  }
 
-       /**
-        * Devuelve el código de una tecla definida por el usuario para el control del juego
-        * @param gameKey Tipo de tecla
-        * @return Un código Allegro de una tecla
-        */
-        int getUserKey ( const std::string& nameOfKey ) {  return this->userKeys[ nameOfKey ] ;  }
+        void changeUserKey ( const std::string& action, const std::string& name ) {  this->userKeys[ action ] = name ;  }
 
-        std::string findNameOfKeyByCode ( int scancode ) ;
+        std::string findActionOfKeyByName ( const std::string& keyName ) ;
 
        /**
         * Move character to the north
-        * @return true if user types this key or moves joystick there
         */
-        bool movenorth () ;
+        bool movenorthTyped () ;
 
        /**
         * Move character to the south
-        * @return true if user types this key or moves joystick there
         */
-        bool movesouth () ;
+        bool movesouthTyped () ;
 
        /**
         * Move character to the east
-        * @return true if user types this key or moves joystick there
         */
-        bool moveeast () ;
+        bool moveeastTyped () ;
 
        /**
         * Move character to the west
-        * @return true if user types this key or moves joystick there
         */
-        bool movewest () ;
+        bool movewestTyped () ;
+
+        bool anyMoveTyped () ;
 
        /**
         * Take or drop some object
-        * @return true if user types this key or joystick button
         */
-        bool take () ;
+        bool takeTyped () ;
 
        /**
         * Character jumps
-        * @return true if user types this key or joystick button
         */
-        bool jump () ;
+        bool jumpTyped () ;
 
-        bool takeAndJump () ;
+        bool takeAndJumpTyped () ;
 
        /**
         * Release doughnut
-        * @return true if user types this key or joystick button
         */
-        bool doughnut () ;
+        bool doughnutTyped () ;
 
        /**
-        * Change characters
-        * @return true if user types this key or joystick button
+        * Swap characters
         */
-        bool swap () ;
+        bool swapTyped () ;
 
        /**
         * Pause game
-        * @return true if user types this key or joystick button
         */
-        bool pause () ;
+        bool pauseTyped () ;
 
-       /**
-        * Deletes stored keystrokes for a key
-        * @param keyName A key associated with an action
-        */
-        void noRepeat ( const std::string& keyName ) ;
+        void releaseKeyFor ( const std::string& keyAction ) ;
 
 private:
 
@@ -138,9 +118,9 @@ private:
         static InputManager * instance ;
 
        /**
-        * Associative map with name of key and Allegro "scan code" for keys defined by user
+        * Associative map of action of key to key’s name for keys chosen by user
         */
-        std::map < std::string, int > userKeys ;
+        std::map < /* action */ std::string, /* name */ std::string > userKeys ;
 
 };
 

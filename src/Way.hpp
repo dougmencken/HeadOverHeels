@@ -16,58 +16,58 @@
 
 namespace isomot
 {
-        const unsigned int South = 0 ;                  // south, bottom right of screen
-        const unsigned int West = 1 ;                   // west, bottom left of screen
-        const unsigned int North = 2 ;                  // north, top left of screen
-        const unsigned int East = 3 ;                   // east, top right of screen
 
-        const unsigned int Northeast = 4 ;              // northeast, top of screen
-        const unsigned int Southeast = 5 ;              // southeast, right side of screen
-        const unsigned int Southwest = 6 ;              // southwest, bottom of screen
-        const unsigned int Northwest = 7 ;              // northwest, left side of screen
-        const unsigned int Eastnorth = 8 ;              // door located to the east, north
-        const unsigned int Eastsouth = 9 ;              // door located to the east, south
-        const unsigned int Westnorth = 10 ;             // door located to the west, north
-        const unsigned int Westsouth = 11 ;             // door located to the west, south
+/**
+ * Way in which you move an item or entry to room or exit from room
+ */
 
-        const unsigned int Up = 22 ;                    // to room without floor
-        const unsigned int Down = 23 ;                  // to room without ceiling
-        const unsigned int ByTeleport = 24 ;            // to another room via teleport
-        const unsigned int ByTeleportToo = 25 ;         // to another room via second teleport
+class Way
+{
 
-        const unsigned int NoExit = 44 ;                // player doesn’t exit from this room
+public:
 
-        const unsigned int Restart = 51 ;               // restart room when character loses its life
+        Way( unsigned int way ) ;
 
-        const unsigned int JustWait = 99 ;              // just wait in room
+        Way( const std::string& stringOfWay ) ;
 
-        const unsigned int Nowhere = 200 ;              // for items with only one direction
+        unsigned int getIntegerOfWay () const {  return way ;  }
 
+        std::string toString () const ;
 
-        /**
-         * Way in which you move an item or entry to room or exit from room
-         */
+        bool operator< ( const Way& toCompare ) const {  return way < toCompare.way ;  }
 
-        class Way
-        {
+        static const unsigned int South = 0 ;           // south, bottom right of screen
+        static const unsigned int West = 1 ;            // west, bottom left of screen
+        static const unsigned int North = 2 ;           // north, top left of screen
+        static const unsigned int East = 3 ;            // east, top right of screen
 
-        public:
+        static const unsigned int Northeast = 4 ;       // northeast, top of screen
+        static const unsigned int Southeast = 5 ;       // southeast, right side of screen
+        static const unsigned int Southwest = 6 ;       // southwest, bottom of screen
+        static const unsigned int Northwest = 7 ;       // northwest, left side of screen
+        static const unsigned int Eastnorth = 8 ;       // door located to the east, north
+        static const unsigned int Eastsouth = 9 ;       // door located to the east, south
+        static const unsigned int Westnorth = 10 ;      // door located to the west, north
+        static const unsigned int Westsouth = 11 ;      // door located to the west, south
 
-                Way( unsigned int way ) ;
+        static const unsigned int Up = 22 ;             // to room without floor
+        static const unsigned int Down = 23 ;           // to room without ceiling
+        static const unsigned int ByTeleport = 24 ;     // to another room via teleport
+        static const unsigned int ByTeleportToo = 25 ;  // to another room via second teleport
 
-                Way( const std::string& stringOfWay ) ;
+        static const unsigned int NoExit = 44 ;         // player doesn’t exit from this room
 
-                unsigned int getIntegerOfWay () const {  return way ;  }
+        static const unsigned int Restart = 51 ;        // restart room when character loses its life
 
-                std::string toString () const ;
+        static const unsigned int JustWait = 99 ;       // just wait in room
 
-                bool operator< ( const Way& toCompare ) const {  return way < toCompare.way ;  }
+        static const unsigned int Nowhere = 200 ;       // for items with only one direction
 
-        private:
+private:
 
-                unsigned int way ;
+        unsigned int way ;
 
-        } ;
+} ;
 
 }
 

@@ -16,7 +16,6 @@
 #include <map>
 
 #include <WrappersAllegro.hpp>
-#include <loadpng.h>
 
 #include "Gui.hpp"
 #include "Font.hpp"
@@ -81,7 +80,7 @@ public:
 
 protected:
 
-        void allegroSetup () ;
+        void initAllegro () ;
 
 private:
 
@@ -97,7 +96,7 @@ private:
 
         std::map < std::string, Screen * > listOfScreens;
 
-        allegro::Pict * picture ;
+        Picture * picture ;
 
        /**
         * Language for user interface

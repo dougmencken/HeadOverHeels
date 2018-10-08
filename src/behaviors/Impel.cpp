@@ -14,7 +14,7 @@ namespace isomot
 Impel::Impel( Item * item, const std::string & behavior ) :
         Behavior( item, behavior )
 {
-        activity = Wait;
+        activity = Activity::Wait;
         speedTimer = new Timer();
         fallTimer = new Timer();
         speedTimer->go();
@@ -34,23 +34,23 @@ bool Impel::update ()
 
         switch ( activity )
         {
-                case Wait:
+                case Activity::Wait:
                         break;
 
-                case DisplaceNorth:
-                case DisplaceSouth:
-                case DisplaceEast:
-                case DisplaceWest:
-                case DisplaceNortheast:
-                case DisplaceNorthwest:
-                case DisplaceSoutheast:
-                case DisplaceSouthwest:
+                case Activity::DisplaceNorth:
+                case Activity::DisplaceSouth:
+                case Activity::DisplaceEast:
+                case Activity::DisplaceWest:
+                case Activity::DisplaceNortheast:
+                case Activity::DisplaceNorthwest:
+                case Activity::DisplaceSoutheast:
+                case Activity::DisplaceSouthwest:
                         // is it time to move
                         if ( speedTimer->getValue() > freeItem->getSpeed() )
                         {
                                 if ( ! DisplaceKindOfActivity::getInstance()->displace( this, &activity, true ) )
                                 {
-                                        activity = Wait;
+                                        activity = Activity::Wait;
                                 }
 
                                 speedTimer->reset();
@@ -59,7 +59,7 @@ bool Impel::update ()
                         freeItem->animate();
                         break;
 
-                case Fall:
+                case Activity::Fall:
                         // look for reaching floor in a room without floor
                         if ( freeItem->getZ() == 0 && freeItem->getMediator()->getRoom()->getKindOfFloor() == "none" )
                         {
@@ -71,7 +71,7 @@ bool Impel::update ()
                         {
                                 if ( ! FallKindOfActivity::getInstance()->fall( this ) )
                                 {
-                                        activity = Wait;
+                                        activity = Activity::Wait;
                                 }
 
                                 fallTimer->reset();

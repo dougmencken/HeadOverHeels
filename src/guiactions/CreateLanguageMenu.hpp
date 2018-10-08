@@ -27,7 +27,7 @@ class CreateLanguageMenu : public Action
 
 public:
 
-        CreateLanguageMenu( allegro::Pict * picture ) ;
+        CreateLanguageMenu( Picture * picture ) ;
 
         ~CreateLanguageMenu( ) ;
 

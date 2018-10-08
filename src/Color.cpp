@@ -30,33 +30,33 @@ Color * Color::the50Gray = new Color( 127, 127, 127 ) ;
 Color * Color::theTransparency = new Color( 255, 0, 255 ) ;
 
 
-Color::Color( unsigned char r, unsigned char g, unsigned char b )
-        : red( r )
-        , green( g )
-        , blue( b )
+std::string Color::toString ()
 {
+        return   "color { r=" + isomot::numberToString( red ) +
+                        " g=" + isomot::numberToString( green ) +
+                        " b=" + isomot::numberToString( blue ) + " }" ;
 }
 
 /* public static */
-allegro::Pict* Color::colorizePicture( allegro::Pict* picture, const Color* color )
+Picture* Color::colorizePicture( Picture* picture, const Color& color )
 {
         if ( color == Color::whiteColor() ) return picture ;
 
-        return colorizePicture( picture, color->getRed (), color->getGreen (), color->getBlue () );
+        return colorizePicture( picture, color.getRed (), color.getGreen (), color.getBlue () );
 }
 
 /* private static */
-allegro::Pict* Color::colorizePicture( allegro::Pict* picture, unsigned char red, unsigned char green, unsigned char blue )
+Picture* Color::colorizePicture( Picture* picture, unsigned char red, unsigned char green, unsigned char blue )
 {
         if ( picture == nilPointer ) return nilPointer ;
 
-        for ( int x = 0; x < picture->w; x++ )
+        for ( unsigned int x = 0; x < picture->getWidth(); x++ )
         {
-                for ( int y = 0; y < picture->h; y++ )
+                for ( unsigned int y = 0; y < picture->getHeight(); y++ )
                 {
-                        if ( ( ( int* )picture->line[ y ] )[ x ] == makecol( 255, 255, 255 ) )
+                        if ( picture->getPixelAt( x, y ) == allegro::makeColor( 255, 255, 255 ) )
                         {
-                                ( ( int* )picture->line[ y ] )[ x ] = makecol( red, green, blue );
+                                picture->setPixelAt( x, y, Color( red, green, blue ) );
                         }
                 }
         }
@@ -65,31 +65,31 @@ allegro::Pict* Color::colorizePicture( allegro::Pict* picture, unsigned char red
 }
 
 /* public static */
-allegro::Pict* Color::multiplyWithColor( allegro::Pict* picture, const Color* color )
+Picture* Color::multiplyWithColor( Picture* picture, const Color& color )
 {
         if ( color == Color::whiteColor() ) return picture ;
 
-        return multiplyWithColor( picture, color->getRed (), color->getGreen (), color->getBlue () );
+        return multiplyWithColor( picture, color.getRed (), color.getGreen (), color.getBlue () );
 }
 
 /* private static */
-allegro::Pict * Color::multiplyWithColor( allegro::Pict * picture, unsigned char red, unsigned char green, unsigned char blue )
+Picture * Color::multiplyWithColor( Picture * picture, unsigned char red, unsigned char green, unsigned char blue )
 {
         if ( picture == nilPointer ) return nilPointer ;
 
-        for ( int x = 0; x < picture->w; x++ )
+        for ( unsigned int x = 0; x < picture->getWidth(); x++ )
         {
-                for ( int y = 0; y < picture->h; y++ )
+                for ( unsigned int y = 0; y < picture->getHeight(); y++ )
                 {
-                        int color = getpixel( picture, x, y );
-                        int r = getr( color );
-                        int g = getg( color );
-                        int b = getb( color );
+                        int color = picture->getPixelAt( x, y );
+                        int r = allegro::getRed( color );
+                        int g = allegro::getGreen( color );
+                        int b = allegro::getBlue( color );
 
                         // don’t touch pixels with color of transparency
                         if ( r != 255 || g != 0 || b != 255 )
                         {
-                                ( ( int* )picture->line[ y ] )[ x ] = makecol( r & red, g & green, b & blue );
+                                picture->setPixelAt( x, y, Color( r & red, g & green, b & blue ) );
                         }
                 }
         }
@@ -98,16 +98,16 @@ allegro::Pict * Color::multiplyWithColor( allegro::Pict * picture, unsigned char
 }
 
 /* public static */
-allegro::Pict * Color::pictureToGrayscale ( allegro::Pict * picture )
+Picture * Color::pictureToGrayscale ( Picture * picture )
 {
         if ( picture == nilPointer ) return nilPointer ;
 
-        for ( int y = 0; y < picture->h; y++ )
+        for ( unsigned int y = 0; y < picture->getHeight(); y++ )
         {
-                for ( int x = 0; x < picture->w; x++ )
+                for ( unsigned int x = 0; x < picture->getWidth(); x++ )
                 {
                         // convert every color but the “ key ” one
-                        if ( ( ( int* )picture->line[ y ] )[ x ] != makecol( 255, 0, 255 ) )
+                        if ( picture->getPixelAt( x, y ) != allegro::makeColor( 255, 0, 255 ) )
                         {
                                 /* imagine color as vector: c { r, g, b }
                                    for each shade of gray r=g=b =w: b { w, w, w }
@@ -117,13 +117,13 @@ allegro::Pict * Color::pictureToGrayscale ( allegro::Pict * picture )
                                         sqrt( rr + gg + bb ) = sqrt( 3 ) * w
                                         w = sqrt( ( rr + gg + bb ) / 3 )
                                 */
-                                int color = getpixel( picture, x, y );
-                                double red = static_cast< double >( getr( color ) );
-                                double green = static_cast< double >( getg( color ) );
-                                double blue = static_cast< double >( getb( color ) );
+                                int color = picture->getPixelAt( x, y );
+                                double red = static_cast< double >( allegro::getRed( color ) );
+                                double green = static_cast< double >( allegro::getGreen( color ) );
+                                double blue = static_cast< double >( allegro::getBlue( color ) );
                                 double ww = ( red * red + green * green + blue * blue ) / 3.0;
                                 unsigned char gray = static_cast< unsigned char >( std::sqrt( ww ) );
-                                ( ( int* )picture->line[ y ] )[ x ] = makecol( gray, gray, gray );
+                                picture->setPixelAt( x, y, Color( gray, gray, gray ) );
                         }
                 }
         }

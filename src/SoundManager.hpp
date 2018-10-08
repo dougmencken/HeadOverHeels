@@ -16,20 +16,13 @@
 #include <map>
 #include <iostream>
 
-#include <WrappersAllegro.hpp>
+#include "WrappersAllegro.hpp"
 
-#include "alogg/aloggpth.h"
-#include "alogg/aloggint.h"
-
-#include "Ism.hpp"
+#include "ActivityOfItem.hpp"
 
 
 namespace isomot
 {
-
-class SampleData ;
-class SoundData ;
-
 
 class SoundManager
 {
@@ -45,11 +38,12 @@ public:
         static SoundManager* getInstance () ;
 
         /**
-         * Crea la lista de sonidos a partir de la información extraída por el gestor XML del archivo
-         * que almacena los sonidos
-         * @param fileName Nombre del archivo XML que contiene los datos de los sonidos
+         * Crea la lista de sonidos a partir de la información extraída por el gestor XML del archivo que almacena los sonidos
+         * @param xmlFile Name of XML file with info about game’s sounds
          */
-        void readListOfSounds ( const std::string& fileName ) ;
+        void readSounds ( const std::string& xmlFile ) ;
+
+        void addSound ( const std::string& label, const std::string& activity, const std::string& sampleFile ) ;
 
         /**
          * Reproduce un sonido
@@ -61,8 +55,6 @@ public:
 
         /**
          * Detiene la reproducción de un sonido
-         * @param label Item that gives out sound
-         * @param activity Activity of item
          */
         void stop ( const std::string& label, const ActivityOfItem& activity ) ;
 
@@ -73,62 +65,38 @@ public:
 
         /**
          * Reproduce un archivo Ogg
-         * @param fileName Nombre del archivo
          */
-        void playOgg ( const std::string& fileName, bool loop ) ;
+        void playOgg ( const std::string& oggFile, bool loop ) ;
 
-        /**
-         * Detiene la reproducción en curso de un archivo Ogg
-         */
-        void stopAnyOgg () ;
+        void stopOgg () {  oggPlayingThread.stop() ;  }
 
-        /**
-         * Indica si un determinado archivo Ogg está reproduciéndose
-         * @param fileName Nombre del archivo Ogg
-         * @return true si está sonando o false en caso contrario
-         */
-        bool isPlayingOgg ( const std::string& fileName ) {  return this->oggPlaying == fileName && oggPlayer != nilPointer && oggPlayer->alive != 0 ;  }
+        allegro::Sample * getSampleFor ( const std::string& label, const std::string& event ) ;
 
-private:
+        allegro::Sample * getSampleFor ( const std::string& label, const ActivityOfItem& activity )
+        {
+                return getSampleFor( label, translateActivityToString( activity ) ) ;
+        }
 
-        /**
-         * Busca un sonido en la tabla
-         * @param label Item that gives out sound
-         * @param activity Activity of item
-         * @return El sonido ó 0 si no se encontró
-         */
-        SampleData* findSample ( const std::string& label, const ActivityOfItem& activity ) ;
+        void setVolumeOfEffects ( unsigned int volume ) {  this->effectsVolume = ( volume <= 99 ) ? volume : 99 ;  }
 
-        /**
-         * Traduce el identificador de un estado empleado por Isomot a una cadena
-         * de caracteres utilizada en la tabla de sonidos
-         * @return Una cadena de caracteres con alguno de los estado manejados por la tabla de sonidos
-         */
-        std::string translateActivityOfItemToString ( const ActivityOfItem& activity ) ;
+        unsigned int getVolumeOfEffects () const {  return this->effectsVolume ;  }
+
+        void setVolumeOfMusic ( unsigned int volume ) ;
+
+        unsigned int getVolumeOfMusic () const {  return this->musicVolume ;  }
+
+protected:
+
+        std::string translateActivityToString ( const ActivityOfItem& activity ) ;
 
 private:
 
         static SoundManager* instance ;
 
         /**
-         * Nombre del archivo XML que contiene los datos de los sonidos
+         * Subprocess for playing Ogg music
          */
-        std::string fileName ;
-
-        /**
-         * Subproceso encargado de la reproducción de archivos Ogg
-         */
-        alogg_thread* oggPlayer ;
-
-        /**
-         * Segmento del archivo Ogg que se está reproduciendo
-         */
-        alogg_stream* oggStream ;
-
-        /**
-         * Nombre del tema que se está reproduciendo
-         */
-        std::string oggPlaying ;
+        allegro::ogg::ThreadPlaysStream oggPlayingThread ;
 
         /**
          * Volumen de los efectos sonoros
@@ -141,101 +109,16 @@ private:
         unsigned int musicVolume ;
 
         /**
-         * Tabla de sonidos
+         * Map of item’s label to pairs of activity and name of file with sound
          */
-        std::list < SoundData > soundData ;
-
-public:
+        std::map < std::string /* label */, std::map< std::string /* event */, std::string /* file */ > > sounds ;
 
         /**
-         * Establece el volumen de los efectos sonoros
-         * @param volume Un valor comprendido entre 0 y 99
+         * Maps name of file to sound sample
          */
-        void setVolumeOfEffects ( unsigned int volume ) {  this->effectsVolume = volume ;  }
+        std::map < std::string /* file */, allegro::Sample * > samples ;
 
-        /**
-         * Volumen de los efectos sonoros
-         * @return Un valor comprendido entre 0 y 99
-         */
-        unsigned int getVolumeOfEffects () const {  return this->effectsVolume ;  }
-
-        /**
-         * Establece el volumen de la música
-         * @param volume Un valor comprendido entre 0 y 99
-         */
-        void setVolumeOfMusic ( unsigned int volume ) ;
-
-        /**
-         * Volumen de la música
-         * @return Un valor comprendido entre 0 y 99
-         */
-        unsigned int getVolumeOfMusic () const {  return this->musicVolume ;  }
-
-};
-
-
-/**
- * Associates sound sample with reproduction number
- */
-
-class SampleData
-{
-
-public:
-
-        /**
-         * Digital sound sample
-         */
-        SAMPLE * sample ;
-
-        /**
-         * Voice number for sound reproduction
-         */
-        int voice ;
-
-};
-
-
-/**
- * Data of sounds
- */
-
-class SoundData
-{
-
-        friend class SoundManager ;
-
-public:
-
-        /**
-         * Constructor
-         * @param label Unique label of this sound
-         */
-        SoundData( const std::string& label ) ;
-
-        void addSound ( const std::string& activity, const std::string& sampleFileName ) ;
-
-        /**
-         * Look for sound
-         * @param event When to play that sound
-         */
-        SampleData* find ( const std::string& event ) ;
-
-private:
-
-        /**
-         * Unique label of this sound
-         */
-        std::string label ;
-
-        /**
-         * Hash table of activity / sound pairs. Activity is string from XML file of sounds
-         */
-        std::map< std::string, SampleData > table ;
-
-public:
-
-        std::string getLabel () const {  return this->label ;  }
+        std::map < ActivityOfItem, std::string > activityToString ;
 
 };
 

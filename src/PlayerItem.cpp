@@ -26,7 +26,6 @@ PlayerItem::PlayerItem( ItemData* itemData, int x, int y, int z, const Way& way 
         , shieldTimer( nilPointer )
         , shieldTime( 25.0 )
         , takenItemData( nilPointer )
-        , takenItemImage( nilPointer )
         , originalDataOfItem( itemData )
 {
 
@@ -45,7 +44,6 @@ PlayerItem::PlayerItem( const PlayerItem& playerItem )
         , shieldTimer( nilPointer )
         , shieldTime( playerItem.shieldTime )
         , takenItemData( nilPointer )
-        , takenItemImage( nilPointer )
         , originalDataOfItem( playerItem.getOriginalDataOfItem() )
 {
 
@@ -62,31 +60,31 @@ void PlayerItem::setWayOfExit ( const std::string& way )
 
         switch ( Way( way ).getIntegerOfWay () )
         {
-                case North:
-                case South:
-                case East:
-                case West:
+                case Way::North:
+                case Way::South:
+                case Way::East:
+                case Way::West:
                         setOrientation( way );
                         break;
 
-                case Northeast:
-                case Northwest:
-                        setOrientation( North );
+                case Way::Northeast:
+                case Way::Northwest:
+                        setOrientation( Way( "north" ) );
                         break;
 
-                case Southeast:
-                case Southwest:
-                        setOrientation( South );
+                case Way::Southeast:
+                case Way::Southwest:
+                        setOrientation( Way( "south" ) );
                         break;
 
-                case Eastnorth:
-                case Eastsouth:
-                        setOrientation( East );
+                case Way::Eastnorth:
+                case Way::Eastsouth:
+                        setOrientation( Way( "east" ) );
                         break;
 
-                case Westnorth:
-                case Westsouth:
-                        setOrientation( West );
+                case Way::Westnorth:
+                case Way::Westsouth:
+                        setOrientation( Way( "west" ) );
                         break;
 
                 default:
@@ -106,37 +104,37 @@ void PlayerItem::autoMoveOnEntry ( const std::string& wayOfEntry )
 
         switch ( Way( wayOfEntry ).getIntegerOfWay () )
         {
-                case North:
-                case Northeast:
-                case Northwest:
-                        getBehavior()->changeActivityOfItem( AutoMoveSouth );
+                case Way::North:
+                case Way::Northeast:
+                case Way::Northwest:
+                        getBehavior()->changeActivityOfItem( Activity::AutoMoveSouth );
                         break;
 
-                case South:
-                case Southeast:
-                case Southwest:
-                        getBehavior()->changeActivityOfItem( AutoMoveNorth );
+                case Way::South:
+                case Way::Southeast:
+                case Way::Southwest:
+                        getBehavior()->changeActivityOfItem( Activity::AutoMoveNorth );
                         break;
 
-                case East:
-                case Eastnorth:
-                case Eastsouth:
-                        getBehavior()->changeActivityOfItem( AutoMoveWest );
+                case Way::East:
+                case Way::Eastnorth:
+                case Way::Eastsouth:
+                        getBehavior()->changeActivityOfItem( Activity::AutoMoveWest );
                         break;
 
-                case West:
-                case Westnorth:
-                case Westsouth:
-                        getBehavior()->changeActivityOfItem( AutoMoveEast );
+                case Way::West:
+                case Way::Westnorth:
+                case Way::Westsouth:
+                        getBehavior()->changeActivityOfItem( Activity::AutoMoveEast );
                         break;
 
-                case ByTeleport:
-                case ByTeleportToo:
-                        getBehavior()->changeActivityOfItem( BeginWayInTeletransport );
+                case Way::ByTeleport:
+                case Way::ByTeleportToo:
+                        getBehavior()->changeActivityOfItem( Activity::BeginWayInTeletransport );
                         break;
 
-                case Up:
-                        getBehavior()->changeActivityOfItem( Fall );
+                case Way::Up:
+                        getBehavior()->changeActivityOfItem( Activity::Fall );
                         break;
 
                 default:
@@ -146,10 +144,10 @@ void PlayerItem::autoMoveOnEntry ( const std::string& wayOfEntry )
 
 bool PlayerItem::addToPosition( int x, int y, int z )
 {
-        bool itAutomoves = getBehavior()->getActivityOfItem() == AutoMoveNorth ||
-                                getBehavior()->getActivityOfItem() == AutoMoveSouth ||
-                                getBehavior()->getActivityOfItem() == AutoMoveEast ||
-                                getBehavior()->getActivityOfItem() == AutoMoveWest ;
+        bool itAutomoves = getBehavior()->getActivityOfItem() == Activity::AutoMoveNorth ||
+                                getBehavior()->getActivityOfItem() == Activity::AutoMoveSouth ||
+                                getBehavior()->getActivityOfItem() == Activity::AutoMoveEast ||
+                                getBehavior()->getActivityOfItem() == Activity::AutoMoveWest ;
 
         bool itFallsUnderDoor = ( x == 0 && y == 0 && z < 0 && this->isUnderSomeDoor () );
 
@@ -163,9 +161,9 @@ bool PlayerItem::addToPosition( int x, int y, int z )
         // copy item before moving
         PlayerItem copyOfItem( *this );
 
-        this->x += x;
-        this->y += y;
-        this->z += z;
+        this->xPos += x;
+        this->yPos += y;
+        this->zPos += z;
 
         // look for collision with door
 
@@ -250,23 +248,23 @@ bool PlayerItem::addToPosition( int x, int y, int z )
         }
 
         // look for collision with real wall, one which limits the room
-        if ( this->x < mediator->getRoom()->getLimitAt( "north" )
+        if ( this->getX() < mediator->getRoom()->getLimitAt( "north" )
                         && isNotUnderDoorAt( "north" ) && isNotUnderDoorAt( "northeast" ) && isNotUnderDoorAt( "northwest" ) )
         {
                 mediator->pushCollision( "some segment of wall at north" );
         }
-        else if ( this->x + static_cast< int >( getDataOfItem()->getWidthX() ) > mediator->getRoom()->getLimitAt( "south" )
+        else if ( this->getX() + static_cast< int >( getDataOfItem()->getWidthX() ) > mediator->getRoom()->getLimitAt( "south" )
                         && isNotUnderDoorAt( "south" ) && isNotUnderDoorAt( "southeast" ) && isNotUnderDoorAt( "southwest" ) )
         {
                 mediator->pushCollision( "some segment of wall at south" );
         }
 
-        if ( this->y - static_cast< int >( getDataOfItem()->getWidthY() ) + 1 < mediator->getRoom()->getLimitAt( "east" )
+        if ( this->getY() - static_cast< int >( getDataOfItem()->getWidthY() ) + 1 < mediator->getRoom()->getLimitAt( "east" )
                         && isNotUnderDoorAt( "east" ) && isNotUnderDoorAt( "eastnorth" ) && isNotUnderDoorAt( "eastsouth" ) )
         {
                 mediator->pushCollision( "some segment of wall at east" );
         }
-        else if ( this->y >= mediator->getRoom()->getLimitAt( "west" )
+        else if ( this->getY() >= mediator->getRoom()->getLimitAt( "west" )
                         && isNotUnderDoorAt( "west" ) && isNotUnderDoorAt( "westnorth" ) && isNotUnderDoorAt( "westsouth" ) )
         {
                 mediator->pushCollision( "some segment of wall at west" );
@@ -293,7 +291,7 @@ bool PlayerItem::addToPosition( int x, int y, int z )
                 }
 
                 // collision with floor
-                if ( this->z < 0 )
+                if ( this->getZ() < 0 )
                 {
                         mediator->pushCollision( "some tile of floor" );
                 }
@@ -308,14 +306,14 @@ bool PlayerItem::addToPosition( int x, int y, int z )
                                 // reshade and remask
                                 binBothProcessedImages();
                                 setWantShadow( true );
-                                this->myMask = WantRemask;
+                                setWantMaskTrue();
 
                                 // for item with image, mark to mask free items whose images overlap with its image
                                 if ( this->rawImage != nilPointer )
                                 {
                                         // get how many pixels is this image from point of room’s origin
-                                        this->offset.first = ( ( this->x - this->y ) << 1 ) + getWidthX() + getDataOfItem()->getWidthY() - ( this->rawImage->w >> 1 ) - 1;
-                                        this->offset.second = this->x + this->y + getWidthX() - this->rawImage->h - this->z;
+                                        this->offset.first = ( ( getX() - getY() ) << 1 ) + getWidthX() + getDataOfItem()->getWidthY() - ( this->rawImage->getWidth() >> 1 ) - 1;
+                                        this->offset.second = getX() + getY() + getWidthX() - this->rawImage->getHeight() - getZ();
 
                                         // for both the previous position and the current position
                                         mediator->remaskWithFreeItem( &copyOfItem );
@@ -327,12 +325,9 @@ bool PlayerItem::addToPosition( int x, int y, int z )
                                 }
 
                                 // reshade items
-                                if ( mediator->getDegreeOfShading() < 256 )
-                                {
-                                        // for both the previous position and the current position
-                                        mediator->reshadeWithFreeItem( &copyOfItem );
-                                        mediator->reshadeWithFreeItem( this );
-                                }
+                                // for both previous position and current position
+                                mediator->reshadeWithFreeItem( &copyOfItem );
+                                mediator->reshadeWithFreeItem( this );
 
                                 // rearrange list of free items
                                 mediator->activateFreeItemsSorting();
@@ -343,9 +338,9 @@ bool PlayerItem::addToPosition( int x, int y, int z )
         // restore previous values for collision which is not collision with door
         if ( collisionFound && ! doorCollision )
         {
-                this->x = copyOfItem.getX();
-                this->y = copyOfItem.getY();
-                this->z = copyOfItem.getZ();
+                this->xPos = copyOfItem.getX();
+                this->yPos = copyOfItem.getY();
+                this->zPos = copyOfItem.getZ();
 
                 this->offset = copyOfItem.getOffset();
         }
@@ -361,50 +356,50 @@ bool PlayerItem::isCollidingWithLimitOfRoom( const std::string& onWhichWay )
 
         switch ( Way( onWhichWay ).getIntegerOfWay () )
         {
-                case North:
-                        result = ( this->x < 0 );
+                case Way::North:
+                        result = ( this->getX() < 0 );
                         break;
 
-                case Northeast:
-                case Northwest:
+                case Way::Northeast:
+                case Way::Northwest:
                         result = ( door != nilPointer &&
-                                        this->x < mediator->getRoom()->getLimitAt( onWhichWay ) &&
-                                        door->isUnderDoor( this->x, this->y, this->z ) );
+                                        this->getX() < mediator->getRoom()->getLimitAt( onWhichWay ) &&
+                                        door->isUnderDoor( this->getX(), this->getY(), this->getZ() ) );
                         break;
 
-                case South:
-                        result = ( this->x + static_cast< int >( getDataOfItem()->getWidthX() )
+                case Way::South:
+                        result = ( this->getX() + static_cast< int >( getDataOfItem()->getWidthX() )
                                         > static_cast< int >( mediator->getRoom()->getTilesX() * mediator->getRoom()->getSizeOfOneTile() ) );
                         break;
 
-                case Southeast:
-                case Southwest:
+                case Way::Southeast:
+                case Way::Southwest:
                         result = ( door != nilPointer &&
-                                        this->x + static_cast< int >( getDataOfItem()->getWidthX() ) > mediator->getRoom()->getLimitAt( onWhichWay ) &&
-                                        door->isUnderDoor( this->x, this->y, this->z ) );
+                                        this->getX() + static_cast< int >( getDataOfItem()->getWidthX() ) > mediator->getRoom()->getLimitAt( onWhichWay ) &&
+                                        door->isUnderDoor( this->getX(), this->getY(), this->getZ() ) );
                         break;
 
-                case East:
-                        result = ( this->y - static_cast< int >( getDataOfItem()->getWidthY() ) + 1 < 0 );
+                case Way::East:
+                        result = ( this->getY() - static_cast< int >( getDataOfItem()->getWidthY() ) + 1 < 0 );
                         break;
 
-                case Eastnorth:
-                case Eastsouth:
+                case Way::Eastnorth:
+                case Way::Eastsouth:
                         result = ( door != nilPointer &&
-                                        this->y - static_cast< int >( getDataOfItem()->getWidthY() ) + 1 < mediator->getRoom()->getLimitAt( onWhichWay ) &&
-                                        door->isUnderDoor( this->x, this->y, this->z ) );
+                                        this->getY() - static_cast< int >( getDataOfItem()->getWidthY() ) + 1 < mediator->getRoom()->getLimitAt( onWhichWay ) &&
+                                        door->isUnderDoor( this->getX(), this->getY(), this->getZ() ) );
                         break;
 
-                case West:
-                        result = ( this->y
+                case Way::West:
+                        result = ( this->getY()
                                         >= static_cast< int >( mediator->getRoom()->getTilesY() * mediator->getRoom()->getSizeOfOneTile() ) );
                         break;
 
-                case Westnorth:
-                case Westsouth:
+                case Way::Westnorth:
+                case Way::Westsouth:
                         result = ( door != nilPointer &&
-                                        this->y + static_cast< int >( getDataOfItem()->getWidthY() ) > mediator->getRoom()->getLimitAt( onWhichWay ) &&
-                                        door->isUnderDoor( this->x, this->y, this->z ) );
+                                        this->getY() + static_cast< int >( getDataOfItem()->getWidthY() ) > mediator->getRoom()->getLimitAt( onWhichWay ) &&
+                                        door->isUnderDoor( this->getX(), this->getY(), this->getZ() ) );
                         break;
 
                 default:
@@ -438,12 +433,12 @@ void PlayerItem::wait ()
         ActivityOfItem activity = this->behavior->getActivityOfItem();
 
         // don’t wait while teleporting or loosing life
-        if ( activity != BeginWayOutTeletransport && activity != WayOutTeletransport &&
-                activity != BeginWayInTeletransport && activity != WayInTeletransport &&
-                activity != MeetMortalItem && activity != Vanish )
+        if ( activity != Activity::BeginWayOutTeletransport && activity != Activity::WayOutTeletransport &&
+                activity != Activity::BeginWayInTeletransport && activity != Activity::WayInTeletransport &&
+                activity != Activity::MeetMortalItem && activity != Activity::Vanish )
         {
                 // get waiting frame by orientation of item
-                unsigned int orientOccident = ( orientation.getIntegerOfWay() == Nowhere ? 0 : orientation.getIntegerOfWay() );
+                unsigned int orientOccident = ( orientation.getIntegerOfWay() == Way::Nowhere ? 0 : orientation.getIntegerOfWay() );
                 size_t frame = ( getDataOfItem()->howManyMotions() - getDataOfItem()->howManyExtraFrames() ) / getDataOfItem()->howManyFramesForOrientations() * orientOccident ;
                 if ( frame >= getDataOfItem()->howManyMotions() ) frame = 0;
 
@@ -457,7 +452,7 @@ void PlayerItem::wait ()
                         }
                 }
 
-                this->behavior->changeActivityOfItem( Wait );
+                this->behavior->changeActivityOfItem( Activity::Wait );
         }
 }
 
@@ -494,7 +489,7 @@ void PlayerItem::loseLife()
                 GameManager::getInstance()->loseLife( getOriginalLabel () /* current label is "bubbles" */ );
         }
 
-        GameManager::getInstance()->emptyHandbag( getOriginalLabel () );
+        GameManager::getInstance()->emptyHandbag();
 }
 
 void PlayerItem::takeTool( const std::string& label )
@@ -607,12 +602,9 @@ void PlayerItem::liberatePlanet ()
         }
 }
 
-void PlayerItem::assignTakenItem ( ItemData* itemData, Picture* itemImage, const std::string& behavior )
+void PlayerItem::placeItemInBag ( ItemData* itemData, const std::string& behavior )
 {
-        GameManager::getInstance()->setItemTaken( itemImage );
-
         this->takenItemData = itemData;
-        this->takenItemImage = itemImage;
         this->takenItemBehavior = behavior;
 }
 

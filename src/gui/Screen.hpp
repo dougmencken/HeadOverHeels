@@ -38,7 +38,6 @@ class Screen : public Widget
 public:
 
         /**
-         * Constructor
          * @param action Action for which this screen is created
          */
         Screen( Action * action ) ;
@@ -48,13 +47,13 @@ public:
         /**
          * Draw parts of screen
          */
-        void draw ( allegro::Pict* where ) ;
+        void draw ( const allegro::Pict& where ) ;
 
         void redraw () ;
 
         void drawOnGlobalScreen () ;
 
-        void handleKey ( int key ) ;
+        void handleKey ( const std::string& key ) ;
 
         void addWidget ( Widget* widget ) ;
 
@@ -72,7 +71,22 @@ public:
 
         static void refreshBackground () ;
 
-        static allegro::Pict * loadPicture ( const char * nameOfPicture ) ;
+        void refreshPicturesOfHeadAndHeels () ;
+
+        Action * getActionOfScreen () const {  return actionOfScreen ;  }
+
+        void setEscapeAction ( Action * action ) ;
+
+        Action * getEscapeAction () const {  return escapeAction ;  }
+
+        /**
+         * Assign successor of this component in chain to handle typing of key
+         */
+        void setKeyHandler ( Widget* widget ) {  keyHandler = widget ;  }
+
+        Widget * getKeyHandler () const {  return keyHandler ;  }
+
+        static Picture * loadPicture ( const std::string& nameOfPicture ) ;
 
         static std::vector < allegro::Pict * > loadAnimation ( const char * nameOfGif ) ;
 
@@ -82,9 +96,9 @@ public:
 
         static void barWipeHorizontally ( Screen * oldScreen, Screen * newScreen, bool rightToLeft ) ;
 
-        static void randomPixelFadeIn( Color * fadeFrom, Screen * screen ) {  randomPixelFade( true, screen, fadeFrom ) ;  }
+        static void randomPixelFadeIn( const Color & fadeFrom, Screen * screen ) {  randomPixelFade( true, screen, fadeFrom ) ;  }
 
-        static void randomPixelFadeOut( Screen * screen, Color * fadeTo ) {  randomPixelFade( false, screen, fadeTo ) ;  }
+        static void randomPixelFadeOut( Screen * screen, const Color & fadeTo ) {  randomPixelFade( false, screen, fadeTo ) ;  }
 
 private:
 
@@ -108,7 +122,7 @@ private:
 
         AnimatedPictureWidget * pictureOfHeels ;
 
-        static void randomPixelFade( bool fadeIn, Screen * slide, Color * color ) ;
+        static void randomPixelFade( bool fadeIn, Screen * slide, const Color & color ) ;
 
 protected:
 
@@ -116,23 +130,6 @@ protected:
          * Imagen de fondo de la pantalla
          */
         static Picture * backgroundPicture ;
-
-public:
-
-        void refreshPicturesOfHeadAndHeels () ;
-
-        Action * getActionOfScreen () const {  return actionOfScreen ;  }
-
-        void setEscapeAction ( Action * action ) ;
-
-        Action * getEscapeAction () const {  return escapeAction ;  }
-
-        /**
-         * Assign successor of this component in chain to handle typing of key
-         */
-        void setKeyHandler ( Widget* widget ) {  keyHandler = widget ;  }
-
-        Widget * getKeyHandler () const {  return keyHandler ;  }
 
 };
 

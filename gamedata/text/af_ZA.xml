@@ -213,16 +213,16 @@
     <properties font="big" color="yellow">
       <string>Mense salueer jou heldedaad en</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>proklameer jou. Hiena toe, liewe</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>friend, on twee helde sit 'n</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>definitiewe einde aan</string>
     </properties>
-    <properties font="regular" color="multicolor">
+    <properties font="plain" color="multicolor">
       <string>Blacktooth Emperor's tirannie</string>
     </properties>
   </text>

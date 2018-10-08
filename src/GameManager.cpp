@@ -57,7 +57,7 @@ GameManager::GameManager( )
         , horn( false )
         , handbag( false )
         , donuts( 0 )
-        , itemTaken( nilPointer )
+        , imageOfItemInBag( nilPointer )
         , takenCrown( false )
         , eatenFish( false )
         , gameOver( false )
@@ -148,7 +148,8 @@ GameManager* GameManager::getInstance ()
 /* static */
 Picture * GameManager::refreshPicture ( const char * nameOfPicture )
 {
-        return new Picture( allegro::loadPNG( isomot::pathToFile( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + nameOfPicture ) ) );
+        smartptr< allegro::Pict > pict( allegro::loadPNG( isomot::pathToFile( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + nameOfPicture ) ) );
+        return new Picture( *pict.get() );
 }
 
 WhyPause GameManager::begin ()
@@ -165,7 +166,7 @@ WhyPause GameManager::begin ()
         this->horn = false;
         this->handbag = false;
         this->donuts = 0;
-        this->itemTaken = nilPointer;
+        this->imageOfItemInBag = nilPointer;
         this->planets.clear();
 
         refreshAmbianceImages ();
@@ -290,7 +291,7 @@ void GameManager::refreshAmbianceImages ()
         }
 }
 
-void GameManager::drawAmbianceOfGame ( allegro::Pict * where )
+void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
 {
         // scenery of this room
         std::string scenery = isomot->getMapManager()->getActiveRoom()->getScenery();
@@ -365,7 +366,7 @@ void GameManager::drawAmbianceOfGame ( allegro::Pict * where )
                 allegro::drawSprite( where, ( this->donuts != 0 ? pictureOfDonuts : grayPictureOfDonuts )->getAllegroPict(), leftTooAmbianceX, charStuffAmbianceY );
                 if ( this->donuts > 0 )
                 {
-                        gui::Label donutsLabel( numberToString( this->donuts ), "regular", colorOfLabels, -2 );
+                        gui::Label donutsLabel( numberToString( this->donuts ), "", colorOfLabels, -2 );
                         donutsLabel.moveTo( ( this->donuts > 9 ? 42 : 49 ) + dx, charStuffAmbianceY + 11 );
                         donutsLabel.draw( where );
                 }
@@ -374,7 +375,7 @@ void GameManager::drawAmbianceOfGame ( allegro::Pict * where )
                 allegro::drawSprite( where, ( this->highJumps > 0 ? pictureOfGrandesSaltos : grayPictureOfGrandesSaltos )->getAllegroPict(), rightAmbianceX, bonusAmbianceY );
                 if ( this->highJumps > 0 )
                 {
-                        gui::Label highJumpsLabel( numberToString( this->highJumps ), "regular", colorOfLabels, -2 );
+                        gui::Label highJumpsLabel( numberToString( this->highJumps ), "", colorOfLabels, -2 );
                         highJumpsLabel.moveTo( ( this->highJumps > 9 ? 505 : 512 ) + dx, bonusAmbianceY + 1 );
                         highJumpsLabel.draw( where );
                 }
@@ -383,7 +384,7 @@ void GameManager::drawAmbianceOfGame ( allegro::Pict * where )
                 allegro::drawSprite( where, ( this->highSpeed > 0 ? pictureOfGranVelocidad : grayPictureOfGranVelocidad )->getAllegroPict(), leftAmbianceX, bonusAmbianceY );
                 if ( this->highSpeed > 0 )
                 {
-                        gui::Label highSpeedLabel( numberToString( this->highSpeed ), "regular", colorOfLabels, -2 );
+                        gui::Label highSpeedLabel( numberToString( this->highSpeed ), "", colorOfLabels, -2 );
                         highSpeedLabel.moveTo( ( this->highSpeed > 9 ? 107 : 114 ) + dx, bonusAmbianceY + 1 );
                         highSpeedLabel.draw( where );
                 }
@@ -393,7 +394,7 @@ void GameManager::drawAmbianceOfGame ( allegro::Pict * where )
                 if ( this->headShield > 0 )
                 {
                         int headShieldValue = static_cast< int >( this->headShield * 99.0 / 25.0 );
-                        gui::Label headShieldLabel( numberToString( headShieldValue ), "regular", colorOfLabels, -2 );
+                        gui::Label headShieldLabel( numberToString( headShieldValue ), "", colorOfLabels, -2 );
                         headShieldLabel.moveTo( ( headShieldValue > 9 ? 107 : 114 ) + dx, immunityAmbianceY + 1 );
                         headShieldLabel.draw( where );
                 }
@@ -403,15 +404,15 @@ void GameManager::drawAmbianceOfGame ( allegro::Pict * where )
                 if ( this->heelsShield > 0 )
                 {
                         int heelsShieldValue = static_cast< int >( this->heelsShield * 99.0 / 25.0 );
-                        gui::Label heelsShieldLabel( numberToString( heelsShieldValue ), "regular", colorOfLabels, -2 );
+                        gui::Label heelsShieldLabel( numberToString( heelsShieldValue ), "", colorOfLabels, -2 );
                         heelsShieldLabel.moveTo( ( heelsShieldValue > 9 ? 505 : 512 ) + dx, immunityAmbianceY + 1 );
                         heelsShieldLabel.draw( where );
                 }
 
                 // item in handbag
-                if ( this->itemTaken != nilPointer )
+                if ( this->imageOfItemInBag != nilPointer )
                 {
-                        allegro::drawSprite( where, this->itemTaken->getAllegroPict(), rightTooAmbianceX, charStuffAmbianceY );
+                        allegro::drawSprite( where, imageOfItemInBag->getAllegroPict(), rightTooAmbianceX, charStuffAmbianceY );
                 }
         }
         else
@@ -432,28 +433,22 @@ void GameManager::drawAmbianceOfGame ( allegro::Pict * where )
                 if ( recordingTimer->getValue() > 0.1 /* 10 times per one second */ )
                 {
                         numberOfCapture++ ;
-                        std::ostringstream file;
-                        file << prefixOfCaptures << numberOfCapture << ".pcx";
 
-                        save_bitmap( ( capturePath + file.str() ).c_str (), where, nilPointer );
+                        allegro::savePictAsPCX( capturePath + prefixOfCaptures + isomot::numberToString( numberOfCapture ), where );
 
                         recordingTimer->reset ();
                 }
         }
 
-        acquire_screen();
-
-        allegro::bitBlit( where, screen );
+        allegro::bitBlit( where, allegro::Pict::theScreen() );
 
         if ( recordCaptures )
         {
-                if ( ! drawBackgroundPicture ) rectfill( screen, 11, 18, 19, 30, Color::blackColor()->toAllegroColor() );
-                rectfill( screen, 19, 18, 80, 30, Color::gray50Color()->toAllegroColor() );
-                circlefill( screen, 34, 24, 5, Color::redColor()->toAllegroColor() );
-                textout_ex( screen, font, "REC", 48, 21, Color::redColor()->toAllegroColor(), -1 );
+                if ( ! drawBackgroundPicture ) allegro::fillRect( allegro::Pict::theScreen(), 11, 18, 19, 30, Color::blackColor().toAllegroColor() );
+                allegro::fillRect( allegro::Pict::theScreen(), 19, 18, 80, 30, Color::gray50Color().toAllegroColor() );
+                allegro::fillCircle( allegro::Pict::theScreen(), 34, 24, 5, Color::redColor().toAllegroColor() );
+                allegro::textOut( "REC", allegro::Pict::theScreen(), 48, 21, Color::redColor().toAllegroColor() );
         }
-
-        release_screen();
 }
 
 void GameManager::loadGame ( const std::string& fileName )
@@ -655,12 +650,9 @@ void GameManager::modifyShield ( const std::string& player, double shield )
         }
 }
 
-void GameManager::emptyHandbag ( const std::string& player )
+void GameManager::emptyHandbag ()
 {
-        if ( player == "heels" || player == "headoverheels" )
-        {
-                this->itemTaken = nilPointer;
-        }
+        setImageOfItemInBag( nilPointer );
 }
 
 void GameManager::resetPlanets ()
@@ -732,15 +724,15 @@ WhyPause GameManager::update ()
         // periodically update the game while user does not type pause key confirming it with ESCAPE
         while ( why == Nevermind )
         {
-                if ( ! key[ InputManager::getInstance()->getUserKey( "pause" ) ] && ! this->takenCrown && ! this->eatenFish && ! this->gameOver )
+                if ( ! InputManager::getInstance()->pauseTyped () && ! this->takenCrown && ! this->eatenFish && ! this->gameOver )
                 {
                         // actualiza la vista isométrica
-                        allegro::Pict* view = isomot->update();
+                        Picture* view = isomot->update();
 
                         // se ha podido actualizar
                         if ( view != nilPointer )
                         {
-                                this->drawAmbianceOfGame( view );
+                                this->drawAmbianceOfGame( view->getAllegroPict() );
                                 milliSleep( 10 );
                         }
                         else
@@ -768,8 +760,7 @@ WhyPause GameManager::pause ()
         // detiene el motor isométrico
         isomot->pause();
 
-        // da tiempo a que el usuario vea la parada
-        clear_keybuf();
+        allegro::emptyKeyboardBuffer();
 
         // el usuario acaba de liberar un planeta, se muestra la pantalla de los planetas
         if ( this->takenCrown )
@@ -793,9 +784,7 @@ WhyPause GameManager::pause ()
                         gui::Label label( line->text, line->font, line->color );
                         label.moveTo( ( ScreenWidth() - label.getWidth() ) >> 1, deltaY );
                         deltaY += label.getHeight() * 3 / 4;
-                        acquire_screen();
-                        label.draw( screen );
-                        release_screen();
+                        label.draw( allegro::Pict::theScreen() );
                 }
 
                 text = language->findLanguageStringForAlias( "confirm-resume" );
@@ -807,37 +796,35 @@ WhyPause GameManager::pause ()
                         gui::Label label( line->text, line->font, line->color );
                         label.moveTo( ( ScreenWidth() - label.getWidth() ) >> 1, deltaY );
                         deltaY += label.getHeight() * 3 / 4;
-                        acquire_screen();
-                        label.draw( screen );
-                        release_screen();
+                        label.draw( allegro::Pict::theScreen() );
                 }
 
-                clear_keybuf();
+                allegro::emptyKeyboardBuffer();
 
                 // mientras el usuario no elija una de las dos opciones no se hará nada
                 while ( ! confirm && ! exit )
                 {
-                        if ( keypressed() )
+                        if ( allegro::areKeypushesWaiting() )
                         {
-                                int key = readkey() >> 8;
+                                std::string key = allegro::nextKey();
 
                                 // si se pulsa SPACE se mostrará la interfaz para la grabación de la partida
-                                if ( key == KEY_SPACE )
+                                if ( key == "Space" )
                                 {
                                         exit = true;
                                         why = SaveGame;
                                 }
-                                else if ( key != inputManager->getUserKey( "movenorth" ) &&
-                                          key != inputManager->getUserKey( "movesouth" ) &&
-                                          key != inputManager->getUserKey( "moveeast" ) &&
-                                          key != inputManager->getUserKey( "movewest" ) &&
-                                          key != inputManager->getUserKey( "jump" ) &&
-                                          key != inputManager->getUserKey( "take" ) &&
-                                          key != inputManager->getUserKey( "take&jump" ) &&
-                                          key != inputManager->getUserKey( "swap" ) &&
-                                          key != inputManager->getUserKey( "doughnut" ) &&
-                                          key != inputManager->getUserKey( "pause" ) &&
-                                          key != KEY_ESC )
+                                else if ( key != inputManager->getUserKeyFor( "movenorth" ) &&
+                                          key != inputManager->getUserKeyFor( "movesouth" ) &&
+                                          key != inputManager->getUserKeyFor( "moveeast" ) &&
+                                          key != inputManager->getUserKeyFor( "movewest" ) &&
+                                          key != inputManager->getUserKeyFor( "jump" ) &&
+                                          key != inputManager->getUserKeyFor( "take" ) &&
+                                          key != inputManager->getUserKeyFor( "take&jump" ) &&
+                                          key != inputManager->getUserKeyFor( "swap" ) &&
+                                          key != inputManager->getUserKeyFor( "doughnut" ) &&
+                                          key != inputManager->getUserKeyFor( "pause" ) &&
+                                          key != "Escape" )
                                 {
                                         confirm = true;
                                         isomot->resume();
@@ -883,9 +870,7 @@ WhyPause GameManager::pause ()
                         gui::Label label( line->text, line->font, line->color );
                         label.moveTo( ( ScreenWidth() - label.getWidth() ) >> 1, deltaY );
                         deltaY += label.getHeight() * 3 / 4;
-                        acquire_screen();
-                        label.draw( screen );
-                        release_screen();
+                        label.draw( allegro::Pict::theScreen() );
                 }
 
                 text = language->findLanguageStringForAlias( "confirm-resume" );
@@ -897,18 +882,16 @@ WhyPause GameManager::pause ()
                         gui::Label label( line->text, line->font, line->color );
                         label.moveTo( ( ScreenWidth() - label.getWidth() ) >> 1, deltaY );
                         deltaY += label.getHeight() * 3 / 4;
-                        acquire_screen();
-                        label.draw( screen );
-                        release_screen();
+                        label.draw( allegro::Pict::theScreen() );
                 }
 
                 // mientras el usuario no elija una de las dos opciones no se hará nada
                 while ( ! confirm && ! exit )
                 {
-                        if ( keypressed() )
+                        if ( allegro::areKeypushesWaiting() )
                         {
                                 // Si ha pulsado Escape se suspende la partida en curso
-                                if ( readkey() >> 8 == KEY_ESC )
+                                if ( allegro::nextKey() == "Escape" )
                                 {
                                         exit = true;
                                         why = GameOver;
@@ -1032,43 +1015,43 @@ bool GameManager::readPreferences( const std::string& fileName )
         {
                 tinyxml2::XMLElement* movenorth = keyboard->FirstChildElement( "movenorth" ) ;
                 if ( movenorth != nilPointer )
-                        InputManager::getInstance()->changeUserKey( "movenorth", std::atoi( movenorth->FirstChild()->ToText()->Value() ) );
+                        InputManager::getInstance()->changeUserKey( "movenorth", movenorth->FirstChild()->ToText()->Value() );
 
                 tinyxml2::XMLElement* movesouth = keyboard->FirstChildElement( "movesouth" ) ;
                 if ( movesouth != nilPointer )
-                        InputManager::getInstance()->changeUserKey( "movesouth", std::atoi( movesouth->FirstChild()->ToText()->Value() ) );
+                        InputManager::getInstance()->changeUserKey( "movesouth", movesouth->FirstChild()->ToText()->Value() );
 
                 tinyxml2::XMLElement* moveeast = keyboard->FirstChildElement( "moveeast" ) ;
                 if ( moveeast != nilPointer )
-                        InputManager::getInstance()->changeUserKey( "moveeast", std::atoi( moveeast->FirstChild()->ToText()->Value() ) );
+                        InputManager::getInstance()->changeUserKey( "moveeast", moveeast->FirstChild()->ToText()->Value() );
 
                 tinyxml2::XMLElement* movewest = keyboard->FirstChildElement( "movewest" ) ;
                 if ( movewest != nilPointer )
-                        InputManager::getInstance()->changeUserKey( "movewest", std::atoi( movewest->FirstChild()->ToText()->Value() ) );
+                        InputManager::getInstance()->changeUserKey( "movewest", movewest->FirstChild()->ToText()->Value() );
 
                 tinyxml2::XMLElement* take = keyboard->FirstChildElement( "take" ) ;
                 if ( take != nilPointer )
-                        InputManager::getInstance()->changeUserKey( "take", std::atoi( take->FirstChild()->ToText()->Value() ) );
+                        InputManager::getInstance()->changeUserKey( "take", take->FirstChild()->ToText()->Value() );
 
                 tinyxml2::XMLElement* jump = keyboard->FirstChildElement( "jump" ) ;
                 if ( jump != nilPointer )
-                        InputManager::getInstance()->changeUserKey( "jump", std::atoi( jump->FirstChild()->ToText()->Value() ) );
+                        InputManager::getInstance()->changeUserKey( "jump", jump->FirstChild()->ToText()->Value() );
 
                 tinyxml2::XMLElement* doughnut = keyboard->FirstChildElement( "doughnut" ) ;
                 if ( doughnut != nilPointer )
-                        InputManager::getInstance()->changeUserKey( "doughnut", std::atoi( doughnut->FirstChild()->ToText()->Value() ) );
+                        InputManager::getInstance()->changeUserKey( "doughnut", doughnut->FirstChild()->ToText()->Value() );
 
                 tinyxml2::XMLElement* takeandjump = keyboard->FirstChildElement( "takeandjump" ) ;
                 if ( takeandjump != nilPointer )
-                        InputManager::getInstance()->changeUserKey( "take&jump", std::atoi( takeandjump->FirstChild()->ToText()->Value() ) );
+                        InputManager::getInstance()->changeUserKey( "take&jump", takeandjump->FirstChild()->ToText()->Value() );
 
                 tinyxml2::XMLElement* swap = keyboard->FirstChildElement( "swap" ) ;
                 if ( swap != nilPointer )
-                        InputManager::getInstance()->changeUserKey( "swap", std::atoi( swap->FirstChild()->ToText()->Value() ) );
+                        InputManager::getInstance()->changeUserKey( "swap", swap->FirstChild()->ToText()->Value() );
 
                 tinyxml2::XMLElement* pause = keyboard->FirstChildElement( "pause" ) ;
                 if ( pause != nilPointer )
-                        InputManager::getInstance()->changeUserKey( "pause", std::atoi( pause->FirstChild()->ToText()->Value() ) );
+                        InputManager::getInstance()->changeUserKey( "pause", pause->FirstChild()->ToText()->Value() );
         }
 
         // preferences for audio
@@ -1160,43 +1143,43 @@ bool GameManager::writePreferences( const std::string& fileName )
                 tinyxml2::XMLNode * keyboard = preferences.NewElement( "keyboard" );
 
                 tinyxml2::XMLElement * movenorth = preferences.NewElement( "movenorth" );
-                movenorth->SetText( InputManager::getInstance()->getUserKey( "movenorth" ) );
+                movenorth->SetText( InputManager::getInstance()->getUserKeyFor( "movenorth" ).c_str () );
                 keyboard->InsertEndChild( movenorth );
 
                 tinyxml2::XMLElement * movesouth = preferences.NewElement( "movesouth" );
-                movesouth->SetText( InputManager::getInstance()->getUserKey( "movesouth" ) );
+                movesouth->SetText( InputManager::getInstance()->getUserKeyFor( "movesouth" ).c_str () );
                 keyboard->InsertEndChild( movesouth );
 
                 tinyxml2::XMLElement * moveeast = preferences.NewElement( "moveeast" );
-                moveeast->SetText( InputManager::getInstance()->getUserKey( "moveeast" ) );
+                moveeast->SetText( InputManager::getInstance()->getUserKeyFor( "moveeast" ).c_str () );
                 keyboard->InsertEndChild( moveeast );
 
                 tinyxml2::XMLElement * movewest = preferences.NewElement( "movewest" );
-                movewest->SetText( InputManager::getInstance()->getUserKey( "movewest" ) );
+                movewest->SetText( InputManager::getInstance()->getUserKeyFor( "movewest" ).c_str () );
                 keyboard->InsertEndChild( movewest );
 
                 tinyxml2::XMLElement * take = preferences.NewElement( "take" );
-                take->SetText( InputManager::getInstance()->getUserKey( "take" ) );
+                take->SetText( InputManager::getInstance()->getUserKeyFor( "take" ).c_str () );
                 keyboard->InsertEndChild( take );
 
                 tinyxml2::XMLElement * jump = preferences.NewElement( "jump" );
-                jump->SetText( InputManager::getInstance()->getUserKey( "jump" ) );
+                jump->SetText( InputManager::getInstance()->getUserKeyFor( "jump" ).c_str () );
                 keyboard->InsertEndChild( jump );
 
                 tinyxml2::XMLElement * doughnut = preferences.NewElement( "doughnut" );
-                doughnut->SetText( InputManager::getInstance()->getUserKey( "doughnut" ) );
+                doughnut->SetText( InputManager::getInstance()->getUserKeyFor( "doughnut" ).c_str () );
                 keyboard->InsertEndChild( doughnut );
 
                 tinyxml2::XMLElement * takeandjump = preferences.NewElement( "takeandjump" );
-                takeandjump->SetText( InputManager::getInstance()->getUserKey( "take&jump" ) );
+                takeandjump->SetText( InputManager::getInstance()->getUserKeyFor( "take&jump" ).c_str () );
                 keyboard->InsertEndChild( takeandjump );
 
                 tinyxml2::XMLElement * swap = preferences.NewElement( "swap" );
-                swap->SetText( InputManager::getInstance()->getUserKey( "swap" ) );
+                swap->SetText( InputManager::getInstance()->getUserKeyFor( "swap" ).c_str () );
                 keyboard->InsertEndChild( swap );
 
                 tinyxml2::XMLElement * pause = preferences.NewElement( "pause" );
-                pause->SetText( InputManager::getInstance()->getUserKey( "pause" ) );
+                pause->SetText( InputManager::getInstance()->getUserKeyFor( "pause" ).c_str () );
                 keyboard->InsertEndChild( pause );
 
                 root->InsertEndChild( keyboard );

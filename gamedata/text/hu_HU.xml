@@ -261,16 +261,16 @@
     <properties font="big" color="yellow">
       <string>mint egy höst</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>És ezzel kedves barátaim most már</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>a két aranyos hösünk a zsarnokság</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>alól a Blacktooth- birodalmat</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>végérvényese felszabadította</string>
     </properties>
   </text>

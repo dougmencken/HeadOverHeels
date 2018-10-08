@@ -18,7 +18,7 @@ using gui::LanguageManager;
 using gui::SelectLanguage;
 
 
-CreateLanguageMenu::CreateLanguageMenu( allegro::Pict* picture )
+CreateLanguageMenu::CreateLanguageMenu( Picture * picture )
         : Action( picture )
 {
         // read list of languages available for this game
@@ -44,7 +44,7 @@ void CreateLanguageMenu::doAction ()
         const unsigned int space = ( screenWidth / 20 ) - 10;
 
         Label* Head = new Label( "Head", "big", "yellow" );
-        Label* over = new Label( "over", "regular", "multicolor" );
+        Label* over = new Label( "over", "plain", "multicolor" );
         Label* Heels = new Label( "Heels", "big", "yellow" );
 
         over->moveTo( ( screenWidth - over->getWidth() - 20 ) >> 1, space + Head->getHeight() - over->getHeight() - 8 );

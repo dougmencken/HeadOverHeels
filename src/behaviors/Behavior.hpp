@@ -15,6 +15,7 @@
 #include <stack>
 
 #include "Ism.hpp"
+#include "ActivityOfItem.hpp"
 
 
 namespace isomot

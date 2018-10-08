@@ -31,9 +31,9 @@ public:
 
         virtual ~PictureWidget( ) ;
 
-        virtual void draw ( allegro::Pict * where ) ;
+        virtual void draw ( const allegro::Pict & where ) ;
 
-        void handleKey ( int /* rawKey */ ) {  /* do nothing */  }
+        void handleKey ( const std::string& /* key */ ) {  /* do nothing */  }
 
         Picture * getPicture () const {  return picture ;  }
 

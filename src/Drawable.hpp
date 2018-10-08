@@ -22,7 +22,7 @@ public:
 
         virtual ~Drawable() { }
 
-        virtual void draw( allegro::Pict * where ) = 0;
+        virtual void draw( const allegro::Pict& where ) = 0;
 
 };
 

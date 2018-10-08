@@ -14,42 +14,41 @@ namespace gui
 {
 
 Menu::Menu( )
-        : Widget( ),
-        activeOption( nilPointer ),
-        whereToDraw( nilPointer ),
-        optionImage( nilPointer ),
-        chosenOptionImage( nilPointer ),
-        chosenOptionImageMini( nilPointer )
+        : Widget( )
+        , whereToDraw( nilPointer )
+        , activeOption( nilPointer )
+        , optionImage( nilPointer )
+        , chosenOptionImage( nilPointer )
+        , chosenOptionImageMini( nilPointer )
 {
         refreshPictures ();
 }
 
 Menu::~Menu( )
 {
-        std::for_each( options.begin (), options.end (), isomot::DeleteObject() );
+        std::for_each( options.begin (), options.end (), isomot::DeleteIt() );
         options.clear();
 }
 
 void Menu::refreshPictures ()
 {
         delete optionImage ;
-        optionImage = new Picture( allegro::loadPNG( isomot::pathToFile( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + "option.png" ) ) );
-
         delete chosenOptionImage ;
-        chosenOptionImage = new Picture( allegro::loadPNG( isomot::pathToFile( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + "chosen-option.png" ) ) );
-
         delete chosenOptionImageMini ;
-        chosenOptionImageMini = new Picture( allegro::loadPNG( isomot::pathToFile( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + "chosen-option-mini.png" ) ) );
+
+        smartptr< allegro::Pict > optionPict( allegro::loadPNG( isomot::pathToFile( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + "option.png" ) ) );
+        optionImage = new Picture( * optionPict.get() );
+
+        smartptr< allegro::Pict > chosenOptionPict( allegro::loadPNG( isomot::pathToFile( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + "chosen-option.png" ) ) );
+        chosenOptionImage = new Picture( * chosenOptionPict.get() );
+
+        smartptr< allegro::Pict > chosenOptionMiniPict( allegro::loadPNG( isomot::pathToFile( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + "chosen-option-mini.png" ) ) );
+        chosenOptionImageMini = new Picture( * chosenOptionMiniPict.get() );
 }
 
-void Menu::draw( allegro::Pict* where )
+void Menu::draw( const allegro::Pict& where )
 {
-        if ( where == nilPointer ) return ;
-
-        if ( where != this->whereToDraw )
-        {
-                this->whereToDraw = where;
-        }
+        if ( ! where.isNotNil() ) return ;
 
         if ( activeOption == nilPointer )
         {
@@ -69,8 +68,8 @@ void Menu::draw( allegro::Pict* where )
                 }
                 else
                 {
-                        if ( label->getFontFamily() != "regular" )
-                                label->changeFontFamily( "regular" );
+                        if ( label->getFontFamily() != "plain" )
+                                label->changeFontFamily( "plain" );
                 }
         }
 
@@ -109,15 +108,13 @@ void Menu::draw( allegro::Pict* where )
 
 void Menu::redraw ()
 {
-        draw( this->whereToDraw );
+        if ( whereToDraw != nilPointer ) draw( whereToDraw->getAllegroPict() );
         GuiManager::getInstance()->redraw();
 }
 
-void Menu::handleKey( int rawKey )
+void Menu::handleKey( const std::string& key )
 {
-        int theKey = rawKey >> 8;
-
-        if ( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && ( theKey == KEY_F ) )
+        if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "f" ) )
         {
                 gui::GuiManager::getInstance()->toggleFullScreenVideo ();
                 return;
@@ -125,19 +122,12 @@ void Menu::handleKey( int rawKey )
 
         if ( this->activeOption != nilPointer )
         {
-                switch ( theKey )
-                {
-                        case KEY_UP:
-                                this->previousOption();
-                                break;
-
-                        case KEY_DOWN:
-                                this->nextOption();
-                                break;
-
-                        default:
-                                activeOption->handleKey( rawKey );
-                }
+                if ( key == "Up" )
+                        this->previousOption();
+                else if ( key == "Down" )
+                        this->nextOption();
+                else
+                        activeOption->handleKey( key );
         }
 }
 

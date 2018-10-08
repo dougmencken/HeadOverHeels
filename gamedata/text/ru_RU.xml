@@ -213,16 +213,16 @@
     <properties font="big" color="yellow">
       <string>прославляют Вас</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>Продолжая в таком духе, дорогой друг,</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>два наших героя определенно положат</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>конец тирании</string>
     </properties>
-    <properties font="regular" color="multicolor">
+    <properties font="plain" color="multicolor">
       <string>Императора Блактут</string>
     </properties>
   </text>

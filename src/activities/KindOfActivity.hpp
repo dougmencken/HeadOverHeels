@@ -13,7 +13,7 @@
 
 #include <vector>
 
-#include "Ism.hpp"
+#include "ActivityOfItem.hpp"
 
 
 namespace isomot

@@ -219,16 +219,16 @@
     <properties font="big" color="yellow">
       <string>zure heroitasuna</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>Honela eta izan zen, adiskide</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>estimatuak, gure 2 heroi betiko</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>bukatu zuten tiraniarekin</string>
     </properties>
-    <properties font="regular" color="multicolor">
+    <properties font="plain" color="multicolor">
       <string>Enperadore Blacktooth-en</string>
     </properties>
   </text>

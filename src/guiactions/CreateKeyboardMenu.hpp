@@ -27,10 +27,9 @@ class CreateKeyboardMenu : public Action
 public:
 
         /**
-         * Constructor
          * @param picture Imagen donde se dibujará la interfaz gráfica
          */
-        CreateKeyboardMenu( allegro::Pict* picture ) ;
+        CreateKeyboardMenu( Picture * picture ) ;
 
         std::string getNameOfAction () const {  return "CreateKeyboardMenu" ;  }
 

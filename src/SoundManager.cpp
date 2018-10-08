@@ -5,44 +5,65 @@
 #include <tinyxml2.h>
 
 using isomot::SoundManager;
-using isomot::SampleData;
-using isomot::SoundData;
+
+#ifdef DEBUG
+#  define DEBUG_SOUNDS  0
+#endif
 
 
 SoundManager* SoundManager::instance = nilPointer ;
 
 
 SoundManager::SoundManager( )
-        : fileName( std::string() ),
-          oggPlayer( nilPointer ),
-          oggStream( nilPointer ),
-          effectsVolume( 80 ),
-          musicVolume( 75 )
+        : effectsVolume( 80 )
+        , musicVolume( 75 )
 {
-        alogg_init();
-        install_timer();
+        allegro::initAudio ();
 
-        int soundSystems[] = {  DIGI_AUTODETECT,
-        # ifdef __gnu_linux__
-                                DIGI_ALSA,
-                                DIGI_OSS,
-                                DIGI_ESD,
-                                DIGI_ARTS,
-                                DIGI_JACK,
-        # endif
-                                DIGI_NONE  };
-        int result = -1;
-        int index = 0;
-
-        while ( result == -1 )
-        {
-                result = install_sound( soundSystems[ index++ ], MIDI_NONE, NULL );
-        }
+        activityToString[ Activity::Wait ] = "wait";
+        activityToString[ Activity::Push ] = "push";
+        activityToString[ Activity::Move ] = "move";
+        activityToString[ Activity::MoveNorth ] = activityToString[ Activity::MoveSouth ] = "move";
+        activityToString[ Activity::MoveEast ] = activityToString[ Activity::MoveWest ] = "move";
+        activityToString[ Activity::MoveNortheast ] = activityToString[ Activity::MoveSoutheast ] = "move";
+        activityToString[ Activity::MoveSouthwest ] = activityToString[ Activity::MoveNorthwest ] = "move";
+        activityToString[ Activity::MoveUp ] = activityToString[ Activity::MoveDown ] = "move";
+        activityToString[ Activity::AutoMove ] = "move";
+        activityToString[ Activity::AutoMoveNorth ] = activityToString[ Activity::AutoMoveSouth ] = "move";
+        activityToString[ Activity::AutoMoveEast ] = activityToString[ Activity::AutoMoveWest ] = "move";
+        activityToString[ Activity::Blink ] = "blink";
+        activityToString[ Activity::Jump ] = "jump";
+        activityToString[ Activity::RegularJump ] = activityToString[ Activity::HighJump ] = "jump";
+        activityToString[ Activity::Fall ] = "fall";
+        activityToString[ Activity::Glide ] = "fall";
+        activityToString[ Activity::TakeItem ] = activityToString[ Activity::TakeAndJump ] = "take";
+        activityToString[ Activity::ItemTaken ] = "taken";
+        activityToString[ Activity::DropItem ] = activityToString[ Activity::DropAndJump ] = "drop";
+        activityToString[ Activity::DisplaceNorth ] = activityToString[ Activity::DisplaceSouth ] = "push";
+        activityToString[ Activity::DisplaceEast ] = activityToString[ Activity::DisplaceWest ] = "push";
+        activityToString[ Activity::DisplaceNortheast ] = activityToString[ Activity::DisplaceSoutheast ] = "push";
+        activityToString[ Activity::DisplaceSouthwest ] = activityToString[ Activity::DisplaceNorthwest ] = "push";
+        activityToString[ Activity::DisplaceUp ] = activityToString[ Activity::DisplaceDown ] = "push";
+        activityToString[ Activity::BeginWayOutTeletransport ] = activityToString[ Activity::WayOutTeletransport ] = "teleport-out";
+        activityToString[ Activity::BeginWayInTeletransport ] = activityToString[ Activity::WayInTeletransport ] = "teleport-in";
+        activityToString[ Activity::ForceDisplaceNorth ] = activityToString[ Activity::ForceDisplaceSouth ] = "force";
+        activityToString[ Activity::ForceDisplaceEast ] = activityToString[ Activity::ForceDisplaceWest ] = "force";
+        activityToString[ Activity::CancelDisplaceNorth ] = activityToString[ Activity::CancelDisplaceSouth ] = "move";
+        activityToString[ Activity::CancelDisplaceEast ] = activityToString[ Activity::CancelDisplaceWest ] = "move";
+        activityToString[ Activity::MeetMortalItem ] = "death";
+        activityToString[ Activity::Vanish ] = "vanish";
+        activityToString[ Activity::FireDoughnut ] = "donut";
+        activityToString[ Activity::Rebound ] = "rebound";
+        activityToString[ Activity::SwitchIt ] = "switch";
+        activityToString[ Activity::Collision ] = "collision";
+        activityToString[ Activity::IsActive ] = "active";
+        activityToString[ Activity::Mistake ] = "mistake";
 }
 
 SoundManager::~SoundManager( )
 {
-        alogg_exit();
+        for ( std::map< std::string, allegro::Sample* >::iterator i = samples.begin (); i != samples.end (); ++ i )
+                delete i->second ;
 }
 
 SoundManager* SoundManager::getInstance()
@@ -55,14 +76,14 @@ SoundManager* SoundManager::getInstance()
         return instance;
 }
 
-void SoundManager::readListOfSounds( const std::string& fileName )
+void SoundManager::readSounds( const std::string& xmlFile )
 {
         // read list of sounds from XML file
         tinyxml2::XMLDocument sounds;
-        tinyxml2::XMLError result = sounds.LoadFile( ( isomot::sharePath() + fileName ).c_str () );
+        tinyxml2::XMLError result = sounds.LoadFile( ( isomot::sharePath() + xmlFile ).c_str () );
         if ( result != tinyxml2::XML_SUCCESS )
         {
-                std::cerr << "can’t read list of sounds from \"" << fileName << "\"" << std::endl ;
+                std::cerr << "can’t read list of sounds from \"" << xmlFile << "\"" << std::endl ;
                 return;
         }
 
@@ -73,7 +94,6 @@ void SoundManager::readListOfSounds( const std::string& fileName )
                         item = item->NextSiblingElement( "item" ) )
         {
                 std::string label = item->Attribute( "label" );
-                SoundData soundDataForLabel( label );
 
                 for ( tinyxml2::XMLElement* event = item->FirstChildElement( "event" ) ;
                                 event != nilPointer ;
@@ -82,311 +102,127 @@ void SoundManager::readListOfSounds( const std::string& fileName )
                         std::string activity = event->Attribute( "activity" );
                         std::string file = event->FirstChildElement( "file" )->FirstChild()->ToText()->Value();
 
-                        soundDataForLabel.addSound( activity, file );
+                        addSound( label, activity, file );
                 }
-
-                this->soundData.push_back( soundDataForLabel );
         }
 
-        std::cout << "read list of sounds from " << fileName << std::endl ;
+        std::cout << "read list of sounds from " << xmlFile << std::endl ;
+}
+
+void SoundManager::addSound( const std::string& label, const std::string& activity, const std::string& sampleFile )
+{
+        this->sounds[ label ][ activity ] = sampleFile ;
+
+#if defined( DEBUG_SOUNDS ) && DEBUG_SOUNDS
+        std::cout << "sound \"" << sampleFile << "\" for activity \"" << activity << "\" of \"" << label << "\"" << std::endl ;
+#endif
+
+        if ( this->samples.find( sampleFile ) != this->samples.end () )
+        {
+                return ;
+        }
+
+        allegro::Sample* sample = allegro::Sample::loadFromFile( isomot::pathToFile( isomot::sharePath() + sampleFile ) );
+
+        if ( sample != nilPointer && sample->isNotNil() )
+        {
+#if defined( DEBUG_SOUNDS ) && DEBUG_SOUNDS
+                std::cout << "+ sample is read from file \"" << sampleFile << "\"" << std::endl ;
+#endif
+                this->samples[ sampleFile ] = sample;
+        }
+        else
+        {
+                std::cerr << "can’t read sound \"" << sampleFile << "\"" << std::endl ;
+        }
 }
 
 void SoundManager::play( const std::string& label, const ActivityOfItem& activity, bool loop )
 {
-        SampleData* sampleData = this->findSample( label, activity );
+        allegro::Sample* sample = getSampleFor( label, activity );
 
-        if ( sampleData != nilPointer && sampleData->voice == -1 )
+        if ( sample != nilPointer && sample->isNotNil() && sample->getVoice() < 0 )
         {
-                sampleData->voice = allocate_voice( sampleData->sample );
-                voice_set_volume( sampleData->voice, ( this->effectsVolume * 255 ) / 100 );
-                voice_set_playmode( sampleData->voice, PLAYMODE_PLAY /* PLAYMODE_BACKWARD */ );
-                if ( loop )
-                {
-                        voice_set_playmode( sampleData->voice, PLAYMODE_LOOP );
-                }
-                voice_start( sampleData->voice );
+                sample->setVolume( ( this->effectsVolume * 255 ) / 99 );
+
+                if ( ! loop )
+                        sample->play();
+                else
+                        sample->loop();
+
+#if defined( DEBUG_SOUNDS ) && DEBUG_SOUNDS
+                std::cout << ( loop ? "looping" : "playing" ) << " sound for event \"" << translateActivityToString( activity ) << "\" of " << label
+                                << " ( voice " << sample->getVoice() << " @ " << sample->getFrequency() << " Hz"
+                                        << " volume " << sample->getVolume() << " )" << std::endl ;
+#endif
         }
 
-        for ( std::list< SoundData >::iterator i = soundData.begin (); i != soundData.end (); ++i )
-        {
-                for ( std::map< std::string, SampleData >::iterator j = ( *i ).table.begin (); j != ( *i ).table.end (); ++j )
-                {
-                        if ( voice_get_position( j->second.voice ) == -1 )
-                        {
-                                deallocate_voice( j->second.voice );
-                                j->second.voice = -1;
-                        }
-                }
-        }
+        for ( std::map< std::string, allegro::Sample* >::const_iterator j = samples.begin (); j != samples.end (); ++ j )
+                        if ( j->second != nilPointer ) j->second->binVoiceIfNotPlaying() ;
 }
 
 void SoundManager::stop( const std::string& label, const ActivityOfItem& activity )
 {
-        SampleData* sampleData = this->findSample( label, activity );
+        allegro::Sample* sample = getSampleFor( label, activity );
 
-        if ( sampleData != nilPointer )
+        if ( sample != nilPointer && sample->isNotNil() )
         {
-                stop_sample( sampleData->sample );
+#if defined( DEBUG_SOUNDS ) && DEBUG_SOUNDS
+                std::cout << "stopping sound for event \"" << translateActivityToString( activity ) << "\" of " << label
+                                << " ( voice " << sample->getVoice() << " )" << std::endl ;
+#endif
+                sample->stop();
         }
 }
 
 void SoundManager::stopEverySound ()
 {
-        for ( std::list< SoundData >::iterator i = soundData.begin (); i != soundData.end (); ++i )
+        for ( std::map< std::string, allegro::Sample* >::const_iterator j = samples.begin (); j != samples.end (); ++ j )
         {
-                for ( std::map< std::string, SampleData >::iterator j = ( *i ).table.begin (); j != ( *i ).table.end (); ++j )
-                {
-                        stop_sample( j->second.sample );
-                        if ( voice_get_position( j->second.voice ) == -1 )
-                        {
-                                deallocate_voice( j->second.voice );
-                                j->second.voice = -1;
-                        }
-                }
+                if ( j->second != nilPointer ) j->second->stop();
         }
 }
 
-void SoundManager::playOgg ( const std::string& fileName, bool loop )
+void SoundManager::playOgg ( const std::string& oggFile, bool loop )
 {
-        if ( ! this->isPlayingOgg ( fileName ) ) // let’s play the same again? nope
+        std::string fullName = isomot::pathToFile( isomot::sharePath() + oggFile );
+
+         // let’s play the same again? yep, when it’s finished playing
+        if ( oggPlayingThread.getFilePlaying() != fullName || ! oggPlayingThread.isPlaying() )
         {
-                // create buffer of 40 KiB
-                const size_t lengthOfbuffer = 40 * 1024;
+                // it is playback of just single Ogg yet
+                oggPlayingThread.stop();
 
-                set_volume( ( this->musicVolume * 255 ) / 100, 0 );
+                allegro::setDigitalVolume( ( this->musicVolume * 255 ) / 99 );
 
-                this->oggStream = alogg_start_streaming( isomot::pathToFile( isomot::sharePath() + fileName ), lengthOfbuffer );
-                if ( this->oggStream != nilPointer )
-                {
-                        alogg_thread* oggThread = nilPointer;
-                        if ( loop )
-                                oggThread = alogg_create_thread_which_loops( this->oggStream, isomot::pathToFile( isomot::sharePath() + fileName ), lengthOfbuffer );
-                        else
-                                oggThread = alogg_create_thread( this->oggStream );
+                oggPlayingThread.play( fullName, loop );
 
-                        if ( oggThread != nilPointer )
-                        {
-                                if ( this->oggPlayer != nilPointer )
-                                        this->stopAnyOgg (); // it is playback of just single Ogg yet
-                                                             // or previous oggPlayer will be lost
-                                                             // and if it is the one which loops forever it would never ever end
-
-                                this->oggPlaying = fileName;
-                                this->oggPlayer = oggThread;
-
-                                if ( loop )
-                                        std::cout << "looping";
-                                else
-                                        std::cout << "playing";
-                                std::cout << " Ogg " << fileName << std::endl ;
-                        }
-                }
-                else
-                {
-                        std::cerr << "can’t play Ogg " << fileName << std::endl ;
-                }
-        }
-}
-
-void SoundManager::stopAnyOgg ()
-{
-        if ( oggPlayer != nilPointer )
-        {
-                if ( oggPlayer->stop == 0 )
-                {
-                        alogg_stop_thread( oggPlayer );
-                        while ( alogg_is_thread_alive( oggPlayer ) ) ;
-                        alogg_join_thread( oggPlayer );
-                        alogg_destroy_thread( oggPlayer );
-                        oggPlayer->stop = 1;
-
-                        std::cout << "Ogg playback is off" << std::endl ;
-                }
-
-                oggPlayer = nilPointer;
-                oggStream = nilPointer;
-                oggPlaying.clear();
+                std::cout << ( loop ? "looping" : "playing" ) << " Ogg " << oggPlayingThread.getFilePlaying() << std::endl ;
         }
 }
 
 void SoundManager::setVolumeOfMusic( unsigned int volume )
 {
-          this->musicVolume = ( volume == 0 ? 1 : volume );
-          set_volume( ( this->musicVolume * 255 ) / 100, 0 );
+          this->musicVolume = ( volume <= 99 ) ? volume : 99 ;
+          allegro::setDigitalVolume( ( this->musicVolume * 255 ) / 99 );
 }
 
-SampleData* SoundManager::findSample( const std::string& label, const ActivityOfItem& activity )
+allegro::Sample* SoundManager::getSampleFor( const std::string& label, const std::string& event )
 {
-        for ( std::list< SoundData >::iterator i = soundData.begin () ; i != soundData.end () ; ++ i )
-        {
-                if ( ( *i ).getLabel() == label )
-                {
-                        return ( *i ).find( translateActivityOfItemToString( activity ) ) ;
-                }
-        }
+        for ( std::map< std::string, std::map< std::string, std::string > >::const_iterator i = sounds.begin (); i != sounds.end (); ++ i )
+                if ( label == i->first )
+                        for ( std::map< std::string, std::string >::const_iterator j = i->second.begin (); j != i->second.end (); ++ j )
+                                if ( event == j->first )
+                                        if ( samples.find( j->second ) != samples.end () )
+                                                return samples[ j->second ] ;
 
-        return nilPointer ;
+        return allegro::Sample::nilSample() ;
 }
 
-std::string SoundManager::translateActivityOfItemToString ( const ActivityOfItem& activity )
+std::string SoundManager::translateActivityToString ( const ActivityOfItem& activity )
 {
-        std::string stringOfActivity;
+        if ( activityToString.find( activity ) != activityToString.end () )
+                return activityToString[ activity ];
 
-        switch ( activity )
-        {
-                case Wait:
-                        stringOfActivity = "wait";
-                        break;
-
-                case Push:
-                        break;
-
-                case Move:
-                case MoveNorth:
-                case MoveSouth:
-                case MoveEast:
-                case MoveWest:
-                case MoveNortheast:
-                case MoveSoutheast:
-                case MoveSouthwest:
-                case MoveNorthwest:
-                case MoveUp:
-                case MoveDown:
-                case AutoMove:
-                case AutoMoveNorth:
-                case AutoMoveSouth:
-                case AutoMoveEast:
-                case AutoMoveWest:
-                        stringOfActivity = "move";
-                        break;
-
-                case Blink:
-                        break;
-
-                case Jump:
-                case RegularJump:
-                case HighJump:
-                        stringOfActivity = "jump";
-                        break;
-
-                case Fall:
-                case Glide:
-                        stringOfActivity = "fall";
-                        break;
-
-                case TakeItem:
-                case TakeAndJump:
-                        stringOfActivity = "take";
-                        break;
-
-                case TakenItem:
-                break;
-
-                case DropItem:
-                case DropAndJump:
-                        stringOfActivity = "drop";
-                        break;
-
-                case DisplaceNorth:
-                case DisplaceSouth:
-                case DisplaceEast:
-                case DisplaceWest:
-                case DisplaceNortheast:
-                case DisplaceSoutheast:
-                case DisplaceSouthwest:
-                case DisplaceNorthwest:
-                case DisplaceUp:
-                case DisplaceDown:
-                        stringOfActivity = "push";
-                        break;
-
-                case BeginWayOutTeletransport:
-                case WayOutTeletransport:
-                        stringOfActivity = "teleport-out";
-                        break;
-
-                case BeginWayInTeletransport:
-                case WayInTeletransport:
-                        stringOfActivity = "teleport-in";
-                        break;
-
-                case ForceDisplaceNorth:
-                case ForceDisplaceSouth:
-                case ForceDisplaceEast:
-                case ForceDisplaceWest:
-                        stringOfActivity = "force";
-                        break;
-
-                case CancelDisplaceNorth:
-                case CancelDisplaceSouth:
-                case CancelDisplaceEast:
-                case CancelDisplaceWest:
-                        stringOfActivity = "move";
-                        break;
-
-                case MeetMortalItem:
-                        break;
-
-                case Vanish:
-                        stringOfActivity = "vanish";
-                        break;
-
-                case FireDoughnut:
-                        stringOfActivity = "shot";
-                        break;
-
-                case Rebound:
-                        stringOfActivity = "rebound";
-                        break;
-
-                case SwitchIt:
-                        stringOfActivity = "switch";
-                        break;
-
-                case Collision:
-                        stringOfActivity = "collision";
-                        break;
-
-                case IsActive:
-                        stringOfActivity = "active";
-                        break;
-
-                case Mistake:
-                        stringOfActivity = "mistake";
-                        break;
-
-                default:
-                        ;
-        }
-
-        return stringOfActivity;
-}
-
-SoundData::SoundData( const std::string& label )
-        : label( label )
-{
-
-}
-
-void SoundData::addSound( const std::string& activity, const std::string& sampleFileName )
-{
-        SAMPLE* sample = load_sample( isomot::pathToFile( isomot::sharePath() + sampleFileName ) );
-
-        if ( sample != nilPointer ) {
-        #if defined( DEBUG ) && DEBUG
-                std::cout << "got sound \"" << sampleFileName << "\" for activity \"" << activity << "\" of \"" << label << "\"" << std::endl ;
-        #endif
-                SampleData sampleData;
-                sampleData.sample = sample;
-                sampleData.voice = -1;
-                this->table[ activity ] = sampleData;
-        } else
-                std::cerr << "can’t read sound \"" << sampleFileName << "\" for activity \"" << activity << "\" of \"" << label << "\"" << std::endl ;
-}
-
-SampleData* SoundData::find( const std::string& event )
-{
-        std::map< std::string, SampleData >::iterator i = this->table.find( event );
-
-        return i != this->table.end () ? ( &( i->second ) ) : nilPointer;
+        return "other";
 }

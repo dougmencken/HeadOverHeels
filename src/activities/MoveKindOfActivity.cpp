@@ -40,7 +40,7 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
 {
         bool moved = false;
 
-        ActivityOfItem displaceActivity = Wait;
+        ActivityOfItem displaceActivity = Activity::Wait;
 
         Item* item = behavior->getItem();
         if ( item == nilPointer ) return false ;
@@ -52,55 +52,55 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
 
         switch ( *activity )
         {
-                case MoveNorth:
-                case AutoMoveNorth:
-                        item->changeOrientation( North );
+                case Activity::MoveNorth:
+                case Activity::AutoMoveNorth:
+                        item->changeOrientation( Way::North );
                         moved = item->addToX( -1 );
-                        displaceActivity = DisplaceNorth;
+                        displaceActivity = Activity::DisplaceNorth;
                         break;
 
-                case MoveSouth:
-                case AutoMoveSouth:
-                        item->changeOrientation( South );
+                case Activity::MoveSouth:
+                case Activity::AutoMoveSouth:
+                        item->changeOrientation( Way::South );
                         moved = item->addToX( 1 );
-                        displaceActivity = DisplaceSouth;
+                        displaceActivity = Activity::DisplaceSouth;
                         break;
 
-                case MoveEast:
-                case AutoMoveEast:
-                        item->changeOrientation( East );
+                case Activity::MoveEast:
+                case Activity::AutoMoveEast:
+                        item->changeOrientation( Way::East );
                         moved = item->addToY( -1 );
-                        displaceActivity = DisplaceEast;
+                        displaceActivity = Activity::DisplaceEast;
                         break;
 
-                case MoveWest:
-                case AutoMoveWest:
-                        item->changeOrientation( West );
+                case Activity::MoveWest:
+                case Activity::AutoMoveWest:
+                        item->changeOrientation( Way::West );
                         moved = item->addToY( 1 );
-                        displaceActivity = DisplaceWest;
+                        displaceActivity = Activity::DisplaceWest;
                         break;
 
-                case MoveNortheast:
+                case Activity::MoveNortheast:
                         moved = item->addToPosition( -1, -1, 0 );
-                        displaceActivity = DisplaceNortheast;
+                        displaceActivity = Activity::DisplaceNortheast;
                         break;
 
-                case MoveNorthwest:
+                case Activity::MoveNorthwest:
                         moved = item->addToPosition( -1, 1, 0 );
-                        displaceActivity = DisplaceNorthwest;
+                        displaceActivity = Activity::DisplaceNorthwest;
                         break;
 
-                case MoveSoutheast:
+                case Activity::MoveSoutheast:
                         moved = item->addToPosition( 1, -1, 0 );
-                        displaceActivity = DisplaceSoutheast;
+                        displaceActivity = Activity::DisplaceSoutheast;
                         break;
 
-                case MoveSouthwest:
+                case Activity::MoveSouthwest:
                         moved = item->addToPosition( 1, 1, 0 );
-                        displaceActivity = DisplaceSouthwest;
+                        displaceActivity = Activity::DisplaceSouthwest;
                         break;
 
-                case MoveUp:
+                case Activity::MoveUp:
                         moved = item->addToZ( 1 );
 
                         // if can’t move up, raise free items above
@@ -124,7 +124,7 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
                         }
                         break;
 
-                case MoveDown:
+                case Activity::MoveDown:
                 {
                         // is there any items above
                         bool loading = ! item->canAdvanceTo( 0, 0, 2 );
@@ -159,20 +159,20 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
                 }
                         break;
 
-                case CancelDisplaceNorth:
-                        item->changeOrientation( South );
+                case Activity::CancelDisplaceNorth:
+                        item->changeOrientation( Way::South );
                         break;
 
-                case CancelDisplaceSouth:
-                        item->changeOrientation( North );
+                case Activity::CancelDisplaceSouth:
+                        item->changeOrientation( Way::North );
                         break;
 
-                case CancelDisplaceEast:
-                        item->changeOrientation( West );
+                case Activity::CancelDisplaceEast:
+                        item->changeOrientation( Way::West );
                         break;
 
-                case CancelDisplaceWest:
-                        item->changeOrientation( East );
+                case Activity::CancelDisplaceWest:
+                        item->changeOrientation( Way::East );
                         break;
 
                 default:
@@ -188,18 +188,18 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
                 }
                 // see if is it necessary to move items above
                 // exception is for vertical movement to keep activity of items above elevator unchanged
-                else if ( *activity != MoveUp && *activity != MoveDown )
+                else if ( *activity != Activity::MoveUp && *activity != Activity::MoveDown )
                 {
                         this->propagateActivityToItemsAbove( freeItem, displaceActivity );
                 }
         }
 
         // item may fall
-        if ( canFall && *activity != Wait )
+        if ( canFall && *activity != Activity::Wait )
         {
                 if ( FallKindOfActivity::getInstance()->fall( behavior ) )
                 {
-                        *activity = Fall;
+                        *activity = Activity::Fall;
                         moved = true;
                 }
         }

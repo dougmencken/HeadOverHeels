@@ -19,17 +19,25 @@ using gui::TextField;
 using isomot::SoundManager;
 
 
-ShowAuthors::ShowAuthors( allegro::Pict* picture ) : Action( picture )
+ShowAuthors::ShowAuthors( Picture* picture )
+        : Action( picture )
+        , linesOfCredits( nilPointer )
+        , initialY( 0 )
+        , loadingScreen( nilPointer )
 {
+}
 
+ShowAuthors::~ShowAuthors( )
+{
+        delete linesOfCredits ;
+        delete loadingScreen ;
 }
 
 void ShowAuthors::doAction ()
 {
-        ///SoundManager::getInstance()->stopAnyOgg();
         SoundManager::getInstance()->playOgg( "music/CreditsTheme.ogg", /* loop */ true );
 
-        int heightOfWhereToDraw = getWhereToDraw()->h ;
+        int heightOfWhereToDraw = getWhereToDraw()->getHeight() ;
 
         Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this );
         if ( screen->countWidgets() == 0 )
@@ -67,48 +75,45 @@ void ShowAuthors::doAction ()
         // move text up
 
         const int heightOfCredits = ( ( linesOfCredits->getHeightOfField() + 1 ) >> 1 ) << 1;
-        const int verticalSpace = ( getWhereToDraw()->h * 3 ) >> 2;
+        const int verticalSpace = ( getWhereToDraw()->getHeight() * 3 ) >> 2;
         const int whenToReloop = - ( heightOfCredits + verticalSpace ) ;
 
-        fprintf( stdout, "height of credits-text is %d\n", heightOfCredits );
+        std::cout << "height of credits-text is " << heightOfCredits << std::endl ;
 
         while ( ! screen->getEscapeAction()->hasBegun() )
         {
                 int yNow = linesOfCredits->getY() - 1;
 
-                if ( keypressed() && key[ KEY_SPACE ] )
+                if ( allegro::isKeyPushed( "Space" ) && allegro::isShiftKeyPushed() )
                 {
-                        if ( key_shifts & KB_SHIFT_FLAG )
-                        {
-                                if ( key_shifts & KB_ALT_FLAG )
-                                        yNow += 2 ;
-                                else
-                                        yNow ++ ;
-                        }
+                        if ( allegro::isAltKeyPushed() )
+                                yNow += 2 ;
+                        else
+                                yNow ++ ;
                 }
 
-                if ( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_LEFT ] )
+                if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "Left" ) )
                 {
                         linesOfCredits->moveTo( linesOfCredits->getX () - 1, linesOfCredits->getY () );
                 }
-                if ( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_RIGHT ] )
+                if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "Right" ) )
                 {
                         linesOfCredits->moveTo( linesOfCredits->getX () + 1, linesOfCredits->getY () );
                 }
-                if ( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_0_PAD ] )
+                if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "Pad 0" ) )
                 {
                         linesOfCredits->moveTo( 0, linesOfCredits->getY () );
                 }
 
-                if ( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_L ] )
+                if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "l" ) )
                 {
                         linesOfCredits->setAlignment( "left" );
                 }
-                if ( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_C ] )
+                if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "c" ) )
                 {
                         linesOfCredits->setAlignment( "center" );
                 }
-                if ( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_R ] )
+                if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "r" ) )
                 {
                         linesOfCredits->setAlignment( "right" );
                 }
@@ -123,14 +128,18 @@ void ShowAuthors::doAction ()
 
                 if ( yNow == heightOfWhereToDraw - heightOfCredits && widgetForLoadingScreen == nilPointer )
                 {
-                        Picture* loadingScreen = new Picture( allegro::loadPNG( isomot::pathToFile( isomot::sharePath() + "loading-screen.png" ) ) );
-                        loadingScreen->setName( "image of loading screen from original speccy version" );
+                        if ( loadingScreen == nilPointer )
+                        {
+                                smartptr< allegro::Pict > png( allegro::loadPNG( isomot::pathToFile( isomot::sharePath() + "loading-screen.png" ) ) );
+                                loadingScreen = new Picture( * png.get() );
+                                loadingScreen->setName( "image of loading screen from original speccy version" );
+                        }
 
-                        if ( loadingScreen->getAllegroPict() != nilPointer )
+                        if ( loadingScreen->getAllegroPict().isNotNil() )
                         {
                                 widgetForLoadingScreen = new PictureWidget(
-                                                ( getWhereToDraw()->w - loadingScreen->getWidth() ) >> 1, heightOfWhereToDraw,
-                                                loadingScreen,
+                                                ( getWhereToDraw()->getWidth() - loadingScreen->getWidth() ) >> 1, heightOfWhereToDraw,
+                                                new Picture( *loadingScreen ),
                                                 "loading screen from original speccy version"
                                 ) ;
                                 screen->addWidget( widgetForLoadingScreen );
@@ -148,20 +157,20 @@ void ShowAuthors::doAction ()
 
                 GuiManager::getInstance()->redraw ();
 
-                if ( keypressed() && ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && ( key[ KEY_F ] ) )
+                if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "f" ) )
                 {
                         gui::GuiManager::getInstance()->toggleFullScreenVideo ();
                 }
 
-                if ( ! ( keypressed() && key[ KEY_SPACE ] ) )
+                if ( ! allegro::isKeyPushed( "Space" ) )
                 {
                         milliSleep( 20 );
                 }
 
-                if ( keypressed() && key[ KEY_ESC ] )
+                if ( allegro::isKeyPushed( "Escape" ) )
                 {
-                        clear_keybuf();
-                        screen->handleKey( KEY_ESC << 8 );
+                        allegro::emptyKeyboardBuffer();
+                        screen->handleKey( "Escape" );
                 }
         }
 

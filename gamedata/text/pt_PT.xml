@@ -210,16 +210,16 @@
     <properties font="big" color="yellow">
       <string>O povo louva e apregoa o teu heroísmo</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>E assim estimado amigo, foi como os</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>nossos heróis acabaram</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>definitivamente com a tirania do</string>
     </properties>
-    <properties font="regular" color="multicolor">
+    <properties font="plain" color="multicolor">
       <string>Imperador Blacktooth</string>
     </properties>
   </text>

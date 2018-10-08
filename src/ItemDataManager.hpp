@@ -34,7 +34,6 @@ class ItemDataManager
 public:
 
         /**
-         * Constructor
          * @param fileName Nombre del archivo XML que contiene los datos de los elementos
          */
         ItemDataManager( const std::string& fileName ) ;
@@ -58,18 +57,16 @@ public:
 protected:
 
         /**
-         * Extract frames for this item from picture file
+         * Extract frames for this item from file
          * @param itemData An item with the frames of picture with non-null frameWidth & frameHeight
-         * @param gfxPrefix A prefix to where to search for the picture file
-         * @return El elemento con el campo motion almacenando los fotogramas ó 0 si se produjo un error
+         * @param gfxPrefix A prefix to where to search for picture file
          */
-        ItemData * createPictureFrames ( ItemData * itemData, const char* gfxPrefix ) ;
+        ItemData * createFrames ( ItemData * itemData, const char* gfxPrefix ) ;
 
         /**
-         * Extract frames for shadow of this item from picture file
+         * Extract frames for shadow of this item from file
          * @param itemData An item with shadow, shadowWidth & shadowHeight fields non-null
-         * @param gfxPrefix A prefix to where to search for the shadow file
-         * @return El elemento con el campo motion almacenando los fotogramas ó 0 si se produjo un error
+         * @param gfxPrefix A prefix to where to search for shadow file
          */
         ItemData* createShadowFrames ( ItemData * itemData, const char* gfxPrefix ) ;
 
@@ -78,7 +75,7 @@ private:
         /**
          * Get lintel from door
          */
-        allegro::Pict * cutOutLintel ( allegro::Pict * door, unsigned int widthX, unsigned int widthY, unsigned int height,
+        Picture* cutOutLintel ( const allegro::Pict & door, unsigned int widthX, unsigned int widthY, unsigned int height,
                                 unsigned int leftJambWidthX, unsigned int leftJambWidthY,
                                 unsigned int rightJambWidthX, unsigned int rightJambWidthY,
                                 const std::string& at ) ;
@@ -86,14 +83,14 @@ private:
         /**
          * Get left jamb from door
          */
-        allegro::Pict * cutOutLeftJamb ( allegro::Pict * door, unsigned int widthX, unsigned int widthY, unsigned int height,
+        Picture* cutOutLeftJamb ( const allegro::Pict & door, unsigned int widthX, unsigned int widthY, unsigned int height,
                                   /* unsigned int lintelWidthX, */ unsigned int lintelWidthY, unsigned int lintelHeight,
                                   const std::string& at ) ;
 
         /**
          * Get right jamb from door
          */
-        allegro::Pict * cutOutRightJamb ( allegro::Pict * door, unsigned int widthX, unsigned int widthY, unsigned int height,
+        Picture* cutOutRightJamb ( const allegro::Pict & door, unsigned int widthX, unsigned int widthY, unsigned int height,
                                    unsigned int lintelWidthX, /* unsigned int lintelWidthY, */ unsigned int lintelHeight,
                                    const std::string& at ) ;
 

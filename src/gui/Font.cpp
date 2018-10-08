@@ -6,8 +6,6 @@
 #include <fstream>
 #include <algorithm> // std::for_each
 
-#include <loadpng.h>
-
 
 namespace gui
 {
@@ -17,31 +15,42 @@ namespace gui
 /* static */ std::string * Font::tableOfLetters = nilPointer ;
 
 
-Font::Font( const std::string& name, const allegro::Pict * pictOfLetters, Color * color, bool doubleHeight ) :
+Font::Font( const std::string& name, const allegro::Pict& pictOfLetters, const Color& color, bool doubleHeight ) :
         fontName( name ),
         fontColor( color )
 {
-        if ( pictOfLetters == nilPointer )
+        if ( ! pictOfLetters.isNotNil() )
         {
                 std::cerr << "picture of letters is nil" << std::endl ;
                 return;
         }
 
+        Picture* lettersOfFont = new Picture( pictOfLetters.getW(), pictOfLetters.getH() );
+        {
+                const unsigned int offsetOfTint = 1;
+                allegro::bitBlit(
+                        Picture( pictOfLetters ).makeColorizedCopy( Color::blackColor() )->getAllegroPict() /* tint of letters */,
+                        lettersOfFont->getAllegroPict(),
+                        0, 0,
+                        offsetOfTint, offsetOfTint,
+                        pictOfLetters.getW() - offsetOfTint, pictOfLetters.getH() - offsetOfTint
+                );
+                allegro::drawSprite( lettersOfFont->getAllegroPict(), pictOfLetters, 0, 0 );
+        }
+        lettersOfFont->setName( "picture of letters to make " + name + " font" );
+
         std::string justFamily = name.substr( name.find( "." ) + 1 );
         std::string justColor = name.substr( 0, name.find( "." ) );
-
-        Picture* lettersOfFont = new Picture( *pictOfLetters );
-        lettersOfFont->setName( "picture of letters just read from file to make " + name + " font" );
 
         // double height font
         if ( doubleHeight )
         {
-                Picture* bigfont = new Picture( lettersOfFont->getWidth(), lettersOfFont->getHeight() << 1 );
+                Picture* bigfont = new Picture( lettersOfFont->getWidth(), lettersOfFont->getHeight() << 1 ) ;
                 allegro::stretchBlit( lettersOfFont->getAllegroPict(), bigfont->getAllegroPict(),
                                         0, 0, lettersOfFont->getWidth(), lettersOfFont->getHeight(),
                                         0, 0, bigfont->getWidth(), bigfont->getHeight() );
                 delete lettersOfFont ;
-                lettersOfFont = bigfont;
+                lettersOfFont = bigfont ;
                 lettersOfFont->setName( "picture of stretched double height letters to make " + name + " font" );
         }
 

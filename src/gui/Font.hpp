@@ -38,17 +38,32 @@ public:
          * @param color Color of letters
          * @param doubleHeight Double height of letters
          */
-        Font( const std::string& name, const allegro::Pict * pictOfLetters, Color * color, bool doubleHeight = false ) ;
+        Font( const std::string& name, const allegro::Pict & pictOfLetters, const Color & color, bool doubleHeight = false ) ;
 
         virtual ~Font( ) ;
 
         Picture * getPictureOfLetter ( const std::string & letter ) ;
 
+        std::string getName () const  {  return fontName ;  }
+
+        /**
+         * Name of font is like color.family, use this to get just family
+         */
+        std::string getFamily () const {  return fontName.substr( fontName.find( "." ) + 1 ) ;  }
+
+        std::string getColor () const {  return fontName.substr( 0, fontName.find( "." ) ) ;  }
+
+        unsigned int getCharWidth () const  {  return charWidth ;  }
+
+        unsigned int getCharHeight () const  {  return charHeight ;  }
+
 private:
+
+        Font( const Font& ) { }
 
         std::string fontName ;
 
-        Color * fontColor ;
+        Color fontColor ;
 
         /**
          * Width, in pixels, of each letter, game fonts are monospaced
@@ -72,21 +87,6 @@ private:
          * which is read from file
          */
         static std::string * tableOfLetters ;
-
-public:
-
-        std::string getName () const  {  return fontName ;  }
-
-        /**
-         * Name of font is like color.family, use this to get just family
-         */
-        std::string getFamily () const {  return fontName.substr( fontName.find( "." ) + 1 ) ;  }
-
-        std::string getColor () const {  return fontName.substr( 0, fontName.find( "." ) ) ;  }
-
-        unsigned int getCharWidth () const  {  return charWidth ;  }
-
-        unsigned int getCharHeight () const  {  return charHeight ;  }
 
 };
 

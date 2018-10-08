@@ -30,23 +30,23 @@ bool Doughnut::update ()
 
         switch ( activity )
         {
-                case Wait:
+                case Activity::Wait:
                         switch ( this->item->getOrientation().getIntegerOfWay () )
                         {
-                                case North:
-                                        activity = MoveNorth;
+                                case Way::North:
+                                        activity = Activity::MoveNorth;
                                         break;
 
-                                case South:
-                                        activity = MoveSouth;
+                                case Way::South:
+                                        activity = Activity::MoveSouth;
                                         break;
 
-                                case East:
-                                        activity = MoveEast;
+                                case Way::East:
+                                        activity = Activity::MoveEast;
                                         break;
 
-                                case West:
-                                        activity = MoveWest;
+                                case Way::West:
+                                        activity = Activity::MoveWest;
                                         break;
 
                                 default:
@@ -55,25 +55,25 @@ bool Doughnut::update ()
 
                         break;
 
-                case MoveNorth:
-                case MoveSouth:
-                case MoveEast:
-                case MoveWest:
+                case Activity::MoveNorth:
+                case Activity::MoveSouth:
+                case Activity::MoveEast:
+                case Activity::MoveWest:
                         if ( speedTimer->getValue() > freeItem->getSpeed() )
                         {
                                 // look for collisions with items
                                 freeItem->setCollisionDetector( true );
 
-                                if ( activity == MoveNorth ) {
+                                if ( activity == Activity::MoveNorth ) {
                                         // -1, 0, 0 for collisions at north
                                         freeItem->canAdvanceTo( -1, 0, 0 );
-                                } else if ( activity == MoveSouth ) {
+                                } else if ( activity == Activity::MoveSouth ) {
                                         // 1, 0, 0 for collisions at south
                                         freeItem->canAdvanceTo( 1, 0, 0 );
-                                } else if ( activity == MoveEast ) {
+                                } else if ( activity == Activity::MoveEast ) {
                                         // 0, -1, 0 for collisions at east
                                         freeItem->canAdvanceTo( 0, -1, 0 );
-                                } else if ( activity == MoveWest ) {
+                                } else if ( activity == Activity::MoveWest ) {
                                         // 0, 1, 0 for collisions at west
                                         freeItem->canAdvanceTo( 0, 1, 0 );
                                 }
@@ -89,7 +89,7 @@ bool Doughnut::update ()
                                         // freeze “ bad boy ” on collision with it
                                         if ( freeItem->getMediator()->collisionWithBadBoy() )
                                         {
-                                                propagateActivity( this->item, Freeze );
+                                                propagateActivity( this->item, Activity::Freeze );
                                         }
 
                                         // doughnut disappears after collison with any item but player

@@ -29,10 +29,9 @@ class CreateMainMenu : public Action
 public:
 
         /**
-         * Constructor
          * @param picture Imagen donde se dibujará la interfaz gráfica
          */
-        CreateMainMenu( allegro::Pict * picture ) ;
+        CreateMainMenu( Picture * picture ) ;
 
         std::string getNameOfAction () const {  return "CreateMainMenu" ;  }
 

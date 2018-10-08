@@ -44,7 +44,8 @@ bool FallKindOfActivity::fall( Behavior * behavior )
         if ( behavior == nilPointer ) return false ;
 
         if ( behavior->getItem()->whichKindOfItem() == "player item" &&
-                GameManager::getInstance()->charactersFly() && ! ( ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_PGDN ] ) )
+                GameManager::getInstance()->charactersFly() &&
+                ! ( allegro::isShiftKeyPushed() && allegro::isKeyPushed( "PageDown" ) ) )
         {
                 return false ;
         }
@@ -88,7 +89,7 @@ bool FallKindOfActivity::fall( Behavior * behavior )
                                                 {
                                                         if ( ! GameManager::getInstance()->isImmuneToCollisionsWithMortalItems () )
                                                         {
-                                                                itemBelow->getBehavior()->changeActivityOfItem( MeetMortalItem );
+                                                                itemBelow->getBehavior()->changeActivityOfItem( Activity::MeetMortalItem );
                                                         }
                                                 }
                                         }
@@ -98,7 +99,7 @@ bool FallKindOfActivity::fall( Behavior * behavior )
                                                 {
                                                         if ( ! GameManager::getInstance()->isImmuneToCollisionsWithMortalItems () )
                                                         {
-                                                                sender->getBehavior()->changeActivityOfItem( MeetMortalItem );
+                                                                sender->getBehavior()->changeActivityOfItem( Activity::MeetMortalItem );
                                                         }
                                                 }
                                                 else
@@ -119,7 +120,7 @@ bool FallKindOfActivity::fall( Behavior * behavior )
                                                         {
                                                                 if ( ! GameManager::getInstance()->isImmuneToCollisionsWithMortalItems () )
                                                                 {
-                                                                        sender->getBehavior()->changeActivityOfItem( MeetMortalItem );
+                                                                        sender->getBehavior()->changeActivityOfItem( Activity::MeetMortalItem );
                                                                 }
                                                         }
                                                 }
@@ -140,7 +141,7 @@ bool FallKindOfActivity::fall( Behavior * behavior )
                                 {
                                         if ( ! GameManager::getInstance()->isImmuneToCollisionsWithMortalItems () )
                                         {
-                                                playerItem->getBehavior()->changeActivityOfItem( MeetMortalItem );
+                                                playerItem->getBehavior()->changeActivityOfItem( Activity::MeetMortalItem );
                                         }
                                 }
                                 else

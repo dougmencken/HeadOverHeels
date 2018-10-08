@@ -185,16 +185,14 @@ private:
          */
         double shieldTime ;
 
-        ItemData* takenItemData ;
-
-        Picture* takenItemImage ;
+        ItemData * takenItemData ;
 
         std::string takenItemBehavior ;
 
         /**
          * Used when morphing to bubbles and back
          */
-        ItemData* originalDataOfItem ;
+        ItemData * originalDataOfItem ;
 
 protected:
 
@@ -224,26 +222,12 @@ protected:
 
 public:
 
-        /**
-         * Set data for item in player’s handbag
-         */
-        void assignTakenItem ( ItemData * itemData, Picture * itemImage, const std::string & behavior ) ;
-
         ItemData * getOriginalDataOfItem () const {  return originalDataOfItem ;  }
 
-        /**
-         * Data of item in handbag
-         */
-        ItemData* getTakenItemData () const {  return this->takenItemData ;  }
+        void placeItemInBag ( ItemData * itemData, const std::string & behavior ) ;
 
-        /**
-         * Image of item taken by player
-         */
-        Picture* getTakenItemImage () const {  return this->takenItemImage ;  }
+        ItemData * getTakenItemData () const {  return this->takenItemData ;  }
 
-        /**
-         * Behavior of item taken by player
-         */
         const std::string& getTakenItemBehavior () const {  return this->takenItemBehavior ;  }
 
         unsigned char getLives () const {  return this->lives ;  }

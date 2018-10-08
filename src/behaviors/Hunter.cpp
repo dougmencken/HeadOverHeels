@@ -38,44 +38,44 @@ bool Hunter::update ()
 
         switch ( activity )
         {
-                case Wait:
-                // if hunter is not a waiting one, activate it yet
-                if ( getNameOfBehavior() == "behavior of hunter in four directions" ||
-                                getNameOfBehavior() == "behavior of hunter in eight directions" )
-                {
-                        SoundManager::getInstance()->play( this->item->getLabel(), activity );
-                        activity = calculateDirection( activity );
-                }
-                // otherwise check if player is within defined rectangle near hunter to activate
-                else
-                {
-                        const unsigned int sizeOfRectangleInTiles = 3;
-                        const int delta = mediator->getRoom()->getSizeOfOneTile() * sizeOfRectangleInTiles;
-
-                        if ( characterToHunt != nilPointer  &&
-                                characterToHunt->getX() > this->item->getX() - delta  &&
-                                characterToHunt->getX() < this->item->getX() + static_cast< int >( this->item->getWidthX() ) + delta  &&
-                                characterToHunt->getY() > this->item->getY() - delta  &&
-                                characterToHunt->getY() < this->item->getY() + static_cast< int >( this->item->getWidthY() ) + delta )
-                        {
-                                activity = calculateDirection( activity );
-                        }
-
-                        // eight-directional waiting hunter emits sound when it waits
-                        if ( getNameOfBehavior() == "behavior of waiting hunter in eight directions" )
+                case Activity::Wait:
+                        // if hunter is not a waiting one, activate it yet
+                        if ( getNameOfBehavior() == "behavior of hunter in four directions" ||
+                                        getNameOfBehavior() == "behavior of hunter in eight directions" )
                         {
                                 SoundManager::getInstance()->play( this->item->getLabel(), activity );
+                                activity = calculateDirection( activity );
                         }
+                        // otherwise check if player is within defined rectangle near hunter to activate
+                        else
+                        {
+                                const unsigned int sizeOfRectangleInTiles = 3;
+                                const int delta = mediator->getRoom()->getSizeOfOneTile() * sizeOfRectangleInTiles;
 
-                        // animate item, and when it waits too
-                        this->item->animate();
-                }
+                                if ( characterToHunt != nilPointer  &&
+                                        characterToHunt->getX() > this->item->getX() - delta  &&
+                                        characterToHunt->getX() < this->item->getX() + static_cast< int >( this->item->getWidthX() ) + delta  &&
+                                        characterToHunt->getY() > this->item->getY() - delta  &&
+                                        characterToHunt->getY() < this->item->getY() + static_cast< int >( this->item->getWidthY() ) + delta )
+                                {
+                                        activity = calculateDirection( activity );
+                                }
+
+                                // eight-directional waiting hunter emits sound when it waits
+                                if ( getNameOfBehavior() == "behavior of waiting hunter in eight directions" )
+                                {
+                                        SoundManager::getInstance()->play( this->item->getLabel(), activity );
+                                }
+
+                                // animate item, and when it waits too
+                                this->item->animate();
+                        }
                 break;
 
-                case MoveNorth:
-                case MoveSouth:
-                case MoveEast:
-                case MoveWest:
+                case Activity::MoveNorth:
+                case Activity::MoveSouth:
+                case Activity::MoveEast:
+                case Activity::MoveWest:
                         // bin original item when full-bodied guard is created
                         if ( getNameOfBehavior() == "behavior of waiting hunter in four directions" && createFullBody () )
                         {
@@ -108,10 +108,10 @@ bool Hunter::update ()
                         }
                         break;
 
-                case MoveNortheast:
-                case MoveNorthwest:
-                case MoveSoutheast:
-                case MoveSouthwest:
+                case Activity::MoveNortheast:
+                case Activity::MoveNorthwest:
+                case Activity::MoveSoutheast:
+                case Activity::MoveSouthwest:
                         if ( ! dynamic_cast< FreeItem* >( this->item )->isFrozen() )
                         {
                                 if ( speedTimer->getValue() > this->item->getSpeed() )
@@ -119,12 +119,12 @@ bool Hunter::update ()
                                         // move item
                                         if ( ! MoveKindOfActivity::getInstance()->move( this, &activity, false ) )
                                         {
-                                                if ( activity == MoveNortheast || activity == MoveNorthwest )
+                                                if ( activity == Activity::MoveNortheast || activity == Activity::MoveNorthwest )
                                                 {
-                                                        ActivityOfItem tempActivity = MoveNorth;
+                                                        ActivityOfItem tempActivity = Activity::MoveNorth;
                                                         if ( ! MoveKindOfActivity::getInstance()->move( this, &tempActivity, false ) )
                                                         {
-                                                                activity = ( activity == MoveNortheast ? MoveEast : MoveWest );
+                                                                activity = ( activity == Activity::MoveNortheast ? Activity::MoveEast : Activity::MoveWest );
                                                                 if ( this->item->getWeight() > 0 )
                                                                 {
                                                                         FallKindOfActivity::getInstance()->fall( this );
@@ -133,10 +133,10 @@ bool Hunter::update ()
                                                 }
                                                 else
                                                 {
-                                                        ActivityOfItem tempActivity = MoveSouth;
+                                                        ActivityOfItem tempActivity = Activity::MoveSouth;
                                                         if ( ! MoveKindOfActivity::getInstance()->move( this, &tempActivity, false ) )
                                                         {
-                                                                activity = ( activity == MoveSoutheast ? MoveEast : MoveWest );
+                                                                activity = ( activity == Activity::MoveSoutheast ? Activity::MoveEast : Activity::MoveWest );
                                                                 if ( this->item->getWeight() > 0 )
                                                                 {
                                                                         FallKindOfActivity::getInstance()->fall( this );
@@ -161,36 +161,36 @@ bool Hunter::update ()
                         }
                         break;
 
-                case DisplaceNorth:
-                case DisplaceSouth:
-                case DisplaceEast:
-                case DisplaceWest:
-                case DisplaceNortheast:
-                case DisplaceNorthwest:
-                case DisplaceSoutheast:
-                case DisplaceSouthwest:
+                case Activity::DisplaceNorth:
+                case Activity::DisplaceSouth:
+                case Activity::DisplaceEast:
+                case Activity::DisplaceWest:
+                case Activity::DisplaceNortheast:
+                case Activity::DisplaceNorthwest:
+                case Activity::DisplaceSoutheast:
+                case Activity::DisplaceSouthwest:
                         // when item is active and it’s time to move
                         if ( speedTimer->getValue() > this->item->getSpeed() )
                         {
                                 DisplaceKindOfActivity::getInstance()->displace( this, &activity, false );
-                                activity = Wait;
+                                activity = Activity::Wait;
                                 speedTimer->reset();
                         }
 
                         // preserve inactivity for frozen item
                         if ( dynamic_cast< FreeItem* >( this->item )->isFrozen() )
                         {
-                                activity = Freeze;
+                                activity = Activity::Freeze;
                         }
                         break;
 
-                case Freeze:
+                case Activity::Freeze:
                         dynamic_cast< FreeItem* >( this->item )->setFrozen( true );
                         break;
 
-                case WakeUp:
+                case Activity::WakeUp:
                         dynamic_cast< FreeItem* >( this->item )->setFrozen( false );
-                        activity = Wait;
+                        activity = Activity::Wait;
                         break;
 
                 default:
@@ -213,7 +213,7 @@ ActivityOfItem Hunter::calculateDirection( const ActivityOfItem& activity )
                 return calculateDirection8( activity );
         }
 
-        return Wait;
+        return Activity::Wait;
 }
 
 ActivityOfItem Hunter::calculateDirection4( const ActivityOfItem& activity )
@@ -229,36 +229,36 @@ ActivityOfItem Hunter::calculateDirection4( const ActivityOfItem& activity )
                 {
                         if ( dx > 0 )
                         {
-                                changeActivityOfItem( MoveNorth );
+                                changeActivityOfItem( Activity::MoveNorth );
                         }
                         else if ( dx < 0 )
                         {
-                                changeActivityOfItem( MoveSouth );
+                                changeActivityOfItem( Activity::MoveSouth );
                         }
                         else
                         {
                                 if ( dy > 0 )
-                                        changeActivityOfItem( MoveEast );
+                                        changeActivityOfItem( Activity::MoveEast );
                                 else if ( dy < 0 )
-                                        changeActivityOfItem( MoveWest );
+                                        changeActivityOfItem( Activity::MoveWest );
                         }
                 }
                 else if ( abs( dy ) < abs( dx ) )
                 {
                         if ( dy > 0 )
                         {
-                                changeActivityOfItem( MoveEast );
+                                changeActivityOfItem( Activity::MoveEast );
                         }
                         else if ( dy < 0 )
                         {
-                                changeActivityOfItem( MoveWest );
+                                changeActivityOfItem( Activity::MoveWest );
                         }
                         else
                         {
                                 if ( dx > 0 )
-                                        changeActivityOfItem( MoveNorth );
+                                        changeActivityOfItem( Activity::MoveNorth );
                                 else if ( dx < 0 )
-                                        changeActivityOfItem( MoveSouth );
+                                        changeActivityOfItem( Activity::MoveSouth );
                         }
                 }
         }
@@ -283,27 +283,27 @@ ActivityOfItem Hunter::calculateDirection8( const ActivityOfItem& activity )
                         if ( dx > 1 )
                         {
                                 if ( dy > 1 )
-                                        changeActivityOfItem( MoveNortheast );
+                                        changeActivityOfItem( Activity::MoveNortheast );
                                 else if ( dy < -1 )
-                                        changeActivityOfItem( MoveNorthwest );
+                                        changeActivityOfItem( Activity::MoveNorthwest );
                                 else
-                                        changeActivityOfItem( MoveNorth );
+                                        changeActivityOfItem( Activity::MoveNorth );
                         }
                         else if ( dx < -1 )
                         {
                                 if ( dy > 1 )
-                                        changeActivityOfItem( MoveSoutheast );
+                                        changeActivityOfItem( Activity::MoveSoutheast );
                                 else if ( dy < -1 )
-                                        changeActivityOfItem( MoveSouthwest );
+                                        changeActivityOfItem( Activity::MoveSouthwest );
                                 else
-                                        changeActivityOfItem( MoveSouth );
+                                        changeActivityOfItem( Activity::MoveSouth );
                         }
                         else
                         {
                                 if ( dy > 0 )
-                                        changeActivityOfItem( MoveEast );
+                                        changeActivityOfItem( Activity::MoveEast );
                                 else if ( dy < 0 )
-                                        changeActivityOfItem( MoveWest );
+                                        changeActivityOfItem( Activity::MoveWest );
                         }
                 }
                 else if ( abs( dy ) < abs( dx ) )
@@ -311,34 +311,34 @@ ActivityOfItem Hunter::calculateDirection8( const ActivityOfItem& activity )
                         if ( dy > 1 )
                         {
                                 if ( dx > 1 )
-                                        changeActivityOfItem( MoveNortheast );
+                                        changeActivityOfItem( Activity::MoveNortheast );
                                 else if ( dx < -1 )
-                                        changeActivityOfItem( MoveSoutheast );
+                                        changeActivityOfItem( Activity::MoveSoutheast );
                                 else
-                                        changeActivityOfItem( MoveEast );
+                                        changeActivityOfItem( Activity::MoveEast );
                         }
                         else if ( dy < -1 )
                         {
                                 if ( dx > 1 )
-                                        changeActivityOfItem( MoveNorthwest );
+                                        changeActivityOfItem( Activity::MoveNorthwest );
                                 else if ( dx < -1 )
-                                        changeActivityOfItem( MoveSouthwest );
+                                        changeActivityOfItem( Activity::MoveSouthwest );
                                 else
-                                        changeActivityOfItem( MoveWest );
+                                        changeActivityOfItem( Activity::MoveWest );
                         }
                         else
                         {
                                 if ( dx > 0 )
-                                        changeActivityOfItem( MoveNorth );
+                                        changeActivityOfItem( Activity::MoveNorth );
                                 else if ( dx < 0 )
-                                        changeActivityOfItem( MoveSouth );
+                                        changeActivityOfItem( Activity::MoveSouth );
                         }
                 }
 
                 // guardian of throne flees from player with four crowns
                 if ( item->getLabel() == "throne-guard" && GameManager::getInstance()->countFreePlanets() >= 4 )
                 {
-                        changeActivityOfItem( MoveSouthwest );
+                        changeActivityOfItem( Activity::MoveSouthwest );
                 }
         }
 

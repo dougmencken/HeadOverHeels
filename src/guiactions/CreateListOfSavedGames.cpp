@@ -22,7 +22,7 @@ using gui::CreateListOfSavedGames;
 using gui::ContinueGame;
 
 
-CreateListOfSavedGames::CreateListOfSavedGames( allegro::Pict* picture, bool isLoadMenu )
+CreateListOfSavedGames::CreateListOfSavedGames( Picture * picture, bool isLoadMenu )
         : Action( picture )
         , isMenuForLoad( isLoadMenu )
 {
@@ -84,7 +84,7 @@ void CreateListOfSavedGames::doAction ()
                 }
                 else
                 {
-                        std::cout << "save \"" << file << "\" is yet free" << std::endl ;
+                        std::cout << "slot \"" << file << "\" is yet free" << std::endl ;
 
                         std::ostringstream ss;
                         ss << languageManager->findLanguageStringForAlias( "free-slot" )->getText();
@@ -92,7 +92,7 @@ void CreateListOfSavedGames::doAction ()
                         if ( isLoadMenu() )
                         {
                                 labelOfFree->changeColor( "cyan" );
-                                labelOfFree->setAction( new PlaySound( isomot::Mistake ) );
+                                labelOfFree->setAction( new PlaySound( isomot::Activity::Mistake ) );
                         }
                         else
                         {

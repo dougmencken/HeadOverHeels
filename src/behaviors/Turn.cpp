@@ -36,14 +36,14 @@ bool Turn::update ()
 
         switch ( activity )
         {
-                case Wait:
+                case Activity::Wait:
                         begin();
                         break;
 
-                case MoveNorth:
-                case MoveSouth:
-                case MoveEast:
-                case MoveWest:
+                case Activity::MoveNorth:
+                case Activity::MoveSouth:
+                case Activity::MoveEast:
+                case Activity::MoveWest:
                         if ( ! freeItem->isFrozen() )
                         {
                                 if ( speedTimer->getValue() > freeItem->getSpeed() )
@@ -52,7 +52,7 @@ bool Turn::update ()
                                         {
                                                 turn();
 
-                                                SoundManager::getInstance()->play( freeItem->getLabel(), Collision );
+                                                SoundManager::getInstance()->play( freeItem->getLabel(), Activity::Collision );
                                         }
 
                                         speedTimer->reset();
@@ -62,28 +62,28 @@ bool Turn::update ()
                         }
                         break;
 
-                case DisplaceNorth:
-                case DisplaceSouth:
-                case DisplaceEast:
-                case DisplaceWest:
-                case DisplaceNortheast:
-                case DisplaceSoutheast:
-                case DisplaceSouthwest:
-                case DisplaceNorthwest:
+                case Activity::DisplaceNorth:
+                case Activity::DisplaceSouth:
+                case Activity::DisplaceEast:
+                case Activity::DisplaceWest:
+                case Activity::DisplaceNortheast:
+                case Activity::DisplaceSoutheast:
+                case Activity::DisplaceSouthwest:
+                case Activity::DisplaceNorthwest:
                         SoundManager::getInstance()->play( freeItem->getLabel(), activity );
 
                         DisplaceKindOfActivity::getInstance()->displace( this, &activity, true );
 
-                        activity = Wait;
+                        activity = Activity::Wait;
 
                         // inactive item continues to be inactive
                         if ( freeItem->isFrozen() )
                         {
-                                activity = Freeze;
+                                activity = Activity::Freeze;
                         }
                         break;
 
-                case Fall:
+                case Activity::Fall:
                         // look for reaching floor in a room without floor
                         if ( freeItem->getZ() == 0 && freeItem->getMediator()->getRoom()->getKindOfFloor() == "none" )
                         {
@@ -95,20 +95,20 @@ bool Turn::update ()
                                 if ( ! FallKindOfActivity::getInstance()->fall( this ) )
                                 {
                                         SoundManager::getInstance()->play( freeItem->getLabel(), activity );
-                                        activity = Wait;
+                                        activity = Activity::Wait;
                                 }
 
                                 fallTimer->reset();
                         }
                         break;
 
-                case Freeze:
+                case Activity::Freeze:
                         freeItem->setFrozen( true );
                         break;
 
-                case WakeUp:
+                case Activity::WakeUp:
                         freeItem->setFrozen( false );
-                        activity = Wait;
+                        activity = Activity::Wait;
                         break;
 
                 default:
@@ -122,20 +122,20 @@ void Turn::begin()
 {
         switch ( this->item->getOrientation().getIntegerOfWay () )
         {
-                case North:
-                        activity = MoveNorth;
+                case Way::North:
+                        activity = Activity::MoveNorth;
                         break;
 
-                case South:
-                        activity = MoveSouth;
+                case Way::South:
+                        activity = Activity::MoveSouth;
                         break;
 
-                case East:
-                        activity = MoveEast;
+                case Way::East:
+                        activity = Activity::MoveEast;
                         break;
 
-                case West:
-                        activity = MoveWest;
+                case Way::West:
+                        activity = Activity::MoveWest;
                         break;
 
                 default:
@@ -145,26 +145,46 @@ void Turn::begin()
 
 void Turn::turn()
 {
-        switch ( this->item->getOrientation().getIntegerOfWay () )
+        switch ( item->getOrientation().getIntegerOfWay () )
         {
-                case North:
-                        activity = ( getNameOfBehavior() == "behavior of move then turn left and move" ? MoveWest : MoveEast );
-                        this->item->changeOrientation( getNameOfBehavior() == "behavior of move then turn left and move" ? West : East );
+                case Way::North:
+                        if ( getNameOfBehavior() == "behavior of move then turn left and move" ) {
+                                activity = Activity::MoveWest ;
+                                item->changeOrientation( Way( "west" ) );
+                        } else {
+                                activity = Activity::MoveEast ;
+                                item->changeOrientation( Way( "east" ) );
+                        }
                         break;
 
-                case South:
-                        activity = ( getNameOfBehavior() == "behavior of move then turn left and move" ? MoveEast : MoveWest );
-                        this->item->changeOrientation( getNameOfBehavior() == "behavior of move then turn left and move" ? East : West );
+                case Way::South:
+                        if ( getNameOfBehavior() == "behavior of move then turn left and move" ) {
+                                activity = Activity::MoveEast ;
+                                item->changeOrientation( Way( "east" ) );
+                        } else {
+                                activity = Activity::MoveWest ;
+                                item->changeOrientation( Way( "west" ) );
+                        }
                         break;
 
-                case East:
-                        activity = ( getNameOfBehavior() == "behavior of move then turn left and move" ? MoveNorth : MoveSouth );
-                        this->item->changeOrientation( getNameOfBehavior() == "behavior of move then turn left and move" ? North : South );
+                case Way::East:
+                        if ( getNameOfBehavior() == "behavior of move then turn left and move" ) {
+                                activity = Activity::MoveNorth ;
+                                item->changeOrientation( Way( "north" ) );
+                        } else {
+                                activity = Activity::MoveSouth ;
+                                item->changeOrientation( Way( "south" ) );
+                        }
                         break;
 
-                case West:
-                        activity = ( getNameOfBehavior() == "behavior of move then turn left and move" ? MoveSouth : MoveNorth );
-                        this->item->changeOrientation( getNameOfBehavior() == "behavior of move then turn left and move" ? South : North );
+                case Way::West:
+                        if ( getNameOfBehavior() == "behavior of move then turn left and move" ) {
+                                activity = Activity::MoveSouth ;
+                                item->changeOrientation( Way( "south" ) );
+                        } else {
+                                activity = Activity::MoveNorth ;
+                                item->changeOrientation( Way( "north" ) );
+                        }
                         break;
 
                 default:

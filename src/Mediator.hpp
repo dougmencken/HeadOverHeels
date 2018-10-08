@@ -256,12 +256,6 @@ public:
 
         const std::string& getLastActiveCharacterBeforeJoining () {  return lastActiveCharacterBeforeJoining ;  }
 
-       /**
-        * Degree for opacity of shadows
-        * @return A value between 0, no shadows, up to 256, fully opaque shadows
-        */
-        short getDegreeOfShading () const {  return room->shadingScale ;  }
-
         Room* getRoom () const {  return room ;  }
 
         const std::vector < std::list < GridItem * > > & getGridItems () const {  return gridItems ;  }

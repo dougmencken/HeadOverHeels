@@ -213,13 +213,13 @@
     <properties font="big" color="yellow">
       <string>проглашава вас</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>На овај начин, драги пријатељу, наша</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>два јунака коначно стављају тачку на</string>
     </properties>
-    <properties font="regular" color="multicolor">
+    <properties font="plain" color="multicolor">
       <string>тиранију Блактутог Императора</string>
     </properties>
   </text>

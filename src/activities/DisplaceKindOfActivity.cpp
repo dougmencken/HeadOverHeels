@@ -43,51 +43,51 @@ bool DisplaceKindOfActivity::displace( Behavior* behavior, ActivityOfItem* activ
 
         switch ( *activity )
         {
-                case ForceDisplaceNorth:
-                        activityToPropagate = DisplaceNorth;
+                case Activity::ForceDisplaceNorth:
+                        activityToPropagate = Activity::DisplaceNorth;
                         // fallthru
-                case DisplaceNorth:
+                case Activity::DisplaceNorth:
                         itemDisplaced = item->addToX( -1 );
                         break;
 
-                case ForceDisplaceSouth:
-                        activityToPropagate = DisplaceSouth;
+                case Activity::ForceDisplaceSouth:
+                        activityToPropagate = Activity::DisplaceSouth;
                         // fallthru
-                case DisplaceSouth:
+                case Activity::DisplaceSouth:
                         itemDisplaced = item->addToX( 1 );
                         break;
 
-                case ForceDisplaceEast:
-                        activityToPropagate = DisplaceEast;
+                case Activity::ForceDisplaceEast:
+                        activityToPropagate = Activity::DisplaceEast;
                         // fallthru
-                case DisplaceEast:
+                case Activity::DisplaceEast:
                         itemDisplaced = item->addToY( -1 );
                         break;
 
-                case ForceDisplaceWest:
-                        activityToPropagate = DisplaceWest;
+                case Activity::ForceDisplaceWest:
+                        activityToPropagate = Activity::DisplaceWest;
                         // fallthru
-                case DisplaceWest:
+                case Activity::DisplaceWest:
                         itemDisplaced = item->addToY( 1 );
                         break;
 
-                case DisplaceNortheast:
+                case Activity::DisplaceNortheast:
                         itemDisplaced = item->addToPosition( -1, -1, 0 );
                         break;
 
-                case DisplaceNorthwest:
+                case Activity::DisplaceNorthwest:
                         itemDisplaced = item->addToPosition( -1, 1, 0 );
                         break;
 
-                case DisplaceSoutheast:
+                case Activity::DisplaceSoutheast:
                         itemDisplaced = item->addToPosition( 1, -1, 0 );
                         break;
 
-                case DisplaceSouthwest:
+                case Activity::DisplaceSouthwest:
                         itemDisplaced = item->addToPosition( 1, 1, 0 );
                         break;
 
-                case DisplaceUp:
+                case Activity::DisplaceUp:
                         itemDisplaced = item->addToZ( 1 );
                         break;
 
@@ -116,7 +116,7 @@ bool DisplaceKindOfActivity::displace( Behavior* behavior, ActivityOfItem* activ
                 // look if it falls yet
                 if ( FallKindOfActivity::getInstance()->fall( behavior ) )
                 {
-                        *activity = Fall;
+                        *activity = Activity::Fall;
                         itemDisplaced = true;
                 }
         }

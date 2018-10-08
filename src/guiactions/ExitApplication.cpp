@@ -9,9 +9,8 @@ using gui::ExitApplication;
 
 
 ExitApplication::ExitApplication( )
-        : Action( 0 )
+        : Action( nilPointer )
 {
-
 }
 
 void ExitApplication::bye ()

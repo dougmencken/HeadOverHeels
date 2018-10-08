@@ -216,16 +216,16 @@
     <properties font="big" color="yellow">
       <string>huutaa nimeäsi</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>Tätä tietä, rakas ystävä. Kaksi</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>sankariamme teki ehdottomasti</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>lopun Blacktoothin Keisarin</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>tyranniasta</string>
     </properties>
   </text>

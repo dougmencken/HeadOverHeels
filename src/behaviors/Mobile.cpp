@@ -34,23 +34,23 @@ bool Mobile::update ()
 
         switch ( activity )
         {
-                case Wait:
+                case Activity::Wait:
                         // see if item falls yet
                         if ( FallKindOfActivity::getInstance()->fall( this ) )
                         {
                                 fallTimer->reset();
-                                activity = Fall;
+                                activity = Activity::Fall;
                         }
                         break;
 
-                case DisplaceNorth:
-                case DisplaceSouth:
-                case DisplaceEast:
-                case DisplaceWest:
-                case DisplaceNortheast:
-                case DisplaceSoutheast:
-                case DisplaceSouthwest:
-                case DisplaceNorthwest:
+                case Activity::DisplaceNorth:
+                case Activity::DisplaceSouth:
+                case Activity::DisplaceEast:
+                case Activity::DisplaceWest:
+                case Activity::DisplaceNortheast:
+                case Activity::DisplaceSoutheast:
+                case Activity::DisplaceSouthwest:
+                case Activity::DisplaceNorthwest:
                         // is it time to move
                         if ( speedTimer->getValue() > freeItem->getSpeed() )
                         {
@@ -63,7 +63,7 @@ bool Mobile::update ()
                                 this->changeActivityOfItem( activity );
                                 DisplaceKindOfActivity::getInstance()->displace( this, &activity, true );
 
-                                activity = Wait;
+                                activity = Activity::Wait;
 
                                 speedTimer->reset();
                         }
@@ -71,22 +71,22 @@ bool Mobile::update ()
                         freeItem->animate();
                         break;
 
-                case ForceDisplaceNorth:
-                case ForceDisplaceSouth:
-                case ForceDisplaceEast:
-                case ForceDisplaceWest:
+                case Activity::ForceDisplaceNorth:
+                case Activity::ForceDisplaceSouth:
+                case Activity::ForceDisplaceEast:
+                case Activity::ForceDisplaceWest:
                         // item is on conveyor
                         if ( speedTimer->getValue() > item->getSpeed() )
                         {
                                 DisplaceKindOfActivity::getInstance()->displace( this, &activity, true );
 
-                                activity = Fall;
+                                activity = Activity::Fall;
 
                                 speedTimer->reset();
                         }
                         break;
 
-                case Fall:
+                case Activity::Fall:
                         // look for reaching floor in a room without floor
                         if ( freeItem->getZ() == 0 && freeItem->getMediator()->getRoom()->getKindOfFloor() == "none" )
                         {
@@ -100,14 +100,14 @@ bool Mobile::update ()
                                 {
                                         // play sound of falling
                                         SoundManager::getInstance()->play( freeItem->getLabel(), activity );
-                                        activity = Wait;
+                                        activity = Activity::Wait;
                                 }
 
                                 fallTimer->reset();
                         }
                         break;
 
-                case Vanish:
+                case Activity::Vanish:
                         // disappear when this item is caught
                         isGone = true;
                         break;

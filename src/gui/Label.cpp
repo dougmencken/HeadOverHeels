@@ -6,6 +6,7 @@
 #include "GameManager.hpp"
 
 #include <iostream>
+#include <cassert>
 
 
 namespace gui
@@ -15,7 +16,7 @@ Label::Label( const std::string& text )
 : Widget( ),
         imageOfLetters( nilPointer ),
         text( text ),
-        fontFamily( "regular" ),
+        fontFamily( "plain" ),
         color( "white" ),
         spacing( 0 ),
         myAction( nilPointer )
@@ -32,7 +33,7 @@ Label::Label( const std::string& text, const std::string& family, const std::str
         spacing( spacing ),
         myAction( nilPointer )
 {
-        if ( family.empty() ) this->fontFamily = "regular";
+        if ( family.empty() ) this->fontFamily = "plain";
         if ( color.empty() ) this->color = "white";
 
         createImageOfLabel( text, Label::getFontByFamilyAndColor( family, color ) );
@@ -46,7 +47,9 @@ Label::~Label( )
 /* static */
 Font* Label::getFontByFamilyAndColor( const std::string& family, const std::string& color )
 {
-        return GuiManager::getInstance()->findFontByFamilyAndColor( family, color == "multicolor" ? "white" : color ) ;
+        Font* found = GuiManager::getInstance()->findFontByFamilyAndColor( family, color == "multicolor" ? "white" : color ) ;
+        assert( found != nilPointer );
+        return found;
 }
 
 void Label::update()
@@ -73,21 +76,17 @@ void Label::changeFontFamilyAndColor( const std::string& family, const std::stri
         update ();
 }
 
-void Label::draw( allegro::Pict* where )
+void Label::draw( const allegro::Pict& where )
 {
         if ( imageOfLetters != nilPointer )
         {
-                /* std::string whereToSave = isomot::homePath() + imageOfLetters->getName() + ".pcx" ;
-                std::cout << "saving it to " << whereToSave << std::endl ;
-                save_bitmap( whereToSave.c_str(), imageOfLetters->getAllegroPict(), nilPointer ); */
-
                 allegro::drawSprite( where, imageOfLetters->getAllegroPict(), getX(), getY() );
         }
 }
 
-void Label::handleKey( int key )
+void Label::handleKey( const std::string& key )
 {
-        if ( key >> 8 == KEY_ENTER && myAction != nilPointer )
+        if ( key == "Enter" && myAction != nilPointer )
         {
                 myAction->doIt ();
         }
@@ -96,7 +95,7 @@ void Label::handleKey( int key )
 void Label::createImageOfLabel( const std::string& text, Font * font )
 {
         std::string nameOfImage = "image of label \"" + text + "\" using " + this->fontFamily + " font colored " + this->color ;
-        /* std::cout << "creating " << nameOfImage << std::endl ; */
+        ///std::cout << "creating " << nameOfImage << std::endl ;
 
         // re-create image of letters
         delete imageOfLetters ;
@@ -122,12 +121,7 @@ void Label::createImageOfLabel( const std::string& text, Font * font )
                         {
                                 // pick new font with color for this letter
                                 fontToUse = Label::getFontByFamilyAndColor( font->getFamily(), multiColors[ cycle ] );
-                                if ( fontToUse == nilPointer )
-                                {
-                                        std::cerr << "can’t get font with family \"" << font->getFamily() << "\"" <<
-                                                        " for color \"" << multiColors[ cycle ] << "\"" << std::endl ;
-                                        fontToUse = font ;
-                                }
+                                if ( fontToUse == nilPointer ) fontToUse = font ;
 
                                 // cycle in sequence of colors
                                 cycle++;

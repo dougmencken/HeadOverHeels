@@ -180,7 +180,7 @@ void algif_render_frame (GIF_ANIMATION *gif, BITMAP *bitmap, int frame, int xpos
 This is the worker function which handles conversion of a GIF_ANIMATION to
 real bitmaps. You need to call it for every frame, starting with frame 0,
 and always specify the same x and y position. This guarantees that the
-right offsets and disposal methods are applied. In regular programs, you
+right offsets and disposal methods are applied. In most programs, you
 will never use this - use load_gif or algif_load_animation instead.
 
 

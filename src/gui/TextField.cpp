@@ -21,18 +21,18 @@ TextField::TextField( unsigned int width, const std::string& align )
 
 TextField::~TextField()
 {
-        std::for_each( this->lines.begin (), this->lines.end (), isomot::DeleteObject() );
+        std::for_each( this->lines.begin (), this->lines.end (), isomot::DeleteIt() );
         this->lines.clear();
 }
 
-void TextField::draw( allegro::Pict* where )
+void TextField::draw( const allegro::Pict& where )
 {
         for ( std::list< Label* >::iterator i = this->lines.begin (); i != this->lines.end (); ++i )
         {
                 Label* label = *i ;
 
                 if ( ( label->getY() + static_cast< int >( label->getWidth() ) >= 0 ) &&
-                                ( label->getY() < where->h ) )
+                                ( label->getY() < static_cast< int >( where.getH() ) ) )
                 {
                         label->draw( where );
                 }

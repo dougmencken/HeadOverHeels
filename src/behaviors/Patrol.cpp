@@ -39,18 +39,18 @@ bool Patrol::update ()
 
         switch ( activity )
         {
-                case Wait:
+                case Activity::Wait:
                         changeOrientation();
                         break;
 
-                case MoveNorth:
-                case MoveSouth:
-                case MoveEast:
-                case MoveWest:
-                case MoveNortheast:
-                case MoveNorthwest:
-                case MoveSoutheast:
-                case MoveSouthwest:
+                case Activity::MoveNorth:
+                case Activity::MoveSouth:
+                case Activity::MoveEast:
+                case Activity::MoveWest:
+                case Activity::MoveNortheast:
+                case Activity::MoveNorthwest:
+                case Activity::MoveSoutheast:
+                case Activity::MoveSouthwest:
                         if ( ! freeItem->isFrozen() )
                         {
                                 if ( speedTimer->getValue() > freeItem->getSpeed())
@@ -67,7 +67,7 @@ bool Patrol::update ()
                                         {
                                                 changeOrientation();
 
-                                                SoundManager::getInstance()->play( freeItem->getLabel(), Collision );
+                                                SoundManager::getInstance()->play( freeItem->getLabel(), Activity::Collision );
                                         }
 
                                         // play sound of moving
@@ -80,30 +80,30 @@ bool Patrol::update ()
                         }
                         break;
 
-                case DisplaceNorth:
-                case DisplaceSouth:
-                case DisplaceEast:
-                case DisplaceWest:
-                case DisplaceNortheast:
-                case DisplaceSoutheast:
-                case DisplaceSouthwest:
-                case DisplaceNorthwest:
+                case Activity::DisplaceNorth:
+                case Activity::DisplaceSouth:
+                case Activity::DisplaceEast:
+                case Activity::DisplaceWest:
+                case Activity::DisplaceNortheast:
+                case Activity::DisplaceSoutheast:
+                case Activity::DisplaceSouthwest:
+                case Activity::DisplaceNorthwest:
                         // play sound of displacing
                         SoundManager::getInstance()->play( freeItem->getLabel(), activity );
 
                         // displace this item by some other one
                         DisplaceKindOfActivity::getInstance()->displace( this, &activity, true );
 
-                        activity = Wait;
+                        activity = Activity::Wait;
 
                         // preserve inactivity for frozen item
                         if ( freeItem->isFrozen() )
                         {
-                                activity = Freeze;
+                                activity = Activity::Freeze;
                         }
                         break;
 
-                case Fall:
+                case Activity::Fall:
                         // look for reaching floor in a room without floor
                         if ( item->getZ() == 0 && item->getMediator()->getRoom()->getKindOfFloor() == "none" )
                         {
@@ -115,20 +115,20 @@ bool Patrol::update ()
                                 if ( ! FallKindOfActivity::getInstance()->fall( this ) )
                                 {
                                         SoundManager::getInstance()->play( freeItem->getLabel(), activity );
-                                        activity = Wait;
+                                        activity = Activity::Wait;
                                 }
 
                                 fallTimer->reset();
                         }
                         break;
 
-                case Freeze:
+                case Activity::Freeze:
                         freeItem->setFrozen( true );
                         break;
 
-                case WakeUp:
+                case Activity::WakeUp:
                         freeItem->setFrozen( false );
-                        activity = Wait;
+                        activity = Activity::Wait;
                         break;
 
                 default:
@@ -158,36 +158,36 @@ void Patrol::changeOrientation()
         // change activity depending on value of calculated direction
         switch ( orientation )
         {
-                case North:
-                        activity = MoveNorth;
+                case Way::North:
+                        activity = Activity::MoveNorth;
                         break;
 
-                case South:
-                        activity = MoveSouth;
+                case Way::South:
+                        activity = Activity::MoveSouth;
                         break;
 
-                case East:
-                        activity = MoveEast;
+                case Way::East:
+                        activity = Activity::MoveEast;
                         break;
 
-                case West:
-                        activity = MoveWest;
+                case Way::West:
+                        activity = Activity::MoveWest;
                         break;
 
-                case Northeast:
-                        activity = MoveNortheast;
+                case Way::Northeast:
+                        activity = Activity::MoveNortheast;
                         break;
 
-                case Northwest:
-                        activity = MoveNorthwest;
+                case Way::Northwest:
+                        activity = Activity::MoveNorthwest;
                         break;
 
-                case Southeast:
-                        activity = MoveSoutheast;
+                case Way::Southeast:
+                        activity = Activity::MoveSoutheast;
                         break;
 
-                case Southwest:
-                        activity = MoveSouthwest;
+                case Way::Southwest:
+                        activity = Activity::MoveSouthwest;
                         break;
 
                 default:

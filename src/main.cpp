@@ -3,6 +3,10 @@
 #include "GameManager.hpp"
 #include "GuiManager.hpp"
 
+#if defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+#  include <allegro.h>
+#endif
+
 
 int main( int argc, char** argv )
 {
@@ -74,4 +78,6 @@ int main( int argc, char** argv )
 
         return EXIT_SUCCESS;
 }
+#if defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
 END_OF_MAIN()
+#endif

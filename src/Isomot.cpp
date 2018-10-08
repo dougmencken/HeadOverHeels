@@ -33,7 +33,7 @@ Isomot::~Isomot( )
         delete this->mapManager;
         delete this->finalRoomTimer;
 
-        allegro::binPicture( this->view );
+        delete this->view ;
 }
 
 void Isomot::beginNewGame ()
@@ -55,7 +55,7 @@ void Isomot::beginNewGame ()
         mapManager->getActiveRoom()->activate ();
 
         std::cout << "play new game" << std::endl ;
-        ////SoundManager::getInstance()->playOgg ( "music/begin.ogg", /* loop */ false );
+        SoundManager::getInstance()->playOgg ( "music/begin.ogg", /* loop */ false );
 }
 
 void Isomot::continueSavedGame ( tinyxml2::XMLElement* characters )
@@ -184,7 +184,7 @@ void Isomot::prepare ()
         if ( this->view == nilPointer )
         {
                 // image where the isometric view will be drawn
-                this->view = allegro::createPicture( ScreenWidth(), ScreenHeight() );
+                this->view = new Picture( ScreenWidth(), ScreenHeight() );
         }
 
         // set of graphics may change between games
@@ -249,7 +249,8 @@ void Isomot::reset()
         if ( finalRoomTimer != nilPointer ) finalRoomTimer->stop();
 
         // bin isometric view
-        allegro::binPicture( this->view );
+        delete this->view ;
+        this->view = nilPointer ;
 
         this->mapManager->binEveryRoom();
 
@@ -257,67 +258,67 @@ void Isomot::reset()
         BonusManager::getInstance()->reset();
 }
 
-allegro::Pict* Isomot::update()
+Picture* Isomot::update()
 {
         Room* activeRoom = mapManager->getActiveRoom();
         GameManager* gameManager = GameManager::getInstance();
 
-        if ( key[ KEY_PRTSCR ] )
+        if ( allegro::isKeyPushed( "PrintScreen" ) )
         {
                 gameManager->toggleRecordingCaptures ();
-                key[ KEY_PRTSCR ] = 0;
+                allegro::releaseKey( "PrintScreen" );
         }
 
-        if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_F ] )
+        if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "f" ) )
         {
                 gui::GuiManager::getInstance()->toggleFullScreenVideo ();
-                key[ KEY_F ] = 0;
+                allegro::releaseKey( "f" );
         }
 
-        if ( ( key_shifts & KB_ALT_FLAG ) && key[ KEY_PGUP ] )
+        if ( allegro::isAltKeyPushed() && allegro::isKeyPushed( "PageUp" ) )
         {
                 if ( ! gameManager->charactersFly() )
                 {
                         gameManager->setCharactersFly( true );
                         std::cout << "characters fly and don’t fall" << std::endl ;
                 }
-                key[ KEY_PGUP ] = 0;
+                allegro::releaseKey( "PageUp" );
         }
-        if ( ( key_shifts & KB_ALT_FLAG ) && key[ KEY_PGDN ] )
+        if ( allegro::isAltKeyPushed() && allegro::isKeyPushed( "PageDown" ) )
         {
                 if ( gameManager->charactersFly() )
                 {
                         gameManager->setCharactersFly( false );
                         std::cout << "characters feel gravity again" << std::endl ;
                 }
-                key[ KEY_PGDN ] = 0;
+                allegro::releaseKey( "PageDown" );
         }
 
-        if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_EQUALS ] )
+        if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "=" ) )
         {
                 gameManager->addLives( activeRoom->getMediator()->getLabelOfActiveCharacter(), 1 );
-                key[ KEY_EQUALS ] = 0;
+                allegro::releaseKey( "=" );
         }
 
-        if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_I ] )
+        if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "i" ) )
         {
                 gameManager->toggleInfiniteLives ();
-                key[ KEY_I ] = 0;
+                allegro::releaseKey( "i" );
         }
 
-        if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_C ] )
+        if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "c" ) )
         {
                 gameManager->toggleImmunityToCollisionsWithMortalItems ();
-                key[ KEY_C ] = 0;
+                allegro::releaseKey( "c" );
         }
 
-        if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_B ] )
+        if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "b" ) )
         {
                 gameManager->toggleBackgroundPicture ();
-                key[ KEY_B ] = 0;
+                allegro::releaseKey( "b" );
         }
 
-        if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_T ] )
+        if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "t" ) )
         {
                 GameManager::getInstance()->togglePlayMelodyOfScenery ();
 
@@ -328,57 +329,57 @@ allegro::Pict* Isomot::update()
                 } else
                         std::cout << "room tunes off" << std::endl ;
 
-                key[ KEY_T ] = 0;
+                allegro::releaseKey( "t" );
         }
 
-        if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_S ] )
+        if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "s" ) )
         {
                 gameManager->eatFish ( activeRoom->getMediator()->getActiveCharacter(), activeRoom );
-                key[ KEY_S ] = 0;
+                allegro::releaseKey( "s" );
         }
 
-        if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_8_PAD ] )
+        if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "Pad 8" ) )
         {
                 activeRoom->getCamera()->setDeltaY( activeRoom->getCamera()->getDeltaY() - 2 );
         }
-        if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_2_PAD ] )
+        if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "Pad 2" ) )
         {
                 activeRoom->getCamera()->setDeltaY( activeRoom->getCamera()->getDeltaY() + 2 );
         }
-        if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_4_PAD ] )
+        if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "Pad 4" ) )
         {
                 activeRoom->getCamera()->setDeltaX( activeRoom->getCamera()->getDeltaX() - 2 );
         }
-        if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_6_PAD ] )
+        if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "Pad 6" ) )
         {
                 activeRoom->getCamera()->setDeltaX( activeRoom->getCamera()->getDeltaX() + 2 );
         }
 
-        if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_MINUS ] )
+        if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "-" ) )
         {
                 unsigned int howManyBars = activeRoom->removeBars ();
 
                 if ( howManyBars > 0 )
                         std::cout << howManyBars << " bars are gone" << std::endl ;
 
-                key[ KEY_MINUS ] = 0;
+                allegro::releaseKey( "-" );
         }
 
-        if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_V ] )
+        if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "v" ) )
         {
                 activeRoom->dontDisappearOnJump ();
-                key[ KEY_V ] = 0;
+                allegro::releaseKey( "v" );
         }
 
-        if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_R ] )
+        if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "r" ) )
         {
                 playTuneForScenery( activeRoom->getScenery () );
                 activeRoom = mapManager->rebuildRoom();
 
-                key[ KEY_R ] = 0;
+                allegro::releaseKey( "r" );
         }
 
-        if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_J ] )
+        if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "j" ) )
         {
                 PlayerItem* activePlayer = activeRoom->getMediator()->getActiveCharacter();
                 PlayerItem* otherPlayer = nilPointer;
@@ -414,16 +415,16 @@ allegro::Pict* Isomot::update()
                         joinedPlayer->fillWithData( gameManager );
 
                         activeRoom->addPlayerToRoom( joinedPlayer, true );
-                        joinedPlayer->getBehavior()->changeActivityOfItem( BeginWayInTeletransport );
+                        joinedPlayer->getBehavior()->changeActivityOfItem( Activity::BeginWayInTeletransport );
 
                         roomWithInactivePlayer->removePlayerFromRoom( otherPlayer, true );
                         this->mapManager->removeRoom( roomWithInactivePlayer );
                 }
 
-                key[ KEY_J ] = 0;
+                allegro::releaseKey( "j" );
         }
 
-        if( ( key_shifts & KB_ALT_FLAG ) && ( key_shifts & KB_SHIFT_FLAG ) && key[ KEY_L ] )
+        if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "l" ) )
         {
                 if ( gameManager->countFreePlanets() < 5 )
                 {
@@ -434,7 +435,7 @@ allegro::Pict* Isomot::update()
                                 int x = ( activeRoom->getLimitAt( "south" ) - activeRoom->getLimitAt( "north" ) + chapeauData->getWidthX() ) >> 1 ;
                                 int y = ( activeRoom->getLimitAt( "west" ) - activeRoom->getLimitAt( "east" ) + chapeauData->getWidthY() ) >> 1 ;
 
-                                FreeItem* chapeau = new FreeItem( chapeauData, x, y, 250, Nowhere );
+                                FreeItem* chapeau = new FreeItem( chapeauData, x, y, 250, Way::Nowhere );
                                 chapeau->assignBehavior( "behavior of something special", chapeauData );
                                 activeRoom->addFreeItem( chapeau );
                         }
@@ -466,7 +467,7 @@ allegro::Pict* Isomot::update()
                         std::string nameOfRoomNearFinal = "blacktooth83tofreedom.xml";
                         Room* roomWithTeleportToFinalScene = this->mapManager->createRoomThenAddItToListOfRooms( nameOfRoomNearFinal, true );
                         roomWithTeleportToFinalScene->addPlayerToRoom( teleportedPlayer, true );
-                        teleportedPlayer->getBehavior()->changeActivityOfItem( BeginWayInTeletransport );
+                        teleportedPlayer->getBehavior()->changeActivityOfItem( Activity::BeginWayInTeletransport );
 
                         activeRoom->removePlayerFromRoom( activePlayer, true );
 
@@ -477,15 +478,15 @@ allegro::Pict* Isomot::update()
                         activeRoom = roomWithTeleportToFinalScene;
                 }
 
-                key[ KEY_L ] = 0;
+                allegro::releaseKey( "l" );
         }
 
         // swap key changes character and possibly room
-        if ( ! this->finalRoomBuilt && InputManager::getInstance()->swap() )
+        if ( ! this->finalRoomBuilt && InputManager::getInstance()->swapTyped() )
         {
                 activeRoom->getMediator()->getActiveCharacter()->wait(); // stop active player
 
-                if ( activeRoom->getMediator()->getActiveCharacter()->getBehavior()->getActivityOfItem() == Wait )
+                if ( activeRoom->getMediator()->getActiveCharacter()->getBehavior()->getActivityOfItem() == Activity::Wait )
                 {
                         // swap in the same room or between different rooms
                         if ( ! activeRoom->swapCharactersInRoom( GameManager::getInstance()->getItemDataManager() ) )
@@ -494,7 +495,7 @@ allegro::Pict* Isomot::update()
                         }
                 }
 
-                InputManager::getInstance()->noRepeat( "swap" );
+                InputManager::getInstance()->releaseKeyFor( "swap" );
         }
 
         if ( activeRoom->getWayOfExit() == "no exit" )
@@ -537,318 +538,55 @@ allegro::Pict* Isomot::update()
         if ( activeRoom != nilPointer )
         {
                 allegro::bitBlit (
-                        activeRoom->getWhereToDraw(), this->view,
+                        activeRoom->getWhereToDraw()->getAllegroPict(), view->getAllegroPict(),
                         activeRoom->getCamera()->getDeltaX(), activeRoom->getCamera()->getDeltaY(),
                         0, 0,
-                        activeRoom->getWhereToDraw()->w, activeRoom->getWhereToDraw()->h
+                        activeRoom->getWhereToDraw()->getWidth(), activeRoom->getWhereToDraw()->getHeight()
                 );
 
                 std::string roomFile = activeRoom->getNameOfFileWithDataAboutRoom() ;
 
-                int whiteColor = Color::whiteColor()->toAllegroColor() ;
+                int allegroWhiteColor = Color::whiteColor().toAllegroColor() ;
 
-        if ( ! GameManager::getInstance()->hasBackgroundPicture () )
-        {
-                // show information about room
-
-                int tilesX = activeRoom->getTilesX();
-                int tilesY = activeRoom->getTilesY();
-
-                std::ostringstream roomTiles;
-                roomTiles << tilesX << "x" << tilesY;
-
-                MapRoomData* connections = this->getMapManager()->findRoomData( activeRoom );
-                assert( connections != nilPointer );
-
-                Way wayToNextRoom( "nowhere" );
-
-                std::string roomAbove = connections->findConnectedRoom( "up", &wayToNextRoom );
-                std::string roomBelow = connections->findConnectedRoom( "down", &wayToNextRoom );
-                std::string roomToTeleport = connections->findConnectedRoom( "via teleport", &wayToNextRoom );
-                std::string roomToTeleportToo = connections->findConnectedRoom( "via second teleport", &wayToNextRoom );
-
-                int gray50Color = Color::gray50Color()->toAllegroColor() ;
-
-                textout_ex( this->view, font, roomFile.c_str (), 12, 8, whiteColor, -1 );
-                textout_ex( this->view, font, roomTiles.str().c_str (), 12, 20, whiteColor, -1 );
-
-                // draw miniature of room
-
-                const unsigned int sizeOfTileForMap = 3 ;
-
-                const unsigned int leftXmap = 24;
-                const unsigned int topYmap = roomAbove.empty() ? 28 : 24 + ( 3 * sizeOfTileForMap );
-
-                const unsigned int iniPosX = leftXmap + ( tilesY * ( sizeOfTileForMap << 1 ) );
-                const unsigned int iniPosY = topYmap + ( sizeOfTileForMap << 1 );
-
-                unsigned int posX = iniPosX ;
-                unsigned int posY = iniPosY ;
-
-                int doorXmid = tilesX >> 1;
-                int doorYmid = tilesY >> 1;
-
-                Door* eastDoor = activeRoom->getDoorAt( "east" );
-                Door* southDoor = activeRoom->getDoorAt( "south" );
-                Door* westDoor = activeRoom->getDoorAt( "west" );
-                Door* northDoor = activeRoom->getDoorAt( "north" );
-
-                if ( eastDoor != nilPointer && westDoor == nilPointer ) doorYmid ++;
-                if ( northDoor != nilPointer && southDoor == nilPointer ) doorXmid ++;
-
-                for ( int tile = 0 ; tile < tilesX ; tile ++ )
+                if ( ! GameManager::getInstance()->hasBackgroundPicture () )
                 {
-                        if ( eastDoor != nilPointer && eastDoor->getCellX() + 1 != doorXmid )
-                        {
-                                doorXmid = eastDoor->getCellX() + 1;
-                        }
+                        // show information about room and draw miniature of room
 
-                        if ( ! ( ( tile == doorXmid || tile + 1 == doorXmid )
-                                && eastDoor != nilPointer ) )
-                        {
-                                for ( unsigned int pix = 0 ; pix < sizeOfTileForMap ; pix ++ )
-                                {
-                                        putpixel( this->view, posX++, posY, whiteColor );
-                                        putpixel( this->view, posX++, posY++, whiteColor );
-                                }
-                        }
-                        else
-                        {
-                                if ( eastDoor != nilPointer && ( tile + 1 == doorXmid ) )
-                                {
-                                        if ( tile > 0 /* not first tile */ )
-                                                putpixel( this->view, posX, posY, gray50Color );
-                                        else
-                                                putpixel( this->view, posX + 2, posY + 1, gray50Color );
-                                }
+                        std::ostringstream roomTiles;
+                        roomTiles << activeRoom->getTilesX() << "x" << activeRoom->getTilesY();
 
-                                posX += sizeOfTileForMap << 1;
-                                posY += sizeOfTileForMap;
+                        allegro::textOut( roomFile, view->getAllegroPict(), 12, 8, allegroWhiteColor );
+                        allegro::textOut( roomTiles.str(), view->getAllegroPict(), 12, 20, allegroWhiteColor );
 
-                                if ( eastDoor != nilPointer && ( tile == doorXmid ) )
-                                {
-                                        if ( tile + 1 < tilesX /* not last tile */ )
-                                                putpixel( this->view, posX - 1, posY - 1, gray50Color );
-                                        else
-                                                putpixel( this->view, posX - 3, posY - 2, gray50Color );
-                                }
-                        }
+                        const unsigned int sizeOfTileForMiniature = 3 ;
+                        Isomot::drawMiniatureOfRoom( activeRoom, this->mapManager, view, sizeOfTileForMiniature );
                 }
-
-                posX--; posY--;
-
-                for ( int tile = 0 ; tile < tilesY ; tile ++ )
-                {
-                        if ( southDoor != nilPointer && southDoor->getCellY() + 1 != doorYmid )
-                        {
-                                doorYmid = southDoor->getCellY() + 1;
-                        }
-
-                        if ( ! ( ( tile == doorYmid || tile + 1 == doorYmid )
-                                && southDoor != nilPointer ) )
-                        {
-                                for ( unsigned int pix = 0 ; pix < sizeOfTileForMap ; pix ++ )
-                                {
-                                        putpixel( this->view, posX--, posY, whiteColor );
-                                        putpixel( this->view, posX--, posY++, whiteColor );
-                                }
-                        }
-                        else
-                        {
-                                if ( southDoor != nilPointer && ( tile + 1 == doorYmid ) )
-                                {
-                                        if ( tile > 0 /* not first tile */ )
-                                                putpixel( this->view, posX, posY, gray50Color );
-                                        else
-                                                putpixel( this->view, posX - 2, posY + 1, gray50Color );
-                                }
-
-                                posX -= sizeOfTileForMap << 1;
-                                posY += sizeOfTileForMap;
-
-                                if ( southDoor != nilPointer && ( tile == doorYmid ) )
-                                {
-                                        if ( tile + 1 < tilesY /* not last tile */ )
-                                                putpixel( this->view, posX + 1, posY - 1, gray50Color );
-                                        else
-                                                putpixel( this->view, posX + 3, posY - 2, gray50Color  );
-                                }
-                        }
-                }
-
-                posX = iniPosX + 1 ;
-                posY = iniPosY ;
-
-                for ( int tile = 0 ; tile < tilesY ; tile ++ )
-                {
-                        if ( northDoor != nilPointer && northDoor->getCellY() + 1 != doorYmid )
-                        {
-                                doorYmid = northDoor->getCellY() + 1;
-                        }
-
-                        if ( ! ( ( tile == doorYmid || tile + 1 == doorYmid )
-                                && northDoor != nilPointer ) )
-                        {
-                                for ( unsigned int pix = 0 ; pix < sizeOfTileForMap ; pix ++ )
-                                {
-                                        putpixel( this->view, posX--, posY, whiteColor );
-                                        putpixel( this->view, posX--, posY++, whiteColor );
-                                }
-                        }
-                        else
-                        {
-                                if ( northDoor != nilPointer && ( tile + 1 == doorYmid ) )
-                                {
-                                        if ( tile > 0 /* not first tile */ )
-                                                putpixel( this->view, posX, posY, gray50Color );
-                                        else
-                                                putpixel( this->view, posX - 2, posY + 1, gray50Color );
-                                }
-
-                                posX -= sizeOfTileForMap << 1;
-                                posY += sizeOfTileForMap;
-
-                                if ( northDoor != nilPointer && ( tile == doorYmid ) )
-                                {
-                                        if ( tile + 1 < tilesY /* not last tile */ )
-                                                putpixel( this->view, posX + 1, posY - 1, gray50Color );
-                                        else
-                                                putpixel( this->view, posX + 3, posY - 2, gray50Color );
-                                }
-                        }
-                }
-
-                posX++; posY--;
-
-                for ( int tile = 0 ; tile < tilesX ; tile ++ )
-                {
-                        if ( westDoor != nilPointer && westDoor->getCellX() + 1 != doorXmid )
-                        {
-                                doorXmid = westDoor->getCellX() + 1;
-                        }
-
-                        if ( ! ( ( tile == doorXmid || tile + 1 == doorXmid )
-                                && westDoor != nilPointer ) )
-                        {
-                                for ( unsigned int pix = 0 ; pix < sizeOfTileForMap ; pix ++ )
-                                {
-                                        putpixel( this->view, posX++, posY, whiteColor );
-                                        putpixel( this->view, posX++, posY++, whiteColor );
-                                }
-                        }
-                        else
-                        {
-                                if ( westDoor != nilPointer && ( tile + 1 == doorXmid ) )
-                                {
-                                        if ( tile > 0 /* not first tile */ )
-                                                putpixel( this->view, posX, posY, gray50Color );
-                                        else
-                                                putpixel( this->view, posX + 2, posY + 1, gray50Color );
-                                }
-
-                                posX += sizeOfTileForMap << 1;
-                                posY += sizeOfTileForMap;
-
-                                if ( westDoor != nilPointer && ( tile == doorXmid ) )
-                                {
-                                        if ( tile + 1 < tilesX /* not last tile */ )
-                                                putpixel( this->view, posX - 1, posY - 1, gray50Color );
-                                        else
-                                                putpixel( this->view, posX - 3, posY - 2, gray50Color );
-                                }
-                        }
-                }
-
-                // show teleports on miniature
-
-                std::vector< std::list< GridItem* > > gridItemsInRoom = activeRoom->getMediator()->getGridItems();
-
-                for ( unsigned int column = 0; column < gridItemsInRoom.size(); column ++ )
-                {
-                        std::list < GridItem * > columnOfItems = gridItemsInRoom[ column ];
-
-                        for ( std::list< GridItem * >::const_iterator gi = columnOfItems.begin (); gi != columnOfItems.end (); ++ gi )
-                        {
-                                if ( ( *gi )->getLabel() == "teleport" && ! roomToTeleport.empty() )
-                                {
-                                        fillIsoTile( this->view, iniPosX, iniPosY, ( *gi )->getCellX(), ( *gi )->getCellY(), sizeOfTileForMap, Color::yellowColor() );
-                                }
-                                else if ( ( *gi )->getLabel() == "teleport-too" && ! roomToTeleportToo.empty() )
-                                {
-                                        fillIsoTile( this->view, iniPosX, iniPosY, ( *gi )->getCellX(), ( *gi )->getCellY(), sizeOfTileForMap, Color::magentaColor() );
-                                }
-                        }
-                }
-
-                // show when there’s a room above or below
-
-                if ( ! roomAbove.empty() || ! roomBelow.empty() )
-                {
-                        int miniatureMidX = leftXmap + ( tilesY + tilesX ) * sizeOfTileForMap;
-                        int abovePointerY = iniPosY - 2;
-                        int belowPointerY = iniPosY + ( tilesY + tilesX ) * sizeOfTileForMap;
-                        abovePointerY -= sizeOfTileForMap << 1;
-                        belowPointerY += sizeOfTileForMap << 1;
-
-                        ///if ( ! roomAbove.empty() ) putpixel( this->view, miniatureMidX, abovePointerY, Color::blueColor()->toAllegroColor() );
-                        ///if ( ! roomBelow.empty() ) putpixel( this->view, miniatureMidX, belowPointerY, Color::blueColor()->toAllegroColor() );
-
-                        int greenColor = Color::greenColor()->toAllegroColor() ;
-
-                        const unsigned int linesEven = ( ( sizeOfTileForMap + 1 ) >> 1 ) << 1;
-
-                        if ( ! roomAbove.empty() )
-                        {
-                                // draw middle line
-                                line( this->view, miniatureMidX, abovePointerY - linesEven + 1, miniatureMidX, abovePointerY - ( linesEven << 1 ), greenColor );
-
-                                int pos = 0;
-                                for ( unsigned int off = linesEven ; off > 0 ; off -- , pos ++ )
-                                {
-                                        line( this->view, miniatureMidX - off, abovePointerY - pos, miniatureMidX - off, abovePointerY - pos - linesEven, greenColor );
-                                        line( this->view, miniatureMidX + off, abovePointerY - pos, miniatureMidX + off, abovePointerY - pos - linesEven, greenColor );
-                                }
-                        }
-
-                        if ( ! roomBelow.empty() )
-                        {
-                                // draw middle line
-                                line( this->view, miniatureMidX, belowPointerY + linesEven - 1, miniatureMidX, belowPointerY + ( linesEven << 1 ), greenColor );
-
-                                int pos = 0;
-                                for ( unsigned int off = linesEven ; off > 0 ; off -- , pos ++ )
-                                {
-                                        line( this->view, miniatureMidX - off, belowPointerY + pos, miniatureMidX - off, belowPointerY + pos + linesEven, greenColor );
-                                        line( this->view, miniatureMidX + off, belowPointerY + pos, miniatureMidX + off, belowPointerY + pos + linesEven, greenColor );
-                                }
-                        }
-                }
-        }
 
                 // cheats
 
                 if ( GameManager::getInstance()->areLivesInexhaustible () )
                 {
-                        ////textout_ex( this->view, font, "VIDAS INFINITAS", 18, 10, whiteColor, -1 );
-                        textout_ex( this->view, font, "INFINITE LIVES", this->view->w - 128, 10, whiteColor, -1 );
+                        ////allegro::textOut( "VIDAS INFINITAS", view->getAllegroPict(), 18, 10, allegroWhiteColor );
+                        allegro::textOut( "INFINITE LIVES", view->getAllegroPict(), view->getWidth() - 128, 10, allegroWhiteColor );
                 }
 
                 if ( GameManager::getInstance()->isImmuneToCollisionsWithMortalItems () )
                 {
-                        textout_ex( this->view, font, "INVIOLABILITY", ( this->view->w >> 1 ) - 50, 10, whiteColor, -1 );
+                        allegro::textOut( "INVIOLABILITY", view->getAllegroPict(), ( view->getWidth() >> 1 ) - 50, 10, allegroWhiteColor );
                 }
 
                 // la sala final es muy especial
                 if ( roomFile == "finalroom.xml" )
                 {
-                        this->updateFinalRoom();
+                        updateFinalRoom();
                 }
         }
         // there’s no active room
         else
         {
                 std::cout << "no room, game over" << std::endl ;
-                allegro::binPicture( this->view );
+                delete this->view ;
+                this->view = nilPointer ;
         }
 
         return this->view;
@@ -886,7 +624,7 @@ void Isomot::updateFinalRoom()
 
                         if ( dataOfArrived != nilPointer )
                         {
-                                FreeItem* character = new FreeItem( dataOfArrived, 66, 92, Top, South );
+                                FreeItem* character = new FreeItem( dataOfArrived, 66, 92, Top, Way::South );
                                 activeRoom->addFreeItem( character );
                         }
                 }
@@ -901,35 +639,35 @@ void Isomot::updateFinalRoom()
                 // la corona de Safari
                 if ( gameManager->isFreePlanet( "safari" ) )
                 {
-                        FreeItem* chapeau = new FreeItem( dataForChapeau, 66, 75, Top, Nowhere );
+                        FreeItem* chapeau = new FreeItem( dataForChapeau, 66, 75, Top, Way::Nowhere );
                         activeRoom->addFreeItem( chapeau );
                         crowns++;
                 }
                 // la corona de Egyptus
                 if ( gameManager->isFreePlanet( "egyptus" ) )
                 {
-                        FreeItem* chapeau = new FreeItem( dataForChapeau, 66, 59, Top, Nowhere );
+                        FreeItem* chapeau = new FreeItem( dataForChapeau, 66, 59, Top, Way::Nowhere );
                         activeRoom->addFreeItem( chapeau );
                         crowns++;
                 }
                 // la corona de Penitentiary
                 if ( gameManager->isFreePlanet( "penitentiary" ) )
                 {
-                        FreeItem* chapeau = new FreeItem( dataForChapeau, 65, 107, Top, Nowhere );
+                        FreeItem* chapeau = new FreeItem( dataForChapeau, 65, 107, Top, Way::Nowhere );
                         activeRoom->addFreeItem( chapeau );
                         crowns++;
                 }
                 // la corona de Byblos
                 if ( gameManager->isFreePlanet( "byblos" ) )
                 {
-                        FreeItem* chapeau = new FreeItem( dataForChapeau, 65, 123, Top, Nowhere );
+                        FreeItem* chapeau = new FreeItem( dataForChapeau, 65, 123, Top, Way::Nowhere );
                         activeRoom->addFreeItem( chapeau );
                         crowns++;
                 }
                 // la corona de Blacktooth
                 if ( gameManager->isFreePlanet( "blacktooth" ) )
                 {
-                        FreeItem* chapeau = new FreeItem( dataForChapeau, 65, 91, Top, Nowhere );
+                        FreeItem* chapeau = new FreeItem( dataForChapeau, 65, 91, Top, Way::Nowhere );
                         activeRoom->addFreeItem( chapeau );
                         crowns++;
                 }
@@ -960,7 +698,10 @@ void Isomot::updateFinalRoom()
         {
                 if ( finalRoomTimer->getValue() > 4 /* each 4 seconds */ )
                 {
-                        FreeItem* finalBall = new FreeItem( GameManager::getInstance()->getItemDataManager()->findDataByLabel( "ball" ), 146, 93, LayerHeight, Nowhere );
+                        FreeItem* finalBall = new FreeItem (
+                                GameManager::getInstance()->getItemDataManager()->findDataByLabel( "ball" ),
+                                146, 93, LayerHeight, Way::Nowhere
+                        );
                         finalBall->assignBehavior( "behaivor of final ball", GameManager::getInstance()->getItemDataManager()->findDataByLabel( "bubbles" ) );
                         activeRoom->addFreeItem( finalBall );
 
@@ -970,7 +711,276 @@ void Isomot::updateFinalRoom()
 }
 
 /* static */
-void Isomot::fillIsoTile( allegro::Pict* where, int x0, int y0, int tileX, int tileY, unsigned int sizeOfTile, const Color* color )
+void Isomot::drawMiniatureOfRoom( Room* room, MapManager* mapManager, const Picture* where, const unsigned int sizeOfTile )
+{
+        assert( room != nilPointer );
+        assert( mapManager != nilPointer );
+        assert( where != nilPointer );
+
+        MapRoomData* connections = mapManager->findRoomData( room );
+        assert( connections != nilPointer );
+
+        Way wayToNextRoom( "nowhere" );
+
+        std::string roomAbove = connections->findConnectedRoom( "up", &wayToNextRoom );
+        std::string roomBelow = connections->findConnectedRoom( "down", &wayToNextRoom );
+        std::string roomToTeleport = connections->findConnectedRoom( "via teleport", &wayToNextRoom );
+        std::string roomToTeleportToo = connections->findConnectedRoom( "via second teleport", &wayToNextRoom );
+
+        int tilesX = room->getTilesX();
+        int tilesY = room->getTilesY();
+
+        const unsigned int leftXmap = 24;
+        const unsigned int topYmap = roomAbove.empty() ? 28 : 24 + ( 3 * sizeOfTile );
+
+        const unsigned int iniPosX = leftXmap + ( tilesY * ( sizeOfTile << 1 ) );
+        const unsigned int iniPosY = topYmap + ( sizeOfTile << 1 );
+
+        unsigned int posX = iniPosX ;
+        unsigned int posY = iniPosY ;
+
+        int doorXmid = tilesX >> 1;
+        int doorYmid = tilesY >> 1;
+
+        Door* eastDoor = room->getDoorAt( "east" );
+        Door* southDoor = room->getDoorAt( "south" );
+        Door* westDoor = room->getDoorAt( "west" );
+        Door* northDoor = room->getDoorAt( "north" );
+
+        if ( eastDoor != nilPointer && westDoor == nilPointer ) doorYmid ++;
+        if ( northDoor != nilPointer && southDoor == nilPointer ) doorXmid ++;
+
+        for ( int tile = 0 ; tile < tilesX ; tile ++ )
+        {
+                if ( eastDoor != nilPointer && eastDoor->getCellX() + 1 != doorXmid )
+                {
+                        doorXmid = eastDoor->getCellX() + 1;
+                }
+
+                if ( ! ( ( tile == doorXmid || tile + 1 == doorXmid )
+                        && eastDoor != nilPointer ) )
+                {
+                        for ( unsigned int pix = 0 ; pix < sizeOfTile ; pix ++ )
+                        {
+                                where->setPixelAt( posX++, posY, Color::whiteColor() );
+                                where->setPixelAt( posX++, posY++, Color::whiteColor() );
+                        }
+                }
+                else
+                {
+                        if ( eastDoor != nilPointer && ( tile + 1 == doorXmid ) )
+                        {
+                                if ( tile > 0 /* not first tile */ )
+                                        where->setPixelAt( posX, posY, Color::gray50Color() );
+                                else
+                                        where->setPixelAt( posX + 2, posY + 1, Color::gray50Color() );
+                        }
+
+                        posX += sizeOfTile << 1;
+                        posY += sizeOfTile;
+
+                        if ( eastDoor != nilPointer && ( tile == doorXmid ) )
+                        {
+                                if ( tile + 1 < tilesX /* not last tile */ )
+                                        where->setPixelAt( posX - 1, posY - 1, Color::gray50Color() );
+                                else
+                                        where->setPixelAt( posX - 3, posY - 2, Color::gray50Color() );
+                        }
+                }
+        }
+
+        posX--; posY--;
+
+        for ( int tile = 0 ; tile < tilesY ; tile ++ )
+        {
+                if ( southDoor != nilPointer && southDoor->getCellY() + 1 != doorYmid )
+                {
+                        doorYmid = southDoor->getCellY() + 1;
+                }
+
+                if ( ! ( ( tile == doorYmid || tile + 1 == doorYmid )
+                        && southDoor != nilPointer ) )
+                {
+                        for ( unsigned int pix = 0 ; pix < sizeOfTile ; pix ++ )
+                        {
+                                where->setPixelAt( posX--, posY, Color::whiteColor() );
+                                where->setPixelAt( posX--, posY++, Color::whiteColor() );
+                        }
+                }
+                else
+                {
+                        if ( southDoor != nilPointer && ( tile + 1 == doorYmid ) )
+                        {
+                                if ( tile > 0 /* not first tile */ )
+                                        where->setPixelAt( posX, posY, Color::gray50Color() );
+                                else
+                                        where->setPixelAt( posX - 2, posY + 1, Color::gray50Color() );
+                        }
+
+                        posX -= sizeOfTile << 1;
+                        posY += sizeOfTile;
+
+                        if ( southDoor != nilPointer && ( tile == doorYmid ) )
+                        {
+                                if ( tile + 1 < tilesY /* not last tile */ )
+                                        where->setPixelAt( posX + 1, posY - 1, Color::gray50Color() );
+                                else
+                                        where->setPixelAt( posX + 3, posY - 2, Color::gray50Color()  );
+                        }
+                }
+        }
+
+        posX = iniPosX + 1 ;
+        posY = iniPosY ;
+
+        for ( int tile = 0 ; tile < tilesY ; tile ++ )
+        {
+                if ( northDoor != nilPointer && northDoor->getCellY() + 1 != doorYmid )
+                {
+                        doorYmid = northDoor->getCellY() + 1;
+                }
+
+                if ( ! ( ( tile == doorYmid || tile + 1 == doorYmid )
+                        && northDoor != nilPointer ) )
+                {
+                        for ( unsigned int pix = 0 ; pix < sizeOfTile ; pix ++ )
+                        {
+                                where->setPixelAt( posX--, posY, Color::whiteColor() );
+                                where->setPixelAt( posX--, posY++, Color::whiteColor() );
+                        }
+                }
+                else
+                {
+                        if ( northDoor != nilPointer && ( tile + 1 == doorYmid ) )
+                        {
+                                if ( tile > 0 /* not first tile */ )
+                                        where->setPixelAt( posX, posY, Color::gray50Color() );
+                                else
+                                        where->setPixelAt( posX - 2, posY + 1, Color::gray50Color() );
+                        }
+
+                        posX -= sizeOfTile << 1;
+                        posY += sizeOfTile;
+
+                        if ( northDoor != nilPointer && ( tile == doorYmid ) )
+                        {
+                                if ( tile + 1 < tilesY /* not last tile */ )
+                                        where->setPixelAt( posX + 1, posY - 1, Color::gray50Color() );
+                                else
+                                        where->setPixelAt( posX + 3, posY - 2, Color::gray50Color() );
+                        }
+                }
+        }
+
+        posX++; posY--;
+
+        for ( int tile = 0 ; tile < tilesX ; tile ++ )
+        {
+                if ( westDoor != nilPointer && westDoor->getCellX() + 1 != doorXmid )
+                {
+                        doorXmid = westDoor->getCellX() + 1;
+                }
+
+                if ( ! ( ( tile == doorXmid || tile + 1 == doorXmid )
+                        && westDoor != nilPointer ) )
+                {
+                        for ( unsigned int pix = 0 ; pix < sizeOfTile ; pix ++ )
+                        {
+                                where->setPixelAt( posX++, posY, Color::whiteColor() );
+                                where->setPixelAt( posX++, posY++, Color::whiteColor() );
+                        }
+                }
+                else
+                {
+                        if ( westDoor != nilPointer && ( tile + 1 == doorXmid ) )
+                        {
+                                if ( tile > 0 /* not first tile */ )
+                                        where->setPixelAt( posX, posY, Color::gray50Color() );
+                                else
+                                        where->setPixelAt( posX + 2, posY + 1, Color::gray50Color() );
+                        }
+
+                        posX += sizeOfTile << 1;
+                        posY += sizeOfTile;
+
+                        if ( westDoor != nilPointer && ( tile == doorXmid ) )
+                        {
+                                if ( tile + 1 < tilesX /* not last tile */ )
+                                        where->setPixelAt( posX - 1, posY - 1, Color::gray50Color() );
+                                else
+                                        where->setPixelAt( posX - 3, posY - 2, Color::gray50Color() );
+                        }
+                }
+        }
+
+        // show teleports on miniature
+
+        std::vector< std::list< GridItem* > > gridItemsInRoom = room->getMediator()->getGridItems();
+
+        for ( unsigned int column = 0; column < gridItemsInRoom.size(); column ++ )
+        {
+                std::list < GridItem * > columnOfItems = gridItemsInRoom[ column ];
+
+                for ( std::list< GridItem * >::const_iterator gi = columnOfItems.begin (); gi != columnOfItems.end (); ++ gi )
+                {
+                        if ( ( *gi )->getLabel() == "teleport" && ! roomToTeleport.empty() )
+                        {
+                                fillIsoTile( where->getAllegroPict(), iniPosX, iniPosY, ( *gi )->getCellX(), ( *gi )->getCellY(), sizeOfTile, Color::yellowColor() );
+                        }
+                        else if ( ( *gi )->getLabel() == "teleport-too" && ! roomToTeleportToo.empty() )
+                        {
+                                fillIsoTile( where->getAllegroPict(), iniPosX, iniPosY, ( *gi )->getCellX(), ( *gi )->getCellY(), sizeOfTile, Color::magentaColor() );
+                        }
+                }
+        }
+
+        // show when there’s a room above or below
+
+        if ( ! roomAbove.empty() || ! roomBelow.empty() )
+        {
+                int miniatureMidX = leftXmap + ( tilesY + tilesX ) * sizeOfTile;
+                int abovePointerY = iniPosY - 2;
+                int belowPointerY = iniPosY + ( tilesY + tilesX ) * sizeOfTile;
+                abovePointerY -= sizeOfTile << 1;
+                belowPointerY += sizeOfTile << 1;
+
+                if ( ! roomAbove.empty() ) where->setPixelAt( miniatureMidX, abovePointerY, Color::blueColor() );
+                if ( ! roomBelow.empty() ) where->setPixelAt( miniatureMidX, belowPointerY, Color::blueColor() );
+
+                int greenColor = Color::greenColor().toAllegroColor() ;
+
+                const unsigned int linesEven = ( ( sizeOfTile + 1 ) >> 1 ) << 1;
+
+                if ( ! roomAbove.empty() )
+                {
+                        // draw middle line
+                        allegro::drawLine( where->getAllegroPict(), miniatureMidX, abovePointerY - linesEven + 1, miniatureMidX, abovePointerY - ( linesEven << 1 ), greenColor );
+
+                        int pos = 0;
+                        for ( unsigned int off = linesEven ; off > 0 ; off -- , pos ++ )
+                        {
+                                allegro::drawLine( where->getAllegroPict(), miniatureMidX - off, abovePointerY - pos, miniatureMidX - off, abovePointerY - pos - linesEven, greenColor );
+                                allegro::drawLine( where->getAllegroPict(), miniatureMidX + off, abovePointerY - pos, miniatureMidX + off, abovePointerY - pos - linesEven, greenColor );
+                        }
+                }
+
+                if ( ! roomBelow.empty() )
+                {
+                        // draw middle line
+                        allegro::drawLine( where->getAllegroPict(), miniatureMidX, belowPointerY + linesEven - 1, miniatureMidX, belowPointerY + ( linesEven << 1 ), greenColor );
+
+                        int pos = 0;
+                        for ( unsigned int off = linesEven ; off > 0 ; off -- , pos ++ )
+                        {
+                                allegro::drawLine( where->getAllegroPict(), miniatureMidX - off, belowPointerY + pos, miniatureMidX - off, belowPointerY + pos + linesEven, greenColor );
+                                allegro::drawLine( where->getAllegroPict(), miniatureMidX + off, belowPointerY + pos, miniatureMidX + off, belowPointerY + pos + linesEven, greenColor );
+                        }
+                }
+        }
+}
+
+/* static */
+void Isomot::fillIsoTile( const allegro::Pict& where, int x0, int y0, int tileX, int tileY, const unsigned int sizeOfTile, const Color& color )
 {
         for ( unsigned int piw = 0 ; piw < sizeOfTile ; piw ++ )
         {
@@ -979,8 +989,8 @@ void Isomot::fillIsoTile( allegro::Pict* where, int x0, int y0, int tileX, int t
 
                 for ( unsigned int pix = 0 ; pix < sizeOfTile ; pix ++ )
                 {
-                        putpixel( where, x++, y, color->toAllegroColor() );
-                        putpixel( where, x++, y++, color->toAllegroColor() );
+                        where.setPixelAt( x++, y, color.toAllegroColor() );
+                        where.setPixelAt( x++, y++, color.toAllegroColor() );
                 }
         }
 }

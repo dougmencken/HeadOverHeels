@@ -213,16 +213,16 @@
     <properties font="big" color="yellow">
       <string>bohaterstwu i obwołuje Was władcami</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>I w ten oto sposób drogi Przyjacielu,</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>nasi dwaj bohaterowie raz na zawsze</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>położyli kres tyranii Imperatora</string>
     </properties>
-    <properties font="regular" color="multicolor">
+    <properties font="plain" color="multicolor">
       <string>Blacktooth - Czarnego Zęba</string>
     </properties>
   </text>

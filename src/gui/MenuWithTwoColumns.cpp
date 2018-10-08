@@ -23,14 +23,9 @@ MenuWithTwoColumns::~MenuWithTwoColumns( )
 
 }
 
-void MenuWithTwoColumns::draw( allegro::Pict* where )
+void MenuWithTwoColumns::draw( const allegro::Pict& where )
 {
-        if ( where == nilPointer ) return ;
-
-        if ( where != this->whereToDraw )
-        {
-                this->whereToDraw = where;
-        }
+        if ( ! where.isNotNil() ) return ;
 
         if ( activeOption == nilPointer )
         {
@@ -74,12 +69,12 @@ void MenuWithTwoColumns::draw( allegro::Pict* where )
                 if ( label == this->activeOption )
                 {
                         if ( label->getColor() != "orange" )
-                                label->changeFontFamilyAndColor( "regular", "orange" );
+                                label->changeFontFamilyAndColor( "plain", "orange" );
                 }
                 else
                 {
                         if ( label->getColor() != "white" )
-                                label->changeFontFamilyAndColor( "regular", "white" );
+                                label->changeFontFamilyAndColor( "plain", "white" );
                 }
 
                 Picture* mark = ( activeOption == label ) ? chosenOptionImageMini : optionImage ;

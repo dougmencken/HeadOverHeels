@@ -216,13 +216,13 @@
     <properties font="big" color="yellow">
       <string>tuas praedicat</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>Et sic fuit, care amice, ut nostri</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>duo heroes ad summum finiant cum</string>
     </properties>
-    <properties font="regular" color="multicolor">
+    <properties font="plain" color="multicolor">
       <string>imperatoris Blacktoothis potestate</string>
     </properties>
   </text>

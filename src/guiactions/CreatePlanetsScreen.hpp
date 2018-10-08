@@ -27,11 +27,10 @@ class CreatePlanetsScreen : public Action
 public:
 
         /**
-         * Constructor
          * @param where Imagen donde se dibujará la interfaz gráfica
          * @param notNewGame Indica si hay una partida en curso o comienza una nueva
          */
-        CreatePlanetsScreen( allegro::Pict* where, bool notNewGame );
+        CreatePlanetsScreen( Picture * picture, bool notNewGame );
 
         virtual ~CreatePlanetsScreen( ) ;
 

@@ -27,7 +27,7 @@ bool Teleport::update ()
 
         switch ( activity )
         {
-        case Wait:
+        case Activity::Wait:
                 // is there items above
                 if ( ! item->canAdvanceTo( 0, 0, 1 ) )
                 {
@@ -79,12 +79,12 @@ bool Teleport::update ()
                 if ( activated )
                 {
                         item->animate();
-                        SoundManager::getInstance()->play( item->getLabel(), IsActive );
+                        SoundManager::getInstance()->play( item->getLabel(), Activity::IsActive );
                 }
                 break;
 
         default:
-                activity = Wait;
+                activity = Activity::Wait;
         }
 
         return false;

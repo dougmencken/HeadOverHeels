@@ -37,7 +37,7 @@ namespace isomot
 Behavior::Behavior( Item * whichItem, const std::string & behavior ) :
           nameOfBehavior( behavior )
         , item( whichItem )
-        , activity( Wait )
+        , activity( Activity::Wait )
         , sender( nilPointer )
 {
         if ( behavior != "behavior of Head" && behavior != "behavior of Heels" && behavior != "behavior of Head over Heels" )

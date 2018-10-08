@@ -13,6 +13,8 @@
 
 #include "WrappersAllegro.hpp"
 
+#include "Picture.hpp"
+
 
 /**
  * Describes color as red, green and blue components,
@@ -22,11 +24,13 @@
 class Color
 {
 
-protected:
-
-        Color( unsigned char r, unsigned char g, unsigned char b ) ;
-
 public:
+
+        Color( ) : red( 255 ), green( 0 ), blue( 255 ) { }
+
+        Color( unsigned char r, unsigned char g, unsigned char b ) : red( r ), green( g ), blue( b ) { }
+
+        Color( const Color& copy ) : red( copy.red ), green( copy.green ), blue( copy.blue ) { }
 
         unsigned char getRed () const {  return red ;  }
 
@@ -34,43 +38,60 @@ public:
 
         unsigned char getBlue () const {  return blue ;  }
 
-        bool operator == ( const Color * c ) {  return c->red == red && c->green == green && c->blue == blue ;  }
+        bool operator == ( const Color & c ) const {  return c.red == red && c.green == green && c.blue == blue ;  }
 
-        bool operator != ( const Color * c ) {  return c->red != red || c->green != green || c->blue != blue ;  }
+        bool operator != ( const Color & c ) const {  return c.red != red || c.green != green || c.blue != blue ;  }
 
-        int toAllegroColor () const {  return makecol( red, green, blue ) ;  }
+        int toAllegroColor () const {  return allegro::makeColor( red, green, blue ) ;  }
 
-        static Color * blackColor () {  return theBlack ;  }                    /* speccy color 0 */
+        std::string toString () ;
 
-        static Color * blueColor () {  return theBlue ;  }                      /* speccy color 1 */
+        /*
+         * True when it’s color with red=255 green=0 blue=255
+         */
+        static bool isKeyColor ( unsigned char red, unsigned char green, unsigned char blue )
+        {
+                return red == 255 && green == 0 && blue == 255 ;
+        }
 
-        static Color * redColor () {  return theRed ;  }                        /* speccy color 2 */
+        static bool isKeyColor ( int allegroColor )
+        {
+                return  allegro::getRed( allegroColor ) == 255  &&
+                        allegro::getGreen( allegroColor ) == 0  &&
+                        allegro::getBlue( allegroColor ) == 255 ;
+        }
 
-        static Color * magentaColor () {  return theMagenta ;  }                /* speccy color 3 */
+        static const Color & blackColor () {  return *theBlack ;  }                     /* speccy color 0 */
 
-        static Color * greenColor () {  return theGreen ;  }                    /* speccy color 4 */
+        static const Color & blueColor () {  return *theBlue ;  }                       /* speccy color 1 */
 
-        static Color * cyanColor () {  return theCyan ;  }                      /* speccy color 5 */
+        static const Color & redColor () {  return *theRed ;  }                         /* speccy color 2 */
 
-        static Color * yellowColor () {  return theYellow ;  }                  /* speccy color 6 */
+        static const Color & magentaColor () {  return *theMagenta ;  }                 /* speccy color 3 */
 
-        static Color * whiteColor () {  return theWhite ;  }                    /* speccy color 7 */
+        static const Color & greenColor () {  return *theGreen ;  }                     /* speccy color 4 */
 
-        static Color * darkBlueColor () {  return theDarkBlue ;  }
+        static const Color & cyanColor () {  return *theCyan ;  }                       /* speccy color 5 */
 
-        static Color * orangeColor () {  return theOrange ;  }
+        static const Color & yellowColor () {  return *theYellow ;  }                   /* speccy color 6 */
 
-        static Color * gray50Color () {  return the50Gray ;  }                  /* 50% gray */
+        static const Color & whiteColor () {  return *theWhite ;  }                     /* speccy color 7 */
 
-        static Color * colorOfTransparency () {  return theTransparency ;  }    /* “ key ” color of transparency, pure magenta */
+        static const Color & darkBlueColor () {  return *theDarkBlue ;  }
 
-        static allegro::Pict * colorizePicture ( allegro::Pict * picture, const Color * color ) ;
+        static const Color & orangeColor () {  return *theOrange ;  }
 
-        static allegro::Pict * multiplyWithColor ( allegro::Pict * picture, const Color * color ) ;
+        static const Color & gray50Color () {  return *the50Gray ;  }                   /* 50% gray */
 
-        static allegro::Pict * pictureToGrayscale ( allegro::Pict * picture ) ;
+        static const Color & colorOfTransparency () {  return *theTransparency ;  }     /* “ key ” color of transparency, pure magenta */
 
-private:
+        static Picture * colorizePicture ( Picture * picture, const Color & color ) ;
+
+        static Picture * multiplyWithColor ( Picture * picture, const Color & color ) ;
+
+        static Picture * pictureToGrayscale ( Picture * picture ) ;
+
+protected:
 
         unsigned char red ;
 
@@ -78,9 +99,11 @@ private:
 
         unsigned char blue ;
 
-        static allegro::Pict * colorizePicture ( allegro::Pict * picture, unsigned char red, unsigned char green, unsigned char blue ) ;
+private:
 
-        static allegro::Pict * multiplyWithColor ( allegro::Pict * picture, unsigned char red, unsigned char green, unsigned char blue ) ;
+        static Picture * colorizePicture ( Picture * picture, unsigned char red, unsigned char green, unsigned char blue ) ;
+
+        static Picture * multiplyWithColor ( Picture * picture, unsigned char red, unsigned char green, unsigned char blue ) ;
 
         static Color * theBlack ;
 
@@ -105,7 +128,6 @@ private:
         static Color * the50Gray ;
 
         static Color * theTransparency ;
-
 
 } ;
 

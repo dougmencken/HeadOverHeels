@@ -19,6 +19,7 @@
 
 #include "Ism.hpp"
 #include "Way.hpp"
+#include "Picture.hpp"
 #include "Drawable.hpp"
 #include "Mediated.hpp"
 #include "Door.hpp"
@@ -92,9 +93,9 @@ public:
          */
         void dontDisappearOnJump () ;
 
-        void draw ( allegro::Pict * where ) ;
+        void draw ( const allegro::Pict& where ) ;
 
-        void drawRoom () {  draw( whereToDraw ) ;  }
+        void drawRoom () {  draw( whereToDraw->getAllegroPict() ) ;  }
 
        /**
         * Calculate boundaries of room from its size and its doors
@@ -219,9 +220,9 @@ private:
 
        /**
         * Degree of shadows’ opacity
-        * from 0, without shadows, up to 256, fully opaque shadows
+        * from 0 for pure black shadows, thru 128 for 50% opacity of shadows, up to 256 for no shadows
         */
-        short shadingScale ;
+        unsigned short shadingOpacity ;
 
        /**
         * El suelo de la sala formado por losetas
@@ -256,7 +257,7 @@ private:
        /**
         * Where to draw active room
         */
-        allegro::Pict * whereToDraw ;
+        Picture * whereToDraw ;
 
         std::list < TripleRoomInitialPoint > listOfInitialPointsForTripleRoom ;
 
@@ -271,6 +272,8 @@ private:
         std::pair < int, int > tripleRoomBoundY ;
 
 public:
+
+        unsigned short getOpacityOfShadows () const {  return shadingOpacity ;  }
 
         std::list < PlayerItem * > getPlayersYetInRoom () const ;
 
@@ -334,7 +337,7 @@ public:
 
         Camera * getCamera () const {  return camera ;  }
 
-        allegro::Pict * getWhereToDraw () {  return whereToDraw ;  }
+        Picture * getWhereToDraw () {  return whereToDraw ;  }
 
        /**
         * Límites para mover la cámara a lo largo del eje X en una sala triple

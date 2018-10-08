@@ -89,7 +89,6 @@ class BonusRoom
 public:
 
        /**
-        * Constructor
         * @param name Nombre del archivo de la sala
         */
         BonusRoom( const std::string& name ) ;

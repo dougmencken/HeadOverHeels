@@ -41,7 +41,7 @@ bool Special::update ()
 
         switch ( activity )
         {
-                case Wait:
+                case Activity::Wait:
                         // is there an item above this one
                         if ( ! item->canAdvanceTo( 0, 0, 1 ) )
                         {
@@ -67,7 +67,7 @@ bool Special::update ()
                                         // disappear on take
                                         if ( takeIt )
                                         {
-                                                activity = Vanish;
+                                                activity = Activity::Vanish;
                                                 this->sender = itemAbove; // player is yet sender
 
                                                 disappearanceTimer->reset();
@@ -78,25 +78,25 @@ bool Special::update ()
                         item->animate();
 
                         // fall if it’s not taken
-                        if ( activity != Vanish )
+                        if ( activity != Activity::Vanish )
                         {
-                                activity = Fall;
+                                activity = Activity::Fall;
                         }
                         break;
 
-                case DisplaceNorth:
-                case DisplaceSouth:
-                case DisplaceEast:
-                case DisplaceWest:
-                case DisplaceNortheast:
-                case DisplaceSoutheast:
-                case DisplaceSouthwest:
-                case DisplaceNorthwest:
-                case DisplaceUp:
+                case Activity::DisplaceNorth:
+                case Activity::DisplaceSouth:
+                case Activity::DisplaceEast:
+                case Activity::DisplaceWest:
+                case Activity::DisplaceNortheast:
+                case Activity::DisplaceSoutheast:
+                case Activity::DisplaceSouthwest:
+                case Activity::DisplaceNorthwest:
+                case Activity::DisplaceUp:
                         // if player touches bonus item and may take this bonus then it’s taken
                         if ( dynamic_cast< PlayerItem * >( sender ) && mayTake( sender ) )
                         {
-                                activity = Vanish;
+                                activity = Activity::Vanish;
                         }
                         // some other item moves this bonus
                         else if ( speedTimer->getValue() > item->getSpeed() )
@@ -104,29 +104,29 @@ bool Special::update ()
                                 DisplaceKindOfActivity::getInstance()->displace( this, &activity, true );
 
                                 // after displacement, back to "fall" activity
-                                activity = Fall;
+                                activity = Activity::Fall;
 
                                 speedTimer->reset();
                         }
                         break;
 
-                case ForceDisplaceNorth:
-                case ForceDisplaceSouth:
-                case ForceDisplaceEast:
-                case ForceDisplaceWest:
+                case Activity::ForceDisplaceNorth:
+                case Activity::ForceDisplaceSouth:
+                case Activity::ForceDisplaceEast:
+                case Activity::ForceDisplaceWest:
                         // bonus item is on conveyor belt
                         if ( speedTimer->getValue() > item->getSpeed() )
                         {
                                 DisplaceKindOfActivity::getInstance()->displace( this, &activity, true );
 
                                 // after displacement, back to "fall" activity
-                                activity = Fall;
+                                activity = Activity::Fall;
 
                                 speedTimer->reset();
                         }
                         break;
 
-                case Fall:
+                case Activity::Fall:
                         // is it fall in room without floor
                         if ( item->getZ() == 0 && item->getMediator()->getRoom()->getKindOfFloor() == "none" )
                         {
@@ -137,7 +137,7 @@ bool Special::update ()
                         {
                                 if ( ! FallKindOfActivity::getInstance()->fall( this ) )
                                 {
-                                        activity = Wait;
+                                        activity = Activity::Wait;
                                 }
 
                                 fallTimer->reset();
@@ -159,7 +159,7 @@ bool Special::update ()
                                                 // disappear on take
                                                 if ( takeIt )
                                                 {
-                                                        activity = Vanish;
+                                                        activity = Activity::Vanish;
                                                         this->sender = itemBelow; // player is yet sender
 
                                                         disappearanceTimer->reset();
@@ -169,7 +169,7 @@ bool Special::update ()
                         }
                         break;
 
-                case Vanish:
+                case Activity::Vanish:
                         if ( disappearanceTimer->getValue() > 0.100 )
                         {
                                 isGone = true;
@@ -183,7 +183,7 @@ bool Special::update ()
                                 takeMagicItem( static_cast< PlayerItem* >( sender ) );
 
                                 // create item "bubbles" in the place of magic item
-                                FreeItem* bubbles = new FreeItem( bubblesData, item->getX(), item->getY(), item->getZ(), Nowhere );
+                                FreeItem* bubbles = new FreeItem( bubblesData, item->getX(), item->getY(), item->getZ(), Way::Nowhere );
 
                                 bubbles->assignBehavior( "behavior of disappearance in time", nilPointer );
                                 bubbles->setCollisionDetector( false );

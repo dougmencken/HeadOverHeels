@@ -8,7 +8,7 @@ using gui::SaveGame;
 using gui::ContinueGame;
 
 
-SaveGame::SaveGame( allegro::Pict* picture, unsigned int slot )
+SaveGame::SaveGame( Picture* picture, unsigned int slot )
         : Action( picture )
         , slot( slot )
 {
@@ -17,7 +17,7 @@ SaveGame::SaveGame( allegro::Pict* picture, unsigned int slot )
 
 void SaveGame::doAction ()
 {
-        clear_keybuf();
+        allegro::emptyKeyboardBuffer();
 
         if ( slot > 0 )
         {

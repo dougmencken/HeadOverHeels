@@ -3,7 +3,6 @@
 #include "GameManager.hpp"
 #include "Color.hpp"
 #include "Ism.hpp"
-#include <loadpng.h>
 #include <tinyxml2.h>
 
 #ifdef DEBUG
@@ -101,7 +100,7 @@ void ItemDataManager::loadItems ()
                         std::cout << "got item \"" << newItem->getLabel() << "\"" ;
                 # endif
 
-                        createPictureFrames( newItem, isomot::GameManager::getInstance()->getChosenGraphicSet() );
+                        createFrames( newItem, isomot::GameManager::getInstance()->getChosenGraphicSet() );
                 }
 
                 {
@@ -210,10 +209,10 @@ void ItemDataManager::loadItems ()
                         }
 
                         // load graphics of door
-                        allegro::Pict* pictureOfDoor = allegro::loadPNG(
-                                        isomot::pathToFile( isomot::sharePath() + isomot::GameManager::getInstance()->getChosenGraphicSet() + pathSeparator + newItem->getNameOfFile( ) )
-                        );
-                        if ( pictureOfDoor == nilPointer )
+                        smartptr< allegro::Pict > pictureOfDoor( allegro::loadPNG( isomot::pathToFile(
+                                isomot::sharePath() + isomot::GameManager::getInstance()->getChosenGraphicSet() + pathSeparator + newItem->getNameOfFile( )
+                        ) ) );
+                        if ( ! pictureOfDoor->isNotNil() )
                         {
                                 std::cerr <<
                                         "picture of door \"" << newItem->getNameOfFile( ) <<
@@ -222,17 +221,17 @@ void ItemDataManager::loadItems ()
                         }
 
                         // cut out left jamb
-                        allegro::Pict* leftJambImage = cutOutLeftJamb( pictureOfDoor, leftJambWidthX, leftJambWidthY, leftJambHeight, lintelWidthY, lintelHeight, doorAt );
+                        Picture* leftJambImage = cutOutLeftJamb( *pictureOfDoor.get(), leftJambWidthX, leftJambWidthY, leftJambHeight, lintelWidthY, lintelHeight, doorAt );
                         leftJamb->motion.push_back( leftJambImage );
                         this->itemData.push_back( leftJamb );
 
                         // cut out right jamb
-                        allegro::Pict* rightJambImage = cutOutRightJamb( pictureOfDoor, rightJambWidthX, rightJambWidthY, rightJambHeight, lintelWidthX, lintelHeight, doorAt );
+                        Picture* rightJambImage = cutOutRightJamb( *pictureOfDoor.get(), rightJambWidthX, rightJambWidthY, rightJambHeight, lintelWidthX, lintelHeight, doorAt );
                         rightJamb->motion.push_back( rightJambImage );
                         this->itemData.push_back( rightJamb );
 
                         // cut out lintel
-                        allegro::Pict* lintelImage = cutOutLintel( pictureOfDoor, lintelWidthX, lintelWidthY, lintelHeight, leftJambWidthX, leftJambWidthY, rightJambWidthX, rightJambWidthY, doorAt );
+                        Picture* lintelImage = cutOutLintel( *pictureOfDoor.get(), lintelWidthX, lintelWidthY, lintelHeight, leftJambWidthX, leftJambWidthY, rightJambWidthX, rightJambWidthY, doorAt );
                         lintel->motion.push_back( lintelImage );
                         this->itemData.push_back( lintel );
 
@@ -241,9 +240,6 @@ void ItemDataManager::loadItems ()
                                         leftJamb->getLabel() << "\" \"" << rightJamb->getLabel() << "\" \"" << lintel->getLabel() << "\""
                                         << std::endl ;
                 # endif
-
-                        // bin original image
-                        allegro::binPicture( pictureOfDoor ) ;
                 }
                 else
                 {
@@ -279,30 +275,32 @@ ItemData* ItemDataManager::findDataByLabel( const std::string& label )
         return nilPointer ;
 }
 
-ItemData* ItemDataManager::createPictureFrames( ItemData * itemData, const char* gfxPrefix )
+ItemData* ItemDataManager::createFrames( ItemData * itemData, const char* gfxPrefix )
 {
         try
         {
                 if ( itemData->getNameOfFile( ).empty() || itemData->getWidthOfFrame() == 0 || itemData->getHeightOfFrame() == 0 )
                 {
-                        throw "either name of file is empty or zero width / height at ItemDataManager::createPictureFrames";
+                        throw "either name of file is empty or zero width / height at ItemDataManager::createFrames";
                 }
 
                 // load graphics for item
-                allegro::Pict* picture = allegro::loadPNG( isomot::pathToFile( isomot::sharePath() + gfxPrefix + pathSeparator + itemData->getNameOfFile( ) ) );
-                if ( picture == nilPointer )
+                smartptr< allegro::Pict > picture( allegro::loadPNG (
+                        isomot::pathToFile( isomot::sharePath() + gfxPrefix + pathSeparator + itemData->getNameOfFile() )
+                ) );
+                if ( ! picture->isNotNil() )
                 {
                         std::cerr << "picture \"" << itemData->getNameOfFile( ) << "\" of set \"" << gfxPrefix << "\" is absent" << std::endl ;
                         throw "picture " + itemData->getNameOfFile( ) + " is absent" ;
                 }
 
                 // decompose image into frames and store them in vector
-                for ( unsigned int y = 0; y < picture->h / itemData->getHeightOfFrame(); y++ )
+                for ( unsigned int y = 0; y < picture->getH() / itemData->getHeightOfFrame(); y++ )
                 {
-                        for ( unsigned int x = 0; x < picture->w / itemData->getWidthOfFrame(); x++ )
+                        for ( unsigned int x = 0; x < picture->getW() / itemData->getWidthOfFrame(); x++ )
                         {
-                                allegro::Pict* frame = allegro::createPicture( itemData->getWidthOfFrame(), itemData->getHeightOfFrame() );
-                                allegro::bitBlit( picture, frame, x * itemData->getWidthOfFrame(), y * itemData->getHeightOfFrame(), 0, 0, frame->w, frame->h );
+                                Picture* frame = new Picture( itemData->getWidthOfFrame(), itemData->getHeightOfFrame() );
+                                allegro::bitBlit( *picture.get(), frame->getAllegroPict(), x * itemData->getWidthOfFrame(), y * itemData->getHeightOfFrame(), 0, 0, frame->getWidth(), frame->getHeight() );
                                 itemData->motion.push_back( frame );
                         }
                 }
@@ -311,8 +309,6 @@ ItemData* ItemDataManager::createPictureFrames( ItemData * itemData, const char*
                         size_t howManyFrames = itemData->motion.size();
                         std::cout << " with " << howManyFrames << ( howManyFrames == 1 ? " frame" : " frames" ) << std::endl ;
                 # endif
-
-                allegro::binPicture( picture ) ;
         }
         catch ( const std::exception& e )
         {
@@ -333,25 +329,25 @@ ItemData* ItemDataManager::createShadowFrames( ItemData * itemData, const char* 
                 }
 
                 // load graphics for shadow
-                allegro::Pict* picture = allegro::loadPNG( isomot::pathToFile( isomot::sharePath() + gfxPrefix + pathSeparator + itemData->getNameOfShadowFile( ) ) );
-                if ( picture == nilPointer )
+                smartptr< allegro::Pict > picture( allegro::loadPNG (
+                        isomot::pathToFile( isomot::sharePath() + gfxPrefix + pathSeparator + itemData->getNameOfShadowFile( ) )
+                ) );
+                if ( ! picture->isNotNil() )
                 {
-                        std::cerr << "file of shadows \"" << itemData->getNameOfShadowFile( ) << "\" is absent at \"" << gfxPrefix << "\"" << std::endl ;
-                        throw "file of shadows " + itemData->getNameOfShadowFile( ) + " is absent at " + gfxPrefix ;
+                        std::cerr << "file of shadows \"" << itemData->getNameOfShadowFile( ) << "\" is absent at set \"" << gfxPrefix << "\"" << std::endl ;
+                        throw "file of shadows " + itemData->getNameOfShadowFile( ) + " is absent" ;
                 }
 
                 // decompose image into frames
-                for ( unsigned int y = 0; y < picture->h / itemData->getHeightOfShadow(); y++ )
+                for ( unsigned int y = 0; y < picture->getH() / itemData->getHeightOfShadow(); y++ )
                 {
-                        for ( unsigned int x = 0; x < picture->w / itemData->getWidthOfShadow(); x++ )
+                        for ( unsigned int x = 0; x < picture->getW() / itemData->getWidthOfShadow(); x++ )
                         {
-                                allegro::Pict* frame = allegro::createPicture( itemData->getWidthOfShadow(), itemData->getHeightOfShadow() );
-                                allegro::bitBlit( picture, frame, x * itemData->getWidthOfShadow(), y * itemData->getHeightOfShadow(), 0, 0, frame->w, frame->h );
+                                Picture* frame = new Picture( itemData->getWidthOfShadow(), itemData->getHeightOfShadow() );
+                                allegro::bitBlit( *picture.get(), frame->getAllegroPict(), x * itemData->getWidthOfShadow(), y * itemData->getHeightOfShadow(), 0, 0, frame->getWidth(), frame->getHeight() );
                                 itemData->shadows.push_back( frame );
                         }
                 }
-
-                allegro::binPicture( picture ) ;
         }
         catch ( const std::exception& e )
         {
@@ -362,7 +358,7 @@ ItemData* ItemDataManager::createShadowFrames( ItemData * itemData, const char* 
         return itemData;
 }
 
-allegro::Pict* ItemDataManager::cutOutLintel( allegro::Pict* door, unsigned int widthX, unsigned int widthY, unsigned int height,
+Picture* ItemDataManager::cutOutLintel( const allegro::Pict& door, unsigned int widthX, unsigned int widthY, unsigned int height,
                                        unsigned int leftJambWidthX, unsigned int leftJambWidthY,
                                        unsigned int rightJambWidthX, unsigned int rightJambWidthY,
                                        const std::string& at )
@@ -372,26 +368,24 @@ allegro::Pict* ItemDataManager::cutOutLintel( allegro::Pict* door, unsigned int 
         // top of door
         unsigned int topWidth = ( widthX << 1 ) + ( widthY << 1 );
         unsigned int topHeight = height + widthY + widthX;
-        allegro::Pict* top = allegro::createPicture( topWidth, topHeight );
-
-        allegro::clearToColor( top, Color::colorOfTransparency()->toAllegroColor () );
+        Picture* top = new Picture( topWidth, topHeight, Color::colorOfTransparency() );
 
         if ( ns )
         {
-                allegro::bitBlit( door, top, 0, 0, 0, 0, topWidth, height + widthX );
+                allegro::bitBlit( door, top->getAllegroPict(), 0, 0, 0, 0, topWidth, height + widthX );
 
                 unsigned int delta = topWidth;
                 int noPixel = topWidth - ( ( rightJambWidthX + rightJambWidthY ) << 1 ) + 1;
                 int yStart = noPixel;
                 int yEnd = noPixel - 1;
 
-                acquire_bitmap( top );
+                allegro::acquirePict( top->getAllegroPict() );
 
-                for ( unsigned int x = height + widthX; x < topHeight; x++ )
+                for ( unsigned int yPic = height + widthX; yPic < topHeight; yPic++ )
                 {
-                        for ( unsigned int y = delta; y > 0; y-- )
+                        for ( unsigned int xPic = delta; xPic > 0; xPic-- )
                         {
-                                if ( x != height + widthX && ( static_cast< int >( y ) - 1 ) == noPixel )
+                                if ( yPic != height + widthX && ( static_cast< int >( xPic ) - 1 ) == noPixel )
                                 {
                                         if ( noPixel > yEnd )
                                         {
@@ -403,33 +397,33 @@ allegro::Pict* ItemDataManager::cutOutLintel( allegro::Pict* door, unsigned int 
                                                 noPixel = yStart;
                                         }
                                 }
-                                else if ( x < height + ( widthX << 1 ) || ( static_cast< int >( y ) - 1 ) < yEnd )
+                                else if ( yPic < height + ( widthX << 1 ) || ( static_cast< int >( xPic ) - 1 ) < yEnd )
                                 {
-                                        ( ( int * )top->line[ x ] )[ y - 1 ] = ( ( int * )door->line[ x ] )[ y - 1 ];
+                                        top->getAllegroPict().setPixelAt( xPic - 1, yPic, door.getPixelAt( xPic - 1, yPic ) );
                                 }
                         }
 
                         delta -= 2;
                 }
 
-                release_bitmap( top );
+                allegro::releasePict( top->getAllegroPict() );
         }
         else
         {
-                allegro::bitBlit( door, top, 0, 0, 0, 0, topWidth, height + widthY );
+                allegro::bitBlit( door, top->getAllegroPict(), 0, 0, 0, 0, topWidth, height + widthY );
 
                 unsigned int delta = 0;
                 int noPixel = ( ( leftJambWidthX + leftJambWidthY ) << 1 ) - 2;
                 int yStart = noPixel;
                 int yEnd = noPixel + 1;
 
-                acquire_bitmap( top );
+                allegro::acquirePict( top->getAllegroPict() );
 
-                for ( unsigned int x = height + widthY; x < topHeight; x++ )
+                for ( unsigned int yPic = height + widthY; yPic < topHeight; yPic++ )
                 {
-                        for ( unsigned int y = delta; y < topWidth; y++ )
+                        for ( unsigned int xPic = delta; xPic < topWidth; xPic++ )
                         {
-                                if ( x != height + widthY && static_cast< int >( y ) == noPixel )
+                                if ( yPic != height + widthY && static_cast< int >( xPic ) == noPixel )
                                 {
                                         if ( noPixel < yEnd )
                                         {
@@ -441,22 +435,22 @@ allegro::Pict* ItemDataManager::cutOutLintel( allegro::Pict* door, unsigned int 
                                                 noPixel = yStart;
                                         }
                                 }
-                                else if ( x < height + ( widthY << 1 ) || static_cast< int >( y ) > yEnd )
+                                else if ( yPic < height + ( widthY << 1 ) || static_cast< int >( xPic ) > yEnd )
                                 {
-                                        ( ( int * )top->line[ x ] )[ y ] = ( ( int * )door->line[ x ] )[ y ];
+                                        top->getAllegroPict().setPixelAt( xPic, yPic, door.getPixelAt( xPic, yPic ) );
                                 }
                         }
 
                         delta += 2;
                 }
 
-                release_bitmap( top );
+                allegro::releasePict( top->getAllegroPict() );
         }
 
         return top;
 }
 
-allegro::Pict* ItemDataManager::cutOutLeftJamb( allegro::Pict* door, unsigned int widthX, unsigned int widthY, unsigned int height,
+Picture* ItemDataManager::cutOutLeftJamb( const allegro::Pict& door, unsigned int widthX, unsigned int widthY, unsigned int height,
                                          /* unsigned int lintelWidthX, */ unsigned int lintelWidthY, unsigned int lintelHeight,
                                          const std::string& at )
 {
@@ -464,16 +458,14 @@ allegro::Pict* ItemDataManager::cutOutLeftJamb( allegro::Pict* door, unsigned in
         unsigned int fixWidth = ( ns ? 7 : 0 );
         int fixY = ( ns ? -1 : 0 );
 
-        allegro::Pict* left = allegro::createPicture( ( widthX << 1 ) + fixWidth + ( widthY << 1 ) , height + widthY + widthX ) ;
+        Picture* left = new Picture( ( widthX << 1 ) + fixWidth + ( widthY << 1 ) , height + widthY + widthX, Color::colorOfTransparency() ) ;
 
-        allegro::clearToColor( left, Color::colorOfTransparency()->toAllegroColor () );
-
-        allegro::bitBlit( door, left, fixY, lintelHeight + lintelWidthY - widthY + fixY, 0, 0, left->w, left->h );
+        allegro::bitBlit( door, left->getAllegroPict(), fixY, lintelHeight + lintelWidthY - widthY + fixY, 0, 0, left->getWidth(), left->getHeight() );
 
         return left;
 }
 
-allegro::Pict* ItemDataManager::cutOutRightJamb( allegro::Pict* door, unsigned int widthX, unsigned int widthY, unsigned int height,
+Picture* ItemDataManager::cutOutRightJamb( const allegro::Pict& door, unsigned int widthX, unsigned int widthY, unsigned int height,
                                           unsigned int lintelWidthX, /* unsigned int lintelWidthY, */ unsigned int lintelHeight,
                                           const std::string& at )
 {
@@ -481,11 +473,9 @@ allegro::Pict* ItemDataManager::cutOutRightJamb( allegro::Pict* door, unsigned i
         unsigned int fixWidth = ( ns ? 0 : 7 );
         int fixY = ( ns ? 0 : -2 );
 
-        allegro::Pict* right = allegro::createPicture( ( widthX << 1 ) + fixWidth + ( widthY << 1 ) , height + widthY + widthX ) ;
+        Picture* right = new Picture( ( widthX << 1 ) + fixWidth + ( widthY << 1 ) , height + widthY + widthX, Color::colorOfTransparency() ) ;
 
-        allegro::clearToColor( right, Color::colorOfTransparency()->toAllegroColor () );
-
-        allegro::bitBlit( door, right, door->w - right->w, lintelHeight + lintelWidthX - widthY + fixY, 0, 0, right->w, right->h );
+        allegro::bitBlit( door, right->getAllegroPict(), door.getW() - right->getWidth(), lintelHeight + lintelWidthX - widthY + fixY, 0, 0, right->getWidth(), right->getHeight() );
 
         return right;
 }

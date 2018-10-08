@@ -30,7 +30,6 @@ class MapRoomData
 public:
 
         /**
-         * Constructor
          * @param Full path and name of file with data for this room
          */
         MapRoomData( const std::string& room ) ;

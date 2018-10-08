@@ -1,6 +1,7 @@
 
 #include "ShadowCaster.hpp"
 
+#include "Color.hpp"
 #include "Item.hpp"
 #include "FreeItem.hpp"
 #include "GridItem.hpp"
@@ -13,8 +14,10 @@ namespace isomot
 {
 
 /* static */
-void ShadowCaster::castShadowOnItem( Item* item, int x, int y, allegro::Pict* shadow, unsigned short shading, unsigned char transparency )
+void ShadowCaster::castShadowOnItem( Item* item, int x, int y, Picture* shadow, unsigned short shading, unsigned char transparency )
 {
+        if ( shading >= 256 ) return ;
+
         // fully transparent stuff doesn’t drop any shadow
         if ( transparency >= 100 ) return;
 
@@ -23,10 +26,7 @@ void ShadowCaster::castShadowOnItem( Item* item, int x, int y, allegro::Pict* sh
 
         if ( ! isFreeItem && ! isGridItem ) return;
 
-        allegro::Pict* rawImage = item->getRawImage() ;
-
-        int colorDepthRaw = allegro::colorDepthOf( rawImage ) ;
-        int colorDepthShadow = allegro::colorDepthOf( shadow ) ;
+        Picture* rawImage = item->getRawImage() ;
 
         int height = static_cast< int >( item->getHeight() );
         int width = static_cast< int >( item->getWidthX() );
@@ -40,35 +40,25 @@ void ShadowCaster::castShadowOnItem( Item* item, int x, int y, allegro::Pict* sh
                 deltaW = static_cast< int >( item->getWidthX() ) - static_cast< int >( item->getWidthY() );
         }
 
-        int inix = x - item->getOffsetX();              // initial X
-        int endx = inix + shadow->w;                    // final X
-        int iniy = y - item->getOffsetY();              // initial Y
-        int endy = iniy + shadow->h;                    // final Y
-        if ( inix < 0 ) inix = 0;
-        if ( iniy < 0 ) iniy = 0;
-        if ( endx > rawImage->w ) endx = rawImage->w;
-        if ( endy > rawImage->h ) endy = rawImage->h;
-        int my = rawImage->h - width - height;          // intermediate Y
-        if ( isGridItem ) my ++;                        // for better shadow on sides of grid item
-        if ( endy < my ) my = endy;
-        if ( endy > my + width ) endy = my + width;
+        int iniX = x - item->getOffsetX();              // initial X
+        int endX = iniX + shadow->getWidth();           // final X
+        int iniY = y - item->getOffsetY();              // initial Y
+        int endY = iniY + shadow->getHeight();          // final Y
+        if ( iniX < 0 ) iniX = 0;
+        if ( iniY < 0 ) iniY = 0;
+        if ( endX > static_cast< int >( rawImage->getWidth() ) ) endX = rawImage->getWidth();
+        if ( endY > static_cast< int >( rawImage->getHeight() ) ) endY = rawImage->getHeight();
+
+        int mY = rawImage->getHeight() - width - height;        // intermediate Y
+        if ( isGridItem ) mY ++;                                // for better shadow on sides of grid item
+        if ( endY < mY ) mY = endY;
+        if ( endY > mY + width ) endY = mY + width;
 
         // continue when initial coordinates are less than final coordinates
-        // id est if ( iniy < endy && inix < endx )
-        if ( iniy >= endy || inix >= endx ) return;
+        // id est if ( iniY < endY && iniX < endX )
+        if ( iniY >= endY || iniX >= endX ) return;
 
-        int iRow = 0;           // row in rows of pixels in image and shady image of this item
-        int sRow = 0;           // row in rows of pixels in shadow shading this item
-        int sPixel = 0;         // pixel in a row of shadow shading this item
-
-        // indices to walk thru color components in a row of image & shady image
-        int iRpx = 0;           // red
-        int iGpx = 0;           // green
-        int iBpx = 0;           // blue
-
-        int n2i = inix + item->getOffsetX() - x;
-
-        allegro::Pict* shadyImage = nilPointer; // graphics of shaded item
+        Picture* shadyImage = nilPointer; // graphics of shaded item
 
         if ( isFreeItem )
         {
@@ -81,40 +71,40 @@ void ShadowCaster::castShadowOnItem( Item* item, int x, int y, allegro::Pict* sh
 
         if ( shadyImage == nilPointer )
         {
-                shadyImage = allegro::createPicture( rawImage->w, rawImage->h, colorDepthRaw );
+                shadyImage = new Picture( rawImage->getWidth(), rawImage->getHeight() );
                 item->setWantShadow( true );
         }
 
         if ( item->getWantShadow() )
         {
                 // initially, image of shaded item is just copy of unshaded item’s image
-                allegro::bitBlit( rawImage, shadyImage );
+                allegro::bitBlit( rawImage->getAllegroPict(), shadyImage->getAllegroPict() );
                 item->setWantShadow( false );
         }
 
-        char iInc = ( colorDepthRaw == 32 ? 4 : 3 );            // increment for iRpx, iGpx and iBpx
-        char sInc = ( colorDepthShadow == 32 ? 4 : 3 );         // increment for sPixel
+        int iRow = 0;           // row of pixels in image and shady image of this item
+        int iPixel = 0;         // pixel in row of image & shady image
+        int sRow = 0;           // row of pixels in shadow shading this item
+        int sPixel = 0;         // pixel in row of shadow shading this item
+
+        int deltaX = iniX + item->getOffsetX() - x ;
+        int deltaY = iniY + item->getOffsetY() - y ;
+
+        const int iniltpx = ( rawImage->getWidth() >> 1 ) - ( width << 1 ) + deltaW ;
+        const int inirtpx = ( rawImage->getWidth() >> 1 ) + ( width << 1 ) + deltaW - 2 ;
+
+        int ltpx1 = iniltpx ;   // first component of first pixel, the one furthest to the left, where shading of sides begins
+        int ltpx2 = ltpx1 + 1 ; // second component of first pixel, the one furthest to the left, where shading of sides begins
+        int rtpx1 = inirtpx ;   // first component of last pixel, the one furthest to the right, where shading of sides ends
+        int rtpx2 = rtpx1 + 1 ; // second component of last pixel, the one furthest to the right, where shading of sides ends
 
         // degree of opacity from 0, full opacity, to 255, full transparency
-        short opacity = static_cast< short >( ( ( 256.0 - shading ) / 100 ) * transparency + shading );
-
-        endx *= iInc;
-        inix *= iInc;
-        n2i *= sInc;
-        #if IS_BIG_ENDIAN
-                inix += colorDepthRaw == 32 ? 1 : 0 ;
-                n2i += colorDepthShadow == 32 ? 1 : 0 ;
-        #endif
-
-        int ltpx = 0;   // first component of first pixel, the one furthest to the left, where shading of sides begins
-        int ltpx1 = 0;  // second component of first pixel, the one furthest to the left, where shading of sides begins
-        int rtpx = 0;   // first component of last pixel, the one furthest to the right, where shading of sides ends
-        int rtpx1 = 0;  // second component of last pixel, the one furthest to the right, where shading of sides ends
+        short opacity = static_cast< short >( shading + ( ( 256.0 - shading ) * transparency / 100 ) );
 
         // when opacity is power of 2 in interval [ 2 ... 128 ]
-        if ( static_cast< int >( std::pow( 2, std::log10( opacity ) / std::log10( 2 ) ) ) == opacity )
+        if ( opacity > 0 && static_cast< int >( std::pow( 2, std::log10( opacity ) / std::log10( 2 ) ) ) == opacity )
         {
-                char pxDiv = 7;  // 2 ^ pxDiv is divisor for shaded pixels
+                short pxDiv = 7;  // 2 ^ pxDiv is divisor for shaded pixels
 
                 // tune divisor by opacity of shadow
                 while ( opacity != 2 )
@@ -124,89 +114,75 @@ void ShadowCaster::castShadowOnItem( Item* item, int x, int y, allegro::Pict* sh
                 }
 
                 // shade top surface of item
-                // rows of three images are crossed within calculated limits
-                for ( iRow = iniy, sRow = iniy + item->getOffsetY() - y; iRow < my; iRow++, sRow++ )
-                {
-                        unsigned char* sln = shadow->line[ sRow ];
-                        unsigned char* iln = rawImage->line[ iRow ];
-                        unsigned char* rln = shadyImage->line[ iRow ];
 
+                // images are crossed within calculated limits
+                for ( iRow = iniY, sRow = deltaY ; iRow < mY ; iRow++, sRow++ )
+                {
                         // walk thru pixels of each row within calculated limits
-                        for ( iRpx = inix, iGpx = inix + 1, iBpx = inix + 2, sPixel = n2i;
-                                        iRpx < endx;
-                                        iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc )
+                        for ( iPixel = iniX, sPixel = deltaX ; iPixel < endX ; iPixel ++, sPixel ++ )
                         {
-                                // when pixel of three images isn’t key color
+                                int sColor = shadow->getPixelAt( sPixel, sRow );
+                                int iColor = rawImage->getPixelAt( iPixel, iRow );
+                                int rColor = shadyImage->getPixelAt( iPixel, iRow );
+
+                                // when pixel of shadow isn’t key color & pixel of item isn’t key color
+                                // and pixel of result isn’t changed before
                                 // then divide pixel of result by 2 ^ pxDiv, darkening it
-                                if ( ( ! isKeyColor( iln[ iRpx ], iln[ iGpx ], iln[ iBpx ] ) ) &&
-                                        ( iln[ iRpx ] == rln[ iRpx ] && iln[ iGpx ] == rln[ iGpx ] && iln[ iBpx ] == rln[ iBpx ] ) &&
-                                        ( ! isKeyColor( sln[ sPixel ], sln[ sPixel + 1 ], sln[ sPixel + 2 ] ) ) )
+                                if ( ! Color::isKeyColor( sColor ) && ! Color::isKeyColor( iColor ) && ( rColor == iColor ) )
                                 {
-                                        rln[ iRpx ] = iln[ iRpx ] >> pxDiv;
-                                        rln[ iGpx ] = iln[ iGpx ] >> pxDiv;
-                                        rln[ iBpx ] = iln[ iBpx ] >> pxDiv;
+                                        int rRed = allegro::getRed( iColor ) >> pxDiv ;
+                                        int rGreen = allegro::getGreen( iColor ) >> pxDiv ;
+                                        int rBlue = allegro::getBlue( iColor ) >> pxDiv ;
+                                        shadyImage->setPixelAt( iPixel, iRow, Color( rRed, rGreen, rBlue ) );
                                 }
                         }
                 }
-                // so far item is shaded horizontally to line ‘my’
+                // so far item is shaded horizontally to line ‘mY’
 
-                // shade sides of item
-                ltpx = ( rawImage->w >> 1 ) - ( width << 1 ) + deltaW + ( ( iRow - my ) << 1 );
-                rtpx = ( rawImage->w >> 1 ) + ( width << 1 ) + deltaW - ( ( iRow - my ) << 1 ) - 2;
-                ltpx *= iInc;
-                rtpx *= iInc;
-        #if IS_BIG_ENDIAN
-                ltpx += colorDepthRaw == 32 ? 1 : 0 ;
-                rtpx += colorDepthRaw == 32 ? 1 : 0 ;
-        #endif
+                // shade left and right sides of item
 
-                // shadow left and right parts of item
-                for ( ltpx1 = ltpx + iInc, rtpx1 = rtpx + iInc;
-                                iRow < endy;
-                                iRow++, sRow++, ltpx += 2 * iInc, ltpx1 += 2 * iInc, rtpx -= 2 * iInc, rtpx1 -= 2 * iInc )
+                for ( ; iRow < endY ; iRow ++, sRow ++, ltpx1 += 2, ltpx2 += 2, rtpx1 -= 2, rtpx2 -= 2 )
                 {
-                        unsigned char* sln = shadow->line[ sRow ];
-                        unsigned char* iln = rawImage->line[ iRow ];
-                        unsigned char* rln = shadyImage->line[ iRow ];
-
-                        if ( inix < ltpx )
+                        if ( iniX < ltpx1 )
                         {
-                                inix = ltpx;
-                                n2i = inix + ( item->getOffsetX() - x ) * sInc;
+                                iniX = ltpx1 ;
+                                deltaX = iniX + item->getOffsetX() - x ;
                         }
 
-                        if ( endx > rtpx + 2 * iInc )
+                        if ( endX > rtpx1 + 2 )
                         {
-                                endx = rtpx + 2 * iInc;
+                                endX = rtpx1 + 2 ;
                         }
 
-                        for ( iRpx = inix, iGpx = inix + 1, iBpx = inix + 2, sPixel = n2i;
-                                        iRpx < endx;
-                                        iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc )
+                        for ( iPixel = iniX, sPixel = deltaX ; iPixel < endX ; iPixel ++, sPixel ++ )
                         {
-                                if ( ! isKeyColor( sln[ sPixel ], sln[ sPixel + 1 ], sln[ sPixel + 2 ] ) )
+                                int sColor = shadow->getPixelAt( sPixel, sRow );
+                                int iColor = rawImage->getPixelAt( iPixel, iRow );
+                                int rColor = shadyImage->getPixelAt( iPixel, iRow );
+
+                                if ( ! Color::isKeyColor( sColor ) )
                                 {
-                                        if ( ( ! isKeyColor( iln[ iRpx ], iln[ iGpx ], iln[ iBpx ] ) ) &&
-                                                ( iln[ iRpx ] == rln[ iRpx ] && iln[ iGpx ] == rln[ iGpx ] && iln[ iBpx ] == rln[ iBpx ] ) )
+                                        if ( ! Color::isKeyColor( iColor ) && ( rColor == iColor ) )
                                         {
-                                                rln[ iRpx ] = iln[ iRpx ] >> pxDiv;
-                                                rln[ iGpx ] = iln[ iGpx ] >> pxDiv;
-                                                rln[ iBpx ] = iln[ iBpx ] >> pxDiv;
+                                                int rRed = allegro::getRed( iColor ) >> pxDiv ;
+                                                int rGreen = allegro::getGreen( iColor ) >> pxDiv ;
+                                                int rBlue = allegro::getBlue( iColor ) >> pxDiv ;
+                                                shadyImage->setPixelAt( iPixel, iRow, Color( rRed, rGreen, rBlue ) );
                                         }
 
-                                        if ( iRpx == ltpx || iRpx == ltpx1 || iRpx == rtpx || iRpx == rtpx1 )
+                                        if ( iPixel == ltpx1 || iPixel == ltpx2 || iPixel == rtpx1 || iPixel == rtpx2 )
                                         {
-                                                for ( int yy = iRow + 1; yy < rawImage->h; yy++ )
+                                                for ( unsigned int yy = iRow + 1 ; yy < rawImage->getHeight() ; yy++ )
                                                 {
-                                                        unsigned char* lraw = rawImage->line[ yy ];
-                                                        unsigned char* lshady = shadyImage->line[ yy ];
+                                                        int rawColor = rawImage->getPixelAt( iPixel, yy );
+                                                        int shadyColor = shadyImage->getPixelAt( iPixel, yy );
 
-                                                        if ( ( ! isKeyColor( lraw[ iRpx ], lraw[ iGpx ], lraw[ iBpx ] ) ) &&
-                                                                ( lraw[ iRpx ] == lshady[ iRpx ] && lraw[ iGpx ] == lshady[ iGpx ] && lraw[ iBpx ] == lshady[ iBpx ] ) )
+                                                        if ( ! Color::isKeyColor( rawColor ) && ( shadyColor == rawColor ) )
                                                         {
-                                                                lshady[ iRpx ] = lraw[ iRpx ] >> pxDiv;
-                                                                lshady[ iGpx ] = lraw[ iGpx ] >> pxDiv;
-                                                                lshady[ iBpx ] = lraw[ iBpx ] >> pxDiv;
+                                                                int shadyRed = allegro::getRed( rawColor ) >> pxDiv ;
+                                                                int shadyGreen = allegro::getGreen( rawColor ) >> pxDiv ;
+                                                                int shadyBlue = allegro::getBlue( rawColor ) >> pxDiv ;
+                                                                shadyImage->setPixelAt( iPixel, yy, Color( shadyRed, shadyGreen, shadyBlue ) );
                                                         }
                                                 }
                                         }
@@ -217,186 +193,102 @@ void ShadowCaster::castShadowOnItem( Item* item, int x, int y, allegro::Pict* sh
         // opacity is not power of two
         else
         {
-                // there’s some transparency
-                if ( opacity != 0 )
+                // images are crossed within calculated limits
+                for ( iRow = iniY, sRow = deltaY ; iRow < mY ; iRow++, sRow++ )
                 {
-                        // rows of three images are crossed within calculated limits
-                        for ( iRow = iniy, sRow = iniy + item->getOffsetY() - y; iRow < my; iRow++, sRow++ )
+                        // walk thru pixels of each row within calculated limits
+                        for ( iPixel = iniX, sPixel = deltaX ; iPixel < endX ; iPixel ++, sPixel ++ )
                         {
-                                unsigned short color;
-                                unsigned char* sln = shadow->line[ sRow ];
-                                unsigned char* iln = rawImage->line[ iRow ];
-                                unsigned char* rln = shadyImage->line[ iRow ];
+                                int sColor = shadow->getPixelAt( sPixel, sRow );
+                                int iColor = rawImage->getPixelAt( iPixel, iRow );
+                                int rColor = shadyImage->getPixelAt( iPixel, iRow );
 
-                                // walk thru pixels of each row within calculated limits
-                                for ( iRpx = inix, iGpx = inix + 1, iBpx = inix + 2, sPixel = n2i;
-                                                iRpx < endx;
-                                                iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc )
+                                // when pixel of shadow isn’t key color & pixel of item isn’t key color
+                                // and pixel of result isn’t changed before
+                                // then decrement color of result’s pixel to darken it
+                                if ( ! Color::isKeyColor( sColor ) && ! Color::isKeyColor( iColor ) && ( rColor == iColor ) )
                                 {
-                                        // when pixel of three images isn’t key color
-                                        // then decrement value of result’s pixel to darken it
-                                        if ( ( ! isKeyColor( iln[ iRpx ], iln[ iGpx ], iln[ iBpx ] ) ) &&
-                                                ( iln[ iRpx ] == rln[ iRpx ] && iln[ iGpx ] == rln[ iGpx ] && iln[ iBpx ] == rln[ iBpx ] ) &&
-                                                ( ! isKeyColor( sln[ sPixel ], sln[ sPixel + 1 ], sln[ sPixel + 2 ] ) ) )
+                                        // there’s some transparency
+                                        if ( opacity != 0 )
                                         {
-                                                color = iln[ iRpx ] * opacity;
-                                                rln[ iRpx ] = static_cast< unsigned char >( color >> 8 );
-                                                color = iln[ iGpx ] * opacity;
-                                                rln[ iGpx ] = static_cast< unsigned char >( color >> 8 );
-                                                color = iln[ iBpx ] * opacity;
-                                                rln[ iBpx ] = static_cast< unsigned char >( color >> 8 );
+                                                int rRed = ( allegro::getRed( iColor ) * opacity ) >> 8 ;
+                                                int rGreen = ( allegro::getGreen( iColor ) * opacity ) >> 8 ;
+                                                int rBlue = ( allegro::getBlue( iColor ) * opacity ) >> 8 ;
+                                                shadyImage->setPixelAt( iPixel, iRow, Color( rRed, rGreen, rBlue ) );
                                         }
-                                }
-                        }
-
-                        ltpx = ( rawImage->w >> 1 ) - ( width << 1 ) + deltaW + ( ( iRow - my ) << 1 );
-                        rtpx = ( rawImage->w >> 1 ) + ( width << 1 ) + deltaW - ( ( iRow - my ) << 1 ) - 2;
-                        ltpx *= iInc;
-                        rtpx *= iInc;
-                #if IS_BIG_ENDIAN
-                        ltpx += colorDepthRaw == 32 ? 1 : 0 ;
-                        rtpx += colorDepthRaw == 32 ? 1 : 0 ;
-                #endif
-
-                        // shadow left and right parts of item
-                        for ( ltpx1 = ltpx + iInc, rtpx1 = rtpx + iInc;
-                                        iRow < endy;
-                                        iRow++, sRow++, ltpx += 2 * iInc, ltpx1 += 2 * iInc, rtpx -= 2 * iInc, rtpx1 -= 2 * iInc )
-                        {
-                                unsigned char* sln = shadow->line[ sRow ];
-                                unsigned char* iln = rawImage->line[ iRow ];
-                                unsigned char* rln = shadyImage->line[ iRow ];
-
-                                if ( inix < ltpx )
-                                {
-                                        inix = ltpx;
-                                        n2i = inix + ( item->getOffsetX() - x ) * sInc;
-                                }
-
-                                if ( endx > rtpx + 2 * iInc )
-                                {
-                                        endx = rtpx + 2 * iInc;
-                                }
-
-                                for ( iRpx = inix, iGpx = inix + 1, iBpx = inix + 2, sPixel = n2i;
-                                                iRpx < endx;
-                                                iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc )
-                                {
-                                        if ( ! isKeyColor( sln[ sPixel ], sln[ sPixel + 1 ], sln[ sPixel + 2 ] ) )
+                                        // zero opacity is full opacity
+                                        else
                                         {
-                                                if ( ( ! isKeyColor( iln[ iRpx ], iln[ iGpx ], iln[ iBpx ] ) ) &&
-                                                        ( iln[ iRpx ] == rln[ iRpx ] && iln[ iGpx ] == rln[ iGpx ] && iln[ iBpx ] == rln[ iBpx ] ) )
-                                                {
-                                                        unsigned short color;
-                                                        color = iln[ iRpx ] * opacity;
-                                                        rln[ iRpx ] = static_cast< unsigned char >( color >> 8 );
-                                                        color = iln[ iGpx ] * opacity;
-                                                        rln[ iGpx ] = static_cast< unsigned char >( color >> 8 );
-                                                        color = iln[ iBpx ] * opacity;
-                                                        rln[ iBpx ] = static_cast< unsigned char >( color >> 8 );
-
-                                                        if ( iRpx == ltpx || iRpx == ltpx1 || iRpx == rtpx || iRpx == rtpx1 )
-                                                        {
-                                                                for ( int yy = iRow + 1; yy < rawImage->h; yy++ )
-                                                                {
-                                                                        unsigned char* lraw = rawImage->line[ yy ];
-                                                                        unsigned char* lshady = shadyImage->line[ yy ];
-
-                                                                        if ( ( ! isKeyColor( lraw[ iRpx ], lraw[ iGpx ], lraw[ iBpx ] ) ) &&
-                                                                                ( lraw[ iRpx ] == lshady[ iRpx ] && lraw[ iGpx ] == lshady[ iGpx ] && lraw[ iBpx ] == lshady[ iBpx ] ) )
-                                                                        {
-                                                                                color = lraw[ iRpx ] * opacity;
-                                                                                lshady[ iRpx ] = static_cast< unsigned char >( color >> 8 );
-                                                                                color = lraw[ iGpx ] * opacity;
-                                                                                lshady[ iGpx ] = static_cast< unsigned char >( color >> 8 );
-                                                                                color = lraw[ iBpx ] * opacity;
-                                                                                lshady[ iBpx ] = static_cast< unsigned char >( color >> 8 );
-                                                                        }
-                                                                }
-                                                        }
-                                                }
+                                                // the pixel of result is pure black
+                                                shadyImage->setPixelAt( iPixel, iRow, Color::blackColor() );
                                         }
                                 }
                         }
                 }
-                // zero opacity is full opacity
-                else
-                {
-                        // rows of three images are crossed within calculated limits
-                        for ( iRow = iniy, sRow = iniy + item->getOffsetY() - y; iRow < my; iRow++, sRow++ )
-                        {
-                                unsigned char* sln = shadow->line[ sRow ];
-                                unsigned char* iln = rawImage->line[ iRow ];
-                                unsigned char* rln = shadyImage->line[ iRow ];
 
-                                // walk thru pixels of each row within calculated limits
-                                for ( iRpx = inix, iGpx = inix + 1, iBpx = inix + 2, sPixel = n2i;
-                                                iRpx < endx;
-                                                iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc )
-                                {
-                                        // when pixel of three images isn’t key color
-                                        // then pixel of result is zero, pure black
-                                        if ( ( ! isKeyColor( iln[ iRpx ], iln[ iGpx ], iln[ iBpx ] ) ) &&
-                                                ( iln[ iRpx ] == rln[ iRpx ] && iln[ iGpx ] == rln[ iGpx ] && iln[ iBpx ] == rln[ iBpx ] ) &&
-                                                ( ! isKeyColor( sln[ sPixel ], sln[ sPixel + 1 ], sln[ sPixel + 2 ] ) ) )
-                                        {
-                                                rln[ iRpx ] = rln[ iGpx ] = rln[ iBpx ] = 0;
-                                        }
-                                }
+                // shade left and right sides of item
+
+                for ( ; iRow < endY ; iRow ++, sRow ++, ltpx1 += 2, ltpx2 += 2, rtpx1 -= 2, rtpx2 -= 2 )
+                {
+                        if ( iniX < ltpx1 )
+                        {
+                                iniX = ltpx1;
+                                deltaX = iniX + item->getOffsetX() - x ;
                         }
 
-                        ltpx = ( rawImage->w >> 1 ) - ( width << 1 ) + deltaW + ( ( iRow - my ) << 1 );
-                        rtpx = ( rawImage->w >> 1 ) + ( width << 1 ) + deltaW - ( ( iRow - my ) << 1 ) - 2;
-                        ltpx *= iInc;
-                        rtpx *= iInc;
-                #if IS_BIG_ENDIAN
-                        ltpx += colorDepthRaw == 32 ? 1 : 0 ;
-                        rtpx += colorDepthRaw == 32 ? 1 : 0 ;
-                #endif
-
-                        // shadow left and right parts of item
-                        for ( ltpx1 = ltpx + iInc, rtpx1 = rtpx + iInc;
-                                        iRow < endy;
-                                        iRow++, sRow++, ltpx += 2 * iInc, ltpx1 += 2 * iInc, rtpx -= 2 * iInc, rtpx1 -= 2 * iInc )
+                        if ( endX > rtpx1 + 2 )
                         {
-                                unsigned char* sln = shadow->line[ sRow ];
-                                unsigned char* iln = rawImage->line[ iRow ];
-                                unsigned char* rln = shadyImage->line[ iRow ];
+                                endX = rtpx1 + 2;
+                        }
 
-                                if ( inix < ltpx )
-                                {
-                                        inix = ltpx;
-                                        n2i = inix + ( item->getOffsetX() - x ) * sInc;
-                                }
+                        for ( iPixel = iniX, sPixel = deltaX ; iPixel < endX ; iPixel ++, sPixel ++ )
+                        {
+                                int sColor = shadow->getPixelAt( sPixel, sRow );
+                                int iColor = rawImage->getPixelAt( iPixel, iRow );
+                                int rColor = shadyImage->getPixelAt( iPixel, iRow );
 
-                                if ( endx > rtpx + 2 * iInc )
+                                if ( ! Color::isKeyColor( sColor ) )
                                 {
-                                        endx = rtpx + 2 * iInc;
-                                }
-
-                                for ( iRpx = inix, iGpx = inix + 1, iBpx = inix + 2, sPixel = n2i;
-                                                iRpx < endx;
-                                                iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc )
-                                {
-                                        if ( ! isKeyColor( sln[ sPixel ], sln[ sPixel + 1 ], sln[ sPixel + 2 ] ) )
+                                        if ( ! Color::isKeyColor( iColor ) && ( rColor == iColor ) )
                                         {
-                                                if ( ( ! isKeyColor( iln[ iRpx ], iln[ iGpx ], iln[ iBpx ] ) ) &&
-                                                        ( iln[ iRpx ] == rln[ iRpx ] && iln[ iGpx ] == rln[ iGpx ] && iln[ iBpx ] == rln[ iBpx ] ) )
+                                                // there’s some transparency
+                                                if ( opacity != 0 )
                                                 {
-                                                        rln[ iRpx ] = rln[ iGpx ] = rln[ iBpx ] = 0;
+                                                        int rRed = ( allegro::getRed( iColor ) * opacity ) >> 8 ;
+                                                        int rGreen = ( allegro::getGreen( iColor ) * opacity ) >> 8 ;
+                                                        int rBlue = ( allegro::getBlue( iColor ) * opacity ) >> 8 ;
+                                                        shadyImage->setPixelAt( iPixel, iRow, Color( rRed, rGreen, rBlue ) );
+                                                }
+                                                // zero opacity is full opacity
+                                                else
+                                                {
+                                                        // the pixel of result is pure black
+                                                        shadyImage->setPixelAt( iPixel, iRow, Color::blackColor() );
+                                                }
+                                        }
 
-                                                        if ( iRpx == ltpx || iRpx == ltpx1 || iRpx == rtpx || iRpx == rtpx1 )
+                                        if ( iPixel == ltpx1 || iPixel == ltpx2 || iPixel == rtpx1 || iPixel == rtpx2 )
+                                        {
+                                                for ( unsigned int yy = iRow + 1; yy < rawImage->getHeight(); yy++ )
+                                                {
+                                                        int rawColor = rawImage->getPixelAt( iPixel, yy );
+                                                        int shadyColor = shadyImage->getPixelAt( iPixel, yy );
+
+                                                        if ( ! Color::isKeyColor( rawColor ) && ( shadyColor == rawColor ) )
                                                         {
-                                                                for ( int yy = iRow + 1; yy < rawImage->h; yy++ )
+                                                                // there’s some transparency
+                                                                if ( opacity != 0 )
                                                                 {
-                                                                        unsigned char* lraw = rawImage->line[ yy ];
-                                                                        unsigned char* lshady = shadyImage->line[ yy ];
-
-                                                                        if ( ( ! isKeyColor( lraw[ iRpx ], lraw[ iGpx ], lraw[ iBpx ] ) ) &&
-                                                                                ( lraw[ iRpx ] == lshady[ iRpx ] && lraw[ iGpx ] == lshady[ iGpx ] && lraw[ iBpx ] == lshady[ iBpx ] ) )
-                                                                        {
-                                                                                lshady[ iRpx ] = lshady[ iGpx ] = lshady[ iBpx ] = 0;
-                                                                        }
+                                                                        int shadyRed = ( allegro::getRed( rawColor ) * opacity ) >> 8 ;
+                                                                        int shadyGreen = ( allegro::getGreen( rawColor ) * opacity ) >> 8 ;
+                                                                        int shadyBlue = ( allegro::getBlue( rawColor ) * opacity ) >> 8 ;
+                                                                        shadyImage->setPixelAt( iPixel, yy, Color( shadyRed, shadyGreen, shadyBlue ) );
+                                                                }
+                                                                // zero opacity is full opacity
+                                                                else
+                                                                {
+                                                                        // the pixel of result is pure black
+                                                                        shadyImage->setPixelAt( iPixel, yy, Color::blackColor() );
                                                                 }
                                                         }
                                                 }
@@ -417,73 +309,58 @@ void ShadowCaster::castShadowOnItem( Item* item, int x, int y, allegro::Pict* sh
 }
 
 /* static */
-void ShadowCaster::castShadowOnFloor( FloorTile* tile, int x, int y, allegro::Pict* shadow, unsigned short shading, unsigned char transparency )
+void ShadowCaster::castShadowOnFloor( FloorTile* tile, int x, int y, Picture* shadow, unsigned short shading, unsigned char transparency )
 {
+        if ( shading >= 256 ) return ;
+
         // fully transparent stuff doesn’t drop any shadow
         if ( transparency >= 100 ) return;
 
-        allegro::Pict* tileImage = tile->getRawImage() ;
+        Picture* tileImage = tile->getRawImage() ;
 
-        int colorDepthTile = allegro::colorDepthOf( tileImage ) ;
-        int colorDepthShadow = allegro::colorDepthOf( shadow ) ;
-
-        int inix = x - tile->getOffsetX();      // initial X
-        int iniy = y - tile->getOffsetY();      // initial Y
-        int endx = inix + shadow->w;            // final X
-        int endy = iniy + shadow->h;            // final Y
-        if ( inix < 0 ) inix = 0;
-        if ( iniy < 0 ) iniy = 0;
-        if ( endx > tileImage->w ) endx = tileImage->w;
-        if ( endy > tileImage->h ) endy = tileImage->h;
+        int iniX = x - tile->getOffsetX();      // initial X
+        int iniY = y - tile->getOffsetY();      // initial Y
+        int endX = iniX + shadow->getWidth();   // final X
+        int endY = iniY + shadow->getHeight();  // final Y
+        if ( iniX < 0 ) iniX = 0;
+        if ( iniY < 0 ) iniY = 0;
+        if ( endX > static_cast< int >( tileImage->getWidth() ) ) endX = tileImage->getWidth();
+        if ( endY > static_cast< int >( tileImage->getHeight() ) ) endY = tileImage->getHeight();
 
         // continue when initial coordinates are less than final coordinates
-        // id est if ( iniy < endy && inix < endx )
-        if ( iniy >= endy || inix >= endx ) return;
+        // id est if ( iniY < endY && iniX < endX )
+        if ( iniY >= endY || iniX >= endX ) return;
 
-        int iRow = 0;        // row in rows of pixels in image and shady image of this tile
-        int sRow = 0;        // row in rows of pixels in shadow shading this tile
-        int sPixel = 0;      // pixel in a row of shadow shading this tile
-
-        // indices to walk thru color components in a row of image & shady image
-        int iRpx = 0;        // red
-        int iGpx = 0;        // green
-        int iBpx = 0;        // blue
-
-        int n2i = inix + tile->getOffsetX() - x;
-
-        allegro::Pict* shadyImage = tile->getShadyImage(); // graphics of shaded item
+        Picture* shadyImage = tile->getShadyImage(); // graphics of shaded item
 
         if ( shadyImage == nilPointer )
         {
-                shadyImage = allegro::createPicture( tileImage->w, tileImage->h, colorDepthTile );
+                shadyImage = new Picture( tileImage->getWidth(), tileImage->getHeight() );
                 tile->setWantShadow( true );
         }
 
         if ( tile->getWantShadow() )
         {
                 // when there’s only one shading item, begin with fresh image of tile
-                allegro::bitBlit( tileImage, shadyImage );
+                allegro::bitBlit( tileImage->getAllegroPict(), shadyImage->getAllegroPict() );
                 tile->setWantShadow( false );
         }
 
-        char iInc = ( colorDepthTile == 32 ? 4 : 3 );           // increment for iRpx, iGpx and iBpx
-        char sInc = ( colorDepthShadow == 32 ? 4 : 3 );         // increment for sPixel
+        int iRow = 0;           // row of pixels in image and shady image of this tile
+        int iPixel = 0;         // pixel in row of image & shady image
+        int sRow = 0;           // row of pixels in shadow shading this tile
+        int sPixel = 0;         // pixel in row of shadow shading this tile
+
+        const int deltaX = iniX + tile->getOffsetX() - x ;
+        const int deltaY = iniY + tile->getOffsetY() - y ;
 
         // degree of opacity from 0, full opacity, to 255, full transparency
-        short opacity = static_cast< short >( ( ( 256.0 - shading ) / 100 ) * transparency + shading );
-
-        endx *= iInc;
-        inix *= iInc;
-        n2i *= sInc;
-        #if IS_BIG_ENDIAN
-                inix += colorDepthTile == 32 ? 1 : 0 ;
-                n2i += colorDepthShadow == 32 ? 1 : 0;
-        #endif
+        short opacity = static_cast< short >( shading + ( ( 256.0 - shading ) * transparency / 100 ) );
 
         // when opacity is power of 2 in interval [ 2 ... 128 ]
-        if ( static_cast< int >( std::pow( 2, std::log10( opacity ) / std::log10( 2 ) ) ) == opacity )
+        if ( opacity > 0 && static_cast< int >( std::pow( 2, std::log10( opacity ) / std::log10( 2 ) ) ) == opacity )
         {
-                char pxDiv = 7;  // 2 ^ pxDiv is divisor for shaded pixels
+                short pxDiv = 7;  // 2 ^ pxDiv is divisor for shaded pixels
 
                 // tune divisor by opacity of shadow
                 while ( opacity != 2 )
@@ -492,27 +369,25 @@ void ShadowCaster::castShadowOnFloor( FloorTile* tile, int x, int y, allegro::Pi
                         pxDiv--;
                 }
 
-                // rows of three images are crossed within calculated limits
-                for ( iRow = iniy, sRow = iniy + tile->getOffsetY() - y; iRow < endy; iRow++, sRow++ )
+                // images are crossed within calculated limits
+                for ( iRow = iniY, sRow = deltaY ; iRow < endY ; iRow++, sRow++ )
                 {
-                        unsigned char* sln = shadow->line[ sRow ];
-                        unsigned char* iln = tileImage->line[ iRow ];
-                        unsigned char* rln = shadyImage->line[ iRow ];
-
                         // walk thru pixels of each row within calculated limits
-                        for ( iRpx = inix, iGpx = inix + 1, iBpx = inix + 2, sPixel = n2i ;
-                                        iRpx < endx ;
-                                        iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc )
+                        for ( iPixel = iniX, sPixel = deltaX ; iPixel < endX ; iPixel ++, sPixel ++ )
                         {
-                                // when pixel of three images isn’t key color
+                                int sColor = shadow->getPixelAt( sPixel, sRow );
+                                int iColor = tileImage->getPixelAt( iPixel, iRow );
+                                int rColor = shadyImage->getPixelAt( iPixel, iRow );
+
+                                // when pixel of shadow isn’t key color & pixel of tile isn’t key color
+                                // and pixel of result isn’t changed before
                                 // then divide pixel of result by 2 ^ pxDiv, darkening it
-                                if ( ( ! isKeyColor( iln[ iRpx ], iln[ iGpx ], iln[ iBpx ] ) )
-                                        && ( iln[ iRpx ] == rln[ iRpx ] && iln[ iGpx ] == rln[ iGpx ] && iln[ iBpx ] == rln[ iBpx ] )
-                                        && ( ! isKeyColor( sln[ sPixel ], sln[ sPixel + 1 ], sln[ sPixel + 2 ] ) ) )
+                                if ( ! Color::isKeyColor( sColor ) && ! Color::isKeyColor( iColor ) && ( rColor == iColor ) )
                                 {
-                                        rln[ iRpx ] = iln[ iRpx ] >> pxDiv;
-                                        rln[ iGpx ] = iln[ iGpx ] >> pxDiv;
-                                        rln[ iBpx ] = iln[ iBpx ] >> pxDiv;
+                                        int rRed = allegro::getRed( iColor ) >> pxDiv ;
+                                        int rGreen = allegro::getGreen( iColor ) >> pxDiv ;
+                                        int rBlue = allegro::getBlue( iColor ) >> pxDiv ;
+                                        shadyImage->setPixelAt( iPixel, iRow, Color( rRed, rGreen, rBlue ) );
                                 }
                         }
                 }
@@ -520,60 +395,34 @@ void ShadowCaster::castShadowOnFloor( FloorTile* tile, int x, int y, allegro::Pi
         // opacity is not power of two
         else
         {
-                // there’s some transparency
-                if ( opacity != 0 )
+                // images are crossed within calculated limits
+                for ( iRow = iniY, sRow = deltaY ; iRow < endY ; iRow++, sRow++ )
                 {
-                        // rows of three images are crossed within calculated limits
-                        for ( iRow = iniy, sRow = iniy + tile->getOffsetY() - y; iRow < endy; iRow++, sRow++ )
+                        // walk thru pixels of each row within calculated limits
+                        for ( iPixel = iniX, sPixel = deltaX ; iPixel < endX ; iPixel ++, sPixel ++ )
                         {
-                                unsigned short color;
-                                unsigned char* sln = shadow->line[ sRow ];
-                                unsigned char* iln = tileImage->line[ iRow ];
-                                unsigned char* rln = shadyImage->line[ iRow ];
+                                int sColor = shadow->getPixelAt( sPixel, sRow );
+                                int iColor = tileImage->getPixelAt( iPixel, iRow );
+                                int rColor = shadyImage->getPixelAt( iPixel, iRow );
 
-                                // walk thru pixels of each row within calculated limits
-                                for ( iRpx = inix, iGpx = inix + 1, iBpx = inix + 2, sPixel = n2i ;
-                                                iRpx < endx ;
-                                                iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc )
+                                // when pixel of shadow isn’t key color & pixel of tile isn’t key color
+                                // and pixel of result isn’t changed before
+                                // then lower color of result’s pixel to darken it
+                                if ( ! Color::isKeyColor( sColor ) && ! Color::isKeyColor( iColor ) && ( rColor == iColor ) )
                                 {
-                                        // when pixel of three images isn’t key color
-                                        // then decrement value of result’s pixel to darken it
-                                        if ( ( ! isKeyColor( iln[ iRpx ], iln[ iGpx ], iln[ iBpx ] ) )
-                                                && ( iln[ iRpx ] == rln[ iRpx ] && iln[ iGpx ] == rln[ iGpx ] && iln[ iBpx ] == rln[ iBpx ] )
-                                                && ( ! isKeyColor( sln[ sPixel ], sln[ sPixel + 1 ], sln[ sPixel + 2 ] ) ) )
+                                        // there’s some transparency
+                                        if ( opacity != 0 )
                                         {
-                                                color = iln[ iRpx ] * opacity;
-                                                rln[ iRpx ] = static_cast< unsigned char >( color >> 8 );
-                                                color = iln[ iGpx ] * opacity;
-                                                rln[ iGpx ] = static_cast< unsigned char >( color >> 8 );
-                                                color = iln[ iBpx ] * opacity;
-                                                rln[ iBpx ] = static_cast< unsigned char >( color >> 8 );
+                                                int rRed = ( allegro::getRed( iColor ) * opacity ) >> 8 ;
+                                                int rGreen = ( allegro::getGreen( iColor ) * opacity ) >> 8 ;
+                                                int rBlue = ( allegro::getBlue( iColor ) * opacity ) >> 8 ;
+                                                shadyImage->setPixelAt( iPixel, iRow, Color( rRed, rGreen, rBlue ) );
                                         }
-                                }
-                        }
-                }
-                // zero opacity is full opacity
-                else
-                {
-                        // rows of three images are crossed within calculated limits
-                        for ( iRow = iniy, sRow = iniy + tile->getOffsetY() - y; iRow < endy; iRow++, sRow++ )
-                        {
-                                unsigned char* sln = shadow->line[ sRow ];
-                                unsigned char* iln = tileImage->line[ iRow ];
-                                unsigned char* rln = shadyImage->line[ iRow ];
-
-                                // walk thru pixels of each row within calculated limits
-                                for ( iRpx = inix, iGpx = inix + 1, iBpx = inix + 2, sPixel = n2i ;
-                                                iRpx < endx ;
-                                                iRpx += iInc, iGpx += iInc, iBpx += iInc, sPixel += sInc )
-                                {
-                                        // when pixel of three images isn’t key color
-                                        // then pixel of result is zero, pure black
-                                        if ( ( ! isKeyColor( iln[ iRpx ], iln[ iGpx ], iln[ iBpx ] ) )
-                                                && ( iln[ iRpx ] == rln[ iRpx ] && iln[ iGpx ] == rln[ iGpx ] && iln[ iBpx ] == rln[ iBpx ] )
-                                                && ( ! isKeyColor( sln[ sPixel ], sln[ sPixel + 1 ], sln[ sPixel + 2 ] ) ) )
+                                        // zero opacity is full opacity
+                                        else
                                         {
-                                                rln[ iRpx ] = rln[ iRpx + 1 ] = rln[ iRpx + 2 ] = 0;
+                                                // the pixel of result is pure black
+                                                shadyImage->setPixelAt( iPixel, iRow, Color::blackColor() );
                                         }
                                 }
                         }

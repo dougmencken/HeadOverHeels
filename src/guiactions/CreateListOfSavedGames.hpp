@@ -27,11 +27,10 @@ class CreateListOfSavedGames : public gui::Action
 public:
 
         /**
-         * Constructor
          * @param picture where to draw
          * @param isLoadMenu true for "load game", false for "save game"
          */
-        CreateListOfSavedGames( allegro::Pict* picture, bool isLoadMenu ) ;
+        CreateListOfSavedGames( Picture * picture, bool isLoadMenu ) ;
 
         std::string getNameOfAction () const {  return "CreateListOfSavedGames" ;  }
 

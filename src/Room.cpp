@@ -25,6 +25,7 @@ Room::Room( const std::string& roomFile, const std::string& scenery, int xTiles,
         , tileSize( tileSize )
         , kindOfFloor( floor )
         , wayOfExit( "no exit" )
+        , whereToDraw( nilPointer )
 {
         playersYetInRoom.clear ();
         playersWhoEnteredRoom.clear ();
@@ -121,29 +122,33 @@ Room::Room( const std::string& roomFile, const std::string& scenery, int xTiles,
                 }
         }
 
-        // crea la imagen with suitable dimensions to draw the active room,
-        // single room ( id est up to 10 x 10 tiles ) just fits to the screen
-        // but image of double or triple room is larger
+        // crea la imagen with suitable dimensions to draw the active room
+
+        int roomW = ScreenWidth();
+        int roomH = ScreenHeight();
+
         if ( isSingleRoom() )
         {
-                whereToDraw = allegro::createPicture( ScreenWidth(), ScreenHeight() );
+                // single room ( id est up to 10 x 10 tiles ) just fits to the screen
+                // but image of double or triple room is larger
         }
         else if ( xTiles > 10 && yTiles > 10 )
         {
-                whereToDraw = allegro::createPicture( ScreenWidth() + 20 * ( tileSize << 1 ), ScreenHeight() + 20 * tileSize );
+                roomW += 20 * ( tileSize << 1 );
+                roomH += 20 * tileSize;
         }
         else if ( xTiles > 10 || yTiles > 10 )
         {
-                int w = ScreenWidth() + ( xTiles > 10 ? ( ( xTiles - 10 ) * ( tileSize << 1 ) ) : 0 )
+                roomW += ( xTiles > 10 ? ( ( xTiles - 10 ) * ( tileSize << 1 ) ) : 0 )
                                         + ( yTiles > 10 ? ( ( yTiles - 10 ) * ( tileSize << 1 ) ) : 0 );
-                int h = ScreenHeight() + ( xTiles > 10 ? ( ( xTiles - 10 ) * tileSize) : 0 )
+                roomH += ( xTiles > 10 ? ( ( xTiles - 10 ) * tileSize) : 0 )
                                         + ( yTiles > 10 ? ( ( yTiles - 10 ) * tileSize) : 0 );
-
-                whereToDraw = allegro::createPicture( w, h );
         }
 
-        // 128 for 50% opacity of shadows, or 256 for no shadows
-        this->shadingScale = isomot::GameManager::getInstance()->getDrawShadows () ? 128 : 256 ;
+        whereToDraw = new Picture( roomW, roomH );
+
+        // 0 for pure black shadows, 128 for 50% opacity of shadows, 256 for no shadows
+        shadingOpacity = isomot::GameManager::getInstance()->getDrawShadows () ? 128 /* 0 */ : 256 ;
 
         // since yet room is active
         this->active = true;
@@ -160,11 +165,11 @@ Room::~Room()
         }
 
         // bin floor
-        std::for_each( floor.begin (), floor.end (), DeleteObject() );
+        std::for_each( floor.begin (), floor.end (), DeleteIt() );
 
         // bin walls
-        std::for_each( wallX.begin (), wallX.end (), DeleteObject() );
-        std::for_each( wallY.begin (), wallY.end (), DeleteObject() );
+        std::for_each( wallX.begin (), wallX.end (), DeleteIt() );
+        std::for_each( wallY.begin (), wallY.end (), DeleteIt() );
 
         // bin sequence of drawing
         delete drawSequence;
@@ -188,8 +193,6 @@ Room::~Room()
                 playersWhoEnteredRoom.remove( player );
                 delete player;
         }
-
-        allegro::binPicture( whereToDraw );
 }
 
 std::list < PlayerItem * > Room::getPlayersYetInRoom () const
@@ -316,15 +319,15 @@ void Room::addGridItem( GridItem * gridItem )
         if ( gridItem->getRawImage() != nilPointer )
         {
                 std::pair< int, int > offset (
-                        ( ( this->tileSize * ( gridItem->getCellX() - gridItem->getCellY() ) ) << 1 ) - ( gridItem->getRawImage()->w >> 1 ) + 1,
-                        this->tileSize * ( gridItem->getCellX() + gridItem->getCellY() + 2 ) - gridItem->getRawImage()->h - gridItem->getZ() - 1
+                        ( ( this->tileSize * ( gridItem->getCellX() - gridItem->getCellY() ) ) << 1 ) - ( gridItem->getRawImage()->getWidth() >> 1 ) + 1,
+                        this->tileSize * ( gridItem->getCellX() + gridItem->getCellY() + 2 ) - gridItem->getRawImage()->getHeight() - gridItem->getZ() - 1
                 ) ;
                 gridItem->setOffset( offset );
         }
 
         mediator->addGridItemToList( gridItem );
 
-        if ( this->shadingScale < 256 && gridItem->getImageOfShadow() != nilPointer )
+        if ( shadingOpacity < 256 && gridItem->getImageOfShadow() != nilPointer )
         {
                 mediator->reshadeWithGridItem( gridItem );
         }
@@ -399,8 +402,8 @@ void Room::addFreeItem( FreeItem * freeItem )
         if ( freeItem->getRawImage () != nilPointer )
         {
                 std::pair< int, int > offset (
-                        ( ( freeItem->getX() - freeItem->getY() ) << 1 ) + freeItem->getWidthX() + freeItem->getWidthY() - ( freeItem->getRawImage()->w >> 1 ) - 1,
-                        freeItem->getX() + freeItem->getY() + freeItem->getWidthX() - freeItem->getRawImage()->h - freeItem->getZ()
+                        ( ( freeItem->getX() - freeItem->getY() ) << 1 ) + freeItem->getWidthX() + freeItem->getWidthY() - ( freeItem->getRawImage()->getWidth() >> 1 ) - 1,
+                        freeItem->getX() + freeItem->getY() + freeItem->getWidthX() - freeItem->getRawImage()->getHeight() - freeItem->getZ()
                 ) ;
                 freeItem->setOffset( offset );
         }
@@ -408,7 +411,7 @@ void Room::addFreeItem( FreeItem * freeItem )
         // add free item to room
         mediator->addFreeItemToList( freeItem );
 
-        if ( this->shadingScale < 256 && freeItem->getImageOfShadow() != nilPointer )
+        if ( shadingOpacity < 256 && freeItem->getImageOfShadow() != nilPointer )
         {
                 mediator->reshadeWithFreeItem( freeItem );
         }
@@ -535,8 +538,8 @@ bool Room::addPlayerToRoom( PlayerItem* playerItem, bool playerEntersRoom )
         if ( playerItem->getRawImage () != nilPointer )
         {
                 std::pair< int, int > offset (
-                        ( ( playerItem->getX() - playerItem->getY() ) << 1 ) + playerItem->getWidthX() + playerItem->getWidthY() - ( playerItem->getRawImage()->w >> 1 ) - 1,
-                        playerItem->getX() + playerItem->getY() + playerItem->getWidthX() - playerItem->getRawImage()->h - playerItem->getZ()
+                        ( ( playerItem->getX() - playerItem->getY() ) << 1 ) + playerItem->getWidthX() + playerItem->getWidthY() - ( playerItem->getRawImage()->getWidth() >> 1 ) - 1,
+                        playerItem->getX() + playerItem->getY() + playerItem->getWidthX() - playerItem->getRawImage()->getHeight() - playerItem->getZ()
                 ) ;
                 playerItem->setOffset( offset );
         }
@@ -550,7 +553,7 @@ bool Room::addPlayerToRoom( PlayerItem* playerItem, bool playerEntersRoom )
                 mediator->setActiveCharacter( playerItem );
         }
 
-        if ( this->shadingScale < 256 && playerItem->getImageOfShadow() != nilPointer )
+        if ( shadingOpacity < 256 && playerItem->getImageOfShadow() != nilPointer )
         {
                 mediator->reshadeWithFreeItem( playerItem );
         }
@@ -628,7 +631,7 @@ void Room::removeGridItem( GridItem * gridItem )
 
         mediator->removeGridItemFromList( gridItem );
 
-        if ( this->shadingScale < 256 && gridItem->getImageOfShadow() != nilPointer )
+        if ( shadingOpacity < 256 && gridItem->getImageOfShadow() != nilPointer )
         {
                 mediator->reshadeWithGridItem( gridItem );
         }
@@ -645,7 +648,7 @@ void Room::removeFreeItem( FreeItem * freeItem )
 
         mediator->removeFreeItemFromList( freeItem );
 
-        if ( this->shadingScale < 256 && freeItem->getImageOfShadow() != nilPointer )
+        if ( shadingOpacity < 256 && freeItem->getImageOfShadow() != nilPointer )
         {
                 mediator->reshadeWithFreeItem( freeItem );
         }
@@ -669,7 +672,7 @@ bool Room::removePlayerFromRoom( PlayerItem* playerItem, bool playerExitsRoom )
                         mediator->removeFreeItemFromList( playerItem );
                         nextNumbers[ "character " + playerItem->getOriginalLabel() ] -- ;
 
-                        if ( this->shadingScale < 256 && playerItem->getImageOfShadow() != nilPointer )
+                        if ( shadingOpacity < 256 && playerItem->getImageOfShadow() != nilPointer )
                         {
                                 mediator->reshadeWithFreeItem( playerItem );
                         }
@@ -775,9 +778,8 @@ void Room::dontDisappearOnJump ()
                                         gridItem->setBehavior( nilPointer );
                                         delete thatBehavior ;
 
-                                        allegro::Pict* original = gridItem->getRawImage();
-                                        allegro::Pict* copy = allegro::createPicture( original->w, original->h, allegro::colorDepthOf( original ) );
-                                        allegro::bitBlit( original, copy );
+                                        Picture* original = gridItem->getRawImage();
+                                        Picture* copy = new Picture( *original );
 
                                         gridItem->changeImage( Color::multiplyWithColor(
                                                 copy,
@@ -803,9 +805,8 @@ void Room::dontDisappearOnJump ()
                                 freeItem->setBehavior( nilPointer );
                                 delete thatBehavior ;
 
-                                allegro::Pict* original = freeItem->getRawImage();
-                                allegro::Pict* copy = allegro::createPicture( original->w, original->h, allegro::colorDepthOf( original ) );
-                                allegro::bitBlit( original, copy );
+                                Picture* original = freeItem->getRawImage();
+                                Picture* copy = new Picture( *original );
 
                                 freeItem->changeImage( Color::multiplyWithColor(
                                         copy,
@@ -818,24 +819,24 @@ void Room::dontDisappearOnJump ()
         }
 }
 
-void Room::draw( allegro::Pict* where )
+void Room::draw( const allegro::Pict& where )
 {
         const unsigned int maxTilesOfSingleRoom = 10 ;
 
         // draw room when it is active and image to draw it isn’t nil
-        if ( active && where != nilPointer )
+        if ( active && where.isNotNil() )
         {
+                // acquire video memory before drawing
+                if ( where.isInVideoMemory() )
+                {
+                        allegro::acquirePict( where );
+                }
+
                 // clear image of room
                 if ( GameManager::getInstance()->charactersFly() )
-                        allegro::clearToColor( where, Color::darkBlueColor()->toAllegroColor() );
+                        where.clearToColor( Color::darkBlueColor().toAllegroColor() );
                 else
-                        allegro::clearToColor( where, Color::blackColor()->toAllegroColor() );
-
-                // acquire video memory before drawing
-                if ( is_video_bitmap( where ) )
-                {
-                        acquire_bitmap( where );
-                }
+                        where.clearToColor( Color::blackColor().toAllegroColor() );
 
                 // adjust position of camera
                 if ( numberOfTiles.first > maxTilesOfSingleRoom || numberOfTiles.second > maxTilesOfSingleRoom )
@@ -854,7 +855,7 @@ void Room::draw( allegro::Pict* where )
                                 if ( tile != nilPointer )  // if there is tile of floor here
                                 {
                                         // shade this tile when shadows are on
-                                        if ( shadingScale < 256 && tile->getRawImage() != nilPointer )
+                                        if ( shadingOpacity < 256 && tile->getRawImage() != nilPointer )
                                         {
                                                 mediator->lockGridItemMutex();
                                                 mediator->lockFreeItemMutex();
@@ -897,7 +898,7 @@ void Room::draw( allegro::Pict* where )
                         {
                                 GridItem* gridItem = *gi ;
 
-                                if ( shadingScale < 256 && gridItem->getRawImage() != nilPointer )
+                                if ( shadingOpacity < 256 && gridItem->getRawImage() != nilPointer )
                                 {
                                         // cast shadow
                                         if ( gridItem->getWantShadow() )
@@ -919,7 +920,7 @@ void Room::draw( allegro::Pict* where )
                         if ( ( *fi )->getRawImage() != nilPointer )
                         {
                                 // shade an item when shadows are on
-                                if ( shadingScale < 256 )
+                                if ( shadingOpacity < 256 )
                                 {
                                         ( *fi )->requestShadow();
                                 }
@@ -939,10 +940,10 @@ void Room::draw( allegro::Pict* where )
                 mediator->unlockGridItemMutex();
                 mediator->unlockFreeItemMutex();
 
-                // free used video memory after drawing
-                if ( is_video_bitmap( where ) )
+                // release video memory after drawing
+                if ( where.isInVideoMemory() )
                 {
-                        release_bitmap( where );
+                        allegro::releasePict( where );
                 }
         }
 }
@@ -979,7 +980,7 @@ void Room::calculateCoordinates( bool hasNorthDoor, bool hasEastDoor )
 
         // the origin for 8 x 8, that’s without doors, room is at ( width / 2, height / 3 )
         // for smaller room the origin moves to center on 8 x 8 grid, as example for 6 x 8 room X moves one tile
-        int middlePointX = ( xGrid > 8 || yGrid > 8 ? getWhereToDraw()->w : ScreenWidth() ) >> 1 ;
+        int middlePointX = ( xGrid > 8 || yGrid > 8 ? getWhereToDraw()->getWidth() : ScreenWidth() ) >> 1 ;
         int middlePointY = ScreenHeight() / 3 ;
         this->coordinates.first = middlePointX
                                 - ( hasNorthDoor || hasNoFloor ? ( tileSize << 1 ) : 0)
@@ -995,7 +996,7 @@ void Room::calculateCoordinates( bool hasNorthDoor, bool hasEastDoor )
         }
         else
         {
-                this->coordinates.first = ( getWhereToDraw()->w - ( ( xGrid + yGrid ) * ( tileSize << 1 ) ) ) / 2
+                this->coordinates.first = ( getWhereToDraw()->getWidth() - ( ( xGrid + yGrid ) * ( tileSize << 1 ) ) ) / 2
                                         + ( yGrid * ( tileSize << 1 ) )
                                         - ( hasNorthDoor ? ( tileSize << 1 ) : 0 )
                                         + ( hasEastDoor ? ( tileSize << 1 ) : 0 );
@@ -1091,91 +1092,91 @@ bool Room::calculateEntryCoordinates( const Way& wayOfEntry, int widthX, int wid
         // calculate coordinates according to way of entry
         switch ( wayOfEntry.getIntegerOfWay () )
         {
-                case North:
+                case Way::North:
                         *x = bounds[ "north" ] - tileSize + 1;
                         *y = doors[ "north" ]->getLeftJamb()->getY() - doors[ "north" ]->getLeftJamb()->getWidthY();
                         *z = doors[ "north" ]->getLeftJamb()->getZ();
                         result = true;
                         break;
 
-                case South:
+                case Way::South:
                         *x = bounds[ "south" ] + tileSize - widthX;
                         *y = doors[ "south" ]->getLeftJamb()->getY() - doors[ "south" ]->getLeftJamb()->getWidthY();
                         *z = doors[ "south" ]->getLeftJamb()->getZ();
                         result = true;
                         break;
 
-                case East:
+                case Way::East:
                         *x = doors[ "east" ]->getLeftJamb()->getX() + doors[ "east" ]->getLeftJamb()->getWidthX();
                         *y = bounds[ "east" ] - tileSize + widthY;
                         *z = doors[ "east" ]->getLeftJamb()->getZ();
                         result = true;
                         break;
 
-                case West:
+                case Way::West:
                         *x = doors[ "west" ]->getLeftJamb()->getX() + doors[ "west" ]->getLeftJamb()->getWidthX();
                         *y = bounds[ "west" ] + tileSize - 1;
                         *z = doors[ "west" ]->getLeftJamb()->getZ();
                         result = true;
                         break;
 
-                case Northeast:
+                case Way::Northeast:
                         *x = bounds[ "northeast" ];
                         *y = doors[ "northeast" ]->getLeftJamb()->getY() - doors[ "northeast" ]->getLeftJamb()->getWidthY();
                         *z = doors[ "northeast" ]->getLeftJamb()->getZ();
                         result = true;
                         break;
 
-                case Northwest:
+                case Way::Northwest:
                         *x = bounds[ "northwest" ];
                         *y = doors[ "northwest" ]->getLeftJamb()->getY() - doors[ "northwest" ]->getLeftJamb()->getWidthY();
                         *z = doors[ "northwest" ]->getLeftJamb()->getZ();
                         result = true;
                         break;
 
-                case Southeast:
+                case Way::Southeast:
                         *x = bounds[ "southeast" ] - widthX;
                         *y = doors[ "southeast" ]->getLeftJamb()->getY() - doors[ "southeast" ]->getLeftJamb()->getWidthY();
                         *z = doors[ "southeast" ]->getLeftJamb()->getZ();
                         result = true;
                         break;
 
-                case Southwest:
+                case Way::Southwest:
                         *x = bounds[ "southwest" ] - widthX;
                         *y = doors[ "southwest" ]->getLeftJamb()->getY() - doors[ "southwest" ]->getLeftJamb()->getWidthY();
                         *z = doors[ "southwest" ]->getLeftJamb()->getZ();
                         result = true;
                         break;
 
-                case Eastnorth:
+                case Way::Eastnorth:
                         *x = doors[ "eastnorth" ]->getLeftJamb()->getX() + doors[ "eastnorth" ]->getLeftJamb()->getWidthX();
                         *y = bounds[ "eastnorth" ] + widthY;
                         *z = doors[ "eastnorth" ]->getLeftJamb()->getZ();
                         result = true;
                         break;
 
-                case Eastsouth:
+                case Way::Eastsouth:
                         *x = doors[ "eastsouth" ]->getLeftJamb()->getX() + doors[ "eastsouth" ]->getLeftJamb()->getWidthX();
                         *y = bounds[ "eastsouth" ] + widthY;
                         *z = doors[ "eastsouth" ]->getLeftJamb()->getZ();
                         result = true;
                         break;
 
-                case Westnorth:
+                case Way::Westnorth:
                         *x = doors[ "westnorth" ]->getLeftJamb()->getX() + doors[ "westnorth" ]->getLeftJamb()->getWidthX();
                         *y = bounds[ "westnorth" ] - widthY;
                         *z = doors[ "westnorth" ]->getLeftJamb()->getZ();
                         result = true;
                         break;
 
-                case Westsouth:
+                case Way::Westsouth:
                         *x = doors[ "westsouth" ]->getLeftJamb()->getX() + doors[ "westsouth" ]->getLeftJamb()->getWidthX();
                         *y = bounds[ "westsouth" ] - widthY;
                         *z = doors[ "westsouth" ]->getLeftJamb()->getZ();
                         result = true;
                         break;
 
-                case Up:
+                case Way::Up:
                         *x += bounds[ "north" ] - northBound + ( ( bounds[ "south" ] - bounds[ "north" ] - southBound + northBound ) >> 1 );
                         *x += ( *x < ( ( bounds[ "south" ] - bounds[ "north" ] ) >> 1 ) ? -differentSizeDeltaX : differentSizeDeltaX );
                         *y += bounds[ "east" ] - eastBound + ( ( bounds[ "west" ] - bounds[ "east" ] - westBound + eastBound ) >> 1 );
@@ -1184,7 +1185,7 @@ bool Room::calculateEntryCoordinates( const Way& wayOfEntry, int widthX, int wid
                         result = true;
                         break;
 
-                case Down:
+                case Way::Down:
                         *x += bounds[ "north" ] - northBound + ( ( bounds[ "south" ] - bounds[ "north" ] - southBound + northBound ) >> 1 );
                         *x += ( *x < ( ( bounds[ "south" ] - bounds[ "north" ] ) >> 1 ) ? -differentSizeDeltaX : differentSizeDeltaX );
                         *y += bounds[ "east" ] - eastBound + ( ( bounds[ "west" ] - bounds[ "east" ] - westBound + eastBound) >> 1 );
@@ -1193,8 +1194,8 @@ bool Room::calculateEntryCoordinates( const Way& wayOfEntry, int widthX, int wid
                         result = true;
                         break;
 
-                case ByTeleport:
-                case ByTeleportToo:
+                case Way::ByTeleport:
+                case Way::ByTeleportToo:
                         *x += bounds[ "north" ] - northBound + ( ( bounds[ "south" ] - bounds[ "north" ] - southBound + northBound ) >> 1 );
                         *x += ( *x < ( ( bounds[ "south" ] - bounds[ "north" ] ) >> 1 ) ? -differentSizeDeltaX : differentSizeDeltaX );
                         *y += differentSizeDeltaY + bounds[ "east" ] - eastBound + ( ( bounds[ "west" ] - bounds[ "east" ] - westBound + eastBound ) >> 1 );

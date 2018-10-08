@@ -14,18 +14,18 @@ GridItem::GridItem( ItemData* itemData, int cx, int cy, int z, const Way& way )
         , cell( std::pair< int, int >( cx, cy ) )
 {
         // free coordinates of grid item
-        this->x = cx * this->getWidthX();
-        this->y = ( cy + 1 ) * this->getWidthY() - 1;
+        this->xPos = cx * this->getWidthX();
+        this->yPos = ( cy + 1 ) * this->getWidthY() - 1;
 
         unsigned int orientation = way.getIntegerOfWay();
-        if ( orientation == Nowhere ) orientation = 0;
+        if ( orientation == Way::Nowhere ) orientation = 0;
         unsigned int position = itemData->howManyMotions() / itemData->howManyFramesForOrientations() * orientation;
-        this->rawImage = itemData->getMotionAt( position );
+        this->rawImage = itemData->getMotionAt( position ) ;
 
         // may have no shadow
         if ( itemData->getWidthOfShadow() > 0 && itemData->getHeightOfShadow() > 0 )
         {
-                this->shadow = itemData->getShadowAt( position );
+                this->shadow = itemData->getShadowAt( position ) ;
         }
 }
 
@@ -34,19 +34,21 @@ GridItem::~GridItem( )
 
 }
 
-void GridItem::draw( allegro::Pict* where )
+void GridItem::draw( const allegro::Pict& where )
 {
         if ( this->processedImage != nilPointer )
         {
-                allegro::drawSprite( where, this->processedImage, mediator->getRoom()->getX0() + this->offset.first, mediator->getRoom()->getY0() + this->offset.second );
+                allegro::drawSprite( where, this->processedImage->getAllegroPict(),
+                        mediator->getRoom()->getX0() + this->offset.first, mediator->getRoom()->getY0() + this->offset.second );
         }
         else if ( this->rawImage != nilPointer )
         {
-                allegro::drawSprite( where, this->rawImage, mediator->getRoom()->getX0() + this->offset.first, mediator->getRoom()->getY0() + this->offset.second );
+                allegro::drawSprite( where, this->rawImage->getAllegroPict(),
+                        mediator->getRoom()->getX0() + this->offset.first, mediator->getRoom()->getY0() + this->offset.second );
         }
 }
 
-void GridItem::changeImage( allegro::Pict* newImage )
+void GridItem::changeImage( Picture* newImage )
 {
         if ( this->rawImage == nilPointer )
         {
@@ -66,16 +68,13 @@ void GridItem::changeImage( allegro::Pict* newImage )
         // calculate displacement of new image unless it’s nil
         if ( newImage != nilPointer )
         {
-                if ( mediator->getDegreeOfShading() < 256 )
-                {
-                        // shadows are on, then reshade this item
-                        binProcessedImage();
-                        setWantShadow( true );
-                }
+                // reshade this item
+                binProcessedImage();
+                setWantShadow( true );
 
                 // how many pixels is this image from the origin of room
-                this->offset.first = ( ( mediator->getRoom()->getSizeOfOneTile() * ( this->cell.first - this->cell.second ) ) << 1 ) - ( newImage->w >> 1 ) + 1;
-                this->offset.second = mediator->getRoom()->getSizeOfOneTile() * ( this->cell.first + this->cell.second + 2 ) - newImage->h - this->z - 1;
+                this->offset.first = ( ( mediator->getRoom()->getSizeOfOneTile() * ( this->cell.first - this->cell.second ) ) << 1 ) - ( newImage->getWidth() >> 1 ) + 1;
+                this->offset.second = mediator->getRoom()->getSizeOfOneTile() * ( this->cell.first + this->cell.second + 2 ) - newImage->getHeight() - this->getZ() - 1;
         }
         else
         {
@@ -91,17 +90,14 @@ void GridItem::changeImage( allegro::Pict* newImage )
                 mediator->remaskWithGridItem( this );
 }
 
-void GridItem::changeShadow( allegro::Pict* newShadow )
+void GridItem::changeShadow( Picture* newShadow )
 {
         Item::changeShadow( newShadow );
 
         if ( newShadow != nilPointer && this->shadow != newShadow && this->rawImage != nilPointer )
         {
-                if ( mediator->getDegreeOfShading() < 256 )
-                {
-                        // reshade items when shadows are on
-                        mediator->reshadeWithGridItem( this );
-                }
+                // reshade items
+                mediator->reshadeWithGridItem( this );
         }
 }
 
@@ -118,10 +114,10 @@ bool GridItem::addToPosition( int x, int y, int z )
         if ( y != 0 )
                 std::cout << "can’t change position on Y for grid item, ignoring y = " << y << std::endl ;
 
-        this->z += z;
+        this->zPos += z;
 
         // is there collision with floor
-        if ( this->z < 0 )
+        if ( this->getZ() < 0 )
         {
                 mediator->pushCollision( "some tile of floor" );
                 collisionFound = true;
@@ -137,7 +133,7 @@ bool GridItem::addToPosition( int x, int y, int z )
                         {
                                 // how many pixels is image from origin of room
                                 // change only value on Y axis because it depends on Z coordinate
-                                this->offset.second = mediator->getRoom()->getSizeOfOneTile() * ( this->cell.first + this->cell.second + 2 ) - this->rawImage->h - this->z - 1;
+                                this->offset.second = mediator->getRoom()->getSizeOfOneTile() * ( this->cell.first + this->cell.second + 2 ) - this->rawImage->getHeight() - this->getZ() - 1;
 
                                 mediator->remaskWithGridItem( &copyOfItem );
                                 mediator->remaskWithGridItem( this );
@@ -148,13 +144,10 @@ bool GridItem::addToPosition( int x, int y, int z )
                         }
 
                         // reshade items
-                        if ( mediator->getDegreeOfShading() < 256 )
-                        {
-                                if ( this->z > copyOfItem.getZ() )
-                                        mediator->reshadeWithGridItem( this );
-                                else if ( this->z < copyOfItem.getZ() )
-                                        mediator->reshadeWithGridItem( &copyOfItem );
-                        }
+                        if ( this->getZ() > copyOfItem.getZ() )
+                                mediator->reshadeWithGridItem( this );
+                        else if ( this->getZ() < copyOfItem.getZ() )
+                                mediator->reshadeWithGridItem( &copyOfItem );
 
                         mediator->activateGridItemsSorting();
                 }
@@ -163,7 +156,7 @@ bool GridItem::addToPosition( int x, int y, int z )
         // restore previous values on collision
         if ( collisionFound )
         {
-                this->z = copyOfItem.getZ();
+                this->zPos = copyOfItem.getZ();
 
                 this->offset = copyOfItem.getOffset();
         }

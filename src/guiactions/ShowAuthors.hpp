@@ -29,7 +29,9 @@ class ShowAuthors : public Action
 
 public:
 
-        ShowAuthors( allegro::Pict * picture ) ;
+        ShowAuthors( Picture * picture ) ;
+
+	virtual ~ShowAuthors( ) ;
 
         std::string getNameOfAction () const {  return "ShowAuthors" ;  }
 
@@ -42,6 +44,8 @@ private:
         TextField * linesOfCredits ;
 
         unsigned int initialY ;
+
+        Picture * loadingScreen ;
 
 };
 

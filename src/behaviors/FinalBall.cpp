@@ -29,11 +29,11 @@ bool FinalBall::update ()
 
         switch ( activity )
         {
-                case Wait:
-                        this->changeActivityOfItem( MoveNorth );
+                case Activity::Wait:
+                        this->changeActivityOfItem( Activity::MoveNorth );
                         break;
 
-                case MoveNorth:
+                case Activity::MoveNorth:
                         if ( speedTimer->getValue() > this->item->getSpeed() )
                         {
                                 // look for collisions with items that are to the north
@@ -53,7 +53,7 @@ bool FinalBall::update ()
                                         FreeItem * bubbles = new FreeItem (
                                                 bubblesData,
                                                 item->getX(), item->getY(), item->getZ(),
-                                                Nowhere
+                                                Way::Nowhere
                                         );
 
                                         bubbles->assignBehavior( "behavior of disappearance in time", nilPointer );

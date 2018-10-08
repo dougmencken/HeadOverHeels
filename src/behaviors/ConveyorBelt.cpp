@@ -34,7 +34,7 @@ bool ConveyorBelt::update ()
 
         switch ( activity )
         {
-                case Wait:
+                case Activity::Wait:
                         if ( speedTimer->getValue() > item->getSpeed() )
                         {
                                 if ( ! item->canAdvanceTo( 0, 0, 1 ) )
@@ -63,33 +63,33 @@ bool ConveyorBelt::update ()
                                                                 if ( itemAbove->getAnchor() == nilPointer || this->item == itemAbove->getAnchor() )
                                                                 {
                                                                         if ( item->getOrientation().toString() == "south" ) {
-                                                                                if ( itemAbove->getBehavior()->getActivityOfItem() != RegularJump &&
-                                                                                                itemAbove->getBehavior()->getActivityOfItem() != HighJump )
+                                                                                if ( itemAbove->getBehavior()->getActivityOfItem() != Activity::RegularJump &&
+                                                                                                itemAbove->getBehavior()->getActivityOfItem() != Activity::HighJump )
                                                                                 {
-                                                                                        itemAbove->getBehavior()->changeActivityOfItem( ForceDisplaceSouth );
+                                                                                        itemAbove->getBehavior()->changeActivityOfItem( Activity::ForceDisplaceSouth );
                                                                                 }
                                                                         } else if ( item->getOrientation().toString() == "west" ) {
-                                                                                if ( itemAbove->getBehavior()->getActivityOfItem() != RegularJump &&
-                                                                                                itemAbove->getBehavior()->getActivityOfItem() != HighJump )
+                                                                                if ( itemAbove->getBehavior()->getActivityOfItem() != Activity::RegularJump &&
+                                                                                                itemAbove->getBehavior()->getActivityOfItem() != Activity::HighJump )
                                                                                 {
-                                                                                        itemAbove->getBehavior()->changeActivityOfItem( ForceDisplaceWest );
+                                                                                        itemAbove->getBehavior()->changeActivityOfItem( Activity::ForceDisplaceWest );
                                                                                 }
                                                                         } else if ( item->getOrientation().toString() == "north" ) {
-                                                                                if ( itemAbove->getBehavior()->getActivityOfItem() != RegularJump &&
-                                                                                                itemAbove->getBehavior()->getActivityOfItem() != HighJump )
+                                                                                if ( itemAbove->getBehavior()->getActivityOfItem() != Activity::RegularJump &&
+                                                                                                itemAbove->getBehavior()->getActivityOfItem() != Activity::HighJump )
                                                                                 {
-                                                                                        itemAbove->getBehavior()->changeActivityOfItem( ForceDisplaceNorth );
+                                                                                        itemAbove->getBehavior()->changeActivityOfItem( Activity::ForceDisplaceNorth );
                                                                                 }
                                                                         } else if ( item->getOrientation().toString() == "east" ) {
-                                                                                if ( itemAbove->getBehavior()->getActivityOfItem() != RegularJump &&
-                                                                                                itemAbove->getBehavior()->getActivityOfItem() != HighJump )
+                                                                                if ( itemAbove->getBehavior()->getActivityOfItem() != Activity::RegularJump &&
+                                                                                                itemAbove->getBehavior()->getActivityOfItem() != Activity::HighJump )
                                                                                 {
-                                                                                        itemAbove->getBehavior()->changeActivityOfItem( ForceDisplaceEast );
+                                                                                        itemAbove->getBehavior()->changeActivityOfItem( Activity::ForceDisplaceEast );
                                                                                 }
                                                                         }
 
                                                                         // play sound of conveyor belt
-                                                                        SoundManager::getInstance()->play( item->getLabel(), IsActive );
+                                                                        SoundManager::getInstance()->play( item->getLabel(), Activity::IsActive );
                                                                 }
                                                         }
                                                 }
@@ -108,7 +108,7 @@ bool ConveyorBelt::update ()
                         break;
 
                 default:
-                        activity = Wait;
+                        activity = Activity::Wait;
         }
 
         return false;

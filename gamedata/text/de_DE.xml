@@ -213,16 +213,16 @@
     <properties font="big" color="yellow">
       <string>Sie als Helden</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>Und so, mein lieber Freund, kam es,</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>daß unsere beiden Helden die Tyrannei</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>des Blacktooth- Imperiums ein für</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>alle Mal beendeten</string>
     </properties>
   </text>

@@ -8,10 +8,9 @@
 #include "CreateCongratulationsScreen.hpp"
 
 using gui::ContinueGame;
-using isomot::SoundManager;
 
 
-ContinueGame::ContinueGame( allegro::Pict* picture, bool gameInProgress )
+ContinueGame::ContinueGame( Picture * picture, bool gameInProgress )
         : Action( picture )
         , gameInProgress( gameInProgress )
 {
@@ -20,7 +19,7 @@ ContinueGame::ContinueGame( allegro::Pict* picture, bool gameInProgress )
 
 void ContinueGame::doAction ()
 {
-        SoundManager::getInstance()->stopAnyOgg (); // or hear music of planets screen when playing after restore
+        isomot::SoundManager::getInstance()->stopOgg (); // or hear music of planets screen when playing restored game
 
         isomot::GameManager * gameManager = isomot::GameManager::getInstance();
         isomot::WhyPause why = gameInProgress ? gameManager->resume () : gameManager->begin () ;

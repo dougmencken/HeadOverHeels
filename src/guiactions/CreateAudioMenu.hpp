@@ -29,11 +29,7 @@ class CreateAudioMenu : public Action
 
 public:
 
-        /**
-         * Constructor
-         * @param picture Image where to draw
-         */
-        CreateAudioMenu( allegro::Pict* picture ) ;
+        CreateAudioMenu( Picture * picture ) ;
 
         std::string getNameOfAction () const {  return "CreateAudioMenu" ;  }
 

@@ -17,7 +17,7 @@ Trampoline::Trampoline( Item * item, const std::string & behavior ) :
         Behavior( item, behavior )
         , folded( false )
         , rebounding( false )
-        , regularFrame( 0 )
+        , plainFrame( 0 )
         , foldedFrame( 1 )
 {
         speedTimer = new Timer();
@@ -43,7 +43,7 @@ bool Trampoline::update ()
 
         switch ( activity )
         {
-                case Wait:
+                case Activity::Wait:
                         // fold trampoline when there are items on top of it
                         if ( ! freeItem->canAdvanceTo( 0, 0, 1 ) )
                         {
@@ -61,7 +61,7 @@ bool Trampoline::update ()
                                         // play sound of bouncing
                                         if ( reboundTimer->getValue() > 0.100 )
                                         {
-                                                SoundManager::getInstance()->play( freeItem->getLabel(), IsActive );
+                                                SoundManager::getInstance()->play( freeItem->getLabel(), Activity::IsActive );
                                         }
                                 }
                                 else
@@ -76,7 +76,7 @@ bool Trampoline::update ()
                                         // it is no longer folded
                                         folded = false;
 
-                                        freeItem->changeFrame(regularFrame);
+                                        freeItem->changeFrame( plainFrame );
                                 }
                         }
 
@@ -84,18 +84,18 @@ bool Trampoline::update ()
                         if ( FallKindOfActivity::getInstance()->fall( this ) )
                         {
                                 fallTimer->reset();
-                                activity = Fall;
+                                activity = Activity::Fall;
                         }
                         break;
 
-                case DisplaceNorth:
-                case DisplaceSouth:
-                case DisplaceEast:
-                case DisplaceWest:
-                case DisplaceNortheast:
-                case DisplaceNorthwest:
-                case DisplaceSoutheast:
-                case DisplaceSouthwest:
+                case Activity::DisplaceNorth:
+                case Activity::DisplaceSouth:
+                case Activity::DisplaceEast:
+                case Activity::DisplaceWest:
+                case Activity::DisplaceNortheast:
+                case Activity::DisplaceNorthwest:
+                case Activity::DisplaceSoutheast:
+                case Activity::DisplaceSouthwest:
                         // is it time to move
                         if ( speedTimer->getValue() > freeItem->getSpeed() )
                         {
@@ -105,16 +105,16 @@ bool Trampoline::update ()
                                 this->changeActivityOfItem( activity );
                                 DisplaceKindOfActivity::getInstance()->displace( this, &activity, true );
 
-                                if ( activity != Fall )
+                                if ( activity != Activity::Fall )
                                 {
-                                        activity = Wait;
+                                        activity = Activity::Wait;
                                 }
 
                                 speedTimer->reset();
                         }
                         break;
 
-                case Fall:
+                case Activity::Fall:
                         // look for reaching floor in a room without floor
                         if ( item->getZ() == 0 && item->getMediator()->getRoom()->getKindOfFloor() == "none" )
                         {
@@ -130,14 +130,14 @@ bool Trampoline::update ()
                                 {
                                         // play sound of falling down
                                         SoundManager::getInstance()->play( freeItem->getLabel(), activity );
-                                        activity = Wait;
+                                        activity = Activity::Wait;
                                 }
 
                                 fallTimer->reset();
                         }
                         break;
 
-                case Vanish:
+                case Activity::Vanish:
                         vanish = true;
                         break;
 

@@ -11,7 +11,6 @@
 #ifndef DisplaceKindOfActivity_hpp_
 #define DisplaceKindOfActivity_hpp_
 
-#include "Ism.hpp"
 #include "KindOfActivity.hpp"
 
 

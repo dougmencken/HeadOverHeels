@@ -15,10 +15,9 @@ using gui::CreateKeyboardMenu;
 using isomot::InputManager;
 
 
-CreateKeyboardMenu::CreateKeyboardMenu( allegro::Pict* picture ) :
+CreateKeyboardMenu::CreateKeyboardMenu( Picture * picture ) :
         Action( picture )
 {
-
 }
 
 void CreateKeyboardMenu::doAction ()
@@ -38,13 +37,13 @@ void CreateKeyboardMenu::doAction ()
                 // create one option for each key used in the game
                 for ( size_t i = 0; i < InputManager::numberOfKeys; i++ )
                 {
-                        std::string nameOfThisKey = InputManager::namesOfKeys[ i ];
+                        std::string nameOfThisKey = InputManager::actionsOfKeys[ i ];
                         std::string nameOfTranslation = ( nameOfThisKey == "take&jump" ? "takeandjump" : nameOfThisKey );
 
                         Label* label = new Label( languageManager->findLanguageStringForAlias( nameOfTranslation )->getText() );
 
-                        int scancode = InputManager::getInstance()->getUserKey( nameOfThisKey );
-                        if ( scancode == 0 )
+                        std::string theKey = InputManager::getInstance()->getUserKeyFor( nameOfThisKey );
+                        if ( theKey == "none" )
                         {
                                 label->changeColor( "cyan" );
                         }
@@ -53,7 +52,7 @@ void CreateKeyboardMenu::doAction ()
                         label->setAction( new RedefineKey( menuOfKeys, nameOfThisKey ) );
 
                         menuOfKeys->addOption( label );
-                        menuOfKeys->setValueOf( label, scancode_to_name( scancode ) );
+                        menuOfKeys->setValueOf( label, theKey );
                 }
 
                 screen->addWidget( menuOfKeys );

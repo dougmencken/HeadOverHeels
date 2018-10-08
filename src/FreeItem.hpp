@@ -14,8 +14,8 @@
 #include <utility>
 #include <cmath>
 
-#include <WrappersAllegro.hpp>
-
+#include "tribool.hpp"
+#include "WrappersAllegro.hpp"
 #include "Ism.hpp"
 
 #include "Item.hpp"
@@ -24,14 +24,6 @@
 
 namespace isomot
 {
-
-// ~TO~DO~ bin it completely
-enum WhichMask
-{
-        NoMask,         /* masked image is nil, wantMask is true or false */
-        WantRemask,     /* masked image is not nil and wantMask is true */
-        AlreadyMasked   /* masked image is not nil and wantMask is false */
-} ;
 
 class ItemData ;
 
@@ -46,7 +38,6 @@ class FreeItem : public Item, public Drawable
 public:
 
        /**
-        * Constructor
         * @param itemData Data about this item
         * @param x Position on X
         * @param y Position on Y
@@ -66,19 +57,19 @@ public:
 
         virtual bool addToPosition ( int x, int y, int z ) ;
 
-        void draw ( allegro::Pict* where ) ;
+        void draw ( const allegro::Pict& where ) ;
 
         void binBothProcessedImages () ;
 
         /**
          * Change graphics of item
          */
-        virtual void changeImage ( allegro::Pict* newImage ) ;
+        virtual void changeImage ( Picture* newImage ) ;
 
         /**
          * Change graphics of item’s shadow
          */
-        virtual void changeShadow ( allegro::Pict* newShadow ) ;
+        virtual void changeShadow ( Picture* newShadow ) ;
 
         /**
          * Request to shade item
@@ -90,9 +81,13 @@ public:
          */
         void requestMask () ;
 
-        void setWhichMask ( const WhichMask& mask ) {  myMask = mask ;  }
+        tribool getWantMask () const {  return wantMask ;  }
 
-        WhichMask whichMask () const {  return myMask ;  }
+        void setWantMaskFalse () {  wantMask.setFalse() ;  }
+
+        void setWantMaskTrue () {  wantMask.setTrue() ;  }
+
+        void setWantMaskIndeterminate () {  wantMask.setIndeterminate() ;  }
 
         /**
          * Grado de transparencia del elemento
@@ -114,9 +109,9 @@ public:
 
         bool isFrozen () const {  return frozen ;  }
 
-        allegro::Pict * getShadedNonmaskedImage () const {  return shadedNonmaskedImage ;  }
+        Picture * getShadedNonmaskedImage () const {  return shadedNonmaskedImage ;  }
 
-        void setShadedNonmaskedImage ( allegro::Pict * newImage ) ;
+        void setShadedNonmaskedImage ( Picture * newImage ) ;
 
         bool isPartOfDoor () const {  return partOfDoor ;  }
 
@@ -124,10 +119,8 @@ public:
 
         /**
          * Mask image of item behind image of another item
-         * @param x X coordinate where image of masking item is
-         * @param y Y coordinate where image of masking item is
          */
-        static void maskItemBehindImage ( FreeItem * item, allegro::Pict * upwardImage, int x, int y ) ;
+        static void maskItemBehindItem ( FreeItem * itemToMask, Item * upwardItem ) ;
 
 protected:
 
@@ -147,7 +140,7 @@ protected:
 
         bool isUnderSomeDoor () ;
 
-        WhichMask myMask ;
+        tribool wantMask ;
 
         /**
          * Degree of item’s transparency in percentage 0 to 100
@@ -167,7 +160,7 @@ protected:
         /**
          * Current frame of this item shaded but not masked yet
          */
-        allegro::Pict * shadedNonmaskedImage ;
+        Picture * shadedNonmaskedImage ;
 
         bool partOfDoor ;
 

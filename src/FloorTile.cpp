@@ -8,7 +8,7 @@
 namespace isomot
 {
 
-FloorTile::FloorTile( int cellX, int cellY, allegro::Pict* image )
+FloorTile::FloorTile( int cellX, int cellY, Picture* image )
         : Mediated (), Shady ()
         , uniqueName( "floor tile at cx=" + isomot::numberToString( cellX ) + " cy=" + isomot::numberToString( cellY ) )
         , rawImage( image )
@@ -21,8 +21,8 @@ FloorTile::FloorTile( int cellX, int cellY, allegro::Pict* image )
 
 FloorTile::~FloorTile()
 {
-        allegro::binPicture( rawImage );
-        allegro::binPicture( shadyImage );
+        delete rawImage ;
+        delete shadyImage ;
 }
 
 void FloorTile::calculateOffset()
@@ -35,23 +35,23 @@ void FloorTile::calculateOffset()
         }
 }
 
-void FloorTile::draw( allegro::Pict* where )
+void FloorTile::draw( const allegro::Pict& where )
 {
         if ( shadyImage != nilPointer )
         {       // draw tile with shadow
-                allegro::drawSprite( where, shadyImage, offset.first, offset.second /*~ , "shady image of " + uniqueName + " via FloorTile::draw" ~*/ );
+                allegro::drawSprite( where, shadyImage->getAllegroPict(), offset.first, offset.second );
         }
         else if ( rawImage != nilPointer )
         {       // draw tile, just tile
-                allegro::drawSprite( where, rawImage, offset.first, offset.second /*~ , "raw image of " + uniqueName + " via FloorTile::draw" ~*/ );
+                allegro::drawSprite( where, rawImage->getAllegroPict(), offset.first, offset.second );
         }
 }
 
-void FloorTile::setShadyImage( allegro::Pict* newShady )
+void FloorTile::setShadyImage( Picture* newShady )
 {
         if ( shadyImage != newShady )
         {
-                allegro::binPicture( shadyImage );
+                delete shadyImage ;
                 shadyImage = newShady;
         }
 }
@@ -60,11 +60,8 @@ void FloorTile::freshShadyImage ()
 {
         if ( shadyImage != nilPointer )
         {
-                allegro::binPicture( shadyImage );
-
-                allegro::Pict* shady = allegro::createPicture( rawImage->w, rawImage->h );
-                allegro::bitBlit( rawImage, shady );
-                shadyImage = shady;
+                delete shadyImage ;
+                shadyImage = new Picture( *rawImage );
         }
 }
 

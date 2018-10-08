@@ -8,7 +8,7 @@
 namespace isomot
 {
 
-Wall::Wall( bool trueXfalseY, int index, allegro::Pict* image )
+Wall::Wall( bool trueXfalseY, int index, Picture* image )
         : Mediated()
         , onX( trueXfalseY )
         , position( index )
@@ -19,7 +19,8 @@ Wall::Wall( bool trueXfalseY, int index, allegro::Pict* image )
 
 Wall::~Wall()
 {
-          allegro::binPicture( image );
+          delete image ;
+          image = nilPointer ;
 }
 
 void Wall::calculateOffset()
@@ -33,7 +34,7 @@ void Wall::calculateOffset()
         else
                 this->offset.first = 1 - tileSize * ( ( this->position + 2 ) << 1 ) + mediator->getRoom()->getX0();
 
-        this->offset.second = ( this->position + 1 ) * tileSize - this->image->h - 1 + mediator->getRoom()->getY0();
+        this->offset.second = ( this->position + 1 ) * tileSize - this->image->getHeight() - 1 + mediator->getRoom()->getY0();
 
         if ( isOnX() && ( mediator->getRoom()->hasDoorAt( "east" ) || mediator->getRoom()->getKindOfFloor() == "none" ) )
         {
@@ -48,11 +49,11 @@ void Wall::calculateOffset()
         }
 }
 
-void Wall::draw( allegro::Pict* where )
+void Wall::draw( const allegro::Pict& where )
 {
-        if ( this->image )
+        if ( this->image != nilPointer )
         {
-                allegro::drawSprite( where, this->image, this->offset.first, this->offset.second );
+                allegro::drawSprite( where, this->image->getAllegroPict(), this->offset.first, this->offset.second );
         }
 }
 

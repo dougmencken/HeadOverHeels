@@ -45,12 +45,12 @@ private:
         bool rebounding ;
 
        /**
-        * Frame of undeformed trampoline, usually frame 0
+        * Frame of undeformed trampoline, usually 0th frame
         */
-        int regularFrame ;
+        int plainFrame ;
 
        /**
-        * Frame of folded trampoline, usually frame 1
+        * Frame of folded trampoline, usually 1st frame
         */
         int foldedFrame ;
 

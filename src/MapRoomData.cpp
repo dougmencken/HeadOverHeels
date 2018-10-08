@@ -21,84 +21,84 @@ std::string MapRoomData::findConnectedRoom( const std::string& wayOfExit, Way* w
 
         switch ( Way( wayOfExit ).getIntegerOfWay () )
         {
-                case North:
+                case Way::North:
                         roomFile = north;
-                        *wayOfEntry = South;
+                        *wayOfEntry = Way::South;
                         break;
 
-                case South:
+                case Way::South:
                         roomFile = south;
-                        *wayOfEntry = North;
+                        *wayOfEntry = Way::North;
                         break;
 
-                case East:
+                case Way::East:
                         roomFile = east;
-                        *wayOfEntry = West;
+                        *wayOfEntry = Way::West;
                         break;
 
-                case West:
+                case Way::West:
                         roomFile = west;
-                        *wayOfEntry = East;
+                        *wayOfEntry = Way::East;
                         break;
 
-                case Northeast:
+                case Way::Northeast:
                         roomFile = northEast;
-                        *wayOfEntry = South;
+                        *wayOfEntry = Way::South;
                         break;
 
-                case Southeast:
+                case Way::Southeast:
                         roomFile = southEast;
-                        *wayOfEntry = North;
+                        *wayOfEntry = Way::North;
                         break;
 
-                case Southwest:
+                case Way::Southwest:
                         roomFile = southWest;
-                        *wayOfEntry = North;
+                        *wayOfEntry = Way::North;
                         break;
 
-                case Northwest:
+                case Way::Northwest:
                         roomFile = northWest;
-                        *wayOfEntry = South;
+                        *wayOfEntry = Way::South;
                         break;
 
-                case Eastnorth:
+                case Way::Eastnorth:
                         roomFile = eastNorth;
-                        *wayOfEntry = West;
+                        *wayOfEntry = Way::West;
                         break;
 
-                case Eastsouth:
+                case Way::Eastsouth:
                         roomFile = eastSouth;
-                        *wayOfEntry = West;
+                        *wayOfEntry = Way::West;
                         break;
 
-                case Westnorth:
+                case Way::Westnorth:
                         roomFile = westNorth;
-                        *wayOfEntry = East;
+                        *wayOfEntry = Way::East;
                         break;
 
-                case Westsouth:
+                case Way::Westsouth:
                         roomFile = westSouth;
-                        *wayOfEntry = East;
+                        *wayOfEntry = Way::East;
                         break;
 
-                case Up:
+                case Way::Up:
                         roomFile = roof;
-                        *wayOfEntry = Down;
+                        *wayOfEntry = Way::Down;
                         break;
 
-                case Down:
+                case Way::Down:
                         roomFile = floor;
-                        *wayOfEntry = Up;
+                        *wayOfEntry = Way::Up;
                         break;
 
-                case ByTeleport:
+                case Way::ByTeleport:
                         roomFile = teleport;
-                        *wayOfEntry = ByTeleport;
+                        *wayOfEntry = Way::ByTeleport;
                         break;
 
-                case ByTeleportToo:
+                case Way::ByTeleportToo:
                         roomFile = teleport2;
-                        *wayOfEntry = ByTeleportToo;
+                        *wayOfEntry = Way::ByTeleportToo;
                         break;
 
                 default:
@@ -112,58 +112,58 @@ void MapRoomData::adjustEntry( Way* entry, const std::string& previousRoom )
 {
         switch ( entry->getIntegerOfWay() )
         {
-                case North:
+                case Way::North:
                         if ( north.empty() )
                         {
                                 if ( previousRoom == northEast )
                                 {
-                                        *entry = Northeast;
+                                        *entry = Way::Northeast;
                                 }
                                 else if ( previousRoom == northWest )
                                 {
-                                        *entry = Northwest;
+                                        *entry = Way::Northwest;
                                 }
                         }
                         break;
 
-                case South:
+                case Way::South:
                         if ( south.empty() )
                         {
                                 if ( previousRoom == southEast )
                                 {
-                                        *entry = Southeast;
+                                        *entry = Way::Southeast;
                                 }
                                 else if ( previousRoom == southWest )
                                 {
-                                        *entry = Southwest;
+                                        *entry = Way::Southwest;
                                 }
                         }
                         break;
 
-                case East:
+                case Way::East:
                         if ( east.empty() )
                         {
                                 if ( eastNorth == previousRoom )
                                 {
-                                        *entry = Eastnorth;
+                                        *entry = Way::Eastnorth;
                                 }
                                 else if ( eastSouth == previousRoom )
                                 {
-                                        *entry = Eastsouth;
+                                        *entry = Way::Eastsouth;
                                 }
                         }
                         break;
 
-                case West:
+                case Way::West:
                         if ( west.empty() )
                         {
                                 if ( westNorth == previousRoom )
                                 {
-                                        *entry = Westnorth;
+                                        *entry = Way::Westnorth;
                                 }
                                 else if ( westSouth == previousRoom )
                                 {
-                                        *entry = Westsouth;
+                                        *entry = Way::Westsouth;
                                 }
                         }
                         break;

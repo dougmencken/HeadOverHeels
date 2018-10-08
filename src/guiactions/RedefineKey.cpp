@@ -11,10 +11,10 @@ using gui::RedefineKey;
 using isomot::InputManager;
 
 
-RedefineKey::RedefineKey( MenuWithValues* menu, std::string name )
-        : Action( 0 ),
+RedefineKey::RedefineKey( MenuWithValues* menu, const std::string& userKey )
+        : Action( nilPointer ),
         menu( menu ),
-        nameOfKey( name )
+        whatKeyDoes( userKey )
 {
 
 }
@@ -25,66 +25,60 @@ void RedefineKey::doAction ()
         activeLabel->changeFontFamilyAndColor( "big", "yellow" );
         menu->redraw ();
 
-        clear_keybuf();
+        allegro::emptyKeyboardBuffer();
 
         bool exitLoop = false;
         while ( ! exitLoop )
         {
-                if ( keypressed() )
+                if ( allegro::areKeypushesWaiting() )
                 {
-                        // Tecla asignada por el usuario
-                        int newKey = readkey() >> 8;
+                        std::string newKey = allegro::nextKey() ;
 
-                        if ( newKey == KEY_ESC )
+                        if ( newKey == "Escape" )
                         {
                                 exitLoop = true;
                         }
                         else
                         {
-                                int codeOfKey = InputManager::getInstance()->getUserKey( this->nameOfKey );
-                                if ( codeOfKey != newKey && /* print screen is used to toggle recording of game */ newKey != KEY_PRTSCR )
+                                std::string thatKey = InputManager::getInstance()->getUserKeyFor( this->whatKeyDoes );
+                                if ( thatKey != newKey && /* print screen is used to toggle recording of game */ newKey != "PrintScreen" )
                                 {
                                         // if this new key was already in use, change that previous one to "none"
-                                        std::string nameOfPrevious = InputManager::getInstance()->findNameOfKeyByCode( newKey );
-                                        std::string nameForText = ( nameOfPrevious == "take&jump" ? "takeandjump" : nameOfPrevious );
+                                        std::string previousAction = InputManager::getInstance()->findActionOfKeyByName( newKey );
+                                        std::string toLook = ( previousAction == "take&jump" ? "takeandjump" : previousAction );
 
-                                        if ( nameOfPrevious != InputManager::nameOfAbsentKey )
+                                        if ( previousAction != "unknown" )
                                         {
-                                                InputManager::getInstance()->changeUserKey( nameOfPrevious, 0 );
+                                                InputManager::getInstance()->changeUserKey( previousAction, "none" );
 
                                                 // update menu
-                                                std::string textOfThatKey = GuiManager::getInstance()->getLanguageManager()->findLanguageStringForAlias( nameForText )->getText();
+                                                std::string textOfThatKey = GuiManager::getInstance()->getLanguageManager()->findLanguageStringForAlias( toLook )->getText();
                                                 std::list < Label * > everyLabel = menu->getEveryOption ();
                                                 for ( std::list< Label * >::iterator o = everyLabel.begin (); o != everyLabel.end (); ++o )
                                                 {
                                                         if ( ( *o )->getText() == textOfThatKey )
                                                         {
-                                                                menu->setValueOf( *o, scancode_to_name( 0 ) );
+                                                                menu->setValueOf( *o, "none" );
                                                                 ( *o )->changeColor( "cyan" );
 
-                                                                std::cout << "key \"" << nameOfPrevious << "\" is now NONE ( 0 )" << std::endl ;
+                                                                std::cout << "key \"" << previousAction << "\" is now NONE" << std::endl ;
                                                                 break;
                                                         }
                                                 }
                                                 menu->redraw ();
                                         }
 
-                                        std::cout << "key \"" << this->nameOfKey
-                                                  << "\" was " << scancode_to_name( codeOfKey ) << " ( " << codeOfKey << " ) "
-                                                  << "now is " << scancode_to_name( newKey ) << " ( " << newKey << " )"
-                                                  << std::endl ;
+                                        std::cout << "key for \"" << this->whatKeyDoes << "\" was \"" << thatKey << "\" now is \"" << newKey << "\"" << std::endl ;
 
-                                        nameForText = ( this->nameOfKey == "take&jump" ? "takeandjump" : this->nameOfKey );
+                                        menu->setValueOf( activeLabel, newKey );
 
-                                        menu->setValueOf( activeLabel, scancode_to_name( newKey ) );
-
-                                        InputManager::getInstance()->changeUserKey( this->nameOfKey, newKey );
+                                        InputManager::getInstance()->changeUserKey( this->whatKeyDoes, newKey );
                                 }
 
                                 exitLoop = true;
                         }
 
-                        clear_keybuf();
+                        allegro::emptyKeyboardBuffer();
                 }
 
                 // no te comas la CPU
@@ -92,7 +86,7 @@ void RedefineKey::doAction ()
                 milliSleep( 20 );
         }
 
-        if ( InputManager::getInstance()->getUserKey( this->nameOfKey ) != 0 ) {
+        if ( InputManager::getInstance()->getUserKeyFor( this->whatKeyDoes ) != "none" ) {
                 activeLabel->changeFontFamilyAndColor( "big", "white" );
         } else {
                 activeLabel->changeFontFamilyAndColor( "big", "cyan" );

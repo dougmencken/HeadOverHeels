@@ -219,13 +219,13 @@
     <properties font="big" color="yellow">
       <string>et vous acclament</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>De cette façon, mon ami, nos deux</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>héros ont mis une fin définitive à la</string>
     </properties>
-    <properties font="regular" color="multicolor">
+    <properties font="plain" color="multicolor">
       <string>tyrannie de l'Empereur de Blacktooth</string>
     </properties>
   </text>

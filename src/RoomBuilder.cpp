@@ -12,8 +12,6 @@
 #include "BonusManager.hpp"
 #include "GameManager.hpp"
 
-#include <loadpng.h>
-
 
 namespace isomot
 {
@@ -107,35 +105,35 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
 
                 if ( northeast != nilPointer )
                 {
-                        theRoom->addTripleRoomInitialPoint( Northeast, std::atoi( northeast->Attribute( "x" ) ), std::atoi( northeast->Attribute( "y" ) ) );
+                        theRoom->addTripleRoomInitialPoint( Way::Northeast, std::atoi( northeast->Attribute( "x" ) ), std::atoi( northeast->Attribute( "y" ) ) );
                 }
                 if ( southeast != nilPointer )
                 {
-                        theRoom->addTripleRoomInitialPoint( Southeast, std::atoi( southeast->Attribute( "x" ) ), std::atoi( southeast->Attribute( "y" ) ) );
+                        theRoom->addTripleRoomInitialPoint( Way::Southeast, std::atoi( southeast->Attribute( "x" ) ), std::atoi( southeast->Attribute( "y" ) ) );
                 }
                 if ( northwest != nilPointer )
                 {
-                        theRoom->addTripleRoomInitialPoint( Northwest, std::atoi( northwest->Attribute( "x" ) ), std::atoi( northwest->Attribute( "y" ) ) );
+                        theRoom->addTripleRoomInitialPoint( Way::Northwest, std::atoi( northwest->Attribute( "x" ) ), std::atoi( northwest->Attribute( "y" ) ) );
                 }
                 if ( southwest != nilPointer )
                 {
-                        theRoom->addTripleRoomInitialPoint( Southwest, std::atoi( southwest->Attribute( "x" ) ), std::atoi( southwest->Attribute( "y" ) ) );
+                        theRoom->addTripleRoomInitialPoint( Way::Southwest, std::atoi( southwest->Attribute( "x" ) ), std::atoi( southwest->Attribute( "y" ) ) );
                 }
                 if ( eastnorth != nilPointer )
                 {
-                        theRoom->addTripleRoomInitialPoint( Eastnorth, std::atoi( eastnorth->Attribute( "x" ) ), std::atoi( eastnorth->Attribute( "y" ) ) );
+                        theRoom->addTripleRoomInitialPoint( Way::Eastnorth, std::atoi( eastnorth->Attribute( "x" ) ), std::atoi( eastnorth->Attribute( "y" ) ) );
                 }
                 if ( eastsouth != nilPointer )
                 {
-                        theRoom->addTripleRoomInitialPoint( Eastsouth, std::atoi( eastsouth->Attribute( "x" ) ), std::atoi( eastsouth->Attribute( "y" ) ) );
+                        theRoom->addTripleRoomInitialPoint( Way::Eastsouth, std::atoi( eastsouth->Attribute( "x" ) ), std::atoi( eastsouth->Attribute( "y" ) ) );
                 }
                 if ( westnorth != nilPointer )
                 {
-                        theRoom->addTripleRoomInitialPoint( Westnorth, std::atoi( westnorth->Attribute( "x" ) ), std::atoi( westnorth->Attribute( "y" ) ) );
+                        theRoom->addTripleRoomInitialPoint( Way::Westnorth, std::atoi( westnorth->Attribute( "x" ) ), std::atoi( westnorth->Attribute( "y" ) ) );
                 }
                 if ( westsouth != nilPointer )
                 {
-                        theRoom->addTripleRoomInitialPoint( Westsouth, std::atoi( westsouth->Attribute( "x" ) ), std::atoi( westsouth->Attribute( "y" ) ) );
+                        theRoom->addTripleRoomInitialPoint( Way::Westsouth, std::atoi( westsouth->Attribute( "x" ) ), std::atoi( westsouth->Attribute( "y" ) ) );
                 }
 
                 tinyxml2::XMLElement* boundX = tripleRoomData->FirstChildElement( "bound-x" );
@@ -276,10 +274,6 @@ PlayerItem* RoomBuilder::createPlayerInRoom( Room* room,
                 if ( gameManager->getLives( nameOfPlayerToCreate ) > 0 )
                 {
                         player = new PlayerItem( itemData, x, y, z, orientation );
-
-                        // forget taken item
-                        gameManager->emptyHandbag( nameOfPlayerToCreate );
-
                         player->fillWithData( gameManager );
 
                         std::string behaviorOfPlayer = "behavior of some player";
@@ -315,13 +309,15 @@ FloorTile* RoomBuilder::buildFloorTile( tinyxml2::XMLElement* tile, const char* 
         tinyxml2::XMLElement* y = tile->FirstChildElement( "y" );
         std::string pictureString = tile->FirstChildElement( "picture" )->FirstChild()->ToText()->Value();
 
-        allegro::Pict* picture = allegro::loadPNG( isomot::pathToFile( isomot::sharePath() + gfxPrefix + pathSeparator + pictureString ) );
-        if ( picture == nilPointer ) {
+        smartptr< allegro::Pict > picture( allegro::loadPNG (
+                isomot::pathToFile( isomot::sharePath() + gfxPrefix + pathSeparator + pictureString )
+        ) );
+        if ( ! picture->isNotNil() ) {
                 std::cerr << "picture \"" << pictureString << "\" from \"" << gfxPrefix << "\" is absent" << std::endl ;
                 return nilPointer;
         }
 
-        return new FloorTile( std::atoi( x->FirstChild()->ToText()->Value() ), std::atoi( y->FirstChild()->ToText()->Value() ), picture );
+        return new FloorTile( std::atoi( x->FirstChild()->ToText()->Value() ), std::atoi( y->FirstChild()->ToText()->Value() ), new Picture( *picture.get() ) );
 }
 
 /* static */
@@ -331,13 +327,15 @@ Wall* RoomBuilder::buildWall( tinyxml2::XMLElement* wall, const char* gfxPrefix 
         std::string axisString = wall->FirstChildElement( "axis" )->FirstChild()->ToText()->Value();
         std::string pictureString = wall->FirstChildElement( "picture" )->FirstChild()->ToText()->Value();
 
-        allegro::Pict* picture = allegro::loadPNG( isomot::pathToFile( isomot::sharePath() + gfxPrefix + pathSeparator + pictureString ) );
-        if ( picture == nilPointer ) {
+        smartptr< allegro::Pict > picture( allegro::loadPNG (
+                isomot::pathToFile( isomot::sharePath() + gfxPrefix + pathSeparator + pictureString )
+        ) );
+        if ( ! picture->isNotNil() ) {
                 std::cerr << "picture \"" << pictureString << "\" from \"" << gfxPrefix << "\" is absent" << std::endl ;
                 return nilPointer;
         }
 
-        return new Wall( axisString == "x" ? true : false, std::atoi( index->FirstChild()->ToText()->Value() ), picture );
+        return new Wall( axisString == "x" ? true : false, std::atoi( index->FirstChild()->ToText()->Value() ), new Picture( *picture.get() ) );
 }
 
 /* static */

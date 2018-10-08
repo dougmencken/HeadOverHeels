@@ -33,7 +33,7 @@ Mediator::Mediator( Room* room )
         pthread_mutex_init( &gridItemsMutex, nilPointer );
         pthread_mutex_init( &freeItemsMutex, nilPointer );
 
-        // items which may be freezed by doughnut or switch
+        // behaviors of items which may be freezed by doughnut or switch
         badBoys.push_back( "behavior of detector" );
         badBoys.push_back( "behavior of hunter in four directions" );
         badBoys.push_back( "behavior of waiting hunter in four directions" );
@@ -58,7 +58,7 @@ Mediator::~Mediator()
         // bin grid items
         for ( size_t i = 0; i < gridItems.size(); i++ )
         {
-                std::for_each( gridItems[ i ].begin(), gridItems[ i ].end (), DeleteObject() );
+                std::for_each( gridItems[ i ].begin(), gridItems[ i ].end (), DeleteIt() );
                 gridItems[ i ].clear();
         }
 
@@ -128,7 +128,7 @@ void Mediator::update()
                 // remask items after sorting because overlaps may change
                 for ( std::list< FreeItem * >::iterator f = freeItems.begin (); f != freeItems.end (); ++f )
                 {
-                        ( *f )->setWhichMask( WantRemask );
+                        ( *f )->setWantMaskTrue();
                 }
         }
 
@@ -228,12 +228,12 @@ void Mediator::remaskWithFreeItem( FreeItem* item )
                         thatFreeItem != item && thatFreeItem->getUniqueName() + " copy" != item->getUniqueName() )
                 {
                         // mask item if there’s overlap between images
-                        if ( ( thatFreeItem->getOffsetX() < item->getOffsetX() + item->getRawImage()->w )
-                                && ( thatFreeItem->getOffsetX() + thatFreeItem->getRawImage()->w > item->getOffsetX() )
-                                && ( thatFreeItem->getOffsetY() < item->getOffsetY() + item->getRawImage()->h )
-                                && ( thatFreeItem->getOffsetY() + thatFreeItem->getRawImage()->h > item->getOffsetY() ) )
+                        if ( ( thatFreeItem->getOffsetX() < item->getOffsetX() + static_cast< int >( item->getRawImage()->getWidth() ) )
+                                && ( thatFreeItem->getOffsetX() + static_cast< int >( thatFreeItem->getRawImage()->getWidth() ) > item->getOffsetX() )
+                                && ( thatFreeItem->getOffsetY() < item->getOffsetY() + static_cast< int >( item->getRawImage()->getHeight() ) )
+                                && ( thatFreeItem->getOffsetY() + static_cast< int >( thatFreeItem->getRawImage()->getHeight() ) > item->getOffsetY() ) )
                         {
-                                thatFreeItem->setWhichMask( WantRemask );
+                                thatFreeItem->setWantMaskTrue();
                         }
                 }
         }
@@ -251,17 +251,17 @@ void Mediator::remaskWithGridItem( GridItem* gridItem )
                 if ( freeItem != nilPointer && freeItem->getRawImage() != nilPointer )
                 {
                         // mask item if there’s overlap between images
-                        if ( ( freeItem->getOffsetX() < gridItem->getOffsetX() + gridItem->getRawImage()->w )
-                                && ( freeItem->getOffsetX() + freeItem->getRawImage()->w > gridItem->getOffsetX() )
-                                && ( freeItem->getOffsetY() < gridItem->getOffsetY() + gridItem->getRawImage()->h )
-                                && ( freeItem->getOffsetY() + freeItem->getRawImage()->h > gridItem->getOffsetY() ) )
+                        if ( ( freeItem->getOffsetX() < gridItem->getOffsetX() + static_cast< int >( gridItem->getRawImage()->getWidth() ) )
+                                && ( freeItem->getOffsetX() + static_cast< int >( freeItem->getRawImage()->getWidth() ) > gridItem->getOffsetX() )
+                                && ( freeItem->getOffsetY() < gridItem->getOffsetY() + static_cast< int >( gridItem->getRawImage()->getHeight() ) )
+                                && ( freeItem->getOffsetY() + static_cast< int >( freeItem->getRawImage()->getHeight() ) > gridItem->getOffsetY() ) )
                         {
                                 // see whether free item is behind grid item
                                 if ( ( freeItem->getX() < gridItem->getX() + static_cast< int >( gridItem->getWidthX() ) )
                                         && ( freeItem->getY() - static_cast< int >( freeItem->getWidthY() ) < gridItem->getY() )
                                         && ( freeItem->getZ() < gridItem->getZ() + static_cast< int >( gridItem->getHeight() ) ) )
                                 {
-                                        freeItem->setWhichMask( WantRemask );
+                                        freeItem->setWantMaskTrue();
                                 }
                         }
                 }
@@ -270,6 +270,8 @@ void Mediator::remaskWithGridItem( GridItem* gridItem )
 
 void Mediator::reshadeWithGridItem( GridItem* item )
 {
+        if ( room->getOpacityOfShadows() >= 256 ) return ;
+
         // shade free items underneath
         this->shadeFreeItemsBeneathItem( item );
 
@@ -301,6 +303,8 @@ void Mediator::reshadeWithGridItem( GridItem* item )
 
 void Mediator::reshadeWithFreeItem( FreeItem* item )
 {
+        if ( room->getOpacityOfShadows() >= 256 ) return ;
+
         // shade free items underneath
         this->shadeFreeItemsBeneathItem( item );
 
@@ -373,6 +377,8 @@ void Mediator::shadeFreeItemsBeneathItem( Item* item )
 
 void Mediator::castShadowOnFloor( FloorTile* floorTile )
 {
+        if ( room->getOpacityOfShadows() >= 256 ) return ;
+
         int xCell = floorTile->getCellX();
         int yCell = floorTile->getCellY();
         int column = floorTile->getColumn();
@@ -397,10 +403,14 @@ void Mediator::castShadowOnFloor( FloorTile* floorTile )
 
                         ShadowCaster::castShadowOnFloor (
                                 floorTile,
-                                /* x */ ( tileSize << 1 ) * ( xCell - yCell ) - ( gridItem->getImageOfShadow()->w >> 1 ) + room->getX0() + 1,
-                                /* y */ tileSize * ( xCell + yCell + 1 ) - ( gridItem->getImageOfShadow()->h >> 1 ) + room->getY0() - 1,
+                                /* x */ ( tileSize << 1 ) * ( xCell - yCell )
+                                                        - ( static_cast< int >( gridItem->getImageOfShadow()->getWidth() ) >> 1 )
+                                                        + room->getX0() + 1,
+                                /* y */ tileSize * ( xCell + yCell + 1 )
+                                                        - ( static_cast< int >( gridItem->getImageOfShadow()->getHeight() ) >> 1 )
+                                                        + room->getY0() - 1,
                                 /* shadow */ gridItem->getImageOfShadow(),
-                                /* shadingScale */ room->shadingScale
+                                /* shading */ room->getOpacityOfShadows()
                                 /* transparency = 0 */
                         ) ;
                 }
@@ -434,12 +444,12 @@ void Mediator::castShadowOnFloor( FloorTile* floorTile )
                                         floorTile,
                                         /* x */ ( ( freeItem->getX() - freeItem->getY() ) << 1 ) + room->getX0()
                                                         + static_cast< int >( freeItem->getWidthX() + freeItem->getWidthY() )
-                                                        - ( ( freeItem->getImageOfShadow()->w ) >> 1 ) - 1,
+                                                        - ( static_cast< int >( freeItem->getImageOfShadow()->getWidth() ) >> 1 ) - 1,
                                         /* y */ freeItem->getX() + freeItem->getY() + room->getY0()
                                                         + ( ( static_cast< int >( freeItem->getWidthX() ) - static_cast< int >( freeItem->getWidthY() ) + 1 ) >> 1 )
-                                                        - ( ( freeItem->getImageOfShadow()->h ) >> 1 ),
+                                                        - ( static_cast< int >( freeItem->getImageOfShadow()->getHeight() ) >> 1 ),
                                         /* shadow */ freeItem->getImageOfShadow(),
-                                        /* shadingScale */ room->shadingScale,
+                                        /* shading */ room->getOpacityOfShadows(),
                                         /* transparency */ freeItem->getTransparency()
                                 ) ;
                         }
@@ -449,6 +459,8 @@ void Mediator::castShadowOnFloor( FloorTile* floorTile )
 
 void Mediator::castShadowOnGridItem( GridItem* gridItem )
 {
+        if ( room->getOpacityOfShadows() >= 256 ) return ;
+
         int tileSize = room->getSizeOfOneTile();
         int column = gridItem->getColumnOfGrid();
 
@@ -471,10 +483,14 @@ void Mediator::castShadowOnGridItem( GridItem* gridItem )
 
                         ShadowCaster::castShadowOnItem (
                                 gridItem,
-                                /* x */ gridItem->getOffsetX() + ( ( gridItem->getRawImage()->w - aboveItem->getImageOfShadow()->w ) >> 1 ),
-                                /* y */ gridItem->getOffsetY() + gridItem->getRawImage()->h - tileSize - gridItem->getHeight() - ( aboveItem->getImageOfShadow()->h >> 1 ),
+                                /* x */ gridItem->getOffsetX()
+                                                + ( ( static_cast< int >( gridItem->getRawImage()->getWidth() )
+                                                        - static_cast< int >( aboveItem->getImageOfShadow()->getWidth() ) ) >> 1 ),
+                                /* y */ gridItem->getOffsetY()
+                                                + gridItem->getRawImage()->getHeight() - tileSize - gridItem->getHeight()
+                                                - ( static_cast< int >( aboveItem->getImageOfShadow()->getHeight() ) >> 1 ),
                                 /* shadow */ aboveItem->getImageOfShadow(),
-                                /* shadingScale */ room->shadingScale
+                                /* shading */ room->getOpacityOfShadows()
                                 /* transparency = 0 */
                         ) ;
                 }
@@ -510,12 +526,13 @@ void Mediator::castShadowOnGridItem( GridItem* gridItem )
                                         gridItem,
                                         /* x */ ( ( freeItem->getX() - freeItem->getY() ) << 1 )
                                                         + static_cast< int >( freeItem->getWidthX() + freeItem->getWidthY() )
-                                                        - ( ( freeItem->getImageOfShadow()->w ) >> 1 ) - 1,
+                                                        - ( static_cast< int >( freeItem->getImageOfShadow()->getWidth() ) >> 1 ) - 1,
                                         /* y */ freeItem->getX() + freeItem->getY()
                                                         + ( ( static_cast< int >( freeItem->getWidthX() ) - static_cast< int >( freeItem->getWidthY() ) + 1 ) >> 1 )
-                                                        - ( ( freeItem->getImageOfShadow()->h ) >> 1 ) - gridItem->getZ() - gridItem->getHeight(),
+                                                        - ( static_cast< int >( freeItem->getImageOfShadow()->getHeight() ) >> 1 )
+                                                        - gridItem->getZ() - gridItem->getHeight(),
                                         /* shadow */ freeItem->getImageOfShadow(),
-                                        /* shadingScale */ room->shadingScale,
+                                        /* shading */ room->getOpacityOfShadows(),
                                         /* transparency */ freeItem->getTransparency()
                                 ) ;
                         }
@@ -525,6 +542,8 @@ void Mediator::castShadowOnGridItem( GridItem* gridItem )
 
 void Mediator::castShadowOnFreeItem( FreeItem* freeItem )
 {
+        if ( room->getOpacityOfShadows() >= 256 ) return ;
+
         int tileSize = room->getSizeOfOneTile();
 
         // range of columns met with item
@@ -558,10 +577,13 @@ void Mediator::castShadowOnFreeItem( FreeItem* freeItem )
 
                                         ShadowCaster::castShadowOnItem (
                                                 freeItem,
-                                                /* x */ ( tileSize << 1 ) * ( xCell - yCell ) - ( gridItem->getImageOfShadow()->w >> 1 ) + 1,
-                                                /* y */ tileSize * ( xCell + yCell + 1 ) - freeItem->getZ() - freeItem->getHeight() - ( gridItem->getImageOfShadow()->h >> 1 ) - 1,
+                                                /* x */ ( tileSize << 1 ) * ( xCell - yCell )
+                                                                - ( static_cast< int >( gridItem->getImageOfShadow()->getWidth() ) >> 1 ) + 1,
+                                                /* y */ tileSize * ( xCell + yCell + 1 )
+                                                                - freeItem->getZ() - freeItem->getHeight()
+                                                                - ( static_cast< int >( gridItem->getImageOfShadow()->getHeight() ) >> 1 ) - 1,
                                                 /* shadow */ gridItem->getImageOfShadow(),
-                                                /* shadingScale */ room->shadingScale
+                                                /* shading */ room->getOpacityOfShadows()
                                                 /* transparency = 0 */
                                         ) ;
                                 }
@@ -597,11 +619,12 @@ void Mediator::castShadowOnFreeItem( FreeItem* freeItem )
                                         freeItem,
                                         /* x */ ( ( aboveItem->getX() - aboveItem->getY() ) << 1 )
                                                         + static_cast< int >( aboveItem->getWidthX() + aboveItem->getWidthY() )
-                                                        - ( aboveItem->getImageOfShadow()->w >> 1 ) - 1,
+                                                        - ( static_cast< int >( aboveItem->getImageOfShadow()->getWidth() ) >> 1 ) - 1,
                                         /* y */ aboveItem->getX() + aboveItem->getY() - freeItem->getZ() - freeItem->getHeight()
-                                                        + ( ( static_cast< int >( aboveItem->getWidthX() ) - static_cast< int >( aboveItem->getWidthY() ) - aboveItem->getImageOfShadow()->h ) >> 1 ),
+                                                        + ( ( static_cast< int >( aboveItem->getWidthX() ) - static_cast< int >( aboveItem->getWidthY() )
+                                                                - static_cast< int >( aboveItem->getImageOfShadow()->getHeight() ) ) >> 1 ),
                                         /* shadow */ aboveItem->getImageOfShadow(),
-                                        /* shadingScale */ room->shadingScale,
+                                        /* shading */ room->getOpacityOfShadows(),
                                         /* transparency */ freeItem->getTransparency()
                                 );
                         }
@@ -626,14 +649,14 @@ void Mediator::maskFreeItem( FreeItem* freeItem )
 
                 if ( itemToMaskWith->getRawImage() && (
                         /* one of two is marked to mask and other of two isn’t transparent */
-                        ( freeItem->whichMask() != NoMask && itemToMaskWith->getTransparency() == 0 ) ||
-                        ( itemToMaskWith->whichMask() != NoMask && freeItem->getTransparency() == 0 ) )
+                        ( ! freeItem->getWantMask().isFalse() && itemToMaskWith->getTransparency() == 0 ) ||
+                        ( ! itemToMaskWith->getWantMask().isFalse() && freeItem->getTransparency() == 0 ) )
                 ) {
                         // do graphics overlap
-                        if ( ( itemToMaskWith->getOffsetX() < freeItem->getOffsetX() + freeItem->getRawImage()->w ) &&
-                                ( itemToMaskWith->getOffsetX() + itemToMaskWith->getRawImage()->w > freeItem->getOffsetX() ) &&
-                                ( itemToMaskWith->getOffsetY() < freeItem->getOffsetY() + freeItem->getRawImage()->h ) &&
-                                ( itemToMaskWith->getOffsetY() + itemToMaskWith->getRawImage()->h > freeItem->getOffsetY() ) )
+                        if ( ( itemToMaskWith->getOffsetX() < freeItem->getOffsetX() + static_cast< int >( freeItem->getRawImage()->getWidth() ) ) &&
+                                ( itemToMaskWith->getOffsetX() + static_cast< int >( itemToMaskWith->getRawImage()->getWidth() ) > freeItem->getOffsetX() ) &&
+                                ( itemToMaskWith->getOffsetY() < freeItem->getOffsetY() + static_cast< int >( freeItem->getRawImage()->getHeight() ) ) &&
+                                ( itemToMaskWith->getOffsetY() + static_cast< int >( itemToMaskWith->getRawImage()->getHeight() ) > freeItem->getOffsetY() ) )
                         {
                                 // freeItem is behind itemToMaskWith
                                 if ( ( freeItem->getX() + static_cast< int >( freeItem->getWidthX() ) <= itemToMaskWith->getX() ) ||
@@ -650,7 +673,7 @@ void Mediator::maskFreeItem( FreeItem* freeItem )
                                                         " behind \"" << itemToMaskWith->getUniqueName() << "\" at " << positionOfItem.str() << std::endl ;
                                 # endif
 
-                                        FreeItem::maskItemBehindImage( freeItem, itemToMaskWith->getRawImage(), itemToMaskWith->getOffsetX(), itemToMaskWith->getOffsetY() );
+                                        FreeItem::maskItemBehindItem( freeItem, itemToMaskWith );
                                 }
                                 // itemToMaskWith is behind freeItem
                                 else
@@ -665,13 +688,13 @@ void Mediator::maskFreeItem( FreeItem* freeItem )
                                                         " behind \"" << freeItem->getUniqueName() << "\" at " << positionOfItem.str() << std::endl ;
                                 # endif
 
-                                        FreeItem::maskItemBehindImage( itemToMaskWith, freeItem->getRawImage(), freeItem->getOffsetX(), freeItem->getOffsetY() );
+                                        FreeItem::maskItemBehindItem( itemToMaskWith, freeItem );
                                 }
                         }
                 }
         }
 
-        if ( freeItem->whichMask() != NoMask )
+        if ( ! freeItem->getWantMask().isFalse() )
         {
                 int xStart = freeItem->getX() / room->getSizeOfOneTile();
                 int xEnd = ( ( freeItem->getX() + freeItem->getWidthX() - 1 ) / room->getSizeOfOneTile() ) + 1;
@@ -694,10 +717,10 @@ void Mediator::maskFreeItem( FreeItem* freeItem )
                                         if ( gridItem->getRawImage() != nilPointer )
                                         {
                                                 // see if graphics overlap
-                                                if ( ( gridItem->getOffsetX() < freeItem->getOffsetX() + freeItem->getRawImage()->w ) &&
-                                                        ( gridItem->getOffsetX() + gridItem->getRawImage()->w > freeItem->getOffsetX() ) &&
-                                                        ( gridItem->getOffsetY() < freeItem->getOffsetY() + freeItem->getRawImage()->h ) &&
-                                                        ( gridItem->getOffsetY() + gridItem->getRawImage()->h > freeItem->getOffsetY() ) )
+                                                if ( ( gridItem->getOffsetX() < freeItem->getOffsetX() + static_cast< int >( freeItem->getRawImage()->getWidth() ) ) &&
+                                                        ( gridItem->getOffsetX() + static_cast< int >( gridItem->getRawImage()->getWidth() ) > freeItem->getOffsetX() ) &&
+                                                        ( gridItem->getOffsetY() < freeItem->getOffsetY() + static_cast< int >( freeItem->getRawImage()->getHeight() ) ) &&
+                                                        ( gridItem->getOffsetY() + static_cast< int >( gridItem->getRawImage()->getHeight() ) > freeItem->getOffsetY() ) )
                                                 {
                                                         // if free item is behind grid item
                                                         if ( ( freeItem->getX() + static_cast< int >( freeItem->getWidthX() ) <= static_cast< int >( ( xStart + i ) * room->getSizeOfOneTile() ) ) ||
@@ -714,7 +737,7 @@ void Mediator::maskFreeItem( FreeItem* freeItem )
                                                                                 " behind \"" << gridItem->getUniqueName() << "\" at " << positionOfItem.str() << std::endl ;
                                                         # endif
 
-                                                                FreeItem::maskItemBehindImage( freeItem, gridItem->getRawImage(), gridItem->getOffsetX(), gridItem->getOffsetY() );
+                                                                FreeItem::maskItemBehindItem( freeItem, gridItem );
                                                         }
                                                 }
                                         }
@@ -1143,9 +1166,8 @@ bool Mediator::pickNextCharacter( ItemDataManager* itemDataManager )
 
                                 // item that Heels may have in handbag
                                 PlayerItem* heels = reference;
-                                ItemData* takenItemData = heels->getTakenItemData ();
-                                Picture* takenItemImage = heels->getTakenItemImage ();
-                                std::string behaviorOfItemTaken = heels->getTakenItemBehavior( );
+                                ItemData* dataOfItemInBag = heels->getTakenItemData ();
+                                std::string behaviorOfItemInBag = heels->getTakenItemBehavior( );
 
                                 // remove simple players
                                 this->room->removePlayerFromRoom( previousCharacter, false );
@@ -1155,10 +1177,10 @@ bool Mediator::pickNextCharacter( ItemDataManager* itemDataManager )
                                 setActiveCharacter( RoomBuilder::createPlayerInRoom( this->room, "headoverheels", false, x, y, z, orientation ) );
 
                                 // transfer item in handbag
-                                if ( takenItemData != nilPointer )
+                                if ( dataOfItemInBag != nilPointer )
                                 {
-                                        std::cout << "transfer item \"" << takenItemData->getLabel() << "\" to player \"" << activeCharacter->getLabel() << "\"" << std::endl ;
-                                        activeCharacter->assignTakenItem( takenItemData, takenItemImage, behaviorOfItemTaken );
+                                        std::cout << "transfer item \"" << dataOfItemInBag->getLabel() << "\" to player \"" << activeCharacter->getLabel() << "\"" << std::endl ;
+                                        activeCharacter->placeItemInBag( dataOfItemInBag, behaviorOfItemInBag );
                                 }
 
                                 unlockFreeItemMutex ();
@@ -1182,9 +1204,8 @@ bool Mediator::pickNextCharacter( ItemDataManager* itemDataManager )
                 lockFreeItemMutex ();
 
                 // get data of item in handbag
-                ItemData* takenItemData = activeCharacter->getTakenItemData ();
-                std::string behaviorOfItemTaken = activeCharacter->getTakenItemBehavior( );
-                Picture* takenItemImage = activeCharacter->getTakenItemImage ();
+                ItemData* dataOfItemInBag = activeCharacter->getTakenItemData ();
+                std::string behaviorOfItemInBag = activeCharacter->getTakenItemBehavior( );
 
                 // remove composite player
                 this->room->removePlayerFromRoom( activeCharacter, false );
@@ -1193,10 +1214,10 @@ bool Mediator::pickNextCharacter( ItemDataManager* itemDataManager )
 
                 PlayerItem* heelsPlayer = RoomBuilder::createPlayerInRoom( this->room, "heels", false, x, y, z, orientation );
 
-                if ( takenItemData != nilPointer )
+                if ( dataOfItemInBag != nilPointer )
                 {
-                        std::cout << "transfer item \"" << takenItemData->getLabel() << "\" to player \"" << heelsPlayer->getLabel() << "\"" << std::endl ;
-                        heelsPlayer->assignTakenItem( takenItemData, takenItemImage, behaviorOfItemTaken );
+                        std::cout << "transfer item \"" << dataOfItemInBag->getLabel() << "\" to player \"" << heelsPlayer->getLabel() << "\"" << std::endl ;
+                        heelsPlayer->placeItemInBag( dataOfItemInBag, behaviorOfItemInBag );
                 }
 
                 PlayerItem* headPlayer = RoomBuilder::createPlayerInRoom( this->room, "head", false, x, y, z + LayerHeight, orientation );
@@ -1233,7 +1254,10 @@ void Mediator::toggleSwitchInRoom ()
                         if ( behavior == "behavior of disappearance on touch" || behavior == "behavior of disappearance on jump into" ||
                                         std::find( badBoys.begin (), badBoys.end (), behavior ) != badBoys.end () )
                         {
-                                freeItem->getBehavior()->changeActivityOfItem( this->switchInRoomIsOn ? Freeze : WakeUp );
+                                freeItem->getBehavior()->changeActivityOfItem(
+                                        this->switchInRoomIsOn ?
+                                                Activity::Freeze :
+                                                Activity::WakeUp );
                         }
                 }
         }
@@ -1251,7 +1275,10 @@ void Mediator::toggleSwitchInRoom ()
 
                                 if ( behavior == "behavior of disappearance on touch" || behavior == "behavior of disappearance on jump into" )
                                 {
-                                        gridItem->getBehavior()->changeActivityOfItem( this->switchInRoomIsOn ? Freeze : Wait );
+                                        gridItem->getBehavior()->changeActivityOfItem(
+                                                this->switchInRoomIsOn ?
+                                                        Activity::Freeze :
+                                                        Activity::Wait );
                                 }
                         }
                 }

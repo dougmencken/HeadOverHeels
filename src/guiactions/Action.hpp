@@ -15,6 +15,8 @@
 
 #include "WrappersAllegro.hpp"
 
+#include "Picture.hpp"
+
 
 namespace gui
 {
@@ -24,7 +26,7 @@ class Action
 
 public:
 
-        Action( allegro::Pict * picture ) : whereToDraw( picture ), begin( false ), done( false ) { }
+        Action( Picture * picture ) : whereToDraw( picture ), begin( false ), done( false ) { }
 
         virtual ~Action( ) { }
 
@@ -36,7 +38,7 @@ public:
 
         bool isDone() {  return done ;  }
 
-        allegro::Pict * getWhereToDraw () const {  return whereToDraw ;  }
+        Picture * getWhereToDraw () const {  return whereToDraw ;  }
 
 protected:
 
@@ -44,7 +46,7 @@ protected:
 
 private:
 
-        allegro::Pict * whereToDraw ;
+        Picture * whereToDraw ;
 
         bool begin ;
 

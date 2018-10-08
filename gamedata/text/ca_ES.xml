@@ -258,16 +258,16 @@
     <properties font="big" color="yellow">
       <string>teva heroicitat</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>I així va ser, amic nostre, com</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>els nostres herois van acabar</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>definitivament amb la tirania de</string>
     </properties>
-    <properties font="regular" color="multicolor">
+    <properties font="plain" color="multicolor">
       <string>l'Emperador Blacktooth</string>
     </properties>
   </text>

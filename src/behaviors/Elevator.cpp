@@ -9,8 +9,9 @@
 namespace isomot
 {
 
-Elevator::Elevator( Item * item, const std::string & behavior ) :
-        Behavior( item, behavior )
+Elevator::Elevator( Item * item, const std::string & behavior )
+        : Behavior( item, behavior )
+        , lastActivity( Activity::Wait )
 {
         speedTimer = new Timer();
         stopTimer = new Timer();
@@ -30,12 +31,12 @@ bool Elevator::update ()
 
         switch ( activity )
         {
-                case Wait:
-                        changeActivityOfItem ( ascent ? MoveUp : MoveDown );
+                case Activity::Wait:
+                        changeActivityOfItem ( ascent ? Activity::MoveUp : Activity::MoveDown );
                         lastActivity = activity;
                         break;
 
-                case MoveUp:
+                case Activity::MoveUp:
                         if ( speedTimer->getValue() > freeItem->getSpeed() )
                         {
                                 MoveKindOfActivity::getInstance()->move( this, &activity, false );
@@ -45,7 +46,7 @@ bool Elevator::update ()
                                 // elevator reached its top
                                 if ( freeItem->getZ() > top * LayerHeight )
                                 {
-                                        activity = StopTop;
+                                        activity = Activity::StopAtTop;
                                         lastActivity = activity;
                                         stopTimer->reset();
                                 }
@@ -54,7 +55,7 @@ bool Elevator::update ()
                         freeItem->animate();
                         break;
 
-                case MoveDown:
+                case Activity::MoveDown:
                         if ( speedTimer->getValue() > freeItem->getSpeed() )
                         {
                                 MoveKindOfActivity::getInstance()->move( this, &activity, false );
@@ -64,7 +65,7 @@ bool Elevator::update ()
                                 // elevator reached its bottom
                                 if ( freeItem->getZ() <= bottom * LayerHeight )
                                 {
-                                        activity = StopBottom;
+                                        activity = Activity::StopAtBottom;
                                         lastActivity = activity;
                                         stopTimer->reset();
                                 }
@@ -74,10 +75,10 @@ bool Elevator::update ()
                         break;
 
                 // stop elevator for a moment when it reaches minimum height
-                case StopBottom:
+                case Activity::StopAtBottom:
                         if ( stopTimer->getValue() >= 0.250 )
                         {
-                                changeActivityOfItem( MoveUp );
+                                changeActivityOfItem( Activity::MoveUp );
                                 lastActivity = activity;
                         }
 
@@ -85,10 +86,10 @@ bool Elevator::update ()
                         break;
 
                 // stop elevator for a moment when it reaches maximum height
-                case StopTop:
+                case Activity::StopAtTop:
                         if ( stopTimer->getValue() >= 0.250 )
                         {
-                                changeActivityOfItem( MoveDown );
+                                changeActivityOfItem( Activity::MoveDown );
                                 lastActivity = activity;
                         }
 

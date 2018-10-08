@@ -194,7 +194,7 @@ protected:
        /**
         * Is there a fire from hooter in room
         */
-        bool fireFromHooterIsPresent ;
+        bool donutFromHooterIsHere ;
 
        /**
         * Item used as transition when changing room via teleport
@@ -235,7 +235,7 @@ public:
         */
         unsigned int getJumpFrames () const {  return jumpFrames ;  }
 
-        void setFireFromHooter ( bool isHere ) {  this->fireFromHooterIsPresent = isHere ;  }
+        void setFireFromHooter ( bool isHere ) {  this->donutFromHooterIsHere = isHere ;  }
 
         void setMoreData ( void * data ) ;
 

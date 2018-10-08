@@ -8,19 +8,24 @@ else
     AM_CXXFLAGS = -O3
 endif
 
+if USE_ALLEGRO5
+    AM_CFLAGS += -DUSE_ALLEGRO5=1
+    AM_CXXFLAGS += -DUSE_ALLEGRO5=1
+else
+if USE_ALLEGRO4
+    AM_CFLAGS += -DUSE_ALLEGRO4=1
+    AM_CXXFLAGS += -DUSE_ALLEGRO4=1
+endif
+endif
+
 headoverheels_CXXFLAGS = -I. -Iloadpng -Ialgif -Igui -Iguiactions -Ibehaviors -Iactivities -Wall $(AM_CXXFLAGS)
 
 AM_LDFLAGS = `allegro-config --libs release` -lvorbisfile -lvorbisenc -lvorbis -logg -ltinyxml2 -lpthread -lz -lpng
 
 bin_PROGRAMS = headoverheels
 
-headoverheels_SOURCES = loadpng/loadpng.c \
-			loadpng/savepng.c \
-			loadpng/regpng.c \
-			algif/algif.c \
-			algif/gif.c \
-			algif/lzw.c \
-			main.cpp \
+headoverheels_SOURCES = main.cpp \
+			tribool.hpp \
 			Ism.cpp \
 			Ism.hpp \
 			WrappersAllegro.cpp \
@@ -56,11 +61,6 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			GameSaverAndLoader.hpp \
 			GameManager.cpp \
 			GameManager.hpp \
-			Timer.hpp \
-			TimerPOSIX.cpp \
-			TimerPOSIX.hpp \
-			TimerWindows.cpp \
-			TimerWindows.hpp \
 			InputManager.cpp \
 			InputManager.hpp \
 			Isomot.cpp \
@@ -83,12 +83,12 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			SoundManager.hpp \
 			Wall.cpp \
 			Wall.hpp \
-			alogg/alogg.c \
-			alogg/aloggcfg.h \
-			alogg/alogg.h \
-			alogg/aloggint.h \
-			alogg/aloggpth.c \
-			alogg/aloggpth.h \
+			Timer.hpp \
+			TimerPOSIX.cpp \
+			TimerPOSIX.hpp \
+			TimerWindows.cpp \
+			TimerWindows.hpp \
+			activities/ActivityOfItem.hpp \
 			activities/KindOfActivity.cpp \
 			activities/KindOfActivity.hpp \
 			activities/DisplaceKindOfActivity.cpp \
@@ -99,6 +99,54 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			activities/JumpKindOfActivity.hpp \
 			activities/MoveKindOfActivity.cpp \
 			activities/MoveKindOfActivity.hpp \
+			behaviors/Behavior.cpp \
+			behaviors/Behavior.hpp \
+			behaviors/ConveyorBelt.cpp \
+			behaviors/ConveyorBelt.hpp \
+			behaviors/Detector.cpp \
+			behaviors/Detector.hpp \
+			behaviors/Doughnut.cpp \
+			behaviors/Doughnut.hpp \
+			behaviors/Driven.cpp \
+			behaviors/Driven.hpp \
+			behaviors/Elevator.cpp \
+			behaviors/Elevator.hpp \
+			behaviors/FinalBall.cpp \
+			behaviors/FinalBall.hpp \
+			behaviors/Hunter.cpp \
+			behaviors/Hunter.hpp \
+			behaviors/Impel.cpp \
+			behaviors/Impel.hpp \
+			behaviors/Mobile.cpp \
+			behaviors/Mobile.hpp \
+			behaviors/OneWay.cpp \
+			behaviors/OneWay.hpp \
+			behaviors/Patrol.cpp \
+			behaviors/Patrol.hpp \
+			behaviors/PlayerHeadAndHeels.cpp \
+			behaviors/PlayerHeadAndHeels.hpp \
+			behaviors/PlayerHead.cpp \
+			behaviors/PlayerHead.hpp \
+			behaviors/PlayerHeels.cpp \
+			behaviors/PlayerHeels.hpp \
+			behaviors/RemoteControl.cpp \
+			behaviors/RemoteControl.hpp \
+			behaviors/Sink.cpp \
+			behaviors/Sink.hpp \
+			behaviors/Special.cpp \
+			behaviors/Special.hpp \
+			behaviors/Switch.cpp \
+			behaviors/Switch.hpp \
+			behaviors/Teleport.cpp \
+			behaviors/Teleport.hpp \
+			behaviors/Trampoline.cpp \
+			behaviors/Trampoline.hpp \
+			behaviors/Turn.cpp \
+			behaviors/Turn.hpp \
+			behaviors/UserControlled.cpp \
+			behaviors/UserControlled.hpp \
+			behaviors/Volatile.cpp \
+			behaviors/Volatile.hpp \
 			gui/Font.cpp \
 			gui/Font.hpp \
 			gui/Gui.hpp \
@@ -163,52 +211,19 @@ headoverheels_SOURCES = loadpng/loadpng.c \
 			guiactions/SelectLanguage.cpp \
 			guiactions/SelectLanguage.hpp \
 			guiactions/ShowAuthors.cpp \
-			guiactions/ShowAuthors.hpp \
-			behaviors/ConveyorBelt.cpp \
-			behaviors/ConveyorBelt.hpp \
-			behaviors/Detector.cpp \
-			behaviors/Detector.hpp \
-			behaviors/Doughnut.cpp \
-			behaviors/Doughnut.hpp \
-			behaviors/Driven.cpp \
-			behaviors/Driven.hpp \
-			behaviors/Elevator.cpp \
-			behaviors/Elevator.hpp \
-			behaviors/FinalBall.cpp \
-			behaviors/FinalBall.hpp \
-			behaviors/Hunter.cpp \
-			behaviors/Hunter.hpp \
-			behaviors/Impel.cpp \
-			behaviors/Impel.hpp \
-			behaviors/Mobile.cpp \
-			behaviors/Mobile.hpp \
-			behaviors/OneWay.cpp \
-			behaviors/OneWay.hpp \
-			behaviors/Patrol.cpp \
-			behaviors/Patrol.hpp \
-			behaviors/PlayerHeadAndHeels.cpp \
-			behaviors/PlayerHeadAndHeels.hpp \
-			behaviors/PlayerHead.cpp \
-			behaviors/PlayerHead.hpp \
-			behaviors/PlayerHeels.cpp \
-			behaviors/PlayerHeels.hpp \
-			behaviors/RemoteControl.cpp \
-			behaviors/RemoteControl.hpp \
-			behaviors/Sink.cpp \
-			behaviors/Sink.hpp \
-			behaviors/Special.cpp \
-			behaviors/Special.hpp \
-			behaviors/Switch.cpp \
-			behaviors/Switch.hpp \
-			behaviors/Teleport.cpp \
-			behaviors/Teleport.hpp \
-			behaviors/Trampoline.cpp \
-			behaviors/Trampoline.hpp \
-			behaviors/Turn.cpp \
-			behaviors/Turn.hpp \
-			behaviors/UserControlled.cpp \
-			behaviors/UserControlled.hpp \
-			behaviors/Volatile.cpp \
-			behaviors/Volatile.hpp \
-			behaviors/Behavior.cpp \
-			behaviors/Behavior.hpp
+			guiactions/ShowAuthors.hpp
+
+if USE_ALLEGRO4
+headoverheels_SOURCES += loadpng/loadpng.c \
+			loadpng/savepng.c \
+			loadpng/regpng.c \
+			alogg/alogg.c \
+			alogg/aloggcfg.h \
+			alogg/alogg.h \
+			alogg/aloggint.h \
+			alogg/aloggpth.c \
+			alogg/aloggpth.h \
+			algif/algif.c \
+			algif/gif.c \
+			algif/lzw.c
+endif

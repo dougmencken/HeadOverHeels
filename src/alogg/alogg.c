@@ -76,12 +76,6 @@ void alogg_init()
 #endif
 }
 
-void alogg_exit()
-{
-}
-
-
-
 /* Helper to read using libvorbisfile or Tremor */
 static int read_ogg_data(
   struct OggVorbis_File *vf,char *buffer,int length,int word,int sgned,

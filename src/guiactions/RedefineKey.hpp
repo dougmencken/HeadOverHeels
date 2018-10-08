@@ -29,9 +29,9 @@ class RedefineKey : public Action
 public:
 
        /**
-        * @param name Name of key like "jump" or "movesouth"
+        * @param userKey what the key does, like "jump" or "movesouth"
         */
-        RedefineKey( MenuWithValues * menu, std::string name ) ;
+        RedefineKey( MenuWithValues * menu, const std::string& userKey ) ;
 
         std::string getNameOfAction () const {  return "RedefineKey" ;  }
 
@@ -43,7 +43,7 @@ private:
 
         MenuWithValues * menu ;
 
-        std::string nameOfKey ;
+        std::string whatKeyDoes ;
 
 };
 

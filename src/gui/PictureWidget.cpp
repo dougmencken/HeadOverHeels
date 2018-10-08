@@ -19,7 +19,7 @@ PictureWidget::~PictureWidget()
         delete picture ;
 }
 
-void PictureWidget::draw( allegro::Pict* where )
+void PictureWidget::draw( const allegro::Pict& where )
 {
         if ( picture != nilPointer )
         {

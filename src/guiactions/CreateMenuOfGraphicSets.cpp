@@ -12,7 +12,7 @@
 using gui::CreateMenuOfGraphicSets ;
 
 
-CreateMenuOfGraphicSets::CreateMenuOfGraphicSets( allegro::Pict* picture, Action* previous ) :
+CreateMenuOfGraphicSets::CreateMenuOfGraphicSets( Picture* picture, Action* previous ) :
         Action( picture ),
         actionOnEscape( previous ),
         menuOfGraphicSets( nilPointer )
@@ -81,26 +81,26 @@ void CreateMenuOfGraphicSets::doAction ()
 
         gui::GuiManager::getInstance()->changeScreen( screen, true );
 
-        clear_keybuf();
+        allegro::emptyKeyboardBuffer();
 
         while ( true )
         {
-                if ( keypressed() )
+                if ( allegro::areKeypushesWaiting() )
                 {
                         // get the key pressed by user
-                        int theKey = readkey() >> 8;
+                        std::string theKey = allegro::nextKey() ;
 
-                        if ( theKey == KEY_ESC )
+                        if ( theKey == "Escape" )
                         {
-                                clear_keybuf();
-                                screen->handleKey( theKey << 8 );
+                                allegro::emptyKeyboardBuffer();
+                                screen->handleKey( theKey );
                                 break;
                         }
                         else
                         {
                                 bool doneWithKey = false;
 
-                                if ( theKey == KEY_ENTER )
+                                if ( theKey == "Enter" )
                                 {
                                         std::string chosenSet = menuOfGraphicSets->getActiveOption()->getText().substr( positionOfSecondColumn ) ;
 
@@ -123,10 +123,10 @@ void CreateMenuOfGraphicSets::doAction ()
 
                                 if ( ! doneWithKey )
                                 {
-                                        screen->getKeyHandler()->handleKey ( theKey << 8 );
+                                        screen->getKeyHandler()->handleKey ( theKey );
                                 }
 
-                                clear_keybuf();
+                                allegro::emptyKeyboardBuffer();
                                 menuOfGraphicSets->redraw ();
                         }
 

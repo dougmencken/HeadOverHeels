@@ -151,7 +151,7 @@ void MapManager::beginNewGame( const std::string& headRoom, const std::string& h
                         if ( headRoom != heelsRoom )
                         {
                                 // create character Head
-                                RoomBuilder::createPlayerInRoom( firstRoom, "head", true, centerX, centerY, 0, West );
+                                RoomBuilder::createPlayerInRoom( firstRoom, "head", true, centerX, centerY, 0, Way::West );
 
                                 headRoomData->setVisited( true );
 
@@ -160,14 +160,14 @@ void MapManager::beginNewGame( const std::string& headRoom, const std::string& h
                         else
                         {
                                 // create character Head over Heels
-                                RoomBuilder::createPlayerInRoom( firstRoom, "headoverheels", true, centerX, centerY, 0, West );
+                                RoomBuilder::createPlayerInRoom( firstRoom, "headoverheels", true, centerX, centerY, 0, Way::West );
 
                                 headRoomData->setVisited( true );
 
                                 firstRoom->activateCharacterByLabel( "headoverheels" );
                         }
 
-                        firstRoom->getCamera()->turnOn( firstRoom->getMediator()->getActiveCharacter(), JustWait );
+                        firstRoom->getCamera()->turnOn( firstRoom->getMediator()->getActiveCharacter(), Way::JustWait );
                         activeRoom = firstRoom;
                         rooms.push_back( firstRoom );
                 }
@@ -191,13 +191,13 @@ void MapManager::beginNewGame( const std::string& headRoom, const std::string& h
                                 int centerY = RoomBuilder::getYCenterOfRoom( heelsData, secondRoom );
 
                                 // create character Heels
-                                RoomBuilder::createPlayerInRoom( secondRoom, "heels", true, centerX, centerY, 0, South );
+                                RoomBuilder::createPlayerInRoom( secondRoom, "heels", true, centerX, centerY, 0, Way::South );
 
                                 heelsRoomData->setVisited( true );
 
                                 secondRoom->activateCharacterByLabel( "heels" );
 
-                                secondRoom->getCamera()->turnOn( secondRoom->getMediator()->getActiveCharacter(), JustWait );
+                                secondRoom->getCamera()->turnOn( secondRoom->getMediator()->getActiveCharacter(), Way::JustWait );
                                 rooms.push_back( secondRoom );
                         }
                 }
@@ -270,7 +270,7 @@ void MapManager::beginOldGameWithCharacter( const std::string& roomFile, const s
 void MapManager::binEveryRoom()
 {
         // bin rooms
-        std::for_each( this->rooms.begin (), this->rooms.end (), DeleteObject() );
+        std::for_each( this->rooms.begin (), this->rooms.end (), DeleteIt() );
 
         this->rooms.clear();
 
@@ -285,7 +285,7 @@ Room* MapManager::changeRoom( const Way& wayOfExit )
         // get data of previous room
         MapRoomData* previousRoomData = findRoomData( previousRoom->getNameOfFileWithDataAboutRoom() );
 
-        Way wayOfEntry( JustWait ) ;
+        Way wayOfEntry( "just wait" ) ;
 
         // search the map for next room and get way of entry to it
         MapRoomData* nextRoomData = findRoomData( previousRoomData->findConnectedRoom( wayOfExit.toString(), &wayOfEntry ) );
@@ -370,6 +370,9 @@ Room* MapManager::changeRoom( const Way& wayOfExit )
                 entryZ = Top;
         }
 
+        // no taken item in new room
+        GameManager::getInstance()->emptyHandbag();
+
         PlayerItem* newItemOfRoamer = RoomBuilder::createPlayerInRoom( newRoom, nameOfRoamer, true, entryX, entryY, entryZ, exitOrientation, wayOfEntry );
 
         if ( newItemOfRoamer != nilPointer )
@@ -401,7 +404,7 @@ Room* MapManager::rebuildRoom()
         std::string nameOfActivePlayer = oldRoom->getMediator()->getLabelOfActiveCharacter();
         std::string nameOfActivePlayerBeforeJoining = oldRoom->getMediator()->getLastActiveCharacterBeforeJoining();
 
-        Way theWay = Nowhere;
+        Way theWay( "nowhere" );
         PlayerItem* alivePlayer = nilPointer;
 
         // for each player entered this room

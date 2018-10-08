@@ -213,13 +213,13 @@
     <properties font="big" color="yellow">
       <string>proglašavaju te carom</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>Ovaj su put, dragi prijatelju, naša</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>dva heroja zadali konačni udaracn</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>tiraniji carstva Blacktooth</string>
     </properties>
   </text>

@@ -11,7 +11,7 @@ pathToCompiler="/Developer/GCC/${gccVersion}/PowerPC/32bit" # ="/usr"
 
 if [ ! -f src/Makefile ]
 then
-        LDFLAGS="-L/opt/tinyxml2-6.2.0/lib -L/opt/ogg-vorbis/lib -L/opt/libpng-1.6.35/lib -L/opt/zlib-1.2.11/lib -L${pathToCompiler}/lib" \
+        LDFLAGS="-headerpad_max_install_names -L/opt/allegro-4.4.2/lib -L/opt/tinyxml2-6.2.0/lib -L/opt/ogg-vorbis/lib -L/opt/libpng-1.6.35/lib -L/opt/zlib-1.2.11/lib -L${pathToCompiler}/lib" \
         CPPFLAGS="-I/opt/zlib-1.2.11/include -I/opt/libpng-1.6.35/include -I/opt/tinyxml2-6.2.0/include -I/opt/ogg-vorbis/include -I/opt/allegro-4.4.2/include" \
         CC="${pathToCompiler}/bin/gcc" CXX="${pathToCompiler}/bin/g++" \
         ./configure --prefix=${installPrefix} --enable-debug

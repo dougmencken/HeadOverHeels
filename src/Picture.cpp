@@ -10,37 +10,47 @@
 
 
 Picture::Picture( unsigned int width, unsigned int height )
-        : name( "Picture." + isomot::makeRandomString( 12 ) )
-{
-        picture = allegro::createPicture( width, height );
-        fillWithColor( Color::colorOfTransparency() );
-}
-
-Picture::Picture( unsigned int width, unsigned int height, Color * color )
-        : name( "Picture." + isomot::makeRandomString( 12 ) )
-{
-        picture = allegro::createPicture( width, height );
-        fillWithColor( color );
-}
-
-Picture::Picture( allegro::Pict * pict )
-        : picture( pict )
+        : picture( allegro::Pict::newPict( width, height ) )
         , name( "Picture." + isomot::makeRandomString( 12 ) )
 {
+        fillWithColor( Color::colorOfTransparency() );
+
+#if defined( DEBUG_PICTURES )  &&  DEBUG_PICTURES
+        std::cout << "created Picture " << getName() << " with width " << width << " and height " << height << std::endl ;
+#endif
+}
+
+Picture::Picture( unsigned int width, unsigned int height, const Color& color )
+        : picture( allegro::Pict::newPict( width, height ) )
+        , name( "Picture." + isomot::makeRandomString( 12 ) )
+{
+        fillWithColor( color );
+
+#if defined( DEBUG_PICTURES )  &&  DEBUG_PICTURES
+        std::cout << "created Picture " << getName() << " with width " << width << " and height " << height << " filled with " << color->toString () << std::endl ;
+#endif
 }
 
 Picture::Picture( const allegro::Pict& pict )
-        : name( "Picture." + isomot::makeRandomString( 12 ) )
+        : picture( allegro::Pict::newPict( pict.getW(), pict.getH(), pict.getColorDepth() ) )
+        , name( "Picture." + isomot::makeRandomString( 12 ) )
 {
-        picture = allegro::createPicture( pict.w, pict.h, allegro::colorDepthOf( &pict ) );
-        allegro::bitBlit( &pict, picture );
+        allegro::bitBlit( pict, getAllegroPict() );
+
+#if defined( DEBUG_PICTURES )  &&  DEBUG_PICTURES
+        std::cout << "created Picture " << getName() << " as copy of const allegro::Pict &" << std::endl ;
+#endif
 }
 
 Picture::Picture( const Picture& pic )
-        : name( "copy of " + pic.name )
+        : picture( allegro::Pict::newPict( pic.getWidth(), pic.getHeight(), pic.getColorDepth() ) )
+        , name( "copy of " + pic.name )
 {
-        picture = allegro::createPicture( pic.getWidth(), pic.getHeight(), pic.getColorDepth() );
-        allegro::bitBlit( pic.getAllegroPict(), picture );
+        allegro::bitBlit( pic.getAllegroPict(), getAllegroPict() );
+
+#if defined( DEBUG_PICTURES )  &&  DEBUG_PICTURES
+        std::cout << "created Picture " << getName() << " as copy of const Picture &" << std::endl ;
+#endif
 }
 
 Picture::~Picture( )
@@ -48,29 +58,49 @@ Picture::~Picture( )
 #if defined( DEBUG_PICTURES )  &&  DEBUG_PICTURES
         std::cout << "bye bye " << getName() << std::endl ;
 #endif
-        allegro::binPicture( picture );
+
+        delete picture ;
 }
 
-void Picture::fillWithColor( Color * color )
+void Picture::setName( const std::string& newName )
 {
-        allegro::clearToColor( picture, color->toAllegroColor () );
+#if defined( DEBUG_PICTURES )  &&  DEBUG_PICTURES
+        std::cout << "rename Picture \"" << getName() << "\" to \"" << newName << "\"" << std::endl ;
+#endif
+
+        name = newName ;
 }
 
-void Picture::colorize( Color * color )
+void Picture::setPixelAt( int x, int y, const Color& color ) const
 {
-        Color::colorizePicture( picture, color );
+        picture->setPixelAt( x, y, color.toAllegroColor() ) ;
+}
+
+void Picture::fillWithColor( const Color& color )
+{
+        picture->clearToColor( color.toAllegroColor () ) ;
+}
+
+void Picture::colorize( const Color& color )
+{
+        Color::colorizePicture( this, color );
 }
 
 Picture * Picture::makeGrayscaleCopy ()
 {
         Picture* copy = new Picture( *this );
-        Color::pictureToGrayscale( copy->getAllegroPict() );
+        Color::pictureToGrayscale( copy );
         return copy;
 }
 
-Picture * Picture::makeColorizedCopy ( Color * color )
+Picture * Picture::makeColorizedCopy ( const Color& color )
 {
         Picture* copy = new Picture( *this );
         copy->colorize( color );
         return copy;
+}
+
+void Picture::saveAsPCX ( const std::string& path )
+{
+        allegro::savePictAsPCX( path + getName(), getAllegroPict() );
 }

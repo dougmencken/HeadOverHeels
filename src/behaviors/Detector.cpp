@@ -40,17 +40,17 @@ bool Detector::update ()
         {
                 switch ( activity )
                 {
-                        case Wait:
+                        case Activity::Wait:
                                 // player meets detector on X way
                                 if ( freeItem->getX() >= activeCharacter->getX() - 1 && freeItem->getX() <= activeCharacter->getX() + 1 )
                                 {
                                         if ( activeCharacter->getY() <= freeItem->getY() )
                                         {
-                                                changeActivityOfItem( MoveEast );
+                                                changeActivityOfItem( Activity::MoveEast );
                                         }
                                         else if ( activeCharacter->getY() >= freeItem->getY() )
                                         {
-                                                changeActivityOfItem( MoveWest );
+                                                changeActivityOfItem( Activity::MoveWest );
                                         }
                                 }
                                 // player meets detector on Y way
@@ -58,26 +58,26 @@ bool Detector::update ()
                                 {
                                         if ( activeCharacter->getX() <= freeItem->getX() )
                                         {
-                                                changeActivityOfItem( MoveNorth );
+                                                changeActivityOfItem( Activity::MoveNorth );
                                         }
                                         else
                                         if ( activeCharacter->getX() >= freeItem->getX() )
                                         {
-                                                changeActivityOfItem( MoveSouth );
+                                                changeActivityOfItem( Activity::MoveSouth );
                                         }
                                 }
 
                                 // play sound on change of activity
-                                if ( activity != Wait )
+                                if ( activity != Activity::Wait )
                                 {
                                         SoundManager::getInstance()->play( freeItem->getLabel(), activity );
                                 }
                                 break;
 
-                        case MoveNorth:
-                        case MoveSouth:
-                        case MoveEast:
-                        case MoveWest:
+                        case Activity::MoveNorth:
+                        case Activity::MoveSouth:
+                        case Activity::MoveEast:
+                        case Activity::MoveWest:
                                 // is item active
                                 if ( ! freeItem->isFrozen() )
                                 {
@@ -87,7 +87,7 @@ bool Detector::update ()
                                                 // move item, if there’s collision let’s wait
                                                 if ( ! MoveKindOfActivity::getInstance()->move( this, &activity, true ) )
                                                 {
-                                                        activity = Wait;
+                                                        activity = Activity::Wait;
                                                 }
 
                                                 speedTimer->reset();
@@ -97,20 +97,20 @@ bool Detector::update ()
                                 }
                                 break;
 
-                        case DisplaceNorth:
-                        case DisplaceSouth:
-                        case DisplaceEast:
-                        case DisplaceWest:
-                        case DisplaceNortheast:
-                        case DisplaceNorthwest:
-                        case DisplaceSoutheast:
-                        case DisplaceSouthwest:
+                        case Activity::DisplaceNorth:
+                        case Activity::DisplaceSouth:
+                        case Activity::DisplaceEast:
+                        case Activity::DisplaceWest:
+                        case Activity::DisplaceNortheast:
+                        case Activity::DisplaceNorthwest:
+                        case Activity::DisplaceSoutheast:
+                        case Activity::DisplaceSouthwest:
                                 // is it time to move
                                 if ( speedTimer->getValue() > freeItem->getSpeed() )
                                 {
                                         if ( ! DisplaceKindOfActivity::getInstance()->displace( this, &activity, true ) )
                                         {
-                                                activity = Wait;
+                                                activity = Activity::Wait;
                                         }
 
                                         speedTimer->reset();
@@ -119,11 +119,11 @@ bool Detector::update ()
                                 // preserve inactivity for inactive item
                                 if ( freeItem->isFrozen() )
                                 {
-                                        activity = Freeze;
+                                        activity = Activity::Freeze;
                                 }
                                 break;
 
-                        case Fall:
+                        case Activity::Fall:
                                 // look for reaching floor in a room without floor
                                 if ( freeItem->getZ() == 0 && freeItem->getMediator()->getRoom()->getKindOfFloor() == "none" )
                                 {
@@ -134,20 +134,20 @@ bool Detector::update ()
                                 {
                                         if ( ! FallKindOfActivity::getInstance()->fall( this ) )
                                         {
-                                                activity = Wait;
+                                                activity = Activity::Wait;
                                         }
 
                                         fallTimer->reset();
                                 }
                                 break;
 
-                        case Freeze:
+                        case Activity::Freeze:
                                 freeItem->setFrozen( true );
                                 break;
 
-                        case WakeUp:
+                        case Activity::WakeUp:
                                 freeItem->setFrozen( false );
-                                activity = Wait;
+                                activity = Activity::Wait;
                                 break;
 
                         default:

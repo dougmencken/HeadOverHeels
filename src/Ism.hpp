@@ -22,8 +22,6 @@
 #include <string>
 #include <sstream>
 
-#include "WrappersAllegro.hpp"
-
 #ifndef __WIN32
     #include <time.h>
 #endif
@@ -167,83 +165,15 @@ namespace isomot
         std::string sharePath () ;
 
         /**
-         * Object-function to finalize objects of Standard Template Library container
+         * Object-function to finalize elements of Standard Template Library container
          */
-        struct DeleteObject
+        struct DeleteIt
         {
                 template < typename T >
                 void operator() ( const T* ptr ) const
                 {
                         delete ptr;
                 }
-        } ;
-
-        enum ActivityOfItem
-        {
-                Wait,                           /* El elemento está quieto */
-                Push,                           /* El elemento ha sido empujado por otro */
-                Move,                           /* El elemento se mueve. Estado genérico usado por el gestor de sonido */
-                MoveNorth = 64,                 /* El elemento se mueve al norte */
-                MoveSouth,                      /* El elemento se mueve al sur */
-                MoveEast,                       /* El elemento se mueve al este */
-                MoveWest,                       /* El elemento se mueve al oeste */
-                MoveNortheast,                  /* El elemento se mueve al nordeste */
-                MoveSoutheast,                  /* El elemento se mueve al sudeste */
-                MoveSouthwest,                  /* El elemento se mueve al sudoeste */
-                MoveNorthwest,                  /* El elemento se mueve al noroeste */
-                MoveUp,                         /* El elemento se mueve arriba */
-                MoveDown,                       /* El elemento se mueve abajo */
-                Blink,                          /* El elemento parpadea */
-                Jump,                           /* El elemento salta */
-                RegularJump,                    /* El elemento salta de modo normal */
-                HighJump,                       /* El elemento salta de modo especial, a mayor altura y desplazamiento */
-                Fall,                           /* El elemento cae */
-                Glide,                          /* El elemento planea */
-                TakeItem,                       /* El elemento coge otro elemento */
-                TakenItem,                      /* El elemento ha cogido otro elemento */
-                DropItem,                       /* El elemento suelta a otro elemento previamente cogido */
-                TakeAndJump,                    /* El elemento coge otro elemento y luego salta */
-                DropAndJump,                    /* El elemento deja otro elemento y luego salta */
-                DisplaceNorth,                  /* El elemento es desplazado al norte por otro elemento */
-                DisplaceSouth,                  /* El elemento es desplazado al sur por otro elemento */
-                DisplaceEast,                   /* El elemento es desplazado al este por otro elemento */
-                DisplaceWest,                   /* El elemento es desplazado al oeste por otro elemento */
-                DisplaceNortheast,              /* El elemento es desplazado al noreste por otro elemento */
-                DisplaceSoutheast,              /* El elemento es desplazado al sudeste por otro elemento */
-                DisplaceSouthwest,              /* El elemento es desplazado al sudoeste por otro elemento */
-                DisplaceNorthwest,              /* El elemento es desplazado al noroeste por otro elemento */
-                DisplaceUp,                     /* El elemento es desplazado hacia arriba por otro elemento */
-                DisplaceDown,                   /* El elemento es desplazado hacia abajo por otro elemento */
-                BeginWayOutTeletransport,
-                WayOutTeletransport,
-                BeginWayInTeletransport,
-                WayInTeletransport,
-                AutoMove,                       /* El elemento se mueve automáticamente. Estado genérico usado por el gestor de sonido */
-                AutoMoveNorth,                  /* El elemento se mueve automáticamente al norte */
-                AutoMoveSouth,                  /* El elemento se mueve automáticamente al sur */
-                AutoMoveEast,                   /* El elemento se mueve automáticamente al este */
-                AutoMoveWest,                   /* El elemento se mueve automáticamente al oeste */
-                ForceDisplace,
-                ForceDisplaceNorth,             /* El elemento se desplaza automáticamente al norte */
-                ForceDisplaceSouth,             /* El elemento se desplaza automáticamente al sur */
-                ForceDisplaceEast,              /* El elemento se desplaza automáticamente al este */
-                ForceDisplaceWest,              /* El elemento se desplaza automáticamente al oeste */
-                CancelDisplaceNorth,            /* El elemento deja de desplazarse automáticamente al norte */
-                CancelDisplaceSouth,            /* El elemento deja de desplazarse automáticamente al sur */
-                CancelDisplaceEast,             /* El elemento deja de desplazarse automáticamente al este */
-                CancelDisplaceWest,             /* El elemento deja de desplazarse automáticamente al oeste */
-                Freeze,                         /* El elemento está detenido por la acción de un rosquillazo o por la activación de un interruptor */
-                WakeUp,                         /* El elemento se vuelve a activar por la desactivación del interruptor */
-                StopTop,                        /* El elemento ha alcanzado su altura máxima. Aplicado a elementos de movimiento vertical */
-                StopBottom,                     /* El elemento ha alcanzado su altura mínima. Aplicado a elementos de movimiento vertical */
-                MeetMortalItem,
-                Vanish,
-                FireDoughnut,
-                Rebound,                        /* El elemento rebota */
-                SwitchIt,                       /* El elemento (un interruptor) cambia de estado */
-                Collision,                      /* El elemento choca con algo */
-                IsActive,
-                Mistake                         /* Estado imposible, se utiliza en el gestor de sonido */
         } ;
 
         const int Top = -1 ;

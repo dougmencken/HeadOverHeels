@@ -40,25 +40,25 @@ bool Driven::update ()
 
         switch ( activity )
         {
-                case Wait:
+                case Activity::Wait:
                         if ( running )
                         {
                                 switch ( freeItem->getOrientation().getIntegerOfWay() )
                                 {
-                                        case North:
-                                                changeActivityOfItem( MoveNorth );
+                                        case Way::North:
+                                                changeActivityOfItem( Activity::MoveNorth );
                                                 break;
 
-                                        case South:
-                                                changeActivityOfItem( MoveSouth );
+                                        case Way::South:
+                                                changeActivityOfItem( Activity::MoveSouth );
                                                 break;
 
-                                        case East:
-                                                changeActivityOfItem( MoveEast );
+                                        case Way::East:
+                                                changeActivityOfItem( Activity::MoveEast );
                                                 break;
 
-                                        case West:
-                                                changeActivityOfItem( MoveWest );
+                                        case Way::West:
+                                                changeActivityOfItem( Activity::MoveWest );
                                                 break;
 
                                         default:
@@ -81,20 +81,20 @@ bool Driven::update ()
 
                                                         switch ( item->getOrientation().getIntegerOfWay () )
                                                         {
-                                                                case North:
-                                                                        changeActivityOfItem( MoveNorth );
+                                                                case Way::North:
+                                                                        changeActivityOfItem( Activity::MoveNorth );
                                                                         break;
 
-                                                                case South:
-                                                                        changeActivityOfItem( MoveSouth );
+                                                                case Way::South:
+                                                                        changeActivityOfItem( Activity::MoveSouth );
                                                                         break;
 
-                                                                case East:
-                                                                        changeActivityOfItem( MoveEast );
+                                                                case Way::East:
+                                                                        changeActivityOfItem( Activity::MoveEast );
                                                                         break;
 
-                                                                case West:
-                                                                        changeActivityOfItem( MoveWest );
+                                                                case Way::West:
+                                                                        changeActivityOfItem( Activity::MoveWest );
                                                                         break;
 
                                                                 default:
@@ -106,10 +106,10 @@ bool Driven::update ()
                         }
                         break;
 
-                case MoveNorth:
-                case MoveSouth:
-                case MoveEast:
-                case MoveWest:
+                case Activity::MoveNorth:
+                case Activity::MoveSouth:
+                case Activity::MoveEast:
+                case Activity::MoveWest:
                         // item is active and it is time to move
                         if ( ! freeItem->isFrozen() )
                         {
@@ -118,10 +118,10 @@ bool Driven::update ()
                                         if ( ! MoveKindOfActivity::getInstance()->move( this, &activity, true ) )
                                         {
                                                 running = false;
-                                                activity = Wait;
+                                                activity = Activity::Wait;
 
                                                 // emit sound of collision
-                                                SoundManager::getInstance()->play( freeItem->getLabel(), Collision );
+                                                SoundManager::getInstance()->play( freeItem->getLabel(), Activity::Collision );
                                         }
 
                                         speedTimer->reset();
@@ -131,20 +131,20 @@ bool Driven::update ()
                         }
                         break;
 
-                case DisplaceNorth:
-                case DisplaceSouth:
-                case DisplaceEast:
-                case DisplaceWest:
-                case DisplaceNortheast:
-                case DisplaceNorthwest:
-                case DisplaceSoutheast:
-                case DisplaceSouthwest:
+                case Activity::DisplaceNorth:
+                case Activity::DisplaceSouth:
+                case Activity::DisplaceEast:
+                case Activity::DisplaceWest:
+                case Activity::DisplaceNortheast:
+                case Activity::DisplaceNorthwest:
+                case Activity::DisplaceSoutheast:
+                case Activity::DisplaceSouthwest:
                         // is it time to move
                         if ( speedTimer->getValue() > freeItem->getSpeed() )
                         {
                                 if ( ! DisplaceKindOfActivity::getInstance()->displace( this, &activity, true ) )
                                 {
-                                        activity = Wait;
+                                        activity = Activity::Wait;
                                 }
 
                                 speedTimer->reset();
@@ -153,11 +153,11 @@ bool Driven::update ()
                         // inactive item continues to be inactive
                         if ( freeItem->isFrozen() )
                         {
-                                activity = Freeze;
+                                activity = Activity::Freeze;
                         }
                         break;
 
-                case Fall:
+                case Activity::Fall:
                         // look for reaching floor in a room without floor
                         if ( freeItem->getZ() == 0 && freeItem->getMediator()->getRoom()->getKindOfFloor() == "none" )
                         {
@@ -169,20 +169,20 @@ bool Driven::update ()
                         {
                                 if ( ! FallKindOfActivity::getInstance()->fall( this ) )
                                 {
-                                        activity = Wait;
+                                        activity = Activity::Wait;
                                 }
 
                                 fallTimer->reset();
                         }
                         break;
 
-                case Freeze:
+                case Activity::Freeze:
                         freeItem->setFrozen( true );
                         break;
 
-                case WakeUp:
+                case Activity::WakeUp:
                         freeItem->setFrozen( false );
-                        activity = Wait;
+                        activity = Activity::Wait;
                         break;
 
                 default:

@@ -190,7 +190,7 @@ void alogg_destroy_thread( alogg_thread *thread )
         ASSERT( thread );
 
         if ( ! thread ) return;
-        ASSERT( ! thread->alive );
+        ASSERT( thread->alive == 0 );
 
         free( thread );
 }
@@ -200,7 +200,7 @@ void alogg_join_thread( alogg_thread *thread )
         ASSERT( thread);
 
         if ( ! thread ) return;
-        ASSERT( ! thread->alive );
+        ASSERT( thread->alive == 0 );
 
         pthread_join( thread->thread, NULL );
 }

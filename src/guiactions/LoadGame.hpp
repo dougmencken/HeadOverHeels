@@ -23,11 +23,10 @@ class LoadGame : public Action
 public:
 
         /**
-         * Constructor
-         * @param picture Image where to draw user interface
+         * @param picture Where to draw user interface
          * @param slot Number of file to load
          */
-        LoadGame( allegro::Pict * picture, unsigned int slot ) ;
+        LoadGame( Picture * picture, unsigned int slot ) ;
 
         std::string getNameOfAction () const {  return "LoadGame" ;  }
 

@@ -22,7 +22,7 @@ ColorCyclingLabel::~ColorCyclingLabel( )
         delete colorCyclingTimer ;
 }
 
-void ColorCyclingLabel::draw( allegro::Pict* where )
+void ColorCyclingLabel::draw( const allegro::Pict& where )
 {
         updateImageOfLabel( getText(), Label::getFontByFamilyAndColor( getFontFamily(), getColor() ) );
 

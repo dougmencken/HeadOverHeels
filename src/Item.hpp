@@ -19,6 +19,7 @@
 #include "Ism.hpp"
 #include "Way.hpp"
 #include "Timer.hpp"
+#include "Picture.hpp"
 #include "Mediated.hpp"
 #include "Shady.hpp"
 
@@ -80,12 +81,12 @@ public:
         /**
          * Change graphics of item
          */
-        virtual void changeImage ( allegro::Pict* image ) = 0 ;
+        virtual void changeImage ( Picture* image ) = 0 ;
 
         /**
          * Change graphics of item’s shadow
          */
-        virtual void changeShadow ( allegro::Pict* shadow ) ;
+        virtual void changeShadow ( Picture* shadow ) ;
 
         /**
          * Add value to coordinate X
@@ -160,17 +161,17 @@ protected:
         /**
          * Spacial position X in isometric units
          */
-        int x ;
+        int xPos ;
 
         /**
          * Spacial position Y in isometric units
          */
-        int y ;
+        int yPos ;
 
         /**
          * Spacial position Z in isometric units
          */
-        int z ;
+        int zPos ;
 
         Way orientation ;
 
@@ -182,17 +183,17 @@ protected:
         /**
          * Image of item, unprocessed, just read from file
          */
-        allegro::Pict * rawImage ;
+        Picture * rawImage ;
 
         /**
          * Image of item’s shadow
          */
-        allegro::Pict * shadow ;
+        Picture * shadow ;
 
         /**
          * Image of this item with shadows from other items, for free item it is also masked
          */
-        allegro::Pict * processedImage ;
+        Picture * processedImage ;
 
         /**
          * Timer for animation of item
@@ -224,13 +225,13 @@ public:
 
         const std::string& getLabel () const ;
 
-        int getX () const {  return x ;  }
+        int getX () const {  return xPos ;  }
 
-        int getY () const {  return y ;  }
+        int getY () const {  return yPos ;  }
 
-        int getZ () const {  return z ;  }
+        int getZ () const {  return zPos ;  }
 
-        void setZ ( const int z ) {  this->z = z ;  }
+        void setZ ( const int newZ ) {  zPos = newZ ;  }
 
         /**
          * Width of item on X in isometric units
@@ -290,13 +291,13 @@ public:
 
         Way getOrientation () const {  return orientation ;  }
 
-        allegro::Pict * getRawImage () const {  return rawImage ;  }
+        Picture * getRawImage () const {  return rawImage ;  }
 
-        allegro::Pict * getImageOfShadow () const {  return shadow ;  }
+        Picture * getImageOfShadow () const {  return shadow ;  }
 
-        allegro::Pict * getProcessedImage () const {  return processedImage ;  }
+        Picture * getProcessedImage () const {  return processedImage ;  }
 
-        void setProcessedImage ( allegro::Pict * newImage ) ;
+        void setProcessedImage ( Picture * newImage ) ;
 
         void binProcessedImage() {  if ( processedImage != nilPointer ) setProcessedImage( nilPointer ) ;  }
 

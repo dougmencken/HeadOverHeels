@@ -8,6 +8,11 @@
       <file>sound/o-ou.wav</file>
     </event>
   </item>
+  <item label="gui">
+    <event activity="push">
+      <file>sound/quack.wav</file>
+    </event>
+  </item>
 
   <!-- door -->
   <item label="door">
@@ -74,7 +79,7 @@
   <!-- puppy -->
   <item label="puppy">
     <event activity="vanish">
-      <file>sound/silence-puppy.wav</file>
+      <file>sound/puppy-scratch.wav</file>
     </event>
   </item>
 
@@ -407,8 +412,8 @@
     <event activity="vanish">
       <file>sound/hh-dying.wav</file>
     </event>
-    <event activity="shot">
-      <file>sound/shot.wav</file>
+    <event activity="donut">
+      <file>sound/fire.wav</file>
     </event>
     <event activity="rebound">
       <file>sound/trampoline.wav</file>
@@ -469,8 +474,8 @@
     <event activity="vanish">
       <file>sound/hh-dying.wav</file>
     </event>
-    <event activity="shot">
-      <file>sound/shot.wav</file>
+    <event activity="donut">
+      <file>sound/fire.wav</file>
     </event>
     <event activity="rebound">
       <file>sound/trampoline.wav</file>

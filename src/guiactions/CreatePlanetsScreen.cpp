@@ -20,7 +20,7 @@ using isomot::GameManager ;
 using isomot::SoundManager ;
 
 
-CreatePlanetsScreen::CreatePlanetsScreen( allegro::Pict* where, bool notNewGame )
+CreatePlanetsScreen::CreatePlanetsScreen( Picture * where, bool notNewGame )
         : Action( where )
         , gameInProgress( notNewGame )
         , blacktoothFree( false )
@@ -65,7 +65,7 @@ void CreatePlanetsScreen::doAction ()
 
         PictureWidget* imageOfChapeau = nilPointer;
 
-        Picture* chapeau = new Picture( Screen::loadPicture( "crown.png" ) );
+        Picture* chapeau = Screen::loadPicture( "crown.png" ) ;
         Picture* chapeauTriste = nilPointer;
         if ( ! GameManager::getInstance()->isSimpleGraphicSet () )
         {
@@ -84,8 +84,8 @@ void CreatePlanetsScreen::doAction ()
 
         // Blacktooth
 
-        Picture* planetBlacktooth = new Picture( Screen::loadPicture( "blacktooth.png" ) );
-        if ( planetBlacktooth->getAllegroPict() != nilPointer )
+        Picture* planetBlacktooth = Screen::loadPicture( "blacktooth.png" ) ;
+        if ( planetBlacktooth->getAllegroPict().isNotNil() )
         {
                 const int blacktoothX = ( screenWidth - planetBlacktooth->getWidth() ) >> 1 ;
                 const int blacktoothY = ( ( screenHeight - planetBlacktooth->getHeight() ) >> 1 ) + ( topOffsetY >> 1 ) ;
@@ -108,8 +108,8 @@ void CreatePlanetsScreen::doAction ()
 
         // Egyptus
 
-        Picture* planetEgyptus = new Picture( Screen::loadPicture( "egyptus.png" ) );
-        if ( planetEgyptus->getAllegroPict() != nilPointer )
+        Picture* planetEgyptus = Screen::loadPicture( "egyptus.png" ) ;
+        if ( planetEgyptus->getAllegroPict().isNotNil() )
         {
                 const int egyptusX = ( screenWidth >> 2 ) - ( screenWidth >> 4 ) - ( planetEgyptus->getWidth() >> 1 ) ;
                 const int egyptusY = ( screenHeight >> 2 ) - ( planetEgyptus->getHeight() >> 1 ) + ( topOffsetY >> 1 ) ;
@@ -132,8 +132,8 @@ void CreatePlanetsScreen::doAction ()
 
         // Penitentiary
 
-        Picture* planetPenitentiary = new Picture( Screen::loadPicture( "penitentiary.png" ) );
-        if ( planetPenitentiary->getAllegroPict() != nilPointer )
+        Picture* planetPenitentiary = Screen::loadPicture( "penitentiary.png" ) ;
+        if ( planetPenitentiary->getAllegroPict().isNotNil() )
         {
                 const int penitentiaryX = ( screenWidth >> 1 ) + ( screenWidth >> 2 ) + ( screenWidth >> 4 ) - ( planetPenitentiary->getWidth() >> 1 );
                 const int penitentiaryY = ( screenHeight >> 2 ) - ( planetPenitentiary->getHeight() >> 1 ) + ( topOffsetY >> 1 ) ;
@@ -156,8 +156,8 @@ void CreatePlanetsScreen::doAction ()
 
         // Byblos
 
-        Picture* planetByblos = new Picture( Screen::loadPicture( "byblos.png" ) );
-        if ( planetByblos->getAllegroPict() != nilPointer )
+        Picture* planetByblos = Screen::loadPicture( "byblos.png" ) ;
+        if ( planetByblos->getAllegroPict().isNotNil() )
         {
                 const int byblosX = ( screenWidth >> 2 ) - ( screenWidth >> 4 ) - ( planetByblos->getWidth() >> 1 ) ;
                 const int byblosY = ( screenHeight >> 1 ) + ( screenHeight >> 2 ) - ( planetByblos->getHeight() >> 1 ) + ( topOffsetY >> 1 ) ;
@@ -180,8 +180,8 @@ void CreatePlanetsScreen::doAction ()
 
         // Safari
 
-        Picture* planetSafari = new Picture( Screen::loadPicture( "safari.png" ) );
-        if ( planetSafari->getAllegroPict() != nilPointer )
+        Picture* planetSafari = Screen::loadPicture( "safari.png" ) ;
+        if ( planetSafari->getAllegroPict().isNotNil() )
         {
                 const int safariX = ( screenWidth >> 1 ) + ( screenWidth >> 2 ) + ( screenWidth >> 4 ) - ( planetSafari->getWidth() >> 1 );
                 const int safariY = ( screenHeight >> 1 ) + ( screenHeight >> 2 ) - ( planetSafari->getHeight() >> 1 ) + ( topOffsetY >> 1 );

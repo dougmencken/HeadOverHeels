@@ -28,12 +28,11 @@ class CreateEndScreen : public gui::Action
 public:
 
         /**
-         * Constructor
          * @param picture Image where to draw
          * @param rooms Count of visited rooms
          * @param planets Count of liberated planets
          */
-        CreateEndScreen( allegro::Pict* picture, unsigned int rooms, unsigned short planets ) ;
+        CreateEndScreen( Picture * picture, unsigned int rooms, unsigned short planets ) ;
 
         std::string getNameOfAction () const {  return "CreateEndScreen" ;  }
 

@@ -29,9 +29,7 @@ public:
 
         Picture( unsigned int width, unsigned int height ) ;
 
-        Picture( unsigned int width, unsigned int height, Color * color ) ;
-
-        Picture( allegro::Pict * pict ) ;
+        Picture( unsigned int width, unsigned int height, const Color & color ) ;
 
         Picture( const allegro::Pict& pict ) ;
 
@@ -41,23 +39,29 @@ public:
 
         const std::string& getName () const {  return name ;  }
 
-        void setName( const std::string& newName ) {  name = newName ;  }
+        void setName( const std::string& newName ) ;
 
-        unsigned int getWidth () const {  return picture->w ;  }
+        unsigned int getWidth () const {  return picture->getW() ;  }
 
-        unsigned int getHeight () const {  return picture->h ;  }
+        unsigned int getHeight () const {  return picture->getH() ;  }
 
-        unsigned int getColorDepth () const {  return allegro::colorDepthOf( picture ) ;  }
+        unsigned int getColorDepth () const {  return picture->getColorDepth() ;  }
 
-        allegro::Pict * getAllegroPict () const {  return picture ;  }
+        int getPixelAt ( int x, int y ) const {  return picture->getPixelAt( x, y ) ;  }
 
-        void fillWithColor ( Color * color ) ;
+        void setPixelAt ( int x, int y, const Color& color ) const ;
 
-        void colorize ( Color * color ) ;
+        const allegro::Pict& getAllegroPict () const {  return *picture ;  }
+
+        void fillWithColor ( const Color & color ) ;
+
+        void colorize ( const Color & color ) ;
 
         Picture * makeGrayscaleCopy () ;
 
-        Picture * makeColorizedCopy ( Color * color ) ;
+        Picture * makeColorizedCopy ( const Color & color ) ;
+
+        void saveAsPCX ( const std::string& path ) ;
 
 private:
 

@@ -15,7 +15,7 @@
 #include <string>
 #include <cassert>
 
-#include <WrappersAllegro.hpp>
+#include "Picture.hpp"
 
 
 namespace isomot
@@ -88,7 +88,7 @@ public:
 
         unsigned int howManyMotions () const {  return motion.size () ;  }
 
-        allegro::Pict * getMotionAt( size_t at ) const
+        Picture * getMotionAt( size_t at ) const
         {
                 assert( at < motion.size () );
                 return motion[ at ] ;
@@ -97,7 +97,7 @@ public:
 
         unsigned int howManyShadows () const {  return shadows.size () ;  }
 
-        allegro::Pict * getShadowAt( size_t at ) const
+        Picture * getShadowAt( size_t at ) const
         {
                 assert( at < shadows.size () );
                 return shadows[ at ] ;
@@ -176,7 +176,7 @@ private:
         bool mortal ;
 
        /**
-        * Extra frames are those that don’t relate to regular motion, such as frames of jump
+        * Extra frames such as frames of jumping
         */
         unsigned int extraFrames ;
 
@@ -188,12 +188,12 @@ private:
        /**
         * Pictures of item
         */
-        std::vector< allegro::Pict * > motion ;
+        std::vector< Picture * > motion ;
 
        /**
         * Pictures of item’s shadow
         */
-        std::vector< allegro::Pict * > shadows ;
+        std::vector< Picture * > shadows ;
 
        /**
         * Name of the file that contains the frames of this item

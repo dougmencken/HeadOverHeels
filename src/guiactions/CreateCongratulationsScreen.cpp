@@ -14,7 +14,7 @@ using gui::CreateCongratulationsScreen ;
 using isomot::GameManager ;
 
 
-CreateCongratulationsScreen::CreateCongratulationsScreen( allegro::Pict* picture, unsigned short rooms, unsigned short planets )
+CreateCongratulationsScreen::CreateCongratulationsScreen( Picture * picture, unsigned short rooms, unsigned short planets )
         : Action( picture )
         , rooms( rooms )
         , planets( planets )
@@ -44,11 +44,11 @@ void CreateCongratulationsScreen::doAction ()
         }
 
         // Head coronado
-        screen->addWidget( new PictureWidget( 192, 50, new Picture( Screen::loadPicture( "crown.png" ) ), "crown.png" ) );
+        screen->addWidget( new PictureWidget( 192, 50, Screen::loadPicture( "crown.png" ), "crown.png" ) );
         screen->addPictureOfHeadAt( 192, 100 );
 
         // Heels coronado
-        screen->addWidget( new PictureWidget( 400, 50, new Picture( Screen::loadPicture( "crown.png" ) ), "crown.png" ) );
+        screen->addWidget( new PictureWidget( 400, 50, Screen::loadPicture( "crown.png" ), "crown.png" ) );
         screen->addPictureOfHeelsAt( 400, 100 );
 
         // Texto final

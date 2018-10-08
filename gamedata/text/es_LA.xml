@@ -207,16 +207,16 @@
     <properties font="big" color="yellow">
       <string>El pueblo alaba y pregona su heroísmo</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>Y así fue, estimado amigo, como</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>nuestros dos héroes acabaron</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>definitivamente con la tiranía del</string>
     </properties>
-    <properties font="regular" color="multicolor">
+    <properties font="plain" color="multicolor">
       <string>Emperador Blacktooth</string>
     </properties>
   </text>

@@ -31,10 +31,9 @@ class CreateVideoMenu : public Action
 public:
 
         /**
-         * Constructor
-         * @param picture Image where to draw
+         * @param picture where to draw
          */
-        CreateVideoMenu( allegro::Pict * picture ) ;
+        CreateVideoMenu( Picture * picture ) ;
 
         std::string getNameOfAction () const {  return "CreateVideoMenu" ;  }
 

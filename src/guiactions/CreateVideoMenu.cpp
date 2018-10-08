@@ -14,7 +14,7 @@ using gui::CreateVideoMenu ;
 using gui::CreateMenuOfGraphicSets ;
 
 
-CreateVideoMenu::CreateVideoMenu( allegro::Pict* picture ) :
+CreateVideoMenu::CreateVideoMenu( Picture * picture ) :
         Action( picture ),
         listOfOptions ( nilPointer ),
         labelScreenSize ( nilPointer ),
@@ -48,7 +48,7 @@ void CreateVideoMenu::doAction ()
                 this->labelDrawBackground = new Label( textDrawBackground->getText() );
 
                 LanguageText* textGraphicSet = languageManager->findLanguageStringForAlias( "graphic-set" );
-                this->labelGraphicSet = new Label( textGraphicSet->getText(), "regular", "yellow" );
+                this->labelGraphicSet = new Label( textGraphicSet->getText(), "", "yellow" );
                 labelGraphicSet->setAction( new CreateMenuOfGraphicSets( getWhereToDraw(), this ) );
 
                 this->listOfOptions = new MenuWithValues( ' ', 1 );
@@ -79,26 +79,26 @@ void CreateVideoMenu::doAction ()
 
         gui::GuiManager::getInstance()->changeScreen( screen, true );
 
-        clear_keybuf();
+        allegro::emptyKeyboardBuffer();
 
         while ( ! screen->getEscapeAction()->hasBegun() )
         {
-                if ( keypressed() )
+                if ( allegro::areKeypushesWaiting() )
                 {
                         // get the key pressed by user
-                        int theKey = readkey() >> 8;
+                        std::string theKey = allegro::nextKey() ;
 
-                        if ( theKey == KEY_ESC )
+                        if ( theKey == "Escape" )
                         {
-                                clear_keybuf();
-                                screen->handleKey( theKey << 8 );
+                                allegro::emptyKeyboardBuffer();
+                                screen->handleKey( theKey );
                                 break;
                         }
                         else
                         {
                                 bool doneWithKey = false;
 
-                                if ( theKey == KEY_LEFT || theKey == KEY_RIGHT )
+                                if ( theKey == "Left" || theKey == "Right" )
                                 {
                                         if ( listOfOptions->getActiveOption () == labelFullscreen )
                                         {
@@ -119,10 +119,10 @@ void CreateVideoMenu::doAction ()
 
                                 if ( ! doneWithKey )
                                 {
-                                        screen->getKeyHandler()->handleKey ( theKey << 8 );
+                                        screen->getKeyHandler()->handleKey ( theKey );
                                 }
 
-                                clear_keybuf();
+                                allegro::emptyKeyboardBuffer();
 
                                 // update labels of options now
                                 updateLabels();

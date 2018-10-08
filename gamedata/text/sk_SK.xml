@@ -210,13 +210,13 @@
     <properties font="big" color="yellow">
       <string>tvoje hrdinstvo</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>Takto, drahý priateľu, naši dvaja</string>
     </properties>
-    <properties font="regular" color="cyan">
+    <properties font="plain" color="cyan">
       <string>hrdinovia definitívne ukončili</string>
     </properties>
-    <properties font="regular" color="multicolor">
+    <properties font="plain" color="multicolor">
       <string>tyraniu Blacktoothskeho imperátora</string>
     </properties>
   </text>

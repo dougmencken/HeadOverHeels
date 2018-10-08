@@ -22,14 +22,9 @@ MenuWithValues::~MenuWithValues( )
         listOfValues.clear();
 }
 
-void MenuWithValues::draw( allegro::Pict* where )
+void MenuWithValues::draw( const allegro::Pict& where )
 {
-        if ( where == nilPointer ) return ;
-
-        if ( where != this->whereToDraw )
-        {
-                this->whereToDraw = where;
-        }
+        if ( ! where.isNotNil() ) return ;
 
         if ( activeOption == nilPointer )
         {
@@ -61,8 +56,8 @@ void MenuWithValues::draw( allegro::Pict* where )
                 }
                 else
                 {
-                        if ( option->getFontFamily() != "regular" )
-                                option->changeFontFamily( "regular" );
+                        if ( option->getFontFamily() != "plain" )
+                                option->changeFontFamily( "plain" );
                 }
         }
 
@@ -128,7 +123,7 @@ void MenuWithValues::draw( allegro::Pict* where )
         setX ( previousX );
         setY ( previousY );
 
-        std::for_each( optionsWithValues.begin (), optionsWithValues.end (), isomot::DeleteObject() );
+        std::for_each( optionsWithValues.begin (), optionsWithValues.end (), isomot::DeleteIt() );
         optionsWithValues.clear();
 }
 

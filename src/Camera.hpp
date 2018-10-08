@@ -35,7 +35,7 @@ public:
         /**
          * @param Room for this camera
          */
-        Camera( Room* room ) ;
+        Camera( Room * room ) ;
 
         virtual ~Camera( ) ;
 
@@ -46,7 +46,7 @@ public:
         * @param player El jugador activo
         * @param entry Vía de entrada a la sala
         */
-        void turnOn ( PlayerItem* player, const Way& wayOfEntry ) ;
+        void turnOn ( PlayerItem * player, const Way& wayOfEntry ) ;
 
         /**
          * Centra la sala en pantalla

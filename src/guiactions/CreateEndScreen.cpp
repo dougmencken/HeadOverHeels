@@ -15,7 +15,7 @@ using gui::CreateEndScreen;
 using isomot::SoundManager;
 
 
-CreateEndScreen::CreateEndScreen( allegro::Pict* picture, unsigned int rooms, unsigned short planets )
+CreateEndScreen::CreateEndScreen( Picture * picture, unsigned int rooms, unsigned short planets )
         : Action( picture )
         , rooms( rooms )
         , planets( planets )
@@ -49,21 +49,21 @@ void CreateEndScreen::doAction ()
 
         // score reached by the player
         unsigned int score = this->rooms * 160 + this->planets * 10000;
-        Label* scoreLabel = new Label( languageManager->findLanguageStringForAlias( "score" )->getText() + " " + isomot::numberToString( score ), "regular", "yellow" );
+        Label* scoreLabel = new Label( languageManager->findLanguageStringForAlias( "score" )->getText() + " " + isomot::numberToString( score ), "", "yellow" );
         scoreLabel->moveTo( ( screenWidth - scoreLabel->getWidth() ) >> 1, labelsY );
         screen->addWidget( scoreLabel );
 
         // count of visited rooms
         std::string exploredRooms = languageManager->findLanguageStringForAlias( "explored-rooms" )->getText();
         exploredRooms.replace( exploredRooms.find( "%d" ), 2, isomot::numberToString( this->rooms ) );
-        Label* rooms = new Label( exploredRooms, "regular", "cyan" );
+        Label* rooms = new Label( exploredRooms, "", "cyan" );
         rooms->moveTo( ( screenWidth - rooms->getWidth() ) >> 1, labelsY + leading );
         screen->addWidget( rooms );
 
         // count of liberated planets
         std::string liberatedPlanets = languageManager->findLanguageStringForAlias( "liberated-planets" )->getText();
         liberatedPlanets.replace( liberatedPlanets.find( "%d" ), 2, isomot::numberToString( this->planets ) );
-        Label* planets = new Label( liberatedPlanets, "regular", "white" );
+        Label* planets = new Label( liberatedPlanets, "", "white" );
         planets->moveTo( ( screenWidth - planets->getWidth() ) >> 1, labelsY + leading + leading );
         screen->addWidget( planets );
 

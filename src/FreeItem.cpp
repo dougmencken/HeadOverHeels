@@ -3,6 +3,7 @@
 #include "ItemData.hpp"
 #include "Mediator.hpp"
 #include "SoundManager.hpp"
+#include "Color.hpp"
 
 
 namespace isomot
@@ -10,20 +11,20 @@ namespace isomot
 
 FreeItem::FreeItem( ItemData* itemData, int x, int y, int z, const Way& way )
         : Item ( itemData, z, way )
-        , myMask ( WantRemask )
+        , wantMask ( tritrue )
         , transparency ( 0 )
         , collisionDetector ( true )
         , frozen ( false )
         , shadedNonmaskedImage ( nilPointer )
         , partOfDoor( false )
 {
-        this->x = x;
-        this->y = y;
-        if ( y < 0 ) this->y = 0;
+        xPos = x;
+        yPos = y;
+        if ( yPos < 0 ) yPos = 0;
 
         // init frames
         int howManyFrames = ( getDataOfItem()->howManyMotions() - getDataOfItem()->howManyExtraFrames() ) / getDataOfItem()->howManyFramesForOrientations() ;
-        unsigned int orientation = ( way.getIntegerOfWay() == Nowhere ? 0 : way.getIntegerOfWay() );
+        unsigned int orientation = ( way.getIntegerOfWay() == Way::Nowhere ? 0 : way.getIntegerOfWay() );
         int currentFrame = ( getDataOfItem()->howManyFramesForOrientations() > 1 ?
                                         getDataOfItem()->getFrameAt( getIndexOfFrame() ) + howManyFrames * orientation :
                                         getDataOfItem()->getFrameAt( 0 ) );
@@ -39,7 +40,7 @@ FreeItem::FreeItem( ItemData* itemData, int x, int y, int z, const Way& way )
 
 FreeItem::FreeItem( const FreeItem& freeItem )
         : Item( freeItem ), Drawable()
-        , myMask( freeItem.myMask )
+        , wantMask( freeItem.wantMask )
         , transparency( freeItem.transparency )
         , collisionDetector( freeItem.collisionDetector )
         , frozen( freeItem.frozen )
@@ -48,21 +49,20 @@ FreeItem::FreeItem( const FreeItem& freeItem )
 {
         if ( freeItem.shadedNonmaskedImage != nilPointer )
         {
-                this->shadedNonmaskedImage = allegro::createPicture( freeItem.shadedNonmaskedImage->w, freeItem.shadedNonmaskedImage->h );
-                allegro::bitBlit( freeItem.shadedNonmaskedImage, this->shadedNonmaskedImage );
+                this->shadedNonmaskedImage = new Picture( *freeItem.shadedNonmaskedImage );
         }
 }
 
 FreeItem::~FreeItem()
 {
-        allegro::binPicture( shadedNonmaskedImage );
+        delete shadedNonmaskedImage ;
 }
 
-void FreeItem::draw( allegro::Pict* where )
+void FreeItem::draw( const allegro::Pict& where )
 {
         if ( transparency >= 100 ) /* item is fully transparent */ return ;
 
-        allegro::Pict* imageToDraw = this->rawImage;
+        Picture* imageToDraw = this->rawImage;
         if ( this->shadedNonmaskedImage != nilPointer ) imageToDraw = this->shadedNonmaskedImage;
         if ( this->processedImage != nilPointer ) imageToDraw = this->processedImage;
         if ( imageToDraw == nilPointer ) return;
@@ -71,21 +71,19 @@ void FreeItem::draw( allegro::Pict* where )
         {
                 allegro::drawSprite(
                         where,
-                        imageToDraw,
+                        imageToDraw->getAllegroPict(),
                         mediator->getRoom()->getX0 () + this->offset.first,
                         mediator->getRoom()->getY0 () + this->offset.second
                 ) ;
         }
         else
         {
-                // draw item with transparency
-                set_trans_blender( 0, 0, 0, static_cast < int > ( 256 - 2.56 * this->transparency ) );
-
-                draw_trans_sprite(
+                allegro::drawSpriteWithTransparencyBlender(
                         where,
-                        imageToDraw,
+                        imageToDraw->getAllegroPict(),
                         mediator->getRoom()->getX0 () + this->offset.first,
-                        mediator->getRoom()->getY0 () + this->offset.second
+                        mediator->getRoom()->getY0 () + this->offset.second,
+                        0, 0, 0, static_cast < int > ( 256 - 2.56 * this->transparency )
                 ) ;
         }
 }
@@ -97,7 +95,7 @@ void FreeItem::binBothProcessedImages()
         setShadedNonmaskedImage( nilPointer );
 }
 
-void FreeItem::changeImage( allegro::Pict* newImage )
+void FreeItem::changeImage( Picture* newImage )
 {
         if ( newImage == nilPointer )
         {
@@ -118,8 +116,8 @@ void FreeItem::changeImage( allegro::Pict* newImage )
                 if ( newImage != nilPointer )
                 {
                         // recalculate how many pixels is this image from point of room’s origin
-                        this->offset.first = ( ( this->x - this->y ) << 1 ) + static_cast< int >( getWidthX() + getWidthY() ) - ( newImage->w >> 1 ) - 1;
-                        this->offset.second = this->x + this->y + static_cast< int >( getWidthX() ) - newImage->h - this->z;
+                        this->offset.first = ( ( getX() - getY() ) << 1 ) + static_cast< int >( getWidthX() + getWidthY() ) - ( newImage->getWidth() >> 1 ) - 1;
+                        this->offset.second = getX() + getY() + static_cast< int >( getWidthX() ) - newImage->getHeight() - getZ();
                 }
                 else
                 {
@@ -130,7 +128,7 @@ void FreeItem::changeImage( allegro::Pict* newImage )
 
                 binBothProcessedImages() ;
                 setWantShadow( true );
-                this->myMask = WantRemask;
+                setWantMaskTrue();
 
                 // remask with old image
                 if ( copyOfItem.getRawImage() != nilPointer )
@@ -142,7 +140,7 @@ void FreeItem::changeImage( allegro::Pict* newImage )
         }
 }
 
-void FreeItem::changeShadow( allegro::Pict* newShadow )
+void FreeItem::changeShadow( Picture* newShadow )
 {
         if ( this->shadow == nilPointer )
         {
@@ -155,10 +153,7 @@ void FreeItem::changeShadow( allegro::Pict* newShadow )
                 // reshade items
                 if ( this->rawImage != nilPointer )
                 {
-                        if ( mediator->getDegreeOfShading() < 256 )
-                        {
-                                mediator->reshadeWithFreeItem( this );
-                        }
+                        mediator->reshadeWithFreeItem( this );
                 }
         }
 }
@@ -171,7 +166,7 @@ void FreeItem::requestShadow()
 
                 if ( ! getWantShadow() )
                 {
-                        this->myMask = WantRemask;
+                        setWantMaskTrue();
                 }
         }
 }
@@ -180,10 +175,10 @@ void FreeItem::requestMask()
 {
         mediator->maskFreeItem( this );
 
-        if ( this->myMask == WantRemask && this->processedImage != nilPointer )
+        if ( getWantMask().isTrue() && this->processedImage != nilPointer )
                 binProcessedImage();
 
-        this->myMask = NoMask;
+        setWantMaskFalse();
 }
 
 bool FreeItem::addToPosition( int x, int y, int z )
@@ -195,30 +190,30 @@ bool FreeItem::addToPosition( int x, int y, int z )
         // copy item before moving
         FreeItem copyOfItem( *this );
 
-        this->x += x;
-        this->y += y;
-        this->z += z;
+        this->xPos += x;
+        this->yPos += y;
+        this->zPos += z;
 
         // look for collision with real wall, one which limits the room
-        if ( this->x < mediator->getRoom()->getLimitAt( "north" ) )
+        if ( getX() < mediator->getRoom()->getLimitAt( "north" ) )
         {
                 mediator->pushCollision( "some segment of wall at north" );
         }
-        else if ( this->x + static_cast< int >( getWidthX() ) > mediator->getRoom()->getLimitAt( "south" ) )
+        else if ( getX() + static_cast< int >( getWidthX() ) > mediator->getRoom()->getLimitAt( "south" ) )
         {
                 mediator->pushCollision( "some segment of wall at south" );
         }
-        if ( this->y >= mediator->getRoom()->getLimitAt( "west" ) )
+        if ( getY() >= mediator->getRoom()->getLimitAt( "west" ) )
         {
                 mediator->pushCollision( "some segment of wall at west" );
         }
-        else if ( this->y - static_cast< int >( getWidthY() ) + 1 < mediator->getRoom()->getLimitAt( "east" ) )
+        else if ( getY() - static_cast< int >( getWidthY() ) + 1 < mediator->getRoom()->getLimitAt( "east" ) )
         {
                 mediator->pushCollision( "some segment of wall at east" );
         }
 
         // look for collision with floor
-        if ( this->z < 0 )
+        if ( getZ() < 0 )
         {
                 mediator->pushCollision( "some tile of floor" );
         }
@@ -233,14 +228,14 @@ bool FreeItem::addToPosition( int x, int y, int z )
                         // reshade and remask
                         binBothProcessedImages();
                         setWantShadow( true );
-                        this->myMask = WantRemask;
+                        setWantMaskTrue();
 
                         // for item with image, mark to mask free items whose images overlap with its image
                         if ( this->rawImage != nilPointer )
                         {
                                 // get how many pixels is this image from point of room’s origin
-                                this->offset.first = ( ( this->x - this->y ) << 1 ) + getWidthX() + getWidthY() - ( this->rawImage->w >> 1 ) - 1;
-                                this->offset.second = this->x + this->y + getWidthX() - this->rawImage->h - this->z;
+                                this->offset.first = ( ( getX() - getY() ) << 1 ) + getWidthX() + getWidthY() - ( this->rawImage->getWidth() >> 1 ) - 1;
+                                this->offset.second = getX() + getY() + getWidthX() - this->rawImage->getHeight() - getZ();
 
                                 // for both the previous position and the current position
                                 mediator->remaskWithFreeItem( &copyOfItem );
@@ -252,12 +247,9 @@ bool FreeItem::addToPosition( int x, int y, int z )
                         }
 
                         // reshade items
-                        if ( mediator->getDegreeOfShading() < 256 )
-                        {
-                                // for both the previous position and the current position
-                                mediator->reshadeWithFreeItem( &copyOfItem );
-                                mediator->reshadeWithFreeItem( this );
-                        }
+                        // for both the previous position and the current position
+                        mediator->reshadeWithFreeItem( &copyOfItem );
+                        mediator->reshadeWithFreeItem( this );
 
                         // rearrange list of free items
                         mediator->activateFreeItemsSorting();
@@ -267,9 +259,9 @@ bool FreeItem::addToPosition( int x, int y, int z )
         // restore previous values when there’s a collision
         if ( collisionFound )
         {
-                this->x = copyOfItem.getX();
-                this->y = copyOfItem.getY();
-                this->z = copyOfItem.getZ();
+                this->xPos = copyOfItem.getX();
+                this->yPos = copyOfItem.getY();
+                this->zPos = copyOfItem.getZ();
 
                 this->offset = copyOfItem.getOffset();
         }
@@ -282,55 +274,55 @@ bool FreeItem::isCollidingWithDoor( const std::string& way, const std::string& n
         Door* door = mediator->getRoom()->getDoorAt( way );
         if ( door == nilPointer ) return false ;
 
-        int oldX = this->x;
-        int oldY = this->y;
+        int oldX = getX();
+        int oldY = getY();
 
         switch ( Way( way ).getIntegerOfWay() )
         {
                 // for rooms with north or south door
-                case North:
-                case Northeast:
-                case Northwest:
-                case South:
-                case Southeast:
-                case Southwest:
-                        // move player right when player hits left jamb
-                        if ( door->getLeftJamb()->getUniqueName() == name && this->y <= door->getLeftJamb()->getY() )
+                case Way::North:
+                case Way::Northeast:
+                case Way::Northwest:
+                case Way::South:
+                case Way::Southeast:
+                case Way::Southwest:
+                        // move player right when player collides with left jamb
+                        if ( door->getLeftJamb()->getUniqueName() == name && this->getY() <= door->getLeftJamb()->getY() )
                         {
-                                this->y--;
-                                this->x = previousX;
+                                this->yPos--;
+                                this->xPos = previousX;
                         }
-                        // move player left when player collides with right jamb
+                        // move player left when player hits right jamb
                         else if ( door->getRightJamb()->getUniqueName() == name &&
-                                        this->y - static_cast< int >( getDataOfItem()->getWidthY() )
+                                        this->getY() - static_cast< int >( getDataOfItem()->getWidthY() )
                                                 >= door->getRightJamb()->getY() - static_cast< int >( door->getRightJamb()->getWidthY() ) )
                         {
-                                this->y++;
-                                this->x = previousX;
+                                this->yPos++;
+                                this->xPos = previousX;
                         }
 
                         break;
 
                 // for rooms with east or west door
-                case East:
-                case Eastnorth:
-                case Eastsouth:
-                case West:
-                case Westnorth:
-                case Westsouth:
+                case Way::East:
+                case Way::Eastnorth:
+                case Way::Eastsouth:
+                case Way::West:
+                case Way::Westnorth:
+                case Way::Westsouth:
                         // move player right when player hits left jamb
-                        if ( door->getLeftJamb()->getUniqueName() == name && this->x >= door->getLeftJamb()->getX() )
+                        if ( door->getLeftJamb()->getUniqueName() == name && this->getX() >= door->getLeftJamb()->getX() )
                         {
-                                this->x++;
-                                this->y = previousY;
+                                this->xPos++;
+                                this->yPos = previousY;
                         }
                         // move player left when player collides with right jamb
                         else if ( door->getRightJamb()->getUniqueName() == name &&
-                                        this->x - static_cast< int >( getDataOfItem()->getWidthX() )
+                                        this->getX() - static_cast< int >( getDataOfItem()->getWidthX() )
                                                 <= door->getRightJamb()->getX() + static_cast< int >( door->getRightJamb()->getWidthX() ) )
                         {
-                                this->x--;
-                                this->y = previousY;
+                                this->xPos--;
+                                this->yPos = previousY;
                         }
 
                         break;
@@ -339,9 +331,9 @@ bool FreeItem::isCollidingWithDoor( const std::string& way, const std::string& n
                         ;
         }
 
-        if ( oldX != this->x || oldY != this->y )
+        if ( oldX != getX() || oldY != getY() )
         {
-                isomot::SoundManager::getInstance()->play ( "door", isomot::Collision, /* loop */ false );
+                isomot::SoundManager::getInstance()->play ( "door", Activity::Collision, /* loop */ false );
                 return true ;
         }
 
@@ -352,7 +344,7 @@ bool FreeItem::isNotUnderDoorAt( const std::string& way )
 {
         Door* door = mediator->getRoom()->getDoorAt( way );
 
-        return ( door == nilPointer || ! door->isUnderDoor( this->x, this->y, this->z ) );
+        return ( door == nilPointer || ! door->isUnderDoor( getX(), getY(), getZ() ) );
 }
 
 bool FreeItem::isUnderSomeDoor ()
@@ -362,89 +354,79 @@ bool FreeItem::isUnderSomeDoor ()
         for ( std::map < std::string, Door* >::const_iterator iter = doors.begin () ; iter != doors.end (); ++ iter )
         {
                 Door* door = iter->second ;
-                if ( door != nilPointer && door->isUnderDoor( this->x, this->y, this->z ) )
+                if ( door != nilPointer && door->isUnderDoor( getX(), getY(), getZ() ) )
                         return true;
         }
 
         return false;
 }
 
-void FreeItem::setShadedNonmaskedImage( allegro::Pict* newImage )
+void FreeItem::setShadedNonmaskedImage( Picture* newImage )
 {
         if ( shadedNonmaskedImage != newImage )
         {
-                allegro::binPicture( shadedNonmaskedImage );
+                delete shadedNonmaskedImage ;
                 shadedNonmaskedImage = newImage;
         }
 }
 
 /* static */
-void FreeItem::maskItemBehindImage( FreeItem* item, allegro::Pict* upwardImage, int x, int y )
+void FreeItem::maskItemBehindItem( FreeItem* itemToMask, Item* upwardItem )
 {
-        if ( item == nilPointer || upwardImage == nilPointer ) return;
+        if ( itemToMask == nilPointer || upwardItem == nilPointer ) return;
 
         // mask shaded image or raw image when item is not yet shaded or shadows are off
-        allegro::Pict* imageToMask = ( item->getShadedNonmaskedImage() != nilPointer ? item->getShadedNonmaskedImage() : item->getRawImage() );
-        if ( imageToMask == nilPointer ) return;
+        Picture* imageToMask = itemToMask->getShadedNonmaskedImage() ;
+        if ( imageToMask == nilPointer ) imageToMask = itemToMask->getRawImage() ;
+        if ( imageToMask == nilPointer ) return ;
 
-        int inix = x - item->getOffsetX();      // initial X
-        int endx = inix + upwardImage->w;       // final X
-        int iniy = y - item->getOffsetY();      // initial Y
-        int endy = iniy + upwardImage->h;       // final Y
+        Picture* upwardImage = upwardItem->getRawImage() ;
+        if ( upwardImage == nilPointer ) return ;
 
-        if ( inix < 0 ) inix = 0;
-        if ( iniy < 0 ) iniy = 0;
-        if ( endx > imageToMask->w ) endx = imageToMask->w;
-        if ( endy > imageToMask->h ) endy = imageToMask->h;
+        int iniX = upwardItem->getOffsetX() - itemToMask->getOffsetX(); // initial X
+        int endX = iniX + upwardImage->getWidth();                      // final X
+        int iniY = upwardItem->getOffsetY() - itemToMask->getOffsetY(); // initial Y
+        int endY = iniY + upwardImage->getHeight();                     // final Y
 
-        allegro::Pict* maskedImage = item->getProcessedImage();
+        if ( iniX < 0 ) iniX = 0;
+        if ( iniY < 0 ) iniY = 0;
+        if ( endX > static_cast< int >( imageToMask->getWidth() ) ) endX = imageToMask->getWidth();
+        if ( endY > static_cast< int >( imageToMask->getHeight() ) ) endY = imageToMask->getHeight();
+
+        Picture* maskedImage = itemToMask->getProcessedImage();
 
         if ( maskedImage == nilPointer )
         {
-                maskedImage = allegro::createPicture( imageToMask->w, imageToMask->h, allegro::colorDepthOf( imageToMask ) );
+                maskedImage = new Picture( imageToMask->getWidth(), imageToMask->getHeight() );
         }
 
-        if ( item->whichMask() == WantRemask )
+        if ( itemToMask->getWantMask().isTrue() )
         {
                 // in principle, image of masked item is image of unmasked item, shaded or not
-                allegro::bitBlit( imageToMask, maskedImage );
-                item->setWhichMask( AlreadyMasked );
+                allegro::bitBlit( imageToMask->getAllegroPict(), maskedImage->getAllegroPict() );
+                itemToMask->setWantMaskIndeterminate();
         }
 
-        char increase1 = ( allegro::colorDepthOf( maskedImage ) == 32 ? 4 : 3 );
-        char increase2 = ( allegro::colorDepthOf( upwardImage ) == 32 ? 4 : 3 );
-
-        int n2i = inix + item->getOffsetX() - x;
-
-        endx *= increase1;
-        inix *= increase1;
-        n2i *= increase2;
-        #if IS_BIG_ENDIAN
-                inix += allegro::colorDepthOf( imageToMask ) == 32 ? 1 : 0 ;
-                n2i += allegro::colorDepthOf( upwardImage ) == 32 ? 1 : 0;
-        #endif
+        const int deltaX = iniX + itemToMask->getOffsetX() - upwardItem->getOffsetX() ;
+        const int deltaY = iniY + itemToMask->getOffsetY() - upwardItem->getOffsetY() ;
 
         int cRow = 0;           // row of pixels in imageToMask
-        int iRow = 0;           // row of pixels in upwardImage
         int cPixel = 0;         // pixel in row of imageToMask
+        int iRow = 0;           // row of pixels in upwardImage
         int iPixel = 0;         // pixel in row of upwardImage
 
-        for ( cRow = iniy, iRow = iniy + item->getOffsetY() - y; cRow < endy; cRow++, iRow++ )
+        for ( cRow = iniY, iRow = deltaY ; cRow < endY ; cRow++, iRow++ )
         {
-                unsigned char* cln = maskedImage->line[ cRow ];
-                unsigned char* iln = upwardImage->line[ iRow ];
-
-                for ( cPixel = inix, iPixel = n2i; cPixel < endx; cPixel += increase1, iPixel += increase2 )
+                for ( cPixel = iniX, iPixel = deltaX ; cPixel < endX ; cPixel++, iPixel++ )
                 {
-                        if ( iln[ iPixel ] != 255 || iln[ iPixel + 1 ] != 0 || iln[ iPixel + 2 ] != 255 )
+                        if ( ! Color::isKeyColor( upwardImage->getPixelAt( iPixel, iRow ) ) )
                         {
-                                cln[ cPixel ] = cln[ cPixel + 2 ] = 255;
-                                cln[ cPixel + 1 ] = 0;
+                                maskedImage->setPixelAt( cPixel, cRow, Color::colorOfTransparency() );
                         }
                 }
         }
 
-        item->setProcessedImage( maskedImage );
+        itemToMask->setProcessedImage( maskedImage );
 }
 
 }

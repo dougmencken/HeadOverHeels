@@ -11,7 +11,7 @@
 #ifndef ShadowCaster_hpp_
 #define ShadowCaster_hpp_
 
-#include <WrappersAllegro.hpp>
+#include "Picture.hpp"
 
 namespace isomot
 {
@@ -34,19 +34,9 @@ class ShadowCaster
 
 public:
 
-        static void castShadowOnItem ( Item* item, int x, int y, allegro::Pict* shadow, unsigned short shading, unsigned char transparency = 0 ) ;
+        static void castShadowOnItem ( Item* item, int x, int y, Picture* shadow, unsigned short shading, unsigned char transparency = 0 ) ;
 
-        static void castShadowOnFloor ( FloorTile* tile, int x, int y, allegro::Pict* shadow, unsigned short shading, unsigned char transparency = 0 ) ;
-
-protected:
-
-        /*
-         * True when it’s color with red=255 green=0 blue=255
-         */
-        inline static bool isKeyColor( unsigned char red, unsigned char green, unsigned char blue )
-        {
-                return ( red == 255 && green == 0 && blue == 255 );
-        }
+        static void castShadowOnFloor ( FloorTile* tile, int x, int y, Picture* shadow, unsigned short shading, unsigned char transparency = 0 ) ;
 
 };
 

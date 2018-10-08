@@ -17,12 +17,12 @@ using gui::CreateAudioMenu;
 using isomot::SoundManager;
 
 
-CreateAudioMenu::CreateAudioMenu( allegro::Pict* picture ) :
+CreateAudioMenu::CreateAudioMenu( Picture * picture ) :
         Action( picture ),
-        listOfOptions ( nilPointer ),
-        labelEffects ( nilPointer ),
-        labelMusic ( nilPointer ),
-        playRoomTunes ( nilPointer )
+        listOfOptions( nilPointer ),
+        labelEffects( nilPointer ),
+        labelMusic( nilPointer ),
+        playRoomTunes( nilPointer )
 {
 
 }
@@ -93,19 +93,19 @@ void CreateAudioMenu::doAction ()
 
         GuiManager::getInstance()->changeScreen( screen, true );
 
-        clear_keybuf();
+        allegro::emptyKeyboardBuffer();
 
         while ( true )
         {
-                if ( keypressed() )
+                if ( allegro::areKeypushesWaiting() )
                 {
                         // get the key pressed by user
-                        int theKey = readkey() >> 8;
+                        std::string theKey = allegro::nextKey() ;
 
-                        if ( theKey == KEY_ESC )
+                        if ( theKey == "Escape" )
                         {
-                                clear_keybuf();
-                                screen->handleKey ( theKey << 8 );
+                                allegro::emptyKeyboardBuffer();
+                                screen->handleKey ( theKey );
                                 break;
                         }
                         else
@@ -119,12 +119,12 @@ void CreateAudioMenu::doAction ()
                                         int value = ( listOfOptions->getActiveOption () == labelMusic ) ? musicVolume : effectsVolume ;
                                         int previousValue = value;
 
-                                        if ( theKey == KEY_LEFT )
+                                        if ( theKey == "Left" )
                                         {
                                                 value = ( value > 0 ? value - 1 : 0 ); // decrease volume
                                                 doneWithKey = true;
                                         }
-                                        else if ( theKey == KEY_RIGHT )
+                                        else if ( theKey == "Right" )
                                         {
                                                 value = ( value < 99 ? value + 1 : 99 ); // increase volume
                                                 doneWithKey = true;
@@ -144,12 +144,14 @@ void CreateAudioMenu::doAction ()
                                                 {
                                                         listOfOptions->setValueOf( labelEffects, ss.str() );
                                                         SoundManager::getInstance()->setVolumeOfEffects( value );
+                                                        isomot::SoundManager::getInstance()->stopEverySound ();
+                                                        isomot::SoundManager::getInstance()->play ( "gui", isomot::Activity::Push, /* loop */ false );
                                                 }
                                         }
                                 }
                                 else if ( listOfOptions->getActiveOption () == playRoomTunes )
                                 {
-                                        if ( theKey == KEY_LEFT || theKey == KEY_RIGHT )
+                                        if ( theKey == "Left" || theKey == "Right" )
                                         {
                                                 isomot::GameManager::getInstance()->togglePlayMelodyOfScenery ();
                                                 listOfOptions->setValueOf( playRoomTunes, isomot::GameManager::getInstance()->playMelodyOfScenery () ? yeah : nope );
@@ -160,10 +162,10 @@ void CreateAudioMenu::doAction ()
 
                                 if ( ! doneWithKey )
                                 {
-                                        screen->getKeyHandler()->handleKey ( theKey << 8 );
+                                        screen->getKeyHandler()->handleKey ( theKey );
                                 }
 
-                                clear_keybuf();
+                                allegro::emptyKeyboardBuffer();
                                 listOfOptions->redraw ();
                         }
                 }

@@ -1,6 +1,8 @@
 
 #include "AnimatedPictureWidget.hpp"
+
 #include <iostream>
+#include <algorithm> // std::for_each
 
 
 namespace gui
@@ -19,20 +21,17 @@ AnimatedPictureWidget::AnimatedPictureWidget( int x, int y, const std::vector< a
 
 AnimatedPictureWidget::~AnimatedPictureWidget()
 {
-        for ( std::vector< allegro::Pict * >::iterator bb = animation.begin (); bb != animation.end (); ++bb )
-        {
-                allegro::binPicture( *bb );
-        }
+        std::for_each( animation.begin (), animation.end (), isomot::DeleteIt() );
         animation.clear();
 
         delete animationTimer;
 }
 
-void AnimatedPictureWidget::draw( allegro::Pict* where )
+void AnimatedPictureWidget::draw( const allegro::Pict& where )
 {
         if ( animation.size() > 0 )
         {
-                allegro::drawSprite( where, animation[ theFrame ], getX(), getY() );
+                allegro::drawSprite( where, *animation[ theFrame ], getX(), getY() );
         }
 
         if ( animationTimer->getValue() > delayBetweenFrames )
@@ -46,7 +45,7 @@ void AnimatedPictureWidget::draw( allegro::Pict* where )
 unsigned int AnimatedPictureWidget::getWidth () const
 {
         if ( animation.size() > 0 )
-                return ( * animation.begin () )->w ;
+                return ( * animation.begin () )->getW() ;
         else
                 return 0 ;
 }
@@ -54,7 +53,7 @@ unsigned int AnimatedPictureWidget::getWidth () const
 unsigned int AnimatedPictureWidget::getHeight () const
 {
         if ( animation.size() > 0 )
-                return ( * animation.begin () )->h ;
+                return ( * animation.begin () )->getH() ;
         else
                 return 0 ;
 }

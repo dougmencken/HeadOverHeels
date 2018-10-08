@@ -11,7 +11,6 @@
 #ifndef MoveKindOfActivity_hpp_
 #define MoveKindOfActivity_hpp_
 
-#include "Ism.hpp"
 #include "KindOfActivity.hpp"
 
 

@@ -17,9 +17,9 @@ Item::Item( ItemData* data, int z, const Way& way )
         frameIndex( 0 ),
         backwardMotion( false ),
         dataOfItem( data ),
-        x( 0 ),
-        y( 0 ),
-        z( z ),
+        xPos( 0 ),
+        yPos( 0 ),
+        zPos( z ),
         orientation( way ),
         offset( std::pair< int, int >( 0, 0 ) ),
         rawImage( nilPointer ),
@@ -46,9 +46,9 @@ Item::Item( const Item& item )
         frameIndex( item.frameIndex ),
         backwardMotion( item.backwardMotion ),
         dataOfItem( item.dataOfItem ),
-        x( item.x ),
-        y( item.y ),
-        z( item.z ),
+        xPos( item.xPos ),
+        yPos( item.yPos ),
+        zPos( item.zPos ),
         orientation( item.orientation ),
         offset( item.offset ),
         rawImage( item.rawImage ),
@@ -66,8 +66,7 @@ Item::Item( const Item& item )
 
         if ( item.processedImage != nilPointer )
         {
-                this->processedImage = allegro::createPicture( item.processedImage->w, item.processedImage->h, allegro::colorDepthOf( item.processedImage ) );
-                allegro::bitBlit( item.processedImage, this->processedImage );
+                this->processedImage = new Picture( *item.processedImage );
         }
 }
 
@@ -76,7 +75,7 @@ Item::~Item( )
         delete this->behavior;
         delete this->motionTimer;
 
-        allegro::binPicture( this->processedImage );
+        delete this->processedImage ;
 }
 
 bool Item::update()
@@ -120,7 +119,7 @@ bool Item::animate()
 
                         // which frame to show yet
                         int framesNumber = ( dataOfItem->howManyMotions() - dataOfItem->howManyExtraFrames() ) / dataOfItem->howManyFramesForOrientations();
-                        unsigned int orientOccident = ( orientation.getIntegerOfWay() == Nowhere ? 0 : orientation.getIntegerOfWay() );
+                        unsigned int orientOccident = ( orientation.getIntegerOfWay() == Way::Nowhere ? 0 : orientation.getIntegerOfWay() );
                         int currentFrame = dataOfItem->getFrameAt( frameIndex ) + ( dataOfItem->howManyFramesForOrientations() > 1 ? framesNumber * orientOccident : 0 );
 
                         // change frame of animation
@@ -152,7 +151,7 @@ void Item::changeItemData( ItemData* itemData, const std::string& initiatedBy )
         this->backwardMotion = false;
 }
 
-void Item::changeShadow( allegro::Pict* newShadow )
+void Item::changeShadow( Picture* newShadow )
 {
         if ( shadow != newShadow )
         {
@@ -161,11 +160,11 @@ void Item::changeShadow( allegro::Pict* newShadow )
         }
 }
 
-void Item::setProcessedImage( allegro::Pict* newImage )
+void Item::setProcessedImage( Picture* newImage )
 {
         if ( processedImage != newImage )
         {
-                allegro::binPicture( processedImage );
+                delete processedImage ;
                 processedImage = newImage;
         }
 }
@@ -182,7 +181,7 @@ void Item::changeOrientation( const Way& way )
         if ( dataOfItem->howManyFramesForOrientations() > 1 )
         {
                 // get frame for new orientation
-                unsigned int orientOccident = ( way.getIntegerOfWay() == Nowhere ? 0 : way.getIntegerOfWay() );
+                unsigned int orientOccident = ( way.getIntegerOfWay() == Way::Nowhere ? 0 : way.getIntegerOfWay() );
                 unsigned int frame = ( ( dataOfItem->howManyMotions() - dataOfItem->howManyExtraFrames() ) / dataOfItem->howManyFramesForOrientations() ) * orientOccident;
 
                 if ( this->rawImage != nilPointer && frame < dataOfItem->howManyMotions() && this->rawImage != dataOfItem->getMotionAt( frame ) )
@@ -223,39 +222,39 @@ void Item::changeFrame( const unsigned int frameIndex )
 bool Item::canAdvanceTo( int x, int y, int z )
 {
         // coordinates before change
-        int originalX = this->x;
-        int originalY = this->y;
-        int originalZ = this->z;
+        int originalX = this->getX();
+        int originalY = this->getY();
+        int originalZ = this->getZ();
 
         mediator->clearStackOfCollisions( );
 
         bool collisionFound = false;
 
         // new coordinates
-        this->x += x;
-        this->y += y;
-        this->z += z;
+        this->xPos += x;
+        this->yPos += y;
+        this->zPos += z;
 
         // look for collision with wall
-        if ( this->x < mediator->getRoom()->getLimitAt( "north" ) )
+        if ( this->getX() < mediator->getRoom()->getLimitAt( "north" ) )
         {
                 mediator->pushCollision( "some segment of wall at north" );
         }
-        else if ( this->x + static_cast< int >( this->getWidthX() ) > mediator->getRoom()->getLimitAt( "south" ) )
+        else if ( this->getX() + static_cast< int >( this->getWidthX() ) > mediator->getRoom()->getLimitAt( "south" ) )
         {
                 mediator->pushCollision( "some segment of wall at south" );
         }
-        if ( this->y >= mediator->getRoom()->getLimitAt( "west" ) )
+        if ( this->getY() >= mediator->getRoom()->getLimitAt( "west" ) )
         {
                 mediator->pushCollision( "some segment of wall at west" );
         }
-        else if ( this->y - static_cast< int >( this->getWidthY() ) + 1 < mediator->getRoom()->getLimitAt( "east" ) )
+        else if ( this->getY() - static_cast< int >( this->getWidthY() ) + 1 < mediator->getRoom()->getLimitAt( "east" ) )
         {
                 mediator->pushCollision( "some segment of wall at east" );
         }
 
         // look for collision with floor
-        if ( this->z < 0 )
+        if ( this->getZ() < 0 )
         {
                 mediator->pushCollision( "some tile of floor" );
         }
@@ -268,9 +267,9 @@ bool Item::canAdvanceTo( int x, int y, int z )
         }
 
         // restore original coordinates
-        this->x = originalX;
-        this->y = originalY;
-        this->z = originalZ;
+        this->xPos = originalX;
+        this->yPos = originalY;
+        this->zPos = originalZ;
 
         return ! collisionFound;
 }

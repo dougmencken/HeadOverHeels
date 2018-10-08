@@ -32,13 +32,11 @@ class Label : public Widget
 public:
 
         /**
-         * Constructor
          * @param text The text of this label
          */
         Label( const std::string& text ) ;
 
         /**
-         * Constructor
          * @param text the text of this label
          * @param family family of font to draw characters
          * @param color color of text
@@ -56,12 +54,9 @@ public:
 
         void changeFontFamilyAndColor ( const std::string& family, const std::string& color ) ;
 
-        virtual void draw ( allegro::Pict * where ) ;
+        virtual void draw ( const allegro::Pict & where ) ;
 
-        /**
-         * Responde a la pulsación de una tecla
-         */
-        void handleKey ( int key ) ;
+        void handleKey ( const std::string& key ) ;
 
 protected:
 

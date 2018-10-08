@@ -23,11 +23,10 @@ class SaveGame : public Action
 public:
 
         /**
-         * Constructor
          * @param picture Image where to draw user interface
          * @param slot Number of file to load
          */
-        SaveGame( allegro::Pict * picture, unsigned int slot ) ;
+        SaveGame( Picture * picture, unsigned int slot ) ;
 
         std::string getNameOfAction () const {  return "SaveGame" ;  }
 

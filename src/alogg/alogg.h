@@ -70,7 +70,6 @@ extern "C" {
 #endif
 
 void alogg_init();
-void alogg_exit();
 
 /* Integration with Allegro's SAMPLE management */
 struct SAMPLE *alogg_load_ogg(AL_CONST char *filename);

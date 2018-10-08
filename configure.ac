@@ -18,7 +18,7 @@ AC_PROG_CXX
 AM_PROG_CC_C_O
 
 # support for debug build
-AC_ARG_ENABLE(debug,
+AC_ARG_ENABLE([debug],
         AS_HELP_STRING([--enable-debug], [make debug build]),
         [case "${enableval}" in
                      yes|true)  debug=true ; AC_MSG_NOTICE([debug build is on]) ;;
@@ -30,23 +30,29 @@ AC_ARG_ENABLE(debug,
 AM_CONDITIONAL([DEBUG], [test x"$debug" = x"true"])
 AC_SUBST([DEBUG])
 
-# look for libraries
-
 # look for header files
+AC_CHECK_HEADERS([pthread.h],, [AC_MSG_ERROR(pthread.h is absent)])
 AC_CHECK_HEADERS([execinfo.h])
-AC_CHECK_HEADERS(allegro.h,, [AC_MSG_ERROR(allegro headers not found)])
-AC_CHECK_HEADERS(zlib.h,, [AC_MSG_ERROR(zlib headers not found)])
-AC_CHECK_HEADERS(png.h,, [AC_MSG_ERROR(libpng headers not found)])
-AC_CHECK_HEADERS(vorbis/codec.h vorbis/vorbisenc.h vorbis/vorbisfile.h,, [AC_MSG_ERROR(vorbis headers not found)])
-AC_CHECK_HEADERS(ogg/ogg.h,, [AC_MSG_ERROR(ogg headers not found)])
+AC_CHECK_HEADERS([zlib.h],, [AC_MSG_ERROR(zlib headers are absent)])
+AC_CHECK_HEADERS([png.h],, [AC_MSG_ERROR(libpng headers are absent)])
+AC_CHECK_HEADERS([vorbis/codec.h vorbis/vorbisenc.h vorbis/vorbisfile.h],, [AC_MSG_ERROR(vorbis headers are absent)])
+AC_CHECK_HEADERS([ogg/ogg.h],, [AC_MSG_ERROR(ogg headers are absent)])
 AC_LANG_PUSH([C++]) # tinyxml2.h is C++ header
-AC_CHECK_HEADERS(tinyxml2.h,, [AC_MSG_ERROR(tinyxml2 header not found)])
+AC_CHECK_HEADERS([tinyxml2.h],, [AC_MSG_ERROR(tinyxml2 header is absent)])
 AC_LANG_POP([C++])
-AC_CHECK_HEADERS(pthread.h,, [AC_MSG_ERROR(pthread.h not found)])
+
+AC_ARG_WITH([allegro5],
+        [AS_HELP_STRING([--with-allegro5], [build game with allegro5 library (default: no)])], [], [with_allegro5=no])
+AC_ARG_WITH([allegro4],
+        [AS_HELP_STRING([--with-allegro4], [build game with allegro4 library (default: check)])], [], [with_allegro4=check])
+
+AC_CHECK_HEADERS([allegro5/allegro.h], [HAVE_ALLEGRO5=1], [HAVE_ALLEGRO5=0], [])
+AM_CONDITIONAL([USE_ALLEGRO5], [test "$with_allegro5" != no -a "$HAVE_ALLEGRO5" -eq 1])
+
+AC_CHECK_HEADERS([allegro.h], [HAVE_ALLEGRO4=1], [HAVE_ALLEGRO4=0], [])
+AM_CONDITIONAL([USE_ALLEGRO4], [test "$with_allegro4" != no -a "$HAVE_ALLEGRO4" -eq 1])
 
 # look for typedefs, structures, and compiler characteristics
-
-# look for library functions
 
 # makefiles
 AC_OUTPUT( \

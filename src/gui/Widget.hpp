@@ -15,6 +15,7 @@
 
 #include "Drawable.hpp"
 
+#include <string>
 #include <utility>
 
 
@@ -36,12 +37,14 @@ public:
 
         virtual ~Widget( ) ;
 
-        virtual void draw ( allegro::Pict * where ) = 0 ;
+        virtual bool isMenu () {  return false ;  }
+
+        virtual void draw ( const allegro::Pict & where ) = 0 ;
 
         /**
          * Subclasses may respond to this event or notify other component
          */
-        virtual void handleKey ( int key ) = 0 ;
+        virtual void handleKey ( const std::string& key ) = 0 ;
 
         /**
          * Change position of the widget

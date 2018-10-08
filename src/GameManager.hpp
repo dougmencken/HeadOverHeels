@@ -95,13 +95,9 @@ public:
         void setHeelsRoom( const std::string& room ) {  heelsRoom = room ;  }
 
         /**
-         * Dibuja en pantalla la información relativa al juego actual compuesta de:
-         * un marco, vidas disponibles, herramientas disponibles, objeto guardado en el
-         * bolso, tiempo restante de inmunidad, saltos largos disponibles y rosquillas
-         * disponibles
-         * @param where Imagen donde se dibujará toda la información
+         * Draw information about the current game like lives, tools, donus, thing in bag
          */
-        void drawAmbianceOfGame ( allegro::Pict* where ) ;
+        void drawAmbianceOfGame ( const allegro::Pict& where ) ;
 
         /**
          * Carga una partida grabada en disco
@@ -177,11 +173,7 @@ public:
          */
         void modifyShield ( const std::string& player, double shield ) ;
 
-        /**
-         * Elimina el elemento que contiene el bolso para no mostrarlo en la interfaz
-         * @param player Player with handbag
-         */
-        void emptyHandbag ( const std::string& player ) ;
+        void emptyHandbag () ;
 
         /**
          * Establece todos los planetas como miembros del Imperio Blacktooth
@@ -382,10 +374,7 @@ private:
          */
         unsigned short donuts ;
 
-        /**
-         * Imagen del elemento que está dentro del bolso
-         */
-        Picture * itemTaken ;
+        Picture * imageOfItemInBag ;
 
         /**
          * Stores name of planet with boolean of its liberation
@@ -513,7 +502,7 @@ public:
         /**
          * Image of the item inside hand bag
          */
-        void setItemTaken ( Picture* pic ) {  delete this->itemTaken ;  this->itemTaken = pic ;  }
+        void setImageOfItemInBag ( Picture* pic ) {  delete this->imageOfItemInBag ;  this->imageOfItemInBag = pic ;  }
 
         unsigned int getVisitedRooms () const ;
 

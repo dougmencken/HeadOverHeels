@@ -22,7 +22,7 @@ class SelectLanguage: public Action
 
 public:
 
-        SelectLanguage( allegro::Pict * picture, const std::string& language ) ;
+        SelectLanguage( Picture * picture, const std::string& language ) ;
 
         std::string getNameOfAction () const {  return "SelectLanguage" ;  }
 

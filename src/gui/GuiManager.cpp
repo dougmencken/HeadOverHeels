@@ -37,7 +37,7 @@ GuiManager::GuiManager( ) :
         atFullScreen( false ),
         preferencesRead( false )
 {
-        this->allegroSetup();
+        initAllegro();
 
         std::string nameOfWindow = "Head over Heels";
 
@@ -54,33 +54,31 @@ GuiManager::GuiManager( ) :
         nameOfWindow = nameOfWindow + " " + version;
 #endif
 
-        set_window_title ( nameOfWindow.c_str () );
+        allegro::setTitleOfAllegroWindow ( nameOfWindow );
 
         // create fonts to use in game
 
         std::string nameOfFontFile = isomot::sharePath() + "font.png" ;
         std::cout << "reading from file \"" << nameOfFontFile << "\" to create fonts used in game" << std::endl ;
 
-        allegro::Pict * pictureOfFont = allegro::loadPNG( isomot::pathToFile( nameOfFontFile.c_str () ) );
-        if ( pictureOfFont != nilPointer )
+        smartptr< allegro::Pict > pictureOfFont( allegro::loadPNG( isomot::pathToFile( nameOfFontFile.c_str () ) ) );
+        if ( pictureOfFont->isNotNil() )
         {
-                addFont( new Font( "white.regular", pictureOfFont, Color::whiteColor() ) );
-                addFont( new Font( "white.big", pictureOfFont, Color::whiteColor(), true ) );
+                addFont( new Font( "white.plain", *pictureOfFont.get(), Color::whiteColor() ) );
+                addFont( new Font( "white.big", *pictureOfFont.get(), Color::whiteColor(), true ) );
 
-                addFont( new Font( "orange.regular", pictureOfFont, Color::orangeColor() ) );
-                addFont( new Font( "cyan.regular", pictureOfFont, Color::cyanColor() ) );
-                addFont( new Font( "yellow.regular", pictureOfFont, Color::yellowColor() ) );
+                addFont( new Font( "orange.plain", *pictureOfFont.get(), Color::orangeColor() ) );
+                addFont( new Font( "cyan.plain", *pictureOfFont.get(), Color::cyanColor() ) );
+                addFont( new Font( "yellow.plain", *pictureOfFont.get(), Color::yellowColor() ) );
 
-                addFont( new Font( "orange.big", pictureOfFont, Color::orangeColor(), true ) );
-                addFont( new Font( "cyan.big", pictureOfFont, Color::cyanColor(), true ) );
-                addFont( new Font( "yellow.big", pictureOfFont, Color::yellowColor(), true ) );
+                addFont( new Font( "orange.big", *pictureOfFont.get(), Color::orangeColor(), true ) );
+                addFont( new Font( "cyan.big", *pictureOfFont.get(), Color::cyanColor(), true ) );
+                addFont( new Font( "yellow.big", *pictureOfFont.get(), Color::yellowColor(), true ) );
 
-                addFont( new Font( "green.regular", pictureOfFont, Color::greenColor(), false ) );
-                addFont( new Font( "green.big", pictureOfFont, Color::greenColor(), true ) );
-                addFont( new Font( "magenta.regular", pictureOfFont, Color::magentaColor(), false ) );
-                addFont( new Font( "magenta.big", pictureOfFont, Color::magentaColor(), true ) );
-
-                allegro::binPicture( pictureOfFont );
+                addFont( new Font( "green.plain", *pictureOfFont.get(), Color::greenColor(), false ) );
+                addFont( new Font( "green.big", *pictureOfFont.get(), Color::greenColor(), true ) );
+                addFont( new Font( "magenta.plain", *pictureOfFont.get(), Color::magentaColor(), false ) );
+                addFont( new Font( "magenta.big", *pictureOfFont.get(), Color::magentaColor(), true ) );
         }
         else
         {
@@ -88,17 +86,17 @@ GuiManager::GuiManager( ) :
         }
 
         // create image to draw interface
-        this->picture = allegro::createPicture( isomot::ScreenWidth(), isomot::ScreenHeight() );
+        this->picture = new Picture( isomot::ScreenWidth(), isomot::ScreenHeight() );
 
         // initialize sound manager
-        SoundManager::getInstance()->readListOfSounds( "sounds.xml" );
+        SoundManager::getInstance()->readSounds( "sounds.xml" );
 }
 
 GuiManager::~GuiManager( )
 {
         freeScreens () ;
 
-        std::for_each( this->fonts.begin (), this->fonts.end (), isomot::DeleteObject() );
+        std::for_each( this->fonts.begin (), this->fonts.end (), isomot::DeleteIt() );
         this->fonts.clear();
 
         delete this->languageManager;
@@ -139,11 +137,11 @@ void GuiManager::begin ()
         // draw user interface and handle keys
         while ( this->active )
         {
-                this->activeScreen->draw( this->picture );
+                activeScreen->draw( picture->getAllegroPict() );
 
-                if ( keypressed() )
+                if ( allegro::areKeypushesWaiting() )
                 {
-                        this->activeScreen->handleKey( readkey() );
+                        activeScreen->handleKey( allegro::nextKey() );
                 }
 
                 milliSleep( 30 );
@@ -252,7 +250,7 @@ void GuiManager::redraw()
 {
         if ( this->active && ( this->activeScreen != nilPointer ) )
         {
-                activeScreen->draw( this->picture );
+                activeScreen->draw( picture->getAllegroPict() );
         }
 }
 
@@ -261,18 +259,18 @@ std::string GuiManager::getPathToPicturesOfGui ()
         return isomot::sharePath() + GameManager::getInstance()->getChosenGraphicSet() + pathSeparator ;
 }
 
-void GuiManager::allegroSetup()
+void GuiManager::initAllegro()
 {
         allegro::init ();
 
         // 8 bits for each of three colors with 8 bits for alpha channel
-        set_color_depth( 32 );
+        allegro::setDefaultColorDepth( 32 );
 
         // fill list of screen’s sizes
 
         sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 640, 480 ) );
 
-        /*  if ( allegro::setGraphicsMode( GFX_AUTODETECT_FULLSCREEN, 800, 600 ) )
+        /*  if ( allegro::switchToFullscreenVideo( 800, 600 ) )
                 sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 800, 600 ) ); */
 
         sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 800, 600 ) );
@@ -284,19 +282,17 @@ void GuiManager::allegroSetup()
 
         // switch to chosen size of screen
 
-        int magicCard = this->atFullScreen ? GFX_AUTODETECT_FULLSCREEN : GFX_AUTODETECT_WINDOWED ;
+        bool switched = false;
 
-        if ( ! allegro::setGraphicsMode( magicCard, isomot::ScreenWidth(), isomot::ScreenHeight() ) )
-                toggleFullScreenVideo ();
+        if ( this->atFullScreen )
+                switched = allegro::switchToFullscreenVideo( isomot::ScreenWidth(), isomot::ScreenHeight() ) ;
+        else
+                switched = allegro::switchToWindowedVideo( isomot::ScreenWidth(), isomot::ScreenHeight() ) ;
 
-#ifdef __WIN32
-        // when application loses focus, the game will continue in background
-        // because there are threads that will continue even when the main thread pauses
-        set_display_switch_mode( SWITCH_BACKGROUND );
-#endif
+        if ( ! switched ) toggleFullScreenVideo ();
 
-        // install handler of keyboard events
-        install_keyboard ();
+        // initialize handler of keyboard events
+        allegro::initKeyboardHandler ();
 }
 
 bool GuiManager::isAtFullScreen ()
@@ -306,9 +302,14 @@ bool GuiManager::isAtFullScreen ()
 
 void GuiManager::toggleFullScreenVideo ()
 {
-        int magicCardToggled = this->atFullScreen ? GFX_AUTODETECT_WINDOWED : GFX_AUTODETECT_FULLSCREEN ;
+        bool switched = false;
 
-        if ( allegro::setGraphicsMode( magicCardToggled, isomot::ScreenWidth(), isomot::ScreenHeight() ) )
+        if ( this->atFullScreen )
+                switched = allegro::switchToWindowedVideo();
+        else
+                switched = allegro::switchToFullscreenVideo();
+
+        if ( switched )
         {
                 this->atFullScreen = ! this->atFullScreen ;
 
@@ -318,8 +319,8 @@ void GuiManager::toggleFullScreenVideo ()
         }
         else
         {
-                int magicCard = this->atFullScreen ? GFX_AUTODETECT_FULLSCREEN : GFX_AUTODETECT_WINDOWED ;
-                allegro::setGraphicsMode( magicCard, isomot::ScreenWidth(), isomot::ScreenHeight() ) ;
+                if ( this->atFullScreen ) allegro::switchToFullscreenVideo();
+                else    allegro::switchToWindowedVideo();
         }
 }
 
@@ -338,12 +339,26 @@ void GuiManager::assignLanguage( const std::string& language )
 
 Font* GuiManager::findFontByFamilyAndColor ( const std::string& family, const std::string& color )
 {
-        for (  std::list< Font * >::iterator i = fonts.begin (); i != fonts.end (); ++i )
+        std::string familyToLook = ( ! family.empty() ) ? family : "plain";
+        std::string colorToLook = ( ! color.empty() ) ? color : "white";
+
+        for (  std::list< Font * >::const_iterator i = fonts.begin (); i != fonts.end (); ++i )
         {
-                if ( ( *i )->getName() == color + "." + family )
+                if ( ( *i )->getName() == colorToLook + "." + familyToLook )
                 {
-                        return *i ;
+                        return ( *i ) ;
                 }
+        }
+
+        std::cout << "there’s no font with family \"" << familyToLook << "\" and color \"" << colorToLook << "\"" << std::endl ;
+
+        if ( fonts.size() == 0 )
+                std::cout << "list of fonts is empty" << std::endl ;
+        else
+        {
+                std::cout << "list of fonts" << std::endl ;
+                for (  std::list< Font * >::const_iterator i = fonts.begin (); i != fonts.end (); ++i )
+                        std::cout << "   " << ( *i )->getName() << std::endl ;
         }
 
         return nilPointer ;

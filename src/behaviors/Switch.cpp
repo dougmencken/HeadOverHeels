@@ -30,7 +30,7 @@ bool Switch::update ()
 
         switch ( activity )
         {
-                case Wait:
+                case Activity::Wait:
                         // look if there’re items on sides
                         if ( checkSideItems( sideItems ) )
                         {
@@ -42,7 +42,7 @@ bool Switch::update ()
                                         Item* trigger = triggerItems[ i ];
 
                                         if ( std::find( sideItems.begin (), sideItems.end (), trigger ) == sideItems.end () ||
-                                                ( trigger->whichKindOfItem() == "player item" && trigger->getBehavior()->getActivityOfItem() == Wait ) )
+                                                ( trigger->whichKindOfItem() == "player item" && trigger->getBehavior()->getActivityOfItem() == Activity::Wait ) )
                                         {
                                                 triggerItems.erase( std::remove( triggerItems.begin (), triggerItems.end (), trigger ), triggerItems.end () );
                                         }
@@ -76,8 +76,8 @@ bool Switch::update ()
                                                 if ( itemAbove->getBehavior() != nilPointer &&
                                                         ! itemAbove->canAdvanceTo( 0, 0, -1 ) &&
                                                                 // yep, switch doesn’t toggle when player jumps
-                                                                itemAbove->getBehavior()->getActivityOfItem() != RegularJump &&
-                                                                itemAbove->getBehavior()->getActivityOfItem() != HighJump )
+                                                                itemAbove->getBehavior()->getActivityOfItem() != Activity::RegularJump &&
+                                                                itemAbove->getBehavior()->getActivityOfItem() != Activity::HighJump )
                                                 {
                                                         // when there’s no more than one item below initiator of switch
                                                         if ( ! isItemAbove && mediator->depthOfStackOfCollisions() <= 1 )
@@ -89,7 +89,7 @@ bool Switch::update ()
                                                                 mediator->toggleSwitchInRoom();
 
                                                                 // play sound of switching
-                                                                SoundManager::getInstance()->play( item->getLabel(), SwitchIt );
+                                                                SoundManager::getInstance()->play( item->getLabel(), Activity::SwitchIt );
                                                         }
                                                 }
                                         }
@@ -101,14 +101,14 @@ bool Switch::update ()
                         }
                         break;
 
-                case DisplaceNorth:
-                case DisplaceSouth:
-                case DisplaceEast:
-                case DisplaceWest:
-                case DisplaceNortheast:
-                case DisplaceSoutheast:
-                case DisplaceSouthwest:
-                case DisplaceNorthwest:
+                case Activity::DisplaceNorth:
+                case Activity::DisplaceSouth:
+                case Activity::DisplaceEast:
+                case Activity::DisplaceWest:
+                case Activity::DisplaceNortheast:
+                case Activity::DisplaceSoutheast:
+                case Activity::DisplaceSouthwest:
+                case Activity::DisplaceNorthwest:
                         if ( std::find( triggerItems.begin (), triggerItems.end (), sender ) == triggerItems.end () )
                         {
                                 triggerItems.push_back( sender );
@@ -117,10 +117,10 @@ bool Switch::update ()
                                 mediator->toggleSwitchInRoom();
 
                                 // play sound of switching
-                                SoundManager::getInstance()->play( item->getLabel(), SwitchIt );
+                                SoundManager::getInstance()->play( item->getLabel(), Activity::SwitchIt );
                         }
 
-                        activity = Wait;
+                        activity = Activity::Wait;
                         break;
 
                 default:

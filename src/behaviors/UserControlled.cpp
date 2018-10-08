@@ -27,7 +27,7 @@ UserControlled::UserControlled( Item * item, const std::string & behavior )
         , automaticStepsThruDoor( 0 )
         , highSpeedSteps( 0 )
         , shieldSteps( 0 )
-        , fireFromHooterIsPresent( false )
+        , donutFromHooterIsHere( false )
         , speedTimer( nilPointer )
         , fallTimer( nilPointer )
         , glideTimer( nilPointer )
@@ -51,7 +51,7 @@ void UserControlled::changeActivityOfItem( const ActivityOfItem & activityOf, It
 {
         Behavior::changeActivityOfItem( activityOf, sender );
 
-        if ( activityOf == BeginWayInTeletransport )
+        if ( activityOf == Activity::BeginWayInTeletransport )
         {
                 this->item->changeFrame( this->nullFrame );
         }
@@ -64,7 +64,7 @@ void UserControlled::wait( PlayerItem * player )
         if ( FallKindOfActivity::getInstance()->fall( this ) )
         {
                 speedTimer->reset();
-                activity = Fall;
+                activity = Activity::Fall;
 
                 if ( player->getLabel() == "head" && player->getHighSpeed() > 0 && this->highSpeedSteps < 4 )
                 {
@@ -89,7 +89,7 @@ void UserControlled::move( PlayerItem * player )
                         bool moved = MoveKindOfActivity::getInstance()->move( this, &activity, true );
 
                         // decrement high speed
-                        if ( player->getHighSpeed() > 0 && moved && activity != Fall )
+                        if ( player->getHighSpeed() > 0 && moved && activity != Activity::Fall )
                         {
                                 this->highSpeedSteps++;
 
@@ -130,14 +130,14 @@ void UserControlled::autoMove( PlayerItem * player )
                 {
                         // done auto~moving
                         automaticStepsThruDoor = automaticSteps;
-                        activity = Wait;
+                        activity = Activity::Wait;
                 }
         }
 
         // when done then stop playing sound of auto movement
-        if ( activity == Wait )
+        if ( activity == Activity::Wait )
         {
-                SoundManager::getInstance()->stop( player->getLabel(), AutoMove );
+                SoundManager::getInstance()->stop( player->getLabel(), Activity::AutoMove );
         }
 }
 
@@ -149,7 +149,7 @@ void UserControlled::displace( PlayerItem * player )
         {
                 DisplaceKindOfActivity::getInstance()->displace( this, &activity, true );
 
-                activity = Wait;
+                activity = Activity::Wait;
 
                 speedTimer->reset();
         }
@@ -184,17 +184,17 @@ void UserControlled::fall( PlayerItem * player )
                                 player->changeFrame( fallFrames[ player->getOrientation().toString () ] );
                         }
                 }
-                else if ( activity != MeetMortalItem || ( activity == MeetMortalItem && player->hasShield() ) )
+                else if ( activity != Activity::MeetMortalItem || player->hasShield() )
                 {
-                        activity = Wait;
+                        activity = Activity::Wait;
                 }
 
                 fallTimer->reset();
         }
 
-        if ( activity != Fall )
+        if ( activity != Activity::Fall )
         {
-                SoundManager::getInstance()->stop( player->getLabel(), Fall );
+                SoundManager::getInstance()->stop( player->getLabel(), Activity::Fall );
         }
 }
 
@@ -202,38 +202,38 @@ void UserControlled::jump( PlayerItem * player )
 {
         switch ( activity )
         {
-                case Jump:
+                case Activity::Jump:
                         // look for item below
                         player->canAdvanceTo( 0, 0, -1 );
                         // when on trampoline or with rabbit of high jumps, player makes big leap
                         activity = ( player->getMediator()->collisionWithByBehavior( "behavior of big leap for player" ) ||
                                         ( player->getHighJumps() > 0 && player->getLabel() == "heels" )
-                                ? HighJump
-                                : RegularJump );
+                                ? Activity::HighJump
+                                : Activity::RegularJump );
 
-                        if ( activity == HighJump )
+                        if ( activity == Activity::HighJump )
                         {
                                 if ( player->getLabel() == "heels" )
                                 {
                                         player->decreaseHighJumps();
                                 }
-                                SoundManager::getInstance()->play( player->getOriginalLabel(), Rebound );
+                                SoundManager::getInstance()->play( player->getOriginalLabel(), Activity::Rebound );
                         }
                         break;
 
-                case RegularJump:
-                case HighJump:
+                case Activity::RegularJump:
+                case Activity::HighJump:
                         // is it time to jump
                         if ( speedTimer->getValue() > player->getSpeed() )
                         {
-                                if ( activity == RegularJump )
+                                if ( activity == Activity::RegularJump )
                                         JumpKindOfActivity::getInstance()->jump( this, &activity, jumpIndex, jumpVector );
-                                else if ( activity == HighJump )
+                                else if ( activity == Activity::HighJump )
                                         JumpKindOfActivity::getInstance()->jump( this, &activity, jumpIndex, highJumpVector );
 
                                 // to next phase of jump
                                 jumpIndex++ ;
-                                if ( activity == Fall ) jumpIndex = 0;
+                                if ( activity == Activity::Fall ) jumpIndex = 0;
 
                                 speedTimer->reset();
 
@@ -246,9 +246,9 @@ void UserControlled::jump( PlayerItem * player )
         }
 
         // when jump ends, stop sound of jumping
-        if ( activity != Jump && activity != RegularJump && activity != HighJump )
+        if ( activity != Activity::Jump && activity != Activity::RegularJump && activity != Activity::HighJump )
         {
-                SoundManager::getInstance()->stop( player->getLabel(), Jump );
+                SoundManager::getInstance()->stop( player->getLabel(), Activity::Jump );
         }
 
         // when player is active and is at maximum height of room it may go to room above
@@ -264,9 +264,9 @@ void UserControlled::glide( PlayerItem * player )
         {
                 // when there’s a collision then stop falling and return to waiting
                 if ( ! FallKindOfActivity::getInstance()->fall( this ) &&
-                        ( activity != MeetMortalItem || ( activity == MeetMortalItem && player->hasShield() ) ) )
+                        ( activity != Activity::MeetMortalItem || player->hasShield() ) )
                 {
-                        activity = Wait;
+                        activity = Activity::Wait;
                 }
 
                 glideTimer->reset();
@@ -274,24 +274,24 @@ void UserControlled::glide( PlayerItem * player )
 
         if ( speedTimer->getValue() > player->getSpeed() * ( player->getLabel() == "headoverheels" ? 2 : 1 ) )
         {
-                ActivityOfItem subactivity;
+                ActivityOfItem subactivity( Activity::Wait );
 
                 switch ( player->getOrientation().getIntegerOfWay () )
                 {
-                        case North:
-                                subactivity = MoveNorth;
+                        case Way::North:
+                                subactivity = Activity::MoveNorth;
                                 break;
 
-                        case South:
-                                subactivity = MoveSouth;
+                        case Way::South:
+                                subactivity = Activity::MoveSouth;
                                 break;
 
-                        case East:
-                                subactivity = MoveEast;
+                        case Way::East:
+                                subactivity = Activity::MoveEast;
                                 break;
 
-                        case West:
-                                subactivity = MoveWest;
+                        case Way::West:
+                                subactivity = Activity::MoveWest;
                                 break;
 
                         default:
@@ -306,10 +306,10 @@ void UserControlled::glide( PlayerItem * player )
                 speedTimer->reset();
         }
 
-        if ( activity != Glide )
+        if ( activity != Activity::Glide )
         {
-                // no gliding yet, so stop its sound
-                SoundManager::getInstance()->stop( player->getLabel(), Glide );
+                // not gliding yet, so stop its sound
+                SoundManager::getInstance()->stop( player->getLabel(), Activity::Glide );
         }
 }
 
@@ -317,25 +317,24 @@ void UserControlled::wayInTeletransport( PlayerItem * player )
 {
         switch ( activity )
         {
-                case BeginWayInTeletransport:
+                case Activity::BeginWayInTeletransport:
                         // change to bubbles
                         player->changeItemData( itemDataManager->findDataByLabel( labelOfTransitionViaTeleport ), "begin way in teletransport" );
 
                         // reverse animation of bubbles
                         player->setReverseMotion();
 
-                        // begin teleportation
-                        activity = WayInTeletransport;
+                        activity = Activity::WayInTeletransport;
                         break;
 
-                case WayInTeletransport:
+                case Activity::WayInTeletransport:
                         // animate item, player appears in room when animation finishes
                         if ( player->animate() )
                         {
                                 // back to original appearance of player
                                 player->changeItemData( player->getOriginalDataOfItem(), "way in teletransport" );
 
-                                activity = Wait;
+                                activity = Activity::Wait;
                         }
                         break;
 
@@ -348,15 +347,14 @@ void UserControlled::wayOutTeletransport( PlayerItem * player )
 {
         switch ( activity )
         {
-                case BeginWayOutTeletransport:
+                case Activity::BeginWayOutTeletransport:
                         // change to bubbles
                         player->changeItemData( itemDataManager->findDataByLabel( labelOfTransitionViaTeleport ), "begin way out teletransport" );
 
-                        // begin teleportation
-                        activity = WayOutTeletransport;
+                        activity = Activity::WayOutTeletransport;
                         break;
 
-                case WayOutTeletransport:
+                case Activity::WayOutTeletransport:
                         // animate item, change room when animation finishes
                         if ( player->animate() )
                         {
@@ -375,22 +373,22 @@ void UserControlled::collideWithMortalItem( PlayerItem* player )
         switch ( activity )
         {
                 // player just met mortal guy
-                case MeetMortalItem:
+                case Activity::MeetMortalItem:
                         // do you have immunity
                         if ( ! player->hasShield() )
                         {
                                 // change to bubbles retaining player’s label
                                 player->changeItemData( itemDataManager->findDataByLabel( labelOfTransitionViaTeleport ), "collide with mortal item" );
 
-                                activity = Vanish;
+                                activity = Activity::Vanish;
                         }
                         else
                         {
-                                activity = Wait;
+                                activity = Activity::Wait;
                         }
                         break;
 
-                case Vanish:
+                case Activity::Vanish:
                         if ( ! player->isActiveCharacter() )
                         {
                                 std::cout << "inactive " << player->getUniqueName() << " is going to vanish, activate it" << std::endl ;
@@ -415,13 +413,13 @@ void UserControlled::useHooter( PlayerItem* player )
         // El jugador puede disparar si tiene la bocina y rosquillas
         if ( player->hasTool( "horn" ) && player->getDoughnuts() > 0 )
         {
-                this->fireFromHooterIsPresent = true;
+                this->donutFromHooterIsHere = true;
 
                 ItemData* hooterData = this->itemDataManager->findDataByLabel( labelOfFireFromHooter );
 
                 if ( hooterData != nilPointer )
                 {
-                        SoundManager::getInstance()->stop( player->getLabel(), FireDoughnut );
+                        SoundManager::getInstance()->stop( player->getLabel(), Activity::FireDoughnut );
 
                         // create item at the same position as player
                         int z = player->getZ() + player->getHeight() - hooterData->getHeight();
@@ -445,7 +443,7 @@ void UserControlled::useHooter( PlayerItem* player )
 
                         player->useDoughnut();
 
-                        SoundManager::getInstance()->play( player->getOriginalLabel(), FireDoughnut );
+                        SoundManager::getInstance()->play( player->getOriginalLabel(), Activity::FireDoughnut );
                 }
         }
 }
@@ -484,27 +482,26 @@ void UserControlled::takeItem( PlayerItem * player )
                         // take that item
                         if ( takenItem != nilPointer )
                         {
-                                // get image of that item
-                                Picture* takenItemImage = new Picture( takenItem->getRawImage() );
-                                GameManager::getInstance()->setItemTaken( takenItemImage );
+                                Picture* takenItemImage = new Picture( *takenItem->getRawImage() );
 
-                                player->assignTakenItem( itemDataManager->findDataByLabel( takenItem->getLabel() ),
-                                                                takenItemImage,
+                                GameManager::getInstance()->setImageOfItemInBag( takenItemImage );
+
+                                player->placeItemInBag( itemDataManager->findDataByLabel( takenItem->getLabel() ),
                                                                 takenItem->getBehavior()->getNameOfBehavior () );
 
-                                takenItem->getBehavior()->changeActivityOfItem( Vanish );
-                                activity = ( activity == TakeAndJump ? Jump : TakenItem );
+                                takenItem->getBehavior()->changeActivityOfItem( Activity::Vanish );
+                                activity = ( activity == Activity::TakeAndJump ? Activity::Jump : Activity::ItemTaken );
 
-                                SoundManager::getInstance()->play( player->getOriginalLabel(), TakeItem );
+                                SoundManager::getInstance()->play( player->getOriginalLabel(), Activity::TakeItem );
 
                                 std::cout << "took item \"" << takenItem->getUniqueName() << "\"" << std::endl ;
                         }
                 }
         }
 
-        if ( activity != TakenItem && activity != Jump )
+        if ( activity != Activity::ItemTaken && activity != Activity::Jump )
         {
-                activity = Wait;
+                activity = Activity::Wait;
         }
 }
 
@@ -520,32 +517,32 @@ void UserControlled::dropItem( PlayerItem* player )
                         FreeItem* freeItem = new FreeItem( player->getTakenItemData(),
                                                            player->getX(), player->getY(),
                                                            player->getZ() - LayerHeight,
-                                                           Nowhere );
+                                                           Way::Nowhere );
 
                         freeItem->assignBehavior( player->getTakenItemBehavior(), nilPointer );
 
                         player->getMediator()->getRoom()->addFreeItem( freeItem );
 
-                        player->assignTakenItem( nilPointer, nilPointer, "still" );
+                        GameManager::getInstance()->emptyHandbag();
+
+                        player->placeItemInBag( nilPointer, "still" );
 
                         // update activity
-                        activity = ( activity == DropAndJump ? Jump : Wait );
+                        activity = ( activity == Activity::DropAndJump ? Activity::Jump : Activity::Wait );
 
-                        GameManager::getInstance()->setItemTaken( nilPointer );
-
-                        SoundManager::getInstance()->stop( player->getOriginalLabel(), Fall );
-                        SoundManager::getInstance()->play( player->getOriginalLabel(), DropItem );
+                        SoundManager::getInstance()->stop( player->getOriginalLabel(), Activity::Fall );
+                        SoundManager::getInstance()->play( player->getOriginalLabel(), Activity::DropItem );
                 }
                 else
                 {
                         // emit sound of o~ ou
-                        SoundManager::getInstance()->play( player->getOriginalLabel(), Mistake );
+                        SoundManager::getInstance()->play( player->getOriginalLabel(), Activity::Mistake );
                 }
         }
 
-        if ( activity != Jump )
+        if ( activity != Activity::Jump )
         {
-                activity = Wait;
+                activity = Activity::Wait;
         }
 }
 

@@ -20,7 +20,7 @@ using gui::CreateMainMenu;
 using isomot::SoundManager;
 
 
-CreateMainMenu::CreateMainMenu( allegro::Pict* picture ) :
+CreateMainMenu::CreateMainMenu( Picture * picture ) :
         Action( picture )
 {
 
@@ -28,11 +28,7 @@ CreateMainMenu::CreateMainMenu( allegro::Pict* picture ) :
 
 void CreateMainMenu::doAction ()
 {
-        if ( ! SoundManager::getInstance()->isPlayingOgg( "music/MainTheme.ogg" ) )
-        {
-                ///SoundManager::getInstance()->stopAnyOgg();
-                SoundManager::getInstance()->playOgg( "music/MainTheme.ogg", /* loop */ true );
-        }
+        SoundManager::getInstance()->playOgg( "music/MainTheme.ogg", /* loop */ true );
 
         Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this );
         if ( screen->countWidgets() == 0 )
