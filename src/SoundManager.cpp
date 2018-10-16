@@ -20,44 +20,44 @@ SoundManager::SoundManager( )
 {
         allegro::initAudio ();
 
-        activityToString[ Activity::Wait ] = "wait";
-        activityToString[ Activity::Push ] = "push";
-        activityToString[ Activity::Move ] = "move";
-        activityToString[ Activity::MoveNorth ] = activityToString[ Activity::MoveSouth ] = "move";
-        activityToString[ Activity::MoveEast ] = activityToString[ Activity::MoveWest ] = "move";
-        activityToString[ Activity::MoveNortheast ] = activityToString[ Activity::MoveSoutheast ] = "move";
-        activityToString[ Activity::MoveSouthwest ] = activityToString[ Activity::MoveNorthwest ] = "move";
-        activityToString[ Activity::MoveUp ] = activityToString[ Activity::MoveDown ] = "move";
-        activityToString[ Activity::AutoMove ] = "move";
-        activityToString[ Activity::AutoMoveNorth ] = activityToString[ Activity::AutoMoveSouth ] = "move";
-        activityToString[ Activity::AutoMoveEast ] = activityToString[ Activity::AutoMoveWest ] = "move";
-        activityToString[ Activity::Blink ] = "blink";
-        activityToString[ Activity::Jump ] = "jump";
-        activityToString[ Activity::RegularJump ] = activityToString[ Activity::HighJump ] = "jump";
-        activityToString[ Activity::Fall ] = "fall";
-        activityToString[ Activity::Glide ] = "fall";
-        activityToString[ Activity::TakeItem ] = activityToString[ Activity::TakeAndJump ] = "take";
-        activityToString[ Activity::ItemTaken ] = "taken";
-        activityToString[ Activity::DropItem ] = activityToString[ Activity::DropAndJump ] = "drop";
-        activityToString[ Activity::DisplaceNorth ] = activityToString[ Activity::DisplaceSouth ] = "push";
-        activityToString[ Activity::DisplaceEast ] = activityToString[ Activity::DisplaceWest ] = "push";
-        activityToString[ Activity::DisplaceNortheast ] = activityToString[ Activity::DisplaceSoutheast ] = "push";
-        activityToString[ Activity::DisplaceSouthwest ] = activityToString[ Activity::DisplaceNorthwest ] = "push";
-        activityToString[ Activity::DisplaceUp ] = activityToString[ Activity::DisplaceDown ] = "push";
-        activityToString[ Activity::BeginWayOutTeletransport ] = activityToString[ Activity::WayOutTeletransport ] = "teleport-out";
-        activityToString[ Activity::BeginWayInTeletransport ] = activityToString[ Activity::WayInTeletransport ] = "teleport-in";
-        activityToString[ Activity::ForceDisplaceNorth ] = activityToString[ Activity::ForceDisplaceSouth ] = "force";
-        activityToString[ Activity::ForceDisplaceEast ] = activityToString[ Activity::ForceDisplaceWest ] = "force";
-        activityToString[ Activity::CancelDisplaceNorth ] = activityToString[ Activity::CancelDisplaceSouth ] = "move";
-        activityToString[ Activity::CancelDisplaceEast ] = activityToString[ Activity::CancelDisplaceWest ] = "move";
-        activityToString[ Activity::MeetMortalItem ] = "death";
-        activityToString[ Activity::Vanish ] = "vanish";
-        activityToString[ Activity::FireDoughnut ] = "donut";
-        activityToString[ Activity::Rebound ] = "rebound";
-        activityToString[ Activity::SwitchIt ] = "switch";
-        activityToString[ Activity::Collision ] = "collision";
-        activityToString[ Activity::IsActive ] = "active";
-        activityToString[ Activity::Mistake ] = "mistake";
+        activityStrings[ Activity::Wait ] = "wait";
+        activityStrings[ Activity::Push ] = "push";
+        activityStrings[ Activity::Move ] = "move";
+        activityStrings[ Activity::MoveNorth ] = activityStrings[ Activity::MoveSouth ] = "move";
+        activityStrings[ Activity::MoveEast ] = activityStrings[ Activity::MoveWest ] = "move";
+        activityStrings[ Activity::MoveNortheast ] = activityStrings[ Activity::MoveSoutheast ] = "move";
+        activityStrings[ Activity::MoveSouthwest ] = activityStrings[ Activity::MoveNorthwest ] = "move";
+        activityStrings[ Activity::MoveUp ] = activityStrings[ Activity::MoveDown ] = "move";
+        activityStrings[ Activity::AutoMove ] = "move";
+        activityStrings[ Activity::AutoMoveNorth ] = activityStrings[ Activity::AutoMoveSouth ] = "move";
+        activityStrings[ Activity::AutoMoveEast ] = activityStrings[ Activity::AutoMoveWest ] = "move";
+        activityStrings[ Activity::Blink ] = "blink";
+        activityStrings[ Activity::Jump ] = "jump";
+        activityStrings[ Activity::RegularJump ] = activityStrings[ Activity::HighJump ] = "jump";
+        activityStrings[ Activity::Fall ] = "fall";
+        activityStrings[ Activity::Glide ] = "fall";
+        activityStrings[ Activity::TakeItem ] = activityStrings[ Activity::TakeAndJump ] = "take";
+        activityStrings[ Activity::ItemTaken ] = "taken";
+        activityStrings[ Activity::DropItem ] = activityStrings[ Activity::DropAndJump ] = "drop";
+        activityStrings[ Activity::DisplaceNorth ] = activityStrings[ Activity::DisplaceSouth ] = "push";
+        activityStrings[ Activity::DisplaceEast ] = activityStrings[ Activity::DisplaceWest ] = "push";
+        activityStrings[ Activity::DisplaceNortheast ] = activityStrings[ Activity::DisplaceSoutheast ] = "push";
+        activityStrings[ Activity::DisplaceSouthwest ] = activityStrings[ Activity::DisplaceNorthwest ] = "push";
+        activityStrings[ Activity::DisplaceUp ] = activityStrings[ Activity::DisplaceDown ] = "push";
+        activityStrings[ Activity::BeginWayOutTeletransport ] = activityStrings[ Activity::WayOutTeletransport ] = "teleport-out";
+        activityStrings[ Activity::BeginWayInTeletransport ] = activityStrings[ Activity::WayInTeletransport ] = "teleport-in";
+        activityStrings[ Activity::ForceDisplaceNorth ] = activityStrings[ Activity::ForceDisplaceSouth ] = "force";
+        activityStrings[ Activity::ForceDisplaceEast ] = activityStrings[ Activity::ForceDisplaceWest ] = "force";
+        activityStrings[ Activity::CancelDisplaceNorth ] = activityStrings[ Activity::CancelDisplaceSouth ] = "move";
+        activityStrings[ Activity::CancelDisplaceEast ] = activityStrings[ Activity::CancelDisplaceWest ] = "move";
+        activityStrings[ Activity::MeetMortalItem ] = "death";
+        activityStrings[ Activity::Vanish ] = "vanish";
+        activityStrings[ Activity::FireDoughnut ] = "donut";
+        activityStrings[ Activity::Rebound ] = "rebound";
+        activityStrings[ Activity::SwitchIt ] = "switch";
+        activityStrings[ Activity::Collision ] = "collision";
+        activityStrings[ Activity::IsActive ] = "active";
+        activityStrings[ Activity::Mistake ] = "mistake";
 }
 
 SoundManager::~SoundManager( )
@@ -151,14 +151,13 @@ void SoundManager::play( const std::string& label, const ActivityOfItem& activit
                         sample->loop();
 
 #if defined( DEBUG_SOUNDS ) && DEBUG_SOUNDS
-                std::cout << ( loop ? "looping" : "playing" ) << " sound for event \"" << translateActivityToString( activity ) << "\" of " << label
-                                << " ( voice " << sample->getVoice() << " @ " << sample->getFrequency() << " Hz"
-                                        << " volume " << sample->getVolume() << " )" << std::endl ;
+                std::cout << ( loop ? "looping" : "playing" ) << " sound for event \"" << activityToString( activity )
+                                << "\" of \"" << label << "\"" << std::endl ;
 #endif
         }
 
         for ( std::map< std::string, allegro::Sample* >::const_iterator j = samples.begin (); j != samples.end (); ++ j )
-                        if ( j->second != nilPointer ) j->second->binVoiceIfNotPlaying() ;
+                        if ( j->second != nilPointer ) j->second->neatenIfNotPlaying() ;
 }
 
 void SoundManager::stop( const std::string& label, const ActivityOfItem& activity )
@@ -168,8 +167,7 @@ void SoundManager::stop( const std::string& label, const ActivityOfItem& activit
         if ( sample != nilPointer && sample->isNotNil() )
         {
 #if defined( DEBUG_SOUNDS ) && DEBUG_SOUNDS
-                std::cout << "stopping sound for event \"" << translateActivityToString( activity ) << "\" of " << label
-                                << " ( voice " << sample->getVoice() << " )" << std::endl ;
+                std::cout << "stopping sound for event \"" << activityToString( activity ) << "\" of \"" << label << "\"" << std::endl ;
 #endif
                 sample->stop();
         }
@@ -188,16 +186,17 @@ void SoundManager::playOgg ( const std::string& oggFile, bool loop )
         std::string fullName = isomot::pathToFile( isomot::sharePath() + oggFile );
 
          // let’s play the same again? yep, when it’s finished playing
-        if ( oggPlayingThread.getFilePlaying() != fullName || ! oggPlayingThread.isPlaying() )
+        if ( oggPlayer.getFilePlaying() != fullName || ! oggPlayer.isPlaying() )
         {
                 // it is playback of just single Ogg yet
-                oggPlayingThread.stop();
+                oggPlayer.stop();
 
                 allegro::setDigitalVolume( ( this->musicVolume * 255 ) / 99 );
 
-                oggPlayingThread.play( fullName, loop );
+                oggPlayer.play( fullName, loop );
 
-                std::cout << ( loop ? "looping" : "playing" ) << " Ogg " << oggPlayingThread.getFilePlaying() << std::endl ;
+                if ( ! oggPlayer.getFilePlaying().empty() )
+                        std::cout << ( loop ? "looping" : "playing" ) << " Ogg " << oggPlayer.getFilePlaying() << std::endl ;
         }
 }
 
@@ -219,10 +218,10 @@ allegro::Sample* SoundManager::getSampleFor( const std::string& label, const std
         return allegro::Sample::nilSample() ;
 }
 
-std::string SoundManager::translateActivityToString ( const ActivityOfItem& activity )
+std::string SoundManager::activityToString ( const ActivityOfItem& activity )
 {
-        if ( activityToString.find( activity ) != activityToString.end () )
-                return activityToString[ activity ];
+        if ( activityStrings.find( activity ) != activityStrings.end () )
+                return activityStrings[ activity ];
 
         return "other";
 }

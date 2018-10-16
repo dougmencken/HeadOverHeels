@@ -132,6 +132,7 @@ namespace isomot
 
                 free( listOfSymbols );
 #else
+                ( void ) howDeep ;
                 fprintf( out, "no backtrace for non-debug build or when there’s no execinfo.h\n" );
 #endif
         }

@@ -27,8 +27,8 @@ namespace gui
 class Label ;
 
 /**
- * Menu of user interface where options are chosen by Up Arrow / Down Arrow keys
- * and are selected by using Enter key
+ * Menu of user interface, where options are chosen by Up Arrow or Q / Down Arrow or A keys
+ * and are selected by using Enter or Space key
  */
 
 class Menu : public Widget
@@ -86,8 +86,6 @@ protected:
          */
         virtual void nextOption () ;
 
-        void refreshPictures () ;
-
         Picture * whereToDraw ;
 
         /**
@@ -103,17 +101,19 @@ protected:
         /**
          * Image before each option of menu
          */
-        Picture * optionImage ;
+        static Picture * beforeOption ;
 
         /**
-         * Image for the chosen option which is double sized
+         * Image for the chosen option which is double height
          */
-        Picture * chosenOptionImage ;
+        static Picture * beforeChosenOption ;
 
         /**
-         * Image for the chosen option which is single sized
+         * Image for the chosen option which is single height
          */
-        Picture * chosenOptionImageMini ;
+        static Picture * beforeChosenOptionMini ;
+
+        static void makePicturesForOptions () ;
 
 };
 

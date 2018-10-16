@@ -42,15 +42,31 @@ AC_CHECK_HEADERS([tinyxml2.h],, [AC_MSG_ERROR(tinyxml2 header is absent)])
 AC_LANG_POP([C++])
 
 AC_ARG_WITH([allegro5],
-        [AS_HELP_STRING([--with-allegro5], [build game with allegro5 library (default: no)])], [], [with_allegro5=no])
+        [AS_HELP_STRING([--with-allegro5], [build game with allegro5 library (default: check)])], [], [with_allegro5=check])
 AC_ARG_WITH([allegro4],
         [AS_HELP_STRING([--with-allegro4], [build game with allegro4 library (default: check)])], [], [with_allegro4=check])
 
+if test x"$with_allegro4" = x"yes" -a x"$with_allegro5" = x"yes" ; then
+    AC_MSG_ERROR(--with_allegro5 and --with_allegro4 are mutually exclusive)
+fi
+
 AC_CHECK_HEADERS([allegro5/allegro.h], [HAVE_ALLEGRO5=1], [HAVE_ALLEGRO5=0], [])
-AM_CONDITIONAL([USE_ALLEGRO5], [test "$with_allegro5" != no -a "$HAVE_ALLEGRO5" -eq 1])
+AM_CONDITIONAL([USE_ALLEGRO5], [test "$with_allegro5" != no -a "$with_allegro4" != yes -a "$HAVE_ALLEGRO5" -eq 1])
 
 AC_CHECK_HEADERS([allegro.h], [HAVE_ALLEGRO4=1], [HAVE_ALLEGRO4=0], [])
-AM_CONDITIONAL([USE_ALLEGRO4], [test "$with_allegro4" != no -a "$HAVE_ALLEGRO4" -eq 1])
+AM_CONDITIONAL([USE_ALLEGRO4], [test "$with_allegro4" != no -a "$with_allegro5" != yes -a "$HAVE_ALLEGRO4" -eq 1])
+
+# check for Darwin
+AC_MSG_CHECKING([if running on Darwin])
+UNAME=`uname -s`
+if test x"$UNAME" = x"Darwin"; then
+        AC_MSG_RESULT([yes])
+        on_darwin=true
+else
+        AC_MSG_RESULT([no])
+        on_darwin=false
+fi
+AM_CONDITIONAL([DARWIN], [test x"$on_darwin" = x"true"])
 
 # look for typedefs, structures, and compiler characteristics
 

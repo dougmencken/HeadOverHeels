@@ -346,7 +346,9 @@ Picture * Screen::loadPicture ( const std::string& nameOfPicture )
 #if defined( DEBUG ) && DEBUG
         std::cout << "Screen::loadPicture( \"" << nameOfPicture << "\" )" << std::endl ;
 #endif
-        smartptr< allegro::Pict > pict( allegro::loadPNG( isomot::pathToFile( GuiManager::getInstance()->getPathToPicturesOfGui() + nameOfPicture ) ) );
+        smartptr< allegro::Pict > pict( allegro::Pict::fromPNGFile (
+                isomot::pathToFile( GuiManager::getInstance()->getPathToPicturesOfGui() + nameOfPicture )
+        ) );
         return new Picture( *pict.get() ) ;
 }
 
@@ -364,11 +366,11 @@ std::vector< allegro::Pict * > Screen::loadAnimation ( const char * nameOfGif )
 /* static */
 void Screen::scrollHorizontally( Screen* oldScreen, Screen* newScreen, bool rightToLeft )
 {
-        if ( oldScreen == nilPointer || newScreen == nilPointer ||
-                oldScreen == newScreen ||
+        if ( oldScreen == newScreen ||
+                oldScreen == nilPointer || newScreen == nilPointer ||
                 oldScreen->imageOfScreen == nilPointer || newScreen->imageOfScreen == nilPointer ) return ;
 
-        Picture * oldPicture = new Picture( * oldScreen->imageOfScreen );
+        Picture oldPicture( * oldScreen->imageOfScreen );
 
         newScreen->redraw ();
         Picture * newPicture = newScreen->imageOfScreen;
@@ -381,26 +383,25 @@ void Screen::scrollHorizontally( Screen* oldScreen, Screen* newScreen, bool righ
 
                 if ( rightToLeft )
                 {
-                        allegro::bitBlit( oldPicture->getAllegroPict(), allegro::Pict::theScreen(), x, 0, 0, 0, oldPicture->getWidth() - x, isomot::ScreenHeight() );
-                        allegro::bitBlit( newPicture->getAllegroPict(), allegro::Pict::theScreen(), 0, 0, oldPicture->getWidth() - x, 0, x, isomot::ScreenHeight() );
+                        allegro::bitBlit( oldPicture.getAllegroPict(), allegro::Pict::theScreen(), x, 0, 0, 0, oldPicture.getWidth() - x, isomot::ScreenHeight() );
+                        allegro::bitBlit( newPicture->getAllegroPict(), allegro::Pict::theScreen(), 0, 0, oldPicture.getWidth() - x, 0, x, isomot::ScreenHeight() );
                 }
                 else
                 {
                         allegro::bitBlit( newPicture->getAllegroPict(), allegro::Pict::theScreen(), newPicture->getWidth() - x, 0, 0, 0, x, isomot::ScreenHeight() );
-                        allegro::bitBlit( oldPicture->getAllegroPict(), allegro::Pict::theScreen(), 0, 0, x, 0, newPicture->getWidth() - x, isomot::ScreenHeight() );
+                        allegro::bitBlit( oldPicture.getAllegroPict(), allegro::Pict::theScreen(), 0, 0, x, 0, newPicture->getWidth() - x, isomot::ScreenHeight() );
                 }
 
                 milliSleep( 1 );
         }
-
-        delete oldPicture ;
 }
 
 /* static */
 void Screen::wipeHorizontally( Screen* oldScreen, Screen* newScreen, bool rightToLeft )
 {
-        if ( oldScreen == nilPointer || newScreen == nilPointer ||
-                oldScreen == newScreen || newScreen->imageOfScreen == nilPointer ) return ;
+        if ( oldScreen == newScreen ||
+                oldScreen == nilPointer || newScreen == nilPointer ||
+                oldScreen->imageOfScreen == nilPointer || newScreen->imageOfScreen == nilPointer ) return ;
 
         newScreen->redraw ();
         Picture * newPicture = newScreen->imageOfScreen ;
@@ -425,8 +426,11 @@ void Screen::wipeHorizontally( Screen* oldScreen, Screen* newScreen, bool rightT
 /* static */
 void Screen::barWipeHorizontally( Screen* oldScreen, Screen* newScreen, bool rightToLeft )
 {
-        if ( oldScreen == nilPointer || newScreen == nilPointer ||
-                oldScreen == newScreen || newScreen->imageOfScreen == nilPointer ) return ;
+        if ( oldScreen == newScreen ||
+                oldScreen == nilPointer || newScreen == nilPointer ||
+                oldScreen->imageOfScreen == nilPointer || newScreen->imageOfScreen == nilPointer ) return ;
+
+        Picture buffer( * oldScreen->imageOfScreen );
 
         newScreen->redraw ();
         Picture * newPicture = newScreen->imageOfScreen ;
@@ -442,19 +446,19 @@ void Screen::barWipeHorizontally( Screen* oldScreen, Screen* newScreen, bool rig
                 {
                         if ( rightToLeft )
                         {
-                                allegro::bitBlit( newPicture->getAllegroPict(), allegro::Pict::theScreen(), pieceX + widthOfPiece - x, 0, pieceX + widthOfPiece - x, 0, x, isomot::ScreenHeight() );
+                                allegro::bitBlit( newPicture->getAllegroPict(), buffer.getAllegroPict(), pieceX + widthOfPiece - x, 0, pieceX + widthOfPiece - x, 0, x, isomot::ScreenHeight() );
                         }
                         else
                         {
-                                allegro::bitBlit( newPicture->getAllegroPict(), allegro::Pict::theScreen(), pieceX, 0, pieceX, 0, x, isomot::ScreenHeight() );
+                                allegro::bitBlit( newPicture->getAllegroPict(), buffer.getAllegroPict(), pieceX, 0, pieceX, 0, x, isomot::ScreenHeight() );
                         }
                 }
+
+                allegro::bitBlit( buffer.getAllegroPict(), allegro::Pict::theScreen() );
 
                 milliSleep( 2 );
         }
 }
-
-///#define MAKE_LIST_OF_RANDOM_POINTS
 
 /* static */
 void Screen::randomPixelFade( bool fadeIn, Screen * slide, const Color& color )
@@ -464,11 +468,11 @@ void Screen::randomPixelFade( bool fadeIn, Screen * slide, const Color& color )
         // refresh screen before fading
         slide->redraw();
 
-        int allegroColor = color.toAllegroColor() ;
+        AllegroColor aColor = color.toAllegroColor() ;
 
         if ( fadeIn )
         {
-                allegro::Pict::theScreen().clearToColor( allegroColor );
+                allegro::Pict::theScreen().clearToColor( aColor );
         }
 
         const unsigned int screenWidth = slide->imageOfScreen->getWidth() ;
@@ -478,48 +482,24 @@ void Screen::randomPixelFade( bool fadeIn, Screen * slide, const Color& color )
 
         std::vector< bool > bits( howManyPixels, false ); // bit map of howManyPixels bits
 
-#ifdef MAKE_LIST_OF_RANDOM_POINTS
-        short * pointsX = new short[ howManyPixels ];
-        short * pointsY = new short[ howManyPixels ];
-#endif
+        unsigned int limit = ( howManyPixels >= 100000 ) ? ( howManyPixels / 50000 ) - 1 : 0 ;
 
-        for ( size_t yet = 0 ; yet < howManyPixels ; )
+        for ( size_t yet = 0 ; yet < howManyPixels - limit ; )
         {
                 int x = rand() % screenWidth ;  /* random between 0 and screenWidth - 1 */
                 int y =  rand() % screenHeight ; /* random between 0 and screenHeight - 1 */
 
                 if ( ! bits[ x + y * screenWidth ] )
                 {
-#ifdef MAKE_LIST_OF_RANDOM_POINTS
-                        pointsX[ yet ] = static_cast< short >( x );
-                        pointsY[ yet ] = static_cast< short >( y );
-#else
                         if ( fadeIn )
-                                allegro::Pict::theScreen().setPixelAt( x, y, slide->imageOfScreen->getAllegroPict().getPixelAt( x, y ) );
+                                allegro::Pict::theScreen().drawPixelAt( x, y, slide->imageOfScreen->getPixelAt( x, y ) );
                         else
-                                allegro::Pict::theScreen().setPixelAt( x, y, allegroColor );
-#endif
+                                allegro::Pict::theScreen().drawPixelAt( x, y, aColor );
 
                         bits[ x + y * screenWidth ] = true;
                         yet ++;
                 }
         }
-
-#ifdef MAKE_LIST_OF_RANDOM_POINTS
-        for ( size_t i = 0 ; i < howManyPixels ; i ++ )
-        {
-                short x = pointsX[ i ];
-                short y = pointsY[ i ];
-
-                if ( fadeIn )
-                        allegro::Pict::theScreen().setPixelAt( x, y, slide->imageOfScreen->getAllegroPict().getPixelAt( x, y ) );
-                else
-                        allegro::Pict::theScreen().setPixelAt( x, y, allegroColor );
-        }
-
-        delete pointsX ;
-        delete pointsY ;
-#endif
 }
 
 }

@@ -309,7 +309,7 @@ FloorTile* RoomBuilder::buildFloorTile( tinyxml2::XMLElement* tile, const char* 
         tinyxml2::XMLElement* y = tile->FirstChildElement( "y" );
         std::string pictureString = tile->FirstChildElement( "picture" )->FirstChild()->ToText()->Value();
 
-        smartptr< allegro::Pict > picture( allegro::loadPNG (
+        smartptr< allegro::Pict > picture( allegro::Pict::fromPNGFile (
                 isomot::pathToFile( isomot::sharePath() + gfxPrefix + pathSeparator + pictureString )
         ) );
         if ( ! picture->isNotNil() ) {
@@ -327,7 +327,7 @@ Wall* RoomBuilder::buildWall( tinyxml2::XMLElement* wall, const char* gfxPrefix 
         std::string axisString = wall->FirstChildElement( "axis" )->FirstChild()->ToText()->Value();
         std::string pictureString = wall->FirstChildElement( "picture" )->FirstChild()->ToText()->Value();
 
-        smartptr< allegro::Pict > picture( allegro::loadPNG (
+        smartptr< allegro::Pict > picture( allegro::Pict::fromPNGFile (
                 isomot::pathToFile( isomot::sharePath() + gfxPrefix + pathSeparator + pictureString )
         ) );
         if ( ! picture->isNotNil() ) {

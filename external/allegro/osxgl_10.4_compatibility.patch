@@ -1,0 +1,92 @@
+NSTrackingArea appeared in OS X 10.5
+
+ALOpenGLView may not respond to -exitFullScreenModeWithOptions:
+
+--- a/src/macosx/osxgl.h
++++ b/src/macosx/osxgl.h
+@@ -21,7 +21,9 @@
+    NSCursor* cursor;
+    CGDirectDisplayID display_id;
+    BOOL show_cursor;
++#if MAC_OS_X_VERSION_MIN_REQUIRED >= 1050
+    NSTrackingArea *tracking;
++#endif
+    unsigned int display_group;
+    BOOL in_fullscreen;
+ } ALLEGRO_DISPLAY_OSX_WIN;
+--- a/src/macosx/osxgl.m
++++ b/src/macosx/osxgl.m
+@@ -149,6 +149,7 @@
+ static NSOpenGLContext* osx_create_shareable_context(NSOpenGLPixelFormat* fmt, unsigned int* group);
+ static bool set_display_flag(ALLEGRO_DISPLAY *display, int flag, bool onoff);
+ 
++#if MAC_OS_X_VERSION_MIN_REQUIRED >= 1050
+ static NSTrackingArea *create_tracking_area(NSView *view)
+ {
+    NSTrackingAreaOptions options =
+@@ -158,6 +159,7 @@
+       NSTrackingActiveAlways;
+    return [[NSTrackingArea alloc] initWithRect:[view bounds] options:options owner:view userInfo:nil];
+ }
++#endif
+ 
+ /* osx_change_cursor:
+  * Actually change the current cursor. This can be called fom any thread 
+@@ -307,12 +309,14 @@
+       glMatrixMode(GL_PROJECTION);
+       glLoadIdentity();
+       glOrtho(0, NSWidth(rc), NSHeight(rc), 0, -1, 1);
+-      
++
++#if MAC_OS_X_VERSION_MIN_REQUIRED >= 1050
+       if (dpy->tracking) {
+          [self removeTrackingArea: dpy->tracking];
+          dpy->tracking = create_tracking_area(self);
+ 	 [self addTrackingArea: dpy->tracking];
+       }
++#endif
+    }
+ }
+ 
+@@ -405,17 +409,21 @@
+ /* Cursor handling */
+ - (void) viewDidMoveToWindow {
+    ALLEGRO_DISPLAY_OSX_WIN* dpy =  (ALLEGRO_DISPLAY_OSX_WIN*) dpy_ptr;
++#if MAC_OS_X_VERSION_MIN_REQUIRED >= 1050
+    dpy->tracking = create_tracking_area(self);
+    [self addTrackingArea: dpy->tracking];
++#endif
+ }
+ 
+ - (void) viewWillMoveToWindow: (NSWindow*) newWindow {
+    ALLEGRO_DISPLAY_OSX_WIN* dpy = (ALLEGRO_DISPLAY_OSX_WIN*) dpy_ptr;
+    (void)newWindow;
++#if MAC_OS_X_VERSION_MIN_REQUIRED >= 1050
+    if (([self window] != nil) && (dpy->tracking != 0)) {
+       [self removeTrackingArea:dpy->tracking];
+       dpy->tracking = 0;
+    }
++#endif
+ }
+ 
+ -(void) mouseEntered: (NSEvent*) evt
+@@ -550,7 +558,9 @@
+     * (my theory)
+     */
+    [dpy->win orderOut:[dpy->win contentView]];
+-   [self exitFullScreenModeWithOptions: nil];
++   if ([self respondsToSelector:@selector(exitFullScreenModeWithOptions:)]) {
++      [self exitFullScreenModeWithOptions: nil];
++   }
+ }
+ 
+ -(void) finishExitingFullScreenWindowMode
+@@ -884,7 +894,7 @@
+                   defer: NO
+                  screen: screen];
+    if (dpy->parent.flags & ALLEGRO_RESIZABLE) {
+-      if ([win respondsToSelector:NSSelectorFromString(@"setCollectionBehavior:")]) {
++      if ([win respondsToSelector:@selector(setCollectionBehavior:)]) {
+          [win setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
+       }
+    }

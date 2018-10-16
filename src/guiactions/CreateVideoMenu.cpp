@@ -98,7 +98,7 @@ void CreateVideoMenu::doAction ()
                         {
                                 bool doneWithKey = false;
 
-                                if ( theKey == "Left" || theKey == "Right" )
+                                if ( theKey == "Left" || theKey == "Right" || theKey == "o" || theKey == "p" )
                                 {
                                         if ( listOfOptions->getActiveOption () == labelFullscreen )
                                         {

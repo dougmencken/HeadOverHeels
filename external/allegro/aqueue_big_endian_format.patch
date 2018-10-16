@@ -1,0 +1,12 @@
+--- a/addons/audio/aqueue.m
++++ b/addons/audio/aqueue.m
+@@ -255,6 +255,9 @@
+    else
+    	desc.mFormatFlags = kLinearPCMFormatFlagIsFloat |
+ 		kLinearPCMFormatFlagIsPacked;
++#ifdef ALLEGRO_BIG_ENDIAN
++   desc.mFormatFlags |= kLinearPCMFormatFlagIsBigEndian;
++#endif
+    desc.mBytesPerPacket = ex_data->channels * (ex_data->bits_per_sample/8);
+    desc.mFramesPerPacket = 1;
+    desc.mBytesPerFrame = ex_data->channels * (ex_data->bits_per_sample/8);

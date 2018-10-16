@@ -119,12 +119,12 @@ void CreateAudioMenu::doAction ()
                                         int value = ( listOfOptions->getActiveOption () == labelMusic ) ? musicVolume : effectsVolume ;
                                         int previousValue = value;
 
-                                        if ( theKey == "Left" )
+                                        if ( theKey == "Left" || theKey == "o" )
                                         {
                                                 value = ( value > 0 ? value - 1 : 0 ); // decrease volume
                                                 doneWithKey = true;
                                         }
-                                        else if ( theKey == "Right" )
+                                        else if ( theKey == "Right" || theKey == "p" )
                                         {
                                                 value = ( value < 99 ? value + 1 : 99 ); // increase volume
                                                 doneWithKey = true;
@@ -151,7 +151,7 @@ void CreateAudioMenu::doAction ()
                                 }
                                 else if ( listOfOptions->getActiveOption () == playRoomTunes )
                                 {
-                                        if ( theKey == "Left" || theKey == "Right" )
+                                        if ( theKey == "Left" || theKey == "Right" || theKey == "o" || theKey == "p" )
                                         {
                                                 isomot::GameManager::getInstance()->togglePlayMelodyOfScenery ();
                                                 listOfOptions->setValueOf( playRoomTunes, isomot::GameManager::getInstance()->playMelodyOfScenery () ? yeah : nope );

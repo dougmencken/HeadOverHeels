@@ -3,6 +3,8 @@ gamedata_DATA = items.xml \
 		sounds.xml \
 		letters.utf8 \
 		font.png \
+		menu-option.png \
+		chosen-menu-option.png \
 		loading-screen.png \
 		shadow-template.png
 

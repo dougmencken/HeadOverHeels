@@ -23,10 +23,10 @@ FreeItem::FreeItem( ItemData* itemData, int x, int y, int z, const Way& way )
         if ( yPos < 0 ) yPos = 0;
 
         // init frames
-        int howManyFrames = ( getDataOfItem()->howManyMotions() - getDataOfItem()->howManyExtraFrames() ) / getDataOfItem()->howManyFramesForOrientations() ;
+        int howManyFrames = ( getDataOfItem()->howManyMotions() - getDataOfItem()->howManyExtraFrames() ) / getDataOfItem()->howManyFramesPerOrientation() ;
         unsigned int orientation = ( way.getIntegerOfWay() == Way::Nowhere ? 0 : way.getIntegerOfWay() );
-        int currentFrame = ( getDataOfItem()->howManyFramesForOrientations() > 1 ?
-                                        getDataOfItem()->getFrameAt( getIndexOfFrame() ) + howManyFrames * orientation :
+        int currentFrame = ( getDataOfItem()->howManyFramesPerOrientation() > 1 ?
+                                        getDataOfItem()->getFrameAt( getCurrentFrame() ) + howManyFrames * orientation :
                                         getDataOfItem()->getFrameAt( 0 ) );
 
         this->rawImage = getDataOfItem()->getMotionAt( currentFrame );
@@ -78,12 +78,12 @@ void FreeItem::draw( const allegro::Pict& where )
         }
         else
         {
-                allegro::drawSpriteWithTransparencyBlender(
+                allegro::drawSpriteWithTransparency(
                         where,
                         imageToDraw->getAllegroPict(),
                         mediator->getRoom()->getX0 () + this->offset.first,
                         mediator->getRoom()->getY0 () + this->offset.second,
-                        0, 0, 0, static_cast < int > ( 256 - 2.56 * this->transparency )
+                        static_cast < unsigned char > ( 255 - 2.55 * this->transparency )
                 ) ;
         }
 }
@@ -415,16 +415,22 @@ void FreeItem::maskItemBehindItem( FreeItem* itemToMask, Item* upwardItem )
         int iRow = 0;           // row of pixels in upwardImage
         int iPixel = 0;         // pixel in row of upwardImage
 
+        upwardImage->getAllegroPict().lock( true, false );
+        maskedImage->getAllegroPict().lock( false, true );
+
         for ( cRow = iniY, iRow = deltaY ; cRow < endY ; cRow++, iRow++ )
         {
                 for ( cPixel = iniX, iPixel = deltaX ; cPixel < endX ; cPixel++, iPixel++ )
                 {
-                        if ( ! Color::isKeyColor( upwardImage->getPixelAt( iPixel, iRow ) ) )
+                        if ( ! upwardImage->getPixelAt( iPixel, iRow ).isKeyColor() )
                         {
-                                maskedImage->setPixelAt( cPixel, cRow, Color::colorOfTransparency() );
+                                maskedImage->putPixelAt( cPixel, cRow, Color() );
                         }
                 }
         }
+
+        maskedImage->getAllegroPict().unlock();
+        upwardImage->getAllegroPict().unlock();
 
         itemToMask->setProcessedImage( maskedImage );
 }

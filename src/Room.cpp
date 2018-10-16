@@ -781,12 +781,12 @@ void Room::dontDisappearOnJump ()
                                         Picture* original = gridItem->getRawImage();
                                         Picture* copy = new Picture( *original );
 
-                                        gridItem->changeImage( Color::multiplyWithColor(
+                                        Color::multiplyWithColor(
                                                 copy,
                                                 ( behavior == "behavior of slow disappearance on jump into" ) ?
-                                                        Color::magentaColor() :
-                                                        Color::redColor() )
-                                        );
+                                                        Color::magentaColor() : Color::redColor() );
+
+                                        gridItem->changeImage( copy );
                                 }
                         }
                 }
@@ -808,12 +808,12 @@ void Room::dontDisappearOnJump ()
                                 Picture* original = freeItem->getRawImage();
                                 Picture* copy = new Picture( *original );
 
-                                freeItem->changeImage( Color::multiplyWithColor(
+                                Color::multiplyWithColor(
                                         copy,
                                         ( behavior == "behavior of slow disappearance on jump into" ) ?
-                                                Color::magentaColor() :
-                                                Color::redColor() )
-                                );
+                                                Color::magentaColor() : Color::redColor() );
+
+                                freeItem->changeImage( copy );
                         }
                 }
         }
@@ -826,11 +826,8 @@ void Room::draw( const allegro::Pict& where )
         // draw room when it is active and image to draw it isn’t nil
         if ( active && where.isNotNil() )
         {
-                // acquire video memory before drawing
-                if ( where.isInVideoMemory() )
-                {
-                        allegro::acquirePict( where );
-                }
+                // acquire picture before drawing
+                allegro::acquirePict( where );
 
                 // clear image of room
                 if ( GameManager::getInstance()->charactersFly() )
@@ -940,11 +937,8 @@ void Room::draw( const allegro::Pict& where )
                 mediator->unlockGridItemMutex();
                 mediator->unlockFreeItemMutex();
 
-                // release video memory after drawing
-                if ( where.isInVideoMemory() )
-                {
-                        allegro::releasePict( where );
-                }
+                // release picture after drawing
+                allegro::releasePict( where );
         }
 }
 

@@ -96,7 +96,7 @@ void MenuWithValues::draw( const allegro::Pict& where )
         setX( previousX + ( ( isomot::ScreenWidth() - previousX ) >> 1 ) - ( getWidthOfMenu () >> 1 ) );
         setY( previousY + ( ( isomot::ScreenHeight() - previousY ) >> 1 ) - ( getHeightOfMenu() >> 1 ) );
 
-        int dx( this->optionImage != nilPointer ? this->optionImage->getWidth() : 0 );
+        int dx( Menu::beforeOption != nilPointer ? Menu::beforeOption->getWidth() : 0 );
         int dy( 0 );
 
         // for each label
@@ -105,7 +105,7 @@ void MenuWithValues::draw( const allegro::Pict& where )
         {
                 Label* label = *i;
 
-                Picture * mark = ( activeOptionWithValue == label ) ? this->chosenOptionImage : this->optionImage ;
+                Picture * mark = ( activeOptionWithValue == label ) ? Menu::beforeChosenOption : Menu::beforeOption ;
                 if ( mark != nilPointer )
                         allegro::drawSprite( where, mark->getAllegroPict(), getX (), getY () + dy );
 
@@ -180,7 +180,7 @@ unsigned int MenuWithValues::getWidthOfMenu () const
                         textOfOption = textOfOption + symbolToFill;
 
                 Label optionWithValue( textOfOption + getValueOf( *o ), ( *o )->getFontFamily(), ( *o )->getColor(), ( *o )->getSpacing() );
-                unsigned int theWidth = optionWithValue.getWidth() + ( this->optionImage != nilPointer ? this->optionImage->getWidth() : 0 ) ;
+                unsigned int theWidth = optionWithValue.getWidth() + ( Menu::beforeOption != nilPointer ? Menu::beforeOption->getWidth() : 0 ) ;
                 if ( theWidth > widthOfMenu ) widthOfMenu = theWidth ;
         }
 

@@ -144,6 +144,8 @@ public:
 
         Screen * getActiveScreen () const {  return this->activeScreen ;  }
 
+        void setActiveScreen ( Screen * newScreen ) {  this->activeScreen = newScreen ;  }
+
 };
 
 }

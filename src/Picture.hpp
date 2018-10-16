@@ -45,11 +45,11 @@ public:
 
         unsigned int getHeight () const {  return picture->getH() ;  }
 
-        unsigned int getColorDepth () const {  return picture->getColorDepth() ;  }
+        AllegroColor getPixelAt ( int x, int y ) const {  return picture->getPixelAt( x, y ) ;  }
 
-        int getPixelAt ( int x, int y ) const {  return picture->getPixelAt( x, y ) ;  }
+        void putPixelAt ( int x, int y, const Color& color ) const ;
 
-        void setPixelAt ( int x, int y, const Color& color ) const ;
+        void drawPixelAt ( int x, int y, const Color& color ) const ;
 
         const allegro::Pict& getAllegroPict () const {  return *picture ;  }
 
@@ -62,6 +62,8 @@ public:
         Picture * makeColorizedCopy ( const Color & color ) ;
 
         void saveAsPCX ( const std::string& path ) ;
+
+        void saveAsPNG ( const std::string& path ) ;
 
 private:
 

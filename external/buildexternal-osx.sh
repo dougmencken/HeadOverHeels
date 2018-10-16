@@ -176,7 +176,8 @@ if [ -x "$( command -v cmake )" ]; then
     if [ ! -f ./Makefile ]; then
         export CC=`command -v gcc`
         export CXX=`command -v g++`
-        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH=/opt/tinyxml2-"$tinyxml2_version" -DBUILD_TESTS:BOOL=ON ..
+        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH=/opt/tinyxml2-"$tinyxml2_version" \
+              -DBUILD_TESTS:BOOL=ON ..
     fi
 
     make
@@ -185,6 +186,8 @@ if [ -x "$( command -v cmake )" ]; then
     rm -r /opt/tinyxml2-"$tinyxml2_version"/lib/cmake
 
     cd ..
+
+    install_name_tool -id /opt/tinyxml2-"$tinyxml2_version"/lib/libtinyxml2.6.dylib /opt/tinyxml2-"$tinyxml2_version"/lib/libtinyxml2.6.dylib
 
     echo "okay" > ./okay
 
@@ -228,7 +231,13 @@ if [ -x "$( command -v cmake )" ]; then
     if [ ! -f ./Makefile ]; then
         export CC=`command -v gcc`
         export CXX=`command -v g++`
-        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH=/opt/allegro-"$allegro4_version" -DCMAKE_C_FLAGS:STRING="-fno-common" ..
+        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH=/opt/allegro-"$allegro4_version" \
+              -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=$(printf 10.%d `sw_vers -productVersion | cut -d . -f 2`) \
+              -DCMAKE_LIBRARY_PATH="/opt/zlib-$zlib_version/lib;/opt/libpng-$libpng_version/lib" \
+              -DPNG_PNG_INCLUDE_DIR="/opt/libpng-$libpng_version/include" \
+              -DOGG_INCLUDE_DIR="/opt/ogg-vorbis/include" -DVORBIS_INCLUDE_DIR="/opt/ogg-vorbis/include" \
+              -DCMAKE_C_FLAGS:STRING="-fno-common" \
+              ..
     fi
 
     make
@@ -237,8 +246,7 @@ if [ -x "$( command -v cmake )" ]; then
 
     cd ..
 
-    rm -f /usr/bin/allegro-config
-    ln -s /opt/allegro-"$allegro4_version"/bin/allegro-config /usr/bin/allegro-config
+    install_name_tool -id /opt/allegro-"$allegro4_version"/lib/liballeg.4.4.dylib /opt/allegro-"$allegro4_version"/lib/liballeg.4.4.dylib
 
     echo "okay" > ./okay
 
@@ -251,6 +259,103 @@ if [ -x "$( command -v cmake )" ]; then
 else
 
     echo "can’t build allegro 4, it needs cmake to build"
+
+fi
+
+echo
+echo "    allegro 5"
+echo "    a cross-platform library for video game and multimedia programming"
+echo
+
+allegro5_version="5.0.11"
+
+if [ -x "$( command -v cmake )" ]; then
+
+    cd "${pathToExternal}"/allegro
+    if [ ! -d allegro-"$allegro5_version" ]; then
+        tar xzf allegro-"$allegro5_version".tar.gz
+        cd allegro-"$allegro5_version"
+        patch -p1 < ../fix_wav_swapping.patch
+        patch -p1 < ../aqueue_big_endian_format.patch
+        patch -p1 < ../osxgl_10.4_compatibility.patch
+        cd ..
+    fi
+
+    cd allegro-"$allegro5_version"
+
+    if [ ! -f ./okay ]; then
+
+    [ -d TheBuild ] || mkdir TheBuild
+
+    cd TheBuild
+
+    if [ ! -f ./Makefile ]; then
+        export CC=`command -v gcc`
+        export CXX=`command -v g++`
+        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH=/opt/allegro-"$allegro5_version" \
+              -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=$(printf 10.%d `sw_vers -productVersion | cut -d . -f 2`) \
+              -DCMAKE_LIBRARY_PATH="/opt/zlib-$zlib_version/lib;/opt/libpng-$libpng_version/lib;/opt/ogg-vorbis/lib" \
+              -DWANT_NATIVE_IMAGE_LOADER:BOOL=OFF -DALLEGRO_CFG_WANT_NATIVE_IMAGE_LOADER=0 \
+              -DWANT_IMAGE_JPG:BOOL=OFF \
+              -DWANT_TTF:BOOL=OFF \
+              -DPNG_PNG_INCLUDE_DIR="/opt/libpng-$libpng_version/include" \
+              -DOGG_INCLUDE_DIR="/opt/ogg-vorbis/include" -DVORBIS_INCLUDE_DIR="/opt/ogg-vorbis/include" \
+              ..
+    fi
+
+    make
+
+    make install
+
+    cd ..
+
+    a5libs="/opt/allegro-$allegro5_version/lib"
+
+    install_name_tool -id "$a5libs"/liballegro.5.0.dylib "$a5libs"/liballegro.5.0.dylib
+    install_name_tool -id "$a5libs"/liballegro_audio.5.0.dylib "$a5libs"/liballegro_audio.5.0.dylib
+    install_name_tool -id "$a5libs"/liballegro_acodec.5.0.dylib "$a5libs"/liballegro_acodec.5.0.dylib
+    install_name_tool -id "$a5libs"/liballegro_color.5.0.dylib "$a5libs"/liballegro_color.5.0.dylib
+    install_name_tool -id "$a5libs"/liballegro_dialog.5.0.dylib "$a5libs"/liballegro_dialog.5.0.dylib
+    install_name_tool -id "$a5libs"/liballegro_font.5.0.dylib "$a5libs"/liballegro_font.5.0.dylib
+    #install_name_tool -id "$a5libs"/liballegro_ttf.5.0.dylib "$a5libs"/liballegro_ttf.5.0.dylib
+    install_name_tool -id "$a5libs"/liballegro_image.5.0.dylib "$a5libs"/liballegro_image.5.0.dylib
+    install_name_tool -id "$a5libs"/liballegro_main.5.0.dylib "$a5libs"/liballegro_main.5.0.dylib
+    install_name_tool -id "$a5libs"/liballegro_memfile.5.0.dylib "$a5libs"/liballegro_memfile.5.0.dylib
+    install_name_tool -id "$a5libs"/liballegro_primitives.5.0.dylib "$a5libs"/liballegro_primitives.5.0.dylib
+
+    install_name_tool -change liballegro.5.0.dylib "$a5libs"/liballegro.5.0.dylib "$a5libs"/liballegro_audio.5.0.dylib
+
+    install_name_tool -change liballegro.5.0.dylib "$a5libs"/liballegro.5.0.dylib "$a5libs"/liballegro_acodec.5.0.dylib
+    install_name_tool -change liballegro_audio.5.0.dylib "$a5libs"/liballegro_audio.5.0.dylib "$a5libs"/liballegro_acodec.5.0.dylib
+
+    install_name_tool -change liballegro.5.0.dylib "$a5libs"/liballegro.5.0.dylib "$a5libs"/liballegro_color.5.0.dylib
+
+    install_name_tool -change liballegro.5.0.dylib "$a5libs"/liballegro.5.0.dylib "$a5libs"/liballegro_dialog.5.0.dylib
+
+    install_name_tool -change liballegro.5.0.dylib "$a5libs"/liballegro.5.0.dylib "$a5libs"/liballegro_font.5.0.dylib
+
+    #install_name_tool -change liballegro.5.0.dylib "$a5libs"/liballegro.5.0.dylib "$a5libs"/liballegro_ttf.5.0.dylib
+    #install_name_tool -change liballegro_font.5.0.dylib "$a5libs"/liballegro_font.5.0.dylib "$a5libs"/liballegro_ttf.5.0.dylib
+
+    install_name_tool -change liballegro.5.0.dylib "$a5libs"/liballegro.5.0.dylib "$a5libs"/liballegro_image.5.0.dylib
+
+    install_name_tool -change liballegro.5.0.dylib "$a5libs"/liballegro.5.0.dylib "$a5libs"/liballegro_main.5.0.dylib
+
+    install_name_tool -change liballegro.5.0.dylib "$a5libs"/liballegro.5.0.dylib "$a5libs"/liballegro_memfile.5.0.dylib
+
+    install_name_tool -change liballegro.5.0.dylib "$a5libs"/liballegro.5.0.dylib "$a5libs"/liballegro_primitives.5.0.dylib
+
+    echo "okay" > ./okay
+
+    else
+
+    echo "already built"
+
+    fi
+
+else
+
+    echo "can’t build allegro 5, it needs cmake to build"
 
 fi
 

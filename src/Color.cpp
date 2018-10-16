@@ -5,109 +5,120 @@
 #include <cmath> // for sqrt
 
 
-Color * Color::theBlack = new Color( 0, 0, 0 ) ;
+const Color * Color::theBlack = new Color( 0, 0, 0, 0xff );
 
-Color * Color::theDarkBlue = new Color( 0, 0, 127 ) ;
+const Color * Color::theDarkBlue = new Color( 0, 0, 127, 0xff ) ;
 
-Color * Color::theBlue = new Color( 50, 50, 255 ) ;
+const Color * Color::theBlue = new Color( 50, 50, 255, 0xff ) ;
 
-Color * Color::theRed = new Color( 255, 50, 50 ) ;
+const Color * Color::theRed = new Color( 255, 50, 50, 0xff ) ;
 
-Color * Color::theMagenta = new Color( 255, 50, 255 ) ;
+const Color * Color::theMagenta = new Color( 255, 50, 255, 0xff ) ;
 
-Color * Color::theGreen = new Color( 50, 255, 50 ) ;
+const Color * Color::theGreen = new Color( 50, 255, 50, 0xff ) ;
 
-Color * Color::theCyan = new Color( 0, 228, 231 ) ;
+const Color * Color::theCyan = new Color( 0, 228, 231, 0xff ) ;
 
-Color * Color::theYellow = new Color( 255, 255, 50 ) ;
+const Color * Color::theYellow = new Color( 255, 255, 50, 0xff ) ;
 
-Color * Color::theWhite = new Color( 255, 255, 255 ) ;
+const Color * Color::theWhite = new Color( 255, 255, 255, 0xff ) ;
 
-Color * Color::theOrange = new Color( 239, 129, 0 ) ;
+const Color * Color::theOrange = new Color( 239, 129, 0, 0xff ) ;
 
-Color * Color::the50Gray = new Color( 127, 127, 127 ) ;
-
-Color * Color::theTransparency = new Color( 255, 0, 255 ) ;
+const Color * Color::the50Gray = new Color( 127, 127, 127, 0xff ) ;
 
 
-std::string Color::toString ()
+Color::Color( )
+        : red( AllegroColor::keyColor().getRed() )
+        , green( AllegroColor::keyColor().getGreen() )
+        , blue( AllegroColor::keyColor().getBlue() )
+        , alpha( AllegroColor::keyColor().getAlpha() )
+{
+}
+
+std::string Color::toString () const
 {
         return   "color { r=" + isomot::numberToString( red ) +
                         " g=" + isomot::numberToString( green ) +
-                        " b=" + isomot::numberToString( blue ) + " }" ;
+                        " b=" + isomot::numberToString( blue ) +
+                        " a=" + isomot::numberToString( alpha ) + " }" ;
 }
 
 /* public static */
-Picture* Color::colorizePicture( Picture* picture, const Color& color )
+void Color::colorizePicture( Picture* picture, const Color& color )
 {
-        if ( color == Color::whiteColor() ) return picture ;
+        if ( color == Color::whiteColor() ) return ;
 
-        return colorizePicture( picture, color.getRed (), color.getGreen (), color.getBlue () );
-}
+        if ( picture == nilPointer ) return ;
 
-/* private static */
-Picture* Color::colorizePicture( Picture* picture, unsigned char red, unsigned char green, unsigned char blue )
-{
-        if ( picture == nilPointer ) return nilPointer ;
-
-        for ( unsigned int x = 0; x < picture->getWidth(); x++ )
-        {
-                for ( unsigned int y = 0; y < picture->getHeight(); y++ )
-                {
-                        if ( picture->getPixelAt( x, y ) == allegro::makeColor( 255, 255, 255 ) )
-                        {
-                                picture->setPixelAt( x, y, Color( red, green, blue ) );
-                        }
-                }
-        }
-
-        return picture ;
-}
-
-/* public static */
-Picture* Color::multiplyWithColor( Picture* picture, const Color& color )
-{
-        if ( color == Color::whiteColor() ) return picture ;
-
-        return multiplyWithColor( picture, color.getRed (), color.getGreen (), color.getBlue () );
-}
-
-/* private static */
-Picture * Color::multiplyWithColor( Picture * picture, unsigned char red, unsigned char green, unsigned char blue )
-{
-        if ( picture == nilPointer ) return nilPointer ;
-
-        for ( unsigned int x = 0; x < picture->getWidth(); x++ )
-        {
-                for ( unsigned int y = 0; y < picture->getHeight(); y++ )
-                {
-                        int color = picture->getPixelAt( x, y );
-                        int r = allegro::getRed( color );
-                        int g = allegro::getGreen( color );
-                        int b = allegro::getBlue( color );
-
-                        // don’t touch pixels with color of transparency
-                        if ( r != 255 || g != 0 || b != 255 )
-                        {
-                                picture->setPixelAt( x, y, Color( r & red, g & green, b & blue ) );
-                        }
-                }
-        }
-
-        return picture ;
-}
-
-/* public static */
-Picture * Color::pictureToGrayscale ( Picture * picture )
-{
-        if ( picture == nilPointer ) return nilPointer ;
+        picture->getAllegroPict().lock( true, true );
 
         for ( unsigned int y = 0; y < picture->getHeight(); y++ )
         {
                 for ( unsigned int x = 0; x < picture->getWidth(); x++ )
                 {
+                        AllegroColor pixel = picture->getPixelAt( x, y );
+
+                        if ( pixel.getRed() == 255 && pixel.getGreen() == 255 && pixel.getBlue() == 255 )
+                        {
+                                picture->putPixelAt( x, y, color );
+                        }
+                }
+        }
+
+        picture->getAllegroPict().unlock();
+}
+
+/* public static */
+void Color::multiplyWithColor( Picture* picture, const Color& color )
+{
+        if ( color == Color::whiteColor() ) return ;
+
+        multiplyWithColor( picture, color.getRed (), color.getGreen (), color.getBlue () );
+}
+
+/* private static */
+void Color::multiplyWithColor( Picture * picture, unsigned char red, unsigned char green, unsigned char blue )
+{
+        if ( picture == nilPointer ) return ;
+
+        picture->getAllegroPict().lock( true, true );
+
+        for ( unsigned int y = 0; y < picture->getHeight(); y++ )
+        {
+                for ( unsigned int x = 0; x < picture->getWidth(); x++ )
+                {
+                        AllegroColor color = picture->getPixelAt( x, y );
+                        unsigned char r = color.getRed();
+                        unsigned char g = color.getGreen();
+                        unsigned char b = color.getBlue();
+
+                        // don’t touch pixels with color of transparency
+                        if ( ! color.isKeyColor() )
+                        {
+                                picture->putPixelAt( x, y, Color( r & red, g & green, b & blue, color.getAlpha() ) );
+                        }
+                }
+        }
+
+        picture->getAllegroPict().unlock();
+}
+
+/* public static */
+void Color::pictureToGrayscale ( Picture * picture )
+{
+        if ( picture == nilPointer ) return ;
+
+        picture->getAllegroPict().lock( true, true );
+
+        for ( unsigned int y = 0; y < picture->getHeight(); y++ )
+        {
+                for ( unsigned int x = 0; x < picture->getWidth(); x++ )
+                {
+                        AllegroColor color = picture->getPixelAt( x, y );
+
                         // convert every color but the “ key ” one
-                        if ( picture->getPixelAt( x, y ) != allegro::makeColor( 255, 0, 255 ) )
+                        if ( ! color.isKeyColor() )
                         {
                                 /* imagine color as vector: c { r, g, b }
                                    for each shade of gray r=g=b =w: b { w, w, w }
@@ -117,16 +128,15 @@ Picture * Color::pictureToGrayscale ( Picture * picture )
                                         sqrt( rr + gg + bb ) = sqrt( 3 ) * w
                                         w = sqrt( ( rr + gg + bb ) / 3 )
                                 */
-                                int color = picture->getPixelAt( x, y );
-                                double red = static_cast< double >( allegro::getRed( color ) );
-                                double green = static_cast< double >( allegro::getGreen( color ) );
-                                double blue = static_cast< double >( allegro::getBlue( color ) );
+                                double red = static_cast< double >( color.getRed() );
+                                double green = static_cast< double >( color.getGreen() );
+                                double blue = static_cast< double >( color.getBlue() );
                                 double ww = ( red * red + green * green + blue * blue ) / 3.0;
                                 unsigned char gray = static_cast< unsigned char >( std::sqrt( ww ) );
-                                picture->setPixelAt( x, y, Color( gray, gray, gray ) );
+                                picture->putPixelAt( x, y, Color( gray, gray, gray, color.getAlpha() ) );
                         }
                 }
         }
 
-        return picture ;
+        picture->getAllegroPict().unlock();
 }

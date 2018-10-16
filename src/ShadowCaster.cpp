@@ -82,6 +82,10 @@ void ShadowCaster::castShadowOnItem( Item* item, int x, int y, Picture* shadow, 
                 item->setWantShadow( false );
         }
 
+        shadow->getAllegroPict().lock( true, false );
+        rawImage->getAllegroPict().lock( true, false );
+        shadyImage->getAllegroPict().lock( true, true );
+
         int iRow = 0;           // row of pixels in image and shady image of this item
         int iPixel = 0;         // pixel in row of image & shady image
         int sRow = 0;           // row of pixels in shadow shading this item
@@ -121,19 +125,19 @@ void ShadowCaster::castShadowOnItem( Item* item, int x, int y, Picture* shadow, 
                         // walk thru pixels of each row within calculated limits
                         for ( iPixel = iniX, sPixel = deltaX ; iPixel < endX ; iPixel ++, sPixel ++ )
                         {
-                                int sColor = shadow->getPixelAt( sPixel, sRow );
-                                int iColor = rawImage->getPixelAt( iPixel, iRow );
-                                int rColor = shadyImage->getPixelAt( iPixel, iRow );
+                                AllegroColor sColor = shadow->getPixelAt( sPixel, sRow );
+                                AllegroColor iColor = rawImage->getPixelAt( iPixel, iRow );
+                                AllegroColor rColor = shadyImage->getPixelAt( iPixel, iRow );
 
                                 // when pixel of shadow isn’t key color & pixel of item isn’t key color
                                 // and pixel of result isn’t changed before
                                 // then divide pixel of result by 2 ^ pxDiv, darkening it
-                                if ( ! Color::isKeyColor( sColor ) && ! Color::isKeyColor( iColor ) && ( rColor == iColor ) )
+                                if ( ! sColor.isKeyColor() && ! iColor.isKeyColor() && rColor.equalsRGB( iColor ) )
                                 {
-                                        int rRed = allegro::getRed( iColor ) >> pxDiv ;
-                                        int rGreen = allegro::getGreen( iColor ) >> pxDiv ;
-                                        int rBlue = allegro::getBlue( iColor ) >> pxDiv ;
-                                        shadyImage->setPixelAt( iPixel, iRow, Color( rRed, rGreen, rBlue ) );
+                                        unsigned char rRed = iColor.getRed() >> pxDiv ;
+                                        unsigned char rGreen = iColor.getGreen() >> pxDiv ;
+                                        unsigned char rBlue = iColor.getBlue() >> pxDiv ;
+                                        shadyImage->putPixelAt( iPixel, iRow, Color( rRed, rGreen, rBlue, iColor.getAlpha() ) );
                                 }
                         }
                 }
@@ -156,33 +160,33 @@ void ShadowCaster::castShadowOnItem( Item* item, int x, int y, Picture* shadow, 
 
                         for ( iPixel = iniX, sPixel = deltaX ; iPixel < endX ; iPixel ++, sPixel ++ )
                         {
-                                int sColor = shadow->getPixelAt( sPixel, sRow );
-                                int iColor = rawImage->getPixelAt( iPixel, iRow );
-                                int rColor = shadyImage->getPixelAt( iPixel, iRow );
+                                AllegroColor sColor = shadow->getPixelAt( sPixel, sRow );
+                                AllegroColor iColor = rawImage->getPixelAt( iPixel, iRow );
+                                AllegroColor rColor = shadyImage->getPixelAt( iPixel, iRow );
 
-                                if ( ! Color::isKeyColor( sColor ) )
+                                if ( ! sColor.isKeyColor() )
                                 {
-                                        if ( ! Color::isKeyColor( iColor ) && ( rColor == iColor ) )
+                                        if ( ! iColor.isKeyColor() && rColor.equalsRGB( iColor ) )
                                         {
-                                                int rRed = allegro::getRed( iColor ) >> pxDiv ;
-                                                int rGreen = allegro::getGreen( iColor ) >> pxDiv ;
-                                                int rBlue = allegro::getBlue( iColor ) >> pxDiv ;
-                                                shadyImage->setPixelAt( iPixel, iRow, Color( rRed, rGreen, rBlue ) );
+                                                unsigned char rRed = iColor.getRed() >> pxDiv ;
+                                                unsigned char rGreen = iColor.getGreen() >> pxDiv ;
+                                                unsigned char rBlue = iColor.getBlue() >> pxDiv ;
+                                                shadyImage->putPixelAt( iPixel, iRow, Color( rRed, rGreen, rBlue, iColor.getAlpha() ) );
                                         }
 
                                         if ( iPixel == ltpx1 || iPixel == ltpx2 || iPixel == rtpx1 || iPixel == rtpx2 )
                                         {
                                                 for ( unsigned int yy = iRow + 1 ; yy < rawImage->getHeight() ; yy++ )
                                                 {
-                                                        int rawColor = rawImage->getPixelAt( iPixel, yy );
-                                                        int shadyColor = shadyImage->getPixelAt( iPixel, yy );
+                                                        AllegroColor rawColor = rawImage->getPixelAt( iPixel, yy );
+                                                        AllegroColor shadyColor = shadyImage->getPixelAt( iPixel, yy );
 
-                                                        if ( ! Color::isKeyColor( rawColor ) && ( shadyColor == rawColor ) )
+                                                        if ( ! rawColor.isKeyColor() && shadyColor.equalsRGB( rawColor ) )
                                                         {
-                                                                int shadyRed = allegro::getRed( rawColor ) >> pxDiv ;
-                                                                int shadyGreen = allegro::getGreen( rawColor ) >> pxDiv ;
-                                                                int shadyBlue = allegro::getBlue( rawColor ) >> pxDiv ;
-                                                                shadyImage->setPixelAt( iPixel, yy, Color( shadyRed, shadyGreen, shadyBlue ) );
+                                                                unsigned char shadyRed = rawColor.getRed() >> pxDiv ;
+                                                                unsigned char shadyGreen = rawColor.getGreen() >> pxDiv ;
+                                                                unsigned char shadyBlue = rawColor.getBlue() >> pxDiv ;
+                                                                shadyImage->putPixelAt( iPixel, yy, Color( shadyRed, shadyGreen, shadyBlue, rawColor.getAlpha() ) );
                                                         }
                                                 }
                                         }
@@ -199,28 +203,28 @@ void ShadowCaster::castShadowOnItem( Item* item, int x, int y, Picture* shadow, 
                         // walk thru pixels of each row within calculated limits
                         for ( iPixel = iniX, sPixel = deltaX ; iPixel < endX ; iPixel ++, sPixel ++ )
                         {
-                                int sColor = shadow->getPixelAt( sPixel, sRow );
-                                int iColor = rawImage->getPixelAt( iPixel, iRow );
-                                int rColor = shadyImage->getPixelAt( iPixel, iRow );
+                                AllegroColor sColor = shadow->getPixelAt( sPixel, sRow );
+                                AllegroColor iColor = rawImage->getPixelAt( iPixel, iRow );
+                                AllegroColor rColor = shadyImage->getPixelAt( iPixel, iRow );
 
                                 // when pixel of shadow isn’t key color & pixel of item isn’t key color
                                 // and pixel of result isn’t changed before
                                 // then decrement color of result’s pixel to darken it
-                                if ( ! Color::isKeyColor( sColor ) && ! Color::isKeyColor( iColor ) && ( rColor == iColor ) )
+                                if ( ! sColor.isKeyColor() && ! iColor.isKeyColor() && rColor.equalsRGB( iColor ) )
                                 {
                                         // there’s some transparency
                                         if ( opacity != 0 )
                                         {
-                                                int rRed = ( allegro::getRed( iColor ) * opacity ) >> 8 ;
-                                                int rGreen = ( allegro::getGreen( iColor ) * opacity ) >> 8 ;
-                                                int rBlue = ( allegro::getBlue( iColor ) * opacity ) >> 8 ;
-                                                shadyImage->setPixelAt( iPixel, iRow, Color( rRed, rGreen, rBlue ) );
+                                                unsigned char rRed = ( iColor.getRed() * opacity ) >> 8 ;
+                                                unsigned char rGreen = ( iColor.getGreen() * opacity ) >> 8 ;
+                                                unsigned char rBlue = ( iColor.getBlue() * opacity ) >> 8 ;
+                                                shadyImage->putPixelAt( iPixel, iRow, Color( rRed, rGreen, rBlue, iColor.getAlpha() ) );
                                         }
                                         // zero opacity is full opacity
                                         else
                                         {
                                                 // the pixel of result is pure black
-                                                shadyImage->setPixelAt( iPixel, iRow, Color::blackColor() );
+                                                shadyImage->putPixelAt( iPixel, iRow, Color::blackColor() );
                                         }
                                 }
                         }
@@ -243,27 +247,27 @@ void ShadowCaster::castShadowOnItem( Item* item, int x, int y, Picture* shadow, 
 
                         for ( iPixel = iniX, sPixel = deltaX ; iPixel < endX ; iPixel ++, sPixel ++ )
                         {
-                                int sColor = shadow->getPixelAt( sPixel, sRow );
-                                int iColor = rawImage->getPixelAt( iPixel, iRow );
-                                int rColor = shadyImage->getPixelAt( iPixel, iRow );
+                                AllegroColor sColor = shadow->getPixelAt( sPixel, sRow );
+                                AllegroColor iColor = rawImage->getPixelAt( iPixel, iRow );
+                                AllegroColor rColor = shadyImage->getPixelAt( iPixel, iRow );
 
-                                if ( ! Color::isKeyColor( sColor ) )
+                                if ( ! sColor.isKeyColor() )
                                 {
-                                        if ( ! Color::isKeyColor( iColor ) && ( rColor == iColor ) )
+                                        if ( ! iColor.isKeyColor() && rColor.equalsRGB( iColor ) )
                                         {
                                                 // there’s some transparency
                                                 if ( opacity != 0 )
                                                 {
-                                                        int rRed = ( allegro::getRed( iColor ) * opacity ) >> 8 ;
-                                                        int rGreen = ( allegro::getGreen( iColor ) * opacity ) >> 8 ;
-                                                        int rBlue = ( allegro::getBlue( iColor ) * opacity ) >> 8 ;
-                                                        shadyImage->setPixelAt( iPixel, iRow, Color( rRed, rGreen, rBlue ) );
+                                                        unsigned char rRed = ( iColor.getRed() * opacity ) >> 8 ;
+                                                        unsigned char rGreen = ( iColor.getGreen() * opacity ) >> 8 ;
+                                                        unsigned char rBlue = ( iColor.getBlue() * opacity ) >> 8 ;
+                                                        shadyImage->putPixelAt( iPixel, iRow, Color( rRed, rGreen, rBlue, iColor.getAlpha() ) );
                                                 }
                                                 // zero opacity is full opacity
                                                 else
                                                 {
                                                         // the pixel of result is pure black
-                                                        shadyImage->setPixelAt( iPixel, iRow, Color::blackColor() );
+                                                        shadyImage->putPixelAt( iPixel, iRow, Color::blackColor() );
                                                 }
                                         }
 
@@ -271,24 +275,24 @@ void ShadowCaster::castShadowOnItem( Item* item, int x, int y, Picture* shadow, 
                                         {
                                                 for ( unsigned int yy = iRow + 1; yy < rawImage->getHeight(); yy++ )
                                                 {
-                                                        int rawColor = rawImage->getPixelAt( iPixel, yy );
-                                                        int shadyColor = shadyImage->getPixelAt( iPixel, yy );
+                                                        AllegroColor rawColor = rawImage->getPixelAt( iPixel, yy );
+                                                        AllegroColor shadyColor = shadyImage->getPixelAt( iPixel, yy );
 
-                                                        if ( ! Color::isKeyColor( rawColor ) && ( shadyColor == rawColor ) )
+                                                        if ( ! rawColor.isKeyColor() && shadyColor.equalsRGB( rawColor ) )
                                                         {
                                                                 // there’s some transparency
                                                                 if ( opacity != 0 )
                                                                 {
-                                                                        int shadyRed = ( allegro::getRed( rawColor ) * opacity ) >> 8 ;
-                                                                        int shadyGreen = ( allegro::getGreen( rawColor ) * opacity ) >> 8 ;
-                                                                        int shadyBlue = ( allegro::getBlue( rawColor ) * opacity ) >> 8 ;
-                                                                        shadyImage->setPixelAt( iPixel, yy, Color( shadyRed, shadyGreen, shadyBlue ) );
+                                                                        unsigned char shadyRed = ( rawColor.getRed() * opacity ) >> 8 ;
+                                                                        unsigned char shadyGreen = ( rawColor.getGreen() * opacity ) >> 8 ;
+                                                                        unsigned char shadyBlue = ( rawColor.getBlue() * opacity ) >> 8 ;
+                                                                        shadyImage->putPixelAt( iPixel, yy, Color( shadyRed, shadyGreen, shadyBlue, rawColor.getAlpha() ) );
                                                                 }
                                                                 // zero opacity is full opacity
                                                                 else
                                                                 {
                                                                         // the pixel of result is pure black
-                                                                        shadyImage->setPixelAt( iPixel, yy, Color::blackColor() );
+                                                                        shadyImage->putPixelAt( iPixel, yy, Color::blackColor() );
                                                                 }
                                                         }
                                                 }
@@ -297,6 +301,10 @@ void ShadowCaster::castShadowOnItem( Item* item, int x, int y, Picture* shadow, 
                         }
                 }
         }
+
+        shadyImage->getAllegroPict().unlock();
+        rawImage->getAllegroPict().unlock();
+        shadow->getAllegroPict().unlock();
 
         if ( isFreeItem )
         {
@@ -346,6 +354,10 @@ void ShadowCaster::castShadowOnFloor( FloorTile* tile, int x, int y, Picture* sh
                 tile->setWantShadow( false );
         }
 
+        shadow->getAllegroPict().lock( true, false );
+        tileImage->getAllegroPict().lock( true, false );
+        shadyImage->getAllegroPict().lock( true, true );
+
         int iRow = 0;           // row of pixels in image and shady image of this tile
         int iPixel = 0;         // pixel in row of image & shady image
         int sRow = 0;           // row of pixels in shadow shading this tile
@@ -375,19 +387,19 @@ void ShadowCaster::castShadowOnFloor( FloorTile* tile, int x, int y, Picture* sh
                         // walk thru pixels of each row within calculated limits
                         for ( iPixel = iniX, sPixel = deltaX ; iPixel < endX ; iPixel ++, sPixel ++ )
                         {
-                                int sColor = shadow->getPixelAt( sPixel, sRow );
-                                int iColor = tileImage->getPixelAt( iPixel, iRow );
-                                int rColor = shadyImage->getPixelAt( iPixel, iRow );
+                                AllegroColor sColor = shadow->getPixelAt( sPixel, sRow );
+                                AllegroColor iColor = tileImage->getPixelAt( iPixel, iRow );
+                                AllegroColor rColor = shadyImage->getPixelAt( iPixel, iRow );
 
                                 // when pixel of shadow isn’t key color & pixel of tile isn’t key color
                                 // and pixel of result isn’t changed before
                                 // then divide pixel of result by 2 ^ pxDiv, darkening it
-                                if ( ! Color::isKeyColor( sColor ) && ! Color::isKeyColor( iColor ) && ( rColor == iColor ) )
+                                if ( ! sColor.isKeyColor() && ! iColor.isKeyColor() && rColor.equalsRGB( iColor ) )
                                 {
-                                        int rRed = allegro::getRed( iColor ) >> pxDiv ;
-                                        int rGreen = allegro::getGreen( iColor ) >> pxDiv ;
-                                        int rBlue = allegro::getBlue( iColor ) >> pxDiv ;
-                                        shadyImage->setPixelAt( iPixel, iRow, Color( rRed, rGreen, rBlue ) );
+                                        unsigned char rRed = iColor.getRed() >> pxDiv ;
+                                        unsigned char rGreen = iColor.getGreen() >> pxDiv ;
+                                        unsigned char rBlue = iColor.getBlue() >> pxDiv ;
+                                        shadyImage->putPixelAt( iPixel, iRow, Color( rRed, rGreen, rBlue, iColor.getAlpha() ) );
                                 }
                         }
                 }
@@ -401,33 +413,37 @@ void ShadowCaster::castShadowOnFloor( FloorTile* tile, int x, int y, Picture* sh
                         // walk thru pixels of each row within calculated limits
                         for ( iPixel = iniX, sPixel = deltaX ; iPixel < endX ; iPixel ++, sPixel ++ )
                         {
-                                int sColor = shadow->getPixelAt( sPixel, sRow );
-                                int iColor = tileImage->getPixelAt( iPixel, iRow );
-                                int rColor = shadyImage->getPixelAt( iPixel, iRow );
+                                AllegroColor sColor = shadow->getPixelAt( sPixel, sRow );
+                                AllegroColor iColor = tileImage->getPixelAt( iPixel, iRow );
+                                AllegroColor rColor = shadyImage->getPixelAt( iPixel, iRow );
 
                                 // when pixel of shadow isn’t key color & pixel of tile isn’t key color
                                 // and pixel of result isn’t changed before
                                 // then lower color of result’s pixel to darken it
-                                if ( ! Color::isKeyColor( sColor ) && ! Color::isKeyColor( iColor ) && ( rColor == iColor ) )
+                                if ( ! sColor.isKeyColor() && ! iColor.isKeyColor() && rColor.equalsRGB( iColor ) )
                                 {
                                         // there’s some transparency
                                         if ( opacity != 0 )
                                         {
-                                                int rRed = ( allegro::getRed( iColor ) * opacity ) >> 8 ;
-                                                int rGreen = ( allegro::getGreen( iColor ) * opacity ) >> 8 ;
-                                                int rBlue = ( allegro::getBlue( iColor ) * opacity ) >> 8 ;
-                                                shadyImage->setPixelAt( iPixel, iRow, Color( rRed, rGreen, rBlue ) );
+                                                unsigned char rRed = ( iColor.getRed() * opacity ) >> 8 ;
+                                                unsigned char rGreen = ( iColor.getGreen() * opacity ) >> 8 ;
+                                                unsigned char rBlue = ( iColor.getBlue() * opacity ) >> 8 ;
+                                                shadyImage->putPixelAt( iPixel, iRow, Color( rRed, rGreen, rBlue, iColor.getAlpha() ) );
                                         }
                                         // zero opacity is full opacity
                                         else
                                         {
                                                 // the pixel of result is pure black
-                                                shadyImage->setPixelAt( iPixel, iRow, Color::blackColor() );
+                                                shadyImage->putPixelAt( iPixel, iRow, Color::blackColor() );
                                         }
                                 }
                         }
                 }
         }
+
+        shadyImage->getAllegroPict().unlock();
+        tileImage->getAllegroPict().unlock();
+        shadow->getAllegroPict().unlock();
 
         tile->setShadyImage( shadyImage );
 }

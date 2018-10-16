@@ -17,7 +17,7 @@
 
 
 /**
- * Describes color as red, green and blue components,
+ * Describes color as red, green, blue, and alpha components,
  * and contains utilities to deal with colors
  */
 
@@ -26,11 +26,14 @@ class Color
 
 public:
 
-        Color( ) : red( 255 ), green( 0 ), blue( 255 ) { }
+        /* default constructor makes transparent color */
+        Color( ) ;
 
-        Color( unsigned char r, unsigned char g, unsigned char b ) : red( r ), green( g ), blue( b ) { }
+        Color( unsigned char r, unsigned char g, unsigned char b, unsigned char a ) : red( r ), green( g ), blue( b ), alpha( a ) { }
 
-        Color( const Color& copy ) : red( copy.red ), green( copy.green ), blue( copy.blue ) { }
+        Color( const AllegroColor& color ) : red( color.getRed() ), green( color.getGreen() ), blue( color.getBlue() ), alpha( color.getAlpha() ) { }
+
+        Color( const Color& copy ) : red( copy.red ), green( copy.green ), blue( copy.blue ), alpha( copy.alpha ) { }
 
         unsigned char getRed () const {  return red ;  }
 
@@ -38,28 +41,15 @@ public:
 
         unsigned char getBlue () const {  return blue ;  }
 
-        bool operator == ( const Color & c ) const {  return c.red == red && c.green == green && c.blue == blue ;  }
+        unsigned char getAlpha () const {  return alpha ;  }
 
-        bool operator != ( const Color & c ) const {  return c.red != red || c.green != green || c.blue != blue ;  }
+        bool operator == ( const Color & c ) const {  return c.red == red && c.green == green && c.blue == blue && c.alpha == alpha ;  }
 
-        int toAllegroColor () const {  return allegro::makeColor( red, green, blue ) ;  }
+        bool operator != ( const Color & c ) const {  return c.red != red || c.green != green || c.blue != blue || c.alpha != alpha ;  }
 
-        std::string toString () ;
+        AllegroColor toAllegroColor () const {  return AllegroColor::makeColor( red, green, blue, alpha ) ;  }
 
-        /*
-         * True when it’s color with red=255 green=0 blue=255
-         */
-        static bool isKeyColor ( unsigned char red, unsigned char green, unsigned char blue )
-        {
-                return red == 255 && green == 0 && blue == 255 ;
-        }
-
-        static bool isKeyColor ( int allegroColor )
-        {
-                return  allegro::getRed( allegroColor ) == 255  &&
-                        allegro::getGreen( allegroColor ) == 0  &&
-                        allegro::getBlue( allegroColor ) == 255 ;
-        }
+        std::string toString () const ;
 
         static const Color & blackColor () {  return *theBlack ;  }                     /* speccy color 0 */
 
@@ -83,13 +73,11 @@ public:
 
         static const Color & gray50Color () {  return *the50Gray ;  }                   /* 50% gray */
 
-        static const Color & colorOfTransparency () {  return *theTransparency ;  }     /* “ key ” color of transparency, pure magenta */
+        static void colorizePicture ( Picture * picture, const Color & color ) ;
 
-        static Picture * colorizePicture ( Picture * picture, const Color & color ) ;
+        static void multiplyWithColor ( Picture * picture, const Color & color ) ;
 
-        static Picture * multiplyWithColor ( Picture * picture, const Color & color ) ;
-
-        static Picture * pictureToGrayscale ( Picture * picture ) ;
+        static void pictureToGrayscale ( Picture * picture ) ;
 
 protected:
 
@@ -99,35 +87,33 @@ protected:
 
         unsigned char blue ;
 
+        unsigned char alpha ;
+
 private:
 
-        static Picture * colorizePicture ( Picture * picture, unsigned char red, unsigned char green, unsigned char blue ) ;
+        static void multiplyWithColor ( Picture * picture, unsigned char red, unsigned char green, unsigned char blue ) ;
 
-        static Picture * multiplyWithColor ( Picture * picture, unsigned char red, unsigned char green, unsigned char blue ) ;
+        static const Color * theBlack ;
 
-        static Color * theBlack ;
+        static const Color * theDarkBlue ;
 
-        static Color * theDarkBlue ;
+        static const Color * theBlue ;
 
-        static Color * theBlue ;
+        static const Color * theRed ;
 
-        static Color * theRed ;
+        static const Color * theMagenta ;
 
-        static Color * theMagenta ;
+        static const Color * theGreen ;
 
-        static Color * theGreen ;
+        static const Color * theCyan ;
 
-        static Color * theCyan ;
+        static const Color * theYellow ;
 
-        static Color * theYellow ;
+        static const Color * theWhite ;
 
-        static Color * theWhite ;
+        static const Color * theOrange ;
 
-        static Color * theOrange ;
-
-        static Color * the50Gray ;
-
-        static Color * theTransparency ;
+        static const Color * the50Gray ;
 
 } ;
 

@@ -317,8 +317,6 @@ gamedatagfx2009_DATA = item.png/ball-shadows.png \
 			gui.gfx/blacktooth.png \
 			gui.gfx/byblos-frame.png \
 			gui.gfx/byblos.png \
-			gui.gfx/chosen-option-mini.png \
-			gui.gfx/chosen-option.png \
 			gui.gfx/egyptus-frame.png \
 			gui.gfx/egyptus.png \
 			gui.gfx/gui-donuts.png \
@@ -332,7 +330,6 @@ gamedatagfx2009_DATA = item.png/ball-shadows.png \
 			gui.gfx/high-speed.png \
 			gui.gfx/jail-frame.png \
 			gui.gfx/market-frame.png \
-			gui.gfx/option.png \
 			gui.gfx/penitentiary-frame.png \
 			gui.gfx/penitentiary.png \
 			gui.gfx/safari-frame.png \
