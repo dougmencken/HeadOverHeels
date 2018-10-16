@@ -18,9 +18,25 @@ if USE_ALLEGRO4
 endif
 endif
 
-headoverheels_CXXFLAGS = -I. -Iloadpng -Ialgif -Igui -Iguiactions -Ibehaviors -Iactivities -Wall $(AM_CXXFLAGS)
+if DARWIN
+    AM_CFLAGS += -DDARWIN=1
+    AM_CXXFLAGS += -DDARWIN=1
+endif
 
-AM_LDFLAGS = `allegro-config --libs release` -lvorbisfile -lvorbisenc -lvorbis -logg -ltinyxml2 -lpthread -lz -lpng
+headoverheels_CXXFLAGS = -I. -Iactivities -Ibehaviors -Igui -Iguiactions -Wall $(AM_CXXFLAGS)
+
+AM_LDFLAGS = -lpthread -lz -lpng -lvorbis -lvorbisenc -lvorbisfile -logg -ltinyxml2
+
+if USE_ALLEGRO5
+AM_LDFLAGS += -lallegro -lallegro_audio -lallegro_acodec -lallegro_image -lallegro_font -lallegro_primitives
+if DARWIN
+AM_LDFLAGS += -lallegro_main
+endif
+else
+if USE_ALLEGRO4
+AM_LDFLAGS += `allegro-config --libs release`
+endif
+endif
 
 bin_PROGRAMS = headoverheels
 
@@ -213,6 +229,12 @@ headoverheels_SOURCES = main.cpp \
 			guiactions/ShowAuthors.cpp \
 			guiactions/ShowAuthors.hpp
 
+if USE_ALLEGRO5
+headoverheels_SOURCES += algif5/algif.c \
+			algif5/gif.c \
+			algif5/lzw.c \
+			algif5/bitmap.c
+else
 if USE_ALLEGRO4
 headoverheels_SOURCES += loadpng/loadpng.c \
 			loadpng/savepng.c \
@@ -226,4 +248,5 @@ headoverheels_SOURCES += loadpng/loadpng.c \
 			algif/algif.c \
 			algif/gif.c \
 			algif/lzw.c
+endif
 endif

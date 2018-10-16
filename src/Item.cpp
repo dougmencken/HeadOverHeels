@@ -14,7 +14,7 @@ Item::Item( ItemData* data, int z, const Way& way )
       : Mediated(), Shady(),
         uniqueName( data->getLabel() + "." + makeRandomString( 12 ) ),
         originalLabel( data->getLabel() ),
-        frameIndex( 0 ),
+        currentFrame( 0 ),
         backwardMotion( false ),
         dataOfItem( data ),
         xPos( 0 ),
@@ -30,7 +30,7 @@ Item::Item( ItemData* data, int z, const Way& way )
         anchor( nilPointer )
 {
         // item with more than one frame per direction has animation
-        if ( ( data->howManyMotions() - data->howManyExtraFrames() ) / data->howManyFramesForOrientations() > 1 )
+        if ( ( data->howManyMotions() - data->howManyExtraFrames() ) / data->howManyFramesPerOrientation() > 1 )
         {
                 motionTimer = new Timer ();
                 motionTimer->go();
@@ -43,7 +43,7 @@ Item::Item( const Item& item )
       : Mediated( item ), Shady( item.wantShadow ),
         uniqueName( item.uniqueName + " copy" ),
         originalLabel( item.originalLabel ),
-        frameIndex( item.frameIndex ),
+        currentFrame( item.currentFrame ),
         backwardMotion( item.backwardMotion ),
         dataOfItem( item.dataOfItem ),
         xPos( item.xPos ),
@@ -93,7 +93,7 @@ bool Item::animate()
         bool cycle = false;
 
         // item with more than one frame per direction has animation
-        if ( ( dataOfItem->howManyMotions() - dataOfItem->howManyExtraFrames() ) / dataOfItem->howManyFramesForOrientations() > 1 )
+        if ( ( dataOfItem->howManyMotions() - dataOfItem->howManyExtraFrames() ) / dataOfItem->howManyFramesPerOrientation() > 1 )
         {
                 // is it time to change frames
                 if ( motionTimer->getValue() > dataOfItem->getDelayBetweenFrames() )
@@ -101,35 +101,35 @@ bool Item::animate()
                         // forward motion
                         if ( ! backwardMotion )
                         {
-                                if ( ++frameIndex >= dataOfItem->howManyFrames() )
+                                if ( ++ currentFrame >= dataOfItem->howManyFrames() )
                                 {
-                                        frameIndex = 0;
+                                        currentFrame = 0;
                                         cycle = true;
                                 }
                         }
                         // backward motion
                         else
                         {
-                                if ( frameIndex-- <= 0 )
+                                if ( currentFrame -- <= 0 )
                                 {
-                                        frameIndex = dataOfItem->howManyFrames() - 1;
+                                        currentFrame = dataOfItem->howManyFrames() - 1;
                                         cycle = true;
                                 }
                         }
 
                         // which frame to show yet
-                        int framesNumber = ( dataOfItem->howManyMotions() - dataOfItem->howManyExtraFrames() ) / dataOfItem->howManyFramesForOrientations();
                         unsigned int orientOccident = ( orientation.getIntegerOfWay() == Way::Nowhere ? 0 : orientation.getIntegerOfWay() );
-                        int currentFrame = dataOfItem->getFrameAt( frameIndex ) + ( dataOfItem->howManyFramesForOrientations() > 1 ? framesNumber * orientOccident : 0 );
+                        unsigned int orientations = ( dataOfItem->howManyMotions() - dataOfItem->howManyExtraFrames() ) / dataOfItem->howManyFramesPerOrientation();
+                        unsigned int frame = dataOfItem->getFrameAt( currentFrame ) + ( dataOfItem->howManyFramesPerOrientation() > 1 ? orientations * orientOccident : 0 );
 
-                        // change frame of animation
-                        if ( this->rawImage != nilPointer && this->rawImage != dataOfItem->getMotionAt( currentFrame ) )
+                        // change frame
+                        if ( this->rawImage != nilPointer && frame < dataOfItem->howManyMotions() && this->rawImage != dataOfItem->getMotionAt( frame ) )
                         {
-                                changeImage( dataOfItem->getMotionAt( currentFrame ) );
+                                changeImage( dataOfItem->getMotionAt( frame ) );
 
                                 if ( this->shadow != nilPointer )
                                 {
-                                        changeShadow( dataOfItem->getShadowAt( currentFrame ) );
+                                        changeShadow( dataOfItem->getShadowAt( frame ) );
                                 }
                         }
 
@@ -147,7 +147,7 @@ void Item::changeItemData( ItemData* itemData, const std::string& initiatedBy )
                         << "\" initiated by \"" << initiatedBy << "\"" << std::endl ;
 
         this->dataOfItem = itemData;
-        this->frameIndex = 0;
+        this->currentFrame = 0;
         this->backwardMotion = false;
 }
 
@@ -178,11 +178,12 @@ void Item::changeOrientation( const Way& way )
         }
 
         // when item has different frames for orientations
-        if ( dataOfItem->howManyFramesForOrientations() > 1 )
+        if ( dataOfItem->howManyFramesPerOrientation() > 1 )
         {
                 // get frame for new orientation
                 unsigned int orientOccident = ( way.getIntegerOfWay() == Way::Nowhere ? 0 : way.getIntegerOfWay() );
-                unsigned int frame = ( ( dataOfItem->howManyMotions() - dataOfItem->howManyExtraFrames() ) / dataOfItem->howManyFramesForOrientations() ) * orientOccident;
+                unsigned int orientations = ( dataOfItem->howManyMotions() - dataOfItem->howManyExtraFrames() ) / dataOfItem->howManyFramesPerOrientation();
+                unsigned int frame = orientations * orientOccident;
 
                 if ( this->rawImage != nilPointer && frame < dataOfItem->howManyMotions() && this->rawImage != dataOfItem->getMotionAt( frame ) )
                 {
@@ -200,21 +201,18 @@ void Item::changeOrientation( const Way& way )
         }
 }
 
-void Item::changeFrame( const unsigned int frameIndex )
+void Item::changeFrame( const unsigned int newFrame )
 {
-        // if index of frame is within bounds of vector with sequence of animation
-        if ( dataOfItem->howManyMotions() > frameIndex )
+        if ( dataOfItem->howManyMotions() > newFrame )
         {
-                this->frameIndex = frameIndex;
+                this->currentFrame = newFrame;
 
-                // change frame
-                if ( this->rawImage != nilPointer && this->rawImage != dataOfItem->getMotionAt( frameIndex ) )
+                if ( this->rawImage != nilPointer && this->rawImage != dataOfItem->getMotionAt( newFrame ) )
                 {
-                        changeImage( dataOfItem->getMotionAt( frameIndex ) );
+                        changeImage( dataOfItem->getMotionAt( newFrame ) );
 
-                        // update shadow too
                         if ( this->shadow != nilPointer )
-                                changeShadow( dataOfItem->getShadowAt( frameIndex ) );
+                                changeShadow( dataOfItem->getShadowAt( newFrame ) );
                 }
         }
 }
@@ -282,13 +280,13 @@ void Item::assignBehavior( const std::string& behavior, void* extraData )
 void Item::setForthMotion ()
 {
         this->backwardMotion = false;
-        this->frameIndex = 0;
+        this->currentFrame = 0;
 }
 
 void Item::setReverseMotion ()
 {
         this->backwardMotion = true;
-        this->frameIndex = dataOfItem->howManyFrames() - 1;
+        this->currentFrame = dataOfItem->howManyFrames() - 1;
 }
 
 const std::string& Item::getLabel() const
@@ -321,9 +319,9 @@ bool Item::isMortal() const
         return dataOfItem->isMortal() ;
 }
 
-unsigned short Item::howManyFramesForOrientations() const
+unsigned short Item::howManyFramesPerOrientation() const
 {
-        return dataOfItem->howManyFramesForOrientations() ;
+        return dataOfItem->howManyFramesPerOrientation() ;
 }
 
 double Item::getSpeed() const

@@ -51,39 +51,34 @@ GuiManager::GuiManager( ) :
         else if ( version == "v1.32" )
                 version = "32nd anniversary";
 
-        nameOfWindow = nameOfWindow + " " + version;
+        nameOfWindow += " " + version ;
+#endif
+
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+        nameOfWindow += " (allegro5)" ;
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+        nameOfWindow += " (allegro4)" ;
 #endif
 
         allegro::setTitleOfAllegroWindow ( nameOfWindow );
 
         // create fonts to use in game
 
-        std::string nameOfFontFile = isomot::sharePath() + "font.png" ;
-        std::cout << "reading from file \"" << nameOfFontFile << "\" to create fonts used in game" << std::endl ;
+        addFont( new Font( "white.plain", Color::whiteColor() ) );
+        addFont( new Font( "white.big", Color::whiteColor(), true ) );
 
-        smartptr< allegro::Pict > pictureOfFont( allegro::loadPNG( isomot::pathToFile( nameOfFontFile.c_str () ) ) );
-        if ( pictureOfFont->isNotNil() )
-        {
-                addFont( new Font( "white.plain", *pictureOfFont.get(), Color::whiteColor() ) );
-                addFont( new Font( "white.big", *pictureOfFont.get(), Color::whiteColor(), true ) );
+        addFont( new Font( "orange.plain", Color::orangeColor() ) );
+        addFont( new Font( "cyan.plain", Color::cyanColor() ) );
+        addFont( new Font( "yellow.plain", Color::yellowColor() ) );
 
-                addFont( new Font( "orange.plain", *pictureOfFont.get(), Color::orangeColor() ) );
-                addFont( new Font( "cyan.plain", *pictureOfFont.get(), Color::cyanColor() ) );
-                addFont( new Font( "yellow.plain", *pictureOfFont.get(), Color::yellowColor() ) );
+        addFont( new Font( "orange.big", Color::orangeColor(), true ) );
+        addFont( new Font( "cyan.big", Color::cyanColor(), true ) );
+        addFont( new Font( "yellow.big", Color::yellowColor(), true ) );
 
-                addFont( new Font( "orange.big", *pictureOfFont.get(), Color::orangeColor(), true ) );
-                addFont( new Font( "cyan.big", *pictureOfFont.get(), Color::cyanColor(), true ) );
-                addFont( new Font( "yellow.big", *pictureOfFont.get(), Color::yellowColor(), true ) );
-
-                addFont( new Font( "green.plain", *pictureOfFont.get(), Color::greenColor(), false ) );
-                addFont( new Font( "green.big", *pictureOfFont.get(), Color::greenColor(), true ) );
-                addFont( new Font( "magenta.plain", *pictureOfFont.get(), Color::magentaColor(), false ) );
-                addFont( new Font( "magenta.big", *pictureOfFont.get(), Color::magentaColor(), true ) );
-        }
-        else
-        {
-                std::cerr << "oops, can’t get letters of fonts from file \"" << nameOfFontFile << "\"" << std::endl ;
-        }
+        addFont( new Font( "green.plain", Color::greenColor(), false ) );
+        addFont( new Font( "green.big", Color::greenColor(), true ) );
+        addFont( new Font( "magenta.plain", Color::magentaColor(), false ) );
+        addFont( new Font( "magenta.big", Color::magentaColor(), true ) );
 
         // create image to draw interface
         this->picture = new Picture( isomot::ScreenWidth(), isomot::ScreenHeight() );
@@ -194,7 +189,7 @@ void GuiManager::changeScreen( Screen* newScreen, bool dive )
         if ( listOfScreens.find( newScreen->getActionOfScreen()->getNameOfAction() ) != listOfScreens.end () )
         {
                 Screen::barWipeHorizontally( this->activeScreen, newScreen, dive );
-                this->activeScreen = newScreen;
+                setActiveScreen( newScreen );
                 redraw() ;
         }
         else
@@ -263,9 +258,6 @@ void GuiManager::initAllegro()
 {
         allegro::init ();
 
-        // 8 bits for each of three colors with 8 bits for alpha channel
-        allegro::setDefaultColorDepth( 32 );
-
         // fill list of screen’s sizes
 
         sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 640, 480 ) );
@@ -290,6 +282,8 @@ void GuiManager::initAllegro()
                 switched = allegro::switchToWindowedVideo( isomot::ScreenWidth(), isomot::ScreenHeight() ) ;
 
         if ( ! switched ) toggleFullScreenVideo ();
+
+        allegro::Pict::theScreen().clearToColor( Color::blackColor().toAllegroColor() ) ;
 
         // initialize handler of keyboard events
         allegro::initKeyboardHandler ();

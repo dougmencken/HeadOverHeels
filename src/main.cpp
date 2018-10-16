@@ -3,7 +3,9 @@
 #include "GameManager.hpp"
 #include "GuiManager.hpp"
 
-#if defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+#  include <allegro5/allegro.h>
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
 #  include <allegro.h>
 #endif
 

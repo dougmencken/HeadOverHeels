@@ -130,7 +130,9 @@ void ShowAuthors::doAction ()
                 {
                         if ( loadingScreen == nilPointer )
                         {
-                                smartptr< allegro::Pict > png( allegro::loadPNG( isomot::pathToFile( isomot::sharePath() + "loading-screen.png" ) ) );
+                                smartptr< allegro::Pict > png( allegro::Pict::fromPNGFile (
+                                        isomot::pathToFile( isomot::sharePath() + "loading-screen.png" )
+                                ) );
                                 loadingScreen = new Picture( * png.get() );
                                 loadingScreen->setName( "image of loading screen from original speccy version" );
                         }

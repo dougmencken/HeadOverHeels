@@ -9,12 +9,17 @@ installPrefix="/game"
 
 pathToCompiler="/Developer/GCC/${gccVersion}/PowerPC/32bit" # ="/usr"
 
+a5path="/opt/allegro-5.0.11"
+a4path="/opt/allegro-4.4.2"
+
+export PATH="$a4path"/bin:$PATH
+
 if [ ! -f src/Makefile ]
 then
-        LDFLAGS="-headerpad_max_install_names -L/opt/allegro-4.4.2/lib -L/opt/tinyxml2-6.2.0/lib -L/opt/ogg-vorbis/lib -L/opt/libpng-1.6.35/lib -L/opt/zlib-1.2.11/lib -L${pathToCompiler}/lib" \
-        CPPFLAGS="-I/opt/zlib-1.2.11/include -I/opt/libpng-1.6.35/include -I/opt/tinyxml2-6.2.0/include -I/opt/ogg-vorbis/include -I/opt/allegro-4.4.2/include" \
+        LDFLAGS="-headerpad_max_install_names -L${a4path}/lib -L${a5path}/lib -L/opt/tinyxml2-6.2.0/lib -L/opt/ogg-vorbis/lib -L/opt/libpng-1.6.35/lib -L/opt/zlib-1.2.11/lib -L${pathToCompiler}/lib" \
+        CPPFLAGS="-I/opt/zlib-1.2.11/include -I/opt/libpng-1.6.35/include -I/opt/tinyxml2-6.2.0/include -I/opt/ogg-vorbis/include -I${a4path}/include -I${a5path}/include" \
         CC="${pathToCompiler}/bin/gcc" CXX="${pathToCompiler}/bin/g++" \
-        ./configure --prefix=${installPrefix} --enable-debug
+        ./configure --prefix=${installPrefix} --enable-debug --with-allegro5 # --with-allegro4
 fi
 
 installPath=`pwd`/headoverheelsroot
@@ -27,9 +32,8 @@ time make -j2 CFLAGS="${makeCOptions}" CXXFLAGS="${makeCOptions}" && echo && mak
 headoverheelsbin="${installPath}${installPrefix}"/bin/headoverheels
 if [ -f "${headoverheelsbin}" ]
 then
-        install_name_tool -change liballeg.4.4.dylib /opt/allegro-4.4.2/lib/liballeg.4.4.dylib "${headoverheelsbin}"
-        install_name_tool -change libtinyxml2.6.dylib /opt/tinyxml2-6.2.0/lib/libtinyxml2.6.dylib "${headoverheelsbin}"
         install_name_tool -change /usr/lib/libgcc_s.1.dylib "${pathToCompiler}"/lib/libgcc_s.1.dylib "${headoverheelsbin}"
+
         otool -L "${headoverheelsbin}"
 
         games="/Applications/Games"

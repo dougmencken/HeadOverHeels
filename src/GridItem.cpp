@@ -19,7 +19,7 @@ GridItem::GridItem( ItemData* itemData, int cx, int cy, int z, const Way& way )
 
         unsigned int orientation = way.getIntegerOfWay();
         if ( orientation == Way::Nowhere ) orientation = 0;
-        unsigned int position = itemData->howManyMotions() / itemData->howManyFramesForOrientations() * orientation;
+        unsigned int position = itemData->howManyMotions() / itemData->howManyFramesPerOrientation() * orientation;
         this->rawImage = itemData->getMotionAt( position ) ;
 
         // may have no shadow

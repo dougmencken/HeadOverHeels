@@ -86,7 +86,7 @@ void Label::draw( const allegro::Pict& where )
 
 void Label::handleKey( const std::string& key )
 {
-        if ( key == "Enter" && myAction != nilPointer )
+        if ( myAction != nilPointer && ( key == "Enter" || key == "Space" ) )
         {
                 myAction->doIt ();
         }

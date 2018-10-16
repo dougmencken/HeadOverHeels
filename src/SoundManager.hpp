@@ -68,13 +68,13 @@ public:
          */
         void playOgg ( const std::string& oggFile, bool loop ) ;
 
-        void stopOgg () {  oggPlayingThread.stop() ;  }
+        void stopOgg () {  oggPlayer.stop() ;  }
 
         allegro::Sample * getSampleFor ( const std::string& label, const std::string& event ) ;
 
         allegro::Sample * getSampleFor ( const std::string& label, const ActivityOfItem& activity )
         {
-                return getSampleFor( label, translateActivityToString( activity ) ) ;
+                return getSampleFor( label, activityToString( activity ) ) ;
         }
 
         void setVolumeOfEffects ( unsigned int volume ) {  this->effectsVolume = ( volume <= 99 ) ? volume : 99 ;  }
@@ -87,7 +87,7 @@ public:
 
 protected:
 
-        std::string translateActivityToString ( const ActivityOfItem& activity ) ;
+        std::string activityToString ( const ActivityOfItem& activity ) ;
 
 private:
 
@@ -96,7 +96,7 @@ private:
         /**
          * Subprocess for playing Ogg music
          */
-        allegro::ogg::ThreadPlaysStream oggPlayingThread ;
+        allegro::ogg::OggPlayer oggPlayer ;
 
         /**
          * Volumen de los efectos sonoros
@@ -118,7 +118,7 @@ private:
          */
         std::map < std::string /* file */, allegro::Sample * > samples ;
 
-        std::map < ActivityOfItem, std::string > activityToString ;
+        std::map < ActivityOfItem, std::string > activityStrings ;
 
 };
 

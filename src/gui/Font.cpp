@@ -10,33 +10,47 @@
 namespace gui
 {
 
+/* static */ Picture * Font::imageOfFont = nilPointer ;
+
 /* static */ unsigned int Font::howManyLetters = 0 ;
 
 /* static */ std::string * Font::tableOfLetters = nilPointer ;
 
 
-Font::Font( const std::string& name, const allegro::Pict& pictOfLetters, const Color& color, bool doubleHeight ) :
+Font::Font( const std::string& name, const Color& color, bool doubleHeight ) :
         fontName( name ),
         fontColor( color )
 {
-        if ( ! pictOfLetters.isNotNil() )
+        if ( Font::imageOfFont == nilPointer )
         {
-                std::cerr << "picture of letters is nil" << std::endl ;
-                return;
-        }
+                std::string nameOfFontFile = isomot::sharePath() + "font.png" ;
+                smartptr< allegro::Pict > fontFromFile( allegro::Pict::fromPNGFile( isomot::pathToFile( nameOfFontFile.c_str () ) ) );
+                if ( ! fontFromFile->isNotNil() )
+                {
+                        std::cerr << "oops, can’t get letters of fonts from file \"" << nameOfFontFile << "\"" << std::endl ;
+                        return ;
+                }
 
-        Picture* lettersOfFont = new Picture( pictOfLetters.getW(), pictOfLetters.getH() );
-        {
+                imageOfFont = new Picture( fontFromFile->getW(), fontFromFile->getH() );
+
+                smartptr< Picture > blackLetters( new Picture( *fontFromFile.get() ) );
+                blackLetters->colorize( Color::blackColor() );
+
                 const unsigned int offsetOfTint = 1;
                 allegro::bitBlit(
-                        Picture( pictOfLetters ).makeColorizedCopy( Color::blackColor() )->getAllegroPict() /* tint of letters */,
-                        lettersOfFont->getAllegroPict(),
+                        blackLetters->getAllegroPict(),
+                        imageOfFont->getAllegroPict(),
                         0, 0,
                         offsetOfTint, offsetOfTint,
-                        pictOfLetters.getW() - offsetOfTint, pictOfLetters.getH() - offsetOfTint
+                        imageOfFont->getWidth() - offsetOfTint, imageOfFont->getHeight() - offsetOfTint
                 );
-                allegro::drawSprite( lettersOfFont->getAllegroPict(), pictOfLetters, 0, 0 );
+
+                allegro::drawSprite( imageOfFont->getAllegroPict(), *fontFromFile.get(), 0, 0 );
+
+                imageOfFont->setName( "image of font’s letters" );
         }
+
+        Picture* lettersOfFont = new Picture( *imageOfFont );
         lettersOfFont->setName( "picture of letters to make " + name + " font" );
 
         std::string justFamily = name.substr( name.find( "." ) + 1 );

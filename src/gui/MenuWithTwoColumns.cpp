@@ -35,7 +35,7 @@ void MenuWithTwoColumns::draw( const allegro::Pict& where )
         // rows in first column, after this number options go to second column
         unsigned int rowsInFirstColumn = options.size () >> 1;
 
-        unsigned int widthOfOption = ( this->optionImage != nilPointer ) ? this->optionImage->getWidth() : 0 ;
+        unsigned int widthOfOption = ( Menu::beforeOption != nilPointer ) ? Menu::beforeOption->getWidth() : 0 ;
 
         // calculate position of second column
         unsigned int widthOfFirstColumn = 0;
@@ -77,7 +77,7 @@ void MenuWithTwoColumns::draw( const allegro::Pict& where )
                                 label->changeFontFamilyAndColor( "plain", "white" );
                 }
 
-                Picture* mark = ( activeOption == label ) ? chosenOptionImageMini : optionImage ;
+                Picture* mark = ( activeOption == label ) ? Menu::beforeChosenOptionMini : Menu::beforeOption ;
 
                 // place option in first column
                 if ( countOfRows <= rowsInFirstColumn )
@@ -129,7 +129,7 @@ unsigned int MenuWithTwoColumns::getWidthOfMenu () const
 
         for ( std::list< Label* >::const_iterator i = options.begin (); i != options.end (); ++i, countOfRows++ )
         {
-                unsigned int theWidth = ( *i )->getWidth() + ( this->optionImage != nilPointer ? this->optionImage->getWidth() : 0 );
+                unsigned int theWidth = ( *i )->getWidth() + ( Menu::beforeOption != nilPointer ? Menu::beforeOption->getWidth() : 0 );
 
                 if ( countOfRows <= rowsInFirstColumn )
                 {

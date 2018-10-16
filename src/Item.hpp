@@ -74,9 +74,8 @@ public:
          * or via looping in sequence of animation. However there’re some cases when it’s necessary
          * to change frames manually, in situations not linked to animation or change of orientation.
          * As example, in behavior of trampoline one frame is for rest and another is for fold
-         * @param frameIndex index of new frame
          */
-        void changeFrame ( const unsigned int frameIndex ) ;
+        void changeFrame ( const unsigned int newFrame ) ;
 
         /**
          * Change graphics of item
@@ -147,7 +146,7 @@ private:
         /**
          * Current frame for item
          */
-        unsigned int frameIndex ;
+        unsigned int currentFrame ;
 
         /**
          * True to reverse sequence of animation
@@ -262,7 +261,7 @@ public:
          *         2 for frames of south and west, or
          *         4 for different frames of all of them
          */
-        unsigned short howManyFramesForOrientations () const ;
+        unsigned short howManyFramesPerOrientation () const ;
 
         /**
          * Time in seconds to move item
@@ -330,7 +329,7 @@ public:
 
         void setAnchor ( Item * item ) {  this->anchor = item ;  }
 
-        unsigned int getIndexOfFrame() {  return this->frameIndex ;  }
+        unsigned int getCurrentFrame() {  return this->currentFrame ;  }
 
 };
 

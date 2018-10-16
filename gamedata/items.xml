@@ -545,7 +545,7 @@
     <frame>0</frame>
   </item>
 
-  <!-- Monkey head -->
+  <!-- Monkey head (unused) -->
   <item label="monkey-head">
     <widthX>12</widthX>
     <widthY>12</widthY>
@@ -554,7 +554,7 @@
     <mortal>true</mortal>
     <picture file="monkey-head.png">
       <frameWidth>48</frameWidth>
-      <frameHeight>48</frameHeight>
+      <frameHeight>50</frameHeight>
     </picture>
     <frame>0</frame>
   </item>

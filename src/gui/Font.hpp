@@ -24,7 +24,7 @@ namespace gui
 {
 
 /**
- * Uses letters stored in picture file. Letters may have non-white color or~and double height
+ * Font which uses letters from picture file. Letters may have non-white color or~and double height
  */
 
 class Font
@@ -34,11 +34,10 @@ public:
 
         /**
          * @param name Name of this font to mention it
-         * @param pictOfLetters Picture with letters
          * @param color Color of letters
          * @param doubleHeight Double height of letters
          */
-        Font( const std::string& name, const allegro::Pict & pictOfLetters, const Color & color, bool doubleHeight = false ) ;
+        Font( const std::string& name, const Color & color, bool doubleHeight = false ) ;
 
         virtual ~Font( ) ;
 
@@ -79,6 +78,8 @@ private:
          * Images of letters
          */
         std::vector < Picture * > letters ;
+
+        static Picture * imageOfFont ;
 
         static unsigned int howManyLetters ;
 

@@ -17,6 +17,6 @@ External dependencies
 
         a simple, small, C++ XML parser that can be easily integrated into other programs
 
-    allegro 4
+    allegro 5 or allegro 4
 
         a cross-platform library for video game and multimedia programming

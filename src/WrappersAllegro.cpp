@@ -1,8 +1,25 @@
 
 #include "WrappersAllegro.hpp"
 
-#include <string>
+#include <algorithm>
+
 #include <iostream>
+
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+#include <allegro5/allegro.h>
+
+#include <allegro5/allegro_image.h>
+#include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_acodec.h>
+
+#include <algif5/algif.h>
+
+#include <queue>
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
 
 #include <allegro.h>
 
@@ -10,100 +27,506 @@
   #include <winalleg.h>
 #endif
 
-#include <loadpng.h>
+#include <loadpng/loadpng.h>
 
-#include <algif.h>
+#include <algif/algif.h>
 
-#include "alogg/aloggpth.h"
-#include "alogg/aloggint.h"
+#include <alogg/aloggpth.h>
+#include <alogg/aloggint.h>
+
+#endif
+
+#include "Timer.hpp"
 
 #ifdef DEBUG
 #  define DEBUG_ALLEGRO_INIT    1
 #endif
 
+#define RECORD_EACH_FRAME       0
+
+#if defined( RECORD_EACH_FRAME ) && RECORD_EACH_FRAME
+    # include <sstream>
+#endif
+
+
+unsigned char AllegroColor::getRed() const
+{
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        unsigned char red, green, blue ;
+        al_unmap_rgb( color, &red, &green, &blue );
+        return red ;
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        return getr( color );
+
+#endif
+}
+
+unsigned char AllegroColor::getGreen() const
+{
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        unsigned char red, green, blue ;
+        al_unmap_rgb( color, &red, &green, &blue );
+        return green ;
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        return getg( color );
+
+#endif
+}
+
+unsigned char AllegroColor::getBlue() const
+{
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        unsigned char red, green, blue ;
+        al_unmap_rgb( color, &red, &green, &blue );
+        return blue ;
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        return getb( color );
+
+#endif
+}
+
+unsigned char AllegroColor::getAlpha() const
+{
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        unsigned char red, green, blue, alpha ;
+        al_unmap_rgba( color, &red, &green, &blue, &alpha );
+        return alpha ;
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        return geta( color );
+
+#endif
+}
+
+bool AllegroColor::equalsRGBA( const AllegroColor& toCompare ) const
+{
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        unsigned char red, green, blue, alpha ;
+        al_unmap_rgba( color, &red, &green, &blue, &alpha );
+
+        unsigned char redToCompare, greenToCompare, blueToCompare, alphaToCompare ;
+        al_unmap_rgba( toCompare, &redToCompare, &greenToCompare, &blueToCompare, &alphaToCompare );
+
+        return red == redToCompare && green == greenToCompare && blue == blueToCompare && alpha == alphaToCompare ;
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        return getr( color ) == getr( toCompare ) && getg( color ) == getg( toCompare ) &&
+                getb( color ) == getb( toCompare ) && geta( color ) == geta( toCompare ) ;
+
+#endif
+}
+
+bool AllegroColor::equalsRGB( const AllegroColor& toCompare ) const
+{
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        unsigned char red, green, blue ;
+        al_unmap_rgb( color, &red, &green, &blue );
+
+        unsigned char redToCompare, greenToCompare, blueToCompare ;
+        al_unmap_rgb( toCompare, &redToCompare, &greenToCompare, &blueToCompare );
+
+        return red == redToCompare && green == greenToCompare && blue == blueToCompare ;
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        return getr( color ) == getr( toCompare ) &&
+                getg( color ) == getg( toCompare ) &&
+                getb( color ) == getb( toCompare ) ;
+
+#endif
+}
+
+/* static */
+AllegroColor AllegroColor::makeColor( unsigned char r, unsigned char g, unsigned char b, unsigned char a )
+{
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        if ( a == 0 ) {  r = 0 ;  g = 0 ;  b = 0 ;  }
+
+        return al_map_rgba( r, g, b, a );
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        return makeacol( r, g, b, a );
+
+#endif
+}
+
+/* static */
+AllegroColor AllegroColor::makeColor( unsigned char r, unsigned char g, unsigned char b )
+{
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        return al_map_rgba( r, g, b, 0xff );
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        return makeacol( r, g, b, 0xff );
+
+#endif
+}
+
+/* static */
+AllegroColor AllegroColor::keyColor(  )
+{
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        return al_map_rgba( 0, 0, 0, 0 ) ;
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        return makeacol( 255, 0, 255, 0 ) ;
+
+#endif
+}
+
+bool AllegroColor::isKeyColor () const
+{
+        return getRed() == keyColor().getRed() &&
+                getGreen() == keyColor().getGreen() &&
+                getBlue() == keyColor().getBlue() &&
+                getAlpha() == keyColor().getAlpha() ;
+}
+
 
 namespace allegro
 {
 
-#if defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 
-/* static */ Pict* Pict::nil = new Pict( NULL ) ;
+ALLEGRO_DISPLAY * allegroDisplay ;
 
-/* static */ Pict* Pict::globalScreen = new Pict( /* allegro’s global variable */ screen );
+#endif
+
+Pict* Pict::nil = new Pict( NULL ) ;
+
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+Pict* Pict::globalScreen = new Pict( NULL );
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+Pict* Pict::globalScreen = new Pict( /* allegro’s global variable */ screen );
+
+#endif
 
 Pict::Pict( unsigned int w, unsigned int h )
         : shallowCopy( false )
 {
-        it = create_bitmap( w, h );
-}
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 
-Pict::Pict( unsigned int w, unsigned int h, unsigned int depth )
-        : shallowCopy( false )
-{
-        it = create_bitmap_ex( depth, w, h );
+        al_set_new_bitmap_format( ALLEGRO_PIXEL_FORMAT_RGBA_8888 );
+        al_set_new_bitmap_flags( ALLEGRO_MEMORY_BITMAP | ALLEGRO_NO_PREMULTIPLIED_ALPHA | ALLEGRO_ALPHA_TEST | ALLEGRO_NO_PRESERVE_TEXTURE );
+        it = al_create_bitmap( w, h );
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        it = create_bitmap( w, h );
+
+#endif
 }
 
 Pict::~Pict( )
 {
         if ( ! isNotNil() ) return ;
         if ( shallowCopy ) return ;
-        if ( it == /* allegro’s global variable */ screen ) return ;
 
         // nullify it first, then invoke destroy_bitmap
         // to avoid drawing of being-destroyed thing when there’re many threads
 
-        BITMAP* toBin = it;
+        AllegroBitmap* toBin = it;
         it = NULL;
 
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        al_destroy_bitmap( toBin );
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
         destroy_bitmap( toBin );
+
+#endif
 }
 
 unsigned int Pict::getW() const
 {
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        return ( isNotNil() ) ? al_get_bitmap_width( it ) : 0 ;
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
         return ( isNotNil() ) ? it->w : 0 ;
+
+#endif
 }
 
 unsigned int Pict::getH() const
 {
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        return ( isNotNil() ) ? al_get_bitmap_height( it ) : 0 ;
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
         return ( isNotNil() ) ? it->h : 0 ;
+
+#endif
 }
 
-int Pict::getPixelAt( int x, int y ) const
+AllegroColor Pict::getPixelAt( int x, int y ) const
 {
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        return al_get_pixel( it, x, y ) ;
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
         return getpixel( it, x, y ) ;
+
+#endif
 }
 
-void Pict::setPixelAt( int x, int y, int allegroColor ) const
+void Pict::putPixelAt( int x, int y, AllegroColor color ) const
 {
-        putpixel( it, x, y, allegroColor ) ;
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        AllegroBitmap* previous = al_get_target_bitmap() ;
+        if ( previous != it ) al_set_target_bitmap( it ) ;
+        al_put_pixel( x, y, color );
+        if ( previous != it ) al_set_target_bitmap( previous );
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        putpixel( it, x, y, color ) ;
+
+#endif
 }
 
-unsigned int Pict::getColorDepth () const
+void Pict::drawPixelAt( int x, int y, AllegroColor color ) const
 {
-        return ( isNotNil() ) ? bitmap_color_depth( it ) : 0 ;
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        AllegroBitmap* previous = al_get_target_bitmap() ;
+        if ( previous != it ) al_set_target_bitmap( it ) ;
+        al_draw_filled_rectangle( x, y, x + 1.0, y + 1.0, color );
+        ///al_draw_filled_circle( x + 0.5, y + 0.5, 1.0, color );
+        if ( previous != it ) al_set_target_bitmap( previous ) ;
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        putpixel( it, x, y, color ) ;
+
+#endif
+
+        redraw() ;
 }
 
-void Pict::clearToColor( int allegroColor ) const
+void Pict::clearToColor( AllegroColor color ) const
 {
-        clear_to_color( it, allegroColor );
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        AllegroBitmap* previous = al_get_target_bitmap() ;
+        if ( previous != it ) al_set_target_bitmap( it ) ;
+        al_clear_to_color( color );
+        if ( previous != it ) al_set_target_bitmap( previous );
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        clear_to_color( it, color );
+
+#endif
+
+        redraw() ;
 }
 
-bool Pict::isInVideoMemory() const
+void Pict::lock( bool read, bool write ) const
 {
-        // int is_video_bitmap( BITMAP* bmp )
-        // returns TRUE if bmp is the allegro screen bitmap, a video memory bitmap,
-        // or a sub-bitmap of either
-        return is_video_bitmap( it ) == TRUE ;
+        if ( ! isNotNil() ) return ;
+
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        int rw = ( read && write ) ? ALLEGRO_LOCK_READWRITE :
+                        ( read && ! write ? ALLEGRO_LOCK_READONLY :
+                                ( write && ! read ? ALLEGRO_LOCK_WRITEONLY : ALLEGRO_LOCK_READWRITE ) ) ;
+
+        al_lock_bitmap( it, al_get_bitmap_format( it ), rw );
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        ( void ) read ;
+        ( void ) write ;
+        // do nothing
+
+#endif
+}
+
+void Pict::unlock() const
+{
+        if ( ! isNotNil() ) return ;
+
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        al_unlock_bitmap( it );
+
+#endif
+}
+
+/* static */ Pict* Pict::asCloneOf( AllegroBitmap* image )
+{
+        if ( image == NULL ) return nil ;
+
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        Pict* clone = Pict::newPict( al_clone_bitmap( image ) );
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        Pict* clone = Pict::newPict( image->w, image->h );
+        blit( image, clone->it, 0, 0, 0, 0, image->w, image->h ) ;
+
+#endif
+
+        return clone ;
+}
+
+/* static */ Pict* Pict::mendIntoPict( AllegroBitmap* image )
+{
+        if ( image == NULL ) return nil ;
+
+        AllegroColor transparent = AllegroColor::keyColor();
+
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        /* al_convert_mask_to_alpha( image, al_map_rgb( 255, 0, 255 ) ); */
+
+        unsigned int imageWidth = al_get_bitmap_width( image );
+        unsigned int imageHeight = al_get_bitmap_height( image );
+
+        Pict* pict = newPict( imageWidth, imageHeight );
+
+        AllegroBitmap* previous = al_get_target_bitmap() ;
+        al_set_target_bitmap( pict->it ) ;
+
+        ///al_clear_to_color( transparent );
+
+        al_lock_bitmap( image, al_get_bitmap_format( image ), ALLEGRO_LOCK_READONLY );
+        al_lock_bitmap( pict->it, al_get_bitmap_format( pict->it ), ALLEGRO_LOCK_WRITEONLY );
+
+        for ( unsigned int y = 0; y < imageHeight; y++ )
+        {
+                for ( unsigned int x = 0; x < imageWidth; x++ )
+                {
+                        AllegroColor pixel = al_get_pixel( image, x, y );
+
+                        unsigned char red, green, blue ;
+                        al_unmap_rgb( pixel, &red, &green, &blue );
+
+                        if ( red == 255 && green == 0 && blue == 255 )
+                        {
+                                al_put_pixel( x, y, transparent );
+                        }
+                        else /* if ( ! ( red == 255 && green == 0 && blue == 255 ) ) */
+                        {
+                                al_put_pixel( x, y, al_map_rgba( red, green, blue, 0xff ) );
+                        }
+                }
+        }
+
+        al_unlock_bitmap( image );
+        al_unlock_bitmap( pict->it );
+
+        al_destroy_bitmap( image );
+
+        al_set_target_bitmap( previous );
+
+        return pict ;
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        unsigned int imageWidth = image->w ;
+        unsigned int imageHeight = image->h ;
+
+        Pict* pict = newPict( imageWidth, imageHeight );
+
+        ///clear_to_color( pict->it, transparent );
+
+        for ( unsigned int y = 0; y < imageHeight; y++ )
+        {
+                for ( unsigned int x = 0; x < imageWidth; x++ )
+                {
+                        AllegroColor pixel = getpixel( image, x, y );
+
+                        unsigned char red = getr( pixel );
+                        unsigned char green = getg( pixel );
+                        unsigned char blue = getb( pixel );
+
+                        if ( red == 255 && green == 0 && blue == 255 )
+                                putpixel( pict->it, x, y, transparent );
+                        else
+                                putpixel( pict->it, x, y, makeacol( red, green, blue, 0xff ) );
+                }
+        }
+
+        destroy_bitmap( image );
+
+        return pict ;
+
+#endif
+}
+
+/* static */ Pict* Pict::fromPNGFile( const std::string& file )
+{
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        AllegroBitmap* image = al_load_bitmap( file.c_str () );
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        AllegroBitmap* image = load_png( file.c_str (), NULL );
+
+#endif
+
+        return Pict::mendIntoPict( image ) ;
 }
 
 /* static */ const Pict& Pict::theScreen ()
 {
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        globalScreen->it = al_get_backbuffer( allegroDisplay != NULL ? allegroDisplay : al_get_current_display() );
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
         globalScreen->it = /* allegro’s global variable */ screen ; // update it before returning
+
+#endif
+
+        globalScreen->shallowCopy = true ;
         return *globalScreen ;
 }
 
 
-/* static */ Sample* Sample::nil = new Sample( );
+unsigned short Audio::digitalVolume = 200 ;
+
+unsigned short Audio::midiVolume = 200 ;
+
+
+Sample* Sample::nil = new Sample( );
 
 Sample::~Sample( )
 {
@@ -112,129 +535,607 @@ Sample::~Sample( )
 
         stop();
 
-        SAMPLE* toBin = it;
+        AllegroSample* toBin = it;
         it = NULL;
 
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        al_destroy_sample( toBin );
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
         destroy_sample( toBin );
+
+#endif
 }
 
 unsigned int Sample::getFrequency() const
 {
         if ( voice < 0 ) return 0 ;
+
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        return al_get_sample_frequency( it );
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
         int frequency = voice_get_frequency( voice );
         return ( frequency > 0 ) ? frequency : 0 ;
-}
 
-short Sample::getPan() const
-{
-        if ( voice < 0 ) return -1 ;
-        return voice_get_pan( voice );
+#endif
 }
 
 void Sample::play( unsigned short pan )
 {
-        if ( ! isPlaying() )
-                voice = play_sample( it, volume, pan, 1000 /* frequency that sample was recorded at */, 0 /* don’t loop */ );
-        else
-                voice_set_position( voice, 0 );
+        playMe( this->volume, pan, false );
 }
 
 void Sample::loop( unsigned short pan )
 {
+        playMe( this->volume, pan, true );
+}
+
+/* private */ void Sample::playMe( unsigned short volume, unsigned short pan, bool loop )
+{
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
         if ( ! isPlaying() )
-                voice = play_sample( it, volume, pan, 1000 /* frequency that sample was recorded at */, 1 /* loop */ );
+        {
+                sampleInstance = al_create_sample_instance( it );
+                al_attach_sample_instance_to_mixer( sampleInstance, al_get_default_mixer() );
+
+                al_set_sample_instance_gain( sampleInstance, volume / 255.0 );
+                al_set_sample_instance_pan( sampleInstance, ( pan - 128 ) / 128.0 );
+                al_set_sample_instance_speed( sampleInstance, 1.0 /* original frequency */ );
+                al_set_sample_instance_playmode( sampleInstance, loop ? ALLEGRO_PLAYMODE_LOOP : ALLEGRO_PLAYMODE_ONCE );
+
+                ///bool okay = al_play_sample( it, volume /* * 0.089 */ / 255.0, ( pan - 128 ) / 128.0, 1.0, ALLEGRO_PLAYMODE_ONCE, sampleID );
+                bool okay = al_play_sample_instance( sampleInstance );
+                if ( okay ) voice = 1 ;
+        }
+        else
+                al_set_sample_instance_position( sampleInstance, 0 );
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        if ( ! isPlaying() )
+                voice = play_sample( it, volume, pan, 1000 /* frequency that sample was recorded at */, loop ? 1 : 0 );
         else
                 voice_set_position( voice, 0 );
+
+#endif
 }
 
 void Sample::stop()
 {
         if ( ! isNotNil() || voice < 0 ) return ;
 
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        if ( sampleInstance == NULL ) return ;
+
+        /* al_stop_sample( sampleID ); */
+        al_stop_sample_instance( sampleInstance );
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
         stop_sample( it );
-        binVoiceIfNotPlaying();
+
+#endif
+
+        neatenIfNotPlaying();
+}
+
+void Sample::neatenIfNotPlaying()
+{
+        if ( voice < 0 || isPlaying() ) return ;
+
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        if ( sampleInstance != NULL )
+        {
+                al_set_sample( sampleInstance, NULL );
+                al_destroy_sample_instance( sampleInstance );
+                sampleInstance = NULL;
+        }
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        deallocate_voice( voice );
+
+#endif
+
+        voice = -1;
 }
 
 bool Sample::isPlaying() const
 {
         if ( voice < 0 ) return false ;
 
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        if ( sampleInstance == NULL ) return false ;
+
+        return al_get_sample_instance_playing( sampleInstance );
+        /* return al_get_mixer_playing( al_get_default_mixer() ); */
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
         // int voice_get_position( int voice )
         // returns the current position of voice in sample units or -1 if it has finished playing
 
         return voice_get_position( voice ) != -1 ;
-}
 
-void Sample::binVoiceIfNotPlaying()
-{
-        if ( voice < 0 || isPlaying() ) return ;
-        deallocate_voice( voice );
-        voice = -1;
+#endif
 }
 
 /* static */
 Sample* Sample::loadFromFile( const std::string& file )
 {
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        return new Sample( al_load_sample( file.c_str () ) );
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
         return new Sample( load_sample( file.c_str () ) );
+
+#endif
 }
 
 
 namespace ogg
 {
 
-void ThreadPlaysStream::play( const std::string& oggFile, bool loop )
+/* static */ std::vector< OggPlayer * > OggPlayer::everyPlayer ;
+
+void OggPlayer::play( const std::string& oggFile, bool loop )
 {
-        if ( isNotNil() ) return ;
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        if ( oggSample != NULL || sampleInstance != NULL || oggMixer != NULL ) return ;
+
+        oggSample = al_load_sample( oggFile.c_str () );
+        if ( oggSample == NULL ) return ;
+
+        oggMixer = al_create_mixer (
+                /* al_get_sample_frequency( oggSample ) */ al_get_mixer_frequency( al_get_default_mixer() ),
+                ALLEGRO_AUDIO_DEPTH_FLOAT32, ALLEGRO_CHANNEL_CONF_2
+        );
+        if ( oggMixer == NULL )
+        {
+                al_destroy_sample( oggSample );
+                oggSample = NULL ;
+                return ;
+        }
+
+        sampleInstance = al_create_sample_instance( oggSample );
+        if ( sampleInstance == NULL )
+        {
+                al_destroy_mixer( oggMixer );
+                al_destroy_sample( oggSample );
+                oggMixer = NULL ;
+                oggSample = NULL ;
+                return ;
+        }
+
+        al_attach_sample_instance_to_mixer( sampleInstance, oggMixer );
+        al_attach_mixer_to_mixer( oggMixer, al_get_default_mixer() );
+
+        al_set_sample_instance_gain( sampleInstance, Audio::digitalVolume / 255.0 );
+        al_set_sample_instance_pan( sampleInstance, 0.0 );
+        al_set_sample_instance_speed( sampleInstance, 1.0 /* original frequency */ );
+        al_set_sample_instance_playmode( sampleInstance, loop ? ALLEGRO_PLAYMODE_LOOP : ALLEGRO_PLAYMODE_ONCE );
+
+        al_play_sample_instance( sampleInstance );
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        if ( th != NULL ) return ;
 
         // use buffer of 40 KiB
         const size_t lengthOfbuffer = 40 * 1024;
 
         stream = alogg_start_streaming( oggFile.c_str(), lengthOfbuffer );
 
-        if ( stream != NULL )
-        {
-                th = ( loop ) ? alogg_create_thread_which_loops( stream, oggFile.c_str(), lengthOfbuffer )
-                                : alogg_create_thread( stream );
-        }
+        if ( stream == NULL ) return ;
+
+        th = ( loop ) ? alogg_create_thread_which_loops( stream, oggFile.c_str(), lengthOfbuffer )
+                        : alogg_create_thread( stream );
+#endif
 
         filePlaying = oggFile ;
+        everyPlayer.push_back( this );
 }
 
-void ThreadPlaysStream::stop()
+void OggPlayer::stop()
 {
-        if ( ! isNotNil() ) return ;
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        if ( sampleInstance != NULL )
+        {
+                al_stop_sample_instance( sampleInstance );
+
+                al_set_sample( sampleInstance, NULL );
+                al_destroy_sample_instance( sampleInstance );
+
+                sampleInstance = NULL;
+        }
+
+        if ( oggMixer != NULL )
+        {
+                al_detach_mixer( oggMixer );
+                al_destroy_mixer( oggMixer );
+                oggMixer = NULL ;
+        }
+
+        if ( oggSample != NULL )
+        {
+                al_destroy_sample( oggSample );
+                oggSample = NULL ;
+        }
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        if ( th != NULL )
+        {
+                alogg_stop_thread( th );
+                /// while ( isPlaying() ) ;
+                alogg_join_thread( th );
+
+                alogg_thread* toBin = th;
+                th = NULL;
+                alogg_destroy_thread( toBin );
+        }
+
+#endif
 
         filePlaying.clear() ;
-
-        alogg_stop_thread( th );
-        /// while ( isPlaying() ) ;
-        alogg_join_thread( th );
-
-        alogg_thread* toBin = th;
-        th = NULL;
-
-        alogg_destroy_thread( toBin );
+        everyPlayer.erase( std::remove( everyPlayer.begin (), everyPlayer.end (), this ), everyPlayer.end () );
 }
 
-bool ThreadPlaysStream::isPlaying()
+bool OggPlayer::isPlaying()
 {
-        return isNotNil() ? th->alive != 0 && th->stop == 0 : false ;
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        return ( oggMixer != NULL ) ? al_get_mixer_playing( oggMixer ) : false ;
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        return ( th != NULL ) ? ( th->alive != 0 && th->stop == 0 ) : false ;
+
+#endif
+}
+
+/* static */ void OggPlayer::syncPlayersWithDigitalVolume()
+{
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        for ( std::vector < OggPlayer * >::iterator it = everyPlayer.begin (); it != everyPlayer.end () ; ++ it )
+        {
+                OggPlayer* player = *it ;
+                if ( player != NULL && player->isPlaying() )
+                        al_set_sample_instance_gain( player->sampleInstance, Audio::digitalVolume / 255.0 );
+        }
+
+#endif
 }
 
 }
+
+
+#if defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+#define  ALLEGRO_KEY_A                  KEY_A
+#define  ALLEGRO_KEY_B                  KEY_B
+#define  ALLEGRO_KEY_C                  KEY_C
+#define  ALLEGRO_KEY_D                  KEY_D
+#define  ALLEGRO_KEY_E                  KEY_E
+#define  ALLEGRO_KEY_F                  KEY_F
+#define  ALLEGRO_KEY_G                  KEY_G
+#define  ALLEGRO_KEY_H                  KEY_H
+#define  ALLEGRO_KEY_I                  KEY_I
+#define  ALLEGRO_KEY_J                  KEY_J
+#define  ALLEGRO_KEY_K                  KEY_K
+#define  ALLEGRO_KEY_L                  KEY_L
+#define  ALLEGRO_KEY_M                  KEY_M
+#define  ALLEGRO_KEY_N                  KEY_N
+#define  ALLEGRO_KEY_O                  KEY_O
+#define  ALLEGRO_KEY_P                  KEY_P
+#define  ALLEGRO_KEY_Q                  KEY_Q
+#define  ALLEGRO_KEY_R                  KEY_R
+#define  ALLEGRO_KEY_S                  KEY_S
+#define  ALLEGRO_KEY_T                  KEY_T
+#define  ALLEGRO_KEY_U                  KEY_U
+#define  ALLEGRO_KEY_V                  KEY_V
+#define  ALLEGRO_KEY_W                  KEY_W
+#define  ALLEGRO_KEY_X                  KEY_X
+#define  ALLEGRO_KEY_Y                  KEY_Y
+#define  ALLEGRO_KEY_Z                  KEY_Z
+#define  ALLEGRO_KEY_0                  KEY_0
+#define  ALLEGRO_KEY_1                  KEY_1
+#define  ALLEGRO_KEY_2                  KEY_2
+#define  ALLEGRO_KEY_3                  KEY_3
+#define  ALLEGRO_KEY_4                  KEY_4
+#define  ALLEGRO_KEY_5                  KEY_5
+#define  ALLEGRO_KEY_6                  KEY_6
+#define  ALLEGRO_KEY_7                  KEY_7
+#define  ALLEGRO_KEY_8                  KEY_8
+#define  ALLEGRO_KEY_9                  KEY_9
+#define  ALLEGRO_KEY_ESCAPE             KEY_ESC
+#define  ALLEGRO_KEY_TILDE              KEY_TILDE
+#define  ALLEGRO_KEY_MINUS              KEY_MINUS
+#define  ALLEGRO_KEY_EQUALS             KEY_EQUALS
+#define  ALLEGRO_KEY_BACKSPACE          KEY_BACKSPACE
+#define  ALLEGRO_KEY_TAB                KEY_TAB
+#define  ALLEGRO_KEY_OPENBRACE          KEY_OPENBRACE
+#define  ALLEGRO_KEY_CLOSEBRACE         KEY_CLOSEBRACE
+#define  ALLEGRO_KEY_ENTER              KEY_ENTER
+#define  ALLEGRO_KEY_SEMICOLON          KEY_COLON
+#define  ALLEGRO_KEY_QUOTE              KEY_QUOTE
+#define  ALLEGRO_KEY_BACKSLASH          KEY_BACKSLASH
+#define  ALLEGRO_KEY_BACKSLASH2         KEY_BACKSLASH2
+#define  ALLEGRO_KEY_COMMA              KEY_COMMA
+#define  ALLEGRO_KEY_FULLSTOP           KEY_STOP
+#define  ALLEGRO_KEY_SLASH              KEY_SLASH
+#define  ALLEGRO_KEY_SPACE              KEY_SPACE
+#define  ALLEGRO_KEY_LEFT               KEY_LEFT
+#define  ALLEGRO_KEY_RIGHT              KEY_RIGHT
+#define  ALLEGRO_KEY_UP                 KEY_UP
+#define  ALLEGRO_KEY_DOWN               KEY_DOWN
+#define  ALLEGRO_KEY_INSERT             KEY_INSERT
+#define  ALLEGRO_KEY_DELETE             KEY_DEL
+#define  ALLEGRO_KEY_HOME               KEY_HOME
+#define  ALLEGRO_KEY_END                KEY_END
+#define  ALLEGRO_KEY_PGUP               KEY_PGUP
+#define  ALLEGRO_KEY_PGDN               KEY_PGDN
+#define  ALLEGRO_KEY_F1                 KEY_F1
+#define  ALLEGRO_KEY_F2                 KEY_F2
+#define  ALLEGRO_KEY_F3                 KEY_F3
+#define  ALLEGRO_KEY_F4                 KEY_F4
+#define  ALLEGRO_KEY_F5                 KEY_F5
+#define  ALLEGRO_KEY_F6                 KEY_F6
+#define  ALLEGRO_KEY_F7                 KEY_F7
+#define  ALLEGRO_KEY_F8                 KEY_F8
+#define  ALLEGRO_KEY_F9                 KEY_F9
+#define  ALLEGRO_KEY_F10                KEY_F10
+#define  ALLEGRO_KEY_F11                KEY_F11
+#define  ALLEGRO_KEY_F12                KEY_F12
+#define  ALLEGRO_KEY_PRINTSCREEN        KEY_PRTSCR
+#define  ALLEGRO_KEY_PAUSE              KEY_PAUSE
+#define  ALLEGRO_KEY_PAD_0              KEY_0_PAD
+#define  ALLEGRO_KEY_PAD_1              KEY_1_PAD
+#define  ALLEGRO_KEY_PAD_2              KEY_2_PAD
+#define  ALLEGRO_KEY_PAD_3              KEY_3_PAD
+#define  ALLEGRO_KEY_PAD_4              KEY_4_PAD
+#define  ALLEGRO_KEY_PAD_5              KEY_5_PAD
+#define  ALLEGRO_KEY_PAD_6              KEY_6_PAD
+#define  ALLEGRO_KEY_PAD_7              KEY_7_PAD
+#define  ALLEGRO_KEY_PAD_8              KEY_8_PAD
+#define  ALLEGRO_KEY_PAD_9              KEY_9_PAD
+#define  ALLEGRO_KEY_PAD_SLASH          KEY_SLASH_PAD
+#define  ALLEGRO_KEY_PAD_ASTERISK       KEY_ASTERISK
+#define  ALLEGRO_KEY_PAD_MINUS          KEY_MINUS_PAD
+#define  ALLEGRO_KEY_PAD_PLUS           KEY_PLUS_PAD
+#define  ALLEGRO_KEY_PAD_DELETE         KEY_DEL_PAD
+#define  ALLEGRO_KEY_PAD_ENTER          KEY_ENTER_PAD
+#define  ALLEGRO_KEY_PAD_EQUALS         KEY_EQUALS_PAD
+#define  ALLEGRO_KEY_ABNT_C1            KEY_ABNT_C1
+#define  ALLEGRO_KEY_YEN                KEY_YEN
+#define  ALLEGRO_KEY_KANA               KEY_KANA
+#define  ALLEGRO_KEY_KANJI              KEY_KANJI
+#define  ALLEGRO_KEY_CONVERT            KEY_CONVERT
+#define  ALLEGRO_KEY_NOCONVERT          KEY_NOCONVERT
+#define  ALLEGRO_KEY_AT                 KEY_AT
+#define  ALLEGRO_KEY_CIRCUMFLEX         KEY_CIRCUMFLEX
+#define  ALLEGRO_KEY_COLON2             KEY_COLON2
+#define  ALLEGRO_KEY_BACKQUOTE          KEY_BACKQUOTE
+#define  ALLEGRO_KEY_SEMICOLON2         KEY_SEMICOLON
+#define  ALLEGRO_KEY_COMMAND            KEY_COMMAND
+#define  ALLEGRO_KEY_UNKNOWN            KEY_UNKNOWN1
+
+#define  ALLEGRO_KEYMOD_SHIFT           KB_SHIFT_FLAG
+#define  ALLEGRO_KEYMOD_CTRL            KB_CTRL_FLAG
+#define  ALLEGRO_KEYMOD_ALT             KB_ALT_FLAG
+
+#endif
+
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+#ifndef TRUE
+    #define TRUE        -1
+    #define FALSE       0
+#endif
+
+Timer * keyRepeatTimer ;
+const float firstRepeatDelay = 0.5 ;
+const float nextRepeatDelay = 0.1 ;
+bool firstRepeat ;
+
+ALLEGRO_FONT * allegroFont ;
+
+int key[ ALLEGRO_KEY_MAX ] ;
+
+int key_shifts ;
+
+static std::queue< int > keybuf ;
+
+static ALLEGRO_MUTEX* keybuf_mutex ;
+
+static ALLEGRO_EVENT_QUEUE* event_queue ;
+
+///static void addChar( ALLEGRO_KEYBOARD_EVENT* keyboardEvent )
+/* {
+        if ( keyboardEvent->unichar == 0 || keyboardEvent->unichar > 255 ) return ;
+
+        al_lock_mutex( keybuf_mutex );
+        keybuf.push( keyboardEvent->unichar | ( ( keyboardEvent->keycode << 8 ) & 0xff00 ) );
+        al_unlock_mutex( keybuf_mutex );
+} */
+
+static void addScancode( int scancode )
+{
+        al_lock_mutex( keybuf_mutex );
+        keybuf.push( ( scancode << 8 ) & 0xff00 );
+        al_unlock_mutex( keybuf_mutex );
+}
+
+static void peekKey( int scancode, bool repeat, ALLEGRO_KEYBOARD_STATE* ks )
+{
+        if ( al_key_down( ks, scancode ) )
+        {
+                if ( key[ scancode ] != TRUE )
+                {
+                        key[ scancode ] = TRUE ;
+
+                        if ( repeat )
+                        {
+                                addScancode( scancode );
+                                firstRepeat = true ;
+                                keyRepeatTimer->reset() ;
+                        }
+                }
+                else if ( repeat )
+                {
+                        if ( ( firstRepeat && keyRepeatTimer->getValue() > firstRepeatDelay ) ||
+                                ( ! firstRepeat && keyRepeatTimer->getValue() > nextRepeatDelay ) )
+                        {
+                                addScancode( scancode );
+                                keyRepeatTimer->reset() ;
+                                firstRepeat = false ;
+                        }
+                }
+        }
+        else
+        {
+                key[ scancode ] = FALSE ;
+        }
+}
+
+static void peekKeys( bool repeat )
+{
+        ALLEGRO_KEYBOARD_STATE ks ;
+        al_get_keyboard_state( &ks );
+
+        for ( int scancode = ALLEGRO_KEY_A ; scancode < ALLEGRO_KEY_MODIFIERS ; scancode ++ )
+        {
+                peekKey( scancode, repeat, &ks );
+        }
+}
+
+void peekKeys()
+{
+        peekKeys( false );
+}
+
+void peekModifiers()
+{
+        key_shifts = 0;
+
+        ALLEGRO_KEYBOARD_STATE ks ;
+        al_get_keyboard_state( &ks );
+
+        if ( al_key_down( &ks, ALLEGRO_KEY_LSHIFT ) || al_key_down( &ks, ALLEGRO_KEY_RSHIFT ) )
+        {
+                key_shifts |= ALLEGRO_KEYMOD_SHIFT ;
+        }
+
+        if ( al_key_down( &ks, ALLEGRO_KEY_LCTRL ) || al_key_down( &ks, ALLEGRO_KEY_RCTRL ) )
+        {
+                key_shifts |= ALLEGRO_KEYMOD_CTRL ;
+        }
+
+        if ( al_key_down( &ks, ALLEGRO_KEY_ALT ) || al_key_down( &ks, ALLEGRO_KEY_ALTGR ) )
+        {
+                key_shifts |= ALLEGRO_KEYMOD_ALT ;
+        }
+}
+
+void pollEvents()
+{
+        ALLEGRO_EVENT event;
+
+        while ( al_get_next_event( event_queue, &event ) )
+        {
+                switch ( event.type )
+                {
+                        case ALLEGRO_EVENT_KEY_DOWN:
+                                /* key[ event.keyboard.keycode ] = TRUE ; */
+                                break;
+
+                        case ALLEGRO_EVENT_KEY_UP:
+                                /* key[ event.keyboard.keycode ] = FALSE ; */
+                                break;
+
+                        case ALLEGRO_EVENT_KEY_CHAR:
+                                /* addChar( &event.keyboard ); */
+                                break;
+
+                        case ALLEGRO_EVENT_DISPLAY_EXPOSE:
+                                break;
+
+                        case ALLEGRO_EVENT_DISPLAY_CLOSE:
+                                break;
+                }
+        }
+
+        peekKeys( true );
+        peekModifiers();
+}
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+void peekKeys()
+{
+}
+
+void peekModifiers()
+{
+}
+
+#endif
 
 
 std::map < int, std::string > scancodesToNames ;
 
 std::map < std::string, int > namesToScancodes ;
 
+Timer * redrawTimer ;
+const float redrawDelay = 0.04 ; /* 25 times per second */
+
 bool initialized = false ;
 
 bool audioInitialized = false ;
 
+
 void init( )
 {
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        al_init();
+
+        allegroDisplay = al_get_current_display();
+
+        al_init_font_addon() ;
+        allegroFont = al_create_builtin_font();
+
+        al_init_image_addon();
+        al_init_primitives_addon();
+
+        keybuf_mutex = al_create_mutex();
+
+        event_queue = al_create_event_queue() ;
+        if ( allegroDisplay != NULL ) al_register_event_source( event_queue, al_get_display_event_source( allegroDisplay ) );
+
+        keyRepeatTimer = new Timer() ;
+        keyRepeatTimer->go() ;
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
         allegro_init();
+
+        // 8 bits for each of three colors with 8 bits for alpha channel
+        set_color_depth( 32 );
 
 #ifdef __WIN32
         // when application loses focus, the game will continue in background
@@ -242,220 +1143,227 @@ void init( )
         set_display_switch_mode( SWITCH_BACKGROUND );
 #endif
 
-        scancodesToNames[ KEY_A ] = "a" ;
-        scancodesToNames[ KEY_B ] = "b" ;
-        scancodesToNames[ KEY_C ] = "c" ;
-        scancodesToNames[ KEY_D ] = "d" ;
-        scancodesToNames[ KEY_E ] = "e" ;
-        scancodesToNames[ KEY_F ] = "f" ;
-        scancodesToNames[ KEY_G ] = "g" ;
-        scancodesToNames[ KEY_H ] = "h" ;
-        scancodesToNames[ KEY_I ] = "i" ;
-        scancodesToNames[ KEY_J ] = "j" ;
-        scancodesToNames[ KEY_K ] = "k" ;
-        scancodesToNames[ KEY_L ] = "l" ;
-        scancodesToNames[ KEY_M ] = "m" ;
-        scancodesToNames[ KEY_N ] = "n" ;
-        scancodesToNames[ KEY_O ] = "o" ;
-        scancodesToNames[ KEY_P ] = "p" ;
-        scancodesToNames[ KEY_Q ] = "q" ;
-        scancodesToNames[ KEY_R ] = "r" ;
-        scancodesToNames[ KEY_S ] = "s" ;
-        scancodesToNames[ KEY_T ] = "t" ;
-        scancodesToNames[ KEY_U ] = "u" ;
-        scancodesToNames[ KEY_V ] = "v" ;
-        scancodesToNames[ KEY_W ] = "w" ;
-        scancodesToNames[ KEY_X ] = "x" ;
-        scancodesToNames[ KEY_Y ] = "y" ;
-        scancodesToNames[ KEY_Z ] = "z" ;
-        scancodesToNames[ KEY_0 ] = "0" ;
-        scancodesToNames[ KEY_1 ] = "1" ;
-        scancodesToNames[ KEY_2 ] = "2" ;
-        scancodesToNames[ KEY_3 ] = "3" ;
-        scancodesToNames[ KEY_4 ] = "4" ;
-        scancodesToNames[ KEY_5 ] = "5" ;
-        scancodesToNames[ KEY_6 ] = "6" ;
-        scancodesToNames[ KEY_7 ] = "7" ;
-        scancodesToNames[ KEY_8 ] = "8" ;
-        scancodesToNames[ KEY_9 ] = "9" ;
-        scancodesToNames[ KEY_ESC ] = "Escape" ;
-        scancodesToNames[ KEY_TILDE ] = "Tilde" ;
-        scancodesToNames[ KEY_MINUS ] = "Minus" ;
-        scancodesToNames[ KEY_EQUALS ] = "Equals" ;
-        scancodesToNames[ KEY_BACKSPACE ] = "Backspace" ;
-        scancodesToNames[ KEY_TAB ] = "Tab" ;
-        scancodesToNames[ KEY_OPENBRACE ] = "OpenBrace" ;
-        scancodesToNames[ KEY_CLOSEBRACE ] = "CloseBrace" ;
-        scancodesToNames[ KEY_ENTER ] = "Enter" ;
-        scancodesToNames[ KEY_COLON ] = "Colon" ;
-        scancodesToNames[ KEY_QUOTE ] = "Quote" ;
-        scancodesToNames[ KEY_BACKSLASH ] = "Backslash" ;
-        scancodesToNames[ KEY_BACKSLASH2 ] = "Backslash2" ;
-        scancodesToNames[ KEY_COMMA ] = "Comma" ;
-        scancodesToNames[ KEY_STOP ] = "Period" ;
-        scancodesToNames[ KEY_SLASH ] = "Slash" ;
-        scancodesToNames[ KEY_SPACE ] = "Space" ;
-        scancodesToNames[ KEY_LEFT ] = "Left" ;
-        scancodesToNames[ KEY_RIGHT ] = "Right" ;
-        scancodesToNames[ KEY_UP ] = "Up" ;
-        scancodesToNames[ KEY_DOWN ] = "Down" ;
-        scancodesToNames[ KEY_INSERT ] = "Insert" ;
-        scancodesToNames[ KEY_DEL ] = "Delete" ;
-        scancodesToNames[ KEY_HOME ] = "Home" ;
-        scancodesToNames[ KEY_END ] = "End" ;
-        scancodesToNames[ KEY_PGUP ] = "PageUp" ;
-        scancodesToNames[ KEY_PGDN ] = "PageDown" ;
-        scancodesToNames[ KEY_F1 ] = "F1" ;
-        scancodesToNames[ KEY_F2 ] = "F2" ;
-        scancodesToNames[ KEY_F3 ] = "F3" ;
-        scancodesToNames[ KEY_F4 ] = "F4" ;
-        scancodesToNames[ KEY_F5 ] = "F5" ;
-        scancodesToNames[ KEY_F6 ] = "F6" ;
-        scancodesToNames[ KEY_F7 ] = "F7" ;
-        scancodesToNames[ KEY_F8 ] = "F8" ;
-        scancodesToNames[ KEY_F9 ] = "F9" ;
-        scancodesToNames[ KEY_F10 ] = "F10" ;
-        scancodesToNames[ KEY_F11 ] = "F11" ;
-        scancodesToNames[ KEY_F12 ] = "F12" ;
-        scancodesToNames[ KEY_PRTSCR ] = "PrintScreen" ;
-        scancodesToNames[ KEY_PAUSE ] = "Pause" ;
-        scancodesToNames[ KEY_0_PAD ] = "Pad 0" ;
-        scancodesToNames[ KEY_1_PAD ] = "Pad 1" ;
-        scancodesToNames[ KEY_2_PAD ] = "Pad 2" ;
-        scancodesToNames[ KEY_3_PAD ] = "Pad 3" ;
-        scancodesToNames[ KEY_4_PAD ] = "Pad 4" ;
-        scancodesToNames[ KEY_5_PAD ] = "Pad 5" ;
-        scancodesToNames[ KEY_6_PAD ] = "Pad 6" ;
-        scancodesToNames[ KEY_7_PAD ] = "Pad 7" ;
-        scancodesToNames[ KEY_8_PAD ] = "Pad 8" ;
-        scancodesToNames[ KEY_9_PAD ] = "Pad 9" ;
-        scancodesToNames[ KEY_SLASH_PAD ] = "Pad /" ;
-        scancodesToNames[ KEY_ASTERISK ] = "Pad *" ;
-        scancodesToNames[ KEY_MINUS_PAD ] = "Pad -" ;
-        scancodesToNames[ KEY_PLUS_PAD ] = "Pad +" ;
-        scancodesToNames[ KEY_DEL_PAD ] = "Pad Decimal" ;
-        scancodesToNames[ KEY_ENTER_PAD ] = "Pad Enter" ;
-        scancodesToNames[ KEY_EQUALS_PAD ] = "Pad =" ;
-        scancodesToNames[ KEY_ABNT_C1 ] = "AbntC1" ;
-        scancodesToNames[ KEY_YEN ] = "Yen" ;
-        scancodesToNames[ KEY_KANA ] = "Kana" ;
-        scancodesToNames[ KEY_KANJI ] = "Kanji" ;
-        scancodesToNames[ KEY_CONVERT ] = "Convert" ;
-        scancodesToNames[ KEY_NOCONVERT ] = "NoConvert" ;
-        scancodesToNames[ KEY_AT ] = "At" ;
-        scancodesToNames[ KEY_CIRCUMFLEX ] = "Circumflex" ;
-        scancodesToNames[ KEY_COLON2 ] = "Colon2" ;
-        scancodesToNames[ KEY_BACKQUOTE ] = "Mac Backquote" ;
-        scancodesToNames[ KEY_SEMICOLON ] = "Mac Semicolon" ;
-        scancodesToNames[ KEY_COMMAND ] = "Mac Command" ;
+        install_timer() ;
+
+#endif
+
+        redrawTimer = new Timer() ;
+        redrawTimer->go() ;
+
+        scancodesToNames[ ALLEGRO_KEY_A ] = "a" ;
+        scancodesToNames[ ALLEGRO_KEY_B ] = "b" ;
+        scancodesToNames[ ALLEGRO_KEY_C ] = "c" ;
+        scancodesToNames[ ALLEGRO_KEY_D ] = "d" ;
+        scancodesToNames[ ALLEGRO_KEY_E ] = "e" ;
+        scancodesToNames[ ALLEGRO_KEY_F ] = "f" ;
+        scancodesToNames[ ALLEGRO_KEY_G ] = "g" ;
+        scancodesToNames[ ALLEGRO_KEY_H ] = "h" ;
+        scancodesToNames[ ALLEGRO_KEY_I ] = "i" ;
+        scancodesToNames[ ALLEGRO_KEY_J ] = "j" ;
+        scancodesToNames[ ALLEGRO_KEY_K ] = "k" ;
+        scancodesToNames[ ALLEGRO_KEY_L ] = "l" ;
+        scancodesToNames[ ALLEGRO_KEY_M ] = "m" ;
+        scancodesToNames[ ALLEGRO_KEY_N ] = "n" ;
+        scancodesToNames[ ALLEGRO_KEY_O ] = "o" ;
+        scancodesToNames[ ALLEGRO_KEY_P ] = "p" ;
+        scancodesToNames[ ALLEGRO_KEY_Q ] = "q" ;
+        scancodesToNames[ ALLEGRO_KEY_R ] = "r" ;
+        scancodesToNames[ ALLEGRO_KEY_S ] = "s" ;
+        scancodesToNames[ ALLEGRO_KEY_T ] = "t" ;
+        scancodesToNames[ ALLEGRO_KEY_U ] = "u" ;
+        scancodesToNames[ ALLEGRO_KEY_V ] = "v" ;
+        scancodesToNames[ ALLEGRO_KEY_W ] = "w" ;
+        scancodesToNames[ ALLEGRO_KEY_X ] = "x" ;
+        scancodesToNames[ ALLEGRO_KEY_Y ] = "y" ;
+        scancodesToNames[ ALLEGRO_KEY_Z ] = "z" ;
+        scancodesToNames[ ALLEGRO_KEY_0 ] = "0" ;
+        scancodesToNames[ ALLEGRO_KEY_1 ] = "1" ;
+        scancodesToNames[ ALLEGRO_KEY_2 ] = "2" ;
+        scancodesToNames[ ALLEGRO_KEY_3 ] = "3" ;
+        scancodesToNames[ ALLEGRO_KEY_4 ] = "4" ;
+        scancodesToNames[ ALLEGRO_KEY_5 ] = "5" ;
+        scancodesToNames[ ALLEGRO_KEY_6 ] = "6" ;
+        scancodesToNames[ ALLEGRO_KEY_7 ] = "7" ;
+        scancodesToNames[ ALLEGRO_KEY_8 ] = "8" ;
+        scancodesToNames[ ALLEGRO_KEY_9 ] = "9" ;
+        scancodesToNames[ ALLEGRO_KEY_ESCAPE ] = "Escape" ;
+        scancodesToNames[ ALLEGRO_KEY_TILDE ] = "Tilde" ;
+        scancodesToNames[ ALLEGRO_KEY_MINUS ] = "Minus" ;
+        scancodesToNames[ ALLEGRO_KEY_EQUALS ] = "Equals" ;
+        scancodesToNames[ ALLEGRO_KEY_BACKSPACE ] = "Backspace" ;
+        scancodesToNames[ ALLEGRO_KEY_TAB ] = "Tab" ;
+        scancodesToNames[ ALLEGRO_KEY_OPENBRACE ] = "OpenBrace" ;
+        scancodesToNames[ ALLEGRO_KEY_CLOSEBRACE ] = "CloseBrace" ;
+        scancodesToNames[ ALLEGRO_KEY_ENTER ] = "Enter" ;
+        scancodesToNames[ ALLEGRO_KEY_SEMICOLON ] = "Semicolon" ;
+        scancodesToNames[ ALLEGRO_KEY_QUOTE ] = "Quote" ;
+        scancodesToNames[ ALLEGRO_KEY_BACKSLASH ] = "Backslash" ;
+        scancodesToNames[ ALLEGRO_KEY_BACKSLASH2 ] = "Backslash2" ;
+        scancodesToNames[ ALLEGRO_KEY_COMMA ] = "Comma" ;
+        scancodesToNames[ ALLEGRO_KEY_FULLSTOP ] = "Period" ;
+        scancodesToNames[ ALLEGRO_KEY_SLASH ] = "Slash" ;
+        scancodesToNames[ ALLEGRO_KEY_SPACE ] = "Space" ;
+        scancodesToNames[ ALLEGRO_KEY_LEFT ] = "Left" ;
+        scancodesToNames[ ALLEGRO_KEY_RIGHT ] = "Right" ;
+        scancodesToNames[ ALLEGRO_KEY_UP ] = "Up" ;
+        scancodesToNames[ ALLEGRO_KEY_DOWN ] = "Down" ;
+        scancodesToNames[ ALLEGRO_KEY_INSERT ] = "Insert" ;
+        scancodesToNames[ ALLEGRO_KEY_DELETE ] = "Delete" ;
+        scancodesToNames[ ALLEGRO_KEY_HOME ] = "Home" ;
+        scancodesToNames[ ALLEGRO_KEY_END ] = "End" ;
+        scancodesToNames[ ALLEGRO_KEY_PGUP ] = "PageUp" ;
+        scancodesToNames[ ALLEGRO_KEY_PGDN ] = "PageDown" ;
+        scancodesToNames[ ALLEGRO_KEY_F1 ] = "F1" ;
+        scancodesToNames[ ALLEGRO_KEY_F2 ] = "F2" ;
+        scancodesToNames[ ALLEGRO_KEY_F3 ] = "F3" ;
+        scancodesToNames[ ALLEGRO_KEY_F4 ] = "F4" ;
+        scancodesToNames[ ALLEGRO_KEY_F5 ] = "F5" ;
+        scancodesToNames[ ALLEGRO_KEY_F6 ] = "F6" ;
+        scancodesToNames[ ALLEGRO_KEY_F7 ] = "F7" ;
+        scancodesToNames[ ALLEGRO_KEY_F8 ] = "F8" ;
+        scancodesToNames[ ALLEGRO_KEY_F9 ] = "F9" ;
+        scancodesToNames[ ALLEGRO_KEY_F10 ] = "F10" ;
+        scancodesToNames[ ALLEGRO_KEY_F11 ] = "F11" ;
+        scancodesToNames[ ALLEGRO_KEY_F12 ] = "F12" ;
+        scancodesToNames[ ALLEGRO_KEY_PRINTSCREEN ] = "PrintScreen" ;
+        scancodesToNames[ ALLEGRO_KEY_PAUSE ] = "Pause" ;
+        scancodesToNames[ ALLEGRO_KEY_PAD_0 ] = "Pad 0" ;
+        scancodesToNames[ ALLEGRO_KEY_PAD_1 ] = "Pad 1" ;
+        scancodesToNames[ ALLEGRO_KEY_PAD_2 ] = "Pad 2" ;
+        scancodesToNames[ ALLEGRO_KEY_PAD_3 ] = "Pad 3" ;
+        scancodesToNames[ ALLEGRO_KEY_PAD_4 ] = "Pad 4" ;
+        scancodesToNames[ ALLEGRO_KEY_PAD_5 ] = "Pad 5" ;
+        scancodesToNames[ ALLEGRO_KEY_PAD_6 ] = "Pad 6" ;
+        scancodesToNames[ ALLEGRO_KEY_PAD_7 ] = "Pad 7" ;
+        scancodesToNames[ ALLEGRO_KEY_PAD_8 ] = "Pad 8" ;
+        scancodesToNames[ ALLEGRO_KEY_PAD_9 ] = "Pad 9" ;
+        scancodesToNames[ ALLEGRO_KEY_PAD_SLASH ] = "Pad /" ;
+        scancodesToNames[ ALLEGRO_KEY_PAD_ASTERISK ] = "Pad *" ;
+        scancodesToNames[ ALLEGRO_KEY_PAD_MINUS ] = "Pad -" ;
+        scancodesToNames[ ALLEGRO_KEY_PAD_PLUS ] = "Pad +" ;
+        scancodesToNames[ ALLEGRO_KEY_PAD_DELETE ] = "Pad Decimal" ;
+        scancodesToNames[ ALLEGRO_KEY_PAD_ENTER ] = "Pad Enter" ;
+        scancodesToNames[ ALLEGRO_KEY_PAD_EQUALS ] = "Pad =" ;
+        scancodesToNames[ ALLEGRO_KEY_ABNT_C1 ] = "AbntC1" ;
+        scancodesToNames[ ALLEGRO_KEY_YEN ] = "Yen" ;
+        scancodesToNames[ ALLEGRO_KEY_KANA ] = "Kana" ;
+        scancodesToNames[ ALLEGRO_KEY_KANJI ] = "Kanji" ;
+        scancodesToNames[ ALLEGRO_KEY_CONVERT ] = "Convert" ;
+        scancodesToNames[ ALLEGRO_KEY_NOCONVERT ] = "NoConvert" ;
+        scancodesToNames[ ALLEGRO_KEY_AT ] = "At" ;
+        scancodesToNames[ ALLEGRO_KEY_CIRCUMFLEX ] = "Circumflex" ;
+        scancodesToNames[ ALLEGRO_KEY_COLON2 ] = "Colon2" ;
+        scancodesToNames[ ALLEGRO_KEY_BACKQUOTE ] = "Mac Backquote" ;
+        scancodesToNames[ ALLEGRO_KEY_SEMICOLON2 ] = "Mac Semicolon" ;
+        scancodesToNames[ ALLEGRO_KEY_COMMAND ] = "Mac Command" ;
         scancodesToNames[ 0 ] = "none" ;
 
-        namesToScancodes[ "a" ] = namesToScancodes[ "A" ] = KEY_A ;
-        namesToScancodes[ "b" ] = namesToScancodes[ "B" ] = KEY_B ;
-        namesToScancodes[ "c" ] = namesToScancodes[ "C" ] = KEY_C ;
-        namesToScancodes[ "d" ] = namesToScancodes[ "D" ] = KEY_D ;
-        namesToScancodes[ "e" ] = namesToScancodes[ "E" ] = KEY_E ;
-        namesToScancodes[ "f" ] = namesToScancodes[ "F" ] = KEY_F ;
-        namesToScancodes[ "g" ] = namesToScancodes[ "G" ] = KEY_G ;
-        namesToScancodes[ "h" ] = namesToScancodes[ "H" ] = KEY_H ;
-        namesToScancodes[ "i" ] = namesToScancodes[ "I" ] = KEY_I ;
-        namesToScancodes[ "j" ] = namesToScancodes[ "J" ] = KEY_J ;
-        namesToScancodes[ "k" ] = namesToScancodes[ "K" ] = KEY_K ;
-        namesToScancodes[ "l" ] = namesToScancodes[ "L" ] = KEY_L ;
-        namesToScancodes[ "m" ] = namesToScancodes[ "M" ] = KEY_M ;
-        namesToScancodes[ "n" ] = namesToScancodes[ "N" ] = KEY_N ;
-        namesToScancodes[ "o" ] = namesToScancodes[ "O" ] = KEY_O ;
-        namesToScancodes[ "p" ] = namesToScancodes[ "P" ] = KEY_P ;
-        namesToScancodes[ "q" ] = namesToScancodes[ "Q" ] = KEY_Q ;
-        namesToScancodes[ "r" ] = namesToScancodes[ "R" ] = KEY_R ;
-        namesToScancodes[ "s" ] = namesToScancodes[ "S" ] = KEY_S ;
-        namesToScancodes[ "t" ] = namesToScancodes[ "T" ] = KEY_T ;
-        namesToScancodes[ "u" ] = namesToScancodes[ "U" ] = KEY_U ;
-        namesToScancodes[ "v" ] = namesToScancodes[ "V" ] = KEY_V ;
-        namesToScancodes[ "w" ] = namesToScancodes[ "W" ] = KEY_W ;
-        namesToScancodes[ "x" ] = namesToScancodes[ "X" ] = KEY_X ;
-        namesToScancodes[ "y" ] = namesToScancodes[ "Y" ] = KEY_Y ;
-        namesToScancodes[ "z" ] = namesToScancodes[ "Z" ] = KEY_Z ;
-        namesToScancodes[ "0" ] = KEY_0 ;
-        namesToScancodes[ "1" ] = KEY_1 ;
-        namesToScancodes[ "2" ] = KEY_2 ;
-        namesToScancodes[ "3" ] = KEY_3 ;
-        namesToScancodes[ "4" ] = KEY_4 ;
-        namesToScancodes[ "5" ] = KEY_5 ;
-        namesToScancodes[ "6" ] = KEY_6 ;
-        namesToScancodes[ "7" ] = KEY_7 ;
-        namesToScancodes[ "8" ] = KEY_8 ;
-        namesToScancodes[ "9" ] = KEY_9 ;
-        namesToScancodes[ "escape" ] = namesToScancodes[ "Escape" ] = namesToScancodes[ "ESCAPE" ] = namesToScancodes[ "ESC" ] = namesToScancodes[ "Esc" ] = namesToScancodes[ "esc" ] = KEY_ESC ;
-        namesToScancodes[ "~" ] = namesToScancodes[ "tilde" ] = namesToScancodes[ "Tilde" ] = namesToScancodes[ "TILDE" ] = KEY_TILDE ;
-        namesToScancodes[ "-" ] = namesToScancodes[ "minus" ] = namesToScancodes[ "Minus" ] = namesToScancodes[ "MINUS" ] = KEY_MINUS ;
-        namesToScancodes[ "=" ] = namesToScancodes[ "equals" ] = namesToScancodes[ "Equals" ] = namesToScancodes[ "EQUALS" ] = KEY_EQUALS ;
-        namesToScancodes[ "backspace" ] = namesToScancodes[ "Backspace" ] = namesToScancodes[ "BackSpace" ] = namesToScancodes[ "BACKSPACE" ] = KEY_BACKSPACE ;
-        namesToScancodes[ "tab" ] = namesToScancodes[ "Tab" ] = namesToScancodes[ "TAB" ] = KEY_TAB ;
-        namesToScancodes[ "[" ] = namesToScancodes[ "openbrace" ] = namesToScancodes[ "OpenBrace" ] = namesToScancodes[ "OPENBRACE" ] = KEY_OPENBRACE ;
-        namesToScancodes[ "]" ] = namesToScancodes[ "closebrace" ] = namesToScancodes[ "CloseBrace" ] = namesToScancodes[ "CLOSEBRACE" ] = KEY_CLOSEBRACE ;
-        namesToScancodes[ "enter" ] = namesToScancodes[ "Enter" ] = namesToScancodes[ "ENTER" ] = KEY_ENTER ;
-        namesToScancodes[ ";" ] = namesToScancodes[ ":" ] = namesToScancodes[ "colon" ] = namesToScancodes[ "Colon" ] = namesToScancodes[ "COLON" ] = KEY_COLON ;
-        namesToScancodes[ "'" ] = namesToScancodes[ "\"" ] = namesToScancodes[ "quote" ] = namesToScancodes[ "Quote" ] = namesToScancodes[ "QUOTE" ] = KEY_QUOTE ;
-        namesToScancodes[ "\\" ] = namesToScancodes[ "backslash" ] = namesToScancodes[ "Backslash" ] = namesToScancodes[ "BackSlash" ] = namesToScancodes[ "BACKSLASH" ] = KEY_BACKSLASH ;
-        namesToScancodes[ "backslash2" ] = namesToScancodes[ "Backslash2" ] = namesToScancodes[ "BackSlash2" ] = namesToScancodes[ "BACKSLASH2" ] = KEY_BACKSLASH2 ;
-        namesToScancodes[ "," ] = namesToScancodes[ "comma" ] = namesToScancodes[ "Comma" ] = namesToScancodes[ "COMMA" ] = KEY_COMMA ;
-        namesToScancodes[ "." ] = namesToScancodes[ "period" ] = namesToScancodes[ "Period" ] = namesToScancodes[ "PERIOD" ] = namesToScancodes[ "stop" ] = namesToScancodes[ "Stop" ] = namesToScancodes[ "STOP" ] = KEY_STOP ;
-        namesToScancodes[ "/" ] = namesToScancodes[ "slash" ] = namesToScancodes[ "Slash" ] = namesToScancodes[ "SLASH" ] = KEY_SLASH ;
-        namesToScancodes[ " " ] = namesToScancodes[ "space" ] = namesToScancodes[ "Space" ] = namesToScancodes[ "SPACE" ] = KEY_SPACE ;
-        namesToScancodes[ "left" ] = namesToScancodes[ "Left" ] = namesToScancodes[ "LEFT" ] = KEY_LEFT ;
-        namesToScancodes[ "right" ] = namesToScancodes[ "Right" ] = namesToScancodes[ "RIGHT" ] = KEY_RIGHT ;
-        namesToScancodes[ "up" ] = namesToScancodes[ "Up" ] = namesToScancodes[ "UP" ] = KEY_UP ;
-        namesToScancodes[ "down" ] = namesToScancodes[ "Down" ] = namesToScancodes[ "DOWN" ] = KEY_DOWN ;
-        namesToScancodes[ "insert" ] = namesToScancodes[ "Insert" ] = namesToScancodes[ "INSERT" ] = namesToScancodes[ "INS" ] = namesToScancodes[ "Ins" ] = namesToScancodes[ "ins" ] = KEY_INSERT ;
-        namesToScancodes[ "delete" ] = namesToScancodes[ "Delete" ] = namesToScancodes[ "DELETE" ] = namesToScancodes[ "DEL" ] = namesToScancodes[ "Del" ] = namesToScancodes[ "del" ] = KEY_DEL ;
-        namesToScancodes[ "home" ] = namesToScancodes[ "Home" ] = namesToScancodes[ "HOME" ] = KEY_HOME ;
-        namesToScancodes[ "end" ] = namesToScancodes[ "End" ] = namesToScancodes[ "END" ] = KEY_END ;
-        namesToScancodes[ "pageup" ] = namesToScancodes[ "PageUp" ] = namesToScancodes[ "PAGEUP" ] = namesToScancodes[ "PGUP" ] = namesToScancodes[ "PgUp" ] = namesToScancodes[ "pgup" ] = KEY_PGUP ;
-        namesToScancodes[ "pagedown" ] = namesToScancodes[ "PageDown" ] = namesToScancodes[ "PAGEDOWN" ] = namesToScancodes[ "PGDN" ] = namesToScancodes[ "PgDn" ] = namesToScancodes[ "pgdn" ] = KEY_PGDN ;
-        namesToScancodes[ "F1" ] = namesToScancodes[ "f1" ] = KEY_F1 ;
-        namesToScancodes[ "F2" ] = namesToScancodes[ "f2" ] = KEY_F2 ;
-        namesToScancodes[ "F3" ] = namesToScancodes[ "f3" ] = KEY_F3 ;
-        namesToScancodes[ "F4" ] = namesToScancodes[ "f4" ] = KEY_F4 ;
-        namesToScancodes[ "F5" ] = namesToScancodes[ "f5" ] = KEY_F5 ;
-        namesToScancodes[ "F6" ] = namesToScancodes[ "f6" ] = KEY_F6 ;
-        namesToScancodes[ "F7" ] = namesToScancodes[ "f7" ] = KEY_F7 ;
-        namesToScancodes[ "F8" ] = namesToScancodes[ "f8" ] = KEY_F8 ;
-        namesToScancodes[ "F9" ] = namesToScancodes[ "f9" ] = KEY_F9 ;
-        namesToScancodes[ "F10" ] = namesToScancodes[ "f10" ] = KEY_F10 ;
-        namesToScancodes[ "F11" ] = namesToScancodes[ "f11" ] = KEY_F11 ;
-        namesToScancodes[ "F12" ] = namesToScancodes[ "f12" ] = KEY_F12 ;
-        namesToScancodes[ "printscreen" ] = namesToScancodes[ "PrintScreen" ] = namesToScancodes[ "PRINTSCREEN" ] = namesToScancodes[ "PRTSCR" ] = namesToScancodes[ "PrtScr" ] = namesToScancodes[ "prtscr" ] = KEY_PRTSCR ;
-        namesToScancodes[ "pause" ] = namesToScancodes[ "Pause" ] = namesToScancodes[ "PAUSE" ] = KEY_PAUSE ;
-        namesToScancodes[ "Pad 0" ] = namesToScancodes[ "pad 0" ] = namesToScancodes[ "PAD 0" ] = KEY_0_PAD ;
-        namesToScancodes[ "Pad 1" ] = namesToScancodes[ "pad 1" ] = namesToScancodes[ "PAD 1" ] = KEY_1_PAD ;
-        namesToScancodes[ "Pad 2" ] = namesToScancodes[ "pad 2" ] = namesToScancodes[ "PAD 2" ] = KEY_2_PAD ;
-        namesToScancodes[ "Pad 3" ] = namesToScancodes[ "pad 3" ] = namesToScancodes[ "PAD 3" ] = KEY_3_PAD ;
-        namesToScancodes[ "Pad 4" ] = namesToScancodes[ "pad 4" ] = namesToScancodes[ "PAD 4" ] = KEY_4_PAD ;
-        namesToScancodes[ "Pad 5" ] = namesToScancodes[ "pad 5" ] = namesToScancodes[ "PAD 5" ] = KEY_5_PAD ;
-        namesToScancodes[ "Pad 6" ] = namesToScancodes[ "pad 6" ] = namesToScancodes[ "PAD 6" ] = KEY_6_PAD ;
-        namesToScancodes[ "Pad 7" ] = namesToScancodes[ "pad 7" ] = namesToScancodes[ "PAD 7" ] = KEY_7_PAD ;
-        namesToScancodes[ "Pad 8" ] = namesToScancodes[ "pad 8" ] = namesToScancodes[ "PAD 8" ] = KEY_8_PAD ;
-        namesToScancodes[ "Pad 9" ] = namesToScancodes[ "pad 9" ] = namesToScancodes[ "PAD 9" ] = KEY_9_PAD ;
-        namesToScancodes[ "Pad /" ] = namesToScancodes[ "pad /" ] = namesToScancodes[ "PAD /" ] = KEY_SLASH_PAD ;
-        namesToScancodes[ "Pad *" ] = namesToScancodes[ "pad *" ] = namesToScancodes[ "PAD *" ] = KEY_ASTERISK ;
-        namesToScancodes[ "Pad -" ] = namesToScancodes[ "pad -" ] = namesToScancodes[ "PAD -" ] = KEY_MINUS_PAD ;
-        namesToScancodes[ "Pad +" ] = namesToScancodes[ "pad +" ] = namesToScancodes[ "PAD +" ] = KEY_PLUS_PAD ;
-        namesToScancodes[ "Pad Decimal" ] = namesToScancodes[ "pad decimal" ] = namesToScancodes[ "PAD DECIMAL" ] = KEY_DEL_PAD ;
-        namesToScancodes[ "Pad Enter" ] = namesToScancodes[ "pad enter" ] = namesToScancodes[ "PAD ENTER" ] = KEY_ENTER_PAD ;
-        namesToScancodes[ "Pad =" ] = namesToScancodes[ "pad =" ] = namesToScancodes[ "PAD =" ] = KEY_EQUALS_PAD ; // OS X
-        namesToScancodes[ "AbntC1" ] = namesToScancodes[ "ABNT_C1" ] = KEY_ABNT_C1 ; // Japanese
-        namesToScancodes[ "yen" ] = namesToScancodes[ "Yen" ] = namesToScancodes[ "YEN" ] = KEY_YEN ; // Japanese
-        namesToScancodes[ "kana" ] = namesToScancodes[ "Kana" ] = namesToScancodes[ "KANA" ] = KEY_KANA ; // Japanese
-        namesToScancodes[ "kanji" ] = namesToScancodes[ "Kanji" ] = namesToScancodes[ "KANJI" ] = KEY_KANJI ; // Japanese
-        namesToScancodes[ "convert" ] = namesToScancodes[ "Convert" ] = namesToScancodes[ "CONVERT" ] = KEY_CONVERT ;
-        namesToScancodes[ "noconvert" ] = namesToScancodes[ "NoConvert" ] = namesToScancodes[ "NOCONVERT" ] = KEY_NOCONVERT ;
-        namesToScancodes[ "@" ] = namesToScancodes[ "at" ] = namesToScancodes[ "At" ] = namesToScancodes[ "AT" ] = KEY_AT ;
-        namesToScancodes[ "^" ] = namesToScancodes[ "circumflex" ] = namesToScancodes[ "Circumflex" ] = namesToScancodes[ "CIRCUMFLEX" ] = KEY_CIRCUMFLEX ;
-        namesToScancodes[ "colon2" ] = namesToScancodes[ "Colon2" ] = namesToScancodes[ "COLON2" ] = KEY_COLON2 ;
-        namesToScancodes[ "mac backquote" ] = namesToScancodes[ "Mac Backquote" ] = namesToScancodes[ "MAC BACKQUOTE" ] = KEY_BACKQUOTE ;
-        namesToScancodes[ "mac semicolon" ] = namesToScancodes[ "Mac Semicolon" ] = namesToScancodes[ "MAC SEMICOLON" ] = KEY_SEMICOLON ;
-        namesToScancodes[ "mac command" ] = namesToScancodes[ "Mac Command" ] = namesToScancodes[ "MAC COMMAND" ] = KEY_COMMAND ;
+        namesToScancodes[ "a" ] = namesToScancodes[ "A" ] = ALLEGRO_KEY_A ;
+        namesToScancodes[ "b" ] = namesToScancodes[ "B" ] = ALLEGRO_KEY_B ;
+        namesToScancodes[ "c" ] = namesToScancodes[ "C" ] = ALLEGRO_KEY_C ;
+        namesToScancodes[ "d" ] = namesToScancodes[ "D" ] = ALLEGRO_KEY_D ;
+        namesToScancodes[ "e" ] = namesToScancodes[ "E" ] = ALLEGRO_KEY_E ;
+        namesToScancodes[ "f" ] = namesToScancodes[ "F" ] = ALLEGRO_KEY_F ;
+        namesToScancodes[ "g" ] = namesToScancodes[ "G" ] = ALLEGRO_KEY_G ;
+        namesToScancodes[ "h" ] = namesToScancodes[ "H" ] = ALLEGRO_KEY_H ;
+        namesToScancodes[ "i" ] = namesToScancodes[ "I" ] = ALLEGRO_KEY_I ;
+        namesToScancodes[ "j" ] = namesToScancodes[ "J" ] = ALLEGRO_KEY_J ;
+        namesToScancodes[ "k" ] = namesToScancodes[ "K" ] = ALLEGRO_KEY_K ;
+        namesToScancodes[ "l" ] = namesToScancodes[ "L" ] = ALLEGRO_KEY_L ;
+        namesToScancodes[ "m" ] = namesToScancodes[ "M" ] = ALLEGRO_KEY_M ;
+        namesToScancodes[ "n" ] = namesToScancodes[ "N" ] = ALLEGRO_KEY_N ;
+        namesToScancodes[ "o" ] = namesToScancodes[ "O" ] = ALLEGRO_KEY_O ;
+        namesToScancodes[ "p" ] = namesToScancodes[ "P" ] = ALLEGRO_KEY_P ;
+        namesToScancodes[ "q" ] = namesToScancodes[ "Q" ] = ALLEGRO_KEY_Q ;
+        namesToScancodes[ "r" ] = namesToScancodes[ "R" ] = ALLEGRO_KEY_R ;
+        namesToScancodes[ "s" ] = namesToScancodes[ "S" ] = ALLEGRO_KEY_S ;
+        namesToScancodes[ "t" ] = namesToScancodes[ "T" ] = ALLEGRO_KEY_T ;
+        namesToScancodes[ "u" ] = namesToScancodes[ "U" ] = ALLEGRO_KEY_U ;
+        namesToScancodes[ "v" ] = namesToScancodes[ "V" ] = ALLEGRO_KEY_V ;
+        namesToScancodes[ "w" ] = namesToScancodes[ "W" ] = ALLEGRO_KEY_W ;
+        namesToScancodes[ "x" ] = namesToScancodes[ "X" ] = ALLEGRO_KEY_X ;
+        namesToScancodes[ "y" ] = namesToScancodes[ "Y" ] = ALLEGRO_KEY_Y ;
+        namesToScancodes[ "z" ] = namesToScancodes[ "Z" ] = ALLEGRO_KEY_Z ;
+        namesToScancodes[ "0" ] = ALLEGRO_KEY_0 ;
+        namesToScancodes[ "1" ] = ALLEGRO_KEY_1 ;
+        namesToScancodes[ "2" ] = ALLEGRO_KEY_2 ;
+        namesToScancodes[ "3" ] = ALLEGRO_KEY_3 ;
+        namesToScancodes[ "4" ] = ALLEGRO_KEY_4 ;
+        namesToScancodes[ "5" ] = ALLEGRO_KEY_5 ;
+        namesToScancodes[ "6" ] = ALLEGRO_KEY_6 ;
+        namesToScancodes[ "7" ] = ALLEGRO_KEY_7 ;
+        namesToScancodes[ "8" ] = ALLEGRO_KEY_8 ;
+        namesToScancodes[ "9" ] = ALLEGRO_KEY_9 ;
+        namesToScancodes[ "escape" ] = namesToScancodes[ "Escape" ] = namesToScancodes[ "ESCAPE" ] = namesToScancodes[ "ESC" ] = namesToScancodes[ "Esc" ] = namesToScancodes[ "esc" ] = ALLEGRO_KEY_ESCAPE ;
+        namesToScancodes[ "~" ] = namesToScancodes[ "tilde" ] = namesToScancodes[ "Tilde" ] = namesToScancodes[ "TILDE" ] = ALLEGRO_KEY_TILDE ;
+        namesToScancodes[ "-" ] = namesToScancodes[ "minus" ] = namesToScancodes[ "Minus" ] = namesToScancodes[ "MINUS" ] = ALLEGRO_KEY_MINUS ;
+        namesToScancodes[ "=" ] = namesToScancodes[ "equals" ] = namesToScancodes[ "Equals" ] = namesToScancodes[ "EQUALS" ] = ALLEGRO_KEY_EQUALS ;
+        namesToScancodes[ "backspace" ] = namesToScancodes[ "Backspace" ] = namesToScancodes[ "BACKSPACE" ] = ALLEGRO_KEY_BACKSPACE ;
+        namesToScancodes[ "tab" ] = namesToScancodes[ "Tab" ] = namesToScancodes[ "TAB" ] = ALLEGRO_KEY_TAB ;
+        namesToScancodes[ "[" ] = namesToScancodes[ "openbrace" ] = namesToScancodes[ "OpenBrace" ] = namesToScancodes[ "OPENBRACE" ] = ALLEGRO_KEY_OPENBRACE ;
+        namesToScancodes[ "]" ] = namesToScancodes[ "closebrace" ] = namesToScancodes[ "CloseBrace" ] = namesToScancodes[ "CLOSEBRACE" ] = ALLEGRO_KEY_CLOSEBRACE ;
+        namesToScancodes[ "enter" ] = namesToScancodes[ "Enter" ] = namesToScancodes[ "ENTER" ] = ALLEGRO_KEY_ENTER ;
+        namesToScancodes[ ";" ] = namesToScancodes[ "semicolon" ] = namesToScancodes[ "Semicolon" ] = namesToScancodes[ "SEMICOLON" ] = ALLEGRO_KEY_SEMICOLON ;
+        namesToScancodes[ "'" ] = namesToScancodes[ "\"" ] = namesToScancodes[ "quote" ] = namesToScancodes[ "Quote" ] = namesToScancodes[ "QUOTE" ] = ALLEGRO_KEY_QUOTE ;
+        namesToScancodes[ "\\" ] = namesToScancodes[ "backslash" ] = namesToScancodes[ "Backslash" ] = namesToScancodes[ "BackSlash" ] = namesToScancodes[ "BACKSLASH" ] = ALLEGRO_KEY_BACKSLASH ;
+        namesToScancodes[ "backslash2" ] = namesToScancodes[ "Backslash2" ] = namesToScancodes[ "BackSlash2" ] = namesToScancodes[ "BACKSLASH2" ] = ALLEGRO_KEY_BACKSLASH2 ;
+        namesToScancodes[ "," ] = namesToScancodes[ "comma" ] = namesToScancodes[ "Comma" ] = namesToScancodes[ "COMMA" ] = ALLEGRO_KEY_COMMA ;
+        namesToScancodes[ "." ] = namesToScancodes[ "period" ] = namesToScancodes[ "Period" ] = namesToScancodes[ "PERIOD" ] = ALLEGRO_KEY_FULLSTOP ;
+        namesToScancodes[ "/" ] = namesToScancodes[ "slash" ] = namesToScancodes[ "Slash" ] = namesToScancodes[ "SLASH" ] = ALLEGRO_KEY_SLASH ;
+        namesToScancodes[ " " ] = namesToScancodes[ "space" ] = namesToScancodes[ "Space" ] = namesToScancodes[ "SPACE" ] = ALLEGRO_KEY_SPACE ;
+        namesToScancodes[ "left" ] = namesToScancodes[ "Left" ] = namesToScancodes[ "LEFT" ] = ALLEGRO_KEY_LEFT ;
+        namesToScancodes[ "right" ] = namesToScancodes[ "Right" ] = namesToScancodes[ "RIGHT" ] = ALLEGRO_KEY_RIGHT ;
+        namesToScancodes[ "up" ] = namesToScancodes[ "Up" ] = namesToScancodes[ "UP" ] = ALLEGRO_KEY_UP ;
+        namesToScancodes[ "down" ] = namesToScancodes[ "Down" ] = namesToScancodes[ "DOWN" ] = ALLEGRO_KEY_DOWN ;
+        namesToScancodes[ "insert" ] = namesToScancodes[ "Insert" ] = namesToScancodes[ "INSERT" ] = namesToScancodes[ "INS" ] = namesToScancodes[ "Ins" ] = namesToScancodes[ "ins" ] = ALLEGRO_KEY_INSERT ;
+        namesToScancodes[ "delete" ] = namesToScancodes[ "Delete" ] = namesToScancodes[ "DELETE" ] = namesToScancodes[ "DEL" ] = namesToScancodes[ "Del" ] = namesToScancodes[ "del" ] = ALLEGRO_KEY_DELETE ;
+        namesToScancodes[ "home" ] = namesToScancodes[ "Home" ] = namesToScancodes[ "HOME" ] = ALLEGRO_KEY_HOME ;
+        namesToScancodes[ "end" ] = namesToScancodes[ "End" ] = namesToScancodes[ "END" ] = ALLEGRO_KEY_END ;
+        namesToScancodes[ "pageup" ] = namesToScancodes[ "PageUp" ] = namesToScancodes[ "PAGEUP" ] = namesToScancodes[ "PGUP" ] = namesToScancodes[ "PgUp" ] = namesToScancodes[ "pgup" ] = ALLEGRO_KEY_PGUP ;
+        namesToScancodes[ "pagedown" ] = namesToScancodes[ "PageDown" ] = namesToScancodes[ "PAGEDOWN" ] = namesToScancodes[ "PGDN" ] = namesToScancodes[ "PgDn" ] = namesToScancodes[ "pgdn" ] = ALLEGRO_KEY_PGDN ;
+        namesToScancodes[ "F1" ] = namesToScancodes[ "f1" ] = ALLEGRO_KEY_F1 ;
+        namesToScancodes[ "F2" ] = namesToScancodes[ "f2" ] = ALLEGRO_KEY_F2 ;
+        namesToScancodes[ "F3" ] = namesToScancodes[ "f3" ] = ALLEGRO_KEY_F3 ;
+        namesToScancodes[ "F4" ] = namesToScancodes[ "f4" ] = ALLEGRO_KEY_F4 ;
+        namesToScancodes[ "F5" ] = namesToScancodes[ "f5" ] = ALLEGRO_KEY_F5 ;
+        namesToScancodes[ "F6" ] = namesToScancodes[ "f6" ] = ALLEGRO_KEY_F6 ;
+        namesToScancodes[ "F7" ] = namesToScancodes[ "f7" ] = ALLEGRO_KEY_F7 ;
+        namesToScancodes[ "F8" ] = namesToScancodes[ "f8" ] = ALLEGRO_KEY_F8 ;
+        namesToScancodes[ "F9" ] = namesToScancodes[ "f9" ] = ALLEGRO_KEY_F9 ;
+        namesToScancodes[ "F10" ] = namesToScancodes[ "f10" ] = ALLEGRO_KEY_F10 ;
+        namesToScancodes[ "F11" ] = namesToScancodes[ "f11" ] = ALLEGRO_KEY_F11 ;
+        namesToScancodes[ "F12" ] = namesToScancodes[ "f12" ] = ALLEGRO_KEY_F12 ;
+        namesToScancodes[ "printscreen" ] = namesToScancodes[ "PrintScreen" ] = namesToScancodes[ "PRINTSCREEN" ] = namesToScancodes[ "PRTSCR" ] = namesToScancodes[ "PrtScr" ] = namesToScancodes[ "prtscr" ] = ALLEGRO_KEY_PRINTSCREEN ;
+        namesToScancodes[ "pause" ] = namesToScancodes[ "Pause" ] = namesToScancodes[ "PAUSE" ] = ALLEGRO_KEY_PAUSE ;
+        namesToScancodes[ "Pad 0" ] = namesToScancodes[ "pad 0" ] = namesToScancodes[ "PAD 0" ] = ALLEGRO_KEY_PAD_0 ;
+        namesToScancodes[ "Pad 1" ] = namesToScancodes[ "pad 1" ] = namesToScancodes[ "PAD 1" ] = ALLEGRO_KEY_PAD_1 ;
+        namesToScancodes[ "Pad 2" ] = namesToScancodes[ "pad 2" ] = namesToScancodes[ "PAD 2" ] = ALLEGRO_KEY_PAD_2 ;
+        namesToScancodes[ "Pad 3" ] = namesToScancodes[ "pad 3" ] = namesToScancodes[ "PAD 3" ] = ALLEGRO_KEY_PAD_3 ;
+        namesToScancodes[ "Pad 4" ] = namesToScancodes[ "pad 4" ] = namesToScancodes[ "PAD 4" ] = ALLEGRO_KEY_PAD_4 ;
+        namesToScancodes[ "Pad 5" ] = namesToScancodes[ "pad 5" ] = namesToScancodes[ "PAD 5" ] = ALLEGRO_KEY_PAD_5 ;
+        namesToScancodes[ "Pad 6" ] = namesToScancodes[ "pad 6" ] = namesToScancodes[ "PAD 6" ] = ALLEGRO_KEY_PAD_6 ;
+        namesToScancodes[ "Pad 7" ] = namesToScancodes[ "pad 7" ] = namesToScancodes[ "PAD 7" ] = ALLEGRO_KEY_PAD_7 ;
+        namesToScancodes[ "Pad 8" ] = namesToScancodes[ "pad 8" ] = namesToScancodes[ "PAD 8" ] = ALLEGRO_KEY_PAD_8 ;
+        namesToScancodes[ "Pad 9" ] = namesToScancodes[ "pad 9" ] = namesToScancodes[ "PAD 9" ] = ALLEGRO_KEY_PAD_9 ;
+        namesToScancodes[ "Pad /" ] = namesToScancodes[ "pad /" ] = namesToScancodes[ "PAD /" ] = ALLEGRO_KEY_PAD_SLASH ;
+        namesToScancodes[ "Pad *" ] = namesToScancodes[ "pad *" ] = namesToScancodes[ "PAD *" ] = ALLEGRO_KEY_PAD_ASTERISK ;
+        namesToScancodes[ "Pad -" ] = namesToScancodes[ "pad -" ] = namesToScancodes[ "PAD -" ] = ALLEGRO_KEY_PAD_MINUS ;
+        namesToScancodes[ "Pad +" ] = namesToScancodes[ "pad +" ] = namesToScancodes[ "PAD +" ] = ALLEGRO_KEY_PAD_PLUS ;
+        namesToScancodes[ "Pad Decimal" ] = namesToScancodes[ "pad decimal" ] = namesToScancodes[ "PAD DECIMAL" ] = ALLEGRO_KEY_PAD_DELETE ;
+        namesToScancodes[ "Pad Enter" ] = namesToScancodes[ "pad enter" ] = namesToScancodes[ "PAD ENTER" ] = ALLEGRO_KEY_PAD_ENTER ;
+        namesToScancodes[ "Pad =" ] = namesToScancodes[ "pad =" ] = namesToScancodes[ "PAD =" ] = ALLEGRO_KEY_PAD_EQUALS ; // OS X
+        namesToScancodes[ "AbntC1" ] = namesToScancodes[ "ABNT_C1" ] = ALLEGRO_KEY_ABNT_C1 ; // Japanese
+        namesToScancodes[ "yen" ] = namesToScancodes[ "Yen" ] = namesToScancodes[ "YEN" ] = ALLEGRO_KEY_YEN ; // Japanese
+        namesToScancodes[ "kana" ] = namesToScancodes[ "Kana" ] = namesToScancodes[ "KANA" ] = ALLEGRO_KEY_KANA ; // Japanese
+        namesToScancodes[ "kanji" ] = namesToScancodes[ "Kanji" ] = namesToScancodes[ "KANJI" ] = ALLEGRO_KEY_KANJI ; // Japanese
+        namesToScancodes[ "convert" ] = namesToScancodes[ "Convert" ] = namesToScancodes[ "CONVERT" ] = ALLEGRO_KEY_CONVERT ;
+        namesToScancodes[ "noconvert" ] = namesToScancodes[ "NoConvert" ] = namesToScancodes[ "NOCONVERT" ] = ALLEGRO_KEY_NOCONVERT ;
+        namesToScancodes[ "@" ] = namesToScancodes[ "at" ] = namesToScancodes[ "At" ] = namesToScancodes[ "AT" ] = ALLEGRO_KEY_AT ;
+        namesToScancodes[ "^" ] = namesToScancodes[ "circumflex" ] = namesToScancodes[ "Circumflex" ] = namesToScancodes[ "CIRCUMFLEX" ] = ALLEGRO_KEY_CIRCUMFLEX ;
+        namesToScancodes[ "colon2" ] = namesToScancodes[ "Colon2" ] = namesToScancodes[ "COLON2" ] = ALLEGRO_KEY_COLON2 ;
+        namesToScancodes[ "mac backquote" ] = namesToScancodes[ "Mac Backquote" ] = namesToScancodes[ "MAC BACKQUOTE" ] = ALLEGRO_KEY_BACKQUOTE ;
+        namesToScancodes[ "mac semicolon" ] = namesToScancodes[ "Mac Semicolon" ] = namesToScancodes[ "MAC SEMICOLON" ] = ALLEGRO_KEY_SEMICOLON2 ;
+        namesToScancodes[ "mac command" ] = namesToScancodes[ "Mac Command" ] = namesToScancodes[ "MAC COMMAND" ] = ALLEGRO_KEY_COMMAND ;
         namesToScancodes[ "none" ] = namesToScancodes[ "None" ] = namesToScancodes[ "NONE" ] = 0 ;
 
         initialized = true ;
@@ -465,13 +1373,45 @@ void init( )
 #endif
 }
 
-void setDefaultColorDepth( unsigned int depth )
+void bye()
 {
-#if defined( DEBUG_ALLEGRO_INIT ) && DEBUG_ALLEGRO_INIT
-        if ( ! initialized ) {  std::cerr << "allegro::setDefaultColorDepth before allegro::init" << std::endl ; return ;  }
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        al_destroy_mutex( keybuf_mutex );
+        keybuf_mutex = NULL ;
+
+        if ( event_queue != NULL ) al_destroy_event_queue( event_queue );
+        event_queue = NULL ;
+
+        if ( audioInitialized ) al_uninstall_audio() ;
+
+        if ( allegroDisplay != NULL ) al_destroy_display( allegroDisplay );
+
+        delete keyRepeatTimer ;
+
 #endif
 
-        set_color_depth( depth );
+        delete redrawTimer ;
+
+        initialized = false ;
+}
+
+void redraw()
+{
+        if ( redrawTimer->getValue() > redrawDelay )
+        {
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+                al_flip_display() ;
+#endif
+
+#if defined( RECORD_EACH_FRAME ) && RECORD_EACH_FRAME
+                static int number = 0;
+                savePictAsPCX( "frame" + static_cast< std::ostringstream * >( &( std::ostringstream() << std::dec << number ++ ) )->str (), Pict::theScreen() );
+#endif
+
+                redrawTimer->reset ();
+        }
+
 }
 
 bool switchToFullscreenVideo( unsigned int width, unsigned int height )
@@ -480,14 +1420,35 @@ bool switchToFullscreenVideo( unsigned int width, unsigned int height )
         if ( ! initialized ) {  std::cerr << "allegro::switchToFullscreenVideo before allegro::init" << std::endl ; return false ;  }
 #endif
 
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        if ( allegroDisplay == NULL )
+        {
+                al_set_new_display_flags( ALLEGRO_FULLSCREEN /* ALLEGRO_FULLSCREEN_WINDOW */ | ALLEGRO_GENERATE_EXPOSE_EVENTS );
+                ALLEGRO_DISPLAY* newDisplay = al_create_display( width, height );
+                if ( newDisplay == NULL ) return false ;
+                al_register_event_source( event_queue, al_get_display_event_source( newDisplay ) );
+                al_set_target_bitmap( al_get_backbuffer( newDisplay ) );
+                allegroDisplay = newDisplay ;
+                return true ;
+        }
+        else
+        {
+                al_resize_display( allegroDisplay, width, height );
+                return al_set_display_flag( allegroDisplay, ALLEGRO_FULLSCREEN_WINDOW, true );
+        }
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
         int magicCard = GFX_AUTODETECT_FULLSCREEN ;
         return set_gfx_mode( magicCard, width, height, 0, 0 ) == /* okay */ 0 ;
+
+#endif
 }
 
 bool switchToFullscreenVideo()
 {
-        // screen is allegro’s global variable
-        return switchToFullscreenVideo( screen->w, screen->h ) ;
+        return switchToFullscreenVideo( Pict::theScreen().getW(), Pict::theScreen().getH() ) ;
 }
 
 bool switchToWindowedVideo( unsigned int width, unsigned int height )
@@ -496,14 +1457,35 @@ bool switchToWindowedVideo( unsigned int width, unsigned int height )
         if ( ! initialized ) {  std::cerr << "allegro::switchToWindowedVideo before allegro::init" << std::endl ; return false ;  }
 #endif
 
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        if ( allegroDisplay == NULL )
+        {
+                al_set_new_display_flags( ALLEGRO_WINDOWED | ALLEGRO_GENERATE_EXPOSE_EVENTS );
+                ALLEGRO_DISPLAY* newDisplay = al_create_display( width, height );
+                if ( newDisplay == NULL ) return false ;
+                al_register_event_source( event_queue, al_get_display_event_source( newDisplay ) );
+                al_set_target_bitmap( al_get_backbuffer( newDisplay ) );
+                allegroDisplay = newDisplay ;
+                return true ;
+        }
+        else
+        {
+                al_resize_display( allegroDisplay, width, height );
+                return al_set_display_flag( allegroDisplay, ALLEGRO_FULLSCREEN_WINDOW, false );
+        }
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
         int magicCard = GFX_AUTODETECT_WINDOWED ;
         return set_gfx_mode( magicCard, width, height, 0, 0 ) == /* okay */ 0 ;
+
+#endif
 }
 
 bool switchToWindowedVideo()
 {
-        // screen is allegro’s global variable
-        return switchToWindowedVideo( screen->w, screen->h ) ;
+        return switchToWindowedVideo( Pict::theScreen().getW(), Pict::theScreen().getH() ) ;
 }
 
 void setTitleOfAllegroWindow( const std::string& title )
@@ -512,52 +1494,125 @@ void setTitleOfAllegroWindow( const std::string& title )
         if ( ! initialized ) {  std::cerr << "allegro::setTitleOfAllegroWindow before allegro::init" << std::endl ; return ;  }
 #endif
 
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        if ( allegroDisplay != NULL ) al_set_window_title( allegroDisplay, title.c_str () );
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
         set_window_title( title.c_str () );
+
+#endif
 }
 
-void drawLine( const Pict& where, int xFrom, int yFrom, int xTo, int yTo, int allegroColor )
+void drawLine( const Pict& where, int xFrom, int yFrom, int xTo, int yTo, AllegroColor color )
 {
 #if defined( DEBUG_ALLEGRO_INIT ) && DEBUG_ALLEGRO_INIT
         if ( ! initialized ) {  std::cerr << "allegro::drawLine before allegro::init" << std::endl ; return ;  }
 #endif
 
-        line( where.ptr (), xFrom, yFrom, xTo, yTo, allegroColor );
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        AllegroBitmap* previous = al_get_target_bitmap() ;
+        if ( previous != where.ptr() ) al_set_target_bitmap( where.ptr() ) ;
+        al_draw_line( xFrom + 0.5, yFrom + 0.5, xTo + 0.5, yTo + 0.5, color, /* thickness */ 1.0 );
+        if ( previous != where.ptr() ) al_set_target_bitmap( previous ) ;
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        line( where.ptr (), xFrom, yFrom, xTo, yTo, color );
+
+#endif
+
+        redraw() ;
 }
 
-void drawCircle( const Pict& where, int x, int y, int radius, int allegroColor )
+void drawCircle( const Pict& where, int x, int y, int radius, AllegroColor color )
 {
 #if defined( DEBUG_ALLEGRO_INIT ) && DEBUG_ALLEGRO_INIT
         if ( ! initialized ) {  std::cerr << "allegro::drawCircle before allegro::init" << std::endl ; return ;  }
 #endif
 
-        circle( where.ptr (), x, y, radius, allegroColor );
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        AllegroBitmap* previous = al_get_target_bitmap() ;
+        if ( previous != where.ptr() ) al_set_target_bitmap( where.ptr() ) ;
+        al_draw_circle( x + 0.5, y + 0.5, radius, color, /* thickness */ 1.0 );
+        if ( previous != where.ptr() ) al_set_target_bitmap( previous ) ;
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        circle( where.ptr (), x, y, radius, color );
+
+#endif
+
+        redraw() ;
 }
 
-void fillCircle( const Pict& where, int x, int y, int radius, int allegroColor )
+void fillCircle( const Pict& where, int x, int y, int radius, AllegroColor color )
 {
 #if defined( DEBUG_ALLEGRO_INIT ) && DEBUG_ALLEGRO_INIT
         if ( ! initialized ) {  std::cerr << "allegro::fillCircle before allegro::init" << std::endl ; return ;  }
 #endif
 
-        circlefill( where.ptr (), x, y, radius, allegroColor );
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        AllegroBitmap* previous = al_get_target_bitmap() ;
+        if ( previous != where.ptr() ) al_set_target_bitmap( where.ptr() ) ;
+        al_draw_filled_circle( x + 0.5, y + 0.5, radius, color );
+        if ( previous != where.ptr() ) al_set_target_bitmap( previous ) ;
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        circlefill( where.ptr (), x, y, radius, color );
+
+#endif
+
+        redraw() ;
 }
 
-void drawRect( const Pict& where, int x1, int y1, int x2, int y2, int allegroColor )
+void drawRect( const Pict& where, int x1, int y1, int x2, int y2, AllegroColor color )
 {
 #if defined( DEBUG_ALLEGRO_INIT ) && DEBUG_ALLEGRO_INIT
         if ( ! initialized ) {  std::cerr << "allegro::drawRect before allegro::init" << std::endl ; return ;  }
 #endif
 
-        rect( where.ptr (), x1, y1, x2, y2, allegroColor );
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        AllegroBitmap* previous = al_get_target_bitmap() ;
+        if ( previous != where.ptr() ) al_set_target_bitmap( where.ptr() ) ;
+        al_draw_rectangle( x1 + 0.5, y1 + 0.5, x2 + 0.5, y2 + 0.5, color, /* thickness */ 1.0 );
+        if ( previous != where.ptr() ) al_set_target_bitmap( previous ) ;
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        rect( where.ptr (), x1, y1, x2, y2, color );
+
+#endif
+
+        redraw() ;
 }
 
-void fillRect( const Pict& where, int x1, int y1, int x2, int y2, int allegroColor )
+void fillRect( const Pict& where, int x1, int y1, int x2, int y2, AllegroColor color )
 {
 #if defined( DEBUG_ALLEGRO_INIT ) && DEBUG_ALLEGRO_INIT
         if ( ! initialized ) {  std::cerr << "allegro::fillRect before allegro::init" << std::endl ; return ;  }
 #endif
 
-        rectfill( where.ptr (), x1, y1, x2, y2, allegroColor );
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        AllegroBitmap* previous = al_get_target_bitmap() ;
+        if ( previous != where.ptr() ) al_set_target_bitmap( where.ptr() ) ;
+        al_draw_filled_rectangle( x1 + 0.5, y1 + 0.5, x2 + 0.5, y2 + 0.5, color );
+        if ( previous != where.ptr() ) al_set_target_bitmap( previous ) ;
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        rectfill( where.ptr (), x1, y1, x2, y2, color );
+
+#endif
+
+        redraw() ;
 }
 
 void bitBlit( const Pict& from, const Pict& to, int fromX, int fromY, int toX, int toY, unsigned int width, unsigned int height )
@@ -566,12 +1621,46 @@ void bitBlit( const Pict& from, const Pict& to, int fromX, int fromY, int toX, i
         if ( ! initialized ) {  std::cerr << "allegro::bitBlit before allegro::init" << std::endl ; return ;  }
 #endif
 
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        AllegroBitmap* previous = al_get_target_bitmap() ;
+        if ( previous != to.ptr() ) al_set_target_bitmap( to.ptr() ) ;
+        al_draw_bitmap_region( from.ptr(), fromX, fromY, width, height, toX, toY, /* flipping */ 0 );
+        if ( previous != to.ptr() ) al_set_target_bitmap( previous ) ;
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
         blit( from.ptr (), to.ptr (), fromX, fromY, toX, toY, width, height );
+
+#endif
+
+        redraw() ;
+}
+
+void bitBlit( const Pict& from, const Pict& to, int toX, int toY )
+{
+#if defined( DEBUG_ALLEGRO_INIT ) && DEBUG_ALLEGRO_INIT
+        if ( ! initialized ) {  std::cerr << "allegro::bitBlit before allegro::init" << std::endl ; return ;  }
+#endif
+
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        AllegroBitmap* previous = al_get_target_bitmap() ;
+        if ( previous != to.ptr() ) al_set_target_bitmap( to.ptr() ) ;
+        al_draw_bitmap( from.ptr(), toX, toY, /* flipping */ 0 );
+        if ( previous != to.ptr() ) al_set_target_bitmap( previous ) ;
+        redraw() ;
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        bitBlit( from, to, 0, 0, toX, toY, from.getW(), from.getH() ) ;
+
+#endif
 }
 
 void bitBlit( const Pict& from, const Pict& to )
 {
-        bitBlit( from, to, 0, 0, 0, 0, from.getW(), from.getH() ) ;
+        bitBlit( from, to, 0, 0 ) ;
 }
 
 void drawSprite( const Pict& view, const Pict& sprite, int x, int y )
@@ -580,17 +1669,39 @@ void drawSprite( const Pict& view, const Pict& sprite, int x, int y )
         if ( ! initialized ) {  std::cerr << "allegro::drawSprite before allegro::init" << std::endl ; return ;  }
 #endif
 
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        bitBlit( sprite, view, x, y ) ;
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
         draw_sprite( view.ptr (), sprite.ptr (), x, y );
+        redraw() ;
+
+#endif
 }
 
-void drawSpriteWithTransparencyBlender( const Pict& view, const Pict& sprite, int x, int y, int r, int g, int b, int a )
+void drawSpriteWithTransparency( const Pict& view, const Pict& sprite, int x, int y, unsigned char transparency )
 {
 #if defined( DEBUG_ALLEGRO_INIT ) && DEBUG_ALLEGRO_INIT
-        if ( ! initialized ) {  std::cerr << "allegro::drawSpriteWithTransparencyBlender before allegro::init" << std::endl ; return ;  }
+        if ( ! initialized ) {  std::cerr << "allegro::drawSpriteWithTransparency before allegro::init" << std::endl ; return ;  }
 #endif
 
-        set_trans_blender( r, g, b, a );
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        AllegroBitmap* previous = al_get_target_bitmap() ;
+        if ( previous != view.ptr() ) al_set_target_bitmap( view.ptr() ) ;
+        al_draw_tinted_bitmap( sprite.ptr(), al_map_rgba( 0, 0, 0, 255 - transparency ), x, y, /* flipping */ 0 );
+        if ( previous != view.ptr() ) al_set_target_bitmap( previous ) ;
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        set_trans_blender( 0, 0, 0, transparency );
         draw_trans_sprite( view.ptr (), sprite.ptr (), x, y );
+
+#endif
+
+        redraw() ;
 }
 
 void stretchBlit( const Pict& source, const Pict& dest, int sX, int sY, int sW, int sH, int dX, int dY, int dW, int dH )
@@ -599,33 +1710,42 @@ void stretchBlit( const Pict& source, const Pict& dest, int sX, int sY, int sW, 
         if ( ! initialized ) {  std::cerr << "allegro::stretchBlit before allegro::init" << std::endl ; return ;  }
 #endif
 
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        AllegroBitmap* previous = al_get_target_bitmap() ;
+        if ( previous != dest.ptr() ) al_set_target_bitmap( dest.ptr () ) ;
+        al_draw_scaled_bitmap( source.ptr (), sX, sY, sW, sH, dX, dY, dW, dH, /* flipping */ 0 );
+        if ( previous != dest.ptr() ) al_set_target_bitmap( previous ) ;
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
         stretch_blit( source.ptr (), dest.ptr (), sX, sY, sW, sH, dX, dY, dW, dH );
-}
 
-int getRed ( int color ) {  return getr( color );  }
-
-int getGreen ( int color ) {  return getg( color ); }
-
-int getBlue ( int color ) {  return getb( color ); }
-
-int getAlpha ( int color ) {  return geta( color );  }
-
-int makeColor( int r, int g, int b )
-{
-#if defined( DEBUG_ALLEGRO_INIT ) && DEBUG_ALLEGRO_INIT
-        if ( ! initialized ) {  std::cerr << "allegro::makeColor before allegro::init" << std::endl ; return -1 ;  }
 #endif
 
-        return makecol( r, g, b );
+        redraw() ;
 }
 
-void textOut( const std::string& text, const Pict& where, int x, int y, int allegroColor )
+void textOut( const std::string& text, const Pict& where, int x, int y, AllegroColor color )
 {
 #if defined( DEBUG_ALLEGRO_INIT ) && DEBUG_ALLEGRO_INIT
         if ( ! initialized ) {  std::cerr << "allegro::textOut before allegro::init" << std::endl ; return ;  }
 #endif
 
-        textout_ex( where.ptr (), /* allegro’s global */ font, text.c_str(), x, y, allegroColor, -1 );
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        AllegroBitmap* previous = al_get_target_bitmap() ;
+        if ( previous != where.ptr() ) al_set_target_bitmap( where.ptr() ) ;
+        al_draw_text( allegroFont, color, x, y, ALLEGRO_ALIGN_LEFT, text.c_str() );
+        if ( previous != where.ptr() ) al_set_target_bitmap( previous );
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        textout_ex( where.ptr (), /* allegro’s global */ font, text.c_str(), x, y, color, -1 );
+
+#endif
+
+        redraw() ;
 }
 
 void acquirePict( const Pict& what )
@@ -634,7 +1754,16 @@ void acquirePict( const Pict& what )
         if ( ! initialized ) {  std::cerr << "allegro::acquirePict before allegro::init" << std::endl ; return ;  }
 #endif
 
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        ( void ) what ;
+        // do nothing
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
         acquire_bitmap( what.ptr () );
+
+#endif
 }
 
 void releasePict( const Pict& what )
@@ -643,16 +1772,16 @@ void releasePict( const Pict& what )
         if ( ! initialized ) {  std::cerr << "allegro::releasePict before allegro::init" << std::endl ; return ;  }
 #endif
 
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        ( void ) what ;
+        // do nothing
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
         release_bitmap( what.ptr () );
-}
 
-void initTimers()
-{
-#if defined( DEBUG_ALLEGRO_INIT ) && DEBUG_ALLEGRO_INIT
-        if ( ! initialized ) {  std::cerr << "allegro::initTimer before allegro::init" << std::endl ; return ;  }
 #endif
-
-        install_timer() ;
 }
 
 void initAudio()
@@ -661,9 +1790,23 @@ void initAudio()
         if ( ! initialized ) {  std::cerr << "allegro::initAudio before allegro::init" << std::endl ; return ;  }
 #endif
 
-        alogg_init();
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 
-        allegro::initTimers();
+#if defined( DARWIN ) && DARWIN
+        al_set_config_value( al_get_system_config(), "audio", "driver", "openal" );
+#endif
+
+        al_set_config_value( al_get_system_config(), "audio", "default_mixer_quality", /* "point" */ "linear" /* "cubic" */ );
+
+        al_install_audio() ;
+
+        al_init_acodec_addon() ;
+
+        al_reserve_samples( 256 ) ;
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        alogg_init();
 
         int digitalDrivers[] = {  DIGI_AUTODETECT,
         # ifdef __gnu_linux__
@@ -683,6 +1826,8 @@ void initAudio()
                 result = install_sound( digitalDrivers[ index++ ], MIDI_NONE, NULL );
         }
 
+#endif
+
         audioInitialized = true ;
 
 #if defined( DEBUG_ALLEGRO_INIT ) && DEBUG_ALLEGRO_INIT
@@ -696,7 +1841,14 @@ void setDigitalVolume( unsigned short volume )
         if ( ! audioInitialized ) {  std::cerr << "allegro::setDigitalVolume before allegro::initAudio" << std::endl ; return ;  }
 #endif
 
-        set_volume( ( volume <= 255 ) ? volume : 255, -1 ) ;
+        Audio::digitalVolume = ( volume <= 255 ) ? volume : 255 ;
+        ogg::OggPlayer::syncPlayersWithDigitalVolume ();
+
+#if defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        set_volume( Audio::digitalVolume, -1 ) ;
+
+#endif
 }
 
 void setMIDIVolume( unsigned short volume )
@@ -705,7 +1857,13 @@ void setMIDIVolume( unsigned short volume )
         if ( ! audioInitialized ) {  std::cerr << "allegro::setMIDIVolume before allegro::initAudio" << std::endl ; return ;  }
 #endif
 
-        set_volume( -1, ( volume <= 255 ) ? volume : 255 ) ;
+        Audio::midiVolume = ( volume <= 255 ) ? volume : 255 ;
+
+#if defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        set_volume( -1, Audio::midiVolume ) ;
+
+#endif
 }
 
 void initKeyboardHandler()
@@ -714,7 +1872,17 @@ void initKeyboardHandler()
         if ( ! initialized ) {  std::cerr << "allegro::initKeyboardHandler before allegro::init" << std::endl ; return ;  }
 #endif
 
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        al_install_keyboard() ;
+
+        al_register_event_source( event_queue, al_get_keyboard_event_source() ) ;
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
         install_keyboard() ;
+
+#endif
 }
 
 std::string scancodeToNameOfKey( int scancode )
@@ -738,33 +1906,38 @@ int nameOfKeyToScancode( const std::string& name )
         if ( namesToScancodes.find( name ) != namesToScancodes.end () )
                 return namesToScancodes[ name ];
 
-        return KEY_UNKNOWN5 /* 111 */ ;
+        return ALLEGRO_KEY_UNKNOWN ;
 }
 
 bool isKeyPushed( const std::string& name )
 {
-        // key is allegro’s global array
+        peekKeys();
+
+        // key is allegro 4’s global array
         return key[ nameOfKeyToScancode( name ) ] == TRUE ;
 }
 
 bool isShiftKeyPushed()
 {
-        return ( key_shifts & KB_SHIFT_FLAG ) != 0 ;
+        peekModifiers();
+        return ( key_shifts & ALLEGRO_KEYMOD_SHIFT ) != 0 ;
 }
 
 bool isControlKeyPushed()
 {
-        return ( key_shifts & KB_CTRL_FLAG ) != 0 ;
+        peekModifiers();
+        return ( key_shifts & ALLEGRO_KEYMOD_CTRL ) != 0 ;
 }
 
 bool isAltKeyPushed()
 {
-        return ( key_shifts & KB_ALT_FLAG ) != 0 ;
+        peekModifiers();
+        return ( key_shifts & ALLEGRO_KEYMOD_ALT ) != 0 ;
 }
 
 void releaseKey( const std::string& name )
 {
-        // key is allegro’s global
+        // key is allegro 4’s global
         key[ nameOfKeyToScancode( name ) ] = FALSE ;
 }
 
@@ -774,7 +1947,16 @@ bool areKeypushesWaiting()
         if ( ! initialized ) {  std::cerr << "allegro::areKeypushesWaiting before allegro::init" << std::endl ; return false ;  }
 #endif
 
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        pollEvents() ;
+        return ! keybuf.empty() ;
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
         return keypressed() == TRUE ;
+
+#endif
 }
 
 std::string nextKey()
@@ -783,8 +1965,26 @@ std::string nextKey()
         if ( ! initialized ) {  std::cerr << "allegro::nextKey before allegro::init" << std::endl ; return "no key" ;  }
 #endif
 
-        int keycode = readkey() >> 8 ;
-        return scancodeToNameOfKey( keycode );
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        int keycode = 0 ;
+        pollEvents();
+
+        if ( ! keybuf.empty() )
+        {
+                al_lock_mutex( keybuf_mutex );
+                keycode = keybuf.front();
+                keybuf.pop();
+                al_unlock_mutex( keybuf_mutex );
+        }
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        int keycode = readkey() ;
+
+#endif
+
+        return scancodeToNameOfKey( keycode >> 8 ) ;
 }
 
 void emptyKeyboardBuffer ()
@@ -793,16 +1993,17 @@ void emptyKeyboardBuffer ()
         if ( ! initialized ) {  std::cerr << "allegro::emptyKeyboardBuffer before allegro::init" << std::endl ; return ;  }
 #endif
 
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        al_lock_mutex( keybuf_mutex );
+        while ( ! keybuf.empty() ) keybuf.pop();
+        al_unlock_mutex( keybuf_mutex );
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
         clear_keybuf();
-}
 
-Pict* loadPNG( const std::string& file )
-{
-#if defined( DEBUG_ALLEGRO_INIT ) && DEBUG_ALLEGRO_INIT
-        if ( ! initialized ) {  std::cerr << "allegro::loadPNG before allegro::init" << std::endl ; return Pict::nilPict() ;  }
 #endif
-
-        return Pict::newPict( load_png( file.c_str (), NULL ) );
 }
 
 int loadGIFAnimation( const std::string& gifFile, std::vector< Pict* >& frames, std::vector< int >& durations )
@@ -811,7 +2012,27 @@ int loadGIFAnimation( const std::string& gifFile, std::vector< Pict* >& frames, 
         if ( ! initialized ) {  std::cerr << "allegro::loadGIFAnimation before allegro::init" << std::endl ; return 0 ;  }
 #endif
 
-        BITMAP** theseFrames = NULL;
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        ALGIF_ANIMATION* gifAnimation = algif_load_animation( gifFile.c_str () );
+        int howManyFrames = gifAnimation->frames_count ;
+
+        if ( howManyFrames > 0 )
+        {
+                for ( int i = 0; i < howManyFrames; i++ )
+                {
+                        AllegroBitmap* frame = algif_get_frame_bitmap( gifAnimation, i );
+                        frames.push_back( Pict::mendIntoPict( frame ) );
+
+                        durations.push_back( algif_get_frame_duration( gifAnimation, i ) );
+                }
+        }
+
+        return howManyFrames;
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        AllegroBitmap** theseFrames = NULL;
         int* theseDurations = NULL;
         int howManyFrames = algif_load_animation( gifFile.c_str (), &theseFrames, &theseDurations );
 
@@ -819,7 +2040,8 @@ int loadGIFAnimation( const std::string& gifFile, std::vector< Pict* >& frames, 
         {
                 for ( int i = 0; i < howManyFrames; i++ )
                 {
-                        frames.push_back( Pict::newPict( theseFrames[ i ] ) );
+                        frames.push_back( Pict::mendIntoPict( theseFrames[ i ] ) );
+
                         durations.push_back( theseDurations[ i ] );
                 }
 
@@ -827,17 +2049,42 @@ int loadGIFAnimation( const std::string& gifFile, std::vector< Pict* >& frames, 
         }
 
         return howManyFrames;
+
+#endif
 }
 
-void savePictAsPCX ( const std::string& where, const Pict& what )
+void savePictAsPCX( const std::string& where, const Pict& what )
 {
 #if defined( DEBUG_ALLEGRO_INIT ) && DEBUG_ALLEGRO_INIT
         if ( ! initialized ) {  std::cerr << "allegro::savePictAsPCX before allegro::init" << std::endl ; return ;  }
 #endif
 
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        al_save_bitmap( ( where + ".pcx" ).c_str (), what.ptr () );
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
         save_bitmap( ( where + ".pcx" ).c_str (), what.ptr (), NULL );
-}
 
 #endif
+}
+
+void savePictAsPNG( const std::string& where, const Pict& what )
+{
+#if defined( DEBUG_ALLEGRO_INIT ) && DEBUG_ALLEGRO_INIT
+        if ( ! initialized ) {  std::cerr << "allegro::savePictAsPNG before allegro::init" << std::endl ; return ;  }
+#endif
+
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        al_save_bitmap( ( where + ".png" ).c_str (), what.ptr () );
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        save_png( ( where + ".png" ).c_str (), what.ptr (), NULL );
+
+#endif
+}
 
 }

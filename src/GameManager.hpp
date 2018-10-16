@@ -55,7 +55,7 @@ private:
 
 protected:
 
-        static Picture * refreshPicture ( const char * nameOfPicture ) ;
+        static Picture * refreshPicture ( const std::string & nameOfPicture ) ;
 
 public:
 

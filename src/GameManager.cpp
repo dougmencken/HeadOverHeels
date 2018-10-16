@@ -20,8 +20,6 @@
 
 #include <tinyxml2.h>
 
-#include <sstream>
-
 
 namespace isomot
 {
@@ -146,9 +144,11 @@ GameManager* GameManager::getInstance ()
 }
 
 /* static */
-Picture * GameManager::refreshPicture ( const char * nameOfPicture )
+Picture * GameManager::refreshPicture ( const std::string& nameOfPicture )
 {
-        smartptr< allegro::Pict > pict( allegro::loadPNG( isomot::pathToFile( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + nameOfPicture ) ) );
+        smartptr< allegro::Pict > pict( allegro::Pict::fromPNGFile (
+                isomot::pathToFile( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + nameOfPicture )
+        ) ) ;
         return new Picture( *pict.get() );
 }
 

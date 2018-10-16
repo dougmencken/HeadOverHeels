@@ -13,7 +13,7 @@ Picture::Picture( unsigned int width, unsigned int height )
         : picture( allegro::Pict::newPict( width, height ) )
         , name( "Picture." + isomot::makeRandomString( 12 ) )
 {
-        fillWithColor( Color::colorOfTransparency() );
+        fillWithColor( Color() );
 
 #if defined( DEBUG_PICTURES )  &&  DEBUG_PICTURES
         std::cout << "created Picture " << getName() << " with width " << width << " and height " << height << std::endl ;
@@ -27,27 +27,23 @@ Picture::Picture( unsigned int width, unsigned int height, const Color& color )
         fillWithColor( color );
 
 #if defined( DEBUG_PICTURES )  &&  DEBUG_PICTURES
-        std::cout << "created Picture " << getName() << " with width " << width << " and height " << height << " filled with " << color->toString () << std::endl ;
+        std::cout << "created Picture " << getName() << " with width " << width << " and height " << height << " filled with " << color.toString () << std::endl ;
 #endif
 }
 
 Picture::Picture( const allegro::Pict& pict )
-        : picture( allegro::Pict::newPict( pict.getW(), pict.getH(), pict.getColorDepth() ) )
+        : picture( allegro::Pict::asCloneOf( pict.ptr() ) )
         , name( "Picture." + isomot::makeRandomString( 12 ) )
 {
-        allegro::bitBlit( pict, getAllegroPict() );
-
 #if defined( DEBUG_PICTURES )  &&  DEBUG_PICTURES
         std::cout << "created Picture " << getName() << " as copy of const allegro::Pict &" << std::endl ;
 #endif
 }
 
 Picture::Picture( const Picture& pic )
-        : picture( allegro::Pict::newPict( pic.getWidth(), pic.getHeight(), pic.getColorDepth() ) )
+        : picture( allegro::Pict::asCloneOf( pic.getAllegroPict().ptr() ) )
         , name( "copy of " + pic.name )
 {
-        allegro::bitBlit( pic.getAllegroPict(), getAllegroPict() );
-
 #if defined( DEBUG_PICTURES )  &&  DEBUG_PICTURES
         std::cout << "created Picture " << getName() << " as copy of const Picture &" << std::endl ;
 #endif
@@ -71,9 +67,14 @@ void Picture::setName( const std::string& newName )
         name = newName ;
 }
 
-void Picture::setPixelAt( int x, int y, const Color& color ) const
+void Picture::putPixelAt( int x, int y, const Color& color ) const
 {
-        picture->setPixelAt( x, y, color.toAllegroColor() ) ;
+        picture->putPixelAt( x, y, color.toAllegroColor() ) ;
+}
+
+void Picture::drawPixelAt( int x, int y, const Color& color ) const
+{
+        picture->drawPixelAt( x, y, color.toAllegroColor() ) ;
 }
 
 void Picture::fillWithColor( const Color& color )
@@ -86,21 +87,26 @@ void Picture::colorize( const Color& color )
         Color::colorizePicture( this, color );
 }
 
-Picture * Picture::makeGrayscaleCopy ()
+Picture * Picture::makeGrayscaleCopy()
 {
         Picture* copy = new Picture( *this );
         Color::pictureToGrayscale( copy );
         return copy;
 }
 
-Picture * Picture::makeColorizedCopy ( const Color& color )
+Picture * Picture::makeColorizedCopy( const Color& color )
 {
         Picture* copy = new Picture( *this );
         copy->colorize( color );
         return copy;
 }
 
-void Picture::saveAsPCX ( const std::string& path )
+void Picture::saveAsPCX( const std::string& path )
 {
         allegro::savePictAsPCX( path + getName(), getAllegroPict() );
+}
+
+void Picture::saveAsPNG( const std::string& path )
+{
+        allegro::savePictAsPNG( path + getName(), getAllegroPict() );
 }

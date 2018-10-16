@@ -36,7 +36,7 @@ public:
 
         virtual ~ItemData( ) ;
 
-        static ItemData * clone ( ItemData * data ) ;
+        static ItemData * clone ( const ItemData & data ) ;
 
 public:
 
@@ -82,7 +82,7 @@ public:
 
         bool isMortal() const {  return mortal ;  }
 
-        unsigned short howManyFramesForOrientations () const {  return orientationFrames ;  }
+        unsigned short howManyFramesPerOrientation () const {  return framesPerOrientation ;  }
 
         unsigned int howManyExtraFrames () const {  return extraFrames ;  }
 
@@ -146,7 +146,7 @@ private:
        /**
         * How many frames are for orientations
         */
-        unsigned short orientationFrames ;
+        unsigned short framesPerOrientation ;
 
        /**
         * Time in seconds between each frame of animation

@@ -439,7 +439,8 @@ void PlayerItem::wait ()
         {
                 // get waiting frame by orientation of item
                 unsigned int orientOccident = ( orientation.getIntegerOfWay() == Way::Nowhere ? 0 : orientation.getIntegerOfWay() );
-                size_t frame = ( getDataOfItem()->howManyMotions() - getDataOfItem()->howManyExtraFrames() ) / getDataOfItem()->howManyFramesForOrientations() * orientOccident ;
+                unsigned int orientations = ( getDataOfItem()->howManyMotions() - getDataOfItem()->howManyExtraFrames() ) / getDataOfItem()->howManyFramesPerOrientation() ;
+                size_t frame = orientations * orientOccident ;
                 if ( frame >= getDataOfItem()->howManyMotions() ) frame = 0;
 
                 if ( this->rawImage != nilPointer && /* if images differ */ this->rawImage != getDataOfItem()->getMotionAt( frame ) )

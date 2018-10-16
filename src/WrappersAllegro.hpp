@@ -17,21 +17,80 @@
 #include <map>
 
 
-#if defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+#include <allegro5/color.h>
+typedef ALLEGRO_COLOR type_of_allegro_color ;
+
+struct ALLEGRO_BITMAP ;
+typedef ALLEGRO_BITMAP AllegroBitmap ;
+
+struct ALLEGRO_SAMPLE ;
+typedef ALLEGRO_SAMPLE AllegroSample ;
+
+struct ALLEGRO_SAMPLE_INSTANCE ;
+
+struct ALLEGRO_SAMPLE_ID ;
+
+struct ALLEGRO_MIXER ;
+
+struct ALLEGRO_DISPLAY ;
+
+struct ALLEGRO_FONT ;
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+typedef int type_of_allegro_color ;
 
 struct BITMAP ;
+typedef BITMAP AllegroBitmap ;
+
 struct SAMPLE ;
+typedef SAMPLE AllegroSample ;
 
 struct alogg_stream ;
 struct alogg_thread ;
 
+#else
+
+#error I need either Allegro 4 or Allegro 5
+
 #endif
+
+
+class AllegroColor
+{
+
+public:
+
+        AllegroColor ( type_of_allegro_color c ) : color( c ) { }
+
+        operator type_of_allegro_color() const {  return color ;  }
+
+        unsigned char getRed () const ;
+        unsigned char getGreen () const ;
+        unsigned char getBlue () const ;
+        unsigned char getAlpha () const ;
+
+        bool equalsRGBA ( const AllegroColor& toCompare ) const ;
+        bool equalsRGB ( const AllegroColor& toCompare ) const ;
+
+        bool isKeyColor () const ;
+
+        static AllegroColor makeColor ( unsigned char r, unsigned char g, unsigned char b, unsigned char a ) ;
+        static AllegroColor makeColor ( unsigned char r, unsigned char g, unsigned char b ) ;
+
+        static AllegroColor keyColor () ;
+
+private:
+
+        type_of_allegro_color color ;
+
+};
 
 
 namespace allegro
 {
-
-#if defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
 
 class Pict
 {
@@ -43,43 +102,46 @@ public:
         unsigned int getW () const ;
         unsigned int getH () const ;
 
-        int getPixelAt ( int x, int y ) const ;
-        void setPixelAt ( int x, int y, int allegroColor ) const ;
+        AllegroColor getPixelAt ( int x, int y ) const ;
+        void putPixelAt ( int x, int y, AllegroColor color ) const ;
+        void drawPixelAt ( int x, int y, AllegroColor color ) const ;
 
-        /* Returns the color depth of picture
-         * 8, 15, 16, 24, or 32 */
-        unsigned int getColorDepth () const ;
+        void clearToColor ( AllegroColor color ) const ;
 
-        void clearToColor ( int allegroColor ) const ;
-
-        bool isInVideoMemory () const ;
+        void lock( bool read, bool write ) const ;
+        void unlock () const ;
 
         bool isNotNil () const {  return it != NULL ;  }
 
-        BITMAP* ptr () const {  return it ;  } // instead of just operator BITMAP*() const {  return it ;  }
+        AllegroBitmap* ptr () const {  return it ;  } // instead of just operator AllegroBitmap*() const {  return it ;  }
 
         bool equals ( const Pict& toWhat ) const {  return it == toWhat.it ;  }
 
         static Pict* nilPict () {  return nil ;  }
 
-        static Pict* newPict ( BITMAP* b ) {  return new Pict( b ) ;  }
+        static Pict* newPict ( AllegroBitmap* b ) {  return new Pict( b ) ;  }
         static Pict* newPict ( unsigned int w, unsigned int h ) {  return new Pict( w, h ) ;  }
-        static Pict* newPict ( unsigned int w, unsigned int h, unsigned int depth ) {  return new Pict( w, h, depth ) ;  }
+
+        static Pict* asCloneOf ( AllegroBitmap* image ) ;
+
+        static Pict* mendIntoPict ( AllegroBitmap* image ) ;
+
+        static Pict* fromPNGFile ( const std::string& file ) ;
 
         static const Pict& theScreen ();
 
 private:
 
-        BITMAP* it ;
+        AllegroBitmap* it ;
 
         bool shallowCopy ;
 
         static Pict* nil ;
+
         static Pict* globalScreen ;
 
-        Pict( BITMAP* p ) : it( p ), shallowCopy( false )  { }
+        Pict( AllegroBitmap* p ) : it( p ), shallowCopy( false )  { }
         Pict( unsigned int w, unsigned int h ) ;
-        Pict( unsigned int w, unsigned int h, unsigned int depth ) ;
 
         Pict( const Pict & copy ) : it( copy.it ), shallowCopy( true )  { }
 
@@ -87,6 +149,17 @@ private:
         bool operator == ( void * ) {  return false ;  }
         bool operator != ( const Pict & ) {  return true ;  }
         bool operator != ( void * ) {  return true ;  }
+
+};
+
+
+class Audio
+{
+
+public:
+
+        static unsigned short digitalVolume ;
+        static unsigned short midiVolume ;
 
 };
 
@@ -103,18 +176,18 @@ public:
 
         int getVoice () const {  return voice ;  }
         unsigned int getFrequency () const ;
-        short getPan () const ;
 
         void play ( unsigned short pan = 128 /* from 0 as "at left" to 255 as "at right" */ ) ;
         void loop ( unsigned short pan = 128 /* from 0 as "at left" to 255 as "at right" */ ) ;
         void stop () ;
 
+        void neatenIfNotPlaying () ;
+
         bool isPlaying () const ;
-        void binVoiceIfNotPlaying () ;
 
         bool isNotNil () const {  return it != NULL ;  }
 
-        SAMPLE* ptr () const {  return it ;  } // instead of just operator SAMPLE*() const {  return it ;  }
+        AllegroSample* ptr () const {  return it ;  } // instead of just operator AllegroSample*() const {  return it ;  }
 
         static Sample* loadFromFile ( const std::string& file ) ;
 
@@ -122,18 +195,26 @@ public:
 
 private:
 
-        SAMPLE* it ;
+        AllegroSample* it ;
         short volume ; /* from 0 to 255 */
         int voice ;
+
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        ALLEGRO_SAMPLE_INSTANCE* sampleInstance ;
+
+#endif
 
         bool shallowCopy ;
 
         static Sample* nil ;
 
         Sample( ) : it( NULL ), volume( 0 ), voice( -1 ), shallowCopy( false )  { }
-        Sample( SAMPLE* s ) : it( s ), volume( 128 ), voice( -1 ), shallowCopy( false )  { }
+        Sample( AllegroSample* s ) : it( s ), volume( 128 ), voice( -1 ), shallowCopy( false )  { }
 
         Sample( const Sample & copy ) : it( copy.it ), volume( copy.volume ), voice( copy.voice ), shallowCopy( true )  { }
+
+        void playMe ( unsigned short volume, unsigned short pan, bool loop ) ;
 
 };
 
@@ -141,31 +222,48 @@ private:
 namespace ogg
 {
 
-class ThreadPlaysStream
+class OggPlayer
 {
 
 public:
 
-        ThreadPlaysStream( ) : th( NULL ), stream( NULL )  { }
-        virtual ~ThreadPlaysStream( )  {  stop () ;  }
+        OggPlayer( ) :
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+                oggSample( NULL ), sampleInstance( NULL ), oggMixer( NULL )
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+                th( NULL ), stream( NULL )
+#endif
+        { }
+
+        virtual ~OggPlayer( ) {  stop () ;  }
 
         void play ( const std::string& oggFile, bool loop = false ) ;
         void stop () ;
 
         bool isPlaying () ;
 
-        bool isNotNil () const {  return th != NULL ;  }
-
         std::string getFilePlaying () const {  return filePlaying ;  }
 
+        static void syncPlayersWithDigitalVolume () ;
+
 private:
+
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        ALLEGRO_SAMPLE* oggSample ;
+        ALLEGRO_SAMPLE_INSTANCE* sampleInstance ;
+        ALLEGRO_MIXER * oggMixer ;
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
 
         alogg_thread * th ;
         alogg_stream * stream ;
 
+#endif
+
         std::string filePlaying ;
 
-        ThreadPlaysStream( const ThreadPlaysStream & copy ) : th( copy.th ), stream( copy.stream ), filePlaying( copy.filePlaying )  { }
+        static std::vector < OggPlayer * > everyPlayer ;
 
 };
 
@@ -179,14 +277,10 @@ private:
 
 void init ( ) ;
 
+void bye ( ) ;
 
-/* void set_color_depth( int depth )
- *
- * Sets the pixel format to be used by subsequent calls to set_gfx_mode() and create_bitmap().
- * Valid depths are 8 (the default), 15, 16, 24, and 32 bits
- */
 
-void setDefaultColorDepth ( unsigned int depth ) ;
+void redraw ( ) ;
 
 
 /* int set_gfx_mode( int card, int w, int h, int v_w, int v_h )
@@ -220,7 +314,7 @@ void setTitleOfAllegroWindow ( const std::string& title ) ;
  * Draws a line onto the bitmap, from point (x1, y1) to (x2, y2)
  */
 
-void drawLine ( const Pict & where, int xFrom, int yFrom, int xTo, int yTo, int allegroColor ) ;
+void drawLine ( const Pict & where, int xFrom, int yFrom, int xTo, int yTo, AllegroColor color ) ;
 
 
 /* void circle( BITMAP* bmp, int x, int y, int radius, int color )
@@ -228,7 +322,7 @@ void drawLine ( const Pict & where, int xFrom, int yFrom, int xTo, int yTo, int 
  * Draws a circle with the specified centre and radius
  */
 
-void drawCircle ( const Pict & where, int x, int y, int radius, int allegroColor ) ;
+void drawCircle ( const Pict & where, int x, int y, int radius, AllegroColor color ) ;
 
 
 /* void circlefill( BITMAP* bmp, int x, int y, int radius, int color )
@@ -236,7 +330,7 @@ void drawCircle ( const Pict & where, int x, int y, int radius, int allegroColor
  * Draws a filled circle with the specified centre and radius
  */
 
-void fillCircle ( const Pict & where, int x, int y, int radius, int allegroColor ) ;
+void fillCircle ( const Pict & where, int x, int y, int radius, AllegroColor color ) ;
 
 
 /* void rect( BITMAP* bmp, int x1, int y1, int x2, int y2, int color )
@@ -244,7 +338,7 @@ void fillCircle ( const Pict & where, int x, int y, int radius, int allegroColor
  * Draws an outline rectangle with the two points as its opposite corners
  */
 
-void drawRect ( const Pict & where, int x1, int y1, int x2, int y2, int allegroColor ) ;
+void drawRect ( const Pict & where, int x1, int y1, int x2, int y2, AllegroColor color ) ;
 
 
 /* void rectfill( BITMAP* bmp, int x1, int y1, int x2, int y2, int color )
@@ -252,101 +346,20 @@ void drawRect ( const Pict & where, int x1, int y1, int x2, int y2, int allegroC
  * Draws a filled rectangle with the two points as its opposite corners
  */
 
-void fillRect ( const Pict & where, int x1, int y1, int x2, int y2, int allegroColor ) ;
+void fillRect ( const Pict & where, int x1, int y1, int x2, int y2, AllegroColor color ) ;
 
 
-/* void blit( BITMAP* source, BITMAP* dest, int source_x, int source_y, int dest_x, int dest_y, int width, int height )
- *
- * Copies a rectangular area of the source bitmap to the destination bitmap. The source_x and source_y
- * parameters are the top left corner of the area to copy from the source bitmap, and dest_x and dest_y
- * are the corresponding position in the destination bitmap
- */
+void bitBlit ( const Pict & from, const Pict & to, int fromX, int fromY, int toX, int toY, unsigned int width, unsigned int height ) ;
 
-void bitBlit( const Pict & from, const Pict & to, int fromX, int fromY, int toX, int toY, unsigned int width, unsigned int height ) ;
+void bitBlit ( const Pict& from, const Pict& to, int toX, int toY ) ;
 
-void bitBlit( const Pict & from, const Pict & to ) ;
-
-
-/* void draw_sprite( BITMAP* view, BITMAP* sprite, int x, int y )
- *
- * Draws a copy of the sprite onto the view at the specified position. This is almost the same
- * as blit( sprite, view, 0, 0, x, y, sprite->w, sprite->h ), but it uses masked drawing
- * where transparent pixels are skipped
- */
+void bitBlit ( const Pict & from, const Pict & to ) ;
 
 void drawSprite ( const Pict & view, const Pict & sprite, int x, int y ) ;
 
-
-/* void draw_trans_sprite( BITMAP* bmp, BITMAP* sprite, int x, int y )
- *
- * Uses the global color_map table or truecolor blender functions to overlay the sprite on top
- * of the existing image
- */
-/* void set_trans_blender( int r, int g, int b, int a )
- *
- * Enables a linear interpolator blender mode for combining translucent or lit truecolor pixels
- */
-
-void drawSpriteWithTransparencyBlender ( const Pict & view, const Pict & sprite, int x, int y, int r, int g, int b, int a ) ;
-
-
-/* void stretch_blit( BITMAP* source, BITMAP* dest, int source_x, source_y, source_width, source_height, int dest_x, dest_y, dest_width, dest_height )
- *
- * Like blit(), except it can scale images (so the source and destination rectangles don’t need
- * to be the same size) and requires the source and destination bitmaps to be of the same color depth
- */
+void drawSpriteWithTransparency ( const Pict & view, const Pict & sprite, int x, int y, unsigned char transparency ) ;
 
 void stretchBlit ( const Pict & source, const Pict & dest, int sX, int sY, int sW, int sH, int dX, int dY, int dW, int dH ) ;
-
-
-/* BITMAP* create_bitmap( int width, int height )
- *
- * Creates a memory bitmap sized width by height. The bitmap will have clipping turned on,
- * and the clipping rectangle set to the full size of the bitmap. The image memory
- * will not be cleared, so it will probably contain garbage: you should clear the bitmap
- * before using it. This routine always uses the global pixel format, as specified
- * by calling set_color_depth()
- */
-
-/* BITMAP* create_bitmap_ex( int color_depth, int width, int height )
- *
- * Creates a bitmap in a specific color depth (8, 15, 16, 24 or 32 bits per pixel). Returns
- * a pointer to the created bitmap, or NULL if the bitmap could not be created
- */
-
-/* Pict createPict ( int width, int height, int depth = 32 ) ; */
-
-
-/* int getpixel( BITMAP* bmp, int x, int y )
- *
- * Reads a pixel from point (x, y) in the bitmap. To extract the individual color components,
- * use the getr() / getg() / getb() / geta() family of functions
- */
-
-/* int getPixel ( const Pict & picture, int x, int y ) ; */
-
-int getRed ( int color ) ;
-int getGreen ( int color ) ;
-int getBlue ( int color ) ;
-int getAlpha ( int color ) ;
-
-
-/* void putpixel( BITMAP* bmp, int x, int y, int color )
- *
- * Writes a pixel to the specified position in the bitmap
- */
-
-/* void putPixel ( const Pict & picture, int x, int y, int allegroColor ) ; */
-
-
-/* int makecol( int r, int g, int b )
- *
- * Converts colors from a hardware independent format (red, green, and blue values ranging 0..255)
- * to the pixel format required by the current video mode, calling the preceding 8, 15, 16, 24,
- * or 32-bit makecol functions as appropriate
- */
-
-int makeColor ( int r, int g, int b ) ;
 
 
 /* void textout_ex( BITMAP* bitmap, const FONT* font, const char* string, int x, int y, int color, int bg )
@@ -359,7 +372,7 @@ int makeColor ( int r, int g, int b ) ;
  * and always treated as -1
  */
 
-void textOut ( const std::string& text, const Pict & where, int x, int y, int allegroColor ) ;
+void textOut ( const std::string& text, const Pict & where, int x, int y, AllegroColor color ) ;
 
 
 /* void acquire_screen()
@@ -387,17 +400,6 @@ void acquirePict ( const Pict & what ) ;
  */
 
 void releasePict ( const Pict & what ) ;
-
-
-/* int install_timer()
- *
- * Installs the Allegro timer interrupt handler. Do this before installing any timer routines, and
- * also before displaying a mouse pointer, playing animations or music, and using any of GUI routines
- *
- * Returns zero on success, or a negative number on failure which is very unlikely
- */
-
-void initTimers () ;
 
 
 /* int install_sound( int digi, int midi, const char* cfg_path )
@@ -499,14 +501,6 @@ std::string nextKey () ;
 void emptyKeyboardBuffer () ;
 
 
-/* BITMAP* load_png( const char* filename, RGB* pal )
- *
- * Load a PNG from disk
- */
-
-Pict* loadPNG ( const std::string& file ) ;
-
-
 /* int algif_load_animation( const char* filename, BITMAP*** frames, int** durations )
  *
  * Returns number of frames
@@ -524,7 +518,7 @@ int loadGIFAnimation ( const std::string& gifFile, std::vector< Pict * >& frames
 
 void savePictAsPCX ( const std::string& where, const Pict & what ) ;
 
-#endif
+void savePictAsPNG ( const std::string& where, const Pict & what ) ;
 
 }
 

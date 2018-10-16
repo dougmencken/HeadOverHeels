@@ -191,8 +191,8 @@ void Isomot::prepare ()
         // new ItemDataManager is needed to refresh pictures of items
         GameManager::getInstance()->binItemDataManager();
 
-        ItemDataManager* itemDataManager = new ItemDataManager( "items.xml" );
-        itemDataManager->loadItems ();
+        ItemDataManager* itemDataManager = new ItemDataManager();
+        itemDataManager->loadItems( "items.xml" );
         GameManager::getInstance()->setItemDataManager( itemDataManager );
 
         if ( this->mapManager == nilPointer )
@@ -546,7 +546,7 @@ Picture* Isomot::update()
 
                 std::string roomFile = activeRoom->getNameOfFileWithDataAboutRoom() ;
 
-                int allegroWhiteColor = Color::whiteColor().toAllegroColor() ;
+                AllegroColor allegroWhiteColor = Color::whiteColor().toAllegroColor() ;
 
                 if ( ! GameManager::getInstance()->hasBackgroundPicture () )
                 {
@@ -762,8 +762,8 @@ void Isomot::drawMiniatureOfRoom( Room* room, MapManager* mapManager, const Pict
                 {
                         for ( unsigned int pix = 0 ; pix < sizeOfTile ; pix ++ )
                         {
-                                where->setPixelAt( posX++, posY, Color::whiteColor() );
-                                where->setPixelAt( posX++, posY++, Color::whiteColor() );
+                                where->drawPixelAt( posX++, posY, Color::whiteColor() );
+                                where->drawPixelAt( posX++, posY++, Color::whiteColor() );
                         }
                 }
                 else
@@ -771,9 +771,9 @@ void Isomot::drawMiniatureOfRoom( Room* room, MapManager* mapManager, const Pict
                         if ( eastDoor != nilPointer && ( tile + 1 == doorXmid ) )
                         {
                                 if ( tile > 0 /* not first tile */ )
-                                        where->setPixelAt( posX, posY, Color::gray50Color() );
+                                        where->drawPixelAt( posX, posY, Color::gray50Color() );
                                 else
-                                        where->setPixelAt( posX + 2, posY + 1, Color::gray50Color() );
+                                        where->drawPixelAt( posX + 2, posY + 1, Color::gray50Color() );
                         }
 
                         posX += sizeOfTile << 1;
@@ -782,9 +782,9 @@ void Isomot::drawMiniatureOfRoom( Room* room, MapManager* mapManager, const Pict
                         if ( eastDoor != nilPointer && ( tile == doorXmid ) )
                         {
                                 if ( tile + 1 < tilesX /* not last tile */ )
-                                        where->setPixelAt( posX - 1, posY - 1, Color::gray50Color() );
+                                        where->drawPixelAt( posX - 1, posY - 1, Color::gray50Color() );
                                 else
-                                        where->setPixelAt( posX - 3, posY - 2, Color::gray50Color() );
+                                        where->drawPixelAt( posX - 3, posY - 2, Color::gray50Color() );
                         }
                 }
         }
@@ -803,8 +803,8 @@ void Isomot::drawMiniatureOfRoom( Room* room, MapManager* mapManager, const Pict
                 {
                         for ( unsigned int pix = 0 ; pix < sizeOfTile ; pix ++ )
                         {
-                                where->setPixelAt( posX--, posY, Color::whiteColor() );
-                                where->setPixelAt( posX--, posY++, Color::whiteColor() );
+                                where->drawPixelAt( posX--, posY, Color::whiteColor() );
+                                where->drawPixelAt( posX--, posY++, Color::whiteColor() );
                         }
                 }
                 else
@@ -812,9 +812,9 @@ void Isomot::drawMiniatureOfRoom( Room* room, MapManager* mapManager, const Pict
                         if ( southDoor != nilPointer && ( tile + 1 == doorYmid ) )
                         {
                                 if ( tile > 0 /* not first tile */ )
-                                        where->setPixelAt( posX, posY, Color::gray50Color() );
+                                        where->drawPixelAt( posX, posY, Color::gray50Color() );
                                 else
-                                        where->setPixelAt( posX - 2, posY + 1, Color::gray50Color() );
+                                        where->drawPixelAt( posX - 2, posY + 1, Color::gray50Color() );
                         }
 
                         posX -= sizeOfTile << 1;
@@ -823,9 +823,9 @@ void Isomot::drawMiniatureOfRoom( Room* room, MapManager* mapManager, const Pict
                         if ( southDoor != nilPointer && ( tile == doorYmid ) )
                         {
                                 if ( tile + 1 < tilesY /* not last tile */ )
-                                        where->setPixelAt( posX + 1, posY - 1, Color::gray50Color() );
+                                        where->drawPixelAt( posX + 1, posY - 1, Color::gray50Color() );
                                 else
-                                        where->setPixelAt( posX + 3, posY - 2, Color::gray50Color()  );
+                                        where->drawPixelAt( posX + 3, posY - 2, Color::gray50Color()  );
                         }
                 }
         }
@@ -845,8 +845,8 @@ void Isomot::drawMiniatureOfRoom( Room* room, MapManager* mapManager, const Pict
                 {
                         for ( unsigned int pix = 0 ; pix < sizeOfTile ; pix ++ )
                         {
-                                where->setPixelAt( posX--, posY, Color::whiteColor() );
-                                where->setPixelAt( posX--, posY++, Color::whiteColor() );
+                                where->drawPixelAt( posX--, posY, Color::whiteColor() );
+                                where->drawPixelAt( posX--, posY++, Color::whiteColor() );
                         }
                 }
                 else
@@ -854,9 +854,9 @@ void Isomot::drawMiniatureOfRoom( Room* room, MapManager* mapManager, const Pict
                         if ( northDoor != nilPointer && ( tile + 1 == doorYmid ) )
                         {
                                 if ( tile > 0 /* not first tile */ )
-                                        where->setPixelAt( posX, posY, Color::gray50Color() );
+                                        where->drawPixelAt( posX, posY, Color::gray50Color() );
                                 else
-                                        where->setPixelAt( posX - 2, posY + 1, Color::gray50Color() );
+                                        where->drawPixelAt( posX - 2, posY + 1, Color::gray50Color() );
                         }
 
                         posX -= sizeOfTile << 1;
@@ -865,9 +865,9 @@ void Isomot::drawMiniatureOfRoom( Room* room, MapManager* mapManager, const Pict
                         if ( northDoor != nilPointer && ( tile == doorYmid ) )
                         {
                                 if ( tile + 1 < tilesY /* not last tile */ )
-                                        where->setPixelAt( posX + 1, posY - 1, Color::gray50Color() );
+                                        where->drawPixelAt( posX + 1, posY - 1, Color::gray50Color() );
                                 else
-                                        where->setPixelAt( posX + 3, posY - 2, Color::gray50Color() );
+                                        where->drawPixelAt( posX + 3, posY - 2, Color::gray50Color() );
                         }
                 }
         }
@@ -886,8 +886,8 @@ void Isomot::drawMiniatureOfRoom( Room* room, MapManager* mapManager, const Pict
                 {
                         for ( unsigned int pix = 0 ; pix < sizeOfTile ; pix ++ )
                         {
-                                where->setPixelAt( posX++, posY, Color::whiteColor() );
-                                where->setPixelAt( posX++, posY++, Color::whiteColor() );
+                                where->drawPixelAt( posX++, posY, Color::whiteColor() );
+                                where->drawPixelAt( posX++, posY++, Color::whiteColor() );
                         }
                 }
                 else
@@ -895,9 +895,9 @@ void Isomot::drawMiniatureOfRoom( Room* room, MapManager* mapManager, const Pict
                         if ( westDoor != nilPointer && ( tile + 1 == doorXmid ) )
                         {
                                 if ( tile > 0 /* not first tile */ )
-                                        where->setPixelAt( posX, posY, Color::gray50Color() );
+                                        where->drawPixelAt( posX, posY, Color::gray50Color() );
                                 else
-                                        where->setPixelAt( posX + 2, posY + 1, Color::gray50Color() );
+                                        where->drawPixelAt( posX + 2, posY + 1, Color::gray50Color() );
                         }
 
                         posX += sizeOfTile << 1;
@@ -906,9 +906,9 @@ void Isomot::drawMiniatureOfRoom( Room* room, MapManager* mapManager, const Pict
                         if ( westDoor != nilPointer && ( tile == doorXmid ) )
                         {
                                 if ( tile + 1 < tilesX /* not last tile */ )
-                                        where->setPixelAt( posX - 1, posY - 1, Color::gray50Color() );
+                                        where->drawPixelAt( posX - 1, posY - 1, Color::gray50Color() );
                                 else
-                                        where->setPixelAt( posX - 3, posY - 2, Color::gray50Color() );
+                                        where->drawPixelAt( posX - 3, posY - 2, Color::gray50Color() );
                         }
                 }
         }
@@ -944,10 +944,7 @@ void Isomot::drawMiniatureOfRoom( Room* room, MapManager* mapManager, const Pict
                 abovePointerY -= sizeOfTile << 1;
                 belowPointerY += sizeOfTile << 1;
 
-                if ( ! roomAbove.empty() ) where->setPixelAt( miniatureMidX, abovePointerY, Color::blueColor() );
-                if ( ! roomBelow.empty() ) where->setPixelAt( miniatureMidX, belowPointerY, Color::blueColor() );
-
-                int greenColor = Color::greenColor().toAllegroColor() ;
+                AllegroColor greenColor = Color::greenColor().toAllegroColor() ;
 
                 const unsigned int linesEven = ( ( sizeOfTile + 1 ) >> 1 ) << 1;
 
@@ -989,8 +986,8 @@ void Isomot::fillIsoTile( const allegro::Pict& where, int x0, int y0, int tileX,
 
                 for ( unsigned int pix = 0 ; pix < sizeOfTile ; pix ++ )
                 {
-                        where.setPixelAt( x++, y, color.toAllegroColor() );
-                        where.setPixelAt( x++, y++, color.toAllegroColor() );
+                        where.drawPixelAt( x++, y, color.toAllegroColor() );
+                        where.drawPixelAt( x++, y++, color.toAllegroColor() );
                 }
         }
 }
