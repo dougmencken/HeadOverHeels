@@ -223,8 +223,6 @@
 
   <!-- elephant head -->
 
-  <!-- monkey head -->
-
   <!-- handbag -->
   <item label="handbag">
     <event activity="vanish">
@@ -410,7 +408,7 @@
       <file>sound/head-falling.wav</file>
     </event>
     <event activity="vanish">
-      <file>sound/hh-dying.wav</file>
+      <file>sound/lose-life.wav</file>
     </event>
     <event activity="donut">
       <file>sound/fire.wav</file>
@@ -438,7 +436,7 @@
       <file>sound/heels-falling.wav</file>
     </event>
     <event activity="vanish">
-      <file>sound/hh-dying.wav</file>
+      <file>sound/lose-life.wav</file>
     </event>
     <event activity="rebound">
       <file>sound/trampoline.wav</file>
@@ -472,7 +470,7 @@
       <file>sound/head-falling.wav</file>
     </event>
     <event activity="vanish">
-      <file>sound/hh-dying.wav</file>
+      <file>sound/lose-life.wav</file>
     </event>
     <event activity="donut">
       <file>sound/fire.wav</file>

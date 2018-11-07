@@ -3,20 +3,20 @@ External dependencies
 
     zlib
 
-        a Massively Spiffy Yet Delicately Unobtrusive Compression Library
+        Massively Spiffy Yet Delicately Unobtrusive Compression Library
 
     libpng
 
-        a Portable Network Graphics reference library which supports almost all PNG features
+        Portable Network Graphics reference library which supports almost all PNG features
 
     ogg-vorbis ( libogg, libvorbis, vorbis-tools )
 
-        a completely open, patent-free audio encoding and streaming technology
+        completely open, patent-free audio encoding and streaming technology
 
     tinyxml2
 
-        a simple, small, C++ XML parser that can be easily integrated into other programs
+        simple, small, C++ XML parser that can be easily integrated into other programs
 
     allegro 5 or allegro 4
 
-        a cross-platform library for video game and multimedia programming
+        cross-platform library for video game and multimedia programming

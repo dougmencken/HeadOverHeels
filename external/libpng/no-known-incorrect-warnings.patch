@@ -1,0 +1,31 @@
+--- a/png.c
++++ b/png.c
+@@ -2387,28 +2387,6 @@
+                   if (crc == png_sRGB_checks[i].crc)
+ #              endif
+                {
+-                  if (png_sRGB_checks[i].is_broken != 0)
+-                  {
+-                     /* These profiles are known to have bad data that may cause
+-                      * problems if they are used, therefore attempt to
+-                      * discourage their use, skip the 'have_md5' warning below,
+-                      * which is made irrelevant by this error.
+-                      */
+-                     png_chunk_report(png_ptr, "known incorrect sRGB profile",
+-                         PNG_CHUNK_ERROR);
+-                  }
+-
+-                  /* Warn that this being done; this isn't even an error since
+-                   * the profile is perfectly valid, but it would be nice if
+-                   * people used the up-to-date ones.
+-                   */
+-                  else if (png_sRGB_checks[i].have_md5 == 0)
+-                  {
+-                     png_chunk_report(png_ptr,
+-                         "out-of-date sRGB profile with no signature",
+-                         PNG_CHUNK_WARNING);
+-                  }
+-
+                   return 1+png_sRGB_checks[i].is_broken;
+                }
+             }

@@ -27,12 +27,12 @@ CreateVideoMenu::CreateVideoMenu( Picture * picture ) :
 
 void CreateVideoMenu::doAction ()
 {
-        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this );
+        Screen* screen = GuiManager::getInstance().findOrCreateScreenForAction( this );
         if ( screen->countWidgets() == 0 )
         {
                 screen->placeHeadAndHeels( /* icons */ false, /* copyrights */ false );
 
-                LanguageManager* languageManager = gui::GuiManager::getInstance()->getLanguageManager();
+                LanguageManager* languageManager = gui::GuiManager::getInstance().getLanguageManager();
 
                 LanguageText* textScreenSize = languageManager->findLanguageStringForAlias( "screen-size" );
                 LanguageText* textFullscreen = languageManager->findLanguageStringForAlias( "full-screen" );
@@ -77,7 +77,7 @@ void CreateVideoMenu::doAction ()
                 screen->setKeyHandler( listOfOptions );
         }
 
-        gui::GuiManager::getInstance()->changeScreen( screen, true );
+        gui::GuiManager::getInstance().changeScreen( screen, true );
 
         allegro::emptyKeyboardBuffer();
 
@@ -102,17 +102,17 @@ void CreateVideoMenu::doAction ()
                                 {
                                         if ( listOfOptions->getActiveOption () == labelFullscreen )
                                         {
-                                                gui::GuiManager::getInstance()->toggleFullScreenVideo ();
+                                                gui::GuiManager::getInstance().toggleFullScreenVideo ();
                                                 doneWithKey = true;
                                         }
                                         else if ( listOfOptions->getActiveOption () == labelDrawShadows )
                                         {
-                                                isomot::GameManager::getInstance()->toggleDrawShadows ();
+                                                iso::GameManager::getInstance().toggleDrawShadows ();
                                                 doneWithKey = true;
                                         }
                                         else if ( listOfOptions->getActiveOption () == labelDrawBackground )
                                         {
-                                                isomot::GameManager::getInstance()->toggleBackgroundPicture ();
+                                                iso::GameManager::getInstance().toggleBackgroundPicture ();
                                                 doneWithKey = true;
                                         }
                                 }
@@ -137,17 +137,17 @@ void CreateVideoMenu::doAction ()
 
 void CreateVideoMenu::updateLabels ()
 {
-        LanguageManager* languageManager = gui::GuiManager::getInstance()->getLanguageManager();
+        LanguageManager* languageManager = gui::GuiManager::getInstance().getLanguageManager();
         std::string yeah = languageManager->findLanguageStringForAlias( "yep" )-> getText ();
         std::string nope = languageManager->findLanguageStringForAlias( "nope" )->getText ();
 
-        listOfOptions->setValueOf( labelDrawBackground, isomot::GameManager::getInstance()->hasBackgroundPicture () ? yeah : nope );
-        listOfOptions->setValueOf( labelDrawShadows, isomot::GameManager::getInstance()->getDrawShadows () ? yeah : nope );
-        listOfOptions->setValueOf( labelFullscreen, gui::GuiManager::getInstance()->isAtFullScreen () ? yeah : nope );
+        listOfOptions->setValueOf( labelDrawBackground, iso::GameManager::getInstance().hasBackgroundPicture () ? yeah : nope );
+        listOfOptions->setValueOf( labelDrawShadows, iso::GameManager::getInstance().getDrawShadows () ? yeah : nope );
+        listOfOptions->setValueOf( labelFullscreen, gui::GuiManager::getInstance().isAtFullScreen () ? yeah : nope );
         // labelGraphicSet has no value but action
 
         std::string screenSize = languageManager->findLanguageStringForAlias( "screen-size" )->getText ();
-        labelScreenSize->setText( screenSize + " " + isomot::numberToString( isomot::ScreenWidth() ) + " x " + isomot::numberToString( isomot::ScreenHeight() ) );
+        labelScreenSize->setText( screenSize + " " + util::number2string( iso::ScreenWidth() ) + " x " + util::number2string( iso::ScreenHeight() ) );
 
         listOfOptions->redraw ();
 }

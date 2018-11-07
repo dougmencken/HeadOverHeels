@@ -13,6 +13,8 @@
 
 #include <string>
 
+#include "pointers.hpp"
+
 #include "WrappersAllegro.hpp"
 
 class Color ;
@@ -57,9 +59,7 @@ public:
 
         void colorize ( const Color & color ) ;
 
-        Picture * makeGrayscaleCopy () ;
-
-        Picture * makeColorizedCopy ( const Color & color ) ;
+        void toGrayscale () ;
 
         void saveAsPCX ( const std::string& path ) ;
 
@@ -67,11 +67,13 @@ public:
 
 private:
 
-        allegro::Pict * picture ;
+        justptr < allegro::Pict > picture ;
 
         std::string name ;
 
 } ;
+
+typedef safeptr < Picture > PicturePtr ;
 
 
 #endif

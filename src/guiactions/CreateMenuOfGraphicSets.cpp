@@ -36,7 +36,7 @@ void CreateMenuOfGraphicSets::doAction ()
 {
         const size_t positionOfSecondColumn = 18;
 
-        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this );
+        Screen* screen = GuiManager::getInstance().findOrCreateScreenForAction( this );
 
         if ( screen->countWidgets() == 0 )
         {
@@ -54,7 +54,7 @@ void CreateMenuOfGraphicSets::doAction ()
                         }
 
                         Label * theLabel = new Label( nameOfSetSpaced + i->first );
-                        if ( i->first != isomot::GameManager::getInstance()->getChosenGraphicSet() )
+                        if ( i->first != iso::GameManager::getInstance().getChosenGraphicSet() )
                         {
                                 theLabel->changeColor( "cyan" );
                         }
@@ -79,7 +79,7 @@ void CreateMenuOfGraphicSets::doAction ()
                 }
         }
 
-        gui::GuiManager::getInstance()->changeScreen( screen, true );
+        gui::GuiManager::getInstance().changeScreen( screen, true );
 
         allegro::emptyKeyboardBuffer();
 
@@ -100,15 +100,15 @@ void CreateMenuOfGraphicSets::doAction ()
                         {
                                 bool doneWithKey = false;
 
-                                if ( theKey == "Enter" )
+                                if ( theKey == "Enter" || theKey == "Space" )
                                 {
                                         std::string chosenSet = menuOfGraphicSets->getActiveOption()->getText().substr( positionOfSecondColumn ) ;
 
-                                        if ( chosenSet != isomot::GameManager::getInstance()->getChosenGraphicSet() )
+                                        if ( chosenSet != iso::GameManager::getInstance().getChosenGraphicSet() )
                                         { // new set is not the same as previous one
-                                                isomot::GameManager::getInstance()->setChosenGraphicSet( chosenSet.c_str () ) ;
+                                                iso::GameManager::getInstance().setChosenGraphicSet( chosenSet.c_str () ) ;
 
-                                                gui::GuiManager::getInstance()->refreshScreens ();
+                                                gui::GuiManager::getInstance().refreshScreens ();
 
                                                 std::list< Label * > everySet = menuOfGraphicSets->getEveryOption ();
                                                 for ( std::list< Label* >::iterator is = everySet.begin (); is != everySet.end (); ++is )

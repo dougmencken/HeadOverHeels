@@ -14,7 +14,7 @@
 #include "Behavior.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
 class Item ;
@@ -28,7 +28,7 @@ class Teleport : public Behavior
 
 public:
 
-        Teleport( Item * item, const std::string & behavior ) ;
+        Teleport( const ItemPtr & item, const std::string & behavior ) ;
 
         virtual ~Teleport( ) ;
 

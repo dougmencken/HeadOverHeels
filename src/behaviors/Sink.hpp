@@ -15,7 +15,7 @@
 #include "Timer.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
 class Item ;
@@ -29,7 +29,7 @@ class Sink : public Behavior
 
 public:
 
-        Sink( Item * item, const std::string & behavior ) ;
+        Sink( const ItemPtr & item, const std::string & behavior ) ;
 
         virtual ~Sink( ) ;
 
@@ -40,7 +40,7 @@ private:
        /**
         * Timer for speed of falling
         */
-        Timer * fallTimer ;
+        autouniqueptr < Timer > fallTimer ;
 
 };
 

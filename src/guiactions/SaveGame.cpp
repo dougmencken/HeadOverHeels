@@ -21,8 +21,8 @@ void SaveGame::doAction ()
 
         if ( slot > 0 )
         {
-                isomot::GameManager* gameManager = isomot::GameManager::getInstance();
-                gameManager->saveGame( isomot::homePath() + "savegame" + pathSeparator + "saved." + isomot::numberToString( slot ) );
+                iso::GameManager& gameManager = iso::GameManager::getInstance();
+                gameManager.saveGame( iso::homePath() + "savegame" + util::pathSeparator() + "saved." + util::number2string( slot ) );
         }
 
         ContinueGame * game = new ContinueGame( getWhereToDraw(), true );

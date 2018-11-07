@@ -2,7 +2,7 @@
 #include "Way.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
 Way::Way( unsigned int way )

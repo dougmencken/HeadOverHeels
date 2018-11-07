@@ -22,7 +22,7 @@ class PlaySound : public Action
 
 public:
 
-        PlaySound( const isomot::ActivityOfItem& what ) : Action( nilPointer ), whichSound( what ) { }
+        PlaySound( const iso::ActivityOfItem& what ) : Action( nilPointer ), whichSound( what ) { }
 
         virtual ~PlaySound( ) { }
 
@@ -32,13 +32,13 @@ protected:
 
         virtual void doAction ()
         {
-                isomot::SoundManager::getInstance()->stopEverySound (); //stop ( "gui", whichSound );
-                isomot::SoundManager::getInstance()->play ( "gui", whichSound, /* loop */ false );
+                iso::SoundManager::getInstance().stopEverySound (); //stop ( "gui", whichSound );
+                iso::SoundManager::getInstance().play ( "gui", whichSound, /* loop */ false );
         }
 
 private:
 
-        isomot::ActivityOfItem whichSound ;
+        iso::ActivityOfItem whichSound ;
 
 };
 

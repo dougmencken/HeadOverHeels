@@ -14,7 +14,7 @@
 #include <string>
 
 
-namespace isomot
+namespace iso
 {
 
 /**

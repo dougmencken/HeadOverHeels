@@ -30,7 +30,7 @@ Menu::Menu( )
 
 Menu::~Menu( )
 {
-        std::for_each( options.begin (), options.end (), isomot::DeleteIt() );
+        std::for_each( options.begin (), options.end (), iso::DeleteIt() );
         options.clear();
 }
 
@@ -38,14 +38,14 @@ Menu::~Menu( )
 {
         if ( beforeOption == nilPointer )
         {
-                smartptr< allegro::Pict > optionPict( allegro::Pict::fromPNGFile (
-                        isomot::pathToFile( isomot::sharePath() + "menu-option.png" )
+                autouniqueptr< allegro::Pict > optionPict( allegro::Pict::fromPNGFile (
+                        iso::pathToFile( iso::sharePath(), "menu-option.png" )
                 ) );
                 assert( optionPict->isNotNil() );
 
                 beforeOption = new Picture( optionPict->getW(), optionPict->getH() );
 
-                smartptr< Picture > blackOption( new Picture( *optionPict.get() ) );
+                autouniqueptr< Picture > blackOption( new Picture( *optionPict.get() ) );
                 blackOption->colorize( Color::blackColor() );
 
                 const unsigned int offsetOfTintX = 1;
@@ -65,14 +65,14 @@ Menu::~Menu( )
 
         if ( beforeChosenOptionMini == nilPointer )
         {
-                smartptr< allegro::Pict > chosenOptionMiniPict( allegro::Pict::fromPNGFile (
-                        isomot::pathToFile( isomot::sharePath() + "chosen-menu-option.png" )
+                autouniqueptr< allegro::Pict > chosenOptionMiniPict( allegro::Pict::fromPNGFile (
+                        iso::pathToFile( iso::sharePath(), "chosen-menu-option.png" )
                 ) );
                 assert( chosenOptionMiniPict->isNotNil() );
 
                 beforeChosenOptionMini = new Picture( chosenOptionMiniPict->getW(), chosenOptionMiniPict->getH() );
 
-                smartptr< Picture > blackChosenOptionMini( new Picture( *chosenOptionMiniPict.get() ) );
+                autouniqueptr< Picture > blackChosenOptionMini( new Picture( *chosenOptionMiniPict.get() ) );
                 blackChosenOptionMini->colorize( Color::blackColor() );
 
                 const unsigned int offsetOfTintX = 1;
@@ -133,8 +133,8 @@ void Menu::draw( const allegro::Pict& where )
 
         // update position of the whole menu to draw it centered
         int previousX = getX (); int previousY = getY ();
-        setX( previousX + ( ( isomot::ScreenWidth() - previousX ) >> 1 ) - ( getWidthOfMenu () >> 1 ) );
-        setY( previousY + ( ( isomot::ScreenHeight() - previousY ) >> 1 ) - ( getHeightOfMenu() >> 1 ) );
+        setX( previousX + ( ( iso::ScreenWidth() - previousX ) >> 1 ) - ( getWidthOfMenu () >> 1 ) );
+        setY( previousY + ( ( iso::ScreenHeight() - previousY ) >> 1 ) - ( getHeightOfMenu() >> 1 ) );
 
         int dx( Menu::beforeOption != nilPointer ? Menu::beforeOption->getWidth() : 0 );
         int dy( 0 );
@@ -167,14 +167,14 @@ void Menu::draw( const allegro::Pict& where )
 void Menu::redraw ()
 {
         if ( whereToDraw != nilPointer ) draw( whereToDraw->getAllegroPict() );
-        GuiManager::getInstance()->redraw();
+        GuiManager::getInstance().redraw();
 }
 
 void Menu::handleKey( const std::string& key )
 {
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "f" ) )
         {
-                gui::GuiManager::getInstance()->toggleFullScreenVideo ();
+                gui::GuiManager::getInstance().toggleFullScreenVideo ();
                 return;
         }
 

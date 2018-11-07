@@ -7,20 +7,18 @@
 #include "Room.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
-FinalBall::FinalBall( Item * item, const std::string & behavior ) :
-        Behavior( item, behavior )
-        , bubblesData( nilPointer )
+FinalBall::FinalBall( const ItemPtr & item, const std::string & behavior )
+        : Behavior( item, behavior )
+        , speedTimer( new Timer() )
 {
-        speedTimer = new Timer();
         speedTimer->go();
 }
 
 FinalBall::~FinalBall( )
 {
-        delete speedTimer;
 }
 
 bool FinalBall::update ()
@@ -42,7 +40,7 @@ bool FinalBall::update ()
                                 // move ball when there’s no collision
                                 if ( this->item->getMediator()->isStackOfCollisionsEmpty() )
                                 {
-                                        MoveKindOfActivity::getInstance()->move( this, &activity, false );
+                                        MoveKindOfActivity::getInstance().move( this, &activity, false );
                                 }
                                 else
                                 {
@@ -50,13 +48,12 @@ bool FinalBall::update ()
                                         isGone = true;
 
                                         // create bubbles at the same position
-                                        FreeItem * bubbles = new FreeItem (
-                                                bubblesData,
+                                        FreeItemPtr bubbles( new FreeItem (
+                                                item->getDataOfItem()->getItemDataManager()->findDataByLabel( "bubbles" ),
                                                 item->getX(), item->getY(), item->getZ(),
-                                                Way::Nowhere
-                                        );
+                                                Way::Nowhere ) );
 
-                                        bubbles->assignBehavior( "behavior of disappearance in time", nilPointer );
+                                        bubbles->setBehaviorOf( "behavior of disappearance in time" );
                                         bubbles->setCollisionDetector( false );
 
                                         item->getMediator()->getRoom()->addFreeItem( bubbles );
@@ -73,11 +70,6 @@ bool FinalBall::update ()
         }
 
         return isGone;
-}
-
-void FinalBall::setMoreData( void * data )
-{
-        this->bubblesData = reinterpret_cast< ItemData * >( data );
 }
 
 }

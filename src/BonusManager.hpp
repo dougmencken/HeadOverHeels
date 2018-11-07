@@ -11,23 +11,18 @@
 #ifndef BonusManager_hpp_
 #define BonusManager_hpp_
 
-#include <list>
 #include <map>
 #include <string>
 
 
-namespace isomot
+namespace iso
 {
-
-class BonusItem ;
-class BonusRoom ;
-
 
 /**
  * Manage the presence or absence of bonuses in rooms. Bonuses are elements
  * that provide lives and other powerups to players, in addition to the crowns
- * that are key elements of the game. When a bonus is taken from a particular room,
- * it wouldn’t appear again in the same game
+ * that are key elements of the game. Bonus may be absent in the room due to being
+ * picked up, when a bonus is taken from a particular room it wouldn’t appear again
  */
 
 class BonusManager
@@ -35,108 +30,33 @@ class BonusManager
 
 private:
 
-        BonusManager( ) ;
+        BonusManager( ) { }
 
 public:
 
-        virtual ~BonusManager( ) ;
+        virtual ~BonusManager( ) {  absentBonuses.clear() ;  }
 
-        static BonusManager * getInstance () ;
+        static BonusManager & getInstance () ;
 
-       /**
-        * Mark the given bonus as absent on game’s map
-        * @param roomFile room where this bonus was
-        * @param label label of bonus
-        */
-        void markBonusAsAbsent ( const std::string& roomFile, const std::string& label ) ;
+        void markBonusAsAbsent ( const std::string& room, const std::string& label ) ;
 
        /**
-        * Is a certain bonus still in this room
-        * @param roomFile room with bonus
-        * @param label label of bonus
+        * Is a certain bonus in this room absent
         */
-        bool isPresent ( const std::string& roomFile, const std::string& label ) ;
-
-        void parseAbsentBonuses ( const std::multimap < std::string /* room */, std::string /* bonus */ > & bonusesInRooms ) ;
+        bool isAbsent ( const std::string& room, const std::string& label ) ;
 
         void fillAbsentBonuses ( std::multimap < std::string /* room */, std::string /* bonus */ > & bonusesInRooms ) ;
 
        /**
-        * Every bonus in every room is not absent after that
+        * Each bonus in every room is not absent after that
         */
-        void reset () ;
+        void reset () {  absentBonuses.clear() ;  }
 
 private:
+
+        std::multimap < std::string /* room */, std::string /* bonus */ > absentBonuses ;
 
         static BonusManager * instance ;
-
-       /**
-        * List of rooms with taken bonuses
-        */
-        std::list < BonusRoom > bonusRooms ;
-
-};
-
-
-/**
- * Bonus may be absent in the room due to being picked up
- * BonusRoom helps to avoid two equal bonuses in the same room
- */
-
-class BonusRoom
-{
-
-public:
-
-       /**
-        * @param name Nombre del archivo de la sala
-        */
-        BonusRoom( const std::string& name ) ;
-
-        virtual ~BonusRoom( ) ;
-
-       /**
-        * Almacena un bonus para no volverse a mostrar nunca en esta sala
-        * @param label Etiqueta del bonus
-        */
-        void markBonusAsAbsent ( const std::string& label ) ;
-
-       /**
-        * Indica si un bonus determinado sigue estando en esta sala
-        * @param label Etiqueta del bonus
-        */
-        bool isPresent ( const std::string& label ) ;
-
-       /**
-        * Operador de igualdad
-        * @return true si el nombre de archivo de la sala de ambos elementos es igual
-        */
-        bool operator== ( const std::string & fileName ) ;
-
-private:
-
-       /**
-        * Nombre del archivo de la sala que hace las veces de identificador
-        */
-        std::string nameOfFile ;
-
-       /**
-        * Bonuses already taken in this room
-        */
-        std::list < std::string > bonusItems ;
-
-public:
-
-       /**
-        * Nombre del archivo de la sala que hace las veces de identificador
-        */
-        std::string getNameOfFile () const {  return this->nameOfFile ;  }
-
-       /**
-        * Bonus que no deben aparecer en la sala
-        * @return Una referencia a la lista
-        */
-        std::list < std::string >& getBonusItems () {  return this->bonusItems ;  }
 
 };
 

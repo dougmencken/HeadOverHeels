@@ -52,8 +52,8 @@ void MenuWithTwoColumns::draw( const allegro::Pict& where )
 
         // update position of the whole menu to draw it centered
         int previousX = getX (); int previousY = getY ();
-        setX( previousX + ( ( isomot::ScreenWidth() - previousX ) >> 1 ) - ( getWidthOfMenu () >> 1 ) );
-        setY( previousY + ( ( isomot::ScreenHeight() - previousY ) >> 1 ) - ( getHeightOfMenu() >> 1 ) );
+        setX( previousX + ( ( iso::ScreenWidth() - previousX ) >> 1 ) - ( getWidthOfMenu () >> 1 ) );
+        setY( previousY + ( ( iso::ScreenHeight() - previousY ) >> 1 ) - ( getHeightOfMenu() >> 1 ) );
 
         int dx( widthOfOption );
         int dy( 0 );

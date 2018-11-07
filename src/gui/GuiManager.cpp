@@ -22,12 +22,12 @@ using gui::GuiManager;
 using gui::Screen;
 using gui::Font;
 using gui::LanguageManager;
-using isomot::GameManager;
-using isomot::InputManager;
-using isomot::SoundManager;
+using iso::GameManager;
+using iso::InputManager;
+using iso::SoundManager;
 
 
-GuiManager* GuiManager::instance = nilPointer ;
+GuiManager * GuiManager::instance = nilPointer ;
 
 GuiManager::GuiManager( ) :
         activeScreen( nilPointer ),
@@ -37,8 +37,6 @@ GuiManager::GuiManager( ) :
         atFullScreen( false ),
         preferencesRead( false )
 {
-        initAllegro();
-
         std::string nameOfWindow = "Head over Heels";
 
 #ifdef PACKAGE_VERSION
@@ -81,52 +79,50 @@ GuiManager::GuiManager( ) :
         addFont( new Font( "magenta.big", Color::magentaColor(), true ) );
 
         // create image to draw interface
-        this->picture = new Picture( isomot::ScreenWidth(), isomot::ScreenHeight() );
+        this->picture = new Picture( iso::ScreenWidth(), iso::ScreenHeight() );
 
         // initialize sound manager
-        SoundManager::getInstance()->readSounds( "sounds.xml" );
+        SoundManager::getInstance().readSounds( "sounds.xml" );
 }
 
 GuiManager::~GuiManager( )
 {
         freeScreens () ;
 
-        std::for_each( this->fonts.begin (), this->fonts.end (), isomot::DeleteIt() );
+        std::for_each( this->fonts.begin (), this->fonts.end (), iso::DeleteIt() );
         this->fonts.clear();
 
         delete this->languageManager;
 }
 
-GuiManager* GuiManager::getInstance ()
+GuiManager& GuiManager::getInstance ()
 {
         if ( instance == nilPointer )
-        {
-                instance = new GuiManager();
-                instance->readPreferences ();
+                instance = new GuiManager () ;
 
-                Screen::refreshBackground ();
-        }
-
-        return instance;
+        return *instance ;
 }
 
 void GuiManager::readPreferences ()
 {
         if ( ! preferencesRead )
         {
-                preferencesRead = GameManager::readPreferences( isomot::homePath() + "preferences.xml" ) ;
+                preferencesRead = GameManager::readPreferences( iso::homePath() + "preferences.xml" ) ;
 
-                if ( ! preferencesRead && instance != nilPointer )
+                if ( ! preferencesRead )
                 {
-                        instance->setLanguage( "en_US" );
+                        GuiManager::getInstance().setLanguage( "en_US" );
+                        preferencesRead = true ;
                 }
         }
 }
 
 void GuiManager::begin ()
 {
+        readPreferences () ;
+
         // show list of languages
-        smartptr< CreateLanguageMenu > languageMenu( new CreateLanguageMenu( this->picture ) );
+        autouniqueptr< CreateLanguageMenu > languageMenu( new CreateLanguageMenu( this->picture ) );
         languageMenu->doIt ();
 
         // draw user interface and handle keys
@@ -188,7 +184,11 @@ void GuiManager::changeScreen( Screen* newScreen, bool dive )
 
         if ( listOfScreens.find( newScreen->getActionOfScreen()->getNameOfAction() ) != listOfScreens.end () )
         {
-                Screen::barWipeHorizontally( this->activeScreen, newScreen, dive );
+                if ( activeScreen == nilPointer || activeScreen->getActionOfScreen() == nilPointer ||
+                        activeScreen->getActionOfScreen()->getNameOfAction() != "CreatePlanetsScreen" )
+                {
+                        Screen::barWipeHorizontally( this->activeScreen, newScreen, dive );
+                }
                 setActiveScreen( newScreen );
                 redraw() ;
         }
@@ -251,42 +251,7 @@ void GuiManager::redraw()
 
 std::string GuiManager::getPathToPicturesOfGui ()
 {
-        return isomot::sharePath() + GameManager::getInstance()->getChosenGraphicSet() + pathSeparator ;
-}
-
-void GuiManager::initAllegro()
-{
-        allegro::init ();
-
-        // fill list of screen’s sizes
-
-        sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 640, 480 ) );
-
-        /*  if ( allegro::switchToFullscreenVideo( 800, 600 ) )
-                sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 800, 600 ) ); */
-
-        sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 800, 600 ) );
-        sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 1024, 576 ) );
-        sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 1024, 600 ) );
-        sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 1024, 768 ) );
-        sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 1280, 720 ) );
-        sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 1280, 1024 ) );
-
-        // switch to chosen size of screen
-
-        bool switched = false;
-
-        if ( this->atFullScreen )
-                switched = allegro::switchToFullscreenVideo( isomot::ScreenWidth(), isomot::ScreenHeight() ) ;
-        else
-                switched = allegro::switchToWindowedVideo( isomot::ScreenWidth(), isomot::ScreenHeight() ) ;
-
-        if ( ! switched ) toggleFullScreenVideo ();
-
-        allegro::Pict::theScreen().clearToColor( Color::blackColor().toAllegroColor() ) ;
-
-        // initialize handler of keyboard events
-        allegro::initKeyboardHandler ();
+        return iso::sharePath() + GameManager::getInstance().getChosenGraphicSet() ;
 }
 
 bool GuiManager::isAtFullScreen ()
@@ -313,8 +278,13 @@ void GuiManager::toggleFullScreenVideo ()
         }
         else
         {
-                if ( this->atFullScreen ) allegro::switchToFullscreenVideo();
-                else    allegro::switchToWindowedVideo();
+                iso::SoundManager::getInstance().stopEverySound ();
+                iso::SoundManager::getInstance().play( "gui", iso::Activity::Mistake, /* loop */ false );
+
+                if ( this->atFullScreen )
+                        allegro::switchToFullscreenVideo();
+                else
+                        allegro::switchToWindowedVideo();
         }
 }
 
@@ -327,8 +297,8 @@ void GuiManager::assignLanguage( const std::string& language )
         }
 
         fprintf( stdout, "language \"%s\"\n", language.c_str () );
-        std::string pathToTextInGameData = isomot::sharePath() + "text" + pathSeparator ;
-        this->languageManager = new LanguageManager( pathToTextInGameData + language + ".xml", pathToTextInGameData + "en_US.xml" );
+        std::string pathToText = iso::sharePath() + "text" + util::pathSeparator() ;
+        this->languageManager = new LanguageManager( pathToText + language + ".xml", pathToText + "en_US.xml" );
 }
 
 Font* GuiManager::findFontByFamilyAndColor ( const std::string& family, const std::string& color )

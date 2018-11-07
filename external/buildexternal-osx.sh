@@ -11,7 +11,7 @@ fi
 
 echo
 echo "    zlib"
-echo "    a Massively Spiffy Yet Delicately Unobtrusive Compression Library"
+echo "    Massively Spiffy Yet Delicately Unobtrusive Compression Library"
 echo
 
 zlib_version="1.2.11"
@@ -39,13 +39,19 @@ fi
 
 echo
 echo "    libpng"
-echo "    a Portable Network Graphics reference library which supports almost all PNG features"
+echo "    Portable Network Graphics reference library which supports almost all PNG features"
 echo
 
 libpng_version="1.6.35"
 
 cd "${pathToExternal}"/libpng
-[ -d libpng-"$libpng_version" ] || tar xzf libpng-"$libpng_version".tar.gz
+if [ ! -d libpng-"$libpng_version" ]; then
+    tar xzf libpng-"$libpng_version".tar.gz
+    cd libpng-"$libpng_version"
+    patch -p1 < ../no-known-incorrect-warnings.patch
+    cd ..
+fi
+
 cd libpng-"$libpng_version"
 
 if [ ! -f ./okay ]; then
@@ -66,7 +72,7 @@ fi
 
 echo
 echo "    ogg-vorbis ( libogg, libvorbis, vorbis-tools )"
-echo "    a completely open, patent-free audio encoding and streaming technology"
+echo "    completely open, patent-free audio encoding and streaming technology"
 echo
 
 echo "    libogg"
@@ -151,7 +157,7 @@ fi
 
 echo
 echo "    tinyxml2"
-echo "    a simple, small, C++ XML parser that can be easily integrated into other programs"
+echo "    simple, small, C++ XML parser that can be easily integrated into other programs"
 echo
 
 tinyxml2_version="6.2.0"
@@ -205,7 +211,7 @@ fi
 
 echo
 echo "    allegro 4"
-echo "    a cross-platform library for video game and multimedia programming"
+echo "    cross-platform library for video game and multimedia programming"
 echo
 
 allegro4_version="4.4.2"
@@ -264,7 +270,7 @@ fi
 
 echo
 echo "    allegro 5"
-echo "    a cross-platform library for video game and multimedia programming"
+echo "    cross-platform library for video game and multimedia programming"
 echo
 
 allegro5_version="5.0.11"

@@ -22,17 +22,17 @@ CreateLanguageMenu::CreateLanguageMenu( Picture * picture )
         : Action( picture )
 {
         // read list of languages available for this game
-        this->parse( isomot::sharePath() + "text" + pathSeparator + "language.xml" );
+        parse( iso::sharePath() + "text" + util::pathSeparator() + "language.xml" );
 }
 
 CreateLanguageMenu::~CreateLanguageMenu( )
 {
-        this->languages.clear();
+        languages.clear();
 }
 
 void CreateLanguageMenu::doAction ()
 {
-        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this );
+        Screen* screen = GuiManager::getInstance().findOrCreateScreenForAction( this );
         if ( screen->countWidgets() > 0 )
         {
                 screen->freeWidgets();
@@ -40,7 +40,7 @@ void CreateLanguageMenu::doAction ()
 
         screen->setEscapeAction( new gui::CreateMainMenu( getWhereToDraw() ) );
 
-        const unsigned int screenWidth = isomot::ScreenWidth();
+        const unsigned int screenWidth = iso::ScreenWidth();
         const unsigned int space = ( screenWidth / 20 ) - 10;
 
         Label* Head = new Label( "Head", "big", "yellow" );
@@ -62,7 +62,7 @@ void CreateLanguageMenu::doAction ()
 
         // presenta los idiomas disponibles
 
-        std::string language = GuiManager::getInstance()->getLanguage();
+        std::string language = GuiManager::getInstance().getLanguage();
 
         MenuWithTwoColumns * menu = new MenuWithTwoColumns( /* space between columns */ ( screenWidth >> 3 ) - 20 );
         menu->setVerticalOffset( 50 ); // adjust for header over heelser
@@ -84,7 +84,7 @@ void CreateLanguageMenu::doAction ()
         screen->setKeyHandler( menu );
 
         Screen::randomPixelFadeIn( Color::blackColor(), screen );
-        GuiManager::getInstance()->changeScreen( screen, true );
+        GuiManager::getInstance().changeScreen( screen, true );
 }
 
 void CreateLanguageMenu::parse( const std::string& fileName )

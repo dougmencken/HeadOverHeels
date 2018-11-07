@@ -1,5 +1,5 @@
 
-#include "OneWay.hpp"
+#include "ThereAndBack.hpp"
 #include "Item.hpp"
 #include "ItemData.hpp"
 #include "FreeItem.hpp"
@@ -11,35 +11,27 @@
 #include "SoundManager.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
-OneWay::OneWay( Item * item, const std::string & behavior, bool flying ) :
+ThereAndBack::ThereAndBack( const ItemPtr & item, const std::string & behavior, bool flying ) :
         Behavior( item, behavior )
         , isFlying( flying )
-        , speedTimer( nilPointer )
-        , fallTimer( nilPointer )
+        , speedTimer( new Timer() )
+        , fallTimer( new Timer() )
 {
-        speedTimer = new Timer();
         speedTimer->go();
-
-        if ( ! flying )
-        {
-                fallTimer = new Timer();
-                fallTimer->go();
-        }
+        if ( ! flying ) fallTimer->go();
 }
 
-OneWay::~OneWay()
+ThereAndBack::~ThereAndBack()
 {
-        delete speedTimer ;
-        delete fallTimer ;
 }
 
-bool OneWay::update ()
+bool ThereAndBack::update ()
 {
         bool vanish = false;
-        FreeItem * freeItem = dynamic_cast< FreeItem * >( this->item );
+        FreeItem& freeItem = dynamic_cast< FreeItem& >( * this->item );
 
         switch ( activity )
         {
@@ -51,23 +43,23 @@ bool OneWay::update ()
                 case Activity::MoveSouth:
                 case Activity::MoveEast:
                 case Activity::MoveWest:
-                        if ( ! freeItem->isFrozen() )
+                        if ( ! freeItem.isFrozen() )
                         {
-                                if ( speedTimer->getValue() > freeItem->getSpeed() )
+                                if ( speedTimer->getValue() > freeItem.getSpeed() )
                                 {
                                         // move it
-                                        if ( ! MoveKindOfActivity::getInstance()->move( this, &activity, true ) )
+                                        if ( ! MoveKindOfActivity::getInstance().move( this, &activity, true ) )
                                         {
                                                 turnRound();
 
                                                 // play sound of colliding
-                                                SoundManager::getInstance()->play( freeItem->getLabel(), Activity::Collision );
+                                                SoundManager::getInstance().play( freeItem.getLabel(), Activity::Collision );
                                         }
 
                                         speedTimer->reset();
                                 }
 
-                                freeItem->animate();
+                                freeItem.animate();
                         }
                         break;
 
@@ -82,15 +74,15 @@ bool OneWay::update ()
                         if ( ! this->isFlying )
                         {
                                 // emit sound of displacing
-                                SoundManager::getInstance()->play( freeItem->getLabel(), activity );
+                                SoundManager::getInstance().play( freeItem.getLabel(), activity );
 
                                 // displace this item by other one
-                                DisplaceKindOfActivity::getInstance()->displace( this, &activity, true );
+                                DisplaceKindOfActivity::getInstance().displace( this, &activity, true );
 
                                 activity = Activity::Wait;
 
                                 // preserve inactivity for frozen item
-                                if ( freeItem->isFrozen() )
+                                if ( freeItem.isFrozen() )
                                         activity = Activity::Freeze;
                         }
                         else
@@ -103,18 +95,18 @@ bool OneWay::update ()
                         if ( ! this->isFlying )
                         {
                                 // look for reaching floor in a room without floor
-                                if ( freeItem->getZ() == 0 && freeItem->getMediator()->getRoom()->getKindOfFloor() == "none" )
+                                if ( freeItem.getZ() == 0 && ! freeItem.getMediator()->getRoom()->hasFloor() )
                                 {
                                         // item disappears
                                         vanish = true;
                                 }
                                 // is it time to fall
-                                else if ( fallTimer->getValue() > freeItem->getWeight() )
+                                else if ( fallTimer->getValue() > freeItem.getWeight() )
                                 {
-                                        if ( ! FallKindOfActivity::getInstance()->fall( this ) )
+                                        if ( ! FallKindOfActivity::getInstance().fall( this ) )
                                         {
                                                 // emit sound of falling down
-                                                SoundManager::getInstance()->play( freeItem->getLabel(), activity );
+                                                SoundManager::getInstance().play( freeItem.getLabel(), activity );
                                                 activity = Activity::Wait;
                                         }
 
@@ -128,11 +120,11 @@ bool OneWay::update ()
                         break;
 
                 case Activity::Freeze:
-                        freeItem->setFrozen( true );
+                        freeItem.setFrozen( true );
                         break;
 
                 case Activity::WakeUp:
-                        freeItem->setFrozen( false );
+                        freeItem.setFrozen( false );
                         activity = Activity::Wait;
                         break;
 
@@ -143,7 +135,7 @@ bool OneWay::update ()
         return vanish;
 }
 
-void OneWay::letsMove()
+void ThereAndBack::letsMove()
 {
         switch ( this->item->getOrientation().getIntegerOfWay () )
         {
@@ -168,7 +160,7 @@ void OneWay::letsMove()
         }
 }
 
-void OneWay::turnRound()
+void ThereAndBack::turnRound()
 {
         switch ( this->item->getOrientation().getIntegerOfWay () )
         {

@@ -1,6 +1,7 @@
 
 #include "CreateMainMenu.hpp"
 #include "GuiManager.hpp"
+#include "GameManager.hpp"
 #include "LanguageManager.hpp"
 #include "SoundManager.hpp"
 #include "LanguageText.hpp"
@@ -17,7 +18,6 @@
 #include "ExitApplication.hpp"
 
 using gui::CreateMainMenu;
-using isomot::SoundManager;
 
 
 CreateMainMenu::CreateMainMenu( Picture * picture ) :
@@ -28,14 +28,14 @@ CreateMainMenu::CreateMainMenu( Picture * picture ) :
 
 void CreateMainMenu::doAction ()
 {
-        SoundManager::getInstance()->playOgg( "music/MainTheme.ogg", /* loop */ true );
+        iso::SoundManager::getInstance().playOgg( "music/MainTheme.ogg", /* loop */ true );
 
-        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this );
+        Screen* screen = GuiManager::getInstance().findOrCreateScreenForAction( this );
         if ( screen->countWidgets() == 0 )
         {
                 screen->placeHeadAndHeels( /* icons */ true, /* copyrights */ true );
 
-                LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
+                LanguageManager* languageManager = GuiManager::getInstance().getLanguageManager();
 
                 // Las opciones del menú
 
@@ -70,5 +70,5 @@ void CreateMainMenu::doAction ()
                 screen->setKeyHandler( menu );
         }
 
-        GuiManager::getInstance()->changeScreen( screen, false );
+        GuiManager::getInstance().changeScreen( screen, false );
 }

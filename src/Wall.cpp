@@ -5,7 +5,7 @@
 #include <cassert>
 
 
-namespace isomot
+namespace iso
 {
 
 Wall::Wall( bool trueXfalseY, int index, Picture* image )
@@ -36,13 +36,17 @@ void Wall::calculateOffset()
 
         this->offset.second = ( this->position + 1 ) * tileSize - this->image->getHeight() - 1 + mediator->getRoom()->getY0();
 
-        if ( isOnX() && ( mediator->getRoom()->hasDoorAt( "east" ) || mediator->getRoom()->getKindOfFloor() == "none" ) )
+        if ( isOnX() && ( mediator->getRoom()->hasDoorAt( "east" ) ||
+                          mediator->getRoom()->hasDoorAt( "eastnorth" ) || mediator->getRoom()->hasDoorAt( "eastsouth" ) ||
+                          ! mediator->getRoom()->hasFloor() ) )
         {
                 this->offset.first -= ( tileSize << 1 );
                 this->offset.second += tileSize;
         }
 
-        if ( isOnY() && ( mediator->getRoom()->hasDoorAt( "north" ) || mediator->getRoom()->getKindOfFloor() == "none" ) )
+        if ( isOnY() && ( mediator->getRoom()->hasDoorAt( "north" ) ||
+                          mediator->getRoom()->hasDoorAt( "northeast" ) || mediator->getRoom()->hasDoorAt( "northwest" ) ||
+                          ! mediator->getRoom()->hasFloor() ) )
         {
                 this->offset.first += ( tileSize << 1 );
                 this->offset.second += tileSize;

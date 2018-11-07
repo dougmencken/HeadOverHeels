@@ -22,7 +22,7 @@
 #include "Drawable.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
 class ItemData ;
@@ -44,7 +44,7 @@ public:
         * @param z Position on Z, or how far is floor
         * @param way Initial orientation of item
         */
-        FreeItem( ItemData* itemData, int x, int y, int z, const Way& way ) ;
+        FreeItem( const ItemData* itemData, int x, int y, int z, const Way& way ) ;
 
        /**
         * Copy constructor
@@ -55,6 +55,28 @@ public:
 
         virtual std::string whichKindOfItem () const {  return "free item" ;  }
 
+       /**
+        * Used for sorting free items in container
+        */
+        virtual bool operator< ( const FreeItem& item ) const
+        {
+                return ( Item::operator< ( item ) ) &&
+                        ( getX() < item.getX() + static_cast< int >( item.getWidthX() ) ) &&
+                        ( getY() - static_cast< int >( getWidthY() ) < item.getY() ) ;
+        }
+
+        int getOriginalCellX () const {  return originalCellX ;  }
+
+        int getOriginalCellY () const {  return originalCellY ;  }
+
+        int getOriginalCellZ () const {  return originalCellZ ;  }
+
+        void setOriginalCellX ( int x ) {  originalCellX = x ;  }
+
+        void setOriginalCellY ( int y ) {  originalCellY = y ;  }
+
+        void setOriginalCellZ ( int z ) {  originalCellZ = z ;  }
+
         virtual bool addToPosition ( int x, int y, int z ) ;
 
         void draw ( const allegro::Pict& where ) ;
@@ -64,12 +86,12 @@ public:
         /**
          * Change graphics of item
          */
-        virtual void changeImage ( Picture* newImage ) ;
+        virtual void changeImage ( const Picture* newImage ) ;
 
         /**
          * Change graphics of item’s shadow
          */
-        virtual void changeShadow ( Picture* newShadow ) ;
+        virtual void changeShadow ( const Picture* newShadow ) ;
 
         /**
          * Request to shade item
@@ -96,13 +118,6 @@ public:
         unsigned char getTransparency () const {  return transparency ;  }
 
         /**
-         * Set item’s ability to detect collisions
-         */
-        void setCollisionDetector ( bool collisionDetector ) {  this->collisionDetector = collisionDetector ;  }
-
-        bool isCollisionDetector () const {  return collisionDetector ;  }
-
-        /**
          * Set item’s inactivity
          */
         void setFrozen ( bool frozen ) {  this->frozen = frozen ;  }
@@ -116,11 +131,6 @@ public:
         bool isPartOfDoor () const {  return partOfDoor ;  }
 
         void setPartOfDoor ( bool isPart ) {  partOfDoor = isPart ;  }
-
-        /**
-         * Mask image of item behind image of another item
-         */
-        static void maskItemBehindItem ( FreeItem * itemToMask, Item * upwardItem ) ;
 
 protected:
 
@@ -140,17 +150,18 @@ protected:
 
         bool isUnderSomeDoor () ;
 
+        int originalCellX ;
+
+        int originalCellY ;
+
+        int originalCellZ ;
+
         tribool wantMask ;
 
         /**
          * Degree of item’s transparency in percentage 0 to 100
          */
         unsigned char transparency ;
-
-        /**
-         * Whether this item detects collisions
-         */
-        bool collisionDetector ;
 
         /**
          * Whether item is inactive
@@ -165,6 +176,8 @@ protected:
         bool partOfDoor ;
 
 };
+
+typedef safeptr < FreeItem > FreeItemPtr ;
 
 }
 

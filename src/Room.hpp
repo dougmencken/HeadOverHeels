@@ -22,18 +22,19 @@
 #include "Picture.hpp"
 #include "Drawable.hpp"
 #include "Mediated.hpp"
+#include "RoomConnections.hpp"
+#include "Item.hpp"
+#include "GridItem.hpp"
+#include "FreeItem.hpp"
+#include "PlayerItem.hpp"
 #include "Door.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
 class FloorTile ;
 class Wall ;
-class Item ;
-class GridItem ;
-class FreeItem ;
-class PlayerItem ;
 class Camera ;
 class ItemDataManager ;
 class TripleRoomInitialPoint ;
@@ -54,11 +55,17 @@ public:
         * @param xTiles How many tiles on X
         * @param yTiles How many tiles on Y
         * @param tileSize Length of side of single tile
-        * @param floor Kind of floor
+        * @param floorKind Kind of floor
         */
-        Room( const std::string& roomFile, const std::string& scenery, int xTiles, int yTiles, int tileSize, const std::string& floor ) ;
+        Room( const std::string& roomFile, const std::string& scenery, unsigned int xTiles, unsigned int yTiles, unsigned int tileSize, const std::string& floorKind ) ;
 
         virtual ~Room( ) ;
+
+        std::string whichRoom () const ;
+
+        bool isSingleRoom () const {  return getTilesX() <= maxTilesOfSingleRoom && getTilesY() <= maxTilesOfSingleRoom ;  }
+
+        bool saveAsXML ( const std::string& file ) ;
 
         void addFloor ( FloorTile * floorTile ) ;
 
@@ -68,19 +75,19 @@ public:
 
         void updateWallsWithDoors () ;
 
-        void addGridItem ( GridItem * gridItem ) ;
+        void addGridItem ( const GridItemPtr & gridItem ) ;
 
-        void addFreeItem ( FreeItem * freeItem ) ;
+        void addFreeItem ( const FreeItemPtr & freeItem ) ;
 
-        bool addPlayerToRoom ( PlayerItem * playerItem, bool playerEntersRoom ) ;
+        bool addPlayerToRoom ( const PlayerItemPtr & playerItem, bool playerEntersRoom ) ;
 
         void removeFloor ( FloorTile * floorTile ) ;
 
-        void removeGridItem ( GridItem * gridItem ) ;
+        void removeGridItemByUniqueName ( const std::string & uniqueName ) ;
 
-        void removeFreeItem ( FreeItem * freeItem ) ;
+        void removeFreeItemByUniqueName ( const std::string & uniqueName ) ;
 
-        bool removePlayerFromRoom ( PlayerItem * playerItem, bool playerExitsRoom ) ;
+        bool removePlayerFromRoom ( const PlayerItem & playerItem, bool playerExitsRoom ) ;
 
         /**
          * Removes any bar in this room
@@ -95,7 +102,7 @@ public:
 
         void draw ( const allegro::Pict& where ) ;
 
-        void drawRoom () {  draw( whereToDraw->getAllegroPict() ) ;  }
+        void drawRoom () {  if ( whereToDraw != nilPointer ) draw( whereToDraw->getAllegroPict() ) ;  }
 
        /**
         * Calculate boundaries of room from its size and its doors
@@ -118,9 +125,9 @@ public:
         */
         void deactivate () ;
 
-        bool swapCharactersInRoom ( ItemDataManager * itemDataManager ) ;
+        bool swapCharactersInRoom () ;
 
-        bool continueWithAlivePlayer ( ) ;
+        bool continueWithAlivePlayer () ;
 
        /**
         * Calculate coordinates at which player enters room
@@ -141,36 +148,144 @@ public:
                                                 int northBound, int eastBound, int southBound, int westBound,
                                                 int * x, int * y, int * z ) ;
 
-       /**
-        * Almacena una posición inicial de la cámara en una sala triple
-        * @param x Diferencia que se debe aplicar a la coordenada de pantalla X para centrar la cámara
-        * @param y Diferencia que se debe aplicar a la coordenada de pantalla Y para centrar la cámara
-        */
-        void addTripleRoomInitialPoint ( const Way& way, int x, int y ) ;
+        void setVisited ( bool visited ) {  this->visited = visited ;  }
+
+        bool isVisited () const {  return visited ;  }
+
+        const RoomConnections * getConnections () const {  return connections ;  }
+
+        void setConnections ( const RoomConnections * links ) {  connections = links ;  }
+
+        unsigned short getOpacityOfShadows () const {  return shadingOpacity ;  }
+
+        std::vector < PlayerItemPtr > getPlayersYetInRoom () const ;
+
+        std::vector < PlayerItemPtr > getPlayersWhoEnteredRoom () const ;
+
+        bool isAnyPlayerStillInRoom () const ;
+
+        std::string getNameOfFileWithDataAboutRoom () const {  return nameOfFileWithDataAboutRoom ;  }
 
        /**
-        * Almacena los límites para el desplazamiento de la cámara en una sala triple
+        * Identificador textual del escenario al que pertenece la sala
+        * @return jail, blacktooth, marketplace, themoon, egyptus, penitentiary, safary o byblos
+        */
+        std::string getScenery () const {  return this->scenery ;  }
+
+       /**
+        * Screen coordinate X of room’s origin
+        */
+        int getX0 () const {  return coordinates.first ;  }
+
+       /**
+        * Screen coordinate Y of room’s origin
+        */
+        int getY0 () const {  return coordinates.second ;  }
+
+        unsigned int getTilesX () const {  return howManyTiles.first ;  }
+
+        unsigned int getTilesY () const {  return howManyTiles.second ;  }
+
+       /**
+        * Returns length of side of single tile in isometric units
+        */
+        unsigned int getSizeOfOneTile () const {  return tileSize ;  }
+
+       /**
+        * @return kind of floor which may be "plain", "mortal", or absent "none"
+        */
+        std::string getKindOfFloor () const {  return kindOfFloor ;  }
+
+        bool hasFloor () const {  return kindOfFloor != "absent" ;  }
+
+        bool isActive () const {  return active ;  }
+
+        unsigned short getLimitAt ( const std::string& way ) {  return bounds[ way ] ;  }
+
+        const std::vector < std::vector < GridItemPtr > > & getGridItems () const {  return gridItems ;  }
+
+        const std::vector < FreeItemPtr > & getFreeItems () const {  return freeItems ;  }
+
+        Door * getDoorAt ( const std::string& way ) const
+        {
+                std::map< std::string, Door * >::const_iterator it = doors.find( way );
+                return it != doors.end() ? it->second : nilPointer ;
+        }
+
+        bool hasDoorAt ( const std::string& way ) const {  return ( getDoorAt( way ) != nilPointer ) ;  }
+
+        const std::map < std::string, Door * >& getDoors () const {  return doors ;  }
+
+        Camera * getCamera () const {  return camera ;  }
+
+        Picture * getWhereToDraw () {  return whereToDraw ;  }
+
+        int getXCenterForItem ( const Item & item ) {  return getXCenterForItem( item.getDataOfItem() ) ;  }
+
+        int getXCenterForItem ( const ItemData * data ) ;
+
+        int getYCenterForItem ( const Item & item ) {  return getYCenterForItem( item.getDataOfItem() ) ;  }
+
+        int getYCenterForItem ( const ItemData * data ) ;
+
+       /**
+        * Limit for movement of camera along X in triple room
+        */
+        std::pair < int, int > getTripleRoomBoundX () const {  return this->tripleRoomBoundX ;  }
+
+       /**
+        * Limit for movement of camera along Y in triple room
+        */
+        std::pair < int, int > getTripleRoomBoundY () const {  return this->tripleRoomBoundY ;  }
+
+       /**
+        * Sets limits for movement of camera in triple room
         */
         void assignTripleRoomBounds ( int minX, int maxX, int minY, int maxY ) ;
 
        /**
-        * Busca una posición inicial de la cámara en una sala triple
+        * Sets initial position of camera in triple room
+        * @param x Difference to X screen coordinate to center camera
+        * @param y Difference to Y screen coordinate to center camera
         */
-        TripleRoomInitialPoint * findInitialPointOfEntryToTripleRoom ( const Way& way ) ;
+        void addTripleRoomInitialPoint ( const Way& way, int x, int y ) ;
+
+       /**
+        * Look for initial position of camera in triple room
+        */
+        TripleRoomInitialPoint findInitialPointOfEntryToTripleRoom ( const Way& way ) ;
+
+        static const unsigned int maxTilesOfSingleRoom = 10 ;
 
 protected:
 
         void copyAnotherCharacterAsEntered ( const std::string& name ) ;
 
-        void dumpItemInsideThisRoom ( const Item* item ) ;
+        void dumpItemInsideThisRoom ( const Item & item ) ;
+
+        void addGridItemToContainer ( const GridItemPtr & gridItem ) ;
+
+        void addFreeItemToContainer ( const FreeItemPtr & freeItem ) ;
 
 private:
 
+        ///Room( const Room & /* toCopy */ ) : Drawable( ), Mediated( )  { }
+
         friend class Mediator ;
 
-        std::list < PlayerItem * > playersYetInRoom ;
+        /**
+         * Is this room already visited by any of characters
+         */
+        bool visited ;
 
-        std::list < const PlayerItem * > playersWhoEnteredRoom ;
+        /*
+         * Connections of room with another rooms
+         */
+        const RoomConnections * connections ;
+
+        std::vector < PlayerItemPtr > playersYetInRoom ;
+
+        std::vector < PlayerItemPtr > playersWhoEnteredRoom ;
 
         /**
          * Pairs label of item with next number for such item,
@@ -187,14 +302,11 @@ private:
         std::string scenery ;
 
        /**
-        * Coordinates X and Y where the origin of room is
+        * Where the origin of room is
         */
-        std::pair < int, int > coordinates ;
+        std::pair < int /* x */, int /* y */ > coordinates ;
 
-       /**
-        * Number of room’s tiles both in X-way and in Y-way
-        */
-        std::pair < unsigned int, unsigned int > numberOfTiles ;
+        std::pair < unsigned int /* tilesX */, unsigned int /* tilesY */ > howManyTiles ;
 
        /**
         * Length of tile’s side
@@ -209,14 +321,9 @@ private:
         bool active ;
 
        /**
-        * Way by which player leaves room
-        */
-        std::string wayOfExit ;
-
-       /**
         * Indices in sequence of how columns of grid items are drawn, diagonally from right to left
         */
-        int * drawSequence ;
+        unsigned int * drawSequence ;
 
        /**
         * Degree of shadows’ opacity
@@ -224,20 +331,22 @@ private:
         */
         unsigned short shadingOpacity ;
 
-       /**
-        * El suelo de la sala formado por losetas
-        */
-        std::vector < FloorTile * > floor ;
+        std::vector < FloorTile * > floorTiles ;
 
-       /**
-        * El muro este
-        */
         std::vector < Wall * > wallX ;
 
-       /**
-        * El muro norte
-        */
         std::vector < Wall * > wallY ;
+
+       /**
+        * Set of grid items that form structure of room. Each column is sorted
+        * thus next item’s Z is greater than preceding item’s Z
+        */
+        std::vector < std::vector < GridItemPtr > > gridItems ;
+
+       /**
+        * Free items in room
+        */
+        std::vector < FreeItemPtr > freeItems ;
 
        /**
         * Las puertas
@@ -271,84 +380,6 @@ private:
         */
         std::pair < int, int > tripleRoomBoundY ;
 
-public:
-
-        unsigned short getOpacityOfShadows () const {  return shadingOpacity ;  }
-
-        std::list < PlayerItem * > getPlayersYetInRoom () const ;
-
-        std::list < const PlayerItem * > getPlayersWhoEnteredRoom () const ;
-
-        bool isAnyPlayerStillInRoom () const ;
-
-        std::string getNameOfFileWithDataAboutRoom () const {  return nameOfFileWithDataAboutRoom ;  }
-
-       /**
-        * Identificador textual del escenario al que pertenece la sala
-        * @return jail, blacktooth, marketplace, themoon, egyptus, penitentiary, safary o byblos
-        */
-        std::string getScenery () const {  return this->scenery ;  }
-
-       /**
-        * Screen coordinate X of room’s origin
-        */
-        int getX0 () const {  return coordinates.first ;  }
-
-       /**
-        * Screen coordinate Y of room’s origin
-        */
-        int getY0 () const {  return coordinates.second ;  }
-
-       /**
-        * Número de losetas de la sala en el eje X
-        */
-        unsigned int getTilesX () const {  return numberOfTiles.first ;  }
-
-       /**
-        * Número de losetas de la sala en el eje Y
-        */
-        unsigned int getTilesY () const {  return numberOfTiles.second ;  }
-
-        bool isSingleRoom () const {  return getTilesX() <= 10 && getTilesY() <= 10 ;  }
-
-       /**
-        * Returns length of side of single tile in isometric units
-        */
-        unsigned int getSizeOfOneTile () const {  return tileSize ;  }
-
-       /**
-        * @return kind of floor which may be "plain", "mortal", or absent "none"
-        */
-        std::string getKindOfFloor () const {  return kindOfFloor ;  }
-
-        bool isActive () const {  return active ;  }
-
-        unsigned short getLimitAt ( const std::string& way ) {  return bounds[ way ] ;  }
-
-        Door * getDoorAt ( const std::string& way ) {  return doors[ way ] ;  }
-
-        bool hasDoorAt ( const std::string& way ) {  return ( doors[ way ] != nilPointer ) ;  }
-
-        const std::map < std::string, Door * >& getDoors () const {  return doors ;  }
-
-        void setWayOfExit ( const std::string& exit ) {  this->wayOfExit = exit ;  }
-
-        std::string getWayOfExit () const {  return wayOfExit ;  }
-
-        Camera * getCamera () const {  return camera ;  }
-
-        Picture * getWhereToDraw () {  return whereToDraw ;  }
-
-       /**
-        * Límites para mover la cámara a lo largo del eje X en una sala triple
-        */
-        std::pair < int, int > getTripleRoomBoundX () const {  return this->tripleRoomBoundX ;  }
-
-       /**
-        * Límites para mover la cámara a lo largo del eje Y en una sala triple
-        */
-        std::pair < int, int > getTripleRoomBoundY () const {  return this->tripleRoomBoundY ;  }
-
 };
 
 
@@ -361,19 +392,19 @@ class TripleRoomInitialPoint
 
 public:
 
-        TripleRoomInitialPoint( const Way& way, int x, int y ) ;
+        TripleRoomInitialPoint( const Way& way, int x, int y ) : wayOfEntry( way ), x( x ), y( y ) { }
 
 private:
 
         Way wayOfEntry ;
 
         /**
-         * Offset of camera to screen X
+         * Offset of camera at X
          */
         int x ;
 
         /**
-         * Offset of camera to screen Y
+         * Offset of camera at Y
          */
         int y ;
 
@@ -384,15 +415,6 @@ public:
         int getX () const {  return this->x ;  }
 
         int getY () const {  return this->y ;  }
-
-};
-
-
-class EqualTripleRoomInitialPoint : public std::binary_function< TripleRoomInitialPoint, Way, bool >
-{
-
-public:
-        bool operator()( TripleRoomInitialPoint point, const Way& wayOfEntry ) const ;
 
 };
 

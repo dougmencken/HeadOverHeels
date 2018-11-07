@@ -11,7 +11,7 @@
 
 Picture::Picture( unsigned int width, unsigned int height )
         : picture( allegro::Pict::newPict( width, height ) )
-        , name( "Picture." + isomot::makeRandomString( 12 ) )
+        , name( "Picture." + iso::makeRandomString( 12 ) )
 {
         fillWithColor( Color() );
 
@@ -22,7 +22,7 @@ Picture::Picture( unsigned int width, unsigned int height )
 
 Picture::Picture( unsigned int width, unsigned int height, const Color& color )
         : picture( allegro::Pict::newPict( width, height ) )
-        , name( "Picture." + isomot::makeRandomString( 12 ) )
+        , name( "Picture." + iso::makeRandomString( 12 ) )
 {
         fillWithColor( color );
 
@@ -33,7 +33,7 @@ Picture::Picture( unsigned int width, unsigned int height, const Color& color )
 
 Picture::Picture( const allegro::Pict& pict )
         : picture( allegro::Pict::asCloneOf( pict.ptr() ) )
-        , name( "Picture." + isomot::makeRandomString( 12 ) )
+        , name( "Picture." + iso::makeRandomString( 12 ) )
 {
 #if defined( DEBUG_PICTURES )  &&  DEBUG_PICTURES
         std::cout << "created Picture " << getName() << " as copy of const allegro::Pict &" << std::endl ;
@@ -87,18 +87,9 @@ void Picture::colorize( const Color& color )
         Color::colorizePicture( this, color );
 }
 
-Picture * Picture::makeGrayscaleCopy()
+void Picture::toGrayscale()
 {
-        Picture* copy = new Picture( *this );
-        Color::pictureToGrayscale( copy );
-        return copy;
-}
-
-Picture * Picture::makeColorizedCopy( const Color& color )
-{
-        Picture* copy = new Picture( *this );
-        copy->colorize( color );
-        return copy;
+        Color::pictureToGrayscale( this );
 }
 
 void Picture::saveAsPCX( const std::string& path )

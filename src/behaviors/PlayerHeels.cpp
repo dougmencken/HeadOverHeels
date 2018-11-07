@@ -8,10 +8,10 @@
 #include "SoundManager.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
-PlayerHeels::PlayerHeels( Item* item, const std::string& behavior ) :
+PlayerHeels::PlayerHeels( const ItemPtr & item, const std::string& behavior ) :
         UserControlled( item, behavior )
 {
         jumpFrames = 20;
@@ -31,27 +31,13 @@ PlayerHeels::PlayerHeels( Item* item, const std::string& behavior ) :
                 highJumpVector.push_back( jumpPhase );
         }
 
-        // la primera fase del salto
-        jumpIndex = 0;
-
         // fotogramas de caída
-        fallFrames[ "north" ] = 6;
+        fallFrames[ "north" ] = 8;
         fallFrames[ "south" ] = 0;
-        fallFrames[ "east" ] = 9;
-        fallFrames[ "west" ] = 3;
+        fallFrames[ "east" ] = 12;
+        fallFrames[ "west" ] = 4;
 
-        // fotograma en blanco
-        nullFrame = 12;
-
-        labelOfTransitionViaTeleport = "bubbles";
-        labelOfFireFromHooter = "bubbles";
-
-        // pasos automáticos
-        automaticStepsThruDoor = 16;
-
-        // create and activate chronometers
-        speedTimer = new Timer ();
-        fallTimer = new Timer ();
+        // activate chronometers
         speedTimer->go ();
         fallTimer->go ();
 }
@@ -62,31 +48,31 @@ PlayerHeels::~PlayerHeels( )
 
 bool PlayerHeels::update()
 {
-        PlayerItem* player = dynamic_cast< PlayerItem* >( this->item );
+        PlayerItem& playerItem = dynamic_cast< PlayerItem& >( * this->item );
 
-        if ( player->hasShield() )
+        if ( playerItem.hasShield() )
         {
-                player->decreaseShield();
+                playerItem.decreaseShield();
         }
 
         switch ( activity )
         {
                 case Activity::Wait:
-                        wait( player );
+                        wait( playerItem );
                         break;
 
                 case Activity::AutoMoveNorth:
                 case Activity::AutoMoveSouth:
                 case Activity::AutoMoveEast:
                 case Activity::AutoMoveWest:
-                        autoMove( player );
+                        autoMove( playerItem );
                         break;
 
                 case Activity::MoveNorth:
                 case Activity::MoveSouth:
                 case Activity::MoveEast:
                 case Activity::MoveWest:
-                        move( player );
+                        move( playerItem );
                         break;
 
                 case Activity::DisplaceNorth:
@@ -101,54 +87,54 @@ bool PlayerHeels::update()
                 case Activity::ForceDisplaceSouth:
                 case Activity::ForceDisplaceEast:
                 case Activity::ForceDisplaceWest:
-                        displace( player );
+                        displace( playerItem );
                         break;
 
                 case Activity::CancelDisplaceNorth:
                 case Activity::CancelDisplaceSouth:
                 case Activity::CancelDisplaceEast:
                 case Activity::CancelDisplaceWest:
-                        cancelDisplace( player );
+                        cancelDisplace( playerItem );
                         break;
 
                 case Activity::Fall:
-                        fall( player );
+                        fall( playerItem );
                         break;
 
                 case Activity::Jump:
                 case Activity::RegularJump:
                 case Activity::HighJump:
-                        jump( player );
+                        jump( playerItem );
                         break;
 
                 case Activity::BeginWayOutTeletransport:
                 case Activity::WayOutTeletransport:
-                        wayOutTeletransport( player );
+                        wayOutTeletransport( playerItem );
                         break;
 
                 case Activity::BeginWayInTeletransport:
                 case Activity::WayInTeletransport:
-                        wayInTeletransport( player );
+                        wayInTeletransport( playerItem );
                         break;
 
                 case Activity::MeetMortalItem:
                 case Activity::Vanish:
-                        collideWithMortalItem( player );
+                        collideWithMortalItem( playerItem );
                         break;
 
                 case Activity::TakeItem:
                 case Activity::TakeAndJump:
-                        takeItem( player );
+                        takeItem( playerItem );
                         break;
 
                 case Activity::ItemTaken:
-                        player->addToZ( - LayerHeight );
+                        playerItem.addToZ( - LayerHeight );
                         activity = Activity::Wait;
                         break;
 
                 case Activity::DropItem:
                 case Activity::DropAndJump:
-                        dropItem( player );
+                        dropItem( playerItem );
                         break;
 
                 default:
@@ -156,15 +142,15 @@ bool PlayerHeels::update()
         }
 
         // play sound for current activity
-        SoundManager::getInstance()->play( player->getOriginalLabel(), activity );
+        SoundManager::getInstance().play( playerItem.getOriginalLabel(), activity );
 
         return false;
 }
 
 void PlayerHeels::behave ()
 {
-        PlayerItem* playerItem = dynamic_cast< PlayerItem * >( this->item );
-        InputManager* input = InputManager::getInstance();
+        PlayerItem& playerItem = dynamic_cast< PlayerItem& >( * this->item );
+        InputManager& input = InputManager::getInstance();
 
         // if it’s not a move by inertia or some other exotic activity
         if ( activity != Activity::AutoMoveNorth && activity != Activity::AutoMoveSouth &&
@@ -176,39 +162,39 @@ void PlayerHeels::behave ()
                 // when waiting or blinking
                 if ( activity == Activity::Wait || activity == Activity::Blink )
                 {
-                        if ( input->takeTyped() )
+                        if ( input.takeTyped() )
                         {
-                                activity = ( playerItem->getTakenItemData() == nilPointer ? Activity::TakeItem : Activity::DropItem );
-                                input->releaseKeyFor( "take" );
+                                activity = ( playerItem.getTakenItemData() == nilPointer ? Activity::TakeItem : Activity::DropItem );
+                                input.releaseKeyFor( "take" );
                         }
-                        else if ( input->takeAndJumpTyped() )
+                        else if ( input.takeAndJumpTyped() )
                         {
-                                activity = ( playerItem->getTakenItemData() == nilPointer ? Activity::TakeAndJump : Activity::DropAndJump );
-                                input->releaseKeyFor( "take&jump" );
+                                activity = ( playerItem.getTakenItemData() == nilPointer ? Activity::TakeAndJump : Activity::DropAndJump );
+                                input.releaseKeyFor( "take&jump" );
                         }
-                        else if ( input->movenorthTyped() )
+                        else if ( input.movenorthTyped() )
                         {
                                 activity = Activity::MoveNorth;
                         }
-                        else if ( input->movesouthTyped() )
+                        else if ( input.movesouthTyped() )
                         {
                                 activity = Activity::MoveSouth;
                         }
-                        else if ( input->moveeastTyped() )
+                        else if ( input.moveeastTyped() )
                         {
                                 activity = Activity::MoveEast;
                         }
-                        else if ( input->movewestTyped() )
+                        else if ( input.movewestTyped() )
                         {
                                 activity = Activity::MoveWest;
                         }
-                        else if ( input->jumpTyped() )
+                        else if ( input.jumpTyped() )
                         {
                                 // look for item below
-                                playerItem->canAdvanceTo( 0, 0, -1 );
+                                playerItem.canAdvanceTo( 0, 0, -1 );
                                 // key to teleport is the same as for jump
                                 activity =
-                                        playerItem->getMediator()->collisionWithByBehavior( "behavior of teletransport" ) ?
+                                        playerItem.getMediator()->collisionWithByBehavior( "behavior of teletransport" ) != nilPointer ?
                                                 Activity::BeginWayOutTeletransport : Activity::Jump ;
                         }
                 }
@@ -216,43 +202,43 @@ void PlayerHeels::behave ()
                 else if ( activity == Activity::MoveNorth || activity == Activity::MoveSouth ||
                         activity == Activity::MoveEast || activity == Activity::MoveWest )
                 {
-                        if( input->jumpTyped() )
+                        if( input.jumpTyped() )
                         {
                                 // teleport when teletransport is below
-                                playerItem->canAdvanceTo( 0, 0, -1 );
+                                playerItem.canAdvanceTo( 0, 0, -1 );
                                 activity =
-                                        playerItem->getMediator()->collisionWithByBehavior( "behavior of teletransport" ) ?
+                                        playerItem.getMediator()->collisionWithByBehavior( "behavior of teletransport" ) != nilPointer ?
                                                 Activity::BeginWayOutTeletransport : Activity::Jump ;
                         }
-                        else if ( input->takeTyped() )
+                        else if ( input.takeTyped() )
                         {
-                                activity = ( playerItem->getTakenItemData() == nilPointer ? Activity::TakeItem : Activity::DropItem );
-                                input->releaseKeyFor( "take" );
+                                activity = ( playerItem.getTakenItemData() == nilPointer ? Activity::TakeItem : Activity::DropItem );
+                                input.releaseKeyFor( "take" );
                         }
-                        else if ( input->takeAndJumpTyped() )
+                        else if ( input.takeAndJumpTyped() )
                         {
-                                activity = ( playerItem->getTakenItemData() == nilPointer ? Activity::TakeAndJump : Activity::DropAndJump );
-                                input->releaseKeyFor( "take&jump" );
+                                activity = ( playerItem.getTakenItemData() == nilPointer ? Activity::TakeAndJump : Activity::DropAndJump );
+                                input.releaseKeyFor( "take&jump" );
                         }
-                        else if ( input->movenorthTyped() )
+                        else if ( input.movenorthTyped() )
                         {
                                 activity = Activity::MoveNorth;
                         }
-                        else if ( input->movesouthTyped() )
+                        else if ( input.movesouthTyped() )
                         {
                                 activity = Activity::MoveSouth;
                         }
-                        else if ( input->moveeastTyped() )
+                        else if ( input.moveeastTyped() )
                         {
                                 activity = Activity::MoveEast;
                         }
-                        else if ( input->movewestTyped() )
+                        else if ( input.movewestTyped() )
                         {
                                 activity = Activity::MoveWest;
                         }
-                        else if ( ! input->anyMoveTyped() )
+                        else if ( ! input.anyMoveTyped() )
                         {
-                                SoundManager::getInstance()->stop( playerItem->getLabel(), activity );
+                                SoundManager::getInstance().stop( playerItem.getLabel(), activity );
                                 activity = Activity::Wait;
                         }
                 }
@@ -260,33 +246,33 @@ void PlayerHeels::behave ()
                 else if ( activity == Activity::DisplaceNorth || activity == Activity::DisplaceSouth ||
                         activity == Activity::DisplaceEast || activity == Activity::DisplaceWest )
                 {
-                        if ( input->jumpTyped() )
+                        if ( input.jumpTyped() )
                         {
                                 activity = Activity::Jump;
                         }
-                        else if ( input->takeTyped() )
+                        else if ( input.takeTyped() )
                         {
-                                activity = ( playerItem->getTakenItemData() == nilPointer ? Activity::TakeItem : Activity::DropItem );
-                                input->releaseKeyFor( "take" );
+                                activity = ( playerItem.getTakenItemData() == nilPointer ? Activity::TakeItem : Activity::DropItem );
+                                input.releaseKeyFor( "take" );
                         }
-                        else if ( input->takeAndJumpTyped() )
+                        else if ( input.takeAndJumpTyped() )
                         {
-                                activity = ( playerItem->getTakenItemData() == nilPointer ? Activity::TakeAndJump : Activity::DropAndJump );
-                                input->releaseKeyFor( "take&jump" );
+                                activity = ( playerItem.getTakenItemData() == nilPointer ? Activity::TakeAndJump : Activity::DropAndJump );
+                                input.releaseKeyFor( "take&jump" );
                         }
-                        else if ( input->movenorthTyped() )
+                        else if ( input.movenorthTyped() )
                         {
                                 activity = Activity::MoveNorth;
                         }
-                        else if ( input->movesouthTyped() )
+                        else if ( input.movesouthTyped() )
                         {
                                 activity = Activity::MoveSouth;
                         }
-                        else if ( input->moveeastTyped() )
+                        else if ( input.moveeastTyped() )
                         {
                                 activity = Activity::MoveEast;
                         }
-                        else if ( input->movewestTyped() )
+                        else if ( input.movewestTyped() )
                         {
                                 activity = Activity::MoveWest;
                         }
@@ -295,25 +281,25 @@ void PlayerHeels::behave ()
                 else if ( activity == Activity::ForceDisplaceNorth || activity == Activity::ForceDisplaceSouth ||
                         activity == Activity::ForceDisplaceEast || activity == Activity::ForceDisplaceWest )
                 {
-                        if ( input->jumpTyped() )
+                        if ( input.jumpTyped() )
                         {
                                 activity = Activity::Jump;
                         }
                         // user moves while displacing
                         // cancel displace when moving in direction opposite to displacement
-                        else if ( input->movenorthTyped() )
+                        else if ( input.movenorthTyped() )
                         {
                                 activity = ( activity == Activity::ForceDisplaceSouth ? Activity::CancelDisplaceSouth : Activity::MoveNorth );
                         }
-                        else if ( input->movesouthTyped() )
+                        else if ( input.movesouthTyped() )
                         {
                                 activity = ( activity == Activity::ForceDisplaceNorth ? Activity::CancelDisplaceNorth : Activity::MoveSouth );
                         }
-                        else if ( input->moveeastTyped() )
+                        else if ( input.moveeastTyped() )
                         {
                                 activity = ( activity == Activity::ForceDisplaceWest ? Activity::CancelDisplaceWest : Activity::MoveEast );
                         }
-                        else if ( input->movewestTyped() )
+                        else if ( input.movewestTyped() )
                         {
                                 activity = ( activity == Activity::ForceDisplaceEast ? Activity::CancelDisplaceEast : Activity::MoveWest );
                         }
@@ -325,10 +311,10 @@ void PlayerHeels::behave ()
                 else if ( activity == Activity::Fall )
                 {
                         // pick or drop an item when falling
-                        if ( input->takeTyped() )
+                        if ( input.takeTyped() )
                         {
-                                activity = ( playerItem->getTakenItemData() == nilPointer ? Activity::TakeItem : Activity::DropItem );
-                                input->releaseKeyFor( "take" );
+                                activity = ( playerItem.getTakenItemData() == nilPointer ? Activity::TakeItem : Activity::DropItem );
+                                input.releaseKeyFor( "take" );
                         }
                 }
         }

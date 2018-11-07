@@ -13,26 +13,24 @@
 #include "GameManager.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
-Hunter::Hunter( Item * item, const std::string & behavior ) :
-        Behavior( item, behavior )
-        , guardData( nilPointer )
+Hunter::Hunter( const ItemPtr & item, const std::string & behavior )
+        : Behavior( item, behavior )
+        , speedTimer( new Timer() )
 {
-        speedTimer = new Timer();
         speedTimer->go ();
 }
 
 Hunter::~Hunter()
 {
-        delete speedTimer;
 }
 
 bool Hunter::update ()
 {
         Mediator* mediator = this->item->getMediator();
-        PlayerItem* characterToHunt = mediator->getActiveCharacter();
+        PlayerItemPtr characterToHunt = mediator->getActiveCharacter();
 
         bool alive = true;
 
@@ -43,7 +41,7 @@ bool Hunter::update ()
                         if ( getNameOfBehavior() == "behavior of hunter in four directions" ||
                                         getNameOfBehavior() == "behavior of hunter in eight directions" )
                         {
-                                SoundManager::getInstance()->play( this->item->getLabel(), activity );
+                                SoundManager::getInstance().play( this->item->getLabel(), activity );
                                 activity = calculateDirection( activity );
                         }
                         // otherwise check if player is within defined rectangle near hunter to activate
@@ -64,7 +62,7 @@ bool Hunter::update ()
                                 // eight-directional waiting hunter emits sound when it waits
                                 if ( getNameOfBehavior() == "behavior of waiting hunter in eight directions" )
                                 {
-                                        SoundManager::getInstance()->play( this->item->getLabel(), activity );
+                                        SoundManager::getInstance().play( this->item->getLabel(), activity );
                                 }
 
                                 // animate item, and when it waits too
@@ -81,12 +79,12 @@ bool Hunter::update ()
                         {
                                 alive = false;
                         }
-                        else if ( ! dynamic_cast< FreeItem* >( this->item )->isFrozen() ) // item is active and it’s time to move
+                        else if ( ! dynamic_cast< FreeItem& >( * this->item ).isFrozen() )
                         {
                                 if ( speedTimer->getValue() > this->item->getSpeed() )
                                 {
                                         // move item
-                                        MoveKindOfActivity::getInstance()->move( this, &activity, false );
+                                        MoveKindOfActivity::getInstance().move( this, &activity, false );
 
                                         // reset timer to next cycle
                                         speedTimer->reset();
@@ -97,14 +95,14 @@ bool Hunter::update ()
                                         // fall if you have to
                                         if ( this->item->getWeight() > 0 )
                                         {
-                                                FallKindOfActivity::getInstance()->fall( this );
+                                                FallKindOfActivity::getInstance().fall( this );
                                         }
                                 }
 
                                 this->item->animate();
 
                                 // play sound of movement
-                                SoundManager::getInstance()->play( this->item->getLabel(), activity );
+                                SoundManager::getInstance().play( this->item->getLabel(), activity );
                         }
                         break;
 
@@ -112,34 +110,34 @@ bool Hunter::update ()
                 case Activity::MoveNorthwest:
                 case Activity::MoveSoutheast:
                 case Activity::MoveSouthwest:
-                        if ( ! dynamic_cast< FreeItem* >( this->item )->isFrozen() )
+                        if ( ! dynamic_cast< FreeItem& >( * this->item ).isFrozen() )
                         {
                                 if ( speedTimer->getValue() > this->item->getSpeed() )
                                 {
                                         // move item
-                                        if ( ! MoveKindOfActivity::getInstance()->move( this, &activity, false ) )
+                                        if ( ! MoveKindOfActivity::getInstance().move( this, &activity, false ) )
                                         {
                                                 if ( activity == Activity::MoveNortheast || activity == Activity::MoveNorthwest )
                                                 {
                                                         ActivityOfItem tempActivity = Activity::MoveNorth;
-                                                        if ( ! MoveKindOfActivity::getInstance()->move( this, &tempActivity, false ) )
+                                                        if ( ! MoveKindOfActivity::getInstance().move( this, &tempActivity, false ) )
                                                         {
                                                                 activity = ( activity == Activity::MoveNortheast ? Activity::MoveEast : Activity::MoveWest );
                                                                 if ( this->item->getWeight() > 0 )
                                                                 {
-                                                                        FallKindOfActivity::getInstance()->fall( this );
+                                                                        FallKindOfActivity::getInstance().fall( this );
                                                                 }
                                                         }
                                                 }
                                                 else
                                                 {
                                                         ActivityOfItem tempActivity = Activity::MoveSouth;
-                                                        if ( ! MoveKindOfActivity::getInstance()->move( this, &tempActivity, false ) )
+                                                        if ( ! MoveKindOfActivity::getInstance().move( this, &tempActivity, false ) )
                                                         {
                                                                 activity = ( activity == Activity::MoveSoutheast ? Activity::MoveEast : Activity::MoveWest );
                                                                 if ( this->item->getWeight() > 0 )
                                                                 {
-                                                                        FallKindOfActivity::getInstance()->fall( this );
+                                                                        FallKindOfActivity::getInstance().fall( this );
                                                                 }
                                                         }
                                                 }
@@ -157,7 +155,7 @@ bool Hunter::update ()
                                 this->item->animate();
 
                                 // play sound of movement
-                                SoundManager::getInstance()->play( this->item->getLabel(), activity );
+                                SoundManager::getInstance().play( this->item->getLabel(), activity );
                         }
                         break;
 
@@ -172,24 +170,24 @@ bool Hunter::update ()
                         // when item is active and it’s time to move
                         if ( speedTimer->getValue() > this->item->getSpeed() )
                         {
-                                DisplaceKindOfActivity::getInstance()->displace( this, &activity, false );
+                                DisplaceKindOfActivity::getInstance().displace( this, &activity, false );
                                 activity = Activity::Wait;
                                 speedTimer->reset();
                         }
 
                         // preserve inactivity for frozen item
-                        if ( dynamic_cast< FreeItem* >( this->item )->isFrozen() )
+                        if ( dynamic_cast< FreeItem& >( * this->item ).isFrozen() )
                         {
                                 activity = Activity::Freeze;
                         }
                         break;
 
                 case Activity::Freeze:
-                        dynamic_cast< FreeItem* >( this->item )->setFrozen( true );
+                        dynamic_cast< FreeItem& >( * this->item ).setFrozen( true );
                         break;
 
                 case Activity::WakeUp:
-                        dynamic_cast< FreeItem* >( this->item )->setFrozen( false );
+                        dynamic_cast< FreeItem& >( * this->item ).setFrozen( false );
                         activity = Activity::Wait;
                         break;
 
@@ -218,7 +216,7 @@ ActivityOfItem Hunter::calculateDirection( const ActivityOfItem& activity )
 
 ActivityOfItem Hunter::calculateDirection4( const ActivityOfItem& activity )
 {
-        PlayerItem* characterToHunt = this->item->getMediator()->getActiveCharacter();
+        PlayerItemPtr characterToHunt = this->item->getMediator()->getActiveCharacter();
 
         if ( characterToHunt != nilPointer ) // if there’s active player in room
         {
@@ -268,7 +266,7 @@ ActivityOfItem Hunter::calculateDirection4( const ActivityOfItem& activity )
 
 ActivityOfItem Hunter::calculateDirection8( const ActivityOfItem& activity )
 {
-        PlayerItem* characterToHunt = this->item->getMediator()->getActiveCharacter();
+        PlayerItemPtr characterToHunt = this->item->getMediator()->getActiveCharacter();
 
         if ( characterToHunt != nilPointer ) // if there’s active player in room
         {
@@ -336,7 +334,7 @@ ActivityOfItem Hunter::calculateDirection8( const ActivityOfItem& activity )
                 }
 
                 // guardian of throne flees from player with four crowns
-                if ( item->getLabel() == "throne-guard" && GameManager::getInstance()->countFreePlanets() >= 4 )
+                if ( item->getLabel() == "throne-guard" && GameManager::getInstance().countFreePlanets() >= 4 )
                 {
                         changeActivityOfItem( Activity::MoveSouthwest );
                 }
@@ -347,33 +345,29 @@ ActivityOfItem Hunter::calculateDirection8( const ActivityOfItem& activity )
 
 bool Hunter::createFullBody()
 {
-        FreeItem* thisItem = dynamic_cast< FreeItem* >( this->item );
+        FreeItem& thisItem = dynamic_cast< FreeItem& >( * this->item );
         bool created = false;
 
-        if ( thisItem->getLabel() == "imperial-guard-head" && thisItem->canAdvanceTo( 0, 0, -LayerHeight ) )
+        if ( thisItem.getLabel() == "imperial-guard-head" && thisItem.canAdvanceTo( 0, 0, -LayerHeight ) )
         {
                 created = true;
 
                 // create new item in the same location
-                FreeItem* newItem = new FreeItem( guardData,
-                                                  thisItem->getX(), thisItem->getY(), thisItem->getZ() - LayerHeight,
-                                                  thisItem->getOrientation() );
+                FreeItemPtr newItem( new FreeItem (
+                        item->getDataOfItem()->getItemDataManager()->findDataByLabel( "imperial-guard" ),
+                        thisItem.getX(), thisItem.getY(), thisItem.getZ() - LayerHeight,
+                        thisItem.getOrientation() ) );
 
-                newItem->assignBehavior( "behavior of hunter in four directions", nilPointer );
+                newItem->setBehaviorOf( "behavior of hunter in four directions" );
 
                 // switch off collisions for this item
                 // otherwise it’s impossible to create full-bodied guard
-                thisItem->setCollisionDetector( false );
+                thisItem.setCollisionDetector( false );
 
-                thisItem->getMediator()->getRoom()->addFreeItem( newItem );
+                thisItem.getMediator()->getRoom()->addFreeItem( newItem );
         }
 
         return created;
-}
-
-void Hunter::setMoreData( void * data )
-{
-        this->guardData = reinterpret_cast< ItemData * >( data );
 }
 
 }

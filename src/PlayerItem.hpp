@@ -18,7 +18,7 @@
 #include "Picture.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
 class ItemData ;
@@ -34,7 +34,7 @@ class PlayerItem : public FreeItem
 
 public:
 
-        PlayerItem( ItemData* itemData, int x, int y, int z, const Way& orientation ) ;
+        PlayerItem( const ItemData* itemData, int x, int y, int z, const Way& orientation ) ;
 
         /**
          * Constructor copia. No copia los atributos que son punteros
@@ -58,15 +58,11 @@ public:
          */
         virtual bool update () ;
 
-        /**
-         * El jugador espera a que el usuario le dé una orden, lo que implica detener al jugador o, lo que
-         * es lo mismo, establecer el fotograma de parada
-         */
         void wait () ;
 
-        void fillWithData ( const GameManager * data ) ;
+        void fillWithData ( const GameManager & data ) ;
 
-        bool isActiveCharacter () ;
+        bool isActiveCharacter () const ;
 
         void addLives( unsigned char lives ) ;
 
@@ -94,9 +90,8 @@ public:
 
         /**
          * Añade un número de grandes saltos al jugador
-         * @param highJumps Un número entre 0 y 10
          */
-        void addHighJumps ( unsigned char highJumps ) ;
+        void addHighJumps ( unsigned char howMany ) ;
 
         /**
          * El jugador consume un gran salto
@@ -156,43 +151,33 @@ private:
          */
         unsigned int highJumps ;
 
-        /**
-         * Tiempo restante de inmunidad. Si el jugador no posee esta habilidad entonces vale cero
-         */
-        double shield ;
-
         std::vector< std::string > tools ;
 
         unsigned short howManyDoughnuts ;
 
         /**
-         * Way of player when it leaves room
+         * Way by which player leaves room
          */
-        std::string exit ;
+        std::string wayOfExit ;
 
         /**
          * How player enters room: through door, or via teleport, or going below floor or above ceiling
          */
-        std::string entry ;
+        std::string wayOfEntry ;
 
         /**
-         * Time of immunity, player gots 25 seconds of immunity when rabbit is caught
+         * Timer for immunity, player gets 25 seconds of immunity when rabbit is caught
          */
-        Timer * shieldTimer ;
+        autouniqueptr < Timer > shieldTimer ;
 
         /**
-         * How many seconds left during which player is immune
+         * How many seconds are remaining of time when character has immunity
          */
-        double shieldTime ;
+        float shieldRemaining ;
 
-        ItemData * takenItemData ;
+        const ItemData * takenItemData ;
 
         std::string takenItemBehavior ;
-
-        /**
-         * Used when morphing to bubbles and back
-         */
-        ItemData * originalDataOfItem ;
 
 protected:
 
@@ -210,23 +195,15 @@ protected:
          */
         void setHighJumps ( unsigned int highJumps ) {  this->highJumps = highJumps ;  }
 
-        /**
-         * Establece el tiempo total de inmunidad y activa el cronómetro si está activado
-         * @param shield Un número de segundos
-         */
-        void setShieldTime ( double shield ) ;
-
         void setDoughnuts ( const unsigned short howMany ) {  this->howManyDoughnuts = howMany ;  }
 
-        double getShieldTime () const {  return this->shieldTime ;  }
+        void setShieldTime ( float seconds ) ;
 
 public:
 
-        ItemData * getOriginalDataOfItem () const {  return originalDataOfItem ;  }
+        void placeItemInBag ( const std::string & labelOfItem, const std::string & behavior ) ;
 
-        void placeItemInBag ( ItemData * itemData, const std::string & behavior ) ;
-
-        ItemData * getTakenItemData () const {  return this->takenItemData ;  }
+        const ItemData * getTakenItemData () const {  return this->takenItemData ;  }
 
         const std::string& getTakenItemBehavior () const {  return this->takenItemBehavior ;  }
 
@@ -242,8 +219,6 @@ public:
          */
         unsigned int getHighJumps () const {  return this->highJumps ;  }
 
-        bool hasShield () const {  return this->shieldTime > 0 ;  }
-
         /**
          * Character has its magic item, horn or bag, or not
          */
@@ -251,21 +226,19 @@ public:
 
         unsigned short getDoughnuts () const {  return this->howManyDoughnuts ;  }
 
-        /**
-         * Way of player when it leaves room
-         */
+        bool hasShield () const {  return shieldRemaining > 0 ;  }
+
         void setWayOfExit ( const std::string& way ) ;
 
-        const std::string& getWayOfExit () const {  return this->exit ;  }
+        const std::string& getWayOfExit () const {  return wayOfExit ;  }
 
-        /**
-         * How player enters room
-         */
-        const std::string& getWayOfEntry () const {  return this->entry ;  }
+        const std::string& getWayOfEntry () const {  return wayOfEntry ;  }
 
-        void setWayOfEntry ( const std::string& way ) {  this->entry = way ;  }
+        void setWayOfEntry ( const std::string& way ) {  wayOfEntry = way ;  }
 
 };
+
+typedef safeptr < PlayerItem > PlayerItemPtr ;
 
 }
 

@@ -27,21 +27,25 @@ const Color * Color::theOrange = new Color( 239, 129, 0, 0xff ) ;
 
 const Color * Color::the50Gray = new Color( 127, 127, 127, 0xff ) ;
 
+const Color * Color::the75Gray = new Color( 191, 191, 191, 0xff ) ;
+
+const Color * Color::the25Gray = new Color( 63, 63, 63, 0xff ) ;
+
 
 Color::Color( )
-        : red( AllegroColor::keyColor().getRed() )
-        , green( AllegroColor::keyColor().getGreen() )
-        , blue( AllegroColor::keyColor().getBlue() )
-        , alpha( AllegroColor::keyColor().getAlpha() )
+        : red( AllegroColor::redOfKeyColor )
+        , green( AllegroColor::greenOfKeyColor )
+        , blue( AllegroColor::blueOfKeyColor )
+        , alpha( AllegroColor::alphaOfKeyColor )
 {
 }
 
 std::string Color::toString () const
 {
-        return   "color { r=" + isomot::numberToString( red ) +
-                        " g=" + isomot::numberToString( green ) +
-                        " b=" + isomot::numberToString( blue ) +
-                        " a=" + isomot::numberToString( alpha ) + " }" ;
+        return   "color { r=" + util::number2string( red ) +
+                        " g=" + util::number2string( green ) +
+                        " b=" + util::number2string( blue ) +
+                        " a=" + util::number2string( alpha ) + " }" ;
 }
 
 /* public static */
@@ -96,7 +100,7 @@ void Color::multiplyWithColor( Picture * picture, unsigned char red, unsigned ch
                         // don’t touch pixels with color of transparency
                         if ( ! color.isKeyColor() )
                         {
-                                picture->putPixelAt( x, y, Color( r & red, g & green, b & blue, color.getAlpha() ) );
+                                picture->putPixelAt( x, y, Color( r * ( red / 255.0 ), g * ( green / 255.0 ), b * ( blue / 255.0 ), color.getAlpha() ) );
                         }
                 }
         }

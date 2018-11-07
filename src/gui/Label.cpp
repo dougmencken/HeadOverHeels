@@ -47,7 +47,7 @@ Label::~Label( )
 /* static */
 Font* Label::getFontByFamilyAndColor( const std::string& family, const std::string& color )
 {
-        Font* found = GuiManager::getInstance()->findFontByFamilyAndColor( family, color == "multicolor" ? "white" : color ) ;
+        Font* found = GuiManager::getInstance().findFontByFamilyAndColor( family, color == "multicolor" ? "white" : color ) ;
         assert( found != nilPointer );
         return found;
 }
@@ -106,7 +106,7 @@ void Label::createImageOfLabel( const std::string& text, Font * font )
         {
                 const size_t numberOfColors = 3;
                 std::string multiColors[ numberOfColors ] = {  "cyan", "yellow", "orange"  }; // sequence of colors for multi~color labels
-                /* if ( isomot::GameManager::getInstance()->isSimpleGraphicSet() )
+                /* if ( iso::GameManager::getInstance().isSimpleGraphicSet() )
                         multiColors[ 2 ] = "white"; // original speccy sequence is “ cyan yellow white ” */
 
                 unsigned short cycle = 0; // position in that sequence for character to draw

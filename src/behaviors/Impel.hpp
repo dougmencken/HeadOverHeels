@@ -15,7 +15,7 @@
 #include "Timer.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
 class Item ;
@@ -29,7 +29,7 @@ class Impel : public Behavior
 
 public:
 
-        Impel( Item * item, const std::string & behavior ) ;
+        Impel( const ItemPtr & item, const std::string & behavior ) ;
 
         virtual ~Impel( ) ;
 
@@ -38,14 +38,14 @@ public:
 private:
 
        /**
-        * Timer that defines speed of movement
+        * Timer for speed of movement
         */
-        Timer * speedTimer ;
+        autouniqueptr < Timer > speedTimer ;
 
        /**
-        * Timer that defines speed of fall
+        * Timer for speed of falling
         */
-        Timer * fallTimer ;
+        autouniqueptr < Timer > fallTimer ;
 
 };
 

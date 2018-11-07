@@ -36,13 +36,15 @@ private:
 
         GuiManager( ) ;
 
-        void readPreferences () ;
+        GuiManager( const GuiManager & ) { }
 
 public:
 
         ~GuiManager( ) ;
 
-        static GuiManager* getInstance () ;
+        static GuiManager & getInstance () ;
+
+        void readPreferences () ;
 
        /**
         * Begin with the menu for this game
@@ -77,10 +79,6 @@ public:
         void addFont ( Font * font ) {  fonts.push_back( font ) ;  }
 
         Font * findFontByFamilyAndColor ( const std::string& family, const std::string& color ) ;
-
-protected:
-
-        void initAllegro () ;
 
 private:
 
@@ -118,8 +116,6 @@ private:
         bool preferencesRead ;
 
         std::list < Font * > fonts ;
-
-        std::multimap< unsigned int, unsigned int > sizesOfScreen ;
 
 private:
 

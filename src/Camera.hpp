@@ -13,13 +13,13 @@
 
 #include "Ism.hpp"
 #include "Way.hpp"
+#include "PlayerItem.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
 class Room;
-class PlayerItem;
 
 /**
  * Camera centers the room. If it’s simple or small room, it just calculates optimal coordinates.
@@ -39,22 +39,17 @@ public:
 
         virtual ~Camera( ) ;
 
-        /**
-        * Centra la sala en pantalla y establece el punto de referencia. Una vez se ha
-        * asignado dicho punto debe usarse la operación "center" para centrar la sala,
-        * pues "turnOn" ya no tendrá efecto
-        * @param player El jugador activo
-        * @param entry Vía de entrada a la sala
-        */
-        void turnOn ( PlayerItem * player, const Way& wayOfEntry ) ;
+        /* Center room on screen and set reference point. Once this point has been assigned,
+         * use "centerOn" to center room, since "turnOn" will no longer have an effect
+         * @param player active player
+         * @param entry Way of entry to room
+         */
+        void turnOn ( const PlayerItem & player, const Way& wayOfEntry ) ;
 
         /**
-         * Centra la sala en pantalla
-         * @param player El jugador activo
-         * @return true si se ha producido variación respecto al desplazamiento previo,
-         * o false en caso contrario
+         * Centers the room on the screen
          */
-        bool centerOn ( PlayerItem * player ) ;
+        bool centerOn ( const PlayerItem & player ) ;
 
 private:
 
@@ -64,30 +59,16 @@ private:
         Room * room ;
 
         /**
-         * Punto de referencia a partir del cual se realizará el desplazamiento de la cámara
-         * Coincide con las coordenadas X e Y del jugador activo
+         * Reference point from which to move camera
          */
         std::pair < int, int > reference ;
 
-        /**
-         * Desplazamiento de pantalla a realizar en el eje X e Y, respectivamente, para centrar la sala
-         */
         std::pair < int, int > delta ;
 
 public:
 
-        /**
-         * Desplazamiento de pantalla a realizar en el eje X para centrar la sala
-         * @return Un número positivo indica que la sala se desplazará a la derecha, mientras que un
-         * número negativo desplazará la sala a la izquierda
-         */
         int getDeltaX () const {  return delta.first;  }
 
-        /**
-         * Desplazamiento de pantalla a realizar en el eje Y para centrar la sala
-         * @return Un número positivo indica que la sala se desplazará hacia abajo, mientras que un
-         * número negativo desplazará la sala hacia arriba
-         */
         int getDeltaY () const {  return delta.second;  }
 
         void setDeltaX ( int delta ) {  this->delta.first = delta;  }

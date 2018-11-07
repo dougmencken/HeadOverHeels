@@ -11,39 +11,36 @@
 #include "SoundManager.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
-Driven::Driven( Item* item, const std::string& behavior )
+Driven::Driven( const ItemPtr & item, const std::string& behavior )
         : Behavior( item, behavior )
+        , moving( false )
+        , speedTimer( new Timer() )
+        , fallTimer( new Timer() )
 {
-        running = false;
-
-        speedTimer = new Timer();
-        fallTimer = new Timer();
         speedTimer->go();
         fallTimer->go();
 }
 
 Driven::~Driven( )
 {
-        delete speedTimer;
-        delete fallTimer;
 }
 
 bool Driven::update ()
 {
-        FreeItem* freeItem = dynamic_cast< FreeItem * >( this->item );
-        Mediator* mediator = freeItem->getMediator();
+        FreeItem& freeItem = dynamic_cast< FreeItem& >( * this->item );
+        Mediator* mediator = freeItem.getMediator();
         bool isGone = false;
         bool playerFound = false;
 
         switch ( activity )
         {
                 case Activity::Wait:
-                        if ( running )
+                        if ( moving )
                         {
-                                switch ( freeItem->getOrientation().getIntegerOfWay() )
+                                switch ( freeItem.getOrientation().getIntegerOfWay() )
                                 {
                                         case Way::North:
                                                 changeActivityOfItem( Activity::MoveNorth );
@@ -68,16 +65,16 @@ bool Driven::update ()
                         // when stopped, see if there is a character on it and use its orientation to begin moving
                         else
                         {
-                                if ( ! freeItem->canAdvanceTo( 0, 0, 1 ) )
+                                if ( ! freeItem.canAdvanceTo( 0, 0, 1 ) )
                                 {
                                         while ( ! mediator->isStackOfCollisionsEmpty() && ! playerFound )
                                         {
-                                                Item * item = mediator->findCollisionPop ();
+                                                ItemPtr item = mediator->findCollisionPop ();
 
-                                                if ( dynamic_cast< PlayerItem * >( item ) )
+                                                if ( item->whichKindOfItem() == "player item" )
                                                 {
                                                         playerFound = true;
-                                                        running = true;
+                                                        moving = true;
 
                                                         switch ( item->getOrientation().getIntegerOfWay () )
                                                         {
@@ -111,23 +108,23 @@ bool Driven::update ()
                 case Activity::MoveEast:
                 case Activity::MoveWest:
                         // item is active and it is time to move
-                        if ( ! freeItem->isFrozen() )
+                        if ( ! freeItem.isFrozen() )
                         {
-                                if ( speedTimer->getValue() > freeItem->getSpeed() )
+                                if ( speedTimer->getValue() > freeItem.getSpeed() )
                                 {
-                                        if ( ! MoveKindOfActivity::getInstance()->move( this, &activity, true ) )
+                                        if ( ! MoveKindOfActivity::getInstance().move( this, &activity, true ) )
                                         {
-                                                running = false;
+                                                moving = false;
                                                 activity = Activity::Wait;
 
                                                 // emit sound of collision
-                                                SoundManager::getInstance()->play( freeItem->getLabel(), Activity::Collision );
+                                                SoundManager::getInstance().play( freeItem.getLabel(), Activity::Collision );
                                         }
 
                                         speedTimer->reset();
                                 }
 
-                                freeItem->animate();
+                                freeItem.animate();
                         }
                         break;
 
@@ -140,9 +137,9 @@ bool Driven::update ()
                 case Activity::DisplaceSoutheast:
                 case Activity::DisplaceSouthwest:
                         // is it time to move
-                        if ( speedTimer->getValue() > freeItem->getSpeed() )
+                        if ( speedTimer->getValue() > freeItem.getSpeed() )
                         {
-                                if ( ! DisplaceKindOfActivity::getInstance()->displace( this, &activity, true ) )
+                                if ( ! DisplaceKindOfActivity::getInstance().displace( this, &activity, true ) )
                                 {
                                         activity = Activity::Wait;
                                 }
@@ -151,7 +148,7 @@ bool Driven::update ()
                         }
 
                         // inactive item continues to be inactive
-                        if ( freeItem->isFrozen() )
+                        if ( freeItem.isFrozen() )
                         {
                                 activity = Activity::Freeze;
                         }
@@ -159,15 +156,15 @@ bool Driven::update ()
 
                 case Activity::Fall:
                         // look for reaching floor in a room without floor
-                        if ( freeItem->getZ() == 0 && freeItem->getMediator()->getRoom()->getKindOfFloor() == "none" )
+                        if ( freeItem.getZ() == 0 && ! freeItem.getMediator()->getRoom()->hasFloor() )
                         {
                                 // item disappears
                                 isGone = true;
                         }
                         // is it time to fall
-                        else if ( fallTimer->getValue() > freeItem->getWeight() )
+                        else if ( fallTimer->getValue() > freeItem.getWeight() )
                         {
-                                if ( ! FallKindOfActivity::getInstance()->fall( this ) )
+                                if ( ! FallKindOfActivity::getInstance().fall( this ) )
                                 {
                                         activity = Activity::Wait;
                                 }
@@ -177,11 +174,11 @@ bool Driven::update ()
                         break;
 
                 case Activity::Freeze:
-                        freeItem->setFrozen( true );
+                        freeItem.setFrozen( true );
                         break;
 
                 case Activity::WakeUp:
-                        freeItem->setFrozen( false );
+                        freeItem.setFrozen( false );
                         activity = Activity::Wait;
                         break;
 

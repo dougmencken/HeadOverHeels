@@ -31,7 +31,7 @@ CreateListOfSavedGames::CreateListOfSavedGames( Picture * picture, bool isLoadMe
 
 void CreateListOfSavedGames::doAction ()
 {
-        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this );
+        Screen* screen = GuiManager::getInstance().findOrCreateScreenForAction( this );
         if ( screen->countWidgets() > 0 )
         {
                 screen->freeWidgets() ;
@@ -50,14 +50,14 @@ void CreateListOfSavedGames::doAction ()
 
         screen->placeHeadAndHeels( /* icons */ true, /* copyrights */ false );
 
-        LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
+        LanguageManager* languageManager = GuiManager::getInstance().getLanguageManager();
 
         // list of games
         Menu* menu = new Menu( );
         menu->setVerticalOffset( 112 );
         for ( unsigned int fileCount = 1; fileCount <= howManySaves; fileCount++ )
         {
-                std::string file = isomot::homePath() + "savegame" + pathSeparator + "saved." + isomot::numberToString( fileCount ) ;
+                std::string file = iso::homePath() + "savegame" + util::pathSeparator() + "saved." + util::number2string( fileCount ) ;
 
                 bool fileExists = false;
                 std::ifstream in( file.c_str() );
@@ -78,13 +78,13 @@ void CreateListOfSavedGames::doAction ()
                                 label->setAction( new LoadGame( getWhereToDraw(), fileCount ) );
                         else
                                 label->setAction( new SaveGame( getWhereToDraw(), fileCount ) );
-                                // very funny to change to LoadGame here by the way to get many heads/heels, just try it
+                                // very funny to change to LoadGame here, just try it
 
                         menu->addOption( label );
                 }
                 else
                 {
-                        std::cout << "slot \"" << file << "\" is yet free" << std::endl ;
+                        std::cout << "slot \"" << file << "\" is free" << std::endl ;
 
                         std::ostringstream ss;
                         ss << languageManager->findLanguageStringForAlias( "free-slot" )->getText();
@@ -92,7 +92,7 @@ void CreateListOfSavedGames::doAction ()
                         if ( isLoadMenu() )
                         {
                                 labelOfFree->changeColor( "cyan" );
-                                labelOfFree->setAction( new PlaySound( isomot::Activity::Mistake ) );
+                                labelOfFree->setAction( new PlaySound( iso::Activity::Mistake ) );
                         }
                         else
                         {
@@ -107,7 +107,7 @@ void CreateListOfSavedGames::doAction ()
         screen->addWidget( menu );
         screen->setKeyHandler( menu );
 
-        GuiManager::getInstance()->changeScreen( screen, true );
+        GuiManager::getInstance().changeScreen( screen, true );
 }
 
 bool CreateListOfSavedGames::readSomeInfoFromGamefile( const std::string& fileName,

@@ -15,7 +15,7 @@
 #include "Timer.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
 class Item ;
@@ -26,7 +26,7 @@ class ConveyorBelt : public Behavior
 
 public:
 
-        ConveyorBelt( Item * item, const std::string & behavior ) ;
+        ConveyorBelt( const ItemPtr & item, const std::string & behavior ) ;
 
         virtual ~ConveyorBelt( ) ;
 
@@ -35,11 +35,11 @@ public:
 private:
 
        /**
-        * Time for speed of dragging items above conveyor
+        * Timer for speed of dragging items above
         */
-        Timer * speedTimer ;
+        autouniqueptr < Timer > speedTimer ;
 
-        Timer * animationTimer ;
+        autouniqueptr < Timer > animationTimer ;
 
 };
 

@@ -20,7 +20,7 @@
 #include "Picture.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
 /**
@@ -98,6 +98,8 @@ public:
         void freshShadyImage () ;
 
 };
+
+typedef safeptr < FloorTile > FloorTilePtr ;
 
 }
 

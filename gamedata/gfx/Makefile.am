@@ -53,9 +53,6 @@ gamedatagfx_DATA = item.png/ball-shadows.png \
 			item.png/heels.png \
 			item.png/helicopter-bug-shadows.png \
 			item.png/helicopter-bug.png \
-			item.png/hidden-shaft.png \
-			item.png/hidden-top-wall.png \
-			item.png/hidden-wall.png \
 			item.png/horn.png \
 			item.png/imperial-guard-head.png \
 			item.png/imperial-guard-shadows.png \

@@ -15,7 +15,7 @@ SelectLanguage::SelectLanguage( Picture* picture, const std::string& language )
 
 void SelectLanguage::doAction ()
 {
-        GuiManager::getInstance()->setLanguage( language );
+        GuiManager::getInstance().setLanguage( language );
 
         CreateMainMenu * mainMenu = new CreateMainMenu( getWhereToDraw() );
         mainMenu->doIt ();

@@ -1,72 +1,88 @@
 
 #include "Isomot.hpp"
 #include "Color.hpp"
+#include "FlickeringColor.hpp"
 #include "GameManager.hpp"
 #include "GuiManager.hpp"
-#include "ItemDataManager.hpp"
-#include "MapManager.hpp"
 #include "BonusManager.hpp"
 #include "InputManager.hpp"
 #include "SoundManager.hpp"
 #include "Room.hpp"
 #include "Mediator.hpp"
-#include "GridItem.hpp"
 #include "Camera.hpp"
 #include "PlayerItem.hpp"
 #include "Behavior.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
 Isomot::Isomot( ) :
         view( nilPointer ),
-        mapManager( nilPointer ),
-        finalRoomTimer( nilPointer ),
-        finalRoomBuilt( false )
+        mapManager(),
+        itemDataManager(),
+        paused( false ),
+        finalRoomTimer( new Timer() ),
+        finalRoomBuilt( false ),
+        sizeOfTileForMiniature( 3 )
 {
-
 }
 
 Isomot::~Isomot( )
 {
-        delete this->mapManager;
-        delete this->finalRoomTimer;
+        binView ();
+}
 
-        delete this->view ;
+void Isomot::binView ()
+{
+        delete view ;
+        view = nilPointer ;
+}
+
+void Isomot::prepare ()
+{
+        offRecording() ;
+        offVidasInfinitas() ;
+        offInviolability() ;
+        GameManager::getInstance().setCharactersFly( false );
+
+        paused = false ;
+
+        finalRoomBuilt = false ;
+        finalRoomTimer->stop();
+
+        // image where the isometric view is drawn
+        if ( view == nilPointer )
+                view = new Picture( ScreenWidth(), ScreenHeight() );
+        else
+                view->fillWithColor( Color::orangeColor() );
+
+        // bin taken bonuses
+        BonusManager::getInstance().reset();
+}
+
+void Isomot::fillItemDataManager ()
+{
+        itemDataManager.readDataAboutItems( "items.xml" );
 }
 
 void Isomot::beginNewGame ()
 {
-        prepare() ;
+        prepare ();
+        fillItemDataManager ();
 
-        offRecording() ;
-        offVidasInfinitas() ;
-        offInviolability() ;
-        GameManager::getInstance()->setCharactersFly( false );
+        mapManager.beginNewGame( GameManager::getInstance().getHeadRoom(), GameManager::getInstance().getHeelsRoom() );
 
-        finalRoomBuilt = false;
-        if ( finalRoomTimer != nilPointer ) finalRoomTimer->stop();
-
-        assert( mapManager != nilPointer );
-        mapManager->beginNewGame( GameManager::getInstance()->getHeadRoom(), GameManager::getInstance()->getHeelsRoom() );
-
-        assert( mapManager->getActiveRoom() != nilPointer );
-        mapManager->getActiveRoom()->activate ();
+        assert( mapManager.getActiveRoom() != nilPointer );
+        mapManager.getActiveRoom()->activate ();
 
         std::cout << "play new game" << std::endl ;
-        SoundManager::getInstance()->playOgg ( "music/begin.ogg", /* loop */ false );
+        SoundManager::getInstance().playOgg ( "music/begin.ogg", /* loop */ false );
 }
 
 void Isomot::continueSavedGame ( tinyxml2::XMLElement* characters )
 {
-        offRecording() ;
-        offVidasInfinitas() ;
-        offInviolability() ;
-        GameManager::getInstance()->setCharactersFly( false );
-
-        finalRoomBuilt = false;
-        if ( finalRoomTimer != nilPointer ) finalRoomTimer->stop();
+        prepare ();
 
         if ( characters != nilPointer )
         {
@@ -104,10 +120,11 @@ void Isomot::continueSavedGame ( tinyxml2::XMLElement* characters )
                         if ( lives != nilPointer )
                                 howManyLives = std::atoi( lives->FirstChild()->ToText()->Value() );
 
-                        std::string directionString = "nowhere";
-                        tinyxml2::XMLElement* direction = player->FirstChildElement( "direction" );
-                        if ( direction != nilPointer )
-                                directionString = direction->FirstChild()->ToText()->Value() ;
+                        std::string orientationString = "nowhere";
+                        tinyxml2::XMLElement* orientation = player->FirstChildElement( "orientation" );
+                        if ( orientation == nilPointer ) orientation = player->FirstChildElement( "direction" );
+                        if ( orientation != nilPointer )
+                                orientationString = orientation->FirstChild()->ToText()->Value() ;
 
                         std::string entryString = "just wait";
                         tinyxml2::XMLElement* entry = player->FirstChildElement( "entry" );
@@ -145,150 +162,238 @@ void Isomot::continueSavedGame ( tinyxml2::XMLElement* characters )
 
                                 heelsLives = static_cast< unsigned char >( howManyLives );
 
-                                GameManager::getInstance()->setHeadLives( headLives );
-                                GameManager::getInstance()->setHorn( hasHorn );
-                                GameManager::getInstance()->setDonuts( howManyDoughnuts );
-                                GameManager::getInstance()->setHeelsLives( heelsLives );
-                                GameManager::getInstance()->setHandbag( hasHandbag );
-                                GameManager::getInstance()->setHighSpeed( 0 );
-                                GameManager::getInstance()->setHighJumps( 0 );
-                                GameManager::getInstance()->setHeadShield( 0 );
-                                GameManager::getInstance()->setHeelsShield( 0 );
+                                GameManager::getInstance().setHeadLives( headLives );
+                                GameManager::getInstance().setHeelsLives( heelsLives );
+                                GameManager::getInstance().setHorn( hasHorn );
+                                GameManager::getInstance().setDonuts( howManyDoughnuts );
+                                GameManager::getInstance().setHandbag( hasHandbag );
+                                GameManager::getInstance().setHighSpeed( 0 );
+                                GameManager::getInstance().setHighJumps( 0 );
+                                GameManager::getInstance().setHeadShield( 0 );
+                                GameManager::getInstance().setHeelsShield( 0 );
                         }
                         else if ( label == "head" )
                         {
-                                GameManager::getInstance()->setHeadLives( howManyLives );
-                                GameManager::getInstance()->setHorn( hasHorn );
-                                GameManager::getInstance()->setDonuts( howManyDoughnuts );
-                                GameManager::getInstance()->setHighSpeed( 0 );
-                                GameManager::getInstance()->setHeadShield( 0 );
+                                GameManager::getInstance().setHeadLives( howManyLives );
+                                GameManager::getInstance().setHorn( hasHorn );
+                                GameManager::getInstance().setDonuts( howManyDoughnuts );
+                                GameManager::getInstance().setHighSpeed( 0 );
+                                GameManager::getInstance().setHeadShield( 0 );
                         }
                         else if ( label == "heels" )
                         {
-                                GameManager::getInstance()->setHeelsLives( howManyLives );
-                                GameManager::getInstance()->setHandbag( hasHandbag );
-                                GameManager::getInstance()->setHighJumps( 0 );
-                                GameManager::getInstance()->setHeelsShield( 0 );
+                                GameManager::getInstance().setHeelsLives( howManyLives );
+                                GameManager::getInstance().setHandbag( hasHandbag );
+                                GameManager::getInstance().setHighJumps( 0 );
+                                GameManager::getInstance().setHeelsShield( 0 );
                         }
 
-                        mapManager->beginOldGameWithCharacter( room, label, x, y, z, Way( directionString ), entryString, isActiveCharacter );
+                        mapManager.beginOldGameWithCharacter( room, label, x, y, z, Way( orientationString ), entryString, isActiveCharacter );
                 }
         }
 
         std::cout << "continue previous game" << std::endl ;
-        /// no begin.ogg here
-}
-
-void Isomot::prepare ()
-{
-        if ( this->view == nilPointer )
-        {
-                // image where the isometric view will be drawn
-                this->view = new Picture( ScreenWidth(), ScreenHeight() );
-        }
-
-        // set of graphics may change between games
-        // new ItemDataManager is needed to refresh pictures of items
-        GameManager::getInstance()->binItemDataManager();
-
-        ItemDataManager* itemDataManager = new ItemDataManager();
-        itemDataManager->loadItems( "items.xml" );
-        GameManager::getInstance()->setItemDataManager( itemDataManager );
-
-        if ( this->mapManager == nilPointer )
-        {
-                // map of game
-                this->mapManager = new MapManager( this );
-                this->mapManager->loadMap ( isomot::sharePath() + "map" + pathSeparator + "map.xml" );
-        }
+        // no begin.ogg here
 }
 
 void Isomot::offRecording ()
 {
-        if ( GameManager::getInstance()->recordingCaptures () )
+        if ( GameManager::getInstance().recordingCaptures () )
         {
-                GameManager::getInstance()->toggleRecordingCaptures ();
+                GameManager::getInstance().toggleRecordingCaptures ();
         }
 }
 
 void Isomot::offVidasInfinitas ()
 {
-        if ( GameManager::getInstance()->areLivesInexhaustible () )
+        if ( GameManager::getInstance().areLivesInexhaustible () )
         {
-                GameManager::getInstance()->toggleInfiniteLives ();
+                GameManager::getInstance().toggleInfiniteLives ();
         }
 }
 
 void Isomot::offInviolability ()
 {
-        if ( GameManager::getInstance()->isImmuneToCollisionsWithMortalItems () )
+        if ( GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
         {
-                GameManager::getInstance()->toggleImmunityToCollisionsWithMortalItems ();
+                GameManager::getInstance().toggleImmunityToCollisionsWithMortalItems ();
         }
 }
 
 void Isomot::pause ()
 {
-        if ( mapManager->getActiveRoom() != nilPointer )
+        if ( mapManager.getActiveRoom() != nilPointer )
         {
-                mapManager->getActiveRoom()->deactivate();
+                mapManager.getActiveRoom()->deactivate();
         }
+
+        paused = true ;
 }
 
 void Isomot::resume ()
 {
-        if ( mapManager->getActiveRoom() != nilPointer )
+        if ( mapManager.getActiveRoom() != nilPointer )
         {
-                mapManager->getActiveRoom()->activate();
+                mapManager.getActiveRoom()->activate();
         }
+
+        paused = false ;
 }
 
-void Isomot::reset()
+Picture* Isomot::updateMe ()
 {
-        finalRoomBuilt = false;
-        if ( finalRoomTimer != nilPointer ) finalRoomTimer->stop();
+        if ( view == nilPointer ) return nilPointer ;
 
-        // bin isometric view
-        delete this->view ;
-        this->view = nilPointer ;
+        Color backgroundColor = Color::blackColor();
+        if ( GameManager::getInstance().charactersFly() ) backgroundColor = Color::darkBlueColor();
 
-        this->mapManager->binEveryRoom();
+        view->fillWithColor( backgroundColor );
 
-        // bin taken bonuses
-        BonusManager::getInstance()->reset();
+        Room* activeRoom = mapManager.getActiveRoom();
+        if ( activeRoom == nilPointer ) return view ;
+
+        handleMagicKeys ();
+
+        // swap key changes character and possibly room
+        if ( ! this->finalRoomBuilt && InputManager::getInstance().swapTyped() )
+        {
+                activeRoom->getMediator()->getActiveCharacter()->wait(); // stop active player
+
+                if ( activeRoom->getMediator()->getActiveCharacter()->getBehavior()->getActivityOfItem() == Activity::Wait )
+                {
+                        // swap in the same room or between different rooms
+                        if ( ! activeRoom->swapCharactersInRoom() )
+                        {
+                                activeRoom = mapManager.swapRoom();
+                        }
+                }
+
+                InputManager::getInstance().releaseKeyFor( "swap" );
+        }
+
+        if ( activeRoom->getMediator()->getActiveCharacter()->getWayOfExit() == "no exit" )
+        {
+                activeRoom->drawRoom();
+        }
+        // there’s a change of room or active player lost its life
+        else
+        {
+                const PlayerItem& activeCharacter = * activeRoom->getMediator()->getActiveCharacter() ;
+
+                if ( activeCharacter.getWayOfExit() == "rebuild room" )
+                {
+                        if ( activeCharacter.getLives() != 0 || activeCharacter.getLabel() == "headoverheels" )
+                        {
+                                activeRoom = mapManager.rebuildRoom();
+                        }
+                        else
+                        {
+                                if ( ! activeRoom->continueWithAlivePlayer( ) )
+                                {
+                                        activeRoom = mapManager.noLivesSwap ();
+                                }
+                        }
+                }
+                else
+                {
+                        Room* newRoom = mapManager.changeRoom();
+
+                        if ( newRoom != nilPointer && newRoom != activeRoom )
+                        {
+                                playTuneForScenery( newRoom->getScenery () );
+                        }
+
+                        activeRoom = newRoom;
+                }
+        }
+
+        // draw active room
+
+        const int cameraDeltaX = activeRoom->getCamera()->getDeltaX();
+        const int cameraDeltaY = activeRoom->getCamera()->getDeltaY();
+
+        allegro::bitBlit (
+                activeRoom->getWhereToDraw()->getAllegroPict(), view->getAllegroPict(),
+                cameraDeltaX, cameraDeltaY,
+                0, 0,
+                activeRoom->getWhereToDraw()->getWidth(), activeRoom->getWhereToDraw()->getHeight()
+        );
+
+        std::string roomFile = activeRoom->getNameOfFileWithDataAboutRoom() ;
+
+        AllegroColor allegroWhiteColor = Color::whiteColor().toAllegroColor() ;
+
+        if ( ! GameManager::getInstance().hasBackgroundPicture () )
+        {
+                // show information about room and draw miniature of room
+
+                std::ostringstream roomTiles;
+                roomTiles << activeRoom->getTilesX() << "x" << activeRoom->getTilesY();
+
+                allegro::textOut( roomFile, view->getAllegroPict(), 12, 8, allegroWhiteColor );
+                allegro::textOut( roomTiles.str(), view->getAllegroPict(), 12, 20, allegroWhiteColor );
+
+                Isomot::drawMiniatureOfRoom( *activeRoom, view, sizeOfTileForMiniature );
+        }
+
+        // cheats
+
+        if ( GameManager::getInstance().areLivesInexhaustible () )
+        {
+                ///allegro::textOut( "VIDAS INFINITAS", view->getAllegroPict(), 18, 10, allegroWhiteColor );
+                allegro::textOut( "INFINITE LIVES", view->getAllegroPict(), view->getWidth() - 128, 10, allegroWhiteColor );
+        }
+
+        if ( GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
+        {
+                allegro::textOut( "INVIOLABILITY", view->getAllegroPict(), ( view->getWidth() - 13 * 8 ) >> 1, 10, allegroWhiteColor );
+        }
+
+        // la sala final es muy especial
+        if ( roomFile == "finalroom.xml" )
+        {
+                updateFinalRoom();
+        }
+
+        if ( paused )
+        {
+                Color::multiplyWithColor( view, Color::gray50Color() );
+        }
+
+        return this->view;
 }
 
-Picture* Isomot::update()
+void Isomot::handleMagicKeys ()
 {
-        Room* activeRoom = mapManager->getActiveRoom();
-        GameManager* gameManager = GameManager::getInstance();
+        Room* activeRoom = mapManager.getActiveRoom();
+        GameManager& gameManager = GameManager::getInstance();
 
         if ( allegro::isKeyPushed( "PrintScreen" ) )
         {
-                gameManager->toggleRecordingCaptures ();
+                gameManager.toggleRecordingCaptures ();
                 allegro::releaseKey( "PrintScreen" );
         }
 
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "f" ) )
         {
-                gui::GuiManager::getInstance()->toggleFullScreenVideo ();
+                gui::GuiManager::getInstance().toggleFullScreenVideo ();
                 allegro::releaseKey( "f" );
         }
 
         if ( allegro::isAltKeyPushed() && allegro::isKeyPushed( "PageUp" ) )
         {
-                if ( ! gameManager->charactersFly() )
+                if ( ! gameManager.charactersFly() )
                 {
-                        gameManager->setCharactersFly( true );
+                        gameManager.setCharactersFly( true );
                         std::cout << "characters fly and don’t fall" << std::endl ;
                 }
                 allegro::releaseKey( "PageUp" );
         }
         if ( allegro::isAltKeyPushed() && allegro::isKeyPushed( "PageDown" ) )
         {
-                if ( gameManager->charactersFly() )
+                if ( gameManager.charactersFly() )
                 {
-                        gameManager->setCharactersFly( false );
+                        gameManager.setCharactersFly( false );
                         std::cout << "characters feel gravity again" << std::endl ;
                 }
                 allegro::releaseKey( "PageDown" );
@@ -296,33 +401,33 @@ Picture* Isomot::update()
 
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "=" ) )
         {
-                gameManager->addLives( activeRoom->getMediator()->getLabelOfActiveCharacter(), 1 );
+                gameManager.addLives( activeRoom->getMediator()->getLabelOfActiveCharacter(), 1 );
                 allegro::releaseKey( "=" );
         }
 
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "i" ) )
         {
-                gameManager->toggleInfiniteLives ();
+                gameManager.toggleInfiniteLives ();
                 allegro::releaseKey( "i" );
         }
 
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "c" ) )
         {
-                gameManager->toggleImmunityToCollisionsWithMortalItems ();
+                gameManager.toggleImmunityToCollisionsWithMortalItems ();
                 allegro::releaseKey( "c" );
         }
 
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "b" ) )
         {
-                gameManager->toggleBackgroundPicture ();
+                gameManager.toggleBackgroundPicture ();
                 allegro::releaseKey( "b" );
         }
 
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "t" ) )
         {
-                GameManager::getInstance()->togglePlayMelodyOfScenery ();
+                GameManager::getInstance().togglePlayMelodyOfScenery ();
 
-                if ( GameManager::getInstance()->playMelodyOfScenery() )
+                if ( GameManager::getInstance().playMelodyOfScenery() )
                 {
                         std::cout << "room tunes on" << std::endl ;
                         playTuneForScenery( activeRoom->getScenery () );
@@ -334,7 +439,7 @@ Picture* Isomot::update()
 
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "s" ) )
         {
-                gameManager->eatFish ( activeRoom->getMediator()->getActiveCharacter(), activeRoom );
+                gameManager.eatFish ( * activeRoom->getMediator()->getActiveCharacter(), activeRoom );
                 allegro::releaseKey( "s" );
         }
 
@@ -374,20 +479,20 @@ Picture* Isomot::update()
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "r" ) )
         {
                 playTuneForScenery( activeRoom->getScenery () );
-                activeRoom = mapManager->rebuildRoom();
+                activeRoom = mapManager.rebuildRoom();
 
                 allegro::releaseKey( "r" );
         }
 
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "j" ) )
         {
-                PlayerItem* activePlayer = activeRoom->getMediator()->getActiveCharacter();
-                PlayerItem* otherPlayer = nilPointer;
+                PlayerItemPtr activePlayer = activeRoom->getMediator()->getActiveCharacter();
+                PlayerItemPtr otherPlayer ;
 
-                Room* roomWithInactivePlayer = this->mapManager->getRoomOfInactivePlayer();
+                Room* roomWithInactivePlayer = mapManager.getRoomOfInactivePlayer();
                 if ( roomWithInactivePlayer != nilPointer )
                 {
-                        otherPlayer = roomWithInactivePlayer->getMediator()->getActiveCharacter();
+                        otherPlayer = roomWithInactivePlayer->getMediator()->getActiveCharacter() ;
                 }
 
                 if ( otherPlayer != nilPointer && roomWithInactivePlayer != activeRoom )
@@ -401,24 +506,24 @@ Picture* Isomot::update()
                         int playerZ = activePlayer->getZ() + 2 * LayerHeight;
                         Way way = otherPlayer->getOrientation();
 
-                        PlayerItem* joinedPlayer = new PlayerItem(
-                                GameManager::getInstance()->getItemDataManager()->findDataByLabel( nameOfAnotherPlayer ),
+                        PlayerItemPtr joinedPlayer( new PlayerItem(
+                                itemDataManager.findDataByLabel( nameOfAnotherPlayer ),
                                 playerX, playerY, playerZ, way
-                        ) ;
+                        ) );
 
                         std::string behavior = "still";
                         if ( nameOfAnotherPlayer == "head" ) behavior = "behavior of Head";
                         else if ( nameOfAnotherPlayer == "heels" ) behavior = "behavior of Heels";
 
-                        joinedPlayer->assignBehavior( behavior, reinterpret_cast< void * >( GameManager::getInstance()->getItemDataManager() ) );
+                        joinedPlayer->setBehaviorOf( behavior );
 
                         joinedPlayer->fillWithData( gameManager );
 
                         activeRoom->addPlayerToRoom( joinedPlayer, true );
                         joinedPlayer->getBehavior()->changeActivityOfItem( Activity::BeginWayInTeletransport );
 
-                        roomWithInactivePlayer->removePlayerFromRoom( otherPlayer, true );
-                        this->mapManager->removeRoom( roomWithInactivePlayer );
+                        roomWithInactivePlayer->removePlayerFromRoom( *otherPlayer, true );
+                        mapManager.removeRoomInPlay( roomWithInactivePlayer );
                 }
 
                 allegro::releaseKey( "j" );
@@ -426,53 +531,53 @@ Picture* Isomot::update()
 
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "l" ) )
         {
-                if ( gameManager->countFreePlanets() < 5 )
+                if ( gameManager.countFreePlanets() < 5 )
                 {
                         if ( activeRoom->getMediator()->findItemByLabel( "crown" ) == nilPointer )
                         {
-                                ItemData* chapeauData = GameManager::getInstance()->getItemDataManager()->findDataByLabel( "crown" );
+                                const ItemData* chapeauData = itemDataManager.findDataByLabel( "crown" );
 
                                 int x = ( activeRoom->getLimitAt( "south" ) - activeRoom->getLimitAt( "north" ) + chapeauData->getWidthX() ) >> 1 ;
                                 int y = ( activeRoom->getLimitAt( "west" ) - activeRoom->getLimitAt( "east" ) + chapeauData->getWidthY() ) >> 1 ;
 
-                                FreeItem* chapeau = new FreeItem( chapeauData, x, y, 250, Way::Nowhere );
-                                chapeau->assignBehavior( "behavior of something special", chapeauData );
+                                FreeItemPtr chapeau( new FreeItem( chapeauData, x, y, 250, Way::Nowhere ) );
+                                chapeau->setBehaviorOf( "behavior of something special" );
                                 activeRoom->addFreeItem( chapeau );
                         }
                 }
                 else
                 {
-                        PlayerItem* activePlayer = activeRoom->getMediator()->getActiveCharacter();
+                        PlayerItemPtr activePlayer = activeRoom->getMediator()->getActiveCharacter();
                         std::string nameOfPlayer = activePlayer->getLabel();
                         Way whichWay = activePlayer->getOrientation();
                         int teleportedX = 0;
                         int teleportedY = 95;
                         int teleportedZ = 240;
 
-                        PlayerItem* teleportedPlayer = new PlayerItem(
-                                GameManager::getInstance()->getItemDataManager()->findDataByLabel( nameOfPlayer ),
+                        PlayerItemPtr teleportedPlayer( new PlayerItem(
+                                itemDataManager.findDataByLabel( nameOfPlayer ),
                                 teleportedX, teleportedY, teleportedZ,
                                 whichWay
-                        ) ;
+                        ) ) ;
 
                         std::string behaviorOfPlayer = "still";
                         if ( nameOfPlayer == "head" ) behaviorOfPlayer = "behavior of Head";
                         else if ( nameOfPlayer == "heels" ) behaviorOfPlayer = "behavior of Heels";
                         else if ( nameOfPlayer == "headoverheels" ) behaviorOfPlayer = "behavior of Head over Heels";
 
-                        teleportedPlayer->assignBehavior( behaviorOfPlayer, reinterpret_cast< void * >( GameManager::getInstance()->getItemDataManager() ) );
+                        teleportedPlayer->setBehaviorOf( behaviorOfPlayer );
 
                         teleportedPlayer->fillWithData( gameManager );
 
                         std::string nameOfRoomNearFinal = "blacktooth83tofreedom.xml";
-                        Room* roomWithTeleportToFinalScene = this->mapManager->createRoomThenAddItToListOfRooms( nameOfRoomNearFinal, true );
+                        Room* roomWithTeleportToFinalScene = mapManager.getRoomThenAddItToRoomsInPlay( nameOfRoomNearFinal, true );
                         roomWithTeleportToFinalScene->addPlayerToRoom( teleportedPlayer, true );
                         teleportedPlayer->getBehavior()->changeActivityOfItem( Activity::BeginWayInTeletransport );
 
-                        activeRoom->removePlayerFromRoom( activePlayer, true );
+                        activeRoom->removePlayerFromRoom( *activePlayer, true );
 
-                        this->mapManager->setActiveRoom( roomWithTeleportToFinalScene );
-                        this->mapManager->removeRoom( activeRoom );
+                        mapManager.setActiveRoom( roomWithTeleportToFinalScene );
+                        mapManager.removeRoomInPlay( activeRoom );
 
                         roomWithTeleportToFinalScene->activate();
                         activeRoom = roomWithTeleportToFinalScene;
@@ -481,129 +586,30 @@ Picture* Isomot::update()
                 allegro::releaseKey( "l" );
         }
 
-        // swap key changes character and possibly room
-        if ( ! this->finalRoomBuilt && InputManager::getInstance()->swapTyped() )
+        if ( allegro::isShiftKeyPushed() && allegro::isKeyPushed( "Pad -" ) )
         {
-                activeRoom->getMediator()->getActiveCharacter()->wait(); // stop active player
-
-                if ( activeRoom->getMediator()->getActiveCharacter()->getBehavior()->getActivityOfItem() == Activity::Wait )
-                {
-                        // swap in the same room or between different rooms
-                        if ( ! activeRoom->swapCharactersInRoom( GameManager::getInstance()->getItemDataManager() ) )
-                        {
-                                activeRoom = mapManager->swapRoom();
-                        }
-                }
-
-                InputManager::getInstance()->releaseKeyFor( "swap" );
+                if ( sizeOfTileForMiniature > 2 ) sizeOfTileForMiniature --;
+                allegro::releaseKey( "Pad -" );
         }
-
-        if ( activeRoom->getWayOfExit() == "no exit" )
+        if ( allegro::isShiftKeyPushed() && allegro::isKeyPushed( "Pad +" ) )
         {
-                activeRoom->drawRoom();
+                if ( sizeOfTileForMiniature < 10 ) sizeOfTileForMiniature ++;
+                allegro::releaseKey( "Pad +" );
         }
-        // there’s a change of room or active player lost its life
-        else
-        {
-                if ( activeRoom->getWayOfExit() == "rebuild room" )
-                {
-                        PlayerItem* player = activeRoom->getMediator()->getActiveCharacter();
-
-                        if ( player->getLives() != 0 || player->getLabel() == "headoverheels" )
-                        {
-                                activeRoom = mapManager->rebuildRoom();
-                        }
-                        else
-                        {
-                                if ( ! activeRoom->continueWithAlivePlayer( ) )
-                                {
-                                        activeRoom = mapManager->removeRoomAndSwap ();
-                                }
-                        }
-                }
-                else
-                {
-                        Room* newRoom = mapManager->changeRoom( activeRoom->getWayOfExit() );
-
-                        if ( newRoom != nilPointer && newRoom != activeRoom )
-                        {
-                                playTuneForScenery( newRoom->getScenery () );
-                        }
-
-                        activeRoom = newRoom;
-                }
-        }
-
-        // draw active room, if there’s any
-        if ( activeRoom != nilPointer )
-        {
-                allegro::bitBlit (
-                        activeRoom->getWhereToDraw()->getAllegroPict(), view->getAllegroPict(),
-                        activeRoom->getCamera()->getDeltaX(), activeRoom->getCamera()->getDeltaY(),
-                        0, 0,
-                        activeRoom->getWhereToDraw()->getWidth(), activeRoom->getWhereToDraw()->getHeight()
-                );
-
-                std::string roomFile = activeRoom->getNameOfFileWithDataAboutRoom() ;
-
-                AllegroColor allegroWhiteColor = Color::whiteColor().toAllegroColor() ;
-
-                if ( ! GameManager::getInstance()->hasBackgroundPicture () )
-                {
-                        // show information about room and draw miniature of room
-
-                        std::ostringstream roomTiles;
-                        roomTiles << activeRoom->getTilesX() << "x" << activeRoom->getTilesY();
-
-                        allegro::textOut( roomFile, view->getAllegroPict(), 12, 8, allegroWhiteColor );
-                        allegro::textOut( roomTiles.str(), view->getAllegroPict(), 12, 20, allegroWhiteColor );
-
-                        const unsigned int sizeOfTileForMiniature = 3 ;
-                        Isomot::drawMiniatureOfRoom( activeRoom, this->mapManager, view, sizeOfTileForMiniature );
-                }
-
-                // cheats
-
-                if ( GameManager::getInstance()->areLivesInexhaustible () )
-                {
-                        ////allegro::textOut( "VIDAS INFINITAS", view->getAllegroPict(), 18, 10, allegroWhiteColor );
-                        allegro::textOut( "INFINITE LIVES", view->getAllegroPict(), view->getWidth() - 128, 10, allegroWhiteColor );
-                }
-
-                if ( GameManager::getInstance()->isImmuneToCollisionsWithMortalItems () )
-                {
-                        allegro::textOut( "INVIOLABILITY", view->getAllegroPict(), ( view->getWidth() >> 1 ) - 50, 10, allegroWhiteColor );
-                }
-
-                // la sala final es muy especial
-                if ( roomFile == "finalroom.xml" )
-                {
-                        updateFinalRoom();
-                }
-        }
-        // there’s no active room
-        else
-        {
-                std::cout << "no room, game over" << std::endl ;
-                delete this->view ;
-                this->view = nilPointer ;
-        }
-
-        return this->view;
 }
 
 void Isomot::playTuneForScenery ( const std::string& scenery )
 {
-        if ( scenery != "" && GameManager::getInstance()->playMelodyOfScenery () )
+        if ( scenery != "" && GameManager::getInstance().playMelodyOfScenery () )
         {
-                SoundManager::getInstance()->playOgg ( "music/" + scenery + ".ogg", /* loop */ false );
+                SoundManager::getInstance().playOgg ( "music/" + scenery + ".ogg", /* loop */ false );
         } else
                 std::cout << "( ignore melody for scenery \"" << scenery << "\" )" << std::endl ;
 }
 
 void Isomot::updateFinalRoom()
 {
-        Room* activeRoom = mapManager->getActiveRoom();
+        Room* activeRoom = mapManager.getActiveRoom();
         assert( activeRoom != nilPointer );
         Mediator* mediator = activeRoom->getMediator();
         assert( mediator != nilPointer );
@@ -612,62 +618,59 @@ void Isomot::updateFinalRoom()
         {
                 mediator->endUpdate();
 
-                if ( mediator->getActiveCharacter() != nilPointer )
+                std::string arrivedCharacter = mediator->getActiveCharacter()->getOriginalLabel();
+
+                activeRoom->removePlayerFromRoom( * mediator->getActiveCharacter(), true );
+
+                std::cout << "character \"" << arrivedCharacter << "\" arrived to final room" << std::endl ;
+
+                const ItemData* dataOfArrived = itemDataManager.findDataByLabel( arrivedCharacter );
+
+                if ( dataOfArrived != nilPointer )
                 {
-                        std::string arrivedCharacter = mediator->getActiveCharacter()->getOriginalLabel();
-
-                        activeRoom->removePlayerFromRoom( mediator->getActiveCharacter(), true );
-
-                        std::cout << "character \"" << arrivedCharacter << "\" arrived to final room" << std::endl ;
-
-                        ItemData* dataOfArrived = GameManager::getInstance()->getItemDataManager()->findDataByLabel( arrivedCharacter );
-
-                        if ( dataOfArrived != nilPointer )
-                        {
-                                FreeItem* character = new FreeItem( dataOfArrived, 66, 92, Top, Way::South );
-                                activeRoom->addFreeItem( character );
-                        }
+                        FreeItemPtr character( new FreeItem( dataOfArrived, 66, 92, Top, Way::South ) );
+                        activeRoom->addFreeItem( character );
                 }
 
                 // crea las coronas recuperadas
 
-                GameManager* gameManager = GameManager::getInstance();
+                GameManager& gameManager = GameManager::getInstance();
                 unsigned int crowns = 0;
 
-                ItemData* dataForChapeau = GameManager::getInstance()->getItemDataManager()->findDataByLabel( "crown" );
+                const ItemData* dataForChapeau = itemDataManager.findDataByLabel( "crown" );
 
                 // la corona de Safari
-                if ( gameManager->isFreePlanet( "safari" ) )
+                if ( gameManager.isFreePlanet( "safari" ) )
                 {
-                        FreeItem* chapeau = new FreeItem( dataForChapeau, 66, 75, Top, Way::Nowhere );
+                        FreeItemPtr chapeau( new FreeItem( dataForChapeau, 66, 75, Top, Way::Nowhere ) );
                         activeRoom->addFreeItem( chapeau );
                         crowns++;
                 }
                 // la corona de Egyptus
-                if ( gameManager->isFreePlanet( "egyptus" ) )
+                if ( gameManager.isFreePlanet( "egyptus" ) )
                 {
-                        FreeItem* chapeau = new FreeItem( dataForChapeau, 66, 59, Top, Way::Nowhere );
+                        FreeItemPtr chapeau( new FreeItem( dataForChapeau, 66, 59, Top, Way::Nowhere ) );
                         activeRoom->addFreeItem( chapeau );
                         crowns++;
                 }
                 // la corona de Penitentiary
-                if ( gameManager->isFreePlanet( "penitentiary" ) )
+                if ( gameManager.isFreePlanet( "penitentiary" ) )
                 {
-                        FreeItem* chapeau = new FreeItem( dataForChapeau, 65, 107, Top, Way::Nowhere );
+                        FreeItemPtr chapeau( new FreeItem( dataForChapeau, 65, 107, Top, Way::Nowhere ) );
                         activeRoom->addFreeItem( chapeau );
                         crowns++;
                 }
                 // la corona de Byblos
-                if ( gameManager->isFreePlanet( "byblos" ) )
+                if ( gameManager.isFreePlanet( "byblos" ) )
                 {
-                        FreeItem* chapeau = new FreeItem( dataForChapeau, 65, 123, Top, Way::Nowhere );
+                        FreeItemPtr chapeau( new FreeItem( dataForChapeau, 65, 123, Top, Way::Nowhere ) );
                         activeRoom->addFreeItem( chapeau );
                         crowns++;
                 }
                 // la corona de Blacktooth
-                if ( gameManager->isFreePlanet( "blacktooth" ) )
+                if ( gameManager.isFreePlanet( "blacktooth" ) )
                 {
-                        FreeItem* chapeau = new FreeItem( dataForChapeau, 65, 91, Top, Way::Nowhere );
+                        FreeItemPtr chapeau( new FreeItem( dataForChapeau, 65, 91, Top, Way::Nowhere ) );
                         activeRoom->addFreeItem( chapeau );
                         crowns++;
                 }
@@ -677,32 +680,31 @@ void Isomot::updateFinalRoom()
                 if ( crowns == 5 )
                 {
                         // all five crowns are taken, show the greeting screen
-                        gameManager->success();
+                        gameManager.success();
                 }
                 else
                 {
                         // if not, just go to the summary screen
-                        gameManager->arriveFreedom();
+                        gameManager.arriveInFreedom();
                 }
 
-                if ( finalRoomTimer == nilPointer ) finalRoomTimer = new Timer() ;
                 finalRoomTimer->reset();
                 finalRoomTimer->go();
 
                 this->finalRoomBuilt = true;
                 std::cout << "final room is okay" << std::endl ;
 
-                SoundManager::getInstance()->playOgg ( "music/freedom.ogg", /* loop */ true );
+                SoundManager::getInstance().playOgg ( "music/freedom.ogg", /* loop */ true );
         }
         else
         {
                 if ( finalRoomTimer->getValue() > 4 /* each 4 seconds */ )
                 {
-                        FreeItem* finalBall = new FreeItem (
-                                GameManager::getInstance()->getItemDataManager()->findDataByLabel( "ball" ),
+                        FreeItemPtr finalBall( new FreeItem (
+                                itemDataManager.findDataByLabel( "ball" ),
                                 146, 93, LayerHeight, Way::Nowhere
-                        );
-                        finalBall->assignBehavior( "behaivor of final ball", GameManager::getInstance()->getItemDataManager()->findDataByLabel( "bubbles" ) );
+                        ) );
+                        finalBall->setBehaviorOf( "behaivor of final ball" );
                         activeRoom->addFreeItem( finalBall );
 
                         finalRoomTimer->reset();
@@ -711,13 +713,13 @@ void Isomot::updateFinalRoom()
 }
 
 /* static */
-void Isomot::drawMiniatureOfRoom( Room* room, MapManager* mapManager, const Picture* where, const unsigned int sizeOfTile )
+void Isomot::drawMiniatureOfRoom( const Room& room, const Picture* where, const unsigned int sizeOfTile )
 {
-        assert( room != nilPointer );
-        assert( mapManager != nilPointer );
         assert( where != nilPointer );
 
-        MapRoomData* connections = mapManager->findRoomData( room );
+        if ( sizeOfTile < 2 ) return ;
+
+        const RoomConnections* connections = room.getConnections();
         assert( connections != nilPointer );
 
         Way wayToNextRoom( "nowhere" );
@@ -727,211 +729,419 @@ void Isomot::drawMiniatureOfRoom( Room* room, MapManager* mapManager, const Pict
         std::string roomToTeleport = connections->findConnectedRoom( "via teleport", &wayToNextRoom );
         std::string roomToTeleportToo = connections->findConnectedRoom( "via second teleport", &wayToNextRoom );
 
-        int tilesX = room->getTilesX();
-        int tilesY = room->getTilesY();
+        unsigned int tilesX = room.getTilesX();
+        unsigned int tilesY = room.getTilesY();
 
         const unsigned int leftXmap = 24;
         const unsigned int topYmap = roomAbove.empty() ? 28 : 24 + ( 3 * sizeOfTile );
 
-        const unsigned int iniPosX = leftXmap + ( tilesY * ( sizeOfTile << 1 ) );
-        const unsigned int iniPosY = topYmap + ( sizeOfTile << 1 );
+        const unsigned int iniX = leftXmap + ( tilesY * ( sizeOfTile << 1 ) );
+        const unsigned int iniY = topYmap + ( sizeOfTile << 1 );
 
-        unsigned int posX = iniPosX ;
-        unsigned int posY = iniPosY ;
+        unsigned int firstTileX = 0;
+        unsigned int firstTileY = 0;
+        unsigned int lastTileX = tilesX - 1;
+        unsigned int lastTileY = tilesY - 1;
 
-        int doorXmid = tilesX >> 1;
-        int doorYmid = tilesY >> 1;
+        Door* eastDoor = room.getDoorAt( "east" );
+        Door* southDoor = room.getDoorAt( "south" );
+        Door* northDoor = room.getDoorAt( "north" );
+        Door* westDoor = room.getDoorAt( "west" );
 
-        Door* eastDoor = room->getDoorAt( "east" );
-        Door* southDoor = room->getDoorAt( "south" );
-        Door* westDoor = room->getDoorAt( "west" );
-        Door* northDoor = room->getDoorAt( "north" );
+        Door* eastnorthDoor = room.getDoorAt( "eastnorth" );
+        Door* eastsouthDoor = room.getDoorAt( "eastsouth" );
+        Door* southeastDoor = room.getDoorAt( "southeast" );
+        Door* southwestDoor = room.getDoorAt( "southwest" );
+        Door* northeastDoor = room.getDoorAt( "northeast" );
+        Door* northwestDoor = room.getDoorAt( "northwest" );
+        Door* westnorthDoor = room.getDoorAt( "westnorth" );
+        Door* westsouthDoor = room.getDoorAt( "westsouth" );
 
-        if ( eastDoor != nilPointer && westDoor == nilPointer ) doorYmid ++;
-        if ( northDoor != nilPointer && southDoor == nilPointer ) doorXmid ++;
+        if ( northDoor != nilPointer || northeastDoor != nilPointer || northwestDoor != nilPointer )
+                firstTileX++ ;
 
-        for ( int tile = 0 ; tile < tilesX ; tile ++ )
+        if ( eastDoor != nilPointer || eastnorthDoor != nilPointer || eastsouthDoor != nilPointer )
+                firstTileY++ ;
+
+        if ( southDoor != nilPointer || southeastDoor != nilPointer || southwestDoor != nilPointer )
+                lastTileX --;
+
+        if ( westDoor != nilPointer || westnorthDoor != nilPointer || westsouthDoor != nilPointer )
+                lastTileY --;
+
+        bool narrowRoomAlongX = ( lastTileY == firstTileY + 1 ) ;
+        bool narrowRoomAlongY = ( lastTileX == firstTileX + 1 ) ;
+
+        // draw doors
+
+        if ( eastDoor != nilPointer && ! narrowRoomAlongY )
         {
-                if ( eastDoor != nilPointer && eastDoor->getCellX() + 1 != doorXmid )
-                {
-                        doorXmid = eastDoor->getCellX() + 1;
-                }
-
-                if ( ! ( ( tile == doorXmid || tile + 1 == doorXmid )
-                        && eastDoor != nilPointer ) )
-                {
-                        for ( unsigned int pix = 0 ; pix < sizeOfTile ; pix ++ )
-                        {
-                                where->drawPixelAt( posX++, posY, Color::whiteColor() );
-                                where->drawPixelAt( posX++, posY++, Color::whiteColor() );
-                        }
-                }
-                else
-                {
-                        if ( eastDoor != nilPointer && ( tile + 1 == doorXmid ) )
-                        {
-                                if ( tile > 0 /* not first tile */ )
-                                        where->drawPixelAt( posX, posY, Color::gray50Color() );
-                                else
-                                        where->drawPixelAt( posX + 2, posY + 1, Color::gray50Color() );
-                        }
-
-                        posX += sizeOfTile << 1;
-                        posY += sizeOfTile;
-
-                        if ( eastDoor != nilPointer && ( tile == doorXmid ) )
-                        {
-                                if ( tile + 1 < tilesX /* not last tile */ )
-                                        where->drawPixelAt( posX - 1, posY - 1, Color::gray50Color() );
-                                else
-                                        where->drawPixelAt( posX - 3, posY - 2, Color::gray50Color() );
-                        }
-                }
+                unsigned int eastDoorXmid = eastDoor->getCellX() + 1;
+                drawEastDoorOnMiniature( where->getAllegroPict(), iniX, iniY, eastDoorXmid, eastDoor->getCellY(), sizeOfTile, Color::whiteColor() );
+        }
+        if ( eastnorthDoor != nilPointer )
+        {
+                unsigned int eastnorthDoorXmid = eastnorthDoor->getCellX() + 1;
+                drawEastDoorOnMiniature( where->getAllegroPict(), iniX, iniY, eastnorthDoorXmid, eastnorthDoor->getCellY(), sizeOfTile, Color::whiteColor() );
+        }
+        if ( eastsouthDoor != nilPointer )
+        {
+                unsigned int eastsouthDoorXmid = eastsouthDoor->getCellX() + 1;
+                drawEastDoorOnMiniature( where->getAllegroPict(), iniX, iniY, eastsouthDoorXmid, eastsouthDoor->getCellY(), sizeOfTile, Color::whiteColor() );
         }
 
-        posX--; posY--;
-
-        for ( int tile = 0 ; tile < tilesY ; tile ++ )
+        if ( northDoor != nilPointer && ! narrowRoomAlongX )
         {
-                if ( southDoor != nilPointer && southDoor->getCellY() + 1 != doorYmid )
-                {
-                        doorYmid = southDoor->getCellY() + 1;
-                }
-
-                if ( ! ( ( tile == doorYmid || tile + 1 == doorYmid )
-                        && southDoor != nilPointer ) )
-                {
-                        for ( unsigned int pix = 0 ; pix < sizeOfTile ; pix ++ )
-                        {
-                                where->drawPixelAt( posX--, posY, Color::whiteColor() );
-                                where->drawPixelAt( posX--, posY++, Color::whiteColor() );
-                        }
-                }
-                else
-                {
-                        if ( southDoor != nilPointer && ( tile + 1 == doorYmid ) )
-                        {
-                                if ( tile > 0 /* not first tile */ )
-                                        where->drawPixelAt( posX, posY, Color::gray50Color() );
-                                else
-                                        where->drawPixelAt( posX - 2, posY + 1, Color::gray50Color() );
-                        }
-
-                        posX -= sizeOfTile << 1;
-                        posY += sizeOfTile;
-
-                        if ( southDoor != nilPointer && ( tile == doorYmid ) )
-                        {
-                                if ( tile + 1 < tilesY /* not last tile */ )
-                                        where->drawPixelAt( posX + 1, posY - 1, Color::gray50Color() );
-                                else
-                                        where->drawPixelAt( posX + 3, posY - 2, Color::gray50Color()  );
-                        }
-                }
+                unsigned int northDoorYmid = northDoor->getCellY() + 1;
+                drawNorthDoorOnMiniature( where->getAllegroPict(), iniX, iniY, northDoor->getCellX(), northDoorYmid, sizeOfTile, Color::whiteColor() );
+        }
+        if ( northeastDoor != nilPointer )
+        {
+                unsigned int northeastDoorYmid = northeastDoor->getCellY() + 1;
+                drawNorthDoorOnMiniature( where->getAllegroPict(), iniX, iniY, northeastDoor->getCellX(), northeastDoorYmid, sizeOfTile, Color::whiteColor() );
+        }
+        if ( northwestDoor != nilPointer )
+        {
+                unsigned int northwestDoorYmid = northwestDoor->getCellY() + 1;
+                drawNorthDoorOnMiniature( where->getAllegroPict(), iniX, iniY, northwestDoor->getCellX(), northwestDoorYmid, sizeOfTile, Color::whiteColor() );
         }
 
-        posX = iniPosX + 1 ;
-        posY = iniPosY ;
-
-        for ( int tile = 0 ; tile < tilesY ; tile ++ )
+        if ( westDoor != nilPointer && ! narrowRoomAlongY )
         {
-                if ( northDoor != nilPointer && northDoor->getCellY() + 1 != doorYmid )
-                {
-                        doorYmid = northDoor->getCellY() + 1;
-                }
-
-                if ( ! ( ( tile == doorYmid || tile + 1 == doorYmid )
-                        && northDoor != nilPointer ) )
-                {
-                        for ( unsigned int pix = 0 ; pix < sizeOfTile ; pix ++ )
-                        {
-                                where->drawPixelAt( posX--, posY, Color::whiteColor() );
-                                where->drawPixelAt( posX--, posY++, Color::whiteColor() );
-                        }
-                }
-                else
-                {
-                        if ( northDoor != nilPointer && ( tile + 1 == doorYmid ) )
-                        {
-                                if ( tile > 0 /* not first tile */ )
-                                        where->drawPixelAt( posX, posY, Color::gray50Color() );
-                                else
-                                        where->drawPixelAt( posX - 2, posY + 1, Color::gray50Color() );
-                        }
-
-                        posX -= sizeOfTile << 1;
-                        posY += sizeOfTile;
-
-                        if ( northDoor != nilPointer && ( tile == doorYmid ) )
-                        {
-                                if ( tile + 1 < tilesY /* not last tile */ )
-                                        where->drawPixelAt( posX + 1, posY - 1, Color::gray50Color() );
-                                else
-                                        where->drawPixelAt( posX + 3, posY - 2, Color::gray50Color() );
-                        }
-                }
+                unsigned int westDoorXmid = westDoor->getCellX() + 1;
+                drawWestDoorOnMiniature( where->getAllegroPict(), iniX, iniY, westDoorXmid, westDoor->getCellY(), sizeOfTile, Color::whiteColor() );
+        }
+        if ( westnorthDoor != nilPointer )
+        {
+                unsigned int westnorthDoorXmid = westnorthDoor->getCellX() + 1;
+                drawWestDoorOnMiniature( where->getAllegroPict(), iniX, iniY, westnorthDoorXmid, westnorthDoor->getCellY(), sizeOfTile, Color::whiteColor() );
+        }
+        if ( westsouthDoor != nilPointer )
+        {
+                unsigned int westsouthDoorXmid = westsouthDoor->getCellX() + 1;
+                drawWestDoorOnMiniature( where->getAllegroPict(), iniX, iniY, westsouthDoorXmid, westsouthDoor->getCellY(), sizeOfTile, Color::whiteColor() );
         }
 
-        posX++; posY--;
-
-        for ( int tile = 0 ; tile < tilesX ; tile ++ )
+        if ( southDoor != nilPointer && ! narrowRoomAlongX )
         {
-                if ( westDoor != nilPointer && westDoor->getCellX() + 1 != doorXmid )
-                {
-                        doorXmid = westDoor->getCellX() + 1;
-                }
-
-                if ( ! ( ( tile == doorXmid || tile + 1 == doorXmid )
-                        && westDoor != nilPointer ) )
-                {
-                        for ( unsigned int pix = 0 ; pix < sizeOfTile ; pix ++ )
-                        {
-                                where->drawPixelAt( posX++, posY, Color::whiteColor() );
-                                where->drawPixelAt( posX++, posY++, Color::whiteColor() );
-                        }
-                }
-                else
-                {
-                        if ( westDoor != nilPointer && ( tile + 1 == doorXmid ) )
-                        {
-                                if ( tile > 0 /* not first tile */ )
-                                        where->drawPixelAt( posX, posY, Color::gray50Color() );
-                                else
-                                        where->drawPixelAt( posX + 2, posY + 1, Color::gray50Color() );
-                        }
-
-                        posX += sizeOfTile << 1;
-                        posY += sizeOfTile;
-
-                        if ( westDoor != nilPointer && ( tile == doorXmid ) )
-                        {
-                                if ( tile + 1 < tilesX /* not last tile */ )
-                                        where->drawPixelAt( posX - 1, posY - 1, Color::gray50Color() );
-                                else
-                                        where->drawPixelAt( posX - 3, posY - 2, Color::gray50Color() );
-                        }
-                }
+                unsigned int southDoorYmid = southDoor->getCellY() + 1;
+                drawSouthDoorOnMiniature( where->getAllegroPict(), iniX, iniY, southDoor->getCellX(), southDoorYmid, sizeOfTile, Color::whiteColor() );
+        }
+        if ( southeastDoor != nilPointer )
+        {
+                unsigned int southeastDoorYmid = southeastDoor->getCellY() + 1;
+                drawSouthDoorOnMiniature( where->getAllegroPict(), iniX, iniY, southeastDoor->getCellX(), southeastDoorYmid, sizeOfTile, Color::whiteColor() );
+        }
+        if ( southwestDoor != nilPointer )
+        {
+                unsigned int southwestDoorYmid = southwestDoor->getCellY() + 1;
+                drawSouthDoorOnMiniature( where->getAllegroPict(), iniX, iniY, southwestDoor->getCellX(), southwestDoorYmid, sizeOfTile, Color::whiteColor() );
         }
 
-        // show teleports on miniature
+        // draw boundaries of room
 
-        std::vector< std::list< GridItem* > > gridItemsInRoom = room->getMediator()->getGridItems();
+        drawIsoSquare( where->getAllegroPict(), iniX, iniY, tilesX, tilesY, sizeOfTile, Color::gray50Color() );
+
+        // draw walls
+
+        int minXne = firstTileX ;
+        int minYne = firstTileY ;
+        int maxXsw = lastTileX ;
+        int maxYsw = lastTileY ;
+
+        room.getMediator()->lockGridItemsMutex ();
+        const std::vector< std::vector< GridItemPtr > > & gridItemsInRoom = room.getGridItems();
 
         for ( unsigned int column = 0; column < gridItemsInRoom.size(); column ++ )
         {
-                std::list < GridItem * > columnOfItems = gridItemsInRoom[ column ];
+                std::vector< GridItemPtr > columnOfItems = gridItemsInRoom[ column ];
 
-                for ( std::list< GridItem * >::const_iterator gi = columnOfItems.begin (); gi != columnOfItems.end (); ++ gi )
+                for ( std::vector< GridItemPtr >::const_iterator gi = columnOfItems.begin (); gi != columnOfItems.end (); ++ gi )
                 {
-                        if ( ( *gi )->getLabel() == "teleport" && ! roomToTeleport.empty() )
+                        const GridItem& item = *( *gi ) ;
+
+                        std::string label = item.getLabel();
+                        int tileX = item.getCellX();
+                        int tileY = item.getCellY();
+
+                        if ( label == "invisible-wall-x" )
                         {
-                                fillIsoTile( where->getAllegroPict(), iniPosX, iniPosY, ( *gi )->getCellX(), ( *gi )->getCellY(), sizeOfTile, Color::yellowColor() );
+                                maxYsw = tileY - 1 ;
                         }
-                        else if ( ( *gi )->getLabel() == "teleport-too" && ! roomToTeleportToo.empty() )
+                        else if ( label.find( "wall-x" ) != std::string::npos )
                         {
-                                fillIsoTile( where->getAllegroPict(), iniPosX, iniPosY, ( *gi )->getCellX(), ( *gi )->getCellY(), sizeOfTile, Color::magentaColor() );
+                                minYne = tileY + 1 ;
+                        }
+
+                        if ( label == "invisible-wall-y" )
+                        {
+                                maxXsw = tileX - 1 ;
+                        }
+                        else if ( label.find( "wall-y" ) != std::string::npos )
+                        {
+                                minXne = tileX + 1 ;
                         }
                 }
+        }
+
+        room.getMediator()->unlockGridItemsMutex ();
+
+        for ( unsigned int tile = firstTileX ; tile <= lastTileX ; tile ++ )
+        {
+                if ( static_cast< int >( tile ) >= minXne )
+                {
+                        if ( ! ( eastDoor != nilPointer && ( static_cast< int >( tile ) == eastDoor->getCellX() + 1 || static_cast< int >( tile ) == eastDoor->getCellX() ) ) &&
+                                ! ( eastnorthDoor != nilPointer && ( static_cast< int >( tile ) == eastnorthDoor->getCellX() + 1 || static_cast< int >( tile ) == eastnorthDoor->getCellX() ) ) &&
+                                ! ( eastsouthDoor != nilPointer && ( static_cast< int >( tile ) == eastsouthDoor->getCellX() + 1 || static_cast< int >( tile ) == eastsouthDoor->getCellX() ) ) )
+                        {
+                                drawIsoTile (
+                                        where->getAllegroPict(), iniX, iniY,
+                                        tile, firstTileY,
+                                        sizeOfTile, Color::whiteColor(),
+                                        true, false, false, false );
+                        }
+                }
+
+                if ( static_cast< int >( tile ) <= maxXsw )
+                {
+                        if ( ! ( westDoor != nilPointer && ( static_cast< int >( tile ) == westDoor->getCellX() + 1 || static_cast< int >( tile ) == westDoor->getCellX() ) ) &&
+                                ! ( westnorthDoor != nilPointer && ( static_cast< int >( tile ) == westnorthDoor->getCellX() + 1 || static_cast< int >( tile ) == westnorthDoor->getCellX() ) ) &&
+                                ! ( westsouthDoor != nilPointer && ( static_cast< int >( tile ) == westsouthDoor->getCellX() + 1 || static_cast< int >( tile ) == westsouthDoor->getCellX() ) ) )
+                        {
+                                drawIsoTile (
+                                        where->getAllegroPict(), iniX, iniY,
+                                        tile, lastTileY,
+                                        sizeOfTile, Color::whiteColor(),
+                                        false, false, true, false );
+                        }
+                }
+
+                if ( narrowRoomAlongX )
+                {
+                        if ( northDoor != nilPointer )
+                        {
+                                drawIsoTile ( where->getAllegroPict(), iniX, iniY, 0, firstTileY,
+                                                sizeOfTile, Color::gray75Color(),
+                                                true, false, false, false );
+
+                                drawIsoTile ( where->getAllegroPict(), iniX, iniY, 0, lastTileY,
+                                                sizeOfTile, Color::gray75Color(),
+                                                false, false, true, false );
+                        }
+
+                        if ( southDoor != nilPointer )
+                        {
+                                drawIsoTile ( where->getAllegroPict(), iniX, iniY, tilesX - 1, firstTileY,
+                                                sizeOfTile, Color::gray75Color(),
+                                                true, false, false, false );
+
+                                drawIsoTile ( where->getAllegroPict(), iniX, iniY, tilesX - 1, lastTileY,
+                                                sizeOfTile, Color::gray75Color(),
+                                                false, false, true, false );
+                        }
+                }
+        }
+
+        for ( unsigned int tile = firstTileY ; tile <= lastTileY ; tile ++ )
+        {
+                if ( static_cast< int >( tile ) <= maxYsw )
+                {
+                        if ( ! ( southDoor != nilPointer && ( static_cast< int >( tile ) == southDoor->getCellY() + 1 || static_cast< int >( tile ) == southDoor->getCellY() ) ) &&
+                                ! ( southeastDoor != nilPointer && ( static_cast< int >( tile ) == southeastDoor->getCellY() + 1 || static_cast< int >( tile ) == southeastDoor->getCellY() ) ) &&
+                                ! ( southwestDoor != nilPointer && ( static_cast< int >( tile ) == southwestDoor->getCellY() + 1 || static_cast< int >( tile ) == southwestDoor->getCellY() ) ) )
+                        {
+                                drawIsoTile (
+                                        where->getAllegroPict(), iniX, iniY,
+                                        lastTileX, tile,
+                                        sizeOfTile, Color::whiteColor(),
+                                        false, false, false, true );
+                        }
+                }
+
+                if ( static_cast< int >( tile ) >= minYne )
+                {
+                        if ( ! ( northDoor != nilPointer && ( static_cast< int >( tile ) == northDoor->getCellY() + 1 || static_cast< int >( tile ) == northDoor->getCellY() ) ) &&
+                                ! ( northeastDoor != nilPointer && ( static_cast< int >( tile ) == northeastDoor->getCellY() + 1 || static_cast< int >( tile ) == northeastDoor->getCellY() ) ) &&
+                                ! ( northwestDoor != nilPointer && ( static_cast< int >( tile ) == northwestDoor->getCellY() + 1 || static_cast< int >( tile ) == northwestDoor->getCellY() ) ) )
+                        {
+                                drawIsoTile (
+                                        where->getAllegroPict(), iniX, iniY,
+                                        firstTileX, tile,
+                                        sizeOfTile, Color::whiteColor(),
+                                        false, true, false, false );
+                        }
+                }
+
+                if ( narrowRoomAlongY )
+                {
+                        if ( eastDoor != nilPointer )
+                        {
+                                drawIsoTile ( where->getAllegroPict(), iniX, iniY, firstTileX, 0,
+                                                sizeOfTile, Color::gray75Color(),
+                                                false, true, false, false );
+
+                                drawIsoTile ( where->getAllegroPict(), iniX, iniY, lastTileX, 0,
+                                                sizeOfTile, Color::gray75Color(),
+                                                false, false, false, true );
+                        }
+
+                        if ( westDoor != nilPointer )
+                        {
+                                drawIsoTile ( where->getAllegroPict(), iniX, iniY, firstTileX, tilesY - 1,
+                                                sizeOfTile, Color::gray75Color(),
+                                                false, true, false, false );
+
+                                drawIsoTile ( where->getAllegroPict(), iniX, iniY, lastTileX, tilesY - 1,
+                                                sizeOfTile, Color::gray75Color(),
+                                                false, false, false, true );
+                        }
+                }
+        }
+
+        room.getMediator()->lockGridItemsMutex ();
+
+        for ( unsigned int column = 0; column < gridItemsInRoom.size(); column ++ )
+        {
+                std::vector< GridItemPtr > columnOfItems = gridItemsInRoom[ column ];
+
+                for ( std::vector< GridItemPtr >::const_iterator gi = columnOfItems.begin (); gi != columnOfItems.end (); ++ gi )
+                {
+                        const GridItem& item = *( *gi ) ;
+
+                        std::string label = item.getLabel();
+                        int tileX = item.getCellX();
+                        int tileY = item.getCellY();
+
+                        // show teleports
+
+                        if ( label == "teleport" && ! roomToTeleport.empty() )
+                        {
+                                fillIsoTile( where->getAllegroPict(), iniX, iniY, tileX, tileY, sizeOfTile, Color::yellowColor() );
+                        }
+                        else if ( label == "teleport-too" && ! roomToTeleportToo.empty() )
+                        {
+                                fillIsoTile( where->getAllegroPict(), iniX, iniY, tileX, tileY, sizeOfTile, Color::magentaColor() );
+                        }
+
+                        // show triple room’s walls
+
+                        if ( label.find( "wall-x" ) != std::string::npos )
+                        {
+                                if ( label.find( "invisible-wall" ) != std::string::npos )
+                                        drawIsoTile( where->getAllegroPict(), iniX, iniY, tileX, tileY, sizeOfTile, Color::whiteColor(), true, false, false, false );
+                                else
+                                        drawIsoTile( where->getAllegroPict(), iniX, iniY, tileX, tileY, sizeOfTile, Color::whiteColor(), false, false, true, false );
+                        }
+                        if ( label.find( "wall-y" ) != std::string::npos )
+                        {
+                                if ( label.find( "invisible-wall" ) != std::string::npos )
+                                        drawIsoTile( where->getAllegroPict(), iniX, iniY, tileX, tileY, sizeOfTile, Color::whiteColor(), false, true, false, false );
+                                else
+                                        drawIsoTile( where->getAllegroPict(), iniX, iniY, tileX, tileY, sizeOfTile, Color::whiteColor(), false, false, false, true );
+                        }
+                }
+        }
+
+        room.getMediator()->unlockGridItemsMutex ();
+
+        room.getMediator()->lockFreeItemsMutex ();
+        const std::vector< FreeItemPtr > & freeItemsInRoom = room.getFreeItems();
+
+        for ( std::vector< FreeItemPtr >::const_iterator fi = freeItemsInRoom.begin (); fi != freeItemsInRoom.end (); ++ fi )
+        {
+                if ( *fi == nilPointer || ( *fi )->whichKindOfItem() == "player item" ) continue ;
+                const FreeItem& item = *( *fi ) ;
+
+                const ItemData* dataOfItem = item.getDataOfItem();
+                std::string label = dataOfItem->getLabel();
+
+                // show tools
+
+                if ( label == "handbag" || label == "horn" || label == "donuts" )
+                {
+                        unsigned int roomTileSize = room.getSizeOfOneTile() ;
+
+                        // free coordinates to tile coordinates
+                        int tileX = ( item.getX() - ( ( roomTileSize - dataOfItem->getWidthX() ) >> 1 ) ) / roomTileSize ;
+                        int tileY = ( ( item.getY() + ( ( roomTileSize - dataOfItem->getWidthY() ) >> 1 ) + 1 ) / roomTileSize ) - 1 ;
+
+                        fillIsoTile( where->getAllegroPict(), iniX, iniY, tileX, tileY, sizeOfTile, Color::orangeColor() );
+                }
+
+                // show rabbit bonuses
+
+                if ( label == "extra-life" || label == "high-jumps" || label == "high-speed" || label == "shield" )
+                {
+                        unsigned int roomTileSize = room.getSizeOfOneTile() ;
+
+                        // free coordinates to tile coordinates
+                        int tileX = ( item.getX() - ( ( roomTileSize - dataOfItem->getWidthX() ) >> 1 ) ) / roomTileSize ;
+                        int tileY = ( ( item.getY() + ( ( roomTileSize - dataOfItem->getWidthY() ) >> 1 ) + 1 ) / roomTileSize ) - 1 ;
+
+                        fillIsoTile( where->getAllegroPict(), iniX, iniY, tileX, tileY, sizeOfTile, Color::cyanColor() );
+                }
+
+                // show fish
+
+                if ( label == "reincarnation-fish" || label == "mortal-fish" )
+                {
+                        unsigned int roomTileSize = room.getSizeOfOneTile() ;
+
+                        // free coordinates to tile coordinates
+                        int tileX = ( item.getX() - ( ( roomTileSize - dataOfItem->getWidthX() ) >> 1 ) ) / roomTileSize ;
+                        int tileY = ( ( item.getY() + ( ( roomTileSize - dataOfItem->getWidthY() ) >> 1 ) + 1 ) / roomTileSize ) - 1 ;
+
+                        if ( label == "reincarnation-fish" )
+                                fillIsoTile( where->getAllegroPict(), iniX, iniY, tileX, tileY, sizeOfTile, Color::greenColor() );
+                        else if ( label == "mortal-fish" )
+                                fillIsoTile( where->getAllegroPict(), iniX, iniY, tileX, tileY, sizeOfTile, Color::redColor() );
+                }
+        }
+
+        room.getMediator()->unlockFreeItemsMutex ();
+
+        // show characters in room
+
+        std::vector< PlayerItemPtr > charactersInRoom = room.getPlayersYetInRoom();
+
+        for ( std::vector< PlayerItemPtr >::const_iterator pi = charactersInRoom.begin (); pi != charactersInRoom.end (); ++ pi )
+        {
+                const PlayerItem& character = *( *pi ) ;
+
+                unsigned int roomTileSize = room.getSizeOfOneTile() ;
+
+                // range of tiles where character is
+                int xBegin = character.getX() / roomTileSize;
+                int xEnd = ( character.getX() + character.getWidthX() - 1 ) / roomTileSize;
+                int yBegin = ( character.getY() - character.getWidthY() + 1 ) / roomTileSize;
+                int yEnd = character.getY() / roomTileSize;
+
+                /* for ( int x = xBegin ; x <= xEnd ; ++ x )
+                        for ( int y = yBegin ; y <= yEnd ; ++ y )
+                                drawIsoTile( where->getAllegroPict(), iniX, iniY, x, y, sizeOfTile, Color::blueColor(), true, true, true, true ) ; */
+
+                int deltaWx = ( roomTileSize - character.getWidthX() ) >> 1 ;
+                int deltaWy = ( roomTileSize - character.getWidthY() ) >> 1 ;
+
+                int tileX = ( character.getX() > deltaWx ) ? ( character.getX() - deltaWx ) / roomTileSize : 0 ;
+                int tileY = ( ( character.getY() + deltaWy + 1 ) / roomTileSize ) - 1 ;
+                if ( tileY < 0 ) tileY = 0 ;
+
+                if ( xBegin == xEnd && yBegin == yEnd )
+                {
+                        tileX = xBegin ;
+                        tileY = yEnd ;
+                }
+                else
+                {
+                        if ( tileX < xBegin ) tileX = xBegin ;
+                        else if ( tileX > xEnd ) tileX = xEnd ;
+
+                        if ( tileY < yBegin ) tileY = yBegin ;
+                        else if ( tileY > yEnd ) tileY = yEnd ;
+                }
+
+                fillIsoTileInside( where->getAllegroPict(), iniX, iniY, tileX, tileY, sizeOfTile, FlickeringColor::flickerWhiteAndTransparent(), true );
         }
 
         // show when there’s a room above or below
@@ -939,8 +1149,8 @@ void Isomot::drawMiniatureOfRoom( Room* room, MapManager* mapManager, const Pict
         if ( ! roomAbove.empty() || ! roomBelow.empty() )
         {
                 int miniatureMidX = leftXmap + ( tilesY + tilesX ) * sizeOfTile;
-                int abovePointerY = iniPosY - 2;
-                int belowPointerY = iniPosY + ( tilesY + tilesX ) * sizeOfTile;
+                int abovePointerY = iniY - 2;
+                int belowPointerY = iniY + ( tilesY + tilesX ) * sizeOfTile;
                 abovePointerY -= sizeOfTile << 1;
                 belowPointerY += sizeOfTile << 1;
 
@@ -977,8 +1187,222 @@ void Isomot::drawMiniatureOfRoom( Room* room, MapManager* mapManager, const Pict
 }
 
 /* static */
+void Isomot::drawEastDoorOnMiniature( const allegro::Pict& where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const unsigned int sizeOfTile, const Color& color )
+{
+        if ( color.isKeyColor() ) return ;
+        if ( sizeOfTile < 2 ) return ;
+
+        drawIsoTile( where, x0, y0, tilesX - 1, tilesY, sizeOfTile, color, false, true, false, false );
+
+        {
+                int x = x0 + ( ( tilesX - 1 ) - ( tilesY + 1 ) ) * ( sizeOfTile << 1 ) ;
+                int y = y0 + ( ( tilesY + 1 ) + ( tilesX - 1 ) ) * sizeOfTile ;
+                where.drawPixelAt( x, y, color.toAllegroColor() );
+                where.drawPixelAt( x + 1, y, color.toAllegroColor() );
+        }
+
+        drawIsoTile( where, x0, y0, tilesX, tilesY, sizeOfTile, color, false, false, false, true );
+
+        {
+                int x = x0 + ( ( tilesX + 1 ) - ( tilesY + 1 ) ) * ( sizeOfTile << 1 ) ;
+                int y = y0 + ( ( tilesY + 1 ) + ( tilesX + 1 ) ) * sizeOfTile ;
+                where.drawPixelAt( x - 2, y - 1, color.toAllegroColor() );
+                where.drawPixelAt( x - 1, y - 1, color.toAllegroColor() );
+        }
+}
+
+/* static */
+void Isomot::drawNorthDoorOnMiniature( const allegro::Pict& where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const unsigned int sizeOfTile, const Color& color )
+{
+        if ( color.isKeyColor() ) return ;
+        if ( sizeOfTile < 2 ) return ;
+
+        drawIsoTile( where, x0, y0, tilesX, tilesY - 1, sizeOfTile, color, true, false, false, false );
+
+        {
+                int x = x0 + ( ( tilesX + 1 ) - ( tilesY - 1 ) ) * ( sizeOfTile << 1 ) ;
+                int y = y0 + ( ( tilesY - 1 ) + ( tilesX + 1 ) ) * sizeOfTile ;
+                where.drawPixelAt( x, y, color.toAllegroColor() );
+                where.drawPixelAt( x + 1, y, color.toAllegroColor() );
+        }
+
+        drawIsoTile( where, x0, y0, tilesX, tilesY, sizeOfTile, color, false, false, true, false );
+
+        {
+                int x = x0 + ( ( tilesX + 1 ) - ( tilesY + 1 ) ) * ( sizeOfTile << 1 ) ;
+                int y = y0 + ( ( tilesY + 1 ) + ( tilesX + 1 ) ) * sizeOfTile ;
+                where.drawPixelAt( x + 2, y - 1, color.toAllegroColor() );
+                where.drawPixelAt( x + 3, y - 1, color.toAllegroColor() );
+        }
+}
+
+/* static */
+void Isomot::drawWestDoorOnMiniature( const allegro::Pict& where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const unsigned int sizeOfTile, const Color& color )
+{
+        if ( color.isKeyColor() ) return ;
+        if ( sizeOfTile < 2 ) return ;
+
+        drawIsoTile( where, x0, y0, tilesX - 1, tilesY, sizeOfTile, color, false, true, false, false );
+
+        {
+                int x = x0 + ( ( tilesX - 1 ) - tilesY ) * ( sizeOfTile << 1 ) ;
+                int y = y0 + ( tilesY + ( tilesX - 1 ) ) * sizeOfTile ;
+                where.drawPixelAt( x + 2, y - 1, color.toAllegroColor() );
+                where.drawPixelAt( x + 3, y - 1, color.toAllegroColor() );
+        }
+
+        drawIsoTile( where, x0, y0, tilesX, tilesY, sizeOfTile, color, false, false, false, true );
+
+        {
+                int x = x0 + ( ( tilesX + 1 ) - tilesY ) * ( sizeOfTile << 1 ) ;
+                int y = y0 + ( tilesY + ( tilesX + 1 ) ) * sizeOfTile ;
+                where.drawPixelAt( x, y - 2, color.toAllegroColor() );
+                where.drawPixelAt( x + 1, y - 2, color.toAllegroColor() );
+        }
+}
+
+/* static */
+void Isomot::drawSouthDoorOnMiniature( const allegro::Pict& where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const unsigned int sizeOfTile, const Color& color )
+{
+        if ( color.isKeyColor() ) return ;
+        if ( sizeOfTile < 2 ) return ;
+
+        drawIsoTile( where, x0, y0, tilesX, tilesY - 1, sizeOfTile, color, true, false, false, false );
+
+        {
+                int x = x0 + ( tilesX - ( tilesY - 1 ) ) * ( sizeOfTile << 1 ) ;
+                int y = y0 + ( ( tilesY - 1 ) + tilesX ) * sizeOfTile ;
+                where.drawPixelAt( x - 2, y - 1, color.toAllegroColor() );
+                where.drawPixelAt( x - 1, y - 1, color.toAllegroColor() );
+        }
+
+        drawIsoTile( where, x0, y0, tilesX, tilesY, sizeOfTile, color, false, false, true, false );
+
+        {
+                int x = x0 + ( tilesX - ( tilesY + 1 ) ) * ( sizeOfTile << 1 ) ;
+                int y = y0 + ( ( tilesY + 1 ) + tilesX ) * sizeOfTile ;
+                where.drawPixelAt( x, y - 2, color.toAllegroColor() );
+                where.drawPixelAt( x + 1, y - 2, color.toAllegroColor() );
+        }
+}
+
+/* static */
+void Isomot::drawIsoSquare( const allegro::Pict& where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const unsigned int sizeOfTile, const Color& color )
+{
+        if ( color.isKeyColor() ) return ;
+        if ( sizeOfTile < 2 ) return ;
+
+        unsigned int posX = x0 ;
+        unsigned int posY = y0 ;
+
+        for ( unsigned int tile = 0 ; tile < tilesX ; tile ++ )
+        {
+                for ( unsigned int pix = 0 ; pix < sizeOfTile ; pix ++ )
+                {
+                        where.drawPixelAt( posX++, posY, color.toAllegroColor() );
+                        where.drawPixelAt( posX++, posY++, color.toAllegroColor() );
+                }
+        }
+
+        posX--; posY--;
+
+        for ( unsigned int tile = 0 ; tile < tilesY ; tile ++ )
+        {
+                for ( unsigned int pix = 0 ; pix < sizeOfTile ; pix ++ )
+                {
+                        where.drawPixelAt( posX--, posY, color.toAllegroColor() );
+                        where.drawPixelAt( posX--, posY++, color.toAllegroColor() );
+                }
+        }
+
+        posX = x0 + 1 ;
+        posY = y0 ;
+
+        for ( unsigned int tile = 0 ; tile < tilesY ; tile ++ )
+        {
+                for ( unsigned int pix = 0 ; pix < sizeOfTile ; pix ++ )
+                {
+                        where.drawPixelAt( posX--, posY, color.toAllegroColor() );
+                        where.drawPixelAt( posX--, posY++, color.toAllegroColor() );
+                }
+        }
+
+        posX++; posY--;
+
+        for ( unsigned int tile = 0 ; tile < tilesX ; tile ++ )
+        {
+                for ( unsigned int pix = 0 ; pix < sizeOfTile ; pix ++ )
+                {
+                        where.drawPixelAt( posX++, posY, color.toAllegroColor() );
+                        where.drawPixelAt( posX++, posY++, color.toAllegroColor() );
+                }
+        }
+}
+
+/* static */
+void Isomot::drawIsoTile( const allegro::Pict& where, int x0, int y0, int tileX, int tileY, const unsigned int sizeOfTile, const Color& color, bool loX, bool loY, bool hiX, bool hiY )
+{
+        if ( color.isKeyColor() ) return ;
+        if ( sizeOfTile < 2 ) return ;
+
+        int x = 0 ;
+        int y = 0 ;
+
+        if ( loX )
+        {
+                x = x0 + ( tileX - tileY ) * ( sizeOfTile << 1 ) ;
+                y = y0 + ( tileY + tileX ) * sizeOfTile ;
+
+                for ( unsigned int pix = 0 ; pix < sizeOfTile ; pix ++ )
+                {
+                        where.drawPixelAt( x++, y, color.toAllegroColor() );
+                        where.drawPixelAt( x++, y++, color.toAllegroColor() );
+                }
+        }
+
+        if ( loY )
+        {
+                x = x0 + ( tileX - tileY ) * ( sizeOfTile << 1 ) + 1 ;
+                y = y0 + ( tileY + tileX ) * sizeOfTile ;
+
+                for ( unsigned int pix = 0 ; pix < sizeOfTile ; pix ++ )
+                {
+                        where.drawPixelAt( x--, y, color.toAllegroColor() );
+                        where.drawPixelAt( x--, y++, color.toAllegroColor() );
+                }
+        }
+
+        if ( hiX )
+        {
+                x = x0 + ( tileX - tileY ) * ( sizeOfTile << 1 ) - ( ( sizeOfTile - 1 ) << 1 ) ;
+                y = y0 + ( tileY + tileX ) * sizeOfTile + ( sizeOfTile - 1 ) ;
+
+                for ( unsigned int pix = 0 ; pix < sizeOfTile ; pix ++ )
+                {
+                        where.drawPixelAt( x++, y, color.toAllegroColor() );
+                        where.drawPixelAt( x++, y++, color.toAllegroColor() );
+                }
+        }
+
+        if ( hiY )
+        {
+                x = x0 + ( tileX - tileY ) * ( sizeOfTile << 1 ) + ( ( sizeOfTile - 1 ) << 1 ) + 1 ;
+                y = y0 + ( tileY + tileX ) * sizeOfTile + ( sizeOfTile - 1 ) ;
+
+                for ( unsigned int pix = 0 ; pix < sizeOfTile ; pix ++ )
+                {
+                        where.drawPixelAt( x--, y, color.toAllegroColor() );
+                        where.drawPixelAt( x--, y++, color.toAllegroColor() );
+                }
+        }
+}
+
+/* static */
 void Isomot::fillIsoTile( const allegro::Pict& where, int x0, int y0, int tileX, int tileY, const unsigned int sizeOfTile, const Color& color )
 {
+        if ( color.isKeyColor() ) return ;
+        if ( sizeOfTile < 2 ) return ;
+
         for ( unsigned int piw = 0 ; piw < sizeOfTile ; piw ++ )
         {
                 int x = x0 + ( tileX - tileY ) * ( sizeOfTile << 1 ) - ( piw << 1 ) ;
@@ -988,6 +1412,51 @@ void Isomot::fillIsoTile( const allegro::Pict& where, int x0, int y0, int tileX,
                 {
                         where.drawPixelAt( x++, y, color.toAllegroColor() );
                         where.drawPixelAt( x++, y++, color.toAllegroColor() );
+                }
+        }
+}
+
+/* static */
+void Isomot::fillIsoTileInside( const allegro::Pict& where, int x0, int y0, int tileX, int tileY, const unsigned int sizeOfTile, const Color& color, bool fullFill )
+{
+        if ( color.isKeyColor() ) return ;
+        if ( sizeOfTile < 2 ) return ;
+
+        if ( sizeOfTile == 2 )
+        {
+                int x = x0 + ( tileX - tileY ) * ( sizeOfTile << 1 ) ;
+                int y = y0 + ( tileY + tileX ) * sizeOfTile + 1 ;
+
+                where.drawPixelAt( x++, y, color.toAllegroColor() );
+                where.drawPixelAt( x++, y++, color.toAllegroColor() );
+        }
+        else
+        {
+                for ( unsigned int piw = 1 ; piw < ( sizeOfTile - 1 ) ; piw ++ )
+                {
+                        int x = x0 + ( tileX - tileY ) * ( sizeOfTile << 1 ) - ( piw << 1 ) + 2 ;
+                        int y = y0 + ( tileY + tileX ) * sizeOfTile + piw + 1 ;
+
+                        for ( unsigned int pix = 1 ; pix < ( sizeOfTile - 1 ) ; pix ++ )
+                        {
+                                if ( fullFill )
+                                {
+                                        where.drawPixelAt( x, y - 1, color.toAllegroColor() );
+                                        where.drawPixelAt( x + 1, y - 1, color.toAllegroColor() );
+
+                                        where.drawPixelAt( x, y + 1, color.toAllegroColor() );
+                                        where.drawPixelAt( x + 1, y + 1, color.toAllegroColor() );
+
+                                        where.drawPixelAt( x - 2, y, color.toAllegroColor() );
+                                        where.drawPixelAt( x - 1, y, color.toAllegroColor() );
+
+                                        where.drawPixelAt( x + 2, y, color.toAllegroColor() );
+                                        where.drawPixelAt( x + 3, y, color.toAllegroColor() );
+                                }
+
+                                where.drawPixelAt( x++, y, color.toAllegroColor() );
+                                where.drawPixelAt( x++, y++, color.toAllegroColor() );
+                        }
                 }
         }
 }

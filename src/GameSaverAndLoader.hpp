@@ -16,12 +16,8 @@
 #include "Way.hpp"
 
 
-namespace isomot
+namespace iso
 {
-
-class GameManager ;
-class Isomot ;
-class MapManager ;
 
 /**
  * Deals with saving and restoring of game
@@ -32,7 +28,7 @@ class GameSaverAndLoader
 
 public:
 
-        GameSaverAndLoader( GameManager * gameManager, Isomot * isomot ) ;
+        GameSaverAndLoader( ) ;
 
         ~GameSaverAndLoader( ) ;
 
@@ -66,10 +62,6 @@ private:
         int zFish ;
 
         Way catchFishWay ;
-
-        GameManager * gameManager ;
-
-        Isomot * isomot ;
 
 };
 

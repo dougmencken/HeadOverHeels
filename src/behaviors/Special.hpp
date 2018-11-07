@@ -12,15 +12,12 @@
 #define Special_hpp_
 
 #include "Behavior.hpp"
+#include "PlayerItem.hpp"
 #include "Timer.hpp"
 
 
-namespace isomot
+namespace iso
 {
-
-class Item ;
-class ItemData ;
-class PlayerItem ;
 
 /**
  * Behavior of magic bonus item
@@ -31,7 +28,7 @@ class Special : public Behavior
 
 public:
 
-        Special( Item* item, const std::string& behavior ) ;
+        Special( const ItemPtr & item, const std::string& behavior ) ;
 
         virtual ~Special () ;
 
@@ -42,34 +39,27 @@ protected:
         /**
          * Checks if magic item can be taken, it depends on item and on character who takes it
          */
-        bool mayTake ( Item* sender ) ;
+        bool mayTake ( const std::string & character ) ;
 
-        void takeMagicItem ( PlayerItem* sender ) ;
-
-protected:
-
-        ItemData * bubblesData ;
+        void takeMagicItem ( PlayerItem & whoTakes ) ;
 
 private:
 
         /**
-         * Timer for disappearance of special item
+         * Timer for disappearance of bonus
          */
-        Timer * disappearanceTimer ;
+        autouniqueptr < Timer > disappearanceTimer ;
 
         /**
          * Timer for speed of item’s movement
          */
-        Timer * speedTimer ;
+        autouniqueptr < Timer > speedTimer ;
 
         /**
-         * Timer for speed of item’s drop
+         * Timer for speed of item’s falling
          */
-        Timer * fallTimer ;
+        autouniqueptr < Timer > fallTimer ;
 
-public:
-
-        void setMoreData ( void * data ) ;
 };
 
 }

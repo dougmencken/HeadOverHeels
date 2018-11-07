@@ -5,12 +5,12 @@
 #include <cassert>
 
 
-namespace isomot
+namespace iso
 {
 
 FloorTile::FloorTile( int cellX, int cellY, Picture* image )
         : Mediated (), Shady ()
-        , uniqueName( "floor tile at cx=" + isomot::numberToString( cellX ) + " cy=" + isomot::numberToString( cellY ) )
+        , uniqueName( "floor tile at cx=" + util::number2string( cellX ) + " cy=" + util::number2string( cellY ) )
         , rawImage( image )
         , shadyImage( nilPointer )
 {

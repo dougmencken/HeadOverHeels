@@ -15,7 +15,7 @@
 #include "Timer.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
 class Item ;
@@ -26,7 +26,7 @@ class Trampoline : public Behavior
 
 public:
 
-        Trampoline( Item * item, const std::string & behavior ) ;
+        Trampoline( const ItemPtr & item, const std::string & behavior ) ;
 
         virtual ~Trampoline( ) ;
 
@@ -57,17 +57,17 @@ private:
        /**
         * Timer for speed of movement
         */
-        Timer* speedTimer ;
+        autouniqueptr < Timer > speedTimer ;
 
        /**
         * Timer for speed of falling
         */
-        Timer* fallTimer ;
+        autouniqueptr < Timer > fallTimer ;
 
        /**
-        * Chronometer for time of bouncing
+        * Chronometer for bouncing
         */
-        Timer* reboundTimer ;
+        autouniqueptr < Timer > reboundTimer ;
 
 };
 

@@ -12,7 +12,7 @@
 #include "RedefineKey.hpp"
 
 using gui::CreateKeyboardMenu;
-using isomot::InputManager;
+using iso::InputManager;
 
 
 CreateKeyboardMenu::CreateKeyboardMenu( Picture * picture ) :
@@ -22,14 +22,14 @@ CreateKeyboardMenu::CreateKeyboardMenu( Picture * picture ) :
 
 void CreateKeyboardMenu::doAction ()
 {
-        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this );
+        Screen* screen = GuiManager::getInstance().findOrCreateScreenForAction( this );
         if ( screen->countWidgets() == 0 )
         {
                 screen->setEscapeAction( new CreateMainMenu( getWhereToDraw() ) );
 
                 screen->placeHeadAndHeels( /* icons */ false, /* copyrights */ false );
 
-                LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
+                LanguageManager* languageManager = GuiManager::getInstance().getLanguageManager();
 
                 this->menuOfKeys = new MenuWithValues( '.', 5 );
                 menuOfKeys->setVerticalOffset( 78 );
@@ -42,7 +42,7 @@ void CreateKeyboardMenu::doAction ()
 
                         Label* label = new Label( languageManager->findLanguageStringForAlias( nameOfTranslation )->getText() );
 
-                        std::string theKey = InputManager::getInstance()->getUserKeyFor( nameOfThisKey );
+                        std::string theKey = InputManager::getInstance().getUserKeyFor( nameOfThisKey );
                         if ( theKey == "none" )
                         {
                                 label->changeColor( "cyan" );
@@ -64,5 +64,5 @@ void CreateKeyboardMenu::doAction ()
                 menuOfKeys->resetActiveOption();
         }
 
-        GuiManager::getInstance()->changeScreen( screen, true );
+        GuiManager::getInstance().changeScreen( screen, true );
 }

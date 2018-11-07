@@ -22,10 +22,10 @@ LanguageManager::LanguageManager( const std::string& file, const std::string& fi
 
 LanguageManager::~LanguageManager()
 {
-        std::for_each( strings.begin(), strings.end(), isomot::DeleteIt() );
+        std::for_each( strings.begin(), strings.end(), iso::DeleteIt() );
         strings.clear();
 
-        std::for_each( backupStrings.begin(), backupStrings.end(), isomot::DeleteIt() );
+        std::for_each( backupStrings.begin(), backupStrings.end(), iso::DeleteIt() );
         backupStrings.clear();
 }
 

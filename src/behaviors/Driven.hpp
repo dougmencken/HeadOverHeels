@@ -15,7 +15,7 @@
 #include "Timer.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
 class Item ;
@@ -29,7 +29,7 @@ class Driven : public Behavior
 
 public:
 
-        Driven( Item * item, const std::string & behavior ) ;
+        Driven( const ItemPtr & item, const std::string & behavior ) ;
 
         virtual ~Driven( ) ;
 
@@ -37,17 +37,17 @@ public:
 
 private:
 
-        bool running ;
+        bool moving ;
 
        /**
         * Timer for speed of movement
         */
-        Timer * speedTimer ;
+        autouniqueptr < Timer > speedTimer ;
 
        /**
         * Timer for speed of falling
         */
-        Timer * fallTimer ;
+        autouniqueptr < Timer > fallTimer ;
 
 };
 

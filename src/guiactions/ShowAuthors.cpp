@@ -16,37 +16,36 @@ using gui::ShowAuthors;
 using gui::Label;
 using gui::PictureWidget;
 using gui::TextField;
-using isomot::SoundManager;
+using iso::SoundManager;
 
 
 ShowAuthors::ShowAuthors( Picture* picture )
         : Action( picture )
         , linesOfCredits( nilPointer )
         , initialY( 0 )
-        , loadingScreen( nilPointer )
+        , loadingScreen( )
 {
 }
 
 ShowAuthors::~ShowAuthors( )
 {
         delete linesOfCredits ;
-        delete loadingScreen ;
 }
 
 void ShowAuthors::doAction ()
 {
-        SoundManager::getInstance()->playOgg( "music/CreditsTheme.ogg", /* loop */ true );
+        SoundManager::getInstance().playOgg( "music/CreditsTheme.ogg", /* loop */ true );
 
         int heightOfWhereToDraw = getWhereToDraw()->getHeight() ;
 
-        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this );
+        Screen* screen = GuiManager::getInstance().findOrCreateScreenForAction( this );
         if ( screen->countWidgets() == 0 )
         {
-                LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
+                LanguageManager* languageManager = GuiManager::getInstance().getLanguageManager();
                 LanguageText* langString = languageManager->findLanguageStringForAlias( "credits-text" );
 
                 this->initialY = heightOfWhereToDraw;
-                this->linesOfCredits = new TextField( isomot::ScreenWidth(), "center" );
+                this->linesOfCredits = new TextField( iso::ScreenWidth(), "center" );
                 this->linesOfCredits->moveTo( 0, initialY );
 
                 size_t howManyLines = langString->getLinesCount() ;
@@ -68,7 +67,7 @@ void ShowAuthors::doAction ()
 
         screen->setEscapeAction( new CreateMainMenu( getWhereToDraw() ) );
 
-        GuiManager::getInstance()->changeScreen( screen, true );
+        GuiManager::getInstance().changeScreen( screen, true );
 
         PictureWidget* widgetForLoadingScreen = nilPointer;
 
@@ -130,18 +129,18 @@ void ShowAuthors::doAction ()
                 {
                         if ( loadingScreen == nilPointer )
                         {
-                                smartptr< allegro::Pict > png( allegro::Pict::fromPNGFile (
-                                        isomot::pathToFile( isomot::sharePath() + "loading-screen.png" )
+                                autouniqueptr< allegro::Pict > png( allegro::Pict::fromPNGFile (
+                                        iso::pathToFile( iso::sharePath(), "loading-screen.png" )
                                 ) );
-                                loadingScreen = new Picture( * png.get() );
+                                loadingScreen = PicturePtr( new Picture( * png.get() ) );
                                 loadingScreen->setName( "image of loading screen from original speccy version" );
                         }
 
                         if ( loadingScreen->getAllegroPict().isNotNil() )
                         {
-                                widgetForLoadingScreen = new PictureWidget(
+                                widgetForLoadingScreen = new PictureWidget (
                                                 ( getWhereToDraw()->getWidth() - loadingScreen->getWidth() ) >> 1, heightOfWhereToDraw,
-                                                new Picture( *loadingScreen ),
+                                                loadingScreen,
                                                 "loading screen from original speccy version"
                                 ) ;
                                 screen->addWidget( widgetForLoadingScreen );
@@ -157,11 +156,11 @@ void ShowAuthors::doAction ()
                         widgetForLoadingScreen = nilPointer;
                 }
 
-                GuiManager::getInstance()->redraw ();
+                GuiManager::getInstance().redraw ();
 
                 if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "f" ) )
                 {
-                        gui::GuiManager::getInstance()->toggleFullScreenVideo ();
+                        gui::GuiManager::getInstance().toggleFullScreenVideo ();
                 }
 
                 if ( ! allegro::isKeyPushed( "Space" ) )

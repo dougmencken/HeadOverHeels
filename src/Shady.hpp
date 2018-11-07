@@ -12,7 +12,7 @@
 #define Shady_hpp_
 
 
-namespace isomot
+namespace iso
 {
 
 class Shady

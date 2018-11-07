@@ -12,10 +12,11 @@
 #define Doughnut_hpp_
 
 #include "Behavior.hpp"
+#include "PlayerItem.hpp"
 #include "Timer.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
 class Item ;
@@ -27,22 +28,22 @@ class Doughnut : public Behavior
 
 public:
 
-        Doughnut( Item * item, const std::string & behavior ) ;
+        Doughnut( const ItemPtr & item, const std::string & behavior ) ;
 
         virtual ~Doughnut( ) ;
 
         virtual bool update () ;
 
-        void setPlayerItem ( PlayerItem * player ) {  this->playerItem = player ;  }
+        void setPlayerItem ( const PlayerItemPtr & player ) {  this->playerItem = player ;  }
 
 private:
 
-        PlayerItem * playerItem ;
+        PlayerItemPtr playerItem ;
 
        /**
-        * Time for speed of movement
+        * Timer for speed of movement
         */
-        Timer * speedTimer ;
+        autouniqueptr < Timer > speedTimer ;
 
 } ;
 

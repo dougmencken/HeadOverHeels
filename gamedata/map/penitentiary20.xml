@@ -291,7 +291,7 @@
     <item x="2" y="3" z="1">
       <label>trampoline</label>
       <direction>none</direction>
-      <behavior>behavior of big leap for player</behavior>
+      <behavior>behavior of big leap for character</behavior>
       <type>freeitem</type>
     </item>
     <item x="3" y="3" z="0">

@@ -2,6 +2,7 @@
 #include "PlayerItem.hpp"
 #include "Behavior.hpp"
 #include "ItemData.hpp"
+#include "ItemDataManager.hpp"
 #include "Door.hpp"
 #include "Mediator.hpp"
 #include "Room.hpp"
@@ -11,22 +12,20 @@
 #include <algorithm> // std::find
 
 
-namespace isomot
+namespace iso
 {
 
-PlayerItem::PlayerItem( ItemData* itemData, int x, int y, int z, const Way& way )
+PlayerItem::PlayerItem( const ItemData* itemData, int x, int y, int z, const Way& way )
         : FreeItem( itemData, x, y, z, way )
         , lives( 0 )
         , highSpeed( 0 )
         , highJumps( 0 )
-        , shield( 0.0 )
         , howManyDoughnuts( 0 )
-        , exit( "no exit" )
-        , entry( "just wait" )
-        , shieldTimer( nilPointer )
-        , shieldTime( 25.0 )
+        , wayOfExit( "no exit" )
+        , wayOfEntry( "just wait" )
+        , shieldTimer( new Timer () )
+        , shieldRemaining( 0.0 )
         , takenItemData( nilPointer )
-        , originalDataOfItem( itemData )
 {
 
 }
@@ -36,27 +35,25 @@ PlayerItem::PlayerItem( const PlayerItem& playerItem )
         , lives( playerItem.lives )
         , highSpeed( playerItem.highSpeed )
         , highJumps( playerItem.highJumps )
-        , shield( playerItem.shield )
         , tools( playerItem.tools )
         , howManyDoughnuts( playerItem.howManyDoughnuts )
-        , exit( playerItem.exit )
-        , entry( playerItem.entry )
-        , shieldTimer( nilPointer )
-        , shieldTime( playerItem.shieldTime )
+        , wayOfExit( playerItem.wayOfExit )
+        , wayOfEntry( playerItem.wayOfEntry )
+        , shieldTimer( new Timer () )
+        , shieldRemaining( 0.0 )
         , takenItemData( nilPointer )
-        , originalDataOfItem( playerItem.getOriginalDataOfItem() )
 {
 
 }
 
 PlayerItem::~PlayerItem()
 {
-        delete shieldTimer;
+
 }
 
 void PlayerItem::setWayOfExit ( const std::string& way )
 {
-        this->exit = way;
+        this->wayOfExit = way;
 
         switch ( Way( way ).getIntegerOfWay () )
         {
@@ -158,8 +155,8 @@ bool PlayerItem::addToPosition( int x, int y, int z )
 
         mediator->clearStackOfCollisions( );
 
-        // copy item before moving
-        PlayerItem copyOfItem( *this );
+        // copy item before moving it
+        PlayerItemPtr copyOfItem ( new PlayerItem ( *this ) );
 
         this->xPos += x;
         this->yPos += y;
@@ -169,7 +166,7 @@ bool PlayerItem::addToPosition( int x, int y, int z )
 
         bool doorCollision = false;
 
-        bool collisionFound = mediator->findCollisionWithItem( this );
+        bool collisionFound = mediator->lookForCollisionsOf( this->getUniqueName() );
 
         if ( collisionFound )
         {
@@ -177,8 +174,8 @@ bool PlayerItem::addToPosition( int x, int y, int z )
                 {
                         std::string what = mediator->popCollision();
 
-                        int oldX = copyOfItem.getX();
-                        int oldY = copyOfItem.getY();
+                        int oldX = copyOfItem->getX();
+                        int oldY = copyOfItem->getY();
 
                         // case of move to north wall
                         if ( x < 0 )
@@ -300,7 +297,7 @@ bool PlayerItem::addToPosition( int x, int y, int z )
                 if ( ! collisionFound )
                 {
                         // look for collision with the rest of items in room
-                        collisionFound = mediator->findCollisionWithItem( this );
+                        collisionFound = mediator->lookForCollisionsOf( this->getUniqueName() );
                         if ( ! collisionFound )
                         {
                                 // reshade and remask
@@ -316,8 +313,8 @@ bool PlayerItem::addToPosition( int x, int y, int z )
                                         this->offset.second = getX() + getY() + getWidthX() - this->rawImage->getHeight() - getZ();
 
                                         // for both the previous position and the current position
-                                        mediator->remaskWithFreeItem( &copyOfItem );
-                                        mediator->remaskWithFreeItem( this );
+                                        mediator->remaskWithFreeItem( *copyOfItem );
+                                        mediator->remaskWithFreeItem( *this );
                                 }
                                 else
                                 {
@@ -326,11 +323,11 @@ bool PlayerItem::addToPosition( int x, int y, int z )
 
                                 // reshade items
                                 // for both previous position and current position
-                                mediator->reshadeWithFreeItem( &copyOfItem );
-                                mediator->reshadeWithFreeItem( this );
+                                mediator->reshadeWithFreeItem( *copyOfItem );
+                                mediator->reshadeWithFreeItem( *this );
 
-                                // rearrange list of free items
-                                mediator->activateFreeItemsSorting();
+                                // mark to sort container of free items
+                                mediator->needsToSortFreeItems ();
                         }
                 }
         }
@@ -338,11 +335,11 @@ bool PlayerItem::addToPosition( int x, int y, int z )
         // restore previous values for collision which is not collision with door
         if ( collisionFound && ! doorCollision )
         {
-                this->xPos = copyOfItem.getX();
-                this->yPos = copyOfItem.getY();
-                this->zPos = copyOfItem.getZ();
+                this->xPos = copyOfItem->getX();
+                this->yPos = copyOfItem->getY();
+                this->zPos = copyOfItem->getZ();
 
-                this->offset = copyOfItem.getOffset();
+                this->offset = copyOfItem->getOffset();
         }
 
         return ! collisionFound ;
@@ -439,17 +436,16 @@ void PlayerItem::wait ()
         {
                 // get waiting frame by orientation of item
                 unsigned int orientOccident = ( orientation.getIntegerOfWay() == Way::Nowhere ? 0 : orientation.getIntegerOfWay() );
-                unsigned int orientations = ( getDataOfItem()->howManyMotions() - getDataOfItem()->howManyExtraFrames() ) / getDataOfItem()->howManyFramesPerOrientation() ;
-                size_t frame = orientations * orientOccident ;
-                if ( frame >= getDataOfItem()->howManyMotions() ) frame = 0;
+                size_t frame = getDataOfItem()->howManyFrames() * orientOccident ;
+                if ( frame >= howManyMotions() ) frame = 0;
 
-                if ( this->rawImage != nilPointer && /* if images differ */ this->rawImage != getDataOfItem()->getMotionAt( frame ) )
+                if ( this->rawImage != nilPointer && this->rawImage != getMotionAt( frame ) )
                 {
-                        changeImage( getDataOfItem()->getMotionAt( frame ) );
+                        changeImage( getMotionAt( frame ) );
 
                         if ( this->shadow != nilPointer )
                         {
-                                changeShadow( getDataOfItem()->getShadowAt( frame ) );
+                                changeShadow( getShadowAt( frame ) );
                         }
                 }
 
@@ -457,20 +453,20 @@ void PlayerItem::wait ()
         }
 }
 
-bool PlayerItem::isActiveCharacter ()
+bool PlayerItem::isActiveCharacter () const
 {
-        return mediator->getActiveCharacter() == this ;
+        return mediator->getActiveCharacter()->getUniqueName() == this->getUniqueName() ;
 }
 
-void PlayerItem::fillWithData( const GameManager * data )
+void PlayerItem::fillWithData( const GameManager & data )
 {
-        setLives( data->getLives( getLabel() ) );
+        setLives( data.getLives( getLabel() ) );
 
-        setHighJumps( data->getHighJumps() );
-        setHighSpeed( data->getHighSpeed() );
-        setShieldTime( data->getShield( getLabel() ) );
-        data->toolsOwnedByCharacter( getLabel(), this->tools );
-        setDoughnuts( data->getDonuts( getLabel() ) );
+        setHighJumps( data.getHighJumps() );
+        setHighSpeed( data.getHighSpeed() );
+        setShieldTime( data.getShield( getLabel() ) );
+        data.fillToolsOwnedByCharacter( getLabel(), this->tools );
+        setDoughnuts( data.getDonuts( getLabel() ) );
 }
 
 void PlayerItem::addLives( unsigned char lives )
@@ -478,103 +474,99 @@ void PlayerItem::addLives( unsigned char lives )
         if ( this->lives < 100 )
         {
                 this->lives += lives;
-                GameManager::getInstance()->addLives( this->getLabel (), lives );
+                GameManager::getInstance().addLives( this->getLabel (), lives );
         }
 }
 
 void PlayerItem::loseLife()
 {
+        setWayOfExit( "rebuild room" );
+
         if ( this->lives > 0 )
         {
                 this->lives--;
-                GameManager::getInstance()->loseLife( getOriginalLabel () /* current label is "bubbles" */ );
+                GameManager::getInstance().loseLife( getOriginalLabel () /* current label is "bubbles" */ );
         }
 
-        GameManager::getInstance()->emptyHandbag();
+        GameManager::getInstance().emptyHandbag();
 }
 
 void PlayerItem::takeTool( const std::string& label )
 {
         this->tools.push_back( label );
-        GameManager::getInstance()->takeMagicItem( label );
+        GameManager::getInstance().takeMagicItem( label );
 }
 
 void PlayerItem::addDoughnuts( const unsigned short howMany )
 {
-        this->howManyDoughnuts += howMany;
-        GameManager::getInstance()->setDonuts( this->howManyDoughnuts );
+        howManyDoughnuts += howMany;
+        GameManager::getInstance().setDonuts( howManyDoughnuts );
 }
 
 void PlayerItem::useDoughnut()
 {
-        if ( this->howManyDoughnuts > 0 )
+        if ( howManyDoughnuts > 0 )
         {
-                this->howManyDoughnuts--;
-                GameManager::getInstance()->consumeDonut();
+                howManyDoughnuts-- ;
+                GameManager::getInstance().consumeDonut();
         }
 }
 
 void PlayerItem::activateHighSpeed()
 {
-        if ( this->getLabel() == "head" )
+        if ( getOriginalLabel() == "head" )
         {
-                this->highSpeed = 99;
-                GameManager::getInstance()->addHighSpeed( this->getLabel(), 99 );
+                highSpeed = 99 ;
+                GameManager::getInstance().addHighSpeed( getOriginalLabel(), highSpeed );
         }
 }
 
 void PlayerItem::decreaseHighSpeed()
 {
-        if ( this->highSpeed > 0 )
+        if ( highSpeed > 0 )
         {
-                this->highSpeed--;
-                GameManager::getInstance()->decreaseHighSpeed( this->getLabel() );
+                highSpeed-- ;
+                GameManager::getInstance().decreaseHighSpeed( getOriginalLabel() );
         }
 }
 
-void PlayerItem::addHighJumps( unsigned char highJumps )
+void PlayerItem::addHighJumps( unsigned char howMany )
 {
-        if ( this->getLabel() == "heels" )
+        if ( getOriginalLabel() == "heels" )
         {
-                this->highJumps += highJumps;
-                GameManager::getInstance()->addHighJumps( this->getLabel(), highJumps );
+                highJumps += howMany;
+                GameManager::getInstance().addHighJumps( getOriginalLabel(), highJumps );
         }
 }
 
 void PlayerItem::decreaseHighJumps()
 {
-        if ( this->highJumps > 0 )
+        if ( highJumps > 0 )
         {
-                this->highJumps--;
-                GameManager::getInstance()->decreaseHighJumps( this->getLabel() );
+                highJumps-- ;
+                GameManager::getInstance().decreaseHighJumps( getOriginalLabel() );
         }
 }
 
 void PlayerItem::activateShield()
 {
-        this->shieldTimer = new Timer();
-        this->shieldTimer->go();
-        this->shieldTime = 25.0;
-        this->shield = shieldTime - shieldTimer->getValue();
-        GameManager::getInstance()->addShield( this->getLabel(), this->shield );
+        shieldTimer->reset();
+        shieldTimer->go();
+        shieldRemaining = 25.0;
+        GameManager::getInstance().addShield( getOriginalLabel(), shieldRemaining );
 }
 
 void PlayerItem::decreaseShield()
 {
-        if ( this->shieldTimer != nilPointer )
+        shieldRemaining = 25.0 - shieldTimer->getValue();
+
+        if ( shieldRemaining < 0 )
         {
-                this->shield = shieldTime - shieldTimer->getValue();
-                GameManager::getInstance()->modifyShield( this->getLabel(), this->shield );
+                shieldRemaining = 0.0;
+                shieldTimer->stop();
         }
 
-        if ( this->shield < 0 )
-        {
-                this->shieldTime = 0.0;
-                this->shield = 0;
-                this->shieldTimer->stop();
-                delete this->shieldTimer;
-                this->shieldTimer = nilPointer;
-        }
+        GameManager::getInstance().modifyShield( getOriginalLabel(), shieldRemaining );
 }
 
 void PlayerItem::liberatePlanet ()
@@ -583,51 +575,53 @@ void PlayerItem::liberatePlanet ()
 
         if ( scenery == "jail" || scenery == "blacktooth" || scenery == "market" )
         {
-                GameManager::getInstance()->liberatePlanet( "blacktooth" );
+                GameManager::getInstance().liberatePlanet( "blacktooth" );
         }
         else if ( scenery == "egyptus" )
         {
-                GameManager::getInstance()->liberatePlanet( "egyptus" );
+                GameManager::getInstance().liberatePlanet( "egyptus" );
         }
         else if ( scenery == "penitentiary" )
         {
-                GameManager::getInstance()->liberatePlanet( "penitentiary" );
+                GameManager::getInstance().liberatePlanet( "penitentiary" );
         }
         else if ( scenery == "safari" )
         {
-                GameManager::getInstance()->liberatePlanet( "safari" );
+                GameManager::getInstance().liberatePlanet( "safari" );
         }
         else if ( scenery == "byblos" )
         {
-                GameManager::getInstance()->liberatePlanet( "byblos" );
+                GameManager::getInstance().liberatePlanet( "byblos" );
         }
 }
 
-void PlayerItem::placeItemInBag ( ItemData* itemData, const std::string& behavior )
+void PlayerItem::placeItemInBag ( const std::string& labelOfItem, const std::string& behavior )
 {
+        const ItemData* itemData = getDataOfItem()->getItemDataManager()->findDataByLabel( labelOfItem ) ;
         this->takenItemData = itemData;
         this->takenItemBehavior = behavior;
 }
 
 void PlayerItem::save ()
 {
-        GameManager::getInstance()->eatFish( this, this->mediator->getRoom() );
+        GameManager::getInstance().eatFish( *this, this->mediator->getRoom() );
 }
 
 void PlayerItem::saveAt ( int x, int y, int z )
 {
-        GameManager::getInstance()->eatFish( this, this->mediator->getRoom(), x, y, z );
+        GameManager::getInstance().eatFish( *this, this->mediator->getRoom(), x, y, z );
 }
 
-void PlayerItem::setShieldTime ( double shield )
+void PlayerItem::setShieldTime ( float seconds )
 {
-        this->shieldTime = shield;
+        shieldTimer->reset();
 
-        if ( this->shieldTime > 0 && this->shieldTimer == nilPointer )
+        if ( seconds > 0 && ! hasShield() )
         {
-                this->shieldTimer = new Timer();
-                this->shieldTimer->go();
+                shieldTimer->go();
         }
+
+        shieldRemaining = seconds;
 }
 
 bool PlayerItem::hasTool( const std::string& label ) const

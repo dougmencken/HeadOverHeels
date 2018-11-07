@@ -1,7 +1,5 @@
 
 #include "RemoteControl.hpp"
-#include "Item.hpp"
-#include "FreeItem.hpp"
 #include "MoveKindOfActivity.hpp"
 #include "DisplaceKindOfActivity.hpp"
 #include "FallKindOfActivity.hpp"
@@ -10,20 +8,20 @@
 #include "SoundManager.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
-RemoteControl::RemoteControl( Item * item, const std::string & behavior ) :
-        Behavior( item, behavior )
+RemoteControl::RemoteControl( const ItemPtr & item, const std::string & behavior )
+        : Behavior( item, behavior )
+        , controlledItem ()
+        , speedTimer( new Timer() )
+        , fallTimer( new Timer() )
 {
         activity = Activity::Wait;
-        controlledItem = nilPointer;
 
         // move controlled one but not controller
         if ( getNameOfBehavior() == "behavior of remotely controlled one" )
         {
-                speedTimer = new Timer();
-                fallTimer = new Timer();
                 speedTimer->go();
                 fallTimer->go();
         }
@@ -31,22 +29,17 @@ RemoteControl::RemoteControl( Item * item, const std::string & behavior ) :
 
 RemoteControl::~RemoteControl()
 {
-        if ( getNameOfBehavior() == "behavior of remotely controlled one" )
-        {
-                delete speedTimer;
-                delete fallTimer;
-        }
 }
 
 bool RemoteControl::update ()
 {
-        FreeItem* freeItem = dynamic_cast< FreeItem * >( this->item );
+        FreeItem& freeItem = dynamic_cast< FreeItem& >( * this->item );
         bool vanish = false;
 
         // get controlled item
         if ( getNameOfBehavior() == "behavior of remote control" && controlledItem == nilPointer )
         {
-                controlledItem = dynamic_cast< FreeItem * >( freeItem->getMediator()->findItemByBehavior( "behavior of remotely controlled one" ) );
+                controlledItem = freeItem.getMediator()->findItemByBehavior( "behavior of remotely controlled one" );
         }
 
         switch ( activity )
@@ -60,10 +53,10 @@ bool RemoteControl::update ()
                 case Activity::MoveWest:
                         if ( getNameOfBehavior() == "behavior of remotely controlled one" )
                         {
-                                if ( speedTimer->getValue() > freeItem->getSpeed() )
+                                if ( speedTimer->getValue() > freeItem.getSpeed() )
                                 {
                                         // move item
-                                        MoveKindOfActivity::getInstance()->move( this, &activity, true );
+                                        MoveKindOfActivity::getInstance().move( this, &activity, true );
 
                                         if ( activity != Activity::Fall )
                                         {
@@ -73,7 +66,7 @@ bool RemoteControl::update ()
                                         speedTimer->reset();
                                 }
 
-                                freeItem->animate();
+                                freeItem.animate();
                         }
                         break;
 
@@ -87,15 +80,15 @@ bool RemoteControl::update ()
                 case Activity::DisplaceSouthwest:
                         if ( getNameOfBehavior() == "behavior of remotely controlled one" )
                         {
-                                if ( speedTimer->getValue() > freeItem->getSpeed() )
+                                if ( speedTimer->getValue() > freeItem.getSpeed() )
                                 {
                                         // emit sound of displacement if item is pushed but not displaced by item below it
                                         if ( this->sender == nilPointer || this->sender != this->item )
                                         {
-                                                SoundManager::getInstance()->play( freeItem->getLabel(), activity );
+                                                SoundManager::getInstance().play( freeItem.getLabel(), activity );
                                         }
 
-                                        DisplaceKindOfActivity::getInstance()->displace( this, &activity, true );
+                                        DisplaceKindOfActivity::getInstance().displace( this, &activity, true );
 
                                         if ( activity != Activity::Fall )
                                         {
@@ -105,7 +98,7 @@ bool RemoteControl::update ()
                                         speedTimer->reset();
                                 }
 
-                                freeItem->animate();
+                                freeItem.animate();
                         }
 
                         // controller changes movement of controlled item
@@ -146,18 +139,18 @@ bool RemoteControl::update ()
 
                 case Activity::Fall:
                         // look for reaching floor in a room without floor
-                        if ( freeItem->getZ() == 0 && freeItem->getMediator()->getRoom()->getKindOfFloor() == "none" )
+                        if ( freeItem.getZ() == 0 && ! freeItem.getMediator()->getRoom()->hasFloor() )
                         {
                                 // item disappears
                                 vanish = true;
                         }
                         // is it time to fall for controlled item
-                        else if ( getNameOfBehavior() == "behavior of remotely controlled one" && fallTimer->getValue() > freeItem->getWeight() )
+                        else if ( getNameOfBehavior() == "behavior of remotely controlled one" && fallTimer->getValue() > freeItem.getWeight() )
                         {
-                                if ( ! FallKindOfActivity::getInstance()->fall( this ) )
+                                if ( ! FallKindOfActivity::getInstance().fall( this ) )
                                 {
                                         // play sound of falling down
-                                        SoundManager::getInstance()->play( freeItem->getLabel(), activity );
+                                        SoundManager::getInstance().play( freeItem.getLabel(), activity );
                                         activity = Activity::Wait;
                                 }
 

@@ -7,19 +7,19 @@
 #include "FreeItem.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
 DisplaceKindOfActivity * DisplaceKindOfActivity::instance = nilPointer ;
 
-DisplaceKindOfActivity* DisplaceKindOfActivity::getInstance()
+DisplaceKindOfActivity& DisplaceKindOfActivity::getInstance()
 {
         if ( instance == nilPointer )
         {
                 instance = new DisplaceKindOfActivity();
         }
 
-        return instance;
+        return *instance;
 }
 
 
@@ -36,7 +36,7 @@ bool DisplaceKindOfActivity::displace( Behavior* behavior, ActivityOfItem* activ
 {
         bool itemDisplaced = false;
 
-        Item* item = behavior->getItem ();
+        ItemPtr item = behavior->getItem ();
         if ( item == nilPointer ) return false ;
 
         ActivityOfItem activityToPropagate = *activity;
@@ -101,12 +101,12 @@ bool DisplaceKindOfActivity::displace( Behavior* behavior, ActivityOfItem* activ
                 if ( ! itemDisplaced )
                 {
                         // move involved items
-                        this->propagateActivityToAdjacentItems( item, activityToPropagate );
+                        this->propagateActivityToAdjacentItems( *item, activityToPropagate );
                 }
                 else
                 {
                         // look if items on top of this item needs to move too
-                        this->propagateActivityToItemsAbove( item, *activity );
+                        this->propagateActivityToItemsAbove( *item, *activity );
                 }
         }
 
@@ -114,7 +114,7 @@ bool DisplaceKindOfActivity::displace( Behavior* behavior, ActivityOfItem* activ
         if ( canFall )
         {
                 // look if it falls yet
-                if ( FallKindOfActivity::getInstance()->fall( behavior ) )
+                if ( FallKindOfActivity::getInstance().fall( behavior ) )
                 {
                         *activity = Activity::Fall;
                         itemDisplaced = true;

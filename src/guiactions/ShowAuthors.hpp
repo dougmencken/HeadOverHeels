@@ -12,6 +12,7 @@
 #define ShowAuthors_hpp_
 
 #include "Action.hpp"
+#include "Picture.hpp"
 
 
 namespace gui
@@ -45,7 +46,7 @@ private:
 
         unsigned int initialY ;
 
-        Picture * loadingScreen ;
+        PicturePtr loadingScreen ;
 
 };
 

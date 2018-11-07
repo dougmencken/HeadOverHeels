@@ -1,21 +1,19 @@
 
-#include "MapRoomData.hpp"
+#include "RoomConnections.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
-MapRoomData::MapRoomData( const std::string& room )
-        : room( room )
-        , visited( false )
+RoomConnections::RoomConnections( )
 {
 }
 
-MapRoomData::~MapRoomData()
+RoomConnections::~RoomConnections( )
 {
 }
 
-std::string MapRoomData::findConnectedRoom( const std::string& wayOfExit, Way* wayOfEntry ) const
+std::string RoomConnections::findConnectedRoom( const std::string& wayOfExit, Way* wayOfEntry ) const
 {
         std::string roomFile;
 
@@ -108,7 +106,7 @@ std::string MapRoomData::findConnectedRoom( const std::string& wayOfExit, Way* w
         return roomFile;
 }
 
-void MapRoomData::adjustEntry( Way* entry, const std::string& previousRoom )
+void RoomConnections::adjustEntry( Way* entry, const std::string& previousRoom ) const
 {
         switch ( entry->getIntegerOfWay() )
         {

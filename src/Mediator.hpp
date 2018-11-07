@@ -24,20 +24,13 @@
 #include "Room.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
 class Mediated ;
-class Item ;
 class FloorTile ;
-class GridItem ;
-class FreeItem ;
-class PlayerItem ;
 class Door ;
 class ItemDataManager ;
-
-
-void * updateThread ( void * thisClass ) ;
 
 
 /**
@@ -57,6 +50,8 @@ public:
 
         virtual ~Mediator( ) ;
 
+        static void * updateThread ( void * mediatorAsVoid ) ;
+
        /**
         * Update behavior of every item for one cycle
         */
@@ -72,59 +67,51 @@ public:
         */
         void endUpdate () ;
 
-        void remaskWithFreeItem( FreeItem* item ) ;
+        void remaskWithFreeItem( const FreeItem & item ) ;
 
-        void remaskWithGridItem( GridItem* gridItem ) ;
+        void remaskWithGridItem( const GridItem & gridItem ) ;
 
-        void reshadeWithGridItem( GridItem* gridItem ) ;
+        void reshadeWithGridItem( const GridItem & gridItem ) ;
 
-        void reshadeWithFreeItem( FreeItem* freeItem ) ;
+        void reshadeWithFreeItem( const FreeItem & freeItem ) ;
 
-        void castShadowOnFloor( FloorTile* floorTile ) ;
+        void shadeFreeItemsBeneathItem ( const Item & item ) ;
 
-        void castShadowOnGridItem( GridItem* gridItem ) ;
+        void castShadowOnFloor( FloorTile & floorTile ) ;
 
-        void castShadowOnFreeItem( FreeItem* freeItem ) ;
+        void castShadowOnGridItem( GridItem & gridItem ) ;
 
-        void maskFreeItem ( FreeItem* freeItem ) ;
+        void castShadowOnFreeItem( FreeItem & freeItem ) ;
+
+        void maskFreeItem ( FreeItem & freeItem ) ;
 
        /**
         * Find item in room by its unique name
-        * @return item found or nil if no such item
         */
-        Item * findItemByUniqueName ( const std::string& uniqueName ) ;
+        ItemPtr findItemByUniqueName ( const std::string & uniqueName ) ;
 
        /**
         * Find item in room by its label
         * @param label Label of item, when there are several elements with this label return the first one found
-        * @return item found or nil if no such item
         */
-        Item * findItemByLabel ( const std::string& label ) ;
+        ItemPtr findItemByLabel ( const std::string & label ) ;
 
        /**
         * Find item in room by its behavior
         */
-        Item * findItemByBehavior ( const std::string& behavior ) ;
+        ItemPtr findItemByBehavior ( const std::string & behavior ) ;
 
        /**
         * Look for collisions between the given item and other items in room
         * @return true if collisions were found or false otherwise
         */
-        bool findCollisionWithItem ( Item* item ) ;
+        bool lookForCollisionsOf ( const std::string & uniqueNameOfItem ) ;
 
        /**
         * Search for Z coordinate which is the highest position to place the given item
         * @return value of Z or zero if can’t get it
         */
-        int findHighestZ ( Item* item ) ;
-
-        void addGridItemToList ( GridItem* gridItem ) ;
-
-        void addFreeItemToList ( FreeItem* freeItem ) ;
-
-        void removeGridItemFromList ( GridItem* gridItem ) ;
-
-        void removeFreeItemFromList ( FreeItem* freeItem ) ;
+        int findHighestZ ( const Item & item ) ;
 
         void pushCollision ( const std::string& uniqueName ) ;
 
@@ -139,30 +126,27 @@ public:
 
         unsigned int depthOfStackOfCollisions () {  return collisions.size() ;  }
 
-        Item * findCollisionPop () {  return this->findItemByUniqueName( this->popCollision() ) ;  }
+        ItemPtr findCollisionPop () {  return findItemByUniqueName( popCollision() ) ;  }
 
        /**
         * Is there collision with item of a given label
         * @return item with which collision happened or nil if there’s no collision
         */
-        Item * collisionWithByLabel ( const std::string& label ) ;
+        ItemPtr collisionWithByLabel ( const std::string& label ) ;
 
        /**
         * Is there collision with item of a given behavior
         * @return item with which collision happened or nil if there’s no collision
         */
-        Item * collisionWithByBehavior ( const std::string& behavior ) ;
+        ItemPtr collisionWithByBehavior ( const std::string& behavior ) ;
 
-        Item * collisionWithBadBoy () ;
+        ItemPtr collisionWithBadBoy () ;
 
        /**
         * Activate next character in room
-        * @param itemDataManager Needed to create composite player from simple ones
-        *                        or to create simple players from composite,
-        *                        you may use nil when you’re sure that there’s no joining or splitting
         * @return true if it’s possible to swap or false if there’s only one player in this room
         */
-        bool pickNextCharacter ( ItemDataManager* itemDataManager ) ;
+        bool pickNextCharacter () ;
 
        /**
         * Toggle the switch if it is in room, most rooms do not have a switch. If it turns on
@@ -171,27 +155,17 @@ public:
         */
         void toggleSwitchInRoom () ;
 
-        void activateGridItemsSorting () {  this->gridItemsSorting = true ;  }
+        void needsToSortGridItems () {  this->needsGridItemsSorting = true ;  }
 
-        void activateFreeItemsSorting () {  this->freeItemsSorting = true ;  }
+        void needsToSortFreeItems () {  this->needsFreeItemsSorting = true ;  }
 
-        void lockGridItemMutex () {  pthread_mutex_lock( &gridItemsMutex ) ;  }
+        void lockGridItemsMutex () {  pthread_mutex_lock( &gridItemsMutex ) ;  }
 
-        void lockFreeItemMutex () {  pthread_mutex_lock( &freeItemsMutex ) ;  }
+        void lockFreeItemsMutex () {  pthread_mutex_lock( &freeItemsMutex ) ;  }
 
-        void unlockGridItemMutex () {  pthread_mutex_unlock( &gridItemsMutex ) ;  }
+        void unlockGridItemsMutex () {  pthread_mutex_unlock( &gridItemsMutex ) ;  }
 
-        void unlockFreeItemMutex () {  pthread_mutex_unlock( &freeItemsMutex ) ;  }
-
-protected:
-
-        void shadeFreeItemsBeneathItem ( Item * item ) ;
-
-private:
-
-        static bool sortColumnOfGridItems ( GridItem * g1, GridItem * g2 ) ;
-
-        static bool sortListOfFreeItems ( FreeItem * f1, FreeItem * f2 ) ;
+        void unlockFreeItemsMutex () {  pthread_mutex_unlock( &freeItemsMutex ) ;  }
 
 private:
 
@@ -211,22 +185,11 @@ private:
 
         pthread_mutex_t freeItemsMutex ;
 
-        bool gridItemsSorting ;
+        bool needsGridItemsSorting ;
 
-        bool freeItemsSorting ;
+        bool needsFreeItemsSorting ;
 
         bool switchInRoomIsOn ;
-
-       /**
-        * Set of grid items that form structure of room. Each column is list of grid items
-        * sorted thus next item’s Z is greater than preceding item’s Z
-        */
-        std::vector < std::list < GridItem * > > gridItems ;
-
-       /**
-        * List of free items in room
-        */
-        std::list < FreeItem * > freeItems ;
 
        /**
         * Items that may take life from player and that may be freezed by doughnut or by switch
@@ -236,7 +199,7 @@ private:
        /**
         * Character yet controlled by user
         */
-        PlayerItem * activeCharacter ;
+        PlayerItemPtr activeCharacter ;
 
         std::string labelOfActiveCharacter ;
 
@@ -256,48 +219,19 @@ public:
 
         const std::string& getLastActiveCharacterBeforeJoining () {  return lastActiveCharacterBeforeJoining ;  }
 
-        Room* getRoom () const {  return room ;  }
+        Room * getRoom () const {  return room ;  }
 
-        const std::vector < std::list < GridItem * > > & getGridItems () const {  return gridItems ;  }
-
-        const std::list < FreeItem * > & getFreeItems () const {  return freeItems ;  }
-
-        PlayerItem * getActiveCharacter () const {  return this->activeCharacter ;  }
+        PlayerItemPtr getActiveCharacter () const {  return activeCharacter ;  }
 
         const std::string& getLabelOfActiveCharacter () const {  return labelOfActiveCharacter ;  }
 
-        void setActiveCharacter ( PlayerItem * character ) ;
+        void setActiveCharacter ( const PlayerItemPtr & character ) ;
 
        /**
         * Waiting character
         * @return player item or nil if there’re no more players in this room
         */
-        PlayerItem * getWaitingCharacter () const ;
-
-};
-
-
-class EqualUniqueNameOfItem : public std::binary_function< Item *, std::string, bool >
-{
-
-public:
-        bool operator() ( Item* item, const std::string& uniqueName ) const ;
-
-};
-
-class EqualLabelOfItem : public std::binary_function< Item *, std::string, bool >
-{
-
-public:
-        bool operator() ( Item* item, const std::string& label ) const ;
-
-};
-
-class EqualBehaviorOfItem : public std::binary_function< Item *, std::string, bool >
-{
-
-public:
-        bool operator() ( Item* item, const std::string& behavior ) const ;
+        PlayerItemPtr getWaitingCharacter () const ;
 
 };
 

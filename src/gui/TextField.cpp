@@ -21,7 +21,7 @@ TextField::TextField( unsigned int width, const std::string& align )
 
 TextField::~TextField()
 {
-        std::for_each( this->lines.begin (), this->lines.end (), isomot::DeleteIt() );
+        std::for_each( this->lines.begin (), this->lines.end (), iso::DeleteIt() );
         this->lines.clear();
 }
 

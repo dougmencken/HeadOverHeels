@@ -15,7 +15,7 @@
 #include "Timer.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
 class Item ;
@@ -29,7 +29,7 @@ class Mobile : public Behavior
 
 public:
 
-        Mobile( Item * item, const std::string & behavior ) ;
+        Mobile( const ItemPtr & item, const std::string & behavior ) ;
 
         virtual ~Mobile( ) ;
 
@@ -37,9 +37,9 @@ public:
 
 private:
 
-        Timer * speedTimer ;
+        autouniqueptr < Timer > speedTimer ;
 
-        Timer * fallTimer ;
+        autouniqueptr < Timer > fallTimer ;
 
 };
 

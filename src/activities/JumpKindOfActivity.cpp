@@ -1,26 +1,24 @@
 
 #include "JumpKindOfActivity.hpp"
 #include "Behavior.hpp"
-#include "Item.hpp"
-#include "FreeItem.hpp"
 #include "PlayerItem.hpp"
 #include "Mediator.hpp"
 #include "GameManager.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
 JumpKindOfActivity * JumpKindOfActivity::instance = nilPointer ;
 
-JumpKindOfActivity* JumpKindOfActivity::getInstance()
+JumpKindOfActivity& JumpKindOfActivity::getInstance()
 {
         if ( instance == nilPointer )
         {
                 instance = new JumpKindOfActivity();
         }
 
-        return instance;
+        return *instance;
 }
 
 
@@ -38,13 +36,13 @@ bool JumpKindOfActivity::jump( Behavior* behavior, ActivityOfItem* activity, uns
 {
         bool itemMoved = false;
         ActivityOfItem displaceActivity = Activity::Wait;
-        PlayerItem* playerItem = dynamic_cast< PlayerItem * >( behavior->getItem() );
-        Mediator* mediator = playerItem->getMediator();
+        PlayerItem& playerItem = dynamic_cast< PlayerItem& >( * behavior->getItem() );
+        Mediator* mediator = playerItem.getMediator();
 
         int deltaXY = jumpVector[ jumpPhase ].first ;
         int deltaZ = jumpVector[ jumpPhase ].second ;
 
-        if ( GameManager::getInstance()->charactersFly() )
+        if ( GameManager::getInstance().charactersFly() )
         {
                 deltaXY = 0;
 
@@ -55,69 +53,59 @@ bool JumpKindOfActivity::jump( Behavior* behavior, ActivityOfItem* activity, uns
         }
 
         // let’s move up
-        if ( ! playerItem->addToZ( deltaZ ) )
+        if ( ! playerItem.addToZ( deltaZ ) )
         {
                 // if can’t, raise pile of items above
                 if ( deltaZ > 0 )
                 {
                         while ( ! mediator->isStackOfCollisionsEmpty() )
                         {
-                                std::string nameOfCollision = mediator->popCollision();
-                                Item* item = mediator->findItemByUniqueName( nameOfCollision );
+                                ItemPtr item = mediator->findItemByUniqueName( mediator->popCollision() );
+                                if ( item == nilPointer ) continue ;
 
-                                if ( item != nilPointer )
+                                // mortal thing is above
+                                if ( item->isMortal() && ! playerItem.hasShield() )
                                 {
-                                        // is it free item or grid item
-                                        if ( item->whichKindOfItem() == "grid item" ||
-                                                item->whichKindOfItem() == "free item" || item->whichKindOfItem() == "player item" )
+                                        if ( ! GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
                                         {
-                                                // mortal thing is above
-                                                if ( item->isMortal() && ! playerItem->hasShield() )
-                                                {
-                                                        if ( ! GameManager::getInstance()->isImmuneToCollisionsWithMortalItems () )
-                                                        {
-                                                                playerItem->getBehavior()->changeActivityOfItem( Activity::MeetMortalItem );
-                                                        }
-                                                }
-                                                else
-                                                {
-                                                        FreeItem* freeItem = dynamic_cast< FreeItem * >( item );
-
-                                                        // non mortal free item
-                                                        if ( freeItem != nilPointer )
-                                                        {
-                                                                // raise items recursively
-                                                                lift( playerItem, freeItem, deltaZ - ( jumpPhase > 0 && jumpPhase % 2 == 0 ? 1 : 2 ) );
-                                                        }
-                                                }
+                                                playerItem.getBehavior()->changeActivityOfItem( Activity::MeetMortalItem );
+                                        }
+                                }
+                                else
+                                {
+                                        // non mortal free item
+                                        if ( item->whichKindOfItem() == "free item" || item->whichKindOfItem() == "player item" )
+                                        {
+                                                // raise items recursively
+                                                lift( playerItem, *item, deltaZ - ( jumpPhase > 0 && jumpPhase % 2 == 0 ? 1 : 2 ) );
                                         }
                                 }
                         }
 
                         // yet you may ascend
-                        playerItem->addToZ( deltaZ - ( jumpPhase > 0 && jumpPhase % 2 == 0 ? 1 : 2 ) );
+                        playerItem.addToZ( deltaZ - ( jumpPhase > 0 && jumpPhase % 2 == 0 ? 1 : 2 ) );
                 }
         }
 
-        switch ( playerItem->getOrientation().getIntegerOfWay() )
+        switch ( playerItem.getOrientation().getIntegerOfWay() )
         {
                 case Way::North:
-                        itemMoved = playerItem->addToX( - deltaXY );
+                        itemMoved = playerItem.addToX( - deltaXY );
                         displaceActivity = Activity::DisplaceNorth;
                         break;
 
                 case Way::South:
-                        itemMoved = playerItem->addToX( deltaXY );
+                        itemMoved = playerItem.addToX( deltaXY );
                         displaceActivity = Activity::DisplaceSouth;
                         break;
 
                 case Way::East:
-                        itemMoved = playerItem->addToY( - deltaXY );
+                        itemMoved = playerItem.addToY( - deltaXY );
                         displaceActivity = Activity::DisplaceEast;
                         break;
 
                 case Way::West:
-                        itemMoved = playerItem->addToY( deltaXY );
+                        itemMoved = playerItem.addToY( deltaXY );
                         displaceActivity = Activity::DisplaceWest;
                         break;
 
@@ -126,15 +114,11 @@ bool JumpKindOfActivity::jump( Behavior* behavior, ActivityOfItem* activity, uns
         }
 
         // displace adjacent items when there’s horizontal collision
-        if ( ! itemMoved )
+        if ( ! itemMoved || ( itemMoved && jumpPhase > 4 ) )
         {
+                // is it okay to move items above
+                // it is okay after fourth phase of jump so player can get rid of item above
                 this->propagateActivityToAdjacentItems( playerItem, displaceActivity );
-        }
-        // is it okay to move items above
-        // it is okay after fourth phase of jump so player can get rid of item above
-        else if ( itemMoved && jumpPhase > 4 )
-        {
-                this->propagateActivityToItemsAbove( playerItem, displaceActivity );
         }
 
         // end jump when it’s last phase
@@ -146,38 +130,38 @@ bool JumpKindOfActivity::jump( Behavior* behavior, ActivityOfItem* activity, uns
         return itemMoved ;
 }
 
-void JumpKindOfActivity::lift( FreeItem* sender, FreeItem* freeItem, int z )
+void JumpKindOfActivity::lift( FreeItem& sender, Item& item, int z )
 {
         // only for item with behavior
-        if ( freeItem->getBehavior() != nilPointer )
+        if ( item.getBehavior() != nilPointer )
         {
                 // when item is volatile
-                if ( freeItem->getBehavior()->getNameOfBehavior () == "behavior of disappearance on touch" ||
-                                freeItem->getBehavior()->getNameOfBehavior () == "behavior of something special" )
+                if ( item.getBehavior()->getNameOfBehavior () == "behavior of disappearance on touch" ||
+                                item.getBehavior()->getNameOfBehavior () == "behavior of something special" )
                 {
-                        freeItem->getBehavior()->changeActivityOfItem( Activity::DisplaceUp, sender );
+                        item.getBehavior()->changeActivityOfItem( Activity::DisplaceUp, sender );
                 }
                 // raise item when it’s not elevator
-                else if ( freeItem->getBehavior()->getNameOfBehavior () != "behavior of elevator" )
+                else if ( item.getBehavior()->getNameOfBehavior () != "behavior of elevator" )
                 {
                         // is there’s something above
-                        if ( ! freeItem->addToZ( z ) )
+                        if ( ! item.addToZ( z ) )
                         {
-                                Mediator* mediator = freeItem->getMediator();
+                                Mediator* mediator = item.getMediator();
 
                                 while ( ! mediator->isStackOfCollisionsEmpty() )
                                 {
-                                        FreeItem* topItem = dynamic_cast< FreeItem * >( mediator->findCollisionPop( ) );
+                                        ItemPtr topItem = mediator->findCollisionPop();
 
                                         if ( topItem != nilPointer )
                                         {
                                                 // raise free items recursively
-                                                lift( sender, topItem, z );
+                                                lift( sender, *topItem, z );
                                         }
                                 }
 
                                 // ahora ya puede ascender
-                                freeItem->addToZ( z );
+                                item.addToZ( z );
                         }
                 }
         }

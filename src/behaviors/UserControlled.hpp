@@ -15,17 +15,12 @@
 #include <map>
 
 #include "Behavior.hpp"
+#include "PlayerItem.hpp"
 #include "Timer.hpp"
 
 
-namespace isomot
+namespace iso
 {
-
-class Item ;
-class ItemData ;
-class ItemDataManager ;
-class PlayerItem ;
-
 
 /**
  * Models behavior of character, that is item controlled by user. Defines attributes
@@ -37,7 +32,7 @@ class UserControlled : public Behavior
 
 public:
 
-        UserControlled( Item * item, const std::string & behavior ) ;
+        UserControlled( const ItemPtr & item, const std::string & behavior ) ;
 
         virtual ~UserControlled( ) ;
 
@@ -52,22 +47,17 @@ public:
         */
         virtual void behave () = 0 ;
 
-       /**
-        * Changes current activity of item’s behavior
-        */
-        virtual void changeActivityOfItem ( const ActivityOfItem& activityOf, Item* sender = 0 ) ;
-
 protected:
 
        /**
         * Character waits, game shows first frame of character’s animation for current orientation
         */
-        virtual void wait( PlayerItem * player ) ;
+        virtual void wait( PlayerItem & player ) ;
 
        /**
         * Character moves at speed specified in item’s data, in the direction of north or south or west or east
         */
-        virtual void move( PlayerItem * player ) ;
+        virtual void move( PlayerItem & player ) ;
 
        /**
         * Character moves automatically
@@ -75,64 +65,64 @@ protected:
         * in direction of north or south or west or east,
         * at speed specified in item’s data
         */
-        virtual void autoMove( PlayerItem * player ) ;
+        virtual void autoMove( PlayerItem & player ) ;
 
        /**
         * Move player at speed of item that pushes it in one of eight directions
         */
-        virtual void displace( PlayerItem * player ) ;
+        virtual void displace( PlayerItem & player ) ;
 
        /**
         * Cancels movement by moving in the opposite direction of displacing, leaving item stopped
         * at current point. Used when character is dragged by conveyor belt or some similar item
         */
-        virtual void cancelDisplace( PlayerItem * player ) ;
+        virtual void cancelDisplace( PlayerItem & player ) ;
 
        /**
         * Character falls down at speed from item’s data
         */
-        virtual void fall( PlayerItem * player ) ;
+        virtual void fall( PlayerItem & player ) ;
 
        /**
         * Character jumps, details of jumping are in subclasses
         */
-        virtual void jump( PlayerItem * player ) ;
+        virtual void jump( PlayerItem & player ) ;
 
        /**
         * Character in air, falling or has jumped, glides at speed from item’s data
         * in direction of north or south or west or east
         */
-        virtual void glide( PlayerItem * player ) ;
+        virtual void glide( PlayerItem & player ) ;
 
        /**
         * Character teleports from another room
         */
-        virtual void wayInTeletransport( PlayerItem * player ) ;
+        virtual void wayInTeletransport( PlayerItem & player ) ;
 
        /**
         * Character teleports to another room
         */
-        virtual void wayOutTeletransport( PlayerItem * player ) ;
+        virtual void wayOutTeletransport( PlayerItem & player ) ;
 
        /**
         * Character collides with a mortal item
         */
-        virtual void collideWithMortalItem( PlayerItem * player ) ;
+        virtual void collideWithMortalItem( PlayerItem & player ) ;
 
        /**
         * Character releases something that freezes moving items
         */
-        virtual void useHooter( PlayerItem * player ) ;
+        virtual void useHooter( PlayerItem & player ) ;
 
        /**
         * Take item underneath player
         */
-        virtual void takeItem( PlayerItem * player ) ;
+        virtual void takeItem( PlayerItem & player ) ;
 
        /**
         * Drop item just below player
         */
-        virtual void dropItem( PlayerItem * player ) ;
+        virtual void dropItem( PlayerItem & player ) ;
 
 protected:
 
@@ -146,10 +136,7 @@ protected:
         */
         std::vector < std::pair< int /* xy */, int /* z */ > > highJumpVector ;
 
-       /**
-        * Index of phase of jump
-        */
-        unsigned int jumpIndex ;
+        unsigned int jumpPhase ;
 
        /**
         * Number of phases for normal jump
@@ -187,46 +174,33 @@ protected:
         std::map < std::string, unsigned int > fallFrames ;
 
        /**
-        * Blank frame, used during teleportation
-        */
-        unsigned int nullFrame ;
-
-       /**
         * Is there a fire from hooter in room
         */
         bool donutFromHooterIsHere ;
 
-       /**
-        * Item used as transition when changing room via teleport
-        */
-        std::string labelOfTransitionViaTeleport ;
+        std::string labelOfBubbles ;
 
-       /**
-        * Item used as fire from hooter
-        */
-        std::string labelOfFireFromHooter ;
-
-        ItemDataManager* itemDataManager ;
+        std::string labelOfFiredDoughnut ;
 
        /**
         * Timer for speed of movement
         */
-        Timer* speedTimer ;
+        autouniqueptr < Timer > speedTimer ;
 
        /**
         * Timer for speed of falling
         */
-        Timer* fallTimer ;
+        autouniqueptr < Timer > fallTimer ;
 
        /**
         * Timer for speed of gliding
         */
-        Timer* glideTimer ;
+        autouniqueptr < Timer > glideTimer ;
 
        /**
         * Timer for blinking
         */
-        Timer* blinkingTimer ;
+        autouniqueptr < Timer > blinkingTimer ;
 
 public:
 
@@ -236,8 +210,6 @@ public:
         unsigned int getJumpFrames () const {  return jumpFrames ;  }
 
         void setFireFromHooter ( bool isHere ) {  this->donutFromHooterIsHere = isHere ;  }
-
-        void setMoreData ( void * data ) ;
 
 };
 
