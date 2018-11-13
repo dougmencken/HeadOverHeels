@@ -76,7 +76,7 @@ public:
 
         static const unsigned int updatesPerSecond = 50 ;
 
-        static const unsigned int spaceForAmbiance = 64 ;
+        static const unsigned int spaceForAmbiance = 100 ;
 
         static GameManager & getInstance () ;
 

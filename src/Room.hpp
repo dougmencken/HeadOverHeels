@@ -84,6 +84,10 @@ public:
 
         void removeFloorTile ( FloorTile * floorTile ) ;
 
+        void removeWallOnX ( Wall * segment ) ;
+
+        void removeWallOnY ( Wall * segment ) ;
+
         void removeGridItemByUniqueName ( const std::string & uniqueName ) ;
 
         void removeFreeItemByUniqueName ( const std::string & uniqueName ) ;

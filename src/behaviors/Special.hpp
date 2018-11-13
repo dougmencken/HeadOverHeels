@@ -30,7 +30,7 @@ public:
 
         Special( const ItemPtr & item, const std::string& behavior ) ;
 
-        virtual ~Special () ;
+        virtual ~Special () { }
 
         virtual bool update () ;
 

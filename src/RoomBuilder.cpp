@@ -580,13 +580,12 @@ GridItemPtr RoomBuilder::buildGridItem( tinyxml2::XMLElement* item, Room* room )
                 if ( orientation == nilPointer ) orientation = item->FirstChildElement( "direction" ) ;
                 std::string theWay = orientation->FirstChild()->ToText()->Value();
 
-                // deal with difference between position from file and position in room
                 GridItemPtr gridItem( new GridItem( dataOfItem, itemX, itemY, itemZ > Top ? itemZ * LayerHeight : Top ,
                                                     theWay == "none" ? Way( "nowhere" ) : Way( theWay ) ) );
 
                 std::string behaviorOfItem = "still";
                 tinyxml2::XMLElement* behavior = item->FirstChildElement( "behavior" );
-                if ( behavior != nilPointer )
+                if ( behavior != nilPointer && behavior->FirstChild() != nilPointer )
                 {
                         behaviorOfItem = behavior->FirstChild()->ToText()->Value() ;
                 }

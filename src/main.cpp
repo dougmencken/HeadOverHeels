@@ -14,7 +14,6 @@
 
 #include "WrappersAllegro.hpp"
 
-#include "Ism.hpp"
 #include "GameManager.hpp"
 #include "GuiManager.hpp"
 

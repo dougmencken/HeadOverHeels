@@ -11,7 +11,9 @@
 #ifndef GridItem_hpp_
 #define GridItem_hpp_
 
-#include <WrappersAllegro.hpp>
+#include <string>
+
+#include "WrappersAllegro.hpp"
 
 #include "Ism.hpp"
 #include "Picture.hpp"
@@ -48,10 +50,18 @@ public:
 
         virtual std::string whichKindOfItem () const {  return "grid item" ;  }
 
+        bool isSegmentOfWallOnX () const
+                {  return getOriginalLabel().find( "wall-x" ) != std::string::npos &&
+                                getOriginalLabel().find( "invisible-wall" ) == std::string::npos ;  }
+
+        bool isSegmentOfWallOnY () const
+                {  return getOriginalLabel().find( "wall-y" ) != std::string::npos &&
+                                getOriginalLabel().find( "invisible-wall" ) == std::string::npos ;  }
+
         /**
          * Draw this grid item
          */
-        void draw ( const allegro::Pict & where ) ;
+        virtual void draw ( const allegro::Pict & where ) ;
 
         virtual void changeImage ( const Picture * newImage ) ;
 

@@ -23,10 +23,6 @@ Special::Special( const ItemPtr & item, const std::string & behavior )
         fallTimer->go();
 }
 
-Special::~Special( )
-{
-}
-
 bool Special::update ()
 {
         bool isGone = false ;
@@ -44,28 +40,10 @@ bool Special::update ()
                                 // is that above item a player which may take this bonus
                                 if ( itemAbove != nilPointer && itemAbove->whichKindOfItem() == "player item" && mayTake( itemAbove->getOriginalLabel() ) )
                                 {
-                                        bool takeIt = true;
+                                        activity = Activity::Vanish;
+                                        this->sender = itemAbove; // player is yet sender
 
-                                        // get collisions of player item with items below it
-                                        itemAbove->canAdvanceTo( 0, 0, -1 );
-
-                                        // if that player item is just above bonus then it’s okay to take it
-                                        // but when it’s on several items then look if all these items are also special or volatile
-                                        if ( mediator->depthOfStackOfCollisions() > 1 )
-                                        {
-                                                takeIt = ( mediator->collisionWithByBehavior( "behavior of something special" ) == nilPointer ) &&
-                                                                ( mediator->collisionWithByBehavior( "behavior of disappearance on jump into" ) == nilPointer ) &&
-                                                                ( mediator->collisionWithByBehavior( "behavior of disappearance on touch" ) == nilPointer ) ;
-                                        }
-
-                                        // disappear on take
-                                        if ( takeIt )
-                                        {
-                                                activity = Activity::Vanish;
-                                                this->sender = itemAbove; // player is yet sender
-
-                                                disappearanceTimer->reset();
-                                        }
+                                        disappearanceTimer->reset();
                                 }
                         }
 
@@ -200,30 +178,24 @@ bool Special::mayTake( const std::string& character )
 {
         std::string magicItem = this->item->getOriginalLabel();
 
-        return  ( character == "head"     &&  ( magicItem == "donuts" ||
-                                                magicItem == "extra-life" ||
-                                                magicItem == "high-speed" ||
-                                                magicItem == "shield" ||
-                                                magicItem == "crown" ||
+        if ( magicItem == "extra-life" || magicItem == "shield" ||
+                magicItem == "reincarnation-fish" || magicItem == "crown" )
+        {
+                return true ;
+        }
+
+        return  ( character == "head"     &&  ( magicItem == "high-speed" ||
                                                 magicItem == "horn" ||
-                                                magicItem == "reincarnation-fish" ) )
+                                                magicItem == "donuts" ) )
                 ||
 
-                ( character == "heels"    &&  ( magicItem == "extra-life" ||
-                                                magicItem == "high-jumps" ||
-                                                magicItem == "shield" ||
-                                                magicItem == "crown" ||
-                                                magicItem == "handbag" ||
-                                                magicItem == "reincarnation-fish" ) )
+                ( character == "heels"    &&  ( magicItem == "high-jumps" ||
+                                                magicItem == "handbag" ) )
                 ||
 
-                ( character == "headoverheels" && ( magicItem == "donuts" ||
-                                                magicItem == "extra-life" ||
-                                                magicItem == "shield" ||
-                                                magicItem == "crown" ||
+                ( character == "headoverheels" && ( magicItem == "handbag" ||
                                                 magicItem == "horn" ||
-                                                magicItem == "handbag" ||
-                                                magicItem == "reincarnation-fish" ) ) ;
+                                                magicItem == "donuts" ) ) ;
 }
 
 void Special::takeMagicItem( PlayerItem& whoTakes )

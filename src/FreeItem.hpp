@@ -79,7 +79,7 @@ public:
 
         virtual bool addToPosition ( int x, int y, int z ) ;
 
-        void draw ( const allegro::Pict& where ) ;
+        virtual void draw ( const allegro::Pict& where ) ;
 
         void binBothProcessedImages () ;
 
