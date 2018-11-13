@@ -12,7 +12,7 @@
 #define Mediated_hpp_
 
 
-namespace isomot
+namespace iso
 {
 
 class Mediator ;
@@ -45,7 +45,7 @@ public:
         * Mediador entre los elementos pertenecientes a la sala
         * @return mediator El mediador de la sala
         */
-        Mediator* getMediator () {  return this->mediator ;  }
+        Mediator* getMediator () const {  return this->mediator ;  }
 
 };
 

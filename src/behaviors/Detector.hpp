@@ -15,7 +15,7 @@
 #include "Timer.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
 class Item ;
@@ -29,7 +29,7 @@ class Detector : public Behavior
 
 public:
 
-        Detector( Item * item, const std::string & behavior ) ;
+        Detector( const ItemPtr & item, const std::string & behavior ) ;
 
         virtual ~Detector( ) ;
 
@@ -40,12 +40,12 @@ private:
        /**
         * Timer for speed of movement
         */
-        Timer * speedTimer ;
+        autouniqueptr < Timer > speedTimer ;
 
        /**
         * Timer for speed of falling
         */
-        Timer * fallTimer ;
+        autouniqueptr < Timer > fallTimer ;
 
 };
 

@@ -21,7 +21,7 @@
 #include "ActivityOfItem.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
 class SoundManager
@@ -35,7 +35,7 @@ public:
 
         ~SoundManager( ) ;
 
-        static SoundManager* getInstance () ;
+        static SoundManager & getInstance () ;
 
         /**
          * Crea la lista de sonidos a partir de la información extraída por el gestor XML del archivo que almacena los sonidos

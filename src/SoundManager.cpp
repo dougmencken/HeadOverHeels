@@ -4,7 +4,7 @@
 
 #include <tinyxml2.h>
 
-using isomot::SoundManager;
+using iso::SoundManager;
 
 #ifdef DEBUG
 #  define DEBUG_SOUNDS  0
@@ -66,21 +66,21 @@ SoundManager::~SoundManager( )
                 delete i->second ;
 }
 
-SoundManager* SoundManager::getInstance()
+SoundManager& SoundManager::getInstance()
 {
         if ( instance == nilPointer )
         {
                 instance = new SoundManager();
         }
 
-        return instance;
+        return *instance;
 }
 
 void SoundManager::readSounds( const std::string& xmlFile )
 {
         // read list of sounds from XML file
         tinyxml2::XMLDocument sounds;
-        tinyxml2::XMLError result = sounds.LoadFile( ( isomot::sharePath() + xmlFile ).c_str () );
+        tinyxml2::XMLError result = sounds.LoadFile( ( iso::sharePath() + xmlFile ).c_str () );
         if ( result != tinyxml2::XML_SUCCESS )
         {
                 std::cerr << "can’t read list of sounds from \"" << xmlFile << "\"" << std::endl ;
@@ -122,7 +122,7 @@ void SoundManager::addSound( const std::string& label, const std::string& activi
                 return ;
         }
 
-        allegro::Sample* sample = allegro::Sample::loadFromFile( isomot::pathToFile( isomot::sharePath() + sampleFile ) );
+        allegro::Sample* sample = allegro::Sample::loadFromFile( iso::pathToFile( iso::sharePath(), sampleFile ) );
 
         if ( sample != nilPointer && sample->isNotNil() )
         {
@@ -183,7 +183,7 @@ void SoundManager::stopEverySound ()
 
 void SoundManager::playOgg ( const std::string& oggFile, bool loop )
 {
-        std::string fullName = isomot::pathToFile( isomot::sharePath() + oggFile );
+        std::string fullName = iso::pathToFile( iso::sharePath(), oggFile );
 
          // let’s play the same again? yep, when it’s finished playing
         if ( oggPlayer.getFilePlaying() != fullName || ! oggPlayer.isPlaying() )

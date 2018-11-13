@@ -6,27 +6,18 @@
 #include <cassert>
 
 
-namespace isomot
+namespace iso
 {
 
-GridItem::GridItem( ItemData* itemData, int cx, int cy, int z, const Way& way )
+GridItem::GridItem( const ItemData* itemData, int cx, int cy, int z, const Way& way )
         : Item( itemData, z, way )
         , cell( std::pair< int, int >( cx, cy ) )
 {
         // free coordinates of grid item
-        this->xPos = cx * this->getWidthX();
-        this->yPos = ( cy + 1 ) * this->getWidthY() - 1;
+        this->xPos = cx * getWidthX();
+        this->yPos = ( cy + 1 ) * getWidthY() - 1;
 
-        unsigned int orientation = way.getIntegerOfWay();
-        if ( orientation == Way::Nowhere ) orientation = 0;
-        unsigned int position = itemData->howManyMotions() / itemData->howManyFramesPerOrientation() * orientation;
-        this->rawImage = itemData->getMotionAt( position ) ;
-
-        // may have no shadow
-        if ( itemData->getWidthOfShadow() > 0 && itemData->getHeightOfShadow() > 0 )
-        {
-                this->shadow = itemData->getShadowAt( position ) ;
-        }
+        setCollisionDetector( true );
 }
 
 GridItem::~GridItem( )
@@ -48,24 +39,23 @@ void GridItem::draw( const allegro::Pict& where )
         }
 }
 
-void GridItem::changeImage( Picture* newImage )
+void GridItem::changeImage( const Picture* newImage )
 {
         if ( this->rawImage == nilPointer )
         {
                 // when there's no image for this item, just assign it
-                // such case usually happens during construction of the item
+                // such case happens during construction of the item
                 this->rawImage = newImage;
                 return;
         }
 
         // get a copy of this item before modifying it
-        GridItem copyOfItem( *this );
+        GridItemPtr copyOfItem ( new GridItem ( *this ) );
 
         binProcessedImage();
 
         this->rawImage = newImage;
 
-        // calculate displacement of new image unless it’s nil
         if ( newImage != nilPointer )
         {
                 // reshade this item
@@ -82,22 +72,22 @@ void GridItem::changeImage( Picture* newImage )
         }
 
         // remask every free item affected by previous image
-        if ( copyOfItem.getRawImage () )
-                mediator->remaskWithGridItem( &copyOfItem );
+        if ( copyOfItem->getRawImage () != nilPointer )
+                mediator->remaskWithGridItem( *copyOfItem );
 
         // remask every free item affected by new image
         if ( newImage != nilPointer )
-                mediator->remaskWithGridItem( this );
+                mediator->remaskWithGridItem( *this );
 }
 
-void GridItem::changeShadow( Picture* newShadow )
+void GridItem::changeShadow( const Picture* newShadow )
 {
         Item::changeShadow( newShadow );
 
         if ( newShadow != nilPointer && this->shadow != newShadow && this->rawImage != nilPointer )
         {
                 // reshade items
-                mediator->reshadeWithGridItem( this );
+                mediator->reshadeWithGridItem( *this );
         }
 }
 
@@ -107,7 +97,8 @@ bool GridItem::addToPosition( int x, int y, int z )
 
         bool collisionFound = false;
 
-        GridItem copyOfItem( *this );
+        // copy item before moving it
+        GridItemPtr copyOfItem ( new GridItem ( *this ) );
 
         if ( x != 0 )
                 std::cout << "can’t change position on X for grid item, ignoring x = " << x << std::endl ;
@@ -125,7 +116,7 @@ bool GridItem::addToPosition( int x, int y, int z )
         // or maybe with other items in room
         else
         {
-                collisionFound = mediator->findCollisionWithItem( this );
+                collisionFound = mediator->lookForCollisionsOf( this->getUniqueName() );
                 if ( ! collisionFound )
                 {
                         // for grid element with image, mark to mask overlapping free items
@@ -135,8 +126,8 @@ bool GridItem::addToPosition( int x, int y, int z )
                                 // change only value on Y axis because it depends on Z coordinate
                                 this->offset.second = mediator->getRoom()->getSizeOfOneTile() * ( this->cell.first + this->cell.second + 2 ) - this->rawImage->getHeight() - this->getZ() - 1;
 
-                                mediator->remaskWithGridItem( &copyOfItem );
-                                mediator->remaskWithGridItem( this );
+                                mediator->remaskWithGridItem( *copyOfItem );
+                                mediator->remaskWithGridItem( *this );
                         }
                         else
                         {
@@ -144,27 +135,27 @@ bool GridItem::addToPosition( int x, int y, int z )
                         }
 
                         // reshade items
-                        if ( this->getZ() > copyOfItem.getZ() )
-                                mediator->reshadeWithGridItem( this );
-                        else if ( this->getZ() < copyOfItem.getZ() )
-                                mediator->reshadeWithGridItem( &copyOfItem );
+                        if ( this->getZ() > copyOfItem->getZ() )
+                                mediator->reshadeWithGridItem( *this );
+                        else if ( this->getZ() < copyOfItem->getZ() )
+                                mediator->reshadeWithGridItem( *copyOfItem );
 
-                        mediator->activateGridItemsSorting();
+                        mediator->markToSortGridItems ();
                 }
         }
 
         // restore previous values on collision
         if ( collisionFound )
         {
-                this->zPos = copyOfItem.getZ();
+                this->zPos = copyOfItem->getZ();
 
-                this->offset = copyOfItem.getOffset();
+                this->offset = copyOfItem->getOffset();
         }
 
         return ! collisionFound;
 }
 
-int GridItem::getColumnOfGrid () const
+unsigned int GridItem::getColumnOfGrid () const
 {
         assert( mediator != nilPointer );
         return mediator->getRoom()->getTilesX() * getCellY() + getCellX();

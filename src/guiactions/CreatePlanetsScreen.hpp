@@ -27,10 +27,9 @@ class CreatePlanetsScreen : public Action
 public:
 
         /**
-         * @param where Imagen donde se dibujará la interfaz gráfica
          * @param notNewGame Indica si hay una partida en curso o comienza una nueva
          */
-        CreatePlanetsScreen( Picture * picture, bool notNewGame );
+        CreatePlanetsScreen( bool notNewGame );
 
         virtual ~CreatePlanetsScreen( ) ;
 
@@ -48,9 +47,6 @@ public:
 
 protected:
 
-        /**
-         * Crea la pantalla de los planetas
-         */
         virtual void doAction () ;
 
 private:

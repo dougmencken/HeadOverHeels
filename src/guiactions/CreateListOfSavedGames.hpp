@@ -27,10 +27,9 @@ class CreateListOfSavedGames : public gui::Action
 public:
 
         /**
-         * @param picture where to draw
          * @param isLoadMenu true for "load game", false for "save game"
          */
-        CreateListOfSavedGames( Picture * picture, bool isLoadMenu ) ;
+        CreateListOfSavedGames( bool isLoadMenu ) ;
 
         std::string getNameOfAction () const {  return "CreateListOfSavedGames" ;  }
 

@@ -14,7 +14,7 @@
 #include "KindOfActivity.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
 class Behavior ;
@@ -31,7 +31,7 @@ public:
 
         virtual ~DisplaceKindOfActivity( ) ;
 
-        static DisplaceKindOfActivity * getInstance() ;
+        static DisplaceKindOfActivity & getInstance() ;
 
        /**
         * Item is being displaced

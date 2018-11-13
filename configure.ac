@@ -2,7 +2,7 @@ AC_PREREQ([2.65])
 AC_LANG(C++)
 AC_CONFIG_MACRO_DIRS([m4])
 
-AC_INIT(headoverheels, 1.31, dougmencken@gmail.com)
+AC_INIT(headoverheels, 1.32dev, dougmencken@gmail.com)
 
 AM_INIT_AUTOMAKE([subdir-objects])
 
@@ -47,7 +47,7 @@ AC_ARG_WITH([allegro4],
         [AS_HELP_STRING([--with-allegro4], [build game with allegro4 library (default: check)])], [], [with_allegro4=check])
 
 if test x"$with_allegro4" = x"yes" -a x"$with_allegro5" = x"yes" ; then
-    AC_MSG_ERROR(--with_allegro5 and --with_allegro4 are mutually exclusive)
+    AC_MSG_ERROR(--with-allegro5 and --with-allegro4 are mutually exclusive)
 fi
 
 AC_CHECK_HEADERS([allegro5/allegro.h], [HAVE_ALLEGRO5=1], [HAVE_ALLEGRO5=0], [])

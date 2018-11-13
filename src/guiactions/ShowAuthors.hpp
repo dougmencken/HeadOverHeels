@@ -12,6 +12,7 @@
 #define ShowAuthors_hpp_
 
 #include "Action.hpp"
+#include "Picture.hpp"
 
 
 namespace gui
@@ -29,7 +30,7 @@ class ShowAuthors : public Action
 
 public:
 
-        ShowAuthors( Picture * picture ) ;
+        ShowAuthors( ) ;
 
 	virtual ~ShowAuthors( ) ;
 
@@ -45,7 +46,7 @@ private:
 
         unsigned int initialY ;
 
-        Picture * loadingScreen ;
+        PicturePtr loadingScreen ;
 
 };
 

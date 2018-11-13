@@ -31,10 +31,9 @@ class CreateMenuOfGraphicSets : public Action
 public:
 
         /**
-         * @param picture Image where to draw
-         * @param previous Instance of action to do on escape
+         * @param previous Action to do on escape
          */
-        CreateMenuOfGraphicSets( Picture * picture, Action * previous ) ;
+        CreateMenuOfGraphicSets( Action * previous ) ;
 
         virtual ~CreateMenuOfGraphicSets( ) ;
 

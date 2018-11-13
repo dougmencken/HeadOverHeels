@@ -8,13 +8,13 @@
 #include "Label.hpp"
 
 using gui::RedefineKey;
-using isomot::InputManager;
+using iso::InputManager;
 
 
 RedefineKey::RedefineKey( MenuWithValues* menu, const std::string& userKey )
-        : Action( nilPointer ),
-        menu( menu ),
-        whatKeyDoes( userKey )
+        : Action( )
+        , menu( menu )
+        , whatKeyDoes( userKey )
 {
 
 }
@@ -40,19 +40,19 @@ void RedefineKey::doAction ()
                         }
                         else
                         {
-                                std::string thatKey = InputManager::getInstance()->getUserKeyFor( this->whatKeyDoes );
+                                std::string thatKey = InputManager::getInstance().getUserKeyFor( this->whatKeyDoes );
                                 if ( thatKey != newKey && /* print screen is used to toggle recording of game */ newKey != "PrintScreen" )
                                 {
                                         // if this new key was already in use, change that previous one to "none"
-                                        std::string previousAction = InputManager::getInstance()->findActionOfKeyByName( newKey );
+                                        std::string previousAction = InputManager::getInstance().findActionOfKeyByName( newKey );
                                         std::string toLook = ( previousAction == "take&jump" ? "takeandjump" : previousAction );
 
                                         if ( previousAction != "unknown" )
                                         {
-                                                InputManager::getInstance()->changeUserKey( previousAction, "none" );
+                                                InputManager::getInstance().changeUserKey( previousAction, "none" );
 
                                                 // update menu
-                                                std::string textOfThatKey = GuiManager::getInstance()->getLanguageManager()->findLanguageStringForAlias( toLook )->getText();
+                                                std::string textOfThatKey = GuiManager::getInstance().getLanguageManager()->findLanguageStringForAlias( toLook )->getText();
                                                 std::list < Label * > everyLabel = menu->getEveryOption ();
                                                 for ( std::list< Label * >::iterator o = everyLabel.begin (); o != everyLabel.end (); ++o )
                                                 {
@@ -72,7 +72,7 @@ void RedefineKey::doAction ()
 
                                         menu->setValueOf( activeLabel, newKey );
 
-                                        InputManager::getInstance()->changeUserKey( this->whatKeyDoes, newKey );
+                                        InputManager::getInstance().changeUserKey( this->whatKeyDoes, newKey );
                                 }
 
                                 exitLoop = true;
@@ -86,7 +86,7 @@ void RedefineKey::doAction ()
                 milliSleep( 20 );
         }
 
-        if ( InputManager::getInstance()->getUserKeyFor( this->whatKeyDoes ) != "none" ) {
+        if ( InputManager::getInstance().getUserKeyFor( this->whatKeyDoes ) != "none" ) {
                 activeLabel->changeFontFamilyAndColor( "big", "white" );
         } else {
                 activeLabel->changeFontFamilyAndColor( "big", "cyan" );

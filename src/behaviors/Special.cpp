@@ -1,9 +1,6 @@
 
 #include "Special.hpp"
-#include "Item.hpp"
-#include "ItemData.hpp"
 #include "FreeItem.hpp"
-#include "PlayerItem.hpp"
 #include "DisplaceKindOfActivity.hpp"
 #include "FallKindOfActivity.hpp"
 #include "Room.hpp"
@@ -12,17 +9,15 @@
 #include "SoundManager.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
-Special::Special( Item * item, const std::string & behavior ) :
-        Behavior( item, behavior )
-        , bubblesData( nilPointer )
+Special::Special( const ItemPtr & item, const std::string & behavior )
+        : Behavior( item, behavior )
+        , disappearanceTimer( new Timer() )
+        , speedTimer( new Timer() )
+        , fallTimer( new Timer() )
 {
-        disappearanceTimer = new Timer();
-        speedTimer = new Timer();
-        fallTimer = new Timer();
-
         disappearanceTimer->go();
         speedTimer->go();
         fallTimer->go();
@@ -30,12 +25,11 @@ Special::Special( Item * item, const std::string & behavior ) :
 
 Special::~Special( )
 {
-        delete disappearanceTimer;
 }
 
 bool Special::update ()
 {
-        bool isGone = false;
+        bool isGone = false ;
 
         Mediator* mediator = item->getMediator();
 
@@ -45,10 +39,10 @@ bool Special::update ()
                         // is there an item above this one
                         if ( ! item->canAdvanceTo( 0, 0, 1 ) )
                         {
-                                Item* itemAbove = mediator->findCollisionPop( );
+                                ItemPtr itemAbove = mediator->findCollisionPop( );
 
                                 // is that above item a player which may take this bonus
-                                if ( dynamic_cast< PlayerItem * >( itemAbove ) && mayTake( itemAbove ) )
+                                if ( itemAbove != nilPointer && itemAbove->whichKindOfItem() == "player item" && mayTake( itemAbove->getOriginalLabel() ) )
                                 {
                                         bool takeIt = true;
 
@@ -94,14 +88,14 @@ bool Special::update ()
                 case Activity::DisplaceNorthwest:
                 case Activity::DisplaceUp:
                         // if player touches bonus item and may take this bonus then it’s taken
-                        if ( dynamic_cast< PlayerItem * >( sender ) && mayTake( sender ) )
+                        if ( sender->whichKindOfItem() == "player item" && mayTake( sender->getOriginalLabel() ) )
                         {
                                 activity = Activity::Vanish;
                         }
                         // some other item moves this bonus
                         else if ( speedTimer->getValue() > item->getSpeed() )
                         {
-                                DisplaceKindOfActivity::getInstance()->displace( this, &activity, true );
+                                DisplaceKindOfActivity::getInstance().displace( this, &activity, true );
 
                                 // after displacement, back to "fall" activity
                                 activity = Activity::Fall;
@@ -117,7 +111,7 @@ bool Special::update ()
                         // bonus item is on conveyor belt
                         if ( speedTimer->getValue() > item->getSpeed() )
                         {
-                                DisplaceKindOfActivity::getInstance()->displace( this, &activity, true );
+                                DisplaceKindOfActivity::getInstance().displace( this, &activity, true );
 
                                 // after displacement, back to "fall" activity
                                 activity = Activity::Fall;
@@ -128,14 +122,14 @@ bool Special::update ()
 
                 case Activity::Fall:
                         // is it fall in room without floor
-                        if ( item->getZ() == 0 && item->getMediator()->getRoom()->getKindOfFloor() == "none" )
+                        if ( item->getZ() == 0 && ! item->getMediator()->getRoom()->hasFloor() )
                         {
                                 isGone = true;
                         }
                         // is it time to fall
                         else if ( fallTimer->getValue() > item->getWeight() )
                         {
-                                if ( ! FallKindOfActivity::getInstance()->fall( this ) )
+                                if ( ! FallKindOfActivity::getInstance().fall( this ) )
                                 {
                                         activity = Activity::Wait;
                                 }
@@ -145,10 +139,10 @@ bool Special::update ()
                                 // look if bonus falls on player
                                 if ( ! item->canAdvanceTo( 0, 0, -1 ) )
                                 {
-                                        Item* itemBelow = mediator->findCollisionPop( );
+                                        ItemPtr itemBelow = mediator->findCollisionPop( );
 
                                         // is that below item a player which may take this bonus
-                                        if ( dynamic_cast< PlayerItem * >( itemBelow ) && mayTake( itemBelow ) )
+                                        if ( itemBelow != nilPointer && itemBelow->whichKindOfItem() == "player item" && mayTake( itemBelow->getOriginalLabel() ) )
                                         {
                                                 // get collisions of player item with items above it
                                                 itemBelow->canAdvanceTo( 0, 0, 1 );
@@ -172,24 +166,26 @@ bool Special::update ()
                 case Activity::Vanish:
                         if ( disappearanceTimer->getValue() > 0.100 )
                         {
-                                isGone = true;
+                                isGone = true ;
 
                                 // play sound of taking
-                                SoundManager::getInstance()->play( item->getLabel(), activity );
+                                SoundManager::getInstance().play( item->getLabel(), activity );
 
                                 // bonus item disappears from room once it is taken
-                                BonusManager::getInstance()->markBonusAsAbsent( item->getMediator()->getRoom()->getNameOfFileWithDataAboutRoom(), item->getLabel() );
+                                BonusManager::getInstance().markBonusAsAbsent( item->getMediator()->getRoom()->getNameOfFileWithDataAboutRoom(), item->getLabel() );
 
-                                takeMagicItem( static_cast< PlayerItem* >( sender ) );
+                                takeMagicItem( dynamic_cast< PlayerItem& >( *sender ) );
 
-                                // create item "bubbles" in the place of magic item
-                                FreeItem* bubbles = new FreeItem( bubblesData, item->getX(), item->getY(), item->getZ(), Way::Nowhere );
+                                if ( item->getOriginalLabel() != "crown" ) // no bubbles for crowns
+                                {
+                                        item->setCollisionDetector( false );
 
-                                bubbles->assignBehavior( "behavior of disappearance in time", nilPointer );
-                                bubbles->setCollisionDetector( false );
+                                        item->setHeight( 0 );
+                                        item->metamorphInto( "bubbles", "vanishing bonus item" );
+                                        item->setBehaviorOf( "behavior of disappearance in time" );
 
-                                // add to current room
-                                mediator->getRoom()->addFreeItem( bubbles );
+                                        isGone = false ;
+                                }
                         }
                         break;
 
@@ -200,12 +196,11 @@ bool Special::update ()
         return isGone;
 }
 
-bool Special::mayTake( Item* sender )
+bool Special::mayTake( const std::string& character )
 {
-        std::string player = sender->getLabel();
-        std::string magicItem = this->item->getLabel();
+        std::string magicItem = this->item->getOriginalLabel();
 
-        return  ( player == "head"      &&  ( magicItem == "donuts" ||
+        return  ( character == "head"     &&  ( magicItem == "donuts" ||
                                                 magicItem == "extra-life" ||
                                                 magicItem == "high-speed" ||
                                                 magicItem == "shield" ||
@@ -214,7 +209,7 @@ bool Special::mayTake( Item* sender )
                                                 magicItem == "reincarnation-fish" ) )
                 ||
 
-                ( player == "heels"     &&  ( magicItem == "extra-life" ||
+                ( character == "heels"    &&  ( magicItem == "extra-life" ||
                                                 magicItem == "high-jumps" ||
                                                 magicItem == "shield" ||
                                                 magicItem == "crown" ||
@@ -222,7 +217,7 @@ bool Special::mayTake( Item* sender )
                                                 magicItem == "reincarnation-fish" ) )
                 ||
 
-                ( player == "headoverheels"  &&  ( magicItem == "donuts" ||
+                ( character == "headoverheels" && ( magicItem == "donuts" ||
                                                 magicItem == "extra-life" ||
                                                 magicItem == "shield" ||
                                                 magicItem == "crown" ||
@@ -231,48 +226,43 @@ bool Special::mayTake( Item* sender )
                                                 magicItem == "reincarnation-fish" ) ) ;
 }
 
-void Special::takeMagicItem( PlayerItem* who )
+void Special::takeMagicItem( PlayerItem& whoTakes )
 {
         std::string magicItem = this->item->getLabel();
 
         if ( magicItem == "donuts" )
         {
                 const unsigned short DonutsPerBox = 6 ;
-                who->addDoughnuts( DonutsPerBox );
+                whoTakes.addDoughnuts( DonutsPerBox );
         }
         else if ( magicItem == "extra-life" )
         {
-                who->addLives( 2 );
+                whoTakes.addLives( 2 );
         }
         else if ( magicItem == "high-speed" )
         {
-                who->activateHighSpeed();
+                whoTakes.activateHighSpeed();
         }
         else if ( magicItem == "high-jumps" )
         {
-                who->addHighJumps( 10 );
+                whoTakes.addHighJumps( 10 );
         }
         else if ( magicItem == "shield" )
         {
-                who->activateShield();
+                whoTakes.activateShield();
         }
         else if ( magicItem == "crown" )
         {
-                who->liberatePlanet();
+                whoTakes.liberatePlanet();
         }
         else if ( magicItem == "horn" || magicItem == "handbag" )
         {
-                who->takeTool( magicItem );
+                whoTakes.takeTool( magicItem );
         }
         else if ( magicItem == "reincarnation-fish" )
         {
-                who->saveAt( this->item->getX (), this->item->getY (), this->item->getZ () );
+                whoTakes.saveAt( this->item->getX (), this->item->getY (), this->item->getZ () );
         }
-}
-
-void Special::setMoreData( void* data )
-{
-        this->bubblesData = reinterpret_cast< ItemData* >( data );
 }
 
 }

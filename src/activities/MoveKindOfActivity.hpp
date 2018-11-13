@@ -12,13 +12,13 @@
 #define MoveKindOfActivity_hpp_
 
 #include "KindOfActivity.hpp"
+#include "FreeItem.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
 class Behavior ;
-class FreeItem ;
 
 
 class MoveKindOfActivity : public KindOfActivity
@@ -32,7 +32,7 @@ public:
 
         virtual ~MoveKindOfActivity( ) ;
 
-        static MoveKindOfActivity * getInstance () ;
+        static MoveKindOfActivity & getInstance () ;
 
        /**
         * Item moves
@@ -50,14 +50,14 @@ protected:
          * @param freeItem Currently first item
          * @param z Units to ascend
          */
-        void ascent ( FreeItem * freeItem, int z ) ;
+        void ascent ( FreeItem & freeItem, int z ) ;
 
         /**
          * Recursively lower items stacked on this item
          * @param freeItem Currently first item
          * @param z Units to descend
          */
-        void descend ( FreeItem * freeItem, int z ) ;
+        void descend ( FreeItem & freeItem, int z ) ;
 
 private:
 

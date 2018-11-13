@@ -1,555 +1,197 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<room>
-
-  <scenery>blacktooth</scenery>
-
-  <xTiles>9</xTiles>
-
-  <yTiles>8</yTiles>
-
-  <width>16</width>
-
-  <floorType>mortal</floorType>
-
-  <floor>
-    <tile>
-      <x>0</x>
-      <y>3</y>
-      <picture>blacktooth-floor-north.png</picture>
-    </tile>
-    <tile>
-      <x>0</x>
-      <y>4</y>
-      <picture>blacktooth-floor-north.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>0</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>1</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>2</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>3</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>4</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>5</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>6</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>7</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>0</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>1</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>2</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>3</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>4</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>5</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>6</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>7</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>3</x>
-      <y>0</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>3</x>
-      <y>1</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>3</x>
-      <y>2</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>3</x>
-      <y>3</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>3</x>
-      <y>4</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>3</x>
-      <y>5</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>3</x>
-      <y>6</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>3</x>
-      <y>7</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>4</x>
-      <y>0</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>4</x>
-      <y>1</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>4</x>
-      <y>2</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>4</x>
-      <y>3</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>4</x>
-      <y>4</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>4</x>
-      <y>5</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>4</x>
-      <y>6</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>4</x>
-      <y>7</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>5</x>
-      <y>0</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>5</x>
-      <y>1</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>5</x>
-      <y>2</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>5</x>
-      <y>3</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>5</x>
-      <y>4</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>5</x>
-      <y>5</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>5</x>
-      <y>6</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>5</x>
-      <y>7</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>6</x>
-      <y>0</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>6</x>
-      <y>1</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>6</x>
-      <y>2</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>6</x>
-      <y>3</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>6</x>
-      <y>4</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>6</x>
-      <y>5</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>6</x>
-      <y>6</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>6</x>
-      <y>7</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>7</x>
-      <y>0</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>7</x>
-      <y>1</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>7</x>
-      <y>2</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>7</x>
-      <y>3</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>7</x>
-      <y>4</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>7</x>
-      <y>5</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>7</x>
-      <y>6</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>7</x>
-      <y>7</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>8</x>
-      <y>0</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>8</x>
-      <y>1</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>8</x>
-      <y>2</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>8</x>
-      <y>3</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>8</x>
-      <y>4</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>8</x>
-      <y>5</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>8</x>
-      <y>6</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-    <tile>
-      <x>8</x>
-      <y>7</y>
-      <picture>blacktooth-mortal-floor.png</picture>
-    </tile>
-  </floor>
-
-  <walls>
-    <wall>
-      <axis>x</axis>
-      <index>1</index>
-      <picture>blacktooth-wall-x-1.png</picture>
-    </wall>
-    <wall>
-      <axis>x</axis>
-      <index>2</index>
-      <picture>blacktooth-wall-x-3.png</picture>
-    </wall>
-    <wall>
-      <axis>x</axis>
-      <index>3</index>
-      <picture>blacktooth-wall-x-1.png</picture>
-    </wall>
-    <wall>
-      <axis>x</axis>
-      <index>4</index>
-      <picture>blacktooth-wall-x-2.png</picture>
-    </wall>
-    <wall>
-      <axis>x</axis>
-      <index>5</index>
-      <picture>blacktooth-wall-x-2.png</picture>
-    </wall>
-    <wall>
-      <axis>x</axis>
-      <index>6</index>
-      <picture>blacktooth-wall-x-1.png</picture>
-    </wall>
-    <wall>
-      <axis>x</axis>
-      <index>7</index>
-      <picture>blacktooth-wall-x-3.png</picture>
-    </wall>
-    <wall>
-      <axis>x</axis>
-      <index>8</index>
-      <picture>blacktooth-wall-x-1.png</picture>
-    </wall>
-  </walls>
-
-  <items>
-    <item x="0" y="0" z="0">
-      <label>blacktooth-wall-y-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="0" y="1" z="0">
-      <label>blacktooth-wall-y-2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="0" y="2" z="0">
-      <label>blacktooth-wall-y-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="0" y="5" z="0">
-      <label>blacktooth-wall-y-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="0" y="6" z="0">
-      <label>blacktooth-wall-y-2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="0" y="7" z="0">
-      <label>blacktooth-wall-y-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="0" y="3" z="-1">
-      <label>blacktooth-column-shaft-north</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="0" y="4" z="-1">
-      <label>blacktooth-column-shaft-north</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="0" y="3" z="-1">
-      <label>blacktooth-column-capital-north</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="0" y="4" z="-1">
-      <label>blacktooth-column-capital-north</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="0" y="3" z="-1">
-      <label>blacktooth-door-south</label>
-      <direction>north</direction>
-      <type>door</type>
-    </item>
-    <item x="1" y="0" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="1" y="0" z="1">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="1" y="0" z="2">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="5" y="0" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <behavior>behavior of disappearance on jump into</behavior>
-      <type>griditem</type>
-    </item>
-    <item x="5" y="0" z="1">
-      <label>brick2</label>
-      <direction>none</direction>
-      <behavior>behavior of disappearance on jump into</behavior>
-      <type>griditem</type>
-    </item>
-    <item x="5" y="0" z="2">
-      <label>brick2</label>
-      <direction>none</direction>
-      <behavior>behavior of disappearance on jump into</behavior>
-      <type>griditem</type>
-    </item>
-    <item x="1" y="1" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="1" y="2" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="1" y="3" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="5" y="3" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <behavior>behavior of disappearance on jump into</behavior>
-      <type>griditem</type>
-    </item>
-    <item x="5" y="3" z="1">
-      <label>brick2</label>
-      <direction>none</direction>
-      <behavior>behavior of disappearance on jump into</behavior>
-      <type>griditem</type>
-    </item>
-    <item x="5" y="3" z="2">
-      <label>brick2</label>
-      <direction>none</direction>
-      <behavior>behavior of disappearance on jump into</behavior>
-      <type>griditem</type>
-    </item>
-    <item x="8" y="3" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="8" y="3" z="1">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="8" y="3" z="2">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="8" y="3" z="7">
-      <label>horn</label>
-      <direction>none</direction>
-      <behavior>behavior of something special</behavior>
-      <type>freeitem</type>
-    </item>
-    <item x="1" y="4" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="1" y="5" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="1" y="6" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="1" y="7" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-  </items>
-
+<room scenery="blacktooth" tileSize="16">
+    <xTiles>9</xTiles>
+    <yTiles>8</yTiles>
+    <floorKind>mortal</floorKind>
+    <walls>
+        <wall on="x">
+            <position>1</position>
+            <picture>blacktooth-wall-x-1.png</picture>
+        </wall>
+        <wall on="x">
+            <position>2</position>
+            <picture>blacktooth-wall-x-3.png</picture>
+        </wall>
+        <wall on="x">
+            <position>3</position>
+            <picture>blacktooth-wall-x-1.png</picture>
+        </wall>
+        <wall on="x">
+            <position>4</position>
+            <picture>blacktooth-wall-x-2.png</picture>
+        </wall>
+        <wall on="x">
+            <position>5</position>
+            <picture>blacktooth-wall-x-2.png</picture>
+        </wall>
+        <wall on="x">
+            <position>6</position>
+            <picture>blacktooth-wall-x-1.png</picture>
+        </wall>
+        <wall on="x">
+            <position>7</position>
+            <picture>blacktooth-wall-x-3.png</picture>
+        </wall>
+        <wall on="x">
+            <position>8</position>
+            <picture>blacktooth-wall-x-1.png</picture>
+        </wall>
+        <wall on="y">
+            <position>0</position>
+            <picture>blacktooth-wall-y-1.png</picture>
+        </wall>
+        <wall on="y">
+            <position>1</position>
+            <picture>blacktooth-wall-y-2.png</picture>
+        </wall>
+        <wall on="y">
+            <position>2</position>
+            <picture>blacktooth-wall-y-1.png</picture>
+        </wall>
+        <wall on="y">
+            <position>5</position>
+            <picture>blacktooth-wall-y-1.png</picture>
+        </wall>
+        <wall on="y">
+            <position>6</position>
+            <picture>blacktooth-wall-y-2.png</picture>
+        </wall>
+        <wall on="y">
+            <position>7</position>
+            <picture>blacktooth-wall-y-1.png</picture>
+        </wall>
+    </walls>
+    <items>
+        <item x="1" y="0" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="1" y="0" z="1">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="1" y="0" z="2">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="5" y="0" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <behavior>behavior of disappearance on jump into</behavior>
+            <kind>griditem</kind>
+        </item>
+        <item x="5" y="0" z="1">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <behavior>behavior of disappearance on jump into</behavior>
+            <kind>griditem</kind>
+        </item>
+        <item x="5" y="0" z="2">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <behavior>behavior of disappearance on jump into</behavior>
+            <kind>griditem</kind>
+        </item>
+        <item x="1" y="1" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="1" y="2" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="0" y="3" z="0">
+            <label>blacktooth-column-shaft-north</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="0" y="3" z="1">
+            <label>blacktooth-column-capital-north</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="1" y="3" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="5" y="3" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <behavior>behavior of disappearance on jump into</behavior>
+            <kind>griditem</kind>
+        </item>
+        <item x="5" y="3" z="1">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <behavior>behavior of disappearance on jump into</behavior>
+            <kind>griditem</kind>
+        </item>
+        <item x="5" y="3" z="2">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <behavior>behavior of disappearance on jump into</behavior>
+            <kind>griditem</kind>
+        </item>
+        <item x="8" y="3" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="8" y="3" z="1">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="8" y="3" z="2">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="0" y="4" z="0">
+            <label>blacktooth-column-shaft-north</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="0" y="4" z="1">
+            <label>blacktooth-column-capital-north</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="1" y="4" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="1" y="5" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="1" y="6" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="1" y="7" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="8" y="3" z="7">
+            <label>horn</label>
+            <orientation>none</orientation>
+            <behavior>behavior of something special</behavior>
+            <kind>freeitem</kind>
+        </item>
+        <item x="0" y="3" z="-1">
+            <label>blacktooth-door-south</label>
+            <orientation>north</orientation>
+            <kind>door</kind>
+        </item>
+    </items>
 </room>

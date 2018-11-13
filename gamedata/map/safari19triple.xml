@@ -1,1024 +1,327 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<room>
-
-  <scenery>safari</scenery>
-
-  <xTiles>17</xTiles>
-
-  <yTiles>12</yTiles>
-
-  <width>16</width>
-
-  <floorType>plain</floorType>
-
-  <triple-room-data>
-    <northwest x="194" y="49" />
-    <eastsouth x="448" y="144" />
-    <westsouth x="416" y="160" />
-    <bound-x minimum="64" maximum="176" />
-    <bound-y minimum="112" maximum="128" />
-  </triple-room-data>
-
-  <floor>
-    <tile>
-      <x>0</x>
-      <y>8</y>
-      <picture>safari-floor-north.png</picture>
-    </tile>
-    <tile>
-      <x>0</x>
-      <y>9</y>
-      <picture>safari-floor-north.png</picture>
-    </tile>
-    <tile>
-      <x>12</x>
-      <y>0</y>
-      <picture>safari-floor-east.png</picture>
-    </tile>
-    <tile>
-      <x>13</x>
-      <y>0</y>
-      <picture>safari-floor-east.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>11</y>
-      <picture>safari-floor-west.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>11</y>
-      <picture>safari-floor-west.png</picture>
-    </tile>
-    <tile>
-      <x>3</x>
-      <y>11</y>
-      <picture>safari-floor-west.png</picture>
-    </tile>
-    <tile>
-      <x>4</x>
-      <y>11</y>
-      <picture>safari-floor-west.png</picture>
-    </tile>
-    <tile>
-      <x>5</x>
-      <y>11</y>
-      <picture>safari-floor-west.png</picture>
-    </tile>
-    <tile>
-      <x>6</x>
-      <y>11</y>
-      <picture>safari-floor-west.png</picture>
-    </tile>
-    <tile>
-      <x>7</x>
-      <y>11</y>
-      <picture>safari-floor-west.png</picture>
-    </tile>
-    <tile>
-      <x>8</x>
-      <y>11</y>
-      <picture>safari-floor-west.png</picture>
-    </tile>
-    <tile>
-      <x>9</x>
-      <y>11</y>
-      <picture>safari-floor-west.png</picture>
-    </tile>
-    <tile>
-      <x>10</x>
-      <y>11</y>
-      <picture>safari-floor-west.png</picture>
-    </tile>
-    <tile>
-      <x>11</x>
-      <y>11</y>
-      <picture>safari-floor-west.png</picture>
-    </tile>
-    <tile>
-      <x>12</x>
-      <y>11</y>
-      <picture>safari-floor-west.png</picture>
-    </tile>
-    <tile>
-      <x>13</x>
-      <y>11</y>
-      <picture>safari-floor-west.png</picture>
-    </tile>
-    <tile>
-      <x>14</x>
-      <y>11</y>
-      <picture>safari-floor-west.png</picture>
-    </tile>
-    <tile>
-      <x>15</x>
-      <y>11</y>
-      <picture>safari-floor-west.png</picture>
-    </tile>
-    <tile>
-      <x>16</x>
-      <y>11</y>
-      <picture>safari-floor-west.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>7</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>8</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>9</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>10</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>7</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>8</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>9</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>10</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>3</x>
-      <y>7</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>3</x>
-      <y>8</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>3</x>
-      <y>9</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>3</x>
-      <y>10</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>4</x>
-      <y>7</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>4</x>
-      <y>8</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>4</x>
-      <y>9</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>4</x>
-      <y>10</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>5</x>
-      <y>7</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>5</x>
-      <y>8</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>5</x>
-      <y>9</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>5</x>
-      <y>10</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>6</x>
-      <y>7</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>6</x>
-      <y>8</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>6</x>
-      <y>9</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>6</x>
-      <y>10</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>7</x>
-      <y>7</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>7</x>
-      <y>8</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>7</x>
-      <y>9</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>7</x>
-      <y>10</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>8</x>
-      <y>7</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>8</x>
-      <y>8</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>8</x>
-      <y>9</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>8</x>
-      <y>10</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>9</x>
-      <y>1</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>9</x>
-      <y>2</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>9</x>
-      <y>3</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>9</x>
-      <y>4</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>9</x>
-      <y>5</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>9</x>
-      <y>6</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>9</x>
-      <y>7</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>9</x>
-      <y>8</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>9</x>
-      <y>9</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>9</x>
-      <y>10</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>10</x>
-      <y>1</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>10</x>
-      <y>2</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>10</x>
-      <y>3</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>10</x>
-      <y>4</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>10</x>
-      <y>5</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>10</x>
-      <y>6</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>10</x>
-      <y>7</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>10</x>
-      <y>8</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>10</x>
-      <y>9</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>10</x>
-      <y>10</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>11</x>
-      <y>1</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>11</x>
-      <y>2</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>11</x>
-      <y>3</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>11</x>
-      <y>4</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>11</x>
-      <y>5</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>11</x>
-      <y>6</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>11</x>
-      <y>7</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>11</x>
-      <y>8</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>11</x>
-      <y>9</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>11</x>
-      <y>10</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>12</x>
-      <y>1</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>12</x>
-      <y>2</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>12</x>
-      <y>3</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>12</x>
-      <y>4</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>12</x>
-      <y>5</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>12</x>
-      <y>6</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>12</x>
-      <y>7</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>12</x>
-      <y>8</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>12</x>
-      <y>9</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>12</x>
-      <y>10</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>13</x>
-      <y>1</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>13</x>
-      <y>2</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>13</x>
-      <y>3</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>13</x>
-      <y>4</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>13</x>
-      <y>5</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>13</x>
-      <y>6</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>13</x>
-      <y>7</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>13</x>
-      <y>8</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>13</x>
-      <y>9</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>13</x>
-      <y>10</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>14</x>
-      <y>1</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>14</x>
-      <y>2</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>14</x>
-      <y>3</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>14</x>
-      <y>4</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>14</x>
-      <y>5</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>14</x>
-      <y>6</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>14</x>
-      <y>7</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>14</x>
-      <y>8</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>14</x>
-      <y>9</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>14</x>
-      <y>10</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>15</x>
-      <y>1</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>15</x>
-      <y>2</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>15</x>
-      <y>3</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>15</x>
-      <y>4</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>15</x>
-      <y>5</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>15</x>
-      <y>6</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>15</x>
-      <y>7</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>15</x>
-      <y>8</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>15</x>
-      <y>9</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>15</x>
-      <y>10</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>16</x>
-      <y>1</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>16</x>
-      <y>2</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>16</x>
-      <y>3</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>16</x>
-      <y>4</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>16</x>
-      <y>5</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>16</x>
-      <y>6</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>16</x>
-      <y>7</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>16</x>
-      <y>8</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>16</x>
-      <y>9</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-    <tile>
-      <x>16</x>
-      <y>10</y>
-      <picture>safari-floor.png</picture>
-    </tile>
-  </floor>
-
-  <items>
-    <item x="0" y="7" z="0">
-      <label>safari-wall-y-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="0" y="10" z="0">
-      <label>safari-wall-y-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="0" y="8" z="-1">
-      <label>safari-door-north</label>
-      <direction>northwest</direction>
-      <type>door</type>
-    </item>
-    <item x="9" y="0" z="0">
-      <label>safari-wall-x-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="10" y="0" z="0">
-      <label>safari-wall-x-3</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="11" y="0" z="0">
-      <label>safari-wall-x-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="14" y="0" z="0">
-      <label>safari-wall-x-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="15" y="0" z="0">
-      <label>safari-wall-x-3</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="16" y="0" z="0">
-      <label>safari-wall-x-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="12" y="0" z="-1">
-      <label>safari-door-east</label>
-      <direction>eastsouth</direction>
-      <type>door</type>
-    </item>
-    <item x="12" y="11" z="-1">
-      <label>safari-door-west</label>
-      <direction>westsouth</direction>
-      <type>door</type>
-    </item>
-    <item x="1" y="6" z="0">
-      <label>safari-wall-x-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="1" y="6" z="-1">
-      <label>hidden-wall-x</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="2" y="6" z="0">
-      <label>safari-wall-x-3</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="2" y="6" z="-1">
-      <label>hidden-wall-x</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="3" y="6" z="0">
-      <label>safari-wall-x-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="3" y="6" z="-1">
-      <label>hidden-wall-x</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="4" y="6" z="0">
-      <label>safari-wall-x-2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="4" y="6" z="-1">
-      <label>hidden-wall-x</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="5" y="6" z="0">
-      <label>safari-wall-x-2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="5" y="6" z="-1">
-      <label>hidden-wall-x</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="6" y="6" z="0">
-      <label>safari-wall-x-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="6" y="6" z="-1">
-      <label>hidden-wall-x</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="7" y="6" z="0">
-      <label>safari-wall-x-3</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="7" y="6" z="-1">
-      <label>hidden-wall-x</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="8" y="6" z="0">
-      <label>safari-wall-x-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="8" y="6" z="1">
-      <label>hidden-wall-x</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="8" y="6" z="0">
-      <label>safari-wall-y-2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="8" y="6" z="1">
-      <label>hidden-wall-y</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="8" y="5" z="0">
-      <label>safari-wall-y-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="8" y="5" z="-1">
-      <label>hidden-wall-y</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="8" y="4" z="0">
-      <label>safari-wall-y-3</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="8" y="4" z="-1">
-      <label>hidden-wall-y</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="8" y="3" z="0">
-      <label>safari-wall-y-3</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="8" y="3" z="-1">
-      <label>hidden-wall-y</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="8" y="2" z="0">
-      <label>safari-wall-y-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="8" y="2" z="-1">
-      <label>hidden-wall-y</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="8" y="1" z="0">
-      <label>safari-wall-y-2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="8" y="1" z="-1">
-      <label>hidden-wall-y</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="16" y="1" z="0">
-      <label>cylinder</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="16" y="1" z="1">
-      <label>cylinder</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="16" y="1" z="2">
-      <label>cylinder</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="16" y="1" z="3">
-      <label>cylinder</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="16" y="1" z="4">
-      <label>cylinder</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="16" y="1" z="5">
-      <label>cylinder</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="16" y="1" z="6">
-      <label>extra-life</label>
-      <direction>west</direction>
-      <behavior>behavior of something special</behavior>
-      <type>freeitem</type>
-    </item>
-    <item x="10" y="2" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="10" y="3" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="10" y="4" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="10" y="2" z="1">
-      <label>drum</label>
-      <direction>none</direction>
-      <behavior>behavior of thing able to move by pushing</behavior>
-      <type>freeitem</type>
-    </item>
-    <item x="10" y="4" z="1">
-      <label>drum</label>
-      <direction>none</direction>
-      <behavior>behavior of thing able to move by pushing</behavior>
-      <type>freeitem</type>
-    </item>
-    <item x="10" y="3" z="1">
-      <label>trampoline</label>
-      <direction>none</direction>
-      <behavior>behavior of big leap for player</behavior>
-      <type>freeitem</type>
-    </item>
-    <item x="3" y="7" z="0">
-      <label>bars-ns</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="3" y="7" z="1">
-      <label>bars-ns</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="3" y="7" z="2">
-      <label>bars-ns</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="3" y="8" z="0">
-      <label>bars-ns</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="3" y="8" z="1">
-      <label>bars-ns</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="3" y="8" z="2">
-      <label>bars-ns</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="3" y="9" z="0">
-      <label>bars-ns</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="3" y="9" z="1">
-      <label>bars-ns</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="3" y="9" z="2">
-      <label>bars-ns</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="3" y="10" z="0">
-      <label>bars-ns</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="3" y="10" z="1">
-      <label>bars-ns</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="3" y="10" z="2">
-      <label>bars-ns</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="4" y="10" z="0">
-      <label>siren</label>
-      <direction>none</direction>
-      <behavior>behavior of random patroling in four secondary directions</behavior>
-      <type>freeitem</type>
-    </item>
-    <item x="4" y="10" z="1">
-      <label>drum</label>
-      <direction>none</direction>
-      <behavior>behavior of thing able to move by pushing</behavior>
-      <type>freeitem</type>
-    </item>
-  </items>
-
+<room scenery="safari" tileSize="16">
+    <xTiles>17</xTiles>
+    <yTiles>12</yTiles>
+    <triple-room-data>
+        <bound-x minimum="64" maximum="176"/>
+        <bound-y minimum="112" maximum="128"/>
+    </triple-room-data>
+    <floorKind>plain</floorKind>
+    <nofloor x="0" y="0"/>
+    <nofloor x="0" y="1"/>
+    <nofloor x="0" y="2"/>
+    <nofloor x="0" y="3"/>
+    <nofloor x="0" y="4"/>
+    <nofloor x="0" y="5"/>
+    <nofloor x="0" y="6"/>
+    <nofloor x="1" y="0"/>
+    <nofloor x="1" y="1"/>
+    <nofloor x="1" y="2"/>
+    <nofloor x="1" y="3"/>
+    <nofloor x="1" y="4"/>
+    <nofloor x="1" y="5"/>
+    <nofloor x="1" y="6"/>
+    <nofloor x="2" y="0"/>
+    <nofloor x="2" y="1"/>
+    <nofloor x="2" y="2"/>
+    <nofloor x="2" y="3"/>
+    <nofloor x="2" y="4"/>
+    <nofloor x="2" y="5"/>
+    <nofloor x="2" y="6"/>
+    <nofloor x="3" y="0"/>
+    <nofloor x="3" y="1"/>
+    <nofloor x="3" y="2"/>
+    <nofloor x="3" y="3"/>
+    <nofloor x="3" y="4"/>
+    <nofloor x="3" y="5"/>
+    <nofloor x="3" y="6"/>
+    <nofloor x="4" y="0"/>
+    <nofloor x="4" y="1"/>
+    <nofloor x="4" y="2"/>
+    <nofloor x="4" y="3"/>
+    <nofloor x="4" y="4"/>
+    <nofloor x="4" y="5"/>
+    <nofloor x="4" y="6"/>
+    <nofloor x="5" y="0"/>
+    <nofloor x="5" y="1"/>
+    <nofloor x="5" y="2"/>
+    <nofloor x="5" y="3"/>
+    <nofloor x="5" y="4"/>
+    <nofloor x="5" y="5"/>
+    <nofloor x="5" y="6"/>
+    <nofloor x="6" y="0"/>
+    <nofloor x="6" y="1"/>
+    <nofloor x="6" y="2"/>
+    <nofloor x="6" y="3"/>
+    <nofloor x="6" y="4"/>
+    <nofloor x="6" y="5"/>
+    <nofloor x="6" y="6"/>
+    <nofloor x="7" y="0"/>
+    <nofloor x="7" y="1"/>
+    <nofloor x="7" y="2"/>
+    <nofloor x="7" y="3"/>
+    <nofloor x="7" y="4"/>
+    <nofloor x="7" y="5"/>
+    <nofloor x="7" y="6"/>
+    <walls>
+        <wall on="x">
+            <position>9</position>
+            <picture>safari-wall-x-1.png</picture>
+        </wall>
+        <wall on="x">
+            <position>10</position>
+            <picture>safari-wall-x-3.png</picture>
+        </wall>
+        <wall on="x">
+            <position>11</position>
+            <picture>safari-wall-x-1.png</picture>
+        </wall>
+        <wall on="x">
+            <position>14</position>
+            <picture>safari-wall-x-1.png</picture>
+        </wall>
+        <wall on="x">
+            <position>15</position>
+            <picture>safari-wall-x-3.png</picture>
+        </wall>
+        <wall on="x">
+            <position>16</position>
+            <picture>safari-wall-x-1.png</picture>
+        </wall>
+        <wall on="y">
+            <position>7</position>
+            <picture>safari-wall-y-1.png</picture>
+        </wall>
+        <wall on="y">
+            <position>10</position>
+            <picture>safari-wall-y-1.png</picture>
+        </wall>
+    </walls>
+    <items>
+        <item x="8" y="1" z="0">
+            <label>safari-wall-y-2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="8" y="2" z="0">
+            <label>safari-wall-y-1</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="10" y="2" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="8" y="3" z="0">
+            <label>safari-wall-y-3</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="10" y="3" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="8" y="4" z="0">
+            <label>safari-wall-y-3</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="10" y="4" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="8" y="5" z="0">
+            <label>safari-wall-y-1</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="1" y="6" z="0">
+            <label>safari-wall-x-1</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="2" y="6" z="0">
+            <label>safari-wall-x-3</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="3" y="6" z="0">
+            <label>safari-wall-x-1</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="4" y="6" z="0">
+            <label>safari-wall-x-2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="5" y="6" z="0">
+            <label>safari-wall-x-2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="6" y="6" z="0">
+            <label>safari-wall-x-1</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="7" y="6" z="0">
+            <label>safari-wall-x-3</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="8" y="6" z="0">
+            <label>safari-wall-y-2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="8" y="6" z="0">
+            <label>safari-wall-x-1</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="4" y="10" z="1">
+            <label>drum</label>
+            <orientation>none</orientation>
+            <behavior>behavior of thing able to move by pushing</behavior>
+            <kind>freeitem</kind>
+        </item>
+        <item x="3" y="10" z="2">
+            <label>bars-ns</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="3" y="10" z="0">
+            <label>bars-ns</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="3" y="9" z="1">
+            <label>bars-ns</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="3" y="8" z="2">
+            <label>bars-ns</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="16" y="1" z="5">
+            <label>cylinder</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="16" y="1" z="3">
+            <label>cylinder</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="16" y="1" z="1">
+            <label>cylinder</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="3" y="8" z="0">
+            <label>bars-ns</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="3" y="7" z="1">
+            <label>bars-ns</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="10" y="3" z="1">
+            <label>trampoline</label>
+            <orientation>none</orientation>
+            <behavior>behavior of spring leap</behavior>
+            <kind>freeitem</kind>
+        </item>
+        <item x="10" y="2" z="1">
+            <label>drum</label>
+            <orientation>none</orientation>
+            <behavior>behavior of thing able to move by pushing</behavior>
+            <kind>freeitem</kind>
+        </item>
+        <item x="16" y="1" z="0">
+            <label>cylinder</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="16" y="1" z="2">
+            <label>cylinder</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="16" y="1" z="4">
+            <label>cylinder</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="16" y="1" z="6">
+            <label>extra-life</label>
+            <orientation>west</orientation>
+            <behavior>behavior of something special</behavior>
+            <kind>freeitem</kind>
+        </item>
+        <item x="10" y="4" z="1">
+            <label>drum</label>
+            <orientation>none</orientation>
+            <behavior>behavior of thing able to move by pushing</behavior>
+            <kind>freeitem</kind>
+        </item>
+        <item x="3" y="7" z="0">
+            <label>bars-ns</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="3" y="7" z="2">
+            <label>bars-ns</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="3" y="8" z="1">
+            <label>bars-ns</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="3" y="9" z="0">
+            <label>bars-ns</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="3" y="9" z="2">
+            <label>bars-ns</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="3" y="10" z="1">
+            <label>bars-ns</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="4" y="10" z="0">
+            <label>siren</label>
+            <orientation>none</orientation>
+            <behavior>behavior of random patroling in four secondary directions</behavior>
+            <kind>freeitem</kind>
+        </item>
+        <item x="12" y="0" z="-1">
+            <label>safari-door-east</label>
+            <orientation>eastsouth</orientation>
+            <kind>door</kind>
+        </item>
+        <item x="0" y="8" z="-1">
+            <label>safari-door-north</label>
+            <orientation>northwest</orientation>
+            <kind>door</kind>
+        </item>
+        <item x="12" y="11" z="-1">
+            <label>safari-door-west</label>
+            <orientation>westsouth</orientation>
+            <kind>door</kind>
+        </item>
+    </items>
 </room>

@@ -53,9 +53,6 @@ gamedatagfxriderx_DATA = item.png/ball-shadows.png \
 			item.png/heels.png \
 			item.png/helicopter-bug-shadows.png \
 			item.png/helicopter-bug.png \
-			item.png/hidden-shaft.png \
-			item.png/hidden-top-wall.png \
-			item.png/hidden-wall.png \
 			item.png/horn.png \
 			item.png/imperial-guard-head.png \
 			item.png/imperial-guard-shadows.png \
@@ -113,11 +110,11 @@ gamedatagfxriderx_DATA = item.png/ball-shadows.png \
 			blacktooth.png/blacktooth-floor-north.png \
 			blacktooth.png/blacktooth-floor-south.png \
 			blacktooth.png/blacktooth-floor-sw.png \
-			blacktooth.png/blacktooth-floor-underground-east.png \
-			blacktooth.png/blacktooth-floor-underground-north.png \
 			blacktooth.png/blacktooth-floor-west.png \
 			blacktooth.png/blacktooth-floor.png \
 			blacktooth.png/blacktooth-mortal-floor.png \
+			blacktooth.png/blacktooth-nofloor-east.png \
+			blacktooth.png/blacktooth-nofloor-north.png \
 			blacktooth.png/blacktooth-nofloor-south.png \
 			blacktooth.png/blacktooth-nofloor-sw.png \
 			blacktooth.png/blacktooth-nofloor-west.png \
@@ -141,11 +138,11 @@ gamedatagfxriderx_DATA = item.png/ball-shadows.png \
 			jail.png/jail-floor-north.png \
 			jail.png/jail-floor-south.png \
 			jail.png/jail-floor-sw.png \
-			jail.png/jail-floor-underground-east.png \
-			jail.png/jail-floor-underground-north.png \
 			jail.png/jail-floor-west.png \
 			jail.png/jail-floor.png \
 			jail.png/jail-mortal-floor.png \
+			jail.png/jail-nofloor-east.png \
+			jail.png/jail-nofloor-north.png \
 			jail.png/jail-nofloor-south.png \
 			jail.png/jail-nofloor-sw.png \
 			jail.png/jail-nofloor-west.png \
@@ -165,44 +162,44 @@ gamedatagfxriderx_DATA = item.png/ball-shadows.png \
 			market.png/market-floor-north.png \
 			market.png/market-floor-south.png \
 			market.png/market-floor-sw.png \
-			market.png/market-floor-underground-east.png \
-			market.png/market-floor-underground-north.png \
 			market.png/market-floor-west.png \
 			market.png/market-floor.png \
 			market.png/market-mortal-floor.png \
+			market.png/market-nofloor-east.png \
+			market.png/market-nofloor-north.png \
 			market.png/market-wall-x-1.png \
 			market.png/market-wall-x-2.png \
 			market.png/market-wall-x-3.png \
 			market.png/market-wall-y-1.png \
 			market.png/market-wall-y-2.png \
 			market.png/market-wall-y-3.png \
-			themoon.png/moon-column-capital-east.png \
-			themoon.png/moon-column-capital-north.png \
-			themoon.png/moon-column-capital-south.png \
-			themoon.png/moon-column-capital-west.png \
-			themoon.png/moon-column-shaft-east.png \
-			themoon.png/moon-column-shaft-north.png \
-			themoon.png/moon-door-east.png \
-			themoon.png/moon-door-north.png \
-			themoon.png/moon-door-south.png \
-			themoon.png/moon-door-west.png \
-			themoon.png/moon-floor-east.png \
-			themoon.png/moon-floor-north.png \
-			themoon.png/moon-floor-south.png \
-			themoon.png/moon-floor-sw.png \
-			themoon.png/moon-floor-underground-east.png \
-			themoon.png/moon-floor-underground-north.png \
-			themoon.png/moon-floor-west.png \
-			themoon.png/moon-floor.png \
-			themoon.png/moon-mortal-floor.png \
-			themoon.png/moon-wall-x-1.png \
-			themoon.png/moon-wall-x-2.png \
-			themoon.png/moon-wall-x-3.png \
-			themoon.png/moon-wall-x-4.png \
-			themoon.png/moon-wall-y-1.png \
-			themoon.png/moon-wall-y-2.png \
-			themoon.png/moon-wall-y-3.png \
-			themoon.png/moon-wall-y-4.png \
+			moon.png/moon-column-capital-east.png \
+			moon.png/moon-column-capital-north.png \
+			moon.png/moon-column-capital-south.png \
+			moon.png/moon-column-capital-west.png \
+			moon.png/moon-column-shaft-east.png \
+			moon.png/moon-column-shaft-north.png \
+			moon.png/moon-door-east.png \
+			moon.png/moon-door-north.png \
+			moon.png/moon-door-south.png \
+			moon.png/moon-door-west.png \
+			moon.png/moon-floor-east.png \
+			moon.png/moon-floor-north.png \
+			moon.png/moon-floor-south.png \
+			moon.png/moon-floor-sw.png \
+			moon.png/moon-floor-west.png \
+			moon.png/moon-floor.png \
+			moon.png/moon-mortal-floor.png \
+			moon.png/moon-nofloor-east.png \
+			moon.png/moon-nofloor-north.png \
+			moon.png/moon-wall-x-1.png \
+			moon.png/moon-wall-x-2.png \
+			moon.png/moon-wall-x-3.png \
+			moon.png/moon-wall-x-4.png \
+			moon.png/moon-wall-y-1.png \
+			moon.png/moon-wall-y-2.png \
+			moon.png/moon-wall-y-3.png \
+			moon.png/moon-wall-y-4.png \
 			byblos.png/byblos-column-capital-east.png \
 			byblos.png/byblos-column-capital-north.png \
 			byblos.png/byblos-column-capital-south.png \
@@ -217,11 +214,11 @@ gamedatagfxriderx_DATA = item.png/ball-shadows.png \
 			byblos.png/byblos-floor-north.png \
 			byblos.png/byblos-floor-south.png \
 			byblos.png/byblos-floor-sw.png \
-			byblos.png/byblos-floor-underground-east.png \
-			byblos.png/byblos-floor-underground-north.png \
 			byblos.png/byblos-floor-west.png \
 			byblos.png/byblos-floor.png \
 			byblos.png/byblos-mortal-floor.png \
+			byblos.png/byblos-nofloor-east.png \
+			byblos.png/byblos-nofloor-north.png \
 			byblos.png/byblos-nofloor-south.png \
 			byblos.png/byblos-nofloor-sw.png \
 			byblos.png/byblos-nofloor-west.png \
@@ -243,11 +240,11 @@ gamedatagfxriderx_DATA = item.png/ball-shadows.png \
 			egyptus.png/egyptus-floor-north.png \
 			egyptus.png/egyptus-floor-south.png \
 			egyptus.png/egyptus-floor-sw.png \
-			egyptus.png/egyptus-floor-underground-east.png \
-			egyptus.png/egyptus-floor-underground-north.png \
 			egyptus.png/egyptus-floor-west.png \
 			egyptus.png/egyptus-floor.png \
 			egyptus.png/egyptus-mortal-floor.png \
+			egyptus.png/egyptus-nofloor-east.png \
+			egyptus.png/egyptus-nofloor-north.png \
 			egyptus.png/egyptus-nofloor-south.png \
 			egyptus.png/egyptus-nofloor-sw.png \
 			egyptus.png/egyptus-nofloor-west.png \
@@ -269,11 +266,11 @@ gamedatagfxriderx_DATA = item.png/ball-shadows.png \
 			penitentiary.png/penitentiary-floor-north.png \
 			penitentiary.png/penitentiary-floor-south.png \
 			penitentiary.png/penitentiary-floor-sw.png \
-			penitentiary.png/penitentiary-floor-underground-east.png \
-			penitentiary.png/penitentiary-floor-underground-north.png \
 			penitentiary.png/penitentiary-floor-west.png \
 			penitentiary.png/penitentiary-floor.png \
 			penitentiary.png/penitentiary-mortal-floor.png \
+			penitentiary.png/penitentiary-nofloor-east.png \
+			penitentiary.png/penitentiary-nofloor-north.png \
 			penitentiary.png/penitentiary-nofloor-south.png \
 			penitentiary.png/penitentiary-nofloor-sw.png \
 			penitentiary.png/penitentiary-nofloor-west.png \
@@ -295,11 +292,11 @@ gamedatagfxriderx_DATA = item.png/ball-shadows.png \
 			safari.png/safari-floor-north.png \
 			safari.png/safari-floor-south.png \
 			safari.png/safari-floor-sw.png \
-			safari.png/safari-floor-underground-east.png \
-			safari.png/safari-floor-underground-north.png \
 			safari.png/safari-floor-west.png \
 			safari.png/safari-floor.png \
 			safari.png/safari-mortal-floor.png \
+			safari.png/safari-nofloor-east.png \
+			safari.png/safari-nofloor-north.png \
 			safari.png/safari-nofloor-south.png \
 			safari.png/safari-nofloor-sw.png \
 			safari.png/safari-nofloor-west.png \
@@ -309,7 +306,9 @@ gamedatagfxriderx_DATA = item.png/ball-shadows.png \
 			safari.png/safari-wall-y-1.png \
 			safari.png/safari-wall-y-2.png \
 			safari.png/safari-wall-y-3.png \
-			freedom.png/grass+flowers.png \
+			freedom.png/grass+flowers-1.png \
+			freedom.png/grass+flowers-2.png \
+			freedom.png/grass+flowers-3.png \
 			freedom.png/trees-x-1.png \
 			freedom.png/trees-y-1.png \
 			gui.gfx/background.png \
@@ -330,9 +329,9 @@ gamedatagfxriderx_DATA = item.png/ball-shadows.png \
 			gui.gfx/high-speed.png \
 			gui.gfx/jail-frame.png \
 			gui.gfx/market-frame.png \
+			gui.gfx/moon-frame.png \
 			gui.gfx/penitentiary-frame.png \
 			gui.gfx/penitentiary.png \
 			gui.gfx/safari-frame.png \
 			gui.gfx/safari.png \
-			gui.gfx/shield.png \
-			gui.gfx/themoon-frame.png
+			gui.gfx/shield.png

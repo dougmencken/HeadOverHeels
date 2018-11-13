@@ -14,11 +14,11 @@
 #include <sstream>
 
 using gui::CreateAudioMenu;
-using isomot::SoundManager;
+using iso::SoundManager;
 
 
-CreateAudioMenu::CreateAudioMenu( Picture * picture ) :
-        Action( picture ),
+CreateAudioMenu::CreateAudioMenu( ) :
+        Action( ),
         listOfOptions( nilPointer ),
         labelEffects( nilPointer ),
         labelMusic( nilPointer ),
@@ -29,7 +29,7 @@ CreateAudioMenu::CreateAudioMenu( Picture * picture ) :
 
 void CreateAudioMenu::doAction ()
 {
-        LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
+        LanguageManager* languageManager = GuiManager::getInstance().getLanguageManager();
 
         LanguageText* langStringEffects = languageManager->findLanguageStringForAlias( "soundfx" );
         LanguageText* langStringMusic = languageManager->findLanguageStringForAlias( "music" );
@@ -41,12 +41,12 @@ void CreateAudioMenu::doAction ()
 
         std::stringstream ss;
 
-        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this );
-        if ( screen->countWidgets() == 0 )
+        Screen& screen = * GuiManager::getInstance().findOrCreateScreenForAction( this );
+        if ( screen.countWidgets() == 0 )
         {
-                screen->setEscapeAction( new CreateMainMenu( getWhereToDraw() ) );
+                screen.setEscapeAction( new CreateMainMenu() );
 
-                screen->placeHeadAndHeels( /* icons */ false, /* copyrights */ false );
+                screen.placeHeadAndHeels( /* icons */ false, /* copyrights */ false );
 
                 // efectos sonoros
                 this->labelEffects = new Label( langStringEffects->getText() );
@@ -63,35 +63,35 @@ void CreateAudioMenu::doAction ()
 
                 listOfOptions->addOption( labelEffects );
                 ss.str( std::string() ); // clear ss
-                ss << SoundManager::getInstance()->getVolumeOfEffects();
+                ss << SoundManager::getInstance().getVolumeOfEffects();
                 listOfOptions->setValueOf( labelEffects, ss.str() );
 
                 listOfOptions->addOption( labelMusic );
                 ss.str( std::string() );
-                ss << SoundManager::getInstance()->getVolumeOfMusic();
+                ss << SoundManager::getInstance().getVolumeOfMusic();
                 listOfOptions->setValueOf( labelMusic, ss.str() );
 
                 listOfOptions->addOption( playRoomTunes );
-                listOfOptions->setValueOf( playRoomTunes, isomot::GameManager::getInstance()->playMelodyOfScenery () ? yeah : nope );
+                listOfOptions->setValueOf( playRoomTunes, iso::GameManager::getInstance().playMelodyOfScenery () ? yeah : nope );
 
                 listOfOptions->setVerticalOffset( 35 );
 
                 // add menu to screen
 
-                screen->addWidget( listOfOptions );
+                screen.addWidget( listOfOptions );
         }
         else
         {
                 // update labels
-                listOfOptions->setValueOf( playRoomTunes, isomot::GameManager::getInstance()->playMelodyOfScenery () ? yeah : nope );
+                listOfOptions->setValueOf( playRoomTunes, iso::GameManager::getInstance().playMelodyOfScenery () ? yeah : nope );
         }
 
-        if ( screen->getKeyHandler() == nilPointer )
+        if ( screen.getKeyHandler() == nilPointer )
         {
-                screen->setKeyHandler( listOfOptions );
+                screen.setKeyHandler( listOfOptions );
         }
 
-        GuiManager::getInstance()->changeScreen( screen, true );
+        GuiManager::getInstance().changeScreen( screen, true );
 
         allegro::emptyKeyboardBuffer();
 
@@ -105,7 +105,7 @@ void CreateAudioMenu::doAction ()
                         if ( theKey == "Escape" )
                         {
                                 allegro::emptyKeyboardBuffer();
-                                screen->handleKey ( theKey );
+                                screen.handleKey ( theKey );
                                 break;
                         }
                         else
@@ -114,8 +114,8 @@ void CreateAudioMenu::doAction ()
 
                                 if ( listOfOptions->getActiveOption () == labelMusic || listOfOptions->getActiveOption () == labelEffects )
                                 {
-                                        int musicVolume = SoundManager::getInstance()->getVolumeOfMusic();
-                                        int effectsVolume = SoundManager::getInstance()->getVolumeOfEffects();
+                                        int musicVolume = SoundManager::getInstance().getVolumeOfMusic();
+                                        int effectsVolume = SoundManager::getInstance().getVolumeOfEffects();
                                         int value = ( listOfOptions->getActiveOption () == labelMusic ) ? musicVolume : effectsVolume ;
                                         int previousValue = value;
 
@@ -138,14 +138,14 @@ void CreateAudioMenu::doAction ()
                                                 if ( listOfOptions->getActiveOption () == labelMusic )
                                                 {
                                                         listOfOptions->setValueOf( labelMusic, ss.str() );
-                                                        SoundManager::getInstance()->setVolumeOfMusic( value );
+                                                        SoundManager::getInstance().setVolumeOfMusic( value );
                                                 }
                                                 else if ( listOfOptions->getActiveOption () == labelEffects )
                                                 {
                                                         listOfOptions->setValueOf( labelEffects, ss.str() );
-                                                        SoundManager::getInstance()->setVolumeOfEffects( value );
-                                                        isomot::SoundManager::getInstance()->stopEverySound ();
-                                                        isomot::SoundManager::getInstance()->play ( "gui", isomot::Activity::Push, /* loop */ false );
+                                                        SoundManager::getInstance().setVolumeOfEffects( value );
+                                                        iso::SoundManager::getInstance().stopEverySound ();
+                                                        iso::SoundManager::getInstance().play ( "gui", iso::Activity::Push, /* loop */ false );
                                                 }
                                         }
                                 }
@@ -153,8 +153,8 @@ void CreateAudioMenu::doAction ()
                                 {
                                         if ( theKey == "Left" || theKey == "Right" || theKey == "o" || theKey == "p" )
                                         {
-                                                isomot::GameManager::getInstance()->togglePlayMelodyOfScenery ();
-                                                listOfOptions->setValueOf( playRoomTunes, isomot::GameManager::getInstance()->playMelodyOfScenery () ? yeah : nope );
+                                                iso::GameManager::getInstance().togglePlayMelodyOfScenery ();
+                                                listOfOptions->setValueOf( playRoomTunes, iso::GameManager::getInstance().playMelodyOfScenery () ? yeah : nope );
 
                                                 doneWithKey = true;
                                         }
@@ -162,7 +162,7 @@ void CreateAudioMenu::doAction ()
 
                                 if ( ! doneWithKey )
                                 {
-                                        screen->getKeyHandler()->handleKey ( theKey );
+                                        screen.getKeyHandler()->handleKey ( theKey );
                                 }
 
                                 allegro::emptyKeyboardBuffer();

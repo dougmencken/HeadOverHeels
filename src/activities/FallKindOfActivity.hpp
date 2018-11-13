@@ -15,13 +15,14 @@
 #include <vector>
 
 #include "KindOfActivity.hpp"
+#include "FreeItem.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
 class Behavior ;
-class FreeItem ;
+class Mediator ;
 
 
 /**
@@ -44,14 +45,14 @@ public:
         */
         virtual bool fall ( Behavior * behavior ) ;
 
-        static FallKindOfActivity * getInstance () ;
+        static FallKindOfActivity & getInstance () ;
 
 private:
 
        /**
         * When item falls on some other one, that one becomes item’s anchor
         */
-        void assignAnchor ( FreeItem * freeItem, const std::vector < std::string > & items ) ;
+        void assignAnchor ( const std::string & uniqueNameOfItem, Mediator * mediator, const std::vector < std::string > & itemsBelow ) ;
 
 private:
 

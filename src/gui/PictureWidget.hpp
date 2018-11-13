@@ -27,7 +27,7 @@ class PictureWidget : public Widget
 
 public:
 
-        PictureWidget( int x, int y, Picture * image, const std::string & name ) ;
+        PictureWidget( int x, int y, const PicturePtr & image, const std::string & name ) ;
 
         virtual ~PictureWidget( ) ;
 
@@ -35,7 +35,7 @@ public:
 
         void handleKey ( const std::string& /* key */ ) {  /* do nothing */  }
 
-        Picture * getPicture () const {  return picture ;  }
+        PicturePtr & getPicture () {  return picture ;  }
 
         unsigned int getWidth () const {  return this->picture->getWidth() ;  }
 
@@ -43,7 +43,7 @@ public:
 
 private:
 
-        Picture * picture ;
+        PicturePtr picture ;
 
         std::string nameOfPicture ;
 

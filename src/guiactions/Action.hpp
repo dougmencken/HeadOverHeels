@@ -26,7 +26,7 @@ class Action
 
 public:
 
-        Action( Picture * picture ) : whereToDraw( picture ), begin( false ), done( false ) { }
+        Action() : begin( false ), done( false ) { }
 
         virtual ~Action( ) { }
 
@@ -38,15 +38,11 @@ public:
 
         bool isDone() {  return done ;  }
 
-        Picture * getWhereToDraw () const {  return whereToDraw ;  }
-
 protected:
 
         virtual void doAction () = 0 ;
 
 private:
-
-        Picture * whereToDraw ;
 
         bool begin ;
 

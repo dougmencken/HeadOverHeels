@@ -15,41 +15,15 @@
 #include <cstring>
 #include <unistd.h>
 
-#include <sys/stat.h>
-#include <sys/types.h>
-
 #include <memory>
 #include <string>
 #include <sstream>
 
+#include "util.hpp"
+#include "pointers.hpp"
+
 #ifndef __WIN32
     #include <time.h>
-#endif
-
-#if __cplusplus >= 201103L /* when complier supports c++11 */
-    #define __Cxx11__
-    #define nilPointer nullptr
-    #define smartptr std::unique_ptr
-#else
-    #define nilPointer NULL
-    #define smartptr std::auto_ptr
-#endif
-
-#if defined( DEBUG ) && defined( HAVE_EXECINFO_H ) && HAVE_EXECINFO_H
-    #include <execinfo.h>
-    #include <cxxabi.h>
-#endif
-
-#if defined ( __WIN32 ) && ! defined ( __CYGWIN__ )
-    const std::string pathSeparator = "\\" ;
-#else
-    const std::string pathSeparator = "/" ;
-#endif
-
-#ifdef ALLEGRO_BIG_ENDIAN
-    # define IS_BIG_ENDIAN 1
-#else
-    # define IS_BIG_ENDIAN 0
 #endif
 
 
@@ -73,20 +47,8 @@ void nanoSleep ( unsigned long nanoseconds );
 
 #endif
 
-namespace isomot
+namespace iso
 {
-
-        inline bool folderExists( const std::string& path )
-        {
-                struct stat info;
-
-                if ( stat( path.c_str (), &info ) < 0 )
-                        return false;
-                else if ( ( info.st_mode & S_IFDIR ) != 0 )
-                        return true;
-
-                return false;
-        }
 
         unsigned int ScreenWidth () ;
 
@@ -98,60 +60,9 @@ namespace isomot
 
         std::string makeRandomString ( const size_t length ) ;
 
-        std::string toStringWithOrdinalSuffix ( unsigned int number ) ;
-
-        inline static std::string numberToString ( int number )
-        {
-                return static_cast< std::ostringstream * >( &( std::ostringstream() << std::dec << number ) )->str () ;
-        }
-
-        /** print backtrace of caller */
-        inline void printBacktrace ( FILE * out = stdout, unsigned int howDeep = 80 )
-        {
-#if defined( DEBUG ) && defined( HAVE_EXECINFO_H ) && HAVE_EXECINFO_H
-                fprintf( out, "backtrace\n" );
-
-                // storage for data of backtrace addresses
-                void* addrlist[ howDeep + 1 ];
-
-                // get addresses of backtrace
-                size_t addrlen = backtrace( addrlist, sizeof( addrlist ) / sizeof( void * ) );
-
-                if ( addrlen == 0 ) {
-                        fprintf( out, "    < empty, possibly broken >\n" );
-                        return;
-                }
-
-                // convert addresses into strings
-                char** listOfSymbols = backtrace_symbols( addrlist, addrlen );
-
-                for ( size_t i = 0; i < addrlen; i++ )
-                {
-                        fprintf( out, "    %s\n", listOfSymbols[ i ] );
-                }
-
-                free( listOfSymbols );
-#else
-                ( void ) howDeep ;
-                fprintf( out, "no backtrace for non-debug build or when there’s no execinfo.h\n" );
-#endif
-        }
-
-#ifdef __WIN32
-        struct IsPathSeparator
-        {
-                bool operator() ( char c ) const {  return c == '\\' || c == '/' ;  }
-        };
-#else
-        struct IsPathSeparator
-        {
-                bool operator() ( char c ) const {  return c == '/' ;  }
-        };
-#endif
-
         std::string nameFromPath ( std::string const& path ) ;
 
-        const char * pathToFile ( const std::string& in ) ;
+        const char * pathToFile ( const std::string& folder, const std::string& file = std::string() ) ;
 
         void setPathToGame ( const char * pathToGame ) ;
 
@@ -173,7 +84,7 @@ namespace isomot
                 template < typename T >
                 void operator() ( const T* ptr ) const
                 {
-                        delete ptr;
+                        delete ptr ;
                 }
         } ;
 

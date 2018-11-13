@@ -11,7 +11,8 @@
 #ifndef Isomot_hpp_
 #define Isomot_hpp_
 
-#include "WrappersAllegro.hpp"
+#include "Ism.hpp"
+#include "Timer.hpp"
 #include "Picture.hpp"
 
 #include <list>
@@ -19,16 +20,16 @@
 
 #include <tinyxml2.h>
 
-#include "Timer.hpp"
+#include "MapManager.hpp"
+#include "ItemDataManager.hpp"
 
 
 class Color ;
+class Picture ;
 
-namespace isomot
+namespace iso
 {
 
-class ItemDataManager ;
-class MapManager ;
 class Room ;
 
 
@@ -45,36 +46,46 @@ public:
 
         virtual ~Isomot( ) ;
 
+        void binView () ;
+
         void prepare () ;
+
+        void fillItemDataManager () ;
 
         void beginNewGame () ;
 
         void continueSavedGame ( tinyxml2::XMLElement * characters ) ;
 
-        /**
-         * Detiene el motor isométrico
-         */
         void pause () ;
 
         void resume () ;
 
-        /**
-         * Prepara el motor para iniciar una nueva partida
-         */
-        void reset () ;
+        Picture * updateMe () ;
 
-        /**
-         * Update isometric engine
-         */
-        Picture * update () ;
+        static void drawMiniatureOfRoom ( const Room & room, const Picture * where, const unsigned int sizeOfTile ) ;
 
-        MapManager * getMapManager () const {  return mapManager ;  }
+        static void drawEastDoorOnMiniature( const allegro::Pict & where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const unsigned int sizeOfTile, const Color& color ) ;
+        static void drawSouthDoorOnMiniature( const allegro::Pict & where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const unsigned int sizeOfTile, const Color& color ) ;
+        static void drawNorthDoorOnMiniature( const allegro::Pict & where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const unsigned int sizeOfTile, const Color& color ) ;
+        static void drawWestDoorOnMiniature( const allegro::Pict & where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const unsigned int sizeOfTile, const Color& color ) ;
 
-        static void drawMiniatureOfRoom ( Room * room, MapManager * mapManager, const Picture * where, const unsigned int sizeOfTile ) ;
+        static void drawIsoSquare( const allegro::Pict & where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const unsigned int sizeOfTile, const Color& color ) ;
+
+        static void drawIsoTile ( const allegro::Pict & where, int x0, int y0, int tileX, int tileY, const unsigned int sizeOfTile, const Color & color, bool loX, bool loY, bool hiX, bool hiY ) ;
 
         static void fillIsoTile ( const allegro::Pict & where, int x0, int y0, int tileX, int tileY, const unsigned int sizeOfTile, const Color & color ) ;
 
+        static void fillIsoTileInside ( const allegro::Pict & where, int x0, int y0, int tileX, int tileY, const unsigned int sizeOfTile, const Color & color, bool fullFill ) ;
+
+        MapManager & getMapManager () {  return mapManager ;  }
+
+        const ItemDataManager & getItemDataManager () const {  return itemDataManager ;  }
+
+        bool doesCameraFollowCharacter () const {  return cameraFollowsCharacter ;  }
+
 private:
+
+        void handleMagicKeys () ;
 
         void playTuneForScenery ( const std::string& scenery ) ;
 
@@ -91,11 +102,23 @@ private:
          */
         Picture * view ;
 
-        MapManager * mapManager ;
+        MapManager mapManager ;
 
-        Timer * finalRoomTimer ;
+        ItemDataManager itemDataManager ;
+
+        bool paused ;
+
+        autouniqueptr < Timer > finalRoomTimer ;
 
         bool finalRoomBuilt ;
+
+        unsigned int sizeOfTileForMiniature ;
+
+        bool cameraFollowsCharacter ;
+
+#if defined( DEBUG ) && DEBUG
+        PicturePtr chequerboard ;
+#endif
 
 };
 

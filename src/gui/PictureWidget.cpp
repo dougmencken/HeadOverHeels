@@ -6,8 +6,8 @@
 namespace gui
 {
 
-PictureWidget::PictureWidget( int x, int y, Picture* image, const std::string& name ) :
-        Widget( x, y )
+PictureWidget::PictureWidget( int x, int y, const PicturePtr& image, const std::string& name )
+        : Widget( x, y )
         , picture( image )
         , nameOfPicture( name )
 {
@@ -16,7 +16,7 @@ PictureWidget::PictureWidget( int x, int y, Picture* image, const std::string& n
 
 PictureWidget::~PictureWidget()
 {
-        delete picture ;
+
 }
 
 void PictureWidget::draw( const allegro::Pict& where )

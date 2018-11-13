@@ -82,6 +82,11 @@ public:
 
         static AllegroColor keyColor () ;
 
+        static unsigned char redOfKeyColor ;
+        static unsigned char greenOfKeyColor ;
+        static unsigned char blueOfKeyColor ;
+        static unsigned char alphaOfKeyColor ;
+
 private:
 
         type_of_allegro_color color ;
@@ -145,10 +150,10 @@ private:
 
         Pict( const Pict & copy ) : it( copy.it ), shallowCopy( true )  { }
 
-        bool operator == ( const Pict & ) {  return false ;  }
-        bool operator == ( void * ) {  return false ;  }
-        bool operator != ( const Pict & ) {  return true ;  }
-        bool operator != ( void * ) {  return true ;  }
+        bool operator == ( const Pict & ) const {  return false ;  }
+        bool operator == ( void * ) const {  return false ;  }
+        bool operator != ( const Pict & ) const {  return true ;  }
+        bool operator != ( void * ) const {  return true ;  }
 
 };
 

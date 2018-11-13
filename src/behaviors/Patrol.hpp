@@ -15,7 +15,7 @@
 #include "Timer.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
 class Item ;
@@ -31,7 +31,7 @@ class Patrol : public Behavior
 
 public:
 
-        Patrol( Item * item, const std::string & behavior ) ;
+        Patrol( const ItemPtr & item, const std::string & behavior ) ;
 
         virtual ~Patrol( ) ;
 
@@ -47,19 +47,19 @@ protected:
 private:
 
        /**
-        * Cronómetro que controla la velocidad de movimiento del elemento
+        * Timer for item’s speed of movement
         */
-        Timer * speedTimer ;
+        autouniqueptr < Timer > speedTimer ;
 
        /**
-        * Cronómetro que controla la velocidad de caída del elemento
+        * Timer for item’s speed of falling
         */
-        Timer * fallTimer ;
+        autouniqueptr < Timer > fallTimer ;
 
        /**
-        * Cronómetro que controla el cambio de dirección del elemento
+        * Timer for change of item’s direction
         */
-        Timer * changeTimer ;
+        autouniqueptr < Timer > changeTimer ;
 
 };
 

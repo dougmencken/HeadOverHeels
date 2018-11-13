@@ -2,36 +2,36 @@
 #include "Mediator.hpp"
 #include "Mediated.hpp"
 #include "RoomBuilder.hpp"
-#include "Item.hpp"
+#include "GameManager.hpp"
 #include "ItemData.hpp"
-#include "GridItem.hpp"
-#include "FreeItem.hpp"
-#include "PlayerItem.hpp"
 #include "FloorTile.hpp"
 #include "ShadowCaster.hpp"
+#include "Masker.hpp"
 #include "Behavior.hpp"
 
-#include <algorithm> // std::for_each
+#include <algorithm>
 
 #ifdef DEBUG
+#  define DEBUG_COLLISIONS      0
 #  define DEBUG_SHADOWS         0
 #  define DEBUG_MASKS           0
 #endif
 
 
-namespace isomot
+namespace iso
 {
 
 Mediator::Mediator( Room* room )
         : room( room )
         , threadRunning( false )
-        , gridItemsSorting( false )
-        , freeItemsSorting( false )
+        , needGridItemsSorting( false )
+        , needFreeItemsSorting( false )
         , switchInRoomIsOn( false )
         , activeCharacter( nilPointer )
 {
         pthread_mutex_init( &gridItemsMutex, nilPointer );
         pthread_mutex_init( &freeItemsMutex, nilPointer );
+        pthread_mutex_init( &collisionsMutex, nilPointer );
 
         // behaviors of items which may be freezed by doughnut or switch
         badBoys.push_back( "behavior of detector" );
@@ -49,113 +49,101 @@ Mediator::Mediator( Room* room )
         // make structure of room
         for ( unsigned int i = 0; i < room->getTilesX() * room->getTilesY() + 1; i++ )
         {
-                gridItems.push_back( std::list< GridItem * > () );
+                room->gridItems.push_back( std::vector< GridItemPtr > () );
         }
 }
 
 Mediator::~Mediator()
 {
-        // bin grid items
-        for ( size_t i = 0; i < gridItems.size(); i++ )
-        {
-                std::for_each( gridItems[ i ].begin(), gridItems[ i ].end (), DeleteIt() );
-                gridItems[ i ].clear();
-        }
-
-        // bin free items
-        for ( std::list< FreeItem* >::const_iterator it = freeItems.begin () ; it != freeItems.end () ; ++ it )
-        {
-                FreeItem* item = *it;
-
-                // player items are deleted in destructor of Room
-                if ( item->whichKindOfItem() != "player item" )
-                {
-                        delete item ;
-                }
-        }
-        freeItems.clear() ;
-
         pthread_mutex_destroy( &gridItemsMutex );
         pthread_mutex_destroy( &freeItemsMutex );
+        pthread_mutex_destroy( &collisionsMutex );
 }
 
 void Mediator::update()
 {
-        lockGridItemMutex ();
-
-        if ( this->gridItemsSorting )
+# if defined( DEBUG_COLLISIONS ) && DEBUG_COLLISIONS
+        if ( ! collisions.empty () )
         {
-                for ( unsigned int column = 0; column < gridItems.size(); column ++ )
+                std::cout << "stack of collisions" << std::endl ;
+                for ( std::deque< std::string >::const_iterator c = collisions.begin () ; c != collisions.end () ; ++ c )
+                        std::cout << "   " << *c << std::endl ;
+        }
+# endif
+
+        lockGridItemsMutex ();
+
+        // grid items to remove after update
+        std::vector< std::string > vanishedGridItems ;
+
+        // update grid items
+        for ( unsigned int column = 0; column < room->gridItems.size(); ++ column )
+        {
+                for ( std::vector< GridItemPtr >::iterator g = room->gridItems[ column ].begin (); g != room->gridItems[ column ].end (); ++ g )
                 {
-                        if ( ! gridItems[ column ].empty() )
+                        if ( ( *g )->updateItem() )
+                                vanishedGridItems.push_back( ( *g )->getUniqueName() );
+                }
+        }
+
+        for ( std::vector< std::string >::const_iterator i = vanishedGridItems.begin () ; i != vanishedGridItems.end () ; ++ i )
+        {
+                std::cout << "grid item \"" << *i << "\" is to be gone" << std::endl ;
+                room->removeGridItemByUniqueName( *i );
+        }
+
+        if ( needGridItemsSorting )
+        {
+                for ( unsigned int column = 0; column < room->gridItems.size(); ++ column )
+                {
+                        if ( ! room->gridItems[ column ].empty() )
                         {
-                                gridItems[ column ].sort( sortColumnOfGridItems );
+                                std::sort( room->gridItems[ column ].begin (), room->gridItems[ column ].end () );
                         }
                 }
 
-                this->gridItemsSorting = false;
+                needGridItemsSorting = false;
         }
 
-        // grid items to remove after update
-        std::stack< GridItem * > vanishedGridItems ;
-
-        // update grid items
-        for ( unsigned int column = 0; column < gridItems.size(); column ++ )
-        {
-                for ( std::list< GridItem* >::iterator g = gridItems[ column ].begin (); g != gridItems[ column ].end (); ++g )
-                {
-                        if ( ( *g )->update() )
-                                vanishedGridItems.push( *g );
-                }
-        }
-
-        while ( ! vanishedGridItems.empty() )
-        {
-                GridItem* gi = vanishedGridItems.top();
-                room->removeGridItem( gi );
-                vanishedGridItems.pop();
-        }
-
-        unlockGridItemMutex ();
-
-        lockFreeItemMutex ();
-
-        if ( this->freeItemsSorting )
-        {
-                freeItems.sort( sortListOfFreeItems );
-                this->freeItemsSorting = false;
-
-                // remask items after sorting because overlaps may change
-                for ( std::list< FreeItem * >::iterator f = freeItems.begin (); f != freeItems.end (); ++f )
-                {
-                        ( *f )->setWantMaskTrue();
-                }
-        }
+        unlockGridItemsMutex ();
 
         if ( activeCharacter != nilPointer )
         {
                 activeCharacter->behave ();
         }
 
+        lockFreeItemsMutex ();
+
         // free items to remove after update
-        std::stack < FreeItem * > vanishedFreeItems ;
+        std::vector< std::string > vanishedFreeItems ;
 
         // update free items
-        for ( std::list< FreeItem * >::iterator f = freeItems.begin (); f != freeItems.end (); ++f )
+        for ( std::vector< FreeItemPtr >::iterator f = room->freeItems.begin (); f != room->freeItems.end (); ++ f )
         {
-                if ( ( *f )->update() )
-                        vanishedFreeItems.push( *f );
+                if ( ( *f )->updateItem() )
+                        vanishedFreeItems.push_back( ( *f )->getUniqueName() );
         }
 
-        while ( ! vanishedFreeItems.empty() )
+        for ( std::vector< std::string >::const_iterator i = vanishedFreeItems.begin () ; i != vanishedFreeItems.end () ; ++ i )
         {
-                FreeItem* fi = vanishedFreeItems.top();
-                room->removeFreeItem( fi );
-                vanishedFreeItems.pop();
+                std::cout << "free item \"" << *i << "\" is to be gone" << std::endl ;
+                room->removeFreeItemByUniqueName( *i );
         }
 
-        std::list< PlayerItem * > playersInRoom = room->getPlayersYetInRoom();
-        for ( std::list< PlayerItem * >::iterator p = playersInRoom.begin (); p != playersInRoom.end (); ++p )
+        if ( needFreeItemsSorting )
+        {
+                std::sort( room->freeItems.begin (), room->freeItems.end () );
+                needFreeItemsSorting = false;
+
+                // remask items after sorting because overlaps may change
+                for ( std::vector< FreeItemPtr >::iterator f = room->freeItems.begin (); f != room->freeItems.end (); ++ f )
+                {
+                        ( *f )->setWantMaskTrue();
+                }
+        }
+
+        std::vector< PlayerItemPtr > playersInRoom = room->getPlayersYetInRoom();
+        for ( std::vector< PlayerItemPtr >::iterator p = playersInRoom.begin (); p != playersInRoom.end (); ++ p )
         {
                 // when inactive character falls down to room below this one
                 // then make it active to let it fall
@@ -163,75 +151,72 @@ void Mediator::update()
                 {
                         std::cout << "inactive character \"" << ( *p )->getLabel() << "\" falls down to another room, swap characters to make it active" << std::endl ;
                         activeCharacter->setWayOfExit( "no exit" );
-                        this->pickNextCharacter( nilPointer );
-                }
-
-                if ( ( *p )->isActiveCharacter() )
-                {
-                        if ( ( *p )->getWayOfExit() != "no exit" )
-                        {
-                                // transfer way of exit from player to room
-                                room->setWayOfExit( ( *p )->getWayOfExit() );
-                                ( *p )->setWayOfExit( "no exit" );
-                        }
-
-                        break; // only active character may exit room
+                        this->pickNextCharacter();
                 }
         }
 
-        unlockFreeItemMutex ();
+        unlockFreeItemsMutex ();
 }
 
-void Mediator::beginUpdate()
+void Mediator::beginUpdate ()
 {
-        this->threadRunning = true;
+        if ( this->threadRunning ) return ;
+
+        IF_DEBUG( fprintf ( stdout, "Mediator::beginUpdate ()\n" ) )
 
         pthread_attr_t attr;
 
         pthread_attr_init( &attr );
         pthread_attr_setdetachstate( &attr, PTHREAD_CREATE_JOINABLE );
 
-        pthread_create( &thread, nilPointer, updateThread, reinterpret_cast< void * >( this ) );
+        pthread_create( &thread, &attr, Mediator::updateThread, reinterpret_cast< void * >( this ) );
+
+        this->threadRunning = true;
 
         pthread_attr_destroy( &attr );
 }
 
-void Mediator::endUpdate()
+void Mediator::endUpdate ()
 {
+        if ( ! this->threadRunning ) return ;
+
+        IF_DEBUG( fprintf ( stdout, "Mediator::endUpdate ()\n" ) )
+
         this->threadRunning = false;
+
         pthread_join( thread, nilPointer );
 }
 
-void* updateThread( void* thisClass )
+void* Mediator::updateThread( void* mediatorAsVoid )
 {
-        Mediator* mediator = reinterpret_cast< Mediator* >( thisClass );
+        Mediator* mediator = reinterpret_cast< Mediator* >( mediatorAsVoid );
 
         while ( mediator->isThreadRunning() )
         {
                 mediator->update();
-                milliSleep( 10 );
+                milliSleep( 1000 / GameManager::updatesPerSecond );
         }
 
         pthread_exit( nilPointer );
 }
 
-void Mediator::remaskWithFreeItem( FreeItem* item )
+void Mediator::remaskWithFreeItem( const FreeItem& item )
 {
-        if ( item == nilPointer ) return;
+        if ( item.getRawImage() == nilPointer ) return;
 
         // go through list of free items to see which ones to remask
-        for ( std::list< FreeItem* >::iterator f = freeItems.begin (); f != freeItems.end (); ++f )
+        for ( std::vector< FreeItemPtr >::iterator f = room->freeItems.begin (); f != room->freeItems.end (); ++ f )
         {
-                FreeItem* thatFreeItem = *f;
+                FreeItemPtr thatFreeItem = *f;
 
                 if ( thatFreeItem != nilPointer && thatFreeItem->getRawImage() != nilPointer &&
-                        thatFreeItem != item && thatFreeItem->getUniqueName() + " copy" != item->getUniqueName() )
+                        thatFreeItem->getUniqueName() != item.getUniqueName() && thatFreeItem->getUniqueName() + " copy" != item.getUniqueName() )
                 {
                         // mask item if there’s overlap between images
-                        if ( ( thatFreeItem->getOffsetX() < item->getOffsetX() + static_cast< int >( item->getRawImage()->getWidth() ) )
-                                && ( thatFreeItem->getOffsetX() + static_cast< int >( thatFreeItem->getRawImage()->getWidth() ) > item->getOffsetX() )
-                                && ( thatFreeItem->getOffsetY() < item->getOffsetY() + static_cast< int >( item->getRawImage()->getHeight() ) )
-                                && ( thatFreeItem->getOffsetY() + static_cast< int >( thatFreeItem->getRawImage()->getHeight() ) > item->getOffsetY() ) )
+                        if ( ( thatFreeItem->getOffsetX() < item.getOffsetX() + static_cast< int >( item.getRawImage()->getWidth() ) )
+                                && ( thatFreeItem->getOffsetX() + static_cast< int >( thatFreeItem->getRawImage()->getWidth() ) > item.getOffsetX() )
+                                && ( thatFreeItem->getOffsetY() < item.getOffsetY() + static_cast< int >( item.getRawImage()->getHeight() ) )
+                                && ( thatFreeItem->getOffsetY() + static_cast< int >( thatFreeItem->getRawImage()->getHeight() ) > item.getOffsetY() ) )
                         {
                                 thatFreeItem->setWantMaskTrue();
                         }
@@ -239,27 +224,27 @@ void Mediator::remaskWithFreeItem( FreeItem* item )
         }
 }
 
-void Mediator::remaskWithGridItem( GridItem* gridItem )
+void Mediator::remaskWithGridItem( const GridItem& gridItem )
 {
-        if ( gridItem == nilPointer ) return;
+        if ( gridItem.getRawImage() == nilPointer ) return;
 
         // go through list of free items to see which ones to remask
-        for ( std::list< FreeItem* >::iterator f = freeItems.begin (); f != freeItems.end (); ++f )
+        for ( std::vector< FreeItemPtr >::iterator f = room->freeItems.begin (); f != room->freeItems.end (); ++ f )
         {
-                FreeItem* freeItem = *f;
+                FreeItemPtr freeItem = *f;
 
                 if ( freeItem != nilPointer && freeItem->getRawImage() != nilPointer )
                 {
                         // mask item if there’s overlap between images
-                        if ( ( freeItem->getOffsetX() < gridItem->getOffsetX() + static_cast< int >( gridItem->getRawImage()->getWidth() ) )
-                                && ( freeItem->getOffsetX() + static_cast< int >( freeItem->getRawImage()->getWidth() ) > gridItem->getOffsetX() )
-                                && ( freeItem->getOffsetY() < gridItem->getOffsetY() + static_cast< int >( gridItem->getRawImage()->getHeight() ) )
-                                && ( freeItem->getOffsetY() + static_cast< int >( freeItem->getRawImage()->getHeight() ) > gridItem->getOffsetY() ) )
+                        if ( ( freeItem->getOffsetX() < gridItem.getOffsetX() + static_cast< int >( gridItem.getRawImage()->getWidth() ) )
+                                && ( freeItem->getOffsetX() + static_cast< int >( freeItem->getRawImage()->getWidth() ) > gridItem.getOffsetX() )
+                                && ( freeItem->getOffsetY() < gridItem.getOffsetY() + static_cast< int >( gridItem.getRawImage()->getHeight() ) )
+                                && ( freeItem->getOffsetY() + static_cast< int >( freeItem->getRawImage()->getHeight() ) > gridItem.getOffsetY() ) )
                         {
                                 // see whether free item is behind grid item
-                                if ( ( freeItem->getX() < gridItem->getX() + static_cast< int >( gridItem->getWidthX() ) )
-                                        && ( freeItem->getY() - static_cast< int >( freeItem->getWidthY() ) < gridItem->getY() )
-                                        && ( freeItem->getZ() < gridItem->getZ() + static_cast< int >( gridItem->getHeight() ) ) )
+                                if ( ( freeItem->getX() < gridItem.getX() + static_cast< int >( gridItem.getWidthX() ) )
+                                        && ( freeItem->getY() - static_cast< int >( freeItem->getWidthY() ) < gridItem.getY() )
+                                        && ( freeItem->getZ() < gridItem.getZ() + static_cast< int >( gridItem.getHeight() ) ) )
                                 {
                                         freeItem->setWantMaskTrue();
                                 }
@@ -268,51 +253,53 @@ void Mediator::remaskWithGridItem( GridItem* gridItem )
         }
 }
 
-void Mediator::reshadeWithGridItem( GridItem* item )
+void Mediator::reshadeWithGridItem( const GridItem& item )
 {
         if ( room->getOpacityOfShadows() >= 256 ) return ;
+        if ( item.getImageOfShadow() == nilPointer ) return ;
 
         // shade free items underneath
         this->shadeFreeItemsBeneathItem( item );
 
-        int column = item->getColumnOfGrid();
+        int column = item.getColumnOfGrid();
 
         // shade grid items below
-        if ( ! this->gridItems[ column ].empty() )
+        if ( ! room->gridItems[ column ].empty() )
         {
-                std::list< GridItem * >::iterator g = this->gridItems[ column ].begin ();
-                GridItem* gridItem = *g;
+                std::vector< GridItemPtr >::iterator g = room->gridItems[ column ].begin ();
 
-                while ( g != this->gridItems[ column ].end() && item->getUniqueName() != gridItem->getUniqueName() + " copy" )
+                while ( g != room->gridItems[ column ].end() && item.getUniqueName() != ( *g )->getUniqueName() + " copy" )
                 {
+                        GridItemPtr gridItem = *g;
+
                         gridItem->binProcessedImage();
                         gridItem->setWantShadow( true );
 
-                        // next grid item in column
-                        gridItem = *( ++g ) ;
+                        ++g ;
                 }
         }
 
         // shade floor in this column, if any
-        if ( room->floor[ column ] != nilPointer )
+        if ( room->floorTiles[ column ] != nilPointer )
         {
-                room->floor[ column ]->freshShadyImage();
-                room->floor[ column ]->setWantShadow( true );
+                room->floorTiles[ column ]->freshShadyImage();
+                room->floorTiles[ column ]->setWantShadow( true );
         }
 }
 
-void Mediator::reshadeWithFreeItem( FreeItem* item )
+void Mediator::reshadeWithFreeItem( const FreeItem& item )
 {
         if ( room->getOpacityOfShadows() >= 256 ) return ;
+        if ( item.getImageOfShadow() == nilPointer ) return ;
 
         // shade free items underneath
         this->shadeFreeItemsBeneathItem( item );
 
         // range of columns met with item
-        int xStart = item->getX() / room->tileSize;
-        int xEnd = ( item->getX() + item->getWidthX() - 1 ) / room->tileSize + 1;
-        int yStart = ( item->getY() - item->getWidthY() + 1 ) / room->tileSize;
-        int yEnd = item->getY() / room->tileSize + 1;
+        int xStart = item.getX() / room->tileSize;
+        int xEnd = ( item.getX() + item.getWidthX() - 1 ) / room->tileSize + 1;
+        int yStart = ( item.getY() - item.getWidthY() + 1 ) / room->tileSize;
+        int yEnd = item.getY() / room->tileSize + 1;
 
         // for every column that item meets
         for ( int i = xStart; i < xEnd; i++ )
@@ -321,11 +308,11 @@ void Mediator::reshadeWithFreeItem( FreeItem* item )
                 {
                         // mark to shade every item in this column that is below free item
                         int column = room->getTilesX() * j + i;
-                        for ( std::list< GridItem* >::iterator g = gridItems[ column ]. begin (); g != gridItems[ column ]. end (); ++g )
+                        for ( std::vector< GridItemPtr >::iterator g = room->gridItems[ column ]. begin (); g != room->gridItems[ column ]. end (); ++ g )
                         {
-                                GridItem* gridItem = *g ;
+                                GridItemPtr gridItem = *g ;
 
-                                if ( item->getZ () > gridItem->getZ () )
+                                if ( item.getZ () > gridItem->getZ () )
                                 {
                                         gridItem->binProcessedImage();
                                         gridItem->setWantShadow( true );
@@ -333,38 +320,42 @@ void Mediator::reshadeWithFreeItem( FreeItem* item )
                         }
 
                         // shade floor in this column, if any
-                        if ( room->floor[ column ] != nilPointer )
+                        if ( room->floorTiles[ column ] != nilPointer )
                         {
-                                room->floor[ column ]->freshShadyImage ();
-                                room->floor[ column ]->setWantShadow( true );
+                                room->floorTiles[ column ]->freshShadyImage ();
+                                room->floorTiles[ column ]->setWantShadow( true );
                         }
                 }
         }
 }
 
-void Mediator::shadeFreeItemsBeneathItem( Item* item )
+void Mediator::shadeFreeItemsBeneathItem( const Item& item )
 {
-        for ( std::list < FreeItem* >::iterator f = freeItems.begin (); f != freeItems.end (); ++f )
-        {
-                FreeItem* freeItem = *f ;
+        if ( item.getImageOfShadow() == nilPointer ) return ;
 
-                if ( freeItem != item &&
-                        item->getUniqueName() != freeItem->getUniqueName() + " copy" )
+        for ( std::vector< FreeItemPtr >::iterator f = room->freeItems.begin (); f != room->freeItems.end (); ++ f )
+        {
+                FreeItemPtr freeItem = *f ;
+
+                if ( freeItem->getUniqueName() != item.getUniqueName() &&
+                        item.getUniqueName() != freeItem->getUniqueName() + " copy" )
                 {
-                        int itemX = item->getX();       int itemY = item->getY();
-                        int freeX = freeItem->getX();   int freeY = freeItem->getY();
+                        int itemX = item.getX();
+                        int itemY = item.getY();
+                        int freeX = freeItem->getX();
+                        int freeY = freeItem->getY();
                         int freeXend = freeX + static_cast< int >( freeItem->getWidthX() );
                         int freeYend = freeY - static_cast< int >( freeItem->getWidthY() );
-                        int itemXend = itemX + static_cast< int >( item->getWidthX() );
-                        int itemYend = itemY - static_cast< int >( item->getWidthY() );
+                        int itemXend = itemX + static_cast< int >( item.getWidthX() );
+                        int itemYend = itemY - static_cast< int >( item.getWidthY() );
 
                         if ( ( freeXend > itemX ) && ( freeX < itemXend )
                                 && ( freeY > itemYend ) && ( freeYend < itemY )
-                                && ( freeItem->getZ() < item->getZ() ) )
+                                && ( freeItem->getZ() < item.getZ() ) )
                         {
                         # if  defined( DEBUG_SHADOWS )  &&  DEBUG_SHADOWS
                                 std::cout << "Mediator::shadeFreeItemsBeneathItem got item \"" << freeItem->getUniqueName ()
-                                          << "\" to shade from \"" << item->getUniqueName () << "\""
+                                          << "\" to shade from \"" << item.getUniqueName () << "\""
                                           << std::endl ;
                         #endif
 
@@ -375,19 +366,19 @@ void Mediator::shadeFreeItemsBeneathItem( Item* item )
         }
 }
 
-void Mediator::castShadowOnFloor( FloorTile* floorTile )
+void Mediator::castShadowOnFloor( FloorTile& floorTile )
 {
         if ( room->getOpacityOfShadows() >= 256 ) return ;
 
-        int xCell = floorTile->getCellX();
-        int yCell = floorTile->getCellY();
-        int column = floorTile->getColumn();
+        int xCell = floorTile.getCellX();
+        int yCell = floorTile.getCellY();
+        int column = floorTile.getColumn();
         int tileSize = room->getSizeOfOneTile();
 
         // shade with every grid item above
-        for ( std::list< GridItem * >::iterator g = gridItems[ column ].begin (); g != gridItems[ column ].end (); ++g )
+        for ( std::vector< GridItemPtr >::const_iterator g = room->gridItems[ column ].begin (); g != room->gridItems[ column ].end (); ++ g )
         {
-                GridItem* gridItem = *g ;
+                const GridItemPtr gridItem = *g ;
 
                 // shade image of tile when item has shadow
                 if ( gridItem->getImageOfShadow() != nilPointer )
@@ -409,7 +400,7 @@ void Mediator::castShadowOnFloor( FloorTile* floorTile )
                                 /* y */ tileSize * ( xCell + yCell + 1 )
                                                         - ( static_cast< int >( gridItem->getImageOfShadow()->getHeight() ) >> 1 )
                                                         + room->getY0() - 1,
-                                /* shadow */ gridItem->getImageOfShadow(),
+                                /* shadow */ * gridItem->getImageOfShadow(),
                                 /* shading */ room->getOpacityOfShadows()
                                 /* transparency = 0 */
                         ) ;
@@ -417,9 +408,9 @@ void Mediator::castShadowOnFloor( FloorTile* floorTile )
         }
 
         // scroll through list of free items to shade floor tile
-        for ( std::list< FreeItem* >::iterator f = freeItems.begin (); f != freeItems.end (); ++f )
+        for ( std::vector< FreeItemPtr >::const_iterator f = room->freeItems.begin (); f != room->freeItems.end (); ++ f )
         {
-                FreeItem* freeItem = *f ;
+                const FreeItemPtr freeItem = *f ;
 
                 if ( freeItem->getImageOfShadow() != nilPointer )
                 {
@@ -448,7 +439,7 @@ void Mediator::castShadowOnFloor( FloorTile* floorTile )
                                         /* y */ freeItem->getX() + freeItem->getY() + room->getY0()
                                                         + ( ( static_cast< int >( freeItem->getWidthX() ) - static_cast< int >( freeItem->getWidthY() ) + 1 ) >> 1 )
                                                         - ( static_cast< int >( freeItem->getImageOfShadow()->getHeight() ) >> 1 ),
-                                        /* shadow */ freeItem->getImageOfShadow(),
+                                        /* shadow */ * freeItem->getImageOfShadow(),
                                         /* shading */ room->getOpacityOfShadows(),
                                         /* transparency */ freeItem->getTransparency()
                                 ) ;
@@ -457,37 +448,37 @@ void Mediator::castShadowOnFloor( FloorTile* floorTile )
         }
 }
 
-void Mediator::castShadowOnGridItem( GridItem* gridItem )
+void Mediator::castShadowOnGridItem( GridItem& gridItem )
 {
         if ( room->getOpacityOfShadows() >= 256 ) return ;
 
         int tileSize = room->getSizeOfOneTile();
-        int column = gridItem->getColumnOfGrid();
+        int column = gridItem.getColumnOfGrid();
 
         // shade with grid items it may have above
-        for ( std::list< GridItem* >::iterator g = gridItems[ column ].begin(); g != gridItems[ column ].end(); ++g )
+        for ( std::vector< GridItemPtr >::const_iterator g = room->gridItems[ column ].begin(); g != room->gridItems[ column ].end(); ++ g )
         {
-                GridItem* aboveItem = *g ;
+                const GridItemPtr aboveItem = *g ;
 
-                if ( aboveItem->getImageOfShadow() != nilPointer && aboveItem->getZ() > gridItem->getZ() )
+                if ( aboveItem->getImageOfShadow() != nilPointer && aboveItem->getZ() > gridItem.getZ() )
                 {
                 # if  defined( DEBUG_SHADOWS )  &&  DEBUG_SHADOWS
                         std::ostringstream positionOfFrom;
                         positionOfFrom << "x=" << aboveItem->getX() << " y=" << aboveItem->getY() << " z=" << aboveItem->getZ() ;
                         std::ostringstream positionOfOn;
-                        positionOfOn << "x=" << gridItem->getX() << " y=" << gridItem->getY() << " z=" << gridItem->getZ() ;
+                        positionOfOn << "x=" << gridItem.getX() << " y=" << gridItem.getY() << " z=" << gridItem.getZ() ;
 
                         std::cout << "casting shadow from " << aboveItem->whichKindOfItem() << " \"" << aboveItem->getUniqueName() << "\"" << " at " << positionOfFrom.str() <<
-                                        " on " << gridItem->whichKindOfItem() << " \"" << gridItem->getUniqueName() << "\"" << " at " << positionOfOn.str() << std::endl ;
+                                        " on " << gridItem.whichKindOfItem() << " \"" << gridItem.getUniqueName() << "\"" << " at " << positionOfOn.str() << std::endl ;
                 # endif
 
                         ShadowCaster::castShadowOnItem (
                                 gridItem,
-                                /* x */ gridItem->getOffsetX()
-                                                + ( ( static_cast< int >( gridItem->getRawImage()->getWidth() )
+                                /* x */ gridItem.getOffsetX()
+                                                + ( ( static_cast< int >( gridItem.getRawImage()->getWidth() )
                                                         - static_cast< int >( aboveItem->getImageOfShadow()->getWidth() ) ) >> 1 ),
-                                /* y */ gridItem->getOffsetY()
-                                                + gridItem->getRawImage()->getHeight() - tileSize - gridItem->getHeight()
+                                /* y */ gridItem.getOffsetY()
+                                                + gridItem.getRawImage()->getHeight() - tileSize - gridItem.getHeight()
                                                 - ( static_cast< int >( aboveItem->getImageOfShadow()->getHeight() ) >> 1 ),
                                 /* shadow */ aboveItem->getImageOfShadow(),
                                 /* shading */ room->getOpacityOfShadows()
@@ -497,29 +488,29 @@ void Mediator::castShadowOnGridItem( GridItem* gridItem )
         }
 
         // scroll thru list of free items to shade grid item
-        for ( std::list< FreeItem* >::iterator f = freeItems.begin(); f != freeItems.end(); ++f )
+        for ( std::vector< FreeItemPtr >::const_iterator f = room->freeItems.begin(); f != room->freeItems.end(); ++ f )
         {
-                FreeItem* freeItem = *f ;
+                const FreeItemPtr freeItem = *f ;
 
-                if ( freeItem->getImageOfShadow() != nilPointer && freeItem->getZ() > gridItem->getZ() )
+                if ( freeItem->getImageOfShadow() != nilPointer && freeItem->getZ() > gridItem.getZ() )
                 {
-                        // range of columns met with item
+                        // range of tiles where item is
                         int xStart = freeItem->getX() / tileSize;
                         int xEnd = ( freeItem->getX() + freeItem->getWidthX() - 1 ) / tileSize;
                         int yStart = ( freeItem->getY() - freeItem->getWidthY() + 1 ) / tileSize;
                         int yEnd = freeItem->getY() / tileSize;
 
                         // shade with free item above
-                        if ( gridItem->getCellX() >= xStart && gridItem->getCellX() <= xEnd && gridItem->getCellY() >= yStart && gridItem->getCellY() <= yEnd )
+                        if ( gridItem.getCellX() >= xStart && gridItem.getCellX() <= xEnd && gridItem.getCellY() >= yStart && gridItem.getCellY() <= yEnd )
                         {
                         # if  defined( DEBUG_SHADOWS )  &&  DEBUG_SHADOWS
                                 std::ostringstream positionOfFrom;
                                 positionOfFrom << "x=" << freeItem->getX() << " y=" << freeItem->getY() << " z=" << freeItem->getZ() ;
                                 std::ostringstream positionOfOn;
-                                positionOfOn << "x=" << gridItem->getX() << " y=" << gridItem->getY() << " z=" << gridItem->getZ() ;
+                                positionOfOn << "x=" << gridItem.getX() << " y=" << gridItem.getY() << " z=" << gridItem.getZ() ;
 
                                 std::cout << "casting shadow from " << freeItem->whichKindOfItem() << " \"" << freeItem->getUniqueName() << "\"" << " at " << positionOfFrom.str() <<
-                                                " on " << gridItem->whichKindOfItem() << " \"" << gridItem->getUniqueName() << "\"" << " at " << positionOfOn.str() << std::endl ;
+                                                " on " << gridItem.whichKindOfItem() << " \"" << gridItem.getUniqueName() << "\"" << " at " << positionOfOn.str() << std::endl ;
                         # endif
 
                                 ShadowCaster::castShadowOnItem (
@@ -530,7 +521,7 @@ void Mediator::castShadowOnGridItem( GridItem* gridItem )
                                         /* y */ freeItem->getX() + freeItem->getY()
                                                         + ( ( static_cast< int >( freeItem->getWidthX() ) - static_cast< int >( freeItem->getWidthY() ) + 1 ) >> 1 )
                                                         - ( static_cast< int >( freeItem->getImageOfShadow()->getHeight() ) >> 1 )
-                                                        - gridItem->getZ() - gridItem->getHeight(),
+                                                        - gridItem.getZ() - gridItem.getHeight(),
                                         /* shadow */ freeItem->getImageOfShadow(),
                                         /* shading */ room->getOpacityOfShadows(),
                                         /* transparency */ freeItem->getTransparency()
@@ -540,17 +531,17 @@ void Mediator::castShadowOnGridItem( GridItem* gridItem )
         }
 }
 
-void Mediator::castShadowOnFreeItem( FreeItem* freeItem )
+void Mediator::castShadowOnFreeItem( FreeItem& freeItem )
 {
         if ( room->getOpacityOfShadows() >= 256 ) return ;
 
         int tileSize = room->getSizeOfOneTile();
 
         // range of columns met with item
-        int xStart = freeItem->getX() / tileSize;
-        int xEnd = ( freeItem->getX() + freeItem->getWidthX() - 1 ) / tileSize;
-        int yStart = ( freeItem->getY() - freeItem->getWidthY() + 1 ) / tileSize;
-        int yEnd = freeItem->getY() / tileSize;
+        int xStart = freeItem.getX() / tileSize;
+        int xEnd = ( freeItem.getX() + freeItem.getWidthX() - 1 ) / tileSize;
+        int yStart = ( freeItem.getY() - freeItem.getWidthY() + 1 ) / tileSize;
+        int yEnd = freeItem.getY() / tileSize;
 
         // shadow from grid items above
         for ( int yCell = yStart; yCell <= yEnd; yCell++ )
@@ -559,30 +550,30 @@ void Mediator::castShadowOnFreeItem( FreeItem* freeItem )
                 {
                         int column = yCell * room->getTilesX() + xCell;
 
-                        for ( std::list< GridItem* >::iterator g = gridItems[ column ].begin (); g != gridItems[ column ].end (); ++g )
+                        for ( std::vector< GridItemPtr >::const_iterator g = room->gridItems[ column ].begin (); g != room->gridItems[ column ].end (); ++ g )
                         {
-                                GridItem* gridItem = *g ;
+                                const GridItem& gridItem = *( *g ) ;
 
-                                if ( gridItem->getImageOfShadow() != nilPointer && gridItem->getZ() > freeItem->getZ() )
+                                if ( gridItem.getImageOfShadow() != nilPointer && gridItem.getZ() > freeItem.getZ() )
                                 {
                                 # if  defined( DEBUG_SHADOWS )  &&  DEBUG_SHADOWS
                                         std::ostringstream positionOfFrom;
-                                        positionOfFrom << "x=" << gridItem->getX() << " y=" << gridItem->getY() << " z=" << gridItem->getZ() ;
+                                        positionOfFrom << "x=" << gridItem.getX() << " y=" << gridItem.getY() << " z=" << gridItem.getZ() ;
                                         std::ostringstream positionOfOn;
-                                        positionOfOn << "x=" << freeItem->getX() << " y=" << freeItem->getY() << " z=" << freeItem->getZ() ;
+                                        positionOfOn << "x=" << freeItem.getX() << " y=" << freeItem.getY() << " z=" << freeItem.getZ() ;
 
-                                        std::cout << "casting shadow from " << gridItem->whichKindOfItem() << " \"" << gridItem->getUniqueName() << "\"" << " at " << positionOfFrom.str() <<
-                                                        " on " << freeItem->whichKindOfItem() << " \"" << freeItem->getUniqueName() << "\"" << " at " << positionOfOn.str() << std::endl ;
+                                        std::cout << "casting shadow from " << gridItem.whichKindOfItem() << " \"" << gridItem.getUniqueName() << "\"" << " at " << positionOfFrom.str() <<
+                                                        " on " << freeItem.whichKindOfItem() << " \"" << freeItem.getUniqueName() << "\"" << " at " << positionOfOn.str() << std::endl ;
                                 # endif
 
                                         ShadowCaster::castShadowOnItem (
                                                 freeItem,
                                                 /* x */ ( tileSize << 1 ) * ( xCell - yCell )
-                                                                - ( static_cast< int >( gridItem->getImageOfShadow()->getWidth() ) >> 1 ) + 1,
+                                                                - ( static_cast< int >( gridItem.getImageOfShadow()->getWidth() ) >> 1 ) + 1,
                                                 /* y */ tileSize * ( xCell + yCell + 1 )
-                                                                - freeItem->getZ() - freeItem->getHeight()
-                                                                - ( static_cast< int >( gridItem->getImageOfShadow()->getHeight() ) >> 1 ) - 1,
-                                                /* shadow */ gridItem->getImageOfShadow(),
+                                                                - freeItem.getZ() - freeItem.getHeight()
+                                                                - ( static_cast< int >( gridItem.getImageOfShadow()->getHeight() ) >> 1 ) - 1,
+                                                /* shadow */ gridItem.getImageOfShadow(),
                                                 /* shading */ room->getOpacityOfShadows()
                                                 /* transparency = 0 */
                                         ) ;
@@ -592,114 +583,119 @@ void Mediator::castShadowOnFreeItem( FreeItem* freeItem )
         }
 
         // scroll through list of free items
-        for ( std::list< FreeItem* >::iterator f = freeItems.begin (); f != freeItems.end (); ++f )
+        for ( std::vector< FreeItemPtr >::const_iterator f = room->freeItems.begin (); f != room->freeItems.end (); ++ f )
         {
-                FreeItem* aboveItem = *f ;
+                const FreeItem& aboveItem = *( *f ) ;
 
-                if ( aboveItem->getImageOfShadow() != nilPointer && aboveItem->getUniqueName() != freeItem->getUniqueName() )
+                if ( aboveItem.getImageOfShadow() != nilPointer && aboveItem.getUniqueName() != freeItem.getUniqueName() )
                 {
                         // shadow with free item above
-                        if ( freeItem->getZ() < aboveItem->getZ() &&
-                                freeItem->getX() < aboveItem->getX() + static_cast< int >( aboveItem->getWidthX() ) &&
-                                        aboveItem->getX() < freeItem->getX() + static_cast< int >( freeItem->getWidthX() ) &&
-                                freeItem->getY() > aboveItem->getY() - static_cast< int >( aboveItem->getWidthY() ) &&
-                                        aboveItem->getY() > freeItem->getY() - static_cast< int >( freeItem->getWidthY() ) )
+                        if ( freeItem.getZ() < aboveItem.getZ() &&
+                                freeItem.getX() < aboveItem.getX() + static_cast< int >( aboveItem.getWidthX() ) &&
+                                        aboveItem.getX() < freeItem.getX() + static_cast< int >( freeItem.getWidthX() ) &&
+                                freeItem.getY() > aboveItem.getY() - static_cast< int >( aboveItem.getWidthY() ) &&
+                                        aboveItem.getY() > freeItem.getY() - static_cast< int >( freeItem.getWidthY() ) )
                         {
                         # if  defined( DEBUG_SHADOWS )  &&  DEBUG_SHADOWS
                                 std::ostringstream positionOfFrom;
-                                positionOfFrom << "x=" << aboveItem->getX() << " y=" << aboveItem->getY() << " z=" << aboveItem->getZ() ;
+                                positionOfFrom << "x=" << aboveItem.getX() << " y=" << aboveItem.getY() << " z=" << aboveItem.getZ() ;
                                 std::ostringstream positionOfOn;
-                                positionOfOn << "x=" << freeItem->getX() << " y=" << freeItem->getY() << " z=" << freeItem->getZ() ;
+                                positionOfOn << "x=" << freeItem.getX() << " y=" << freeItem.getY() << " z=" << freeItem.getZ() ;
 
-                                std::cout << "casting shadow from " << aboveItem->whichKindOfItem() << " \"" << aboveItem->getUniqueName() << "\"" << " at " << positionOfFrom.str() <<
-                                        " on " << freeItem->whichKindOfItem() << " \"" << freeItem->getUniqueName() << "\"" << " at " << positionOfOn.str() << std::endl ;
+                                std::cout << "casting shadow from " << aboveItem.whichKindOfItem() << " \"" << aboveItem.getUniqueName() << "\"" << " at " << positionOfFrom.str() <<
+                                        " on " << freeItem.whichKindOfItem() << " \"" << freeItem.getUniqueName() << "\"" << " at " << positionOfOn.str() << std::endl ;
                         # endif
 
                                 ShadowCaster::castShadowOnItem (
                                         freeItem,
-                                        /* x */ ( ( aboveItem->getX() - aboveItem->getY() ) << 1 )
-                                                        + static_cast< int >( aboveItem->getWidthX() + aboveItem->getWidthY() )
-                                                        - ( static_cast< int >( aboveItem->getImageOfShadow()->getWidth() ) >> 1 ) - 1,
-                                        /* y */ aboveItem->getX() + aboveItem->getY() - freeItem->getZ() - freeItem->getHeight()
-                                                        + ( ( static_cast< int >( aboveItem->getWidthX() ) - static_cast< int >( aboveItem->getWidthY() )
-                                                                - static_cast< int >( aboveItem->getImageOfShadow()->getHeight() ) ) >> 1 ),
-                                        /* shadow */ aboveItem->getImageOfShadow(),
+                                        /* x */ ( ( aboveItem.getX() - aboveItem.getY() ) << 1 )
+                                                        + static_cast< int >( aboveItem.getWidthX() + aboveItem.getWidthY() )
+                                                        - ( static_cast< int >( aboveItem.getImageOfShadow()->getWidth() ) >> 1 ) - 1,
+                                        /* y */ aboveItem.getX() + aboveItem.getY() - freeItem.getZ() - freeItem.getHeight()
+                                                        + ( ( static_cast< int >( aboveItem.getWidthX() ) - static_cast< int >( aboveItem.getWidthY() )
+                                                                - static_cast< int >( aboveItem.getImageOfShadow()->getHeight() ) ) >> 1 ),
+                                        /* shadow */ aboveItem.getImageOfShadow(),
                                         /* shading */ room->getOpacityOfShadows(),
-                                        /* transparency */ freeItem->getTransparency()
+                                        /* transparency */ freeItem.getTransparency()
                                 );
                         }
                 }
         }
 }
 
-void Mediator::maskFreeItem( FreeItem* freeItem )
+void Mediator::maskFreeItem( FreeItem& freeItem )
 {
         // mask only with next items
         // for sorted list there’s no masking with previous items
 
         // look for item in list
-        std::list< FreeItem * >::iterator fi = std::find( freeItems.begin (), freeItems.end (), freeItem );
-        if ( fi == freeItems.end () ) /* there’s no such item in list */ return;
-
-        while ( ++fi != freeItems.end () ) // when there’s any next item
+        std::vector< FreeItemPtr >::const_iterator fi = room->freeItems.begin ();
+        while ( fi != room->freeItems.end () )
         {
-                FreeItem* itemToMaskWith = *fi ;
+                if ( freeItem.getUniqueName() == ( *fi )->getUniqueName() ) break ;
+                ++ fi ;
+        }
+        if ( fi == room->freeItems.end () ) /* there’s no such item in list */ return;
 
-                if ( freeItem->isPartOfDoor() && itemToMaskWith->isPartOfDoor() ) continue ;
+        while ( ++ fi != room->freeItems.end () ) // when there’s any next item
+        {
+                FreeItem& itemToMaskWith = *( *fi ) ;
 
-                if ( itemToMaskWith->getRawImage() && (
+                if ( freeItem.isPartOfDoor() && itemToMaskWith.isPartOfDoor() ) continue ;
+
+                if ( itemToMaskWith.getRawImage() && (
                         /* one of two is marked to mask and other of two isn’t transparent */
-                        ( ! freeItem->getWantMask().isFalse() && itemToMaskWith->getTransparency() == 0 ) ||
-                        ( ! itemToMaskWith->getWantMask().isFalse() && freeItem->getTransparency() == 0 ) )
+                        ( ! freeItem.getWantMask().isFalse() && itemToMaskWith.getTransparency() == 0 ) ||
+                        ( ! itemToMaskWith.getWantMask().isFalse() && freeItem.getTransparency() == 0 ) )
                 ) {
                         // do graphics overlap
-                        if ( ( itemToMaskWith->getOffsetX() < freeItem->getOffsetX() + static_cast< int >( freeItem->getRawImage()->getWidth() ) ) &&
-                                ( itemToMaskWith->getOffsetX() + static_cast< int >( itemToMaskWith->getRawImage()->getWidth() ) > freeItem->getOffsetX() ) &&
-                                ( itemToMaskWith->getOffsetY() < freeItem->getOffsetY() + static_cast< int >( freeItem->getRawImage()->getHeight() ) ) &&
-                                ( itemToMaskWith->getOffsetY() + static_cast< int >( itemToMaskWith->getRawImage()->getHeight() ) > freeItem->getOffsetY() ) )
+                        if ( ( itemToMaskWith.getOffsetX() < freeItem.getOffsetX() + static_cast< int >( freeItem.getRawImage()->getWidth() ) ) &&
+                                ( itemToMaskWith.getOffsetX() + static_cast< int >( itemToMaskWith.getRawImage()->getWidth() ) > freeItem.getOffsetX() ) &&
+                                ( itemToMaskWith.getOffsetY() < freeItem.getOffsetY() + static_cast< int >( freeItem.getRawImage()->getHeight() ) ) &&
+                                ( itemToMaskWith.getOffsetY() + static_cast< int >( itemToMaskWith.getRawImage()->getHeight() ) > freeItem.getOffsetY() ) )
                         {
                                 // freeItem is behind itemToMaskWith
-                                if ( ( freeItem->getX() + static_cast< int >( freeItem->getWidthX() ) <= itemToMaskWith->getX() ) ||
-                                        ( freeItem->getY() <= itemToMaskWith->getY() - static_cast< int >( itemToMaskWith->getWidthY() ) ) ||
-                                        ( freeItem->getZ() + static_cast< int >( freeItem->getHeight() ) <= itemToMaskWith->getZ() ) )
+                                if ( ( freeItem.getX() + static_cast< int >( freeItem.getWidthX() ) <= itemToMaskWith.getX() ) ||
+                                        ( freeItem.getY() <= itemToMaskWith.getY() - static_cast< int >( itemToMaskWith.getWidthY() ) ) ||
+                                        ( freeItem.getZ() + static_cast< int >( freeItem.getHeight() ) <= itemToMaskWith.getZ() ) )
                                 {
                                 # if  defined( DEBUG_MASKS )  &&  DEBUG_MASKS
                                         std::ostringstream positionOfItemBehind;
-                                        positionOfItemBehind << "x=" << freeItem->getX() << " y=" << freeItem->getY() << " z=" << freeItem->getZ() ;
+                                        positionOfItemBehind << "x=" << freeItem.getX() << " y=" << freeItem.getY() << " z=" << freeItem.getZ() ;
                                         std::ostringstream positionOfItem;
-                                        positionOfItem << "x=" << itemToMaskWith->getX() << " y=" << itemToMaskWith->getY() << " z=" << itemToMaskWith->getZ() ;
+                                        positionOfItem << "x=" << itemToMaskWith.getX() << " y=" << itemToMaskWith.getY() << " z=" << itemToMaskWith.getZ() ;
 
-                                        std::cout << "masking \"" << freeItem->getUniqueName() << "\" at " << positionOfItemBehind.str() <<
-                                                        " behind \"" << itemToMaskWith->getUniqueName() << "\" at " << positionOfItem.str() << std::endl ;
+                                        std::cout << "masking \"" << freeItem.getUniqueName() << "\" at " << positionOfItemBehind.str() <<
+                                                        " behind \"" << itemToMaskWith.getUniqueName() << "\" at " << positionOfItem.str() << std::endl ;
                                 # endif
 
-                                        FreeItem::maskItemBehindItem( freeItem, itemToMaskWith );
+                                        Masker::maskFreeItemBehindItem( freeItem, itemToMaskWith );
                                 }
                                 // itemToMaskWith is behind freeItem
                                 else
                                 {
                                 # if  defined( DEBUG_MASKS )  &&  DEBUG_MASKS
                                         std::ostringstream positionOfItemBehind;
-                                        positionOfItemBehind << "x=" << itemToMaskWith->getX() << " y=" << itemToMaskWith->getY() << " z=" << itemToMaskWith->getZ() ;
+                                        positionOfItemBehind << "x=" << itemToMaskWith.getX() << " y=" << itemToMaskWith.getY() << " z=" << itemToMaskWith.getZ() ;
                                         std::ostringstream positionOfItem;
-                                        positionOfItem << "x=" << freeItem->getX() << " y=" << freeItem->getY() << " z=" << freeItem->getZ() ;
+                                        positionOfItem << "x=" << freeItem.getX() << " y=" << freeItem.getY() << " z=" << freeItem.getZ() ;
 
-                                        std::cout << "masking \"" << itemToMaskWith->getUniqueName() << "\" at " << positionOfItemBehind.str() <<
-                                                        " behind \"" << freeItem->getUniqueName() << "\" at " << positionOfItem.str() << std::endl ;
+                                        std::cout << "masking \"" << itemToMaskWith.getUniqueName() << "\" at " << positionOfItemBehind.str() <<
+                                                        " behind \"" << freeItem.getUniqueName() << "\" at " << positionOfItem.str() << std::endl ;
                                 # endif
 
-                                        FreeItem::maskItemBehindItem( itemToMaskWith, freeItem );
+                                        Masker::maskFreeItemBehindItem( itemToMaskWith, freeItem );
                                 }
                         }
                 }
         }
 
-        if ( ! freeItem->getWantMask().isFalse() )
+        if ( ! freeItem.getWantMask().isFalse() )
         {
-                int xStart = freeItem->getX() / room->getSizeOfOneTile();
-                int xEnd = ( ( freeItem->getX() + freeItem->getWidthX() - 1 ) / room->getSizeOfOneTile() ) + 1;
-                int yStart = ( freeItem->getY() / room->getSizeOfOneTile() ) + 1;
-                int yEnd = ( freeItem->getY() - freeItem->getWidthY() + 1 ) / room ->getSizeOfOneTile();
+                int xStart = freeItem.getX() / room->getSizeOfOneTile();
+                int xEnd = ( ( freeItem.getX() + freeItem.getWidthX() - 1 ) / room->getSizeOfOneTile() ) + 1;
+                int yStart = ( freeItem.getY() / room->getSizeOfOneTile() ) + 1;
+                int yEnd = ( freeItem.getY() - freeItem.getWidthY() + 1 ) / room ->getSizeOfOneTile();
 
                 do
                 {
@@ -710,34 +706,34 @@ void Mediator::maskFreeItem( FreeItem* freeItem )
                                 int column = room->getTilesX() * ( yStart + i ) + xStart + i;
 
                                 // proceed with grid items
-                                for ( std::list< GridItem * >::iterator g = gridItems[ column ].begin (); g != gridItems[ column ].end (); ++g )
+                                for ( std::vector< GridItemPtr >::const_iterator g = room->gridItems[ column ].begin (); g != room->gridItems[ column ].end (); ++ g )
                                 {
-                                        GridItem* gridItem = *g ;
+                                        const GridItem& gridItem = *( *g ) ;
 
-                                        if ( gridItem->getRawImage() != nilPointer )
+                                        if ( gridItem.getRawImage() != nilPointer )
                                         {
                                                 // see if graphics overlap
-                                                if ( ( gridItem->getOffsetX() < freeItem->getOffsetX() + static_cast< int >( freeItem->getRawImage()->getWidth() ) ) &&
-                                                        ( gridItem->getOffsetX() + static_cast< int >( gridItem->getRawImage()->getWidth() ) > freeItem->getOffsetX() ) &&
-                                                        ( gridItem->getOffsetY() < freeItem->getOffsetY() + static_cast< int >( freeItem->getRawImage()->getHeight() ) ) &&
-                                                        ( gridItem->getOffsetY() + static_cast< int >( gridItem->getRawImage()->getHeight() ) > freeItem->getOffsetY() ) )
+                                                if ( ( gridItem.getOffsetX() < freeItem.getOffsetX() + static_cast< int >( freeItem.getRawImage()->getWidth() ) ) &&
+                                                        ( gridItem.getOffsetX() + static_cast< int >( gridItem.getRawImage()->getWidth() ) > freeItem.getOffsetX() ) &&
+                                                        ( gridItem.getOffsetY() < freeItem.getOffsetY() + static_cast< int >( freeItem.getRawImage()->getHeight() ) ) &&
+                                                        ( gridItem.getOffsetY() + static_cast< int >( gridItem.getRawImage()->getHeight() ) > freeItem.getOffsetY() ) )
                                                 {
                                                         // if free item is behind grid item
-                                                        if ( ( freeItem->getX() + static_cast< int >( freeItem->getWidthX() ) <= static_cast< int >( ( xStart + i ) * room->getSizeOfOneTile() ) ) ||
-                                                                ( freeItem->getY() <= static_cast< int >( ( yStart + i ) * room->getSizeOfOneTile() ) - 1 ) ||
-                                                                ( freeItem->getZ() + static_cast< int >( freeItem->getHeight() ) <= gridItem->getZ() ) )
+                                                        if ( ( freeItem.getX() + static_cast< int >( freeItem.getWidthX() ) <= static_cast< int >( ( xStart + i ) * room->getSizeOfOneTile() ) ) ||
+                                                                ( freeItem.getY() <= static_cast< int >( ( yStart + i ) * room->getSizeOfOneTile() ) - 1 ) ||
+                                                                ( freeItem.getZ() + static_cast< int >( freeItem.getHeight() ) <= gridItem.getZ() ) )
                                                         {
                                                         # if  defined( DEBUG_MASKS )  &&  DEBUG_MASKS
                                                                 std::ostringstream positionOfItemBehind;
-                                                                positionOfItemBehind << "x=" << freeItem->getX() << " y=" << freeItem->getY() << " z=" << freeItem->getZ() ;
+                                                                positionOfItemBehind << "x=" << freeItem.getX() << " y=" << freeItem.getY() << " z=" << freeItem.getZ() ;
                                                                 std::ostringstream positionOfItem;
-                                                                positionOfItem << "x=" << gridItem->getX() << " y=" << gridItem->getY() << " z=" << gridItem->getZ() ;
+                                                                positionOfItem << "x=" << gridItem.getX() << " y=" << gridItem.getY() << " z=" << gridItem.getZ() ;
 
-                                                                std::cout << "masking \"" << freeItem->getUniqueName() << "\" at " << positionOfItemBehind.str() <<
-                                                                                " behind \"" << gridItem->getUniqueName() << "\" at " << positionOfItem.str() << std::endl ;
+                                                                std::cout << "masking \"" << freeItem.getUniqueName() << "\" at " << positionOfItemBehind.str() <<
+                                                                                " behind \"" << gridItem.getUniqueName() << "\" at " << positionOfItem.str() << std::endl ;
                                                         # endif
 
-                                                                FreeItem::maskItemBehindItem( freeItem, gridItem );
+                                                                Masker::maskFreeItemBehindItem( freeItem, gridItem );
                                                         }
                                                 }
                                         }
@@ -759,125 +755,103 @@ void Mediator::maskFreeItem( FreeItem* freeItem )
         }
 }
 
-Item* Mediator::findItemByUniqueName( const std::string& uniqueName )
+ItemPtr Mediator::findItemByUniqueName( const std::string& uniqueName )
 {
-        Item* item = nilPointer;
-
         // first look for free item
-        std::list< FreeItem * >::iterator f = std::find_if( freeItems.begin (), freeItems.end (), std::bind2nd( EqualUniqueNameOfItem (), uniqueName ) );
-
-        if ( f != freeItems.end () )
+        for ( std::vector< FreeItemPtr >::iterator f = room->freeItems.begin (); f != room->freeItems.end (); ++ f )
         {
-                item = dynamic_cast< Item * >( *f );
+                if ( *f != nilPointer && ( *f )->getUniqueName() == uniqueName )
+                {
+                        return ItemPtr( *f ) ;
+                }
         }
 
         // then look for grid item
-        if ( item == nilPointer )
+        for ( unsigned int column = 0; column < room->gridItems.size(); ++ column )
         {
-                std::list< GridItem * >::iterator g;
-
-                for ( unsigned int column = 0; column < gridItems.size(); column ++ )
+                for ( std::vector< GridItemPtr >::iterator g = room->gridItems[ column ].begin (); g != room->gridItems[ column ].end (); ++ g )
                 {
-                        g = std::find_if( gridItems[ column ].begin (), gridItems[ column ].end (), std::bind2nd( EqualUniqueNameOfItem (), uniqueName ) );
-
-                        if ( g != gridItems[ column ].end() )
+                        if ( *g != nilPointer && ( *g )->getUniqueName() == uniqueName )
                         {
-                                item = dynamic_cast< Item * >( *g );
-                                break;
+                                return ItemPtr( *g ) ;
                         }
                 }
         }
 
-        return item;
+        return ItemPtr() ;
 }
 
-Item* Mediator::findItemByLabel( const std::string& label )
+ItemPtr Mediator::findItemByLabel( const std::string& label )
 {
-        Item* item = nilPointer;
-
         // look for free item
-        std::list< FreeItem * >::iterator f = std::find_if( freeItems.begin (), freeItems.end (), std::bind2nd( EqualLabelOfItem (), label ) );
-
-        if ( f != freeItems.end () )
+        for ( std::vector< FreeItemPtr >::iterator f = room->freeItems.begin (); f != room->freeItems.end (); ++ f )
         {
-                item = dynamic_cast< Item * >( *f );
+                if ( *f != nilPointer && ( *f )->getLabel() == label )
+                {
+                        return ItemPtr( *f ) ;
+                }
         }
 
         // look for grid item
-        if ( item == nilPointer )
+        for ( unsigned int column = 0; column < room->gridItems.size(); ++ column )
         {
-                std::list< GridItem * >::iterator g;
-
-                for ( unsigned int column = 0; column < gridItems.size(); column ++ )
+                for ( std::vector< GridItemPtr >::iterator g = room->gridItems[ column ].begin (); g != room->gridItems[ column ].end (); ++ g )
                 {
-                        g = std::find_if( gridItems[ column ].begin (), gridItems[ column ].end (), std::bind2nd( EqualLabelOfItem (), label ) );
-
-                        if ( g != gridItems[ column ].end () )
+                        if ( *g != nilPointer && ( *g )->getLabel() == label )
                         {
-                                item = dynamic_cast< Item * >( *g );
-                                break;
+                                return ItemPtr( *g ) ;
                         }
                 }
         }
 
-        return item;
+        return ItemPtr() ;
 }
 
-Item* Mediator::findItemByBehavior( const std::string& behavior )
+ItemPtr Mediator::findItemByBehavior( const std::string& behavior )
 {
-        Item* item = nilPointer;
-
         // look for free item
-        std::list< FreeItem * >::iterator f = std::find_if( freeItems.begin (), freeItems.end (), std::bind2nd( EqualBehaviorOfItem (), behavior ) );
-
-        if ( f != freeItems.end () )
+        for ( std::vector< FreeItemPtr >::iterator f = room->freeItems.begin (); f != room->freeItems.end (); ++ f )
         {
-                item = dynamic_cast< Item * >( *f );
+                if ( *f != nilPointer && ( *f )->getBehavior() != nilPointer && ( *f )->getBehavior()->getNameOfBehavior () == behavior )
+                {
+                        return ItemPtr( *f ) ;
+                }
         }
 
         // look for grid item
-        if ( item == nilPointer )
+        for ( unsigned int column = 0; column < room->gridItems.size(); ++ column )
         {
-                std::list< GridItem * >::iterator g;
-
-                for ( unsigned int column = 0; column < gridItems.size(); column ++ )
+                for ( std::vector< GridItemPtr >::iterator g = room->gridItems[ column ].begin (); g != room->gridItems[ column ].end (); ++ g )
                 {
-                        g = std::find_if( gridItems[ column ].begin (), gridItems[ column ].end (), std::bind2nd( EqualBehaviorOfItem (), behavior ) );
-
-                        if ( g != gridItems[ column ].end () )
+                        if ( *g != nilPointer && ( *g )->getBehavior() != nilPointer && ( *g )->getBehavior()->getNameOfBehavior () == behavior )
                         {
-                                item = dynamic_cast< Item * >( *g );
-                                break;
+                                return ItemPtr( *g ) ;
                         }
                 }
         }
 
-        return item;
+        return ItemPtr() ;
 }
 
-bool Mediator::findCollisionWithItem( Item * item )
+bool Mediator::lookForCollisionsOf( const std::string & uniqueNameOfItem )
 {
+        const ItemPtr item = findItemByUniqueName( uniqueNameOfItem ) ;
+        if ( item == nilPointer ) return false ;
+
         bool collisionFound = false;
 
-        // for grid item or free item with ability to detect collisions
-        if ( item->whichKindOfItem() == "grid item" || ( dynamic_cast< FreeItem * >( item ) && dynamic_cast< FreeItem * >( item )->isCollisionDetector() ) )
+        if ( item->isCollisionDetector() )
         {
                 // traverse list of free items looking for collisions
-                for ( std::list< FreeItem * >::iterator f = freeItems.begin (); f != freeItems.end (); ++ f )
+                for ( std::vector< FreeItemPtr >::iterator f = room->freeItems.begin (); f != room->freeItems.end (); ++ f )
                 {
-                        FreeItem* freeItem = *f ;
+                        const FreeItem& freeItem = *( *f ) ;
 
-                        if ( freeItem->getUniqueName() != item->getUniqueName() && freeItem->isCollisionDetector() )
+                        if ( freeItem.getUniqueName() != item->getUniqueName() && freeItem.isCollisionDetector() )
                         {
-                                // look for intersection
-                                if ( ( freeItem->getX() + static_cast< int >( freeItem->getWidthX() ) > item->getX() ) &&
-                                                ( freeItem->getX() < item->getX() + static_cast< int >( item->getWidthX() ) ) &&
-                                        ( freeItem->getY() > item->getY() - static_cast< int >( item->getWidthX() ) ) &&
-                                                ( freeItem->getY() - static_cast< int >( freeItem->getWidthY() ) < item->getY() ) &&
-                                        ( freeItem->getZ() + static_cast< int >( freeItem->getHeight() ) > item->getZ() ) &&
-                                                ( freeItem->getZ() < item->getZ() + static_cast< int >( item->getHeight() ) ) )
+                                if ( item->intersectsWith( freeItem ) )
                                 {
-                                        collisions.push_back( freeItem->getUniqueName() );
+                                        collisions.push_back( freeItem.getUniqueName() );
                                         collisionFound = true;
                                 }
                         }
@@ -886,31 +860,25 @@ bool Mediator::findCollisionWithItem( Item * item )
                 // for grid item
                 if ( item->whichKindOfItem() == "grid item" )
                 {
-                        int column = dynamic_cast< GridItem * >( item )->getColumnOfGrid() ;
+                        int column = dynamic_cast< GridItem& >( *item ).getColumnOfGrid() ;
 
                         // scroll through lists of grid items looking for collisions
-                        for ( std::list< GridItem * >::iterator g = this->gridItems[ column ].begin (); g != this->gridItems[ column ].end (); ++ g )
+                        for ( std::vector< GridItemPtr >::iterator g = room->gridItems[ column ].begin (); g != room->gridItems[ column ].end (); ++ g )
                         {
-                                GridItem* gridItem = *g ;
+                                const GridItem& gridItem = *( *g ) ;
 
-                                if ( gridItem->getUniqueName() != item->getUniqueName() )
+                                if ( gridItem.getUniqueName() != item->getUniqueName() )
                                 {
-                                        // look for intersection
-                                        if ( ( gridItem->getX() + static_cast< int >( gridItem->getWidthX() ) > item->getX() ) &&
-                                                        ( gridItem->getX() < item->getX() + static_cast< int >( item->getWidthX() ) ) &&
-                                                ( gridItem->getY() > item->getY() - static_cast< int >( item->getWidthX() ) ) &&
-                                                        ( gridItem->getY() - static_cast< int >( gridItem->getWidthY() ) < item->getY() ) &&
-                                                ( gridItem->getZ() + static_cast< int >( gridItem->getHeight() ) > item->getZ() ) &&
-                                                        ( gridItem->getZ() < item->getZ() + static_cast< int >( item->getHeight() ) ) )
+                                        if ( item->intersectsWith( gridItem ) )
                                         {
-                                                collisions.push_back( gridItem->getUniqueName() );
+                                                collisions.push_back( gridItem.getUniqueName() );
                                                 collisionFound = true;
                                         }
                                 }
                         }
                 }
                 // for free item
-                else if ( dynamic_cast< FreeItem * >( item ) )
+                else if ( item->whichKindOfItem() == "free item" || item->whichKindOfItem() == "player item" )
                 {
                         int xStart = item->getX() / room->tileSize;
                         int xEnd = ( item->getX() + item->getWidthX() - 1 ) / room->tileSize + 1;
@@ -923,20 +891,21 @@ bool Mediator::findCollisionWithItem( Item * item )
                         if ( yStart < 0 ) yStart = 0;
                         if ( yEnd > static_cast< int >( room->getTilesY () ) ) yEnd = room->getTilesY();
 
-                        // see collision only in range of columns intersecting with item
+                        // look for collisions in range of columns where item is
                         for ( int i = xStart; i < xEnd; i++ )
                         {
                                 for ( int j = yStart; j < yEnd; j++ )
                                 {
-                                        for ( std::list< GridItem * >::iterator g = this->gridItems[ room->getTilesX() * j + i ].begin ();
-                                                g != this->gridItems[ room->getTilesX() * j + i ].end (); ++g )
-                                        {
-                                                GridItem* gridItem = static_cast< GridItem * >( *g );
+                                        std::vector< GridItemPtr > items = room->gridItems[ room->getTilesX() * j + i ] ;
 
-                                                if ( ( gridItem->getZ() + static_cast< int >( gridItem->getHeight() ) > item->getZ() ) &&
-                                                                ( gridItem->getZ() < item->getZ() + static_cast< int >( item->getHeight() ) ) )
+                                        for ( std::vector< GridItemPtr >::const_iterator g = items.begin (); g != items.end (); ++g )
+                                        {
+                                                const GridItem& gridItem = *( *g ) ;
+
+                                                if ( ( item->getZ() < gridItem.getZ() + static_cast< int >( gridItem.getHeight() ) ) &&
+                                                        ( gridItem.getZ() < item->getZ() + static_cast< int >( item->getHeight() ) ) )
                                                 {
-                                                        collisions.push_back( gridItem->getUniqueName() );
+                                                        collisions.push_back( gridItem.getUniqueName() );
                                                         collisionFound = true;
                                                 }
                                         }
@@ -948,67 +917,67 @@ bool Mediator::findCollisionWithItem( Item * item )
         return collisionFound;
 }
 
-int Mediator::findHighestZ( Item * item )
+int Mediator::findHighestZ( const Item& item )
 {
         int z = 0 ;
 
         // go thru list of free items looking for highest in column
-        for ( std::list< FreeItem * >::iterator f = freeItems.begin (); f != freeItems.end (); ++f )
+        for ( std::vector< FreeItemPtr >::const_iterator f = room->freeItems.begin (); f != room->freeItems.end (); ++f )
         {
-                FreeItem* freeItem = *f ;
+                const FreeItem& freeItem = *( *f ) ;
 
-                if ( freeItem->getUniqueName() != item->getUniqueName() && freeItem->isCollisionDetector() )
+                if ( freeItem.getUniqueName() != item.getUniqueName() && freeItem.isCollisionDetector() )
                 {
                         // look for intersection on X and Y with higher Z
-                        if ( ( freeItem->getX() + static_cast< int >( freeItem->getWidthX() ) > item->getX() ) &&
-                                        ( freeItem->getX() < item->getX() + static_cast< int >( item->getWidthX() ) ) &&
-                                ( freeItem->getY() > item->getY() - static_cast< int >( item->getWidthX() ) ) &&
-                                        ( freeItem->getY() - static_cast< int >( freeItem->getWidthY() ) < item->getY() ) &&
-                                ( freeItem->getZ() + static_cast< int >( freeItem->getHeight() ) > item->getZ() ) )
+                        if ( ( freeItem.getX() + static_cast< int >( freeItem.getWidthX() ) > item.getX() ) &&
+                                        ( freeItem.getX() < item.getX() + static_cast< int >( item.getWidthX() ) ) &&
+                                ( freeItem.getY() > item.getY() - static_cast< int >( item.getWidthX() ) ) &&
+                                        ( freeItem.getY() - static_cast< int >( freeItem.getWidthY() ) < item.getY() ) &&
+                                ( freeItem.getZ() + static_cast< int >( freeItem.getHeight() ) > item.getZ() ) )
                         {
-                                z = freeItem->getZ() + static_cast< int >( freeItem->getHeight() );
+                                z = freeItem.getZ() + static_cast< int >( freeItem.getHeight() );
                         }
                 }
         }
 
-        if ( item->whichKindOfItem() == "grid item" )
+        if ( item.whichKindOfItem() == "grid item" )
         {
-                int column = dynamic_cast< GridItem * >( item )->getColumnOfGrid ();
+                int column = dynamic_cast< const GridItem& >( item ).getColumnOfGrid ();
 
                 // look for highest Z in the column
-                for ( std::list< GridItem * >::iterator g = this->gridItems[ column ].begin (); g != this->gridItems[ column ].end (); ++g )
+                for ( std::vector< GridItemPtr >::const_iterator g = room->gridItems[ column ].begin (); g != room->gridItems[ column ].end (); ++g )
                 {
-                        GridItem* gridItem = *g ;
+                        const GridItem& gridItem = *( *g ) ;
 
-                        if ( gridItem->getZ() + static_cast< int >( gridItem->getHeight() ) > z )
+                        if ( gridItem.getZ() + static_cast< int >( gridItem.getHeight() ) > z )
                         {
-                                z = gridItem->getZ() + gridItem->getHeight();
+                                z = gridItem.getZ() + gridItem.getHeight();
                         }
                 }
         }
-        else if ( item->whichKindOfItem() == "free item" || item->whichKindOfItem() == "player item" )
+        else if ( item.whichKindOfItem() == "free item" || item.whichKindOfItem() == "player item" )
         {
-                FreeItem* freeItem = dynamic_cast< FreeItem * >( item );
+                const FreeItem& freeItem = dynamic_cast< const FreeItem& >( item );
 
                 // get columns where item is
-                int xStart = freeItem->getX() / room->getSizeOfOneTile();
-                int xEnd = ( freeItem->getX() + freeItem->getWidthX() - 1 ) / room->getSizeOfOneTile() + 1;
-                int yStart = ( freeItem->getY() - freeItem->getWidthY() + 1 ) / room->getSizeOfOneTile();
-                int yEnd = freeItem->getY() / room->getSizeOfOneTile() + 1;
+                int xStart = freeItem.getX() / room->getSizeOfOneTile();
+                int xEnd = ( freeItem.getX() + freeItem.getWidthX() - 1 ) / room->getSizeOfOneTile() + 1;
+                int yStart = ( freeItem.getY() - freeItem.getWidthY() + 1 ) / room->getSizeOfOneTile();
+                int yEnd = freeItem.getY() / room->getSizeOfOneTile() + 1;
 
-                // walk thru items in columns met by item
+                // walk thru items in columns where item is
                 for ( int i = xStart; i < xEnd; i++ )
                 {
                         for ( int j = yStart; j < yEnd; j++ )
                         {
                                 int column = room->getTilesX() * j + i ;
-                                for ( std::list< GridItem * >::iterator g = gridItems[ column ].begin (); g != gridItems[ column ].end (); ++g )
+                                for ( std::vector< GridItemPtr >::const_iterator g = room->gridItems[ column ].begin (); g != room->gridItems[ column ].end (); ++g )
                                 {
-                                        GridItem* gridItem = *g ;
+                                        const GridItem& gridItem = *( *g ) ;
 
-                                        if ( gridItem->getZ() + static_cast< int >( gridItem->getHeight() ) > z )
+                                        if ( gridItem.getZ() + static_cast< int >( gridItem.getHeight() ) > z )
                                         {
-                                                z = gridItem->getZ() + gridItem->getHeight();
+                                                z = gridItem.getZ() + gridItem.getHeight();
                                         }
                                 }
                         }
@@ -1018,58 +987,43 @@ int Mediator::findHighestZ( Item * item )
         return z;
 }
 
-void Mediator::addGridItemToList( GridItem* gridItem )
-{
-        lockGridItemMutex ();
-
-        int column = gridItem->getColumnOfGrid();
-
-        gridItems[ column ].push_back( gridItem );
-        gridItems[ column ].sort( sortColumnOfGridItems );
-
-        unlockGridItemMutex ();
-}
-
-void Mediator::addFreeItemToList( FreeItem* freeItem )
-{
-        freeItems.push_back( freeItem );
-        freeItems.sort( sortListOfFreeItems );
-}
-
-void Mediator::removeGridItemFromList( GridItem* gridItem )
-{
-        gridItems[ gridItem->getColumnOfGrid() ].remove( gridItem );
-}
-
-void Mediator::removeFreeItemFromList( FreeItem* freeItem )
-{
-        freeItems.remove( freeItem );
-}
-
 void Mediator::pushCollision( const std::string& name )
 {
-        collisions.push_back( name );
+# if defined( DEBUG_COLLISIONS ) && DEBUG_COLLISIONS
+        std::cout << ")( pushing collision with \"" << name << "\"" << std::endl ;
+# endif
+
+        lockCollisionsMutex ();
+        collisions.push_front( name );
+        unlockCollisionsMutex ();
 }
 
 std::string Mediator::popCollision()
 {
-        std::string name = "";
+        std::string name ;
+
+        lockCollisionsMutex ();
 
         if ( ! collisions.empty() )
         {
-                std::vector< std::string >::iterator it = collisions.begin ();
-                name = *it ;
-                it = collisions.erase( it );
+                name = collisions.back ();
+                collisions.pop_back( );
         }
 
-        return name;
+        unlockCollisionsMutex ();
+
+# if defined( DEBUG_COLLISIONS ) && DEBUG_COLLISIONS
+        std::cout << ") ( popped collision with \"" << name << "\"" << std::endl ;
+# endif
+
+        return name ;
 }
 
-Item* Mediator::collisionWithByLabel( const std::string& label )
+ItemPtr Mediator::collisionWithByLabel( const std::string& label )
 {
         for ( unsigned int i = 0; i < collisions.size(); i++ )
         {
-                Item* item = findItemByUniqueName( collisions[ i ] );
+                ItemPtr item = findItemByUniqueName( collisions[ i ] );
 
                 if ( item != nilPointer && item->getLabel() == label )
                 {
@@ -1077,14 +1031,14 @@ Item* Mediator::collisionWithByLabel( const std::string& label )
                 }
         }
 
-        return nilPointer;
+        return ItemPtr ();
 }
 
-Item* Mediator::collisionWithByBehavior( const std::string& behavior )
+ItemPtr Mediator::collisionWithByBehavior( const std::string& behavior )
 {
         for ( unsigned int i = 0; i < collisions.size(); i++ )
         {
-                Item* item = findItemByUniqueName( collisions[ i ] );
+                ItemPtr item = findItemByUniqueName( collisions[ i ] );
 
                 if ( item != nilPointer && item->getBehavior() != nilPointer &&
                         item->getBehavior()->getNameOfBehavior () == behavior )
@@ -1093,14 +1047,14 @@ Item* Mediator::collisionWithByBehavior( const std::string& behavior )
                 }
         }
 
-        return nilPointer;
+        return ItemPtr ();
 }
 
-Item* Mediator::collisionWithBadBoy()
+ItemPtr Mediator::collisionWithBadBoy()
 {
         for ( unsigned int i = 0; i < collisions.size(); i++ )
         {
-                Item* item = findItemByUniqueName( collisions[ i ] );
+                ItemPtr item = findItemByUniqueName( collisions[ i ] );
 
                 if ( item != nilPointer && item->getBehavior() != nilPointer && item->isMortal()
                         && std::find( badBoys.begin(), badBoys.end(), item->getBehavior()->getNameOfBehavior () ) != badBoys.end() )
@@ -1109,17 +1063,17 @@ Item* Mediator::collisionWithBadBoy()
                 }
         }
 
-        return nilPointer;
+        return ItemPtr ();
 }
 
-void Mediator::setActiveCharacter ( PlayerItem * character )
+void Mediator::setActiveCharacter ( const PlayerItemPtr& character )
 {
         if ( this->activeCharacter != character )
         {
                 this->activeCharacter = character ;
 
                 if ( character != nilPointer )
-                        this->labelOfActiveCharacter = character->getLabel ();
+                        this->labelOfActiveCharacter = character->getOriginalLabel ();
                 else
                         this->labelOfActiveCharacter.clear();
 
@@ -1127,37 +1081,40 @@ void Mediator::setActiveCharacter ( PlayerItem * character )
         }
 }
 
-bool Mediator::pickNextCharacter( ItemDataManager* itemDataManager )
+bool Mediator::pickNextCharacter()
 {
-        PlayerItem* previousCharacter = activeCharacter;
+        PlayerItemPtr previousCharacter = activeCharacter;
 
         // search for next player
-        std::list< PlayerItem * > playersInRoom = room->getPlayersYetInRoom();
-        std::list< PlayerItem * >::iterator i = std::find_if(
-                playersInRoom.begin (), playersInRoom.end (),
-                std::bind2nd( EqualLabelOfItem(), activeCharacter->getLabel() ) );
+        std::vector< PlayerItemPtr > playersInRoom = room->getPlayersYetInRoom();
+        std::vector< PlayerItemPtr >::iterator i = playersInRoom.begin () ;
+        while ( i != playersInRoom.end () )
+        {
+                if ( *i != nilPointer && ( *i )->getOriginalLabel() == activeCharacter->getOriginalLabel() ) break;
+                ++ i ;
+        }
         ++ i;
         setActiveCharacter( i != playersInRoom.end () ? *i : *playersInRoom.begin () );
 
         // see if players may join here
-        if ( previousCharacter != activeCharacter && itemDataManager != nilPointer )
+        if ( previousCharacter->getOriginalLabel() != activeCharacter->getOriginalLabel() )
         {
                 const int delta = room->getSizeOfOneTile() >> 1;
 
-                if ( ( previousCharacter->getLabel() == "head" && activeCharacter->getLabel() == "heels" ) ||
-                                ( previousCharacter->getLabel() == "heels" && activeCharacter->getLabel() == "head" ) )
+                if ( ( previousCharacter->getOriginalLabel() == "head" && activeCharacter->getOriginalLabel() == "heels" ) ||
+                                ( previousCharacter->getOriginalLabel() == "heels" && activeCharacter->getOriginalLabel() == "head" ) )
                 {
                         if ( ( previousCharacter->getX() + delta >= activeCharacter->getX() )
                                 && ( previousCharacter->getX() + previousCharacter->getWidthX() - delta <= activeCharacter->getX() + activeCharacter->getWidthX() )
                                 && ( previousCharacter->getY() + delta >= activeCharacter->getY() )
                                 && ( previousCharacter->getY() + previousCharacter->getWidthY() - delta <= activeCharacter->getY() + activeCharacter->getWidthY() )
-                                && ( ( previousCharacter->getLabel() == "head" && previousCharacter->getZ() - LayerHeight == activeCharacter->getZ() ) ||
-                                        ( previousCharacter->getLabel() == "heels" && activeCharacter->getZ() - LayerHeight == previousCharacter->getZ() ) ) )
+                                && ( ( previousCharacter->getOriginalLabel() == "head" && previousCharacter->getZ() - LayerHeight == activeCharacter->getZ() ) ||
+                                        ( previousCharacter->getOriginalLabel() == "heels" && activeCharacter->getZ() - LayerHeight == previousCharacter->getZ() ) ) )
                         {
-                                lockFreeItemMutex ();
+                                lockFreeItemsMutex ();
 
-                                PlayerItem* reference = previousCharacter->getLabel() == "heels" ? previousCharacter : activeCharacter;
-                                this->lastActiveCharacterBeforeJoining = previousCharacter->getLabel() == "heels" ? "heels" : "head";
+                                PlayerItemPtr reference = previousCharacter->getOriginalLabel() == "heels" ? previousCharacter : activeCharacter;
+                                this->lastActiveCharacterBeforeJoining = previousCharacter->getOriginalLabel() == "heels" ? "heels" : "head";
 
                                 int x = reference->getX();
                                 int y = reference->getY();
@@ -1165,13 +1122,13 @@ bool Mediator::pickNextCharacter( ItemDataManager* itemDataManager )
                                 Way orientation = reference->getOrientation();
 
                                 // item that Heels may have in handbag
-                                PlayerItem* heels = reference;
-                                ItemData* dataOfItemInBag = heels->getTakenItemData ();
+                                PlayerItemPtr heels = reference;
+                                const ItemData* dataOfItemInBag = heels->getTakenItemData ();
                                 std::string behaviorOfItemInBag = heels->getTakenItemBehavior( );
 
                                 // remove simple players
-                                this->room->removePlayerFromRoom( previousCharacter, false );
-                                this->room->removePlayerFromRoom( activeCharacter, false );
+                                this->room->removePlayerFromRoom( *previousCharacter, false );
+                                this->room->removePlayerFromRoom( *activeCharacter, false );
 
                                 // create composite player
                                 setActiveCharacter( RoomBuilder::createPlayerInRoom( this->room, "headoverheels", false, x, y, z, orientation ) );
@@ -1180,60 +1137,60 @@ bool Mediator::pickNextCharacter( ItemDataManager* itemDataManager )
                                 if ( dataOfItemInBag != nilPointer )
                                 {
                                         std::cout << "transfer item \"" << dataOfItemInBag->getLabel() << "\" to player \"" << activeCharacter->getLabel() << "\"" << std::endl ;
-                                        activeCharacter->placeItemInBag( dataOfItemInBag, behaviorOfItemInBag );
+                                        activeCharacter->placeItemInBag( dataOfItemInBag->getLabel(), behaviorOfItemInBag );
                                 }
 
-                                unlockFreeItemMutex ();
+                                unlockFreeItemsMutex ();
 
-                                std::cout << "join both characters into \"" << activeCharacter->getLabel() << "\""
+                                std::cout << "join both characters into \"" << activeCharacter->getOriginalLabel() << "\""
                                                 << " in room " << room->getNameOfFileWithDataAboutRoom() << std::endl ;
                                 return true;
                         }
                 }
         }
         // is it composite player
-        else if ( activeCharacter->getLabel() == "headoverheels" && itemDataManager != nilPointer )
+        else if ( activeCharacter->getOriginalLabel() == "headoverheels" )
         {
-                std::cout << "split \"" << activeCharacter->getLabel() << "\" in room " << room->getNameOfFileWithDataAboutRoom() << std::endl ;
+                std::cout << "split \"" << activeCharacter->getOriginalLabel() << "\" in room " << room->getNameOfFileWithDataAboutRoom() << std::endl ;
 
                 int x = activeCharacter->getX();
                 int y = activeCharacter->getY();
                 int z = activeCharacter->getZ();
                 Way orientation = activeCharacter->getOrientation();
 
-                lockFreeItemMutex ();
+                lockFreeItemsMutex ();
 
                 // get data of item in handbag
-                ItemData* dataOfItemInBag = activeCharacter->getTakenItemData ();
+                const ItemData* dataOfItemInBag = activeCharacter->getTakenItemData ();
                 std::string behaviorOfItemInBag = activeCharacter->getTakenItemBehavior( );
 
                 // remove composite player
-                this->room->removePlayerFromRoom( activeCharacter, false );
+                this->room->removePlayerFromRoom( *activeCharacter, false );
 
                 // create simple players
 
-                PlayerItem* heelsPlayer = RoomBuilder::createPlayerInRoom( this->room, "heels", false, x, y, z, orientation );
+                PlayerItemPtr heelsPlayer = RoomBuilder::createPlayerInRoom( this->room, "heels", false, x, y, z, orientation );
 
                 if ( dataOfItemInBag != nilPointer )
                 {
                         std::cout << "transfer item \"" << dataOfItemInBag->getLabel() << "\" to player \"" << heelsPlayer->getLabel() << "\"" << std::endl ;
-                        heelsPlayer->placeItemInBag( dataOfItemInBag, behaviorOfItemInBag );
+                        heelsPlayer->placeItemInBag( dataOfItemInBag->getLabel(), behaviorOfItemInBag );
                 }
 
-                PlayerItem* headPlayer = RoomBuilder::createPlayerInRoom( this->room, "head", false, x, y, z + LayerHeight, orientation );
+                PlayerItemPtr headPlayer = RoomBuilder::createPlayerInRoom( this->room, "head", false, x, y, z + LayerHeight, orientation );
 
                 setActiveCharacter( ( this->lastActiveCharacterBeforeJoining == "head" ) ? heelsPlayer : headPlayer );
-                previousCharacter = ( activeCharacter == headPlayer ) ? heelsPlayer : headPlayer;
+                previousCharacter = ( activeCharacter->getOriginalLabel() == "head" ) ? heelsPlayer : headPlayer;
 
-                unlockFreeItemMutex ();
+                unlockFreeItemsMutex ();
         }
 
-        if ( previousCharacter == activeCharacter )
+        if ( previousCharacter->getOriginalLabel() == activeCharacter->getOriginalLabel() )
         {
                 return false;
         }
 
-        std::cout << "swop character \"" << previousCharacter->getLabel() << "\" to character \"" << activeCharacter->getLabel() << "\""
+        std::cout << "swop character \"" << previousCharacter->getOriginalLabel() << "\" to character \"" << activeCharacter->getOriginalLabel() << "\""
                         << " in room " << room->getNameOfFileWithDataAboutRoom() << std::endl ;
         return true;
 }
@@ -1243,18 +1200,18 @@ void Mediator::toggleSwitchInRoom ()
         this->switchInRoomIsOn = ! this->switchInRoomIsOn ;
 
         // look for volatile and mortal free items to freeze them
-        for ( std::list< FreeItem* >::iterator f = freeItems.begin (); f != freeItems.end (); ++f )
+        for ( std::vector< FreeItemPtr >::const_iterator f = room->freeItems.begin (); f != room->freeItems.end (); ++f )
         {
-                FreeItem* freeItem = *f;
+                const FreeItem& freeItem = *( *f ) ;
 
-                if ( freeItem != nilPointer && freeItem->getBehavior() != nilPointer )
+                if ( freeItem.getBehavior() != nilPointer )
                 {
-                        std::string behavior = freeItem->getBehavior()->getNameOfBehavior ();
+                        std::string behavior = freeItem.getBehavior()->getNameOfBehavior ();
 
                         if ( behavior == "behavior of disappearance on touch" || behavior == "behavior of disappearance on jump into" ||
                                         std::find( badBoys.begin (), badBoys.end (), behavior ) != badBoys.end () )
                         {
-                                freeItem->getBehavior()->changeActivityOfItem(
+                                freeItem.getBehavior()->changeActivityOfItem(
                                         this->switchInRoomIsOn ?
                                                 Activity::Freeze :
                                                 Activity::WakeUp );
@@ -1263,19 +1220,19 @@ void Mediator::toggleSwitchInRoom ()
         }
 
         // look for volatile grid items to freeze them
-        for ( unsigned int column = 0; column < gridItems.size(); column ++ )
+        for ( unsigned int column = 0; column < room->gridItems.size(); ++ column )
         {
-                for ( std::list< GridItem* >::iterator g = gridItems[ column ].begin (); g != gridItems[ column ].end (); ++g )
+                for ( std::vector< GridItemPtr >::const_iterator g = room->gridItems[ column ].begin (); g != room->gridItems[ column ].end (); ++g )
                 {
-                        GridItem* gridItem = *g;
+                        const GridItem& gridItem = *( *g ) ;
 
-                        if ( gridItem != nilPointer && gridItem->getBehavior() != nilPointer )
+                        if ( gridItem.getBehavior() != nilPointer )
                         {
-                                std::string behavior = gridItem->getBehavior()->getNameOfBehavior ();
+                                std::string behavior = gridItem.getBehavior()->getNameOfBehavior ();
 
                                 if ( behavior == "behavior of disappearance on touch" || behavior == "behavior of disappearance on jump into" )
                                 {
-                                        gridItem->getBehavior()->changeActivityOfItem(
+                                        gridItem.getBehavior()->changeActivityOfItem(
                                                 this->switchInRoomIsOn ?
                                                         Activity::Freeze :
                                                         Activity::Wait );
@@ -1287,48 +1244,19 @@ void Mediator::toggleSwitchInRoom ()
         std::cout << "toggled switch in room " << getRoom()->getNameOfFileWithDataAboutRoom() << std::endl ;
 }
 
-bool Mediator::sortColumnOfGridItems( GridItem* g1, GridItem* g2 )
+PlayerItemPtr Mediator::getWaitingCharacter() const
 {
-        return ( g1->getZ() < g2->getZ() + static_cast< int >( g2->getHeight() ) );
-}
+        std::vector< PlayerItemPtr > playersInRoom = room->getPlayersYetInRoom();
 
-bool Mediator::sortListOfFreeItems( FreeItem* f1, FreeItem* f2 )
-{
-        return (
-                ( f1->getZ() < f2->getZ() + static_cast< int >( f2->getHeight() ) ) ||
-                ( f1->getX() < f2->getX() + static_cast< int >( f2->getWidthX() ) ) ||
-                ( f1->getY() - static_cast< int >( f1->getWidthY() ) < f2->getY() )
-        );
-}
-
-PlayerItem* Mediator::getWaitingCharacter() const
-{
-        std::list< PlayerItem * > playersInRoom = room->getPlayersYetInRoom();
-
-        for ( std::list< PlayerItem * >::iterator p = playersInRoom.begin (); p != playersInRoom.end (); ++p )
+        for ( std::vector< PlayerItemPtr >::iterator p = playersInRoom.begin (); p != playersInRoom.end (); ++p )
         {
-                if ( ( *p ) != this->activeCharacter )
+                if ( ( *p )->getUniqueName() != activeCharacter->getUniqueName() )
                 {
-                        return ( *p ) ;
+                        return *p ;
                 }
         }
 
-        return nilPointer ;
-}
-
-bool EqualUniqueNameOfItem::operator() ( Item* item, const std::string& uniqueName ) const
-{
-        return ( item != nilPointer && item->getUniqueName() == uniqueName );
-}
-
-bool EqualLabelOfItem::operator() ( Item* item, const std::string& label ) const
-{
-        return ( item != nilPointer && item->getLabel() == label );
-}
-
-bool EqualBehaviorOfItem::operator() ( Item* item, const std::string& behavior ) const
-{
-        return ( item != nilPointer && item->getBehavior() != nilPointer && item->getBehavior()->getNameOfBehavior () == behavior );
+        return PlayerItemPtr ();
 }
 
 }

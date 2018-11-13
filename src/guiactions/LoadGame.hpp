@@ -23,10 +23,9 @@ class LoadGame : public Action
 public:
 
         /**
-         * @param picture Where to draw user interface
          * @param slot Number of file to load
          */
-        LoadGame( Picture * picture, unsigned int slot ) ;
+        LoadGame( unsigned int slot ) ;
 
         std::string getNameOfAction () const {  return "LoadGame" ;  }
 

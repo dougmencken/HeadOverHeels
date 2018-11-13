@@ -11,9 +11,9 @@
     <key>CFBundleIconFile</key>
     <string>headoverheels.icns</string>
     <key>CFBundleShortVersionString</key>
-    <string>1.31</string>
+    <string>1.32dev</string>
     <key>CFBundleVersion</key>
-    <string>1.31</string>
+    <string>1.32dev</string>
     <key>CFBundleName</key>
     <string>Head over Heels</string>
     <key>CFBundlePackageType</key>

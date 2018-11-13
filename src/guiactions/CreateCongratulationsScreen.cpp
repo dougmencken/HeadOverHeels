@@ -11,11 +11,11 @@
 #include "CreateEndScreen.hpp"
 
 using gui::CreateCongratulationsScreen ;
-using isomot::GameManager ;
+using iso::GameManager ;
 
 
-CreateCongratulationsScreen::CreateCongratulationsScreen( Picture * picture, unsigned short rooms, unsigned short planets )
-        : Action( picture )
+CreateCongratulationsScreen::CreateCongratulationsScreen( unsigned short rooms, unsigned short planets )
+        : Action( )
         , rooms( rooms )
         , planets( planets )
 {
@@ -29,31 +29,31 @@ CreateCongratulationsScreen::~CreateCongratulationsScreen( )
 
 void CreateCongratulationsScreen::doAction ()
 {
-        LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
+        LanguageManager* languageManager = GuiManager::getInstance().getLanguageManager();
         LanguageText* langString = 0;
 
-        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this );
+        Screen& screen = * GuiManager::getInstance().findOrCreateScreenForAction( this );
 
-        if ( screen->countWidgets() == 0 )
+        if ( screen.countWidgets() == 0 )
         {
-                screen->setEscapeAction( new CreateEndScreen( getWhereToDraw(), rooms, planets ) );
+                screen.setEscapeAction( new CreateEndScreen( rooms, planets ) );
         }
         else
         {
-                screen->freeWidgets() ;
+                screen.freeWidgets() ;
         }
 
         // Head coronado
-        screen->addWidget( new PictureWidget( 192, 50, Screen::loadPicture( "crown.png" ), "crown.png" ) );
-        screen->addPictureOfHeadAt( 192, 100 );
+        screen.addWidget( new PictureWidget( 192, 50, PicturePtr( Screen::loadPicture( "crown.png" ) ), "crown.png" ) );
+        screen.addPictureOfHeadAt( 192, 100 );
 
         // Heels coronado
-        screen->addWidget( new PictureWidget( 400, 50, Screen::loadPicture( "crown.png" ), "crown.png" ) );
-        screen->addPictureOfHeelsAt( 400, 100 );
+        screen.addWidget( new PictureWidget( 400, 50, PicturePtr( Screen::loadPicture( "crown.png" ) ), "crown.png" ) );
+        screen.addPictureOfHeelsAt( 400, 100 );
 
         // Texto final
         langString = languageManager->findLanguageStringForAlias( "final-text" );
-        TextField* textField = new TextField( isomot::ScreenWidth(), "center" );
+        TextField* textField = new TextField( iso::ScreenWidth(), "center" );
         textField->moveTo( 0, 180 );
 
         for ( size_t i = 0; i < langString->getLinesCount(); i++ )
@@ -62,7 +62,7 @@ void CreateCongratulationsScreen::doAction ()
                 textField->addLine( line->text, line->font, line->color );
         }
 
-        screen->addWidget( textField );
+        screen.addWidget( textField );
 
-        GuiManager::getInstance()->changeScreen( screen, true );
+        GuiManager::getInstance().changeScreen( screen, true );
 }

@@ -5,13 +5,15 @@
 #include "Mediator.hpp"
 #include "SoundManager.hpp"
 
+#include <stack>
+
 #include <algorithm>  // std::find_if
 
 
-namespace isomot
+namespace iso
 {
 
-Switch::Switch( Item * item, const std::string & behavior )
+Switch::Switch( const ItemPtr & item, const std::string & behavior )
         : Behavior( item, behavior )
         , isItemAbove( false )
 {
@@ -26,7 +28,7 @@ Switch::~Switch( )
 bool Switch::update ()
 {
         Mediator * mediator = item->getMediator();
-        std::vector< Item * > sideItems;
+        std::vector< ItemPtr > sideItems;
 
         switch ( activity )
         {
@@ -39,7 +41,7 @@ bool Switch::update ()
                                 // then remove such item from list of triggers so that it may re~switch
                                 for ( size_t i = 0; i < triggerItems.size(); i++ )
                                 {
-                                        Item* trigger = triggerItems[ i ];
+                                        ItemPtr trigger = triggerItems[ i ];
 
                                         if ( std::find( sideItems.begin (), sideItems.end (), trigger ) == sideItems.end () ||
                                                 ( trigger->whichKindOfItem() == "player item" && trigger->getBehavior()->getActivityOfItem() == Activity::Wait ) )
@@ -66,7 +68,7 @@ bool Switch::update ()
                                 // as long as there’re elements above this switch
                                 while ( ! aboveItems.empty() )
                                 {
-                                        Item* itemAbove = mediator->findItemByUniqueName( aboveItems.top() );
+                                        ItemPtr itemAbove = mediator->findItemByUniqueName( aboveItems.top() );
                                         aboveItems.pop();
 
                                         // is it free item
@@ -89,7 +91,7 @@ bool Switch::update ()
                                                                 mediator->toggleSwitchInRoom();
 
                                                                 // play sound of switching
-                                                                SoundManager::getInstance()->play( item->getLabel(), Activity::SwitchIt );
+                                                                SoundManager::getInstance().play( item->getLabel(), Activity::SwitchIt );
                                                         }
                                                 }
                                         }
@@ -117,7 +119,7 @@ bool Switch::update ()
                                 mediator->toggleSwitchInRoom();
 
                                 // play sound of switching
-                                SoundManager::getInstance()->play( item->getLabel(), Activity::SwitchIt );
+                                SoundManager::getInstance().play( item->getLabel(), Activity::SwitchIt );
                         }
 
                         activity = Activity::Wait;
@@ -130,7 +132,7 @@ bool Switch::update ()
         return false;
 }
 
-bool Switch::checkSideItems( std::vector< Item * >& sideItems )
+bool Switch::checkSideItems( std::vector< ItemPtr >& sideItems )
 {
         Mediator* mediator = item->getMediator();
 

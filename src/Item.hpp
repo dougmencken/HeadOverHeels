@@ -13,6 +13,7 @@
 
 #include <string>
 #include <utility>
+#include <cassert>
 
 #include <WrappersAllegro.hpp>
 
@@ -24,7 +25,7 @@
 #include "Shady.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
 class ItemData ;
@@ -40,21 +41,23 @@ class Item : public Mediated, public Shady
 
 public:
 
-        Item( ItemData* data, int z, const Way& way ) ;
+        Item( const ItemData* data, int z, const Way& way ) ;
 
-       /**
-        * Constructor copia. No copia los atributos que son punteros
-        */
         Item( const Item& item ) ;
 
         virtual ~Item( ) ;
 
         virtual std::string whichKindOfItem () const {  return "abstract item" ;  }
 
-        /**
-         * Update item’s behavior
-         */
-        virtual bool update () ;
+       /**
+        * Used for sorting items in container, this variant is okay for grid items
+        */
+        virtual bool operator< ( const Item& item ) const
+        {
+                return ( getZ() < item.getZ() + static_cast< int >( item.getHeight() ) );
+        }
+
+        virtual bool updateItem () ;
 
         /**
          * Anima el elemento obteniendo el fotograma adecuado de la secuencia y cambiando su gráfico y su sombra
@@ -63,9 +66,9 @@ public:
         bool animate () ;
 
         /**
-         * Change data of item preserving its label, used when there’s metamorphosis such as when player teleports
+         * Used for metamorphosis into bubbles, such as when player teleports
          */
-        void changeItemData ( ItemData * itemData, const std::string& initiatedBy ) ;
+        void metamorphInto ( const std::string& labelOfItem, const std::string& initiatedBy ) ;
 
         void changeOrientation ( const Way& way ) ;
 
@@ -80,12 +83,12 @@ public:
         /**
          * Change graphics of item
          */
-        virtual void changeImage ( Picture* image ) = 0 ;
+        virtual void changeImage ( const Picture* image ) = 0 ;
 
         /**
          * Change graphics of item’s shadow
          */
-        virtual void changeShadow ( Picture* shadow ) ;
+        virtual void changeShadow ( const Picture* shadow ) ;
 
         /**
          * Add value to coordinate X
@@ -121,21 +124,24 @@ public:
          */
         virtual bool canAdvanceTo ( int x, int y, int z ) ;
 
+        bool intersectsWith ( const Item & item ) const ;
+
         /**
          * @param behavior Name of item’s behavior
-         * @param extra Additional data to configure behavior
          */
-        void assignBehavior( const std::string& behavior, void* extraData ) ;
+        void setBehaviorOf ( const std::string & behavior ) ;
+
+        Behavior * getBehavior () const {  return behavior ;  }
 
         /**
          * Set animation going from first to last frame, which is by default
          */
-        void setForthMotion () ;
+        void doForthMotion () ;
 
         /**
          * Set animation going from last to first frame, backwards
          */
-        void setReverseMotion () ;
+        void doBackwardsMotion () ;
 
 private:
 
@@ -151,9 +157,21 @@ private:
         /**
          * True to reverse sequence of animation
          */
-        bool backwardMotion ;
+        bool backwardsMotion ;
 
-        ItemData * dataOfItem ;
+        const ItemData * dataOfItem ;
+
+        void readGraphicsOfItem () ;
+
+        /**
+         * Extract frames for this item from file
+         */
+        static void createFrames ( Item * item, const ItemData & data, const char * gfxPrefix ) ;
+
+        /**
+         * Extract frames for shadow of this item from file
+         */
+        static void createShadowFrames ( Item * item, const ItemData & data, const char * gfxPrefix ) ;
 
 protected:
 
@@ -172,6 +190,8 @@ protected:
          */
         int zPos ;
 
+        unsigned int height ;
+
         Way orientation ;
 
         /**
@@ -180,14 +200,19 @@ protected:
         std::pair < int, int > offset ;
 
         /**
+         * Whether this item detects collisions
+         */
+        bool collisionDetector ;
+
+        /**
          * Image of item, unprocessed, just read from file
          */
-        Picture * rawImage ;
+        const Picture * rawImage ;
 
         /**
          * Image of item’s shadow
          */
-        Picture * shadow ;
+        const Picture * shadow ;
 
         /**
          * Image of this item with shadows from other items, for free item it is also masked
@@ -195,9 +220,19 @@ protected:
         Picture * processedImage ;
 
         /**
+         * Pictures of item
+         */
+        std::vector< const Picture * > motion ;
+
+        /**
+         * Pictures of item’s shadow
+         */
+        std::vector< const Picture * > shadows ;
+
+        /**
          * Timer for animation of item
          */
-        Timer * motionTimer ;
+        autouniqueptr < Timer > motionTimer ;
 
         /**
          * Behavior of item
@@ -205,9 +240,9 @@ protected:
         Behavior * behavior ;
 
         /**
-         * Reference item used to know if it would move when others are below
+         * Unique name of item below this one, when anchor moves item above it moves too
          */
-        Item * anchor ;
+        std::string anchor ;
 
 public:
 
@@ -216,11 +251,11 @@ public:
         void setUniqueName ( const std::string& name ) {  this->uniqueName = name ;  }
 
         /**
-         * Gives original label of item, because label from item’s data may change via metamorphosis
+         * Gives original label of item, label from item’s data may change via metamorphosis
          */
         const std::string& getOriginalLabel () const {  return originalLabel ;  }
 
-        ItemData * getDataOfItem () const {  return dataOfItem ;  }
+        const ItemData * getDataOfItem () const {  return dataOfItem ;  }
 
         const std::string& getLabel () const ;
 
@@ -245,9 +280,9 @@ public:
         /**
          * Height, or width on Z, of item in isometric units
          */
-        unsigned int getHeight () const ;
+        unsigned int getHeight () const {  return height ;  }
 
-        void setHeight ( int height ) ;
+        void setHeight ( int newHeight ) {  height = newHeight ;  }
 
         /**
          * If true, item takes one life of character on touch
@@ -255,33 +290,26 @@ public:
         bool isMortal () const ;
 
         /**
-         * How many different frames has item for four orientations ~
-         * south, west, north, and east
          * @return 1 when there’s only one orientation,
-         *         2 for frames of south and west, or
-         *         4 for different frames of all of them
+         *         2 if there’re frames for south and west, or
+         *         4 there’re frames for each orientation
          */
-        unsigned short howManyFramesPerOrientation () const ;
+        unsigned short howManyOrientations () const ;
 
         /**
          * Time in seconds to move item
          */
-        double getSpeed () const ;
+        float getSpeed () const ;
 
         /**
          * Time in seconds to fall item
          */
-        double getWeight () const ;
+        float getWeight () const ;
 
         /**
          * Time in seconds between each frame of item’s animation
          */
-        double getDelayBetweenFrames () const ;
-
-        /**
-         * How many frames has item’s animation sequence
-         */
-        unsigned int countFrames () const ;
+        float getDelayBetweenFrames () const ;
 
         /**
          * Set current orientation of item
@@ -290,15 +318,75 @@ public:
 
         Way getOrientation () const {  return orientation ;  }
 
-        Picture * getRawImage () const {  return rawImage ;  }
+        const Picture * getRawImage () const {  return rawImage ;  }
 
-        Picture * getImageOfShadow () const {  return shadow ;  }
+        const Picture * getImageOfShadow () const {  return shadow ;  }
 
         Picture * getProcessedImage () const {  return processedImage ;  }
 
         void setProcessedImage ( Picture * newImage ) ;
 
         void binProcessedImage() {  if ( processedImage != nilPointer ) setProcessedImage( nilPointer ) ;  }
+
+        unsigned int howManyMotions () const {  return motion.size () ;  }
+
+        const Picture * getMotionAt( size_t at ) const
+        {
+                assert( at < motion.size () );  /// return ( at < motion.size() ? motion[ at ] : nilPointer ) ;
+                return ( rawImage != nilPointer ) ? motion[ at ] : nilPointer ;
+        }
+
+        void addFrame( const Picture& frame )
+        {
+                motion.push_back( new Picture( frame ) ) ;
+
+                if ( rawImage == nilPointer && motion.size() == 1 )
+                {
+                        rawImage = motion.back() ;
+                }
+        }
+
+        void clearMotionFrames ()
+        {
+                binProcessedImage ();
+
+                rawImage = nilPointer ;
+
+                for ( std::vector< const Picture * >::iterator it = motion.begin (); it != motion.end (); ++ it )
+                        delete *it ;
+
+                motion.clear ();
+        }
+
+        unsigned int howManyShadows () const {  return shadows.size () ;  }
+
+        const Picture * getShadowAt( size_t at ) const
+        {
+                assert( at < shadows.size () ); /// return ( at < shadows.size() ? shadows[ at ] : nilPointer ) ;
+                return ( shadow != nilPointer ) ? shadows[ at ] : nilPointer ;
+        }
+
+        void addFrameOfShadow( const Picture& frame )
+        {
+                shadows.push_back( new Picture( frame ) ) ;
+
+                if ( shadow == nilPointer && shadows.size() == 1 )
+                {
+                        shadow = shadows.back() ;
+                }
+        }
+
+        void clearShadowFrames ()
+        {
+                binProcessedImage ();
+
+                shadow = nilPointer ;
+
+                for ( std::vector< const Picture * >::iterator it = shadows.begin (); it != shadows.end (); ++ it )
+                        delete *it ;
+
+                shadows.clear() ;
+        }
 
         /**
          * Distance of processed image from room’s origin ( 0, 0, 0 )
@@ -317,21 +405,25 @@ public:
          */
         int getOffsetY () const {  return offset.second ;  }
 
-        Behavior * getBehavior () const {  return behavior ;  }
-
-        void setBehavior ( Behavior * newBehavior ) {  behavior = newBehavior ;  }
-
         /**
-         * Reference item used to know if it would move when others are below
-         * @return such item or nil if there’s none
+         * Reference item below which would move this item
          */
-        Item * getAnchor () const {  return this->anchor ;  }
+        std::string getAnchor () const {  return this->anchor ;  }
 
-        void setAnchor ( Item * item ) {  this->anchor = item ;  }
+        void setAnchor ( const std::string & item ) {  this->anchor = item ;  }
 
         unsigned int getCurrentFrame() {  return this->currentFrame ;  }
 
+        /**
+         * Set item’s ability to detect collisions
+         */
+        void setCollisionDetector ( bool detectThem ) {  collisionDetector = detectThem ;  }
+
+        bool isCollisionDetector () const {  return collisionDetector ;  }
+
 };
+
+typedef safeptr < Item > ItemPtr ;
 
 }
 

@@ -5,11 +5,13 @@
 #include "Mediator.hpp"
 #include "SoundManager.hpp"
 
+#include <stack>
 
-namespace isomot
+
+namespace iso
 {
 
-Teleport::Teleport( Item * item, const std::string & behavior ) :
+Teleport::Teleport( const ItemPtr & item, const std::string & behavior ) :
         Behavior( item, behavior ),
         activated( false )
 {
@@ -27,64 +29,64 @@ bool Teleport::update ()
 
         switch ( activity )
         {
-        case Activity::Wait:
-                // is there items above
-                if ( ! item->canAdvanceTo( 0, 0, 1 ) )
-                {
-                        // copy stack of collisions
-                        std::stack< std::string > topItems;
-                        while ( ! mediator->isStackOfCollisionsEmpty() )
+                case Activity::Wait:
+                        // is there items above
+                        if ( ! item->canAdvanceTo( 0, 0, 1 ) )
                         {
-                                topItems.push( mediator->popCollision() );
-                        }
-
-                        // as long as there are items above teleport
-                        while ( ! topItems.empty() )
-                        {
-                                Item * aboveItem = mediator->findItemByUniqueName( topItems.top() );
-                                topItems.pop();
-
-                                // is it free item with behavior
-                                if ( aboveItem != nilPointer &&
-                                        ( aboveItem->whichKindOfItem() == "free item" || aboveItem->whichKindOfItem() == "player item" ) &&
-                                                aboveItem->getBehavior() != nilPointer )
+                                // copy stack of collisions
+                                std::stack< std::string > topItems;
+                                while ( ! mediator->isStackOfCollisionsEmpty() )
                                 {
-                                        // look for items below
-                                        if ( ! aboveItem->canAdvanceTo( 0, 0, -1 ) )
+                                        topItems.push( mediator->popCollision() );
+                                }
+
+                                // as long as there are items above teleport
+                                while ( ! topItems.empty() )
+                                {
+                                        ItemPtr aboveItem = mediator->findItemByUniqueName( topItems.top() );
+                                        topItems.pop();
+
+                                        // is it free item with behavior
+                                        if ( aboveItem != nilPointer &&
+                                                ( aboveItem->whichKindOfItem() == "free item" || aboveItem->whichKindOfItem() == "player item" ) &&
+                                                        aboveItem->getBehavior() != nilPointer )
                                         {
-                                                bool playerAboveTeleport = false;
-
-                                                while ( ! mediator->isStackOfCollisionsEmpty() )
+                                                // look for items below
+                                                if ( ! aboveItem->canAdvanceTo( 0, 0, -1 ) )
                                                 {
-                                                        Item * belowItem = mediator->findCollisionPop( );
+                                                        bool playerAboveTeleport = false;
 
-                                                        if ( aboveItem->whichKindOfItem() == "player item" && belowItem == this->item )
+                                                        while ( ! mediator->isStackOfCollisionsEmpty() )
                                                         {
-                                                                playerAboveTeleport = true;
-                                                                break;
-                                                        }
-                                                }
+                                                                ItemPtr belowItem = mediator->findCollisionPop( );
 
-                                                activated = playerAboveTeleport;
+                                                                if ( aboveItem->whichKindOfItem() == "player item" && belowItem == this->item )
+                                                                {
+                                                                        playerAboveTeleport = true;
+                                                                        break;
+                                                                }
+                                                        }
+
+                                                        activated = playerAboveTeleport;
+                                                }
                                         }
                                 }
                         }
-                }
-                else
-                {
-                        activated = false;
-                }
+                        else
+                        {
+                                activated = false;
+                        }
 
-                // animate activated teleport
-                if ( activated )
-                {
-                        item->animate();
-                        SoundManager::getInstance()->play( item->getLabel(), Activity::IsActive );
-                }
-                break;
+                        // animate activated teleport
+                        if ( activated )
+                        {
+                                item->animate();
+                                SoundManager::getInstance().play( item->getLabel(), Activity::IsActive );
+                        }
+                        break;
 
-        default:
-                activity = Activity::Wait;
+                default:
+                        activity = Activity::Wait;
         }
 
         return false;

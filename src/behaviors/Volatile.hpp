@@ -15,7 +15,7 @@
 #include "Timer.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
 class Item ;
@@ -30,28 +30,11 @@ class Volatile : public Behavior
 
 public:
 
-        Volatile( Item * item, const std::string & behavior ) ;
+        Volatile( const ItemPtr & item, const std::string & behavior ) ;
 
         virtual ~Volatile( ) ;
 
         virtual bool update () ;
-
-       /**
-        * Data used when volatile disappears
-        */
-        void setMoreData ( void * data ) ;
-
-protected:
-
-       /**
-        * Used when volatile disappears
-        */
-        ItemData * bubblesData ;
-
-       /**
-        * Timer for disappearance of volatile item
-        */
-        Timer * disappearanceTimer ;
 
 private:
 
@@ -59,6 +42,11 @@ private:
         * True if item isn’t volatile yet by toggle of switch in room
         */
         bool solid ;
+
+       /**
+        * Timer for disappearance of volatile item
+        */
+        autouniqueptr < Timer > disappearanceTimer ;
 
 };
 

@@ -15,16 +15,14 @@
 #include <list>
 #include <map>
 
-#include <WrappersAllegro.hpp>
-
 #include "Gui.hpp"
 #include "Font.hpp"
+#include "Screen.hpp"
 
 
 namespace gui
 {
 
-class Screen ;
 class Action ;
 class LanguageManager ;
 
@@ -36,26 +34,23 @@ private:
 
         GuiManager( ) ;
 
-        void readPreferences () ;
+        GuiManager( const GuiManager & ) { }
 
 public:
 
         ~GuiManager( ) ;
 
-        static GuiManager* getInstance () ;
+        static GuiManager & getInstance () ;
 
-       /**
-        * Begin with the menu for this game
-        */
         void begin () ;
 
-        void changeScreen ( Screen * newScreen, bool dive ) ;
+        void changeScreen ( const Screen & newScreen, bool dive ) ;
 
        /*
         * Search in list of screens for the one associated with this action
         * When there’s no such screen found, create a new one
         */
-        Screen * findOrCreateScreenForAction ( Action * action ) ;
+        ScreenPtr findOrCreateScreenForAction ( Action * action ) ;
 
         void freeScreens () ;
 
@@ -78,9 +73,24 @@ public:
 
         Font * findFontByFamilyAndColor ( const std::string& family, const std::string& color ) ;
 
-protected:
+       /**
+        * @return A string of characters in the LLL_CC format
+        *         where LLL is a language code according to ISO 639
+        *         and CC is a country code according to ISO 3166
+        */
+        std::string getLanguage () const {  return this->language ;  }
 
-        void initAllegro () ;
+        void setLanguage ( const std::string& language )
+        {
+                this->language = language ;
+                assignLanguage( language );
+        }
+
+        LanguageManager* getLanguageManager () const {  return languageManager ;  }
+
+        const ScreenPtr & getActiveScreen () const {  return activeScreen ;  }
+
+        void setActiveScreen ( const ScreenPtr newScreen ) {  activeScreen = newScreen ;  }
 
 private:
 
@@ -92,11 +102,9 @@ private:
        /**
         * Screen to display by interface
         */
-        Screen * activeScreen ;
+        ScreenPtr activeScreen ;
 
-        std::map < std::string, Screen * > listOfScreens;
-
-        Picture * picture ;
+        std::map < std::string, ScreenPtr > listOfScreens;
 
        /**
         * Language for user interface
@@ -115,36 +123,9 @@ private:
         */
         bool atFullScreen ;
 
-        bool preferencesRead ;
-
         std::list < Font * > fonts ;
 
-        std::multimap< unsigned int, unsigned int > sizesOfScreen ;
-
-private:
-
         void assignLanguage ( const std::string& language ) ;
-
-public:
-
-       /**
-        * @return A string of characters in the LLL_CC format
-        *         where LLL is a language code according to ISO 639
-        *         and CC is a country code according to ISO 3166
-        */
-        std::string getLanguage () const {  return this->language ;  }
-
-        void setLanguage ( const std::string& language )
-        {
-                this->language = language ;
-                assignLanguage( language );
-        }
-
-        LanguageManager* getLanguageManager () const {  return this->languageManager ;  }
-
-        Screen * getActiveScreen () const {  return this->activeScreen ;  }
-
-        void setActiveScreen ( Screen * newScreen ) {  this->activeScreen = newScreen ;  }
 
 };
 

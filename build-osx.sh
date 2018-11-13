@@ -3,7 +3,7 @@
 [ -d ./m4 ] || mkdir m4
 [ -f ./configure ] || autoreconf -f -i
 
-gccVersion="7.3p" # ="6.4"
+gccVersion="8.2p"
 
 installPrefix="/game"
 
@@ -29,6 +29,8 @@ makeCOptions="-Wextra -Werror" # ="-Wall -Werror"
 
 time make -j2 CFLAGS="${makeCOptions}" CXXFLAGS="${makeCOptions}" && echo && make install DESTDIR="${installPath}"
 
+rm -f src/headoverheels
+
 headoverheelsbin="${installPath}${installPrefix}"/bin/headoverheels
 if [ -f "${headoverheelsbin}" ]
 then
@@ -44,4 +46,12 @@ then
         mkdir -p "${games}"/Head\ over\ Heels.app/Contents/Resources/
         cp headoverheelsroot/game/bin/headoverheels "${games}"/Head\ over\ Heels.app/Contents/MacOS/
         cp -r headoverheelsroot/game/share/headoverheels/* "${games}"/Head\ over\ Heels.app/Contents/Resources/
+
+        if [ -x "$( command -v haxelib )" ]; then
+                cd src
+                rm -r -f obj
+                haxelib run hxcpp hxcpp-build.xml
+                [ -f headoverheels ] && mv headoverheels "${installPath}${installPrefix}"/bin/headoverheels.allegro4
+                cd ..
+        fi
 fi

@@ -30,10 +30,7 @@ class CreateVideoMenu : public Action
 
 public:
 
-        /**
-         * @param picture where to draw
-         */
-        CreateVideoMenu( Picture * picture ) ;
+        CreateVideoMenu( ) ;
 
         std::string getNameOfAction () const {  return "CreateVideoMenu" ;  }
 

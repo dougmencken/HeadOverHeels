@@ -10,16 +10,14 @@ namespace gui
 
 ColorCyclingLabel::ColorCyclingLabel( const std::string& text, const std::string& family, int spacing )
         : Label( text, family, "white", spacing )
-        , colorCyclingTimer( nilPointer )
         , cycle( 0 )
+        , colorCyclingTimer( new Timer () )
 {
-        colorCyclingTimer = new Timer ();
         colorCyclingTimer->go();
 }
 
 ColorCyclingLabel::~ColorCyclingLabel( )
 {
-        delete colorCyclingTimer ;
 }
 
 void ColorCyclingLabel::draw( const allegro::Pict& where )

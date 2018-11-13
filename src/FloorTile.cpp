@@ -5,34 +5,32 @@
 #include <cassert>
 
 
-namespace isomot
+namespace iso
 {
 
-FloorTile::FloorTile( int cellX, int cellY, Picture* image )
+FloorTile::FloorTile( int cellX, int cellY, const Picture& graphicsOfTile )
         : Mediated (), Shady ()
-        , uniqueName( "floor tile at cx=" + isomot::numberToString( cellX ) + " cy=" + isomot::numberToString( cellY ) )
-        , rawImage( image )
-        , shadyImage( nilPointer )
+        , uniqueName( "floor tile at cx=" + util::number2string( cellX ) + " cy=" + util::number2string( cellY ) )
+        , rawImage( new Picture( graphicsOfTile ) )
+        , shadyImage( new Picture( graphicsOfTile ) )
 {
         this->coordinates.first = cellX;
         this->coordinates.second = cellY;
         this->offset.first = this->offset.second = 0;
-}
 
-FloorTile::~FloorTile()
-{
-        delete rawImage ;
-        delete shadyImage ;
+        rawImage->setName( graphicsOfTile.getName() );
+        shadyImage->setName( "shaded " + graphicsOfTile.getName() );
+
+        setWantShadow( true );
 }
 
 void FloorTile::calculateOffset()
 {
-        if ( mediator != nilPointer )
-        {
-                Room* room = mediator->getRoom();
-                this->offset.first = room->getX0() + ( ( room->getSizeOfOneTile() * ( getCellX() - getCellY() - 1 ) ) << 1 ) + 1;
-                this->offset.second = room->getY0() + room->getSizeOfOneTile() * ( getCellX() + getCellY() );
-        }
+        assert( mediator != nilPointer );
+
+        Room* room = mediator->getRoom();
+        this->offset.first = room->getX0() + ( ( room->getSizeOfOneTile() * ( getCellX() - getCellY() - 1 ) ) << 1 ) + 1;
+        this->offset.second = room->getY0() + room->getSizeOfOneTile() * ( getCellX() + getCellY() );
 }
 
 void FloorTile::draw( const allegro::Pict& where )
@@ -47,22 +45,10 @@ void FloorTile::draw( const allegro::Pict& where )
         }
 }
 
-void FloorTile::setShadyImage( Picture* newShady )
-{
-        if ( shadyImage != newShady )
-        {
-                delete shadyImage ;
-                shadyImage = newShady;
-        }
-}
-
 void FloorTile::freshShadyImage ()
 {
-        if ( shadyImage != nilPointer )
-        {
-                delete shadyImage ;
-                shadyImage = new Picture( *rawImage );
-        }
+        shadyImage = PicturePtr( new Picture( *rawImage ) );
+        shadyImage->setName( "shaded " + rawImage->getName() );
 }
 
 int FloorTile::getColumn () const

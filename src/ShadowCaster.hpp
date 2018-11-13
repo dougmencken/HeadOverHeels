@@ -11,13 +11,13 @@
 #ifndef ShadowCaster_hpp_
 #define ShadowCaster_hpp_
 
+#include "Ism.hpp"
 #include "Picture.hpp"
+#include "Item.hpp"
+#include "FloorTile.hpp"
 
-namespace isomot
+namespace iso
 {
-
-class Item ;
-class FloorTile ;
 
 /**
  * Shades graphics of item or floor tile with shadow of another item
@@ -34,9 +34,9 @@ class ShadowCaster
 
 public:
 
-        static void castShadowOnItem ( Item* item, int x, int y, Picture* shadow, unsigned short shading, unsigned char transparency = 0 ) ;
+        static void castShadowOnItem ( Item & item, int x, int y, const Picture * shadow, unsigned short shading, unsigned char transparency = 0 ) ;
 
-        static void castShadowOnFloor ( FloorTile* tile, int x, int y, Picture* shadow, unsigned short shading, unsigned char transparency = 0 ) ;
+        static void castShadowOnFloor ( FloorTile & tile, int x, int y, const Picture & shadow, unsigned short shading, unsigned char transparency = 0 ) ;
 
 };
 

@@ -6,8 +6,8 @@
 using gui::SelectLanguage ;
 
 
-SelectLanguage::SelectLanguage( Picture* picture, const std::string& language )
-        : Action( picture )
+SelectLanguage::SelectLanguage( const std::string& language )
+        : Action( )
         , language( language )
 {
 
@@ -15,8 +15,8 @@ SelectLanguage::SelectLanguage( Picture* picture, const std::string& language )
 
 void SelectLanguage::doAction ()
 {
-        GuiManager::getInstance()->setLanguage( language );
+        GuiManager::getInstance().setLanguage( language );
 
-        CreateMainMenu * mainMenu = new CreateMainMenu( getWhereToDraw() );
+        CreateMainMenu * mainMenu = new CreateMainMenu();
         mainMenu->doIt ();
 }

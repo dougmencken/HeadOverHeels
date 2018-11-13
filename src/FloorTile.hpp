@@ -20,7 +20,7 @@
 #include "Picture.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
 /**
@@ -32,14 +32,9 @@ class FloorTile : public Drawable, public Mediated, public Shady
 
 public:
 
-       /**
-        * @param cellX X coordinate on grid
-        * @param cellY Y coordinate on grid
-        * @param image Graphics of tile
-        */
-        FloorTile( int cellX, int cellY, Picture * image ) ;
+        FloorTile( int cellX, int cellY, const Picture & graphicsOfTile ) ;
 
-        virtual ~FloorTile( ) ;
+        virtual ~FloorTile( ) { }
 
         /**
          * Calculate offset for tile’s graphics
@@ -65,12 +60,12 @@ private:
         /**
          * Picture of tile
          */
-        Picture * rawImage ;
+        PicturePtr rawImage ;
 
         /**
          * Picture of shaded tile
          */
-        Picture * shadyImage ;
+        PicturePtr shadyImage ;
 
 public:
 
@@ -89,15 +84,15 @@ public:
 
         int getOffsetY () const {  return offset.second ;  }
 
-        Picture * getRawImage () const {  return rawImage ;  }
+        const Picture & getRawImage () const {  return *rawImage ;  }
 
-        Picture * getShadyImage () const {  return shadyImage ;  }
-
-        void setShadyImage( Picture * newShady ) ;
+        Picture & getShadyImage () const {  return *shadyImage ;  }
 
         void freshShadyImage () ;
 
 };
+
+typedef safeptr < FloorTile > FloorTilePtr ;
 
 }
 

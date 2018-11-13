@@ -35,21 +35,25 @@ public:
 
         Color( const Color& copy ) : red( copy.red ), green( copy.green ), blue( copy.blue ), alpha( copy.alpha ) { }
 
-        unsigned char getRed () const {  return red ;  }
+        virtual ~Color( ) { }
 
-        unsigned char getGreen () const {  return green ;  }
+        virtual unsigned char getRed () const {  return red ;  }
 
-        unsigned char getBlue () const {  return blue ;  }
+        virtual unsigned char getGreen () const {  return green ;  }
 
-        unsigned char getAlpha () const {  return alpha ;  }
+        virtual unsigned char getBlue () const {  return blue ;  }
+
+        virtual unsigned char getAlpha () const {  return alpha ;  }
 
         bool operator == ( const Color & c ) const {  return c.red == red && c.green == green && c.blue == blue && c.alpha == alpha ;  }
 
         bool operator != ( const Color & c ) const {  return c.red != red || c.green != green || c.blue != blue || c.alpha != alpha ;  }
 
-        AllegroColor toAllegroColor () const {  return AllegroColor::makeColor( red, green, blue, alpha ) ;  }
+        bool isKeyColor () const {  return toAllegroColor().isKeyColor() ;  }
 
-        std::string toString () const ;
+        virtual AllegroColor toAllegroColor () const {  return AllegroColor::makeColor( red, green, blue, alpha ) ;  }
+
+        virtual std::string toString () const ;
 
         static const Color & blackColor () {  return *theBlack ;  }                     /* speccy color 0 */
 
@@ -72,6 +76,10 @@ public:
         static const Color & orangeColor () {  return *theOrange ;  }
 
         static const Color & gray50Color () {  return *the50Gray ;  }                   /* 50% gray */
+
+        static const Color & gray25Color () {  return *the25Gray ;  }                   /* 25% gray */
+
+        static const Color & gray75Color () {  return *the75Gray ;  }                   /* 75% gray */
 
         static void colorizePicture ( Picture * picture, const Color & color ) ;
 
@@ -114,6 +122,10 @@ private:
         static const Color * theOrange ;
 
         static const Color * the50Gray ;
+
+        static const Color * the25Gray ;
+
+        static const Color * the75Gray ;
 
 } ;
 

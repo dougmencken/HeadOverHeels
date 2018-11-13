@@ -28,7 +28,7 @@ class AnimatedPictureWidget : public Widget
 
 public:
 
-        AnimatedPictureWidget( int x, int y, const std::vector < allegro::Pict * > & frames, double delay, const std::string& name ) ;
+        AnimatedPictureWidget( int x, int y, const std::vector < allegro::Pict * > & frames, float delay, const std::string& name ) ;
 
         virtual ~AnimatedPictureWidget( ) ;
 
@@ -44,11 +44,11 @@ private:
 
         std::vector < allegro::Pict * > animation ;
 
-        double delayBetweenFrames ;
+        float delayBetweenFrames ;
 
         size_t theFrame ;
 
-        Timer * animationTimer ;
+        autouniqueptr < Timer > animationTimer ;
 
         std::string nameOfAnimation ;
 

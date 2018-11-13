@@ -14,12 +14,14 @@
 #include <list>
 #include <vector>
 
-#include <WrappersAllegro.hpp>
+#include "pointers.hpp"
+
+#include "WrappersAllegro.hpp"
 
 #include "Widget.hpp"
+#include "Picture.hpp"
 
 class Color ;
-class Picture ;
 
 
 namespace gui
@@ -44,12 +46,11 @@ public:
 
         virtual ~Screen( ) ;
 
-        /**
-         * Draw parts of screen
-         */
         void draw ( const allegro::Pict& where ) ;
 
-        void redraw () ;
+        void draw () ;
+
+        void refresh () const ;
 
         void drawOnGlobalScreen () ;
 
@@ -73,6 +74,8 @@ public:
 
         void refreshPicturesOfHeadAndHeels () ;
 
+        const Picture & getImageOfScreen () const {  return *imageOfScreen ;  }
+
         Action * getActionOfScreen () const {  return actionOfScreen ;  }
 
         void setEscapeAction ( Action * action ) ;
@@ -90,22 +93,22 @@ public:
 
         static std::vector < allegro::Pict * > loadAnimation ( const char * nameOfGif ) ;
 
-        static void scrollHorizontally ( Screen * oldScreen, Screen * newScreen, bool rightToLeft ) ;
+        static void scrollHorizontally ( const Screen & oldScreen, const Screen & newScreen, bool rightToLeft ) ;
 
-        static void wipeHorizontally ( Screen * oldScreen, Screen * newScreen, bool rightToLeft ) ;
+        static void wipeHorizontally ( const Screen & oldScreen, const Screen & newScreen, bool rightToLeft ) ;
 
-        static void barWipeHorizontally ( Screen * oldScreen, Screen * newScreen, bool rightToLeft ) ;
+        static void barWipeHorizontally ( const Screen & oldScreen, const Screen & newScreen, bool rightToLeft ) ;
 
-        static void randomPixelFadeIn( const Color & fadeFrom, Screen * screen ) {  randomPixelFade( true, screen, fadeFrom ) ;  }
+        static void randomPixelFadeIn( const Color & fadeFrom, const Screen & screen ) {  randomPixelFade( true, screen, fadeFrom ) ;  }
 
-        static void randomPixelFadeOut( Screen * screen, const Color & fadeTo ) {  randomPixelFade( false, screen, fadeTo ) ;  }
+        static void randomPixelFadeOut( const Screen & screen, const Color & fadeTo ) {  randomPixelFade( false, screen, fadeTo ) ;  }
 
 private:
 
         /**
          * Image of this screen
          */
-        Picture * imageOfScreen ;
+        PicturePtr imageOfScreen ;
 
         /**
          * Elements of interface to draw on screen
@@ -122,7 +125,7 @@ private:
 
         AnimatedPictureWidget * pictureOfHeels ;
 
-        static void randomPixelFade( bool fadeIn, Screen * slide, const Color & color ) ;
+        static void randomPixelFade( bool fadeIn, const Screen & slide, const Color & color ) ;
 
 protected:
 
@@ -132,6 +135,8 @@ protected:
         static Picture * backgroundPicture ;
 
 };
+
+typedef safeptr < Screen > ScreenPtr ;
 
 }
 

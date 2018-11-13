@@ -13,6 +13,8 @@
 
 #include <string>
 
+#include "pointers.hpp"
+
 #include "WrappersAllegro.hpp"
 
 class Color ;
@@ -55,11 +57,23 @@ public:
 
         void fillWithColor ( const Color & color ) ;
 
+        void fillWithTransparencyChequerboard ( const unsigned int sizeOfSquare = 8 ) ;
+
         void colorize ( const Color & color ) ;
 
-        Picture * makeGrayscaleCopy () ;
+        void toGrayscale () ;
 
-        Picture * makeColorizedCopy ( const Color & color ) ;
+        void flipHorizontal () ;
+
+        void flipVertical () ;
+
+        void rotate90 () ;
+
+        void rotate90counterclockwise () {  rotate90 () ;  }
+
+        void rotate270 () ;
+
+        void rotate90clockwise () {  rotate270 () ;  }
 
         void saveAsPCX ( const std::string& path ) ;
 
@@ -67,11 +81,13 @@ public:
 
 private:
 
-        allegro::Pict * picture ;
+        safeptr < allegro::Pict > picture ;
 
         std::string name ;
 
 } ;
+
+typedef safeptr < Picture > PicturePtr ;
 
 
 #endif

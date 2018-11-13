@@ -2,47 +2,45 @@
 #include "ShadowCaster.hpp"
 
 #include "Color.hpp"
-#include "Item.hpp"
 #include "FreeItem.hpp"
 #include "GridItem.hpp"
-#include "FloorTile.hpp"
 
 #include <cmath>
 
 
-namespace isomot
+namespace iso
 {
 
 /* static */
-void ShadowCaster::castShadowOnItem( Item* item, int x, int y, Picture* shadow, unsigned short shading, unsigned char transparency )
+void ShadowCaster::castShadowOnItem( Item& item, int x, int y, const Picture* shadow, unsigned short shading, unsigned char transparency )
 {
         if ( shading >= 256 ) return ;
 
         // fully transparent stuff doesn’t drop any shadow
         if ( transparency >= 100 ) return;
 
-        bool isFreeItem = ( item->whichKindOfItem() == "free item" || item->whichKindOfItem() == "player item" );
-        bool isGridItem = ( item->whichKindOfItem() == "grid item" );
+        bool isFreeItem = ( item.whichKindOfItem() == "free item" || item.whichKindOfItem() == "player item" );
+        bool isGridItem = ( item.whichKindOfItem() == "grid item" );
 
         if ( ! isFreeItem && ! isGridItem ) return;
 
-        Picture* rawImage = item->getRawImage() ;
+        const Picture* rawImage = item.getRawImage() ;
 
-        int height = static_cast< int >( item->getHeight() );
-        int width = static_cast< int >( item->getWidthX() );
+        int height = static_cast< int >( item.getHeight() );
+        int width = static_cast< int >( item.getWidthX() );
         int deltaW = 0 ;  // widths of grid item are always equal
 
         if ( isFreeItem )
         {
-                if ( item->getWidthY() > item->getWidthX() )
-                        width = static_cast< int >( item->getWidthY() );
+                if ( item.getWidthY() > item.getWidthX() )
+                        width = static_cast< int >( item.getWidthY() );
 
-                deltaW = static_cast< int >( item->getWidthX() ) - static_cast< int >( item->getWidthY() );
+                deltaW = static_cast< int >( item.getWidthX() ) - static_cast< int >( item.getWidthY() );
         }
 
-        int iniX = x - item->getOffsetX();              // initial X
+        int iniX = x - item.getOffsetX();               // initial X
         int endX = iniX + shadow->getWidth();           // final X
-        int iniY = y - item->getOffsetY();              // initial Y
+        int iniY = y - item.getOffsetY();               // initial Y
         int endY = iniY + shadow->getHeight();          // final Y
         if ( iniX < 0 ) iniX = 0;
         if ( iniY < 0 ) iniY = 0;
@@ -62,24 +60,24 @@ void ShadowCaster::castShadowOnItem( Item* item, int x, int y, Picture* shadow, 
 
         if ( isFreeItem )
         {
-                shadyImage = dynamic_cast< FreeItem* >( item )->getShadedNonmaskedImage();
+                shadyImage = dynamic_cast< FreeItem& >( item ).getShadedNonmaskedImage();
         }
         else if ( isGridItem )
         {
-                shadyImage = item->getProcessedImage();
+                shadyImage = item.getProcessedImage();
         }
 
         if ( shadyImage == nilPointer )
         {
                 shadyImage = new Picture( rawImage->getWidth(), rawImage->getHeight() );
-                item->setWantShadow( true );
+                item.setWantShadow( true );
         }
 
-        if ( item->getWantShadow() )
+        if ( item.getWantShadow() )
         {
                 // initially, image of shaded item is just copy of unshaded item’s image
                 allegro::bitBlit( rawImage->getAllegroPict(), shadyImage->getAllegroPict() );
-                item->setWantShadow( false );
+                item.setWantShadow( false );
         }
 
         shadow->getAllegroPict().lock( true, false );
@@ -91,8 +89,8 @@ void ShadowCaster::castShadowOnItem( Item* item, int x, int y, Picture* shadow, 
         int sRow = 0;           // row of pixels in shadow shading this item
         int sPixel = 0;         // pixel in row of shadow shading this item
 
-        int deltaX = iniX + item->getOffsetX() - x ;
-        int deltaY = iniY + item->getOffsetY() - y ;
+        int deltaX = iniX + item.getOffsetX() - x ;
+        int deltaY = iniY + item.getOffsetY() - y ;
 
         const int iniltpx = ( rawImage->getWidth() >> 1 ) - ( width << 1 ) + deltaW ;
         const int inirtpx = ( rawImage->getWidth() >> 1 ) + ( width << 1 ) + deltaW - 2 ;
@@ -150,7 +148,7 @@ void ShadowCaster::castShadowOnItem( Item* item, int x, int y, Picture* shadow, 
                         if ( iniX < ltpx1 )
                         {
                                 iniX = ltpx1 ;
-                                deltaX = iniX + item->getOffsetX() - x ;
+                                deltaX = iniX + item.getOffsetX() - x ;
                         }
 
                         if ( endX > rtpx1 + 2 )
@@ -237,7 +235,7 @@ void ShadowCaster::castShadowOnItem( Item* item, int x, int y, Picture* shadow, 
                         if ( iniX < ltpx1 )
                         {
                                 iniX = ltpx1;
-                                deltaX = iniX + item->getOffsetX() - x ;
+                                deltaX = iniX + item.getOffsetX() - x ;
                         }
 
                         if ( endX > rtpx1 + 2 )
@@ -308,63 +306,57 @@ void ShadowCaster::castShadowOnItem( Item* item, int x, int y, Picture* shadow, 
 
         if ( isFreeItem )
         {
-                dynamic_cast< FreeItem* >( item )->setShadedNonmaskedImage( shadyImage );
+                dynamic_cast< FreeItem& >( item ).setShadedNonmaskedImage( shadyImage );
         }
         else if ( isGridItem )
         {
-                item->setProcessedImage( shadyImage );
+                item.setProcessedImage( shadyImage );
         }
 }
 
 /* static */
-void ShadowCaster::castShadowOnFloor( FloorTile* tile, int x, int y, Picture* shadow, unsigned short shading, unsigned char transparency )
+void ShadowCaster::castShadowOnFloor( FloorTile& tile, int x, int y, const Picture& shadow, unsigned short shading, unsigned char transparency )
 {
         if ( shading >= 256 ) return ;
 
         // fully transparent stuff doesn’t drop any shadow
         if ( transparency >= 100 ) return;
 
-        Picture* tileImage = tile->getRawImage() ;
+        const Picture& tileImage = tile.getRawImage() ;
 
-        int iniX = x - tile->getOffsetX();      // initial X
-        int iniY = y - tile->getOffsetY();      // initial Y
-        int endX = iniX + shadow->getWidth();   // final X
-        int endY = iniY + shadow->getHeight();  // final Y
+        int iniX = x - tile.getOffsetX();       // initial X
+        int iniY = y - tile.getOffsetY();       // initial Y
+        int endX = iniX + shadow.getWidth();    // final X
+        int endY = iniY + shadow.getHeight();   // final Y
         if ( iniX < 0 ) iniX = 0;
         if ( iniY < 0 ) iniY = 0;
-        if ( endX > static_cast< int >( tileImage->getWidth() ) ) endX = tileImage->getWidth();
-        if ( endY > static_cast< int >( tileImage->getHeight() ) ) endY = tileImage->getHeight();
+        if ( endX > static_cast< int >( tileImage.getWidth() ) ) endX = tileImage.getWidth();
+        if ( endY > static_cast< int >( tileImage.getHeight() ) ) endY = tileImage.getHeight();
 
         // continue when initial coordinates are less than final coordinates
         // id est if ( iniY < endY && iniX < endX )
         if ( iniY >= endY || iniX >= endX ) return;
 
-        Picture* shadyImage = tile->getShadyImage(); // graphics of shaded item
+        Picture& shadyImage = tile.getShadyImage(); // graphics of shaded item
 
-        if ( shadyImage == nilPointer )
-        {
-                shadyImage = new Picture( tileImage->getWidth(), tileImage->getHeight() );
-                tile->setWantShadow( true );
-        }
-
-        if ( tile->getWantShadow() )
+        if ( tile.getWantShadow() )
         {
                 // when there’s only one shading item, begin with fresh image of tile
-                allegro::bitBlit( tileImage->getAllegroPict(), shadyImage->getAllegroPict() );
-                tile->setWantShadow( false );
+                allegro::bitBlit( tileImage.getAllegroPict(), shadyImage.getAllegroPict() );
+                tile.setWantShadow( false );
         }
 
-        shadow->getAllegroPict().lock( true, false );
-        tileImage->getAllegroPict().lock( true, false );
-        shadyImage->getAllegroPict().lock( true, true );
+        shadow.getAllegroPict().lock( true, false );
+        tileImage.getAllegroPict().lock( true, false );
+        shadyImage.getAllegroPict().lock( true, true );
 
         int iRow = 0;           // row of pixels in image and shady image of this tile
         int iPixel = 0;         // pixel in row of image & shady image
         int sRow = 0;           // row of pixels in shadow shading this tile
         int sPixel = 0;         // pixel in row of shadow shading this tile
 
-        const int deltaX = iniX + tile->getOffsetX() - x ;
-        const int deltaY = iniY + tile->getOffsetY() - y ;
+        const int deltaX = iniX + tile.getOffsetX() - x ;
+        const int deltaY = iniY + tile.getOffsetY() - y ;
 
         // degree of opacity from 0, full opacity, to 255, full transparency
         short opacity = static_cast< short >( shading + ( ( 256.0 - shading ) * transparency / 100 ) );
@@ -387,9 +379,9 @@ void ShadowCaster::castShadowOnFloor( FloorTile* tile, int x, int y, Picture* sh
                         // walk thru pixels of each row within calculated limits
                         for ( iPixel = iniX, sPixel = deltaX ; iPixel < endX ; iPixel ++, sPixel ++ )
                         {
-                                AllegroColor sColor = shadow->getPixelAt( sPixel, sRow );
-                                AllegroColor iColor = tileImage->getPixelAt( iPixel, iRow );
-                                AllegroColor rColor = shadyImage->getPixelAt( iPixel, iRow );
+                                AllegroColor sColor = shadow.getPixelAt( sPixel, sRow );
+                                AllegroColor iColor = tileImage.getPixelAt( iPixel, iRow );
+                                AllegroColor rColor = shadyImage.getPixelAt( iPixel, iRow );
 
                                 // when pixel of shadow isn’t key color & pixel of tile isn’t key color
                                 // and pixel of result isn’t changed before
@@ -399,7 +391,7 @@ void ShadowCaster::castShadowOnFloor( FloorTile* tile, int x, int y, Picture* sh
                                         unsigned char rRed = iColor.getRed() >> pxDiv ;
                                         unsigned char rGreen = iColor.getGreen() >> pxDiv ;
                                         unsigned char rBlue = iColor.getBlue() >> pxDiv ;
-                                        shadyImage->putPixelAt( iPixel, iRow, Color( rRed, rGreen, rBlue, iColor.getAlpha() ) );
+                                        shadyImage.putPixelAt( iPixel, iRow, Color( rRed, rGreen, rBlue, iColor.getAlpha() ) );
                                 }
                         }
                 }
@@ -413,9 +405,9 @@ void ShadowCaster::castShadowOnFloor( FloorTile* tile, int x, int y, Picture* sh
                         // walk thru pixels of each row within calculated limits
                         for ( iPixel = iniX, sPixel = deltaX ; iPixel < endX ; iPixel ++, sPixel ++ )
                         {
-                                AllegroColor sColor = shadow->getPixelAt( sPixel, sRow );
-                                AllegroColor iColor = tileImage->getPixelAt( iPixel, iRow );
-                                AllegroColor rColor = shadyImage->getPixelAt( iPixel, iRow );
+                                AllegroColor sColor = shadow.getPixelAt( sPixel, sRow );
+                                AllegroColor iColor = tileImage.getPixelAt( iPixel, iRow );
+                                AllegroColor rColor = shadyImage.getPixelAt( iPixel, iRow );
 
                                 // when pixel of shadow isn’t key color & pixel of tile isn’t key color
                                 // and pixel of result isn’t changed before
@@ -428,24 +420,22 @@ void ShadowCaster::castShadowOnFloor( FloorTile* tile, int x, int y, Picture* sh
                                                 unsigned char rRed = ( iColor.getRed() * opacity ) >> 8 ;
                                                 unsigned char rGreen = ( iColor.getGreen() * opacity ) >> 8 ;
                                                 unsigned char rBlue = ( iColor.getBlue() * opacity ) >> 8 ;
-                                                shadyImage->putPixelAt( iPixel, iRow, Color( rRed, rGreen, rBlue, iColor.getAlpha() ) );
+                                                shadyImage.putPixelAt( iPixel, iRow, Color( rRed, rGreen, rBlue, iColor.getAlpha() ) );
                                         }
                                         // zero opacity is full opacity
                                         else
                                         {
                                                 // the pixel of result is pure black
-                                                shadyImage->putPixelAt( iPixel, iRow, Color::blackColor() );
+                                                shadyImage.putPixelAt( iPixel, iRow, Color::blackColor() );
                                         }
                                 }
                         }
                 }
         }
 
-        shadyImage->getAllegroPict().unlock();
-        tileImage->getAllegroPict().unlock();
-        shadow->getAllegroPict().unlock();
-
-        tile->setShadyImage( shadyImage );
+        shadyImage.getAllegroPict().unlock();
+        tileImage.getAllegroPict().unlock();
+        shadow.getAllegroPict().unlock();
 }
 
 }

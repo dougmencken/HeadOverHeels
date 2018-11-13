@@ -15,7 +15,7 @@
 #include "Behavior.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
 class Item ;
@@ -26,7 +26,7 @@ class Switch : public Behavior
 
 public:
 
-        Switch( Item * item, const std::string & behavior ) ;
+        Switch( const ItemPtr & item, const std::string & behavior ) ;
 
         virtual ~Switch( ) ;
 
@@ -39,7 +39,7 @@ private:
         * @param Where to store items
         * @return true if any item was found or false otherwise
         */
-        bool checkSideItems ( std::vector< Item * > & sideItems ) ;
+        bool checkSideItems ( std::vector< ItemPtr > & sideItems ) ;
 
 private:
 
@@ -48,7 +48,7 @@ private:
        /**
         * Items that triggered this switch
         */
-        std::vector< Item * > triggerItems ;
+        std::vector< ItemPtr > triggerItems ;
 
 };
 

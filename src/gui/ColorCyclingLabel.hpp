@@ -33,9 +33,9 @@ private:
 
         virtual void updateImageOfLabel ( const std::string& text, Font * font ) ;
 
-        Timer * colorCyclingTimer ;
-
         unsigned short cycle ;
+
+        autouniqueptr < Timer > colorCyclingTimer ;
 
 };
 

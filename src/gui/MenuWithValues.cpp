@@ -87,14 +87,14 @@ void MenuWithValues::draw( const allegro::Pict& where )
         /* for ( std::list< Label* >::iterator o = optionsWithValues.begin (); o != optionsWithValues.end (); ++o )
         {
                 Label* option = *o;
-                while ( option->getWidth() > ( isomot::ScreenWidth() - 100 ) )
+                while ( option->getWidth() > ( iso::ScreenWidth() - 100 ) )
                         option->setSpacing( option->getSpacing() - 1 );
         } */
 
         // update position of the whole menu to draw it centered
         int previousX = getX (); int previousY = getY ();
-        setX( previousX + ( ( isomot::ScreenWidth() - previousX ) >> 1 ) - ( getWidthOfMenu () >> 1 ) );
-        setY( previousY + ( ( isomot::ScreenHeight() - previousY ) >> 1 ) - ( getHeightOfMenu() >> 1 ) );
+        setX( previousX + ( ( iso::ScreenWidth() - previousX ) >> 1 ) - ( getWidthOfMenu () >> 1 ) );
+        setY( previousY + ( ( iso::ScreenHeight() - previousY ) >> 1 ) - ( getHeightOfMenu() >> 1 ) );
 
         int dx( Menu::beforeOption != nilPointer ? Menu::beforeOption->getWidth() : 0 );
         int dy( 0 );
@@ -123,7 +123,7 @@ void MenuWithValues::draw( const allegro::Pict& where )
         setX ( previousX );
         setY ( previousY );
 
-        std::for_each( optionsWithValues.begin (), optionsWithValues.end (), isomot::DeleteIt() );
+        std::for_each( optionsWithValues.begin (), optionsWithValues.end (), iso::DeleteIt() );
         optionsWithValues.clear();
 }
 

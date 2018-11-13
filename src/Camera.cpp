@@ -1,233 +1,77 @@
 
 #include "Camera.hpp"
 #include "Room.hpp"
-#include "PlayerItem.hpp"
+#include "GameManager.hpp"
 #include "Ism.hpp"
 
-# include "RoomBuilder.hpp"
 
-
-namespace isomot
+namespace iso
 {
 
 Camera::Camera( Room * room )
         : room( room )
-        , reference( std::pair< int, int >( 0, 0 ) )
         , delta( std::pair< int, int >( 0, 0 ) )
 {
+        centerRoom ();
 }
 
-Camera::~Camera()
+void Camera::centerRoom ()
 {
+        delta.first = ( static_cast< int >( room->getWidthOfRoomImage() ) - static_cast< int >( ScreenWidth() ) ) >> 1 ;
+        delta.second = ( static_cast< int >( room->getHeightOfRoomImage() ) - static_cast< int >( ScreenHeight() ) ) >> 1 ;
+        delta.second += GameManager::spaceForAmbiance + LayerHeight ;
+
+        centeredOnItem.clear();
 }
 
-void Camera::turnOn( PlayerItem* player, const Way& wayOfEntry )
+bool Camera::centerOnItem( const Item & item )
 {
-        const unsigned int maxTilesOfSingleRoom = 10 ;
+        std::pair< int, int > offsetBefore = delta ;
 
-        if ( delta.first == 0 && delta.second == 0 && player != nilPointer &&
-                        ( room->getTilesX() > maxTilesOfSingleRoom || room->getTilesY() > maxTilesOfSingleRoom ) )
+        // center on room’s origin at first
+        delta.first = room->getX0 () - ( static_cast< int >( ScreenWidth() ) >> 1 ) ;
+        delta.second = room->getY0 () - ( static_cast< int >( ScreenHeight() ) >> 1 ) ;
+        delta.second += GameManager::spaceForAmbiance + LayerHeight ;
+
+        // apply offset of item to room’s origin
+        delta.first += item.getOffsetX () ;
+        delta.second += item.getOffsetY () ;
+
+        // center item itself
+        int widthOfItem = ( item.getWidthX() + item.getWidthY() ) << 1 ;
+        int heightOfItem = item.getWidthX() + item.getWidthY() + item.getHeight() ;
+        delta.first += ( widthOfItem >> 1 );
+        delta.second -= ( heightOfItem >> 1 );
+
+        if ( centeredOnItem.empty() )
         {
-                // is it double room along Y
-                if ( room->getTilesX() <= maxTilesOfSingleRoom && room->getTilesY() > maxTilesOfSingleRoom )
-                {
-                        int playerY = player->getY ();
-                        unsigned int absoluteValueOfY = ( playerY >= 0 ? playerY : -playerY );
+                centeredOnItem = item.getUniqueName();
+        }
+        else if ( item.getUniqueName() != centeredOnItem )
+        {
+                int distanceX = delta.first - offsetBefore.first ;
+                int distanceY = delta.second - offsetBefore.second ;
+                int stepX = distanceX >> 2 ;
+                int stepY = distanceY >> 2 ;
 
-                        if ( absoluteValueOfY < room->getTilesY() * room->getSizeOfOneTile() / 2 )
-                        {
-                                delta.first = static_cast< int >( room->getWhereToDraw()->getWidth() ) - static_cast< int >( ScreenWidth() );
-                                delta.second = 0;
-                        }
-                        else
-                        {
-                                delta.first = 0;
-                                delta.second = static_cast< int >( room->getWhereToDraw()->getHeight() ) - static_cast< int >( ScreenHeight() );
-                        }
-                }
-                // is it double room along X
-                else if ( room->getTilesX() > maxTilesOfSingleRoom && room->getTilesY() <= maxTilesOfSingleRoom )
-                {
-                        int playerX = player->getX ();
-                        unsigned int absoluteValueOfX = ( playerX >= 0 ? playerX : -playerX );
+                if ( stepX == 0 && distanceX != 0 ) stepX = distanceX >> 1 ;
+                if ( stepY == 0 && distanceY != 0 ) stepY = distanceY >> 1 ;
+                if ( stepX == 0 && distanceX != 0 ) stepX = distanceX ;
+                if ( stepY == 0 && distanceY != 0 ) stepY = distanceY ;
 
-                        if ( absoluteValueOfX < room->getTilesX() * room->getSizeOfOneTile() / 2 )
-                        {
-                                delta.first = 0;
-                                delta.second = 0;
-                        }
-                        else
-                        {
-                                delta.first = static_cast< int >( room->getWhereToDraw()->getWidth() ) - static_cast< int >( ScreenWidth() );
-                                delta.second = static_cast< int >( room->getWhereToDraw()->getHeight() ) - static_cast< int >( ScreenHeight() );
-                        }
+                if ( stepX != 0 || stepY != 0 )
+                {
+                        delta.first = offsetBefore.first + stepX ;
+                        delta.second = offsetBefore.second + stepY ;
+                        centeredOnItem += "+" ;
                 }
-                // it’s triple room then
                 else
                 {
-                        TripleRoomInitialPoint* initialPoint = room->findInitialPointOfEntryToTripleRoom( wayOfEntry );
-                        if ( initialPoint != nilPointer )
-                        {
-                                delta.first = initialPoint->getX();
-                                delta.second = initialPoint->getY();
-                        }
-                        else
-                        { // for example it’s resume of some game which was saved in triple room
-                                int midX = RoomBuilder::getXCenterOfRoom( player->getDataOfItem(), room );
-                                int midY = RoomBuilder::getYCenterOfRoom( player->getDataOfItem(), room );
-                                delta.first = midX + ( 12 * room->getSizeOfOneTile() );  // yeah, 12 is just some magic number
-                                delta.second = midY + ( 6 * room->getSizeOfOneTile() );  // as well as 6
-                        }
-                }
-
-                reference.first = player->getX ();
-                reference.second = player->getY ();
-        }
-}
-
-bool Camera::centerOn( PlayerItem* player )
-{
-        const unsigned int maxTilesOfSingleRoom = 10 ;
-
-        // whether camera has moved
-        bool changed = false;
-
-        // Sala triple
-        if ( ( room->getTilesX() > maxTilesOfSingleRoom && room->getTilesY() > maxTilesOfSingleRoom ) && player != nilPointer )
-        {
-                // Debe haber cambio en el eje X para realizar los cálculos
-                if ( reference.first - player->getX() != 0 && room->getTilesX() > maxTilesOfSingleRoom )
-                {
-                        // Diferencia en X respecto al último movimiento
-                        int offsetX = player->getX() - reference.first;
-
-                        // Límites de la sala para efectuar el desplazamiento de la cámara
-                        int minX = room->getTripleRoomBoundX().first; //96;
-                        int maxX = room->getTripleRoomBoundX().second; //144;
-
-                        // Hay desplazamiento al norte
-                        if ( offsetX < 0 && player->getX() > minX && player->getX() <= maxX )
-                        {
-                                delta.first += ( offsetX << 1 );
-                                delta.second += offsetX;
-                                changed = true;
-                        }
-                        // Hay desplazamiento al sur
-                        else if ( offsetX > 0 && player->getX() > minX && player->getX() <= maxX )
-                        {
-                                delta.first += ( offsetX << 1 );
-                                delta.second += offsetX;
-                                changed = true;
-                        }
-                }
-
-                // Debe haber cambio en el eje Y para realizar los cálculos
-                if ( reference.second - player->getY() != 0 && room->getTilesY() > maxTilesOfSingleRoom )
-                {
-                        // Diferencia en Y respecto al último movimiento
-                        int offsetY = player->getY() - reference.second;
-
-                        // Límites de la sala para efectuar el desplazamiento de la cámara
-                        int minY = room->getTripleRoomBoundY().first; //80;
-                        int maxY = room->getTripleRoomBoundY().second; //128;
-
-                        // Hay desplazamiento al este
-                        if ( offsetY < 0 && player->getY() > minY && player->getY() <= maxY )
-                        {
-                                delta.first -= ( offsetY << 1 );
-                                delta.second += offsetY;
-                                changed = true;
-                        }
-                        // Hay desplazamiento al oeste
-                        else if ( offsetY > 0 && player->getY() > minY && player->getY() <= maxY )
-                        {
-                                delta.first -= ( offsetY << 1 );
-                                delta.second += offsetY;
-                                changed = true;
-                        }
-                }
-        }
-        // Sala doble
-        else if ( ( room->getTilesX() > maxTilesOfSingleRoom || room->getTilesY() > maxTilesOfSingleRoom ) && player != nilPointer )
-        {
-                // Debe haber cambio en el eje X para realizar los cálculos
-                if ( reference.first - player->getX() != 0 && room->getTilesX() > maxTilesOfSingleRoom )
-                {
-                        // Diferencia en X respecto al último movimiento
-                        int offsetX = player->getX() - reference.first;
-
-                        // Límites de la sala para efectuar el desplazamiento de la cámara
-                        int minX = ( room->getTilesX() * room->getSizeOfOneTile() ) / 4;
-                        int maxX = ( room->getTilesX() * room->getSizeOfOneTile() * 3 ) / 4;
-
-                        // Hay desplazamiento al norte
-                        if ( offsetX < 0 && player->getX() <= maxX - 1 && player->getX() >= minX - 1 )
-                        {
-                                // Si no se han alcanzado los límites de la sala el desplazamiento al norte es posible
-                                if ( delta.first >= 0 && delta.second >= 0 )
-                                {
-                                        delta.first += ( offsetX << 1 );
-                                        delta.second += offsetX;
-                                        changed = true;
-                                }
-                        }
-                        // Hay desplazamiento al sur
-                        else if ( offsetX > 0 && player->getX() <= maxX && player->getX() >= minX )
-                        {
-                                // Si no se han alcanzado los límites de la sala el desplazamiento al sur es posible
-                                if ( delta.first <= ( static_cast< int >( room->getWhereToDraw()->getWidth() ) - static_cast< int >( ScreenWidth() ) ) &&
-                                        delta.second <= ( static_cast< int >( room->getWhereToDraw()->getHeight() ) - static_cast< int >( ScreenHeight() ) ) )
-                                {
-                                        delta.first += ( offsetX << 1 );
-                                        delta.second += offsetX;
-                                        changed = true;
-                                }
-                        }
-                }
-
-                // Debe haber cambio en el eje Y para realizar los cálculos
-                if ( reference.second - player->getY() != 0 && room->getTilesY() > maxTilesOfSingleRoom )
-                {
-                        // Diferencia en Y respecto al último movimiento
-                        int offsetY = player->getY() - reference.second;
-
-                        // Límites de la sala para efectuar el desplazamiento de la cámara
-                        int minY = ( room->getTilesY() * room->getSizeOfOneTile() ) / 4;
-                        int maxY = ( room->getTilesY() * room->getSizeOfOneTile() * 3 ) / 4;
-
-                        // Hay desplazamiento al este
-                        if ( offsetY < 0 && player->getY() <= maxY - 1 && player->getY() >= minY - 1 )
-                        {
-                                // Si no se han alcanzado los límites de la sala el desplazamiento al este es posible
-                                if ( delta.first <= static_cast< int >( room->getWhereToDraw()->getWidth() ) - static_cast< int >( ScreenWidth() ) && delta.second >= 0 )
-                                {
-                                        delta.first -= ( offsetY << 1 );
-                                        delta.second += offsetY;
-                                        changed = true;
-                                }
-                        }
-                        // Hay desplazamiento al oeste
-                        else if ( offsetY > 0 && player->getY() <= maxY && player->getY() >= minY )
-                        {
-                                // Si no se han alcanzado los límites de la sala el desplazamiento al oeste es posible
-                                if ( delta.first >= 0 && delta.second <= static_cast< int >( room->getWhereToDraw()->getHeight() ) - static_cast< int >( ScreenHeight() ) )
-                                {
-                                        delta.first -= ( offsetY << 1 );
-                                        delta.second += offsetY;
-                                        changed = true;
-                                }
-                        }
+                        centeredOnItem = item.getUniqueName();
                 }
         }
 
-        if ( player != nilPointer )
-        {
-                // refresh point of reference
-                reference.first = player->getX();
-                reference.second = player->getY();
-        }
-
-        return changed;
+        return delta == offsetBefore ;
 }
 
 }

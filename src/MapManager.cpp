@@ -13,27 +13,37 @@
 
 #include <tinyxml2.h>
 
-#include <algorithm>
-
-
-namespace isomot
+namespace iso
 {
 
-MapManager::MapManager( Isomot* isomot )
-        : isomot( isomot )
-        , activeRoom( nilPointer )
-{
-
-}
+bool MapManager::buildEveryRoomAtOnce = false ;
 
 MapManager::~MapManager( )
 {
-
+        clear() ;
 }
 
-void MapManager::loadMap ( const std::string& fileName )
+/* private */ void MapManager::clear ()
 {
-        // read from XML file
+        binRoomsInPlay() ;
+
+        for ( std::map< std::string, Room * >::const_iterator ri = gameRooms.begin () ; ri != gameRooms.end () ; ++ ri )
+        {
+                delete ri->second ;
+        }
+        gameRooms.clear() ;
+
+        for ( std::map< std::string, RoomConnections * >::const_iterator ci = linksBetweenRooms.begin () ; ci != linksBetweenRooms.end () ; ++ ci )
+        {
+                delete ci->second ;
+        }
+        linksBetweenRooms.clear() ;
+}
+
+void MapManager::readMap ( const std::string& fileName )
+{
+        clear();
+
         tinyxml2::XMLDocument mapXml;
         tinyxml2::XMLError result = mapXml.LoadFile( fileName.c_str () );
         if ( result != tinyxml2::XML_SUCCESS )
@@ -42,15 +52,33 @@ void MapManager::loadMap ( const std::string& fileName )
                 return;
         }
 
+        std::string pathToRooms = iso::homePath() + "rooms" + util::pathSeparator() ;
+
+        if ( MapManager::buildEveryRoomAtOnce )
+        {
+                if ( ! util::folderExists( pathToRooms ) )
+                        mkdir( pathToRooms.c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH );
+        }
+
         tinyxml2::XMLElement* root = mapXml.FirstChildElement( "map" );
 
+        unsigned int howManyRooms = 0 ;
         for ( tinyxml2::XMLElement* room = root->FirstChildElement( "room" ) ;
                         room != nilPointer ;
                         room = room->NextSiblingElement( "room" ) )
         {
+                ++ howManyRooms ;
+        }
+        std::cout << "map of game consists of " << howManyRooms << " rooms" << std::endl ;
+
+        unsigned int roomNth = 0 ;
+        for ( tinyxml2::XMLElement* room = root->FirstChildElement( "room" ) ;
+                        room != nilPointer ;
+                        room = room->NextSiblingElement( "room" ) )
+        {
+                ++ roomNth ;
+
                 std::string roomFile = room->Attribute( "file" );
-                /* std::cout << "got room \"" << roomFile << "\" of map" << std::endl ; */
-                MapRoomData* roomData = new MapRoomData( roomFile );
 
                 tinyxml2::XMLElement* north = room->FirstChildElement( "north" ) ;
                 tinyxml2::XMLElement* south = room->FirstChildElement( "south" ) ;
@@ -71,56 +99,102 @@ void MapManager::loadMap ( const std::string& fileName )
                 tinyxml2::XMLElement* westnorth = room->FirstChildElement( "westnorth" ) ;
                 tinyxml2::XMLElement* westsouth = room->FirstChildElement( "westsouth" ) ;
 
+                RoomConnections* connections = new RoomConnections();
+
                 if ( north != nilPointer ) // connection on north
-                        roomData->setNorth( north->FirstChild()->ToText()->Value() );
+                        connections->setNorth( north->FirstChild()->ToText()->Value() );
 
                 if ( south != nilPointer ) // connection on south
-                        roomData->setSouth( south->FirstChild()->ToText()->Value() );
+                        connections->setSouth( south->FirstChild()->ToText()->Value() );
 
                 if ( east != nilPointer ) // connection on east
-                        roomData->setEast( east->FirstChild()->ToText()->Value() );
+                        connections->setEast( east->FirstChild()->ToText()->Value() );
 
                 if ( west != nilPointer ) // connection on west
-                        roomData->setWest( west->FirstChild()->ToText()->Value() );
+                        connections->setWest( west->FirstChild()->ToText()->Value() );
 
                 if ( floor != nilPointer ) // connection on bottom
-                        roomData->setFloor( floor->FirstChild()->ToText()->Value() );
+                        connections->setFloor( floor->FirstChild()->ToText()->Value() );
 
                 if ( roof != nilPointer ) // connection on top
-                        roomData->setRoof( roof->FirstChild()->ToText()->Value() );
+                        connections->setRoof( roof->FirstChild()->ToText()->Value() );
 
                 if ( teleport != nilPointer ) // connection via teleport
-                        roomData->setTeleport( teleport->FirstChild()->ToText()->Value() );
+                        connections->setTeleport( teleport->FirstChild()->ToText()->Value() );
 
                 if ( teleport2 != nilPointer ) // connection via second teleport
-                        roomData->setTeleportToo( teleport2->FirstChild()->ToText()->Value() );
+                        connections->setTeleportToo( teleport2->FirstChild()->ToText()->Value() );
 
-                if ( northeast != nilPointer ) // north-east connection
-                        roomData->setNorthEast( northeast->FirstChild()->ToText()->Value() );
+                if ( northeast != nilPointer ) // connection on northeast
+                        connections->setNorthEast( northeast->FirstChild()->ToText()->Value() );
 
-                if ( northwest != nilPointer ) // north-west connection
-                        roomData->setNorthWest( northwest->FirstChild()->ToText()->Value() );
+                if ( northwest != nilPointer ) // connection on northwest
+                        connections->setNorthWest( northwest->FirstChild()->ToText()->Value() );
 
-                if ( southeast != nilPointer ) // south-east connection
-                        roomData->setSouthEast( southeast->FirstChild()->ToText()->Value() );
+                if ( southeast != nilPointer ) // connection on southeast
+                        connections->setSouthEast( southeast->FirstChild()->ToText()->Value() );
 
-                if ( southwest != nilPointer ) // south-west connection
-                        roomData->setSouthWest( southwest->FirstChild()->ToText()->Value() );
+                if ( southwest != nilPointer ) // connection on southwest
+                        connections->setSouthWest( southwest->FirstChild()->ToText()->Value() );
 
-                if ( eastnorth != nilPointer ) // east-north connection
-                        roomData->setEastNorth( eastnorth->FirstChild()->ToText()->Value() );
+                if ( eastnorth != nilPointer ) // connection on eastnorth
+                        connections->setEastNorth( eastnorth->FirstChild()->ToText()->Value() );
 
-                if ( eastsouth != nilPointer ) // east-south connection
-                        roomData->setEastSouth( eastsouth->FirstChild()->ToText()->Value() );
+                if ( eastsouth != nilPointer ) // connection on eastsouth
+                        connections->setEastSouth( eastsouth->FirstChild()->ToText()->Value() );
 
-                if ( westnorth != nilPointer ) // west-north connection
-                        roomData->setWestNorth( westnorth->FirstChild()->ToText()->Value() );
+                if ( westnorth != nilPointer ) // connection on westnorth
+                        connections->setWestNorth( westnorth->FirstChild()->ToText()->Value() );
 
-                if ( westsouth != nilPointer ) // west-south connection
-                        roomData->setWestSouth( westsouth->FirstChild()->ToText()->Value() );
+                if ( westsouth != nilPointer ) // connection on westsouth
+                        connections->setWestSouth( westsouth->FirstChild()->ToText()->Value() );
 
-                // add data for this room to the list
-                this->theMap.push_back( roomData );
+                linksBetweenRooms[ roomFile ] = connections ;
+
+                if ( MapManager::buildEveryRoomAtOnce )
+                {
+                        // letters of allegro’s font are 8 x 7
+                        const unsigned short widthOfChar = 8 ;
+                        const unsigned short heightOfChar = 7 ;
+                        const unsigned short interligne = 8 ;
+
+                        const unsigned short offsetY = ( ( heightOfChar + interligne ) << 1 ) + 10 ;
+                        const unsigned short atY = ScreenHeight() - offsetY ;
+
+                        std::string roomInRooms = "building " + util::toStringWithOrdinalSuffix( roomNth ) + " room out of " + util::number2string( howManyRooms ) ;
+
+                        allegro::fillRect( allegro::Pict::theScreen(),
+                                           0, atY - 4, ScreenWidth(), atY,
+                                           Color::blackColor().toAllegroColor() );
+
+                        autouniqueptr< allegro::Pict > stripe( allegro::Pict::newPict( ScreenWidth(), heightOfChar + interligne ) );
+
+                        unsigned int textX = ( ScreenWidth() - roomInRooms.length() * widthOfChar ) >> 1 ;
+                        stripe->clearToColor( Color::blueColor().toAllegroColor() );
+                        allegro::textOut( roomInRooms, *stripe.get(), textX, ( interligne >> 1 ) + 1, Color::yellowColor().toAllegroColor() );
+                        allegro::bitBlit( *stripe.get(), allegro::Pict::theScreen(), 0, atY );
+
+                        textX = ( ScreenWidth() - roomFile.length() * widthOfChar ) >> 1 ;
+                        stripe->clearToColor( Color::blueColor().toAllegroColor() );
+                        allegro::textOut( roomFile, *stripe.get(), textX, ( interligne >> 1 ) - 1, Color::greenColor().toAllegroColor() );
+                        allegro::bitBlit( *stripe.get(), allegro::Pict::theScreen(), 0, atY + ( heightOfChar + interligne ) );
+
+                        allegro::fillRect( allegro::Pict::theScreen(),
+                                           0, atY + ( ( heightOfChar + interligne ) << 1 ),
+                                           ScreenWidth(), atY + ( ( heightOfChar + interligne ) << 1 ) + 4,
+                                           Color::blackColor().toAllegroColor() );
+
+                        Room* theRoom = RoomBuilder::buildRoom( iso::sharePath() + "map" + util::pathSeparator() + roomFile );
+                        theRoom->setConnections( connections );
+                        gameRooms[ roomFile ] = theRoom ;
+
+                        // write file of room
+                        theRoom->saveAsXML( pathToRooms + theRoom->getNameOfFileWithDataAboutRoom() );
+                }
+                else
+                {
+                        gameRooms[ roomFile ] = nilPointer ;
+                }
         }
 
         std::cout << "read map of rooms from " << fileName << std::endl ;
@@ -128,169 +202,286 @@ void MapManager::loadMap ( const std::string& fileName )
 
 void MapManager::beginNewGame( const std::string& headRoom, const std::string& heelsRoom )
 {
+        std::cout << "MapManager::beginNewGame( \"" << headRoom << "\", \"" << heelsRoom << "\" )" << std::endl ;
+
         resetVisitedRooms();
 
-        GameManager::getInstance()->setHeadLives( 8 );
-        GameManager::getInstance()->setHeelsLives( 8 );
+        GameManager::getInstance().setHeadLives( 8 );
+        GameManager::getInstance().setHeelsLives( 8 );
+
+        if ( linksBetweenRooms.empty() )
+                readMap( iso::sharePath() + "map" + util::pathSeparator() + "map.xml" );
 
         // head’s room
 
-        MapRoomData* headRoomData = findRoomData( headRoom );
-
-        if ( headRoomData != nilPointer )
+        if ( linksBetweenRooms.find( headRoom ) != linksBetweenRooms.end () )
         {
-                Room* firstRoom = RoomBuilder::buildRoom( isomot::sharePath() + "map" + pathSeparator + headRoom );
+                Room* firstRoom = getOrBuildRoomByFile( headRoom );
 
                 if ( firstRoom != nilPointer )
                 {
-                        ItemData* headData = GameManager::getInstance()->getItemDataManager()->findDataByLabel( "head" );
+                        addRoomInPlay( firstRoom );
 
-                        int centerX = RoomBuilder::getXCenterOfRoom( headData, firstRoom );
-                        int centerY = RoomBuilder::getYCenterOfRoom( headData, firstRoom );
+                        const ItemData* headData = GameManager::getInstance().getIsomot().getItemDataManager().findDataByLabel( "head" );
+
+                        int centerX = firstRoom->getXCenterForItem( headData );
+                        int centerY = firstRoom->getYCenterForItem( headData );
 
                         if ( headRoom != heelsRoom )
                         {
                                 // create character Head
                                 RoomBuilder::createPlayerInRoom( firstRoom, "head", true, centerX, centerY, 0, Way::West );
-
-                                headRoomData->setVisited( true );
-
                                 firstRoom->activateCharacterByLabel( "head" );
                         }
                         else
                         {
                                 // create character Head over Heels
                                 RoomBuilder::createPlayerInRoom( firstRoom, "headoverheels", true, centerX, centerY, 0, Way::West );
-
-                                headRoomData->setVisited( true );
-
                                 firstRoom->activateCharacterByLabel( "headoverheels" );
                         }
 
-                        firstRoom->getCamera()->turnOn( firstRoom->getMediator()->getActiveCharacter(), Way::JustWait );
+                        firstRoom->setVisited( true );
+
                         activeRoom = firstRoom;
-                        rooms.push_back( firstRoom );
                 }
+        }
+        else
+        {
+                std::cerr << "room \"" << headRoom << "\" doesn’t exist" << std::endl ;
         }
 
         if ( headRoom != heelsRoom )
         {
                 // heels’ room
 
-                MapRoomData* heelsRoomData = findRoomData( heelsRoom );
-
-                if ( heelsRoomData != nilPointer )
+                if ( linksBetweenRooms.find( heelsRoom ) != linksBetweenRooms.end () )
                 {
-                        Room* secondRoom = RoomBuilder::buildRoom( isomot::sharePath() + "map" + pathSeparator + heelsRoom );
+                        Room* secondRoom = getOrBuildRoomByFile( heelsRoom );
 
                         if ( secondRoom != nilPointer )
                         {
-                                ItemData* heelsData = GameManager::getInstance()->getItemDataManager()->findDataByLabel( "heels" );
+                                addRoomInPlay( secondRoom );
 
-                                int centerX = RoomBuilder::getXCenterOfRoom( heelsData, secondRoom );
-                                int centerY = RoomBuilder::getYCenterOfRoom( heelsData, secondRoom );
+                                const ItemData* heelsData = GameManager::getInstance().getIsomot().getItemDataManager().findDataByLabel( "heels" );
+
+                                int centerX = secondRoom->getXCenterForItem( heelsData );
+                                int centerY = secondRoom->getYCenterForItem( heelsData );
 
                                 // create character Heels
                                 RoomBuilder::createPlayerInRoom( secondRoom, "heels", true, centerX, centerY, 0, Way::South );
-
-                                heelsRoomData->setVisited( true );
-
                                 secondRoom->activateCharacterByLabel( "heels" );
 
-                                secondRoom->getCamera()->turnOn( secondRoom->getMediator()->getActiveCharacter(), Way::JustWait );
-                                rooms.push_back( secondRoom );
+                                secondRoom->setVisited( true );
                         }
                 }
+                else
+                {
+                        std::cerr << "room \"" << heelsRoom << "\" doesn’t exist" << std::endl ;
+                }
         }
+
+        if ( activeRoom != nilPointer ) activeRoom->activate();
 }
 
 void MapManager::beginOldGameWithCharacter( const std::string& roomFile, const std::string& character,
                                             int x, int y, int z, const Way& direction, const std::string& entry, bool active )
 {
-        MapRoomData* roomData = findRoomData( roomFile );
+        std::cout << "MapManager::beginOldGameWithCharacter( \"" << roomFile << "\", \"" << character << "\", "
+                        << x << ", " << y << ", " << z << ", \""
+                        << direction.toString() << "\", \"" << entry << "\", "
+                        << ( active ? "true" : "false" ) << " )"
+                        << std::endl ;
+
         Room* room = nilPointer;
 
-        if ( roomData != nilPointer )
+        // if there is already created room it is when room of second player is the same as of first player
+        if ( activeRoom != nilPointer && activeRoom->getNameOfFileWithDataAboutRoom() == roomFile )
         {
-                // if there is already created room it is when room of second player is the same as of first player
-                if ( this->activeRoom != nilPointer && this->activeRoom->getNameOfFileWithDataAboutRoom() == roomData->getNameOfRoomFile() )
+                room = activeRoom;
+        }
+        else
+        {
+                room = getOrBuildRoomByFile( roomFile );
+        }
+
+        // place character in room
+        if ( room != nilPointer )
+        {
+                addRoomInPlay( room );
+
+                // create player
+                PlayerItemPtr player = RoomBuilder::createPlayerInRoom(
+                                                room, character, true,
+                                                x, y, z, direction, Way( entry ) );
+
+                room->setVisited( true );
+
+                std::string realEntry = entry ;
+
+                if ( realEntry == "just wait" )
                 {
-                        room = this->activeRoom;
-                }
-                else
-                {
-                        room = RoomBuilder::buildRoom ( isomot::sharePath() + "map" + pathSeparator + roomFile );
-                }
-
-                // place character in room
-                if ( room != nilPointer )
-                {
-                        // create player
-                        PlayerItem* player = RoomBuilder::createPlayerInRoom(
-                                                        room, character, true,
-                                                        x, y, z, direction, Way( entry ) );
-
-                        roomData->setVisited( true );
-
-                        std::string realEntry = entry ;
-
-                        if ( realEntry == "just wait" )
+                        // it’s the case of resume of saved game
+                        // show bubbles only for active player
+                        if ( active )
                         {
-                                // it’s the case of resume of saved game
-                                // show bubbles only for active player
-                                if ( active )
-                                {
-                                        realEntry = "via second teleport";
-                                }
+                                realEntry = "via second teleport";
                         }
+                }
 
-                        // change activity of player by way of entry
-                        player->autoMoveOnEntry( realEntry );
+                room->activateCharacterByLabel( character );
 
-                        // for active player or for other player when it is created in another room
-                        // when other player is in the same room as active player then there’s no need to do anything more
-                        if ( active || this->activeRoom != room )
-                        {
-                                room->activateCharacterByLabel( character );
-                                room->getCamera()->turnOn( room->getMediator()->getActiveCharacter(), realEntry );
-                                //// room->getCamera()->centerOn( room->getMediator()->getActiveCharacter () );
+                player->autoMoveOnEntry( realEntry );
 
-                                if ( active )
-                                {
-                                        // for active player this room is active one
-                                        this->activeRoom = room;
-                                }
-
-                                this->rooms.push_back( room );
-                        }
+                // when other player is in the same room as active player then there’s no need to do anything more
+                if ( active )
+                {
+                        activeRoom = room;
+                        activeRoom->activate();
                 }
         }
 }
 
-void MapManager::binEveryRoom()
+Room* MapManager::rebuildRoom( Room* room )
 {
-        // bin rooms
-        std::for_each( this->rooms.begin (), this->rooms.end (), DeleteIt() );
+        if ( room == nilPointer ) return nilPointer ;
 
-        this->rooms.clear();
+        bool isActive = room->isActive();
+        room->deactivate();
 
-        this->activeRoom = nilPointer ;
+        std::string fileOfRoom = room->getNameOfFileWithDataAboutRoom() ;
+
+        // rebuild room
+        Room* newRoom = RoomBuilder::buildRoom( iso::sharePath() + "map" + util::pathSeparator() + fileOfRoom );
+        if ( newRoom == nilPointer ) return nilPointer ;
+        newRoom->setConnections( room->getConnections() );
+        newRoom->setVisited( room->isVisited () ); // keep “ is room visited or not ” switch
+
+        if ( isRoomInPlay( room ) )
+        {
+                std::string nameOfActivePlayer = room->getMediator()->getLabelOfActiveCharacter();
+                std::string nameOfActivePlayerBeforeJoining = room->getMediator()->getLastActiveCharacterBeforeJoining();
+
+                Way theWay( "nowhere" );
+                PlayerItemPtr alivePlayer ;
+
+                // for each player entered this room
+                std::vector< PlayerItemPtr > playersOnEntry = room->getPlayersWhoEnteredRoom ();
+                for ( std::vector< PlayerItemPtr >::const_iterator it = playersOnEntry.begin (); it != playersOnEntry.end (); )
+                {
+                        const PlayerItemPtr player = *it;
+
+                        if ( player->getLabel() == "headoverheels" || GameManager::getInstance().getLives( player->getLabel() ) > 0 )
+                        {
+                        #ifdef DEBUG
+                                std::cout << "got player \"" << player->getLabel() << "\" who entered this room @ MapManager::rebuildRoom" << std::endl ;
+                        #endif
+
+                                // when joined character splits, then some simple character migrates to another room
+                                // and further via swap user changes to room of splitting, and loses life there
+                                // then don’t rebuild room with headoverheels together with simple character
+
+                                if ( player->getLabel() == "headoverheels" && roomsInPlay.size() > 1 )
+                                {
+                                        std::cout << "some character migrated to another room, and only \"" << nameOfActivePlayer << "\" is still here" << std::endl ;
+
+                                        int playerX = player->getX();
+                                        int playerY = player->getY();
+                                        int playerZ = player->getZ();
+                                        Way playerOrientation = player->getOrientation();
+                                        Way playerEntry = player->getWayOfEntry();
+
+                                        // forget composite player
+                                        room->removePlayerFromRoom( * room->getMediator()->getActiveCharacter(), true );
+
+                                        // create simple player
+                                        RoomBuilder::createPlayerInRoom( room,
+                                                                         nameOfActivePlayer, true,
+                                                                         playerX, playerY, playerZ,
+                                                                         playerOrientation, playerEntry );
+
+                                        // update list of players and rewind iterator
+                                        playersOnEntry = room->getPlayersWhoEnteredRoom ();
+                                        it = playersOnEntry.begin ();
+                                        continue;
+                                }
+
+                                theWay = player->getOrientation();
+
+                                Way entry = player->getWayOfEntry();
+
+                                // create player
+                                alivePlayer = RoomBuilder::createPlayerInRoom( newRoom,
+                                                                               player->getLabel(),
+                                                                               true,
+                                                                               player->getX(), player->getY(), player->getZ(),
+                                                                               theWay, entry );
+
+                                if ( alivePlayer != nilPointer )
+                                        alivePlayer->autoMoveOnEntry( entry.toString() );
+                        }
+
+                        ++it ; // next player
+                }
+
+                roomsInPlay.erase( std::remove( roomsInPlay.begin (), roomsInPlay.end (), room ), roomsInPlay.end() );
+
+                if ( alivePlayer != nilPointer )
+                {
+                        addRoomInPlay( newRoom );
+
+                        bool activePlayerIsHere = newRoom->activateCharacterByLabel( nameOfActivePlayer );
+
+                        if ( ! activePlayerIsHere )
+                        {
+                                // case when composite player joined in this room loses life and splits back into two players
+                                activePlayerIsHere = newRoom->activateCharacterByLabel( nameOfActivePlayerBeforeJoining );
+
+                                if ( ! activePlayerIsHere ) // unlucky to happen
+                                {
+                                        if ( newRoom->isAnyPlayerStillInRoom() )
+                                        {
+                                                newRoom->getMediator()->setActiveCharacter( * newRoom->getPlayersYetInRoom().begin () );
+                                        }
+                                }
+                        }
+                }
+                // can’t create player, game over
+                else
+                {
+                        delete newRoom ;
+                        newRoom = nilPointer ;
+                }
+        }
+
+        if ( isActive )
+        {
+                activeRoom = newRoom;
+                if ( activeRoom != nilPointer ) activeRoom->activate();
+        }
+
+        gameRooms[ fileOfRoom ] = newRoom ;
+        delete room ;
+
+        return newRoom;
+}
+
+Room* MapManager::changeRoom()
+{
+        return changeRoom( activeRoom->getMediator()->getActiveCharacter()->getWayOfExit() );
 }
 
 Room* MapManager::changeRoom( const Way& wayOfExit )
 {
         Room* previousRoom = this->activeRoom;
-        previousRoom->setWayOfExit( "no exit" );
 
-        // get data of previous room
-        MapRoomData* previousRoomData = findRoomData( previousRoom->getNameOfFileWithDataAboutRoom() );
+        std::string fileOfPreviousRoom = previousRoom->getNameOfFileWithDataAboutRoom() ;
+        const RoomConnections* previousRoomLinks = previousRoom->getConnections();
 
         Way wayOfEntry( "just wait" ) ;
 
         // search the map for next room and get way of entry to it
-        MapRoomData* nextRoomData = findRoomData( previousRoomData->findConnectedRoom( wayOfExit.toString(), &wayOfEntry ) );
-
-        if ( nextRoomData == nilPointer )
+        std::string fileOfNextRoom = previousRoomLinks->findConnectedRoom( wayOfExit.toString(), &wayOfEntry );
+        if ( fileOfNextRoom.empty() )
         {
                 // no room there, so continue with current one
                 return previousRoom ;
@@ -299,23 +490,22 @@ Room* MapManager::changeRoom( const Way& wayOfExit )
         activeRoom->deactivate();
         this->activeRoom = nilPointer;
 
-        nextRoomData->adjustEntry( &wayOfEntry, previousRoomData->getNameOfRoomFile() );
+        SoundManager::getInstance().stopEverySound ();
 
-        SoundManager::getInstance()->stopEverySound ();
+        const PlayerItem& oldItemOfRoamer = * previousRoom->getMediator()->getActiveCharacter( );
 
-        PlayerItem* oldItemOfRoamer = previousRoom->getMediator()->getActiveCharacter( );
-
-        std::string nameOfRoamer = oldItemOfRoamer->getOriginalLabel() ; // current label may be "bubbles" when teleporting
+        std::string nameOfRoamer = oldItemOfRoamer.getOriginalLabel() ; // current label may be "bubbles" when teleporting
+        const ItemData* dataOfRoamer = oldItemOfRoamer.getDataOfItem()->getItemDataManager()->findDataByLabel( nameOfRoamer ) ;
 
         std::cout << "\"" << nameOfRoamer << "\" migrates"
-                        << " from room \"" << previousRoomData->getNameOfRoomFile() << "\" with way of exit \"" << wayOfExit.toString() << "\""
-                        << " to room \"" << nextRoomData->getNameOfRoomFile() << "\" with way of entry \"" << wayOfEntry.toString() << "\"" << std::endl ;
+                        << " from room \"" << fileOfPreviousRoom << "\" with way of exit \"" << wayOfExit.toString() << "\""
+                        << " to room \"" << fileOfNextRoom << "\" with way of entry \"" << wayOfEntry.toString() << "\"" << std::endl ;
 
-        const int exitX = oldItemOfRoamer->getX ();
-        const int exitY = oldItemOfRoamer->getY ();
-        const int exitZ = oldItemOfRoamer->getZ ();
+        const int exitX = oldItemOfRoamer.getX ();
+        const int exitY = oldItemOfRoamer.getY ();
+        const int exitZ = oldItemOfRoamer.getZ ();
 
-        const Way exitOrientation = oldItemOfRoamer->getOrientation ();
+        const Way exitOrientation = oldItemOfRoamer.getOrientation ();
 
         // get limits of room
         int northBound = previousRoom->getLimitAt( "north" );
@@ -326,33 +516,19 @@ Room* MapManager::changeRoom( const Way& wayOfExit )
 
         // remove active player from previous room
         previousRoom->removePlayerFromRoom( oldItemOfRoamer, true );
-        oldItemOfRoamer = nilPointer;
 
         if ( ! previousRoom->isAnyPlayerStillInRoom() || nameOfRoamer == "headoverheels" )
         {
-                std::cout << "there’re no players left in room \"" << previousRoom->getNameOfFileWithDataAboutRoom() << "\""
+                std::cout << "there’re no players left in room \"" << fileOfPreviousRoom << "\""
                                 << " so bye that room" << std::endl ;
 
-                removeRoom( previousRoom );
-                previousRoom = nilPointer;
+                removeRoomInPlay( previousRoom );
         }
 
-        Room* newRoom = findRoomByFile( nextRoomData->getNameOfRoomFile() );
+        Room* newRoom = getOrBuildRoomByFile( fileOfNextRoom );
+        newRoom->getConnections()->adjustEntry( &wayOfEntry, fileOfPreviousRoom );
 
-        if ( newRoom != nilPointer )
-        {
-                std::cout << "room \"" << newRoom->getNameOfFileWithDataAboutRoom() << "\" is already created" << std::endl ;
-                newRoom->setWayOfExit( "no exit" );
-        }
-        else
-        {
-                std::cout << "going to create room \"" << nextRoomData->getNameOfRoomFile() << "\"" << std::endl ;
-
-                newRoom = RoomBuilder::buildRoom( isomot::sharePath() + "map" + pathSeparator + nextRoomData->getNameOfRoomFile() );
-                rooms.push_back( newRoom );
-        }
-
-        ItemData* dataOfRoamer = GameManager::getInstance()->getItemDataManager()->findDataByLabel( nameOfRoamer );
+        addRoomInPlay( newRoom );
 
         // get player’s exit position in old room to calculate entry position in new room
         int entryX = exitX ;
@@ -371,19 +547,18 @@ Room* MapManager::changeRoom( const Way& wayOfExit )
         }
 
         // no taken item in new room
-        GameManager::getInstance()->emptyHandbag();
+        GameManager::getInstance().emptyHandbag();
 
-        PlayerItem* newItemOfRoamer = RoomBuilder::createPlayerInRoom( newRoom, nameOfRoamer, true, entryX, entryY, entryZ, exitOrientation, wayOfEntry );
+        PlayerItemPtr newItemOfRoamer = RoomBuilder::createPlayerInRoom( newRoom, nameOfRoamer, true, entryX, entryY, entryZ, exitOrientation, wayOfEntry );
 
         if ( newItemOfRoamer != nilPointer )
         {
                 newItemOfRoamer->autoMoveOnEntry( wayOfEntry.toString() );
         }
 
-        nextRoomData->setVisited( true );
+        newRoom->setVisited( true );
 
         newRoom->activateCharacterByLabel( nameOfRoamer );
-        newRoom->getCamera()->turnOn( newRoom->getMediator()->getActiveCharacter(), wayOfEntry );
 
         activeRoom = newRoom;
         activeRoom->activate();
@@ -391,134 +566,14 @@ Room* MapManager::changeRoom( const Way& wayOfExit )
         return newRoom;
 }
 
-Room* MapManager::rebuildRoom()
+Room* MapManager::getRoomThenAddItToRoomsInPlay( const std::string& roomFile, bool markVisited )
 {
-        activeRoom->deactivate();
-        Room* oldRoom = activeRoom;
+        Room* room = getOrBuildRoomByFile( roomFile );
 
-        MapRoomData* oldRoomData = findRoomData( oldRoom->getNameOfFileWithDataAboutRoom() );
-
-        // rebuild room
-        Room* newRoom = RoomBuilder::buildRoom ( isomot::sharePath() + "map" + pathSeparator + oldRoomData->getNameOfRoomFile() );
-
-        std::string nameOfActivePlayer = oldRoom->getMediator()->getLabelOfActiveCharacter();
-        std::string nameOfActivePlayerBeforeJoining = oldRoom->getMediator()->getLastActiveCharacterBeforeJoining();
-
-        Way theWay( "nowhere" );
-        PlayerItem* alivePlayer = nilPointer;
-
-        // for each player entered this room
-        std::list < const PlayerItem * > playersOnEntry = oldRoom->getPlayersWhoEnteredRoom ();
-        for ( std::list< const PlayerItem * >::const_iterator it = playersOnEntry.begin (); it != playersOnEntry.end (); )
+        if ( room != nilPointer )
         {
-                const PlayerItem* player = *it;
-
-                if ( player->getLabel() == "headoverheels" || GameManager::getInstance()->getLives( player->getLabel() ) > 0 )
-                {
-                #ifdef DEBUG
-                        std::cout << "got player \"" << player->getLabel() << "\" who entered this room @ MapManager::rebuildRoom" << std::endl ;
-                #endif
-
-                        // when joined character splits, then some simple character migrates to another room
-                        // and further via swap user changes to room of splitting, and loses life there
-                        // then don’t rebuild room with headoverheels but with character left in this room
-
-                        if ( player->getLabel() == "headoverheels" && rooms.size() > 1 )
-                        {
-                                std::cout << "some character migrated to another room, and only \"" << nameOfActivePlayer << "\" is still here" << std::endl ;
-
-                                int playerX = player->getX();
-                                int playerY = player->getY();
-                                int playerZ = player->getZ();
-                                Way playerOrientation = player->getOrientation();
-                                Way playerEntry = player->getWayOfEntry();
-
-                                // forget composite player
-                                oldRoom->removePlayerFromRoom( oldRoom->getMediator()->getActiveCharacter(), true );
-
-                                // create simple player
-                                RoomBuilder::createPlayerInRoom( oldRoom,
-                                                                 nameOfActivePlayer, true,
-                                                                 playerX, playerY, playerZ,
-                                                                 playerOrientation, playerEntry );
-
-                                // update list of players and rewind iterator
-                                playersOnEntry = oldRoom->getPlayersWhoEnteredRoom ();
-                                it = playersOnEntry.begin ();
-                                continue;
-                        }
-
-                        theWay = player->getOrientation();
-
-                        Way entry = player->getWayOfEntry();
-
-                        // create player
-                        alivePlayer = RoomBuilder::createPlayerInRoom( newRoom,
-                                                                       player->getLabel(),
-                                                                       true,
-                                                                       player->getX(), player->getY(), player->getZ(),
-                                                                       theWay, entry );
-
-                        if ( alivePlayer != nilPointer )
-                                alivePlayer->autoMoveOnEntry( entry.toString() );
-                }
-
-                ++it ; // next player
-        }
-
-        // remove existing room
-        removeRoom( oldRoom );
-
-        if ( alivePlayer != nilPointer )
-        {
-                // add room just created
-                rooms.push_back( newRoom );
-
-                bool activePlayerIsHere = newRoom->activateCharacterByLabel( nameOfActivePlayer );
-
-                if ( ! activePlayerIsHere )
-                {
-                        // case when composite player joined in this room loses life and splits back into two players
-                        activePlayerIsHere = newRoom->activateCharacterByLabel( nameOfActivePlayerBeforeJoining );
-
-                        if ( ! activePlayerIsHere ) // unlucky to happen
-                        {
-                                if ( newRoom->isAnyPlayerStillInRoom() )
-                                {
-                                        newRoom->getMediator()->setActiveCharacter( * newRoom->getPlayersYetInRoom().begin () );
-                                }
-                        }
-                }
-
-                newRoom->getCamera()->turnOn( newRoom->getMediator()->getActiveCharacter(), theWay );
-
-                activeRoom = newRoom;
-                activeRoom->activate();
-        }
-        // can’t create player, game over
-        else
-        {
-                delete newRoom;
-                activeRoom = newRoom = nilPointer;
-        }
-
-        return newRoom;
-}
-
-Room* MapManager::createRoom( const std::string& fileName )
-{
-        return RoomBuilder::buildRoom( isomot::sharePath() + "map" + pathSeparator + fileName );
-}
-
-Room* MapManager::createRoomThenAddItToListOfRooms( const std::string& fileName, bool markVisited )
-{
-        Room* room = createRoom( fileName );
-        rooms.push_back( room );
-
-        if ( markVisited )
-        {
-                MapRoomData* roomData = findRoomData( fileName );
-                roomData->setVisited( true );
+                if ( markVisited ) room->setVisited( true );
+                addRoomInPlay( room );
         }
 
         return room;
@@ -527,16 +582,16 @@ Room* MapManager::createRoomThenAddItToListOfRooms( const std::string& fileName,
 Room* MapManager::swapRoom ()
 {
         // swap is possible when there are more than one room
-        if ( rooms.size() > 1 )
+        if ( roomsInPlay.size() > 1 )
         {
                 activeRoom->deactivate();
 
-                SoundManager::getInstance()->stopEverySound ();
+                SoundManager::getInstance().stopEverySound ();
 
                 std::string fileOfPreviousRoom = activeRoom->getNameOfFileWithDataAboutRoom() ;
 
-                std::list< Room* >::iterator ri = rooms.begin ();
-                while ( ri != rooms.end () )
+                std::vector< Room* >::iterator ri = roomsInPlay.begin ();
+                while ( ri != roomsInPlay.end () )
                 {
                         if ( *ri == activeRoom ) break;
                         ++ ri;
@@ -545,7 +600,7 @@ Room* MapManager::swapRoom ()
                 // get next room to swap with
                 ++ ri;
                 // when it’s last one swap with first one
-                activeRoom = ( ri != rooms.end() ? *ri : *rooms.begin() );
+                activeRoom = ( ri != roomsInPlay.end () ? *ri : *roomsInPlay.begin () );
 
                 std::cout << "swop room \"" << fileOfPreviousRoom << "\" with \"" << activeRoom->getNameOfFileWithDataAboutRoom() << "\"" << std::endl ;
 
@@ -555,14 +610,14 @@ Room* MapManager::swapRoom ()
         return activeRoom;
 }
 
-Room* MapManager::removeRoomAndSwap ()
+Room* MapManager::noLivesSwap ()
 {
         activeRoom->deactivate();
 
         Room* inactiveRoom = activeRoom;
 
-        std::list< Room* >::iterator ri = rooms.begin ();
-        while ( ri != rooms.end () )
+        std::vector< Room* >::iterator ri = roomsInPlay.begin ();
+        while ( ri != roomsInPlay.end () )
         {
                 if ( *ri == activeRoom ) break;
                 ++ ri;
@@ -571,7 +626,7 @@ Room* MapManager::removeRoomAndSwap ()
         // get next room to swap with
         ++ ri;
         // when it’s last one swap with first one
-        activeRoom = ( ri != rooms.end() ? *ri : *rooms.begin() );
+        activeRoom = ( ri != roomsInPlay.end () ? *ri : *roomsInPlay.begin () );
 
         // no more rooms, game over
         if ( inactiveRoom == activeRoom )
@@ -579,7 +634,7 @@ Room* MapManager::removeRoomAndSwap ()
                 activeRoom = nilPointer;
         }
 
-        removeRoom( inactiveRoom );
+        removeRoomInPlay( inactiveRoom );
 
         if ( activeRoom != nilPointer )
         {
@@ -589,101 +644,49 @@ Room* MapManager::removeRoomAndSwap ()
         return activeRoom;
 }
 
-void MapManager::removeRoom( Room* whichRoom )
+void MapManager::addRoomInPlay( Room* whichRoom )
 {
-        if ( whichRoom != nilPointer )
+        if ( whichRoom == nilPointer ) return ;
+
+        std::string roomFile = whichRoom->getNameOfFileWithDataAboutRoom();
+
+        if ( isRoomInPlay( whichRoom ) || findRoomInPlayByFile( roomFile ) != nilPointer )
         {
-                if ( whichRoom->isActive() )
-                        whichRoom->deactivate();
-
-                if ( whichRoom == this->activeRoom )
-                        this->activeRoom = nilPointer;
-
-                rooms.remove( whichRoom );
-
-                delete whichRoom;
+                std::cout << "room \"" << roomFile << "\" is already in play" << std::endl ;
+                return ;
         }
+
+        roomsInPlay.push_back( whichRoom );
 }
 
-void MapManager::parseVisitedRooms( const std::vector< std::string >& visitedRooms )
+void MapManager::removeRoomInPlay( Room* whichRoom )
 {
-        resetVisitedRooms();
+        if ( whichRoom == nilPointer ) return ;
 
-        for ( std::vector< std::string >::const_iterator i = visitedRooms.begin () ; i != visitedRooms.end () ; ++ i )
-        {
-                for ( std::list< MapRoomData * >::iterator m = theMap.begin() ; m != theMap.end() ; ++ m )
-                {
-                        if ( ( *m )->getNameOfRoomFile() == *i )
-                        {
-                                ( *m )->setVisited( true );
-                                break;
-                        }
-                }
-        }
+        whichRoom->deactivate();
+
+        if ( whichRoom == this->activeRoom )
+                this->activeRoom = nilPointer;
+
+        roomsInPlay.erase( std::remove( roomsInPlay.begin (), roomsInPlay.end (), whichRoom ), roomsInPlay.end() );
+
+        gameRooms[ whichRoom->getNameOfFileWithDataAboutRoom() ] = nilPointer ;
+        delete whichRoom ;
 }
 
-void MapManager::fillVisitedRooms( std::vector< std::string >& visitedRooms )
+void MapManager::binRoomsInPlay()
 {
-        for ( std::list< MapRoomData * >::iterator m = theMap.begin () ; m != theMap.end () ; ++ m )
+        while ( ! roomsInPlay.empty () )
         {
-                if ( ( *m )->isVisited() )
-                {
-                        visitedRooms.push_back( ( *m )->getNameOfRoomFile() );
-                }
-        }
-}
-
-unsigned int MapManager::countVisitedRooms()
-{
-        unsigned int number = 0;
-
-        for ( std::list< MapRoomData * >::iterator i = theMap.begin () ; i != theMap.end () ; ++ i )
-        {
-                number += ( *i )->isVisited() ? 1 : 0;
+                removeRoomInPlay( roomsInPlay.back () ) ;
         }
 
-        return number;
-}
-
-void MapManager::resetVisitedRooms()
-{
-        for ( std::list< MapRoomData * >::iterator i = theMap.begin () ; i != theMap.end () ; ++ i )
-        {
-                ( *i )->setVisited( false );
-        }
-}
-
-MapRoomData* MapManager::findRoomData( const std::string& roomFile ) const
-{
-        if ( roomFile.empty() ) return nilPointer;
-
-        for ( std::list< MapRoomData * >::const_iterator m = theMap.begin () ; m != theMap.end () ; ++ m )
-        {
-                if ( ( *m )->getNameOfRoomFile() == roomFile )
-                {
-                        return *m ;
-                }
-        }
-
-        return nilPointer ;
-}
-
-Room* MapManager::findRoomByFile( const std::string& roomFile ) const
-{
-        for ( std::list< Room* >::const_iterator ri = rooms.begin () ; ri != rooms.end () ; ++ ri )
-        {
-                if ( ( *ri )->getNameOfFileWithDataAboutRoom() == roomFile )
-                {
-                        return *ri ;
-                }
-        }
-
-        return nilPointer ;
+        this->activeRoom = nilPointer ;
 }
 
 Room* MapManager::getRoomOfInactivePlayer() const
 {
-        for ( std::list< Room* >::const_iterator ri = rooms.begin () ; ri != rooms.end () ; ++ ri )
+        for ( std::vector< Room* >::const_iterator ri = roomsInPlay.begin () ; ri != roomsInPlay.end () ; ++ ri )
         {
                 if ( *ri != this->activeRoom )
                 {
@@ -692,6 +695,111 @@ Room* MapManager::getRoomOfInactivePlayer() const
         }
 
         return nilPointer ;
+}
+
+bool MapManager::isRoomInPlay( const Room* room ) const
+{
+        for ( std::vector< Room* >::const_iterator ri = roomsInPlay.begin () ; ri != roomsInPlay.end () ; ++ ri )
+        {
+                if ( *ri == room ) return true ;
+        }
+
+        return false ;
+}
+
+Room* MapManager::findRoomInPlayByFile( const std::string& roomFile ) const
+{
+        for ( std::vector< Room* >::const_iterator ri = roomsInPlay.begin () ; ri != roomsInPlay.end () ; ++ ri )
+        {
+                if ( *ri != nilPointer && ( *ri )->getNameOfFileWithDataAboutRoom() == roomFile )
+                {
+                        return *ri ;
+                }
+        }
+
+        return nilPointer ;
+}
+
+Room* MapManager::findRoomByFile( const std::string& roomFile ) const
+{
+        for ( std::map< std::string, Room * >::const_iterator ri = gameRooms.begin () ; ri != gameRooms.end () ; ++ ri )
+        {
+                if ( ri->first == roomFile )
+                {
+                        return ri->second ;
+                }
+        }
+
+        return nilPointer ;
+}
+
+Room* MapManager::getOrBuildRoomByFile( const std::string& roomFile )
+{
+        if ( gameRooms.empty() || linksBetweenRooms.empty() )
+                readMap( iso::sharePath() + "map" + util::pathSeparator() + "map.xml" );
+
+        if ( gameRooms.find( roomFile ) != gameRooms.end () )
+        {
+                if ( gameRooms[ roomFile ] == nilPointer )
+                {
+                        Room* theRoom = RoomBuilder::buildRoom( iso::sharePath() + "map" + util::pathSeparator() + roomFile );
+                        if ( theRoom != nilPointer )
+                        {
+                                theRoom->setConnections( linksBetweenRooms[ roomFile ] );
+                                gameRooms[ roomFile ] = theRoom ;
+                        }
+                }
+
+                return gameRooms[ roomFile ] ;
+        }
+
+        return nilPointer ;
+}
+
+void MapManager::parseVisitedRooms( const std::vector< std::string >& visitedRooms )
+{
+        resetVisitedRooms();
+
+        for ( std::vector< std::string >::const_iterator vi = visitedRooms.begin () ; vi != visitedRooms.end () ; ++ vi )
+        {
+                Room* visitedRoom = getOrBuildRoomByFile( *vi );
+
+                if ( visitedRoom != nilPointer )
+                {
+                        visitedRoom->setVisited( true );
+                }
+        }
+}
+
+void MapManager::fillVisitedRooms( std::vector< std::string >& visitedRooms )
+{
+        for ( std::map< std::string, Room * >::const_iterator ri = gameRooms.begin () ; ri != gameRooms.end () ; ++ ri )
+        {
+                if ( ri->second != nilPointer && ri->second->isVisited() )
+                {
+                        visitedRooms.push_back( ri->first );
+                }
+        }
+}
+
+unsigned int MapManager::countVisitedRooms()
+{
+        unsigned int count = 0;
+
+        for ( std::map< std::string, Room * >::const_iterator ri = gameRooms.begin () ; ri != gameRooms.end () ; ++ ri )
+        {
+                if ( ri->second != nilPointer && ri->second->isVisited() ) count ++ ;
+        }
+
+        return count;
+}
+
+void MapManager::resetVisitedRooms()
+{
+        for ( std::map< std::string, Room * >::iterator ri = gameRooms.begin () ; ri != gameRooms.end () ; ++ ri )
+        {
+                if ( ri->second != nilPointer ) ri->second->setVisited( false );
+        }
 }
 
 }

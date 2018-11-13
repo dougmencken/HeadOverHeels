@@ -14,13 +14,14 @@
 #include "Ism.hpp"
 #include "Way.hpp"
 #include "Mediated.hpp"
+#include "Picture.hpp"
+#include "FreeItem.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
 class ItemDataManager ;
-class FreeItem ;
 
 
 /**
@@ -35,56 +36,66 @@ public:
        /**
         * @param itemDataManager to find three parts of door
         * @param label label of door
-        * @param cx cell on X
-        * @param cy cell on Y
+        * @param cx cell of door on X
+        * @param cy cell of door on Y
         * @param z position on Z or how far is item from ground
         * @param way orientation of door
         */
-        Door( ItemDataManager* itemDataManager, const std::string& label, int cx, int cy, int z, const std::string& way ) ;
+        Door( const ItemDataManager & itemDataManager, const std::string & label, int cx, int cy, int z, const std::string & way ) ;
 
         virtual ~Door( ) ;
 
+        /**
+         * Get image of lintel from image of door
+         */
+        static Picture * cutOutLintel ( const allegro::Pict & door, unsigned int widthX, unsigned int widthY, unsigned int height,
+                                        unsigned int leftJambWidthX, unsigned int leftJambWidthY,
+                                        unsigned int rightJambWidthX, unsigned int rightJambWidthY,
+                                        const std::string& at ) ;
+
+        /**
+         * Get image of left jamb from image of door
+         */
+        static Picture * cutOutLeftJamb ( const allegro::Pict & door, unsigned int widthX, unsigned int widthY, unsigned int height,
+                                                /* unsigned int lintelWidthX, */ unsigned int lintelWidthY, unsigned int lintelHeight,
+                                                const std::string& at ) ;
+
+        /**
+         * Get image of right jamb from image of door
+         */
+        static Picture * cutOutRightJamb ( const allegro::Pict & door, unsigned int widthX, unsigned int widthY, unsigned int height,
+                                                unsigned int lintelWidthX, /* unsigned int lintelWidthY, */ unsigned int lintelHeight,
+                                                const std::string& at ) ;
+
 private:
 
-       /**
-        * Gestor de los datos invariables de los elementos del juego
-        */
-        ItemDataManager * itemDataManager ;
+        const ItemDataManager & itemDataManager ;
 
         std::string labelOfDoor ;
 
-       /**
-        * Cell on X axis of this door
-        */
         int cellX ;
 
-       /**
-        * Cell on Y axis of this door
-        */
         int cellY ;
 
-       /**
-        * Spatial position Z or how far is ground
-        */
         int z ;
 
-       /**
-        * Initial coordinate of entrance
-        */
         int rightLimit ;
 
-       /**
-        * Final coordinate of entrance
-        */
         int leftLimit ;
 
         std::string positionOfDoor ;
 
-        FreeItem * leftJamb ;
+        Picture * leftJambImage ;
 
-        FreeItem * rightJamb ;
+        Picture * rightJambImage ;
 
-        FreeItem * lintel ;
+        Picture * lintelImage ;
+
+        FreeItemPtr leftJamb ;
+
+        FreeItemPtr rightJamb ;
+
+        FreeItemPtr lintel ;
 
 public:
 
@@ -92,17 +103,23 @@ public:
 
         std::string getWhereIsDoor () const {  return positionOfDoor ;  }
 
-        FreeItem * getLeftJamb () ;
+        FreeItemPtr getLeftJamb () ;
 
-        FreeItem * getRightJamb () ;
+        FreeItemPtr getRightJamb () ;
 
-        FreeItem * getLintel () ;
+        FreeItemPtr getLintel () ;
 
         int getCellX () const {  return cellX ;  }
 
         int getCellY () const {  return cellY ;  }
 
+        int getZ () const {  return z ;  }
+
+        std::string getLabel() const {  return labelOfDoor ;  }
+
 };
+
+typedef safeptr < Door > DoorPtr ;
 
 }
 

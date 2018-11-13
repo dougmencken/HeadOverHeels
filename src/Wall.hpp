@@ -19,7 +19,7 @@
 #include "Mediated.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
 /**
@@ -64,9 +64,13 @@ public:
 
         bool isOnY () const {  return ! onX ;  }
 
-        int getPosition () {  return position ;  }
+        int getPosition () const {  return position ;  }
+
+        Picture * getImage () const {  return image ;  }
 
 };
+
+typedef safeptr < Wall > WallPtr ;
 
 }
 

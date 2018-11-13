@@ -14,24 +14,19 @@
 #include "UserControlled.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
 class Item ;
 class ItemData ;
 
-/**
- * Comportamiento del jugador Head. Dado que Head es uno de los elementos controlados por el usuario
- * su comportamiento viene definido tanto por la operación "update" como por "behave"
- * Head puede caminar, saltar, planear y disparar, como acciones más significativas
- */
 
 class PlayerHeels : public UserControlled
 {
 
 public:
 
-        PlayerHeels( Item * item, const std::string & behavior ) ;
+        PlayerHeels( const ItemPtr & item, const std::string & behavior ) ;
 
         virtual ~PlayerHeels( ) ;
 

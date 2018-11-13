@@ -15,7 +15,7 @@
 #include "Timer.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
 class Item ;
@@ -30,24 +30,18 @@ class FinalBall : public Behavior
 
 public:
 
-        FinalBall( Item * item, const std::string & behavior ) ;
+        FinalBall( const ItemPtr & item, const std::string & behavior ) ;
 
-        virtual ~FinalBall( );
+        virtual ~FinalBall( ) { }
 
         virtual bool update () ;
 
 private:
 
-        ItemData * bubblesData ;
-
        /**
         * Timer for speed of movement
         */
-        Timer * speedTimer ;
-
-public:
-
-        void setMoreData ( void * data ) ;
+        autouniqueptr < Timer > speedTimer ;
 
 };
 

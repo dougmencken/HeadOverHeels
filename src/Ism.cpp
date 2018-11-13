@@ -42,7 +42,7 @@ void nanoSleep ( unsigned long nanoseconds )
 #endif
 
 
-namespace isomot
+namespace iso
 {
 
 unsigned int screenWidth = 640 ;
@@ -83,34 +83,6 @@ std::string makeRandomString( const size_t length )
 
 }
 
-std::string toStringWithOrdinalSuffix( unsigned int number )
-{
-        unsigned int mod10 = number % 10;
-        unsigned int mod100 = number % 100;
-
-        std::ostringstream result ;
-        result << number ;
-
-        if ( mod10 == 1 && mod100 != 11 )
-        {
-                result << "st";
-        }
-        else if ( mod10 == 2 && mod100 != 12 )
-        {
-                result << "nd";
-        }
-        else if ( mod10 == 3 && mod100 != 13 )
-        {
-                result << "rd";
-        }
-        else
-        {
-                result << "th";
-        }
-
-        return result.str() ;
-}
-
 std::string nameFromPath( std::string const& path )
 {
         return std::string (
@@ -118,7 +90,7 @@ std::string nameFromPath( std::string const& path )
                 path.end() );
 }
 
-const char * pathToFile( const std::string& in )
+static const char * convertPath( const std::string& path )
 {
 #if defined ( __CYGWIN__ )
         ssize_t length ;
@@ -127,21 +99,36 @@ const char * pathToFile( const std::string& in )
         /* ssize_t cygwin_conv_path( cygwin_conv_path_t what, const void * from, void * to, size_t size ) */
         /* https://cygwin.com/cygwin-api/func-cygwin-conv-path.html */
 
-        length = cygwin_conv_path ( CCP_POSIX_TO_WIN_A | CCP_RELATIVE, in.c_str (), nilPointer, 0 ) ;
+        length = cygwin_conv_path ( CCP_POSIX_TO_WIN_A | CCP_RELATIVE, path.c_str (), nilPointer, 0 ) ;
         if ( length >= 0 )
         {
                 windowsPath = static_cast< char * >( malloc( length ) );
-                cygwin_conv_path ( CCP_POSIX_TO_WIN_A | CCP_RELATIVE, in.c_str (), windowsPath, length ) ;
+                cygwin_conv_path ( CCP_POSIX_TO_WIN_A | CCP_RELATIVE, path.c_str (), windowsPath, length ) ;
         }
 
 #if defined( DEBUG ) && DEBUG
-        /// fprintf( stdout, "cygwin converted path \"%s\" to \"%s\"\n", in.c_str (), windowsPath ) ;
+        /// fprintf( stdout, "cygwin converted path \"%s\" to \"%s\"\n", path.c_str (), windowsPath ) ;
 #endif
 
         return windowsPath ;
 #else
-        return in.c_str ();
+        return path.c_str ();
 #endif
+}
+
+const char * pathToFile( const std::string& folder, const std::string& file )
+{
+        std::string path = folder ;
+
+        if ( ! file.empty() )
+        {
+                if ( path.at( path.length() - 1 ) != util::pathSeparator().at( 0 ) )
+                        path.append( util::pathSeparator() );
+
+                path += file ;
+        }
+
+        return convertPath( path ) ;
 }
 
 std::string FullPathToGame( "no way" ) ;
@@ -174,13 +161,14 @@ void setPathToGame ( const char * pathToGame )
         else
 #endif
         {
-                if ( FullPathToGame[ 0 ] != pathSeparator[ 0 ] )
+                char pathSeparator = util::pathSeparator()[ 0 ] ;
+                if ( FullPathToGame[ 0 ] != pathSeparator )
                 {  // it’s not full path
                         char folderOfGame[ PATH_MAX ];
                         getcwd( folderOfGame, PATH_MAX ) ;
 
                         size_t len = strlen( folderOfGame );
-                        if ( folderOfGame[ len - 1 ] == pathSeparator[ 0 ] )
+                        if ( folderOfGame[ len - 1 ] == pathSeparator )
                                 folderOfGame[ len - 1 ] = '\0';
 
                         FullPathToGame = std::string( folderOfGame ) + pathSeparator + whereIsGame ;
@@ -204,7 +192,7 @@ std::string homePath ()
                 if ( home != nilPointer )
                 {
                         HomePath = std::string( home ) + "/.headoverheels/";
-                        if ( ! isomot::folderExists( HomePath ) )
+                        if ( ! util::folderExists( HomePath ) )
                         {
                                 mkdir( HomePath.c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH );
                                 mkdir( ( HomePath + "savegame/" ).c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH );

@@ -1,333 +1,84 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<room>
-
-  <scenery>byblos</scenery>
-
-  <xTiles>7</xTiles>
-
-  <yTiles>8</yTiles>
-
-  <width>16</width>
-
-  <floorType>plain</floorType>
-
-  <floor>
-    <tile>
-      <x>0</x>
-      <y>3</y>
-      <picture>byblos-floor-north.png</picture>
-    </tile>
-    <tile>
-      <x>0</x>
-      <y>4</y>
-      <picture>byblos-floor-north.png</picture>
-    </tile>
-    <tile>
-      <x>3</x>
-      <y>0</y>
-      <picture>byblos-floor-east.png</picture>
-    </tile>
-    <tile>
-      <x>4</x>
-      <y>0</y>
-      <picture>byblos-floor-east.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>7</y>
-      <picture>byblos-floor-west.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>7</y>
-      <picture>byblos-floor-west.png</picture>
-    </tile>
-    <tile>
-      <x>3</x>
-      <y>7</y>
-      <picture>byblos-floor-west.png</picture>
-    </tile>
-    <tile>
-      <x>4</x>
-      <y>7</y>
-      <picture>byblos-floor-west.png</picture>
-    </tile>
-    <tile>
-      <x>5</x>
-      <y>7</y>
-      <picture>byblos-floor-west.png</picture>
-    </tile>
-    <tile>
-      <x>6</x>
-      <y>7</y>
-      <picture>byblos-floor-west.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>1</y>
-      <picture>byblos-floor.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>2</y>
-      <picture>byblos-floor.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>3</y>
-      <picture>byblos-floor.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>4</y>
-      <picture>byblos-floor.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>5</y>
-      <picture>byblos-floor.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>6</y>
-      <picture>byblos-floor.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>1</y>
-      <picture>byblos-floor.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>2</y>
-      <picture>byblos-floor.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>3</y>
-      <picture>byblos-floor.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>4</y>
-      <picture>byblos-floor.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>5</y>
-      <picture>byblos-floor.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>6</y>
-      <picture>byblos-floor.png</picture>
-    </tile>
-    <tile>
-      <x>3</x>
-      <y>1</y>
-      <picture>byblos-floor.png</picture>
-    </tile>
-    <tile>
-      <x>3</x>
-      <y>2</y>
-      <picture>byblos-floor.png</picture>
-    </tile>
-    <tile>
-      <x>3</x>
-      <y>3</y>
-      <picture>byblos-floor.png</picture>
-    </tile>
-    <tile>
-      <x>3</x>
-      <y>4</y>
-      <picture>byblos-floor.png</picture>
-    </tile>
-    <tile>
-      <x>3</x>
-      <y>5</y>
-      <picture>byblos-floor.png</picture>
-    </tile>
-    <tile>
-      <x>3</x>
-      <y>6</y>
-      <picture>byblos-floor.png</picture>
-    </tile>
-    <tile>
-      <x>4</x>
-      <y>1</y>
-      <picture>byblos-floor.png</picture>
-    </tile>
-    <tile>
-      <x>4</x>
-      <y>2</y>
-      <picture>byblos-floor.png</picture>
-    </tile>
-    <tile>
-      <x>4</x>
-      <y>3</y>
-      <picture>byblos-floor.png</picture>
-    </tile>
-    <tile>
-      <x>4</x>
-      <y>4</y>
-      <picture>byblos-floor.png</picture>
-    </tile>
-    <tile>
-      <x>4</x>
-      <y>5</y>
-      <picture>byblos-floor.png</picture>
-    </tile>
-    <tile>
-      <x>4</x>
-      <y>6</y>
-      <picture>byblos-floor.png</picture>
-    </tile>
-    <tile>
-      <x>5</x>
-      <y>1</y>
-      <picture>byblos-floor.png</picture>
-    </tile>
-    <tile>
-      <x>5</x>
-      <y>2</y>
-      <picture>byblos-floor.png</picture>
-    </tile>
-    <tile>
-      <x>5</x>
-      <y>3</y>
-      <picture>byblos-floor.png</picture>
-    </tile>
-    <tile>
-      <x>5</x>
-      <y>4</y>
-      <picture>byblos-floor.png</picture>
-    </tile>
-    <tile>
-      <x>5</x>
-      <y>5</y>
-      <picture>byblos-floor.png</picture>
-    </tile>
-    <tile>
-      <x>5</x>
-      <y>6</y>
-      <picture>byblos-floor.png</picture>
-    </tile>
-    <tile>
-      <x>6</x>
-      <y>1</y>
-      <picture>byblos-floor.png</picture>
-    </tile>
-    <tile>
-      <x>6</x>
-      <y>2</y>
-      <picture>byblos-floor.png</picture>
-    </tile>
-    <tile>
-      <x>6</x>
-      <y>3</y>
-      <picture>byblos-floor.png</picture>
-    </tile>
-    <tile>
-      <x>6</x>
-      <y>4</y>
-      <picture>byblos-floor.png</picture>
-    </tile>
-    <tile>
-      <x>6</x>
-      <y>5</y>
-      <picture>byblos-floor.png</picture>
-    </tile>
-    <tile>
-      <x>6</x>
-      <y>6</y>
-      <picture>byblos-floor.png</picture>
-    </tile>
-  </floor>
-
-  <items>
-    <item x="0" y="1" z="0">
-      <label>byblos-wall-y-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="0" y="2" z="0">
-      <label>byblos-wall-y-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="0" y="5" z="0">
-      <label>byblos-wall-y-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="0" y="6" z="0">
-      <label>byblos-wall-y-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="0" y="3" z="-1">
-      <label>byblos-door-north</label>
-      <direction>north</direction>
-      <type>door</type>
-    </item>
-    <item x="1" y="0" z="0">
-      <label>byblos-wall-x-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="2" y="0" z="0">
-      <label>byblos-wall-x-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="5" y="0" z="0">
-      <label>byblos-wall-x-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="6" y="0" z="0">
-      <label>byblos-wall-x-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="3" y="0" z="-1">
-      <label>byblos-door-east</label>
-      <direction>east</direction>
-      <type>door</type>
-    </item>
-    <item x="3" y="7" z="3">
-      <label>byblos-capital-west</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="4" y="7" z="3">
-      <label>byblos-capital-west</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="3" y="7" z="-1">
-      <label>byblos-door-west</label>
-      <direction>west</direction>
-      <type>door</type>
-    </item>
-    <item x="3" y="6" z="2">
-      <label>puppy</label>
-      <direction>west</direction>
-      <behavior>behavior of disappearance as soon as Head appears</behavior>
-      <type>griditem</type>
-    </item>
-    <item x="4" y="6" z="1">
-      <label>puppy</label>
-      <direction>west</direction>
-      <behavior>behavior of disappearance as soon as Head appears</behavior>
-      <type>griditem</type>
-    </item>
-    <item x="5" y="6" z="0">
-      <label>puppy</label>
-      <direction>west</direction>
-      <behavior>behavior of disappearance as soon as Head appears</behavior>
-      <type>griditem</type>
-    </item>
-  </items>
-
+<room scenery="byblos" tileSize="16">
+    <xTiles>7</xTiles>
+    <yTiles>8</yTiles>
+    <floorKind>plain</floorKind>
+    <walls>
+        <wall on="x">
+            <position>1</position>
+            <picture>byblos-wall-x-1.png</picture>
+        </wall>
+        <wall on="x">
+            <position>2</position>
+            <picture>byblos-wall-x-1.png</picture>
+        </wall>
+        <wall on="x">
+            <position>5</position>
+            <picture>byblos-wall-x-1.png</picture>
+        </wall>
+        <wall on="x">
+            <position>6</position>
+            <picture>byblos-wall-x-1.png</picture>
+        </wall>
+        <wall on="y">
+            <position>1</position>
+            <picture>byblos-wall-y-1.png</picture>
+        </wall>
+        <wall on="y">
+            <position>2</position>
+            <picture>byblos-wall-y-1.png</picture>
+        </wall>
+        <wall on="y">
+            <position>5</position>
+            <picture>byblos-wall-y-1.png</picture>
+        </wall>
+        <wall on="y">
+            <position>6</position>
+            <picture>byblos-wall-y-1.png</picture>
+        </wall>
+    </walls>
+    <items>
+        <item x="3" y="6" z="2">
+            <label>puppy</label>
+            <orientation>west</orientation>
+            <behavior>behavior of disappearance as soon as Head appears</behavior>
+            <kind>griditem</kind>
+        </item>
+        <item x="4" y="6" z="1">
+            <label>puppy</label>
+            <orientation>west</orientation>
+            <behavior>behavior of disappearance as soon as Head appears</behavior>
+            <kind>griditem</kind>
+        </item>
+        <item x="5" y="6" z="0">
+            <label>puppy</label>
+            <orientation>west</orientation>
+            <behavior>behavior of disappearance as soon as Head appears</behavior>
+            <kind>griditem</kind>
+        </item>
+        <item x="3" y="7" z="3">
+            <label>byblos-capital-west</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="4" y="7" z="3">
+            <label>byblos-capital-west</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="3" y="0" z="-1">
+            <label>byblos-door-east</label>
+            <orientation>east</orientation>
+            <kind>door</kind>
+        </item>
+        <item x="0" y="3" z="-1">
+            <label>byblos-door-north</label>
+            <orientation>north</orientation>
+            <kind>door</kind>
+        </item>
+        <item x="3" y="7" z="-1">
+            <label>byblos-door-west</label>
+            <orientation>west</orientation>
+            <kind>door</kind>
+        </item>
+    </items>
 </room>

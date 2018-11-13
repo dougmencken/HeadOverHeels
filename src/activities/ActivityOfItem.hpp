@@ -11,7 +11,7 @@
 #ifndef ActivityOfItem_hpp_
 #define ActivityOfItem_hpp_
 
-namespace isomot
+namespace iso
 {
 
 class ActivityOfItem

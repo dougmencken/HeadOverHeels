@@ -15,29 +15,42 @@
 
 #include "Ism.hpp"
 #include "Picture.hpp"
+#include "Isomot.hpp"
 #include "Room.hpp"
+#include "GameSaverAndLoader.hpp"
 #include "ColorCyclingLabel.hpp"
 #include "Timer.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
 class Isomot ;
-class GameSaverAndLoader ;
-class PlayerItem ;
+
 
 /**
  * Why the game was paused
  */
-enum WhyPause
+
+class WhyPaused
 {
-        Nevermind,
-        FreePlanet,
-        SaveGame,
-        Freedom,
-        Sucess,
-        GameOver
+
+public:
+
+        WhyPaused( unsigned int why ) : whyPaused( why ) { }
+        operator unsigned int() const {  return whyPaused ;  }
+
+        static const unsigned int Nevermind = 0 ;
+        static const unsigned int FreePlanet = 1 ;
+        static const unsigned int SaveGame = 2 ;
+        static const unsigned int Freedom = 3 ;
+        static const unsigned int Success = 4 ;
+        static const unsigned int GameOver = 5 ;
+
+private:
+
+        unsigned int whyPaused ;
+
 };
 
 
@@ -53,15 +66,23 @@ private:
 
         GameManager( ) ;
 
+        GameManager( const GameManager & ) { }
+
 protected:
 
-        static Picture * refreshPicture ( const std::string & nameOfPicture ) ;
+        static PicturePtr refreshPicture ( const std::string & nameOfPicture ) ;
 
 public:
 
-        static GameManager * getInstance () ;
+        static const unsigned int updatesPerSecond = 50 ;
+
+        static const unsigned int spaceForAmbiance = 64 ;
+
+        static GameManager & getInstance () ;
 
         virtual ~GameManager( ) ;
+
+        void cleanUp () ;
 
         /**
          * Read preferences of game from XML file
@@ -74,17 +95,21 @@ public:
         static bool writePreferences ( const std::string& fileName ) ;
 
         /**
-         * Todo empieza aquí
-         * @return Razón por la que se ha detenido el juego
+         * Game begins here
+         * @return Reason why the game is paused
          */
-        WhyPause begin () ;
+        WhyPaused begin () ;
 
         /**
-         * Reanuda la partida tras una interrupción. La interrupción viene dada porque se ha liberado
-         * un planeta o porque se acaba de grabar la partida
-         * @return Razón por la que se ha interrumpido el juego
+         * Pause game in progress
          */
-        WhyPause resume () ;
+        WhyPaused pause () ;
+
+        /**
+         * Resume game after a pause
+         * @return Reason why the game was paused
+         */
+        WhyPaused resume () ;
 
         std::string getHeadRoom () const {  return headRoom ;  }
 
@@ -95,9 +120,11 @@ public:
         void setHeelsRoom( const std::string& room ) {  heelsRoom = room ;  }
 
         /**
-         * Draw information about the current game like lives, tools, donus, thing in bag
+         * Draw ambiance of game, that is info about game like lives, tools, donus, thing in bag
          */
         void drawAmbianceOfGame ( const allegro::Pict& where ) ;
+
+        void drawOnScreen ( const allegro::Pict& view ) ;
 
         /**
          * Carga una partida grabada en disco
@@ -111,20 +138,16 @@ public:
 
         /**
          * Añade un número de vidas a un jugador
-         * @param player Name of character
-         * @param lives Número de vidas a sumar
          */
         void addLives ( const std::string& player, unsigned char lives ) ;
 
         /**
          * Resta una vida a un jugador
-         * @param player Name of character
          */
         void loseLife ( const std::string& player ) ;
 
         /**
          * Player takes magic item
-         * @param Label of item
          */
         void takeMagicItem ( const std::string& label ) ;
 
@@ -135,49 +158,35 @@ public:
 
         /**
          * Añade velocidad doble a un jugador
-         * @param player Player taking high speed
-         * @param highSpeed Un número entre 0 y 99
          */
         void addHighSpeed ( const std::string& player, unsigned int highSpeed ) ;
 
         /**
          * Resta una unidad al tiempo restante de doble velocidad
-         * @param Player with high speed
          */
         void decreaseHighSpeed ( const std::string& player ) ;
 
         /**
          * Añade un número de grandes saltos a un jugador
-         * @param player Player taking high jumps
-         * @param highJumps Un número entre 0 y 10
          */
         void addHighJumps ( const std::string& player, unsigned int highJumps ) ;
 
         /**
          * Resta un gran salto al jugador
-         * @param player Player with high jumps
          */
         void decreaseHighJumps ( const std::string& player ) ;
 
-        /**
-         * Añade inmunidad a un jugador
-         * @param player Player taking immunity
-         * @param shield Un número de milisegundos
-         */
-        void addShield ( const std::string& player, double shield ) ;
+        void addShield ( const std::string& player, float shield ) ;
+
+        void modifyShield ( const std::string& player, float shield ) ;
+
+        void emptyHandbag () {  setImageOfItemInBag( PicturePtr () ) ;  }
 
         /**
-         * Actualiza el tiempo restante de inmunidad
-         * @param player Player with immunity
-         * @param shield Un número de milisegundos
+         * Image of the item inside hand bag
          */
-        void modifyShield ( const std::string& player, double shield ) ;
+        void setImageOfItemInBag ( const PicturePtr & pic ) {  this->imageOfItemInBag = pic ;  }
 
-        void emptyHandbag () ;
-
-        /**
-         * Establece todos los planetas como miembros del Imperio Blacktooth
-         */
         void resetPlanets () ;
 
         /**
@@ -202,19 +211,19 @@ public:
         /**
          * Eat fish, that is, begin process to save the game
          */
-        void eatFish ( PlayerItem* character, Room* room ) ;
+        void eatFish ( const PlayerItem & character, Room * room ) ;
 
-        void eatFish ( PlayerItem* character, Room* room, int x, int y, int z ) ;
+        void eatFish ( const PlayerItem & character, Room * room, int x, int y, int z ) ;
 
         /**
          * End game because characters have lost all their lives
          */
-        void end () {  this->gameOver = true ;  }
+        void endGame () {  this->gameOver = true ;  }
 
         /**
          * End game because characters have reached Freedom
          */
-        void arriveFreedom () {  this->freedom = true ;  }
+        void arriveInFreedom () {  this->freedom = true ;  }
 
         /**
          * End game because characters have been proclaimed emperors
@@ -235,17 +244,11 @@ private:
          * Update game periodically by redrawing isometric view and updating items
          * @return reason why update was paused
          */
-        WhyPause update () ;
-
-        /**
-         * Pause game in progress
-         * @return reason why update was paused
-         */
-        WhyPause pause () ;
+        WhyPaused update () ;
 
         void refreshAmbianceImages () ;
 
-        void refreshBackgroundFrames () ;
+        void refreshSceneryBackgrounds () ;
 
 public:
 
@@ -288,15 +291,13 @@ public:
 
 private:
 
-        ItemDataManager * itemDataManager ;
+        static GameManager instance ;
 
         std::string headRoom ;
 
         std::string heelsRoom ;
 
         gui::ColorCyclingLabel * freedomLabel ;
-
-        Timer * recordingTimer ;
 
         unsigned int numberOfCapture ;
 
@@ -320,14 +321,14 @@ private:
 
         bool recordCaptures ;
 
-        static GameManager * instance ;
+        autouniqueptr < Timer > recordingTimer ;
 
-        Isomot * isomot ;
+        Isomot isomot ;
 
         /**
          * To save and restore games
          */
-        GameSaverAndLoader * saverAndLoader ;
+        GameSaverAndLoader saverAndLoader ;
 
         /**
          * Vidas de Head
@@ -352,12 +353,12 @@ private:
         /**
          * Tiempo restante para consumir la inmunidad de Head
          */
-        double headShield ;
+        float headShield ;
 
         /**
          * Tiempo restante para consumir la inmunidad de Heels
          */
-        double heelsShield ;
+        float heelsShield ;
 
         /**
          * Indica si Head tiene la bocina
@@ -374,7 +375,7 @@ private:
          */
         unsigned short donuts ;
 
-        Picture * imageOfItemInBag ;
+        PicturePtr imageOfItemInBag ;
 
         /**
          * Stores name of planet with boolean of its liberation
@@ -391,55 +392,43 @@ private:
 
         bool emperator ;
 
-        Picture * frameForJail ;
+        std::map < std::string, PicturePtr > sceneryBackgrounds ;
 
-        Picture * frameForBlacktooth ;
+        PicturePtr pictureOfHead ;
 
-        Picture * frameForMarket ;
+        PicturePtr grayPictureOfHead ;
 
-        Picture * frameForMoon ;
+        PicturePtr pictureOfHeels ;
 
-        Picture * frameForByblos ;
+        PicturePtr grayPictureOfHeels ;
 
-        Picture * frameForSafari ;
+        PicturePtr pictureOfBag ;
 
-        Picture * frameForEgyptus ;
+        PicturePtr grayPictureOfBag ;
 
-        Picture * frameForPenitentiary ;
+        PicturePtr pictureOfHorn ;
 
-        Picture * pictureOfHead ;
+        PicturePtr grayPictureOfHorn ;
 
-        Picture * grayPictureOfHead ;
+        PicturePtr pictureOfDonuts ;
 
-        Picture * pictureOfHeels ;
+        PicturePtr grayPictureOfDonuts ;
 
-        Picture * grayPictureOfHeels ;
+        PicturePtr pictureOfGrandesSaltos ;
 
-        Picture * pictureOfBag ;
+        PicturePtr grayPictureOfGrandesSaltos ;
 
-        Picture * grayPictureOfBag ;
+        PicturePtr pictureOfGranVelocidad ;
 
-        Picture * pictureOfHorn ;
+        PicturePtr grayPictureOfGranVelocidad ;
 
-        Picture * grayPictureOfHorn ;
+        PicturePtr pictureOfEscudo ;
 
-        Picture * pictureOfDonuts ;
-
-        Picture * grayPictureOfDonuts ;
-
-        Picture * pictureOfGrandesSaltos ;
-
-        Picture * grayPictureOfGrandesSaltos ;
-
-        Picture * pictureOfGranVelocidad ;
-
-        Picture * grayPictureOfGranVelocidad ;
-
-        Picture * pictureOfEscudo ;
-
-        Picture * grayPictureOfEscudo ;
+        PicturePtr grayPictureOfEscudo ;
 
 public:
+
+        Isomot & getIsomot () {  return isomot ;  }
 
         /**
          * Returns the number of lives left for player
@@ -450,67 +439,31 @@ public:
 
         void setHeelsLives ( unsigned char lives ) {  this->heelsLives = lives ;  }
 
-        /**
-         * Establece el tiempo restante de movimiento a doble velocidad
-         * @param Un número entre 0 y 99
-         */
         void setHighSpeed ( unsigned int highSpeed ) {  this->highSpeed = highSpeed ;  }
 
-        /**
-         * Devuelve el tiempo restante de movimiento a doble velocidad
-         * @return Un número entre 0 y 99
-         */
         unsigned int getHighSpeed () const {  return this->highSpeed;  }
 
-        /**
-         * Establece el número de grandes saltos del jugador
-         * @param highJumps Un número entre 0 y 10
-         */
         void setHighJumps ( unsigned int highJumps ) {  this->highJumps = highJumps ;  }
 
-        /**
-         * Devuelve el número de grandes saltos del jugador
-         * @return Un número entre 0 y 10
-         */
         unsigned int getHighJumps () const {  return this->highJumps ;  }
 
-        /**
-         * Establece el tiempo restante de inmunidad para Head
-         */
         void setHeadShield ( unsigned int shield ) {  this->headShield = shield ;  }
 
-        /**
-         * Establece el tiempo restante de inmunidad para Heels
-         */
         void setHeelsShield ( unsigned int shield ) {  this->heelsShield = shield ;  }
 
-        /**
-         * Devuelve el tiempo restante de inmunidad de un jugador
-         */
-        double getShield ( const std::string& player ) const ;
+        float getShield ( const std::string& player ) const ;
 
         void setHorn ( bool hasHorn ) {  this->horn = hasHorn ;  }
 
         void setHandbag ( bool hasHandbag ) {  this->handbag = hasHandbag ;  }
 
-        void toolsOwnedByCharacter ( const std::string& player, std::vector< std::string >& tools ) const ;
+        void fillToolsOwnedByCharacter ( const std::string& player, std::vector < std::string > & tools ) const ;
 
         void setDonuts ( unsigned short number ) {  this->donuts = number ;  }
 
         unsigned short getDonuts ( const std::string& player ) const ;
 
-        /**
-         * Image of the item inside hand bag
-         */
-        void setImageOfItemInBag ( Picture* pic ) {  delete this->imageOfItemInBag ;  this->imageOfItemInBag = pic ;  }
-
-        unsigned int getVisitedRooms () const ;
-
-        ItemDataManager * getItemDataManager () const {  return itemDataManager ;  }
-
-        void binItemDataManager () ;
-
-        void setItemDataManager ( ItemDataManager* manager ) {  itemDataManager = manager ;  }
+        unsigned int getVisitedRooms () ;
 
 };
 

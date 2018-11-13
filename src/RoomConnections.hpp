@@ -8,8 +8,8 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef MapRoomData_hpp_
-#define MapRoomData_hpp_
+#ifndef RoomConnections_hpp_
+#define RoomConnections_hpp_
 
 #include <string>
 
@@ -17,24 +17,21 @@
 #include "Way.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
 /**
- * Connections of this room with another rooms of map
+ * Connections of room with another rooms of map
  */
 
-class MapRoomData
+class RoomConnections
 {
 
 public:
 
-        /**
-         * @param Full path and name of file with data for this room
-         */
-        MapRoomData( const std::string& room ) ;
+        RoomConnections( ) ;
 
-        virtual ~MapRoomData( ) ;
+        virtual ~RoomConnections( ) ;
 
         /**
          * Find room connected to this one
@@ -48,19 +45,9 @@ public:
          * then entrance isn’t okay because map returns simple way like south or west
          * but doors of triple and quadruple rooms are out of such ways
          */
-        void adjustEntry ( Way* wayOfEntry, const std::string& previousRoom ) ;
+        void adjustEntry ( Way* wayOfEntry, const std::string& previousRoom ) const ;
 
 private:
-
-        /**
-         * Name of file with data for this room
-         */
-        std::string room ;
-
-        /**
-         * When this room is already visited by any of characters
-         */
-        bool visited ;
 
         /**
          * File for room to the north of this room, empty string if no room there
@@ -140,15 +127,6 @@ private:
         std::string westSouth ;
 
 public:
-
-        /**
-         * Name of the file with data for this room
-         */
-        std::string getNameOfRoomFile () const {  return this->room ;  }
-
-        void setVisited ( bool visited ) {  this->visited = visited ;  }
-
-        bool isVisited () const {  return this->visited ;  }
 
         void setNorth ( const std::string& room ) {  this->north = room ;  }
 

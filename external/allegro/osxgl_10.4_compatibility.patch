@@ -4,12 +4,14 @@ ALOpenGLView may not respond to -exitFullScreenModeWithOptions:
 
 --- a/src/macosx/osxgl.h
 +++ b/src/macosx/osxgl.h
-@@ -21,7 +21,9 @@
+@@ -21,7 +21,11 @@
     NSCursor* cursor;
     CGDirectDisplayID display_id;
     BOOL show_cursor;
 +#if MAC_OS_X_VERSION_MIN_REQUIRED >= 1050
     NSTrackingArea *tracking;
++#else
++   NSTrackingRectTag tracking;
 +#endif
     unsigned int display_group;
     BOOL in_fullscreen;
@@ -32,13 +34,16 @@ ALOpenGLView may not respond to -exitFullScreenModeWithOptions:
  
  /* osx_change_cursor:
   * Actually change the current cursor. This can be called fom any thread 
-@@ -307,12 +309,14 @@
+@@ -307,12 +309,17 @@
        glMatrixMode(GL_PROJECTION);
        glLoadIdentity();
        glOrtho(0, NSWidth(rc), NSHeight(rc), 0, -1, 1);
 -      
 +
-+#if MAC_OS_X_VERSION_MIN_REQUIRED >= 1050
++#if MAC_OS_X_VERSION_MIN_REQUIRED < 1050
++      [self removeTrackingRect:dpy->tracking];
++      dpy->tracking = [self addTrackingRect:[self bounds] owner:self userData:nil assumeInside:NO];
++#else
        if (dpy->tracking) {
           [self removeTrackingArea: dpy->tracking];
           dpy->tracking = create_tracking_area(self);
@@ -48,11 +53,13 @@ ALOpenGLView may not respond to -exitFullScreenModeWithOptions:
     }
  }
  
-@@ -405,17 +409,21 @@
+@@ -405,15 +412,23 @@
  /* Cursor handling */
  - (void) viewDidMoveToWindow {
     ALLEGRO_DISPLAY_OSX_WIN* dpy =  (ALLEGRO_DISPLAY_OSX_WIN*) dpy_ptr;
-+#if MAC_OS_X_VERSION_MIN_REQUIRED >= 1050
++#if MAC_OS_X_VERSION_MIN_REQUIRED < 1050
++   dpy->tracking = [self addTrackingRect:[self bounds] owner:self userData:nil assumeInside:NO];
++#else
     dpy->tracking = create_tracking_area(self);
     [self addTrackingArea: dpy->tracking];
 +#endif
@@ -61,16 +68,16 @@ ALOpenGLView may not respond to -exitFullScreenModeWithOptions:
  - (void) viewWillMoveToWindow: (NSWindow*) newWindow {
     ALLEGRO_DISPLAY_OSX_WIN* dpy = (ALLEGRO_DISPLAY_OSX_WIN*) dpy_ptr;
     (void)newWindow;
-+#if MAC_OS_X_VERSION_MIN_REQUIRED >= 1050
     if (([self window] != nil) && (dpy->tracking != 0)) {
++#if MAC_OS_X_VERSION_MIN_REQUIRED < 1050
++      [self removeTrackingRect:dpy->tracking];
++#else
        [self removeTrackingArea:dpy->tracking];
++#endif
        dpy->tracking = 0;
     }
-+#endif
  }
- 
- -(void) mouseEntered: (NSEvent*) evt
-@@ -550,7 +558,9 @@
+@@ -550,7 +565,9 @@
      * (my theory)
      */
     [dpy->win orderOut:[dpy->win contentView]];
@@ -81,7 +88,7 @@ ALOpenGLView may not respond to -exitFullScreenModeWithOptions:
  }
  
  -(void) finishExitingFullScreenWindowMode
-@@ -884,7 +894,7 @@
+@@ -884,7 +901,7 @@
                    defer: NO
                   screen: screen];
     if (dpy->parent.flags & ALLEGRO_RESIZABLE) {
@@ -90,3 +97,11 @@ ALOpenGLView may not respond to -exitFullScreenModeWithOptions:
           [win setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
        }
     }
+@@ -950,6 +967,7 @@
+    [fmt release];
+    [view release];
+ }
++
+ +(void) destroyDisplay: (NSValue*) display_object {
+    ALLEGRO_DISPLAY_OSX_WIN* dpy = [display_object pointerValue];
+    ALLEGRO_OGL_EXTRAS *ogl = ((ALLEGRO_DISPLAY *)dpy)->ogl_extras;

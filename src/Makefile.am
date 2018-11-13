@@ -42,6 +42,9 @@ bin_PROGRAMS = headoverheels
 
 headoverheels_SOURCES = main.cpp \
 			tribool.hpp \
+			util.hpp \
+			pointers.cpp \
+			pointers.hpp \
 			Ism.cpp \
 			Ism.hpp \
 			WrappersAllegro.cpp \
@@ -50,6 +53,8 @@ headoverheels_SOURCES = main.cpp \
 			Way.hpp \
 			Color.cpp \
 			Color.hpp \
+			FlickeringColor.cpp \
+			FlickeringColor.hpp \
 			Picture.cpp \
 			Picture.hpp \
 			Drawable.hpp \
@@ -73,6 +78,8 @@ headoverheels_SOURCES = main.cpp \
 			Mediator.hpp \
 			ShadowCaster.cpp \
 			ShadowCaster.hpp \
+			Masker.cpp \
+			Masker.hpp \
 			GameSaverAndLoader.cpp \
 			GameSaverAndLoader.hpp \
 			GameManager.cpp \
@@ -87,8 +94,8 @@ headoverheels_SOURCES = main.cpp \
 			ItemDataManager.hpp \
 			MapManager.cpp \
 			MapManager.hpp \
-			MapRoomData.cpp \
-			MapRoomData.hpp \
+			RoomConnections.cpp \
+			RoomConnections.hpp \
 			RoomBuilder.cpp \
 			RoomBuilder.hpp \
 			Room.cpp \
@@ -135,8 +142,8 @@ headoverheels_SOURCES = main.cpp \
 			behaviors/Impel.hpp \
 			behaviors/Mobile.cpp \
 			behaviors/Mobile.hpp \
-			behaviors/OneWay.cpp \
-			behaviors/OneWay.hpp \
+			behaviors/ThereAndBack.cpp \
+			behaviors/ThereAndBack.hpp \
 			behaviors/Patrol.cpp \
 			behaviors/Patrol.hpp \
 			behaviors/PlayerHeadAndHeels.cpp \

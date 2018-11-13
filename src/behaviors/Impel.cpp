@@ -8,28 +8,27 @@
 #include "Room.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
-Impel::Impel( Item * item, const std::string & behavior ) :
-        Behavior( item, behavior )
+Impel::Impel( const ItemPtr & item, const std::string & behavior )
+        : Behavior( item, behavior )
+        , speedTimer( new Timer() )
+        , fallTimer( new Timer() )
 {
-        activity = Activity::Wait;
-        speedTimer = new Timer();
-        fallTimer = new Timer();
+        activity = Activity::Wait ;
+
         speedTimer->go();
         fallTimer->go();
 }
 
 Impel::~Impel()
 {
-        delete speedTimer;
-        delete fallTimer;
 }
 
 bool Impel::update ()
 {
-        FreeItem * freeItem = dynamic_cast< FreeItem * >( this->item );
+        FreeItem& freeItem = dynamic_cast< FreeItem& >( * this->item );
         bool vanish = false;
 
         switch ( activity )
@@ -46,9 +45,9 @@ bool Impel::update ()
                 case Activity::DisplaceSoutheast:
                 case Activity::DisplaceSouthwest:
                         // is it time to move
-                        if ( speedTimer->getValue() > freeItem->getSpeed() )
+                        if ( speedTimer->getValue() > freeItem.getSpeed() )
                         {
-                                if ( ! DisplaceKindOfActivity::getInstance()->displace( this, &activity, true ) )
+                                if ( ! DisplaceKindOfActivity::getInstance().displace( this, &activity, true ) )
                                 {
                                         activity = Activity::Wait;
                                 }
@@ -56,20 +55,20 @@ bool Impel::update ()
                                 speedTimer->reset();
                         }
 
-                        freeItem->animate();
+                        freeItem.animate();
                         break;
 
                 case Activity::Fall:
                         // look for reaching floor in a room without floor
-                        if ( freeItem->getZ() == 0 && freeItem->getMediator()->getRoom()->getKindOfFloor() == "none" )
+                        if ( freeItem.getZ() == 0 && ! freeItem.getMediator()->getRoom()->hasFloor() )
                         {
                                 // item disappears
                                 vanish = true;
                         }
                         // is it time to fall
-                        else if ( fallTimer->getValue() > freeItem->getWeight() )
+                        else if ( fallTimer->getValue() > freeItem.getWeight() )
                         {
-                                if ( ! FallKindOfActivity::getInstance()->fall( this ) )
+                                if ( ! FallKindOfActivity::getInstance().fall( this ) )
                                 {
                                         activity = Activity::Wait;
                                 }

@@ -8,23 +8,21 @@
 namespace gui
 {
 
-AnimatedPictureWidget::AnimatedPictureWidget( int x, int y, const std::vector< allegro::Pict* >& frames, double delay, const std::string& name ) :
+AnimatedPictureWidget::AnimatedPictureWidget( int x, int y, const std::vector< allegro::Pict* >& frames, float delay, const std::string& name ) :
         Widget( x, y )
         , animation( frames )
         , delayBetweenFrames( delay )
         , theFrame( 0 )
+        , animationTimer( new Timer () )
         , nameOfAnimation( name )
 {
-        animationTimer = new Timer();
         animationTimer->go();
 }
 
 AnimatedPictureWidget::~AnimatedPictureWidget()
 {
-        std::for_each( animation.begin (), animation.end (), isomot::DeleteIt() );
+        std::for_each( animation.begin (), animation.end (), iso::DeleteIt() );
         animation.clear();
-
-        delete animationTimer;
 }
 
 void AnimatedPictureWidget::draw( const allegro::Pict& where )

@@ -1,595 +1,237 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<room>
-
-  <scenery>jail</scenery>
-
-  <xTiles>9</xTiles>
-
-  <yTiles>8</yTiles>
-
-  <width>16</width>
-
-  <floorType>plain</floorType>
-
-  <floor>
-    <tile>
-      <x>0</x>
-      <y>3</y>
-      <picture>jail-floor-north.png</picture>
-    </tile>
-    <tile>
-      <x>0</x>
-      <y>4</y>
-      <picture>jail-floor-north.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>0</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>1</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>2</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>3</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>4</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>5</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>6</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>7</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>0</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>1</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>2</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>3</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>4</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>5</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>6</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>7</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>3</x>
-      <y>0</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>3</x>
-      <y>1</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>3</x>
-      <y>2</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>3</x>
-      <y>3</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>3</x>
-      <y>4</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>3</x>
-      <y>5</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>3</x>
-      <y>6</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>3</x>
-      <y>7</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>4</x>
-      <y>0</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>4</x>
-      <y>1</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>4</x>
-      <y>2</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>4</x>
-      <y>3</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>4</x>
-      <y>4</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>4</x>
-      <y>5</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>4</x>
-      <y>6</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>4</x>
-      <y>7</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>5</x>
-      <y>0</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>5</x>
-      <y>1</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>5</x>
-      <y>2</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>5</x>
-      <y>3</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>5</x>
-      <y>4</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>5</x>
-      <y>5</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>5</x>
-      <y>6</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>5</x>
-      <y>7</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>6</x>
-      <y>0</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>6</x>
-      <y>1</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>6</x>
-      <y>2</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>6</x>
-      <y>3</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>6</x>
-      <y>4</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>6</x>
-      <y>5</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>6</x>
-      <y>6</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>6</x>
-      <y>7</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>7</x>
-      <y>0</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>7</x>
-      <y>1</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>7</x>
-      <y>2</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>7</x>
-      <y>3</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>7</x>
-      <y>4</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>7</x>
-      <y>5</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>7</x>
-      <y>6</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>7</x>
-      <y>7</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>8</x>
-      <y>0</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>8</x>
-      <y>1</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>8</x>
-      <y>2</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>8</x>
-      <y>3</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>8</x>
-      <y>4</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>8</x>
-      <y>5</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>8</x>
-      <y>6</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-    <tile>
-      <x>8</x>
-      <y>7</y>
-      <picture>jail-floor.png</picture>
-    </tile>
-  </floor>
-
-  <walls>
-    <wall>
-      <axis>x</axis>
-      <index>1</index>
-      <picture>jail-wall-x.png</picture>
-    </wall>
-    <wall>
-      <axis>x</axis>
-      <index>2</index>
-      <picture>jail-wall-x.png</picture>
-    </wall>
-    <wall>
-      <axis>x</axis>
-      <index>3</index>
-      <picture>jail-wall-x.png</picture>
-    </wall>
-    <wall>
-      <axis>x</axis>
-      <index>4</index>
-      <picture>jail-wall-x.png</picture>
-    </wall>
-    <wall>
-      <axis>x</axis>
-      <index>5</index>
-      <picture>jail-wall-x.png</picture>
-    </wall>
-    <wall>
-      <axis>x</axis>
-      <index>6</index>
-      <picture>jail-wall-x.png</picture>
-    </wall>
-    <wall>
-      <axis>x</axis>
-      <index>7</index>
-      <picture>jail-wall-x.png</picture>
-    </wall>
-    <wall>
-      <axis>x</axis>
-      <index>8</index>
-      <picture>jail-wall-x.png</picture>
-    </wall>
-    <wall>
-      <axis>y</axis>
-      <index>0</index>
-      <picture>jail-wall-y.png</picture>
-    </wall>
-    <wall>
-      <axis>y</axis>
-      <index>1</index>
-      <picture>jail-wall-y.png</picture>
-    </wall>
-    <wall>
-      <axis>y</axis>
-      <index>2</index>
-      <picture>jail-wall-y.png</picture>
-    </wall>
-    <wall>
-      <axis>y</axis>
-      <index>5</index>
-      <picture>jail-wall-y.png</picture>
-    </wall>
-    <wall>
-      <axis>y</axis>
-      <index>6</index>
-      <picture>jail-wall-y.png</picture>
-    </wall>
-    <wall>
-      <axis>y</axis>
-      <index>7</index>
-      <picture>jail-wall-y.png</picture>
-    </wall>
-  </walls>
-
-  <items>
-    <item x="0" y="3" z="-1">
-      <label>jail-door-north</label>
-      <direction>north</direction>
-      <type>door</type>
-    </item>
-    <item x="4" y="0" z="0">
-      <label>bars-ns</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="4" y="0" z="1">
-      <label>bars-ns</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="4" y="0" z="2">
-      <label>bars-ns</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="8" y="0" z="0">
-      <label>vulcano</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="4" y="1" z="0">
-      <label>bars-ns</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="4" y="1" z="1">
-      <label>bars-ns</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="4" y="1" z="2">
-      <label>bars-ns</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="8" y="1" z="0">
-      <label>conveyor-belt</label>
-      <direction>east</direction>
-      <behavior>behavior of conveyor</behavior>
-      <type>griditem</type>
-    </item>
-    <item x="4" y="2" z="0">
-      <label>bars-ns</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="4" y="2" z="1">
-      <label>bars-ns</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="4" y="2" z="2">
-      <label>bars-ns</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="8" y="2" z="0">
-      <label>conveyor-belt</label>
-      <direction>east</direction>
-      <behavior>behavior of conveyor</behavior>
-      <type>griditem</type>
-    </item>
-    <item x="4" y="3" z="0">
-      <label>bars-ns</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="4" y="3" z="1">
-      <label>bars-ns</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="4" y="3" z="2">
-      <label>bars-ns</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="8" y="3" z="0">
-      <label>conveyor-belt</label>
-      <direction>east</direction>
-      <behavior>behavior of conveyor</behavior>
-      <type>griditem</type>
-    </item>
-    <item x="4" y="4" z="0">
-      <label>bars-ns</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="4" y="4" z="1">
-      <label>bars-ns</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="4" y="4" z="2">
-      <label>bars-ns</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="8" y="4" z="0">
-      <label>conveyor-belt</label>
-      <direction>east</direction>
-      <behavior>behavior of conveyor</behavior>
-      <type>griditem</type>
-    </item>
-    <item x="4" y="5" z="0">
-      <label>bars-ns</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="4" y="5" z="1">
-      <label>bars-ns</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="4" y="5" z="2">
-      <label>bars-ns</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="8" y="5" z="0">
-      <label>conveyor-belt</label>
-      <direction>east</direction>
-      <behavior>behavior of conveyor</behavior>
-      <type>griditem</type>
-    </item>
-    <item x="4" y="6" z="0">
-      <label>bars-ns</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="4" y="6" z="1">
-      <label>bars-ns</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="4" y="6" z="2">
-      <label>bars-ns</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="8" y="6" z="0">
-      <label>conveyor-belt</label>
-      <direction>east</direction>
-      <behavior>behavior of conveyor</behavior>
-      <type>griditem</type>
-    </item>
-    <item x="4" y="7" z="0">
-      <label>bars-ns</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="4" y="7" z="1">
-      <label>bars-ns</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="4" y="7" z="2">
-      <label>bars-ns</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="8" y="7" z="0">
-      <label>teleport</label>
-      <direction>none</direction>
-      <behavior>behavior of teletransport</behavior>
-      <type>griditem</type>
-    </item>
-  </items>
-
+<room scenery="jail" tileSize="16">
+    <xTiles>9</xTiles>
+    <yTiles>8</yTiles>
+    <floorKind>plain</floorKind>
+    <walls>
+        <wall on="x">
+            <position>1</position>
+            <picture>jail-wall-x.png</picture>
+        </wall>
+        <wall on="x">
+            <position>2</position>
+            <picture>jail-wall-x.png</picture>
+        </wall>
+        <wall on="x">
+            <position>3</position>
+            <picture>jail-wall-x.png</picture>
+        </wall>
+        <wall on="x">
+            <position>4</position>
+            <picture>jail-wall-x.png</picture>
+        </wall>
+        <wall on="x">
+            <position>5</position>
+            <picture>jail-wall-x.png</picture>
+        </wall>
+        <wall on="x">
+            <position>6</position>
+            <picture>jail-wall-x.png</picture>
+        </wall>
+        <wall on="x">
+            <position>7</position>
+            <picture>jail-wall-x.png</picture>
+        </wall>
+        <wall on="x">
+            <position>8</position>
+            <picture>jail-wall-x.png</picture>
+        </wall>
+        <wall on="y">
+            <position>0</position>
+            <picture>jail-wall-y.png</picture>
+        </wall>
+        <wall on="y">
+            <position>1</position>
+            <picture>jail-wall-y.png</picture>
+        </wall>
+        <wall on="y">
+            <position>2</position>
+            <picture>jail-wall-y.png</picture>
+        </wall>
+        <wall on="y">
+            <position>5</position>
+            <picture>jail-wall-y.png</picture>
+        </wall>
+        <wall on="y">
+            <position>6</position>
+            <picture>jail-wall-y.png</picture>
+        </wall>
+        <wall on="y">
+            <position>7</position>
+            <picture>jail-wall-y.png</picture>
+        </wall>
+    </walls>
+    <items>
+        <item x="8" y="0" z="0">
+            <label>vulcano</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="8" y="1" z="0">
+            <label>conveyor-belt</label>
+            <orientation>east</orientation>
+            <behavior>behavior of conveyor</behavior>
+            <kind>griditem</kind>
+        </item>
+        <item x="8" y="2" z="0">
+            <label>conveyor-belt</label>
+            <orientation>east</orientation>
+            <behavior>behavior of conveyor</behavior>
+            <kind>griditem</kind>
+        </item>
+        <item x="8" y="3" z="0">
+            <label>conveyor-belt</label>
+            <orientation>east</orientation>
+            <behavior>behavior of conveyor</behavior>
+            <kind>griditem</kind>
+        </item>
+        <item x="8" y="4" z="0">
+            <label>conveyor-belt</label>
+            <orientation>east</orientation>
+            <behavior>behavior of conveyor</behavior>
+            <kind>griditem</kind>
+        </item>
+        <item x="8" y="5" z="0">
+            <label>conveyor-belt</label>
+            <orientation>east</orientation>
+            <behavior>behavior of conveyor</behavior>
+            <kind>griditem</kind>
+        </item>
+        <item x="8" y="6" z="0">
+            <label>conveyor-belt</label>
+            <orientation>east</orientation>
+            <behavior>behavior of conveyor</behavior>
+            <kind>griditem</kind>
+        </item>
+        <item x="8" y="7" z="0">
+            <label>teleport</label>
+            <orientation>none</orientation>
+            <behavior>behavior of teletransport</behavior>
+            <kind>griditem</kind>
+        </item>
+        <item x="4" y="0" z="0">
+            <label>bars-ns</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="4" y="0" z="1">
+            <label>bars-ns</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="4" y="0" z="2">
+            <label>bars-ns</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="4" y="1" z="0">
+            <label>bars-ns</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="4" y="1" z="1">
+            <label>bars-ns</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="4" y="1" z="2">
+            <label>bars-ns</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="4" y="2" z="0">
+            <label>bars-ns</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="4" y="2" z="1">
+            <label>bars-ns</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="4" y="2" z="2">
+            <label>bars-ns</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="4" y="3" z="0">
+            <label>bars-ns</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="4" y="3" z="1">
+            <label>bars-ns</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="4" y="3" z="2">
+            <label>bars-ns</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="4" y="4" z="0">
+            <label>bars-ns</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="4" y="4" z="1">
+            <label>bars-ns</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="4" y="4" z="2">
+            <label>bars-ns</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="4" y="5" z="0">
+            <label>bars-ns</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="4" y="5" z="1">
+            <label>bars-ns</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="4" y="5" z="2">
+            <label>bars-ns</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="4" y="6" z="0">
+            <label>bars-ns</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="4" y="6" z="1">
+            <label>bars-ns</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="4" y="6" z="2">
+            <label>bars-ns</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="4" y="7" z="0">
+            <label>bars-ns</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="4" y="7" z="1">
+            <label>bars-ns</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="4" y="7" z="2">
+            <label>bars-ns</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="0" y="3" z="-1">
+            <label>jail-door-north</label>
+            <orientation>north</orientation>
+            <kind>door</kind>
+        </item>
+    </items>
 </room>

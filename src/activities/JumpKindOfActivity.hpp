@@ -14,13 +14,13 @@
 #include <vector>
 
 #include "KindOfActivity.hpp"
+#include "FreeItem.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
 class Behavior;
-class FreeItem;
 
 /**
  * Salto de un elemento
@@ -37,7 +37,7 @@ public:
 
         virtual ~JumpKindOfActivity();
 
-        static JumpKindOfActivity * getInstance() ;
+        static JumpKindOfActivity & getInstance() ;
 
        /**
         * Item jumps
@@ -53,10 +53,10 @@ protected:
        /**
         * Raise items stacked on player
         * @param sender player that triggers lifting of pile
-        * @param freeItem first item of pile
+        * @param item first item of pile
         * @param z units to ascend pile of items
         */
-        void lift ( FreeItem * sender, FreeItem * freeItem, int z ) ;
+        void lift ( FreeItem& sender, Item& item, int z ) ;
 
 private:
 

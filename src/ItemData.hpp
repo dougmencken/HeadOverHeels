@@ -13,16 +13,18 @@
 
 #include <vector>
 #include <string>
-#include <cassert>
 
 #include "Picture.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
+class ItemDataManager ;
+
+
 /**
- * Container for definition of an item read from file
+ * Container for definition of an item
  */
 
 class ItemData
@@ -44,33 +46,23 @@ public:
 
         void setNameOfFile ( const std::string& newName ) {  this->nameOfFile = newName ;  }
 
-        void clearNameOfFile () {  this->nameOfFile.clear() ;  }
-
         const std::string& getNameOfShadowFile () const {  return this->nameOfShadowFile;  }
 
         void setNameOfShadowFile ( const std::string& newNameOfShadow ) {  this->nameOfShadowFile = newNameOfShadow ;  }
-
-        void clearNameOfShadowFile () {  this->nameOfShadowFile.clear() ;  }
 
         const std::string& getLabel () const {  return label ;  }
 
         unsigned int getWidthX () const {  return widthX ;  }
 
-        void setWidthX ( unsigned int newWidthX ) {  widthX = newWidthX ;  }
-
         unsigned int getWidthY () const {  return widthY ;  }
-
-        void setWidthY ( unsigned int newWidthY ) {  widthY = newWidthY ;  }
 
         unsigned int getHeight () const {  return height ;  }
 
-        void setHeight ( unsigned int newHeight ) {  height = newHeight ;  }
+        float getWeight() const {  return weight ;  }
 
-        double getWeight() const {  return weight ;  }
+        float getSpeed() const {  return speed ;  }
 
-        double getSpeed() const {  return speed ;  }
-
-        double getDelayBetweenFrames () const {  return delayBetweenFrames ;  }
+        float getDelayBetweenFrames () const {  return delayBetweenFrames ;  }
 
         unsigned int getWidthOfFrame () const {  return widthOfFrame ;  }
 
@@ -82,40 +74,23 @@ public:
 
         bool isMortal() const {  return mortal ;  }
 
-        unsigned short howManyFramesPerOrientation () const {  return framesPerOrientation ;  }
+        unsigned short howManyOrientations () const {  return orientations ;  }
 
         unsigned int howManyExtraFrames () const {  return extraFrames ;  }
 
-        unsigned int howManyMotions () const {  return motion.size () ;  }
-
-        Picture * getMotionAt( size_t at ) const
-        {
-                assert( at < motion.size () );
-                return motion[ at ] ;
-                /// return ( at < motion.size() ? motion[ at ] : nilPointer ) ;
-        }
-
-        unsigned int howManyShadows () const {  return shadows.size () ;  }
-
-        Picture * getShadowAt( size_t at ) const
-        {
-                assert( at < shadows.size () );
-                return shadows[ at ] ;
-                /// return ( at < shadows.size() ? shadows[ at ] : nilPointer ) ;
-        }
-
-        int getFrameAt( size_t at ) const
+        unsigned int getFrameAt( size_t at ) const
         {
                 return ( at < frames.size () ? frames[ at ] : 0 ) ;
         }
 
         unsigned int howManyFrames () const {  return frames.size() ;  }
 
+        bool isPartOfDoor () const {  return partOfDoor ;  }
+
+        const ItemDataManager * getItemDataManager () const {  return manager ;  }
+
 private:
 
-       /**
-        * Label names item uniquely, there’s no two different items with one label
-        */
         std::string label ;
 
        /**
@@ -136,30 +111,24 @@ private:
        /**
         * Weight of item in seconds, higher for bigger speed of falling, zero for don’t fall
         */
-        double weight ;
+        float weight ;
 
        /**
         * Time in seconds needed for item to move
         */
-        double speed ;
+        float speed ;
+
+        unsigned short orientations ;
+
+        float delayBetweenFrames ;
 
        /**
-        * How many frames are for orientations
-        */
-        unsigned short framesPerOrientation ;
-
-       /**
-        * Time in seconds between each frame of animation
-        */
-        double delayBetweenFrames ;
-
-       /**
-        * Width in pixels of each frame for item
+        * Width in pixels of each frame
         */
         unsigned int widthOfFrame ;
 
        /**
-        * Height in pixels of each frame for item
+        * Height in pixels of each frame
         */
         unsigned int heightOfFrame ;
 
@@ -181,29 +150,23 @@ private:
         unsigned int extraFrames ;
 
        /**
-        * Frames that define sequence of animation
+        * Sequence of animation
         */
-        std::vector< int > frames ;
+        std::vector< unsigned int > frames ;
 
        /**
-        * Pictures of item
-        */
-        std::vector< Picture * > motion ;
-
-       /**
-        * Pictures of item’s shadow
-        */
-        std::vector< Picture * > shadows ;
-
-       /**
-        * Name of the file that contains the frames of this item
+        * Name of the file that contains frames of this item
         */
         std::string nameOfFile ;
 
        /**
-        * Name of the file that contains the shadows for this item
+        * Name of the file that contains shadows for this item
         */
         std::string nameOfShadowFile ;
+
+        bool partOfDoor ;
+
+        ItemDataManager * manager ;
 
 };
 

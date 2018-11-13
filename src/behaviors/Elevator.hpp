@@ -15,7 +15,7 @@
 #include "Timer.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
 class Item ;
@@ -29,11 +29,23 @@ class Elevator : public Behavior
 
 public:
 
-        Elevator( Item * item, const std::string & behavior ) ;
+        Elevator( const ItemPtr & item, const std::string & behavior ) ;
 
         virtual ~Elevator( ) ;
 
         virtual bool update () ;
+
+        int getTop () const {  return top ;  }
+
+        int getBottom () const {  return bottom ;  }
+
+        bool getAscent () const {  return ascent ;  }
+
+        void setTop ( int top ) {  this->top = top ;  }
+
+        void setBottom ( int bottom ) {  this->bottom = bottom ;  }
+
+        void setAscent ( bool ascent ) {  this->ascent = ascent ;  }
 
 private:
 
@@ -57,19 +69,12 @@ private:
        /**
         * Timer for speed of movement
         */
-        Timer * speedTimer ;
+        autouniqueptr < Timer > speedTimer ;
 
        /**
         * Timer for delays on change of direction
         */
-        Timer * stopTimer ;
-
-public:
-
-       /**
-        * Set maximum and minimum height, and initial position of this elevator
-        */
-        void setMoreData ( void * data ) ;
+        autouniqueptr < Timer > stopTimer ;
 
 };
 

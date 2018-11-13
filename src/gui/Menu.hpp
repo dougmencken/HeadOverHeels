@@ -46,9 +46,9 @@ public:
 
         void redraw () ;
 
-        Picture * getWhereToDraw () const {  return whereToDraw ;  }
+        PicturePtr getWhereToDraw () const {  return whereToDraw ;  }
 
-        void setWhereToDraw ( Picture * where ) {  whereToDraw = where ;  }
+        void setWhereToDraw ( const PicturePtr& where ) {  whereToDraw = where ;  }
 
         void handleKey ( const std::string& key ) ;
 
@@ -86,7 +86,7 @@ protected:
          */
         virtual void nextOption () ;
 
-        Picture * whereToDraw ;
+        PicturePtr whereToDraw ;
 
         /**
          * Options that make up the menu

@@ -12,17 +12,16 @@
 #define Behavior_hpp_
 
 #include <string>
-#include <stack>
 
 #include "Ism.hpp"
 #include "ActivityOfItem.hpp"
+#include "Item.hpp"
+#include "ItemData.hpp"
+#include "ItemDataManager.hpp"
 
 
-namespace isomot
+namespace iso
 {
-
-class Item ;
-class KindOfActivity ;
 
 /**
  * Abstraction for behavior of item. Item of game changes its activity in each cycle of update.
@@ -34,13 +33,13 @@ class Behavior
 
 protected:
 
-        Behavior( Item * whichItem, const std::string & behavior ) ;
+        Behavior( const ItemPtr & whichItem, const std::string & behaviorFromFile ) ;
 
 public:
 
         virtual ~Behavior( ) ;
 
-        static Behavior * createBehaviorByName ( Item * item, const std::string& behavior, void * extraData ) ;
+        static Behavior * createBehaviorByName ( const ItemPtr & item, const std::string & behavior ) ;
 
         /**
          * Updates behavior of item in each cycle
@@ -48,18 +47,18 @@ public:
          */
         virtual bool update () = 0 ;
 
-        /**
-         * @param activity Activity of item
-         * @param sender Item which changes activity
-         */
-        virtual void changeActivityOfItem ( const ActivityOfItem & activity, Item * sender = nilPointer ) ;
+        virtual void changeActivityOfItem ( const ActivityOfItem & activity, const ItemPtr & sender = ItemPtr () )
+                {  this->activity = activity ;  this->sender = sender ;  }
+
+        virtual void changeActivityOfItem ( const ActivityOfItem & activity, Item & sender )
+                {  changeActivityOfItem( activity, ItemPtr( &sender ) ) ;  }
 
 protected:
 
         /**
          * Change activity of every item collided with sender
          */
-        void propagateActivity ( Item * sender, const ActivityOfItem & activity ) ;
+        void propagateActivity ( const Item & sender, const ActivityOfItem & activity ) ;
 
 protected:
 
@@ -68,7 +67,7 @@ protected:
         /**
          * Item with this behavior
          */
-        Item * item ;
+        ItemPtr item ;
 
         /**
          * Current variant of activity
@@ -78,7 +77,7 @@ protected:
         /**
          * Another item which changes activity of item with this behavior
          */
-        Item * sender ;
+        ItemPtr sender ;
 
 public:
 
@@ -86,12 +85,7 @@ public:
 
         ActivityOfItem getActivityOfItem () const {  return activity ;  }
 
-        Item* getItem () {  return item ;  }
-
-        /**
-         * Add some more data for behavior
-         */
-        virtual void setMoreData ( void * data ) {  ( void )data ;  }
+        const ItemPtr & getItem () {  return item ;  }
 
 };
 

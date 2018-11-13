@@ -16,37 +16,34 @@ using gui::ShowAuthors;
 using gui::Label;
 using gui::PictureWidget;
 using gui::TextField;
-using isomot::SoundManager;
+using iso::SoundManager;
 
 
-ShowAuthors::ShowAuthors( Picture* picture )
-        : Action( picture )
+ShowAuthors::ShowAuthors( )
+        : Action( )
         , linesOfCredits( nilPointer )
         , initialY( 0 )
-        , loadingScreen( nilPointer )
+        , loadingScreen( )
 {
 }
 
 ShowAuthors::~ShowAuthors( )
 {
         delete linesOfCredits ;
-        delete loadingScreen ;
 }
 
 void ShowAuthors::doAction ()
 {
-        SoundManager::getInstance()->playOgg( "music/CreditsTheme.ogg", /* loop */ true );
+        SoundManager::getInstance().playOgg( "music/CreditsTheme.ogg", /* loop */ true );
 
-        int heightOfWhereToDraw = getWhereToDraw()->getHeight() ;
-
-        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this );
-        if ( screen->countWidgets() == 0 )
+        Screen& screen = * GuiManager::getInstance().findOrCreateScreenForAction( this );
+        if ( screen.countWidgets() == 0 )
         {
-                LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
+                LanguageManager* languageManager = GuiManager::getInstance().getLanguageManager();
                 LanguageText* langString = languageManager->findLanguageStringForAlias( "credits-text" );
 
-                this->initialY = heightOfWhereToDraw;
-                this->linesOfCredits = new TextField( isomot::ScreenWidth(), "center" );
+                this->initialY = screen.getImageOfScreen().getHeight() ;
+                this->linesOfCredits = new TextField( iso::ScreenWidth(), "center" );
                 this->linesOfCredits->moveTo( 0, initialY );
 
                 size_t howManyLines = langString->getLinesCount() ;
@@ -58,7 +55,7 @@ void ShowAuthors::doAction ()
                         linesOfCredits->addLine( line->text, line->font, line->color );
                 }
 
-                screen->addWidget( linesOfCredits );
+                screen.addWidget( linesOfCredits );
         }
         else
         {
@@ -66,21 +63,24 @@ void ShowAuthors::doAction ()
                 linesOfCredits->moveTo( linesOfCredits->getX(), initialY );
         }
 
-        screen->setEscapeAction( new CreateMainMenu( getWhereToDraw() ) );
+        screen.setEscapeAction( new CreateMainMenu() );
 
-        GuiManager::getInstance()->changeScreen( screen, true );
+        GuiManager::getInstance().changeScreen( screen, true );
+
+        const unsigned int widthOfSlide = screen.getImageOfScreen().getWidth() ;
+        const unsigned int heightOfSlide = screen.getImageOfScreen().getHeight() ;
+
+        const unsigned int heightOfCredits = ( ( linesOfCredits->getHeightOfField() + 1 ) >> 1 ) << 1;
+        const unsigned int verticalSpace = ( heightOfSlide * 3 ) >> 2;
+        const int whenToReloop = - ( heightOfCredits + verticalSpace ) ;
+
+        std::cout << "height of credits-text is " << heightOfCredits << std::endl ;
 
         PictureWidget* widgetForLoadingScreen = nilPointer;
 
         // move text up
 
-        const int heightOfCredits = ( ( linesOfCredits->getHeightOfField() + 1 ) >> 1 ) << 1;
-        const int verticalSpace = ( getWhereToDraw()->getHeight() * 3 ) >> 2;
-        const int whenToReloop = - ( heightOfCredits + verticalSpace ) ;
-
-        std::cout << "height of credits-text is " << heightOfCredits << std::endl ;
-
-        while ( ! screen->getEscapeAction()->hasBegun() )
+        while ( ! screen.getEscapeAction()->hasBegun() )
         {
                 int yNow = linesOfCredits->getY() - 1;
 
@@ -126,42 +126,42 @@ void ShowAuthors::doAction ()
 
                 linesOfCredits->moveTo( linesOfCredits->getX(), yNow );
 
-                if ( yNow == heightOfWhereToDraw - heightOfCredits && widgetForLoadingScreen == nilPointer )
+                if ( yNow == static_cast< int >( heightOfSlide ) - static_cast< int >( heightOfCredits ) && widgetForLoadingScreen == nilPointer )
                 {
                         if ( loadingScreen == nilPointer )
                         {
-                                smartptr< allegro::Pict > png( allegro::Pict::fromPNGFile (
-                                        isomot::pathToFile( isomot::sharePath() + "loading-screen.png" )
+                                autouniqueptr< allegro::Pict > png( allegro::Pict::fromPNGFile (
+                                        iso::pathToFile( iso::sharePath(), "loading-screen.png" )
                                 ) );
-                                loadingScreen = new Picture( * png.get() );
+                                loadingScreen = PicturePtr( new Picture( * png.get() ) );
                                 loadingScreen->setName( "image of loading screen from original speccy version" );
                         }
 
                         if ( loadingScreen->getAllegroPict().isNotNil() )
                         {
-                                widgetForLoadingScreen = new PictureWidget(
-                                                ( getWhereToDraw()->getWidth() - loadingScreen->getWidth() ) >> 1, heightOfWhereToDraw,
-                                                new Picture( *loadingScreen ),
+                                widgetForLoadingScreen = new PictureWidget (
+                                                ( widthOfSlide - loadingScreen->getWidth() ) >> 1, heightOfSlide,
+                                                loadingScreen,
                                                 "loading screen from original speccy version"
                                 ) ;
-                                screen->addWidget( widgetForLoadingScreen );
+                                screen.addWidget( widgetForLoadingScreen );
                         }
                 }
-                else if ( yNow < heightOfWhereToDraw - heightOfCredits && widgetForLoadingScreen != nilPointer )
+                else if ( yNow < static_cast< int >( heightOfSlide ) - static_cast< int >( heightOfCredits ) && widgetForLoadingScreen != nilPointer )
                 {
                         widgetForLoadingScreen->moveTo( widgetForLoadingScreen->getX(), yNow + heightOfCredits );
                 }
                 else if ( widgetForLoadingScreen != nilPointer )
                 {
-                        screen->removeWidget( widgetForLoadingScreen );
+                        screen.removeWidget( widgetForLoadingScreen );
                         widgetForLoadingScreen = nilPointer;
                 }
 
-                GuiManager::getInstance()->redraw ();
+                GuiManager::getInstance().redraw ();
 
                 if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "f" ) )
                 {
-                        gui::GuiManager::getInstance()->toggleFullScreenVideo ();
+                        gui::GuiManager::getInstance().toggleFullScreenVideo ();
                 }
 
                 if ( ! allegro::isKeyPushed( "Space" ) )
@@ -172,12 +172,12 @@ void ShowAuthors::doAction ()
                 if ( allegro::isKeyPushed( "Escape" ) )
                 {
                         allegro::emptyKeyboardBuffer();
-                        screen->handleKey( "Escape" );
+                        screen.handleKey( "Escape" );
                 }
         }
 
         if ( widgetForLoadingScreen != nilPointer )
         {
-                screen->removeWidget( widgetForLoadingScreen );
+                screen.removeWidget( widgetForLoadingScreen );
         }
 }

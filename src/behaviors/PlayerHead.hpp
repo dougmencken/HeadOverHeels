@@ -13,24 +13,19 @@
 
 #include "UserControlled.hpp"
 
-namespace isomot
+namespace iso
 {
 
 class Item;
 class ItemData;
 
-/**
- * Comportamiento del jugador Head. Dado que Head es uno de los elementos controlados por el usuario
- * su comportamiento viene definido tanto por la operación "update" como por "behave"
- * Head puede caminar, saltar, planear y disparar, como acciones más significativas
- */
 
 class PlayerHead : public UserControlled
 {
 
 public:
 
-        PlayerHead( Item* item, const std::string& behavior ) ;
+        PlayerHead( const ItemPtr & item, const std::string& behavior ) ;
 
         virtual ~PlayerHead( ) ;
 
@@ -40,19 +35,9 @@ public:
 
 protected:
 
-       /**
-        * Pone en espera al jugador. Implica la presentación del primer fotograma de la
-        * secuencia de animación según la orientación del jugador y ponerlo a parpadear si pasan
-        * entre 5 y 9 segundos
-        * @param playerItem El jugador que va a cambiar su comportamiento
-        */
-        virtual void wait ( PlayerItem* playerItem ) ;
+        virtual void wait ( PlayerItem & playerItem ) ;
 
-       /**
-        * Hace parpadear al jugador. El parpadeo se interrumpirá ante cualquier orden del usuario
-        * @param playerItem El jugador que va a cambiar su comportamiento
-        */
-        virtual void blink ( PlayerItem* playerItem ) ;
+        virtual void blink ( PlayerItem & playerItem ) ;
 
 protected:
 

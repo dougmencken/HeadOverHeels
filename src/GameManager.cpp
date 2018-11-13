@@ -1,13 +1,11 @@
 
 #include "GameManager.hpp"
-#include "Isomot.hpp"
-#include "Room.hpp"
 #include "Mediator.hpp"
 #include "PlayerItem.hpp"
 #include "PictureWidget.hpp"
 #include "Label.hpp"
 #include "ColorCyclingLabel.hpp"
-#include "GameSaverAndLoader.hpp"
+#include "Camera.hpp"
 #include "GuiManager.hpp"
 #include "MapManager.hpp"
 #include "InputManager.hpp"
@@ -21,21 +19,19 @@
 #include <tinyxml2.h>
 
 
-namespace isomot
+namespace iso
 {
 
-GameManager * GameManager::instance = nilPointer ;
+GameManager GameManager::instance ;
 
 
 GameManager::GameManager( )
-        : itemDataManager( nilPointer )
-        , headRoom( "blacktooth1head.xml" )
+        : headRoom( "blacktooth1head.xml" )
         , heelsRoom( "blacktooth23heels.xml" )
         , freedomLabel( nilPointer )
-        , recordingTimer( nilPointer )
         , numberOfCapture( 0 )
         , prefixOfCaptures( makeRandomString( 10 ) )
-        , capturePath( isomot::homePath() + "capture" + pathSeparator )
+        , capturePath( iso::homePath() + "capture" )
         , chosenGraphicSet( "gfx" )
         , vidasInfinitas( false )
         , immunityToCollisions( false )
@@ -44,8 +40,9 @@ GameManager::GameManager( )
         , drawShadows( true )
         , drawBackgroundPicture( true )
         , recordCaptures( false )
-        , isomot( new Isomot() )
-        , saverAndLoader( new GameSaverAndLoader( this, isomot ) )
+        , recordingTimer( new Timer () )
+        , isomot( )
+        , saverAndLoader( )
         , headLives( 0 )
         , heelsLives( 0 )
         , highSpeed( 0 )
@@ -55,106 +52,71 @@ GameManager::GameManager( )
         , horn( false )
         , handbag( false )
         , donuts( 0 )
-        , imageOfItemInBag( nilPointer )
         , takenCrown( false )
         , eatenFish( false )
         , gameOver( false )
         , freedom( false )
         , emperator( false )
-        , frameForJail( nilPointer )
-        , frameForBlacktooth( nilPointer )
-        , frameForMarket( nilPointer )
-        , frameForMoon( nilPointer )
-        , frameForByblos( nilPointer )
-        , frameForSafari( nilPointer )
-        , frameForEgyptus( nilPointer )
-        , frameForPenitentiary( nilPointer )
-        , pictureOfHead( nilPointer )
-        , grayPictureOfHead( nilPointer )
-        , pictureOfHeels( nilPointer )
-        , grayPictureOfHeels( nilPointer )
-        , pictureOfBag( nilPointer )
-        , grayPictureOfBag( nilPointer )
-        , pictureOfHorn( nilPointer )
-        , grayPictureOfHorn( nilPointer )
-        , pictureOfDonuts( nilPointer )
-        , grayPictureOfDonuts( nilPointer )
-        , pictureOfGrandesSaltos( nilPointer )
-        , grayPictureOfGrandesSaltos( nilPointer )
-        , pictureOfGranVelocidad( nilPointer )
-        , grayPictureOfGranVelocidad( nilPointer )
-        , pictureOfEscudo( nilPointer )
-        , grayPictureOfEscudo( nilPointer )
 {
-        if ( ! isomot::folderExists( capturePath ) )
+        if ( ! util::folderExists( capturePath ) )
                 mkdir( capturePath.c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH );
 
-        recordingTimer = new Timer();
         recordingTimer->go ();
 }
 
 GameManager::~GameManager( )
 {
-        delete frameForMoon ;
-        delete frameForMarket ;
-        delete frameForBlacktooth ;
-        delete frameForJail ;
-        delete frameForPenitentiary ;
-        delete frameForEgyptus ;
-        delete frameForSafari ;
-        delete frameForByblos ;
+        cleanUp () ;
+}
 
-        delete pictureOfHead ;
-        delete pictureOfHeels ;
-        delete grayPictureOfHead ;
-        delete grayPictureOfHeels ;
+void GameManager::cleanUp()
+{
+        sceneryBackgrounds.clear ();
 
-        delete pictureOfBag ;
-        delete pictureOfHorn ;
-        delete grayPictureOfHorn ;
-        delete grayPictureOfBag ;
-        delete pictureOfDonuts ;
-        delete grayPictureOfDonuts ;
+        pictureOfHead.clear ();
+        grayPictureOfHead.clear ();
+        pictureOfHeels.clear ();
+        grayPictureOfHeels.clear ();
+        pictureOfBag.clear ();
+        grayPictureOfBag.clear ();
+        pictureOfHorn.clear ();
+        grayPictureOfHorn.clear ();
+        pictureOfDonuts.clear ();
+        grayPictureOfDonuts.clear ();
+        pictureOfGrandesSaltos.clear ();
+        grayPictureOfGrandesSaltos.clear ();
+        pictureOfGranVelocidad.clear ();
+        grayPictureOfGranVelocidad.clear ();
+        pictureOfEscudo.clear ();
+        grayPictureOfEscudo.clear ();
 
-        delete pictureOfGrandesSaltos ;
-        delete grayPictureOfGrandesSaltos ;
-        delete pictureOfGranVelocidad ;
-        delete grayPictureOfGranVelocidad ;
-        delete pictureOfEscudo ;
-        delete grayPictureOfEscudo ;
+        isomot.binView ();
+        isomot.getMapManager().clear ();
 
         delete freedomLabel ;
-
-        delete recordingTimer ;
-
-        delete isomot ;
-
-        delete itemDataManager;
 }
 
 /* static */
-GameManager* GameManager::getInstance ()
+GameManager& GameManager::getInstance ()
 {
-        if ( instance == nilPointer )
-        {
-                instance = new GameManager();
-        }
-
-        return instance;
+        return instance ;
 }
 
 /* static */
-Picture * GameManager::refreshPicture ( const std::string& nameOfPicture )
+PicturePtr GameManager::refreshPicture ( const std::string& nameOfPicture )
 {
-        smartptr< allegro::Pict > pict( allegro::Pict::fromPNGFile (
-                isomot::pathToFile( gui::GuiManager::getInstance()->getPathToPicturesOfGui() + nameOfPicture )
+        IF_DEBUG( std::cout << "refreshing picture \"" << nameOfPicture << "\"" << std::endl )
+
+        autouniqueptr< allegro::Pict > pict( allegro::Pict::fromPNGFile (
+                iso::pathToFile( gui::GuiManager::getInstance().getPathToPicturesOfGui(), nameOfPicture )
         ) ) ;
-        return new Picture( *pict.get() );
+
+        return PicturePtr( new Picture( *pict.get() ) );
 }
 
-WhyPause GameManager::begin ()
+WhyPaused GameManager::begin ()
 {
-        fprintf ( stdout, "GameManager::begin ()\n" ) ;
+        IF_DEBUG( fprintf ( stdout, "GameManager::begin ()\n" ) )
 
         this->vidasInfinitas = false;
         this->headLives = 8;
@@ -166,127 +128,322 @@ WhyPause GameManager::begin ()
         this->horn = false;
         this->handbag = false;
         this->donuts = 0;
-        this->imageOfItemInBag = nilPointer;
-        this->planets.clear();
+        this->imageOfItemInBag.clear ();
+        this->planets.clear ();
 
         refreshAmbianceImages ();
-        refreshBackgroundFrames ();
+        refreshSceneryBackgrounds ();
 
-        assert( isomot != nilPointer );
-        isomot->beginNewGame ();
+        isomot.beginNewGame ();
 
         return this->update ();
 }
 
-WhyPause GameManager::resume ()
+WhyPaused GameManager::update ()
 {
-        fprintf ( stdout, "GameManager::resume ()\n" ) ;
+        IF_DEBUG( fprintf ( stdout, "GameManager::update ()\n" ) )
+
+        WhyPaused why = WhyPaused::Nevermind ;
+
+        while ( why == WhyPaused::Nevermind )
+        {
+                if ( ! InputManager::getInstance().pauseTyped () && ! this->takenCrown && ! this->eatenFish && ! this->gameOver )
+                {
+                        if ( headLives > 0 || heelsLives > 0 )
+                        {
+                                if ( isomot.getMapManager().getActiveRoom() != nilPointer )
+                                {
+                                        // actualiza la vista isométrica
+                                        Picture* view = isomot.updateMe ();
+
+                                        if ( view != nilPointer )
+                                        {
+                                                drawAmbianceOfGame( view->getAllegroPict() );
+                                                drawOnScreen( view->getAllegroPict() );
+                                        }
+                                        else
+                                        {
+                                                autouniqueptr< allegro::Pict > nothing ( allegro::Pict::newPict( ScreenWidth(), ScreenHeight() ) );
+                                                nothing->clearToColor( Color::gray75Color().toAllegroColor() );
+                                                drawAmbianceOfGame( *nothing.get() );
+                                                drawOnScreen( *nothing.get() );
+                                        }
+
+                                        milliSleep( 1000 / GameManager::updatesPerSecond );
+                                }
+                                else
+                                {
+                                        std::cout << "there’s no active room, game over" << std::endl ;
+                                        this->gameOver = true ;
+                                }
+                        }
+                        else
+                        {
+                                std::cout << "lives are exhausted, game over" << std::endl ;
+                                this->gameOver = true ;
+                        }
+                }
+                else
+                {
+                        why = this->pause ();
+                }
+        }
+
+        return why;
+}
+
+WhyPaused GameManager::pause ()
+{
+        bool exit = false;
+        bool confirm = false;
+        WhyPaused why = WhyPaused::Nevermind ;
+
+        // detiene el motor isométrico
+        isomot.pause();
+        Picture* view = isomot.updateMe ();
+        allegro::bitBlit( view->getAllegroPict(), allegro::Pict::theScreen() );
+
+        allegro::emptyKeyboardBuffer();
+
+        // the user just released some planet
+        if ( this->takenCrown )
+        {
+                why = WhyPaused::FreePlanet ;
+                this->takenCrown = false;
+        }
+        // the user has just eaten reincarnation fish
+        else if ( this->eatenFish )
+        {
+                this->eatenFish = false;
+
+                gui::LanguageManager* language = gui::GuiManager::getInstance().getLanguageManager();
+                gui::LanguageText* text = language->findLanguageStringForAlias( "save-game" );
+                int deltaY = ( iso::ScreenHeight() >> 2 ) - 60 ;
+
+                for ( size_t i = 0; i < text->getLinesCount(); i++ )
+                {
+                        gui::LanguageLine* line = text->getLine( i );
+                        gui::Label label( line->text, line->font, line->color );
+                        label.moveTo( ( ScreenWidth() - label.getWidth() ) >> 1, deltaY );
+                        deltaY += label.getHeight() * 3 / 4;
+                        label.draw( view->getAllegroPict() );
+                }
+
+                text = language->findLanguageStringForAlias( "confirm-resume" );
+                deltaY += 20;
+
+                for ( size_t i = 0; i < text->getLinesCount(); i++ )
+                {
+                        gui::LanguageLine* line = text->getLine( i );
+                        gui::Label label( line->text, line->font, line->color );
+                        label.moveTo( ( ScreenWidth() - label.getWidth() ) >> 1, deltaY );
+                        deltaY += label.getHeight() * 3 / 4;
+                        label.draw( view->getAllegroPict() );
+                }
+
+                allegro::emptyKeyboardBuffer();
+
+                // mientras el usuario no elija una de las dos opciones no se hará nada
+                while ( ! confirm && ! exit )
+                {
+                        allegro::bitBlit( view->getAllegroPict(), allegro::Pict::theScreen() );
+
+                        if ( allegro::areKeypushesWaiting() )
+                        {
+                                iso::InputManager& inputManager = InputManager::getInstance();
+
+                                std::string key = allegro::nextKey();
+
+                                // si se pulsa SPACE se mostrará la interfaz para la grabación de la partida
+                                if ( key == "Space" )
+                                {
+                                        exit = true;
+                                        why = WhyPaused::SaveGame ;
+                                }
+                                else if ( key != inputManager.getUserKeyFor( "movenorth" ) &&
+                                          key != inputManager.getUserKeyFor( "movesouth" ) &&
+                                          key != inputManager.getUserKeyFor( "moveeast" ) &&
+                                          key != inputManager.getUserKeyFor( "movewest" ) &&
+                                          key != inputManager.getUserKeyFor( "jump" ) &&
+                                          key != inputManager.getUserKeyFor( "take" ) &&
+                                          key != inputManager.getUserKeyFor( "take&jump" ) &&
+                                          key != inputManager.getUserKeyFor( "swap" ) &&
+                                          key != inputManager.getUserKeyFor( "doughnut" ) &&
+                                          key != inputManager.getUserKeyFor( "pause" ) &&
+                                          key != "Escape" )
+                                {
+                                        confirm = true;
+                                        isomot.resume();
+                                }
+                        }
+
+                        milliSleep( 100 );
+                }
+        }
+        // the user exhausted lives of both characters
+        else if ( this->gameOver )
+        {
+                this->gameOver = false;
+                why = WhyPaused::GameOver ;
+        }
+        // the user reached Freedom but with not every crown
+        else if ( this->freedom )
+        {
+                this->freedom = false;
+                why = WhyPaused::Freedom ;
+        }
+        // the user completed this game
+        else if ( this->emperator )
+        {
+                this->emperator = false;
+                why = WhyPaused::Success ;
+        }
+        // the user typed key for pause
+        else
+        {
+                SoundManager::getInstance().stopEverySound ();
+
+                gui::LanguageManager* language = gui::GuiManager::getInstance().getLanguageManager();
+                gui::LanguageText* text = language->findLanguageStringForAlias( "confirm-quit" );
+                int deltaY = ( iso::ScreenHeight() >> 2 );
+
+                for ( size_t i = 0; i < text->getLinesCount(); i++ )
+                {
+                        gui::LanguageLine* line = text->getLine( i );
+                        gui::Label label( line->text, line->font, line->color );
+                        label.moveTo( ( ScreenWidth() - label.getWidth() ) >> 1, deltaY );
+                        deltaY += label.getHeight() * 3 / 4;
+                        label.draw( view->getAllegroPict() );
+                }
+
+                text = language->findLanguageStringForAlias( "confirm-resume" );
+                deltaY += 20;
+
+                for ( size_t i = 0; i < text->getLinesCount(); i++ )
+                {
+                        gui::LanguageLine* line = text->getLine( i );
+                        gui::Label label( line->text, line->font, line->color );
+                        label.moveTo( ( ScreenWidth() - label.getWidth() ) >> 1, deltaY );
+                        deltaY += label.getHeight() * 3 / 4;
+                        label.draw( view->getAllegroPict() );
+                }
+
+                while ( ! confirm && ! exit )
+                {
+                        allegro::bitBlit( view->getAllegroPict(), allegro::Pict::theScreen() );
+
+                        if ( allegro::areKeypushesWaiting() )
+                        {
+                                if ( allegro::nextKey() == "Escape" )
+                                {
+                                        exit = true;
+                                        why = WhyPaused::GameOver ;
+                                }
+                                else
+                                {
+                                        confirm = true;
+                                        isomot.resume();
+                                }
+                        }
+
+                        milliSleep( 100 );
+                }
+        }
+
+        return why;
+}
+
+WhyPaused GameManager::resume ()
+{
+        IF_DEBUG( fprintf ( stdout, "GameManager::resume ()\n" ) )
 
         refreshAmbianceImages ();
-        refreshBackgroundFrames ();
+        refreshSceneryBackgrounds ();
 
-        assert( isomot != nilPointer );
-        isomot->resume ();
+        isomot.resume ();
 
         return this->update ();
 }
 
-void GameManager::refreshBackgroundFrames ()
+void GameManager::refreshSceneryBackgrounds ()
 {
-        delete frameForEgyptus ;
-        delete frameForPenitentiary ;
-        delete frameForByblos ;
-        delete frameForSafari ;
-        delete frameForMoon ;
-        delete frameForMarket ;
-        delete frameForJail ;
-        delete frameForBlacktooth ;
-
-        frameForJail = refreshPicture( "jail-frame.png" );
-        frameForBlacktooth = refreshPicture( "blacktooth-frame.png" );
-        frameForMarket = refreshPicture( "market-frame.png" );
-        frameForMoon = refreshPicture( "themoon-frame.png" );
-        frameForSafari = refreshPicture( "safari-frame.png" );
-        frameForByblos = refreshPicture( "byblos-frame.png" );
-        frameForPenitentiary = refreshPicture( "penitentiary-frame.png" );
-        frameForEgyptus = refreshPicture( "egyptus-frame.png" );
+        sceneryBackgrounds[ "jail" ] = refreshPicture( "jail-frame.png" );
+        sceneryBackgrounds[ "blacktooth" ] = refreshPicture( "blacktooth-frame.png" );
+        sceneryBackgrounds[ "market" ] = refreshPicture( "market-frame.png" );
+        sceneryBackgrounds[ "moon" ] = refreshPicture( "moon-frame.png" );
+        sceneryBackgrounds[ "safari" ] = refreshPicture( "safari-frame.png" );
+        sceneryBackgrounds[ "byblos" ] = refreshPicture( "byblos-frame.png" );
+        sceneryBackgrounds[ "penitentiary" ] = refreshPicture( "penitentiary-frame.png" );
+        sceneryBackgrounds[ "egyptus" ] = refreshPicture( "egyptus-frame.png" );
 }
 
 void GameManager::refreshAmbianceImages ()
 {
-        delete pictureOfHead ;
-        delete grayPictureOfHead ;
-        delete pictureOfHeels ;
-        delete grayPictureOfHeels ;
-
         pictureOfHead = refreshPicture( "gui-head.png" );
         pictureOfHeels = refreshPicture( "gui-heels.png" );
 
+        grayPictureOfHead = PicturePtr( new Picture( *pictureOfHead ) );
+        grayPictureOfHeels = PicturePtr( new Picture( *pictureOfHeels ) );
+
         if ( ! isSimpleGraphicSet () )
         {
-                grayPictureOfHead = pictureOfHead->makeGrayscaleCopy();
-                grayPictureOfHeels = pictureOfHeels->makeGrayscaleCopy();
+                grayPictureOfHead->toGrayscale();
+                grayPictureOfHeels->toGrayscale();
         }
         else
         {
-                grayPictureOfHead = pictureOfHead->makeColorizedCopy( Color::greenColor() );
-                grayPictureOfHeels = pictureOfHeels->makeColorizedCopy( Color::greenColor() );
+                grayPictureOfHead->colorize( Color::greenColor() );
+                grayPictureOfHeels->colorize( Color::greenColor() );
         }
-
-        delete pictureOfBag ;
-        delete grayPictureOfBag ;
-        delete pictureOfDonuts ;
-        delete grayPictureOfDonuts ;
-        delete pictureOfHorn ;
-        delete grayPictureOfHorn ;
 
         pictureOfBag = refreshPicture( "gui-handbag.png" );
         pictureOfHorn = refreshPicture( "gui-horn.png" );
         pictureOfDonuts = refreshPicture( "gui-donuts.png" );
 
+        grayPictureOfHorn = PicturePtr( new Picture( *pictureOfHorn ) );
+        grayPictureOfBag = PicturePtr( new Picture( *pictureOfBag ) );
+        grayPictureOfDonuts = PicturePtr( new Picture( *pictureOfDonuts ) );
+
         if ( ! isSimpleGraphicSet () )
         {
-                grayPictureOfHorn = pictureOfHorn->makeGrayscaleCopy();
-                grayPictureOfBag = pictureOfBag->makeGrayscaleCopy();
-                grayPictureOfDonuts = pictureOfDonuts->makeGrayscaleCopy();
+                grayPictureOfHorn->toGrayscale();
+                grayPictureOfBag->toGrayscale();
+                grayPictureOfDonuts->toGrayscale();
         }
         else
         {
-                grayPictureOfHorn = pictureOfHorn->makeColorizedCopy( Color::greenColor() );
-                grayPictureOfBag = pictureOfBag->makeColorizedCopy( Color::greenColor() );
-                grayPictureOfDonuts = pictureOfDonuts->makeColorizedCopy( Color::greenColor() );
+                grayPictureOfHorn->colorize( Color::greenColor() );
+                grayPictureOfBag->colorize( Color::greenColor() );
+                grayPictureOfDonuts->colorize( Color::greenColor() );
 
                 pictureOfBag->colorize( Color::yellowColor() );
                 pictureOfHorn->colorize( Color::yellowColor() );
                 pictureOfDonuts->colorize( Color::yellowColor() );
         }
 
-        delete grayPictureOfGrandesSaltos ;
-        delete pictureOfGrandesSaltos ;
-        delete grayPictureOfGranVelocidad ;
-        delete pictureOfGranVelocidad ;
-        delete grayPictureOfEscudo ;
-        delete pictureOfEscudo ;
-
         pictureOfGrandesSaltos = refreshPicture( "high-jumps.png" );
         pictureOfGranVelocidad = refreshPicture( "high-speed.png" );
         pictureOfEscudo = refreshPicture( "shield.png" );
 
+        grayPictureOfGrandesSaltos = PicturePtr( new Picture( *pictureOfGrandesSaltos ) );
+        grayPictureOfGranVelocidad = PicturePtr( new Picture( *pictureOfGranVelocidad ) );
+        grayPictureOfEscudo = PicturePtr( new Picture( *pictureOfEscudo ) );
+
         if ( ! isSimpleGraphicSet () )
         {
-                grayPictureOfGrandesSaltos = pictureOfGrandesSaltos->makeGrayscaleCopy();
-                grayPictureOfGranVelocidad = pictureOfGranVelocidad->makeGrayscaleCopy();
-                grayPictureOfEscudo = pictureOfEscudo->makeGrayscaleCopy();
+                grayPictureOfGrandesSaltos->toGrayscale();
+                grayPictureOfGranVelocidad->toGrayscale();
+                grayPictureOfEscudo->toGrayscale();
         }
         else
         {
-                grayPictureOfGrandesSaltos = pictureOfGrandesSaltos->makeColorizedCopy( Color::greenColor() );
+                grayPictureOfGrandesSaltos->colorize( Color::greenColor() );
                 pictureOfGrandesSaltos->colorize( Color::yellowColor() );
 
-                grayPictureOfGranVelocidad = pictureOfGranVelocidad->makeColorizedCopy( Color::greenColor() );
+                grayPictureOfGranVelocidad->colorize( Color::greenColor() );
                 pictureOfGranVelocidad->colorize( Color::yellowColor() );
 
-                grayPictureOfEscudo = pictureOfEscudo->makeColorizedCopy( Color::greenColor() );
+                grayPictureOfEscudo->colorize( Color::greenColor() );
                 pictureOfEscudo->colorize( Color::yellowColor() );
         }
 }
@@ -294,40 +451,22 @@ void GameManager::refreshAmbianceImages ()
 void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
 {
         // scenery of this room
-        std::string scenery = isomot->getMapManager()->getActiveRoom()->getScenery();
+        std::string scenery = isomot.getMapManager().getActiveRoom()->getScenery();
 
         // empty scenery means that it is the final room
         if ( scenery != "" )
         {
-                const unsigned int diffX = isomot::ScreenWidth() - 640 ;
-                const unsigned int diffY = isomot::ScreenHeight() - 480 ;
+                const unsigned int diffX = iso::ScreenWidth() - 640 ;
+                const unsigned int diffY = iso::ScreenHeight() - 480 ;
 
                 if ( ( diffX > 0 || diffY > 0 ) && ! isPresentGraphicSet() && ! isSimpleGraphicSet() )
                         drawBackgroundPicture = false ;
 
-                if ( drawBackgroundPicture )
+                if ( drawBackgroundPicture ) // marco, varía en función del escenario
                 {
-                        // marco, varía en función del escenario
-                        Picture * background = nilPointer;
-
-                        if ( scenery == "blacktooth" )
-                                background = frameForBlacktooth;
-                        else if ( scenery == "jail" )
-                                background = frameForJail;
-                        else if ( scenery == "market" )
-                                background = frameForMarket;
-                        else if ( scenery == "themoon" )
-                                background = frameForMoon;
-                        else if ( scenery == "safari" )
-                                background = frameForSafari;
-                        else if ( scenery == "byblos" )
-                                background = frameForByblos;
-                        else if ( scenery == "penitentiary" )
-                                background = frameForPenitentiary;
-                        else if ( scenery == "egyptus" )
-                                background = frameForEgyptus;
-
-                        allegro::drawSprite( where, background->getAllegroPict(), diffX >> 1, diffY );
+                        if ( sceneryBackgrounds.find( scenery ) != sceneryBackgrounds.end () )
+                                if ( sceneryBackgrounds[ scenery ] != nilPointer )
+                                        allegro::drawSprite( where, sceneryBackgrounds[ scenery ]->getAllegroPict(), diffX >> 1, diffY );
                 }
 
                 const unsigned int headHeelsAmbianceY = 425 + diffY ;
@@ -341,7 +480,7 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                 const unsigned int leftTooAmbianceX = 33 + dx ;
                 const unsigned int rightTooAmbianceX = 559 + dx ;
 
-                std::string player = isomot->getMapManager()->getActiveRoom()->getMediator()->getLabelOfActiveCharacter();
+                std::string player = isomot.getMapManager().getActiveRoom()->getMediator()->getLabelOfActiveCharacter();
                 allegro::drawSprite( where, ( (  player == "head" || player == "headoverheels" ) ? pictureOfHead : grayPictureOfHead )->getAllegroPict(), 161 + dx, headHeelsAmbianceY );
                 allegro::drawSprite( where, ( ( player == "heels" || player == "headoverheels" ) ? pictureOfHeels : grayPictureOfHeels )->getAllegroPict(), 431 + dx, headHeelsAmbianceY );
 
@@ -353,12 +492,12 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                 /* if ( isSimpleGraphicSet () ) colorOfLabels = "magenta"; */
 
                 // vidas de Head
-                gui::Label headLivesLabel( numberToString( this->headLives ), "big", "white", -2 );
+                gui::Label headLivesLabel( util::number2string( this->headLives ), "big", "white", -2 );
                 headLivesLabel.moveTo( ( this->headLives > 9 ? 214 : 221 ) + dx, headHeelsAmbianceY - 1 );
                 headLivesLabel.draw( where );
 
                 // vidas de Heels
-                gui::Label heelsLivesLabel( numberToString( this->heelsLives ), "big", "white", -2 );
+                gui::Label heelsLivesLabel( util::number2string( this->heelsLives ), "big", "white", -2 );
                 heelsLivesLabel.moveTo( ( this->heelsLives > 9 ? 398 : 405 ) + dx, headHeelsAmbianceY - 1 );
                 heelsLivesLabel.draw( where );
 
@@ -366,7 +505,7 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                 allegro::drawSprite( where, ( this->donuts != 0 ? pictureOfDonuts : grayPictureOfDonuts )->getAllegroPict(), leftTooAmbianceX, charStuffAmbianceY );
                 if ( this->donuts > 0 )
                 {
-                        gui::Label donutsLabel( numberToString( this->donuts ), "", colorOfLabels, -2 );
+                        gui::Label donutsLabel( util::number2string( this->donuts ), "", colorOfLabels, -2 );
                         donutsLabel.moveTo( ( this->donuts > 9 ? 42 : 49 ) + dx, charStuffAmbianceY + 11 );
                         donutsLabel.draw( where );
                 }
@@ -375,7 +514,7 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                 allegro::drawSprite( where, ( this->highJumps > 0 ? pictureOfGrandesSaltos : grayPictureOfGrandesSaltos )->getAllegroPict(), rightAmbianceX, bonusAmbianceY );
                 if ( this->highJumps > 0 )
                 {
-                        gui::Label highJumpsLabel( numberToString( this->highJumps ), "", colorOfLabels, -2 );
+                        gui::Label highJumpsLabel( util::number2string( this->highJumps ), "", colorOfLabels, -2 );
                         highJumpsLabel.moveTo( ( this->highJumps > 9 ? 505 : 512 ) + dx, bonusAmbianceY + 1 );
                         highJumpsLabel.draw( where );
                 }
@@ -384,7 +523,7 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                 allegro::drawSprite( where, ( this->highSpeed > 0 ? pictureOfGranVelocidad : grayPictureOfGranVelocidad )->getAllegroPict(), leftAmbianceX, bonusAmbianceY );
                 if ( this->highSpeed > 0 )
                 {
-                        gui::Label highSpeedLabel( numberToString( this->highSpeed ), "", colorOfLabels, -2 );
+                        gui::Label highSpeedLabel( util::number2string( this->highSpeed ), "", colorOfLabels, -2 );
                         highSpeedLabel.moveTo( ( this->highSpeed > 9 ? 107 : 114 ) + dx, bonusAmbianceY + 1 );
                         highSpeedLabel.draw( where );
                 }
@@ -394,17 +533,17 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                 if ( this->headShield > 0 )
                 {
                         int headShieldValue = static_cast< int >( this->headShield * 99.0 / 25.0 );
-                        gui::Label headShieldLabel( numberToString( headShieldValue ), "", colorOfLabels, -2 );
+                        gui::Label headShieldLabel( util::number2string( headShieldValue ), "", colorOfLabels, -2 );
                         headShieldLabel.moveTo( ( headShieldValue > 9 ? 107 : 114 ) + dx, immunityAmbianceY + 1 );
                         headShieldLabel.draw( where );
                 }
 
                 // escudo de Heels
-                allegro::drawSprite( where, ( this->headShield > 0 ? pictureOfEscudo : grayPictureOfEscudo )->getAllegroPict(), rightAmbianceX, immunityAmbianceY );
+                allegro::drawSprite( where, ( this->heelsShield > 0 ? pictureOfEscudo : grayPictureOfEscudo )->getAllegroPict(), rightAmbianceX, immunityAmbianceY );
                 if ( this->heelsShield > 0 )
                 {
                         int heelsShieldValue = static_cast< int >( this->heelsShield * 99.0 / 25.0 );
-                        gui::Label heelsShieldLabel( numberToString( heelsShieldValue ), "", colorOfLabels, -2 );
+                        gui::Label heelsShieldLabel( util::number2string( heelsShieldValue ), "", colorOfLabels, -2 );
                         heelsShieldLabel.moveTo( ( heelsShieldValue > 9 ? 505 : 512 ) + dx, immunityAmbianceY + 1 );
                         heelsShieldLabel.draw( where );
                 }
@@ -427,6 +566,56 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                 freedomLabel->draw( where );
         }
 
+        if ( ! hasBackgroundPicture () )
+        {
+                // show position of camera
+
+                const unsigned short widthOfChar = 8 ; // letters of allegro’s font are 8 x 7
+                const unsigned short deltaYtext = 36 ;
+
+                if ( isomot.getMapManager().getActiveRoom() != nilPointer )
+                {
+                        Color backgroundColor = Color::blackColor();
+                        if ( charactersFly() ) backgroundColor = Color::darkBlueColor();
+
+                        allegro::fillRect( where,
+                                           ( where.getW() - 8 * widthOfChar ) >> 1, where.getH() - deltaYtext - 1,
+                                           ( where.getW() + 8 * widthOfChar ) >> 1, where.getH() - deltaYtext + 8,
+                                           backgroundColor.toAllegroColor() );
+
+                        allegro::textOut( "camera", where,
+                                          ( where.getW() - 6 * widthOfChar ) >> 1, where.getH() - deltaYtext,
+                                          Color::gray75Color().toAllegroColor() );
+
+                        const int cameraDeltaX = isomot.getMapManager().getActiveRoom()->getCamera()->getDeltaX();
+                        const int cameraDeltaY = isomot.getMapManager().getActiveRoom()->getCamera()->getDeltaY();
+
+                        std::string xCamera = util::number2string( cameraDeltaX );
+                        if ( cameraDeltaX > 0 ) xCamera = "+" + xCamera ;
+                        std::string yCamera = util::number2string( cameraDeltaY );
+                        if ( cameraDeltaY > 0 ) yCamera = "+" + yCamera ;
+                        std::string xyCamera = xCamera + "," + yCamera ;
+
+                        allegro::fillRect( where,
+                                           ( where.getW() - ( xyCamera.length() + 2 ) * widthOfChar ) >> 1, where.getH() - deltaYtext + 10 - 1,
+                                           ( where.getW() + ( xyCamera.length() + 2 ) * widthOfChar ) >> 1, where.getH() - deltaYtext + 10 + 8 + 1,
+                                           backgroundColor.toAllegroColor() );
+
+                        const int textX = ( where.getW() - xyCamera.length() * widthOfChar ) >> 1 ;
+                        const int textY = where.getH() - deltaYtext + 10 ;
+
+                        allegro::textOut( xCamera, where, textX, textY,
+                                          isomot.doesCameraFollowCharacter() ? Color::gray50Color().toAllegroColor() : Color::whiteColor().toAllegroColor() );
+                        allegro::textOut( "," , where, textX + widthOfChar * xCamera.length(), textY,
+                                          isomot.doesCameraFollowCharacter() ? Color::gray25Color().toAllegroColor() : Color::gray50Color().toAllegroColor() );
+                        allegro::textOut( yCamera, where, textX + widthOfChar * ( xCamera.length() + 1 ), textY,
+                                          isomot.doesCameraFollowCharacter() ? Color::gray50Color().toAllegroColor() : Color::whiteColor().toAllegroColor() );
+                }
+        }
+}
+
+void GameManager::drawOnScreen ( const allegro::Pict& view )
+{
         if ( recordCaptures )
         {
                 // record game’s screen
@@ -434,18 +623,18 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                 {
                         numberOfCapture++ ;
 
-                        allegro::savePictAsPCX( capturePath + prefixOfCaptures + isomot::numberToString( numberOfCapture ), where );
+                        allegro::savePictAsPCX( capturePath + util::pathSeparator() + prefixOfCaptures + util::number2string( numberOfCapture ), view );
 
                         recordingTimer->reset ();
                 }
         }
 
-        allegro::bitBlit( where, allegro::Pict::theScreen() );
+        allegro::bitBlit( view, allegro::Pict::theScreen() );
 
         if ( recordCaptures )
         {
                 if ( ! drawBackgroundPicture ) allegro::fillRect( allegro::Pict::theScreen(), 11, 18, 19, 30, Color::blackColor().toAllegroColor() );
-                allegro::fillRect( allegro::Pict::theScreen(), 19, 18, 80, 30, Color::gray50Color().toAllegroColor() );
+                allegro::fillRect( allegro::Pict::theScreen(), 19, 18, 80, 30, Color::gray75Color().toAllegroColor() );
                 allegro::fillCircle( allegro::Pict::theScreen(), 34, 24, 5, Color::redColor().toAllegroColor() );
                 allegro::textOut( "REC", allegro::Pict::theScreen(), 48, 21, Color::redColor().toAllegroColor() );
         }
@@ -453,13 +642,13 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
 
 void GameManager::loadGame ( const std::string& fileName )
 {
-        isomot->prepare() ;
-        saverAndLoader->loadGame( fileName );
+        isomot.fillItemDataManager ();
+        saverAndLoader.loadGame( fileName );
 }
 
 void GameManager::saveGame ( const std::string& fileName )
 {
-        saverAndLoader->saveGame( fileName );
+        saverAndLoader.saveGame( fileName );
 }
 
 void GameManager::addLives ( const std::string& player, unsigned char lives )
@@ -582,7 +771,7 @@ void GameManager::decreaseHighJumps ( const std::string& player )
         }
 }
 
-void GameManager::addShield ( const std::string& player, double shield )
+void GameManager::addShield ( const std::string& player, float shield )
 {
         if ( player == "head" )
         {
@@ -616,9 +805,9 @@ void GameManager::addShield ( const std::string& player, double shield )
         }
 }
 
-void GameManager::modifyShield ( const std::string& player, double shield )
+void GameManager::modifyShield ( const std::string& player, float shield )
 {
-        if ( player == "head" )
+        if ( player == "head" || player == "headoverheels" )
         {
                 this->headShield = shield;
                 if ( this->headShield < 0 )
@@ -626,7 +815,8 @@ void GameManager::modifyShield ( const std::string& player, double shield )
                         this->headShield = 0;
                 }
         }
-        else if ( player == "heels" )
+
+        if ( player == "heels" || player == "headoverheels" )
         {
                 this->heelsShield = shield;
                 if ( this->heelsShield < 0 )
@@ -634,25 +824,6 @@ void GameManager::modifyShield ( const std::string& player, double shield )
                         this->heelsShield = 0;
                 }
         }
-        else if ( player == "headoverheels" )
-        {
-                this->headShield = shield;
-                if ( this->headShield < 0 )
-                {
-                        this->headShield = 0;
-                }
-
-                this->heelsShield = shield;
-                if ( this->heelsShield < 0 )
-                {
-                        this->heelsShield = 0;
-                }
-        }
-}
-
-void GameManager::emptyHandbag ()
-{
-        setImageOfItemInBag( nilPointer );
 }
 
 void GameManager::resetPlanets ()
@@ -700,216 +871,21 @@ unsigned short GameManager::countFreePlanets () const
         return count;
 }
 
-void GameManager::eatFish ( PlayerItem* character, Room* room )
+void GameManager::eatFish ( const PlayerItem& character, Room* room )
 {
-        this->eatFish( character, room, character->getX (), character->getY (), character->getZ () ) ;
+        this->eatFish( character, room, character.getX (), character.getY (), character.getZ () ) ;
 }
 
-void GameManager::eatFish ( PlayerItem* character, Room* room, int x, int y, int z )
+void GameManager::eatFish ( const PlayerItem& character, Room* room, int x, int y, int z )
 {
         this->eatenFish = true;
 
-        saverAndLoader->ateFish (
+        saverAndLoader.ateFish (
                 room->getNameOfFileWithDataAboutRoom (),
-                character->getLabel (),
+                character.getLabel (),
                 x, y, z,
-                character->getOrientation ()
+                character.getOrientation ()
         );
-}
-
-WhyPause GameManager::update ()
-{
-        WhyPause why = Nevermind;
-
-        // periodically update the game while user does not type pause key confirming it with ESCAPE
-        while ( why == Nevermind )
-        {
-                if ( ! InputManager::getInstance()->pauseTyped () && ! this->takenCrown && ! this->eatenFish && ! this->gameOver )
-                {
-                        // actualiza la vista isométrica
-                        Picture* view = isomot->update();
-
-                        // se ha podido actualizar
-                        if ( view != nilPointer )
-                        {
-                                this->drawAmbianceOfGame( view->getAllegroPict() );
-                                milliSleep( 10 );
-                        }
-                        else
-                        {
-                                // la partida ha terminado
-                                this->gameOver = true;
-                        }
-                }
-                else
-                {
-                        // detiene el juego
-                        why = this->pause ();
-                }
-        }
-
-        return why;
-}
-
-WhyPause GameManager::pause ()
-{
-        bool exit = false;
-        bool confirm = false;
-        WhyPause why = Nevermind;
-
-        // detiene el motor isométrico
-        isomot->pause();
-
-        allegro::emptyKeyboardBuffer();
-
-        // el usuario acaba de liberar un planeta, se muestra la pantalla de los planetas
-        if ( this->takenCrown )
-        {
-                why = FreePlanet;
-                this->takenCrown = false;
-        }
-        // el usuario acaba de comer un pez, se le da la opción de grabar la partida
-        else if ( this->eatenFish )
-        {
-                this->eatenFish = false;
-                isomot::InputManager* inputManager = InputManager::getInstance();
-
-                gui::LanguageManager* language = gui::GuiManager::getInstance()->getLanguageManager();
-                gui::LanguageText* text = language->findLanguageStringForAlias( "save-game" );
-                int deltaY = ( isomot::ScreenHeight() >> 2 ) - 60 ;
-
-                for ( size_t i = 0; i < text->getLinesCount(); i++ )
-                {
-                        gui::LanguageLine* line = text->getLine( i );
-                        gui::Label label( line->text, line->font, line->color );
-                        label.moveTo( ( ScreenWidth() - label.getWidth() ) >> 1, deltaY );
-                        deltaY += label.getHeight() * 3 / 4;
-                        label.draw( allegro::Pict::theScreen() );
-                }
-
-                text = language->findLanguageStringForAlias( "confirm-resume" );
-                deltaY += 20;
-
-                for ( size_t i = 0; i < text->getLinesCount(); i++ )
-                {
-                        gui::LanguageLine* line = text->getLine( i );
-                        gui::Label label( line->text, line->font, line->color );
-                        label.moveTo( ( ScreenWidth() - label.getWidth() ) >> 1, deltaY );
-                        deltaY += label.getHeight() * 3 / 4;
-                        label.draw( allegro::Pict::theScreen() );
-                }
-
-                allegro::emptyKeyboardBuffer();
-
-                // mientras el usuario no elija una de las dos opciones no se hará nada
-                while ( ! confirm && ! exit )
-                {
-                        if ( allegro::areKeypushesWaiting() )
-                        {
-                                std::string key = allegro::nextKey();
-
-                                // si se pulsa SPACE se mostrará la interfaz para la grabación de la partida
-                                if ( key == "Space" )
-                                {
-                                        exit = true;
-                                        why = SaveGame;
-                                }
-                                else if ( key != inputManager->getUserKeyFor( "movenorth" ) &&
-                                          key != inputManager->getUserKeyFor( "movesouth" ) &&
-                                          key != inputManager->getUserKeyFor( "moveeast" ) &&
-                                          key != inputManager->getUserKeyFor( "movewest" ) &&
-                                          key != inputManager->getUserKeyFor( "jump" ) &&
-                                          key != inputManager->getUserKeyFor( "take" ) &&
-                                          key != inputManager->getUserKeyFor( "take&jump" ) &&
-                                          key != inputManager->getUserKeyFor( "swap" ) &&
-                                          key != inputManager->getUserKeyFor( "doughnut" ) &&
-                                          key != inputManager->getUserKeyFor( "pause" ) &&
-                                          key != "Escape" )
-                                {
-                                        confirm = true;
-                                        isomot->resume();
-                                }
-                        }
-
-                        milliSleep( 10 );
-                }
-        }
-        // el usuario ha acabado con las vidas de todos los jugadores
-        else if ( this->gameOver )
-        {
-                this->gameOver = false;
-                why = GameOver;
-                isomot->reset();
-        }
-        // el usuario ha llegado a Freedom pero le faltaron coronas
-        else if ( this->freedom )
-        {
-                this->freedom = false;
-                why = Freedom;
-                isomot->reset();
-        }
-        // el usuario ha acabado el juego
-        else if ( this->emperator )
-        {
-                this->emperator = false;
-                why = Sucess;
-                isomot->reset();
-        }
-        // el usuario ha pulsado la tecla de pausa
-        else
-        {
-                SoundManager::getInstance()->stopEverySound ();
-
-                gui::LanguageManager* language = gui::GuiManager::getInstance()->getLanguageManager();
-                gui::LanguageText* text = language->findLanguageStringForAlias( "confirm-quit" );
-                int deltaY = ( isomot::ScreenHeight() >> 2 );
-
-                for ( size_t i = 0; i < text->getLinesCount(); i++ )
-                {
-                        gui::LanguageLine* line = text->getLine( i );
-                        gui::Label label( line->text, line->font, line->color );
-                        label.moveTo( ( ScreenWidth() - label.getWidth() ) >> 1, deltaY );
-                        deltaY += label.getHeight() * 3 / 4;
-                        label.draw( allegro::Pict::theScreen() );
-                }
-
-                text = language->findLanguageStringForAlias( "confirm-resume" );
-                deltaY += 20;
-
-                for ( size_t i = 0; i < text->getLinesCount(); i++ )
-                {
-                        gui::LanguageLine* line = text->getLine( i );
-                        gui::Label label( line->text, line->font, line->color );
-                        label.moveTo( ( ScreenWidth() - label.getWidth() ) >> 1, deltaY );
-                        deltaY += label.getHeight() * 3 / 4;
-                        label.draw( allegro::Pict::theScreen() );
-                }
-
-                // mientras el usuario no elija una de las dos opciones no se hará nada
-                while ( ! confirm && ! exit )
-                {
-                        if ( allegro::areKeypushesWaiting() )
-                        {
-                                // Si ha pulsado Escape se suspende la partida en curso
-                                if ( allegro::nextKey() == "Escape" )
-                                {
-                                        exit = true;
-                                        why = GameOver;
-                                        isomot->reset();
-                                }
-                                // Si se pulsa cualquier otra tecla, prosigue la partida en curso
-                                else
-                                {
-                                        confirm = true;
-                                        isomot->resume();
-                                }
-                        }
-
-                        milliSleep( 10 );
-                }
-        }
-
-        return why;
 }
 
 unsigned char GameManager::getLives ( const std::string& player ) const
@@ -930,7 +906,7 @@ unsigned char GameManager::getLives ( const std::string& player ) const
         return 0;
 }
 
-double GameManager::getShield ( const std::string& player ) const
+float GameManager::getShield ( const std::string& player ) const
 {
         if ( player == "headoverheels" )
         {
@@ -945,10 +921,10 @@ double GameManager::getShield ( const std::string& player ) const
                 return this->heelsShield;
         }
 
-        return 0.0;
+        return 0.0 ;
 }
 
-void GameManager::toolsOwnedByCharacter ( const std::string& player, std::vector< std::string >& tools ) const
+void GameManager::fillToolsOwnedByCharacter ( const std::string& player, std::vector< std::string >& tools ) const
 {
         tools.clear ();
 
@@ -968,18 +944,9 @@ unsigned short GameManager::getDonuts ( const std::string& player ) const
         return ( player == "head" || player == "headoverheels" ? this->donuts : 0 );
 }
 
-unsigned int GameManager::getVisitedRooms () const
+unsigned int GameManager::getVisitedRooms ()
 {
-        return isomot->getMapManager()->countVisitedRooms() ;
-}
-
-void GameManager::binItemDataManager ()
-{
-        if ( this->itemDataManager != nilPointer )
-        {
-                delete this->itemDataManager;
-                this->itemDataManager = nilPointer ;
-        }
+        return isomot.getMapManager().countVisitedRooms() ;
 }
 
 /* static */
@@ -1006,7 +973,7 @@ bool GameManager::readPreferences( const std::string& fileName )
         {
                 languageString = language->FirstChild()->ToText()->Value();
         }
-        gui::GuiManager::getInstance()->setLanguage( languageString );
+        gui::GuiManager::getInstance().setLanguage( languageString );
 
         // chosen keys
 
@@ -1015,43 +982,43 @@ bool GameManager::readPreferences( const std::string& fileName )
         {
                 tinyxml2::XMLElement* movenorth = keyboard->FirstChildElement( "movenorth" ) ;
                 if ( movenorth != nilPointer )
-                        InputManager::getInstance()->changeUserKey( "movenorth", movenorth->FirstChild()->ToText()->Value() );
+                        InputManager::getInstance().changeUserKey( "movenorth", movenorth->FirstChild()->ToText()->Value() );
 
                 tinyxml2::XMLElement* movesouth = keyboard->FirstChildElement( "movesouth" ) ;
                 if ( movesouth != nilPointer )
-                        InputManager::getInstance()->changeUserKey( "movesouth", movesouth->FirstChild()->ToText()->Value() );
+                        InputManager::getInstance().changeUserKey( "movesouth", movesouth->FirstChild()->ToText()->Value() );
 
                 tinyxml2::XMLElement* moveeast = keyboard->FirstChildElement( "moveeast" ) ;
                 if ( moveeast != nilPointer )
-                        InputManager::getInstance()->changeUserKey( "moveeast", moveeast->FirstChild()->ToText()->Value() );
+                        InputManager::getInstance().changeUserKey( "moveeast", moveeast->FirstChild()->ToText()->Value() );
 
                 tinyxml2::XMLElement* movewest = keyboard->FirstChildElement( "movewest" ) ;
                 if ( movewest != nilPointer )
-                        InputManager::getInstance()->changeUserKey( "movewest", movewest->FirstChild()->ToText()->Value() );
+                        InputManager::getInstance().changeUserKey( "movewest", movewest->FirstChild()->ToText()->Value() );
 
                 tinyxml2::XMLElement* take = keyboard->FirstChildElement( "take" ) ;
                 if ( take != nilPointer )
-                        InputManager::getInstance()->changeUserKey( "take", take->FirstChild()->ToText()->Value() );
+                        InputManager::getInstance().changeUserKey( "take", take->FirstChild()->ToText()->Value() );
 
                 tinyxml2::XMLElement* jump = keyboard->FirstChildElement( "jump" ) ;
                 if ( jump != nilPointer )
-                        InputManager::getInstance()->changeUserKey( "jump", jump->FirstChild()->ToText()->Value() );
+                        InputManager::getInstance().changeUserKey( "jump", jump->FirstChild()->ToText()->Value() );
 
                 tinyxml2::XMLElement* doughnut = keyboard->FirstChildElement( "doughnut" ) ;
                 if ( doughnut != nilPointer )
-                        InputManager::getInstance()->changeUserKey( "doughnut", doughnut->FirstChild()->ToText()->Value() );
+                        InputManager::getInstance().changeUserKey( "doughnut", doughnut->FirstChild()->ToText()->Value() );
 
                 tinyxml2::XMLElement* takeandjump = keyboard->FirstChildElement( "takeandjump" ) ;
                 if ( takeandjump != nilPointer )
-                        InputManager::getInstance()->changeUserKey( "take&jump", takeandjump->FirstChild()->ToText()->Value() );
+                        InputManager::getInstance().changeUserKey( "take&jump", takeandjump->FirstChild()->ToText()->Value() );
 
                 tinyxml2::XMLElement* swap = keyboard->FirstChildElement( "swap" ) ;
                 if ( swap != nilPointer )
-                        InputManager::getInstance()->changeUserKey( "swap", swap->FirstChild()->ToText()->Value() );
+                        InputManager::getInstance().changeUserKey( "swap", swap->FirstChild()->ToText()->Value() );
 
                 tinyxml2::XMLElement* pause = keyboard->FirstChildElement( "pause" ) ;
                 if ( pause != nilPointer )
-                        InputManager::getInstance()->changeUserKey( "pause", pause->FirstChild()->ToText()->Value() );
+                        InputManager::getInstance().changeUserKey( "pause", pause->FirstChild()->ToText()->Value() );
         }
 
         // preferences for audio
@@ -1062,13 +1029,13 @@ bool GameManager::readPreferences( const std::string& fileName )
                 tinyxml2::XMLElement* fx = audio->FirstChildElement( "fx" ) ;
                 if ( fx != nilPointer )
                 {
-                        SoundManager::getInstance()->setVolumeOfEffects( std::atoi( fx->FirstChild()->ToText()->Value() ) ) ;
+                        SoundManager::getInstance().setVolumeOfEffects( std::atoi( fx->FirstChild()->ToText()->Value() ) ) ;
                 }
 
                 tinyxml2::XMLElement* music = audio->FirstChildElement( "music" ) ;
                 if ( music != nilPointer )
                 {
-                        SoundManager::getInstance()->setVolumeOfMusic( std::atoi( music->FirstChild()->ToText()->Value() ) ) ;
+                        SoundManager::getInstance().setVolumeOfMusic( std::atoi( music->FirstChild()->ToText()->Value() ) ) ;
                 }
 
                 tinyxml2::XMLElement* roomtunes = audio->FirstChildElement( "roomtunes" ) ;
@@ -1076,8 +1043,8 @@ bool GameManager::readPreferences( const std::string& fileName )
                 {
                         bool playRoomTunes = ( std::string( roomtunes->FirstChild()->ToText()->Value() ) == "true" ) ? true : false ;
 
-                        if ( GameManager::getInstance()->playMelodyOfScenery () != playRoomTunes )
-                                GameManager::getInstance()->togglePlayMelodyOfScenery ();
+                        if ( GameManager::getInstance().playMelodyOfScenery () != playRoomTunes )
+                                GameManager::getInstance().togglePlayMelodyOfScenery ();
                 }
         }
 
@@ -1091,8 +1058,8 @@ bool GameManager::readPreferences( const std::string& fileName )
                 {
                         bool atFullScreen = ( std::string( fullscreen->FirstChild()->ToText()->Value() ) == "true" ) ? true : false ;
 
-                        if ( gui::GuiManager::getInstance()->isAtFullScreen () != atFullScreen )
-                                gui::GuiManager::getInstance()->toggleFullScreenVideo ();
+                        if ( gui::GuiManager::getInstance().isAtFullScreen () != atFullScreen )
+                                gui::GuiManager::getInstance().toggleFullScreenVideo ();
                 }
 
                 tinyxml2::XMLElement* shadows = video->FirstChildElement( "shadows" ) ;
@@ -1100,8 +1067,8 @@ bool GameManager::readPreferences( const std::string& fileName )
                 {
                         bool drawShadows = ( std::string( shadows->FirstChild()->ToText()->Value() ) == "true" ) ? true : false ;
 
-                        if ( GameManager::getInstance()->getDrawShadows () != drawShadows )
-                                GameManager::getInstance()->toggleDrawShadows ();
+                        if ( GameManager::getInstance().getDrawShadows () != drawShadows )
+                                GameManager::getInstance().toggleDrawShadows ();
                 }
 
                 tinyxml2::XMLElement* background = video->FirstChildElement( "background" ) ;
@@ -1109,14 +1076,14 @@ bool GameManager::readPreferences( const std::string& fileName )
                 {
                         bool drawBackground = ( std::string( background->FirstChild()->ToText()->Value() ) == "true" ) ? true : false ;
 
-                        if ( GameManager::getInstance()->hasBackgroundPicture () != drawBackground )
-                                GameManager::getInstance()->toggleBackgroundPicture ();
+                        if ( GameManager::getInstance().hasBackgroundPicture () != drawBackground )
+                                GameManager::getInstance().toggleBackgroundPicture ();
                 }
 
                 tinyxml2::XMLElement* graphics = video->FirstChildElement( "graphics" ) ;
                 if ( graphics != nilPointer )
                 {
-                        GameManager::getInstance()->setChosenGraphicSet( graphics->FirstChild()->ToText()->Value() ) ;
+                        GameManager::getInstance().setChosenGraphicSet( graphics->FirstChild()->ToText()->Value() ) ;
                 }
         }
 
@@ -1135,7 +1102,7 @@ bool GameManager::writePreferences( const std::string& fileName )
         // language
 
         tinyxml2::XMLElement * language = preferences.NewElement( "language" );
-        language->SetText( gui::GuiManager::getInstance()->getLanguage().c_str () );
+        language->SetText( gui::GuiManager::getInstance().getLanguage().c_str () );
         root->InsertEndChild( language );
 
         // keys
@@ -1143,43 +1110,43 @@ bool GameManager::writePreferences( const std::string& fileName )
                 tinyxml2::XMLNode * keyboard = preferences.NewElement( "keyboard" );
 
                 tinyxml2::XMLElement * movenorth = preferences.NewElement( "movenorth" );
-                movenorth->SetText( InputManager::getInstance()->getUserKeyFor( "movenorth" ).c_str () );
+                movenorth->SetText( InputManager::getInstance().getUserKeyFor( "movenorth" ).c_str () );
                 keyboard->InsertEndChild( movenorth );
 
                 tinyxml2::XMLElement * movesouth = preferences.NewElement( "movesouth" );
-                movesouth->SetText( InputManager::getInstance()->getUserKeyFor( "movesouth" ).c_str () );
+                movesouth->SetText( InputManager::getInstance().getUserKeyFor( "movesouth" ).c_str () );
                 keyboard->InsertEndChild( movesouth );
 
                 tinyxml2::XMLElement * moveeast = preferences.NewElement( "moveeast" );
-                moveeast->SetText( InputManager::getInstance()->getUserKeyFor( "moveeast" ).c_str () );
+                moveeast->SetText( InputManager::getInstance().getUserKeyFor( "moveeast" ).c_str () );
                 keyboard->InsertEndChild( moveeast );
 
                 tinyxml2::XMLElement * movewest = preferences.NewElement( "movewest" );
-                movewest->SetText( InputManager::getInstance()->getUserKeyFor( "movewest" ).c_str () );
+                movewest->SetText( InputManager::getInstance().getUserKeyFor( "movewest" ).c_str () );
                 keyboard->InsertEndChild( movewest );
 
                 tinyxml2::XMLElement * take = preferences.NewElement( "take" );
-                take->SetText( InputManager::getInstance()->getUserKeyFor( "take" ).c_str () );
+                take->SetText( InputManager::getInstance().getUserKeyFor( "take" ).c_str () );
                 keyboard->InsertEndChild( take );
 
                 tinyxml2::XMLElement * jump = preferences.NewElement( "jump" );
-                jump->SetText( InputManager::getInstance()->getUserKeyFor( "jump" ).c_str () );
+                jump->SetText( InputManager::getInstance().getUserKeyFor( "jump" ).c_str () );
                 keyboard->InsertEndChild( jump );
 
                 tinyxml2::XMLElement * doughnut = preferences.NewElement( "doughnut" );
-                doughnut->SetText( InputManager::getInstance()->getUserKeyFor( "doughnut" ).c_str () );
+                doughnut->SetText( InputManager::getInstance().getUserKeyFor( "doughnut" ).c_str () );
                 keyboard->InsertEndChild( doughnut );
 
                 tinyxml2::XMLElement * takeandjump = preferences.NewElement( "takeandjump" );
-                takeandjump->SetText( InputManager::getInstance()->getUserKeyFor( "take&jump" ).c_str () );
+                takeandjump->SetText( InputManager::getInstance().getUserKeyFor( "take&jump" ).c_str () );
                 keyboard->InsertEndChild( takeandjump );
 
                 tinyxml2::XMLElement * swap = preferences.NewElement( "swap" );
-                swap->SetText( InputManager::getInstance()->getUserKeyFor( "swap" ).c_str () );
+                swap->SetText( InputManager::getInstance().getUserKeyFor( "swap" ).c_str () );
                 keyboard->InsertEndChild( swap );
 
                 tinyxml2::XMLElement * pause = preferences.NewElement( "pause" );
-                pause->SetText( InputManager::getInstance()->getUserKeyFor( "pause" ).c_str () );
+                pause->SetText( InputManager::getInstance().getUserKeyFor( "pause" ).c_str () );
                 keyboard->InsertEndChild( pause );
 
                 root->InsertEndChild( keyboard );
@@ -1190,15 +1157,15 @@ bool GameManager::writePreferences( const std::string& fileName )
                 tinyxml2::XMLNode * audio = preferences.NewElement( "audio" );
 
                 tinyxml2::XMLElement * fx = preferences.NewElement( "fx" );
-                fx->SetText( SoundManager::getInstance()->getVolumeOfEffects () );
+                fx->SetText( SoundManager::getInstance().getVolumeOfEffects () );
                 audio->InsertEndChild( fx );
 
                 tinyxml2::XMLElement * music = preferences.NewElement( "music" );
-                music->SetText( SoundManager::getInstance()->getVolumeOfMusic () );
+                music->SetText( SoundManager::getInstance().getVolumeOfMusic () );
                 audio->InsertEndChild( music );
 
                 tinyxml2::XMLElement * roomtunes = preferences.NewElement( "roomtunes" );
-                roomtunes->SetText( GameManager::getInstance()->playMelodyOfScenery () ? "true" : "false" );
+                roomtunes->SetText( GameManager::getInstance().playMelodyOfScenery () ? "true" : "false" );
                 audio->InsertEndChild( roomtunes );
 
                 root->InsertEndChild( audio );
@@ -1209,19 +1176,19 @@ bool GameManager::writePreferences( const std::string& fileName )
                 tinyxml2::XMLNode * video = preferences.NewElement( "video" );
 
                 tinyxml2::XMLElement * fullscreen = preferences.NewElement( "fullscreen" );
-                fullscreen->SetText( gui::GuiManager::getInstance()->isAtFullScreen () ? "true" : "false" );
+                fullscreen->SetText( gui::GuiManager::getInstance().isAtFullScreen () ? "true" : "false" );
                 video->InsertEndChild( fullscreen );
 
                 tinyxml2::XMLElement * shadows = preferences.NewElement( "shadows" );
-                shadows->SetText( GameManager::getInstance()->getDrawShadows () ? "true" : "false" );
+                shadows->SetText( GameManager::getInstance().getDrawShadows () ? "true" : "false" );
                 video->InsertEndChild( shadows );
 
                 tinyxml2::XMLElement * background = preferences.NewElement( "background" );
-                background->SetText( GameManager::getInstance()->hasBackgroundPicture () ? "true" : "false" );
+                background->SetText( GameManager::getInstance().hasBackgroundPicture () ? "true" : "false" );
                 video->InsertEndChild( background );
 
                 tinyxml2::XMLElement * graphics = preferences.NewElement( "graphics" );
-                graphics->SetText( GameManager::getInstance()->getChosenGraphicSet() );
+                graphics->SetText( GameManager::getInstance().getChosenGraphicSet() );
                 video->InsertEndChild( graphics );
 
                 root->InsertEndChild( video );

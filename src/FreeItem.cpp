@@ -6,14 +6,16 @@
 #include "Color.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
-FreeItem::FreeItem( ItemData* itemData, int x, int y, int z, const Way& way )
+FreeItem::FreeItem( const ItemData* itemData, int x, int y, int z, const Way& way )
         : Item ( itemData, z, way )
+        , originalCellX( -1024 )
+        , originalCellY( -1024 )
+        , originalCellZ( -1024 )
         , wantMask ( tritrue )
         , transparency ( 0 )
-        , collisionDetector ( true )
         , frozen ( false )
         , shadedNonmaskedImage ( nilPointer )
         , partOfDoor( false )
@@ -22,27 +24,16 @@ FreeItem::FreeItem( ItemData* itemData, int x, int y, int z, const Way& way )
         yPos = y;
         if ( yPos < 0 ) yPos = 0;
 
-        // init frames
-        int howManyFrames = ( getDataOfItem()->howManyMotions() - getDataOfItem()->howManyExtraFrames() ) / getDataOfItem()->howManyFramesPerOrientation() ;
-        unsigned int orientation = ( way.getIntegerOfWay() == Way::Nowhere ? 0 : way.getIntegerOfWay() );
-        int currentFrame = ( getDataOfItem()->howManyFramesPerOrientation() > 1 ?
-                                        getDataOfItem()->getFrameAt( getCurrentFrame() ) + howManyFrames * orientation :
-                                        getDataOfItem()->getFrameAt( 0 ) );
-
-        this->rawImage = getDataOfItem()->getMotionAt( currentFrame );
-
-        // get shadow
-        if ( getDataOfItem()->getWidthOfShadow() > 0 && getDataOfItem()->getHeightOfShadow() > 0 )
-        {
-                this->shadow = getDataOfItem()->getShadowAt( currentFrame );
-        }
+        setCollisionDetector( true );
 }
 
 FreeItem::FreeItem( const FreeItem& freeItem )
         : Item( freeItem ), Drawable()
+        , originalCellX( freeItem.originalCellX )
+        , originalCellY( freeItem.originalCellY )
+        , originalCellZ( freeItem.originalCellZ )
         , wantMask( freeItem.wantMask )
         , transparency( freeItem.transparency )
-        , collisionDetector( freeItem.collisionDetector )
         , frozen( freeItem.frozen )
         , shadedNonmaskedImage( nilPointer )
         , partOfDoor( freeItem.partOfDoor )
@@ -62,7 +53,7 @@ void FreeItem::draw( const allegro::Pict& where )
 {
         if ( transparency >= 100 ) /* item is fully transparent */ return ;
 
-        Picture* imageToDraw = this->rawImage;
+        const Picture* imageToDraw = this->rawImage;
         if ( this->shadedNonmaskedImage != nilPointer ) imageToDraw = this->shadedNonmaskedImage;
         if ( this->processedImage != nilPointer ) imageToDraw = this->processedImage;
         if ( imageToDraw == nilPointer ) return;
@@ -95,7 +86,7 @@ void FreeItem::binBothProcessedImages()
         setShadedNonmaskedImage( nilPointer );
 }
 
-void FreeItem::changeImage( Picture* newImage )
+void FreeItem::changeImage( const Picture* newImage )
 {
         if ( newImage == nilPointer )
         {
@@ -111,7 +102,7 @@ void FreeItem::changeImage( Picture* newImage )
         if ( this->rawImage != newImage )
         {
                 // copy this item before modifying it
-                FreeItem copyOfItem( *this );
+                FreeItemPtr copyOfItem ( new FreeItem ( *this ) );
 
                 if ( newImage != nilPointer )
                 {
@@ -131,16 +122,16 @@ void FreeItem::changeImage( Picture* newImage )
                 setWantMaskTrue();
 
                 // remask with old image
-                if ( copyOfItem.getRawImage() != nilPointer )
-                        mediator->remaskWithFreeItem( &copyOfItem );
+                if ( copyOfItem->getRawImage() != nilPointer )
+                        mediator->remaskWithFreeItem( *copyOfItem );
 
                 // remask with new image
                 if ( newImage != nilPointer )
-                        mediator->remaskWithFreeItem( this );
+                        mediator->remaskWithFreeItem( *this );
         }
 }
 
-void FreeItem::changeShadow( Picture* newShadow )
+void FreeItem::changeShadow( const Picture* newShadow )
 {
         if ( this->shadow == nilPointer )
         {
@@ -153,7 +144,7 @@ void FreeItem::changeShadow( Picture* newShadow )
                 // reshade items
                 if ( this->rawImage != nilPointer )
                 {
-                        mediator->reshadeWithFreeItem( this );
+                        mediator->reshadeWithFreeItem( *this );
                 }
         }
 }
@@ -162,7 +153,7 @@ void FreeItem::requestShadow()
 {
         if ( rawImage != nilPointer && getWantShadow() )
         {
-                mediator->castShadowOnFreeItem( this );
+                mediator->castShadowOnFreeItem( *this );
 
                 if ( ! getWantShadow() )
                 {
@@ -173,7 +164,7 @@ void FreeItem::requestShadow()
 
 void FreeItem::requestMask()
 {
-        mediator->maskFreeItem( this );
+        mediator->maskFreeItem( *this );
 
         if ( getWantMask().isTrue() && this->processedImage != nilPointer )
                 binProcessedImage();
@@ -187,8 +178,8 @@ bool FreeItem::addToPosition( int x, int y, int z )
 
         bool collisionFound = false;
 
-        // copy item before moving
-        FreeItem copyOfItem( *this );
+        // copy item before moving it
+        FreeItemPtr copyOfItem ( new FreeItem ( *this ) );
 
         this->xPos += x;
         this->yPos += y;
@@ -222,7 +213,7 @@ bool FreeItem::addToPosition( int x, int y, int z )
         if ( ! collisionFound )
         {
                 // look for collision with other items in room
-                collisionFound = mediator->findCollisionWithItem( this );
+                collisionFound = mediator->lookForCollisionsOf( this->getUniqueName() );
                 if ( ! collisionFound )  // is it okay to move
                 {
                         // reshade and remask
@@ -238,8 +229,8 @@ bool FreeItem::addToPosition( int x, int y, int z )
                                 this->offset.second = getX() + getY() + getWidthX() - this->rawImage->getHeight() - getZ();
 
                                 // for both the previous position and the current position
-                                mediator->remaskWithFreeItem( &copyOfItem );
-                                mediator->remaskWithFreeItem( this );
+                                mediator->remaskWithFreeItem( *copyOfItem );
+                                mediator->remaskWithFreeItem( *this );
                         }
                         else
                         {
@@ -248,22 +239,22 @@ bool FreeItem::addToPosition( int x, int y, int z )
 
                         // reshade items
                         // for both the previous position and the current position
-                        mediator->reshadeWithFreeItem( &copyOfItem );
-                        mediator->reshadeWithFreeItem( this );
+                        mediator->reshadeWithFreeItem( *copyOfItem );
+                        mediator->reshadeWithFreeItem( *this );
 
                         // rearrange list of free items
-                        mediator->activateFreeItemsSorting();
+                        mediator->markToSortFreeItems ();
                 }
         }
 
         // restore previous values when there’s a collision
         if ( collisionFound )
         {
-                this->xPos = copyOfItem.getX();
-                this->yPos = copyOfItem.getY();
-                this->zPos = copyOfItem.getZ();
+                this->xPos = copyOfItem->getX();
+                this->yPos = copyOfItem->getY();
+                this->zPos = copyOfItem->getZ();
 
-                this->offset = copyOfItem.getOffset();
+                this->offset = copyOfItem->getOffset();
         }
 
         return ! collisionFound;
@@ -333,7 +324,7 @@ bool FreeItem::isCollidingWithDoor( const std::string& way, const std::string& n
 
         if ( oldX != getX() || oldY != getY() )
         {
-                isomot::SoundManager::getInstance()->play ( "door", Activity::Collision, /* loop */ false );
+                iso::SoundManager::getInstance().play ( "door", Activity::Collision, /* loop */ false );
                 return true ;
         }
 
@@ -368,71 +359,6 @@ void FreeItem::setShadedNonmaskedImage( Picture* newImage )
                 delete shadedNonmaskedImage ;
                 shadedNonmaskedImage = newImage;
         }
-}
-
-/* static */
-void FreeItem::maskItemBehindItem( FreeItem* itemToMask, Item* upwardItem )
-{
-        if ( itemToMask == nilPointer || upwardItem == nilPointer ) return;
-
-        // mask shaded image or raw image when item is not yet shaded or shadows are off
-        Picture* imageToMask = itemToMask->getShadedNonmaskedImage() ;
-        if ( imageToMask == nilPointer ) imageToMask = itemToMask->getRawImage() ;
-        if ( imageToMask == nilPointer ) return ;
-
-        Picture* upwardImage = upwardItem->getRawImage() ;
-        if ( upwardImage == nilPointer ) return ;
-
-        int iniX = upwardItem->getOffsetX() - itemToMask->getOffsetX(); // initial X
-        int endX = iniX + upwardImage->getWidth();                      // final X
-        int iniY = upwardItem->getOffsetY() - itemToMask->getOffsetY(); // initial Y
-        int endY = iniY + upwardImage->getHeight();                     // final Y
-
-        if ( iniX < 0 ) iniX = 0;
-        if ( iniY < 0 ) iniY = 0;
-        if ( endX > static_cast< int >( imageToMask->getWidth() ) ) endX = imageToMask->getWidth();
-        if ( endY > static_cast< int >( imageToMask->getHeight() ) ) endY = imageToMask->getHeight();
-
-        Picture* maskedImage = itemToMask->getProcessedImage();
-
-        if ( maskedImage == nilPointer )
-        {
-                maskedImage = new Picture( imageToMask->getWidth(), imageToMask->getHeight() );
-        }
-
-        if ( itemToMask->getWantMask().isTrue() )
-        {
-                // in principle, image of masked item is image of unmasked item, shaded or not
-                allegro::bitBlit( imageToMask->getAllegroPict(), maskedImage->getAllegroPict() );
-                itemToMask->setWantMaskIndeterminate();
-        }
-
-        const int deltaX = iniX + itemToMask->getOffsetX() - upwardItem->getOffsetX() ;
-        const int deltaY = iniY + itemToMask->getOffsetY() - upwardItem->getOffsetY() ;
-
-        int cRow = 0;           // row of pixels in imageToMask
-        int cPixel = 0;         // pixel in row of imageToMask
-        int iRow = 0;           // row of pixels in upwardImage
-        int iPixel = 0;         // pixel in row of upwardImage
-
-        upwardImage->getAllegroPict().lock( true, false );
-        maskedImage->getAllegroPict().lock( false, true );
-
-        for ( cRow = iniY, iRow = deltaY ; cRow < endY ; cRow++, iRow++ )
-        {
-                for ( cPixel = iniX, iPixel = deltaX ; cPixel < endX ; cPixel++, iPixel++ )
-                {
-                        if ( ! upwardImage->getPixelAt( iPixel, iRow ).isKeyColor() )
-                        {
-                                maskedImage->putPixelAt( cPixel, cRow, Color() );
-                        }
-                }
-        }
-
-        maskedImage->getAllegroPict().unlock();
-        upwardImage->getAllegroPict().unlock();
-
-        itemToMask->setProcessedImage( maskedImage );
 }
 
 }

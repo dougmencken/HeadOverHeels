@@ -8,31 +8,31 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef OneWay_hpp_
-#define OneWay_hpp_
+#ifndef ThereAndBack_hpp_
+#define ThereAndBack_hpp_
 
 #include "Behavior.hpp"
 #include "Timer.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
 class Item ;
 
 /**
- * Moves item in only one direction. When it collides with something,
+ * Moves item in one direction. When it collides with something,
  * it rotates 180° and continues to move in opposite way
  */
 
-class OneWay : public Behavior
+class ThereAndBack : public Behavior
 {
 
 public:
 
-        OneWay( Item * item, const std::string & behavior, bool flying ) ;
+        ThereAndBack( const ItemPtr & item, const std::string & behavior, bool flying ) ;
 
-        virtual ~OneWay( ) ;
+        virtual ~ThereAndBack( ) ;
 
         virtual bool update () ;
 
@@ -46,9 +46,9 @@ private:
 
         bool isFlying ;
 
-        Timer * speedTimer ;
+        autouniqueptr < Timer > speedTimer ;
 
-        Timer * fallTimer ;
+        autouniqueptr < Timer > fallTimer ;
 
 };
 

@@ -2,30 +2,28 @@
 #include "Doughnut.hpp"
 #include "Mediator.hpp"
 #include "FreeItem.hpp"
-#include "PlayerItem.hpp"
 #include "UserControlled.hpp"
 #include "MoveKindOfActivity.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
-Doughnut::Doughnut( Item * item, const std::string & behavior )
+Doughnut::Doughnut( const ItemPtr & item, const std::string & behavior )
         : Behavior( item, behavior )
-        , playerItem( 0 )
+        , playerItem( nilPointer )
+        , speedTimer( new Timer() )
 {
-        speedTimer = new Timer();
         speedTimer->go();
 }
 
 Doughnut::~Doughnut( )
 {
-        delete speedTimer;
 }
 
 bool Doughnut::update ()
 {
-        FreeItem* freeItem = dynamic_cast< FreeItem * >( this->item );
+        FreeItem& freeItem = dynamic_cast< FreeItem& >( * this->item );
         bool vanish = false;
 
         switch ( activity )
@@ -59,37 +57,40 @@ bool Doughnut::update ()
                 case Activity::MoveSouth:
                 case Activity::MoveEast:
                 case Activity::MoveWest:
-                        if ( speedTimer->getValue() > freeItem->getSpeed() )
+                        if ( speedTimer->getValue() > freeItem.getSpeed() )
                         {
                                 // look for collisions with items
-                                freeItem->setCollisionDetector( true );
+                                freeItem.setCollisionDetector( true );
 
                                 if ( activity == Activity::MoveNorth ) {
                                         // -1, 0, 0 for collisions at north
-                                        freeItem->canAdvanceTo( -1, 0, 0 );
+                                        freeItem.canAdvanceTo( -1, 0, 0 );
                                 } else if ( activity == Activity::MoveSouth ) {
                                         // 1, 0, 0 for collisions at south
-                                        freeItem->canAdvanceTo( 1, 0, 0 );
+                                        freeItem.canAdvanceTo( 1, 0, 0 );
                                 } else if ( activity == Activity::MoveEast ) {
                                         // 0, -1, 0 for collisions at east
-                                        freeItem->canAdvanceTo( 0, -1, 0 );
+                                        freeItem.canAdvanceTo( 0, -1, 0 );
                                 } else if ( activity == Activity::MoveWest ) {
                                         // 0, 1, 0 for collisions at west
-                                        freeItem->canAdvanceTo( 0, 1, 0 );
+                                        freeItem.canAdvanceTo( 0, 1, 0 );
                                 }
 
                                 // if there’s no collision or collision is with player, move doughnut
-                                if ( freeItem->getMediator()->isStackOfCollisionsEmpty() || freeItem->getMediator()->collisionWithByLabel( playerItem->getLabel() ) )
+
+                                Mediator* mediator = freeItem.getMediator() ;
+                                if ( mediator->isStackOfCollisionsEmpty() ||
+                                        mediator->collisionWithByLabel( playerItem->getLabel() ) != nilPointer )
                                 {
-                                        freeItem->setCollisionDetector( false );
-                                        MoveKindOfActivity::getInstance()->move( this, &activity, false );
+                                        freeItem.setCollisionDetector( false );
+                                        MoveKindOfActivity::getInstance().move( this, &activity, false );
                                 }
                                 else
                                 {
                                         // freeze “ bad boy ” on collision with it
-                                        if ( freeItem->getMediator()->collisionWithBadBoy() )
+                                        if ( mediator->collisionWithBadBoy() != nilPointer )
                                         {
-                                                propagateActivity( this->item, Activity::Freeze );
+                                                propagateActivity( *this->item, Activity::Freeze );
                                         }
 
                                         // doughnut disappears after collison with any item but player
@@ -99,7 +100,7 @@ bool Doughnut::update ()
 
                                 speedTimer->reset();
 
-                                freeItem->animate();
+                                freeItem.animate();
                         }
                         break;
 

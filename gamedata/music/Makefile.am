@@ -11,6 +11,6 @@ gamedatamusic_DATA = CreditsTheme.ogg \
 			freedom.ogg \
 			jail.ogg \
 			market.ogg \
+			moon.ogg \
 			penitentiary.ogg \
-			safari.ogg \
-			themoon.ogg
+			safari.ogg

@@ -1,223 +1,56 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<room>
-
-  <scenery>themoon</scenery>
-
-  <xTiles>3</xTiles>
-
-  <yTiles>10</yTiles>
-
-  <width>16</width>
-
-  <floorType>plain</floorType>
-
-  <floor>
-    <tile>
-      <x>0</x>
-      <y>0</y>
-      <picture>moon-floor-east.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>0</y>
-      <picture>moon-floor-east.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>1</y>
-      <picture>moon-floor-south.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>2</y>
-      <picture>moon-floor-south.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>3</y>
-      <picture>moon-floor-south.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>4</y>
-      <picture>moon-floor-south.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>5</y>
-      <picture>moon-floor-south.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>6</y>
-      <picture>moon-floor-south.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>7</y>
-      <picture>moon-floor-south.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>8</y>
-      <picture>moon-floor-south.png</picture>
-    </tile>
-    <tile>
-      <x>0</x>
-      <y>9</y>
-      <picture>moon-floor-west.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>9</y>
-      <picture>moon-floor-west.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>9</y>
-      <picture>moon-floor-sw.png</picture>
-    </tile>
-    <tile>
-      <x>0</x>
-      <y>1</y>
-      <picture>moon-floor.png</picture>
-    </tile>
-    <tile>
-      <x>0</x>
-      <y>2</y>
-      <picture>moon-floor.png</picture>
-    </tile>
-    <tile>
-      <x>0</x>
-      <y>3</y>
-      <picture>moon-floor.png</picture>
-    </tile>
-    <tile>
-      <x>0</x>
-      <y>4</y>
-      <picture>moon-floor.png</picture>
-    </tile>
-    <tile>
-      <x>0</x>
-      <y>5</y>
-      <picture>moon-floor.png</picture>
-    </tile>
-    <tile>
-      <x>0</x>
-      <y>6</y>
-      <picture>moon-floor.png</picture>
-    </tile>
-    <tile>
-      <x>0</x>
-      <y>7</y>
-      <picture>moon-floor.png</picture>
-    </tile>
-    <tile>
-      <x>0</x>
-      <y>8</y>
-      <picture>moon-floor.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>1</y>
-      <picture>moon-floor.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>2</y>
-      <picture>moon-floor.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>3</y>
-      <picture>moon-floor.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>4</y>
-      <picture>moon-floor.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>5</y>
-      <picture>moon-floor.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>6</y>
-      <picture>moon-floor.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>7</y>
-      <picture>moon-floor.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>8</y>
-      <picture>moon-floor.png</picture>
-    </tile>
-  </floor>
-
-  <walls>
-    <wall>
-      <axis>y</axis>
-      <index>1</index>
-      <picture>moon-wall-y-4.png</picture>
-    </wall>
-    <wall>
-      <axis>y</axis>
-      <index>2</index>
-      <picture>moon-wall-y-2.png</picture>
-    </wall>
-    <wall>
-      <axis>y</axis>
-      <index>3</index>
-      <picture>moon-wall-y-1.png</picture>
-    </wall>
-    <wall>
-      <axis>y</axis>
-      <index>4</index>
-      <picture>moon-wall-y-2.png</picture>
-    </wall>
-    <wall>
-      <axis>y</axis>
-      <index>5</index>
-      <picture>moon-wall-y-3.png</picture>
-    </wall>
-    <wall>
-      <axis>y</axis>
-      <index>6</index>
-      <picture>moon-wall-y-1.png</picture>
-    </wall>
-    <wall>
-      <axis>y</axis>
-      <index>7</index>
-      <picture>moon-wall-y-4.png</picture>
-    </wall>
-    <wall>
-      <axis>y</axis>
-      <index>8</index>
-      <picture>moon-wall-y-2.png</picture>
-    </wall>
-  </walls>
-
-  <items>
-    <item x="0" y="0" z="-1">
-      <label>moon-door-west</label>
-      <direction>east</direction>
-      <type>door</type>
-    </item>
-    <item x="2" y="4" z="-1">
-      <label>moon-door-south</label>
-      <direction>south</direction>
-      <type>door</type>
-    </item>
-    <item x="0" y="9" z="-1">
-      <label>moon-door-west</label>
-      <direction>west</direction>
-      <type>door</type>
-    </item>
-  </items>
-
+<room scenery="moon" tileSize="16">
+    <xTiles>3</xTiles>
+    <yTiles>10</yTiles>
+    <floorKind>plain</floorKind>
+    <walls>
+        <wall on="y">
+            <position>1</position>
+            <picture>moon-wall-y-4.png</picture>
+        </wall>
+        <wall on="y">
+            <position>2</position>
+            <picture>moon-wall-y-2.png</picture>
+        </wall>
+        <wall on="y">
+            <position>3</position>
+            <picture>moon-wall-y-1.png</picture>
+        </wall>
+        <wall on="y">
+            <position>4</position>
+            <picture>moon-wall-y-2.png</picture>
+        </wall>
+        <wall on="y">
+            <position>5</position>
+            <picture>moon-wall-y-3.png</picture>
+        </wall>
+        <wall on="y">
+            <position>6</position>
+            <picture>moon-wall-y-1.png</picture>
+        </wall>
+        <wall on="y">
+            <position>7</position>
+            <picture>moon-wall-y-4.png</picture>
+        </wall>
+        <wall on="y">
+            <position>8</position>
+            <picture>moon-wall-y-2.png</picture>
+        </wall>
+    </walls>
+    <items>
+        <item x="0" y="0" z="-1">
+            <label>moon-door-west</label>
+            <orientation>east</orientation>
+            <kind>door</kind>
+        </item>
+        <item x="2" y="4" z="-1">
+            <label>moon-door-south</label>
+            <orientation>south</orientation>
+            <kind>door</kind>
+        </item>
+        <item x="0" y="9" z="-1">
+            <label>moon-door-west</label>
+            <orientation>west</orientation>
+            <kind>door</kind>
+        </item>
+    </items>
 </room>

@@ -13,27 +13,23 @@
 
 #include <string>
 #include <iostream>
-#include <sstream>
-
-#include <WrappersAllegro.hpp>
 
 #include <tinyxml2.h>
 
 #include "Ism.hpp"
 #include "Way.hpp"
+#include "FloorTile.hpp"
+#include "Wall.hpp"
+#include "GridItem.hpp"
+#include "FreeItem.hpp"
+#include "PlayerItem.hpp"
+#include "Door.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
-class ItemData ;
 class Room ;
-class FloorTile ;
-class Wall ;
-class GridItem ;
-class FreeItem ;
-class PlayerItem ;
-class Door ;
 
 /**
  * Creates a room by constructing different parts of it via data from file
@@ -54,29 +50,23 @@ public:
          * @param room Room where to create player
          * @param justEntered Make copy of player used to recreate it when rebuilding room or not
          */
-        static PlayerItem * createPlayerInRoom ( Room* room,
-                                                 const std::string& nameOfPlayer,
-                                                 bool justEntered,
-                                                 int x, int y, int z,
-                                                 const Way& orientation, const Way& wayOfEntry = Way::JustWait );
-
-        static int getXCenterOfRoom ( ItemData* data, Room* theRoom ) ;
-
-        static int getYCenterOfRoom ( ItemData* data, Room* theRoom ) ;
+        static PlayerItemPtr createPlayerInRoom ( Room* room,
+                                                  const std::string& nameOfPlayer,
+                                                  bool justEntered,
+                                                  int x, int y, int z,
+                                                  const Way& orientation, const Way& wayOfEntry = Way::JustWait );
 
 private:
 
         RoomBuilder( ) { }
 
-        static FloorTile* buildFloorTile ( tinyxml2::XMLElement * tile, const char* gfxPrefix ) ;
+        static Wall * buildWall ( tinyxml2::XMLElement * wall, const std::string& gfxPrefix ) ;
 
-        static Wall* buildWall ( tinyxml2::XMLElement * wall, const char* gfxPrefix ) ;
+        static GridItemPtr buildGridItem ( tinyxml2::XMLElement * item, Room* room ) ;
 
-        static GridItem* buildGridItem ( tinyxml2::XMLElement * item, Room* room ) ;
+        static FreeItemPtr buildFreeItem ( tinyxml2::XMLElement * item, Room* room ) ;
 
-        static FreeItem* buildFreeItem ( tinyxml2::XMLElement * item, Room* room ) ;
-
-        static Door* buildDoor ( tinyxml2::XMLElement * item ) ;
+        static Door * buildDoor ( tinyxml2::XMLElement * item ) ;
 
 };
 

@@ -10,7 +10,7 @@ echo "${nameOfFolder}dir = ""$""(""datadir"")""/""@""PACKAGE""@""/gfx.simple"
 
 printf "${nameOfFolder}_DATA = "
 
-listOfSubfolders="item.png blacktooth.png jail.png market.png themoon.png byblos.png egyptus.png penitentiary.png safari.png freedom.png gui.gfx"
+listOfSubfolders="item.png blacktooth.png jail.png market.png moon.png byblos.png egyptus.png penitentiary.png safari.png freedom.png gui.gfx"
 items=`find $listOfSubfolders -type f -print`
 
 howManyLines=`printf "${items}" | wc -l`

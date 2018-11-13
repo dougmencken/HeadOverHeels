@@ -6,28 +6,29 @@
 #include "SoundManager.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
-Elevator::Elevator( Item * item, const std::string & behavior )
+Elevator::Elevator( const ItemPtr & item, const std::string & behavior )
         : Behavior( item, behavior )
+        , top( 10 )
+        , bottom( 0 )
+        , ascent( true )
         , lastActivity( Activity::Wait )
+        , speedTimer( new Timer() )
+        , stopTimer( new Timer() )
 {
-        speedTimer = new Timer();
-        stopTimer = new Timer();
         speedTimer->go ();
         stopTimer->go ();
 }
 
 Elevator::~Elevator( )
 {
-        delete speedTimer;
-        delete stopTimer;
 }
 
 bool Elevator::update ()
 {
-        FreeItem* freeItem = dynamic_cast< FreeItem * >( this->item );
+        FreeItem& freeItem = dynamic_cast< FreeItem& >( * this->item );
 
         switch ( activity )
         {
@@ -37,14 +38,14 @@ bool Elevator::update ()
                         break;
 
                 case Activity::MoveUp:
-                        if ( speedTimer->getValue() > freeItem->getSpeed() )
+                        if ( speedTimer->getValue() > freeItem.getSpeed() )
                         {
-                                MoveKindOfActivity::getInstance()->move( this, &activity, false );
+                                MoveKindOfActivity::getInstance().move( this, &activity, false );
 
                                 speedTimer->reset();
 
                                 // elevator reached its top
-                                if ( freeItem->getZ() > top * LayerHeight )
+                                if ( freeItem.getZ() > top * LayerHeight )
                                 {
                                         activity = Activity::StopAtTop;
                                         lastActivity = activity;
@@ -52,18 +53,18 @@ bool Elevator::update ()
                                 }
                         }
 
-                        freeItem->animate();
+                        freeItem.animate();
                         break;
 
                 case Activity::MoveDown:
-                        if ( speedTimer->getValue() > freeItem->getSpeed() )
+                        if ( speedTimer->getValue() > freeItem.getSpeed() )
                         {
-                                MoveKindOfActivity::getInstance()->move( this, &activity, false );
+                                MoveKindOfActivity::getInstance().move( this, &activity, false );
 
                                 speedTimer->reset();
 
                                 // elevator reached its bottom
-                                if ( freeItem->getZ() <= bottom * LayerHeight )
+                                if ( freeItem.getZ() <= bottom * LayerHeight )
                                 {
                                         activity = Activity::StopAtBottom;
                                         lastActivity = activity;
@@ -71,7 +72,7 @@ bool Elevator::update ()
                                 }
                         }
 
-                        freeItem->animate();
+                        freeItem.animate();
                         break;
 
                 // stop elevator for a moment when it reaches minimum height
@@ -82,7 +83,7 @@ bool Elevator::update ()
                                 lastActivity = activity;
                         }
 
-                        freeItem->animate();
+                        freeItem.animate();
                         break;
 
                 // stop elevator for a moment when it reaches maximum height
@@ -93,7 +94,7 @@ bool Elevator::update ()
                                 lastActivity = activity;
                         }
 
-                        freeItem->animate();
+                        freeItem.animate();
                         break;
 
                 default:
@@ -101,18 +102,9 @@ bool Elevator::update ()
                         break;
         }
 
-        SoundManager::getInstance()->play( freeItem->getLabel(), activity );
+        SoundManager::getInstance().play( freeItem.getLabel(), activity );
 
         return false;
-}
-
-void Elevator::setMoreData( void * data )
-{
-        int * values = reinterpret_cast< int * >( data );
-
-        this->top = values[ 0 ];
-        this->bottom = values[ 1 ];
-        this->ascent = bool( values[ 2 ] );
 }
 
 }

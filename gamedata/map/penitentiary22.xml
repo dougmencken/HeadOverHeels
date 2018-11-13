@@ -1,446 +1,264 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<room>
-
-  <scenery>penitentiary</scenery>
-
-  <xTiles>9</xTiles>
-
-  <yTiles>9</yTiles>
-
-  <width>16</width>
-
-  <floorType>none</floorType>
-
-  <floor>
-    <tile>
-      <x>0</x>
-      <y>1</y>
-      <picture>penitentiary-floor-underground-north.png</picture>
-    </tile>
-    <tile>
-      <x>0</x>
-      <y>2</y>
-      <picture>penitentiary-floor-underground-north.png</picture>
-    </tile>
-    <tile>
-      <x>0</x>
-      <y>3</y>
-      <picture>penitentiary-floor-underground-north.png</picture>
-    </tile>
-    <tile>
-      <x>0</x>
-      <y>4</y>
-      <picture>penitentiary-floor-underground-north.png</picture>
-    </tile>
-    <tile>
-      <x>0</x>
-      <y>5</y>
-      <picture>penitentiary-floor-underground-north.png</picture>
-    </tile>
-    <tile>
-      <x>0</x>
-      <y>6</y>
-      <picture>penitentiary-floor-underground-north.png</picture>
-    </tile>
-    <tile>
-      <x>0</x>
-      <y>7</y>
-      <picture>penitentiary-floor-underground-north.png</picture>
-    </tile>
-    <tile>
-      <x>0</x>
-      <y>8</y>
-      <picture>penitentiary-floor-underground-north.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>0</y>
-      <picture>penitentiary-floor-underground-east.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>0</y>
-      <picture>penitentiary-floor-underground-east.png</picture>
-    </tile>
-    <tile>
-      <x>3</x>
-      <y>0</y>
-      <picture>penitentiary-floor-underground-east.png</picture>
-    </tile>
-    <tile>
-      <x>4</x>
-      <y>0</y>
-      <picture>penitentiary-floor-underground-east.png</picture>
-    </tile>
-    <tile>
-      <x>5</x>
-      <y>0</y>
-      <picture>penitentiary-floor-underground-east.png</picture>
-    </tile>
-    <tile>
-      <x>6</x>
-      <y>0</y>
-      <picture>penitentiary-floor-underground-east.png</picture>
-    </tile>
-    <tile>
-      <x>7</x>
-      <y>0</y>
-      <picture>penitentiary-floor-underground-east.png</picture>
-    </tile>
-    <tile>
-      <x>8</x>
-      <y>0</y>
-      <picture>penitentiary-floor-underground-east.png</picture>
-    </tile>
-    <tile>
-      <x>8</x>
-      <y>1</y>
-      <picture>penitentiary-nofloor-south.png</picture>
-    </tile>
-    <tile>
-      <x>8</x>
-      <y>2</y>
-      <picture>penitentiary-nofloor-south.png</picture>
-    </tile>
-    <tile>
-      <x>8</x>
-      <y>3</y>
-      <picture>penitentiary-nofloor-south.png</picture>
-    </tile>
-    <tile>
-      <x>8</x>
-      <y>4</y>
-      <picture>penitentiary-nofloor-south.png</picture>
-    </tile>
-    <tile>
-      <x>8</x>
-      <y>5</y>
-      <picture>penitentiary-nofloor-south.png</picture>
-    </tile>
-    <tile>
-      <x>8</x>
-      <y>6</y>
-      <picture>penitentiary-nofloor-south.png</picture>
-    </tile>
-    <tile>
-      <x>8</x>
-      <y>7</y>
-      <picture>penitentiary-nofloor-south.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>8</y>
-      <picture>penitentiary-nofloor-west.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>8</y>
-      <picture>penitentiary-nofloor-west.png</picture>
-    </tile>
-    <tile>
-      <x>3</x>
-      <y>8</y>
-      <picture>penitentiary-nofloor-west.png</picture>
-    </tile>
-    <tile>
-      <x>4</x>
-      <y>8</y>
-      <picture>penitentiary-nofloor-west.png</picture>
-    </tile>
-    <tile>
-      <x>5</x>
-      <y>8</y>
-      <picture>penitentiary-nofloor-west.png</picture>
-    </tile>
-    <tile>
-      <x>6</x>
-      <y>8</y>
-      <picture>penitentiary-nofloor-west.png</picture>
-    </tile>
-    <tile>
-      <x>7</x>
-      <y>8</y>
-      <picture>penitentiary-nofloor-west.png</picture>
-    </tile>
-    <tile>
-      <x>8</x>
-      <y>8</y>
-      <picture>penitentiary-nofloor-sw.png</picture>
-    </tile>
-  </floor>
-
-  <items>
-    <item x="0" y="1" z="0">
-      <label>penitentiary-wall-y-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="0" y="2" z="0">
-      <label>penitentiary-wall-y-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="0" y="3" z="0">
-      <label>penitentiary-wall-y-2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="0" y="4" z="0">
-      <label>penitentiary-wall-y-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="0" y="5" z="0">
-      <label>penitentiary-wall-y-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="0" y="6" z="0">
-      <label>penitentiary-wall-y-2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="0" y="7" z="0">
-      <label>penitentiary-wall-y-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="0" y="8" z="0">
-      <label>penitentiary-wall-y-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="1" y="0" z="0">
-      <label>penitentiary-wall-x-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="2" y="0" z="0">
-      <label>penitentiary-wall-x-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="3" y="0" z="0">
-      <label>penitentiary-wall-x-2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="4" y="0" z="0">
-      <label>penitentiary-wall-x-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="5" y="0" z="0">
-      <label>penitentiary-wall-x-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="6" y="0" z="0">
-      <label>penitentiary-wall-x-2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="7" y="0" z="0">
-      <label>penitentiary-wall-x-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="8" y="0" z="0">
-      <label>penitentiary-wall-x-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="1" y="1" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="2" y="1" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="3" y="1" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="4" y="1" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="5" y="1" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="6" y="1" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="7" y="1" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="8" y="1" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="1" y="2" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="8" y="2" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="1" y="3" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="8" y="3" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="1" y="4" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="4" y="4" z="4">
-      <label>brick1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="4" y="4" z="5">
-      <label>extra-life</label>
-      <direction>west</direction>
-      <behavior>behavior of something special</behavior>
-      <type>freeitem</type>
-    </item>
-    <item x="5" y="4" z="4">
-      <label>brick1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="6" y="4" z="5">
-      <label>brick2</label>
-      <direction>none</direction>
-      <behavior>behavior of disappearance on jump into</behavior>
-      <type>griditem</type>
-    </item>
-    <item x="7" y="4" z="6">
-      <label>brick2</label>
-      <direction>none</direction>
-      <behavior>behavior of disappearance on jump into</behavior>
-      <type>griditem</type>
-    </item>
-    <item x="8" y="4" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="8" y="4" z="7">
-      <label>brick1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="1" y="5" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="4" y="5" z="3">
-      <label>brick2</label>
-      <direction>none</direction>
-      <behavior>behavior of disappearance on jump into</behavior>
-      <type>griditem</type>
-    </item>
-    <item x="8" y="5" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="1" y="6" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="4" y="6" z="2">
-      <label>brick2</label>
-      <direction>none</direction>
-      <behavior>behavior of disappearance on jump into</behavior>
-      <type>griditem</type>
-    </item>
-    <item x="8" y="6" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="1" y="7" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="4" y="7" z="1">
-      <label>brick2</label>
-      <direction>none</direction>
-      <behavior>behavior of disappearance on jump into</behavior>
-      <type>griditem</type>
-    </item>
-    <item x="8" y="7" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="1" y="8" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="2" y="8" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="3" y="8" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="4" y="8" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="5" y="8" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="6" y="8" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="7" y="8" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="8" y="8" z="0">
-      <label>brick2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-  </items>
-
+<room scenery="penitentiary" tileSize="16">
+    <xTiles>9</xTiles>
+    <yTiles>9</yTiles>
+    <floorKind>absent</floorKind>
+    <walls>
+        <wall on="x">
+            <position>1</position>
+            <picture>penitentiary-wall-x-1.png</picture>
+        </wall>
+        <wall on="x">
+            <position>2</position>
+            <picture>penitentiary-wall-x-1.png</picture>
+        </wall>
+        <wall on="x">
+            <position>3</position>
+            <picture>penitentiary-wall-x-2.png</picture>
+        </wall>
+        <wall on="x">
+            <position>4</position>
+            <picture>penitentiary-wall-x-1.png</picture>
+        </wall>
+        <wall on="x">
+            <position>5</position>
+            <picture>penitentiary-wall-x-1.png</picture>
+        </wall>
+        <wall on="x">
+            <position>6</position>
+            <picture>penitentiary-wall-x-2.png</picture>
+        </wall>
+        <wall on="x">
+            <position>7</position>
+            <picture>penitentiary-wall-x-1.png</picture>
+        </wall>
+        <wall on="x">
+            <position>8</position>
+            <picture>penitentiary-wall-x-1.png</picture>
+        </wall>
+        <wall on="y">
+            <position>1</position>
+            <picture>penitentiary-wall-y-1.png</picture>
+        </wall>
+        <wall on="y">
+            <position>2</position>
+            <picture>penitentiary-wall-y-1.png</picture>
+        </wall>
+        <wall on="y">
+            <position>3</position>
+            <picture>penitentiary-wall-y-2.png</picture>
+        </wall>
+        <wall on="y">
+            <position>4</position>
+            <picture>penitentiary-wall-y-1.png</picture>
+        </wall>
+        <wall on="y">
+            <position>5</position>
+            <picture>penitentiary-wall-y-1.png</picture>
+        </wall>
+        <wall on="y">
+            <position>6</position>
+            <picture>penitentiary-wall-y-2.png</picture>
+        </wall>
+        <wall on="y">
+            <position>7</position>
+            <picture>penitentiary-wall-y-1.png</picture>
+        </wall>
+        <wall on="y">
+            <position>8</position>
+            <picture>penitentiary-wall-y-1.png</picture>
+        </wall>
+    </walls>
+    <items>
+        <item x="1" y="1" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="2" y="1" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="3" y="1" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="4" y="1" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="5" y="1" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="6" y="1" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="7" y="1" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="8" y="1" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="1" y="2" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="8" y="2" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="1" y="3" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="8" y="3" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="1" y="4" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="4" y="4" z="4">
+            <label>brick1</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="5" y="4" z="4">
+            <label>brick1</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="6" y="4" z="5">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <behavior>behavior of disappearance on jump into</behavior>
+            <kind>griditem</kind>
+        </item>
+        <item x="7" y="4" z="6">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <behavior>behavior of disappearance on jump into</behavior>
+            <kind>griditem</kind>
+        </item>
+        <item x="8" y="4" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="8" y="4" z="7">
+            <label>brick1</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="1" y="5" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="4" y="5" z="3">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <behavior>behavior of disappearance on jump into</behavior>
+            <kind>griditem</kind>
+        </item>
+        <item x="8" y="5" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="1" y="6" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="4" y="6" z="2">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <behavior>behavior of disappearance on jump into</behavior>
+            <kind>griditem</kind>
+        </item>
+        <item x="8" y="6" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="1" y="7" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="4" y="7" z="1">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <behavior>behavior of disappearance on jump into</behavior>
+            <kind>griditem</kind>
+        </item>
+        <item x="8" y="7" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="1" y="8" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="2" y="8" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="3" y="8" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="4" y="8" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="5" y="8" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="6" y="8" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="7" y="8" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="8" y="8" z="0">
+            <label>brick2</label>
+            <orientation>none</orientation>
+            <kind>griditem</kind>
+        </item>
+        <item x="4" y="4" z="5">
+            <label>extra-life</label>
+            <orientation>west</orientation>
+            <behavior>behavior of something special</behavior>
+            <kind>freeitem</kind>
+        </item>
+    </items>
 </room>

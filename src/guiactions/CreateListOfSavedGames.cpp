@@ -22,8 +22,8 @@ using gui::CreateListOfSavedGames;
 using gui::ContinueGame;
 
 
-CreateListOfSavedGames::CreateListOfSavedGames( Picture * picture, bool isLoadMenu )
-        : Action( picture )
+CreateListOfSavedGames::CreateListOfSavedGames( bool isLoadMenu )
+        : Action( )
         , isMenuForLoad( isLoadMenu )
 {
 
@@ -31,33 +31,33 @@ CreateListOfSavedGames::CreateListOfSavedGames( Picture * picture, bool isLoadMe
 
 void CreateListOfSavedGames::doAction ()
 {
-        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this );
-        if ( screen->countWidgets() > 0 )
+        Screen& screen = * GuiManager::getInstance().findOrCreateScreenForAction( this );
+        if ( screen.countWidgets() > 0 )
         {
-                screen->freeWidgets() ;
+                screen.freeWidgets() ;
         }
 
         if ( isLoadMenu() )
         {
                 // return to main menu
-                screen->setEscapeAction( new CreateMainMenu( getWhereToDraw() ) );
+                screen.setEscapeAction( new CreateMainMenu() );
         }
         else
         {
                 // return to play
-                screen->setEscapeAction( new ContinueGame( getWhereToDraw(), true ) );
+                screen.setEscapeAction( new ContinueGame( true ) );
         }
 
-        screen->placeHeadAndHeels( /* icons */ true, /* copyrights */ false );
+        screen.placeHeadAndHeels( /* icons */ true, /* copyrights */ false );
 
-        LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
+        LanguageManager* languageManager = GuiManager::getInstance().getLanguageManager();
 
         // list of games
         Menu* menu = new Menu( );
         menu->setVerticalOffset( 112 );
-        for ( unsigned int fileCount = 1; fileCount <= howManySaves; fileCount++ )
+        for ( unsigned int slot = 1 ; slot <= howManySaves ; ++ slot )
         {
-                std::string file = isomot::homePath() + "savegame" + pathSeparator + "saved." + isomot::numberToString( fileCount ) ;
+                std::string file = iso::homePath() + "savegame" + util::pathSeparator() + "saved." + util::number2string( slot ) ;
 
                 bool fileExists = false;
                 std::ifstream in( file.c_str() );
@@ -75,16 +75,16 @@ void CreateListOfSavedGames::doAction ()
                         Label* label = new Label( ss.str() );
 
                         if ( isLoadMenu() )
-                                label->setAction( new LoadGame( getWhereToDraw(), fileCount ) );
+                                label->setAction( new LoadGame( slot ) );
                         else
-                                label->setAction( new SaveGame( getWhereToDraw(), fileCount ) );
-                                // very funny to change to LoadGame here by the way to get many heads/heels, just try it
+                                label->setAction( new SaveGame( slot ) );
+                                // very funny to change to LoadGame here, just try it
 
                         menu->addOption( label );
                 }
                 else
                 {
-                        std::cout << "slot \"" << file << "\" is yet free" << std::endl ;
+                        std::cout << "slot \"" << file << "\" is free" << std::endl ;
 
                         std::ostringstream ss;
                         ss << languageManager->findLanguageStringForAlias( "free-slot" )->getText();
@@ -92,22 +92,22 @@ void CreateListOfSavedGames::doAction ()
                         if ( isLoadMenu() )
                         {
                                 labelOfFree->changeColor( "cyan" );
-                                labelOfFree->setAction( new PlaySound( isomot::Activity::Mistake ) );
+                                labelOfFree->setAction( new PlaySound( iso::Activity::Mistake ) );
                         }
                         else
                         {
                                 labelOfFree->changeColor( "orange" );
-                                labelOfFree->setAction( new SaveGame( getWhereToDraw(), fileCount ) );
+                                labelOfFree->setAction( new SaveGame( slot ) );
                         }
 
                         menu->addOption( labelOfFree );
                 }
         }
 
-        screen->addWidget( menu );
-        screen->setKeyHandler( menu );
+        screen.addWidget( menu );
+        screen.setKeyHandler( menu );
 
-        GuiManager::getInstance()->changeScreen( screen, true );
+        GuiManager::getInstance().changeScreen( screen, true );
 }
 
 bool CreateListOfSavedGames::readSomeInfoFromGamefile( const std::string& fileName,

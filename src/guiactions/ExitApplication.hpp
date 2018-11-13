@@ -22,7 +22,7 @@ class ExitApplication : public Action
 
 public:
 
-        ExitApplication( );
+        ExitApplication( ) : Action( ) { }
 
         std::string getNameOfAction () const {  return "ExitApplication" ;  }
 

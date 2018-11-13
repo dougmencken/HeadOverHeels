@@ -104,8 +104,8 @@ struct OggVorbis_File *alogg_get_vorbis_file( struct alogg_stream* );
 
 /* Encoding */
 struct alogg_encoding_data *alogg_start_encoding(
-  size_t channels,size_t freq,float quality,size_t ncomments,char **comments,
-  void (*write)(void*,size_t,unsigned long),unsigned long write_data
+  size_t channels, size_t freq, float quality, size_t ncomments, char **comments,
+  long (*write)(const void*, long, struct PACKFILE*), struct PACKFILE* write_data
 );
 int alogg_update_encoding(
   struct alogg_encoding_data*,AL_CONST void *buffer,

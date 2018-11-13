@@ -18,18 +18,17 @@ namespace gui
 
 class MenuWithValues ;
 
+
 /**
- * Crea el menú de configuración del teclado y el joystick
+ * Crea el menú de configuración del teclado
  */
+
 class CreateKeyboardMenu : public Action
 {
 
 public:
 
-        /**
-         * @param picture Imagen donde se dibujará la interfaz gráfica
-         */
-        CreateKeyboardMenu( Picture * picture ) ;
+        CreateKeyboardMenu( ) : Action( ) { }
 
         std::string getNameOfAction () const {  return "CreateKeyboardMenu" ;  }
 

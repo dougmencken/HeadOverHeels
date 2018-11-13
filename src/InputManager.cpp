@@ -2,7 +2,7 @@
 #include "InputManager.hpp"
 #include <iostream>
 
-using isomot::InputManager;
+using iso::InputManager;
 
 
 InputManager* InputManager::instance = nilPointer ;
@@ -32,14 +32,14 @@ InputManager::~InputManager()
 {
 }
 
-InputManager* InputManager::getInstance()
+InputManager& InputManager::getInstance()
 {
         if ( instance == nilPointer )
         {
                 instance = new InputManager();
         }
 
-        return instance;
+        return *instance;
 }
 
 std::string InputManager::findActionOfKeyByName( const std::string& keyName )

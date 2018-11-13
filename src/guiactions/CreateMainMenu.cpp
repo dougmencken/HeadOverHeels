@@ -1,6 +1,7 @@
 
 #include "CreateMainMenu.hpp"
 #include "GuiManager.hpp"
+#include "GameManager.hpp"
 #include "LanguageManager.hpp"
 #include "SoundManager.hpp"
 #include "LanguageText.hpp"
@@ -17,25 +18,23 @@
 #include "ExitApplication.hpp"
 
 using gui::CreateMainMenu;
-using isomot::SoundManager;
 
 
-CreateMainMenu::CreateMainMenu( Picture * picture ) :
-        Action( picture )
+CreateMainMenu::CreateMainMenu( ) : Action( )
 {
 
 }
 
 void CreateMainMenu::doAction ()
 {
-        SoundManager::getInstance()->playOgg( "music/MainTheme.ogg", /* loop */ true );
+        iso::SoundManager::getInstance().playOgg( "music/MainTheme.ogg", /* loop */ true );
 
-        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this );
-        if ( screen->countWidgets() == 0 )
+        Screen& screen = * GuiManager::getInstance().findOrCreateScreenForAction( this );
+        if ( screen.countWidgets() == 0 )
         {
-                screen->placeHeadAndHeels( /* icons */ true, /* copyrights */ true );
+                screen.placeHeadAndHeels( /* icons */ true, /* copyrights */ true );
 
-                LanguageManager* languageManager = GuiManager::getInstance()->getLanguageManager();
+                LanguageManager* languageManager = GuiManager::getInstance().getLanguageManager();
 
                 // Las opciones del menú
 
@@ -47,12 +46,12 @@ void CreateMainMenu::doAction ()
                 Label* showCredits = new Label( languageManager->findLanguageStringForAlias( "show-credits" )->getText() );
                 Label* quitGame = new Label( languageManager->findLanguageStringForAlias( "exit-game" )->getText() );
 
-                newGame->setAction( new CreatePlanetsScreen( getWhereToDraw(), false ) );
-                loadGame->setAction( new CreateListOfSavedGames( getWhereToDraw(), true ) );
-                defineKeys->setAction( new CreateKeyboardMenu( getWhereToDraw() ) );
-                adjustAudio->setAction( new CreateAudioMenu( getWhereToDraw() ) );
-                adjustVideo->setAction( new CreateVideoMenu( getWhereToDraw() ) );
-                showCredits->setAction( new ShowAuthors( getWhereToDraw() ) );
+                newGame->setAction( new CreatePlanetsScreen( false ) );
+                loadGame->setAction( new CreateListOfSavedGames( true ) );
+                defineKeys->setAction( new CreateKeyboardMenu() );
+                adjustAudio->setAction( new CreateAudioMenu() );
+                adjustVideo->setAction( new CreateVideoMenu() );
+                showCredits->setAction( new ShowAuthors() );
                 quitGame->setAction( new ExitApplication() );
 
                 Menu * menu = new Menu( );
@@ -66,9 +65,9 @@ void CreateMainMenu::doAction ()
                 menu->addOption( showCredits );
                 menu->addOption( quitGame );
 
-                screen->addWidget( menu );
-                screen->setKeyHandler( menu );
+                screen.addWidget( menu );
+                screen.setKeyHandler( menu );
         }
 
-        GuiManager::getInstance()->changeScreen( screen, false );
+        GuiManager::getInstance().changeScreen( screen, false );
 }

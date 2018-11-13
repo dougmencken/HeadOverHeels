@@ -11,7 +11,7 @@
 
 Picture::Picture( unsigned int width, unsigned int height )
         : picture( allegro::Pict::newPict( width, height ) )
-        , name( "Picture." + isomot::makeRandomString( 12 ) )
+        , name( "Picture." + iso::makeRandomString( 12 ) )
 {
         fillWithColor( Color() );
 
@@ -22,7 +22,7 @@ Picture::Picture( unsigned int width, unsigned int height )
 
 Picture::Picture( unsigned int width, unsigned int height, const Color& color )
         : picture( allegro::Pict::newPict( width, height ) )
-        , name( "Picture." + isomot::makeRandomString( 12 ) )
+        , name( "Picture." + iso::makeRandomString( 12 ) )
 {
         fillWithColor( color );
 
@@ -33,7 +33,7 @@ Picture::Picture( unsigned int width, unsigned int height, const Color& color )
 
 Picture::Picture( const allegro::Pict& pict )
         : picture( allegro::Pict::asCloneOf( pict.ptr() ) )
-        , name( "Picture." + isomot::makeRandomString( 12 ) )
+        , name( "Picture." + iso::makeRandomString( 12 ) )
 {
 #if defined( DEBUG_PICTURES )  &&  DEBUG_PICTURES
         std::cout << "created Picture " << getName() << " as copy of const allegro::Pict &" << std::endl ;
@@ -54,8 +54,6 @@ Picture::~Picture( )
 #if defined( DEBUG_PICTURES )  &&  DEBUG_PICTURES
         std::cout << "bye bye " << getName() << std::endl ;
 #endif
-
-        delete picture ;
 }
 
 void Picture::setName( const std::string& newName )
@@ -82,23 +80,140 @@ void Picture::fillWithColor( const Color& color )
         picture->clearToColor( color.toAllegroColor () ) ;
 }
 
+void Picture::fillWithTransparencyChequerboard( const unsigned int sizeOfSquare )
+{
+        const unsigned int sizeOfSquareDoubled = sizeOfSquare << 1 ;
+
+        unsigned int width = getWidth ();
+        unsigned int height = getHeight ();
+
+        getAllegroPict().lock( true, true );
+
+        for ( unsigned int y = 0 ; y < height ; y ++ )
+        {
+                for ( unsigned int x = 0 ; x < width ; x ++ )
+                {
+                        if ( getPixelAt( x, y ).isKeyColor() )
+                        {
+                                Color whichColor = Color::whiteColor() ;
+                                if ( ( ( y % sizeOfSquare ) == ( y % sizeOfSquareDoubled ) && ( x % sizeOfSquare ) != ( x % sizeOfSquareDoubled ) ) ||
+                                        ( ( y % sizeOfSquare ) != ( y % sizeOfSquareDoubled ) && ( x % sizeOfSquare ) == ( x % sizeOfSquareDoubled ) ) )
+                                {
+                                        whichColor = Color::gray75Color() ;
+                                }
+
+                                putPixelAt( x, y, whichColor );
+                        }
+                }
+        }
+
+        getAllegroPict().unlock();
+}
+
 void Picture::colorize( const Color& color )
 {
         Color::colorizePicture( this, color );
 }
 
-Picture * Picture::makeGrayscaleCopy()
+void Picture::toGrayscale()
 {
-        Picture* copy = new Picture( *this );
-        Color::pictureToGrayscale( copy );
-        return copy;
+        Color::pictureToGrayscale( this );
 }
 
-Picture * Picture::makeColorizedCopy( const Color& color )
+void Picture::flipHorizontal()
 {
-        Picture* copy = new Picture( *this );
-        copy->colorize( color );
-        return copy;
+        unsigned int width = getWidth ();
+        unsigned int height = getHeight ();
+
+        allegro::Pict* flipped = allegro::Pict::newPict( width, height );
+
+        picture->lock( true, false );
+        flipped->lock( false, true );
+
+        for ( unsigned int y = 0 ; y < height ; y ++ )
+        {
+                for ( unsigned int x = 0 ; x < width ; x ++ )
+                {
+                        flipped->putPixelAt( width - x - 1, y, picture->getPixelAt( x, y ) );
+                }
+        }
+
+        flipped->unlock();
+        picture->unlock();
+
+        picture = safeptr< allegro::Pict >( flipped );
+}
+
+void Picture::flipVertical()
+{
+        unsigned int width = getWidth ();
+        unsigned int height = getHeight ();
+
+        allegro::Pict* flipped = allegro::Pict::newPict( width, height );
+
+        picture->lock( true, false );
+        flipped->lock( false, true );
+
+        for ( unsigned int y = 0 ; y < height ; y ++ )
+        {
+                for ( unsigned int x = 0 ; x < width ; x ++ )
+                {
+                        flipped->putPixelAt( x, height - y - 1, picture->getPixelAt( x, y ) );
+                }
+        }
+
+        flipped->unlock();
+        picture->unlock();
+
+        picture = safeptr< allegro::Pict >( flipped );
+}
+
+void Picture::rotate90 ()
+{
+        unsigned int width = getWidth ();
+        unsigned int height = getHeight ();
+
+        allegro::Pict* rotated = allegro::Pict::newPict( height, width );
+
+        picture->lock( true, false );
+        rotated->lock( false, true );
+
+        for ( unsigned int y = 0 ; y < height ; y ++ )
+        {
+                for ( unsigned int x = 0 ; x < width ; x ++ )
+                {
+                        rotated->putPixelAt( y, x, picture->getPixelAt( x, y ) );
+                }
+        }
+
+        rotated->unlock();
+        picture->unlock();
+
+        picture = safeptr< allegro::Pict >( rotated );
+}
+
+void Picture::rotate270 ()
+{
+        unsigned int width = getWidth ();
+        unsigned int height = getHeight ();
+
+        allegro::Pict* rotated = allegro::Pict::newPict( height, width );
+
+        picture->lock( true, false );
+        rotated->lock( false, true );
+
+        for ( unsigned int y = 0 ; y < height ; y ++ )
+        {
+                for ( unsigned int x = 0 ; x < width ; x ++ )
+                {
+                        rotated->putPixelAt( height - y - 1, width - x - 1, picture->getPixelAt( x, y ) );
+                }
+        }
+
+        rotated->unlock();
+        picture->unlock();
+
+        picture = safeptr< allegro::Pict >( rotated );
 }
 
 void Picture::saveAsPCX( const std::string& path )

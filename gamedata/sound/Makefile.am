@@ -20,8 +20,8 @@ gamedatasound_DATA = adjust.wav \
 			heels-falling.wav \
 			heels-jumping.wav \
 			heels-walking.wav \
-			hh-dying.wav \
 			imperial-guard.wav \
+			lose-life.wav \
 			monkey.wav \
 			o-ou.wav \
 			puppy-scratch.wav \

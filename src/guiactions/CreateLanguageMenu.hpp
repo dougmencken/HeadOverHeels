@@ -27,7 +27,7 @@ class CreateLanguageMenu : public Action
 
 public:
 
-        CreateLanguageMenu( Picture * picture ) ;
+        CreateLanguageMenu( ) ;
 
         ~CreateLanguageMenu( ) ;
 

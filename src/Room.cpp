@@ -1,46 +1,49 @@
 
 #include "Room.hpp"
+#include "Color.hpp"
 #include "FloorTile.hpp"
 #include "Wall.hpp"
-#include "Item.hpp"
-#include "GridItem.hpp"
-#include "FreeItem.hpp"
-#include "PlayerItem.hpp"
+#include "ItemData.hpp"
 #include "Mediator.hpp"
 #include "Camera.hpp"
 #include "GameManager.hpp"
 #include "Behavior.hpp"
-#include "Color.hpp"
+#include "Elevator.hpp"
 
-#include <algorithm>
+#if defined( DEBUG ) && DEBUG
+# define DEBUG_ORIGIN_OF_ROOM   0
+
+# if defined( DEBUG_ORIGIN_OF_ROOM ) && DEBUG_ORIGIN_OF_ROOM
+  # include "FlickeringColor.hpp"
+# endif
+#endif
+
+#include <tinyxml2.h>
+
+#include <algorithm> // std::for_each
 
 
-namespace isomot
+namespace iso
 {
 
-Room::Room( const std::string& roomFile, const std::string& scenery, int xTiles, int yTiles, int tileSize, const std::string& floor )
+Room::Room( const std::string& roomFile, const std::string& scenery, unsigned int xTiles, unsigned int yTiles, unsigned int tileSize, const std::string& floorKind )
 : Mediated( )
+        , visited( false )
+        , connections( nilPointer )
         , nameOfFileWithDataAboutRoom( roomFile )
         , scenery( scenery )
+        , howManyTiles( std::pair< unsigned int, unsigned int >( xTiles, yTiles ) )
         , tileSize( tileSize )
-        , kindOfFloor( floor )
-        , wayOfExit( "no exit" )
-        , whereToDraw( nilPointer )
+        , kindOfFloor( floorKind )
+        , camera( new Camera( this ) )
+        , whereToDraw( )
 {
-        playersYetInRoom.clear ();
-        playersWhoEnteredRoom.clear ();
-
-        this->numberOfTiles.first = xTiles;
-        this->numberOfTiles.second = yTiles;
         this->mediator = new Mediator( this );
-        this->camera = new Camera( this );
 
-        nextNumbers.clear ();
-
-        bounds.clear ();
+        ///bounds.clear ();
         bounds[ "north" ] = 64000;
         bounds[ "south" ] = 64000;
-        bounds[ "rast" ] = 64000;
+        bounds[ "east" ] = 64000;
         bounds[ "west" ] = 64000;
         bounds[ "northeast" ] = 64000;
         bounds[ "southeast" ] = 64000;
@@ -51,24 +54,24 @@ Room::Room( const std::string& roomFile, const std::string& scenery, int xTiles,
         bounds[ "westnorth" ] = 64000;
         bounds[ "westsouth" ] = 64000;
 
-        doors.clear ();
-        doors[ "north" ] = 0;
-        doors[ "south" ] = 0;
-        doors[ "east" ] = 0;
-        doors[ "west" ] = 0;
-        doors[ "northeast" ] = 0;
-        doors[ "southeast" ] = 0;
-        doors[ "southwest" ] = 0;
-        doors[ "northwest" ] = 0;
-        doors[ "eastnorth" ] = 0;
-        doors[ "eastsouth" ] = 0;
-        doors[ "westnorth" ] = 0;
-        doors[ "westsouth" ] = 0;
+        ///doors.clear ();
+        doors[ "north" ] = nilPointer;
+        doors[ "south" ] = nilPointer;
+        doors[ "east" ] = nilPointer;
+        doors[ "west" ] = nilPointer;
+        doors[ "northeast" ] = nilPointer;
+        doors[ "southeast" ] = nilPointer;
+        doors[ "southwest" ] = nilPointer;
+        doors[ "northwest" ] = nilPointer;
+        doors[ "eastnorth" ] = nilPointer;
+        doors[ "eastsouth" ] = nilPointer;
+        doors[ "westnorth" ] = nilPointer;
+        doors[ "westsouth" ] = nilPointer;
 
         // create empty floor
-        for ( int i = 0; i < xTiles * yTiles + 1; i++ )
+        for ( unsigned int i = 0 ; i < xTiles * yTiles /* + 1 */ ; i ++ )
         {
-                this->floor.push_back( nilPointer );
+                this->floorTiles.push_back( nilPointer );
         }
 
         // create sequence of drawing, as example for 8 x 8 grid
@@ -107,14 +110,14 @@ Room::Room( const std::string& roomFile, const std::string& scenery, int xTiles,
         //              55  62
         //                63
 
-        int pos = 0;
-        this->drawSequence = new int[ xTiles * yTiles ];
+        this->drawSequence = new unsigned int[ xTiles * yTiles ];
+        size_t pos = 0;
 
-        for ( int f = 0; f <= ( xTiles + yTiles - 1 ); f++ )
+        for ( unsigned int f = 0 ; f < xTiles + yTiles ; f++ )
         {
-                for ( int n = yTiles - 1; n >= 0; n-- )
+                for ( int n = yTiles - 1 ; n >= 0 ; n-- )
                 {
-                        int index = n * ( xTiles - 1 ) + f;
+                        unsigned int index = n * ( xTiles - 1 ) + f;
                         if ( ( index >= n * xTiles ) && ( index < ( n + 1 ) * xTiles ) )
                         {
                                 this->drawSequence[ pos++ ] = index;
@@ -122,36 +125,8 @@ Room::Room( const std::string& roomFile, const std::string& scenery, int xTiles,
                 }
         }
 
-        // crea la imagen with suitable dimensions to draw the active room
-
-        int roomW = ScreenWidth();
-        int roomH = ScreenHeight();
-
-        if ( isSingleRoom() )
-        {
-                // single room ( id est up to 10 x 10 tiles ) just fits to the screen
-                // but image of double or triple room is larger
-        }
-        else if ( xTiles > 10 && yTiles > 10 )
-        {
-                roomW += 20 * ( tileSize << 1 );
-                roomH += 20 * tileSize;
-        }
-        else if ( xTiles > 10 || yTiles > 10 )
-        {
-                roomW += ( xTiles > 10 ? ( ( xTiles - 10 ) * ( tileSize << 1 ) ) : 0 )
-                                        + ( yTiles > 10 ? ( ( yTiles - 10 ) * ( tileSize << 1 ) ) : 0 );
-                roomH += ( xTiles > 10 ? ( ( xTiles - 10 ) * tileSize) : 0 )
-                                        + ( yTiles > 10 ? ( ( yTiles - 10 ) * tileSize) : 0 );
-        }
-
-        whereToDraw = new Picture( roomW, roomH );
-
         // 0 for pure black shadows, 128 for 50% opacity of shadows, 256 for no shadows
-        shadingOpacity = isomot::GameManager::getInstance()->getDrawShadows () ? 128 /* 0 */ : 256 ;
-
-        // since yet room is active
-        this->active = true;
+        shadingOpacity = iso::GameManager::getInstance().getDrawShadows () ? 128 /* 0 */ : 256 ;
 
         std::cout << "created room \"" << nameOfFileWithDataAboutRoom << "\"" << std::endl ;
 }
@@ -165,7 +140,7 @@ Room::~Room()
         }
 
         // bin floor
-        std::for_each( floor.begin (), floor.end (), DeleteIt() );
+        std::for_each( floorTiles.begin (), floorTiles.end (), DeleteIt() );
 
         // bin walls
         std::for_each( wallX.begin (), wallX.end (), DeleteIt() );
@@ -178,39 +153,348 @@ Room::~Room()
 
         delete mediator;
 
-        // bin players
+        // bin items
 
-        while ( ! this->playersYetInRoom.empty () )
+        for ( size_t i = 0; i < gridItems.size(); i++ )
         {
-                PlayerItem* player = *( playersYetInRoom.begin () );
-                playersYetInRoom.remove( player );
-                delete player;
+                gridItems[ i ].clear();
+        }
+        gridItems.clear() ;
+
+        freeItems.clear() ;
+
+        // characters too
+
+        playersYetInRoom.clear() ;
+        playersWhoEnteredRoom.clear() ;
+}
+
+std::string Room::whichRoom() const
+{
+        if ( getTilesX() <= maxTilesOfSingleRoom && getTilesY() <= maxTilesOfSingleRoom )
+        {
+                return "single" ;
+        }
+        // is it double room along Y
+        else if ( getTilesX() <= maxTilesOfSingleRoom && getTilesY() > maxTilesOfSingleRoom )
+        {
+                return "double along Y" ;
+        }
+        // is it double room along X
+        else if ( getTilesX() > maxTilesOfSingleRoom && getTilesY() <= maxTilesOfSingleRoom )
+        {
+                return "double along X" ;
+        }
+        else
+        {
+                return "triple" ;
+        }
+}
+
+bool Room::saveAsXML( const std::string& file )
+{
+        std::cout << "writing room as XML file \"" << file << "\"" << std::endl ;
+
+        tinyxml2::XMLDocument roomXml;
+
+        tinyxml2::XMLElement * root = roomXml.NewElement( "room" );
+        roomXml.InsertFirstChild( root );
+
+        if ( ! getScenery().empty () )
+                root->SetAttribute( "scenery", getScenery().c_str () );
+
+        tinyxml2::XMLElement* xTiles = roomXml.NewElement( "xTiles" ) ;
+        xTiles->SetText( getTilesX() );
+        root->InsertEndChild( xTiles );
+
+        tinyxml2::XMLElement* yTiles = roomXml.NewElement( "yTiles" ) ;
+        yTiles->SetText( getTilesY() );
+        root->InsertEndChild( yTiles );
+
+        root->SetAttribute( "tileSize", getSizeOfOneTile() );
+
+        if ( whichRoom() == "triple" )
+        {
+                tinyxml2::XMLElement* tripleRoomData = roomXml.NewElement( "triple-room-data" ) ;
+
+                tinyxml2::XMLElement* boundX = roomXml.NewElement( "bound-x" ) ;
+                boundX->SetAttribute( "minimum", tripleRoomBoundX.first );
+                boundX->SetAttribute( "maximum", tripleRoomBoundX.second );
+                tripleRoomData->InsertEndChild( boundX );
+
+                tinyxml2::XMLElement* boundY = roomXml.NewElement( "bound-y" ) ;
+                boundY->SetAttribute( "minimum", tripleRoomBoundY.first );
+                boundY->SetAttribute( "maximum", tripleRoomBoundY.second );
+                tripleRoomData->InsertEndChild( boundY );
+
+                root->InsertEndChild( tripleRoomData );
         }
 
-        while ( ! this->playersWhoEnteredRoom.empty () )
+        tinyxml2::XMLElement* floorKind = roomXml.NewElement( "floorKind" ) ;
+        floorKind->SetText( getKindOfFloor().c_str () );
+        root->InsertEndChild( floorKind );
+
+        // write tiles without floor
+
+        if ( tilesWithoutFloor.size() > 0 )
         {
-                const PlayerItem* player = *( playersWhoEnteredRoom.begin () );
-                playersWhoEnteredRoom.remove( player );
-                delete player;
+                for ( std::vector< std::pair< int, int > >::const_iterator it = tilesWithoutFloor.begin () ; it != tilesWithoutFloor.end () ; ++ it )
+                {
+                        tinyxml2::XMLElement* nofloor = roomXml.NewElement( "nofloor" );
+
+                        nofloor->SetAttribute( "x", it->first );
+                        nofloor->SetAttribute( "y", it->second );
+
+                        root->InsertEndChild( nofloor );
+                }
         }
+
+        // write tiles of floor
+
+        if ( getScenery() == "" )
+        {
+                if ( floorTiles.size() > 0 )
+                {
+                        tinyxml2::XMLElement* floor = roomXml.NewElement( "floor" );
+
+                        for ( std::vector< FloorTile * >::const_iterator it = floorTiles.begin () ; it != floorTiles.end () ; ++ it )
+                        {
+                                FloorTile* theTile = *it ;
+                                if ( theTile != nilPointer )
+                                {
+                                        tinyxml2::XMLElement* tile = roomXml.NewElement( "tile" );
+
+                                        tinyxml2::XMLElement* tileX = roomXml.NewElement( "x" );
+                                        tinyxml2::XMLElement* tileY = roomXml.NewElement( "y" );
+                                        tileX->SetText( theTile->getCellX() );
+                                        tileY->SetText( theTile->getCellY() );
+                                        tinyxml2::XMLElement* tilePicture = roomXml.NewElement( "picture" );
+                                        tilePicture->SetText( theTile->getRawImage().getName().c_str () );
+
+                                        tile->InsertEndChild( tileX );
+                                        tile->InsertEndChild( tileY );
+                                        tile->InsertEndChild( tilePicture );
+
+                                        floor->InsertEndChild( tile );
+                                }
+                        }
+
+                        root->InsertEndChild( floor );
+                }
+        }
+
+        // write walls
+
+        if ( wallX.size() + wallY.size() > 0 )
+        {
+                tinyxml2::XMLElement* walls = roomXml.NewElement( "walls" );
+
+                for ( std::vector< Wall * >::const_iterator it = wallX.begin () ; it != wallX.end () ; ++ it )
+                {
+                        Wall* segment = *it ;
+                        if ( segment != nilPointer )
+                        {
+                                tinyxml2::XMLElement* wall = roomXml.NewElement( "wall" );
+
+                                wall->SetAttribute( "on", segment->isOnX() ? "x" : "y" );
+
+                                tinyxml2::XMLElement* wallPosition = roomXml.NewElement( "position" );
+                                wallPosition->SetText( segment->getPosition() );
+                                wall->InsertEndChild( wallPosition );
+
+                                tinyxml2::XMLElement* wallPicture = roomXml.NewElement( "picture" );
+                                wallPicture->SetText( segment->getImage()->getName().c_str () );
+                                wall->InsertEndChild( wallPicture );
+
+                                walls->InsertEndChild( wall );
+                        }
+                }
+
+                for ( std::vector< Wall * >::const_iterator it = wallY.begin () ; it != wallY.end () ; ++ it )
+                {
+                        Wall* segment = *it ;
+                        if ( segment != nilPointer )
+                        {
+                                tinyxml2::XMLElement* wall = roomXml.NewElement( "wall" );
+
+                                wall->SetAttribute( "on", segment->isOnX() ? "x" : "y" );
+
+                                tinyxml2::XMLElement* wallPosition = roomXml.NewElement( "position" );
+                                wallPosition->SetText( segment->getPosition() );
+                                wall->InsertEndChild( wallPosition );
+
+                                tinyxml2::XMLElement* wallPicture = roomXml.NewElement( "picture" );
+                                wallPicture->SetText( segment->getImage()->getName().c_str () );
+                                wall->InsertEndChild( wallPicture );
+
+                                walls->InsertEndChild( wall );
+                        }
+                }
+
+                root->InsertEndChild( walls );
+        }
+
+        // write items
+
+        if ( gridItems.size() + freeItems.size() + doors.size() > 0 )
+        {
+                tinyxml2::XMLElement* items = roomXml.NewElement( "items" );
+
+                // grid items
+
+                for ( unsigned int column = 0; column < gridItems.size (); column ++ )
+                {
+                        for ( std::vector< GridItemPtr >::const_iterator gi = gridItems[ column ].begin (); gi != gridItems[ column ].end (); ++ gi )
+                        {
+                                GridItemPtr theItem = *gi ;
+                                if ( theItem != nilPointer )
+                                {
+                                        tinyxml2::XMLElement* item = roomXml.NewElement( "item" );
+
+                                        item->SetAttribute( "x", theItem->getCellX() );
+                                        item->SetAttribute( "y", theItem->getCellY() );
+                                        int z = theItem->getZ();
+                                        z = ( z > Top ) ? z / LayerHeight : Top ;
+                                        item->SetAttribute( "z", z );
+
+                                        tinyxml2::XMLElement* itemLabel = roomXml.NewElement( "label" );
+                                        itemLabel->SetText( theItem->getLabel().c_str () );
+                                        item->InsertEndChild( itemLabel );
+
+                                        tinyxml2::XMLElement* itemOrientation = roomXml.NewElement( "orientation" );
+                                        std::string orientation = theItem->getOrientation().toString();
+                                        if ( orientation == "nowhere" ) orientation = "none" ;
+                                        itemOrientation->SetText( orientation.c_str () );
+                                        item->InsertEndChild( itemOrientation );
+
+                                        if ( theItem->getBehavior() != nilPointer )
+                                        {
+                                                tinyxml2::XMLElement* itemBehavior = roomXml.NewElement( "behavior" );
+                                                itemBehavior->SetText( theItem->getBehavior()->getNameOfBehavior().c_str () );
+                                                item->InsertEndChild( itemBehavior );
+                                        }
+
+                                        tinyxml2::XMLElement* kindOfItem = roomXml.NewElement( "kind" );
+                                        kindOfItem->SetText( "griditem" );
+                                        item->InsertEndChild( kindOfItem );
+
+                                        items->InsertEndChild( item );
+                                }
+                        }
+                }
+
+                // free items
+
+                for ( std::vector< FreeItemPtr >::const_iterator fi = freeItems.begin (); fi != freeItems.end (); ++ fi )
+                {
+                        FreeItemPtr theItem = *fi ;
+                        if ( theItem != nilPointer && ! theItem->isPartOfDoor() && theItem->whichKindOfItem() != "player item" )
+                        {
+                                tinyxml2::XMLElement* item = roomXml.NewElement( "item" );
+
+                                item->SetAttribute( "x", theItem->getOriginalCellX() );
+                                item->SetAttribute( "y", theItem->getOriginalCellY() );
+                                item->SetAttribute( "z", theItem->getOriginalCellZ() );
+
+                                tinyxml2::XMLElement* itemLabel = roomXml.NewElement( "label" );
+                                itemLabel->SetText( theItem->getLabel().c_str () );
+                                item->InsertEndChild( itemLabel );
+
+                                tinyxml2::XMLElement* itemOrientation = roomXml.NewElement( "orientation" );
+                                std::string orientation = theItem->getOrientation().toString();
+                                if ( orientation == "nowhere" ) orientation = "none" ;
+                                itemOrientation->SetText( orientation.c_str () );
+                                item->InsertEndChild( itemOrientation );
+
+                                if ( theItem->getBehavior() != nilPointer )
+                                {
+                                        std::string behavior = theItem->getBehavior()->getNameOfBehavior();
+
+                                        tinyxml2::XMLElement* itemBehavior = roomXml.NewElement( "behavior" );
+                                        itemBehavior->SetText( behavior.c_str () );
+                                        item->InsertEndChild( itemBehavior );
+
+                                        if ( behavior == "behavior of elevator" )
+                                        {
+                                                Elevator* elevatorBehavior = dynamic_cast< Elevator* >( theItem->getBehavior() );
+
+                                                tinyxml2::XMLElement* top = roomXml.NewElement( "top" );
+                                                tinyxml2::XMLElement* bottom = roomXml.NewElement( "bottom" );
+                                                tinyxml2::XMLElement* ascent = roomXml.NewElement( "ascent" );
+
+                                                top->SetText( elevatorBehavior->getTop() );
+                                                bottom->SetText( elevatorBehavior->getBottom() );
+                                                ascent->SetText( elevatorBehavior->getAscent() ? "true" : "false" ); // is first movement of elevator ascending
+
+                                                item->InsertEndChild( top );
+                                                item->InsertEndChild( bottom );
+                                                item->InsertEndChild( ascent );
+                                        }
+                                }
+
+                                tinyxml2::XMLElement* kindOfItem = roomXml.NewElement( "kind" );
+                                kindOfItem->SetText( "freeitem" );
+                                item->InsertEndChild( kindOfItem );
+
+                                items->InsertEndChild( item );
+                        }
+                }
+
+                // doors
+
+                for ( std::map< std::string, Door* >::const_iterator di = doors.begin (); di != doors.end (); ++ di )
+                {
+                        Door* theDoor = di->second ;
+                        if ( theDoor != nilPointer )
+                        {
+                                tinyxml2::XMLElement* item = roomXml.NewElement( "item" );
+
+                                item->SetAttribute( "x", theDoor->getCellX() );
+                                item->SetAttribute( "y", theDoor->getCellY() );
+                                int z = theDoor->getZ();
+                                z = ( z > Top ) ? z / LayerHeight : Top ;
+                                item->SetAttribute( "z", z );
+
+                                tinyxml2::XMLElement* itemLabel = roomXml.NewElement( "label" );
+                                itemLabel->SetText( theDoor->getLabel().c_str () );
+                                item->InsertEndChild( itemLabel );
+
+                                tinyxml2::XMLElement* itemOrientation = roomXml.NewElement( "orientation" );
+                                itemOrientation->SetText( theDoor->getWhereIsDoor().c_str () );
+                                item->InsertEndChild( itemOrientation );
+
+                                tinyxml2::XMLElement* kindOfItem = roomXml.NewElement( "kind" );
+                                kindOfItem->SetText( "door" );
+                                item->InsertEndChild( kindOfItem );
+
+                                items->InsertEndChild( item );
+                        }
+                }
+
+                root->InsertEndChild( items );
+        }
+
+        tinyxml2::XMLError result = roomXml.SaveFile( file.c_str () );
+        if ( result != tinyxml2::XML_SUCCESS )
+        {
+                std::cerr << "can’t save room as \"" << file << "\"" << std::endl ;
+                return false;
+        }
+
+        return true;
 }
 
-std::list < PlayerItem * > Room::getPlayersYetInRoom () const
+void Room::addFloorTile( FloorTile * floorTile )
 {
-        return playersYetInRoom ;
-}
+        if ( floorTile == nilPointer ) return ;
 
-std::list < const PlayerItem * > Room::getPlayersWhoEnteredRoom () const
-{
-        return playersWhoEnteredRoom ;
-}
-
-void Room::addFloor( FloorTile * floorTile )
-{
         floorTile->setMediator( mediator );
         floorTile->calculateOffset();
 
-        this->floor[ floorTile->getColumn() ] = floorTile;
+        // bin old tile, if any
+        removeFloorAt( floorTile->getCellX(), floorTile->getCellY() );
+
+        floorTiles[ floorTile->getColumn() ] = floorTile;
 }
 
 void Room::addWall( Wall * wall )
@@ -235,9 +519,9 @@ void Room::addDoor( Door * door )
         this->doors[ door->getWhereIsDoor() ] = door;
 
         // each door is actually three free items
-        FreeItem* leftJamb = door->getLeftJamb() ;
-        FreeItem* rightJamb = door->getRightJamb() ;
-        FreeItem* lintel = door->getLintel() ;
+        FreeItemPtr leftJamb = door->getLeftJamb() ;
+        FreeItemPtr rightJamb = door->getRightJamb() ;
+        FreeItemPtr lintel = door->getLintel() ;
 
         leftJamb->setPartOfDoor( true );
         rightJamb->setPartOfDoor( true );
@@ -246,11 +530,13 @@ void Room::addDoor( Door * door )
         addFreeItem( leftJamb );
         addFreeItem( rightJamb );
         addFreeItem( lintel );
+
+        camera->centerRoom() ;
 }
 
 void Room::updateWallsWithDoors ()
 {
-        // update position of walls
+        // update positions of walls
         for ( std::vector< Wall * >::iterator wx = this->wallX.begin (); wx != this->wallX.end (); ++wx )
         {
                 ( *wx )->calculateOffset();
@@ -261,13 +547,20 @@ void Room::updateWallsWithDoors ()
         }
 }
 
-void Room::addGridItem( GridItem * gridItem )
+void Room::addGridItemToContainer( const GridItemPtr& gridItem )
+{
+        int column = gridItem->getColumnOfGrid();
+        gridItems[ column ].push_back( gridItem );
+        // don’t sort here
+}
+
+void Room::addGridItem( const GridItemPtr& gridItem )
 {
         if ( gridItem == nilPointer ) return;
 
         if ( ( gridItem->getCellX() < 0 || gridItem->getCellY() < 0 ) ||
-                ( gridItem->getCellX() >= static_cast< int >( this->numberOfTiles.first ) ||
-                        gridItem->getCellY() >= static_cast< int >( this->numberOfTiles.second ) ) )
+                ( gridItem->getCellX() >= static_cast< int >( this->getTilesX() ) ||
+                        gridItem->getCellY() >= static_cast< int >( this->getTilesY() ) ) )
         {
                 std::cerr << "coordinates for " << gridItem->whichKindOfItem() << " are out of limits" << std::endl ;
                 return;
@@ -292,27 +585,30 @@ void Room::addGridItem( GridItem * gridItem )
         nextNumbers[ labelOfItem ] = uniqueNumberOfItem + 1;
 
         std::ostringstream name;
-        name << labelOfItem << " " << toStringWithOrdinalSuffix( uniqueNumberOfItem ) <<
+        name << labelOfItem << " " << util::toStringWithOrdinalSuffix( uniqueNumberOfItem ) <<
                 " @" << gridItem->getX() << "," << gridItem->getY() << "," << gridItem->getZ() ;
 
         gridItem->setUniqueName( name.str() );
 
+        addGridItemToContainer( gridItem );
+
         if ( gridItem->getZ() != Top )
         {
                 // when item goes lower than top, look for collisions
-                mediator->findCollisionWithItem( gridItem );
+                mediator->lookForCollisionsOf( gridItem->getUniqueName() );
         }
         else
         {
                 // whem item goes to top, modify its position on Z
-                gridItem->setZ( mediator->findHighestZ( gridItem ) );
+                gridItem->setZ( mediator->findHighestZ( *gridItem ) );
+                std::cout << "for " << gridItem->whichKindOfItem() << " \"" << gridItem->getUniqueName() << "\" on top Z is " << gridItem->getZ() << std::endl ;
         }
 
         if ( ! mediator->isStackOfCollisionsEmpty () )
         {
                 // can’t add item when there’s some collision
                 std::cerr << "there’s collision with " << gridItem->whichKindOfItem() << std::endl ;
-                return;
+                return ;
         }
 
         // calculate offset of item’s image from origin of room
@@ -325,28 +621,28 @@ void Room::addGridItem( GridItem * gridItem )
                 gridItem->setOffset( offset );
         }
 
-        mediator->addGridItemToList( gridItem );
-
-        if ( shadingOpacity < 256 && gridItem->getImageOfShadow() != nilPointer )
-        {
-                mediator->reshadeWithGridItem( gridItem );
-        }
-
-        mediator->remaskWithGridItem( gridItem );
+        mediator->reshadeWithGridItem( *gridItem );
+        mediator->remaskWithGridItem( *gridItem );
 
 #if defined( DEBUG ) && DEBUG
         std::cout << gridItem->whichKindOfItem() << " \"" << gridItem->getUniqueName() << "\" is yet part of room \"" << getNameOfFileWithDataAboutRoom() << "\"" << std::endl ;
 #endif
 }
 
-void Room::addFreeItem( FreeItem * freeItem )
+void Room::addFreeItemToContainer( const FreeItemPtr& freeItem )
+{
+        freeItems.push_back( freeItem );
+        // no sorting here
+}
+
+void Room::addFreeItem( const FreeItemPtr& freeItem )
 {
         if ( freeItem == nilPointer ) return;
 
         if ( freeItem->getX() < 0 || freeItem->getY() < 1 || freeItem->getZ() < Top )
         {
                 std::cerr << "coordinates for " << freeItem->whichKindOfItem() << " are out of limits" << std::endl ;
-                dumpItemInsideThisRoom( freeItem );
+                dumpItemInsideThisRoom( *freeItem );
                 return;
         }
 
@@ -356,12 +652,12 @@ void Room::addFreeItem( FreeItem * freeItem )
                 return;
         }
 
-        if ( ( freeItem->getX() + static_cast< int >( freeItem->getWidthX() ) > static_cast< int >( this->numberOfTiles.first * this->tileSize ) )
+        if ( ( freeItem->getX() + static_cast< int >( freeItem->getWidthX() ) > static_cast< int >( this->getTilesX() * this->tileSize ) )
                 || ( freeItem->getY() - static_cast< int >( freeItem->getWidthY() ) + 1 < 0 )
-                || ( freeItem->getY() > static_cast< int >( this->numberOfTiles.second * this->tileSize ) - 1 ) )
+                || ( freeItem->getY() > static_cast< int >( this->getTilesY() * this->tileSize ) - 1 ) )
         {
                 std::cerr << "coordinates for " << freeItem->whichKindOfItem() << " are out of room" << std::endl ;
-                dumpItemInsideThisRoom( freeItem );
+                dumpItemInsideThisRoom( *freeItem );
                 return;
         }
 
@@ -377,24 +673,26 @@ void Room::addFreeItem( FreeItem * freeItem )
         }
         nextNumbers[ labelOfItem ] = uniqueNumberOfItem + 1;
 
-        freeItem->setUniqueName( labelOfItem + " " + toStringWithOrdinalSuffix( uniqueNumberOfItem ) );
+        freeItem->setUniqueName( labelOfItem + " " + util::toStringWithOrdinalSuffix( uniqueNumberOfItem ) );
+
+        addFreeItemToContainer( freeItem );
 
         // for item which is placed at some height, look for collisions
         if ( freeItem->getZ() > Top )
         {
-                mediator->findCollisionWithItem( freeItem );
+                mediator->lookForCollisionsOf( freeItem->getUniqueName() );
         }
         // for item at the top of column
         else
         {
-                freeItem->setZ( mediator->findHighestZ( freeItem ) );
+                freeItem->setZ( mediator->findHighestZ( *freeItem ) );
         }
 
         // collision is found, so can’t add this item
         if ( ! mediator->isStackOfCollisionsEmpty () )
         {
                 std::cerr << "there’s collision with " << freeItem->whichKindOfItem() << std::endl ;
-                dumpItemInsideThisRoom( freeItem );
+                dumpItemInsideThisRoom( *freeItem );
                 return;
         }
 
@@ -408,26 +706,19 @@ void Room::addFreeItem( FreeItem * freeItem )
                 freeItem->setOffset( offset );
         }
 
-        // add free item to room
-        mediator->addFreeItemToList( freeItem );
-
-        if ( shadingOpacity < 256 && freeItem->getImageOfShadow() != nilPointer )
-        {
-                mediator->reshadeWithFreeItem( freeItem );
-        }
-
-        mediator->remaskWithFreeItem( freeItem );
+        mediator->reshadeWithFreeItem( *freeItem );
+        mediator->remaskWithFreeItem( *freeItem );
 
 #if defined( DEBUG ) && DEBUG
         std::cout << freeItem->whichKindOfItem() << " \"" << freeItem->getUniqueName() << "\" is yet in room \"" << getNameOfFileWithDataAboutRoom() << "\"" << std::endl ;
 #endif
 }
 
-bool Room::addPlayerToRoom( PlayerItem* playerItem, bool playerEntersRoom )
+bool Room::addPlayerToRoom( const PlayerItemPtr& playerItem, bool playerEntersRoom )
 {
         if ( playerItem == nilPointer ) return false;
 
-        for ( std::list< PlayerItem * >::const_iterator pi = playersYetInRoom.begin (); pi != playersYetInRoom.end (); ++pi )
+        for ( std::vector< PlayerItemPtr >::const_iterator pi = playersYetInRoom.begin (); pi != playersYetInRoom.end (); ++pi )
         {
                 if ( playerItem == *pi )
                 {
@@ -438,35 +729,34 @@ bool Room::addPlayerToRoom( PlayerItem* playerItem, bool playerEntersRoom )
 
         if ( playerEntersRoom )
         {
-                for ( std::list< const PlayerItem * >::const_iterator epi = playersWhoEnteredRoom.begin (); epi != playersWhoEnteredRoom.end (); ++epi )
+                for ( std::vector< PlayerItemPtr >::iterator epi = playersWhoEnteredRoom.begin (); epi != playersWhoEnteredRoom.end (); ++epi )
                 {
-                        const PlayerItem* enteredPlayer = *epi ;
+                        PlayerItemPtr enteredPlayer = *epi ;
 
-                        if ( enteredPlayer->getLabel() == "headoverheels" && playerItem->getLabel() != "headoverheels" )
+                        if ( enteredPlayer->getOriginalLabel() == "headoverheels" && playerItem->getOriginalLabel() != "headoverheels" )
                         {
                                 // case when joined character enters room, splits in this room, and one of characters exits & re~enters
-                                std::cout << "character \"" << playerItem->getLabel() << "\" enters but joined \"headoverheels\" entered the same room before" << std::endl ;
+                                std::cout << "character \"" << playerItem->getOriginalLabel() << "\" enters but joined \"headoverheels\" entered the same room before" << std::endl ;
 
                                 // bin joined character
-                                this->playersWhoEnteredRoom.remove( enteredPlayer );
+                                playersWhoEnteredRoom.erase( epi );
                                 /*  epi-- ;  */
-                                delete enteredPlayer ;
 
                                 // add copy of another character as entered
-                                copyAnotherCharacterAsEntered( playerItem->getLabel() );
+                                copyAnotherCharacterAsEntered( playerItem->getOriginalLabel() );
 
                                 break;
                         }
 
-                        if ( enteredPlayer->getLabel() == playerItem->getLabel() )
+                        if ( enteredPlayer->getOriginalLabel() == playerItem->getOriginalLabel() )
                         {
                                 // case when character returns back to this room, maybe via different way
-                                std::cout << "character \"" << playerItem->getLabel() << "\" already entered this room some time ago" << std::endl ;
+                                std::cout << "character \"" << playerItem->getOriginalLabel() << "\" already entered this room some time ago" << std::endl ;
 
                                 // bin previous entry
-                                this->playersWhoEnteredRoom.remove( enteredPlayer );
+                                playersWhoEnteredRoom.erase( epi );
                                 /*  epi-- ;  */
-                                delete enteredPlayer ;
+
                                 break;
                         }
                 }
@@ -475,7 +765,7 @@ bool Room::addPlayerToRoom( PlayerItem* playerItem, bool playerEntersRoom )
         if ( playerItem->getX() < 0 || playerItem->getY() < 1 || playerItem->getZ() < Top )
         {
                 std::cerr << "coordinates for " << playerItem->whichKindOfItem() << " are out of limits" << std::endl ;
-                dumpItemInsideThisRoom( playerItem );
+                dumpItemInsideThisRoom( *playerItem );
                 return false;
         }
 
@@ -485,12 +775,12 @@ bool Room::addPlayerToRoom( PlayerItem* playerItem, bool playerEntersRoom )
                 return false;
         }
 
-        if ( ( playerItem->getX() + static_cast< int >( playerItem->getWidthX() ) > static_cast< int >( this->numberOfTiles.first * this->tileSize ) )
+        if ( ( playerItem->getX() + static_cast< int >( playerItem->getWidthX() ) > static_cast< int >( this->getTilesX() * this->tileSize ) )
                 || ( playerItem->getY() - static_cast< int >( playerItem->getWidthY() ) + 1 < 0 )
-                || ( playerItem->getY() > static_cast< int >( this->numberOfTiles.second * this->tileSize ) - 1 ) )
+                || ( playerItem->getY() > static_cast< int >( this->getTilesY() * this->tileSize ) - 1 ) )
         {
                 std::cerr << "coordinates for " << playerItem->whichKindOfItem() << " are out of room" << std::endl ;
-                dumpItemInsideThisRoom( playerItem );
+                dumpItemInsideThisRoom( *playerItem );
                 return false;
         }
 
@@ -509,28 +799,32 @@ bool Room::addPlayerToRoom( PlayerItem* playerItem, bool playerEntersRoom )
 
         playerItem->setUniqueName( labelOfItem + " @ " + getNameOfFileWithDataAboutRoom() );
 
+        std::cout << "adding character \"" << playerItem->getOriginalLabel() << "\" to room \"" << getNameOfFileWithDataAboutRoom() << "\"" << std::endl ;
+
+        addFreeItemToContainer( playerItem );
+
         // for item which is placed at some height, look for collisions
         if ( playerItem->getZ() > Top )
         {
-                mediator->findCollisionWithItem( playerItem );
+                mediator->lookForCollisionsOf( playerItem->getUniqueName() );
                 while ( ! mediator->isStackOfCollisionsEmpty () )
                 {
                         playerItem->setZ( playerItem->getZ() + LayerHeight );
                         mediator->clearStackOfCollisions ();
-                        mediator->findCollisionWithItem( playerItem );
+                        mediator->lookForCollisionsOf( playerItem->getUniqueName() );
                 }
         }
         // for item at the top of column
         else
         {
-                playerItem->setZ( mediator->findHighestZ( playerItem ) );
+                playerItem->setZ( mediator->findHighestZ( *playerItem ) );
         }
 
         // collision is found, so can’t add this item
         if ( ! mediator->isStackOfCollisionsEmpty () )
         {
                 std::cerr << "there’s collision with " << playerItem->whichKindOfItem() << std::endl ;
-                dumpItemInsideThisRoom( playerItem );
+                dumpItemInsideThisRoom( *playerItem );
                 return false;
         }
 
@@ -544,62 +838,53 @@ bool Room::addPlayerToRoom( PlayerItem* playerItem, bool playerEntersRoom )
                 playerItem->setOffset( offset );
         }
 
-        std::cout << "adding character \"" << playerItem->getLabel() << "\" to room \"" << getNameOfFileWithDataAboutRoom() << "\"" << std::endl ;
-
-        mediator->addFreeItemToList( playerItem );
-
         if ( mediator->getActiveCharacter() == nilPointer )
         {
                 mediator->setActiveCharacter( playerItem );
         }
 
-        if ( shadingOpacity < 256 && playerItem->getImageOfShadow() != nilPointer )
-        {
-                mediator->reshadeWithFreeItem( playerItem );
-        }
-
-        mediator->remaskWithFreeItem( playerItem );
+        mediator->reshadeWithFreeItem( *playerItem );
+        mediator->remaskWithFreeItem( *playerItem );
 
         // add player item to room
         this->playersYetInRoom.push_back( playerItem );
 
         if ( playerEntersRoom )
         {
-                PlayerItem* copyOfPlayer = new PlayerItem( *playerItem );
-                copyOfPlayer->assignBehavior( playerItem->getBehavior()->getNameOfBehavior(), playerItem->getDataOfItem() );
+                PlayerItemPtr copyOfPlayer( new PlayerItem( *playerItem ) );
+                copyOfPlayer->setBehaviorOf( playerItem->getBehavior()->getNameOfBehavior() );
                 this->playersWhoEnteredRoom.push_back( copyOfPlayer );
 
-                std::cout << "copy of character \"" << copyOfPlayer->getLabel() << "\""
-                                << " with behavior \"" << copyOfPlayer->getBehavior()->getNameOfBehavior() << "\""
+                std::cout << "copy of character \"" << copyOfPlayer->getOriginalLabel() << "\""
                                 << " is created to rebuild this room" << std::endl ;
         }
 
         return true;
 }
 
-void Room::dumpItemInsideThisRoom( const Item* item )
+void Room::dumpItemInsideThisRoom( const Item& item )
 {
-        std::cout << "   " << item->whichKindOfItem()
-                        << " at " << item->getX() << " " << item->getY() << " " << item->getZ()
-                        << " with dimensions " << item->getWidthX() << " x " << item->getWidthY() << " x " << item->getHeight()
+        std::cout << "   " << item.whichKindOfItem()
+                        << " at " << item.getX() << " " << item.getY() << " " << item.getZ()
+                        << " with dimensions " << item.getWidthX() << " x " << item.getWidthY() << " x " << item.getHeight()
                         << std::endl
                         << "   inside room \"" << this->nameOfFileWithDataAboutRoom << "\""
-                        << " of " << this->numberOfTiles.first << " x " << this->numberOfTiles.second << " tiles"
+                        << " of " << this->getTilesX() << " x " << this->getTilesY() << " tiles"
                         << " each tile of " << this->tileSize << " pixels"
                         << std::endl ;
 }
 
 void Room::copyAnotherCharacterAsEntered( const std::string& name )
 {
-        for ( std::list< PlayerItem * >::const_iterator pi = playersYetInRoom.begin (); pi != playersYetInRoom.end (); ++pi )
+        for ( std::vector< PlayerItemPtr >::const_iterator pi = playersYetInRoom.begin (); pi != playersYetInRoom.end (); ++pi )
         {
-                if ( ( *pi )->getLabel() != name )
+                if ( ( *pi )->getOriginalLabel() != name )
                 {
                         bool alreadyThere = false;
 
-                        for ( std::list< const PlayerItem * >::const_iterator epi = playersWhoEnteredRoom.begin (); epi != playersWhoEnteredRoom.end (); ++epi )
+                        for ( std::vector< PlayerItemPtr >::const_iterator epi = playersWhoEnteredRoom.begin (); epi != playersWhoEnteredRoom.end (); ++epi )
                         {
-                                if ( ( *epi )->getLabel() == ( *pi )->getLabel() )
+                                if ( ( *epi )->getOriginalLabel() == ( *pi )->getOriginalLabel() )
                                 {
                                         alreadyThere = true;
                                         break;
@@ -608,8 +893,8 @@ void Room::copyAnotherCharacterAsEntered( const std::string& name )
 
                         if ( ! alreadyThere )
                         {
-                                PlayerItem* copy = new PlayerItem( *( *pi ) );
-                                copy->assignBehavior( ( *pi )->getBehavior()->getNameOfBehavior(), ( *pi )->getDataOfItem() );
+                                PlayerItemPtr copy( new PlayerItem( *( *pi ) ) );
+                                copy->setBehaviorOf( ( *pi )->getBehavior()->getNameOfBehavior() );
                                 copy->setWayOfEntry( "just wait" );
 
                                 playersWhoEnteredRoom.push_back( copy );
@@ -618,94 +903,129 @@ void Room::copyAnotherCharacterAsEntered( const std::string& name )
         }
 }
 
-void Room::removeFloor( FloorTile * floorTile )
+void Room::removeFloorAt( int tileX, int tileY )
 {
-        this->floor[ floorTile->getColumn () ] = nilPointer;
-        delete floorTile;
-}
+        FloorTile* tile = nilPointer ;
 
-void Room::removeGridItem( GridItem * gridItem )
-{
-        std::cout << "removing " << gridItem->whichKindOfItem() << " \"" << gridItem->getUniqueName() <<
-                        "\" from room \"" << getNameOfFileWithDataAboutRoom() << "\"" << std::endl ;
-
-        mediator->removeGridItemFromList( gridItem );
-
-        if ( shadingOpacity < 256 && gridItem->getImageOfShadow() != nilPointer )
+        for ( std::vector< FloorTile* >::const_iterator i = floorTiles.begin (); i != floorTiles.end (); ++ i )
         {
-                mediator->reshadeWithGridItem( gridItem );
-        }
+                if ( *i == nilPointer ) continue ;
 
-        mediator->remaskWithGridItem( gridItem );
-
-        delete gridItem;
-}
-
-void Room::removeFreeItem( FreeItem * freeItem )
-{
-        std::cout << "removing " << freeItem->whichKindOfItem() << " \"" << freeItem->getUniqueName() <<
-                        "\" from room \"" << getNameOfFileWithDataAboutRoom() << "\"" << std::endl ;
-
-        mediator->removeFreeItemFromList( freeItem );
-
-        if ( shadingOpacity < 256 && freeItem->getImageOfShadow() != nilPointer )
-        {
-                mediator->reshadeWithFreeItem( freeItem );
-        }
-
-        mediator->remaskWithFreeItem( freeItem );
-
-        delete freeItem;
-}
-
-bool Room::removePlayerFromRoom( PlayerItem* playerItem, bool playerExitsRoom )
-{
-        if ( playerItem == nilPointer ) return false ;
-
-        for ( std::list< PlayerItem * >::const_iterator pi = playersYetInRoom.begin (); pi != playersYetInRoom.end (); ++pi )
-        {
-                if ( playerItem == *pi )
+                if ( ( *i )->getCellX() == tileX && ( *i )->getCellY() == tileY )
                 {
-                        std::cout << "removing " << playerItem->whichKindOfItem() << " \"" << playerItem->getUniqueName() <<
+                        tile = *i ;
+                        break ;
+                }
+        }
+
+        if ( tile != nilPointer ) removeFloorTile( tile );
+
+        floorTiles[ tileX + ( getTilesX() * tileY ) ] = nilPointer ;
+}
+
+void Room::removeFloorTile( FloorTile * floorTile )
+{
+        if ( floorTile != nilPointer )
+                floorTiles[ floorTile->getColumn () ] = nilPointer ;
+
+        delete floorTile ;
+}
+
+void Room::removeGridItemByUniqueName( const std::string& uniqueName )
+{
+        GridItemPtr gridItem ;
+        bool found = false ;
+
+        for ( unsigned int column = 0 ; column < gridItems.size() ; column ++ )
+        {
+                for ( std::vector< GridItemPtr >::iterator g = gridItems[ column ].begin (); g != gridItems[ column ].end (); ++ g )
+                {
+                        if ( *g != nilPointer && ( *g )->getUniqueName() == uniqueName )
+                        {
+                                gridItem = *g ;
+                                found = true ;
+
+                                std::cout << "removing " << ( *g )->whichKindOfItem() << " \"" << uniqueName <<
                                         "\" from room \"" << getNameOfFileWithDataAboutRoom() << "\"" << std::endl ;
 
-                        mediator->removeFreeItemFromList( playerItem );
-                        nextNumbers[ "character " + playerItem->getOriginalLabel() ] -- ;
+                                gridItems[ column ].erase( g );
 
-                        if ( shadingOpacity < 256 && playerItem->getImageOfShadow() != nilPointer )
-                        {
-                                mediator->reshadeWithFreeItem( playerItem );
+                                break ;
                         }
+                }
 
-                        mediator->remaskWithFreeItem( playerItem );
+                if ( found ) break ;
+        }
 
-                        if ( playerItem->isActiveCharacter() )
+        if ( found )
+        {
+                mediator->reshadeWithGridItem( *gridItem );
+                mediator->remaskWithGridItem( *gridItem );
+        }
+}
+
+void Room::removeFreeItemByUniqueName( const std::string& uniqueName )
+{
+        FreeItemPtr freeItem ;
+        bool found = false ;
+
+        for ( std::vector< FreeItemPtr >::iterator f = freeItems.begin (); f != freeItems.end (); ++ f )
+        {
+                if ( *f != nilPointer && ( *f )->getUniqueName() == uniqueName )
+                {
+                        freeItem = *f ;
+                        found = true ;
+
+                        std::cout << "removing " << ( *f )->whichKindOfItem() << " \"" << uniqueName <<
+                                "\" from room \"" << getNameOfFileWithDataAboutRoom() << "\"" << std::endl ;
+
+                        freeItems.erase( f );
+
+                        break ;
+                }
+        }
+
+        if ( found )
+        {
+                mediator->reshadeWithFreeItem( *freeItem );
+                mediator->remaskWithFreeItem( *freeItem );
+        }
+}
+
+bool Room::removePlayerFromRoom( const PlayerItem & playerItem, bool playerExitsRoom )
+{
+        for ( std::vector< PlayerItemPtr >::iterator pi = playersYetInRoom.begin (); pi != playersYetInRoom.end (); ++pi )
+        {
+                if ( playerItem.getUniqueName() == ( *pi )->getUniqueName() )
+                {
+                        std::string character = playerItem.getOriginalLabel();
+                        bool wasActive = playerItem.isActiveCharacter() ;
+
+                        removeFreeItemByUniqueName( playerItem.getUniqueName() );
+
+                        nextNumbers[ "character " + character ] -- ;
+
+                        if ( wasActive )
                         {
                                 // activate other character, or set it to nil when there’s no other character in room
                                 mediator->setActiveCharacter( mediator->getWaitingCharacter() );
                         }
 
-                        std::string nameOfPlayer = playerItem->getLabel();
-
-                        this->playersYetInRoom.remove( playerItem );
+                        playersYetInRoom.erase( pi );
                         /// pi --; // not needed, this iteration is last one due to "return" below
-
-                        delete playerItem;
 
                         // when player leaves room, bin its copy on entry
                         if ( playerExitsRoom )
                         {
-                                for ( std::list< const PlayerItem * >::const_iterator epi = playersWhoEnteredRoom.begin (); epi != playersWhoEnteredRoom.end (); ++epi )
+                                for ( std::vector< PlayerItemPtr >::iterator epi = playersWhoEnteredRoom.begin (); epi != playersWhoEnteredRoom.end (); ++epi )
                                 {
-                                        const PlayerItem* enteredPlayer = *epi ;
-
-                                        if ( enteredPlayer->getLabel() == nameOfPlayer )
+                                        if ( ( *epi )->getOriginalLabel() == character )
                                         {
-                                                std::cout << "also removing copy of character \"" << nameOfPlayer << "\" created on entry to this room" << std::endl ;
+                                                std::cout << "and removing copy of character \"" << character << "\" created on entry to this room" << std::endl ;
 
-                                                this->playersWhoEnteredRoom.remove( enteredPlayer );
+                                                playersWhoEnteredRoom.erase( epi );
                                                 /// epi-- ; // not needed because of "break"
-                                                delete enteredPlayer ;
+
                                                 break;
                                         }
                                 }
@@ -720,65 +1040,79 @@ bool Room::removePlayerFromRoom( PlayerItem* playerItem, bool playerExitsRoom )
 
 bool Room::isAnyPlayerStillInRoom () const
 {
-        return ! this->playersYetInRoom.empty () ;
+        return ! playersYetInRoom.empty () ;
 }
 
 unsigned int Room::removeBars ()
 {
         unsigned int howManyBars = 0;
 
-        std::vector < std::list < GridItem * > > gridItems = mediator->getGridItems ();
-        std::list< FreeItem * > freeItems = mediator->getFreeItems ();
+        mediator->lockGridItemsMutex();
+        mediator->lockFreeItemsMutex();
+
+        std::vector< std::string > gridItemsToRemove ;
 
         for ( unsigned int column = 0; column < gridItems.size(); column ++ )
         {
-                std::list < GridItem * > columnOfItems = gridItems[ column ];
-
-                for ( std::list< GridItem * >::const_iterator gi = columnOfItems.begin (); gi != columnOfItems.end (); ++ gi )
+                for ( std::vector< GridItemPtr >::const_iterator gi = gridItems[ column ].begin (); gi != gridItems[ column ].end (); ++ gi )
                 {
-                        if ( ( *gi )->getLabel() == "bars-ns" || ( *gi )->getLabel() == "bars-ew" )
+                        GridItemPtr gridItem = *gi ;
+                        if ( gridItem == nilPointer ) continue ;
+
+                        if ( gridItem->getLabel().find( "bars" ) != std::string::npos )
                         {
-                                this->removeGridItem( *gi );
+                                gridItemsToRemove.push_back( gridItem->getUniqueName() );
                                 howManyBars ++;
                         }
                 }
         }
 
-        for ( std::list< FreeItem * >::const_iterator fi = freeItems.begin (); fi != freeItems.end (); ++fi )
+        for ( std::vector< std::string >::const_iterator gi = gridItemsToRemove.begin (); gi != gridItemsToRemove.end (); ++ gi )
         {
-                if ( ( *fi )->getLabel() == "bars-ns" || ( *fi )->getLabel() == "bars-ew" )
+                removeGridItemByUniqueName( *gi );
+        }
+
+        std::vector< std::string > freeItemsToRemove ;
+
+        for ( std::vector< FreeItemPtr >::const_iterator fi = freeItems.begin (); fi != freeItems.end (); ++ fi )
+        {
+                FreeItemPtr freeItem = *fi ;
+                if ( freeItem == nilPointer ) continue ;
+
+                if ( freeItem->getLabel().find( "bars" ) != std::string::npos )
                 {
-                        this->removeFreeItem( *fi );
+                        freeItemsToRemove.push_back( freeItem->getUniqueName() );
                         howManyBars ++;
                 }
         }
+
+        for ( std::vector< std::string >::const_iterator fi = freeItemsToRemove.begin (); fi != freeItemsToRemove.end (); ++ fi )
+        {
+                removeFreeItemByUniqueName( *fi );
+        }
+
+        mediator->unlockFreeItemsMutex();
+        mediator->unlockGridItemsMutex();
 
         return howManyBars;
 }
 
 void Room::dontDisappearOnJump ()
 {
-        std::vector < std::list < GridItem * > > gridItems = mediator->getGridItems ();
-        std::list< FreeItem * > freeItems = mediator->getFreeItems ();
-
         for ( unsigned int column = 0; column < gridItems.size(); column ++ )
         {
-                std::list < GridItem * > columnOfItems = gridItems[ column ];
-
-                for ( std::list< GridItem * >::const_iterator gi = columnOfItems.begin (); gi != columnOfItems.end (); ++ gi )
+                for ( std::vector< GridItemPtr >::const_iterator gi = gridItems[ column ].begin (); gi != gridItems[ column ].end (); ++ gi )
                 {
-                        GridItem* gridItem = *gi;
+                        GridItemPtr gridItem = *gi;
                         if ( gridItem->getBehavior() != nilPointer )
                         {
                                 std::string behavior = gridItem->getBehavior()->getNameOfBehavior();
                                 if ( behavior == "behavior of disappearance on jump into" ||
                                                 behavior == "behavior of slow disappearance on jump into" )
                                 {
-                                        Behavior* thatBehavior = gridItem->getBehavior();
-                                        gridItem->setBehavior( nilPointer );
-                                        delete thatBehavior ;
+                                        gridItem->setBehaviorOf( "still" );
 
-                                        Picture* original = gridItem->getRawImage();
+                                        const Picture* original = gridItem->getRawImage();
                                         Picture* copy = new Picture( *original );
 
                                         Color::multiplyWithColor(
@@ -792,20 +1126,18 @@ void Room::dontDisappearOnJump ()
                 }
         }
 
-        for ( std::list< FreeItem * >::const_iterator fi = freeItems.begin (); fi != freeItems.end (); ++fi )
+        for ( std::vector< FreeItemPtr >::const_iterator fi = freeItems.begin (); fi != freeItems.end (); ++fi )
         {
-                FreeItem* freeItem = *fi;
+                FreeItemPtr freeItem = *fi;
                 if ( freeItem->getBehavior() != nilPointer )
                 {
                         std::string behavior = freeItem->getBehavior()->getNameOfBehavior();
                         if ( behavior == "behavior of disappearance on jump into" ||
                                         behavior == "behavior of slow disappearance on jump into" )
                         {
-                                Behavior* thatBehavior = freeItem->getBehavior();
-                                freeItem->setBehavior( nilPointer );
-                                delete thatBehavior ;
+                                freeItem->setBehaviorOf( "still" );
 
-                                Picture* original = freeItem->getRawImage();
+                                const Picture* original = freeItem->getRawImage();
                                 Picture* copy = new Picture( *original );
 
                                 Color::multiplyWithColor(
@@ -819,187 +1151,212 @@ void Room::dontDisappearOnJump ()
         }
 }
 
+unsigned int Room::getWidthOfRoomImage () const
+{
+        unsigned int roomW = ( getTilesX () + getTilesY () ) * ( tileSize << 1 ) ;
+
+        if ( ( ! hasFloor() || ( ! hasDoorAt( "north" ) && ! hasDoorAt( "northeast" ) && ! hasDoorAt( "northwest" ) ) )
+                && ! hasDoorAt( "west" ) && ! hasDoorAt( "westnorth" ) && ! hasDoorAt( "westsouth" ) )
+        {
+                roomW += tileSize ;
+        }
+        if ( ( ! hasFloor() || ( ! hasDoorAt( "east" ) && ! hasDoorAt( "eastnorth" ) && ! hasDoorAt( "eastsouth" ) ) )
+                && ! hasDoorAt( "south" ) && ! hasDoorAt( "southeast" ) && ! hasDoorAt( "southwest" ) )
+        {
+                roomW += tileSize ;
+        }
+
+        return roomW ;
+}
+
+unsigned int Room::getHeightOfRoomImage () const
+{
+        unsigned int roomH = /* height of plane */ ( getTilesX () + getTilesY () ) * tileSize ;
+
+        roomH += /* room’s height in 3D */ ( MaxLayers + 2 ) * LayerHeight ;
+        roomH += /* height of floor */ 8 ;
+
+        if ( ! hasDoorAt( "south" ) && ! hasDoorAt( "southwest" ) && ! hasDoorAt( "southeast" ) &&
+                ! hasDoorAt( "west" ) && ! hasDoorAt( "westsouth" ) && ! hasDoorAt( "westnorth" ) )
+        {
+                roomH += ( tileSize >> 1 ) ;
+        }
+
+        return roomH ;
+}
+
+void Room::drawRoom ()
+{
+        if ( whereToDraw == nilPointer )
+        {
+                // crea la imagen with suitable dimensions to draw this room
+                whereToDraw = PicturePtr( new Picture( getWidthOfRoomImage (), getHeightOfRoomImage () ) );
+        }
+
+        draw( whereToDraw->getAllegroPict() ) ;
+}
+
 void Room::draw( const allegro::Pict& where )
 {
-        const unsigned int maxTilesOfSingleRoom = 10 ;
+        if ( ! where.isNotNil() ) return ;
 
-        // draw room when it is active and image to draw it isn’t nil
-        if ( active && where.isNotNil() )
+        // clear image of room
+        if ( GameManager::getInstance().charactersFly() )
+                where.clearToColor( Color::darkBlueColor().toAllegroColor() );
+        else
+                where.clearToColor( Color::blackColor().toAllegroColor() );
+
+        // acquire picture before drawing
+        allegro::acquirePict( where );
+
+        // draw tiles of floor
+        for ( unsigned int xCell = 0; xCell < getTilesX(); xCell++ )
         {
-                // acquire picture before drawing
-                allegro::acquirePict( where );
-
-                // clear image of room
-                if ( GameManager::getInstance()->charactersFly() )
-                        where.clearToColor( Color::darkBlueColor().toAllegroColor() );
-                else
-                        where.clearToColor( Color::blackColor().toAllegroColor() );
-
-                // adjust position of camera
-                if ( numberOfTiles.first > maxTilesOfSingleRoom || numberOfTiles.second > maxTilesOfSingleRoom )
+                for ( unsigned int yCell = 0; yCell < getTilesY(); yCell++ )
                 {
-                        camera->centerOn( mediator->getActiveCharacter () );
-                }
+                        unsigned int column = getTilesX() * yCell + xCell;
+                        FloorTile* tile = floorTiles[ column ];
 
-                // draw tiles of floor
-                for ( unsigned int xCell = 0; xCell < this->numberOfTiles.first; xCell++ )
-                {
-                        for ( unsigned int yCell = 0; yCell < this->numberOfTiles.second; yCell++ )
+                        if ( tile != nilPointer )  // if there is tile of floor here
                         {
-                                unsigned int column = this->numberOfTiles.first * yCell + xCell;
-                                FloorTile* tile = floor[ column ];
-
-                                if ( tile != nilPointer )  // if there is tile of floor here
-                                {
-                                        // shade this tile when shadows are on
-                                        if ( shadingOpacity < 256 && tile->getRawImage() != nilPointer )
-                                        {
-                                                mediator->lockGridItemMutex();
-                                                mediator->lockFreeItemMutex();
-
-                                                if ( tile->getWantShadow() )
-                                                {
-                                                        mediator->castShadowOnFloor( tile );
-                                                }
-
-                                                mediator->unlockGridItemMutex();
-                                                mediator->unlockFreeItemMutex();
-                                        }
-
-                                        // draw this tile o’floor
-                                        tile->draw( where );
-                                }
-                        }
-                }
-
-                // draw walls without doors
-                for ( std::vector< Wall * >::iterator wx = this->wallX.begin (); wx != this->wallX.end (); ++wx )
-                {
-                        ( *wx )->draw( where );
-                }
-                for ( std::vector< Wall * >::iterator wy = this->wallY.begin (); wy != this->wallY.end (); ++wy )
-                {
-                        ( *wy )->draw( where );
-                }
-
-                mediator->lockGridItemMutex();
-                mediator->lockFreeItemMutex();
-
-                // draw grid items
-                std::vector < std::list < GridItem * > > gridItems = mediator->getGridItems ();
-
-                for ( unsigned int i = 0; i < numberOfTiles.first * numberOfTiles.second; i ++ )
-                {
-                        for ( std::list< GridItem * >::const_iterator gi = gridItems[ drawSequence[ i ] ].begin () ;
-                                gi != gridItems[ drawSequence[ i ] ].end () ; ++ gi )
-                        {
-                                GridItem* gridItem = *gi ;
-
-                                if ( shadingOpacity < 256 && gridItem->getRawImage() != nilPointer )
-                                {
-                                        // cast shadow
-                                        if ( gridItem->getWantShadow() )
-                                        {
-                                                mediator->castShadowOnGridItem( gridItem );
-                                        }
-                                }
-
-                                gridItem->draw( where );
-                        }
-                }
-
-                // for free items there’re two steps before drawing
-                std::list< FreeItem * > freeItems = mediator->getFreeItems ();
-
-                // at first shade every free item with grid items and other free items
-                for ( std::list< FreeItem * >::const_iterator fi = freeItems.begin (); fi != freeItems.end (); ++ fi )
-                {
-                        if ( ( *fi )->getRawImage() != nilPointer )
-                        {
-                                // shade an item when shadows are on
+                                // shade this tile when shadows are on
                                 if ( shadingOpacity < 256 )
                                 {
-                                        ( *fi )->requestShadow();
+                                        mediator->lockGridItemsMutex();
+                                        mediator->lockFreeItemsMutex();
+
+                                        if ( tile->getWantShadow() )
+                                        {
+                                                mediator->castShadowOnFloor( *tile );
+                                        }
+
+                                        mediator->unlockGridItemsMutex();
+                                        mediator->unlockFreeItemsMutex();
+                                }
+
+                                // draw this tile o’floor
+                                tile->draw( where );
+                        }
+                }
+        }
+
+        // draw walls without doors
+        for ( std::vector< Wall * >::iterator wx = this->wallX.begin (); wx != this->wallX.end (); ++wx )
+        {
+                ( *wx )->draw( where );
+        }
+        for ( std::vector< Wall * >::iterator wy = this->wallY.begin (); wy != this->wallY.end (); ++wy )
+        {
+                ( *wy )->draw( where );
+        }
+
+        mediator->lockGridItemsMutex();
+        mediator->lockFreeItemsMutex();
+
+        // draw grid items
+
+        for ( unsigned int i = 0 ; i < getTilesX() * getTilesY() ; i ++ )
+        {
+                for ( std::vector< GridItemPtr >::const_iterator gi = gridItems[ drawSequence[ i ] ].begin () ;
+                        gi != gridItems[ drawSequence[ i ] ].end () ; ++ gi )
+                {
+                        GridItem& gridItem = *( *gi );
+
+                        if ( shadingOpacity < 256 && gridItem.getRawImage() != nilPointer )
+                        {
+                                // cast shadow
+                                if ( gridItem.getWantShadow() )
+                                {
+                                        mediator->castShadowOnGridItem( gridItem );
                                 }
                         }
-                }
 
-                // then mask it and finally draw it
-                for ( std::list< FreeItem * >::const_iterator fi = freeItems.begin (); fi != freeItems.end (); ++ fi )
+                        gridItem.draw( where );
+                }
+        }
+
+        // for free items there’re two steps before drawing
+
+        // at first shade every free item with grid items and other free items
+        for ( std::vector< FreeItemPtr >::const_iterator fi = freeItems.begin (); fi != freeItems.end (); ++ fi )
+        {
+                if ( ( *fi )->getRawImage() != nilPointer )
                 {
-                        if ( ( *fi )->getRawImage() != nilPointer )
+                        // shade an item when shadows are on
+                        if ( shadingOpacity < 256 )
                         {
-                                ( *fi )->requestMask();
-                                ( *fi )->draw( where );
+                                ( *fi )->requestShadow();
                         }
                 }
-
-                mediator->unlockGridItemMutex();
-                mediator->unlockFreeItemMutex();
-
-                // release picture after drawing
-                allegro::releasePict( where );
         }
+
+        // then mask it and finally draw it
+        for ( std::vector< FreeItemPtr >::const_iterator fi = freeItems.begin (); fi != freeItems.end (); ++ fi )
+        {
+                if ( ( *fi )->getRawImage() != nilPointer )
+                {
+                        ( *fi )->requestMask();
+                        ( *fi )->draw( where );
+                }
+        }
+
+        mediator->unlockGridItemsMutex();
+        mediator->unlockFreeItemsMutex();
+
+#if defined( DEBUG_ORIGIN_OF_ROOM ) && DEBUG_ORIGIN_OF_ROOM
+        // draw point of room’s origin
+        if ( FlickeringColor::flickerWhiteAndTransparent() != Color::whiteColor() )
+        {
+                allegro::fillCircle( where, getX0(), getY0(), 4, Color::blackColor().toAllegroColor() );
+                where.drawPixelAt( getX0(), getY0(), Color::whiteColor().toAllegroColor() );
+        }
+        else
+        {
+                allegro::fillCircle( where, getX0(), getY0(), 4, Color::whiteColor().toAllegroColor() );
+                where.drawPixelAt( getX0(), getY0(), Color::blackColor().toAllegroColor() );
+        }
+#endif
+
+        // release picture after drawing
+        allegro::releasePict( where );
 }
 
 void Room::calculateBounds()
 {
-        bounds[ "north" ] = doors[ "north" ] || doors[ "northeast" ] || doors[ "northwest" ] || this->kindOfFloor == "none" ? tileSize : 0;
-        bounds[ "east" ] = doors[ "east" ] || doors[ "eastnorth" ] || doors[ "eastsouth" ] || this->kindOfFloor == "none" ? tileSize : 0;
-        bounds[ "south" ] = tileSize * numberOfTiles.first - ( doors[ "south" ] || doors[ "southeast" ] || doors[ "southwest" ]  ? tileSize : 0 );
-        bounds[ "west" ] = tileSize * numberOfTiles.second - ( doors[ "west" ] || doors[ "westnorth" ] || doors[ "westsouth" ]  ? tileSize : 0 );
+        bounds[ "north" ] = hasDoorAt( "north" ) || hasDoorAt( "northeast" ) || hasDoorAt( "northwest" ) || ! hasFloor() ? tileSize : 0;
+        bounds[ "east" ] = hasDoorAt( "east" ) || hasDoorAt( "eastnorth" ) || hasDoorAt( "eastsouth" ) || ! hasFloor() ? tileSize : 0;
+        bounds[ "south" ] = tileSize * getTilesX() - ( hasDoorAt( "south" ) || hasDoorAt( "southeast" ) || hasDoorAt( "southwest" )  ? tileSize : 0 );
+        bounds[ "west" ] = tileSize * getTilesY() - ( hasDoorAt( "west" ) || hasDoorAt( "westnorth" ) || hasDoorAt( "westsouth" )  ? tileSize : 0 );
 
         // door limits of triple room
-        bounds[ "northeast" ] = doors[ "northeast" ] ? doors[ "northeast" ]->getLintel()->getX() + doors[ "northeast" ]->getLintel()->getWidthX() - tileSize : bounds[ "north" ];
-        bounds[ "northwest" ] = doors[ "northwest" ] ? doors[ "northwest" ]->getLintel()->getX() + doors[ "northwest" ]->getLintel()->getWidthX() - tileSize : bounds[ "north" ];
-        bounds[ "southeast" ] = doors[ "southeast" ] ? doors[ "southeast" ]->getLintel()->getX() + tileSize : bounds[ "south" ];
-        bounds[ "southwest" ] = doors[ "southwest" ] ? doors[ "southwest" ]->getLintel()->getX() + tileSize : bounds[ "south" ];
-        bounds[ "eastnorth" ] = doors[ "eastnorth" ] ? doors[ "eastnorth" ]->getLintel()->getY() + doors[ "eastnorth" ]->getLintel()->getWidthY() - tileSize : bounds[ "east" ];
-        bounds[ "eastsouth" ] = doors[ "eastsouth" ] ? doors[ "eastsouth" ]->getLintel()->getY() + doors[ "eastsouth" ]->getLintel()->getWidthY() - tileSize : bounds[ "east" ];
-        bounds[ "westnorth" ] = doors[ "westnorth" ] ? doors[ "westnorth" ]->getLintel()->getY() + tileSize : bounds[ "west" ];
-        bounds[ "westsouth" ] = doors[ "westsouth" ] ? doors[ "westsouth" ]->getLintel()->getY() + tileSize : bounds[ "west" ];
+        bounds[ "northeast" ] = hasDoorAt( "northeast" ) ? doors[ "northeast" ]->getLintel()->getX() + doors[ "northeast" ]->getLintel()->getWidthX() - tileSize : bounds[ "north" ];
+        bounds[ "northwest" ] = hasDoorAt( "northwest" ) ? doors[ "northwest" ]->getLintel()->getX() + doors[ "northwest" ]->getLintel()->getWidthX() - tileSize : bounds[ "north" ];
+        bounds[ "southeast" ] = hasDoorAt( "southeast" ) ? doors[ "southeast" ]->getLintel()->getX() + tileSize : bounds[ "south" ];
+        bounds[ "southwest" ] = hasDoorAt( "southwest" ) ? doors[ "southwest" ]->getLintel()->getX() + tileSize : bounds[ "south" ];
+        bounds[ "eastnorth" ] = hasDoorAt( "eastnorth" ) ? doors[ "eastnorth" ]->getLintel()->getY() + doors[ "eastnorth" ]->getLintel()->getWidthY() - tileSize : bounds[ "east" ];
+        bounds[ "eastsouth" ] = hasDoorAt( "eastsouth" ) ? doors[ "eastsouth" ]->getLintel()->getY() + doors[ "eastsouth" ]->getLintel()->getWidthY() - tileSize : bounds[ "east" ];
+        bounds[ "westnorth" ] = hasDoorAt( "westnorth" ) ? doors[ "westnorth" ]->getLintel()->getY() + tileSize : bounds[ "west" ];
+        bounds[ "westsouth" ] = hasDoorAt( "westsouth" ) ? doors[ "westsouth" ]->getLintel()->getY() + tileSize : bounds[ "west" ];
 }
 
-void Room::calculateCoordinates( bool hasNorthDoor, bool hasEastDoor )
+void Room::calculateCoordinatesOfOrigin( bool hasNorthDoor, bool hasEastDoor, bool hasSouthDoor, bool hasWestDoor )
 {
-        bool hasNoFloor = ( this->kindOfFloor == "none" );
+        coordinatesOfOrigin.second = ( MaxLayers + 2 ) * LayerHeight ;
+        coordinatesOfOrigin.first = getTilesY () * ( tileSize << 1 ) ;
 
-        // don’t count tiles taken by doors
-        int xGrid = hasNorthDoor || hasNoFloor ? numberOfTiles.first - 1 : numberOfTiles.first;
-        int yGrid = hasEastDoor || hasNoFloor ? numberOfTiles.second - 1 : numberOfTiles.second;
+        if ( ! hasNorthDoor && ! hasWestDoor && hasFloor() ) coordinatesOfOrigin.first += tileSize ;
+        ( void ) hasEastDoor ; ( void ) hasSouthDoor ;
 
-        // if there’s south or west door then variable is odd, in such case subtract one more 1
-        xGrid += ( xGrid & 1 ? -1 : 0 );
-        yGrid += ( yGrid & 1 ? -1 : 0 );
-
-        // the origin for 8 x 8, that’s without doors, room is at ( width / 2, height / 3 )
-        // for smaller room the origin moves to center on 8 x 8 grid, as example for 6 x 8 room X moves one tile
-        int middlePointX = ( xGrid > 8 || yGrid > 8 ? getWhereToDraw()->getWidth() : ScreenWidth() ) >> 1 ;
-        int middlePointY = ScreenHeight() / 3 ;
-        this->coordinates.first = middlePointX
-                                - ( hasNorthDoor || hasNoFloor ? ( tileSize << 1 ) : 0)
-                                + ( hasEastDoor || hasNoFloor ? ( tileSize << 1 ) : 0 );
-        this->coordinates.second = middlePointY
-                                 - ( hasNorthDoor || hasNoFloor ? tileSize : 0 )
-                                 - ( hasEastDoor || hasNoFloor ? tileSize : 0 );
-
-        if ( xGrid <= 8 && yGrid <= 8 )
-        {
-                this->coordinates.first += ( yGrid - xGrid ) * tileSize;
-                this->coordinates.second += ( ( 16 - xGrid - yGrid ) >> 1 ) * tileSize;
-        }
-        else
-        {
-                this->coordinates.first = ( getWhereToDraw()->getWidth() - ( ( xGrid + yGrid ) * ( tileSize << 1 ) ) ) / 2
-                                        + ( yGrid * ( tileSize << 1 ) )
-                                        - ( hasNorthDoor ? ( tileSize << 1 ) : 0 )
-                                        + ( hasEastDoor ? ( tileSize << 1 ) : 0 );
-        }
+#if defined( DEBUG_ORIGIN_OF_ROOM ) && DEBUG_ORIGIN_OF_ROOM
+        std::cout << "origin of room \"" << getNameOfFileWithDataAboutRoom() << "\" is at " <<
+                        "( " << coordinatesOfOrigin.first << ", " << coordinatesOfOrigin.second << " )" <<
+                        std::endl ;
+#endif
 }
 
 bool Room::activateCharacterByLabel( const std::string& player )
 {
-        for ( std::list< PlayerItem * >::const_iterator pi = playersYetInRoom.begin (); pi != playersYetInRoom.end (); ++pi )
+        for ( std::vector< PlayerItemPtr >::const_iterator pi = playersYetInRoom.begin (); pi != playersYetInRoom.end (); ++pi )
         {
                 if ( player == ( *pi )->getLabel() )
                 {
@@ -1013,38 +1370,44 @@ bool Room::activateCharacterByLabel( const std::string& player )
 
 void Room::activate()
 {
-        this->mediator->beginUpdate();
-        this->active = true;
+        mediator->beginUpdate();
 }
 
 void Room::deactivate()
 {
-        this->mediator->endUpdate();
-        this->active = false;
+        mediator->endUpdate();
 }
 
-bool Room::swapCharactersInRoom ( ItemDataManager * itemDataManager )
+bool Room::isActive() const
 {
-        return mediator->pickNextCharacter( itemDataManager );
+        return mediator->isThreadRunning() ;
 }
 
-bool Room::continueWithAlivePlayer ( )
+bool Room::swapCharactersInRoom ()
 {
-        PlayerItem* previouslyAlivePlayer = mediator->getActiveCharacter();
+        return mediator->pickNextCharacter();
+}
+
+bool Room::continueWithAlivePlayer ()
+{
+        PlayerItemPtr previouslyAlivePlayer = mediator->getActiveCharacter();
 
         if ( previouslyAlivePlayer->getLives() == 0 )
         {
                 // look for next player
-                std::list< PlayerItem* >::iterator i =
-                                std::find_if( this->playersYetInRoom.begin (), this->playersYetInRoom.end (),
-                                                std::bind2nd( EqualLabelOfItem(), previouslyAlivePlayer->getLabel() ) );
+                std::vector< PlayerItemPtr >::iterator i = playersYetInRoom.begin () ;
+                while ( i != playersYetInRoom.end () )
+                {
+                        if ( *i != nilPointer && ( *i )->getLabel() == previouslyAlivePlayer->getLabel() ) break;
+                        ++ i ;
+                }
                 ++i ;
                 mediator->setActiveCharacter( i != this->playersYetInRoom.end () ? ( *i ) : *this->playersYetInRoom.begin () );
 
                 // is there other alive player in room
                 if ( previouslyAlivePlayer != mediator->getActiveCharacter() )
                 {
-                        removePlayerFromRoom( previouslyAlivePlayer, true );
+                        removePlayerFromRoom( *previouslyAlivePlayer, true );
 
                         this->activate();
                         return true;
@@ -1065,7 +1428,6 @@ bool Room::calculateEntryCoordinates( const Way& wayOfEntry, int widthX, int wid
         if ( wayOfEntry.toString() == "up" || wayOfEntry.toString() == "down" ||
                         wayOfEntry.toString() == "via teleport" || wayOfEntry.toString() == "via second teleport" )
         {
-                const unsigned int maxTilesOfSingleRoom = 10 ;
                 const int limitOfSingleRoom = maxTilesOfSingleRoom * tileSize ;
 
                 // calculate the difference on X axis when moving from single room to double room or vice versa
@@ -1204,39 +1566,29 @@ bool Room::calculateEntryCoordinates( const Way& wayOfEntry, int widthX, int wid
         return result;
 }
 
-void Room::addTripleRoomInitialPoint( const Way& way, int x, int y )
+int Room::getXCenterForItem( const ItemData* data )
 {
-        this->listOfInitialPointsForTripleRoom.push_back( TripleRoomInitialPoint( way, x, y ) );
+        return
+                ( ( getLimitAt( "south" ) - getLimitAt( "north" ) + data->getWidthX() ) >> 1 )
+                        + ( hasDoorAt( "north" ) ? getSizeOfOneTile() >> 1 : 0 )
+                                - ( hasDoorAt( "south" ) ? getSizeOfOneTile() >> 1 : 0 ) ;
+}
+
+int Room::getYCenterForItem( const ItemData* data )
+{
+        return
+                ( ( getLimitAt( "west" ) - getLimitAt( "east" ) + data->getWidthY() ) >> 1 )
+                        + ( hasDoorAt( "east" ) ? getSizeOfOneTile() >> 1 : 0 )
+                                - ( hasDoorAt( "west" ) ? getSizeOfOneTile() >> 1 : 0 )
+                                        - 1 ;
 }
 
 void Room::assignTripleRoomBounds( int minX, int maxX, int minY, int maxY )
 {
-        this->tripleRoomBoundX.first = minX;
-        this->tripleRoomBoundX.second = maxX;
-        this->tripleRoomBoundY.first = minY;
-        this->tripleRoomBoundY.second = maxY;
-}
-
-TripleRoomInitialPoint* Room::findInitialPointOfEntryToTripleRoom( const Way& way )
-{
-        std::list< TripleRoomInitialPoint >::iterator i = std::find_if(
-                                                                listOfInitialPointsForTripleRoom.begin (),
-                                                                listOfInitialPointsForTripleRoom.end (),
-                                                                std::bind2nd( EqualTripleRoomInitialPoint(), way ) );
-
-        return ( i != listOfInitialPointsForTripleRoom.end () ? ( &( *i ) ) : nilPointer );
-}
-
-TripleRoomInitialPoint::TripleRoomInitialPoint( const Way& way, int x, int y )
-        : wayOfEntry( way )
-        , x( x )
-        , y( y )
-{
-}
-
-bool EqualTripleRoomInitialPoint::operator()( TripleRoomInitialPoint point, const Way& wayOfEntry ) const
-{
-        return ( point.getWayOfEntry().getIntegerOfWay() == wayOfEntry.getIntegerOfWay() );
+        tripleRoomBoundX.first = minX;
+        tripleRoomBoundX.second = maxX;
+        tripleRoomBoundY.first = minY;
+        tripleRoomBoundY.second = maxY;
 }
 
 }

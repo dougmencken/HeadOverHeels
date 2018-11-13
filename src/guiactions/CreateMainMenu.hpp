@@ -28,10 +28,7 @@ class CreateMainMenu : public Action
 
 public:
 
-        /**
-         * @param picture Imagen donde se dibujará la interfaz gráfica
-         */
-        CreateMainMenu( Picture * picture ) ;
+        CreateMainMenu( ) ;
 
         std::string getNameOfAction () const {  return "CreateMainMenu" ;  }
 

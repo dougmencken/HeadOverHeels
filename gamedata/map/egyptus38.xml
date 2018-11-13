@@ -1,577 +1,179 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<room>
-
-  <scenery>egyptus</scenery>
-
-  <xTiles>10</xTiles>
-
-  <yTiles>8</yTiles>
-
-  <width>16</width>
-
-  <floorType>plain</floorType>
-
-  <floor>
-    <tile>
-      <x>0</x>
-      <y>3</y>
-      <picture>egyptus-floor-north.png</picture>
-    </tile>
-    <tile>
-      <x>0</x>
-      <y>4</y>
-      <picture>egyptus-floor-north.png</picture>
-    </tile>
-    <tile>
-      <x>9</x>
-      <y>0</y>
-      <picture>egyptus-floor-south.png</picture>
-    </tile>
-    <tile>
-      <x>9</x>
-      <y>1</y>
-      <picture>egyptus-floor-south.png</picture>
-    </tile>
-    <tile>
-      <x>9</x>
-      <y>2</y>
-      <picture>egyptus-floor-south.png</picture>
-    </tile>
-    <tile>
-      <x>9</x>
-      <y>3</y>
-      <picture>egyptus-floor-south.png</picture>
-    </tile>
-    <tile>
-      <x>9</x>
-      <y>4</y>
-      <picture>egyptus-floor-south.png</picture>
-    </tile>
-    <tile>
-      <x>9</x>
-      <y>5</y>
-      <picture>egyptus-floor-south.png</picture>
-    </tile>
-    <tile>
-      <x>9</x>
-      <y>6</y>
-      <picture>egyptus-floor-south.png</picture>
-    </tile>
-    <tile>
-      <x>9</x>
-      <y>7</y>
-      <picture>egyptus-floor-south.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>0</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>1</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>2</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>3</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>4</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>5</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>6</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>1</x>
-      <y>7</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>0</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>1</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>2</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>3</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>4</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>5</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>6</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>2</x>
-      <y>7</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>3</x>
-      <y>0</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>3</x>
-      <y>1</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>3</x>
-      <y>2</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>3</x>
-      <y>3</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>3</x>
-      <y>4</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>3</x>
-      <y>5</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>3</x>
-      <y>6</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>3</x>
-      <y>7</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>4</x>
-      <y>0</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>4</x>
-      <y>1</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>4</x>
-      <y>2</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>4</x>
-      <y>3</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>4</x>
-      <y>4</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>4</x>
-      <y>5</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>4</x>
-      <y>6</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>4</x>
-      <y>7</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>5</x>
-      <y>0</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>5</x>
-      <y>1</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>5</x>
-      <y>2</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>5</x>
-      <y>3</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>5</x>
-      <y>4</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>5</x>
-      <y>5</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>5</x>
-      <y>6</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>5</x>
-      <y>7</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>6</x>
-      <y>0</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>6</x>
-      <y>1</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>6</x>
-      <y>2</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>6</x>
-      <y>3</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>6</x>
-      <y>4</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>6</x>
-      <y>5</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>6</x>
-      <y>6</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>6</x>
-      <y>7</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>7</x>
-      <y>0</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>7</x>
-      <y>1</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>7</x>
-      <y>2</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>7</x>
-      <y>3</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>7</x>
-      <y>4</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>7</x>
-      <y>5</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>7</x>
-      <y>6</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>7</x>
-      <y>7</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>8</x>
-      <y>0</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>8</x>
-      <y>1</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>8</x>
-      <y>2</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>8</x>
-      <y>3</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>8</x>
-      <y>4</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>8</x>
-      <y>5</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>8</x>
-      <y>6</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-    <tile>
-      <x>8</x>
-      <y>7</y>
-      <picture>egyptus-floor.png</picture>
-    </tile>
-  </floor>
-
-  <walls>
-    <wall>
-      <axis>x</axis>
-      <index>1</index>
-      <picture>egyptus-wall-x-1.png</picture>
-    </wall>
-    <wall>
-      <axis>x</axis>
-      <index>2</index>
-      <picture>egyptus-wall-x-1.png</picture>
-    </wall>
-    <wall>
-      <axis>x</axis>
-      <index>3</index>
-      <picture>egyptus-wall-x-2.png</picture>
-    </wall>
-    <wall>
-      <axis>x</axis>
-      <index>4</index>
-      <picture>egyptus-wall-x-1.png</picture>
-    </wall>
-    <wall>
-      <axis>x</axis>
-      <index>5</index>
-      <picture>egyptus-wall-x-1.png</picture>
-    </wall>
-    <wall>
-      <axis>x</axis>
-      <index>6</index>
-      <picture>egyptus-wall-x-2.png</picture>
-    </wall>
-    <wall>
-      <axis>x</axis>
-      <index>7</index>
-      <picture>egyptus-wall-x-1.png</picture>
-    </wall>
-    <wall>
-      <axis>x</axis>
-      <index>8</index>
-      <picture>egyptus-wall-x-1.png</picture>
-    </wall>
-  </walls>
-
-  <items>
-    <item x="0" y="0" z="0">
-      <label>egyptus-wall-y-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="0" y="1" z="0">
-      <label>egyptus-wall-y-2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="0" y="2" z="0">
-      <label>egyptus-wall-y-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="0" y="5" z="0">
-      <label>egyptus-wall-y-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="0" y="6" z="0">
-      <label>egyptus-wall-y-2</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="0" y="7" z="0">
-      <label>egyptus-wall-y-1</label>
-      <direction>none</direction>
-      <type>griditem</type>
-    </item>
-    <item x="0" y="3" z="-1">
-      <label>egyptus-door-north</label>
-      <direction>north</direction>
-      <type>door</type>
-    </item>
-    <item x="9" y="3" z="-1">
-      <label>egyptus-door-south</label>
-      <direction>south</direction>
-      <type>door</type>
-    </item>
-    <item x="2" y="1" z="0">
-      <label>cylinder</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="2" y="1" z="1">
-      <label>cylinder</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="2" y="1" z="2">
-      <label>cylinder</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="2" y="1" z="3">
-      <label>ball</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="7" y="1" z="0">
-      <label>cylinder</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="7" y="1" z="1">
-      <label>cylinder</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="7" y="1" z="2">
-      <label>cylinder</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="7" y="1" z="3">
-      <label>ball</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="4" y="3" z="0">
-      <label>teleport</label>
-      <direction>none</direction>
-      <behavior>behavior of teletransport</behavior>
-      <type>griditem</type>
-    </item>
-    <item x="5" y="3" z="0">
-      <label>teleport</label>
-      <direction>none</direction>
-      <behavior>behavior of teletransport</behavior>
-      <type>griditem</type>
-    </item>
-    <item x="4" y="4" z="0">
-      <label>teleport</label>
-      <direction>none</direction>
-      <behavior>behavior of teletransport</behavior>
-      <type>griditem</type>
-    </item>
-    <item x="5" y="4" z="0">
-      <label>teleport</label>
-      <direction>none</direction>
-      <behavior>behavior of teletransport</behavior>
-      <type>griditem</type>
-    </item>
-    <item x="2" y="6" z="0">
-      <label>cylinder</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="2" y="6" z="1">
-      <label>cylinder</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="2" y="6" z="2">
-      <label>cylinder</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="2" y="6" z="3">
-      <label>ball</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="7" y="6" z="0">
-      <label>cylinder</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="7" y="6" z="1">
-      <label>cylinder</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="7" y="6" z="2">
-      <label>cylinder</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-    <item x="7" y="6" z="3">
-      <label>ball</label>
-      <direction>none</direction>
-      <type>freeitem</type>
-    </item>
-  </items>
-
+<room scenery="egyptus" tileSize="16">
+    <xTiles>10</xTiles>
+    <yTiles>8</yTiles>
+    <floorKind>plain</floorKind>
+    <walls>
+        <wall on="x">
+            <position>1</position>
+            <picture>egyptus-wall-x-1.png</picture>
+        </wall>
+        <wall on="x">
+            <position>2</position>
+            <picture>egyptus-wall-x-1.png</picture>
+        </wall>
+        <wall on="x">
+            <position>3</position>
+            <picture>egyptus-wall-x-2.png</picture>
+        </wall>
+        <wall on="x">
+            <position>4</position>
+            <picture>egyptus-wall-x-1.png</picture>
+        </wall>
+        <wall on="x">
+            <position>5</position>
+            <picture>egyptus-wall-x-1.png</picture>
+        </wall>
+        <wall on="x">
+            <position>6</position>
+            <picture>egyptus-wall-x-2.png</picture>
+        </wall>
+        <wall on="x">
+            <position>7</position>
+            <picture>egyptus-wall-x-1.png</picture>
+        </wall>
+        <wall on="x">
+            <position>8</position>
+            <picture>egyptus-wall-x-1.png</picture>
+        </wall>
+        <wall on="y">
+            <position>0</position>
+            <picture>egyptus-wall-y-1.png</picture>
+        </wall>
+        <wall on="y">
+            <position>1</position>
+            <picture>egyptus-wall-y-2.png</picture>
+        </wall>
+        <wall on="y">
+            <position>2</position>
+            <picture>egyptus-wall-y-1.png</picture>
+        </wall>
+        <wall on="y">
+            <position>5</position>
+            <picture>egyptus-wall-y-1.png</picture>
+        </wall>
+        <wall on="y">
+            <position>6</position>
+            <picture>egyptus-wall-y-2.png</picture>
+        </wall>
+        <wall on="y">
+            <position>7</position>
+            <picture>egyptus-wall-y-1.png</picture>
+        </wall>
+    </walls>
+    <items>
+        <item x="4" y="3" z="0">
+            <label>teleport</label>
+            <orientation>none</orientation>
+            <behavior>behavior of teletransport</behavior>
+            <kind>griditem</kind>
+        </item>
+        <item x="5" y="3" z="0">
+            <label>teleport</label>
+            <orientation>none</orientation>
+            <behavior>behavior of teletransport</behavior>
+            <kind>griditem</kind>
+        </item>
+        <item x="4" y="4" z="0">
+            <label>teleport</label>
+            <orientation>none</orientation>
+            <behavior>behavior of teletransport</behavior>
+            <kind>griditem</kind>
+        </item>
+        <item x="5" y="4" z="0">
+            <label>teleport</label>
+            <orientation>none</orientation>
+            <behavior>behavior of teletransport</behavior>
+            <kind>griditem</kind>
+        </item>
+        <item x="2" y="1" z="0">
+            <label>cylinder</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="2" y="1" z="1">
+            <label>cylinder</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="2" y="1" z="2">
+            <label>cylinder</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="2" y="1" z="3">
+            <label>ball</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="7" y="1" z="0">
+            <label>cylinder</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="7" y="1" z="1">
+            <label>cylinder</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="7" y="1" z="2">
+            <label>cylinder</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="7" y="1" z="3">
+            <label>ball</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="2" y="6" z="0">
+            <label>cylinder</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="2" y="6" z="1">
+            <label>cylinder</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="2" y="6" z="2">
+            <label>cylinder</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="2" y="6" z="3">
+            <label>ball</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="7" y="6" z="0">
+            <label>cylinder</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="7" y="6" z="1">
+            <label>cylinder</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="7" y="6" z="2">
+            <label>cylinder</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="7" y="6" z="3">
+            <label>ball</label>
+            <orientation>none</orientation>
+            <kind>freeitem</kind>
+        </item>
+        <item x="0" y="3" z="-1">
+            <label>egyptus-door-north</label>
+            <orientation>north</orientation>
+            <kind>door</kind>
+        </item>
+        <item x="9" y="3" z="-1">
+            <label>egyptus-door-south</label>
+            <orientation>south</orientation>
+            <kind>door</kind>
+        </item>
+    </items>
 </room>

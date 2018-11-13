@@ -11,16 +11,15 @@
 #ifndef KindOfActivity_hpp_
 #define KindOfActivity_hpp_
 
-#include <vector>
+#include <stack>
 
+#include "Ism.hpp"
 #include "ActivityOfItem.hpp"
+#include "Item.hpp"
 
 
-namespace isomot
+namespace iso
 {
-
-class Behavior ;
-class Item ;
 
 /**
  * Abstraction of item’s current activity
@@ -40,12 +39,12 @@ protected:
        /**
         * Change activity of items that collide with the sender
         */
-        virtual void propagateActivityToAdjacentItems ( Item * sender, const ActivityOfItem & activity ) ;
+        virtual void propagateActivityToAdjacentItems ( Item & sender, const ActivityOfItem & activity ) ;
 
        /**
         * Change activity of items above the sender
         */
-        virtual void propagateActivityToItemsAbove ( Item * sender, const ActivityOfItem & activity ) ;
+        virtual void propagateActivityToItemsAbove ( Item & sender, const ActivityOfItem & activity ) ;
 
 };
 

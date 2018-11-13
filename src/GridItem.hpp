@@ -19,7 +19,7 @@
 #include "Drawable.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
 class ItemData ;
@@ -42,7 +42,7 @@ public:
          * @param z Position on Z, or how far is floor
          * @param way Initial orientation of item
          */
-        GridItem( ItemData* itemData, int cx, int cy, int z, const Way& way ) ;
+        GridItem( const ItemData* itemData, int cx, int cy, int z, const Way& way ) ;
 
         virtual ~GridItem( ) ;
 
@@ -53,9 +53,9 @@ public:
          */
         void draw ( const allegro::Pict & where ) ;
 
-        virtual void changeImage ( Picture * newImage ) ;
+        virtual void changeImage ( const Picture * newImage ) ;
 
-        virtual void changeShadow ( Picture * newShadow ) ;
+        virtual void changeShadow ( const Picture * newShadow ) ;
 
         virtual bool addToPosition ( int x, int y, int z ) ;
 
@@ -78,9 +78,11 @@ public:
          */
         int getCellY () const {  return cell.second ;  }
 
-        int getColumnOfGrid () const ;
+        unsigned int getColumnOfGrid () const ;
 
 };
+
+typedef safeptr < GridItem > GridItemPtr ;
 
 }
 

@@ -19,13 +19,8 @@
 #include "Ism.hpp"
 
 
-namespace isomot
+namespace iso
 {
-
-/**
- * Gestor de los dispositivos de entrada. Almacena las teclas empleadas para el control del
- * juego así como la configuración del joystick ( siempre que haya uno conectado al sistema )
- */
 
 class InputManager
 {
@@ -44,11 +39,7 @@ public:
 
         ~InputManager( ) ;
 
-       /**
-        * Único objeto de esta clase para toda la aplicación
-        * @return Un puntero al objeto único
-        */
-        static InputManager * getInstance () ;
+        static InputManager & getInstance () ;
 
        /**
         * Returns name of key defined by user for given action

@@ -10,16 +10,15 @@
 #include "SoundManager.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
-Patrol::Patrol( Item * item, const std::string & behavior ) :
-        Behavior( item, behavior )
+Patrol::Patrol( const ItemPtr & item, const std::string & behavior )
+        : Behavior( item, behavior )
+        , speedTimer( new Timer() )
+        , fallTimer( new Timer() )
+        , changeTimer( new Timer() )
 {
-        speedTimer = new Timer();
-        fallTimer = new Timer();
-        changeTimer = new Timer();
-
         speedTimer->go ();
         fallTimer->go ();
         changeTimer->go ();
@@ -27,14 +26,11 @@ Patrol::Patrol( Item * item, const std::string & behavior ) :
 
 Patrol::~Patrol()
 {
-        delete speedTimer;
-        delete fallTimer;
-        delete changeTimer;
 }
 
 bool Patrol::update ()
 {
-        FreeItem * freeItem = dynamic_cast< FreeItem * >( this->item );
+        FreeItem& freeItem = dynamic_cast< FreeItem& >( * this->item );
         bool isGone = false;
 
         switch ( activity )
@@ -51,9 +47,9 @@ bool Patrol::update ()
                 case Activity::MoveNorthwest:
                 case Activity::MoveSoutheast:
                 case Activity::MoveSouthwest:
-                        if ( ! freeItem->isFrozen() )
+                        if ( ! freeItem.isFrozen() )
                         {
-                                if ( speedTimer->getValue() > freeItem->getSpeed())
+                                if ( speedTimer->getValue() > freeItem.getSpeed())
                                 {
                                         // ¿ cambio de dirección ?
                                         if ( changeTimer->getValue() > ( double( rand() % 1000 ) + 400.0 ) / 1000.0 )
@@ -63,20 +59,20 @@ bool Patrol::update ()
                                         }
 
                                         // move item
-                                        if ( ! MoveKindOfActivity::getInstance()->move( this, &activity, true ) )
+                                        if ( ! MoveKindOfActivity::getInstance().move( this, &activity, true ) )
                                         {
                                                 changeOrientation();
 
-                                                SoundManager::getInstance()->play( freeItem->getLabel(), Activity::Collision );
+                                                SoundManager::getInstance().play( freeItem.getLabel(), Activity::Collision );
                                         }
 
                                         // play sound of moving
-                                        SoundManager::getInstance()->play( freeItem->getLabel(), activity );
+                                        SoundManager::getInstance().play( freeItem.getLabel(), activity );
 
                                         speedTimer->reset();
                                 }
 
-                                freeItem->animate();
+                                freeItem.animate();
                         }
                         break;
 
@@ -89,15 +85,15 @@ bool Patrol::update ()
                 case Activity::DisplaceSouthwest:
                 case Activity::DisplaceNorthwest:
                         // play sound of displacing
-                        SoundManager::getInstance()->play( freeItem->getLabel(), activity );
+                        SoundManager::getInstance().play( freeItem.getLabel(), activity );
 
                         // displace this item by some other one
-                        DisplaceKindOfActivity::getInstance()->displace( this, &activity, true );
+                        DisplaceKindOfActivity::getInstance().displace( this, &activity, true );
 
                         activity = Activity::Wait;
 
                         // preserve inactivity for frozen item
-                        if ( freeItem->isFrozen() )
+                        if ( freeItem.isFrozen() )
                         {
                                 activity = Activity::Freeze;
                         }
@@ -105,16 +101,16 @@ bool Patrol::update ()
 
                 case Activity::Fall:
                         // look for reaching floor in a room without floor
-                        if ( item->getZ() == 0 && item->getMediator()->getRoom()->getKindOfFloor() == "none" )
+                        if ( item->getZ() == 0 && ! item->getMediator()->getRoom()->hasFloor() )
                         {
                                 isGone = true;
                         }
                         // is it time to fall
-                        else if ( fallTimer->getValue() > freeItem->getWeight() )
+                        else if ( fallTimer->getValue() > freeItem.getWeight() )
                         {
-                                if ( ! FallKindOfActivity::getInstance()->fall( this ) )
+                                if ( ! FallKindOfActivity::getInstance().fall( this ) )
                                 {
-                                        SoundManager::getInstance()->play( freeItem->getLabel(), activity );
+                                        SoundManager::getInstance().play( freeItem.getLabel(), activity );
                                         activity = Activity::Wait;
                                 }
 
@@ -123,11 +119,11 @@ bool Patrol::update ()
                         break;
 
                 case Activity::Freeze:
-                        freeItem->setFrozen( true );
+                        freeItem.setFrozen( true );
                         break;
 
                 case Activity::WakeUp:
-                        freeItem->setFrozen( false );
+                        freeItem.setFrozen( false );
                         activity = Activity::Wait;
                         break;
 

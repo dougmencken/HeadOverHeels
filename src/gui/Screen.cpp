@@ -9,13 +9,11 @@
 #include "PictureWidget.hpp"
 #include "AnimatedPictureWidget.hpp"
 #include "Color.hpp"
-#include "Picture.hpp"
 
 #include <iostream>
-//#include <algorithm> // std::for_each
 
 
-const double delayBetweenFrames = 0.1 ;
+const float delayBetweenFrames = 0.1 ;
 
 
 namespace gui
@@ -28,26 +26,24 @@ namespace gui
         delete Screen::backgroundPicture ;
 
         Screen::backgroundPicture = Screen::loadPicture( "background.png" );
-        Screen::backgroundPicture->setName( "background for slides of user interface" );
+
+        if ( Screen::backgroundPicture != nilPointer )
+                Screen::backgroundPicture->setName( "background for slides of user interface" );
 }
 
 
 Screen::Screen( Action* action ) :
         Widget( 0, 0 ),
-        imageOfScreen( nilPointer ),
+        imageOfScreen( new Picture( iso::ScreenWidth(), iso::ScreenHeight() ) ),
         actionOfScreen( action ),
         escapeAction( nilPointer ),
         keyHandler( nilPointer ),
         pictureOfHead( nilPointer ),
         pictureOfHeels( nilPointer )
 {
-        if ( action != nilPointer && action->getWhereToDraw() != nilPointer )
-        {
-                imageOfScreen = action->getWhereToDraw() ;
-                imageOfScreen->setName( "image of screen for action " + action->getNameOfAction() );
+        imageOfScreen->setName( "image of screen for action " + action->getNameOfAction() );
 
-                refreshPicturesOfHeadAndHeels ();
-        }
+        refreshPicturesOfHeadAndHeels ();
 }
 
 Screen::~Screen( )
@@ -109,22 +105,26 @@ void Screen::refreshPicturesOfHeadAndHeels ()
 }
 
 void Screen::draw( const allegro::Pict& where )
-{
+ {
         if ( ! imageOfScreen->getAllegroPict().equals( where ) )
         {
                 std::cout << "change image to draw gui.Screen for \"" <<
                         ( actionOfScreen != nilPointer ? actionOfScreen->getNameOfAction() : "nil" ) <<
                         "\" action" << std::endl ;
 
-                delete this->imageOfScreen ;
-                this->imageOfScreen = new Picture( where );
+                imageOfScreen = PicturePtr( new Picture( where ) );
         }
 
-        redraw();
+        draw ();
+ }
+
+void Screen::draw()
+{
+        refresh();
         drawOnGlobalScreen( );
 }
 
-void Screen::redraw( )
+void Screen::refresh() const
 {
         if ( imageOfScreen == nilPointer ) return ;
 
@@ -132,60 +132,65 @@ void Screen::redraw( )
 
         // draw background, if any
 
+        if ( Screen::backgroundPicture == nilPointer )
+        {
+                Screen::refreshBackground ();
+        }
+
         if ( Screen::backgroundPicture != nilPointer )
         {
                 unsigned int backgroundWidth = backgroundPicture->getWidth();
                 unsigned int backgroundHeight = backgroundPicture->getHeight();
 
-                if ( backgroundWidth == isomot::ScreenWidth() && backgroundHeight == isomot::ScreenHeight() )
+                if ( backgroundWidth == iso::ScreenWidth() && backgroundHeight == iso::ScreenHeight() )
                 {
                         allegro::bitBlit( backgroundPicture->getAllegroPict(), imageOfScreen->getAllegroPict() );
                 }
                 else
                 {
-                        double ratioX = static_cast< double >( isomot::ScreenWidth() ) / static_cast< double >( backgroundWidth ) ;
-                        double ratioY = static_cast< double >( isomot::ScreenHeight() ) / static_cast< double >( backgroundHeight ) ;
+                        float ratioX = static_cast< float >( iso::ScreenWidth() ) / static_cast< float >( backgroundWidth ) ;
+                        float ratioY = static_cast< float >( iso::ScreenHeight() ) / static_cast< float >( backgroundHeight ) ;
 
                         if ( ratioX == ratioY )
                         {
                                 allegro::stretchBlit( backgroundPicture->getAllegroPict(), imageOfScreen->getAllegroPict(),
                                                 0, 0, backgroundWidth, backgroundHeight,
-                                                0, 0, isomot::ScreenWidth(), isomot::ScreenHeight() );
+                                                0, 0, iso::ScreenWidth(), iso::ScreenHeight() );
                         }
                         else if ( ratioX > ratioY ) /* horizontal over~stretching */
                         {
                                 unsigned int proportionalWidth = static_cast< unsigned int >( backgroundWidth * ratioY );
-                                unsigned int offsetX = ( isomot::ScreenWidth() - proportionalWidth ) >> 1;
+                                unsigned int offsetX = ( iso::ScreenWidth() - proportionalWidth ) >> 1;
 
                                 imageOfScreen->fillWithColor( Color::blackColor() );
 
                                 allegro::stretchBlit( backgroundPicture->getAllegroPict(), imageOfScreen->getAllegroPict(),
                                                 0, 0, backgroundWidth, backgroundHeight,
-                                                offsetX, 0, proportionalWidth, isomot::ScreenHeight() );
+                                                offsetX, 0, proportionalWidth, iso::ScreenHeight() );
                         }
                         else /* if ( ratioY > ratioX ) */ /* vertical over~stretching */
                         {
                                 unsigned int proportionalHeight = static_cast< unsigned int >( backgroundHeight * ratioX );
-                                unsigned int offsetY = ( isomot::ScreenHeight() - proportionalHeight ) >> 1;
+                                unsigned int offsetY = ( iso::ScreenHeight() - proportionalHeight ) >> 1;
 
                                 imageOfScreen->fillWithColor( Color::blackColor() );
 
                                 allegro::stretchBlit( backgroundPicture->getAllegroPict(), imageOfScreen->getAllegroPict(),
                                                 0, 0, backgroundWidth, backgroundHeight,
-                                                0, offsetY, isomot::ScreenWidth(), proportionalHeight );
+                                                0, offsetY, iso::ScreenWidth(), proportionalHeight );
                         }
                 }
         }
 
         // draw each component
 
-        for ( std::list< Widget * >::iterator it = widgets.begin () ; it != widgets.end () ; ++it )
+        for ( std::list< Widget * >::const_iterator it = widgets.begin () ; it != widgets.end () ; ++it )
         {
                 ( *it )->draw( imageOfScreen->getAllegroPict() );
         }
 }
 
-void Screen::drawOnGlobalScreen( )
+void Screen::drawOnGlobalScreen()
 {
         // copy resulting image to screen
         allegro::bitBlit( imageOfScreen->getAllegroPict(), allegro::Pict::theScreen() );
@@ -195,7 +200,7 @@ void Screen::handleKey( const std::string& key )
 {
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "f" ) )
         {
-                gui::GuiManager::getInstance()->toggleFullScreenVideo ();
+                gui::GuiManager::getInstance().toggleFullScreenVideo ();
                 return;
         }
 
@@ -220,6 +225,7 @@ void Screen::addWidget( Widget* widget )
 
         this->widgets.push_back( widget );
         widget->setOnScreen( true );
+
         if ( widget->isMenu() ) dynamic_cast< gui::Menu* >( widget )->setWhereToDraw( imageOfScreen );
 }
 
@@ -280,7 +286,7 @@ void Screen::addPictureOfHeelsAt ( int x, int y )
 
 void Screen::placeHeadAndHeels( bool picturesToo, bool copyrightsToo )
 {
-        const unsigned int screenWidth = isomot::ScreenWidth();
+        const unsigned int screenWidth = iso::ScreenWidth();
         const unsigned int space = ( screenWidth / 20 ) - 10;
 
         Label* Head = new Label( "Head", "big", "yellow" );
@@ -321,7 +327,7 @@ void Screen::placeHeadAndHeels( bool picturesToo, bool copyrightsToo )
                 Label* Jorge = new Label( "{ 2009 Jorge Rodríguez Santos", "", "orange" );
                 Label* Douglas = new Label( "{ 2018 Douglas Mencken", "", "yellow" );
 
-                const unsigned int screenHeight = isomot::ScreenHeight();
+                const unsigned int screenHeight = iso::ScreenHeight();
                 const int leading = 28;
                 const int whereY = screenHeight - space - leading + 4;
                 const int whereX = ( screenWidth - Jorge->getWidth() ) >> 1 ;
@@ -346,8 +352,8 @@ Picture * Screen::loadPicture ( const std::string& nameOfPicture )
 #if defined( DEBUG ) && DEBUG
         std::cout << "Screen::loadPicture( \"" << nameOfPicture << "\" )" << std::endl ;
 #endif
-        smartptr< allegro::Pict > pict( allegro::Pict::fromPNGFile (
-                isomot::pathToFile( GuiManager::getInstance()->getPathToPicturesOfGui() + nameOfPicture )
+        autouniqueptr< allegro::Pict > pict( allegro::Pict::fromPNGFile (
+                iso::pathToFile( GuiManager::getInstance().getPathToPicturesOfGui(), nameOfPicture )
         ) );
         return new Picture( *pict.get() ) ;
 }
@@ -358,38 +364,37 @@ std::vector< allegro::Pict * > Screen::loadAnimation ( const char * nameOfGif )
         std::vector< allegro::Pict * > animation;
         std::vector< int > durations;
 
-        allegro::loadGIFAnimation( isomot::pathToFile( GuiManager::getInstance()->getPathToPicturesOfGui() + nameOfGif ), animation, durations );
+        allegro::loadGIFAnimation( iso::pathToFile( GuiManager::getInstance().getPathToPicturesOfGui(), nameOfGif ), animation, durations );
 
         return animation;
 }
 
 /* static */
-void Screen::scrollHorizontally( Screen* oldScreen, Screen* newScreen, bool rightToLeft )
+void Screen::scrollHorizontally( const Screen& oldScreen, const Screen& newScreen, bool rightToLeft )
 {
-        if ( oldScreen == newScreen ||
-                oldScreen == nilPointer || newScreen == nilPointer ||
-                oldScreen->imageOfScreen == nilPointer || newScreen->imageOfScreen == nilPointer ) return ;
+        if ( &oldScreen == &newScreen ||
+                oldScreen.imageOfScreen == nilPointer || newScreen.imageOfScreen == nilPointer ) return ;
 
-        Picture oldPicture( * oldScreen->imageOfScreen );
+        Picture oldPicture( * oldScreen.imageOfScreen );
 
-        newScreen->redraw ();
-        Picture * newPicture = newScreen->imageOfScreen;
+        newScreen.refresh ();
+        Picture& newPicture = * newScreen.imageOfScreen ;
 
-        unsigned int step = ( ( ( isomot::ScreenWidth() >> 6 ) + 5 ) / 10 ) << 1 ;
+        unsigned int step = ( ( ( iso::ScreenWidth() >> 6 ) + 5 ) / 10 ) << 1 ;
 
-        for ( unsigned int x = step ; x < isomot::ScreenWidth() ; x += step )
+        for ( unsigned int x = step ; x < iso::ScreenWidth() ; x += step )
         {
                 /* bitBlit( from, to, fromX, fromY, toX, toY, width, height ) */
 
                 if ( rightToLeft )
                 {
-                        allegro::bitBlit( oldPicture.getAllegroPict(), allegro::Pict::theScreen(), x, 0, 0, 0, oldPicture.getWidth() - x, isomot::ScreenHeight() );
-                        allegro::bitBlit( newPicture->getAllegroPict(), allegro::Pict::theScreen(), 0, 0, oldPicture.getWidth() - x, 0, x, isomot::ScreenHeight() );
+                        allegro::bitBlit( oldPicture.getAllegroPict(), allegro::Pict::theScreen(), x, 0, 0, 0, oldPicture.getWidth() - x, iso::ScreenHeight() );
+                        allegro::bitBlit( newPicture.getAllegroPict(), allegro::Pict::theScreen(), 0, 0, oldPicture.getWidth() - x, 0, x, iso::ScreenHeight() );
                 }
                 else
                 {
-                        allegro::bitBlit( newPicture->getAllegroPict(), allegro::Pict::theScreen(), newPicture->getWidth() - x, 0, 0, 0, x, isomot::ScreenHeight() );
-                        allegro::bitBlit( oldPicture.getAllegroPict(), allegro::Pict::theScreen(), 0, 0, x, 0, newPicture->getWidth() - x, isomot::ScreenHeight() );
+                        allegro::bitBlit( newPicture.getAllegroPict(), allegro::Pict::theScreen(), newPicture.getWidth() - x, 0, 0, 0, x, iso::ScreenHeight() );
+                        allegro::bitBlit( oldPicture.getAllegroPict(), allegro::Pict::theScreen(), 0, 0, x, 0, newPicture.getWidth() - x, iso::ScreenHeight() );
                 }
 
                 milliSleep( 1 );
@@ -397,26 +402,25 @@ void Screen::scrollHorizontally( Screen* oldScreen, Screen* newScreen, bool righ
 }
 
 /* static */
-void Screen::wipeHorizontally( Screen* oldScreen, Screen* newScreen, bool rightToLeft )
+void Screen::wipeHorizontally( const Screen& oldScreen, const Screen& newScreen, bool rightToLeft )
 {
-        if ( oldScreen == newScreen ||
-                oldScreen == nilPointer || newScreen == nilPointer ||
-                oldScreen->imageOfScreen == nilPointer || newScreen->imageOfScreen == nilPointer ) return ;
+        if ( &oldScreen == &newScreen ||
+                oldScreen.imageOfScreen == nilPointer || newScreen.imageOfScreen == nilPointer ) return ;
 
-        newScreen->redraw ();
-        Picture * newPicture = newScreen->imageOfScreen ;
+        newScreen.refresh ();
+        Picture& newPicture = * newScreen.imageOfScreen ;
 
-        unsigned int step = ( ( ( isomot::ScreenWidth() >> 6 ) + 5 ) / 10 ) << 1 ;
+        unsigned int step = ( ( ( iso::ScreenWidth() >> 6 ) + 5 ) / 10 ) << 1 ;
 
-        for ( unsigned int x = step ; x < isomot::ScreenWidth() ; x += step )
+        for ( unsigned int x = step ; x < iso::ScreenWidth() ; x += step )
         {
                 if ( rightToLeft )
                 {
-                        allegro::bitBlit( newPicture->getAllegroPict(), allegro::Pict::theScreen(), newPicture->getWidth() - x, 0, newPicture->getWidth() - x, 0, x, isomot::ScreenHeight() );
+                        allegro::bitBlit( newPicture.getAllegroPict(), allegro::Pict::theScreen(), newPicture.getWidth() - x, 0, newPicture.getWidth() - x, 0, x, iso::ScreenHeight() );
                 }
                 else
                 {
-                        allegro::bitBlit( newPicture->getAllegroPict(), allegro::Pict::theScreen(), 0, 0, 0, 0, x, isomot::ScreenHeight() );
+                        allegro::bitBlit( newPicture.getAllegroPict(), allegro::Pict::theScreen(), 0, 0, 0, 0, x, iso::ScreenHeight() );
                 }
 
                 milliSleep( 1 );
@@ -424,33 +428,32 @@ void Screen::wipeHorizontally( Screen* oldScreen, Screen* newScreen, bool rightT
 }
 
 /* static */
-void Screen::barWipeHorizontally( Screen* oldScreen, Screen* newScreen, bool rightToLeft )
+void Screen::barWipeHorizontally( const Screen& oldScreen, const Screen& newScreen, bool rightToLeft )
 {
-        if ( oldScreen == newScreen ||
-                oldScreen == nilPointer || newScreen == nilPointer ||
-                oldScreen->imageOfScreen == nilPointer || newScreen->imageOfScreen == nilPointer ) return ;
+        if ( &oldScreen == &newScreen ||
+                oldScreen.imageOfScreen == nilPointer || newScreen.imageOfScreen == nilPointer ) return ;
 
-        Picture buffer( * oldScreen->imageOfScreen );
+        Picture buffer( * oldScreen.imageOfScreen );
 
-        newScreen->redraw ();
-        Picture * newPicture = newScreen->imageOfScreen ;
+        newScreen.refresh ();
+        Picture& newPicture = * newScreen.imageOfScreen ;
 
-        unsigned int pieces = isomot::ScreenWidth() >> 6 ;
-        unsigned int widthOfPiece = isomot::ScreenWidth() / pieces ;
+        unsigned int pieces = iso::ScreenWidth() >> 6 ;
+        unsigned int widthOfPiece = iso::ScreenWidth() / pieces ;
 
         unsigned int step = ( pieces + 5 ) / 10 ;
 
         for ( unsigned int x = step ; x < widthOfPiece ; x += step )
         {
-                for ( unsigned int pieceX = 0 ; pieceX < isomot::ScreenWidth() ; pieceX += widthOfPiece )
+                for ( unsigned int pieceX = 0 ; pieceX < iso::ScreenWidth() ; pieceX += widthOfPiece )
                 {
                         if ( rightToLeft )
                         {
-                                allegro::bitBlit( newPicture->getAllegroPict(), buffer.getAllegroPict(), pieceX + widthOfPiece - x, 0, pieceX + widthOfPiece - x, 0, x, isomot::ScreenHeight() );
+                                allegro::bitBlit( newPicture.getAllegroPict(), buffer.getAllegroPict(), pieceX + widthOfPiece - x, 0, pieceX + widthOfPiece - x, 0, x, iso::ScreenHeight() );
                         }
                         else
                         {
-                                allegro::bitBlit( newPicture->getAllegroPict(), buffer.getAllegroPict(), pieceX, 0, pieceX, 0, x, isomot::ScreenHeight() );
+                                allegro::bitBlit( newPicture.getAllegroPict(), buffer.getAllegroPict(), pieceX, 0, pieceX, 0, x, iso::ScreenHeight() );
                         }
                 }
 
@@ -461,12 +464,12 @@ void Screen::barWipeHorizontally( Screen* oldScreen, Screen* newScreen, bool rig
 }
 
 /* static */
-void Screen::randomPixelFade( bool fadeIn, Screen * slide, const Color& color )
+void Screen::randomPixelFade( bool fadeIn, const Screen& slide, const Color& color )
 {
-        if ( slide == nilPointer || slide->imageOfScreen == nilPointer ) return;
+        if ( slide.imageOfScreen == nilPointer ) return;
 
         // refresh screen before fading
-        slide->redraw();
+        slide.refresh();
 
         AllegroColor aColor = color.toAllegroColor() ;
 
@@ -475,8 +478,8 @@ void Screen::randomPixelFade( bool fadeIn, Screen * slide, const Color& color )
                 allegro::Pict::theScreen().clearToColor( aColor );
         }
 
-        const unsigned int screenWidth = slide->imageOfScreen->getWidth() ;
-        const unsigned int screenHeight = slide->imageOfScreen->getHeight() ;
+        const unsigned int screenWidth = slide.imageOfScreen->getWidth() ;
+        const unsigned int screenHeight = slide.imageOfScreen->getHeight() ;
 
         const size_t howManyPixels = screenWidth * screenHeight;
 
@@ -492,7 +495,7 @@ void Screen::randomPixelFade( bool fadeIn, Screen * slide, const Color& color )
                 if ( ! bits[ x + y * screenWidth ] )
                 {
                         if ( fadeIn )
-                                allegro::Pict::theScreen().drawPixelAt( x, y, slide->imageOfScreen->getPixelAt( x, y ) );
+                                allegro::Pict::theScreen().drawPixelAt( x, y, slide.imageOfScreen->getPixelAt( x, y ) );
                         else
                                 allegro::Pict::theScreen().drawPixelAt( x, y, aColor );
 

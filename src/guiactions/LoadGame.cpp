@@ -8,8 +8,8 @@ using gui::LoadGame;
 using gui::CreatePlanetsScreen;
 
 
-LoadGame::LoadGame( Picture * picture, unsigned int slot )
-        : Action( picture )
+LoadGame::LoadGame( unsigned int slot )
+        : Action( )
         , slot( slot )
 {
 
@@ -17,25 +17,25 @@ LoadGame::LoadGame( Picture * picture, unsigned int slot )
 
 void LoadGame::doAction ()
 {
-        isomot::GameManager* gameManager = isomot::GameManager::getInstance();
-        gameManager->resetPlanets();
-        gameManager->loadGame( isomot::homePath() + "savegame" + pathSeparator + "saved." + isomot::numberToString( slot ) );
+        iso::GameManager& gameManager = iso::GameManager::getInstance();
+        gameManager.resetPlanets();
+        gameManager.loadGame( iso::homePath() + "savegame" + util::pathSeparator() + "saved." + util::number2string( slot ) );
 
-        CreatePlanetsScreen * planetsAction = new CreatePlanetsScreen( getWhereToDraw(), true );
+        CreatePlanetsScreen * planetsAction = new CreatePlanetsScreen( true );
 
-        if ( gameManager->isFreePlanet( "blacktooth" ) )
+        if ( gameManager.isFreePlanet( "blacktooth" ) )
                 planetsAction->liberateBlacktooth();
 
-        if ( gameManager->isFreePlanet( "egyptus" ) )
+        if ( gameManager.isFreePlanet( "egyptus" ) )
                 planetsAction->liberateEgyptus();
 
-        if ( gameManager->isFreePlanet( "penitentiary" ) )
+        if ( gameManager.isFreePlanet( "penitentiary" ) )
                 planetsAction->liberatePenitentiary();
 
-        if ( gameManager->isFreePlanet( "safari" ) )
+        if ( gameManager.isFreePlanet( "safari" ) )
                 planetsAction->liberateSafari();
 
-        if ( gameManager->isFreePlanet( "byblos" ) )
+        if ( gameManager.isFreePlanet( "byblos" ) )
                 planetsAction->liberateByblos();
 
         planetsAction->doIt ();

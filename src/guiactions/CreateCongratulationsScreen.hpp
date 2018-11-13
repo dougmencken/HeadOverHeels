@@ -27,11 +27,10 @@ class CreateCongratulationsScreen : public Action
 public:
 
         /**
-         * @param picture Imagen donde se dibujará la interfaz gráfica
          * @param rooms Número de salas visitadas
          * @param planets Número de planetas liberados
          */
-        CreateCongratulationsScreen( Picture * picture, unsigned short rooms, unsigned short planets ) ;
+        CreateCongratulationsScreen( unsigned short rooms, unsigned short planets ) ;
 
         virtual ~CreateCongratulationsScreen( ) ;
 

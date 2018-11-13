@@ -11,28 +11,26 @@
 #include "SoundManager.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
-Turn::Turn( Item * item, const std::string & behavior ) :
-        Behavior( item, behavior )
+Turn::Turn( const ItemPtr & item, const std::string & behavior )
+        : Behavior( item, behavior )
+        , speedTimer( new Timer() )
+        , fallTimer( new Timer() )
 {
-        speedTimer = new Timer();
-        fallTimer = new Timer();
         speedTimer->go();
         fallTimer->go();
 }
 
 Turn::~Turn()
 {
-        delete speedTimer;
-        delete fallTimer;
 }
 
 bool Turn::update ()
 {
         bool isGone = false;
-        FreeItem* freeItem = dynamic_cast< FreeItem * >( this->item );
+        FreeItem& freeItem = dynamic_cast< FreeItem& >( * this->item );
 
         switch ( activity )
         {
@@ -44,21 +42,21 @@ bool Turn::update ()
                 case Activity::MoveSouth:
                 case Activity::MoveEast:
                 case Activity::MoveWest:
-                        if ( ! freeItem->isFrozen() )
+                        if ( ! freeItem.isFrozen() )
                         {
-                                if ( speedTimer->getValue() > freeItem->getSpeed() )
+                                if ( speedTimer->getValue() > freeItem.getSpeed() )
                                 {
-                                        if ( ! MoveKindOfActivity::getInstance()->move( this, &activity, true ) )
+                                        if ( ! MoveKindOfActivity::getInstance().move( this, &activity, true ) )
                                         {
                                                 turn();
 
-                                                SoundManager::getInstance()->play( freeItem->getLabel(), Activity::Collision );
+                                                SoundManager::getInstance().play( freeItem.getLabel(), Activity::Collision );
                                         }
 
                                         speedTimer->reset();
                                 }
 
-                                freeItem->animate();
+                                freeItem.animate();
                         }
                         break;
 
@@ -70,14 +68,14 @@ bool Turn::update ()
                 case Activity::DisplaceSoutheast:
                 case Activity::DisplaceSouthwest:
                 case Activity::DisplaceNorthwest:
-                        SoundManager::getInstance()->play( freeItem->getLabel(), activity );
+                        SoundManager::getInstance().play( freeItem.getLabel(), activity );
 
-                        DisplaceKindOfActivity::getInstance()->displace( this, &activity, true );
+                        DisplaceKindOfActivity::getInstance().displace( this, &activity, true );
 
                         activity = Activity::Wait;
 
                         // inactive item continues to be inactive
-                        if ( freeItem->isFrozen() )
+                        if ( freeItem.isFrozen() )
                         {
                                 activity = Activity::Freeze;
                         }
@@ -85,16 +83,16 @@ bool Turn::update ()
 
                 case Activity::Fall:
                         // look for reaching floor in a room without floor
-                        if ( freeItem->getZ() == 0 && freeItem->getMediator()->getRoom()->getKindOfFloor() == "none" )
+                        if ( freeItem.getZ() == 0 && ! freeItem.getMediator()->getRoom()->hasFloor() )
                         {
                                 isGone = true;
                         }
                         // is it time to lower by one unit
-                        else if ( fallTimer->getValue() > freeItem->getWeight() )
+                        else if ( fallTimer->getValue() > freeItem.getWeight() )
                         {
-                                if ( ! FallKindOfActivity::getInstance()->fall( this ) )
+                                if ( ! FallKindOfActivity::getInstance().fall( this ) )
                                 {
-                                        SoundManager::getInstance()->play( freeItem->getLabel(), activity );
+                                        SoundManager::getInstance().play( freeItem.getLabel(), activity );
                                         activity = Activity::Wait;
                                 }
 
@@ -103,11 +101,11 @@ bool Turn::update ()
                         break;
 
                 case Activity::Freeze:
-                        freeItem->setFrozen( true );
+                        freeItem.setFrozen( true );
                         break;
 
                 case Activity::WakeUp:
-                        freeItem->setFrozen( false );
+                        freeItem.setFrozen( false );
                         activity = Activity::Wait;
                         break;
 

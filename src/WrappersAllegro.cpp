@@ -39,7 +39,7 @@
 #include "Timer.hpp"
 
 #ifdef DEBUG
-#  define DEBUG_ALLEGRO_INIT    1
+#  define DEBUG_ALLEGRO_INIT    0
 #endif
 
 #define RECORD_EACH_FRAME       0
@@ -180,26 +180,42 @@ AllegroColor AllegroColor::makeColor( unsigned char r, unsigned char g, unsigned
 #endif
 }
 
-/* static */
-AllegroColor AllegroColor::keyColor(  )
-{
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 
-        return al_map_rgba( 0, 0, 0, 0 ) ;
+/* static */ unsigned char AllegroColor::redOfKeyColor = 0 ;
+/* static */ unsigned char AllegroColor::greenOfKeyColor = 0 ;
+/* static */ unsigned char AllegroColor::blueOfKeyColor = 0 ;
+/* static */ unsigned char AllegroColor::alphaOfKeyColor =  0 ;
 
 #elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
 
-        return makeacol( 255, 0, 255, 0 ) ;
+/* static */ unsigned char AllegroColor::redOfKeyColor = 255 ;
+/* static */ unsigned char AllegroColor::greenOfKeyColor = 0 ;
+/* static */ unsigned char AllegroColor::blueOfKeyColor = 255 ;
+/* static */ unsigned char AllegroColor::alphaOfKeyColor =  0 ;
+
+#endif
+
+/* static */
+AllegroColor AllegroColor::keyColor()
+{
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        return al_map_rgba( redOfKeyColor, greenOfKeyColor, blueOfKeyColor, alphaOfKeyColor ) ;
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        return makeacol( redOfKeyColor, greenOfKeyColor, blueOfKeyColor, alphaOfKeyColor ) ;
 
 #endif
 }
 
 bool AllegroColor::isKeyColor () const
 {
-        return getRed() == keyColor().getRed() &&
-                getGreen() == keyColor().getGreen() &&
-                getBlue() == keyColor().getBlue() &&
-                getAlpha() == keyColor().getAlpha() ;
+        return   getRed() == redOfKeyColor   &&
+               getGreen() == greenOfKeyColor &&
+                getBlue() == blueOfKeyColor  &&
+               getAlpha() == alphaOfKeyColor ;
 }
 
 
@@ -422,8 +438,6 @@ void Pict::unlock() const
         AllegroBitmap* previous = al_get_target_bitmap() ;
         al_set_target_bitmap( pict->it ) ;
 
-        ///al_clear_to_color( transparent );
-
         al_lock_bitmap( image, al_get_bitmap_format( image ), ALLEGRO_LOCK_READONLY );
         al_lock_bitmap( pict->it, al_get_bitmap_format( pict->it ), ALLEGRO_LOCK_WRITEONLY );
 
@@ -462,8 +476,6 @@ void Pict::unlock() const
         unsigned int imageHeight = image->h ;
 
         Pict* pict = newPict( imageWidth, imageHeight );
-
-        ///clear_to_color( pict->it, transparent );
 
         for ( unsigned int y = 0; y < imageHeight; y++ )
         {
@@ -2014,21 +2026,25 @@ int loadGIFAnimation( const std::string& gifFile, std::vector< Pict* >& frames, 
 
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 
+        int howManyFrames = 0;
         ALGIF_ANIMATION* gifAnimation = algif_load_animation( gifFile.c_str () );
-        int howManyFrames = gifAnimation->frames_count ;
-
-        if ( howManyFrames > 0 )
+        if ( gifAnimation != NULL )
         {
-                for ( int i = 0; i < howManyFrames; i++ )
-                {
-                        AllegroBitmap* frame = algif_get_frame_bitmap( gifAnimation, i );
-                        frames.push_back( Pict::mendIntoPict( frame ) );
+                howManyFrames = gifAnimation->frames_count ;
 
-                        durations.push_back( algif_get_frame_duration( gifAnimation, i ) );
+                if ( howManyFrames > 0 )
+                {
+                        for ( int i = 0; i < howManyFrames; i++ )
+                        {
+                                AllegroBitmap* frame = algif_get_frame_bitmap( gifAnimation, i );
+                                frames.push_back( Pict::mendIntoPict( frame ) );
+
+                                durations.push_back( algif_get_frame_duration( gifAnimation, i ) );
+                        }
                 }
         }
 
-        return howManyFrames;
+        return howManyFrames ;
 
 #elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
 

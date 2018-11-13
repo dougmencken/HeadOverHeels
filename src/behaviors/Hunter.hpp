@@ -15,7 +15,7 @@
 #include "Timer.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
 class Item ;
@@ -30,7 +30,7 @@ class Hunter : public Behavior
 
 public:
 
-        Hunter( Item * item, const std::string & behavior ) ;
+        Hunter( const ItemPtr & item, const std::string & behavior ) ;
 
         virtual ~Hunter( ) ;
 
@@ -61,22 +61,12 @@ private:
         */
         bool createFullBody () ;
 
-       /**
-        * Set additional data of full-bodied guard
-        */
-        void setMoreData ( void * data ) ;
-
 private:
 
        /**
         * Timer for item’s speed of movement
         */
-        Timer * speedTimer ;
-
-       /**
-        * Data of imperial guard
-        */
-        ItemData * guardData ;
+        autouniqueptr < Timer > speedTimer ;
 
 };
 

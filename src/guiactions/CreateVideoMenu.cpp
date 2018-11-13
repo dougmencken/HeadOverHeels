@@ -14,8 +14,8 @@ using gui::CreateVideoMenu ;
 using gui::CreateMenuOfGraphicSets ;
 
 
-CreateVideoMenu::CreateVideoMenu( Picture * picture ) :
-        Action( picture ),
+CreateVideoMenu::CreateVideoMenu( ) :
+        Action( ),
         listOfOptions ( nilPointer ),
         labelScreenSize ( nilPointer ),
         labelFullscreen ( nilPointer ),
@@ -27,12 +27,12 @@ CreateVideoMenu::CreateVideoMenu( Picture * picture ) :
 
 void CreateVideoMenu::doAction ()
 {
-        Screen* screen = GuiManager::getInstance()->findOrCreateScreenForAction( this );
-        if ( screen->countWidgets() == 0 )
+        Screen& screen = * GuiManager::getInstance().findOrCreateScreenForAction( this );
+        if ( screen.countWidgets() == 0 )
         {
-                screen->placeHeadAndHeels( /* icons */ false, /* copyrights */ false );
+                screen.placeHeadAndHeels( /* icons */ false, /* copyrights */ false );
 
-                LanguageManager* languageManager = gui::GuiManager::getInstance()->getLanguageManager();
+                LanguageManager* languageManager = gui::GuiManager::getInstance().getLanguageManager();
 
                 LanguageText* textScreenSize = languageManager->findLanguageStringForAlias( "screen-size" );
                 LanguageText* textFullscreen = languageManager->findLanguageStringForAlias( "full-screen" );
@@ -49,7 +49,7 @@ void CreateVideoMenu::doAction ()
 
                 LanguageText* textGraphicSet = languageManager->findLanguageStringForAlias( "graphic-set" );
                 this->labelGraphicSet = new Label( textGraphicSet->getText(), "", "yellow" );
-                labelGraphicSet->setAction( new CreateMenuOfGraphicSets( getWhereToDraw(), this ) );
+                labelGraphicSet->setAction( new CreateMenuOfGraphicSets( this ) );
 
                 this->listOfOptions = new MenuWithValues( ' ', 1 );
 
@@ -63,25 +63,25 @@ void CreateVideoMenu::doAction ()
 
                 listOfOptions->setVerticalOffset( 33 );
 
-                screen->addWidget( listOfOptions );
+                screen.addWidget( listOfOptions );
         }
         else
         {
                 updateLabels();
         }
 
-        screen->setEscapeAction( new CreateMainMenu( getWhereToDraw() ) );
+        screen.setEscapeAction( new CreateMainMenu() );
 
-        if ( screen->getKeyHandler() == nilPointer )
+        if ( screen.getKeyHandler() == nilPointer )
         {
-                screen->setKeyHandler( listOfOptions );
+                screen.setKeyHandler( listOfOptions );
         }
 
-        gui::GuiManager::getInstance()->changeScreen( screen, true );
+        gui::GuiManager::getInstance().changeScreen( screen, true );
 
         allegro::emptyKeyboardBuffer();
 
-        while ( ! screen->getEscapeAction()->hasBegun() )
+        while ( ! screen.getEscapeAction()->hasBegun() )
         {
                 if ( allegro::areKeypushesWaiting() )
                 {
@@ -91,7 +91,7 @@ void CreateVideoMenu::doAction ()
                         if ( theKey == "Escape" )
                         {
                                 allegro::emptyKeyboardBuffer();
-                                screen->handleKey( theKey );
+                                screen.handleKey( theKey );
                                 break;
                         }
                         else
@@ -102,24 +102,24 @@ void CreateVideoMenu::doAction ()
                                 {
                                         if ( listOfOptions->getActiveOption () == labelFullscreen )
                                         {
-                                                gui::GuiManager::getInstance()->toggleFullScreenVideo ();
+                                                gui::GuiManager::getInstance().toggleFullScreenVideo ();
                                                 doneWithKey = true;
                                         }
                                         else if ( listOfOptions->getActiveOption () == labelDrawShadows )
                                         {
-                                                isomot::GameManager::getInstance()->toggleDrawShadows ();
+                                                iso::GameManager::getInstance().toggleDrawShadows ();
                                                 doneWithKey = true;
                                         }
                                         else if ( listOfOptions->getActiveOption () == labelDrawBackground )
                                         {
-                                                isomot::GameManager::getInstance()->toggleBackgroundPicture ();
+                                                iso::GameManager::getInstance().toggleBackgroundPicture ();
                                                 doneWithKey = true;
                                         }
                                 }
 
                                 if ( ! doneWithKey )
                                 {
-                                        screen->getKeyHandler()->handleKey ( theKey );
+                                        screen.getKeyHandler()->handleKey ( theKey );
                                 }
 
                                 allegro::emptyKeyboardBuffer();
@@ -137,17 +137,17 @@ void CreateVideoMenu::doAction ()
 
 void CreateVideoMenu::updateLabels ()
 {
-        LanguageManager* languageManager = gui::GuiManager::getInstance()->getLanguageManager();
+        LanguageManager* languageManager = gui::GuiManager::getInstance().getLanguageManager();
         std::string yeah = languageManager->findLanguageStringForAlias( "yep" )-> getText ();
         std::string nope = languageManager->findLanguageStringForAlias( "nope" )->getText ();
 
-        listOfOptions->setValueOf( labelDrawBackground, isomot::GameManager::getInstance()->hasBackgroundPicture () ? yeah : nope );
-        listOfOptions->setValueOf( labelDrawShadows, isomot::GameManager::getInstance()->getDrawShadows () ? yeah : nope );
-        listOfOptions->setValueOf( labelFullscreen, gui::GuiManager::getInstance()->isAtFullScreen () ? yeah : nope );
+        listOfOptions->setValueOf( labelDrawBackground, iso::GameManager::getInstance().hasBackgroundPicture () ? yeah : nope );
+        listOfOptions->setValueOf( labelDrawShadows, iso::GameManager::getInstance().getDrawShadows () ? yeah : nope );
+        listOfOptions->setValueOf( labelFullscreen, gui::GuiManager::getInstance().isAtFullScreen () ? yeah : nope );
         // labelGraphicSet has no value but action
 
         std::string screenSize = languageManager->findLanguageStringForAlias( "screen-size" )->getText ();
-        labelScreenSize->setText( screenSize + " " + isomot::numberToString( isomot::ScreenWidth() ) + " x " + isomot::numberToString( isomot::ScreenHeight() ) );
+        labelScreenSize->setText( screenSize + " " + util::number2string( iso::ScreenWidth() ) + " x " + util::number2string( iso::ScreenHeight() ) );
 
         listOfOptions->redraw ();
 }

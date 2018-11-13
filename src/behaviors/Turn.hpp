@@ -15,14 +15,14 @@
 #include "Timer.hpp"
 
 
-namespace isomot
+namespace iso
 {
 
 class Item ;
 
 /**
- * Moves item in only one direction. When it collides with something,
- * it turns 90° left or right and continues to move
+ * Moves item in one direction. When it collides with something,
+ * turn 90° left or right and continue to move
  */
 
 class Turn : public Behavior
@@ -30,7 +30,7 @@ class Turn : public Behavior
 
 public:
 
-        Turn( Item * item, const std::string & behavior ) ;
+        Turn( const ItemPtr & item, const std::string & behavior ) ;
 
         virtual ~Turn( ) ;
 
@@ -47,9 +47,9 @@ protected:
 
 private:
 
-        Timer * speedTimer ;
+        autouniqueptr < Timer > speedTimer ;
 
-        Timer * fallTimer ;
+        autouniqueptr < Timer > fallTimer ;
 
 };
 

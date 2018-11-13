@@ -21,7 +21,7 @@ class MenuWithValues ;
 class Label ;
 
 /**
- * Create menu for adjusting music and sound effects of game
+ * Create menu for adjusting music and sound effects
  */
 
 class CreateAudioMenu : public Action
@@ -29,7 +29,7 @@ class CreateAudioMenu : public Action
 
 public:
 
-        CreateAudioMenu( Picture * picture ) ;
+        CreateAudioMenu( ) ;
 
         std::string getNameOfAction () const {  return "CreateAudioMenu" ;  }
 

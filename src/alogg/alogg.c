@@ -41,8 +41,8 @@
 int alogg_error_code=0;
 
 typedef struct alogg_encoding_data {
-  void (*write)(void*,size_t,unsigned long);
-  unsigned long write_data;
+  long (*write)(const void*, long, PACKFILE*);
+  PACKFILE* write_data;
   ogg_stream_state os;
   ogg_page og;
   ogg_packet op;
@@ -794,8 +794,8 @@ int alogg_save_ogg_param(
 
   /* encode stream using pack_fwrite */
   data=alogg_start_encoding(
-    sample->stereo?2:1,sample->freq,quality,ncomments,comments,
-    (void(*)(void*,size_t,unsigned long))&pack_fwrite,(unsigned long)f
+    sample->stereo ? 2 : 1, sample->freq, quality, ncomments, comments,
+    (long(*)(const void*, long, PACKFILE*))&pack_fwrite, f
   );
   ret=!pack_ferror(f);
   if (data) {
@@ -818,8 +818,8 @@ int alogg_save_ogg(AL_CONST char *filename,struct SAMPLE *sample)
 }
 
 alogg_encoding_data *alogg_start_encoding(
-  size_t channels,size_t freq,float quality,size_t ncomments,char **comments,
-  void (*write)(void*,size_t,unsigned long),unsigned long write_data
+  size_t channels, size_t freq, float quality, size_t ncomments, char **comments,
+  long (*write)(const void*, long, PACKFILE*), PACKFILE* write_data
 )
 {
   alogg_encoding_data *encoding_data;

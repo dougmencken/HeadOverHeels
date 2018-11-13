@@ -12,14 +12,12 @@
 #define RemoteControl_hpp_
 
 #include "Behavior.hpp"
+#include "FreeItem.hpp"
 #include "Timer.hpp"
 
 
-namespace isomot
+namespace iso
 {
-
-class Item ;
-class FreeItem ;
 
 /**
  * A pair of controller & controlled item
@@ -30,7 +28,7 @@ class RemoteControl : public Behavior
 
 public:
 
-        RemoteControl( Item * item, const std::string & behavior ) ;
+        RemoteControl( const ItemPtr & item, const std::string & behavior ) ;
 
         virtual ~RemoteControl( ) ;
 
@@ -41,11 +39,11 @@ private:
        /**
         * Item to move by remote control
         */
-        FreeItem * controlledItem ;
+        ItemPtr controlledItem ;
 
-        Timer * speedTimer ;
+        autouniqueptr < Timer > speedTimer ;
 
-        Timer * fallTimer ;
+        autouniqueptr < Timer > fallTimer ;
 
 };
 

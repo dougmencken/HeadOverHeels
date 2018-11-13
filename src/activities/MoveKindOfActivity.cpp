@@ -2,28 +2,25 @@
 #include "MoveKindOfActivity.hpp"
 #include "FallKindOfActivity.hpp"
 #include "Behavior.hpp"
-#include "Item.hpp"
-#include "GridItem.hpp"
-#include "FreeItem.hpp"
 #include "PlayerItem.hpp"
 #include "Mediator.hpp"
 
 #include <iostream>
 
 
-namespace isomot
+namespace iso
 {
 
 MoveKindOfActivity * MoveKindOfActivity::instance = nilPointer ;
 
-MoveKindOfActivity* MoveKindOfActivity::getInstance()
+MoveKindOfActivity& MoveKindOfActivity::getInstance()
 {
         if ( instance == nilPointer )
         {
                 instance = new MoveKindOfActivity();
         }
 
-        return instance;
+        return *instance;
 }
 
 
@@ -42,13 +39,9 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
 
         ActivityOfItem displaceActivity = Activity::Wait;
 
-        Item* item = behavior->getItem();
+        ItemPtr item = behavior->getItem();
         if ( item == nilPointer ) return false ;
         Mediator* mediator = item->getMediator();
-
-        FreeItem* freeItem = nilPointer;
-        if ( item->whichKindOfItem() == "free item" || item->whichKindOfItem() == "player item" )
-                freeItem = dynamic_cast< FreeItem * >( item );
 
         switch ( *activity )
         {
@@ -108,14 +101,14 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
                         {
                                 while ( ! mediator->isStackOfCollisionsEmpty() )
                                 {
-                                        Item* topItem = mediator->findCollisionPop( );
-                                        FreeItem* topFreeItem = nilPointer;
-                                        if ( topItem->whichKindOfItem() == "free item" || topItem->whichKindOfItem() == "player item" )
-                                                topFreeItem = dynamic_cast< FreeItem * >( topItem );
-
-                                        if ( topFreeItem != nilPointer && item->getWidthX() + item->getWidthY() >= topItem->getWidthX() + topItem->getWidthY() )
+                                        ItemPtr topItem = mediator->findCollisionPop( );
+                                        if ( topItem != nilPointer &&
+                                                ( topItem->whichKindOfItem() == "free item" || topItem->whichKindOfItem() == "player item" ) )
                                         {
-                                                ascent( topFreeItem, 1 );
+                                                if ( item->getWidthX() + item->getWidthY() >= topItem->getWidthX() + topItem->getWidthY() )
+                                                {
+                                                        ascent( dynamic_cast< FreeItem& >( *topItem ), 1 );
+                                                }
                                         }
                                 }
 
@@ -143,16 +136,12 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
                         {
                                 while ( ! topItems.empty() )
                                 {
-                                        Item* topItem = mediator->findItemByUniqueName( topItems.top() );
+                                        ItemPtr topItem = mediator->findItemByUniqueName( topItems.top() );
                                         topItems.pop();
 
-                                        FreeItem* topFreeItem = nilPointer;
                                         if ( topItem->whichKindOfItem() == "free item" || topItem->whichKindOfItem() == "player item" )
-                                                topFreeItem = dynamic_cast< FreeItem * >( topItem );
-
-                                        if ( topFreeItem != nilPointer )
                                         {
-                                                descend( topFreeItem, 2 );
+                                                descend( dynamic_cast< FreeItem& >( *topItem ), 2 );
                                         }
                                 }
                         }
@@ -179,25 +168,22 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
                         ;
         }
 
-        if ( freeItem != nilPointer )
+        if ( item->whichKindOfItem() == "free item" || item->whichKindOfItem() == "player item" )
         {
                 // move collided items when there’s horizontal collision
-                if ( ! moved )
+                if ( ! moved ||
+                        ( *activity != Activity::MoveUp && *activity != Activity::MoveDown ) )
                 {
-                        this->propagateActivityToAdjacentItems( freeItem, displaceActivity );
-                }
-                // see if is it necessary to move items above
-                // exception is for vertical movement to keep activity of items above elevator unchanged
-                else if ( *activity != Activity::MoveUp && *activity != Activity::MoveDown )
-                {
-                        this->propagateActivityToItemsAbove( freeItem, displaceActivity );
+                        // see if is it necessary to move items above
+                        // exception is for vertical movement to keep activity of items above elevator unchanged
+                        this->propagateActivityToAdjacentItems( *item, displaceActivity );
                 }
         }
 
         // item may fall
         if ( canFall && *activity != Activity::Wait )
         {
-                if ( FallKindOfActivity::getInstance()->fall( behavior ) )
+                if ( FallKindOfActivity::getInstance().fall( behavior ) )
                 {
                         *activity = Activity::Fall;
                         moved = true;
@@ -207,59 +193,70 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
         return moved ;
 }
 
-void MoveKindOfActivity::ascent( FreeItem* freeItem, int z )
+void MoveKindOfActivity::ascent( FreeItem & freeItem, int z )
 {
-        if ( freeItem->getBehavior() != nilPointer )
+        if ( freeItem.getBehavior() != nilPointer )
         {
                 // don’t ascent elevator
-                if ( freeItem->getBehavior()->getNameOfBehavior () != "behavior of elevator" )
+                if ( freeItem.getBehavior()->getNameOfBehavior () != "behavior of elevator" )
                 {
                         // when there’s something above this item
                         // then raise every not bigger free item above
-                        if ( ! freeItem->addToZ( z ) )
+                        if ( ! freeItem.addToZ( z ) )
                         {
-                                Mediator* mediator = freeItem->getMediator();
+                                Mediator* mediator = freeItem.getMediator();
 
                                 while ( ! mediator->isStackOfCollisionsEmpty() )
                                 {
-                                        FreeItem* topItem = dynamic_cast< FreeItem * >( mediator->findCollisionPop( ) );
+                                        std::string collision = mediator->popCollision ();
+
+                                        if ( freeItem.whichKindOfItem() == "player item" )
+                                        {
+                                                if ( collision == "ceiling" )
+                                                {
+                                                        PlayerItem& playerItem = dynamic_cast< PlayerItem& >( freeItem );
+
+                                                        if ( playerItem.isActiveCharacter() )
+                                                        {
+                                                                // active character reached maximum height of room
+                                                                playerItem.setWayOfExit( "up" );
+                                                        }
+
+                                                        continue ;
+                                                }
+                                        }
+
+                                        ItemPtr topItem = mediator->findItemByUniqueName( collision );
 
                                         if ( topItem != nilPointer &&
-                                                freeItem->getWidthX() + freeItem->getWidthY() >= topItem->getWidthX() + topItem->getWidthY() )
+                                                ( topItem->whichKindOfItem() == "free item" || topItem->whichKindOfItem() == "player item" ) )
                                         {
-                                                // raise recursively
-                                                ascent( topItem, z );
+                                                if ( freeItem.getWidthX() + freeItem.getWidthY() >= topItem->getWidthX() + topItem->getWidthY() )
+                                                {
+                                                        // raise recursively
+                                                        ascent( dynamic_cast< FreeItem& >( *topItem ), z );
+                                                }
                                         }
                                 }
 
                                 // yet it can ascend
-                                freeItem->addToZ( z );
-                        }
-
-                        if ( freeItem->whichKindOfItem() == "player item" )
-                        {
-                                PlayerItem* playerItem = dynamic_cast< PlayerItem * >( freeItem );
-                                if ( playerItem->isActiveCharacter() && playerItem->getZ() >= MaxLayers * LayerHeight )
-                                {
-                                        // active player reaches maximum height of room to possibly go to room above it
-                                        playerItem->setWayOfExit( "up" );
-                                }
+                                freeItem.addToZ( z );
                         }
                 }
         }
 }
 
-void MoveKindOfActivity::descend( FreeItem* freeItem, int z )
+void MoveKindOfActivity::descend( FreeItem & freeItem, int z )
 {
-        if ( freeItem->getBehavior() != nilPointer )
+        if ( freeItem.getBehavior() != nilPointer )
         {
                 // are there items on top
-                bool loading = ! freeItem->canAdvanceTo( 0, 0, z );
+                bool loading = ! freeItem.canAdvanceTo( 0, 0, z );
 
                 // if item may descend itself then lower every item above it
-                if ( freeItem->addToZ( -1 ) && loading )
+                if ( freeItem.addToZ( -1 ) && loading )
                 {
-                        Mediator* mediator = freeItem->getMediator();
+                        Mediator* mediator = freeItem.getMediator();
 
                         // make copy of stack of collisions
                         std::stack< std::string > topItems;
@@ -271,19 +268,20 @@ void MoveKindOfActivity::descend( FreeItem* freeItem, int z )
                         // descend by one at a time, otherwise there may be collision which hinders descend
                         for ( int i = 0; i < ( z - 1 ); i++ )
                         {
-                                freeItem->addToZ( -1 );
+                                freeItem.addToZ( -1 );
                         }
 
                         // for each item above
                         while ( ! mediator->isStackOfCollisionsEmpty() )
                         {
-                                FreeItem* topItem = dynamic_cast< FreeItem * >( mediator->findItemByUniqueName( topItems.top() ) );
+                                ItemPtr topItem = mediator->findItemByUniqueName( topItems.top() );
                                 topItems.pop();
 
-                                if ( topItem != nilPointer )
+                                if ( topItem != nilPointer &&
+                                        ( topItem->whichKindOfItem() == "free item" || topItem->whichKindOfItem() == "player item" ) )
                                 {
                                         // lower recursively
-                                        descend( topItem, z );
+                                        descend( dynamic_cast< FreeItem& >( *topItem ), z );
                                 }
                         }
                 }
