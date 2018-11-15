@@ -14,7 +14,6 @@
     <nofloor x="0" y="5"/>
     <nofloor x="0" y="6"/>
     <nofloor x="0" y="7"/>
-    <nofloor x="0" y="8"/>
     <nofloor x="1" y="0"/>
     <nofloor x="1" y="1"/>
     <nofloor x="1" y="2"/>
@@ -23,7 +22,6 @@
     <nofloor x="1" y="5"/>
     <nofloor x="1" y="6"/>
     <nofloor x="1" y="7"/>
-    <nofloor x="1" y="8"/>
     <nofloor x="2" y="0"/>
     <nofloor x="2" y="1"/>
     <nofloor x="2" y="2"/>
@@ -32,7 +30,6 @@
     <nofloor x="2" y="5"/>
     <nofloor x="2" y="6"/>
     <nofloor x="2" y="7"/>
-    <nofloor x="2" y="8"/>
     <nofloor x="3" y="0"/>
     <nofloor x="3" y="1"/>
     <nofloor x="3" y="2"/>
@@ -41,7 +38,6 @@
     <nofloor x="3" y="5"/>
     <nofloor x="3" y="6"/>
     <nofloor x="3" y="7"/>
-    <nofloor x="3" y="8"/>
     <nofloor x="4" y="0"/>
     <nofloor x="4" y="1"/>
     <nofloor x="4" y="2"/>
@@ -50,7 +46,6 @@
     <nofloor x="4" y="5"/>
     <nofloor x="4" y="6"/>
     <nofloor x="4" y="7"/>
-    <nofloor x="4" y="8"/>
     <nofloor x="5" y="0"/>
     <nofloor x="5" y="1"/>
     <nofloor x="5" y="2"/>
@@ -59,7 +54,6 @@
     <nofloor x="5" y="5"/>
     <nofloor x="5" y="6"/>
     <nofloor x="5" y="7"/>
-    <nofloor x="5" y="8"/>
     <nofloor x="6" y="0"/>
     <nofloor x="6" y="1"/>
     <nofloor x="6" y="2"/>
@@ -68,16 +62,7 @@
     <nofloor x="6" y="5"/>
     <nofloor x="6" y="6"/>
     <nofloor x="6" y="7"/>
-    <nofloor x="6" y="8"/>
     <nofloor x="7" y="0"/>
-    <nofloor x="7" y="1"/>
-    <nofloor x="7" y="2"/>
-    <nofloor x="7" y="3"/>
-    <nofloor x="7" y="4"/>
-    <nofloor x="7" y="5"/>
-    <nofloor x="7" y="6"/>
-    <nofloor x="7" y="7"/>
-    <nofloor x="7" y="8"/>
     <walls>
         <wall on="x">
             <position>8</position>
@@ -85,10 +70,6 @@
         </wall>
         <wall on="x">
             <position>9</position>
-            <picture>jail-wall-x.png</picture>
-        </wall>
-        <wall on="x">
-            <position>12</position>
             <picture>jail-wall-x.png</picture>
         </wall>
         <wall on="x">
@@ -104,11 +85,11 @@
             <picture>jail-wall-y.png</picture>
         </wall>
         <wall on="y">
-            <position>11</position>
+            <position>12</position>
             <picture>jail-wall-y.png</picture>
         </wall>
         <wall on="y">
-            <position>12</position>
+            <position>11</position>
             <picture>jail-wall-y.png</picture>
         </wall>
         <wall on="y">
@@ -118,6 +99,10 @@
         <wall on="y">
             <position>14</position>
             <picture>jail-wall-y.png</picture>
+        </wall>
+        <wall on="x">
+            <position>12</position>
+            <picture>jail-wall-x.png</picture>
         </wall>
     </walls>
     <items>

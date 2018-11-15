@@ -66,7 +66,15 @@
             <picture>moon-wall-x-4.png</picture>
         </wall>
         <wall on="x">
+            <position>4</position>
+            <picture>moon-wall-x-3.png</picture>
+        </wall>
+        <wall on="x">
             <position>2</position>
+            <picture>moon-wall-x-1.png</picture>
+        </wall>
+        <wall on="x">
+            <position>5</position>
             <picture>moon-wall-x-1.png</picture>
         </wall>
         <wall on="x">
@@ -74,32 +82,32 @@
             <picture>moon-wall-x-2.png</picture>
         </wall>
         <wall on="x">
-            <position>4</position>
-            <picture>moon-wall-x-3.png</picture>
-        </wall>
-        <wall on="x">
-            <position>5</position>
-            <picture>moon-wall-x-1.png</picture>
+            <position>7</position>
+            <picture>moon-wall-x-4.png</picture>
         </wall>
         <wall on="x">
             <position>6</position>
             <picture>moon-wall-x-4.png</picture>
         </wall>
         <wall on="x">
-            <position>7</position>
-            <picture>moon-wall-x-4.png</picture>
+            <position>12</position>
+            <picture>moon-wall-x-3.png</picture>
         </wall>
         <wall on="x">
             <position>8</position>
             <picture>moon-wall-x-2.png</picture>
         </wall>
-        <wall on="x">
-            <position>11</position>
-            <picture>moon-wall-x-2.png</picture>
+        <wall on="y">
+            <position>13</position>
+            <picture>moon-wall-y-3.png</picture>
         </wall>
-        <wall on="x">
-            <position>12</position>
-            <picture>moon-wall-x-3.png</picture>
+        <wall on="y">
+            <position>3</position>
+            <picture>moon-wall-y-3.png</picture>
+        </wall>
+        <wall on="y">
+            <position>10</position>
+            <picture>moon-wall-y-2.png</picture>
         </wall>
         <wall on="y">
             <position>1</position>
@@ -110,14 +118,6 @@
             <picture>moon-wall-y-1.png</picture>
         </wall>
         <wall on="y">
-            <position>3</position>
-            <picture>moon-wall-y-3.png</picture>
-        </wall>
-        <wall on="y">
-            <position>6</position>
-            <picture>moon-wall-y-3.png</picture>
-        </wall>
-        <wall on="y">
             <position>7</position>
             <picture>moon-wall-y-1.png</picture>
         </wall>
@@ -126,36 +126,36 @@
             <picture>moon-wall-y-2.png</picture>
         </wall>
         <wall on="y">
-            <position>9</position>
-            <picture>moon-wall-y-4.png</picture>
-        </wall>
-        <wall on="y">
-            <position>10</position>
-            <picture>moon-wall-y-2.png</picture>
-        </wall>
-        <wall on="y">
             <position>11</position>
             <picture>moon-wall-y-1.png</picture>
+        </wall>
+        <wall on="y">
+            <position>9</position>
+            <picture>moon-wall-y-4.png</picture>
         </wall>
         <wall on="y">
             <position>12</position>
             <picture>moon-wall-y-2.png</picture>
         </wall>
         <wall on="y">
-            <position>13</position>
-            <picture>moon-wall-y-3.png</picture>
-        </wall>
-        <wall on="y">
             <position>14</position>
             <picture>moon-wall-y-1.png</picture>
+        </wall>
+        <wall on="y">
+            <position>16</position>
+            <picture>moon-wall-y-2.png</picture>
         </wall>
         <wall on="y">
             <position>15</position>
             <picture>moon-wall-y-4.png</picture>
         </wall>
+        <wall on="x">
+            <position>11</position>
+            <picture>moon-wall-x-2.png</picture>
+        </wall>
         <wall on="y">
-            <position>16</position>
-            <picture>moon-wall-y-2.png</picture>
+            <position>6</position>
+            <picture>moon-wall-y-3.png</picture>
         </wall>
     </walls>
     <items>

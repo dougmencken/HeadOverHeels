@@ -898,20 +898,24 @@ void Isomot::drawMiniatureOfRoom( const Room& room, const Picture* where, const 
 
                         if ( label == "invisible-wall-x" )
                         {
-                                maxYsw = tileY - 1 ;
+                                int newPos = tileY - 1 ;
+                                if ( newPos < maxYsw ) maxYsw = newPos ;
                         }
                         else if ( label.find( "wall-x" ) != std::string::npos )
                         {
-                                minYne = tileY + 1 ;
+                                int newPos = tileY + 1 ;
+                                if ( newPos > minYne ) minYne = newPos ;
                         }
 
                         if ( label == "invisible-wall-y" )
                         {
-                                maxXsw = tileX - 1 ;
+                                int newPos = tileX - 1 ;
+                                if ( newPos < maxXsw ) maxXsw = newPos ;
                         }
                         else if ( label.find( "wall-y" ) != std::string::npos )
                         {
-                                minXne = tileX + 1 ;
+                                int newPos = tileX + 1 ;
+                                if ( newPos > minXne ) minXne = newPos ;
                         }
                 }
         }

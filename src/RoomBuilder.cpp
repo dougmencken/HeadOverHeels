@@ -149,6 +149,8 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
 
         // build walls without doors
 
+        std::vector< std::pair< int, int > > wallsXY ;
+
         tinyxml2::XMLElement* walls = root->FirstChildElement( "walls" );
         if ( walls != nilPointer )
         {
@@ -157,7 +159,16 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                 wall = wall->NextSiblingElement( "wall" ) )
                 {
                         Wall* wallSegment = buildWall( wall, iso::GameManager::getInstance().getChosenGraphicSet() );
-                        if ( wallSegment != nilPointer ) theRoom->addWall( wallSegment );
+
+                        if ( wallSegment != nilPointer )
+                        {
+                                if ( wallSegment->isOnX() )
+                                        wallsXY.push_back( std::pair< int, int >( wallSegment->getPosition(), 0 ) );
+                                else
+                                        wallsXY.push_back( std::pair< int, int >( 0, wallSegment->getPosition() ) );
+
+                                theRoom->addWall( wallSegment );
+                        }
                 }
         }
 
@@ -212,10 +223,13 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
 
                                 if ( picture->isNotNil() )
                                 {
+                                        wallsXY.push_back( std::pair< int, int >( onX ? index : 0, onX ? 0 : index ) );
+
                                         Picture* imageOfWall = new Picture( *picture.get() );
                                         imageOfWall->setName( fileWithPicture );
 
                                         Wall* wallSegment = new Wall( onX, index, imageOfWall );
+
                                         theRoom->addWall( wallSegment );
                                 }
                                 else
@@ -228,7 +242,12 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                 GridItemPtr gridItem = buildGridItem( item, theRoom );
 
                                 if ( gridItem != nilPointer )
+                                {
                                         theRoom->addGridItem( gridItem );
+
+                                        if ( gridItem->isSegmentOfWallOnX () || gridItem->isSegmentOfWallOnY () )
+                                                wallsXY.push_back( std::pair< int, int >( gridItem->getCellX(), gridItem->getCellY() ) );
+                                }
                                 else
                                         std::cout << "oops, can’t build a grid item with coordinates " << itemX << ", " << itemY << ", " << itemZ << std::endl ;
                         }
@@ -245,6 +264,45 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                 }
         }
 
+        Door* eastDoor = theRoom->getDoorAt( "east" );
+        Door* southDoor = theRoom->getDoorAt( "south" );
+        Door* northDoor = theRoom->getDoorAt( "north" );
+        Door* westDoor = theRoom->getDoorAt( "west" );
+
+        Door* eastnorthDoor = theRoom->getDoorAt( "eastnorth" );
+        Door* eastsouthDoor = theRoom->getDoorAt( "eastsouth" );
+        Door* southeastDoor = theRoom->getDoorAt( "southeast" );
+        Door* southwestDoor = theRoom->getDoorAt( "southwest" );
+        Door* northeastDoor = theRoom->getDoorAt( "northeast" );
+        Door* northwestDoor = theRoom->getDoorAt( "northwest" );
+        Door* westnorthDoor = theRoom->getDoorAt( "westnorth" );
+        Door* westsouthDoor = theRoom->getDoorAt( "westsouth" );
+
+        // when room has floor and has no door at north and~or east, then north and~or east wall is outside room
+
+        if ( theRoom->hasFloor() )
+        {
+                std::vector< std::pair< int, int > > outsideWalls ;
+
+                for ( std::vector< std::pair< int, int > >::const_iterator it = wallsXY.begin () ; it != wallsXY.end () ; ++ it )
+                {
+                        if ( northDoor == nilPointer && northeastDoor == nilPointer && northwestDoor == nilPointer )
+                                if ( it->first == 0 )
+                                        outsideWalls.push_back( *it );
+
+                        if ( eastDoor == nilPointer && eastnorthDoor == nilPointer && eastsouthDoor == nilPointer )
+                                if ( it->second == 0 )
+                                        outsideWalls.push_back( *it );
+                }
+
+                while ( ! outsideWalls.empty () )
+                {
+                        std::vector< std::pair< int, int > >::iterator binMe = std::find( wallsXY.begin (), wallsXY.end (), outsideWalls.back () ) ;
+                        if ( binMe != wallsXY.end () /* 0,0 may be pushed twice */ ) wallsXY.erase( binMe );
+                        outsideWalls.pop_back();
+                }
+        }
+
         // read about tiles with no floor
 
         std::vector< std::pair< int, int > > tilesWithoutFloor ;
@@ -253,11 +311,24 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                         nofloor != nilPointer ;
                         nofloor = nofloor->NextSiblingElement( "nofloor" ) )
         {
-                tilesWithoutFloor.push_back( std::pair< int, int >( std::atoi( nofloor->Attribute( "x" ) ), std::atoi( nofloor->Attribute( "y" ) ) ) );
+                int noFloorX = std::atoi( nofloor->Attribute( "x" ) ) ;
+                int noFloorY = std::atoi( nofloor->Attribute( "y" ) ) ;
+                std::pair< int, int > noFloorXY( noFloorX, noFloorY ) ;
+
+                if ( std::find( tilesWithoutFloor.begin (), tilesWithoutFloor.end (), noFloorXY ) == tilesWithoutFloor.end () &&
+                        std::find( wallsXY.begin (), wallsXY.end (), noFloorXY ) == wallsXY.end () )
+                {
+                        tilesWithoutFloor.push_back( noFloorXY );
+                }
         }
 
         if ( ! tilesWithoutFloor.empty () )
+        {
+                std::sort( tilesWithoutFloor.begin (), tilesWithoutFloor.end () );
                 theRoom->setTilesWithoutFloor( tilesWithoutFloor );
+        }
+
+        std::cout << "building floor in room \"" << theRoom->getNameOfFileWithDataAboutRoom() << "\"" ;
 
         std::string gfxPrefix = iso::GameManager::getInstance().getChosenGraphicSet() ;
 
@@ -276,20 +347,6 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                 {
                         for ( int tileY = 0 ; tileY <= lastTileY ; ++ tileY )
                         {
-                                Door* eastDoor = theRoom->getDoorAt( "east" );
-                                Door* southDoor = theRoom->getDoorAt( "south" );
-                                Door* northDoor = theRoom->getDoorAt( "north" );
-                                Door* westDoor = theRoom->getDoorAt( "west" );
-
-                                Door* eastnorthDoor = theRoom->getDoorAt( "eastnorth" );
-                                Door* eastsouthDoor = theRoom->getDoorAt( "eastsouth" );
-                                Door* southeastDoor = theRoom->getDoorAt( "southeast" );
-                                Door* southwestDoor = theRoom->getDoorAt( "southwest" );
-                                Door* northeastDoor = theRoom->getDoorAt( "northeast" );
-                                Door* northwestDoor = theRoom->getDoorAt( "northwest" );
-                                Door* westnorthDoor = theRoom->getDoorAt( "westnorth" );
-                                Door* westsouthDoor = theRoom->getDoorAt( "westsouth" );
-
                                 std::string suffixOfNotFullTile ;
 
                                 if ( ( southDoor != nilPointer && westDoor != nilPointer &&
@@ -305,9 +362,58 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                 {
                                         suffixOfNotFullTile = "-sw" ;
                                 }
-                                else if ( ( eastDoor != nilPointer && eastDoor->getCellY() == tileY ) ||
-                                        ( eastnorthDoor != nilPointer && eastnorthDoor->getCellY() == tileY ) ||
-                                        ( eastsouthDoor != nilPointer && eastsouthDoor->getCellY() == tileY ) )
+                                else if ( ( southDoor != nilPointer && eastDoor != nilPointer &&
+                                                southDoor->getCellX() == tileX && eastDoor->getCellY() == tileY &&
+                                                        tileX == lastTileX && tileY == 0 )
+                                        ||
+                                        ( southwestDoor != nilPointer && eastsouthDoor != nilPointer &&
+                                                southwestDoor->getCellX() == tileX && eastsouthDoor->getCellY() == tileY &&
+                                                        tileX == lastTileX && tileY == 0 )
+                                        ||
+                                        ( southeastDoor != nilPointer && eastsouthDoor != nilPointer &&
+                                                southeastDoor->getCellX() == tileX && eastsouthDoor->getCellY() == tileY &&
+                                                        tileX == lastTileX && tileY == 0 )
+                                        ||
+                                        ( southwestDoor != nilPointer && eastnorthDoor != nilPointer &&
+                                                southwestDoor->getCellX() == tileX && eastnorthDoor->getCellY() == tileY &&
+                                                        tileX == lastTileX && tileY == 0 )
+                                        ||
+                                        ( southeastDoor != nilPointer && eastnorthDoor != nilPointer &&
+                                                southeastDoor->getCellX() == tileX && eastnorthDoor->getCellY() == tileY &&
+                                                        tileX == lastTileX && tileY == 0 ) )
+                                {
+                                        // no floor tile for “ se ” corner
+                                        continue ;
+                                }
+                                else if ( ( northDoor != nilPointer && westDoor != nilPointer &&
+                                                northDoor->getCellX() == tileX && westDoor->getCellY() == tileY &&
+                                                        tileX == 0 && tileY == lastTileY )
+                                        ||
+                                        ( northwestDoor != nilPointer && westsouthDoor != nilPointer &&
+                                                northwestDoor->getCellX() == tileX && westsouthDoor->getCellY() == tileY &&
+                                                        tileX == 0 && tileY == lastTileY )
+                                        ||
+                                        ( northeastDoor != nilPointer && westsouthDoor != nilPointer &&
+                                                northeastDoor->getCellX() == tileX && westsouthDoor->getCellY() == tileY &&
+                                                        tileX == 0 && tileY == lastTileY )
+                                        ||
+                                        ( northwestDoor != nilPointer && westnorthDoor != nilPointer &&
+                                                northwestDoor->getCellX() == tileX && westnorthDoor->getCellY() == tileY &&
+                                                        tileX == 0 && tileY == lastTileY )
+                                        ||
+                                        ( northeastDoor != nilPointer && westnorthDoor != nilPointer &&
+                                                northeastDoor->getCellX() == tileX && westnorthDoor->getCellY() == tileY &&
+                                                        tileX == 0 && tileY == lastTileY ) )
+                                {
+                                        // no floor tile for “ nw ” corner
+                                        continue ;
+                                }
+                                else if ( ( eastDoor != nilPointer && eastDoor->getCellY() == tileY &&
+                                                /* is under door */ ( eastDoor->getCellX() == tileX || eastDoor->getCellX() + 1 == tileX ) ) ||
+                                        ( eastnorthDoor != nilPointer && eastnorthDoor->getCellY() == tileY &&
+                                                /* is under door */ ( eastnorthDoor->getCellX() == tileX || eastnorthDoor->getCellX() + 1 == tileX ) ) ||
+                                        ( eastsouthDoor != nilPointer && eastsouthDoor->getCellY() == tileY &&
+                                                /* is under door */ ( eastsouthDoor->getCellX() == tileX || eastsouthDoor->getCellX() + 1 == tileX ) ) )
                                 {
                                         suffixOfNotFullTile = "-east" ;
                                 }
@@ -317,9 +423,12 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                 {
                                         suffixOfNotFullTile = "-west" ;
                                 }
-                                else if ( ( northDoor != nilPointer && northDoor->getCellX() == tileX ) ||
-                                        ( northeastDoor != nilPointer && northeastDoor->getCellX() == tileX ) ||
-                                        ( northwestDoor != nilPointer && northwestDoor->getCellX() == tileX ) )
+                                else if ( ( northDoor != nilPointer && northDoor->getCellX() == tileX &&
+                                                /* is under door */ ( northDoor->getCellY() == tileY || northDoor->getCellY() + 1 == tileY ) ) ||
+                                        ( northeastDoor != nilPointer && northeastDoor->getCellX() == tileX &&
+                                                /* is under door */ ( northeastDoor->getCellY() == tileY || northeastDoor->getCellY() + 1 == tileY ) ) ||
+                                        ( northwestDoor != nilPointer && northwestDoor->getCellX() == tileX &&
+                                                /* is under door */ ( northwestDoor->getCellY() == tileY || northwestDoor->getCellY() + 1 == tileY ) ) )
                                 {
                                         suffixOfNotFullTile = "-north" ;
                                 }
@@ -378,19 +487,12 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                         delete picture ;
                                 }
 
-                                bool tileHasFloor = true ;
+                                std::pair< int, int > tileXY( tileX, tileY );
 
-                                for ( size_t i = 0 ; i < tilesWithoutFloor.size () ; ++ i )
+                                if ( std::find( tilesWithoutFloor.begin (), tilesWithoutFloor.end (), tileXY ) == tilesWithoutFloor.end () &&
+                                        ( std::find( wallsXY.begin (), wallsXY.end (), tileXY ) == wallsXY.end () || ! theRoom->hasFloor() ) )
                                 {
-                                        if ( tilesWithoutFloor[ i ].first == tileX && tilesWithoutFloor[ i ].second == tileY )
-                                        {
-                                                tileHasFloor = false ;
-                                                break ;
-                                        }
-                                }
-
-                                if ( tileHasFloor )
-                                {
+                                        std::cout << " tile@" << tileX << "," << tileY ;
                                         theRoom->addFloorTile( new FloorTile( tileX, tileY, * floorImages[ fileOfTile ] ) );
                                 }
                         }
@@ -437,8 +539,12 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                 }
         }
 
+        std::cout << std::endl ;
+
         theRoom->calculateBounds();
         theRoom->updateWallsWithDoors();
+
+        std::cout << "built room \"" << theRoom->getNameOfFileWithDataAboutRoom() << "\"" << std::endl ;
 
         return theRoom ;
 }

@@ -519,6 +519,8 @@ void Room::addFloorTile( FloorTile * floorTile )
 
 void Room::addWall( Wall * wall )
 {
+        if ( wall == nilPointer ) return ;
+
         wall->setMediator( mediator );
         wall->calculateOffset();
 
@@ -534,6 +536,8 @@ void Room::addWall( Wall * wall )
 
 void Room::addDoor( Door * door )
 {
+        if ( door == nilPointer ) return ;
+
         door->setMediator( mediator );
 
         this->doors[ door->getWhereIsDoor() ] = door;
