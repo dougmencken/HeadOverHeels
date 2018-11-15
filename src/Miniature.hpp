@@ -1,0 +1,72 @@
+// The free and open source remake of Head over Heels
+//
+// Copyright © 2018 Douglas Mencken dougmencken@gmail.com
+// Copyright © 2008 Jorge Rodríguez Santos
+// Original game copyright © 1987 Ocean Software Ltd.
+//
+// This program is free software
+// You may redistribute it and~or modify it under the terms of the GNU General Public License
+// either version 3 of the License or at your option any later version
+
+#ifndef Miniature_hpp_
+#define Miniature_hpp_
+
+#include "WrappersAllegro.hpp"
+
+#include "Picture.hpp"
+#include "Drawable.hpp"
+
+#include <map>
+#include <string>
+
+
+class Color ;
+
+namespace iso
+{
+
+class Room ;
+class RoomConnections ;
+
+
+class Miniature : public Drawable
+{
+
+public:
+
+        Miniature( const Room & roomForMiniature, unsigned int sizeOfTileForMiniature = 3 ) ;
+
+        virtual ~Miniature( ) { }
+
+        virtual void draw ( const allegro::Pict & where ) ;
+
+        void drawEastDoorOnMiniature( const allegro::Pict & where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const Color& color ) ;
+        void drawSouthDoorOnMiniature( const allegro::Pict & where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const Color& color ) ;
+        void drawNorthDoorOnMiniature( const allegro::Pict & where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const Color& color ) ;
+        void drawWestDoorOnMiniature( const allegro::Pict & where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const Color& color ) ;
+
+        void drawIsoSquare( const allegro::Pict & where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const Color& color ) ;
+
+        void drawIsoTile ( const allegro::Pict & where, int x0, int y0, int tileX, int tileY, const Color & color, bool loX, bool loY, bool hiX, bool hiY ) ;
+
+        void fillIsoTile ( const allegro::Pict & where, int x0, int y0, int tileX, int tileY, const Color & color ) ;
+
+        void fillIsoTileInside ( const allegro::Pict & where, int x0, int y0, int tileX, int tileY, const Color & color, bool fullFill ) ;
+
+        unsigned int getSizeOfTile () const {  return sizeOfTile ;  }
+
+        void setSizeOfTile ( unsigned int newSize ) {  sizeOfTile = ( newSize >= 2 ) ? newSize : 2 ;  }
+
+        const Room & getRoom () const {  return room ;  }
+
+private:
+
+        const Room & room ;
+
+        unsigned int sizeOfTile ;
+
+};
+
+}
+
+#endif

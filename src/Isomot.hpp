@@ -62,21 +62,6 @@ public:
 
         Picture * updateMe () ;
 
-        static void drawMiniatureOfRoom ( const Room & room, const Picture * where, const unsigned int sizeOfTile ) ;
-
-        static void drawEastDoorOnMiniature( const allegro::Pict & where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const unsigned int sizeOfTile, const Color& color ) ;
-        static void drawSouthDoorOnMiniature( const allegro::Pict & where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const unsigned int sizeOfTile, const Color& color ) ;
-        static void drawNorthDoorOnMiniature( const allegro::Pict & where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const unsigned int sizeOfTile, const Color& color ) ;
-        static void drawWestDoorOnMiniature( const allegro::Pict & where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const unsigned int sizeOfTile, const Color& color ) ;
-
-        static void drawIsoSquare( const allegro::Pict & where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const unsigned int sizeOfTile, const Color& color ) ;
-
-        static void drawIsoTile ( const allegro::Pict & where, int x0, int y0, int tileX, int tileY, const unsigned int sizeOfTile, const Color & color, bool loX, bool loY, bool hiX, bool hiY ) ;
-
-        static void fillIsoTile ( const allegro::Pict & where, int x0, int y0, int tileX, int tileY, const unsigned int sizeOfTile, const Color & color ) ;
-
-        static void fillIsoTileInside ( const allegro::Pict & where, int x0, int y0, int tileX, int tileY, const unsigned int sizeOfTile, const Color & color, bool fullFill ) ;
-
         MapManager & getMapManager () {  return mapManager ;  }
 
         const ItemDataManager & getItemDataManager () const {  return itemDataManager ;  }

@@ -57,6 +57,8 @@ headoverheels_SOURCES = main.cpp \
 			FlickeringColor.hpp \
 			Picture.cpp \
 			Picture.hpp \
+			PoolOfPictures.cpp \
+			PoolOfPictures.hpp \
 			Drawable.hpp \
 			Mediated.hpp \
 			Shady.hpp \
@@ -86,6 +88,8 @@ headoverheels_SOURCES = main.cpp \
 			GameManager.hpp \
 			InputManager.cpp \
 			InputManager.hpp \
+			Miniature.cpp \
+			Miniature.hpp \
 			Isomot.cpp \
 			Isomot.hpp \
 			ItemData.cpp \

@@ -8,6 +8,7 @@
 #include "Elevator.hpp"
 #include "BonusManager.hpp"
 #include "GameManager.hpp"
+#include "PoolOfPictures.hpp"
 
 
 namespace iso
@@ -330,9 +331,7 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
 
         std::cout << "building floor in room \"" << theRoom->getNameOfFileWithDataAboutRoom() << "\"" ;
 
-        std::string gfxPrefix = iso::GameManager::getInstance().getChosenGraphicSet() ;
-
-        std::map< std::string /* imageFile */, PicturePtr /* image */ > floorImages ;
+        PoolOfPictures floorImages ;
 
         if ( scenery != "" )
         {
@@ -464,36 +463,13 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
 
                                 fileOfTile += ".png" ;
 
-                                if ( floorImages.find( fileOfTile ) == floorImages.end () )
-                                {
-                                        allegro::Pict* picture = allegro::Pict::fromPNGFile( iso::pathToFile( iso::sharePath() + gfxPrefix, fileOfTile ) );
-
-                                        if ( picture->isNotNil() )
-                                        {
-                                                floorImages[ fileOfTile ] = PicturePtr( new Picture( *picture ) );
-                                                floorImages[ fileOfTile ]->setName( fileOfTile );
-                                        }
-                                        else
-                                        {
-                                                std::cout << "picture \"" << fileOfTile << "\" from \"" << gfxPrefix << "\" is absent" << std::endl ;
-
-                                                floorImages[ fileOfTile ] = PicturePtr( new Picture( 64, 37 ) ) ;
-                                                floorImages[ fileOfTile ]->fillWithTransparencyChequerboard ();
-                                                floorImages[ fileOfTile ]->setName( "transparency chequerboard for absent " + fileOfTile );
-
-                                                std::cout << "made \"" << floorImages[ fileOfTile ]->getName() << "\"" << std::endl ;
-                                        }
-
-                                        delete picture ;
-                                }
-
                                 std::pair< int, int > tileXY( tileX, tileY );
 
                                 if ( std::find( tilesWithoutFloor.begin (), tilesWithoutFloor.end (), tileXY ) == tilesWithoutFloor.end () &&
                                         ( std::find( wallsXY.begin (), wallsXY.end (), tileXY ) == wallsXY.end () || ! theRoom->hasFloor() ) )
                                 {
                                         std::cout << " tile@" << tileX << "," << tileY ;
-                                        theRoom->addFloorTile( new FloorTile( tileX, tileY, * floorImages[ fileOfTile ] ) );
+                                        theRoom->addFloorTile( new FloorTile( tileX, tileY, * floorImages.getOrLoadAndGetOrMakeAndGet( fileOfTile, 64, 37 ) ) );
                                 }
                         }
                 }
@@ -515,26 +491,10 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                 int tileY = std::atoi( y->FirstChild()->ToText()->Value() );
                                 std::string imageFile = picture->FirstChild()->ToText()->Value();
 
-                                if ( floorImages.find( imageFile ) == floorImages.end () )
-                                {
-                                        allegro::Pict* picture = allegro::Pict::fromPNGFile( iso::pathToFile( iso::sharePath() + gfxPrefix, imageFile ) );
+                                const PicturePtr& image = floorImages.getOrLoadAndGet( imageFile ) ;
 
-                                        if ( picture->isNotNil() )
-                                        {
-                                                floorImages[ imageFile ] = PicturePtr( new Picture( *picture ) );
-                                                floorImages[ imageFile ]->setName( imageFile );
-                                        }
-                                        else
-                                        {
-                                                std::cerr << "picture \"" << imageFile << "\" from \"" << gfxPrefix << "\" is absent" << std::endl ;
-                                                floorImages[ imageFile ] = PicturePtr ();
-                                        }
-
-                                        delete picture ;
-                                }
-
-                                if ( floorImages[ imageFile ] != nilPointer )
-                                        theRoom->addFloorTile( new FloorTile( tileX, tileY, * floorImages[ imageFile ] ) );
+                                if ( image != nilPointer )
+                                        theRoom->addFloorTile( new FloorTile( tileX, tileY, * image ) );
                         }
                 }
         }

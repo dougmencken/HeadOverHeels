@@ -22,6 +22,7 @@
         <file name="Color.cpp" />
         <file name="FlickeringColor.cpp" />
         <file name="Picture.cpp" />
+        <file name="PoolOfPictures.cpp" />
         <file name="Camera.cpp" />
         <file name="Wall.cpp" />
         <file name="Door.cpp" />
@@ -38,6 +39,7 @@
         <file name="GameSaverAndLoader.cpp" />
         <file name="InputManager.cpp" />
         <file name="GameManager.cpp" />
+        <file name="Miniature.cpp" />
         <file name="Isomot.cpp" />
         <file name="TimerPOSIX.cpp" />
         <file name="TimerWindows.cpp" />
