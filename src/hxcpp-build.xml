@@ -15,6 +15,7 @@
         <compilerflag value="-I/opt/allegro-4.4.2/include" />
         <compilerflag value="-Wall" />
         <file name="main.cpp" />
+        <file name="sleep.cpp" />
         <file name="pointers.cpp" />
         <file name="Ism.cpp" />
         <file name="WrappersAllegro.cpp" />
@@ -91,7 +92,6 @@
         <file name="gui/MenuWithTwoColumns.cpp" />
         <file name="gui/Screen.cpp" />
         <file name="gui/TextField.cpp" />
-        <file name="gui/Widget.cpp" />
         <file name="guiactions/ContinueGame.cpp" />
         <file name="guiactions/CreateAudioMenu.cpp" />
         <file name="guiactions/CreateVideoMenu.cpp" />

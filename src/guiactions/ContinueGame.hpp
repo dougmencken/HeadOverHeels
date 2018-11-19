@@ -25,7 +25,7 @@ public:
         /**
          * @param gameInProgress Indica si hay una partida en curso o comienza una nueva
          */
-        ContinueGame( bool gameInProgress ) ;
+        explicit ContinueGame( bool gameInProgress ) ;
 
         std::string getNameOfAction () const {  return "ContinueGame" ;  }
 

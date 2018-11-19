@@ -1314,12 +1314,12 @@ void Room::drawRoom ()
                 whereToDraw = PicturePtr( new Picture( getWidthOfRoomImage (), getHeightOfRoomImage () ) );
         }
 
-        draw( whereToDraw->getAllegroPict() ) ;
+        drawOn( whereToDraw->getAllegroPict() ) ;
 }
 
-void Room::draw( const allegro::Pict& where )
+void Room::draw ()
 {
-        if ( ! where.isNotNil() ) return ;
+        const allegro::Pict& where = allegro::Pict::getWhereToDraw() ;
 
         // clear image of room
         if ( GameManager::getInstance().charactersFly() )
@@ -1327,10 +1327,7 @@ void Room::draw( const allegro::Pict& where )
         else
                 where.clearToColor( Color::blackColor().toAllegroColor() );
 
-        // acquire picture before drawing
-        allegro::acquirePict( where );
-
-        // draw tiles of floor
+        // draw tiles o’floor
 
         for ( unsigned int xCell = 0; xCell < getTilesX(); xCell++ )
         {
@@ -1356,8 +1353,7 @@ void Room::draw( const allegro::Pict& where )
                                         mediator->unlockFreeItemsMutex();
                                 }
 
-                                // draw this tile o’floor
-                                tile->draw( where );
+                                tile->draw ();
                         }
                 }
         }
@@ -1366,11 +1362,11 @@ void Room::draw( const allegro::Pict& where )
 
         for ( std::vector< Wall * >::iterator wx = this->wallX.begin (); wx != this->wallX.end (); ++wx )
         {
-                ( *wx )->draw( where );
+                ( *wx )->draw ();
         }
         for ( std::vector< Wall * >::iterator wy = this->wallY.begin (); wy != this->wallY.end (); ++wy )
         {
-                ( *wy )->draw( where );
+                ( *wy )->draw ();
         }
 
         mediator->lockGridItemsMutex();
@@ -1394,7 +1390,7 @@ void Room::draw( const allegro::Pict& where )
                                 }
                         }
 
-                        gridItem.draw( where );
+                        gridItem.draw ();
                 }
         }
 
@@ -1403,12 +1399,14 @@ void Room::draw( const allegro::Pict& where )
         // at first shade every free item with grid items and other free items
         for ( std::vector< FreeItemPtr >::const_iterator fi = freeItems.begin (); fi != freeItems.end (); ++ fi )
         {
-                if ( ( *fi )->getRawImage() != nilPointer )
+                FreeItem& freeItem = *( *fi );
+
+                if ( freeItem.getRawImage() != nilPointer )
                 {
                         // shade an item when shadows are on
                         if ( shadingOpacity < 256 )
                         {
-                                ( *fi )->requestShadow();
+                                freeItem.requestShadow();
                         }
                 }
         }
@@ -1416,10 +1414,12 @@ void Room::draw( const allegro::Pict& where )
         // then mask it and finally draw it
         for ( std::vector< FreeItemPtr >::const_iterator fi = freeItems.begin (); fi != freeItems.end (); ++ fi )
         {
-                if ( ( *fi )->getRawImage() != nilPointer )
+                FreeItem& freeItem = *( *fi );
+
+                if ( freeItem.getRawImage() != nilPointer )
                 {
-                        ( *fi )->requestMask();
-                        ( *fi )->draw( where );
+                        freeItem.requestMask();
+                        freeItem.draw ();
                 }
         }
 
@@ -1439,9 +1439,6 @@ void Room::draw( const allegro::Pict& where )
                 where.drawPixelAt( getX0(), getY0(), Color::blackColor().toAllegroColor() );
         }
 #endif
-
-        // release picture after drawing
-        allegro::releasePict( where );
 }
 
 void Room::calculateBounds()

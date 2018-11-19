@@ -22,7 +22,7 @@ class PlaySound : public Action
 
 public:
 
-        PlaySound( const iso::ActivityOfItem& what ) : Action( ), whichSound( what ) { }
+        explicit PlaySound( const iso::ActivityOfItem& what ) : Action( ), whichSound( what ) { }
 
         virtual ~PlaySound( ) { }
 

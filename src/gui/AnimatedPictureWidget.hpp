@@ -32,7 +32,7 @@ public:
 
         virtual ~AnimatedPictureWidget( ) ;
 
-        virtual void draw ( const allegro::Pict & where ) ;
+        virtual void draw () ;
 
         void handleKey ( const std::string& /* key */ ) {  /* do nothing */  }
 

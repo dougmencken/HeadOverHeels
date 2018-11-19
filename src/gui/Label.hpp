@@ -54,7 +54,7 @@ public:
 
         void changeFontFamilyAndColor ( const std::string& family, const std::string& color ) ;
 
-        virtual void draw ( const allegro::Pict & where ) ;
+        virtual void draw () ;
 
         void handleKey ( const std::string& key ) ;
 

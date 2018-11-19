@@ -248,6 +248,9 @@ Picture* Isomot::updateMe ()
 {
         if ( view == nilPointer ) return nilPointer ;
 
+        const allegro::Pict& previousWhere = allegro::Pict::getWhereToDraw() ;
+        allegro::Pict::setWhereToDraw( view->getAllegroPict() );
+
 # if defined( DEBUG ) && DEBUG
         if ( chequerboard == nilPointer )
         {
@@ -334,14 +337,16 @@ Picture* Isomot::updateMe ()
 
         activeRoom->drawRoom();
 
-        if ( cameraFollowsCharacter )
+        if ( cameraFollowsCharacter && activeRoom->getMediator()->getActiveCharacter() != nilPointer )
                 activeRoom->getCamera()->centerOnItem( * activeRoom->getMediator()->getActiveCharacter() );
 
         const int cameraDeltaX = activeRoom->getCamera()->getDeltaX();
         const int cameraDeltaY = activeRoom->getCamera()->getDeltaY();
 
+        allegro::Pict::setWhereToDraw( view->getAllegroPict() );
+
         allegro::bitBlit (
-                activeRoom->getWhereToDraw()->getAllegroPict(), view->getAllegroPict(),
+                activeRoom->getWhereToDraw()->getAllegroPict(),
                 cameraDeltaX, cameraDeltaY,
                 0, 0,
                 view->getWidth(), view->getHeight()
@@ -356,30 +361,32 @@ Picture* Isomot::updateMe ()
                 std::ostringstream roomTiles;
                 roomTiles << activeRoom->getTilesX() << "x" << activeRoom->getTilesY();
 
-                allegro::textOut( roomFile, view->getAllegroPict(), 12, 8, allegroWhiteColor );
-                allegro::textOut( roomTiles.str(), view->getAllegroPict(), 12, 20, allegroWhiteColor );
+                allegro::textOut( roomFile, 12, 8, allegroWhiteColor );
+                allegro::textOut( roomTiles.str(), 12, 20, allegroWhiteColor );
 
                 Miniature miniatureOfRoom( *activeRoom, sizeOfTileForMiniature );
-                miniatureOfRoom.draw( view->getAllegroPict() );
+                miniatureOfRoom.draw ();
         }
 
         // cheats
 
         if ( GameManager::getInstance().areLivesInexhaustible () )
         {
-                ///allegro::textOut( "VIDAS INFINITAS", view->getAllegroPict(), 18, 10, allegroWhiteColor );
-                allegro::textOut( "INFINITE LIVES", view->getAllegroPict(), view->getWidth() - 128, 10, allegroWhiteColor );
+                ///allegro::textOut( "VIDAS INFINITAS", 18, 10, allegroWhiteColor );
+                allegro::textOut( "INFINITE LIVES", view->getWidth() - 128, 10, allegroWhiteColor );
         }
 
         if ( GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
         {
-                allegro::textOut( "INVIOLABILITY", view->getAllegroPict(), ( view->getWidth() - 13 * 8 ) >> 1, 10, allegroWhiteColor );
+                allegro::textOut( "INVIOLABILITY", ( view->getWidth() - 13 * 8 ) >> 1, 10, allegroWhiteColor );
         }
 
         if ( paused )
         {
                 Color::multiplyWithColor( view, Color::gray50Color() );
         }
+
+        allegro::Pict::setWhereToDraw( previousWhere );
 
         return this->view;
 }
@@ -460,7 +467,9 @@ void Isomot::handleMagicKeys ()
 
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "s" ) )
         {
-                gameManager.eatFish ( * activeRoom->getMediator()->getActiveCharacter(), activeRoom );
+                if ( activeRoom->getMediator()->getActiveCharacter() != nilPointer )
+                        gameManager.eatFish ( * activeRoom->getMediator()->getActiveCharacter(), activeRoom );
+
                 allegro::releaseKey( "s" );
         }
 
@@ -517,43 +526,46 @@ void Isomot::handleMagicKeys ()
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "j" ) )
         {
                 PlayerItemPtr activePlayer = activeRoom->getMediator()->getActiveCharacter();
-                PlayerItemPtr otherPlayer ;
-
-                Room* roomWithInactivePlayer = mapManager.getRoomOfInactivePlayer();
-                if ( roomWithInactivePlayer != nilPointer )
+                if ( activePlayer != nilPointer )
                 {
-                        otherPlayer = roomWithInactivePlayer->getMediator()->getActiveCharacter() ;
-                }
+                        PlayerItemPtr otherPlayer ;
 
-                if ( otherPlayer != nilPointer && roomWithInactivePlayer != activeRoom )
-                {
-                        std::cout << "join characters in active room \"" << activeRoom->getNameOfFileWithDataAboutRoom() << "\" via pure magic" << std::endl ;
+                        Room* roomWithInactivePlayer = mapManager.getRoomOfInactivePlayer();
+                        if ( roomWithInactivePlayer != nilPointer )
+                        {
+                                otherPlayer = roomWithInactivePlayer->getMediator()->getActiveCharacter() ;
+                        }
 
-                        std::string nameOfAnotherPlayer = otherPlayer->getLabel();
+                        if ( otherPlayer != nilPointer && roomWithInactivePlayer != activeRoom )
+                        {
+                                std::cout << "both characters are in active room \"" << activeRoom->getNameOfFileWithDataAboutRoom() << "\" via pure magic" << std::endl ;
 
-                        int playerX = activePlayer->getX();
-                        int playerY = activePlayer->getY();
-                        int playerZ = activePlayer->getZ() + 2 * LayerHeight;
-                        Way way = otherPlayer->getOrientation();
+                                std::string nameOfAnotherPlayer = otherPlayer->getLabel();
 
-                        PlayerItemPtr joinedPlayer( new PlayerItem(
-                                itemDataManager.findDataByLabel( nameOfAnotherPlayer ),
-                                playerX, playerY, playerZ, way
-                        ) );
+                                int playerX = activePlayer->getX();
+                                int playerY = activePlayer->getY();
+                                int playerZ = activePlayer->getZ() + 2 * LayerHeight;
+                                Way way = otherPlayer->getOrientation();
 
-                        std::string behavior = "still";
-                        if ( nameOfAnotherPlayer == "head" ) behavior = "behavior of Head";
-                        else if ( nameOfAnotherPlayer == "heels" ) behavior = "behavior of Heels";
+                                PlayerItemPtr joinedPlayer( new PlayerItem(
+                                        itemDataManager.findDataByLabel( nameOfAnotherPlayer ),
+                                        playerX, playerY, playerZ, way
+                                ) );
 
-                        joinedPlayer->setBehaviorOf( behavior );
+                                std::string behavior = "still";
+                                if ( nameOfAnotherPlayer == "head" ) behavior = "behavior of Head";
+                                else if ( nameOfAnotherPlayer == "heels" ) behavior = "behavior of Heels";
 
-                        joinedPlayer->fillWithData( gameManager );
+                                joinedPlayer->setBehaviorOf( behavior );
 
-                        activeRoom->addPlayerToRoom( joinedPlayer, true );
-                        joinedPlayer->getBehavior()->changeActivityOfItem( Activity::BeginWayInTeletransport );
+                                joinedPlayer->fillWithData( gameManager );
 
-                        roomWithInactivePlayer->removePlayerFromRoom( *otherPlayer, true );
-                        mapManager.removeRoomInPlay( roomWithInactivePlayer );
+                                activeRoom->addPlayerToRoom( joinedPlayer, true );
+                                joinedPlayer->getBehavior()->changeActivityOfItem( Activity::BeginWayInTeletransport );
+
+                                roomWithInactivePlayer->removePlayerFromRoom( *otherPlayer, true );
+                                mapManager.removeRoomInPlay( roomWithInactivePlayer );
+                        }
                 }
 
                 allegro::releaseKey( "j" );
@@ -578,39 +590,42 @@ void Isomot::handleMagicKeys ()
                 else
                 {
                         PlayerItemPtr activePlayer = activeRoom->getMediator()->getActiveCharacter();
-                        std::string nameOfPlayer = activePlayer->getLabel();
-                        Way whichWay = activePlayer->getOrientation();
-                        int teleportedX = 0;
-                        int teleportedY = 95;
-                        int teleportedZ = 240;
+                        if ( activePlayer != nilPointer )
+                        {
+                                std::string nameOfPlayer = activePlayer->getLabel();
+                                Way whichWay = activePlayer->getOrientation();
+                                int teleportedX = 0;
+                                int teleportedY = 95;
+                                int teleportedZ = 240;
 
-                        PlayerItemPtr teleportedPlayer( new PlayerItem(
-                                itemDataManager.findDataByLabel( nameOfPlayer ),
-                                teleportedX, teleportedY, teleportedZ,
-                                whichWay
-                        ) ) ;
+                                PlayerItemPtr teleportedPlayer( new PlayerItem(
+                                        itemDataManager.findDataByLabel( nameOfPlayer ),
+                                        teleportedX, teleportedY, teleportedZ,
+                                        whichWay
+                                ) ) ;
 
-                        std::string behaviorOfPlayer = "still";
-                        if ( nameOfPlayer == "head" ) behaviorOfPlayer = "behavior of Head";
-                        else if ( nameOfPlayer == "heels" ) behaviorOfPlayer = "behavior of Heels";
-                        else if ( nameOfPlayer == "headoverheels" ) behaviorOfPlayer = "behavior of Head over Heels";
+                                std::string behaviorOfPlayer = "still";
+                                if ( nameOfPlayer == "head" ) behaviorOfPlayer = "behavior of Head";
+                                else if ( nameOfPlayer == "heels" ) behaviorOfPlayer = "behavior of Heels";
+                                else if ( nameOfPlayer == "headoverheels" ) behaviorOfPlayer = "behavior of Head over Heels";
 
-                        teleportedPlayer->setBehaviorOf( behaviorOfPlayer );
+                                teleportedPlayer->setBehaviorOf( behaviorOfPlayer );
 
-                        teleportedPlayer->fillWithData( gameManager );
+                                teleportedPlayer->fillWithData( gameManager );
 
-                        std::string nameOfRoomNearFinal = "blacktooth83tofreedom.xml";
-                        Room* roomWithTeleportToFinalScene = mapManager.getRoomThenAddItToRoomsInPlay( nameOfRoomNearFinal, true );
-                        roomWithTeleportToFinalScene->addPlayerToRoom( teleportedPlayer, true );
-                        teleportedPlayer->getBehavior()->changeActivityOfItem( Activity::BeginWayInTeletransport );
+                                std::string nameOfRoomNearFinal = "blacktooth83tofreedom.xml";
+                                Room* roomWithTeleportToFinalScene = mapManager.getRoomThenAddItToRoomsInPlay( nameOfRoomNearFinal, true );
+                                roomWithTeleportToFinalScene->addPlayerToRoom( teleportedPlayer, true );
+                                teleportedPlayer->getBehavior()->changeActivityOfItem( Activity::BeginWayInTeletransport );
 
-                        activeRoom->removePlayerFromRoom( *activePlayer, true );
+                                activeRoom->removePlayerFromRoom( *activePlayer, true );
 
-                        mapManager.setActiveRoom( roomWithTeleportToFinalScene );
-                        mapManager.removeRoomInPlay( activeRoom );
+                                mapManager.setActiveRoom( roomWithTeleportToFinalScene );
+                                mapManager.removeRoomInPlay( activeRoom );
 
-                        roomWithTeleportToFinalScene->activate();
-                        activeRoom = roomWithTeleportToFinalScene;
+                                roomWithTeleportToFinalScene->activate();
+                                activeRoom = roomWithTeleportToFinalScene;
+                        }
                 }
 
                 allegro::releaseKey( "l" );

@@ -22,10 +22,8 @@ MenuWithValues::~MenuWithValues( )
         listOfValues.clear();
 }
 
-void MenuWithValues::draw( const allegro::Pict& where )
+void MenuWithValues::draw ()
 {
-        if ( ! where.isNotNil() ) return ;
-
         if ( activeOption == nilPointer )
         {
                 resetActiveOption ();
@@ -107,10 +105,10 @@ void MenuWithValues::draw( const allegro::Pict& where )
 
                 Picture * mark = ( activeOptionWithValue == label ) ? Menu::beforeChosenOption : Menu::beforeOption ;
                 if ( mark != nilPointer )
-                        allegro::drawSprite( where, mark->getAllegroPict(), getX (), getY () + dy );
+                        allegro::drawSprite( mark->getAllegroPict(), getX (), getY () + dy );
 
                 label->moveTo( getX () + dx, getY () + dy );
-                label->draw( where );
+                label->draw ();
 
                 // update vertical offset
                 dy += label->getHeight() - ( label == activeOptionWithValue ? 8 : 4 );

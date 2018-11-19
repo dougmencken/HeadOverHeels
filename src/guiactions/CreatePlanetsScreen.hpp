@@ -29,7 +29,7 @@ public:
         /**
          * @param notNewGame Indica si hay una partida en curso o comienza una nueva
          */
-        CreatePlanetsScreen( bool notNewGame );
+        explicit CreatePlanetsScreen( bool notNewGame );
 
         virtual ~CreatePlanetsScreen( ) ;
 

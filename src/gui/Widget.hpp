@@ -31,15 +31,13 @@ class Widget : public Drawable
 
 public:
 
-        Widget( ) ;
+        Widget( ) : xy ( std::make_pair( 0, 0 ) ), onScreen( false ) { }
 
-        Widget( int x, int y ) ;
+        Widget( int x, int y ) : xy ( std::make_pair( x, y ) ), onScreen( false ) { }
 
-        virtual ~Widget( ) ;
+        virtual ~Widget( ) { }
 
         virtual bool isMenu () {  return false ;  }
-
-        virtual void draw ( const allegro::Pict & where ) = 0 ;
 
         /**
          * Subclasses may respond to this event or notify other component
@@ -49,7 +47,17 @@ public:
         /**
          * Change position of the widget
          */
-        virtual void moveTo ( int x, int y ) ;
+        virtual void moveTo ( int x, int y ) {  xy = std::make_pair( x, y ) ;  }
+
+        int getX () const {  return this->xy.first ;  }
+
+        int getY () const {  return this->xy.second ;  }
+
+        std::pair < int, int > getXY () const {  return this->xy ;  }
+
+        bool isOnScreen() const {  return this->onScreen ;  }
+
+        void setOnScreen( bool onscreen ) {  this->onScreen = onscreen ;  }
 
 private:
 
@@ -66,18 +74,6 @@ protected:
         void setX ( int x ) {  this->xy.first = x ;  }
 
         void setY ( int y ) {  this->xy.second = y ;  }
-
-public:
-
-        std::pair < int, int > getXY () const {  return this->xy ;  }
-
-        int getX () const {  return this->xy.first ;  }
-
-        int getY () const {  return this->xy.second ;  }
-
-        bool isOnScreen() const {  return this->onScreen ;  }
-
-        void setOnScreen( bool onscreen ) {  this->onScreen = onscreen ;  }
 
 };
 

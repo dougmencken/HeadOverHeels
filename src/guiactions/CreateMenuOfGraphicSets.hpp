@@ -33,7 +33,7 @@ public:
         /**
          * @param previous Action to do on escape
          */
-        CreateMenuOfGraphicSets( Action * previous ) ;
+        explicit CreateMenuOfGraphicSets( Action * previous ) ;
 
         virtual ~CreateMenuOfGraphicSets( ) ;
 

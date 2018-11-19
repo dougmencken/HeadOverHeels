@@ -49,6 +49,7 @@ void initAllegro ()
                 std::cout << "can’t switch screen to " << iso::ScreenWidth() << " x " << iso::ScreenHeight() << std::endl ;
 
         allegro::Pict::theScreen().clearToColor( Color::blackColor().toAllegroColor() ) ;
+        allegro::update ();
 
         // initialize handler of keyboard events
         allegro::initKeyboardHandler ();

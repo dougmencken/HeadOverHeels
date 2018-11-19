@@ -202,8 +202,12 @@ WhyPaused GameManager::pause ()
         isomot.pause();
         Picture* view = isomot.updateMe ();
         allegro::bitBlit( view->getAllegroPict(), allegro::Pict::theScreen() );
+        allegro::update ();
 
         allegro::emptyKeyboardBuffer();
+
+        const allegro::Pict& previousWhere = allegro::Pict::getWhereToDraw() ;
+        allegro::Pict::setWhereToDraw( view->getAllegroPict() );
 
         // the user just released some planet
         if ( this->takenCrown )
@@ -226,7 +230,7 @@ WhyPaused GameManager::pause ()
                         gui::Label label( line->text, line->font, line->color );
                         label.moveTo( ( ScreenWidth() - label.getWidth() ) >> 1, deltaY );
                         deltaY += label.getHeight() * 3 / 4;
-                        label.draw( view->getAllegroPict() );
+                        label.draw ();
                 }
 
                 text = language->findLanguageStringForAlias( "confirm-resume" );
@@ -238,7 +242,7 @@ WhyPaused GameManager::pause ()
                         gui::Label label( line->text, line->font, line->color );
                         label.moveTo( ( ScreenWidth() - label.getWidth() ) >> 1, deltaY );
                         deltaY += label.getHeight() * 3 / 4;
-                        label.draw( view->getAllegroPict() );
+                        label.draw ();
                 }
 
                 allegro::emptyKeyboardBuffer();
@@ -247,6 +251,7 @@ WhyPaused GameManager::pause ()
                 while ( ! confirm && ! exit )
                 {
                         allegro::bitBlit( view->getAllegroPict(), allegro::Pict::theScreen() );
+                        allegro::update ();
 
                         if ( allegro::areKeypushesWaiting() )
                         {
@@ -313,7 +318,7 @@ WhyPaused GameManager::pause ()
                         gui::Label label( line->text, line->font, line->color );
                         label.moveTo( ( ScreenWidth() - label.getWidth() ) >> 1, deltaY );
                         deltaY += label.getHeight() * 3 / 4;
-                        label.draw( view->getAllegroPict() );
+                        label.draw ();
                 }
 
                 text = language->findLanguageStringForAlias( "confirm-resume" );
@@ -325,12 +330,13 @@ WhyPaused GameManager::pause ()
                         gui::Label label( line->text, line->font, line->color );
                         label.moveTo( ( ScreenWidth() - label.getWidth() ) >> 1, deltaY );
                         deltaY += label.getHeight() * 3 / 4;
-                        label.draw( view->getAllegroPict() );
+                        label.draw ();
                 }
 
                 while ( ! confirm && ! exit )
                 {
                         allegro::bitBlit( view->getAllegroPict(), allegro::Pict::theScreen() );
+                        allegro::update ();
 
                         if ( allegro::areKeypushesWaiting() )
                         {
@@ -349,6 +355,8 @@ WhyPaused GameManager::pause ()
                         milliSleep( 100 );
                 }
         }
+
+        allegro::Pict::setWhereToDraw( previousWhere );
 
         return why;
 }
@@ -450,6 +458,9 @@ void GameManager::refreshAmbianceImages ()
 
 void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
 {
+        const allegro::Pict& previousWhere = allegro::Pict::getWhereToDraw() ;
+        allegro::Pict::setWhereToDraw( where );
+
         // scenery of this room
         std::string scenery = isomot.getMapManager().getActiveRoom()->getScenery();
 
@@ -466,7 +477,7 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                 {
                         if ( sceneryBackgrounds.find( scenery ) != sceneryBackgrounds.end () )
                                 if ( sceneryBackgrounds[ scenery ] != nilPointer )
-                                        allegro::drawSprite( where, sceneryBackgrounds[ scenery ]->getAllegroPict(), diffX >> 1, diffY );
+                                        allegro::drawSprite( sceneryBackgrounds[ scenery ]->getAllegroPict(), diffX >> 1, diffY );
                 }
 
                 const unsigned int headHeelsAmbianceY = 425 + diffY ;
@@ -481,12 +492,12 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                 const unsigned int rightTooAmbianceX = 559 + dx ;
 
                 std::string player = isomot.getMapManager().getActiveRoom()->getMediator()->getLabelOfActiveCharacter();
-                allegro::drawSprite( where, ( (  player == "head" || player == "headoverheels" ) ? pictureOfHead : grayPictureOfHead )->getAllegroPict(), 161 + dx, headHeelsAmbianceY );
-                allegro::drawSprite( where, ( ( player == "heels" || player == "headoverheels" ) ? pictureOfHeels : grayPictureOfHeels )->getAllegroPict(), 431 + dx, headHeelsAmbianceY );
+                allegro::drawSprite( ( (  player == "head" || player == "headoverheels" ) ? pictureOfHead : grayPictureOfHead )->getAllegroPict(), 161 + dx, headHeelsAmbianceY );
+                allegro::drawSprite( ( ( player == "heels" || player == "headoverheels" ) ? pictureOfHeels : grayPictureOfHeels )->getAllegroPict(), 431 + dx, headHeelsAmbianceY );
 
-                allegro::drawSprite( where, ( this->horn ? pictureOfHorn : grayPictureOfHorn )->getAllegroPict(), leftTooAmbianceX, headHeelsAmbianceY );
+                allegro::drawSprite( ( this->horn ? pictureOfHorn : grayPictureOfHorn )->getAllegroPict(), leftTooAmbianceX, headHeelsAmbianceY );
 
-                allegro::drawSprite( where, ( this->handbag ? pictureOfBag : grayPictureOfBag )->getAllegroPict(), rightTooAmbianceX, headHeelsAmbianceY );
+                allegro::drawSprite( ( this->handbag ? pictureOfBag : grayPictureOfBag )->getAllegroPict(), rightTooAmbianceX, headHeelsAmbianceY );
 
                 std::string colorOfLabels = "white";
                 /* if ( isSimpleGraphicSet () ) colorOfLabels = "magenta"; */
@@ -494,64 +505,64 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                 // vidas de Head
                 gui::Label headLivesLabel( util::number2string( this->headLives ), "big", "white", -2 );
                 headLivesLabel.moveTo( ( this->headLives > 9 ? 214 : 221 ) + dx, headHeelsAmbianceY - 1 );
-                headLivesLabel.draw( where );
+                headLivesLabel.draw ();
 
                 // vidas de Heels
                 gui::Label heelsLivesLabel( util::number2string( this->heelsLives ), "big", "white", -2 );
                 heelsLivesLabel.moveTo( ( this->heelsLives > 9 ? 398 : 405 ) + dx, headHeelsAmbianceY - 1 );
-                heelsLivesLabel.draw( where );
+                heelsLivesLabel.draw ();
 
                 // número de rosquillas
-                allegro::drawSprite( where, ( this->donuts != 0 ? pictureOfDonuts : grayPictureOfDonuts )->getAllegroPict(), leftTooAmbianceX, charStuffAmbianceY );
+                allegro::drawSprite( ( this->donuts != 0 ? pictureOfDonuts : grayPictureOfDonuts )->getAllegroPict(), leftTooAmbianceX, charStuffAmbianceY );
                 if ( this->donuts > 0 )
                 {
                         gui::Label donutsLabel( util::number2string( this->donuts ), "", colorOfLabels, -2 );
                         donutsLabel.moveTo( ( this->donuts > 9 ? 42 : 49 ) + dx, charStuffAmbianceY + 11 );
-                        donutsLabel.draw( where );
+                        donutsLabel.draw ();
                 }
 
                 // grandes saltos
-                allegro::drawSprite( where, ( this->highJumps > 0 ? pictureOfGrandesSaltos : grayPictureOfGrandesSaltos )->getAllegroPict(), rightAmbianceX, bonusAmbianceY );
+                allegro::drawSprite( ( this->highJumps > 0 ? pictureOfGrandesSaltos : grayPictureOfGrandesSaltos )->getAllegroPict(), rightAmbianceX, bonusAmbianceY );
                 if ( this->highJumps > 0 )
                 {
                         gui::Label highJumpsLabel( util::number2string( this->highJumps ), "", colorOfLabels, -2 );
                         highJumpsLabel.moveTo( ( this->highJumps > 9 ? 505 : 512 ) + dx, bonusAmbianceY + 1 );
-                        highJumpsLabel.draw( where );
+                        highJumpsLabel.draw ();
                 }
 
                 // gran velocidad
-                allegro::drawSprite( where, ( this->highSpeed > 0 ? pictureOfGranVelocidad : grayPictureOfGranVelocidad )->getAllegroPict(), leftAmbianceX, bonusAmbianceY );
+                allegro::drawSprite( ( this->highSpeed > 0 ? pictureOfGranVelocidad : grayPictureOfGranVelocidad )->getAllegroPict(), leftAmbianceX, bonusAmbianceY );
                 if ( this->highSpeed > 0 )
                 {
                         gui::Label highSpeedLabel( util::number2string( this->highSpeed ), "", colorOfLabels, -2 );
                         highSpeedLabel.moveTo( ( this->highSpeed > 9 ? 107 : 114 ) + dx, bonusAmbianceY + 1 );
-                        highSpeedLabel.draw( where );
+                        highSpeedLabel.draw ();
                 }
 
                 // escudo de Head
-                allegro::drawSprite( where, ( this->headShield > 0 ? pictureOfEscudo : grayPictureOfEscudo )->getAllegroPict(), leftAmbianceX, immunityAmbianceY );
+                allegro::drawSprite( ( this->headShield > 0 ? pictureOfEscudo : grayPictureOfEscudo )->getAllegroPict(), leftAmbianceX, immunityAmbianceY );
                 if ( this->headShield > 0 )
                 {
                         int headShieldValue = static_cast< int >( this->headShield * 99.0 / 25.0 );
                         gui::Label headShieldLabel( util::number2string( headShieldValue ), "", colorOfLabels, -2 );
                         headShieldLabel.moveTo( ( headShieldValue > 9 ? 107 : 114 ) + dx, immunityAmbianceY + 1 );
-                        headShieldLabel.draw( where );
+                        headShieldLabel.draw ();
                 }
 
                 // escudo de Heels
-                allegro::drawSprite( where, ( this->heelsShield > 0 ? pictureOfEscudo : grayPictureOfEscudo )->getAllegroPict(), rightAmbianceX, immunityAmbianceY );
+                allegro::drawSprite( ( this->heelsShield > 0 ? pictureOfEscudo : grayPictureOfEscudo )->getAllegroPict(), rightAmbianceX, immunityAmbianceY );
                 if ( this->heelsShield > 0 )
                 {
                         int heelsShieldValue = static_cast< int >( this->heelsShield * 99.0 / 25.0 );
                         gui::Label heelsShieldLabel( util::number2string( heelsShieldValue ), "", colorOfLabels, -2 );
                         heelsShieldLabel.moveTo( ( heelsShieldValue > 9 ? 505 : 512 ) + dx, immunityAmbianceY + 1 );
-                        heelsShieldLabel.draw( where );
+                        heelsShieldLabel.draw ();
                 }
 
                 // item in handbag
                 if ( this->imageOfItemInBag != nilPointer )
                 {
-                        allegro::drawSprite( where, imageOfItemInBag->getAllegroPict(), rightTooAmbianceX, charStuffAmbianceY );
+                        allegro::drawSprite( imageOfItemInBag->getAllegroPict(), rightTooAmbianceX, charStuffAmbianceY );
                 }
         }
         else
@@ -563,7 +574,7 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                         freedomLabel->moveTo( ScreenWidth() / 10, ScreenHeight() - 100 );
                 }
 
-                freedomLabel->draw( where );
+                freedomLabel->draw ();
         }
 
         if ( ! hasBackgroundPicture () )
@@ -578,12 +589,11 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                         Color backgroundColor = Color::blackColor();
                         if ( charactersFly() ) backgroundColor = Color::darkBlueColor();
 
-                        allegro::fillRect( where,
-                                           ( where.getW() - 8 * widthOfChar ) >> 1, where.getH() - deltaYtext - 1,
+                        allegro::fillRect( ( where.getW() - 8 * widthOfChar ) >> 1, where.getH() - deltaYtext - 1,
                                            ( where.getW() + 8 * widthOfChar ) >> 1, where.getH() - deltaYtext + 8,
                                            backgroundColor.toAllegroColor() );
 
-                        allegro::textOut( "camera", where,
+                        allegro::textOut( "camera",
                                           ( where.getW() - 6 * widthOfChar ) >> 1, where.getH() - deltaYtext,
                                           Color::gray75Color().toAllegroColor() );
 
@@ -596,22 +606,23 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                         if ( cameraDeltaY > 0 ) yCamera = "+" + yCamera ;
                         std::string xyCamera = xCamera + "," + yCamera ;
 
-                        allegro::fillRect( where,
-                                           ( where.getW() - ( xyCamera.length() + 2 ) * widthOfChar ) >> 1, where.getH() - deltaYtext + 10 - 1,
+                        allegro::fillRect( ( where.getW() - ( xyCamera.length() + 2 ) * widthOfChar ) >> 1, where.getH() - deltaYtext + 10 - 1,
                                            ( where.getW() + ( xyCamera.length() + 2 ) * widthOfChar ) >> 1, where.getH() - deltaYtext + 10 + 8 + 1,
                                            backgroundColor.toAllegroColor() );
 
                         const int textX = ( where.getW() - xyCamera.length() * widthOfChar ) >> 1 ;
                         const int textY = where.getH() - deltaYtext + 10 ;
 
-                        allegro::textOut( xCamera, where, textX, textY,
+                        allegro::textOut( xCamera, textX, textY,
                                           isomot.doesCameraFollowCharacter() ? Color::gray50Color().toAllegroColor() : Color::whiteColor().toAllegroColor() );
-                        allegro::textOut( "," , where, textX + widthOfChar * xCamera.length(), textY,
+                        allegro::textOut( "," , textX + widthOfChar * xCamera.length(), textY,
                                           isomot.doesCameraFollowCharacter() ? Color::gray25Color().toAllegroColor() : Color::gray50Color().toAllegroColor() );
-                        allegro::textOut( yCamera, where, textX + widthOfChar * ( xCamera.length() + 1 ), textY,
+                        allegro::textOut( yCamera, textX + widthOfChar * ( xCamera.length() + 1 ), textY,
                                           isomot.doesCameraFollowCharacter() ? Color::gray50Color().toAllegroColor() : Color::whiteColor().toAllegroColor() );
                 }
         }
+
+        allegro::Pict::setWhereToDraw( previousWhere );
 }
 
 void GameManager::drawOnScreen ( const allegro::Pict& view )
@@ -629,15 +640,19 @@ void GameManager::drawOnScreen ( const allegro::Pict& view )
                 }
         }
 
+        allegro::Pict::resetWhereToDraw();
+
         allegro::bitBlit( view, allegro::Pict::theScreen() );
 
         if ( recordCaptures )
         {
-                if ( ! drawBackgroundPicture ) allegro::fillRect( allegro::Pict::theScreen(), 11, 18, 19, 30, Color::blackColor().toAllegroColor() );
-                allegro::fillRect( allegro::Pict::theScreen(), 19, 18, 80, 30, Color::gray75Color().toAllegroColor() );
-                allegro::fillCircle( allegro::Pict::theScreen(), 34, 24, 5, Color::redColor().toAllegroColor() );
-                allegro::textOut( "REC", allegro::Pict::theScreen(), 48, 21, Color::redColor().toAllegroColor() );
+                if ( ! drawBackgroundPicture ) allegro::fillRect( 11, 18, 19, 30, Color::blackColor().toAllegroColor() );
+                allegro::fillRect( 19, 18, 80, 30, Color::gray75Color().toAllegroColor() );
+                allegro::fillCircle( 34, 24, 5, Color::redColor().toAllegroColor() );
+                allegro::textOut( "REC", 48, 21, Color::redColor().toAllegroColor() );
         }
+
+        allegro::update ();
 }
 
 void GameManager::loadGame ( const std::string& fileName )

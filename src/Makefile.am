@@ -42,6 +42,8 @@ bin_PROGRAMS = headoverheels
 
 headoverheels_SOURCES = main.cpp \
 			tribool.hpp \
+			sleep.cpp \
+			sleep.hpp \
 			util.hpp \
 			pointers.cpp \
 			pointers.hpp \
@@ -201,7 +203,6 @@ headoverheels_SOURCES = main.cpp \
 			gui/Screen.hpp \
 			gui/TextField.cpp \
 			gui/TextField.hpp \
-			gui/Widget.cpp \
 			gui/Widget.hpp \
 			guiactions/Action.hpp \
 			guiactions/PlaySound.hpp \

@@ -58,7 +58,10 @@ Menu::~Menu( )
                         beforeOption->getWidth() - offsetOfTintX, beforeOption->getHeight() - offsetOfTintY
                 );
 
-                allegro::drawSprite( beforeOption->getAllegroPict(), *optionPict.get(), 0, 0 );
+                const allegro::Pict& previousWhere = allegro::Pict::getWhereToDraw() ;
+                allegro::Pict::setWhereToDraw( beforeOption->getAllegroPict() );
+                allegro::drawSprite( *optionPict.get(), 0, 0 );
+                allegro::Pict::setWhereToDraw( previousWhere );
 
                 beforeOption->setName( "picture to show before menu option" );
         }
@@ -85,7 +88,10 @@ Menu::~Menu( )
                         beforeChosenOptionMini->getWidth() - offsetOfTintX, beforeChosenOptionMini->getHeight() - offsetOfTintY
                 );
 
-                allegro::drawSprite( beforeChosenOptionMini->getAllegroPict(), *chosenOptionMiniPict.get(), 0, 0 );
+                const allegro::Pict& previousWhere = allegro::Pict::getWhereToDraw() ;
+                allegro::Pict::setWhereToDraw( beforeChosenOptionMini->getAllegroPict() );
+                allegro::drawSprite( *chosenOptionMiniPict.get(), 0, 0 );
+                allegro::Pict::setWhereToDraw( previousWhere );
 
                 beforeChosenOptionMini->setName( "picture to show before chosen but not double height menu option" );
         }
@@ -104,10 +110,8 @@ Menu::~Menu( )
         beforeChosenOptionMini->colorize( Color::orangeColor() );
 }
 
-void Menu::draw( const allegro::Pict& where )
+void Menu::draw ()
 {
-        if ( ! where.isNotNil() ) return ;
-
         if ( activeOption == nilPointer )
         {
                 resetActiveOption ();
@@ -147,10 +151,10 @@ void Menu::draw( const allegro::Pict& where )
 
                 Picture * mark = ( this->activeOption == label ) ? Menu::beforeChosenOption : Menu::beforeOption ;
                 if ( mark != nilPointer )
-                        allegro::drawSprite( where, mark->getAllegroPict(), getX (), getY () + dy );
+                        allegro::drawSprite( mark->getAllegroPict(), getX (), getY () + dy );
 
                 label->moveTo( getX () + dx, getY () + dy );
-                label->draw( where );
+                label->draw ();
 
                 // update vertical offset
                 dy += label->getHeight() - ( label == this->activeOption ? 8 : 4 );
@@ -166,7 +170,7 @@ void Menu::draw( const allegro::Pict& where )
 
 void Menu::redraw ()
 {
-        if ( whereToDraw != nilPointer ) draw( whereToDraw->getAllegroPict() );
+        if ( whereToDraw != nilPointer ) drawOn( whereToDraw->getAllegroPict() );
         GuiManager::getInstance().redraw();
 }
 

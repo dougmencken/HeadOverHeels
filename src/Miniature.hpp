@@ -38,14 +38,16 @@ public:
 
         virtual ~Miniature( ) { }
 
-        virtual void draw ( const allegro::Pict & where ) ;
+        virtual void draw () ;
 
-        void drawEastDoorOnMiniature( const allegro::Pict & where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const Color& color ) ;
-        void drawSouthDoorOnMiniature( const allegro::Pict & where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const Color& color ) ;
-        void drawNorthDoorOnMiniature( const allegro::Pict & where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const Color& color ) ;
-        void drawWestDoorOnMiniature( const allegro::Pict & where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const Color& color ) ;
+        void drawVignetteForRoomAboveOrBelow ( const allegro::Pict& where, int midX, int aboveY, int belowY, const Color& color, const std::string& roomAbove, const std::string& roomBelow ) ;
 
-        void drawIsoSquare( const allegro::Pict & where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const Color& color ) ;
+        void drawEastDoorOnMiniature ( const allegro::Pict & where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const Color& color ) ;
+        void drawSouthDoorOnMiniature ( const allegro::Pict & where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const Color& color ) ;
+        void drawNorthDoorOnMiniature ( const allegro::Pict & where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const Color& color ) ;
+        void drawWestDoorOnMiniature ( const allegro::Pict & where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const Color& color ) ;
+
+        void drawIsoSquare ( const allegro::Pict & where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const Color& color ) ;
 
         void drawIsoTile ( const allegro::Pict & where, int x0, int y0, int tileX, int tileY, const Color & color, bool loX, bool loY, bool hiX, bool hiY ) ;
 

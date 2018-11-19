@@ -29,9 +29,9 @@ public:
 
         PictureWidget( int x, int y, const PicturePtr & image, const std::string & name ) ;
 
-        virtual ~PictureWidget( ) ;
+        virtual ~PictureWidget( ) { }
 
-        virtual void draw ( const allegro::Pict & where ) ;
+        virtual void draw () ;
 
         void handleKey ( const std::string& /* key */ ) {  /* do nothing */  }
 

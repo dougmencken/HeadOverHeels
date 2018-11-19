@@ -37,7 +37,7 @@ public:
 
         virtual ~MenuWithValues( );
 
-        void draw ( const allegro::Pict& where ) ;
+        virtual void draw () ;
 
         std::vector < std::string > getValues () {  return this->listOfValues ;  }
 

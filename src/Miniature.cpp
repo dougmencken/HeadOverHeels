@@ -18,7 +18,7 @@ Miniature::Miniature( const Room& roomForMiniature, unsigned int sizeOfTileForMi
         if ( sizeOfTile < 2 ) sizeOfTile = 2 ;
 }
 
-void Miniature::draw( const allegro::Pict& where )
+void Miniature::draw ()
 {
         const RoomConnections* connections = room.getConnections();
         assert( connections != nilPointer );
@@ -72,6 +72,8 @@ void Miniature::draw( const allegro::Pict& where )
 
         bool narrowRoomAlongX = ( lastTileY == firstTileY + 1 ) ;
         bool narrowRoomAlongY = ( lastTileX == firstTileX + 1 ) ;
+
+        const allegro::Pict& where = allegro::Pict::getWhereToDraw() ;
 
         // draw doors
 
@@ -150,15 +152,13 @@ void Miniature::draw( const allegro::Pict& where )
         int maxXsw = lastTileX ;
         int maxYsw = lastTileY ;
 
-        room.getMediator()->lockGridItemsMutex ();
+        ////room.getMediator()->lockGridItemsMutex ();
 
         const std::vector< std::vector< GridItemPtr > > & gridItemsInRoom = room.getGridItems();
 
         for ( unsigned int column = 0; column < gridItemsInRoom.size(); column ++ )
         {
-                const std::vector< GridItemPtr >& columnOfItems = gridItemsInRoom[ column ];
-
-                for ( std::vector< GridItemPtr >::const_iterator gi = columnOfItems.begin (); gi != columnOfItems.end (); ++ gi )
+                for ( std::vector< GridItemPtr >::const_iterator gi = gridItemsInRoom[ column ].begin (); gi != gridItemsInRoom[ column ].end (); ++ gi )
                 {
                         const GridItem& item = *( *gi ) ;
 
@@ -190,7 +190,7 @@ void Miniature::draw( const allegro::Pict& where )
                 }
         }
 
-        room.getMediator()->unlockGridItemsMutex ();
+        ////room.getMediator()->unlockGridItemsMutex ();
 
         for ( unsigned int tile = firstTileX ; tile <= lastTileX ; tile ++ )
         {
@@ -304,7 +304,7 @@ void Miniature::draw( const allegro::Pict& where )
                 }
         }
 
-        room.getMediator()->lockGridItemsMutex ();
+        ////room.getMediator()->lockGridItemsMutex ();
 
         for ( unsigned int column = 0; column < gridItemsInRoom.size(); column ++ )
         {
@@ -348,9 +348,9 @@ void Miniature::draw( const allegro::Pict& where )
                 }
         }
 
-        room.getMediator()->unlockGridItemsMutex ();
+        ////room.getMediator()->unlockGridItemsMutex ();
 
-        room.getMediator()->lockFreeItemsMutex ();
+        ////room.getMediator()->lockFreeItemsMutex ();
 
         const std::vector< FreeItemPtr > & freeItemsInRoom = room.getFreeItems();
 
@@ -405,7 +405,7 @@ void Miniature::draw( const allegro::Pict& where )
                 }
         }
 
-        room.getMediator()->unlockFreeItemsMutex ();
+        ////room.getMediator()->unlockFreeItemsMutex ();
 
         // show characters in room
 
@@ -448,7 +448,10 @@ void Miniature::draw( const allegro::Pict& where )
                         else if ( tileY > yEnd ) tileY = yEnd ;
                 }
 
-                fillIsoTileInside( where, iniX, iniY, tileX, tileY, FlickeringColor::flickerWhiteAndTransparent(), true );
+                fillIsoTileInside( where,
+                        iniX, iniY, tileX, tileY,
+                        character.isActiveCharacter() ? FlickeringColor::flickerWhiteAndTransparent() : FlickeringColor::flickerGray75AndTransparent(),
+                        true );
         }
 
         // show when there’s a room above or below
@@ -456,40 +459,12 @@ void Miniature::draw( const allegro::Pict& where )
         if ( ! roomAbove.empty() || ! roomBelow.empty() )
         {
                 int miniatureMidX = leftXmap + ( tilesY + tilesX ) * sizeOfTile;
-                int abovePointerY = iniY - 2;
-                int belowPointerY = iniY + ( tilesY + tilesX ) * sizeOfTile;
-                abovePointerY -= sizeOfTile << 1;
-                belowPointerY += sizeOfTile << 1;
+                int aboveY = iniY - 2;
+                int belowY = iniY + ( tilesY + tilesX ) * sizeOfTile;
+                aboveY -= sizeOfTile << 1;
+                belowY += sizeOfTile << 1;
 
-                AllegroColor greenColor = Color::greenColor().toAllegroColor() ;
-
-                const unsigned int linesEven = ( ( sizeOfTile + 1 ) >> 1 ) << 1;
-
-                if ( ! roomAbove.empty() )
-                {
-                        // draw middle line
-                        allegro::drawLine( where, miniatureMidX, abovePointerY - linesEven + 1, miniatureMidX, abovePointerY - ( linesEven << 1 ), greenColor );
-
-                        int pos = 0;
-                        for ( unsigned int off = linesEven ; off > 0 ; off -- , pos ++ )
-                        {
-                                allegro::drawLine( where, miniatureMidX - off, abovePointerY - pos, miniatureMidX - off, abovePointerY - pos - linesEven, greenColor );
-                                allegro::drawLine( where, miniatureMidX + off, abovePointerY - pos, miniatureMidX + off, abovePointerY - pos - linesEven, greenColor );
-                        }
-                }
-
-                if ( ! roomBelow.empty() )
-                {
-                        // draw middle line
-                        allegro::drawLine( where, miniatureMidX, belowPointerY + linesEven - 1, miniatureMidX, belowPointerY + ( linesEven << 1 ), greenColor );
-
-                        int pos = 0;
-                        for ( unsigned int off = linesEven ; off > 0 ; off -- , pos ++ )
-                        {
-                                allegro::drawLine( where, miniatureMidX - off, belowPointerY + pos, miniatureMidX - off, belowPointerY + pos + linesEven, greenColor );
-                                allegro::drawLine( where, miniatureMidX + off, belowPointerY + pos, miniatureMidX + off, belowPointerY + pos + linesEven, greenColor );
-                        }
-                }
+                drawVignetteForRoomAboveOrBelow( where, miniatureMidX, aboveY, belowY, Color::greenColor().toAllegroColor(), roomAbove, roomBelow );
         }
 
         // paint final room
@@ -505,6 +480,46 @@ void Miniature::draw( const allegro::Pict& where )
                         }
                 }
         }
+}
+
+void Miniature::drawVignetteForRoomAboveOrBelow( const allegro::Pict& where, int midX, int aboveY, int belowY, const Color& color, const std::string& roomAbove, const std::string& roomBelow )
+{
+        if ( color.isKeyColor() ) return ;
+
+        if ( roomAbove.empty() && roomBelow.empty() ) return ;
+
+        const allegro::Pict& previousWhere = allegro::Pict::getWhereToDraw() ;
+        allegro::Pict::setWhereToDraw( where );
+
+        const unsigned int linesEven = ( ( sizeOfTile + 1 ) >> 1 ) << 1;
+
+        if ( ! roomAbove.empty() )
+        {
+                // draw middle line
+                allegro::drawLine( midX, aboveY - linesEven + 1, midX, aboveY - ( linesEven << 1 ), color.toAllegroColor() );
+
+                int pos = 0;
+                for ( unsigned int off = linesEven ; off > 0 ; off -- , pos ++ )
+                {
+                        allegro::drawLine( midX - off, aboveY - pos, midX - off, aboveY - pos - linesEven, color.toAllegroColor() );
+                        allegro::drawLine( midX + off, aboveY - pos, midX + off, aboveY - pos - linesEven, color.toAllegroColor() );
+                }
+        }
+
+        if ( ! roomBelow.empty() )
+        {
+                // draw middle line
+                allegro::drawLine( midX, belowY + linesEven - 1, midX, belowY + ( linesEven << 1 ), color.toAllegroColor() );
+
+                int pos = 0;
+                for ( unsigned int off = linesEven ; off > 0 ; off -- , pos ++ )
+                {
+                        allegro::drawLine( midX - off, belowY + pos, midX - off, belowY + pos + linesEven, color.toAllegroColor() );
+                        allegro::drawLine( midX + off, belowY + pos, midX + off, belowY + pos + linesEven, color.toAllegroColor() );
+                }
+        }
+
+        allegro::Pict::setWhereToDraw( previousWhere );
 }
 
 void Miniature::drawEastDoorOnMiniature( const allegro::Pict& where, int x0, int y0, unsigned int tilesX, unsigned int tilesY, const Color& color )

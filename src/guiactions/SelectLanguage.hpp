@@ -22,7 +22,7 @@ class SelectLanguage: public Action
 
 public:
 
-        SelectLanguage( const std::string& language ) ;
+        explicit SelectLanguage( const std::string& language ) ;
 
         std::string getNameOfAction () const {  return "SelectLanguage" ;  }
 

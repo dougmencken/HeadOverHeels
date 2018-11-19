@@ -42,7 +42,7 @@ public:
 
         virtual bool isMenu () {  return true ;  }
 
-        void draw ( const allegro::Pict& where ) ;
+        virtual void draw () ;
 
         void redraw () ;
 

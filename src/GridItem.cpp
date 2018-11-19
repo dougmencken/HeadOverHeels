@@ -25,16 +25,16 @@ GridItem::~GridItem( )
 
 }
 
-void GridItem::draw( const allegro::Pict& where )
+void GridItem::draw ()
 {
-        if ( this->processedImage != nilPointer )
+        if ( processedImage != nilPointer )
         {
-                allegro::drawSprite( where, this->processedImage->getAllegroPict(),
+                allegro::drawSprite( processedImage->getAllegroPict(),
                         mediator->getRoom()->getX0() + this->offset.first, mediator->getRoom()->getY0() + this->offset.second );
         }
-        else if ( this->rawImage != nilPointer )
+        else if ( rawImage != nilPointer )
         {
-                allegro::drawSprite( where, this->rawImage->getAllegroPict(),
+                allegro::drawSprite( rawImage->getAllegroPict(),
                         mediator->getRoom()->getX0() + this->offset.first, mediator->getRoom()->getY0() + this->offset.second );
         }
 }

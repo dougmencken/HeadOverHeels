@@ -45,7 +45,10 @@ Font::Font( const std::string& name, const Color& color, bool doubleHeight ) :
                         imageOfFont->getWidth() - offsetOfTint, imageOfFont->getHeight() - offsetOfTint
                 );
 
-                allegro::drawSprite( imageOfFont->getAllegroPict(), *fontFromFile.get(), 0, 0 );
+                const allegro::Pict& previousWhere = allegro::Pict::getWhereToDraw() ;
+                allegro::Pict::setWhereToDraw( imageOfFont->getAllegroPict() );
+                allegro::drawSprite( *fontFromFile.get(), 0, 0 );
+                allegro::Pict::setWhereToDraw( previousWhere );
 
                 imageOfFont->setName( "image of font’s letters" );
         }

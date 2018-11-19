@@ -14,16 +14,11 @@ PictureWidget::PictureWidget( int x, int y, const PicturePtr& image, const std::
 
 }
 
-PictureWidget::~PictureWidget()
-{
-
-}
-
-void PictureWidget::draw( const allegro::Pict& where )
+void PictureWidget::draw ()
 {
         if ( picture != nilPointer )
         {
-                allegro::drawSprite( where, picture->getAllegroPict(), getX(), getY() );
+                allegro::drawSprite( picture->getAllegroPict(), getX(), getY() );
         }
 }
 

@@ -25,16 +25,16 @@ TextField::~TextField()
         this->lines.clear();
 }
 
-void TextField::draw( const allegro::Pict& where )
+void TextField::draw ()
 {
         for ( std::list< Label* >::iterator i = this->lines.begin (); i != this->lines.end (); ++i )
         {
                 Label* label = *i ;
 
                 if ( ( label->getY() + static_cast< int >( label->getWidth() ) >= 0 ) &&
-                                ( label->getY() < static_cast< int >( where.getH() ) ) )
+                                ( label->getY() < static_cast< int >( allegro::Pict::getWhereToDraw().getH() ) ) )
                 {
-                        label->draw( where );
+                        label->draw ();
                 }
         }
 }

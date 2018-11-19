@@ -163,26 +163,32 @@ void MapManager::readMap ( const std::string& fileName )
 
                         std::string roomInRooms = "building " + util::toStringWithOrdinalSuffix( roomNth ) + " room out of " + util::number2string( howManyRooms ) ;
 
-                        allegro::fillRect( allegro::Pict::theScreen(),
-                                           0, atY - 4, ScreenWidth(), atY,
+                        allegro::Pict::resetWhereToDraw() ;
+
+                        allegro::fillRect( 0, atY - 4, ScreenWidth(), atY,
                                            Color::blackColor().toAllegroColor() );
 
                         autouniqueptr< allegro::Pict > stripe( allegro::Pict::newPict( ScreenWidth(), heightOfChar + interligne ) );
 
+                        allegro::Pict::setWhereToDraw( *stripe.get() ) ;
+
                         unsigned int textX = ( ScreenWidth() - roomInRooms.length() * widthOfChar ) >> 1 ;
                         stripe->clearToColor( Color::blueColor().toAllegroColor() );
-                        allegro::textOut( roomInRooms, *stripe.get(), textX, ( interligne >> 1 ) + 1, Color::yellowColor().toAllegroColor() );
+                        allegro::textOut( roomInRooms, textX, ( interligne >> 1 ) + 1, Color::yellowColor().toAllegroColor() );
                         allegro::bitBlit( *stripe.get(), allegro::Pict::theScreen(), 0, atY );
 
                         textX = ( ScreenWidth() - roomFile.length() * widthOfChar ) >> 1 ;
                         stripe->clearToColor( Color::blueColor().toAllegroColor() );
-                        allegro::textOut( roomFile, *stripe.get(), textX, ( interligne >> 1 ) - 1, Color::greenColor().toAllegroColor() );
+                        allegro::textOut( roomFile, textX, ( interligne >> 1 ) - 1, Color::greenColor().toAllegroColor() );
                         allegro::bitBlit( *stripe.get(), allegro::Pict::theScreen(), 0, atY + ( heightOfChar + interligne ) );
 
-                        allegro::fillRect( allegro::Pict::theScreen(),
-                                           0, atY + ( ( heightOfChar + interligne ) << 1 ),
+                        allegro::Pict::resetWhereToDraw() ;
+
+                        allegro::fillRect( 0, atY + ( ( heightOfChar + interligne ) << 1 ),
                                            ScreenWidth(), atY + ( ( heightOfChar + interligne ) << 1 ) + 4,
                                            Color::blackColor().toAllegroColor() );
+
+                        allegro::update();
 
                         Room* theRoom = RoomBuilder::buildRoom( iso::sharePath() + "map" + util::pathSeparator() + roomFile );
                         theRoom->setConnections( connections );

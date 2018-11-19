@@ -33,7 +33,7 @@ public:
 
         virtual ~MenuWithTwoColumns( );
 
-        void draw ( const allegro::Pict& where ) ;
+        virtual void draw () ;
 
         virtual unsigned int getWidthOfMenu () const ;
 

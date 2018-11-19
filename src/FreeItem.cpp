@@ -44,12 +44,12 @@ FreeItem::FreeItem( const FreeItem& freeItem )
         }
 }
 
-FreeItem::~FreeItem()
+FreeItem::~FreeItem( )
 {
         delete shadedNonmaskedImage ;
 }
 
-void FreeItem::draw( const allegro::Pict& where )
+void FreeItem::draw ()
 {
         if ( transparency >= 100 ) /* item is fully transparent */ return ;
 
@@ -61,7 +61,6 @@ void FreeItem::draw( const allegro::Pict& where )
         if ( transparency == 0 )
         {
                 allegro::drawSprite(
-                        where,
                         imageToDraw->getAllegroPict(),
                         mediator->getRoom()->getX0 () + this->offset.first,
                         mediator->getRoom()->getY0 () + this->offset.second
@@ -70,7 +69,6 @@ void FreeItem::draw( const allegro::Pict& where )
         else
         {
                 allegro::drawSpriteWithTransparency(
-                        where,
                         imageToDraw->getAllegroPict(),
                         mediator->getRoom()->getX0 () + this->offset.first,
                         mediator->getRoom()->getY0 () + this->offset.second,

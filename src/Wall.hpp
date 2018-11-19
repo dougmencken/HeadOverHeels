@@ -40,7 +40,7 @@ public:
          */
         void calculateOffset () ;
 
-        virtual void draw ( const allegro::Pict & where ) ;
+        virtual void draw () ;
 
         virtual bool operator < ( const Wall& segment ) const
                 {  return getPosition() < segment.getPosition() ;  }

@@ -33,15 +33,15 @@ void FloorTile::calculateOffset()
         this->offset.second = room->getY0() + room->getSizeOfOneTile() * ( getCellX() + getCellY() );
 }
 
-void FloorTile::draw( const allegro::Pict& where )
+void FloorTile::draw ()
 {
         if ( shadyImage != nilPointer )
         {       // draw tile with shadow
-                allegro::drawSprite( where, shadyImage->getAllegroPict(), offset.first, offset.second );
+                allegro::drawSprite( shadyImage->getAllegroPict(), offset.first, offset.second );
         }
         else if ( rawImage != nilPointer )
         {       // draw tile, just tile
-                allegro::drawSprite( where, rawImage->getAllegroPict(), offset.first, offset.second );
+                allegro::drawSprite( rawImage->getAllegroPict(), offset.first, offset.second );
         }
 }
 

@@ -26,7 +26,7 @@ public:
          * @param picture Image where to draw user interface
          * @param slot Number of file to load
          */
-        SaveGame( unsigned int slot ) ;
+        explicit SaveGame( unsigned int slot ) ;
 
         std::string getNameOfAction () const {  return "SaveGame" ;  }
 

@@ -41,7 +41,7 @@ public:
          */
         void calculateOffset () ;
 
-        void draw ( const allegro::Pict& where ) ;
+        void draw () ;
 
 private:
 

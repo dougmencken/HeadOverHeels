@@ -29,7 +29,7 @@ public:
         /**
          * @param isLoadMenu true for "load game", false for "save game"
          */
-        CreateListOfSavedGames( bool isLoadMenu ) ;
+        explicit CreateListOfSavedGames( bool isLoadMenu ) ;
 
         std::string getNameOfAction () const {  return "CreateListOfSavedGames" ;  }
 

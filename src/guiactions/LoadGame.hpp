@@ -25,7 +25,7 @@ public:
         /**
          * @param slot Number of file to load
          */
-        LoadGame( unsigned int slot ) ;
+        explicit LoadGame( unsigned int slot ) ;
 
         std::string getNameOfAction () const {  return "LoadGame" ;  }
 

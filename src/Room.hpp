@@ -105,7 +105,7 @@ public:
          */
         void dontDisappearOnJump () ;
 
-        void draw ( const allegro::Pict& where ) ;
+        virtual void draw () ;
 
         void drawRoom () ;
 

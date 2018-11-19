@@ -23,10 +23,8 @@ MenuWithTwoColumns::~MenuWithTwoColumns( )
 
 }
 
-void MenuWithTwoColumns::draw( const allegro::Pict& where )
+void MenuWithTwoColumns::draw ()
 {
-        if ( ! where.isNotNil() ) return ;
-
         if ( activeOption == nilPointer )
         {
                 resetActiveOption ();
@@ -83,10 +81,10 @@ void MenuWithTwoColumns::draw( const allegro::Pict& where )
                 if ( countOfRows <= rowsInFirstColumn )
                 {
                         if ( mark != nilPointer )
-                                allegro::drawSprite( where, mark->getAllegroPict(), getX (), getY () + dy );
+                                allegro::drawSprite( mark->getAllegroPict(), getX (), getY () + dy );
 
                         label->moveTo( getX () + dx, getY () + dy );
-                        label->draw( where );
+                        label->draw ();
                 }
                 // place option in second column
                 else
@@ -101,10 +99,10 @@ void MenuWithTwoColumns::draw( const allegro::Pict& where )
                         // para cada etiqueta
                         // ( poems, no less )
                         if ( mark != nilPointer )
-                                allegro::drawSprite( where, mark->getAllegroPict(), getX () + secondColumnX, getY () + dy );
+                                allegro::drawSprite( mark->getAllegroPict(), getX () + secondColumnX, getY () + dy );
 
                         label->moveTo( getX () + dx + secondColumnX, getY () + dy );
-                        label->draw( where );
+                        label->draw ();
                 }
 
                 // update vertical offset

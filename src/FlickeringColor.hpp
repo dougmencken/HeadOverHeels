@@ -73,6 +73,8 @@ public:
 
         static const FlickeringColor & flickerWhiteAndTransparent () {  return *whiteAndTransparent ;  }
 
+        static const FlickeringColor & flickerGray75AndTransparent () {  return *gray75AndTransparent ;  }
+
 protected:
 
         Color first ;
@@ -94,6 +96,8 @@ private:
         void initTimer () ;
 
         static const FlickeringColor * whiteAndTransparent ;
+
+        static const FlickeringColor * gray75AndTransparent ;
 
 } ;
 

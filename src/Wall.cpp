@@ -53,11 +53,11 @@ void Wall::calculateOffset()
         }
 }
 
-void Wall::draw( const allegro::Pict& where )
+void Wall::draw ()
 {
         if ( this->image != nilPointer )
         {
-                allegro::drawSprite( where, this->image->getAllegroPict(), this->offset.first, this->offset.second );
+                allegro::drawSprite( this->image->getAllegroPict(), this->offset.first, this->offset.second );
         }
 }
 

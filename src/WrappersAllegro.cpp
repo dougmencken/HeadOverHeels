@@ -230,6 +230,8 @@ ALLEGRO_DISPLAY * allegroDisplay ;
 
 Pict* Pict::nil = new Pict( NULL ) ;
 
+Pict* Pict::whereToDraw = new Pict( NULL );
+
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 
 Pict* Pict::globalScreen = new Pict( NULL );
@@ -348,8 +350,6 @@ void Pict::drawPixelAt( int x, int y, AllegroColor color ) const
         putpixel( it, x, y, color ) ;
 
 #endif
-
-        redraw() ;
 }
 
 void Pict::clearToColor( AllegroColor color ) const
@@ -366,8 +366,6 @@ void Pict::clearToColor( AllegroColor color ) const
         clear_to_color( it, color );
 
 #endif
-
-        redraw() ;
 }
 
 void Pict::lock( bool read, bool write ) const
@@ -530,6 +528,32 @@ void Pict::unlock() const
 
         globalScreen->shallowCopy = true ;
         return *globalScreen ;
+}
+
+/* static */ const Pict & Pict::getWhereToDraw ()
+{
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        whereToDraw->it = al_get_target_bitmap() ;
+
+#endif
+
+        whereToDraw->shallowCopy = true ;
+        return *whereToDraw ;
+}
+
+/* static */ void Pict::setWhereToDraw( const Pict & where )
+{
+        if ( whereToDraw->it == where.it ) return ;
+
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        al_set_target_bitmap( where.it ) ;
+
+#endif
+
+        whereToDraw->it = where.it ;
+        whereToDraw->shallowCopy = true ;
 }
 
 
@@ -1113,7 +1137,8 @@ std::map < int, std::string > scancodesToNames ;
 std::map < std::string, int > namesToScancodes ;
 
 Timer * redrawTimer ;
-const float redrawDelay = 0.04 ; /* 25 times per second */
+
+const float redrawDelay = 0.04 ; /* 25 redraws per second */
 
 bool initialized = false ;
 
@@ -1408,7 +1433,7 @@ void bye()
         initialized = false ;
 }
 
-void redraw()
+void update()
 {
         if ( redrawTimer->getValue() > redrawDelay )
         {
@@ -1418,12 +1443,11 @@ void redraw()
 
 #if defined( RECORD_EACH_FRAME ) && RECORD_EACH_FRAME
                 static int number = 0;
-                savePictAsPCX( "frame" + static_cast< std::ostringstream * >( &( std::ostringstream() << std::dec << number ++ ) )->str (), Pict::theScreen() );
+                savePictAsPCX( "frame" + static_cast< std::ostringstream & >( std::ostringstream() << std::dec << ( ++ number ) ).str (), Pict::theScreen() );
 #endif
 
                 redrawTimer->reset ();
         }
-
 }
 
 bool switchToFullscreenVideo( unsigned int width, unsigned int height )
@@ -1431,6 +1455,8 @@ bool switchToFullscreenVideo( unsigned int width, unsigned int height )
 #if defined( DEBUG_ALLEGRO_INIT ) && DEBUG_ALLEGRO_INIT
         if ( ! initialized ) {  std::cerr << "allegro::switchToFullscreenVideo before allegro::init" << std::endl ; return false ;  }
 #endif
+
+        bool result = false ;
 
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 
@@ -1440,22 +1466,25 @@ bool switchToFullscreenVideo( unsigned int width, unsigned int height )
                 ALLEGRO_DISPLAY* newDisplay = al_create_display( width, height );
                 if ( newDisplay == NULL ) return false ;
                 al_register_event_source( event_queue, al_get_display_event_source( newDisplay ) );
-                al_set_target_bitmap( al_get_backbuffer( newDisplay ) );
                 allegroDisplay = newDisplay ;
-                return true ;
+                result = true ;
         }
         else
         {
                 al_resize_display( allegroDisplay, width, height );
-                return al_set_display_flag( allegroDisplay, ALLEGRO_FULLSCREEN_WINDOW, true );
+                result = al_set_display_flag( allegroDisplay, ALLEGRO_FULLSCREEN_WINDOW, true );
         }
 
 #elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
 
         int magicCard = GFX_AUTODETECT_FULLSCREEN ;
-        return set_gfx_mode( magicCard, width, height, 0, 0 ) == /* okay */ 0 ;
+        result = set_gfx_mode( magicCard, width, height, 0, 0 ) == /* okay */ 0 ;
 
 #endif
+
+        if ( result ) Pict::resetWhereToDraw();
+
+        return result ;
 }
 
 bool switchToFullscreenVideo()
@@ -1469,6 +1498,8 @@ bool switchToWindowedVideo( unsigned int width, unsigned int height )
         if ( ! initialized ) {  std::cerr << "allegro::switchToWindowedVideo before allegro::init" << std::endl ; return false ;  }
 #endif
 
+        bool result = false ;
+
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 
         if ( allegroDisplay == NULL )
@@ -1477,22 +1508,25 @@ bool switchToWindowedVideo( unsigned int width, unsigned int height )
                 ALLEGRO_DISPLAY* newDisplay = al_create_display( width, height );
                 if ( newDisplay == NULL ) return false ;
                 al_register_event_source( event_queue, al_get_display_event_source( newDisplay ) );
-                al_set_target_bitmap( al_get_backbuffer( newDisplay ) );
                 allegroDisplay = newDisplay ;
-                return true ;
+                result = true ;
         }
         else
         {
                 al_resize_display( allegroDisplay, width, height );
-                return al_set_display_flag( allegroDisplay, ALLEGRO_FULLSCREEN_WINDOW, false );
+                result = al_set_display_flag( allegroDisplay, ALLEGRO_FULLSCREEN_WINDOW, false );
         }
 
 #elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
 
         int magicCard = GFX_AUTODETECT_WINDOWED ;
-        return set_gfx_mode( magicCard, width, height, 0, 0 ) == /* okay */ 0 ;
+        result = set_gfx_mode( magicCard, width, height, 0, 0 ) == /* okay */ 0 ;
 
 #endif
+
+        if ( result ) Pict::resetWhereToDraw();
+
+        return result ;
 }
 
 bool switchToWindowedVideo()
@@ -1517,122 +1551,99 @@ void setTitleOfAllegroWindow( const std::string& title )
 #endif
 }
 
-void drawLine( const Pict& where, int xFrom, int yFrom, int xTo, int yTo, AllegroColor color )
+void drawLine( int xFrom, int yFrom, int xTo, int yTo, AllegroColor color )
 {
-#if defined( DEBUG_ALLEGRO_INIT ) && DEBUG_ALLEGRO_INIT
-        if ( ! initialized ) {  std::cerr << "allegro::drawLine before allegro::init" << std::endl ; return ;  }
-#endif
-
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 
-        AllegroBitmap* previous = al_get_target_bitmap() ;
-        if ( previous != where.ptr() ) al_set_target_bitmap( where.ptr() ) ;
         al_draw_line( xFrom + 0.5, yFrom + 0.5, xTo + 0.5, yTo + 0.5, color, /* thickness */ 1.0 );
-        if ( previous != where.ptr() ) al_set_target_bitmap( previous ) ;
 
 #elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
 
-        line( where.ptr (), xFrom, yFrom, xTo, yTo, color );
+        line( Pict::getWhereToDraw().ptr (), xFrom, yFrom, xTo, yTo, color );
 
 #endif
-
-        redraw() ;
 }
 
-void drawCircle( const Pict& where, int x, int y, int radius, AllegroColor color )
+void drawCircle( int x, int y, int radius, AllegroColor color )
 {
-#if defined( DEBUG_ALLEGRO_INIT ) && DEBUG_ALLEGRO_INIT
-        if ( ! initialized ) {  std::cerr << "allegro::drawCircle before allegro::init" << std::endl ; return ;  }
-#endif
-
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 
-        AllegroBitmap* previous = al_get_target_bitmap() ;
-        if ( previous != where.ptr() ) al_set_target_bitmap( where.ptr() ) ;
         al_draw_circle( x + 0.5, y + 0.5, radius, color, /* thickness */ 1.0 );
-        if ( previous != where.ptr() ) al_set_target_bitmap( previous ) ;
 
 #elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
 
-        circle( where.ptr (), x, y, radius, color );
+        circle( Pict::getWhereToDraw().ptr (), x, y, radius, color );
 
 #endif
-
-        redraw() ;
 }
 
-void fillCircle( const Pict& where, int x, int y, int radius, AllegroColor color )
+void fillCircle( int x, int y, int radius, AllegroColor color )
 {
-#if defined( DEBUG_ALLEGRO_INIT ) && DEBUG_ALLEGRO_INIT
-        if ( ! initialized ) {  std::cerr << "allegro::fillCircle before allegro::init" << std::endl ; return ;  }
-#endif
-
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 
-        AllegroBitmap* previous = al_get_target_bitmap() ;
-        if ( previous != where.ptr() ) al_set_target_bitmap( where.ptr() ) ;
         al_draw_filled_circle( x + 0.5, y + 0.5, radius, color );
-        if ( previous != where.ptr() ) al_set_target_bitmap( previous ) ;
 
 #elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
 
-        circlefill( where.ptr (), x, y, radius, color );
+        circlefill( Pict::getWhereToDraw().ptr (), x, y, radius, color );
 
 #endif
-
-        redraw() ;
 }
 
-void drawRect( const Pict& where, int x1, int y1, int x2, int y2, AllegroColor color )
+void drawRect( int x1, int y1, int x2, int y2, AllegroColor color )
 {
-#if defined( DEBUG_ALLEGRO_INIT ) && DEBUG_ALLEGRO_INIT
-        if ( ! initialized ) {  std::cerr << "allegro::drawRect before allegro::init" << std::endl ; return ;  }
-#endif
-
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 
-        AllegroBitmap* previous = al_get_target_bitmap() ;
-        if ( previous != where.ptr() ) al_set_target_bitmap( where.ptr() ) ;
         al_draw_rectangle( x1 + 0.5, y1 + 0.5, x2 + 0.5, y2 + 0.5, color, /* thickness */ 1.0 );
-        if ( previous != where.ptr() ) al_set_target_bitmap( previous ) ;
 
 #elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
 
-        rect( where.ptr (), x1, y1, x2, y2, color );
+        rect( Pict::getWhereToDraw().ptr (), x1, y1, x2, y2, color );
 
 #endif
-
-        redraw() ;
 }
 
-void fillRect( const Pict& where, int x1, int y1, int x2, int y2, AllegroColor color )
+void fillRect( int x1, int y1, int x2, int y2, AllegroColor color )
 {
-#if defined( DEBUG_ALLEGRO_INIT ) && DEBUG_ALLEGRO_INIT
-        if ( ! initialized ) {  std::cerr << "allegro::fillRect before allegro::init" << std::endl ; return ;  }
-#endif
-
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 
-        AllegroBitmap* previous = al_get_target_bitmap() ;
-        if ( previous != where.ptr() ) al_set_target_bitmap( where.ptr() ) ;
         al_draw_filled_rectangle( x1 + 0.5, y1 + 0.5, x2 + 0.5, y2 + 0.5, color );
-        if ( previous != where.ptr() ) al_set_target_bitmap( previous ) ;
 
 #elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
 
-        rectfill( where.ptr (), x1, y1, x2, y2, color );
+        rectfill( Pict::getWhereToDraw().ptr (), x1, y1, x2, y2, color );
 
 #endif
+}
 
-        redraw() ;
+void bitBlit( const Pict& from, int fromX, int fromY, int toX, int toY, unsigned int width, unsigned int height )
+{
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        al_draw_bitmap_region( from.ptr(), fromX, fromY, width, height, toX, toY, /* flipping */ 0 );
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        blit( from.ptr (), Pict::getWhereToDraw().ptr (), fromX, fromY, toX, toY, width, height );
+
+#endif
+}
+
+void bitBlit( const Pict& from, int toX, int toY )
+{
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        al_draw_bitmap( from.ptr(), toX, toY, /* flipping */ 0 );
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        bitBlit( from, 0, 0, toX, toY, from.getW(), from.getH() ) ;
+
+#endif
 }
 
 void bitBlit( const Pict& from, const Pict& to, int fromX, int fromY, int toX, int toY, unsigned int width, unsigned int height )
 {
-#if defined( DEBUG_ALLEGRO_INIT ) && DEBUG_ALLEGRO_INIT
-        if ( ! initialized ) {  std::cerr << "allegro::bitBlit before allegro::init" << std::endl ; return ;  }
-#endif
-
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 
         AllegroBitmap* previous = al_get_target_bitmap() ;
@@ -1645,23 +1656,16 @@ void bitBlit( const Pict& from, const Pict& to, int fromX, int fromY, int toX, i
         blit( from.ptr (), to.ptr (), fromX, fromY, toX, toY, width, height );
 
 #endif
-
-        redraw() ;
 }
 
 void bitBlit( const Pict& from, const Pict& to, int toX, int toY )
 {
-#if defined( DEBUG_ALLEGRO_INIT ) && DEBUG_ALLEGRO_INIT
-        if ( ! initialized ) {  std::cerr << "allegro::bitBlit before allegro::init" << std::endl ; return ;  }
-#endif
-
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 
         AllegroBitmap* previous = al_get_target_bitmap() ;
         if ( previous != to.ptr() ) al_set_target_bitmap( to.ptr() ) ;
         al_draw_bitmap( from.ptr(), toX, toY, /* flipping */ 0 );
         if ( previous != to.ptr() ) al_set_target_bitmap( previous ) ;
-        redraw() ;
 
 #elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
 
@@ -1670,58 +1674,25 @@ void bitBlit( const Pict& from, const Pict& to, int toX, int toY )
 #endif
 }
 
-void bitBlit( const Pict& from, const Pict& to )
-{
-        bitBlit( from, to, 0, 0 ) ;
-}
+void bitBlit ( const Pict & from ) {  bitBlit( from, 0, 0 ) ;  }
 
-void drawSprite( const Pict& view, const Pict& sprite, int x, int y )
-{
-#if defined( DEBUG_ALLEGRO_INIT ) && DEBUG_ALLEGRO_INIT
-        if ( ! initialized ) {  std::cerr << "allegro::drawSprite before allegro::init" << std::endl ; return ;  }
-#endif
+void bitBlit ( const Pict & from, const Pict & to ) {  bitBlit( from, to, 0, 0 ) ;  }
 
+void stretchBlit( const Pict& source, int sX, int sY, int sW, int sH, int dX, int dY, int dW, int dH )
+{
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 
-        bitBlit( sprite, view, x, y ) ;
+        al_draw_scaled_bitmap( source.ptr (), sX, sY, sW, sH, dX, dY, dW, dH, /* flipping */ 0 );
 
 #elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
 
-        draw_sprite( view.ptr (), sprite.ptr (), x, y );
-        redraw() ;
+        stretch_blit( source.ptr (), Pict::getWhereToDraw().ptr (), sX, sY, sW, sH, dX, dY, dW, dH );
 
 #endif
-}
-
-void drawSpriteWithTransparency( const Pict& view, const Pict& sprite, int x, int y, unsigned char transparency )
-{
-#if defined( DEBUG_ALLEGRO_INIT ) && DEBUG_ALLEGRO_INIT
-        if ( ! initialized ) {  std::cerr << "allegro::drawSpriteWithTransparency before allegro::init" << std::endl ; return ;  }
-#endif
-
-#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
-
-        AllegroBitmap* previous = al_get_target_bitmap() ;
-        if ( previous != view.ptr() ) al_set_target_bitmap( view.ptr() ) ;
-        al_draw_tinted_bitmap( sprite.ptr(), al_map_rgba( 0, 0, 0, 255 - transparency ), x, y, /* flipping */ 0 );
-        if ( previous != view.ptr() ) al_set_target_bitmap( previous ) ;
-
-#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
-
-        set_trans_blender( 0, 0, 0, transparency );
-        draw_trans_sprite( view.ptr (), sprite.ptr (), x, y );
-
-#endif
-
-        redraw() ;
 }
 
 void stretchBlit( const Pict& source, const Pict& dest, int sX, int sY, int sW, int sH, int dX, int dY, int dW, int dH )
 {
-#if defined( DEBUG_ALLEGRO_INIT ) && DEBUG_ALLEGRO_INIT
-        if ( ! initialized ) {  std::cerr << "allegro::stretchBlit before allegro::init" << std::endl ; return ;  }
-#endif
-
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 
         AllegroBitmap* previous = al_get_target_bitmap() ;
@@ -1734,64 +1705,44 @@ void stretchBlit( const Pict& source, const Pict& dest, int sX, int sY, int sW, 
         stretch_blit( source.ptr (), dest.ptr (), sX, sY, sW, sH, dX, dY, dW, dH );
 
 #endif
-
-        redraw() ;
 }
 
-void textOut( const std::string& text, const Pict& where, int x, int y, AllegroColor color )
+void drawSprite( const Pict& sprite, int x, int y )
 {
-#if defined( DEBUG_ALLEGRO_INIT ) && DEBUG_ALLEGRO_INIT
-        if ( ! initialized ) {  std::cerr << "allegro::textOut before allegro::init" << std::endl ; return ;  }
-#endif
-
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 
-        AllegroBitmap* previous = al_get_target_bitmap() ;
-        if ( previous != where.ptr() ) al_set_target_bitmap( where.ptr() ) ;
+        bitBlit( sprite, x, y ) ;
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        draw_sprite( Pict::getWhereToDraw().ptr (), sprite.ptr (), x, y );
+
+#endif
+}
+
+void drawSpriteWithTransparency( const Pict& sprite, int x, int y, unsigned char transparency )
+{
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
+        al_draw_tinted_bitmap( sprite.ptr(), al_map_rgba( 0, 0, 0, 255 - transparency ), x, y, /* flipping */ 0 );
+
+#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+
+        set_trans_blender( 0, 0, 0, transparency );
+        draw_trans_sprite( Pict::getWhereToDraw().ptr (), sprite.ptr (), x, y );
+
+#endif
+}
+
+void textOut( const std::string& text, int x, int y, AllegroColor color )
+{
+#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
+
         al_draw_text( allegroFont, color, x, y, ALLEGRO_ALIGN_LEFT, text.c_str() );
-        if ( previous != where.ptr() ) al_set_target_bitmap( previous );
 
 #elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
 
-        textout_ex( where.ptr (), /* allegro’s global */ font, text.c_str(), x, y, color, -1 );
-
-#endif
-
-        redraw() ;
-}
-
-void acquirePict( const Pict& what )
-{
-#if defined( DEBUG_ALLEGRO_INIT ) && DEBUG_ALLEGRO_INIT
-        if ( ! initialized ) {  std::cerr << "allegro::acquirePict before allegro::init" << std::endl ; return ;  }
-#endif
-
-#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
-
-        ( void ) what ;
-        // do nothing
-
-#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
-
-        acquire_bitmap( what.ptr () );
-
-#endif
-}
-
-void releasePict( const Pict& what )
-{
-#if defined( DEBUG_ALLEGRO_INIT ) && DEBUG_ALLEGRO_INIT
-        if ( ! initialized ) {  std::cerr << "allegro::releasePict before allegro::init" << std::endl ; return ;  }
-#endif
-
-#if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
-
-        ( void ) what ;
-        // do nothing
-
-#elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
-
-        release_bitmap( what.ptr () );
+        textout_ex( Pict::getWhereToDraw().ptr (), /* allegro’s global */ font, text.c_str(), x, y, color, -1 );
 
 #endif
 }
@@ -1925,7 +1876,7 @@ bool isKeyPushed( const std::string& name )
 {
         peekKeys();
 
-        // key is allegro 4’s global array
+        // key is allegro4’s global array
         return key[ nameOfKeyToScancode( name ) ] == TRUE ;
 }
 
@@ -1949,7 +1900,7 @@ bool isAltKeyPushed()
 
 void releaseKey( const std::string& name )
 {
-        // key is allegro 4’s global
+        // key is allegro4’s global
         key[ nameOfKeyToScancode( name ) ] = FALSE ;
 }
 

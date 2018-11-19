@@ -27,7 +27,7 @@ public:
 
         virtual ~ColorCyclingLabel( ) ;
 
-        virtual void draw ( const allegro::Pict & where ) ;
+        virtual void draw () ;
 
 private:
 

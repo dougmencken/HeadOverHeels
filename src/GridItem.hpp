@@ -61,7 +61,7 @@ public:
         /**
          * Draw this grid item
          */
-        virtual void draw ( const allegro::Pict & where ) ;
+        virtual void draw () ;
 
         virtual void changeImage ( const Picture * newImage ) ;
 

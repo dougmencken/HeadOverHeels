@@ -46,8 +46,6 @@ public:
 
         virtual ~Screen( ) ;
 
-        void draw ( const allegro::Pict& where ) ;
-
         void draw () ;
 
         void refresh () const ;

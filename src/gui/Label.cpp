@@ -76,11 +76,11 @@ void Label::changeFontFamilyAndColor( const std::string& family, const std::stri
         update ();
 }
 
-void Label::draw( const allegro::Pict& where )
+void Label::draw ()
 {
         if ( imageOfLetters != nilPointer )
         {
-                allegro::drawSprite( where, imageOfLetters->getAllegroPict(), getX(), getY() );
+                allegro::drawSprite( imageOfLetters->getAllegroPict(), getX(), getY() );
         }
 }
 

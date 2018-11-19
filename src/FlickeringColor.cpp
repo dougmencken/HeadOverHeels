@@ -5,6 +5,8 @@
 
 const FlickeringColor * FlickeringColor::whiteAndTransparent = new FlickeringColor( Color::whiteColor(), Color() ) ;
 
+const FlickeringColor * FlickeringColor::gray75AndTransparent = new FlickeringColor( Color::gray75Color(), Color() ) ;
+
 
 FlickeringColor::~FlickeringColor( )
 {
@@ -33,7 +35,7 @@ std::string FlickeringColor::toString() const
                 milliSleep( thiz->period * 0.99 * 1000 );
         }
 
-        /* pthread_exit( nilPointer ); */
+        pthread_exit( nilPointer );
 }
 
 void FlickeringColor::initTimer()

@@ -20,11 +20,11 @@ ColorCyclingLabel::~ColorCyclingLabel( )
 {
 }
 
-void ColorCyclingLabel::draw( const allegro::Pict& where )
+void ColorCyclingLabel::draw ()
 {
         updateImageOfLabel( getText(), Label::getFontByFamilyAndColor( getFontFamily(), getColor() ) );
 
-        Label::draw( where );
+        Label::draw ();
 }
 
 void ColorCyclingLabel::updateImageOfLabel( const std::string& text, Font * font )

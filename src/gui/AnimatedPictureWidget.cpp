@@ -25,11 +25,11 @@ AnimatedPictureWidget::~AnimatedPictureWidget()
         animation.clear();
 }
 
-void AnimatedPictureWidget::draw( const allegro::Pict& where )
+void AnimatedPictureWidget::draw ()
 {
         if ( animation.size() > 0 )
         {
-                allegro::drawSprite( where, *animation[ theFrame ], getX(), getY() );
+                allegro::drawSprite( *animation[ theFrame ], getX(), getY() );
         }
 
         if ( animationTimer->getValue() > delayBetweenFrames )

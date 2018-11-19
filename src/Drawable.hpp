@@ -22,7 +22,21 @@ public:
 
         virtual ~Drawable( ) { }
 
-        virtual void draw ( const allegro::Pict & where ) = 0 ;
+        virtual void draw () = 0 ;
+
+protected:
+
+        virtual void drawOn ( const allegro::Pict & where )
+        {
+                if ( ! where.isNotNil() ) return ;
+
+                const allegro::Pict& previousWhere = allegro::Pict::getWhereToDraw() ;
+                allegro::Pict::setWhereToDraw( where );
+
+                draw ();
+
+                allegro::Pict::setWhereToDraw( previousWhere );
+        }
 
 };
 

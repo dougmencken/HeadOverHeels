@@ -135,6 +135,12 @@ public:
 
         static const Pict& theScreen ();
 
+        static const Pict & getWhereToDraw () ;
+
+        static void setWhereToDraw ( const Pict & where ) ;
+
+        static void resetWhereToDraw () {  setWhereToDraw( theScreen() ) ;  }
+
 private:
 
         AllegroBitmap* it ;
@@ -142,6 +148,8 @@ private:
         bool shallowCopy ;
 
         static Pict* nil ;
+
+        static Pict* whereToDraw ;
 
         static Pict* globalScreen ;
 
@@ -151,9 +159,9 @@ private:
         Pict( const Pict & copy ) : it( copy.it ), shallowCopy( true )  { }
 
         bool operator == ( const Pict & ) const {  return false ;  }
-        bool operator == ( void * ) const {  return false ;  }
+        bool operator == ( const void * ) const {  return false ;  }
         bool operator != ( const Pict & ) const {  return true ;  }
-        bool operator != ( void * ) const {  return true ;  }
+        bool operator != ( const void * ) const {  return true ;  }
 
 };
 
@@ -255,8 +263,8 @@ private:
 
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 
-        ALLEGRO_SAMPLE* oggSample ;
-        ALLEGRO_SAMPLE_INSTANCE* sampleInstance ;
+        ALLEGRO_SAMPLE * oggSample ;
+        ALLEGRO_SAMPLE_INSTANCE * sampleInstance ;
         ALLEGRO_MIXER * oggMixer ;
 
 #elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
@@ -275,17 +283,12 @@ private:
 }
 
 
-/* int allegro_init()
- *
- * Macro to initialize Allegro library. Is the same as install_allegro( SYSTEM_AUTODETECT, &errno, atexit )
- */
-
 void init ( ) ;
 
 void bye ( ) ;
 
 
-void redraw ( ) ;
+void update () ;
 
 
 /* int set_gfx_mode( int card, int w, int h, int v_w, int v_h )
@@ -319,7 +322,7 @@ void setTitleOfAllegroWindow ( const std::string& title ) ;
  * Draws a line onto the bitmap, from point (x1, y1) to (x2, y2)
  */
 
-void drawLine ( const Pict & where, int xFrom, int yFrom, int xTo, int yTo, AllegroColor color ) ;
+void drawLine ( int xFrom, int yFrom, int xTo, int yTo, AllegroColor color ) ;
 
 
 /* void circle( BITMAP* bmp, int x, int y, int radius, int color )
@@ -327,7 +330,7 @@ void drawLine ( const Pict & where, int xFrom, int yFrom, int xTo, int yTo, Alle
  * Draws a circle with the specified centre and radius
  */
 
-void drawCircle ( const Pict & where, int x, int y, int radius, AllegroColor color ) ;
+void drawCircle ( int x, int y, int radius, AllegroColor color ) ;
 
 
 /* void circlefill( BITMAP* bmp, int x, int y, int radius, int color )
@@ -335,7 +338,7 @@ void drawCircle ( const Pict & where, int x, int y, int radius, AllegroColor col
  * Draws a filled circle with the specified centre and radius
  */
 
-void fillCircle ( const Pict & where, int x, int y, int radius, AllegroColor color ) ;
+void fillCircle ( int x, int y, int radius, AllegroColor color ) ;
 
 
 /* void rect( BITMAP* bmp, int x1, int y1, int x2, int y2, int color )
@@ -343,7 +346,7 @@ void fillCircle ( const Pict & where, int x, int y, int radius, AllegroColor col
  * Draws an outline rectangle with the two points as its opposite corners
  */
 
-void drawRect ( const Pict & where, int x1, int y1, int x2, int y2, AllegroColor color ) ;
+void drawRect ( int x1, int y1, int x2, int y2, AllegroColor color ) ;
 
 
 /* void rectfill( BITMAP* bmp, int x1, int y1, int x2, int y2, int color )
@@ -351,20 +354,28 @@ void drawRect ( const Pict & where, int x1, int y1, int x2, int y2, AllegroColor
  * Draws a filled rectangle with the two points as its opposite corners
  */
 
-void fillRect ( const Pict & where, int x1, int y1, int x2, int y2, AllegroColor color ) ;
+void fillRect ( int x1, int y1, int x2, int y2, AllegroColor color ) ;
 
+
+void bitBlit ( const Pict & from, int fromX, int fromY, int toX, int toY, unsigned int width, unsigned int height ) ;
+
+void bitBlit ( const Pict& from, int toX, int toY ) ;
 
 void bitBlit ( const Pict & from, const Pict & to, int fromX, int fromY, int toX, int toY, unsigned int width, unsigned int height ) ;
 
 void bitBlit ( const Pict& from, const Pict& to, int toX, int toY ) ;
 
+void bitBlit ( const Pict & from ) ;
+
 void bitBlit ( const Pict & from, const Pict & to ) ;
 
-void drawSprite ( const Pict & view, const Pict & sprite, int x, int y ) ;
-
-void drawSpriteWithTransparency ( const Pict & view, const Pict & sprite, int x, int y, unsigned char transparency ) ;
+void stretchBlit ( const Pict & source, int sX, int sY, int sW, int sH, int dX, int dY, int dW, int dH ) ;
 
 void stretchBlit ( const Pict & source, const Pict & dest, int sX, int sY, int sW, int sH, int dX, int dY, int dW, int dH ) ;
+
+void drawSprite ( const Pict & sprite, int x, int y ) ;
+
+void drawSpriteWithTransparency ( const Pict & sprite, int x, int y, unsigned char transparency ) ;
 
 
 /* void textout_ex( BITMAP* bitmap, const FONT* font, const char* string, int x, int y, int color, int bg )
@@ -377,34 +388,7 @@ void stretchBlit ( const Pict & source, const Pict & dest, int sX, int sY, int s
  * and always treated as -1
  */
 
-void textOut ( const std::string& text, const Pict & where, int x, int y, AllegroColor color ) ;
-
-
-/* void acquire_screen()
- *
- * Shortcut of acquire_bitmap( screen )
- */
-/* void acquire_bitmap( BITMAP* bmp )
- *
- * Locks the bitmap before drawing onto it. You never need to call the function explicitly as it
- * is low level, and will only give you a speed up if you know what you are doing. Using it wrongly
- * may cause slowdown, or even lock up your program
- */
-
-void acquirePict ( const Pict & what ) ;
-
-
-/* void release_screen()
- *
- * Shortcut of release_bitmap( screen )
- */
-/* void release_bitmap( BITMAP* bmp )
- *
- * Releases a bitmap that was previously locked by acquire_bitmap. If the bitmap was locked
- * multiple times, you must release it the same number of times before it will truly be unlocked
- */
-
-void releasePict ( const Pict & what ) ;
+void textOut ( const std::string& text, int x, int y, AllegroColor color ) ;
 
 
 /* int install_sound( int digi, int midi, const char* cfg_path )
