@@ -18,8 +18,6 @@
 namespace iso
 {
 
-class Item ;
-
 /**
  * Move item in the direction set by item above it
  */

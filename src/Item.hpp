@@ -21,6 +21,7 @@
 #include "Way.hpp"
 #include "Timer.hpp"
 #include "Picture.hpp"
+#include "PoolOfPictures.hpp"
 #include "Mediated.hpp"
 #include "Shady.hpp"
 
@@ -28,7 +29,7 @@
 namespace iso
 {
 
-class ItemData ;
+class DescriptionOfItem ;
 class Behavior ;
 
 
@@ -41,7 +42,7 @@ class Item : public Mediated, public Shady
 
 public:
 
-        Item( const ItemData* data, int z, const Way& way ) ;
+        Item( const DescriptionOfItem * description, int z, const Way& way ) ;
 
         Item( const Item& item ) ;
 
@@ -145,6 +146,8 @@ public:
 
 private:
 
+        static PoolOfPictures * poolOfPictures ;
+
         std::string uniqueName ;
 
         std::string originalLabel ;
@@ -159,19 +162,19 @@ private:
          */
         bool backwardsMotion ;
 
-        const ItemData * dataOfItem ;
+        const DescriptionOfItem * descriptionOfItem ;
 
         void readGraphicsOfItem () ;
 
         /**
          * Extract frames for this item from file
          */
-        static void createFrames ( Item * item, const ItemData & data, const char * gfxPrefix ) ;
+        static void createFrames ( Item * item, const DescriptionOfItem & data ) ;
 
         /**
          * Extract frames for shadow of this item from file
          */
-        static void createShadowFrames ( Item * item, const ItemData & data, const char * gfxPrefix ) ;
+        static void createShadowFrames ( Item * item, const DescriptionOfItem & data ) ;
 
 protected:
 
@@ -246,6 +249,8 @@ protected:
 
 public:
 
+        static PoolOfPictures & getPoolOfPictures () {  return * poolOfPictures ;  }
+
         const std::string& getUniqueName () const {  return uniqueName ;  }
 
         void setUniqueName ( const std::string& name ) {  this->uniqueName = name ;  }
@@ -255,7 +260,7 @@ public:
          */
         const std::string& getOriginalLabel () const {  return originalLabel ;  }
 
-        const ItemData * getDataOfItem () const {  return dataOfItem ;  }
+        const DescriptionOfItem * getDescriptionOfItem () const {  return descriptionOfItem ;  }
 
         const std::string& getLabel () const ;
 

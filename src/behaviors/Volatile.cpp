@@ -1,7 +1,6 @@
 
 #include "Volatile.hpp"
 #include "Item.hpp"
-#include "ItemData.hpp"
 #include "FreeItem.hpp"
 #include "Room.hpp"
 #include "Mediator.hpp"

@@ -21,7 +21,7 @@
 #include <tinyxml2.h>
 
 #include "MapManager.hpp"
-#include "ItemDataManager.hpp"
+#include "ItemDescriptions.hpp"
 
 
 class Color ;
@@ -50,7 +50,7 @@ public:
 
         void prepare () ;
 
-        void fillItemDataManager () ;
+        void fillItemDescriptions () ;
 
         void beginNewGame () ;
 
@@ -64,7 +64,7 @@ public:
 
         MapManager & getMapManager () {  return mapManager ;  }
 
-        const ItemDataManager & getItemDataManager () const {  return itemDataManager ;  }
+        const ItemDescriptions & getItemDescriptions () const {  return itemDescriptions ;  }
 
         bool doesCameraFollowCharacter () const {  return cameraFollowsCharacter ;  }
 
@@ -89,7 +89,7 @@ private:
 
         MapManager mapManager ;
 
-        ItemDataManager itemDataManager ;
+        ItemDescriptions itemDescriptions ;
 
         bool paused ;
 

@@ -18,8 +18,6 @@
 namespace iso
 {
 
-class Item ;
-
 /**
  * Sink when another item is on top of this one
  */

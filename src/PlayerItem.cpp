@@ -1,8 +1,7 @@
 
 #include "PlayerItem.hpp"
 #include "Behavior.hpp"
-#include "ItemData.hpp"
-#include "ItemDataManager.hpp"
+#include "DescriptionOfItem.hpp"
 #include "Door.hpp"
 #include "Mediator.hpp"
 #include "Room.hpp"
@@ -15,8 +14,8 @@
 namespace iso
 {
 
-PlayerItem::PlayerItem( const ItemData* itemData, int x, int y, int z, const Way& way )
-        : FreeItem( itemData, x, y, z, way )
+PlayerItem::PlayerItem( const DescriptionOfItem* description, int x, int y, int z, const Way& way )
+        : FreeItem( description, x, y, z, way )
         , lives( 0 )
         , highSpeed( 0 )
         , highJumps( 0 )
@@ -25,7 +24,7 @@ PlayerItem::PlayerItem( const ItemData* itemData, int x, int y, int z, const Way
         , wayOfEntry( "just wait" )
         , shieldTimer( new Timer () )
         , shieldRemaining( 0.0 )
-        , takenItemData( nilPointer )
+        , descriptionOfTakenItem( nilPointer )
 {
 
 }
@@ -41,7 +40,7 @@ PlayerItem::PlayerItem( const PlayerItem& playerItem )
         , wayOfEntry( playerItem.wayOfEntry )
         , shieldTimer( new Timer () )
         , shieldRemaining( 0.0 )
-        , takenItemData( nilPointer )
+        , descriptionOfTakenItem( nilPointer )
 {
 
 }
@@ -250,13 +249,13 @@ bool PlayerItem::addToPosition( int x, int y, int z )
         {
                 mediator->pushCollision( "some segment of wall at north" );
         }
-        else if ( this->getX() + static_cast< int >( getDataOfItem()->getWidthX() ) > mediator->getRoom()->getLimitAt( "south" )
+        else if ( this->getX() + static_cast< int >( getDescriptionOfItem()->getWidthX() ) > mediator->getRoom()->getLimitAt( "south" )
                         && isNotUnderDoorAt( "south" ) && isNotUnderDoorAt( "southeast" ) && isNotUnderDoorAt( "southwest" ) )
         {
                 mediator->pushCollision( "some segment of wall at south" );
         }
 
-        if ( this->getY() - static_cast< int >( getDataOfItem()->getWidthY() ) + 1 < mediator->getRoom()->getLimitAt( "east" )
+        if ( this->getY() - static_cast< int >( getDescriptionOfItem()->getWidthY() ) + 1 < mediator->getRoom()->getLimitAt( "east" )
                         && isNotUnderDoorAt( "east" ) && isNotUnderDoorAt( "eastnorth" ) && isNotUnderDoorAt( "eastsouth" ) )
         {
                 mediator->pushCollision( "some segment of wall at east" );
@@ -315,7 +314,7 @@ bool PlayerItem::addToPosition( int x, int y, int z )
                                 if ( this->rawImage != nilPointer )
                                 {
                                         // get how many pixels is this image from point of room’s origin
-                                        this->offset.first = ( ( getX() - getY() ) << 1 ) + getWidthX() + getDataOfItem()->getWidthY() - ( this->rawImage->getWidth() >> 1 ) - 1;
+                                        this->offset.first = ( ( getX() - getY() ) << 1 ) + getWidthX() + getDescriptionOfItem()->getWidthY() - ( this->rawImage->getWidth() >> 1 ) - 1;
                                         this->offset.second = getX() + getY() + getWidthX() - this->rawImage->getHeight() - getZ();
 
                                         // for both the previous position and the current position
@@ -371,25 +370,25 @@ bool PlayerItem::isCollidingWithLimitOfRoom( const std::string& onWhichWay )
                         break;
 
                 case Way::South:
-                        result = ( this->getX() + static_cast< int >( getDataOfItem()->getWidthX() )
+                        result = ( this->getX() + static_cast< int >( getDescriptionOfItem()->getWidthX() )
                                         > static_cast< int >( mediator->getRoom()->getTilesX() * mediator->getRoom()->getSizeOfOneTile() ) );
                         break;
 
                 case Way::Southeast:
                 case Way::Southwest:
                         result = ( door != nilPointer &&
-                                        this->getX() + static_cast< int >( getDataOfItem()->getWidthX() ) > mediator->getRoom()->getLimitAt( onWhichWay ) &&
+                                        this->getX() + static_cast< int >( getDescriptionOfItem()->getWidthX() ) > mediator->getRoom()->getLimitAt( onWhichWay ) &&
                                         door->isUnderDoor( this->getX(), this->getY(), this->getZ() ) );
                         break;
 
                 case Way::East:
-                        result = ( this->getY() - static_cast< int >( getDataOfItem()->getWidthY() ) + 1 < 0 );
+                        result = ( this->getY() - static_cast< int >( getDescriptionOfItem()->getWidthY() ) + 1 < 0 );
                         break;
 
                 case Way::Eastnorth:
                 case Way::Eastsouth:
                         result = ( door != nilPointer &&
-                                        this->getY() - static_cast< int >( getDataOfItem()->getWidthY() ) + 1 < mediator->getRoom()->getLimitAt( onWhichWay ) &&
+                                        this->getY() - static_cast< int >( getDescriptionOfItem()->getWidthY() ) + 1 < mediator->getRoom()->getLimitAt( onWhichWay ) &&
                                         door->isUnderDoor( this->getX(), this->getY(), this->getZ() ) );
                         break;
 
@@ -401,7 +400,7 @@ bool PlayerItem::isCollidingWithLimitOfRoom( const std::string& onWhichWay )
                 case Way::Westnorth:
                 case Way::Westsouth:
                         result = ( door != nilPointer &&
-                                        this->getY() + static_cast< int >( getDataOfItem()->getWidthY() ) > mediator->getRoom()->getLimitAt( onWhichWay ) &&
+                                        this->getY() + static_cast< int >( getDescriptionOfItem()->getWidthY() ) > mediator->getRoom()->getLimitAt( onWhichWay ) &&
                                         door->isUnderDoor( this->getX(), this->getY(), this->getZ() ) );
                         break;
 
@@ -442,7 +441,7 @@ void PlayerItem::wait ()
         {
                 // get waiting frame by orientation of item
                 unsigned int orientOccident = ( orientation.getIntegerOfWay() == Way::Nowhere ? 0 : orientation.getIntegerOfWay() );
-                size_t frame = getDataOfItem()->howManyFrames() * orientOccident ;
+                size_t frame = getDescriptionOfItem()->howManyFrames() * orientOccident ;
                 if ( frame >= howManyMotions() ) frame = 0;
 
                 if ( this->rawImage != nilPointer && this->rawImage != getMotionAt( frame ) )
@@ -603,9 +602,9 @@ void PlayerItem::liberatePlanet ()
 
 void PlayerItem::placeItemInBag ( const std::string& labelOfItem, const std::string& behavior )
 {
-        const ItemData* itemData = getDataOfItem()->getItemDataManager()->findDataByLabel( labelOfItem ) ;
-        this->takenItemData = itemData;
-        this->takenItemBehavior = behavior;
+        const DescriptionOfItem* description = getDescriptionOfItem()->getItemDescriptions()->getDescriptionByLabel( labelOfItem ) ;
+        this->descriptionOfTakenItem = description ;
+        this->behaviorOfTakenItem = behavior ;
 }
 
 void PlayerItem::save ()

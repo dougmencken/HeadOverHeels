@@ -32,8 +32,8 @@
         <file name="GridItem.cpp" />
         <file name="FreeItem.cpp" />
         <file name="PlayerItem.cpp" />
-        <file name="ItemData.cpp" />
-        <file name="ItemDataManager.cpp" />
+        <file name="DescriptionOfItem.cpp" />
+        <file name="ItemDescriptions.cpp" />
         <file name="Mediator.cpp" />
         <file name="ShadowCaster.cpp" />
         <file name="Masker.cpp" />

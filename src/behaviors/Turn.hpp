@@ -18,8 +18,6 @@
 namespace iso
 {
 
-class Item ;
-
 /**
  * Moves item in one direction. When it collides with something,
  * turn 90° left or right and continue to move

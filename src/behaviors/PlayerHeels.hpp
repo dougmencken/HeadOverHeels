@@ -17,10 +17,6 @@
 namespace iso
 {
 
-class Item ;
-class ItemData ;
-
-
 class PlayerHeels : public UserControlled
 {
 

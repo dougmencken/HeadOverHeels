@@ -19,8 +19,8 @@ namespace iso
 
 Isomot::Isomot( ) :
         view( nilPointer ),
-        mapManager(),
-        itemDataManager(),
+        mapManager( ),
+        itemDescriptions( ),
         paused( false ),
         finalRoomTimer( new Timer() ),
         finalRoomBuilt( false ),
@@ -68,15 +68,15 @@ void Isomot::prepare ()
         mapManager.binRoomsInPlay();
 }
 
-void Isomot::fillItemDataManager ()
+void Isomot::fillItemDescriptions ()
 {
-        itemDataManager.readDataAboutItems( "items.xml" );
+        itemDescriptions.readDescriptionOfItemsFrom( "items.xml" );
 }
 
 void Isomot::beginNewGame ()
 {
         prepare ();
-        fillItemDataManager ();
+        fillItemDescriptions ();
 
         mapManager.beginNewGame( GameManager::getInstance().getHeadRoom(), GameManager::getInstance().getHeelsRoom() );
 
@@ -548,7 +548,7 @@ void Isomot::handleMagicKeys ()
                                 Way way = otherPlayer->getOrientation();
 
                                 PlayerItemPtr joinedPlayer( new PlayerItem(
-                                        itemDataManager.findDataByLabel( nameOfAnotherPlayer ),
+                                        itemDescriptions.getDescriptionByLabel( nameOfAnotherPlayer ),
                                         playerX, playerY, playerZ, way
                                 ) );
 
@@ -577,12 +577,12 @@ void Isomot::handleMagicKeys ()
                 {
                         if ( activeRoom->getMediator()->findItemByLabel( "crown" ) == nilPointer )
                         {
-                                const ItemData* chapeauData = itemDataManager.findDataByLabel( "crown" );
+                                const DescriptionOfItem* chapeauDescription = itemDescriptions.getDescriptionByLabel( "crown" );
 
-                                int x = ( activeRoom->getLimitAt( "south" ) - activeRoom->getLimitAt( "north" ) + chapeauData->getWidthX() ) >> 1 ;
-                                int y = ( activeRoom->getLimitAt( "west" ) - activeRoom->getLimitAt( "east" ) + chapeauData->getWidthY() ) >> 1 ;
+                                int x = ( activeRoom->getLimitAt( "south" ) - activeRoom->getLimitAt( "north" ) + chapeauDescription->getWidthX() ) >> 1 ;
+                                int y = ( activeRoom->getLimitAt( "west" ) - activeRoom->getLimitAt( "east" ) + chapeauDescription->getWidthY() ) >> 1 ;
 
-                                FreeItemPtr chapeau( new FreeItem( chapeauData, x, y, 250, Way::Nowhere ) );
+                                FreeItemPtr chapeau( new FreeItem( chapeauDescription, x, y, 250, Way::Nowhere ) );
                                 chapeau->setBehaviorOf( "behavior of something special" );
                                 activeRoom->addFreeItem( chapeau );
                         }
@@ -599,7 +599,7 @@ void Isomot::handleMagicKeys ()
                                 int teleportedZ = 240;
 
                                 PlayerItemPtr teleportedPlayer( new PlayerItem(
-                                        itemDataManager.findDataByLabel( nameOfPlayer ),
+                                        itemDescriptions.getDescriptionByLabel( nameOfPlayer ),
                                         teleportedX, teleportedY, teleportedZ,
                                         whichWay
                                 ) ) ;
@@ -669,11 +669,11 @@ void Isomot::updateFinalRoom()
 
                 std::cout << "character \"" << arrivedCharacter << "\" arrived to final room" << std::endl ;
 
-                const ItemData* dataOfArrived = itemDataManager.findDataByLabel( arrivedCharacter );
+                const DescriptionOfItem* arrived = itemDescriptions.getDescriptionByLabel( arrivedCharacter );
 
-                if ( dataOfArrived != nilPointer )
+                if ( arrived != nilPointer )
                 {
-                        FreeItemPtr character( new FreeItem( dataOfArrived, 66, 92, Top, Way::South ) );
+                        FreeItemPtr character( new FreeItem( arrived, 66, 92, Top, Way::South ) );
                         activeRoom->addFreeItem( character );
                 }
 
@@ -684,40 +684,40 @@ void Isomot::updateFinalRoom()
                 GameManager& gameManager = GameManager::getInstance();
                 unsigned int crowns = 0;
 
-                const ItemData* dataForChapeau = itemDataManager.findDataByLabel( "crown" );
+                const DescriptionOfItem* descriptionOfChapeau = itemDescriptions.getDescriptionByLabel( "crown" );
 
                 // la corona de Safari
                 if ( gameManager.isFreePlanet( "safari" ) )
                 {
-                        FreeItemPtr chapeau( new FreeItem( dataForChapeau, 66, 75, Top, Way::Nowhere ) );
+                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 66, 75, Top, Way::Nowhere ) );
                         activeRoom->addFreeItem( chapeau );
                         crowns++;
                 }
                 // la corona de Egyptus
                 if ( gameManager.isFreePlanet( "egyptus" ) )
                 {
-                        FreeItemPtr chapeau( new FreeItem( dataForChapeau, 66, 59, Top, Way::Nowhere ) );
+                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 66, 59, Top, Way::Nowhere ) );
                         activeRoom->addFreeItem( chapeau );
                         crowns++;
                 }
                 // la corona de Penitentiary
                 if ( gameManager.isFreePlanet( "penitentiary" ) )
                 {
-                        FreeItemPtr chapeau( new FreeItem( dataForChapeau, 65, 107, Top, Way::Nowhere ) );
+                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 65, 107, Top, Way::Nowhere ) );
                         activeRoom->addFreeItem( chapeau );
                         crowns++;
                 }
                 // la corona de Byblos
                 if ( gameManager.isFreePlanet( "byblos" ) )
                 {
-                        FreeItemPtr chapeau( new FreeItem( dataForChapeau, 65, 123, Top, Way::Nowhere ) );
+                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 65, 123, Top, Way::Nowhere ) );
                         activeRoom->addFreeItem( chapeau );
                         crowns++;
                 }
                 // la corona de Blacktooth
                 if ( gameManager.isFreePlanet( "blacktooth" ) )
                 {
-                        FreeItemPtr chapeau( new FreeItem( dataForChapeau, 65, 91, Top, Way::Nowhere ) );
+                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 65, 91, Top, Way::Nowhere ) );
                         activeRoom->addFreeItem( chapeau );
                         crowns++;
                 }
@@ -748,7 +748,7 @@ void Isomot::updateFinalRoom()
                 if ( finalRoomTimer->getValue() > 4 /* each 4 seconds */ )
                 {
                         FreeItemPtr finalBall( new FreeItem (
-                                itemDataManager.findDataByLabel( "ball" ),
+                                itemDescriptions.getDescriptionByLabel( "ball" ),
                                 146, 93, LayerHeight, Way::Nowhere
                         ) );
                         finalBall->setBehaviorOf( "behaivor of final ball" );

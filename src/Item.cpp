@@ -1,7 +1,6 @@
 
 #include "Item.hpp"
-#include "ItemData.hpp"
-#include "ItemDataManager.hpp"
+#include "DescriptionOfItem.hpp"
 #include "Mediator.hpp"
 #include "Behavior.hpp"
 #include "GameManager.hpp"
@@ -14,17 +13,20 @@
 namespace iso
 {
 
-Item::Item( const ItemData* data, int z, const Way& way )
+PoolOfPictures * Item::poolOfPictures = new PoolOfPictures( ) ;
+
+
+Item::Item( const DescriptionOfItem* description, int z, const Way& way )
       : Mediated(), Shady(),
-        uniqueName( data->getLabel() + "." + makeRandomString( 12 ) ),
-        originalLabel( data->getLabel() ),
+        uniqueName( description->getLabel() + "." + makeRandomString( 12 ) ),
+        originalLabel( description->getLabel() ),
         currentFrame( 0 ),
         backwardsMotion( false ),
-        dataOfItem( data ),
+        descriptionOfItem( description ),
         xPos( 0 ),
         yPos( 0 ),
         zPos( z ),
-        height( data->getHeight() ),
+        height( description->getHeight() ),
         orientation( way ),
         offset( std::pair< int, int >( 0, 0 ) ),
         collisionDetector( false ),
@@ -38,7 +40,7 @@ Item::Item( const ItemData* data, int z, const Way& way )
         readGraphicsOfItem ();
 
         // item with more than one frame per orientation is animated
-        if ( dataOfItem->howManyFrames() > 1 )
+        if ( descriptionOfItem->howManyFrames() > 1 )
         {
                 motionTimer->go();
         }
@@ -50,7 +52,7 @@ Item::Item( const Item& item )
         originalLabel( item.originalLabel ),
         currentFrame( item.currentFrame ),
         backwardsMotion( item.backwardsMotion ),
-        dataOfItem( item.dataOfItem ),
+        descriptionOfItem( item.descriptionOfItem ),
         xPos( item.xPos ),
         yPos( item.yPos ),
         zPos( item.zPos ),
@@ -75,7 +77,7 @@ Item::Item( const Item& item )
                 shadows.push_back( new Picture( ( *it )->getAllegroPict() ) );
         }
 
-        if ( dataOfItem->howManyFrames() > 1 )
+        if ( descriptionOfItem->howManyFrames() > 1 )
         {
                 motionTimer->go();
         }
@@ -101,27 +103,27 @@ void Item::readGraphicsOfItem ()
         clearMotionFrames ();
         clearShadowFrames ();
 
-        if ( ! dataOfItem->isPartOfDoor() && ! dataOfItem->getNameOfFile().empty() )
+        if ( ! descriptionOfItem->isPartOfDoor() && ! descriptionOfItem->getNameOfFile().empty() )
         {
-                createFrames( this, *dataOfItem, iso::GameManager::getInstance().getChosenGraphicSet() );
+                createFrames( this, *descriptionOfItem );
 
                 unsigned int way = orientation.getIntegerOfWay();
                 if ( way == Way::Nowhere ) way = 0;
-                unsigned int firstFrame = ( dataOfItem->howManyOrientations() > 1 ?
-                                                dataOfItem->howManyFrames() * way : 0 );
+                unsigned int firstFrame = ( descriptionOfItem->howManyOrientations() > 1 ?
+                                                descriptionOfItem->howManyFrames() * way : 0 );
 
                 this->rawImage = getMotionAt( firstFrame );
 
-                if ( dataOfItem->getWidthOfShadow() > 0 && dataOfItem->getHeightOfShadow() > 0 ) // item may have no shadow
+                if ( descriptionOfItem->getWidthOfShadow() > 0 && descriptionOfItem->getHeightOfShadow() > 0 ) // item may have no shadow
                 {
-                        createShadowFrames( this, *dataOfItem, iso::GameManager::getInstance().getChosenGraphicSet() );
+                        createShadowFrames( this, *descriptionOfItem );
 
                         this->shadow = getShadowAt( firstFrame );
                 }
         }
-        else if ( dataOfItem->getNameOfFile().empty() )
+        else if ( descriptionOfItem->getNameOfFile().empty() )
         {
-                Picture invisibleFrame( dataOfItem->getWidthOfFrame(), dataOfItem->getHeightOfFrame() );
+                Picture invisibleFrame( descriptionOfItem->getWidthOfFrame(), descriptionOfItem->getHeightOfFrame() );
                 addFrame( invisibleFrame );
         }
 }
@@ -141,15 +143,15 @@ bool Item::animate()
         bool cycle = false;
 
         // item with more than one frame per orientation is animated
-        if ( dataOfItem->howManyFrames() > 1 )
+        if ( descriptionOfItem->howManyFrames() > 1 )
         {
                 // is it time to change frames
-                if ( motionTimer->getValue() > dataOfItem->getDelayBetweenFrames() )
+                if ( motionTimer->getValue() > descriptionOfItem->getDelayBetweenFrames() )
                 {
                         // forwards motion
                         if ( ! backwardsMotion )
                         {
-                                if ( ++ currentFrame >= dataOfItem->howManyFrames() )
+                                if ( ++ currentFrame >= descriptionOfItem->howManyFrames() )
                                 {
                                         currentFrame = 0;
                                         cycle = true;
@@ -160,14 +162,14 @@ bool Item::animate()
                         {
                                 if ( currentFrame -- <= 0 )
                                 {
-                                        currentFrame = dataOfItem->howManyFrames() - 1;
+                                        currentFrame = descriptionOfItem->howManyFrames() - 1;
                                         cycle = true;
                                 }
                         }
 
                         // which frame to show yet
                         unsigned int orientOccident = ( orientation.getIntegerOfWay() == Way::Nowhere ? 0 : orientation.getIntegerOfWay() );
-                        unsigned int frame = currentFrame + ( dataOfItem->howManyOrientations() > 1 ? dataOfItem->howManyFrames() * orientOccident : 0 );
+                        unsigned int frame = currentFrame + ( descriptionOfItem->howManyOrientations() > 1 ? descriptionOfItem->howManyFrames() * orientOccident : 0 );
 
                         // change frame
                         if ( this->rawImage != nilPointer && this->rawImage != getMotionAt( frame ) )
@@ -189,14 +191,14 @@ bool Item::animate()
 
 void Item::metamorphInto( const std::string& labelOfItem, const std::string& initiatedBy )
 {
-        const ItemData * data = dataOfItem->getItemDataManager()->findDataByLabel( labelOfItem );
-        if ( data == nilPointer ) return ;
+        const DescriptionOfItem * description = descriptionOfItem->getItemDescriptions()->getDescriptionByLabel( labelOfItem );
+        if ( description == nilPointer ) return ;
 
         std::cout << "metamorphosis of item \"" << getUniqueName()
-                        << "\" into \"" << data->getLabel()
+                        << "\" into \"" << description->getLabel()
                         << "\" initiated by \"" << initiatedBy << "\"" << std::endl ;
 
-        this->dataOfItem = data;
+        this->descriptionOfItem = description;
 
         doForthMotion ();
 
@@ -228,11 +230,11 @@ void Item::changeOrientation( const Way& way )
                 return;
         }
 
-        if ( dataOfItem->howManyOrientations() > 1 )
+        if ( descriptionOfItem->howManyOrientations() > 1 )
         {
                 // get frame for new orientation
                 unsigned int orientOccident = ( way.getIntegerOfWay() == Way::Nowhere ? 0 : way.getIntegerOfWay() );
-                unsigned int frame = dataOfItem->howManyFrames() * orientOccident;
+                unsigned int frame = descriptionOfItem->howManyFrames() * orientOccident;
 
                 if ( this->rawImage != nilPointer && this->rawImage != getMotionAt( frame ) )
                 {
@@ -346,47 +348,47 @@ void Item::doForthMotion ()
 void Item::doBackwardsMotion ()
 {
         this->backwardsMotion = true;
-        this->currentFrame = dataOfItem->howManyFrames() - 1;
+        this->currentFrame = descriptionOfItem->howManyFrames() - 1;
 }
 
 const std::string& Item::getLabel() const
 {
-        return dataOfItem->getLabel() ;
+        return descriptionOfItem->getLabel() ;
 }
 
 unsigned int Item::getWidthX() const
 {
-        return dataOfItem->getWidthX() ;
+        return descriptionOfItem->getWidthX() ;
 }
 
 unsigned int Item::getWidthY() const
 {
-        return dataOfItem->getWidthY() ;
+        return descriptionOfItem->getWidthY() ;
 }
 
 bool Item::isMortal() const
 {
-        return dataOfItem->isMortal() ;
+        return descriptionOfItem->isMortal() ;
 }
 
 unsigned short Item::howManyOrientations() const
 {
-        return dataOfItem->howManyOrientations() ;
+        return descriptionOfItem->howManyOrientations() ;
 }
 
 float Item::getSpeed() const
 {
-        return dataOfItem->getSpeed() ;
+        return descriptionOfItem->getSpeed() ;
 }
 
 float Item::getWeight() const
 {
-        return dataOfItem->getWeight() ;
+        return descriptionOfItem->getWeight() ;
 }
 
 float Item::getDelayBetweenFrames() const
 {
-        return dataOfItem->getDelayBetweenFrames() ;
+        return descriptionOfItem->getDelayBetweenFrames() ;
 }
 
 #ifdef DEBUG
@@ -394,22 +396,15 @@ float Item::getDelayBetweenFrames() const
 #endif
 
 /* static */
-void Item::createFrames( Item* item, const ItemData& data, const char* gfxPrefix )
+void Item::createFrames( Item* item, const DescriptionOfItem& description )
 {
-        if ( data.getNameOfFile( ).empty() || data.getWidthOfFrame() == 0 || data.getHeightOfFrame() == 0 )
+        if ( description.getNameOfFile( ).empty() || description.getWidthOfFrame() == 0 || description.getHeightOfFrame() == 0 )
         {
                 std::cerr << "either name of picture file is empty or zero width / height at Item::createFrames" << std::endl ;
                 return ;
         }
 
-        autouniqueptr< allegro::Pict > picture( allegro::Pict::fromPNGFile (
-                iso::pathToFile( iso::sharePath() + gfxPrefix, data.getNameOfFile() )
-        ) );
-        if ( ! picture->isNotNil() )
-        {
-                std::cerr << "picture \"" << data.getNameOfFile( ) << "\" of set \"" << gfxPrefix << "\" is absent" << std::endl ;
-                return ;
-        }
+        PicturePtr picture = getPoolOfPictures().getOrLoadAndGetOrMakeAndGet( description.getNameOfFile(), description.getWidthOfFrame(), description.getHeightOfFrame() );
 
         // decompose image into frames
         // they are
@@ -420,13 +415,13 @@ void Item::createFrames( Item* item, const ItemData& data, const char* gfxPrefix
 
         std::vector< Picture* > rawFrames;
 
-        for ( unsigned int y = 0; y < picture->getH(); y += data.getHeightOfFrame() )
+        for ( unsigned int y = 0; y < picture->getHeight(); y += description.getHeightOfFrame() )
         {
-                for ( unsigned int x = 0; x < picture->getW(); x += data.getWidthOfFrame() )
+                for ( unsigned int x = 0; x < picture->getWidth(); x += description.getWidthOfFrame() )
                 {
-                        Picture* rawFrame = new Picture( data.getWidthOfFrame(), data.getHeightOfFrame() );
-                        allegro::bitBlit( *picture.get(), rawFrame->getAllegroPict(), x, y, 0, 0, rawFrame->getWidth(), rawFrame->getHeight() );
-                        rawFrame->setName( data.getLabel() + " " + util::toStringWithOrdinalSuffix( rawFrames.size() ) + " raw frame" );
+                        Picture* rawFrame = new Picture( description.getWidthOfFrame(), description.getHeightOfFrame() );
+                        allegro::bitBlit( picture->getAllegroPict(), rawFrame->getAllegroPict(), x, y, 0, 0, rawFrame->getWidth(), rawFrame->getHeight() );
+                        rawFrame->setName( description.getLabel() + " " + util::toStringWithOrdinalSuffix( rawFrames.size() ) + " raw frame" );
                 # if  defined( SAVE_ITEM_FRAMES )  &&  SAVE_ITEM_FRAMES
                         rawFrame->saveAsPNG( iso::homePath() );
                 # endif
@@ -434,24 +429,24 @@ void Item::createFrames( Item* item, const ItemData& data, const char* gfxPrefix
                 }
         }
 
-        unsigned int rawRow = ( rawFrames.size() - data.howManyExtraFrames() ) / data.howManyOrientations();
+        unsigned int rawRow = ( rawFrames.size() - description.howManyExtraFrames() ) / description.howManyOrientations();
 
-        for ( unsigned int o = 0 ; o < data.howManyOrientations() ; o ++ )
+        for ( unsigned int o = 0 ; o < description.howManyOrientations() ; o ++ )
         {
-                for ( unsigned int f = 0 ; f < data.howManyFrames() ; f ++ )
+                for ( unsigned int f = 0 ; f < description.howManyFrames() ; f ++ )
                 {
-                        Picture animationFrame( * rawFrames[ ( o * rawRow ) + data.getFrameAt( f ) ] );
-                        animationFrame.setName( data.getLabel() + " " + util::toStringWithOrdinalSuffix( o ) + " row " + util::toStringWithOrdinalSuffix( f ) + " frame" );
+                        Picture animationFrame( * rawFrames[ ( o * rawRow ) + description.getFrameAt( f ) ] );
+                        animationFrame.setName( description.getLabel() + " " + util::toStringWithOrdinalSuffix( o ) + " row " + util::toStringWithOrdinalSuffix( f ) + " frame" );
                 # if  defined( SAVE_ITEM_FRAMES )  &&  SAVE_ITEM_FRAMES
                         animationFrame.saveAsPNG( iso::homePath() );
                 # endif
                         item->addFrame( animationFrame );
                 }
         }
-        for ( unsigned int e = 0 ; e < data.howManyExtraFrames() ; e ++ )
+        for ( unsigned int e = 0 ; e < description.howManyExtraFrames() ; e ++ )
         {
-                Picture extraFrame( * rawFrames[ e + ( rawRow * data.howManyOrientations() ) ] );
-                extraFrame.setName( data.getLabel() + " " + util::toStringWithOrdinalSuffix( e ) + " extra frame" );
+                Picture extraFrame( * rawFrames[ e + ( rawRow * description.howManyOrientations() ) ] );
+                extraFrame.setName( description.getLabel() + " " + util::toStringWithOrdinalSuffix( e ) + " extra frame" );
         # if  defined( SAVE_ITEM_FRAMES )  &&  SAVE_ITEM_FRAMES
                 extraFrame.saveAsPNG( iso::homePath() );
         # endif
@@ -462,34 +457,27 @@ void Item::createFrames( Item* item, const ItemData& data, const char* gfxPrefix
 }
 
 /* static */
-void Item::createShadowFrames( Item* item, const ItemData& data, const char* gfxPrefix )
+void Item::createShadowFrames( Item* item, const DescriptionOfItem& description )
 {
-        if ( data.getNameOfShadowFile( ).empty() || data.getWidthOfShadow() == 0 || data.getHeightOfShadow() == 0 )
+        if ( description.getNameOfShadowFile( ).empty() || description.getWidthOfShadow() == 0 || description.getHeightOfShadow() == 0 )
         {
                 std::cerr << "either name of shadow file is empty or zero width / height at Item::createShadowFrames" << std::endl ;
                 return ;
         }
 
-        autouniqueptr< allegro::Pict > picture( allegro::Pict::fromPNGFile (
-                iso::pathToFile( iso::sharePath() + gfxPrefix, data.getNameOfShadowFile( ) )
-        ) );
-        if ( ! picture->isNotNil() )
-        {
-                std::cerr << "file of shadows \"" << data.getNameOfShadowFile( ) << "\" is absent for set \"" << gfxPrefix << "\"" << std::endl ;
-                return ;
-        }
+        PicturePtr picture = getPoolOfPictures().getOrLoadAndGetOrMakeAndGet( description.getNameOfShadowFile(), description.getWidthOfShadow(), description.getHeightOfShadow() );
 
         // decompose image into frames
 
         std::vector< Picture* > rawShadows;
 
-        for ( unsigned int y = 0; y < picture->getH(); y += data.getHeightOfShadow() )
+        for ( unsigned int y = 0; y < picture->getHeight(); y += description.getHeightOfShadow() )
         {
-                for ( unsigned int x = 0; x < picture->getW(); x += data.getWidthOfShadow() )
+                for ( unsigned int x = 0; x < picture->getWidth(); x += description.getWidthOfShadow() )
                 {
-                        Picture* rawShadow = new Picture( data.getWidthOfShadow(), data.getHeightOfShadow() );
-                        allegro::bitBlit( *picture.get(), rawShadow->getAllegroPict(), x, y, 0, 0, rawShadow->getWidth(), rawShadow->getHeight() );
-                        rawShadow->setName( data.getLabel() + " " + util::toStringWithOrdinalSuffix( rawShadows.size() ) + " raw shadow" );
+                        Picture* rawShadow = new Picture( description.getWidthOfShadow(), description.getHeightOfShadow() );
+                        allegro::bitBlit( picture->getAllegroPict(), rawShadow->getAllegroPict(), x, y, 0, 0, rawShadow->getWidth(), rawShadow->getHeight() );
+                        rawShadow->setName( description.getLabel() + " " + util::toStringWithOrdinalSuffix( rawShadows.size() ) + " raw shadow" );
                 # if  defined( SAVE_ITEM_FRAMES )  &&  SAVE_ITEM_FRAMES
                         rawShadow->saveAsPNG( iso::homePath() );
                 # endif
@@ -497,24 +485,24 @@ void Item::createShadowFrames( Item* item, const ItemData& data, const char* gfx
                 }
         }
 
-        unsigned int rawRow = ( rawShadows.size() - data.howManyExtraFrames() ) / data.howManyOrientations();
+        unsigned int rawRow = ( rawShadows.size() - description.howManyExtraFrames() ) / description.howManyOrientations();
 
-        for ( unsigned int o = 0 ; o < data.howManyOrientations() ; o ++ )
+        for ( unsigned int o = 0 ; o < description.howManyOrientations() ; o ++ )
         {
-                for ( unsigned int f = 0 ; f < data.howManyFrames() ; f ++ )
+                for ( unsigned int f = 0 ; f < description.howManyFrames() ; f ++ )
                 {
-                        Picture shadowFrame( * rawShadows[ ( o * rawRow ) + data.getFrameAt( f ) ] );
-                        shadowFrame.setName( data.getLabel() + " " + util::toStringWithOrdinalSuffix( o ) + " row " + util::toStringWithOrdinalSuffix( f ) + " shadow" );
+                        Picture shadowFrame( * rawShadows[ ( o * rawRow ) + description.getFrameAt( f ) ] );
+                        shadowFrame.setName( description.getLabel() + " " + util::toStringWithOrdinalSuffix( o ) + " row " + util::toStringWithOrdinalSuffix( f ) + " shadow" );
                 # if  defined( SAVE_ITEM_FRAMES )  &&  SAVE_ITEM_FRAMES
                         shadowFrame.saveAsPNG( iso::homePath() );
                 # endif
                         item->addFrameOfShadow( shadowFrame );
                 }
         }
-        for ( unsigned int e = 0 ; e < data.howManyExtraFrames() ; e ++ )
+        for ( unsigned int e = 0 ; e < description.howManyExtraFrames() ; e ++ )
         {
-                Picture extraShadow( * rawShadows[ e + ( rawRow * data.howManyOrientations() ) ] );
-                extraShadow.setName( data.getLabel() + " " + util::toStringWithOrdinalSuffix( e ) + " extra shadow" );
+                Picture extraShadow( * rawShadows[ e + ( rawRow * description.howManyOrientations() ) ] );
+                extraShadow.setName( description.getLabel() + " " + util::toStringWithOrdinalSuffix( e ) + " extra shadow" );
         # if  defined( SAVE_ITEM_FRAMES )  &&  SAVE_ITEM_FRAMES
                 extraShadow.saveAsPNG( iso::homePath() );
         # endif

@@ -1,7 +1,6 @@
 
 #include "PlayerHead.hpp"
 #include "Item.hpp"
-#include "ItemData.hpp"
 #include "PlayerItem.hpp"
 #include "Mediator.hpp"
 #include "MoveKindOfActivity.hpp"

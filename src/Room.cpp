@@ -3,7 +3,7 @@
 #include "Color.hpp"
 #include "FloorTile.hpp"
 #include "Wall.hpp"
-#include "ItemData.hpp"
+#include "DescriptionOfItem.hpp"
 #include "Mediator.hpp"
 #include "Camera.hpp"
 #include "GameManager.hpp"
@@ -592,7 +592,7 @@ void Room::updateWallsWithDoors ()
                                 std::string label = segment->getImage()->getName() ;
                                 label = label.substr( 0, label.find_last_of( "." ) );
 
-                                const ItemData* dataOfWall = GameManager::getInstance().getIsomot().getItemDataManager().findDataByLabel( label );
+                                const DescriptionOfItem* dataOfWall = GameManager::getInstance().getIsomot().getItemDescriptions().getDescriptionByLabel( label );
 
                                 addGridItem( GridItemPtr( new GridItem( dataOfWall, 0, segment->getPosition(), 0, Way( "nowhere" ) ) ) );
 
@@ -626,7 +626,7 @@ void Room::updateWallsWithDoors ()
                                 std::string label = segment->getImage()->getName() ;
                                 label = label.substr( 0, label.find_last_of( "." ) );
 
-                                const ItemData* dataOfWall = GameManager::getInstance().getIsomot().getItemDataManager().findDataByLabel( label );
+                                const DescriptionOfItem* dataOfWall = GameManager::getInstance().getIsomot().getItemDescriptions().getDescriptionByLabel( label );
 
                                 addGridItem( GridItemPtr( new GridItem( dataOfWall, segment->getPosition(), 0, 0, Way( "nowhere" ) ) ) );
 
@@ -1686,7 +1686,7 @@ bool Room::calculateEntryCoordinates( const Way& wayOfEntry, int widthX, int wid
         return result;
 }
 
-int Room::getXCenterForItem( const ItemData* data )
+int Room::getXCenterForItem( const DescriptionOfItem* data )
 {
         return
                 ( ( getLimitAt( "south" ) - getLimitAt( "north" ) + data->getWidthX() ) >> 1 )
@@ -1694,7 +1694,7 @@ int Room::getXCenterForItem( const ItemData* data )
                                 - ( hasDoorAt( "south" ) ? getSizeOfOneTile() >> 1 : 0 ) ;
 }
 
-int Room::getYCenterForItem( const ItemData* data )
+int Room::getYCenterForItem( const DescriptionOfItem* data )
 {
         return
                 ( ( getLimitAt( "west" ) - getLimitAt( "east" ) + data->getWidthY() ) >> 1 )

@@ -31,7 +31,6 @@ namespace iso
 class Mediated ;
 class FloorTile ;
 class Door ;
-class ItemDataManager ;
 
 
 /**

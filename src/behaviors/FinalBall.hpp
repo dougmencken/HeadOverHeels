@@ -18,9 +18,6 @@
 namespace iso
 {
 
-class Item ;
-class ItemData ;
-
 /**
  * The ball of the final screen. It moves northwards and disappears when it collides
  */

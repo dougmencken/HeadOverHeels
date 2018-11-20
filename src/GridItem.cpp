@@ -1,6 +1,6 @@
 
 #include "GridItem.hpp"
-#include "ItemData.hpp"
+#include "DescriptionOfItem.hpp"
 #include "Mediator.hpp"
 
 #include <cassert>
@@ -9,8 +9,8 @@
 namespace iso
 {
 
-GridItem::GridItem( const ItemData* itemData, int cx, int cy, int z, const Way& way )
-        : Item( itemData, z, way )
+GridItem::GridItem( const DescriptionOfItem* description, int cx, int cy, int z, const Way& way )
+        : Item( description, z, way )
         , cell( std::pair< int, int >( cx, cy ) )
 {
         // free coordinates of grid item

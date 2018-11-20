@@ -16,10 +16,6 @@
 namespace iso
 {
 
-class Item;
-class ItemData;
-
-
 class PlayerHead : public UserControlled
 {
 

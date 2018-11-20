@@ -1,7 +1,7 @@
 
 #include "PlayerHeels.hpp"
 #include "Item.hpp"
-#include "ItemData.hpp"
+#include "DescriptionOfItem.hpp"
 #include "PlayerItem.hpp"
 #include "Mediator.hpp"
 #include "InputManager.hpp"
@@ -164,12 +164,12 @@ void PlayerHeels::behave ()
                 {
                         if ( input.takeTyped() )
                         {
-                                activity = ( playerItem.getTakenItemData() == nilPointer ? Activity::TakeItem : Activity::DropItem );
+                                activity = ( playerItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeItem : Activity::DropItem );
                                 input.releaseKeyFor( "take" );
                         }
                         else if ( input.takeAndJumpTyped() )
                         {
-                                activity = ( playerItem.getTakenItemData() == nilPointer ? Activity::TakeAndJump : Activity::DropAndJump );
+                                activity = ( playerItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeAndJump : Activity::DropAndJump );
                                 input.releaseKeyFor( "take&jump" );
                         }
                         else if ( input.movenorthTyped() )
@@ -212,12 +212,12 @@ void PlayerHeels::behave ()
                         }
                         else if ( input.takeTyped() )
                         {
-                                activity = ( playerItem.getTakenItemData() == nilPointer ? Activity::TakeItem : Activity::DropItem );
+                                activity = ( playerItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeItem : Activity::DropItem );
                                 input.releaseKeyFor( "take" );
                         }
                         else if ( input.takeAndJumpTyped() )
                         {
-                                activity = ( playerItem.getTakenItemData() == nilPointer ? Activity::TakeAndJump : Activity::DropAndJump );
+                                activity = ( playerItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeAndJump : Activity::DropAndJump );
                                 input.releaseKeyFor( "take&jump" );
                         }
                         else if ( input.movenorthTyped() )
@@ -252,12 +252,12 @@ void PlayerHeels::behave ()
                         }
                         else if ( input.takeTyped() )
                         {
-                                activity = ( playerItem.getTakenItemData() == nilPointer ? Activity::TakeItem : Activity::DropItem );
+                                activity = ( playerItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeItem : Activity::DropItem );
                                 input.releaseKeyFor( "take" );
                         }
                         else if ( input.takeAndJumpTyped() )
                         {
-                                activity = ( playerItem.getTakenItemData() == nilPointer ? Activity::TakeAndJump : Activity::DropAndJump );
+                                activity = ( playerItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeAndJump : Activity::DropAndJump );
                                 input.releaseKeyFor( "take&jump" );
                         }
                         else if ( input.movenorthTyped() )
@@ -313,7 +313,7 @@ void PlayerHeels::behave ()
                         // pick or drop an item when falling
                         if ( input.takeTyped() )
                         {
-                                activity = ( playerItem.getTakenItemData() == nilPointer ? Activity::TakeItem : Activity::DropItem );
+                                activity = ( playerItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeItem : Activity::DropItem );
                                 input.releaseKeyFor( "take" );
                         }
                 }

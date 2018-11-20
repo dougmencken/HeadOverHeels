@@ -19,9 +19,7 @@
 namespace iso
 {
 
-class Item ;
 class PlayerItem ;
-
 
 class Doughnut : public Behavior
 {

@@ -1,7 +1,8 @@
 
 #include "Door.hpp"
 #include "Color.hpp"
-#include "ItemDataManager.hpp"
+#include "DescriptionOfItem.hpp"
+#include "ItemDescriptions.hpp"
 #include "FreeItem.hpp"
 #include "Mediator.hpp"
 #include "GameManager.hpp"
@@ -15,8 +16,8 @@
 namespace iso
 {
 
-Door::Door( const ItemDataManager& itemDataManager, const std::string& label, int cx, int cy, int z, const std::string& way )
-        : itemDataManager( itemDataManager )
+Door::Door( const ItemDescriptions& itemDescriptions, const std::string& label, int cx, int cy, int z, const std::string& way )
+        : itemDescriptions( itemDescriptions )
         , labelOfDoor( label )
         , cellX( cx )
         , cellY( cy )
@@ -31,7 +32,7 @@ Door::Door( const ItemDataManager& itemDataManager, const std::string& label, in
 {
         /* std::cout << "creation of door \"" << labelOfDoor << "\"" << std::endl ; */
 
-        const ItemData* lintelData = itemDataManager.findDataByLabel( labelOfDoor + "~lintel" );
+        const DescriptionOfItem* lintelData = itemDescriptions.getDescriptionByLabel( labelOfDoor + "~lintel" );
 
         // load graphics of door
 
@@ -51,7 +52,7 @@ Door::Door( const ItemDataManager& itemDataManager, const std::string& label, in
 
         // cut out left jamb
 
-        const ItemData* leftJambData = itemDataManager.findDataByLabel( labelOfDoor + "~leftjamb" );
+        const DescriptionOfItem* leftJambData = itemDescriptions.getDescriptionByLabel( labelOfDoor + "~leftjamb" );
 
         leftJambImage = cutOutLeftJamb( *pictureOfDoor.get(),
                                         leftJambData->getWidthX(), leftJambData->getWidthY(), leftJambData->getHeight(),
@@ -61,7 +62,7 @@ Door::Door( const ItemDataManager& itemDataManager, const std::string& label, in
 
         // cut out right jamb
 
-        const ItemData* rightJambData = itemDataManager.findDataByLabel( labelOfDoor + "~rightjamb" );
+        const DescriptionOfItem* rightJambData = itemDescriptions.getDescriptionByLabel( labelOfDoor + "~rightjamb" );
 
         rightJambImage = cutOutRightJamb( *pictureOfDoor.get(),
                                         rightJambData->getWidthX(), rightJambData->getWidthY(), rightJambData->getHeight(),
@@ -231,7 +232,7 @@ FreeItemPtr Door::getLeftJamb()
 {
         if ( leftJamb == nilPointer )
         {
-                const ItemData* leftJambData = itemDataManager.findDataByLabel( labelOfDoor + "~leftjamb" );
+                const DescriptionOfItem* leftJambData = itemDescriptions.getDescriptionByLabel( labelOfDoor + "~leftjamb" );
 
                 int tileSize = mediator->getRoom()->getSizeOfOneTile();
 
@@ -297,7 +298,7 @@ FreeItemPtr Door::getRightJamb()
                 int x( 0 ), y( 0 );
                 int tileSize = mediator->getRoom()->getSizeOfOneTile();
 
-                const ItemData* rightJambData = itemDataManager.findDataByLabel( labelOfDoor + "~rightjamb" );
+                const DescriptionOfItem* rightJambData = itemDescriptions.getDescriptionByLabel( labelOfDoor + "~rightjamb" );
 
                 if ( rightJambData != nilPointer && rightJambImage != nilPointer )
                 {
@@ -356,7 +357,7 @@ FreeItemPtr Door::getLintel()
                 int x( 0 ), y( 0 );
                 int tileSize = mediator->getRoom()->getSizeOfOneTile();
 
-                const ItemData* lintelData = itemDataManager.findDataByLabel( labelOfDoor + "~lintel" );
+                const DescriptionOfItem* lintelData = itemDescriptions.getDescriptionByLabel( labelOfDoor + "~lintel" );
 
                 if ( lintelData != nilPointer && lintelImage != nilPointer )
                 {

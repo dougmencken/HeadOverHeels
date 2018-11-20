@@ -1,7 +1,6 @@
 
 #include "Turn.hpp"
 #include "Item.hpp"
-#include "ItemData.hpp"
 #include "FreeItem.hpp"
 #include "MoveKindOfActivity.hpp"
 #include "DisplaceKindOfActivity.hpp"

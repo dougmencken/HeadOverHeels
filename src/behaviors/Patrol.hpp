@@ -18,8 +18,6 @@
 namespace iso
 {
 
-class Item ;
-
 /**
  * Moves item randomly. For "four primary directions" variant move north, south, east or west.
  * For variant "four secondary directions" move northeast, northwest, southeast and southwest.

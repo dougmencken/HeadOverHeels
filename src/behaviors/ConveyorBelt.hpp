@@ -18,9 +18,6 @@
 namespace iso
 {
 
-class Item ;
-
-
 class ConveyorBelt : public Behavior
 {
 

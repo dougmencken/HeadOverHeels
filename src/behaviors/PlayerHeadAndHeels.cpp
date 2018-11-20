@@ -1,7 +1,7 @@
 
 #include "PlayerHeadAndHeels.hpp"
 #include "Item.hpp"
-#include "ItemData.hpp"
+#include "DescriptionOfItem.hpp"
 #include "PlayerItem.hpp"
 #include "Mediator.hpp"
 #include "FallKindOfActivity.hpp"
@@ -196,12 +196,12 @@ void PlayerHeadAndHeels::behave ()
                         }
                         else if ( input.takeTyped() )
                         {
-                                activity = ( playerItem.getTakenItemData() == nilPointer ? Activity::TakeItem : Activity::DropItem );
+                                activity = ( playerItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeItem : Activity::DropItem );
                                 input.releaseKeyFor( "take" );
                         }
                         else if ( input.takeAndJumpTyped() )
                         {
-                                activity = ( playerItem.getTakenItemData() == nilPointer ? Activity::TakeAndJump : Activity::DropAndJump );
+                                activity = ( playerItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeAndJump : Activity::DropAndJump );
                                 input.releaseKeyFor( "take&jump" );
                         }
                         else if ( input.movenorthTyped() )
@@ -240,12 +240,12 @@ void PlayerHeadAndHeels::behave ()
                         }
                         else if ( input.takeTyped() )
                         {
-                                activity = ( playerItem.getTakenItemData() == nilPointer ? Activity::TakeItem : Activity::DropItem );
+                                activity = ( playerItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeItem : Activity::DropItem );
                                 input.releaseKeyFor( "take" );
                         }
                         else if ( input.takeAndJumpTyped() )
                         {
-                                activity = ( playerItem.getTakenItemData() == nilPointer ? Activity::TakeAndJump : Activity::DropAndJump );
+                                activity = ( playerItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeAndJump : Activity::DropAndJump );
                                 input.releaseKeyFor( "take&jump" );
                         }
                         else if ( input.movenorthTyped() )
@@ -285,12 +285,12 @@ void PlayerHeadAndHeels::behave ()
                         }
                         else if ( input.takeTyped() )
                         {
-                                activity = ( playerItem.getTakenItemData() == nilPointer ? Activity::TakeItem : Activity::DropItem );
+                                activity = ( playerItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeItem : Activity::DropItem );
                                 input.releaseKeyFor( "take" );
                         }
                         else if ( input.takeAndJumpTyped() )
                         {
-                                activity = ( playerItem.getTakenItemData() == nilPointer ? Activity::TakeAndJump : Activity::DropAndJump );
+                                activity = ( playerItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeAndJump : Activity::DropAndJump );
                                 input.releaseKeyFor( "take&jump" );
                         }
                         else if ( input.movenorthTyped() )
@@ -370,7 +370,7 @@ void PlayerHeadAndHeels::behave ()
                         // pick or drop an item when falling
                         else if ( input.takeTyped() )
                         {
-                                activity = ( playerItem.getTakenItemData() == nilPointer ? Activity::TakeItem : Activity::DropItem );
+                                activity = ( playerItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeItem : Activity::DropItem );
                                 input.releaseKeyFor( "take" );
                         }
                         // entonces Head y Heels planean
@@ -393,7 +393,7 @@ void PlayerHeadAndHeels::behave ()
                         // pick or drop an item when gliding
                         else if ( input.takeTyped() )
                         {
-                                activity = ( playerItem.getTakenItemData() == nilPointer ? Activity::TakeItem : Activity::DropItem );
+                                activity = ( playerItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeItem : Activity::DropItem );
                                 input.releaseKeyFor( "take" );
                         }
                         else if ( input.movenorthTyped() )

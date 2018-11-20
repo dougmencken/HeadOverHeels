@@ -21,7 +21,7 @@
 namespace iso
 {
 
-class ItemDataManager ;
+class ItemDescriptions ;
 
 
 /**
@@ -34,14 +34,14 @@ class Door : public Mediated
 public:
 
        /**
-        * @param itemDataManager to find three parts of door
+        * @param itemDescriptions to find three parts of door
         * @param label label of door
         * @param cx cell of door on X
         * @param cy cell of door on Y
         * @param z position on Z or how far is item from ground
         * @param way orientation of door
         */
-        Door( const ItemDataManager & itemDataManager, const std::string & label, int cx, int cy, int z, const std::string & way ) ;
+        Door( const ItemDescriptions & itemDescriptions, const std::string & label, int cx, int cy, int z, const std::string & way ) ;
 
         virtual ~Door( ) ;
 
@@ -69,7 +69,7 @@ public:
 
 private:
 
-        const ItemDataManager & itemDataManager ;
+        const ItemDescriptions & itemDescriptions ;
 
         std::string labelOfDoor ;
 

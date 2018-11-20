@@ -3,7 +3,7 @@
 #include "Mediated.hpp"
 #include "RoomBuilder.hpp"
 #include "GameManager.hpp"
-#include "ItemData.hpp"
+#include "DescriptionOfItem.hpp"
 #include "FloorTile.hpp"
 #include "ShadowCaster.hpp"
 #include "Masker.hpp"
@@ -1123,8 +1123,8 @@ bool Mediator::pickNextCharacter()
 
                                 // item that Heels may have in handbag
                                 PlayerItemPtr heels = reference;
-                                const ItemData* dataOfItemInBag = heels->getTakenItemData ();
-                                std::string behaviorOfItemInBag = heels->getTakenItemBehavior( );
+                                const DescriptionOfItem* descriptionOfItemInBag = heels->getDescriptionOfTakenItem ();
+                                std::string behaviorOfItemInBag = heels->getBehaviorOfTakenItem( );
 
                                 // remove simple players
                                 this->room->removePlayerFromRoom( *previousCharacter, false );
@@ -1134,10 +1134,10 @@ bool Mediator::pickNextCharacter()
                                 setActiveCharacter( RoomBuilder::createPlayerInRoom( this->room, "headoverheels", false, x, y, z, orientation ) );
 
                                 // transfer item in handbag
-                                if ( dataOfItemInBag != nilPointer )
+                                if ( descriptionOfItemInBag != nilPointer )
                                 {
-                                        std::cout << "transfer item \"" << dataOfItemInBag->getLabel() << "\" to player \"" << activeCharacter->getLabel() << "\"" << std::endl ;
-                                        activeCharacter->placeItemInBag( dataOfItemInBag->getLabel(), behaviorOfItemInBag );
+                                        std::cout << "transfer item \"" << descriptionOfItemInBag->getLabel() << "\" to player \"" << activeCharacter->getLabel() << "\"" << std::endl ;
+                                        activeCharacter->placeItemInBag( descriptionOfItemInBag->getLabel(), behaviorOfItemInBag );
                                 }
 
                                 unlockFreeItemsMutex ();
@@ -1161,8 +1161,8 @@ bool Mediator::pickNextCharacter()
                 lockFreeItemsMutex ();
 
                 // get data of item in handbag
-                const ItemData* dataOfItemInBag = activeCharacter->getTakenItemData ();
-                std::string behaviorOfItemInBag = activeCharacter->getTakenItemBehavior( );
+                const DescriptionOfItem* descriptionOfItemInBag = activeCharacter->getDescriptionOfTakenItem ();
+                std::string behaviorOfItemInBag = activeCharacter->getBehaviorOfTakenItem( );
 
                 // remove composite player
                 this->room->removePlayerFromRoom( *activeCharacter, false );
@@ -1171,10 +1171,10 @@ bool Mediator::pickNextCharacter()
 
                 PlayerItemPtr heelsPlayer = RoomBuilder::createPlayerInRoom( this->room, "heels", false, x, y, z, orientation );
 
-                if ( dataOfItemInBag != nilPointer )
+                if ( descriptionOfItemInBag != nilPointer )
                 {
-                        std::cout << "transfer item \"" << dataOfItemInBag->getLabel() << "\" to player \"" << heelsPlayer->getLabel() << "\"" << std::endl ;
-                        heelsPlayer->placeItemInBag( dataOfItemInBag->getLabel(), behaviorOfItemInBag );
+                        std::cout << "transfer item \"" << descriptionOfItemInBag->getLabel() << "\" to player \"" << heelsPlayer->getLabel() << "\"" << std::endl ;
+                        heelsPlayer->placeItemInBag( descriptionOfItemInBag->getLabel(), behaviorOfItemInBag );
                 }
 
                 PlayerItemPtr headPlayer = RoomBuilder::createPlayerInRoom( this->room, "head", false, x, y, z + LayerHeight, orientation );

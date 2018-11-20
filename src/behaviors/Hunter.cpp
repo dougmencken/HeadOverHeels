@@ -1,7 +1,7 @@
 
 #include "Hunter.hpp"
 #include "Item.hpp"
-#include "ItemData.hpp"
+#include "DescriptionOfItem.hpp"
 #include "FreeItem.hpp"
 #include "PlayerItem.hpp"
 #include "MoveKindOfActivity.hpp"
@@ -354,7 +354,7 @@ bool Hunter::createFullBody()
 
                 // create new item in the same location
                 FreeItemPtr newItem( new FreeItem (
-                        item->getDataOfItem()->getItemDataManager()->findDataByLabel( "imperial-guard" ),
+                        item->getDescriptionOfItem()->getItemDescriptions()->getDescriptionByLabel( "imperial-guard" ),
                         thisItem.getX(), thisItem.getY(), thisItem.getZ() - LayerHeight,
                         thisItem.getOrientation() ) );
 

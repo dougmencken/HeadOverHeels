@@ -36,7 +36,6 @@ namespace iso
 class FloorTile ;
 class Wall ;
 class Camera ;
-class ItemDataManager ;
 
 
 /**
@@ -224,13 +223,13 @@ public:
 
         PicturePtr getWhereToDraw () const {  return whereToDraw ;  }
 
-        int getXCenterForItem ( const Item & item ) {  return getXCenterForItem( item.getDataOfItem() ) ;  }
+        int getXCenterForItem ( const Item & item ) {  return getXCenterForItem( item.getDescriptionOfItem() ) ;  }
 
-        int getXCenterForItem ( const ItemData * data ) ;
+        int getXCenterForItem ( const DescriptionOfItem * data ) ;
 
-        int getYCenterForItem ( const Item & item ) {  return getYCenterForItem( item.getDataOfItem() ) ;  }
+        int getYCenterForItem ( const Item & item ) {  return getYCenterForItem( item.getDescriptionOfItem() ) ;  }
 
-        int getYCenterForItem ( const ItemData * data ) ;
+        int getYCenterForItem ( const DescriptionOfItem * data ) ;
 
        /**
         * Limit for movement of camera along X in triple room

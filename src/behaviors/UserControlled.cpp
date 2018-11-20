@@ -1,7 +1,6 @@
 
 #include "UserControlled.hpp"
-#include "ItemData.hpp"
-#include "ItemDataManager.hpp"
+#include "DescriptionOfItem.hpp"
 #include "Room.hpp"
 #include "Mediator.hpp"
 #include "MoveKindOfActivity.hpp"
@@ -398,16 +397,16 @@ void UserControlled::useHooter( PlayerItem & player )
         {
                 this->donutFromHooterIsHere = true;
 
-                const ItemData* hooterData = player.getDataOfItem()->getItemDataManager()->findDataByLabel( labelOfFiredDoughnut );
+                const DescriptionOfItem* hooterDoughnut = player.getDescriptionOfItem()->getItemDescriptions()->getDescriptionByLabel( labelOfFiredDoughnut );
 
-                if ( hooterData != nilPointer )
+                if ( hooterDoughnut != nilPointer )
                 {
                         SoundManager::getInstance().stop( player.getLabel(), Activity::FireDoughnut );
 
                         // create item at the same position as player
-                        int z = player.getZ() + player.getHeight() - hooterData->getHeight();
+                        int z = player.getZ() + player.getHeight() - hooterDoughnut->getHeight();
                         FreeItemPtr donut( new FreeItem (
-                                hooterData,
+                                hooterDoughnut,
                                 player.getX(), player.getY(),
                                 z < 0 ? 0 : z,
                                 player.getOrientation() ) );
@@ -487,19 +486,19 @@ void UserControlled::takeItem( PlayerItem & player )
 
 void UserControlled::dropItem( PlayerItem & player )
 {
-        if ( player.getTakenItemData() != nilPointer )
+        if ( player.getDescriptionOfTakenItem() != nilPointer )
         {
-                std::cout << "drop item \"" << player.getTakenItemData()->getLabel() << "\"" << std::endl ;
+                std::cout << "drop item \"" << player.getDescriptionOfTakenItem()->getLabel() << "\"" << std::endl ;
 
                 // place dropped item just below player
                 if ( player.addToZ( LayerHeight ) )
                 {
-                        FreeItemPtr freeItem( new FreeItem( player.getTakenItemData(),
+                        FreeItemPtr freeItem( new FreeItem( player.getDescriptionOfTakenItem(),
                                                             player.getX(), player.getY(),
                                                             player.getZ() - LayerHeight,
                                                             Way::Nowhere ) );
 
-                        freeItem->setBehaviorOf( player.getTakenItemBehavior() );
+                        freeItem->setBehaviorOf( player.getBehaviorOfTakenItem() );
 
                         player.getMediator()->getRoom()->addFreeItem( freeItem );
 

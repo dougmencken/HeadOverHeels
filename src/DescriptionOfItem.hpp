@@ -8,8 +8,8 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef ItemData_hpp_
-#define ItemData_hpp_
+#ifndef DescriptionOfItem_hpp_
+#define DescriptionOfItem_hpp_
 
 #include <vector>
 #include <string>
@@ -20,25 +20,21 @@
 namespace iso
 {
 
-class ItemDataManager ;
+class ItemDescriptions ;
 
 
-/**
- * Container for definition of an item
- */
-
-class ItemData
+class DescriptionOfItem
 {
 
-friend class ItemDataManager ;
+friend class ItemDescriptions ;
 
 public:
 
-        ItemData( ) ;
+        DescriptionOfItem( ) ;
 
-        virtual ~ItemData( ) ;
+        virtual ~DescriptionOfItem( ) ;
 
-        static ItemData * clone ( const ItemData & data ) ;
+        static DescriptionOfItem * clone ( const DescriptionOfItem & data ) ;
 
 public:
 
@@ -87,7 +83,7 @@ public:
 
         bool isPartOfDoor () const {  return partOfDoor ;  }
 
-        const ItemDataManager * getItemDataManager () const {  return manager ;  }
+        const ItemDescriptions * getItemDescriptions () const {  return descriptions ;  }
 
 private:
 
@@ -166,7 +162,7 @@ private:
 
         bool partOfDoor ;
 
-        ItemDataManager * manager ;
+        ItemDescriptions * descriptions ;
 
 };
 

@@ -18,9 +18,6 @@
 namespace iso
 {
 
-class Item ;
-class ItemData ;
-
 /**
  * For items which lack autonomous movement and move only on touch by some other item
  */

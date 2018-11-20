@@ -17,8 +17,6 @@
 namespace iso
 {
 
-class Item ;
-
 /**
  * Teleports item between rooms, activates when item is above it
  */

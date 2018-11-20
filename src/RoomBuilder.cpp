@@ -2,7 +2,6 @@
 #include "RoomBuilder.hpp"
 #include "Isomot.hpp"
 #include "MapManager.hpp"
-#include "ItemDataManager.hpp"
 #include "Room.hpp"
 #include "Behavior.hpp"
 #include "Elevator.hpp"
@@ -550,15 +549,15 @@ PlayerItemPtr RoomBuilder::createPlayerInRoom( Room* room,
                 }
         }
 
-        const ItemData* dataOfItem = gameManager.getIsomot().getItemDataManager().findDataByLabel( nameOfPlayerToCreate );
+        const DescriptionOfItem* itemDescription = gameManager.getIsomot().getItemDescriptions().getDescriptionByLabel( nameOfPlayerToCreate );
 
         // if it is found and has some lives left, place it in room
         if ( ( nameOfPlayerToCreate == "headoverheels" || nameOfPlayerToCreate == "head" || nameOfPlayerToCreate == "heels" )
-                && dataOfItem != nilPointer )
+                && itemDescription != nilPointer )
         {
                 if ( gameManager.getLives( nameOfPlayerToCreate ) > 0 )
                 {
-                        PlayerItemPtr player( new PlayerItem( dataOfItem, x, y, z, orientation ) );
+                        PlayerItemPtr player( new PlayerItem( itemDescription, x, y, z, orientation ) );
                         player->fillWithData( gameManager );
 
                         std::string behaviorOfPlayer = "behavior of some player";
@@ -634,9 +633,9 @@ GridItemPtr RoomBuilder::buildGridItem( tinyxml2::XMLElement* item, Room* room )
 
         std::string label = item->FirstChildElement( "label" )->FirstChild()->ToText()->Value();
 
-        const ItemData* dataOfItem = GameManager::getInstance().getIsomot().getItemDataManager().findDataByLabel( label );
+        const DescriptionOfItem* itemDescription = GameManager::getInstance().getIsomot().getItemDescriptions().getDescriptionByLabel( label );
 
-        if ( dataOfItem != nilPointer )
+        if ( itemDescription != nilPointer )
         {
                 int itemX = std::atoi( item->Attribute( "x" ) );
                 int itemY = std::atoi( item->Attribute( "y" ) );
@@ -646,7 +645,7 @@ GridItemPtr RoomBuilder::buildGridItem( tinyxml2::XMLElement* item, Room* room )
                 if ( orientation == nilPointer ) orientation = item->FirstChildElement( "direction" ) ;
                 std::string theWay = orientation->FirstChild()->ToText()->Value();
 
-                GridItemPtr gridItem( new GridItem( dataOfItem, itemX, itemY, itemZ > Top ? itemZ * LayerHeight : Top ,
+                GridItemPtr gridItem( new GridItem( itemDescription, itemX, itemY, itemZ > Top ? itemZ * LayerHeight : Top ,
                                                     theWay == "none" ? Way( "nowhere" ) : Way( theWay ) ) );
 
                 std::string behaviorOfItem = "still";
@@ -669,21 +668,21 @@ FreeItemPtr RoomBuilder::buildFreeItem( tinyxml2::XMLElement* item, Room* room )
 {
         std::string label = item->FirstChildElement( "label" )->FirstChild()->ToText()->Value();
 
-        const ItemData* dataOfItem = GameManager::getInstance().getIsomot().getItemDataManager().findDataByLabel( label );
+        const DescriptionOfItem* itemDescription = GameManager::getInstance().getIsomot().getItemDescriptions().getDescriptionByLabel( label );
 
-        if ( dataOfItem != nilPointer )
+        if ( itemDescription != nilPointer )
         {
                 int itemX = std::atoi( item->Attribute( "x" ) );
                 int itemY = std::atoi( item->Attribute( "y" ) );
                 int itemZ = std::atoi( item->Attribute( "z" ) );
 
                 // in free coordinates
-                int fx = itemX * room->getSizeOfOneTile() + ( ( room->getSizeOfOneTile() - dataOfItem->getWidthX() ) >> 1 );
-                int fy = ( itemY + 1 ) * room->getSizeOfOneTile() - ( ( room->getSizeOfOneTile() - dataOfItem->getWidthY() ) >> 1 ) - 1;
+                int fx = itemX * room->getSizeOfOneTile() + ( ( room->getSizeOfOneTile() - itemDescription->getWidthX() ) >> 1 );
+                int fy = ( itemY + 1 ) * room->getSizeOfOneTile() - ( ( room->getSizeOfOneTile() - itemDescription->getWidthY() ) >> 1 ) - 1;
                 int fz = ( itemZ != Top ) ? itemZ * LayerHeight : Top;
 
                 // don’t place an item if it is a bonus and has already been taken
-                if ( BonusManager::getInstance().isAbsent( room->getNameOfFileWithDataAboutRoom(), dataOfItem->getLabel() ) )
+                if ( BonusManager::getInstance().isAbsent( room->getNameOfFileWithDataAboutRoom(), itemDescription->getLabel() ) )
                 {
                         return FreeItemPtr () ;
                 }
@@ -692,7 +691,7 @@ FreeItemPtr RoomBuilder::buildFreeItem( tinyxml2::XMLElement* item, Room* room )
                 if ( orientation == nilPointer ) orientation = item->FirstChildElement( "direction" ) ;
                 std::string theWay = orientation->FirstChild()->ToText()->Value();
 
-                FreeItemPtr freeItem( new FreeItem( dataOfItem, fx, fy, fz,
+                FreeItemPtr freeItem( new FreeItem( itemDescription, fx, fy, fz,
                                                     theWay == "none" ? Way( "nowhere" ) : Way( theWay ) ) );
 
                 freeItem->setOriginalCellX( itemX );
@@ -765,7 +764,7 @@ Door* RoomBuilder::buildDoor( tinyxml2::XMLElement* item )
         if ( orientation == nilPointer ) orientation = item->FirstChildElement( "direction" ) ;
 
         return
-                new Door( GameManager::getInstance().getIsomot().getItemDataManager(), label,
+                new Door( GameManager::getInstance().getIsomot().getItemDescriptions(), label,
                                 itemX, itemY, ( itemZ > Top ? itemZ * LayerHeight : Top ),
                                         orientation->FirstChild()->ToText()->Value() );
 }

@@ -24,7 +24,7 @@
 namespace iso
 {
 
-class ItemData ;
+class DescriptionOfItem ;
 
 /**
  * Grid items are those which are placed in a particular position and have the same widths
@@ -38,13 +38,13 @@ class GridItem : public Item, public Drawable
 public:
 
         /**
-         * @param itemData Data of item
+         * @param description Description of item
          * @param cx Position on X of the cell in room where this item is
          * @param cy Position on Y of the cell in room where this item is
          * @param z Position on Z, or how far is floor
          * @param way Initial orientation of item
          */
-        GridItem( const ItemData* itemData, int cx, int cy, int z, const Way& way ) ;
+        GridItem( const DescriptionOfItem * description, int cx, int cy, int z, const Way& way ) ;
 
         virtual ~GridItem( ) ;
 

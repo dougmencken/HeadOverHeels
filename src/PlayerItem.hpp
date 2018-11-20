@@ -21,7 +21,7 @@
 namespace iso
 {
 
-class ItemData ;
+class DescriptionOfItem ;
 class GameManager ;
 
 
@@ -34,7 +34,7 @@ class PlayerItem : public FreeItem
 
 public:
 
-        PlayerItem( const ItemData* itemData, int x, int y, int z, const Way& orientation ) ;
+        PlayerItem( const DescriptionOfItem* description, int x, int y, int z, const Way& orientation ) ;
 
         /**
          * Constructor copia. No copia los atributos que son punteros
@@ -175,24 +175,16 @@ private:
          */
         float shieldRemaining ;
 
-        const ItemData * takenItemData ;
+        const DescriptionOfItem * descriptionOfTakenItem ;
 
-        std::string takenItemBehavior ;
+        std::string behaviorOfTakenItem ;
 
 protected:
 
         void setLives ( unsigned char lives ) {  this->lives = lives ;  }
 
-        /**
-         * Tiempo restante de doble velocidad
-         * @param highSpeed Number between 0 and 99
-         */
         void setHighSpeed ( unsigned int highSpeed ) {  this->highSpeed = highSpeed ;  }
 
-        /**
-         * Establece el número de grandes saltos del jugador
-         * @param highJumps Number between 0 and 10
-         */
         void setHighJumps ( unsigned int highJumps ) {  this->highJumps = highJumps ;  }
 
         void setDoughnuts ( const unsigned short howMany ) {  this->howManyDoughnuts = howMany ;  }
@@ -203,9 +195,9 @@ public:
 
         void placeItemInBag ( const std::string & labelOfItem, const std::string & behavior ) ;
 
-        const ItemData * getTakenItemData () const {  return this->takenItemData ;  }
+        const DescriptionOfItem * getDescriptionOfTakenItem () const {  return descriptionOfTakenItem ;  }
 
-        const std::string& getTakenItemBehavior () const {  return this->takenItemBehavior ;  }
+        const std::string & getBehaviorOfTakenItem () const {  return this->behaviorOfTakenItem ;  }
 
         unsigned char getLives () const {  return this->lives ;  }
 

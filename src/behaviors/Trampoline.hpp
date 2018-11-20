@@ -18,9 +18,6 @@
 namespace iso
 {
 
-class Item ;
-
-
 class Trampoline : public Behavior
 {
 

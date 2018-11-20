@@ -18,9 +18,6 @@
 namespace iso
 {
 
-class Item ;
-class ItemData ;
-
 /**
  * Hunts for player by moving wherever it is
  */

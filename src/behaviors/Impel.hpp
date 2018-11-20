@@ -18,8 +18,6 @@
 namespace iso
 {
 
-class Item ;
-
 /**
  * Move item in one direction as result of displacement of another item. Stop when something is hit
  */

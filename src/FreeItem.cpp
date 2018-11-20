@@ -1,6 +1,6 @@
 
 #include "FreeItem.hpp"
-#include "ItemData.hpp"
+#include "DescriptionOfItem.hpp"
 #include "Mediator.hpp"
 #include "SoundManager.hpp"
 #include "Color.hpp"
@@ -9,8 +9,8 @@
 namespace iso
 {
 
-FreeItem::FreeItem( const ItemData* itemData, int x, int y, int z, const Way& way )
-        : Item ( itemData, z, way )
+FreeItem::FreeItem( const DescriptionOfItem* description, int x, int y, int z, const Way& way )
+        : Item ( description, z, way )
         , originalCellX( -1024 )
         , originalCellY( -1024 )
         , originalCellZ( -1024 )
@@ -283,7 +283,7 @@ bool FreeItem::isCollidingWithDoor( const std::string& way, const std::string& n
                         }
                         // move player left when player hits right jamb
                         else if ( door->getRightJamb()->getUniqueName() == name &&
-                                        this->getY() - static_cast< int >( getDataOfItem()->getWidthY() )
+                                        this->getY() - static_cast< int >( getDescriptionOfItem()->getWidthY() )
                                                 >= door->getRightJamb()->getY() - static_cast< int >( door->getRightJamb()->getWidthY() ) )
                         {
                                 this->yPos++;
@@ -307,7 +307,7 @@ bool FreeItem::isCollidingWithDoor( const std::string& way, const std::string& n
                         }
                         // move player left when player collides with right jamb
                         else if ( door->getRightJamb()->getUniqueName() == name &&
-                                        this->getX() - static_cast< int >( getDataOfItem()->getWidthX() )
+                                        this->getX() - static_cast< int >( getDescriptionOfItem()->getWidthX() )
                                                 <= door->getRightJamb()->getX() + static_cast< int >( door->getRightJamb()->getWidthX() ) )
                         {
                                 this->xPos--;

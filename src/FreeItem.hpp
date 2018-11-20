@@ -25,7 +25,7 @@
 namespace iso
 {
 
-class ItemData ;
+class DescriptionOfItem ;
 
 /**
  * Free items are those that may be anywhere and move around the room such as
@@ -38,13 +38,13 @@ class FreeItem : public Item, public Drawable
 public:
 
        /**
-        * @param itemData Data about this item
+        * @param description Description of this item
         * @param x Position on X
         * @param y Position on Y
         * @param z Position on Z, or how far is floor
         * @param way Initial orientation of item
         */
-        FreeItem( const ItemData* itemData, int x, int y, int z, const Way& way ) ;
+        FreeItem( const DescriptionOfItem * description, int x, int y, int z, const Way& way ) ;
 
        /**
         * Copy constructor

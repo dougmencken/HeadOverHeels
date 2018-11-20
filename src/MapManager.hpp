@@ -15,10 +15,9 @@
 #include <vector>
 #include <map>
 
-#include <WrappersAllegro.hpp>
+#include "WrappersAllegro.hpp"
 
 #include "Room.hpp"
-#include "ItemDataManager.hpp"
 
 
 namespace iso

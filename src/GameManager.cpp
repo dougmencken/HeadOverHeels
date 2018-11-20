@@ -71,6 +71,8 @@ GameManager::~GameManager( )
 
 void GameManager::cleanUp()
 {
+        Item::getPoolOfPictures().clear ();
+
         sceneryBackgrounds.clear ();
 
         pictureOfHead.clear ();
@@ -657,7 +659,7 @@ void GameManager::drawOnScreen ( const allegro::Pict& view )
 
 void GameManager::loadGame ( const std::string& fileName )
 {
-        isomot.fillItemDataManager ();
+        isomot.fillItemDescriptions ();
         saverAndLoader.loadGame( fileName );
 }
 

@@ -16,8 +16,6 @@
 #include "Ism.hpp"
 #include "ActivityOfItem.hpp"
 #include "Item.hpp"
-#include "ItemData.hpp"
-#include "ItemDataManager.hpp"
 
 
 namespace iso

@@ -18,8 +18,6 @@
 namespace iso
 {
 
-class Item ;
-
 /**
  * Item moves only when pushed by other item, and lacks autonomous movement
  */

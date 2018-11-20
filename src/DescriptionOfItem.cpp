@@ -1,5 +1,5 @@
 
-#include "ItemData.hpp"
+#include "DescriptionOfItem.hpp"
 #include "Ism.hpp"
 #include <iostream>
 
@@ -7,7 +7,7 @@
 namespace iso
 {
 
-ItemData::ItemData( ) :
+DescriptionOfItem::DescriptionOfItem( ) :
         label( "unlabeled" ) ,
         widthX( 0 ) ,
         widthY( 0 ) ,
@@ -23,19 +23,19 @@ ItemData::ItemData( ) :
         mortal( false ) ,
         extraFrames( 0 ) ,
         partOfDoor( false ) ,
-        manager( nilPointer )
+        descriptions( nilPointer )
 {
 
 }
 
-ItemData::~ItemData( )
+DescriptionOfItem::~DescriptionOfItem( )
 {
         frames.clear ();
 }
 
-/* static */ ItemData* ItemData::clone ( const ItemData& data )
+/* static */ DescriptionOfItem* DescriptionOfItem::clone ( const DescriptionOfItem& data )
 {
-        ItemData* copyOfData = new ItemData( );
+        DescriptionOfItem* copyOfData = new DescriptionOfItem( );
 
         copyOfData->label = data.getLabel () ;
 
@@ -66,8 +66,8 @@ ItemData::~ItemData( )
                 copyOfData->frames.push_back( 0 );
         }
 
-        copyOfData->partOfDoor = data.partOfDoor;
-        copyOfData->manager = data.manager;
+        copyOfData->partOfDoor = data.partOfDoor ;
+        copyOfData->descriptions = data.descriptions ;
 
         copyOfData->setNameOfFile( data.getNameOfFile () );
         copyOfData->setNameOfShadowFile( data.getNameOfShadowFile () );

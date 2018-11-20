@@ -94,10 +94,10 @@ headoverheels_SOURCES = main.cpp \
 			Miniature.hpp \
 			Isomot.cpp \
 			Isomot.hpp \
-			ItemData.cpp \
-			ItemData.hpp \
-			ItemDataManager.cpp \
-			ItemDataManager.hpp \
+			DescriptionOfItem.cpp \
+			DescriptionOfItem.hpp \
+			ItemDescriptions.cpp \
+			ItemDescriptions.hpp \
 			MapManager.cpp \
 			MapManager.hpp \
 			RoomConnections.cpp \

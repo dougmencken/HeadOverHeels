@@ -1,5 +1,5 @@
 
-#include "ItemDataManager.hpp"
+#include "ItemDescriptions.hpp"
 #include "GameManager.hpp"
 #include "Color.hpp"
 #include "Ism.hpp"
@@ -10,14 +10,14 @@
 namespace iso
 {
 
-ItemDataManager::~ItemDataManager( )
+ItemDescriptions::~ItemDescriptions( )
 {
-        freeDataAboutItems() ;
+        freeDescriptionOfItems() ;
 }
 
-void ItemDataManager::readDataAboutItems( const std::string& nameOfXMLFile )
+void ItemDescriptions::readDescriptionOfItemsFrom( const std::string& nameOfXMLFile )
 {
-        freeDataAboutItems() ;
+        freeDescriptionOfItems() ;
 
         tinyxml2::XMLDocument itemsXml;
         tinyxml2::XMLError result = itemsXml.LoadFile( ( iso::sharePath() + nameOfXMLFile ).c_str () );
@@ -32,8 +32,8 @@ void ItemDataManager::readDataAboutItems( const std::string& nameOfXMLFile )
                         item != nilPointer ;
                         item = item->NextSiblingElement( "item" ) )
         {
-                ItemData* newItem = new ItemData ();
-                newItem->manager = this ;
+                DescriptionOfItem* newItem = new DescriptionOfItem ();
+                newItem->descriptions = this ;
 
                 // label of item
                 newItem->label = item->Attribute( "label" ) ;
@@ -146,13 +146,13 @@ void ItemDataManager::readDataAboutItems( const std::string& nameOfXMLFile )
                         /* std::string doorAt = door->FirstChild()->ToText()->Value() ; */
 
                         // three parts of door are lintel, left jamb and right jamb
-                        ItemData* lintel = ItemData::clone( *newItem ) ;
+                        DescriptionOfItem* lintel = DescriptionOfItem::clone( *newItem ) ;
                         lintel->label += "~lintel";
                         lintel->partOfDoor = true;
-                        ItemData* leftJamb = ItemData::clone( *newItem ) ;
+                        DescriptionOfItem* leftJamb = DescriptionOfItem::clone( *newItem ) ;
                         leftJamb->label += "~leftjamb";
                         leftJamb->partOfDoor = true;
-                        ItemData* rightJamb = ItemData::clone( *newItem ) ;
+                        DescriptionOfItem* rightJamb = DescriptionOfItem::clone( *newItem ) ;
                         rightJamb->label += "~rightjamb";
                         rightJamb->partOfDoor = true;
 
@@ -198,9 +198,9 @@ void ItemDataManager::readDataAboutItems( const std::string& nameOfXMLFile )
                                         lintel->height = wz ;
                         }
 
-                        dataOfItems.push_back( leftJamb );
-                        dataOfItems.push_back( rightJamb );
-                        dataOfItems.push_back( lintel );
+                        descriptionOfItems[ leftJamb->label ] = leftJamb ;
+                        descriptionOfItems[ rightJamb->label ] = rightJamb ;
+                        descriptionOfItems[ lintel->label ] = lintel ;
                 }
                 else
                 {
@@ -208,33 +208,39 @@ void ItemDataManager::readDataAboutItems( const std::string& nameOfXMLFile )
                         newItem->widthY = std::atoi( item->FirstChildElement( "widthY" )->FirstChild()->ToText()->Value() ) ;
                         newItem->height = std::atoi( item->FirstChildElement( "height" )->FirstChild()->ToText()->Value() ) ;
 
-                        // add data to the list
-                        dataOfItems.push_back( newItem );
+                        descriptionOfItems[ newItem->label ] = newItem ;
                 }
         }
 }
 
-void ItemDataManager::freeDataAboutItems ()
+void ItemDescriptions::freeDescriptionOfItems ()
 {
-        for ( std::list< const ItemData * >::iterator i = dataOfItems.begin (); i != dataOfItems.end (); ++ i )
+        for ( std::map< std::string, const DescriptionOfItem * >::iterator i = descriptionOfItems.begin (); i != descriptionOfItems.end (); ++ i )
         {
-                delete ( *i );
+                delete i->second ;
         }
-        dataOfItems.clear();
+        descriptionOfItems.clear();
 }
 
-const ItemData* ItemDataManager::findDataByLabel( const std::string& label ) const
+const DescriptionOfItem* ItemDescriptions::getDescriptionByLabel( const std::string& label ) const
 {
-        for ( std::list< const ItemData * >::const_iterator i = dataOfItems.begin (); i != dataOfItems.end (); ++i )
+        if ( descriptionOfItems.find( label ) == descriptionOfItems.end () )
         {
-                if ( ( *i )->getLabel() == label )
-                {
-                        return *i ;
-                }
+                std::cerr << "description for item with label \"" << label << "\" is absent" << std::endl ;
+                return nilPointer ;
         }
 
-        std::cerr << "data for item with label \"" << label << "\" is absent" << std::endl;
+#ifdef __Cxx11__
+
+        return descriptionOfItems.at( label );
+
+#else
+
+        std::map< std::string, const DescriptionOfItem * >::const_iterator it = descriptionOfItems.find( label );
+        if ( it != descriptionOfItems.end () ) return it->second ;
         return nilPointer ;
+
+#endif
 }
 
 }

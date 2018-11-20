@@ -228,7 +228,7 @@ void MapManager::beginNewGame( const std::string& headRoom, const std::string& h
                 {
                         addRoomInPlay( firstRoom );
 
-                        const ItemData* headData = GameManager::getInstance().getIsomot().getItemDataManager().findDataByLabel( "head" );
+                        const DescriptionOfItem* headData = GameManager::getInstance().getIsomot().getItemDescriptions().getDescriptionByLabel( "head" );
 
                         int centerX = firstRoom->getXCenterForItem( headData );
                         int centerY = firstRoom->getYCenterForItem( headData );
@@ -268,7 +268,7 @@ void MapManager::beginNewGame( const std::string& headRoom, const std::string& h
                         {
                                 addRoomInPlay( secondRoom );
 
-                                const ItemData* heelsData = GameManager::getInstance().getIsomot().getItemDataManager().findDataByLabel( "heels" );
+                                const DescriptionOfItem* heelsData = GameManager::getInstance().getIsomot().getItemDescriptions().getDescriptionByLabel( "heels" );
 
                                 int centerX = secondRoom->getXCenterForItem( heelsData );
                                 int centerY = secondRoom->getYCenterForItem( heelsData );
@@ -501,7 +501,7 @@ Room* MapManager::changeRoom( const Way& wayOfExit )
         const PlayerItem& oldItemOfRoamer = * previousRoom->getMediator()->getActiveCharacter( );
 
         std::string nameOfRoamer = oldItemOfRoamer.getOriginalLabel() ; // current label may be "bubbles" when teleporting
-        const ItemData* dataOfRoamer = oldItemOfRoamer.getDataOfItem()->getItemDataManager()->findDataByLabel( nameOfRoamer ) ;
+        const DescriptionOfItem* descriptionOfRoamer = oldItemOfRoamer.getDescriptionOfItem()->getItemDescriptions()->getDescriptionByLabel( nameOfRoamer ) ;
 
         std::cout << "\"" << nameOfRoamer << "\" migrates"
                         << " from room \"" << fileOfPreviousRoom << "\" with way of exit \"" << wayOfExit.toString() << "\""
@@ -536,13 +536,16 @@ Room* MapManager::changeRoom( const Way& wayOfExit )
 
         addRoomInPlay( newRoom );
 
-        // get player’s exit position in old room to calculate entry position in new room
+        // calculate entry position in new room
         int entryX = exitX ;
         int entryY = exitY ;
         int entryZ = exitZ ;
 
         std::cout << "exit coordinates are x=" << exitX << " y=" << exitY << " z=" << exitZ << std::endl ;
-        newRoom->calculateEntryCoordinates( wayOfEntry, dataOfRoamer->getWidthX(), dataOfRoamer->getWidthY(), northBound, eastBound, southBound, westBound, &entryX, &entryY, &entryZ );
+        newRoom->calculateEntryCoordinates (
+                wayOfEntry, descriptionOfRoamer->getWidthX(), descriptionOfRoamer->getWidthY(),
+                northBound, eastBound, southBound, westBound, &entryX, &entryY, &entryZ
+        ) ;
         std::cout << "entry coordinates are x=" << entryX << " y=" << entryY << " z=" << entryZ << std::endl ;
 
         // create player
