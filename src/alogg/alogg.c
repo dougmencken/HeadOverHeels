@@ -571,7 +571,7 @@ alogg_stream *alogg_start_streaming_callbacks(
   if (ret<0) {
     TRACE("ov_open_callbacks failed: %d\n",ret);
     alogg_error_code=ret;
-    return NULL;
+    goto error;
   }
 
   /* gather info on the stream */

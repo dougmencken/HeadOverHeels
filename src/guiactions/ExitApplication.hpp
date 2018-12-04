@@ -24,7 +24,7 @@ public:
 
         ExitApplication( ) : Action( ) { }
 
-        std::string getNameOfAction () const {  return "ExitApplication" ;  }
+        virtual std::string getNameOfAction () const {  return "ExitApplication" ;  }
 
 protected:
 

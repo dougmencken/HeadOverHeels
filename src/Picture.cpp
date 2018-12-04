@@ -36,7 +36,7 @@ Picture::Picture( const allegro::Pict& pict )
         , name( "Picture." + iso::makeRandomString( 12 ) )
 {
 #if defined( DEBUG_PICTURES )  &&  DEBUG_PICTURES
-        std::cout << "created Picture " << getName() << " as copy of const allegro::Pict &" << std::endl ;
+        std::cout << "created Picture " << getName() << " as copy of allegro::Pict" << std::endl ;
 #endif
 }
 
@@ -45,7 +45,7 @@ Picture::Picture( const Picture& pic )
         , name( "copy of " + pic.name )
 {
 #if defined( DEBUG_PICTURES )  &&  DEBUG_PICTURES
-        std::cout << "created Picture " << getName() << " as copy of const Picture &" << std::endl ;
+        std::cout << "created Picture " << getName() << " as copy of Picture" << std::endl ;
 #endif
 }
 
@@ -87,6 +87,9 @@ void Picture::fillWithTransparencyChequerboard( const unsigned int sizeOfSquare 
         unsigned int width = getWidth ();
         unsigned int height = getHeight ();
 
+        const Color& white = Color::whiteColor() ;
+        const Color& gray75 = Color::byName( "gray 75%" );
+
         getAllegroPict().lock( true, true );
 
         for ( unsigned int y = 0 ; y < height ; y ++ )
@@ -95,11 +98,11 @@ void Picture::fillWithTransparencyChequerboard( const unsigned int sizeOfSquare 
                 {
                         if ( getPixelAt( x, y ).isKeyColor() )
                         {
-                                Color whichColor = Color::whiteColor() ;
+                                Color whichColor = white ;
                                 if ( ( ( y % sizeOfSquare ) == ( y % sizeOfSquareDoubled ) && ( x % sizeOfSquare ) != ( x % sizeOfSquareDoubled ) ) ||
                                         ( ( y % sizeOfSquare ) != ( y % sizeOfSquareDoubled ) && ( x % sizeOfSquare ) == ( x % sizeOfSquareDoubled ) ) )
                                 {
-                                        whichColor = Color::gray75Color() ;
+                                        whichColor = gray75 ;
                                 }
 
                                 putPixelAt( x, y, whichColor );
@@ -112,12 +115,21 @@ void Picture::fillWithTransparencyChequerboard( const unsigned int sizeOfSquare 
 
 void Picture::colorize( const Color& color )
 {
-        Color::colorizePicture( this, color );
+        Color::changeWhiteToColor( *this, color );
 }
 
 void Picture::toGrayscale()
 {
-        Color::pictureToGrayscale( this );
+        Color::pictureToGrayscale( *this );
+}
+
+void Picture::expandOrCropTo( unsigned int width, unsigned int height )
+{
+        allegro::Pict* resized = allegro::Pict::newPict( width, height );
+        resized->clearToColor( AllegroColor::keyColor () ) ;
+
+        allegro::bitBlit( *picture, *resized );
+        picture = safeptr< allegro::Pict >( resized );
 }
 
 void Picture::flipHorizontal()

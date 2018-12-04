@@ -143,7 +143,7 @@ void Miniature::draw ()
 
         // draw boundaries of room
 
-        drawIsoSquare( where, iniX, iniY, tilesX, tilesY, Color::gray50Color() );
+        drawIsoSquare( where, iniX, iniY, tilesX, tilesY, Color::byName( "gray" ) );
 
         // draw walls
 
@@ -227,22 +227,22 @@ void Miniature::draw ()
                         if ( northDoor != nilPointer )
                         {
                                 drawIsoTile ( where, iniX, iniY, 0, firstTileY,
-                                                Color::gray75Color(),
+                                                Color::byName( "75% gray" ),
                                                 true, false, false, false );
 
                                 drawIsoTile ( where, iniX, iniY, 0, lastTileY,
-                                                Color::gray75Color(),
+                                                Color::byName( "75% gray" ),
                                                 false, false, true, false );
                         }
 
                         if ( southDoor != nilPointer )
                         {
                                 drawIsoTile ( where, iniX, iniY, tilesX - 1, firstTileY,
-                                                Color::gray75Color(),
+                                                Color::byName( "75% gray" ),
                                                 true, false, false, false );
 
                                 drawIsoTile ( where, iniX, iniY, tilesX - 1, lastTileY,
-                                                Color::gray75Color(),
+                                                Color::byName( "75% gray" ),
                                                 false, false, true, false );
                         }
                 }
@@ -283,22 +283,22 @@ void Miniature::draw ()
                         if ( eastDoor != nilPointer )
                         {
                                 drawIsoTile ( where, iniX, iniY, firstTileX, 0,
-                                                Color::gray75Color(),
+                                                Color::byName( "75% gray" ),
                                                 false, true, false, false );
 
                                 drawIsoTile ( where, iniX, iniY, lastTileX, 0,
-                                                Color::gray75Color(),
+                                                Color::byName( "75% gray" ),
                                                 false, false, false, true );
                         }
 
                         if ( westDoor != nilPointer )
                         {
                                 drawIsoTile ( where, iniX, iniY, firstTileX, tilesY - 1,
-                                                Color::gray75Color(),
+                                                Color::byName( "75% gray" ),
                                                 false, true, false, false );
 
                                 drawIsoTile ( where, iniX, iniY, lastTileX, tilesY - 1,
-                                                Color::gray75Color(),
+                                                Color::byName( "75% gray" ),
                                                 false, false, false, true );
                         }
                 }
@@ -322,11 +322,11 @@ void Miniature::draw ()
 
                         if ( label == "teleport" && ! roomToTeleport.empty() )
                         {
-                                fillIsoTile( where, iniX, iniY, tileX, tileY, Color::yellowColor() );
+                                fillIsoTile( where, iniX, iniY, tileX, tileY, Color::byName( "yellow" ) );
                         }
                         else if ( label == "teleport-too" && ! roomToTeleportToo.empty() )
                         {
-                                fillIsoTile( where, iniX, iniY, tileX, tileY, Color::magentaColor() );
+                                fillIsoTile( where, iniX, iniY, tileX, tileY, Color::byName( "magenta" ) );
                         }
 
                         // show triple room’s walls
@@ -372,7 +372,7 @@ void Miniature::draw ()
                         int tileX = ( item.getX() - ( ( roomTileSize - descriptionOfItem->getWidthX() ) >> 1 ) ) / roomTileSize ;
                         int tileY = ( ( item.getY() + ( ( roomTileSize - descriptionOfItem->getWidthY() ) >> 1 ) + 1 ) / roomTileSize ) - 1 ;
 
-                        fillIsoTile( where, iniX, iniY, tileX, tileY, Color::orangeColor() );
+                        fillIsoTile( where, iniX, iniY, tileX, tileY, Color::byName( "orange" ) );
                 }
 
                 // show rabbit bonuses
@@ -385,7 +385,7 @@ void Miniature::draw ()
                         int tileX = ( item.getX() - ( ( roomTileSize - descriptionOfItem->getWidthX() ) >> 1 ) ) / roomTileSize ;
                         int tileY = ( ( item.getY() + ( ( roomTileSize - descriptionOfItem->getWidthY() ) >> 1 ) + 1 ) / roomTileSize ) - 1 ;
 
-                        fillIsoTile( where, iniX, iniY, tileX, tileY, Color::cyanColor() );
+                        fillIsoTile( where, iniX, iniY, tileX, tileY, Color::byName( "cyan" ) );
                 }
 
                 // show fish
@@ -399,9 +399,9 @@ void Miniature::draw ()
                         int tileY = ( ( item.getY() + ( ( roomTileSize - descriptionOfItem->getWidthY() ) >> 1 ) + 1 ) / roomTileSize ) - 1 ;
 
                         if ( label == "reincarnation-fish" )
-                                fillIsoTile( where, iniX, iniY, tileX, tileY, Color::greenColor() );
+                                fillIsoTile( where, iniX, iniY, tileX, tileY, Color::byName( "green" ) );
                         else if ( label == "mortal-fish" )
-                                fillIsoTile( where, iniX, iniY, tileX, tileY, Color::redColor() );
+                                fillIsoTile( where, iniX, iniY, tileX, tileY, Color::byName( "red" ) );
                 }
         }
 
@@ -425,7 +425,7 @@ void Miniature::draw ()
 
                 /* for ( int x = xBegin ; x <= xEnd ; ++ x )
                         for ( int y = yBegin ; y <= yEnd ; ++ y )
-                                drawIsoTile( where, iniX, iniY, x, y, Color::blueColor(), true, true, true, true ) ; */
+                                drawIsoTile( where, iniX, iniY, x, y, Color::byName( "blue" ), true, true, true, true ) ; */
 
                 int deltaWx = ( roomTileSize - character.getWidthX() ) >> 1 ;
                 int deltaWy = ( roomTileSize - character.getWidthY() ) >> 1 ;
@@ -464,7 +464,7 @@ void Miniature::draw ()
                 aboveY -= sizeOfTile << 1;
                 belowY += sizeOfTile << 1;
 
-                drawVignetteForRoomAboveOrBelow( where, miniatureMidX, aboveY, belowY, Color::greenColor().toAllegroColor(), roomAbove, roomBelow );
+                drawVignetteForRoomAboveOrBelow( where, miniatureMidX, aboveY, belowY, Color::byName( "green" ).toAllegroColor(), roomAbove, roomBelow );
         }
 
         // paint final room
@@ -475,8 +475,8 @@ void Miniature::draw ()
                 {
                         for ( unsigned int y = 0 ; y < tilesY ; ++ y )
                         {
-                                drawIsoTile( where, iniX, iniY, x, y, Color::greenColor(), true, true, true, true ) ;
-                                fillIsoTileInside( where, iniX, iniY, x, y, Color::yellowColor(), true ) ;
+                                drawIsoTile( where, iniX, iniY, x, y, Color::byName( "green" ), true, true, true, true ) ;
+                                fillIsoTileInside( where, iniX, iniY, x, y, Color::byName( "yellow" ), true ) ;
                         }
                 }
         }

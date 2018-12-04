@@ -34,7 +34,7 @@ public:
 
 	virtual ~ShowAuthors( ) ;
 
-        std::string getNameOfAction () const {  return "ShowAuthors" ;  }
+        virtual std::string getNameOfAction () const {  return "ShowAuthors" ;  }
 
 protected:
 

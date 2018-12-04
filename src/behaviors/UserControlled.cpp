@@ -30,7 +30,7 @@ UserControlled::UserControlled( const ItemPtr & item, const std::string & behavi
         , speedTimer( new Timer () )
         , fallTimer( new Timer () )
         , glideTimer( new Timer () )
-        , blinkingTimer( new Timer () )
+        , timerForBlinking( new Timer () )
 {
 
 }
@@ -313,7 +313,9 @@ void UserControlled::wayInTeletransport( PlayerItem & player )
 
                 case Activity::WayInTeletransport:
                         // animate item, player appears in room when animation finishes
-                        if ( player.animate() )
+                        player.animate() ;
+
+                        if ( player.animationFinished() )
                         {
                                 // back to original appearance of player
                                 player.metamorphInto( player.getOriginalLabel(), "way in teletransport" );
@@ -340,7 +342,9 @@ void UserControlled::wayOutTeletransport( PlayerItem & player )
 
                 case Activity::WayOutTeletransport:
                         // animate item, change room when animation finishes
-                        if ( player.animate() )
+                        player.animate() ;
+
+                        if ( player.animationFinished() )
                         {
                                 player.addToZ( -1 );
                                 player.setWayOfExit( player.getMediator()->collisionWithByLabel( "teleport" ) != nilPointer ?
@@ -380,9 +384,10 @@ void UserControlled::collideWithMortalItem( PlayerItem & player )
                                 player.getMediator()->pickNextCharacter();
                         }
 
-                        if ( player.isActiveCharacter() && player.animate() )
+                        if ( player.isActiveCharacter() )
                         {
-                                player.loseLife();
+                                player.animate ();
+                                if ( player.animationFinished() ) player.loseLife() ;
                         }
                         break;
 
@@ -409,7 +414,7 @@ void UserControlled::useHooter( PlayerItem & player )
                                 hooterDoughnut,
                                 player.getX(), player.getY(),
                                 z < 0 ? 0 : z,
-                                player.getOrientation() ) );
+                                "none" ) );
 
                         donut->setBehaviorOf( "behavior of freezing doughnut" );
 
@@ -462,7 +467,7 @@ void UserControlled::takeItem( PlayerItem & player )
                         // take that item
                         if ( takenItem != nilPointer )
                         {
-                                PicturePtr takenItemImage( new Picture( *takenItem->getRawImage() ) );
+                                PicturePtr takenItemImage( new Picture( takenItem->getRawImage() ) );
 
                                 GameManager::getInstance().setImageOfItemInBag( takenItemImage );
 
@@ -496,7 +501,7 @@ void UserControlled::dropItem( PlayerItem & player )
                         FreeItemPtr freeItem( new FreeItem( player.getDescriptionOfTakenItem(),
                                                             player.getX(), player.getY(),
                                                             player.getZ() - LayerHeight,
-                                                            Way::Nowhere ) );
+                                                            "none" ) );
 
                         freeItem->setBehaviorOf( player.getBehaviorOfTakenItem() );
 

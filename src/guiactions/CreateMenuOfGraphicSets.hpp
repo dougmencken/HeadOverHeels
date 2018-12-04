@@ -37,7 +37,7 @@ public:
 
         virtual ~CreateMenuOfGraphicSets( ) ;
 
-        std::string getNameOfAction () const {  return "CreateMenuOfGraphicSets" ;  }
+        virtual std::string getNameOfAction () const {  return "CreateMenuOfGraphicSets" ;  }
 
 protected:
 

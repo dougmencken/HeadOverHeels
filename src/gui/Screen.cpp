@@ -3,6 +3,7 @@
 #include "Gui.hpp"
 #include "Menu.hpp"
 #include "GuiManager.hpp"
+#include "GameManager.hpp"
 #include "Action.hpp"
 #include "Label.hpp"
 #include "TextField.hpp"
@@ -117,7 +118,7 @@ void Screen::refresh () const
         const allegro::Pict& previousWhere = allegro::Pict::getWhereToDraw() ;
         allegro::Pict::setWhereToDraw( imageOfScreen->getAllegroPict() );
 
-        imageOfScreen->fillWithColor( Color::redColor() );
+        imageOfScreen->fillWithColor( Color::byName( "red" ) );
 
         // draw background, if any
 
@@ -168,6 +169,33 @@ void Screen::refresh () const
                                                 0, 0, backgroundWidth, backgroundHeight,
                                                 0, offsetY, iso::ScreenWidth(), proportionalHeight );
                         }
+                }
+        }
+
+        if ( iso::GameManager::getInstance().isSimpleGraphicSet() )
+        {
+                static const size_t howManyColors = 8 ;
+                static const std::string colors[ howManyColors ] =
+                        { "black", "blue", "red", "magenta", "green", "cyan", "yellow", "white" } ;
+
+                const unsigned int sizeOfSquare = 8 ;
+
+                const unsigned int colorsX = iso::ScreenWidth() - ( howManyColors * sizeOfSquare );
+                const unsigned int colorsY = iso::ScreenHeight() - ( 2 * sizeOfSquare );
+
+                for ( size_t i = 0 ; i < howManyColors ; ++ i )
+                {
+                        allegro::fillRect( colorsX + ( i * sizeOfSquare ), colorsY + sizeOfSquare,
+                                           colorsX + ( i * sizeOfSquare ) + sizeOfSquare - 1, colorsY + sizeOfSquare  + sizeOfSquare - 1,
+                                           Color::byName( colors[ i ] ).toAllegroColor () );
+
+                        allegro::fillRect( colorsX + ( i * sizeOfSquare ), colorsY,
+                                           colorsX + ( i * sizeOfSquare ) + sizeOfSquare - 1, colorsY + sizeOfSquare - 1,
+                                           Color::byName( "reduced " + colors[ i ] ).toAllegroColor () );
+
+                        /* allegro::fillRect( colorsX + ( i * sizeOfSquare ), colorsY + ( sizeOfSquare << 1 ),
+                                           colorsX + ( i * sizeOfSquare ) + sizeOfSquare - 1, colorsY + ( sizeOfSquare << 1 ) + sizeOfSquare - 1,
+                                           Color::byName( "light " + colors[ i ] ).toAllegroColor () ); */
                 }
         }
 
@@ -346,7 +374,7 @@ Picture * Screen::loadPicture ( const std::string& nameOfPicture )
         autouniqueptr< allegro::Pict > pict( allegro::Pict::fromPNGFile (
                 iso::pathToFile( GuiManager::getInstance().getPathToPicturesOfGui(), nameOfPicture )
         ) );
-        return new Picture( *pict.get() ) ;
+        return new Picture( *pict ) ;
 }
 
 /* static */

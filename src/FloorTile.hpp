@@ -11,8 +11,6 @@
 #ifndef FloorTile_hpp_
 #define FloorTile_hpp_
 
-#include <WrappersAllegro.hpp>
-
 #include "Ism.hpp"
 #include "Drawable.hpp"
 #include "Mediated.hpp"
@@ -53,7 +51,7 @@ private:
         std::pair < int, int > coordinates ;
 
         /**
-         * Offset ( X, Y ) for tile’s graphics
+         * Offset ( X, Y ) of tile’s graphics
          */
         std::pair < int, int > offset ;
 
@@ -89,6 +87,8 @@ public:
         Picture & getShadyImage () const {  return *shadyImage ;  }
 
         void freshShadyImage () ;
+
+        static PicturePtr fullTileToPartialTile ( const Picture & fullTile, const std::string & whichPart, bool darkenPlane = true ) ;
 
 };
 

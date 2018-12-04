@@ -19,11 +19,12 @@
 #include <iostream>
 #include <cassert>
 
+#include <pthread.h>
+
 #include "util.hpp"
 
 #if defined( DEBUG ) && DEBUG
 # define DEBUG_POINTERS         0
-# define SHOW_MEMORY_LEAKS      1
 #endif
 
 #if defined( DEBUG_POINTERS ) && DEBUG_POINTERS
@@ -66,23 +67,30 @@ public:
 
         static references & instance () ;
 
-        void addreference ( void * pointee, const char * type, void * pointer ) ;
+        void addreference ( void * pointee, const std::string & type, void * pointer ) ;
 
         void binreference ( void * pointee, void * pointer ) ;
 
         size_t countreferences ( void * pointee ) ;
 
+        void compactreferences () ;
+
 private:
 
         static references me ;
 
-        references ( ) : entries ()  { }
+        references ( ) {  pthread_mutex_init( &mutex, nilPointer ) ;  }
 
         ~references ( ) ;
 
         std::map < void *, std::vector < void * > > entries ;
 
         std::map < void *, std::string > types ;
+
+        void lockmutex () {  pthread_mutex_lock( &mutex ) ;  }
+        void unlockmutex () {  pthread_mutex_unlock( &mutex ) ;  }
+
+        pthread_mutex_t mutex ;
 
 } ;
 

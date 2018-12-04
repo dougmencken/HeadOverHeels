@@ -34,7 +34,7 @@ class ShadowCaster
 
 public:
 
-        static void castShadowOnItem ( Item & item, int x, int y, const Picture * shadow, unsigned short shading, unsigned char transparency = 0 ) ;
+        static void castShadowOnItem ( Item & item, int x, int y, const Picture & shadow, unsigned short shading, unsigned char transparency = 0 ) ;
 
         static void castShadowOnFloor ( FloorTile & tile, int x, int y, const Picture & shadow, unsigned short shading, unsigned char transparency = 0 ) ;
 

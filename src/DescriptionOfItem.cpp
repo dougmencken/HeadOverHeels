@@ -53,7 +53,7 @@ DescriptionOfItem::~DescriptionOfItem( )
         copyOfData->mortal = data.mortal;
         copyOfData->extraFrames = data.extraFrames;
 
-        // copy sequence of animation, it is just one element 0 for static items
+        // copy sequence of animation, it’s just single 0 for static items
         if ( data.frames.size() > 1 )
         {
                 for ( std::vector< unsigned int >::const_iterator fi = data.frames.begin (); fi != data.frames.end (); ++fi )

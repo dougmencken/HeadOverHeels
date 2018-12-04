@@ -31,7 +31,7 @@ public:
          */
         explicit CreateListOfSavedGames( bool isLoadMenu ) ;
 
-        std::string getNameOfAction () const {  return "CreateListOfSavedGames" ;  }
+        virtual std::string getNameOfAction () const {  return "CreateListOfSavedGames" ;  }
 
         bool isLoadMenu () {  return this->isMenuForLoad ;  }
 

@@ -27,7 +27,7 @@ public:
          */
         explicit LoadGame( unsigned int slot ) ;
 
-        std::string getNameOfAction () const {  return "LoadGame" ;  }
+        virtual std::string getNameOfAction () const {  return "LoadGame" ;  }
 
 protected:
 

@@ -55,37 +55,23 @@ public:
 
         virtual std::string toString () const ;
 
-        static const Color & blackColor () {  return *theBlack ;  }                     /* speccy color 0 */
+        static const Color & byName ( const std::string & color ) ;
 
-        static const Color & blueColor () {  return *theBlue ;  }                       /* speccy color 1 */
+        static const Color & blackColor () {  return *theBlack ;  }
 
-        static const Color & redColor () {  return *theRed ;  }                         /* speccy color 2 */
+        static const Color & whiteColor () {  return *theWhite ;  }
 
-        static const Color & magentaColor () {  return *theMagenta ;  }                 /* speccy color 3 */
+        static void replaceColor ( Picture & picture, const Color & from, const Color & to ) ;
 
-        static const Color & greenColor () {  return *theGreen ;  }                     /* speccy color 4 */
+        static void changeWhiteToColor ( Picture & picture, const Color & color ) {  replaceColor( picture, whiteColor(), color ) ;  }
 
-        static const Color & cyanColor () {  return *theCyan ;  }                       /* speccy color 5 */
+        static void changeBlackToColor ( Picture & picture, const Color & color ) {  replaceColor( picture, blackColor(), color ) ;  }
 
-        static const Color & yellowColor () {  return *theYellow ;  }                   /* speccy color 6 */
+        static void multiplyWithColor ( Picture & picture, const Color & color ) ;
 
-        static const Color & whiteColor () {  return *theWhite ;  }                     /* speccy color 7 */
+        static void pictureToGrayscale ( Picture & picture ) ;
 
-        static const Color & darkBlueColor () {  return *theDarkBlue ;  }
-
-        static const Color & orangeColor () {  return *theOrange ;  }
-
-        static const Color & gray50Color () {  return *the50Gray ;  }                   /* 50% gray */
-
-        static const Color & gray25Color () {  return *the25Gray ;  }                   /* 25% gray */
-
-        static const Color & gray75Color () {  return *the75Gray ;  }                   /* 75% gray */
-
-        static void colorizePicture ( Picture * picture, const Color & color ) ;
-
-        static void multiplyWithColor ( Picture * picture, const Color & color ) ;
-
-        static void pictureToGrayscale ( Picture * picture ) ;
+        static void invertColors ( Picture & picture ) ;
 
 protected:
 
@@ -99,33 +85,42 @@ protected:
 
 private:
 
-        static void multiplyWithColor ( Picture * picture, unsigned char red, unsigned char green, unsigned char blue ) ;
-
-        static const Color * theBlack ;
-
-        static const Color * theDarkBlue ;
-
-        static const Color * theBlue ;
-
-        static const Color * theRed ;
-
-        static const Color * theMagenta ;
-
-        static const Color * theGreen ;
-
-        static const Color * theCyan ;
-
-        static const Color * theYellow ;
+        static void multiplyWithColor ( Picture & picture, unsigned char red, unsigned char green, unsigned char blue ) ;
 
         static const Color * theWhite ;
 
+        static const Color * theBlack ;
+
+        static const Color * theBlue ;
+        static const Color * theRed ;
+        static const Color * theMagenta ;
+        static const Color * theGreen ;
+        static const Color * theCyan ;
+        static const Color * theYellow ;
+
+        static const Color * theDarkBlue ;
+
         static const Color * theOrange ;
 
-        static const Color * the50Gray ;
+        static const Color * the50Gray ;        // 50% gray
+        static const Color * the75Gray ;        // 75% gray
+        static const Color * the25Gray ;        // 25% gray
 
-        static const Color * the25Gray ;
+        static const Color * theReducedWhite ;
 
-        static const Color * the75Gray ;
+        static const Color * theReducedBlue ;
+        static const Color * theReducedRed ;
+        static const Color * theReducedMagenta ;
+        static const Color * theReducedGreen ;
+        static const Color * theReducedCyan ;
+        static const Color * theReducedYellow ;
+
+        static const Color * theLightBlue ;
+        static const Color * theLightRed ;
+        static const Color * theLightMagenta ;
+        static const Color * theLightGreen ;
+        static const Color * theLightCyan ;
+        static const Color * theLightYellow ;
 
 } ;
 

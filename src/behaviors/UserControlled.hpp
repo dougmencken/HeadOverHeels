@@ -200,7 +200,7 @@ protected:
        /**
         * Timer for blinking
         */
-        autouniqueptr < Timer > blinkingTimer ;
+        autouniqueptr < Timer > timerForBlinking ;
 
 public:
 

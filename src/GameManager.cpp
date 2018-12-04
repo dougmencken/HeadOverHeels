@@ -69,31 +69,16 @@ GameManager::~GameManager( )
         cleanUp () ;
 }
 
-void GameManager::cleanUp()
+void GameManager::cleanUp ()
 {
-        Item::getPoolOfPictures().clear ();
-
         sceneryBackgrounds.clear ();
 
-        pictureOfHead.clear ();
-        grayPictureOfHead.clear ();
-        pictureOfHeels.clear ();
-        grayPictureOfHeels.clear ();
-        pictureOfBag.clear ();
-        grayPictureOfBag.clear ();
-        pictureOfHorn.clear ();
-        grayPictureOfHorn.clear ();
-        pictureOfDonuts.clear ();
-        grayPictureOfDonuts.clear ();
-        pictureOfGrandesSaltos.clear ();
-        grayPictureOfGrandesSaltos.clear ();
-        pictureOfGranVelocidad.clear ();
-        grayPictureOfGranVelocidad.clear ();
-        pictureOfEscudo.clear ();
-        grayPictureOfEscudo.clear ();
+        ambiancePictures.clear ();
 
         isomot.binView ();
         isomot.getMapManager().clear ();
+
+        Item::getPoolOfPictures().clear ();
 
         delete freedomLabel ;
 }
@@ -113,7 +98,10 @@ PicturePtr GameManager::refreshPicture ( const std::string& nameOfPicture )
                 iso::pathToFile( gui::GuiManager::getInstance().getPathToPicturesOfGui(), nameOfPicture )
         ) ) ;
 
-        return PicturePtr( new Picture( *pict.get() ) );
+        PicturePtr newPicture( new Picture( *pict ) );
+        newPicture->setName( nameOfPicture );
+
+        return newPicture ;
 }
 
 WhyPaused GameManager::begin ()
@@ -166,9 +154,9 @@ WhyPaused GameManager::update ()
                                         else
                                         {
                                                 autouniqueptr< allegro::Pict > nothing ( allegro::Pict::newPict( ScreenWidth(), ScreenHeight() ) );
-                                                nothing->clearToColor( Color::gray75Color().toAllegroColor() );
-                                                drawAmbianceOfGame( *nothing.get() );
-                                                drawOnScreen( *nothing.get() );
+                                                nothing->clearToColor( Color::byName( "gray75" ).toAllegroColor() );
+                                                drawAmbianceOfGame( *nothing );
+                                                drawOnScreen( *nothing );
                                         }
 
                                         milliSleep( 1000 / GameManager::updatesPerSecond );
@@ -261,7 +249,7 @@ WhyPaused GameManager::pause ()
 
                                 std::string key = allegro::nextKey();
 
-                                // si se pulsa SPACE se mostrará la interfaz para la grabación de la partida
+                                // si se pulsa Space se mostrará la interfaz para la grabación de la partida
                                 if ( key == "Space" )
                                 {
                                         exit = true;
@@ -389,72 +377,72 @@ void GameManager::refreshSceneryBackgrounds ()
 
 void GameManager::refreshAmbianceImages ()
 {
-        pictureOfHead = refreshPicture( "gui-head.png" );
-        pictureOfHeels = refreshPicture( "gui-heels.png" );
+        ambiancePictures[ "head" ] = refreshPicture( "gui-head.png" );
+        ambiancePictures[ "heels" ] = refreshPicture( "gui-heels.png" );
 
-        grayPictureOfHead = PicturePtr( new Picture( *pictureOfHead ) );
-        grayPictureOfHeels = PicturePtr( new Picture( *pictureOfHeels ) );
-
-        if ( ! isSimpleGraphicSet () )
-        {
-                grayPictureOfHead->toGrayscale();
-                grayPictureOfHeels->toGrayscale();
-        }
-        else
-        {
-                grayPictureOfHead->colorize( Color::greenColor() );
-                grayPictureOfHeels->colorize( Color::greenColor() );
-        }
-
-        pictureOfBag = refreshPicture( "gui-handbag.png" );
-        pictureOfHorn = refreshPicture( "gui-horn.png" );
-        pictureOfDonuts = refreshPicture( "gui-donuts.png" );
-
-        grayPictureOfHorn = PicturePtr( new Picture( *pictureOfHorn ) );
-        grayPictureOfBag = PicturePtr( new Picture( *pictureOfBag ) );
-        grayPictureOfDonuts = PicturePtr( new Picture( *pictureOfDonuts ) );
+        ambiancePictures[ "gray head" ] = PicturePtr( new Picture( * ambiancePictures[ "head" ] ) );
+        ambiancePictures[ "gray heels" ] = PicturePtr( new Picture( * ambiancePictures[ "heels" ] ) );
 
         if ( ! isSimpleGraphicSet () )
         {
-                grayPictureOfHorn->toGrayscale();
-                grayPictureOfBag->toGrayscale();
-                grayPictureOfDonuts->toGrayscale();
+                ambiancePictures[ "gray head" ]->toGrayscale();
+                ambiancePictures[ "gray heels" ]->toGrayscale();
         }
         else
         {
-                grayPictureOfHorn->colorize( Color::greenColor() );
-                grayPictureOfBag->colorize( Color::greenColor() );
-                grayPictureOfDonuts->colorize( Color::greenColor() );
-
-                pictureOfBag->colorize( Color::yellowColor() );
-                pictureOfHorn->colorize( Color::yellowColor() );
-                pictureOfDonuts->colorize( Color::yellowColor() );
+                ambiancePictures[ "gray head" ]->colorize( Color::byName( "reduced magenta" ) );
+                ambiancePictures[ "gray heels" ]->colorize( Color::byName( "reduced magenta" ) );
         }
 
-        pictureOfGrandesSaltos = refreshPicture( "high-jumps.png" );
-        pictureOfGranVelocidad = refreshPicture( "high-speed.png" );
-        pictureOfEscudo = refreshPicture( "shield.png" );
+        ambiancePictures[ "handbag" ] = refreshPicture( "gui-handbag.png" );
+        ambiancePictures[ "horn" ] = refreshPicture( "gui-horn.png" );
+        ambiancePictures[ "donuts" ] = refreshPicture( "gui-donuts.png" );
 
-        grayPictureOfGrandesSaltos = PicturePtr( new Picture( *pictureOfGrandesSaltos ) );
-        grayPictureOfGranVelocidad = PicturePtr( new Picture( *pictureOfGranVelocidad ) );
-        grayPictureOfEscudo = PicturePtr( new Picture( *pictureOfEscudo ) );
+        ambiancePictures[ "gray handbag" ] = PicturePtr( new Picture( * ambiancePictures[ "handbag" ] ) );
+        ambiancePictures[ "gray horn" ] = PicturePtr( new Picture( * ambiancePictures[ "horn" ] ) );
+        ambiancePictures[ "gray donuts" ] = PicturePtr( new Picture( * ambiancePictures[ "donuts" ] ) );
 
         if ( ! isSimpleGraphicSet () )
         {
-                grayPictureOfGrandesSaltos->toGrayscale();
-                grayPictureOfGranVelocidad->toGrayscale();
-                grayPictureOfEscudo->toGrayscale();
+                ambiancePictures[ "gray handbag" ]->toGrayscale();
+                ambiancePictures[ "gray horn" ]->toGrayscale();
+                ambiancePictures[ "gray donuts" ]->toGrayscale();
         }
         else
         {
-                grayPictureOfGrandesSaltos->colorize( Color::greenColor() );
-                pictureOfGrandesSaltos->colorize( Color::yellowColor() );
+                ambiancePictures[ "gray handbag" ]->colorize( Color::byName( "reduced magenta" ) );
+                ambiancePictures[ "gray horn" ]->colorize( Color::byName( "reduced magenta" ) );
+                ambiancePictures[ "gray donuts" ]->colorize( Color::byName( "reduced magenta" ) );
 
-                grayPictureOfGranVelocidad->colorize( Color::greenColor() );
-                pictureOfGranVelocidad->colorize( Color::yellowColor() );
+                ambiancePictures[ "handbag" ]->colorize( Color::byName( "yellow" ) );
+                ambiancePictures[ "horn" ]->colorize( Color::byName( "yellow" ) );
+                ambiancePictures[ "donuts" ]->colorize( Color::byName( "yellow" ) );
+        }
 
-                grayPictureOfEscudo->colorize( Color::greenColor() );
-                pictureOfEscudo->colorize( Color::yellowColor() );
+        ambiancePictures[ "grandes saltos" ] = refreshPicture( "high-jumps.png" );
+        ambiancePictures[ "gran velocidad" ] = refreshPicture( "high-speed.png" );
+        ambiancePictures[ "escudo" ] = refreshPicture( "shield.png" );
+
+        ambiancePictures[ "gray grandes saltos" ] = PicturePtr( new Picture( * ambiancePictures[ "grandes saltos" ] ) );
+        ambiancePictures[ "gray gran velocidad" ] = PicturePtr( new Picture( * ambiancePictures[ "gran velocidad" ] ) );
+        ambiancePictures[ "gray escudo" ] = PicturePtr( new Picture( * ambiancePictures[ "escudo" ] ) );
+
+        if ( ! isSimpleGraphicSet () )
+        {
+                ambiancePictures[ "gray grandes saltos" ]->toGrayscale();
+                ambiancePictures[ "gray gran velocidad" ]->toGrayscale();
+                ambiancePictures[ "gray escudo" ]->toGrayscale();
+        }
+        else
+        {
+                ambiancePictures[ "gray grandes saltos" ]->colorize( Color::byName( "reduced magenta" ) );
+                ambiancePictures[ "grandes saltos" ]->colorize( Color::byName( "yellow" ) );
+
+                ambiancePictures[ "gray gran velocidad" ]->colorize( Color::byName( "reduced magenta" ) );
+                ambiancePictures[ "gran velocidad" ]->colorize( Color::byName( "yellow" ) );
+
+                ambiancePictures[ "gray escudo" ]->colorize( Color::byName( "reduced magenta" ) );
+                ambiancePictures[ "escudo" ]->colorize( Color::byName( "yellow" ) );
         }
 }
 
@@ -494,12 +482,20 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                 const unsigned int rightTooAmbianceX = 559 + dx ;
 
                 std::string player = isomot.getMapManager().getActiveRoom()->getMediator()->getLabelOfActiveCharacter();
-                allegro::drawSprite( ( (  player == "head" || player == "headoverheels" ) ? pictureOfHead : grayPictureOfHead )->getAllegroPict(), 161 + dx, headHeelsAmbianceY );
-                allegro::drawSprite( ( ( player == "heels" || player == "headoverheels" ) ? pictureOfHeels : grayPictureOfHeels )->getAllegroPict(), 431 + dx, headHeelsAmbianceY );
+                allegro::drawSprite (
+                        ( (  player == "head" || player == "headoverheels" ) ? ambiancePictures[ "head" ] : ambiancePictures[ "gray head" ] )->getAllegroPict(),
+                        161 + dx, headHeelsAmbianceY );
+                allegro::drawSprite (
+                        ( ( player == "heels" || player == "headoverheels" ) ? ambiancePictures[ "heels" ] : ambiancePictures[ "gray heels" ] )->getAllegroPict(),
+                        431 + dx, headHeelsAmbianceY );
 
-                allegro::drawSprite( ( this->horn ? pictureOfHorn : grayPictureOfHorn )->getAllegroPict(), leftTooAmbianceX, headHeelsAmbianceY );
+                allegro::drawSprite(
+                        ( this->horn ? ambiancePictures[ "horn" ] : ambiancePictures[ "gray horn" ] )->getAllegroPict(),
+                        leftTooAmbianceX, headHeelsAmbianceY );
 
-                allegro::drawSprite( ( this->handbag ? pictureOfBag : grayPictureOfBag )->getAllegroPict(), rightTooAmbianceX, headHeelsAmbianceY );
+                allegro::drawSprite(
+                        ( this->handbag ? ambiancePictures[ "handbag" ] : ambiancePictures[ "gray handbag" ] )->getAllegroPict(),
+                        rightTooAmbianceX, headHeelsAmbianceY );
 
                 std::string colorOfLabels = "white";
                 /* if ( isSimpleGraphicSet () ) colorOfLabels = "magenta"; */
@@ -515,7 +511,9 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                 heelsLivesLabel.draw ();
 
                 // número de rosquillas
-                allegro::drawSprite( ( this->donuts != 0 ? pictureOfDonuts : grayPictureOfDonuts )->getAllegroPict(), leftTooAmbianceX, charStuffAmbianceY );
+                allegro::drawSprite(
+                        ( this->donuts != 0 ? ambiancePictures[ "donuts" ] : ambiancePictures[ "gray donuts" ] )->getAllegroPict(),
+                        leftTooAmbianceX, charStuffAmbianceY );
                 if ( this->donuts > 0 )
                 {
                         gui::Label donutsLabel( util::number2string( this->donuts ), "", colorOfLabels, -2 );
@@ -524,7 +522,9 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                 }
 
                 // grandes saltos
-                allegro::drawSprite( ( this->highJumps > 0 ? pictureOfGrandesSaltos : grayPictureOfGrandesSaltos )->getAllegroPict(), rightAmbianceX, bonusAmbianceY );
+                allegro::drawSprite(
+                        ( this->highJumps > 0 ? ambiancePictures[ "grandes saltos" ] : ambiancePictures[ "gray grandes saltos" ] )->getAllegroPict(),
+                        rightAmbianceX, bonusAmbianceY );
                 if ( this->highJumps > 0 )
                 {
                         gui::Label highJumpsLabel( util::number2string( this->highJumps ), "", colorOfLabels, -2 );
@@ -533,7 +533,9 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                 }
 
                 // gran velocidad
-                allegro::drawSprite( ( this->highSpeed > 0 ? pictureOfGranVelocidad : grayPictureOfGranVelocidad )->getAllegroPict(), leftAmbianceX, bonusAmbianceY );
+                allegro::drawSprite(
+                        ( this->highSpeed > 0 ? ambiancePictures[ "gran velocidad" ] : ambiancePictures[ "gray gran velocidad" ] )->getAllegroPict(),
+                        leftAmbianceX, bonusAmbianceY );
                 if ( this->highSpeed > 0 )
                 {
                         gui::Label highSpeedLabel( util::number2string( this->highSpeed ), "", colorOfLabels, -2 );
@@ -542,7 +544,9 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                 }
 
                 // escudo de Head
-                allegro::drawSprite( ( this->headShield > 0 ? pictureOfEscudo : grayPictureOfEscudo )->getAllegroPict(), leftAmbianceX, immunityAmbianceY );
+                allegro::drawSprite(
+                        ( this->headShield > 0 ? ambiancePictures[ "escudo" ] : ambiancePictures[ "gray escudo" ] )->getAllegroPict(),
+                        leftAmbianceX, immunityAmbianceY );
                 if ( this->headShield > 0 )
                 {
                         int headShieldValue = static_cast< int >( this->headShield * 99.0 / 25.0 );
@@ -552,7 +556,9 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                 }
 
                 // escudo de Heels
-                allegro::drawSprite( ( this->heelsShield > 0 ? pictureOfEscudo : grayPictureOfEscudo )->getAllegroPict(), rightAmbianceX, immunityAmbianceY );
+                allegro::drawSprite(
+                        ( this->heelsShield > 0 ? ambiancePictures[ "escudo" ] : ambiancePictures[ "gray escudo" ] )->getAllegroPict(),
+                        rightAmbianceX, immunityAmbianceY );
                 if ( this->heelsShield > 0 )
                 {
                         int heelsShieldValue = static_cast< int >( this->heelsShield * 99.0 / 25.0 );
@@ -589,7 +595,7 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                 if ( isomot.getMapManager().getActiveRoom() != nilPointer )
                 {
                         Color backgroundColor = Color::blackColor();
-                        if ( charactersFly() ) backgroundColor = Color::darkBlueColor();
+                        if ( charactersFly() ) backgroundColor = Color::byName( "dark blue" );
 
                         allegro::fillRect( ( where.getW() - 8 * widthOfChar ) >> 1, where.getH() - deltaYtext - 1,
                                            ( where.getW() + 8 * widthOfChar ) >> 1, where.getH() - deltaYtext + 8,
@@ -597,7 +603,7 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
 
                         allegro::textOut( "camera",
                                           ( where.getW() - 6 * widthOfChar ) >> 1, where.getH() - deltaYtext,
-                                          Color::gray75Color().toAllegroColor() );
+                                          Color::byName( "75% gray" ).toAllegroColor() );
 
                         const int cameraDeltaX = isomot.getMapManager().getActiveRoom()->getCamera()->getDeltaX();
                         const int cameraDeltaY = isomot.getMapManager().getActiveRoom()->getCamera()->getDeltaY();
@@ -616,11 +622,11 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                         const int textY = where.getH() - deltaYtext + 10 ;
 
                         allegro::textOut( xCamera, textX, textY,
-                                          isomot.doesCameraFollowCharacter() ? Color::gray50Color().toAllegroColor() : Color::whiteColor().toAllegroColor() );
+                                          isomot.doesCameraFollowCharacter() ? Color::byName( "gray" ).toAllegroColor() : Color::whiteColor().toAllegroColor() );
                         allegro::textOut( "," , textX + widthOfChar * xCamera.length(), textY,
-                                          isomot.doesCameraFollowCharacter() ? Color::gray25Color().toAllegroColor() : Color::gray50Color().toAllegroColor() );
+                                          isomot.doesCameraFollowCharacter() ? Color::byName( "gray 25%" ).toAllegroColor() : Color::byName( "gray" ).toAllegroColor() );
                         allegro::textOut( yCamera, textX + widthOfChar * ( xCamera.length() + 1 ), textY,
-                                          isomot.doesCameraFollowCharacter() ? Color::gray50Color().toAllegroColor() : Color::whiteColor().toAllegroColor() );
+                                          isomot.doesCameraFollowCharacter() ? Color::byName( "gray" ).toAllegroColor() : Color::whiteColor().toAllegroColor() );
                 }
         }
 
@@ -648,10 +654,9 @@ void GameManager::drawOnScreen ( const allegro::Pict& view )
 
         if ( recordCaptures )
         {
-                if ( ! drawBackgroundPicture ) allegro::fillRect( 11, 18, 19, 30, Color::blackColor().toAllegroColor() );
-                allegro::fillRect( 19, 18, 80, 30, Color::gray75Color().toAllegroColor() );
-                allegro::fillCircle( 34, 24, 5, Color::redColor().toAllegroColor() );
-                allegro::textOut( "REC", 48, 21, Color::redColor().toAllegroColor() );
+                allegro::fillRect( 19, 18, 80, 31, Color::byName( "75% gray" ).toAllegroColor() );
+                allegro::fillCircle( 34, 24, 5, Color::byName( "red" ).toAllegroColor() );
+                allegro::textOut( "REC", 48, 21, Color::byName( "red" ).toAllegroColor() );
         }
 
         allegro::update ();

@@ -44,26 +44,23 @@ public:
         * @param z Position on Z, or how far is floor
         * @param way Initial orientation of item
         */
-        FreeItem( const DescriptionOfItem * description, int x, int y, int z, const Way& way ) ;
+        FreeItem( const DescriptionOfItem * description, int x, int y, int z, const std::string& way ) ;
 
-       /**
-        * Copy constructor
-        */
         FreeItem( const FreeItem& freeItem ) ;
 
-        virtual ~FreeItem( ) ;
+        virtual ~FreeItem( ) { }
 
         virtual std::string whichKindOfItem () const {  return "free item" ;  }
 
        /**
-        * Used for sorting free items in container
+        * For sorting free items in container
         */
         virtual bool operator< ( const FreeItem& item ) const
         {
-                return ( Item::operator< ( item ) ) &&
-                        ( getX() < item.getX() + static_cast< int >( item.getWidthX() ) ) &&
-                        ( getY() - static_cast< int >( getWidthY() ) < item.getY() ) ;
+                return isBehind( item ) ;
         }
+
+        virtual void calculateOffset () ;
 
         int getOriginalCellX () const {  return originalCellX ;  }
 
@@ -81,17 +78,9 @@ public:
 
         virtual void draw () ;
 
-        void binBothProcessedImages () ;
+        virtual void freshProcessedImage () ;
 
-        /**
-         * Change graphics of item
-         */
-        virtual void changeImage ( const Picture* newImage ) ;
-
-        /**
-         * Change graphics of item’s shadow
-         */
-        virtual void changeShadow ( const Picture* newShadow ) ;
+        void freshBothProcessedImages () ;
 
         /**
          * Request to shade item
@@ -124,15 +113,19 @@ public:
 
         bool isFrozen () const {  return frozen ;  }
 
-        Picture * getShadedNonmaskedImage () const {  return shadedNonmaskedImage ;  }
-
-        void setShadedNonmaskedImage ( Picture * newImage ) ;
+        Picture & getShadedNonmaskedImage () const {  return * shadedNonmaskedImage ;  }
 
         bool isPartOfDoor () const {  return partOfDoor ;  }
 
         void setPartOfDoor ( bool isPart ) {  partOfDoor = isPart ;  }
 
+        static const int farFarAway = -1024 ;
+
 protected:
+
+        virtual void updateImage () ;
+
+        virtual void updateShadow () ;
 
         /**
          * Check if item hits a door, when yes then move it
@@ -168,12 +161,14 @@ protected:
          */
         bool frozen ;
 
+        bool partOfDoor ;
+
+private:
+
         /**
          * Current frame of this item shaded but not masked yet
          */
-        Picture * shadedNonmaskedImage ;
-
-        bool partOfDoor ;
+        PicturePtr shadedNonmaskedImage ;
 
 };
 

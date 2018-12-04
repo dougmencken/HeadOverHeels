@@ -28,9 +28,9 @@ class CreateKeyboardMenu : public Action
 
 public:
 
-        CreateKeyboardMenu( ) : Action( ) { }
+        CreateKeyboardMenu( ) : Action( ), menuOfKeys( nilPointer ) { }
 
-        std::string getNameOfAction () const {  return "CreateKeyboardMenu" ;  }
+        virtual std::string getNameOfAction () const {  return "CreateKeyboardMenu" ;  }
 
 protected:
 

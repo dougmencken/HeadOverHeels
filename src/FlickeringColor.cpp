@@ -5,7 +5,7 @@
 
 const FlickeringColor * FlickeringColor::whiteAndTransparent = new FlickeringColor( Color::whiteColor(), Color() ) ;
 
-const FlickeringColor * FlickeringColor::gray75AndTransparent = new FlickeringColor( Color::gray75Color(), Color() ) ;
+const FlickeringColor * FlickeringColor::gray75AndTransparent = new FlickeringColor( Color::byName( "gray75" ), Color() ) ;
 
 
 FlickeringColor::~FlickeringColor( )

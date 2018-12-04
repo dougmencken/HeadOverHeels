@@ -37,7 +37,7 @@ public:
         virtual void beginNewGame ( const std::string& headRoom, const std::string& heelsRoom ) ;
 
         virtual void beginOldGameWithCharacter ( const std::string& roomFile, const std::string& character,
-                                                 int x, int y, int z, const Way& direction, const std::string& entry,
+                                                 int x, int y, int z, const std::string& direction, const std::string& entry,
                                                  bool active ) ;
 
         Room * changeRoom () ;

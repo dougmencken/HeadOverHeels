@@ -17,7 +17,7 @@ namespace gui
 /* static */ std::string * Font::tableOfLetters = nilPointer ;
 
 
-Font::Font( const std::string& name, const Color& color, bool doubleHeight ) :
+Font::Font( const std::string& name, const std::string& color, bool doubleHeight ) :
         fontName( name ),
         fontColor( color )
 {
@@ -33,7 +33,7 @@ Font::Font( const std::string& name, const Color& color, bool doubleHeight ) :
 
                 imageOfFont = new Picture( fontFromFile->getW(), fontFromFile->getH() );
 
-                autouniqueptr< Picture > blackLetters( new Picture( *fontFromFile.get() ) );
+                autouniqueptr< Picture > blackLetters( new Picture( *fontFromFile ) );
                 blackLetters->colorize( Color::blackColor() );
 
                 const unsigned int offsetOfTint = 1;
@@ -47,7 +47,7 @@ Font::Font( const std::string& name, const Color& color, bool doubleHeight ) :
 
                 const allegro::Pict& previousWhere = allegro::Pict::getWhereToDraw() ;
                 allegro::Pict::setWhereToDraw( imageOfFont->getAllegroPict() );
-                allegro::drawSprite( *fontFromFile.get(), 0, 0 );
+                allegro::drawSprite( *fontFromFile, 0, 0 );
                 allegro::Pict::setWhereToDraw( previousWhere );
 
                 imageOfFont->setName( "image of font’s letters" );
@@ -72,9 +72,9 @@ Font::Font( const std::string& name, const Color& color, bool doubleHeight ) :
         }
 
         // colorize letters
-        if ( color != Color::whiteColor () )
+        if ( color != "white" )
         {
-                lettersOfFont->colorize( color );
+                lettersOfFont->colorize( Color::byName( color ) );
                 lettersOfFont->setName( lettersOfFont->getName() + ", yet colored " + justColor );
         }
 
@@ -95,7 +95,7 @@ Font::Font( const std::string& name, const Color& color, bool doubleHeight ) :
                         unsigned int length = lettersFile.tellg();
                         lettersFile.seekg( 0, lettersFile.beg );
 
-                        char * buffer = new char [ length ];
+                        char buffer[ length ];
                         lettersFile.read( buffer, length );
                         lettersFile.close ();
 
@@ -139,8 +139,6 @@ Font::Font( const std::string& name, const Color& color, bool doubleHeight ) :
                                         inTable++ ;
                                 }
                         }
-
-                        delete buffer;
                 }
                 else
                 {

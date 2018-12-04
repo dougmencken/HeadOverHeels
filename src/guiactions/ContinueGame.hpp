@@ -27,7 +27,7 @@ public:
          */
         explicit ContinueGame( bool gameInProgress ) ;
 
-        std::string getNameOfAction () const {  return "ContinueGame" ;  }
+        virtual std::string getNameOfAction () const {  return "ContinueGame" ;  }
 
 protected:
 

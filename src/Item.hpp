@@ -42,7 +42,7 @@ class Item : public Mediated, public Shady
 
 public:
 
-        Item( const DescriptionOfItem * description, int z, const Way& way ) ;
+        Item( const DescriptionOfItem * description, int z, const std::string& way ) ;
 
         Item( const Item& item ) ;
 
@@ -53,18 +53,30 @@ public:
        /**
         * Used for sorting items in container, this variant is okay for grid items
         */
-        virtual bool operator< ( const Item& item ) const
+        virtual bool operator < ( const Item& item ) const
         {
                 return ( getZ() < item.getZ() + static_cast< int >( item.getHeight() ) );
         }
 
+        bool isBehind ( const Item& item ) const
+        {
+                return  ( getZ() < item.getZ() + static_cast< int >( item.getHeight() ) ) &&
+                        ( getX() < item.getX() + static_cast< int >( item.getWidthX() ) ) &&
+                        ( getY() - static_cast< int >( getWidthY() ) < item.getY() ) ;
+        }
+
+        bool isBehindAt ( const Item& item, int x, int y, int z ) const
+        {
+                return  ( getZ() < z + static_cast< int >( item.getHeight() ) ) &&
+                        ( getX() < x + static_cast< int >( item.getWidthX() ) ) &&
+                        ( getY() - static_cast< int >( getWidthY() ) < y ) ;
+        }
+
+        virtual void calculateOffset () = 0 ;
+
         virtual bool updateItem () ;
 
-        /**
-         * Anima el elemento obteniendo el fotograma adecuado de la secuencia y cambiando su gráfico y su sombra
-         * @return true si ha completado un ciclo de animación o false en caso contrario
-         */
-        bool animate () ;
+        void animate () ;
 
         /**
          * Used for metamorphosis into bubbles, such as when player teleports
@@ -76,20 +88,10 @@ public:
         /**
          * Change current frame for item. Change of frames is usually done via change of orientation
          * or via looping in sequence of animation. However there’re some cases when it’s necessary
-         * to change frames manually, in situations not linked to animation or change of orientation.
-         * As example, in behavior of trampoline one frame is for rest and another is for fold
+         * to change frames manually. As example, in behavior of trampoline one frame is for rest
+         * and another is for fold
          */
-        void changeFrame ( const unsigned int newFrame ) ;
-
-        /**
-         * Change graphics of item
-         */
-        virtual void changeImage ( const Picture* image ) = 0 ;
-
-        /**
-         * Change graphics of item’s shadow
-         */
-        virtual void changeShadow ( const Picture* shadow ) ;
+        void changeFrame ( size_t newFrame ) ;
 
         /**
          * Add value to coordinate X
@@ -127,6 +129,10 @@ public:
 
         bool intersectsWith ( const Item & item ) const ;
 
+        bool doGraphicsOverlap ( const Item & item ) const ;
+
+        bool doGraphicsOverlapAt ( const Item & item, std::pair < int, int > offset ) const ;
+
         /**
          * @param behavior Name of item’s behavior
          */
@@ -144,111 +150,6 @@ public:
          */
         void doBackwardsMotion () ;
 
-private:
-
-        static PoolOfPictures * poolOfPictures ;
-
-        std::string uniqueName ;
-
-        std::string originalLabel ;
-
-        /**
-         * Current frame for item
-         */
-        unsigned int currentFrame ;
-
-        /**
-         * True to reverse sequence of animation
-         */
-        bool backwardsMotion ;
-
-        const DescriptionOfItem * descriptionOfItem ;
-
-        void readGraphicsOfItem () ;
-
-        /**
-         * Extract frames for this item from file
-         */
-        static void createFrames ( Item * item, const DescriptionOfItem & data ) ;
-
-        /**
-         * Extract frames for shadow of this item from file
-         */
-        static void createShadowFrames ( Item * item, const DescriptionOfItem & data ) ;
-
-protected:
-
-        /**
-         * Spacial position X in isometric units
-         */
-        int xPos ;
-
-        /**
-         * Spacial position Y in isometric units
-         */
-        int yPos ;
-
-        /**
-         * Spacial position Z in isometric units
-         */
-        int zPos ;
-
-        unsigned int height ;
-
-        Way orientation ;
-
-        /**
-         * Offset on ( X, Y ) from room’s point of origin
-         */
-        std::pair < int, int > offset ;
-
-        /**
-         * Whether this item detects collisions
-         */
-        bool collisionDetector ;
-
-        /**
-         * Image of item, unprocessed, just read from file
-         */
-        const Picture * rawImage ;
-
-        /**
-         * Image of item’s shadow
-         */
-        const Picture * shadow ;
-
-        /**
-         * Image of this item with shadows from other items, for free item it is also masked
-         */
-        Picture * processedImage ;
-
-        /**
-         * Pictures of item
-         */
-        std::vector< const Picture * > motion ;
-
-        /**
-         * Pictures of item’s shadow
-         */
-        std::vector< const Picture * > shadows ;
-
-        /**
-         * Timer for animation of item
-         */
-        autouniqueptr < Timer > motionTimer ;
-
-        /**
-         * Behavior of item
-         */
-        Behavior * behavior ;
-
-        /**
-         * Unique name of item below this one, when anchor moves item above it moves too
-         */
-        std::string anchor ;
-
-public:
-
         static PoolOfPictures & getPoolOfPictures () {  return * poolOfPictures ;  }
 
         const std::string& getUniqueName () const {  return uniqueName ;  }
@@ -264,13 +165,13 @@ public:
 
         const std::string& getLabel () const ;
 
-        int getX () const {  return xPos ;  }
+        int getX () const {  return xYet ;  }
 
-        int getY () const {  return yPos ;  }
+        int getY () const {  return yYet ;  }
 
-        int getZ () const {  return zPos ;  }
+        int getZ () const {  return zYet ;  }
 
-        void setZ ( const int newZ ) {  zPos = newZ ;  }
+        void setZ ( const int newZ ) {  zYet = newZ ;  }
 
         /**
          * Width of item on X in isometric units
@@ -301,6 +202,8 @@ public:
          */
         unsigned short howManyOrientations () const ;
 
+        size_t firstFrameForOrientation ( const Way& way ) const ;
+
         /**
          * Time in seconds to move item
          */
@@ -323,74 +226,46 @@ public:
 
         Way getOrientation () const {  return orientation ;  }
 
-        const Picture * getRawImage () const {  return rawImage ;  }
+        size_t firstFrame () const {  return firstFrameForOrientation( orientation ) ;  }
 
-        const Picture * getImageOfShadow () const {  return shadow ;  }
+        bool animationFinished () const ;
 
-        Picture * getProcessedImage () const {  return processedImage ;  }
+        bool atExtraFrame () const ;
 
-        void setProcessedImage ( Picture * newImage ) ;
+        const Picture & getRawImage () const {  return * getMotionAt( currentFrame ) ;  }
 
-        void binProcessedImage() {  if ( processedImage != nilPointer ) setProcessedImage( nilPointer ) ;  }
+        Picture & getRawImageToChangeIt () const {  return * getMotionAt( currentFrame ) ;  }
 
-        unsigned int howManyMotions () const {  return motion.size () ;  }
+        bool hasShadow () const {  return ! shadows.empty() ;  }
 
-        const Picture * getMotionAt( size_t at ) const
+        const Picture & getImageOfShadow () const {  return * getShadowAt( currentFrame ) ;  }
+
+        Picture & getProcessedImage () const {  return * processedImage ;  }
+
+        virtual void freshProcessedImage () ;
+
+        size_t howManyMotions () const {  return motion.size () ;  }
+
+        const PicturePtr getMotionAt( size_t at ) const
         {
-                assert( at < motion.size () );  /// return ( at < motion.size() ? motion[ at ] : nilPointer ) ;
-                return ( rawImage != nilPointer ) ? motion[ at ] : nilPointer ;
+                return ( at < motion.size () ) ? motion[ at ] : PicturePtr () ;
         }
 
         void addFrame( const Picture& frame )
         {
-                motion.push_back( new Picture( frame ) ) ;
-
-                if ( rawImage == nilPointer && motion.size() == 1 )
-                {
-                        rawImage = motion.back() ;
-                }
+                motion.push_back( PicturePtr( new Picture( frame ) ) ) ;
         }
 
-        void clearMotionFrames ()
+        size_t howManyShadows () const {  return shadows.size () ;  }
+
+        const PicturePtr getShadowAt( size_t at ) const
         {
-                binProcessedImage ();
-
-                rawImage = nilPointer ;
-
-                for ( std::vector< const Picture * >::iterator it = motion.begin (); it != motion.end (); ++ it )
-                        delete *it ;
-
-                motion.clear ();
-        }
-
-        unsigned int howManyShadows () const {  return shadows.size () ;  }
-
-        const Picture * getShadowAt( size_t at ) const
-        {
-                assert( at < shadows.size () ); /// return ( at < shadows.size() ? shadows[ at ] : nilPointer ) ;
-                return ( shadow != nilPointer ) ? shadows[ at ] : nilPointer ;
+                return ( at < shadows.size () ) ? shadows[ at ] : PicturePtr () ;
         }
 
         void addFrameOfShadow( const Picture& frame )
         {
-                shadows.push_back( new Picture( frame ) ) ;
-
-                if ( shadow == nilPointer && shadows.size() == 1 )
-                {
-                        shadow = shadows.back() ;
-                }
-        }
-
-        void clearShadowFrames ()
-        {
-                binProcessedImage ();
-
-                shadow = nilPointer ;
-
-                for ( std::vector< const Picture * >::iterator it = shadows.begin (); it != shadows.end (); ++ it )
-                        delete *it ;
-
-                shadows.clear() ;
+                shadows.push_back( PicturePtr( new Picture( frame ) ) ) ;
         }
 
         /**
@@ -417,14 +292,109 @@ public:
 
         void setAnchor ( const std::string & item ) {  this->anchor = item ;  }
 
-        unsigned int getCurrentFrame() {  return this->currentFrame ;  }
-
         /**
          * Set item’s ability to detect collisions
          */
         void setCollisionDetector ( bool detectThem ) {  collisionDetector = detectThem ;  }
 
         bool isCollisionDetector () const {  return collisionDetector ;  }
+
+private:
+
+        static PoolOfPictures * poolOfPictures ;
+
+        void readGraphicsOfItem () ;
+
+        /**
+         * Extract frames for this item from file
+         */
+        static void createFrames ( Item * item, const DescriptionOfItem & data ) ;
+
+        /**
+         * Extract frames for shadow of this item from file
+         */
+        static void createShadowFrames ( Item * item, const DescriptionOfItem & data ) ;
+
+        const DescriptionOfItem * descriptionOfItem ;
+
+        std::string uniqueName ;
+
+        std::string originalLabel ;
+
+        /**
+         * Image of this item with shadows from other items, for free item it is also masked
+         */
+        PicturePtr processedImage ;
+
+        unsigned int height ;
+
+        Way orientation ;
+
+        /**
+         * Current frame for item
+         */
+        size_t currentFrame ;
+
+        /**
+         * True to reverse sequence of animation
+         */
+        bool backwardsMotion ;
+
+        /**
+         * Offset on ( X, Y ) from room’s point of origin
+         */
+        std::pair < int, int > offset ;
+
+        /**
+         * Whether this item detects collisions
+         */
+        bool collisionDetector ;
+
+        /**
+         * Pictures of item
+         */
+        std::vector< PicturePtr > motion ;
+
+        /**
+         * Pictures of item’s shadow
+         */
+        std::vector< PicturePtr > shadows ;
+
+        /**
+         * Timer for animation of item
+         */
+        autouniqueptr < Timer > motionTimer ;
+
+        /**
+         * Behavior of item
+         */
+        Behavior * behavior ;
+
+        /**
+         * Unique name of item below this one, when anchor moves item above it moves too
+         */
+        std::string anchor ;
+
+protected:
+
+        /**
+         * Spacial position X in isometric units
+         */
+        int xYet ;
+
+        /**
+         * Spacial position Y in isometric units
+         */
+        int yYet ;
+
+        /**
+         * Spacial position Z in isometric units
+         */
+        int zYet ;
+
+        virtual void updateImage () ;
+
+        virtual void updateShadow () ;
 
 };
 

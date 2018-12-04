@@ -33,7 +33,7 @@ public:
          */
         CreateEndScreen( unsigned int rooms, unsigned short planets ) ;
 
-        std::string getNameOfAction () const {  return "CreateEndScreen" ;  }
+        virtual std::string getNameOfAction () const {  return "CreateEndScreen" ;  }
 
 protected:
 

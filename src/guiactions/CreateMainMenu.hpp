@@ -30,7 +30,7 @@ public:
 
         CreateMainMenu( ) ;
 
-        std::string getNameOfAction () const {  return "CreateMainMenu" ;  }
+        virtual std::string getNameOfAction () const {  return "CreateMainMenu" ;  }
 
 protected:
 

@@ -45,6 +45,9 @@ public:
         virtual bool operator < ( const Wall& segment ) const
                 {  return getPosition() < segment.getPosition() ;  }
 
+        static bool comparePointersToWall ( const Wall * first, const Wall * second )
+                {  return ( first != nilPointer && second != nilPointer ) ? *first < *second : false ;  }
+
 private:
 
         bool onX;

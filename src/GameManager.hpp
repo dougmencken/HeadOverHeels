@@ -394,37 +394,7 @@ private:
 
         std::map < std::string, PicturePtr > sceneryBackgrounds ;
 
-        PicturePtr pictureOfHead ;
-
-        PicturePtr grayPictureOfHead ;
-
-        PicturePtr pictureOfHeels ;
-
-        PicturePtr grayPictureOfHeels ;
-
-        PicturePtr pictureOfBag ;
-
-        PicturePtr grayPictureOfBag ;
-
-        PicturePtr pictureOfHorn ;
-
-        PicturePtr grayPictureOfHorn ;
-
-        PicturePtr pictureOfDonuts ;
-
-        PicturePtr grayPictureOfDonuts ;
-
-        PicturePtr pictureOfGrandesSaltos ;
-
-        PicturePtr grayPictureOfGrandesSaltos ;
-
-        PicturePtr pictureOfGranVelocidad ;
-
-        PicturePtr grayPictureOfGranVelocidad ;
-
-        PicturePtr pictureOfEscudo ;
-
-        PicturePtr grayPictureOfEscudo ;
+        std::map < std::string, PicturePtr > ambiancePictures ;
 
 public:
 

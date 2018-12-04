@@ -133,7 +133,7 @@ void ShowAuthors::doAction ()
                                 autouniqueptr< allegro::Pict > png( allegro::Pict::fromPNGFile (
                                         iso::pathToFile( iso::sharePath(), "loading-screen.png" )
                                 ) );
-                                loadingScreen = PicturePtr( new Picture( * png.get() ) );
+                                loadingScreen = PicturePtr( new Picture( * png ) );
                                 loadingScreen->setName( "image of loading screen from original speccy version" );
                         }
 

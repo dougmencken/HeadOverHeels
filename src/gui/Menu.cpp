@@ -45,7 +45,7 @@ Menu::~Menu( )
 
                 beforeOption = new Picture( optionPict->getW(), optionPict->getH() );
 
-                autouniqueptr< Picture > blackOption( new Picture( *optionPict.get() ) );
+                autouniqueptr< Picture > blackOption( new Picture( *optionPict ) );
                 blackOption->colorize( Color::blackColor() );
 
                 const unsigned int offsetOfTintX = 1;
@@ -60,7 +60,7 @@ Menu::~Menu( )
 
                 const allegro::Pict& previousWhere = allegro::Pict::getWhereToDraw() ;
                 allegro::Pict::setWhereToDraw( beforeOption->getAllegroPict() );
-                allegro::drawSprite( *optionPict.get(), 0, 0 );
+                allegro::drawSprite( *optionPict, 0, 0 );
                 allegro::Pict::setWhereToDraw( previousWhere );
 
                 beforeOption->setName( "picture to show before menu option" );
@@ -75,7 +75,7 @@ Menu::~Menu( )
 
                 beforeChosenOptionMini = new Picture( chosenOptionMiniPict->getW(), chosenOptionMiniPict->getH() );
 
-                autouniqueptr< Picture > blackChosenOptionMini( new Picture( *chosenOptionMiniPict.get() ) );
+                autouniqueptr< Picture > blackChosenOptionMini( new Picture( *chosenOptionMiniPict ) );
                 blackChosenOptionMini->colorize( Color::blackColor() );
 
                 const unsigned int offsetOfTintX = 1;
@@ -90,7 +90,7 @@ Menu::~Menu( )
 
                 const allegro::Pict& previousWhere = allegro::Pict::getWhereToDraw() ;
                 allegro::Pict::setWhereToDraw( beforeChosenOptionMini->getAllegroPict() );
-                allegro::drawSprite( *chosenOptionMiniPict.get(), 0, 0 );
+                allegro::drawSprite( *chosenOptionMiniPict, 0, 0 );
                 allegro::Pict::setWhereToDraw( previousWhere );
 
                 beforeChosenOptionMini->setName( "picture to show before chosen but not double height menu option" );
@@ -107,7 +107,7 @@ Menu::~Menu( )
                 beforeChosenOption->setName( "picture to show before chosen menu option" );
         }
 
-        beforeChosenOptionMini->colorize( Color::orangeColor() );
+        beforeChosenOptionMini->colorize( Color::byName( "orange" ) );
 }
 
 void Menu::draw ()

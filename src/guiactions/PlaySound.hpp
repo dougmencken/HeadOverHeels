@@ -26,7 +26,7 @@ public:
 
         virtual ~PlaySound( ) { }
 
-        std::string getNameOfAction () const {  return "PlaySound" ;  }
+        virtual std::string getNameOfAction () const {  return "PlaySound" ;  }
 
 protected:
 

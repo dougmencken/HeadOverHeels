@@ -50,7 +50,7 @@ PlayerHeadAndHeels::PlayerHeadAndHeels( const ItemPtr & item, const std::string 
         speedTimer->go();
         fallTimer->go();
         glideTimer->go();
-        blinkingTimer->go();
+        timerForBlinking->go();
 }
 
 PlayerHeadAndHeels::~PlayerHeadAndHeels( )
@@ -424,9 +424,9 @@ void PlayerHeadAndHeels::wait( PlayerItem & playerItem )
 {
         playerItem.wait();
 
-        if ( blinkingTimer->getValue() >= ( rand() % 4 ) + 5 )
+        if ( timerForBlinking->getValue() >= ( rand() % 4 ) + 5 )
         {
-                blinkingTimer->reset();
+                timerForBlinking->reset();
                 activity = Activity::Blink;
         }
 
@@ -439,7 +439,7 @@ void PlayerHeadAndHeels::wait( PlayerItem & playerItem )
 
 void PlayerHeadAndHeels::blink( PlayerItem & playerItem )
 {
-        double blinkTime = blinkingTimer->getValue();
+        double blinkTime = timerForBlinking->getValue();
 
         // close the eyes
         if ( ( blinkTime > 0.0 && blinkTime < 0.050 ) || ( blinkTime > 0.400 && blinkTime < 0.450 ) )
@@ -453,7 +453,7 @@ void PlayerHeadAndHeels::blink( PlayerItem & playerItem )
         // end blinking
         else if ( blinkTime > 0.800 )
         {
-                blinkingTimer->reset();
+                timerForBlinking->reset();
                 activity = Activity::Wait;
         }
 }

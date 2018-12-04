@@ -72,8 +72,8 @@ void CreatePlanetsScreen::doAction ()
         }
         else
         {
-                chapeauTriste->colorize( Color::gray50Color() );
-                chapeau->colorize( Color::yellowColor() );
+                chapeauTriste->colorize( Color::byName( "gray" ) );
+                chapeau->colorize( Color::byName( "yellow" ) );
         }
 
         const int halfOfChapeauWidth = chapeau->getWidth() >> 1;

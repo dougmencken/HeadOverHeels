@@ -7,6 +7,15 @@
 namespace iso
 {
 
+PicturePtr PoolOfPictures::getPicture( const std::string& imageFile ) const
+{
+        std::string gfxPrefix = iso::GameManager::getInstance().getChosenGraphicSet() ;
+        std::string key = gfxPrefix + ":" + imageFile ;
+
+        std::map< std::string, PicturePtr >::const_iterator pi = pictures.find( key ) ;
+        return ( pi != pictures.end () ) ? ( *pi ).second : PicturePtr () ;
+}
+
 PicturePtr PoolOfPictures::getOrLoadAndGet( const std::string& imageFile )
 {
         std::string gfxPrefix = iso::GameManager::getInstance().getChosenGraphicSet() ;
@@ -62,6 +71,15 @@ PicturePtr PoolOfPictures::getOrLoadAndGetOrMakeAndGet( const std::string& image
         }
 
         return pictures[ key ] ;
+}
+
+void PoolOfPictures::putPicture( const std::string& imageFile, const PicturePtr& picture )
+{
+        std::string gfxPrefix = iso::GameManager::getInstance().getChosenGraphicSet() ;
+        std::string key = gfxPrefix + ":" + imageFile ;
+
+        pictures[ key ] = picture ;
+        pictures[ key ]->setName( imageFile );
 }
 
 }

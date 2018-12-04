@@ -9,6 +9,8 @@
 #include "GameManager.hpp"
 #include "PoolOfPictures.hpp"
 
+#define MAKE_PARTIAL_FLOOR_TILES        0
+
 
 namespace iso
 {
@@ -62,6 +64,10 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
         unsigned int xTiles = std::atoi( xTilesElement->FirstChild()->ToText()->Value() );
         unsigned int yTiles = std::atoi( yTilesElement->FirstChild()->ToText()->Value() );
 
+        std::string roomColor = "white" ;
+        tinyxml2::XMLElement* colorElement = root->FirstChildElement( "color" ) ;
+        if ( colorElement != nilPointer ) roomColor = colorElement->FirstChild()->ToText()->Value() ;
+
         tinyxml2::XMLElement* floorKind = root->FirstChildElement( "floorKind" ) ;
         if ( floorKind == nilPointer ) floorKind = root->FirstChildElement( "floorType" ) ;
         std::string kindOfFloor = floorKind->FirstChild()->ToText()->Value() ;
@@ -94,6 +100,8 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                 std::cerr << "can’t create room \"" << roomFile << "\"" << std::endl ;
                 return nilPointer;
         }
+
+        theRoom->setColor( roomColor );
 
         // need to know about presence of doors
         // to calculate coordinates of room’s origin in isometric space
@@ -225,7 +233,7 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                 {
                                         wallsXY.push_back( std::pair< int, int >( onX ? index : 0, onX ? 0 : index ) );
 
-                                        Picture* imageOfWall = new Picture( *picture.get() );
+                                        Picture* imageOfWall = new Picture( *picture );
                                         imageOfWall->setName( fileWithPicture );
 
                                         Wall* wallSegment = new Wall( onX, index, imageOfWall );
@@ -328,7 +336,9 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                 theRoom->setTilesWithoutFloor( tilesWithoutFloor );
         }
 
+#if defined( DEBUG ) && DEBUG
         std::cout << "building floor in room \"" << theRoom->getNameOfFileWithDataAboutRoom() << "\"" ;
+#endif
 
         PoolOfPictures floorImages ;
 
@@ -358,7 +368,7 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                         ( southeastDoor != nilPointer && westnorthDoor != nilPointer &&
                                                 southeastDoor->getCellX() == tileX && westnorthDoor->getCellY() == tileY ) )
                                 {
-                                        suffixOfNotFullTile = "-sw" ;
+                                        suffixOfNotFullTile = "sw" ;
                                 }
                                 else if ( ( southDoor != nilPointer && eastDoor != nilPointer &&
                                                 southDoor->getCellX() == tileX && eastDoor->getCellY() == tileY &&
@@ -413,13 +423,13 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                         ( eastsouthDoor != nilPointer && eastsouthDoor->getCellY() == tileY &&
                                                 /* is under door */ ( eastsouthDoor->getCellX() == tileX || eastsouthDoor->getCellX() + 1 == tileX ) ) )
                                 {
-                                        suffixOfNotFullTile = "-east" ;
+                                        suffixOfNotFullTile = "east" ;
                                 }
                                 else if ( ( westDoor != nilPointer && westDoor->getCellY() == tileY ) ||
                                         ( westnorthDoor != nilPointer && westnorthDoor->getCellY() == tileY ) ||
                                         ( westsouthDoor != nilPointer && westsouthDoor->getCellY() == tileY ) )
                                 {
-                                        suffixOfNotFullTile = "-west" ;
+                                        suffixOfNotFullTile = "west" ;
                                 }
                                 else if ( ( northDoor != nilPointer && northDoor->getCellX() == tileX &&
                                                 /* is under door */ ( northDoor->getCellY() == tileY || northDoor->getCellY() + 1 == tileY ) ) ||
@@ -428,16 +438,17 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                         ( northwestDoor != nilPointer && northwestDoor->getCellX() == tileX &&
                                                 /* is under door */ ( northwestDoor->getCellY() == tileY || northwestDoor->getCellY() + 1 == tileY ) ) )
                                 {
-                                        suffixOfNotFullTile = "-north" ;
+                                        suffixOfNotFullTile = "north" ;
                                 }
                                 else if ( ( southDoor != nilPointer && southDoor->getCellX() == tileX ) ||
                                         ( southeastDoor != nilPointer && southeastDoor->getCellX() == tileX ) ||
                                         ( southwestDoor != nilPointer && southwestDoor->getCellX() == tileX ) )
                                 {
-                                        suffixOfNotFullTile = "-south" ;
+                                        suffixOfNotFullTile = "south" ;
                                 }
 
-                                std::string fileOfTile = sceneryPrefix + "floor" + suffixOfNotFullTile ;
+                                std::string fileOfTile = sceneryPrefix + "floor" ;
+                                if ( ! suffixOfNotFullTile.empty () ) fileOfTile += "-" + suffixOfNotFullTile ;
 
                                 if ( kindOfFloor == "mortal" && suffixOfNotFullTile.empty() )
                                         fileOfTile = sceneryPrefix + "mortal-floor" ;
@@ -445,20 +456,23 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                 if ( kindOfFloor == "absent" )
                                 {
                                         if ( tileX == lastTileX && tileY == lastTileY )
-                                                suffixOfNotFullTile = "-sw" ;
+                                                suffixOfNotFullTile = "sw" ;
                                         else if ( tileX == 0 )
-                                                suffixOfNotFullTile = "-north" ;
+                                                suffixOfNotFullTile = "north" ;
                                         else if ( tileY == 0 )
-                                                suffixOfNotFullTile = "-east" ;
+                                                suffixOfNotFullTile = "east" ;
                                         else if ( tileX == lastTileX )
-                                                suffixOfNotFullTile = "-south" ;
+                                                suffixOfNotFullTile = "south" ;
                                         else if ( tileY == lastTileY )
-                                                suffixOfNotFullTile = "-west" ;
+                                                suffixOfNotFullTile = "west" ;
                                         else
                                                 continue ;
 
-                                        fileOfTile = sceneryPrefix + "nofloor" + suffixOfNotFullTile ;
+                                        fileOfTile = sceneryPrefix + "nofloor" ;
+                                        if ( ! suffixOfNotFullTile.empty () ) fileOfTile += "-" + suffixOfNotFullTile ;
                                 }
+
+                                std::string nameOfPicture = fileOfTile ;
 
                                 fileOfTile += ".png" ;
 
@@ -467,8 +481,38 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                 if ( std::find( tilesWithoutFloor.begin (), tilesWithoutFloor.end (), tileXY ) == tilesWithoutFloor.end () &&
                                         ( std::find( wallsXY.begin (), wallsXY.end (), tileXY ) == wallsXY.end () || ! theRoom->hasFloor() ) )
                                 {
+                                # if defined( DEBUG ) && DEBUG
                                         std::cout << " tile@" << tileX << "," << tileY ;
-                                        theRoom->addFloorTile( new FloorTile( tileX, tileY, * floorImages.getOrLoadAndGetOrMakeAndGet( fileOfTile, 64, 37 ) ) );
+                                # endif
+
+                                        floorImages.getOrLoadAndGetOrMakeAndGet( fileOfTile, 64, 40 ) ;
+
+                                        if ( floorImages.getPicture( fileOfTile ) != nilPointer )
+                                        {
+                                                const PicturePtr& image = floorImages.getPicture( fileOfTile ) ;
+                                                image->setName( nameOfPicture );
+
+                                                if ( image->getHeight() < 40 )
+                                                        image->expandOrCropTo( image->getWidth(), 40 );
+
+                                                theRoom->addFloorTile( new FloorTile( tileX, tileY, * image ) );
+
+                                        # if defined( MAKE_PARTIAL_FLOOR_TILES ) && MAKE_PARTIAL_FLOOR_TILES
+                                                if ( suffixOfNotFullTile.empty() )
+                                                {
+                                                        FloorTile::fullTileToPartialTile( * image, "sw", true )->saveAsPNG( iso::homePath() );
+                                                        FloorTile::fullTileToPartialTile( * image, "se", true )->saveAsPNG( iso::homePath() );
+                                                        FloorTile::fullTileToPartialTile( * image, "ne", true )->saveAsPNG( iso::homePath() );
+                                                        FloorTile::fullTileToPartialTile( * image, "nw", true )->saveAsPNG( iso::homePath() );
+                                                        FloorTile::fullTileToPartialTile( * image, "north", true )->saveAsPNG( iso::homePath() );
+                                                        FloorTile::fullTileToPartialTile( * image, "south", true )->saveAsPNG( iso::homePath() );
+                                                        FloorTile::fullTileToPartialTile( * image, "east", true )->saveAsPNG( iso::homePath() );
+                                                        FloorTile::fullTileToPartialTile( * image, "west", true )->saveAsPNG( iso::homePath() );
+                                                        FloorTile::fullTileToPartialTile( * image, "full", false )->saveAsPNG( iso::homePath() );
+                                                        FloorTile::fullTileToPartialTile( * image, "darkfull", true )->saveAsPNG( iso::homePath() );
+                                                }
+                                        # endif
+                                        }
                                 }
                         }
                 }
@@ -498,7 +542,9 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                 }
         }
 
+#if defined( DEBUG ) && DEBUG
         std::cout << std::endl ;
+#endif
 
         theRoom->calculateBounds();
         theRoom->updateWallsWithDoors();
@@ -513,7 +559,7 @@ PlayerItemPtr RoomBuilder::createPlayerInRoom( Room* room,
                                                const std::string& nameOfPlayer,
                                                bool justEntered,
                                                int x, int y, int z,
-                                               const Way& orientation, const Way& wayOfEntry )
+                                               const std::string& orientation, const std::string& wayOfEntry )
 {
         if ( room == nilPointer ) return PlayerItemPtr () ;
 
@@ -577,7 +623,7 @@ PlayerItemPtr RoomBuilder::createPlayerInRoom( Room* room,
 
                         player->setBehaviorOf( behaviorOfPlayer );
 
-                        player->setWayOfEntry( wayOfEntry.toString() );
+                        player->setWayOfEntry( wayOfEntry );
 
                         room->addPlayerToRoom( player, justEntered );
 
@@ -615,7 +661,7 @@ Wall* RoomBuilder::buildWall( tinyxml2::XMLElement* wall, const std::string& gfx
 
         if ( image->isNotNil() )
         {
-                Picture* imageOfWall = new Picture( *image.get() );
+                Picture* imageOfWall = new Picture( *image );
                 imageOfWall->setName( pictureString );
 
                 return new Wall( xy == "x" ? true : false, std::atoi( position->FirstChild()->ToText()->Value() ), imageOfWall );
@@ -645,8 +691,9 @@ GridItemPtr RoomBuilder::buildGridItem( tinyxml2::XMLElement* item, Room* room )
                 if ( orientation == nilPointer ) orientation = item->FirstChildElement( "direction" ) ;
                 std::string theWay = orientation->FirstChild()->ToText()->Value();
 
-                GridItemPtr gridItem( new GridItem( itemDescription, itemX, itemY, itemZ > Top ? itemZ * LayerHeight : Top ,
-                                                    theWay == "none" ? Way( "nowhere" ) : Way( theWay ) ) );
+                GridItemPtr gridItem( new GridItem( itemDescription,
+                                                    itemX, itemY, itemZ > Top ? itemZ * LayerHeight : Top ,
+                                                    theWay ) );
 
                 std::string behaviorOfItem = "still";
                 tinyxml2::XMLElement* behavior = item->FirstChildElement( "behavior" );
@@ -691,8 +738,7 @@ FreeItemPtr RoomBuilder::buildFreeItem( tinyxml2::XMLElement* item, Room* room )
                 if ( orientation == nilPointer ) orientation = item->FirstChildElement( "direction" ) ;
                 std::string theWay = orientation->FirstChild()->ToText()->Value();
 
-                FreeItemPtr freeItem( new FreeItem( itemDescription, fx, fy, fz,
-                                                    theWay == "none" ? Way( "nowhere" ) : Way( theWay ) ) );
+                FreeItemPtr freeItem( new FreeItem( itemDescription, fx, fy, fz, theWay ) );
 
                 freeItem->setOriginalCellX( itemX );
                 freeItem->setOriginalCellY( itemY );

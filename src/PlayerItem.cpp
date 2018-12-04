@@ -14,7 +14,7 @@
 namespace iso
 {
 
-PlayerItem::PlayerItem( const DescriptionOfItem* description, int x, int y, int z, const Way& way )
+PlayerItem::PlayerItem( const DescriptionOfItem* description, int x, int y, int z, const std::string& way )
         : FreeItem( description, x, y, z, way )
         , lives( 0 )
         , highSpeed( 0 )
@@ -26,7 +26,6 @@ PlayerItem::PlayerItem( const DescriptionOfItem* description, int x, int y, int 
         , shieldRemaining( 0.0 )
         , descriptionOfTakenItem( nilPointer )
 {
-
 }
 
 PlayerItem::PlayerItem( const PlayerItem& playerItem )
@@ -42,12 +41,6 @@ PlayerItem::PlayerItem( const PlayerItem& playerItem )
         , shieldRemaining( 0.0 )
         , descriptionOfTakenItem( nilPointer )
 {
-
-}
-
-PlayerItem::~PlayerItem()
-{
-
 }
 
 void PlayerItem::setWayOfExit ( const std::string& way )
@@ -154,12 +147,15 @@ bool PlayerItem::addToPosition( int x, int y, int z )
 
         mediator->clearStackOfCollisions( );
 
-        // copy item before moving it
-        PlayerItemPtr copyOfItem ( new PlayerItem ( *this ) );
+        int xBefore = xYet ;
+        int yBefore = yYet ;
+        int zBefore = zYet ;
 
-        this->xPos += x;
-        this->yPos += y;
-        this->zPos += z;
+        std::pair< int, int > offsetBefore = getOffset() ;
+
+        xYet += x ;
+        yYet += y ;
+        zYet += z ;
 
         // look for collision with door
 
@@ -173,22 +169,19 @@ bool PlayerItem::addToPosition( int x, int y, int z )
                 {
                         std::string what = mediator->popCollision();
 
-                        int oldX = copyOfItem->getX();
-                        int oldY = copyOfItem->getY();
-
                         // case of move to north wall
                         if ( x < 0 )
                         {
                                 // check for hit of north door’s jamb
-                                doorCollision = isCollidingWithDoor( "north", what, oldX, oldY );
+                                doorCollision = isCollidingWithDoor( "north", what, xBefore, yBefore );
                                 if ( ! doorCollision )
                                 {
                                         // check for hit of northeast door’s jamb
-                                        doorCollision = isCollidingWithDoor( "northeast", what, oldX, oldY );
+                                        doorCollision = isCollidingWithDoor( "northeast", what, xBefore, yBefore );
                                         if ( ! doorCollision )
                                         {
                                                 // then it’s hit of northwest door’s jamb
-                                                doorCollision = isCollidingWithDoor( "northwest", what, oldX, oldY );
+                                                doorCollision = isCollidingWithDoor( "northwest", what, xBefore, yBefore );
                                         }
                                 }
                         }
@@ -196,47 +189,47 @@ bool PlayerItem::addToPosition( int x, int y, int z )
                         else if ( x > 0 )
                         {
                                 // check for hit of south door’s jamb
-                                doorCollision = isCollidingWithDoor( "south", what, oldX, oldY );
+                                doorCollision = isCollidingWithDoor( "south", what, xBefore, yBefore );
                                 if ( ! doorCollision )
                                 {
                                         // check for hit of southeast door’s jamb
-                                        doorCollision = isCollidingWithDoor( "southeast", what, oldX, oldY );
+                                        doorCollision = isCollidingWithDoor( "southeast", what, xBefore, yBefore );
                                         if ( ! doorCollision )
                                         {
                                                 // then it’s hit of southwest door’s jamb
-                                                doorCollision = isCollidingWithDoor( "southwest", what, oldX, oldY );
+                                                doorCollision = isCollidingWithDoor( "southwest", what, xBefore, yBefore );
                                         }
                                 }
                         }
                         // case of move to east wall
                         else if ( y < 0 )
                         {
-                                doorCollision = isCollidingWithDoor( "east", what, oldX, oldY );
+                                doorCollision = isCollidingWithDoor( "east", what, xBefore, yBefore );
                                 // check for hit of east door’s jamb
                                 if ( ! doorCollision )
                                 {
                                         // check for hit of east-north door’s jamb
-                                        doorCollision = isCollidingWithDoor( "eastnorth", what, oldX, oldY );
+                                        doorCollision = isCollidingWithDoor( "eastnorth", what, xBefore, yBefore );
                                         if ( ! doorCollision )
                                         {
                                                 // so it’s hit of east-south door’s jamb
-                                                doorCollision = isCollidingWithDoor( "eastsouth", what, oldX, oldY );
+                                                doorCollision = isCollidingWithDoor( "eastsouth", what, xBefore, yBefore );
                                         }
                                 }
                         }
                         // case of move to west wall
                         else if ( y > 0 )
                         {
-                                doorCollision = isCollidingWithDoor( "west", what, oldX, oldY );
+                                doorCollision = isCollidingWithDoor( "west", what, xBefore, yBefore );
                                 // check for hit of west door’s jamb
                                 if ( ! doorCollision )
                                 {
                                         // check for hit of west-north door’s jamb
-                                        doorCollision = isCollidingWithDoor( "westnorth", what, oldX, oldY );
+                                        doorCollision = isCollidingWithDoor( "westnorth", what, xBefore, yBefore );
                                         if ( ! doorCollision )
                                         {
                                                 // so it’s hit of west-south door’s jamb
-                                                doorCollision = isCollidingWithDoor( "westsouth", what, oldX, oldY );
+                                                doorCollision = isCollidingWithDoor( "westsouth", what, xBefore, yBefore );
                                         }
                                 }
                         }
@@ -306,30 +299,20 @@ bool PlayerItem::addToPosition( int x, int y, int z )
                         if ( ! collisionFound )
                         {
                                 // reshade and remask
-                                binBothProcessedImages();
+                                freshBothProcessedImages();
                                 setWantShadow( true );
                                 setWantMaskTrue();
 
-                                // for item with image, mark to mask free items whose images overlap with its image
-                                if ( this->rawImage != nilPointer )
-                                {
-                                        // get how many pixels is this image from point of room’s origin
-                                        this->offset.first = ( ( getX() - getY() ) << 1 ) + getWidthX() + getDescriptionOfItem()->getWidthY() - ( this->rawImage->getWidth() >> 1 ) - 1;
-                                        this->offset.second = getX() + getY() + getWidthX() - this->rawImage->getHeight() - getZ();
+                                // update offset to point of room’s origin
+                                calculateOffset ();
 
-                                        // for both the previous position and the current position
-                                        mediator->remaskWithFreeItem( *copyOfItem );
-                                        mediator->remaskWithFreeItem( *this );
-                                }
-                                else
-                                {
-                                        this->offset.first = this->offset.second = 0;
-                                }
+                                // mark to mask free items whose images overlap with character’s image
+                                mediator->wantToMaskWithFreeItemAt( *this, offsetBefore );
+                                mediator->wantToMaskWithFreeItem( *this );
 
                                 // reshade items
-                                // for both previous position and current position
-                                mediator->reshadeWithFreeItem( *copyOfItem );
-                                mediator->reshadeWithFreeItem( *this );
+                                mediator->wantShadowFromFreeItemAt( *this, xBefore, yBefore, zBefore );
+                                mediator->wantShadowFromFreeItem( *this );
 
                                 // mark to sort container of free items
                                 mediator->markToSortFreeItems ();
@@ -337,14 +320,14 @@ bool PlayerItem::addToPosition( int x, int y, int z )
                 }
         }
 
-        // restore previous values for collision which is not collision with door
         if ( collisionFound && ! doorCollision )
         {
-                this->xPos = copyOfItem->getX();
-                this->yPos = copyOfItem->getY();
-                this->zPos = copyOfItem->getZ();
+                // restore previous values
+                xYet = xBefore ;
+                yYet = yBefore ;
+                zYet = zBefore ;
 
-                this->offset = copyOfItem->getOffset();
+                setOffset( offsetBefore );
         }
 
         return ! collisionFound ;
@@ -413,48 +396,33 @@ bool PlayerItem::isCollidingWithLimitOfRoom( const std::string& onWhichWay )
 
 void PlayerItem::behave ()
 {
-        UserControlled* userBehavior = dynamic_cast< UserControlled* >( this->behavior );
+        UserControlled* userBehavior = dynamic_cast< UserControlled* >( getBehavior () );
+
         if ( userBehavior != nilPointer )
-        {
                 userBehavior->behave ( );
-        }
 }
 
 bool PlayerItem::update ()
 {
-        if ( behavior != nilPointer )
-        {
-                behavior->update ( );
-        }
+        if ( getBehavior() != nilPointer )
+                getBehavior()->update ( );
 
         return false;
 }
 
 void PlayerItem::wait ()
 {
-        ActivityOfItem activity = this->behavior->getActivityOfItem();
+        ActivityOfItem activity = getBehavior()->getActivityOfItem();
 
         // don’t wait while teleporting or loosing life
         if ( activity != Activity::BeginWayOutTeletransport && activity != Activity::WayOutTeletransport &&
                 activity != Activity::BeginWayInTeletransport && activity != Activity::WayInTeletransport &&
                 activity != Activity::MeetMortalItem && activity != Activity::Vanish )
         {
-                // get waiting frame by orientation of item
-                unsigned int orientOccident = ( orientation.getIntegerOfWay() == Way::Nowhere ? 0 : orientation.getIntegerOfWay() );
-                size_t frame = getDescriptionOfItem()->howManyFrames() * orientOccident ;
-                if ( frame >= howManyMotions() ) frame = 0;
+                // set waiting frame by orientation of item
+                changeFrame( firstFrame () );
 
-                if ( this->rawImage != nilPointer && this->rawImage != getMotionAt( frame ) )
-                {
-                        changeImage( getMotionAt( frame ) );
-
-                        if ( this->shadow != nilPointer )
-                        {
-                                changeShadow( getShadowAt( frame ) );
-                        }
-                }
-
-                this->behavior->changeActivityOfItem( Activity::Wait );
+                getBehavior()->changeActivityOfItem( Activity::Wait );
         }
 }
 

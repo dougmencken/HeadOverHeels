@@ -54,7 +54,8 @@ public:
                                                   const std::string& nameOfPlayer,
                                                   bool justEntered,
                                                   int x, int y, int z,
-                                                  const Way& orientation, const Way& wayOfEntry = Way::JustWait );
+                                                  const std::string& orientation,
+                                                  const std::string& wayOfEntry = "just wait" );
 
 private:
 

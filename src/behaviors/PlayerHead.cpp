@@ -47,7 +47,7 @@ PlayerHead::PlayerHead( const ItemPtr & item, const std::string& behavior ) :
         speedTimer->go ();
         fallTimer->go ();
         glideTimer->go ();
-        blinkingTimer->go ();
+        timerForBlinking->go ();
 }
 
 PlayerHead::~PlayerHead( )
@@ -370,15 +370,13 @@ void PlayerHead::wait( PlayerItem& playerItem )
 {
         playerItem.wait();
 
-        // Si está detenido entre 4 y 9 segundos entonces parpadea
-        if( blinkingTimer->getValue() >= ( rand() % 4 ) + 5 )
+        if ( timerForBlinking->getValue() >= ( rand() % 4 ) + 5 )
         {
-                blinkingTimer->reset();
+                timerForBlinking->reset();
                 activity = Activity::Blink;
         }
 
-        // Se comprueba si el jugador debe empezar a caer
-        if( FallKindOfActivity::getInstance().fall( this ) )
+        if ( FallKindOfActivity::getInstance().fall( this ) )
         {
                 speedTimer->reset();
                 activity = Activity::Fall;
@@ -387,18 +385,18 @@ void PlayerHead::wait( PlayerItem& playerItem )
 
 void PlayerHead::blink( PlayerItem& playerItem )
 {
-        double timeToBlink = blinkingTimer->getValue();
+        double timeToBlink = timerForBlinking->getValue();
 
-        if( ( timeToBlink > 0.0 && timeToBlink < 0.050 ) || ( timeToBlink > 0.400 && timeToBlink < 0.450 ) )
+        if ( ( timeToBlink > 0.0 && timeToBlink < 0.050 ) || ( timeToBlink > 0.400 && timeToBlink < 0.450 ) )
         {
                 playerItem.changeFrame( blinkFrames[ playerItem.getOrientation().toString () ] );
         }
-        else if( ( timeToBlink > 0.250 && timeToBlink < 0.300 ) || ( timeToBlink > 0.750 && timeToBlink < 0.800 ) )
+        else if ( ( timeToBlink > 0.250 && timeToBlink < 0.300 ) || ( timeToBlink > 0.750 && timeToBlink < 0.800 ) )
         {
         }
-        else if( timeToBlink > 0.800 )
+        else if ( timeToBlink > 0.800 )
         {
-                blinkingTimer->reset();
+                timerForBlinking->reset();
                 activity = Activity::Wait;
         }
 }

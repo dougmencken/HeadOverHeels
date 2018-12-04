@@ -60,7 +60,7 @@ void Isomot::prepare ()
         if ( view == nilPointer )
                 view = new Picture( ScreenWidth(), ScreenHeight() );
         else
-                view->fillWithColor( Color::orangeColor() );
+                view->fillWithColor( Color::byName( "orange" ) );
 
         // bin taken bonuses
         BonusManager::getInstance().reset();
@@ -96,12 +96,12 @@ void Isomot::continueSavedGame ( tinyxml2::XMLElement* characters )
                 {
                         std::string label = player->Attribute( "label" );
 
-                        bool isActiveCharacter = false;
+                        bool isActiveCharacter = false ;
                         tinyxml2::XMLElement* active = player->FirstChildElement( "active" );
                         if ( active != nilPointer && std::string( active->FirstChild()->ToText()->Value() ) == "true" )
                                 isActiveCharacter = true;
 
-                        std::string room = "no room";
+                        std::string room = "no room" ;
                         tinyxml2::XMLElement* roomFile = player->FirstChildElement( "room" );
                         if ( roomFile != nilPointer )
                                 room = roomFile->FirstChild()->ToText()->Value();
@@ -109,9 +109,9 @@ void Isomot::continueSavedGame ( tinyxml2::XMLElement* characters )
                         tinyxml2::XMLElement* xElement = player->FirstChildElement( "x" );
                         tinyxml2::XMLElement* yElement = player->FirstChildElement( "y" );
                         tinyxml2::XMLElement* zElement = player->FirstChildElement( "z" );
-                        int x = 0;
-                        int y = 0;
-                        int z = 0;
+                        int x = 0 ;
+                        int y = 0 ;
+                        int z = 0 ;
                         if ( xElement != nilPointer )
                                 x = std::atoi( xElement->FirstChild()->ToText()->Value() );
                         if ( yElement != nilPointer )
@@ -119,33 +119,33 @@ void Isomot::continueSavedGame ( tinyxml2::XMLElement* characters )
                         if ( zElement != nilPointer )
                                 z = std::atoi( zElement->FirstChild()->ToText()->Value() );
 
-                        unsigned int howManyLives = 0;
+                        unsigned int howManyLives = 0 ;
                         tinyxml2::XMLElement* lives = player->FirstChildElement( "lives" );
                         if ( lives != nilPointer )
                                 howManyLives = std::atoi( lives->FirstChild()->ToText()->Value() );
 
-                        std::string orientationString = "nowhere";
+                        std::string orientationString = "nowhere" ;
                         tinyxml2::XMLElement* orientation = player->FirstChildElement( "orientation" );
                         if ( orientation == nilPointer ) orientation = player->FirstChildElement( "direction" );
                         if ( orientation != nilPointer )
                                 orientationString = orientation->FirstChild()->ToText()->Value() ;
 
-                        std::string entryString = "just wait";
+                        std::string entryString = "just wait" ;
                         tinyxml2::XMLElement* entry = player->FirstChildElement( "entry" );
                         if ( entry != nilPointer )
                                 entryString = entry->FirstChild()->ToText()->Value() ;
 
-                        bool hasHorn = false;
+                        bool hasHorn = false ;
                         tinyxml2::XMLElement* horn = player->FirstChildElement( "hasHorn" );
                         if ( horn != nilPointer && std::string( horn->FirstChild()->ToText()->Value() ) == "yes" )
                                 hasHorn = true;
 
-                        bool hasHandbag = false;
+                        bool hasHandbag = false ;
                         tinyxml2::XMLElement* handbag = player->FirstChildElement( "hasHandbag" );
                         if ( handbag != nilPointer && std::string( handbag->FirstChild()->ToText()->Value() ) == "yes" )
                                 hasHandbag = true;
 
-                        unsigned int howManyDoughnuts = 0;
+                        unsigned int howManyDoughnuts = 0 ;
                         tinyxml2::XMLElement* donuts = player->FirstChildElement( "donuts" );
                         if ( donuts != nilPointer )
                                 howManyDoughnuts = std::atoi( donuts->FirstChild()->ToText()->Value() );
@@ -192,7 +192,7 @@ void Isomot::continueSavedGame ( tinyxml2::XMLElement* characters )
                                 GameManager::getInstance().setHeelsShield( 0 );
                         }
 
-                        mapManager.beginOldGameWithCharacter( room, label, x, y, z, Way( orientationString ), entryString, isActiveCharacter );
+                        mapManager.beginOldGameWithCharacter( room, label, x, y, z, orientationString, entryString, isActiveCharacter );
                 }
         }
 
@@ -261,7 +261,7 @@ Picture* Isomot::updateMe ()
         allegro::bitBlit( chequerboard->getAllegroPict(), view->getAllegroPict() );
 # else
         Color backgroundColor = Color::blackColor();
-        if ( GameManager::getInstance().charactersFly() ) backgroundColor = Color::darkBlueColor();
+        if ( GameManager::getInstance().charactersFly() ) backgroundColor = Color::byName( "dark blue" );
 
         view->fillWithColor( backgroundColor );
 # endif
@@ -279,8 +279,9 @@ Picture* Isomot::updateMe ()
         }
         else
         {
-                Room* previousRoom = activeRoom ;
+                assert( activeRoom->getMediator()->getActiveCharacter() != nilPointer );
                 PlayerItem& activeCharacter = * activeRoom->getMediator()->getActiveCharacter() ;
+                Room* previousRoom = activeRoom ;
 
                 // swap key changes character and possibly room
                 if ( InputManager::getInstance().swapTyped() )
@@ -343,13 +344,14 @@ Picture* Isomot::updateMe ()
         const int cameraDeltaX = activeRoom->getCamera()->getDeltaX();
         const int cameraDeltaY = activeRoom->getCamera()->getDeltaY();
 
+        if ( GameManager::getInstance().isSimpleGraphicSet() )
+                Color::multiplyWithColor( * activeRoom->getWhereToDraw(), Color::byName( activeRoom->getColor() ) );
+
         allegro::Pict::setWhereToDraw( view->getAllegroPict() );
 
-        allegro::bitBlit (
+        allegro::drawSprite (
                 activeRoom->getWhereToDraw()->getAllegroPict(),
-                cameraDeltaX, cameraDeltaY,
-                0, 0,
-                view->getWidth(), view->getHeight()
+                - cameraDeltaX, - cameraDeltaY
         );
 
         AllegroColor allegroWhiteColor = Color::whiteColor().toAllegroColor() ;
@@ -383,7 +385,7 @@ Picture* Isomot::updateMe ()
 
         if ( paused )
         {
-                Color::multiplyWithColor( view, Color::gray50Color() );
+                Color::multiplyWithColor( * view, Color::byName( "gray" ) );
         }
 
         allegro::Pict::setWhereToDraw( previousWhere );
@@ -549,7 +551,7 @@ void Isomot::handleMagicKeys ()
 
                                 PlayerItemPtr joinedPlayer( new PlayerItem(
                                         itemDescriptions.getDescriptionByLabel( nameOfAnotherPlayer ),
-                                        playerX, playerY, playerZ, way
+                                        playerX, playerY, playerZ, way.toString()
                                 ) );
 
                                 std::string behavior = "still";
@@ -582,7 +584,7 @@ void Isomot::handleMagicKeys ()
                                 int x = ( activeRoom->getLimitAt( "south" ) - activeRoom->getLimitAt( "north" ) + chapeauDescription->getWidthX() ) >> 1 ;
                                 int y = ( activeRoom->getLimitAt( "west" ) - activeRoom->getLimitAt( "east" ) + chapeauDescription->getWidthY() ) >> 1 ;
 
-                                FreeItemPtr chapeau( new FreeItem( chapeauDescription, x, y, 250, Way::Nowhere ) );
+                                FreeItemPtr chapeau( new FreeItem( chapeauDescription, x, y, 250, "none" ) );
                                 chapeau->setBehaviorOf( "behavior of something special" );
                                 activeRoom->addFreeItem( chapeau );
                         }
@@ -601,7 +603,7 @@ void Isomot::handleMagicKeys ()
                                 PlayerItemPtr teleportedPlayer( new PlayerItem(
                                         itemDescriptions.getDescriptionByLabel( nameOfPlayer ),
                                         teleportedX, teleportedY, teleportedZ,
-                                        whichWay
+                                        whichWay.toString()
                                 ) ) ;
 
                                 std::string behaviorOfPlayer = "still";
@@ -673,7 +675,7 @@ void Isomot::updateFinalRoom()
 
                 if ( arrived != nilPointer )
                 {
-                        FreeItemPtr character( new FreeItem( arrived, 66, 92, Top, Way::South ) );
+                        FreeItemPtr character( new FreeItem( arrived, 66, 92, Top, "south" ) );
                         activeRoom->addFreeItem( character );
                 }
 
@@ -689,35 +691,35 @@ void Isomot::updateFinalRoom()
                 // la corona de Safari
                 if ( gameManager.isFreePlanet( "safari" ) )
                 {
-                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 66, 75, Top, Way::Nowhere ) );
+                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 66, 75, Top, "none" ) );
                         activeRoom->addFreeItem( chapeau );
                         crowns++;
                 }
                 // la corona de Egyptus
                 if ( gameManager.isFreePlanet( "egyptus" ) )
                 {
-                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 66, 59, Top, Way::Nowhere ) );
+                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 66, 59, Top, "none" ) );
                         activeRoom->addFreeItem( chapeau );
                         crowns++;
                 }
                 // la corona de Penitentiary
                 if ( gameManager.isFreePlanet( "penitentiary" ) )
                 {
-                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 65, 107, Top, Way::Nowhere ) );
+                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 65, 107, Top, "none" ) );
                         activeRoom->addFreeItem( chapeau );
                         crowns++;
                 }
                 // la corona de Byblos
                 if ( gameManager.isFreePlanet( "byblos" ) )
                 {
-                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 65, 123, Top, Way::Nowhere ) );
+                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 65, 123, Top, "none" ) );
                         activeRoom->addFreeItem( chapeau );
                         crowns++;
                 }
                 // la corona de Blacktooth
                 if ( gameManager.isFreePlanet( "blacktooth" ) )
                 {
-                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 65, 91, Top, Way::Nowhere ) );
+                        FreeItemPtr chapeau( new FreeItem( descriptionOfChapeau, 65, 91, Top, "none" ) );
                         activeRoom->addFreeItem( chapeau );
                         crowns++;
                 }
@@ -749,7 +751,7 @@ void Isomot::updateFinalRoom()
                 {
                         FreeItemPtr finalBall( new FreeItem (
                                 itemDescriptions.getDescriptionByLabel( "ball" ),
-                                146, 93, LayerHeight, Way::Nowhere
+                                146, 93, LayerHeight, "none"
                         ) );
                         finalBall->setBehaviorOf( "behaivor of final ball" );
                         activeRoom->addFreeItem( finalBall );

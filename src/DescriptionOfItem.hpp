@@ -79,7 +79,7 @@ public:
                 return ( at < frames.size () ? frames[ at ] : 0 ) ;
         }
 
-        unsigned int howManyFrames () const {  return frames.size() ;  }
+        unsigned int howManyFramesPerOrientation () const {  return frames.size() ;  }
 
         bool isPartOfDoor () const {  return partOfDoor ;  }
 
@@ -146,7 +146,7 @@ private:
         unsigned int extraFrames ;
 
        /**
-        * Sequence of animation
+        * Sequence of animation per orientation
         */
         std::vector< unsigned int > frames ;
 

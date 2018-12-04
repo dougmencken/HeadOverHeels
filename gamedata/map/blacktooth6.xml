@@ -1,6 +1,7 @@
 <room scenery="blacktooth" tileSize="16">
     <xTiles>9</xTiles>
     <yTiles>8</yTiles>
+    <color>cyan.reduced</color>
     <floorKind>mortal</floorKind>
     <walls>
         <wall on="x">

@@ -169,6 +169,10 @@ public:
         */
         std::string getScenery () const {  return this->scenery ;  }
 
+        std::string getColor () const {  return this->color ;  }
+
+        void setColor ( const std::string & roomColor ) {  this->color = roomColor ;  }
+
        /**
         * Screen coordinate X of room’s origin
         */
@@ -260,8 +264,6 @@ protected:
 
 private:
 
-        ///Room( const Room & /* toCopy */ ) : Drawable( ), Mediated( )  { }
-
         friend class Mediator ;
 
         /**
@@ -288,6 +290,8 @@ private:
 
         std::string scenery ;
 
+        std::string color ;
+
        /**
         * Where the origin of room is
         */
@@ -303,7 +307,7 @@ private:
         std::string kindOfFloor ;
 
        /**
-        * Indices in sequence of how columns of grid items are drawn, diagonally from right to left
+        * Sequence of when to draw a column of grid items
         */
         unsigned int * drawSequence ;
 

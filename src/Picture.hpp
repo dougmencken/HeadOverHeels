@@ -63,6 +63,8 @@ public:
 
         void toGrayscale () ;
 
+        void expandOrCropTo ( unsigned int width, unsigned int height ) ;
+
         void flipHorizontal () ;
 
         void flipVertical () ;

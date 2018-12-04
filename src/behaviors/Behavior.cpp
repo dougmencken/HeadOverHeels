@@ -64,7 +64,7 @@ Behavior* Behavior::createBehaviorByName( const ItemPtr& item, const std::string
         if ( behavior == "behavior of big leap for player" || behavior == "behavior of big leap for character" )
                 behavior = "behavior of spring leap" ;
 
-        Behavior* behaviorToReturn = nilPointer;
+        Behavior* behaviorToReturn = nilPointer ;
 
         if ( behavior == "behavior of conveyor" )
         {
@@ -174,7 +174,7 @@ Behavior* Behavior::createBehaviorByName( const ItemPtr& item, const std::string
                 // yeah, do nothing
         }
 
-        return behaviorToReturn;
+        return behaviorToReturn ;
 }
 
 void Behavior::propagateActivity( const Item& sender, const ActivityOfItem& activity )

@@ -16,31 +16,29 @@ namespace iso
 PoolOfPictures * Item::poolOfPictures = new PoolOfPictures( ) ;
 
 
-Item::Item( const DescriptionOfItem* description, int z, const Way& way )
+Item::Item( const DescriptionOfItem* description, int z, const std::string& way )
       : Mediated(), Shady(),
+        descriptionOfItem( description ),
         uniqueName( description->getLabel() + "." + makeRandomString( 12 ) ),
         originalLabel( description->getLabel() ),
-        currentFrame( 0 ),
-        backwardsMotion( false ),
-        descriptionOfItem( description ),
-        xPos( 0 ),
-        yPos( 0 ),
-        zPos( z ),
+        processedImage( new Picture( description->getWidthOfFrame(), description->getHeightOfFrame() ) ),
         height( description->getHeight() ),
-        orientation( way ),
+        orientation( way == "none" ? Way( "nowhere" ) : Way( way ) ),
+        currentFrame( firstFrame () ),
+        backwardsMotion( false ),
         offset( std::pair< int, int >( 0, 0 ) ),
         collisionDetector( false ),
-        rawImage( nilPointer ),
-        shadow( nilPointer ),
-        processedImage( nilPointer ),
         motionTimer( new Timer () ),
         behavior( nilPointer ),
-        anchor( "" )
+        anchor( ),
+        xYet( 0 ),
+        yYet( 0 ),
+        zYet( z )
 {
         readGraphicsOfItem ();
 
         // item with more than one frame per orientation is animated
-        if ( descriptionOfItem->howManyFrames() > 1 )
+        if ( descriptionOfItem->howManyFramesPerOrientation() > 1 )
         {
                 motionTimer->go();
         }
@@ -48,43 +46,36 @@ Item::Item( const DescriptionOfItem* description, int z, const Way& way )
 
 Item::Item( const Item& item )
       : Mediated( item ), Shady( item.wantShadow ),
+        descriptionOfItem( item.descriptionOfItem ),
         uniqueName( item.uniqueName + " copy" ),
         originalLabel( item.originalLabel ),
-        currentFrame( item.currentFrame ),
-        backwardsMotion( item.backwardsMotion ),
-        descriptionOfItem( item.descriptionOfItem ),
-        xPos( item.xPos ),
-        yPos( item.yPos ),
-        zPos( item.zPos ),
+        processedImage( new Picture( * item.processedImage ) ),
         height( item.height ),
         orientation( item.orientation ),
+        currentFrame( item.currentFrame ),
+        backwardsMotion( item.backwardsMotion ),
         offset( item.offset ),
         collisionDetector( item.collisionDetector ),
-        rawImage( item.rawImage ),
-        shadow( item.shadow ),
-        processedImage( /* more in body */ nilPointer ),
         motionTimer( new Timer () ),
         behavior( nilPointer ),
-        anchor( item.anchor )
+        anchor( item.anchor ),
+        xYet( item.xYet ),
+        yYet( item.yYet ),
+        zYet( item.zYet )
 {
-        for ( std::vector< const Picture * >::const_iterator it = item.motion.begin (); it != item.motion.end (); ++ it )
+        for ( std::vector< PicturePtr >::const_iterator it = item.motion.begin (); it != item.motion.end (); ++ it )
         {
-                motion.push_back( new Picture( ( *it )->getAllegroPict() ) );
+                motion.push_back( PicturePtr( new Picture( ( *it )->getAllegroPict () ) ) );
         }
 
-        for ( std::vector< const Picture * >::const_iterator it = item.shadows.begin (); it != item.shadows.end (); ++ it )
+        for ( std::vector< PicturePtr >::const_iterator it = item.shadows.begin (); it != item.shadows.end (); ++ it )
         {
-                shadows.push_back( new Picture( ( *it )->getAllegroPict() ) );
+                shadows.push_back( PicturePtr( new Picture( ( *it )->getAllegroPict () ) ) );
         }
 
-        if ( descriptionOfItem->howManyFrames() > 1 )
+        if ( descriptionOfItem->howManyFramesPerOrientation() > 1 )
         {
                 motionTimer->go();
-        }
-
-        if ( item.processedImage != nilPointer )
-        {
-                this->processedImage = new Picture( *item.processedImage );
         }
 }
 
@@ -92,40 +83,29 @@ Item::~Item( )
 {
         delete behavior;
 
-        clearMotionFrames();
-        clearShadowFrames();
-
-        delete processedImage ;
+        motion.clear ();
+        shadows.clear ();
 }
 
 void Item::readGraphicsOfItem ()
 {
-        clearMotionFrames ();
-        clearShadowFrames ();
+        motion.clear ();
+        shadows.clear ();
 
         if ( ! descriptionOfItem->isPartOfDoor() && ! descriptionOfItem->getNameOfFile().empty() )
         {
                 createFrames( this, *descriptionOfItem );
 
-                unsigned int way = orientation.getIntegerOfWay();
-                if ( way == Way::Nowhere ) way = 0;
-                unsigned int firstFrame = ( descriptionOfItem->howManyOrientations() > 1 ?
-                                                descriptionOfItem->howManyFrames() * way : 0 );
+                currentFrame = firstFrame ();
 
-                this->rawImage = getMotionAt( firstFrame );
-
-                if ( descriptionOfItem->getWidthOfShadow() > 0 && descriptionOfItem->getHeightOfShadow() > 0 ) // item may have no shadow
-                {
+                if ( descriptionOfItem->getWidthOfShadow() > 0 && descriptionOfItem->getHeightOfShadow() > 0 )
                         createShadowFrames( this, *descriptionOfItem );
+        }
 
-                        this->shadow = getShadowAt( firstFrame );
-                }
-        }
-        else if ( descriptionOfItem->getNameOfFile().empty() )
-        {
-                Picture invisibleFrame( descriptionOfItem->getWidthOfFrame(), descriptionOfItem->getHeightOfFrame() );
-                addFrame( invisibleFrame );
-        }
+        if ( motion.empty() )
+                addFrame( Picture( descriptionOfItem->getWidthOfFrame(), descriptionOfItem->getHeightOfFrame() ) );
+
+        freshProcessedImage ();
 }
 
 bool Item::updateItem()
@@ -138,55 +118,50 @@ bool Item::updateItem()
         return isGone;
 }
 
-bool Item::animate()
+void Item::animate()
 {
-        bool cycle = false;
-
-        // item with more than one frame per orientation is animated
-        if ( descriptionOfItem->howManyFrames() > 1 )
+        if ( descriptionOfItem->howManyFramesPerOrientation() > 1 )
         {
-                // is it time to change frames
+                // is it time to change frame
                 if ( motionTimer->getValue() > descriptionOfItem->getDelayBetweenFrames() )
                 {
-                        // forwards motion
-                        if ( ! backwardsMotion )
+                        size_t newFrame = currentFrame ;
+
+                        if ( ! backwardsMotion ) // forwards motion
                         {
-                                if ( ++ currentFrame >= descriptionOfItem->howManyFrames() )
-                                {
-                                        currentFrame = 0;
-                                        cycle = true;
-                                }
+                                if ( animationFinished() )
+                                        newFrame = firstFrame() ;
+                                else
+                                        ++ newFrame ;
                         }
-                        // backwards motion
-                        else
+                        else // backwards motion
                         {
-                                if ( currentFrame -- <= 0 )
-                                {
-                                        currentFrame = descriptionOfItem->howManyFrames() - 1;
-                                        cycle = true;
-                                }
+                                if ( animationFinished() )
+                                        newFrame = firstFrame() + descriptionOfItem->howManyFramesPerOrientation() - 1 ;
+                                else
+                                        -- newFrame ;
                         }
 
-                        // which frame to show yet
-                        unsigned int orientOccident = ( orientation.getIntegerOfWay() == Way::Nowhere ? 0 : orientation.getIntegerOfWay() );
-                        unsigned int frame = currentFrame + ( descriptionOfItem->howManyOrientations() > 1 ? descriptionOfItem->howManyFrames() * orientOccident : 0 );
-
-                        // change frame
-                        if ( this->rawImage != nilPointer && this->rawImage != getMotionAt( frame ) )
-                        {
-                                changeImage( getMotionAt( frame ) );
-
-                                if ( this->shadow != nilPointer )
-                                {
-                                        changeShadow( getShadowAt( frame ) );
-                                }
-                        }
+                        changeFrame( newFrame );
 
                         motionTimer->reset();
                 }
         }
+}
 
-        return cycle;
+bool Item::animationFinished() const
+{
+        if ( atExtraFrame() ) return true ;
+
+        if ( backwardsMotion )
+                return currentFrame == firstFrame() ;
+        else
+                return currentFrame + 1 == firstFrame() + descriptionOfItem->howManyFramesPerOrientation() ;
+}
+
+bool Item::atExtraFrame() const
+{
+        return currentFrame >= howManyMotions() - descriptionOfItem->howManyExtraFrames() ;
 }
 
 void Item::metamorphInto( const std::string& labelOfItem, const std::string& initiatedBy )
@@ -205,84 +180,61 @@ void Item::metamorphInto( const std::string& labelOfItem, const std::string& ini
         readGraphicsOfItem ();
 }
 
-void Item::changeShadow( const Picture* newShadow )
+void Item::updateImage ()
 {
-        if ( shadow != newShadow )
-        {
-                this->shadow = newShadow;
-                // don’t bin old shadow, it is re~used
-        }
+        freshProcessedImage ();
 }
 
-void Item::setProcessedImage( Picture* newImage )
+void Item::updateShadow ()
 {
-        if ( processedImage != newImage )
-        {
-                delete processedImage ;
-                processedImage = newImage;
-        }
+}
+
+void Item::freshProcessedImage()
+{
+        processedImage = PicturePtr( new Picture( getRawImage () ) );
+        processedImage->setName( "processed " + getRawImage().getName() );
 }
 
 void Item::changeOrientation( const Way& way )
 {
-        if ( this->orientation.getIntegerOfWay() == way.getIntegerOfWay() )
+        if ( orientation.getIntegerOfWay() != way.getIntegerOfWay() )
         {
-                return;
-        }
+                this->orientation = way ;
 
-        if ( descriptionOfItem->howManyOrientations() > 1 )
-        {
-                // get frame for new orientation
-                unsigned int orientOccident = ( way.getIntegerOfWay() == Way::Nowhere ? 0 : way.getIntegerOfWay() );
-                unsigned int frame = descriptionOfItem->howManyFrames() * orientOccident;
-
-                if ( this->rawImage != nilPointer && this->rawImage != getMotionAt( frame ) )
-                {
-                        changeImage( getMotionAt( frame ) );
-
-                        if ( this->shadow != nilPointer )
-                                changeShadow( getShadowAt( frame ) );
-
-                        this->orientation = way;
-                }
-        }
-        else
-        {
-                this->orientation = way;
+                changeFrame( firstFrame() );
         }
 }
 
-void Item::changeFrame( const unsigned int newFrame )
+void Item::changeFrame( size_t newFrame )
 {
         if ( howManyMotions() > newFrame )
         {
-                if ( this->rawImage != nilPointer && this->rawImage != getMotionAt( newFrame ) )
+                if ( currentFrame != newFrame )
                 {
-                        changeImage( getMotionAt( newFrame ) );
+                        currentFrame = newFrame ;
 
-                        if ( this->shadow != nilPointer )
-                                changeShadow( getShadowAt( newFrame ) );
+                        updateImage ();
+
+                        if ( ! shadows.empty() ) updateShadow ();
                 }
-
-                this->currentFrame = newFrame;
         }
 }
 
 bool Item::canAdvanceTo( int x, int y, int z )
 {
         // coordinates before change
-        int originalX = this->getX();
-        int originalY = this->getY();
-        int originalZ = this->getZ();
+        int originalX = xYet ;
+        int originalY = yYet ;
+        int originalZ = zYet ;
 
         mediator->clearStackOfCollisions( );
 
         bool collisionFound = false;
 
         // new coordinates
-        this->xPos += x;
-        this->yPos += y;
-        this->zPos += z;
+        xYet += x ;
+        yYet += y ;
+        zYet += z ;
 
         // look for collision with wall
         if ( this->getX() < mediator->getRoom()->getLimitAt( "north" ) )
@@ -316,9 +268,9 @@ bool Item::canAdvanceTo( int x, int y, int z )
         }
 
         // restore original coordinates
-        this->xPos = originalX;
-        this->yPos = originalY;
-        this->zPos = originalZ;
+        xYet = originalX ;
+        yYet = originalY ;
+        zYet = originalZ ;
 
         return ! collisionFound;
 }
@@ -333,6 +285,22 @@ bool Item::intersectsWith( const Item& item ) const
                         ( item.getZ() < this->getZ() + static_cast< int >( this->getHeight() ) ) ;
 }
 
+bool Item::doGraphicsOverlap( const Item& item ) const
+{
+        return  ( this->getOffsetX() < item.getOffsetX() + static_cast< int >( item.getRawImage().getWidth() ) ) &&
+                        ( item.getOffsetX() < this->getOffsetX() + static_cast< int >( this->getRawImage().getWidth() ) ) &&
+                ( this->getOffsetY() < item.getOffsetY() + static_cast< int >( item.getRawImage().getHeight() ) ) &&
+                        ( item.getOffsetY() < this->getOffsetY() + static_cast< int >( this->getRawImage().getHeight() ) ) ;
+}
+
+bool Item::doGraphicsOverlapAt( const Item& item, std::pair< int, int > offset ) const
+{
+        return  ( this->getOffsetX() < offset.first + static_cast< int >( item.getRawImage().getWidth() ) ) &&
+                        ( offset.first < this->getOffsetX() + static_cast< int >( this->getRawImage().getWidth() ) ) &&
+                ( this->getOffsetY() < offset.second + static_cast< int >( item.getRawImage().getHeight() ) ) &&
+                        ( offset.second < this->getOffsetY() + static_cast< int >( this->getRawImage().getHeight() ) ) ;
+}
+
 void Item::setBehaviorOf( const std::string& behavior )
 {
         delete this->behavior ;
@@ -341,14 +309,14 @@ void Item::setBehaviorOf( const std::string& behavior )
 
 void Item::doForthMotion ()
 {
-        this->backwardsMotion = false;
-        this->currentFrame = 0;
+        backwardsMotion = false ;
+        currentFrame = firstFrame() ;
 }
 
 void Item::doBackwardsMotion ()
 {
-        this->backwardsMotion = true;
-        this->currentFrame = descriptionOfItem->howManyFrames() - 1;
+        backwardsMotion = true ;
+        currentFrame = firstFrame() + descriptionOfItem->howManyFramesPerOrientation() - 1 ;
 }
 
 const std::string& Item::getLabel() const
@@ -374,6 +342,17 @@ bool Item::isMortal() const
 unsigned short Item::howManyOrientations() const
 {
         return descriptionOfItem->howManyOrientations() ;
+}
+
+size_t Item::firstFrameForOrientation ( const Way& way ) const
+{
+        if ( descriptionOfItem->howManyOrientations() > 1 )
+        {
+                unsigned int orientOccident = ( way.getIntegerOfWay() == Way::Nowhere ? 0 : way.getIntegerOfWay() );
+                return descriptionOfItem->howManyFramesPerOrientation() * orientOccident ;
+        }
+
+        return 0 ;
 }
 
 float Item::getSpeed() const
@@ -433,13 +412,17 @@ void Item::createFrames( Item* item, const DescriptionOfItem& description )
 
         for ( unsigned int o = 0 ; o < description.howManyOrientations() ; o ++ )
         {
-                for ( unsigned int f = 0 ; f < description.howManyFrames() ; f ++ )
+                for ( unsigned int f = 0 ; f < description.howManyFramesPerOrientation() ; f ++ )
                 {
                         Picture animationFrame( * rawFrames[ ( o * rawRow ) + description.getFrameAt( f ) ] );
-                        animationFrame.setName( description.getLabel() + " " + util::toStringWithOrdinalSuffix( o ) + " row " + util::toStringWithOrdinalSuffix( f ) + " frame" );
+                        animationFrame.setName( description.getLabel() + " " +
+                                                        util::toStringWithOrdinalSuffix( o ) + " orientation " +
+                                                        util::toStringWithOrdinalSuffix( f ) + " frame" );
+
                 # if  defined( SAVE_ITEM_FRAMES )  &&  SAVE_ITEM_FRAMES
                         animationFrame.saveAsPNG( iso::homePath() );
                 # endif
+
                         item->addFrame( animationFrame );
                 }
         }
@@ -489,13 +472,17 @@ void Item::createShadowFrames( Item* item, const DescriptionOfItem& description 
 
         for ( unsigned int o = 0 ; o < description.howManyOrientations() ; o ++ )
         {
-                for ( unsigned int f = 0 ; f < description.howManyFrames() ; f ++ )
+                for ( unsigned int f = 0 ; f < description.howManyFramesPerOrientation() ; f ++ )
                 {
                         Picture shadowFrame( * rawShadows[ ( o * rawRow ) + description.getFrameAt( f ) ] );
-                        shadowFrame.setName( description.getLabel() + " " + util::toStringWithOrdinalSuffix( o ) + " row " + util::toStringWithOrdinalSuffix( f ) + " shadow" );
+                        shadowFrame.setName( description.getLabel() + " " +
+                                                util::toStringWithOrdinalSuffix( o ) + " orientation " +
+                                                util::toStringWithOrdinalSuffix( f ) + " shadow" );
+
                 # if  defined( SAVE_ITEM_FRAMES )  &&  SAVE_ITEM_FRAMES
                         shadowFrame.saveAsPNG( iso::homePath() );
                 # endif
+
                         item->addFrameOfShadow( shadowFrame );
                 }
         }

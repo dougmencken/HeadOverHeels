@@ -24,7 +24,7 @@ public:
 
         explicit SelectLanguage( const std::string& language ) ;
 
-        std::string getNameOfAction () const {  return "SelectLanguage" ;  }
+        virtual std::string getNameOfAction () const {  return "SelectLanguage" ;  }
 
 protected:
 

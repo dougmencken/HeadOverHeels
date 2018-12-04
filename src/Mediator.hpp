@@ -67,21 +67,27 @@ public:
         */
         void endUpdate () ;
 
-        void remaskWithFreeItem( const FreeItem & item ) ;
+        void wantToMaskWithFreeItemAt ( const FreeItem & item, std::pair < int, int > offset ) ;
 
-        void remaskWithGridItem( const GridItem & gridItem ) ;
+        void wantToMaskWithFreeItem ( const FreeItem & item ) ;
 
-        void reshadeWithGridItem( const GridItem & gridItem ) ;
+        void wantToMaskWithGridItemAt ( const GridItem & gridItem, int x, int y, int z, std::pair < int, int > offset ) ;
 
-        void reshadeWithFreeItem( const FreeItem & freeItem ) ;
+        void wantToMaskWithGridItem ( const GridItem & gridItem ) ;
 
-        void shadeFreeItemsBeneathItem ( const Item & item ) ;
+        void wantShadowFromGridItem ( const GridItem & gridItem ) ;
 
-        void castShadowOnFloor( FloorTile & floorTile ) ;
+        void wantShadowFromFreeItemAt ( const FreeItem & freeItem, int x, int y, int z ) ;
 
-        void castShadowOnGridItem( GridItem & gridItem ) ;
+        void wantShadowFromFreeItem ( const FreeItem & freeItem ) ;
 
-        void castShadowOnFreeItem( FreeItem & freeItem ) ;
+        void shadeFreeItemsBeneathItemAt ( const Item & item, int x, int y, int z ) ;
+
+        void castShadowOnFloor ( FloorTile & floorTile ) ;
+
+        void castShadowOnGridItem ( GridItem & gridItem ) ;
+
+        void castShadowOnFreeItem ( FreeItem & freeItem ) ;
 
         void maskFreeItem ( FreeItem & freeItem ) ;
 

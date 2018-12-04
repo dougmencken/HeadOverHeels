@@ -170,17 +170,17 @@ void MapManager::readMap ( const std::string& fileName )
 
                         autouniqueptr< allegro::Pict > stripe( allegro::Pict::newPict( ScreenWidth(), heightOfChar + interligne ) );
 
-                        allegro::Pict::setWhereToDraw( *stripe.get() ) ;
+                        allegro::Pict::setWhereToDraw( *stripe ) ;
 
                         unsigned int textX = ( ScreenWidth() - roomInRooms.length() * widthOfChar ) >> 1 ;
-                        stripe->clearToColor( Color::blueColor().toAllegroColor() );
-                        allegro::textOut( roomInRooms, textX, ( interligne >> 1 ) + 1, Color::yellowColor().toAllegroColor() );
-                        allegro::bitBlit( *stripe.get(), allegro::Pict::theScreen(), 0, atY );
+                        stripe->clearToColor( Color::byName( "blue" ).toAllegroColor() );
+                        allegro::textOut( roomInRooms, textX, ( interligne >> 1 ) + 1, Color::byName( "yellow" ).toAllegroColor() );
+                        allegro::bitBlit( *stripe, allegro::Pict::theScreen(), 0, atY );
 
                         textX = ( ScreenWidth() - roomFile.length() * widthOfChar ) >> 1 ;
-                        stripe->clearToColor( Color::blueColor().toAllegroColor() );
-                        allegro::textOut( roomFile, textX, ( interligne >> 1 ) - 1, Color::greenColor().toAllegroColor() );
-                        allegro::bitBlit( *stripe.get(), allegro::Pict::theScreen(), 0, atY + ( heightOfChar + interligne ) );
+                        stripe->clearToColor( Color::byName( "blue" ).toAllegroColor() );
+                        allegro::textOut( roomFile, textX, ( interligne >> 1 ) - 1, Color::byName( "green" ).toAllegroColor() );
+                        allegro::bitBlit( *stripe, allegro::Pict::theScreen(), 0, atY + ( heightOfChar + interligne ) );
 
                         allegro::Pict::resetWhereToDraw() ;
 
@@ -236,13 +236,13 @@ void MapManager::beginNewGame( const std::string& headRoom, const std::string& h
                         if ( headRoom != heelsRoom )
                         {
                                 // create character Head
-                                RoomBuilder::createPlayerInRoom( firstRoom, "head", true, centerX, centerY, 0, Way::West );
+                                RoomBuilder::createPlayerInRoom( firstRoom, "head", true, centerX, centerY, 0, "west" );
                                 firstRoom->activateCharacterByLabel( "head" );
                         }
                         else
                         {
                                 // create character Head over Heels
-                                RoomBuilder::createPlayerInRoom( firstRoom, "headoverheels", true, centerX, centerY, 0, Way::West );
+                                RoomBuilder::createPlayerInRoom( firstRoom, "headoverheels", true, centerX, centerY, 0, "west" );
                                 firstRoom->activateCharacterByLabel( "headoverheels" );
                         }
 
@@ -274,7 +274,7 @@ void MapManager::beginNewGame( const std::string& headRoom, const std::string& h
                                 int centerY = secondRoom->getYCenterForItem( heelsData );
 
                                 // create character Heels
-                                RoomBuilder::createPlayerInRoom( secondRoom, "heels", true, centerX, centerY, 0, Way::South );
+                                RoomBuilder::createPlayerInRoom( secondRoom, "heels", true, centerX, centerY, 0, "south" );
                                 secondRoom->activateCharacterByLabel( "heels" );
 
                                 secondRoom->setVisited( true );
@@ -290,11 +290,12 @@ void MapManager::beginNewGame( const std::string& headRoom, const std::string& h
 }
 
 void MapManager::beginOldGameWithCharacter( const std::string& roomFile, const std::string& character,
-                                            int x, int y, int z, const Way& direction, const std::string& entry, bool active )
+                                            int x, int y, int z, const std::string& direction, const std::string& entry, bool active )
 {
-        std::cout << "MapManager::beginOldGameWithCharacter( \"" << roomFile << "\", \"" << character << "\", "
+        std::cout << "MapManager::beginOldGameWithCharacter( \""
+                        << roomFile << "\", \"" << character << "\", "
                         << x << ", " << y << ", " << z << ", \""
-                        << direction.toString() << "\", \"" << entry << "\", "
+                        << direction << "\", \"" << entry << "\", "
                         << ( active ? "true" : "false" ) << " )"
                         << std::endl ;
 
@@ -318,7 +319,7 @@ void MapManager::beginOldGameWithCharacter( const std::string& roomFile, const s
                 // create player
                 PlayerItemPtr player = RoomBuilder::createPlayerInRoom(
                                                 room, character, true,
-                                                x, y, z, direction, Way( entry ) );
+                                                x, y, z, direction, entry );
 
                 room->setVisited( true );
 
@@ -367,7 +368,7 @@ Room* MapManager::rebuildRoom( Room* room )
                 std::string nameOfActivePlayer = room->getMediator()->getLabelOfActiveCharacter();
                 std::string nameOfActivePlayerBeforeJoining = room->getMediator()->getLastActiveCharacterBeforeJoining();
 
-                Way theWay( "nowhere" );
+                std::string theWay( "nowhere" );
                 PlayerItemPtr alivePlayer ;
 
                 // for each player entered this room
@@ -393,8 +394,8 @@ Room* MapManager::rebuildRoom( Room* room )
                                         int playerX = player->getX();
                                         int playerY = player->getY();
                                         int playerZ = player->getZ();
-                                        Way playerOrientation = player->getOrientation();
-                                        Way playerEntry = player->getWayOfEntry();
+                                        std::string playerOrientation = player->getOrientation().toString ();
+                                        std::string playerEntry = player->getWayOfEntry() ;
 
                                         // forget composite player
                                         room->removePlayerFromRoom( * room->getMediator()->getActiveCharacter(), true );
@@ -411,9 +412,9 @@ Room* MapManager::rebuildRoom( Room* room )
                                         continue;
                                 }
 
-                                theWay = player->getOrientation();
+                                theWay = player->getOrientation().toString ();
 
-                                Way entry = player->getWayOfEntry();
+                                std::string entry = player->getWayOfEntry() ;
 
                                 // create player
                                 alivePlayer = RoomBuilder::createPlayerInRoom( newRoom,
@@ -423,7 +424,7 @@ Room* MapManager::rebuildRoom( Room* room )
                                                                                theWay, entry );
 
                                 if ( alivePlayer != nilPointer )
-                                        alivePlayer->autoMoveOnEntry( entry.toString() );
+                                        alivePlayer->autoMoveOnEntry( entry );
                         }
 
                         ++it ; // next player
@@ -511,8 +512,6 @@ Room* MapManager::changeRoom( const Way& wayOfExit )
         const int exitY = oldItemOfRoamer.getY ();
         const int exitZ = oldItemOfRoamer.getZ ();
 
-        const Way exitOrientation = oldItemOfRoamer.getOrientation ();
-
         // get limits of room
         int northBound = previousRoom->getLimitAt( "north" );
         int eastBound = previousRoom->getLimitAt( "east" );
@@ -520,13 +519,15 @@ Room* MapManager::changeRoom( const Way& wayOfExit )
         int westBound = previousRoom->getLimitAt( "west" );
         // plus there’s possibility to exit and to enter room via floor, roof or teletransport
 
+        const std::string exitOrientation = oldItemOfRoamer.getOrientation().toString ();
+
         // remove active player from previous room
         previousRoom->removePlayerFromRoom( oldItemOfRoamer, true );
 
         if ( ! previousRoom->isAnyPlayerStillInRoom() || nameOfRoamer == "headoverheels" )
         {
                 std::cout << "there’re no players left in room \"" << fileOfPreviousRoom << "\""
-                                << " so bye that room" << std::endl ;
+                                << " thus bye that room" << std::endl ;
 
                 removeRoomInPlay( previousRoom );
         }
@@ -537,16 +538,17 @@ Room* MapManager::changeRoom( const Way& wayOfExit )
         addRoomInPlay( newRoom );
 
         // calculate entry position in new room
+
         int entryX = exitX ;
         int entryY = exitY ;
         int entryZ = exitZ ;
 
-        std::cout << "exit coordinates are x=" << exitX << " y=" << exitY << " z=" << exitZ << std::endl ;
+        std::cout << "exit coordinates from room \"" << fileOfPreviousRoom << "\" are x=" << exitX << " y=" << exitY << " z=" << exitZ << std::endl ;
         newRoom->calculateEntryCoordinates (
                 wayOfEntry, descriptionOfRoamer->getWidthX(), descriptionOfRoamer->getWidthY(),
                 northBound, eastBound, southBound, westBound, &entryX, &entryY, &entryZ
         ) ;
-        std::cout << "entry coordinates are x=" << entryX << " y=" << entryY << " z=" << entryZ << std::endl ;
+        std::cout << "entry coordinates to room \"" << fileOfNextRoom << "\" are x=" << entryX << " y=" << entryY << " z=" << entryZ << std::endl ;
 
         // create player
 
@@ -558,8 +560,8 @@ Room* MapManager::changeRoom( const Way& wayOfExit )
         // no taken item in new room
         GameManager::getInstance().emptyHandbag();
 
-        PlayerItemPtr newItemOfRoamer = RoomBuilder::createPlayerInRoom( newRoom, nameOfRoamer, true, entryX, entryY, entryZ, exitOrientation, wayOfEntry );
-
+        PlayerItemPtr newItemOfRoamer = RoomBuilder::createPlayerInRoom( newRoom, nameOfRoamer, true, entryX, entryY, entryZ,
+                                                                         exitOrientation, wayOfEntry.toString () );
         if ( newItemOfRoamer != nilPointer )
         {
                 newItemOfRoamer->autoMoveOnEntry( wayOfEntry.toString() );

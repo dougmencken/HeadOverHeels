@@ -32,7 +32,7 @@ public:
 
         CreateVideoMenu( ) ;
 
-        std::string getNameOfAction () const {  return "CreateVideoMenu" ;  }
+        virtual std::string getNameOfAction () const {  return "CreateVideoMenu" ;  }
 
 protected:
 

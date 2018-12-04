@@ -33,7 +33,7 @@ public:
 
         virtual ~CreatePlanetsScreen( ) ;
 
-        std::string getNameOfAction () const {  return "CreatePlanetsScreen" ;  }
+        virtual std::string getNameOfAction () const {  return "CreatePlanetsScreen" ;  }
 
         void liberateBlacktooth() {  blacktoothFree = true ;  }
 

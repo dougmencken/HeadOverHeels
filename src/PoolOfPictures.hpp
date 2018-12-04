@@ -31,15 +31,13 @@ public:
 
         void clear () {  pictures.clear() ;  }
 
-        PicturePtr getPicture ( const std::string & imageFile ) const
-        {
-                std::map< std::string, PicturePtr >::const_iterator pi = pictures.find( imageFile ) ;
-                return ( pi != pictures.end () ) ? ( *pi ).second : PicturePtr () ;
-        }
+        PicturePtr getPicture ( const std::string & imageFile ) const ;
 
         PicturePtr getOrLoadAndGet ( const std::string & imageFile ) ;
 
         PicturePtr getOrLoadAndGetOrMakeAndGet ( const std::string & imageFile, unsigned int imageWidth, unsigned int imageHeight ) ;
+
+        void putPicture ( const std::string & imageFile, const PicturePtr & picture ) ;
 
 private:
 

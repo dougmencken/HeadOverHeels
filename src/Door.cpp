@@ -54,7 +54,7 @@ Door::Door( const ItemDescriptions& itemDescriptions, const std::string& label, 
 
         const DescriptionOfItem* leftJambData = itemDescriptions.getDescriptionByLabel( labelOfDoor + "~leftjamb" );
 
-        leftJambImage = cutOutLeftJamb( *pictureOfDoor.get(),
+        leftJambImage = cutOutLeftJamb( *pictureOfDoor,
                                         leftJambData->getWidthX(), leftJambData->getWidthY(), leftJambData->getHeight(),
                                         lintelData->getWidthY(), lintelData->getHeight(),
                                         way );
@@ -64,7 +64,7 @@ Door::Door( const ItemDescriptions& itemDescriptions, const std::string& label, 
 
         const DescriptionOfItem* rightJambData = itemDescriptions.getDescriptionByLabel( labelOfDoor + "~rightjamb" );
 
-        rightJambImage = cutOutRightJamb( *pictureOfDoor.get(),
+        rightJambImage = cutOutRightJamb( *pictureOfDoor,
                                         rightJambData->getWidthX(), rightJambData->getWidthY(), rightJambData->getHeight(),
                                         lintelData->getWidthX(), lintelData->getHeight(),
                                         way );
@@ -72,7 +72,7 @@ Door::Door( const ItemDescriptions& itemDescriptions, const std::string& label, 
 
         // cut out lintel
 
-        lintelImage = cutOutLintel( *pictureOfDoor.get(),
+        lintelImage = cutOutLintel( *pictureOfDoor,
                                         lintelData->getWidthX(), lintelData->getWidthY(), lintelData->getHeight(),
                                         leftJambData->getWidthX(), leftJambData->getWidthY(),
                                         rightJambData->getWidthX(), rightJambData->getWidthY(),
@@ -278,12 +278,11 @@ FreeItemPtr Door::getLeftJamb()
                                         ;
                         }
 
-                        leftJamb = FreeItemPtr( new FreeItem( leftJambData, x, y, Top, Way::Nowhere ) );
-                        leftJamb->clearMotionFrames();
-
-
-
-                        leftJamb->addFrame( *leftJambImage );
+                        leftJamb = FreeItemPtr( new FreeItem( leftJambData, x, y, Top, "none" ) );
+                        leftJamb->getRawImageToChangeIt().expandOrCropTo( leftJambImage->getWidth (), leftJambImage->getHeight () );
+                        allegro::bitBlit( leftJambImage->getAllegroPict(), leftJamb->getRawImageToChangeIt ().getAllegroPict() );
+                        leftJamb->getRawImageToChangeIt().setName( leftJambImage->getName() );
+                        leftJamb->freshBothProcessedImages ();
                         leftJamb->setUniqueName( leftJamb->getLabel() + " " + makeRandomString( 8 ) );
                 }
         }
@@ -340,9 +339,11 @@ FreeItemPtr Door::getRightJamb()
                                         ;
                         }
 
-                        rightJamb = FreeItemPtr( new FreeItem( rightJambData, x, y, Top, Way::Nowhere ) );
-                        rightJamb->clearMotionFrames();
-                        rightJamb->addFrame( *rightJambImage );
+                        rightJamb = FreeItemPtr( new FreeItem( rightJambData, x, y, Top, "none" ) );
+                        rightJamb->getRawImageToChangeIt().expandOrCropTo( rightJambImage->getWidth (), rightJambImage->getHeight () );
+                        allegro::bitBlit( rightJambImage->getAllegroPict(), rightJamb->getRawImageToChangeIt ().getAllegroPict() );
+                        rightJamb->getRawImageToChangeIt().setName( rightJambImage->getName() );
+                        rightJamb->freshBothProcessedImages ();
                         rightJamb->setUniqueName( rightJamb->getLabel() + " " + makeRandomString( 8 ) );
                 }
         }
@@ -395,9 +396,11 @@ FreeItemPtr Door::getLintel()
                                         ;
                         }
 
-                        lintel = FreeItemPtr( new FreeItem( lintelData, x, y, Top, Way::Nowhere ) );
-                        lintel->clearMotionFrames();
-                        lintel->addFrame( *lintelImage );
+                        lintel = FreeItemPtr( new FreeItem( lintelData, x, y, Top, "none" ) );
+                        lintel->getRawImageToChangeIt().expandOrCropTo( lintelImage->getWidth (), lintelImage->getHeight () );
+                        allegro::bitBlit( lintelImage->getAllegroPict(), lintel->getRawImageToChangeIt ().getAllegroPict() );
+                        lintel->getRawImageToChangeIt().setName( lintelImage->getName() );
+                        lintel->freshBothProcessedImages ();
                         lintel->setUniqueName( lintel->getLabel() + " " + makeRandomString( 8 ) );
                 }
         }

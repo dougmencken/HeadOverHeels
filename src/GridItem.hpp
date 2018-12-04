@@ -44,7 +44,7 @@ public:
          * @param z Position on Z, or how far is floor
          * @param way Initial orientation of item
          */
-        GridItem( const DescriptionOfItem * description, int cx, int cy, int z, const Way& way ) ;
+        GridItem( const DescriptionOfItem * description, int cx, int cy, int z, const std::string& way ) ;
 
         virtual ~GridItem( ) ;
 
@@ -58,25 +58,14 @@ public:
                 {  return getOriginalLabel().find( "wall-y" ) != std::string::npos &&
                                 getOriginalLabel().find( "invisible-wall" ) == std::string::npos ;  }
 
+        virtual void calculateOffset () ;
+
         /**
          * Draw this grid item
          */
         virtual void draw () ;
 
-        virtual void changeImage ( const Picture * newImage ) ;
-
-        virtual void changeShadow ( const Picture * newShadow ) ;
-
         virtual bool addToPosition ( int x, int y, int z ) ;
-
-protected:
-
-        /**
-         * Position ( X, Y ) of the cell in room where this item is
-         */
-        std::pair < int, int > cell ;
-
-public:
 
         /**
          * Position on X of the cell in room where this item is
@@ -89,6 +78,17 @@ public:
         int getCellY () const {  return cell.second ;  }
 
         unsigned int getColumnOfGrid () const ;
+
+protected:
+
+        /**
+         * Position ( X, Y ) of the cell in room where this item is
+         */
+        std::pair < int, int > cell ;
+
+        virtual void updateImage () ;
+
+        virtual void updateShadow () ;
 
 };
 

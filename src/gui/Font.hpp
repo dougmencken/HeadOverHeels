@@ -37,7 +37,7 @@ public:
          * @param color Color of letters
          * @param doubleHeight Double height of letters
          */
-        Font( const std::string& name, const Color & color, bool doubleHeight = false ) ;
+        Font( const std::string & name, const std::string & color, bool doubleHeight = false ) ;
 
         virtual ~Font( ) ;
 
@@ -62,7 +62,7 @@ private:
 
         std::string fontName ;
 
-        Color fontColor ;
+        std::string fontColor ;
 
         /**
          * Width, in pixels, of each letter, game fonts are monospaced

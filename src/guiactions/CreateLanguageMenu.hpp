@@ -31,7 +31,7 @@ public:
 
         ~CreateLanguageMenu( ) ;
 
-        std::string getNameOfAction () const {  return "CreateLanguageMenu" ;  }
+        virtual std::string getNameOfAction () const {  return "CreateLanguageMenu" ;  }
 
 protected:
 

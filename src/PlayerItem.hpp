@@ -26,7 +26,7 @@ class GameManager ;
 
 
 /**
- * Item of player controller by the user
+ * Item of character controlled by the user
  */
 
 class PlayerItem : public FreeItem
@@ -34,15 +34,11 @@ class PlayerItem : public FreeItem
 
 public:
 
-        PlayerItem( const DescriptionOfItem* description, int x, int y, int z, const Way& orientation ) ;
+        PlayerItem( const DescriptionOfItem* description, int x, int y, int z, const std::string& orientation ) ;
 
-        /**
-         * Constructor copia. No copia los atributos que son punteros
-         * @param playerItem Un objeto de esta clase
-         */
         PlayerItem( const PlayerItem& playerItem ) ;
 
-        virtual ~PlayerItem( ) ;
+        virtual ~PlayerItem( ) { }
 
         virtual std::string whichKindOfItem () const {  return "player item" ;  }
 
@@ -122,12 +118,57 @@ public:
 
         virtual bool addToPosition ( int x, int y, int z ) ;
 
+        void placeItemInBag ( const std::string & labelOfItem, const std::string & behavior ) ;
+
+        const DescriptionOfItem * getDescriptionOfTakenItem () const {  return descriptionOfTakenItem ;  }
+
+        const std::string & getBehaviorOfTakenItem () const {  return this->behaviorOfTakenItem ;  }
+
+        unsigned char getLives () const {  return this->lives ;  }
+
+        /**
+         * Returns remaining steps at double speed between 0 and 99
+         */
+        unsigned int getHighSpeed () const {  return this->highSpeed ;  }
+
+        /**
+         * Returns number of high jumps between 0 and 10
+         */
+        unsigned int getHighJumps () const {  return this->highJumps ;  }
+
+        /**
+         * Character has its magic item, horn or bag, or not
+         */
+        bool hasTool ( const std::string& label ) const ;
+
+        unsigned short getDoughnuts () const {  return this->howManyDoughnuts ;  }
+
+        bool hasShield () const {  return shieldRemaining > 0 ;  }
+
+        void setWayOfExit ( const std::string& way ) ;
+
+        const std::string& getWayOfExit () const {  return wayOfExit ;  }
+
+        const std::string& getWayOfEntry () const {  return wayOfEntry ;  }
+
+        void setWayOfEntry ( const std::string& way ) {  wayOfEntry = way ;  }
+
 protected:
 
         /**
          * See if player crosses limits of room, if yes then change rooms
          */
         bool isCollidingWithLimitOfRoom( const std::string& onWhichWay ) ;
+
+        void setLives ( unsigned char lives ) {  this->lives = lives ;  }
+
+        void setHighSpeed ( unsigned int highSpeed ) {  this->highSpeed = highSpeed ;  }
+
+        void setHighJumps ( unsigned int highJumps ) {  this->highJumps = highJumps ;  }
+
+        void setDoughnuts ( const unsigned short howMany ) {  this->howManyDoughnuts = howMany ;  }
+
+        void setShieldTime ( float seconds ) ;
 
 private:
 
@@ -178,55 +219,6 @@ private:
         const DescriptionOfItem * descriptionOfTakenItem ;
 
         std::string behaviorOfTakenItem ;
-
-protected:
-
-        void setLives ( unsigned char lives ) {  this->lives = lives ;  }
-
-        void setHighSpeed ( unsigned int highSpeed ) {  this->highSpeed = highSpeed ;  }
-
-        void setHighJumps ( unsigned int highJumps ) {  this->highJumps = highJumps ;  }
-
-        void setDoughnuts ( const unsigned short howMany ) {  this->howManyDoughnuts = howMany ;  }
-
-        void setShieldTime ( float seconds ) ;
-
-public:
-
-        void placeItemInBag ( const std::string & labelOfItem, const std::string & behavior ) ;
-
-        const DescriptionOfItem * getDescriptionOfTakenItem () const {  return descriptionOfTakenItem ;  }
-
-        const std::string & getBehaviorOfTakenItem () const {  return this->behaviorOfTakenItem ;  }
-
-        unsigned char getLives () const {  return this->lives ;  }
-
-        /**
-         * Returns remaining steps at double speed between 0 and 99
-         */
-        unsigned int getHighSpeed () const {  return this->highSpeed ;  }
-
-        /**
-         * Returns number of high jumps between 0 and 10
-         */
-        unsigned int getHighJumps () const {  return this->highJumps ;  }
-
-        /**
-         * Character has its magic item, horn or bag, or not
-         */
-        bool hasTool ( const std::string& label ) const ;
-
-        unsigned short getDoughnuts () const {  return this->howManyDoughnuts ;  }
-
-        bool hasShield () const {  return shieldRemaining > 0 ;  }
-
-        void setWayOfExit ( const std::string& way ) ;
-
-        const std::string& getWayOfExit () const {  return wayOfExit ;  }
-
-        const std::string& getWayOfEntry () const {  return wayOfEntry ;  }
-
-        void setWayOfEntry ( const std::string& way ) {  wayOfEntry = way ;  }
 
 };
 

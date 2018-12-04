@@ -32,9 +32,11 @@ Room::Room( const std::string& roomFile, const std::string& scenery, unsigned in
         , connections( nilPointer )
         , nameOfFileWithDataAboutRoom( roomFile )
         , scenery( scenery )
+        , color( "white" )
         , howManyTiles( std::pair< unsigned int, unsigned int >( xTiles, yTiles ) )
         , tileSize( tileSize )
         , kindOfFloor( floorKind )
+        , drawSequence( new unsigned int[ xTiles * yTiles ] )
         , camera( new Camera( this ) )
         , whereToDraw( )
 {
@@ -110,7 +112,6 @@ Room::Room( const std::string& roomFile, const std::string& scenery, unsigned in
         //              55  62
         //                63
 
-        this->drawSequence = new unsigned int[ xTiles * yTiles ];
         size_t pos = 0;
 
         for ( unsigned int f = 0 ; f < xTiles + yTiles ; f++ )
@@ -120,7 +121,7 @@ Room::Room( const std::string& roomFile, const std::string& scenery, unsigned in
                         unsigned int index = n * ( xTiles - 1 ) + f;
                         if ( ( index >= n * xTiles ) && ( index < ( n + 1 ) * xTiles ) )
                         {
-                                this->drawSequence[ pos++ ] = index;
+                                drawSequence[ pos++ ] = index;
                         }
                 }
         }
@@ -203,6 +204,8 @@ bool Room::saveAsXML( const std::string& file )
         if ( ! getScenery().empty () )
                 root->SetAttribute( "scenery", getScenery().c_str () );
 
+        root->SetAttribute( "tileSize", getSizeOfOneTile() );
+
         tinyxml2::XMLElement* xTiles = roomXml.NewElement( "xTiles" ) ;
         xTiles->SetText( getTilesX() );
         root->InsertEndChild( xTiles );
@@ -211,7 +214,9 @@ bool Room::saveAsXML( const std::string& file )
         yTiles->SetText( getTilesY() );
         root->InsertEndChild( yTiles );
 
-        root->SetAttribute( "tileSize", getSizeOfOneTile() );
+        tinyxml2::XMLElement* roomColor = roomXml.NewElement( "color" ) ;
+        roomColor->SetText( getColor().c_str () );
+        root->InsertEndChild( roomColor );
 
         if ( whichRoom() == "triple" )
         {
@@ -594,7 +599,7 @@ void Room::updateWallsWithDoors ()
 
                                 const DescriptionOfItem* dataOfWall = GameManager::getInstance().getIsomot().getItemDescriptions().getDescriptionByLabel( label );
 
-                                addGridItem( GridItemPtr( new GridItem( dataOfWall, 0, segment->getPosition(), 0, Way( "nowhere" ) ) ) );
+                                addGridItem( GridItemPtr( new GridItem( dataOfWall, 0, segment->getPosition(), 0, "nowhere" ) ) );
 
                                 wallsToBin.push_back( segment );
                         }
@@ -628,7 +633,7 @@ void Room::updateWallsWithDoors ()
 
                                 const DescriptionOfItem* dataOfWall = GameManager::getInstance().getIsomot().getItemDescriptions().getDescriptionByLabel( label );
 
-                                addGridItem( GridItemPtr( new GridItem( dataOfWall, segment->getPosition(), 0, 0, Way( "nowhere" ) ) ) );
+                                addGridItem( GridItemPtr( new GridItem( dataOfWall, segment->getPosition(), 0, 0, "nowhere" ) ) );
 
                                 wallsToBin.push_back( segment );
                         }
@@ -644,8 +649,8 @@ void Room::updateWallsWithDoors ()
 
         // sort walls
 
-        std::sort( wallX.begin (), wallX.end () );
-        std::sort( wallY.begin (), wallY.end () );
+        std::sort( wallX.begin (), wallX.end (), Wall::comparePointersToWall );
+        std::sort( wallY.begin (), wallY.end (), Wall::comparePointersToWall );
 }
 
 void Room::addGridItemToContainer( const GridItemPtr& gridItem )
@@ -713,17 +718,14 @@ void Room::addGridItem( const GridItemPtr& gridItem )
         }
 
         // calculate offset of item’s image from origin of room
-        if ( gridItem->getRawImage() != nilPointer )
-        {
-                std::pair< int, int > offset (
-                        ( ( this->tileSize * ( gridItem->getCellX() - gridItem->getCellY() ) ) << 1 ) - ( gridItem->getRawImage()->getWidth() >> 1 ) + 1,
-                        this->tileSize * ( gridItem->getCellX() + gridItem->getCellY() + 2 ) - gridItem->getRawImage()->getHeight() - gridItem->getZ() - 1
-                ) ;
-                gridItem->setOffset( offset );
-        }
+        std::pair< int, int > offset (
+                ( ( this->tileSize * ( gridItem->getCellX() - gridItem->getCellY() ) ) << 1 ) - ( gridItem->getRawImage().getWidth() >> 1 ) + 1,
+                this->tileSize * ( gridItem->getCellX() + gridItem->getCellY() + 2 ) - gridItem->getRawImage().getHeight() - gridItem->getZ() - 1
+        ) ;
+        gridItem->setOffset( offset );
 
-        mediator->reshadeWithGridItem( *gridItem );
-        mediator->remaskWithGridItem( *gridItem );
+        mediator->wantShadowFromGridItem( *gridItem );
+        mediator->wantToMaskWithGridItem( *gridItem );
 
 #if defined( DEBUG ) && DEBUG
         std::cout << gridItem->whichKindOfItem() << " \"" << gridItem->getUniqueName() << "\" is yet part of room \"" << getNameOfFileWithDataAboutRoom() << "\"" << std::endl ;
@@ -798,17 +800,14 @@ void Room::addFreeItem( const FreeItemPtr& freeItem )
         }
 
         // calculate offset of item’s image from origin of room
-        if ( freeItem->getRawImage () != nilPointer )
-        {
-                std::pair< int, int > offset (
-                        ( ( freeItem->getX() - freeItem->getY() ) << 1 ) + freeItem->getWidthX() + freeItem->getWidthY() - ( freeItem->getRawImage()->getWidth() >> 1 ) - 1,
-                        freeItem->getX() + freeItem->getY() + freeItem->getWidthX() - freeItem->getRawImage()->getHeight() - freeItem->getZ()
-                ) ;
-                freeItem->setOffset( offset );
-        }
+        std::pair< int, int > offset (
+                ( ( freeItem->getX() - freeItem->getY() ) << 1 ) + freeItem->getWidthX() + freeItem->getWidthY() - ( freeItem->getRawImage().getWidth() >> 1 ) - 1,
+                freeItem->getX() + freeItem->getY() + freeItem->getWidthX() - freeItem->getRawImage().getHeight() - freeItem->getZ()
+        ) ;
+        freeItem->setOffset( offset );
 
-        mediator->reshadeWithFreeItem( *freeItem );
-        mediator->remaskWithFreeItem( *freeItem );
+        mediator->wantShadowFromFreeItem( *freeItem );
+        mediator->wantToMaskWithFreeItem( *freeItem );
 
 #if defined( DEBUG ) && DEBUG
         std::cout << freeItem->whichKindOfItem() << " \"" << freeItem->getUniqueName() << "\" is yet in room \"" << getNameOfFileWithDataAboutRoom() << "\"" << std::endl ;
@@ -930,22 +929,19 @@ bool Room::addPlayerToRoom( const PlayerItemPtr& playerItem, bool playerEntersRo
         }
 
         // set offset of player’s image from origin of room
-        if ( playerItem->getRawImage () != nilPointer )
-        {
-                std::pair< int, int > offset (
-                        ( ( playerItem->getX() - playerItem->getY() ) << 1 ) + playerItem->getWidthX() + playerItem->getWidthY() - ( playerItem->getRawImage()->getWidth() >> 1 ) - 1,
-                        playerItem->getX() + playerItem->getY() + playerItem->getWidthX() - playerItem->getRawImage()->getHeight() - playerItem->getZ()
-                ) ;
-                playerItem->setOffset( offset );
-        }
+        std::pair< int, int > offset (
+                ( ( playerItem->getX() - playerItem->getY() ) << 1 ) + playerItem->getWidthX() + playerItem->getWidthY() - ( playerItem->getRawImage().getWidth() >> 1 ) - 1,
+                playerItem->getX() + playerItem->getY() + playerItem->getWidthX() - playerItem->getRawImage().getHeight() - playerItem->getZ()
+        ) ;
+        playerItem->setOffset( offset );
 
         if ( mediator->getActiveCharacter() == nilPointer )
         {
                 mediator->setActiveCharacter( playerItem );
         }
 
-        mediator->reshadeWithFreeItem( *playerItem );
-        mediator->remaskWithFreeItem( *playerItem );
+        mediator->wantShadowFromFreeItem( *playerItem );
+        mediator->wantToMaskWithFreeItem( *playerItem );
 
         // add player item to room
         this->playersYetInRoom.push_back( playerItem );
@@ -1080,8 +1076,8 @@ void Room::removeGridItemByUniqueName( const std::string& uniqueName )
 
         if ( found )
         {
-                mediator->reshadeWithGridItem( *gridItem );
-                mediator->remaskWithGridItem( *gridItem );
+                mediator->wantShadowFromGridItem( *gridItem );
+                mediator->wantToMaskWithGridItem( *gridItem );
         }
 }
 
@@ -1108,8 +1104,8 @@ void Room::removeFreeItemByUniqueName( const std::string& uniqueName )
 
         if ( found )
         {
-                mediator->reshadeWithFreeItem( *freeItem );
-                mediator->remaskWithFreeItem( *freeItem );
+                mediator->wantShadowFromFreeItem( *freeItem );
+                mediator->wantToMaskWithFreeItem( *freeItem );
         }
 }
 
@@ -1222,51 +1218,54 @@ void Room::dontDisappearOnJump ()
 {
         for ( unsigned int column = 0; column < gridItems.size(); column ++ )
         {
-                for ( std::vector< GridItemPtr >::const_iterator gi = gridItems[ column ].begin (); gi != gridItems[ column ].end (); ++ gi )
+                for ( std::vector< GridItemPtr >::iterator gi = gridItems[ column ].begin (); gi != gridItems[ column ].end (); ++ gi )
                 {
-                        GridItemPtr gridItem = *gi;
-                        if ( gridItem->getBehavior() != nilPointer )
+                        GridItem& gridItem = *( *gi );
+                        if ( gridItem.getBehavior() != nilPointer )
                         {
-                                std::string behavior = gridItem->getBehavior()->getNameOfBehavior();
+                                std::string behavior = gridItem.getBehavior()->getNameOfBehavior();
                                 if ( behavior == "behavior of disappearance on jump into" ||
                                                 behavior == "behavior of slow disappearance on jump into" )
                                 {
-                                        gridItem->setBehaviorOf( "still" );
+                                        gridItem.setBehaviorOf( "still" );
 
-                                        const Picture* original = gridItem->getRawImage();
-                                        Picture* copy = new Picture( *original );
+                                        if ( ! GameManager::getInstance().isSimpleGraphicSet() )
+                                                Color::multiplyWithColor(
+                                                        gridItem.getRawImageToChangeIt (),
+                                                        ( behavior == "behavior of slow disappearance on jump into" ) ?
+                                                                Color::byName( "magenta" ) : Color::byName( "red" ) );
+                                        else
+                                                Color::invertColors( gridItem.getRawImageToChangeIt () );
 
-                                        Color::multiplyWithColor(
-                                                copy,
-                                                ( behavior == "behavior of slow disappearance on jump into" ) ?
-                                                        Color::magentaColor() : Color::redColor() );
-
-                                        gridItem->changeImage( copy );
+                                        gridItem.freshProcessedImage();
+                                        gridItem.setWantShadow( true );
                                 }
                         }
                 }
         }
 
-        for ( std::vector< FreeItemPtr >::const_iterator fi = freeItems.begin (); fi != freeItems.end (); ++fi )
+        for ( std::vector< FreeItemPtr >::iterator fi = freeItems.begin (); fi != freeItems.end (); ++fi )
         {
-                FreeItemPtr freeItem = *fi;
-                if ( freeItem->getBehavior() != nilPointer )
+                FreeItem& freeItem = *( *fi );
+                if ( freeItem.getBehavior() != nilPointer )
                 {
-                        std::string behavior = freeItem->getBehavior()->getNameOfBehavior();
+                        std::string behavior = freeItem.getBehavior()->getNameOfBehavior();
                         if ( behavior == "behavior of disappearance on jump into" ||
                                         behavior == "behavior of slow disappearance on jump into" )
                         {
-                                freeItem->setBehaviorOf( "still" );
+                                freeItem.setBehaviorOf( "still" );
 
-                                const Picture* original = freeItem->getRawImage();
-                                Picture* copy = new Picture( *original );
+                                if ( ! GameManager::getInstance().isSimpleGraphicSet() )
+                                        Color::multiplyWithColor(
+                                                freeItem.getRawImageToChangeIt (),
+                                                ( behavior == "behavior of slow disappearance on jump into" ) ?
+                                                        Color::byName( "magenta" ) : Color::byName( "red" ) );
+                                else
+                                        Color::invertColors( freeItem.getRawImageToChangeIt () );
 
-                                Color::multiplyWithColor(
-                                        copy,
-                                        ( behavior == "behavior of slow disappearance on jump into" ) ?
-                                                Color::magentaColor() : Color::redColor() );
-
-                                freeItem->changeImage( copy );
+                                freeItem.freshBothProcessedImages();
+                                freeItem.setWantShadow( true );
+                                freeItem.setWantMaskTrue();
                         }
                 }
         }
@@ -1322,10 +1321,12 @@ void Room::draw ()
         const allegro::Pict& where = allegro::Pict::getWhereToDraw() ;
 
         // clear image of room
-        if ( GameManager::getInstance().charactersFly() )
-                where.clearToColor( Color::darkBlueColor().toAllegroColor() );
+        where.clearToColor( AllegroColor::keyColor() );
+
+        /* if ( GameManager::getInstance().charactersFly() )
+                where.clearToColor( Color::byName( "dark blue" ).toAllegroColor() );
         else
-                where.clearToColor( Color::blackColor().toAllegroColor() );
+                where.clearToColor( Color::blackColor().toAllegroColor() ); */
 
         // draw tiles o’floor
 
@@ -1376,12 +1377,12 @@ void Room::draw ()
 
         for ( unsigned int i = 0 ; i < getTilesX() * getTilesY() ; i ++ )
         {
-                for ( std::vector< GridItemPtr >::const_iterator gi = gridItems[ drawSequence[ i ] ].begin () ;
+                for ( std::vector< GridItemPtr >::iterator gi = gridItems[ drawSequence[ i ] ].begin () ;
                         gi != gridItems[ drawSequence[ i ] ].end () ; ++ gi )
                 {
                         GridItem& gridItem = *( *gi );
 
-                        if ( shadingOpacity < 256 && gridItem.getRawImage() != nilPointer )
+                        if ( shadingOpacity < 256 )
                         {
                                 // cast shadow
                                 if ( gridItem.getWantShadow() )
@@ -1397,45 +1398,41 @@ void Room::draw ()
         // for free items there’re two steps before drawing
 
         // at first shade every free item with grid items and other free items
-        for ( std::vector< FreeItemPtr >::const_iterator fi = freeItems.begin (); fi != freeItems.end (); ++ fi )
+        for ( std::vector< FreeItemPtr >::iterator fi = freeItems.begin (); fi != freeItems.end (); ++ fi )
         {
                 FreeItem& freeItem = *( *fi );
 
-                if ( freeItem.getRawImage() != nilPointer )
+                // shade an item when shadows are on
+                if ( shadingOpacity < 256 )
                 {
-                        // shade an item when shadows are on
-                        if ( shadingOpacity < 256 )
-                        {
-                                freeItem.requestShadow();
-                        }
+                        freeItem.requestShadow();
                 }
         }
 
         // then mask it and finally draw it
-        for ( std::vector< FreeItemPtr >::const_iterator fi = freeItems.begin (); fi != freeItems.end (); ++ fi )
+        for ( std::vector< FreeItemPtr >::iterator fi = freeItems.begin (); fi != freeItems.end (); ++ fi )
         {
                 FreeItem& freeItem = *( *fi );
 
-                if ( freeItem.getRawImage() != nilPointer )
-                {
-                        freeItem.requestMask();
-                        freeItem.draw ();
-                }
+                freeItem.requestMask();
+                freeItem.draw ();
         }
 
         mediator->unlockGridItemsMutex();
         mediator->unlockFreeItemsMutex();
 
+
+
 #if defined( DEBUG_ORIGIN_OF_ROOM ) && DEBUG_ORIGIN_OF_ROOM
         // draw point of room’s origin
         if ( FlickeringColor::flickerWhiteAndTransparent() != Color::whiteColor() )
         {
-                allegro::fillCircle( where, getX0(), getY0(), 4, Color::blackColor().toAllegroColor() );
+                allegro::fillCircle( getX0(), getY0(), 4, Color::blackColor().toAllegroColor() );
                 where.drawPixelAt( getX0(), getY0(), Color::whiteColor().toAllegroColor() );
         }
         else
         {
-                allegro::fillCircle( where, getX0(), getY0(), 4, Color::whiteColor().toAllegroColor() );
+                allegro::fillCircle( getX0(), getY0(), 4, Color::whiteColor().toAllegroColor() );
                 where.drawPixelAt( getX0(), getY0(), Color::blackColor().toAllegroColor() );
         }
 #endif

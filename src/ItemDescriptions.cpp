@@ -78,9 +78,9 @@ void ItemDescriptions::readDescriptionOfItemsFrom( const std::string& nameOfXMLF
                 tinyxml2::XMLElement* frames = item->FirstChildElement( "frames" ) ;
                 if ( frames != nilPointer )
                 {
-                        unsigned int howManyFrames = std::atoi( frames->FirstChild()->ToText()->Value() ) ;
+                        unsigned int howManyFramesPerOrientation = std::atoi( frames->FirstChild()->ToText()->Value() ) ;
 
-                        for ( unsigned int frame = 0 ; frame < howManyFrames ; frame ++ )
+                        for ( unsigned int frame = 0 ; frame < howManyFramesPerOrientation ; frame ++ )
                         {
                                 newItem->frames.push_back( frame );
                         }

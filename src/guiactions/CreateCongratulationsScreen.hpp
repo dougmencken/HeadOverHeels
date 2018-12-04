@@ -34,7 +34,7 @@ public:
 
         virtual ~CreateCongratulationsScreen( ) ;
 
-        std::string getNameOfAction () const {  return "CreateCongratulationsScreen" ;  }
+        virtual std::string getNameOfAction () const {  return "CreateCongratulationsScreen" ;  }
 
 protected:
 
