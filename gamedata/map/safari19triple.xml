@@ -1,6 +1,7 @@
 <room scenery="safari" tileSize="16">
     <xTiles>17</xTiles>
     <yTiles>12</yTiles>
+    <color>white</color>
     <triple-room-data>
         <bound-x minimum="64" maximum="176"/>
         <bound-y minimum="112" maximum="128"/>
@@ -69,12 +70,12 @@
             <picture>safari-wall-x-1.png</picture>
         </wall>
         <wall on="x">
-            <position>16</position>
-            <picture>safari-wall-x-1.png</picture>
-        </wall>
-        <wall on="x">
             <position>15</position>
             <picture>safari-wall-x-3.png</picture>
+        </wall>
+        <wall on="x">
+            <position>16</position>
+            <picture>safari-wall-x-1.png</picture>
         </wall>
         <wall on="y">
             <position>7</position>

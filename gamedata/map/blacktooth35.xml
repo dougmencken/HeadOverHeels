@@ -1,6 +1,7 @@
 <room scenery="blacktooth" tileSize="16">
     <xTiles>5</xTiles>
     <yTiles>17</yTiles>
+    <color>cyan.reduced</color>
     <floorKind>mortal</floorKind>
     <walls>
         <wall on="x">
@@ -29,10 +30,6 @@
         </wall>
         <wall on="y">
             <position>2</position>
-            <picture>blacktooth-wall-y-1.png</picture>
-        </wall>
-        <wall on="y">
-            <position>5</position>
             <picture>blacktooth-wall-y-1.png</picture>
         </wall>
         <wall on="y">
@@ -73,6 +70,10 @@
         </wall>
         <wall on="y">
             <position>15</position>
+            <picture>blacktooth-wall-y-1.png</picture>
+        </wall>
+        <wall on="y">
+            <position>5</position>
             <picture>blacktooth-wall-y-1.png</picture>
         </wall>
     </walls>

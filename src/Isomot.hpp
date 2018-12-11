@@ -101,9 +101,9 @@ private:
 
         bool cameraFollowsCharacter ;
 
-#if defined( DEBUG ) && DEBUG
         PicturePtr chequerboard ;
-#endif
+
+        bool drawOnChequerboard ;
 
 };
 

@@ -112,7 +112,7 @@ gamedatagfx2009_DATA = item.png/ball-shadows.png \
 			blacktooth.png/blacktooth-floor-sw.png \
 			blacktooth.png/blacktooth-floor-west.png \
 			blacktooth.png/blacktooth-floor.png \
-			blacktooth.png/blacktooth-mortal-floor.png \
+			blacktooth.png/blacktooth-mortalfloor.png \
 			blacktooth.png/blacktooth-nofloor-east.png \
 			blacktooth.png/blacktooth-nofloor-north.png \
 			blacktooth.png/blacktooth-nofloor-south.png \
@@ -140,7 +140,7 @@ gamedatagfx2009_DATA = item.png/ball-shadows.png \
 			jail.png/jail-floor-sw.png \
 			jail.png/jail-floor-west.png \
 			jail.png/jail-floor.png \
-			jail.png/jail-mortal-floor.png \
+			jail.png/jail-mortalfloor.png \
 			jail.png/jail-nofloor-east.png \
 			jail.png/jail-nofloor-north.png \
 			jail.png/jail-nofloor-south.png \
@@ -164,7 +164,7 @@ gamedatagfx2009_DATA = item.png/ball-shadows.png \
 			market.png/market-floor-sw.png \
 			market.png/market-floor-west.png \
 			market.png/market-floor.png \
-			market.png/market-mortal-floor.png \
+			market.png/market-mortalfloor.png \
 			market.png/market-nofloor-east.png \
 			market.png/market-nofloor-north.png \
 			market.png/market-wall-x-1.png \
@@ -189,7 +189,7 @@ gamedatagfx2009_DATA = item.png/ball-shadows.png \
 			moon.png/moon-floor-sw.png \
 			moon.png/moon-floor-west.png \
 			moon.png/moon-floor.png \
-			moon.png/moon-mortal-floor.png \
+			moon.png/moon-mortalfloor.png \
 			moon.png/moon-nofloor-east.png \
 			moon.png/moon-nofloor-north.png \
 			moon.png/moon-wall-x-1.png \
@@ -216,7 +216,7 @@ gamedatagfx2009_DATA = item.png/ball-shadows.png \
 			byblos.png/byblos-floor-sw.png \
 			byblos.png/byblos-floor-west.png \
 			byblos.png/byblos-floor.png \
-			byblos.png/byblos-mortal-floor.png \
+			byblos.png/byblos-mortalfloor.png \
 			byblos.png/byblos-nofloor-east.png \
 			byblos.png/byblos-nofloor-north.png \
 			byblos.png/byblos-nofloor-south.png \
@@ -242,7 +242,7 @@ gamedatagfx2009_DATA = item.png/ball-shadows.png \
 			egyptus.png/egyptus-floor-sw.png \
 			egyptus.png/egyptus-floor-west.png \
 			egyptus.png/egyptus-floor.png \
-			egyptus.png/egyptus-mortal-floor.png \
+			egyptus.png/egyptus-mortalfloor.png \
 			egyptus.png/egyptus-nofloor-east.png \
 			egyptus.png/egyptus-nofloor-north.png \
 			egyptus.png/egyptus-nofloor-south.png \
@@ -268,7 +268,7 @@ gamedatagfx2009_DATA = item.png/ball-shadows.png \
 			penitentiary.png/penitentiary-floor-sw.png \
 			penitentiary.png/penitentiary-floor-west.png \
 			penitentiary.png/penitentiary-floor.png \
-			penitentiary.png/penitentiary-mortal-floor.png \
+			penitentiary.png/penitentiary-mortalfloor.png \
 			penitentiary.png/penitentiary-nofloor-east.png \
 			penitentiary.png/penitentiary-nofloor-north.png \
 			penitentiary.png/penitentiary-nofloor-south.png \
@@ -294,7 +294,7 @@ gamedatagfx2009_DATA = item.png/ball-shadows.png \
 			safari.png/safari-floor-sw.png \
 			safari.png/safari-floor-west.png \
 			safari.png/safari-floor.png \
-			safari.png/safari-mortal-floor.png \
+			safari.png/safari-mortalfloor.png \
 			safari.png/safari-nofloor-east.png \
 			safari.png/safari-nofloor-north.png \
 			safari.png/safari-nofloor-south.png \

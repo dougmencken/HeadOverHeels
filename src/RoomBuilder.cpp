@@ -101,6 +101,9 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                 return nilPointer;
         }
 
+#if defined( DEBUG ) && DEBUG
+        std::cout << "color of room is " << Color::byName( roomColor ).toString () << std::endl ;
+#endif
         theRoom->setColor( roomColor );
 
         // need to know about presence of doors
@@ -447,13 +450,13 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                         suffixOfNotFullTile = "south" ;
                                 }
 
-                                std::string fileOfTile = sceneryPrefix + "floor" ;
-                                if ( ! suffixOfNotFullTile.empty () ) fileOfTile += "-" + suffixOfNotFullTile ;
+                                std::string fileOfFullTile = sceneryPrefix + "floor" ;
 
-                                if ( kindOfFloor == "mortal" && suffixOfNotFullTile.empty() )
-                                        fileOfTile = sceneryPrefix + "mortal-floor" ;
-
-                                if ( kindOfFloor == "absent" )
+                                if ( kindOfFloor == "mortal" )
+                                {
+                                        fileOfFullTile = sceneryPrefix + "mortalfloor" ;
+                                }
+                                else if ( kindOfFloor == "absent" )
                                 {
                                         if ( tileX == lastTileX && tileY == lastTileY )
                                                 suffixOfNotFullTile = "sw" ;
@@ -468,13 +471,13 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                         else
                                                 continue ;
 
-                                        fileOfTile = sceneryPrefix + "nofloor" ;
-                                        if ( ! suffixOfNotFullTile.empty () ) fileOfTile += "-" + suffixOfNotFullTile ;
+                                        fileOfFullTile = sceneryPrefix + "nofloor" ;
                                 }
 
+                                std::string fileOfTile = suffixOfNotFullTile.empty() ? fileOfFullTile : fileOfFullTile + "-" + suffixOfNotFullTile ;
                                 std::string nameOfPicture = fileOfTile ;
-
                                 fileOfTile += ".png" ;
+                                fileOfFullTile += ".png" ;
 
                                 std::pair< int, int > tileXY( tileX, tileY );
 
@@ -485,7 +488,23 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                         std::cout << " tile@" << tileX << "," << tileY ;
                                 # endif
 
-                                        floorImages.getOrLoadAndGetOrMakeAndGet( fileOfTile, 64, 40 ) ;
+                                        if ( floorImages.getOrLoadAndGet( fileOfTile ) == nilPointer )
+                                        {
+                                                if ( suffixOfNotFullTile.empty () )
+                                                {
+                                                        floorImages.makePicture( fileOfTile, 64, 40 ) ;
+                                                }
+                                                else
+                                                {
+                                                        bool darken = iso::GameManager::getInstance().getCastShadows() ;
+                                                        if ( iso::GameManager::getInstance().getChosenGraphicSet() == "gfx.2003" ||
+                                                                iso::GameManager::getInstance().getChosenGraphicSet() == "gfx.riderx" ) darken = false ;
+
+                                                        const PicturePtr& imageOfFullTile = floorImages.getOrLoadAndGetOrMakeAndGet( fileOfFullTile, 64, 40 );
+                                                        PicturePtr imageOfPartialTile = FloorTile::fullTileToPartialTile( * imageOfFullTile, suffixOfNotFullTile, darken );
+                                                        floorImages.putPicture( fileOfTile, imageOfPartialTile );
+                                                }
+                                        }
 
                                         if ( floorImages.getPicture( fileOfTile ) != nilPointer )
                                         {
@@ -500,14 +519,18 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                         # if defined( MAKE_PARTIAL_FLOOR_TILES ) && MAKE_PARTIAL_FLOOR_TILES
                                                 if ( suffixOfNotFullTile.empty() )
                                                 {
-                                                        FloorTile::fullTileToPartialTile( * image, "sw", true )->saveAsPNG( iso::homePath() );
-                                                        FloorTile::fullTileToPartialTile( * image, "se", true )->saveAsPNG( iso::homePath() );
-                                                        FloorTile::fullTileToPartialTile( * image, "ne", true )->saveAsPNG( iso::homePath() );
-                                                        FloorTile::fullTileToPartialTile( * image, "nw", true )->saveAsPNG( iso::homePath() );
-                                                        FloorTile::fullTileToPartialTile( * image, "north", true )->saveAsPNG( iso::homePath() );
-                                                        FloorTile::fullTileToPartialTile( * image, "south", true )->saveAsPNG( iso::homePath() );
-                                                        FloorTile::fullTileToPartialTile( * image, "east", true )->saveAsPNG( iso::homePath() );
-                                                        FloorTile::fullTileToPartialTile( * image, "west", true )->saveAsPNG( iso::homePath() );
+                                                        bool darken = iso::GameManager::getInstance().getCastShadows() ;
+                                                        if ( iso::GameManager::getInstance().getChosenGraphicSet() == "gfx.2003" ||
+                                                                iso::GameManager::getInstance().getChosenGraphicSet() == "gfx.riderx" ) darken = false ;
+
+                                                        FloorTile::fullTileToPartialTile( * image, "sw", darken )->saveAsPNG( iso::homePath() );
+                                                        FloorTile::fullTileToPartialTile( * image, "se", darken )->saveAsPNG( iso::homePath() );
+                                                        FloorTile::fullTileToPartialTile( * image, "ne", darken )->saveAsPNG( iso::homePath() );
+                                                        FloorTile::fullTileToPartialTile( * image, "nw", darken )->saveAsPNG( iso::homePath() );
+                                                        FloorTile::fullTileToPartialTile( * image, "north", darken )->saveAsPNG( iso::homePath() );
+                                                        FloorTile::fullTileToPartialTile( * image, "south", darken )->saveAsPNG( iso::homePath() );
+                                                        FloorTile::fullTileToPartialTile( * image, "east", darken )->saveAsPNG( iso::homePath() );
+                                                        FloorTile::fullTileToPartialTile( * image, "west", darken )->saveAsPNG( iso::homePath() );
                                                         FloorTile::fullTileToPartialTile( * image, "full", false )->saveAsPNG( iso::homePath() );
                                                         FloorTile::fullTileToPartialTile( * image, "darkfull", true )->saveAsPNG( iso::homePath() );
                                                 }

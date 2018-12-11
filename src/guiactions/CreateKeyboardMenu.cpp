@@ -26,24 +26,26 @@ void CreateKeyboardMenu::doAction ()
                 LanguageManager* languageManager = GuiManager::getInstance().getLanguageManager();
 
                 this->menuOfKeys = new MenuWithValues( '.', 5 );
-                menuOfKeys->setVerticalOffset( 78 );
+                menuOfKeys->setVerticalOffset( 64 );
 
-                // create one option for each key used in the game
-                for ( size_t i = 0; i < iso::InputManager::numberOfKeys; i++ )
+                const std::vector < std::pair < /* action */ std::string, /* name */ std::string > > & userKeys = iso::InputManager::getInstance().getUserKeys ();
+
+                // create option for each key
+                for ( std::vector< std::pair< std::string, std::string > >::const_iterator it = userKeys.begin () ; it != userKeys.end () ; ++ it )
                 {
-                        std::string nameOfThisKey = iso::InputManager::actionsOfKeys[ i ];
-                        std::string nameOfTranslation = ( nameOfThisKey == "take&jump" ? "takeandjump" : nameOfThisKey );
+                        std::string theAction = it->first ;
+                        std::string xmlAction = ( theAction == "take&jump" ) ? "takeandjump" : theAction ;
 
-                        Label* label = new Label( languageManager->findLanguageStringForAlias( nameOfTranslation )->getText() );
+                        Label* label = new Label( languageManager->findLanguageStringForAlias( xmlAction )->getText() );
 
-                        std::string theKey = iso::InputManager::getInstance().getUserKeyFor( nameOfThisKey );
+                        std::string theKey = it->second ;
                         if ( theKey == "none" )
                         {
                                 label->changeColor( "cyan" );
                         }
 
                         // action is possibility to change key
-                        label->setAction( new RedefineKey( menuOfKeys, nameOfThisKey ) );
+                        label->setAction( new RedefineKey( menuOfKeys, theAction ) );
 
                         menuOfKeys->addOption( label );
                         menuOfKeys->setValueOf( label, theKey );

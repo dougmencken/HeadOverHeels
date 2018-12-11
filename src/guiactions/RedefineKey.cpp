@@ -11,10 +11,10 @@ using gui::RedefineKey;
 using iso::InputManager;
 
 
-RedefineKey::RedefineKey( MenuWithValues* menu, const std::string& userKey )
+RedefineKey::RedefineKey( MenuWithValues* menu, const std::string& keyAction )
         : Action( )
         , menu( menu )
-        , whatKeyDoes( userKey )
+        , whatKeyDoes( keyAction )
 {
 
 }
@@ -44,7 +44,7 @@ void RedefineKey::doAction ()
                                 if ( thatKey != newKey && /* print screen is used to toggle recording of game */ newKey != "PrintScreen" )
                                 {
                                         // if this new key was already in use, change that previous one to "none"
-                                        std::string previousAction = InputManager::getInstance().findActionOfKeyByName( newKey );
+                                        std::string previousAction = InputManager::getInstance().getActionOfKeyByName( newKey );
                                         std::string toLook = ( previousAction == "take&jump" ? "takeandjump" : previousAction );
 
                                         if ( previousAction != "unknown" )

@@ -3,6 +3,11 @@
 #include "Ism.hpp"
 #include "GameManager.hpp"
 
+#ifdef DEBUG
+# define DEBUG_POOL_OF_PICTURES  0
+# include <iostream>
+#endif
+
 
 namespace iso
 {
@@ -23,7 +28,7 @@ PicturePtr PoolOfPictures::getOrLoadAndGet( const std::string& imageFile )
 
         if ( pictures.find( key ) == pictures.end () )
         {
-                allegro::Pict* picture = allegro::Pict::fromPNGFile( iso::pathToFile( iso::sharePath() + gfxPrefix, imageFile ) );
+                safeptr< allegro::Pict > picture( allegro::Pict::fromPNGFile( iso::pathToFile( iso::sharePath() + gfxPrefix, imageFile ) ) );
 
                 if ( picture->isNotNil() )
                 {
@@ -32,11 +37,11 @@ PicturePtr PoolOfPictures::getOrLoadAndGet( const std::string& imageFile )
                 }
                 else
                 {
-                        std::cerr << "picture \"" << imageFile << "\" from \"" << gfxPrefix << "\" is absent" << std::endl ;
+                #if defined( DEBUG_POOL_OF_PICTURES ) && DEBUG_POOL_OF_PICTURES
+                        std::cout << TERMINAL_COLOR_RED << " picture " << TERMINAL_COLOR_BOLD_RED << key << TERMINAL_COLOR_RED << " is absent" << TERMINAL_COLOR_OFF << std::endl ;
+                #endif
                         pictures[ key ] = PicturePtr ();
                 }
-
-                delete picture ;
         }
 
         return pictures[ key ] ;
@@ -47,9 +52,9 @@ PicturePtr PoolOfPictures::getOrLoadAndGetOrMakeAndGet( const std::string& image
         std::string gfxPrefix = iso::GameManager::getInstance().getChosenGraphicSet() ;
         std::string key = gfxPrefix + ":" + imageFile ;
 
-        if ( pictures.find( key ) == pictures.end () )
+        if ( pictures.find( key ) == pictures.end () || pictures[ key ] == nilPointer )
         {
-                allegro::Pict* picture = allegro::Pict::fromPNGFile( iso::pathToFile( iso::sharePath() + gfxPrefix, imageFile ) );
+                safeptr< allegro::Pict > picture( allegro::Pict::fromPNGFile( iso::pathToFile( iso::sharePath() + gfxPrefix, imageFile ) ) );
 
                 if ( picture->isNotNil() )
                 {
@@ -58,17 +63,28 @@ PicturePtr PoolOfPictures::getOrLoadAndGetOrMakeAndGet( const std::string& image
                 }
                 else
                 {
-                        std::cout << "picture \"" << imageFile << "\" from \"" << gfxPrefix << "\" is absent" << std::endl ;
-
-                        pictures[ key ] = PicturePtr( new Picture( imageWidth, imageHeight ) ) ;
-                        pictures[ key ]->fillWithTransparencyChequerboard ();
-                        pictures[ key ]->setName( "transparency chequerboard for absent " + imageFile );
-
-                        std::cout << "made \"" << pictures[ key ]->getName() << "\"" << std::endl ;
+                #if defined( DEBUG_POOL_OF_PICTURES ) && DEBUG_POOL_OF_PICTURES
+                        std::cout << TERMINAL_COLOR_BLUE << " picture " << TERMINAL_COLOR_BOLD_BLUE << key << TERMINAL_COLOR_BLUE << " is absent" << TERMINAL_COLOR_OFF << std::endl ;
+                #endif
+                        makePicture( imageFile, imageWidth, imageHeight );
                 }
-
-                delete picture ;
         }
+
+        return pictures[ key ] ;
+}
+
+PicturePtr PoolOfPictures::makePicture( const std::string& imageFile, unsigned int imageWidth, unsigned int imageHeight )
+{
+        std::string gfxPrefix = iso::GameManager::getInstance().getChosenGraphicSet() ;
+        std::string key = gfxPrefix + ":" + imageFile ;
+
+        pictures[ key ] = PicturePtr( new Picture( imageWidth, imageHeight ) ) ;
+        pictures[ key ]->fillWithTransparencyChequerboard ();
+        pictures[ key ]->setName( "transparency chequerboard for absent " + key );
+
+#if defined( DEBUG_POOL_OF_PICTURES ) && DEBUG_POOL_OF_PICTURES
+        std::cout << TERMINAL_COLOR_GREEN << " made " << TERMINAL_COLOR_BOLD_GREEN << pictures[ key ]->getName() << TERMINAL_COLOR_OFF << std::endl ;
+#endif
 
         return pictures[ key ] ;
 }

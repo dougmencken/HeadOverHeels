@@ -34,7 +34,7 @@ class Miniature : public Drawable
 
 public:
 
-        Miniature( const Room & roomForMiniature, unsigned int sizeOfTileForMiniature = 3 ) ;
+        Miniature( const Room & roomForMiniature, int leftX, int topY, unsigned int sizeOfTileForMiniature ) ;
 
         virtual ~Miniature( ) { }
 
@@ -55,6 +55,8 @@ public:
 
         void fillIsoTileInside ( const allegro::Pict & where, int x0, int y0, int tileX, int tileY, const Color & color, bool fullFill ) ;
 
+        std::pair < int, int > calculatePositionOfConnectedMiniature ( const std::string & where ) ;
+
         unsigned int getSizeOfTile () const {  return sizeOfTile ;  }
 
         void setSizeOfTile ( unsigned int newSize ) {  sizeOfTile = ( newSize >= 2 ) ? newSize : 2 ;  }
@@ -66,6 +68,8 @@ private:
         const Room & room ;
 
         unsigned int sizeOfTile ;
+
+        std::pair < int, int > offset ;
 
 };
 

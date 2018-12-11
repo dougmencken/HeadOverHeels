@@ -122,7 +122,7 @@ public:
 
         bool equals ( const Pict& toWhat ) const {  return it == toWhat.it ;  }
 
-        static Pict* nilPict () {  return nil ;  }
+        static Pict* nilPict () {  return new Pict( NULL ) ;  }
 
         static Pict* newPict ( AllegroBitmap* b ) {  return new Pict( b ) ;  }
         static Pict* newPict ( unsigned int w, unsigned int h ) {  return new Pict( w, h ) ;  }
@@ -146,8 +146,6 @@ private:
         AllegroBitmap* it ;
 
         bool shallowCopy ;
-
-        static Pict* nil ;
 
         static Pict* whereToDraw ;
 
@@ -204,7 +202,7 @@ public:
 
         static Sample* loadFromFile ( const std::string& file ) ;
 
-        static Sample* nilSample () {  return nil ;  }
+        static Sample* nilSample () {  return new Sample( ) ;  }
 
 private:
 
@@ -219,8 +217,6 @@ private:
 #endif
 
         bool shallowCopy ;
-
-        static Sample* nil ;
 
         Sample( ) : it( NULL ), volume( 0 ), voice( -1 ), shallowCopy( false )  { }
         Sample( AllegroSample* s ) : it( s ), volume( 128 ), voice( -1 ), shallowCopy( false )  { }

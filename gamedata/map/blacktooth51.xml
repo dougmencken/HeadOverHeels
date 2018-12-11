@@ -1,6 +1,7 @@
 <room scenery="jail" tileSize="16">
     <xTiles>6</xTiles>
     <yTiles>9</yTiles>
+    <color>yellow</color>
     <floorKind>plain</floorKind>
     <walls>
         <wall on="x">
@@ -9,10 +10,6 @@
         </wall>
         <wall on="x">
             <position>1</position>
-            <picture>jail-wall-x.png</picture>
-        </wall>
-        <wall on="x">
-            <position>4</position>
             <picture>jail-wall-x.png</picture>
         </wall>
         <wall on="x">
@@ -50,6 +47,10 @@
         <wall on="y">
             <position>8</position>
             <picture>jail-wall-y.png</picture>
+        </wall>
+        <wall on="x">
+            <position>4</position>
+            <picture>jail-wall-x.png</picture>
         </wall>
     </walls>
     <items>

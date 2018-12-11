@@ -75,16 +75,16 @@ PicturePtr FloorTile::fullTileToPartialTile( const Picture & fullTile, const std
 
         autouniqueptr< allegro::Pict > depthOfTile( allegro::Pict::asCloneOf( fullTile.getAllegroPict().ptr() ) );
 
-        unsigned int sizeOfTileX = tileWidth >> 1 ;
-        unsigned int sizeOfTileY = tileWidth >> 2 ;
+        unsigned int sizeOfPlaneX = tileWidth >> 1 ;
+        unsigned int sizeOfPlaneY = tileWidth >> 2 ;
 
-        unsigned int originX = sizeOfTileX ;
+        unsigned int originX = sizeOfPlaneX ;
         unsigned int originY = 0 ;
 
         unsigned int dxBegin = 0 ;
-        unsigned int dxEnd = sizeOfTileX ;
+        unsigned int dxEnd = sizeOfPlaneX ;
         unsigned int dyBegin = 0 ;
-        unsigned int dyEnd = sizeOfTileY ;
+        unsigned int dyEnd = sizeOfPlaneY ;
 
         unsigned int maxHeight = planeOfTile->getH() ;
 
@@ -132,21 +132,21 @@ PicturePtr FloorTile::fullTileToPartialTile( const Picture & fullTile, const std
 
         if ( whichPart == "north" || whichPart == "ne" || whichPart == "nw" )
         {
-                dxBegin = sizeOfTileX >> 1 ;
+                dxBegin = sizeOfPlaneX >> 1 ;
         }
         if ( whichPart == "east" || whichPart == "ne" || whichPart == "se" )
         {
-                dyBegin = sizeOfTileY >> 1 ;
+                dyBegin = sizeOfPlaneY >> 1 ;
         }
         if ( whichPart == "south" || whichPart == "se" || whichPart == "sw" )
         {
-                dxEnd = sizeOfTileX >> 1 ;
-                maxHeight -= ( sizeOfTileY >> 1 ) ;
+                dxEnd = sizeOfPlaneX >> 1 ;
+                maxHeight -= ( sizeOfPlaneY >> 1 ) ;
         }
         if ( whichPart == "west" || whichPart == "nw" || whichPart == "sw" )
         {
-                dyEnd = sizeOfTileY >> 1 ;
-                maxHeight -= ( sizeOfTileY >> 1 ) ;
+                dyEnd = sizeOfPlaneY >> 1 ;
+                maxHeight -= ( sizeOfPlaneY >> 1 ) ;
         }
 
         planeOfTile->lock( false, true );
@@ -206,29 +206,6 @@ PicturePtr FloorTile::fullTileToPartialTile( const Picture & fullTile, const std
         PicturePtr leftDepth( new Picture( halfOfWidth , depthOfTile->getH() ) );
         allegro::bitBlit( *depthOfTile, leftDepth->getAllegroPict(), 0, deltaHeight, 0, 0, halfOfWidth, leftDepth->getHeight() );
 
-        if ( whichPart == "north" || whichPart == "ne" || whichPart == "nw" )
-        {
-                PicturePtr leftDepthNorth( new Picture( quarterOfWidth , depthOfTile->getH() ) );
-                allegro::bitBlit( leftDepth->getAllegroPict(), leftDepthNorth->getAllegroPict(),
-                                  quarterOfWidth, 0, 0, 0, quarterOfWidth, leftDepthNorth->getHeight() );
-                allegro::bitBlit( leftDepth->getAllegroPict(), leftDepthNorth->getAllegroPict(),
-                                  0, 0, 0, quarterOfWidth >> 1, 1, leftDepthNorth->getHeight() );
-
-                leftDepth->fillWithColor( Color() );
-                allegro::bitBlit( leftDepthNorth->getAllegroPict(), leftDepth->getAllegroPict(), 0, 0, quarterOfWidth, 0, quarterOfWidth, leftDepth->getHeight() );
-        }
-        if ( whichPart == "south" || whichPart == "se" || whichPart == "sw" )
-        {
-                PicturePtr leftDepthSouth( new Picture( quarterOfWidth , depthOfTile->getH() ) );
-                allegro::bitBlit( leftDepth->getAllegroPict(), leftDepthSouth->getAllegroPict(),
-                                  0, 0, 0, quarterOfWidth >> 1, quarterOfWidth, leftDepthSouth->getHeight() );
-                allegro::bitBlit( leftDepth->getAllegroPict(), leftDepthSouth->getAllegroPict(),
-                                  leftDepth->getWidth() - 1, 0, leftDepthSouth->getWidth() - 1, 0, 1, leftDepthSouth->getHeight() );
-
-                leftDepth->fillWithColor( Color() );
-                allegro::bitBlit( leftDepthSouth->getAllegroPict(), leftDepth->getAllegroPict(), 0, 0, 0, 0, quarterOfWidth, leftDepth->getHeight() );
-        }
-
         PicturePtr rightDepth( new Picture( halfOfWidth , depthOfTile->getH() ) );
         allegro::bitBlit( *depthOfTile, rightDepth->getAllegroPict(), halfOfWidth, deltaHeight, 0, 0, halfOfWidth, rightDepth->getHeight() );
 
@@ -238,24 +215,49 @@ PicturePtr FloorTile::fullTileToPartialTile( const Picture & fullTile, const std
                 allegro::bitBlit( rightDepth->getAllegroPict(), rightDepthEast->getAllegroPict(),
                                   0, 0, 0, 0, quarterOfWidth, rightDepthEast->getHeight() );
                 allegro::bitBlit( rightDepth->getAllegroPict(), rightDepthEast->getAllegroPict(),
-                                  rightDepth->getWidth() - 1, 0, rightDepthEast->getWidth() - 1, quarterOfWidth >> 1, 1, rightDepthEast->getHeight() );
+                                  rightDepth->getWidth() - 2, 0, rightDepthEast->getWidth() - 2, quarterOfWidth >> 1, 2, rightDepthEast->getHeight() );
 
                 rightDepth->fillWithColor( Color() );
                 allegro::bitBlit( rightDepthEast->getAllegroPict(), rightDepth->getAllegroPict(), 0, 0, 0, 0, quarterOfWidth, rightDepth->getHeight() );
         }
+
+        if ( whichPart == "north" || whichPart == "ne" || whichPart == "nw" )
+        {
+                PicturePtr leftDepthNorth( new Picture( quarterOfWidth , depthOfTile->getH() ) );
+                allegro::bitBlit( leftDepth->getAllegroPict(), leftDepthNorth->getAllegroPict(),
+                                  quarterOfWidth, 0, 0, 0, quarterOfWidth, leftDepthNorth->getHeight() );
+                allegro::bitBlit( leftDepth->getAllegroPict(), leftDepthNorth->getAllegroPict(),
+                                  0, 0, 0, quarterOfWidth >> 1, 2, leftDepthNorth->getHeight() );
+
+                leftDepth->fillWithColor( Color() );
+                allegro::bitBlit( leftDepthNorth->getAllegroPict(), leftDepth->getAllegroPict(), 0, 0, quarterOfWidth, 0, quarterOfWidth, leftDepth->getHeight() );
+        }
+
+        if ( whichPart == "south" || whichPart == "se" || whichPart == "sw" )
+        {
+                PicturePtr leftDepthSouth( new Picture( quarterOfWidth , depthOfTile->getH() ) );
+                allegro::bitBlit( leftDepth->getAllegroPict(), leftDepthSouth->getAllegroPict(),
+                                  0, 0, 0, quarterOfWidth >> 1, quarterOfWidth, leftDepthSouth->getHeight() );
+                allegro::bitBlit( leftDepth->getAllegroPict(), leftDepthSouth->getAllegroPict(),
+                                  leftDepth->getWidth() - 2, 0, leftDepthSouth->getWidth() - 2, 0, 2, leftDepthSouth->getHeight() );
+
+                leftDepth->fillWithColor( Color() );
+                allegro::bitBlit( leftDepthSouth->getAllegroPict(), leftDepth->getAllegroPict(), 0, 0, 0, 0, quarterOfWidth, leftDepth->getHeight() );
+        }
+
         if ( whichPart == "west" || whichPart == "nw" || whichPart == "sw" )
         {
                 PicturePtr rightDepthWest( new Picture( quarterOfWidth , depthOfTile->getH() ) );
                 allegro::bitBlit( rightDepth->getAllegroPict(), rightDepthWest->getAllegroPict(),
                                   quarterOfWidth, 0, 0, quarterOfWidth >> 1, quarterOfWidth, rightDepthWest->getHeight() );
                 allegro::bitBlit( rightDepth->getAllegroPict(), rightDepthWest->getAllegroPict(),
-                                  0, 0, 0, 0, 1, rightDepthWest->getHeight() );
+                                  0, 0, 0, 0, 2, rightDepthWest->getHeight() );
 
                 rightDepth->fillWithColor( Color() );
                 allegro::bitBlit( rightDepthWest->getAllegroPict(), rightDepth->getAllegroPict(), 0, 0, quarterOfWidth, 0, quarterOfWidth, rightDepth->getHeight() );
         }
 
-        PicturePtr result( new Picture( fullTile.getWidth (), fullTile.getHeight () ) );
+        PicturePtr result( new Picture( tileWidth, tileHeight ) );
         result->setName( fullTile.getName() + "-" + whichPart );
 
         const allegro::Pict& previousWhere = allegro::Pict::getWhereToDraw ();
@@ -275,8 +277,8 @@ PicturePtr FloorTile::fullTileToPartialTile( const Picture & fullTile, const std
         leftDepth->expandOrCropTo( leftDepth->getWidth() , maxHeight + heightOfDepth );
         rightDepth->expandOrCropTo( rightDepth->getWidth() , maxHeight + heightOfDepth );
 
-        allegro::bitBlit( leftDepth->getAllegroPict(), offsetForLeftDepth, 0 );
-        allegro::bitBlit( rightDepth->getAllegroPict(), halfOfWidth + offsetForRightDepth, 0 );
+        allegro::drawSprite( leftDepth->getAllegroPict(), offsetForLeftDepth, 0 );
+        allegro::drawSprite( rightDepth->getAllegroPict(), halfOfWidth + offsetForRightDepth, 0 );
 
         allegro::Pict::setWhereToDraw( previousWhere );
 

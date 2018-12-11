@@ -1,6 +1,7 @@
 <room scenery="blacktooth" tileSize="16">
     <xTiles>7</xTiles>
     <yTiles>8</yTiles>
+    <color>yellow</color>
     <floorKind>plain</floorKind>
     <walls>
         <wall on="x">
@@ -9,10 +10,6 @@
         </wall>
         <wall on="x">
             <position>1</position>
-            <picture>blacktooth-wall-x-2.png</picture>
-        </wall>
-        <wall on="x">
-            <position>4</position>
             <picture>blacktooth-wall-x-2.png</picture>
         </wall>
         <wall on="x">
@@ -42,6 +39,10 @@
         <wall on="y">
             <position>6</position>
             <picture>blacktooth-wall-y-1.png</picture>
+        </wall>
+        <wall on="x">
+            <position>4</position>
+            <picture>blacktooth-wall-x-2.png</picture>
         </wall>
     </walls>
     <items>

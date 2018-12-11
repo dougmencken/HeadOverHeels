@@ -45,6 +45,8 @@ public:
 
         virtual unsigned char getAlpha () const {  return alpha ;  }
 
+        Color operator * ( const Color & c ) const ;
+
         bool operator == ( const Color & c ) const {  return c.red == red && c.green == green && c.blue == blue && c.alpha == alpha ;  }
 
         bool operator != ( const Color & c ) const {  return c.red != red || c.green != green || c.blue != blue || c.alpha != alpha ;  }

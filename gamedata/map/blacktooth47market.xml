@@ -1,6 +1,7 @@
 <room scenery="market" tileSize="16">
     <xTiles>8</xTiles>
     <yTiles>10</yTiles>
+    <color>white.reduced</color>
     <floorKind>mortal</floorKind>
     <walls>
         <wall on="x">
@@ -14,10 +15,6 @@
         <wall on="x">
             <position>2</position>
             <picture>market-wall-x-2.png</picture>
-        </wall>
-        <wall on="x">
-            <position>5</position>
-            <picture>market-wall-x-3.png</picture>
         </wall>
         <wall on="x">
             <position>6</position>
@@ -58,6 +55,10 @@
         <wall on="y">
             <position>8</position>
             <picture>market-wall-y-2.png</picture>
+        </wall>
+        <wall on="x">
+            <position>5</position>
+            <picture>market-wall-x-3.png</picture>
         </wall>
     </walls>
     <items>

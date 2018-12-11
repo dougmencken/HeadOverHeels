@@ -1,6 +1,7 @@
 <room scenery="egyptus" tileSize="16">
     <xTiles>7</xTiles>
     <yTiles>8</yTiles>
+    <color>green</color>
     <floorKind>plain</floorKind>
     <walls>
         <wall on="x">
@@ -12,10 +13,6 @@
             <picture>egyptus-wall-x-1.png</picture>
         </wall>
         <wall on="x">
-            <position>5</position>
-            <picture>egyptus-wall-x-1.png</picture>
-        </wall>
-        <wall on="x">
             <position>6</position>
             <picture>egyptus-wall-x-1.png</picture>
         </wall>
@@ -28,11 +25,15 @@
             <picture>egyptus-wall-y-1.png</picture>
         </wall>
         <wall on="y">
-            <position>5</position>
+            <position>6</position>
             <picture>egyptus-wall-y-1.png</picture>
         </wall>
+        <wall on="x">
+            <position>5</position>
+            <picture>egyptus-wall-x-1.png</picture>
+        </wall>
         <wall on="y">
-            <position>6</position>
+            <position>5</position>
             <picture>egyptus-wall-y-1.png</picture>
         </wall>
     </walls>

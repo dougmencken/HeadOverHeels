@@ -11,8 +11,8 @@
 #ifndef InputManager_hpp_
 #define InputManager_hpp_
 
-#include <map>
 #include <string>
+#include <vector>
 
 #include "WrappersAllegro.hpp"
 
@@ -25,93 +25,88 @@ namespace iso
 class InputManager
 {
 
-public:
-
-        static const size_t numberOfKeys = 10 ;
-
-        static const std::string actionsOfKeys[ ] ;
-
 private:
 
         InputManager( ) ;
 
 public:
 
-        ~InputManager( ) ;
+        ~InputManager( ) { }
 
         static InputManager & getInstance () ;
+
+        const std::vector < std::pair < std::string, std::string > > & getUserKeys () const {  return userKeys ;  }
 
        /**
         * Returns name of key defined by user for given action
         */
-        std::string getUserKeyFor ( const std::string& action ) {  return this->userKeys[ action ] ;  }
+        std::string getUserKeyFor ( const std::string & action ) const ;
 
-        void changeUserKey ( const std::string& action, const std::string& name ) {  this->userKeys[ action ] = name ;  }
+        std::string getActionOfKeyByName ( const std::string & keyName ) const ;
 
-        std::string findActionOfKeyByName ( const std::string& keyName ) ;
+        void changeUserKey ( const std::string & action, const std::string & name ) ;
 
        /**
         * Move character to the north
         */
-        bool movenorthTyped () ;
+        bool movenorthTyped () const ;
 
        /**
         * Move character to the south
         */
-        bool movesouthTyped () ;
+        bool movesouthTyped () const ;
 
        /**
         * Move character to the east
         */
-        bool moveeastTyped () ;
+        bool moveeastTyped () const ;
 
        /**
         * Move character to the west
         */
-        bool movewestTyped () ;
+        bool movewestTyped () const ;
 
-        bool anyMoveTyped () ;
+        bool anyMoveTyped () const ;
 
        /**
         * Take or drop some object
         */
-        bool takeTyped () ;
+        bool takeTyped () const ;
 
        /**
         * Character jumps
         */
-        bool jumpTyped () ;
+        bool jumpTyped () const ;
 
-        bool takeAndJumpTyped () ;
+        bool takeAndJumpTyped () const ;
 
        /**
         * Release doughnut
         */
-        bool doughnutTyped () ;
+        bool doughnutTyped () const ;
 
        /**
         * Swap characters
         */
-        bool swapTyped () ;
+        bool swapTyped () const ;
 
        /**
         * Pause game
         */
-        bool pauseTyped () ;
+        bool pauseTyped () const ;
 
-        void releaseKeyFor ( const std::string& keyAction ) ;
+       /**
+        * Show automap
+        */
+        bool automapTyped () const ;
+
+        void releaseKeyFor ( const std::string& keyAction ) const ;
 
 private:
 
-       /**
-        * Único objeto de esta clase para toda la aplicación
-        */
         static InputManager * instance ;
 
-       /**
-        * Associative map of action of key to key’s name for keys chosen by user
-        */
-        std::map < /* action */ std::string, /* name */ std::string > userKeys ;
+        std::vector < std::pair < /* action */ std::string, /* name */ std::string > > userKeys ;
 
 };
 

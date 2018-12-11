@@ -11,9 +11,10 @@
 namespace iso
 {
 
-Miniature::Miniature( const Room& roomForMiniature, unsigned int sizeOfTileForMiniature )
+Miniature::Miniature( const Room& roomForMiniature, int leftX, int topY, unsigned int sizeOfTileForMiniature )
         : room( roomForMiniature )
         , sizeOfTile( sizeOfTileForMiniature )
+        , offset( std::pair< int, int >( leftX, topY ) )
 {
         if ( sizeOfTile < 2 ) sizeOfTile = 2 ;
 }
@@ -30,14 +31,14 @@ void Miniature::draw ()
         std::string roomToTeleport = connections->findConnectedRoom( "via teleport", &wayToNextRoom );
         std::string roomToTeleportToo = connections->findConnectedRoom( "via second teleport", &wayToNextRoom );
 
-        const unsigned int tilesX = room.getTilesX();
-        const unsigned int tilesY = room.getTilesY();
+        const unsigned int tilesX = room.getTilesX ();
+        const unsigned int tilesY = room.getTilesY ();
 
-        const unsigned int leftXmap = 24;
-        const unsigned int topYmap = roomAbove.empty() ? 28 : 24 + ( 3 * sizeOfTile );
+        const int deltaX = offset.first ;
+        const int deltaY = offset.second + ( roomAbove.empty() ? 4 : ( 3 * sizeOfTile ) );
 
-        const unsigned int iniX = leftXmap + ( tilesY * ( sizeOfTile << 1 ) );
-        const unsigned int iniY = topYmap + ( sizeOfTile << 1 );
+        const int originX = deltaX + ( tilesY * ( sizeOfTile << 1 ) );
+        const int originY = deltaY + ( sizeOfTile << 1 );
 
         unsigned int firstTileX = 0;
         unsigned int firstTileY = 0;
@@ -75,75 +76,77 @@ void Miniature::draw ()
 
         const allegro::Pict& where = allegro::Pict::getWhereToDraw() ;
 
+        const Color& roomColor = Color::byName( room.getColor () );
+
         // draw doors
 
         if ( eastDoor != nilPointer && ! narrowRoomAlongY )
         {
                 unsigned int eastDoorXmid = eastDoor->getCellX() + 1;
-                drawEastDoorOnMiniature( where, iniX, iniY, eastDoorXmid, eastDoor->getCellY(), Color::whiteColor() );
+                drawEastDoorOnMiniature( where, originX, originY, eastDoorXmid, eastDoor->getCellY(), Color::whiteColor() * roomColor );
         }
         if ( eastnorthDoor != nilPointer )
         {
                 unsigned int eastnorthDoorXmid = eastnorthDoor->getCellX() + 1;
-                drawEastDoorOnMiniature( where, iniX, iniY, eastnorthDoorXmid, eastnorthDoor->getCellY(), Color::whiteColor() );
+                drawEastDoorOnMiniature( where, originX, originY, eastnorthDoorXmid, eastnorthDoor->getCellY(), Color::whiteColor() * roomColor );
         }
         if ( eastsouthDoor != nilPointer )
         {
                 unsigned int eastsouthDoorXmid = eastsouthDoor->getCellX() + 1;
-                drawEastDoorOnMiniature( where, iniX, iniY, eastsouthDoorXmid, eastsouthDoor->getCellY(), Color::whiteColor() );
+                drawEastDoorOnMiniature( where, originX, originY, eastsouthDoorXmid, eastsouthDoor->getCellY(), Color::whiteColor() * roomColor );
         }
 
         if ( northDoor != nilPointer && ! narrowRoomAlongX )
         {
                 unsigned int northDoorYmid = northDoor->getCellY() + 1;
-                drawNorthDoorOnMiniature( where, iniX, iniY, northDoor->getCellX(), northDoorYmid, Color::whiteColor() );
+                drawNorthDoorOnMiniature( where, originX, originY, northDoor->getCellX(), northDoorYmid, Color::whiteColor() * roomColor );
         }
         if ( northeastDoor != nilPointer )
         {
                 unsigned int northeastDoorYmid = northeastDoor->getCellY() + 1;
-                drawNorthDoorOnMiniature( where, iniX, iniY, northeastDoor->getCellX(), northeastDoorYmid, Color::whiteColor() );
+                drawNorthDoorOnMiniature( where, originX, originY, northeastDoor->getCellX(), northeastDoorYmid, Color::whiteColor() * roomColor );
         }
         if ( northwestDoor != nilPointer )
         {
                 unsigned int northwestDoorYmid = northwestDoor->getCellY() + 1;
-                drawNorthDoorOnMiniature( where, iniX, iniY, northwestDoor->getCellX(), northwestDoorYmid, Color::whiteColor() );
+                drawNorthDoorOnMiniature( where, originX, originY, northwestDoor->getCellX(), northwestDoorYmid, Color::whiteColor() * roomColor );
         }
 
         if ( westDoor != nilPointer && ! narrowRoomAlongY )
         {
                 unsigned int westDoorXmid = westDoor->getCellX() + 1;
-                drawWestDoorOnMiniature( where, iniX, iniY, westDoorXmid, westDoor->getCellY(), Color::whiteColor() );
+                drawWestDoorOnMiniature( where, originX, originY, westDoorXmid, westDoor->getCellY(), Color::whiteColor() * roomColor );
         }
         if ( westnorthDoor != nilPointer )
         {
                 unsigned int westnorthDoorXmid = westnorthDoor->getCellX() + 1;
-                drawWestDoorOnMiniature( where, iniX, iniY, westnorthDoorXmid, westnorthDoor->getCellY(), Color::whiteColor() );
+                drawWestDoorOnMiniature( where, originX, originY, westnorthDoorXmid, westnorthDoor->getCellY(), Color::whiteColor() * roomColor );
         }
         if ( westsouthDoor != nilPointer )
         {
                 unsigned int westsouthDoorXmid = westsouthDoor->getCellX() + 1;
-                drawWestDoorOnMiniature( where, iniX, iniY, westsouthDoorXmid, westsouthDoor->getCellY(), Color::whiteColor() );
+                drawWestDoorOnMiniature( where, originX, originY, westsouthDoorXmid, westsouthDoor->getCellY(), Color::whiteColor() * roomColor );
         }
 
         if ( southDoor != nilPointer && ! narrowRoomAlongX )
         {
                 unsigned int southDoorYmid = southDoor->getCellY() + 1;
-                drawSouthDoorOnMiniature( where, iniX, iniY, southDoor->getCellX(), southDoorYmid, Color::whiteColor() );
+                drawSouthDoorOnMiniature( where, originX, originY, southDoor->getCellX(), southDoorYmid, Color::whiteColor() * roomColor );
         }
         if ( southeastDoor != nilPointer )
         {
                 unsigned int southeastDoorYmid = southeastDoor->getCellY() + 1;
-                drawSouthDoorOnMiniature( where, iniX, iniY, southeastDoor->getCellX(), southeastDoorYmid, Color::whiteColor() );
+                drawSouthDoorOnMiniature( where, originX, originY, southeastDoor->getCellX(), southeastDoorYmid, Color::whiteColor() * roomColor );
         }
         if ( southwestDoor != nilPointer )
         {
                 unsigned int southwestDoorYmid = southwestDoor->getCellY() + 1;
-                drawSouthDoorOnMiniature( where, iniX, iniY, southwestDoor->getCellX(), southwestDoorYmid, Color::whiteColor() );
+                drawSouthDoorOnMiniature( where, originX, originY, southwestDoor->getCellX(), southwestDoorYmid, Color::whiteColor() * roomColor );
         }
 
         // draw boundaries of room
 
-        drawIsoSquare( where, iniX, iniY, tilesX, tilesY, Color::byName( "gray" ) );
+        drawIsoSquare( where, originX, originY, tilesX, tilesY, Color::byName( "gray" ) * roomColor );
 
         // draw walls
 
@@ -201,9 +204,9 @@ void Miniature::draw ()
                                 ! ( eastsouthDoor != nilPointer && ( static_cast< int >( tile ) == eastsouthDoor->getCellX() + 1 || static_cast< int >( tile ) == eastsouthDoor->getCellX() ) ) )
                         {
                                 drawIsoTile (
-                                        where, iniX, iniY,
+                                        where, originX, originY,
                                         tile, firstTileY,
-                                        Color::whiteColor(),
+                                        Color::whiteColor() * roomColor,
                                         true, false, false, false );
                         }
                 }
@@ -215,9 +218,9 @@ void Miniature::draw ()
                                 ! ( westsouthDoor != nilPointer && ( static_cast< int >( tile ) == westsouthDoor->getCellX() + 1 || static_cast< int >( tile ) == westsouthDoor->getCellX() ) ) )
                         {
                                 drawIsoTile (
-                                        where, iniX, iniY,
+                                        where, originX, originY,
                                         tile, lastTileY,
-                                        Color::whiteColor(),
+                                        Color::whiteColor() * roomColor,
                                         false, false, true, false );
                         }
                 }
@@ -226,23 +229,23 @@ void Miniature::draw ()
                 {
                         if ( northDoor != nilPointer )
                         {
-                                drawIsoTile ( where, iniX, iniY, 0, firstTileY,
-                                                Color::byName( "75% gray" ),
+                                drawIsoTile ( where, originX, originY, 0, firstTileY,
+                                                Color::byName( "75% gray" ) * roomColor,
                                                 true, false, false, false );
 
-                                drawIsoTile ( where, iniX, iniY, 0, lastTileY,
-                                                Color::byName( "75% gray" ),
+                                drawIsoTile ( where, originX, originY, 0, lastTileY,
+                                                Color::byName( "75% gray" ) * roomColor,
                                                 false, false, true, false );
                         }
 
                         if ( southDoor != nilPointer )
                         {
-                                drawIsoTile ( where, iniX, iniY, tilesX - 1, firstTileY,
-                                                Color::byName( "75% gray" ),
+                                drawIsoTile ( where, originX, originY, tilesX - 1, firstTileY,
+                                                Color::byName( "75% gray" ) * roomColor,
                                                 true, false, false, false );
 
-                                drawIsoTile ( where, iniX, iniY, tilesX - 1, lastTileY,
-                                                Color::byName( "75% gray" ),
+                                drawIsoTile ( where, originX, originY, tilesX - 1, lastTileY,
+                                                Color::byName( "75% gray" ) * roomColor,
                                                 false, false, true, false );
                         }
                 }
@@ -257,9 +260,9 @@ void Miniature::draw ()
                                 ! ( southwestDoor != nilPointer && ( static_cast< int >( tile ) == southwestDoor->getCellY() + 1 || static_cast< int >( tile ) == southwestDoor->getCellY() ) ) )
                         {
                                 drawIsoTile (
-                                        where, iniX, iniY,
+                                        where, originX, originY,
                                         lastTileX, tile,
-                                        Color::whiteColor(),
+                                        Color::whiteColor() * roomColor,
                                         false, false, false, true );
                         }
                 }
@@ -271,9 +274,9 @@ void Miniature::draw ()
                                 ! ( northwestDoor != nilPointer && ( static_cast< int >( tile ) == northwestDoor->getCellY() + 1 || static_cast< int >( tile ) == northwestDoor->getCellY() ) ) )
                         {
                                 drawIsoTile (
-                                        where, iniX, iniY,
+                                        where, originX, originY,
                                         firstTileX, tile,
-                                        Color::whiteColor(),
+                                        Color::whiteColor() * roomColor,
                                         false, true, false, false );
                         }
                 }
@@ -282,23 +285,23 @@ void Miniature::draw ()
                 {
                         if ( eastDoor != nilPointer )
                         {
-                                drawIsoTile ( where, iniX, iniY, firstTileX, 0,
-                                                Color::byName( "75% gray" ),
+                                drawIsoTile ( where, originX, originY, firstTileX, 0,
+                                                Color::byName( "75% gray" ) * roomColor,
                                                 false, true, false, false );
 
-                                drawIsoTile ( where, iniX, iniY, lastTileX, 0,
-                                                Color::byName( "75% gray" ),
+                                drawIsoTile ( where, originX, originY, lastTileX, 0,
+                                                Color::byName( "75% gray" ) * roomColor,
                                                 false, false, false, true );
                         }
 
                         if ( westDoor != nilPointer )
                         {
-                                drawIsoTile ( where, iniX, iniY, firstTileX, tilesY - 1,
-                                                Color::byName( "75% gray" ),
+                                drawIsoTile ( where, originX, originY, firstTileX, tilesY - 1,
+                                                Color::byName( "75% gray" ) * roomColor,
                                                 false, true, false, false );
 
-                                drawIsoTile ( where, iniX, iniY, lastTileX, tilesY - 1,
-                                                Color::byName( "75% gray" ),
+                                drawIsoTile ( where, originX, originY, lastTileX, tilesY - 1,
+                                                Color::byName( "75% gray" ) * roomColor,
                                                 false, false, false, true );
                         }
                 }
@@ -322,11 +325,11 @@ void Miniature::draw ()
 
                         if ( label == "teleport" && ! roomToTeleport.empty() )
                         {
-                                fillIsoTile( where, iniX, iniY, tileX, tileY, Color::byName( "yellow" ) );
+                                fillIsoTile( where, originX, originY, tileX, tileY, Color::byName( "yellow" ) );
                         }
                         else if ( label == "teleport-too" && ! roomToTeleportToo.empty() )
                         {
-                                fillIsoTile( where, iniX, iniY, tileX, tileY, Color::byName( "magenta" ) );
+                                fillIsoTile( where, originX, originY, tileX, tileY, Color::byName( "magenta" ) );
                         }
 
                         // show triple room’s walls
@@ -334,16 +337,16 @@ void Miniature::draw ()
                         if ( label.find( "wall-x" ) != std::string::npos )
                         {
                                 if ( label.find( "invisible-wall" ) != std::string::npos )
-                                        drawIsoTile( where, iniX, iniY, tileX, tileY, Color::whiteColor(), true, false, false, false );
+                                        drawIsoTile( where, originX, originY, tileX, tileY, Color::whiteColor() * roomColor, true, false, false, false );
                                 else
-                                        drawIsoTile( where, iniX, iniY, tileX, tileY, Color::whiteColor(), false, false, true, false );
+                                        drawIsoTile( where, originX, originY, tileX, tileY, Color::whiteColor() * roomColor, false, false, true, false );
                         }
                         if ( label.find( "wall-y" ) != std::string::npos )
                         {
                                 if ( label.find( "invisible-wall" ) != std::string::npos )
-                                        drawIsoTile( where, iniX, iniY, tileX, tileY, Color::whiteColor(), false, true, false, false );
+                                        drawIsoTile( where, originX, originY, tileX, tileY, Color::whiteColor() * roomColor, false, true, false, false );
                                 else
-                                        drawIsoTile( where, iniX, iniY, tileX, tileY, Color::whiteColor(), false, false, false, true );
+                                        drawIsoTile( where, originX, originY, tileX, tileY, Color::whiteColor() * roomColor, false, false, false, true );
                         }
                 }
         }
@@ -372,7 +375,7 @@ void Miniature::draw ()
                         int tileX = ( item.getX() - ( ( roomTileSize - descriptionOfItem->getWidthX() ) >> 1 ) ) / roomTileSize ;
                         int tileY = ( ( item.getY() + ( ( roomTileSize - descriptionOfItem->getWidthY() ) >> 1 ) + 1 ) / roomTileSize ) - 1 ;
 
-                        fillIsoTile( where, iniX, iniY, tileX, tileY, Color::byName( "orange" ) );
+                        fillIsoTile( where, originX, originY, tileX, tileY, Color::byName( "orange" ) );
                 }
 
                 // show rabbit bonuses
@@ -385,7 +388,7 @@ void Miniature::draw ()
                         int tileX = ( item.getX() - ( ( roomTileSize - descriptionOfItem->getWidthX() ) >> 1 ) ) / roomTileSize ;
                         int tileY = ( ( item.getY() + ( ( roomTileSize - descriptionOfItem->getWidthY() ) >> 1 ) + 1 ) / roomTileSize ) - 1 ;
 
-                        fillIsoTile( where, iniX, iniY, tileX, tileY, Color::byName( "cyan" ) );
+                        fillIsoTile( where, originX, originY, tileX, tileY, Color::byName( "cyan" ) );
                 }
 
                 // show fish
@@ -399,9 +402,9 @@ void Miniature::draw ()
                         int tileY = ( ( item.getY() + ( ( roomTileSize - descriptionOfItem->getWidthY() ) >> 1 ) + 1 ) / roomTileSize ) - 1 ;
 
                         if ( label == "reincarnation-fish" )
-                                fillIsoTile( where, iniX, iniY, tileX, tileY, Color::byName( "green" ) );
+                                fillIsoTile( where, originX, originY, tileX, tileY, Color::byName( "green" ) );
                         else if ( label == "mortal-fish" )
-                                fillIsoTile( where, iniX, iniY, tileX, tileY, Color::byName( "red" ) );
+                                fillIsoTile( where, originX, originY, tileX, tileY, Color::byName( "red" ) );
                 }
         }
 
@@ -425,7 +428,7 @@ void Miniature::draw ()
 
                 /* for ( int x = xBegin ; x <= xEnd ; ++ x )
                         for ( int y = yBegin ; y <= yEnd ; ++ y )
-                                drawIsoTile( where, iniX, iniY, x, y, Color::byName( "blue" ), true, true, true, true ) ; */
+                                drawIsoTile( where, originX, originY, x, y, Color::byName( "blue" ), true, true, true, true ) ; */
 
                 int deltaWx = ( roomTileSize - character.getWidthX() ) >> 1 ;
                 int deltaWy = ( roomTileSize - character.getWidthY() ) >> 1 ;
@@ -449,7 +452,7 @@ void Miniature::draw ()
                 }
 
                 fillIsoTileInside( where,
-                        iniX, iniY, tileX, tileY,
+                        originX, originY, tileX, tileY,
                         character.isActiveCharacter() ? FlickeringColor::flickerWhiteAndTransparent() : FlickeringColor::flickerGray75AndTransparent(),
                         true );
         }
@@ -458,11 +461,11 @@ void Miniature::draw ()
 
         if ( ! roomAbove.empty() || ! roomBelow.empty() )
         {
-                int miniatureMidX = leftXmap + ( tilesY + tilesX ) * sizeOfTile;
-                int aboveY = iniY - 2;
-                int belowY = iniY + ( tilesY + tilesX ) * sizeOfTile;
-                aboveY -= sizeOfTile << 1;
-                belowY += sizeOfTile << 1;
+                int miniatureMidX = deltaX + ( tilesY + tilesX ) * sizeOfTile ;
+                int aboveY = originY - 2 ;
+                int belowY = originY + ( tilesY + tilesX ) * sizeOfTile ;
+                aboveY -= sizeOfTile << 1 ;
+                belowY += sizeOfTile << 1 ;
 
                 drawVignetteForRoomAboveOrBelow( where, miniatureMidX, aboveY, belowY, Color::byName( "green" ).toAllegroColor(), roomAbove, roomBelow );
         }
@@ -475,8 +478,8 @@ void Miniature::draw ()
                 {
                         for ( unsigned int y = 0 ; y < tilesY ; ++ y )
                         {
-                                drawIsoTile( where, iniX, iniY, x, y, Color::byName( "green" ), true, true, true, true ) ;
-                                fillIsoTileInside( where, iniX, iniY, x, y, Color::byName( "yellow" ), true ) ;
+                                drawIsoTile( where, originX, originY, x, y, Color::byName( "green" ), true, true, true, true ) ;
+                                fillIsoTileInside( where, originX, originY, x, y, Color::byName( "yellow" ), true ) ;
                         }
                 }
         }
@@ -779,6 +782,13 @@ void Miniature::fillIsoTileInside( const allegro::Pict& where, int x0, int y0, i
                         }
                 }
         }
+}
+
+std::pair< int, int > Miniature::calculatePositionOfConnectedMiniature( const std::string& where )
+{
+        ( void ) where ;
+
+        return offset ;
 }
 
 }

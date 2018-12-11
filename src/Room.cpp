@@ -127,7 +127,7 @@ Room::Room( const std::string& roomFile, const std::string& scenery, unsigned in
         }
 
         // 0 for pure black shadows, 128 for 50% opacity of shadows, 256 for no shadows
-        shadingOpacity = iso::GameManager::getInstance().getDrawShadows () ? 128 /* 0 */ : 256 ;
+        shadingOpacity = iso::GameManager::getInstance().getCastShadows () ? 128 /* 0 */ : 256 ;
 
         std::cout << "created room \"" << nameOfFileWithDataAboutRoom << "\"" << std::endl ;
 }

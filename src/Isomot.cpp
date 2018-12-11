@@ -25,7 +25,8 @@ Isomot::Isomot( ) :
         finalRoomTimer( new Timer() ),
         finalRoomBuilt( false ),
         sizeOfTileForMiniature( 3 ),
-        cameraFollowsCharacter( true )
+        cameraFollowsCharacter( true ),
+        drawOnChequerboard( false )
 {
 }
 
@@ -39,9 +40,7 @@ void Isomot::binView ()
         delete view ;
         view = nilPointer ;
 
-# if defined( DEBUG ) && DEBUG
         chequerboard.clear ();
-# endif
 }
 
 void Isomot::prepare ()
@@ -251,20 +250,23 @@ Picture* Isomot::updateMe ()
         const allegro::Pict& previousWhere = allegro::Pict::getWhereToDraw() ;
         allegro::Pict::setWhereToDraw( view->getAllegroPict() );
 
-# if defined( DEBUG ) && DEBUG
         if ( chequerboard == nilPointer )
         {
                 chequerboard = PicturePtr( new Picture( view->getWidth(), view->getHeight() ) );
                 chequerboard->fillWithTransparencyChequerboard ();
         }
 
-        allegro::bitBlit( chequerboard->getAllegroPict(), view->getAllegroPict() );
-# else
-        Color backgroundColor = Color::blackColor();
-        if ( GameManager::getInstance().charactersFly() ) backgroundColor = Color::byName( "dark blue" );
+        if ( drawOnChequerboard )
+        {
+                allegro::bitBlit( chequerboard->getAllegroPict(), view->getAllegroPict() );
+        }
+        else
+        {
+                Color backgroundColor = Color::blackColor();
+                if ( GameManager::getInstance().charactersFly() ) backgroundColor = Color::byName( "dark blue" );
 
-        view->fillWithColor( backgroundColor );
-# endif
+                view->fillWithColor( backgroundColor );
+        }
 
         Room* activeRoom = mapManager.getActiveRoom();
         if ( activeRoom == nilPointer ) return view ;
@@ -344,8 +346,10 @@ Picture* Isomot::updateMe ()
         const int cameraDeltaX = activeRoom->getCamera()->getDeltaX();
         const int cameraDeltaY = activeRoom->getCamera()->getDeltaY();
 
+        const Color& roomColor = Color::byName( activeRoom->getColor() );
+
         if ( GameManager::getInstance().isSimpleGraphicSet() )
-                Color::multiplyWithColor( * activeRoom->getWhereToDraw(), Color::byName( activeRoom->getColor() ) );
+                Color::multiplyWithColor( * activeRoom->getWhereToDraw(), roomColor );
 
         allegro::Pict::setWhereToDraw( view->getAllegroPict() );
 
@@ -354,8 +358,6 @@ Picture* Isomot::updateMe ()
                 - cameraDeltaX, - cameraDeltaY
         );
 
-        AllegroColor allegroWhiteColor = Color::whiteColor().toAllegroColor() ;
-
         if ( ! GameManager::getInstance().hasBackgroundPicture () )
         {
                 // show information about room and draw miniature of room
@@ -363,10 +365,10 @@ Picture* Isomot::updateMe ()
                 std::ostringstream roomTiles;
                 roomTiles << activeRoom->getTilesX() << "x" << activeRoom->getTilesY();
 
-                allegro::textOut( roomFile, 12, 8, allegroWhiteColor );
-                allegro::textOut( roomTiles.str(), 12, 20, allegroWhiteColor );
+                allegro::textOut( roomFile, 12, 8, roomColor.toAllegroColor() );
+                allegro::textOut( roomTiles.str(), 12, 20, roomColor.toAllegroColor() );
 
-                Miniature miniatureOfRoom( *activeRoom, sizeOfTileForMiniature );
+                Miniature miniatureOfRoom( *activeRoom, 24, 24, sizeOfTileForMiniature );
                 miniatureOfRoom.draw ();
         }
 
@@ -374,13 +376,14 @@ Picture* Isomot::updateMe ()
 
         if ( GameManager::getInstance().areLivesInexhaustible () )
         {
-                ///allegro::textOut( "VIDAS INFINITAS", 18, 10, allegroWhiteColor );
-                allegro::textOut( "INFINITE LIVES", view->getWidth() - 128, 10, allegroWhiteColor );
+                std::string infiniteLives = "VIDAS INFINITAS" ;
+                allegro::textOut( infiniteLives, view->getWidth() - ( 8 * infiniteLives.length() ) - 16, 10, Color::whiteColor().toAllegroColor() );
         }
 
         if ( GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
         {
-                allegro::textOut( "INVIOLABILITY", ( view->getWidth() - 13 * 8 ) >> 1, 10, allegroWhiteColor );
+                std::string immunity = "INVIOLABILITY" ;
+                allegro::textOut( immunity, ( view->getWidth() - ( immunity.length() * 8 ) ) >> 1, 10, Color::whiteColor().toAllegroColor() );
         }
 
         if ( paused )
@@ -642,6 +645,12 @@ void Isomot::handleMagicKeys ()
         {
                 if ( sizeOfTileForMiniature < 10 ) sizeOfTileForMiniature ++;
                 allegro::releaseKey( "Pad +" );
+        }
+
+        if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "." ) )
+        {
+                drawOnChequerboard = ! drawOnChequerboard ;
+                allegro::releaseKey( "." );
         }
 }
 

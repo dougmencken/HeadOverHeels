@@ -1,14 +1,11 @@
 <room scenery="safari" tileSize="16">
     <xTiles>4</xTiles>
     <yTiles>18</yTiles>
+    <color>white.reduced</color>
     <floorKind>plain</floorKind>
     <walls>
         <wall on="x">
             <position>0</position>
-            <picture>safari-wall-x-1.png</picture>
-        </wall>
-        <wall on="x">
-            <position>3</position>
             <picture>safari-wall-x-1.png</picture>
         </wall>
         <wall on="y">
@@ -74,6 +71,10 @@
         <wall on="y">
             <position>16</position>
             <picture>safari-wall-y-1.png</picture>
+        </wall>
+        <wall on="x">
+            <position>3</position>
+            <picture>safari-wall-x-1.png</picture>
         </wall>
     </walls>
     <items>

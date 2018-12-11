@@ -70,6 +70,11 @@ public:
 
         bool isMortal() const {  return mortal ;  }
 
+        /**
+         * @return 1 when there’s only one orientation,
+         *         2 if there’re frames for south and west, or
+         *         4 there’re frames for each orientation
+         */
         unsigned short howManyOrientations () const {  return orientations ;  }
 
         unsigned int howManyExtraFrames () const {  return extraFrames ;  }
@@ -138,6 +143,9 @@ private:
         */
         unsigned int heightOfShadow ;
 
+       /**
+        * When true, item takes one life from character on touch
+        */
         bool mortal ;
 
        /**

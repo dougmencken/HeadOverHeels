@@ -1,6 +1,7 @@
 <room scenery="jail" tileSize="16">
     <xTiles>14</xTiles>
     <yTiles>16</yTiles>
+    <color>white</color>
     <triple-room-data>
         <bound-x minimum="64" maximum="144"/>
         <bound-y minimum="80" maximum="160"/>
@@ -85,11 +86,11 @@
             <picture>jail-wall-y.png</picture>
         </wall>
         <wall on="y">
-            <position>12</position>
+            <position>11</position>
             <picture>jail-wall-y.png</picture>
         </wall>
         <wall on="y">
-            <position>11</position>
+            <position>12</position>
             <picture>jail-wall-y.png</picture>
         </wall>
         <wall on="y">

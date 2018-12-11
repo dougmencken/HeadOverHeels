@@ -107,7 +107,7 @@ void CreateVideoMenu::doAction ()
                                         }
                                         else if ( listOfOptions->getActiveOption () == labelDrawShadows )
                                         {
-                                                iso::GameManager::getInstance().toggleDrawShadows ();
+                                                iso::GameManager::getInstance().toggleCastShadows ();
                                                 doneWithKey = true;
                                         }
                                         else if ( listOfOptions->getActiveOption () == labelDrawBackground )
@@ -142,7 +142,7 @@ void CreateVideoMenu::updateLabels ()
         std::string nope = languageManager->findLanguageStringForAlias( "nope" )->getText ();
 
         listOfOptions->setValueOf( labelDrawBackground, iso::GameManager::getInstance().hasBackgroundPicture () ? yeah : nope );
-        listOfOptions->setValueOf( labelDrawShadows, iso::GameManager::getInstance().getDrawShadows () ? yeah : nope );
+        listOfOptions->setValueOf( labelDrawShadows, iso::GameManager::getInstance().getCastShadows () ? yeah : nope );
         listOfOptions->setValueOf( labelFullscreen, gui::GuiManager::getInstance().isAtFullScreen () ? yeah : nope );
         // labelGraphicSet has no value but action
 

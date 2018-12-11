@@ -1,6 +1,7 @@
 <room scenery="jail" tileSize="16">
     <xTiles>7</xTiles>
     <yTiles>8</yTiles>
+    <color>white.reduced</color>
     <floorKind>absent</floorKind>
     <walls>
         <wall on="x">

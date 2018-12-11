@@ -37,7 +37,7 @@ GameManager::GameManager( )
         , immunityToCollisions( false )
         , noFallingDown( false )
         , playTuneOfScenery( true )
-        , drawShadows( true )
+        , castShadows( true )
         , drawBackgroundPicture( true )
         , recordCaptures( false )
         , recordingTimer( new Timer () )
@@ -1002,45 +1002,15 @@ bool GameManager::readPreferences( const std::string& fileName )
         tinyxml2::XMLElement* keyboard = root->FirstChildElement( "keyboard" ) ;
         if ( keyboard != nilPointer )
         {
-                tinyxml2::XMLElement* movenorth = keyboard->FirstChildElement( "movenorth" ) ;
-                if ( movenorth != nilPointer )
-                        InputManager::getInstance().changeUserKey( "movenorth", movenorth->FirstChild()->ToText()->Value() );
+                const std::vector < std::pair < /* action */ std::string, /* name */ std::string > > & chosenKeys = InputManager::getInstance().getUserKeys ();
+                for ( std::vector< std::pair< std::string, std::string > >::const_iterator it = chosenKeys.begin () ; it != chosenKeys.end () ; ++ it )
+                {
+                        std::string xmlAction = ( it->first == "take&jump" ) ? "takeandjump" : it->first ;
+                        tinyxml2::XMLElement* elementForKey = keyboard->FirstChildElement( xmlAction.c_str () ) ;
 
-                tinyxml2::XMLElement* movesouth = keyboard->FirstChildElement( "movesouth" ) ;
-                if ( movesouth != nilPointer )
-                        InputManager::getInstance().changeUserKey( "movesouth", movesouth->FirstChild()->ToText()->Value() );
-
-                tinyxml2::XMLElement* moveeast = keyboard->FirstChildElement( "moveeast" ) ;
-                if ( moveeast != nilPointer )
-                        InputManager::getInstance().changeUserKey( "moveeast", moveeast->FirstChild()->ToText()->Value() );
-
-                tinyxml2::XMLElement* movewest = keyboard->FirstChildElement( "movewest" ) ;
-                if ( movewest != nilPointer )
-                        InputManager::getInstance().changeUserKey( "movewest", movewest->FirstChild()->ToText()->Value() );
-
-                tinyxml2::XMLElement* take = keyboard->FirstChildElement( "take" ) ;
-                if ( take != nilPointer )
-                        InputManager::getInstance().changeUserKey( "take", take->FirstChild()->ToText()->Value() );
-
-                tinyxml2::XMLElement* jump = keyboard->FirstChildElement( "jump" ) ;
-                if ( jump != nilPointer )
-                        InputManager::getInstance().changeUserKey( "jump", jump->FirstChild()->ToText()->Value() );
-
-                tinyxml2::XMLElement* doughnut = keyboard->FirstChildElement( "doughnut" ) ;
-                if ( doughnut != nilPointer )
-                        InputManager::getInstance().changeUserKey( "doughnut", doughnut->FirstChild()->ToText()->Value() );
-
-                tinyxml2::XMLElement* takeandjump = keyboard->FirstChildElement( "takeandjump" ) ;
-                if ( takeandjump != nilPointer )
-                        InputManager::getInstance().changeUserKey( "take&jump", takeandjump->FirstChild()->ToText()->Value() );
-
-                tinyxml2::XMLElement* swap = keyboard->FirstChildElement( "swap" ) ;
-                if ( swap != nilPointer )
-                        InputManager::getInstance().changeUserKey( "swap", swap->FirstChild()->ToText()->Value() );
-
-                tinyxml2::XMLElement* pause = keyboard->FirstChildElement( "pause" ) ;
-                if ( pause != nilPointer )
-                        InputManager::getInstance().changeUserKey( "pause", pause->FirstChild()->ToText()->Value() );
+                        if ( elementForKey != nilPointer && elementForKey->FirstChild() != nilPointer )
+                                InputManager::getInstance().changeUserKey( it->first, elementForKey->FirstChild()->ToText()->Value() );
+                }
         }
 
         // preferences for audio
@@ -1087,10 +1057,10 @@ bool GameManager::readPreferences( const std::string& fileName )
                 tinyxml2::XMLElement* shadows = video->FirstChildElement( "shadows" ) ;
                 if ( shadows != nilPointer )
                 {
-                        bool drawShadows = ( std::string( shadows->FirstChild()->ToText()->Value() ) == "true" ) ? true : false ;
+                        bool castShadows = ( std::string( shadows->FirstChild()->ToText()->Value() ) == "true" ) ? true : false ;
 
-                        if ( GameManager::getInstance().getDrawShadows () != drawShadows )
-                                GameManager::getInstance().toggleDrawShadows ();
+                        if ( GameManager::getInstance().getCastShadows () != castShadows )
+                                GameManager::getInstance().toggleCastShadows ();
                 }
 
                 tinyxml2::XMLElement* background = video->FirstChildElement( "background" ) ;
@@ -1116,7 +1086,7 @@ bool GameManager::readPreferences( const std::string& fileName )
 bool GameManager::writePreferences( const std::string& fileName )
 {
 
-        tinyxml2::XMLDocument preferences;
+        tinyxml2::XMLDocument preferences ;
 
         tinyxml2::XMLNode * root = preferences.NewElement( "preferences" );
         preferences.InsertFirstChild( root );
@@ -1131,45 +1101,14 @@ bool GameManager::writePreferences( const std::string& fileName )
         {
                 tinyxml2::XMLNode * keyboard = preferences.NewElement( "keyboard" );
 
-                tinyxml2::XMLElement * movenorth = preferences.NewElement( "movenorth" );
-                movenorth->SetText( InputManager::getInstance().getUserKeyFor( "movenorth" ).c_str () );
-                keyboard->InsertEndChild( movenorth );
-
-                tinyxml2::XMLElement * movesouth = preferences.NewElement( "movesouth" );
-                movesouth->SetText( InputManager::getInstance().getUserKeyFor( "movesouth" ).c_str () );
-                keyboard->InsertEndChild( movesouth );
-
-                tinyxml2::XMLElement * moveeast = preferences.NewElement( "moveeast" );
-                moveeast->SetText( InputManager::getInstance().getUserKeyFor( "moveeast" ).c_str () );
-                keyboard->InsertEndChild( moveeast );
-
-                tinyxml2::XMLElement * movewest = preferences.NewElement( "movewest" );
-                movewest->SetText( InputManager::getInstance().getUserKeyFor( "movewest" ).c_str () );
-                keyboard->InsertEndChild( movewest );
-
-                tinyxml2::XMLElement * take = preferences.NewElement( "take" );
-                take->SetText( InputManager::getInstance().getUserKeyFor( "take" ).c_str () );
-                keyboard->InsertEndChild( take );
-
-                tinyxml2::XMLElement * jump = preferences.NewElement( "jump" );
-                jump->SetText( InputManager::getInstance().getUserKeyFor( "jump" ).c_str () );
-                keyboard->InsertEndChild( jump );
-
-                tinyxml2::XMLElement * doughnut = preferences.NewElement( "doughnut" );
-                doughnut->SetText( InputManager::getInstance().getUserKeyFor( "doughnut" ).c_str () );
-                keyboard->InsertEndChild( doughnut );
-
-                tinyxml2::XMLElement * takeandjump = preferences.NewElement( "takeandjump" );
-                takeandjump->SetText( InputManager::getInstance().getUserKeyFor( "take&jump" ).c_str () );
-                keyboard->InsertEndChild( takeandjump );
-
-                tinyxml2::XMLElement * swap = preferences.NewElement( "swap" );
-                swap->SetText( InputManager::getInstance().getUserKeyFor( "swap" ).c_str () );
-                keyboard->InsertEndChild( swap );
-
-                tinyxml2::XMLElement * pause = preferences.NewElement( "pause" );
-                pause->SetText( InputManager::getInstance().getUserKeyFor( "pause" ).c_str () );
-                keyboard->InsertEndChild( pause );
+                const std::vector < std::pair < /* action */ std::string, /* name */ std::string > > & chosenKeys = InputManager::getInstance().getUserKeys ();
+                for ( std::vector< std::pair< std::string, std::string > >::const_iterator it = chosenKeys.begin () ; it != chosenKeys.end () ; ++ it )
+                {
+                        std::string xmlAction = ( it->first == "take&jump" ) ? "takeandjump" : it->first ;
+                        tinyxml2::XMLElement* elementForKey = preferences.NewElement( xmlAction.c_str () ) ;
+                        elementForKey->SetText( InputManager::getInstance().getUserKeyFor( it->first ).c_str () );
+                        keyboard->InsertEndChild( elementForKey );
+                }
 
                 root->InsertEndChild( keyboard );
         }
@@ -1202,7 +1141,7 @@ bool GameManager::writePreferences( const std::string& fileName )
                 video->InsertEndChild( fullscreen );
 
                 tinyxml2::XMLElement * shadows = preferences.NewElement( "shadows" );
-                shadows->SetText( GameManager::getInstance().getDrawShadows () ? "true" : "false" );
+                shadows->SetText( GameManager::getInstance().getCastShadows () ? "true" : "false" );
                 video->InsertEndChild( shadows );
 
                 tinyxml2::XMLElement * background = preferences.NewElement( "background" );
@@ -1210,7 +1149,7 @@ bool GameManager::writePreferences( const std::string& fileName )
                 video->InsertEndChild( background );
 
                 tinyxml2::XMLElement * graphics = preferences.NewElement( "graphics" );
-                graphics->SetText( GameManager::getInstance().getChosenGraphicSet() );
+                graphics->SetText( GameManager::getInstance().getChosenGraphicSet().c_str () );
                 video->InsertEndChild( graphics );
 
                 root->InsertEndChild( video );

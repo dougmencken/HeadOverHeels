@@ -105,7 +105,7 @@ void Item::readGraphicsOfItem ()
         if ( motion.empty() )
                 addFrame( Picture( descriptionOfItem->getWidthOfFrame(), descriptionOfItem->getHeightOfFrame() ) );
 
-        freshProcessedImage ();
+        updateImage ();
 }
 
 bool Item::updateItem()
@@ -337,11 +337,6 @@ unsigned int Item::getWidthY() const
 bool Item::isMortal() const
 {
         return descriptionOfItem->isMortal() ;
-}
-
-unsigned short Item::howManyOrientations() const
-{
-        return descriptionOfItem->howManyOrientations() ;
 }
 
 size_t Item::firstFrameForOrientation ( const Way& way ) const

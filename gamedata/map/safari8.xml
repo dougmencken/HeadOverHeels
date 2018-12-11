@@ -1,6 +1,7 @@
 <room scenery="safari" tileSize="16">
     <xTiles>10</xTiles>
     <yTiles>2</yTiles>
+    <color>green</color>
     <floorKind>plain</floorKind>
     <walls>
         <wall on="x">

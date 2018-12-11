@@ -37,6 +37,8 @@ public:
 
         PicturePtr getOrLoadAndGetOrMakeAndGet ( const std::string & imageFile, unsigned int imageWidth, unsigned int imageHeight ) ;
 
+        PicturePtr makePicture ( const std::string & imageFile, unsigned int imageWidth, unsigned int imageHeight ) ;
+
         void putPicture ( const std::string & imageFile, const PicturePtr & picture ) ;
 
 private:

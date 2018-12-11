@@ -29,14 +29,14 @@ class RoomConnections
 
 public:
 
-        RoomConnections( ) ;
+        RoomConnections( ) { }
 
-        virtual ~RoomConnections( ) ;
+        virtual ~RoomConnections( ) { }
 
         /**
          * Find room connected to this one
          */
-        std::string findConnectedRoom ( const std::string& wayOfExit, Way* wayOfEntry ) const ;
+        std::string findConnectedRoom ( const std::string & wayOfExit, Way * wayOfEntry ) const ;
 
         /**
          * See if entrance to this room is okay or fix it if it’s not
@@ -45,7 +45,7 @@ public:
          * then entrance isn’t okay because map returns simple way like south or west
          * but doors of triple and quadruple rooms are out of such ways
          */
-        void adjustEntry ( Way* wayOfEntry, const std::string& previousRoom ) const ;
+        void adjustEntry ( Way * wayOfEntry, const std::string & previousRoom ) const ;
 
 private:
 
@@ -89,42 +89,42 @@ private:
         /**
          * File for room located at north-east for triple or quadruple rooms, or empty string
          */
-        std::string northEast ;
+        std::string northeast ;
 
         /**
          * File for room located at north-west for triple or quadruple rooms, or empty string
          */
-        std::string northWest ;
+        std::string northwest ;
 
         /**
          * File for room located at south-east for triple or quadruple rooms, or empty string
          */
-        std::string southEast ;
+        std::string southeast ;
 
         /**
          * File for room located at south-west for triple or quadruple rooms, or empty string
          */
-        std::string southWest ;
+        std::string southwest ;
 
         /**
          * File for room located at east-north for triple or quadruple rooms, or empty string
          */
-        std::string eastNorth ;
+        std::string eastnorth ;
 
         /**
          * File for room located at east-south for triple or quadruple rooms, or empty string
          */
-        std::string eastSouth ;
+        std::string eastsouth ;
 
         /**
          * File for room located at west-north for triple or quadruple rooms, or empty string
          */
-        std::string westNorth ;
+        std::string westnorth ;
 
         /**
          * File for room located at west-south for triple or quadruple rooms, or empty string
          */
-        std::string westSouth ;
+        std::string westsouth ;
 
 public:
 
@@ -144,21 +144,21 @@ public:
 
         void setTeleportToo ( const std::string& room ) {  this->teleport2 = room ;  }
 
-        void setNorthEast ( const std::string& room ) {  this->northEast = room ;  }
+        void setNorthEast ( const std::string& room ) {  this->northeast = room ;  }
 
-        void setNorthWest ( const std::string& room ) {  this->northWest = room ;  }
+        void setNorthWest ( const std::string& room ) {  this->northwest = room ;  }
 
-        void setSouthEast ( const std::string& room ) {  this->southEast = room ;  }
+        void setSouthEast ( const std::string& room ) {  this->southeast = room ;  }
 
-        void setSouthWest ( const std::string& room ) {  this->southWest = room ;  }
+        void setSouthWest ( const std::string& room ) {  this->southwest = room ;  }
 
-        void setEastNorth ( const std::string& room ) {  this->eastNorth = room ;  }
+        void setEastNorth ( const std::string& room ) {  this->eastnorth = room ;  }
 
-        void setEastSouth ( const std::string& room ) {  this->eastSouth = room ;  }
+        void setEastSouth ( const std::string& room ) {  this->eastsouth = room ;  }
 
-        void setWestNorth ( const std::string& room ) {  this->westNorth = room ;  }
+        void setWestNorth ( const std::string& room ) {  this->westnorth = room ;  }
 
-        void setWestSouth ( const std::string& room ) {  this->westSouth = room ;  }
+        void setWestSouth ( const std::string& room ) {  this->westsouth = room ;  }
 
 };
 

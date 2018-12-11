@@ -1,6 +1,7 @@
 <room scenery="blacktooth" tileSize="16">
     <xTiles>8</xTiles>
     <yTiles>9</yTiles>
+    <color>cyan</color>
     <floorKind>plain</floorKind>
     <walls>
         <wall on="x">

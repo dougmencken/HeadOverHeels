@@ -49,6 +49,11 @@ Color::Color( )
 {
 }
 
+Color Color::operator * ( const Color & c ) const
+{
+        return Color( red * ( c.red / 255.0 ), green * ( c.green / 255.0 ), blue * ( c.blue / 255.0 ), alpha ) ;
+}
+
 std::string Color::toString () const
 {
         return   "color { r=" + util::number2string( red ) +
@@ -95,6 +100,7 @@ const Color& Color::byName ( const std::string& color )
         if ( color == "light cyan" || color == "lightcyan" || color == "cyan.light" ) return *theLightCyan ;
         if ( color == "light yellow" || color == "lightyellow" || color == "yellow.light" ) return *theLightYellow ;
 
+        assert( color == "gray" );
         return *the50Gray ;
 }
 

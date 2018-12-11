@@ -1,6 +1,7 @@
 <room scenery="blacktooth" tileSize="16">
     <xTiles>14</xTiles>
     <yTiles>12</yTiles>
+    <color>yellow</color>
     <triple-room-data>
         <bound-x minimum="96" maximum="144"/>
         <bound-y minimum="80" maximum="128"/>
@@ -47,11 +48,11 @@
             <picture>blacktooth-wall-x-3.png</picture>
         </wall>
         <wall on="x">
-            <position>10</position>
+            <position>9</position>
             <picture>blacktooth-wall-x-2.png</picture>
         </wall>
         <wall on="x">
-            <position>9</position>
+            <position>10</position>
             <picture>blacktooth-wall-x-2.png</picture>
         </wall>
         <wall on="x">

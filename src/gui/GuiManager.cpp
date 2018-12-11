@@ -32,7 +32,7 @@ GuiManager::GuiManager( ) :
         active( true ),
         atFullScreen( false )
 {
-        std::string nameOfWindow = "Head over Heels";
+        std::string nameOfWindow = "Head over Heels" ;
 
 #ifdef PACKAGE_VERSION
         std::string version = "v" + std::string( PACKAGE_VERSION );
@@ -43,6 +43,9 @@ GuiManager::GuiManager( ) :
                 version = "31st anniversary";
         else if ( version == "v1.32" )
                 version = "0x20 32nd anniversary";
+
+        if ( version.find( "v1.32" ) != std::string::npos )
+                nameOfWindow = "Foot and Mouth" ;
 
         nameOfWindow += " " + version ;
 #endif

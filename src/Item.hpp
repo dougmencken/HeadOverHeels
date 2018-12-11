@@ -190,17 +190,7 @@ public:
 
         void setHeight ( int newHeight ) {  height = newHeight ;  }
 
-        /**
-         * If true, item takes one life of character on touch
-         */
         bool isMortal () const ;
-
-        /**
-         * @return 1 when there’s only one orientation,
-         *         2 if there’re frames for south and west, or
-         *         4 there’re frames for each orientation
-         */
-        unsigned short howManyOrientations () const ;
 
         size_t firstFrameForOrientation ( const Way& way ) const ;
 

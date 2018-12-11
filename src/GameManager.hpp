@@ -230,9 +230,9 @@ public:
          */
         void success () {  this->emperator = true ;  }
 
-        const char* getChosenGraphicSet () const {  return chosenGraphicSet.c_str () ;  }
+        std::string getChosenGraphicSet () const {  return chosenGraphicSet ;  }
 
-        void setChosenGraphicSet ( const char* newSet ) {  chosenGraphicSet = newSet ;  }
+        void setChosenGraphicSet ( const std::string & newSet ) {  chosenGraphicSet = newSet ;  }
 
         bool isPresentGraphicSet () const {  return ( chosenGraphicSet == "gfx" ) ;  }
 
@@ -268,9 +268,9 @@ public:
 
         void togglePlayMelodyOfScenery () {  playTuneOfScenery = ! playTuneOfScenery ;  }
 
-        bool getDrawShadows () const {  return drawShadows ;  }
+        bool getCastShadows () const {  return castShadows ;  }
 
-        void toggleDrawShadows () {  drawShadows = ! drawShadows ;  }
+        void toggleCastShadows () {  castShadows = ! castShadows ;  }
 
         bool hasBackgroundPicture () const {  return drawBackgroundPicture ;  }
 
@@ -315,7 +315,7 @@ private:
 
         bool playTuneOfScenery ;
 
-        bool drawShadows ;
+        bool castShadows ;
 
         bool drawBackgroundPicture ;
 

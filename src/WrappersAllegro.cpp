@@ -228,8 +228,6 @@ ALLEGRO_DISPLAY * allegroDisplay ;
 
 #endif
 
-Pict* Pict::nil = new Pict( NULL ) ;
-
 Pict* Pict::whereToDraw = new Pict( NULL );
 
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
@@ -402,7 +400,7 @@ void Pict::unlock() const
 
 /* static */ Pict* Pict::asCloneOf( AllegroBitmap* image )
 {
-        if ( image == NULL ) return nil ;
+        if ( image == NULL ) return nilPict() ;
 
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 
@@ -420,7 +418,7 @@ void Pict::unlock() const
 
 /* static */ Pict* Pict::mendIntoPict( AllegroBitmap* image )
 {
-        if ( image == NULL ) return nil ;
+        if ( image == NULL ) return nilPict() ;
 
         AllegroColor transparent = AllegroColor::keyColor();
 
@@ -561,8 +559,6 @@ unsigned short Audio::digitalVolume = 200 ;
 
 unsigned short Audio::midiVolume = 200 ;
 
-
-Sample* Sample::nil = new Sample( );
 
 Sample::~Sample( )
 {
@@ -1857,7 +1853,7 @@ std::string scancodeToNameOfKey( int scancode )
         if ( scancodesToNames.find( scancode ) != scancodesToNames.end () )
                 return scancodesToNames[ scancode ];
 
-        return "unknown";
+        return "unknown" ;
 }
 
 int nameOfKeyToScancode( const std::string& name )
