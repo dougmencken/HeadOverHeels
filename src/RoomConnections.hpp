@@ -12,6 +12,7 @@
 #define RoomConnections_hpp_
 
 #include <string>
+#include <map>
 
 #include "Ism.hpp"
 #include "Way.hpp"
@@ -39,126 +40,131 @@ public:
         std::string findConnectedRoom ( const std::string & wayOfExit, Way * wayOfEntry ) const ;
 
         /**
-         * See if entrance to this room is okay or fix it if it’s not
+         * See if entrance to this room is okay or fix it when it’s not
          *
          * When triple or quadruple room is entered from single or double room
          * then entrance isn’t okay because map returns simple way like south or west
-         * but doors of triple and quadruple rooms are out of such ways
          */
         void adjustEntry ( Way * wayOfEntry, const std::string & previousRoom ) const ;
 
-private:
+        std::string getConnectedRoomAt ( const std::string & where ) const
+        {
+                std::map< std::string, std::string >::const_iterator found = connections.find( where );
+                return ( found != connections.end () ) ? found->second : "" ;
+        }
 
         /**
          * File for room to the north of this room, empty string if no room there
          */
-        std::string north ;
+        std::string getNorth () const {  return getConnectedRoomAt( "north" ) ;  }
+
+        void setNorth ( const std::string & room ) {  connections[ "north" ] = room ;  }
 
         /**
          * File for room to the south of this room, empty string if no room there
          */
-        std::string south ;
+        std::string getSouth () const {  return getConnectedRoomAt( "south" ) ;  }
+
+        void setSouth ( const std::string & room ) {  connections[ "south" ] = room ;  }
 
         /**
          * File for room to the east of this room, empty string if no room there
          */
-        std::string east ;
+        std::string getEast () const {  return getConnectedRoomAt( "east" ) ;  }
+
+        void setEast ( const std::string & room ) {  connections[ "east" ] = room ;  }
 
         /**
          * File for room to the west of this room, empty string if no room there
          */
-        std::string west ;
+        std::string getWest () const {  return getConnectedRoomAt( "west" ) ;  }
+
+        void setWest ( const std::string & room ) {  connections[ "west" ] = room ;  }
 
         /**
          * File for room below this room, empty string if no room there
          */
-        std::string floor ;
+        std::string getFloor () const {  return getConnectedRoomAt( "below" ) ;  }
+
+        void setFloor ( const std::string & room ) {  connections[ "below" ] = room ;  }
 
         /**
          * File for room above this room, empty string if no room there
          */
-        std::string roof ;
+        std::string getRoof () const {  return getConnectedRoomAt( "above" ) ;  }
+
+        void setRoof ( const std::string & room ) {  connections[ "above" ] = room ;  }
 
         /**
-         * File for room to teleport from this room, empty string when no room to teleport to
+         * File for room connected via teleport to this room, empty string when no teleport
          */
-        std::string teleport ;
+        std::string getTeleport () const {  return getConnectedRoomAt( "via teleport" ) ;  }
 
-        std::string teleport2 ;
+        void setTeleport ( const std::string & room ) {  connections[ "via teleport" ] = room ;  }
+
+        std::string getTeleportToo () const {  return getConnectedRoomAt( "via second teleport" ) ;  }
+
+        void setTeleportToo ( const std::string & room ) {  connections[ "via second teleport" ] = room ;  }
 
         /**
          * File for room located at north-east for triple or quadruple rooms, or empty string
          */
-        std::string northeast ;
+        std::string getNorthEast () const {  return getConnectedRoomAt( "northeast" ) ;  }
+
+        void setNorthEast ( const std::string & room ) {  connections[ "northeast" ] = room ;  }
 
         /**
          * File for room located at north-west for triple or quadruple rooms, or empty string
          */
-        std::string northwest ;
+        std::string getNorthWest () const {  return getConnectedRoomAt( "northwest" ) ;  }
+
+        void setNorthWest ( const std::string & room ) {  connections[ "northwest" ] = room ;  }
 
         /**
          * File for room located at south-east for triple or quadruple rooms, or empty string
          */
-        std::string southeast ;
+        std::string getSouthEast () const {  return getConnectedRoomAt( "southeast" ) ;  }
+
+        void setSouthEast ( const std::string & room ) {  connections[ "southeast" ] = room ;  }
 
         /**
          * File for room located at south-west for triple or quadruple rooms, or empty string
          */
-        std::string southwest ;
+        std::string getSouthWest () const {  return getConnectedRoomAt( "southwest" ) ;  }
+
+        void setSouthWest ( const std::string & room ) {  connections[ "southwest" ] = room ;  }
 
         /**
          * File for room located at east-north for triple or quadruple rooms, or empty string
          */
-        std::string eastnorth ;
+        std::string getEastNorth () const {  return getConnectedRoomAt( "eastnorth" ) ;  }
+
+        void setEastNorth ( const std::string & room ) {  connections[ "eastnorth" ] = room ;  }
 
         /**
          * File for room located at east-south for triple or quadruple rooms, or empty string
          */
-        std::string eastsouth ;
+        std::string getEastSouth () const {  return getConnectedRoomAt( "eastsouth" ) ;  }
+
+        void setEastSouth ( const std::string & room ) {  connections[ "eastsouth" ] = room ;  }
 
         /**
          * File for room located at west-north for triple or quadruple rooms, or empty string
          */
-        std::string westnorth ;
+        std::string getWestNorth () const {  return getConnectedRoomAt( "westnorth" ) ;  }
+
+        void setWestNorth ( const std::string & room ) {  connections[ "westnorth" ] = room ;  }
 
         /**
          * File for room located at west-south for triple or quadruple rooms, or empty string
          */
-        std::string westsouth ;
+        std::string getWestSouth () const {  return getConnectedRoomAt( "westsouth" ) ;  }
 
-public:
+        void setWestSouth ( const std::string & room ) {  connections[ "westsouth" ] = room ;  }
 
-        void setNorth ( const std::string& room ) {  this->north = room ;  }
+private:
 
-        void setSouth ( const std::string& room ) {  this->south = room ;  }
-
-        void setEast ( const std::string& room ) {  this->east = room ;  }
-
-        void setWest ( const std::string& room ) {  this->west = room ;  }
-
-        void setFloor ( const std::string& room ) {  this->floor = room ;  }
-
-        void setRoof ( const std::string& room ) {  this->roof = room ;  }
-
-        void setTeleport ( const std::string& room ) {  this->teleport = room ;  }
-
-        void setTeleportToo ( const std::string& room ) {  this->teleport2 = room ;  }
-
-        void setNorthEast ( const std::string& room ) {  this->northeast = room ;  }
-
-        void setNorthWest ( const std::string& room ) {  this->northwest = room ;  }
-
-        void setSouthEast ( const std::string& room ) {  this->southeast = room ;  }
-
-        void setSouthWest ( const std::string& room ) {  this->southwest = room ;  }
-
-        void setEastNorth ( const std::string& room ) {  this->eastnorth = room ;  }
-
-        void setEastSouth ( const std::string& room ) {  this->eastsouth = room ;  }
-
-        void setWestNorth ( const std::string& room ) {  this->westnorth = room ;  }
-
-        void setWestSouth ( const std::string& room ) {  this->westsouth = room ;  }
+        std::map < std::string /* where */, std::string /* file of room */ > connections ;
 
 };
 

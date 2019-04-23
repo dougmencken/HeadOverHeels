@@ -136,7 +136,7 @@ bool ThereAndBack::update ()
 
 void ThereAndBack::letsMove()
 {
-        switch ( this->item->getOrientation().getIntegerOfWay () )
+        switch ( Way( item->getOrientation() ).getIntegerOfWay () )
         {
                 case Way::North:
                         activity = Activity::MoveNorth;
@@ -161,26 +161,26 @@ void ThereAndBack::letsMove()
 
 void ThereAndBack::turnRound()
 {
-        switch ( this->item->getOrientation().getIntegerOfWay () )
+        switch ( Way( item->getOrientation() ).getIntegerOfWay () )
         {
                 case Way::North:
-                        activity = Activity::MoveSouth;
-                        this->item->changeOrientation( Way::South );
+                        activity = Activity::MoveSouth ;
+                        item->changeOrientation( "south" );
                         break;
 
                 case Way::South:
-                        activity = Activity::MoveNorth;
-                        this->item->changeOrientation( Way::North );
+                        activity = Activity::MoveNorth ;
+                        item->changeOrientation( "north" );
                         break;
 
                 case Way::East:
-                        activity = Activity::MoveWest;
-                        this->item->changeOrientation( Way::West );
+                        activity = Activity::MoveWest ;
+                        item->changeOrientation( "west" );
                         break;
 
                 case Way::West:
-                        activity = Activity::MoveEast;
-                        this->item->changeOrientation( Way::East );
+                        activity = Activity::MoveEast ;
+                        item->changeOrientation( "east" );
                         break;
 
                 default:

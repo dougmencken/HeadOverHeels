@@ -26,15 +26,21 @@ class Way
 
 public:
 
-        Way( unsigned int way ) ;
+        explicit Way( unsigned int way = Nowhere ) : way( way ) { }
 
-        Way( const std::string& stringOfWay ) ;
+        explicit Way( const std::string & stringOfWay ) ;
 
         unsigned int getIntegerOfWay () const {  return way ;  }
 
         std::string toString () const ;
 
-        bool operator< ( const Way& toCompare ) const {  return way < toCompare.way ;  }
+        bool operator < ( const Way & toCompare ) const {  return way < toCompare.way ;  }
+
+        Way & operator = ( unsigned int newWay )
+        {
+                if ( way != newWay ) way = newWay ;
+                return *this ;
+        }
 
         static const unsigned int South = 0 ;           // south, bottom right of screen
         static const unsigned int West = 1 ;            // west, bottom left of screen
@@ -50,14 +56,15 @@ public:
         static const unsigned int Westnorth = 10 ;      // door located to the west, north
         static const unsigned int Westsouth = 11 ;      // door located to the west, south
 
-        static const unsigned int Up = 22 ;             // to room without floor
-        static const unsigned int Down = 23 ;           // to room without ceiling
-        static const unsigned int ByTeleport = 24 ;     // to another room via teleport
-        static const unsigned int ByTeleportToo = 25 ;  // to another room via second teleport
+        static const unsigned int Above = 22 ;          // to room without floor
+        static const unsigned int Below = 23 ;          // to room without ceiling
+
+        static const unsigned int ByTeleport = 33 ;     // to another room via teleport
+        static const unsigned int ByTeleportToo = 34 ;  // to another room via second teleport
 
         static const unsigned int NoExit = 44 ;         // player doesn’t exit from this room
 
-        static const unsigned int Restart = 51 ;        // restart room when character loses its life
+        static const unsigned int Restart = 55 ;        // restart room when character loses its life
 
         static const unsigned int JustWait = 99 ;       // just wait in room
 

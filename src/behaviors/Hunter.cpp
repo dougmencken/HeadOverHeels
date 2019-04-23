@@ -356,7 +356,7 @@ bool Hunter::createFullBody()
                 FreeItemPtr newItem( new FreeItem (
                         item->getDescriptionOfItem()->getItemDescriptions()->getDescriptionByLabel( "imperial-guard" ),
                         thisItem.getX(), thisItem.getY(), thisItem.getZ() - LayerHeight,
-                        thisItem.getOrientation().toString() ) );
+                        thisItem.getOrientation() ) );
 
                 newItem->setBehaviorOf( "behavior of hunter in four directions" );
 

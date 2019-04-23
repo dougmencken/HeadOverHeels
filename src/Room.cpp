@@ -387,7 +387,7 @@ bool Room::saveAsXML( const std::string& file )
                                         item->InsertEndChild( itemLabel );
 
                                         tinyxml2::XMLElement* itemOrientation = roomXml.NewElement( "orientation" );
-                                        std::string orientation = theItem->getOrientation().toString();
+                                        std::string orientation = theItem->getOrientation();
                                         if ( orientation == "nowhere" ) orientation = "none" ;
                                         itemOrientation->SetText( orientation.c_str () );
                                         item->InsertEndChild( itemOrientation );
@@ -426,7 +426,7 @@ bool Room::saveAsXML( const std::string& file )
                                 item->InsertEndChild( itemLabel );
 
                                 tinyxml2::XMLElement* itemOrientation = roomXml.NewElement( "orientation" );
-                                std::string orientation = theItem->getOrientation().toString();
+                                std::string orientation = theItem->getOrientation();
                                 if ( orientation == "nowhere" ) orientation = "none" ;
                                 itemOrientation->SetText( orientation.c_str () );
                                 item->InsertEndChild( itemOrientation );
@@ -1542,7 +1542,7 @@ bool Room::calculateEntryCoordinates( const Way& wayOfEntry, int widthX, int wid
         int differentSizeDeltaX = 0;
         int differentSizeDeltaY = 0;
 
-        if ( wayOfEntry.toString() == "up" || wayOfEntry.toString() == "down" ||
+        if ( wayOfEntry.toString() == "above" || wayOfEntry.toString() == "below" ||
                         wayOfEntry.toString() == "via teleport" || wayOfEntry.toString() == "via second teleport" )
         {
                 const int limitOfSingleRoom = maxTilesOfSingleRoom * tileSize ;
@@ -1649,7 +1649,7 @@ bool Room::calculateEntryCoordinates( const Way& wayOfEntry, int widthX, int wid
                         result = true;
                         break;
 
-                case Way::Up:
+                case Way::Above:
                         *x += bounds[ "north" ] - northBound + ( ( bounds[ "south" ] - bounds[ "north" ] - southBound + northBound ) >> 1 );
                         *x += ( *x < ( ( bounds[ "south" ] - bounds[ "north" ] ) >> 1 ) ? -differentSizeDeltaX : differentSizeDeltaX );
                         *y += bounds[ "east" ] - eastBound + ( ( bounds[ "west" ] - bounds[ "east" ] - westBound + eastBound ) >> 1 );
@@ -1658,7 +1658,7 @@ bool Room::calculateEntryCoordinates( const Way& wayOfEntry, int widthX, int wid
                         result = true;
                         break;
 
-                case Way::Down:
+                case Way::Below:
                         *x += bounds[ "north" ] - northBound + ( ( bounds[ "south" ] - bounds[ "north" ] - southBound + northBound ) >> 1 );
                         *x += ( *x < ( ( bounds[ "south" ] - bounds[ "north" ] ) >> 1 ) ? -differentSizeDeltaX : differentSizeDeltaX );
                         *y += bounds[ "east" ] - eastBound + ( ( bounds[ "west" ] - bounds[ "east" ] - westBound + eastBound) >> 1 );

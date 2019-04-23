@@ -54,8 +54,8 @@ void CreatePlanetsScreen::doAction ()
         const unsigned int screenHeight = iso::ScreenHeight();
 
         // etiqueta fija “ El Imperio Blacktooth ”
-        std::string colorOfLabel = "yellow";
-        if ( GameManager::getInstance().isSimpleGraphicSet () ) colorOfLabel = "green";
+        std::string colorOfLabel = "yellow" ;
+        if ( GameManager::getInstance().isSimpleGraphicSet () ) colorOfLabel = "red" ;
         Label* empire = new Label( languageManager->findLanguageStringForAlias( "blacktooth-empire" )->getText(), "big", colorOfLabel );
         empire->moveTo( ( screenWidth - empire->getWidth() ) >> 1, 2 );
         empire->setAction( new ContinueGame( gameInProgress ) );

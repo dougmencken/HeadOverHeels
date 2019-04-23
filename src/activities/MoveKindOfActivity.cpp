@@ -47,50 +47,50 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
         {
                 case Activity::MoveNorth:
                 case Activity::AutoMoveNorth:
-                        item->changeOrientation( Way::North );
+                        item->changeOrientation( "north" );
                         moved = item->addToX( -1 );
-                        displaceActivity = Activity::DisplaceNorth;
+                        displaceActivity = Activity::DisplaceNorth ;
                         break;
 
                 case Activity::MoveSouth:
                 case Activity::AutoMoveSouth:
-                        item->changeOrientation( Way::South );
+                        item->changeOrientation( "south" );
                         moved = item->addToX( 1 );
-                        displaceActivity = Activity::DisplaceSouth;
+                        displaceActivity = Activity::DisplaceSouth ;
                         break;
 
                 case Activity::MoveEast:
                 case Activity::AutoMoveEast:
-                        item->changeOrientation( Way::East );
+                        item->changeOrientation( "east" );
                         moved = item->addToY( -1 );
-                        displaceActivity = Activity::DisplaceEast;
+                        displaceActivity = Activity::DisplaceEast ;
                         break;
 
                 case Activity::MoveWest:
                 case Activity::AutoMoveWest:
-                        item->changeOrientation( Way::West );
+                        item->changeOrientation( "west" );
                         moved = item->addToY( 1 );
-                        displaceActivity = Activity::DisplaceWest;
+                        displaceActivity = Activity::DisplaceWest ;
                         break;
 
                 case Activity::MoveNortheast:
                         moved = item->addToPosition( -1, -1, 0 );
-                        displaceActivity = Activity::DisplaceNortheast;
+                        displaceActivity = Activity::DisplaceNortheast ;
                         break;
 
                 case Activity::MoveNorthwest:
                         moved = item->addToPosition( -1, 1, 0 );
-                        displaceActivity = Activity::DisplaceNorthwest;
+                        displaceActivity = Activity::DisplaceNorthwest ;
                         break;
 
                 case Activity::MoveSoutheast:
                         moved = item->addToPosition( 1, -1, 0 );
-                        displaceActivity = Activity::DisplaceSoutheast;
+                        displaceActivity = Activity::DisplaceSoutheast ;
                         break;
 
                 case Activity::MoveSouthwest:
                         moved = item->addToPosition( 1, 1, 0 );
-                        displaceActivity = Activity::DisplaceSouthwest;
+                        displaceActivity = Activity::DisplaceSouthwest ;
                         break;
 
                 case Activity::MoveUp:
@@ -149,19 +149,19 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
                         break;
 
                 case Activity::CancelDisplaceNorth:
-                        item->changeOrientation( Way::South );
+                        item->changeOrientation( "south" );
                         break;
 
                 case Activity::CancelDisplaceSouth:
-                        item->changeOrientation( Way::North );
+                        item->changeOrientation( "north" );
                         break;
 
                 case Activity::CancelDisplaceEast:
-                        item->changeOrientation( Way::West );
+                        item->changeOrientation( "west" );
                         break;
 
                 case Activity::CancelDisplaceWest:
-                        item->changeOrientation( Way::East );
+                        item->changeOrientation( "east" );
                         break;
 
                 default:
@@ -219,7 +219,7 @@ void MoveKindOfActivity::ascent( FreeItem & freeItem, int z )
                                                         if ( playerItem.isActiveCharacter() )
                                                         {
                                                                 // active character reached maximum height of room
-                                                                playerItem.setWayOfExit( "up" );
+                                                                playerItem.setWayOfExit( "above" );
                                                         }
 
                                                         continue ;

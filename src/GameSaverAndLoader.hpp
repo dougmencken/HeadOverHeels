@@ -30,18 +30,18 @@ public:
 
         GameSaverAndLoader( ) ;
 
-        ~GameSaverAndLoader( ) ;
+        ~GameSaverAndLoader( ) { }
 
        /**
         * Set data needed to record game
         * @param room Room where reincarnation fish is caught
         * @param label Character who caught the fish
         */
-        void ateFish ( const std::string& room, const std::string& label, int x, int y, int z, const Way& way ) ;
+        void ateFish ( const std::string & room, const std::string & label, int x, int y, int z, const std::string & orientation ) ;
 
-        bool loadGame ( const std::string& fileName ) ;
+        bool loadGame ( const std::string & file ) ;
 
-        bool saveGame ( const std::string& fileName ) ;
+        bool saveGame ( const std::string & file ) ;
 
 private:
 
@@ -61,7 +61,7 @@ private:
 
         int zFish ;
 
-        Way catchFishWay ;
+        std::string catchFishWay ;
 
 };
 

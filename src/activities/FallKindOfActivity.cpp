@@ -134,7 +134,7 @@ bool FallKindOfActivity::fall( Behavior * behavior )
 
                                 if ( ! mediator->getRoom()->hasFloor() )
                                 {
-                                        playerItem.setWayOfExit( "down" );
+                                        playerItem.setWayOfExit( "below" );
                                 }
                                 else
                                 if ( mediator->getRoom()->getKindOfFloor() == "mortal" )

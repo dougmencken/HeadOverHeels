@@ -59,25 +59,25 @@ bool ConveyorBelt::update ()
                                                         {
                                                                 if ( ! itemAbove.getAnchor().empty() || this->item->getUniqueName() == itemAbove.getAnchor() )
                                                                 {
-                                                                        if ( item->getOrientation().toString() == "south" ) {
+                                                                        if ( item->getOrientation() == "south" ) {
                                                                                 if ( itemAbove.getBehavior()->getActivityOfItem() != Activity::RegularJump &&
                                                                                                 itemAbove.getBehavior()->getActivityOfItem() != Activity::HighJump )
                                                                                 {
                                                                                         itemAbove.getBehavior()->changeActivityOfItem( Activity::ForceDisplaceSouth );
                                                                                 }
-                                                                        } else if ( item->getOrientation().toString() == "west" ) {
+                                                                        } else if ( item->getOrientation() == "west" ) {
                                                                                 if ( itemAbove.getBehavior()->getActivityOfItem() != Activity::RegularJump &&
                                                                                                 itemAbove.getBehavior()->getActivityOfItem() != Activity::HighJump )
                                                                                 {
                                                                                         itemAbove.getBehavior()->changeActivityOfItem( Activity::ForceDisplaceWest );
                                                                                 }
-                                                                        } else if ( item->getOrientation().toString() == "north" ) {
+                                                                        } else if ( item->getOrientation() == "north" ) {
                                                                                 if ( itemAbove.getBehavior()->getActivityOfItem() != Activity::RegularJump &&
                                                                                                 itemAbove.getBehavior()->getActivityOfItem() != Activity::HighJump )
                                                                                 {
                                                                                         itemAbove.getBehavior()->changeActivityOfItem( Activity::ForceDisplaceNorth );
                                                                                 }
-                                                                        } else if ( item->getOrientation().toString() == "east" ) {
+                                                                        } else if ( item->getOrientation() == "east" ) {
                                                                                 if ( itemAbove.getBehavior()->getActivityOfItem() != Activity::RegularJump &&
                                                                                                 itemAbove.getBehavior()->getActivityOfItem() != Activity::HighJump )
                                                                                 {

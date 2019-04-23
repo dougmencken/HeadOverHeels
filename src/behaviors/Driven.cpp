@@ -40,7 +40,7 @@ bool Driven::update ()
                 case Activity::Wait:
                         if ( moving )
                         {
-                                switch ( freeItem.getOrientation().getIntegerOfWay() )
+                                switch ( Way( freeItem.getOrientation() ).getIntegerOfWay() )
                                 {
                                         case Way::North:
                                                 changeActivityOfItem( Activity::MoveNorth );
@@ -76,7 +76,7 @@ bool Driven::update ()
                                                         playerFound = true;
                                                         moving = true;
 
-                                                        switch ( item->getOrientation().getIntegerOfWay () )
+                                                        switch ( Way( item->getOrientation() ).getIntegerOfWay () )
                                                         {
                                                                 case Way::North:
                                                                         changeActivityOfItem( Activity::MoveNorth );

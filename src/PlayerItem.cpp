@@ -58,22 +58,22 @@ void PlayerItem::setWayOfExit ( const std::string& way )
 
                 case Way::Northeast:
                 case Way::Northwest:
-                        setOrientation( Way( "north" ) );
+                        setOrientation( "north" );
                         break;
 
                 case Way::Southeast:
                 case Way::Southwest:
-                        setOrientation( Way( "south" ) );
+                        setOrientation( "south" );
                         break;
 
                 case Way::Eastnorth:
                 case Way::Eastsouth:
-                        setOrientation( Way( "east" ) );
+                        setOrientation( "east" );
                         break;
 
                 case Way::Westnorth:
                 case Way::Westsouth:
-                        setOrientation( Way( "west" ) );
+                        setOrientation( "west" );
                         break;
 
                 default:
@@ -122,7 +122,7 @@ void PlayerItem::autoMoveOnEntry ( const std::string& wayOfEntry )
                         getBehavior()->changeActivityOfItem( Activity::BeginWayInTeletransport );
                         break;
 
-                case Way::Up:
+                case Way::Above:
                         getBehavior()->changeActivityOfItem( Activity::Fall );
                         break;
 

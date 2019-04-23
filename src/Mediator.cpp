@@ -147,7 +147,7 @@ void Mediator::update()
         {
                 // when inactive character falls down to room below this one
                 // then make it active to let it fall
-                if ( ( *p )->getWayOfExit() == "down" && ! ( *p )->isActiveCharacter() )
+                if ( ( *p )->getWayOfExit() == "below" && ! ( *p )->isActiveCharacter() )
                 {
                         std::cout << "inactive character \"" << ( *p )->getLabel() << "\" falls down to another room, swap characters to make it active" << std::endl ;
                         activeCharacter->setWayOfExit( "no exit" );
@@ -1079,7 +1079,7 @@ bool Mediator::pickNextCharacter()
                                 int x = reference->getX();
                                 int y = reference->getY();
                                 int z = reference->getZ();
-                                std::string orientation = reference->getOrientation().toString ();
+                                std::string orientation = reference->getOrientation() ;
 
                                 // item that Heels may have in handbag
                                 PlayerItemPtr heels = reference;
@@ -1116,7 +1116,7 @@ bool Mediator::pickNextCharacter()
                 int x = activeCharacter->getX();
                 int y = activeCharacter->getY();
                 int z = activeCharacter->getZ();
-                std::string orientation = activeCharacter->getOrientation().toString ();
+                std::string orientation = activeCharacter->getOrientation() ;
 
                 lockFreeItemsMutex ();
 

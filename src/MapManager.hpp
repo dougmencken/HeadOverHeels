@@ -15,8 +15,6 @@
 #include <vector>
 #include <map>
 
-#include "WrappersAllegro.hpp"
-
 #include "Room.hpp"
 
 
@@ -42,7 +40,7 @@ public:
 
         Room * changeRoom () ;
 
-        Room * changeRoom ( const Way& wayOfExit ) ;
+        Room * changeRoom ( const std::string & wayOfExit ) ;
 
         Room * rebuildRoom ( Room * room ) ;
 

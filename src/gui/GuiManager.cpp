@@ -58,24 +58,6 @@ GuiManager::GuiManager( ) :
 
         allegro::setTitleOfAllegroWindow ( nameOfWindow );
 
-        // create fonts to use in game
-
-        addFont( new Font( "white.plain", "white" ) );
-        addFont( new Font( "white.big", "white", true ) );
-
-        addFont( new Font( "orange.plain", "orange" ) );
-        addFont( new Font( "cyan.plain", "cyan" ) );
-        addFont( new Font( "yellow.plain", "yellow" ) );
-
-        addFont( new Font( "orange.big", "orange", true ) );
-        addFont( new Font( "cyan.big", "cyan", true ) );
-        addFont( new Font( "yellow.big", "yellow", true ) );
-
-        addFont( new Font( "green.plain", "green", false ) );
-        addFont( new Font( "green.big", "green", true ) );
-        addFont( new Font( "magenta.plain", "magenta", false ) );
-        addFont( new Font( "magenta.big", "magenta", true ) );
-
         // initialize sound manager
         iso::SoundManager::getInstance().readSounds( "sounds.xml" );
 }
@@ -275,7 +257,7 @@ void GuiManager::assignLanguage( const std::string& language )
         this->languageManager = new LanguageManager( pathToText + language + ".xml", pathToText + "en_US.xml" );
 }
 
-Font* GuiManager::findFontByFamilyAndColor ( const std::string& family, const std::string& color )
+Font* GuiManager::getOrCreateFontByFamilyAndColor ( const std::string& family, const std::string& color )
 {
         std::string familyToLook = ( ! family.empty() ) ? family : "plain";
         std::string colorToLook = ( ! color.empty() ) ? color : "white";
@@ -288,18 +270,12 @@ Font* GuiManager::findFontByFamilyAndColor ( const std::string& family, const st
                 }
         }
 
-        std::cout << "there’s no font with family \"" << familyToLook << "\" and color \"" << colorToLook << "\"" << std::endl ;
+        IF_DEBUG( std::cout << "making font with family \"" << familyToLook << "\" and color \"" << colorToLook << "\"" << std::endl )
 
-        if ( fonts.empty () )
-                std::cout << "list of fonts is empty" << std::endl ;
-        else
-        {
-                std::cout << "list of fonts" << std::endl ;
-                for (  std::list< Font * >::const_iterator i = fonts.begin (); i != fonts.end (); ++i )
-                        std::cout << "   " << ( *i )->getName() << std::endl ;
-        }
+        Font* newFont = new Font( colorToLook + "." + familyToLook, colorToLook, family == "big" );
+        addFont( newFont );
 
-        return nilPointer ;
+        return newFont ;
 }
 
 }

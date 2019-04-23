@@ -22,35 +22,30 @@ GameSaverAndLoader::GameSaverAndLoader( )
         , xFish( 0 )
         , yFish( 0 )
         , zFish( 0 )
-        , catchFishWay( Way::Nowhere )
+        , catchFishWay( "nowhere" )
 {
 
 }
 
-GameSaverAndLoader::~GameSaverAndLoader( )
-{
-
-}
-
-void GameSaverAndLoader::ateFish( const std::string& room, const std::string& name, int x, int y, int z, const Way& way )
+void GameSaverAndLoader::ateFish( const std::string& room, const std::string& name, int x, int y, int z, const std::string& orientation )
 {
         this->fishRoom = room;
         this->nameOfCharacterWhoCaughtTheFish = name;
         this->xFish = x;
         this->yFish = y;
         this->zFish = z;
-        this->catchFishWay = way;
+        catchFishWay = orientation ;
 }
 
-bool GameSaverAndLoader::loadGame( const std::string& fileName )
+bool GameSaverAndLoader::loadGame( const std::string& file )
 {
-        std::cout << "load game \"" << fileName << "\"" << std::endl ;
+        std::cout << "load game \"" << file << "\"" << std::endl ;
 
         tinyxml2::XMLDocument saveXml;
-        tinyxml2::XMLError result = saveXml.LoadFile( fileName.c_str () );
+        tinyxml2::XMLError result = saveXml.LoadFile( file.c_str () );
         if ( result != tinyxml2::XML_SUCCESS )
         {
-                std::cerr << "can’t load file \"" << fileName << "\" with saved game" << std::endl ;
+                std::cerr << "can’t load file \"" << file << "\" with saved game" << std::endl ;
                 return false;
         }
 
@@ -133,9 +128,9 @@ bool GameSaverAndLoader::loadGame( const std::string& fileName )
         return true;
 }
 
-bool GameSaverAndLoader::saveGame( const std::string& fileName )
+bool GameSaverAndLoader::saveGame( const std::string& file )
 {
-        std::cout << "save game \"" << fileName << "\"" << std::endl ;
+        std::cout << "save game \"" << file << "\"" << std::endl ;
 
         GameManager& gameManager = GameManager::getInstance() ;
 
@@ -247,7 +242,7 @@ bool GameSaverAndLoader::saveGame( const std::string& fileName )
                 activeCharacter->InsertEndChild( lives );
 
                 tinyxml2::XMLElement* orientation = saveXml.NewElement( "orientation" );
-                orientation->SetText( this->catchFishWay.toString().c_str () );
+                orientation->SetText( catchFishWay.c_str () );
                 activeCharacter->InsertEndChild( orientation );
 
                 tinyxml2::XMLElement* entry = saveXml.NewElement( "entry" );
@@ -348,7 +343,7 @@ bool GameSaverAndLoader::saveGame( const std::string& fileName )
                         inactiveCharacter->InsertEndChild( lives );
 
                         tinyxml2::XMLElement* orientation = saveXml.NewElement( "orientation" );
-                        orientation->SetText( characterToo->getOrientation().toString().c_str () );
+                        orientation->SetText( characterToo->getOrientation().c_str () );
                         inactiveCharacter->InsertEndChild( orientation );
 
                         tinyxml2::XMLElement* entry = saveXml.NewElement( "entry" );
@@ -392,10 +387,10 @@ bool GameSaverAndLoader::saveGame( const std::string& fileName )
 
         root->InsertEndChild( players );
 
-        tinyxml2::XMLError result = saveXml.SaveFile( fileName.c_str () );
+        tinyxml2::XMLError result = saveXml.SaveFile( file.c_str () );
         if ( result != tinyxml2::XML_SUCCESS )
         {
-                std::cerr << "can’t save game as \"" << fileName << "\"" << std::endl ;
+                std::cerr << "can’t save game as \"" << file << "\"" << std::endl ;
                 return false;
         }
 

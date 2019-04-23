@@ -71,7 +71,7 @@ public:
 
         void addFont ( Font * font ) {  fonts.push_back( font ) ;  }
 
-        Font * findFontByFamilyAndColor ( const std::string& family, const std::string& color ) ;
+        Font * getOrCreateFontByFamilyAndColor ( const std::string& family, const std::string& color ) ;
 
        /**
         * @return A string of characters in the LLL_CC format

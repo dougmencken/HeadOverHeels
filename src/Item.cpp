@@ -4,6 +4,7 @@
 #include "Mediator.hpp"
 #include "Behavior.hpp"
 #include "GameManager.hpp"
+#include "Way.hpp"
 
 #include <algorithm> // std::for_each
 
@@ -23,7 +24,7 @@ Item::Item( const DescriptionOfItem* description, int z, const std::string& way 
         originalLabel( description->getLabel() ),
         processedImage( new Picture( description->getWidthOfFrame(), description->getHeightOfFrame() ) ),
         height( description->getHeight() ),
-        orientation( way == "none" ? Way( "nowhere" ) : Way( way ) ),
+        orientation( way == "none" ? "nowhere" : way ),
         currentFrame( firstFrame () ),
         backwardsMotion( false ),
         offset( std::pair< int, int >( 0, 0 ) ),
@@ -195,9 +196,9 @@ void Item::freshProcessedImage()
         processedImage->setName( "processed " + getRawImage().getName() );
 }
 
-void Item::changeOrientation( const Way& way )
+void Item::changeOrientation( const std::string& way )
 {
-        if ( orientation.getIntegerOfWay() != way.getIntegerOfWay() )
+        if ( orientation != way )
         {
                 this->orientation = way ;
 
@@ -339,11 +340,12 @@ bool Item::isMortal() const
         return descriptionOfItem->isMortal() ;
 }
 
-size_t Item::firstFrameForOrientation ( const Way& way ) const
+size_t Item::firstFrameForOrientation ( const std::string& way ) const
 {
         if ( descriptionOfItem->howManyOrientations() > 1 )
         {
-                unsigned int orientOccident = ( way.getIntegerOfWay() == Way::Nowhere ? 0 : way.getIntegerOfWay() );
+                unsigned int integerOfWay = Way( way ).getIntegerOfWay() ;
+                unsigned int orientOccident = ( integerOfWay == Way::Nowhere ? 0 : integerOfWay );
                 return descriptionOfItem->howManyFramesPerOrientation() * orientOccident ;
         }
 

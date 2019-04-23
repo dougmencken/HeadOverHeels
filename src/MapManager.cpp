@@ -394,7 +394,7 @@ Room* MapManager::rebuildRoom( Room* room )
                                         int playerX = player->getX();
                                         int playerY = player->getY();
                                         int playerZ = player->getZ();
-                                        std::string playerOrientation = player->getOrientation().toString ();
+                                        std::string playerOrientation = player->getOrientation() ;
                                         std::string playerEntry = player->getWayOfEntry() ;
 
                                         // forget composite player
@@ -412,7 +412,7 @@ Room* MapManager::rebuildRoom( Room* room )
                                         continue;
                                 }
 
-                                theWay = player->getOrientation().toString ();
+                                theWay = player->getOrientation() ;
 
                                 std::string entry = player->getWayOfEntry() ;
 
@@ -477,7 +477,7 @@ Room* MapManager::changeRoom()
         return changeRoom( activeRoom->getMediator()->getActiveCharacter()->getWayOfExit() );
 }
 
-Room* MapManager::changeRoom( const Way& wayOfExit )
+Room* MapManager::changeRoom( const std::string& wayOfExit )
 {
         Room* previousRoom = this->activeRoom;
 
@@ -487,7 +487,7 @@ Room* MapManager::changeRoom( const Way& wayOfExit )
         Way wayOfEntry( "just wait" ) ;
 
         // search the map for next room and get way of entry to it
-        std::string fileOfNextRoom = previousRoomLinks->findConnectedRoom( wayOfExit.toString(), &wayOfEntry );
+        std::string fileOfNextRoom = previousRoomLinks->findConnectedRoom( wayOfExit, &wayOfEntry );
         if ( fileOfNextRoom.empty() )
         {
                 // no room there, so continue with current one
@@ -505,7 +505,7 @@ Room* MapManager::changeRoom( const Way& wayOfExit )
         const DescriptionOfItem* descriptionOfRoamer = oldItemOfRoamer.getDescriptionOfItem()->getItemDescriptions()->getDescriptionByLabel( nameOfRoamer ) ;
 
         std::cout << "\"" << nameOfRoamer << "\" migrates"
-                        << " from room \"" << fileOfPreviousRoom << "\" with way of exit \"" << wayOfExit.toString() << "\""
+                        << " from room \"" << fileOfPreviousRoom << "\" with way of exit \"" << wayOfExit << "\""
                         << " to room \"" << fileOfNextRoom << "\" with way of entry \"" << wayOfEntry.toString() << "\"" << std::endl ;
 
         const int exitX = oldItemOfRoamer.getX ();
@@ -519,7 +519,7 @@ Room* MapManager::changeRoom( const Way& wayOfExit )
         int westBound = previousRoom->getLimitAt( "west" );
         // plus there’s possibility to exit and to enter room via floor, roof or teletransport
 
-        const std::string exitOrientation = oldItemOfRoamer.getOrientation().toString ();
+        const std::string exitOrientation = oldItemOfRoamer.getOrientation() ;
 
         // remove active player from previous room
         previousRoom->removePlayerFromRoom( oldItemOfRoamer, true );

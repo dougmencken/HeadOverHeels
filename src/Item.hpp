@@ -18,7 +18,6 @@
 #include <WrappersAllegro.hpp>
 
 #include "Ism.hpp"
-#include "Way.hpp"
 #include "Timer.hpp"
 #include "Picture.hpp"
 #include "PoolOfPictures.hpp"
@@ -83,7 +82,7 @@ public:
          */
         void metamorphInto ( const std::string& labelOfItem, const std::string& initiatedBy ) ;
 
-        void changeOrientation ( const Way& way ) ;
+        void changeOrientation ( const std::string & way ) ;
 
         /**
          * Change current frame for item. Change of frames is usually done via change of orientation
@@ -192,7 +191,7 @@ public:
 
         bool isMortal () const ;
 
-        size_t firstFrameForOrientation ( const Way& way ) const ;
+        size_t firstFrameForOrientation ( const std::string & way ) const ;
 
         /**
          * Time in seconds to move item
@@ -212,9 +211,9 @@ public:
         /**
          * Set current orientation of item
          */
-        void setOrientation ( const Way& way ) {  this->orientation = way ;  }
+        void setOrientation ( const std::string & way ) {  this->orientation = way ;  }
 
-        Way getOrientation () const {  return orientation ;  }
+        std::string getOrientation () const {  return orientation ;  }
 
         size_t firstFrame () const {  return firstFrameForOrientation( orientation ) ;  }
 
@@ -318,7 +317,7 @@ private:
 
         unsigned int height ;
 
-        Way orientation ;
+        std::string orientation ;
 
         /**
          * Current frame for item

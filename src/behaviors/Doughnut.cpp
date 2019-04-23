@@ -29,7 +29,7 @@ bool Doughnut::update ()
         switch ( activity )
         {
                 case Activity::Wait:
-                        switch ( this->item->getOrientation().getIntegerOfWay () )
+                        switch ( Way( item->getOrientation() ).getIntegerOfWay () )
                         {
                                 case Way::North:
                                         activity = Activity::MoveNorth;

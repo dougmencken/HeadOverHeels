@@ -64,7 +64,7 @@ bool JumpKindOfActivity::jump( Behavior* behavior, ActivityOfItem* activity, uns
 
                                 if ( collision == "ceiling" && playerItem.isActiveCharacter() )
                                 {
-                                        playerItem.setWayOfExit( "up" );
+                                        playerItem.setWayOfExit( "above" );
                                         continue ;
                                 }
 
@@ -95,30 +95,27 @@ bool JumpKindOfActivity::jump( Behavior* behavior, ActivityOfItem* activity, uns
                 }
         }
 
-        switch ( playerItem.getOrientation().getIntegerOfWay() )
+        std::string orientation = playerItem.getOrientation() ;
+
+        if ( orientation == "north" )
         {
-                case Way::North:
-                        itemMoved = playerItem.addToX( - deltaXY );
-                        displaceActivity = Activity::DisplaceNorth;
-                        break;
-
-                case Way::South:
-                        itemMoved = playerItem.addToX( deltaXY );
-                        displaceActivity = Activity::DisplaceSouth;
-                        break;
-
-                case Way::East:
-                        itemMoved = playerItem.addToY( - deltaXY );
-                        displaceActivity = Activity::DisplaceEast;
-                        break;
-
-                case Way::West:
-                        itemMoved = playerItem.addToY( deltaXY );
-                        displaceActivity = Activity::DisplaceWest;
-                        break;
-
-                default:
-                        ;
+                itemMoved = playerItem.addToX( - deltaXY );
+                displaceActivity = Activity::DisplaceNorth ;
+        }
+        else if ( orientation == "south" )
+        {
+                itemMoved = playerItem.addToX( deltaXY );
+                displaceActivity = Activity::DisplaceSouth ;
+        }
+        else if ( orientation == "east" )
+        {
+                itemMoved = playerItem.addToY( - deltaXY );
+                displaceActivity = Activity::DisplaceEast ;
+        }
+        else if ( orientation == "west" )
+        {
+                itemMoved = playerItem.addToY( deltaXY );
+                displaceActivity = Activity::DisplaceWest ;
         }
 
         // displace adjacent items when there’s horizontal collision

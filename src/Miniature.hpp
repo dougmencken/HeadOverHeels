@@ -55,7 +55,7 @@ public:
 
         void fillIsoTileInside ( const allegro::Pict & where, int x0, int y0, int tileX, int tileY, const Color & color, bool fullFill ) ;
 
-        std::pair < int, int > calculatePositionOfConnectedMiniature ( const std::string & where ) ;
+        std::pair < int, int > calculatePositionOfConnectedMiniature ( const std::string & where, unsigned short gap = 1 ) ;
 
         unsigned int getSizeOfTile () const {  return sizeOfTile ;  }
 

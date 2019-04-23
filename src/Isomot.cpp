@@ -268,14 +268,13 @@ Picture* Isomot::updateMe ()
                 view->fillWithColor( backgroundColor );
         }
 
-        Room* activeRoom = mapManager.getActiveRoom();
-        if ( activeRoom == nilPointer ) return view ;
-        std::string roomFile = activeRoom->getNameOfFileWithDataAboutRoom() ;
-
         handleMagicKeys ();
 
+        Room* activeRoom = mapManager.getActiveRoom();
+        if ( activeRoom == nilPointer ) return view ;
+
         // la sala final es muy especial
-        if ( roomFile == "finalroom.xml" )
+        if ( activeRoom->getNameOfFileWithDataAboutRoom() == "finalroom.xml" )
         {
                 updateFinalRoom();
         }
@@ -365,10 +364,53 @@ Picture* Isomot::updateMe ()
                 std::ostringstream roomTiles;
                 roomTiles << activeRoom->getTilesX() << "x" << activeRoom->getTilesY();
 
-                allegro::textOut( roomFile, 12, 8, roomColor.toAllegroColor() );
+                allegro::textOut( activeRoom->getNameOfFileWithDataAboutRoom(), 12, 8, roomColor.toAllegroColor() );
                 allegro::textOut( roomTiles.str(), 12, 20, roomColor.toAllegroColor() );
 
                 Miniature miniatureOfRoom( *activeRoom, 24, 24, sizeOfTileForMiniature );
+
+                Way connectsAt( "nowhere" );
+                std::string roomAtSouth = activeRoom->getConnections()->findConnectedRoom( "south", &connectsAt );
+                std::string roomAtNorth = activeRoom->getConnections()->findConnectedRoom( "north", &connectsAt );
+                std::string roomAtEast = activeRoom->getConnections()->findConnectedRoom( "east", &connectsAt );
+                std::string roomAtWest = activeRoom->getConnections()->findConnectedRoom( "west", &connectsAt );
+
+                if ( ! roomAtSouth.empty () )
+                {
+                        std::pair< int, int > secondRoomOffset = miniatureOfRoom.calculatePositionOfConnectedMiniature( "south", 0 );
+                        Miniature miniatureOfConnectedRoom( * mapManager.getOrBuildRoomByFile( roomAtSouth ),
+                                                                secondRoomOffset.first, secondRoomOffset.second,
+                                                                sizeOfTileForMiniature );
+                        miniatureOfConnectedRoom.draw ();
+                }
+
+                if ( ! roomAtNorth.empty() )
+                {
+                        std::pair< int, int > secondRoomOffset = miniatureOfRoom.calculatePositionOfConnectedMiniature( "north", 0 );
+                        Miniature miniatureOfConnectedRoom( * mapManager.getOrBuildRoomByFile( roomAtNorth ),
+                                                                secondRoomOffset.first, secondRoomOffset.second,
+                                                                sizeOfTileForMiniature );
+                        miniatureOfConnectedRoom.draw ();
+                }
+
+                if ( ! roomAtEast.empty() )
+                {
+                        std::pair< int, int > secondRoomOffset = miniatureOfRoom.calculatePositionOfConnectedMiniature( "east", 0 );
+                        Miniature miniatureOfConnectedRoom( * mapManager.getOrBuildRoomByFile( roomAtEast ),
+                                                                secondRoomOffset.first, secondRoomOffset.second,
+                                                                sizeOfTileForMiniature );
+                        miniatureOfConnectedRoom.draw ();
+                }
+
+                if ( ! roomAtWest.empty() )
+                {
+                        std::pair< int, int > secondRoomOffset = miniatureOfRoom.calculatePositionOfConnectedMiniature( "west", 0 );
+                        Miniature miniatureOfConnectedRoom( * mapManager.getOrBuildRoomByFile( roomAtWest ),
+                                                                secondRoomOffset.first, secondRoomOffset.second,
+                                                                sizeOfTileForMiniature );
+                        miniatureOfConnectedRoom.draw ();
+                }
+
                 miniatureOfRoom.draw ();
         }
 
@@ -550,11 +592,11 @@ void Isomot::handleMagicKeys ()
                                 int playerX = activePlayer->getX();
                                 int playerY = activePlayer->getY();
                                 int playerZ = activePlayer->getZ() + 2 * LayerHeight;
-                                Way way = otherPlayer->getOrientation();
+                                std::string orientation = otherPlayer->getOrientation();
 
                                 PlayerItemPtr joinedPlayer( new PlayerItem(
                                         itemDescriptions.getDescriptionByLabel( nameOfAnotherPlayer ),
-                                        playerX, playerY, playerZ, way.toString()
+                                        playerX, playerY, playerZ, orientation
                                 ) );
 
                                 std::string behavior = "still";
@@ -598,7 +640,7 @@ void Isomot::handleMagicKeys ()
                         if ( activePlayer != nilPointer )
                         {
                                 std::string nameOfPlayer = activePlayer->getLabel();
-                                Way whichWay = activePlayer->getOrientation();
+                                std::string orientation = activePlayer->getOrientation();
                                 int teleportedX = 0;
                                 int teleportedY = 95;
                                 int teleportedZ = 240;
@@ -606,7 +648,7 @@ void Isomot::handleMagicKeys ()
                                 PlayerItemPtr teleportedPlayer( new PlayerItem(
                                         itemDescriptions.getDescriptionByLabel( nameOfPlayer ),
                                         teleportedX, teleportedY, teleportedZ,
-                                        whichWay.toString()
+                                        orientation
                                 ) ) ;
 
                                 std::string behaviorOfPlayer = "still";

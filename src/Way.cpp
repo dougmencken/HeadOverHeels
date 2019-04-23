@@ -5,54 +5,48 @@
 namespace iso
 {
 
-Way::Way( unsigned int way )
-        : way( way )
-{
-
-}
-
 Way::Way( const std::string& stringOfWay )
 {
         if ( stringOfWay == "north" )
-                way = North;
+                way = North ;
         else if ( stringOfWay == "south" )
-                way = South;
+                way = South ;
         else if ( stringOfWay == "east" )
-                way = East;
+                way = East ;
         else if ( stringOfWay == "west" )
-                way = West;
+                way = West ;
         else if ( stringOfWay == "northeast" )
-                way = Northeast;
+                way = Northeast ;
         else if ( stringOfWay == "southeast" )
-                way = Southeast;
+                way = Southeast ;
         else if ( stringOfWay == "southwest" )
-                way = Southwest;
+                way = Southwest ;
         else if ( stringOfWay == "northwest" )
-                way = Northwest;
+                way = Northwest ;
         else if ( stringOfWay == "eastnorth" )
-                way = Eastnorth;
+                way = Eastnorth ;
         else if ( stringOfWay == "eastsouth" )
-                way = Eastsouth;
+                way = Eastsouth ;
         else if ( stringOfWay == "westnorth" )
-                way = Westnorth;
+                way = Westnorth ;
         else if ( stringOfWay == "westsouth" )
-                way = Westsouth;
-        else if ( stringOfWay == "up" )
-                way = Up;
-        else if ( stringOfWay == "down" )
-                way = Down;
+                way = Westsouth ;
+        else if ( stringOfWay == "above" )
+                way = Above ;
+        else if ( stringOfWay == "below" )
+                way = Below ;
         else if ( stringOfWay == "via teleport" )
-                way = ByTeleport;
+                way = ByTeleport ;
         else if ( stringOfWay == "via second teleport" )
-                way = ByTeleportToo;
+                way = ByTeleportToo ;
         else if ( stringOfWay == "no exit" )
-                way = NoExit;
+                way = NoExit ;
         else if ( stringOfWay == "rebuild room" || stringOfWay == "restart room" )
-                way = Restart;
+                way = Restart ;
         else if ( stringOfWay == "just wait" )
-                way = JustWait;
+                way = JustWait ;
         else
-                way = Nowhere;
+                way = Nowhere ;
 
 }
 
@@ -74,8 +68,8 @@ std::string Way::toString () const
                 case Westnorth:         return "westnorth" ;
                 case Westsouth:         return "westsouth" ;
 
-                case Up:                return "up" ;
-                case Down:              return "down" ;
+                case Above:             return "above" ;
+                case Below:             return "below" ;
 
                 case ByTeleport:        return "via teleport" ;
                 case ByTeleportToo:     return "via second teleport" ;

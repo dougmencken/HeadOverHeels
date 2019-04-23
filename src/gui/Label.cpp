@@ -47,7 +47,7 @@ Label::~Label( )
 /* static */
 Font* Label::getFontByFamilyAndColor( const std::string& family, const std::string& color )
 {
-        Font* found = GuiManager::getInstance().findFontByFamilyAndColor( family, color == "multicolor" ? "white" : color ) ;
+        Font* found = GuiManager::getInstance().getOrCreateFontByFamilyAndColor( family, color == "multicolor" ? "white" : color ) ;
         assert( found != nilPointer );
         return found;
 }

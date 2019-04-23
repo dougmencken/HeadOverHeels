@@ -165,7 +165,7 @@ void UserControlled::fall( PlayerItem & player )
                         // change character’s image to frame of falling when there’s no collision yet
                         if ( player.canAdvanceTo( 0, 0, -1 ) )
                         {
-                                player.changeFrame( fallFrames[ player.getOrientation().toString () ] );
+                                player.changeFrame( fallFrames[ player.getOrientation() ] );
                         }
                 }
                 else if ( activity != Activity::MeetMortalItem || player.hasShield() )
@@ -238,7 +238,7 @@ void UserControlled::jump( PlayerItem & player )
         // when player is active and is at maximum height of room it may go to room above
         if ( player.isActiveCharacter() && player.getZ() >= MaxLayers * LayerHeight )
         {
-                player.setWayOfExit( "up" );
+                player.setWayOfExit( "above" );
         }
 }
 
@@ -260,7 +260,7 @@ void UserControlled::glide( PlayerItem & player )
         {
                 ActivityOfItem subactivity( Activity::Wait );
 
-                switch ( player.getOrientation().getIntegerOfWay () )
+                switch ( Way( player.getOrientation() ).getIntegerOfWay () )
                 {
                         case Way::North:
                                 subactivity = Activity::MoveNorth;
@@ -285,7 +285,7 @@ void UserControlled::glide( PlayerItem & player )
                 MoveKindOfActivity::getInstance().move( this, &subactivity, false );
 
                 // pick picture of falling
-                player.changeFrame( fallFrames[ player.getOrientation().toString() ] );
+                player.changeFrame( fallFrames[ player.getOrientation() ] );
 
                 speedTimer->reset();
         }

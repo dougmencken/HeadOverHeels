@@ -117,7 +117,7 @@ bool Turn::update ()
 
 void Turn::begin()
 {
-        switch ( this->item->getOrientation().getIntegerOfWay () )
+        switch ( Way( item->getOrientation() ).getIntegerOfWay () )
         {
                 case Way::North:
                         activity = Activity::MoveNorth;
@@ -142,45 +142,47 @@ void Turn::begin()
 
 void Turn::turn()
 {
-        switch ( item->getOrientation().getIntegerOfWay () )
+        bool turnLeft = ( getNameOfBehavior() == "behavior of move then turn left and move" );
+
+        switch ( Way( item->getOrientation() ).getIntegerOfWay () )
         {
                 case Way::North:
-                        if ( getNameOfBehavior() == "behavior of move then turn left and move" ) {
+                        if ( turnLeft ) {
                                 activity = Activity::MoveWest ;
-                                item->changeOrientation( Way( "west" ) );
+                                item->changeOrientation( "west" );
                         } else {
                                 activity = Activity::MoveEast ;
-                                item->changeOrientation( Way( "east" ) );
+                                item->changeOrientation( "east" );
                         }
                         break;
 
                 case Way::South:
-                        if ( getNameOfBehavior() == "behavior of move then turn left and move" ) {
+                        if ( turnLeft ) {
                                 activity = Activity::MoveEast ;
-                                item->changeOrientation( Way( "east" ) );
+                                item->changeOrientation( "east" );
                         } else {
                                 activity = Activity::MoveWest ;
-                                item->changeOrientation( Way( "west" ) );
+                                item->changeOrientation( "west" );
                         }
                         break;
 
                 case Way::East:
-                        if ( getNameOfBehavior() == "behavior of move then turn left and move" ) {
+                        if ( turnLeft ) {
                                 activity = Activity::MoveNorth ;
-                                item->changeOrientation( Way( "north" ) );
+                                item->changeOrientation( "north" );
                         } else {
                                 activity = Activity::MoveSouth ;
-                                item->changeOrientation( Way( "south" ) );
+                                item->changeOrientation( "south" );
                         }
                         break;
 
                 case Way::West:
-                        if ( getNameOfBehavior() == "behavior of move then turn left and move" ) {
+                        if ( turnLeft ) {
                                 activity = Activity::MoveSouth ;
-                                item->changeOrientation( Way( "south" ) );
+                                item->changeOrientation( "south" );
                         } else {
                                 activity = Activity::MoveNorth ;
-                                item->changeOrientation( Way( "north" ) );
+                                item->changeOrientation( "north" );
                         }
                         break;
 
