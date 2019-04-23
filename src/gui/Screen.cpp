@@ -344,7 +344,7 @@ void Screen::placeHeadAndHeels( bool picturesToo, bool copyrightsToo )
         {
                 Label* ocean = new Label( "{ 1987 Ocean Software Ltd.", "", "cyan" );
                 Label* Jorge = new Label( "{ 2009 Jorge Rodríguez Santos", "", "orange" );
-                Label* Douglas = new Label( "{ 2018 Douglas Mencken", "", "yellow" );
+                Label* Douglas = new Label( "{ 2019 Douglas Mencken", "", "yellow" );
 
                 const unsigned int screenHeight = iso::ScreenHeight();
                 const int leading = 28;
@@ -359,7 +359,7 @@ void Screen::placeHeadAndHeels( bool picturesToo, bool copyrightsToo )
                 Jorge->moveTo( whereX, whereY - leading );
                 addWidget( Jorge );
 
-                // (c) 2018 Douglas Mencken
+                // (c) 2019 Douglas Mencken
                 Douglas->moveTo( whereX, whereY - leading - leading );
                 addWidget( Douglas );
         }
