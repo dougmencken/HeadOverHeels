@@ -38,7 +38,7 @@ namespace iso
 
         std::string nameFromPath ( std::string const& path ) ;
 
-        const char * pathToFile ( const std::string& folder, const std::string& file = std::string() ) ;
+        std::string pathToFile ( const std::string& folder, const std::string& file = std::string() ) ;
 
         void setPathToGame ( const char * pathToGame ) ;
 

@@ -133,18 +133,20 @@ void Label::createImageOfLabel( const std::string& text, Font * font )
                         std::string utf8letter = text.substr( from, howMany );
 
                         // draw letter
-                        allegro::bitBlit(
-                                fontToUse->getPictureOfLetter( utf8letter )->getAllegroPict(),
-                                imageOfLetters->getAllegroPict(),
-                                0,
-                                0,
-                                charPos * ( fontToUse->getCharWidth() + getSpacing() ),
-                                0,
-                                fontToUse->getCharWidth(),
-                                fontToUse->getCharHeight()
-                        );
+                        Picture* pictureOfLetter = fontToUse->getPictureOfLetter( utf8letter ) ;
+                        if ( pictureOfLetter != nilPointer )
+                                allegro::bitBlit(
+                                    pictureOfLetter->getAllegroPict(),
+                                    imageOfLetters->getAllegroPict(),
+                                    0,
+                                    0,
+                                    charPos * ( fontToUse->getCharWidth() + getSpacing() ),
+                                    0,
+                                    fontToUse->getCharWidth(),
+                                    fontToUse->getCharHeight()
+                                ) ;
 
-                        charPos ++;
+                        charPos ++ ;
                 }
         }
 }

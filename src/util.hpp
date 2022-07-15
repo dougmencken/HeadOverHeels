@@ -70,17 +70,23 @@ public:
 
         inline static std::string pointer2string ( const void * pointer )
         {
-                return static_cast< std::ostringstream & >( std::ostringstream() << std::hex << pointer ).str () ;
+                std::ostringstream result ;
+                result << std::hex << pointer ;
+                return result.str () ;
         }
 
         inline static std::string number2string ( int number )
         {
-                return static_cast< std::ostringstream & >( std::ostringstream() << std::dec << number ).str () ;
+                std::ostringstream result ;
+                result << std::dec << number ;
+                return result.str () ;
         }
 
         inline static std::string number2hexstring ( int number )
         {
-                return static_cast< std::ostringstream & >( std::ostringstream() << std::hex << number ).str () ;
+                std::ostringstream result ;
+                result << std::hex << number ;
+                return result.str () ;
         }
 
         static std::string toStringWithOrdinalSuffix( unsigned int number )

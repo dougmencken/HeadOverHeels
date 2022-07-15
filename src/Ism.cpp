@@ -61,7 +61,7 @@ std::string nameFromPath( std::string const& path )
                 path.end() );
 }
 
-static const char * convertPath( const std::string& path )
+static std::string convertPath( const std::string& path )
 {
 #if defined ( __CYGWIN__ )
         ssize_t length ;
@@ -81,13 +81,13 @@ static const char * convertPath( const std::string& path )
         /// fprintf( stdout, "cygwin converted path \"%s\" to \"%s\"\n", path.c_str (), windowsPath ) ;
 #endif
 
-        return windowsPath ;
+        return std::string( windowsPath );
 #else
-        return path.c_str ();
+        return path ;
 #endif
 }
 
-const char * pathToFile( const std::string& folder, const std::string& file )
+std::string pathToFile( const std::string& folder, const std::string& file )
 {
         std::string path = folder ;
 
@@ -136,7 +136,9 @@ void setPathToGame ( const char * pathToGame )
                 if ( FullPathToGame[ 0 ] != pathSeparator )
                 {  // it’s not full path
                         char folderOfGame[ PATH_MAX ];
-                        getcwd( folderOfGame, PATH_MAX ) ;
+                        char* cwd = getcwd( folderOfGame, PATH_MAX ) ;
+                        if ( cwd == nilPointer )
+                                folderOfGame[ 0 ] = '\0' ;
 
                         size_t len = strlen( folderOfGame );
                         if ( folderOfGame[ len - 1 ] == pathSeparator )
@@ -215,7 +217,7 @@ std::string sharePath ()
                 }
         #else
                 SharePath = cpath.substr( 0, cpath.length() - filename.length() - ( 1 + containername.length() ) );
-                SharePath += "share" + pathSeparator + "headoverheels" + pathSeparator;
+                SharePath += "share" + util::pathSeparator() + "headoverheels" + util::pathSeparator() ;
         #endif
 
                 fprintf ( stdout, "SharePath is \"%s\"\n", SharePath.c_str () );

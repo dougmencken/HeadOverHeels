@@ -122,7 +122,8 @@ void SoundManager::addSound( const std::string& label, const std::string& activi
                 return ;
         }
 
-        allegro::Sample* sample = allegro::Sample::loadFromFile( iso::pathToFile( iso::sharePath(), sampleFile ) );
+        std::string pathToSample = iso::pathToFile( iso::sharePath(), sampleFile ) ;
+        allegro::Sample* sample = allegro::Sample::loadFromFile( pathToSample );
 
         if ( sample != nilPointer && sample->isNotNil() )
         {
@@ -133,7 +134,7 @@ void SoundManager::addSound( const std::string& label, const std::string& activi
         }
         else
         {
-                std::cerr << "can’t read sound \"" << sampleFile << "\"" << std::endl ;
+                std::cerr << "can’t read sound \"" << sampleFile << "\" (" << pathToSample << ")" << std::endl ;
         }
 }
 

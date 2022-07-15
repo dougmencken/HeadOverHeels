@@ -183,16 +183,20 @@ Font::~Font( )
 
 Picture* Font::getPictureOfLetter( const std::string& letter )
 {
-        for ( unsigned int i = 0; i < howManyLetters; i++ )
+        if ( tableOfLetters != nilPointer )
         {
-                if ( letter == tableOfLetters[ i ] )
+                for ( unsigned int i = 0; i < howManyLetters; i++ )
                 {
-                        return letters.at( i );
+                        if ( letter == tableOfLetters[ i ] )
+                                return letters.at( i );
                 }
         }
 
         // return '?' when letter isn’t found
-        return letters.at( '?' - 32 );
+        if ( letters.size() > ( '?' - 32 ) )
+                return letters.at( '?' - 32 );
+
+        return nilPointer ;
 }
 
 }
