@@ -2,7 +2,7 @@ AC_PREREQ([2.65])
 AC_LANG(C++)
 AC_CONFIG_MACRO_DIRS([m4])
 
-AC_INIT(headoverheels, 1.32dev, dougmencken@gmail.com)
+AC_INIT(headoverheels, 1.33dev, dougmencken@gmail.com)
 
 AM_INIT_AUTOMAKE([subdir-objects])
 
@@ -56,7 +56,7 @@ else if test x"$with_allegro4" = x"yes" -a x"$with_allegro5" = x"no" -a test x"$
         AC_MSG_NOTICE(building with allegro4)
 else if test x"$with_allegro4" = x"yes" -a x"$with_allegro5" = x"yes" -a test x"$with_allegro" = x"yes" ; then
         AC_MSG_ERROR(--with-allegro5 and --with-allegro4 are mutually exclusive)
-else if test x"$with_allegro" = x"no" ;
+else if test x"$with_allegro" = x"no" ; then
         AC_MSG_NOTICE(building without allegro libraries)
 fi
 
