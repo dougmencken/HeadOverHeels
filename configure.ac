@@ -42,12 +42,22 @@ AC_CHECK_HEADERS([tinyxml2.h],, [AC_MSG_ERROR(tinyxml2 header is absent)])
 AC_LANG_POP([C++])
 
 AC_ARG_WITH([allegro5],
-        [AS_HELP_STRING([--with-allegro5], [build game with allegro5 library (default: check)])], [], [with_allegro5=check])
+        [AS_HELP_STRING([--with-allegro5], [build the game with the allegro5 library (default: check)])], [], [with_allegro5=check])
 AC_ARG_WITH([allegro4],
-        [AS_HELP_STRING([--with-allegro4], [build game with allegro4 library (default: check)])], [], [with_allegro4=check])
+        [AS_HELP_STRING([--with-allegro4], [build the game with the allegro4 library (default: check)])], [], [with_allegro4=check])
+AC_ARG_WITH([allegro],
+        [AS_HELP_STRING([--without-allegro], [build the game without allegro libraries])], [], [with_allegro=yes])
 
-if test x"$with_allegro4" = x"yes" -a x"$with_allegro5" = x"yes" ; then
-    AC_MSG_ERROR(--with-allegro5 and --with-allegro4 are mutually exclusive)
+if test x"$with_allegro4" = x"no" -a x"$with_allegro5" = x"no" -a test x"$with_allegro" = x"yes" ; then
+        AC_MSG_ERROR(use --with-allegro5 or --with-allegro4 or --without-allegro)
+else if test x"$with_allegro4" = x"no" -a x"$with_allegro5" = x"yes" -a test x"$with_allegro" = x"yes" ; then
+        AC_MSG_NOTICE(building with allegro5)
+else if test x"$with_allegro4" = x"yes" -a x"$with_allegro5" = x"no" -a test x"$with_allegro" = x"yes" ; then
+        AC_MSG_NOTICE(building with allegro4)
+else if test x"$with_allegro4" = x"yes" -a x"$with_allegro5" = x"yes" -a test x"$with_allegro" = x"yes" ; then
+        AC_MSG_ERROR(--with-allegro5 and --with-allegro4 are mutually exclusive)
+else if test x"$with_allegro" = x"no" ;
+        AC_MSG_NOTICE(building without allegro libraries)
 fi
 
 AC_CHECK_HEADERS([allegro5/allegro.h], [HAVE_ALLEGRO5=1], [HAVE_ALLEGRO5=0], [])
