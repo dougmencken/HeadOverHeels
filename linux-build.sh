@@ -2,9 +2,6 @@
 
 buildFolder=`pwd`
 
-[ -d ./m4 ] || mkdir m4
-[ -f ./configure ] || autoreconf -f -i
-
 if [ -x "$( command -v ccache )" ]; then
     export CC="ccache $( command -v gcc )"
     export CXX="ccache $( command -v g++ )"
@@ -75,6 +72,9 @@ else
 fi
 
 cd "${buildFolder}"
+
+[ -d ./m4 ] || mkdir m4
+[ -f ./configure ] || autoreconf -f -i
 
 gameInstallPath="${buildFolder}"/_rootdir
 
