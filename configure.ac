@@ -50,13 +50,13 @@ AC_ARG_WITH([allegro],
 
 if test x"$with_allegro4" = x"no" -a x"$with_allegro5" = x"no" -a test x"$with_allegro" = x"yes" ; then
         AC_MSG_ERROR(use --with-allegro5 or --with-allegro4 or --without-allegro)
-else if test x"$with_allegro4" = x"no" -a x"$with_allegro5" = x"yes" -a test x"$with_allegro" = x"yes" ; then
+elif test x"$with_allegro4" = x"no" -a x"$with_allegro5" = x"yes" -a test x"$with_allegro" = x"yes" ; then
         AC_MSG_NOTICE(building with allegro5)
-else if test x"$with_allegro4" = x"yes" -a x"$with_allegro5" = x"no" -a test x"$with_allegro" = x"yes" ; then
+elif test x"$with_allegro4" = x"yes" -a x"$with_allegro5" = x"no" -a test x"$with_allegro" = x"yes" ; then
         AC_MSG_NOTICE(building with allegro4)
-else if test x"$with_allegro4" = x"yes" -a x"$with_allegro5" = x"yes" -a test x"$with_allegro" = x"yes" ; then
+elif test x"$with_allegro4" = x"yes" -a x"$with_allegro5" = x"yes" -a test x"$with_allegro" = x"yes" ; then
         AC_MSG_ERROR(--with-allegro5 and --with-allegro4 are mutually exclusive)
-else if test x"$with_allegro" = x"no" ; then
+elif test x"$with_allegro" = x"no" ; then
         AC_MSG_NOTICE(building without allegro libraries)
 fi
 
