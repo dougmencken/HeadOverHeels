@@ -187,9 +187,9 @@ void UserControlled::jump( PlayerItem & player )
         switch ( activity )
         {
                 case Activity::Jump:
-                        // look for item below
+                        // look for an item below
                         player.canAdvanceTo( 0, 0, -1 );
-                        // when on trampoline or with rabbit of high jumps, player makes big leap
+                        // when on trampoline or with rabbit of high jumps
                         activity = ( player.getMediator()->collisionWithByBehavior( "behavior of spring leap" ) != nilPointer ||
                                         ( player.getHighJumps() > 0 && player.getLabel() == "heels" )
                                 ? Activity::HighJump
@@ -215,7 +215,7 @@ void UserControlled::jump( PlayerItem & player )
                                 else if ( activity == Activity::HighJump )
                                         JumpKindOfActivity::getInstance().jump( this, &activity, jumpPhase, highJumpVector );
 
-                                // to next phase of jump
+                                // to the next phase of jump
                                 ++ jumpPhase ;
                                 if ( activity == Activity::Fall ) jumpPhase = 0;
 
@@ -452,7 +452,7 @@ void UserControlled::takeItem( PlayerItem & player )
                                 // choose free pushable item less than or equal to 3/4 of size of one tile
                                 if ( bottomItem != nilPointer && bottomItem->getBehavior() != nilPointer
                                         && ( bottomItem->getBehavior()->getNameOfBehavior() == "behavior of thing able to move by pushing" ||
-                                                bottomItem->getBehavior()->getNameOfBehavior() == "behavior of big leap for character" )
+                                                bottomItem->getBehavior()->getNameOfBehavior() == "behavior of spring leap" )
                                         && bottomItem->getWidthX() <= ( mediator->getRoom()->getSizeOfOneTile() * 3 ) >> 2
                                         && bottomItem->getWidthY() <= ( mediator->getRoom()->getSizeOfOneTile() * 3 ) >> 2 )
                                 {

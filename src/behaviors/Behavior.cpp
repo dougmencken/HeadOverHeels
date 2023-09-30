@@ -57,13 +57,8 @@ Behavior::~Behavior( )
 
 }
 
-Behavior* Behavior::createBehaviorByName( const ItemPtr& item, const std::string& behaviorFromFile )
+Behavior* Behavior::createBehaviorByName( const ItemPtr & item, const std::string & behavior )
 {
-        std::string behavior = behaviorFromFile ;
-
-        if ( behavior == "behavior of big leap for player" || behavior == "behavior of big leap for character" )
-                behavior = "behavior of spring leap" ;
-
         Behavior* behaviorToReturn = nilPointer ;
 
         if ( behavior == "behavior of conveyor" )
