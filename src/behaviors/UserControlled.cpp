@@ -190,7 +190,7 @@ void UserControlled::jump( PlayerItem & player )
                         // look for item below
                         player.canAdvanceTo( 0, 0, -1 );
                         // when on trampoline or with rabbit of high jumps, player makes big leap
-                        activity = ( player.getMediator()->collisionWithByBehavior( "behavior of big leap for character" ) != nilPointer ||
+                        activity = ( player.getMediator()->collisionWithByBehavior( "behavior of spring leap" ) != nilPointer ||
                                         ( player.getHighJumps() > 0 && player.getLabel() == "heels" )
                                 ? Activity::HighJump
                                 : Activity::RegularJump );
