@@ -1,7 +1,7 @@
 <!-- use “ haxelib run hxcpp hxcpp-build.xml ” to build -->
 <xml>
     <files id="sources">
-        <compilerflag value="-DPACKAGE_VERSION=&quot;1.32dev&quot;" />
+        <compilerflag value="-DPACKAGE_VERSION=&quot;1.4dev&quot;" />
         <compilerflag value="-DUSE_ALLEGRO4=1" />
         <compilerflag value="-I." />
         <compilerflag value="-Iactivities" />

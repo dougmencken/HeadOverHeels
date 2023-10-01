@@ -2,7 +2,7 @@ AC_PREREQ([2.65])
 AC_LANG(C++)
 AC_CONFIG_MACRO_DIRS([m4])
 
-AC_INIT(headoverheels, 1.33dev, dougmencken@gmail.com)
+AC_INIT(headoverheels, 1.4dev, dougmencken@gmail.com)
 
 AM_INIT_AUTOMAKE([subdir-objects])
 
@@ -78,21 +78,19 @@ else
 fi
 AM_CONDITIONAL([DARWIN], [test x"$on_darwin" = x"true"])
 
-# look for typedefs, structures, and compiler characteristics
-
-# makefiles
-AC_OUTPUT( \
-            Makefile \
-            src/Makefile \
-            gamedata/Makefile \
-            gamedata/gfx/Makefile \
-            gamedata/gfx.2009/Makefile \
-            gamedata/gfx.riderx/Makefile \
-            gamedata/gfx.2003/Makefile \
-            gamedata/gfx.simple/Makefile \
-            gamedata/map/Makefile \
-            gamedata/music/Makefile \
-            gamedata/savegame/Makefile \
-            gamedata/sound/Makefile \
-            gamedata/text/Makefile \
-         )
+AC_CONFIG_FILES([
+        Makefile
+        src/Makefile
+        src/path_prefix.h
+        gamedata/Makefile
+        gamedata/gfx/Makefile
+        gamedata/gfx.2009/Makefile
+        gamedata/gfx.riderx/Makefile
+        gamedata/gfx.2003/Makefile
+        gamedata/gfx.simple/Makefile
+        gamedata/map/Makefile
+        gamedata/music/Makefile
+        gamedata/savegame/Makefile
+        gamedata/sound/Makefile
+        gamedata/text/Makefile])
+AC_OUTPUT

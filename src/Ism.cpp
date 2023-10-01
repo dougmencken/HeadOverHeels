@@ -1,5 +1,6 @@
 
 #include "Ism.hpp"
+#include "path_prefix.h"
 
 #include <algorithm>
 
@@ -113,12 +114,12 @@ void setPathToGame ( const char * pathToGame )
         if ( whereIsGame == "headoverheels" || whereIsGame == "/usr/bin/headoverheels" )
         {
 #if defined ( __CYGWIN__ )
-                FullPathToGame = "/bin/headoverheels" ;
+                FullPathToGame = "/bin/headoverheels" ;         /* hard-coded */
 #else
-                FullPathToGame = "/usr/bin/headoverheels" ;  /* hard-coded */
-                                                             /* for other paths like /usr/local
-                                                                and~or custom names of game
-                                                                it needs more sophiscated logic */
+                /* more sophiscated logic */ // at least than = "/usr/bin/headoverheels"
+                FullPathToGame = std::string( ThatPrefixFromConfigure ) + "/bin/headoverheels" ;
+                /* and those who wish a custom name for the game's binary
+                   may sophiscate it further more */
 #endif
         }
 

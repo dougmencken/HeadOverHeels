@@ -44,7 +44,7 @@ GuiManager::GuiManager( ) :
         else if ( version == "v1.32" )
                 version = "0x20 32nd anniversary";
 
-        if ( version.find( "v1.32" ) != std::string::npos )
+        if ( version.find( "v1.4" ) != std::string::npos )
                 nameOfWindow = "Foot and Mouth" ;
 
         nameOfWindow += " " + version ;
