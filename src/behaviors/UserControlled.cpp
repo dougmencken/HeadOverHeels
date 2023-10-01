@@ -509,7 +509,7 @@ void UserControlled::dropItem( PlayerItem & player )
 
                         GameManager::getInstance().emptyHandbag();
 
-                        player.placeItemInBag( nilPointer, "still" );
+                        player.emptyBag();
 
                         // update activity
                         activity = ( activity == Activity::DropAndJump ? Activity::Jump : Activity::Wait );

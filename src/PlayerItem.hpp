@@ -120,6 +120,8 @@ public:
 
         void placeItemInBag ( const std::string & labelOfItem, const std::string & behavior ) ;
 
+        void emptyBag () ;
+
         const DescriptionOfItem * getDescriptionOfTakenItem () const {  return descriptionOfTakenItem ;  }
 
         const std::string & getBehaviorOfTakenItem () const {  return this->behaviorOfTakenItem ;  }
