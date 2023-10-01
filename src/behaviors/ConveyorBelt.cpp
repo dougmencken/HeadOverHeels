@@ -61,25 +61,29 @@ bool ConveyorBelt::update ()
                                                                 {
                                                                         if ( item->getOrientation() == "south" ) {
                                                                                 if ( itemAbove.getBehavior()->getActivityOfItem() != Activity::RegularJump &&
-                                                                                                itemAbove.getBehavior()->getActivityOfItem() != Activity::HighJump )
+                                                                                                itemAbove.getBehavior()->getActivityOfItem() != Activity::HighJump &&
+                                                                                                itemAbove.getBehavior()->getActivityOfItem() != Activity::Vanish )
                                                                                 {
                                                                                         itemAbove.getBehavior()->changeActivityOfItem( Activity::ForceDisplaceSouth );
                                                                                 }
                                                                         } else if ( item->getOrientation() == "west" ) {
                                                                                 if ( itemAbove.getBehavior()->getActivityOfItem() != Activity::RegularJump &&
-                                                                                                itemAbove.getBehavior()->getActivityOfItem() != Activity::HighJump )
+                                                                                                itemAbove.getBehavior()->getActivityOfItem() != Activity::HighJump &&
+                                                                                                itemAbove.getBehavior()->getActivityOfItem() != Activity::Vanish )
                                                                                 {
                                                                                         itemAbove.getBehavior()->changeActivityOfItem( Activity::ForceDisplaceWest );
                                                                                 }
                                                                         } else if ( item->getOrientation() == "north" ) {
                                                                                 if ( itemAbove.getBehavior()->getActivityOfItem() != Activity::RegularJump &&
-                                                                                                itemAbove.getBehavior()->getActivityOfItem() != Activity::HighJump )
+                                                                                                itemAbove.getBehavior()->getActivityOfItem() != Activity::HighJump &&
+                                                                                                itemAbove.getBehavior()->getActivityOfItem() != Activity::Vanish )
                                                                                 {
                                                                                         itemAbove.getBehavior()->changeActivityOfItem( Activity::ForceDisplaceNorth );
                                                                                 }
                                                                         } else if ( item->getOrientation() == "east" ) {
                                                                                 if ( itemAbove.getBehavior()->getActivityOfItem() != Activity::RegularJump &&
-                                                                                                itemAbove.getBehavior()->getActivityOfItem() != Activity::HighJump )
+                                                                                                itemAbove.getBehavior()->getActivityOfItem() != Activity::HighJump &&
+                                                                                                itemAbove.getBehavior()->getActivityOfItem() != Activity::Vanish )
                                                                                 {
                                                                                         itemAbove.getBehavior()->changeActivityOfItem( Activity::ForceDisplaceEast );
                                                                                 }
