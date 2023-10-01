@@ -575,6 +575,12 @@ void PlayerItem::placeItemInBag ( const std::string& labelOfItem, const std::str
         this->behaviorOfTakenItem = behavior ;
 }
 
+void PlayerItem::emptyBag ()
+{
+        this->descriptionOfTakenItem = nilPointer ;
+        this->behaviorOfTakenItem = "still" ;
+}
+
 void PlayerItem::save ()
 {
         GameManager::getInstance().eatFish( *this, this->mediator->getRoom() );
