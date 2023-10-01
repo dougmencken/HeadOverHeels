@@ -254,19 +254,29 @@ unsigned int Menu::getHeightOfMenu () const
 
 void Menu::previousOption ()
 {
-        std::list< Label* >::const_iterator i = std::find_if( options.begin (), options.end (), std::bind2nd( EqualXYOfLabel(), this->activeOption->getXY () ) );
-        assert ( i != options.end () );
+        std::list < Label * >::iterator it = options.begin ();
+        for ( ; it != options.end (); ++ it )
+        {
+                if ( (*it)->getY () == this->activeOption->getY ()
+                        && (*it)->getX () == this->activeOption->getX () ) break ;
+        }
+        assert ( it != options.end () );
 
-        this->activeOption = ( i == options.begin() ? *( --options.end() ) : *( --i ) );
+        this->activeOption = ( it == options.begin() ? *( -- options.end() ) : *( -- it ) );
 }
 
 void Menu::nextOption ()
 {
-        std::list< Label* >::const_iterator i = std::find_if( options.begin (), options.end (), std::bind2nd( EqualXYOfLabel(), this->activeOption->getXY () ) );
-        assert ( i != options.end () );
+        std::list < Label * >::iterator it = options.begin ();
+        for ( ; it != options.end (); ++ it )
+        {
+                if ( (*it)->getY () == this->activeOption->getY ()
+                        && (*it)->getX () == this->activeOption->getX () ) break ;
+        }
+        assert ( it != options.end () );
 
-        ++i ;
-        this->activeOption = ( i == options.end() ? *options.begin() : *i );
+        ++ it ;
+        this->activeOption = ( it == options.end() ? *options.begin() : *it );
 }
 
 }

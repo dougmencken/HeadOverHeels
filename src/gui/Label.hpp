@@ -111,19 +111,7 @@ public:
 
         void setAction ( Action* action ) {  myAction = action ;  }
 
-};
-
-
-struct EqualXYOfLabel : public std::binary_function< Label*, std::pair < int, int >, bool >
-{
-        bool operator() ( const Label* label, std::pair < int, int > thatXY ) const;
-};
-
-
-struct EqualTextOfLabel : public std::binary_function< Label*, std::string, bool >
-{
-        bool operator() ( const Label* label, const std::string& text ) const;
-};
+} ;
 
 }
 

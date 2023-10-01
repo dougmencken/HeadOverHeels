@@ -53,8 +53,6 @@ public:
 
         int getY () const {  return this->xy.second ;  }
 
-        std::pair < int, int > getXY () const {  return this->xy ;  }
-
         bool isOnScreen() const {  return this->onScreen ;  }
 
         void setOnScreen( bool onscreen ) {  this->onScreen = onscreen ;  }

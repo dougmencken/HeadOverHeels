@@ -151,14 +151,4 @@ void Label::createImageOfLabel( const std::string& text, Font * font )
         }
 }
 
-bool EqualXYOfLabel::operator() ( const Label* label, std::pair < int, int > thatXY ) const
-{
-        return ( label->getY () == thatXY.second && label->getX () == thatXY.first );
-}
-
-bool EqualTextOfLabel::operator() ( const Label* label, const std::string& text ) const
-{
-        return ( label->getText() == text );
-}
-
 }
