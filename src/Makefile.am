@@ -23,20 +23,14 @@ if DARWIN
     AM_CXXFLAGS += -DDARWIN=1
 endif
 
-headoverheels_CXXFLAGS = -I. -Iactivities -Ibehaviors -Igui -Iguiactions -Wall $(AM_CXXFLAGS)
+headoverheels_CPPFLAGS = -Iactivities -Ibehaviors -Igui -Iguiactions
+headoverheels_CPPFLAGS += $(zlib_HEADERS) $(libpng_HEADERS) $(ogg_HEADERS) $(vorbis_HEADERS) $(tinyxml2_HEADERS) $(allegro_HEADERS)
+headoverheels_CPPFLAGS += $(AM_CPPFLAGS)
 
-AM_LDFLAGS = -lpthread -lz -lpng -lvorbis -lvorbisenc -lvorbisfile -logg -ltinyxml2
+headoverheels_CFLAGS = -Wall $(AM_CFLAGS)
+headoverheels_CXXFLAGS = -Wall $(AM_CXXFLAGS)
 
-if USE_ALLEGRO5
-AM_LDFLAGS += -lallegro -lallegro_audio -lallegro_acodec -lallegro_image -lallegro_font -lallegro_primitives
-if DARWIN
-AM_LDFLAGS += -lallegro_main
-endif
-else
-if USE_ALLEGRO4
-AM_LDFLAGS += `allegro-config --libs release`
-endif
-endif
+AM_LDFLAGS = -lpthread $(zlib_LIBS) $(libpng_LIBS) $(ogg_LIBS) $(vorbis_LIBS) $(tinyxml2_LIBS) $(allegro_LIBS)
 
 bin_PROGRAMS = headoverheels
 

@@ -47,8 +47,8 @@ if [ ! -f ./okay ]; then
     make install
 
     zlibInstalledLibs=`find "${zlibinstallpath}"/lib -name "libz*" -type f -print 2>/dev/null`
-    num_zlibs=`echo "${zlibInstalledLibs}" | wc -l`
-    if [ $num_zlibs -gt 1 ]; then
+    num_zlibs=`printf "${zlibInstalledLibs}" | wc -l`
+    if [ $num_zlibs -gt 0 ]; then
         echo
         for thezlib in $zlibInstalledLibs; do
             file -h "${thezlib}"
@@ -103,8 +103,8 @@ if [ ! -f ./okay ]; then
     make install
 
     libpngInstalledLibs=`find "${libpnginstallpath}"/lib -name "libpng*" -type f -print 2>/dev/null`
-    num_libpngs=`echo "${libpngInstalledLibs}" | wc -l`
-    if [ $num_libpngs -gt 1 ]; then
+    num_libpngs=`printf "${libpngInstalledLibs}" | wc -l`
+    if [ $num_libpngs -gt 0 ]; then
         echo
         for thelibpng in $libpngInstalledLibs; do
             file -h "${thelibpng}"
@@ -154,8 +154,8 @@ if [ ! -f ./okay ]; then
     make install
 
     liboggInstalledLibs=`find "${libogginstallpath}"/lib -name "libogg*" -type f -print 2>/dev/null`
-    num_liboggs=`echo "${liboggInstalledLibs}" | wc -l`
-    if [ $num_liboggs -gt 1 ]; then
+    num_liboggs=`printf "${liboggInstalledLibs}" | wc -l`
+    if [ $num_liboggs -gt 0 ]; then
         echo
         for thelibogg in $liboggInstalledLibs; do
             file -h "${thelibogg}"
@@ -200,8 +200,8 @@ if [ ! -f ./okay ]; then
     make install
 
     libvorbisInstalledLibs=`find "${libvorbisinstallpath}"/lib -name "libvorbis*" -type f -print 2>/dev/null`
-    num_libvorbiss=`echo "${libvorbisInstalledLibs}" | wc -l`
-    if [ $num_libvorbiss -gt 1 ]; then
+    num_libvorbises=`printf "${libvorbisInstalledLibs}" | wc -l`
+    if [ $num_libvorbises -gt 0 ]; then
         echo
         for thelibvorbis in $libvorbisInstalledLibs; do
             file -h "${thelibvorbis}"
@@ -252,8 +252,8 @@ fi
 #    make install
 #
 #    vorbistoolsInstalledBins=`find "${vorbistoolsinstallpath}"/bin -type f -print 2>/dev/null`
-#    num_vorbistools=`echo "${vorbistoolsInstalledBins}" | wc -l`
-#    if [ $num_vorbistools -gt 1 ]; then
+#    num_vorbistools=`printf "${vorbistoolsInstalledBins}" | wc -l`
+#    if [ $num_vorbistools -gt 0 ]; then
 #        echo
 #        for thevorbistool in $vorbistoolsInstalledBins; do
 #            file -h "${thevorbistool}"
@@ -314,20 +314,23 @@ if [ -x "$( command -v cmake )" ]; then
         make install
         rm -r "${tinyxml2installpath}"/lib/cmake
 
-        cd ..
+        cd "${tinyxml2installpath}"
 
         tinyxmlInstalledLibs=`find "${tinyxml2installpath}"/lib -name "*tinyxml*" -type f -print 2>/dev/null`
-        num_tinyxmls=`echo "${tinyxmlInstalledLibs}" | wc -l`
-        if [ $num_tinyxmls -gt 1 ]; then
+        num_tinyxmls=`printf "${tinyxmlInstalledLibs}" | wc -l`
+        if [ $num_tinyxmls -gt 0 ]; then
             echo
             for thetinyxml in $tinyxmlInstalledLibs; do
                 file -h "${thetinyxml}"
             done
-
-            echo "okay" > ./okay
         fi
 
-        [ -f ./okay ] && echo && find "${tinyxml2installpath}"/include -type f -print
+        if [ -f ./include/tinyxml2.h ]; then
+            mv ./include/tinyxml2.h ./ && rmdir ./include
+            [ -f ./tinyxml2.h ] && echo "okay" > ./okay
+        fi
+
+        [ -f ./okay ] && echo && find "${tinyxml2installpath}" -name "*.h" -type f -print
 
         echo
         printf "tinyxml2 "
@@ -381,9 +384,12 @@ if [ -x "$( command -v cmake )" ]; then
 
             cmake -DCMAKE_BUILD_TYPE=Release \
                   -DBUILD_SHARED_LIBS:BOOL=OFF \
-                  -DZLIB_INCLUDE_DIR="${zlibinstallpath}"/include \
-                  -DPNG_PNG_INCLUDE_DIR="${libpnginstallpath}"/include \
-                  -DOGG_INCLUDE_DIR="${libogginstallpath}"/include -DVORBIS_INCLUDE_DIR="${libvorbisinstallpath}"/include \
+                  -DZLIB_INCLUDE_DIR:PATH="${zlibinstallpath}"/include \
+                  -DZLIB_LIBRARY="${zlibinstallpath}"/lib/libz.so \
+                  -DPNG_PNG_INCLUDE_DIR:PATH="${libpnginstallpath}"/include \
+                  -DPNG_LIBRARY="${libpnginstallpath}"/lib/libpng.so \
+                  -DOGG_INCLUDE_DIR:PATH="${libogginstallpath}"/include \
+                  -DVORBIS_INCLUDE_DIR:PATH="${libvorbisinstallpath}"/include \
                   -DCMAKE_INSTALL_PREFIX:PATH="${allegro4installpath}" \
                   -DCMAKE_C_FLAGS:STRING="-fno-common" \
                   ..
@@ -394,8 +400,8 @@ if [ -x "$( command -v cmake )" ]; then
         cd ..
 
         allegro4InstalledLibs=`find "${allegro4installpath}"/lib -name "lib*alleg*" -type f -print 2>/dev/null`
-        num_allegro4s=`echo "${allegro4InstalledLibs}" | wc -l`
-        if [ $num_allegro4s -gt 1 ]; then
+        num_allegro4s=`printf "${allegro4InstalledLibs}" | wc -l`
+        if [ $num_allegro4s -gt 0 ]; then
             echo
             for theliballeg in $allegro4InstalledLibs; do
                 file -h "${theliballeg}"
@@ -459,13 +465,18 @@ gameInstallPath="${installPath}"
 [ -f src/Makefile ] && rm -v src/Makefile
 echo
 
-##export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${zlibinstallpath}/lib:${libpnginstallpath}/lib:${libogginstallpath}/lib:${libvorbisinstallpath}/lib:${tinyxml2installpath}/lib:${allegro4installpath}/lib
-
-LDFLAGS="-L${zlibinstallpath}/lib -Wl,-rpath ${zlibinstallpath}/lib -L${libpnginstallpath}/lib -Wl,-rpath ${libpnginstallpath}/lib -L${libogginstallpath}/lib -Wl,-rpath ${libogginstallpath}/lib -L${libvorbisinstallpath}/lib -Wl,-rpath ${libvorbisinstallpath}/lib -L${tinyxml2installpath}/lib -Wl,-rpath ${tinyxml2installpath}/lib -L${allegro4installpath}/lib -Wl,-rpath ${allegro4installpath}/lib" \
-CPPFLAGS="-I${zlibinstallpath}/include -I${libpnginstallpath}/include -I${libogginstallpath}/include -I${libvorbisinstallpath}/include -I${tinyxml2installpath}/include -I${allegro4installpath}/include" \
+LDFLAGS="-Wl,-rpath ${zlibinstallpath}/lib -Wl,-rpath ${libpnginstallpath}/lib -Wl,-rpath ${libogginstallpath}/lib -Wl,-rpath ${libvorbisinstallpath}/lib -Wl,-rpath ${tinyxml2installpath}/lib -Wl,-rpath ${allegro4installpath}/lib" \
 ./configure \
         --prefix="${gameInstallPath}" \
-        --with-allegro4
+        --with-zlib-prefix="${zlibinstallpath}" \
+        --with-libpng-prefix="${libpnginstallpath}" \
+        --with-ogg-prefix="${libogginstallpath}" \
+        --with-vorbis-prefix="${libvorbisinstallpath}" \
+        --with-tinyxml2-libs="${tinyxml2installpath}"/lib \
+        --with-tinyxml2-includes="${tinyxml2installpath}" \
+        --with-allegro4 \
+        --with-allegro-libs="${allegro4installpath}"/lib \
+        --with-allegro-includes="${allegro4installpath}"/include
         ##--enable-debug=yes
 
 make && make install ##DESTDIR="${gameInstallPath}"
