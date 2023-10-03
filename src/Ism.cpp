@@ -124,7 +124,7 @@ void setPathToGame ( const char * pathToGame )
         }
 
 #if defined ( __APPLE__ ) && defined ( __MACH__ )
-        char* lastdot = std::strrchr ( nameFromPath( pathToGame ).c_str(), '.' );
+        const char* lastdot = std::strrchr ( nameFromPath( pathToGame ).c_str(), '.' );
         if ( lastdot != nilPointer && strlen( lastdot ) == 4 &&
                         ( lastdot[ 1 ] == 'a' && lastdot[ 2 ] == 'p' && lastdot[ 3 ] == 'p' ) )
         {       // game is in OS X bundle
@@ -198,7 +198,7 @@ std::string sharePath ()
                    and nameFromPath in its turn gives
                    Head over Heels.app */
                 bool inBundle = false;
-                char* lastdot = std::strrchr ( filename.c_str() , '.' );
+                const char* lastdot = std::strrchr ( filename.c_str() , '.' );
                 if ( lastdot != NULL && strlen( lastdot ) == 4 )
                         if ( lastdot[ 1 ] == 'a' && lastdot[ 2 ] == 'p' && lastdot[ 3 ] == 'p' )
                                 inBundle = true;
