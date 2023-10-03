@@ -31,7 +31,13 @@ CreateLanguageMenu::~CreateLanguageMenu( )
 
 void CreateLanguageMenu::doAction ()
 {
-        Screen& screen = * GuiManager::getInstance().findOrCreateScreenForAction( this );
+        ScreenPtr screenptr = GuiManager::getInstance().findOrCreateScreenForAction( this );
+        if ( screenptr == nilPointer ) {
+                std::cout << "nil screen for " << this->getNameOfAction() ;
+                return ;
+        }
+        Screen& screen = *screenptr ;
+
         if ( screen.countWidgets() > 0 )
         {
                 screen.freeWidgets();

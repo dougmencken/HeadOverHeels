@@ -374,7 +374,7 @@ Picture * Screen::loadPicture ( const std::string& nameOfPicture )
         autouniqueptr< allegro::Pict > pict( allegro::Pict::fromPNGFile (
                 iso::pathToFile( GuiManager::getInstance().getPathToPicturesOfGui(), nameOfPicture )
         ) );
-        return new Picture( *pict ) ;
+        return ( pict != nilPointer ) ? new Picture( *pict ) : nilPointer ;
 }
 
 /* static */
