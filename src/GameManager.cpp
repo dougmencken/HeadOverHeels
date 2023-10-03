@@ -974,6 +974,8 @@ unsigned int GameManager::getVisitedRooms ()
 /* static */
 bool GameManager::readPreferences( const std::string& fileName )
 {
+        std::cout << "readPreferences( " << fileName << " )" << std::endl ;
+
         // read list of sounds from XML file
         tinyxml2::XMLDocument preferences;
         tinyxml2::XMLError result = preferences.LoadFile( fileName.c_str () );
@@ -1072,6 +1074,16 @@ bool GameManager::readPreferences( const std::string& fileName )
                                 GameManager::getInstance().toggleBackgroundPicture ();
                 }
 
+                tinyxml2::XMLElement* centerCameraOn = video->FirstChildElement( "centercamera" ) ;
+                if ( centerCameraOn != nilPointer )
+                {
+                        bool centerCameraOnCharacter =
+                                ( std::string( centerCameraOn->FirstChild()->ToText()->Value() ) == "character" ) ? true : false ;
+
+                        if ( GameManager::getInstance().getIsomot().doesCameraFollowCharacter () != centerCameraOnCharacter )
+                                GameManager::getInstance().getIsomot().toggleCameraFollowsCharacter ();
+                }
+
                 tinyxml2::XMLElement* graphics = video->FirstChildElement( "graphics" ) ;
                 if ( graphics != nilPointer )
                 {
@@ -1085,6 +1097,7 @@ bool GameManager::readPreferences( const std::string& fileName )
 /* static */
 bool GameManager::writePreferences( const std::string& fileName )
 {
+        std::cout << "writePreferences( " << fileName << " )" << std::endl ;
 
         tinyxml2::XMLDocument preferences ;
 
@@ -1147,6 +1160,10 @@ bool GameManager::writePreferences( const std::string& fileName )
                 tinyxml2::XMLElement * background = preferences.NewElement( "background" );
                 background->SetText( GameManager::getInstance().hasBackgroundPicture () ? "true" : "false" );
                 video->InsertEndChild( background );
+
+                tinyxml2::XMLElement * centerCameraOn = preferences.NewElement( "centercamera" );
+                centerCameraOn->SetText( GameManager::getInstance().getIsomot().doesCameraFollowCharacter () ? "character" : "room" );
+                video->InsertEndChild( centerCameraOn );
 
                 tinyxml2::XMLElement * graphics = preferences.NewElement( "graphics" );
                 graphics->SetText( GameManager::getInstance().getChosenGraphicSet().c_str () );

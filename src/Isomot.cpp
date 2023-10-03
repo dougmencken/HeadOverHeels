@@ -25,7 +25,7 @@ Isomot::Isomot( ) :
         finalRoomTimer( new Timer() ),
         finalRoomBuilt( false ),
         sizeOfTileForMiniature( 3 ),
-        cameraFollowsCharacter( true ),
+        cameraFollowsCharacter( false ),
         drawOnChequerboard( false )
 {
 }

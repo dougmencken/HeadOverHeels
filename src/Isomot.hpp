@@ -68,6 +68,8 @@ public:
 
         bool doesCameraFollowCharacter () const {  return cameraFollowsCharacter ;  }
 
+        void toggleCameraFollowsCharacter () {  cameraFollowsCharacter = ! cameraFollowsCharacter ;  }
+
 private:
 
         void handleMagicKeys () ;

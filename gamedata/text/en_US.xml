@@ -176,6 +176,24 @@
     </properties>
   </text>
 
+  <text alias="center-camera-on">
+    <properties>
+      <string>Center Camera On</string>
+    </properties>
+  </text>
+
+  <text alias="room">
+    <properties>
+      <string>room</string>
+    </properties>
+  </text>
+
+  <text alias="character">
+    <properties>
+      <string>character</string>
+    </properties>
+  </text>
+
   <text alias="graphic-set">
     <properties>
       <string>Choose Set of Graphics</string>

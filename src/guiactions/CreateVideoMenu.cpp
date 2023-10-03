@@ -38,14 +38,13 @@ void CreateVideoMenu::doAction ()
                 LanguageText* textFullscreen = languageManager->findLanguageStringForAlias( "full-screen" );
                 LanguageText* textDrawShadows = languageManager->findLanguageStringForAlias( "draw-shadows" );
                 LanguageText* textDrawBackground = languageManager->findLanguageStringForAlias( "draw-background" );
-
-                std::string yeah = languageManager->findLanguageStringForAlias( "yep" )-> getText ();
-                std::string nope = languageManager->findLanguageStringForAlias( "nope" )->getText ();
+                LanguageText* textCenterCameraOn = languageManager->findLanguageStringForAlias( "center-camera-on" );
 
                 this->labelScreenSize = new Label( textScreenSize->getText() );
                 this->labelFullscreen = new Label( textFullscreen->getText() );
                 this->labelDrawShadows = new Label( textDrawShadows->getText() );
                 this->labelDrawBackground = new Label( textDrawBackground->getText() );
+                this->labelCenterCameraOn = new Label( textCenterCameraOn->getText() );
 
                 LanguageText* textGraphicSet = languageManager->findLanguageStringForAlias( "graphic-set" );
                 this->labelGraphicSet = new Label( textGraphicSet->getText(), "", "yellow" );
@@ -57,6 +56,7 @@ void CreateVideoMenu::doAction ()
                 listOfOptions->addOption( labelFullscreen );
                 listOfOptions->addOption( labelDrawShadows );
                 listOfOptions->addOption( labelDrawBackground );
+                listOfOptions->addOption( labelCenterCameraOn );
                 listOfOptions->addOption( labelGraphicSet );
 
                 updateLabels ();
@@ -115,6 +115,11 @@ void CreateVideoMenu::doAction ()
                                                 iso::GameManager::getInstance().toggleBackgroundPicture ();
                                                 doneWithKey = true;
                                         }
+                                        else if ( listOfOptions->getActiveOption () == labelCenterCameraOn )
+                                        {
+                                                iso::GameManager::getInstance().getIsomot().toggleCameraFollowsCharacter ();
+                                                doneWithKey = true;
+                                        }
                                 }
 
                                 if ( ! doneWithKey )
@@ -138,16 +143,23 @@ void CreateVideoMenu::doAction ()
 void CreateVideoMenu::updateLabels ()
 {
         LanguageManager* languageManager = gui::GuiManager::getInstance().getLanguageManager();
+
         std::string yeah = languageManager->findLanguageStringForAlias( "yep" )-> getText ();
         std::string nope = languageManager->findLanguageStringForAlias( "nope" )->getText ();
 
         listOfOptions->setValueOf( labelDrawBackground, iso::GameManager::getInstance().hasBackgroundPicture () ? yeah : nope );
         listOfOptions->setValueOf( labelDrawShadows, iso::GameManager::getInstance().getCastShadows () ? yeah : nope );
         listOfOptions->setValueOf( labelFullscreen, gui::GuiManager::getInstance().isAtFullScreen () ? yeah : nope );
+
+        std::string room = languageManager->findLanguageStringForAlias( "room" )-> getText ();
+        std::string character = languageManager->findLanguageStringForAlias( "character" )-> getText ();
+
+        listOfOptions->setValueOf( labelCenterCameraOn, iso::GameManager::getInstance().getIsomot().doesCameraFollowCharacter () ? character : room );
+
         // labelGraphicSet has no value but action
 
-        std::string screenSize = languageManager->findLanguageStringForAlias( "screen-size" )->getText ();
-        labelScreenSize->setText( screenSize + " " + util::number2string( iso::ScreenWidth() ) + " x " + util::number2string( iso::ScreenHeight() ) );
+        labelScreenSize->changeColor( "cyan" );
+        listOfOptions->setValueOf( labelScreenSize, util::number2string( iso::ScreenWidth() ) + " x " + util::number2string( iso::ScreenHeight() ) );
 
         listOfOptions->redraw ();
 }
