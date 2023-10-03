@@ -342,25 +342,20 @@ void Screen::placeHeadAndHeels( bool picturesToo, bool copyrightsToo )
 
         if ( copyrightsToo )
         {
-                Label* ocean = new Label( "{ 1987 Ocean Software Ltd.", "", "cyan" );
                 Label* Jorge = new Label( "{ 2009 Jorge Rodríguez Santos", "", "orange" );
-                Label* Douglas = new Label( "{ 2022 Douglas Mencken", "", "yellow" );
+                Label* Douglas = new Label( "{ 2023 Douglas Mencken", "", "yellow" );
 
                 const unsigned int screenHeight = iso::ScreenHeight();
                 const int leading = 28;
                 const int whereY = screenHeight - space - leading + 4;
                 const int whereX = ( screenWidth - Jorge->getWidth() ) >> 1 ;
 
-                // (c) 1987 Ocean Software Ltd.
-                ocean->moveTo( whereX, whereY );
-                addWidget( ocean );
-
-                // (c) 2009 Jorge Rodríguez Santos
-                Jorge->moveTo( whereX, whereY - leading );
+                // Jorge Rodríguez Santos
+                Jorge->moveTo( whereX, whereY );
                 addWidget( Jorge );
 
-                // (c) 2022 Douglas Mencken
-                Douglas->moveTo( whereX, whereY - leading - leading );
+                // Douglas Mencken
+                Douglas->moveTo( whereX, whereY - leading );
                 addWidget( Douglas );
         }
 }

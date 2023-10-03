@@ -2,7 +2,7 @@
 //
 // Copyright © 2023 Douglas Mencken dougmencken@gmail.com
 // Copyright © 2008 Jorge Rodríguez Santos
-// Original game copyright © 1987 Ocean Software Ltd.
+// Original game by Jon Ritman, Bernie Drummond and Guy Stevens, released by Ocean Software Ltd. in 1987
 //
 // This program is free software
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
