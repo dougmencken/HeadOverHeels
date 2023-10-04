@@ -64,67 +64,67 @@
 
   <text alias="keyboard-menu">
     <properties>
-      <string>Клавиатура</string>
+      <string>Клавиши</string>
     </properties>
   </text>
 
   <text alias="movenorth">
     <properties>
-      <string>Лево</string>
+      <string>влево</string>
     </properties>
   </text>
 
   <text alias="movesouth">
     <properties>
-      <string>Право</string>
+      <string>вправо</string>
     </properties>
   </text>
 
   <text alias="moveeast">
     <properties>
-      <string>Верх</string>
+      <string>вверх</string>
     </properties>
   </text>
 
   <text alias="movewest">
     <properties>
-      <string>Низ</string>
+      <string>вниз</string>
     </properties>
   </text>
 
   <text alias="take">
     <properties>
-      <string>Нести</string>
+      <string>взять</string>
     </properties>
   </text>
 
   <text alias="jump">
     <properties>
-      <string>Прыгнуть</string>
+      <string>прыгнуть</string>
     </properties>
   </text>
 
   <text alias="doughnut">
     <properties>
-      <string>Огонь</string>
+      <string>выпустить пончик</string>
     </properties>
   </text>
 
   <text alias="takeandjump">
     <properties>
-      <string>Нести+Прыгнуть</string>
+      <string>взять и прыгнуть</string>
     </properties>
   </text>
 
   <text alias="swap">
     <properties>
-      <string>Сменить</string>
+      <string>поменять персонажа</string>
     </properties>
   </text>
 
   <text alias="pause">
     <properties>
-      <string>Пауза</string>
+      <string>пауза</string>
     </properties>
   </text>
 
