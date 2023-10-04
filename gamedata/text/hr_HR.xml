@@ -206,24 +206,6 @@
     </properties>
   </text>
 
-  <text alias="final-text">
-    <properties font="big" color="yellow">
-      <string>Ljudi salutiraju tvom herojstvu i</string>
-    </properties>
-    <properties font="big" color="yellow">
-      <string>proglašavaju te carom</string>
-    </properties>
-    <properties font="plain" color="cyan">
-      <string>Ovaj su put, dragi prijatelju, naša</string>
-    </properties>
-    <properties font="plain" color="cyan">
-      <string>dva heroja zadali konačni udaracn</string>
-    </properties>
-    <properties font="plain" color="cyan">
-      <string>tiraniji carstva Blacktooth</string>
-    </properties>
-  </text>
-
   <text alias="dummy">
     <properties>
       <string>Spavač</string>

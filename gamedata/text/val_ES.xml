@@ -209,24 +209,6 @@
     </properties>
   </text>
 
-  <text alias="final-text">
-    <properties font="big" color="yellow">
-      <string>El poble lloa el teu heroisme</string>
-    </properties>
-    <properties font="plain" color="cyan">
-      <string>I així va ser, estimat amic, com els</string>
-    </properties>
-    <properties font="plain" color="cyan">
-      <string>nostres dos herois van acabar</string>
-    </properties>
-    <properties font="plain" color="cyan">
-      <string>definitivament amb la tirania de</string>
-    </properties>
-    <properties font="plain" color="multicolor">
-      <string>l'Emperador Blacktooth</string>
-    </properties>
-  </text>
-
   <text alias="dummy">
     <properties>
       <string>Aprenent</string>

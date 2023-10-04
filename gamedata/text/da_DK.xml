@@ -209,24 +209,6 @@
     </properties>
   </text>
 
-  <text alias="final-text">
-    <properties font="big" color="yellow">
-      <string>Folket hilser dit heltemod, og</string>
-    </properties>
-    <properties font="big" color="yellow">
-      <string>udnævner dig til</string>
-    </properties>
-    <properties font="plain" color="cyan">
-      <string>Kære ven, på denne måde satte vore to</string>
-    </properties>
-    <properties font="plain" color="cyan">
-      <string>to helte en stopper for Kejseren</string>
-    </properties>
-    <properties font="plain" color="multicolor">
-      <string>Af Blacktooths tyranni</string>
-    </properties>
-  </text>
-
   <text alias="dummy">
     <properties>
       <string>Fæhoved</string>

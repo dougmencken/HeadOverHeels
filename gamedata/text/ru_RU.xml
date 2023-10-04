@@ -206,27 +206,6 @@
     </properties>
   </text>
 
-  <text alias="final-text">
-    <properties font="big" color="yellow">
-      <string>Люди салютуют Вашему героизму и</string>
-    </properties>
-    <properties font="big" color="yellow">
-      <string>прославляют Вас</string>
-    </properties>
-    <properties font="plain" color="cyan">
-      <string>Продолжая в таком духе, дорогой друг,</string>
-    </properties>
-    <properties font="plain" color="cyan">
-      <string>два наших героя определенно положат</string>
-    </properties>
-    <properties font="plain" color="cyan">
-      <string>конец тирании</string>
-    </properties>
-    <properties font="plain" color="multicolor">
-      <string>Императора Блактут</string>
-    </properties>
-  </text>
-
   <text alias="dummy">
     <properties>
       <string>Глупышка</string>

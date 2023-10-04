@@ -209,27 +209,6 @@
     </properties>
   </text>
 
-  <text alias="final-text">
-    <properties font="big" color="yellow">
-      <string>Sankaruuttasi ylistetään ja väki</string>
-    </properties>
-    <properties font="big" color="yellow">
-      <string>huutaa nimeäsi</string>
-    </properties>
-    <properties font="plain" color="cyan">
-      <string>Tätä tietä, rakas ystävä. Kaksi</string>
-    </properties>
-    <properties font="plain" color="cyan">
-      <string>sankariamme teki ehdottomasti</string>
-    </properties>
-    <properties font="plain" color="cyan">
-      <string>lopun Blacktoothin Keisarin</string>
-    </properties>
-    <properties font="plain" color="cyan">
-      <string>tyranniasta</string>
-    </properties>
-  </text>
-
   <text alias="dummy">
     <properties>
       <string>Tumpelo</string>

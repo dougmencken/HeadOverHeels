@@ -732,16 +732,19 @@
   </text>
 
   <text alias="final-text">
-    <properties font="big" color="yellow">
-      <string>The people praised and preaches</string>
-      <string>your heroism</string>
+    <properties font="big" color="multicolor">
+      <string>The people praise you</string>
+      <string></string>
     </properties>
-    <properties font="plain" color="cyan">
-      <string>This way, my dear friend, our two</string>
-      <string>heroes finished once for all with the</string>
+    <properties font="plain" color="white">
+      <string>This way, my dear friend,</string>
+      <string>our two heroes put an end to</string>
     </properties>
-    <properties font="plain" color="multicolor">
-      <string>Blacktooth Emperor's tyranny</string>
+    <properties font="plain" color="red">
+      <string>the Blacktooth Emperor's tyranny</string>
+    </properties>
+    <properties font="plain" color="yellow">
+      <string>once and for all</string>
     </properties>
   </text>
 

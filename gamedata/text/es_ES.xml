@@ -203,24 +203,6 @@
     </properties>
   </text>
 
-  <text alias="final-text">
-    <properties font="big" color="yellow">
-      <string>El pueblo alaba y pregona tu heroísmo</string>
-    </properties>
-    <properties font="plain" color="cyan">
-      <string>Y así fue, estimado amigo, como</string>
-    </properties>
-    <properties font="plain" color="cyan">
-      <string>nuestros dos héroes acabaron</string>
-    </properties>
-    <properties font="plain" color="cyan">
-      <string>definitivamente con la tiranía del</string>
-    </properties>
-    <properties font="plain" color="multicolor">
-      <string>Emperador Blacktooth</string>
-    </properties>
-  </text>
-
   <text alias="dummy">
     <properties>
       <string>Aprendiz</string>

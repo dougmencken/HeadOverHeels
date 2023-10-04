@@ -206,24 +206,6 @@
     </properties>
   </text>
 
-  <text alias="final-text">
-    <properties font="big" color="yellow">
-      <string>Il popolo saluta il tuo eroismo</string>
-    </properties>
-    <properties font="plain" color="cyan">
-      <string>E così, caro amico, i nostri due eroi</string>
-    </properties>
-    <properties font="plain" color="cyan">
-      <string>hanno messo definitivamente la parola</string>
-    </properties>
-    <properties font="plain" color="cyan">
-      <string>fine alla tirannia dell'</string>
-    </properties>
-    <properties font="plain" color="multicolor">
-      <string>Imperatore di Blacktooth</string>
-    </properties>
-  </text>
-
   <text alias="dummy">
     <properties>
       <string>Principiante</string>

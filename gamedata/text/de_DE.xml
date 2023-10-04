@@ -206,27 +206,6 @@
     </properties>
   </text>
 
-  <text alias="final-text">
-    <properties font="big" color="yellow">
-      <string>Die Bevölkerung lobt Sie und feiert</string>
-    </properties>
-    <properties font="big" color="yellow">
-      <string>Sie als Helden</string>
-    </properties>
-    <properties font="plain" color="cyan">
-      <string>Und so, mein lieber Freund, kam es,</string>
-    </properties>
-    <properties font="plain" color="cyan">
-      <string>daß unsere beiden Helden die Tyrannei</string>
-    </properties>
-    <properties font="plain" color="cyan">
-      <string>des Blacktooth- Imperiums ein für</string>
-    </properties>
-    <properties font="plain" color="cyan">
-      <string>alle Mal beendeten</string>
-    </properties>
-  </text>
-
   <text alias="dummy">
     <properties>
       <string>Attrappe</string>

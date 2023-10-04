@@ -212,27 +212,6 @@
     </properties>
   </text>
 
-  <text alias="final-text">
-    <properties font="big" color="yellow">
-      <string>Herria alabatzen eta pregonatzen du</string>
-    </properties>
-    <properties font="big" color="yellow">
-      <string>zure heroitasuna</string>
-    </properties>
-    <properties font="plain" color="cyan">
-      <string>Honela eta izan zen, adiskide</string>
-    </properties>
-    <properties font="plain" color="cyan">
-      <string>estimatuak, gure 2 heroi betiko</string>
-    </properties>
-    <properties font="plain" color="cyan">
-      <string>bukatu zuten tiraniarekin</string>
-    </properties>
-    <properties font="plain" color="multicolor">
-      <string>Enperadore Blacktooth-en</string>
-    </properties>
-  </text>
-
   <text alias="dummy">
     <properties>
       <string>Mutil</string>

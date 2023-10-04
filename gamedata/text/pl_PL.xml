@@ -206,27 +206,6 @@
     </properties>
   </text>
 
-  <text alias="final-text">
-    <properties font="big" color="yellow">
-      <string>Społeczeństwo oddaje honor Waszemu</string>
-    </properties>
-    <properties font="big" color="yellow">
-      <string>bohaterstwu i obwołuje Was władcami</string>
-    </properties>
-    <properties font="plain" color="cyan">
-      <string>I w ten oto sposób drogi Przyjacielu,</string>
-    </properties>
-    <properties font="plain" color="cyan">
-      <string>nasi dwaj bohaterowie raz na zawsze</string>
-    </properties>
-    <properties font="plain" color="cyan">
-      <string>położyli kres tyranii Imperatora</string>
-    </properties>
-    <properties font="plain" color="multicolor">
-      <string>Blacktooth - Czarnego Zęba</string>
-    </properties>
-  </text>
-
   <text alias="dummy">
     <properties>
       <string>Jeleń</string>

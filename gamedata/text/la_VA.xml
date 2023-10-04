@@ -209,24 +209,6 @@
     </properties>
   </text>
 
-  <text alias="final-text">
-    <properties font="big" color="yellow">
-      <string>Populus laudat atque heroicas res</string>
-    </properties>
-    <properties font="big" color="yellow">
-      <string>tuas praedicat</string>
-    </properties>
-    <properties font="plain" color="cyan">
-      <string>Et sic fuit, care amice, ut nostri</string>
-    </properties>
-    <properties font="plain" color="cyan">
-      <string>duo heroes ad summum finiant cum</string>
-    </properties>
-    <properties font="plain" color="multicolor">
-      <string>imperatoris Blacktoothis potestate</string>
-    </properties>
-  </text>
-
   <text alias="dummy">
     <properties>
       <string>Discipulus</string>

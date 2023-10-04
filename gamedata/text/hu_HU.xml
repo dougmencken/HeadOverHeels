@@ -254,27 +254,6 @@
     </properties>
   </text>
 
-  <text alias="final-text">
-    <properties font="big" color="yellow">
-      <string>A lakosság áld és ünnepel téged</string>
-    </properties>
-    <properties font="big" color="yellow">
-      <string>mint egy höst</string>
-    </properties>
-    <properties font="plain" color="cyan">
-      <string>És ezzel kedves barátaim most már</string>
-    </properties>
-    <properties font="plain" color="cyan">
-      <string>a két aranyos hösünk a zsarnokság</string>
-    </properties>
-    <properties font="plain" color="cyan">
-      <string>alól a Blacktooth- birodalmat</string>
-    </properties>
-    <properties font="plain" color="cyan">
-      <string>végérvényese felszabadította</string>
-    </properties>
-  </text>
-
   <text alias="dummy">
     <properties>
       <string>ügyetlen</string>
