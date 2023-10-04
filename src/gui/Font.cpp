@@ -185,9 +185,15 @@ Picture* Font::getPictureOfLetter( const std::string& letter )
 {
         if ( tableOfLetters != nilPointer )
         {
+                std::string letterInTable = letter ;
+
+                // render cyrillic ё as e diaeresis (e umlaut)
+                if ( letter == "ё" ) letterInTable = "ë" ;
+                if ( letter == "Ё" ) letterInTable = "Ë" ;
+
                 for ( unsigned int i = 0; i < howManyLetters; i++ )
                 {
-                        if ( letter == tableOfLetters[ i ] )
+                        if ( letterInTable == tableOfLetters[ i ] )
                                 return letters.at( i );
                 }
         }
