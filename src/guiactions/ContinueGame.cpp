@@ -1,6 +1,7 @@
 
 #include "ContinueGame.hpp"
 #include "GameManager.hpp"
+#include "GuiManager.hpp"
 #include "SoundManager.hpp"
 #include "CreatePlanetsScreen.hpp"
 #include "CreateEndScreen.hpp"
@@ -10,21 +11,30 @@
 using gui::ContinueGame;
 
 
-ContinueGame::ContinueGame( bool gameInProgress )
+ContinueGame::ContinueGame( bool inProgress )
         : Action( )
-        , gameInProgress( gameInProgress )
+        , gameInProgress( inProgress )
 {
 
 }
 
 void ContinueGame::doAction ()
 {
-        iso::SoundManager::getInstance().stopOgg (); // or hear music of planets screen when playing restored game
+        iso::SoundManager::getInstance().stopOgg (); // or else hear the planets screen's music when resuming an old (saved) game
 
-        iso::GameManager& gameManager = iso::GameManager::getInstance();
-        iso::WhyPaused why = gameInProgress ? gameManager.resume () : gameManager.begin () ;
+        iso::GameManager & gameManager = iso::GameManager::getInstance() ;
+        gui::GuiManager & uiManager = gui::GuiManager::getInstance() ;
 
-        if ( why.toCallOnlyWithinDoActionOfContinueGame_isPlanetLiberated () )
+        uiManager.resetWhyTheGameIsPaused () ;
+
+        // until the game is paused
+        if ( gameInProgress )
+                gameManager.resume () ;
+        else
+                gameManager.begin () ;
+
+        //  when the game is paused
+        if ( uiManager.getWhyTheGameIsPaused().isPlanetLiberated () )
         {
                 // when some planet is liberated, show the screen with planets
                 CreatePlanetsScreen * planetsAction = new CreatePlanetsScreen( true );
@@ -46,15 +56,15 @@ void ContinueGame::doAction ()
 
                 planetsAction->doIt ();
         }
-        else if ( why.toCallOnlyWithinDoActionOfContinueGame_isTimeToSaveTheGame () )
+        else if ( uiManager.getWhyTheGameIsPaused().isTimeToSaveTheGame () )
         {
                 // show the save game screen
                 CreateListOfSavedGames * listOfGamesAction = new CreateListOfSavedGames( false );
 
                 listOfGamesAction->doIt ();
         }
-        else if ( /* all lives lost */ why.toCallOnlyWithinDoActionOfContinueGame_isAllLivesLost ()
-                    || /* in Freedom not with all crowns */ why.toCallOnlyWithinDoActionOfContinueGame_isInFreedomWithoutAllTheCrowns () )
+        else if ( uiManager.getWhyTheGameIsPaused().isGameOver ()
+                        || uiManager.getWhyTheGameIsPaused().isInFreedomWithoutAllTheCrowns () )
         {
                 CreateEndScreen * endScreenAction =
                         new CreateEndScreen(
@@ -63,7 +73,7 @@ void ContinueGame::doAction ()
 
                 endScreenAction->doIt ();
         }
-        else if ( why.toCallOnlyWithinDoActionOfContinueGame_isThatFinalSuccessScreen () )
+        else if ( uiManager.getWhyTheGameIsPaused().isThatFinalSuccessScreen () )
         {
                 CreateCongratulationsScreen * congratulationsScreenAction =
                         new CreateCongratulationsScreen(

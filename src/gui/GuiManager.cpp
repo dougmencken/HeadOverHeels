@@ -82,14 +82,14 @@ GuiManager& GuiManager::getInstance ()
 
 void GuiManager::begin ()
 {
-        // show list of languages
+        // show the list of languages
         autouniqueptr< CreateLanguageMenu > languageMenu( new CreateLanguageMenu() );
         if ( languageMenu != nilPointer )
                 languageMenu->doIt ();
         else
                 std::cerr << "can't create the language menu, the first screen of user interface" << std::endl ;
 
-        // draw user interface and handle keys
+        // draw the user interface and handle keys
         while ( this->active )
         {
                 activeScreen->draw ();

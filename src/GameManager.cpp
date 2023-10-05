@@ -100,7 +100,7 @@ PicturePtr GameManager::refreshPicture ( const std::string& nameOfPicture )
         return newPicture ;
 }
 
-WhyPaused GameManager::begin ()
+void GameManager::begin ()
 {
         IF_DEBUG( fprintf ( stdout, "GameManager::begin ()\n" ) )
 
@@ -122,21 +122,22 @@ WhyPaused GameManager::begin ()
 
         isomot.beginNewGame ();
 
-        return this->update ();
+        this->update ();
 }
 
-WhyPaused GameManager::update ()
+void GameManager::update ()
 {
         IF_DEBUG( fprintf ( stdout, "GameManager::update ()\n" ) )
 
-        WhyPaused why ;
-        while ( why.stillNevermind() )
+        gui::GuiManager::getInstance().resetWhyTheGameIsPaused() ;
+
+        while ( ! gui::GuiManager::getInstance().getWhyTheGameIsPaused().isPaused () )
         {
                 if ( InputManager::getInstance().pauseTyped ()
                                 || keyMoments.isGameOver( false )
                                         || keyMoments.wasFishEaten( false )
                                                 || keyMoments.wasCrownTaken( false ) )
-                        why = this->pause ();
+                        this->pause ();
                 else
                 {
                         if ( headLives > 0 || heelsLives > 0 )
@@ -174,11 +175,9 @@ WhyPaused GameManager::update ()
                         }
                 }
         }
-
-        return why ;
 }
 
-WhyPaused GameManager::pause ()
+void GameManager::pause ()
 {
         // pause the isometric engine
         isomot.pause();
@@ -192,17 +191,21 @@ WhyPaused GameManager::pause ()
         const allegro::Pict& previousWhere = allegro::Pict::getWhereToDraw() ;
         allegro::Pict::setWhereToDraw( view->getAllegroPict() );
 
-        WhyPaused paused ;
+        /*
+         * convert from GameManager's "key moments" to GuiManager's "why paused"
+         */
+
+        gui::GuiManager::getInstance().resetWhyTheGameIsPaused () ;
 
         // the user just got the planet's crown
         if ( keyMoments.wasCrownTaken( true ) )
         {
-                paused.forNewlyLiberatedPlanet() ;
+                gui::GuiManager::getInstance().getWhyTheGameIsPausedToAlter().forNewlyLiberatedPlanet() ;
         }
         // the user just ate a reincarnation fish
         else if ( keyMoments.wasFishEaten( true ) )
         {
-                gui::LanguageManager* language = gui::GuiManager::getInstance().getLanguageManager();
+                gui::LanguageManager* language = gui::GuiManager::getInstance().getLanguageManager() ;
                 gui::LanguageText* text = language->findLanguageStringForAlias( "save-game" );
                 int deltaY = ( iso::ScreenHeight() >> 2 ) - 60 ;
 
@@ -248,7 +251,7 @@ WhyPaused GameManager::pause ()
                                 if ( key == "Space" )
                                 {
                                         saveit = true ;
-                                        paused.forSaving ();
+                                        gui::GuiManager::getInstance().getWhyTheGameIsPausedToAlter().forSaving ();
                                 }
                                 else if ( key != inputManager.getUserKeyFor( "movenorth" ) &&
                                           key != inputManager.getUserKeyFor( "movesouth" ) &&
@@ -272,15 +275,15 @@ WhyPaused GameManager::pause ()
         }
         else if ( keyMoments.arrivedInFreedomNotWithAllCrowns( true ) )
         {
-                paused.forArrivingInFreedom() ;
+                gui::GuiManager::getInstance().getWhyTheGameIsPausedToAlter().forArrivingInFreedom() ;
         }
         else if ( keyMoments.areHeadAndHeelsInFreedomWithAllTheCrowns( true ) )
         {
-                paused.forThatFinalScreen() ;
+                gui::GuiManager::getInstance().getWhyTheGameIsPausedToAlter().forThatFinalScreen() ;
         }
         else if ( keyMoments.isGameOver( true ) )
         {
-                paused.forGameOver ();
+                gui::GuiManager::getInstance().getWhyTheGameIsPausedToAlter().forGameOver ();
         }
         // none of the above, thus the user just typed the pause key
         else
@@ -325,7 +328,7 @@ WhyPaused GameManager::pause ()
                                 if ( allegro::nextKey() == "Escape" )
                                 {
                                         quit = true;
-                                        paused.forGameOver ();
+                                        gui::GuiManager::getInstance().getWhyTheGameIsPausedToAlter().forGameOver ();
                                 }
                                 else
                                 {
@@ -339,11 +342,9 @@ WhyPaused GameManager::pause ()
         }
 
         allegro::Pict::setWhereToDraw( previousWhere );
-
-        return paused ;
 }
 
-WhyPaused GameManager::resume ()
+void GameManager::resume ()
 {
         IF_DEBUG( fprintf ( stdout, "GameManager::resume ()\n" ) )
 
@@ -353,7 +354,7 @@ WhyPaused GameManager::resume ()
         // resume the isometric engine
         isomot.resume ();
 
-        return this->update ();
+        this->update ();
 }
 
 void GameManager::refreshSceneryBackgrounds ()

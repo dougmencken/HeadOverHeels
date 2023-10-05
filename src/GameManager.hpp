@@ -43,7 +43,7 @@ private:
         bool theMomentOfGameOver ;   /* all lives are lost or the user quit the game */
 
         bool theMomentOFishWasEaten ;      /* a chance to save the current progress */
-        bool theMomentOfCrownWasTaken ;    /* crown is taken and one more planet was liberated this way */
+        bool theMomentOfCrownWasTaken ;    /* a crown is taken and one more planet was liberated this way */
 
         bool theMomentOfArrivalInFreedomNotWithAllCrowns ;            /* at least one character reached Freedom (not with all crowns) */
         bool theMomentWhenHeadAndHeelsAreInFreedomWithAllTheCrowns ;  /* both characters reached Freedom with all the crowns */
@@ -103,7 +103,7 @@ public:
                 return are ;
         }
 
-        bool isThereAny()
+        bool isThereAny() const
         {
                 return ( theMomentOfGameOver
                          || theMomentOFishWasEaten
@@ -125,45 +125,7 @@ public:
 
 
 /**
- * Why the game was paused
- */
-
-class WhyPaused
-{
-private:
-
-        unsigned int whyPaused ;
-
-        static const unsigned int Nevermind = 0 ;
-        static const unsigned int LiberatePlanet = 1 ;
-        static const unsigned int SaveGame = 2 ;
-        static const unsigned int InFreedom = 3 ;
-        static const unsigned int TheFinalScreen = 4 ;
-        static const unsigned int GameOver = 5 ;
-
-public:
-
-        WhyPaused() : whyPaused( Nevermind ) { }
-        WhyPaused( unsigned int why ) : whyPaused( why ) { }
-
-        bool stillNevermind() {  return whyPaused == Nevermind ;  }
-
-        void forNewlyLiberatedPlanet() {  whyPaused = LiberatePlanet ;  }
-        void forSaving() {  whyPaused = SaveGame ;  }
-        void forArrivingInFreedom() {  whyPaused = InFreedom ;  }
-        void forThatFinalScreen() {  whyPaused = TheFinalScreen ;  }
-        void forGameOver() {  whyPaused = GameOver ;  }
-
-        bool toCallOnlyWithinDoActionOfContinueGame_isPlanetLiberated() {  return whyPaused == LiberatePlanet ;  }
-        bool toCallOnlyWithinDoActionOfContinueGame_isTimeToSaveTheGame() {  return whyPaused == SaveGame ;  }
-        bool toCallOnlyWithinDoActionOfContinueGame_isThatFinalSuccessScreen() {  return whyPaused == TheFinalScreen ;  }
-        bool toCallOnlyWithinDoActionOfContinueGame_isInFreedomWithoutAllTheCrowns() {  return whyPaused == InFreedom ;  }
-        bool toCallOnlyWithinDoActionOfContinueGame_isAllLivesLost() {  return whyPaused == GameOver ;  }
-} ;
-
-
-/**
- * Manages user interface and isometric engine. Plus, holds the game's data
+ * Manages the user interface and the isometric engine. Plus, holds the game's data
  * such as how many lives left for characters, which planets are free already, and so on
  */
 
@@ -197,21 +159,19 @@ public:
         static bool writePreferences ( const std::string& fileName ) ;
 
         /**
-         * Game begins here
-         * @return Reason why the game is paused
+         * The game begins here
          */
-        WhyPaused begin () ;
+        void begin () ;
 
         /**
-         * Pause game in progress
+         * Pause the game in progress
          */
-        WhyPaused pause () ;
+        void pause () ;
 
         /**
-         * Resume game after a pause
-         * @return Reason why the game was paused
+         * Resume the game after a pause
          */
-        WhyPaused resume () ;
+        void resume () ;
 
         std::string getHeadRoom () const {  return headRoom ;  }
 
@@ -222,12 +182,12 @@ public:
         void setHeelsRoom( const std::string& room ) {  heelsRoom = room ;  }
 
         /**
-         * Draw ambiance of game, that is info about game like lives, tools, donus, thing in bag
+         * Draw the ambiance, that is info about the game like lives, tools, donus, thing in bag
          */
         void drawAmbianceOfGame ( const allegro::Pict& where ) ;
 
         /**
-         * bitBlit the view on the allegro's screen
+         * copy a view's image buffer to the allegro's screen
          */
         void drawOnScreen ( const allegro::Pict& view ) ;
 
@@ -276,7 +236,7 @@ public:
 
         /**
          * Indica si un planeta es libre
-         * @param planet Planet in question
+         * @param planet the planet in question
          * @return true if you took planet’s crown or false otherwise
          */
         bool isFreePlanet ( const std::string& planet ) const ;
@@ -304,10 +264,9 @@ public:
 private:
 
         /**
-         * Update game periodically by redrawing isometric view and updating items
-         * @return reason why update was paused
+         * Update game periodically by redrawing the isometric view and updating items
          */
-        WhyPaused update () ;
+        void update () ;
 
         void refreshAmbianceImages () ;
 
