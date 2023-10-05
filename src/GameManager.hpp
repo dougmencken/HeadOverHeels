@@ -29,34 +29,142 @@ class Isomot ;
 
 
 /**
+ * Marks the definitive moments of the game
+ *
+ * Only the single lone of these moments may be set true at the same time
+ * Checking for a key moment optionally resets it to false, so be sure to use such a knowledge
+ */
+
+class TheKeyMoments
+{
+
+private:
+
+        bool theMomentOfGameOver ;   /* all lives are lost or the user quit the game */
+
+        bool theMomentOFishWasEaten ;      /* a chance to save the current progress */
+        bool theMomentOfCrownWasTaken ;    /* crown is taken and one more planet was liberated this way */
+
+        bool theMomentOfArrivalInFreedomNotWithAllCrowns ;            /* at least one character reached Freedom (not with all crowns) */
+        bool theMomentWhenHeadAndHeelsAreInFreedomWithAllTheCrowns ;  /* both characters reached Freedom with all the crowns */
+
+public:
+
+        TheKeyMoments()
+                : theMomentOfGameOver( false )
+                , theMomentOFishWasEaten( false )
+                , theMomentOfCrownWasTaken( false )
+                , theMomentOfArrivalInFreedomNotWithAllCrowns( false )
+                , theMomentWhenHeadAndHeelsAreInFreedomWithAllTheCrowns( false )
+        {}
+
+        void gameOver() {  resetAll() ; theMomentOfGameOver = true ;  }
+
+        bool isGameOver( bool reset )
+        {
+                bool is = theMomentOfGameOver ;
+                if ( reset ) theMomentOfGameOver = false ;
+                return is ;
+        }
+
+        void fishEaten() {  resetAll() ; theMomentOFishWasEaten = true ;  }
+
+        bool wasFishEaten( bool reset )
+        {
+                bool was = theMomentOFishWasEaten ;
+                if ( reset ) theMomentOFishWasEaten = false ;
+                return was ;
+        }
+
+        void crownTaken() {  resetAll() ; theMomentOfCrownWasTaken = true ;  }
+
+        bool wasCrownTaken( bool reset )
+        {
+                bool was = theMomentOfCrownWasTaken ;
+                if ( reset ) theMomentOfCrownWasTaken = false ;
+                return was ;
+        }
+
+        void arriveInFreedomNotWithAllCrowns() {  resetAll() ; theMomentOfArrivalInFreedomNotWithAllCrowns = true ;  }
+
+        bool arrivedInFreedomNotWithAllCrowns( bool reset )
+        {
+                bool arrived = theMomentOfArrivalInFreedomNotWithAllCrowns ;
+                if ( reset ) theMomentOfArrivalInFreedomNotWithAllCrowns = false ;
+                return arrived ;
+        }
+
+        void HeadAndHeelsAreInFreedomWithAllTheCrowns() {  resetAll() ; theMomentWhenHeadAndHeelsAreInFreedomWithAllTheCrowns = true ;  }
+
+        bool areHeadAndHeelsInFreedomWithAllTheCrowns( bool reset )
+        {
+                bool are = theMomentWhenHeadAndHeelsAreInFreedomWithAllTheCrowns ;
+                if ( reset ) theMomentWhenHeadAndHeelsAreInFreedomWithAllTheCrowns = false ;
+                return are ;
+        }
+
+        bool isThereAny()
+        {
+                return ( theMomentOfGameOver
+                         || theMomentOFishWasEaten
+                            || theMomentOfCrownWasTaken
+                               || theMomentOfArrivalInFreedomNotWithAllCrowns
+                                  || theMomentWhenHeadAndHeelsAreInFreedomWithAllTheCrowns ) ;
+        }
+
+        void resetAll()
+        {
+                theMomentOfGameOver = false ;
+                theMomentOFishWasEaten = false ;
+                theMomentOfCrownWasTaken = false ;
+                theMomentOfArrivalInFreedomNotWithAllCrowns = false ;
+                theMomentWhenHeadAndHeelsAreInFreedomWithAllTheCrowns = false ;
+        }
+
+} ;
+
+
+/**
  * Why the game was paused
  */
 
 class WhyPaused
 {
-
-public:
-
-        WhyPaused( unsigned int why ) : whyPaused( why ) { }
-        operator unsigned int() const {  return whyPaused ;  }
-
-        static const unsigned int Nevermind = 0 ;
-        static const unsigned int FreePlanet = 1 ;
-        static const unsigned int SaveGame = 2 ;
-        static const unsigned int Freedom = 3 ;
-        static const unsigned int Success = 4 ;
-        static const unsigned int GameOver = 5 ;
-
 private:
 
         unsigned int whyPaused ;
 
-};
+        static const unsigned int Nevermind = 0 ;
+        static const unsigned int LiberatePlanet = 1 ;
+        static const unsigned int SaveGame = 2 ;
+        static const unsigned int InFreedom = 3 ;
+        static const unsigned int TheFinalScreen = 4 ;
+        static const unsigned int GameOver = 5 ;
+
+public:
+
+        WhyPaused() : whyPaused( Nevermind ) { }
+        WhyPaused( unsigned int why ) : whyPaused( why ) { }
+
+        bool stillNevermind() {  return whyPaused == Nevermind ;  }
+
+        void forNewlyLiberatedPlanet() {  whyPaused = LiberatePlanet ;  }
+        void forSaving() {  whyPaused = SaveGame ;  }
+        void forArrivingInFreedom() {  whyPaused = InFreedom ;  }
+        void forThatFinalScreen() {  whyPaused = TheFinalScreen ;  }
+        void forGameOver() {  whyPaused = GameOver ;  }
+
+        bool toCallOnlyWithinDoActionOfContinueGame_isPlanetLiberated() {  return whyPaused == LiberatePlanet ;  }
+        bool toCallOnlyWithinDoActionOfContinueGame_isTimeToSaveTheGame() {  return whyPaused == SaveGame ;  }
+        bool toCallOnlyWithinDoActionOfContinueGame_isThatFinalSuccessScreen() {  return whyPaused == TheFinalScreen ;  }
+        bool toCallOnlyWithinDoActionOfContinueGame_isInFreedomWithoutAllTheCrowns() {  return whyPaused == InFreedom ;  }
+        bool toCallOnlyWithinDoActionOfContinueGame_isAllLivesLost() {  return whyPaused == GameOver ;  }
+} ;
 
 
 /**
- * Manages user interface and isometric engine. Plus, holds data for the game
- * such as how many lives left for characters, which planets are now free, et cetera
+ * Manages user interface and isometric engine. Plus, holds the game's data
+ * such as how many lives left for characters, which planets are free already, and so on
  */
 
 class GameManager
@@ -84,14 +192,8 @@ public:
 
         void cleanUp () ;
 
-        /**
-         * Read preferences of game from XML file
-         */
         static bool readPreferences ( const std::string& fileName ) ;
 
-        /**
-         * Write preferences of game to XML file
-         */
         static bool writePreferences ( const std::string& fileName ) ;
 
         /**
@@ -124,26 +226,17 @@ public:
          */
         void drawAmbianceOfGame ( const allegro::Pict& where ) ;
 
+        /**
+         * bitBlit the view on the allegro's screen
+         */
         void drawOnScreen ( const allegro::Pict& view ) ;
 
-        /**
-         * Carga una partida grabada en disco
-         */
         void loadGame ( const std::string& fileName ) ;
 
-        /**
-         * Guarda en disco la partida actual
-         */
         void saveGame ( const std::string& fileName ) ;
 
-        /**
-         * Añade un número de vidas a un jugador
-         */
         void addLives ( const std::string& player, unsigned char lives ) ;
 
-        /**
-         * Resta una vida a un jugador
-         */
         void loseLife ( const std::string& player ) ;
 
         /**
@@ -151,29 +244,14 @@ public:
          */
         void takeMagicItem ( const std::string& label ) ;
 
-        /**
-         * Resta una rosquilla a Head
-         */
         void consumeDonut () {  this->donuts-- ;  }
 
-        /**
-         * Añade velocidad doble a un jugador
-         */
         void addHighSpeed ( const std::string& player, unsigned int highSpeed ) ;
 
-        /**
-         * Resta una unidad al tiempo restante de doble velocidad
-         */
         void decreaseHighSpeed ( const std::string& player ) ;
 
-        /**
-         * Añade un número de grandes saltos a un jugador
-         */
         void addHighJumps ( const std::string& player, unsigned int highJumps ) ;
 
-        /**
-         * Resta un gran salto al jugador
-         */
         void decreaseHighJumps ( const std::string& player ) ;
 
         void addShield ( const std::string& player, float shield ) ;
@@ -209,26 +287,11 @@ public:
         unsigned short countFreePlanets () const ;
 
         /**
-         * Eat fish, that is, begin process to save the game
+         * Eat fish, that is, begin the process to save the game
          */
         void eatFish ( const PlayerItem & character, Room * room ) ;
 
         void eatFish ( const PlayerItem & character, Room * room, int x, int y, int z ) ;
-
-        /**
-         * End game because characters have lost all their lives
-         */
-        void endGame () {  this->gameOver = true ;  }
-
-        /**
-         * End game because characters have reached Freedom
-         */
-        void arriveInFreedom () {  this->freedom = true ;  }
-
-        /**
-         * End game because characters have been proclaimed emperors
-         */
-        void success () {  this->emperator = true ;  }
 
         std::string getChosenGraphicSet () const {  return chosenGraphicSet ;  }
 
@@ -325,72 +388,38 @@ private:
 
         Isomot isomot ;
 
-        /**
-         * To save and restore games
-         */
-        GameSaverAndLoader saverAndLoader ;
+        GameSaverAndLoader saverAndLoader ; // to save and restore games
 
-        /**
-         * Vidas de Head
-         */
         unsigned char headLives ;
 
-        /**
-         * Vidas de Heels
-         */
         unsigned char heelsLives ;
 
-        /**
-         * Tiempo restante para consumir la doble velocidad de Head
-         */
+        // the remaining time of bonus high speed for Head
         unsigned int highSpeed ;
 
-        /**
-         * Número de grandes saltos que le restan a Heels
-         */
+        // the number of remaining bonus high jumps for Heels
         unsigned int highJumps ;
 
-        /**
-         * Tiempo restante para consumir la inmunidad de Head
-         */
+        // the remaining time of Head's inviolability
         float headShield ;
 
-        /**
-         * Tiempo restante para consumir la inmunidad de Heels
-         */
+        // the remaining time of Heels' inviolability
         float heelsShield ;
 
-        /**
-         * Indica si Head tiene la bocina
-         */
+        // does Head have the doughnut horn
         bool horn ;
 
-        /**
-         * Indica si Heels tiene el bolso
-         */
+        // does Heels have the hand bag
         bool handbag ;
 
-        /**
-         * Número de rosquillas que tiene Head
-         */
+        // the number of donuts collected by Head
         unsigned short donuts ;
+
+        TheKeyMoments keyMoments ;
 
         PicturePtr imageOfItemInBag ;
 
-        /**
-         * Stores name of planet with boolean of its liberation
-         */
-        std::map < std::string, bool > planets ;
-
-        bool takenCrown ;
-
-        bool eatenFish ;
-
-        bool gameOver ;
-
-        bool freedom ;
-
-        bool emperator ;
+        std::map < std::string /* the planet's name */, bool /* is free or not */ > planets ;
 
         std::map < std::string, PicturePtr > sceneryBackgrounds ;
 
@@ -434,6 +463,9 @@ public:
         unsigned short getDonuts ( const std::string& player ) const ;
 
         unsigned int getVisitedRooms () ;
+
+        // at the end of the game it's time to count the crowns
+        void inFreedomWithSoManyCrowns( unsigned int crowns ) ;
 
 };
 

@@ -24,9 +24,9 @@ void ContinueGame::doAction ()
         iso::GameManager& gameManager = iso::GameManager::getInstance();
         iso::WhyPaused why = gameInProgress ? gameManager.resume () : gameManager.begin () ;
 
-        // when some planet is set free, show screen with planets
-        if ( why == iso::WhyPaused::FreePlanet )
+        if ( why.toCallOnlyWithinDoActionOfContinueGame_isPlanetLiberated () )
         {
+                // when some planet is liberated, show the screen with planets
                 CreatePlanetsScreen * planetsAction = new CreatePlanetsScreen( true );
 
                 if ( gameManager.isFreePlanet( "blacktooth" ) )
@@ -46,15 +46,15 @@ void ContinueGame::doAction ()
 
                 planetsAction->doIt ();
         }
-        // show screen to save game
-        else if ( why == iso::WhyPaused::SaveGame )
+        else if ( why.toCallOnlyWithinDoActionOfContinueGame_isTimeToSaveTheGame () )
         {
+                // show the save game screen
                 CreateListOfSavedGames * listOfGamesAction = new CreateListOfSavedGames( false );
 
                 listOfGamesAction->doIt ();
         }
-        // it’s end of game
-        else if ( why == iso::WhyPaused::GameOver || why == iso::WhyPaused::Freedom )
+        else if ( /* all lives lost */ why.toCallOnlyWithinDoActionOfContinueGame_isAllLivesLost ()
+                    || /* in Freedom not with all crowns */ why.toCallOnlyWithinDoActionOfContinueGame_isInFreedomWithoutAllTheCrowns () )
         {
                 CreateEndScreen * endScreenAction =
                         new CreateEndScreen(
@@ -63,7 +63,7 @@ void ContinueGame::doAction ()
 
                 endScreenAction->doIt ();
         }
-        else if ( why == iso::WhyPaused::Success )
+        else if ( why.toCallOnlyWithinDoActionOfContinueGame_isThatFinalSuccessScreen () )
         {
                 CreateCongratulationsScreen * congratulationsScreenAction =
                         new CreateCongratulationsScreen(

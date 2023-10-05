@@ -52,11 +52,7 @@ GameManager::GameManager( )
         , horn( false )
         , handbag( false )
         , donuts( 0 )
-        , takenCrown( false )
-        , eatenFish( false )
-        , gameOver( false )
-        , freedom( false )
-        , emperator( false )
+        , keyMoments( )
 {
         if ( ! util::folderExists( capturePath ) )
                 mkdir( capturePath.c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH );
@@ -133,17 +129,21 @@ WhyPaused GameManager::update ()
 {
         IF_DEBUG( fprintf ( stdout, "GameManager::update ()\n" ) )
 
-        WhyPaused why = WhyPaused::Nevermind ;
-
-        while ( why == WhyPaused::Nevermind )
+        WhyPaused why ;
+        while ( why.stillNevermind() )
         {
-                if ( ! InputManager::getInstance().pauseTyped () && ! this->takenCrown && ! this->eatenFish && ! this->gameOver )
+                if ( InputManager::getInstance().pauseTyped ()
+                                || keyMoments.isGameOver( false )
+                                        || keyMoments.wasFishEaten( false )
+                                                || keyMoments.wasCrownTaken( false ) )
+                        why = this->pause ();
+                else
                 {
                         if ( headLives > 0 || heelsLives > 0 )
                         {
                                 if ( isomot.getMapManager().getActiveRoom() != nilPointer )
                                 {
-                                        // actualiza la vista isométrica
+                                        // update the isometric view
                                         Picture* view = isomot.updateMe ();
 
                                         if ( view != nilPointer )
@@ -164,32 +164,25 @@ WhyPaused GameManager::update ()
                                 else
                                 {
                                         std::cout << "there’s no active room, game over" << std::endl ;
-                                        this->gameOver = true ;
+                                        keyMoments.gameOver() ;
                                 }
                         }
                         else
                         {
                                 std::cout << "lives are exhausted, game over" << std::endl ;
-                                this->gameOver = true ;
+                                keyMoments.gameOver() ;
                         }
-                }
-                else
-                {
-                        why = this->pause ();
                 }
         }
 
-        return why;
+        return why ;
 }
 
 WhyPaused GameManager::pause ()
 {
-        bool exit = false;
-        bool confirm = false;
-        WhyPaused why = WhyPaused::Nevermind ;
-
-        // detiene el motor isométrico
+        // pause the isometric engine
         isomot.pause();
+
         Picture* view = isomot.updateMe ();
         allegro::bitBlit( view->getAllegroPict(), allegro::Pict::theScreen() );
         allegro::update ();
@@ -199,17 +192,16 @@ WhyPaused GameManager::pause ()
         const allegro::Pict& previousWhere = allegro::Pict::getWhereToDraw() ;
         allegro::Pict::setWhereToDraw( view->getAllegroPict() );
 
-        // the user just released some planet
-        if ( this->takenCrown )
-        {
-                why = WhyPaused::FreePlanet ;
-                this->takenCrown = false;
-        }
-        // the user has just eaten reincarnation fish
-        else if ( this->eatenFish )
-        {
-                this->eatenFish = false;
+        WhyPaused paused ;
 
+        // the user just got the planet's crown
+        if ( keyMoments.wasCrownTaken( true ) )
+        {
+                paused.forNewlyLiberatedPlanet() ;
+        }
+        // the user just ate a reincarnation fish
+        else if ( keyMoments.wasFishEaten( true ) )
+        {
                 gui::LanguageManager* language = gui::GuiManager::getInstance().getLanguageManager();
                 gui::LanguageText* text = language->findLanguageStringForAlias( "save-game" );
                 int deltaY = ( iso::ScreenHeight() >> 2 ) - 60 ;
@@ -237,8 +229,11 @@ WhyPaused GameManager::pause ()
 
                 allegro::emptyKeyboardBuffer();
 
-                // mientras el usuario no elija una de las dos opciones no se hará nada
-                while ( ! confirm && ! exit )
+                bool saveit = false;
+                bool resume = false;
+
+                // as long as the user doesn't pick one of the two options, to save or not to save
+                while ( ! saveit && ! resume )
                 {
                         allegro::bitBlit( view->getAllegroPict(), allegro::Pict::theScreen() );
                         allegro::update ();
@@ -249,11 +244,11 @@ WhyPaused GameManager::pause ()
 
                                 std::string key = allegro::nextKey();
 
-                                // si se pulsa Space se mostrará la interfaz para la grabación de la partida
+                                // save game by touching Space, or another key to don't save
                                 if ( key == "Space" )
                                 {
-                                        exit = true;
-                                        why = WhyPaused::SaveGame ;
+                                        saveit = true ;
+                                        paused.forSaving ();
                                 }
                                 else if ( key != inputManager.getUserKeyFor( "movenorth" ) &&
                                           key != inputManager.getUserKeyFor( "movesouth" ) &&
@@ -267,33 +262,27 @@ WhyPaused GameManager::pause ()
                                           key != inputManager.getUserKeyFor( "pause" ) &&
                                           key != "Escape" )
                                 {
-                                        confirm = true;
-                                        isomot.resume();
+                                        resume = true ;
+                                        isomot.resume() ;
                                 }
                         }
 
                         milliSleep( 100 );
                 }
         }
-        // the user exhausted lives of both characters
-        else if ( this->gameOver )
+        else if ( keyMoments.arrivedInFreedomNotWithAllCrowns( true ) )
         {
-                this->gameOver = false;
-                why = WhyPaused::GameOver ;
+                paused.forArrivingInFreedom() ;
         }
-        // the user reached Freedom but with not every crown
-        else if ( this->freedom )
+        else if ( keyMoments.areHeadAndHeelsInFreedomWithAllTheCrowns( true ) )
         {
-                this->freedom = false;
-                why = WhyPaused::Freedom ;
+                paused.forThatFinalScreen() ;
         }
-        // the user completed this game
-        else if ( this->emperator )
+        else if ( keyMoments.isGameOver( true ) )
         {
-                this->emperator = false;
-                why = WhyPaused::Success ;
+                paused.forGameOver ();
         }
-        // the user typed key for pause
+        // none of the above, thus the user just typed the pause key
         else
         {
                 SoundManager::getInstance().stopEverySound ();
@@ -323,7 +312,10 @@ WhyPaused GameManager::pause ()
                         label.draw ();
                 }
 
-                while ( ! confirm && ! exit )
+                bool quit = false ;
+                bool resume = false ;
+
+                while ( ! quit && ! resume ) // wait for the user's choice
                 {
                         allegro::bitBlit( view->getAllegroPict(), allegro::Pict::theScreen() );
                         allegro::update ();
@@ -332,12 +324,12 @@ WhyPaused GameManager::pause ()
                         {
                                 if ( allegro::nextKey() == "Escape" )
                                 {
-                                        exit = true;
-                                        why = WhyPaused::GameOver ;
+                                        quit = true;
+                                        paused.forGameOver ();
                                 }
                                 else
                                 {
-                                        confirm = true;
+                                        resume = true;
                                         isomot.resume();
                                 }
                         }
@@ -348,7 +340,7 @@ WhyPaused GameManager::pause ()
 
         allegro::Pict::setWhereToDraw( previousWhere );
 
-        return why;
+        return paused ;
 }
 
 WhyPaused GameManager::resume ()
@@ -358,6 +350,7 @@ WhyPaused GameManager::resume ()
         refreshAmbianceImages ();
         refreshSceneryBackgrounds ();
 
+        // resume the isometric engine
         isomot.resume ();
 
         return this->update ();
@@ -831,20 +824,16 @@ void GameManager::modifyShield ( const std::string& player, float shield )
 {
         if ( player == "head" || player == "headoverheels" )
         {
-                this->headShield = shield;
+                this->headShield = shield ;
                 if ( this->headShield < 0 )
-                {
-                        this->headShield = 0;
-                }
+                        this->headShield = 0 ;
         }
 
         if ( player == "heels" || player == "headoverheels" )
         {
-                this->heelsShield = shield;
+                this->heelsShield = shield ;
                 if ( this->heelsShield < 0 )
-                {
-                        this->heelsShield = 0;
-                }
+                        this->heelsShield = 0 ;
         }
 }
 
@@ -861,7 +850,7 @@ void GameManager::liberatePlanet ( const std::string& planet, bool now )
         if ( planet == "blacktooth" || planet == "safari" || planet == "egyptus" || planet == "penitentiary" || planet == "byblos" )
         {
                 this->planets[ planet ] = true;
-                this->takenCrown = now;
+                if ( now ) keyMoments.crownTaken() ;
         }
 }
 
@@ -870,9 +859,7 @@ bool GameManager::isFreePlanet ( const std::string& planet ) const
         for ( std::map < std::string, bool >::const_iterator i = this->planets.begin (); i != this->planets.end (); ++i )
         {
                 if ( planet == i->first )
-                {
                         return i->second;
-                }
         }
 
         return false;
@@ -885,9 +872,7 @@ unsigned short GameManager::countFreePlanets () const
         for ( std::map < std::string, bool >::const_iterator p = this->planets.begin (); p != this->planets.end (); ++p )
         {
                 if ( p->second )
-                {
                         count++ ;
-                }
         }
 
         return count;
@@ -900,7 +885,7 @@ void GameManager::eatFish ( const PlayerItem& character, Room* room )
 
 void GameManager::eatFish ( const PlayerItem& character, Room* room, int x, int y, int z )
 {
-        this->eatenFish = true;
+        keyMoments.fishEaten ();
 
         saverAndLoader.ateFish (
                 room->getNameOfFileWithDataAboutRoom (),
@@ -969,6 +954,16 @@ unsigned short GameManager::getDonuts ( const std::string& player ) const
 unsigned int GameManager::getVisitedRooms ()
 {
         return isomot.getMapManager().countVisitedRooms() ;
+}
+
+void GameManager::inFreedomWithSoManyCrowns( unsigned int crowns )
+{
+        if ( crowns == 5 ) {
+                // all the five crowns are taken
+                keyMoments.HeadAndHeelsAreInFreedomWithAllTheCrowns ();
+        } else {
+                keyMoments.arriveInFreedomNotWithAllCrowns ();
+        }
 }
 
 /* static */

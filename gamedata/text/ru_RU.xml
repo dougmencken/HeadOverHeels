@@ -62,7 +62,7 @@
     </properties>
   </text>
 
-  <text alias="keyboard-menu">
+  <text alias="keys-menu">
     <properties>
       <string>Клавиши</string>
     </properties>

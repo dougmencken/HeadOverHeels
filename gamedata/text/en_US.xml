@@ -62,9 +62,9 @@
     </properties>
   </text>
 
-  <text alias="keyboard-menu">
+  <text alias="keys-menu">
     <properties>
-      <string>Keyboard</string>
+      <string>Keys</string>
     </properties>
   </text>
 
@@ -733,14 +733,14 @@
 
   <text alias="final-text">
     <properties font="big" color="multicolor">
-      <string>The people praise you</string>
+      <string>The people praise you !</string>
       <string></string>
     </properties>
     <properties font="plain" color="white">
       <string>This way, my dear friend,</string>
       <string>our two heroes put an end to</string>
     </properties>
-    <properties font="plain" color="red">
+    <properties font="plain" color="cyan">
       <string>the Blacktooth Emperor's tyranny</string>
     </properties>
     <properties font="plain" color="yellow">

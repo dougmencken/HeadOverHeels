@@ -777,16 +777,8 @@ void Isomot::updateFinalRoom()
 
                 mediator->beginUpdate();
 
-                if ( crowns == 5 )
-                {
-                        // all five crowns are taken, show the greeting screen
-                        gameManager.success();
-                }
-                else
-                {
-                        // if not, just go to the summary screen
-                        gameManager.arriveInFreedom();
-                }
+                // it's time to count the crowns
+                gameManager.inFreedomWithSoManyCrowns( crowns );
 
                 finalRoomTimer->reset();
                 finalRoomTimer->go();
