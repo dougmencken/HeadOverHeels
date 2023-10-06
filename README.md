@@ -18,3 +18,29 @@ yet is extinct.
 
 I found it in the fall of 2016 and saw that the sources lack a (sup)port for Mac OS X at all, and in particular for OS X on PowerPC,
 therefore I began this project on GitHub which eventually evolved into what it is now.
+
+## The Present
+
+Since then, I reworked almost every piece of the Jorge's code, dealed around many gotchas and added many new features as like
+* animated movin'n‘binkin dudes in the menus
+* the transitions between user interface menus
+* the new black & white set of graphics
+* ... with the speccy-like coloring of rooms
+* room entry tunes
+* room miniatures
+* the camera optionally follows an active character
+* support for various screen sizes not only 640 x 480
+* support for both allegro 5 and allegro 4 libraries
+* many easy-to-enable cheats :O
+
+However, this project went (and still continues to go) almost unnoticed.
+Neither Jorge nor anyone else from the original team was ever participated in any further development and never wrote a single line about what's goin' on or was done here.
+https://osgameclones.com/ was perhaps the only lone site on which a link to this repo ever appeared.
+In the spring of 2019, I lost interest in this project and almost forgot about it.
+François Bissy's ( @kiwifb ) contribution in the fall of 2023 seems to have awakened my care to a some O_o degree
+
+## The Future
+
+But yep, all this is still quite “raw” for now and really needs some more love.
+Any playing, testing, issues found, spreading a word about this project somewhere, and other contributions are welcome.
+Especially patches, these are **very much** welcome ;)
