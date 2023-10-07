@@ -443,10 +443,10 @@ void Isomot::handleMagicKeys ()
         Room* activeRoom = mapManager.getActiveRoom();
         GameManager& gameManager = GameManager::getInstance();
 
-        if ( allegro::isKeyPushed( "PrintScreen" ) )
+        if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "v" ) )
         {
                 gameManager.toggleRecordingCaptures ();
-                allegro::releaseKey( "PrintScreen" );
+                allegro::releaseKey( "v" ) ;
         }
 
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "f" ) )
@@ -556,10 +556,10 @@ void Isomot::handleMagicKeys ()
                 allegro::releaseKey( "-" );
         }
 
-        if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "v" ) )
+        if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "d" ) )
         {
                 activeRoom->dontDisappearOnJump ();
-                allegro::releaseKey( "v" );
+                allegro::releaseKey( "d" );
         }
 
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "r" ) )
