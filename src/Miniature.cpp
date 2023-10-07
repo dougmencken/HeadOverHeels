@@ -473,7 +473,7 @@ void Miniature::draw ()
 
         // paint final room
 
-        if ( room.getNameOfFileWithDataAboutRoom() == "finalroom.xml" )
+        if ( room.getNameOfRoomDescriptionFile() == "finalroom.xml" )
         {
                 for ( unsigned int x = 0 ; x < tilesX ; ++ x )
                 {

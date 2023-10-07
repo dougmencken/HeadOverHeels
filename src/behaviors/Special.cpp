@@ -150,7 +150,7 @@ bool Special::update ()
                                 SoundManager::getInstance().play( item->getLabel(), activity );
 
                                 // bonus item disappears from room once it is taken
-                                BonusManager::getInstance().markBonusAsAbsent( item->getMediator()->getRoom()->getNameOfFileWithDataAboutRoom(), item->getLabel() );
+                                BonusManager::getInstance().markBonusAsAbsent( item->getMediator()->getRoom()->getNameOfRoomDescriptionFile(), item->getLabel() );
 
                                 takeMagicItem( dynamic_cast< PlayerItem& >( *sender ) );
 

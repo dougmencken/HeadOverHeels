@@ -889,7 +889,7 @@ void GameManager::eatFish ( const PlayerItem& character, Room* room, int x, int 
         keyMoments.fishEaten ();
 
         saverAndLoader.ateFish (
-                room->getNameOfFileWithDataAboutRoom (),
+                room->getNameOfRoomDescriptionFile (),
                 character.getLabel (),
                 x, y, z,
                 character.getOrientation ()

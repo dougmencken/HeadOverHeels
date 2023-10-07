@@ -55,7 +55,9 @@ public:
         * @param tileSize Length of side of single tile
         * @param floorKind Kind of floor
         */
-        Room( const std::string& roomFile, const std::string& scenery, unsigned int xTiles, unsigned int yTiles, unsigned int tileSize, const std::string& floorKind ) ;
+        Room( const std::string& roomFile, const std::string& scenery,
+                        unsigned int xTiles, unsigned int yTiles, unsigned int tileSize,
+                                const std::string& floorKind ) ;
 
         virtual ~Room( ) ;
 
@@ -146,10 +148,6 @@ public:
                                                 int northBound, int eastBound, int southBound, int westBound,
                                                 int * x, int * y, int * z ) ;
 
-        void setVisited ( bool visited ) {  this->visited = visited ;  }
-
-        bool isVisited () const {  return visited ;  }
-
         const RoomConnections * getConnections () const {  return connections ;  }
 
         void setConnections ( const RoomConnections * links ) {  connections = links ;  }
@@ -162,14 +160,14 @@ public:
 
         bool isAnyPlayerStillInRoom () const ;
 
-        std::string getNameOfFileWithDataAboutRoom () const {  return nameOfFileWithDataAboutRoom ;  }
+        const std::string & getNameOfRoomDescriptionFile () const {  return nameOfFileWithDataAboutRoom ;  }
 
        /**
         * @return jail, blacktooth, market, moon, egyptus, penitentiary, safary o byblos
         */
-        std::string getScenery () const {  return this->scenery ;  }
+        const std::string & getScenery () const {  return this->scenery ;  }
 
-        std::string getColor () const {  return this->color ;  }
+        const std::string & getColor () const {  return this->color ;  }
 
         void setColor ( const std::string & roomColor ) {  this->color = roomColor ;  }
 
@@ -199,7 +197,7 @@ public:
        /**
         * @return kind of floor which may be "plain", "mortal", or absent "none"
         */
-        std::string getKindOfFloor () const {  return kindOfFloor ;  }
+        const std::string & getKindOfFloor () const {  return kindOfFloor ;  }
 
         bool hasFloor () const {  return kindOfFloor != "absent" ;  }
 
@@ -266,14 +264,7 @@ private:
 
         friend class Mediator ;
 
-        /**
-         * Is this room already visited by any of characters
-         */
-        bool visited ;
-
-        /*
-         * Connections of room with another rooms
-         */
+        // the connections of this room with other rooms
         const RoomConnections * connections ;
 
         std::vector < PlayerItemPtr > playersYetInRoom ;
@@ -356,14 +347,8 @@ private:
         */
         PicturePtr whereToDraw ;
 
-       /**
-        * Límites para mover la cámara a lo largo del eje X en una sala triple
-        */
+        // limits for camera shifting in a triple room
         std::pair < int, int > tripleRoomBoundX ;
-
-       /**
-        * Límites para mover la cámara a lo largo del eje Y en una sala triple
-        */
         std::pair < int, int > tripleRoomBoundY ;
 
 };

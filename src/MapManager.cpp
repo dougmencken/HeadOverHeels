@@ -195,7 +195,7 @@ void MapManager::readMap ( const std::string& fileName )
                         gameRooms[ roomFile ] = theRoom ;
 
                         // write file of room
-                        theRoom->saveAsXML( pathToRooms + theRoom->getNameOfFileWithDataAboutRoom() );
+                        theRoom->saveAsXML( pathToRooms + theRoom->getNameOfRoomDescriptionFile() );
                 }
                 else
                 {
@@ -210,7 +210,7 @@ void MapManager::beginNewGame( const std::string& headRoom, const std::string& h
 {
         std::cout << "MapManager::beginNewGame( \"" << headRoom << "\", \"" << heelsRoom << "\" )" << std::endl ;
 
-        resetVisitedRooms();
+        forgetVisitedRooms () ;
 
         GameManager::getInstance().setHeadLives( 8 );
         GameManager::getInstance().setHeelsLives( 8 );
@@ -246,7 +246,7 @@ void MapManager::beginNewGame( const std::string& headRoom, const std::string& h
                                 firstRoom->activateCharacterByLabel( "headoverheels" );
                         }
 
-                        firstRoom->setVisited( true );
+                        addRoomAsVisited( firstRoom->getNameOfRoomDescriptionFile () ) ;
 
                         activeRoom = firstRoom;
                 }
@@ -277,7 +277,7 @@ void MapManager::beginNewGame( const std::string& headRoom, const std::string& h
                                 RoomBuilder::createPlayerInRoom( secondRoom, "heels", true, centerX, centerY, 0, "south" );
                                 secondRoom->activateCharacterByLabel( "heels" );
 
-                                secondRoom->setVisited( true );
+                                addRoomAsVisited( secondRoom->getNameOfRoomDescriptionFile () ) ;
                         }
                 }
                 else
@@ -302,7 +302,7 @@ void MapManager::beginOldGameWithCharacter( const std::string& roomFile, const s
         Room* room = nilPointer;
 
         // if there is already created room it is when room of second player is the same as of first player
-        if ( activeRoom != nilPointer && activeRoom->getNameOfFileWithDataAboutRoom() == roomFile )
+        if ( activeRoom != nilPointer && activeRoom->getNameOfRoomDescriptionFile() == roomFile )
         {
                 room = activeRoom;
         }
@@ -321,7 +321,7 @@ void MapManager::beginOldGameWithCharacter( const std::string& roomFile, const s
                                                 room, character, true,
                                                 x, y, z, direction, entry );
 
-                room->setVisited( true );
+                addRoomAsVisited( room->getNameOfRoomDescriptionFile () ) ;
 
                 std::string realEntry = entry ;
 
@@ -355,13 +355,12 @@ Room* MapManager::rebuildRoom( Room* room )
         bool isActive = room->isActive();
         room->deactivate();
 
-        std::string fileOfRoom = room->getNameOfFileWithDataAboutRoom() ;
+        std::string fileOfRoom = room->getNameOfRoomDescriptionFile() ;
 
         // rebuild room
         Room* newRoom = RoomBuilder::buildRoom( iso::sharePath() + "map" + util::pathSeparator() + fileOfRoom );
         if ( newRoom == nilPointer ) return nilPointer ;
         newRoom->setConnections( room->getConnections() );
-        newRoom->setVisited( room->isVisited () ); // keep “ is room visited or not ” switch
 
         if ( isRoomInPlay( room ) )
         {
@@ -481,7 +480,7 @@ Room* MapManager::changeRoom( const std::string& wayOfExit )
 {
         Room* previousRoom = this->activeRoom;
 
-        std::string fileOfPreviousRoom = previousRoom->getNameOfFileWithDataAboutRoom() ;
+        std::string fileOfPreviousRoom = previousRoom->getNameOfRoomDescriptionFile() ;
         const RoomConnections* previousRoomLinks = previousRoom->getConnections();
 
         Way wayOfEntry( "just wait" ) ;
@@ -567,7 +566,7 @@ Room* MapManager::changeRoom( const std::string& wayOfExit )
                 newItemOfRoamer->autoMoveOnEntry( wayOfEntry.toString() );
         }
 
-        newRoom->setVisited( true );
+        addRoomAsVisited( newRoom->getNameOfRoomDescriptionFile () ) ;
 
         newRoom->activateCharacterByLabel( nameOfRoamer );
 
@@ -583,7 +582,9 @@ Room* MapManager::getRoomThenAddItToRoomsInPlay( const std::string& roomFile, bo
 
         if ( room != nilPointer )
         {
-                if ( markVisited ) room->setVisited( true );
+                if ( markVisited )
+                        addRoomAsVisited( room->getNameOfRoomDescriptionFile () ) ;
+
                 addRoomInPlay( room );
         }
 
@@ -599,7 +600,7 @@ Room* MapManager::swapRoom ()
 
                 SoundManager::getInstance().stopEverySound ();
 
-                std::string fileOfPreviousRoom = activeRoom->getNameOfFileWithDataAboutRoom() ;
+                std::string fileOfPreviousRoom = activeRoom->getNameOfRoomDescriptionFile() ;
 
                 std::vector< Room* >::iterator ri = roomsInPlay.begin ();
                 while ( ri != roomsInPlay.end () )
@@ -613,7 +614,7 @@ Room* MapManager::swapRoom ()
                 // when it’s last one swap with first one
                 activeRoom = ( ri != roomsInPlay.end () ? *ri : *roomsInPlay.begin () );
 
-                std::cout << "swop room \"" << fileOfPreviousRoom << "\" with \"" << activeRoom->getNameOfFileWithDataAboutRoom() << "\"" << std::endl ;
+                std::cout << "swop room \"" << fileOfPreviousRoom << "\" with \"" << activeRoom->getNameOfRoomDescriptionFile() << "\"" << std::endl ;
 
                 activeRoom->activate();
         }
@@ -659,7 +660,7 @@ void MapManager::addRoomInPlay( Room* whichRoom )
 {
         if ( whichRoom == nilPointer ) return ;
 
-        std::string roomFile = whichRoom->getNameOfFileWithDataAboutRoom();
+        std::string roomFile = whichRoom->getNameOfRoomDescriptionFile();
 
         if ( isRoomInPlay( whichRoom ) || findRoomInPlayByFile( roomFile ) != nilPointer )
         {
@@ -681,7 +682,7 @@ void MapManager::removeRoomInPlay( Room* whichRoom )
 
         roomsInPlay.erase( std::remove( roomsInPlay.begin (), roomsInPlay.end (), whichRoom ), roomsInPlay.end() );
 
-        gameRooms[ whichRoom->getNameOfFileWithDataAboutRoom() ] = nilPointer ;
+        gameRooms[ whichRoom->getNameOfRoomDescriptionFile() ] = nilPointer ;
         delete whichRoom ;
 }
 
@@ -722,7 +723,7 @@ Room* MapManager::findRoomInPlayByFile( const std::string& roomFile ) const
 {
         for ( std::vector< Room* >::const_iterator ri = roomsInPlay.begin () ; ri != roomsInPlay.end () ; ++ ri )
         {
-                if ( *ri != nilPointer && ( *ri )->getNameOfFileWithDataAboutRoom() == roomFile )
+                if ( *ri != nilPointer && ( *ri )->getNameOfRoomDescriptionFile() == roomFile )
                 {
                         return *ri ;
                 }
@@ -769,47 +770,14 @@ Room* MapManager::getOrBuildRoomByFile( const std::string& roomFile )
 
 void MapManager::parseVisitedRooms( const std::vector< std::string >& visitedRooms )
 {
-        resetVisitedRooms();
+        forgetVisitedRooms () ;
 
         for ( std::vector< std::string >::const_iterator vi = visitedRooms.begin () ; vi != visitedRooms.end () ; ++ vi )
         {
                 Room* visitedRoom = getOrBuildRoomByFile( *vi );
 
                 if ( visitedRoom != nilPointer )
-                {
-                        visitedRoom->setVisited( true );
-                }
-        }
-}
-
-void MapManager::fillVisitedRooms( std::vector< std::string >& visitedRooms )
-{
-        for ( std::map< std::string, Room * >::const_iterator ri = gameRooms.begin () ; ri != gameRooms.end () ; ++ ri )
-        {
-                if ( ri->second != nilPointer && ri->second->isVisited() )
-                {
-                        visitedRooms.push_back( ri->first );
-                }
-        }
-}
-
-unsigned int MapManager::countVisitedRooms()
-{
-        unsigned int count = 0;
-
-        for ( std::map< std::string, Room * >::const_iterator ri = gameRooms.begin () ; ri != gameRooms.end () ; ++ ri )
-        {
-                if ( ri->second != nilPointer && ri->second->isVisited() ) count ++ ;
-        }
-
-        return count;
-}
-
-void MapManager::resetVisitedRooms()
-{
-        for ( std::map< std::string, Room * >::iterator ri = gameRooms.begin () ; ri != gameRooms.end () ; ++ ri )
-        {
-                if ( ri->second != nilPointer ) ri->second->setVisited( false );
+                        addRoomAsVisited( visitedRoom->getNameOfRoomDescriptionFile () ) ;
         }
 }
 

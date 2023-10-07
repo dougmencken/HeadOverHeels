@@ -274,7 +274,7 @@ Picture* Isomot::updateMe ()
         if ( activeRoom == nilPointer ) return view ;
 
         // la sala final es muy especial
-        if ( activeRoom->getNameOfFileWithDataAboutRoom() == "finalroom.xml" )
+        if ( activeRoom->getNameOfRoomDescriptionFile() == "finalroom.xml" )
         {
                 updateFinalRoom();
         }
@@ -364,7 +364,7 @@ Picture* Isomot::updateMe ()
                 std::ostringstream roomTiles;
                 roomTiles << activeRoom->getTilesX() << "x" << activeRoom->getTilesY();
 
-                allegro::textOut( activeRoom->getNameOfFileWithDataAboutRoom(), 12, 8, roomColor.toAllegroColor() );
+                allegro::textOut( activeRoom->getNameOfRoomDescriptionFile(), 12, 8, roomColor.toAllegroColor() );
                 allegro::textOut( roomTiles.str(), 12, 20, roomColor.toAllegroColor() );
 
                 Miniature miniatureOfRoom( *activeRoom, 24, 24, sizeOfTileForMiniature );
@@ -585,7 +585,7 @@ void Isomot::handleMagicKeys ()
 
                         if ( otherPlayer != nilPointer && roomWithInactivePlayer != activeRoom )
                         {
-                                std::cout << "both characters are in active room \"" << activeRoom->getNameOfFileWithDataAboutRoom() << "\" via pure magic" << std::endl ;
+                                std::cout << "both characters are in active room \"" << activeRoom->getNameOfRoomDescriptionFile() << "\" via pure magic" << std::endl ;
 
                                 std::string nameOfAnotherPlayer = otherPlayer->getLabel();
 

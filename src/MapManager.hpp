@@ -14,6 +14,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <set>
 
 #include "Room.hpp"
 
@@ -85,22 +86,15 @@ public:
 
         Room * getOrBuildRoomByFile ( const std::string& roomFile ) ;
 
-        void parseVisitedRooms ( const std::vector< std::string >& visitedRooms ) ;
+        const std::set< std::string > & getVisitedRooms () const {  return visitedRooms ;  }
 
-        void fillVisitedRooms ( std::vector< std::string >& visitedSequence ) ;
+        unsigned int countVisitedRooms() const {  return visitedRooms.size() ;  }
 
-        unsigned int countVisitedRooms () ;
-
-        void resetVisitedRooms () ;
+        void parseVisitedRooms ( const std::vector< std::string > & visitedRooms ) ;
 
         static bool buildEveryRoomAtOnce ;
 
 private:
-
-        /**
-         * Compose map from XML file
-         */
-        void readMap ( const std::string& fileName ) ;
 
         /**
          * The room to draw yet
@@ -112,9 +106,22 @@ private:
         std::map< std::string, RoomConnections* > linksBetweenRooms ;
 
         /**
-         * Every room on map
+         * Every room on the map
          */
         std::map < std::string, Room * > gameRooms ;
+
+        /*
+         * when any character visits a room, the unique name of room's file is added to this set
+         */
+        std::set < std::string > visitedRooms ;
+
+        // compose map from XML file
+        void readMap ( const std::string & fileName ) ;
+
+        void addRoomAsVisited( const std::string & roomFile ) {  visitedRooms.insert( roomFile ) ;  }
+
+        // after such forgetting, no room will be counted as visited
+        void forgetVisitedRooms () {  visitedRooms.clear () ;  }
 
 };
 

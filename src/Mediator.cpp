@@ -1037,7 +1037,7 @@ void Mediator::setActiveCharacter ( const PlayerItemPtr& character )
                 else
                         this->labelOfActiveCharacter.clear();
 
-                std::cout << "character \"" << labelOfActiveCharacter << "\" is yet active in room \"" << room->getNameOfFileWithDataAboutRoom() << "\"" << std::endl ;
+                std::cout << "character \"" << labelOfActiveCharacter << "\" is yet active in room \"" << room->getNameOfRoomDescriptionFile() << "\"" << std::endl ;
         }
 }
 
@@ -1103,7 +1103,7 @@ bool Mediator::pickNextCharacter()
                                 unlockFreeItemsMutex ();
 
                                 std::cout << "join both characters into \"" << activeCharacter->getOriginalLabel() << "\""
-                                                << " in room " << room->getNameOfFileWithDataAboutRoom() << std::endl ;
+                                                << " in room " << room->getNameOfRoomDescriptionFile() << std::endl ;
                                 return true;
                         }
                 }
@@ -1111,7 +1111,7 @@ bool Mediator::pickNextCharacter()
         // is it composite player
         else if ( activeCharacter->getOriginalLabel() == "headoverheels" )
         {
-                std::cout << "split \"" << activeCharacter->getOriginalLabel() << "\" in room " << room->getNameOfFileWithDataAboutRoom() << std::endl ;
+                std::cout << "split \"" << activeCharacter->getOriginalLabel() << "\" in room " << room->getNameOfRoomDescriptionFile() << std::endl ;
 
                 int x = activeCharacter->getX();
                 int y = activeCharacter->getY();
@@ -1151,7 +1151,7 @@ bool Mediator::pickNextCharacter()
         }
 
         std::cout << "swop character \"" << previousCharacter->getOriginalLabel() << "\" to character \"" << activeCharacter->getOriginalLabel() << "\""
-                        << " in room " << room->getNameOfFileWithDataAboutRoom() << std::endl ;
+                        << " in room " << room->getNameOfRoomDescriptionFile() << std::endl ;
         return true;
 }
 
@@ -1201,7 +1201,7 @@ void Mediator::toggleSwitchInRoom ()
                 }
         }
 
-        std::cout << "toggled switch in room " << getRoom()->getNameOfFileWithDataAboutRoom() << std::endl ;
+        std::cout << "toggled switch in room " << getRoom()->getNameOfRoomDescriptionFile() << std::endl ;
 }
 
 PlayerItemPtr Mediator::getWaitingCharacter() const

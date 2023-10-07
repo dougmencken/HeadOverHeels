@@ -26,9 +26,10 @@
 namespace iso
 {
 
-Room::Room( const std::string& roomFile, const std::string& scenery, unsigned int xTiles, unsigned int yTiles, unsigned int tileSize, const std::string& floorKind )
-: Mediated( )
-        , visited( false )
+Room::Room( const std::string& roomFile, const std::string& scenery,
+                unsigned int xTiles, unsigned int yTiles, unsigned int tileSize,
+                const std::string& floorKind )
+        : Mediated( )
         , connections( nilPointer )
         , nameOfFileWithDataAboutRoom( roomFile )
         , scenery( scenery )
@@ -730,7 +731,7 @@ void Room::addGridItem( const GridItemPtr& gridItem )
         mediator->wantToMaskWithGridItem( *gridItem );
 
 #if defined( DEBUG ) && DEBUG
-        std::cout << gridItem->whichKindOfItem() << " \"" << gridItem->getUniqueName() << "\" is yet part of room \"" << getNameOfFileWithDataAboutRoom() << "\"" << std::endl ;
+        std::cout << gridItem->whichKindOfItem() << " \"" << gridItem->getUniqueName() << "\" is yet part of room \"" << getNameOfRoomDescriptionFile() << "\"" << std::endl ;
 #endif
 }
 
@@ -812,7 +813,7 @@ void Room::addFreeItem( const FreeItemPtr& freeItem )
         mediator->wantToMaskWithFreeItem( *freeItem );
 
 #if defined( DEBUG ) && DEBUG
-        std::cout << freeItem->whichKindOfItem() << " \"" << freeItem->getUniqueName() << "\" is yet in room \"" << getNameOfFileWithDataAboutRoom() << "\"" << std::endl ;
+        std::cout << freeItem->whichKindOfItem() << " \"" << freeItem->getUniqueName() << "\" is yet in room \"" << getNameOfRoomDescriptionFile() << "\"" << std::endl ;
 #endif
 }
 
@@ -899,9 +900,9 @@ bool Room::addPlayerToRoom( const PlayerItemPtr& playerItem, bool playerEntersRo
         }
         nextNumbers[ labelOfItem ] = uniqueNumberOfItem + 1;
 
-        playerItem->setUniqueName( labelOfItem + " @ " + getNameOfFileWithDataAboutRoom() );
+        playerItem->setUniqueName( labelOfItem + " @ " + getNameOfRoomDescriptionFile() );
 
-        std::cout << "adding character \"" << playerItem->getOriginalLabel() << "\" to room \"" << getNameOfFileWithDataAboutRoom() << "\"" << std::endl ;
+        std::cout << "adding character \"" << playerItem->getOriginalLabel() << "\" to room \"" << getNameOfRoomDescriptionFile() << "\"" << std::endl ;
 
         addFreeItemToContainer( playerItem );
 
@@ -1065,7 +1066,7 @@ void Room::removeGridItemByUniqueName( const std::string& uniqueName )
                                 found = true ;
 
                                 std::cout << "removing " << ( *g )->whichKindOfItem() << " \"" << uniqueName <<
-                                        "\" from room \"" << getNameOfFileWithDataAboutRoom() << "\"" << std::endl ;
+                                        "\" from room \"" << getNameOfRoomDescriptionFile() << "\"" << std::endl ;
 
                                 gridItems[ column ].erase( g );
 
@@ -1096,7 +1097,7 @@ void Room::removeFreeItemByUniqueName( const std::string& uniqueName )
                         found = true ;
 
                         std::cout << "removing " << ( *f )->whichKindOfItem() << " \"" << uniqueName <<
-                                "\" from room \"" << getNameOfFileWithDataAboutRoom() << "\"" << std::endl ;
+                                "\" from room \"" << getNameOfRoomDescriptionFile() << "\"" << std::endl ;
 
                         freeItems.erase( f );
 
@@ -1467,7 +1468,7 @@ void Room::calculateCoordinatesOfOrigin( bool hasNorthDoor, bool hasEastDoor, bo
         ( void ) hasEastDoor ; ( void ) hasSouthDoor ;
 
 #if defined( DEBUG_ORIGIN_OF_ROOM ) && DEBUG_ORIGIN_OF_ROOM
-        std::cout << "origin of room \"" << getNameOfFileWithDataAboutRoom() << "\" is at " <<
+        std::cout << "origin of room \"" << getNameOfRoomDescriptionFile() << "\" is at " <<
                         "( " << coordinatesOfOrigin.first << ", " << coordinatesOfOrigin.second << " )" <<
                         std::endl ;
 #endif

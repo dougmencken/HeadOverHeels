@@ -223,7 +223,7 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                 int index = ( onX ? wallX : wallY );
 
                                 std::cout << "converting grid item \"" << label << "\" to wall on " << ( onX ? "x:" : "y:" ) << index
-                                                << " of room \"" << theRoom->getNameOfFileWithDataAboutRoom() << "\"" << std::endl ;
+                                                << " of room \"" << theRoom->getNameOfRoomDescriptionFile() << "\"" << std::endl ;
 
                                 std::string fileWithPicture = label + ".png";
                                 std::string gfxSet = iso::GameManager::getInstance().getChosenGraphicSet();
@@ -340,7 +340,7 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
         }
 
 #if defined( DEBUG ) && DEBUG
-        std::cout << "building floor in room \"" << theRoom->getNameOfFileWithDataAboutRoom() << "\"" ;
+        std::cout << "building floor in room \"" << theRoom->getNameOfRoomDescriptionFile() << "\"" ;
 #endif
 
         PoolOfPictures floorImages ;
@@ -572,7 +572,7 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
         theRoom->calculateBounds();
         theRoom->updateWallsWithDoors();
 
-        std::cout << "built room \"" << theRoom->getNameOfFileWithDataAboutRoom() << "\"" << std::endl ;
+        std::cout << "built room \"" << theRoom->getNameOfRoomDescriptionFile() << "\"" << std::endl ;
 
         return theRoom ;
 }
@@ -752,7 +752,7 @@ FreeItemPtr RoomBuilder::buildFreeItem( tinyxml2::XMLElement* item, Room* room )
                 int fz = ( itemZ != Top ) ? itemZ * LayerHeight : Top;
 
                 // don’t place an item if it is a bonus and has already been taken
-                if ( BonusManager::getInstance().isAbsent( room->getNameOfFileWithDataAboutRoom(), itemDescription->getLabel() ) )
+                if ( BonusManager::getInstance().isAbsent( room->getNameOfRoomDescriptionFile(), itemDescription->getLabel() ) )
                 {
                         return FreeItemPtr () ;
                 }

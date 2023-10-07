@@ -139,15 +139,14 @@ bool GameSaverAndLoader::saveGame( const std::string& file )
         tinyxml2::XMLNode * root = saveXml.NewElement( "savegame" );
         saveXml.InsertFirstChild( root );
 
-        // visited rooms
+        // rooms visited
 
-        std::vector< std::string > visitedRooms;
-        gameManager.getIsomot().getMapManager().fillVisitedRooms( visitedRooms );
+        const std::set< std::string > & visitedRooms = gameManager.getIsomot().getMapManager().getVisitedRooms() ;
         if ( visitedRooms.size () > 0 )
         {
                 tinyxml2::XMLElement* exploredRooms = saveXml.NewElement( "exploredRooms" );
 
-                for ( std::vector< std::string >::iterator i = visitedRooms.begin () ; i != visitedRooms.end () ; ++ i )
+                for ( std::set< std::string >::iterator i = visitedRooms.begin () ; i != visitedRooms.end () ; ++ i )
                 {
                         tinyxml2::XMLElement* visited = saveXml.NewElement( "visited" );
                         visited->SetAttribute( "room", ( *i ).c_str () );
@@ -325,7 +324,7 @@ bool GameSaverAndLoader::saveGame( const std::string& file )
                         inactiveCharacter->SetAttribute( "label", whoWaitsToPlay.c_str () );
 
                         tinyxml2::XMLElement* roomFile = saveXml.NewElement( "room" );
-                        roomFile->SetText( roomWithWaitingGuy->getNameOfFileWithDataAboutRoom().c_str() );
+                        roomFile->SetText( roomWithWaitingGuy->getNameOfRoomDescriptionFile().c_str() );
                         inactiveCharacter->InsertEndChild( roomFile );
 
                         tinyxml2::XMLElement* x = saveXml.NewElement( "x" );
