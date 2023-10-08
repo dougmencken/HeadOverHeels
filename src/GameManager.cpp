@@ -39,6 +39,7 @@ GameManager::GameManager( )
         , playTuneOfScenery( true )
         , castShadows( true )
         , drawSceneryBackgrounds( true )
+        , drawMiniatures( false )
         , recordCaptures( false )
         , recordingTimer( new Timer () )
         , isomot( )
@@ -1071,6 +1072,15 @@ bool GameManager::readPreferences( const std::string& fileName )
                                 GameManager::getInstance().toggleSceneryDecor ();
                 }
 
+                tinyxml2::XMLElement* roomMiniatures = video->FirstChildElement( "drawminiatures" ) ;
+                if ( roomMiniatures != nilPointer )
+                {
+                        bool drawMiniatures = ( std::string( roomMiniatures->FirstChild()->ToText()->Value() ) == "true" ) ? true : false ;
+
+                        if ( GameManager::getInstance().drawRoomMiniatures () != drawMiniatures )
+                                GameManager::getInstance().toggleRoomMiniatures ();
+                }
+
                 tinyxml2::XMLElement* centerCameraOn = video->FirstChildElement( "centercamera" ) ;
                 if ( centerCameraOn != nilPointer )
                 {
@@ -1157,6 +1167,10 @@ bool GameManager::writePreferences( const std::string& fileName )
                 tinyxml2::XMLElement * drawdecor = preferences.NewElement( "drawdecor" );
                 drawdecor->SetText( GameManager::getInstance().drawSceneryDecor () ? "true" : "false" );
                 video->InsertEndChild( drawdecor );
+
+                tinyxml2::XMLElement * drawMiniatures = preferences.NewElement( "drawminiatures" );
+                drawMiniatures->SetText( GameManager::getInstance().drawRoomMiniatures () ? "true" : "false" );
+                video->InsertEndChild( drawMiniatures );
 
                 tinyxml2::XMLElement * centerCameraOn = preferences.NewElement( "centercamera" );
                 centerCameraOn->SetText( GameManager::getInstance().getIsomot().doesCameraFollowCharacter () ? "character" : "room" );

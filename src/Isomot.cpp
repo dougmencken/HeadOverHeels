@@ -357,9 +357,9 @@ Picture* Isomot::updateMe ()
                 - cameraDeltaX, - cameraDeltaY
         );
 
-        if ( ! GameManager::getInstance().drawSceneryDecor () )
+        if ( GameManager::getInstance().drawRoomMiniatures () )
         {
-                // show information about room and draw miniature of room
+                // show information about room and draw the miniature of room
 
                 std::ostringstream roomTiles;
                 roomTiles << activeRoom->getTilesX() << "x" << activeRoom->getTilesY();
@@ -496,6 +496,12 @@ void Isomot::handleMagicKeys ()
         {
                 gameManager.toggleSceneryDecor ();
                 allegro::releaseKey( "b" );
+        }
+
+        if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "m" ) )
+        {
+                gameManager.toggleRoomMiniatures ();
+                allegro::releaseKey( "m" );
         }
 
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "t" ) )

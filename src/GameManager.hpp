@@ -298,6 +298,10 @@ public:
 
         void toggleSceneryDecor () {  drawSceneryBackgrounds = ! drawSceneryBackgrounds ;  }
 
+        bool drawRoomMiniatures () const {  return drawMiniatures ;  }
+
+        void toggleRoomMiniatures () {  drawMiniatures = ! drawMiniatures ;  }
+
         bool recordingCaptures () const {  return recordCaptures ;  }
 
         void toggleRecordingCaptures ()
@@ -340,6 +344,8 @@ private:
         bool castShadows ;
 
         bool drawSceneryBackgrounds ;
+
+        bool drawMiniatures ;
 
         bool recordCaptures ;
 
