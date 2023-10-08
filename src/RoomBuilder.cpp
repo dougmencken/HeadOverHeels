@@ -169,7 +169,7 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                 wall != nilPointer ;
                                 wall = wall->NextSiblingElement( "wall" ) )
                 {
-                        Wall* wallSegment = buildWall( wall, iso::GameManager::getInstance().getChosenGraphicSet() );
+                        Wall* wallSegment = buildWall( wall, iso::GameManager::getInstance().getChosenGraphicsSet() );
 
                         if ( wallSegment != nilPointer )
                         {
@@ -226,7 +226,7 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                                 << " of room \"" << theRoom->getNameOfRoomDescriptionFile() << "\"" << std::endl ;
 
                                 std::string fileWithPicture = label + ".png";
-                                std::string gfxSet = iso::GameManager::getInstance().getChosenGraphicSet();
+                                std::string gfxSet = iso::GameManager::getInstance().getChosenGraphicsSet() ;
 
                                 autouniqueptr< allegro::Pict > picture( allegro::Pict::fromPNGFile (
                                         iso::pathToFile( iso::sharePath() + gfxSet, fileWithPicture )
@@ -497,8 +497,8 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                                 else
                                                 {
                                                         bool darken = iso::GameManager::getInstance().getCastShadows() ;
-                                                        if ( iso::GameManager::getInstance().getChosenGraphicSet() == "gfx.2003" ||
-                                                                iso::GameManager::getInstance().getChosenGraphicSet() == "gfx.riderx" ) darken = false ;
+                                                        if ( iso::GameManager::getInstance().getChosenGraphicsSet() == "gfx.2003" ||
+                                                                iso::GameManager::getInstance().getChosenGraphicsSet() == "gfx.riderx" ) darken = false ;
 
                                                         const PicturePtr& imageOfFullTile = floorImages.getOrLoadAndGetOrMakeAndGet( fileOfFullTile, 64, 40 );
                                                         PicturePtr imageOfPartialTile = FloorTile::fullTileToPartialTile( * imageOfFullTile, suffixOfNotFullTile, darken );
@@ -520,8 +520,8 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                                 if ( suffixOfNotFullTile.empty() )
                                                 {
                                                         bool darken = iso::GameManager::getInstance().getCastShadows() ;
-                                                        if ( iso::GameManager::getInstance().getChosenGraphicSet() == "gfx.2003" ||
-                                                                iso::GameManager::getInstance().getChosenGraphicSet() == "gfx.riderx" ) darken = false ;
+                                                        if ( iso::GameManager::getInstance().getChosenGraphicsSet() == "gfx.2003" ||
+                                                                iso::GameManager::getInstance().getChosenGraphicsSet() == "gfx.riderx" ) darken = false ;
 
                                                         FloorTile::fullTileToPartialTile( * image, "sw", darken )->saveAsPNG( iso::homePath() );
                                                         FloorTile::fullTileToPartialTile( * image, "se", darken )->saveAsPNG( iso::homePath() );

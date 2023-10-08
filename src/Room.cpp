@@ -1232,7 +1232,7 @@ void Room::dontDisappearOnJump ()
                                 {
                                         gridItem.setBehaviorOf( "still" );
 
-                                        if ( ! GameManager::getInstance().isSimpleGraphicSet() )
+                                        if ( ! GameManager::getInstance().isSimpleGraphicsSet() )
                                                 Color::multiplyWithColor(
                                                         gridItem.getRawImageToChangeIt (),
                                                         ( behavior == "behavior of slow disappearance on jump into" ) ?
@@ -1258,7 +1258,7 @@ void Room::dontDisappearOnJump ()
                         {
                                 freeItem.setBehaviorOf( "still" );
 
-                                if ( ! GameManager::getInstance().isSimpleGraphicSet() )
+                                if ( ! GameManager::getInstance().isSimpleGraphicsSet() )
                                         Color::multiplyWithColor(
                                                 freeItem.getRawImageToChangeIt (),
                                                 ( behavior == "behavior of slow disappearance on jump into" ) ?

@@ -1744,7 +1744,7 @@ void textOut( const std::string& text, int x, int y, AllegroColor color )
 }
 
 #if defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
-std::string allegroAudioDriverCodeToName( int code )
+std::string allegro4AudioDriverCodeToName( int code )
 {
         if ( code == DIGI_AUTODETECT ) return "DIGI_AUTODETECT" ;
 
@@ -1800,7 +1800,7 @@ void initAudio()
         for ( unsigned int index = 0 ; index < digitalDrivers.size () ; index ++ )
         {
         #if defined( DEBUG_ALLEGRO_INIT ) && DEBUG_ALLEGRO_INIT
-                std::cout << "trying to install_sound( " << allegroAudioDriverCodeToName( digitalDrivers[ index ] ) << " ) ...." ;
+                std::cout << "trying to install_sound( " << allegro4AudioDriverCodeToName( digitalDrivers[ index ] ) << " ) ...." ;
         #endif
                 result = install_sound( digitalDrivers[ index ], MIDI_NONE, NULL );
                 // install_sound returns zero on success, and -1 on failure
@@ -1817,7 +1817,7 @@ void initAudio()
                         std::cout << " oops" << std::endl ;
         #endif
                         std::string allegroError( allegro_error ) ;
-                        std::cout << "install_sound( " << allegroAudioDriverCodeToName( digitalDrivers[ index ] )
+                        std::cout << "install_sound( " << allegro4AudioDriverCodeToName( digitalDrivers[ index ] )
                                         << " ) returned error \"" << allegroError << "\"" << std::endl ;
                 }
         }

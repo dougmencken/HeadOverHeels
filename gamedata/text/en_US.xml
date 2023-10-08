@@ -170,9 +170,9 @@
     </properties>
   </text>
 
-  <text alias="draw-background">
+  <text alias="draw-decor">
     <properties>
-      <string>Draw Background</string>
+      <string>Draw Scenery Decor</string>
     </properties>
   </text>
 

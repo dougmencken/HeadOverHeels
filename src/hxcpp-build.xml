@@ -95,7 +95,7 @@
         <file name="guiactions/ContinueGame.cpp" />
         <file name="guiactions/CreateAudioMenu.cpp" />
         <file name="guiactions/CreateVideoMenu.cpp" />
-        <file name="guiactions/CreateMenuOfGraphicSets.cpp" />
+        <file name="guiactions/CreateMenuOfGraphicsSets.cpp" />
         <file name="guiactions/CreateCongratulationsScreen.cpp" />
         <file name="guiactions/CreateEndScreen.cpp" />
         <file name="guiactions/CreateListOfSavedGames.cpp" />

@@ -50,9 +50,9 @@ private:
         Label * labelScreenSize ;
         Label * labelFullscreen ;
         Label * labelDrawShadows ;
-        Label * labelDrawBackground ;
+        Label * labelDrawSceneryDecor ;
         Label * labelCenterCameraOn ;
-        Label * labelGraphicSet ;
+        Label * labelChooseGraphics ;
 
 };
 

@@ -161,7 +161,7 @@
     </properties>
   </text>
 
-  <text alias="draw-background">
+  <text alias="draw-decor">
     <properties>
       <string>háttér</string>
     </properties>

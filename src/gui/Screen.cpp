@@ -29,7 +29,7 @@ namespace gui
         Screen::backgroundPicture = Screen::loadPicture( "background.png" );
 
         if ( Screen::backgroundPicture != nilPointer )
-                Screen::backgroundPicture->setName( "background for slides of user interface" );
+                Screen::backgroundPicture->setName( "the background for user interface slides" );
 }
 
 
@@ -172,7 +172,7 @@ void Screen::refresh () const
                 }
         }
 
-        if ( iso::GameManager::getInstance().isSimpleGraphicSet() )
+        if ( iso::GameManager::getInstance().isSimpleGraphicsSet() )
         {
                 static const size_t howManyColors = 8 ;
                 static const std::string colors[ howManyColors ] =
@@ -367,7 +367,7 @@ Picture * Screen::loadPicture ( const std::string& nameOfPicture )
         std::cout << "Screen::loadPicture( \"" << nameOfPicture << "\" )" << std::endl ;
 #endif
         autouniqueptr< allegro::Pict > pict( allegro::Pict::fromPNGFile (
-                iso::pathToFile( GuiManager::getInstance().getPathToPicturesOfGui(), nameOfPicture )
+                iso::pathToFile( GuiManager::getInstance().getPathToThesePictures(), nameOfPicture )
         ) );
         return ( pict != nilPointer ) ? new Picture( *pict ) : nilPointer ;
 }
@@ -378,7 +378,7 @@ std::vector< allegro::Pict * > Screen::loadAnimation ( const char * nameOfGif )
         std::vector< allegro::Pict * > animation;
         std::vector< int > durations;
 
-        allegro::loadGIFAnimation( iso::pathToFile( GuiManager::getInstance().getPathToPicturesOfGui(), nameOfGif ), animation, durations );
+        allegro::loadGIFAnimation( iso::pathToFile( GuiManager::getInstance().getPathToThesePictures(), nameOfGif ), animation, durations );
 
         return animation;
 }

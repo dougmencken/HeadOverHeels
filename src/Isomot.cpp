@@ -347,7 +347,7 @@ Picture* Isomot::updateMe ()
 
         const Color& roomColor = Color::byName( activeRoom->getColor() );
 
-        if ( GameManager::getInstance().isSimpleGraphicSet() )
+        if ( GameManager::getInstance().isSimpleGraphicsSet() )
                 Color::multiplyWithColor( * activeRoom->getWhereToDraw(), roomColor );
 
         allegro::Pict::setWhereToDraw( view->getAllegroPict() );
@@ -357,7 +357,7 @@ Picture* Isomot::updateMe ()
                 - cameraDeltaX, - cameraDeltaY
         );
 
-        if ( ! GameManager::getInstance().hasBackgroundPicture () )
+        if ( ! GameManager::getInstance().drawSceneryDecor () )
         {
                 // show information about room and draw miniature of room
 
@@ -494,7 +494,7 @@ void Isomot::handleMagicKeys ()
 
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "b" ) )
         {
-                gameManager.toggleBackgroundPicture ();
+                gameManager.toggleSceneryDecor ();
                 allegro::releaseKey( "b" );
         }
 

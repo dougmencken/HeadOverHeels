@@ -55,7 +55,7 @@ void CreatePlanetsScreen::doAction ()
 
         // etiqueta fija “ El Imperio Blacktooth ”
         std::string colorOfLabel = "yellow" ;
-        if ( GameManager::getInstance().isSimpleGraphicSet () ) colorOfLabel = "red" ;
+        if ( GameManager::getInstance().isSimpleGraphicsSet () ) colorOfLabel = "red" ;
         Label* empire = new Label( languageManager->findLanguageStringForAlias( "blacktooth-empire" )->getText(), "big", colorOfLabel );
         empire->moveTo( ( screenWidth - empire->getWidth() ) >> 1, 2 );
         empire->setAction( new ContinueGame( gameInProgress ) );
@@ -66,7 +66,7 @@ void CreatePlanetsScreen::doAction ()
         PicturePtr chapeau( Screen::loadPicture( "crown.png" ) );
         PicturePtr chapeauTriste( new Picture( *chapeau ) );
 
-        if ( ! GameManager::getInstance().isSimpleGraphicSet () )
+        if ( ! GameManager::getInstance().isSimpleGraphicsSet () )
         {
                 chapeauTriste->toGrayscale();
         }

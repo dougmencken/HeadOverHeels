@@ -105,7 +105,7 @@ public:
 
         void redraw () ;
 
-        std::string getPathToPicturesOfGui () ;
+        std::string getPathToThesePictures () ;
 
         void suspend () {  this->active = false ;  }
 

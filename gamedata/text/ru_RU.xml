@@ -170,7 +170,7 @@
     </properties>
   </text>
 
-  <text alias="draw-background">
+  <text alias="draw-decor">
     <properties>
       <string>рисовать фон</string>
     </properties>

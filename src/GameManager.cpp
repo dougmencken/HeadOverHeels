@@ -32,13 +32,13 @@ GameManager::GameManager( )
         , numberOfCapture( 0 )
         , prefixOfCaptures( makeRandomString( 10 ) )
         , capturePath( iso::homePath() + "capture" )
-        , chosenGraphicSet( "gfx" )
+        , chosenGraphicsSet( "gfx" )
         , vidasInfinitas( false )
         , immunityToCollisions( false )
         , noFallingDown( false )
         , playTuneOfScenery( true )
         , castShadows( true )
-        , drawBackgroundPicture( true )
+        , drawSceneryBackgrounds( true )
         , recordCaptures( false )
         , recordingTimer( new Timer () )
         , isomot( )
@@ -91,7 +91,7 @@ PicturePtr GameManager::refreshPicture ( const std::string& nameOfPicture )
         IF_DEBUG( std::cout << "refreshing picture \"" << nameOfPicture << "\"" << std::endl )
 
         autouniqueptr< allegro::Pict > pict( allegro::Pict::fromPNGFile (
-                iso::pathToFile( gui::GuiManager::getInstance().getPathToPicturesOfGui(), nameOfPicture )
+                iso::pathToFile( gui::GuiManager::getInstance().getPathToThesePictures(), nameOfPicture )
         ) ) ;
 
         PicturePtr newPicture( new Picture( *pict ) );
@@ -377,7 +377,7 @@ void GameManager::refreshAmbianceImages ()
         ambiancePictures[ "gray head" ] = PicturePtr( new Picture( * ambiancePictures[ "head" ] ) );
         ambiancePictures[ "gray heels" ] = PicturePtr( new Picture( * ambiancePictures[ "heels" ] ) );
 
-        if ( ! isSimpleGraphicSet () )
+        if ( ! isSimpleGraphicsSet () )
         {
                 ambiancePictures[ "gray head" ]->toGrayscale();
                 ambiancePictures[ "gray heels" ]->toGrayscale();
@@ -396,7 +396,7 @@ void GameManager::refreshAmbianceImages ()
         ambiancePictures[ "gray horn" ] = PicturePtr( new Picture( * ambiancePictures[ "horn" ] ) );
         ambiancePictures[ "gray donuts" ] = PicturePtr( new Picture( * ambiancePictures[ "donuts" ] ) );
 
-        if ( ! isSimpleGraphicSet () )
+        if ( ! isSimpleGraphicsSet () )
         {
                 ambiancePictures[ "gray handbag" ]->toGrayscale();
                 ambiancePictures[ "gray horn" ]->toGrayscale();
@@ -421,7 +421,7 @@ void GameManager::refreshAmbianceImages ()
         ambiancePictures[ "gray gran velocidad" ] = PicturePtr( new Picture( * ambiancePictures[ "gran velocidad" ] ) );
         ambiancePictures[ "gray escudo" ] = PicturePtr( new Picture( * ambiancePictures[ "escudo" ] ) );
 
-        if ( ! isSimpleGraphicSet () )
+        if ( ! isSimpleGraphicsSet () )
         {
                 ambiancePictures[ "gray grandes saltos" ]->toGrayscale();
                 ambiancePictures[ "gray gran velocidad" ]->toGrayscale();
@@ -454,10 +454,11 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                 const unsigned int diffX = iso::ScreenWidth() - 640 ;
                 const unsigned int diffY = iso::ScreenHeight() - 480 ;
 
-                if ( ( diffX > 0 || diffY > 0 ) && ! isPresentGraphicSet() && ! isSimpleGraphicSet() )
-                        drawBackgroundPicture = false ;
+                if ( diffX > 0 || diffY > 0 ) // when the screen is larger than 640 x 480
+                        if ( ! isPresentGraphicsSet() && ! isSimpleGraphicsSet() )
+                                drawSceneryBackgrounds = false ; // off for other sets of graphics but present & simple
 
-                if ( drawBackgroundPicture ) // marco, varía en función del escenario
+                if ( drawSceneryBackgrounds )
                 {
                         if ( sceneryBackgrounds.find( scenery ) != sceneryBackgrounds.end () )
                                 if ( sceneryBackgrounds[ scenery ] != nilPointer )
@@ -492,7 +493,7 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                         rightTooAmbianceX, headHeelsAmbianceY );
 
                 std::string colorOfLabels = "white";
-                /* if ( isSimpleGraphicSet () ) colorOfLabels = "magenta"; */
+                /* if ( isSimpleGraphicsSet () ) colorOfLabels = "magenta"; */
 
                 // vidas de Head
                 gui::Label headLivesLabel( util::number2string( this->headLives ), "big", "white", -2 );
@@ -579,7 +580,7 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                 freedomLabel->draw ();
         }
 
-        if ( ! hasBackgroundPicture () )
+        if ( ! drawSceneryDecor () )
         {
                 // show position of camera
 
@@ -1052,7 +1053,7 @@ bool GameManager::readPreferences( const std::string& fileName )
                                 gui::GuiManager::getInstance().toggleFullScreenVideo ();
                 }
 
-                tinyxml2::XMLElement* shadows = video->FirstChildElement( "shadows" ) ;
+                tinyxml2::XMLElement* shadows = video->FirstChildElement( "drawshadows" ) ;
                 if ( shadows != nilPointer )
                 {
                         bool castShadows = ( std::string( shadows->FirstChild()->ToText()->Value() ) == "true" ) ? true : false ;
@@ -1061,13 +1062,13 @@ bool GameManager::readPreferences( const std::string& fileName )
                                 GameManager::getInstance().toggleCastShadows ();
                 }
 
-                tinyxml2::XMLElement* background = video->FirstChildElement( "background" ) ;
-                if ( background != nilPointer )
+                tinyxml2::XMLElement* sceneryDecor = video->FirstChildElement( "drawdecor" ) ;
+                if ( sceneryDecor != nilPointer )
                 {
-                        bool drawBackground = ( std::string( background->FirstChild()->ToText()->Value() ) == "true" ) ? true : false ;
+                        bool drawDecor = ( std::string( sceneryDecor->FirstChild()->ToText()->Value() ) == "true" ) ? true : false ;
 
-                        if ( GameManager::getInstance().hasBackgroundPicture () != drawBackground )
-                                GameManager::getInstance().toggleBackgroundPicture ();
+                        if ( GameManager::getInstance().drawSceneryDecor () != drawDecor )
+                                GameManager::getInstance().toggleSceneryDecor ();
                 }
 
                 tinyxml2::XMLElement* centerCameraOn = video->FirstChildElement( "centercamera" ) ;
@@ -1083,7 +1084,7 @@ bool GameManager::readPreferences( const std::string& fileName )
                 tinyxml2::XMLElement* graphics = video->FirstChildElement( "graphics" ) ;
                 if ( graphics != nilPointer )
                 {
-                        GameManager::getInstance().setChosenGraphicSet( graphics->FirstChild()->ToText()->Value() ) ;
+                        GameManager::getInstance().setChosenGraphicsSet( graphics->FirstChild()->ToText()->Value() ) ;
                 }
         }
 
@@ -1149,20 +1150,20 @@ bool GameManager::writePreferences( const std::string& fileName )
                 fullscreen->SetText( gui::GuiManager::getInstance().isAtFullScreen () ? "true" : "false" );
                 video->InsertEndChild( fullscreen );
 
-                tinyxml2::XMLElement * shadows = preferences.NewElement( "shadows" );
+                tinyxml2::XMLElement * shadows = preferences.NewElement( "drawshadows" );
                 shadows->SetText( GameManager::getInstance().getCastShadows () ? "true" : "false" );
                 video->InsertEndChild( shadows );
 
-                tinyxml2::XMLElement * background = preferences.NewElement( "background" );
-                background->SetText( GameManager::getInstance().hasBackgroundPicture () ? "true" : "false" );
-                video->InsertEndChild( background );
+                tinyxml2::XMLElement * drawdecor = preferences.NewElement( "drawdecor" );
+                drawdecor->SetText( GameManager::getInstance().drawSceneryDecor () ? "true" : "false" );
+                video->InsertEndChild( drawdecor );
 
                 tinyxml2::XMLElement * centerCameraOn = preferences.NewElement( "centercamera" );
                 centerCameraOn->SetText( GameManager::getInstance().getIsomot().doesCameraFollowCharacter () ? "character" : "room" );
                 video->InsertEndChild( centerCameraOn );
 
                 tinyxml2::XMLElement * graphics = preferences.NewElement( "graphics" );
-                graphics->SetText( GameManager::getInstance().getChosenGraphicSet().c_str () );
+                graphics->SetText( GameManager::getInstance().getChosenGraphicsSet().c_str () );
                 video->InsertEndChild( graphics );
 
                 root->InsertEndChild( video );

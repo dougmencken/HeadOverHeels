@@ -1,6 +1,6 @@
 
 #include "CreateVideoMenu.hpp"
-#include "CreateMenuOfGraphicSets.hpp"
+#include "CreateMenuOfGraphicsSets.hpp"
 #include "GuiManager.hpp"
 #include "GameManager.hpp"
 #include "LanguageText.hpp"
@@ -11,7 +11,7 @@
 #include "CreateMainMenu.hpp"
 
 using gui::CreateVideoMenu ;
-using gui::CreateMenuOfGraphicSets ;
+using gui::CreateMenuOfGraphicsSets ;
 
 
 CreateVideoMenu::CreateVideoMenu( ) :
@@ -19,8 +19,8 @@ CreateVideoMenu::CreateVideoMenu( ) :
         listOfOptions ( nilPointer ),
         labelScreenSize ( nilPointer ),
         labelFullscreen ( nilPointer ),
-        labelDrawBackground ( nilPointer ),
-        labelGraphicSet ( nilPointer )
+        labelDrawSceneryDecor ( nilPointer ),
+        labelChooseGraphics ( nilPointer )
 {
 
 }
@@ -37,27 +37,27 @@ void CreateVideoMenu::doAction ()
                 LanguageText* textScreenSize = languageManager->findLanguageStringForAlias( "screen-size" );
                 LanguageText* textFullscreen = languageManager->findLanguageStringForAlias( "full-screen" );
                 LanguageText* textDrawShadows = languageManager->findLanguageStringForAlias( "draw-shadows" );
-                LanguageText* textDrawBackground = languageManager->findLanguageStringForAlias( "draw-background" );
+                LanguageText* textDrawSceneryDecor = languageManager->findLanguageStringForAlias( "draw-decor" );
                 LanguageText* textCenterCameraOn = languageManager->findLanguageStringForAlias( "center-camera-on" );
 
                 this->labelScreenSize = new Label( textScreenSize->getText() );
                 this->labelFullscreen = new Label( textFullscreen->getText() );
                 this->labelDrawShadows = new Label( textDrawShadows->getText() );
-                this->labelDrawBackground = new Label( textDrawBackground->getText() );
+                this->labelDrawSceneryDecor = new Label( textDrawSceneryDecor->getText() );
                 this->labelCenterCameraOn = new Label( textCenterCameraOn->getText() );
 
-                LanguageText* textGraphicSet = languageManager->findLanguageStringForAlias( "graphic-set" );
-                this->labelGraphicSet = new Label( textGraphicSet->getText(), "", "yellow" );
-                labelGraphicSet->setAction( new CreateMenuOfGraphicSets( this ) );
+                LanguageText* textChooseGraphics = languageManager->findLanguageStringForAlias( "graphic-set" );
+                this->labelChooseGraphics = new Label( textChooseGraphics->getText(), "", "yellow" );
+                labelChooseGraphics->setAction( new CreateMenuOfGraphicsSets( this ) );
 
                 this->listOfOptions = new MenuWithValues( ' ', 1 );
 
                 listOfOptions->addOption( labelScreenSize );
                 listOfOptions->addOption( labelFullscreen );
                 listOfOptions->addOption( labelDrawShadows );
-                listOfOptions->addOption( labelDrawBackground );
+                listOfOptions->addOption( labelDrawSceneryDecor );
                 listOfOptions->addOption( labelCenterCameraOn );
-                listOfOptions->addOption( labelGraphicSet );
+                listOfOptions->addOption( labelChooseGraphics );
 
                 updateLabels ();
 
@@ -110,9 +110,9 @@ void CreateVideoMenu::doAction ()
                                                 iso::GameManager::getInstance().toggleCastShadows ();
                                                 doneWithKey = true;
                                         }
-                                        else if ( listOfOptions->getActiveOption () == labelDrawBackground )
+                                        else if ( listOfOptions->getActiveOption () == labelDrawSceneryDecor )
                                         {
-                                                iso::GameManager::getInstance().toggleBackgroundPicture ();
+                                                iso::GameManager::getInstance().toggleSceneryDecor ();
                                                 doneWithKey = true;
                                         }
                                         else if ( listOfOptions->getActiveOption () == labelCenterCameraOn )
@@ -147,7 +147,7 @@ void CreateVideoMenu::updateLabels ()
         std::string yeah = languageManager->findLanguageStringForAlias( "yep" )-> getText ();
         std::string nope = languageManager->findLanguageStringForAlias( "nope" )->getText ();
 
-        listOfOptions->setValueOf( labelDrawBackground, iso::GameManager::getInstance().hasBackgroundPicture () ? yeah : nope );
+        listOfOptions->setValueOf( labelDrawSceneryDecor, iso::GameManager::getInstance().drawSceneryDecor () ? yeah : nope );
         listOfOptions->setValueOf( labelDrawShadows, iso::GameManager::getInstance().getCastShadows () ? yeah : nope );
         listOfOptions->setValueOf( labelFullscreen, gui::GuiManager::getInstance().isAtFullScreen () ? yeah : nope );
 
@@ -156,7 +156,7 @@ void CreateVideoMenu::updateLabels ()
 
         listOfOptions->setValueOf( labelCenterCameraOn, iso::GameManager::getInstance().getIsomot().doesCameraFollowCharacter () ? character : room );
 
-        // labelGraphicSet has no value but action
+        // labelChooseGraphics has no value but action
 
         labelScreenSize->changeColor( "cyan" );
         listOfOptions->setValueOf( labelScreenSize, util::number2string( iso::ScreenWidth() ) + " x " + util::number2string( iso::ScreenHeight() ) );

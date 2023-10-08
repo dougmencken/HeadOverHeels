@@ -253,13 +253,13 @@ public:
 
         void eatFish ( const PlayerItem & character, Room * room, int x, int y, int z ) ;
 
-        std::string getChosenGraphicSet () const {  return chosenGraphicSet ;  }
+        std::string getChosenGraphicsSet () const {  return chosenGraphicsSet ;  }
 
-        void setChosenGraphicSet ( const std::string & newSet ) {  chosenGraphicSet = newSet ;  }
+        void setChosenGraphicsSet ( const std::string & newSet ) {  chosenGraphicsSet = newSet ;  }
 
-        bool isPresentGraphicSet () const {  return ( chosenGraphicSet == "gfx" ) ;  }
+        bool isPresentGraphicsSet () const {  return ( chosenGraphicsSet == "gfx" ) ;  }
 
-        bool isSimpleGraphicSet () const {  return ( chosenGraphicSet == "gfx.simple" ) ;  }
+        bool isSimpleGraphicsSet () const {  return ( chosenGraphicsSet == "gfx.simple" ) ;  }
 
 private:
 
@@ -294,9 +294,9 @@ public:
 
         void toggleCastShadows () {  castShadows = ! castShadows ;  }
 
-        bool hasBackgroundPicture () const {  return drawBackgroundPicture ;  }
+        bool drawSceneryDecor () const {  return drawSceneryBackgrounds ;  }
 
-        void toggleBackgroundPicture () {  drawBackgroundPicture = ! drawBackgroundPicture ;  }
+        void toggleSceneryDecor () {  drawSceneryBackgrounds = ! drawSceneryBackgrounds ;  }
 
         bool recordingCaptures () const {  return recordCaptures ;  }
 
@@ -327,7 +327,7 @@ private:
 
         std::string capturePath ;
 
-        std::string chosenGraphicSet ;
+        std::string chosenGraphicsSet ;
 
         bool vidasInfinitas ;
 
@@ -339,7 +339,7 @@ private:
 
         bool castShadows ;
 
-        bool drawBackgroundPicture ;
+        bool drawSceneryBackgrounds ;
 
         bool recordCaptures ;
 

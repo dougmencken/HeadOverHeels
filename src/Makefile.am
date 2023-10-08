@@ -206,8 +206,8 @@ headoverheels_SOURCES = main.cpp \
 			guiactions/CreateAudioMenu.hpp \
 			guiactions/CreateVideoMenu.hpp \
 			guiactions/CreateVideoMenu.cpp \
-			guiactions/CreateMenuOfGraphicSets.hpp \
-			guiactions/CreateMenuOfGraphicSets.cpp \
+			guiactions/CreateMenuOfGraphicsSets.hpp \
+			guiactions/CreateMenuOfGraphicsSets.cpp \
 			guiactions/CreateCongratulationsScreen.cpp \
 			guiactions/CreateCongratulationsScreen.hpp \
 			guiactions/CreateEndScreen.cpp \

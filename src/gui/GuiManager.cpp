@@ -208,9 +208,9 @@ void GuiManager::redraw()
         }
 }
 
-std::string GuiManager::getPathToPicturesOfGui ()
+std::string GuiManager::getPathToThesePictures ()
 {
-        return iso::sharePath() + iso::GameManager::getInstance().getChosenGraphicSet() ;
+        return iso::sharePath() + iso::GameManager::getInstance().getChosenGraphicsSet() ;
 }
 
 bool GuiManager::isAtFullScreen ()
