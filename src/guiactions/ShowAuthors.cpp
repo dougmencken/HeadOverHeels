@@ -2,7 +2,6 @@
 #include "ShowAuthors.hpp"
 #include "GuiManager.hpp"
 #include "LanguageText.hpp"
-#include "LanguageManager.hpp"
 #include "SoundManager.hpp"
 
 #include "Font.hpp"
@@ -12,55 +11,103 @@
 #include "TextField.hpp"
 #include "CreateMainMenu.hpp"
 
-using gui::ShowAuthors;
-using gui::Label;
-using gui::PictureWidget;
-using gui::TextField;
-using iso::SoundManager;
+#include <tinyxml2.h>
+
+using gui::ShowAuthors ;
 
 
 ShowAuthors::ShowAuthors( )
         : Action( )
+        , creditsText( nilPointer )
         , linesOfCredits( nilPointer )
         , initialY( 0 )
         , loadingScreen( )
 {
+        std::string pathToText = iso::sharePath() + "text" + util::pathSeparator() ;
+        this->readCreditsText( pathToText + "credits.xml" );
 }
 
 ShowAuthors::~ShowAuthors( )
 {
+        delete creditsText ;
         delete linesOfCredits ;
+}
+
+void ShowAuthors::readCreditsText( const std::string & fileName )
+{
+        std::cout << "reading the credits from \"" << fileName << "\"" << std::endl ;
+
+        tinyxml2::XMLDocument creditsXml ;
+        tinyxml2::XMLError result = creditsXml.LoadFile( fileName.c_str () );
+        if ( result != tinyxml2::XML_SUCCESS ) {
+                std::cerr << "can't read XML file \"" << fileName << "\"" << std::endl ;
+
+                this->creditsText = new LanguageText( "credits" ) ;
+                this->creditsText->addLine( "and where is my credits.xml ?", "big", "white" );
+                return ;
+        }
+
+        tinyxml2::XMLElement* root = creditsXml.FirstChildElement( "credits" );
+
+        for ( tinyxml2::XMLElement* text = root->FirstChildElement( "text" ) ;
+                        text != nilPointer ;
+                                text = text->NextSiblingElement( "text" ) )
+        {
+                std::string alias = text->Attribute( "alias" );
+                this->creditsText = new LanguageText( alias );
+
+                for ( tinyxml2::XMLElement* properties = text->FirstChildElement( "properties" ) ;
+                                properties != nilPointer ;
+                                        properties = properties->NextSiblingElement( "properties" ) )
+                {
+                        const char * font = properties->Attribute( "font" );
+                        const char * color = properties->Attribute( "color" );
+
+                        for ( tinyxml2::XMLElement* string = properties->FirstChildElement( "string" ) ;
+                                        string != nilPointer ;
+                                                string = string->NextSiblingElement( "string" ) )
+                        {
+                                if ( string->FirstChild() != nilPointer )
+                                {
+                                        this->creditsText->addLine( string->FirstChild()->ToText()->Value(),
+                                                                        font != nilPointer ? font : "",
+                                                                        color != nilPointer ? color : "" );
+                                } else
+                                {
+                                        this->creditsText->addLine( "" );
+                                }
+                        }
+                }
+        }
 }
 
 void ShowAuthors::doAction ()
 {
-        SoundManager::getInstance().playOgg( "music/CreditsTheme.ogg", /* loop */ true );
+        iso::SoundManager::getInstance().playOgg( "music/CreditsTheme.ogg", /* loop */ true );
 
         Screen& screen = * GuiManager::getInstance().findOrCreateScreenForAction( this );
         if ( screen.countWidgets() == 0 )
         {
-                LanguageManager* languageManager = GuiManager::getInstance().getLanguageManager();
-                LanguageText* langString = languageManager->findLanguageStringForAlias( "credits-text" );
+                if ( this->linesOfCredits != nilPointer ) delete this->linesOfCredits ;
+                this->linesOfCredits = new TextField( iso::ScreenWidth(), "center" );
 
                 this->initialY = screen.getImageOfScreen().getHeight() ;
-                this->linesOfCredits = new TextField( iso::ScreenWidth(), "center" );
                 this->linesOfCredits->moveTo( 0, initialY );
 
-                size_t howManyLines = langString->getLinesCount() ;
+                size_t howManyLines = this->creditsText->getLinesCount() ;
                 std::cout << "credits-text has " << howManyLines << " lines" << std::endl ;
 
                 for ( size_t i = 0; i < howManyLines; i++ )
                 {
-                        LanguageLine* line = langString->getLine( i );
+                        LanguageLine* line = this->creditsText->getLine( i );
                         linesOfCredits->addLine( line->text, line->font, line->color );
                 }
 
-                screen.addWidget( linesOfCredits );
+                screen.addWidget( this->linesOfCredits );
         }
-        else
-        {
-                // restore initial position
-                linesOfCredits->moveTo( linesOfCredits->getX(), initialY );
+        else {
+                // restore the initial position
+                this->linesOfCredits->moveTo( this->linesOfCredits->getX(), initialY );
         }
 
         screen.setEscapeAction( new CreateMainMenu() );
@@ -70,7 +117,7 @@ void ShowAuthors::doAction ()
         const unsigned int widthOfSlide = screen.getImageOfScreen().getWidth() ;
         const unsigned int heightOfSlide = screen.getImageOfScreen().getHeight() ;
 
-        const unsigned int heightOfCredits = ( ( linesOfCredits->getHeightOfField() + 1 ) >> 1 ) << 1;
+        const unsigned int heightOfCredits = ( ( this->linesOfCredits->getHeightOfField() + 1 ) >> 1 ) << 1;
         const unsigned int verticalSpace = ( heightOfSlide * 3 ) >> 2;
         const int whenToReloop = - ( heightOfCredits + verticalSpace ) ;
 

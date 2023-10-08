@@ -18,6 +18,8 @@
 namespace gui
 {
 
+class LanguageText ;
+
 class TextField ;
 
 
@@ -38,9 +40,13 @@ public:
 
 protected:
 
+        void readCreditsText( const std::string & fileName ) ;
+
         virtual void doAction () ;
 
 private:
+
+        LanguageText * creditsText ;
 
         TextField * linesOfCredits ;
 
