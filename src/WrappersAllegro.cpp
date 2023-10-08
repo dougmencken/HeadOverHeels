@@ -1743,6 +1743,7 @@ void textOut( const std::string& text, int x, int y, AllegroColor color )
 #endif
 }
 
+#if defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
 std::string allegroAudioDriverCodeToName( int code )
 {
         if ( code == DIGI_AUTODETECT ) return "DIGI_AUTODETECT" ;
@@ -1757,6 +1758,7 @@ std::string allegroAudioDriverCodeToName( int code )
 
         return "unknown" ;
 }
+#endif
 
 void initAudio()
 {
