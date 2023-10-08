@@ -51,6 +51,7 @@ private:
         Label * labelFullscreen ;
         Label * labelDrawShadows ;
         Label * labelDrawSceneryDecor ;
+        Label * labelDrawRoomMiniatures ;
         Label * labelCenterCameraOn ;
         Label * labelChooseGraphics ;
 

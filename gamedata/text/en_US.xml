@@ -176,6 +176,12 @@
     </properties>
   </text>
 
+  <text alias="draw-miniatures">
+    <properties>
+      <string>Draw Room Miniatures</string>
+    </properties>
+  </text>
+
   <text alias="center-camera-on">
     <properties>
       <string>Center Camera On</string>
