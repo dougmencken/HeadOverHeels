@@ -10,6 +10,8 @@
 #include "Label.hpp"
 #include "CreateMainMenu.hpp"
 
+#include "sleep.hpp"
+
 #include <string>
 #include <sstream>
 
@@ -172,6 +174,6 @@ void CreateAudioMenu::doAction ()
 
                 // no te comas la CPU
                 // do not eat the CPU
-                milliSleep( 25 );
+                somn::milliSleep( 25 );
         }
 }

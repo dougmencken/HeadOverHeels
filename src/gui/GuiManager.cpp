@@ -1,6 +1,5 @@
 
 #include "GuiManager.hpp"
-#include "Ism.hpp"
 #include "LanguageManager.hpp"
 #include "InputManager.hpp"
 #include "SoundManager.hpp"
@@ -12,6 +11,9 @@
 #include "CreateLanguageMenu.hpp"
 
 #include "WrappersAllegro.hpp"
+
+#include "ospaths.hpp"
+#include "sleep.hpp"
 
 #include <algorithm>
 
@@ -66,7 +68,7 @@ GuiManager::~GuiManager( )
 {
         freeScreens () ;
 
-        std::for_each( this->fonts.begin (), this->fonts.end (), iso::DeleteIt() );
+        std::for_each( this->fonts.begin (), this->fonts.end (), DeleteIt() );
         this->fonts.clear();
 
         delete this->languageManager;
@@ -99,7 +101,7 @@ void GuiManager::begin ()
                         activeScreen->handleKey( allegro::nextKey() );
                 }
 
-                milliSleep( 30 );
+                somn::milliSleep( 30 );
         }
 }
 
@@ -210,7 +212,7 @@ void GuiManager::redraw()
 
 std::string GuiManager::getPathToThesePictures ()
 {
-        return iso::sharePath() + iso::GameManager::getInstance().getChosenGraphicsSet() ;
+        return ospaths::sharePath() + iso::GameManager::getInstance().getChosenGraphicsSet() ;
 }
 
 bool GuiManager::isAtFullScreen ()
@@ -232,7 +234,7 @@ void GuiManager::toggleFullScreenVideo ()
                 this->atFullScreen = ! this->atFullScreen ;
 
                 fprintf( stdout, "video is now %s\n", ( this->atFullScreen ? "at full screen" : "in window" ) );
-                milliSleep( 80 );
+                somn::milliSleep( 80 );
                 redraw ();
         }
         else
@@ -256,7 +258,7 @@ void GuiManager::assignLanguage( const std::string& language )
         }
 
         fprintf( stdout, "language \"%s\"\n", language.c_str () );
-        std::string pathToText = iso::sharePath() + "text" + util::pathSeparator() ;
+        std::string pathToText = ospaths::sharePath () + "text" + ospaths::pathSeparator () ;
         this->languageManager = new LanguageManager( pathToText + language + ".xml", pathToText + "en_US.xml" );
 }
 

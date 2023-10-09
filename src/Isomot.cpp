@@ -13,6 +13,8 @@
 #include "PlayerItem.hpp"
 #include "Behavior.hpp"
 
+#include "screen.hpp"
+
 
 namespace iso
 {
@@ -57,7 +59,7 @@ void Isomot::prepare ()
 
         // image where the isometric view is drawn
         if ( view == nilPointer )
-                view = new Picture( ScreenWidth(), ScreenHeight() );
+                view = new Picture( variables::getScreenWidth(), variables::getScreenHeight() );
         else
                 view->fillWithColor( Color::byName( "orange" ) );
 

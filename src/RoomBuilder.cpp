@@ -9,6 +9,8 @@
 #include "GameManager.hpp"
 #include "PoolOfPictures.hpp"
 
+#include "ospaths.hpp"
+
 #define MAKE_PARTIAL_FLOOR_TILES        0
 
 
@@ -74,7 +76,7 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
         if ( kindOfFloor == "none" ) kindOfFloor = "absent" ;
 
         std::string roomName = roomFile;
-        const char* fromLastSlash = std::strrchr( roomFile.c_str (), util::pathSeparator()[ 0 ] );
+        const char* fromLastSlash = std::strrchr( roomFile.c_str (), ospaths::pathSeparator()[ 0 ] );
         if ( fromLastSlash != nilPointer )
                 roomName = std::string( fromLastSlash + 1 );
 
@@ -229,7 +231,7 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                 std::string gfxSet = iso::GameManager::getInstance().getChosenGraphicsSet() ;
 
                                 autouniqueptr< allegro::Pict > picture( allegro::Pict::fromPNGFile (
-                                        iso::pathToFile( iso::sharePath() + gfxSet, fileWithPicture )
+                                        ospaths::pathToFile( ospaths::sharePath() + gfxSet, fileWithPicture )
                                 ) );
 
                                 if ( picture->isNotNil() )
@@ -679,7 +681,7 @@ Wall* RoomBuilder::buildWall( tinyxml2::XMLElement* wall, const std::string& gfx
         std::string pictureString = picture->FirstChild()->ToText()->Value();
 
         autouniqueptr< allegro::Pict > image( allegro::Pict::fromPNGFile (
-                iso::pathToFile( iso::sharePath() + gfxPrefix, pictureString )
+                ospaths::pathToFile( ospaths::sharePath() + gfxPrefix, pictureString )
         ) );
 
         if ( image->isNotNil() )
@@ -715,7 +717,7 @@ GridItemPtr RoomBuilder::buildGridItem( tinyxml2::XMLElement* item, Room* room )
                 std::string theWay = orientation->FirstChild()->ToText()->Value();
 
                 GridItemPtr gridItem( new GridItem( itemDescription,
-                                                    itemX, itemY, itemZ > Top ? itemZ * LayerHeight : Top ,
+                                                    itemX, itemY, itemZ > Isomot::Top ? itemZ * Isomot::LayerHeight : Isomot::Top ,
                                                     theWay ) );
 
                 std::string behaviorOfItem = "still";
@@ -749,7 +751,7 @@ FreeItemPtr RoomBuilder::buildFreeItem( tinyxml2::XMLElement* item, Room* room )
                 // in free coordinates
                 int fx = itemX * room->getSizeOfOneTile() + ( ( room->getSizeOfOneTile() - itemDescription->getWidthX() ) >> 1 );
                 int fy = ( itemY + 1 ) * room->getSizeOfOneTile() - ( ( room->getSizeOfOneTile() - itemDescription->getWidthY() ) >> 1 ) - 1;
-                int fz = ( itemZ != Top ) ? itemZ * LayerHeight : Top;
+                int fz = ( itemZ != Isomot::Top ) ? itemZ * Isomot::LayerHeight : Isomot::Top ;
 
                 // don’t place an item if it is a bonus and has already been taken
                 if ( BonusManager::getInstance().isAbsent( room->getNameOfRoomDescriptionFile(), itemDescription->getLabel() ) )
@@ -834,7 +836,7 @@ Door* RoomBuilder::buildDoor( tinyxml2::XMLElement* item )
 
         return
                 new Door( GameManager::getInstance().getIsomot().getItemDescriptions(), label,
-                                itemX, itemY, ( itemZ > Top ? itemZ * LayerHeight : Top ),
+                                itemX, itemY, ( itemZ > Isomot::Top ? itemZ * Isomot::LayerHeight : Isomot::Top ),
                                         orientation->FirstChild()->ToText()->Value() );
 }
 

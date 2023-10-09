@@ -21,7 +21,6 @@
 #include <pthread.h>
 #include <sys/time.h>
 
-#include "Ism.hpp"
 #include "Room.hpp"
 
 

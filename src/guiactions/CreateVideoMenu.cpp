@@ -10,6 +10,9 @@
 #include "Label.hpp"
 #include "CreateMainMenu.hpp"
 
+#include "sleep.hpp"
+#include "screen.hpp"
+
 using gui::CreateVideoMenu ;
 using gui::CreateMenuOfGraphicsSets ;
 
@@ -144,7 +147,7 @@ void CreateVideoMenu::doAction ()
 
                         // no te comas la CPU
                         // do not eat the CPU
-                        milliSleep( 25 );
+                        somn::milliSleep( 25 );
                 }
         }
 }
@@ -169,7 +172,8 @@ void CreateVideoMenu::updateLabels ()
         // labelChooseGraphics has no value but action
 
         labelScreenSize->changeColor( "cyan" );
-        listOfOptions->setValueOf( labelScreenSize, util::number2string( iso::ScreenWidth() ) + " x " + util::number2string( iso::ScreenHeight() ) );
-
+        listOfOptions->setValueOf( labelScreenSize, util::number2string( variables::getScreenWidth() )
+                                                                + " x "
+                                                  + util::number2string( variables::getScreenHeight() ) );
         listOfOptions->redraw ();
 }

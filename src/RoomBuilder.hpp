@@ -16,7 +16,6 @@
 
 #include <tinyxml2.h>
 
-#include "Ism.hpp"
 #include "Way.hpp"
 #include "FloorTile.hpp"
 #include "Wall.hpp"

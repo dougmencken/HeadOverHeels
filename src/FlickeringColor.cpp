@@ -1,6 +1,7 @@
 
 #include "FlickeringColor.hpp"
-#include "Ism.hpp"
+
+#include "sleep.hpp" // for milliSleep
 
 
 const FlickeringColor * FlickeringColor::whiteAndTransparent = new FlickeringColor( Color::whiteColor(), Color() ) ;
@@ -32,7 +33,7 @@ std::string FlickeringColor::toString() const
 
                 // no te comas la CPU
                 // do not eat the CPU
-                milliSleep( thiz->period * 0.99 * 1000 );
+                somn::milliSleep( thiz->period * 0.99 * 1000 );
         }
 
         pthread_exit( nilPointer );

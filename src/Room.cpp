@@ -382,7 +382,7 @@ bool Room::saveAsXML( const std::string& file )
                                         item->SetAttribute( "x", theItem->getCellX() );
                                         item->SetAttribute( "y", theItem->getCellY() );
                                         int z = theItem->getZ();
-                                        z = ( z > Top ) ? z / LayerHeight : Top ;
+                                        z = ( z > Isomot::Top ) ? ( z / Isomot::LayerHeight ) : Isomot::Top ;
                                         item->SetAttribute( "z", z );
 
                                         tinyxml2::XMLElement* itemLabel = roomXml.NewElement( "label" );
@@ -480,7 +480,7 @@ bool Room::saveAsXML( const std::string& file )
                                 item->SetAttribute( "x", theDoor->getCellX() );
                                 item->SetAttribute( "y", theDoor->getCellY() );
                                 int z = theDoor->getZ();
-                                z = ( z > Top ) ? z / LayerHeight : Top ;
+                                z = ( z > Isomot::Top ) ? ( z / Isomot::LayerHeight ) : Isomot::Top ;
                                 item->SetAttribute( "z", z );
 
                                 tinyxml2::XMLElement* itemLabel = roomXml.NewElement( "label" );
@@ -701,7 +701,7 @@ void Room::addGridItem( const GridItemPtr& gridItem )
 
         addGridItemToContainer( gridItem );
 
-        if ( gridItem->getZ() != Top )
+        if ( gridItem->getZ() != Isomot::Top )
         {
                 // when item goes lower than top, look for collisions
                 mediator->lookForCollisionsOf( gridItem->getUniqueName() );
@@ -745,7 +745,7 @@ void Room::addFreeItem( const FreeItemPtr& freeItem )
 {
         if ( freeItem == nilPointer ) return;
 
-        if ( freeItem->getX() < 0 || freeItem->getY() < 1 || freeItem->getZ() < Top )
+        if ( freeItem->getX() < 0 || freeItem->getY() < 1 || freeItem->getZ() < Isomot::Top )
         {
                 std::cerr << "coordinates for " << freeItem->whichKindOfItem() << " are out of limits" << std::endl ;
                 dumpItemInsideThisRoom( *freeItem );
@@ -784,7 +784,7 @@ void Room::addFreeItem( const FreeItemPtr& freeItem )
         addFreeItemToContainer( freeItem );
 
         // for item which is placed at some height, look for collisions
-        if ( freeItem->getZ() > Top )
+        if ( freeItem->getZ() > Isomot::Top )
         {
                 mediator->lookForCollisionsOf( freeItem->getUniqueName() );
         }
@@ -865,7 +865,7 @@ bool Room::addPlayerToRoom( const PlayerItemPtr& playerItem, bool playerEntersRo
                 }
         }
 
-        if ( playerItem->getX() < 0 || playerItem->getY() < 1 || playerItem->getZ() < Top )
+        if ( playerItem->getX() < 0 || playerItem->getY() < 1 || playerItem->getZ() < Isomot::Top )
         {
                 std::cerr << "coordinates for " << playerItem->whichKindOfItem() << " are out of limits" << std::endl ;
                 dumpItemInsideThisRoom( *playerItem );
@@ -907,12 +907,12 @@ bool Room::addPlayerToRoom( const PlayerItemPtr& playerItem, bool playerEntersRo
         addFreeItemToContainer( playerItem );
 
         // for item which is placed at some height, look for collisions
-        if ( playerItem->getZ() > Top )
+        if ( playerItem->getZ() > Isomot::Top )
         {
                 mediator->lookForCollisionsOf( playerItem->getUniqueName() );
                 while ( ! mediator->isStackOfCollisionsEmpty () )
                 {
-                        playerItem->setZ( playerItem->getZ() + LayerHeight );
+                        playerItem->setZ( playerItem->getZ() + Isomot::LayerHeight );
                         mediator->clearStackOfCollisions ();
                         mediator->lookForCollisionsOf( playerItem->getUniqueName() );
                 }
@@ -1296,7 +1296,7 @@ unsigned int Room::getHeightOfRoomImage () const
 {
         unsigned int roomH = /* height of plane */ ( getTilesX () + getTilesY () ) * tileSize ;
 
-        roomH += /* room’s height in 3D */ ( MaxLayers + 2 ) * LayerHeight ;
+        roomH += /* room’s height in 3D */ ( Isomot::MaxLayers + 2 ) * Isomot::LayerHeight ;
         roomH += /* height of floor */ 8 ;
 
         if ( ! hasDoorAt( "south" ) && ! hasDoorAt( "southwest" ) && ! hasDoorAt( "southeast" ) &&
@@ -1461,7 +1461,7 @@ void Room::calculateBounds()
 
 void Room::calculateCoordinatesOfOrigin( bool hasNorthDoor, bool hasEastDoor, bool hasSouthDoor, bool hasWestDoor )
 {
-        coordinatesOfOrigin.second = ( MaxLayers + 2 ) * LayerHeight ;
+        coordinatesOfOrigin.second = ( Isomot::MaxLayers + 2 ) * Isomot::LayerHeight ;
         coordinatesOfOrigin.first = getTilesY () * ( tileSize << 1 ) ;
 
         if ( ! hasNorthDoor && ! hasWestDoor && hasFloor() ) coordinatesOfOrigin.first += tileSize ;
@@ -1657,7 +1657,7 @@ bool Room::calculateEntryCoordinates( const Way& wayOfEntry, int widthX, int wid
                         *x += ( *x < ( ( bounds[ "south" ] - bounds[ "north" ] ) >> 1 ) ? -differentSizeDeltaX : differentSizeDeltaX );
                         *y += bounds[ "east" ] - eastBound + ( ( bounds[ "west" ] - bounds[ "east" ] - westBound + eastBound ) >> 1 );
                         *y += ( *y < ( ( bounds[ "west" ] - bounds[ "east" ] ) >> 1 ) ? -differentSizeDeltaY : differentSizeDeltaY );
-                        *z = MaxLayers * LayerHeight;
+                        *z = Isomot::MaxLayers * Isomot::LayerHeight ;
                         result = true;
                         break;
 
@@ -1666,7 +1666,7 @@ bool Room::calculateEntryCoordinates( const Way& wayOfEntry, int widthX, int wid
                         *x += ( *x < ( ( bounds[ "south" ] - bounds[ "north" ] ) >> 1 ) ? -differentSizeDeltaX : differentSizeDeltaX );
                         *y += bounds[ "east" ] - eastBound + ( ( bounds[ "west" ] - bounds[ "east" ] - westBound + eastBound) >> 1 );
                         *y += ( *y < ( ( bounds[ "west" ] - bounds[ "east" ]) >> 1 ) ? -differentSizeDeltaY : differentSizeDeltaY );
-                        *z = LayerHeight;
+                        *z = Isomot::LayerHeight ;
                         result = true;
                         break;
 

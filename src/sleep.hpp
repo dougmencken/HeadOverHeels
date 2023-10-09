@@ -16,6 +16,8 @@
 #endif
 
 
+namespace somn {
+
 /**
  * Pause subprocess for a given period of time in milliseconds
  */
@@ -36,5 +38,6 @@ void nanoSleep ( unsigned long nanoseconds );
 
 #endif
 
+}
 
 #endif

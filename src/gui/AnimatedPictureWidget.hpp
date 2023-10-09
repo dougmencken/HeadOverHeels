@@ -11,10 +11,10 @@
 #ifndef AnimatedPictureWidget_hpp_
 #define AnimatedPictureWidget_hpp_
 
-#include "Ism.hpp"
-
 #include <string>
 #include <vector>
+
+#include "util.hpp"
 
 #include "Timer.hpp"
 #include "Widget.hpp"

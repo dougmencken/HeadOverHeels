@@ -12,7 +12,7 @@
 #define GameSaverAndLoader_hpp_
 
 #include <string>
-#include "Ism.hpp"
+
 #include "Way.hpp"
 
 

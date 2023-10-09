@@ -1,6 +1,5 @@
 
 #include "CreateLanguageMenu.hpp"
-#include "Ism.hpp"
 #include "GuiManager.hpp"
 #include "LanguageManager.hpp"
 #include "Font.hpp"
@@ -9,6 +8,9 @@
 #include "Label.hpp"
 #include "SelectLanguage.hpp"
 #include "CreateMainMenu.hpp"
+
+#include "ospaths.hpp"
+#include "screen.hpp"
 
 #include <tinyxml2.h>
 
@@ -21,7 +23,7 @@ using gui::SelectLanguage;
 CreateLanguageMenu::CreateLanguageMenu( ) : Action( )
 {
         // read list of languages available for this game
-        parse( iso::sharePath() + "text" + util::pathSeparator() + "language.xml" );
+        parse( ospaths::sharePath() + "text" + ospaths::pathSeparator() + "language.xml" );
 }
 
 CreateLanguageMenu::~CreateLanguageMenu( )
@@ -45,7 +47,7 @@ void CreateLanguageMenu::doAction ()
 
         screen.setEscapeAction( new gui::CreateMainMenu() );
 
-        const unsigned int screenWidth = iso::ScreenWidth();
+        const unsigned int screenWidth = variables::getScreenWidth();
         const unsigned int space = ( screenWidth / 20 ) - 10;
 
         Label* Head = new Label( "Head", "big", "yellow" );

@@ -7,6 +7,8 @@
 #include "Label.hpp"
 #include "Font.hpp"
 
+#include "screen.hpp"
+
 
 namespace gui
 {
@@ -50,8 +52,8 @@ void MenuWithTwoColumns::draw ()
 
         // update position of the whole menu to draw it centered
         int previousX = getX (); int previousY = getY ();
-        setX( previousX + ( ( iso::ScreenWidth() - previousX ) >> 1 ) - ( getWidthOfMenu () >> 1 ) );
-        setY( previousY + ( ( iso::ScreenHeight() - previousY ) >> 1 ) - ( getHeightOfMenu() >> 1 ) );
+        setX( previousX + ( ( variables::getScreenWidth() - previousX ) >> 1 ) - ( getWidthOfMenu () >> 1 ) );
+        setY( previousY + ( ( variables::getScreenHeight() - previousY ) >> 1 ) - ( getHeightOfMenu() >> 1 ) );
 
         int dx( widthOfOption );
         int dy( 0 );

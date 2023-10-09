@@ -1,6 +1,5 @@
 
 #include "MapManager.hpp"
-#include "Ism.hpp"
 #include "Isomot.hpp"
 #include "RoomBuilder.hpp"
 #include "PlayerItem.hpp"
@@ -10,6 +9,9 @@
 #include "Camera.hpp"
 #include "SoundManager.hpp"
 #include "GameManager.hpp"
+
+#include "ospaths.hpp"
+#include "screen.hpp"
 
 #include <tinyxml2.h>
 
@@ -52,11 +54,11 @@ void MapManager::readMap ( const std::string& fileName )
                 return;
         }
 
-        std::string pathToRooms = iso::homePath() + "rooms" + util::pathSeparator() ;
+        std::string pathToRooms = ospaths::homePath () + "rooms" + ospaths::pathSeparator () ;
 
         if ( MapManager::buildEveryRoomAtOnce )
         {
-                if ( ! util::folderExists( pathToRooms ) )
+                if ( ! ospaths::folderExists( pathToRooms ) )
                         mkdir( pathToRooms.c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH );
         }
 
@@ -159,25 +161,25 @@ void MapManager::readMap ( const std::string& fileName )
                         const unsigned short interligne = 8 ;
 
                         const unsigned short offsetY = ( ( heightOfChar + interligne ) << 1 ) + 10 ;
-                        const unsigned short atY = ScreenHeight() - offsetY ;
+                        const unsigned short atY = variables::getScreenHeight() - offsetY ;
 
                         std::string roomInRooms = "building " + util::toStringWithOrdinalSuffix( roomNth ) + " room out of " + util::number2string( howManyRooms ) ;
 
                         allegro::Pict::resetWhereToDraw() ;
 
-                        allegro::fillRect( 0, atY - 4, ScreenWidth(), atY,
+                        allegro::fillRect( 0, atY - 4, variables::getScreenWidth(), atY,
                                            Color::blackColor().toAllegroColor() );
 
-                        autouniqueptr< allegro::Pict > stripe( allegro::Pict::newPict( ScreenWidth(), heightOfChar + interligne ) );
+                        autouniqueptr< allegro::Pict > stripe( allegro::Pict::newPict( variables::getScreenWidth(), heightOfChar + interligne ) );
 
                         allegro::Pict::setWhereToDraw( *stripe ) ;
 
-                        unsigned int textX = ( ScreenWidth() - roomInRooms.length() * widthOfChar ) >> 1 ;
+                        unsigned int textX = ( variables::getScreenWidth() - roomInRooms.length() * widthOfChar ) >> 1 ;
                         stripe->clearToColor( Color::byName( "blue" ).toAllegroColor() );
                         allegro::textOut( roomInRooms, textX, ( interligne >> 1 ) + 1, Color::byName( "yellow" ).toAllegroColor() );
                         allegro::bitBlit( *stripe, allegro::Pict::theScreen(), 0, atY );
 
-                        textX = ( ScreenWidth() - roomFile.length() * widthOfChar ) >> 1 ;
+                        textX = ( variables::getScreenWidth() - roomFile.length() * widthOfChar ) >> 1 ;
                         stripe->clearToColor( Color::byName( "blue" ).toAllegroColor() );
                         allegro::textOut( roomFile, textX, ( interligne >> 1 ) - 1, Color::byName( "green" ).toAllegroColor() );
                         allegro::bitBlit( *stripe, allegro::Pict::theScreen(), 0, atY + ( heightOfChar + interligne ) );
@@ -185,12 +187,12 @@ void MapManager::readMap ( const std::string& fileName )
                         allegro::Pict::resetWhereToDraw() ;
 
                         allegro::fillRect( 0, atY + ( ( heightOfChar + interligne ) << 1 ),
-                                           ScreenWidth(), atY + ( ( heightOfChar + interligne ) << 1 ) + 4,
+                                           variables::getScreenWidth(), atY + ( ( heightOfChar + interligne ) << 1 ) + 4,
                                            Color::blackColor().toAllegroColor() );
 
                         allegro::update();
 
-                        Room* theRoom = RoomBuilder::buildRoom( iso::sharePath() + "map" + util::pathSeparator() + roomFile );
+                        Room* theRoom = RoomBuilder::buildRoom( ospaths::sharePath() + "map" + ospaths::pathSeparator() + roomFile );
                         theRoom->setConnections( connections );
                         gameRooms[ roomFile ] = theRoom ;
 
@@ -216,7 +218,7 @@ void MapManager::beginNewGame( const std::string& headRoom, const std::string& h
         GameManager::getInstance().setHeelsLives( 8 );
 
         if ( linksBetweenRooms.empty() )
-                readMap( iso::sharePath() + "map" + util::pathSeparator() + "map.xml" );
+                readMap( ospaths::sharePath() + "map" + ospaths::pathSeparator() + "map.xml" );
 
         // head’s room
 
@@ -358,7 +360,7 @@ Room* MapManager::rebuildRoom( Room* room )
         std::string fileOfRoom = room->getNameOfRoomDescriptionFile() ;
 
         // rebuild room
-        Room* newRoom = RoomBuilder::buildRoom( iso::sharePath() + "map" + util::pathSeparator() + fileOfRoom );
+        Room* newRoom = RoomBuilder::buildRoom( ospaths::sharePath() + "map" + ospaths::pathSeparator() + fileOfRoom );
         if ( newRoom == nilPointer ) return nilPointer ;
         newRoom->setConnections( room->getConnections() );
 
@@ -553,7 +555,7 @@ Room* MapManager::changeRoom( const std::string& wayOfExit )
 
         if ( wayOfEntry.toString() == "via teleport" || wayOfEntry.toString() == "via second teleport" )
         {
-                entryZ = Top;
+                entryZ = Isomot::Top ;
         }
 
         // no taken item in new room
@@ -748,13 +750,13 @@ Room* MapManager::findRoomByFile( const std::string& roomFile ) const
 Room* MapManager::getOrBuildRoomByFile( const std::string& roomFile )
 {
         if ( gameRooms.empty() || linksBetweenRooms.empty() )
-                readMap( iso::sharePath() + "map" + util::pathSeparator() + "map.xml" );
+                readMap( ospaths::sharePath() + "map" + ospaths::pathSeparator() + "map.xml" );
 
         if ( gameRooms.find( roomFile ) != gameRooms.end () )
         {
                 if ( gameRooms[ roomFile ] == nilPointer )
                 {
-                        Room* theRoom = RoomBuilder::buildRoom( iso::sharePath() + "map" + util::pathSeparator() + roomFile );
+                        Room* theRoom = RoomBuilder::buildRoom( ospaths::sharePath() + "map" + ospaths::pathSeparator() + roomFile );
                         if ( theRoom != nilPointer )
                         {
                                 theRoom->setConnections( linksBetweenRooms[ roomFile ] );

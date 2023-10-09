@@ -17,7 +17,6 @@
 #include <list>
 #include <map>
 
-#include "Ism.hpp"
 #include "Way.hpp"
 #include "Picture.hpp"
 #include "Drawable.hpp"

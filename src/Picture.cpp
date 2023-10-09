@@ -1,7 +1,8 @@
 
 #include "Picture.hpp"
 #include "Color.hpp"
-#include "Ism.hpp"
+
+#include "util.hpp"
 
 #ifdef DEBUG
 #  define DEBUG_PICTURES        0
@@ -11,7 +12,7 @@
 
 Picture::Picture( unsigned int width, unsigned int height )
         : picture( allegro::Pict::newPict( width, height ) )
-        , name( "Picture." + iso::makeRandomString( 12 ) )
+        , name( "Picture." + util::makeRandomString( 12 ) )
 {
         fillWithColor( Color() );
 
@@ -22,7 +23,7 @@ Picture::Picture( unsigned int width, unsigned int height )
 
 Picture::Picture( unsigned int width, unsigned int height, const Color& color )
         : picture( allegro::Pict::newPict( width, height ) )
-        , name( "Picture." + iso::makeRandomString( 12 ) )
+        , name( "Picture." + util::makeRandomString( 12 ) )
 {
         fillWithColor( color );
 
@@ -33,7 +34,7 @@ Picture::Picture( unsigned int width, unsigned int height, const Color& color )
 
 Picture::Picture( const allegro::Pict& pict )
         : picture( allegro::Pict::asCloneOf( pict.ptr() ) )
-        , name( "Picture." + iso::makeRandomString( 12 ) )
+        , name( "Picture." + util::makeRandomString( 12 ) )
 {
 #if defined( DEBUG_PICTURES )  &&  DEBUG_PICTURES
         std::cout << "created Picture " << getName() << " as copy of allegro::Pict" << std::endl ;

@@ -1,5 +1,6 @@
 
 #include "CreatePlanetsScreen.hpp"
+
 #include "GameManager.hpp"
 #include "LanguageManager.hpp"
 #include "LanguageText.hpp"
@@ -12,6 +13,8 @@
 #include "Label.hpp"
 #include "CreateMainMenu.hpp"
 #include "ContinueGame.hpp"
+
+#include "screen.hpp"
 
 using gui::CreatePlanetsScreen ;
 using gui::ContinueGame ;
@@ -50,10 +53,10 @@ void CreatePlanetsScreen::doAction ()
                 planets.freeWidgets() ;
         }
 
-        const unsigned int screenWidth = iso::ScreenWidth();
-        const unsigned int screenHeight = iso::ScreenHeight();
+        const unsigned int screenWidth = variables::getScreenWidth();
+        const unsigned int screenHeight = variables::getScreenHeight();
 
-        // etiqueta fija “ El Imperio Blacktooth ”
+        // “ El Imperio Blacktooth ”
         std::string colorOfLabel = "yellow" ;
         if ( GameManager::getInstance().isSimpleGraphicsSet () ) colorOfLabel = "red" ;
         Label* empire = new Label( languageManager->findLanguageStringForAlias( "blacktooth-empire" )->getText(), "big", colorOfLabel );

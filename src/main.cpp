@@ -17,6 +17,9 @@
 #include "GameManager.hpp"
 #include "GuiManager.hpp"
 
+#include "ospaths.hpp"
+#include "screen.hpp"
+
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 #  include <allegro5/allegro.h>
 #elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
@@ -44,9 +47,9 @@ void initAllegro ()
 
         // switch to chosen size of screen
 
-        bool switched = allegro::switchToWindowedVideo( iso::ScreenWidth(), iso::ScreenHeight() ) ;
+        bool switched = allegro::switchToWindowedVideo( variables::getScreenWidth(), variables::getScreenHeight() ) ;
         if ( ! switched )
-                std::cout << "can’t switch screen to " << iso::ScreenWidth() << " x " << iso::ScreenHeight() << std::endl ;
+                std::cout << "can’t switch screen to " << variables::getScreenWidth() << " x " << variables::getScreenHeight() << std::endl ;
 
         allegro::Pict::theScreen().clearToColor( Color::blackColor().toAllegroColor() ) ;
         allegro::update ();
@@ -57,7 +60,7 @@ void initAllegro ()
 
 void readPreferences ()
 {
-        bool preferencesRead = iso::GameManager::readPreferences( iso::homePath() + "preferences.xml" ) ;
+        bool preferencesRead = iso::GameManager::readPreferences( ospaths::homePath() + "preferences.xml" ) ;
 
         if ( ! preferencesRead )
                 gui::GuiManager::getInstance().setLanguage( "en_US" );
@@ -66,7 +69,7 @@ void readPreferences ()
 
 int main( int argc, char** argv )
 {
-        if ( argc > 0 ) iso::setPathToGame( argv[ 0 ] );
+        if ( argc > 0 ) ospaths::setPathToGame( argv[ 0 ] );
 
         knownOptions.push_back( std::pair< std::string, bool >( "width", true ) );
         knownOptions.push_back( std::pair< std::string, bool >( "height", true ) );
@@ -135,14 +138,14 @@ int main( int argc, char** argv )
                 {
                         int width = std::atoi( options[ "width" ].c_str () );
                         if ( width < 640 ) width = 640;
-                        iso::setScreenWidth( static_cast< unsigned int >( width ) );
+                        variables::setScreenWidth( static_cast< unsigned int >( width ) );
                 }
 
                 if ( options.count( "height" ) > 0 )
                 {
                         int height = std::atoi( options[ "height" ].c_str () );
                         if ( height < 480 ) height = 480;
-                        iso::setScreenHeight( static_cast< unsigned int >( height ) );
+                        variables::setScreenHeight( static_cast< unsigned int >( height ) );
                 }
 
                 if ( options.count( "head-room" ) > 0 )

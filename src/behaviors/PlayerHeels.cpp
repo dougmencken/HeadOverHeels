@@ -1,5 +1,7 @@
 
 #include "PlayerHeels.hpp"
+
+#include "Isomot.hpp"
 #include "Item.hpp"
 #include "DescriptionOfItem.hpp"
 #include "PlayerItem.hpp"
@@ -128,7 +130,7 @@ bool PlayerHeels::update()
                         break;
 
                 case Activity::ItemTaken:
-                        playerItem.addToZ( - LayerHeight );
+                        playerItem.addToZ( - Isomot::LayerHeight );
                         activity = Activity::Wait;
                         break;
 

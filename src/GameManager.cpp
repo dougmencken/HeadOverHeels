@@ -16,6 +16,11 @@
 #include "LanguageManager.hpp"
 #include "Color.hpp"
 
+#include "util.hpp"
+#include "ospaths.hpp"
+#include "sleep.hpp"
+#include "screen.hpp"
+
 #include <tinyxml2.h>
 
 
@@ -30,8 +35,8 @@ GameManager::GameManager( )
         , heelsRoom( "blacktooth23heels.xml" )
         , freedomLabel( nilPointer )
         , numberOfCapture( 0 )
-        , prefixOfCaptures( makeRandomString( 10 ) )
-        , capturePath( iso::homePath() + "capture" )
+        , prefixOfCaptures( util::makeRandomString( 10 ) )
+        , capturePath( ospaths::homePath() + "capture" )
         , chosenGraphicsSet( "gfx" )
         , vidasInfinitas( false )
         , immunityToCollisions( false )
@@ -55,7 +60,7 @@ GameManager::GameManager( )
         , donuts( 0 )
         , keyMoments( )
 {
-        if ( ! util::folderExists( capturePath ) )
+        if ( ! ospaths::folderExists( capturePath ) )
                 mkdir( capturePath.c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH );
 
         recordingTimer->go ();
@@ -92,7 +97,7 @@ PicturePtr GameManager::refreshPicture ( const std::string& nameOfPicture )
         IF_DEBUG( std::cout << "refreshing picture \"" << nameOfPicture << "\"" << std::endl )
 
         autouniqueptr< allegro::Pict > pict( allegro::Pict::fromPNGFile (
-                iso::pathToFile( gui::GuiManager::getInstance().getPathToThesePictures(), nameOfPicture )
+                ospaths::pathToFile( gui::GuiManager::getInstance().getPathToThesePictures(), nameOfPicture )
         ) ) ;
 
         PicturePtr newPicture( new Picture( *pict ) );
@@ -155,13 +160,15 @@ void GameManager::update ()
                                         }
                                         else
                                         {
-                                                autouniqueptr< allegro::Pict > nothing ( allegro::Pict::newPict( ScreenWidth(), ScreenHeight() ) );
+                                                autouniqueptr< allegro::Pict > nothing ( allegro::Pict::newPict(
+                                                                variables::getScreenWidth(), variables::getScreenHeight()
+                                                ) );
                                                 nothing->clearToColor( Color::byName( "gray75" ).toAllegroColor() );
                                                 drawAmbianceOfGame( *nothing );
                                                 drawOnScreen( *nothing );
                                         }
 
-                                        milliSleep( 1000 / GameManager::updatesPerSecond );
+                                        somn::milliSleep( 1000 / GameManager::updatesPerSecond );
                                 }
                                 else
                                 {
@@ -208,13 +215,13 @@ void GameManager::pause ()
         {
                 gui::LanguageManager* language = gui::GuiManager::getInstance().getLanguageManager() ;
                 gui::LanguageText* text = language->findLanguageStringForAlias( "save-game" );
-                int deltaY = ( iso::ScreenHeight() >> 2 ) - 60 ;
+                int deltaY = ( variables::getScreenHeight() >> 2 ) - 60 ;
 
                 for ( size_t i = 0; i < text->getLinesCount(); i++ )
                 {
                         gui::LanguageLine* line = text->getLine( i );
                         gui::Label label( line->text, line->font, line->color );
-                        label.moveTo( ( ScreenWidth() - label.getWidth() ) >> 1, deltaY );
+                        label.moveTo( ( variables::getScreenWidth() - label.getWidth() ) >> 1, deltaY );
                         deltaY += label.getHeight() * 3 / 4;
                         label.draw ();
                 }
@@ -226,7 +233,7 @@ void GameManager::pause ()
                 {
                         gui::LanguageLine* line = text->getLine( i );
                         gui::Label label( line->text, line->font, line->color );
-                        label.moveTo( ( ScreenWidth() - label.getWidth() ) >> 1, deltaY );
+                        label.moveTo( ( variables::getScreenWidth() - label.getWidth() ) >> 1, deltaY );
                         deltaY += label.getHeight() * 3 / 4;
                         label.draw ();
                 }
@@ -271,7 +278,7 @@ void GameManager::pause ()
                                 }
                         }
 
-                        milliSleep( 100 );
+                        somn::milliSleep( 100 );
                 }
         }
         else if ( keyMoments.arrivedInFreedomNotWithAllCrowns( true ) )
@@ -293,13 +300,13 @@ void GameManager::pause ()
 
                 gui::LanguageManager* language = gui::GuiManager::getInstance().getLanguageManager();
                 gui::LanguageText* text = language->findLanguageStringForAlias( "confirm-quit" );
-                int deltaY = ( iso::ScreenHeight() >> 2 );
+                int deltaY = ( variables::getScreenHeight() >> 2 );
 
                 for ( size_t i = 0; i < text->getLinesCount(); i++ )
                 {
                         gui::LanguageLine* line = text->getLine( i );
                         gui::Label label( line->text, line->font, line->color );
-                        label.moveTo( ( ScreenWidth() - label.getWidth() ) >> 1, deltaY );
+                        label.moveTo( ( variables::getScreenWidth() - label.getWidth() ) >> 1, deltaY );
                         deltaY += label.getHeight() * 3 / 4;
                         label.draw ();
                 }
@@ -311,7 +318,7 @@ void GameManager::pause ()
                 {
                         gui::LanguageLine* line = text->getLine( i );
                         gui::Label label( line->text, line->font, line->color );
-                        label.moveTo( ( ScreenWidth() - label.getWidth() ) >> 1, deltaY );
+                        label.moveTo( ( variables::getScreenWidth() - label.getWidth() ) >> 1, deltaY );
                         deltaY += label.getHeight() * 3 / 4;
                         label.draw ();
                 }
@@ -338,7 +345,7 @@ void GameManager::pause ()
                                 }
                         }
 
-                        milliSleep( 100 );
+                        somn::milliSleep( 100 );
                 }
         }
 
@@ -452,8 +459,8 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
         // empty scenery means that it is the final room
         if ( scenery != "" )
         {
-                const unsigned int diffX = iso::ScreenWidth() - 640 ;
-                const unsigned int diffY = iso::ScreenHeight() - 480 ;
+                const unsigned int diffX = variables::getScreenWidth() - 640 ;
+                const unsigned int diffY = variables::getScreenHeight() - 480 ;
 
                 if ( diffX > 0 || diffY > 0 ) // when the screen is larger than 640 x 480
                         if ( ! isPresentGraphicsSet() && ! isSimpleGraphicsSet() )
@@ -575,7 +582,7 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                 if ( freedomLabel == nilPointer )
                 {
                         freedomLabel = new gui::ColorCyclingLabel( "FREEDOM", "big" );
-                        freedomLabel->moveTo( ScreenWidth() / 10, ScreenHeight() - 100 );
+                        freedomLabel->moveTo( variables::getScreenWidth() / 10, variables::getScreenHeight() - 100 );
                 }
 
                 freedomLabel->draw ();
@@ -638,7 +645,10 @@ void GameManager::drawOnScreen ( const allegro::Pict& view )
                 {
                         numberOfCapture++ ;
 
-                        allegro::savePictAsPCX( capturePath + util::pathSeparator() + prefixOfCaptures + util::number2string( numberOfCapture ), view );
+                        allegro::savePictAsPCX(
+                                        capturePath + ospaths::pathSeparator()
+                                                + prefixOfCaptures + util::number2string( numberOfCapture )
+                                        , view );
 
                         recordingTimer->reset ();
                 }

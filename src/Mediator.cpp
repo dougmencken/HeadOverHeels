@@ -9,6 +9,8 @@
 #include "Masker.hpp"
 #include "Behavior.hpp"
 
+#include "sleep.hpp"
+
 #include <algorithm>
 
 #ifdef DEBUG
@@ -193,8 +195,8 @@ void* Mediator::updateThread( void* mediatorAsVoid )
 
         while ( mediator->isThreadRunning() )
         {
-                mediator->update();
-                milliSleep( 1000 / GameManager::updatesPerSecond );
+                mediator->update() ;
+                somn::milliSleep( 1000 / GameManager::updatesPerSecond );
         }
 
         pthread_exit( nilPointer );
@@ -1068,8 +1070,8 @@ bool Mediator::pickNextCharacter()
                                 && ( previousCharacter->getX() + previousCharacter->getWidthX() - delta <= activeCharacter->getX() + activeCharacter->getWidthX() )
                                 && ( previousCharacter->getY() + delta >= activeCharacter->getY() )
                                 && ( previousCharacter->getY() + previousCharacter->getWidthY() - delta <= activeCharacter->getY() + activeCharacter->getWidthY() )
-                                && ( ( previousCharacter->getOriginalLabel() == "head" && previousCharacter->getZ() - LayerHeight == activeCharacter->getZ() ) ||
-                                        ( previousCharacter->getOriginalLabel() == "heels" && activeCharacter->getZ() - LayerHeight == previousCharacter->getZ() ) ) )
+                                && ( ( previousCharacter->getOriginalLabel() == "head" && previousCharacter->getZ() - Isomot::LayerHeight == activeCharacter->getZ() ) ||
+                                        ( previousCharacter->getOriginalLabel() == "heels" && activeCharacter->getZ() - Isomot::LayerHeight == previousCharacter->getZ() ) ) )
                         {
                                 lockFreeItemsMutex ();
 
@@ -1137,7 +1139,7 @@ bool Mediator::pickNextCharacter()
                         heelsPlayer->placeItemInBag( descriptionOfItemInBag->getLabel(), behaviorOfItemInBag );
                 }
 
-                PlayerItemPtr headPlayer = RoomBuilder::createPlayerInRoom( this->room, "head", false, x, y, z + LayerHeight, orientation );
+                PlayerItemPtr headPlayer = RoomBuilder::createPlayerInRoom( this->room, "head", false, x, y, z + Isomot::LayerHeight, orientation );
 
                 setActiveCharacter( ( this->lastActiveCharacterBeforeJoining == "head" ) ? heelsPlayer : headPlayer );
                 previousCharacter = ( activeCharacter->getOriginalLabel() == "head" ) ? heelsPlayer : headPlayer;

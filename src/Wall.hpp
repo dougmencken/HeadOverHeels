@@ -13,7 +13,6 @@
 
 #include <WrappersAllegro.hpp>
 
-#include "Ism.hpp"
 #include "Picture.hpp"
 #include "Drawable.hpp"
 #include "Mediated.hpp"

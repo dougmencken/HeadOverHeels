@@ -1,5 +1,7 @@
 
 #include "UserControlled.hpp"
+
+#include "Isomot.hpp"
 #include "DescriptionOfItem.hpp"
 #include "Room.hpp"
 #include "Mediator.hpp"
@@ -236,7 +238,7 @@ void UserControlled::jump( PlayerItem & player )
         }
 
         // when player is active and is at maximum height of room it may go to room above
-        if ( player.isActiveCharacter() && player.getZ() >= MaxLayers * LayerHeight )
+        if ( player.isActiveCharacter() && player.getZ() >= Isomot::MaxLayers * Isomot::LayerHeight )
         {
                 player.setWayOfExit( "above" );
         }
@@ -496,11 +498,11 @@ void UserControlled::dropItem( PlayerItem & player )
                 std::cout << "drop item \"" << player.getDescriptionOfTakenItem()->getLabel() << "\"" << std::endl ;
 
                 // place dropped item just below player
-                if ( player.addToZ( LayerHeight ) )
+                if ( player.addToZ( Isomot::LayerHeight ) )
                 {
                         FreeItemPtr freeItem( new FreeItem( player.getDescriptionOfTakenItem(),
                                                             player.getX(), player.getY(),
-                                                            player.getZ() - LayerHeight,
+                                                            player.getZ() - Isomot::LayerHeight,
                                                             "none" ) );
 
                         freeItem->setBehaviorOf( player.getBehaviorOfTakenItem() );

@@ -13,7 +13,6 @@
 
 #include <string>
 
-#include "Ism.hpp"
 #include "Picture.hpp"
 #include "Isomot.hpp"
 #include "Room.hpp"
@@ -310,7 +309,7 @@ public:
                 recordCaptures = ! recordCaptures ;
 
                 if ( recordCaptures )
-                        prefixOfCaptures = makeRandomString( 10 );
+                        prefixOfCaptures = util::makeRandomString( 10 );
                 else
                         numberOfCapture += 1000 ;
         }

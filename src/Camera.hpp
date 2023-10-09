@@ -11,7 +11,6 @@
 #ifndef Camera_hpp_
 #define Camera_hpp_
 
-#include "Ism.hpp"
 #include "Item.hpp"
 
 

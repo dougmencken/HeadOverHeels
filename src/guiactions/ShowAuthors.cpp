@@ -1,5 +1,10 @@
 
 #include "ShowAuthors.hpp"
+
+#include "ospaths.hpp"
+#include "sleep.hpp"
+#include "screen.hpp"
+
 #include "GuiManager.hpp"
 #include "LanguageText.hpp"
 #include "SoundManager.hpp"
@@ -23,7 +28,7 @@ ShowAuthors::ShowAuthors( )
         , initialY( 0 )
         , loadingScreen( )
 {
-        std::string pathToText = iso::sharePath() + "text" + util::pathSeparator() ;
+        std::string pathToText = ospaths::sharePath() + "text" + ospaths::pathSeparator() ;
         this->readCreditsText( pathToText + "credits.xml" );
 }
 
@@ -89,7 +94,7 @@ void ShowAuthors::doAction ()
         if ( screen.countWidgets() == 0 )
         {
                 if ( this->linesOfCredits != nilPointer ) delete this->linesOfCredits ;
-                this->linesOfCredits = new TextField( iso::ScreenWidth(), "center" );
+                this->linesOfCredits = new TextField( variables::getScreenWidth(), "center" );
 
                 this->initialY = screen.getImageOfScreen().getHeight() ;
                 this->linesOfCredits->moveTo( 0, initialY );
@@ -173,12 +178,13 @@ void ShowAuthors::doAction ()
 
                 linesOfCredits->moveTo( linesOfCredits->getX(), yNow );
 
-                if ( yNow == static_cast< int >( heightOfSlide ) - static_cast< int >( heightOfCredits ) && widgetForLoadingScreen == nilPointer )
+                if ( yNow == static_cast< int >( heightOfSlide ) - static_cast< int >( heightOfCredits )
+                                && widgetForLoadingScreen == nilPointer )
                 {
                         if ( loadingScreen == nilPointer )
                         {
                                 autouniqueptr< allegro::Pict > png( allegro::Pict::fromPNGFile (
-                                        iso::pathToFile( iso::sharePath(), "loading-screen.png" )
+                                        ospaths::pathToFile( ospaths::sharePath(), "loading-screen.png" )
                                 ) );
                                 loadingScreen = PicturePtr( new Picture( * png ) );
                                 loadingScreen->setName( "image of loading screen from original speccy version" );
@@ -213,7 +219,7 @@ void ShowAuthors::doAction ()
 
                 if ( ! allegro::isKeyPushed( "Space" ) )
                 {
-                        milliSleep( 20 );
+                        somn::milliSleep( 20 );
                 }
 
                 if ( allegro::isKeyPushed( "Escape" ) )

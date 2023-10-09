@@ -16,7 +16,6 @@
 
 #include "tribool.hpp"
 #include "WrappersAllegro.hpp"
-#include "Ism.hpp"
 
 #include "Item.hpp"
 #include "Drawable.hpp"

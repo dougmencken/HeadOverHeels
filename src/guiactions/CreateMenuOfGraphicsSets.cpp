@@ -9,6 +9,8 @@
 #include "CreateVideoMenu.hpp"
 #include "CreateMainMenu.hpp"
 
+#include "sleep.hpp"
+
 using gui::CreateMenuOfGraphicsSets ;
 
 
@@ -131,7 +133,7 @@ void CreateMenuOfGraphicsSets::doAction ()
 
                         // no te comas la CPU
                         // do not eat the CPU
-                        milliSleep( 25 );
+                        somn::milliSleep( 25 );
                 }
         }
 }

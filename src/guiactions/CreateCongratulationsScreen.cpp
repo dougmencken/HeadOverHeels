@@ -10,6 +10,8 @@
 #include "TextField.hpp"
 #include "CreateEndScreen.hpp"
 
+#include "screen.hpp"
+
 using gui::CreateCongratulationsScreen ;
 using iso::GameManager ;
 
@@ -53,7 +55,7 @@ void CreateCongratulationsScreen::doAction ()
 
         // Texto final
         langString = languageManager->findLanguageStringForAlias( "final-text" );
-        TextField* textField = new TextField( iso::ScreenWidth(), "center" );
+        TextField* textField = new TextField( variables::getScreenWidth(), "center" );
         textField->moveTo( 0, 180 );
 
         for ( size_t i = 0; i < langString->getLinesCount(); i++ )

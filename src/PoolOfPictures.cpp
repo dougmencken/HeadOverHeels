@@ -1,7 +1,8 @@
 
 #include "PoolOfPictures.hpp"
-#include "Ism.hpp"
 #include "GameManager.hpp"
+
+#include "ospaths.hpp"
 
 #ifdef DEBUG
 # define DEBUG_POOL_OF_PICTURES  0
@@ -28,7 +29,7 @@ PicturePtr PoolOfPictures::getOrLoadAndGet( const std::string& imageFile )
 
         if ( pictures.find( key ) == pictures.end () )
         {
-                safeptr< allegro::Pict > picture( allegro::Pict::fromPNGFile( iso::pathToFile( iso::sharePath() + gfxPrefix, imageFile ) ) );
+                safeptr< allegro::Pict > picture( allegro::Pict::fromPNGFile( ospaths::pathToFile( ospaths::sharePath() + gfxPrefix, imageFile ) ) );
 
                 if ( picture->isNotNil() )
                 {
@@ -54,7 +55,7 @@ PicturePtr PoolOfPictures::getOrLoadAndGetOrMakeAndGet( const std::string& image
 
         if ( pictures.find( key ) == pictures.end () || pictures[ key ] == nilPointer )
         {
-                safeptr< allegro::Pict > picture( allegro::Pict::fromPNGFile( iso::pathToFile( iso::sharePath() + gfxPrefix, imageFile ) ) );
+                safeptr< allegro::Pict > picture( allegro::Pict::fromPNGFile( ospaths::pathToFile( ospaths::sharePath() + gfxPrefix, imageFile ) ) );
 
                 if ( picture->isNotNil() )
                 {

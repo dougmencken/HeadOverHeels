@@ -1,9 +1,12 @@
 
-#include "Ism.hpp"
+#include "ospaths.hpp"
+#include "util.hpp"
+
 #include "path_prefix.h"
 
 #include <algorithm>
 
+#include <unistd.h> // getcwd
 
 #if defined ( __CYGWIN__ )
     #include <sys/cygwin.h>
@@ -14,46 +17,8 @@
 #endif
 
 
-namespace iso
+namespace ospaths
 {
-
-unsigned int screenWidth = 640 ;
-
-unsigned int screenHeight = 480 ;
-
-unsigned int ScreenWidth() {  return screenWidth ;  }
-
-unsigned int ScreenHeight() {  return screenHeight ;  }
-
-void setScreenWidth( unsigned int width )
-{
-        if ( width < 640 ) width = 640;
-        screenWidth = width;
-}
-
-void setScreenHeight( unsigned int height )
-{
-        if ( height < 480 ) height = 480;
-        screenHeight = height;
-}
-
-std::string makeRandomString( const size_t length )
-{
-        static const char alphanum[] =  "0123456789"
-                                        "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                                        "abcdefghijklmnopqrstuvwxyz" ;
-        static const size_t howManyChars = sizeof( alphanum );
-
-        std::string result( length, ' ' );
-
-        for ( size_t i = 0 ; i < length; ++ i )
-        {
-                result[ i ] = alphanum[ rand() % ( howManyChars - 1 ) ];
-        }
-
-        return result;
-
-}
 
 std::string nameFromPath( std::string const& path )
 {
@@ -94,8 +59,8 @@ std::string pathToFile( const std::string& folder, const std::string& file )
 
         if ( ! file.empty() )
         {
-                if ( path.at( path.length() - 1 ) != util::pathSeparator().at( 0 ) )
-                        path.append( util::pathSeparator() );
+                if ( path.at( path.length() - 1 ) != ospaths::pathSeparator ().at( 0 ) )
+                        path.append( ospaths::pathSeparator () );
 
                 path += file ;
         }
@@ -133,7 +98,7 @@ void setPathToGame ( const char * pathToGame )
         else
 #endif
         {
-                char pathSeparator = util::pathSeparator()[ 0 ] ;
+                char pathSeparator = ospaths::pathSeparator()[ 0 ] ;
                 if ( FullPathToGame[ 0 ] != pathSeparator )
                 {  // it’s not full path
                         char folderOfGame[ PATH_MAX ];
@@ -166,7 +131,7 @@ std::string homePath ()
                 if ( home != nilPointer )
                 {
                         HomePath = std::string( home ) + "/.headoverheels/";
-                        if ( ! util::folderExists( HomePath ) )
+                        if ( ! ospaths::folderExists( HomePath ) )
                         {
                                 mkdir( HomePath.c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH );
                                 mkdir( ( HomePath + "savegame/" ).c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH );
@@ -218,13 +183,25 @@ std::string sharePath ()
                 }
         #else
                 SharePath = cpath.substr( 0, cpath.length() - filename.length() - ( 1 + containername.length() ) );
-                SharePath += "share" + util::pathSeparator() + "headoverheels" + util::pathSeparator() ;
+                SharePath += "share" + ospaths::pathSeparator () + "headoverheels" + ospaths::pathSeparator () ;
         #endif
 
                 fprintf ( stdout, "SharePath is \"%s\"\n", SharePath.c_str () );
         }
 
         return SharePath;
+}
+
+bool folderExists( const std::string & path )
+{
+        struct stat info ;
+
+        if ( stat( path.c_str (), &info ) < 0 )
+                return false ;
+        else if ( ( info.st_mode & S_IFDIR ) != 0 )
+                return true ;
+
+        return false ;
 }
 
 }

@@ -1,7 +1,8 @@
 
 #include "LanguageText.hpp"
 #include "LanguageManager.hpp"
-#include "Ism.hpp"
+
+#include "util.hpp"
 
 #include <iostream>
 #include <algorithm> // std::for_each
@@ -22,10 +23,10 @@ LanguageManager::LanguageManager( const std::string& file, const std::string& fi
 
 LanguageManager::~LanguageManager()
 {
-        std::for_each( strings.begin(), strings.end(), iso::DeleteIt() );
+        std::for_each( strings.begin(), strings.end(), DeleteIt() );
         strings.clear();
 
-        std::for_each( backupStrings.begin(), backupStrings.end(), iso::DeleteIt() );
+        std::for_each( backupStrings.begin(), backupStrings.end(), DeleteIt() );
         backupStrings.clear();
 }
 
