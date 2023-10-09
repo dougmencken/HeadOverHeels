@@ -27,34 +27,16 @@
 #endif
 
 
-std::multimap< unsigned int, unsigned int > sizesOfScreen ;
-
 std::vector< std::pair< std::string, bool /* has value */ > > knownOptions ;
 
 void initAllegro ()
 {
         allegro::init ();
 
-        // fill list of screen sizes
+        // switch to the chosen size of screen
+        allegroWindowSizeToScreenSize ();
 
-        sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 640, 480 ) );
-        sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 800, 600 ) );
-        sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 1024, 576 ) );
-        sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 1024, 600 ) );
-        sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 1024, 768 ) );
-        sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 1280, 720 ) );
-        sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 1280, 1024 ) );
-
-        // switch to chosen size of screen
-
-        bool switched = allegro::switchToWindowedVideo( variables::getScreenWidth(), variables::getScreenHeight() ) ;
-        if ( ! switched )
-                std::cout << "can’t switch screen to " << variables::getScreenWidth() << " x " << variables::getScreenHeight() << std::endl ;
-
-        allegro::Pict::theScreen().clearToColor( Color::blackColor().toAllegroColor() ) ;
-        allegro::update ();
-
-        // initialize handler of keyboard events
+        // initialize the handler of keyboard events
         allegro::initKeyboardHandler ();
 }
 

@@ -20,3 +20,5 @@ namespace variables
         void setScreenHeight ( unsigned int h ) ;
 
 }
+
+bool allegroWindowSizeToScreenSize () ;

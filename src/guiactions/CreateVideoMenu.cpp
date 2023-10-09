@@ -17,6 +17,8 @@ using gui::CreateVideoMenu ;
 using gui::CreateMenuOfGraphicsSets ;
 
 
+static std::multimap< unsigned int, unsigned int > sizesOfScreen ;
+
 CreateVideoMenu::CreateVideoMenu( )
         : Action( )
         , listOfOptions ( nilPointer )
@@ -26,7 +28,20 @@ CreateVideoMenu::CreateVideoMenu( )
         , labelDrawRoomMiniatures ( nilPointer )
         , labelChooseGraphics ( nilPointer )
 {
+        if ( sizesOfScreen.size () == 0 )
+        {
+                // fill the list of screen sizes
 
+                sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 640, 480 ) );
+                sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 800, 600 ) );
+                /* sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 1024, 576 ) ); */
+                sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 1024, 600 ) );
+                sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 1024, 768 ) );
+                sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 1280, 720 ) );
+                sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 1280, 1024 ) );
+                sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 1366, 768 ) ); // my laptop
+                sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 1600, 900 ) );
+        }
 }
 
 void CreateVideoMenu::doAction ()

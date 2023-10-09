@@ -1,5 +1,6 @@
 
 #include "GameManager.hpp"
+
 #include "Mediator.hpp"
 #include "PlayerItem.hpp"
 #include "PictureWidget.hpp"
@@ -1055,13 +1056,29 @@ bool GameManager::readPreferences( const std::string& fileName )
         tinyxml2::XMLElement* video = root->FirstChildElement( "video" ) ;
         if ( video != nilPointer )
         {
+                tinyxml2::XMLElement* width = video->FirstChildElement( "width" ) ;
+                if ( width != nilPointer )
+                {
+                        variables::setScreenWidth( std::atoi( width->FirstChild()->ToText()->Value() ) ) ;
+                }
+
+                tinyxml2::XMLElement* height = video->FirstChildElement( "height" ) ;
+                if ( height != nilPointer )
+                {
+                        variables::setScreenHeight( std::atoi( height->FirstChild()->ToText()->Value() ) ) ;
+                }
+
+                bool atFullScreen = false ;
                 tinyxml2::XMLElement* fullscreen = video->FirstChildElement( "fullscreen" ) ;
                 if ( fullscreen != nilPointer )
                 {
-                        bool atFullScreen = ( std::string( fullscreen->FirstChild()->ToText()->Value() ) == "true" ) ? true : false ;
+                        atFullScreen = ( std::string( fullscreen->FirstChild()->ToText()->Value() ) == "true" ) ? true : false ;
+                }
 
-                        if ( gui::GuiManager::getInstance().isAtFullScreen () != atFullScreen )
-                                gui::GuiManager::getInstance().toggleFullScreenVideo ();
+                allegroWindowSizeToScreenSize ();
+
+                if ( gui::GuiManager::getInstance().isAtFullScreen () != atFullScreen ) {
+                        gui::GuiManager::getInstance().toggleFullScreenVideo ();
                 }
 
                 tinyxml2::XMLElement* shadows = video->FirstChildElement( "drawshadows" ) ;
@@ -1165,6 +1182,14 @@ bool GameManager::writePreferences( const std::string& fileName )
         // video
         {
                 tinyxml2::XMLNode * video = preferences.NewElement( "video" );
+
+                tinyxml2::XMLElement * width = preferences.NewElement( "width" );
+                width->SetText( variables::getScreenWidth () );
+                video->InsertEndChild( width );
+
+                tinyxml2::XMLElement * height = preferences.NewElement( "height" );
+                height->SetText( variables::getScreenHeight () );
+                video->InsertEndChild( height );
 
                 tinyxml2::XMLElement * fullscreen = preferences.NewElement( "fullscreen" );
                 fullscreen->SetText( gui::GuiManager::getInstance().isAtFullScreen () ? "true" : "false" );
