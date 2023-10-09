@@ -30,13 +30,16 @@ namespace gui
 
 /* static */ void Screen::refreshBackground ()
 {
+        std::cout << "refreshing the background for user interface slides" << std::endl ;
+
         delete Screen::backgroundPicture ;
 
         Screen::backgroundPicture = Screen::loadPicture( "background.png" );
+
         if ( Screen::backgroundPicture == nilPointer ) // not found
         {       // don't crash, just present the red one like in the original game
                 Screen::backgroundPicture = new Picture( variables::getScreenWidth(), variables::getScreenHeight(), Color::byName( "red" ) ) ;
-                std::cout << "there's no background.png but I made a red background for you dear" << std::endl ;
+                std::cout << "there's no background.png but I made the red background for you dear" << std::endl ;
         }
 
         Screen::backgroundPicture->setName( "the background for user interface slides" );
@@ -53,6 +56,8 @@ Screen::Screen( Action* action ) :
         pictureOfHeels( nilPointer )
 {
         imageOfScreen->setName( "image of screen for action " + action->getNameOfAction() );
+
+        if ( Screen::backgroundPicture == nilPointer ) Screen::refreshBackground () ;
 
         refreshPicturesOfHeadAndHeels ();
 }
@@ -372,15 +377,22 @@ void Screen::placeHeadAndHeels( bool picturesToo, bool copyrightsToo )
 }
 
 /* static */
-Picture * Screen::loadPicture ( const std::string& nameOfPicture )
+Picture * Screen::loadPicture ( const std::string & nameOfPicture )
 {
 #if defined( DEBUG ) && DEBUG
         std::cout << "Screen::loadPicture( \"" << nameOfPicture << "\" )" << std::endl ;
 #endif
+        const std::string & pathToPictures = GuiManager::getInstance().getPathToThesePictures() ;
         autouniqueptr< allegro::Pict > pict( allegro::Pict::fromPNGFile (
-                ospaths::pathToFile( GuiManager::getInstance().getPathToThesePictures(), nameOfPicture )
+                ospaths::pathToFile( pathToPictures, nameOfPicture )
         ) );
-        return ( pict != nilPointer ) ? new Picture( *pict ) : nilPointer ;
+
+        if ( pict == nilPointer ) {
+                std::cout << "can't load picture \"" << pathToPictures << ospaths::pathSeparator() << nameOfPicture << "\"" << std::endl ;
+                return nilPointer ;
+        }
+
+        return new Picture( *pict ) ;
 }
 
 /* static */

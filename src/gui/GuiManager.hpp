@@ -105,7 +105,7 @@ public:
 
         void redraw () ;
 
-        std::string getPathToThesePictures () ;
+        std::string getPathToThesePictures () const ;
 
         void suspend () {  this->active = false ;  }
 

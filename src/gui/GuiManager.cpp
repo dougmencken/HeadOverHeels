@@ -210,7 +210,7 @@ void GuiManager::redraw()
         }
 }
 
-std::string GuiManager::getPathToThesePictures ()
+std::string GuiManager::getPathToThesePictures () const
 {
         return ospaths::sharePath() + iso::GameManager::getInstance().getChosenGraphicsSet() ;
 }

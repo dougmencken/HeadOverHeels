@@ -38,7 +38,7 @@ void CreateLanguageMenu::doAction ()
                 std::cout << "nil screen for " << this->getNameOfAction() ;
                 return ;
         }
-        Screen& screen = *screenptr ;
+        Screen & screen = *screenptr ;
 
         if ( screen.countWidgets() > 0 )
         {

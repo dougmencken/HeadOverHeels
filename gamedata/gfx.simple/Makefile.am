@@ -311,7 +311,6 @@ gamedatagfxsimple_DATA = item.png/ball-shadows.png \
 			freedom.png/grass+flowers-3.png \
 			freedom.png/trees-x-1.png \
 			freedom.png/trees-y-1.png \
-			gui.gfx/background.png \
 			gui.gfx/blacktooth-frame.png \
 			gui.gfx/blacktooth.png \
 			gui.gfx/byblos-frame.png \
