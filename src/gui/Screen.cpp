@@ -11,6 +11,8 @@
 #include "AnimatedPictureWidget.hpp"
 #include "Color.hpp"
 
+#include "MayNotBePossible.hpp"
+
 #include <iostream>
 
 
@@ -27,9 +29,13 @@ namespace gui
         delete Screen::backgroundPicture ;
 
         Screen::backgroundPicture = Screen::loadPicture( "background.png" );
+        if ( Screen::backgroundPicture == nilPointer ) // not found
+        {       // don't crash, just present the red one like in the original game
+                Screen::backgroundPicture = new Picture( iso::ScreenWidth(), iso::ScreenHeight(), Color::byName( "red" ) ) ;
+                std::cout << "there's no background.png but I made a red background for you dear" << std::endl ;
+        }
 
-        if ( Screen::backgroundPicture != nilPointer )
-                Screen::backgroundPicture->setName( "the background for user interface slides" );
+        Screen::backgroundPicture->setName( "the background for user interface slides" );
 }
 
 
@@ -113,12 +119,12 @@ void Screen::draw ()
 
 void Screen::refresh () const
 {
-        if ( imageOfScreen == nilPointer ) return ;
+        if ( imageOfScreen == nilPointer ) return ; // nothing to refresh
 
         const allegro::Pict& previousWhere = allegro::Pict::getWhereToDraw() ;
         allegro::Pict::setWhereToDraw( imageOfScreen->getAllegroPict() );
 
-        imageOfScreen->fillWithColor( Color::byName( "red" ) );
+        imageOfScreen->fillWithColor( Color::byName( "red" ) ); // the red background is so red
 
         // draw background, if any
 
@@ -126,49 +132,50 @@ void Screen::refresh () const
         {
                 Screen::refreshBackground ();
         }
+        if ( Screen::backgroundPicture == nilPointer )
+        {       // it's impossible
+                throw new MayNotBePossible( "Screen::backgroundPicture is nil after Screen::refreshBackground()" ) ;
+        }
 
-        if ( Screen::backgroundPicture != nilPointer )
+        unsigned int backgroundWidth = backgroundPicture->getWidth();
+        unsigned int backgroundHeight = backgroundPicture->getHeight();
+
+        if ( backgroundWidth == iso::ScreenWidth() && backgroundHeight == iso::ScreenHeight() )
         {
-                unsigned int backgroundWidth = backgroundPicture->getWidth();
-                unsigned int backgroundHeight = backgroundPicture->getHeight();
+                allegro::bitBlit( backgroundPicture->getAllegroPict() );
+        }
+        else
+        {
+                float ratioX = static_cast< float >( iso::ScreenWidth() ) / static_cast< float >( backgroundWidth ) ;
+                float ratioY = static_cast< float >( iso::ScreenHeight() ) / static_cast< float >( backgroundHeight ) ;
 
-                if ( backgroundWidth == iso::ScreenWidth() && backgroundHeight == iso::ScreenHeight() )
+                if ( ratioX == ratioY )
                 {
-                        allegro::bitBlit( backgroundPicture->getAllegroPict() );
+                        allegro::stretchBlit( backgroundPicture->getAllegroPict(),
+                                        0, 0, backgroundWidth, backgroundHeight,
+                                        0, 0, iso::ScreenWidth(), iso::ScreenHeight() );
                 }
-                else
+                else if ( ratioX > ratioY ) /* horizontal over~stretching */
                 {
-                        float ratioX = static_cast< float >( iso::ScreenWidth() ) / static_cast< float >( backgroundWidth ) ;
-                        float ratioY = static_cast< float >( iso::ScreenHeight() ) / static_cast< float >( backgroundHeight ) ;
+                        unsigned int proportionalWidth = static_cast< unsigned int >( backgroundWidth * ratioY );
+                        unsigned int offsetX = ( iso::ScreenWidth() - proportionalWidth ) >> 1;
 
-                        if ( ratioX == ratioY )
-                        {
-                                allegro::stretchBlit( backgroundPicture->getAllegroPict(),
-                                                0, 0, backgroundWidth, backgroundHeight,
-                                                0, 0, iso::ScreenWidth(), iso::ScreenHeight() );
-                        }
-                        else if ( ratioX > ratioY ) /* horizontal over~stretching */
-                        {
-                                unsigned int proportionalWidth = static_cast< unsigned int >( backgroundWidth * ratioY );
-                                unsigned int offsetX = ( iso::ScreenWidth() - proportionalWidth ) >> 1;
+                        imageOfScreen->fillWithColor( Color::blackColor() );
 
-                                imageOfScreen->fillWithColor( Color::blackColor() );
+                        allegro::stretchBlit( backgroundPicture->getAllegroPict(),
+                                        0, 0, backgroundWidth, backgroundHeight,
+                                        offsetX, 0, proportionalWidth, iso::ScreenHeight() );
+                }
+                else /* if ( ratioY > ratioX ) */ /* vertical over~stretching */
+                {
+                        unsigned int proportionalHeight = static_cast< unsigned int >( backgroundHeight * ratioX );
+                        unsigned int offsetY = ( iso::ScreenHeight() - proportionalHeight ) >> 1;
 
-                                allegro::stretchBlit( backgroundPicture->getAllegroPict(),
-                                                0, 0, backgroundWidth, backgroundHeight,
-                                                offsetX, 0, proportionalWidth, iso::ScreenHeight() );
-                        }
-                        else /* if ( ratioY > ratioX ) */ /* vertical over~stretching */
-                        {
-                                unsigned int proportionalHeight = static_cast< unsigned int >( backgroundHeight * ratioX );
-                                unsigned int offsetY = ( iso::ScreenHeight() - proportionalHeight ) >> 1;
+                        imageOfScreen->fillWithColor( Color::blackColor() );
 
-                                imageOfScreen->fillWithColor( Color::blackColor() );
-
-                                allegro::stretchBlit( backgroundPicture->getAllegroPict(),
-                                                0, 0, backgroundWidth, backgroundHeight,
-                                                0, offsetY, iso::ScreenWidth(), proportionalHeight );
-                        }
+                        allegro::stretchBlit( backgroundPicture->getAllegroPict(),
+                                        0, 0, backgroundWidth, backgroundHeight,
+                                        0, offsetY, iso::ScreenWidth(), proportionalHeight );
                 }
         }
 

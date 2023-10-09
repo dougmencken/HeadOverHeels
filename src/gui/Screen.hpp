@@ -127,9 +127,6 @@ private:
 
 protected:
 
-        /**
-         * Imagen de fondo de la pantalla
-         */
         static Picture * backgroundPicture ;
 
 };

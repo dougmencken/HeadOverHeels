@@ -41,6 +41,7 @@ headoverheels_SOURCES = main.cpp \
 			util.hpp \
 			pointers.cpp \
 			pointers.hpp \
+			MayNotBePossible.hpp \
 			Ism.cpp \
 			Ism.hpp \
 			WrappersAllegro.cpp \
