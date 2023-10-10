@@ -156,10 +156,10 @@ private:
 
         Pict( const Pict & copy ) : it( copy.it ), shallowCopy( true )  { }
 
-        bool operator == ( const Pict & ) const {  return false ;  }
-        bool operator == ( const void * ) const {  return false ;  }
-        bool operator != ( const Pict & ) const {  return true ;  }
-        bool operator != ( const void * ) const {  return true ;  }
+        ///bool operator == ( const Pict & ) const = delete ; /// {  return false ;  }
+        ///bool operator == ( const void * ) const = delete ; /// {  return false ;  }
+        ///bool operator != ( const Pict & ) const = delete ; /// {  return true ;  }
+        ///bool operator != ( const void * ) const = delete ; /// {  return true ;  }
 
 };
 

@@ -387,12 +387,12 @@ Picture * Screen::loadPicture ( const std::string & nameOfPicture )
                 ospaths::pathToFile( pathToPictures, nameOfPicture )
         ) );
 
-        if ( pict == nilPointer ) {
-                std::cout << "can't load picture \"" << pathToPictures << ospaths::pathSeparator() << nameOfPicture << "\"" << std::endl ;
-                return nilPointer ;
+        if ( pict != nilPointer && pict->isNotNil () ) {
+                return new Picture( *pict ) ;
         }
 
-        return new Picture( *pict ) ;
+        std::cout << "can't load picture \"" << pathToPictures << ospaths::pathSeparator() << nameOfPicture << "\"" << std::endl ;
+        return nilPointer ;
 }
 
 /* static */
