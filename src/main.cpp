@@ -15,6 +15,7 @@
 #include "WrappersAllegro.hpp"
 
 #include "GameManager.hpp"
+#include "GamePreferences.hpp"
 #include "GuiManager.hpp"
 
 #include "ospaths.hpp"
@@ -42,9 +43,9 @@ void initAllegro ()
 
 void readPreferences ()
 {
-        bool preferencesRead = iso::GameManager::readPreferences( ospaths::homePath() + "preferences.xml" ) ;
+        bool preferencesOkay = iso::GamePreferences::readPreferences( ospaths::homePath() + "preferences.xml" ) ;
 
-        if ( ! preferencesRead )
+        if ( ! preferencesOkay )
                 gui::GuiManager::getInstance().setLanguage( "en_US" );
 }
 

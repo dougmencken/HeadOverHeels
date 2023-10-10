@@ -153,10 +153,6 @@ public:
 
         void cleanUp () ;
 
-        static bool readPreferences ( const std::string& fileName ) ;
-
-        static bool writePreferences ( const std::string& fileName ) ;
-
         /**
          * The game begins here
          */
