@@ -70,6 +70,8 @@ public:
 
         static void refreshBackground () ;
 
+        static void toBlackBackground () ;
+
         void refreshPicturesOfHeadAndHeels () ;
 
         const Picture & getImageOfScreen () const {  return *imageOfScreen ;  }

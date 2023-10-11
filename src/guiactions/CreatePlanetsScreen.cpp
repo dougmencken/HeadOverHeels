@@ -6,7 +6,6 @@
 #include "LanguageText.hpp"
 #include "SoundManager.hpp"
 #include "GuiManager.hpp"
-#include "GameManager.hpp"
 #include "Color.hpp"
 #include "Screen.hpp"
 #include "PictureWidget.hpp"
@@ -46,7 +45,10 @@ void CreatePlanetsScreen::doAction ()
 
         LanguageManager* languageManager = GuiManager::getInstance().getLanguageManager();
 
-        Screen& planets = * GuiManager::getInstance().findOrCreateScreenForAction( this );
+        if ( GameManager::getInstance().isSimpleGraphicsSet () )
+                Screen::toBlackBackground () ; // change the background from red to black
+
+        Screen & planets = * GuiManager::getInstance().findOrCreateScreenForAction( this );
 
         if ( planets.countWidgets() > 0 )
         {

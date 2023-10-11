@@ -1,6 +1,7 @@
 
 #include "CreateEndScreen.hpp"
 
+#include "GameManager.hpp"
 #include "GuiManager.hpp"
 #include "LanguageText.hpp"
 #include "LanguageManager.hpp"
@@ -29,7 +30,10 @@ void CreateEndScreen::doAction ()
 {
         SoundManager::getInstance().playOgg( "music/MainTheme.ogg", /* loop */ true );
 
-        Screen& screen = * GuiManager::getInstance().findOrCreateScreenForAction( this );
+        if ( game::GameManager::getInstance().isSimpleGraphicsSet () )
+                Screen::refreshBackground () ; // get the background back
+
+        Screen & screen = * GuiManager::getInstance().findOrCreateScreenForAction( this );
         if ( screen.countWidgets() > 0 )
         {
                 screen.freeWidgets();

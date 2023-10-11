@@ -45,6 +45,12 @@ namespace gui
         Screen::backgroundPicture->setName( "the background for user interface slides" );
 }
 
+/* static */ void Screen::toBlackBackground ()
+{
+        delete Screen::backgroundPicture ;
+        Screen::backgroundPicture = new Picture( variables::getScreenWidth(), variables::getScreenHeight(), Color::blackColor() ) ;
+        Screen::backgroundPicture->setName( "the black background for user interface slides" );
+}
 
 Screen::Screen( Action* action ) :
         Widget( 0, 0 ),
