@@ -630,7 +630,6 @@ PlayerItemPtr RoomBuilder::createCharacterInRoom( Room * room,
                 if ( gameInfo.getLivesByName( nameOfCharacterToCreate ) > 0 )
                 {
                         PlayerItemPtr character( new PlayerItem( itemDescription, x, y, z, orientation ) );
-                        ///////////////////////////////////character->fillWithData( gameManager );
 
                         std::string behaviorOfCharacter = "behavior of some character";
 

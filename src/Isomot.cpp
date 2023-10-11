@@ -499,8 +499,6 @@ void Isomot::handleMagicKeys ()
 
                                 joinedPlayer->setBehaviorOf( behavior );
 
-                                /////////////////////joinedPlayer->fillWithData( gameManager );
-
                                 activeRoom->addCharacterToRoom( joinedPlayer, true );
                                 joinedPlayer->getBehavior()->changeActivityOfItem( Activity::BeginWayInTeletransport );
 
@@ -551,8 +549,6 @@ void Isomot::handleMagicKeys ()
                                 else if ( nameOfPlayer == "headoverheels" ) behaviorOfPlayer = "behavior of Head over Heels";
 
                                 teleportedPlayer->setBehaviorOf( behaviorOfPlayer );
-
-                                //////////////////////////////teleportedPlayer->fillWithData( gameManager );
 
                                 std::string nameOfRoomNearFinal = "blacktooth83tofreedom.xml";
                                 Room* roomWithTeleportToFinalScene = mapManager.getRoomThenAddItToRoomsInPlay( nameOfRoomNearFinal, true );

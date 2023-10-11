@@ -124,7 +124,7 @@ public:
 
 
 /**
- * Manages the game
+ * Manages the game, and nothing more. Doesn't play solitaire. Doesn't smoke. Anything at all. Really.
  */
 
 class GameManager
