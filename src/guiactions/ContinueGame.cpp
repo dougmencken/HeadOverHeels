@@ -22,7 +22,7 @@ void ContinueGame::doAction ()
 {
         iso::SoundManager::getInstance().stopOgg (); // or else hear the planets screen's music when resuming an old (saved) game
 
-        iso::GameManager & gameManager = iso::GameManager::getInstance() ;
+        game::GameManager & gameManager = game::GameManager::getInstance() ;
         gui::GuiManager & uiManager = gui::GuiManager::getInstance() ;
 
         uiManager.resetWhyTheGameIsPaused () ;

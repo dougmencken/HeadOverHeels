@@ -61,31 +61,31 @@ PlayerHeadAndHeels::~PlayerHeadAndHeels( )
 
 bool PlayerHeadAndHeels::update ()
 {
-        PlayerItem& playerItem = dynamic_cast< PlayerItem& >( * this->item );
+        PlayerItem & characterItem = dynamic_cast< PlayerItem & >( * this->item );
 
-        if ( playerItem.hasShield() )
+        if ( characterItem.hasShield() )
         {
-                playerItem.decreaseShield();
+                characterItem.decrementShieldOverTime () ;
         }
 
         switch ( activity )
         {
                 case Activity::Wait:
-                        wait( playerItem );
+                        wait( characterItem );
                         break;
 
                 case Activity::AutoMoveNorth:
                 case Activity::AutoMoveSouth:
                 case Activity::AutoMoveEast:
                 case Activity::AutoMoveWest:
-                        autoMove( playerItem );
+                        autoMove( characterItem );
                         break;
 
                 case Activity::MoveNorth:
                 case Activity::MoveSouth:
                 case Activity::MoveEast:
                 case Activity::MoveWest:
-                        move( playerItem );
+                        move( characterItem );
                         break;
 
                 case Activity::DisplaceNorth:
@@ -100,62 +100,62 @@ bool PlayerHeadAndHeels::update ()
                 case Activity::ForceDisplaceSouth:
                 case Activity::ForceDisplaceEast:
                 case Activity::ForceDisplaceWest:
-                        displace( playerItem );
+                        displace( characterItem );
                         break;
 
                 case Activity::CancelDisplaceNorth:
                 case Activity::CancelDisplaceSouth:
                 case Activity::CancelDisplaceEast:
                 case Activity::CancelDisplaceWest:
-                        cancelDisplace( playerItem );
+                        cancelDisplace( characterItem );
                         break;
 
                 case Activity::Fall:
-                        fall( playerItem );
+                        fall( characterItem );
                         break;
 
                 case Activity::Jump:
                 case Activity::RegularJump:
                 case Activity::HighJump:
-                        jump( playerItem );
+                        jump( characterItem );
                         break;
 
                 case Activity::BeginWayOutTeletransport:
                 case Activity::WayOutTeletransport:
-                        wayOutTeletransport( playerItem );
+                        wayOutTeletransport( characterItem );
                         break;
 
                 case Activity::BeginWayInTeletransport:
                 case Activity::WayInTeletransport:
-                        wayInTeletransport( playerItem );
+                        wayInTeletransport( characterItem );
                         break;
 
                 case Activity::MeetMortalItem:
                 case Activity::Vanish:
-                        collideWithMortalItem( playerItem );
+                        collideWithMortalItem( characterItem );
                         break;
 
                 case Activity::Glide:
-                        glide( playerItem );
+                        glide( characterItem );
                         break;
 
                 case Activity::Blink:
-                        blink( playerItem );
+                        blink( characterItem );
                         break;
 
                 case Activity::TakeItem:
                 case Activity::TakeAndJump:
-                        takeItem( playerItem );
+                        takeItem( characterItem );
                         break;
 
                 case Activity::ItemTaken:
-                        playerItem.addToZ( - Isomot::LayerHeight );
+                        characterItem.addToZ( - Isomot::LayerHeight );
                         activity = Activity::Wait;
                         break;
 
                 case Activity::DropItem:
                 case Activity::DropAndJump:
-                        dropItem( playerItem );
+                        dropItem( characterItem );
                         break;
 
                 default:
@@ -163,15 +163,15 @@ bool PlayerHeadAndHeels::update ()
         }
 
         // play sound for current activity
-        SoundManager::getInstance().play( playerItem.getOriginalLabel(), activity );
+        SoundManager::getInstance().play( characterItem.getOriginalLabel(), activity );
 
         return false;
 }
 
 void PlayerHeadAndHeels::behave ()
 {
-        PlayerItem& playerItem = dynamic_cast< PlayerItem& >( * this->item );
-        InputManager& input = InputManager::getInstance();
+        PlayerItem & characterItem = dynamic_cast< PlayerItem & >( * this->item );
+        InputManager & input = InputManager::getInstance() ;
 
         // if it’s not a move by inertia or some other exotic activity
         if ( activity != Activity::AutoMoveNorth && activity != Activity::AutoMoveSouth &&
@@ -186,24 +186,24 @@ void PlayerHeadAndHeels::behave ()
                         if ( input.jumpTyped() )
                         {
                                 // is there teleport below
-                                playerItem.canAdvanceTo( 0, 0, -1 );
+                                characterItem.canAdvanceTo( 0, 0, -1 );
                                 activity =
-                                        playerItem.getMediator()->collisionWithByBehavior( "behavior of teletransport" ) != nilPointer ?
+                                        characterItem.getMediator()->collisionWithByBehavior( "behavior of teletransport" ) != nilPointer ?
                                                 Activity::BeginWayOutTeletransport : Activity::Jump ;
                         }
                         else if ( input.doughnutTyped() && ! donutFromHooterIsHere )
                         {
-                                useHooter( playerItem );
+                                useHooter( characterItem );
                                 input.releaseKeyFor( "doughnut" );
                         }
                         else if ( input.takeTyped() )
                         {
-                                activity = ( playerItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeItem : Activity::DropItem );
+                                activity = ( characterItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeItem : Activity::DropItem );
                                 input.releaseKeyFor( "take" );
                         }
                         else if ( input.takeAndJumpTyped() )
                         {
-                                activity = ( playerItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeAndJump : Activity::DropAndJump );
+                                activity = ( characterItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeAndJump : Activity::DropAndJump );
                                 input.releaseKeyFor( "take&jump" );
                         }
                         else if ( input.movenorthTyped() )
@@ -230,24 +230,24 @@ void PlayerHeadAndHeels::behave ()
                         if ( input.jumpTyped() )
                         {
                                 // jump or teleport
-                                playerItem.canAdvanceTo( 0, 0, -1 );
+                                characterItem.canAdvanceTo( 0, 0, -1 );
                                 activity =
-                                        playerItem.getMediator()->collisionWithByBehavior( "behavior of teletransport" ) != nilPointer ?
+                                        characterItem.getMediator()->collisionWithByBehavior( "behavior of teletransport" ) != nilPointer ?
                                                 Activity::BeginWayOutTeletransport : Activity::Jump ;
                         }
                         else if ( input.doughnutTyped() && ! donutFromHooterIsHere )
                         {
-                                useHooter( playerItem );
+                                useHooter( characterItem );
                                 input.releaseKeyFor( "doughnut" );
                         }
                         else if ( input.takeTyped() )
                         {
-                                activity = ( playerItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeItem : Activity::DropItem );
+                                activity = ( characterItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeItem : Activity::DropItem );
                                 input.releaseKeyFor( "take" );
                         }
                         else if ( input.takeAndJumpTyped() )
                         {
-                                activity = ( playerItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeAndJump : Activity::DropAndJump );
+                                activity = ( characterItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeAndJump : Activity::DropAndJump );
                                 input.releaseKeyFor( "take&jump" );
                         }
                         else if ( input.movenorthTyped() )
@@ -268,7 +268,7 @@ void PlayerHeadAndHeels::behave ()
                         }
                         else if ( ! input.anyMoveTyped() )
                         {
-                                SoundManager::getInstance().stop( playerItem.getLabel(), activity );
+                                SoundManager::getInstance().stop( characterItem.getLabel(), activity );
                                 activity = Activity::Wait;
                         }
                 }
@@ -282,17 +282,17 @@ void PlayerHeadAndHeels::behave ()
                         }
                         else if ( input.doughnutTyped() && ! donutFromHooterIsHere )
                         {
-                                useHooter( playerItem );
+                                useHooter( characterItem );
                                 input.releaseKeyFor( "doughnut" );
                         }
                         else if ( input.takeTyped() )
                         {
-                                activity = ( playerItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeItem : Activity::DropItem );
+                                activity = ( characterItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeItem : Activity::DropItem );
                                 input.releaseKeyFor( "take" );
                         }
                         else if ( input.takeAndJumpTyped() )
                         {
-                                activity = ( playerItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeAndJump : Activity::DropAndJump );
+                                activity = ( characterItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeAndJump : Activity::DropAndJump );
                                 input.releaseKeyFor( "take&jump" );
                         }
                         else if ( input.movenorthTyped() )
@@ -342,37 +342,37 @@ void PlayerHeadAndHeels::behave ()
                 {
                         if ( input.doughnutTyped() && ! donutFromHooterIsHere )
                         {
-                                useHooter( playerItem );
+                                useHooter( characterItem );
                                 input.releaseKeyFor( "doughnut" );
                         }
                         else if ( input.movenorthTyped() )
                         {
-                                playerItem.changeOrientation( "north" );
+                                characterItem.changeOrientation( "north" );
                         }
                         else if ( input.movesouthTyped() )
                         {
-                                playerItem.changeOrientation( "south" );
+                                characterItem.changeOrientation( "south" );
                         }
                         else if ( input.moveeastTyped() )
                         {
-                                playerItem.changeOrientation( "east" );
+                                characterItem.changeOrientation( "east" );
                         }
                         else if ( input.movewestTyped() )
                         {
-                                playerItem.changeOrientation( "west" );
+                                characterItem.changeOrientation( "west" );
                         }
                 }
                 else if ( activity == Activity::Fall )
                 {
                         if ( input.doughnutTyped() && ! donutFromHooterIsHere )
                         {
-                                useHooter( playerItem );
+                                useHooter( characterItem );
                                 input.releaseKeyFor( "doughnut" );
                         }
                         // pick or drop an item when falling
                         else if ( input.takeTyped() )
                         {
-                                activity = ( playerItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeItem : Activity::DropItem );
+                                activity = ( characterItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeItem : Activity::DropItem );
                                 input.releaseKeyFor( "take" );
                         }
                         // entonces Head y Heels planean
@@ -389,30 +389,30 @@ void PlayerHeadAndHeels::behave ()
                 {
                         if ( input.doughnutTyped() && ! donutFromHooterIsHere )
                         {
-                                useHooter( playerItem );
+                                useHooter( characterItem );
                                 input.releaseKeyFor( "doughnut" );
                         }
                         // pick or drop an item when gliding
                         else if ( input.takeTyped() )
                         {
-                                activity = ( playerItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeItem : Activity::DropItem );
+                                activity = ( characterItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeItem : Activity::DropItem );
                                 input.releaseKeyFor( "take" );
                         }
                         else if ( input.movenorthTyped() )
                         {
-                                playerItem.changeOrientation( "north" );
+                                characterItem.changeOrientation( "north" );
                         }
                         else if ( input.movesouthTyped() )
                         {
-                                playerItem.changeOrientation( "south" );
+                                characterItem.changeOrientation( "south" );
                         }
                         else if ( input.moveeastTyped() )
                         {
-                                playerItem.changeOrientation( "east" );
+                                characterItem.changeOrientation( "east" );
                         }
                         else if ( input.movewestTyped() )
                         {
-                                playerItem.changeOrientation( "west" );
+                                characterItem.changeOrientation( "west" );
                         }
                         else if ( ! input.anyMoveTyped() )
                         {
@@ -422,9 +422,9 @@ void PlayerHeadAndHeels::behave ()
         }
 }
 
-void PlayerHeadAndHeels::wait( PlayerItem & playerItem )
+void PlayerHeadAndHeels::wait( PlayerItem & characterItem )
 {
-        playerItem.wait();
+        characterItem.wait();
 
         if ( timerForBlinking->getValue() >= ( rand() % 4 ) + 5 )
         {
@@ -439,14 +439,14 @@ void PlayerHeadAndHeels::wait( PlayerItem & playerItem )
         }
 }
 
-void PlayerHeadAndHeels::blink( PlayerItem & playerItem )
+void PlayerHeadAndHeels::blink( PlayerItem & characterItem )
 {
         double blinkTime = timerForBlinking->getValue();
 
         // close the eyes
         if ( ( blinkTime > 0.0 && blinkTime < 0.050 ) || ( blinkTime > 0.400 && blinkTime < 0.450 ) )
         {
-                playerItem.changeFrame( blinkFrames[ playerItem.getOrientation() ] );
+                characterItem.changeFrame( blinkFrames[ characterItem.getOrientation() ] );
         }
         // open the eyes
         else if ( ( blinkTime > 0.250 && blinkTime < 0.300 ) || ( blinkTime > 0.750 && blinkTime < 0.800 ) )

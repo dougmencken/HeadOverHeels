@@ -41,6 +41,7 @@
         <file name="GameSaverAndLoader.cpp" />
         <file name="InputManager.cpp" />
         <file name="GameManager.cpp" />
+        <file name="GameInfo.cpp" />
         <file name="GamePreferences.cpp" />
         <file name="Miniature.cpp" />
         <file name="Isomot.cpp" />

@@ -1,5 +1,6 @@
 
 #include "Doughnut.hpp"
+
 #include "Mediator.hpp"
 #include "FreeItem.hpp"
 #include "UserControlled.hpp"
@@ -11,7 +12,7 @@ namespace iso
 
 Doughnut::Doughnut( const ItemPtr & item, const std::string & behavior )
         : Behavior( item, behavior )
-        , playerItem( nilPointer )
+        , character( nilPointer )
         , speedTimer( new Timer() )
 {
         speedTimer->go();
@@ -76,25 +77,27 @@ bool Doughnut::update ()
                                         freeItem.canAdvanceTo( 0, 1, 0 );
                                 }
 
-                                // if there’s no collision or collision is with player, move doughnut
-
                                 Mediator* mediator = freeItem.getMediator() ;
-                                if ( mediator->isStackOfCollisionsEmpty() ||
-                                        mediator->collisionWithByLabel( playerItem->getLabel() ) != nilPointer )
+                                bool collisionWithCharacter = ( mediator->collisionWithByLabel( this->character->getOriginalLabel() ) != nilPointer ) ;
+
+                                // if no collisions or a collision with the character
+                                if ( mediator->isStackOfCollisionsEmpty() || collisionWithCharacter )
                                 {
                                         freeItem.setCollisionDetector( false );
+
+                                        // move a doughnut
                                         MoveKindOfActivity::getInstance().move( this, &activity, false );
                                 }
                                 else
                                 {
-                                        // freeze “ bad boy ” on collision with it
+                                        // freeze “ bad boy ” on a collision with it
                                         if ( mediator->collisionWithBadBoy() != nilPointer )
                                         {
                                                 propagateActivity( *this->item, Activity::Freeze );
                                         }
 
                                         // doughnut disappears after collison with any item but player
-                                        dynamic_cast< UserControlled * >( playerItem->getBehavior() )->setFireFromHooter( false );
+                                        dynamic_cast< UserControlled * >( this->character->getBehavior() )->setFireFromHooter( false );
                                         vanish = true;
                                 }
 

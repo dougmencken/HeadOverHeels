@@ -31,9 +31,9 @@ public:
 
 protected:
 
-        virtual void wait ( PlayerItem & playerItem ) ;
+        virtual void wait ( PlayerItem & characterItem ) ;
 
-        virtual void blink ( PlayerItem & playerItem ) ;
+        virtual void blink ( PlayerItem & characterItem ) ;
 
 protected:
 

@@ -53,8 +53,6 @@ public:
 
         void beginNewGame () ;
 
-        void continueSavedGame ( tinyxml2::XMLElement * characters ) ;
-
         void pause () ;
 
         void resume () ;
@@ -82,6 +80,8 @@ public:
          * In isometric units maximum height of room is LayerHeight * MaxLayers
          */
         static const int MaxLayers = 10 ;
+
+        static const unsigned int updatesPerSecond = 50 ;
 
 private:
 

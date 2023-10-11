@@ -43,7 +43,7 @@ void initAllegro ()
 
 void readPreferences ()
 {
-        bool preferencesOkay = iso::GamePreferences::readPreferences( ospaths::homePath() + "preferences.xml" ) ;
+        bool preferencesOkay = game::GamePreferences::readPreferences( ospaths::homePath() + "preferences.xml" ) ;
 
         if ( ! preferencesOkay )
                 gui::GuiManager::getInstance().setLanguage( "en_US" );
@@ -132,10 +132,10 @@ int main( int argc, char** argv )
                 }
 
                 if ( options.count( "head-room" ) > 0 )
-                        iso::GameManager::getInstance().setHeadRoom( options[ "head-room" ] );
+                        game::GameManager::getInstance().setHeadRoom( options[ "head-room" ] );
 
                 if ( options.count( "heels-room" ) > 0 )
-                        iso::GameManager::getInstance().setHeelsRoom( options[ "heels-room" ] );
+                        game::GameManager::getInstance().setHeelsRoom( options[ "heels-room" ] );
 
                 if ( options.count( "rebuild-rooms" ) > 0 )
                         iso::MapManager::buildEveryRoomAtOnce = true ;
@@ -152,7 +152,7 @@ int main( int argc, char** argv )
 #endif
 
         if ( newGameNoGui )
-                iso::GameManager::getInstance().begin () ;
+                game::GameManager::getInstance().begin () ;
         else
                 gui::GuiManager::getInstance().begin () ;
 
@@ -160,7 +160,7 @@ int main( int argc, char** argv )
         timeEndPeriod( 1 );
 #endif
 
-        iso::GameManager::getInstance().cleanUp () ;
+        game::GameManager::getInstance().cleanUp () ;
         gui::GuiManager::getInstance().freeScreens () ;
 
         return EXIT_SUCCESS ;

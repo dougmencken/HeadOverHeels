@@ -19,7 +19,7 @@ LoadGame::LoadGame( unsigned int slot )
 
 void LoadGame::doAction ()
 {
-        iso::GameManager& gameManager = iso::GameManager::getInstance();
+        game::GameManager& gameManager = game::GameManager::getInstance();
         gameManager.resetPlanets();
         gameManager.loadGame( ospaths::homePath () + "savegame" + ospaths::pathSeparator () + "saved." + util::number2string( slot ) );
 

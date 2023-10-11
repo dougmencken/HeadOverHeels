@@ -22,14 +22,15 @@
 #include "screen.hpp"
 
 
-namespace iso
+namespace game
 {
 
 GameManager GameManager::instance ;
 
 
 GameManager::GameManager( )
-        : headRoom( "blacktooth1head.xml" )
+        : theInfo( )
+        , headRoom( "blacktooth1head.xml" )
         , heelsRoom( "blacktooth23heels.xml" )
         , freedomLabel( nilPointer )
         , numberOfCapture( 0 )
@@ -47,15 +48,6 @@ GameManager::GameManager( )
         , recordingTimer( new Timer () )
         , isomot( )
         , saverAndLoader( )
-        , headLives( 0 )
-        , heelsLives( 0 )
-        , highSpeed( 0 )
-        , highJumps( 0 )
-        , headShield( 0 )
-        , heelsShield( 0 )
-        , horn( false )
-        , handbag( false )
-        , donuts( 0 )
         , keyMoments( )
 {
         if ( ! ospaths::folderExists( capturePath ) )
@@ -108,16 +100,11 @@ void GameManager::begin ()
 {
         IF_DEBUG( fprintf ( stdout, "GameManager::begin ()\n" ) )
 
-        this->vidasInfinitas = false;
-        this->headLives = 8;
-        this->heelsLives = 8;
-        this->highSpeed = 0;
-        this->highJumps = 0;
-        this->headShield = 0;
-        this->heelsShield = 0;
-        this->horn = false;
-        this->handbag = false;
-        this->donuts = 0;
+        this->vidasInfinitas = false ;
+        this->immunityToCollisions = false ;
+
+        theInfo.resetForANewGame () ;
+
         this->imageOfItemInBag.clear ();
         this->planets.clear ();
 
@@ -144,7 +131,7 @@ void GameManager::update ()
                         this->pause ();
                 else
                 {
-                        if ( headLives > 0 || heelsLives > 0 )
+                        if ( theInfo.getHeadLives () > 0 || theInfo.getHeelsLives () > 0 )
                         {
                                 if ( isomot.getMapManager().getActiveRoom() != nilPointer )
                                 {
@@ -166,7 +153,7 @@ void GameManager::update ()
                                                 drawOnScreen( *nothing );
                                         }
 
-                                        somn::milliSleep( 1000 / GameManager::updatesPerSecond );
+                                        somn::milliSleep( 1000 / Isomot::updatesPerSecond );
                                 }
                                 else
                                 {
@@ -420,7 +407,7 @@ void GameManager::refreshAmbianceImages ()
         }
 
         ambiancePictures[ "grandes saltos" ] = refreshPicture( "high-jumps.png" );
-        ambiancePictures[ "gran velocidad" ] = refreshPicture( "high-speed.png" );
+        ambiancePictures[ "gran velocidad" ] = refreshPicture( "quick-steps.png" );
         ambiancePictures[ "escudo" ] = refreshPicture( "shield.png" );
 
         ambiancePictures[ "gray grandes saltos" ] = PicturePtr( new Picture( * ambiancePictures[ "grandes saltos" ] ) );
@@ -482,89 +469,94 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                 const unsigned int leftTooAmbianceX = 33 + dx ;
                 const unsigned int rightTooAmbianceX = 559 + dx ;
 
-                std::string player = isomot.getMapManager().getActiveRoom()->getMediator()->getLabelOfActiveCharacter();
+                std::string character = isomot.getMapManager().getActiveRoom()->getMediator()->getLabelOfActiveCharacter();
                 allegro::drawSprite (
-                        ( (  player == "head" || player == "headoverheels" ) ? ambiancePictures[ "head" ] : ambiancePictures[ "gray head" ] )->getAllegroPict(),
+                        ( (  character == "head" || character == "headoverheels" ) ? ambiancePictures[ "head" ] : ambiancePictures[ "gray head" ] )->getAllegroPict(),
                         161 + dx, headHeelsAmbianceY );
                 allegro::drawSprite (
-                        ( ( player == "heels" || player == "headoverheels" ) ? ambiancePictures[ "heels" ] : ambiancePictures[ "gray heels" ] )->getAllegroPict(),
+                        ( ( character == "heels" || character == "headoverheels" ) ? ambiancePictures[ "heels" ] : ambiancePictures[ "gray heels" ] )->getAllegroPict(),
                         431 + dx, headHeelsAmbianceY );
 
                 allegro::drawSprite(
-                        ( this->horn ? ambiancePictures[ "horn" ] : ambiancePictures[ "gray horn" ] )->getAllegroPict(),
+                        ( this->theInfo.hasHorn () ? ambiancePictures[ "horn" ] : ambiancePictures[ "gray horn" ] )->getAllegroPict(),
                         leftTooAmbianceX, headHeelsAmbianceY );
 
                 allegro::drawSprite(
-                        ( this->handbag ? ambiancePictures[ "handbag" ] : ambiancePictures[ "gray handbag" ] )->getAllegroPict(),
+                        ( this->theInfo.hasHandbag () ? ambiancePictures[ "handbag" ] : ambiancePictures[ "gray handbag" ] )->getAllegroPict(),
                         rightTooAmbianceX, headHeelsAmbianceY );
 
                 std::string colorOfLabels = "white";
                 /* if ( isSimpleGraphicsSet () ) colorOfLabels = "magenta"; */
 
                 // vidas de Head
-                gui::Label headLivesLabel( util::number2string( this->headLives ), "big", "white", -2 );
-                headLivesLabel.moveTo( ( this->headLives > 9 ? 214 : 221 ) + dx, headHeelsAmbianceY - 1 );
+                unsigned char livesForHead = this->theInfo.getHeadLives () ;
+                gui::Label headLivesLabel( util::number2string( livesForHead ), "big", "white", -2 );
+                headLivesLabel.moveTo( ( livesForHead > 9 ? 214 : 221 ) + dx, headHeelsAmbianceY - 1 );
                 headLivesLabel.draw ();
 
                 // vidas de Heels
-                gui::Label heelsLivesLabel( util::number2string( this->heelsLives ), "big", "white", -2 );
-                heelsLivesLabel.moveTo( ( this->heelsLives > 9 ? 398 : 405 ) + dx, headHeelsAmbianceY - 1 );
+                unsigned char livesForHeels = this->theInfo.getHeelsLives () ;
+                gui::Label heelsLivesLabel( util::number2string( livesForHeels ), "big", "white", -2 );
+                heelsLivesLabel.moveTo( ( livesForHeels > 9 ? 398 : 405 ) + dx, headHeelsAmbianceY - 1 );
                 heelsLivesLabel.draw ();
 
                 // número de rosquillas
+                unsigned short doughnuts = this->theInfo.getDoughnuts () ;
                 allegro::drawSprite(
-                        ( this->donuts != 0 ? ambiancePictures[ "donuts" ] : ambiancePictures[ "gray donuts" ] )->getAllegroPict(),
+                        ( doughnuts != 0 ? ambiancePictures[ "donuts" ] : ambiancePictures[ "gray donuts" ] )->getAllegroPict(),
                         leftTooAmbianceX, charStuffAmbianceY );
-                if ( this->donuts > 0 )
+                if ( doughnuts > 0 )
                 {
-                        gui::Label donutsLabel( util::number2string( this->donuts ), "", colorOfLabels, -2 );
-                        donutsLabel.moveTo( ( this->donuts > 9 ? 42 : 49 ) + dx, charStuffAmbianceY + 11 );
+                        gui::Label donutsLabel( util::number2string( doughnuts ), "", colorOfLabels, -2 );
+                        donutsLabel.moveTo( ( doughnuts > 9 ? 42 : 49 ) + dx, charStuffAmbianceY + 11 );
                         donutsLabel.draw ();
                 }
 
                 // grandes saltos
+                unsigned int highJumps = this->theInfo.getBonusHighJumps () ;
                 allegro::drawSprite(
-                        ( this->highJumps > 0 ? ambiancePictures[ "grandes saltos" ] : ambiancePictures[ "gray grandes saltos" ] )->getAllegroPict(),
+                        ( highJumps > 0 ? ambiancePictures[ "grandes saltos" ] : ambiancePictures[ "gray grandes saltos" ] )->getAllegroPict(),
                         rightAmbianceX, bonusAmbianceY );
-                if ( this->highJumps > 0 )
+                if ( highJumps > 0 )
                 {
-                        gui::Label highJumpsLabel( util::number2string( this->highJumps ), "", colorOfLabels, -2 );
-                        highJumpsLabel.moveTo( ( this->highJumps > 9 ? 505 : 512 ) + dx, bonusAmbianceY + 1 );
+                        gui::Label highJumpsLabel( util::number2string( highJumps ), "", colorOfLabels, -2 );
+                        highJumpsLabel.moveTo( ( highJumps > 9 ? 505 : 512 ) + dx, bonusAmbianceY + 1 );
                         highJumpsLabel.draw ();
                 }
 
                 // gran velocidad
+                unsigned int quickSteps = this->theInfo.getBonusQuickSteps () ;
                 allegro::drawSprite(
-                        ( this->highSpeed > 0 ? ambiancePictures[ "gran velocidad" ] : ambiancePictures[ "gray gran velocidad" ] )->getAllegroPict(),
+                        ( quickSteps > 0 ? ambiancePictures[ "gran velocidad" ] : ambiancePictures[ "gray gran velocidad" ] )->getAllegroPict(),
                         leftAmbianceX, bonusAmbianceY );
-                if ( this->highSpeed > 0 )
+                if ( quickSteps > 0 )
                 {
-                        gui::Label highSpeedLabel( util::number2string( this->highSpeed ), "", colorOfLabels, -2 );
-                        highSpeedLabel.moveTo( ( this->highSpeed > 9 ? 107 : 114 ) + dx, bonusAmbianceY + 1 );
-                        highSpeedLabel.draw ();
+                        gui::Label bigSpeedLabel( util::number2string( quickSteps ), "", colorOfLabels, -2 );
+                        bigSpeedLabel.moveTo( ( quickSteps > 9 ? 107 : 114 ) + dx, bonusAmbianceY + 1 );
+                        bigSpeedLabel.draw ();
                 }
 
                 // escudo de Head
+                int headShieldInteger = this->theInfo.getHeadShieldPoints () ;
                 allegro::drawSprite(
-                        ( this->headShield > 0 ? ambiancePictures[ "escudo" ] : ambiancePictures[ "gray escudo" ] )->getAllegroPict(),
+                        ( headShieldInteger > 0 ? ambiancePictures[ "escudo" ] : ambiancePictures[ "gray escudo" ] )->getAllegroPict(),
                         leftAmbianceX, immunityAmbianceY );
-                if ( this->headShield > 0 )
+                if ( headShieldInteger > 0 )
                 {
-                        int headShieldValue = static_cast< int >( this->headShield * 99.0 / 25.0 );
-                        gui::Label headShieldLabel( util::number2string( headShieldValue ), "", colorOfLabels, -2 );
-                        headShieldLabel.moveTo( ( headShieldValue > 9 ? 107 : 114 ) + dx, immunityAmbianceY + 1 );
+                        gui::Label headShieldLabel( util::number2string( headShieldInteger ), "", colorOfLabels, -2 );
+                        headShieldLabel.moveTo( ( headShieldInteger > 9 ? 107 : 114 ) + dx, immunityAmbianceY + 1 );
                         headShieldLabel.draw ();
                 }
 
                 // escudo de Heels
+                int heelsShieldInteger = this->theInfo.getHeelsShieldPoints () ;
                 allegro::drawSprite(
-                        ( this->heelsShield > 0 ? ambiancePictures[ "escudo" ] : ambiancePictures[ "gray escudo" ] )->getAllegroPict(),
+                        ( heelsShieldInteger > 0 ? ambiancePictures[ "escudo" ] : ambiancePictures[ "gray escudo" ] )->getAllegroPict(),
                         rightAmbianceX, immunityAmbianceY );
-                if ( this->heelsShield > 0 )
+                if ( heelsShieldInteger > 0 )
                 {
-                        int heelsShieldValue = static_cast< int >( this->heelsShield * 99.0 / 25.0 );
-                        gui::Label heelsShieldLabel( util::number2string( heelsShieldValue ), "", colorOfLabels, -2 );
-                        heelsShieldLabel.moveTo( ( heelsShieldValue > 9 ? 505 : 512 ) + dx, immunityAmbianceY + 1 );
+                        gui::Label heelsShieldLabel( util::number2string( heelsShieldInteger ), "", colorOfLabels, -2 );
+                        heelsShieldLabel.moveTo( ( heelsShieldInteger > 9 ? 505 : 512 ) + dx, immunityAmbianceY + 1 );
                         heelsShieldLabel.draw ();
                 }
 
@@ -677,177 +669,6 @@ void GameManager::saveGame ( const std::string& fileName )
         saverAndLoader.saveGame( fileName );
 }
 
-void GameManager::addLives ( const std::string& player, unsigned char lives )
-{
-        if ( player == "head" )
-        {
-                if ( this->headLives + lives < 100 )
-                {
-                        this->headLives += lives;
-                }
-        }
-        else if ( player == "heels" )
-        {
-                if ( this->heelsLives + lives < 100 )
-                {
-                        this->heelsLives += lives;
-                }
-        }
-        else if ( player == "headoverheels" )
-        {
-                if ( this->headLives + lives < 100 )
-                {
-                        this->headLives += lives;
-                }
-
-                if ( this->heelsLives + lives < 100 )
-                {
-                        this->heelsLives += lives;
-                }
-        }
-}
-
-void GameManager::loseLife ( const std::string& player )
-{
-        if ( ! vidasInfinitas )
-        {
-                if ( player == "head" )
-                {
-                        if ( this->headLives > 0 )
-                        {
-                                this->headLives--;
-                        }
-                }
-                else if ( player == "heels" )
-                {
-                        if ( this->heelsLives > 0 )
-                        {
-                                this->heelsLives--;
-                        }
-                }
-                else if ( player == "headoverheels" )
-                {
-                        if ( this->headLives > 0 )
-                        {
-                                this->headLives--;
-                        }
-                        if ( this->heelsLives > 0 )
-                        {
-                                this->heelsLives--;
-                        }
-                }
-        }
-}
-
-void GameManager::takeMagicItem ( const std::string& label )
-{
-        if ( label == "horn" )
-        {
-                this->horn = true;
-        }
-        else if ( label == "handbag" )
-        {
-                this->handbag = true;
-        }
-}
-
-void GameManager::addHighSpeed ( const std::string& player, unsigned int highSpeed )
-{
-        if ( player == "head" || player == "headoverheels" )
-        {
-                this->highSpeed += highSpeed;
-                if ( this->highSpeed > 99 )
-                {
-                        this->highSpeed = 99;
-                }
-        }
-}
-
-void GameManager::decreaseHighSpeed ( const std::string& player )
-{
-        if ( player == "head" || player == "headoverheels" )
-        {
-                if ( this->highSpeed > 0 )
-                {
-                        this->highSpeed--;
-                }
-        }
-}
-
-void GameManager::addHighJumps ( const std::string& player, unsigned int highJumps )
-{
-        if ( player == "heels" || player == "headoverheels" )
-        {
-                this->highJumps += highJumps;
-                if ( this->highJumps > 99 )
-                {
-                        this->highJumps = 99;
-                }
-        }
-}
-
-void GameManager::decreaseHighJumps ( const std::string& player )
-{
-        if ( player == "heels" || player == "headoverheels" )
-        {
-                if ( this->highJumps > 0 )
-                {
-                        this->highJumps--;
-                }
-        }
-}
-
-void GameManager::addShield ( const std::string& player, float shield )
-{
-        if ( player == "head" )
-        {
-                this->headShield += shield;
-                if ( this->headShield > 25.0 )
-                {
-                        this->headShield = 25.0;
-                }
-        }
-        else if ( player == "heels" )
-        {
-                this->heelsShield += shield;
-                if ( this->heelsShield > 25.0 )
-                {
-                        this->heelsShield = 25.0;
-                }
-        }
-        else if ( player == "headoverheels" )
-        {
-                this->headShield += shield;
-                if ( this->headShield > 25.0 )
-                {
-                        this->headShield = 25.0;
-                }
-
-                this->heelsShield += shield;
-                if ( this->heelsShield > 25.0 )
-                {
-                        this->heelsShield = 25.0;
-                }
-        }
-}
-
-void GameManager::modifyShield ( const std::string& player, float shield )
-{
-        if ( player == "head" || player == "headoverheels" )
-        {
-                this->headShield = shield ;
-                if ( this->headShield < 0 )
-                        this->headShield = 0 ;
-        }
-
-        if ( player == "heels" || player == "headoverheels" )
-        {
-                this->heelsShield = shield ;
-                if ( this->heelsShield < 0 )
-                        this->heelsShield = 0 ;
-        }
-}
-
 void GameManager::resetPlanets ()
 {
         for ( std::map < std::string, bool >::iterator g = this->planets.begin (); g != this->planets.end (); ++g )
@@ -904,62 +725,6 @@ void GameManager::eatFish ( const PlayerItem& character, Room* room, int x, int 
                 x, y, z,
                 character.getOrientation ()
         );
-}
-
-unsigned char GameManager::getLives ( const std::string& player ) const
-{
-        if ( player == "headoverheels" )
-        {
-                return std::min( this->headLives, this->heelsLives );
-        }
-        else if ( player == "head" )
-        {
-                return this->headLives;
-        }
-        else if ( player == "heels" )
-        {
-                return this->heelsLives;
-        }
-
-        return 0;
-}
-
-float GameManager::getShield ( const std::string& player ) const
-{
-        if ( player == "headoverheels" )
-        {
-                return std::max( this->headShield, this->heelsShield );
-        }
-        else if ( player == "head" )
-        {
-                return this->headShield;
-        }
-        else if ( player == "heels" )
-        {
-                return this->heelsShield;
-        }
-
-        return 0.0 ;
-}
-
-void GameManager::fillToolsOwnedByCharacter ( const std::string& player, std::vector< std::string >& tools ) const
-{
-        tools.clear ();
-
-        if ( player == "head" || player == "headoverheels" )
-        {
-                if ( this->horn ) tools.push_back( "horn" );
-        }
-
-        if ( player == "heels" || player == "headoverheels" )
-        {
-                if ( this->handbag ) tools.push_back( "handbag" );
-        }
-}
-
-unsigned short GameManager::getDonuts ( const std::string& player ) const
-{
-        return ( player == "head" || player == "headoverheels" ? this->donuts : 0 );
 }
 
 unsigned int GameManager::getVisitedRooms ()

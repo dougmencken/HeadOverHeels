@@ -33,10 +33,11 @@ public:
 
         void clear () ;
 
-        virtual void beginNewGame ( const std::string& headRoom, const std::string& heelsRoom ) ;
+        virtual void beginNewGame ( const std::string & headRoom, const std::string & heelsRoom ) ;
 
-        virtual void beginOldGameWithCharacter ( const std::string& roomFile, const std::string& character,
-                                                 int x, int y, int z, const std::string& direction, const std::string& entry,
+        virtual void beginOldGameWithCharacter ( const std::string & roomFile, const std::string & characterName,
+                                                 int x, int y, int z,
+                                                 const std::string & direction, const std::string & entry,
                                                  bool active ) ;
 
         Room * changeRoom () ;
@@ -50,13 +51,13 @@ public:
         Room * getRoomThenAddItToRoomsInPlay ( const std::string& roomFile, bool markVisited ) ;
 
         /**
-         * Change active room to next room
+         * Change the active room to the next room
          */
         Room * swapRoom () ;
 
         /**
-         * Remove active room and activate room where the other player is. Used when player
-         * loses all its lives
+         * Remove the active room and activate the room where the other character is.
+         * Used when a character loses all its lives
          */
         Room * noLivesSwap () ;
 
@@ -74,9 +75,9 @@ public:
         void setActiveRoom ( Room * newRoom ) {  activeRoom = newRoom ;  }
 
         /**
-         * @return room or nil if there’re no more players
+         * @return room or nil if there’re no more characters
          */
-        Room * getRoomOfInactivePlayer () const ;
+        Room * getRoomOfInactiveCharacter () const ;
 
         bool isRoomInPlay ( const Room * room ) const ;
 

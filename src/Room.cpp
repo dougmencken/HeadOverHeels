@@ -128,7 +128,7 @@ Room::Room( const std::string& roomFile, const std::string& scenery,
         }
 
         // 0 for pure black shadows, 128 for 50% opacity of shadows, 256 for no shadows
-        shadingOpacity = iso::GameManager::getInstance().getCastShadows () ? 128 /* 0 */ : 256 ;
+        shadingOpacity = game::GameManager::getInstance().getCastShadows () ? 128 /* 0 */ : 256 ;
 
 #if defined( DEBUG ) && DEBUG
         std::cout << "created room \"" << nameOfFileWithDataAboutRoom << "\"" << std::endl ;
@@ -169,8 +169,8 @@ Room::~Room()
 
         // characters too
 
-        playersYetInRoom.clear() ;
-        playersWhoEnteredRoom.clear() ;
+        charactersYetInRoom.clear() ;
+        charactersWhoEnteredRoom.clear() ;
 }
 
 std::string Room::whichRoom() const
@@ -579,6 +579,8 @@ void Room::updateWallsWithDoors ()
                 ( *wy )->calculateOffset();
         }
 
+        iso::Isomot & isomot = game::GameManager::getInstance().getIsomot () ;
+
         // convert walls near doors to grid items to draw them after doors
 
         if ( hasDoorAt( "north" ) || hasDoorAt( "northeast" ) || hasDoorAt( "northwest" ) )
@@ -600,7 +602,7 @@ void Room::updateWallsWithDoors ()
                                 std::string label = segment->getImage()->getName() ;
                                 label = label.substr( 0, label.find_last_of( "." ) );
 
-                                const DescriptionOfItem* dataOfWall = GameManager::getInstance().getIsomot().getItemDescriptions().getDescriptionByLabel( label );
+                                const DescriptionOfItem* dataOfWall = isomot.getItemDescriptions().getDescriptionByLabel( label );
 
                                 addGridItem( GridItemPtr( new GridItem( dataOfWall, 0, segment->getPosition(), 0, "nowhere" ) ) );
 
@@ -634,7 +636,7 @@ void Room::updateWallsWithDoors ()
                                 std::string label = segment->getImage()->getName() ;
                                 label = label.substr( 0, label.find_last_of( "." ) );
 
-                                const DescriptionOfItem* dataOfWall = GameManager::getInstance().getIsomot().getItemDescriptions().getDescriptionByLabel( label );
+                                const DescriptionOfItem* dataOfWall = isomot.getItemDescriptions().getDescriptionByLabel( label );
 
                                 addGridItem( GridItemPtr( new GridItem( dataOfWall, segment->getPosition(), 0, 0, "nowhere" ) ) );
 
@@ -817,47 +819,45 @@ void Room::addFreeItem( const FreeItemPtr& freeItem )
 #endif
 }
 
-bool Room::addPlayerToRoom( const PlayerItemPtr& playerItem, bool playerEntersRoom )
+bool Room::addCharacterToRoom( const PlayerItemPtr & character, bool characterEntersRoom )
 {
-        if ( playerItem == nilPointer ) return false;
-
-        for ( std::vector< PlayerItemPtr >::const_iterator pi = playersYetInRoom.begin (); pi != playersYetInRoom.end (); ++pi )
+        for ( std::vector< PlayerItemPtr >::const_iterator pi = charactersYetInRoom.begin (); pi != charactersYetInRoom.end (); ++pi )
         {
-                if ( playerItem == *pi )
+                if ( character == *pi )
                 {
-                        // player is in room already
+                        // this character is already in room
                         return false;
                 }
         }
 
-        if ( playerEntersRoom )
+        if ( characterEntersRoom )
         {
-                for ( std::vector< PlayerItemPtr >::iterator epi = playersWhoEnteredRoom.begin (); epi != playersWhoEnteredRoom.end (); ++epi )
+                for ( std::vector< PlayerItemPtr >::iterator epi = charactersWhoEnteredRoom.begin (); epi != charactersWhoEnteredRoom.end (); ++epi )
                 {
                         PlayerItemPtr enteredPlayer = *epi ;
 
-                        if ( enteredPlayer->getOriginalLabel() == "headoverheels" && playerItem->getOriginalLabel() != "headoverheels" )
+                        if ( enteredPlayer->getOriginalLabel() == "headoverheels" && character->getOriginalLabel() != "headoverheels" )
                         {
                                 // case when joined character enters room, splits in this room, and one of characters exits & re~enters
-                                std::cout << "character \"" << playerItem->getOriginalLabel() << "\" enters but joined \"headoverheels\" entered the same room before" << std::endl ;
+                                std::cout << "character \"" << character->getOriginalLabel() << "\" enters but joined \"headoverheels\" entered the same room before" << std::endl ;
 
                                 // bin joined character
-                                playersWhoEnteredRoom.erase( epi );
+                                charactersWhoEnteredRoom.erase( epi );
                                 /*  epi-- ;  */
 
                                 // add copy of another character as entered
-                                copyAnotherCharacterAsEntered( playerItem->getOriginalLabel() );
+                                copyAnotherCharacterAsEntered( character->getOriginalLabel() );
 
                                 break;
                         }
 
-                        if ( enteredPlayer->getOriginalLabel() == playerItem->getOriginalLabel() )
+                        if ( enteredPlayer->getOriginalLabel() == character->getOriginalLabel() )
                         {
                                 // case when character returns back to this room, maybe via different way
-                                std::cout << "character \"" << playerItem->getOriginalLabel() << "\" already entered this room some time ago" << std::endl ;
+                                std::cout << "character \"" << character->getOriginalLabel() << "\" already entered this room some time ago" << std::endl ;
 
                                 // bin previous entry
-                                playersWhoEnteredRoom.erase( epi );
+                                charactersWhoEnteredRoom.erase( epi );
                                 /*  epi-- ;  */
 
                                 break;
@@ -865,95 +865,95 @@ bool Room::addPlayerToRoom( const PlayerItemPtr& playerItem, bool playerEntersRo
                 }
         }
 
-        if ( playerItem->getX() < 0 || playerItem->getY() < 1 || playerItem->getZ() < Isomot::Top )
+        if ( character->getX() < 0 || character->getY() < 1 || character->getZ() < Isomot::Top )
         {
-                std::cerr << "coordinates for " << playerItem->whichKindOfItem() << " are out of limits" << std::endl ;
-                dumpItemInsideThisRoom( *playerItem );
+                std::cerr << "coordinates for " << character->whichKindOfItem() << " are out of limits" << std::endl ;
+                dumpItemInsideThisRoom( *character );
                 return false;
         }
 
-        if ( playerItem->getHeight() < 1 || playerItem->getWidthX() < 1 || playerItem->getWidthY() < 1 )
+        if ( character->getHeight() < 1 || character->getWidthX() < 1 || character->getWidthY() < 1 )
         {
-                std::cerr << "can’t add " << playerItem->whichKindOfItem() << " which dimension is zero" << std::endl ;
+                std::cerr << "can’t add " << character->whichKindOfItem() << " which dimension is zero" << std::endl ;
                 return false;
         }
 
-        if ( ( playerItem->getX() + static_cast< int >( playerItem->getWidthX() ) > static_cast< int >( this->getTilesX() * this->tileSize ) )
-                || ( playerItem->getY() - static_cast< int >( playerItem->getWidthY() ) + 1 < 0 )
-                || ( playerItem->getY() > static_cast< int >( this->getTilesY() * this->tileSize ) - 1 ) )
+        if ( ( character->getX() + static_cast< int >( character->getWidthX() ) > static_cast< int >( this->getTilesX() * this->tileSize ) )
+                || ( character->getY() - static_cast< int >( character->getWidthY() ) + 1 < 0 )
+                || ( character->getY() > static_cast< int >( this->getTilesY() * this->tileSize ) - 1 ) )
         {
-                std::cerr << "coordinates for " << playerItem->whichKindOfItem() << " are out of room" << std::endl ;
-                dumpItemInsideThisRoom( *playerItem );
+                std::cerr << "coordinates for " << character->whichKindOfItem() << " are out of room" << std::endl ;
+                dumpItemInsideThisRoom( *character );
                 return false;
         }
 
-        playerItem->setMediator( mediator );
+        character->setMediator( mediator );
 
         mediator->clearStackOfCollisions ();
 
-        std::string labelOfItem = "character " + playerItem->getOriginalLabel() ;
+        std::string labelOfItem = "character " + character->getOriginalLabel() ;
         unsigned int uniqueNumberOfItem = nextNumbers[ labelOfItem ] ;
-        if ( uniqueNumberOfItem > 0 ) // is there some player with the same label
+        if ( uniqueNumberOfItem > 0 ) // is there some character with the same label
         {
                  std::cerr << "oops, can’t add the second character \"" << labelOfItem << "\" to this room" << std::endl ;
                  return false;
         }
         nextNumbers[ labelOfItem ] = uniqueNumberOfItem + 1;
 
-        playerItem->setUniqueName( labelOfItem + " @ " + getNameOfRoomDescriptionFile() );
+        character->setUniqueName( labelOfItem + " @ " + getNameOfRoomDescriptionFile() );
 
-        std::cout << "adding character \"" << playerItem->getOriginalLabel() << "\" to room \"" << getNameOfRoomDescriptionFile() << "\"" << std::endl ;
+        std::cout << "adding character \"" << character->getOriginalLabel() << "\" to room \"" << getNameOfRoomDescriptionFile() << "\"" << std::endl ;
 
-        addFreeItemToContainer( playerItem );
+        addFreeItemToContainer( character );
 
         // for item which is placed at some height, look for collisions
-        if ( playerItem->getZ() > Isomot::Top )
+        if ( character->getZ() > Isomot::Top )
         {
-                mediator->lookForCollisionsOf( playerItem->getUniqueName() );
+                mediator->lookForCollisionsOf( character->getUniqueName() );
                 while ( ! mediator->isStackOfCollisionsEmpty () )
                 {
-                        playerItem->setZ( playerItem->getZ() + Isomot::LayerHeight );
+                        character->setZ( character->getZ() + Isomot::LayerHeight );
                         mediator->clearStackOfCollisions ();
-                        mediator->lookForCollisionsOf( playerItem->getUniqueName() );
+                        mediator->lookForCollisionsOf( character->getUniqueName() );
                 }
         }
         // for item at the top of column
         else
         {
-                playerItem->setZ( mediator->findHighestZ( *playerItem ) );
+                character->setZ( mediator->findHighestZ( *character ) );
         }
 
         // collision is found, so can’t add this item
         if ( ! mediator->isStackOfCollisionsEmpty () )
         {
-                std::cerr << "there’s collision with " << playerItem->whichKindOfItem() << std::endl ;
-                dumpItemInsideThisRoom( *playerItem );
+                std::cerr << "there’s collision with " << character->whichKindOfItem() << std::endl ;
+                dumpItemInsideThisRoom( *character );
                 return false;
         }
 
         // set offset of player’s image from origin of room
         std::pair< int, int > offset (
-                ( ( playerItem->getX() - playerItem->getY() ) << 1 ) + playerItem->getWidthX() + playerItem->getWidthY() - ( playerItem->getRawImage().getWidth() >> 1 ) - 1,
-                playerItem->getX() + playerItem->getY() + playerItem->getWidthX() - playerItem->getRawImage().getHeight() - playerItem->getZ()
+                ( ( character->getX() - character->getY() ) << 1 ) + character->getWidthX() + character->getWidthY() - ( character->getRawImage().getWidth() >> 1 ) - 1,
+                character->getX() + character->getY() + character->getWidthX() - character->getRawImage().getHeight() - character->getZ()
         ) ;
-        playerItem->setOffset( offset );
+        character->setOffset( offset );
 
         if ( mediator->getActiveCharacter() == nilPointer )
         {
-                mediator->setActiveCharacter( playerItem );
+                mediator->setActiveCharacter( character );
         }
 
-        mediator->wantShadowFromFreeItem( *playerItem );
-        mediator->wantToMaskWithFreeItem( *playerItem );
+        mediator->wantShadowFromFreeItem( *character );
+        mediator->wantToMaskWithFreeItem( *character );
 
         // add player item to room
-        this->playersYetInRoom.push_back( playerItem );
+        this->charactersYetInRoom.push_back( character );
 
-        if ( playerEntersRoom )
+        if ( characterEntersRoom )
         {
-                PlayerItemPtr copyOfPlayer( new PlayerItem( *playerItem ) );
-                copyOfPlayer->setBehaviorOf( playerItem->getBehavior()->getNameOfBehavior() );
-                this->playersWhoEnteredRoom.push_back( copyOfPlayer );
+                PlayerItemPtr copyOfPlayer( new PlayerItem( *character ) );
+                copyOfPlayer->setBehaviorOf( character->getBehavior()->getNameOfBehavior() );
+                this->charactersWhoEnteredRoom.push_back( copyOfPlayer );
 
                 std::cout << "copy of character \"" << copyOfPlayer->getOriginalLabel() << "\""
                                 << " is created to rebuild this room" << std::endl ;
@@ -962,7 +962,7 @@ bool Room::addPlayerToRoom( const PlayerItemPtr& playerItem, bool playerEntersRo
         return true;
 }
 
-void Room::dumpItemInsideThisRoom( const Item& item )
+void Room::dumpItemInsideThisRoom( const Item & item )
 {
         std::cout << "   " << item.whichKindOfItem()
                         << " at " << item.getX() << " " << item.getY() << " " << item.getZ()
@@ -974,15 +974,15 @@ void Room::dumpItemInsideThisRoom( const Item& item )
                         << std::endl ;
 }
 
-void Room::copyAnotherCharacterAsEntered( const std::string& name )
+void Room::copyAnotherCharacterAsEntered( const std::string & name )
 {
-        for ( std::vector< PlayerItemPtr >::const_iterator pi = playersYetInRoom.begin (); pi != playersYetInRoom.end (); ++pi )
+        for ( std::vector< PlayerItemPtr >::const_iterator pi = charactersYetInRoom.begin (); pi != charactersYetInRoom.end (); ++pi )
         {
                 if ( ( *pi )->getOriginalLabel() != name )
                 {
                         bool alreadyThere = false;
 
-                        for ( std::vector< PlayerItemPtr >::const_iterator epi = playersWhoEnteredRoom.begin (); epi != playersWhoEnteredRoom.end (); ++epi )
+                        for ( std::vector< PlayerItemPtr >::const_iterator epi = charactersWhoEnteredRoom.begin (); epi != charactersWhoEnteredRoom.end (); ++epi )
                         {
                                 if ( ( *epi )->getOriginalLabel() == ( *pi )->getOriginalLabel() )
                                 {
@@ -997,7 +997,7 @@ void Room::copyAnotherCharacterAsEntered( const std::string& name )
                                 copy->setBehaviorOf( ( *pi )->getBehavior()->getNameOfBehavior() );
                                 copy->setWayOfEntry( "just wait" );
 
-                                playersWhoEnteredRoom.push_back( copy );
+                                charactersWhoEnteredRoom.push_back( copy );
                         }
                 }
         }
@@ -1112,18 +1112,18 @@ void Room::removeFreeItemByUniqueName( const std::string& uniqueName )
         }
 }
 
-bool Room::removePlayerFromRoom( const PlayerItem & playerItem, bool playerExitsRoom )
+bool Room::removeCharacterFromRoom( const PlayerItem & character, bool characterExitsRoom )
 {
-        for ( std::vector< PlayerItemPtr >::iterator pi = playersYetInRoom.begin (); pi != playersYetInRoom.end (); ++pi )
+        for ( std::vector< PlayerItemPtr >::iterator pi = charactersYetInRoom.begin (); pi != charactersYetInRoom.end (); ++pi )
         {
-                if ( playerItem.getUniqueName() == ( *pi )->getUniqueName() )
+                if ( character.getUniqueName() == ( *pi )->getUniqueName() )
                 {
-                        std::string character = playerItem.getOriginalLabel();
-                        bool wasActive = playerItem.isActiveCharacter() ;
+                        const std::string & characterName = character.getOriginalLabel() ;
+                        bool wasActive = character.isActiveCharacter() ;
 
-                        removeFreeItemByUniqueName( playerItem.getUniqueName() );
+                        removeFreeItemByUniqueName( character.getUniqueName() );
 
-                        nextNumbers[ "character " + character ] -- ;
+                        nextNumbers[ "character " + characterName ] -- ;
 
                         if ( wasActive )
                         {
@@ -1131,19 +1131,19 @@ bool Room::removePlayerFromRoom( const PlayerItem & playerItem, bool playerExits
                                 mediator->setActiveCharacter( mediator->getWaitingCharacter() );
                         }
 
-                        playersYetInRoom.erase( pi );
-                        /// pi --; // not needed, this iteration is last one due to "return" below
+                        charactersYetInRoom.erase( pi );
+                        /// pi --; // not needed, this iteration is the last one due to "return" below
 
-                        // when player leaves room, bin its copy on entry
-                        if ( playerExitsRoom )
+                        // when a character leaves room, bin its copy on entry
+                        if ( characterExitsRoom )
                         {
-                                for ( std::vector< PlayerItemPtr >::iterator epi = playersWhoEnteredRoom.begin (); epi != playersWhoEnteredRoom.end (); ++epi )
+                                for ( std::vector< PlayerItemPtr >::iterator epi = charactersWhoEnteredRoom.begin (); epi != charactersWhoEnteredRoom.end (); ++epi )
                                 {
-                                        if ( ( *epi )->getOriginalLabel() == character )
+                                        if ( ( *epi )->getOriginalLabel() == characterName )
                                         {
-                                                std::cout << "and removing copy of character \"" << character << "\" created on entry to this room" << std::endl ;
+                                                std::cout << "and removing copy of character \"" << characterName << "\" created on entry to this room" << std::endl ;
 
-                                                playersWhoEnteredRoom.erase( epi );
+                                                charactersWhoEnteredRoom.erase( epi );
                                                 /// epi-- ; // not needed because of "break"
 
                                                 break;
@@ -1158,9 +1158,9 @@ bool Room::removePlayerFromRoom( const PlayerItem & playerItem, bool playerExits
         return false;
 }
 
-bool Room::isAnyPlayerStillInRoom () const
+bool Room::isAnyCharacterStillInRoom () const
 {
-        return ! playersYetInRoom.empty () ;
+        return ! charactersYetInRoom.empty () ;
 }
 
 unsigned int Room::removeBars ()
@@ -1232,7 +1232,7 @@ void Room::dontDisappearOnJump ()
                                 {
                                         gridItem.setBehaviorOf( "still" );
 
-                                        if ( ! GameManager::getInstance().isSimpleGraphicsSet() )
+                                        if ( ! game::GameManager::getInstance().isSimpleGraphicsSet() )
                                                 Color::multiplyWithColor(
                                                         gridItem.getRawImageToChangeIt (),
                                                         ( behavior == "behavior of slow disappearance on jump into" ) ?
@@ -1258,7 +1258,7 @@ void Room::dontDisappearOnJump ()
                         {
                                 freeItem.setBehaviorOf( "still" );
 
-                                if ( ! GameManager::getInstance().isSimpleGraphicsSet() )
+                                if ( ! game::GameManager::getInstance().isSimpleGraphicsSet() )
                                         Color::multiplyWithColor(
                                                 freeItem.getRawImageToChangeIt (),
                                                 ( behavior == "behavior of slow disappearance on jump into" ) ?
@@ -1474,11 +1474,11 @@ void Room::calculateCoordinatesOfOrigin( bool hasNorthDoor, bool hasEastDoor, bo
 #endif
 }
 
-bool Room::activateCharacterByLabel( const std::string& player )
+bool Room::activateCharacterByName( const std::string & character )
 {
-        for ( std::vector< PlayerItemPtr >::const_iterator pi = playersYetInRoom.begin (); pi != playersYetInRoom.end (); ++pi )
+        for ( std::vector< PlayerItemPtr >::const_iterator pi = charactersYetInRoom.begin (); pi != charactersYetInRoom.end (); ++pi )
         {
-                if ( player == ( *pi )->getLabel() )
+                if ( character == ( *pi )->getOriginalLabel() )
                 {
                         mediator->setActiveCharacter( *pi );
                         return true;
@@ -1508,26 +1508,26 @@ bool Room::swapCharactersInRoom ()
         return mediator->pickNextCharacter();
 }
 
-bool Room::continueWithAlivePlayer ()
+bool Room::continueWithAliveCharacter ()
 {
-        PlayerItemPtr previouslyAlivePlayer = mediator->getActiveCharacter();
+        PlayerItemPtr previouslyAliveCharacter = mediator->getActiveCharacter() ;
 
-        if ( previouslyAlivePlayer->getLives() == 0 )
+        if ( previouslyAliveCharacter->getLives() == 0 )
         {
-                // look for next player
-                std::vector< PlayerItemPtr >::iterator i = playersYetInRoom.begin () ;
-                while ( i != playersYetInRoom.end () )
+                // look for the next character
+                std::vector< PlayerItemPtr >::iterator i = charactersYetInRoom.begin () ;
+                while ( i != charactersYetInRoom.end () )
                 {
-                        if ( *i != nilPointer && ( *i )->getLabel() == previouslyAlivePlayer->getLabel() ) break;
+                        if ( *i != nilPointer && ( *i )->getLabel() == previouslyAliveCharacter->getLabel() ) break;
                         ++ i ;
                 }
                 ++i ;
-                mediator->setActiveCharacter( i != this->playersYetInRoom.end () ? ( *i ) : *this->playersYetInRoom.begin () );
+                mediator->setActiveCharacter( i != this->charactersYetInRoom.end () ? ( *i ) : *this->charactersYetInRoom.begin () );
 
-                // is there other alive player in room
-                if ( previouslyAlivePlayer != mediator->getActiveCharacter() )
+                // is there other alive characters in room
+                if ( previouslyAliveCharacter != mediator->getActiveCharacter() )
                 {
-                        removePlayerFromRoom( *previouslyAlivePlayer, true );
+                        removeCharacterFromRoom( *previouslyAliveCharacter, true );
 
                         this->activate();
                         return true;

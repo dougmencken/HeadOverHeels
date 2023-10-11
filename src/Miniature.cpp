@@ -381,7 +381,7 @@ void Miniature::draw ()
 
                 // show rabbit bonuses
 
-                if ( label == "extra-life" || label == "high-jumps" || label == "high-speed" || label == "shield" )
+                if ( label == "extra-life" || label == "high-jumps" || label == "quick-steps" || label == "shield" )
                 {
                         unsigned int roomTileSize = room.getSizeOfOneTile() ;
 
@@ -413,7 +413,7 @@ void Miniature::draw ()
 
         // show characters in room
 
-        const std::vector< PlayerItemPtr >& charactersInRoom = room.getPlayersYetInRoom();
+        const std::vector< PlayerItemPtr >& charactersInRoom = room.getCharactersYetInRoom() ;
 
         for ( std::vector< PlayerItemPtr >::const_iterator pi = charactersInRoom.begin (); pi != charactersInRoom.end (); ++ pi )
         {
@@ -795,7 +795,7 @@ std::pair< int, int > Miniature::calculatePositionOfConnectedMiniature( const st
 
         if ( fileOfConnectedRoom.empty () ) return offset ;
 
-        const Room* connectedRoom = GameManager::getInstance().getIsomot().getMapManager().getOrBuildRoomByFile( fileOfConnectedRoom );
+        const Room* connectedRoom = game::GameManager::getInstance().getIsomot().getMapManager().getOrBuildRoomByFile( fileOfConnectedRoom );
         assert( connectedRoom != nilPointer );
 
         int connectedDeltaX = 0 ;

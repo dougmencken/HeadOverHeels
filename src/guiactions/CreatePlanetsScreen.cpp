@@ -19,7 +19,7 @@
 using gui::CreatePlanetsScreen ;
 using gui::ContinueGame ;
 using gui::GuiManager ;
-using iso::GameManager ;
+using game::GameManager ;
 using iso::SoundManager ;
 
 

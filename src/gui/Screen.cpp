@@ -188,7 +188,7 @@ void Screen::refresh () const
                 }
         }
 
-        if ( iso::GameManager::getInstance().isSimpleGraphicsSet() )
+        if ( game::GameManager::getInstance().isSimpleGraphicsSet() )
         {
                 static const size_t howManyColors = 8 ;
                 static const std::string colors[ howManyColors ] =

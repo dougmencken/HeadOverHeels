@@ -15,6 +15,8 @@
 
 #include "screen.hpp"
 
+using game::GameManager ;
+
 
 namespace iso
 {
@@ -83,122 +85,6 @@ void Isomot::beginNewGame ()
 
         std::cout << "play new game" << std::endl ;
         SoundManager::getInstance().playOgg ( "music/begin.ogg", /* loop */ false );
-}
-
-void Isomot::continueSavedGame ( tinyxml2::XMLElement* characters )
-{
-        prepare ();
-
-        if ( characters != nilPointer )
-        {
-                for ( tinyxml2::XMLElement* player = characters->FirstChildElement( "player" ) ;
-                                player != nilPointer ;
-                                player = player->NextSiblingElement( "player" ) )
-                {
-                        std::string label = player->Attribute( "label" );
-
-                        bool isActiveCharacter = false ;
-                        tinyxml2::XMLElement* active = player->FirstChildElement( "active" );
-                        if ( active != nilPointer && std::string( active->FirstChild()->ToText()->Value() ) == "true" )
-                                isActiveCharacter = true;
-
-                        std::string room = "no room" ;
-                        tinyxml2::XMLElement* roomFile = player->FirstChildElement( "room" );
-                        if ( roomFile != nilPointer )
-                                room = roomFile->FirstChild()->ToText()->Value();
-
-                        tinyxml2::XMLElement* xElement = player->FirstChildElement( "x" );
-                        tinyxml2::XMLElement* yElement = player->FirstChildElement( "y" );
-                        tinyxml2::XMLElement* zElement = player->FirstChildElement( "z" );
-                        int x = 0 ;
-                        int y = 0 ;
-                        int z = 0 ;
-                        if ( xElement != nilPointer )
-                                x = std::atoi( xElement->FirstChild()->ToText()->Value() );
-                        if ( yElement != nilPointer )
-                                y = std::atoi( yElement->FirstChild()->ToText()->Value() );
-                        if ( zElement != nilPointer )
-                                z = std::atoi( zElement->FirstChild()->ToText()->Value() );
-
-                        unsigned int howManyLives = 0 ;
-                        tinyxml2::XMLElement* lives = player->FirstChildElement( "lives" );
-                        if ( lives != nilPointer )
-                                howManyLives = std::atoi( lives->FirstChild()->ToText()->Value() );
-
-                        std::string orientationString = "nowhere" ;
-                        tinyxml2::XMLElement* orientation = player->FirstChildElement( "orientation" );
-                        if ( orientation == nilPointer ) orientation = player->FirstChildElement( "direction" );
-                        if ( orientation != nilPointer )
-                                orientationString = orientation->FirstChild()->ToText()->Value() ;
-
-                        std::string entryString = "just wait" ;
-                        tinyxml2::XMLElement* entry = player->FirstChildElement( "entry" );
-                        if ( entry != nilPointer )
-                                entryString = entry->FirstChild()->ToText()->Value() ;
-
-                        bool hasHorn = false ;
-                        tinyxml2::XMLElement* horn = player->FirstChildElement( "hasHorn" );
-                        if ( horn != nilPointer && std::string( horn->FirstChild()->ToText()->Value() ) == "yes" )
-                                hasHorn = true;
-
-                        bool hasHandbag = false ;
-                        tinyxml2::XMLElement* handbag = player->FirstChildElement( "hasHandbag" );
-                        if ( handbag != nilPointer && std::string( handbag->FirstChild()->ToText()->Value() ) == "yes" )
-                                hasHandbag = true;
-
-                        unsigned int howManyDoughnuts = 0 ;
-                        tinyxml2::XMLElement* donuts = player->FirstChildElement( "donuts" );
-                        if ( donuts != nilPointer )
-                                howManyDoughnuts = std::atoi( donuts->FirstChild()->ToText()->Value() );
-
-                        if ( label == "headoverheels" )
-                        {
-                                // formula for lives of composite character from lives of simple characters is
-                                // lives H & H = 100 * lives Head + lives Heels
-
-                                unsigned char headLives = 0;
-                                unsigned char heelsLives = 0;
-
-                                while ( howManyLives > 100 )
-                                {
-                                        howManyLives -= 100;
-                                        headLives++;
-                                }
-
-                                heelsLives = static_cast< unsigned char >( howManyLives );
-
-                                GameManager::getInstance().setHeadLives( headLives );
-                                GameManager::getInstance().setHeelsLives( heelsLives );
-                                GameManager::getInstance().setHorn( hasHorn );
-                                GameManager::getInstance().setDonuts( howManyDoughnuts );
-                                GameManager::getInstance().setHandbag( hasHandbag );
-                                GameManager::getInstance().setHighSpeed( 0 );
-                                GameManager::getInstance().setHighJumps( 0 );
-                                GameManager::getInstance().setHeadShield( 0 );
-                                GameManager::getInstance().setHeelsShield( 0 );
-                        }
-                        else if ( label == "head" )
-                        {
-                                GameManager::getInstance().setHeadLives( howManyLives );
-                                GameManager::getInstance().setHorn( hasHorn );
-                                GameManager::getInstance().setDonuts( howManyDoughnuts );
-                                GameManager::getInstance().setHighSpeed( 0 );
-                                GameManager::getInstance().setHeadShield( 0 );
-                        }
-                        else if ( label == "heels" )
-                        {
-                                GameManager::getInstance().setHeelsLives( howManyLives );
-                                GameManager::getInstance().setHandbag( hasHandbag );
-                                GameManager::getInstance().setHighJumps( 0 );
-                                GameManager::getInstance().setHeelsShield( 0 );
-                        }
-
-                        mapManager.beginOldGameWithCharacter( room, label, x, y, z, orientationString, entryString, isActiveCharacter );
-                }
-        }
-
-        std::cout << "continue previous game" << std::endl ;
-        // no begin.ogg here
 }
 
 void Isomot::offRecording ()
@@ -313,7 +199,7 @@ Picture* Isomot::updateMe ()
                         }
                         else
                         {
-                                if ( ! activeRoom->continueWithAlivePlayer( ) )
+                                if ( ! activeRoom->continueWithAliveCharacter () )
                                 {
                                         activeRoom = mapManager.noLivesSwap ();
                                 }
@@ -478,7 +364,7 @@ void Isomot::handleMagicKeys ()
 
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "=" ) )
         {
-                gameManager.addLives( activeRoom->getMediator()->getLabelOfActiveCharacter(), 1 );
+                gameManager.getGameInfo().addLivesByName( activeRoom->getMediator()->getLabelOfActiveCharacter(), 1 );
                 allegro::releaseKey( "=" );
         }
 
@@ -580,46 +466,46 @@ void Isomot::handleMagicKeys ()
 
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "j" ) )
         {
-                PlayerItemPtr activePlayer = activeRoom->getMediator()->getActiveCharacter();
-                if ( activePlayer != nilPointer )
+                PlayerItemPtr activeCharacter = activeRoom->getMediator()->getActiveCharacter();
+                if ( activeCharacter != nilPointer )
                 {
-                        PlayerItemPtr otherPlayer ;
+                        PlayerItemPtr otherCharacter ;
 
-                        Room* roomWithInactivePlayer = mapManager.getRoomOfInactivePlayer();
-                        if ( roomWithInactivePlayer != nilPointer )
+                        Room* roomWithInactiveCharacter = mapManager.getRoomOfInactiveCharacter();
+                        if ( roomWithInactiveCharacter != nilPointer )
                         {
-                                otherPlayer = roomWithInactivePlayer->getMediator()->getActiveCharacter() ;
+                                otherCharacter = roomWithInactiveCharacter->getMediator()->getActiveCharacter() ;
                         }
 
-                        if ( otherPlayer != nilPointer && roomWithInactivePlayer != activeRoom )
+                        if ( otherCharacter != nilPointer && roomWithInactiveCharacter != activeRoom )
                         {
                                 std::cout << "both characters are in active room \"" << activeRoom->getNameOfRoomDescriptionFile() << "\" via pure magic" << std::endl ;
 
-                                std::string nameOfAnotherPlayer = otherPlayer->getLabel();
+                                const std::string & nameOfAnotherCharacter = otherCharacter->getLabel() ;
 
-                                int playerX = activePlayer->getX();
-                                int playerY = activePlayer->getY();
-                                int playerZ = activePlayer->getZ() + 2 * LayerHeight;
-                                std::string orientation = otherPlayer->getOrientation();
+                                int characterX = activeCharacter->getX() ;
+                                int characterY = activeCharacter->getY() ;
+                                int characterZ = activeCharacter->getZ() + 2 * LayerHeight ;
+                                const std::string & orientation = otherCharacter->getOrientation() ;
 
                                 PlayerItemPtr joinedPlayer( new PlayerItem(
-                                        itemDescriptions.getDescriptionByLabel( nameOfAnotherPlayer ),
-                                        playerX, playerY, playerZ, orientation
+                                        itemDescriptions.getDescriptionByLabel( nameOfAnotherCharacter ),
+                                        characterX, characterY, characterZ, orientation
                                 ) );
 
                                 std::string behavior = "still";
-                                if ( nameOfAnotherPlayer == "head" ) behavior = "behavior of Head";
-                                else if ( nameOfAnotherPlayer == "heels" ) behavior = "behavior of Heels";
+                                if ( nameOfAnotherCharacter == "head" ) behavior = "behavior of Head" ;
+                                else if ( nameOfAnotherCharacter == "heels" ) behavior = "behavior of Heels" ;
 
                                 joinedPlayer->setBehaviorOf( behavior );
 
-                                joinedPlayer->fillWithData( gameManager );
+                                /////////////////////joinedPlayer->fillWithData( gameManager );
 
-                                activeRoom->addPlayerToRoom( joinedPlayer, true );
+                                activeRoom->addCharacterToRoom( joinedPlayer, true );
                                 joinedPlayer->getBehavior()->changeActivityOfItem( Activity::BeginWayInTeletransport );
 
-                                roomWithInactivePlayer->removePlayerFromRoom( *otherPlayer, true );
-                                mapManager.removeRoomInPlay( roomWithInactivePlayer );
+                                roomWithInactiveCharacter->removeCharacterFromRoom( *otherCharacter, true );
+                                mapManager.removeRoomInPlay( roomWithInactiveCharacter );
                         }
                 }
 
@@ -644,11 +530,11 @@ void Isomot::handleMagicKeys ()
                 }
                 else
                 {
-                        PlayerItemPtr activePlayer = activeRoom->getMediator()->getActiveCharacter();
-                        if ( activePlayer != nilPointer )
+                        PlayerItemPtr activeCharacter = activeRoom->getMediator()->getActiveCharacter();
+                        if ( activeCharacter != nilPointer )
                         {
-                                std::string nameOfPlayer = activePlayer->getLabel();
-                                std::string orientation = activePlayer->getOrientation();
+                                const std::string & nameOfPlayer = activeCharacter->getLabel() ;
+                                const std::string & orientation = activeCharacter->getOrientation() ;
                                 int teleportedX = 0;
                                 int teleportedY = 95;
                                 int teleportedZ = 240;
@@ -666,14 +552,14 @@ void Isomot::handleMagicKeys ()
 
                                 teleportedPlayer->setBehaviorOf( behaviorOfPlayer );
 
-                                teleportedPlayer->fillWithData( gameManager );
+                                //////////////////////////////teleportedPlayer->fillWithData( gameManager );
 
                                 std::string nameOfRoomNearFinal = "blacktooth83tofreedom.xml";
                                 Room* roomWithTeleportToFinalScene = mapManager.getRoomThenAddItToRoomsInPlay( nameOfRoomNearFinal, true );
-                                roomWithTeleportToFinalScene->addPlayerToRoom( teleportedPlayer, true );
+                                roomWithTeleportToFinalScene->addCharacterToRoom( teleportedPlayer, true );
                                 teleportedPlayer->getBehavior()->changeActivityOfItem( Activity::BeginWayInTeletransport );
 
-                                activeRoom->removePlayerFromRoom( *activePlayer, true );
+                                activeRoom->removeCharacterFromRoom( *activeCharacter, true );
 
                                 mapManager.setActiveRoom( roomWithTeleportToFinalScene );
                                 mapManager.removeRoomInPlay( activeRoom );
@@ -726,7 +612,7 @@ void Isomot::updateFinalRoom()
 
                 std::string arrivedCharacter = mediator->getActiveCharacter()->getOriginalLabel();
 
-                activeRoom->removePlayerFromRoom( * mediator->getActiveCharacter(), true );
+                activeRoom->removeCharacterFromRoom( * mediator->getActiveCharacter(), true );
 
                 std::cout << "character \"" << arrivedCharacter << "\" arrived to final room" << std::endl ;
 

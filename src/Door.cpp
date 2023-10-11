@@ -40,13 +40,13 @@ Door::Door( const ItemDescriptions& itemDescriptions, const std::string& label, 
         // load graphics of door
 
         autouniqueptr< allegro::Pict > pictureOfDoor( allegro::Pict::fromPNGFile( ospaths::pathToFile(
-                ospaths::sharePath() + iso::GameManager::getInstance().getChosenGraphicsSet(), lintelData->getNameOfFile( )
+                ospaths::sharePath() + game::GameManager::getInstance().getChosenGraphicsSet(), lintelData->getNameOfFile( )
         ) ) );
         if ( ! pictureOfDoor->isNotNil() )
         {
                 std::cerr <<
                         "picture of door \"" << lintelData->getNameOfFile( ) <<
-                        "\" for \"" << iso::GameManager::getInstance().getChosenGraphicsSet() <<
+                        "\" for \"" << game::GameManager::getInstance().getChosenGraphicsSet() <<
                         "\" is absent" << std::endl ;
                 return ;
         }

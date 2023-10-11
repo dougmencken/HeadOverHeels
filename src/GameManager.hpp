@@ -13,19 +13,19 @@
 
 #include <string>
 
+#include "GameInfo.hpp"
 #include "Picture.hpp"
-#include "Isomot.hpp"
 #include "Room.hpp"
 #include "GameSaverAndLoader.hpp"
+#include "Isomot.hpp"
 #include "ColorCyclingLabel.hpp"
 #include "Timer.hpp"
 
+using namespace iso ;
 
-namespace iso
+
+namespace game
 {
-
-class Isomot ;
-
 
 /**
  * Marks the definitive moments of the game
@@ -124,8 +124,7 @@ public:
 
 
 /**
- * Manages the user interface and the isometric engine. Plus, holds the game's data
- * such as how many lives left for characters, which planets are free already, and so on
+ * Manages the game
  */
 
 class GameManager
@@ -142,10 +141,6 @@ protected:
         static PicturePtr refreshPicture ( const std::string & nameOfPicture ) ;
 
 public:
-
-        static const unsigned int updatesPerSecond = 50 ;
-
-        static const unsigned int spaceForAmbiance = 100 ;
 
         static GameManager & getInstance () ;
 
@@ -168,11 +163,13 @@ public:
          */
         void resume () ;
 
-        std::string getHeadRoom () const {  return headRoom ;  }
+        GameInfo& getGameInfo() {  return theInfo ;  }
+
+        const std::string & getHeadRoom () const {  return headRoom ;  }
 
         void setHeadRoom( const std::string& room ) {  headRoom = room ;  }
 
-        std::string getHeelsRoom () const {  return heelsRoom ;  }
+        const std::string & getHeelsRoom () const {  return heelsRoom ;  }
 
         void setHeelsRoom( const std::string& room ) {  heelsRoom = room ;  }
 
@@ -189,29 +186,6 @@ public:
         void loadGame ( const std::string& fileName ) ;
 
         void saveGame ( const std::string& fileName ) ;
-
-        void addLives ( const std::string& player, unsigned char lives ) ;
-
-        void loseLife ( const std::string& player ) ;
-
-        /**
-         * Player takes magic item
-         */
-        void takeMagicItem ( const std::string& label ) ;
-
-        void consumeDonut () {  this->donuts-- ;  }
-
-        void addHighSpeed ( const std::string& player, unsigned int highSpeed ) ;
-
-        void decreaseHighSpeed ( const std::string& player ) ;
-
-        void addHighJumps ( const std::string& player, unsigned int highJumps ) ;
-
-        void decreaseHighJumps ( const std::string& player ) ;
-
-        void addShield ( const std::string& player, float shield ) ;
-
-        void modifyShield ( const std::string& player, float shield ) ;
 
         void emptyHandbag () {  setImageOfItemInBag( PicturePtr () ) ;  }
 
@@ -255,6 +229,13 @@ public:
         bool isPresentGraphicsSet () const {  return ( chosenGraphicsSet == "gfx" ) ;  }
 
         bool isSimpleGraphicsSet () const {  return ( chosenGraphicsSet == "gfx.simple" ) ;  }
+
+        Isomot & getIsomot () {  return isomot ;  }
+
+        unsigned int getVisitedRooms () ;
+
+        // at the end of the game it's time to count the crowns
+        void inFreedomWithSoManyCrowns( unsigned int crowns ) ;
 
 private:
 
@@ -314,6 +295,8 @@ private:
 
         static GameManager instance ;
 
+        GameInfo theInfo ;
+
         std::string headRoom ;
 
         std::string heelsRoom ;
@@ -350,31 +333,6 @@ private:
 
         GameSaverAndLoader saverAndLoader ; // to save and restore games
 
-        unsigned char headLives ;
-
-        unsigned char heelsLives ;
-
-        // the remaining time of bonus high speed for Head
-        unsigned int highSpeed ;
-
-        // the number of remaining bonus high jumps for Heels
-        unsigned int highJumps ;
-
-        // the remaining time of Head's inviolability
-        float headShield ;
-
-        // the remaining time of Heels' inviolability
-        float heelsShield ;
-
-        // does Head have the doughnut horn
-        bool horn ;
-
-        // does Heels have the hand bag
-        bool handbag ;
-
-        // the number of donuts collected by Head
-        unsigned short donuts ;
-
         TheKeyMoments keyMoments ;
 
         PicturePtr imageOfItemInBag ;
@@ -384,48 +342,6 @@ private:
         std::map < std::string, PicturePtr > sceneryBackgrounds ;
 
         std::map < std::string, PicturePtr > ambiancePictures ;
-
-public:
-
-        Isomot & getIsomot () {  return isomot ;  }
-
-        /**
-         * Returns the number of lives left for player
-         */
-        unsigned char getLives ( const std::string& player ) const ;
-
-        void setHeadLives ( unsigned char lives ) {  this->headLives = lives ;  }
-
-        void setHeelsLives ( unsigned char lives ) {  this->heelsLives = lives ;  }
-
-        void setHighSpeed ( unsigned int highSpeed ) {  this->highSpeed = highSpeed ;  }
-
-        unsigned int getHighSpeed () const {  return this->highSpeed;  }
-
-        void setHighJumps ( unsigned int highJumps ) {  this->highJumps = highJumps ;  }
-
-        unsigned int getHighJumps () const {  return this->highJumps ;  }
-
-        void setHeadShield ( unsigned int shield ) {  this->headShield = shield ;  }
-
-        void setHeelsShield ( unsigned int shield ) {  this->heelsShield = shield ;  }
-
-        float getShield ( const std::string& player ) const ;
-
-        void setHorn ( bool hasHorn ) {  this->horn = hasHorn ;  }
-
-        void setHandbag ( bool hasHandbag ) {  this->handbag = hasHandbag ;  }
-
-        void fillToolsOwnedByCharacter ( const std::string& player, std::vector < std::string > & tools ) const ;
-
-        void setDonuts ( unsigned short number ) {  this->donuts = number ;  }
-
-        unsigned short getDonuts ( const std::string& player ) const ;
-
-        unsigned int getVisitedRooms () ;
-
-        // at the end of the game it's time to count the crowns
-        void inFreedomWithSoManyCrowns( unsigned int crowns ) ;
 
 };
 

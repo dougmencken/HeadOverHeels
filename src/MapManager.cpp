@@ -214,8 +214,10 @@ void MapManager::beginNewGame( const std::string& headRoom, const std::string& h
 
         forgetVisitedRooms () ;
 
-        GameManager::getInstance().setHeadLives( 8 );
-        GameManager::getInstance().setHeelsLives( 8 );
+        game::GameManager & gameManager = game::GameManager::getInstance () ;
+
+        // reset the number of lives and other game's data
+        gameManager.getGameInfo().resetForANewGame () ;
 
         if ( linksBetweenRooms.empty() )
                 readMap( ospaths::sharePath() + "map" + ospaths::pathSeparator() + "map.xml" );
@@ -230,7 +232,7 @@ void MapManager::beginNewGame( const std::string& headRoom, const std::string& h
                 {
                         addRoomInPlay( firstRoom );
 
-                        const DescriptionOfItem* headData = GameManager::getInstance().getIsomot().getItemDescriptions().getDescriptionByLabel( "head" );
+                        const DescriptionOfItem* headData = gameManager.getIsomot().getItemDescriptions().getDescriptionByLabel( "head" );
 
                         int centerX = firstRoom->getXCenterForItem( headData );
                         int centerY = firstRoom->getYCenterForItem( headData );
@@ -238,14 +240,14 @@ void MapManager::beginNewGame( const std::string& headRoom, const std::string& h
                         if ( headRoom != heelsRoom )
                         {
                                 // create character Head
-                                RoomBuilder::createPlayerInRoom( firstRoom, "head", true, centerX, centerY, 0, "west" );
-                                firstRoom->activateCharacterByLabel( "head" );
+                                RoomBuilder::createCharacterInRoom( firstRoom, "head", true, centerX, centerY, 0, "west" );
+                                firstRoom->activateCharacterByName( "head" );
                         }
                         else
                         {
                                 // create character Head over Heels
-                                RoomBuilder::createPlayerInRoom( firstRoom, "headoverheels", true, centerX, centerY, 0, "west" );
-                                firstRoom->activateCharacterByLabel( "headoverheels" );
+                                RoomBuilder::createCharacterInRoom( firstRoom, "headoverheels", true, centerX, centerY, 0, "west" );
+                                firstRoom->activateCharacterByName( "headoverheels" );
                         }
 
                         addRoomAsVisited( firstRoom->getNameOfRoomDescriptionFile () ) ;
@@ -270,14 +272,14 @@ void MapManager::beginNewGame( const std::string& headRoom, const std::string& h
                         {
                                 addRoomInPlay( secondRoom );
 
-                                const DescriptionOfItem* heelsData = GameManager::getInstance().getIsomot().getItemDescriptions().getDescriptionByLabel( "heels" );
+                                const DescriptionOfItem* heelsData = gameManager.getIsomot().getItemDescriptions().getDescriptionByLabel( "heels" );
 
                                 int centerX = secondRoom->getXCenterForItem( heelsData );
                                 int centerY = secondRoom->getYCenterForItem( heelsData );
 
                                 // create character Heels
-                                RoomBuilder::createPlayerInRoom( secondRoom, "heels", true, centerX, centerY, 0, "south" );
-                                secondRoom->activateCharacterByLabel( "heels" );
+                                RoomBuilder::createCharacterInRoom( secondRoom, "heels", true, centerX, centerY, 0, "south" );
+                                secondRoom->activateCharacterByName( "heels" );
 
                                 addRoomAsVisited( secondRoom->getNameOfRoomDescriptionFile () ) ;
                         }
@@ -291,19 +293,22 @@ void MapManager::beginNewGame( const std::string& headRoom, const std::string& h
         if ( activeRoom != nilPointer ) activeRoom->activate();
 }
 
-void MapManager::beginOldGameWithCharacter( const std::string& roomFile, const std::string& character,
-                                            int x, int y, int z, const std::string& direction, const std::string& entry, bool active )
+void MapManager::beginOldGameWithCharacter( const std::string & roomFile, const std::string & characterName,
+                                            int x, int y, int z,
+                                            const std::string & direction, const std::string & entry,
+                                            bool active )
 {
         std::cout << "MapManager::beginOldGameWithCharacter( \""
-                        << roomFile << "\", \"" << character << "\", "
+                        << roomFile << "\", \"" << characterName << "\", "
                         << x << ", " << y << ", " << z << ", \""
                         << direction << "\", \"" << entry << "\", "
                         << ( active ? "true" : "false" ) << " )"
                         << std::endl ;
 
-        Room* room = nilPointer;
+        Room * room = nilPointer ;
 
-        // if there is already created room it is when room of second player is the same as of first player
+        // if there is already created room, it happens when
+        // the room of the second character is the same as of the first character
         if ( activeRoom != nilPointer && activeRoom->getNameOfRoomDescriptionFile() == roomFile )
         {
                 room = activeRoom;
@@ -318,10 +323,10 @@ void MapManager::beginOldGameWithCharacter( const std::string& roomFile, const s
         {
                 addRoomInPlay( room );
 
-                // create player
-                PlayerItemPtr player = RoomBuilder::createPlayerInRoom(
-                                                room, character, true,
-                                                x, y, z, direction, entry );
+                // create character
+                PlayerItemPtr newCharacter = RoomBuilder::createCharacterInRoom (
+                                                                room, characterName, true,
+                                                                x, y, z, direction, entry );
 
                 addRoomAsVisited( room->getNameOfRoomDescriptionFile () ) ;
 
@@ -330,18 +335,18 @@ void MapManager::beginOldGameWithCharacter( const std::string& roomFile, const s
                 if ( realEntry == "just wait" )
                 {
                         // it’s the case of resume of saved game
-                        // show bubbles only for active player
+                        // show bubbles only for active character
                         if ( active )
                         {
                                 realEntry = "via second teleport";
                         }
                 }
 
-                room->activateCharacterByLabel( character );
+                room->activateCharacterByName( characterName );
 
-                player->autoMoveOnEntry( realEntry );
+                newCharacter->autoMoveOnEntry( realEntry );
 
-                // when other player is in the same room as active player then there’s no need to do anything more
+                // when other character is in the same room as active character then there’s no need to do anything more
                 if ( active )
                 {
                         activeRoom = room;
@@ -366,94 +371,95 @@ Room* MapManager::rebuildRoom( Room* room )
 
         if ( isRoomInPlay( room ) )
         {
-                std::string nameOfActivePlayer = room->getMediator()->getLabelOfActiveCharacter();
-                std::string nameOfActivePlayerBeforeJoining = room->getMediator()->getLastActiveCharacterBeforeJoining();
+                std::string nameOfActiveCharacter = room->getMediator()->getLabelOfActiveCharacter();
+                std::string nameOfActiveCharacterBeforeJoining = room->getMediator()->getLastActiveCharacterBeforeJoining();
 
                 std::string theWay( "nowhere" );
-                PlayerItemPtr alivePlayer ;
+                PlayerItemPtr aliveCharacter ;
 
-                // for each player entered this room
-                std::vector< PlayerItemPtr > playersOnEntry = room->getPlayersWhoEnteredRoom ();
-                for ( std::vector< PlayerItemPtr >::const_iterator it = playersOnEntry.begin (); it != playersOnEntry.end (); )
+                // for each character entered this room
+                std::vector< PlayerItemPtr > charactersOnEntry = room->getCharactersWhoEnteredRoom ();
+                for ( std::vector< PlayerItemPtr >::const_iterator it = charactersOnEntry.begin (); it != charactersOnEntry.end (); )
                 {
-                        const PlayerItemPtr player = *it;
+                        const PlayerItemPtr character = *it;
 
-                        if ( player->getLabel() == "headoverheels" || GameManager::getInstance().getLives( player->getLabel() ) > 0 )
+                        if ( character->getLabel() == "headoverheels" || character->getLives() > 0 )
                         {
                         #ifdef DEBUG
-                                std::cout << "got player \"" << player->getLabel() << "\" who entered this room @ MapManager::rebuildRoom" << std::endl ;
+                                std::cout << "got character \"" << character->getLabel() << "\" who entered this room @ MapManager::rebuildRoom" << std::endl ;
                         #endif
 
-                                // when joined character splits, then some simple character migrates to another room
-                                // and further via swap user changes to room of splitting, and loses life there
-                                // then don’t rebuild room with headoverheels together with simple character
+                                // when the joined character splits, and then some simple character migrates to another room
+                                // and further the user via swapping changes back to the room of splitting, and loses a life there
+                                // then don’t rebuild the room with both headoverheels together with the simple character
 
-                                if ( player->getLabel() == "headoverheels" && roomsInPlay.size() > 1 )
+                                if ( character->getLabel() == "headoverheels" && roomsInPlay.size() > 1 )
                                 {
-                                        std::cout << "some character migrated to another room, and only \"" << nameOfActivePlayer << "\" is still here" << std::endl ;
+                                        std::cout << "some character migrated to another room, and only \"" << nameOfActiveCharacter << "\" is still here" << std::endl ;
 
-                                        int playerX = player->getX();
-                                        int playerY = player->getY();
-                                        int playerZ = player->getZ();
-                                        std::string playerOrientation = player->getOrientation() ;
-                                        std::string playerEntry = player->getWayOfEntry() ;
+                                        // forget the composite character
+                                        room->removeCharacterFromRoom( * room->getMediator()->getActiveCharacter(), true );
 
-                                        // forget composite player
-                                        room->removePlayerFromRoom( * room->getMediator()->getActiveCharacter(), true );
+                                        int characterX = character->getX();
+                                        int characterY = character->getY();
+                                        int characterZ = character->getZ();
+                                        const std::string & characterOrientation = character->getOrientation() ;
+                                        const std::string & characterEntry = character->getWayOfEntry() ;
 
-                                        // create simple player
-                                        RoomBuilder::createPlayerInRoom( room,
-                                                                         nameOfActivePlayer, true,
-                                                                         playerX, playerY, playerZ,
-                                                                         playerOrientation, playerEntry );
+                                        // create the simple character
+                                        RoomBuilder::createCharacterInRoom( room,
+                                                                            nameOfActiveCharacter, true,
+                                                                            characterX, characterY, characterZ,
+                                                                            characterOrientation, characterEntry );
 
-                                        // update list of players and rewind iterator
-                                        playersOnEntry = room->getPlayersWhoEnteredRoom ();
-                                        it = playersOnEntry.begin ();
-                                        continue;
+                                        // update the list of characters and rewind the iterator
+                                        charactersOnEntry = room->getCharactersWhoEnteredRoom ();
+                                        it = charactersOnEntry.begin ();
+                                        continue ;
                                 }
 
-                                theWay = player->getOrientation() ;
+                                theWay = character->getOrientation() ;
 
-                                std::string entry = player->getWayOfEntry() ;
+                                std::string entry = character->getWayOfEntry() ;
 
-                                // create player
-                                alivePlayer = RoomBuilder::createPlayerInRoom( newRoom,
-                                                                               player->getLabel(),
-                                                                               true,
-                                                                               player->getX(), player->getY(), player->getZ(),
-                                                                               theWay, entry );
+                                // create character
+                                aliveCharacter = RoomBuilder::createCharacterInRoom( newRoom,
+                                                                                     character->getLabel(),
+                                                                                     true,
+                                                                                     character->getX(), character->getY(), character->getZ(),
+                                                                                     theWay, entry );
 
-                                if ( alivePlayer != nilPointer )
-                                        alivePlayer->autoMoveOnEntry( entry );
+                                if ( aliveCharacter != nilPointer )
+                                        aliveCharacter->autoMoveOnEntry( entry );
                         }
 
-                        ++it ; // next player
+                        ++ it ; // next character
                 }
 
                 roomsInPlay.erase( std::remove( roomsInPlay.begin (), roomsInPlay.end (), room ), roomsInPlay.end() );
 
-                if ( alivePlayer != nilPointer )
+                if ( aliveCharacter != nilPointer )
                 {
                         addRoomInPlay( newRoom );
 
-                        bool activePlayerIsHere = newRoom->activateCharacterByLabel( nameOfActivePlayer );
+                        bool isActiveCharacterHere = newRoom->activateCharacterByName( nameOfActiveCharacter );
 
-                        if ( ! activePlayerIsHere )
+                        if ( ! isActiveCharacterHere )
                         {
-                                // case when composite player joined in this room loses life and splits back into two players
-                                activePlayerIsHere = newRoom->activateCharacterByLabel( nameOfActivePlayerBeforeJoining );
+                                // the case when the composite character merged in this room
+                                // loses a life and splits back into the two simple characters
+                                isActiveCharacterHere = newRoom->activateCharacterByName( nameOfActiveCharacterBeforeJoining );
 
-                                if ( ! activePlayerIsHere ) // unlucky to happen
+                                if ( ! isActiveCharacterHere ) // unlucky to happen
                                 {
-                                        if ( newRoom->isAnyPlayerStillInRoom() )
+                                        if ( newRoom->isAnyCharacterStillInRoom() )
                                         {
-                                                newRoom->getMediator()->setActiveCharacter( * newRoom->getPlayersYetInRoom().begin () );
+                                                newRoom->getMediator()->setActiveCharacter( * newRoom->getCharactersYetInRoom().begin () );
                                         }
                                 }
                         }
                 }
-                // can’t create player, game over
+                // can’t create character, game over
                 else
                 {
                         delete newRoom ;
@@ -518,16 +524,16 @@ Room* MapManager::changeRoom( const std::string& wayOfExit )
         int eastBound = previousRoom->getLimitAt( "east" );
         int southBound = previousRoom->getLimitAt( "south" );
         int westBound = previousRoom->getLimitAt( "west" );
-        // plus there’s possibility to exit and to enter room via floor, roof or teletransport
+        // plus there’s a possibility to exit and to enter the room via the floor, the roof or the teletransport
 
         const std::string exitOrientation = oldItemOfRoamer.getOrientation() ;
 
-        // remove active player from previous room
-        previousRoom->removePlayerFromRoom( oldItemOfRoamer, true );
+        // remove the active character from the previous room
+        previousRoom->removeCharacterFromRoom( oldItemOfRoamer, true );
 
-        if ( ! previousRoom->isAnyPlayerStillInRoom() || nameOfRoamer == "headoverheels" )
+        if ( ! previousRoom->isAnyCharacterStillInRoom() || nameOfRoamer == "headoverheels" )
         {
-                std::cout << "there’re no players left in room \"" << fileOfPreviousRoom << "\""
+                std::cout << "there’re no characters left in room \"" << fileOfPreviousRoom << "\""
                                 << " thus bye that room" << std::endl ;
 
                 removeRoomInPlay( previousRoom );
@@ -551,7 +557,7 @@ Room* MapManager::changeRoom( const std::string& wayOfExit )
         ) ;
         std::cout << "entry coordinates to room \"" << fileOfNextRoom << "\" are x=" << entryX << " y=" << entryY << " z=" << entryZ << std::endl ;
 
-        // create player
+        // create character
 
         if ( wayOfEntry.toString() == "via teleport" || wayOfEntry.toString() == "via second teleport" )
         {
@@ -559,10 +565,11 @@ Room* MapManager::changeRoom( const std::string& wayOfExit )
         }
 
         // no taken item in new room
-        GameManager::getInstance().emptyHandbag();
+        game::GameManager::getInstance().emptyHandbag();
 
-        PlayerItemPtr newItemOfRoamer = RoomBuilder::createPlayerInRoom( newRoom, nameOfRoamer, true, entryX, entryY, entryZ,
-                                                                         exitOrientation, wayOfEntry.toString () );
+        PlayerItemPtr newItemOfRoamer = RoomBuilder::createCharacterInRoom( newRoom, nameOfRoamer, true,
+                                                                            entryX, entryY, entryZ,
+                                                                            exitOrientation, wayOfEntry.toString () );
         if ( newItemOfRoamer != nilPointer )
         {
                 newItemOfRoamer->autoMoveOnEntry( wayOfEntry.toString() );
@@ -570,7 +577,7 @@ Room* MapManager::changeRoom( const std::string& wayOfExit )
 
         addRoomAsVisited( newRoom->getNameOfRoomDescriptionFile () ) ;
 
-        newRoom->activateCharacterByLabel( nameOfRoamer );
+        newRoom->activateCharacterByName( nameOfRoamer );
 
         activeRoom = newRoom;
         activeRoom->activate();
@@ -698,7 +705,7 @@ void MapManager::binRoomsInPlay()
         this->activeRoom = nilPointer ;
 }
 
-Room* MapManager::getRoomOfInactivePlayer() const
+Room* MapManager::getRoomOfInactiveCharacter () const
 {
         for ( std::vector< Room* >::const_iterator ri = roomsInPlay.begin () ; ri != roomsInPlay.end () ; ++ ri )
         {

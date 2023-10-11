@@ -78,7 +78,7 @@ public:
 
         void addFreeItem ( const FreeItemPtr & freeItem ) ;
 
-        bool addPlayerToRoom ( const PlayerItemPtr & playerItem, bool playerEntersRoom ) ;
+        bool addCharacterToRoom ( const PlayerItemPtr & character, bool characterEntersRoom ) ;
 
         void removeFloorAt ( int tileX, int tileY ) ;
 
@@ -92,7 +92,7 @@ public:
 
         void removeFreeItemByUniqueName ( const std::string & uniqueName ) ;
 
-        bool removePlayerFromRoom ( const PlayerItem & playerItem, bool playerExitsRoom ) ;
+        bool removeCharacterFromRoom ( const PlayerItem & character, bool characterExitsRoom ) ;
 
         /**
          * Removes any bar in this room
@@ -116,7 +116,7 @@ public:
 
         void calculateCoordinatesOfOrigin ( bool hasNorthDoor, bool hasEastDoor, bool hasSouthDoor, bool hasWestDoor ) ;
 
-        bool activateCharacterByLabel ( const std::string& player ) ;
+        bool activateCharacterByName ( const std::string & character ) ;
 
         void activate () ;
 
@@ -126,13 +126,13 @@ public:
 
         bool swapCharactersInRoom () ;
 
-        bool continueWithAlivePlayer () ;
+        bool continueWithAliveCharacter () ;
 
        /**
-        * Calculate coordinates at which player enters room
+        * Calculate coordinates at which the character enters the room
         * @param entry Way of entry
-        * @param widthX Size of player on X
-        * @param widthY Size of player on Y
+        * @param widthX Size of character on X
+        * @param widthY Size of character on Y
         * @param northBound North limit of room, it is X coordinate of north walls or north door
         * @param eastBound East limit of room, it is Y coordinate of east walls or east door
         * @param southBound South limit of room, it’s X coordinate of south walls or south door
@@ -153,11 +153,11 @@ public:
 
         unsigned short getOpacityOfShadows () const {  return shadingOpacity ;  }
 
-        const std::vector < PlayerItemPtr > & getPlayersYetInRoom () const {  return playersYetInRoom ;  }
+        const std::vector < PlayerItemPtr > & getCharactersYetInRoom () const {  return charactersYetInRoom ;  }
 
-        const std::vector < PlayerItemPtr > & getPlayersWhoEnteredRoom () const {  return playersWhoEnteredRoom ;  }
+        const std::vector < PlayerItemPtr > & getCharactersWhoEnteredRoom () const {  return charactersWhoEnteredRoom ;  }
 
-        bool isAnyPlayerStillInRoom () const ;
+        bool isAnyCharacterStillInRoom () const ;
 
         const std::string & getNameOfRoomDescriptionFile () const {  return nameOfFileWithDataAboutRoom ;  }
 
@@ -266,9 +266,9 @@ private:
         // the connections of this room with other rooms
         const RoomConnections * connections ;
 
-        std::vector < PlayerItemPtr > playersYetInRoom ;
+        std::vector < PlayerItemPtr > charactersYetInRoom ;
 
-        std::vector < PlayerItemPtr > playersWhoEnteredRoom ;
+        std::vector < PlayerItemPtr > charactersWhoEnteredRoom ;
 
         /**
          * Pairs label of item with next number for such item,

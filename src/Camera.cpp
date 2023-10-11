@@ -20,7 +20,7 @@ void Camera::centerRoom ()
 {
         delta.first = ( static_cast< int >( room->getWidthOfRoomImage() ) - static_cast< int >( variables::getScreenWidth() ) ) >> 1 ;
         delta.second = ( static_cast< int >( room->getHeightOfRoomImage() ) - static_cast< int >( variables::getScreenHeight() ) ) >> 1 ;
-        delta.second += GameManager::spaceForAmbiance ;
+        delta.second += Camera::spaceForAmbiance ;
 
         centeredOnItem.clear();
 }
@@ -32,7 +32,7 @@ bool Camera::centerOnItem( const Item & item )
         // center on room’s origin at first
         delta.first = room->getX0 () - ( static_cast< int >( variables::getScreenWidth() ) >> 1 ) ;
         delta.second = room->getY0 () - ( static_cast< int >( variables::getScreenHeight() ) >> 1 ) ;
-        delta.second += GameManager::spaceForAmbiance ;
+        delta.second += Camera::spaceForAmbiance ;
 
         // apply offset of item to room’s origin
         delta.first += item.getOffsetX () ;

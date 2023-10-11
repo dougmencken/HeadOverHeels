@@ -325,7 +325,7 @@ gamedatagfxsimple_DATA = item.png/ball-shadows.png \
 			gui.gfx/head.gif \
 			gui.gfx/heels.gif \
 			gui.gfx/high-jumps.png \
-			gui.gfx/high-speed.png \
+			gui.gfx/quick-steps.png \
 			gui.gfx/jail-frame.png \
 			gui.gfx/market-frame.png \
 			gui.gfx/moon-frame.png \

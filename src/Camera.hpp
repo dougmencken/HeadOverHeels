@@ -53,6 +53,8 @@ private:
 
         std::string centeredOnItem ;
 
+        static const unsigned int spaceForAmbiance = 100 ;
+
 public:
 
         int getDeltaX () const {  return delta.first;  }

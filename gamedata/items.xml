@@ -339,8 +339,8 @@
     </shadow>
   </item>
 
-  <!-- Rabbit with high speed -->
-  <item label="high-speed">
+  <!-- Rabbit with bonus quick steps -->
+  <item label="quick-steps">
     <widthX>12</widthX>
     <widthY>12</widthY>
     <height>24</height>
@@ -2697,4 +2697,3 @@
     </picture>
   </item>
 </items>
-

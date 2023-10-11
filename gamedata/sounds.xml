@@ -151,28 +151,28 @@
     </event>
   </item>
 
-  <!-- rabbit with extra lives -->
+  <!-- rabbit with bonus extra lives -->
   <item label="extra-life">
     <event activity="vanish">
       <file>sound/bonus.wav</file>
     </event>
   </item>
 
-  <!-- rabbit with high jumps -->
+  <!-- rabbit with bonus high jumps -->
   <item label="high-jumps">
     <event activity="vanish">
       <file>sound/bonus.wav</file>
     </event>
   </item>
 
-  <!-- rabbit with high speed -->
-  <item label="high-speed">
+  <!-- rabbit with bonus quick steps -->
+  <item label="quick-steps">
     <event activity="vanish">
       <file>sound/bonus.wav</file>
     </event>
   </item>
 
-  <!-- rabbit with immunity -->
+  <!-- rabbit with bonus invulnerability -->
   <item label="shield">
     <event activity="vanish">
       <file>sound/bonus.wav</file>
@@ -496,4 +496,3 @@
   </item>
 
 </sounds>
-

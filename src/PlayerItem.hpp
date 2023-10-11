@@ -14,6 +14,7 @@
 #include <vector>
 
 #include "FreeItem.hpp"
+#include "DescriptionOfItem.hpp"
 #include "Timer.hpp"
 #include "Picture.hpp"
 
@@ -21,12 +22,8 @@
 namespace iso
 {
 
-class DescriptionOfItem ;
-class GameManager ;
-
-
 /**
- * Item of character controlled by the user
+ * A character controlled by the user
  */
 
 class PlayerItem : public FreeItem
@@ -36,81 +33,76 @@ public:
 
         PlayerItem( const DescriptionOfItem* description, int x, int y, int z, const std::string& orientation ) ;
 
-        PlayerItem( const PlayerItem& playerItem ) ;
+        PlayerItem( const PlayerItem & toCopy ) ;
 
         virtual ~PlayerItem( ) { }
 
         virtual std::string whichKindOfItem () const {  return "player item" ;  }
 
-        /**
-         * Change activity of player by way of entry to room
-         */
-        void autoMoveOnEntry ( const std::string& wayOfEntry ) ;
+        bool isHead () const {  return getOriginalLabel() == "head" ;  }
+
+        bool isHeels () const {  return getOriginalLabel() == "heels" ;  }
+
+        bool isHeadOverHeels () const {  return getOriginalLabel() == "headoverheels" ;  }
+
+        void autoMoveOnEntry ( const std::string & wayOfEntry ) ;
 
         virtual void behave () ;
 
         /**
-         * Updates behavior of item
+         * Update the behavior
          */
         virtual bool update () ;
 
         void wait () ;
 
-        void fillWithData ( const GameManager & data ) ;
-
         bool isActiveCharacter () const ;
+
+        unsigned char getLives() const ;
 
         void addLives( unsigned char lives ) ;
 
         void loseLife () ;
 
         /**
-         * Player takes magic item
-         * @label Label of item
+         * the character takes a magic tool, one of "horn" or "handbag"
          */
-        void takeTool( const std::string& label ) ;
+        void takeMagicTool( const std::string & label ) ;
 
-        void addDoughnuts( const unsigned short howMany ) ;
+        unsigned short getDonuts () const ;
 
-        void useDoughnut () ;
+        void addDonuts( unsigned short howMany ) ;
 
         /**
-         * Activa el movimiento a doble velocidad del personaje
+         * the character releases a doughnut
          */
-        void activateHighSpeed () ;
+        void useDoughnutHorn () ;
 
-        /**
-         * El jugador consume una unidad de tiempo del movimiento a doble velocidad
-         */
-        void decreaseHighSpeed () ;
+        unsigned short getQuickSteps () const ;
 
-        /**
-         * Añade un número de grandes saltos al jugador
-         */
-        void addHighJumps ( unsigned char howMany ) ;
+        void activateBonusQuickSteps () ;
 
-        /**
-         * El jugador consume un gran salto
-         */
-        void decreaseHighJumps () ;
+        void decrementBonusQuickSteps () ;
 
-        /**
-         * Activa la inmunidad del personaje
-         */
+        unsigned short getHighJumps () const ;
+
+        void addBonusHighJumps ( unsigned char howMany ) ;
+
+        void decrementBonusHighJumps () ;
+
         void activateShield () ;
 
-        /**
-         * El jugador consume una unidad de tiempo de inmunidad
-         */
-        void decreaseShield () ;
+        void activateShieldForSeconds ( double seconds ) ;
+
+        void decrementShieldOverTime () ;
 
         /**
-         * El jugador libera un planeta
+         * Character just liberated a planet
          */
         void liberatePlanet() ;
 
         /**
-         * Save game when player meets reincarnation fish
+         * Save game when a character meets reincarnation fish
          */
         void save () ;
 
@@ -126,97 +118,44 @@ public:
 
         const std::string & getBehaviorOfTakenItem () const {  return this->behaviorOfTakenItem ;  }
 
-        unsigned char getLives () const {  return this->lives ;  }
+        /**
+         * This character has the temporary invulnerability or doesn't have
+         */
+        bool hasShield () const ;
 
         /**
-         * Returns remaining steps at double speed between 0 and 99
+         * This character has the magic tool, the horn or the bag, or doesn't have
          */
-        unsigned int getHighSpeed () const {  return this->highSpeed ;  }
-
-        /**
-         * Returns number of high jumps between 0 and 10
-         */
-        unsigned int getHighJumps () const {  return this->highJumps ;  }
-
-        /**
-         * Character has its magic item, horn or bag, or not
-         */
-        bool hasTool ( const std::string& label ) const ;
-
-        unsigned short getDoughnuts () const {  return this->howManyDoughnuts ;  }
-
-        bool hasShield () const {  return shieldRemaining > 0 ;  }
+        bool hasTool ( const std::string & tool ) const ;
 
         void setWayOfExit ( const std::string& way ) ;
 
-        const std::string& getWayOfExit () const {  return wayOfExit ;  }
+        const std::string & getWayOfExit () const {  return wayOfExit ;  }
 
-        const std::string& getWayOfEntry () const {  return wayOfEntry ;  }
+        const std::string & getWayOfEntry () const {  return wayOfEntry ;  }
 
         void setWayOfEntry ( const std::string& way ) {  wayOfEntry = way ;  }
 
 protected:
 
         /**
-         * See if player crosses limits of room, if yes then change rooms
+         * See if player crosses the limits of room, if yes then change rooms
          */
-        bool isCollidingWithLimitOfRoom( const std::string& onWhichWay ) ;
-
-        void setLives ( unsigned char lives ) {  this->lives = lives ;  }
-
-        void setHighSpeed ( unsigned int highSpeed ) {  this->highSpeed = highSpeed ;  }
-
-        void setHighJumps ( unsigned int highJumps ) {  this->highJumps = highJumps ;  }
-
-        void setDoughnuts ( const unsigned short howMany ) {  this->howManyDoughnuts = howMany ;  }
-
-        void setShieldTime ( float seconds ) ;
+        bool isCollidingWithLimitsOfRoom( const std::string & onWhichWay ) ;
 
 private:
 
         /**
-         * Número de vidas del jugador
-         */
-        unsigned char lives ;
-
-        /**
-         * Tiempo restante de movimiento a doble velocidad. Si el jugador no posee esta habilidad
-         * entonces vale cero. Por observación se concluye que:
-         * 1. Si el jugador va paso a paso no gasta
-         * 2. Si el jugador se mueve pero colisiona, no gasta
-         * 3. Consume una unidad de tiempo cada 8 pasos, siempre y cuando se den 4 seguidos
-         * 4. Cuando salta no consume
-         */
-        unsigned int highSpeed ;
-
-        /**
-         * Número de grandes saltos del jugador
-         */
-        unsigned int highJumps ;
-
-        std::vector< std::string > tools ;
-
-        unsigned short howManyDoughnuts ;
-
-        /**
-         * Way by which player leaves room
+         * The way by which player leaves room
          */
         std::string wayOfExit ;
 
         /**
-         * How player enters room: through door, or via teleport, or going below floor or above ceiling
+         * How character enters the room: through a door, or via teleport, or going below floor or above ceiling
          */
         std::string wayOfEntry ;
 
-        /**
-         * Timer for immunity, player gets 25 seconds of immunity when rabbit is caught
-         */
         autouniqueptr < Timer > shieldTimer ;
-
-        /**
-         * How many seconds are remaining of time when character has immunity
-         */
-        float shieldRemaining ;
 
         const DescriptionOfItem * descriptionOfTakenItem ;
 

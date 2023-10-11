@@ -32,11 +32,11 @@ public:
 
         virtual bool update () ;
 
-        void setPlayerItem ( const PlayerItemPtr & player ) {  this->playerItem = player ;  }
+        void setCharacter ( const PlayerItemPtr & thatCharacter ) {  this->character = thatCharacter ;  }
 
 private:
 
-        PlayerItemPtr playerItem ;
+        PlayerItemPtr character ;
 
        /**
         * Timer for speed of movement

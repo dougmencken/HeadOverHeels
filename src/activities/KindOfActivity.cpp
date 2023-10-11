@@ -47,7 +47,7 @@ void KindOfActivity::propagateActivityToAdjacentItems( Item& sender, const Activ
                                                 if ( itemMeetsSender->getBehavior()->getActivityOfItem() != Activity::MeetMortalItem &&
                                                                 itemMeetsSender->getBehavior()->getActivityOfItem() != Activity::Vanish )
                                                 {
-                                                        if ( ! GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
+                                                        if ( ! game::GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
                                                         {
                                                                 std::cout << "mortal item \"" << sender.getLabel() << "\" just met player" << std::endl ;
 
@@ -57,7 +57,7 @@ void KindOfActivity::propagateActivityToAdjacentItems( Item& sender, const Activ
                                                                         itemMeetsSender->getBehavior()->changeActivityOfItem( Activity::MeetMortalItem );
                                                                 }
                                                         }
-                                                        /* else std::cout << "right to inviolability granted when item \"" << sender.getLabel() << "\" met player" << std::endl ; */
+                                                        /* else std::cout << "the inviolability granted when item \"" << sender.getLabel() << "\" met the player" << std::endl ; */
                                                 }
                                         }
                                         // if sender is player and colliding one is mortal, then player loses its life
@@ -67,14 +67,14 @@ void KindOfActivity::propagateActivityToAdjacentItems( Item& sender, const Activ
                                                 if ( sender.getBehavior()->getActivityOfItem() != Activity::MeetMortalItem &&
                                                                 itemMeetsSender->getBehavior()->getActivityOfItem() != Activity::Vanish )
                                                 {
-                                                        if ( ! GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
+                                                        if ( ! game::GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
                                                         {
                                                                 std::cout << "player just met mortal item \"" << itemMeetsSender->getLabel() << "\"" << std::endl ;
 
                                                                 sender.getBehavior()->changeActivityOfItem( Activity::MeetMortalItem );
                                                                 itemMeetsSender->getBehavior()->changeActivityOfItem( activity, sender );
                                                         }
-                                                        /* else std::cout << "right to inviolability granted when player met item \"" << itemMeetsSender->getLabel() << "\"" << std::endl ; */
+                                                        /* else std::cout << "the inviolability granted when the player met item \"" << itemMeetsSender->getLabel() << "\"" << std::endl ; */
                                                 }
                                         }
                                         // if not, propagate activity to that item
@@ -93,7 +93,7 @@ void KindOfActivity::propagateActivityToAdjacentItems( Item& sender, const Activ
                                         if ( sender.getBehavior()->getActivityOfItem() != Activity::MeetMortalItem &&
                                                         sender.getBehavior()->getActivityOfItem() != Activity::Vanish )
                                         {
-                                                if ( ! GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
+                                                if ( ! game::GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
                                                 {
                                                         sender.getBehavior()->changeActivityOfItem( Activity::MeetMortalItem );
                                                 }
@@ -191,12 +191,12 @@ void KindOfActivity::propagateActivityToItemsAbove( Item& sender, const Activity
                                                                 {
                                                                         if ( freeItemAbove.getBehavior()->getActivityOfItem() != Activity::MeetMortalItem )
                                                                         {
-                                                                                if ( ! GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
+                                                                                if ( ! game::GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
                                                                                 {
                                                                                         std::cout << "player is above mortal item \"" << sender.getLabel() << "\"" << std::endl ;
                                                                                         freeItemAbove.getBehavior()->changeActivityOfItem( Activity::MeetMortalItem );
                                                                                 }
-                                                                                /* else std::cout << "right to inviolability granted when player is above item \"" << sender.getLabel() << "\"" << std::endl ; */
+                                                                                /* else std::cout << "the inviolability granted when the player is above item \"" << sender.getLabel() << "\"" << std::endl ; */
                                                                         }
                                                                 }
                                                                 // if not, propagate activity to that item above

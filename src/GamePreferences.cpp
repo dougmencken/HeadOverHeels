@@ -10,9 +10,9 @@
 
 #include <tinyxml2.h>
 
-using iso::GamePreferences ;
+using game::GamePreferences ;
 
-using iso::GameManager ;
+using game::GameManager ;
 
 
 /* static */

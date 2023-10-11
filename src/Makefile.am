@@ -85,6 +85,8 @@ headoverheels_SOURCES = main.cpp \
 			GameSaverAndLoader.hpp \
 			GameManager.cpp \
 			GameManager.hpp \
+			GameInfo.cpp \
+			GameInfo.hpp \
 			GamePreferences.cpp \
 			GamePreferences.hpp \
 			InputManager.cpp \

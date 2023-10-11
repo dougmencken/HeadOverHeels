@@ -13,7 +13,7 @@
 
 #include <string>
 
-namespace iso
+namespace game
 {
 
 class GamePreferences

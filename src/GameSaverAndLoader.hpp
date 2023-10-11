@@ -13,14 +13,14 @@
 
 #include <string>
 
-#include "Way.hpp"
+#include <tinyxml2.h>
 
 
-namespace iso
+namespace game
 {
 
 /**
- * Deals with saving and restoring of game
+ * Deals with saving and restoring of a game
  */
 
 class GameSaverAndLoader
@@ -33,7 +33,7 @@ public:
         ~GameSaverAndLoader( ) { }
 
        /**
-        * Set data needed to record game
+        * Set the data needed to record a game
         * @param room Room where reincarnation fish is caught
         * @param label Character who caught the fish
         */
@@ -45,13 +45,15 @@ public:
 
 private:
 
+        void continueSavedGame ( tinyxml2::XMLElement * characters ) ;
+
        /**
-        * Room where reincarnation fish is caught
+        * The room where the reincarnation fish is caught
         */
         std::string fishRoom ;
 
        /**
-        * Name of character who caught the fish
+        * The name of character who caught the fish
         */
         std::string nameOfCharacterWhoCaughtTheFish ;
 

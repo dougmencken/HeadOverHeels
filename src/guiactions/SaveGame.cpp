@@ -23,7 +23,7 @@ void SaveGame::doAction ()
 
         if ( slot > 0 )
         {
-                iso::GameManager& gameManager = iso::GameManager::getInstance();
+                game::GameManager& gameManager = game::GameManager::getInstance();
                 gameManager.saveGame( ospaths::homePath () + "savegame" + ospaths::pathSeparator () + "saved." + util::number2string( slot ) );
         }
 

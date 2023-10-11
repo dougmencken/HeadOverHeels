@@ -40,21 +40,20 @@ class RoomBuilder
 public:
 
         /**
-         * Construct room by data from file
+         * Construct the room by the data from file
          */
-        static Room * buildRoom ( const std::string& roomFile ) ;
+        static Room * buildRoom ( const std::string & roomFile ) ;
 
         /**
-         * Create player in given room
-         * @param room Room where to create player
-         * @param justEntered Make copy of player used to recreate it when rebuilding room or not
+         * Create a character in a specified room
+         * @param justEntered Make the copy of character to recreate it when rebuilding the room or don't
          */
-        static PlayerItemPtr createPlayerInRoom ( Room* room,
-                                                  const std::string& nameOfPlayer,
-                                                  bool justEntered,
-                                                  int x, int y, int z,
-                                                  const std::string& orientation,
-                                                  const std::string& wayOfEntry = "just wait" );
+        static PlayerItemPtr createCharacterInRoom ( Room * room,
+                                                     const std::string & nameOfCharacter,
+                                                     bool justEntered,
+                                                     int x, int y, int z,
+                                                     const std::string & orientation,
+                                                     const std::string & wayOfEntry = "just wait" );
 
 private:
 

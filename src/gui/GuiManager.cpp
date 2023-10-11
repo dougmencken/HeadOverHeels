@@ -212,7 +212,7 @@ void GuiManager::redraw()
 
 std::string GuiManager::getPathToThesePictures () const
 {
-        return ospaths::sharePath() + iso::GameManager::getInstance().getChosenGraphicsSet() ;
+        return ospaths::sharePath() + game::GameManager::getInstance().getChosenGraphicsSet() ;
 }
 
 bool GuiManager::isAtFullScreen ()
