@@ -94,13 +94,19 @@ bool GamePreferences::readPreferences( const std::string & fileName )
                 tinyxml2::XMLElement* width = video->FirstChildElement( "width" ) ;
                 if ( width != nilPointer )
                 {
-                        variables::setScreenWidth( std::atoi( width->FirstChild()->ToText()->Value() ) ) ;
+                        if ( variables::isWidthKept () )
+                                variables::keepThisWidth( false );
+                        else
+                                variables::setScreenWidth( std::atoi( width->FirstChild()->ToText()->Value() ) ) ;
                 }
 
                 tinyxml2::XMLElement* height = video->FirstChildElement( "height" ) ;
                 if ( height != nilPointer )
                 {
-                        variables::setScreenHeight( std::atoi( height->FirstChild()->ToText()->Value() ) ) ;
+                        if ( variables::isHeightKept () )
+                                variables::keepThisHeight( false );
+                        else
+                                variables::setScreenHeight( std::atoi( height->FirstChild()->ToText()->Value() ) ) ;
                 }
 
                 bool atFullScreen = false ;

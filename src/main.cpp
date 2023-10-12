@@ -28,7 +28,30 @@
 #endif
 
 
-std::vector< std::pair< std::string, bool /* has value */ > > knownOptions ;
+class KnownOption
+{
+private:
+        std::string theOption ;
+        bool hasValue ;
+        std::string theDescription ;
+
+public:
+        KnownOption( const std::string & option, bool has, const std::string & about )
+                : theOption( option )
+                , hasValue( has )
+                , theDescription( about )
+        {}
+
+        const std::string & getOption () const {  return theOption ;  }
+
+        bool withValue () const {  return hasValue ;  }
+
+        const std::string & getDescription () const {  return theDescription ;  }
+
+} ;
+
+std::vector< KnownOption > knownOptions ;
+
 
 void initAllegro ()
 {
@@ -52,20 +75,32 @@ void readPreferences ()
 
 int main( int argc, char** argv )
 {
+        std::cout << "Head over Heels" << std::endl ;
+        std::cout << "the free and open source remake" << std::endl ;
+# ifdef PACKAGE_VERSION
+        std::cout << "version " << std::string( PACKAGE_VERSION ) << std::endl;
+# endif
+        std::cout << std::endl ;
+
         if ( argc > 0 ) ospaths::setPathToGame( argv[ 0 ] );
 
-        knownOptions.push_back( std::pair< std::string, bool >( "width", true ) );
-        knownOptions.push_back( std::pair< std::string, bool >( "height", true ) );
-        knownOptions.push_back( std::pair< std::string, bool >( "head-room", true ) );
-        knownOptions.push_back( std::pair< std::string, bool >( "heels-room", true ) );
-        knownOptions.push_back( std::pair< std::string, bool >( "rebuild-rooms", false ) );
-        knownOptions.push_back( std::pair< std::string, bool >( "begin-game", false ) );
+        knownOptions.push_back( KnownOption( "help", false, "shows this text which describes all the known options" ) );
+/* # if defined( __gnu_linux__ ) && defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+        // GNU/Linux with Allegro 4 only
+        knownOptions.push_back( KnownOption( "linux-audio", true, "which audio interface to use, one of =autodetect (default), =alsa, =oss, =esd, =arts, =jack, or =none" ) );
+# endif */
+        knownOptions.push_back( KnownOption( "width", true, "the width of the game's screen, default is the value from preferences or =640" ) );
+        knownOptions.push_back( KnownOption( "height", true, "the height of the game's screen, default is the value from preferences or =480" ) );
+        knownOptions.push_back( KnownOption( "head-room", true, "the room's file name where Head begins the game, =blacktooth1head.xml by default" ) );
+        knownOptions.push_back( KnownOption( "heels-room", true, "the room's file name where Heels begins the game, =blacktooth23heels.xml by default" ) );
+        knownOptions.push_back( KnownOption( "build-rooms", false, "build all the game rooms on launching" ) );
+        knownOptions.push_back( KnownOption( "begin-game", false, "no menus, just begin the new game" ) );
 
         bool newGameNoGui = false ;
 
         if ( argc > 1 )
         {
-                std::map < std::string /* option */, std::string /* value */ > options;
+                std::map < std::string /* option */, std::string /* value */ > options ;
 
                 for ( int a = 1 ; a < argc ; ++ a )
                 {
@@ -95,9 +130,10 @@ int main( int argc, char** argv )
                         std::string value = ( *oi ).second ;
 
                         bool knownOption = false ;
-                        for ( std::vector< std::pair< std::string, bool > >::const_iterator ko = knownOptions.begin () ; ko != knownOptions.end () ; ++ ko )
+                        for ( std::vector< KnownOption >::const_iterator ko = knownOptions.begin () ;
+                                        ko != knownOptions.end () ; ++ ko )
                         {
-                                if ( option == ( *ko ).first )
+                                if ( option == ( *ko ).getOption () )
                                 {
                                         knownOption = true ;
                                         break ;
@@ -117,18 +153,44 @@ int main( int argc, char** argv )
                         }
                 }
 
+                if ( options.count( "help" ) > 0 )
+                {
+                        std::cout << std::endl << "The options are" << std::endl ;
+                        for ( std::vector< KnownOption >::const_iterator ko = knownOptions.begin () ;
+                                        ko != knownOptions.end () ; ++ ko )
+                        {
+                                std::cout << "     " ;
+                                std::cout << "--" << ( *ko ).getOption () ;
+                                if ( ( *ko ).withValue () ) std::cout << "=(value)" ;
+                                std::cout << " — " ;
+                                std::cout << ( *ko ).getDescription () ;
+                                std::cout << std::endl ;
+                        }
+
+                        // and don't run the game, just exit
+                        return EXIT_SUCCESS ;
+                }
+
+        /* # if defined( __gnu_linux__ ) && defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+                if ( options.count( "linux-audio" ) > 0 )
+                {
+                }
+        # endif */
+
                 if ( options.count( "width" ) > 0 )
                 {
                         int width = std::atoi( options[ "width" ].c_str () );
-                        if ( width < 640 ) width = 640;
+                        if ( width < 640 ) width = 640 ;
                         variables::setScreenWidth( static_cast< unsigned int >( width ) );
+                        variables::keepThisWidth( true );
                 }
 
                 if ( options.count( "height" ) > 0 )
                 {
                         int height = std::atoi( options[ "height" ].c_str () );
-                        if ( height < 480 ) height = 480;
+                        if ( height < 480 ) height = 480 ;
                         variables::setScreenHeight( static_cast< unsigned int >( height ) );
+                        variables::keepThisHeight( true );
                 }
 
                 if ( options.count( "head-room" ) > 0 )
@@ -137,7 +199,7 @@ int main( int argc, char** argv )
                 if ( options.count( "heels-room" ) > 0 )
                         game::GameManager::getInstance().setHeelsRoom( options[ "heels-room" ] );
 
-                if ( options.count( "rebuild-rooms" ) > 0 )
+                if ( options.count( "build-rooms" ) > 0 )
                         iso::MapManager::buildEveryRoomAtOnce = true ;
 
                 if ( options.count( "begin-game" ) > 0 )

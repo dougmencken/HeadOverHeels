@@ -5,11 +5,16 @@
 
 #include <iostream>
 
+
 namespace variables
 {
-        unsigned int screenWidth = 640 ;
+        unsigned int screenWidth = constants::Default_Screen_Width ;
 
-        unsigned int screenHeight = 480 ;
+        unsigned int screenHeight = constants::Default_Screen_Height ;
+
+        bool keepWidth = false ;
+
+        bool keepHeight = false ;
 
         unsigned int getScreenWidth() {  return screenWidth ;  }
 
@@ -26,6 +31,14 @@ namespace variables
                 if ( height < 480 ) height = 480;
                 screenHeight = height;
         }
+
+        void keepThisWidth ( bool keep ) {  keepWidth = keep ;  }
+
+        void keepThisHeight ( bool keep ) {  keepHeight = keep ;  }
+
+        bool isWidthKept () {  return keepWidth ;  }
+
+        bool isHeightKept () {  return keepHeight ;  }
 }
 
 bool allegroWindowSizeToScreenSize ()
