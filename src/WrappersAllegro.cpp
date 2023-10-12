@@ -1599,17 +1599,25 @@ void drawRect( int x1, int y1, int x2, int y2, AllegroColor color )
 #endif
 }
 
-void fillRect( int x1, int y1, int x2, int y2, AllegroColor color )
+void fillRect( const Pict & where, int x1, int y1, int x2, int y2, AllegroColor color )
 {
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 
+        AllegroBitmap* previous = al_get_target_bitmap () ;
+        if ( previous != where.ptr() ) al_set_target_bitmap( where.ptr() ) ;
         al_draw_filled_rectangle( x1 + 0.5, y1 + 0.5, x2 + 0.5, y2 + 0.5, color );
+        if ( previous != where.ptr() ) al_set_target_bitmap( previous ) ;
 
 #elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
 
-        rectfill( Pict::getWhereToDraw().ptr (), x1, y1, x2, y2, color );
+        rectfill( where.ptr (), x1, y1, x2, y2, color );
 
 #endif
+}
+
+void fillRect( int x1, int y1, int x2, int y2, AllegroColor color )
+{
+        fillRect( Pict::getWhereToDraw(), x1, y1, x2, y2, color );
 }
 
 void bitBlit( const Pict& from, int fromX, int fromY, int toX, int toY, unsigned int width, unsigned int height )

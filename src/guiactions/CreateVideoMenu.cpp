@@ -99,6 +99,8 @@ void CreateVideoMenu::doAction ()
                 screen.setKeyHandler( listOfOptions );
         }
 
+        screen.drawSpectrumColorBoxes( true );
+
         gui::GuiManager::getInstance().changeScreen( screen, true );
 
         allegro::emptyKeyboardBuffer();

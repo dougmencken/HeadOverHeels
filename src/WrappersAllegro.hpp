@@ -350,6 +350,8 @@ void drawRect ( int x1, int y1, int x2, int y2, AllegroColor color ) ;
  * Draws a filled rectangle with the two points as its opposite corners
  */
 
+void fillRect( const Pict & where, int x1, int y1, int x2, int y2, AllegroColor color ) ;
+
 void fillRect ( int x1, int y1, int x2, int y2, AllegroColor color ) ;
 
 

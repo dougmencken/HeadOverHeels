@@ -55,6 +55,7 @@ namespace gui
 Screen::Screen( Action* action ) :
         Widget( 0, 0 ),
         imageOfScreen( new Picture( variables::getScreenWidth(), variables::getScreenHeight() ) ),
+        drawSpectrumColors( false ),
         actionOfScreen( action ),
         escapeAction( nilPointer ),
         keyHandler( nilPointer ),
@@ -194,31 +195,9 @@ void Screen::refresh () const
                 }
         }
 
-        if ( game::GameManager::getInstance().isSimpleGraphicsSet() )
+        if ( drawSpectrumColors /* || game::GameManager::getInstance().isSimpleGraphicsSet() */ )
         {
-                static const size_t howManyColors = 8 ;
-                static const std::string colors[ howManyColors ] =
-                        { "black", "blue", "red", "magenta", "green", "cyan", "yellow", "white" } ;
-
-                const unsigned int sizeOfSquare = 8 ;
-
-                const unsigned int colorsX = variables::getScreenWidth() - ( howManyColors * sizeOfSquare );
-                const unsigned int colorsY = variables::getScreenHeight() - ( 2 * sizeOfSquare );
-
-                for ( size_t i = 0 ; i < howManyColors ; ++ i )
-                {
-                        allegro::fillRect( colorsX + ( i * sizeOfSquare ), colorsY + sizeOfSquare,
-                                           colorsX + ( i * sizeOfSquare ) + sizeOfSquare - 1, colorsY + sizeOfSquare  + sizeOfSquare - 1,
-                                           Color::byName( colors[ i ] ).toAllegroColor () );
-
-                        allegro::fillRect( colorsX + ( i * sizeOfSquare ), colorsY,
-                                           colorsX + ( i * sizeOfSquare ) + sizeOfSquare - 1, colorsY + sizeOfSquare - 1,
-                                           Color::byName( "reduced " + colors[ i ] ).toAllegroColor () );
-
-                        /* allegro::fillRect( colorsX + ( i * sizeOfSquare ), colorsY + ( sizeOfSquare << 1 ),
-                                           colorsX + ( i * sizeOfSquare ) + sizeOfSquare - 1, colorsY + ( sizeOfSquare << 1 ) + sizeOfSquare - 1,
-                                           Color::byName( "light " + colors[ i ] ).toAllegroColor () ); */
-                }
+                Screen::draw2x8colors( *this ) ;
         }
 
         // draw each component
@@ -235,6 +214,37 @@ void Screen::drawOnGlobalScreen( )
 {
         allegro::bitBlit( imageOfScreen->getAllegroPict(), allegro::Pict::theScreen() );
         allegro::update ();
+}
+
+/* static */
+void Screen::draw2x8colors ( const Screen & slide )
+{
+        static const size_t howManyColors = 8 ;
+        static const std::string colors[ howManyColors ] =
+                { "black", "blue", "red", "magenta", "green", "cyan", "yellow", "white" } ;
+
+        const unsigned int sizeOfSquare = 8 ;
+
+        const unsigned int colorsX = slide.getImageOfScreen().getWidth () - ( howManyColors * sizeOfSquare );
+        const unsigned int colorsY = slide.getImageOfScreen().getHeight() - ( 2 * sizeOfSquare );
+
+        for ( size_t i = 0 ; i < howManyColors ; ++ i )
+        {
+                allegro::fillRect( slide.getImageOfScreen().getAllegroPict (),
+                                   colorsX + ( i * sizeOfSquare ), colorsY + sizeOfSquare,
+                                   colorsX + ( i * sizeOfSquare ) + sizeOfSquare - 1, colorsY + sizeOfSquare + sizeOfSquare - 1,
+                                   Color::byName( colors[ i ] ).toAllegroColor () );
+
+                allegro::fillRect( slide.getImageOfScreen().getAllegroPict (),
+                                   colorsX + ( i * sizeOfSquare ), colorsY,
+                                   colorsX + ( i * sizeOfSquare ) + sizeOfSquare - 1, colorsY + sizeOfSquare - 1,
+                                   Color::byName( "reduced " + colors[ i ] ).toAllegroColor () );
+
+                /* allegro::fillRect( slide.getImageOfScreen().getAllegroPict (),
+                                   colorsX + ( i * sizeOfSquare ), colorsY + ( sizeOfSquare << 1 ),
+                                   colorsX + ( i * sizeOfSquare ) + sizeOfSquare - 1, colorsY + ( sizeOfSquare << 1 ) + sizeOfSquare - 1,
+                                   Color::byName( "light " + colors[ i ] ).toAllegroColor () ); */
+        }
 }
 
 void Screen::handleKey( const std::string& key )

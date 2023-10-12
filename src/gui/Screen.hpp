@@ -76,6 +76,8 @@ public:
 
         const Picture & getImageOfScreen () const {  return *imageOfScreen ;  }
 
+        void drawSpectrumColorBoxes( bool draw ) {  drawSpectrumColors = draw ;  }
+
         Action * getActionOfScreen () const {  return actionOfScreen ;  }
 
         void setEscapeAction ( Action * action ) ;
@@ -103,6 +105,8 @@ public:
 
         static void randomPixelFadeOut( const Screen & screen, const Color & fadeTo ) {  randomPixelFade( false, screen, fadeTo ) ;  }
 
+        static void draw2x8colors ( const Screen & slide ) ;
+
 private:
 
         /**
@@ -114,6 +118,8 @@ private:
          * Elements of interface to draw on screen
          */
         std::list < Widget * > widgets ;
+
+        bool drawSpectrumColors ;
 
         Action * actionOfScreen ;
 
