@@ -37,13 +37,13 @@ public:
         virtual ~UserControlled( ) ;
 
        /**
-        * Updates behavior of the element in each cycle
-        * @return false if the element is supposed to die since this update, true otherwise
+        * Updates the character’s behavior in each cycle
+        * @return false if the character is dead after this update, true otherwise
         */
         virtual bool update () = 0 ;
 
        /**
-        * Updates player’s behavior from commands given by the user
+        * Updates the character’s behavior by the user commands
         */
         virtual void behave () = 0 ;
 
@@ -52,12 +52,12 @@ protected:
        /**
         * Character waits, game shows first frame of character’s animation for current orientation
         */
-        virtual void wait( PlayerItem & player ) ;
+        virtual void wait( PlayerItem & character ) ;
 
        /**
         * Character moves at speed specified in item’s data, in the direction of north or south or west or east
         */
-        virtual void move( PlayerItem & player ) ;
+        virtual void move( PlayerItem & character ) ;
 
        /**
         * Character moves automatically
@@ -65,76 +65,78 @@ protected:
         * in direction of north or south or west or east,
         * at speed specified in item’s data
         */
-        virtual void autoMove( PlayerItem & player ) ;
+        virtual void autoMove( PlayerItem & character ) ;
 
        /**
-        * Move player at speed of item that pushes it in one of eight directions
+        * Move the character at the speed of an item that pushes it in one of eight directions
         */
-        virtual void displace( PlayerItem & player ) ;
+        virtual void displace( PlayerItem & character ) ;
 
        /**
         * Cancels movement by moving in the opposite direction of displacing, leaving item stopped
         * at current point. Used when character is dragged by conveyor belt or some similar item
         */
-        virtual void cancelDisplace( PlayerItem & player ) ;
+        virtual void cancelDisplace( PlayerItem & character ) ;
 
        /**
         * Character falls down at speed from item’s data
         */
-        virtual void fall( PlayerItem & player ) ;
+        virtual void fall( PlayerItem & character ) ;
 
        /**
         * Character jumps, details of jumping are in subclasses
         */
-        virtual void jump( PlayerItem & player ) ;
+        virtual void jump( PlayerItem & character ) ;
 
        /**
         * Character in air, falling or has jumped, glides at speed from item’s data
         * in direction of north or south or west or east
         */
-        virtual void glide( PlayerItem & player ) ;
+        virtual void glide( PlayerItem & character ) ;
 
        /**
         * Character teleports from another room
         */
-        virtual void wayInTeletransport( PlayerItem & player ) ;
+        virtual void wayInTeletransport( PlayerItem & character ) ;
 
        /**
         * Character teleports to another room
         */
-        virtual void wayOutTeletransport( PlayerItem & player ) ;
+        virtual void wayOutTeletransport( PlayerItem & character ) ;
 
        /**
         * Character collides with a mortal item
         */
-        virtual void collideWithMortalItem( PlayerItem & player ) ;
+        virtual void collideWithMortalItem( PlayerItem & character ) ;
 
        /**
         * Character releases something that freezes moving items
         */
-        virtual void useHooter( PlayerItem & player ) ;
+        virtual void useHooter( PlayerItem & character ) ;
 
        /**
-        * Take item underneath player
+        * Take item underneath character
         */
-        virtual void takeItem( PlayerItem & player ) ;
+        virtual void takeItem( PlayerItem & character ) ;
 
        /**
-        * Drop item just below player
+        * Drop item just below character
         */
-        virtual void dropItem( PlayerItem & player ) ;
+        virtual void dropItem( PlayerItem & character ) ;
 
 protected:
 
        /**
-        * Defines player’s jump by pairs of horizontal and vertical offsets on each cycle
+        * Defines the character’s jump by pairs of horizontal and vertical offsets on each cycle
         */
         std::vector < std::pair< int /* xy */, int /* z */ > > jumpVector ;
 
        /**
-        * Defines long jump of player from trampoline or with bunny
+        * Defines the long jump of character from a trampoline or with a bunny's bonus
         */
         std::vector < std::pair< int /* xy */, int /* z */ > > highJumpVector ;
+
+        bool isLosingLife ;
 
         unsigned int jumpPhase ;
 

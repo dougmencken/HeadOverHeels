@@ -78,7 +78,7 @@
             <kind>freeitem</kind>
         </item>
         <item x="0" y="1" z="0">
-            <label>high-speed</label>
+            <label>quick-steps</label>
             <orientation>west</orientation>
             <behavior>behavior of something special</behavior>
             <kind>freeitem</kind>

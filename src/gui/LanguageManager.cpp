@@ -1,7 +1,8 @@
 
 #include "LanguageText.hpp"
 #include "LanguageManager.hpp"
-#include "Ism.hpp"
+
+#include "util.hpp"
 
 #include <iostream>
 #include <algorithm> // std::for_each
@@ -22,10 +23,10 @@ LanguageManager::LanguageManager( const std::string& file, const std::string& fi
 
 LanguageManager::~LanguageManager()
 {
-        std::for_each( strings.begin(), strings.end(), iso::DeleteIt() );
+        std::for_each( strings.begin(), strings.end(), DeleteIt() );
         strings.clear();
 
-        std::for_each( backupStrings.begin(), backupStrings.end(), iso::DeleteIt() );
+        std::for_each( backupStrings.begin(), backupStrings.end(), DeleteIt() );
         backupStrings.clear();
 }
 
@@ -60,11 +61,11 @@ void LanguageManager::parseFile( const std::string& fileName, std::vector< Langu
 {
         std::cout << "parsing \"" << fileName << "\"" << std::endl ;
 
-        tinyxml2::XMLDocument languageXml;
+        tinyxml2::XMLDocument languageXml ;
         tinyxml2::XMLError result = languageXml.LoadFile( fileName.c_str () );
         if ( result != tinyxml2::XML_SUCCESS )
         {
-                return;
+                return ;
         }
 
         tinyxml2::XMLElement* root = languageXml.FirstChildElement( "language" );
@@ -74,7 +75,7 @@ void LanguageManager::parseFile( const std::string& fileName, std::vector< Langu
 
         for ( tinyxml2::XMLElement* text = root->FirstChildElement( "text" ) ;
                         text != nilPointer ;
-                        text = text->NextSiblingElement( "text" ) )
+                                text = text->NextSiblingElement( "text" ) )
         {
                 std::string alias = text->Attribute( "alias" );
                 LanguageText* langText = new LanguageText( alias );
@@ -85,7 +86,7 @@ void LanguageManager::parseFile( const std::string& fileName, std::vector< Langu
 
                 for ( tinyxml2::XMLElement* properties = text->FirstChildElement( "properties" ) ;
                                 properties != nilPointer ;
-                                properties = properties->NextSiblingElement( "properties" ) )
+                                        properties = properties->NextSiblingElement( "properties" ) )
                 {
                         const char * font = properties->Attribute( "font" );
                         const char * color = properties->Attribute( "color" );
@@ -99,7 +100,7 @@ void LanguageManager::parseFile( const std::string& fileName, std::vector< Langu
 
                         for ( tinyxml2::XMLElement* string = properties->FirstChildElement( "string" ) ;
                                         string != nilPointer ;
-                                        string = string->NextSiblingElement( "string" ) )
+                                                string = string->NextSiblingElement( "string" ) )
                         {
                                 if ( string->FirstChild() != nilPointer )
                                 {

@@ -2,7 +2,8 @@
 #include "ItemDescriptions.hpp"
 #include "GameManager.hpp"
 #include "Color.hpp"
-#include "Ism.hpp"
+
+#include "ospaths.hpp"
 
 #include <tinyxml2.h>
 
@@ -20,7 +21,7 @@ void ItemDescriptions::readDescriptionOfItemsFrom( const std::string& nameOfXMLF
         freeDescriptionOfItems() ;
 
         tinyxml2::XMLDocument itemsXml;
-        tinyxml2::XMLError result = itemsXml.LoadFile( ( iso::sharePath() + nameOfXMLFile ).c_str () );
+        tinyxml2::XMLError result = itemsXml.LoadFile( ( ospaths::sharePath() + nameOfXMLFile ).c_str () );
         if ( result != tinyxml2::XML_SUCCESS )
         {
                 return;

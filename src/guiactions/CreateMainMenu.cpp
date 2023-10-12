@@ -40,7 +40,7 @@ void CreateMainMenu::doAction ()
 
                 Label* newGame = new Label( languageManager->findLanguageStringForAlias( "new-game" )->getText() );
                 Label* loadGame = new Label( languageManager->findLanguageStringForAlias( "load-game" )->getText() );
-                Label* defineKeys = new Label( languageManager->findLanguageStringForAlias( "keyboard-menu" )->getText() );
+                Label* defineKeys = new Label( languageManager->findLanguageStringForAlias( "keys-menu" )->getText() );
                 Label* adjustAudio = new Label( languageManager->findLanguageStringForAlias( "audio-menu" )->getText() );
                 Label* adjustVideo = new Label( languageManager->findLanguageStringForAlias( "video-menu" )->getText() );
                 Label* showCredits = new Label( languageManager->findLanguageStringForAlias( "show-credits" )->getText() );

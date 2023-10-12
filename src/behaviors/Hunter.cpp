@@ -1,5 +1,7 @@
 
 #include "Hunter.hpp"
+
+#include "Isomot.hpp"
 #include "Item.hpp"
 #include "DescriptionOfItem.hpp"
 #include "FreeItem.hpp"
@@ -333,8 +335,8 @@ ActivityOfItem Hunter::calculateDirection8( const ActivityOfItem& activity )
                         }
                 }
 
-                // guardian of throne flees from player with four crowns
-                if ( item->getLabel() == "throne-guard" && GameManager::getInstance().countFreePlanets() >= 4 )
+                // the guardian of throne flees from the player with four crowns
+                if ( item->getLabel() == "throne-guard" && game::GameManager::getInstance().countFreePlanets() >= 4 )
                 {
                         changeActivityOfItem( Activity::MoveSouthwest );
                 }
@@ -348,14 +350,14 @@ bool Hunter::createFullBody()
         FreeItem& thisItem = dynamic_cast< FreeItem& >( * this->item );
         bool created = false;
 
-        if ( thisItem.getLabel() == "imperial-guard-head" && thisItem.canAdvanceTo( 0, 0, -LayerHeight ) )
+        if ( thisItem.getLabel() == "imperial-guard-head" && thisItem.canAdvanceTo( 0, 0, - Isomot::LayerHeight ) )
         {
                 created = true;
 
                 // create new item in the same location
                 FreeItemPtr newItem( new FreeItem (
                         item->getDescriptionOfItem()->getItemDescriptions()->getDescriptionByLabel( "imperial-guard" ),
-                        thisItem.getX(), thisItem.getY(), thisItem.getZ() - LayerHeight,
+                        thisItem.getX(), thisItem.getY(), thisItem.getZ() - Isomot::LayerHeight,
                         thisItem.getOrientation() ) );
 
                 newItem->setBehaviorOf( "behavior of hunter in four directions" );

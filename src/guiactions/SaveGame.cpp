@@ -1,6 +1,8 @@
 
 #include "SaveGame.hpp"
-#include "Ism.hpp"
+
+#include "ospaths.hpp"
+
 #include "GameManager.hpp"
 #include "ContinueGame.hpp"
 
@@ -21,8 +23,8 @@ void SaveGame::doAction ()
 
         if ( slot > 0 )
         {
-                iso::GameManager& gameManager = iso::GameManager::getInstance();
-                gameManager.saveGame( iso::homePath() + "savegame" + util::pathSeparator() + "saved." + util::number2string( slot ) );
+                game::GameManager& gameManager = game::GameManager::getInstance();
+                gameManager.saveGame( ospaths::homePath () + "savegame" + ospaths::pathSeparator () + "saved." + util::number2string( slot ) );
         }
 
         ContinueGame * game = new ContinueGame( true );

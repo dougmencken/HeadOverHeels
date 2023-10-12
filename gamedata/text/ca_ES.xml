@@ -62,7 +62,7 @@
     </properties>
   </text>
 
-  <text alias="keyboard-menu">
+  <text alias="keys-menu">
     <properties>
       <string>Teclat</string>
     </properties>
@@ -158,7 +158,7 @@
     </properties>
   </text>
 
-  <text alias="draw-background">
+  <text alias="draw-decor">
     <properties>
       <string>Dibuixa fons</string>
     </properties>

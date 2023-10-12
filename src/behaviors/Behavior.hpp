@@ -13,7 +13,6 @@
 
 #include <string>
 
-#include "Ism.hpp"
 #include "ActivityOfItem.hpp"
 #include "Item.hpp"
 

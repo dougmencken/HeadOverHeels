@@ -1,5 +1,5 @@
 
-#include "CreateMenuOfGraphicSets.hpp"
+#include "CreateMenuOfGraphicsSets.hpp"
 
 #include "GameManager.hpp"
 #include "GuiManager.hpp"
@@ -9,29 +9,31 @@
 #include "CreateVideoMenu.hpp"
 #include "CreateMainMenu.hpp"
 
-using gui::CreateMenuOfGraphicSets ;
+#include "sleep.hpp"
+
+using gui::CreateMenuOfGraphicsSets ;
 
 
-CreateMenuOfGraphicSets::CreateMenuOfGraphicSets( Action* previous ) :
+CreateMenuOfGraphicsSets::CreateMenuOfGraphicsSets( Action* previous ) :
         Action( ),
         actionOnEscape( previous ),
-        menuOfGraphicSets( new Menu( ) )
+        menuOfGraphicsSets( new Menu( ) )
 {
-        graphicSets[ "gfx" ] = "Present" ;
-        graphicSets[ "gfx.2009" ] = "By Davit" ;
-        graphicSets[ "gfx.riderx" ] = "By Ricardo" ;
-        graphicSets[ "gfx.2003" ] = "Initial By Davit" ;
-        graphicSets[ "gfx.simple" ] = "Black & White" ;
+        setsOfGraphics[ "gfx" ] = "Present" ;
+        setsOfGraphics[ "gfx.2009" ] = "By Davit" ;
+        setsOfGraphics[ "gfx.riderx" ] = "By Ricardo" ;
+        setsOfGraphics[ "gfx.2003" ] = "Initial By Davit" ;
+        setsOfGraphics[ "gfx.simple" ] = "Black & White" ;
 
-        menuOfGraphicSets->setVerticalOffset( 40 );
+        menuOfGraphicsSets->setVerticalOffset( 40 );
 }
 
-CreateMenuOfGraphicSets::~CreateMenuOfGraphicSets( )
+CreateMenuOfGraphicsSets::~CreateMenuOfGraphicsSets( )
 {
-        delete menuOfGraphicSets ;
+        delete menuOfGraphicsSets ;
 }
 
-void CreateMenuOfGraphicSets::doAction ()
+void CreateMenuOfGraphicsSets::doAction ()
 {
         const size_t positionOfSecondColumn = 18;
 
@@ -43,7 +45,7 @@ void CreateMenuOfGraphicSets::doAction ()
 
                 screen.placeHeadAndHeels( /* icons */ true, /* copyrights */ false );
 
-                for ( std::map < std::string, std::string >::iterator i = graphicSets.begin (); i != graphicSets.end (); ++i )
+                for ( std::map < std::string, std::string >::iterator i = setsOfGraphics.begin (); i != setsOfGraphics.end (); ++ i )
                 {
                         std::string nameOfSet = i->second;
                         std::string nameOfSetSpaced ( nameOfSet );
@@ -53,7 +55,7 @@ void CreateMenuOfGraphicSets::doAction ()
                         }
 
                         Label * theLabel = new Label( nameOfSetSpaced + i->first );
-                        if ( i->first != iso::GameManager::getInstance().getChosenGraphicSet() )
+                        if ( i->first != game::GameManager::getInstance().getChosenGraphicsSet() )
                         {
                                 theLabel->changeColor( "cyan" );
                         }
@@ -62,19 +64,19 @@ void CreateMenuOfGraphicSets::doAction ()
                                 theLabel->changeColor( "yellow" );
                         }
 
-                        menuOfGraphicSets->addOption( theLabel );
+                        menuOfGraphicsSets->addOption( theLabel );
                 }
 
-                screen.addWidget( menuOfGraphicSets );
-                screen.setKeyHandler( menuOfGraphicSets );
+                screen.addWidget( menuOfGraphicsSets );
+                screen.setKeyHandler( menuOfGraphicsSets );
         }
 
-        std::list< Label* > labels = menuOfGraphicSets->getEveryOption ();
+        std::list< Label* > labels = menuOfGraphicsSets->getEveryOption ();
         for ( std::list< Label * >::iterator il = labels.begin (); il != labels.end (); ++il )
         {
                 if ( ( *il )->getColor() == "yellow" )
                 {
-                        menuOfGraphicSets->setActiveOption( *il );
+                        menuOfGraphicsSets->setActiveOption( *il );
                 }
         }
 
@@ -101,20 +103,20 @@ void CreateMenuOfGraphicSets::doAction ()
 
                                 if ( theKey == "Enter" || theKey == "Space" )
                                 {
-                                        std::string chosenSet = menuOfGraphicSets->getActiveOption()->getText().substr( positionOfSecondColumn ) ;
+                                        std::string chosenSet = menuOfGraphicsSets->getActiveOption()->getText().substr( positionOfSecondColumn ) ;
 
-                                        if ( chosenSet != iso::GameManager::getInstance().getChosenGraphicSet() )
+                                        if ( chosenSet != game::GameManager::getInstance().getChosenGraphicsSet() )
                                         { // new set is not the same as previous one
-                                                iso::GameManager::getInstance().setChosenGraphicSet( chosenSet.c_str () ) ;
+                                                game::GameManager::getInstance().setChosenGraphicsSet( chosenSet.c_str () ) ;
 
                                                 gui::GuiManager::getInstance().refreshScreens ();
 
-                                                std::list< Label * > everySet = menuOfGraphicSets->getEveryOption ();
+                                                std::list< Label * > everySet = menuOfGraphicsSets->getEveryOption ();
                                                 for ( std::list< Label* >::iterator is = everySet.begin (); is != everySet.end (); ++is )
                                                 {
                                                         ( * is )->changeColor( "cyan" );
                                                 }
-                                                menuOfGraphicSets->getActiveOption()->changeColor( "yellow" );
+                                                menuOfGraphicsSets->getActiveOption()->changeColor( "yellow" );
                                         }
 
                                         doneWithKey = true;
@@ -126,12 +128,12 @@ void CreateMenuOfGraphicSets::doAction ()
                                 }
 
                                 allegro::emptyKeyboardBuffer();
-                                menuOfGraphicSets->redraw ();
+                                menuOfGraphicsSets->redraw ();
                         }
 
                         // no te comas la CPU
                         // do not eat the CPU
-                        milliSleep( 25 );
+                        somn::milliSleep( 25 );
                 }
         }
 }

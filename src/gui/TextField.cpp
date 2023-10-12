@@ -2,7 +2,6 @@
 #include "TextField.hpp"
 #include "Font.hpp"
 #include "Label.hpp"
-#include "Ism.hpp"
 
 #include <algorithm> // std::for_each
 
@@ -21,7 +20,7 @@ TextField::TextField( unsigned int width, const std::string& align )
 
 TextField::~TextField()
 {
-        std::for_each( this->lines.begin (), this->lines.end (), iso::DeleteIt() );
+        std::for_each( this->lines.begin (), this->lines.end (), DeleteIt() );
         this->lines.clear();
 }
 

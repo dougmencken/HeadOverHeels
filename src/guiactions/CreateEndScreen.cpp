@@ -1,5 +1,7 @@
 
 #include "CreateEndScreen.hpp"
+
+#include "GameManager.hpp"
 #include "GuiManager.hpp"
 #include "LanguageText.hpp"
 #include "LanguageManager.hpp"
@@ -10,6 +12,8 @@
 #include "Label.hpp"
 #include "TextField.hpp"
 #include "CreateMainMenu.hpp"
+
+#include "screen.hpp"
 
 using gui::CreateEndScreen;
 using iso::SoundManager;
@@ -26,7 +30,10 @@ void CreateEndScreen::doAction ()
 {
         SoundManager::getInstance().playOgg( "music/MainTheme.ogg", /* loop */ true );
 
-        Screen& screen = * GuiManager::getInstance().findOrCreateScreenForAction( this );
+        if ( game::GameManager::getInstance().isSimpleGraphicsSet () )
+                Screen::refreshBackground () ; // get the background back
+
+        Screen & screen = * GuiManager::getInstance().findOrCreateScreenForAction( this );
         if ( screen.countWidgets() > 0 )
         {
                 screen.freeWidgets();
@@ -39,8 +46,8 @@ void CreateEndScreen::doAction ()
         screen.placeHeadAndHeels( /* icons */ true, /* copyrights */ false );
 
         const unsigned int leading = 40 ;
-        const unsigned int screenWidth = iso::ScreenWidth();
-        const unsigned int screenHeight = iso::ScreenHeight();
+        const unsigned int screenWidth = variables::getScreenWidth();
+        const unsigned int screenHeight = variables::getScreenHeight();
         const unsigned int space = ( screenWidth / 20 ) - 10;
         const unsigned int labelsY = screenHeight - ( leading * 3 ) - ( space << 1 ) ;
         const unsigned int resultY = ( screenHeight >> 1 ) - ( screenHeight >> 4 ) - 20 ;

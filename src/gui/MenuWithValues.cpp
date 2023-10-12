@@ -1,7 +1,8 @@
 
 #include "MenuWithValues.hpp"
 #include "Label.hpp"
-#include "Ism.hpp"
+
+#include "screen.hpp"
 
 #include <algorithm> // std::for_each
 
@@ -81,18 +82,18 @@ void MenuWithValues::draw ()
         }
 
         // condense options of menu so they fit on screen
-        // hey but how about alignment, need to condense every option to the same as for most condensed one
+        // hey but how about alignment, need to condense every option to the same as for the most condensed one
         /* for ( std::list< Label* >::iterator o = optionsWithValues.begin (); o != optionsWithValues.end (); ++o )
         {
                 Label* option = *o;
-                while ( option->getWidth() > ( iso::ScreenWidth() - 100 ) )
+                while ( option->getWidth() > ( variables::getScreenWidth() - 100 ) )
                         option->setSpacing( option->getSpacing() - 1 );
         } */
 
         // update position of the whole menu to draw it centered
         int previousX = getX (); int previousY = getY ();
-        setX( previousX + ( ( iso::ScreenWidth() - previousX ) >> 1 ) - ( getWidthOfMenu () >> 1 ) );
-        setY( previousY + ( ( iso::ScreenHeight() - previousY ) >> 1 ) - ( getHeightOfMenu() >> 1 ) );
+        setX( previousX + ( ( variables::getScreenWidth() - previousX ) >> 1 ) - ( getWidthOfMenu () >> 1 ) );
+        setY( previousY + ( ( variables::getScreenHeight() - previousY ) >> 1 ) - ( getHeightOfMenu() >> 1 ) );
 
         int dx( Menu::beforeOption != nilPointer ? Menu::beforeOption->getWidth() : 0 );
         int dy( 0 );
@@ -121,7 +122,7 @@ void MenuWithValues::draw ()
         setX ( previousX );
         setY ( previousY );
 
-        std::for_each( optionsWithValues.begin (), optionsWithValues.end (), iso::DeleteIt() );
+        std::for_each( optionsWithValues.begin (), optionsWithValues.end (), DeleteIt() );
         optionsWithValues.clear();
 }
 

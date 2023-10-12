@@ -1,5 +1,6 @@
 
 #include "JumpKindOfActivity.hpp"
+
 #include "Behavior.hpp"
 #include "PlayerItem.hpp"
 #include "Mediator.hpp"
@@ -36,13 +37,13 @@ bool JumpKindOfActivity::jump( Behavior* behavior, ActivityOfItem* activity, uns
 {
         bool itemMoved = false;
         ActivityOfItem displaceActivity = Activity::Wait;
-        PlayerItem& playerItem = dynamic_cast< PlayerItem& >( * behavior->getItem() );
-        Mediator* mediator = playerItem.getMediator();
+        PlayerItem& characterItem = dynamic_cast< PlayerItem& >( * behavior->getItem() );
+        Mediator* mediator = characterItem.getMediator();
 
         int deltaXY = jumpVector[ jumpPhase ].first ;
         int deltaZ = jumpVector[ jumpPhase ].second ;
 
-        if ( GameManager::getInstance().charactersFly() )
+        if ( game::GameManager::getInstance().charactersFly() )
         {
                 deltaXY = 0;
 
@@ -53,7 +54,7 @@ bool JumpKindOfActivity::jump( Behavior* behavior, ActivityOfItem* activity, uns
         }
 
         // let’s move up
-        if ( ! playerItem.addToZ( deltaZ ) )
+        if ( ! characterItem.addToZ( deltaZ ) )
         {
                 // if can’t, raise pile of items above
                 if ( deltaZ > 0 )
@@ -62,9 +63,9 @@ bool JumpKindOfActivity::jump( Behavior* behavior, ActivityOfItem* activity, uns
                         {
                                 std::string collision = mediator->popCollision ();
 
-                                if ( collision == "ceiling" && playerItem.isActiveCharacter() )
+                                if ( collision == "ceiling" && characterItem.isActiveCharacter() )
                                 {
-                                        playerItem.setWayOfExit( "above" );
+                                        characterItem.setWayOfExit( "above" );
                                         continue ;
                                 }
 
@@ -72,11 +73,11 @@ bool JumpKindOfActivity::jump( Behavior* behavior, ActivityOfItem* activity, uns
                                 if ( item == nilPointer ) continue ;
 
                                 // mortal thing is above
-                                if ( item->isMortal() && ! playerItem.hasShield() )
+                                if ( item->isMortal() && ! characterItem.hasShield() )
                                 {
-                                        if ( ! GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
+                                        if ( ! game::GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
                                         {
-                                                playerItem.getBehavior()->changeActivityOfItem( Activity::MeetMortalItem );
+                                                characterItem.getBehavior()->changeActivityOfItem( Activity::MeetMortalItem );
                                         }
                                 }
                                 else
@@ -85,36 +86,36 @@ bool JumpKindOfActivity::jump( Behavior* behavior, ActivityOfItem* activity, uns
                                         if ( item->whichKindOfItem() == "free item" || item->whichKindOfItem() == "player item" )
                                         {
                                                 // raise items recursively
-                                                lift( playerItem, *item, deltaZ - ( jumpPhase > 0 && jumpPhase % 2 == 0 ? 1 : 2 ) );
+                                                lift( characterItem, *item, deltaZ - ( jumpPhase > 0 && jumpPhase % 2 == 0 ? 1 : 2 ) );
                                         }
                                 }
                         }
 
                         // yet you may ascend
-                        playerItem.addToZ( deltaZ - ( jumpPhase > 0 && jumpPhase % 2 == 0 ? 1 : 2 ) );
+                        characterItem.addToZ( deltaZ - ( jumpPhase > 0 && jumpPhase % 2 == 0 ? 1 : 2 ) );
                 }
         }
 
-        std::string orientation = playerItem.getOrientation() ;
+        std::string orientation = characterItem.getOrientation() ;
 
         if ( orientation == "north" )
         {
-                itemMoved = playerItem.addToX( - deltaXY );
+                itemMoved = characterItem.addToX( - deltaXY );
                 displaceActivity = Activity::DisplaceNorth ;
         }
         else if ( orientation == "south" )
         {
-                itemMoved = playerItem.addToX( deltaXY );
+                itemMoved = characterItem.addToX( deltaXY );
                 displaceActivity = Activity::DisplaceSouth ;
         }
         else if ( orientation == "east" )
         {
-                itemMoved = playerItem.addToY( - deltaXY );
+                itemMoved = characterItem.addToY( - deltaXY );
                 displaceActivity = Activity::DisplaceEast ;
         }
         else if ( orientation == "west" )
         {
-                itemMoved = playerItem.addToY( deltaXY );
+                itemMoved = characterItem.addToY( deltaXY );
                 displaceActivity = Activity::DisplaceWest ;
         }
 
@@ -122,11 +123,11 @@ bool JumpKindOfActivity::jump( Behavior* behavior, ActivityOfItem* activity, uns
         if ( ! itemMoved || ( itemMoved && jumpPhase > 4 ) )
         {
                 // is it okay to move items above
-                // it is okay after fourth phase of jump so player can get rid of item above
-                this->propagateActivityToAdjacentItems( playerItem, displaceActivity );
+                // it is okay after the fourth phase of jump so the character can get rid of the item above
+                this->propagateActivityToAdjacentItems( characterItem, displaceActivity );
         }
 
-        // end jump when it’s last phase
+        // end jump when it’s the last phase
         if ( ( jumpPhase + 1 ) >= jumpVector.size() )
         {
                 *activity = Activity::Fall;

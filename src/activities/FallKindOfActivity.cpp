@@ -1,5 +1,6 @@
 
 #include "FallKindOfActivity.hpp"
+
 #include "Behavior.hpp"
 #include "PlayerItem.hpp"
 #include "Mediator.hpp"
@@ -42,7 +43,7 @@ bool FallKindOfActivity::fall( Behavior * behavior )
         if ( behavior == nilPointer ) return false ;
 
         if ( behavior->getItem()->whichKindOfItem() == "player item" &&
-                GameManager::getInstance().charactersFly() &&
+                game::GameManager::getInstance().charactersFly() &&
                 ! ( allegro::isShiftKeyPushed() && allegro::isKeyPushed( "PageDown" ) ) )
         {
                 return false ;
@@ -68,7 +69,7 @@ bool FallKindOfActivity::fall( Behavior * behavior )
                         this->assignAnchor( sender.getUniqueName(), sender.getMediator(), itemsBelow );
                 }
 
-                // as long as there’re items collided with sender
+                // as long as there’re items collided with the sender
                 while ( ! itemsBelow.empty() )
                 {
                         std::string name = itemsBelow.back();
@@ -87,7 +88,7 @@ bool FallKindOfActivity::fall( Behavior * behavior )
                                         {
                                                 if ( sender.canAdvanceTo( 0, 0, -1 ) )
                                                 {
-                                                        if ( ! GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
+                                                        if ( ! game::GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
                                                         {
                                                                 itemBelow->getBehavior()->changeActivityOfItem( Activity::MeetMortalItem );
                                                         }
@@ -97,7 +98,7 @@ bool FallKindOfActivity::fall( Behavior * behavior )
                                         {
                                                 if ( sender.canAdvanceTo( 0, 0, -1 ) )
                                                 {
-                                                        if ( ! GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
+                                                        if ( ! game::GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
                                                         {
                                                                 sender.getBehavior()->changeActivityOfItem( Activity::MeetMortalItem );
                                                         }
@@ -106,7 +107,7 @@ bool FallKindOfActivity::fall( Behavior * behavior )
                                                 {
                                                         bool onlyMortal = true;
 
-                                                        // look if some item underneath player is not mortal
+                                                        // look if some item underneath the character is not mortal
                                                         while ( ! mediator->isStackOfCollisionsEmpty() )
                                                         {
                                                                 if ( ! mediator->findCollisionPop()->isMortal() )
@@ -115,10 +116,10 @@ bool FallKindOfActivity::fall( Behavior * behavior )
                                                                 }
                                                         }
 
-                                                        // if every one is mortal then player loses its life
+                                                        // if every one is mortal then the character loses its life
                                                         if ( onlyMortal )
                                                         {
-                                                                if ( ! GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
+                                                                if ( ! game::GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
                                                                 {
                                                                         sender.getBehavior()->changeActivityOfItem( Activity::MeetMortalItem );
                                                                 }
@@ -127,21 +128,21 @@ bool FallKindOfActivity::fall( Behavior * behavior )
                                         }
                                 }
                         }
-                        // player reaches floor
+                        // the character reaches floor
                         else if ( sender.whichKindOfItem() == "player item" && name == "some tile of floor" )
                         {
-                                PlayerItem& playerItem = dynamic_cast< PlayerItem& >( sender );
+                                PlayerItem& characterItem = dynamic_cast< PlayerItem& >( sender );
 
                                 if ( ! mediator->getRoom()->hasFloor() )
                                 {
-                                        playerItem.setWayOfExit( "below" );
+                                        characterItem.setWayOfExit( "below" );
                                 }
                                 else
                                 if ( mediator->getRoom()->getKindOfFloor() == "mortal" )
                                 {
-                                        if ( ! GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
+                                        if ( ! game::GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
                                         {
-                                                playerItem.getBehavior()->changeActivityOfItem( Activity::MeetMortalItem );
+                                                characterItem.getBehavior()->changeActivityOfItem( Activity::MeetMortalItem );
                                         }
                                 }
                         }

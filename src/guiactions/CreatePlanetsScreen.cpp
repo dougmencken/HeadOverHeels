@@ -1,11 +1,11 @@
 
 #include "CreatePlanetsScreen.hpp"
+
 #include "GameManager.hpp"
 #include "LanguageManager.hpp"
 #include "LanguageText.hpp"
 #include "SoundManager.hpp"
 #include "GuiManager.hpp"
-#include "GameManager.hpp"
 #include "Color.hpp"
 #include "Screen.hpp"
 #include "PictureWidget.hpp"
@@ -13,10 +13,12 @@
 #include "CreateMainMenu.hpp"
 #include "ContinueGame.hpp"
 
+#include "screen.hpp"
+
 using gui::CreatePlanetsScreen ;
 using gui::ContinueGame ;
 using gui::GuiManager ;
-using iso::GameManager ;
+using game::GameManager ;
 using iso::SoundManager ;
 
 
@@ -43,19 +45,22 @@ void CreatePlanetsScreen::doAction ()
 
         LanguageManager* languageManager = GuiManager::getInstance().getLanguageManager();
 
-        Screen& planets = * GuiManager::getInstance().findOrCreateScreenForAction( this );
+        if ( GameManager::getInstance().isSimpleGraphicsSet () )
+                Screen::toBlackBackground () ; // change the background from red to black
+
+        Screen & planets = * GuiManager::getInstance().findOrCreateScreenForAction( this );
 
         if ( planets.countWidgets() > 0 )
         {
                 planets.freeWidgets() ;
         }
 
-        const unsigned int screenWidth = iso::ScreenWidth();
-        const unsigned int screenHeight = iso::ScreenHeight();
+        const unsigned int screenWidth = variables::getScreenWidth();
+        const unsigned int screenHeight = variables::getScreenHeight();
 
-        // etiqueta fija “ El Imperio Blacktooth ”
+        // “ El Imperio Blacktooth ”
         std::string colorOfLabel = "yellow" ;
-        if ( GameManager::getInstance().isSimpleGraphicSet () ) colorOfLabel = "red" ;
+        if ( GameManager::getInstance().isSimpleGraphicsSet () ) colorOfLabel = "red" ;
         Label* empire = new Label( languageManager->findLanguageStringForAlias( "blacktooth-empire" )->getText(), "big", colorOfLabel );
         empire->moveTo( ( screenWidth - empire->getWidth() ) >> 1, 2 );
         empire->setAction( new ContinueGame( gameInProgress ) );
@@ -66,7 +71,7 @@ void CreatePlanetsScreen::doAction ()
         PicturePtr chapeau( Screen::loadPicture( "crown.png" ) );
         PicturePtr chapeauTriste( new Picture( *chapeau ) );
 
-        if ( ! GameManager::getInstance().isSimpleGraphicSet () )
+        if ( ! GameManager::getInstance().isSimpleGraphicsSet () )
         {
                 chapeauTriste->toGrayscale();
         }

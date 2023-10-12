@@ -17,7 +17,6 @@
 
 #include <WrappersAllegro.hpp>
 
-#include "Ism.hpp"
 #include "Timer.hpp"
 #include "Picture.hpp"
 #include "PoolOfPictures.hpp"

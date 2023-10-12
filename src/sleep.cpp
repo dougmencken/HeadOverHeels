@@ -1,6 +1,12 @@
 
 #include "sleep.hpp"
 
+#ifndef __WIN32
+#  include <functional> // std::modulus
+#endif
+
+
+namespace somn {
 
 void milliSleep( unsigned long milliseconds )
 {
@@ -12,8 +18,6 @@ void milliSleep( unsigned long milliseconds )
 }
 
 #ifndef __WIN32
-
-#include <functional> // std::modulus
 
 void microSleep( unsigned long microseconds )
 {
@@ -31,3 +35,5 @@ void nanoSleep ( unsigned long nanoseconds )
 }
 
 #endif
+
+}

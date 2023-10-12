@@ -1,6 +1,7 @@
 
 #include "Font.hpp"
-#include "Ism.hpp"
+
+#include "ospaths.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -23,8 +24,8 @@ Font::Font( const std::string& name, const std::string& color, bool doubleHeight
 {
         if ( Font::imageOfFont == nilPointer )
         {
-                std::string nameOfFontFile = iso::sharePath() + "font.png" ;
-                autouniqueptr< allegro::Pict > fontFromFile( allegro::Pict::fromPNGFile( iso::pathToFile( nameOfFontFile ) ) );
+                std::string nameOfFontFile = ospaths::sharePath() + "font.png" ;
+                autouniqueptr< allegro::Pict > fontFromFile( allegro::Pict::fromPNGFile( ospaths::pathToFile( nameOfFontFile ) ) );
                 if ( ! fontFromFile->isNotNil() )
                 {
                         std::cerr << "oops, can’t get letters of fonts from file \"" << nameOfFontFile << "\"" << std::endl ;
@@ -83,8 +84,8 @@ Font::Font( const std::string& name, const std::string& color, bool doubleHeight
         {
                 howManyLetters = 0;
 
-                std::string file = iso::sharePath() + "letters.utf8";
-                std::ifstream lettersFile ( iso::pathToFile( file ), std::ifstream::binary );
+                std::string file = ospaths::sharePath() + "letters.utf8";
+                std::ifstream lettersFile ( ospaths::pathToFile( file ), std::ifstream::binary );
                 if ( lettersFile )      /* no comparison with nil here, see https://gcc.gnu.org/gcc-6/porting_to.html
                                          “ The change to iostream classes also affects code that tries
                                            to check for stream errors by comparing to NULL or 0.

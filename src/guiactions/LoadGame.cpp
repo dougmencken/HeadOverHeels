@@ -1,6 +1,8 @@
 
 #include "LoadGame.hpp"
-#include "Ism.hpp"
+
+#include "ospaths.hpp"
+
 #include "GameManager.hpp"
 #include "CreatePlanetsScreen.hpp"
 
@@ -17,9 +19,9 @@ LoadGame::LoadGame( unsigned int slot )
 
 void LoadGame::doAction ()
 {
-        iso::GameManager& gameManager = iso::GameManager::getInstance();
+        game::GameManager& gameManager = game::GameManager::getInstance();
         gameManager.resetPlanets();
-        gameManager.loadGame( iso::homePath() + "savegame" + util::pathSeparator() + "saved." + util::number2string( slot ) );
+        gameManager.loadGame( ospaths::homePath () + "savegame" + ospaths::pathSeparator () + "saved." + util::number2string( slot ) );
 
         CreatePlanetsScreen * planetsAction = new CreatePlanetsScreen( true );
 

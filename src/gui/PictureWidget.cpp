@@ -1,6 +1,5 @@
 
 #include "PictureWidget.hpp"
-#include "Ism.hpp"
 
 
 namespace gui

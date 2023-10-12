@@ -106,8 +106,8 @@ void Label::createImageOfLabel( const std::string& text, Font * font )
         {
                 const size_t numberOfColors = 3;
                 std::string multiColors[ numberOfColors ] = {  "cyan", "yellow", "orange"  }; // sequence of colors for multi~color labels
-                /* if ( iso::GameManager::getInstance().isSimpleGraphicSet() )
-                        multiColors[ 2 ] = "white"; // original speccy sequence is “ cyan yellow white ” */
+                /* if ( game::GameManager::getInstance().isSimpleGraphicsSet() )
+                        multiColors[ 2 ] = "white" ; // the original speccy sequence is “ cyan yellow white ” */
 
                 unsigned short cycle = 0; // position in that sequence for character to draw
                 Font* fontToUse = font ;

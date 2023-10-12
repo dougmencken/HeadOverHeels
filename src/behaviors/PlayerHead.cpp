@@ -1,5 +1,6 @@
 
 #include "PlayerHead.hpp"
+
 #include "Item.hpp"
 #include "PlayerItem.hpp"
 #include "Mediator.hpp"
@@ -56,34 +57,34 @@ PlayerHead::~PlayerHead( )
 
 bool PlayerHead::update ()
 {
-        PlayerItem& playerItem = dynamic_cast< PlayerItem& >( * this->item );
+        PlayerItem & characterItem = dynamic_cast< PlayerItem & >( * this->item );
 
-        if ( playerItem.hasShield() )
+        if ( characterItem.hasShield() )
         {
-                playerItem.decreaseShield();
+                characterItem.decrementShieldOverTime () ;
         }
 
         // change height for climbing bars easily
-        playerItem.setHeight( activity == Activity::Fall || activity == Activity::Glide ? 23 : 24 );
+        characterItem.setHeight( activity == Activity::Fall || activity == Activity::Glide ? 23 : 24 );
 
         switch ( activity )
         {
                 case Activity::Wait:
-                        wait( playerItem );
+                        wait( characterItem );
                         break;
 
                 case Activity::AutoMoveNorth:
                 case Activity::AutoMoveSouth:
                 case Activity::AutoMoveEast:
                 case Activity::AutoMoveWest:
-                        autoMove( playerItem );
+                        autoMove( characterItem );
                         break;
 
                 case Activity::MoveNorth:
                 case Activity::MoveSouth:
                 case Activity::MoveEast:
                 case Activity::MoveWest:
-                        move( playerItem );
+                        move( characterItem );
                         break;
 
                 case Activity::DisplaceNorth:
@@ -98,47 +99,47 @@ bool PlayerHead::update ()
                 case Activity::ForceDisplaceSouth:
                 case Activity::ForceDisplaceEast:
                 case Activity::ForceDisplaceWest:
-                        displace( playerItem );
+                        displace( characterItem );
                         break;
 
                 case Activity::CancelDisplaceNorth:
                 case Activity::CancelDisplaceSouth:
                 case Activity::CancelDisplaceEast:
                 case Activity::CancelDisplaceWest:
-                        cancelDisplace( playerItem );
+                        cancelDisplace( characterItem );
                         break;
 
                 case Activity::Fall:
-                        fall( playerItem );
+                        fall( characterItem );
                         break;
 
                 case Activity::Jump:
                 case Activity::RegularJump:
                 case Activity::HighJump:
-                        jump( playerItem );
+                        jump( characterItem );
                         break;
 
                 case Activity::BeginWayOutTeletransport:
                 case Activity::WayOutTeletransport:
-                        wayOutTeletransport( playerItem );
+                        wayOutTeletransport( characterItem );
                         break;
 
                 case Activity::BeginWayInTeletransport:
                 case Activity::WayInTeletransport:
-                        wayInTeletransport( playerItem );
+                        wayInTeletransport( characterItem );
                         break;
 
                 case Activity::MeetMortalItem:
                 case Activity::Vanish:
-                        collideWithMortalItem( playerItem );
+                        collideWithMortalItem( characterItem );
                         break;
 
                 case Activity::Glide:
-                        glide( playerItem );
+                        glide( characterItem );
                         break;
 
                 case Activity::Blink:
-                        blink( playerItem );
+                        blink( characterItem );
                         break;
 
                 default:
@@ -146,14 +147,14 @@ bool PlayerHead::update ()
         }
 
         // play sound for current activity
-        SoundManager::getInstance().play( playerItem.getOriginalLabel(), activity );
+        SoundManager::getInstance().play( characterItem.getOriginalLabel(), activity );
 
         return false;
 }
 
 void PlayerHead::behave ()
 {
-        PlayerItem& playerItem = dynamic_cast< PlayerItem& >( * this->item );
+        PlayerItem & characterItem = dynamic_cast< PlayerItem & >( * this->item );
         InputManager& input = InputManager::getInstance();
 
         // if it’s not a move by inertia or some other exotic activity
@@ -169,14 +170,14 @@ void PlayerHead::behave ()
                         if ( input.jumpTyped() )
                         {
                                 // jump or teleport
-                                playerItem.canAdvanceTo( 0, 0, -1 );
+                                characterItem.canAdvanceTo( 0, 0, -1 );
                                 activity =
-                                        playerItem.getMediator()->collisionWithByBehavior( "behavior of teletransport" ) != nilPointer ?
+                                        characterItem.getMediator()->collisionWithByBehavior( "behavior of teletransport" ) != nilPointer ?
                                                 Activity::BeginWayOutTeletransport : Activity::Jump ;
                         }
                         else if ( input.doughnutTyped() && ! donutFromHooterIsHere )
                         {
-                                useHooter( playerItem );
+                                useHooter( characterItem );
                                 input.releaseKeyFor( "doughnut" );
                         }
                         else if ( input.movenorthTyped() )
@@ -203,14 +204,14 @@ void PlayerHead::behave ()
                         if ( input.jumpTyped() )
                         {
                                 // look for teletransport below
-                                playerItem.canAdvanceTo( 0, 0, -1 );
+                                characterItem.canAdvanceTo( 0, 0, -1 );
                                 activity =
-                                        playerItem.getMediator()->collisionWithByBehavior( "behavior of teletransport" ) != nilPointer ?
+                                        characterItem.getMediator()->collisionWithByBehavior( "behavior of teletransport" ) != nilPointer ?
                                                 Activity::BeginWayOutTeletransport : Activity::Jump ;
                         }
                         else if ( input.doughnutTyped() && ! donutFromHooterIsHere )
                         {
-                                useHooter( playerItem );
+                                useHooter( characterItem );
                                 input.releaseKeyFor( "doughnut" );
                         }
                         else if ( input.movenorthTyped() )
@@ -231,7 +232,7 @@ void PlayerHead::behave ()
                         }
                         else if ( ! input.anyMoveTyped() )
                         {
-                                SoundManager::getInstance().stop( playerItem.getLabel(), activity );
+                                SoundManager::getInstance().stop( characterItem.getLabel(), activity );
                                 activity = Activity::Wait;
                         }
                 }
@@ -245,7 +246,7 @@ void PlayerHead::behave ()
                         }
                         else if ( input.doughnutTyped() && ! donutFromHooterIsHere )
                         {
-                                useHooter( playerItem );
+                                useHooter( characterItem );
                                 input.releaseKeyFor( "doughnut" );
                         }
                         else if ( input.movenorthTyped() )
@@ -296,32 +297,32 @@ void PlayerHead::behave ()
                 {
                         if ( input.doughnutTyped() && ! donutFromHooterIsHere )
                         {
-                                useHooter( playerItem );
+                                useHooter( characterItem );
                                 input.releaseKeyFor( "doughnut" );
                         }
                         // Head may change orientation when jumping
                         else if ( input.movenorthTyped() )
                         {
-                                playerItem.changeOrientation( "north" );
+                                characterItem.changeOrientation( "north" );
                         }
                         else if ( input.movesouthTyped() )
                         {
-                                playerItem.changeOrientation( "south" );
+                                characterItem.changeOrientation( "south" );
                         }
                         else if ( input.moveeastTyped() )
                         {
-                                playerItem.changeOrientation( "east" );
+                                characterItem.changeOrientation( "east" );
                         }
                         else if ( input.movewestTyped() )
                         {
-                                playerItem.changeOrientation( "west" );
+                                characterItem.changeOrientation( "west" );
                         }
                 }
                 else if ( activity == Activity::Fall )
                 {
                         if ( input.doughnutTyped() && ! donutFromHooterIsHere )
                         {
-                                useHooter( playerItem );
+                                useHooter( characterItem );
                                 input.releaseKeyFor( "doughnut" );
                         }
                         // entonces Head planea
@@ -338,25 +339,25 @@ void PlayerHead::behave ()
                 {
                         if ( input.doughnutTyped() && ! donutFromHooterIsHere )
                         {
-                                useHooter( playerItem );
+                                useHooter( characterItem );
                                 input.releaseKeyFor( "doughnut" );
                         }
                         // Head may change orientation when gliding
                         else if ( input.movenorthTyped() )
                         {
-                                playerItem.changeOrientation( "north" );
+                                characterItem.changeOrientation( "north" );
                         }
                         else if ( input.movesouthTyped() )
                         {
-                                playerItem.changeOrientation( "south" );
+                                characterItem.changeOrientation( "south" );
                         }
                         else if ( input.moveeastTyped() )
                         {
-                                playerItem.changeOrientation( "east" );
+                                characterItem.changeOrientation( "east" );
                         }
                         else if ( input.movewestTyped() )
                         {
-                                playerItem.changeOrientation( "west" );
+                                characterItem.changeOrientation( "west" );
                         }
                         else if ( ! input.anyMoveTyped() )
                         {
@@ -366,9 +367,9 @@ void PlayerHead::behave ()
         }
 }
 
-void PlayerHead::wait( PlayerItem& playerItem )
+void PlayerHead::wait( PlayerItem & characterItem )
 {
-        playerItem.wait();
+        characterItem.wait();
 
         if ( timerForBlinking->getValue() >= ( rand() % 4 ) + 5 )
         {
@@ -383,13 +384,13 @@ void PlayerHead::wait( PlayerItem& playerItem )
         }
 }
 
-void PlayerHead::blink( PlayerItem& playerItem )
+void PlayerHead::blink( PlayerItem & characterItem )
 {
         double timeToBlink = timerForBlinking->getValue();
 
         if ( ( timeToBlink > 0.0 && timeToBlink < 0.050 ) || ( timeToBlink > 0.400 && timeToBlink < 0.450 ) )
         {
-                playerItem.changeFrame( blinkFrames[ playerItem.getOrientation() ] );
+                characterItem.changeFrame( blinkFrames[ characterItem.getOrientation() ] );
         }
         else if ( ( timeToBlink > 0.250 && timeToBlink < 0.300 ) || ( timeToBlink > 0.750 && timeToBlink < 0.800 ) )
         {

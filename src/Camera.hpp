@@ -11,7 +11,6 @@
 #ifndef Camera_hpp_
 #define Camera_hpp_
 
-#include "Ism.hpp"
 #include "Item.hpp"
 
 
@@ -53,6 +52,8 @@ private:
         std::pair < int, int > delta ;
 
         std::string centeredOnItem ;
+
+        static const unsigned int spaceForAmbiance = 100 ;
 
 public:
 

@@ -23,9 +23,9 @@ class ContinueGame : public Action
 public:
 
         /**
-         * @param gameInProgress Indica si hay una partida en curso o comienza una nueva
+         * @param inProgress false for a completely new game
          */
-        explicit ContinueGame( bool gameInProgress ) ;
+        explicit ContinueGame( bool inProgress ) ;
 
         virtual std::string getNameOfAction () const {  return "ContinueGame" ;  }
 
@@ -39,7 +39,7 @@ protected:
 private:
 
         /**
-         * Indica si hay una partida en curso o comienza una nueva
+         * is game already in progress (true) or (false) it is a new game that's beginning
          */
         bool gameInProgress ;
 

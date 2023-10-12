@@ -17,7 +17,6 @@
 #include <list>
 #include <map>
 
-#include "Ism.hpp"
 #include "Way.hpp"
 #include "Picture.hpp"
 #include "Drawable.hpp"
@@ -55,7 +54,9 @@ public:
         * @param tileSize Length of side of single tile
         * @param floorKind Kind of floor
         */
-        Room( const std::string& roomFile, const std::string& scenery, unsigned int xTiles, unsigned int yTiles, unsigned int tileSize, const std::string& floorKind ) ;
+        Room( const std::string& roomFile, const std::string& scenery,
+                        unsigned int xTiles, unsigned int yTiles, unsigned int tileSize,
+                                const std::string& floorKind ) ;
 
         virtual ~Room( ) ;
 
@@ -77,7 +78,7 @@ public:
 
         void addFreeItem ( const FreeItemPtr & freeItem ) ;
 
-        bool addPlayerToRoom ( const PlayerItemPtr & playerItem, bool playerEntersRoom ) ;
+        bool addCharacterToRoom ( const PlayerItemPtr & character, bool characterEntersRoom ) ;
 
         void removeFloorAt ( int tileX, int tileY ) ;
 
@@ -91,7 +92,7 @@ public:
 
         void removeFreeItemByUniqueName ( const std::string & uniqueName ) ;
 
-        bool removePlayerFromRoom ( const PlayerItem & playerItem, bool playerExitsRoom ) ;
+        bool removeCharacterFromRoom ( const PlayerItem & character, bool characterExitsRoom ) ;
 
         /**
          * Removes any bar in this room
@@ -115,7 +116,7 @@ public:
 
         void calculateCoordinatesOfOrigin ( bool hasNorthDoor, bool hasEastDoor, bool hasSouthDoor, bool hasWestDoor ) ;
 
-        bool activateCharacterByLabel ( const std::string& player ) ;
+        bool activateCharacterByName ( const std::string & character ) ;
 
         void activate () ;
 
@@ -125,13 +126,13 @@ public:
 
         bool swapCharactersInRoom () ;
 
-        bool continueWithAlivePlayer () ;
+        bool continueWithAliveCharacter () ;
 
        /**
-        * Calculate coordinates at which player enters room
+        * Calculate coordinates at which the character enters the room
         * @param entry Way of entry
-        * @param widthX Size of player on X
-        * @param widthY Size of player on Y
+        * @param widthX Size of character on X
+        * @param widthY Size of character on Y
         * @param northBound North limit of room, it is X coordinate of north walls or north door
         * @param eastBound East limit of room, it is Y coordinate of east walls or east door
         * @param southBound South limit of room, it’s X coordinate of south walls or south door
@@ -146,30 +147,26 @@ public:
                                                 int northBound, int eastBound, int southBound, int westBound,
                                                 int * x, int * y, int * z ) ;
 
-        void setVisited ( bool visited ) {  this->visited = visited ;  }
-
-        bool isVisited () const {  return visited ;  }
-
         const RoomConnections * getConnections () const {  return connections ;  }
 
         void setConnections ( const RoomConnections * links ) {  connections = links ;  }
 
         unsigned short getOpacityOfShadows () const {  return shadingOpacity ;  }
 
-        const std::vector < PlayerItemPtr > & getPlayersYetInRoom () const {  return playersYetInRoom ;  }
+        const std::vector < PlayerItemPtr > & getCharactersYetInRoom () const {  return charactersYetInRoom ;  }
 
-        const std::vector < PlayerItemPtr > & getPlayersWhoEnteredRoom () const {  return playersWhoEnteredRoom ;  }
+        const std::vector < PlayerItemPtr > & getCharactersWhoEnteredRoom () const {  return charactersWhoEnteredRoom ;  }
 
-        bool isAnyPlayerStillInRoom () const ;
+        bool isAnyCharacterStillInRoom () const ;
 
-        std::string getNameOfFileWithDataAboutRoom () const {  return nameOfFileWithDataAboutRoom ;  }
+        const std::string & getNameOfRoomDescriptionFile () const {  return nameOfFileWithDataAboutRoom ;  }
 
        /**
         * @return jail, blacktooth, market, moon, egyptus, penitentiary, safary o byblos
         */
-        std::string getScenery () const {  return this->scenery ;  }
+        const std::string & getScenery () const {  return this->scenery ;  }
 
-        std::string getColor () const {  return this->color ;  }
+        const std::string & getColor () const {  return this->color ;  }
 
         void setColor ( const std::string & roomColor ) {  this->color = roomColor ;  }
 
@@ -199,7 +196,7 @@ public:
        /**
         * @return kind of floor which may be "plain", "mortal", or absent "none"
         */
-        std::string getKindOfFloor () const {  return kindOfFloor ;  }
+        const std::string & getKindOfFloor () const {  return kindOfFloor ;  }
 
         bool hasFloor () const {  return kindOfFloor != "absent" ;  }
 
@@ -266,19 +263,12 @@ private:
 
         friend class Mediator ;
 
-        /**
-         * Is this room already visited by any of characters
-         */
-        bool visited ;
-
-        /*
-         * Connections of room with another rooms
-         */
+        // the connections of this room with other rooms
         const RoomConnections * connections ;
 
-        std::vector < PlayerItemPtr > playersYetInRoom ;
+        std::vector < PlayerItemPtr > charactersYetInRoom ;
 
-        std::vector < PlayerItemPtr > playersWhoEnteredRoom ;
+        std::vector < PlayerItemPtr > charactersWhoEnteredRoom ;
 
         /**
          * Pairs label of item with next number for such item,
@@ -356,14 +346,8 @@ private:
         */
         PicturePtr whereToDraw ;
 
-       /**
-        * Límites para mover la cámara a lo largo del eje X en una sala triple
-        */
+        // limits for camera shifting in a triple room
         std::pair < int, int > tripleRoomBoundX ;
-
-       /**
-        * Límites para mover la cámara a lo largo del eje Y en una sala triple
-        */
         std::pair < int, int > tripleRoomBoundY ;
 
 };

@@ -9,6 +9,8 @@
 #include "GameManager.hpp"
 #include "PoolOfPictures.hpp"
 
+#include "ospaths.hpp"
+
 #define MAKE_PARTIAL_FLOOR_TILES        0
 
 
@@ -74,11 +76,11 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
         if ( kindOfFloor == "none" ) kindOfFloor = "absent" ;
 
         std::string roomName = roomFile;
-        const char* fromLastSlash = std::strrchr( roomFile.c_str (), util::pathSeparator()[ 0 ] );
+        const char* fromLastSlash = std::strrchr( roomFile.c_str (), ospaths::pathSeparator()[ 0 ] );
         if ( fromLastSlash != nilPointer )
                 roomName = std::string( fromLastSlash + 1 );
 
-        if ( GameManager::getInstance().getIsomot().getMapManager().findRoomByFile( roomName ) == nilPointer )
+        if ( game::GameManager::getInstance().getIsomot().getMapManager().findRoomByFile( roomName ) == nilPointer )
                 std::cout << "building new" ;
         else
                 std::cout << "rebuilding" ;
@@ -169,7 +171,7 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                 wall != nilPointer ;
                                 wall = wall->NextSiblingElement( "wall" ) )
                 {
-                        Wall* wallSegment = buildWall( wall, iso::GameManager::getInstance().getChosenGraphicSet() );
+                        Wall* wallSegment = buildWall( wall, game::GameManager::getInstance().getChosenGraphicsSet() );
 
                         if ( wallSegment != nilPointer )
                         {
@@ -223,13 +225,13 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                 int index = ( onX ? wallX : wallY );
 
                                 std::cout << "converting grid item \"" << label << "\" to wall on " << ( onX ? "x:" : "y:" ) << index
-                                                << " of room \"" << theRoom->getNameOfFileWithDataAboutRoom() << "\"" << std::endl ;
+                                                << " of room \"" << theRoom->getNameOfRoomDescriptionFile() << "\"" << std::endl ;
 
                                 std::string fileWithPicture = label + ".png";
-                                std::string gfxSet = iso::GameManager::getInstance().getChosenGraphicSet();
+                                std::string gfxSet = game::GameManager::getInstance().getChosenGraphicsSet() ;
 
                                 autouniqueptr< allegro::Pict > picture( allegro::Pict::fromPNGFile (
-                                        iso::pathToFile( iso::sharePath() + gfxSet, fileWithPicture )
+                                        ospaths::pathToFile( ospaths::sharePath() + gfxSet, fileWithPicture )
                                 ) );
 
                                 if ( picture->isNotNil() )
@@ -340,7 +342,7 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
         }
 
 #if defined( DEBUG ) && DEBUG
-        std::cout << "building floor in room \"" << theRoom->getNameOfFileWithDataAboutRoom() << "\"" ;
+        std::cout << "building floor in room \"" << theRoom->getNameOfRoomDescriptionFile() << "\"" ;
 #endif
 
         PoolOfPictures floorImages ;
@@ -496,9 +498,9 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                                 }
                                                 else
                                                 {
-                                                        bool darken = iso::GameManager::getInstance().getCastShadows() ;
-                                                        if ( iso::GameManager::getInstance().getChosenGraphicSet() == "gfx.2003" ||
-                                                                iso::GameManager::getInstance().getChosenGraphicSet() == "gfx.riderx" ) darken = false ;
+                                                        bool darken = game::GameManager::getInstance().getCastShadows() ;
+                                                        if ( game::GameManager::getInstance().getChosenGraphicsSet() == "gfx.2003" ||
+                                                                game::GameManager::getInstance().getChosenGraphicsSet() == "gfx.riderx" ) darken = false ;
 
                                                         const PicturePtr& imageOfFullTile = floorImages.getOrLoadAndGetOrMakeAndGet( fileOfFullTile, 64, 40 );
                                                         PicturePtr imageOfPartialTile = FloorTile::fullTileToPartialTile( * imageOfFullTile, suffixOfNotFullTile, darken );
@@ -519,9 +521,9 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                         # if defined( MAKE_PARTIAL_FLOOR_TILES ) && MAKE_PARTIAL_FLOOR_TILES
                                                 if ( suffixOfNotFullTile.empty() )
                                                 {
-                                                        bool darken = iso::GameManager::getInstance().getCastShadows() ;
-                                                        if ( iso::GameManager::getInstance().getChosenGraphicSet() == "gfx.2003" ||
-                                                                iso::GameManager::getInstance().getChosenGraphicSet() == "gfx.riderx" ) darken = false ;
+                                                        bool darken = game::GameManager::getInstance().getCastShadows() ;
+                                                        if ( game::GameManager::getInstance().getChosenGraphicsSet() == "gfx.2003" ||
+                                                                game::GameManager::getInstance().getChosenGraphicsSet() == "gfx.riderx" ) darken = false ;
 
                                                         FloorTile::fullTileToPartialTile( * image, "sw", darken )->saveAsPNG( iso::homePath() );
                                                         FloorTile::fullTileToPartialTile( * image, "se", darken )->saveAsPNG( iso::homePath() );
@@ -572,85 +574,85 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
         theRoom->calculateBounds();
         theRoom->updateWallsWithDoors();
 
-        std::cout << "built room \"" << theRoom->getNameOfFileWithDataAboutRoom() << "\"" << std::endl ;
+        std::cout << "built room \"" << theRoom->getNameOfRoomDescriptionFile() << "\"" << std::endl ;
 
         return theRoom ;
 }
 
 /* static */
-PlayerItemPtr RoomBuilder::createPlayerInRoom( Room* room,
-                                               const std::string& nameOfPlayer,
-                                               bool justEntered,
-                                               int x, int y, int z,
-                                               const std::string& orientation, const std::string& wayOfEntry )
+PlayerItemPtr RoomBuilder::createCharacterInRoom( Room * room,
+                                                  const std::string & nameOfCharacter,
+                                                  bool justEntered,
+                                                  int x, int y, int z,
+                                                  const std::string & orientation, const std::string & wayOfEntry )
 {
         if ( room == nilPointer ) return PlayerItemPtr () ;
 
-        GameManager& gameManager = GameManager::getInstance();
+        game::GameInfo & gameInfo = game::GameManager::getInstance().getGameInfo () ;
 
-        std::string nameOfPlayerToCreate( nameOfPlayer );
+        std::string nameOfCharacterToCreate( nameOfCharacter );
 
-        // when composite player ran out of lives, check if any of simple players still survive
-        if ( gameManager.getLives( nameOfPlayer ) == 0 )
+        // when the composite character ran out of lives, check if any of the simple characters is survive
+        if ( gameInfo.getLivesByName( nameOfCharacter ) == 0 )
         {
-                if ( nameOfPlayer == "headoverheels" )
+                if ( nameOfCharacter == "headoverheels" )
                 {
-                        if ( gameManager.getLives( "head" ) > 0 )
+                        if ( gameInfo.getLivesByName( "head" ) > 0 )
                         {
-                                nameOfPlayerToCreate = "head";
+                                nameOfCharacterToCreate = "head";
                         }
-                        else if ( gameManager.getLives( "heels" ) > 0 )
+                        else if ( gameInfo.getLivesByName( "heels" ) > 0 )
                         {
-                                nameOfPlayerToCreate = "heels";
+                                nameOfCharacterToCreate = "heels";
                         }
                         else
                         {
-                                nameOfPlayerToCreate = "nobody";
+                                nameOfCharacterToCreate = "nobody";
                         }
                 }
-                // it is possible that two players join in room and have no lives
+                // it is possible that the two characters join and have no lives
                 else
                 {
-                        if ( gameManager.getLives( "head" ) == 0 && gameManager.getLives( "heels" ) == 0 )
+                        if ( gameInfo.getLivesByName( "head" ) == 0 && gameInfo.getLivesByName( "heels" ) == 0 )
                         {
-                                nameOfPlayerToCreate = "game over";
+                                nameOfCharacterToCreate = "game over" ;
                         }
                 }
         }
 
-        const DescriptionOfItem* itemDescription = gameManager.getIsomot().getItemDescriptions().getDescriptionByLabel( nameOfPlayerToCreate );
+        iso::Isomot & isomot = game::GameManager::getInstance().getIsomot () ;
+        const DescriptionOfItem* itemDescription = isomot.getItemDescriptions().getDescriptionByLabel( nameOfCharacterToCreate );
 
         // if it is found and has some lives left, place it in room
-        if ( ( nameOfPlayerToCreate == "headoverheels" || nameOfPlayerToCreate == "head" || nameOfPlayerToCreate == "heels" )
+        if ( ( nameOfCharacterToCreate == "headoverheels" || nameOfCharacterToCreate == "head" || nameOfCharacterToCreate == "heels" )
                 && itemDescription != nilPointer )
         {
-                if ( gameManager.getLives( nameOfPlayerToCreate ) > 0 )
+                if ( gameInfo.getLivesByName( nameOfCharacterToCreate ) > 0 )
                 {
-                        PlayerItemPtr player( new PlayerItem( itemDescription, x, y, z, orientation ) );
-                        player->fillWithData( gameManager );
+                        PlayerItemPtr character( new PlayerItem( itemDescription, x, y, z, orientation ) );
 
-                        std::string behaviorOfPlayer = "behavior of some player";
+                        std::string behaviorOfCharacter = "behavior of some character";
 
-                        if ( nameOfPlayerToCreate == "headoverheels" )
+                        if ( nameOfCharacterToCreate == "headoverheels" )
                         {
-                                behaviorOfPlayer = "behavior of Head over Heels";
+                                behaviorOfCharacter = "behavior of Head over Heels";
                         }
-                        else if ( nameOfPlayerToCreate == "head" )
+                        else if ( nameOfCharacterToCreate == "head" )
                         {
-                                behaviorOfPlayer = "behavior of Head";
+                                behaviorOfCharacter = "behavior of Head";
                         }
-                        else if ( nameOfPlayerToCreate == "heels" )
+                        else if ( nameOfCharacterToCreate == "heels" )
                         {
-                                behaviorOfPlayer = "behavior of Heels";
+                                behaviorOfCharacter = "behavior of Heels";
                         }
 
-                        player->setBehaviorOf( behaviorOfPlayer );
+                        character->setBehaviorOf( behaviorOfCharacter );
 
-                        player->setWayOfEntry( wayOfEntry );
+                        character->setWayOfEntry( wayOfEntry );
 
-                        room->addPlayerToRoom( player, justEntered );
+                        room->addCharacterToRoom( character, justEntered );
 
-                        return player ;
+                        return character ;
                 }
         }
 
@@ -679,7 +681,7 @@ Wall* RoomBuilder::buildWall( tinyxml2::XMLElement* wall, const std::string& gfx
         std::string pictureString = picture->FirstChild()->ToText()->Value();
 
         autouniqueptr< allegro::Pict > image( allegro::Pict::fromPNGFile (
-                iso::pathToFile( iso::sharePath() + gfxPrefix, pictureString )
+                ospaths::pathToFile( ospaths::sharePath() + gfxPrefix, pictureString )
         ) );
 
         if ( image->isNotNil() )
@@ -702,7 +704,8 @@ GridItemPtr RoomBuilder::buildGridItem( tinyxml2::XMLElement* item, Room* room )
 
         std::string label = item->FirstChildElement( "label" )->FirstChild()->ToText()->Value();
 
-        const DescriptionOfItem* itemDescription = GameManager::getInstance().getIsomot().getItemDescriptions().getDescriptionByLabel( label );
+        iso::Isomot & isomot = game::GameManager::getInstance().getIsomot () ;
+        const DescriptionOfItem* itemDescription = isomot.getItemDescriptions().getDescriptionByLabel( label );
 
         if ( itemDescription != nilPointer )
         {
@@ -715,7 +718,7 @@ GridItemPtr RoomBuilder::buildGridItem( tinyxml2::XMLElement* item, Room* room )
                 std::string theWay = orientation->FirstChild()->ToText()->Value();
 
                 GridItemPtr gridItem( new GridItem( itemDescription,
-                                                    itemX, itemY, itemZ > Top ? itemZ * LayerHeight : Top ,
+                                                    itemX, itemY, itemZ > Isomot::Top ? itemZ * Isomot::LayerHeight : Isomot::Top ,
                                                     theWay ) );
 
                 std::string behaviorOfItem = "still";
@@ -738,7 +741,8 @@ FreeItemPtr RoomBuilder::buildFreeItem( tinyxml2::XMLElement* item, Room* room )
 {
         std::string label = item->FirstChildElement( "label" )->FirstChild()->ToText()->Value();
 
-        const DescriptionOfItem* itemDescription = GameManager::getInstance().getIsomot().getItemDescriptions().getDescriptionByLabel( label );
+        iso::Isomot & isomot = game::GameManager::getInstance().getIsomot () ;
+        const DescriptionOfItem* itemDescription = isomot.getItemDescriptions().getDescriptionByLabel( label );
 
         if ( itemDescription != nilPointer )
         {
@@ -749,10 +753,10 @@ FreeItemPtr RoomBuilder::buildFreeItem( tinyxml2::XMLElement* item, Room* room )
                 // in free coordinates
                 int fx = itemX * room->getSizeOfOneTile() + ( ( room->getSizeOfOneTile() - itemDescription->getWidthX() ) >> 1 );
                 int fy = ( itemY + 1 ) * room->getSizeOfOneTile() - ( ( room->getSizeOfOneTile() - itemDescription->getWidthY() ) >> 1 ) - 1;
-                int fz = ( itemZ != Top ) ? itemZ * LayerHeight : Top;
+                int fz = ( itemZ != Isomot::Top ) ? itemZ * Isomot::LayerHeight : Isomot::Top ;
 
                 // don’t place an item if it is a bonus and has already been taken
-                if ( BonusManager::getInstance().isAbsent( room->getNameOfFileWithDataAboutRoom(), itemDescription->getLabel() ) )
+                if ( BonusManager::getInstance().isAbsent( room->getNameOfRoomDescriptionFile(), itemDescription->getLabel() ) )
                 {
                         return FreeItemPtr () ;
                 }
@@ -833,8 +837,8 @@ Door* RoomBuilder::buildDoor( tinyxml2::XMLElement* item )
         if ( orientation == nilPointer ) orientation = item->FirstChildElement( "direction" ) ;
 
         return
-                new Door( GameManager::getInstance().getIsomot().getItemDescriptions(), label,
-                                itemX, itemY, ( itemZ > Top ? itemZ * LayerHeight : Top ),
+                new Door( game::GameManager::getInstance().getIsomot().getItemDescriptions(), label,
+                                itemX, itemY, ( itemZ > Isomot::Top ? itemZ * Isomot::LayerHeight : Isomot::Top ),
                                         orientation->FirstChild()->ToText()->Value() );
 }
 

@@ -20,7 +20,7 @@ class MenuWithValues ;
 
 
 /**
- * Crea el menú de configuración del teclado
+ * Create "select the keys" menu
  */
 
 class CreateKeyboardMenu : public Action

@@ -1,11 +1,11 @@
 
 #include "PlayerItem.hpp"
 #include "Behavior.hpp"
-#include "DescriptionOfItem.hpp"
 #include "Door.hpp"
 #include "Mediator.hpp"
 #include "Room.hpp"
 #include "GameManager.hpp"
+#include "GameInfo.hpp"
 #include "UserControlled.hpp"
 
 #include <algorithm> // std::find
@@ -16,29 +16,18 @@ namespace iso
 
 PlayerItem::PlayerItem( const DescriptionOfItem* description, int x, int y, int z, const std::string& way )
         : FreeItem( description, x, y, z, way )
-        , lives( 0 )
-        , highSpeed( 0 )
-        , highJumps( 0 )
-        , howManyDoughnuts( 0 )
         , wayOfExit( "no exit" )
         , wayOfEntry( "just wait" )
         , shieldTimer( new Timer () )
-        , shieldRemaining( 0.0 )
         , descriptionOfTakenItem( nilPointer )
 {
 }
 
-PlayerItem::PlayerItem( const PlayerItem& playerItem )
-        : FreeItem( playerItem )
-        , lives( playerItem.lives )
-        , highSpeed( playerItem.highSpeed )
-        , highJumps( playerItem.highJumps )
-        , tools( playerItem.tools )
-        , howManyDoughnuts( playerItem.howManyDoughnuts )
-        , wayOfExit( playerItem.wayOfExit )
-        , wayOfEntry( playerItem.wayOfEntry )
+PlayerItem::PlayerItem( const PlayerItem & toCopy )
+        : FreeItem( toCopy )
+        , wayOfExit( toCopy.wayOfExit )
+        , wayOfEntry( toCopy.wayOfEntry )
         , shieldTimer( new Timer () )
-        , shieldRemaining( 0.0 )
         , descriptionOfTakenItem( nilPointer )
 {
 }
@@ -263,7 +252,7 @@ bool PlayerItem::addToPosition( int x, int y, int z )
         if ( ! collisionFound )
         {
                 // now it is known that the player may go thru a door
-                // look for collision with limits of room
+                // look for collisions with the limits of room
 
                 const std::string doors[ 12 ] =
                         {  "northeast", "northwest", "north", "southeast", "southwest", "south",
@@ -272,7 +261,7 @@ bool PlayerItem::addToPosition( int x, int y, int z )
                 // check each limit of room
                 for ( unsigned int i = 0; i < 12; i++ )
                 {
-                        if ( isCollidingWithLimitOfRoom( doors[ i ] ) )
+                        if ( isCollidingWithLimitsOfRoom( doors[ i ] ) )
                         {
                                 mediator->pushCollision( doors[ i ] + " limit" );
                                 break;
@@ -286,7 +275,7 @@ bool PlayerItem::addToPosition( int x, int y, int z )
                 }
 
                 // collision with ceiling
-                if ( z >= 0 && this->getZ() > ( MaxLayers - 1 ) * LayerHeight + ( LayerHeight >> 1 ) )
+                if ( z >= 0 && this->getZ() > ( Isomot::MaxLayers - 1 ) * Isomot::LayerHeight + ( Isomot::LayerHeight >> 1 ) )
                 {
                         mediator->pushCollision( "ceiling" );
                 }
@@ -333,7 +322,7 @@ bool PlayerItem::addToPosition( int x, int y, int z )
         return ! collisionFound ;
 }
 
-bool PlayerItem::isCollidingWithLimitOfRoom( const std::string& onWhichWay )
+bool PlayerItem::isCollidingWithLimitsOfRoom( const std::string & onWhichWay )
 {
         bool result = false;
 
@@ -431,115 +420,131 @@ bool PlayerItem::isActiveCharacter () const
         return mediator->getActiveCharacter()->getUniqueName() == this->getUniqueName() ;
 }
 
-void PlayerItem::fillWithData( const GameManager & data )
+unsigned char PlayerItem::getLives() const
 {
-        setLives( data.getLives( getLabel() ) );
-
-        setHighJumps( data.getHighJumps() );
-        setHighSpeed( data.getHighSpeed() );
-        setShieldTime( data.getShield( getLabel() ) );
-        data.fillToolsOwnedByCharacter( getLabel(), this->tools );
-        setDoughnuts( data.getDonuts( getLabel() ) );
+        const std::string & character = this->getOriginalLabel() ;
+        game::GameInfo & gameInfo = game::GameManager::getInstance().getGameInfo () ;
+        return gameInfo.getLivesByName( character ) ;
 }
 
 void PlayerItem::addLives( unsigned char lives )
 {
-        if ( this->lives < 100 )
-        {
-                this->lives += lives;
-                GameManager::getInstance().addLives( this->getLabel (), lives );
-        }
+        const std::string & character = this->getOriginalLabel() ;
+        game::GameInfo & gameInfo = game::GameManager::getInstance().getGameInfo () ;
+        gameInfo.addLivesByName( character, lives );
 }
 
-void PlayerItem::loseLife()
+void PlayerItem::loseLife ()
 {
         setWayOfExit( "rebuild room" );
 
-        if ( this->lives > 0 )
+        const std::string & character = this->getOriginalLabel() ;
+        game::GameManager & gameManager = game::GameManager::getInstance () ;
+        game::GameInfo & gameInfo = gameManager.getGameInfo () ;
+        unsigned char lives = gameInfo.getLivesByName( character ) ;
+
+        if ( ! gameManager.areLivesInexhaustible () && lives > 0 )
+                gameInfo.loseLifeByName( getOriginalLabel () /* current label is "bubbles" */ );
+
+        gameManager.emptyHandbag () ;
+}
+
+void PlayerItem::takeMagicTool( const std::string & label )
+{
+        game::GameManager::getInstance().getGameInfo().setMagicToolByLabel( label );
+}
+
+unsigned short PlayerItem::getDonuts () const
+{
+        return game::GameManager::getInstance().getGameInfo ().getDoughnuts () ;
+}
+
+void PlayerItem::addDonuts( unsigned short howMany )
+{
+        game::GameManager::getInstance().getGameInfo ().addDoughnuts( howMany );
+}
+
+void PlayerItem::useDoughnutHorn ()
+{
+        game::GameManager::getInstance().getGameInfo ().consumeOneDoughnut () ;
+}
+
+unsigned short PlayerItem::getQuickSteps () const
+{
+        return game::GameManager::getInstance().getGameInfo ().getBonusQuickSteps () ;
+}
+
+void PlayerItem::activateBonusQuickSteps ()
+{
+        if ( this->getOriginalLabel() == "head" )
         {
-                this->lives--;
-                GameManager::getInstance().loseLife( getOriginalLabel () /* current label is "bubbles" */ );
-        }
+                game::GameInfo & gameInfo = game::GameManager::getInstance().getGameInfo () ;
 
-        GameManager::getInstance().emptyHandbag();
-}
-
-void PlayerItem::takeTool( const std::string& label )
-{
-        this->tools.push_back( label );
-        GameManager::getInstance().takeMagicItem( label );
-}
-
-void PlayerItem::addDoughnuts( const unsigned short howMany )
-{
-        howManyDoughnuts += howMany;
-        GameManager::getInstance().setDonuts( howManyDoughnuts );
-}
-
-void PlayerItem::useDoughnut()
-{
-        if ( howManyDoughnuts > 0 )
-        {
-                howManyDoughnuts-- ;
-                GameManager::getInstance().consumeDonut();
+                unsigned short bonusHighSpeedSteps = 99 ;
+                gameInfo.addQuickStepsByName( this->getOriginalLabel(), bonusHighSpeedSteps );
         }
 }
 
-void PlayerItem::activateHighSpeed()
+void PlayerItem::decrementBonusQuickSteps ()
 {
-        if ( getOriginalLabel() == "head" )
-        {
-                highSpeed = 99 ;
-                GameManager::getInstance().addHighSpeed( getOriginalLabel(), highSpeed );
-        }
+        game::GameManager::getInstance().getGameInfo().decrementQuickStepsByName( this->getOriginalLabel() );
 }
 
-void PlayerItem::decreaseHighSpeed()
+unsigned short PlayerItem::getHighJumps () const
 {
-        if ( highSpeed > 0 )
-        {
-                highSpeed-- ;
-                GameManager::getInstance().decreaseHighSpeed( getOriginalLabel() );
-        }
+        return game::GameManager::getInstance().getGameInfo ().getBonusHighJumps () ;
 }
 
-void PlayerItem::addHighJumps( unsigned char howMany )
+void PlayerItem::addBonusHighJumps( unsigned char howMany )
 {
         if ( getOriginalLabel() == "heels" )
         {
-                highJumps += howMany;
-                GameManager::getInstance().addHighJumps( getOriginalLabel(), highJumps );
+                game::GameManager::getInstance().getGameInfo().addHighJumpsByName( this->getOriginalLabel(), howMany );
         }
 }
 
-void PlayerItem::decreaseHighJumps()
+void PlayerItem::decrementBonusHighJumps ()
 {
-        if ( highJumps > 0 )
+        game::GameManager::getInstance().getGameInfo().decrementHighJumpsByName( this->getOriginalLabel() );
+}
+
+void PlayerItem::activateShield ()
+{
+        shieldTimer->reset () ;
+        shieldTimer->go () ;
+
+        game::GameInfo & gameInfo = game::GameManager::getInstance().getGameInfo () ;
+        const std::string & character = this->getOriginalLabel() ;
+        gameInfo.setShieldPointsByName( character, 99 );
+}
+
+void PlayerItem::activateShieldForSeconds ( double seconds )
+{
+        shieldTimer->reset () ;
+
+        if ( seconds > 0 && ! hasShield() )
         {
-                highJumps-- ;
-                GameManager::getInstance().decreaseHighJumps( getOriginalLabel() );
+                shieldTimer->go () ;
         }
+
+        game::GameInfo & gameInfo = game::GameManager::getInstance().getGameInfo () ;
+        const std::string & character = this->getOriginalLabel() ;
+        gameInfo.setShieldSecondsByName( character, seconds );
 }
 
-void PlayerItem::activateShield()
+void PlayerItem::decrementShieldOverTime ()
 {
-        shieldTimer->reset();
-        shieldTimer->go();
-        shieldRemaining = 25.0;
-        GameManager::getInstance().addShield( getOriginalLabel(), shieldRemaining );
-}
+        game::GameInfo & gameInfo = game::GameManager::getInstance().getGameInfo () ;
+        double shieldSecondsRemaining = game::GameInfo::fullShieldTimeInSeconds - shieldTimer->getValue() ;
 
-void PlayerItem::decreaseShield()
-{
-        shieldRemaining = 25.0 - shieldTimer->getValue();
-
-        if ( shieldRemaining < 0 )
+        if ( shieldSecondsRemaining < 0 )
         {
-                shieldRemaining = 0.0;
-                shieldTimer->stop();
+                shieldSecondsRemaining = 0 ;
+                shieldTimer->stop () ;
         }
 
-        GameManager::getInstance().modifyShield( getOriginalLabel(), shieldRemaining );
+        const std::string & character = this->getOriginalLabel() ;
+        gameInfo.setShieldSecondsByName( character, shieldSecondsRemaining );
 }
 
 void PlayerItem::liberatePlanet ()
@@ -548,23 +553,23 @@ void PlayerItem::liberatePlanet ()
 
         if ( scenery == "jail" || scenery == "blacktooth" || scenery == "market" )
         {
-                GameManager::getInstance().liberatePlanet( "blacktooth" );
+                game::GameManager::getInstance().liberatePlanet( "blacktooth" );
         }
         else if ( scenery == "egyptus" )
         {
-                GameManager::getInstance().liberatePlanet( "egyptus" );
+                game::GameManager::getInstance().liberatePlanet( "egyptus" );
         }
         else if ( scenery == "penitentiary" )
         {
-                GameManager::getInstance().liberatePlanet( "penitentiary" );
+                game::GameManager::getInstance().liberatePlanet( "penitentiary" );
         }
         else if ( scenery == "safari" )
         {
-                GameManager::getInstance().liberatePlanet( "safari" );
+                game::GameManager::getInstance().liberatePlanet( "safari" );
         }
         else if ( scenery == "byblos" )
         {
-                GameManager::getInstance().liberatePlanet( "byblos" );
+                game::GameManager::getInstance().liberatePlanet( "byblos" );
         }
 }
 
@@ -583,29 +588,34 @@ void PlayerItem::emptyBag ()
 
 void PlayerItem::save ()
 {
-        GameManager::getInstance().eatFish( *this, this->mediator->getRoom() );
+        game::GameManager::getInstance().eatFish( *this, this->mediator->getRoom() );
 }
 
 void PlayerItem::saveAt ( int x, int y, int z )
 {
-        GameManager::getInstance().eatFish( *this, this->mediator->getRoom(), x, y, z );
+        game::GameManager::getInstance().eatFish( *this, this->mediator->getRoom(), x, y, z );
 }
 
-void PlayerItem::setShieldTime ( float seconds )
+bool PlayerItem::hasTool( const std::string & tool ) const
 {
-        shieldTimer->reset();
+        game::GameInfo & gameInfo = game::GameManager::getInstance().getGameInfo () ;
+        const std::string & character = this->getOriginalLabel() ;
 
-        if ( seconds > 0 && ! hasShield() )
-        {
-                shieldTimer->go();
-        }
+        if ( tool == "horn" && gameInfo.hasHorn() )
+                if (  character == "head" || character == "headoverheels" )
+                        return true ;
 
-        shieldRemaining = seconds;
+        if ( tool == "handbag" && gameInfo.hasHandbag() )
+                if ( character == "heels" || character == "headoverheels" )
+                        return true ;
+
+        return false ;
 }
 
-bool PlayerItem::hasTool( const std::string& label ) const
+bool PlayerItem::hasShield () const
 {
-        return std::find( this->tools.begin (), this->tools.end (), label ) != this->tools.end ();
+        game::GameInfo & gameInfo = game::GameManager::getInstance().getGameInfo () ;
+        return gameInfo.getShieldPointsByName( this->getOriginalLabel() ) > 0 ;
 }
 
 }

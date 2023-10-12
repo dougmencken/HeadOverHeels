@@ -12,7 +12,8 @@
 #include "SaveGame.hpp"
 #include "ContinueGame.hpp"
 #include "PlaySound.hpp"
-#include "Ism.hpp"
+
+#include "ospaths.hpp"
 
 #include <fstream>
 
@@ -57,7 +58,7 @@ void CreateListOfSavedGames::doAction ()
         menu->setVerticalOffset( 112 );
         for ( unsigned int slot = 1 ; slot <= howManySaves ; ++ slot )
         {
-                std::string file = iso::homePath() + "savegame" + util::pathSeparator() + "saved." + util::number2string( slot ) ;
+                std::string file = ospaths::homePath() + "savegame" + ospaths::pathSeparator() + "saved." + util::number2string( slot ) ;
 
                 bool fileExists = false;
                 std::ifstream in( file.c_str() );

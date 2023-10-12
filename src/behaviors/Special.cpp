@@ -1,5 +1,6 @@
 
 #include "Special.hpp"
+
 #include "FreeItem.hpp"
 #include "DisplaceKindOfActivity.hpp"
 #include "FallKindOfActivity.hpp"
@@ -150,7 +151,7 @@ bool Special::update ()
                                 SoundManager::getInstance().play( item->getLabel(), activity );
 
                                 // bonus item disappears from room once it is taken
-                                BonusManager::getInstance().markBonusAsAbsent( item->getMediator()->getRoom()->getNameOfFileWithDataAboutRoom(), item->getLabel() );
+                                BonusManager::getInstance().markBonusAsAbsent( item->getMediator()->getRoom()->getNameOfRoomDescriptionFile(), item->getLabel() );
 
                                 takeMagicItem( dynamic_cast< PlayerItem& >( *sender ) );
 
@@ -184,7 +185,7 @@ bool Special::mayTake( const std::string& character )
                 return true ;
         }
 
-        return  ( character == "head"     &&  ( magicItem == "high-speed" ||
+        return  ( character == "head"     &&  ( magicItem == "quick-steps" ||
                                                 magicItem == "horn" ||
                                                 magicItem == "donuts" ) )
                 ||
@@ -198,38 +199,38 @@ bool Special::mayTake( const std::string& character )
                                                 magicItem == "donuts" ) ) ;
 }
 
-void Special::takeMagicItem( PlayerItem& whoTakes )
+void Special::takeMagicItem( PlayerItem & whoTakes )
 {
-        std::string magicItem = this->item->getLabel();
+        std::string magicItem = this->item->getOriginalLabel () ;
 
         if ( magicItem == "donuts" )
         {
                 const unsigned short DonutsPerBox = 6 ;
-                whoTakes.addDoughnuts( DonutsPerBox );
+                whoTakes.addDonuts( DonutsPerBox );
         }
         else if ( magicItem == "extra-life" )
         {
                 whoTakes.addLives( 2 );
         }
-        else if ( magicItem == "high-speed" )
+        else if ( magicItem == "quick-steps" )
         {
-                whoTakes.activateHighSpeed();
+                whoTakes.activateBonusQuickSteps () ;
         }
         else if ( magicItem == "high-jumps" )
         {
-                whoTakes.addHighJumps( 10 );
+                whoTakes.addBonusHighJumps( 10 );
         }
         else if ( magicItem == "shield" )
         {
-                whoTakes.activateShield();
+                whoTakes.activateShield () ;
         }
         else if ( magicItem == "crown" )
         {
-                whoTakes.liberatePlanet();
+                whoTakes.liberatePlanet () ;
         }
         else if ( magicItem == "horn" || magicItem == "handbag" )
         {
-                whoTakes.takeTool( magicItem );
+                whoTakes.takeMagicTool( magicItem );
         }
         else if ( magicItem == "reincarnation-fish" )
         {

@@ -7,6 +7,9 @@
 #include "Mediator.hpp"
 #include "GameManager.hpp"
 
+#include "util.hpp"
+#include "ospaths.hpp"
+
 #ifdef DEBUG
 #  define SAVE_ITEM_FRAMES      0
 #  define GRAYSCALE_JAMBS       0
@@ -36,14 +39,14 @@ Door::Door( const ItemDescriptions& itemDescriptions, const std::string& label, 
 
         // load graphics of door
 
-        autouniqueptr< allegro::Pict > pictureOfDoor( allegro::Pict::fromPNGFile( iso::pathToFile(
-                iso::sharePath() + iso::GameManager::getInstance().getChosenGraphicSet(), lintelData->getNameOfFile( )
+        autouniqueptr< allegro::Pict > pictureOfDoor( allegro::Pict::fromPNGFile( ospaths::pathToFile(
+                ospaths::sharePath() + game::GameManager::getInstance().getChosenGraphicsSet(), lintelData->getNameOfFile( )
         ) ) );
         if ( ! pictureOfDoor->isNotNil() )
         {
                 std::cerr <<
                         "picture of door \"" << lintelData->getNameOfFile( ) <<
-                        "\" for \"" << iso::GameManager::getInstance().getChosenGraphicSet() <<
+                        "\" for \"" << game::GameManager::getInstance().getChosenGraphicsSet() <<
                         "\" is absent" << std::endl ;
                 return ;
         }
@@ -278,12 +281,12 @@ FreeItemPtr Door::getLeftJamb()
                                         ;
                         }
 
-                        leftJamb = FreeItemPtr( new FreeItem( leftJambData, x, y, Top, "none" ) );
+                        leftJamb = FreeItemPtr( new FreeItem( leftJambData, x, y, Isomot::Top, "none" ) );
                         leftJamb->getRawImageToChangeIt().expandOrCropTo( leftJambImage->getWidth (), leftJambImage->getHeight () );
                         allegro::bitBlit( leftJambImage->getAllegroPict(), leftJamb->getRawImageToChangeIt ().getAllegroPict() );
                         leftJamb->getRawImageToChangeIt().setName( leftJambImage->getName() );
                         leftJamb->freshBothProcessedImages ();
-                        leftJamb->setUniqueName( leftJamb->getLabel() + " " + makeRandomString( 8 ) );
+                        leftJamb->setUniqueName( leftJamb->getLabel() + " " + util::makeRandomString( 8 ) );
                 }
         }
 
@@ -339,12 +342,12 @@ FreeItemPtr Door::getRightJamb()
                                         ;
                         }
 
-                        rightJamb = FreeItemPtr( new FreeItem( rightJambData, x, y, Top, "none" ) );
+                        rightJamb = FreeItemPtr( new FreeItem( rightJambData, x, y, Isomot::Top, "none" ) );
                         rightJamb->getRawImageToChangeIt().expandOrCropTo( rightJambImage->getWidth (), rightJambImage->getHeight () );
                         allegro::bitBlit( rightJambImage->getAllegroPict(), rightJamb->getRawImageToChangeIt ().getAllegroPict() );
                         rightJamb->getRawImageToChangeIt().setName( rightJambImage->getName() );
                         rightJamb->freshBothProcessedImages ();
-                        rightJamb->setUniqueName( rightJamb->getLabel() + " " + makeRandomString( 8 ) );
+                        rightJamb->setUniqueName( rightJamb->getLabel() + " " + util::makeRandomString( 8 ) );
                 }
         }
 
@@ -396,12 +399,12 @@ FreeItemPtr Door::getLintel()
                                         ;
                         }
 
-                        lintel = FreeItemPtr( new FreeItem( lintelData, x, y, Top, "none" ) );
+                        lintel = FreeItemPtr( new FreeItem( lintelData, x, y, Isomot::Top, "none" ) );
                         lintel->getRawImageToChangeIt().expandOrCropTo( lintelImage->getWidth (), lintelImage->getHeight () );
                         allegro::bitBlit( lintelImage->getAllegroPict(), lintel->getRawImageToChangeIt ().getAllegroPict() );
                         lintel->getRawImageToChangeIt().setName( lintelImage->getName() );
                         lintel->freshBothProcessedImages ();
-                        lintel->setUniqueName( lintel->getLabel() + " " + makeRandomString( 8 ) );
+                        lintel->setUniqueName( lintel->getLabel() + " " + util::makeRandomString( 8 ) );
                 }
         }
 

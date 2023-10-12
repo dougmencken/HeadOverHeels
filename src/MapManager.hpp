@@ -14,6 +14,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <set>
 
 #include "Room.hpp"
 
@@ -32,10 +33,11 @@ public:
 
         void clear () ;
 
-        virtual void beginNewGame ( const std::string& headRoom, const std::string& heelsRoom ) ;
+        virtual void beginNewGame ( const std::string & headRoom, const std::string & heelsRoom ) ;
 
-        virtual void beginOldGameWithCharacter ( const std::string& roomFile, const std::string& character,
-                                                 int x, int y, int z, const std::string& direction, const std::string& entry,
+        virtual void beginOldGameWithCharacter ( const std::string & roomFile, const std::string & characterName,
+                                                 int x, int y, int z,
+                                                 const std::string & direction, const std::string & entry,
                                                  bool active ) ;
 
         Room * changeRoom () ;
@@ -49,13 +51,13 @@ public:
         Room * getRoomThenAddItToRoomsInPlay ( const std::string& roomFile, bool markVisited ) ;
 
         /**
-         * Change active room to next room
+         * Change the active room to the next room
          */
         Room * swapRoom () ;
 
         /**
-         * Remove active room and activate room where the other player is. Used when player
-         * loses all its lives
+         * Remove the active room and activate the room where the other character is.
+         * Used when a character loses all its lives
          */
         Room * noLivesSwap () ;
 
@@ -73,9 +75,9 @@ public:
         void setActiveRoom ( Room * newRoom ) {  activeRoom = newRoom ;  }
 
         /**
-         * @return room or nil if there’re no more players
+         * @return room or nil if there’re no more characters
          */
-        Room * getRoomOfInactivePlayer () const ;
+        Room * getRoomOfInactiveCharacter () const ;
 
         bool isRoomInPlay ( const Room * room ) const ;
 
@@ -85,22 +87,15 @@ public:
 
         Room * getOrBuildRoomByFile ( const std::string& roomFile ) ;
 
-        void parseVisitedRooms ( const std::vector< std::string >& visitedRooms ) ;
+        const std::set< std::string > & getVisitedRooms () const {  return visitedRooms ;  }
 
-        void fillVisitedRooms ( std::vector< std::string >& visitedSequence ) ;
+        unsigned int countVisitedRooms() const {  return visitedRooms.size() ;  }
 
-        unsigned int countVisitedRooms () ;
-
-        void resetVisitedRooms () ;
+        void parseVisitedRooms ( const std::vector< std::string > & visitedRooms ) ;
 
         static bool buildEveryRoomAtOnce ;
 
 private:
-
-        /**
-         * Compose map from XML file
-         */
-        void readMap ( const std::string& fileName ) ;
 
         /**
          * The room to draw yet
@@ -112,9 +107,22 @@ private:
         std::map< std::string, RoomConnections* > linksBetweenRooms ;
 
         /**
-         * Every room on map
+         * Every room on the map
          */
         std::map < std::string, Room * > gameRooms ;
+
+        /*
+         * when any character visits a room, the unique name of room's file is added to this set
+         */
+        std::set < std::string > visitedRooms ;
+
+        // compose map from XML file
+        void readMap ( const std::string & fileName ) ;
+
+        void addRoomAsVisited( const std::string & roomFile ) {  visitedRooms.insert( roomFile ) ;  }
+
+        // after such forgetting, no room will be counted as visited
+        void forgetVisitedRooms () {  visitedRooms.clear () ;  }
 
 };
 

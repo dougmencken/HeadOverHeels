@@ -1,6 +1,8 @@
 
 #include "SoundManager.hpp"
-#include "Ism.hpp"
+
+#include "util.hpp"
+#include "ospaths.hpp"
 
 #include <tinyxml2.h>
 
@@ -80,7 +82,7 @@ void SoundManager::readSounds( const std::string& xmlFile )
 {
         // read list of sounds from XML file
         tinyxml2::XMLDocument sounds;
-        tinyxml2::XMLError result = sounds.LoadFile( ( iso::sharePath() + xmlFile ).c_str () );
+        tinyxml2::XMLError result = sounds.LoadFile( ( ospaths::sharePath() + xmlFile ).c_str () );
         if ( result != tinyxml2::XML_SUCCESS )
         {
                 std::cerr << "can’t read list of sounds from \"" << xmlFile << "\"" << std::endl ;
@@ -122,7 +124,7 @@ void SoundManager::addSound( const std::string& label, const std::string& activi
                 return ;
         }
 
-        std::string pathToSample = iso::pathToFile( iso::sharePath(), sampleFile ) ;
+        std::string pathToSample = ospaths::pathToFile( ospaths::sharePath(), sampleFile ) ;
         allegro::Sample* sample = allegro::Sample::loadFromFile( pathToSample );
 
         if ( sample != nilPointer && sample->isNotNil() )
@@ -184,9 +186,9 @@ void SoundManager::stopEverySound ()
 
 void SoundManager::playOgg ( const std::string& oggFile, bool loop )
 {
-        std::string fullName = iso::pathToFile( iso::sharePath(), oggFile );
+        std::string fullName = ospaths::pathToFile( ospaths::sharePath(), oggFile );
 
-         // let’s play the same again? yep, when it’s finished playing
+         // to play the same again? yep, when it’s finished playing
         if ( oggPlayer.getFilePlaying() != fullName || ! oggPlayer.isPlaying() )
         {
                 // it is playback of just single Ogg yet

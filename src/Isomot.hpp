@@ -11,7 +11,6 @@
 #ifndef Isomot_hpp_
 #define Isomot_hpp_
 
-#include "Ism.hpp"
 #include "Timer.hpp"
 #include "Picture.hpp"
 
@@ -54,8 +53,6 @@ public:
 
         void beginNewGame () ;
 
-        void continueSavedGame ( tinyxml2::XMLElement * characters ) ;
-
         void pause () ;
 
         void resume () ;
@@ -69,6 +66,22 @@ public:
         bool doesCameraFollowCharacter () const {  return cameraFollowsCharacter ;  }
 
         void toggleCameraFollowsCharacter () {  cameraFollowsCharacter = ! cameraFollowsCharacter ;  }
+
+        static const int Top = -1 ;
+
+        /**
+         * Height in isometric units of layer
+         * Item in the grid at height n is n * LayerHeight units
+         */
+        static const int LayerHeight = 24 ;
+
+        /**
+         * Maximum number of layers in room
+         * In isometric units maximum height of room is LayerHeight * MaxLayers
+         */
+        static const int MaxLayers = 10 ;
+
+        static const unsigned int updatesPerSecond = 50 ;
 
 private:
 

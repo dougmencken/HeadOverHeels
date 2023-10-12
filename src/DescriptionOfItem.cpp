@@ -1,6 +1,5 @@
 
 #include "DescriptionOfItem.hpp"
-#include "Ism.hpp"
 #include <iostream>
 
 

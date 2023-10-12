@@ -13,50 +13,118 @@
 
 #include <string>
 
-#include "Ism.hpp"
+#include "GameInfo.hpp"
 #include "Picture.hpp"
-#include "Isomot.hpp"
 #include "Room.hpp"
 #include "GameSaverAndLoader.hpp"
+#include "Isomot.hpp"
 #include "ColorCyclingLabel.hpp"
 #include "Timer.hpp"
 
+using namespace iso ;
 
-namespace iso
+
+namespace game
 {
-
-class Isomot ;
-
 
 /**
- * Why the game was paused
+ * Marks the definitive moments of the game
+ *
+ * Only the single lone of these moments may be set true at the same time
+ * Checking for a key moment optionally resets it to false, so be sure to use such a knowledge
  */
 
-class WhyPaused
+class TheKeyMoments
 {
-
-public:
-
-        WhyPaused( unsigned int why ) : whyPaused( why ) { }
-        operator unsigned int() const {  return whyPaused ;  }
-
-        static const unsigned int Nevermind = 0 ;
-        static const unsigned int FreePlanet = 1 ;
-        static const unsigned int SaveGame = 2 ;
-        static const unsigned int Freedom = 3 ;
-        static const unsigned int Success = 4 ;
-        static const unsigned int GameOver = 5 ;
 
 private:
 
-        unsigned int whyPaused ;
+        bool theMomentOfGameOver ;   /* all lives are lost or the user quit the game */
 
-};
+        bool theMomentOFishWasEaten ;      /* a chance to save the current progress */
+        bool theMomentOfCrownWasTaken ;    /* a crown is taken and one more planet was liberated this way */
+
+        bool theMomentOfArrivalInFreedomNotWithAllCrowns ;            /* at least one character reached Freedom (not with all crowns) */
+        bool theMomentWhenHeadAndHeelsAreInFreedomWithAllTheCrowns ;  /* both characters reached Freedom with all the crowns */
+
+public:
+
+        TheKeyMoments()
+                : theMomentOfGameOver( false )
+                , theMomentOFishWasEaten( false )
+                , theMomentOfCrownWasTaken( false )
+                , theMomentOfArrivalInFreedomNotWithAllCrowns( false )
+                , theMomentWhenHeadAndHeelsAreInFreedomWithAllTheCrowns( false )
+        {}
+
+        void gameOver() {  resetAll() ; theMomentOfGameOver = true ;  }
+
+        bool isGameOver( bool reset )
+        {
+                bool is = theMomentOfGameOver ;
+                if ( reset ) theMomentOfGameOver = false ;
+                return is ;
+        }
+
+        void fishEaten() {  resetAll() ; theMomentOFishWasEaten = true ;  }
+
+        bool wasFishEaten( bool reset )
+        {
+                bool was = theMomentOFishWasEaten ;
+                if ( reset ) theMomentOFishWasEaten = false ;
+                return was ;
+        }
+
+        void crownTaken() {  resetAll() ; theMomentOfCrownWasTaken = true ;  }
+
+        bool wasCrownTaken( bool reset )
+        {
+                bool was = theMomentOfCrownWasTaken ;
+                if ( reset ) theMomentOfCrownWasTaken = false ;
+                return was ;
+        }
+
+        void arriveInFreedomNotWithAllCrowns() {  resetAll() ; theMomentOfArrivalInFreedomNotWithAllCrowns = true ;  }
+
+        bool arrivedInFreedomNotWithAllCrowns( bool reset )
+        {
+                bool arrived = theMomentOfArrivalInFreedomNotWithAllCrowns ;
+                if ( reset ) theMomentOfArrivalInFreedomNotWithAllCrowns = false ;
+                return arrived ;
+        }
+
+        void HeadAndHeelsAreInFreedomWithAllTheCrowns() {  resetAll() ; theMomentWhenHeadAndHeelsAreInFreedomWithAllTheCrowns = true ;  }
+
+        bool areHeadAndHeelsInFreedomWithAllTheCrowns( bool reset )
+        {
+                bool are = theMomentWhenHeadAndHeelsAreInFreedomWithAllTheCrowns ;
+                if ( reset ) theMomentWhenHeadAndHeelsAreInFreedomWithAllTheCrowns = false ;
+                return are ;
+        }
+
+        bool isThereAny() const
+        {
+                return ( theMomentOfGameOver
+                         || theMomentOFishWasEaten
+                            || theMomentOfCrownWasTaken
+                               || theMomentOfArrivalInFreedomNotWithAllCrowns
+                                  || theMomentWhenHeadAndHeelsAreInFreedomWithAllTheCrowns ) ;
+        }
+
+        void resetAll()
+        {
+                theMomentOfGameOver = false ;
+                theMomentOFishWasEaten = false ;
+                theMomentOfCrownWasTaken = false ;
+                theMomentOfArrivalInFreedomNotWithAllCrowns = false ;
+                theMomentWhenHeadAndHeelsAreInFreedomWithAllTheCrowns = false ;
+        }
+
+} ;
 
 
 /**
- * Manages user interface and isometric engine. Plus, holds data for the game
- * such as how many lives left for characters, which planets are now free, et cetera
+ * Manages the game, and nothing more. Doesn't play solitaire. Doesn't smoke. Anything at all. Really.
  */
 
 class GameManager
@@ -74,10 +142,6 @@ protected:
 
 public:
 
-        static const unsigned int updatesPerSecond = 50 ;
-
-        static const unsigned int spaceForAmbiance = 100 ;
-
         static GameManager & getInstance () ;
 
         virtual ~GameManager( ) ;
@@ -85,100 +149,43 @@ public:
         void cleanUp () ;
 
         /**
-         * Read preferences of game from XML file
+         * The game begins here
          */
-        static bool readPreferences ( const std::string& fileName ) ;
+        void begin () ;
 
         /**
-         * Write preferences of game to XML file
+         * Pause the game in progress
          */
-        static bool writePreferences ( const std::string& fileName ) ;
+        void pause () ;
 
         /**
-         * Game begins here
-         * @return Reason why the game is paused
+         * Resume the game after a pause
          */
-        WhyPaused begin () ;
+        void resume () ;
 
-        /**
-         * Pause game in progress
-         */
-        WhyPaused pause () ;
+        GameInfo& getGameInfo() {  return theInfo ;  }
 
-        /**
-         * Resume game after a pause
-         * @return Reason why the game was paused
-         */
-        WhyPaused resume () ;
-
-        std::string getHeadRoom () const {  return headRoom ;  }
+        const std::string & getHeadRoom () const {  return headRoom ;  }
 
         void setHeadRoom( const std::string& room ) {  headRoom = room ;  }
 
-        std::string getHeelsRoom () const {  return heelsRoom ;  }
+        const std::string & getHeelsRoom () const {  return heelsRoom ;  }
 
         void setHeelsRoom( const std::string& room ) {  heelsRoom = room ;  }
 
         /**
-         * Draw ambiance of game, that is info about game like lives, tools, donus, thing in bag
+         * Draw the ambiance, that is info about the game like lives, tools, donus, thing in bag
          */
         void drawAmbianceOfGame ( const allegro::Pict& where ) ;
 
+        /**
+         * copy a view's image buffer to the allegro's screen
+         */
         void drawOnScreen ( const allegro::Pict& view ) ;
 
-        /**
-         * Carga una partida grabada en disco
-         */
         void loadGame ( const std::string& fileName ) ;
 
-        /**
-         * Guarda en disco la partida actual
-         */
         void saveGame ( const std::string& fileName ) ;
-
-        /**
-         * Añade un número de vidas a un jugador
-         */
-        void addLives ( const std::string& player, unsigned char lives ) ;
-
-        /**
-         * Resta una vida a un jugador
-         */
-        void loseLife ( const std::string& player ) ;
-
-        /**
-         * Player takes magic item
-         */
-        void takeMagicItem ( const std::string& label ) ;
-
-        /**
-         * Resta una rosquilla a Head
-         */
-        void consumeDonut () {  this->donuts-- ;  }
-
-        /**
-         * Añade velocidad doble a un jugador
-         */
-        void addHighSpeed ( const std::string& player, unsigned int highSpeed ) ;
-
-        /**
-         * Resta una unidad al tiempo restante de doble velocidad
-         */
-        void decreaseHighSpeed ( const std::string& player ) ;
-
-        /**
-         * Añade un número de grandes saltos a un jugador
-         */
-        void addHighJumps ( const std::string& player, unsigned int highJumps ) ;
-
-        /**
-         * Resta un gran salto al jugador
-         */
-        void decreaseHighJumps ( const std::string& player ) ;
-
-        void addShield ( const std::string& player, float shield ) ;
-
-        void modifyShield ( const std::string& player, float shield ) ;
 
         void emptyHandbag () {  setImageOfItemInBag( PicturePtr () ) ;  }
 
@@ -198,7 +205,7 @@ public:
 
         /**
          * Indica si un planeta es libre
-         * @param planet Planet in question
+         * @param planet the planet in question
          * @return true if you took planet’s crown or false otherwise
          */
         bool isFreePlanet ( const std::string& planet ) const ;
@@ -209,42 +216,33 @@ public:
         unsigned short countFreePlanets () const ;
 
         /**
-         * Eat fish, that is, begin process to save the game
+         * Eat fish, that is, begin the process to save the game
          */
         void eatFish ( const PlayerItem & character, Room * room ) ;
 
         void eatFish ( const PlayerItem & character, Room * room, int x, int y, int z ) ;
 
-        /**
-         * End game because characters have lost all their lives
-         */
-        void endGame () {  this->gameOver = true ;  }
+        std::string getChosenGraphicsSet () const {  return chosenGraphicsSet ;  }
 
-        /**
-         * End game because characters have reached Freedom
-         */
-        void arriveInFreedom () {  this->freedom = true ;  }
+        void setChosenGraphicsSet ( const std::string & newSet ) {  chosenGraphicsSet = newSet ;  }
 
-        /**
-         * End game because characters have been proclaimed emperors
-         */
-        void success () {  this->emperator = true ;  }
+        bool isPresentGraphicsSet () const {  return ( chosenGraphicsSet == "gfx" ) ;  }
 
-        std::string getChosenGraphicSet () const {  return chosenGraphicSet ;  }
+        bool isSimpleGraphicsSet () const {  return ( chosenGraphicsSet == "gfx.simple" ) ;  }
 
-        void setChosenGraphicSet ( const std::string & newSet ) {  chosenGraphicSet = newSet ;  }
+        Isomot & getIsomot () {  return isomot ;  }
 
-        bool isPresentGraphicSet () const {  return ( chosenGraphicSet == "gfx" ) ;  }
+        unsigned int getVisitedRooms () ;
 
-        bool isSimpleGraphicSet () const {  return ( chosenGraphicSet == "gfx.simple" ) ;  }
+        // at the end of the game it's time to count the crowns
+        void inFreedomWithSoManyCrowns( unsigned int crowns ) ;
 
 private:
 
         /**
-         * Update game periodically by redrawing isometric view and updating items
-         * @return reason why update was paused
+         * Update game periodically by redrawing the isometric view and updating items
          */
-        WhyPaused update () ;
+        void update () ;
 
         void refreshAmbianceImages () ;
 
@@ -272,9 +270,13 @@ public:
 
         void toggleCastShadows () {  castShadows = ! castShadows ;  }
 
-        bool hasBackgroundPicture () const {  return drawBackgroundPicture ;  }
+        bool drawSceneryDecor () const {  return drawSceneryBackgrounds ;  }
 
-        void toggleBackgroundPicture () {  drawBackgroundPicture = ! drawBackgroundPicture ;  }
+        void toggleSceneryDecor () {  drawSceneryBackgrounds = ! drawSceneryBackgrounds ;  }
+
+        bool drawRoomMiniatures () const {  return drawMiniatures ;  }
+
+        void toggleRoomMiniatures () {  drawMiniatures = ! drawMiniatures ;  }
 
         bool recordingCaptures () const {  return recordCaptures ;  }
 
@@ -284,7 +286,7 @@ public:
                 recordCaptures = ! recordCaptures ;
 
                 if ( recordCaptures )
-                        prefixOfCaptures = makeRandomString( 10 );
+                        prefixOfCaptures = util::makeRandomString( 10 );
                 else
                         numberOfCapture += 1000 ;
         }
@@ -292,6 +294,8 @@ public:
 private:
 
         static GameManager instance ;
+
+        GameInfo theInfo ;
 
         std::string headRoom ;
 
@@ -305,7 +309,7 @@ private:
 
         std::string capturePath ;
 
-        std::string chosenGraphicSet ;
+        std::string chosenGraphicsSet ;
 
         bool vidasInfinitas ;
 
@@ -317,7 +321,9 @@ private:
 
         bool castShadows ;
 
-        bool drawBackgroundPicture ;
+        bool drawSceneryBackgrounds ;
+
+        bool drawMiniatures ;
 
         bool recordCaptures ;
 
@@ -325,115 +331,17 @@ private:
 
         Isomot isomot ;
 
-        /**
-         * To save and restore games
-         */
-        GameSaverAndLoader saverAndLoader ;
+        GameSaverAndLoader saverAndLoader ; // to save and restore games
 
-        /**
-         * Vidas de Head
-         */
-        unsigned char headLives ;
-
-        /**
-         * Vidas de Heels
-         */
-        unsigned char heelsLives ;
-
-        /**
-         * Tiempo restante para consumir la doble velocidad de Head
-         */
-        unsigned int highSpeed ;
-
-        /**
-         * Número de grandes saltos que le restan a Heels
-         */
-        unsigned int highJumps ;
-
-        /**
-         * Tiempo restante para consumir la inmunidad de Head
-         */
-        float headShield ;
-
-        /**
-         * Tiempo restante para consumir la inmunidad de Heels
-         */
-        float heelsShield ;
-
-        /**
-         * Indica si Head tiene la bocina
-         */
-        bool horn ;
-
-        /**
-         * Indica si Heels tiene el bolso
-         */
-        bool handbag ;
-
-        /**
-         * Número de rosquillas que tiene Head
-         */
-        unsigned short donuts ;
+        TheKeyMoments keyMoments ;
 
         PicturePtr imageOfItemInBag ;
 
-        /**
-         * Stores name of planet with boolean of its liberation
-         */
-        std::map < std::string, bool > planets ;
-
-        bool takenCrown ;
-
-        bool eatenFish ;
-
-        bool gameOver ;
-
-        bool freedom ;
-
-        bool emperator ;
+        std::map < std::string /* the planet's name */, bool /* is free or not */ > planets ;
 
         std::map < std::string, PicturePtr > sceneryBackgrounds ;
 
         std::map < std::string, PicturePtr > ambiancePictures ;
-
-public:
-
-        Isomot & getIsomot () {  return isomot ;  }
-
-        /**
-         * Returns the number of lives left for player
-         */
-        unsigned char getLives ( const std::string& player ) const ;
-
-        void setHeadLives ( unsigned char lives ) {  this->headLives = lives ;  }
-
-        void setHeelsLives ( unsigned char lives ) {  this->heelsLives = lives ;  }
-
-        void setHighSpeed ( unsigned int highSpeed ) {  this->highSpeed = highSpeed ;  }
-
-        unsigned int getHighSpeed () const {  return this->highSpeed;  }
-
-        void setHighJumps ( unsigned int highJumps ) {  this->highJumps = highJumps ;  }
-
-        unsigned int getHighJumps () const {  return this->highJumps ;  }
-
-        void setHeadShield ( unsigned int shield ) {  this->headShield = shield ;  }
-
-        void setHeelsShield ( unsigned int shield ) {  this->heelsShield = shield ;  }
-
-        float getShield ( const std::string& player ) const ;
-
-        void setHorn ( bool hasHorn ) {  this->horn = hasHorn ;  }
-
-        void setHandbag ( bool hasHandbag ) {  this->handbag = hasHandbag ;  }
-
-        void fillToolsOwnedByCharacter ( const std::string& player, std::vector < std::string > & tools ) const ;
-
-        void setDonuts ( unsigned short number ) {  this->donuts = number ;  }
-
-        unsigned short getDonuts ( const std::string& player ) const ;
-
-        unsigned int getVisitedRooms () ;
 
 };
 

@@ -15,7 +15,6 @@
 
 #include "WrappersAllegro.hpp"
 
-#include "Ism.hpp"
 #include "Picture.hpp"
 #include "Item.hpp"
 #include "Drawable.hpp"

@@ -21,7 +21,7 @@ AnimatedPictureWidget::AnimatedPictureWidget( int x, int y, const std::vector< a
 
 AnimatedPictureWidget::~AnimatedPictureWidget()
 {
-        std::for_each( animation.begin (), animation.end (), iso::DeleteIt() );
+        std::for_each( animation.begin (), animation.end (), DeleteIt() );
         animation.clear();
 }
 

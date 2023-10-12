@@ -11,6 +11,7 @@
 #ifndef pointers_hpp_
 #define pointers_hpp_
 
+#include <memory>
 #include <string>
 #include <vector>
 #include <map>

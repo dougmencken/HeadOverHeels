@@ -15,7 +15,11 @@
 #include "WrappersAllegro.hpp"
 
 #include "GameManager.hpp"
+#include "GamePreferences.hpp"
 #include "GuiManager.hpp"
+
+#include "ospaths.hpp"
+#include "screen.hpp"
 
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 #  include <allegro5/allegro.h>
@@ -24,49 +28,31 @@
 #endif
 
 
-std::multimap< unsigned int, unsigned int > sizesOfScreen ;
-
 std::vector< std::pair< std::string, bool /* has value */ > > knownOptions ;
 
 void initAllegro ()
 {
         allegro::init ();
 
-        // fill list of screen sizes
+        // switch to the chosen size of screen
+        allegroWindowSizeToScreenSize ();
 
-        sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 640, 480 ) );
-        sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 800, 600 ) );
-        sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 1024, 576 ) );
-        sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 1024, 600 ) );
-        sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 1024, 768 ) );
-        sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 1280, 720 ) );
-        sizesOfScreen.insert( std::pair< unsigned int, unsigned int >( 1280, 1024 ) );
-
-        // switch to chosen size of screen
-
-        bool switched = allegro::switchToWindowedVideo( iso::ScreenWidth(), iso::ScreenHeight() ) ;
-        if ( ! switched )
-                std::cout << "can’t switch screen to " << iso::ScreenWidth() << " x " << iso::ScreenHeight() << std::endl ;
-
-        allegro::Pict::theScreen().clearToColor( Color::blackColor().toAllegroColor() ) ;
-        allegro::update ();
-
-        // initialize handler of keyboard events
+        // initialize the handler of keyboard events
         allegro::initKeyboardHandler ();
 }
 
 void readPreferences ()
 {
-        bool preferencesRead = iso::GameManager::readPreferences( iso::homePath() + "preferences.xml" ) ;
+        bool preferencesOkay = game::GamePreferences::readPreferences( ospaths::homePath() + "preferences.xml" ) ;
 
-        if ( ! preferencesRead )
+        if ( ! preferencesOkay )
                 gui::GuiManager::getInstance().setLanguage( "en_US" );
 }
 
 
 int main( int argc, char** argv )
 {
-        if ( argc > 0 ) iso::setPathToGame( argv[ 0 ] );
+        if ( argc > 0 ) ospaths::setPathToGame( argv[ 0 ] );
 
         knownOptions.push_back( std::pair< std::string, bool >( "width", true ) );
         knownOptions.push_back( std::pair< std::string, bool >( "height", true ) );
@@ -135,21 +121,21 @@ int main( int argc, char** argv )
                 {
                         int width = std::atoi( options[ "width" ].c_str () );
                         if ( width < 640 ) width = 640;
-                        iso::setScreenWidth( static_cast< unsigned int >( width ) );
+                        variables::setScreenWidth( static_cast< unsigned int >( width ) );
                 }
 
                 if ( options.count( "height" ) > 0 )
                 {
                         int height = std::atoi( options[ "height" ].c_str () );
                         if ( height < 480 ) height = 480;
-                        iso::setScreenHeight( static_cast< unsigned int >( height ) );
+                        variables::setScreenHeight( static_cast< unsigned int >( height ) );
                 }
 
                 if ( options.count( "head-room" ) > 0 )
-                        iso::GameManager::getInstance().setHeadRoom( options[ "head-room" ] );
+                        game::GameManager::getInstance().setHeadRoom( options[ "head-room" ] );
 
                 if ( options.count( "heels-room" ) > 0 )
-                        iso::GameManager::getInstance().setHeelsRoom( options[ "heels-room" ] );
+                        game::GameManager::getInstance().setHeelsRoom( options[ "heels-room" ] );
 
                 if ( options.count( "rebuild-rooms" ) > 0 )
                         iso::MapManager::buildEveryRoomAtOnce = true ;
@@ -166,7 +152,7 @@ int main( int argc, char** argv )
 #endif
 
         if ( newGameNoGui )
-                iso::GameManager::getInstance().begin () ;
+                game::GameManager::getInstance().begin () ;
         else
                 gui::GuiManager::getInstance().begin () ;
 
@@ -174,7 +160,7 @@ int main( int argc, char** argv )
         timeEndPeriod( 1 );
 #endif
 
-        iso::GameManager::getInstance().cleanUp () ;
+        game::GameManager::getInstance().cleanUp () ;
         gui::GuiManager::getInstance().freeScreens () ;
 
         return EXIT_SUCCESS ;

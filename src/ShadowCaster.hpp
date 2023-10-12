@@ -11,7 +11,6 @@
 #ifndef ShadowCaster_hpp_
 #define ShadowCaster_hpp_
 
-#include "Ism.hpp"
 #include "Picture.hpp"
 #include "Item.hpp"
 #include "FloorTile.hpp"

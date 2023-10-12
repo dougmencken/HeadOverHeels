@@ -12,6 +12,7 @@
 #define util_hpp_
 
 #include <cstring>
+#include <memory>
 #include <string>
 #include <sstream>
 #include <vector>
@@ -52,16 +53,17 @@
 #define TERMINAL_COLOR_BOLD_RED         "\033[1;31m"
 #define TERMINAL_COLOR_BOLD_GREEN       "\033[1;32m"
 
-
-struct IsPathSeparator
+/**
+ * Object-function to finalize elements of Standard Template Library container
+ */
+struct DeleteIt
 {
-# ifdef __WIN32
-        bool operator() ( char c ) const {  return c == '\\' || c == '/' ;  }
-# else
-        bool operator() ( char c ) const {  return c == '/' ;  }
-# endif
+        template < typename T >
+        void operator() ( const T* ptr ) const
+        {
+                delete ptr ;
+        }
 } ;
-
 
 class util
 {
@@ -117,25 +119,21 @@ public:
                 return result.str() ;
         }
 
-        inline static std::string pathSeparator()
+        static std::string makeRandomString ( const size_t length )
         {
-        # if defined ( __WIN32 ) && ! defined ( __CYGWIN__ )
-                return "\\" ;
-        # else
-                return "/" ;
-        # endif
-        }
+                static const char alphanum[] =  "0123456789"
+                                                "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                                                "abcdefghijklmnopqrstuvwxyz" ;
+                static const size_t howManyChars = sizeof( alphanum );
 
-        inline static bool folderExists( const std::string& path )
-        {
-                struct stat info;
+                std::string result( length, ' ' );
 
-                if ( stat( path.c_str (), &info ) < 0 )
-                        return false;
-                else if ( ( info.st_mode & S_IFDIR ) != 0 )
-                        return true;
+                for ( size_t i = 0 ; i < length; ++ i )
+                {
+                        result[ i ] = alphanum[ rand() % ( howManyChars - 1 ) ];
+                }
 
-                return false;
+                return result ;
         }
 
         inline static std::string demangle ( const std::string & mangled )

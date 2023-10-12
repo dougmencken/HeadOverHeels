@@ -11,7 +11,6 @@
 #ifndef FloorTile_hpp_
 #define FloorTile_hpp_
 
-#include "Ism.hpp"
 #include "Drawable.hpp"
 #include "Mediated.hpp"
 #include "Shady.hpp"

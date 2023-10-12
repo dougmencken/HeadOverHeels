@@ -2,7 +2,8 @@
 #include "Camera.hpp"
 #include "Room.hpp"
 #include "GameManager.hpp"
-#include "Ism.hpp"
+
+#include "screen.hpp"
 
 
 namespace iso
@@ -17,9 +18,9 @@ Camera::Camera( Room * room )
 
 void Camera::centerRoom ()
 {
-        delta.first = ( static_cast< int >( room->getWidthOfRoomImage() ) - static_cast< int >( ScreenWidth() ) ) >> 1 ;
-        delta.second = ( static_cast< int >( room->getHeightOfRoomImage() ) - static_cast< int >( ScreenHeight() ) ) >> 1 ;
-        delta.second += GameManager::spaceForAmbiance ;
+        delta.first = ( static_cast< int >( room->getWidthOfRoomImage() ) - static_cast< int >( variables::getScreenWidth() ) ) >> 1 ;
+        delta.second = ( static_cast< int >( room->getHeightOfRoomImage() ) - static_cast< int >( variables::getScreenHeight() ) ) >> 1 ;
+        delta.second += Camera::spaceForAmbiance ;
 
         centeredOnItem.clear();
 }
@@ -29,9 +30,9 @@ bool Camera::centerOnItem( const Item & item )
         std::pair< int, int > offsetBefore = delta ;
 
         // center on room’s origin at first
-        delta.first = room->getX0 () - ( static_cast< int >( ScreenWidth() ) >> 1 ) ;
-        delta.second = room->getY0 () - ( static_cast< int >( ScreenHeight() ) >> 1 ) ;
-        delta.second += GameManager::spaceForAmbiance ;
+        delta.first = room->getX0 () - ( static_cast< int >( variables::getScreenWidth() ) >> 1 ) ;
+        delta.second = room->getY0 () - ( static_cast< int >( variables::getScreenHeight() ) >> 1 ) ;
+        delta.second += Camera::spaceForAmbiance ;
 
         // apply offset of item to room’s origin
         delta.first += item.getOffsetX () ;

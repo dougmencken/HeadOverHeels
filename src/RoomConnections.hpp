@@ -14,7 +14,6 @@
 #include <string>
 #include <map>
 
-#include "Ism.hpp"
 #include "Way.hpp"
 
 

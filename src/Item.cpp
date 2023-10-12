@@ -6,6 +6,8 @@
 #include "GameManager.hpp"
 #include "Way.hpp"
 
+#include <util.hpp>
+
 #include <algorithm> // std::for_each
 
 #include <iostream>
@@ -20,7 +22,7 @@ PoolOfPictures * Item::poolOfPictures = new PoolOfPictures( ) ;
 Item::Item( const DescriptionOfItem* description, int z, const std::string& way )
       : Mediated(), Shady(),
         descriptionOfItem( description ),
-        uniqueName( description->getLabel() + "." + makeRandomString( 12 ) ),
+        uniqueName( description->getLabel() + "." + util::makeRandomString( 12 ) ),
         originalLabel( description->getLabel() ),
         processedImage( new Picture( description->getWidthOfFrame(), description->getHeightOfFrame() ) ),
         height( description->getHeight() ),

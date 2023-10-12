@@ -62,7 +62,7 @@
     </properties>
   </text>
 
-  <text alias="keyboard-menu">
+  <text alias="keys-menu">
     <properties>
       <string>Irányítás</string>
     </properties>
@@ -161,7 +161,7 @@
     </properties>
   </text>
 
-  <text alias="draw-background">
+  <text alias="draw-decor">
     <properties>
       <string>háttér</string>
     </properties>

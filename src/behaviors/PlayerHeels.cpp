@@ -1,5 +1,7 @@
 
 #include "PlayerHeels.hpp"
+
+#include "Isomot.hpp"
 #include "Item.hpp"
 #include "DescriptionOfItem.hpp"
 #include "PlayerItem.hpp"
@@ -48,31 +50,31 @@ PlayerHeels::~PlayerHeels( )
 
 bool PlayerHeels::update()
 {
-        PlayerItem& playerItem = dynamic_cast< PlayerItem& >( * this->item );
+        PlayerItem & characterItem = dynamic_cast< PlayerItem & >( * this->item );
 
-        if ( playerItem.hasShield() )
+        if ( characterItem.hasShield() )
         {
-                playerItem.decreaseShield();
+                characterItem.decrementShieldOverTime () ;
         }
 
         switch ( activity )
         {
                 case Activity::Wait:
-                        wait( playerItem );
+                        wait( characterItem );
                         break;
 
                 case Activity::AutoMoveNorth:
                 case Activity::AutoMoveSouth:
                 case Activity::AutoMoveEast:
                 case Activity::AutoMoveWest:
-                        autoMove( playerItem );
+                        autoMove( characterItem );
                         break;
 
                 case Activity::MoveNorth:
                 case Activity::MoveSouth:
                 case Activity::MoveEast:
                 case Activity::MoveWest:
-                        move( playerItem );
+                        move( characterItem );
                         break;
 
                 case Activity::DisplaceNorth:
@@ -87,54 +89,54 @@ bool PlayerHeels::update()
                 case Activity::ForceDisplaceSouth:
                 case Activity::ForceDisplaceEast:
                 case Activity::ForceDisplaceWest:
-                        displace( playerItem );
+                        displace( characterItem );
                         break;
 
                 case Activity::CancelDisplaceNorth:
                 case Activity::CancelDisplaceSouth:
                 case Activity::CancelDisplaceEast:
                 case Activity::CancelDisplaceWest:
-                        cancelDisplace( playerItem );
+                        cancelDisplace( characterItem );
                         break;
 
                 case Activity::Fall:
-                        fall( playerItem );
+                        fall( characterItem );
                         break;
 
                 case Activity::Jump:
                 case Activity::RegularJump:
                 case Activity::HighJump:
-                        jump( playerItem );
+                        jump( characterItem );
                         break;
 
                 case Activity::BeginWayOutTeletransport:
                 case Activity::WayOutTeletransport:
-                        wayOutTeletransport( playerItem );
+                        wayOutTeletransport( characterItem );
                         break;
 
                 case Activity::BeginWayInTeletransport:
                 case Activity::WayInTeletransport:
-                        wayInTeletransport( playerItem );
+                        wayInTeletransport( characterItem );
                         break;
 
                 case Activity::MeetMortalItem:
                 case Activity::Vanish:
-                        collideWithMortalItem( playerItem );
+                        collideWithMortalItem( characterItem );
                         break;
 
                 case Activity::TakeItem:
                 case Activity::TakeAndJump:
-                        takeItem( playerItem );
+                        takeItem( characterItem );
                         break;
 
                 case Activity::ItemTaken:
-                        playerItem.addToZ( - LayerHeight );
+                        characterItem.addToZ( - Isomot::LayerHeight );
                         activity = Activity::Wait;
                         break;
 
                 case Activity::DropItem:
                 case Activity::DropAndJump:
-                        dropItem( playerItem );
+                        dropItem( characterItem );
                         break;
 
                 default:
@@ -142,14 +144,14 @@ bool PlayerHeels::update()
         }
 
         // play sound for current activity
-        SoundManager::getInstance().play( playerItem.getOriginalLabel(), activity );
+        SoundManager::getInstance().play( characterItem.getOriginalLabel(), activity );
 
         return false;
 }
 
 void PlayerHeels::behave ()
 {
-        PlayerItem& playerItem = dynamic_cast< PlayerItem& >( * this->item );
+        PlayerItem& characterItem = dynamic_cast< PlayerItem& >( * this->item );
         InputManager& input = InputManager::getInstance();
 
         // if it’s not a move by inertia or some other exotic activity
@@ -164,12 +166,12 @@ void PlayerHeels::behave ()
                 {
                         if ( input.takeTyped() )
                         {
-                                activity = ( playerItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeItem : Activity::DropItem );
+                                activity = ( characterItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeItem : Activity::DropItem );
                                 input.releaseKeyFor( "take" );
                         }
                         else if ( input.takeAndJumpTyped() )
                         {
-                                activity = ( playerItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeAndJump : Activity::DropAndJump );
+                                activity = ( characterItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeAndJump : Activity::DropAndJump );
                                 input.releaseKeyFor( "take&jump" );
                         }
                         else if ( input.movenorthTyped() )
@@ -191,10 +193,10 @@ void PlayerHeels::behave ()
                         else if ( input.jumpTyped() )
                         {
                                 // look for item below
-                                playerItem.canAdvanceTo( 0, 0, -1 );
+                                characterItem.canAdvanceTo( 0, 0, -1 );
                                 // key to teleport is the same as for jump
                                 activity =
-                                        playerItem.getMediator()->collisionWithByBehavior( "behavior of teletransport" ) != nilPointer ?
+                                        characterItem.getMediator()->collisionWithByBehavior( "behavior of teletransport" ) != nilPointer ?
                                                 Activity::BeginWayOutTeletransport : Activity::Jump ;
                         }
                 }
@@ -205,19 +207,19 @@ void PlayerHeels::behave ()
                         if( input.jumpTyped() )
                         {
                                 // teleport when teletransport is below
-                                playerItem.canAdvanceTo( 0, 0, -1 );
+                                characterItem.canAdvanceTo( 0, 0, -1 );
                                 activity =
-                                        playerItem.getMediator()->collisionWithByBehavior( "behavior of teletransport" ) != nilPointer ?
+                                        characterItem.getMediator()->collisionWithByBehavior( "behavior of teletransport" ) != nilPointer ?
                                                 Activity::BeginWayOutTeletransport : Activity::Jump ;
                         }
                         else if ( input.takeTyped() )
                         {
-                                activity = ( playerItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeItem : Activity::DropItem );
+                                activity = ( characterItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeItem : Activity::DropItem );
                                 input.releaseKeyFor( "take" );
                         }
                         else if ( input.takeAndJumpTyped() )
                         {
-                                activity = ( playerItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeAndJump : Activity::DropAndJump );
+                                activity = ( characterItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeAndJump : Activity::DropAndJump );
                                 input.releaseKeyFor( "take&jump" );
                         }
                         else if ( input.movenorthTyped() )
@@ -238,7 +240,7 @@ void PlayerHeels::behave ()
                         }
                         else if ( ! input.anyMoveTyped() )
                         {
-                                SoundManager::getInstance().stop( playerItem.getLabel(), activity );
+                                SoundManager::getInstance().stop( characterItem.getLabel(), activity );
                                 activity = Activity::Wait;
                         }
                 }
@@ -252,12 +254,12 @@ void PlayerHeels::behave ()
                         }
                         else if ( input.takeTyped() )
                         {
-                                activity = ( playerItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeItem : Activity::DropItem );
+                                activity = ( characterItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeItem : Activity::DropItem );
                                 input.releaseKeyFor( "take" );
                         }
                         else if ( input.takeAndJumpTyped() )
                         {
-                                activity = ( playerItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeAndJump : Activity::DropAndJump );
+                                activity = ( characterItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeAndJump : Activity::DropAndJump );
                                 input.releaseKeyFor( "take&jump" );
                         }
                         else if ( input.movenorthTyped() )
@@ -313,7 +315,7 @@ void PlayerHeels::behave ()
                         // pick or drop an item when falling
                         if ( input.takeTyped() )
                         {
-                                activity = ( playerItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeItem : Activity::DropItem );
+                                activity = ( characterItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeItem : Activity::DropItem );
                                 input.releaseKeyFor( "take" );
                         }
                 }

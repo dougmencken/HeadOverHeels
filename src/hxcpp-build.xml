@@ -17,7 +17,8 @@
         <file name="main.cpp" />
         <file name="sleep.cpp" />
         <file name="pointers.cpp" />
-        <file name="Ism.cpp" />
+        <file name="ospaths.cpp" />
+        <file name="screen.cpp" />
         <file name="WrappersAllegro.cpp" />
         <file name="Way.cpp" />
         <file name="Color.cpp" />
@@ -40,6 +41,8 @@
         <file name="GameSaverAndLoader.cpp" />
         <file name="InputManager.cpp" />
         <file name="GameManager.cpp" />
+        <file name="GameInfo.cpp" />
+        <file name="GamePreferences.cpp" />
         <file name="Miniature.cpp" />
         <file name="Isomot.cpp" />
         <file name="TimerPOSIX.cpp" />
@@ -95,7 +98,7 @@
         <file name="guiactions/ContinueGame.cpp" />
         <file name="guiactions/CreateAudioMenu.cpp" />
         <file name="guiactions/CreateVideoMenu.cpp" />
-        <file name="guiactions/CreateMenuOfGraphicSets.cpp" />
+        <file name="guiactions/CreateMenuOfGraphicsSets.cpp" />
         <file name="guiactions/CreateCongratulationsScreen.cpp" />
         <file name="guiactions/CreateEndScreen.cpp" />
         <file name="guiactions/CreateListOfSavedGames.cpp" />

@@ -11,7 +11,6 @@
 #ifndef Door_hpp_
 #define Door_hpp_
 
-#include "Ism.hpp"
 #include "Way.hpp"
 #include "Mediated.hpp"
 #include "Picture.hpp"

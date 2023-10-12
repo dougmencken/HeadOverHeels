@@ -16,8 +16,6 @@
 
 #include "WrappersAllegro.hpp"
 
-#include "Ism.hpp"
-
 
 namespace iso
 {

@@ -10,6 +10,8 @@
 #include "Label.hpp"
 #include "CreateMainMenu.hpp"
 
+#include "sleep.hpp"
+
 #include <string>
 #include <sstream>
 
@@ -72,7 +74,7 @@ void CreateAudioMenu::doAction ()
                 listOfOptions->setValueOf( labelMusic, ss.str() );
 
                 listOfOptions->addOption( playRoomTunes );
-                listOfOptions->setValueOf( playRoomTunes, iso::GameManager::getInstance().playMelodyOfScenery () ? yeah : nope );
+                listOfOptions->setValueOf( playRoomTunes, game::GameManager::getInstance().playMelodyOfScenery () ? yeah : nope );
 
                 listOfOptions->setVerticalOffset( 35 );
 
@@ -83,7 +85,7 @@ void CreateAudioMenu::doAction ()
         else
         {
                 // update labels
-                listOfOptions->setValueOf( playRoomTunes, iso::GameManager::getInstance().playMelodyOfScenery () ? yeah : nope );
+                listOfOptions->setValueOf( playRoomTunes, game::GameManager::getInstance().playMelodyOfScenery () ? yeah : nope );
         }
 
         if ( screen.getKeyHandler() == nilPointer )
@@ -153,8 +155,8 @@ void CreateAudioMenu::doAction ()
                                 {
                                         if ( theKey == "Left" || theKey == "Right" || theKey == "o" || theKey == "p" )
                                         {
-                                                iso::GameManager::getInstance().togglePlayMelodyOfScenery ();
-                                                listOfOptions->setValueOf( playRoomTunes, iso::GameManager::getInstance().playMelodyOfScenery () ? yeah : nope );
+                                                game::GameManager::getInstance().togglePlayMelodyOfScenery ();
+                                                listOfOptions->setValueOf( playRoomTunes, game::GameManager::getInstance().playMelodyOfScenery () ? yeah : nope );
 
                                                 doneWithKey = true;
                                         }
@@ -172,6 +174,6 @@ void CreateAudioMenu::doAction ()
 
                 // no te comas la CPU
                 // do not eat the CPU
-                milliSleep( 25 );
+                somn::milliSleep( 25 );
         }
 }

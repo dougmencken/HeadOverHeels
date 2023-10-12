@@ -214,12 +214,12 @@ void MoveKindOfActivity::ascent( FreeItem & freeItem, int z )
                                         {
                                                 if ( collision == "ceiling" )
                                                 {
-                                                        PlayerItem& playerItem = dynamic_cast< PlayerItem& >( freeItem );
+                                                        PlayerItem & character = dynamic_cast< PlayerItem & >( freeItem );
 
-                                                        if ( playerItem.isActiveCharacter() )
+                                                        if ( character.isActiveCharacter() )
                                                         {
                                                                 // active character reached maximum height of room
-                                                                playerItem.setWayOfExit( "above" );
+                                                                character.setWayOfExit( "above" );
                                                         }
 
                                                         continue ;

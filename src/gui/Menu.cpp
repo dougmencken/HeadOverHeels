@@ -1,10 +1,14 @@
 
 #include "Menu.hpp"
+
 #include "Gui.hpp"
 #include "GuiManager.hpp"
 #include "InputManager.hpp"
 #include "Label.hpp"
 #include "Font.hpp"
+
+#include "ospaths.hpp"
+#include "screen.hpp"
 
 #include <algorithm> // std::for_each
 #include <cassert>
@@ -30,7 +34,7 @@ Menu::Menu( )
 
 Menu::~Menu( )
 {
-        std::for_each( options.begin (), options.end (), iso::DeleteIt() );
+        std::for_each( options.begin (), options.end (), DeleteIt() );
         options.clear();
 }
 
@@ -39,7 +43,7 @@ Menu::~Menu( )
         if ( beforeOption == nilPointer )
         {
                 autouniqueptr< allegro::Pict > optionPict( allegro::Pict::fromPNGFile (
-                        iso::pathToFile( iso::sharePath(), "menu-option.png" )
+                        ospaths::pathToFile( ospaths::sharePath(), "menu-option.png" )
                 ) );
                 assert( optionPict->isNotNil() );
 
@@ -69,7 +73,7 @@ Menu::~Menu( )
         if ( beforeChosenOptionMini == nilPointer )
         {
                 autouniqueptr< allegro::Pict > chosenOptionMiniPict( allegro::Pict::fromPNGFile (
-                        iso::pathToFile( iso::sharePath(), "chosen-menu-option.png" )
+                        ospaths::pathToFile( ospaths::sharePath(), "chosen-menu-option.png" )
                 ) );
                 assert( chosenOptionMiniPict->isNotNil() );
 
@@ -137,8 +141,8 @@ void Menu::draw ()
 
         // update position of the whole menu to draw it centered
         int previousX = getX (); int previousY = getY ();
-        setX( previousX + ( ( iso::ScreenWidth() - previousX ) >> 1 ) - ( getWidthOfMenu () >> 1 ) );
-        setY( previousY + ( ( iso::ScreenHeight() - previousY ) >> 1 ) - ( getHeightOfMenu() >> 1 ) );
+        setX( previousX + ( ( variables::getScreenWidth() - previousX ) >> 1 ) - ( getWidthOfMenu () >> 1 ) );
+        setY( previousY + ( ( variables::getScreenHeight() - previousY ) >> 1 ) - ( getHeightOfMenu() >> 1 ) );
 
         int dx( Menu::beforeOption != nilPointer ? Menu::beforeOption->getWidth() : 0 );
         int dy( 0 );

@@ -13,7 +13,6 @@
 
 #include <stack>
 
-#include "Ism.hpp"
 #include "ActivityOfItem.hpp"
 #include "Item.hpp"
 

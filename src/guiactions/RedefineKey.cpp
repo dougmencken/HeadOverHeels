@@ -1,5 +1,8 @@
 
 #include "RedefineKey.hpp"
+
+#include "sleep.hpp"
+
 #include "InputManager.hpp"
 #include "GuiManager.hpp"
 #include "LanguageManager.hpp"
@@ -83,7 +86,7 @@ void RedefineKey::doAction ()
 
                 // no te comas la CPU
                 // do not eat the CPU
-                milliSleep( 20 );
+                somn::milliSleep( 20 );
         }
 
         if ( InputManager::getInstance().getUserKeyFor( this->whatKeyDoes ) != "none" ) {

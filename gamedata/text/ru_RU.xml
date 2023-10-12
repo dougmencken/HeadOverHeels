@@ -62,7 +62,7 @@
     </properties>
   </text>
 
-  <text alias="keyboard-menu">
+  <text alias="keys-menu">
     <properties>
       <string>Клавиши</string>
     </properties>
@@ -170,7 +170,7 @@
     </properties>
   </text>
 
-  <text alias="draw-background">
+  <text alias="draw-decor">
     <properties>
       <string>рисовать фон</string>
     </properties>

@@ -70,6 +70,8 @@ public:
 
         static void refreshBackground () ;
 
+        static void toBlackBackground () ;
+
         void refreshPicturesOfHeadAndHeels () ;
 
         const Picture & getImageOfScreen () const {  return *imageOfScreen ;  }
@@ -127,9 +129,6 @@ private:
 
 protected:
 
-        /**
-         * Imagen de fondo de la pantalla
-         */
         static Picture * backgroundPicture ;
 
 };

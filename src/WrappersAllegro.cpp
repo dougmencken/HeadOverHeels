@@ -1743,11 +1743,30 @@ void textOut( const std::string& text, int x, int y, AllegroColor color )
 #endif
 }
 
+#if defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+std::string allegro4AudioDriverCodeToName( int code )
+{
+        if ( code == DIGI_AUTODETECT ) return "DIGI_AUTODETECT" ;
+
+        if ( code == DIGI_ALSA ) return "DIGI_ALSA" ;
+        if ( code == DIGI_OSS ) return "DIGI_OSS" ;
+        if ( code == DIGI_ESD ) return "DIGI_ESD" ;
+        if ( code == DIGI_ARTS ) return "DIGI_ARTS" ;
+        if ( code == DIGI_JACK ) return "DIGI_JACK" ;
+
+        if ( code == DIGI_NONE ) return "DIGI_NONE" ;
+
+        return "unknown" ;
+}
+#endif
+
 void initAudio()
 {
 #if defined( DEBUG_ALLEGRO_INIT ) && DEBUG_ALLEGRO_INIT
         if ( ! initialized ) {  std::cerr << "allegro::initAudio before allegro::init" << std::endl ; return ;  }
 #endif
+
+        int result = -2 ;
 
 #if defined( USE_ALLEGRO5 ) && USE_ALLEGRO5
 
@@ -1763,35 +1782,58 @@ void initAudio()
 
         al_reserve_samples( 256 ) ;
 
+        result = 0 ; // no error
+
 #elif defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
 
         alogg_init();
 
-        int digitalDrivers[] = {  DIGI_AUTODETECT,
+        std::vector< int > digitalDrivers = {  DIGI_AUTODETECT  };
         # ifdef __gnu_linux__
-                                  DIGI_ALSA,
-                                  DIGI_OSS,
-                                  DIGI_ESD,
-                                  DIGI_ARTS,
-                                  DIGI_JACK,
+                digitalDrivers.push_back( DIGI_ALSA );
+                digitalDrivers.push_back( DIGI_OSS );
+                digitalDrivers.push_back( DIGI_ESD );
+                digitalDrivers.push_back( DIGI_ARTS );
+                digitalDrivers.push_back( DIGI_JACK );
         # endif
-                                  DIGI_NONE  };
 
-        int index = 0;
-        int result = -1;
-
-        while ( result != 0 )
+        for ( unsigned int index = 0 ; index < digitalDrivers.size () ; index ++ )
         {
-                result = install_sound( digitalDrivers[ index++ ], MIDI_NONE, NULL );
+        #if defined( DEBUG_ALLEGRO_INIT ) && DEBUG_ALLEGRO_INIT
+                std::cout << "trying to install_sound( " << allegro4AudioDriverCodeToName( digitalDrivers[ index ] ) << " ) ...." ;
+        #endif
+                result = install_sound( digitalDrivers[ index ], MIDI_NONE, NULL );
+                // install_sound returns zero on success, and -1 on failure
+
+                if ( result == 0 )
+                {
+        #if defined( DEBUG_ALLEGRO_INIT ) && DEBUG_ALLEGRO_INIT
+                        std::cout << " okay" << std::endl ;
+        #endif
+                        break ;
+                } else
+                {
+        #if defined( DEBUG_ALLEGRO_INIT ) && DEBUG_ALLEGRO_INIT
+                        std::cout << " oops" << std::endl ;
+        #endif
+                        std::string allegroError( allegro_error ) ;
+                        std::cout << "install_sound( " << allegro4AudioDriverCodeToName( digitalDrivers[ index ] )
+                                        << " ) returned error \"" << allegroError << "\"" << std::endl ;
+                }
         }
 
+        // if nothing works finally try DIGI_NONE
+        if ( result != 0 )
+                result = install_sound( DIGI_NONE, MIDI_NONE, NULL );
 #endif
 
-        audioInitialized = true ;
+        if ( result == 0 ) {
+                audioInitialized = true ;
 
-#if defined( DEBUG_ALLEGRO_INIT ) && DEBUG_ALLEGRO_INIT
-        std::cout << "allegro audio is initialized" << std::endl ;
-#endif
+        #if defined( DEBUG_ALLEGRO_INIT ) && DEBUG_ALLEGRO_INIT
+                std::cout << "allegro audio is initialized" << std::endl ;
+        #endif
+        }
 }
 
 void setDigitalVolume( unsigned short volume )

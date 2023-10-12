@@ -1,6 +1,5 @@
 
 #include "Color.hpp"
-#include "Ism.hpp"
 
 #include <cmath> // for sqrt
 

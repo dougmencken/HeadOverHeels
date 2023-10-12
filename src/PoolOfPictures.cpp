@@ -1,7 +1,8 @@
 
 #include "PoolOfPictures.hpp"
-#include "Ism.hpp"
 #include "GameManager.hpp"
+
+#include "ospaths.hpp"
 
 #ifdef DEBUG
 # define DEBUG_POOL_OF_PICTURES  0
@@ -14,7 +15,7 @@ namespace iso
 
 PicturePtr PoolOfPictures::getPicture( const std::string& imageFile ) const
 {
-        std::string gfxPrefix = iso::GameManager::getInstance().getChosenGraphicSet() ;
+        std::string gfxPrefix = game::GameManager::getInstance().getChosenGraphicsSet() ;
         std::string key = gfxPrefix + ":" + imageFile ;
 
         std::map< std::string, PicturePtr >::const_iterator pi = pictures.find( key ) ;
@@ -23,12 +24,12 @@ PicturePtr PoolOfPictures::getPicture( const std::string& imageFile ) const
 
 PicturePtr PoolOfPictures::getOrLoadAndGet( const std::string& imageFile )
 {
-        std::string gfxPrefix = iso::GameManager::getInstance().getChosenGraphicSet() ;
+        std::string gfxPrefix = game::GameManager::getInstance().getChosenGraphicsSet() ;
         std::string key = gfxPrefix + ":" + imageFile ;
 
         if ( pictures.find( key ) == pictures.end () )
         {
-                safeptr< allegro::Pict > picture( allegro::Pict::fromPNGFile( iso::pathToFile( iso::sharePath() + gfxPrefix, imageFile ) ) );
+                safeptr< allegro::Pict > picture( allegro::Pict::fromPNGFile( ospaths::pathToFile( ospaths::sharePath() + gfxPrefix, imageFile ) ) );
 
                 if ( picture->isNotNil() )
                 {
@@ -49,12 +50,12 @@ PicturePtr PoolOfPictures::getOrLoadAndGet( const std::string& imageFile )
 
 PicturePtr PoolOfPictures::getOrLoadAndGetOrMakeAndGet( const std::string& imageFile, unsigned int imageWidth, unsigned int imageHeight )
 {
-        std::string gfxPrefix = iso::GameManager::getInstance().getChosenGraphicSet() ;
+        std::string gfxPrefix = game::GameManager::getInstance().getChosenGraphicsSet() ;
         std::string key = gfxPrefix + ":" + imageFile ;
 
         if ( pictures.find( key ) == pictures.end () || pictures[ key ] == nilPointer )
         {
-                safeptr< allegro::Pict > picture( allegro::Pict::fromPNGFile( iso::pathToFile( iso::sharePath() + gfxPrefix, imageFile ) ) );
+                safeptr< allegro::Pict > picture( allegro::Pict::fromPNGFile( ospaths::pathToFile( ospaths::sharePath() + gfxPrefix, imageFile ) ) );
 
                 if ( picture->isNotNil() )
                 {
@@ -75,7 +76,7 @@ PicturePtr PoolOfPictures::getOrLoadAndGetOrMakeAndGet( const std::string& image
 
 PicturePtr PoolOfPictures::makePicture( const std::string& imageFile, unsigned int imageWidth, unsigned int imageHeight )
 {
-        std::string gfxPrefix = iso::GameManager::getInstance().getChosenGraphicSet() ;
+        std::string gfxPrefix = game::GameManager::getInstance().getChosenGraphicsSet() ;
         std::string key = gfxPrefix + ":" + imageFile ;
 
         pictures[ key ] = PicturePtr( new Picture( imageWidth, imageHeight ) ) ;
@@ -91,7 +92,7 @@ PicturePtr PoolOfPictures::makePicture( const std::string& imageFile, unsigned i
 
 void PoolOfPictures::putPicture( const std::string& imageFile, const PicturePtr& picture )
 {
-        std::string gfxPrefix = iso::GameManager::getInstance().getChosenGraphicSet() ;
+        std::string gfxPrefix = game::GameManager::getInstance().getChosenGraphicsSet() ;
         std::string key = gfxPrefix + ":" + imageFile ;
 
         pictures[ key ] = picture ;

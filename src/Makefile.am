@@ -41,8 +41,11 @@ headoverheels_SOURCES = main.cpp \
 			util.hpp \
 			pointers.cpp \
 			pointers.hpp \
-			Ism.cpp \
-			Ism.hpp \
+			ospaths.cpp \
+			ospaths.hpp \
+			screen.cpp \
+			screen.hpp \
+			MayNotBePossible.hpp \
 			WrappersAllegro.cpp \
 			WrappersAllegro.hpp \
 			Way.cpp \
@@ -82,6 +85,10 @@ headoverheels_SOURCES = main.cpp \
 			GameSaverAndLoader.hpp \
 			GameManager.cpp \
 			GameManager.hpp \
+			GameInfo.cpp \
+			GameInfo.hpp \
+			GamePreferences.cpp \
+			GamePreferences.hpp \
 			InputManager.cpp \
 			InputManager.hpp \
 			Miniature.cpp \
@@ -206,8 +213,8 @@ headoverheels_SOURCES = main.cpp \
 			guiactions/CreateAudioMenu.hpp \
 			guiactions/CreateVideoMenu.hpp \
 			guiactions/CreateVideoMenu.cpp \
-			guiactions/CreateMenuOfGraphicSets.hpp \
-			guiactions/CreateMenuOfGraphicSets.cpp \
+			guiactions/CreateMenuOfGraphicsSets.hpp \
+			guiactions/CreateMenuOfGraphicsSets.cpp \
 			guiactions/CreateCongratulationsScreen.cpp \
 			guiactions/CreateCongratulationsScreen.hpp \
 			guiactions/CreateEndScreen.cpp \
