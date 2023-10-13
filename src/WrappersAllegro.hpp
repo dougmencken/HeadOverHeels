@@ -400,7 +400,9 @@ void textOut ( const std::string& text, int x, int y, AllegroColor color ) ;
  * description of the problem in allegro_error
  */
 
-void initAudio () ;
+bool initAudio( const std::string & audioInterface ) ;
+
+bool initAudio () ;
 
 
 /* void set_volume( int digi_volume, int midi_volume )

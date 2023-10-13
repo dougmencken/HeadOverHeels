@@ -29,43 +29,43 @@ class SoundManager
 
 private:
 
-        SoundManager( ) ;
+        SoundManager( const std::string & audioInterface = "auto" ) ;
 
 public:
 
-        ~SoundManager( ) ;
+        ~SoundManager () ;
+
+        static void setAudioInterface( const std::string & interface ) {  audioInterface = interface ;  }
 
         static SoundManager & getInstance () ;
 
         /**
-         * Crea la lista de sonidos a partir de la información extraída por el gestor XML del archivo que almacena los sonidos
-         * @param xmlFile Name of XML file with info about game’s sounds
+         * @param xmlFile the name of XML file with the info about the game’s sounds
          */
         void readSounds ( const std::string& xmlFile ) ;
 
         void addSound ( const std::string& label, const std::string& activity, const std::string& sampleFile ) ;
 
+        bool isAudioInitialized () const {  return audioInitialized ;  }
+
         /**
-         * Reproduce un sonido
+         * Play a sound
          * @param label Item that gives out sound
          * @param activity Activity of item
-         * @param loop Si vale true, el sonido se reproduce continuamente
+         * @param loop If true, the playing is repeated
          */
         void play ( const std::string& label, const ActivityOfItem& activity, bool loop = false ) ;
 
         /**
-         * Detiene la reproducción de un sonido
+         * Stops playing a sound
          */
         void stop ( const std::string& label, const ActivityOfItem& activity ) ;
 
         /**
-         * Detiene la reproducción de todos los sonidos
+         * Stops playing of all sounds
          */
         void stopEverySound () ;
 
-        /**
-         * Reproduce un archivo Ogg
-         */
         void playOgg ( const std::string& oggFile, bool loop ) ;
 
         void stopOgg () {  oggPlayer.stop() ;  }
@@ -91,7 +91,11 @@ protected:
 
 private:
 
-        static SoundManager* instance ;
+        static SoundManager * instance ;
+
+        static std::string audioInterface ;
+
+        bool audioInitialized ; // true after allegro::initAudio()
 
         /**
          * Subprocess for playing Ogg music

@@ -6,21 +6,24 @@
 
 #include <tinyxml2.h>
 
-using iso::SoundManager;
+using iso::SoundManager ;
 
 #ifdef DEBUG
 #  define DEBUG_SOUNDS  0
 #endif
 
 
-SoundManager* SoundManager::instance = nilPointer ;
+/* static */ SoundManager * SoundManager::instance = nilPointer ;
+
+/* static */ std::string SoundManager::audioInterface = "auto" ;
 
 
-SoundManager::SoundManager( )
-        : effectsVolume( 80 )
+SoundManager::SoundManager( const std::string & audioInterface )
+        : audioInitialized( false )
+        , effectsVolume( 80 )
         , musicVolume( 75 )
 {
-        allegro::initAudio ();
+        audioInitialized = allegro::initAudio( audioInterface ) ;
 
         activityStrings[ Activity::Wait ] = "wait";
         activityStrings[ Activity::Push ] = "push";
@@ -71,11 +74,9 @@ SoundManager::~SoundManager( )
 SoundManager& SoundManager::getInstance()
 {
         if ( instance == nilPointer )
-        {
-                instance = new SoundManager();
-        }
+                instance = new SoundManager( SoundManager::audioInterface ) ;
 
-        return *instance;
+        return *instance ;
 }
 
 void SoundManager::readSounds( const std::string& xmlFile )

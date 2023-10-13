@@ -444,8 +444,8 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
         // empty scenery means that it is the final room
         if ( scenery != "" )
         {
-                const unsigned int diffX = variables::getScreenWidth() - 640 ;
-                const unsigned int diffY = variables::getScreenHeight() - 480 ;
+                const unsigned int diffX =  variables::getScreenWidth() - /* 640 */ constants::Default_Screen_Width ;
+                const unsigned int diffY = variables::getScreenHeight() - /* 480 */ constants::Default_Screen_Height ;
 
                 if ( diffX > 0 || diffY > 0 ) // when the screen is larger than 640 x 480
                         if ( ! isPresentGraphicsSet() && ! isSimpleGraphicsSet() )

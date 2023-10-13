@@ -22,13 +22,17 @@ namespace variables
 
         void setScreenWidth( unsigned int width )
         {
-                if ( width < 640 ) width = 640;
+                if ( width < constants:: Smallest_Screen_Width )
+                        width = constants:: Smallest_Screen_Width ;
+
                 screenWidth = width;
         }
 
         void setScreenHeight( unsigned int height )
         {
-                if ( height < 480 ) height = 480;
+                if ( height < constants:: Smallest_Screen_Height )
+                        height = constants:: Smallest_Screen_Height ;
+
                 screenHeight = height;
         }
 

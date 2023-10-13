@@ -18,6 +18,10 @@
 #include "GamePreferences.hpp"
 #include "GuiManager.hpp"
 
+#if defined( __gnu_linux__ ) && defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+#include "SoundManager.hpp"
+#endif
+
 #include "ospaths.hpp"
 #include "screen.hpp"
 
@@ -85,15 +89,15 @@ int main( int argc, char** argv )
         if ( argc > 0 ) ospaths::setPathToGame( argv[ 0 ] );
 
         knownOptions.push_back( KnownOption( "help", false, "shows this text which describes all the known options" ) );
-/* # if defined( __gnu_linux__ ) && defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+# if defined( __gnu_linux__ ) && defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
         // GNU/Linux with Allegro 4 only
-        knownOptions.push_back( KnownOption( "linux-audio", true, "which audio interface to use, one of =autodetect (default), =alsa, =oss, =esd, =arts, =jack, or =none" ) );
-# endif */
+        knownOptions.push_back( KnownOption( "linux-audio", true, "which audio interface to use, one of =auto (default), =alsa, =oss, =esd, =arts, =jack, or =none" ) );
+# endif
         knownOptions.push_back( KnownOption( "width", true, "the width of the game's screen, default is the value from preferences or =640" ) );
         knownOptions.push_back( KnownOption( "height", true, "the height of the game's screen, default is the value from preferences or =480" ) );
         knownOptions.push_back( KnownOption( "head-room", true, "the room's file name where Head begins the game, =blacktooth1head.xml by default" ) );
         knownOptions.push_back( KnownOption( "heels-room", true, "the room's file name where Heels begins the game, =blacktooth23heels.xml by default" ) );
-        knownOptions.push_back( KnownOption( "build-rooms", false, "build all the game rooms on launching" ) );
+        knownOptions.push_back( KnownOption( "build-all-rooms", false, "build all the game rooms at once before beginning the game" ) );
         knownOptions.push_back( KnownOption( "begin-game", false, "no menus, just begin the new game" ) );
 
         bool newGameNoGui = false ;
@@ -171,16 +175,16 @@ int main( int argc, char** argv )
                         return EXIT_SUCCESS ;
                 }
 
-        /* # if defined( __gnu_linux__ ) && defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
+        # if defined( __gnu_linux__ ) && defined( USE_ALLEGRO4 ) && USE_ALLEGRO4
                 if ( options.count( "linux-audio" ) > 0 )
                 {
+                        SoundManager::setAudioInterface( options[ "linux-audio" ] ) ;
                 }
-        # endif */
+        # endif
 
                 if ( options.count( "width" ) > 0 )
                 {
                         int width = std::atoi( options[ "width" ].c_str () );
-                        if ( width < 640 ) width = 640 ;
                         variables::setScreenWidth( static_cast< unsigned int >( width ) );
                         variables::keepThisWidth( true );
                 }
@@ -188,7 +192,6 @@ int main( int argc, char** argv )
                 if ( options.count( "height" ) > 0 )
                 {
                         int height = std::atoi( options[ "height" ].c_str () );
-                        if ( height < 480 ) height = 480 ;
                         variables::setScreenHeight( static_cast< unsigned int >( height ) );
                         variables::keepThisHeight( true );
                 }
@@ -199,7 +202,7 @@ int main( int argc, char** argv )
                 if ( options.count( "heels-room" ) > 0 )
                         game::GameManager::getInstance().setHeelsRoom( options[ "heels-room" ] );
 
-                if ( options.count( "build-rooms" ) > 0 )
+                if ( options.count( "build-all-rooms" ) > 0 )
                         iso::MapManager::buildEveryRoomAtOnce = true ;
 
                 if ( options.count( "begin-game" ) > 0 )

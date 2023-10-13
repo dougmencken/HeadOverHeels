@@ -462,8 +462,9 @@ cd "${buildFolder}"
 
 gameInstallPath="${installPath}"
 
-[ -f src/Makefile ] && rm -v src/Makefile
-echo
+## [ -f src/Makefile ] && rm -v src/Makefile
+
+if [ ! -f src/Makefile ]; then
 
 LDFLAGS="-Wl,-rpath ${zlibinstallpath}/lib -Wl,-rpath ${libpnginstallpath}/lib -Wl,-rpath ${libogginstallpath}/lib -Wl,-rpath ${libvorbisinstallpath}/lib -Wl,-rpath ${tinyxml2installpath}/lib -Wl,-rpath ${allegro4installpath}/lib" \
 ./configure \
@@ -478,5 +479,6 @@ LDFLAGS="-Wl,-rpath ${zlibinstallpath}/lib -Wl,-rpath ${libpnginstallpath}/lib -
         --with-allegro-libs="${allegro4installpath}"/lib \
         --with-allegro-includes="${allegro4installpath}"/include
         ##--enable-debug=yes
+fi
 
 make && make install ##DESTDIR="${gameInstallPath}"
