@@ -5,7 +5,7 @@
 
 installPrefix="/game"
 
-if [ ! -f src/Makefile ]
+if [ ! -f source/Makefile ]
 then
         ## CXX="/usr/bin/g++ -fsanitize=address -fno-omit-frame-pointer" \
         ./configure --prefix=${installPrefix} --enable-debug=yes

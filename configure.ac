@@ -253,8 +253,8 @@ AC_SUBST([allegro_LIBS])
 
 AC_CONFIG_FILES([
         Makefile
-        src/Makefile
-        src/path_prefix.h
+        source/Makefile
+        source/path_prefix.h
         gamedata/Makefile
         gamedata/gfx/Makefile
         gamedata/gfx.2009/Makefile

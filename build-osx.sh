@@ -14,7 +14,7 @@ a4path="/opt/allegro-4.4.2"
 
 export PATH="$a4path"/bin:$PATH
 
-if [ ! -f src/Makefile ]
+if [ ! -f source/Makefile ]
 then
         LDFLAGS="-headerpad_max_install_names -L${a4path}/lib -L${a5path}/lib -L/opt/tinyxml2-6.2.0/lib -L/opt/ogg-vorbis/lib -L/opt/libpng-1.6.35/lib -L/opt/zlib-1.2.11/lib -L${pathToCompiler}/lib" \
         CPPFLAGS="-I/opt/zlib-1.2.11/include -I/opt/libpng-1.6.35/include -I/opt/tinyxml2-6.2.0/include -I/opt/ogg-vorbis/include -I${a4path}/include -I${a5path}/include" \
@@ -29,7 +29,7 @@ makeCOptions="-Wextra -Werror" # ="-Wall -Werror"
 
 time make -j2 CFLAGS="${makeCOptions}" CXXFLAGS="${makeCOptions}" && echo && make install DESTDIR="${installPath}"
 
-rm -f src/headoverheels
+rm -f source/headoverheels
 
 headoverheelsbin="${installPath}${installPrefix}"/bin/headoverheels
 if [ -f "${headoverheelsbin}" ]
@@ -48,7 +48,7 @@ then
         cp -r headoverheelsroot/game/share/headoverheels/* "${games}"/Head\ over\ Heels.app/Contents/Resources/
 
         if [ -x "$( command -v haxelib )" ]; then
-                cd src
+                cd source
                 rm -r -f obj
                 haxelib run hxcpp hxcpp-build.xml
                 [ -f headoverheels ] && mv headoverheels "${installPath}${installPrefix}"/bin/headoverheels.allegro4

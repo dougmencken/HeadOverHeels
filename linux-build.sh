@@ -462,9 +462,9 @@ cd "${buildFolder}"
 
 gameInstallPath="${installPath}"
 
-## [ -f src/Makefile ] && rm -v src/Makefile
+## [ -f source/Makefile ] && rm -v source/Makefile
 
-if [ ! -f src/Makefile ]; then
+if [ ! -f source/Makefile ]; then
 
 LDFLAGS="-Wl,-rpath ${zlibinstallpath}/lib -Wl,-rpath ${libpnginstallpath}/lib -Wl,-rpath ${libogginstallpath}/lib -Wl,-rpath ${libvorbisinstallpath}/lib -Wl,-rpath ${tinyxml2installpath}/lib -Wl,-rpath ${allegro4installpath}/lib" \
 ./configure \
