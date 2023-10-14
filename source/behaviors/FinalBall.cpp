@@ -42,7 +42,7 @@ bool FinalBall::update ()
                                 }
                                 else
                                 {
-                                        item->setCollisionDetector( false );
+                                        item->setIgnoreCollisions( true );
 
                                         item->metamorphInto( "bubbles", "vanishing final ball" );
                                         item->setBehaviorOf( "behavior of disappearance in time" );

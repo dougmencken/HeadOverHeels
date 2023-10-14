@@ -1,5 +1,6 @@
 
 #include "MapManager.hpp"
+
 #include "Isomot.hpp"
 #include "RoomBuilder.hpp"
 #include "PlayerItem.hpp"
@@ -379,15 +380,31 @@ Room* MapManager::rebuildRoom( Room* room )
 
                 // for each character entered this room
                 std::vector< PlayerItemPtr > charactersOnEntry = room->getCharactersWhoEnteredRoom ();
-                for ( std::vector< PlayerItemPtr >::const_iterator it = charactersOnEntry.begin (); it != charactersOnEntry.end (); )
-                {
-                        const PlayerItemPtr character = *it;
 
+        //#ifdef DEBUG
+                size_t howManyCharactersEntered = charactersOnEntry.size () ;
+                std::cout << "there " ;
+                if ( howManyCharactersEntered == 1 ) std::cout << "is " ;
+                else                                 std::cout << "are " ;
+                std::cout << howManyCharactersEntered << " character" ;
+                if ( howManyCharactersEntered != 1 ) std::cout << "s" ;
+                std::cout << " who entered room \"" << fileOfRoom << "\"" << std::endl ;
+        //#endif
+
+                for ( unsigned int i = 0 ; i < charactersOnEntry.size () ; )
+                {
+                        const PlayerItemPtr character = charactersOnEntry[ i ];
+
+                        if ( character == nilPointer )
+                                std::cerr << "**nil** character among those who entered room \"" << fileOfRoom << "\""
+                                                << " @ MapManager::rebuildRoom" << std::endl ;
+                        else
                         if ( character->getLabel() == "headoverheels" || character->getLives() > 0 )
                         {
-                        #ifdef DEBUG
-                                std::cout << "got character \"" << character->getLabel() << "\" who entered this room @ MapManager::rebuildRoom" << std::endl ;
-                        #endif
+                        //#ifdef DEBUG
+                                std::cout << "got character \"" << character->getLabel() << "\" who entered room \"" << fileOfRoom << "\""
+                                                << " @ MapManager::rebuildRoom" << std::endl ;
+                        //#endif
 
                                 // when the joined character splits, and then some simple character migrates to another room
                                 // and further the user via swapping changes back to the room of splitting, and loses a life there
@@ -412,9 +429,9 @@ Room* MapManager::rebuildRoom( Room* room )
                                                                             characterX, characterY, characterZ,
                                                                             characterOrientation, characterEntry );
 
-                                        // update the list of characters and rewind the iterator
+                                        // update the list of characters and rewind the loop
                                         charactersOnEntry = room->getCharactersWhoEnteredRoom ();
-                                        it = charactersOnEntry.begin ();
+                                        i = 0 ;
                                         continue ;
                                 }
 
@@ -433,7 +450,7 @@ Room* MapManager::rebuildRoom( Room* room )
                                         aliveCharacter->autoMoveOnEntry( entry );
                         }
 
-                        ++ it ; // next character
+                        ++ i ; // next character
                 }
 
                 roomsInPlay.erase( std::remove( roomsInPlay.begin (), roomsInPlay.end (), room ), roomsInPlay.end() );

@@ -133,7 +133,7 @@ void UserControlled::autoMove( PlayerItem & character )
 void UserControlled::displace( PlayerItem & character )
 {
         // this item is moved by another one
-        // when displacement couldn’t be performed due to collision then activity propagates to collided items
+        // when the displacement couldn’t be performed due to a collision then the activity propagates to the collided items
         if ( speedTimer->getValue() > character.getSpeed() )
         {
                 DisplaceKindOfActivity::getInstance().displace( this, &activity, true );
@@ -167,9 +167,9 @@ void UserControlled::fall( PlayerItem & character )
         {
                 if ( FallKindOfActivity::getInstance().fall( this ) )
                 {
-                        // change character’s image to frame of falling when there’s no collision yet
+                        // as long as there's no collision below
                         if ( character.canAdvanceTo( 0, 0, -1 ) )
-                        {
+                        {       // show images of falling character
                                 character.changeFrame( fallFrames[ character.getOrientation() ] );
                         }
                 }
@@ -434,8 +434,8 @@ void UserControlled::useHooter( PlayerItem & character )
                         Doughnut * behaviorOfDonut = dynamic_cast< Doughnut * >( donut->getBehavior() );
                         behaviorOfDonut->setCharacter( PlayerItemPtr( &character ) );
 
-                        // at first it shares the same position as the character so it does not detect collisions
-                        donut->setCollisionDetector( false );
+                        // initially the doughnut shares the same position with the character, therefore ignore collisions
+                        // COMMENT THIS AND THE GAME CRASHES WHAHA ///////////donut->setIgnoreCollisions( true );
 
                         character.getMediator()->getRoom()->addFreeItem( donut );
 

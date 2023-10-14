@@ -361,9 +361,11 @@ void Miniature::draw ()
         for ( std::vector< FreeItemPtr >::const_iterator fi = freeItemsInRoom.begin (); fi != freeItemsInRoom.end (); ++ fi )
         {
                 if ( *fi == nilPointer || ( *fi )->whichKindOfItem() == "player item" ) continue ;
-                const FreeItem& item = *( *fi ) ;
+                const FreeItem & item = *( *fi ) ;
 
-                const DescriptionOfItem* descriptionOfItem = item.getDescriptionOfItem();
+                const DescriptionOfItem * descriptionOfItem = item.getDescriptionOfItem () ;
+                if ( descriptionOfItem == nilPointer ) continue ;
+
                 std::string label = descriptionOfItem->getLabel();
 
                 // show tools

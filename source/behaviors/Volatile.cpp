@@ -1,5 +1,6 @@
 
 #include "Volatile.hpp"
+
 #include "Item.hpp"
 #include "FreeItem.hpp"
 #include "Room.hpp"
@@ -176,7 +177,7 @@ bool Volatile::update ()
 
                                 // morph into bubbles
 
-                                item->setCollisionDetector( false );
+                                item->setIgnoreCollisions( true );
 
                                 item->setHeight( 0 );
                                 item->metamorphInto( "bubbles", "vanishing volatile item" );

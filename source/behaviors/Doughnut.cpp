@@ -60,8 +60,8 @@ bool Doughnut::update ()
                 case Activity::MoveWest:
                         if ( speedTimer->getValue() > freeItem.getSpeed() )
                         {
-                                // look for collisions with items
-                                freeItem.setCollisionDetector( true );
+                                // look for collisions with other items
+                                freeItem.setIgnoreCollisions( false );
 
                                 if ( activity == Activity::MoveNorth ) {
                                         // -1, 0, 0 for collisions at north
@@ -80,10 +80,18 @@ bool Doughnut::update ()
                                 Mediator* mediator = freeItem.getMediator() ;
                                 bool collisionWithCharacter = ( mediator->collisionWithByLabel( this->character->getOriginalLabel() ) != nilPointer ) ;
 
+if ( mediator->isStackOfCollisionsEmpty() ) {
+        std::cout << "\"" << freeItem.getLabel () << "\" is not colliding with anything" << std::endl ;
+}
+if ( collisionWithCharacter ) {
+        std::cout << "\"" << freeItem.getLabel () << "\" is colliding with character"
+                << " \"" << this->character->getLabel () << "\" (\" " << this->character->getOriginalLabel () << " \")" << std::endl ;
+}
+
                                 // if no collisions or a collision with the character
                                 if ( mediator->isStackOfCollisionsEmpty() || collisionWithCharacter )
                                 {
-                                        freeItem.setCollisionDetector( false );
+                                        freeItem.setIgnoreCollisions( true );
 
                                         // move a doughnut
                                         MoveKindOfActivity::getInstance().move( this, &activity, false );

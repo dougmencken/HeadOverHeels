@@ -30,7 +30,8 @@ FreeItem::FreeItem( const DescriptionOfItem* description, int x, int y, int z, c
 
         freshBothProcessedImages ();
 
-        setCollisionDetector( true );
+        // look for collisions
+        setIgnoreCollisions( false );
 }
 
 FreeItem::FreeItem( const FreeItem& freeItem )

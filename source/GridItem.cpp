@@ -17,7 +17,8 @@ GridItem::GridItem( const DescriptionOfItem* description, int cx, int cy, int z,
         this->xYet = cx * getWidthX() ;
         this->yYet = ( cy + 1 ) * getWidthY() - 1 ;
 
-        setCollisionDetector( true );
+        // look for collisions
+        setIgnoreCollisions( false );
 }
 
 GridItem::~GridItem( )

@@ -19,7 +19,7 @@ namespace iso
 {
 
 /**
- * The ball of the final screen. It moves northwards and disappears when it collides
+ * The ball for the final scene. It moves northwards and disappears when collides
  */
 
 class FinalBall : public Behavior
@@ -35,9 +35,6 @@ public:
 
 private:
 
-       /**
-        * Timer for speed of movement
-        */
         autouniqueptr < Timer > speedTimer ;
 
 };

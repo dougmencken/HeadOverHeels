@@ -281,11 +281,12 @@ public:
         void setAnchor ( const std::string & item ) {  this->anchor = item ;  }
 
         /**
-         * Set item’s ability to detect collisions
+         * false to track if the item is colliding with something, true to ignore
          */
-        void setCollisionDetector ( bool detectThem ) {  collisionDetector = detectThem ;  }
+        void setIgnoreCollisions ( bool ignore ) {  ignoreCollisions = ignore ;  }
 
-        bool isCollisionDetector () const {  return collisionDetector ;  }
+        bool isIgnoringCollisions () const {  return ignoreCollisions ;  }
+        bool isNotIgnoringCollisions () const {  return ! ignoreCollisions ;  }
 
 private:
 
@@ -334,9 +335,9 @@ private:
         std::pair < int, int > offset ;
 
         /**
-         * Whether this item detects collisions
+         * Whether to ignore that this item collides with something
          */
-        bool collisionDetector ;
+        bool ignoreCollisions ;
 
         /**
          * Pictures of item

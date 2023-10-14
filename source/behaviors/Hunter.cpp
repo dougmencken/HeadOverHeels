@@ -363,8 +363,8 @@ bool Hunter::createFullBody()
                 newItem->setBehaviorOf( "behavior of hunter in four directions" );
 
                 // switch off collisions for this item
-                // otherwise it’s impossible to create full-bodied guard
-                thisItem.setCollisionDetector( false );
+                // otherwise it would be impossible to create a full-bodied guard
+                thisItem.setIgnoreCollisions( true );
 
                 thisItem.getMediator()->getRoom()->addFreeItem( newItem );
         }

@@ -717,19 +717,20 @@ void Mediator::maskFreeItem( FreeItem& freeItem )
         }
 }
 
-ItemPtr Mediator::findItemByUniqueName( const std::string& uniqueName )
+ItemPtr Mediator::findItemByUniqueName( const std::string & uniqueName )
 {
-        // first look for free item
-        for ( std::vector< FreeItemPtr >::iterator f = room->freeItems.begin (); f != room->freeItems.end (); ++ f )
+        // first look for a free item
+        for ( unsigned int f = 0 ; f < room->freeItems.size () ; ++ f )
         {
-                if ( *f != nilPointer && ( *f )->getUniqueName() == uniqueName )
+                FreeItemPtr item = room->freeItems[ f ];
+                if ( item != nilPointer && item->getUniqueName() == uniqueName )
                 {
-                        return ItemPtr( *f ) ;
+                        return ItemPtr( item ) ;
                 }
         }
 
-        // then look for grid item
-        for ( unsigned int column = 0; column < room->gridItems.size(); ++ column )
+        // then look for a grid item
+        for ( unsigned int column = 0; column < room->gridItems.size(); ++ column ) // two-dimensional
         {
                 for ( std::vector< GridItemPtr >::iterator g = room->gridItems[ column ].begin (); g != room->gridItems[ column ].end (); ++ g )
                 {
@@ -802,14 +803,14 @@ bool Mediator::lookForCollisionsOf( const std::string & uniqueNameOfItem )
 
         bool collisionFound = false;
 
-        if ( item->isCollisionDetector() )
+        if ( item->isNotIgnoringCollisions () )
         {
                 // traverse list of free items looking for collisions
                 for ( std::vector< FreeItemPtr >::iterator f = room->freeItems.begin (); f != room->freeItems.end (); ++ f )
                 {
                         const FreeItem& freeItem = *( *f ) ;
 
-                        if ( freeItem.getUniqueName() != item->getUniqueName() && freeItem.isCollisionDetector() )
+                        if ( freeItem.getUniqueName() != item->getUniqueName() && freeItem.isNotIgnoringCollisions () )
                         {
                                 if ( item->intersectsWith( freeItem ) )
                                 {
@@ -888,7 +889,7 @@ int Mediator::findHighestZ( const Item& item )
         {
                 const FreeItem& freeItem = *( *f ) ;
 
-                if ( freeItem.getUniqueName() != item.getUniqueName() && freeItem.isCollisionDetector() )
+                if ( freeItem.getUniqueName() != item.getUniqueName() && freeItem.isNotIgnoringCollisions () )
                 {
                         // look for intersection on X and Y with higher Z
                         if ( ( freeItem.getX() + static_cast< int >( freeItem.getWidthX() ) > item.getX() ) &&

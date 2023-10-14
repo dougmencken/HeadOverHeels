@@ -157,7 +157,7 @@ bool Special::update ()
 
                                 if ( item->getOriginalLabel() != "crown" ) // no bubbles for crowns
                                 {
-                                        item->setCollisionDetector( false );
+                                        item->setIgnoreCollisions( true );
 
                                         item->setHeight( 0 );
                                         item->metamorphInto( "bubbles", "vanishing bonus item" );
