@@ -427,7 +427,7 @@ void UserControlled::useHooter( PlayerItem & character )
                                 hooterDoughnut,
                                 character.getX(), character.getY(),
                                 z < 0 ? 0 : z,
-                                "none" ) );
+                                character.getOrientation () ) );
 
                         donut->setBehaviorOf( "behavior of freezing doughnut" );
 
@@ -435,7 +435,8 @@ void UserControlled::useHooter( PlayerItem & character )
                         behaviorOfDonut->setCharacter( PlayerItemPtr( &character ) );
 
                         // initially the doughnut shares the same position with the character, therefore ignore collisions
-                        // COMMENT THIS AND THE GAME CRASHES WHAHA ///////////donut->setIgnoreCollisions( true );
+                        // COMMENT THIS AND THE GAME CRASHES WHAHA ///////////
+                        donut->setIgnoreCollisions( true );
 
                         character.getMediator()->getRoom()->addFreeItem( donut );
 

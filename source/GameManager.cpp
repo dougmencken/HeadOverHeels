@@ -585,7 +585,7 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                 const unsigned short widthOfChar = 8 ; // letters of allegro’s font are 8 x 7
                 const unsigned short deltaYtext = 36 ;
 
-                if ( isomot.getMapManager().getActiveRoom() != nilPointer )
+                if ( isomot.doesCameraFollowCharacter () && isomot.getMapManager().getActiveRoom() != nilPointer )
                 {
                         Color backgroundColor = Color::blackColor();
                         if ( charactersFly() ) backgroundColor = Color::byName( "dark blue" );

@@ -212,7 +212,7 @@ public:
          */
         void setOrientation ( const std::string & way ) {  this->orientation = way ;  }
 
-        std::string getOrientation () const {  return orientation ;  }
+        const std::string & getOrientation () const {  return orientation ;  }
 
         size_t firstFrame () const {  return firstFrameForOrientation( orientation ) ;  }
 
