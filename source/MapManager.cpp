@@ -51,7 +51,7 @@ void MapManager::readMap ( const std::string& fileName )
         tinyxml2::XMLError result = mapXml.LoadFile( fileName.c_str () );
         if ( result != tinyxml2::XML_SUCCESS )
         {
-                std::cerr << "can’t load file \"" << fileName << "\" with map of game" << std::endl ;
+                std::cerr << "can’t load file \"" << fileName << "\" with the map of the game" << std::endl ;
                 return;
         }
 
@@ -72,7 +72,7 @@ void MapManager::readMap ( const std::string& fileName )
         {
                 ++ howManyRooms ;
         }
-        std::cout << "map of game consists of " << howManyRooms << " rooms" << std::endl ;
+        std::cout << "the map of the game consists of the " << howManyRooms << " rooms" << std::endl ;
 
         unsigned int roomNth = 0 ;
         for ( tinyxml2::XMLElement* room = root->FirstChildElement( "room" ) ;

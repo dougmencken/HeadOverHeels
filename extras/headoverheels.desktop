@@ -1,8 +1,7 @@
 [Desktop Entry]
 Name=headoverheels
 GenericName=Head over Heels
-Comment=Solid 3d Game
-Comment[hu]=Klasszikus szobás játék
+Comment=Classic isometric game starring two characters
 Exec=headoverheels
 Icon=headoverheels
 StartupNotify=false

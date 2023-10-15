@@ -43,6 +43,8 @@ public:
 
         bool saveGame ( const std::string & file ) ;
 
+        static const std::string Current_Save_Version () {  return "2" ;  }
+
 private:
 
         void continueSavedGame ( tinyxml2::XMLElement * characters ) ;

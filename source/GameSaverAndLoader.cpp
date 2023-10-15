@@ -37,21 +37,36 @@ void GameSaverAndLoader::ateFish( const std::string& room, const std::string& na
         catchFishWay = orientation ;
 }
 
-bool GameSaverAndLoader::loadGame( const std::string& file )
+bool GameSaverAndLoader::loadGame( const std::string & file )
 {
         std::cout << "load game \"" << file << "\"" << std::endl ;
 
         tinyxml2::XMLDocument saveXml;
         tinyxml2::XMLError result = saveXml.LoadFile( file.c_str () );
-        if ( result != tinyxml2::XML_SUCCESS )
-        {
+        if ( result != tinyxml2::XML_SUCCESS ) {
                 std::cerr << "can’t load file \"" << file << "\" with saved game" << std::endl ;
-                return false;
+                return false ;
         }
 
         GameManager & gameManager = game::GameManager::getInstance () ;
 
         tinyxml2::XMLElement* root = saveXml.FirstChildElement( "savegame" );
+
+        const char * version = root->Attribute( "version" );
+        if ( version == nilPointer ) {
+                std::cout << "the saved game file \"" << file << "\" has no \'version\' attribute"
+                                << ", hence its version is very old" << std::endl ;
+                return false ;
+        }
+
+        std::string versionOfSave( version );
+        std::cout << "the version of the saved game file \"" << file << "\" is " << versionOfSave ;
+        if ( versionOfSave == GameSaverAndLoader::Current_Save_Version () ) {
+                std::cout << std::endl ;
+        } else {
+                std::cout << ", which is unknown" << std::endl ;
+                return false ;
+        }
 
         // visited rooms
 
@@ -123,7 +138,7 @@ bool GameSaverAndLoader::loadGame( const std::string& file )
 
         // characters
 
-        continueSavedGame( root->FirstChildElement( "players" ) );
+        continueSavedGame( root->FirstChildElement( "starring" ) );
 
         return true;
 }
@@ -138,25 +153,25 @@ void GameSaverAndLoader::continueSavedGame ( tinyxml2::XMLElement* characters )
         {
                 GameInfo & gameInfo = gameManager.getGameInfo () ;
 
-                for ( tinyxml2::XMLElement* player = characters->FirstChildElement( "player" ) ;
-                                player != nilPointer ;
-                                player = player->NextSiblingElement( "player" ) )
+                for ( tinyxml2::XMLElement* character = characters->FirstChildElement( "character" ) ;
+                                character != nilPointer ;
+                                character = character->NextSiblingElement( "character" ) )
                 {
-                        std::string label = player->Attribute( "label" );
+                        std::string label = character->Attribute( "label" );
 
                         bool isActiveCharacter = false ;
-                        tinyxml2::XMLElement* active = player->FirstChildElement( "active" );
+                        tinyxml2::XMLElement* active = character->FirstChildElement( "active" );
                         if ( active != nilPointer && std::string( active->FirstChild()->ToText()->Value() ) == "true" )
                                 isActiveCharacter = true;
 
                         std::string room = "no room" ;
-                        tinyxml2::XMLElement* roomFile = player->FirstChildElement( "room" );
+                        tinyxml2::XMLElement* roomFile = character->FirstChildElement( "room" );
                         if ( roomFile != nilPointer )
                                 room = roomFile->FirstChild()->ToText()->Value();
 
-                        tinyxml2::XMLElement* xElement = player->FirstChildElement( "x" );
-                        tinyxml2::XMLElement* yElement = player->FirstChildElement( "y" );
-                        tinyxml2::XMLElement* zElement = player->FirstChildElement( "z" );
+                        tinyxml2::XMLElement* xElement = character->FirstChildElement( "x" );
+                        tinyxml2::XMLElement* yElement = character->FirstChildElement( "y" );
+                        tinyxml2::XMLElement* zElement = character->FirstChildElement( "z" );
                         int x = 0 ;
                         int y = 0 ;
                         int z = 0 ;
@@ -168,33 +183,32 @@ void GameSaverAndLoader::continueSavedGame ( tinyxml2::XMLElement* characters )
                                 z = std::atoi( zElement->FirstChild()->ToText()->Value() );
 
                         unsigned int howManyLives = 0 ;
-                        tinyxml2::XMLElement* lives = player->FirstChildElement( "lives" );
+                        tinyxml2::XMLElement* lives = character->FirstChildElement( "lives" );
                         if ( lives != nilPointer )
                                 howManyLives = std::atoi( lives->FirstChild()->ToText()->Value() );
 
                         std::string orientationString = "nowhere" ;
-                        tinyxml2::XMLElement* orientation = player->FirstChildElement( "orientation" );
-                        if ( orientation == nilPointer ) orientation = player->FirstChildElement( "direction" );
+                        tinyxml2::XMLElement* orientation = character->FirstChildElement( "orientation" );
                         if ( orientation != nilPointer )
                                 orientationString = orientation->FirstChild()->ToText()->Value() ;
 
                         std::string entryString = "just wait" ;
-                        tinyxml2::XMLElement* entry = player->FirstChildElement( "entry" );
+                        tinyxml2::XMLElement* entry = character->FirstChildElement( "entry" );
                         if ( entry != nilPointer )
                                 entryString = entry->FirstChild()->ToText()->Value() ;
 
                         bool hasHorn = false ;
-                        tinyxml2::XMLElement* horn = player->FirstChildElement( "hasHorn" );
+                        tinyxml2::XMLElement* horn = character->FirstChildElement( "hasHorn" );
                         if ( horn != nilPointer && std::string( horn->FirstChild()->ToText()->Value() ) == "yes" )
                                 hasHorn = true;
 
                         bool hasHandbag = false ;
-                        tinyxml2::XMLElement* handbag = player->FirstChildElement( "hasHandbag" );
+                        tinyxml2::XMLElement* handbag = character->FirstChildElement( "hasHandbag" );
                         if ( handbag != nilPointer && std::string( handbag->FirstChild()->ToText()->Value() ) == "yes" )
                                 hasHandbag = true;
 
                         unsigned int howManyDoughnuts = 0 ;
-                        tinyxml2::XMLElement* donuts = player->FirstChildElement( "donuts" );
+                        tinyxml2::XMLElement* donuts = character->FirstChildElement( "donuts" );
                         if ( donuts != nilPointer )
                                 howManyDoughnuts = std::atoi( donuts->FirstChild()->ToText()->Value() );
 
@@ -259,7 +273,8 @@ bool GameSaverAndLoader::saveGame( const std::string& file )
 
         tinyxml2::XMLDocument saveXml;
 
-        tinyxml2::XMLNode * root = saveXml.NewElement( "savegame" );
+        tinyxml2::XMLElement * root = saveXml.NewElement( "savegame" );
+        root->SetAttribute( "version", GameSaverAndLoader::Current_Save_Version ().c_str () );
         saveXml.InsertFirstChild( root );
 
         // rooms visited
@@ -322,13 +337,13 @@ bool GameSaverAndLoader::saveGame( const std::string& file )
 
         // characters
 
-        tinyxml2::XMLElement* players = saveXml.NewElement( "players" ) ;
+        tinyxml2::XMLElement* characters = saveXml.NewElement( "starring" ) ;
 
         // active character
         {
                 std::string whoPlaysYet = nameOfCharacterWhoCaughtTheFish;
 
-                tinyxml2::XMLElement* activeCharacter = saveXml.NewElement( "player" );
+                tinyxml2::XMLElement* activeCharacter = saveXml.NewElement( "character" );
                 activeCharacter->SetAttribute( "label", whoPlaysYet.c_str () );
 
                 tinyxml2::XMLElement* active = saveXml.NewElement( "active" );
@@ -393,7 +408,7 @@ bool GameSaverAndLoader::saveGame( const std::string& file )
                         activeCharacter->InsertEndChild( handbag );
                 }
 
-                players->InsertEndChild( activeCharacter );
+                characters->InsertEndChild( activeCharacter );
         }
 
         // inactive character, if any
@@ -434,7 +449,7 @@ bool GameSaverAndLoader::saveGame( const std::string& file )
 
                 if ( characterToo != nilPointer )
                 {
-                        tinyxml2::XMLElement* inactiveCharacter = saveXml.NewElement( "player" );
+                        tinyxml2::XMLElement* inactiveCharacter = saveXml.NewElement( "character" );
                         inactiveCharacter->SetAttribute( "label", whoWaitsToPlay.c_str () );
 
                         tinyxml2::XMLElement* roomFile = saveXml.NewElement( "room" );
@@ -485,11 +500,11 @@ bool GameSaverAndLoader::saveGame( const std::string& file )
                                 inactiveCharacter->InsertEndChild( handbag );
                         }
 
-                        players->InsertEndChild( inactiveCharacter );
+                        characters->InsertEndChild( inactiveCharacter );
                 }
         }
 
-        root->InsertEndChild( players );
+        root->InsertEndChild( characters );
 
         tinyxml2::XMLError result = saveXml.SaveFile( file.c_str () );
         if ( result != tinyxml2::XML_SUCCESS )
