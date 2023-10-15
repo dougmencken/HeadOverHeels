@@ -77,7 +77,7 @@ Room::Room( const std::string& roomFile, const std::string& scenery,
                 this->floorTiles.push_back( nilPointer );
         }
 
-        // create sequence of drawing, as example for 8 x 8 grid
+        // create the sequence of drawing, as example for the 8 x 8 grid
         //
         //                00
         //              02  01
@@ -95,7 +95,7 @@ Room::Room( const std::string& roomFile, const std::string& scenery,
         //              62  61
         //                63
         //
-        // sequence of drawing is
+        // the sequence of drawing is
         //
         //                00
         //              01  08
@@ -150,8 +150,8 @@ Room::~Room()
         std::for_each( wallX.begin (), wallX.end (), DeleteIt() );
         std::for_each( wallY.begin (), wallY.end (), DeleteIt() );
 
-        // bin sequence of drawing
-        delete drawSequence;
+        // bin the sequence of drawing
+        delete [] drawSequence ;
 
         delete camera;
 

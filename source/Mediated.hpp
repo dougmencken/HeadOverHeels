@@ -29,22 +29,14 @@ public:
 protected:
 
        /**
-        * Mediador entre los elementos pertenecientes a una sala
+        * Intermediary between the elements of a single room
         */
         Mediator * mediator ;
 
 public:
 
-       /**
-        * Establece el mediador entre los elementos pertenecientes a la sala
-        * @param mediator El mediador de la sala
-        */
         void setMediator ( Mediator* mediator ) {  this->mediator = mediator ;  }
 
-       /**
-        * Mediador entre los elementos pertenecientes a la sala
-        * @return mediator El mediador de la sala
-        */
         Mediator* getMediator () const {  return this->mediator ;  }
 
 };
