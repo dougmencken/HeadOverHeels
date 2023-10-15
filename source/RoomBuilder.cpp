@@ -784,7 +784,7 @@ FreeItemPtr RoomBuilder::buildFreeItem( tinyxml2::XMLElement* item, Room* room )
                 // more data for behavior of elevator
                 if ( behaviorOfItem == "behavior of elevator" )
                 {
-                        Elevator* behaviorOfElevator = dynamic_cast< Elevator* >( freeItem->getBehavior() );
+                        Elevator* behaviorOfElevator = dynamic_cast< Elevator* >( freeItem->getBehavior().get () );
 
                         tinyxml2::XMLElement* extra = item->FirstChildElement( "extra" );
                         if ( extra != nilPointer )

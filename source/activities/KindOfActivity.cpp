@@ -21,11 +21,11 @@ KindOfActivity::~KindOfActivity( )
 
 }
 
-void KindOfActivity::propagateActivityToAdjacentItems( Item& sender, const ActivityOfItem& activity )
+void KindOfActivity::propagateActivityToAdjacentItems( Item & sender, const ActivityOfItem & activity )
 {
         Mediator* mediator = sender.getMediator();
 
-        // as long as there are items collided with sender
+        // as long as there are items collided with the sender
         while ( ! mediator->isStackOfCollisionsEmpty() )
         {
                 std::string nameOfCollision = mediator->popCollision();
@@ -72,7 +72,7 @@ void KindOfActivity::propagateActivityToAdjacentItems( Item& sender, const Activ
                                                                 std::cout << "player just met mortal item \"" << itemMeetsSender->getLabel() << "\"" << std::endl ;
 
                                                                 sender.getBehavior()->changeActivityOfItem( Activity::MeetMortalItem );
-                                                                itemMeetsSender->getBehavior()->changeActivityOfItem( activity, sender );
+                                                                itemMeetsSender->getBehavior()->changeActivityOfItem( activity, ItemPtr( &sender ) );
                                                         }
                                                         /* else std::cout << "the inviolability granted when the player met item \"" << itemMeetsSender->getLabel() << "\"" << std::endl ; */
                                                 }
@@ -82,7 +82,7 @@ void KindOfActivity::propagateActivityToAdjacentItems( Item& sender, const Activ
                                         {
                                                 if ( itemMeetsSender->getBehavior()->getActivityOfItem() != Activity::Vanish )
                                                 {
-                                                        itemMeetsSender->getBehavior()->changeActivityOfItem( activity, sender );
+                                                        itemMeetsSender->getBehavior()->changeActivityOfItem( activity, ItemPtr( &sender ) );
                                                 }
                                         }
                                 }
@@ -208,7 +208,7 @@ void KindOfActivity::propagateActivityToItemsAbove( Item& sender, const Activity
                                                                                 currentActivity != Activity::DisplaceEast &&
                                                                                 currentActivity != Activity::DisplaceWest )
                                                                         {
-                                                                                freeItemAbove.getBehavior()->changeActivityOfItem( activity, freeItemAbove );
+                                                                                freeItemAbove.getBehavior()->changeActivityOfItem( activity, ItemPtr( &freeItemAbove ) );
                                                                         }
                                                                 }
                                                         }

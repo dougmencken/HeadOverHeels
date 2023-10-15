@@ -266,7 +266,7 @@ void Mediator::wantShadowFromGridItem( const GridItem& item )
                         gridItem.freshProcessedImage();
                         gridItem.setWantShadow( true );
 
-                        ++g ;
+                        ++ g ;
                 }
         }
 
@@ -800,77 +800,76 @@ bool Mediator::lookForCollisionsOf( const std::string & uniqueNameOfItem )
 {
         const ItemPtr item = findItemByUniqueName( uniqueNameOfItem ) ;
         if ( item == nilPointer ) return false ;
+        if ( item->isIgnoringCollisions () ) return false ;
 
         bool collisionFound = false;
 
-        if ( item->isNotIgnoringCollisions () )
+        // traverse the list of free items looking for collisions
+        for ( std::vector< FreeItemPtr >::iterator f = room->freeItems.begin (); f != room->freeItems.end (); ++ f )
         {
-                // traverse list of free items looking for collisions
-                for ( std::vector< FreeItemPtr >::iterator f = room->freeItems.begin (); f != room->freeItems.end (); ++ f )
-                {
-                        const FreeItem& freeItem = *( *f ) ;
+                const FreeItem& freeItem = *( *f ) ;
 
-                        if ( freeItem.getUniqueName() != item->getUniqueName() && freeItem.isNotIgnoringCollisions () )
+                if ( freeItem.getUniqueName() != item->getUniqueName() && freeItem.isNotIgnoringCollisions () )
+                {
+                        if ( item->intersectsWith( freeItem ) )
                         {
-                                if ( item->intersectsWith( freeItem ) )
+                                collisions.push_back( freeItem.getUniqueName() );
+                                collisionFound = true;
+                        }
+                }
+        }
+
+        // for a grid item
+        if ( item->whichKindOfItem() == "grid item" )
+        {
+                int column = dynamic_cast< GridItem& >( *item ).getColumnOfGrid() ;
+
+                // scroll through lists of grid items looking for collisions
+                for ( std::vector< GridItemPtr >::iterator g = room->gridItems[ column ].begin ();
+                                g != room->gridItems[ column ].end (); ++ g )
+                {
+                        const GridItem& gridItem = *( *g ) ;
+
+                        if ( gridItem.getUniqueName() != item->getUniqueName() )
+                        {
+                                if ( item->intersectsWith( gridItem ) )
                                 {
-                                        collisions.push_back( freeItem.getUniqueName() );
+                                        collisions.push_back( gridItem.getUniqueName() );
                                         collisionFound = true;
                                 }
                         }
                 }
+        }
+        // for a free item
+        else if ( item->whichKindOfItem() == "free item" || item->whichKindOfItem() == "player item" )
+        {
+                int xStart = item->getX() / room->tileSize;
+                int xEnd = ( item->getX() + item->getWidthX() - 1 ) / room->tileSize + 1;
+                int yStart = ( item->getY() - item->getWidthY() + 1 ) / room->tileSize;
+                int yEnd = item->getY() / room->tileSize + 1;
 
-                // for grid item
-                if ( item->whichKindOfItem() == "grid item" )
+                // in case when item collides with some wall
+                if ( xStart < 0 ) xStart = 0;
+                if ( xEnd > static_cast< int >( room->getTilesX () ) ) xEnd = room->getTilesX();
+                if ( yStart < 0 ) yStart = 0;
+                if ( yEnd > static_cast< int >( room->getTilesY () ) ) yEnd = room->getTilesY();
+
+                // look for collisions in the range of columns where the item is
+                for ( int i = xStart; i < xEnd; i++ )
                 {
-                        int column = dynamic_cast< GridItem& >( *item ).getColumnOfGrid() ;
-
-                        // scroll through lists of grid items looking for collisions
-                        for ( std::vector< GridItemPtr >::iterator g = room->gridItems[ column ].begin (); g != room->gridItems[ column ].end (); ++ g )
+                        for ( int j = yStart; j < yEnd; j++ )
                         {
-                                const GridItem& gridItem = *( *g ) ;
+                                std::vector< GridItemPtr > items = room->gridItems[ room->getTilesX() * j + i ] ;
 
-                                if ( gridItem.getUniqueName() != item->getUniqueName() )
+                                for ( std::vector< GridItemPtr >::const_iterator g = items.begin (); g != items.end (); ++ g )
                                 {
-                                        if ( item->intersectsWith( gridItem ) )
+                                        const GridItem& gridItem = *( *g ) ;
+
+                                        if ( ( item->getZ() < gridItem.getZ() + static_cast< int >( gridItem.getHeight() ) ) &&
+                                                ( gridItem.getZ() < item->getZ() + static_cast< int >( item->getHeight() ) ) )
                                         {
                                                 collisions.push_back( gridItem.getUniqueName() );
                                                 collisionFound = true;
-                                        }
-                                }
-                        }
-                }
-                // for free item
-                else if ( item->whichKindOfItem() == "free item" || item->whichKindOfItem() == "player item" )
-                {
-                        int xStart = item->getX() / room->tileSize;
-                        int xEnd = ( item->getX() + item->getWidthX() - 1 ) / room->tileSize + 1;
-                        int yStart = ( item->getY() - item->getWidthY() + 1 ) / room->tileSize;
-                        int yEnd = item->getY() / room->tileSize + 1;
-
-                        // in case when item collides with some wall
-                        if ( xStart < 0 ) xStart = 0;
-                        if ( xEnd > static_cast< int >( room->getTilesX () ) ) xEnd = room->getTilesX();
-                        if ( yStart < 0 ) yStart = 0;
-                        if ( yEnd > static_cast< int >( room->getTilesY () ) ) yEnd = room->getTilesY();
-
-                        // look for collisions in range of columns where item is
-                        for ( int i = xStart; i < xEnd; i++ )
-                        {
-                                for ( int j = yStart; j < yEnd; j++ )
-                                {
-                                        std::vector< GridItemPtr > items = room->gridItems[ room->getTilesX() * j + i ] ;
-
-                                        for ( std::vector< GridItemPtr >::const_iterator g = items.begin (); g != items.end (); ++g )
-                                        {
-                                                const GridItem& gridItem = *( *g ) ;
-
-                                                if ( ( item->getZ() < gridItem.getZ() + static_cast< int >( gridItem.getHeight() ) ) &&
-                                                        ( gridItem.getZ() < item->getZ() + static_cast< int >( item->getHeight() ) ) )
-                                                {
-                                                        collisions.push_back( gridItem.getUniqueName() );
-                                                        collisionFound = true;
-                                                }
                                         }
                                 }
                         }
@@ -884,10 +883,11 @@ int Mediator::findHighestZ( const Item& item )
 {
         int z = 0 ;
 
-        // go thru list of free items looking for highest in column
-        for ( std::vector< FreeItemPtr >::const_iterator f = room->freeItems.begin (); f != room->freeItems.end (); ++f )
+        // go thru the list of free items looking for the highest in column
+        for ( std::vector< FreeItemPtr >::const_iterator f = room->freeItems.begin ();
+                        f != room->freeItems.end (); ++ f )
         {
-                const FreeItem& freeItem = *( *f ) ;
+                const FreeItem & freeItem = *( *f ) ;
 
                 if ( freeItem.getUniqueName() != item.getUniqueName() && freeItem.isNotIgnoringCollisions () )
                 {
@@ -908,9 +908,10 @@ int Mediator::findHighestZ( const Item& item )
                 int column = dynamic_cast< const GridItem& >( item ).getColumnOfGrid ();
 
                 // look for highest Z in the column
-                for ( std::vector< GridItemPtr >::const_iterator g = room->gridItems[ column ].begin (); g != room->gridItems[ column ].end (); ++g )
+                for ( std::vector< GridItemPtr >::const_iterator g = room->gridItems[ column ].begin ();
+                                g != room->gridItems[ column ].end (); ++ g )
                 {
-                        const GridItem& gridItem = *( *g ) ;
+                        const GridItem & gridItem = *( *g ) ;
 
                         if ( gridItem.getZ() + static_cast< int >( gridItem.getHeight() ) > z )
                         {
@@ -934,7 +935,8 @@ int Mediator::findHighestZ( const Item& item )
                         for ( int j = yStart; j < yEnd; j++ )
                         {
                                 int column = room->getTilesX() * j + i ;
-                                for ( std::vector< GridItemPtr >::const_iterator g = room->gridItems[ column ].begin (); g != room->gridItems[ column ].end (); ++g )
+                                for ( std::vector< GridItemPtr >::const_iterator g = room->gridItems[ column ].begin ();
+                                                g != room->gridItems[ column ].end (); ++ g )
                                 {
                                         const GridItem& gridItem = *( *g ) ;
 
@@ -1163,7 +1165,8 @@ void Mediator::toggleSwitchInRoom ()
         this->switchInRoomIsOn = ! this->switchInRoomIsOn ;
 
         // look for volatile and mortal free items to freeze them
-        for ( std::vector< FreeItemPtr >::const_iterator f = room->freeItems.begin (); f != room->freeItems.end (); ++f )
+        for ( std::vector< FreeItemPtr >::const_iterator f = room->freeItems.begin ();
+                        f != room->freeItems.end (); ++ f )
         {
                 const FreeItem& freeItem = *( *f ) ;
 
@@ -1185,7 +1188,8 @@ void Mediator::toggleSwitchInRoom ()
         // look for volatile grid items to freeze them
         for ( unsigned int column = 0; column < room->gridItems.size(); ++ column )
         {
-                for ( std::vector< GridItemPtr >::const_iterator g = room->gridItems[ column ].begin (); g != room->gridItems[ column ].end (); ++g )
+                for ( std::vector< GridItemPtr >::const_iterator g = room->gridItems[ column ].begin ();
+                                g != room->gridItems[ column ].end (); ++ g )
                 {
                         const GridItem& gridItem = *( *g ) ;
 

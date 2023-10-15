@@ -84,10 +84,10 @@ public:
         void changeOrientation ( const std::string & way ) ;
 
         /**
-         * Change current frame for item. Change of frames is usually done via change of orientation
-         * or via looping in sequence of animation. However there’re some cases when it’s necessary
-         * to change frames manually. As example, in behavior of trampoline one frame is for rest
-         * and another is for fold
+         * Change the current frame for this item. Frames usually change when an orientation changes
+         * or when looping in a sequence of animation. However there’re some cases when frames
+         * change manually. As example, in the behavior of trampoline the one frame is for rest
+         * and the other is for fold
          */
         void changeFrame ( size_t newFrame ) ;
 
@@ -131,12 +131,9 @@ public:
 
         bool doGraphicsOverlapAt ( const Item & item, std::pair < int, int > offset ) const ;
 
-        /**
-         * @param behavior Name of item’s behavior
-         */
-        void setBehaviorOf ( const std::string & behavior ) ;
+        void setBehaviorOf ( const std::string & nameOfBehavior ) ;
 
-        Behavior * getBehavior () const {  return behavior ;  }
+        const autouniqueptr< Behavior > & getBehavior () const {  return behavior ;  }
 
         /**
          * Set animation going from first to last frame, which is by default
@@ -357,7 +354,7 @@ private:
         /**
          * Behavior of item
          */
-        Behavior * behavior ;
+        autouniqueptr< Behavior > behavior ;
 
         /**
          * Unique name of item below this one, when anchor moves item above it moves too
@@ -387,7 +384,7 @@ protected:
 
 };
 
-typedef safeptr < Item > ItemPtr ;
+typedef multiptr < Item > ItemPtr ;
 
 }
 

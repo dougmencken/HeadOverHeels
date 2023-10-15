@@ -118,7 +118,7 @@ public:
 
 };
 
-typedef safeptr < Door > DoorPtr ;
+typedef multiptr < Door > DoorPtr ;
 
 }
 

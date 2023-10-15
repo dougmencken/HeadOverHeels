@@ -131,6 +131,8 @@ headoverheels_SOURCES = main.cpp \
 			activities/MoveKindOfActivity.hpp \
 			behaviors/Behavior.cpp \
 			behaviors/Behavior.hpp \
+			behaviors/CreatorOfBehaviors.cpp \
+			behaviors/CreatorOfBehaviors.hpp \
 			behaviors/ConveyorBelt.cpp \
 			behaviors/ConveyorBelt.hpp \
 			behaviors/Detector.cpp \

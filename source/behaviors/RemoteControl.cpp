@@ -1,5 +1,6 @@
 
 #include "RemoteControl.hpp"
+
 #include "MoveKindOfActivity.hpp"
 #include "DisplaceKindOfActivity.hpp"
 #include "FallKindOfActivity.hpp"
@@ -131,7 +132,7 @@ bool RemoteControl::update ()
                                                         ;
                                         }
 
-                                        dynamic_cast< RemoteControl * >( controlledItem->getBehavior() )->changeActivityOfItem( motionActivity );
+                                        dynamic_cast< RemoteControl * >( controlledItem->getBehavior().get () )->changeActivityOfItem( motionActivity );
                                         activity = Activity::Wait;
                                 }
                         }

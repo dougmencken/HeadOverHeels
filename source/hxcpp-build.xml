@@ -82,6 +82,7 @@
         <file name="behaviors/UserControlled.cpp" />
         <file name="behaviors/Volatile.cpp" />
         <file name="behaviors/Behavior.cpp" />
+        <file name="behaviors/CreatorOfBehaviors.cpp" />
         <file name="gui/Font.cpp" />
         <file name="gui/GuiManager.cpp" />
         <file name="gui/PictureWidget.cpp" />

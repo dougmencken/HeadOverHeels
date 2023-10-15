@@ -91,7 +91,7 @@ protected:
 
 };
 
-typedef safeptr < GridItem > GridItemPtr ;
+typedef multiptr < GridItem > GridItemPtr ;
 
 }
 

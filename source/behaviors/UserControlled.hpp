@@ -37,13 +37,7 @@ public:
         virtual ~UserControlled( ) ;
 
        /**
-        * Updates the character’s behavior in each cycle
-        * @return false if the character is dead after this update, true otherwise
-        */
-        virtual bool update () = 0 ;
-
-       /**
-        * Updates the character’s behavior by the user commands
+        * Updates the character's behavior by the user controls
         */
         virtual void behave () = 0 ;
 

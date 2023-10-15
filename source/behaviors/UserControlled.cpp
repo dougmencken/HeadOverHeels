@@ -431,7 +431,7 @@ void UserControlled::useHooter( PlayerItem & character )
 
                         donut->setBehaviorOf( "behavior of freezing doughnut" );
 
-                        Doughnut * behaviorOfDonut = dynamic_cast< Doughnut * >( donut->getBehavior() );
+                        Doughnut * behaviorOfDonut = dynamic_cast< Doughnut * >( donut->getBehavior().get () );
                         behaviorOfDonut->setCharacter( PlayerItemPtr( &character ) );
 
                         // initially the doughnut shares the same position with the character, therefore ignore collisions

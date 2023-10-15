@@ -83,13 +83,13 @@ public:
 
 private:
 
-        safeptr < allegro::Pict > picture ;
+        multiptr < allegro::Pict > picture ;
 
         std::string name ;
 
 } ;
 
-typedef safeptr < Picture > PicturePtr ;
+typedef multiptr < Picture > PicturePtr ;
 
 
 #endif

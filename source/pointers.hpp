@@ -97,7 +97,7 @@ private:
 
 
 template < typename Type >
-class safeptr
+class multiptr
 {
 
 private:
@@ -126,36 +126,36 @@ private:
 
 public:
 
-        safeptr( ) : pointer( nilPointer )
+        multiptr( ) : pointer( nilPointer )
         {
                 // don’t count references to 0
 
-                IF_DEBUG_POINTERS( prettyprint( "/* constructor */ safeptr( )", util::toStringWithOrdinalSuffix( countreferences() ) + " reference to " + util::pointer2string( pointer ) ) )
+                IF_DEBUG_POINTERS( prettyprint( "/* constructor */ multiptr( )", util::toStringWithOrdinalSuffix( countreferences() ) + " reference to " + util::pointer2string( pointer ) ) )
         }
 
-        explicit safeptr( Type * ptr ) : pointer( ptr )
+        explicit multiptr( Type * ptr ) : pointer( ptr )
         {
                 addreference();
 
-                IF_DEBUG_POINTERS( prettyprint( "/* constructor */ safeptr( TYPE * )", util::toStringWithOrdinalSuffix( countreferences() ) + " reference to " + util::pointer2string( pointer ) ) )
+                IF_DEBUG_POINTERS( prettyprint( "/* constructor */ multiptr( TYPE * )", util::toStringWithOrdinalSuffix( countreferences() ) + " reference to " + util::pointer2string( pointer ) ) )
         }
 
-        safeptr( const safeptr < Type > & copy ) : pointer( copy.pointer )
+        multiptr( const multiptr < Type > & copy ) : pointer( copy.pointer )
         {
                 addreference();
 
-                IF_DEBUG_POINTERS( prettyprint( "/* copy constructor */ safeptr( const safeptr < TYPE > & )", util::toStringWithOrdinalSuffix( countreferences() ) + " reference to " + util::pointer2string( pointer ) ) )
+                IF_DEBUG_POINTERS( prettyprint( "/* copy constructor */ multiptr( const multiptr < TYPE > & )", util::toStringWithOrdinalSuffix( countreferences() ) + " reference to " + util::pointer2string( pointer ) ) )
         }
 
         template < typename ParentType >
-        safeptr( const safeptr < ParentType > & copy ) : pointer( copy.getptr() )
+        multiptr( const multiptr < ParentType > & copy ) : pointer( copy.getptr() )
         {
                 addreference();
 
-                IF_DEBUG_POINTERS( prettyprint( "/* ctor */ safeptr( const safeptr < " + util::demangle( typeid( ParentType ).name () ) + " > & )", util::toStringWithOrdinalSuffix( countreferences() ) + " reference to " + util::pointer2string( pointer ) ) )
+                IF_DEBUG_POINTERS( prettyprint( "/* ctor */ multiptr( const multiptr < " + util::demangle( typeid( ParentType ).name () ) + " > & )", util::toStringWithOrdinalSuffix( countreferences() ) + " reference to " + util::pointer2string( pointer ) ) )
         }
 
-        ~safeptr( )
+        ~multiptr( )
         {
                 clear () ;
         }
@@ -207,9 +207,9 @@ public:
                 return pointer ;
         }
 
-        safeptr < Type > & operator = ( const safeptr < Type > & that )
+        multiptr < Type > & operator = ( const multiptr < Type > & that )
         {
-                IF_DEBUG_POINTERS( prettyprint( "safeptr < TYPE > & operator = ( const safeptr < TYPE > & that )", "this = that " + that.tostring() ) )
+                IF_DEBUG_POINTERS( prettyprint( "multiptr < TYPE > & operator = ( const multiptr < TYPE > & that )", "this = that " + that.tostring() ) )
 
                 if ( this == &that ) return *this ;
                 if ( this->pointer == that.pointer ) return *this ;
@@ -219,19 +219,19 @@ public:
                 pointer = that.pointer ;
 
                 addreference();
-                IF_DEBUG_POINTERS( prettyprint( "safeptr < TYPE > & operator = ( const safeptr < TYPE > & that )", util::toStringWithOrdinalSuffix( countreferences() ) + " reference to " + util::pointer2string( pointer ) ) )
+                IF_DEBUG_POINTERS( prettyprint( "multiptr < TYPE > & operator = ( const multiptr < TYPE > & that )", util::toStringWithOrdinalSuffix( countreferences() ) + " reference to " + util::pointer2string( pointer ) ) )
 
                 return *this ;
         }
 
-        bool operator < ( const safeptr < Type > & that ) const
+        bool operator < ( const multiptr < Type > & that ) const
                 {  return ( pointer != nilPointer && that.pointer != nilPointer ) ? *pointer < *that.pointer : false ;  }
 
         template < typename AnyType >
-        bool operator == ( const safeptr< AnyType > & that ) const {  return getptr() == that.getptr() ;  }
+        bool operator == ( const multiptr< AnyType > & that ) const {  return getptr() == that.getptr() ;  }
 
         template < typename AnyType >
-        bool operator != ( const safeptr< AnyType > & that ) const {  return getptr() != that.getptr() ;  }
+        bool operator != ( const multiptr< AnyType > & that ) const {  return getptr() != that.getptr() ;  }
 
         bool operator == ( const void * that ) const {  return pointer == that ;  }
 
@@ -242,7 +242,7 @@ public:
                 allocations ++ ;
 
         #if defined( DEBUG_POINTERS ) && DEBUG_POINTERS
-                std::cout << "~.*.~ safeptr :: void * operator new ( size_t howMany = " << howMany << " )" ;
+                std::cout << "~.*.~ multiptr :: void * operator new ( size_t howMany = " << howMany << " )" ;
                 std::cout << " it’s " << util::toStringWithOrdinalSuffix( allocations ) << " allocation" << std::endl ;
         #endif
 
@@ -254,7 +254,7 @@ public:
                 deallocations ++ ;
 
         #if defined( DEBUG_POINTERS ) && DEBUG_POINTERS
-                std::cout << "~.*.~ safeptr :: static void operator delete ( void * what = " << util::pointer2string( what ) << " )" ;
+                std::cout << "~.*.~ multiptr :: static void operator delete ( void * what = " << util::pointer2string( what ) << " )" ;
                 std::cout << " it’s " << util::toStringWithOrdinalSuffix( deallocations ) << " deallocation" << std::endl ;
         #endif
 
@@ -274,9 +274,9 @@ private:
                 return pointer ;
         }
 
-        safeptr < Type > & operator = ( Type * that )
+        multiptr < Type > & operator = ( Type * that )
         {
-                IF_DEBUG_POINTERS( prettyprint( "safeptr < TYPE > & operator = ( TYPE * that )", "this = that " + ( that != nilPointer ? util::demangle( typeid( *that ).name () ) + " * " + util::pointer2string( that ) : "0" ) ) )
+                IF_DEBUG_POINTERS( prettyprint( "multiptr < TYPE > & operator = ( TYPE * that )", "this = that " + ( that != nilPointer ? util::demangle( typeid( *that ).name () ) + " * " + util::pointer2string( that ) : "0" ) ) )
 
                 if ( pointer == that ) return *this ;
 
@@ -285,7 +285,7 @@ private:
                 pointer = that ;
 
                 addreference();
-                IF_DEBUG_POINTERS( prettyprint( "safeptr < TYPE > & operator = ( TYPE * that )", util::toStringWithOrdinalSuffix( countreferences() ) + " reference to " + util::pointer2string( pointer ) ) )
+                IF_DEBUG_POINTERS( prettyprint( "multiptr < TYPE > & operator = ( TYPE * that )", util::toStringWithOrdinalSuffix( countreferences() ) + " reference to " + util::pointer2string( pointer ) ) )
 
                 return *this ;
         }
@@ -306,7 +306,7 @@ private:
                 while ( typizedfunction.find( type ) != std::string::npos )
                         typizedfunction.replace( typizedfunction.find( type ), type.length (), nameotype );
 
-                out << "~.*.~ safeptr < " << nameotype << " > @" << util::pointer2string( this ) << " :: " << typizedfunction ;
+                out << "~.*.~ multiptr < " << nameotype << " > @" << util::pointer2string( this ) << " :: " << typizedfunction ;
 
                 out << " " << tostring () ;
 
@@ -326,23 +326,23 @@ private:
 } ;
 
 
-template < typename Type > size_t safeptr< Type >::allocations = 0 ;
+template < typename Type > size_t multiptr< Type >::allocations = 0 ;
 
-template < typename Type > size_t safeptr< Type >::deallocations = 0 ;
+template < typename Type > size_t multiptr< Type >::deallocations = 0 ;
 
 
 /*
 template < typename ThatType, typename ThisType >
-safeptr < ThatType > static_pointer_cast ( const safeptr < ThisType > & castme )
+multiptr < ThatType > static_pointer_cast ( const multiptr < ThisType > & castme )
 {
-        return safeptr< ThatType >( static_cast< ThatType * >( castme.getptr() ) ) ;
+        return multiptr< ThatType >( static_cast< ThatType * >( castme.getptr() ) ) ;
 }
 */
 /*
 template < typename ThatType, typename ThisType >
-safeptr < ThatType > dynamic_pointer_cast ( const safeptr < ThisType > & castme )
+multiptr < ThatType > dynamic_pointer_cast ( const multiptr < ThisType > & castme )
 {
-        return safeptr< ThatType >( dynamic_cast< ThatType * >( castme.getptr() ) ) ;
+        return multiptr< ThatType >( dynamic_cast< ThatType * >( castme.getptr() ) ) ;
 }
 */
 

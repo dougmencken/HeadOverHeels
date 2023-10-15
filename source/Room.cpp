@@ -444,7 +444,7 @@ bool Room::saveAsXML( const std::string& file )
 
                                         if ( behavior == "behavior of elevator" )
                                         {
-                                                Elevator* elevatorBehavior = dynamic_cast< Elevator* >( theItem->getBehavior() );
+                                                Elevator* elevatorBehavior = dynamic_cast< Elevator* >( theItem->getBehavior().get () );
 
                                                 tinyxml2::XMLElement* top = roomXml.NewElement( "top" );
                                                 tinyxml2::XMLElement* bottom = roomXml.NewElement( "bottom" );

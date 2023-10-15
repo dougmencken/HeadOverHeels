@@ -29,7 +29,7 @@ PicturePtr PoolOfPictures::getOrLoadAndGet( const std::string& imageFile )
 
         if ( pictures.find( key ) == pictures.end () )
         {
-                safeptr< allegro::Pict > picture( allegro::Pict::fromPNGFile( ospaths::pathToFile( ospaths::sharePath() + gfxPrefix, imageFile ) ) );
+                multiptr< allegro::Pict > picture( allegro::Pict::fromPNGFile( ospaths::pathToFile( ospaths::sharePath() + gfxPrefix, imageFile ) ) );
 
                 if ( picture->isNotNil() )
                 {
@@ -55,7 +55,7 @@ PicturePtr PoolOfPictures::getOrLoadAndGetOrMakeAndGet( const std::string& image
 
         if ( pictures.find( key ) == pictures.end () || pictures[ key ] == nilPointer )
         {
-                safeptr< allegro::Pict > picture( allegro::Pict::fromPNGFile( ospaths::pathToFile( ospaths::sharePath() + gfxPrefix, imageFile ) ) );
+                multiptr< allegro::Pict > picture( allegro::Pict::fromPNGFile( ospaths::pathToFile( ospaths::sharePath() + gfxPrefix, imageFile ) ) );
 
                 if ( picture->isNotNil() )
                 {

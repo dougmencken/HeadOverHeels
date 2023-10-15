@@ -385,16 +385,14 @@ bool PlayerItem::isCollidingWithLimitsOfRoom( const std::string & onWhichWay )
 
 void PlayerItem::behave ()
 {
-        UserControlled* userBehavior = dynamic_cast< UserControlled* >( getBehavior () );
-
-        if ( userBehavior != nilPointer )
-                userBehavior->behave ( );
+        if ( getBehavior() != nilPointer )
+                dynamic_cast< UserControlled* >( getBehavior ().get() )->behave ();
 }
 
 bool PlayerItem::update ()
 {
         if ( getBehavior() != nilPointer )
-                getBehavior()->update ( );
+                getBehavior()->update ();
 
         return false;
 }

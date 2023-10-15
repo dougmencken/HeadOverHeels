@@ -145,7 +145,7 @@ void JumpKindOfActivity::lift( FreeItem& sender, Item& item, int z )
                 if ( item.getBehavior()->getNameOfBehavior () == "behavior of disappearance on touch" ||
                                 item.getBehavior()->getNameOfBehavior () == "behavior of something special" )
                 {
-                        item.getBehavior()->changeActivityOfItem( Activity::DisplaceUp, sender );
+                        item.getBehavior()->changeActivityOfItem( Activity::DisplaceUp, ItemPtr( &sender ) );
                 }
                 // raise item when it’s not elevator
                 else if ( item.getBehavior()->getNameOfBehavior () != "behavior of elevator" )

@@ -130,7 +130,7 @@ void Picture::expandOrCropTo( unsigned int width, unsigned int height )
         resized->clearToColor( AllegroColor::keyColor () ) ;
 
         allegro::bitBlit( *picture, *resized );
-        picture = safeptr< allegro::Pict >( resized );
+        picture = multiptr< allegro::Pict >( resized );
 }
 
 void Picture::flipHorizontal()
@@ -154,7 +154,7 @@ void Picture::flipHorizontal()
         flipped->unlock();
         picture->unlock();
 
-        picture = safeptr< allegro::Pict >( flipped );
+        picture = multiptr< allegro::Pict >( flipped );
 }
 
 void Picture::flipVertical()
@@ -178,7 +178,7 @@ void Picture::flipVertical()
         flipped->unlock();
         picture->unlock();
 
-        picture = safeptr< allegro::Pict >( flipped );
+        picture = multiptr< allegro::Pict >( flipped );
 }
 
 void Picture::rotate90 ()
@@ -202,7 +202,7 @@ void Picture::rotate90 ()
         rotated->unlock();
         picture->unlock();
 
-        picture = safeptr< allegro::Pict >( rotated );
+        picture = multiptr< allegro::Pict >( rotated );
 }
 
 void Picture::rotate270 ()
@@ -226,7 +226,7 @@ void Picture::rotate270 ()
         rotated->unlock();
         picture->unlock();
 
-        picture = safeptr< allegro::Pict >( rotated );
+        picture = multiptr< allegro::Pict >( rotated );
 }
 
 void Picture::saveAsPCX( const std::string& path )

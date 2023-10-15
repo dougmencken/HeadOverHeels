@@ -21,8 +21,8 @@ namespace iso
 {
 
 /**
- * Abstraction for behavior of item. Item of game changes its activity in each cycle of update.
- * Different kinds of behavior define different ways of transition between activities
+ * Abstraction for the item's behavior. A game's item changes its activity in each cycle of update.
+ * Different kinds of behavior define different ways of transition between these activities
  */
 
 class Behavior
@@ -36,28 +36,27 @@ public:
 
         virtual ~Behavior( ) ;
 
-        static Behavior * createBehaviorByName ( const ItemPtr & item, const std::string & behavior ) ;
-
         /**
-         * Updates behavior of item in each cycle
-         * @return true if item is still alive after this update or false otherwise
+         * Updates the behavior in each cycle
+         * @return true if the item is still alive after this update or false otherwise
          */
         virtual bool update () = 0 ;
 
         virtual void changeActivityOfItem ( const ActivityOfItem & activity, const ItemPtr & sender = ItemPtr () )
                 {  this->activity = activity ;  this->sender = sender ;  }
 
-        virtual void changeActivityOfItem ( const ActivityOfItem & activity, Item & sender )
-                {  changeActivityOfItem( activity, ItemPtr( &sender ) ) ;  }
+        std::string getNameOfBehavior () const {  return nameOfBehavior ;  }
+
+        ActivityOfItem getActivityOfItem () const {  return activity ;  }
+
+        const ItemPtr & getItem () {  return item ;  }
 
 protected:
 
         /**
-         * Change activity of every item collided with sender
+         * Change activity of every item collided with the sender
          */
         void propagateActivity ( const Item & sender, const ActivityOfItem & activity ) ;
-
-protected:
 
         std::string nameOfBehavior ;
 
@@ -76,15 +75,7 @@ protected:
          */
         ItemPtr sender ;
 
-public:
-
-        std::string getNameOfBehavior () const {  return nameOfBehavior ;  }
-
-        ActivityOfItem getActivityOfItem () const {  return activity ;  }
-
-        const ItemPtr & getItem () {  return item ;  }
-
-};
+} ;
 
 }
 

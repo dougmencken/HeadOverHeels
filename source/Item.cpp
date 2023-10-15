@@ -3,6 +3,7 @@
 #include "DescriptionOfItem.hpp"
 #include "Mediator.hpp"
 #include "Behavior.hpp"
+#include "CreatorOfBehaviors.hpp"
 #include "GameManager.hpp"
 #include "Way.hpp"
 
@@ -84,8 +85,6 @@ Item::Item( const Item& item )
 
 Item::~Item( )
 {
-        delete behavior;
-
         motion.clear ();
         shadows.clear ();
 }
@@ -304,10 +303,9 @@ bool Item::doGraphicsOverlapAt( const Item& item, std::pair< int, int > offset )
                         ( offset.second < this->getOffsetY() + static_cast< int >( this->getRawImage().getHeight() ) ) ;
 }
 
-void Item::setBehaviorOf( const std::string& behavior )
+void Item::setBehaviorOf( const std::string & nameOfBehavior )
 {
-        delete this->behavior ;
-        this->behavior = Behavior::createBehaviorByName( ItemPtr( this ), behavior );
+        this->behavior = CreatorOfBehaviors::createBehaviorByName( ItemPtr( this ), nameOfBehavior );
 }
 
 void Item::doForthMotion ()
@@ -322,9 +320,9 @@ void Item::doBackwardsMotion ()
         currentFrame = firstFrame() + descriptionOfItem->howManyFramesPerOrientation() - 1 ;
 }
 
-const std::string& Item::getLabel() const
+const std::string & Item::getLabel() const
 {
-        return descriptionOfItem->getLabel() ;
+        return descriptionOfItem->getLabel () ;
 }
 
 unsigned int Item::getWidthX() const

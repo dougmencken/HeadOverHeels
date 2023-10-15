@@ -139,7 +139,7 @@ protected:
 
 };
 
-typedef safeptr < Screen > ScreenPtr ;
+typedef multiptr < Screen > ScreenPtr ;
 
 }
 

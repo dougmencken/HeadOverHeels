@@ -75,7 +75,7 @@ public:
 
 };
 
-typedef safeptr < Wall > WallPtr ;
+typedef multiptr < Wall > WallPtr ;
 
 }
 

@@ -171,7 +171,7 @@ private:
 
 };
 
-typedef safeptr < FreeItem > FreeItemPtr ;
+typedef multiptr < FreeItem > FreeItemPtr ;
 
 }
 

@@ -96,8 +96,8 @@ bool Doughnut::update ()
                                                 propagateActivity( *this->item, Activity::Freeze );
                                         }
 
-                                        // doughnut disappears after collison with any item but player
-                                        dynamic_cast< UserControlled * >( this->character->getBehavior() )->setFireFromHooter( false );
+                                        // a doughnut disappears after a collison
+                                        dynamic_cast< UserControlled * >( this->character->getBehavior().get () )->setFireFromHooter( false );
                                         vanish = true;
                                 }
 

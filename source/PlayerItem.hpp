@@ -163,7 +163,7 @@ private:
 
 };
 
-typedef safeptr < PlayerItem > PlayerItemPtr ;
+typedef multiptr < PlayerItem > PlayerItemPtr ;
 
 }
 

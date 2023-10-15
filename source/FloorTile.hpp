@@ -91,7 +91,7 @@ public:
 
 };
 
-typedef safeptr < FloorTile > FloorTilePtr ;
+typedef multiptr < FloorTile > FloorTilePtr ;
 
 }
 
