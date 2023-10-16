@@ -116,6 +116,8 @@ private:
 
         bool cameraFollowsCharacter ;
 
+        bool softCenteringOnRoom ;
+
         PicturePtr chequerboard ;
 
         bool drawOnChequerboard ;

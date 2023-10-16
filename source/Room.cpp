@@ -563,7 +563,7 @@ void Room::addDoor( Door * door )
         addFreeItem( rightJamb );
         addFreeItem( lintel );
 
-        camera->centerRoom() ;
+        camera->recenterRoom () ;
 }
 
 void Room::updateWallsWithDoors ()
@@ -1505,7 +1505,7 @@ bool Room::isActive() const
 
 bool Room::swapCharactersInRoom ()
 {
-        return mediator->pickNextCharacter();
+        return mediator->pickNextCharacter () ;
 }
 
 bool Room::continueWithAliveCharacter ()

@@ -153,7 +153,7 @@ void Mediator::update()
                 {
                         std::cout << "inactive character \"" << ( *p )->getLabel() << "\" falls down to another room, swap characters to make it active" << std::endl ;
                         activeCharacter->setWayOfExit( "no exit" );
-                        this->pickNextCharacter();
+                        this->pickNextCharacter () ;
                 }
         }
 
@@ -1046,7 +1046,7 @@ void Mediator::setActiveCharacter ( const PlayerItemPtr& character )
         }
 }
 
-bool Mediator::pickNextCharacter()
+bool Mediator::pickNextCharacter ()
 {
         PlayerItemPtr previousCharacter = activeCharacter;
 

@@ -1,5 +1,6 @@
 
 #include "Isomot.hpp"
+
 #include "Color.hpp"
 #include "GameManager.hpp"
 #include "GuiManager.hpp"
@@ -219,8 +220,11 @@ Picture* Isomot::updateMe ()
                         activeRoom = newRoom;
                 }
 
-                if ( activeRoom != previousRoom )
-                        activeRoom->getCamera()->centerRoom();
+                if ( softCenteringOnRoom )
+                        softCenteringOnRoom = activeRoom->getCamera()->softCenterRoom () ;
+                else
+                if ( activeRoom != previousRoom && ! cameraFollowsCharacter )
+                        activeRoom->getCamera()->instantCenterRoom () ;
         }
 
         // draw active room
@@ -230,8 +234,8 @@ Picture* Isomot::updateMe ()
         if ( cameraFollowsCharacter && activeRoom->getMediator()->getActiveCharacter() != nilPointer )
                 activeRoom->getCamera()->centerOnItem( * activeRoom->getMediator()->getActiveCharacter() );
 
-        const int cameraDeltaX = activeRoom->getCamera()->getDeltaX();
-        const int cameraDeltaY = activeRoom->getCamera()->getDeltaY();
+        const int cameraDeltaX = activeRoom->getCamera()->getOffset().getX ();
+        const int cameraDeltaY = activeRoom->getCamera()->getOffset().getY ();
 
         const Color& roomColor = Color::byName( activeRoom->getColor() );
 
@@ -416,23 +420,23 @@ void Isomot::handleMagicKeys ()
 
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "Pad 8" ) )
         {
-                activeRoom->getCamera()->setDeltaY( activeRoom->getCamera()->getDeltaY() - 2 );
+                activeRoom->getCamera()->shiftAlongY( - 2 );
         }
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "Pad 2" ) )
         {
-                activeRoom->getCamera()->setDeltaY( activeRoom->getCamera()->getDeltaY() + 2 );
+                activeRoom->getCamera()->shiftAlongY( + 2 );
         }
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "Pad 4" ) )
         {
-                activeRoom->getCamera()->setDeltaX( activeRoom->getCamera()->getDeltaX() - 2 );
+                activeRoom->getCamera()->shiftAlongX( - 2 );
         }
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "Pad 6" ) )
         {
-                activeRoom->getCamera()->setDeltaX( activeRoom->getCamera()->getDeltaX() + 2 );
+                activeRoom->getCamera()->shiftAlongX( + 2 );
         }
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "Pad 5" ) )
         {
-                activeRoom->getCamera()->centerRoom();
+                softCenteringOnRoom = true ;
                 cameraFollowsCharacter = false ;
         }
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "Pad 0" ) )
@@ -620,7 +624,7 @@ void Isomot::updateFinalRoom()
                         activeRoom->addFreeItem( character );
                 }
 
-                activeRoom->getCamera()->centerRoom ();
+                activeRoom->getCamera()->instantCenterRoom ();
 
                 // crea las coronas recuperadas
 

@@ -17,31 +17,51 @@
 namespace iso
 {
 
+class Offset2D
+{
+
+private:
+
+        int offsetX ;
+        int offsetY ;
+
+public:
+
+        int getX () const {  return offsetX ;  }
+        int getY () const {  return offsetY ;  }
+
+        void setX ( int x ) {  offsetX = x ;  }
+        void setY ( int y ) {  offsetY = y ;  }
+
+        void addToX ( int dx ) {  offsetX += dx ;  }
+        void addToY ( int dy ) {  offsetY += dy ;  }
+
+        Offset2D() : offsetX( 0 ) , offsetY( 0 ) {}
+        Offset2D( int x, int y ) : offsetX( x ) , offsetY( y ) {}
+
+        Offset2D( const Offset2D & toCopy ) : offsetX( toCopy.offsetX ) , offsetY( toCopy.offsetY ) {}
+
+        bool operator == ( const Offset2D & toCompare ) const {  return   equals( toCompare ) ;  }
+        bool operator != ( const Offset2D & toCompare ) const {  return ! equals( toCompare ) ;  }
+
+        bool equals ( const Offset2D & toCompare ) const
+        {
+                return toCompare.offsetX == offsetX && toCompare.offsetY == offsetY ;
+        }
+
+} ;
+
+typedef Offset2D CameraOffset ;
+
+
 class Room ;
 
 /**
- * Camera gives offset for image of room
+ * The camera deals with the offset of the room's image
  */
 
 class Camera
 {
-
-public:
-
-        /**
-         * @param Room for this camera
-         */
-        Camera( Room * room ) ;
-
-        virtual ~Camera( ) { }
-
-        void centerRoom () ;
-
-        /*
-         * @return whether camera has moved
-         */
-        bool centerOnItem ( const Item & item ) ;
-
 private:
 
         /**
@@ -49,23 +69,44 @@ private:
          */
         Room * room ;
 
-        std::pair < int, int > delta ;
+        CameraOffset offset ;
 
-        std::string centeredOnItem ;
+        CameraOffset roomCenterOffset ;
 
         static const unsigned int spaceForAmbiance = 100 ;
 
 public:
 
-        int getDeltaX () const {  return delta.first;  }
+        Camera( Room * room ) ;
 
-        int getDeltaY () const {  return delta.second;  }
+        virtual ~Camera( ) { }
 
-        void setDeltaX ( int delta ) {  this->delta.first = delta;  }
+        const CameraOffset & getOffset () const {  return offset ;  }
 
-        void setDeltaY ( int delta ) {  this->delta.second = delta;  }
+        void setOffsetX ( int x ) {  this->offset.setX( x );  }
 
-};
+        void setOffsetY ( int y ) {  this->offset.setY( y );  }
+
+        void shiftAlongX ( int dx ) {  this->offset.addToX( dx );  }
+
+        void shiftAlongY ( int dy ) {  this->offset.addToY( dy );  }
+
+        const CameraOffset & getOffsetToRoomCenter () const {  return roomCenterOffset ;  }
+
+        /** @return false if the new offset is the same as the current one */
+        bool softShiftTo ( const CameraOffset & newOffset ) ;
+
+        /** @return whether camera has moved */
+        bool softCenterRoom () ;
+
+        void instantCenterRoom () ;
+
+        void recenterRoom () ;
+
+        /** @return whether camera has moved */
+        bool centerOnItem ( const Item & item ) ;
+
+} ;
 
 }
 

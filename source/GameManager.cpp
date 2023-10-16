@@ -585,7 +585,11 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                 const unsigned short widthOfChar = 8 ; // letters of allegro’s font are 8 x 7
                 const unsigned short deltaYtext = 36 ;
 
-                if ( isomot.doesCameraFollowCharacter () && isomot.getMapManager().getActiveRoom() != nilPointer )
+                Room * activeRoom = isomot.getMapManager().getActiveRoom () ;
+
+                if ( activeRoom != nilPointer &&
+                        ( isomot.doesCameraFollowCharacter ()
+                                || activeRoom->getCamera()->getOffset() != activeRoom->getCamera()->getOffsetToRoomCenter() ) )
                 {
                         Color backgroundColor = Color::blackColor();
                         if ( charactersFly() ) backgroundColor = Color::byName( "dark blue" );
@@ -598,8 +602,8 @@ void GameManager::drawAmbianceOfGame ( const allegro::Pict& where )
                                           ( where.getW() - 6 * widthOfChar ) >> 1, where.getH() - deltaYtext,
                                           Color::byName( "75% gray" ).toAllegroColor() );
 
-                        const int cameraDeltaX = isomot.getMapManager().getActiveRoom()->getCamera()->getDeltaX();
-                        const int cameraDeltaY = isomot.getMapManager().getActiveRoom()->getCamera()->getDeltaY();
+                        const int cameraDeltaX = activeRoom->getCamera()->getOffset().getX ();
+                        const int cameraDeltaY = activeRoom->getCamera()->getOffset().getY ();
 
                         std::string xCamera = util::number2string( cameraDeltaX );
                         if ( cameraDeltaX > 0 ) xCamera = "+" + xCamera ;
