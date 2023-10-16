@@ -32,7 +32,7 @@ class Behavior ;
 
 
 /**
- * Interface that defines attributes and operations for item in room
+ * Defines attributes and operations for an item in a room
  */
 
 class Item : public Mediated, public Shady

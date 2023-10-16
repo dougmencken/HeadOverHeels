@@ -571,10 +571,10 @@ void PlayerItem::liberatePlanet ()
         }
 }
 
-void PlayerItem::placeItemInBag ( const std::string& labelOfItem, const std::string& behavior )
+void PlayerItem::placeItemInBag ( const std::string & labelOfItem, const std::string & behavior )
 {
-        const DescriptionOfItem* description = getDescriptionOfItem()->getItemDescriptions()->getDescriptionByLabel( labelOfItem ) ;
-        this->descriptionOfTakenItem = description ;
+        iso::Isomot & isomot = game::GameManager::getInstance().getIsomot () ;
+        this->descriptionOfTakenItem = isomot.getItemDescriptions().getDescriptionByLabel( labelOfItem ) ;
         this->behaviorOfTakenItem = behavior ;
 }
 

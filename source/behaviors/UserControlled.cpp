@@ -415,7 +415,8 @@ void UserControlled::useHooter( PlayerItem & character )
         {
                 this->donutFromHooterIsHere = true;
 
-                const DescriptionOfItem* hooterDoughnut = character.getDescriptionOfItem()->getItemDescriptions()->getDescriptionByLabel( labelOfFiredDoughnut );
+                iso::Isomot & isomot = game::GameManager::getInstance().getIsomot () ;
+                const DescriptionOfItem * hooterDoughnut = isomot.getItemDescriptions().getDescriptionByLabel( labelOfFiredDoughnut );
 
                 if ( hooterDoughnut != nilPointer )
                 {

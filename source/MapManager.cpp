@@ -526,7 +526,8 @@ Room* MapManager::changeRoom( const std::string& wayOfExit )
         const PlayerItem& oldItemOfRoamer = * previousRoom->getMediator()->getActiveCharacter( );
 
         std::string nameOfRoamer = oldItemOfRoamer.getOriginalLabel() ; // current label may be "bubbles" when teleporting
-        const DescriptionOfItem* descriptionOfRoamer = oldItemOfRoamer.getDescriptionOfItem()->getItemDescriptions()->getDescriptionByLabel( nameOfRoamer ) ;
+        iso::Isomot & isomot = game::GameManager::getInstance().getIsomot () ;
+        const DescriptionOfItem * descriptionOfRoamer = isomot.getItemDescriptions().getDescriptionByLabel( nameOfRoamer ) ;
 
         std::cout << "\"" << nameOfRoamer << "\" migrates"
                         << " from room \"" << fileOfPreviousRoom << "\" with way of exit \"" << wayOfExit << "\""

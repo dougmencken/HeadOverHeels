@@ -166,9 +166,10 @@ bool Item::atExtraFrame() const
         return currentFrame >= howManyMotions() - descriptionOfItem->howManyExtraFrames() ;
 }
 
-void Item::metamorphInto( const std::string& labelOfItem, const std::string& initiatedBy )
+void Item::metamorphInto( const std::string & labelOfItem, const std::string & initiatedBy )
 {
-        const DescriptionOfItem * description = descriptionOfItem->getItemDescriptions()->getDescriptionByLabel( labelOfItem );
+        iso::Isomot & isomot = game::GameManager::getInstance().getIsomot () ;
+        const DescriptionOfItem * description = isomot.getItemDescriptions().getDescriptionByLabel( labelOfItem );
         if ( description == nilPointer ) return ;
 
         std::cout << "metamorphosis of item \"" << getUniqueName()

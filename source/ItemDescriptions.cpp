@@ -16,7 +16,7 @@ ItemDescriptions::~ItemDescriptions( )
         freeDescriptionOfItems() ;
 }
 
-void ItemDescriptions::readDescriptionOfItemsFrom( const std::string& nameOfXMLFile )
+void ItemDescriptions::readDescriptionOfItemsFrom( const std::string & nameOfXMLFile )
 {
         freeDescriptionOfItems() ;
 
@@ -33,49 +33,52 @@ void ItemDescriptions::readDescriptionOfItemsFrom( const std::string& nameOfXMLF
                         item != nilPointer ;
                         item = item->NextSiblingElement( "item" ) )
         {
-                DescriptionOfItem* newItem = new DescriptionOfItem ();
-                newItem->descriptions = this ;
+                std::string itemLabel = item->Attribute( "label" ) ; // the label of item
+                DescriptionOfItem * newItem = new DescriptionOfItem ( itemLabel );
 
-                // label of item
-                newItem->label = item->Attribute( "label" ) ;
-
-                bool isDoor = false;
-                tinyxml2::XMLElement* door = item->FirstChildElement( "door" ) ;
-                if ( door != nilPointer ) isDoor = true;
-
-                // number of frames for orientations of item
+                // how many various orientations
                 tinyxml2::XMLElement* orientations = item->FirstChildElement( "orientations" ) ;
-                newItem->orientations = std::atoi( orientations->FirstChild()->ToText()->Value() ) ;
+                newItem->setHowManyOrientations( std::atoi( orientations->FirstChild()->ToText()->Value() ) );
 
-                // offensive or harmless
+                // mortal or harmless
+                bool isMortal = false ;
+
                 tinyxml2::XMLElement* mortal = item->FirstChildElement( "mortal" ) ;
                 if ( mortal != nilPointer )
-                        newItem->mortal = ( std::string( mortal->FirstChild()->ToText()->Value() ) == "true" ) ? true : false ;
-                else
-                        newItem->mortal = false ;
+                        if ( std::string( mortal->FirstChild()->ToText()->Value() ) == "true" )
+                                isMortal = true ;
+
+                newItem->setMortal( isMortal );
 
                 // how long, in milliseconds, it falls
+                double itemWeight = 0.0 ;
+
                 tinyxml2::XMLElement* weight = item->FirstChildElement( "weight" ) ;
                 if ( weight != nilPointer )
-                        newItem->weight = static_cast< float >( std::atoi( weight->FirstChild()->ToText()->Value() ) ) / 1000.0 ;
-                else
-                        newItem->weight = 0.0 ;
+                        itemWeight = static_cast< double >( std::atoi( weight->FirstChild()->ToText()->Value() ) ) / 1000.0 ;
 
-                // delay, in milliseconds, between frames in animation sequence
-                tinyxml2::XMLElement* framesDelay = item->FirstChildElement( "framesDelay" ) ;
-                if ( framesDelay != nilPointer )
-                        newItem->delayBetweenFrames = static_cast< float >( std::atoi( framesDelay->FirstChild()->ToText()->Value() ) ) / 1000.0 ;
-                else
-                        newItem->delayBetweenFrames = 0.0 ;
+                newItem->setWeight( itemWeight );
 
                 // how many milliseconds this item moves one single isometric unit
+                double itemSpeed = 0.0 ;
+
                 tinyxml2::XMLElement* speed = item->FirstChildElement( "speed" ) ;
                 if ( speed != nilPointer )
-                        newItem->speed = static_cast< float >( std::atoi( speed->FirstChild()->ToText()->Value() ) ) / 1000.0 ;
-                else
-                        newItem->speed = 0.0 ;
+                        itemSpeed = static_cast< double >( std::atoi( speed->FirstChild()->ToText()->Value() ) ) / 1000.0 ;
 
-                // sequence of animation
+                newItem->setSpeed( itemSpeed );
+
+                // delay, in milliseconds, between frames in animation sequence
+                double itemDelayBetweenFrames = 0.0 ;
+
+                tinyxml2::XMLElement* framesDelay = item->FirstChildElement( "framesDelay" ) ;
+                if ( framesDelay != nilPointer )
+                        itemDelayBetweenFrames = static_cast< double >( std::atoi( framesDelay->FirstChild()->ToText()->Value() ) ) / 1000.0 ;
+
+                newItem->setDelayBetweenFrames( itemDelayBetweenFrames );
+
+                // the sequence of frames for an orientation
+                std::vector< unsigned int > sequence ;
                 tinyxml2::XMLElement* frames = item->FirstChildElement( "frames" ) ;
                 if ( frames != nilPointer )
                 {
@@ -83,7 +86,7 @@ void ItemDescriptions::readDescriptionOfItemsFrom( const std::string& nameOfXMLF
 
                         for ( unsigned int frame = 0 ; frame < howManyFramesPerOrientation ; frame ++ )
                         {
-                                newItem->frames.push_back( frame );
+                                sequence.push_back( frame );
                         }
                 }
                 else
@@ -95,39 +98,40 @@ void ItemDescriptions::readDescriptionOfItemsFrom( const std::string& nameOfXMLF
                                                 frame != nilPointer ;
                                                 frame = frame->NextSiblingElement( "frame" ) )
                                 {
-                                        newItem->frames.push_back( std::atoi( frame->FirstChild()->ToText()->Value() ) );
+                                        sequence.push_back( std::atoi( frame->FirstChild()->ToText()->Value() ) );
                                 }
                         }
                         else
                         {
-                                newItem->frames.push_back( 0 ) ;
+                                if ( sequence.size () > 0 ) sequence.clear () ;
+                                sequence.push_back( 0 ) ;
                         }
                 }
+
+                newItem->setSequenceOFrames( sequence ) ;
 
                 tinyxml2::XMLElement* extraFrames = item->FirstChildElement( "extraFrames" ) ;
                 // character items have extra frames
                 if ( extraFrames != nilPointer )
-                {
-                        newItem->extraFrames = std::atoi( extraFrames->FirstChild()->ToText()->Value() ) ;
-                }
+                        newItem->setHowManyExtraFrames( std::atoi( extraFrames->FirstChild()->ToText()->Value() ) );
 
                 tinyxml2::XMLElement* picture = item->FirstChildElement( "picture" ) ;
                 if ( picture != nilPointer )
                 {
-                        // name of file with item's graphics
+                        // the name of file with item's graphics
                         newItem->setNameOfFile( picture->Attribute( "file" ) );
 
-                        // width and height, in pixels, of single frame
+                        // the width and height, in pixels, of a single frame
                         tinyxml2::XMLElement* frameWidth = picture->FirstChildElement( "frameWidth" ) ;
-                        newItem->widthOfFrame = std::atoi( frameWidth->FirstChild()->ToText()->Value() ) ;
+                        newItem->setWidthOfFrame( std::atoi( frameWidth->FirstChild()->ToText()->Value() ) );
                         tinyxml2::XMLElement* frameHeight = picture->FirstChildElement( "frameHeight" ) ;
-                        newItem->heightOfFrame = std::atoi( frameHeight->FirstChild()->ToText()->Value() ) ;
+                        newItem->setHeightOfFrame( std::atoi( frameHeight->FirstChild()->ToText()->Value() ) );
                 }
-                else if ( newItem->label == "invisible-wall-x" || newItem->label == "invisible-wall-y" )
+                else if ( newItem->getLabel() == "invisible-wall-x" || newItem->getLabel() == "invisible-wall-y" )
                 {
                         newItem->setNameOfFile( "" );
-                        newItem->widthOfFrame = 64 ;
-                        newItem->heightOfFrame = 115 ;
+                        newItem->setWidthOfFrame( 64 );
+                        newItem->setHeightOfFrame( 115 );
                 }
 
                 tinyxml2::XMLElement* shadow = item->FirstChildElement( "shadow" ) ;
@@ -136,80 +140,72 @@ void ItemDescriptions::readDescriptionOfItemsFrom( const std::string& nameOfXMLF
                         newItem->setNameOfShadowFile( shadow->Attribute( "file" ) );
 
                         tinyxml2::XMLElement* shadowWidth = shadow->FirstChildElement( "shadowWidth" ) ;
-                        newItem->widthOfShadow = std::atoi( shadowWidth->FirstChild()->ToText()->Value() ) ;
+                        newItem->setWidthOfShadow( std::atoi( shadowWidth->FirstChild()->ToText()->Value() ) );
                         tinyxml2::XMLElement* shadowHeight = shadow->FirstChildElement( "shadowHeight" ) ;
-                        newItem->heightOfShadow = std::atoi( shadowHeight->FirstChild()->ToText()->Value() ) ;
+                        newItem->setHeightOfShadow( std::atoi( shadowHeight->FirstChild()->ToText()->Value() ) );
                 }
 
-                // door has three parameters for its dimensions
+                tinyxml2::XMLElement* door = item->FirstChildElement( "door" ) ;
+                bool isDoor = ( door != nilPointer ) ;
+
+                // for door there are three parts, and thus three times three dimensions
                 if ( isDoor )
                 {
                         /* std::string doorAt = door->FirstChild()->ToText()->Value() ; */
 
-                        // three parts of door are lintel, left jamb and right jamb
-                        DescriptionOfItem* lintel = DescriptionOfItem::clone( *newItem ) ;
-                        lintel->label += "~lintel";
-                        lintel->partOfDoor = true;
-                        DescriptionOfItem* leftJamb = DescriptionOfItem::clone( *newItem ) ;
-                        leftJamb->label += "~leftjamb";
-                        leftJamb->partOfDoor = true;
-                        DescriptionOfItem* rightJamb = DescriptionOfItem::clone( *newItem ) ;
-                        rightJamb->label += "~rightjamb";
-                        rightJamb->partOfDoor = true;
+                        newItem->setWidthX( 0 );
+                        newItem->setWidthY( 0 );
+                        newItem->setHeight( 0 );
+
+                        // the three parts of door are the lintel, the left jamb and the right jamb
+                        DescriptionOfItem* lintel = DescriptionOfItem::cloneAsLintelOfDoor( *newItem ) ;
+                        DescriptionOfItem* leftJamb = DescriptionOfItem::cloneAsLeftJambOfDoor( *newItem ) ;
+                        DescriptionOfItem* rightJamb = DescriptionOfItem::cloneAsRightJambOfDoor( *newItem ) ;
 
                         for ( tinyxml2::XMLElement* widthX = item->FirstChildElement( "widthX" ) ;
                                         widthX != nilPointer ;
-                                        widthX = widthX->NextSiblingElement( "widthX" ) )
+                                                widthX = widthX->NextSiblingElement( "widthX" ) )
                         {
                                 int wx = std::atoi( widthX->FirstChild()->ToText()->Value() ) ;
 
-                                if ( leftJamb->widthX == 0 )
-                                        leftJamb->widthX = wx ;
-                                else if ( rightJamb->widthX == 0 )
-                                        rightJamb->widthX = wx ;
-                                else if ( lintel->widthX == 0 )
-                                        lintel->widthX = wx ;
+                                     if  ( leftJamb->getWidthX() == 0 ) leftJamb->setWidthX( wx );
+                                else if ( rightJamb->getWidthX() == 0 ) rightJamb->setWidthX( wx );
+                                else if    ( lintel->getWidthX() == 0 ) lintel->setWidthX( wx );
                         }
 
                         for ( tinyxml2::XMLElement* widthY = item->FirstChildElement( "widthY" ) ;
                                         widthY != nilPointer ;
-                                        widthY = widthY->NextSiblingElement( "widthY" ) )
+                                                widthY = widthY->NextSiblingElement( "widthY" ) )
                         {
                                 int wy = std::atoi( widthY->FirstChild()->ToText()->Value() ) ;
 
-                                if ( leftJamb->widthY == 0 )
-                                        leftJamb->widthY = wy ;
-                                else if ( rightJamb->widthY == 0 )
-                                        rightJamb->widthY = wy ;
-                                else if ( lintel->widthY == 0 )
-                                        lintel->widthY = wy ;
+                                     if  ( leftJamb->getWidthY() == 0 ) leftJamb->setWidthY( wy );
+                                else if ( rightJamb->getWidthY() == 0 ) rightJamb->setWidthY( wy );
+                                else if    ( lintel->getWidthY() == 0 ) lintel->setWidthY( wy );
                         }
 
                         for ( tinyxml2::XMLElement* height = item->FirstChildElement( "height" ) ;
                                         height != nilPointer ;
-                                        height = height->NextSiblingElement( "height" ) )
+                                                height = height->NextSiblingElement( "height" ) )
                         {
                                 int wz = std::atoi( height->FirstChild()->ToText()->Value() ) ;
 
-                                if ( leftJamb->height == 0 )
-                                        leftJamb->height = wz ;
-                                else if ( rightJamb->height == 0 )
-                                        rightJamb->height = wz ;
-                                else if ( lintel->height == 0 )
-                                        lintel->height = wz ;
+                                     if  ( leftJamb->getHeight() == 0 ) leftJamb->setHeight( wz );
+                                else if ( rightJamb->getHeight() == 0 ) rightJamb->setHeight( wz );
+                                else if    ( lintel->getHeight() == 0 ) lintel->setHeight( wz );
                         }
 
-                        descriptionOfItems[ leftJamb->label ] = leftJamb ;
-                        descriptionOfItems[ rightJamb->label ] = rightJamb ;
-                        descriptionOfItems[ lintel->label ] = lintel ;
+                        descriptionOfItems[  leftJamb->getLabel () ] = leftJamb ;
+                        descriptionOfItems[ rightJamb->getLabel () ] = rightJamb ;
+                        descriptionOfItems[    lintel->getLabel () ] = lintel ;
                 }
                 else
                 {
-                        newItem->widthX = std::atoi( item->FirstChildElement( "widthX" )->FirstChild()->ToText()->Value() ) ;
-                        newItem->widthY = std::atoi( item->FirstChildElement( "widthY" )->FirstChild()->ToText()->Value() ) ;
-                        newItem->height = std::atoi( item->FirstChildElement( "height" )->FirstChild()->ToText()->Value() ) ;
+                        newItem->setWidthX( std::atoi( item->FirstChildElement( "widthX" )->FirstChild()->ToText()->Value() ) );
+                        newItem->setWidthY( std::atoi( item->FirstChildElement( "widthY" )->FirstChild()->ToText()->Value() ) );
+                        newItem->setHeight( std::atoi( item->FirstChildElement( "height" )->FirstChild()->ToText()->Value() ) );
 
-                        descriptionOfItems[ newItem->label ] = newItem ;
+                        descriptionOfItems[ newItem->getLabel () ] = newItem ;
                 }
         }
 }

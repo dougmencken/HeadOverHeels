@@ -30,16 +30,16 @@ public:
         virtual ~ItemDescriptions( ) ;
 
         /**
-         * Load description of items from XML file
+         * Load the description of items from the XML file
          */
-        void readDescriptionOfItemsFrom ( const std::string& nameOfXMLFile ) ;
+        void readDescriptionOfItemsFrom ( const std::string & nameOfXMLFile ) ;
 
         void freeDescriptionOfItems () ;
 
         /**
-         * @return description of item or nil when it is absent
+         * @return the description of item or nil if there's no description for such an item
          */
-        const DescriptionOfItem * getDescriptionByLabel ( const std::string& label ) const ;
+        const DescriptionOfItem * getDescriptionByLabel ( const std::string & label ) const ;
 
 private:
 

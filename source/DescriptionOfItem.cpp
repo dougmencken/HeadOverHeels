@@ -1,77 +1,80 @@
 
 #include "DescriptionOfItem.hpp"
-#include <iostream>
 
 
 namespace iso
 {
 
-DescriptionOfItem::DescriptionOfItem( ) :
-        label( "unlabeled" ) ,
-        widthX( 0 ) ,
-        widthY( 0 ) ,
-        height( 0 ) ,
-        weight( 0 ) ,
-        speed( 0.0 ) ,
-        orientations( 0 ) ,
-        delayBetweenFrames( 0.0 ) ,
-        widthOfFrame( 0 ) ,
-        heightOfFrame( 0 ) ,
-        widthOfShadow( 0 ) ,
-        heightOfShadow( 0 ) ,
-        mortal( false ) ,
-        extraFrames( 0 ) ,
-        partOfDoor( false ) ,
-        descriptions( nilPointer )
-{
-
-}
-
 DescriptionOfItem::~DescriptionOfItem( )
 {
-        frames.clear ();
+        sequenceOFrames.clear ();
 }
 
-/* static */ DescriptionOfItem* DescriptionOfItem::clone ( const DescriptionOfItem& data )
+/* private */ /* static */
+DescriptionOfItem * DescriptionOfItem::clone ( const DescriptionOfItem & toClone )
 {
-        DescriptionOfItem* copyOfData = new DescriptionOfItem( );
+        DescriptionOfItem * copyOfDescription = new DescriptionOfItem (
+                toClone.getLabel (),
+                toClone.getWidthX (),
+                toClone.getWidthY (),
+                toClone.getHeight (),
+                toClone.getWeight (),
+                toClone.getSpeed (),
+                toClone.howManyOrientations (),
+                toClone.getDelayBetweenFrames (),
+                toClone.getWidthOfFrame (),
+                toClone.getHeightOfFrame (),
+                toClone.getWidthOfShadow (),
+                toClone.getHeightOfShadow (),
+                toClone.isMortal (),
+                toClone.howManyExtraFrames ()
+        );
 
-        copyOfData->label = data.getLabel () ;
-
-        copyOfData->widthX = data.widthX;
-        copyOfData->widthY = data.widthY;
-        copyOfData->height = data.height;
-        copyOfData->weight = data.weight;
-        copyOfData->speed = data.speed;
-        copyOfData->orientations = data.orientations;
-        copyOfData->delayBetweenFrames = data.delayBetweenFrames;
-        copyOfData->widthOfFrame = data.widthOfFrame;
-        copyOfData->heightOfFrame = data.heightOfFrame;
-        copyOfData->widthOfShadow = data.widthOfShadow;
-        copyOfData->heightOfShadow = data.heightOfShadow;
-        copyOfData->mortal = data.mortal;
-        copyOfData->extraFrames = data.extraFrames;
-
-        // copy sequence of animation, it’s just single 0 for static items
-        if ( data.frames.size() > 1 )
+        // copy the sequence of animation
+        if ( toClone.sequenceOFrames.size() > 1 )
         {
-                for ( std::vector< unsigned int >::const_iterator fi = data.frames.begin (); fi != data.frames.end (); ++fi )
+                for ( std::vector< unsigned int >::const_iterator fi = toClone.sequenceOFrames.begin () ;
+                                fi != toClone.sequenceOFrames.end () ; ++ fi )
                 {
-                        copyOfData->frames.push_back( *fi );
+                        copyOfDescription->sequenceOFrames.push_back( *fi );
                 }
         }
-        else
+        else // it’s just single 0 for a static item
         {
-                copyOfData->frames.push_back( 0 );
+                copyOfDescription->sequenceOFrames.push_back( 0 );
         }
 
-        copyOfData->partOfDoor = data.partOfDoor ;
-        copyOfData->descriptions = data.descriptions ;
+        copyOfDescription->setNameOfFile( toClone.getNameOfFile () );
+        copyOfDescription->setNameOfShadowFile( toClone.getNameOfShadowFile () );
 
-        copyOfData->setNameOfFile( data.getNameOfFile () );
-        copyOfData->setNameOfShadowFile( data.getNameOfShadowFile () );
+        return copyOfDescription ;
+}
 
-        return copyOfData;
+/* static */
+DescriptionOfItem * DescriptionOfItem::cloneAsLintelOfDoor ( const DescriptionOfItem & toClone )
+{
+        DescriptionOfItem * descriptionOfLintel = DescriptionOfItem::clone( toClone ) ;
+        descriptionOfLintel->label += "~lintel" ;
+        descriptionOfLintel->partOfDoor = true ;
+        return descriptionOfLintel ;
+}
+
+/* static */
+DescriptionOfItem * DescriptionOfItem::cloneAsLeftJambOfDoor ( const DescriptionOfItem & toClone )
+{
+        DescriptionOfItem * descriptionOfLeftJamb = DescriptionOfItem::clone( toClone ) ;
+        descriptionOfLeftJamb->label += "~leftjamb" ;
+        descriptionOfLeftJamb->partOfDoor = true ;
+        return descriptionOfLeftJamb ;
+}
+
+/* static */
+DescriptionOfItem * DescriptionOfItem::cloneAsRightJambOfDoor ( const DescriptionOfItem & toClone )
+{
+        DescriptionOfItem * descriptionOfRightJamb = DescriptionOfItem::clone( toClone ) ;
+        descriptionOfRightJamb->label += "~rightjamb" ;
+        descriptionOfRightJamb->partOfDoor = true ;
+        return descriptionOfRightJamb ;
 }
 
 }

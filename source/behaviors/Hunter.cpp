@@ -355,8 +355,9 @@ bool Hunter::createFullBody()
                 created = true;
 
                 // create new item in the same location
+                iso::Isomot & isomot = game::GameManager::getInstance().getIsomot () ;
                 FreeItemPtr newItem( new FreeItem (
-                        item->getDescriptionOfItem()->getItemDescriptions()->getDescriptionByLabel( "imperial-guard" ),
+                        isomot.getItemDescriptions().getDescriptionByLabel( "imperial-guard" ),
                         thisItem.getX(), thisItem.getY(), thisItem.getZ() - Isomot::LayerHeight,
                         thisItem.getOrientation() ) );
 
