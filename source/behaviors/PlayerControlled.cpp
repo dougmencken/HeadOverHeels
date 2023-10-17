@@ -1,5 +1,5 @@
 
-#include "UserControlled.hpp"
+#include "PlayerControlled.hpp"
 
 #include "Isomot.hpp"
 #include "DescriptionOfItem.hpp"
@@ -17,7 +17,7 @@
 namespace iso
 {
 
-UserControlled::UserControlled( const ItemPtr & item, const std::string & behavior )
+PlayerControlled::PlayerControlled( const ItemPtr & item, const std::string & behavior )
         : Behavior( item, behavior )
         , isLosingLife( false )
         , jumpPhase( 0 )
@@ -38,13 +38,13 @@ UserControlled::UserControlled( const ItemPtr & item, const std::string & behavi
 
 }
 
-UserControlled::~UserControlled()
+PlayerControlled::~PlayerControlled()
 {
         jumpVector.clear();
         highJumpVector.clear();
 }
 
-void UserControlled::wait( PlayerItem & character )
+void PlayerControlled::wait( AvatarItem & character )
 {
         character.wait();
 
@@ -63,7 +63,7 @@ void UserControlled::wait( PlayerItem & character )
         }
 }
 
-void UserControlled::move( PlayerItem & character )
+void PlayerControlled::move( AvatarItem & character )
 {
         // move when character isn’t frozen
         if ( ! character.isFrozen() )
@@ -97,7 +97,7 @@ void UserControlled::move( PlayerItem & character )
         }
 }
 
-void UserControlled::autoMove( PlayerItem & character )
+void PlayerControlled::autoMove( AvatarItem & character )
 {
         // apply the effect of quick steps bonus bunny
         double speed = character.getSpeed() / ( character.getQuickSteps() > 0 ? 2 : 1 );
@@ -130,7 +130,7 @@ void UserControlled::autoMove( PlayerItem & character )
         }
 }
 
-void UserControlled::displace( PlayerItem & character )
+void PlayerControlled::displace( AvatarItem & character )
 {
         // this item is moved by another one
         // when the displacement couldn’t be performed due to a collision then the activity propagates to the collided items
@@ -144,7 +144,7 @@ void UserControlled::displace( PlayerItem & character )
         }
 }
 
-void UserControlled::cancelDisplace( PlayerItem & character )
+void PlayerControlled::cancelDisplace( AvatarItem & character )
 {
         if ( ! character.isFrozen() )
         {
@@ -160,7 +160,7 @@ void UserControlled::cancelDisplace( PlayerItem & character )
         }
 }
 
-void UserControlled::fall( PlayerItem & character )
+void PlayerControlled::fall( AvatarItem & character )
 {
         // is it time to lower by one unit
         if ( fallTimer->getValue() > character.getWeight() )
@@ -187,7 +187,7 @@ void UserControlled::fall( PlayerItem & character )
         }
 }
 
-void UserControlled::jump( PlayerItem & character )
+void PlayerControlled::jump( AvatarItem & character )
 {
         switch ( activity )
         {
@@ -251,7 +251,7 @@ void UserControlled::jump( PlayerItem & character )
         }
 }
 
-void UserControlled::glide( PlayerItem & character )
+void PlayerControlled::glide( AvatarItem & character )
 {
         if ( glideTimer->getValue() > character.getWeight() /* character.getSpeed() / 2.0 */ )
         {
@@ -306,7 +306,7 @@ void UserControlled::glide( PlayerItem & character )
         }
 }
 
-void UserControlled::wayInTeletransport( PlayerItem & character )
+void PlayerControlled::wayInTeletransport( AvatarItem & character )
 {
         switch ( activity )
         {
@@ -338,7 +338,7 @@ void UserControlled::wayInTeletransport( PlayerItem & character )
         }
 }
 
-void UserControlled::wayOutTeletransport( PlayerItem & character )
+void PlayerControlled::wayOutTeletransport( AvatarItem & character )
 {
         switch ( activity )
         {
@@ -366,7 +366,7 @@ void UserControlled::wayOutTeletransport( PlayerItem & character )
         }
 }
 
-void UserControlled::collideWithMortalItem( PlayerItem & character )
+void PlayerControlled::collideWithMortalItem( AvatarItem & character )
 {
         switch ( activity )
         {
@@ -409,7 +409,7 @@ void UserControlled::collideWithMortalItem( PlayerItem & character )
         }
 }
 
-void UserControlled::useHooter( PlayerItem & character )
+void PlayerControlled::useHooter( AvatarItem & character )
 {
         if ( character.hasTool( "horn" ) && character.getDonuts() > 0 )
         {
@@ -433,7 +433,7 @@ void UserControlled::useHooter( PlayerItem & character )
                         donut->setBehaviorOf( "behavior of freezing doughnut" );
 
                         Doughnut * behaviorOfDonut = dynamic_cast< Doughnut * >( donut->getBehavior().get () );
-                        behaviorOfDonut->setCharacter( PlayerItemPtr( &character ) );
+                        behaviorOfDonut->setCharacter( AvatarItemPtr( &character ) );
 
                         // initially the doughnut shares the same position with the character, therefore ignore collisions
                         // COMMENT THIS AND THE GAME CRASHES WHAHA ///////////
@@ -448,7 +448,7 @@ void UserControlled::useHooter( PlayerItem & character )
         }
 }
 
-void UserControlled::takeItem( PlayerItem & character )
+void PlayerControlled::takeItem( AvatarItem & character )
 {
         if ( character.hasTool( "handbag" ) )
         {
@@ -504,7 +504,7 @@ void UserControlled::takeItem( PlayerItem & character )
         }
 }
 
-void UserControlled::dropItem( PlayerItem & character )
+void PlayerControlled::dropItem( AvatarItem & character )
 {
         if ( character.getDescriptionOfTakenItem() != nilPointer )
         {

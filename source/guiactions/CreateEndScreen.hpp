@@ -18,8 +18,8 @@ namespace gui
 {
 
 /**
- * Create summary screen to show player’s range, score, number of visited rooms
- * and number of liberated planets
+ * Create the summary screen to show the player’s range, score, the number of visited rooms
+ * and the number of planets liberated
  */
 
 class CreateEndScreen : public gui::Action
@@ -28,8 +28,8 @@ class CreateEndScreen : public gui::Action
 public:
 
         /**
-         * @param rooms Count of visited rooms
-         * @param planets Count of liberated planets
+         * @param rooms how many visited rooms
+         * @param planets how many liberated planets
          */
         CreateEndScreen( unsigned int rooms, unsigned short planets ) ;
 
@@ -38,21 +38,15 @@ public:
 protected:
 
         /**
-         * Show summary screen
+         * show the summary screen
          */
         virtual void doAction () ;
 
 private:
 
-        /**
-         * Count of visited rooms
-         */
-        unsigned int rooms ;
+        unsigned int visitedRooms ;
 
-        /**
-         * Count of liberated planets
-         */
-        unsigned short planets ;
+        unsigned short liberatedPlanets ;
 
 };
 

@@ -32,7 +32,7 @@
         <file name="Item.cpp" />
         <file name="GridItem.cpp" />
         <file name="FreeItem.cpp" />
-        <file name="PlayerItem.cpp" />
+        <file name="AvatarItem.cpp" />
         <file name="DescriptionOfItem.cpp" />
         <file name="ItemDescriptions.cpp" />
         <file name="Mediator.cpp" />
@@ -69,9 +69,9 @@
         <file name="behaviors/Mobile.cpp" />
         <file name="behaviors/ThereAndBack.cpp" />
         <file name="behaviors/Patrol.cpp" />
-        <file name="behaviors/PlayerHeadAndHeels.cpp" />
-        <file name="behaviors/PlayerHead.cpp" />
-        <file name="behaviors/PlayerHeels.cpp" />
+        <file name="behaviors/CharacterHeadAndHeels.cpp" />
+        <file name="behaviors/CharacterHead.cpp" />
+        <file name="behaviors/CharacterHeels.cpp" />
         <file name="behaviors/RemoteControl.cpp" />
         <file name="behaviors/Sink.cpp" />
         <file name="behaviors/Special.cpp" />
@@ -79,7 +79,7 @@
         <file name="behaviors/Teleport.cpp" />
         <file name="behaviors/Trampoline.cpp" />
         <file name="behaviors/Turn.cpp" />
-        <file name="behaviors/UserControlled.cpp" />
+        <file name="behaviors/PlayerControlled.cpp" />
         <file name="behaviors/Volatile.cpp" />
         <file name="behaviors/Behavior.cpp" />
         <file name="behaviors/CreatorOfBehaviors.cpp" />

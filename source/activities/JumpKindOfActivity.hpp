@@ -51,12 +51,12 @@ public:
 protected:
 
        /**
-        * Raise items stacked on player
-        * @param sender player that triggers lifting of pile
-        * @param item first item of pile
-        * @param z units to ascend pile of items
+        * Raise the items stacked on a character
+        * @param sender the character that begins lifting the heap
+        * @param item the first item of the heap
+        * @param z how many units to rise the heap
         */
-        void lift ( FreeItem& sender, Item& item, int z ) ;
+        void lift ( FreeItem & sender, Item & item, int z ) ;
 
 private:
 

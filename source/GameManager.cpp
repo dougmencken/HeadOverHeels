@@ -2,7 +2,7 @@
 #include "GameManager.hpp"
 
 #include "Mediator.hpp"
-#include "PlayerItem.hpp"
+#include "AvatarItem.hpp"
 #include "PictureWidget.hpp"
 #include "Label.hpp"
 #include "ColorCyclingLabel.hpp"
@@ -714,12 +714,12 @@ unsigned short GameManager::countFreePlanets () const
         return count;
 }
 
-void GameManager::eatFish ( const PlayerItem& character, Room* room )
+void GameManager::eatFish ( const AvatarItem & character, Room* room )
 {
         this->eatFish( character, room, character.getX (), character.getY (), character.getZ () ) ;
 }
 
-void GameManager::eatFish ( const PlayerItem& character, Room* room, int x, int y, int z )
+void GameManager::eatFish ( const AvatarItem & character, Room* room, int x, int y, int z )
 {
         keyMoments.fishEaten ();
 

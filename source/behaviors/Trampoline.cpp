@@ -2,7 +2,7 @@
 #include "Trampoline.hpp"
 #include "Item.hpp"
 #include "FreeItem.hpp"
-#include "PlayerItem.hpp"
+#include "AvatarItem.hpp"
 #include "DisplaceKindOfActivity.hpp"
 #include "FallKindOfActivity.hpp"
 #include "Mediator.hpp"

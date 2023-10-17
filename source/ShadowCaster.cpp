@@ -19,7 +19,7 @@ void ShadowCaster::castShadowOnItem( Item& item, int x, int y, const Picture& sh
         // fully transparent stuff doesn’t drop any shadow
         if ( transparency >= 100 ) return ;
 
-        bool isFreeItem = ( item.whichKindOfItem() == "free item" || item.whichKindOfItem() == "player item" );
+        bool isFreeItem = ( item.whichKindOfItem() == "free item" || item.whichKindOfItem() == "avatar item" );
         bool isGridItem = ( item.whichKindOfItem() == "grid item" );
 
         if ( ! isFreeItem && ! isGridItem ) return;

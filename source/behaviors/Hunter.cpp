@@ -5,7 +5,7 @@
 #include "Item.hpp"
 #include "DescriptionOfItem.hpp"
 #include "FreeItem.hpp"
-#include "PlayerItem.hpp"
+#include "AvatarItem.hpp"
 #include "MoveKindOfActivity.hpp"
 #include "DisplaceKindOfActivity.hpp"
 #include "FallKindOfActivity.hpp"
@@ -32,33 +32,33 @@ Hunter::~Hunter()
 bool Hunter::update ()
 {
         Mediator* mediator = this->item->getMediator();
-        PlayerItemPtr characterToHunt = mediator->getActiveCharacter();
+        AvatarItemPtr characterToHunt = mediator->getActiveCharacter();
 
         bool alive = true;
 
         switch ( activity )
         {
                 case Activity::Wait:
-                        // if hunter is not a waiting one, activate it yet
+                        // if the hunter is not a waiting one, activate it just now
                         if ( getNameOfBehavior() == "behavior of hunter in four directions" ||
                                         getNameOfBehavior() == "behavior of hunter in eight directions" )
                         {
                                 SoundManager::getInstance().play( this->item->getLabel(), activity );
-                                activity = calculateDirection( activity );
+                                activity = updateDirection( activity );
                         }
-                        // otherwise check if player is within defined rectangle near hunter to activate
+                        // otherwise check if the character is within the defined rectangle near the hunter
                         else
                         {
-                                const unsigned int sizeOfRectangleInTiles = 3;
-                                const int delta = mediator->getRoom()->getSizeOfOneTile() * sizeOfRectangleInTiles;
+                                const unsigned int sizeOfRectangleInTiles = 3 ;
+                                const int coverage = mediator->getRoom()->getSizeOfOneTile() * sizeOfRectangleInTiles ;
 
                                 if ( characterToHunt != nilPointer  &&
-                                        characterToHunt->getX() > this->item->getX() - delta  &&
-                                        characterToHunt->getX() < this->item->getX() + static_cast< int >( this->item->getWidthX() ) + delta  &&
-                                        characterToHunt->getY() > this->item->getY() - delta  &&
-                                        characterToHunt->getY() < this->item->getY() + static_cast< int >( this->item->getWidthY() ) + delta )
+                                        characterToHunt->getX() > this->item->getX() - coverage  &&
+                                        characterToHunt->getX() < this->item->getX() + static_cast< int >( this->item->getWidthX() ) + coverage  &&
+                                        characterToHunt->getY() > this->item->getY() - coverage  &&
+                                        characterToHunt->getY() < this->item->getY() + static_cast< int >( this->item->getWidthY() ) + coverage )
                                 {
-                                        activity = calculateDirection( activity );
+                                        activity = updateDirection( activity );
                                 }
 
                                 // eight-directional waiting hunter emits sound when it waits
@@ -92,7 +92,7 @@ bool Hunter::update ()
                                         speedTimer->reset();
 
                                         // see if direction changes
-                                        activity = calculateDirection( activity );
+                                        activity = updateDirection( activity );
 
                                         // fall if you have to
                                         if ( this->item->getWeight() > 0 )
@@ -147,7 +147,7 @@ bool Hunter::update ()
                                         else
                                         {
                                                 // see if direction changes
-                                                activity = calculateDirection( activity );
+                                                activity = updateDirection( activity );
                                         }
 
                                         // reset timer to next cycle
@@ -200,27 +200,27 @@ bool Hunter::update ()
         return ! alive;
 }
 
-ActivityOfItem Hunter::calculateDirection( const ActivityOfItem& activity )
+ActivityOfItem Hunter::updateDirection( const ActivityOfItem & activity )
 {
         if ( getNameOfBehavior() == "behavior of hunter in four directions" ||
                         getNameOfBehavior() == "behavior of waiting hunter in four directions" )
         {
-                return calculateDirection4( activity );
+                return updateDirection4( activity );
         }
         else if ( getNameOfBehavior() == "behavior of hunter in eight directions" ||
                         getNameOfBehavior() == "behavior of waiting hunter in eight directions" )
         {
-                return calculateDirection8( activity );
+                return updateDirection8( activity );
         }
 
         return Activity::Wait;
 }
 
-ActivityOfItem Hunter::calculateDirection4( const ActivityOfItem& activity )
+ActivityOfItem Hunter::updateDirection4( const ActivityOfItem & activity )
 {
-        PlayerItemPtr characterToHunt = this->item->getMediator()->getActiveCharacter();
+        AvatarItemPtr characterToHunt = this->item->getMediator()->getActiveCharacter();
 
-        if ( characterToHunt != nilPointer ) // if there’s active player in room
+        if ( characterToHunt != nilPointer ) // if there’s the active character in the room
         {
                 int dx = this->item->getX() - characterToHunt->getX();
                 int dy = this->item->getY() - characterToHunt->getY();
@@ -266,17 +266,17 @@ ActivityOfItem Hunter::calculateDirection4( const ActivityOfItem& activity )
         return activity;
 }
 
-ActivityOfItem Hunter::calculateDirection8( const ActivityOfItem& activity )
+ActivityOfItem Hunter::updateDirection8( const ActivityOfItem& activity )
 {
-        PlayerItemPtr characterToHunt = this->item->getMediator()->getActiveCharacter();
+        AvatarItemPtr characterToHunt = this->item->getMediator()->getActiveCharacter();
 
-        if ( characterToHunt != nilPointer ) // if there’s active player in room
+        if ( characterToHunt != nilPointer ) // if there’s the active character in the room
         {
                 int dx = this->item->getX() - characterToHunt->getX();
                 int dy = this->item->getY() - characterToHunt->getY();
 
-                // get direction that allows to reach player as fast as possible
-                // look for distances on X and Y between hunter and player
+                // change the direction to reach the character as quick as possible
+                // look for the distances on X and Y between the hunter and the character
 
                 if ( abs( dy ) > abs( dx ) )
                 {

@@ -101,7 +101,7 @@ void CreateAudioMenu::doAction ()
         {
                 if ( allegro::areKeypushesWaiting() )
                 {
-                        // get the key pressed by user
+                        // get the key pressed by the user
                         std::string theKey = allegro::nextKey() ;
 
                         if ( theKey == "Escape" )

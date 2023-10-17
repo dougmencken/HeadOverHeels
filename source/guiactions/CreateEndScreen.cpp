@@ -21,8 +21,8 @@ using iso::SoundManager;
 
 CreateEndScreen::CreateEndScreen( unsigned int rooms, unsigned short planets )
         : Action( )
-        , rooms( rooms )
-        , planets( planets )
+        , visitedRooms( rooms )
+        , liberatedPlanets( planets )
 {
 }
 
@@ -54,22 +54,22 @@ void CreateEndScreen::doAction ()
 
         LanguageManager* languageManager = GuiManager::getInstance().getLanguageManager();
 
-        // score reached by the player
-        unsigned int score = this->rooms * 160 + this->planets * 10000;
+        // the score reached by the player
+        unsigned int score = this->visitedRooms * 160 + this->liberatedPlanets * 10000 ;
         Label* scoreLabel = new Label( languageManager->findLanguageStringForAlias( "score" )->getText() + " " + util::number2string( score ), "", "yellow" );
         scoreLabel->moveTo( ( screenWidth - scoreLabel->getWidth() ) >> 1, labelsY );
         screen.addWidget( scoreLabel );
 
-        // count of visited rooms
+        // the number of the rooms visited
         std::string exploredRooms = languageManager->findLanguageStringForAlias( "explored-rooms" )->getText();
-        exploredRooms.replace( exploredRooms.find( "%d" ), 2, util::number2string( this->rooms ) );
+        exploredRooms.replace( exploredRooms.find( "%d" ), 2, util::number2string( this->visitedRooms ) );
         Label* rooms = new Label( exploredRooms, "", "cyan" );
         rooms->moveTo( ( screenWidth - rooms->getWidth() ) >> 1, labelsY + leading );
         screen.addWidget( rooms );
 
-        // count of liberated planets
+        // the number of the planets liberated
         std::string liberatedPlanets = languageManager->findLanguageStringForAlias( "liberated-planets" )->getText();
-        liberatedPlanets.replace( liberatedPlanets.find( "%d" ), 2, util::number2string( this->planets ) );
+        liberatedPlanets.replace( liberatedPlanets.find( "%d" ), 2, util::number2string( this->liberatedPlanets ) );
         Label* planets = new Label( liberatedPlanets, "", "white" );
         planets->moveTo( ( screenWidth - planets->getWidth() ) >> 1, labelsY + leading + leading );
         screen.addWidget( planets );
@@ -83,7 +83,7 @@ void CreateEndScreen::doAction ()
         }
         else
         {
-                // range reached by player
+                // the range reached by the player
                 unsigned int bounds[ ] = {  0, 8000, 20000, 30000, 55000, 84000  };
                 std::string ranges[ ] = {  "dummy", "novice", "spy", "master-spy", "hero", "emperor"  };
 

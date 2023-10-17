@@ -2,7 +2,7 @@
 #include "MoveKindOfActivity.hpp"
 #include "FallKindOfActivity.hpp"
 #include "Behavior.hpp"
-#include "PlayerItem.hpp"
+#include "AvatarItem.hpp"
 #include "Mediator.hpp"
 
 #include <iostream>
@@ -103,7 +103,7 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
                                 {
                                         ItemPtr topItem = mediator->findCollisionPop( );
                                         if ( topItem != nilPointer &&
-                                                ( topItem->whichKindOfItem() == "free item" || topItem->whichKindOfItem() == "player item" ) )
+                                                ( topItem->whichKindOfItem() == "free item" || topItem->whichKindOfItem() == "avatar item" ) )
                                         {
                                                 if ( item->getWidthX() + item->getWidthY() >= topItem->getWidthX() + topItem->getWidthY() )
                                                 {
@@ -139,7 +139,7 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
                                         ItemPtr topItem = mediator->findItemByUniqueName( topItems.top() );
                                         topItems.pop();
 
-                                        if ( topItem->whichKindOfItem() == "free item" || topItem->whichKindOfItem() == "player item" )
+                                        if ( topItem->whichKindOfItem() == "free item" || topItem->whichKindOfItem() == "avatar item" )
                                         {
                                                 descend( dynamic_cast< FreeItem& >( *topItem ), 2 );
                                         }
@@ -168,7 +168,7 @@ bool MoveKindOfActivity::move( Behavior* behavior, ActivityOfItem* activity, boo
                         ;
         }
 
-        if ( item->whichKindOfItem() == "free item" || item->whichKindOfItem() == "player item" )
+        if ( item->whichKindOfItem() == "free item" || item->whichKindOfItem() == "avatar item" )
         {
                 // move collided items when there’s horizontal collision
                 if ( ! moved ||
@@ -210,11 +210,11 @@ void MoveKindOfActivity::ascent( FreeItem & freeItem, int z )
                                 {
                                         std::string collision = mediator->popCollision ();
 
-                                        if ( freeItem.whichKindOfItem() == "player item" )
+                                        if ( freeItem.whichKindOfItem() == "avatar item" )
                                         {
                                                 if ( collision == "ceiling" )
                                                 {
-                                                        PlayerItem & character = dynamic_cast< PlayerItem & >( freeItem );
+                                                        AvatarItem & character = dynamic_cast< AvatarItem & >( freeItem );
 
                                                         if ( character.isActiveCharacter() )
                                                         {
@@ -229,7 +229,7 @@ void MoveKindOfActivity::ascent( FreeItem & freeItem, int z )
                                         ItemPtr topItem = mediator->findItemByUniqueName( collision );
 
                                         if ( topItem != nilPointer &&
-                                                ( topItem->whichKindOfItem() == "free item" || topItem->whichKindOfItem() == "player item" ) )
+                                                ( topItem->whichKindOfItem() == "free item" || topItem->whichKindOfItem() == "avatar item" ) )
                                         {
                                                 if ( freeItem.getWidthX() + freeItem.getWidthY() >= topItem->getWidthX() + topItem->getWidthY() )
                                                 {
@@ -278,7 +278,7 @@ void MoveKindOfActivity::descend( FreeItem & freeItem, int z )
                                 topItems.pop();
 
                                 if ( topItem != nilPointer &&
-                                        ( topItem->whichKindOfItem() == "free item" || topItem->whichKindOfItem() == "player item" ) )
+                                        ( topItem->whichKindOfItem() == "free item" || topItem->whichKindOfItem() == "avatar item" ) )
                                 {
                                         // lower recursively
                                         descend( dynamic_cast< FreeItem& >( *topItem ), z );

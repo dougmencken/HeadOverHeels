@@ -258,13 +258,13 @@ bool FreeItem::isCollidingWithDoor( const std::string& way, const std::string& n
                 case Way::South:
                 case Way::Southeast:
                 case Way::Southwest:
-                        // move player right when player collides with left jamb
+                        // move the character right when it collides with the left jamb
                         if ( door->getLeftJamb()->getUniqueName() == name && this->getY() <= door->getLeftJamb()->getY() )
                         {
                                 yYet -- ;
                                 xYet = previousX ;
                         }
-                        // move player left when player hits right jamb
+                        // move the character left when it hits the right jamb
                         else if ( door->getRightJamb()->getUniqueName() == name &&
                                         this->getY() - static_cast< int >( getWidthY() )
                                                 >= door->getRightJamb()->getY() - static_cast< int >( door->getRightJamb()->getWidthY() ) )
@@ -275,20 +275,20 @@ bool FreeItem::isCollidingWithDoor( const std::string& way, const std::string& n
 
                         break;
 
-                // for rooms with east or west door
+                // for rooms with the east or the west door
                 case Way::East:
                 case Way::Eastnorth:
                 case Way::Eastsouth:
                 case Way::West:
                 case Way::Westnorth:
                 case Way::Westsouth:
-                        // move player right when player hits left jamb
+                        // move the character right when it hits the left jamb
                         if ( door->getLeftJamb()->getUniqueName() == name && this->getX() >= door->getLeftJamb()->getX() )
                         {
                                 xYet ++ ;
                                 yYet = previousY ;
                         }
-                        // move player left when player collides with right jamb
+                        // move the character left when it collides with the right jamb
                         else if ( door->getRightJamb()->getUniqueName() == name &&
                                         this->getX() - static_cast< int >( getWidthX() )
                                                 <= door->getRightJamb()->getX() + static_cast< int >( door->getRightJamb()->getWidthX() ) )

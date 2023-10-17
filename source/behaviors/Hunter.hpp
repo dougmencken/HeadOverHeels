@@ -19,7 +19,7 @@ namespace iso
 {
 
 /**
- * Hunts for player by moving wherever it is
+ * Hunts for a character by moving wherever it is
  */
 
 class Hunter : public Behavior
@@ -35,27 +35,28 @@ public:
 
 private:
 
-       /**
-        * Calculate direction in which item moves to hunt active player
-        */
-        ActivityOfItem calculateDirection ( const ActivityOfItem & activity ) ;
+        /**
+         * Changes the direction in which the item moves to hunt the active character,
+         * calls updateDirection4 or updateDirection8 depending on the hunter's behavior
+         */
+        ActivityOfItem updateDirection ( const ActivityOfItem & activity ) ;
 
-       /**
-        * Calculate direction in which item moves to hunt active player,
-        * direction may be north, south, east, and west
-        */
-        ActivityOfItem calculateDirection4 ( const ActivityOfItem & activity ) ;
+        /**
+         * Changes the direction in which the item moves to hunt the active character,
+         * the updated direction may be north, south, east, and west
+         */
+        ActivityOfItem updateDirection4 ( const ActivityOfItem & activity ) ;
 
-       /**
-        * Calculate direction in which item moves to hunt active player,
-        * direction may be any of eight possible ones
-        */
-        ActivityOfItem calculateDirection8 ( const ActivityOfItem & activity ) ;
+        /**
+         * Changes the direction in which the item moves to hunt the active character,
+         * the updated direction may be any of the eight possible ones
+         */
+        ActivityOfItem updateDirection8 ( const ActivityOfItem & activity ) ;
 
-       /**
-        * Morph hidden imperial guard to full-bodied hunter
-        * @return true if created or false if it still can’t be created
-        */
+        /**
+         * Morph the hidden imperial guard into the full-bodied hunter
+         * @return true if was created or false if can’t be created
+         */
         bool createFullBody () ;
 
 private:

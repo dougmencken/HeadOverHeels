@@ -2,7 +2,7 @@
 #include "Detector.hpp"
 #include "Item.hpp"
 #include "FreeItem.hpp"
-#include "PlayerItem.hpp"
+#include "AvatarItem.hpp"
 #include "MoveKindOfActivity.hpp"
 #include "DisplaceKindOfActivity.hpp"
 #include "FallKindOfActivity.hpp"
@@ -30,7 +30,7 @@ Detector::~Detector( )
 bool Detector::update ()
 {
         FreeItem& freeItem = dynamic_cast< FreeItem& >( * this->item );
-        PlayerItemPtr activeCharacter = freeItem.getMediator()->getActiveCharacter();
+        AvatarItemPtr activeCharacter = freeItem.getMediator()->getActiveCharacter();
         bool isGone = false;
 
         if ( activeCharacter != nilPointer )
@@ -38,7 +38,7 @@ bool Detector::update ()
                 switch ( activity )
                 {
                         case Activity::Wait:
-                                // player meets detector on X way
+                                // the character meets the detector on the X way
                                 if ( freeItem.getX() >= activeCharacter->getX() - 1 && freeItem.getX() <= activeCharacter->getX() + 1 )
                                 {
                                         if ( activeCharacter->getY() <= freeItem.getY() )
@@ -50,7 +50,7 @@ bool Detector::update ()
                                                 changeActivityOfItem( Activity::MoveWest );
                                         }
                                 }
-                                // player meets detector on Y way
+                                // the character meets the detector on the Y way
                                 else if ( freeItem.getY() >= activeCharacter->getY() - 1 && freeItem.getY() <= activeCharacter->getY() + 1 )
                                 {
                                         if ( activeCharacter->getX() <= freeItem.getX() )

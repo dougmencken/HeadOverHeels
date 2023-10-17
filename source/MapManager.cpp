@@ -3,7 +3,7 @@
 
 #include "Isomot.hpp"
 #include "RoomBuilder.hpp"
-#include "PlayerItem.hpp"
+#include "AvatarItem.hpp"
 #include "Door.hpp"
 #include "Behavior.hpp"
 #include "Mediator.hpp"
@@ -325,7 +325,7 @@ void MapManager::beginOldGameWithCharacter( const std::string & roomFile, const 
                 addRoomInPlay( room );
 
                 // create character
-                PlayerItemPtr newCharacter = RoomBuilder::createCharacterInRoom (
+                AvatarItemPtr newCharacter = RoomBuilder::createCharacterInRoom (
                                                                 room, characterName, true,
                                                                 x, y, z, direction, entry );
 
@@ -376,10 +376,10 @@ Room* MapManager::rebuildRoom( Room* room )
                 std::string nameOfActiveCharacterBeforeJoining = room->getMediator()->getLastActiveCharacterBeforeJoining();
 
                 std::string theWay( "nowhere" );
-                PlayerItemPtr aliveCharacter ;
+                AvatarItemPtr aliveCharacter ;
 
                 // for each character entered this room
-                std::vector< PlayerItemPtr > charactersOnEntry = room->getCharactersWhoEnteredRoom ();
+                std::vector< AvatarItemPtr > charactersOnEntry = room->getCharactersWhoEnteredRoom ();
 
         //#ifdef DEBUG
                 size_t howManyCharactersEntered = charactersOnEntry.size () ;
@@ -393,7 +393,7 @@ Room* MapManager::rebuildRoom( Room* room )
 
                 for ( unsigned int i = 0 ; i < charactersOnEntry.size () ; )
                 {
-                        const PlayerItemPtr character = charactersOnEntry[ i ];
+                        const AvatarItemPtr character = charactersOnEntry[ i ];
 
                         if ( character == nilPointer )
                                 std::cerr << "**nil** character among those who entered room \"" << fileOfRoom << "\""
@@ -407,7 +407,7 @@ Room* MapManager::rebuildRoom( Room* room )
                         //#endif
 
                                 // when the joined character splits, and then some simple character migrates to another room
-                                // and further the user via swapping changes back to the room of splitting, and loses a life there
+                                // and further the player swaps back to the room of splitting, and loses a life there
                                 // then don’t rebuild the room with both headoverheels together with the simple character
 
                                 if ( character->getLabel() == "headoverheels" && roomsInPlay.size() > 1 )
@@ -523,7 +523,7 @@ Room* MapManager::changeRoom( const std::string& wayOfExit )
 
         SoundManager::getInstance().stopEverySound ();
 
-        const PlayerItem& oldItemOfRoamer = * previousRoom->getMediator()->getActiveCharacter( );
+        const AvatarItem & oldItemOfRoamer = * previousRoom->getMediator()->getActiveCharacter( );
 
         std::string nameOfRoamer = oldItemOfRoamer.getOriginalLabel() ; // current label may be "bubbles" when teleporting
         iso::Isomot & isomot = game::GameManager::getInstance().getIsomot () ;
@@ -585,7 +585,7 @@ Room* MapManager::changeRoom( const std::string& wayOfExit )
         // no taken item in new room
         game::GameManager::getInstance().emptyHandbag();
 
-        PlayerItemPtr newItemOfRoamer = RoomBuilder::createCharacterInRoom( newRoom, nameOfRoamer, true,
+        AvatarItemPtr newItemOfRoamer = RoomBuilder::createCharacterInRoom( newRoom, nameOfRoamer, true,
                                                                             entryX, entryY, entryZ,
                                                                             exitOrientation, wayOfEntry.toString () );
         if ( newItemOfRoamer != nilPointer )

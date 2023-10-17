@@ -5,7 +5,7 @@
 namespace iso
 {
 
-Way::Way( const std::string& stringOfWay )
+Way::Way( const std::string & stringOfWay )
 {
         if ( stringOfWay == "north" )
                 way = North ;
@@ -39,10 +39,10 @@ Way::Way( const std::string& stringOfWay )
                 way = ByTeleport ;
         else if ( stringOfWay == "via second teleport" )
                 way = ByTeleportToo ;
-        else if ( stringOfWay == "no exit" )
-                way = NoExit ;
+        else if ( stringOfWay == "did not quit" )
+                way = DidNotQuit ;
         else if ( stringOfWay == "rebuild room" || stringOfWay == "restart room" )
-                way = Restart ;
+                way = RestartRoom ;
         else if ( stringOfWay == "just wait" )
                 way = JustWait ;
         else
@@ -74,9 +74,9 @@ std::string Way::toString () const
                 case ByTeleport:        return "via teleport" ;
                 case ByTeleportToo:     return "via second teleport" ;
 
-                case NoExit:            return "no exit" ;
+                case DidNotQuit:        return "did not quit" ;
 
-                case Restart:           return "rebuild room" ;
+                case RestartRoom:       return "rebuild room" ;
 
                 case JustWait:          return "just wait" ;
 

@@ -7,7 +7,7 @@
 #include "MapManager.hpp"
 #include "BonusManager.hpp"
 #include "Mediator.hpp"
-#include "PlayerItem.hpp"
+#include "AvatarItem.hpp"
 #include "Room.hpp"
 
 #include <algorithm>
@@ -430,15 +430,15 @@ bool GameSaverAndLoader::saveGame( const std::string& file )
                 whoWaitsToPlay = activeRoom->getMediator()->getWaitingCharacter()->getLabel() ;
         }
 
-        PlayerItemPtr characterToo ;
+        AvatarItemPtr characterToo ;
 
         if ( whoWaitsToPlay != "nobody" )
         {
                 Room* roomWithWaitingGuy = ( secondRoom != nilPointer ) ? secondRoom : activeRoom ;
 
-                std::vector< PlayerItemPtr > charactersOnEntry = roomWithWaitingGuy->getCharactersWhoEnteredRoom () ;
+                std::vector< AvatarItemPtr > charactersOnEntry = roomWithWaitingGuy->getCharactersWhoEnteredRoom () ;
 
-                for ( std::vector< PlayerItemPtr >::const_iterator p = charactersOnEntry.begin (); p != charactersOnEntry.end (); ++ p )
+                for ( std::vector< AvatarItemPtr >::const_iterator p = charactersOnEntry.begin (); p != charactersOnEntry.end (); ++ p )
                 {
                         if ( ( *p )->getLabel() == whoWaitsToPlay )
                         {

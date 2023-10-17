@@ -8,8 +8,8 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef PlayerItem_hpp_
-#define PlayerItem_hpp_
+#ifndef AvatarItem_hpp_
+#define AvatarItem_hpp_
 
 #include <vector>
 
@@ -23,21 +23,21 @@ namespace iso
 {
 
 /**
- * A character controlled by the user
+ * An avatar is a game character controlled by the player
  */
 
-class PlayerItem : public FreeItem
+class AvatarItem : public FreeItem
 {
 
 public:
 
-        PlayerItem( const DescriptionOfItem* description, int x, int y, int z, const std::string& orientation ) ;
+        AvatarItem( const DescriptionOfItem* description, int x, int y, int z, const std::string& orientation ) ;
 
-        PlayerItem( const PlayerItem & toCopy ) ;
+        AvatarItem( const AvatarItem & toCopy ) ;
 
-        virtual ~PlayerItem( ) { }
+        virtual ~AvatarItem( ) { }
 
-        virtual std::string whichKindOfItem () const {  return "player item" ;  }
+        virtual std::string whichKindOfItem () const {  return "avatar item" ;  }
 
         bool isHead () const {  return getOriginalLabel() == "head" ;  }
 
@@ -139,19 +139,20 @@ public:
 protected:
 
         /**
-         * See if player crosses the limits of room, if yes then change rooms
+         * See if the character crosses the limits of room, if yes then change the room
          */
         bool isCollidingWithLimitsOfRoom( const std::string & onWhichWay ) ;
 
 private:
 
         /**
-         * The way by which player leaves room
+         * The way by which the character leaves the room
          */
         std::string wayOfExit ;
 
         /**
-         * How character enters the room: through a door, or via teleport, or going below floor or above ceiling
+         * How the character enters the room:
+         * through a door, or via teleport, or going below the floor or above the ceiling
          */
         std::string wayOfEntry ;
 
@@ -163,7 +164,7 @@ private:
 
 };
 
-typedef multiptr < PlayerItem > PlayerItemPtr ;
+typedef multiptr < AvatarItem > AvatarItemPtr ;
 
 }
 

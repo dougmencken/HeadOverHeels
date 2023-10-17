@@ -3,7 +3,7 @@
 
 #include "Mediator.hpp"
 #include "FreeItem.hpp"
-#include "UserControlled.hpp"
+#include "PlayerControlled.hpp"
 #include "MoveKindOfActivity.hpp"
 
 
@@ -97,7 +97,7 @@ bool Doughnut::update ()
                                         }
 
                                         // a doughnut disappears after a collison
-                                        dynamic_cast< UserControlled * >( this->character->getBehavior().get () )->setFireFromHooter( false );
+                                        dynamic_cast< PlayerControlled * >( this->character->getBehavior().get () )->setFireFromHooter( false );
                                         vanish = true;
                                 }
 

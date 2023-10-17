@@ -1,11 +1,12 @@
 
-#include "PlayerHeels.hpp"
+#include "CharacterHead.hpp"
 
-#include "Isomot.hpp"
 #include "Item.hpp"
-#include "DescriptionOfItem.hpp"
-#include "PlayerItem.hpp"
+#include "AvatarItem.hpp"
 #include "Mediator.hpp"
+#include "MoveKindOfActivity.hpp"
+#include "DisplaceKindOfActivity.hpp"
+#include "FallKindOfActivity.hpp"
 #include "InputManager.hpp"
 #include "SoundManager.hpp"
 
@@ -13,49 +14,58 @@
 namespace iso
 {
 
-PlayerHeels::PlayerHeels( const ItemPtr & item, const std::string& behavior ) :
-        UserControlled( item, behavior )
+CharacterHead::CharacterHead( const ItemPtr & item, const std::string & behavior ) :
+        PlayerControlled( item, behavior )
 {
         jumpPhases = 20;
-        highJumpPhases = 21;
+        highJumpPhases = 19;
 
         // salto normal
         for ( unsigned int i = 0; i < jumpPhases; i++ )
         {
-                std::pair< int /* xy */, int /* z */ > jumpPhase( i == 9 || i == 19 ? 2 : 1 , ( i < jumpPhases / 2 ) ? 3 : -3 );
-                jumpVector.push_back( jumpPhase );
+                jumpVector.push_back( std::pair< int /* xy */, int /* z */ >( 1, 3 ) );
         }
 
         // salto largo
         for ( unsigned int i = 0; i < highJumpPhases; i++ )
         {
-                std::pair< int /* xy */, int /* z */ > jumpPhase( 2 , ( i < 17 ) ? 3 : -3 );
-                highJumpVector.push_back( jumpPhase );
+                highJumpVector.push_back( std::pair< int /* xy */, int /* z */ >( 1, 4 ) );
         }
 
         // fotogramas de caída
         fallFrames[ "north" ] = 8;
-        fallFrames[ "south" ] = 0;
+        fallFrames[ "south" ] = 16;
         fallFrames[ "east" ] = 12;
-        fallFrames[ "west" ] = 4;
+        fallFrames[ "west" ] = 17;
+
+        // fotogramas de parpadeo
+        blinkFrames[ "north" ] = 8;
+        blinkFrames[ "south" ] = 19;
+        blinkFrames[ "east" ] = 12;
+        blinkFrames[ "west" ] = 20;
 
         // activate chronometers
         speedTimer->go ();
         fallTimer->go ();
+        glideTimer->go ();
+        timerForBlinking->go ();
 }
 
-PlayerHeels::~PlayerHeels( )
+CharacterHead::~CharacterHead( )
 {
 }
 
-bool PlayerHeels::update()
+bool CharacterHead::update ()
 {
-        PlayerItem & characterItem = dynamic_cast< PlayerItem & >( * this->item );
+        AvatarItem & characterItem = dynamic_cast< AvatarItem & >( * this->item );
 
         if ( characterItem.hasShield() )
         {
                 characterItem.decrementShieldOverTime () ;
         }
+
+        // change height for climbing bars easily
+        characterItem.setHeight( activity == Activity::Fall || activity == Activity::Glide ? 23 : 24 );
 
         switch ( activity )
         {
@@ -124,19 +134,12 @@ bool PlayerHeels::update()
                         collideWithMortalItem( characterItem );
                         break;
 
-                case Activity::TakeItem:
-                case Activity::TakeAndJump:
-                        takeItem( characterItem );
+                case Activity::Glide:
+                        glide( characterItem );
                         break;
 
-                case Activity::ItemTaken:
-                        characterItem.addToZ( - Isomot::LayerHeight );
-                        activity = Activity::Wait;
-                        break;
-
-                case Activity::DropItem:
-                case Activity::DropAndJump:
-                        dropItem( characterItem );
+                case Activity::Blink:
+                        blink( characterItem );
                         break;
 
                 default:
@@ -149,9 +152,9 @@ bool PlayerHeels::update()
         return false;
 }
 
-void PlayerHeels::behave ()
+void CharacterHead::behave ()
 {
-        PlayerItem& characterItem = dynamic_cast< PlayerItem& >( * this->item );
+        AvatarItem & characterItem = dynamic_cast< AvatarItem & >( * this->item );
         InputManager& input = InputManager::getInstance();
 
         // if it’s not a move by inertia or some other exotic activity
@@ -164,15 +167,18 @@ void PlayerHeels::behave ()
                 // when waiting or blinking
                 if ( activity == Activity::Wait || activity == Activity::Blink )
                 {
-                        if ( input.takeTyped() )
+                        if ( input.jumpTyped() )
                         {
-                                activity = ( characterItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeItem : Activity::DropItem );
-                                input.releaseKeyFor( "take" );
+                                // jump or teleport
+                                characterItem.canAdvanceTo( 0, 0, -1 );
+                                activity =
+                                        characterItem.getMediator()->collisionWithByBehavior( "behavior of teletransport" ) != nilPointer ?
+                                                Activity::BeginWayOutTeletransport : Activity::Jump ;
                         }
-                        else if ( input.takeAndJumpTyped() )
+                        else if ( input.doughnutTyped() && ! donutFromHooterIsHere )
                         {
-                                activity = ( characterItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeAndJump : Activity::DropAndJump );
-                                input.releaseKeyFor( "take&jump" );
+                                useHooter( characterItem );
+                                input.releaseKeyFor( "doughnut" );
                         }
                         else if ( input.movenorthTyped() )
                         {
@@ -190,37 +196,23 @@ void PlayerHeels::behave ()
                         {
                                 activity = Activity::MoveWest;
                         }
-                        else if ( input.jumpTyped() )
-                        {
-                                // look for item below
-                                characterItem.canAdvanceTo( 0, 0, -1 );
-                                // key to teleport is the same as for jump
-                                activity =
-                                        characterItem.getMediator()->collisionWithByBehavior( "behavior of teletransport" ) != nilPointer ?
-                                                Activity::BeginWayOutTeletransport : Activity::Jump ;
-                        }
                 }
                 // already moving
                 else if ( activity == Activity::MoveNorth || activity == Activity::MoveSouth ||
                         activity == Activity::MoveEast || activity == Activity::MoveWest )
                 {
-                        if( input.jumpTyped() )
+                        if ( input.jumpTyped() )
                         {
-                                // teleport when teletransport is below
+                                // look for teletransport below
                                 characterItem.canAdvanceTo( 0, 0, -1 );
                                 activity =
                                         characterItem.getMediator()->collisionWithByBehavior( "behavior of teletransport" ) != nilPointer ?
                                                 Activity::BeginWayOutTeletransport : Activity::Jump ;
                         }
-                        else if ( input.takeTyped() )
+                        else if ( input.doughnutTyped() && ! donutFromHooterIsHere )
                         {
-                                activity = ( characterItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeItem : Activity::DropItem );
-                                input.releaseKeyFor( "take" );
-                        }
-                        else if ( input.takeAndJumpTyped() )
-                        {
-                                activity = ( characterItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeAndJump : Activity::DropAndJump );
-                                input.releaseKeyFor( "take&jump" );
+                                useHooter( characterItem );
+                                input.releaseKeyFor( "doughnut" );
                         }
                         else if ( input.movenorthTyped() )
                         {
@@ -252,15 +244,10 @@ void PlayerHeels::behave ()
                         {
                                 activity = Activity::Jump;
                         }
-                        else if ( input.takeTyped() )
+                        else if ( input.doughnutTyped() && ! donutFromHooterIsHere )
                         {
-                                activity = ( characterItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeItem : Activity::DropItem );
-                                input.releaseKeyFor( "take" );
-                        }
-                        else if ( input.takeAndJumpTyped() )
-                        {
-                                activity = ( characterItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeAndJump : Activity::DropAndJump );
-                                input.releaseKeyFor( "take&jump" );
+                                useHooter( characterItem );
+                                input.releaseKeyFor( "doughnut" );
                         }
                         else if ( input.movenorthTyped() )
                         {
@@ -308,17 +295,110 @@ void PlayerHeels::behave ()
                 }
                 else if ( activity == Activity::Jump || activity == Activity::RegularJump || activity == Activity::HighJump )
                 {
-
+                        if ( input.doughnutTyped() && ! donutFromHooterIsHere )
+                        {
+                                useHooter( characterItem );
+                                input.releaseKeyFor( "doughnut" );
+                        }
+                        // Head may change orientation when jumping
+                        else if ( input.movenorthTyped() )
+                        {
+                                characterItem.changeOrientation( "north" );
+                        }
+                        else if ( input.movesouthTyped() )
+                        {
+                                characterItem.changeOrientation( "south" );
+                        }
+                        else if ( input.moveeastTyped() )
+                        {
+                                characterItem.changeOrientation( "east" );
+                        }
+                        else if ( input.movewestTyped() )
+                        {
+                                characterItem.changeOrientation( "west" );
+                        }
                 }
                 else if ( activity == Activity::Fall )
                 {
-                        // pick or drop an item when falling
-                        if ( input.takeTyped() )
+                        if ( input.doughnutTyped() && ! donutFromHooterIsHere )
                         {
-                                activity = ( characterItem.getDescriptionOfTakenItem() == nilPointer ? Activity::TakeItem : Activity::DropItem );
-                                input.releaseKeyFor( "take" );
+                                useHooter( characterItem );
+                                input.releaseKeyFor( "doughnut" );
+                        }
+                        // entonces Head planea
+                        else if ( input.anyMoveTyped() )
+                        {
+                                activity = Activity::Glide;
                         }
                 }
+
+                // for gliding, don’t wait for next cycle because there’s possibility
+                // that gliding comes from falling, and waiting for next cycle may prevent
+                // to enter gap between two grid items
+                if ( activity == Activity::Glide )
+                {
+                        if ( input.doughnutTyped() && ! donutFromHooterIsHere )
+                        {
+                                useHooter( characterItem );
+                                input.releaseKeyFor( "doughnut" );
+                        }
+                        // Head may change orientation when gliding
+                        else if ( input.movenorthTyped() )
+                        {
+                                characterItem.changeOrientation( "north" );
+                        }
+                        else if ( input.movesouthTyped() )
+                        {
+                                characterItem.changeOrientation( "south" );
+                        }
+                        else if ( input.moveeastTyped() )
+                        {
+                                characterItem.changeOrientation( "east" );
+                        }
+                        else if ( input.movewestTyped() )
+                        {
+                                characterItem.changeOrientation( "west" );
+                        }
+                        else if ( ! input.anyMoveTyped() )
+                        {
+                                activity = Activity::Fall;
+                        }
+                }
+        }
+}
+
+void CharacterHead::wait( AvatarItem & characterItem )
+{
+        characterItem.wait();
+
+        if ( timerForBlinking->getValue() >= ( rand() % 4 ) + 5 )
+        {
+                timerForBlinking->reset();
+                activity = Activity::Blink;
+        }
+
+        if ( FallKindOfActivity::getInstance().fall( this ) )
+        {
+                speedTimer->reset();
+                activity = Activity::Fall;
+        }
+}
+
+void CharacterHead::blink( AvatarItem & characterItem )
+{
+        double timeToBlink = timerForBlinking->getValue();
+
+        if ( ( timeToBlink > 0.0 && timeToBlink < 0.050 ) || ( timeToBlink > 0.400 && timeToBlink < 0.450 ) )
+        {
+                characterItem.changeFrame( blinkFrames[ characterItem.getOrientation() ] );
+        }
+        else if ( ( timeToBlink > 0.250 && timeToBlink < 0.300 ) || ( timeToBlink > 0.750 && timeToBlink < 0.800 ) )
+        {
+        }
+        else if ( timeToBlink > 0.800 )
+        {
+                timerForBlinking->reset();
+                activity = Activity::Wait;
         }
 }
 

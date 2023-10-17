@@ -2,7 +2,7 @@
 #include "FallKindOfActivity.hpp"
 
 #include "Behavior.hpp"
-#include "PlayerItem.hpp"
+#include "AvatarItem.hpp"
 #include "Mediator.hpp"
 #include "Room.hpp"
 #include "GameManager.hpp"
@@ -42,7 +42,7 @@ bool FallKindOfActivity::fall( Behavior * behavior )
 {
         if ( behavior == nilPointer ) return false ;
 
-        if ( behavior->getItem()->whichKindOfItem() == "player item" &&
+        if ( behavior->getItem()->whichKindOfItem() == "avatar item" &&
                 game::GameManager::getInstance().charactersFly() &&
                 ! ( allegro::isShiftKeyPushed() && allegro::isKeyPushed( "PageDown" ) ) )
         {
@@ -64,7 +64,7 @@ bool FallKindOfActivity::fall( Behavior * behavior )
                         itemsBelow.push_back( mediator->popCollision() );
                 }
 
-                if ( sender.whichKindOfItem() == "free item" || sender.whichKindOfItem() == "player item" )
+                if ( sender.whichKindOfItem() == "free item" || sender.whichKindOfItem() == "avatar item" )
                 {
                         this->assignAnchor( sender.getUniqueName(), sender.getMediator(), itemsBelow );
                 }
@@ -82,9 +82,9 @@ bool FallKindOfActivity::fall( Behavior * behavior )
                                 // is it grid item or free item
                                 if ( itemBelow->whichKindOfItem() == "grid item" ||
                                         itemBelow->whichKindOfItem() == "free item" ||
-                                        itemBelow->whichKindOfItem() == "player item" )
+                                        itemBelow->whichKindOfItem() == "avatar item" )
                                 {
-                                        if ( itemBelow->whichKindOfItem() == "player item" && sender.isMortal() )
+                                        if ( itemBelow->whichKindOfItem() == "avatar item" && sender.isMortal() )
                                         {
                                                 if ( sender.canAdvanceTo( 0, 0, -1 ) )
                                                 {
@@ -94,7 +94,7 @@ bool FallKindOfActivity::fall( Behavior * behavior )
                                                         }
                                                 }
                                         }
-                                        else if ( sender.whichKindOfItem() == "player item" && itemBelow->isMortal() )
+                                        else if ( sender.whichKindOfItem() == "avatar item" && itemBelow->isMortal() )
                                         {
                                                 if ( sender.canAdvanceTo( 0, 0, -1 ) )
                                                 {
@@ -129,9 +129,9 @@ bool FallKindOfActivity::fall( Behavior * behavior )
                                 }
                         }
                         // the character reaches floor
-                        else if ( sender.whichKindOfItem() == "player item" && name == "some tile of floor" )
+                        else if ( sender.whichKindOfItem() == "avatar item" && name == "some tile of floor" )
                         {
-                                PlayerItem& characterItem = dynamic_cast< PlayerItem& >( sender );
+                                AvatarItem & characterItem = dynamic_cast< AvatarItem & >( sender );
 
                                 if ( ! mediator->getRoom()->hasFloor() )
                                 {

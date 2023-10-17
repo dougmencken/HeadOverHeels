@@ -1,5 +1,6 @@
 
 #include "Room.hpp"
+
 #include "Color.hpp"
 #include "FloorTile.hpp"
 #include "Wall.hpp"
@@ -416,7 +417,7 @@ bool Room::saveAsXML( const std::string& file )
                 for ( std::vector< FreeItemPtr >::const_iterator fi = freeItems.begin (); fi != freeItems.end (); ++ fi )
                 {
                         FreeItemPtr theItem = *fi ;
-                        if ( theItem != nilPointer && ! theItem->isPartOfDoor() && theItem->whichKindOfItem() != "player item" )
+                        if ( theItem != nilPointer && ! theItem->isPartOfDoor() && theItem->whichKindOfItem() != "avatar item" )
                         {
                                 tinyxml2::XMLElement* item = roomXml.NewElement( "item" );
 
@@ -722,7 +723,7 @@ void Room::addGridItem( const GridItemPtr& gridItem )
                 return ;
         }
 
-        // calculate offset of item’s image from origin of room
+        // calculate the offset of the item’s image from the origin of room
         std::pair< int, int > offset (
                 ( ( this->tileSize * ( gridItem->getCellX() - gridItem->getCellY() ) ) << 1 ) - ( gridItem->getRawImage().getWidth() >> 1 ) + 1,
                 this->tileSize * ( gridItem->getCellX() + gridItem->getCellY() + 2 ) - gridItem->getRawImage().getHeight() - gridItem->getZ() - 1
@@ -804,7 +805,7 @@ void Room::addFreeItem( const FreeItemPtr& freeItem )
                 return;
         }
 
-        // calculate offset of item’s image from origin of room
+        // calculate the offset of the item’s image from the origin of room
         std::pair< int, int > offset (
                 ( ( freeItem->getX() - freeItem->getY() ) << 1 ) + freeItem->getWidthX() + freeItem->getWidthY() - ( freeItem->getRawImage().getWidth() >> 1 ) - 1,
                 freeItem->getX() + freeItem->getY() + freeItem->getWidthX() - freeItem->getRawImage().getHeight() - freeItem->getZ()
@@ -819,9 +820,9 @@ void Room::addFreeItem( const FreeItemPtr& freeItem )
 #endif
 }
 
-bool Room::addCharacterToRoom( const PlayerItemPtr & character, bool characterEntersRoom )
+bool Room::addCharacterToRoom( const AvatarItemPtr & character, bool characterEntersRoom )
 {
-        for ( std::vector< PlayerItemPtr >::const_iterator pi = charactersYetInRoom.begin (); pi != charactersYetInRoom.end (); ++pi )
+        for ( std::vector< AvatarItemPtr >::const_iterator pi = charactersYetInRoom.begin (); pi != charactersYetInRoom.end (); ++pi )
         {
                 if ( character == *pi )
                 {
@@ -832,11 +833,11 @@ bool Room::addCharacterToRoom( const PlayerItemPtr & character, bool characterEn
 
         if ( characterEntersRoom )
         {
-                for ( std::vector< PlayerItemPtr >::iterator epi = charactersWhoEnteredRoom.begin (); epi != charactersWhoEnteredRoom.end (); ++epi )
+                for ( std::vector< AvatarItemPtr >::iterator epi = charactersWhoEnteredRoom.begin (); epi != charactersWhoEnteredRoom.end (); ++epi )
                 {
-                        PlayerItemPtr enteredPlayer = *epi ;
+                        AvatarItemPtr characterEntered = *epi ;
 
-                        if ( enteredPlayer->getOriginalLabel() == "headoverheels" && character->getOriginalLabel() != "headoverheels" )
+                        if ( characterEntered->getOriginalLabel() == "headoverheels" && character->getOriginalLabel() != "headoverheels" )
                         {
                                 // case when joined character enters room, splits in this room, and one of characters exits & re~enters
                                 std::cout << "character \"" << character->getOriginalLabel() << "\" enters but joined \"headoverheels\" entered the same room before" << std::endl ;
@@ -851,7 +852,7 @@ bool Room::addCharacterToRoom( const PlayerItemPtr & character, bool characterEn
                                 break;
                         }
 
-                        if ( enteredPlayer->getOriginalLabel() == character->getOriginalLabel() )
+                        if ( characterEntered->getOriginalLabel() == character->getOriginalLabel() )
                         {
                                 // case when character returns back to this room, maybe via different way
                                 std::cout << "character \"" << character->getOriginalLabel() << "\" already entered this room some time ago" << std::endl ;
@@ -931,7 +932,7 @@ bool Room::addCharacterToRoom( const PlayerItemPtr & character, bool characterEn
                 return false;
         }
 
-        // set offset of player’s image from origin of room
+        // the offset of the character’s image from the room's origin
         std::pair< int, int > offset (
                 ( ( character->getX() - character->getY() ) << 1 ) + character->getWidthX() + character->getWidthY() - ( character->getRawImage().getWidth() >> 1 ) - 1,
                 character->getX() + character->getY() + character->getWidthX() - character->getRawImage().getHeight() - character->getZ()
@@ -946,16 +947,16 @@ bool Room::addCharacterToRoom( const PlayerItemPtr & character, bool characterEn
         mediator->wantShadowFromFreeItem( *character );
         mediator->wantToMaskWithFreeItem( *character );
 
-        // add player item to room
+        // add avatar item to room
         this->charactersYetInRoom.push_back( character );
 
         if ( characterEntersRoom )
         {
-                PlayerItemPtr copyOfPlayer( new PlayerItem( *character ) );
-                copyOfPlayer->setBehaviorOf( character->getBehavior()->getNameOfBehavior() );
-                this->charactersWhoEnteredRoom.push_back( copyOfPlayer );
+                AvatarItemPtr copyOfCharacter( new AvatarItem( *character ) );
+                copyOfCharacter->setBehaviorOf( character->getBehavior()->getNameOfBehavior() );
+                this->charactersWhoEnteredRoom.push_back( copyOfCharacter );
 
-                std::cout << "copy of character \"" << copyOfPlayer->getOriginalLabel() << "\""
+                std::cout << "copy of character \"" << copyOfCharacter->getOriginalLabel() << "\""
                                 << " is created to rebuild this room" << std::endl ;
         }
 
@@ -976,13 +977,13 @@ void Room::dumpItemInsideThisRoom( const Item & item )
 
 void Room::copyAnotherCharacterAsEntered( const std::string & name )
 {
-        for ( std::vector< PlayerItemPtr >::const_iterator pi = charactersYetInRoom.begin (); pi != charactersYetInRoom.end (); ++pi )
+        for ( std::vector< AvatarItemPtr >::const_iterator pi = charactersYetInRoom.begin (); pi != charactersYetInRoom.end (); ++pi )
         {
                 if ( ( *pi )->getOriginalLabel() != name )
                 {
                         bool alreadyThere = false;
 
-                        for ( std::vector< PlayerItemPtr >::const_iterator epi = charactersWhoEnteredRoom.begin (); epi != charactersWhoEnteredRoom.end (); ++epi )
+                        for ( std::vector< AvatarItemPtr >::const_iterator epi = charactersWhoEnteredRoom.begin (); epi != charactersWhoEnteredRoom.end (); ++epi )
                         {
                                 if ( ( *epi )->getOriginalLabel() == ( *pi )->getOriginalLabel() )
                                 {
@@ -993,7 +994,7 @@ void Room::copyAnotherCharacterAsEntered( const std::string & name )
 
                         if ( ! alreadyThere )
                         {
-                                PlayerItemPtr copy( new PlayerItem( *( *pi ) ) );
+                                AvatarItemPtr copy( new AvatarItem( *( *pi ) ) );
                                 copy->setBehaviorOf( ( *pi )->getBehavior()->getNameOfBehavior() );
                                 copy->setWayOfEntry( "just wait" );
 
@@ -1112,9 +1113,9 @@ void Room::removeFreeItemByUniqueName( const std::string& uniqueName )
         }
 }
 
-bool Room::removeCharacterFromRoom( const PlayerItem & character, bool characterExitsRoom )
+bool Room::removeCharacterFromRoom( const AvatarItem & character, bool characterExitsRoom )
 {
-        for ( std::vector< PlayerItemPtr >::iterator pi = charactersYetInRoom.begin (); pi != charactersYetInRoom.end (); ++pi )
+        for ( std::vector< AvatarItemPtr >::iterator pi = charactersYetInRoom.begin (); pi != charactersYetInRoom.end (); ++pi )
         {
                 if ( character.getUniqueName() == ( *pi )->getUniqueName() )
                 {
@@ -1137,7 +1138,7 @@ bool Room::removeCharacterFromRoom( const PlayerItem & character, bool character
                         // when a character leaves room, bin its copy on entry
                         if ( characterExitsRoom )
                         {
-                                for ( std::vector< PlayerItemPtr >::iterator epi = charactersWhoEnteredRoom.begin (); epi != charactersWhoEnteredRoom.end (); ++epi )
+                                for ( std::vector< AvatarItemPtr >::iterator epi = charactersWhoEnteredRoom.begin (); epi != charactersWhoEnteredRoom.end (); ++epi )
                                 {
                                         if ( ( *epi )->getOriginalLabel() == characterName )
                                         {
@@ -1476,7 +1477,7 @@ void Room::calculateCoordinatesOfOrigin( bool hasNorthDoor, bool hasEastDoor, bo
 
 bool Room::activateCharacterByName( const std::string & character )
 {
-        for ( std::vector< PlayerItemPtr >::const_iterator pi = charactersYetInRoom.begin (); pi != charactersYetInRoom.end (); ++pi )
+        for ( std::vector< AvatarItemPtr >::const_iterator pi = charactersYetInRoom.begin (); pi != charactersYetInRoom.end (); ++pi )
         {
                 if ( character == ( *pi )->getOriginalLabel() )
                 {
@@ -1510,12 +1511,12 @@ bool Room::swapCharactersInRoom ()
 
 bool Room::continueWithAliveCharacter ()
 {
-        PlayerItemPtr previouslyAliveCharacter = mediator->getActiveCharacter() ;
+        AvatarItemPtr previouslyAliveCharacter = mediator->getActiveCharacter() ;
 
         if ( previouslyAliveCharacter->getLives() == 0 )
         {
                 // look for the next character
-                std::vector< PlayerItemPtr >::iterator i = charactersYetInRoom.begin () ;
+                std::vector< AvatarItemPtr >::iterator i = charactersYetInRoom.begin () ;
                 while ( i != charactersYetInRoom.end () )
                 {
                         if ( *i != nilPointer && ( *i )->getLabel() == previouslyAliveCharacter->getLabel() ) break;

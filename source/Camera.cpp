@@ -23,15 +23,15 @@ bool Camera::softShiftTo ( const CameraOffset & newOffset )
         CameraOffset offsetBefore = this->offset ;
         if ( newOffset == offsetBefore ) return false ;
 
-        int distanceX = newOffset.getX() - offsetBefore.getX() ;
-        int distanceY = newOffset.getY() - offsetBefore.getY() ;
-        int stepX = distanceX >> 2 ;
-        int stepY = distanceY >> 2 ;
+        int xShift = newOffset.getX() - offsetBefore.getX() ;
+        int yShift = newOffset.getY() - offsetBefore.getY() ;
+        int stepX = xShift >> 2 ;
+        int stepY = yShift >> 2 ;
 
-        if ( stepX == 0 && distanceX != 0 ) stepX = distanceX >> 1 ;
-        if ( stepY == 0 && distanceY != 0 ) stepY = distanceY >> 1 ;
-        if ( stepX == 0 && distanceX != 0 ) stepX = distanceX ;
-        if ( stepY == 0 && distanceY != 0 ) stepY = distanceY ;
+        if ( stepX == 0 && xShift != 0 ) stepX = xShift >> 1 ;
+        if ( stepY == 0 && yShift != 0 ) stepY = yShift >> 1 ;
+        if ( stepX == 0 && xShift != 0 ) stepX = xShift ;
+        if ( stepY == 0 && yShift != 0 ) stepY = yShift ;
 
         if ( stepX == 0 && stepY == 0 ) return false ;
 

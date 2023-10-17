@@ -144,15 +144,15 @@ void Mediator::update()
                 }
         }
 
-        std::vector< PlayerItemPtr > charactersInRoom = room->getCharactersYetInRoom() ;
-        for ( std::vector< PlayerItemPtr >::iterator p = charactersInRoom.begin (); p != charactersInRoom.end (); ++ p )
+        std::vector< AvatarItemPtr > charactersInRoom = room->getCharactersYetInRoom() ;
+        for ( std::vector< AvatarItemPtr >::iterator p = charactersInRoom.begin (); p != charactersInRoom.end (); ++ p )
         {
                 // when inactive character falls down to room below this one
                 // then make it active to let it fall
                 if ( ( *p )->getWayOfExit() == "below" && ! ( *p )->isActiveCharacter() )
                 {
                         std::cout << "inactive character \"" << ( *p )->getLabel() << "\" falls down to another room, swap characters to make it active" << std::endl ;
-                        activeCharacter->setWayOfExit( "no exit" );
+                        activeCharacter->setWayOfExit( "did not quit" );
                         this->pickNextCharacter () ;
                 }
         }
@@ -841,7 +841,7 @@ bool Mediator::lookForCollisionsOf( const std::string & uniqueNameOfItem )
                 }
         }
         // for a free item
-        else if ( item->whichKindOfItem() == "free item" || item->whichKindOfItem() == "player item" )
+        else if ( item->whichKindOfItem() == "free item" || item->whichKindOfItem() == "avatar item" )
         {
                 int xStart = item->getX() / room->tileSize;
                 int xEnd = ( item->getX() + item->getWidthX() - 1 ) / room->tileSize + 1;
@@ -919,7 +919,7 @@ int Mediator::findHighestZ( const Item& item )
                         }
                 }
         }
-        else if ( item.whichKindOfItem() == "free item" || item.whichKindOfItem() == "player item" )
+        else if ( item.whichKindOfItem() == "free item" || item.whichKindOfItem() == "avatar item" )
         {
                 const FreeItem& freeItem = dynamic_cast< const FreeItem& >( item );
 
@@ -1031,7 +1031,7 @@ ItemPtr Mediator::collisionWithBadBoy()
         return ItemPtr ();
 }
 
-void Mediator::setActiveCharacter ( const PlayerItemPtr& character )
+void Mediator::setActiveCharacter ( const AvatarItemPtr& character )
 {
         if ( this->activeCharacter != character )
         {
@@ -1048,11 +1048,11 @@ void Mediator::setActiveCharacter ( const PlayerItemPtr& character )
 
 bool Mediator::pickNextCharacter ()
 {
-        PlayerItemPtr previousCharacter = activeCharacter;
+        AvatarItemPtr previousCharacter = activeCharacter;
 
         // search for next character
-        std::vector< PlayerItemPtr > charactersInRoom = room->getCharactersYetInRoom() ;
-        std::vector< PlayerItemPtr >::iterator i = charactersInRoom.begin () ;
+        std::vector< AvatarItemPtr > charactersInRoom = room->getCharactersYetInRoom() ;
+        std::vector< AvatarItemPtr >::iterator i = charactersInRoom.begin () ;
         while ( i != charactersInRoom.end () )
         {
                 if ( *i != nilPointer && ( *i )->getOriginalLabel() == activeCharacter->getOriginalLabel() ) break;
@@ -1078,7 +1078,7 @@ bool Mediator::pickNextCharacter ()
                         {
                                 lockFreeItemsMutex ();
 
-                                PlayerItemPtr reference = previousCharacter->getOriginalLabel() == "heels" ? previousCharacter : activeCharacter;
+                                AvatarItemPtr reference = previousCharacter->getOriginalLabel() == "heels" ? previousCharacter : activeCharacter;
                                 this->lastActiveCharacterBeforeJoining = previousCharacter->getOriginalLabel() == "heels" ? "heels" : "head";
 
                                 int x = reference->getX();
@@ -1087,7 +1087,7 @@ bool Mediator::pickNextCharacter ()
                                 std::string orientation = reference->getOrientation() ;
 
                                 // item that Heels may have in handbag
-                                PlayerItemPtr heels = reference;
+                                AvatarItemPtr heels = reference;
                                 const DescriptionOfItem* descriptionOfItemInBag = heels->getDescriptionOfTakenItem ();
                                 std::string behaviorOfItemInBag = heels->getBehaviorOfTakenItem( );
 
@@ -1125,27 +1125,27 @@ bool Mediator::pickNextCharacter ()
 
                 lockFreeItemsMutex ();
 
-                // get data of item in handbag
+                // get the description of item in the handbag
                 const DescriptionOfItem* descriptionOfItemInBag = activeCharacter->getDescriptionOfTakenItem ();
                 std::string behaviorOfItemInBag = activeCharacter->getBehaviorOfTakenItem( );
 
-                // remove composite character
+                // remove the composite character
                 this->room->removeCharacterFromRoom( *activeCharacter, false );
 
-                // create simple characters
+                // create the simple characters
 
-                PlayerItemPtr heelsPlayer = RoomBuilder::createCharacterInRoom( this->room, "heels", false, x, y, z, orientation );
+                AvatarItemPtr characterHeels = RoomBuilder::createCharacterInRoom( this->room, "heels", false, x, y, z, orientation );
 
                 if ( descriptionOfItemInBag != nilPointer )
                 {
-                        std::cout << "transfer item \"" << descriptionOfItemInBag->getLabel() << "\" to character \"" << heelsPlayer->getLabel() << "\"" << std::endl ;
-                        heelsPlayer->placeItemInBag( descriptionOfItemInBag->getLabel(), behaviorOfItemInBag );
+                        std::cout << "transfer item \"" << descriptionOfItemInBag->getLabel() << "\" to character \"" << characterHeels->getLabel() << "\"" << std::endl ;
+                        characterHeels->placeItemInBag( descriptionOfItemInBag->getLabel(), behaviorOfItemInBag );
                 }
 
-                PlayerItemPtr headPlayer = RoomBuilder::createCharacterInRoom( this->room, "head", false, x, y, z + Isomot::LayerHeight, orientation );
+                AvatarItemPtr characterHead = RoomBuilder::createCharacterInRoom( this->room, "head", false, x, y, z + Isomot::LayerHeight, orientation );
 
-                setActiveCharacter( ( this->lastActiveCharacterBeforeJoining == "head" ) ? heelsPlayer : headPlayer );
-                previousCharacter = ( activeCharacter->getOriginalLabel() == "head" ) ? heelsPlayer : headPlayer;
+                setActiveCharacter( ( this->lastActiveCharacterBeforeJoining == "head" ) ? characterHeels : characterHead );
+                previousCharacter = ( activeCharacter->getOriginalLabel() == "head" ) ? characterHeels : characterHead;
 
                 unlockFreeItemsMutex ();
         }
@@ -1211,11 +1211,11 @@ void Mediator::toggleSwitchInRoom ()
         std::cout << "toggled switch in room " << getRoom()->getNameOfRoomDescriptionFile() << std::endl ;
 }
 
-PlayerItemPtr Mediator::getWaitingCharacter() const
+AvatarItemPtr Mediator::getWaitingCharacter() const
 {
-        std::vector< PlayerItemPtr > charactersInRoom = room->getCharactersYetInRoom() ;
+        std::vector< AvatarItemPtr > charactersInRoom = room->getCharactersYetInRoom() ;
 
-        for ( std::vector< PlayerItemPtr >::iterator p = charactersInRoom.begin (); p != charactersInRoom.end (); ++p )
+        for ( std::vector< AvatarItemPtr >::iterator p = charactersInRoom.begin (); p != charactersInRoom.end (); ++p )
         {
                 if ( ( *p )->getUniqueName() != activeCharacter->getUniqueName() )
                 {
@@ -1223,7 +1223,7 @@ PlayerItemPtr Mediator::getWaitingCharacter() const
                 }
         }
 
-        return PlayerItemPtr ();
+        return AvatarItemPtr ();
 }
 
 }

@@ -37,7 +37,7 @@ public:
         virtual ~Behavior( ) ;
 
         /**
-         * Updates the behavior in each cycle
+         * Updates the item's behavior in each cycle
          * @return true if the item is still alive after this update or false otherwise
          */
         virtual bool update () = 0 ;

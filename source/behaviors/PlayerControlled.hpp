@@ -8,14 +8,14 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef UserControlled_hpp_
-#define UserControlled_hpp_
+#ifndef PlayerControlled_hpp_
+#define PlayerControlled_hpp_
 
 #include <vector>
 #include <map>
 
 #include "Behavior.hpp"
-#include "PlayerItem.hpp"
+#include "AvatarItem.hpp"
 #include "Timer.hpp"
 
 
@@ -23,18 +23,17 @@ namespace iso
 {
 
 /**
- * Models behavior of character, that is item controlled by user. Defines attributes
- * and actions which every character may do
+ * Models the behavior of a character controlled by the player
  */
 
-class UserControlled : public Behavior
+class PlayerControlled : public Behavior
 {
 
 public:
 
-        UserControlled( const ItemPtr & item, const std::string & behavior ) ;
+        PlayerControlled( const ItemPtr & item, const std::string & behavior ) ;
 
-        virtual ~UserControlled( ) ;
+        virtual ~PlayerControlled( ) ;
 
        /**
         * Updates the character's behavior by the user controls
@@ -46,12 +45,12 @@ protected:
        /**
         * Character waits, game shows first frame of character’s animation for current orientation
         */
-        virtual void wait( PlayerItem & character ) ;
+        virtual void wait( AvatarItem & character ) ;
 
        /**
         * Character moves at speed specified in item’s data, in the direction of north or south or west or east
         */
-        virtual void move( PlayerItem & character ) ;
+        virtual void move( AvatarItem & character ) ;
 
        /**
         * Character moves automatically
@@ -59,64 +58,64 @@ protected:
         * in direction of north or south or west or east,
         * at speed specified in item’s data
         */
-        virtual void autoMove( PlayerItem & character ) ;
+        virtual void autoMove( AvatarItem & character ) ;
 
        /**
         * Move the character at the speed of an item that pushes it in one of eight directions
         */
-        virtual void displace( PlayerItem & character ) ;
+        virtual void displace( AvatarItem & character ) ;
 
        /**
         * Cancels movement by moving in the opposite direction of displacing, leaving item stopped
         * at current point. Used when character is dragged by conveyor belt or some similar item
         */
-        virtual void cancelDisplace( PlayerItem & character ) ;
+        virtual void cancelDisplace( AvatarItem & character ) ;
 
        /**
         * Character falls down at speed from item’s data
         */
-        virtual void fall( PlayerItem & character ) ;
+        virtual void fall( AvatarItem & character ) ;
 
        /**
         * Character jumps, details of jumping are in subclasses
         */
-        virtual void jump( PlayerItem & character ) ;
+        virtual void jump( AvatarItem & character ) ;
 
        /**
         * Character in air, falling or has jumped, glides at speed from item’s data
         * in direction of north or south or west or east
         */
-        virtual void glide( PlayerItem & character ) ;
+        virtual void glide( AvatarItem & character ) ;
 
        /**
         * Character teleports from another room
         */
-        virtual void wayInTeletransport( PlayerItem & character ) ;
+        virtual void wayInTeletransport( AvatarItem & character ) ;
 
        /**
         * Character teleports to another room
         */
-        virtual void wayOutTeletransport( PlayerItem & character ) ;
+        virtual void wayOutTeletransport( AvatarItem & character ) ;
 
        /**
         * Character collides with a mortal item
         */
-        virtual void collideWithMortalItem( PlayerItem & character ) ;
+        virtual void collideWithMortalItem( AvatarItem & character ) ;
 
        /**
         * Character releases something that freezes moving items
         */
-        virtual void useHooter( PlayerItem & character ) ;
+        virtual void useHooter( AvatarItem & character ) ;
 
        /**
         * Take item underneath character
         */
-        virtual void takeItem( PlayerItem & character ) ;
+        virtual void takeItem( AvatarItem & character ) ;
 
        /**
         * Drop item just below character
         */
-        virtual void dropItem( PlayerItem & character ) ;
+        virtual void dropItem( AvatarItem & character ) ;
 
 protected:
 

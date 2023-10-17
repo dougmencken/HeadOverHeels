@@ -56,6 +56,19 @@ typedef Offset2D CameraOffset ;
 
 class Room ;
 
+/*
+        “ Isometric games use a simple but ingenious way of simulating three dimensions.
+          The game is divided into rooms where the third and the fourth wall have been taken out.
+          The player is looking down on the scene from a corner.
+          She assumes a neutral third-person stance and a low-flying bird's or an insect's point of view.
+          The avatar can move in four directions. When he moves behind obstacles, he disappears from the user's view.
+          Doors in both the visible and the invisible walls allow the user to move to the next room.
+          Both angle and visibility create a sort of "panic room" atmosphere, where the house is the game itself
+          in which the avatars move around followed by security cameras.
+        ”
+        from “Interactivity and signification in Head Over Heels” by Jan Van Looy https://www.gamestudies.org/0302/vanlooy/
+*/
+
 /**
  * The camera deals with the offset of the room's image
  */

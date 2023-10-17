@@ -38,11 +38,13 @@ bool Special::update ()
                         {
                                 ItemPtr itemAbove = mediator->findCollisionPop( );
 
-                                // is that above item a player which may take this bonus
-                                if ( itemAbove != nilPointer && itemAbove->whichKindOfItem() == "player item" && mayTake( itemAbove->getOriginalLabel() ) )
+                                // is that above item the character which may take this bonus
+                                if ( itemAbove != nilPointer
+                                        && itemAbove->whichKindOfItem() == "avatar item"
+                                                && mayTake( itemAbove->getOriginalLabel() ) )
                                 {
-                                        activity = Activity::Vanish;
-                                        this->sender = itemAbove; // player is yet sender
+                                        activity = Activity::Vanish ;
+                                        this->sender = itemAbove ; // the character is yet the sender
 
                                         disappearanceTimer->reset();
                                 }
@@ -66,17 +68,17 @@ bool Special::update ()
                 case Activity::DisplaceSouthwest:
                 case Activity::DisplaceNorthwest:
                 case Activity::DisplaceUp:
-                        // if player touches bonus item and may take this bonus then it’s taken
-                        if ( sender->whichKindOfItem() == "player item" && mayTake( sender->getOriginalLabel() ) )
+                        // if the character touches the bonus item and may take this bonus
+                        if ( sender->whichKindOfItem() == "avatar item" && mayTake( sender->getOriginalLabel() ) )
                         {
                                 activity = Activity::Vanish;
                         }
-                        // some other item moves this bonus
+                        // otherwise it's some other item which moves the bonus
                         else if ( speedTimer->getValue() > item->getSpeed() )
                         {
                                 DisplaceKindOfActivity::getInstance().displace( this, &activity, true );
 
-                                // after displacement, back to "fall" activity
+                                // after displaced, back to falling
                                 activity = Activity::Fall;
 
                                 speedTimer->reset();
@@ -92,7 +94,7 @@ bool Special::update ()
                         {
                                 DisplaceKindOfActivity::getInstance().displace( this, &activity, true );
 
-                                // after displacement, back to "fall" activity
+                                // after displaced, back to falling
                                 activity = Activity::Fall;
 
                                 speedTimer->reset();
@@ -115,25 +117,25 @@ bool Special::update ()
 
                                 fallTimer->reset();
 
-                                // look if bonus falls on player
+                                // look if the bonus falls on the character
                                 if ( ! item->canAdvanceTo( 0, 0, -1 ) )
                                 {
                                         ItemPtr itemBelow = mediator->findCollisionPop( );
 
-                                        // is that below item a player which may take this bonus
-                                        if ( itemBelow != nilPointer && itemBelow->whichKindOfItem() == "player item" && mayTake( itemBelow->getOriginalLabel() ) )
+                                        // is that below item the character which may take this bonus
+                                        if ( itemBelow != nilPointer && itemBelow->whichKindOfItem() == "avatar item" && mayTake( itemBelow->getOriginalLabel() ) )
                                         {
-                                                // get collisions of player item with items above it
+                                                // get collisions of the avatar item with the items above it
                                                 itemBelow->canAdvanceTo( 0, 0, 1 );
 
-                                                // if that player item is just below bonus then it’s okay to take it
+                                                // if that avatar item is just below the bonus then it’s okay to take it
                                                 bool takeIt = ( mediator->depthOfStackOfCollisions() <= 1 );
 
                                                 // disappear on take
                                                 if ( takeIt )
                                                 {
-                                                        activity = Activity::Vanish;
-                                                        this->sender = itemBelow; // player is yet sender
+                                                        activity = Activity::Vanish ;
+                                                        this->sender = itemBelow; // the character is yet the sender
 
                                                         disappearanceTimer->reset();
                                                 }
@@ -153,7 +155,7 @@ bool Special::update ()
                                 // bonus item disappears from room once it is taken
                                 BonusManager::getInstance().markBonusAsAbsent( item->getMediator()->getRoom()->getNameOfRoomDescriptionFile(), item->getLabel() );
 
-                                takeMagicItem( dynamic_cast< PlayerItem& >( *sender ) );
+                                takeMagicItem( dynamic_cast< AvatarItem & >( *sender ) );
 
                                 if ( item->getOriginalLabel() != "crown" ) // no bubbles for crowns
                                 {
@@ -199,7 +201,7 @@ bool Special::mayTake( const std::string& character )
                                                 magicItem == "donuts" ) ) ;
 }
 
-void Special::takeMagicItem( PlayerItem & whoTakes )
+void Special::takeMagicItem( AvatarItem & whoTakes )
 {
         std::string magicItem = this->item->getOriginalLabel () ;
 

@@ -35,9 +35,9 @@ public:
 
         const std::vector < std::pair < std::string, std::string > > & getUserKeys () const {  return userKeys ;  }
 
-       /**
-        * Returns name of key defined by user for given action
-        */
+        /**
+         * Returns the user-defined key's name for the given action
+         */
         std::string getUserKeyFor ( const std::string & action ) const ;
 
         std::string getActionOfKeyByName ( const std::string & keyName ) const ;

@@ -2,7 +2,7 @@
 #include "ConveyorBelt.hpp"
 #include "Item.hpp"
 #include "FreeItem.hpp"
-#include "PlayerItem.hpp"
+#include "AvatarItem.hpp"
 #include "DisplaceKindOfActivity.hpp"
 #include "FallKindOfActivity.hpp"
 #include "Mediator.hpp"
@@ -50,7 +50,7 @@ bool ConveyorBelt::update ()
 
                                                 // is it free item
                                                 if ( collision != nilPointer &&
-                                                        ( collision->whichKindOfItem() == "free item" || collision->whichKindOfItem() == "player item" ) )
+                                                        ( collision->whichKindOfItem() == "free item" || collision->whichKindOfItem() == "avatar item" ) )
                                                 {
                                                         FreeItem& itemAbove = dynamic_cast< FreeItem& >( *collision );
 

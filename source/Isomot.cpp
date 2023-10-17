@@ -11,7 +11,7 @@
 #include "Mediator.hpp"
 #include "Camera.hpp"
 #include "Miniature.hpp"
-#include "PlayerItem.hpp"
+#include "AvatarItem.hpp"
 #include "Behavior.hpp"
 
 #include "screen.hpp"
@@ -170,13 +170,13 @@ Picture* Isomot::updateMe ()
         else
         {
                 assert( activeRoom->getMediator()->getActiveCharacter() != nilPointer );
-                PlayerItem& activeCharacter = * activeRoom->getMediator()->getActiveCharacter() ;
+                AvatarItem & activeCharacter = * activeRoom->getMediator()->getActiveCharacter() ;
                 Room* previousRoom = activeRoom ;
 
                 // swap key changes character and possibly room
                 if ( InputManager::getInstance().swapTyped() )
                 {
-                        activeCharacter.wait(); // stop active player
+                        activeCharacter.wait(); // stop the character currently active
 
                         if ( activeCharacter.getBehavior()->getActivityOfItem() == Activity::Wait )
                         {
@@ -192,7 +192,7 @@ Picture* Isomot::updateMe ()
 
                 if ( activeCharacter.getWayOfExit() == "rebuild room" )
                 {
-                        // active player lost its life
+                        // the active character lost one life
 
                         if ( activeCharacter.getLives() != 0 || activeCharacter.getLabel() == "headoverheels" )
                         {
@@ -206,7 +206,7 @@ Picture* Isomot::updateMe ()
                                 }
                         }
                 }
-                else if ( activeCharacter.getWayOfExit() != "no exit" )
+                else if ( activeCharacter.getWayOfExit() != "did not quit" )
                 {
                         // there’s change of room
 
@@ -470,10 +470,10 @@ void Isomot::handleMagicKeys ()
 
         if ( allegro::isAltKeyPushed() && allegro::isShiftKeyPushed() && allegro::isKeyPushed( "j" ) )
         {
-                PlayerItemPtr activeCharacter = activeRoom->getMediator()->getActiveCharacter();
+                AvatarItemPtr activeCharacter = activeRoom->getMediator()->getActiveCharacter();
                 if ( activeCharacter != nilPointer )
                 {
-                        PlayerItemPtr otherCharacter ;
+                        AvatarItemPtr otherCharacter ;
 
                         Room* roomWithInactiveCharacter = mapManager.getRoomOfInactiveCharacter();
                         if ( roomWithInactiveCharacter != nilPointer )
@@ -492,7 +492,7 @@ void Isomot::handleMagicKeys ()
                                 int characterZ = activeCharacter->getZ() + 2 * LayerHeight ;
                                 const std::string & orientation = otherCharacter->getOrientation() ;
 
-                                PlayerItemPtr joinedPlayer( new PlayerItem(
+                                AvatarItemPtr joinedCharacter( new AvatarItem(
                                         itemDescriptions.getDescriptionByLabel( nameOfAnotherCharacter ),
                                         characterX, characterY, characterZ, orientation
                                 ) );
@@ -501,10 +501,10 @@ void Isomot::handleMagicKeys ()
                                 if ( nameOfAnotherCharacter == "head" ) behavior = "behavior of Head" ;
                                 else if ( nameOfAnotherCharacter == "heels" ) behavior = "behavior of Heels" ;
 
-                                joinedPlayer->setBehaviorOf( behavior );
+                                joinedCharacter->setBehaviorOf( behavior );
 
-                                activeRoom->addCharacterToRoom( joinedPlayer, true );
-                                joinedPlayer->getBehavior()->changeActivityOfItem( Activity::BeginWayInTeletransport );
+                                activeRoom->addCharacterToRoom( joinedCharacter, true );
+                                joinedCharacter->getBehavior()->changeActivityOfItem( Activity::BeginWayInTeletransport );
 
                                 roomWithInactiveCharacter->removeCharacterFromRoom( *otherCharacter, true );
                                 mapManager.removeRoomInPlay( roomWithInactiveCharacter );
@@ -532,32 +532,32 @@ void Isomot::handleMagicKeys ()
                 }
                 else
                 {
-                        PlayerItemPtr activeCharacter = activeRoom->getMediator()->getActiveCharacter();
+                        AvatarItemPtr activeCharacter = activeRoom->getMediator()->getActiveCharacter();
                         if ( activeCharacter != nilPointer )
                         {
-                                const std::string & nameOfPlayer = activeCharacter->getLabel() ;
+                                const std::string & nameOfCharacter = activeCharacter->getLabel() ;
                                 const std::string & orientation = activeCharacter->getOrientation() ;
                                 int teleportedX = 0;
                                 int teleportedY = 95;
                                 int teleportedZ = 240;
 
-                                PlayerItemPtr teleportedPlayer( new PlayerItem(
-                                        itemDescriptions.getDescriptionByLabel( nameOfPlayer ),
+                                AvatarItemPtr teleportedCharacter( new AvatarItem(
+                                        itemDescriptions.getDescriptionByLabel( nameOfCharacter ),
                                         teleportedX, teleportedY, teleportedZ,
                                         orientation
                                 ) ) ;
 
-                                std::string behaviorOfPlayer = "still";
-                                if ( nameOfPlayer == "head" ) behaviorOfPlayer = "behavior of Head";
-                                else if ( nameOfPlayer == "heels" ) behaviorOfPlayer = "behavior of Heels";
-                                else if ( nameOfPlayer == "headoverheels" ) behaviorOfPlayer = "behavior of Head over Heels";
+                                std::string behaviorOfCharacter = "still";
+                                if ( nameOfCharacter == "head" ) behaviorOfCharacter = "behavior of Head";
+                                else if ( nameOfCharacter == "heels" ) behaviorOfCharacter = "behavior of Heels";
+                                else if ( nameOfCharacter == "headoverheels" ) behaviorOfCharacter = "behavior of Head over Heels";
 
-                                teleportedPlayer->setBehaviorOf( behaviorOfPlayer );
+                                teleportedCharacter->setBehaviorOf( behaviorOfCharacter );
 
                                 std::string nameOfRoomNearFinal = "blacktooth83tofreedom.xml";
                                 Room* roomWithTeleportToFinalScene = mapManager.getRoomThenAddItToRoomsInPlay( nameOfRoomNearFinal, true );
-                                roomWithTeleportToFinalScene->addCharacterToRoom( teleportedPlayer, true );
-                                teleportedPlayer->getBehavior()->changeActivityOfItem( Activity::BeginWayInTeletransport );
+                                roomWithTeleportToFinalScene->addCharacterToRoom( teleportedCharacter, true );
+                                teleportedCharacter->getBehavior()->changeActivityOfItem( Activity::BeginWayInTeletransport );
 
                                 activeRoom->removeCharacterFromRoom( *activeCharacter, true );
 

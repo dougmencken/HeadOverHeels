@@ -8,37 +8,27 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef PlayerHeadAndHeels_hpp_
-#define PlayerHeadAndHeels_hpp_
+#ifndef CharacterHeels_hpp_
+#define CharacterHeels_hpp_
 
-#include "UserControlled.hpp"
+#include "PlayerControlled.hpp"
 
 
 namespace iso
 {
 
-class PlayerHeadAndHeels : public UserControlled
+class CharacterHeels : public PlayerControlled
 {
 
 public:
 
-        PlayerHeadAndHeels( const ItemPtr & item, const std::string & behavior ) ;
+        CharacterHeels( const ItemPtr & item, const std::string & behavior ) ;
 
-        virtual ~PlayerHeadAndHeels( ) ;
+        virtual ~CharacterHeels( ) ;
 
         virtual bool update () ;
 
         virtual void behave () ;
-
-protected:
-
-        virtual void wait( PlayerItem & characterItem ) ;
-
-        virtual void blink( PlayerItem & characterItem ) ;
-
-protected:
-
-        std::map < std::string, unsigned int > blinkFrames ;
 
 };
 

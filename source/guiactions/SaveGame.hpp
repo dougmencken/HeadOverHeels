@@ -23,7 +23,7 @@ class SaveGame : public Action
 public:
 
         /**
-         * @param picture Image where to draw user interface
+         * @param picture Image where to draw the user interface
          * @param slot Number of file to load
          */
         explicit SaveGame( unsigned int slot ) ;

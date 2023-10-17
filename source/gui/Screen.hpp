@@ -31,7 +31,7 @@ class Action ;
 class AnimatedPictureWidget ;
 
 /**
- * Container for elements of user interface
+ * Container for the user interface elements
  */
 
 class Screen : public Widget

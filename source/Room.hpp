@@ -25,7 +25,7 @@
 #include "Item.hpp"
 #include "GridItem.hpp"
 #include "FreeItem.hpp"
-#include "PlayerItem.hpp"
+#include "AvatarItem.hpp"
 #include "Door.hpp"
 
 
@@ -78,7 +78,7 @@ public:
 
         void addFreeItem ( const FreeItemPtr & freeItem ) ;
 
-        bool addCharacterToRoom ( const PlayerItemPtr & character, bool characterEntersRoom ) ;
+        bool addCharacterToRoom ( const AvatarItemPtr & character, bool characterEntersRoom ) ;
 
         void removeFloorAt ( int tileX, int tileY ) ;
 
@@ -92,7 +92,7 @@ public:
 
         void removeFreeItemByUniqueName ( const std::string & uniqueName ) ;
 
-        bool removeCharacterFromRoom ( const PlayerItem & character, bool characterExitsRoom ) ;
+        bool removeCharacterFromRoom ( const AvatarItem & character, bool characterExitsRoom ) ;
 
         /**
          * Removes any bar in this room
@@ -153,9 +153,9 @@ public:
 
         unsigned short getOpacityOfShadows () const {  return shadingOpacity ;  }
 
-        const std::vector < PlayerItemPtr > & getCharactersYetInRoom () const {  return charactersYetInRoom ;  }
+        const std::vector < AvatarItemPtr > & getCharactersYetInRoom () const {  return charactersYetInRoom ;  }
 
-        const std::vector < PlayerItemPtr > & getCharactersWhoEnteredRoom () const {  return charactersWhoEnteredRoom ;  }
+        const std::vector < AvatarItemPtr > & getCharactersWhoEnteredRoom () const {  return charactersWhoEnteredRoom ;  }
 
         bool isAnyCharacterStillInRoom () const ;
 
@@ -266,9 +266,9 @@ private:
         // the connections of this room with other rooms
         const RoomConnections * connections ;
 
-        std::vector < PlayerItemPtr > charactersYetInRoom ;
+        std::vector < AvatarItemPtr > charactersYetInRoom ;
 
-        std::vector < PlayerItemPtr > charactersWhoEnteredRoom ;
+        std::vector < AvatarItemPtr > charactersWhoEnteredRoom ;
 
         /**
          * Pairs label of item with next number for such item,

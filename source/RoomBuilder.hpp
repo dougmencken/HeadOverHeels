@@ -21,7 +21,7 @@
 #include "Wall.hpp"
 #include "GridItem.hpp"
 #include "FreeItem.hpp"
-#include "PlayerItem.hpp"
+#include "AvatarItem.hpp"
 #include "Door.hpp"
 
 
@@ -48,7 +48,7 @@ public:
          * Create a character in a specified room
          * @param justEntered Make the copy of character to recreate it when rebuilding the room or don't
          */
-        static PlayerItemPtr createCharacterInRoom ( Room * room,
+        static AvatarItemPtr createCharacterInRoom ( Room * room,
                                                      const std::string & nameOfCharacter,
                                                      bool justEntered,
                                                      int x, int y, int z,

@@ -77,7 +77,7 @@ public:
         void animate () ;
 
         /**
-         * Used for metamorphosis into bubbles, such as when player teleports
+         * Used for the metamorphosis into bubbles, such as when the character teleports
          */
         void metamorphInto ( const std::string& labelOfItem, const std::string& initiatedBy ) ;
 

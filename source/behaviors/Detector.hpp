@@ -19,7 +19,7 @@ namespace iso
 {
 
 /**
- * Detect player and move to hunt it
+ * Detect the active character and move to hunt it
  */
 
 class Detector : public Behavior
@@ -36,12 +36,12 @@ public:
 private:
 
        /**
-        * Timer for speed of movement
+        * Timer for the movement speed
         */
         autouniqueptr < Timer > speedTimer ;
 
        /**
-        * Timer for speed of falling
+        * Timer for the speed of falling
         */
         autouniqueptr < Timer > fallTimer ;
 

@@ -21,9 +21,9 @@
 #include "Volatile.hpp"
 #include "FinalBall.hpp"
 
-#include "PlayerHead.hpp"
-#include "PlayerHeels.hpp"
-#include "PlayerHeadAndHeels.hpp"
+#include "CharacterHead.hpp"
+#include "CharacterHeels.hpp"
+#include "CharacterHeadAndHeels.hpp"
 
 #include "util.hpp"
 
@@ -128,15 +128,15 @@ autouniqueptr< Behavior > CreatorOfBehaviors::createBehaviorByName( const ItemPt
         }
         else if ( behavior == "behavior of Head" )
         {
-                behaviorToReturn = new PlayerHead( item, behavior );
+                behaviorToReturn = new CharacterHead( item, behavior );
         }
         else if ( behavior == "behavior of Heels" )
         {
-                behaviorToReturn = new PlayerHeels( item, behavior );
+                behaviorToReturn = new CharacterHeels( item, behavior );
         }
         else if ( behavior == "behavior of Head over Heels" )
         {
-                behaviorToReturn = new PlayerHeadAndHeels( item, behavior );
+                behaviorToReturn = new CharacterHeadAndHeels( item, behavior );
         }
         else // if ( behavior == "still" || behavior == "behavior of bubbles" )
         {

@@ -28,7 +28,7 @@ class DescriptionOfItem ;
 
 /**
  * Free items are those that may be anywhere and move around the room such as
- * players, enemies, or something which widths differ from widths of grid’s cells
+ * characters, enemies, or something whose widths differ from the widths of the grid cells
  */
 
 class FreeItem : public Item, public Drawable

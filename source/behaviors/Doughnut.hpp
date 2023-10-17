@@ -12,14 +12,14 @@
 #define Doughnut_hpp_
 
 #include "Behavior.hpp"
-#include "PlayerItem.hpp"
+#include "AvatarItem.hpp"
 #include "Timer.hpp"
 
 
 namespace iso
 {
 
-class PlayerItem ;
+class AvatarItem ;
 
 class Doughnut : public Behavior
 {
@@ -32,11 +32,11 @@ public:
 
         virtual bool update () ;
 
-        void setCharacter ( const PlayerItemPtr & thatCharacter ) {  this->character = thatCharacter ;  }
+        void setCharacter ( const AvatarItemPtr & thatCharacter ) {  this->character = thatCharacter ;  }
 
 private:
 
-        PlayerItemPtr character ;
+        AvatarItemPtr character ;
 
        /**
         * Timer for speed of movement

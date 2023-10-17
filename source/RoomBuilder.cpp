@@ -581,13 +581,13 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
 }
 
 /* static */
-PlayerItemPtr RoomBuilder::createCharacterInRoom( Room * room,
+AvatarItemPtr RoomBuilder::createCharacterInRoom( Room * room,
                                                   const std::string & nameOfCharacter,
                                                   bool justEntered,
                                                   int x, int y, int z,
                                                   const std::string & orientation, const std::string & wayOfEntry )
 {
-        if ( room == nilPointer ) return PlayerItemPtr () ;
+        if ( room == nilPointer ) return AvatarItemPtr () ;
 
         game::GameInfo & gameInfo = game::GameManager::getInstance().getGameInfo () ;
 
@@ -630,7 +630,7 @@ PlayerItemPtr RoomBuilder::createCharacterInRoom( Room * room,
         {
                 if ( gameInfo.getLivesByName( nameOfCharacterToCreate ) > 0 )
                 {
-                        PlayerItemPtr character( new PlayerItem( itemDescription, x, y, z, orientation ) );
+                        AvatarItemPtr character( new AvatarItem( itemDescription, x, y, z, orientation ) );
 
                         std::string behaviorOfCharacter = "behavior of some character";
 
@@ -657,7 +657,7 @@ PlayerItemPtr RoomBuilder::createCharacterInRoom( Room * room,
                 }
         }
 
-        return PlayerItemPtr () ;
+        return AvatarItemPtr () ;
 }
 
 /* static */

@@ -218,9 +218,9 @@ public:
         /**
          * Eat fish, that is, begin the process to save the game
          */
-        void eatFish ( const PlayerItem & character, Room * room ) ;
+        void eatFish ( const AvatarItem & character, Room * room ) ;
 
-        void eatFish ( const PlayerItem & character, Room * room, int x, int y, int z ) ;
+        void eatFish ( const AvatarItem & character, Room * room, int x, int y, int z ) ;
 
         std::string getChosenGraphicsSet () const {  return chosenGraphicsSet ;  }
 

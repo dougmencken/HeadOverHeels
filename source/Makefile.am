@@ -73,8 +73,8 @@ headoverheels_SOURCES = main.cpp \
 			GridItem.hpp \
 			FreeItem.cpp \
 			FreeItem.hpp \
-			PlayerItem.cpp \
-			PlayerItem.hpp \
+			AvatarItem.cpp \
+			AvatarItem.hpp \
 			Mediator.cpp \
 			Mediator.hpp \
 			ShadowCaster.cpp \
@@ -155,12 +155,12 @@ headoverheels_SOURCES = main.cpp \
 			behaviors/ThereAndBack.hpp \
 			behaviors/Patrol.cpp \
 			behaviors/Patrol.hpp \
-			behaviors/PlayerHeadAndHeels.cpp \
-			behaviors/PlayerHeadAndHeels.hpp \
-			behaviors/PlayerHead.cpp \
-			behaviors/PlayerHead.hpp \
-			behaviors/PlayerHeels.cpp \
-			behaviors/PlayerHeels.hpp \
+			behaviors/CharacterHeadAndHeels.cpp \
+			behaviors/CharacterHeadAndHeels.hpp \
+			behaviors/CharacterHead.cpp \
+			behaviors/CharacterHead.hpp \
+			behaviors/CharacterHeels.cpp \
+			behaviors/CharacterHeels.hpp \
 			behaviors/RemoteControl.cpp \
 			behaviors/RemoteControl.hpp \
 			behaviors/Sink.cpp \
@@ -175,8 +175,8 @@ headoverheels_SOURCES = main.cpp \
 			behaviors/Trampoline.hpp \
 			behaviors/Turn.cpp \
 			behaviors/Turn.hpp \
-			behaviors/UserControlled.cpp \
-			behaviors/UserControlled.hpp \
+			behaviors/PlayerControlled.cpp \
+			behaviors/PlayerControlled.hpp \
 			behaviors/Volatile.cpp \
 			behaviors/Volatile.hpp \
 			gui/Font.cpp \

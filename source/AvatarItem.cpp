@@ -1,12 +1,13 @@
 
-#include "PlayerItem.hpp"
+#include "AvatarItem.hpp"
+
 #include "Behavior.hpp"
 #include "Door.hpp"
 #include "Mediator.hpp"
 #include "Room.hpp"
 #include "GameManager.hpp"
 #include "GameInfo.hpp"
-#include "UserControlled.hpp"
+#include "PlayerControlled.hpp"
 
 #include <algorithm> // std::find
 
@@ -14,16 +15,16 @@
 namespace iso
 {
 
-PlayerItem::PlayerItem( const DescriptionOfItem* description, int x, int y, int z, const std::string& way )
+AvatarItem::AvatarItem( const DescriptionOfItem* description, int x, int y, int z, const std::string& way )
         : FreeItem( description, x, y, z, way )
-        , wayOfExit( "no exit" )
+        , wayOfExit( "did not quit" )
         , wayOfEntry( "just wait" )
         , shieldTimer( new Timer () )
         , descriptionOfTakenItem( nilPointer )
 {
 }
 
-PlayerItem::PlayerItem( const PlayerItem & toCopy )
+AvatarItem::AvatarItem( const AvatarItem & toCopy )
         : FreeItem( toCopy )
         , wayOfExit( toCopy.wayOfExit )
         , wayOfEntry( toCopy.wayOfEntry )
@@ -32,7 +33,7 @@ PlayerItem::PlayerItem( const PlayerItem & toCopy )
 {
 }
 
-void PlayerItem::setWayOfExit ( const std::string& way )
+void AvatarItem::setWayOfExit ( const std::string& way )
 {
         this->wayOfExit = way;
 
@@ -70,13 +71,13 @@ void PlayerItem::setWayOfExit ( const std::string& way )
         }
 }
 
-void PlayerItem::autoMoveOnEntry ( const std::string& wayOfEntry )
+void AvatarItem::autoMoveOnEntry ( const std::string& wayOfEntry )
 {
         setWayOfEntry( wayOfEntry );
 
         if ( getBehavior() == nilPointer )
         {
-                std::cerr << "nil behavior at PlayerItem::autoMoveOnEntry" << std::endl ;
+                std::cerr << "nil behavior at AvatarItem::autoMoveOnEntry" << std::endl ;
                 return;
         }
 
@@ -120,7 +121,7 @@ void PlayerItem::autoMoveOnEntry ( const std::string& wayOfEntry )
         }
 }
 
-bool PlayerItem::addToPosition( int x, int y, int z )
+bool AvatarItem::addToPosition( int x, int y, int z )
 {
         bool itAutomoves = getBehavior()->getActivityOfItem() == Activity::AutoMoveNorth ||
                                 getBehavior()->getActivityOfItem() == Activity::AutoMoveSouth ||
@@ -251,7 +252,7 @@ bool PlayerItem::addToPosition( int x, int y, int z )
         collisionFound = ! mediator->isStackOfCollisionsEmpty ();
         if ( ! collisionFound )
         {
-                // now it is known that the player may go thru a door
+                // now it is known that the character can go thru a door
                 // look for collisions with the limits of room
 
                 const std::string doors[ 12 ] =
@@ -322,7 +323,7 @@ bool PlayerItem::addToPosition( int x, int y, int z )
         return ! collisionFound ;
 }
 
-bool PlayerItem::isCollidingWithLimitsOfRoom( const std::string & onWhichWay )
+bool AvatarItem::isCollidingWithLimitsOfRoom( const std::string & onWhichWay )
 {
         bool result = false;
 
@@ -383,13 +384,13 @@ bool PlayerItem::isCollidingWithLimitsOfRoom( const std::string & onWhichWay )
         return result;
 }
 
-void PlayerItem::behave ()
+void AvatarItem::behave ()
 {
         if ( getBehavior() != nilPointer )
-                dynamic_cast< UserControlled* >( getBehavior ().get() )->behave ();
+                dynamic_cast< PlayerControlled* >( getBehavior ().get() )->behave ();
 }
 
-bool PlayerItem::update ()
+bool AvatarItem::update ()
 {
         if ( getBehavior() != nilPointer )
                 getBehavior()->update ();
@@ -397,7 +398,7 @@ bool PlayerItem::update ()
         return false;
 }
 
-void PlayerItem::wait ()
+void AvatarItem::wait ()
 {
         ActivityOfItem activity = getBehavior()->getActivityOfItem();
 
@@ -413,26 +414,26 @@ void PlayerItem::wait ()
         }
 }
 
-bool PlayerItem::isActiveCharacter () const
+bool AvatarItem::isActiveCharacter () const
 {
         return mediator->getActiveCharacter()->getUniqueName() == this->getUniqueName() ;
 }
 
-unsigned char PlayerItem::getLives() const
+unsigned char AvatarItem::getLives() const
 {
         const std::string & character = this->getOriginalLabel() ;
         game::GameInfo & gameInfo = game::GameManager::getInstance().getGameInfo () ;
         return gameInfo.getLivesByName( character ) ;
 }
 
-void PlayerItem::addLives( unsigned char lives )
+void AvatarItem::addLives( unsigned char lives )
 {
         const std::string & character = this->getOriginalLabel() ;
         game::GameInfo & gameInfo = game::GameManager::getInstance().getGameInfo () ;
         gameInfo.addLivesByName( character, lives );
 }
 
-void PlayerItem::loseLife ()
+void AvatarItem::loseLife ()
 {
         setWayOfExit( "rebuild room" );
 
@@ -447,32 +448,32 @@ void PlayerItem::loseLife ()
         gameManager.emptyHandbag () ;
 }
 
-void PlayerItem::takeMagicTool( const std::string & label )
+void AvatarItem::takeMagicTool( const std::string & label )
 {
         game::GameManager::getInstance().getGameInfo().setMagicToolByLabel( label );
 }
 
-unsigned short PlayerItem::getDonuts () const
+unsigned short AvatarItem::getDonuts () const
 {
         return game::GameManager::getInstance().getGameInfo ().getDoughnuts () ;
 }
 
-void PlayerItem::addDonuts( unsigned short howMany )
+void AvatarItem::addDonuts( unsigned short howMany )
 {
         game::GameManager::getInstance().getGameInfo ().addDoughnuts( howMany );
 }
 
-void PlayerItem::useDoughnutHorn ()
+void AvatarItem::useDoughnutHorn ()
 {
         game::GameManager::getInstance().getGameInfo ().consumeOneDoughnut () ;
 }
 
-unsigned short PlayerItem::getQuickSteps () const
+unsigned short AvatarItem::getQuickSteps () const
 {
         return game::GameManager::getInstance().getGameInfo ().getBonusQuickSteps () ;
 }
 
-void PlayerItem::activateBonusQuickSteps ()
+void AvatarItem::activateBonusQuickSteps ()
 {
         if ( this->getOriginalLabel() == "head" )
         {
@@ -483,17 +484,17 @@ void PlayerItem::activateBonusQuickSteps ()
         }
 }
 
-void PlayerItem::decrementBonusQuickSteps ()
+void AvatarItem::decrementBonusQuickSteps ()
 {
         game::GameManager::getInstance().getGameInfo().decrementQuickStepsByName( this->getOriginalLabel() );
 }
 
-unsigned short PlayerItem::getHighJumps () const
+unsigned short AvatarItem::getHighJumps () const
 {
         return game::GameManager::getInstance().getGameInfo ().getBonusHighJumps () ;
 }
 
-void PlayerItem::addBonusHighJumps( unsigned char howMany )
+void AvatarItem::addBonusHighJumps( unsigned char howMany )
 {
         if ( getOriginalLabel() == "heels" )
         {
@@ -501,12 +502,12 @@ void PlayerItem::addBonusHighJumps( unsigned char howMany )
         }
 }
 
-void PlayerItem::decrementBonusHighJumps ()
+void AvatarItem::decrementBonusHighJumps ()
 {
         game::GameManager::getInstance().getGameInfo().decrementHighJumpsByName( this->getOriginalLabel() );
 }
 
-void PlayerItem::activateShield ()
+void AvatarItem::activateShield ()
 {
         shieldTimer->reset () ;
         shieldTimer->go () ;
@@ -516,7 +517,7 @@ void PlayerItem::activateShield ()
         gameInfo.setShieldPointsByName( character, 99 );
 }
 
-void PlayerItem::activateShieldForSeconds ( double seconds )
+void AvatarItem::activateShieldForSeconds ( double seconds )
 {
         shieldTimer->reset () ;
 
@@ -530,7 +531,7 @@ void PlayerItem::activateShieldForSeconds ( double seconds )
         gameInfo.setShieldSecondsByName( character, seconds );
 }
 
-void PlayerItem::decrementShieldOverTime ()
+void AvatarItem::decrementShieldOverTime ()
 {
         game::GameInfo & gameInfo = game::GameManager::getInstance().getGameInfo () ;
         double shieldSecondsRemaining = game::GameInfo::fullShieldTimeInSeconds - shieldTimer->getValue() ;
@@ -545,7 +546,7 @@ void PlayerItem::decrementShieldOverTime ()
         gameInfo.setShieldSecondsByName( character, shieldSecondsRemaining );
 }
 
-void PlayerItem::liberatePlanet ()
+void AvatarItem::liberatePlanet ()
 {
         std::string scenery = this->mediator->getRoom()->getScenery();
 
@@ -571,30 +572,30 @@ void PlayerItem::liberatePlanet ()
         }
 }
 
-void PlayerItem::placeItemInBag ( const std::string & labelOfItem, const std::string & behavior )
+void AvatarItem::placeItemInBag ( const std::string & labelOfItem, const std::string & behavior )
 {
         iso::Isomot & isomot = game::GameManager::getInstance().getIsomot () ;
         this->descriptionOfTakenItem = isomot.getItemDescriptions().getDescriptionByLabel( labelOfItem ) ;
         this->behaviorOfTakenItem = behavior ;
 }
 
-void PlayerItem::emptyBag ()
+void AvatarItem::emptyBag ()
 {
         this->descriptionOfTakenItem = nilPointer ;
         this->behaviorOfTakenItem = "still" ;
 }
 
-void PlayerItem::save ()
+void AvatarItem::save ()
 {
         game::GameManager::getInstance().eatFish( *this, this->mediator->getRoom() );
 }
 
-void PlayerItem::saveAt ( int x, int y, int z )
+void AvatarItem::saveAt ( int x, int y, int z )
 {
         game::GameManager::getInstance().eatFish( *this, this->mediator->getRoom(), x, y, z );
 }
 
-bool PlayerItem::hasTool( const std::string & tool ) const
+bool AvatarItem::hasTool( const std::string & tool ) const
 {
         game::GameInfo & gameInfo = game::GameManager::getInstance().getGameInfo () ;
         const std::string & character = this->getOriginalLabel() ;
@@ -610,7 +611,7 @@ bool PlayerItem::hasTool( const std::string & tool ) const
         return false ;
 }
 
-bool PlayerItem::hasShield () const
+bool AvatarItem::hasShield () const
 {
         game::GameInfo & gameInfo = game::GameManager::getInstance().getGameInfo () ;
         return gameInfo.getShieldPointsByName( this->getOriginalLabel() ) > 0 ;

@@ -2,7 +2,7 @@
 #include "KindOfActivity.hpp"
 #include "Behavior.hpp"
 #include "FreeItem.hpp"
-#include "PlayerItem.hpp"
+#include "AvatarItem.hpp"
 #include "Room.hpp"
 #include "Mediator.hpp"
 #include "GameManager.hpp"
@@ -35,21 +35,21 @@ void KindOfActivity::propagateActivityToAdjacentItems( Item & sender, const Acti
                 {
                         // is it free item or grid item
                         if ( itemMeetsSender->whichKindOfItem() == "grid item" ||
-                                itemMeetsSender->whichKindOfItem() == "free item" || itemMeetsSender->whichKindOfItem() == "player item" )
+                                itemMeetsSender->whichKindOfItem() == "free item" || itemMeetsSender->whichKindOfItem() == "avatar item" )
                         {
                                 // is it item with behavior
                                 if ( itemMeetsSender->getBehavior() != nilPointer )
                                 {
-                                        // if it’s player item and sender is mortal, then player loses its life
-                                        if ( itemMeetsSender->whichKindOfItem() == "player item" && sender.isMortal() &&
-                                                        ! dynamic_cast< const PlayerItem& >( *itemMeetsSender ).hasShield() )
+                                        // if it’s avatar item and the sender is mortal, then the character loses one life
+                                        if ( itemMeetsSender->whichKindOfItem() == "avatar item" && sender.isMortal() &&
+                                                        ! dynamic_cast< const AvatarItem & >( *itemMeetsSender ).hasShield() )
                                         {
                                                 if ( itemMeetsSender->getBehavior()->getActivityOfItem() != Activity::MeetMortalItem &&
                                                                 itemMeetsSender->getBehavior()->getActivityOfItem() != Activity::Vanish )
                                                 {
                                                         if ( ! game::GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
                                                         {
-                                                                std::cout << "mortal item \"" << sender.getLabel() << "\" just met player" << std::endl ;
+                                                                std::cout << "mortal item \"" << sender.getLabel() << "\" just met the character" << std::endl ;
 
                                                                 // is it direct contact
                                                                 if ( mediator->depthOfStackOfCollisions() <= 1 )
@@ -57,24 +57,24 @@ void KindOfActivity::propagateActivityToAdjacentItems( Item & sender, const Acti
                                                                         itemMeetsSender->getBehavior()->changeActivityOfItem( Activity::MeetMortalItem );
                                                                 }
                                                         }
-                                                        /* else std::cout << "the inviolability granted when item \"" << sender.getLabel() << "\" met the player" << std::endl ; */
+                                                        /* else std::cout << "the inviolability granted when item \"" << sender.getLabel() << "\" met the character" << std::endl ; */
                                                 }
                                         }
-                                        // if sender is player and colliding one is mortal, then player loses its life
-                                        else if ( sender.whichKindOfItem() == "player item" && itemMeetsSender->isMortal() &&
-                                                        ! dynamic_cast< const PlayerItem& >( sender ).hasShield() )
+                                        // if the sender is the character and the colliding one is mortal, then the character loses one life
+                                        else if ( sender.whichKindOfItem() == "avatar item" && itemMeetsSender->isMortal() &&
+                                                        ! dynamic_cast< const AvatarItem & >( sender ).hasShield() )
                                         {
                                                 if ( sender.getBehavior()->getActivityOfItem() != Activity::MeetMortalItem &&
                                                                 itemMeetsSender->getBehavior()->getActivityOfItem() != Activity::Vanish )
                                                 {
                                                         if ( ! game::GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
                                                         {
-                                                                std::cout << "player just met mortal item \"" << itemMeetsSender->getLabel() << "\"" << std::endl ;
+                                                                std::cout << "the character just met mortal item \"" << itemMeetsSender->getLabel() << "\"" << std::endl ;
 
                                                                 sender.getBehavior()->changeActivityOfItem( Activity::MeetMortalItem );
                                                                 itemMeetsSender->getBehavior()->changeActivityOfItem( activity, ItemPtr( &sender ) );
                                                         }
-                                                        /* else std::cout << "the inviolability granted when the player met item \"" << itemMeetsSender->getLabel() << "\"" << std::endl ; */
+                                                        /* else std::cout << "the inviolability granted when the character met item \"" << itemMeetsSender->getLabel() << "\"" << std::endl ; */
                                                 }
                                         }
                                         // if not, propagate activity to that item
@@ -87,8 +87,8 @@ void KindOfActivity::propagateActivityToAdjacentItems( Item & sender, const Acti
                                         }
                                 }
                                 // otherwise it is item without behavior, which may be mortal too
-                                else if ( sender.whichKindOfItem() == "player item" && itemMeetsSender->isMortal() &&
-                                                ! dynamic_cast< const PlayerItem& >( sender ).hasShield() )
+                                else if ( sender.whichKindOfItem() == "avatar item" && itemMeetsSender->isMortal() &&
+                                                ! dynamic_cast< const AvatarItem & >( sender ).hasShield() )
                                 {
                                         if ( sender.getBehavior()->getActivityOfItem() != Activity::MeetMortalItem &&
                                                         sender.getBehavior()->getActivityOfItem() != Activity::Vanish )
@@ -101,8 +101,8 @@ void KindOfActivity::propagateActivityToAdjacentItems( Item & sender, const Acti
                                 }
                         }
                 }
-                // is it player which leaves room via some door
-                else if ( sender.whichKindOfItem() == "player item" &&
+                // is it the character leaving the room via some door
+                else if ( sender.whichKindOfItem() == "avatar item" &&
                         ( ( nameOfCollision == "north limit"  &&  mediator->getRoom()->hasDoorAt( "north" ) ) ||
                           ( nameOfCollision == "south limit"  &&  mediator->getRoom()->hasDoorAt( "south" ) ) ||
                           ( nameOfCollision == "east limit"  &&  mediator->getRoom()->hasDoorAt( "east" ) ) ||
@@ -116,7 +116,7 @@ void KindOfActivity::propagateActivityToAdjacentItems( Item & sender, const Acti
                           ( nameOfCollision == "westnorth limit"  &&  mediator->getRoom()->hasDoorAt( "westnorth" ) ) ||
                           ( nameOfCollision == "westsouth limit"  &&  mediator->getRoom()->hasDoorAt( "westsouth" ) ) ) )
                 {
-                        PlayerItem& character = dynamic_cast< PlayerItem & >( sender );
+                        AvatarItem & character = dynamic_cast< AvatarItem & >( sender );
 
                         if ( nameOfCollision == "north limit" )
                                 character.setWayOfExit( "north" );
@@ -170,7 +170,7 @@ void KindOfActivity::propagateActivityToItemsAbove( Item& sender, const Activity
                         if ( itemAbove == nilPointer ) continue ;
 
                         // is it free item
-                        if ( itemAbove->whichKindOfItem() == "free item" || itemAbove->whichKindOfItem() == "player item" )
+                        if ( itemAbove->whichKindOfItem() == "free item" || itemAbove->whichKindOfItem() == "avatar item" )
                         {
                                 FreeItem& freeItemAbove = dynamic_cast< FreeItem& >( *itemAbove );
 
@@ -185,18 +185,18 @@ void KindOfActivity::propagateActivityToItemsAbove( Item& sender, const Activity
                                                 {
                                                         if ( freeItemAbove.getBehavior()->getActivityOfItem() != Activity::Vanish )
                                                         {
-                                                                // if it’s player item above sender and sender is mortal, then player loses its life
-                                                                if ( freeItemAbove.whichKindOfItem() == "player item" && sender.isMortal() &&
-                                                                        ! dynamic_cast< const PlayerItem& >( freeItemAbove ).hasShield() )
+                                                                // if it’s avatar item above sender and sender is mortal, then the character loses its life
+                                                                if ( freeItemAbove.whichKindOfItem() == "avatar item" && sender.isMortal() &&
+                                                                        ! dynamic_cast< const AvatarItem & >( freeItemAbove ).hasShield() )
                                                                 {
                                                                         if ( freeItemAbove.getBehavior()->getActivityOfItem() != Activity::MeetMortalItem )
                                                                         {
                                                                                 if ( ! game::GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
                                                                                 {
-                                                                                        std::cout << "player is above mortal item \"" << sender.getLabel() << "\"" << std::endl ;
+                                                                                        std::cout << "character is above mortal item \"" << sender.getLabel() << "\"" << std::endl ;
                                                                                         freeItemAbove.getBehavior()->changeActivityOfItem( Activity::MeetMortalItem );
                                                                                 }
-                                                                                /* else std::cout << "the inviolability granted when the player is above item \"" << sender.getLabel() << "\"" << std::endl ; */
+                                                                                /* else std::cout << "the inviolability granted when the character is above \"" << sender.getLabel() << "\"" << std::endl ; */
                                                                         }
                                                                 }
                                                                 // if not, propagate activity to that item above

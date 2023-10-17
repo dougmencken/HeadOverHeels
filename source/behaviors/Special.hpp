@@ -12,7 +12,7 @@
 #define Special_hpp_
 
 #include "Behavior.hpp"
-#include "PlayerItem.hpp"
+#include "AvatarItem.hpp"
 #include "Timer.hpp"
 
 
@@ -41,7 +41,7 @@ protected:
          */
         bool mayTake ( const std::string & character ) ;
 
-        void takeMagicItem ( PlayerItem & whoTakes ) ;
+        void takeMagicItem ( AvatarItem & whoTakes ) ;
 
 private:
 

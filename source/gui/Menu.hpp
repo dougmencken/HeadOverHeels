@@ -27,8 +27,10 @@ namespace gui
 class Label ;
 
 /**
- * Menu of user interface, where options are chosen by Up Arrow or Q / Down Arrow or A keys
- * and are selected by using Enter or Space key
+ * The user interface menu
+ *
+ * options are chosen by the Up Arrow or Q / Down Arrow or A keys
+ * and are selected by using the Enter or Space key
  */
 
 class Menu : public Widget

@@ -89,7 +89,7 @@ void GuiManager::begin ()
         if ( languageMenu != nilPointer )
                 languageMenu->doIt ();
         else
-                std::cerr << "can't create the language menu, the first screen of user interface" << std::endl ;
+                std::cerr << "can't create the language menu, the first screen of the user interface" << std::endl ;
 
         // draw the user interface and handle keys
         while ( this->active )

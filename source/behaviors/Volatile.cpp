@@ -57,7 +57,7 @@ bool Volatile::update ()
 
                                         // is it free item
                                         if ( topItem != nilPointer &&
-                                                ( topItem->whichKindOfItem() == "free item" || topItem->whichKindOfItem() == "player item" ) )
+                                                ( topItem->whichKindOfItem() == "free item" || topItem->whichKindOfItem() == "avatar item" ) )
                                         {
                                                 // look at whether above item is volatile or special
                                                 // because that item would disappear unless it is leaning on another one
@@ -113,7 +113,7 @@ bool Volatile::update ()
                                         disappearanceTimer->reset();
                                 }
                         }
-                        // if it is puppy which disappears when Head or composite player is in room
+                        // if it's a puppy which disappears when Head or the composite character is in the room
                         else if ( getNameOfBehavior () == "behavior of disappearance as soon as Head appears" )
                         {
                                 if ( mediator->findItemByLabel( "head" ) != nilPointer ||

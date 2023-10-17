@@ -8,22 +8,23 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef PlayerHead_hpp_
-#define PlayerHead_hpp_
+#ifndef CharacterHeadAndHeels_hpp_
+#define CharacterHeadAndHeels_hpp_
 
-#include "UserControlled.hpp"
+#include "PlayerControlled.hpp"
+
 
 namespace iso
 {
 
-class PlayerHead : public UserControlled
+class CharacterHeadAndHeels : public PlayerControlled
 {
 
 public:
 
-        PlayerHead( const ItemPtr & item, const std::string& behavior ) ;
+        CharacterHeadAndHeels( const ItemPtr & item, const std::string & behavior ) ;
 
-        virtual ~PlayerHead( ) ;
+        virtual ~CharacterHeadAndHeels( ) ;
 
         virtual bool update () ;
 
@@ -31,9 +32,9 @@ public:
 
 protected:
 
-        virtual void wait ( PlayerItem & characterItem ) ;
+        virtual void wait( AvatarItem & characterItem ) ;
 
-        virtual void blink ( PlayerItem & characterItem ) ;
+        virtual void blink( AvatarItem & characterItem ) ;
 
 protected:
 

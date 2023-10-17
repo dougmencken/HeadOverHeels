@@ -18,7 +18,7 @@ namespace iso
 {
 
 /**
- * Way in which you move an item or entry to room or exit from room
+ * The way in which you move an item or the entry to a room or the exit from a room
  */
 
 class Way
@@ -62,9 +62,9 @@ public:
         static const unsigned int ByTeleport = 33 ;     // to another room via teleport
         static const unsigned int ByTeleportToo = 34 ;  // to another room via second teleport
 
-        static const unsigned int NoExit = 44 ;         // player doesn’t exit from this room
+        static const unsigned int DidNotQuit = 44 ;     // the character has not yet quit the room
 
-        static const unsigned int Restart = 55 ;        // restart room when character loses its life
+        static const unsigned int RestartRoom = 55 ;    // restart the room, for example when the character loses one life
 
         static const unsigned int JustWait = 99 ;       // just wait in room
 

@@ -47,7 +47,7 @@ void Behavior::propagateActivity( const Item& sender, const ActivityOfItem& acti
 
                 // is it free item or grid item
                 if ( item != nilPointer &&
-                        ( item->whichKindOfItem() == "grid item" || item->whichKindOfItem() == "free item" || item->whichKindOfItem() == "player item" ) )
+                        ( item->whichKindOfItem() == "grid item" || item->whichKindOfItem() == "free item" || item->whichKindOfItem() == "avatar item" ) )
                 {
                         // change activity for item with behavior
                         if ( item->getBehavior() != nilPointer )

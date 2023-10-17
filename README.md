@@ -23,15 +23,15 @@ therefore I began this project on GitHub which eventually evolved into what it i
 
 Since then, I reworked almost every piece of the Jorge's code, dealed around many gotchas and added many new features as like
 * animated movin'n‘binkin dudes in the menus
-* the transitions between user interface menus
+* transitions between the user interface menus
 * the new black & white set of graphics
 * ... with the speccy-like coloring of rooms
-* room entry tunes
+* the room entry tunes
 * room miniatures
-* the camera optionally follows an active character
-* support for various screen sizes not only 640 x 480
-* support for both allegro 5 and allegro 4 libraries
-* many easy-to-enable cheats :O
+* the camera optionally follows the active character
+* the support for various screen sizes not only 640 x 480
+* the support for both the allegro 5 and allegro 4 libraries
+* the many easy-to-enable cheats :O
 
 However, this project went (and still continues to go) almost unnoticed.
 Neither Jorge nor anyone else from the original team was ever participated in any further development and never wrote a single line about what's goin' on or was done here.

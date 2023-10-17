@@ -95,7 +95,7 @@ bool DisplaceKindOfActivity::displace( Behavior* behavior, ActivityOfItem* activ
                         ;
         }
 
-        if ( item->whichKindOfItem() == "free item" || item->whichKindOfItem() == "player item" )
+        if ( item->whichKindOfItem() == "free item" || item->whichKindOfItem() == "avatar item" )
         {
                 // when there’s collision
                 if ( ! itemDisplaced )

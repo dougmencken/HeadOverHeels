@@ -1,5 +1,6 @@
 
 #include "Teleport.hpp"
+
 #include "Item.hpp"
 #include "GridItem.hpp"
 #include "Mediator.hpp"
@@ -46,28 +47,28 @@ bool Teleport::update ()
                                         ItemPtr aboveItem = mediator->findItemByUniqueName( topItems.top() );
                                         topItems.pop();
 
-                                        // is it free item with behavior
+                                        // is it a free item with behavior
                                         if ( aboveItem != nilPointer &&
-                                                ( aboveItem->whichKindOfItem() == "free item" || aboveItem->whichKindOfItem() == "player item" ) &&
+                                                ( aboveItem->whichKindOfItem() == "free item" || aboveItem->whichKindOfItem() == "avatar item" ) &&
                                                         aboveItem->getBehavior() != nilPointer )
                                         {
-                                                // look for items below
+                                                // look for the items below
                                                 if ( ! aboveItem->canAdvanceTo( 0, 0, -1 ) )
                                                 {
-                                                        bool playerAboveTeleport = false;
+                                                        bool characterIsAboveTeleport = false ;
 
                                                         while ( ! mediator->isStackOfCollisionsEmpty() )
                                                         {
                                                                 ItemPtr belowItem = mediator->findCollisionPop( );
 
-                                                                if ( aboveItem->whichKindOfItem() == "player item" && belowItem == this->item )
+                                                                if ( aboveItem->whichKindOfItem() == "avatar item" && belowItem == this->item )
                                                                 {
-                                                                        playerAboveTeleport = true;
+                                                                        characterIsAboveTeleport = true ;
                                                                         break;
                                                                 }
                                                         }
 
-                                                        activated = playerAboveTeleport;
+                                                        activated = characterIsAboveTeleport ;
                                                 }
                                         }
                                 }

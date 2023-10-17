@@ -360,7 +360,7 @@ void Miniature::draw ()
 
         for ( std::vector< FreeItemPtr >::const_iterator fi = freeItemsInRoom.begin (); fi != freeItemsInRoom.end (); ++ fi )
         {
-                if ( *fi == nilPointer || ( *fi )->whichKindOfItem() == "player item" ) continue ;
+                if ( *fi == nilPointer || ( *fi )->whichKindOfItem() == "avatar item" ) continue ;
                 const FreeItem & item = *( *fi ) ;
 
                 const DescriptionOfItem * descriptionOfItem = item.getDescriptionOfItem () ;
@@ -415,11 +415,11 @@ void Miniature::draw ()
 
         // show characters in room
 
-        const std::vector< PlayerItemPtr >& charactersInRoom = room.getCharactersYetInRoom() ;
+        const std::vector< AvatarItemPtr >& charactersInRoom = room.getCharactersYetInRoom() ;
 
-        for ( std::vector< PlayerItemPtr >::const_iterator pi = charactersInRoom.begin (); pi != charactersInRoom.end (); ++ pi )
+        for ( std::vector< AvatarItemPtr >::const_iterator pi = charactersInRoom.begin (); pi != charactersInRoom.end (); ++ pi )
         {
-                const PlayerItem& character = *( *pi ) ;
+                const AvatarItem & character = *( *pi ) ;
 
                 unsigned int roomTileSize = room.getSizeOfOneTile() ;
 

@@ -148,8 +148,8 @@ public:
         ItemPtr collisionWithBadBoy () ;
 
        /**
-        * Activate next character in room
-        * @return true if it’s possible to swap or false if there’s only one player in this room
+        * Activate the next character in the room
+        * @return true if it’s possible to swap or false if there’s only one character in this room
         */
         bool pickNextCharacter () ;
 
@@ -178,14 +178,12 @@ public:
 
 private:
 
-       /**
-        * Room where this mediator deals
-        */
+        /**
+         * The room where this mediator deals
+         */
         Room * room ;
 
-       /**
-        * Thread for update of items
-        */
+        // for updating of items
         pthread_t thread ;
 
         volatile bool threadRunning ;
@@ -202,26 +200,26 @@ private:
 
         bool switchInRoomIsOn ;
 
-       /**
-        * Items that may take life from player and that may be freezed by doughnut or by switch
-        */
+        /**
+         * Items that can take one life from a character and that may be frozen by a donut or with a switch
+         */
         std::vector < std::string > badBoys ;
 
-       /**
-        * Character yet controlled by user
-        */
-        PlayerItemPtr activeCharacter ;
+        /**
+         * The character yet controlled by the player
+         */
+        AvatarItemPtr activeCharacter ;
 
         std::string labelOfActiveCharacter ;
 
-       /**
-        * Character which was active just before joining them
-        */
+        /**
+         * The character which was active just before joining them both
+         */
         std::string lastActiveCharacterBeforeJoining ;
 
-       /**
-        * Collisions happened in room, stores unique names of items
-        */
+        /**
+         * The unique names of items collided in the room
+         */
         std::deque < std::string > collisions ;
 
 public:
@@ -232,17 +230,17 @@ public:
 
         Room * getRoom () const {  return room ;  }
 
-        PlayerItemPtr & getActiveCharacter () {  return activeCharacter ;  }
+        AvatarItemPtr & getActiveCharacter () {  return activeCharacter ;  }
 
         const std::string & getLabelOfActiveCharacter () const {  return labelOfActiveCharacter ;  }
 
-        void setActiveCharacter ( const PlayerItemPtr & character ) ;
+        void setActiveCharacter ( const AvatarItemPtr & character ) ;
 
-       /**
-        * Waiting character
-        * @return player item or nil if there’re no more players in this room
-        */
-        PlayerItemPtr getWaitingCharacter () const ;
+        /**
+         * The waiting character
+         * @return avatar item or nil if there’s no more character in this room
+         */
+        AvatarItemPtr getWaitingCharacter () const ;
 
 };
 

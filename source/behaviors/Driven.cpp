@@ -2,7 +2,7 @@
 #include "Driven.hpp"
 #include "Item.hpp"
 #include "FreeItem.hpp"
-#include "PlayerItem.hpp"
+#include "AvatarItem.hpp"
 #include "MoveKindOfActivity.hpp"
 #include "DisplaceKindOfActivity.hpp"
 #include "FallKindOfActivity.hpp"
@@ -33,7 +33,7 @@ bool Driven::update ()
         FreeItem& freeItem = dynamic_cast< FreeItem& >( * this->item );
         Mediator* mediator = freeItem.getMediator();
         bool isGone = false;
-        bool playerFound = false;
+        bool characterFound = false;
 
         switch ( activity )
         {
@@ -67,14 +67,14 @@ bool Driven::update ()
                         {
                                 if ( ! freeItem.canAdvanceTo( 0, 0, 1 ) )
                                 {
-                                        while ( ! mediator->isStackOfCollisionsEmpty() && ! playerFound )
+                                        while ( ! mediator->isStackOfCollisionsEmpty() && ! characterFound )
                                         {
                                                 ItemPtr item = mediator->findCollisionPop ();
 
-                                                if ( item->whichKindOfItem() == "player item" )
+                                                if ( item->whichKindOfItem() == "avatar item" )
                                                 {
-                                                        playerFound = true;
-                                                        moving = true;
+                                                        characterFound = true ;
+                                                        moving = true ;
 
                                                         switch ( Way( item->getOrientation() ).getIntegerOfWay () )
                                                         {

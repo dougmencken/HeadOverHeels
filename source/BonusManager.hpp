@@ -19,10 +19,10 @@ namespace iso
 {
 
 /**
- * Manage the presence or absence of bonuses in rooms. Bonuses are elements
- * that provide lives and other powerups to players, in addition to the crowns
- * that are key elements of the game. Bonus may be absent in the room due to being
- * picked up, when a bonus is taken from a particular room it wouldn’t appear again
+ * Manage the presence or absence of the bonuses in the game's rooms.
+ * The bonuses provide lives and other powerups to characters, in addition to the crowns
+ * that are the key elements of the game. A bonus may be absent in the room due to being
+ * taken, and if a bonus is taken from a certain room it wouldn’t appear there again
  */
 
 class BonusManager

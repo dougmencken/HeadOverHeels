@@ -26,9 +26,9 @@ namespace iso
 class DescriptionOfItem ;
 
 /**
- * Grid items are those which are placed in a particular position and have the same widths
- * as cells of grid have. Grid items are mostly static blocks on which player jumps. You can’t
- * change X and Y coordinates of grid item, you can only change its Z coordinate
+ * The grid items are those which are placed in a particular position and have the same widths
+ * as the grid cells have. Grid items are mostly static. You can only change the Z coordinate
+ * of a grid item, but can’t change the X and Y coordinates
  */
 
 class GridItem : public Item, public Drawable

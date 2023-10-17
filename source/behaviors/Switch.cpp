@@ -1,7 +1,8 @@
 
 #include "Switch.hpp"
+
 #include "Item.hpp"
-#include "PlayerItem.hpp"
+#include "AvatarItem.hpp"
 #include "Mediator.hpp"
 #include "SoundManager.hpp"
 
@@ -44,7 +45,7 @@ bool Switch::update ()
                                         ItemPtr trigger = triggerItems[ i ];
 
                                         if ( std::find( sideItems.begin (), sideItems.end (), trigger ) == sideItems.end () ||
-                                                ( trigger->whichKindOfItem() == "player item" && trigger->getBehavior()->getActivityOfItem() == Activity::Wait ) )
+                                                ( trigger->whichKindOfItem() == "avatar item" && trigger->getBehavior()->getActivityOfItem() == Activity::Wait ) )
                                         {
                                                 triggerItems.erase( std::remove( triggerItems.begin (), triggerItems.end (), trigger ), triggerItems.end () );
                                         }
@@ -73,11 +74,11 @@ bool Switch::update ()
 
                                         // is it free item
                                         if ( itemAbove != nilPointer &&
-                                                ( itemAbove->whichKindOfItem() == "free item" || itemAbove->whichKindOfItem() == "player item" ) )
+                                                ( itemAbove->whichKindOfItem() == "free item" || itemAbove->whichKindOfItem() == "avatar item" ) )
                                         {
                                                 if ( itemAbove->getBehavior() != nilPointer &&
                                                         ! itemAbove->canAdvanceTo( 0, 0, -1 ) &&
-                                                                // yep, switch doesn’t toggle when player jumps
+                                                                // yep, the switch doesn’t toggle when the character jumps
                                                                 itemAbove->getBehavior()->getActivityOfItem() != Activity::RegularJump &&
                                                                 itemAbove->getBehavior()->getActivityOfItem() != Activity::HighJump )
                                                 {
