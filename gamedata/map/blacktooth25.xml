@@ -55,7 +55,7 @@
     </walls>
     <items>
         <item x="4" y="0" z="1">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>south</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>

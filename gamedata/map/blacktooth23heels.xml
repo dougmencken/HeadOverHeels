@@ -68,37 +68,37 @@
             <kind>griditem</kind>
         </item>
         <item x="8" y="1" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>east</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
         </item>
         <item x="8" y="2" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>east</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
         </item>
         <item x="8" y="3" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>east</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
         </item>
         <item x="8" y="4" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>east</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
         </item>
         <item x="8" y="5" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>east</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
         </item>
         <item x="8" y="6" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>east</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>

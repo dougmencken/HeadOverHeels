@@ -65,10 +65,10 @@ protected:
         */
         virtual void displace( AvatarItem & character ) ;
 
-       /**
-        * Cancels movement by moving in the opposite direction of displacing, leaving item stopped
-        * at current point. Used when character is dragged by conveyor belt or some similar item
-        */
+        /**
+         * Cancels the existing displace by moving in the opposite direction, leaving the item
+         * stopped at the current point. Used when the character is dragged by a conveyor
+         */
         virtual void cancelDisplace( AvatarItem & character ) ;
 
        /**

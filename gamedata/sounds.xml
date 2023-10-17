@@ -37,10 +37,10 @@
 
   <!-- toaster -->
 
-  <!-- conveyor belt -->
-  <item label="conveyor-belt">
+  <!-- conveyor -->
+  <item label="conveyor">
     <event activity="active">
-      <file>sound/conveyor-belt.wav</file>
+      <file>sound/conveyor.wav</file>
     </event>
     <event activity="vanish">
       <file>sound/destruction.wav</file>

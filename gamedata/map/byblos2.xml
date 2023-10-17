@@ -70,7 +70,7 @@
     </walls>
     <items>
         <item x="1" y="0" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>south</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
@@ -81,25 +81,25 @@
             <kind>griditem</kind>
         </item>
         <item x="2" y="0" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>south</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
         </item>
         <item x="3" y="0" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>south</orientation>
             <behavior>behavior of disappearance on jump into</behavior>
             <kind>griditem</kind>
         </item>
         <item x="4" y="0" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>south</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
         </item>
         <item x="5" y="0" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>south</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
@@ -110,7 +110,7 @@
             <kind>griditem</kind>
         </item>
         <item x="6" y="0" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>south</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
@@ -121,7 +121,7 @@
             <kind>griditem</kind>
         </item>
         <item x="7" y="0" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>south</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
@@ -132,13 +132,13 @@
             <kind>griditem</kind>
         </item>
         <item x="8" y="0" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>west</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
         </item>
         <item x="1" y="1" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>east</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
@@ -149,7 +149,7 @@
             <kind>griditem</kind>
         </item>
         <item x="8" y="1" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>west</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
@@ -170,13 +170,13 @@
             <kind>griditem</kind>
         </item>
         <item x="1" y="2" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>east</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
         </item>
         <item x="8" y="2" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>west</orientation>
             <behavior>behavior of disappearance on jump into</behavior>
             <kind>griditem</kind>
@@ -202,19 +202,19 @@
             <kind>griditem</kind>
         </item>
         <item x="1" y="3" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>east</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
         </item>
         <item x="8" y="3" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>west</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
         </item>
         <item x="12" y="3" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>east</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
@@ -225,19 +225,19 @@
             <kind>griditem</kind>
         </item>
         <item x="8" y="4" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>west</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
         </item>
         <item x="12" y="4" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>east</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
         </item>
         <item x="8" y="5" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>south</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
@@ -248,25 +248,25 @@
             <kind>griditem</kind>
         </item>
         <item x="9" y="5" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>south</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
         </item>
         <item x="10" y="5" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>south</orientation>
             <behavior>behavior of disappearance on jump into</behavior>
             <kind>griditem</kind>
         </item>
         <item x="11" y="5" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>south</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
         </item>
         <item x="12" y="5" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>east</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>

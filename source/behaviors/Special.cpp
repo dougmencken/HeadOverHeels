@@ -89,7 +89,7 @@ bool Special::update ()
                 case Activity::ForceDisplaceSouth:
                 case Activity::ForceDisplaceEast:
                 case Activity::ForceDisplaceWest:
-                        // bonus item is on conveyor belt
+                        // the bonus item is on a conveyor
                         if ( speedTimer->getValue() > item->getSpeed() )
                         {
                                 DisplaceKindOfActivity::getInstance().displace( this, &activity, true );

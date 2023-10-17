@@ -8,8 +8,8 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef ConveyorBelt_hpp_
-#define ConveyorBelt_hpp_
+#ifndef Conveyor_hpp_
+#define Conveyor_hpp_
 
 #include "Behavior.hpp"
 #include "Timer.hpp"
@@ -18,14 +18,14 @@
 namespace iso
 {
 
-class ConveyorBelt : public Behavior
+class Conveyor : public Behavior
 {
 
 public:
 
-        ConveyorBelt( const ItemPtr & item, const std::string & behavior ) ;
+        Conveyor( const ItemPtr & item, const std::string & behavior ) ;
 
-        virtual ~ConveyorBelt( ) ;
+        virtual ~Conveyor( ) ;
 
         virtual bool update () ;
 

@@ -1,5 +1,6 @@
 
-#include "ConveyorBelt.hpp"
+#include "Conveyor.hpp"
+
 #include "Item.hpp"
 #include "FreeItem.hpp"
 #include "AvatarItem.hpp"
@@ -12,7 +13,7 @@
 namespace iso
 {
 
-ConveyorBelt::ConveyorBelt( const ItemPtr & item, const std::string& behavior )
+Conveyor::Conveyor( const ItemPtr & item, const std::string & behavior )
         : Behavior( item, behavior )
         , speedTimer( new Timer() )
         , animationTimer( new Timer() )
@@ -21,11 +22,11 @@ ConveyorBelt::ConveyorBelt( const ItemPtr & item, const std::string& behavior )
         animationTimer->go();
 }
 
-ConveyorBelt::~ConveyorBelt( )
+Conveyor::~Conveyor( )
 {
 }
 
-bool ConveyorBelt::update ()
+bool Conveyor::update ()
 {
         Mediator* mediator = item->getMediator();
 

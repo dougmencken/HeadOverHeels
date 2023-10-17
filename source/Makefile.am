@@ -133,8 +133,8 @@ headoverheels_SOURCES = main.cpp \
 			behaviors/Behavior.hpp \
 			behaviors/CreatorOfBehaviors.cpp \
 			behaviors/CreatorOfBehaviors.hpp \
-			behaviors/ConveyorBelt.cpp \
-			behaviors/ConveyorBelt.hpp \
+			behaviors/Conveyor.cpp \
+			behaviors/Conveyor.hpp \
 			behaviors/Detector.cpp \
 			behaviors/Detector.hpp \
 			behaviors/Doughnut.cpp \

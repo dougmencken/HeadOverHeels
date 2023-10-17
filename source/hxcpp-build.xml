@@ -58,7 +58,7 @@
         <file name="activities/FallKindOfActivity.cpp" />
         <file name="activities/JumpKindOfActivity.cpp" />
         <file name="activities/MoveKindOfActivity.cpp" />
-        <file name="behaviors/ConveyorBelt.cpp" />
+        <file name="behaviors/Conveyor.cpp" />
         <file name="behaviors/Detector.cpp" />
         <file name="behaviors/Doughnut.cpp" />
         <file name="behaviors/Driven.cpp" />

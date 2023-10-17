@@ -113,7 +113,7 @@
             <kind>griditem</kind>
         </item>
         <item x="1" y="6" z="3">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>east</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>

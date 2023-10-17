@@ -1,7 +1,7 @@
 
 #include "CreatorOfBehaviors.hpp"
 
-#include "ConveyorBelt.hpp"
+#include "Conveyor.hpp"
 #include "Detector.hpp"
 #include "Driven.hpp"
 #include "Elevator.hpp"
@@ -37,7 +37,7 @@ autouniqueptr< Behavior > CreatorOfBehaviors::createBehaviorByName( const ItemPt
 
         if ( behavior == "behavior of conveyor" )
         {
-                behaviorToReturn = new ConveyorBelt( item, behavior );
+                behaviorToReturn = new Conveyor( item, behavior );
         }
         else if ( behavior == "behavior of detector" )
         {

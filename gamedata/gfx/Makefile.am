@@ -23,8 +23,8 @@ gamedatagfx_DATA = item.png/ball-shadows.png \
 			item.png/bubbles.png \
 			item.png/cap-shadows.png \
 			item.png/cap.png \
-			item.png/conveyor-belt-shadows.png \
-			item.png/conveyor-belt.png \
+			item.png/conveyor-shadows.png \
+			item.png/conveyor.png \
 			item.png/crown-shadows.png \
 			item.png/crown.png \
 			item.png/cylinder.png \

@@ -70,18 +70,18 @@
     </shadow>
   </item>
 
-  <!-- Conveyor belt -->
-  <item label="conveyor-belt">
+  <!-- Conveyor -->
+  <item label="conveyor">
     <widthX>16</widthX>
     <widthY>16</widthY>
     <height>24</height>
     <orientations>4</orientations>
     <speed>40</speed>
-    <picture file="conveyor-belt.png">
+    <picture file="conveyor.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
     </picture>
-    <shadow file="conveyor-belt-shadows.png">
+    <shadow file="conveyor-shadows.png">
       <shadowWidth>64</shadowWidth>
       <shadowHeight>31</shadowHeight>
     </shadow>

@@ -110,115 +110,115 @@
             <kind>griditem</kind>
         </item>
         <item x="2" y="1" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>north</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
         </item>
         <item x="3" y="1" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>north</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
         </item>
         <item x="4" y="1" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>north</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
         </item>
         <item x="5" y="1" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>north</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
         </item>
         <item x="5" y="3" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>north</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
         </item>
         <item x="1" y="5" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>north</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
         </item>
         <item x="3" y="5" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>north</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
         </item>
         <item x="5" y="5" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>east</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
         </item>
         <item x="1" y="6" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>east</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
         </item>
         <item x="1" y="7" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>east</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
         </item>
         <item x="1" y="8" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>east</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
         </item>
         <item x="1" y="9" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>east</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
         </item>
         <item x="1" y="10" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>east</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
         </item>
         <item x="1" y="11" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>east</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
         </item>
         <item x="3" y="11" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>south</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
         </item>
         <item x="5" y="11" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>south</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
         </item>
         <item x="5" y="12" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>north</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
         </item>
         <item x="3" y="14" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>south</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
         </item>
         <item x="5" y="14" z="0">
-            <label>conveyor-belt</label>
+            <label>conveyor</label>
             <orientation>north</orientation>
             <behavior>behavior of conveyor</behavior>
             <kind>griditem</kind>
