@@ -233,7 +233,7 @@ void MapManager::beginNewGame( const std::string& headRoom, const std::string& h
                 {
                         addRoomInPlay( firstRoom );
 
-                        const DescriptionOfItem* headData = gameManager.getIsomot().getItemDescriptions().getDescriptionByLabel( "head" );
+                        const DescriptionOfItem* headData = ItemDescriptions::descriptions ().getDescriptionByLabel( "head" );
 
                         int centerX = firstRoom->getXCenterForItem( headData );
                         int centerY = firstRoom->getYCenterForItem( headData );
@@ -273,7 +273,7 @@ void MapManager::beginNewGame( const std::string& headRoom, const std::string& h
                         {
                                 addRoomInPlay( secondRoom );
 
-                                const DescriptionOfItem* heelsData = gameManager.getIsomot().getItemDescriptions().getDescriptionByLabel( "heels" );
+                                const DescriptionOfItem* heelsData = ItemDescriptions::descriptions ().getDescriptionByLabel( "heels" );
 
                                 int centerX = secondRoom->getXCenterForItem( heelsData );
                                 int centerY = secondRoom->getYCenterForItem( heelsData );
@@ -525,9 +525,8 @@ Room* MapManager::changeRoom( const std::string& wayOfExit )
 
         const AvatarItem & oldItemOfRoamer = * previousRoom->getMediator()->getActiveCharacter( );
 
-        std::string nameOfRoamer = oldItemOfRoamer.getOriginalLabel() ; // current label may be "bubbles" when teleporting
-        iso::Isomot & isomot = game::GameManager::getInstance().getIsomot () ;
-        const DescriptionOfItem * descriptionOfRoamer = isomot.getItemDescriptions().getDescriptionByLabel( nameOfRoamer ) ;
+        std::string nameOfRoamer = oldItemOfRoamer.getOriginalLabel() ; // the original, because the current label may be "bubbles" when teleporting
+        const DescriptionOfItem * descriptionOfRoamer = ItemDescriptions::descriptions ().getDescriptionByLabel( nameOfRoamer ) ;
 
         std::cout << "\"" << nameOfRoamer << "\" migrates"
                         << " from room \"" << fileOfPreviousRoom << "\" with way of exit \"" << wayOfExit << "\""

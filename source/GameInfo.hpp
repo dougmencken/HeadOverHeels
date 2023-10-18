@@ -160,7 +160,7 @@ public:
         // a character gets 25 seconds of immunity when a rabbit is touched
         #define _fullShieldTimeInSeconds        25.0
 
-#if __cplusplus >= 201103L /* when complier supports c++11 */
+#ifdef __Cxx11__ /* when complier supports c++11 */
         static constexpr double fullShieldTimeInSeconds = _fullShieldTimeInSeconds ;
 #else
         #define fullShieldTimeInSeconds         _fullShieldTimeInSeconds

@@ -574,8 +574,7 @@ void AvatarItem::liberatePlanet ()
 
 void AvatarItem::placeItemInBag ( const std::string & labelOfItem, const std::string & behavior )
 {
-        iso::Isomot & isomot = game::GameManager::getInstance().getIsomot () ;
-        this->descriptionOfTakenItem = isomot.getItemDescriptions().getDescriptionByLabel( labelOfItem ) ;
+        this->descriptionOfTakenItem = ItemDescriptions::descriptions ().getDescriptionByLabel( labelOfItem ) ;
         this->behaviorOfTakenItem = behavior ;
 }
 

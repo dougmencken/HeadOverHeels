@@ -415,9 +415,7 @@ void PlayerControlled::useHooter( AvatarItem & character )
         {
                 this->donutFromHooterIsHere = true;
 
-                iso::Isomot & isomot = game::GameManager::getInstance().getIsomot () ;
-                const DescriptionOfItem * hooterDoughnut = isomot.getItemDescriptions().getDescriptionByLabel( labelOfFiredDoughnut );
-
+                const DescriptionOfItem * hooterDoughnut = ItemDescriptions::descriptions().getDescriptionByLabel( labelOfFiredDoughnut );
                 if ( hooterDoughnut != nilPointer )
                 {
                         SoundManager::getInstance().stop( character.getOriginalLabel(), Activity::FireDoughnut );

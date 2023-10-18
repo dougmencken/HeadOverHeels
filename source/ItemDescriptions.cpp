@@ -1,5 +1,6 @@
 
 #include "ItemDescriptions.hpp"
+
 #include "GameManager.hpp"
 #include "Color.hpp"
 
@@ -11,14 +12,39 @@
 namespace iso
 {
 
+/* static */
+const std::string ItemDescriptions::The_File_Full_Of_Item_Descriptions = "items.xml" ;
+
+/* static */
+autouniqueptr< ItemDescriptions > ItemDescriptions::theDescriptions( new ItemDescriptions( ) );
+
 ItemDescriptions::~ItemDescriptions( )
 {
-        freeDescriptionOfItems() ;
+        binDescriptions () ;
 }
 
-void ItemDescriptions::readDescriptionOfItemsFrom( const std::string & nameOfXMLFile )
+/* private */
+void ItemDescriptions::binDescriptions ()
 {
-        freeDescriptionOfItems() ;
+        for ( std::map< std::string, const DescriptionOfItem * >::iterator i = descriptionsOfItems.begin () ;
+                        i != descriptionsOfItems.end () ; ++ i )
+        {
+                delete i->second ;
+        }
+        descriptionsOfItems.clear();
+
+        this->alreadyRead = false ;
+}
+
+void ItemDescriptions::readDescriptionsFromFile( const std::string & nameOfXMLFile, bool reRead )
+{
+        if ( this->alreadyRead ) {
+                if ( reRead ) {
+                        std::cout << "**RE-READING** the descriptions of items from \"" << nameOfXMLFile << "\"" << std::endl ;
+                        binDescriptions () ;
+                } else
+                        return ;
+        }
 
         tinyxml2::XMLDocument itemsXml;
         tinyxml2::XMLError result = itemsXml.LoadFile( ( ospaths::sharePath() + nameOfXMLFile ).c_str () );
@@ -146,10 +172,17 @@ void ItemDescriptions::readDescriptionOfItemsFrom( const std::string & nameOfXML
                 }
 
                 tinyxml2::XMLElement* door = item->FirstChildElement( "door" ) ;
-                bool isDoor = ( door != nilPointer ) ;
+                bool notDoor = ( door == nilPointer ) ;
 
-                // for door there are three parts, and thus three times three dimensions
-                if ( isDoor )
+                if ( notDoor )
+                {
+                        newItem->setWidthX( std::atoi( item->FirstChildElement( "widthX" )->FirstChild()->ToText()->Value() ) );
+                        newItem->setWidthY( std::atoi( item->FirstChildElement( "widthY" )->FirstChild()->ToText()->Value() ) );
+                        newItem->setHeight( std::atoi( item->FirstChildElement( "height" )->FirstChild()->ToText()->Value() ) );
+
+                        descriptionsOfItems[ newItem->getLabel () ] = newItem ;
+                }
+                else // for door there are three parts, and thus three times three dimensions
                 {
                         /* std::string doorAt = door->FirstChild()->ToText()->Value() ; */
 
@@ -195,46 +228,34 @@ void ItemDescriptions::readDescriptionOfItemsFrom( const std::string & nameOfXML
                                 else if    ( lintel->getHeight() == 0 ) lintel->setHeight( wz );
                         }
 
-                        descriptionOfItems[  leftJamb->getLabel () ] = leftJamb ;
-                        descriptionOfItems[ rightJamb->getLabel () ] = rightJamb ;
-                        descriptionOfItems[    lintel->getLabel () ] = lintel ;
-                }
-                else
-                {
-                        newItem->setWidthX( std::atoi( item->FirstChildElement( "widthX" )->FirstChild()->ToText()->Value() ) );
-                        newItem->setWidthY( std::atoi( item->FirstChildElement( "widthY" )->FirstChild()->ToText()->Value() ) );
-                        newItem->setHeight( std::atoi( item->FirstChildElement( "height" )->FirstChild()->ToText()->Value() ) );
-
-                        descriptionOfItems[ newItem->getLabel () ] = newItem ;
+                        descriptionsOfItems[  leftJamb->getLabel () ] = leftJamb ;
+                        descriptionsOfItems[ rightJamb->getLabel () ] = rightJamb ;
+                        descriptionsOfItems[    lintel->getLabel () ] = lintel ;
                 }
         }
+
+        this->alreadyRead = true ;
 }
 
-void ItemDescriptions::freeDescriptionOfItems ()
+const DescriptionOfItem* ItemDescriptions::getDescriptionByLabel( const std::string & label ) /* const */
 {
-        for ( std::map< std::string, const DescriptionOfItem * >::iterator i = descriptionOfItems.begin (); i != descriptionOfItems.end (); ++ i )
-        {
-                delete i->second ;
-        }
-        descriptionOfItems.clear();
-}
+        if ( ! this->alreadyRead )
+                readDescriptionsFromFile( The_File_Full_Of_Item_Descriptions ) ;
 
-const DescriptionOfItem* ItemDescriptions::getDescriptionByLabel( const std::string& label ) const
-{
-        if ( descriptionOfItems.find( label ) == descriptionOfItems.end () )
+        if ( descriptionsOfItems.find( label ) == descriptionsOfItems.end () )
         {
-                std::cerr << "description for item with label \"" << label << "\" is absent" << std::endl ;
+                std::cerr << "the description of item with label \"" << label << "\" is absent" << std::endl ;
                 return nilPointer ;
         }
 
 #ifdef __Cxx11__
 
-        return descriptionOfItems.at( label );
+        return descriptionsOfItems.at( label );
 
 #else
 
-        std::map< std::string, const DescriptionOfItem * >::const_iterator it = descriptionOfItems.find( label );
-        if ( it != descriptionOfItems.end () ) return it->second ;
+        std::map< std::string, const DescriptionOfItem * >::const_iterator it = descriptionsOfItems.find( label );
+        if ( it != descriptionsOfItems.end () ) return it->second ;
         return nilPointer ;
 
 #endif

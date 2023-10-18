@@ -20,7 +20,6 @@
 #include <tinyxml2.h>
 
 #include "MapManager.hpp"
-#include "ItemDescriptions.hpp"
 
 
 class Color ;
@@ -49,8 +48,6 @@ public:
 
         void prepare () ;
 
-        void fillItemDescriptions () ;
-
         void beginNewGame () ;
 
         void pause () ;
@@ -60,8 +57,6 @@ public:
         Picture * updateMe () ;
 
         MapManager & getMapManager () {  return mapManager ;  }
-
-        const ItemDescriptions & getItemDescriptions () const {  return itemDescriptions ;  }
 
         bool doesCameraFollowCharacter () const {  return cameraFollowsCharacter ;  }
 
@@ -103,8 +98,6 @@ private:
         Picture * view ;
 
         MapManager mapManager ;
-
-        ItemDescriptions itemDescriptions ;
 
         bool paused ;
 

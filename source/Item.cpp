@@ -168,8 +168,7 @@ bool Item::atExtraFrame() const
 
 void Item::metamorphInto( const std::string & labelOfItem, const std::string & initiatedBy )
 {
-        iso::Isomot & isomot = game::GameManager::getInstance().getIsomot () ;
-        const DescriptionOfItem * description = isomot.getItemDescriptions().getDescriptionByLabel( labelOfItem );
+        const DescriptionOfItem * description = ItemDescriptions::descriptions ().getDescriptionByLabel( labelOfItem );
         if ( description == nilPointer ) return ;
 
         std::cout << "metamorphosis of item \"" << getUniqueName()

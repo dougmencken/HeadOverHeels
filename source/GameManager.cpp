@@ -664,7 +664,6 @@ void GameManager::drawOnScreen ( const allegro::Pict& view )
 
 void GameManager::loadGame ( const std::string& fileName )
 {
-        isomot.fillItemDescriptions ();
         saverAndLoader.loadGame( fileName );
 }
 

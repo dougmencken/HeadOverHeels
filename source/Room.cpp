@@ -580,8 +580,6 @@ void Room::updateWallsWithDoors ()
                 ( *wy )->calculateOffset();
         }
 
-        iso::Isomot & isomot = game::GameManager::getInstance().getIsomot () ;
-
         // convert walls near doors to grid items to draw them after doors
 
         if ( hasDoorAt( "north" ) || hasDoorAt( "northeast" ) || hasDoorAt( "northwest" ) )
@@ -603,7 +601,7 @@ void Room::updateWallsWithDoors ()
                                 std::string label = segment->getImage()->getName() ;
                                 label = label.substr( 0, label.find_last_of( "." ) );
 
-                                const DescriptionOfItem* dataOfWall = isomot.getItemDescriptions().getDescriptionByLabel( label );
+                                const DescriptionOfItem* dataOfWall = ItemDescriptions::descriptions().getDescriptionByLabel( label );
 
                                 addGridItem( GridItemPtr( new GridItem( dataOfWall, 0, segment->getPosition(), 0, "nowhere" ) ) );
 
@@ -637,7 +635,7 @@ void Room::updateWallsWithDoors ()
                                 std::string label = segment->getImage()->getName() ;
                                 label = label.substr( 0, label.find_last_of( "." ) );
 
-                                const DescriptionOfItem* dataOfWall = isomot.getItemDescriptions().getDescriptionByLabel( label );
+                                const DescriptionOfItem* dataOfWall = ItemDescriptions::descriptions().getDescriptionByLabel( label );
 
                                 addGridItem( GridItemPtr( new GridItem( dataOfWall, segment->getPosition(), 0, 0, "nowhere" ) ) );
 

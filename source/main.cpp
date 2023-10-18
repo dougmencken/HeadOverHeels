@@ -80,7 +80,7 @@ void readPreferences ()
 int main( int argc, char** argv )
 {
         std::cout << "Head over Heels" << std::endl ;
-        std::cout << "the free and open source remake" << std::endl ;
+        std::cout << "the free and open source remake (in C++)" << std::endl ;
 # ifdef PACKAGE_VERSION
         std::cout << "version " << std::string( PACKAGE_VERSION ) << std::endl;
 # endif
@@ -144,17 +144,12 @@ int main( int argc, char** argv )
                                 }
                         }
 
-                        if ( knownOption )
-                        {
+                        if ( knownOption ) {
                                 std::cout << "got option \"" << option << "\"" ;
-
                                 if ( ! value.empty () ) std::cout << " with value \"" << value << "\"" ;
                                 std::cout << std::endl ;
-                        }
-                        else
-                        {
-                                std::cout << "unknown option \"" << option << "\"" << std::endl ;
-                        }
+                        } else
+                                std::cout << "got unknown option \"" << option << "\"" << std::endl ;
                 }
 
                 if ( options.count( "help" ) > 0 )
@@ -227,6 +222,8 @@ int main( int argc, char** argv )
 
         game::GameManager::getInstance().cleanUp () ;
         gui::GuiManager::getInstance().freeScreens () ;
+
+        std::cout << std::endl << "bye :*" << std::endl ;
 
         return EXIT_SUCCESS ;
 }

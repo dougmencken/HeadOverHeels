@@ -17,6 +17,7 @@
 #include "Picture.hpp"
 #include "Room.hpp"
 #include "GameSaverAndLoader.hpp"
+#include "ItemDescriptions.hpp"
 #include "Isomot.hpp"
 #include "ColorCyclingLabel.hpp"
 #include "Timer.hpp"

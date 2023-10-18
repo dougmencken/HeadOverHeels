@@ -621,8 +621,7 @@ AvatarItemPtr RoomBuilder::createCharacterInRoom( Room * room,
                 }
         }
 
-        iso::Isomot & isomot = game::GameManager::getInstance().getIsomot () ;
-        const DescriptionOfItem* itemDescription = isomot.getItemDescriptions().getDescriptionByLabel( nameOfCharacterToCreate );
+        const DescriptionOfItem* itemDescription = ItemDescriptions::descriptions().getDescriptionByLabel( nameOfCharacterToCreate );
 
         // if it is found and has some lives left, place it in room
         if ( ( nameOfCharacterToCreate == "headoverheels" || nameOfCharacterToCreate == "head" || nameOfCharacterToCreate == "heels" )
@@ -704,9 +703,7 @@ GridItemPtr RoomBuilder::buildGridItem( tinyxml2::XMLElement* item, Room* room )
         ( void ) room ;
 
         std::string label = item->FirstChildElement( "label" )->FirstChild()->ToText()->Value();
-
-        iso::Isomot & isomot = game::GameManager::getInstance().getIsomot () ;
-        const DescriptionOfItem* itemDescription = isomot.getItemDescriptions().getDescriptionByLabel( label );
+        const DescriptionOfItem * itemDescription = ItemDescriptions::descriptions ().getDescriptionByLabel( label );
 
         if ( itemDescription != nilPointer )
         {
@@ -741,9 +738,7 @@ GridItemPtr RoomBuilder::buildGridItem( tinyxml2::XMLElement* item, Room* room )
 FreeItemPtr RoomBuilder::buildFreeItem( tinyxml2::XMLElement* item, Room* room )
 {
         std::string label = item->FirstChildElement( "label" )->FirstChild()->ToText()->Value();
-
-        iso::Isomot & isomot = game::GameManager::getInstance().getIsomot () ;
-        const DescriptionOfItem* itemDescription = isomot.getItemDescriptions().getDescriptionByLabel( label );
+        const DescriptionOfItem * itemDescription = ItemDescriptions::descriptions ().getDescriptionByLabel( label );
 
         if ( itemDescription != nilPointer )
         {
@@ -838,9 +833,8 @@ Door* RoomBuilder::buildDoor( tinyxml2::XMLElement* item )
         if ( orientation == nilPointer ) orientation = item->FirstChildElement( "direction" ) ;
 
         return
-                new Door( game::GameManager::getInstance().getIsomot().getItemDescriptions(), label,
-                                itemX, itemY, ( itemZ > Isomot::Top ? itemZ * Isomot::LayerHeight : Isomot::Top ),
-                                        orientation->FirstChild()->ToText()->Value() );
+                new Door( label, itemX, itemY, ( itemZ > Isomot::Top ? itemZ * Isomot::LayerHeight : Isomot::Top ),
+                                 orientation->FirstChild()->ToText()->Value() );
 }
 
 }

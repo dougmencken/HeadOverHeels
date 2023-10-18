@@ -33,14 +33,13 @@ class Door : public Mediated
 public:
 
        /**
-        * @param itemDescriptions to find three parts of door
         * @param label label of door
         * @param cx cell of door on X
         * @param cy cell of door on Y
         * @param z position on Z or how far is item from ground
         * @param way orientation of door
         */
-        Door( const ItemDescriptions & itemDescriptions, const std::string & label, int cx, int cy, int z, const std::string & way ) ;
+        Door( const std::string & label, int cx, int cy, int z, const std::string & way ) ;
 
         virtual ~Door( ) ;
 
@@ -67,8 +66,6 @@ public:
                                                 const std::string& at ) ;
 
 private:
-
-        const ItemDescriptions & itemDescriptions ;
 
         std::string labelOfDoor ;
 

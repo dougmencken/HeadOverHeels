@@ -20,6 +20,10 @@
 namespace iso
 {
 
+/**
+ * The description of an item as read from items.xml
+ */
+
 class DescriptionOfItem
 {
 
@@ -174,41 +178,33 @@ private:
         double weight ;
 
         /**
-         * Time in seconds the item takes to move one single isometric unit
+         * The time in seconds the item takes to move one single isometric unit
          */
         double speed ;
 
         /**
-         * 1 when there’s only one orientation,
-         * 2 if there’re frames for south and west, or
-         * 4 there’re frames for each orientation
+         * 1 if the item is the same on all sides, thus there’s only one orientation,
+         * 2 if there’re different images for south and west, or
+         * 4 when there’re different images for each orientation
          */
         unsigned short orientations ;
 
         double delayBetweenFrames ;
 
         /**
-         * Width in pixels of each item’s frame
+         * Width and height in pixels of each item’s frame
          */
         unsigned int widthOfFrame ;
-
-        /**
-         * Height in pixels of each item’s frame
-         */
         unsigned int heightOfFrame ;
 
         /**
-         * Width in pixels of each frame for item’s shadow
+         * Width and height in pixels of each frame for the item’s shadow
          */
         unsigned int widthOfShadow ;
-
-        /**
-         * Height in pixels of each frame for item’s shadow
-         */
         unsigned int heightOfShadow ;
 
         /**
-         * When true, item takes one life from character on touch
+         * When true, this item takes one life from the character on touch
          */
         bool mortal ;
 
@@ -218,7 +214,7 @@ private:
         unsigned int extraFrames ;
 
         /**
-         * The sequence of item's frames for an orientation
+         * The sequence of item's frames for one orientation
          */
         std::vector< unsigned int > sequenceOFrames ;
 

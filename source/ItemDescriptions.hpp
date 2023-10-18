@@ -20,30 +20,42 @@
 namespace iso
 {
 
+/**
+ * All the descriptions of the game's items as read from items.xml
+ */
+
 class ItemDescriptions
 {
 
 public:
 
-        ItemDescriptions( ) { }
+        static const std::string The_File_Full_Of_Item_Descriptions ;
+
+        ItemDescriptions( ) : alreadyRead( false ), descriptionsOfItems( ) { }
 
         virtual ~ItemDescriptions( ) ;
 
         /**
-         * Load the description of items from the XML file
+         * Load the descriptions of items from the XML file
          */
-        void readDescriptionOfItemsFrom ( const std::string & nameOfXMLFile ) ;
-
-        void freeDescriptionOfItems () ;
+        void readDescriptionsFromFile ( const std::string & nameOfXMLFile, bool reRead = false ) ;
 
         /**
          * @return the description of item or nil if there's no description for such an item
          */
-        const DescriptionOfItem * getDescriptionByLabel ( const std::string & label ) const ;
+        const DescriptionOfItem * getDescriptionByLabel ( const std::string & label ) /* const */ ;
+
+        static ItemDescriptions & descriptions () {  return *theDescriptions ;  }
 
 private:
 
-        std::map < std::string, const DescriptionOfItem * > descriptionOfItems ;
+        static autouniqueptr< ItemDescriptions > theDescriptions ;
+
+        bool alreadyRead ;
+
+        std::map < std::string, const DescriptionOfItem * > descriptionsOfItems ;
+
+        void binDescriptions () ;
 
 };
 
