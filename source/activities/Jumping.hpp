@@ -8,8 +8,8 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef JumpKindOfActivity_hpp_
-#define JumpKindOfActivity_hpp_
+#ifndef Jumping_hpp_
+#define Jumping_hpp_
 
 #include <vector>
 
@@ -24,18 +24,18 @@ namespace activities
  * Salto
  */
 
-class JumpKindOfActivity : public KindOfActivity
+class Jumping : public KindOfActivity
 {
 
 protected:
 
-        JumpKindOfActivity() : KindOfActivity( ) {}
+        Jumping() : KindOfActivity( ) {}
 
 public:
 
-        virtual ~JumpKindOfActivity() {}
+        virtual ~Jumping() {}
 
-        static JumpKindOfActivity & getInstance() ;
+        static Jumping & getInstance() ;
 
        /**
         * Item jumps
@@ -58,7 +58,7 @@ protected:
 
 private:
 
-        static JumpKindOfActivity * instance ;
+        static Jumping * instance ;
 
 };
 

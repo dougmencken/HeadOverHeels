@@ -54,10 +54,10 @@
         <file name="BonusManager.cpp" />
         <file name="SoundManager.cpp" />
         <file name="activities/KindOfActivity.cpp" />
-        <file name="activities/DisplaceKindOfActivity.cpp" />
-        <file name="activities/FallKindOfActivity.cpp" />
-        <file name="activities/JumpKindOfActivity.cpp" />
-        <file name="activities/MoveKindOfActivity.cpp" />
+        <file name="activities/Displacing.cpp" />
+        <file name="activities/Falling.cpp" />
+        <file name="activities/Jumping.cpp" />
+        <file name="activities/Moving.cpp" />
         <file name="behaviors/Conveyor.cpp" />
         <file name="behaviors/Detector.cpp" />
         <file name="behaviors/Doughnut.cpp" />

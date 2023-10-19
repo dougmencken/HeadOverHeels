@@ -3,9 +3,9 @@
 
 #include "Item.hpp"
 #include "FreeItem.hpp"
-#include "MoveKindOfActivity.hpp"
-#include "DisplaceKindOfActivity.hpp"
-#include "FallKindOfActivity.hpp"
+#include "Moving.hpp"
+#include "Displacing.hpp"
+#include "Falling.hpp"
 #include "Mediator.hpp"
 #include "Room.hpp"
 #include "SoundManager.hpp"
@@ -48,7 +48,7 @@ bool ThereAndBack::update ()
                                 if ( speedTimer->getValue() > freeItem.getSpeed() )
                                 {
                                         // move it
-                                        if ( ! activities::MoveKindOfActivity::getInstance().move( this, &activity, true ) )
+                                        if ( ! activities::Moving::getInstance().move( this, &activity, true ) )
                                         {
                                                 turnRound();
 
@@ -77,7 +77,7 @@ bool ThereAndBack::update ()
                                 SoundManager::getInstance().play( freeItem.getLabel(), activity );
 
                                 // displace this item by other one
-                                activities::DisplaceKindOfActivity::getInstance().displace( this, &activity, true );
+                                activities::Displacing::getInstance().displace( this, &activity, true );
 
                                 activity = activities::Activity::Wait;
 
@@ -103,7 +103,7 @@ bool ThereAndBack::update ()
                                 // is it time to fall
                                 else if ( fallTimer->getValue() > freeItem.getWeight() )
                                 {
-                                        if ( ! activities::FallKindOfActivity::getInstance().fall( this ) )
+                                        if ( ! activities::Falling::getInstance().fall( this ) )
                                         {
                                                 // emit sound of falling down
                                                 SoundManager::getInstance().play( freeItem.getLabel(), activity );

@@ -3,8 +3,8 @@
 #include "Item.hpp"
 #include "FreeItem.hpp"
 #include "AvatarItem.hpp"
-#include "DisplaceKindOfActivity.hpp"
-#include "FallKindOfActivity.hpp"
+#include "Displacing.hpp"
+#include "Falling.hpp"
 #include "Mediator.hpp"
 #include "Room.hpp"
 #include "SoundManager.hpp"
@@ -77,7 +77,7 @@ bool Trampoline::update ()
                         }
 
                         // look if it falls down
-                        if ( activities::FallKindOfActivity::getInstance().fall( this ) )
+                        if ( activities::Falling::getInstance().fall( this ) )
                         {
                                 fallTimer->reset();
                                 activity = activities::Activity::Fall;
@@ -99,7 +99,7 @@ bool Trampoline::update ()
                                 SoundManager::getInstance().play( freeItem.getLabel(), activity );
 
                                 this->changeActivityOfItem( activity );
-                                activities::DisplaceKindOfActivity::getInstance().displace( this, &activity, true );
+                                activities::Displacing::getInstance().displace( this, &activity, true );
 
                                 if ( activity != activities::Activity::Fall )
                                 {
@@ -122,7 +122,7 @@ bool Trampoline::update ()
                         {
                                 // item falls
                                 this->changeActivityOfItem( activity );
-                                if ( ! activities::FallKindOfActivity::getInstance().fall( this ) )
+                                if ( ! activities::Falling::getInstance().fall( this ) )
                                 {
                                         // play sound of falling down
                                         SoundManager::getInstance().play( freeItem.getLabel(), activity );

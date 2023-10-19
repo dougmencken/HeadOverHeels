@@ -8,8 +8,8 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef FallKindOfActivity_hpp_
-#define FallKindOfActivity_hpp_
+#ifndef Falling_hpp_
+#define Falling_hpp_
 
 #include <string>
 #include <vector>
@@ -25,23 +25,23 @@ namespace activities
  * Item falls
  */
 
-class FallKindOfActivity : public KindOfActivity
+class Falling : public KindOfActivity
 {
 
 protected:
 
-        FallKindOfActivity( ) : KindOfActivity( ) {}
+        Falling( ) : KindOfActivity( ) {}
 
 public:
 
-        virtual ~FallKindOfActivity( ) {}
+        virtual ~Falling( ) {}
 
        /**
         * @return true if item may fall or false when there’s collision
         */
         virtual bool fall ( behaviors::Behavior * behavior ) ;
 
-        static FallKindOfActivity & getInstance () ;
+        static Falling & getInstance () ;
 
 private:
 
@@ -52,7 +52,7 @@ private:
 
 private:
 
-        static FallKindOfActivity * instance ;
+        static Falling * instance ;
 
 };
 

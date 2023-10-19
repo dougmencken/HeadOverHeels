@@ -4,8 +4,8 @@
 #include "Item.hpp"
 #include "FreeItem.hpp"
 #include "AvatarItem.hpp"
-#include "DisplaceKindOfActivity.hpp"
-#include "FallKindOfActivity.hpp"
+#include "Displacing.hpp"
+#include "Falling.hpp"
 #include "Mediator.hpp"
 #include "SoundManager.hpp"
 

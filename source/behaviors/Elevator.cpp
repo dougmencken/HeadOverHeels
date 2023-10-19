@@ -4,7 +4,7 @@
 #include "Isomot.hpp"
 #include "Item.hpp"
 #include "FreeItem.hpp"
-#include "MoveKindOfActivity.hpp"
+#include "Moving.hpp"
 #include "SoundManager.hpp"
 
 
@@ -42,7 +42,7 @@ bool Elevator::update ()
                 case activities::Activity::MoveUp:
                         if ( speedTimer->getValue() > freeItem.getSpeed() )
                         {
-                                activities::MoveKindOfActivity::getInstance().move( this, &activity, false );
+                                activities::Moving::getInstance().move( this, &activity, false );
 
                                 speedTimer->reset();
 
@@ -61,7 +61,7 @@ bool Elevator::update ()
                 case activities::Activity::MoveDown:
                         if ( speedTimer->getValue() > freeItem.getSpeed() )
                         {
-                                activities::MoveKindOfActivity::getInstance().move( this, &activity, false );
+                                activities::Moving::getInstance().move( this, &activity, false );
 
                                 speedTimer->reset();
 

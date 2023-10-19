@@ -3,7 +3,7 @@
 
 #include "FreeItem.hpp"
 #include "Mediator.hpp"
-#include "MoveKindOfActivity.hpp"
+#include "Moving.hpp"
 #include "Mediator.hpp"
 #include "Room.hpp"
 
@@ -39,7 +39,7 @@ bool FinalBall::update ()
                                 // move the ball when there’s no collision
                                 if ( this->item->getMediator()->isStackOfCollisionsEmpty() )
                                 {
-                                        activities::MoveKindOfActivity::getInstance().move( this, &activity, false );
+                                        activities::Moving::getInstance().move( this, &activity, false );
                                 }
                                 else
                                 {

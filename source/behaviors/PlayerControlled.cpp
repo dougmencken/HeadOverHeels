@@ -7,10 +7,10 @@
 #include "ItemDescriptions.hpp"
 #include "Room.hpp"
 #include "Mediator.hpp"
-#include "MoveKindOfActivity.hpp"
-#include "DisplaceKindOfActivity.hpp"
-#include "FallKindOfActivity.hpp"
-#include "JumpKindOfActivity.hpp"
+#include "Moving.hpp"
+#include "Displacing.hpp"
+#include "Falling.hpp"
+#include "Jumping.hpp"
 #include "Doughnut.hpp"
 #include "GameManager.hpp"
 #include "SoundManager.hpp"
@@ -49,7 +49,7 @@ void PlayerControlled::wait( ::AvatarItem & character )
 {
         character.wait();
 
-        if ( activities::FallKindOfActivity::getInstance().fall( this ) )
+        if ( activities::Falling::getInstance().fall( this ) )
         {
                 speedTimer->reset();
                 activity = activities::Activity::Fall;
@@ -76,7 +76,7 @@ void PlayerControlled::move( ::AvatarItem & character )
                 if ( speedTimer->getValue() > speed )
                 {
                         // move it
-                        bool moved = activities::MoveKindOfActivity::getInstance().move( this, &activity, true );
+                        bool moved = activities::Moving::getInstance().move( this, &activity, true );
 
                         // decrement the quick steps
                         if ( character.getQuickSteps() > 0
@@ -107,7 +107,7 @@ void PlayerControlled::autoMove( ::AvatarItem & character )
         if ( speedTimer->getValue() > speed )
         {
                 // move it
-                activities::MoveKindOfActivity::getInstance().move( this, &activity, true );
+                activities::Moving::getInstance().move( this, &activity, true );
 
                 speedTimer->reset();
 
@@ -137,7 +137,7 @@ void PlayerControlled::displace( ::AvatarItem & character )
         // when the displacement couldn’t be performed due to a collision then the activity propagates to the collided items
         if ( speedTimer->getValue() > character.getSpeed() )
         {
-                activities::DisplaceKindOfActivity::getInstance().displace( this, &activity, true );
+                activities::Displacing::getInstance().displace( this, &activity, true );
 
                 activity = activities::Activity::Wait;
 
@@ -152,7 +152,7 @@ void PlayerControlled::cancelDisplace( ::AvatarItem & character )
                 if ( speedTimer->getValue() > character.getSpeed() )
                 {
                         // move it
-                        activities::MoveKindOfActivity::getInstance().move( this, &activity, false );
+                        activities::Moving::getInstance().move( this, &activity, false );
 
                         speedTimer->reset();
 
@@ -166,7 +166,7 @@ void PlayerControlled::fall( ::AvatarItem & character )
         // is it time to lower by one unit
         if ( fallTimer->getValue() > character.getWeight() )
         {
-                if ( activities::FallKindOfActivity::getInstance().fall( this ) )
+                if ( activities::Falling::getInstance().fall( this ) )
                 {
                         // as long as there's no collision below
                         if ( character.canAdvanceTo( 0, 0, -1 ) )
@@ -220,9 +220,9 @@ void PlayerControlled::jump( ::AvatarItem & character )
                         if ( speedTimer->getValue() > character.getSpeed() )
                         {
                                 if ( activity == activities::Activity::RegularJump )
-                                        activities::JumpKindOfActivity::getInstance().jump( this, &activity, jumpPhase, jumpVector );
+                                        activities::Jumping::getInstance().jump( this, &activity, jumpPhase, jumpVector );
                                 else if ( activity == activities::Activity::HighJump )
-                                        activities::JumpKindOfActivity::getInstance().jump( this, &activity, jumpPhase, highJumpVector );
+                                        activities::Jumping::getInstance().jump( this, &activity, jumpPhase, highJumpVector );
 
                                 // to the next phase of jump
                                 ++ jumpPhase ;
@@ -257,7 +257,7 @@ void PlayerControlled::glide( ::AvatarItem & character )
         if ( glideTimer->getValue() > character.getWeight() /* character.getSpeed() / 2.0 */ )
         {
                 // when there’s a collision then stop falling and return to waiting
-                if ( ! activities::FallKindOfActivity::getInstance().fall( this ) &&
+                if ( ! activities::Falling::getInstance().fall( this ) &&
                         ( activity != activities::Activity::MeetMortalItem || character.hasShield() ) )
                 {
                         activity = activities::Activity::Wait;
@@ -292,7 +292,7 @@ void PlayerControlled::glide( ::AvatarItem & character )
                                 ;
                 }
 
-                activities::MoveKindOfActivity::getInstance().move( this, &subactivity, false );
+                activities::Moving::getInstance().move( this, &subactivity, false );
 
                 // pick picture of falling
                 character.changeFrame( fallFrames[ character.getOrientation() ] );

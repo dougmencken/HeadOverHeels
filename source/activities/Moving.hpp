@@ -8,8 +8,8 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef MoveKindOfActivity_hpp_
-#define MoveKindOfActivity_hpp_
+#ifndef Moving_hpp_
+#define Moving_hpp_
 
 #include "KindOfActivity.hpp"
 #include "FreeItem.hpp"
@@ -18,18 +18,18 @@
 namespace activities
 {
 
-class MoveKindOfActivity : public KindOfActivity
+class Moving : public KindOfActivity
 {
 
 protected:
 
-        MoveKindOfActivity( ) : KindOfActivity( ) {}
+        Moving( ) : KindOfActivity( ) {}
 
 public:
 
-        virtual ~MoveKindOfActivity( ) {}
+        virtual ~Moving( ) {}
 
-        static MoveKindOfActivity & getInstance () ;
+        static Moving & getInstance () ;
 
        /**
         * Item moves
@@ -58,7 +58,7 @@ protected:
 
 private:
 
-        static MoveKindOfActivity * instance ;
+        static Moving * instance ;
 
 };
 

@@ -8,8 +8,8 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-#ifndef DisplaceKindOfActivity_hpp_
-#define DisplaceKindOfActivity_hpp_
+#ifndef Displacing_hpp_
+#define Displacing_hpp_
 
 #include "KindOfActivity.hpp"
 
@@ -17,18 +17,18 @@
 namespace activities
 {
 
-class DisplaceKindOfActivity : public KindOfActivity
+class Displacing : public KindOfActivity
 {
 
 protected:
 
-        DisplaceKindOfActivity( ) : KindOfActivity( ) {}
+        Displacing( ) : KindOfActivity( ) {}
 
 public:
 
-        virtual ~DisplaceKindOfActivity( ) {}
+        virtual ~Displacing( ) {}
 
-        static DisplaceKindOfActivity & getInstance() ;
+        static Displacing & getInstance() ;
 
        /**
         * Item is being displaced
@@ -41,7 +41,7 @@ public:
 
 private:
 
-        static DisplaceKindOfActivity * instance ;
+        static Displacing * instance ;
 
 };
 

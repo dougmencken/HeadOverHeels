@@ -3,7 +3,7 @@
 
 #include "Item.hpp"
 #include "GridItem.hpp"
-#include "FallKindOfActivity.hpp"
+#include "Falling.hpp"
 #include "SoundManager.hpp"
 
 
@@ -40,7 +40,7 @@ bool Sink::update ()
                         if ( fallTimer->getValue() > gridItem.getWeight() )
                         {
                                 // when can’t fall any more or when there’s no item on top any longer
-                                if ( ! activities::FallKindOfActivity::getInstance().fall( this )
+                                if ( ! activities::Falling::getInstance().fall( this )
                                         || gridItem.canAdvanceTo( 0, 0, 1 ) )
                                 {
                                         activity = activities::Activity::Wait;

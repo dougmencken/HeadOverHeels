@@ -1,5 +1,5 @@
 
-#include "JumpKindOfActivity.hpp"
+#include "Jumping.hpp"
 
 #include "Behavior.hpp"
 #include "AvatarItem.hpp"
@@ -10,20 +10,20 @@
 namespace activities
 {
 
-JumpKindOfActivity * JumpKindOfActivity::instance = nilPointer ;
+Jumping * Jumping::instance = nilPointer ;
 
-JumpKindOfActivity & JumpKindOfActivity::getInstance()
+Jumping & Jumping::getInstance()
 {
         if ( instance == nilPointer )
         {
-                instance = new JumpKindOfActivity();
+                instance = new Jumping();
         }
 
         return *instance;
 }
 
 
-bool JumpKindOfActivity::jump( behaviors::Behavior* behavior, ActivityOfItem* activity, unsigned int jumpPhase, const std::vector< std::pair< int /* xy */, int /* z */ > >& jumpVector )
+bool Jumping::jump( behaviors::Behavior* behavior, ActivityOfItem* activity, unsigned int jumpPhase, const std::vector< std::pair< int /* xy */, int /* z */ > >& jumpVector )
 {
         bool itemMoved = false;
         ActivityOfItem displaceActivity = activities::Activity::Wait;
@@ -126,7 +126,7 @@ bool JumpKindOfActivity::jump( behaviors::Behavior* behavior, ActivityOfItem* ac
         return itemMoved ;
 }
 
-void JumpKindOfActivity::lift( FreeItem& sender, Item& item, int z )
+void Jumping::lift( FreeItem& sender, Item& item, int z )
 {
         // only for item with behavior
         if ( item.getBehavior() != nilPointer )

@@ -1,7 +1,7 @@
 
-#include "MoveKindOfActivity.hpp"
+#include "Moving.hpp"
 
-#include "FallKindOfActivity.hpp"
+#include "Falling.hpp"
 #include "Behavior.hpp"
 #include "AvatarItem.hpp"
 #include "Mediator.hpp"
@@ -12,20 +12,20 @@
 namespace activities
 {
 
-MoveKindOfActivity * MoveKindOfActivity::instance = nilPointer ;
+Moving * Moving::instance = nilPointer ;
 
-MoveKindOfActivity& MoveKindOfActivity::getInstance()
+Moving& Moving::getInstance()
 {
         if ( instance == nilPointer )
         {
-                instance = new MoveKindOfActivity();
+                instance = new Moving();
         }
 
         return *instance;
 }
 
 
-bool MoveKindOfActivity::move( behaviors::Behavior* behavior, ActivityOfItem* activity, bool canFall )
+bool Moving::move( behaviors::Behavior* behavior, ActivityOfItem* activity, bool canFall )
 {
         bool moved = false;
 
@@ -175,7 +175,7 @@ bool MoveKindOfActivity::move( behaviors::Behavior* behavior, ActivityOfItem* ac
         // item may fall
         if ( canFall && *activity != activities::Activity::Wait )
         {
-                if ( FallKindOfActivity::getInstance().fall( behavior ) )
+                if ( Falling::getInstance().fall( behavior ) )
                 {
                         *activity = activities::Activity::Fall;
                         moved = true;
@@ -185,7 +185,7 @@ bool MoveKindOfActivity::move( behaviors::Behavior* behavior, ActivityOfItem* ac
         return moved ;
 }
 
-void MoveKindOfActivity::ascent( FreeItem & freeItem, int z )
+void Moving::ascent( FreeItem & freeItem, int z )
 {
         if ( freeItem.getBehavior() != nilPointer )
         {
@@ -238,7 +238,7 @@ void MoveKindOfActivity::ascent( FreeItem & freeItem, int z )
         }
 }
 
-void MoveKindOfActivity::descend( FreeItem & freeItem, int z )
+void Moving::descend( FreeItem & freeItem, int z )
 {
         if ( freeItem.getBehavior() != nilPointer )
         {

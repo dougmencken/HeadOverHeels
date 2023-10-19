@@ -6,7 +6,7 @@
 #include "DescriptionOfItem.hpp"
 #include "AvatarItem.hpp"
 #include "Mediator.hpp"
-#include "FallKindOfActivity.hpp"
+#include "Falling.hpp"
 #include "InputManager.hpp"
 #include "SoundManager.hpp"
 
@@ -432,7 +432,7 @@ void CharacterHeadAndHeels::wait( AvatarItem & characterItem )
                 activity = activities::Activity::Blink;
         }
 
-        if ( activities::FallKindOfActivity::getInstance().fall( this ) )
+        if ( activities::Falling::getInstance().fall( this ) )
         {
                 speedTimer->reset();
                 activity = activities::Activity::Fall;

@@ -6,9 +6,9 @@
 #include "Mediator.hpp"
 
 #include "KindOfActivity.hpp"
-#include "MoveKindOfActivity.hpp"
-#include "DisplaceKindOfActivity.hpp"
-#include "FallKindOfActivity.hpp"
+#include "Moving.hpp"
+#include "Displacing.hpp"
+#include "Falling.hpp"
 
 
 namespace behaviors

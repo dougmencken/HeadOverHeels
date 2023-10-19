@@ -121,14 +121,14 @@ headoverheels_SOURCES = main.cpp \
 			activities/ActivityOfItem.hpp \
 			activities/KindOfActivity.cpp \
 			activities/KindOfActivity.hpp \
-			activities/DisplaceKindOfActivity.cpp \
-			activities/DisplaceKindOfActivity.hpp \
-			activities/FallKindOfActivity.cpp \
-			activities/FallKindOfActivity.hpp \
-			activities/JumpKindOfActivity.cpp \
-			activities/JumpKindOfActivity.hpp \
-			activities/MoveKindOfActivity.cpp \
-			activities/MoveKindOfActivity.hpp \
+			activities/Displacing.cpp \
+			activities/Displacing.hpp \
+			activities/Falling.cpp \
+			activities/Falling.hpp \
+			activities/Jumping.cpp \
+			activities/Jumping.hpp \
+			activities/Moving.cpp \
+			activities/Moving.hpp \
 			behaviors/Behavior.cpp \
 			behaviors/Behavior.hpp \
 			behaviors/CreatorOfBehaviors.cpp \

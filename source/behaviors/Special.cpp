@@ -2,8 +2,8 @@
 #include "Special.hpp"
 
 #include "FreeItem.hpp"
-#include "DisplaceKindOfActivity.hpp"
-#include "FallKindOfActivity.hpp"
+#include "Displacing.hpp"
+#include "Falling.hpp"
 #include "Room.hpp"
 #include "Mediator.hpp"
 #include "BonusManager.hpp"
@@ -76,7 +76,7 @@ bool Special::update ()
                         // otherwise it's some other item which moves the bonus
                         else if ( speedTimer->getValue() > item->getSpeed() )
                         {
-                                activities::DisplaceKindOfActivity::getInstance().displace( this, &activity, true );
+                                activities::Displacing::getInstance().displace( this, &activity, true );
 
                                 // after displaced, back to falling
                                 activity = activities::Activity::Fall;
@@ -92,7 +92,7 @@ bool Special::update ()
                         // the bonus item is on a conveyor
                         if ( speedTimer->getValue() > item->getSpeed() )
                         {
-                                activities::DisplaceKindOfActivity::getInstance().displace( this, &activity, true );
+                                activities::Displacing::getInstance().displace( this, &activity, true );
 
                                 // after displaced, back to falling
                                 activity = activities::Activity::Fall;
@@ -110,7 +110,7 @@ bool Special::update ()
                         // is it time to fall
                         else if ( fallTimer->getValue() > item->getWeight() )
                         {
-                                if ( ! activities::FallKindOfActivity::getInstance().fall( this ) )
+                                if ( ! activities::Falling::getInstance().fall( this ) )
                                 {
                                         activity = activities::Activity::Wait;
                                 }

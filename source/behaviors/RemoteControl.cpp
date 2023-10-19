@@ -1,9 +1,9 @@
 
 #include "RemoteControl.hpp"
 
-#include "MoveKindOfActivity.hpp"
-#include "DisplaceKindOfActivity.hpp"
-#include "FallKindOfActivity.hpp"
+#include "Moving.hpp"
+#include "Displacing.hpp"
+#include "Falling.hpp"
 #include "Mediator.hpp"
 #include "Room.hpp"
 #include "SoundManager.hpp"
@@ -57,7 +57,7 @@ bool RemoteControl::update ()
                                 if ( speedTimer->getValue() > freeItem.getSpeed() )
                                 {
                                         // move item
-                                        activities::MoveKindOfActivity::getInstance().move( this, &activity, true );
+                                        activities::Moving::getInstance().move( this, &activity, true );
 
                                         if ( activity != activities::Activity::Fall )
                                         {
@@ -89,7 +89,7 @@ bool RemoteControl::update ()
                                                 SoundManager::getInstance().play( freeItem.getLabel(), activity );
                                         }
 
-                                        activities::DisplaceKindOfActivity::getInstance().displace( this, &activity, true );
+                                        activities::Displacing::getInstance().displace( this, &activity, true );
 
                                         if ( activity != activities::Activity::Fall )
                                         {
@@ -148,7 +148,7 @@ bool RemoteControl::update ()
                         // is it time to fall for controlled item
                         else if ( getNameOfBehavior() == "behavior of remotely controlled one" && fallTimer->getValue() > freeItem.getWeight() )
                         {
-                                if ( ! activities::FallKindOfActivity::getInstance().fall( this ) )
+                                if ( ! activities::Falling::getInstance().fall( this ) )
                                 {
                                         // play sound of falling down
                                         SoundManager::getInstance().play( freeItem.getLabel(), activity );

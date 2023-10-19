@@ -21,7 +21,7 @@ namespace activities
 {
 
 /**
- * Abstraction of item’s current activity
+ * Abstraction of the item’s current activity
  */
 
 class KindOfActivity

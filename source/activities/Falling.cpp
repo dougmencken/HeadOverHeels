@@ -1,5 +1,5 @@
 
-#include "FallKindOfActivity.hpp"
+#include "Falling.hpp"
 
 #include "Behavior.hpp"
 #include "AvatarItem.hpp"
@@ -15,20 +15,20 @@
 namespace activities
 {
 
-FallKindOfActivity * FallKindOfActivity::instance = nilPointer ;
+Falling * Falling::instance = nilPointer ;
 
-FallKindOfActivity & FallKindOfActivity::getInstance()
+Falling & Falling::getInstance()
 {
         if ( instance == nilPointer )
         {
-                instance = new FallKindOfActivity();
+                instance = new Falling();
         }
 
         return *instance;
 }
 
 
-bool FallKindOfActivity::fall( behaviors::Behavior * behavior )
+bool Falling::fall( behaviors::Behavior * behavior )
 {
         if ( behavior == nilPointer ) return false ;
 
@@ -142,7 +142,7 @@ bool FallKindOfActivity::fall( behaviors::Behavior * behavior )
         return mayFall ;
 }
 
-void FallKindOfActivity::assignAnchor( const std::string & uniqueNameOfItem, Mediator * mediator, const std::vector< std::string >& itemsBelow )
+void Falling::assignAnchor( const std::string & uniqueNameOfItem, Mediator * mediator, const std::vector< std::string >& itemsBelow )
 {
         assert( mediator != nilPointer );
 

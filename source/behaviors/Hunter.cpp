@@ -7,9 +7,9 @@
 #include "ItemDescriptions.hpp"
 #include "FreeItem.hpp"
 #include "AvatarItem.hpp"
-#include "MoveKindOfActivity.hpp"
-#include "DisplaceKindOfActivity.hpp"
-#include "FallKindOfActivity.hpp"
+#include "Moving.hpp"
+#include "Displacing.hpp"
+#include "Falling.hpp"
 #include "Mediator.hpp"
 #include "Room.hpp"
 #include "SoundManager.hpp"
@@ -87,7 +87,7 @@ bool Hunter::update ()
                                 if ( speedTimer->getValue() > this->item->getSpeed() )
                                 {
                                         // move item
-                                        activities::MoveKindOfActivity::getInstance().move( this, &activity, false );
+                                        activities::Moving::getInstance().move( this, &activity, false );
 
                                         // reset timer to next cycle
                                         speedTimer->reset();
@@ -98,7 +98,7 @@ bool Hunter::update ()
                                         // fall if you have to
                                         if ( this->item->getWeight() > 0 )
                                         {
-                                                activities::FallKindOfActivity::getInstance().fall( this );
+                                                activities::Falling::getInstance().fall( this );
                                         }
                                 }
 
@@ -118,29 +118,29 @@ bool Hunter::update ()
                                 if ( speedTimer->getValue() > this->item->getSpeed() )
                                 {
                                         // move item
-                                        if ( ! activities::MoveKindOfActivity::getInstance().move( this, &activity, false ) )
+                                        if ( ! activities::Moving::getInstance().move( this, &activity, false ) )
                                         {
                                                 if ( activity == activities::Activity::MoveNortheast || activity == activities::Activity::MoveNorthwest )
                                                 {
                                                         ActivityOfItem tempActivity = activities::Activity::MoveNorth;
-                                                        if ( ! activities::MoveKindOfActivity::getInstance().move( this, &tempActivity, false ) )
+                                                        if ( ! activities::Moving::getInstance().move( this, &tempActivity, false ) )
                                                         {
                                                                 activity = ( activity == activities::Activity::MoveNortheast ? activities::Activity::MoveEast : activities::Activity::MoveWest );
                                                                 if ( this->item->getWeight() > 0 )
                                                                 {
-                                                                        activities::FallKindOfActivity::getInstance().fall( this );
+                                                                        activities::Falling::getInstance().fall( this );
                                                                 }
                                                         }
                                                 }
                                                 else
                                                 {
                                                         ActivityOfItem tempActivity = activities::Activity::MoveSouth;
-                                                        if ( ! activities::MoveKindOfActivity::getInstance().move( this, &tempActivity, false ) )
+                                                        if ( ! activities::Moving::getInstance().move( this, &tempActivity, false ) )
                                                         {
                                                                 activity = ( activity == activities::Activity::MoveSoutheast ? activities::Activity::MoveEast : activities::Activity::MoveWest );
                                                                 if ( this->item->getWeight() > 0 )
                                                                 {
-                                                                        activities::FallKindOfActivity::getInstance().fall( this );
+                                                                        activities::Falling::getInstance().fall( this );
                                                                 }
                                                         }
                                                 }
@@ -173,7 +173,7 @@ bool Hunter::update ()
                         // when item is active and it’s time to move
                         if ( speedTimer->getValue() > this->item->getSpeed() )
                         {
-                                activities::DisplaceKindOfActivity::getInstance().displace( this, &activity, false );
+                                activities::Displacing::getInstance().displace( this, &activity, false );
                                 activity = activities::Activity::Wait;
                                 speedTimer->reset();
                         }

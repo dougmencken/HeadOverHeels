@@ -4,7 +4,7 @@
 #include "Mediator.hpp"
 #include "FreeItem.hpp"
 #include "PlayerControlled.hpp"
-#include "MoveKindOfActivity.hpp"
+#include "Moving.hpp"
 
 
 namespace behaviors
@@ -86,7 +86,7 @@ bool Doughnut::update ()
                                         freeItem.setIgnoreCollisions( true );
 
                                         // move a doughnut
-                                        activities::MoveKindOfActivity::getInstance().move( this, &activity, false );
+                                        activities::Moving::getInstance().move( this, &activity, false );
                                 }
                                 else
                                 {

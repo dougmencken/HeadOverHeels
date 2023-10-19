@@ -365,7 +365,7 @@ bool GameSaverAndLoader::saveGame( const std::string& file )
                 std::string whoPlaysYet = nameOfCharacterWhoCaughtTheFish;
 
                 tinyxml2::XMLElement* activeCharacter = saveXml.NewElement( "character" );
-                activeCharacter->SetAttribute( "label", whoPlaysYet.c_str () );
+                activeCharacter->SetAttribute( "name", whoPlaysYet.c_str () );
 
                 tinyxml2::XMLElement* active = saveXml.NewElement( "active" );
                 active->SetText( "true" );
@@ -471,7 +471,7 @@ bool GameSaverAndLoader::saveGame( const std::string& file )
                 if ( characterToo != nilPointer )
                 {
                         tinyxml2::XMLElement* inactiveCharacter = saveXml.NewElement( "character" );
-                        inactiveCharacter->SetAttribute( "label", whoWaitsToPlay.c_str () );
+                        inactiveCharacter->SetAttribute( "name", whoWaitsToPlay.c_str () );
 
                         tinyxml2::XMLElement* roomFile = saveXml.NewElement( "room" );
                         roomFile->SetText( roomWithWaitingGuy->getNameOfRoomDescriptionFile().c_str() );

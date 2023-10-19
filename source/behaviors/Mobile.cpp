@@ -5,8 +5,8 @@
 #include "FreeItem.hpp"
 #include "Room.hpp"
 #include "Mediator.hpp"
-#include "DisplaceKindOfActivity.hpp"
-#include "FallKindOfActivity.hpp"
+#include "Displacing.hpp"
+#include "Falling.hpp"
 #include "SoundManager.hpp"
 
 
@@ -35,7 +35,7 @@ bool Mobile::update ()
         {
                 case activities::Activity::Wait:
                         // see if the item falls yet
-                        if ( activities::FallKindOfActivity::getInstance().fall( this ) )
+                        if ( activities::Falling::getInstance().fall( this ) )
                         {
                                 fallTimer->reset();
                                 activity = activities::Activity::Fall;
@@ -60,7 +60,7 @@ bool Mobile::update ()
                                 }
 
                                 this->changeActivityOfItem( activity );
-                                activities::DisplaceKindOfActivity::getInstance().displace( this, &activity, true );
+                                activities::Displacing::getInstance().displace( this, &activity, true );
 
                                 activity = activities::Activity::Wait;
 
@@ -77,7 +77,7 @@ bool Mobile::update ()
                         // item is on conveyor
                         if ( speedTimer->getValue() > item->getSpeed() )
                         {
-                                activities::DisplaceKindOfActivity::getInstance().displace( this, &activity, true );
+                                activities::Displacing::getInstance().displace( this, &activity, true );
 
                                 activity = activities::Activity::Fall;
 
@@ -95,7 +95,7 @@ bool Mobile::update ()
                         else if ( fallTimer->getValue() > freeItem.getWeight() )
                         {
                                 this->changeActivityOfItem( activity );
-                                if ( ! activities::FallKindOfActivity::getInstance().fall( this ) )
+                                if ( ! activities::Falling::getInstance().fall( this ) )
                                 {
                                         // play sound of falling
                                         SoundManager::getInstance().play( freeItem.getLabel(), activity );

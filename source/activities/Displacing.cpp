@@ -1,7 +1,7 @@
 
-#include "DisplaceKindOfActivity.hpp"
+#include "Displacing.hpp"
 
-#include "FallKindOfActivity.hpp"
+#include "Falling.hpp"
 #include "Behavior.hpp"
 #include "Item.hpp"
 #include "GridItem.hpp"
@@ -11,20 +11,20 @@
 namespace activities
 {
 
-DisplaceKindOfActivity * DisplaceKindOfActivity::instance = nilPointer ;
+Displacing * Displacing::instance = nilPointer ;
 
-DisplaceKindOfActivity& DisplaceKindOfActivity::getInstance()
+Displacing& Displacing::getInstance()
 {
         if ( instance == nilPointer )
         {
-                instance = new DisplaceKindOfActivity();
+                instance = new Displacing();
         }
 
         return *instance;
 }
 
 
-bool DisplaceKindOfActivity::displace( behaviors::Behavior* behavior, ActivityOfItem* activity, bool canFall )
+bool Displacing::displace( behaviors::Behavior* behavior, ActivityOfItem* activity, bool canFall )
 {
         bool itemDisplaced = false;
 
@@ -106,7 +106,7 @@ bool DisplaceKindOfActivity::displace( behaviors::Behavior* behavior, ActivityOf
         if ( canFall )
         {
                 // look if it falls yet
-                if ( FallKindOfActivity::getInstance().fall( behavior ) )
+                if ( Falling::getInstance().fall( behavior ) )
                 {
                         *activity = activities::Activity::Fall;
                         itemDisplaced = true;
