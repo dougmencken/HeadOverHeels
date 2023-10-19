@@ -1,5 +1,6 @@
 
 #include "Mobile.hpp"
+
 #include "Item.hpp"
 #include "FreeItem.hpp"
 #include "Room.hpp"
@@ -9,7 +10,7 @@
 #include "SoundManager.hpp"
 
 
-namespace iso
+namespace behaviors
 {
 
 Mobile::Mobile( const ItemPtr & item, const std::string & behavior )
@@ -32,23 +33,23 @@ bool Mobile::update ()
 
         switch ( activity )
         {
-                case Activity::Wait:
-                        // see if item falls yet
-                        if ( FallKindOfActivity::getInstance().fall( this ) )
+                case activities::Activity::Wait:
+                        // see if the item falls yet
+                        if ( activities::FallKindOfActivity::getInstance().fall( this ) )
                         {
                                 fallTimer->reset();
-                                activity = Activity::Fall;
+                                activity = activities::Activity::Fall;
                         }
                         break;
 
-                case Activity::DisplaceNorth:
-                case Activity::DisplaceSouth:
-                case Activity::DisplaceEast:
-                case Activity::DisplaceWest:
-                case Activity::DisplaceNortheast:
-                case Activity::DisplaceSoutheast:
-                case Activity::DisplaceSouthwest:
-                case Activity::DisplaceNorthwest:
+                case activities::Activity::DisplaceNorth:
+                case activities::Activity::DisplaceSouth:
+                case activities::Activity::DisplaceEast:
+                case activities::Activity::DisplaceWest:
+                case activities::Activity::DisplaceNortheast:
+                case activities::Activity::DisplaceSoutheast:
+                case activities::Activity::DisplaceSouthwest:
+                case activities::Activity::DisplaceNorthwest:
                         // is it time to move
                         if ( speedTimer->getValue() > freeItem.getSpeed() )
                         {
@@ -59,9 +60,9 @@ bool Mobile::update ()
                                 }
 
                                 this->changeActivityOfItem( activity );
-                                DisplaceKindOfActivity::getInstance().displace( this, &activity, true );
+                                activities::DisplaceKindOfActivity::getInstance().displace( this, &activity, true );
 
-                                activity = Activity::Wait;
+                                activity = activities::Activity::Wait;
 
                                 speedTimer->reset();
                         }
@@ -69,22 +70,22 @@ bool Mobile::update ()
                         freeItem.animate();
                         break;
 
-                case Activity::ForceDisplaceNorth:
-                case Activity::ForceDisplaceSouth:
-                case Activity::ForceDisplaceEast:
-                case Activity::ForceDisplaceWest:
+                case activities::Activity::ForceDisplaceNorth:
+                case activities::Activity::ForceDisplaceSouth:
+                case activities::Activity::ForceDisplaceEast:
+                case activities::Activity::ForceDisplaceWest:
                         // item is on conveyor
                         if ( speedTimer->getValue() > item->getSpeed() )
                         {
-                                DisplaceKindOfActivity::getInstance().displace( this, &activity, true );
+                                activities::DisplaceKindOfActivity::getInstance().displace( this, &activity, true );
 
-                                activity = Activity::Fall;
+                                activity = activities::Activity::Fall;
 
                                 speedTimer->reset();
                         }
                         break;
 
-                case Activity::Fall:
+                case activities::Activity::Fall:
                         // look for reaching floor in a room without floor
                         if ( freeItem.getZ() == 0 && ! freeItem.getMediator()->getRoom()->hasFloor() )
                         {
@@ -94,18 +95,18 @@ bool Mobile::update ()
                         else if ( fallTimer->getValue() > freeItem.getWeight() )
                         {
                                 this->changeActivityOfItem( activity );
-                                if ( ! FallKindOfActivity::getInstance().fall( this ) )
+                                if ( ! activities::FallKindOfActivity::getInstance().fall( this ) )
                                 {
                                         // play sound of falling
                                         SoundManager::getInstance().play( freeItem.getLabel(), activity );
-                                        activity = Activity::Wait;
+                                        activity = activities::Activity::Wait;
                                 }
 
                                 fallTimer->reset();
                         }
                         break;
 
-                case Activity::Vanish:
+                case activities::Activity::Vanish:
                         // disappear when this item is caught
                         isGone = true;
                         break;

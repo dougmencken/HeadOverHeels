@@ -88,7 +88,7 @@ void ShowAuthors::readCreditsText( const std::string & fileName )
 
 void ShowAuthors::doAction ()
 {
-        iso::SoundManager::getInstance().playOgg( "music/CreditsTheme.ogg", /* loop */ true );
+        SoundManager::getInstance().playOgg( "music/CreditsTheme.ogg", /* loop */ true );
 
         Screen& screen = * GuiManager::getInstance().findOrCreateScreenForAction( this );
         if ( screen.countWidgets() == 0 )

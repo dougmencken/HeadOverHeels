@@ -55,7 +55,7 @@ void CreateMenuOfGraphicsSets::doAction ()
                         }
 
                         Label * theLabel = new Label( nameOfSetSpaced + i->first );
-                        if ( i->first != game::GameManager::getInstance().getChosenGraphicsSet() )
+                        if ( i->first != GameManager::getInstance().getChosenGraphicsSet() )
                         {
                                 theLabel->changeColor( "cyan" );
                         }
@@ -105,9 +105,9 @@ void CreateMenuOfGraphicsSets::doAction ()
                                 {
                                         std::string chosenSet = menuOfGraphicsSets->getActiveOption()->getText().substr( positionOfSecondColumn ) ;
 
-                                        if ( chosenSet != game::GameManager::getInstance().getChosenGraphicsSet() )
+                                        if ( chosenSet != GameManager::getInstance().getChosenGraphicsSet() )
                                         { // new set is not the same as previous one
-                                                game::GameManager::getInstance().setChosenGraphicsSet( chosenSet.c_str () ) ;
+                                                GameManager::getInstance().setChosenGraphicsSet( chosenSet.c_str () ) ;
 
                                                 gui::GuiManager::getInstance().refreshScreens ();
 

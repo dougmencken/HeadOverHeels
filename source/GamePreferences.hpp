@@ -13,8 +13,6 @@
 
 #include <string>
 
-namespace game
-{
 
 class GamePreferences
 {
@@ -31,7 +29,5 @@ private:
         GamePreferences ( ) { }
 
 } ;
-
-}
 
 #endif

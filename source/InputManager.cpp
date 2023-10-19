@@ -1,9 +1,8 @@
 
 #include "InputManager.hpp"
+
 #include "util.hpp"
 #include <iostream>
-
-using iso::InputManager;
 
 
 InputManager* InputManager::instance = nilPointer ;

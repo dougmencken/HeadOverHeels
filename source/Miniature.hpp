@@ -22,9 +22,6 @@
 
 class Color ;
 
-namespace iso
-{
-
 class Room ;
 class RoomConnections ;
 
@@ -71,8 +68,6 @@ private:
 
         std::pair < int, int > offset ;
 
-};
-
-}
+} ;
 
 #endif

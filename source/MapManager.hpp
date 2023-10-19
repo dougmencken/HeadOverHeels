@@ -19,9 +19,6 @@
 #include "Room.hpp"
 
 
-namespace iso
-{
-
 class MapManager
 {
 
@@ -124,8 +121,6 @@ private:
         // after such forgetting, no room will be counted as visited
         void forgetVisitedRooms () {  visitedRooms.clear () ;  }
 
-};
-
-}
+} ;
 
 #endif

@@ -20,9 +20,6 @@
 #include "Drawable.hpp"
 
 
-namespace iso
-{
-
 class DescriptionOfItem ;
 
 /**
@@ -92,7 +89,5 @@ protected:
 };
 
 typedef multiptr < GridItem > GridItemPtr ;
-
-}
 
 #endif

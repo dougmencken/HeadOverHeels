@@ -15,11 +15,12 @@
 #include <map>
 
 #include "Behavior.hpp"
-#include "AvatarItem.hpp"
 #include "Timer.hpp"
 
+class AvatarItem ;
 
-namespace iso
+
+namespace behaviors
 {
 
 /**
@@ -201,7 +202,7 @@ public:
 
         void setFireFromHooter ( bool isHere ) {  this->donutFromHooterIsHere = isHere ;  }
 
-};
+} ;
 
 }
 

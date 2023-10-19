@@ -14,7 +14,6 @@ SaveGame::SaveGame( unsigned int slot )
         : Action( )
         , slot( slot )
 {
-
 }
 
 void SaveGame::doAction ()
@@ -23,8 +22,10 @@ void SaveGame::doAction ()
 
         if ( slot > 0 )
         {
-                game::GameManager& gameManager = game::GameManager::getInstance();
-                gameManager.saveGame( ospaths::homePath () + "savegame" + ospaths::pathSeparator () + "saved." + util::number2string( slot ) );
+                GameManager & gameManager = GameManager::getInstance() ;
+                bool saved = gameManager.saveGame( ospaths::homePath () + "savegame" + ospaths::pathSeparator () + "saved." + util::number2string( slot ) );
+                if ( ! saved )
+                        std::cout << "can't save the game as \"" << "saved." << slot << "\"" << std::endl ;
         }
 
         ContinueGame * game = new ContinueGame( true );

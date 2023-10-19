@@ -22,9 +22,6 @@
 #include "screen.hpp"
 
 
-namespace game
-{
-
 GameManager GameManager::instance ;
 
 
@@ -236,7 +233,7 @@ void GameManager::pause ()
 
                         if ( allegro::areKeypushesWaiting() )
                         {
-                                iso::InputManager& inputManager = InputManager::getInstance();
+                                InputManager& inputManager = InputManager::getInstance();
 
                                 std::string key = allegro::nextKey();
 
@@ -662,14 +659,14 @@ void GameManager::drawOnScreen ( const allegro::Pict& view )
         allegro::update ();
 }
 
-void GameManager::loadGame ( const std::string& fileName )
+bool GameManager::loadGame ( const std::string & fileName )
 {
-        saverAndLoader.loadGame( fileName );
+        return saverAndLoader.loadGame( fileName );
 }
 
-void GameManager::saveGame ( const std::string& fileName )
+bool GameManager::saveGame ( const std::string & fileName )
 {
-        saverAndLoader.saveGame( fileName );
+        return saverAndLoader.saveGame( fileName );
 }
 
 void GameManager::resetPlanets ()
@@ -743,6 +740,4 @@ void GameManager::inFreedomWithSoManyCrowns( unsigned int crowns )
         } else {
                 keyMoments.arriveInFreedomNotWithAllCrowns ();
         }
-}
-
 }

@@ -5,6 +5,7 @@
 #include "FloorTile.hpp"
 #include "Wall.hpp"
 #include "DescriptionOfItem.hpp"
+#include "ItemDescriptions.hpp"
 #include "Mediator.hpp"
 #include "Camera.hpp"
 #include "GameManager.hpp"
@@ -23,9 +24,8 @@
 
 #include <algorithm> // std::for_each
 
+using behaviors::Elevator ;
 
-namespace iso
-{
 
 Room::Room( const std::string& roomFile, const std::string& scenery,
                 unsigned int xTiles, unsigned int yTiles, unsigned int tileSize,
@@ -129,7 +129,7 @@ Room::Room( const std::string& roomFile, const std::string& scenery,
         }
 
         // 0 for pure black shadows, 128 for 50% opacity of shadows, 256 for no shadows
-        shadingOpacity = game::GameManager::getInstance().getCastShadows () ? 128 /* 0 */ : 256 ;
+        shadingOpacity = GameManager::getInstance().getCastShadows () ? 128 /* 0 */ : 256 ;
 
 #if defined( DEBUG ) && DEBUG
         std::cout << "created room \"" << nameOfFileWithDataAboutRoom << "\"" << std::endl ;
@@ -1231,7 +1231,7 @@ void Room::dontDisappearOnJump ()
                                 {
                                         gridItem.setBehaviorOf( "still" );
 
-                                        if ( ! game::GameManager::getInstance().isSimpleGraphicsSet() )
+                                        if ( ! GameManager::getInstance().isSimpleGraphicsSet() )
                                                 Color::multiplyWithColor(
                                                         gridItem.getRawImageToChangeIt (),
                                                         ( behavior == "behavior of slow disappearance on jump into" ) ?
@@ -1257,7 +1257,7 @@ void Room::dontDisappearOnJump ()
                         {
                                 freeItem.setBehaviorOf( "still" );
 
-                                if ( ! game::GameManager::getInstance().isSimpleGraphicsSet() )
+                                if ( ! GameManager::getInstance().isSimpleGraphicsSet() )
                                         Color::multiplyWithColor(
                                                 freeItem.getRawImageToChangeIt (),
                                                 ( behavior == "behavior of slow disappearance on jump into" ) ?
@@ -1708,6 +1708,4 @@ void Room::assignTripleRoomBounds( int minX, int maxX, int minY, int maxY )
         tripleRoomBoundX.second = maxX;
         tripleRoomBoundY.first = minY;
         tripleRoomBoundY.second = maxY;
-}
-
 }

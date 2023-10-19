@@ -2,9 +2,6 @@
 #include "RoomConnections.hpp"
 
 
-namespace iso
-{
-
 std::string RoomConnections::findConnectedRoom( const std::string& wayOfExit, Way* wayOfEntry ) const
 {
         switch ( Way( wayOfExit ).getIntegerOfWay () )
@@ -127,6 +124,4 @@ void RoomConnections::adjustEntry( Way* entry, const std::string& previousRoom )
                 default:
                         ;
         }
-}
-
 }

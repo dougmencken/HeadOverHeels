@@ -14,7 +14,7 @@
 #include "Behavior.hpp"
 
 
-namespace iso
+namespace behaviors
 {
 
 /**

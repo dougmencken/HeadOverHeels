@@ -28,7 +28,7 @@
 #include "util.hpp"
 
 
-namespace iso
+namespace behaviors
 {
 
 autouniqueptr< Behavior > CreatorOfBehaviors::createBehaviorByName( const ItemPtr & item, const std::string & behavior )

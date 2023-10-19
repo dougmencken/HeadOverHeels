@@ -1,12 +1,13 @@
 
 #include "Sink.hpp"
+
 #include "Item.hpp"
 #include "GridItem.hpp"
 #include "FallKindOfActivity.hpp"
 #include "SoundManager.hpp"
 
 
-namespace iso
+namespace behaviors
 {
 
 Sink::Sink( const ItemPtr & item, const std::string & behavior )
@@ -26,23 +27,23 @@ bool Sink::update ()
 
         switch ( activity )
         {
-                case Activity::Wait:
+                case activities::Activity::Wait:
                         // begin to fall when there’s an item on top
                         if ( ! gridItem.canAdvanceTo( 0, 0, 1 ) )
                         {
-                                this->changeActivityOfItem( Activity::Fall );
+                                this->changeActivityOfItem( activities::Activity::Fall );
                         }
                         break;
 
-                case Activity::Fall:
+                case activities::Activity::Fall:
                         // is it time to lower one unit yet
                         if ( fallTimer->getValue() > gridItem.getWeight() )
                         {
                                 // when can’t fall any more or when there’s no item on top any longer
-                                if ( ! FallKindOfActivity::getInstance().fall( this )
+                                if ( ! activities::FallKindOfActivity::getInstance().fall( this )
                                         || gridItem.canAdvanceTo( 0, 0, 1 ) )
                                 {
-                                        activity = Activity::Wait;
+                                        activity = activities::Activity::Wait;
                                 }
 
                                 fallTimer->reset();
@@ -50,7 +51,7 @@ bool Sink::update ()
                         break;
 
                 default:
-                        activity = Activity::Wait;
+                        activity = activities::Activity::Wait;
         }
 
         SoundManager::getInstance().play( gridItem.getLabel(), activity );

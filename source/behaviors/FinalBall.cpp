@@ -1,5 +1,6 @@
 
 #include "FinalBall.hpp"
+
 #include "FreeItem.hpp"
 #include "Mediator.hpp"
 #include "MoveKindOfActivity.hpp"
@@ -7,7 +8,7 @@
 #include "Room.hpp"
 
 
-namespace iso
+namespace behaviors
 {
 
 FinalBall::FinalBall( const ItemPtr & item, const std::string & behavior )
@@ -21,11 +22,11 @@ bool FinalBall::update ()
 {
         switch ( activity )
         {
-                case Activity::Wait:
-                        this->changeActivityOfItem( Activity::MoveNorth );
+                case activities::Activity::Wait:
+                        this->changeActivityOfItem( activities::Activity::MoveNorth );
                         break;
 
-                case Activity::MoveNorth:
+                case activities::Activity::MoveNorth:
                         if ( speedTimer->getValue() > this->item->getSpeed() )
                         {
                                 speedTimer->reset();
@@ -35,10 +36,10 @@ bool FinalBall::update ()
                                 // look for collisions with items that are to the north
                                 this->item->canAdvanceTo( -1, 0, 0 );
 
-                                // move ball when there’s no collision
+                                // move the ball when there’s no collision
                                 if ( this->item->getMediator()->isStackOfCollisionsEmpty() )
                                 {
-                                        MoveKindOfActivity::getInstance().move( this, &activity, false );
+                                        activities::MoveKindOfActivity::getInstance().move( this, &activity, false );
                                 }
                                 else
                                 {

@@ -9,14 +9,12 @@
 #include <tinyxml2.h>
 
 
-namespace iso
-{
-
 /* static */
 const std::string ItemDescriptions::The_File_Full_Of_Item_Descriptions = "items.xml" ;
 
 /* static */
 autouniqueptr< ItemDescriptions > ItemDescriptions::theDescriptions( new ItemDescriptions( ) );
+
 
 ItemDescriptions::~ItemDescriptions( )
 {
@@ -259,6 +257,4 @@ const DescriptionOfItem* ItemDescriptions::getDescriptionByLabel( const std::str
         return nilPointer ;
 
 #endif
-}
-
 }

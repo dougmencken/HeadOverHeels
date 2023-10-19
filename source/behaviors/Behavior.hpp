@@ -16,8 +16,9 @@
 #include "ActivityOfItem.hpp"
 #include "Item.hpp"
 
+using activities::ActivityOfItem ;
 
-namespace iso
+namespace behaviors
 {
 
 /**

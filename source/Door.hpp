@@ -17,9 +17,6 @@
 #include "FreeItem.hpp"
 
 
-namespace iso
-{
-
 class ItemDescriptions ;
 
 
@@ -113,10 +110,8 @@ public:
 
         std::string getLabel() const {  return labelOfDoor ;  }
 
-};
+} ;
 
 typedef multiptr < Door > DoorPtr ;
-
-}
 
 #endif

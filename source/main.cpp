@@ -70,7 +70,7 @@ void initAllegro ()
 
 void readPreferences ()
 {
-        bool preferencesOkay = game::GamePreferences::readPreferences( ospaths::homePath() + "preferences.xml" ) ;
+        bool preferencesOkay = GamePreferences::readPreferences( ospaths::homePath() + "preferences.xml" ) ;
 
         if ( ! preferencesOkay )
                 gui::GuiManager::getInstance().setLanguage( "en_US" );
@@ -192,13 +192,13 @@ int main( int argc, char** argv )
                 }
 
                 if ( options.count( "head-room" ) > 0 )
-                        game::GameManager::getInstance().setHeadRoom( options[ "head-room" ] );
+                        GameManager::getInstance().setHeadRoom( options[ "head-room" ] );
 
                 if ( options.count( "heels-room" ) > 0 )
-                        game::GameManager::getInstance().setHeelsRoom( options[ "heels-room" ] );
+                        GameManager::getInstance().setHeelsRoom( options[ "heels-room" ] );
 
                 if ( options.count( "build-all-rooms" ) > 0 )
-                        iso::MapManager::buildEveryRoomAtOnce = true ;
+                        MapManager::buildEveryRoomAtOnce = true ;
 
                 if ( options.count( "begin-game" ) > 0 )
                         newGameNoGui = true ;
@@ -212,7 +212,7 @@ int main( int argc, char** argv )
 #endif
 
         if ( newGameNoGui )
-                game::GameManager::getInstance().begin () ;
+                GameManager::getInstance().begin () ;
         else
                 gui::GuiManager::getInstance().begin () ;
 
@@ -220,7 +220,7 @@ int main( int argc, char** argv )
         timeEndPeriod( 1 );
 #endif
 
-        game::GameManager::getInstance().cleanUp () ;
+        GameManager::getInstance().cleanUp () ;
         gui::GuiManager::getInstance().freeScreens () ;
 
         std::cout << std::endl << "bye :*" << std::endl ;

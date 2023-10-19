@@ -13,7 +13,6 @@
 #include "screen.hpp"
 
 using gui::CreateCongratulationsScreen ;
-using game::GameManager ;
 
 
 CreateCongratulationsScreen::CreateCongratulationsScreen( unsigned short rooms, unsigned short planets )

@@ -28,7 +28,7 @@ void CreateKeyboardMenu::doAction ()
                 this->menuOfKeys = new MenuWithValues( '.', 5 );
                 menuOfKeys->setVerticalOffset( 64 );
 
-                const std::vector < std::pair < /* action */ std::string, /* name */ std::string > > & userKeys = iso::InputManager::getInstance().getUserKeys ();
+                const std::vector < std::pair < /* action */ std::string, /* name */ std::string > > & userKeys = InputManager::getInstance().getUserKeys ();
 
                 // create option for each key
                 for ( std::vector< std::pair< std::string, std::string > >::const_iterator it = userKeys.begin () ; it != userKeys.end () ; ++ it )

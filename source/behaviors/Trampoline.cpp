@@ -10,7 +10,7 @@
 #include "SoundManager.hpp"
 
 
-namespace iso
+namespace behaviors
 {
 
 Trampoline::Trampoline( const ItemPtr & item, const std::string & behavior ) :
@@ -39,7 +39,7 @@ bool Trampoline::update ()
 
         switch ( activity )
         {
-                case Activity::Wait:
+                case activities::Activity::Wait:
                         // fold trampoline when there are items on top of it
                         if ( ! freeItem.canAdvanceTo( 0, 0, 1 ) )
                         {
@@ -57,7 +57,7 @@ bool Trampoline::update ()
                                         // play sound of bouncing
                                         if ( reboundTimer->getValue() > 0.100 )
                                         {
-                                                SoundManager::getInstance().play( freeItem.getLabel(), Activity::IsActive );
+                                                SoundManager::getInstance().play( freeItem.getLabel(), activities::Activity::IsActive );
                                         }
                                 }
                                 else
@@ -77,21 +77,21 @@ bool Trampoline::update ()
                         }
 
                         // look if it falls down
-                        if ( FallKindOfActivity::getInstance().fall( this ) )
+                        if ( activities::FallKindOfActivity::getInstance().fall( this ) )
                         {
                                 fallTimer->reset();
-                                activity = Activity::Fall;
+                                activity = activities::Activity::Fall;
                         }
                         break;
 
-                case Activity::DisplaceNorth:
-                case Activity::DisplaceSouth:
-                case Activity::DisplaceEast:
-                case Activity::DisplaceWest:
-                case Activity::DisplaceNortheast:
-                case Activity::DisplaceNorthwest:
-                case Activity::DisplaceSoutheast:
-                case Activity::DisplaceSouthwest:
+                case activities::Activity::DisplaceNorth:
+                case activities::Activity::DisplaceSouth:
+                case activities::Activity::DisplaceEast:
+                case activities::Activity::DisplaceWest:
+                case activities::Activity::DisplaceNortheast:
+                case activities::Activity::DisplaceNorthwest:
+                case activities::Activity::DisplaceSoutheast:
+                case activities::Activity::DisplaceSouthwest:
                         // is it time to move
                         if ( speedTimer->getValue() > freeItem.getSpeed() )
                         {
@@ -99,18 +99,18 @@ bool Trampoline::update ()
                                 SoundManager::getInstance().play( freeItem.getLabel(), activity );
 
                                 this->changeActivityOfItem( activity );
-                                DisplaceKindOfActivity::getInstance().displace( this, &activity, true );
+                                activities::DisplaceKindOfActivity::getInstance().displace( this, &activity, true );
 
-                                if ( activity != Activity::Fall )
+                                if ( activity != activities::Activity::Fall )
                                 {
-                                        activity = Activity::Wait;
+                                        activity = activities::Activity::Wait;
                                 }
 
                                 speedTimer->reset();
                         }
                         break;
 
-                case Activity::Fall:
+                case activities::Activity::Fall:
                         // look for reaching floor in a room without floor
                         if ( item->getZ() == 0 && ! item->getMediator()->getRoom()->hasFloor() )
                         {
@@ -122,18 +122,18 @@ bool Trampoline::update ()
                         {
                                 // item falls
                                 this->changeActivityOfItem( activity );
-                                if ( ! FallKindOfActivity::getInstance().fall( this ) )
+                                if ( ! activities::FallKindOfActivity::getInstance().fall( this ) )
                                 {
                                         // play sound of falling down
                                         SoundManager::getInstance().play( freeItem.getLabel(), activity );
-                                        activity = Activity::Wait;
+                                        activity = activities::Activity::Wait;
                                 }
 
                                 fallTimer->reset();
                         }
                         break;
 
-                case Activity::Vanish:
+                case activities::Activity::Vanish:
                         vanish = true;
                         break;
 

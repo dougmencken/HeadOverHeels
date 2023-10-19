@@ -8,18 +8,8 @@
 #include "GameManager.hpp"
 
 
-namespace iso
+namespace activities
 {
-
-KindOfActivity::KindOfActivity( )
-{
-
-}
-
-KindOfActivity::~KindOfActivity( )
-{
-
-}
 
 void KindOfActivity::propagateActivityToAdjacentItems( Item & sender, const ActivityOfItem & activity )
 {
@@ -44,17 +34,17 @@ void KindOfActivity::propagateActivityToAdjacentItems( Item & sender, const Acti
                                         if ( itemMeetsSender->whichKindOfItem() == "avatar item" && sender.isMortal() &&
                                                         ! dynamic_cast< const AvatarItem & >( *itemMeetsSender ).hasShield() )
                                         {
-                                                if ( itemMeetsSender->getBehavior()->getActivityOfItem() != Activity::MeetMortalItem &&
-                                                                itemMeetsSender->getBehavior()->getActivityOfItem() != Activity::Vanish )
+                                                if ( itemMeetsSender->getBehavior()->getActivityOfItem() != activities::Activity::MeetMortalItem &&
+                                                                itemMeetsSender->getBehavior()->getActivityOfItem() != activities::Activity::Vanish )
                                                 {
-                                                        if ( ! game::GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
+                                                        if ( ! GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
                                                         {
                                                                 std::cout << "mortal item \"" << sender.getLabel() << "\" just met the character" << std::endl ;
 
                                                                 // is it direct contact
                                                                 if ( mediator->depthOfStackOfCollisions() <= 1 )
                                                                 {
-                                                                        itemMeetsSender->getBehavior()->changeActivityOfItem( Activity::MeetMortalItem );
+                                                                        itemMeetsSender->getBehavior()->changeActivityOfItem( activities::Activity::MeetMortalItem );
                                                                 }
                                                         }
                                                         /* else std::cout << "the inviolability granted when item \"" << sender.getLabel() << "\" met the character" << std::endl ; */
@@ -64,14 +54,14 @@ void KindOfActivity::propagateActivityToAdjacentItems( Item & sender, const Acti
                                         else if ( sender.whichKindOfItem() == "avatar item" && itemMeetsSender->isMortal() &&
                                                         ! dynamic_cast< const AvatarItem & >( sender ).hasShield() )
                                         {
-                                                if ( sender.getBehavior()->getActivityOfItem() != Activity::MeetMortalItem &&
-                                                                itemMeetsSender->getBehavior()->getActivityOfItem() != Activity::Vanish )
+                                                if ( sender.getBehavior()->getActivityOfItem() != activities::Activity::MeetMortalItem &&
+                                                                itemMeetsSender->getBehavior()->getActivityOfItem() != activities::Activity::Vanish )
                                                 {
-                                                        if ( ! game::GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
+                                                        if ( ! GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
                                                         {
                                                                 std::cout << "the character just met mortal item \"" << itemMeetsSender->getLabel() << "\"" << std::endl ;
 
-                                                                sender.getBehavior()->changeActivityOfItem( Activity::MeetMortalItem );
+                                                                sender.getBehavior()->changeActivityOfItem( activities::Activity::MeetMortalItem );
                                                                 itemMeetsSender->getBehavior()->changeActivityOfItem( activity, ItemPtr( &sender ) );
                                                         }
                                                         /* else std::cout << "the inviolability granted when the character met item \"" << itemMeetsSender->getLabel() << "\"" << std::endl ; */
@@ -80,7 +70,7 @@ void KindOfActivity::propagateActivityToAdjacentItems( Item & sender, const Acti
                                         // if not, propagate activity to that item
                                         else
                                         {
-                                                if ( itemMeetsSender->getBehavior()->getActivityOfItem() != Activity::Vanish )
+                                                if ( itemMeetsSender->getBehavior()->getActivityOfItem() != activities::Activity::Vanish )
                                                 {
                                                         itemMeetsSender->getBehavior()->changeActivityOfItem( activity, ItemPtr( &sender ) );
                                                 }
@@ -90,12 +80,12 @@ void KindOfActivity::propagateActivityToAdjacentItems( Item & sender, const Acti
                                 else if ( sender.whichKindOfItem() == "avatar item" && itemMeetsSender->isMortal() &&
                                                 ! dynamic_cast< const AvatarItem & >( sender ).hasShield() )
                                 {
-                                        if ( sender.getBehavior()->getActivityOfItem() != Activity::MeetMortalItem &&
-                                                        sender.getBehavior()->getActivityOfItem() != Activity::Vanish )
+                                        if ( sender.getBehavior()->getActivityOfItem() != activities::Activity::MeetMortalItem &&
+                                                        sender.getBehavior()->getActivityOfItem() != activities::Activity::Vanish )
                                         {
-                                                if ( ! game::GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
+                                                if ( ! GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
                                                 {
-                                                        sender.getBehavior()->changeActivityOfItem( Activity::MeetMortalItem );
+                                                        sender.getBehavior()->changeActivityOfItem( activities::Activity::MeetMortalItem );
                                                 }
                                         }
                                 }
@@ -183,18 +173,18 @@ void KindOfActivity::propagateActivityToItemsAbove( Item& sender, const Activity
                                                 // propagate activity when there’s no more than one item below or when sender is anchor of that item
                                                 if ( mediator->depthOfStackOfCollisions() <= 1 || sender.getUniqueName() == freeItemAbove.getAnchor() )
                                                 {
-                                                        if ( freeItemAbove.getBehavior()->getActivityOfItem() != Activity::Vanish )
+                                                        if ( freeItemAbove.getBehavior()->getActivityOfItem() != activities::Activity::Vanish )
                                                         {
                                                                 // if it’s avatar item above sender and sender is mortal, then the character loses its life
                                                                 if ( freeItemAbove.whichKindOfItem() == "avatar item" && sender.isMortal() &&
                                                                         ! dynamic_cast< const AvatarItem & >( freeItemAbove ).hasShield() )
                                                                 {
-                                                                        if ( freeItemAbove.getBehavior()->getActivityOfItem() != Activity::MeetMortalItem )
+                                                                        if ( freeItemAbove.getBehavior()->getActivityOfItem() != activities::Activity::MeetMortalItem )
                                                                         {
-                                                                                if ( ! game::GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
+                                                                                if ( ! GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
                                                                                 {
                                                                                         std::cout << "character is above mortal item \"" << sender.getLabel() << "\"" << std::endl ;
-                                                                                        freeItemAbove.getBehavior()->changeActivityOfItem( Activity::MeetMortalItem );
+                                                                                        freeItemAbove.getBehavior()->changeActivityOfItem( activities::Activity::MeetMortalItem );
                                                                                 }
                                                                                 /* else std::cout << "the inviolability granted when the character is above \"" << sender.getLabel() << "\"" << std::endl ; */
                                                                         }
@@ -203,10 +193,10 @@ void KindOfActivity::propagateActivityToItemsAbove( Item& sender, const Activity
                                                                 else
                                                                 {
                                                                         ActivityOfItem currentActivity = freeItemAbove.getBehavior()->getActivityOfItem();
-                                                                        if ( currentActivity != Activity::DisplaceNorth &&
-                                                                                currentActivity != Activity::DisplaceSouth &&
-                                                                                currentActivity != Activity::DisplaceEast &&
-                                                                                currentActivity != Activity::DisplaceWest )
+                                                                        if ( currentActivity != activities::Activity::DisplaceNorth &&
+                                                                                currentActivity != activities::Activity::DisplaceSouth &&
+                                                                                currentActivity != activities::Activity::DisplaceEast &&
+                                                                                currentActivity != activities::Activity::DisplaceWest )
                                                                         {
                                                                                 freeItemAbove.getBehavior()->changeActivityOfItem( activity, ItemPtr( &freeItemAbove ) );
                                                                         }

@@ -10,7 +10,7 @@
 #include "SoundManager.hpp"
 
 
-namespace iso
+namespace behaviors
 {
 
 Special::Special( const ItemPtr & item, const std::string & behavior )
@@ -32,7 +32,7 @@ bool Special::update ()
 
         switch ( activity )
         {
-                case Activity::Wait:
+                case activities::Activity::Wait:
                         // is there an item above this one
                         if ( ! item->canAdvanceTo( 0, 0, 1 ) )
                         {
@@ -43,7 +43,7 @@ bool Special::update ()
                                         && itemAbove->whichKindOfItem() == "avatar item"
                                                 && mayTake( itemAbove->getOriginalLabel() ) )
                                 {
-                                        activity = Activity::Vanish ;
+                                        activity = activities::Activity::Vanish ;
                                         this->sender = itemAbove ; // the character is yet the sender
 
                                         disappearanceTimer->reset();
@@ -53,55 +53,55 @@ bool Special::update ()
                         item->animate();
 
                         // fall if it’s not taken
-                        if ( activity != Activity::Vanish )
+                        if ( activity != activities::Activity::Vanish )
                         {
-                                activity = Activity::Fall;
+                                activity = activities::Activity::Fall;
                         }
                         break;
 
-                case Activity::DisplaceNorth:
-                case Activity::DisplaceSouth:
-                case Activity::DisplaceEast:
-                case Activity::DisplaceWest:
-                case Activity::DisplaceNortheast:
-                case Activity::DisplaceSoutheast:
-                case Activity::DisplaceSouthwest:
-                case Activity::DisplaceNorthwest:
-                case Activity::DisplaceUp:
+                case activities::Activity::DisplaceNorth:
+                case activities::Activity::DisplaceSouth:
+                case activities::Activity::DisplaceEast:
+                case activities::Activity::DisplaceWest:
+                case activities::Activity::DisplaceNortheast:
+                case activities::Activity::DisplaceSoutheast:
+                case activities::Activity::DisplaceSouthwest:
+                case activities::Activity::DisplaceNorthwest:
+                case activities::Activity::DisplaceUp:
                         // if the character touches the bonus item and may take this bonus
                         if ( sender->whichKindOfItem() == "avatar item" && mayTake( sender->getOriginalLabel() ) )
                         {
-                                activity = Activity::Vanish;
+                                activity = activities::Activity::Vanish;
                         }
                         // otherwise it's some other item which moves the bonus
                         else if ( speedTimer->getValue() > item->getSpeed() )
                         {
-                                DisplaceKindOfActivity::getInstance().displace( this, &activity, true );
+                                activities::DisplaceKindOfActivity::getInstance().displace( this, &activity, true );
 
                                 // after displaced, back to falling
-                                activity = Activity::Fall;
+                                activity = activities::Activity::Fall;
 
                                 speedTimer->reset();
                         }
                         break;
 
-                case Activity::ForceDisplaceNorth:
-                case Activity::ForceDisplaceSouth:
-                case Activity::ForceDisplaceEast:
-                case Activity::ForceDisplaceWest:
+                case activities::Activity::ForceDisplaceNorth:
+                case activities::Activity::ForceDisplaceSouth:
+                case activities::Activity::ForceDisplaceEast:
+                case activities::Activity::ForceDisplaceWest:
                         // the bonus item is on a conveyor
                         if ( speedTimer->getValue() > item->getSpeed() )
                         {
-                                DisplaceKindOfActivity::getInstance().displace( this, &activity, true );
+                                activities::DisplaceKindOfActivity::getInstance().displace( this, &activity, true );
 
                                 // after displaced, back to falling
-                                activity = Activity::Fall;
+                                activity = activities::Activity::Fall;
 
                                 speedTimer->reset();
                         }
                         break;
 
-                case Activity::Fall:
+                case activities::Activity::Fall:
                         // is it fall in room without floor
                         if ( item->getZ() == 0 && ! item->getMediator()->getRoom()->hasFloor() )
                         {
@@ -110,9 +110,9 @@ bool Special::update ()
                         // is it time to fall
                         else if ( fallTimer->getValue() > item->getWeight() )
                         {
-                                if ( ! FallKindOfActivity::getInstance().fall( this ) )
+                                if ( ! activities::FallKindOfActivity::getInstance().fall( this ) )
                                 {
-                                        activity = Activity::Wait;
+                                        activity = activities::Activity::Wait;
                                 }
 
                                 fallTimer->reset();
@@ -134,7 +134,7 @@ bool Special::update ()
                                                 // disappear on take
                                                 if ( takeIt )
                                                 {
-                                                        activity = Activity::Vanish ;
+                                                        activity = activities::Activity::Vanish ;
                                                         this->sender = itemBelow; // the character is yet the sender
 
                                                         disappearanceTimer->reset();
@@ -144,7 +144,7 @@ bool Special::update ()
                         }
                         break;
 
-                case Activity::Vanish:
+                case activities::Activity::Vanish:
                         if ( disappearanceTimer->getValue() > 0.100 )
                         {
                                 isGone = true ;

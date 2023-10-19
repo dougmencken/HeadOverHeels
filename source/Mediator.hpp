@@ -21,13 +21,10 @@
 #include <pthread.h>
 #include <sys/time.h>
 
+#include "Mediated.hpp"
 #include "Room.hpp"
 
 
-namespace iso
-{
-
-class Mediated ;
 class FloorTile ;
 class Door ;
 
@@ -243,7 +240,5 @@ public:
         AvatarItemPtr getWaitingCharacter () const ;
 
 };
-
-}
 
 #endif

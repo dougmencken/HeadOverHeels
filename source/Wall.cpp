@@ -5,9 +5,6 @@
 #include <cassert>
 
 
-namespace iso
-{
-
 Wall::Wall( bool trueXfalseY, int index, Picture* image )
         : Mediated()
         , onX( trueXfalseY )
@@ -59,6 +56,4 @@ void Wall::draw ()
         {
                 allegro::drawSprite( this->image->getAllegroPict(), this->offset.first, this->offset.second );
         }
-}
-
 }

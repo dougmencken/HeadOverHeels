@@ -15,22 +15,19 @@
 #include "FreeItem.hpp"
 
 
-namespace iso
+namespace activities
 {
-
-class Behavior ;
-
 
 class MoveKindOfActivity : public KindOfActivity
 {
 
 protected:
 
-        MoveKindOfActivity( ) ;
+        MoveKindOfActivity( ) : KindOfActivity( ) {}
 
 public:
 
-        virtual ~MoveKindOfActivity( ) ;
+        virtual ~MoveKindOfActivity( ) {}
 
         static MoveKindOfActivity & getInstance () ;
 
@@ -41,7 +38,7 @@ public:
         * @param canFall whether item may fall, false if it flies
         * @return true for move or change of activity, false for collision
         */
-        virtual bool move ( Behavior * behavior, ActivityOfItem * activity, bool canFall ) ;
+        virtual bool move ( behaviors::Behavior * behavior, ActivityOfItem * activity, bool canFall ) ;
 
 protected:
 

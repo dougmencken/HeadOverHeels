@@ -14,9 +14,6 @@
 #include <string>
 
 
-namespace game
-{
-
 /**
  * Holds the game's info for the characters, Head and Heels
  */
@@ -180,7 +177,5 @@ private:
         }
 
 } ;
-
-}
 
 #endif

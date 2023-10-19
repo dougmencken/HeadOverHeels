@@ -12,9 +12,6 @@
 #define Mediated_hpp_
 
 
-namespace iso
-{
-
 class Mediator ;
 
 class Mediated
@@ -39,8 +36,6 @@ public:
 
         Mediator* getMediator () const {  return this->mediator ;  }
 
-};
-
-}
+} ;
 
 #endif

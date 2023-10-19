@@ -7,9 +7,6 @@
 #include "screen.hpp"
 
 
-namespace iso
-{
-
 Camera::Camera( Room * room )
         : room( room )
         , offset( )
@@ -82,6 +79,4 @@ bool Camera::centerOnItem( const Item & item )
         newOffset.addToY( - ( heightOfItem >> 1 ) );
 
         return softShiftTo( newOffset ) ;
-}
-
 }

@@ -8,9 +8,6 @@
 #include <cmath>
 
 
-namespace iso
-{
-
 /* static */
 void ShadowCaster::castShadowOnItem( Item& item, int x, int y, const Picture& shadow, unsigned short shading, unsigned char transparency )
 {
@@ -423,6 +420,4 @@ void ShadowCaster::castShadowOnFloor( FloorTile& tile, int x, int y, const Pictu
         shadow.getAllegroPict().unlock();
 
         /* shadyImage.setName( "+" + shadyImage.getName() ); */
-}
-
 }

@@ -7,12 +7,12 @@
 #include "GameManager.hpp"
 
 
-namespace iso
+namespace activities
 {
 
 JumpKindOfActivity * JumpKindOfActivity::instance = nilPointer ;
 
-JumpKindOfActivity& JumpKindOfActivity::getInstance()
+JumpKindOfActivity & JumpKindOfActivity::getInstance()
 {
         if ( instance == nilPointer )
         {
@@ -23,34 +23,24 @@ JumpKindOfActivity& JumpKindOfActivity::getInstance()
 }
 
 
-JumpKindOfActivity::JumpKindOfActivity( ) : KindOfActivity()
-{
-
-}
-
-JumpKindOfActivity::~JumpKindOfActivity( )
-{
-
-}
-
-bool JumpKindOfActivity::jump( Behavior* behavior, ActivityOfItem* activity, unsigned int jumpPhase, const std::vector< std::pair< int /* xy */, int /* z */ > >& jumpVector )
+bool JumpKindOfActivity::jump( behaviors::Behavior* behavior, ActivityOfItem* activity, unsigned int jumpPhase, const std::vector< std::pair< int /* xy */, int /* z */ > >& jumpVector )
 {
         bool itemMoved = false;
-        ActivityOfItem displaceActivity = Activity::Wait;
+        ActivityOfItem displaceActivity = activities::Activity::Wait;
         AvatarItem & characterItem = dynamic_cast< AvatarItem & >( * behavior->getItem() );
         Mediator* mediator = characterItem.getMediator();
 
         int deltaXY = jumpVector[ jumpPhase ].first ;
         int deltaZ = jumpVector[ jumpPhase ].second ;
 
-        if ( game::GameManager::getInstance().charactersFly() )
+        if ( GameManager::getInstance().charactersFly() )
         {
                 deltaXY = 0;
 
                 if ( deltaZ < 0 ) deltaZ = 0;
                 else deltaZ = 2;
 
-                *activity = Activity::Fall;
+                *activity = activities::Activity::Fall;
         }
 
         // let’s move up
@@ -75,9 +65,9 @@ bool JumpKindOfActivity::jump( Behavior* behavior, ActivityOfItem* activity, uns
                                 // mortal thing is above
                                 if ( item->isMortal() && ! characterItem.hasShield() )
                                 {
-                                        if ( ! game::GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
+                                        if ( ! GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
                                         {
-                                                characterItem.getBehavior()->changeActivityOfItem( Activity::MeetMortalItem );
+                                                characterItem.getBehavior()->changeActivityOfItem( activities::Activity::MeetMortalItem );
                                         }
                                 }
                                 else
@@ -101,22 +91,22 @@ bool JumpKindOfActivity::jump( Behavior* behavior, ActivityOfItem* activity, uns
         if ( orientation == "north" )
         {
                 itemMoved = characterItem.addToX( - deltaXY );
-                displaceActivity = Activity::DisplaceNorth ;
+                displaceActivity = activities::Activity::DisplaceNorth ;
         }
         else if ( orientation == "south" )
         {
                 itemMoved = characterItem.addToX( deltaXY );
-                displaceActivity = Activity::DisplaceSouth ;
+                displaceActivity = activities::Activity::DisplaceSouth ;
         }
         else if ( orientation == "east" )
         {
                 itemMoved = characterItem.addToY( - deltaXY );
-                displaceActivity = Activity::DisplaceEast ;
+                displaceActivity = activities::Activity::DisplaceEast ;
         }
         else if ( orientation == "west" )
         {
                 itemMoved = characterItem.addToY( deltaXY );
-                displaceActivity = Activity::DisplaceWest ;
+                displaceActivity = activities::Activity::DisplaceWest ;
         }
 
         // displace adjacent items when there’s horizontal collision
@@ -130,7 +120,7 @@ bool JumpKindOfActivity::jump( Behavior* behavior, ActivityOfItem* activity, uns
         // end jump when it’s the last phase
         if ( ( jumpPhase + 1 ) >= jumpVector.size() )
         {
-                *activity = Activity::Fall;
+                *activity = activities::Activity::Fall;
         }
 
         return itemMoved ;
@@ -145,7 +135,7 @@ void JumpKindOfActivity::lift( FreeItem& sender, Item& item, int z )
                 if ( item.getBehavior()->getNameOfBehavior () == "behavior of disappearance on touch" ||
                                 item.getBehavior()->getNameOfBehavior () == "behavior of something special" )
                 {
-                        item.getBehavior()->changeActivityOfItem( Activity::DisplaceUp, ItemPtr( &sender ) );
+                        item.getBehavior()->changeActivityOfItem( activities::Activity::DisplaceUp, ItemPtr( &sender ) );
                 }
                 // raise item when it’s not elevator
                 else if ( item.getBehavior()->getNameOfBehavior () != "behavior of elevator" )

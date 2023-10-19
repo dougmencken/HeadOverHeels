@@ -1,13 +1,11 @@
 
 #include "GridItem.hpp"
+
 #include "DescriptionOfItem.hpp"
 #include "Mediator.hpp"
 
 #include <cassert>
 
-
-namespace iso
-{
 
 GridItem::GridItem( const DescriptionOfItem* description, int cx, int cy, int z, const std::string& way )
         : Item( description, z, way )
@@ -128,4 +126,3 @@ unsigned int GridItem::getColumnOfGrid () const
         return mediator->getRoom()->getTilesX() * getCellY() + getCellX();
 }
 
-}

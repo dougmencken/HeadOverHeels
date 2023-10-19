@@ -1,6 +1,8 @@
 
 #include "Item.hpp"
+
 #include "DescriptionOfItem.hpp"
+#include "ItemDescriptions.hpp"
 #include "Mediator.hpp"
 #include "Behavior.hpp"
 #include "CreatorOfBehaviors.hpp"
@@ -13,9 +15,6 @@
 
 #include <iostream>
 
-
-namespace iso
-{
 
 PoolOfPictures * Item::poolOfPictures = new PoolOfPictures( ) ;
 
@@ -305,7 +304,7 @@ bool Item::doGraphicsOverlapAt( const Item& item, std::pair< int, int > offset )
 
 void Item::setBehaviorOf( const std::string & nameOfBehavior )
 {
-        this->behavior = CreatorOfBehaviors::createBehaviorByName( ItemPtr( this ), nameOfBehavior );
+        this->behavior = behaviors::CreatorOfBehaviors::createBehaviorByName( ItemPtr( this ), nameOfBehavior );
 }
 
 void Item::doForthMotion ()
@@ -399,7 +398,7 @@ void Item::createFrames( Item* item, const DescriptionOfItem& description )
                         allegro::bitBlit( picture->getAllegroPict(), rawFrame->getAllegroPict(), x, y, 0, 0, rawFrame->getWidth(), rawFrame->getHeight() );
                         rawFrame->setName( description.getLabel() + " " + util::toStringWithOrdinalSuffix( rawFrames.size() ) + " raw frame" );
                 # if  defined( SAVE_ITEM_FRAMES )  &&  SAVE_ITEM_FRAMES
-                        rawFrame->saveAsPNG( iso::homePath() );
+                        rawFrame->saveAsPNG( ospaths::homePath() );
                 # endif
                         rawFrames.push_back( rawFrame );
                 }
@@ -417,7 +416,7 @@ void Item::createFrames( Item* item, const DescriptionOfItem& description )
                                                         util::toStringWithOrdinalSuffix( f ) + " frame" );
 
                 # if  defined( SAVE_ITEM_FRAMES )  &&  SAVE_ITEM_FRAMES
-                        animationFrame.saveAsPNG( iso::homePath() );
+                        animationFrame.saveAsPNG( ospaths::homePath() );
                 # endif
 
                         item->addFrame( animationFrame );
@@ -428,7 +427,7 @@ void Item::createFrames( Item* item, const DescriptionOfItem& description )
                 Picture extraFrame( * rawFrames[ e + ( rawRow * description.howManyOrientations() ) ] );
                 extraFrame.setName( description.getLabel() + " " + util::toStringWithOrdinalSuffix( e ) + " extra frame" );
         # if  defined( SAVE_ITEM_FRAMES )  &&  SAVE_ITEM_FRAMES
-                extraFrame.saveAsPNG( iso::homePath() );
+                extraFrame.saveAsPNG( ospaths::homePath() );
         # endif
                 item->addFrame( extraFrame );
         }
@@ -459,7 +458,7 @@ void Item::createShadowFrames( Item* item, const DescriptionOfItem& description 
                         allegro::bitBlit( picture->getAllegroPict(), rawShadow->getAllegroPict(), x, y, 0, 0, rawShadow->getWidth(), rawShadow->getHeight() );
                         rawShadow->setName( description.getLabel() + " " + util::toStringWithOrdinalSuffix( rawShadows.size() ) + " raw shadow" );
                 # if  defined( SAVE_ITEM_FRAMES )  &&  SAVE_ITEM_FRAMES
-                        rawShadow->saveAsPNG( iso::homePath() );
+                        rawShadow->saveAsPNG( ospaths::homePath() );
                 # endif
                         rawShadows.push_back( rawShadow );
                 }
@@ -477,7 +476,7 @@ void Item::createShadowFrames( Item* item, const DescriptionOfItem& description 
                                                 util::toStringWithOrdinalSuffix( f ) + " shadow" );
 
                 # if  defined( SAVE_ITEM_FRAMES )  &&  SAVE_ITEM_FRAMES
-                        shadowFrame.saveAsPNG( iso::homePath() );
+                        shadowFrame.saveAsPNG( ospaths::homePath() );
                 # endif
 
                         item->addFrameOfShadow( shadowFrame );
@@ -488,12 +487,10 @@ void Item::createShadowFrames( Item* item, const DescriptionOfItem& description 
                 Picture extraShadow( * rawShadows[ e + ( rawRow * description.howManyOrientations() ) ] );
                 extraShadow.setName( description.getLabel() + " " + util::toStringWithOrdinalSuffix( e ) + " extra shadow" );
         # if  defined( SAVE_ITEM_FRAMES )  &&  SAVE_ITEM_FRAMES
-                extraShadow.saveAsPNG( iso::homePath() );
+                extraShadow.saveAsPNG( ospaths::homePath() );
         # endif
                 item->addFrameOfShadow( extraShadow );
         }
 
         std::for_each( rawShadows.begin (), rawShadows.end (), DeleteIt() );
-}
-
 }

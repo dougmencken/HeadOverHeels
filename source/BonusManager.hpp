@@ -15,9 +15,6 @@
 #include <string>
 
 
-namespace iso
-{
-
 /**
  * Manage the presence or absence of the bonuses in the game's rooms.
  * The bonuses provide lives and other powerups to characters, in addition to the crowns
@@ -58,8 +55,6 @@ private:
 
         static BonusManager * instance ;
 
-};
-
-}
+} ;
 
 #endif

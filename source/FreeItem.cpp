@@ -10,9 +10,6 @@
 #endif
 
 
-namespace iso
-{
-
 FreeItem::FreeItem( const DescriptionOfItem* description, int x, int y, int z, const std::string& way )
         : Item ( description, z, way )
         , originalCellX( farFarAway )
@@ -305,7 +302,7 @@ bool FreeItem::isCollidingWithDoor( const std::string& way, const std::string& n
 
         if ( oldX != getX() || oldY != getY() )
         {
-                iso::SoundManager::getInstance().play ( "door", Activity::Collision, /* loop */ false );
+                SoundManager::getInstance().play ( "door", activities::Activity::Collision, /* loop */ false );
                 return true ;
         }
 
@@ -331,6 +328,4 @@ bool FreeItem::isUnderSomeDoor ()
         }
 
         return false;
-}
-
 }

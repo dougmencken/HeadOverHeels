@@ -17,9 +17,6 @@
 #endif
 
 
-namespace iso
-{
-
 Door::Door( const std::string & label, int cx, int cy, int z, const std::string & way )
         : labelOfDoor( label )
         , cellX( cx )
@@ -40,13 +37,13 @@ Door::Door( const std::string & label, int cx, int cy, int z, const std::string 
         // load the graphics of door
 
         autouniqueptr< allegro::Pict > pictureOfDoor( allegro::Pict::fromPNGFile( ospaths::pathToFile(
-                ospaths::sharePath() + game::GameManager::getInstance().getChosenGraphicsSet(), lintelData->getNameOfFile( )
+                ospaths::sharePath() + GameManager::getInstance().getChosenGraphicsSet(), lintelData->getNameOfFile( )
         ) ) );
         if ( ! pictureOfDoor->isNotNil() )
         {
                 std::cerr <<
                         "picture of door \"" << lintelData->getNameOfFile( ) <<
-                        "\" for \"" << game::GameManager::getInstance().getChosenGraphicsSet() <<
+                        "\" for \"" << GameManager::getInstance().getChosenGraphicsSet() <<
                         "\" is absent" << std::endl ;
                 return ;
         }
@@ -84,9 +81,9 @@ Door::Door( const std::string & label, int cx, int cy, int z, const std::string 
 
 # if defined( SAVE_ITEM_FRAMES ) && SAVE_ITEM_FRAMES
 
-        leftJambImage->saveAsPNG( iso::homePath() );
-        rightJambImage->saveAsPNG( iso::homePath() );
-        lintelImage->saveAsPNG( iso::homePath() );
+        leftJambImage->saveAsPNG( ospaths::homePath() );
+        rightJambImage->saveAsPNG( ospaths::homePath() );
+        lintelImage->saveAsPNG( ospaths::homePath() );
 
 # endif
 }
@@ -442,6 +439,4 @@ bool Door::isUnderDoor( int x, int y, int z ) const
         }
 
         return result;
-}
-
 }

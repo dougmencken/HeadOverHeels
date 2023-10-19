@@ -1,5 +1,6 @@
 
 #include "Driven.hpp"
+
 #include "Item.hpp"
 #include "FreeItem.hpp"
 #include "AvatarItem.hpp"
@@ -11,7 +12,7 @@
 #include "SoundManager.hpp"
 
 
-namespace iso
+namespace behaviors
 {
 
 Driven::Driven( const ItemPtr & item, const std::string& behavior )
@@ -37,25 +38,25 @@ bool Driven::update ()
 
         switch ( activity )
         {
-                case Activity::Wait:
+                case activities::Activity::Wait:
                         if ( moving )
                         {
                                 switch ( Way( freeItem.getOrientation() ).getIntegerOfWay() )
                                 {
                                         case Way::North:
-                                                changeActivityOfItem( Activity::MoveNorth );
+                                                changeActivityOfItem( activities::Activity::MoveNorth );
                                                 break;
 
                                         case Way::South:
-                                                changeActivityOfItem( Activity::MoveSouth );
+                                                changeActivityOfItem( activities::Activity::MoveSouth );
                                                 break;
 
                                         case Way::East:
-                                                changeActivityOfItem( Activity::MoveEast );
+                                                changeActivityOfItem( activities::Activity::MoveEast );
                                                 break;
 
                                         case Way::West:
-                                                changeActivityOfItem( Activity::MoveWest );
+                                                changeActivityOfItem( activities::Activity::MoveWest );
                                                 break;
 
                                         default:
@@ -79,19 +80,19 @@ bool Driven::update ()
                                                         switch ( Way( item->getOrientation() ).getIntegerOfWay () )
                                                         {
                                                                 case Way::North:
-                                                                        changeActivityOfItem( Activity::MoveNorth );
+                                                                        changeActivityOfItem( activities::Activity::MoveNorth );
                                                                         break;
 
                                                                 case Way::South:
-                                                                        changeActivityOfItem( Activity::MoveSouth );
+                                                                        changeActivityOfItem( activities::Activity::MoveSouth );
                                                                         break;
 
                                                                 case Way::East:
-                                                                        changeActivityOfItem( Activity::MoveEast );
+                                                                        changeActivityOfItem( activities::Activity::MoveEast );
                                                                         break;
 
                                                                 case Way::West:
-                                                                        changeActivityOfItem( Activity::MoveWest );
+                                                                        changeActivityOfItem( activities::Activity::MoveWest );
                                                                         break;
 
                                                                 default:
@@ -103,22 +104,22 @@ bool Driven::update ()
                         }
                         break;
 
-                case Activity::MoveNorth:
-                case Activity::MoveSouth:
-                case Activity::MoveEast:
-                case Activity::MoveWest:
+                case activities::Activity::MoveNorth:
+                case activities::Activity::MoveSouth:
+                case activities::Activity::MoveEast:
+                case activities::Activity::MoveWest:
                         // item is active and it is time to move
                         if ( ! freeItem.isFrozen() )
                         {
                                 if ( speedTimer->getValue() > freeItem.getSpeed() )
                                 {
-                                        if ( ! MoveKindOfActivity::getInstance().move( this, &activity, true ) )
+                                        if ( ! activities::MoveKindOfActivity::getInstance().move( this, &activity, true ) )
                                         {
                                                 moving = false;
-                                                activity = Activity::Wait;
+                                                activity = activities::Activity::Wait;
 
                                                 // emit sound of collision
-                                                SoundManager::getInstance().play( freeItem.getLabel(), Activity::Collision );
+                                                SoundManager::getInstance().play( freeItem.getLabel(), activities::Activity::Collision );
                                         }
 
                                         speedTimer->reset();
@@ -128,20 +129,20 @@ bool Driven::update ()
                         }
                         break;
 
-                case Activity::DisplaceNorth:
-                case Activity::DisplaceSouth:
-                case Activity::DisplaceEast:
-                case Activity::DisplaceWest:
-                case Activity::DisplaceNortheast:
-                case Activity::DisplaceNorthwest:
-                case Activity::DisplaceSoutheast:
-                case Activity::DisplaceSouthwest:
+                case activities::Activity::DisplaceNorth:
+                case activities::Activity::DisplaceSouth:
+                case activities::Activity::DisplaceEast:
+                case activities::Activity::DisplaceWest:
+                case activities::Activity::DisplaceNortheast:
+                case activities::Activity::DisplaceNorthwest:
+                case activities::Activity::DisplaceSoutheast:
+                case activities::Activity::DisplaceSouthwest:
                         // is it time to move
                         if ( speedTimer->getValue() > freeItem.getSpeed() )
                         {
-                                if ( ! DisplaceKindOfActivity::getInstance().displace( this, &activity, true ) )
+                                if ( ! activities::DisplaceKindOfActivity::getInstance().displace( this, &activity, true ) )
                                 {
-                                        activity = Activity::Wait;
+                                        activity = activities::Activity::Wait;
                                 }
 
                                 speedTimer->reset();
@@ -150,11 +151,11 @@ bool Driven::update ()
                         // inactive item continues to be inactive
                         if ( freeItem.isFrozen() )
                         {
-                                activity = Activity::Freeze;
+                                activity = activities::Activity::Freeze;
                         }
                         break;
 
-                case Activity::Fall:
+                case activities::Activity::Fall:
                         // look for reaching floor in a room without floor
                         if ( freeItem.getZ() == 0 && ! freeItem.getMediator()->getRoom()->hasFloor() )
                         {
@@ -164,22 +165,22 @@ bool Driven::update ()
                         // is it time to fall
                         else if ( fallTimer->getValue() > freeItem.getWeight() )
                         {
-                                if ( ! FallKindOfActivity::getInstance().fall( this ) )
+                                if ( ! activities::FallKindOfActivity::getInstance().fall( this ) )
                                 {
-                                        activity = Activity::Wait;
+                                        activity = activities::Activity::Wait;
                                 }
 
                                 fallTimer->reset();
                         }
                         break;
 
-                case Activity::Freeze:
+                case activities::Activity::Freeze:
                         freeItem.setFrozen( true );
                         break;
 
-                case Activity::WakeUp:
+                case activities::Activity::WakeUp:
                         freeItem.setFrozen( false );
-                        activity = Activity::Wait;
+                        activity = activities::Activity::Wait;
                         break;
 
                 default:

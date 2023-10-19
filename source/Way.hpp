@@ -14,9 +14,6 @@
 #include <string>
 
 
-namespace iso
-{
-
 /**
  * The way in which you move an item or the entry to a room or the exit from a room
  */
@@ -75,7 +72,5 @@ private:
         unsigned int way ;
 
 } ;
-
-}
 
 #endif

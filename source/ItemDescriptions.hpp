@@ -17,9 +17,6 @@
 #include "DescriptionOfItem.hpp"
 
 
-namespace iso
-{
-
 /**
  * All the descriptions of the game's items as read from items.xml
  */
@@ -57,8 +54,6 @@ private:
 
         void binDescriptions () ;
 
-};
-
-}
+} ;
 
 #endif

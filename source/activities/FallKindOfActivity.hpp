@@ -18,12 +18,8 @@
 #include "FreeItem.hpp"
 
 
-namespace iso
+namespace activities
 {
-
-class Behavior ;
-class Mediator ;
-
 
 /**
  * Item falls
@@ -34,16 +30,16 @@ class FallKindOfActivity : public KindOfActivity
 
 protected:
 
-        FallKindOfActivity( ) ;
+        FallKindOfActivity( ) : KindOfActivity( ) {}
 
 public:
 
-        virtual ~FallKindOfActivity( ) ;
+        virtual ~FallKindOfActivity( ) {}
 
        /**
         * @return true if item may fall or false when there’s collision
         */
-        virtual bool fall ( Behavior * behavior ) ;
+        virtual bool fall ( behaviors::Behavior * behavior ) ;
 
         static FallKindOfActivity & getInstance () ;
 

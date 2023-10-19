@@ -1,5 +1,6 @@
 
 #include "GuiManager.hpp"
+
 #include "LanguageManager.hpp"
 #include "InputManager.hpp"
 #include "SoundManager.hpp"
@@ -61,7 +62,7 @@ GuiManager::GuiManager( ) :
         allegro::setTitleOfAllegroWindow ( nameOfWindow );
 
         // initialize sound manager
-        iso::SoundManager::getInstance().readSounds( "sounds.xml" );
+        SoundManager::getInstance().readSounds( "sounds.xml" );
 }
 
 GuiManager::~GuiManager( )
@@ -212,7 +213,7 @@ void GuiManager::redraw()
 
 std::string GuiManager::getPathToThesePictures () const
 {
-        return ospaths::sharePath() + game::GameManager::getInstance().getChosenGraphicsSet() ;
+        return ospaths::sharePath() + GameManager::getInstance().getChosenGraphicsSet() ;
 }
 
 bool GuiManager::isAtFullScreen ()
@@ -239,8 +240,8 @@ void GuiManager::toggleFullScreenVideo ()
         }
         else
         {
-                iso::SoundManager::getInstance().stopEverySound ();
-                iso::SoundManager::getInstance().play( "gui", iso::Activity::Mistake, /* loop */ false );
+                SoundManager::getInstance().stopEverySound ();
+                SoundManager::getInstance().play( "gui", activities::Activity::Mistake, /* loop */ false );
 
                 if ( this->atFullScreen )
                         allegro::switchToFullscreenVideo();

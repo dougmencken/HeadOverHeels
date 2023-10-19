@@ -14,22 +14,19 @@
 #include "KindOfActivity.hpp"
 
 
-namespace iso
+namespace activities
 {
-
-class Behavior ;
-
 
 class DisplaceKindOfActivity : public KindOfActivity
 {
 
 protected:
 
-        DisplaceKindOfActivity( ) ;
+        DisplaceKindOfActivity( ) : KindOfActivity( ) {}
 
 public:
 
-        virtual ~DisplaceKindOfActivity( ) ;
+        virtual ~DisplaceKindOfActivity( ) {}
 
         static DisplaceKindOfActivity & getInstance() ;
 
@@ -40,7 +37,7 @@ public:
         * @param canFall whether item may fall, false if it flies
         * @return true for displace or change of activity, false for collision
         */
-        virtual bool displace ( Behavior * behavior, ActivityOfItem * activity, bool canFall ) ;
+        virtual bool displace ( behaviors::Behavior * behavior, ActivityOfItem * activity, bool canFall ) ;
 
 private:
 

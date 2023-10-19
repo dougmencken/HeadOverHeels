@@ -6,8 +6,6 @@
 
 #include <tinyxml2.h>
 
-using iso::SoundManager ;
-
 #ifdef DEBUG
 #  define DEBUG_SOUNDS  0
 #endif
@@ -25,44 +23,44 @@ SoundManager::SoundManager( const std::string & audioInterface )
 {
         audioInitialized = allegro::initAudio( audioInterface ) ;
 
-        activityStrings[ Activity::Wait ] = "wait";
-        activityStrings[ Activity::Push ] = "push";
-        activityStrings[ Activity::Move ] = "move";
-        activityStrings[ Activity::MoveNorth ] = activityStrings[ Activity::MoveSouth ] = "move";
-        activityStrings[ Activity::MoveEast ] = activityStrings[ Activity::MoveWest ] = "move";
-        activityStrings[ Activity::MoveNortheast ] = activityStrings[ Activity::MoveSoutheast ] = "move";
-        activityStrings[ Activity::MoveSouthwest ] = activityStrings[ Activity::MoveNorthwest ] = "move";
-        activityStrings[ Activity::MoveUp ] = activityStrings[ Activity::MoveDown ] = "move";
-        activityStrings[ Activity::AutoMove ] = "move";
-        activityStrings[ Activity::AutoMoveNorth ] = activityStrings[ Activity::AutoMoveSouth ] = "move";
-        activityStrings[ Activity::AutoMoveEast ] = activityStrings[ Activity::AutoMoveWest ] = "move";
-        activityStrings[ Activity::Blink ] = "blink";
-        activityStrings[ Activity::Jump ] = "jump";
-        activityStrings[ Activity::RegularJump ] = activityStrings[ Activity::HighJump ] = "jump";
-        activityStrings[ Activity::Fall ] = "fall";
-        activityStrings[ Activity::Glide ] = "fall";
-        activityStrings[ Activity::TakeItem ] = activityStrings[ Activity::TakeAndJump ] = "take";
-        activityStrings[ Activity::ItemTaken ] = "taken";
-        activityStrings[ Activity::DropItem ] = activityStrings[ Activity::DropAndJump ] = "drop";
-        activityStrings[ Activity::DisplaceNorth ] = activityStrings[ Activity::DisplaceSouth ] = "push";
-        activityStrings[ Activity::DisplaceEast ] = activityStrings[ Activity::DisplaceWest ] = "push";
-        activityStrings[ Activity::DisplaceNortheast ] = activityStrings[ Activity::DisplaceSoutheast ] = "push";
-        activityStrings[ Activity::DisplaceSouthwest ] = activityStrings[ Activity::DisplaceNorthwest ] = "push";
-        activityStrings[ Activity::DisplaceUp ] = activityStrings[ Activity::DisplaceDown ] = "push";
-        activityStrings[ Activity::BeginWayOutTeletransport ] = activityStrings[ Activity::WayOutTeletransport ] = "teleport-out";
-        activityStrings[ Activity::BeginWayInTeletransport ] = activityStrings[ Activity::WayInTeletransport ] = "teleport-in";
-        activityStrings[ Activity::ForceDisplaceNorth ] = activityStrings[ Activity::ForceDisplaceSouth ] = "force";
-        activityStrings[ Activity::ForceDisplaceEast ] = activityStrings[ Activity::ForceDisplaceWest ] = "force";
-        activityStrings[ Activity::CancelDisplaceNorth ] = activityStrings[ Activity::CancelDisplaceSouth ] = "move";
-        activityStrings[ Activity::CancelDisplaceEast ] = activityStrings[ Activity::CancelDisplaceWest ] = "move";
-        activityStrings[ Activity::MeetMortalItem ] = "death";
-        activityStrings[ Activity::Vanish ] = "vanish";
-        activityStrings[ Activity::FireDoughnut ] = "donut";
-        activityStrings[ Activity::Rebound ] = "rebound";
-        activityStrings[ Activity::SwitchIt ] = "switch";
-        activityStrings[ Activity::Collision ] = "collision";
-        activityStrings[ Activity::IsActive ] = "active";
-        activityStrings[ Activity::Mistake ] = "mistake";
+        activityStrings[ activities::Activity::Wait ] = "wait";
+        activityStrings[ activities::Activity::Push ] = "push";
+        activityStrings[ activities::Activity::Move ] = "move";
+        activityStrings[ activities::Activity::MoveNorth ] = activityStrings[ activities::Activity::MoveSouth ] = "move";
+        activityStrings[ activities::Activity::MoveEast ] = activityStrings[ activities::Activity::MoveWest ] = "move";
+        activityStrings[ activities::Activity::MoveNortheast ] = activityStrings[ activities::Activity::MoveSoutheast ] = "move";
+        activityStrings[ activities::Activity::MoveSouthwest ] = activityStrings[ activities::Activity::MoveNorthwest ] = "move";
+        activityStrings[ activities::Activity::MoveUp ] = activityStrings[ activities::Activity::MoveDown ] = "move";
+        activityStrings[ activities::Activity::AutoMove ] = "move";
+        activityStrings[ activities::Activity::AutoMoveNorth ] = activityStrings[ activities::Activity::AutoMoveSouth ] = "move";
+        activityStrings[ activities::Activity::AutoMoveEast ] = activityStrings[ activities::Activity::AutoMoveWest ] = "move";
+        activityStrings[ activities::Activity::Blink ] = "blink";
+        activityStrings[ activities::Activity::Jump ] = "jump";
+        activityStrings[ activities::Activity::RegularJump ] = activityStrings[ activities::Activity::HighJump ] = "jump";
+        activityStrings[ activities::Activity::Fall ] = "fall";
+        activityStrings[ activities::Activity::Glide ] = "fall";
+        activityStrings[ activities::Activity::TakeItem ] = activityStrings[ activities::Activity::TakeAndJump ] = "take";
+        activityStrings[ activities::Activity::ItemTaken ] = "taken";
+        activityStrings[ activities::Activity::DropItem ] = activityStrings[ activities::Activity::DropAndJump ] = "drop";
+        activityStrings[ activities::Activity::DisplaceNorth ] = activityStrings[ activities::Activity::DisplaceSouth ] = "push";
+        activityStrings[ activities::Activity::DisplaceEast ] = activityStrings[ activities::Activity::DisplaceWest ] = "push";
+        activityStrings[ activities::Activity::DisplaceNortheast ] = activityStrings[ activities::Activity::DisplaceSoutheast ] = "push";
+        activityStrings[ activities::Activity::DisplaceSouthwest ] = activityStrings[ activities::Activity::DisplaceNorthwest ] = "push";
+        activityStrings[ activities::Activity::DisplaceUp ] = activityStrings[ activities::Activity::DisplaceDown ] = "push";
+        activityStrings[ activities::Activity::BeginWayOutTeletransport ] = activityStrings[ activities::Activity::WayOutTeletransport ] = "teleport-out";
+        activityStrings[ activities::Activity::BeginWayInTeletransport ] = activityStrings[ activities::Activity::WayInTeletransport ] = "teleport-in";
+        activityStrings[ activities::Activity::ForceDisplaceNorth ] = activityStrings[ activities::Activity::ForceDisplaceSouth ] = "force";
+        activityStrings[ activities::Activity::ForceDisplaceEast ] = activityStrings[ activities::Activity::ForceDisplaceWest ] = "force";
+        activityStrings[ activities::Activity::CancelDisplaceNorth ] = activityStrings[ activities::Activity::CancelDisplaceSouth ] = "move";
+        activityStrings[ activities::Activity::CancelDisplaceEast ] = activityStrings[ activities::Activity::CancelDisplaceWest ] = "move";
+        activityStrings[ activities::Activity::MeetMortalItem ] = "death";
+        activityStrings[ activities::Activity::Vanish ] = "vanish";
+        activityStrings[ activities::Activity::FireDoughnut ] = "donut";
+        activityStrings[ activities::Activity::Rebound ] = "rebound";
+        activityStrings[ activities::Activity::SwitchIt ] = "switch";
+        activityStrings[ activities::Activity::Collision ] = "collision";
+        activityStrings[ activities::Activity::IsActive ] = "active";
+        activityStrings[ activities::Activity::Mistake ] = "mistake";
 }
 
 SoundManager::~SoundManager( )

@@ -1,6 +1,6 @@
 
 #include "Mediator.hpp"
-#include "Mediated.hpp"
+
 #include "RoomBuilder.hpp"
 #include "GameManager.hpp"
 #include "DescriptionOfItem.hpp"
@@ -19,9 +19,6 @@
 #  define DEBUG_MASKS           0
 #endif
 
-
-namespace iso
-{
 
 Mediator::Mediator( Room* room )
         : room( room )
@@ -1179,8 +1176,8 @@ void Mediator::toggleSwitchInRoom ()
                         {
                                 freeItem.getBehavior()->changeActivityOfItem(
                                         this->switchInRoomIsOn ?
-                                                Activity::Freeze :
-                                                Activity::WakeUp );
+                                                activities::Activity::Freeze :
+                                                activities::Activity::WakeUp );
                         }
                 }
         }
@@ -1201,8 +1198,8 @@ void Mediator::toggleSwitchInRoom ()
                                 {
                                         gridItem.getBehavior()->changeActivityOfItem(
                                                 this->switchInRoomIsOn ?
-                                                        Activity::Freeze :
-                                                        Activity::Wait );
+                                                        activities::Activity::Freeze :
+                                                        activities::Activity::Wait );
                                 }
                         }
                 }
@@ -1224,6 +1221,4 @@ AvatarItemPtr Mediator::getWaitingCharacter() const
         }
 
         return AvatarItemPtr ();
-}
-
 }

@@ -5,9 +5,6 @@
 #include "Picture.hpp"
 
 
-namespace iso
-{
-
 /* static */
 void Masker::maskFreeItemBehindItem( FreeItem& itemToMask, const Item& upwardItem )
 {
@@ -58,6 +55,4 @@ void Masker::maskFreeItemBehindItem( FreeItem& itemToMask, const Item& upwardIte
         upwardImage.getAllegroPict().unlock();
 
         /* maskedImage.setName( "-" + maskedImage.getName() ); */
-}
-
 }

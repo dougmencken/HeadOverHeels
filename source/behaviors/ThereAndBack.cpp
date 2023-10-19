@@ -1,5 +1,6 @@
 
 #include "ThereAndBack.hpp"
+
 #include "Item.hpp"
 #include "FreeItem.hpp"
 #include "MoveKindOfActivity.hpp"
@@ -10,7 +11,7 @@
 #include "SoundManager.hpp"
 
 
-namespace iso
+namespace behaviors
 {
 
 ThereAndBack::ThereAndBack( const ItemPtr & item, const std::string & behavior, bool flying ) :
@@ -34,25 +35,25 @@ bool ThereAndBack::update ()
 
         switch ( activity )
         {
-                case Activity::Wait:
+                case activities::Activity::Wait:
                         letsMove();
                         break;
 
-                case Activity::MoveNorth:
-                case Activity::MoveSouth:
-                case Activity::MoveEast:
-                case Activity::MoveWest:
+                case activities::Activity::MoveNorth:
+                case activities::Activity::MoveSouth:
+                case activities::Activity::MoveEast:
+                case activities::Activity::MoveWest:
                         if ( ! freeItem.isFrozen() )
                         {
                                 if ( speedTimer->getValue() > freeItem.getSpeed() )
                                 {
                                         // move it
-                                        if ( ! MoveKindOfActivity::getInstance().move( this, &activity, true ) )
+                                        if ( ! activities::MoveKindOfActivity::getInstance().move( this, &activity, true ) )
                                         {
                                                 turnRound();
 
                                                 // play sound of colliding
-                                                SoundManager::getInstance().play( freeItem.getLabel(), Activity::Collision );
+                                                SoundManager::getInstance().play( freeItem.getLabel(), activities::Activity::Collision );
                                         }
 
                                         speedTimer->reset();
@@ -62,35 +63,35 @@ bool ThereAndBack::update ()
                         }
                         break;
 
-                case Activity::DisplaceNorth:
-                case Activity::DisplaceSouth:
-                case Activity::DisplaceEast:
-                case Activity::DisplaceWest:
-                case Activity::DisplaceNortheast:
-                case Activity::DisplaceSoutheast:
-                case Activity::DisplaceSouthwest:
-                case Activity::DisplaceNorthwest:
+                case activities::Activity::DisplaceNorth:
+                case activities::Activity::DisplaceSouth:
+                case activities::Activity::DisplaceEast:
+                case activities::Activity::DisplaceWest:
+                case activities::Activity::DisplaceNortheast:
+                case activities::Activity::DisplaceSoutheast:
+                case activities::Activity::DisplaceSouthwest:
+                case activities::Activity::DisplaceNorthwest:
                         if ( ! this->isFlying )
                         {
                                 // emit sound of displacing
                                 SoundManager::getInstance().play( freeItem.getLabel(), activity );
 
                                 // displace this item by other one
-                                DisplaceKindOfActivity::getInstance().displace( this, &activity, true );
+                                activities::DisplaceKindOfActivity::getInstance().displace( this, &activity, true );
 
-                                activity = Activity::Wait;
+                                activity = activities::Activity::Wait;
 
                                 // preserve inactivity for frozen item
                                 if ( freeItem.isFrozen() )
-                                        activity = Activity::Freeze;
+                                        activity = activities::Activity::Freeze;
                         }
                         else
                         {
-                                activity = Activity::Wait;
+                                activity = activities::Activity::Wait;
                         }
                         break;
 
-                case Activity::Fall:
+                case activities::Activity::Fall:
                         if ( ! this->isFlying )
                         {
                                 // look for reaching floor in a room without floor
@@ -102,11 +103,11 @@ bool ThereAndBack::update ()
                                 // is it time to fall
                                 else if ( fallTimer->getValue() > freeItem.getWeight() )
                                 {
-                                        if ( ! FallKindOfActivity::getInstance().fall( this ) )
+                                        if ( ! activities::FallKindOfActivity::getInstance().fall( this ) )
                                         {
                                                 // emit sound of falling down
                                                 SoundManager::getInstance().play( freeItem.getLabel(), activity );
-                                                activity = Activity::Wait;
+                                                activity = activities::Activity::Wait;
                                         }
 
                                         fallTimer->reset();
@@ -114,17 +115,17 @@ bool ThereAndBack::update ()
                         }
                         else
                         {
-                                activity = Activity::Wait;
+                                activity = activities::Activity::Wait;
                         }
                         break;
 
-                case Activity::Freeze:
+                case activities::Activity::Freeze:
                         freeItem.setFrozen( true );
                         break;
 
-                case Activity::WakeUp:
+                case activities::Activity::WakeUp:
                         freeItem.setFrozen( false );
-                        activity = Activity::Wait;
+                        activity = activities::Activity::Wait;
                         break;
 
                 default:
@@ -139,19 +140,19 @@ void ThereAndBack::letsMove()
         switch ( Way( item->getOrientation() ).getIntegerOfWay () )
         {
                 case Way::North:
-                        activity = Activity::MoveNorth;
+                        activity = activities::Activity::MoveNorth;
                         break;
 
                 case Way::South:
-                        activity = Activity::MoveSouth;
+                        activity = activities::Activity::MoveSouth;
                         break;
 
                 case Way::East:
-                        activity = Activity::MoveEast;
+                        activity = activities::Activity::MoveEast;
                         break;
 
                 case Way::West:
-                        activity = Activity::MoveWest;
+                        activity = activities::Activity::MoveWest;
                         break;
 
                 default:
@@ -164,22 +165,22 @@ void ThereAndBack::turnRound()
         switch ( Way( item->getOrientation() ).getIntegerOfWay () )
         {
                 case Way::North:
-                        activity = Activity::MoveSouth ;
+                        activity = activities::Activity::MoveSouth ;
                         item->changeOrientation( "south" );
                         break;
 
                 case Way::South:
-                        activity = Activity::MoveNorth ;
+                        activity = activities::Activity::MoveNorth ;
                         item->changeOrientation( "north" );
                         break;
 
                 case Way::East:
-                        activity = Activity::MoveWest ;
+                        activity = activities::Activity::MoveWest ;
                         item->changeOrientation( "west" );
                         break;
 
                 case Way::West:
-                        activity = Activity::MoveEast ;
+                        activity = activities::Activity::MoveEast ;
                         item->changeOrientation( "east" );
                         break;
 

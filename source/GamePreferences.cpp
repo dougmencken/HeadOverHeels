@@ -10,10 +10,6 @@
 
 #include <tinyxml2.h>
 
-using game::GamePreferences ;
-
-using game::GameManager ;
-
 
 /* static */
 bool GamePreferences::readPreferences( const std::string & fileName )

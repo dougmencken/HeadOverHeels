@@ -3,8 +3,6 @@
 
 #include "util.hpp"
 
-namespace iso
-{
 
 BonusManager * BonusManager::instance = nilPointer ;
 
@@ -42,6 +40,4 @@ void BonusManager::fillAbsentBonuses ( std::multimap < std::string /* room */, s
         {
                 bonusesInRooms.insert( std::pair< std::string, std::string >( b->first, b->second ) );
         }
-}
-
 }

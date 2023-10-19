@@ -17,7 +17,7 @@
 #include "Item.hpp"
 
 
-namespace iso
+namespace activities
 {
 
 /**
@@ -29,9 +29,9 @@ class KindOfActivity
 
 public:
 
-        KindOfActivity( ) ;
+        KindOfActivity( ) {}
 
-        virtual ~KindOfActivity( ) ;
+        virtual ~KindOfActivity( ) {}
 
 protected:
 

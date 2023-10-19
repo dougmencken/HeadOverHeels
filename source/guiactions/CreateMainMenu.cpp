@@ -27,7 +27,7 @@ CreateMainMenu::CreateMainMenu( ) : Action( )
 
 void CreateMainMenu::doAction ()
 {
-        iso::SoundManager::getInstance().playOgg( "music/MainTheme.ogg", /* loop */ true );
+        SoundManager::getInstance().playOgg( "music/MainTheme.ogg", /* loop */ true );
 
         Screen& screen = * GuiManager::getInstance().findOrCreateScreenForAction( this );
         if ( screen.countWidgets() == 0 )

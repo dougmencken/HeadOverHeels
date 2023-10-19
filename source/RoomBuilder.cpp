@@ -9,14 +9,12 @@
 #include "BonusManager.hpp"
 #include "GameManager.hpp"
 #include "PoolOfPictures.hpp"
+#include "ItemDescriptions.hpp"
 
 #include "ospaths.hpp"
 
 #define MAKE_PARTIAL_FLOOR_TILES        0
 
-
-namespace iso
-{
 
 /* static */
 Room* RoomBuilder::buildRoom ( const std::string& roomFile )
@@ -81,7 +79,7 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
         if ( fromLastSlash != nilPointer )
                 roomName = std::string( fromLastSlash + 1 );
 
-        if ( game::GameManager::getInstance().getIsomot().getMapManager().findRoomByFile( roomName ) == nilPointer )
+        if ( GameManager::getInstance().getIsomot().getMapManager().findRoomByFile( roomName ) == nilPointer )
                 std::cout << "building new" ;
         else
                 std::cout << "rebuilding" ;
@@ -172,7 +170,7 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                 wall != nilPointer ;
                                 wall = wall->NextSiblingElement( "wall" ) )
                 {
-                        Wall* wallSegment = buildWall( wall, game::GameManager::getInstance().getChosenGraphicsSet() );
+                        Wall* wallSegment = buildWall( wall, GameManager::getInstance().getChosenGraphicsSet() );
 
                         if ( wallSegment != nilPointer )
                         {
@@ -229,7 +227,7 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                                 << " of room \"" << theRoom->getNameOfRoomDescriptionFile() << "\"" << std::endl ;
 
                                 std::string fileWithPicture = label + ".png";
-                                std::string gfxSet = game::GameManager::getInstance().getChosenGraphicsSet() ;
+                                std::string gfxSet = GameManager::getInstance().getChosenGraphicsSet() ;
 
                                 autouniqueptr< allegro::Pict > picture( allegro::Pict::fromPNGFile (
                                         ospaths::pathToFile( ospaths::sharePath() + gfxSet, fileWithPicture )
@@ -499,9 +497,9 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                                 }
                                                 else
                                                 {
-                                                        bool darken = game::GameManager::getInstance().getCastShadows() ;
-                                                        if ( game::GameManager::getInstance().getChosenGraphicsSet() == "gfx.2003" ||
-                                                                game::GameManager::getInstance().getChosenGraphicsSet() == "gfx.riderx" ) darken = false ;
+                                                        bool darken = GameManager::getInstance().getCastShadows() ;
+                                                        if ( GameManager::getInstance().getChosenGraphicsSet() == "gfx.2003" ||
+                                                                GameManager::getInstance().getChosenGraphicsSet() == "gfx.riderx" ) darken = false ;
 
                                                         const PicturePtr& imageOfFullTile = floorImages.getOrLoadAndGetOrMakeAndGet( fileOfFullTile, 64, 40 );
                                                         PicturePtr imageOfPartialTile = FloorTile::fullTileToPartialTile( * imageOfFullTile, suffixOfNotFullTile, darken );
@@ -522,20 +520,20 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                                         # if defined( MAKE_PARTIAL_FLOOR_TILES ) && MAKE_PARTIAL_FLOOR_TILES
                                                 if ( suffixOfNotFullTile.empty() )
                                                 {
-                                                        bool darken = game::GameManager::getInstance().getCastShadows() ;
-                                                        if ( game::GameManager::getInstance().getChosenGraphicsSet() == "gfx.2003" ||
-                                                                game::GameManager::getInstance().getChosenGraphicsSet() == "gfx.riderx" ) darken = false ;
+                                                        bool darken = GameManager::getInstance().getCastShadows() ;
+                                                        if ( GameManager::getInstance().getChosenGraphicsSet() == "gfx.2003" ||
+                                                                GameManager::getInstance().getChosenGraphicsSet() == "gfx.riderx" ) darken = false ;
 
-                                                        FloorTile::fullTileToPartialTile( * image, "sw", darken )->saveAsPNG( iso::homePath() );
-                                                        FloorTile::fullTileToPartialTile( * image, "se", darken )->saveAsPNG( iso::homePath() );
-                                                        FloorTile::fullTileToPartialTile( * image, "ne", darken )->saveAsPNG( iso::homePath() );
-                                                        FloorTile::fullTileToPartialTile( * image, "nw", darken )->saveAsPNG( iso::homePath() );
-                                                        FloorTile::fullTileToPartialTile( * image, "north", darken )->saveAsPNG( iso::homePath() );
-                                                        FloorTile::fullTileToPartialTile( * image, "south", darken )->saveAsPNG( iso::homePath() );
-                                                        FloorTile::fullTileToPartialTile( * image, "east", darken )->saveAsPNG( iso::homePath() );
-                                                        FloorTile::fullTileToPartialTile( * image, "west", darken )->saveAsPNG( iso::homePath() );
-                                                        FloorTile::fullTileToPartialTile( * image, "full", false )->saveAsPNG( iso::homePath() );
-                                                        FloorTile::fullTileToPartialTile( * image, "darkfull", true )->saveAsPNG( iso::homePath() );
+                                                        FloorTile::fullTileToPartialTile( * image, "sw", darken )->saveAsPNG( ospaths::homePath() );
+                                                        FloorTile::fullTileToPartialTile( * image, "se", darken )->saveAsPNG( ospaths::homePath() );
+                                                        FloorTile::fullTileToPartialTile( * image, "ne", darken )->saveAsPNG( ospaths::homePath() );
+                                                        FloorTile::fullTileToPartialTile( * image, "nw", darken )->saveAsPNG( ospaths::homePath() );
+                                                        FloorTile::fullTileToPartialTile( * image, "north", darken )->saveAsPNG( ospaths::homePath() );
+                                                        FloorTile::fullTileToPartialTile( * image, "south", darken )->saveAsPNG( ospaths::homePath() );
+                                                        FloorTile::fullTileToPartialTile( * image, "east", darken )->saveAsPNG( ospaths::homePath() );
+                                                        FloorTile::fullTileToPartialTile( * image, "west", darken )->saveAsPNG( ospaths::homePath() );
+                                                        FloorTile::fullTileToPartialTile( * image, "full", false )->saveAsPNG( ospaths::homePath() );
+                                                        FloorTile::fullTileToPartialTile( * image, "darkfull", true )->saveAsPNG( ospaths::homePath() );
                                                 }
                                         # endif
                                         }
@@ -589,7 +587,7 @@ AvatarItemPtr RoomBuilder::createCharacterInRoom( Room * room,
 {
         if ( room == nilPointer ) return AvatarItemPtr () ;
 
-        game::GameInfo & gameInfo = game::GameManager::getInstance().getGameInfo () ;
+        GameInfo & gameInfo = GameManager::getInstance().getGameInfo () ;
 
         std::string nameOfCharacterToCreate( nameOfCharacter );
 
@@ -776,10 +774,10 @@ FreeItemPtr RoomBuilder::buildFreeItem( tinyxml2::XMLElement* item, Room* room )
 
                 freeItem->setBehaviorOf( behaviorOfItem );
 
-                // more data for behavior of elevator
+                // more data for the behavior of elevator
                 if ( behaviorOfItem == "behavior of elevator" )
                 {
-                        Elevator* behaviorOfElevator = dynamic_cast< Elevator* >( freeItem->getBehavior().get () );
+                        behaviors::Elevator* behaviorOfElevator = dynamic_cast< behaviors::Elevator* >( freeItem->getBehavior().get () );
 
                         tinyxml2::XMLElement* extra = item->FirstChildElement( "extra" );
                         if ( extra != nilPointer )
@@ -835,6 +833,4 @@ Door* RoomBuilder::buildDoor( tinyxml2::XMLElement* item )
         return
                 new Door( label, itemX, itemY, ( itemZ > Isomot::Top ? itemZ * Isomot::LayerHeight : Isomot::Top ),
                                  orientation->FirstChild()->ToText()->Value() );
-}
-
 }

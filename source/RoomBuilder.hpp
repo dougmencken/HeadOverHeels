@@ -25,9 +25,6 @@
 #include "Door.hpp"
 
 
-namespace iso
-{
-
 class Room ;
 
 /**
@@ -67,8 +64,6 @@ private:
 
         static Door * buildDoor ( tinyxml2::XMLElement * item ) ;
 
-};
-
-}
+} ;
 
 #endif

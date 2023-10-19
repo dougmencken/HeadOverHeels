@@ -1,5 +1,6 @@
 
 #include "Miniature.hpp"
+
 #include "Color.hpp"
 #include "FlickeringColor.hpp"
 #include "GameManager.hpp"
@@ -8,9 +9,6 @@
 #include "Mediator.hpp"
 #include "DescriptionOfItem.hpp"
 
-
-namespace iso
-{
 
 Miniature::Miniature( const Room& roomForMiniature, int leftX, int topY, unsigned int sizeOfTileForMiniature )
         : room( roomForMiniature )
@@ -797,7 +795,7 @@ std::pair< int, int > Miniature::calculatePositionOfConnectedMiniature( const st
 
         if ( fileOfConnectedRoom.empty () ) return offset ;
 
-        const Room* connectedRoom = game::GameManager::getInstance().getIsomot().getMapManager().getOrBuildRoomByFile( fileOfConnectedRoom );
+        const Room* connectedRoom = GameManager::getInstance().getIsomot().getMapManager().getOrBuildRoomByFile( fileOfConnectedRoom );
         assert( connectedRoom != nilPointer );
 
         int connectedDeltaX = 0 ;
@@ -848,6 +846,4 @@ std::pair< int, int > Miniature::calculatePositionOfConnectedMiniature( const st
         }
 
         return std::pair< int, int >( offset.first + connectedDeltaX , offset.second + connectedDeltaY ) ;
-}
-
 }

@@ -195,7 +195,7 @@ void Screen::refresh () const
                 }
         }
 
-        if ( drawSpectrumColors /* || game::GameManager::getInstance().isSimpleGraphicsSet() */ )
+        if ( drawSpectrumColors /* || GameManager::getInstance().isSimpleGraphicsSet() */ )
         {
                 Screen::draw2x8colors( *this ) ;
         }

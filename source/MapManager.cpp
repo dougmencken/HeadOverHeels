@@ -10,14 +10,13 @@
 #include "Camera.hpp"
 #include "SoundManager.hpp"
 #include "GameManager.hpp"
+#include "ItemDescriptions.hpp"
 
 #include "ospaths.hpp"
 #include "screen.hpp"
 
 #include <tinyxml2.h>
 
-namespace iso
-{
 
 bool MapManager::buildEveryRoomAtOnce = false ;
 
@@ -215,7 +214,7 @@ void MapManager::beginNewGame( const std::string& headRoom, const std::string& h
 
         forgetVisitedRooms () ;
 
-        game::GameManager & gameManager = game::GameManager::getInstance () ;
+        GameManager & gameManager = GameManager::getInstance () ;
 
         // reset the number of lives and other game's data
         gameManager.getGameInfo().resetForANewGame () ;
@@ -582,7 +581,7 @@ Room* MapManager::changeRoom( const std::string& wayOfExit )
         }
 
         // no taken item in new room
-        game::GameManager::getInstance().emptyHandbag();
+        GameManager::getInstance().emptyHandbag();
 
         AvatarItemPtr newItemOfRoamer = RoomBuilder::createCharacterInRoom( newRoom, nameOfRoamer, true,
                                                                             entryX, entryY, entryZ,
@@ -805,6 +804,4 @@ void MapManager::parseVisitedRooms( const std::vector< std::string >& visitedRoo
                 if ( visitedRoom != nilPointer )
                         addRoomAsVisited( visitedRoom->getNameOfRoomDescriptionFile () ) ;
         }
-}
-
 }

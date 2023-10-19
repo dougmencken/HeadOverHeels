@@ -12,12 +12,12 @@
 #endif
 
 
-namespace iso
+namespace activities
 {
 
 FallKindOfActivity * FallKindOfActivity::instance = nilPointer ;
 
-FallKindOfActivity& FallKindOfActivity::getInstance()
+FallKindOfActivity & FallKindOfActivity::getInstance()
 {
         if ( instance == nilPointer )
         {
@@ -28,22 +28,12 @@ FallKindOfActivity& FallKindOfActivity::getInstance()
 }
 
 
-FallKindOfActivity::FallKindOfActivity( ) : KindOfActivity()
-{
-
-}
-
-FallKindOfActivity::~FallKindOfActivity( )
-{
-
-}
-
-bool FallKindOfActivity::fall( Behavior * behavior )
+bool FallKindOfActivity::fall( behaviors::Behavior * behavior )
 {
         if ( behavior == nilPointer ) return false ;
 
         if ( behavior->getItem()->whichKindOfItem() == "avatar item" &&
-                game::GameManager::getInstance().charactersFly() &&
+                GameManager::getInstance().charactersFly() &&
                 ! ( allegro::isShiftKeyPushed() && allegro::isKeyPushed( "PageDown" ) ) )
         {
                 return false ;
@@ -88,9 +78,9 @@ bool FallKindOfActivity::fall( Behavior * behavior )
                                         {
                                                 if ( sender.canAdvanceTo( 0, 0, -1 ) )
                                                 {
-                                                        if ( ! game::GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
+                                                        if ( ! GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
                                                         {
-                                                                itemBelow->getBehavior()->changeActivityOfItem( Activity::MeetMortalItem );
+                                                                itemBelow->getBehavior()->changeActivityOfItem( activities::Activity::MeetMortalItem );
                                                         }
                                                 }
                                         }
@@ -98,9 +88,9 @@ bool FallKindOfActivity::fall( Behavior * behavior )
                                         {
                                                 if ( sender.canAdvanceTo( 0, 0, -1 ) )
                                                 {
-                                                        if ( ! game::GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
+                                                        if ( ! GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
                                                         {
-                                                                sender.getBehavior()->changeActivityOfItem( Activity::MeetMortalItem );
+                                                                sender.getBehavior()->changeActivityOfItem( activities::Activity::MeetMortalItem );
                                                         }
                                                 }
                                                 else
@@ -119,9 +109,9 @@ bool FallKindOfActivity::fall( Behavior * behavior )
                                                         // if every one is mortal then the character loses its life
                                                         if ( onlyMortal )
                                                         {
-                                                                if ( ! game::GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
+                                                                if ( ! GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
                                                                 {
-                                                                        sender.getBehavior()->changeActivityOfItem( Activity::MeetMortalItem );
+                                                                        sender.getBehavior()->changeActivityOfItem( activities::Activity::MeetMortalItem );
                                                                 }
                                                         }
                                                 }
@@ -140,9 +130,9 @@ bool FallKindOfActivity::fall( Behavior * behavior )
                                 else
                                 if ( mediator->getRoom()->getKindOfFloor() == "mortal" )
                                 {
-                                        if ( ! game::GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
+                                        if ( ! GameManager::getInstance().isImmuneToCollisionsWithMortalItems () )
                                         {
-                                                characterItem.getBehavior()->changeActivityOfItem( Activity::MeetMortalItem );
+                                                characterItem.getBehavior()->changeActivityOfItem( activities::Activity::MeetMortalItem );
                                         }
                                 }
                         }

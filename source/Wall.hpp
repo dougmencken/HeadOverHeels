@@ -18,11 +18,8 @@
 #include "Mediated.hpp"
 
 
-namespace iso
-{
-
 /**
- * Segment of room’s wall
+ * The segment of the room’s wall
  */
 
 class Wall : public Drawable, public Mediated
@@ -73,10 +70,8 @@ public:
 
         Picture * getImage () const {  return image ;  }
 
-};
+} ;
 
 typedef multiptr < Wall > WallPtr ;
-
-}
 
 #endif

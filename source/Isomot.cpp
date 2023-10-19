@@ -12,15 +12,11 @@
 #include "Camera.hpp"
 #include "Miniature.hpp"
 #include "AvatarItem.hpp"
+#include "ItemDescriptions.hpp"
 #include "Behavior.hpp"
 
 #include "screen.hpp"
 
-using game::GameManager ;
-
-
-namespace iso
-{
 
 Isomot::Isomot( ) :
         view( nilPointer ),
@@ -171,7 +167,7 @@ Picture* Isomot::updateMe ()
                 {
                         activeCharacter.wait(); // stop the character currently active
 
-                        if ( activeCharacter.getBehavior()->getActivityOfItem() == Activity::Wait )
+                        if ( activeCharacter.getBehavior()->getActivityOfItem() == activities::Activity::Wait )
                         {
                                 // swap in the same room or between different rooms
                                 if ( ! activeRoom->swapCharactersInRoom() )
@@ -497,7 +493,7 @@ void Isomot::handleMagicKeys ()
                                 joinedCharacter->setBehaviorOf( behavior );
 
                                 activeRoom->addCharacterToRoom( joinedCharacter, true );
-                                joinedCharacter->getBehavior()->changeActivityOfItem( Activity::BeginWayInTeletransport );
+                                joinedCharacter->getBehavior()->changeActivityOfItem( activities::Activity::BeginWayInTeletransport );
 
                                 roomWithInactiveCharacter->removeCharacterFromRoom( *otherCharacter, true );
                                 mapManager.removeRoomInPlay( roomWithInactiveCharacter );
@@ -550,7 +546,7 @@ void Isomot::handleMagicKeys ()
                                 std::string nameOfRoomNearFinal = "blacktooth83tofreedom.xml";
                                 Room* roomWithTeleportToFinalScene = mapManager.getRoomThenAddItToRoomsInPlay( nameOfRoomNearFinal, true );
                                 roomWithTeleportToFinalScene->addCharacterToRoom( teleportedCharacter, true );
-                                teleportedCharacter->getBehavior()->changeActivityOfItem( Activity::BeginWayInTeletransport );
+                                teleportedCharacter->getBehavior()->changeActivityOfItem( activities::Activity::BeginWayInTeletransport );
 
                                 activeRoom->removeCharacterFromRoom( *activeCharacter, true );
 
@@ -690,6 +686,4 @@ void Isomot::updateFinalRoom()
                         finalRoomTimer->reset();
                 }
         }
-}
-
 }

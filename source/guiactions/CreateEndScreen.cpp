@@ -15,8 +15,7 @@
 
 #include "screen.hpp"
 
-using gui::CreateEndScreen;
-using iso::SoundManager;
+using gui::CreateEndScreen ;
 
 
 CreateEndScreen::CreateEndScreen( unsigned int rooms, unsigned short planets )
@@ -30,7 +29,7 @@ void CreateEndScreen::doAction ()
 {
         SoundManager::getInstance().playOgg( "music/MainTheme.ogg", /* loop */ true );
 
-        if ( game::GameManager::getInstance().isSimpleGraphicsSet () )
+        if ( GameManager::getInstance().isSimpleGraphicsSet () )
                 Screen::refreshBackground () ; // get the background back
 
         Screen & screen = * GuiManager::getInstance().findOrCreateScreenForAction( this );

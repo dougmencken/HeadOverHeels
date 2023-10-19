@@ -18,8 +18,6 @@
 using gui::CreatePlanetsScreen ;
 using gui::ContinueGame ;
 using gui::GuiManager ;
-using game::GameManager ;
-using iso::SoundManager ;
 
 
 CreatePlanetsScreen::CreatePlanetsScreen( bool notNewGame )

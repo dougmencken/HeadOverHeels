@@ -17,13 +17,11 @@
 #include "FreeItem.hpp"
 
 
-namespace iso
+namespace activities
 {
 
-class Behavior;
-
 /**
- * Salto de un elemento
+ * Salto
  */
 
 class JumpKindOfActivity : public KindOfActivity
@@ -31,11 +29,11 @@ class JumpKindOfActivity : public KindOfActivity
 
 protected:
 
-        JumpKindOfActivity();
+        JumpKindOfActivity() : KindOfActivity( ) {}
 
 public:
 
-        virtual ~JumpKindOfActivity();
+        virtual ~JumpKindOfActivity() {}
 
         static JumpKindOfActivity & getInstance() ;
 
@@ -46,7 +44,7 @@ public:
         * @param jumpPhase phase of jump
         * @return true if jump or false when there’s collision
         */
-        virtual bool jump ( Behavior * behavior, ActivityOfItem * activity, unsigned int jumpPhase, const std::vector < std::pair< int /* xy */, int /* z */ > >& jumpVector ) ;
+        virtual bool jump ( behaviors::Behavior * behavior, ActivityOfItem * activity, unsigned int jumpPhase, const std::vector < std::pair< int /* xy */, int /* z */ > >& jumpVector ) ;
 
 protected:
 

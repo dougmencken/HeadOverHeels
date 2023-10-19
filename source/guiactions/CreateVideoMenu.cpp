@@ -131,22 +131,22 @@ void CreateVideoMenu::doAction ()
                                         }
                                         else if ( listOfOptions->getActiveOption () == labelDrawShadows )
                                         {
-                                                game::GameManager::getInstance().toggleCastShadows ();
+                                                GameManager::getInstance().toggleCastShadows ();
                                                 doneWithKey = true;
                                         }
                                         else if ( listOfOptions->getActiveOption () == labelDrawSceneryDecor )
                                         {
-                                                game::GameManager::getInstance().toggleSceneryDecor ();
+                                                GameManager::getInstance().toggleSceneryDecor ();
                                                 doneWithKey = true;
                                         }
                                         else if ( listOfOptions->getActiveOption () == labelDrawRoomMiniatures )
                                         {
-                                                game::GameManager::getInstance().toggleRoomMiniatures ();
+                                                GameManager::getInstance().toggleRoomMiniatures ();
                                                 doneWithKey = true;
                                         }
                                         else if ( listOfOptions->getActiveOption () == labelCenterCameraOn )
                                         {
-                                                game::GameManager::getInstance().getIsomot().toggleCameraFollowsCharacter ();
+                                                GameManager::getInstance().getIsomot().toggleCameraFollowsCharacter ();
                                                 doneWithKey = true;
                                         }
                                 }
@@ -176,15 +176,15 @@ void CreateVideoMenu::updateLabels ()
         std::string yeah = languageManager->findLanguageStringForAlias( "yep" )-> getText ();
         std::string nope = languageManager->findLanguageStringForAlias( "nope" )->getText ();
 
-        listOfOptions->setValueOf( labelDrawRoomMiniatures, game::GameManager::getInstance().drawRoomMiniatures () ? yeah : nope );
-        listOfOptions->setValueOf( labelDrawSceneryDecor, game::GameManager::getInstance().drawSceneryDecor () ? yeah : nope );
-        listOfOptions->setValueOf( labelDrawShadows, game::GameManager::getInstance().getCastShadows () ? yeah : nope );
+        listOfOptions->setValueOf( labelDrawRoomMiniatures, GameManager::getInstance().drawRoomMiniatures () ? yeah : nope );
+        listOfOptions->setValueOf( labelDrawSceneryDecor, GameManager::getInstance().drawSceneryDecor () ? yeah : nope );
+        listOfOptions->setValueOf( labelDrawShadows, GameManager::getInstance().getCastShadows () ? yeah : nope );
         listOfOptions->setValueOf( labelFullscreen, gui::GuiManager::getInstance().isAtFullScreen () ? yeah : nope );
 
         std::string room = languageManager->findLanguageStringForAlias( "room" )-> getText ();
         std::string character = languageManager->findLanguageStringForAlias( "character" )-> getText ();
 
-        listOfOptions->setValueOf( labelCenterCameraOn, game::GameManager::getInstance().getIsomot().doesCameraFollowCharacter () ? character : room );
+        listOfOptions->setValueOf( labelCenterCameraOn, GameManager::getInstance().getIsomot().doesCameraFollowCharacter () ? character : room );
 
         // labelChooseGraphics has no value but action
 

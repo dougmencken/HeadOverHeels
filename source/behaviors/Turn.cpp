@@ -1,5 +1,6 @@
 
 #include "Turn.hpp"
+
 #include "Item.hpp"
 #include "FreeItem.hpp"
 #include "MoveKindOfActivity.hpp"
@@ -10,7 +11,7 @@
 #include "SoundManager.hpp"
 
 
-namespace iso
+namespace behaviors
 {
 
 Turn::Turn( const ItemPtr & item, const std::string & behavior )
@@ -33,23 +34,23 @@ bool Turn::update ()
 
         switch ( activity )
         {
-                case Activity::Wait:
+                case activities::Activity::Wait:
                         begin();
                         break;
 
-                case Activity::MoveNorth:
-                case Activity::MoveSouth:
-                case Activity::MoveEast:
-                case Activity::MoveWest:
+                case activities::Activity::MoveNorth:
+                case activities::Activity::MoveSouth:
+                case activities::Activity::MoveEast:
+                case activities::Activity::MoveWest:
                         if ( ! freeItem.isFrozen() )
                         {
                                 if ( speedTimer->getValue() > freeItem.getSpeed() )
                                 {
-                                        if ( ! MoveKindOfActivity::getInstance().move( this, &activity, true ) )
+                                        if ( ! activities::MoveKindOfActivity::getInstance().move( this, &activity, true ) )
                                         {
                                                 turn();
 
-                                                SoundManager::getInstance().play( freeItem.getLabel(), Activity::Collision );
+                                                SoundManager::getInstance().play( freeItem.getLabel(), activities::Activity::Collision );
                                         }
 
                                         speedTimer->reset();
@@ -59,28 +60,28 @@ bool Turn::update ()
                         }
                         break;
 
-                case Activity::DisplaceNorth:
-                case Activity::DisplaceSouth:
-                case Activity::DisplaceEast:
-                case Activity::DisplaceWest:
-                case Activity::DisplaceNortheast:
-                case Activity::DisplaceSoutheast:
-                case Activity::DisplaceSouthwest:
-                case Activity::DisplaceNorthwest:
+                case activities::Activity::DisplaceNorth:
+                case activities::Activity::DisplaceSouth:
+                case activities::Activity::DisplaceEast:
+                case activities::Activity::DisplaceWest:
+                case activities::Activity::DisplaceNortheast:
+                case activities::Activity::DisplaceSoutheast:
+                case activities::Activity::DisplaceSouthwest:
+                case activities::Activity::DisplaceNorthwest:
                         SoundManager::getInstance().play( freeItem.getLabel(), activity );
 
-                        DisplaceKindOfActivity::getInstance().displace( this, &activity, true );
+                        activities::DisplaceKindOfActivity::getInstance().displace( this, &activity, true );
 
-                        activity = Activity::Wait;
+                        activity = activities::Activity::Wait;
 
                         // inactive item continues to be inactive
                         if ( freeItem.isFrozen() )
                         {
-                                activity = Activity::Freeze;
+                                activity = activities::Activity::Freeze;
                         }
                         break;
 
-                case Activity::Fall:
+                case activities::Activity::Fall:
                         // look for reaching floor in a room without floor
                         if ( freeItem.getZ() == 0 && ! freeItem.getMediator()->getRoom()->hasFloor() )
                         {
@@ -89,23 +90,23 @@ bool Turn::update ()
                         // is it time to lower by one unit
                         else if ( fallTimer->getValue() > freeItem.getWeight() )
                         {
-                                if ( ! FallKindOfActivity::getInstance().fall( this ) )
+                                if ( ! activities::FallKindOfActivity::getInstance().fall( this ) )
                                 {
                                         SoundManager::getInstance().play( freeItem.getLabel(), activity );
-                                        activity = Activity::Wait;
+                                        activity = activities::Activity::Wait;
                                 }
 
                                 fallTimer->reset();
                         }
                         break;
 
-                case Activity::Freeze:
+                case activities::Activity::Freeze:
                         freeItem.setFrozen( true );
                         break;
 
-                case Activity::WakeUp:
+                case activities::Activity::WakeUp:
                         freeItem.setFrozen( false );
-                        activity = Activity::Wait;
+                        activity = activities::Activity::Wait;
                         break;
 
                 default:
@@ -120,19 +121,19 @@ void Turn::begin()
         switch ( Way( item->getOrientation() ).getIntegerOfWay () )
         {
                 case Way::North:
-                        activity = Activity::MoveNorth;
+                        activity = activities::Activity::MoveNorth;
                         break;
 
                 case Way::South:
-                        activity = Activity::MoveSouth;
+                        activity = activities::Activity::MoveSouth;
                         break;
 
                 case Way::East:
-                        activity = Activity::MoveEast;
+                        activity = activities::Activity::MoveEast;
                         break;
 
                 case Way::West:
-                        activity = Activity::MoveWest;
+                        activity = activities::Activity::MoveWest;
                         break;
 
                 default:
@@ -148,40 +149,40 @@ void Turn::turn()
         {
                 case Way::North:
                         if ( turnLeft ) {
-                                activity = Activity::MoveWest ;
+                                activity = activities::Activity::MoveWest ;
                                 item->changeOrientation( "west" );
                         } else {
-                                activity = Activity::MoveEast ;
+                                activity = activities::Activity::MoveEast ;
                                 item->changeOrientation( "east" );
                         }
                         break;
 
                 case Way::South:
                         if ( turnLeft ) {
-                                activity = Activity::MoveEast ;
+                                activity = activities::Activity::MoveEast ;
                                 item->changeOrientation( "east" );
                         } else {
-                                activity = Activity::MoveWest ;
+                                activity = activities::Activity::MoveWest ;
                                 item->changeOrientation( "west" );
                         }
                         break;
 
                 case Way::East:
                         if ( turnLeft ) {
-                                activity = Activity::MoveNorth ;
+                                activity = activities::Activity::MoveNorth ;
                                 item->changeOrientation( "north" );
                         } else {
-                                activity = Activity::MoveSouth ;
+                                activity = activities::Activity::MoveSouth ;
                                 item->changeOrientation( "south" );
                         }
                         break;
 
                 case Way::West:
                         if ( turnLeft ) {
-                                activity = Activity::MoveSouth ;
+                                activity = activities::Activity::MoveSouth ;
                                 item->changeOrientation( "south" );
                         } else {
-                                activity = Activity::MoveNorth ;
+                                activity = activities::Activity::MoveNorth ;
                                 item->changeOrientation( "north" );
                         }
                         break;

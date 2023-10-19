@@ -10,7 +10,7 @@
 #include "SoundManager.hpp"
 
 
-namespace iso
+namespace behaviors
 {
 
 Conveyor::Conveyor( const ItemPtr & item, const std::string & behavior )
@@ -32,7 +32,7 @@ bool Conveyor::update ()
 
         switch ( activity )
         {
-                case Activity::Wait:
+                case activities::Activity::Wait:
                         if ( speedTimer->getValue() > item->getSpeed() )
                         {
                                 if ( ! item->canAdvanceTo( 0, 0, 1 ) )
@@ -53,7 +53,7 @@ bool Conveyor::update ()
                                                 if ( collision != nilPointer &&
                                                         ( collision->whichKindOfItem() == "free item" || collision->whichKindOfItem() == "avatar item" ) )
                                                 {
-                                                        FreeItem& itemAbove = dynamic_cast< FreeItem& >( *collision );
+                                                        FreeItem& itemAbove = dynamic_cast< FreeItem & >( *collision );
 
                                                         // is it item with behavior
                                                         if ( itemAbove.getBehavior() != nilPointer )
@@ -61,23 +61,23 @@ bool Conveyor::update ()
                                                                 if ( ! itemAbove.getAnchor().empty() || this->item->getUniqueName() == itemAbove.getAnchor() )
                                                                 {
                                                                         ActivityOfItem activityOfItemAbove = itemAbove.getBehavior()->getActivityOfItem() ;
-                                                                        bool outOfGravity = ( activityOfItemAbove == Activity::RegularJump
-                                                                                               || activityOfItemAbove == Activity::HighJump
-                                                                                                  || activityOfItemAbove == Activity::Vanish ) ;
+                                                                        bool outOfGravity = ( activityOfItemAbove == activities::Activity::RegularJump
+                                                                                               || activityOfItemAbove == activities::Activity::HighJump
+                                                                                                  || activityOfItemAbove == activities::Activity::Vanish ) ;
 
                                                                         if ( ! outOfGravity ) {
                                                                                 if ( item->getOrientation() == "south" )
-                                                                                        itemAbove.getBehavior()->changeActivityOfItem( Activity::ForceDisplaceSouth );
+                                                                                        itemAbove.getBehavior()->changeActivityOfItem( activities::Activity::ForceDisplaceSouth );
                                                                                 else if ( item->getOrientation() == "west" )
-                                                                                        itemAbove.getBehavior()->changeActivityOfItem( Activity::ForceDisplaceWest );
+                                                                                        itemAbove.getBehavior()->changeActivityOfItem( activities::Activity::ForceDisplaceWest );
                                                                                 else if ( item->getOrientation() == "north" )
-                                                                                        itemAbove.getBehavior()->changeActivityOfItem( Activity::ForceDisplaceNorth );
+                                                                                        itemAbove.getBehavior()->changeActivityOfItem( activities::Activity::ForceDisplaceNorth );
                                                                                 else if ( item->getOrientation() == "east" )
-                                                                                        itemAbove.getBehavior()->changeActivityOfItem( Activity::ForceDisplaceEast );
+                                                                                        itemAbove.getBehavior()->changeActivityOfItem( activities::Activity::ForceDisplaceEast );
                                                                         }
 
                                                                         // play the sound of conveyor
-                                                                        SoundManager::getInstance().play( item->getLabel(), Activity::IsActive );
+                                                                        SoundManager::getInstance().play( item->getLabel(), activities::Activity::IsActive );
                                                                 }
                                                         }
                                                 }
@@ -96,7 +96,7 @@ bool Conveyor::update ()
                         break;
 
                 default:
-                        activity = Activity::Wait;
+                        activity = activities::Activity::Wait;
         }
 
         return false;

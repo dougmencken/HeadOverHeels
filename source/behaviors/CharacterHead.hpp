@@ -13,7 +13,7 @@
 
 #include "PlayerControlled.hpp"
 
-namespace iso
+namespace behaviors
 {
 
 class CharacterHead : public PlayerControlled

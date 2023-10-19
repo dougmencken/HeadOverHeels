@@ -17,16 +17,10 @@
 #include "Picture.hpp"
 #include "Room.hpp"
 #include "GameSaverAndLoader.hpp"
-#include "ItemDescriptions.hpp"
 #include "Isomot.hpp"
 #include "ColorCyclingLabel.hpp"
 #include "Timer.hpp"
 
-using namespace iso ;
-
-
-namespace game
-{
 
 /**
  * Marks the definitive moments of the game
@@ -184,9 +178,9 @@ public:
          */
         void drawOnScreen ( const allegro::Pict& view ) ;
 
-        void loadGame ( const std::string& fileName ) ;
+        bool loadGame ( const std::string & fileName ) ;
 
-        void saveGame ( const std::string& fileName ) ;
+        bool saveGame ( const std::string & fileName ) ;
 
         void emptyHandbag () {  setImageOfItemInBag( PicturePtr () ) ;  }
 
@@ -344,8 +338,6 @@ private:
 
         std::map < std::string, PicturePtr > ambiancePictures ;
 
-};
-
-}
+} ;
 
 #endif

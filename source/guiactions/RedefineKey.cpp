@@ -10,8 +10,7 @@
 #include "MenuWithValues.hpp"
 #include "Label.hpp"
 
-using gui::RedefineKey;
-using iso::InputManager;
+using gui::RedefineKey ;
 
 
 RedefineKey::RedefineKey( MenuWithValues* menu, const std::string& keyAction )

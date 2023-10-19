@@ -29,9 +29,6 @@
 #include "Door.hpp"
 
 
-namespace iso
-{
-
 class FloorTile ;
 class Wall ;
 class Camera ;
@@ -350,8 +347,6 @@ private:
         std::pair < int, int > tripleRoomBoundX ;
         std::pair < int, int > tripleRoomBoundY ;
 
-};
-
-}
+} ;
 
 #endif

@@ -1,8 +1,10 @@
 
 #include "PlayerControlled.hpp"
 
+#include "AvatarItem.hpp"
 #include "Isomot.hpp"
 #include "DescriptionOfItem.hpp"
+#include "ItemDescriptions.hpp"
 #include "Room.hpp"
 #include "Mediator.hpp"
 #include "MoveKindOfActivity.hpp"
@@ -13,9 +15,8 @@
 #include "GameManager.hpp"
 #include "SoundManager.hpp"
 
+using behaviors::PlayerControlled ;
 
-namespace iso
-{
 
 PlayerControlled::PlayerControlled( const ItemPtr & item, const std::string & behavior )
         : Behavior( item, behavior )
@@ -44,14 +45,14 @@ PlayerControlled::~PlayerControlled()
         highJumpVector.clear();
 }
 
-void PlayerControlled::wait( AvatarItem & character )
+void PlayerControlled::wait( ::AvatarItem & character )
 {
         character.wait();
 
-        if ( FallKindOfActivity::getInstance().fall( this ) )
+        if ( activities::FallKindOfActivity::getInstance().fall( this ) )
         {
                 speedTimer->reset();
-                activity = Activity::Fall;
+                activity = activities::Activity::Fall;
 
                 if ( character.isHead ()
                                 && character.getQuickSteps() > 0
@@ -63,7 +64,7 @@ void PlayerControlled::wait( AvatarItem & character )
         }
 }
 
-void PlayerControlled::move( AvatarItem & character )
+void PlayerControlled::move( ::AvatarItem & character )
 {
         // move when character isn’t frozen
         if ( ! character.isFrozen() )
@@ -75,11 +76,11 @@ void PlayerControlled::move( AvatarItem & character )
                 if ( speedTimer->getValue() > speed )
                 {
                         // move it
-                        bool moved = MoveKindOfActivity::getInstance().move( this, &activity, true );
+                        bool moved = activities::MoveKindOfActivity::getInstance().move( this, &activity, true );
 
                         // decrement the quick steps
                         if ( character.getQuickSteps() > 0
-                                        && moved && activity != Activity::Fall )
+                                        && moved && activity != activities::Activity::Fall )
                         {
                                 this->highSpeedSteps ++ ;
 
@@ -97,7 +98,7 @@ void PlayerControlled::move( AvatarItem & character )
         }
 }
 
-void PlayerControlled::autoMove( AvatarItem & character )
+void PlayerControlled::autoMove( ::AvatarItem & character )
 {
         // apply the effect of quick steps bonus bunny
         double speed = character.getSpeed() / ( character.getQuickSteps() > 0 ? 2 : 1 );
@@ -106,7 +107,7 @@ void PlayerControlled::autoMove( AvatarItem & character )
         if ( speedTimer->getValue() > speed )
         {
                 // move it
-                MoveKindOfActivity::getInstance().move( this, &activity, true );
+                activities::MoveKindOfActivity::getInstance().move( this, &activity, true );
 
                 speedTimer->reset();
 
@@ -120,38 +121,38 @@ void PlayerControlled::autoMove( AvatarItem & character )
                 {
                         // done auto~moving
                         automaticStepsThruDoor = automaticSteps ;
-                        activity = Activity::Wait;
+                        activity = activities::Activity::Wait;
                 }
         }
 
-        if ( activity == Activity::Wait )
+        if ( activity == activities::Activity::Wait )
         {       // stop playing the sound of auto-moving
-                SoundManager::getInstance().stop( character.getOriginalLabel(), Activity::AutoMove );
+                SoundManager::getInstance().stop( character.getOriginalLabel(), activities::Activity::AutoMove );
         }
 }
 
-void PlayerControlled::displace( AvatarItem & character )
+void PlayerControlled::displace( ::AvatarItem & character )
 {
         // this item is moved by another one
         // when the displacement couldn’t be performed due to a collision then the activity propagates to the collided items
         if ( speedTimer->getValue() > character.getSpeed() )
         {
-                DisplaceKindOfActivity::getInstance().displace( this, &activity, true );
+                activities::DisplaceKindOfActivity::getInstance().displace( this, &activity, true );
 
-                activity = Activity::Wait;
+                activity = activities::Activity::Wait;
 
                 speedTimer->reset();
         }
 }
 
-void PlayerControlled::cancelDisplace( AvatarItem & character )
+void PlayerControlled::cancelDisplace( ::AvatarItem & character )
 {
         if ( ! character.isFrozen() )
         {
                 if ( speedTimer->getValue() > character.getSpeed() )
                 {
                         // move it
-                        MoveKindOfActivity::getInstance().move( this, &activity, false );
+                        activities::MoveKindOfActivity::getInstance().move( this, &activity, false );
 
                         speedTimer->reset();
 
@@ -160,12 +161,12 @@ void PlayerControlled::cancelDisplace( AvatarItem & character )
         }
 }
 
-void PlayerControlled::fall( AvatarItem & character )
+void PlayerControlled::fall( ::AvatarItem & character )
 {
         // is it time to lower by one unit
         if ( fallTimer->getValue() > character.getWeight() )
         {
-                if ( FallKindOfActivity::getInstance().fall( this ) )
+                if ( activities::FallKindOfActivity::getInstance().fall( this ) )
                 {
                         // as long as there's no collision below
                         if ( character.canAdvanceTo( 0, 0, -1 ) )
@@ -173,59 +174,59 @@ void PlayerControlled::fall( AvatarItem & character )
                                 character.changeFrame( fallFrames[ character.getOrientation() ] );
                         }
                 }
-                else if ( activity != Activity::MeetMortalItem || character.hasShield() )
+                else if ( activity != activities::Activity::MeetMortalItem || character.hasShield() )
                 {
-                        activity = Activity::Wait;
+                        activity = activities::Activity::Wait;
                 }
 
                 fallTimer->reset();
         }
 
-        if ( activity != Activity::Fall )
+        if ( activity != activities::Activity::Fall )
         {
-                SoundManager::getInstance().stop( character.getOriginalLabel(), Activity::Fall );
+                SoundManager::getInstance().stop( character.getOriginalLabel(), activities::Activity::Fall );
         }
 }
 
-void PlayerControlled::jump( AvatarItem & character )
+void PlayerControlled::jump( ::AvatarItem & character )
 {
         switch ( activity )
         {
-                case Activity::Jump:
+                case activities::Activity::Jump:
                 {
                         // look for an item below
                         character.canAdvanceTo( 0, 0, -1 );
 
                         bool onASpringStool = ( character.getMediator()->collisionWithByBehavior( "behavior of spring leap" ) != nilPointer );
                         activity = ( onASpringStool || ( character.isHeels() && character.getHighJumps() > 0 )
-                                        ? Activity::HighJump // when on a trampoline or has a bonus high jumps
-                                        : Activity::RegularJump );
+                                        ? activities::Activity::HighJump // when on a trampoline or has a bonus high jumps
+                                        : activities::Activity::RegularJump );
 
-                        if ( activity == Activity::HighJump )
+                        if ( activity == activities::Activity::HighJump )
                         {
                                 if ( character.isHeels () )
                                 {
                                         character.decrementBonusHighJumps () ;
                                 }
-                                SoundManager::getInstance().play( character.getOriginalLabel(), Activity::Rebound );
+                                SoundManager::getInstance().play( character.getOriginalLabel(), activities::Activity::Rebound );
                         }
                 }
                         break;
 
-                case Activity::RegularJump:
-                case Activity::HighJump:
+                case activities::Activity::RegularJump:
+                case activities::Activity::HighJump:
                 {
                         // is it time to jump
                         if ( speedTimer->getValue() > character.getSpeed() )
                         {
-                                if ( activity == Activity::RegularJump )
-                                        JumpKindOfActivity::getInstance().jump( this, &activity, jumpPhase, jumpVector );
-                                else if ( activity == Activity::HighJump )
-                                        JumpKindOfActivity::getInstance().jump( this, &activity, jumpPhase, highJumpVector );
+                                if ( activity == activities::Activity::RegularJump )
+                                        activities::JumpKindOfActivity::getInstance().jump( this, &activity, jumpPhase, jumpVector );
+                                else if ( activity == activities::Activity::HighJump )
+                                        activities::JumpKindOfActivity::getInstance().jump( this, &activity, jumpPhase, highJumpVector );
 
                                 // to the next phase of jump
                                 ++ jumpPhase ;
-                                if ( activity == Activity::Fall ) jumpPhase = 0;
+                                if ( activity == activities::Activity::Fall ) jumpPhase = 0;
 
                                 speedTimer->reset();
 
@@ -239,9 +240,9 @@ void PlayerControlled::jump( AvatarItem & character )
         }
 
         // when jump ends, stop sound of jumping
-        if ( activity != Activity::Jump && activity != Activity::RegularJump && activity != Activity::HighJump )
+        if ( activity != activities::Activity::Jump && activity != activities::Activity::RegularJump && activity != activities::Activity::HighJump )
         {
-                SoundManager::getInstance().stop( character.getOriginalLabel(), Activity::Jump );
+                SoundManager::getInstance().stop( character.getOriginalLabel(), activities::Activity::Jump );
         }
 
         // when character is active and is at maximum height of room it may go to room above
@@ -251,15 +252,15 @@ void PlayerControlled::jump( AvatarItem & character )
         }
 }
 
-void PlayerControlled::glide( AvatarItem & character )
+void PlayerControlled::glide( ::AvatarItem & character )
 {
         if ( glideTimer->getValue() > character.getWeight() /* character.getSpeed() / 2.0 */ )
         {
                 // when there’s a collision then stop falling and return to waiting
-                if ( ! FallKindOfActivity::getInstance().fall( this ) &&
-                        ( activity != Activity::MeetMortalItem || character.hasShield() ) )
+                if ( ! activities::FallKindOfActivity::getInstance().fall( this ) &&
+                        ( activity != activities::Activity::MeetMortalItem || character.hasShield() ) )
                 {
-                        activity = Activity::Wait;
+                        activity = activities::Activity::Wait;
                 }
 
                 glideTimer->reset();
@@ -267,31 +268,31 @@ void PlayerControlled::glide( AvatarItem & character )
 
         if ( speedTimer->getValue() > character.getSpeed() * ( character.isHeadOverHeels() ? 2 : 1 ) )
         {
-                ActivityOfItem subactivity( Activity::Wait );
+                ActivityOfItem subactivity( activities::Activity::Wait );
 
                 switch ( Way( character.getOrientation() ).getIntegerOfWay () )
                 {
                         case Way::North:
-                                subactivity = Activity::MoveNorth;
+                                subactivity = activities::Activity::MoveNorth;
                                 break;
 
                         case Way::South:
-                                subactivity = Activity::MoveSouth;
+                                subactivity = activities::Activity::MoveSouth;
                                 break;
 
                         case Way::East:
-                                subactivity = Activity::MoveEast;
+                                subactivity = activities::Activity::MoveEast;
                                 break;
 
                         case Way::West:
-                                subactivity = Activity::MoveWest;
+                                subactivity = activities::Activity::MoveWest;
                                 break;
 
                         default:
                                 ;
                 }
 
-                MoveKindOfActivity::getInstance().move( this, &subactivity, false );
+                activities::MoveKindOfActivity::getInstance().move( this, &subactivity, false );
 
                 // pick picture of falling
                 character.changeFrame( fallFrames[ character.getOrientation() ] );
@@ -299,28 +300,28 @@ void PlayerControlled::glide( AvatarItem & character )
                 speedTimer->reset();
         }
 
-        if ( activity != Activity::Glide )
+        if ( activity != activities::Activity::Glide )
         {
                 // not gliding yet, so stop its sound
-                SoundManager::getInstance().stop( character.getOriginalLabel(), Activity::Glide );
+                SoundManager::getInstance().stop( character.getOriginalLabel(), activities::Activity::Glide );
         }
 }
 
-void PlayerControlled::wayInTeletransport( AvatarItem & character )
+void PlayerControlled::wayInTeletransport( ::AvatarItem & character )
 {
         switch ( activity )
         {
-                case Activity::BeginWayInTeletransport:
+                case activities::Activity::BeginWayInTeletransport:
                         // change to bubbles
                         character.metamorphInto( labelOfBubbles, "begin way in teletransport" );
 
                         // reverse animation of bubbles
                         character.doBackwardsMotion();
 
-                        activity = Activity::WayInTeletransport;
+                        activity = activities::Activity::WayInTeletransport;
                         break;
 
-                case Activity::WayInTeletransport:
+                case activities::Activity::WayInTeletransport:
                         // animate item, character appears in room when animation finishes
                         character.animate() ;
 
@@ -329,7 +330,7 @@ void PlayerControlled::wayInTeletransport( AvatarItem & character )
                                 // back to original appearance of character
                                 character.metamorphInto( character.getOriginalLabel(), "way in teletransport" );
 
-                                activity = Activity::Wait;
+                                activity = activities::Activity::Wait;
                         }
                         break;
 
@@ -338,18 +339,18 @@ void PlayerControlled::wayInTeletransport( AvatarItem & character )
         }
 }
 
-void PlayerControlled::wayOutTeletransport( AvatarItem & character )
+void PlayerControlled::wayOutTeletransport( ::AvatarItem & character )
 {
         switch ( activity )
         {
-                case Activity::BeginWayOutTeletransport:
+                case activities::Activity::BeginWayOutTeletransport:
                         // change to bubbles
                         character.metamorphInto( labelOfBubbles, "begin way out teletransport" );
 
-                        activity = Activity::WayOutTeletransport;
+                        activity = activities::Activity::WayOutTeletransport;
                         break;
 
-                case Activity::WayOutTeletransport:
+                case activities::Activity::WayOutTeletransport:
                         // animate item, change room when animation finishes
                         character.animate() ;
 
@@ -366,12 +367,12 @@ void PlayerControlled::wayOutTeletransport( AvatarItem & character )
         }
 }
 
-void PlayerControlled::collideWithMortalItem( AvatarItem & character )
+void PlayerControlled::collideWithMortalItem( ::AvatarItem & character )
 {
         switch ( activity )
         {
                 // character just met mortal guy
-                case Activity::MeetMortalItem:
+                case activities::Activity::MeetMortalItem:
                         // do you have immunity
                         if ( ! character.hasShield() )
                         {
@@ -379,15 +380,15 @@ void PlayerControlled::collideWithMortalItem( AvatarItem & character )
                                 character.metamorphInto( labelOfBubbles, "collide with mortal item" );
 
                                 this->isLosingLife = true ;
-                                activity = Activity::Vanish;
+                                activity = activities::Activity::Vanish;
                         }
                         else
                         {
-                                activity = Activity::Wait;
+                                activity = activities::Activity::Wait;
                         }
                         break;
 
-                case Activity::Vanish:
+                case activities::Activity::Vanish:
                         if ( ! character.isActiveCharacter() )
                         {
                                 std::cout << "inactive " << character.getUniqueName() << " is going to vanish, activate it" << std::endl ;
@@ -409,7 +410,7 @@ void PlayerControlled::collideWithMortalItem( AvatarItem & character )
         }
 }
 
-void PlayerControlled::useHooter( AvatarItem & character )
+void PlayerControlled::useHooter( ::AvatarItem & character )
 {
         if ( character.hasTool( "horn" ) && character.getDonuts() > 0 )
         {
@@ -418,7 +419,7 @@ void PlayerControlled::useHooter( AvatarItem & character )
                 const DescriptionOfItem * hooterDoughnut = ItemDescriptions::descriptions().getDescriptionByLabel( labelOfFiredDoughnut );
                 if ( hooterDoughnut != nilPointer )
                 {
-                        SoundManager::getInstance().stop( character.getOriginalLabel(), Activity::FireDoughnut );
+                        SoundManager::getInstance().stop( character.getOriginalLabel(), activities::Activity::FireDoughnut );
 
                         // create item at the same position as the character
                         int z = character.getZ() + character.getHeight() - hooterDoughnut->getHeight();
@@ -441,12 +442,12 @@ void PlayerControlled::useHooter( AvatarItem & character )
 
                         character.useDoughnutHorn () ;
 
-                        SoundManager::getInstance().play( character.getOriginalLabel(), Activity::FireDoughnut );
+                        SoundManager::getInstance().play( character.getOriginalLabel(), activities::Activity::FireDoughnut );
                 }
         }
 }
 
-void PlayerControlled::takeItem( AvatarItem & character )
+void PlayerControlled::takeItem( ::AvatarItem & character )
 {
         if ( character.hasTool( "handbag" ) )
         {
@@ -482,27 +483,27 @@ void PlayerControlled::takeItem( AvatarItem & character )
                         {
                                 PicturePtr takenItemImage( new Picture( takenItem->getRawImage() ) );
 
-                                game::GameManager::getInstance().setImageOfItemInBag( takenItemImage );
+                                GameManager::getInstance().setImageOfItemInBag( takenItemImage );
 
                                 character.placeItemInBag( takenItem->getLabel(), takenItem->getBehavior()->getNameOfBehavior () );
 
-                                takenItem->getBehavior()->changeActivityOfItem( Activity::Vanish );
-                                activity = ( activity == Activity::TakeAndJump ? Activity::Jump : Activity::ItemTaken );
+                                takenItem->getBehavior()->changeActivityOfItem( activities::Activity::Vanish );
+                                activity = ( activity == activities::Activity::TakeAndJump ? activities::Activity::Jump : activities::Activity::ItemTaken );
 
-                                SoundManager::getInstance().play( character.getOriginalLabel(), Activity::TakeItem );
+                                SoundManager::getInstance().play( character.getOriginalLabel(), activities::Activity::TakeItem );
 
                                 std::cout << "took item \"" << takenItem->getUniqueName() << "\"" << std::endl ;
                         }
                 }
         }
 
-        if ( activity != Activity::ItemTaken && activity != Activity::Jump )
+        if ( activity != activities::Activity::ItemTaken && activity != activities::Activity::Jump )
         {
-                activity = Activity::Wait;
+                activity = activities::Activity::Wait;
         }
 }
 
-void PlayerControlled::dropItem( AvatarItem & character )
+void PlayerControlled::dropItem( ::AvatarItem & character )
 {
         if ( character.getDescriptionOfTakenItem() != nilPointer )
         {
@@ -520,27 +521,25 @@ void PlayerControlled::dropItem( AvatarItem & character )
 
                         character.getMediator()->getRoom()->addFreeItem( freeItem );
 
-                        game::GameManager::getInstance().emptyHandbag () ;
+                        GameManager::getInstance().emptyHandbag () ;
 
                         character.emptyBag();
 
                         // update activity
-                        activity = ( activity == Activity::DropAndJump ? Activity::Jump : Activity::Wait );
+                        activity = ( activity == activities::Activity::DropAndJump ? activities::Activity::Jump : activities::Activity::Wait );
 
-                        SoundManager::getInstance().stop( character.getOriginalLabel(), Activity::Fall );
-                        SoundManager::getInstance().play( character.getOriginalLabel(), Activity::DropItem );
+                        SoundManager::getInstance().stop( character.getOriginalLabel(), activities::Activity::Fall );
+                        SoundManager::getInstance().play( character.getOriginalLabel(), activities::Activity::DropItem );
                 }
                 else
                 {
                         // emit sound of o~ ou
-                        SoundManager::getInstance().play( character.getOriginalLabel(), Activity::Mistake );
+                        SoundManager::getInstance().play( character.getOriginalLabel(), activities::Activity::Mistake );
                 }
         }
 
-        if ( activity != Activity::Jump )
+        if ( activity != activities::Activity::Jump )
         {
-                activity = Activity::Wait;
+                activity = activities::Activity::Wait;
         }
-}
-
 }

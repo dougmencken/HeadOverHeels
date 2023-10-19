@@ -1,5 +1,6 @@
 
 #include "Patrol.hpp"
+
 #include "Item.hpp"
 #include "FreeItem.hpp"
 #include "MoveKindOfActivity.hpp"
@@ -10,7 +11,7 @@
 #include "SoundManager.hpp"
 
 
-namespace iso
+namespace behaviors
 {
 
 Patrol::Patrol( const ItemPtr & item, const std::string & behavior )
@@ -35,18 +36,18 @@ bool Patrol::update ()
 
         switch ( activity )
         {
-                case Activity::Wait:
+                case activities::Activity::Wait:
                         changeOrientation();
                         break;
 
-                case Activity::MoveNorth:
-                case Activity::MoveSouth:
-                case Activity::MoveEast:
-                case Activity::MoveWest:
-                case Activity::MoveNortheast:
-                case Activity::MoveNorthwest:
-                case Activity::MoveSoutheast:
-                case Activity::MoveSouthwest:
+                case activities::Activity::MoveNorth:
+                case activities::Activity::MoveSouth:
+                case activities::Activity::MoveEast:
+                case activities::Activity::MoveWest:
+                case activities::Activity::MoveNortheast:
+                case activities::Activity::MoveNorthwest:
+                case activities::Activity::MoveSoutheast:
+                case activities::Activity::MoveSouthwest:
                         if ( ! freeItem.isFrozen() )
                         {
                                 if ( speedTimer->getValue() > freeItem.getSpeed())
@@ -59,11 +60,11 @@ bool Patrol::update ()
                                         }
 
                                         // move item
-                                        if ( ! MoveKindOfActivity::getInstance().move( this, &activity, true ) )
+                                        if ( ! activities::MoveKindOfActivity::getInstance().move( this, &activity, true ) )
                                         {
                                                 changeOrientation();
 
-                                                SoundManager::getInstance().play( freeItem.getLabel(), Activity::Collision );
+                                                SoundManager::getInstance().play( freeItem.getLabel(), activities::Activity::Collision );
                                         }
 
                                         // play sound of moving
@@ -76,30 +77,30 @@ bool Patrol::update ()
                         }
                         break;
 
-                case Activity::DisplaceNorth:
-                case Activity::DisplaceSouth:
-                case Activity::DisplaceEast:
-                case Activity::DisplaceWest:
-                case Activity::DisplaceNortheast:
-                case Activity::DisplaceSoutheast:
-                case Activity::DisplaceSouthwest:
-                case Activity::DisplaceNorthwest:
+                case activities::Activity::DisplaceNorth:
+                case activities::Activity::DisplaceSouth:
+                case activities::Activity::DisplaceEast:
+                case activities::Activity::DisplaceWest:
+                case activities::Activity::DisplaceNortheast:
+                case activities::Activity::DisplaceSoutheast:
+                case activities::Activity::DisplaceSouthwest:
+                case activities::Activity::DisplaceNorthwest:
                         // play sound of displacing
                         SoundManager::getInstance().play( freeItem.getLabel(), activity );
 
                         // displace this item by some other one
-                        DisplaceKindOfActivity::getInstance().displace( this, &activity, true );
+                        activities::DisplaceKindOfActivity::getInstance().displace( this, &activity, true );
 
-                        activity = Activity::Wait;
+                        activity = activities::Activity::Wait;
 
                         // preserve inactivity for frozen item
                         if ( freeItem.isFrozen() )
                         {
-                                activity = Activity::Freeze;
+                                activity = activities::Activity::Freeze;
                         }
                         break;
 
-                case Activity::Fall:
+                case activities::Activity::Fall:
                         // look for reaching floor in a room without floor
                         if ( item->getZ() == 0 && ! item->getMediator()->getRoom()->hasFloor() )
                         {
@@ -108,23 +109,23 @@ bool Patrol::update ()
                         // is it time to fall
                         else if ( fallTimer->getValue() > freeItem.getWeight() )
                         {
-                                if ( ! FallKindOfActivity::getInstance().fall( this ) )
+                                if ( ! activities::FallKindOfActivity::getInstance().fall( this ) )
                                 {
                                         SoundManager::getInstance().play( freeItem.getLabel(), activity );
-                                        activity = Activity::Wait;
+                                        activity = activities::Activity::Wait;
                                 }
 
                                 fallTimer->reset();
                         }
                         break;
 
-                case Activity::Freeze:
+                case activities::Activity::Freeze:
                         freeItem.setFrozen( true );
                         break;
 
-                case Activity::WakeUp:
+                case activities::Activity::WakeUp:
                         freeItem.setFrozen( false );
-                        activity = Activity::Wait;
+                        activity = activities::Activity::Wait;
                         break;
 
                 default:
@@ -155,35 +156,35 @@ void Patrol::changeOrientation()
         switch ( orientation )
         {
                 case Way::North:
-                        activity = Activity::MoveNorth;
+                        activity = activities::Activity::MoveNorth;
                         break;
 
                 case Way::South:
-                        activity = Activity::MoveSouth;
+                        activity = activities::Activity::MoveSouth;
                         break;
 
                 case Way::East:
-                        activity = Activity::MoveEast;
+                        activity = activities::Activity::MoveEast;
                         break;
 
                 case Way::West:
-                        activity = Activity::MoveWest;
+                        activity = activities::Activity::MoveWest;
                         break;
 
                 case Way::Northeast:
-                        activity = Activity::MoveNortheast;
+                        activity = activities::Activity::MoveNortheast;
                         break;
 
                 case Way::Northwest:
-                        activity = Activity::MoveNorthwest;
+                        activity = activities::Activity::MoveNorthwest;
                         break;
 
                 case Way::Southeast:
-                        activity = Activity::MoveSoutheast;
+                        activity = activities::Activity::MoveSoutheast;
                         break;
 
                 case Way::Southwest:
-                        activity = Activity::MoveSouthwest;
+                        activity = activities::Activity::MoveSouthwest;
                         break;
 
                 default:

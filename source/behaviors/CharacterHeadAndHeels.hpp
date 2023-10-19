@@ -14,7 +14,7 @@
 #include "PlayerControlled.hpp"
 
 
-namespace iso
+namespace behaviors
 {
 
 class CharacterHeadAndHeels : public PlayerControlled

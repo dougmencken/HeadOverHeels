@@ -25,9 +25,6 @@
 class Color ;
 class Picture ;
 
-namespace iso
-{
-
 class Room ;
 
 
@@ -115,8 +112,6 @@ private:
 
         bool drawOnChequerboard ;
 
-};
-
-}
+} ;
 
 #endif

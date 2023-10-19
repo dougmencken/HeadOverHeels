@@ -20,9 +20,8 @@
 
 #include "ActivityOfItem.hpp"
 
+using activities::ActivityOfItem ;
 
-namespace iso
-{
 
 class SoundManager
 {
@@ -54,12 +53,12 @@ public:
          * @param activity Activity of item
          * @param loop If true, the playing is repeated
          */
-        void play ( const std::string& label, const ActivityOfItem& activity, bool loop = false ) ;
+        void play ( const std::string & label, const activities::ActivityOfItem & activity, bool loop = false ) ;
 
         /**
          * Stops playing a sound
          */
-        void stop ( const std::string& label, const ActivityOfItem& activity ) ;
+        void stop ( const std::string & label, const activities::ActivityOfItem & activity ) ;
 
         /**
          * Stops playing of all sounds
@@ -124,8 +123,6 @@ private:
 
         std::map < ActivityOfItem, std::string > activityStrings ;
 
-};
-
-}
+} ;
 
 #endif

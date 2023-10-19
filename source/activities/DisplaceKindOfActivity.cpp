@@ -1,5 +1,6 @@
 
 #include "DisplaceKindOfActivity.hpp"
+
 #include "FallKindOfActivity.hpp"
 #include "Behavior.hpp"
 #include "Item.hpp"
@@ -7,7 +8,7 @@
 #include "FreeItem.hpp"
 
 
-namespace iso
+namespace activities
 {
 
 DisplaceKindOfActivity * DisplaceKindOfActivity::instance = nilPointer ;
@@ -23,16 +24,7 @@ DisplaceKindOfActivity& DisplaceKindOfActivity::getInstance()
 }
 
 
-DisplaceKindOfActivity::DisplaceKindOfActivity() : KindOfActivity()
-{
-
-}
-
-DisplaceKindOfActivity::~DisplaceKindOfActivity()
-{
-}
-
-bool DisplaceKindOfActivity::displace( Behavior* behavior, ActivityOfItem* activity, bool canFall )
+bool DisplaceKindOfActivity::displace( behaviors::Behavior* behavior, ActivityOfItem* activity, bool canFall )
 {
         bool itemDisplaced = false;
 
@@ -43,51 +35,51 @@ bool DisplaceKindOfActivity::displace( Behavior* behavior, ActivityOfItem* activ
 
         switch ( *activity )
         {
-                case Activity::ForceDisplaceNorth:
-                        activityToPropagate = Activity::DisplaceNorth;
+                case activities::Activity::ForceDisplaceNorth:
+                        activityToPropagate = activities::Activity::DisplaceNorth;
                         // fallthru
-                case Activity::DisplaceNorth:
+                case activities::Activity::DisplaceNorth:
                         itemDisplaced = item->addToX( -1 );
                         break;
 
-                case Activity::ForceDisplaceSouth:
-                        activityToPropagate = Activity::DisplaceSouth;
+                case activities::Activity::ForceDisplaceSouth:
+                        activityToPropagate = activities::Activity::DisplaceSouth;
                         // fallthru
-                case Activity::DisplaceSouth:
+                case activities::Activity::DisplaceSouth:
                         itemDisplaced = item->addToX( 1 );
                         break;
 
-                case Activity::ForceDisplaceEast:
-                        activityToPropagate = Activity::DisplaceEast;
+                case activities::Activity::ForceDisplaceEast:
+                        activityToPropagate = activities::Activity::DisplaceEast;
                         // fallthru
-                case Activity::DisplaceEast:
+                case activities::Activity::DisplaceEast:
                         itemDisplaced = item->addToY( -1 );
                         break;
 
-                case Activity::ForceDisplaceWest:
-                        activityToPropagate = Activity::DisplaceWest;
+                case activities::Activity::ForceDisplaceWest:
+                        activityToPropagate = activities::Activity::DisplaceWest;
                         // fallthru
-                case Activity::DisplaceWest:
+                case activities::Activity::DisplaceWest:
                         itemDisplaced = item->addToY( 1 );
                         break;
 
-                case Activity::DisplaceNortheast:
+                case activities::Activity::DisplaceNortheast:
                         itemDisplaced = item->addToPosition( -1, -1, 0 );
                         break;
 
-                case Activity::DisplaceNorthwest:
+                case activities::Activity::DisplaceNorthwest:
                         itemDisplaced = item->addToPosition( -1, 1, 0 );
                         break;
 
-                case Activity::DisplaceSoutheast:
+                case activities::Activity::DisplaceSoutheast:
                         itemDisplaced = item->addToPosition( 1, -1, 0 );
                         break;
 
-                case Activity::DisplaceSouthwest:
+                case activities::Activity::DisplaceSouthwest:
                         itemDisplaced = item->addToPosition( 1, 1, 0 );
                         break;
 
-                case Activity::DisplaceUp:
+                case activities::Activity::DisplaceUp:
                         itemDisplaced = item->addToZ( 1 );
                         break;
 
@@ -116,7 +108,7 @@ bool DisplaceKindOfActivity::displace( Behavior* behavior, ActivityOfItem* activ
                 // look if it falls yet
                 if ( FallKindOfActivity::getInstance().fall( behavior ) )
                 {
-                        *activity = Activity::Fall;
+                        *activity = activities::Activity::Fall;
                         itemDisplaced = true;
                 }
         }

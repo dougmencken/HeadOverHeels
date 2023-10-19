@@ -8,7 +8,7 @@
 #include "SoundManager.hpp"
 
 
-namespace iso
+namespace behaviors
 {
 
 Elevator::Elevator( const ItemPtr & item, const std::string & behavior )
@@ -16,7 +16,7 @@ Elevator::Elevator( const ItemPtr & item, const std::string & behavior )
         , top( 10 )
         , bottom( 0 )
         , ascent( true )
-        , lastActivity( Activity::Wait )
+        , lastActivity( activities::Activity::Wait )
         , speedTimer( new Timer() )
         , stopTimer( new Timer() )
 {
@@ -34,22 +34,22 @@ bool Elevator::update ()
 
         switch ( activity )
         {
-                case Activity::Wait:
-                        changeActivityOfItem ( ascent ? Activity::MoveUp : Activity::MoveDown );
+                case activities::Activity::Wait:
+                        changeActivityOfItem ( ascent ? activities::Activity::MoveUp : activities::Activity::MoveDown );
                         lastActivity = activity;
                         break;
 
-                case Activity::MoveUp:
+                case activities::Activity::MoveUp:
                         if ( speedTimer->getValue() > freeItem.getSpeed() )
                         {
-                                MoveKindOfActivity::getInstance().move( this, &activity, false );
+                                activities::MoveKindOfActivity::getInstance().move( this, &activity, false );
 
                                 speedTimer->reset();
 
                                 // elevator reached its top
                                 if ( freeItem.getZ() > top * Isomot::LayerHeight )
                                 {
-                                        activity = Activity::StopAtTop;
+                                        activity = activities::Activity::StopAtTop;
                                         lastActivity = activity;
                                         stopTimer->reset();
                                 }
@@ -58,17 +58,17 @@ bool Elevator::update ()
                         freeItem.animate();
                         break;
 
-                case Activity::MoveDown:
+                case activities::Activity::MoveDown:
                         if ( speedTimer->getValue() > freeItem.getSpeed() )
                         {
-                                MoveKindOfActivity::getInstance().move( this, &activity, false );
+                                activities::MoveKindOfActivity::getInstance().move( this, &activity, false );
 
                                 speedTimer->reset();
 
                                 // elevator reached its bottom
                                 if ( freeItem.getZ() <= bottom * Isomot::LayerHeight )
                                 {
-                                        activity = Activity::StopAtBottom;
+                                        activity = activities::Activity::StopAtBottom;
                                         lastActivity = activity;
                                         stopTimer->reset();
                                 }
@@ -78,10 +78,10 @@ bool Elevator::update ()
                         break;
 
                 // stop elevator for a moment when it reaches minimum height
-                case Activity::StopAtBottom:
+                case activities::Activity::StopAtBottom:
                         if ( stopTimer->getValue() >= 0.250 )
                         {
-                                changeActivityOfItem( Activity::MoveUp );
+                                changeActivityOfItem( activities::Activity::MoveUp );
                                 lastActivity = activity;
                         }
 
@@ -89,10 +89,10 @@ bool Elevator::update ()
                         break;
 
                 // stop elevator for a moment when it reaches maximum height
-                case Activity::StopAtTop:
+                case activities::Activity::StopAtTop:
                         if ( stopTimer->getValue() >= 0.250 )
                         {
-                                changeActivityOfItem( Activity::MoveDown );
+                                changeActivityOfItem( activities::Activity::MoveDown );
                                 lastActivity = activity;
                         }
 

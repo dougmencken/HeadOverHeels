@@ -16,7 +16,7 @@
 #include "Timer.hpp"
 
 
-namespace iso
+namespace behaviors
 {
 
 class AvatarItem ;

@@ -2,9 +2,6 @@
 #include "DescriptionOfItem.hpp"
 
 
-namespace iso
-{
-
 DescriptionOfItem::~DescriptionOfItem( )
 {
         sequenceOFrames.clear ();
@@ -75,6 +72,4 @@ DescriptionOfItem * DescriptionOfItem::cloneAsRightJambOfDoor ( const Descriptio
         descriptionOfRightJamb->label += "~rightjamb" ;
         descriptionOfRightJamb->partOfDoor = true ;
         return descriptionOfRightJamb ;
-}
-
 }

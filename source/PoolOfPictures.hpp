@@ -17,9 +17,6 @@
 #include "Picture.hpp"
 
 
-namespace iso
-{
-
 class PoolOfPictures
 {
 
@@ -46,7 +43,5 @@ private:
         std::map < std::string /* imageFile */, PicturePtr /* image */ > pictures ;
 
 } ;
-
-}
 
 #endif

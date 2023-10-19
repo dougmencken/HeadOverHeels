@@ -1,5 +1,6 @@
 
 #include "FloorTile.hpp"
+
 #include "Color.hpp"
 #include "Mediator.hpp"
 
@@ -7,9 +8,6 @@
 
 #include <cassert>
 
-
-namespace iso
-{
 
 FloorTile::FloorTile( int cellX, int cellY, const Picture& graphicsOfTile )
         : Mediated (), Shady ()
@@ -283,6 +281,4 @@ PicturePtr FloorTile::fullTileToPartialTile( const Picture & fullTile, const std
         allegro::Pict::setWhereToDraw( previousWhere );
 
         return result ;
-}
-
 }

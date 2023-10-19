@@ -4,6 +4,7 @@
 #include "Isomot.hpp"
 #include "Item.hpp"
 #include "DescriptionOfItem.hpp"
+#include "ItemDescriptions.hpp"
 #include "FreeItem.hpp"
 #include "AvatarItem.hpp"
 #include "MoveKindOfActivity.hpp"
@@ -15,7 +16,7 @@
 #include "GameManager.hpp"
 
 
-namespace iso
+namespace behaviors
 {
 
 Hunter::Hunter( const ItemPtr & item, const std::string & behavior )
@@ -38,7 +39,7 @@ bool Hunter::update ()
 
         switch ( activity )
         {
-                case Activity::Wait:
+                case activities::Activity::Wait:
                         // if the hunter is not a waiting one, activate it just now
                         if ( getNameOfBehavior() == "behavior of hunter in four directions" ||
                                         getNameOfBehavior() == "behavior of hunter in eight directions" )
@@ -72,10 +73,10 @@ bool Hunter::update ()
                         }
                 break;
 
-                case Activity::MoveNorth:
-                case Activity::MoveSouth:
-                case Activity::MoveEast:
-                case Activity::MoveWest:
+                case activities::Activity::MoveNorth:
+                case activities::Activity::MoveSouth:
+                case activities::Activity::MoveEast:
+                case activities::Activity::MoveWest:
                         // bin original item when full-bodied guard is created
                         if ( getNameOfBehavior() == "behavior of waiting hunter in four directions" && createFullBody () )
                         {
@@ -86,7 +87,7 @@ bool Hunter::update ()
                                 if ( speedTimer->getValue() > this->item->getSpeed() )
                                 {
                                         // move item
-                                        MoveKindOfActivity::getInstance().move( this, &activity, false );
+                                        activities::MoveKindOfActivity::getInstance().move( this, &activity, false );
 
                                         // reset timer to next cycle
                                         speedTimer->reset();
@@ -97,7 +98,7 @@ bool Hunter::update ()
                                         // fall if you have to
                                         if ( this->item->getWeight() > 0 )
                                         {
-                                                FallKindOfActivity::getInstance().fall( this );
+                                                activities::FallKindOfActivity::getInstance().fall( this );
                                         }
                                 }
 
@@ -108,38 +109,38 @@ bool Hunter::update ()
                         }
                         break;
 
-                case Activity::MoveNortheast:
-                case Activity::MoveNorthwest:
-                case Activity::MoveSoutheast:
-                case Activity::MoveSouthwest:
+                case activities::Activity::MoveNortheast:
+                case activities::Activity::MoveNorthwest:
+                case activities::Activity::MoveSoutheast:
+                case activities::Activity::MoveSouthwest:
                         if ( ! dynamic_cast< FreeItem& >( * this->item ).isFrozen() )
                         {
                                 if ( speedTimer->getValue() > this->item->getSpeed() )
                                 {
                                         // move item
-                                        if ( ! MoveKindOfActivity::getInstance().move( this, &activity, false ) )
+                                        if ( ! activities::MoveKindOfActivity::getInstance().move( this, &activity, false ) )
                                         {
-                                                if ( activity == Activity::MoveNortheast || activity == Activity::MoveNorthwest )
+                                                if ( activity == activities::Activity::MoveNortheast || activity == activities::Activity::MoveNorthwest )
                                                 {
-                                                        ActivityOfItem tempActivity = Activity::MoveNorth;
-                                                        if ( ! MoveKindOfActivity::getInstance().move( this, &tempActivity, false ) )
+                                                        ActivityOfItem tempActivity = activities::Activity::MoveNorth;
+                                                        if ( ! activities::MoveKindOfActivity::getInstance().move( this, &tempActivity, false ) )
                                                         {
-                                                                activity = ( activity == Activity::MoveNortheast ? Activity::MoveEast : Activity::MoveWest );
+                                                                activity = ( activity == activities::Activity::MoveNortheast ? activities::Activity::MoveEast : activities::Activity::MoveWest );
                                                                 if ( this->item->getWeight() > 0 )
                                                                 {
-                                                                        FallKindOfActivity::getInstance().fall( this );
+                                                                        activities::FallKindOfActivity::getInstance().fall( this );
                                                                 }
                                                         }
                                                 }
                                                 else
                                                 {
-                                                        ActivityOfItem tempActivity = Activity::MoveSouth;
-                                                        if ( ! MoveKindOfActivity::getInstance().move( this, &tempActivity, false ) )
+                                                        ActivityOfItem tempActivity = activities::Activity::MoveSouth;
+                                                        if ( ! activities::MoveKindOfActivity::getInstance().move( this, &tempActivity, false ) )
                                                         {
-                                                                activity = ( activity == Activity::MoveSoutheast ? Activity::MoveEast : Activity::MoveWest );
+                                                                activity = ( activity == activities::Activity::MoveSoutheast ? activities::Activity::MoveEast : activities::Activity::MoveWest );
                                                                 if ( this->item->getWeight() > 0 )
                                                                 {
-                                                                        FallKindOfActivity::getInstance().fall( this );
+                                                                        activities::FallKindOfActivity::getInstance().fall( this );
                                                                 }
                                                         }
                                                 }
@@ -161,36 +162,36 @@ bool Hunter::update ()
                         }
                         break;
 
-                case Activity::DisplaceNorth:
-                case Activity::DisplaceSouth:
-                case Activity::DisplaceEast:
-                case Activity::DisplaceWest:
-                case Activity::DisplaceNortheast:
-                case Activity::DisplaceNorthwest:
-                case Activity::DisplaceSoutheast:
-                case Activity::DisplaceSouthwest:
+                case activities::Activity::DisplaceNorth:
+                case activities::Activity::DisplaceSouth:
+                case activities::Activity::DisplaceEast:
+                case activities::Activity::DisplaceWest:
+                case activities::Activity::DisplaceNortheast:
+                case activities::Activity::DisplaceNorthwest:
+                case activities::Activity::DisplaceSoutheast:
+                case activities::Activity::DisplaceSouthwest:
                         // when item is active and it’s time to move
                         if ( speedTimer->getValue() > this->item->getSpeed() )
                         {
-                                DisplaceKindOfActivity::getInstance().displace( this, &activity, false );
-                                activity = Activity::Wait;
+                                activities::DisplaceKindOfActivity::getInstance().displace( this, &activity, false );
+                                activity = activities::Activity::Wait;
                                 speedTimer->reset();
                         }
 
                         // preserve inactivity for frozen item
                         if ( dynamic_cast< FreeItem& >( * this->item ).isFrozen() )
                         {
-                                activity = Activity::Freeze;
+                                activity = activities::Activity::Freeze;
                         }
                         break;
 
-                case Activity::Freeze:
+                case activities::Activity::Freeze:
                         dynamic_cast< FreeItem& >( * this->item ).setFrozen( true );
                         break;
 
-                case Activity::WakeUp:
+                case activities::Activity::WakeUp:
                         dynamic_cast< FreeItem& >( * this->item ).setFrozen( false );
-                        activity = Activity::Wait;
+                        activity = activities::Activity::Wait;
                         break;
 
                 default:
@@ -213,7 +214,7 @@ ActivityOfItem Hunter::updateDirection( const ActivityOfItem & activity )
                 return updateDirection8( activity );
         }
 
-        return Activity::Wait;
+        return activities::Activity::Wait;
 }
 
 ActivityOfItem Hunter::updateDirection4( const ActivityOfItem & activity )
@@ -229,36 +230,36 @@ ActivityOfItem Hunter::updateDirection4( const ActivityOfItem & activity )
                 {
                         if ( dx > 0 )
                         {
-                                changeActivityOfItem( Activity::MoveNorth );
+                                changeActivityOfItem( activities::Activity::MoveNorth );
                         }
                         else if ( dx < 0 )
                         {
-                                changeActivityOfItem( Activity::MoveSouth );
+                                changeActivityOfItem( activities::Activity::MoveSouth );
                         }
                         else
                         {
                                 if ( dy > 0 )
-                                        changeActivityOfItem( Activity::MoveEast );
+                                        changeActivityOfItem( activities::Activity::MoveEast );
                                 else if ( dy < 0 )
-                                        changeActivityOfItem( Activity::MoveWest );
+                                        changeActivityOfItem( activities::Activity::MoveWest );
                         }
                 }
                 else if ( abs( dy ) < abs( dx ) )
                 {
                         if ( dy > 0 )
                         {
-                                changeActivityOfItem( Activity::MoveEast );
+                                changeActivityOfItem( activities::Activity::MoveEast );
                         }
                         else if ( dy < 0 )
                         {
-                                changeActivityOfItem( Activity::MoveWest );
+                                changeActivityOfItem( activities::Activity::MoveWest );
                         }
                         else
                         {
                                 if ( dx > 0 )
-                                        changeActivityOfItem( Activity::MoveNorth );
+                                        changeActivityOfItem( activities::Activity::MoveNorth );
                                 else if ( dx < 0 )
-                                        changeActivityOfItem( Activity::MoveSouth );
+                                        changeActivityOfItem( activities::Activity::MoveSouth );
                         }
                 }
         }
@@ -283,27 +284,27 @@ ActivityOfItem Hunter::updateDirection8( const ActivityOfItem& activity )
                         if ( dx > 1 )
                         {
                                 if ( dy > 1 )
-                                        changeActivityOfItem( Activity::MoveNortheast );
+                                        changeActivityOfItem( activities::Activity::MoveNortheast );
                                 else if ( dy < -1 )
-                                        changeActivityOfItem( Activity::MoveNorthwest );
+                                        changeActivityOfItem( activities::Activity::MoveNorthwest );
                                 else
-                                        changeActivityOfItem( Activity::MoveNorth );
+                                        changeActivityOfItem( activities::Activity::MoveNorth );
                         }
                         else if ( dx < -1 )
                         {
                                 if ( dy > 1 )
-                                        changeActivityOfItem( Activity::MoveSoutheast );
+                                        changeActivityOfItem( activities::Activity::MoveSoutheast );
                                 else if ( dy < -1 )
-                                        changeActivityOfItem( Activity::MoveSouthwest );
+                                        changeActivityOfItem( activities::Activity::MoveSouthwest );
                                 else
-                                        changeActivityOfItem( Activity::MoveSouth );
+                                        changeActivityOfItem( activities::Activity::MoveSouth );
                         }
                         else
                         {
                                 if ( dy > 0 )
-                                        changeActivityOfItem( Activity::MoveEast );
+                                        changeActivityOfItem( activities::Activity::MoveEast );
                                 else if ( dy < 0 )
-                                        changeActivityOfItem( Activity::MoveWest );
+                                        changeActivityOfItem( activities::Activity::MoveWest );
                         }
                 }
                 else if ( abs( dy ) < abs( dx ) )
@@ -311,34 +312,34 @@ ActivityOfItem Hunter::updateDirection8( const ActivityOfItem& activity )
                         if ( dy > 1 )
                         {
                                 if ( dx > 1 )
-                                        changeActivityOfItem( Activity::MoveNortheast );
+                                        changeActivityOfItem( activities::Activity::MoveNortheast );
                                 else if ( dx < -1 )
-                                        changeActivityOfItem( Activity::MoveSoutheast );
+                                        changeActivityOfItem( activities::Activity::MoveSoutheast );
                                 else
-                                        changeActivityOfItem( Activity::MoveEast );
+                                        changeActivityOfItem( activities::Activity::MoveEast );
                         }
                         else if ( dy < -1 )
                         {
                                 if ( dx > 1 )
-                                        changeActivityOfItem( Activity::MoveNorthwest );
+                                        changeActivityOfItem( activities::Activity::MoveNorthwest );
                                 else if ( dx < -1 )
-                                        changeActivityOfItem( Activity::MoveSouthwest );
+                                        changeActivityOfItem( activities::Activity::MoveSouthwest );
                                 else
-                                        changeActivityOfItem( Activity::MoveWest );
+                                        changeActivityOfItem( activities::Activity::MoveWest );
                         }
                         else
                         {
                                 if ( dx > 0 )
-                                        changeActivityOfItem( Activity::MoveNorth );
+                                        changeActivityOfItem( activities::Activity::MoveNorth );
                                 else if ( dx < 0 )
-                                        changeActivityOfItem( Activity::MoveSouth );
+                                        changeActivityOfItem( activities::Activity::MoveSouth );
                         }
                 }
 
                 // the guardian of throne flees from the player with four crowns
-                if ( item->getLabel() == "throne-guard" && game::GameManager::getInstance().countFreePlanets() >= 4 )
+                if ( item->getLabel() == "throne-guard" && GameManager::getInstance().countFreePlanets() >= 4 )
                 {
-                        changeActivityOfItem( Activity::MoveSouthwest );
+                        changeActivityOfItem( activities::Activity::MoveSouthwest );
                 }
         }
 

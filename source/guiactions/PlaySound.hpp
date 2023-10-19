@@ -22,7 +22,7 @@ class PlaySound : public Action
 
 public:
 
-        explicit PlaySound( const iso::ActivityOfItem& what ) : Action( ), whichSound( what ) { }
+        explicit PlaySound( const ActivityOfItem& what ) : Action( ), whichSound( what ) { }
 
         virtual ~PlaySound( ) { }
 
@@ -32,13 +32,13 @@ protected:
 
         virtual void doAction ()
         {
-                iso::SoundManager::getInstance().stopEverySound (); //stop ( "gui", whichSound );
-                iso::SoundManager::getInstance().play ( "gui", whichSound, /* loop */ false );
+                SoundManager::getInstance().stopEverySound (); //stop ( "gui", whichSound );
+                SoundManager::getInstance().play ( "gui", whichSound, /* loop */ false );
         }
 
 private:
 
-        iso::ActivityOfItem whichSound ;
+        ActivityOfItem whichSound ;
 
 };
 

@@ -15,11 +15,9 @@
 #include "Item.hpp"
 #include "FloorTile.hpp"
 
-namespace iso
-{
 
 /**
- * Shades graphics of item or floor tile with shadow of another item
+ * Shades the graphics of an item or a floor tile with the shadow from another item
  *
  * @param x Where is shading item on screen
  * @param y Where is shading item on screen
@@ -37,8 +35,6 @@ public:
 
         static void castShadowOnFloor ( FloorTile & tile, int x, int y, const Picture & shadow, unsigned short shading, unsigned char transparency = 0 ) ;
 
-};
-
-}
+} ;
 
 #endif

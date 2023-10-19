@@ -23,12 +23,10 @@
 #include "Mediated.hpp"
 #include "Shady.hpp"
 
-
-namespace iso
-{
+namespace behaviors {  class Behavior ;  }
+using behaviors::Behavior ;
 
 class DescriptionOfItem ;
-class Behavior ;
 
 
 /**
@@ -385,7 +383,5 @@ protected:
 };
 
 typedef multiptr < Item > ItemPtr ;
-
-}
 
 #endif

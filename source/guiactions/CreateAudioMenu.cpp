@@ -15,8 +15,7 @@
 #include <string>
 #include <sstream>
 
-using gui::CreateAudioMenu;
-using iso::SoundManager;
+using gui::CreateAudioMenu ;
 
 
 CreateAudioMenu::CreateAudioMenu( ) :
@@ -74,7 +73,7 @@ void CreateAudioMenu::doAction ()
                 listOfOptions->setValueOf( labelMusic, ss.str() );
 
                 listOfOptions->addOption( playRoomTunes );
-                listOfOptions->setValueOf( playRoomTunes, game::GameManager::getInstance().playMelodyOfScenery () ? yeah : nope );
+                listOfOptions->setValueOf( playRoomTunes, GameManager::getInstance().playMelodyOfScenery () ? yeah : nope );
 
                 listOfOptions->setVerticalOffset( 35 );
 
@@ -85,7 +84,7 @@ void CreateAudioMenu::doAction ()
         else
         {
                 // update labels
-                listOfOptions->setValueOf( playRoomTunes, game::GameManager::getInstance().playMelodyOfScenery () ? yeah : nope );
+                listOfOptions->setValueOf( playRoomTunes, GameManager::getInstance().playMelodyOfScenery () ? yeah : nope );
         }
 
         if ( screen.getKeyHandler() == nilPointer )
@@ -146,8 +145,8 @@ void CreateAudioMenu::doAction ()
                                                 {
                                                         listOfOptions->setValueOf( labelEffects, ss.str() );
                                                         SoundManager::getInstance().setVolumeOfEffects( value );
-                                                        iso::SoundManager::getInstance().stopEverySound ();
-                                                        iso::SoundManager::getInstance().play ( "gui", iso::Activity::Push, /* loop */ false );
+                                                        SoundManager::getInstance().stopEverySound ();
+                                                        SoundManager::getInstance().play ( "gui", activities::Activity::Push, /* loop */ false );
                                                 }
                                         }
                                 }
@@ -155,8 +154,8 @@ void CreateAudioMenu::doAction ()
                                 {
                                         if ( theKey == "Left" || theKey == "Right" || theKey == "o" || theKey == "p" )
                                         {
-                                                game::GameManager::getInstance().togglePlayMelodyOfScenery ();
-                                                listOfOptions->setValueOf( playRoomTunes, game::GameManager::getInstance().playMelodyOfScenery () ? yeah : nope );
+                                                GameManager::getInstance().togglePlayMelodyOfScenery ();
+                                                listOfOptions->setValueOf( playRoomTunes, GameManager::getInstance().playMelodyOfScenery () ? yeah : nope );
 
                                                 doneWithKey = true;
                                         }

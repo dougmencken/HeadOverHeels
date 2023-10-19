@@ -12,9 +12,6 @@
 #define Shady_hpp_
 
 
-namespace iso
-{
-
 class Shady
 {
 
@@ -34,8 +31,6 @@ protected:
 
         bool wantShadow ;
 
-};
-
-}
+} ;
 
 #endif

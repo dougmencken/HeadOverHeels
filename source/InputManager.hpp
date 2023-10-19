@@ -17,9 +17,6 @@
 #include "WrappersAllegro.hpp"
 
 
-namespace iso
-{
-
 class InputManager
 {
 
@@ -106,8 +103,6 @@ private:
 
         std::vector < std::pair < /* action */ std::string, /* name */ std::string > > userKeys ;
 
-};
-
-}
+} ;
 
 #endif

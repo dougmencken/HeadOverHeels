@@ -12,12 +12,12 @@
 #define GameSaverAndLoader_hpp_
 
 #include <string>
+#include <vector>
 
 #include <tinyxml2.h>
 
+#include "util.hpp"
 
-namespace game
-{
 
 /**
  * Deals with saving and restoring of a game
@@ -43,7 +43,18 @@ public:
 
         bool saveGame ( const std::string & file ) ;
 
-        static const std::string Current_Save_Version () {  return "2" ;  }
+        static const std::string Current_Save_Version () {  return "2.1" ;  }
+
+        static const std::vector< std::string > Parsable_Save_Versions ()
+        {
+        #ifdef __Cxx11__
+                return { std::string( "2" ) };
+        #else
+                std::vector< std::string > versions ;
+                versions.push_back( "2" );
+                return versions ;
+        #endif
+        }
 
 private:
 
@@ -67,8 +78,6 @@ private:
 
         std::string catchFishWay ;
 
-};
-
-}
+} ;
 
 #endif

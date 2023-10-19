@@ -17,9 +17,6 @@
 #include "Way.hpp"
 
 
-namespace iso
-{
-
 /**
  * Connections of room with another rooms of map
  */
@@ -165,8 +162,6 @@ private:
 
         std::map < std::string /* where */, std::string /* file of room */ > connections ;
 
-};
-
-}
+} ;
 
 #endif

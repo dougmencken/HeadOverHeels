@@ -12,10 +12,11 @@
 #define Switch_hpp_
 
 #include <vector>
+
 #include "Behavior.hpp"
 
 
-namespace iso
+namespace behaviors
 {
 
 class Switch : public Behavior

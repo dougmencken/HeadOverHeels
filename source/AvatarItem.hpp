@@ -19,9 +19,6 @@
 #include "Picture.hpp"
 
 
-namespace iso
-{
-
 /**
  * An avatar is a game character controlled by the player
  */
@@ -162,10 +159,8 @@ private:
 
         std::string behaviorOfTakenItem ;
 
-};
+} ;
 
 typedef multiptr < AvatarItem > AvatarItemPtr ;
-
-}
 
 #endif

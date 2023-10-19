@@ -1,5 +1,6 @@
 
 #include "Impel.hpp"
+
 #include "Item.hpp"
 #include "FreeItem.hpp"
 #include "DisplaceKindOfActivity.hpp"
@@ -8,7 +9,7 @@
 #include "Room.hpp"
 
 
-namespace iso
+namespace behaviors
 {
 
 Impel::Impel( const ItemPtr & item, const std::string & behavior )
@@ -16,7 +17,7 @@ Impel::Impel( const ItemPtr & item, const std::string & behavior )
         , speedTimer( new Timer() )
         , fallTimer( new Timer() )
 {
-        activity = Activity::Wait ;
+        activity = activities::Activity::Wait ;
 
         speedTimer->go();
         fallTimer->go();
@@ -33,23 +34,23 @@ bool Impel::update ()
 
         switch ( activity )
         {
-                case Activity::Wait:
+                case activities::Activity::Wait:
                         break;
 
-                case Activity::DisplaceNorth:
-                case Activity::DisplaceSouth:
-                case Activity::DisplaceEast:
-                case Activity::DisplaceWest:
-                case Activity::DisplaceNortheast:
-                case Activity::DisplaceNorthwest:
-                case Activity::DisplaceSoutheast:
-                case Activity::DisplaceSouthwest:
+                case activities::Activity::DisplaceNorth:
+                case activities::Activity::DisplaceSouth:
+                case activities::Activity::DisplaceEast:
+                case activities::Activity::DisplaceWest:
+                case activities::Activity::DisplaceNortheast:
+                case activities::Activity::DisplaceNorthwest:
+                case activities::Activity::DisplaceSoutheast:
+                case activities::Activity::DisplaceSouthwest:
                         // is it time to move
                         if ( speedTimer->getValue() > freeItem.getSpeed() )
                         {
-                                if ( ! DisplaceKindOfActivity::getInstance().displace( this, &activity, true ) )
+                                if ( ! activities::DisplaceKindOfActivity::getInstance().displace( this, &activity, true ) )
                                 {
-                                        activity = Activity::Wait;
+                                        activity = activities::Activity::Wait;
                                 }
 
                                 speedTimer->reset();
@@ -58,7 +59,7 @@ bool Impel::update ()
                         freeItem.animate();
                         break;
 
-                case Activity::Fall:
+                case activities::Activity::Fall:
                         // look for reaching floor in a room without floor
                         if ( freeItem.getZ() == 0 && ! freeItem.getMediator()->getRoom()->hasFloor() )
                         {
@@ -68,9 +69,9 @@ bool Impel::update ()
                         // is it time to fall
                         else if ( fallTimer->getValue() > freeItem.getWeight() )
                         {
-                                if ( ! FallKindOfActivity::getInstance().fall( this ) )
+                                if ( ! activities::FallKindOfActivity::getInstance().fall( this ) )
                                 {
-                                        activity = Activity::Wait;
+                                        activity = activities::Activity::Wait;
                                 }
 
                                 fallTimer->reset();

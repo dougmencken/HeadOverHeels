@@ -17,11 +17,8 @@
 #include "Picture.hpp"
 
 
-namespace iso
-{
-
 /**
- * Floor tile of room, set of such items forms room’s ground
+ * A floor tile of room, a set of such items forms the room’s ground
  */
 
 class FloorTile : public Drawable, public Mediated, public Shady
@@ -92,7 +89,5 @@ public:
 };
 
 typedef multiptr < FloorTile > FloorTilePtr ;
-
-}
 
 #endif

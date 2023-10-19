@@ -14,9 +14,6 @@
 #include "Item.hpp"
 
 
-namespace iso
-{
-
 class Offset2D
 {
 
@@ -120,7 +117,5 @@ public:
         bool centerOnItem ( const Item & item ) ;
 
 } ;
-
-}
 
 #endif

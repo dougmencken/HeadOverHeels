@@ -17,7 +17,7 @@
 #include "Item.hpp"
 
 
-namespace iso
+namespace behaviors
 {
 
 class CreatorOfBehaviors

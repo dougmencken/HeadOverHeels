@@ -17,9 +17,6 @@
 #include "Picture.hpp"
 
 
-namespace iso
-{
-
 /**
  * The description of an item as read from items.xml
  */
@@ -231,7 +228,5 @@ private:
         bool partOfDoor ;
 
 } ;
-
-}
 
 #endif

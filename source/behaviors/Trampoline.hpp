@@ -15,7 +15,7 @@
 #include "Timer.hpp"
 
 
-namespace iso
+namespace behaviors
 {
 
 class Trampoline : public Behavior

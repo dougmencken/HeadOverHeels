@@ -9,7 +9,7 @@
 #include <stack>
 
 
-namespace iso
+namespace behaviors
 {
 
 Teleport::Teleport( const ItemPtr & item, const std::string & behavior ) :
@@ -30,7 +30,7 @@ bool Teleport::update ()
 
         switch ( activity )
         {
-                case Activity::Wait:
+                case activities::Activity::Wait:
                         // is there items above
                         if ( ! item->canAdvanceTo( 0, 0, 1 ) )
                         {
@@ -82,12 +82,12 @@ bool Teleport::update ()
                         if ( activated )
                         {
                                 item->animate();
-                                SoundManager::getInstance().play( item->getLabel(), Activity::IsActive );
+                                SoundManager::getInstance().play( item->getLabel(), activities::Activity::IsActive );
                         }
                         break;
 
                 default:
-                        activity = Activity::Wait;
+                        activity = activities::Activity::Wait;
         }
 
         return false;

@@ -1,5 +1,6 @@
 
 #include "ContinueGame.hpp"
+
 #include "GameManager.hpp"
 #include "GuiManager.hpp"
 #include "SoundManager.hpp"
@@ -15,14 +16,13 @@ ContinueGame::ContinueGame( bool inProgress )
         : Action( )
         , gameInProgress( inProgress )
 {
-
 }
 
 void ContinueGame::doAction ()
 {
-        iso::SoundManager::getInstance().stopOgg (); // or else hear the planets screen's music when resuming an old (saved) game
+        SoundManager::getInstance().stopOgg (); // or else hear the planets screen's music when resuming an old (saved) game
 
-        game::GameManager & gameManager = game::GameManager::getInstance() ;
+        GameManager & gameManager = GameManager::getInstance() ;
         gui::GuiManager & uiManager = gui::GuiManager::getInstance() ;
 
         uiManager.resetWhyTheGameIsPaused () ;

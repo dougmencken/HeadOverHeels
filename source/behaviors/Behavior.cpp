@@ -11,13 +11,13 @@
 #include "FallKindOfActivity.hpp"
 
 
-namespace iso
+namespace behaviors
 {
 
 Behavior::Behavior( const ItemPtr & whichItem, const std::string & behavior )
         : nameOfBehavior( behavior )
         , item( whichItem )
-        , activity( Activity::Wait )
+        , activity( activities::Activity::Wait )
         , sender( nilPointer )
 {
 #if defined( DEBUG ) && DEBUG

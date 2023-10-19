@@ -14,8 +14,6 @@
 #include "Item.hpp"
 #include "FreeItem.hpp"
 
-namespace iso
-{
 
 /**
  * Masks image of free item behind image of another item
@@ -28,8 +26,6 @@ public:
 
         static void maskFreeItemBehindItem ( FreeItem & itemToMask, const Item & upwardItem ) ;
 
-};
-
-}
+} ;
 
 #endif

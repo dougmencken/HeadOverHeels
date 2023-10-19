@@ -10,11 +10,8 @@
 #include "AvatarItem.hpp"
 #include "Room.hpp"
 
-#include <algorithm>
+#include <algorithm> // std::find
 
-
-namespace game
-{
 
 GameSaverAndLoader::GameSaverAndLoader( )
         : fishRoom( std::string() )
@@ -48,7 +45,7 @@ bool GameSaverAndLoader::loadGame( const std::string & file )
                 return false ;
         }
 
-        GameManager & gameManager = game::GameManager::getInstance () ;
+        GameManager & gameManager = GameManager::getInstance () ;
 
         tinyxml2::XMLElement* root = saveXml.FirstChildElement( "savegame" );
 
@@ -62,10 +59,16 @@ bool GameSaverAndLoader::loadGame( const std::string & file )
         std::string versionOfSave( version );
         std::cout << "the version of the saved game file \"" << file << "\" is " << versionOfSave ;
         if ( versionOfSave == GameSaverAndLoader::Current_Save_Version () ) {
-                std::cout << std::endl ;
+                std::cout << " (current)" << std::endl ;
         } else {
-                std::cout << ", which is unknown" << std::endl ;
-                return false ;
+                const std::vector< std::string > & parsableVersions = GameSaverAndLoader::Parsable_Save_Versions () ;
+                bool isVersionParsable = ( std::find( parsableVersions.begin(), parsableVersions.end(), versionOfSave ) != parsableVersions.end() );
+                if ( isVersionParsable )
+                        std::cout << " (not current but parsable)" << std::endl ;
+                else {
+                        std::cout << ", which is unknown" << std::endl ;
+                        return false ;
+                }
         }
 
         // visited rooms
@@ -157,7 +160,9 @@ void GameSaverAndLoader::continueSavedGame ( tinyxml2::XMLElement* characters )
                                 character != nilPointer ;
                                 character = character->NextSiblingElement( "character" ) )
                 {
-                        std::string label = character->Attribute( "label" );
+                        const char * name = character->Attribute( "name" );
+                        if ( name == nilPointer ) // the games saved in version "2" had the "label" attribute
+                                name = character->Attribute( "label" );
 
                         bool isActiveCharacter = false ;
                         tinyxml2::XMLElement* active = character->FirstChildElement( "active" );
@@ -212,7 +217,9 @@ void GameSaverAndLoader::continueSavedGame ( tinyxml2::XMLElement* characters )
                         if ( donuts != nilPointer )
                                 howManyDoughnuts = std::atoi( donuts->FirstChild()->ToText()->Value() );
 
-                        if ( label == "headoverheels" )
+                        std::string characterName( name );
+
+                        if ( characterName == "headoverheels" )
                         {
                                 // formula for lives of the composite character from the lives of two simple characters is
                                 // lives H & H = 100 * lives Head + lives Heels
@@ -238,7 +245,7 @@ void GameSaverAndLoader::continueSavedGame ( tinyxml2::XMLElement* characters )
                                 gameInfo.setHeadShieldPoints( 0 );
                                 gameInfo.setHeelsShieldPoints( 0 );
                         }
-                        else if ( label == "head" )
+                        else if ( characterName == "head" )
                         {
                                 gameInfo.setHeadLives( howManyLives );
                                 gameInfo.setHorn( hasHorn );
@@ -246,7 +253,7 @@ void GameSaverAndLoader::continueSavedGame ( tinyxml2::XMLElement* characters )
                                 gameInfo.setBonusQuickSteps( 0 );
                                 gameInfo.setHeadShieldPoints( 0 );
                         }
-                        else if ( label == "heels" )
+                        else if ( characterName == "heels" )
                         {
                                 gameInfo.setHeelsLives( howManyLives );
                                 gameInfo.setHandbag( hasHandbag );
@@ -255,8 +262,7 @@ void GameSaverAndLoader::continueSavedGame ( tinyxml2::XMLElement* characters )
                         }
 
                         gameManager.getIsomot().getMapManager().beginOldGameWithCharacter(
-                                        room, label, x, y, z, orientationString, entryString, isActiveCharacter
-                        ) ;
+                                        room, characterName, x, y, z, orientationString, entryString, isActiveCharacter ) ;
                 }
         }
 
@@ -296,25 +302,40 @@ bool GameSaverAndLoader::saveGame( const std::string& file )
 
         // liberated planets
 
-        tinyxml2::XMLElement* freeByblos = saveXml.NewElement( "freeByblos" ) ;
-        freeByblos->SetText( gameManager.isFreePlanet( "byblos" ) ? "true" : "false" );
-        root->InsertEndChild( freeByblos );
+        bool isByblosFree = gameManager.isFreePlanet( "byblos" ) ;
+        if ( isByblosFree ) {
+                tinyxml2::XMLElement* freeByblos = saveXml.NewElement( "freeByblos" ) ;
+                freeByblos->SetText( "true" ); // isByblosFree ? "true" : "false"
+                root->InsertEndChild( freeByblos );
+        }
 
-        tinyxml2::XMLElement* freeEgyptus = saveXml.NewElement( "freeEgyptus" ) ;
-        freeEgyptus->SetText( gameManager.isFreePlanet( "egyptus" ) ? "true" : "false" );
-        root->InsertEndChild( freeEgyptus );
+        bool isEgyptusFree = gameManager.isFreePlanet( "egyptus" ) ;
+        if ( isEgyptusFree ) {
+                tinyxml2::XMLElement* freeEgyptus = saveXml.NewElement( "freeEgyptus" ) ;
+                freeEgyptus->SetText( "true" ); // isEgyptusFree ? "true" : "false"
+                root->InsertEndChild( freeEgyptus );
+        }
 
-        tinyxml2::XMLElement* freePenitentiary = saveXml.NewElement( "freePenitentiary" ) ;
-        freePenitentiary->SetText( gameManager.isFreePlanet( "penitentiary" ) ? "true" : "false" );
-        root->InsertEndChild( freePenitentiary );
+        bool isPenitentiaryFree = gameManager.isFreePlanet( "penitentiary" ) ;
+        if ( isPenitentiaryFree ) {
+                tinyxml2::XMLElement* freePenitentiary = saveXml.NewElement( "freePenitentiary" ) ;
+                freePenitentiary->SetText( "true" ); // isPenitentiaryFree ? "true" : "false"
+                root->InsertEndChild( freePenitentiary );
+        }
 
-        tinyxml2::XMLElement* freeSafari = saveXml.NewElement( "freeSafari" ) ;
-        freeSafari->SetText( gameManager.isFreePlanet( "safari" ) ? "true" : "false" );
-        root->InsertEndChild( freeSafari );
+        bool isSafariFree = gameManager.isFreePlanet( "safari" ) ;
+        if ( isSafariFree ) {
+                tinyxml2::XMLElement* freeSafari = saveXml.NewElement( "freeSafari" ) ;
+                freeSafari->SetText( "true" ); // isSafariFree ? "true" : "false"
+                root->InsertEndChild( freeSafari );
+        }
 
-        tinyxml2::XMLElement* freeBlacktooth = saveXml.NewElement( "freeBlacktooth" ) ;
-        freeBlacktooth->SetText( gameManager.isFreePlanet( "blacktooth" ) ? "true" : "false" );
-        root->InsertEndChild( freeBlacktooth );
+        bool isBlacktoothFree = gameManager.isFreePlanet( "blacktooth" ) ;
+        if ( isBlacktoothFree ) {
+                tinyxml2::XMLElement* freeBlacktooth = saveXml.NewElement( "freeBlacktooth" ) ;
+                freeBlacktooth->SetText( "true" ); // isBlacktoothFree ? "true" : "false"
+                root->InsertEndChild( freeBlacktooth );
+        }
 
         // taken bonuses
 
@@ -514,6 +535,4 @@ bool GameSaverAndLoader::saveGame( const std::string& file )
         }
 
         return true;
-}
-
 }

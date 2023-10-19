@@ -2,9 +2,6 @@
 #include "Way.hpp"
 
 
-namespace iso
-{
-
 Way::Way( const std::string & stringOfWay )
 {
         if ( stringOfWay == "north" )
@@ -84,6 +81,4 @@ std::string Way::toString () const
         }
 
         return "unknown way" ;
-}
-
 }

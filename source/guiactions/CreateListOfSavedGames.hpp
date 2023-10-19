@@ -17,8 +17,41 @@
 namespace gui
 {
 
+class SavedGameInfo
+{
+
+private:
+
+        std::string fileName ;
+
+        unsigned short visitedRooms ;
+
+        unsigned short liberatedPlanets ;
+
+public:
+
+        const std::string & getFileName () const {  return fileName ;  }
+
+        unsigned short howManyRoomsVisited () const {  return visitedRooms ;  }
+
+        unsigned short howManyPlanetsLiberated () const {  return liberatedPlanets ;  }
+
+        explicit SavedGameInfo( const std::string & file, unsigned short rooms, unsigned short planets )
+                : fileName( file )
+                , visitedRooms( rooms )
+                , liberatedPlanets( planets )
+        {}
+
+        SavedGameInfo( const SavedGameInfo & toCopy )
+                : fileName( toCopy.fileName )
+                , visitedRooms( toCopy.visitedRooms )
+                , liberatedPlanets( toCopy.liberatedPlanets )
+        {}
+
+} ;
+
 /**
- * Crea el menú para seleccionar la partida a cargar
+ * Creates the menu to pick a saved game slot to load or save to
  */
 
 class CreateListOfSavedGames : public gui::Action
@@ -29,7 +62,10 @@ public:
         /**
          * @param isLoadMenu true for "load game", false for "save game"
          */
-        explicit CreateListOfSavedGames( bool isLoadMenu ) ;
+        explicit CreateListOfSavedGames( bool isLoadMenu )
+                : Action( )
+                , isMenuForLoad( isLoadMenu )
+        {}
 
         virtual std::string getNameOfAction () const {  return "CreateListOfSavedGames" ;  }
 
@@ -45,9 +81,9 @@ protected:
 private:
 
         /**
-         * Read some information from a file of saved game to display it
+         * Read the number of rooms visited and the number of liberated planets from the saved game file to show
          */
-        bool readSomeInfoFromGamefile( const std::string& fileName, unsigned short * visitedRooms, unsigned short * freePlanets ) ;
+        SavedGameInfo readSomeInfoFromTheSavedGame( const std::string & fileName ) ;
 
         bool isMenuForLoad ;
 

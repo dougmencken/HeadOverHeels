@@ -1,8 +1,6 @@
 
 #include "GameInfo.hpp"
 
-namespace game
-{
 
 unsigned char GameInfo::getLivesByName ( const std::string & character ) const
 {
@@ -109,7 +107,7 @@ int GameInfo::getShieldPointsByName ( const std::string & character ) const
 
 double GameInfo::getShieldSecondsByName ( const std::string & character ) const
 {
-        return game::GameInfo::convertShieldFromPointsToSeconds( getShieldPointsByName( character ) );
+        return GameInfo::convertShieldFromPointsToSeconds( getShieldPointsByName( character ) );
 }
 
 void GameInfo::setShieldPointsByName ( const std::string & character, int points )
@@ -129,7 +127,7 @@ void GameInfo::setShieldPointsByName ( const std::string & character, int points
 
 void GameInfo::setShieldSecondsByName( const std::string & character, double seconds )
 {
-        setShieldPointsByName( character, game::GameInfo::convertShieldFromSecondsToPoints( seconds ) );
+        setShieldPointsByName( character, GameInfo::convertShieldFromSecondsToPoints( seconds ) );
 }
 
 void GameInfo::setMagicToolByLabel ( const std::string & tool )
@@ -160,6 +158,4 @@ void GameInfo::resetForANewGame ()
         this->horn = false ;
         this->handbag = false ;
         this->donuts = 0 ;
-}
-
 }

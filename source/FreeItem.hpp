@@ -21,9 +21,6 @@
 #include "Drawable.hpp"
 
 
-namespace iso
-{
-
 class DescriptionOfItem ;
 
 /**
@@ -172,7 +169,5 @@ private:
 };
 
 typedef multiptr < FreeItem > FreeItemPtr ;
-
-}
 
 #endif

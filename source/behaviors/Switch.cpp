@@ -8,10 +8,10 @@
 
 #include <stack>
 
-#include <algorithm>  // std::find_if
+#include <algorithm> // std::find_if
 
 
-namespace iso
+namespace behaviors
 {
 
 Switch::Switch( const ItemPtr & item, const std::string & behavior )
@@ -33,7 +33,7 @@ bool Switch::update ()
 
         switch ( activity )
         {
-                case Activity::Wait:
+                case activities::Activity::Wait:
                         // look if there’re items on sides
                         if ( checkSideItems( sideItems ) )
                         {
@@ -45,7 +45,7 @@ bool Switch::update ()
                                         ItemPtr trigger = triggerItems[ i ];
 
                                         if ( std::find( sideItems.begin (), sideItems.end (), trigger ) == sideItems.end () ||
-                                                ( trigger->whichKindOfItem() == "avatar item" && trigger->getBehavior()->getActivityOfItem() == Activity::Wait ) )
+                                                ( trigger->whichKindOfItem() == "avatar item" && trigger->getBehavior()->getActivityOfItem() == activities::Activity::Wait ) )
                                         {
                                                 triggerItems.erase( std::remove( triggerItems.begin (), triggerItems.end (), trigger ), triggerItems.end () );
                                         }
@@ -79,8 +79,8 @@ bool Switch::update ()
                                                 if ( itemAbove->getBehavior() != nilPointer &&
                                                         ! itemAbove->canAdvanceTo( 0, 0, -1 ) &&
                                                                 // yep, the switch doesn’t toggle when the character jumps
-                                                                itemAbove->getBehavior()->getActivityOfItem() != Activity::RegularJump &&
-                                                                itemAbove->getBehavior()->getActivityOfItem() != Activity::HighJump )
+                                                                itemAbove->getBehavior()->getActivityOfItem() != activities::Activity::RegularJump &&
+                                                                itemAbove->getBehavior()->getActivityOfItem() != activities::Activity::HighJump )
                                                 {
                                                         // when there’s no more than one item below initiator of switch
                                                         if ( ! isItemAbove && mediator->depthOfStackOfCollisions() <= 1 )
@@ -92,7 +92,7 @@ bool Switch::update ()
                                                                 mediator->toggleSwitchInRoom();
 
                                                                 // play sound of switching
-                                                                SoundManager::getInstance().play( item->getLabel(), Activity::SwitchIt );
+                                                                SoundManager::getInstance().play( item->getLabel(), activities::Activity::SwitchIt );
                                                         }
                                                 }
                                         }
@@ -104,14 +104,14 @@ bool Switch::update ()
                         }
                         break;
 
-                case Activity::DisplaceNorth:
-                case Activity::DisplaceSouth:
-                case Activity::DisplaceEast:
-                case Activity::DisplaceWest:
-                case Activity::DisplaceNortheast:
-                case Activity::DisplaceSoutheast:
-                case Activity::DisplaceSouthwest:
-                case Activity::DisplaceNorthwest:
+                case activities::Activity::DisplaceNorth:
+                case activities::Activity::DisplaceSouth:
+                case activities::Activity::DisplaceEast:
+                case activities::Activity::DisplaceWest:
+                case activities::Activity::DisplaceNortheast:
+                case activities::Activity::DisplaceSoutheast:
+                case activities::Activity::DisplaceSouthwest:
+                case activities::Activity::DisplaceNorthwest:
                         if ( std::find( triggerItems.begin (), triggerItems.end (), sender ) == triggerItems.end () )
                         {
                                 triggerItems.push_back( sender );
@@ -120,10 +120,10 @@ bool Switch::update ()
                                 mediator->toggleSwitchInRoom();
 
                                 // play sound of switching
-                                SoundManager::getInstance().play( item->getLabel(), Activity::SwitchIt );
+                                SoundManager::getInstance().play( item->getLabel(), activities::Activity::SwitchIt );
                         }
 
-                        activity = Activity::Wait;
+                        activity = activities::Activity::Wait;
                         break;
 
                 default:
