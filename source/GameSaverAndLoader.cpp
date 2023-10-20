@@ -118,6 +118,8 @@ bool GameSaverAndLoader::loadGame( const std::string & file )
 
         // bonuses already taken
 
+        BonusManager::getInstance().clearAbsentBonuses () ; // forget any previous list
+
         tinyxml2::XMLElement* bonuses = root->FirstChildElement( "bonuses" ) ;
 
         if ( bonuses != nilPointer )
@@ -150,10 +152,11 @@ bool GameSaverAndLoader::loadGame( const std::string & file )
 void GameSaverAndLoader::continueSavedGame ( tinyxml2::XMLElement* characters )
 {
         GameManager & gameManager = GameManager::getInstance () ;
-        gameManager.getIsomot().prepare () ;
 
         if ( characters != nilPointer )
         {
+                gameManager.getIsomot().prepare () ;
+
                 GameInfo & gameInfo = gameManager.getGameInfo () ;
 
                 for ( tinyxml2::XMLElement* character = characters->FirstChildElement( "character" ) ;
@@ -261,13 +264,14 @@ void GameSaverAndLoader::continueSavedGame ( tinyxml2::XMLElement* characters )
                                 gameInfo.setHeelsShieldPoints( 0 );
                         }
 
+                        std::cout << "continue the previous game" << std::endl ;
+                        // no begin.ogg here
+
                         gameManager.getIsomot().getMapManager().beginOldGameWithCharacter(
                                         room, characterName, x, y, z, orientationString, entryString, isActiveCharacter ) ;
                 }
-        }
-
-        std::cout << "continue previous game" << std::endl ;
-        // no begin.ogg here
+        } else
+                std::cerr << "can't continue the game without characters" << std::endl ;
 }
 
 bool GameSaverAndLoader::saveGame( const std::string& file )
