@@ -131,7 +131,7 @@ bool GameSaverAndLoader::loadGame( const std::string & file )
                                 std::string room = bonus->Attribute( "room" );
                                 std::string label = bonus->Attribute( "label" );
 
-                                BonusManager::getInstance().markBonusAsAbsent( room, label );
+                                BonusManager::getInstance().markAsAbsent( BonusInRoom( /* which bonus */ label, /* in which room */ room ) );
 
                                 std::cout << "rebuilding room \"" << room << "\" without bonus \"" << label << "\"" << std::endl ;
                                 gameManager.getIsomot().getMapManager().rebuildRoom( gameManager.getIsomot().getMapManager().findRoomByFile( room ) );
@@ -337,19 +337,19 @@ bool GameSaverAndLoader::saveGame( const std::string& file )
                 root->InsertEndChild( freeBlacktooth );
         }
 
-        // taken bonuses
+        // taken thus absent bonuses
 
-        std::multimap < std::string /* room */, std::string /* bonus */ > bonusesInRooms;
-        BonusManager::getInstance().fillAbsentBonuses( bonusesInRooms );
-        if ( bonusesInRooms.size () > 0 )
+        const std::vector < BonusInRoom > & takenBonuses = BonusManager::getInstance().getAllTakenBonuses () ;
+
+        if ( takenBonuses.size () > 0 )
         {
                 tinyxml2::XMLElement* bonuses = saveXml.NewElement( "bonuses" ) ;
 
-                for ( std::multimap< std::string, std::string >::const_iterator b = bonusesInRooms.begin () ; b != bonusesInRooms.end () ; ++ b )
+                for ( unsigned int b = 0 ; b < takenBonuses.size () ; ++ b )
                 {
                         tinyxml2::XMLElement* bonus = saveXml.NewElement( "bonus" );
-                        bonus->SetAttribute( "room", ( *b ).first.c_str () );
-                        bonus->SetAttribute( "label", ( *b ).second.c_str () );
+                        bonus->SetAttribute( "room", takenBonuses[ b ].getRoom ().c_str() );
+                        bonus->SetAttribute( "label", takenBonuses[ b ].getBonus ().c_str() );
                         bonuses->InsertEndChild( bonus );
                 }
 

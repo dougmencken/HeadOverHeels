@@ -62,7 +62,7 @@ void Isomot::prepare ()
                 view->fillWithColor( Color::byName( "orange" ) );
 
         // bin taken bonuses
-        BonusManager::getInstance().reset();
+        BonusManager::getInstance().clearAbsentBonuses () ;
 
         mapManager.binRoomsInPlay();
 }

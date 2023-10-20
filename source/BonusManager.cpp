@@ -8,36 +8,21 @@ BonusManager * BonusManager::instance = nilPointer ;
 
 BonusManager& BonusManager::getInstance ()
 {
-        if ( instance == nilPointer )
-        {
-                instance = new BonusManager();
-        }
+        if ( instance == nilPointer ) instance = new BonusManager();
 
         return *instance;
 }
 
-void BonusManager::markBonusAsAbsent ( const std::string& room, const std::string& label )
+void BonusManager::markAsAbsent ( const BonusInRoom & bonusTakenInRoom )
 {
-        if ( ! isAbsent( room, label ) )
-        {
-                absentBonuses.insert( std::pair< std::string, std::string >( room, label ) );
-        }
+        if ( ! isAbsent( bonusTakenInRoom ) )
+                takenBonuses.push_back( bonusTakenInRoom );
 }
 
-bool BonusManager::isAbsent ( const std::string& room, const std::string& label )
+bool BonusManager::isAbsent ( const BonusInRoom & bonusTakenInRoom ) const
 {
-        for ( std::multimap< std::string, std::string >::const_iterator b = absentBonuses.begin () ; b != absentBonuses.end () ; ++ b )
-        {
-                if ( room == b->first && label == b->second ) return true ;
-        }
+        for ( unsigned int i = 0 ; i < takenBonuses.size () ; ++ i )
+                if ( takenBonuses[ i ].equals( bonusTakenInRoom ) ) return true ;
 
         return false ;
-}
-
-void BonusManager::fillAbsentBonuses ( std::multimap < std::string /* room */, std::string /* bonus */ > & bonusesInRooms )
-{
-        for ( std::multimap< std::string, std::string >::const_iterator b = absentBonuses.begin (); b != absentBonuses.end (); ++ b )
-        {
-                bonusesInRooms.insert( std::pair< std::string, std::string >( b->first, b->second ) );
-        }
 }

@@ -152,8 +152,12 @@ bool Special::update ()
                                 // play sound of taking
                                 SoundManager::getInstance().play( item->getLabel(), activity );
 
-                                // bonus item disappears from room once it is taken
-                                BonusManager::getInstance().markBonusAsAbsent( item->getMediator()->getRoom()->getNameOfRoomDescriptionFile(), item->getLabel() );
+                                // a bonus item disappears from room once it's taken
+                                BonusManager::getInstance().markAsAbsent(
+                                        BonusInRoom(
+                                                item->getLabel(),
+                                                item->getMediator()->getRoom()->getNameOfRoomDescriptionFile()
+                                        ) );
 
                                 takeMagicItem( dynamic_cast< AvatarItem & >( *sender ) );
 

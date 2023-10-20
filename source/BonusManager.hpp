@@ -11,9 +11,41 @@
 #ifndef BonusManager_hpp_
 #define BonusManager_hpp_
 
-#include <map>
 #include <string>
+#include <vector>
 
+class BonusInRoom
+{
+private:
+
+        std::string bonus ;
+
+        std::string room ;
+
+public:
+
+        explicit BonusInRoom ( const std::string & whichBonus, const std::string & inWhichRoom )
+                : bonus ( whichBonus )
+                , room ( inWhichRoom )
+        {}
+
+        BonusInRoom( const BonusInRoom & toCopy )
+                : bonus ( toCopy.bonus )
+                ,  room ( toCopy.room )
+        {}
+
+        const std::string & getBonus () const {  return bonus ;  }
+
+        const std::string & getRoom () const {  return room ;  }
+
+        bool equals ( const BonusInRoom & that ) const
+        {
+                return this->bonus == that.bonus && this->room == that.room ;
+        }
+
+        bool operator == ( const BonusInRoom & toCompare ) const {  return   equals( toCompare ) ;  }
+        bool operator != ( const BonusInRoom & toCompare ) const {  return ! equals( toCompare ) ;  }
+} ;
 
 /**
  * Manage the presence or absence of the bonuses in the game's rooms.
@@ -31,27 +63,24 @@ private:
 
 public:
 
-        virtual ~BonusManager( ) {  absentBonuses.clear() ;  }
-
         static BonusManager & getInstance () ;
 
-        void markBonusAsAbsent ( const std::string& room, const std::string& label ) ;
+        void markAsAbsent ( const BonusInRoom & bonusTakenInRoom ) ;
 
-       /**
-        * Is a certain bonus in this room absent
-        */
-        bool isAbsent ( const std::string& room, const std::string& label ) ;
+        /**
+         * Is the bonus absent in the room
+         */
+        bool isAbsent ( const BonusInRoom & bonusInRoom ) const ;
 
-        void fillAbsentBonuses ( std::multimap < std::string /* room */, std::string /* bonus */ > & bonusesInRooms ) ;
+        const std::vector < BonusInRoom > & getAllTakenBonuses () const {  return takenBonuses ;  }
 
-       /**
-        * Each bonus in every room is not absent after that
-        */
-        void reset () {  absentBonuses.clear() ;  }
+        void clearAbsentBonuses () {  takenBonuses.clear() ;  }
+
+        virtual ~BonusManager( ) {  clearAbsentBonuses () ;  }
 
 private:
 
-        std::multimap < std::string /* room */, std::string /* bonus */ > absentBonuses ;
+        std::vector < BonusInRoom > takenBonuses ;
 
         static BonusManager * instance ;
 

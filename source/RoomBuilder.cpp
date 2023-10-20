@@ -749,8 +749,8 @@ FreeItemPtr RoomBuilder::buildFreeItem( tinyxml2::XMLElement* item, Room* room )
                 int fy = ( itemY + 1 ) * room->getSizeOfOneTile() - ( ( room->getSizeOfOneTile() - itemDescription->getWidthY() ) >> 1 ) - 1;
                 int fz = ( itemZ != Isomot::Top ) ? itemZ * Isomot::LayerHeight : Isomot::Top ;
 
-                // don’t place an item if it is a bonus and has already been taken
-                if ( BonusManager::getInstance().isAbsent( room->getNameOfRoomDescriptionFile(), itemDescription->getLabel() ) )
+                // don’t create the item if it's a bonus that disappears once when taken
+                if ( BonusManager::getInstance().isAbsent( BonusInRoom( itemDescription->getLabel(), room->getNameOfRoomDescriptionFile() ) ) )
                 {
                         return FreeItemPtr () ;
                 }
