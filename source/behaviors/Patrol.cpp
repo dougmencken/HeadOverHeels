@@ -50,7 +50,7 @@ bool Patrol::update ()
                 case activities::Activity::MoveSouthwest:
                         if ( ! freeItem.isFrozen() )
                         {
-                                if ( speedTimer->getValue() > freeItem.getSpeed())
+                                if ( speedTimer->getValue () > freeItem.getSpeed () )
                                 {
                                         // ¿ cambio de dirección ?
                                         if ( changeTimer->getValue() > ( double( rand() % 1000 ) + 400.0 ) / 1000.0 )

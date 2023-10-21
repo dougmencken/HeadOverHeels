@@ -34,7 +34,7 @@ public:
         void go () ;
 
        /**
-        * Return milliseconds since timer was started
+        * Return seconds since the timer was started
         */
         double getValue () ;
 

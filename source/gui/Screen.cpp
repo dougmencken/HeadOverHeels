@@ -543,9 +543,12 @@ void Screen::randomPixelFade( bool fadeIn, const Screen& slide, const Color& col
 
         std::vector< bool > bits( howManyPixels, false ); // bit map of howManyPixels bits
 
-        unsigned int limit = ( howManyPixels >= 100000 ) ? ( howManyPixels / 50000 ) - 1 : 0 ;
+        Picture buffer( allegro::Pict::theScreen () );
 
-        for ( size_t yet = 0 ; yet < howManyPixels - limit ; )
+        autouniqueptr < Timer > drawTimer( new Timer() );
+        drawTimer->go ();
+
+        for ( size_t yet = 0 ; yet < howManyPixels ; )
         {
                 int x = rand() % screenWidth ;  /* random between 0 and screenWidth - 1 */
                 int y =  rand() % screenHeight ; /* random between 0 and screenHeight - 1 */
@@ -553,11 +556,16 @@ void Screen::randomPixelFade( bool fadeIn, const Screen& slide, const Color& col
                 if ( ! bits[ x + y * screenWidth ] )
                 {
                         if ( fadeIn )
-                                allegro::Pict::theScreen().drawPixelAt( x, y, slide.imageOfScreen->getPixelAt( x, y ) );
+                                buffer.getAllegroPict().drawPixelAt( x, y, slide.imageOfScreen->getPixelAt( x, y ) );
                         else
-                                allegro::Pict::theScreen().drawPixelAt( x, y, aColor );
+                                buffer.getAllegroPict().drawPixelAt( x, y, aColor );
 
-                        allegro::update(); // redraw for each & every pixel O_O
+                        if ( drawTimer->getValue() > 0.001 ) // every 10 milliseconds, that is 1/100 (one hundredth) of a second
+                        {
+                                allegro::bitBlit( buffer.getAllegroPict(), allegro::Pict::theScreen() );
+                                allegro::update ();
+                                drawTimer->reset ();
+                        }
 
                         bits[ x + y * screenWidth ] = true;
                         yet ++;

@@ -28,9 +28,9 @@ public:
         bool go();
 
         /**
-         * Devuelve el número de segundos transcurridos desde que el cronómetro se puso en marcha
+         * Return seconds since the timer was started
          */
-        double getValue();
+        double getValue () ;
 
         /**
          * Pone a cero el cronómetro
