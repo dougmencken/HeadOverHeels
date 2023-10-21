@@ -1,5 +1,6 @@
 
 #include "Screen.hpp"
+
 #include "Gui.hpp"
 #include "Menu.hpp"
 #include "GuiManager.hpp"
@@ -556,7 +557,7 @@ void Screen::randomPixelFade( bool fadeIn, const Screen& slide, const Color& col
                         else
                                 allegro::Pict::theScreen().drawPixelAt( x, y, aColor );
 
-                        allegro::update();
+                        allegro::update(); // redraw for each & every pixel O_O
 
                         bits[ x + y * screenWidth ] = true;
                         yet ++;

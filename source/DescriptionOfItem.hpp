@@ -35,7 +35,7 @@ private:
                                         , unsigned int itemWidthOfFrame , unsigned int itemHeightOfFrame
                                         , unsigned int itemWidthOfShadow , unsigned int itemHeightOfShadow
                                         , bool isItemMortal
-                                        , unsigned int itemExtraFrames )
+                                        , unsigned short itemExtraFrames )
                 : label( itemLabel )
                 , widthX( itemWidthX )
                 , widthY( itemWidthY )
@@ -139,9 +139,9 @@ public:
 
         void setHowManyOrientations( unsigned short newOrientations ) {  this->orientations = newOrientations ;  }
 
-        unsigned int howManyExtraFrames () const {  return extraFrames ;  }
+        unsigned short howManyExtraFrames () const {  return extraFrames ;  }
 
-        void setHowManyExtraFrames( unsigned int newExtraFrames ) {  this->extraFrames = newExtraFrames ;  }
+        void setHowManyExtraFrames( unsigned short newExtraFrames ) {  this->extraFrames = newExtraFrames ;  }
 
         void setSequenceOFrames( const std::vector< unsigned int > & newSequence )
         {
@@ -208,7 +208,7 @@ private:
         /**
          * Extra frames such as for jumping
          */
-        unsigned int extraFrames ;
+        unsigned short extraFrames ;
 
         /**
          * The sequence of item's frames for one orientation
