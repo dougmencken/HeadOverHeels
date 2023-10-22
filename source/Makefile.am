@@ -23,7 +23,8 @@ if DARWIN
     AM_CXXFLAGS += -DDARWIN=1
 endif
 
-headoverheels_CPPFLAGS = -Iactivities -Ibehaviors -Igui -Iguiactions -DBinDirFromConfigure=\"$(bindir)\" -DDataDirFromConfigure=\"$(datadir)\"
+headoverheels_CPPFLAGS =  -Iactivities -Ibehaviors -Igui -Iguiactions
+headoverheels_CPPFLAGS += -DBinDirFromConfigure=\"$(bindir)\" -DDataDirFromConfigure=\"$(datadir)\"
 headoverheels_CPPFLAGS += $(zlib_HEADERS) $(libpng_HEADERS) $(ogg_HEADERS) $(vorbis_HEADERS) $(tinyxml2_HEADERS) $(allegro_HEADERS)
 headoverheels_CPPFLAGS += $(AM_CPPFLAGS)
 
