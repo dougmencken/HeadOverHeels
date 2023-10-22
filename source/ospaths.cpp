@@ -2,8 +2,6 @@
 #include "ospaths.hpp"
 #include "util.hpp"
 
-#include "path_prefix.h"
-
 #include <algorithm>
 
 #include <unistd.h> // getcwd
@@ -82,7 +80,7 @@ void setPathToGame ( const char * pathToGame )
                 FullPathToGame = "/bin/headoverheels" ;         /* hard-coded */
 #else
                 /* more sophiscated logic */ // at least than = "/usr/bin/headoverheels"
-                FullPathToGame = std::string( ThatPrefixFromConfigure ) + "/bin/headoverheels" ;
+                FullPathToGame = BinDirFromConfigure + ospaths::pathSeparator () + "headoverheels" ;
                 /* and those who wish a custom name for the game's binary
                    may sophiscate it further more */
 #endif
@@ -182,8 +180,7 @@ std::string sharePath ()
                         SharePath += "/share/headoverheels/";
                 }
         #else
-                SharePath = cpath.substr( 0, cpath.length() - filename.length() - ( 1 + containername.length() ) );
-                SharePath += "share" + ospaths::pathSeparator () + "headoverheels" + ospaths::pathSeparator () ;
+                SharePath = DataDirFromConfigure + ospaths::pathSeparator () + "headoverheels" + ospaths::pathSeparator () ;
         #endif
 
                 fprintf ( stdout, "SharePath is \"%s\"\n", SharePath.c_str () );
