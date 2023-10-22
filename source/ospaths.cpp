@@ -2,8 +2,6 @@
 #include "ospaths.hpp"
 #include "util.hpp"
 
-#include "path_prefix.h"
-
 #include <algorithm>
 
 #include <unistd.h> // getcwd
@@ -81,10 +79,9 @@ void setPathToGame ( const char * pathToGame )
 #if defined ( __CYGWIN__ )
                 FullPathToGame = "/bin/headoverheels" ;         /* hard-coded */
 #else
-                /* more sophiscated logic */ // at least than = "/usr/bin/headoverheels"
-                FullPathToGame = std::string( ThatPrefixFromConfigure ) + "/bin/headoverheels" ;
-                /* and those who wish a custom name for the game's binary
-                   may sophiscate it further more */
+                FullPathToGame = BinDirFromConfigure + ospaths::pathSeparator () + "headoverheels" ;
+                /* customizing the name of the game's binary
+                   will need more exquisite logic */
 #endif
         }
 
@@ -153,37 +150,23 @@ std::string sharePath ()
 {
         if ( SharePath.empty () )
         {
-                std::string cpath = FullPathToGame ;
-                std::string filename = nameFromPath( cpath ) ;
+                SharePath = DataDirFromConfigure + ospaths::pathSeparator () + "headoverheels" + ospaths::pathSeparator () ;
 
         #if defined ( __APPLE__ ) && defined ( __MACH__ )
-                /* when binary is inside application bundle
-                   get_executable_name gives something like
-                   /Applications/Games/Head over Heels.app
-                   and nameFromPath in its turn gives
-                   Head over Heels.app */
+                std::string fullpath = FullPathToGame ;
                 bool inBundle = false;
-                const char* lastdot = std::strrchr ( filename.c_str() , '.' );
+
+                /* when the binary is inside an application bundle
+                   fullpath is something like /Applications/Games/Head over Heels.app
+                   and nameFromPath gives Head over Heels.app
+                */
+                const char* lastdot = std::strrchr ( nameFromPath( fullpath ).c_str () , '.' );
                 if ( lastdot != NULL && strlen( lastdot ) == 4 )
                         if ( lastdot[ 1 ] == 'a' && lastdot[ 2 ] == 'p' && lastdot[ 3 ] == 'p' )
                                 inBundle = true;
-        #endif
 
-                std::string container = cpath.substr( 0, cpath.length() - filename.length() - 1 );
-                std::string containername = nameFromPath( container ) ;
-
-        #if defined ( __APPLE__ ) && defined ( __MACH__ )
-                if ( inBundle ) {
-                        SharePath = cpath ;
-                        SharePath += "/Contents/Resources/";
-                } else {
-                        /* not in bundle? okay so go the linux way */
-                        SharePath = cpath.substr( 0, cpath.length() - 1 - containername.length() - 1 - filename.length() );
-                        SharePath += "/share/headoverheels/";
-                }
-        #else
-                SharePath = cpath.substr( 0, cpath.length() - filename.length() - ( 1 + containername.length() ) );
-                SharePath += "share" + ospaths::pathSeparator () + "headoverheels" + ospaths::pathSeparator () ;
+                if ( inBundle )
+                        SharePath = fullpath + "/Contents/Resources/" ;
         #endif
 
                 fprintf ( stdout, "SharePath is \"%s\"\n", SharePath.c_str () );
