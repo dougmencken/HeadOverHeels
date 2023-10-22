@@ -84,8 +84,7 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
         else
                 std::cout << "rebuilding" ;
 
-        std::cout << " room \"" << roomName << "\"" ;
-        std::cout << " using data from " << roomFile.c_str () << std::endl ;
+        std::cout << " room \"" << roomName << "\"" << std::endl ;
 
         // create room with initial parameters like scenery, dimensions, type of floor
         Room * theRoom = new Room (
@@ -103,7 +102,7 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
         }
 
 #if defined( DEBUG ) && DEBUG
-        std::cout << "color of room is " << Color::byName( roomColor ).toString () << std::endl ;
+        std::cout << "the color of room is " << Color::byName( roomColor ).toString () << std::endl ;
 #endif
         theRoom->setColor( roomColor );
 

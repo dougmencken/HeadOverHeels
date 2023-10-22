@@ -541,7 +541,14 @@ void Screen::randomPixelFade( bool fadeIn, const Screen& slide, const Color& col
 
         const size_t howManyPixels = screenWidth * screenHeight;
 
-        std::vector< bool > bits( howManyPixels, false ); // bit map of howManyPixels bits
+        /*
+         * the bit map of screenWidth x screenHeight bits
+         *
+         * if someone thinks that bits the bitmap is redundant here since pixels are copied off screen,
+         * so copying a pixel one more time is better than looking for was it already copied or not,
+         * don't bother removing it, the counting of pixels with the bit map is here for ending the loop
+         */
+        std::vector< bool > bits( howManyPixels, false );
 
         Picture buffer( allegro::Pict::theScreen () );
 
@@ -560,7 +567,7 @@ void Screen::randomPixelFade( bool fadeIn, const Screen& slide, const Color& col
                         else
                                 buffer.getAllegroPict().drawPixelAt( x, y, aColor );
 
-                        if ( drawTimer->getValue() > 0.001 ) // every 10 milliseconds, that is 1/100 (one hundredth) of a second
+                        if ( drawTimer->getValue() > 0.003 ) // every 3 milliseconds, that is 3/1000 (three thousandth) of a second
                         {
                                 allegro::bitBlit( buffer.getAllegroPict(), allegro::Pict::theScreen() );
                                 allegro::update ();

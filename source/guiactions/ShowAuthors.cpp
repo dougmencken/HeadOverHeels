@@ -136,11 +136,12 @@ void ShowAuthors::doAction ()
         {
                 int yNow = linesOfCredits->getY() - 1;
 
-                if ( allegro::isKeyPushed( "Space" ) && allegro::isShiftKeyPushed() )
-                {
-                        if ( allegro::isAltKeyPushed() )
-                                yNow += 2 ;
-                        else
+                if ( allegro::isKeyPushed( "b" )
+                                || ( allegro::isKeyPushed( "Space" ) && allegro::isShiftKeyPushed() )
+                ) {
+                        yNow ++ ;
+
+                        if ( allegro::isAltKeyPushed() || allegro::isKeyPushed( "b" ) )
                                 yNow ++ ;
                 }
 
@@ -217,7 +218,7 @@ void ShowAuthors::doAction ()
                         gui::GuiManager::getInstance().toggleFullScreenVideo ();
                 }
 
-                if ( ! allegro::isKeyPushed( "Space" ) )
+                if ( ! allegro::isKeyPushed( "Space" ) && ! allegro::isKeyPushed( "b" ) )
                 {
                         somn::milliSleep( 20 );
                 }
