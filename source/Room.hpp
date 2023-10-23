@@ -207,15 +207,15 @@ public:
 
         const std::vector < FreeItemPtr > & getFreeItems () const {  return freeItems ;  }
 
-        Door * getDoorAt ( const std::string& way ) const
+        Door * getDoorAt ( const std::string & way ) const
         {
                 std::map< std::string, Door * >::const_iterator it = doors.find( way );
                 return it != doors.end() ? it->second : nilPointer ;
         }
 
-        bool hasDoorAt ( const std::string& way ) const {  return ( getDoorAt( way ) != nilPointer ) ;  }
+        bool hasDoorAt ( const std::string & way ) const {  return ( getDoorAt( way ) != nilPointer ) ;  }
 
-        const std::map < std::string, Door * >& getDoors () const {  return doors ;  }
+        const std::map < std::string, Door * > & getDoors () const {  return doors ;  }
 
         Camera * getCamera () const {  return camera ;  }
 
@@ -229,20 +229,26 @@ public:
 
         int getYCenterForItem ( const DescriptionOfItem * data ) ;
 
-       /**
-        * Limit for movement of camera along X in triple room
-        */
-        std::pair < int, int > getTripleRoomBoundX () const {  return this->tripleRoomBoundX ;  }
+        /**
+         * (unused) the limits for moving the camera along X in a triple room
+         */
+        ///std::pair < int, int > getTripleRoomCameraLimitsX () const {  return tripleRoomCameraLimitsX ;  }
 
-       /**
-        * Limit for movement of camera along Y in triple room
-        */
-        std::pair < int, int > getTripleRoomBoundY () const {  return this->tripleRoomBoundY ;  }
+        /**
+         * (unused) the limits for moving the camera along Y in a triple room
+         */
+        ///std::pair < int, int > getTripleRoomCameraLimitsY () const {  return tripleRoomCameraLimitsY ;  }
 
-       /**
-        * Sets limits for movement of camera in triple room
-        */
-        void assignTripleRoomBounds ( int minX, int maxX, int minY, int maxY ) ;
+        /**
+         * Sets the limits for moving the camera in a triple room
+         */
+        void setTripleRoomCameraLimits ( int minX, int maxX, int minY, int maxY )
+        {
+                tripleRoomCameraLimitsX.first  = minX ;
+                tripleRoomCameraLimitsX.second = maxX ;
+                tripleRoomCameraLimitsY.first  = minY ;
+                tripleRoomCameraLimitsY.second = maxY ;
+        }
 
         static const unsigned int maxTilesOfSingleRoom = 10 ;
 
@@ -325,6 +331,7 @@ private:
 
        /**
         * Las puertas
+        * The doors
         */
         std::map < std::string, Door * > doors ;
 
@@ -333,19 +340,13 @@ private:
         */
         std::map < std::string, unsigned short > bounds ;
 
-       /**
-        * Cámara encargada de centrar una sala grande en pantalla
-        */
         Camera * camera ;
 
-       /**
-        * Where to draw room
-        */
         PicturePtr whereToDraw ;
 
-        // limits for camera shifting in a triple room
-        std::pair < int, int > tripleRoomBoundX ;
-        std::pair < int, int > tripleRoomBoundY ;
+        // (obsolete) the limits for moving the camera for a triple room
+        /*~~~*/ std::pair < int, int > tripleRoomCameraLimitsX ;
+        /*~~~*/ std::pair < int, int > tripleRoomCameraLimitsY ;
 
 } ;
 

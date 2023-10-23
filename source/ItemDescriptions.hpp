@@ -14,6 +14,8 @@
 #include <string>
 #include <map>
 
+#include <tinyxml2.h>
+
 #include "DescriptionOfItem.hpp"
 
 
@@ -33,7 +35,7 @@ public:
         virtual ~ItemDescriptions( ) ;
 
         /**
-         * Load the descriptions of items from the XML file
+         * Read the descriptions of items from the XML file
          */
         void readDescriptionsFromFile ( const std::string & nameOfXMLFile, bool reRead = false ) ;
 
@@ -45,6 +47,8 @@ public:
         static ItemDescriptions & descriptions () {  return *theDescriptions ;  }
 
 private:
+
+        void readDescriptionFurther( const tinyxml2::XMLElement & item, DescriptionOfItem & description ) ;
 
         static autouniqueptr< ItemDescriptions > theDescriptions ;
 

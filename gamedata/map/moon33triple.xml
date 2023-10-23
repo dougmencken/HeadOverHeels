@@ -2,10 +2,10 @@
     <xTiles>13</xTiles>
     <yTiles>18</yTiles>
     <color>white</color>
-    <triple-room-data>
-        <bound-x minimum="80" maximum="128"/>
-        <bound-y minimum="80" maximum="208"/>
-    </triple-room-data>
+    <for-triple-room>
+        <camera-limit-x minimum="80" maximum="128"/>
+        <camera-limit-y minimum="80" maximum="208"/>
+    </for-triple-room>
     <floorKind>plain</floorKind>
     <nofloor x="7" y="9"/>
     <nofloor x="7" y="10"/>

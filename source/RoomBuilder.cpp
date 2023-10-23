@@ -141,20 +141,22 @@ Room* RoomBuilder::buildRoom ( const std::string& roomFile )
                 }
         }
 
-        // with knowledge about doors, calculate coordinates of origin
+        // with the knowledge about doors, calculate the coordinates of origin
         theRoom->calculateCoordinatesOfOrigin( hasNorthDoor, hasEastDoor, hasSouthDoor, hasWestDoor );
 
-        // for “ triple ” room there’s more data
-        tinyxml2::XMLElement* tripleRoomData = root->FirstChildElement( "triple-room-data" );
-        if ( tripleRoomData != nilPointer )
+        // for a “ triple ” room there’s more info
+        tinyxml2::XMLElement* tripleRoomInfo = root->FirstChildElement( "for-triple-room" );
+        if ( tripleRoomInfo != nilPointer )
         {
-                tinyxml2::XMLElement* boundX = tripleRoomData->FirstChildElement( "bound-x" );
-                tinyxml2::XMLElement* boundY = tripleRoomData->FirstChildElement( "bound-y" );
+                // the limits for moving the camera
+                tinyxml2::XMLElement* limitX = tripleRoomInfo->FirstChildElement( "camera-limit-x" );
+                tinyxml2::XMLElement* limitY = tripleRoomInfo->FirstChildElement( "camera-limit-y" );
 
-                if ( boundX != nilPointer && boundY != nilPointer )
+                if ( limitX != nilPointer && limitY != nilPointer )
                 {
-                        theRoom->assignTripleRoomBounds( std::atoi( boundX->Attribute( "minimum" ) ), std::atoi( boundX->Attribute( "maximum" ) ),
-                                                         std::atoi( boundY->Attribute( "minimum" ) ), std::atoi( boundY->Attribute( "maximum" ) ) );
+                        theRoom->setTripleRoomCameraLimits (
+                                std::atoi( limitX->Attribute( "minimum" ) ), std::atoi( limitX->Attribute( "maximum" ) ),
+                                std::atoi( limitY->Attribute( "minimum" ) ), std::atoi( limitY->Attribute( "maximum" ) ) );
                 }
         }
 

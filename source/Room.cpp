@@ -224,19 +224,19 @@ bool Room::saveAsXML( const std::string& file )
 
         if ( whichRoom() == "triple" )
         {
-                tinyxml2::XMLElement* tripleRoomData = roomXml.NewElement( "triple-room-data" ) ;
+                tinyxml2::XMLElement* tripleRoomInfo = roomXml.NewElement( "for-triple-room" ) ;
 
-                tinyxml2::XMLElement* boundX = roomXml.NewElement( "bound-x" ) ;
-                boundX->SetAttribute( "minimum", tripleRoomBoundX.first );
-                boundX->SetAttribute( "maximum", tripleRoomBoundX.second );
-                tripleRoomData->InsertEndChild( boundX );
+                tinyxml2::XMLElement* limitX = roomXml.NewElement( "camera-limit-x" ) ;
+                limitX->SetAttribute( "minimum", tripleRoomCameraLimitsX.first );
+                limitX->SetAttribute( "maximum", tripleRoomCameraLimitsX.second );
+                tripleRoomInfo->InsertEndChild( limitX );
 
-                tinyxml2::XMLElement* boundY = roomXml.NewElement( "bound-y" ) ;
-                boundY->SetAttribute( "minimum", tripleRoomBoundY.first );
-                boundY->SetAttribute( "maximum", tripleRoomBoundY.second );
-                tripleRoomData->InsertEndChild( boundY );
+                tinyxml2::XMLElement* limitY = roomXml.NewElement( "camera-limit-y" ) ;
+                limitY->SetAttribute( "minimum", tripleRoomCameraLimitsY.first );
+                limitY->SetAttribute( "maximum", tripleRoomCameraLimitsY.second );
+                tripleRoomInfo->InsertEndChild( limitY );
 
-                root->InsertEndChild( tripleRoomData );
+                root->InsertEndChild( tripleRoomInfo );
         }
 
         tinyxml2::XMLElement* floorKind = roomXml.NewElement( "floorKind" ) ;
@@ -1700,12 +1700,4 @@ int Room::getYCenterForItem( const DescriptionOfItem* data )
                         + ( hasDoorAt( "east" ) ? getSizeOfOneTile() >> 1 : 0 )
                                 - ( hasDoorAt( "west" ) ? getSizeOfOneTile() >> 1 : 0 )
                                         - 1 ;
-}
-
-void Room::assignTripleRoomBounds( int minX, int maxX, int minY, int maxY )
-{
-        tripleRoomBoundX.first = minX;
-        tripleRoomBoundX.second = maxX;
-        tripleRoomBoundY.first = minY;
-        tripleRoomBoundY.second = maxY;
 }

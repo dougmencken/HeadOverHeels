@@ -93,7 +93,7 @@ void Item::readGraphicsOfItem ()
         motion.clear ();
         shadows.clear ();
 
-        if ( ! descriptionOfItem->isPartOfDoor() && ! descriptionOfItem->getNameOfFile().empty() )
+        if ( ! descriptionOfItem->isPartOfDoor() && ! descriptionOfItem->getNameOfPicturesFile().empty() )
         {
                 createFrames( this, *descriptionOfItem );
 
@@ -373,13 +373,13 @@ float Item::getDelayBetweenFrames() const
 /* static */
 void Item::createFrames( Item* item, const DescriptionOfItem& description )
 {
-        if ( description.getNameOfFile( ).empty() || description.getWidthOfFrame() == 0 || description.getHeightOfFrame() == 0 )
+        if ( description.getNameOfPicturesFile().empty() || description.getWidthOfFrame() == 0 || description.getHeightOfFrame() == 0 )
         {
                 std::cerr << "either name of picture file is empty or zero width / height at Item::createFrames" << std::endl ;
                 return ;
         }
 
-        PicturePtr picture = getPoolOfPictures().getOrLoadAndGetOrMakeAndGet( description.getNameOfFile(), description.getWidthOfFrame(), description.getHeightOfFrame() );
+        PicturePtr picture = getPoolOfPictures().getOrLoadAndGetOrMakeAndGet( description.getNameOfPicturesFile(), description.getWidthOfFrame(), description.getHeightOfFrame() );
 
         // decompose image into frames
         // they are
@@ -438,13 +438,13 @@ void Item::createFrames( Item* item, const DescriptionOfItem& description )
 /* static */
 void Item::createShadowFrames( Item* item, const DescriptionOfItem& description )
 {
-        if ( description.getNameOfShadowFile( ).empty() || description.getWidthOfShadow() == 0 || description.getHeightOfShadow() == 0 )
+        if ( description.getNameOfShadowsFile( ).empty() || description.getWidthOfShadow() == 0 || description.getHeightOfShadow() == 0 )
         {
                 std::cerr << "either name of shadow file is empty or zero width / height at Item::createShadowFrames" << std::endl ;
                 return ;
         }
 
-        PicturePtr picture = getPoolOfPictures().getOrLoadAndGetOrMakeAndGet( description.getNameOfShadowFile(), description.getWidthOfShadow(), description.getHeightOfShadow() );
+        PicturePtr picture = getPoolOfPictures().getOrLoadAndGetOrMakeAndGet( description.getNameOfShadowsFile(), description.getWidthOfShadow(), description.getHeightOfShadow() );
 
         // decompose image into frames
 

@@ -25,7 +25,7 @@
     <widthY>16</widthY>
     <height>24</height>
     <orientations>1</orientations>
-    <mortal>true</mortal>
+    <mortal>yes</mortal>
     <picture file="vulcano.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
@@ -42,7 +42,7 @@
     <widthY>16</widthY>
     <height>24</height>
     <orientations>1</orientations>
-    <mortal>true</mortal>
+    <mortal>yes</mortal>
     <picture file="spikes.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
@@ -59,7 +59,7 @@
     <widthY>16</widthY>
     <height>24</height>
     <orientations>2</orientations>
-    <mortal>true</mortal>
+    <mortal>yes</mortal>
     <picture file="toaster.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
@@ -399,7 +399,7 @@
     <widthY>12</widthY>
     <height>24</height>
     <orientations>1</orientations>
-    <mortal>true</mortal>
+    <mortal>yes</mortal>
     <weight>10</weight>
     <speed>20</speed>
     <picture file="bomb.png">
@@ -483,7 +483,7 @@
     <widthY>12</widthY>
     <height>24</height>
     <orientations>4</orientations>
-    <mortal>true</mortal>
+    <mortal>yes</mortal>
     <speed>40</speed>
     <picture file="imperial-guard-head.png">
       <frameWidth>48</frameWidth>
@@ -497,7 +497,7 @@
     <widthY>12</widthY>
     <height>24</height>
     <orientations>4</orientations>
-    <mortal>true</mortal>
+    <mortal>yes</mortal>
     <picture file="elephant-head.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
@@ -510,7 +510,7 @@
     <widthY>12</widthY>
     <height>24</height>
     <orientations>4</orientations>
-    <mortal>true</mortal>
+    <mortal>yes</mortal>
     <picture file="monkey-head.png">
       <frameWidth>48</frameWidth>
       <frameHeight>50</frameHeight>
@@ -523,7 +523,7 @@
     <widthY>12</widthY>
     <height>24</height>
     <orientations>1</orientations>
-    <framesDelay>100</framesDelay>
+    <betweenFrames>100</betweenFrames>
     <speed>20</speed>
     <picture file="elevator.png">
       <frameWidth>48</frameWidth>
@@ -542,9 +542,9 @@
     <widthY>12</widthY>
     <height>24</height>
     <orientations>1</orientations>
-    <mortal>true</mortal>
+    <mortal>yes</mortal>
     <weight>10</weight>
-    <framesDelay>100</framesDelay>
+    <betweenFrames>100</betweenFrames>
     <speed>30</speed>
     <picture file="helicopter-bug.png">
       <frameWidth>48</frameWidth>
@@ -564,7 +564,7 @@
     <height>24</height>
     <orientations>1</orientations>
     <weight>10</weight>
-    <framesDelay>200</framesDelay>
+    <betweenFrames>200</betweenFrames>
     <picture file="fish.png">
       <frameWidth>48</frameWidth>
       <frameHeight>48</frameHeight>
@@ -582,7 +582,7 @@
     <widthY>12</widthY>
     <height>24</height>
     <orientations>1</orientations>
-    <mortal>true</mortal>
+    <mortal>yes</mortal>
     <weight>10</weight>
     <picture file="fish.png">
       <frameWidth>48</frameWidth>
@@ -600,9 +600,9 @@
     <widthY>12</widthY>
     <height>24</height>
     <orientations>1</orientations>
-    <mortal>true</mortal>
+    <mortal>yes</mortal>
     <weight>10</weight>
-    <framesDelay>40</framesDelay>
+    <betweenFrames>40</betweenFrames>
     <speed>40</speed>
     <picture file="siren.png">
       <frameWidth>48</frameWidth>
@@ -621,7 +621,7 @@
     <widthY>16</widthY>
     <height>24</height>
     <orientations>1</orientations>
-    <framesDelay>150</framesDelay>
+    <betweenFrames>150</betweenFrames>
     <picture file="teleport.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
@@ -639,7 +639,7 @@
     <widthY>16</widthY>
     <height>24</height>
     <orientations>1</orientations>
-    <framesDelay>150</framesDelay>
+    <betweenFrames>150</betweenFrames>
     <picture file="teleport.png">
       <frameWidth>64</frameWidth>
       <frameHeight>56</frameHeight>
@@ -657,9 +657,9 @@
     <widthY>12</widthY>
     <height>24</height>
     <orientations>4</orientations>
-    <mortal>true</mortal>
+    <mortal>yes</mortal>
     <weight>10</weight>
-    <framesDelay>150</framesDelay>
+    <betweenFrames>150</betweenFrames>
     <speed>40</speed>
     <picture file="turtle.png">
       <frameWidth>48</frameWidth>
@@ -679,7 +679,7 @@
     <height>24</height>
     <orientations>1</orientations>
     <weight>10</weight>
-    <framesDelay>80</framesDelay>
+    <betweenFrames>80</betweenFrames>
     <speed>40</speed>
     <picture file="trampoline.png">
       <frameWidth>48</frameWidth>
@@ -698,7 +698,7 @@
     <widthY>12</widthY>
     <height>24</height>
     <orientations>1</orientations>
-    <framesDelay>130</framesDelay>
+    <betweenFrames>130</betweenFrames>
     <speed>10</speed>
     <picture file="bubbles.png">
       <frameWidth>48</frameWidth>
@@ -717,7 +717,7 @@
     <widthY>12</widthY>
     <height>48</height>
     <orientations>1</orientations>
-    <framesDelay>130</framesDelay>
+    <betweenFrames>130</betweenFrames>
     <speed>10</speed>
     <picture file="double-bubbles.png">
       <frameWidth>48</frameWidth>
@@ -736,7 +736,7 @@
     <widthY>12</widthY>
     <height>24</height>
     <orientations>1</orientations>
-    <mortal>true</mortal>
+    <mortal>yes</mortal>
     <weight>10</weight>
     <speed>20</speed>
     <picture file="cap.png">
@@ -773,9 +773,9 @@
     <widthY>12</widthY>
     <height>48</height>
     <orientations>4</orientations>
-    <mortal>true</mortal>
+    <mortal>yes</mortal>
     <weight>10</weight>
-    <framesDelay>150</framesDelay>
+    <betweenFrames>150</betweenFrames>
     <speed>40</speed>
     <picture file="big-head-robot.png">
       <frameWidth>48</frameWidth>
@@ -793,9 +793,9 @@
     <widthY>12</widthY>
     <height>48</height>
     <orientations>4</orientations>
-    <mortal>true</mortal>
+    <mortal>yes</mortal>
     <weight>10</weight>
-    <framesDelay>150</framesDelay>
+    <betweenFrames>150</betweenFrames>
     <speed>40</speed>
     <picture file="elephant.png">
       <frameWidth>48</frameWidth>
@@ -813,9 +813,9 @@
     <widthY>12</widthY>
     <height>48</height>
     <orientations>4</orientations>
-    <mortal>true</mortal>
+    <mortal>yes</mortal>
     <weight>10</weight>
-    <framesDelay>150</framesDelay>
+    <betweenFrames>150</betweenFrames>
     <speed>40</speed>
     <picture file="monkey.png">
       <frameWidth>48</frameWidth>
@@ -833,9 +833,9 @@
     <widthY>12</widthY>
     <height>48</height>
     <orientations>4</orientations>
-    <mortal>true</mortal>
+    <mortal>yes</mortal>
     <weight>10</weight>
-    <framesDelay>150</framesDelay>
+    <betweenFrames>150</betweenFrames>
     <speed>40</speed>
     <picture file="diver.png">
       <frameWidth>48</frameWidth>
@@ -853,9 +853,9 @@
     <widthY>12</widthY>
     <height>48</height>
     <orientations>1</orientations>
-    <mortal>true</mortal>
+    <mortal>yes</mortal>
     <weight>10</weight>
-    <framesDelay>100</framesDelay>
+    <betweenFrames>100</betweenFrames>
     <speed>40</speed>
     <picture file="bubble-robot.png">
       <frameWidth>48</frameWidth>
@@ -874,8 +874,8 @@
     <widthY>12</widthY>
     <height>48</height>
     <orientations>4</orientations>
-    <mortal>true</mortal>
-    <framesDelay>100</framesDelay>
+    <mortal>yes</mortal>
+    <betweenFrames>100</betweenFrames>
     <speed>40</speed>
     <picture file="imperial-guard.png">
       <frameWidth>48</frameWidth>
@@ -895,7 +895,7 @@
     <height>48</height>
     <orientations>4</orientations>
     <weight>10</weight>
-    <framesDelay>150</framesDelay>
+    <betweenFrames>150</betweenFrames>
     <speed>40</speed>
     <picture file="robot.png">
       <frameWidth>48</frameWidth>
@@ -914,7 +914,7 @@
     <height>23</height>
     <orientations>4</orientations>
     <weight>20</weight>
-    <framesDelay>90</framesDelay>
+    <betweenFrames>90</betweenFrames>
     <speed>40</speed>
     <picture file="head.png">
       <frameWidth>48</frameWidth>
@@ -938,7 +938,7 @@
     <height>24</height>
     <orientations>4</orientations>
     <weight>10</weight>
-    <framesDelay>90</framesDelay>
+    <betweenFrames>90</betweenFrames>
     <speed>20</speed>
     <picture file="heels.png">
       <frameWidth>48</frameWidth>
@@ -961,7 +961,7 @@
     <height>47</height>
     <orientations>4</orientations>
     <weight>20</weight>
-    <framesDelay>100</framesDelay>
+    <betweenFrames>100</betweenFrames>
     <speed>20</speed>
     <picture file="headoverheels.png">
       <frameWidth>48</frameWidth>
@@ -981,9 +981,9 @@
     <widthY>12</widthY>
     <height>48</height>
     <orientations>1</orientations>
-    <mortal>true</mortal>
+    <mortal>yes</mortal>
     <weight>10</weight>
-    <framesDelay>100</framesDelay>
+    <betweenFrames>100</betweenFrames>
     <speed>20</speed>
     <picture file="throne-guard.png">
       <frameWidth>48</frameWidth>
@@ -1002,9 +1002,9 @@
     <widthY>12</widthY>
     <height>24</height>
     <orientations>1</orientations>
-    <mortal>true</mortal>
+    <mortal>yes</mortal>
     <weight>10</weight>
-    <framesDelay>200</framesDelay>
+    <betweenFrames>200</betweenFrames>
     <speed>20</speed>
     <picture file="emperor.png">
       <frameWidth>48</frameWidth>
@@ -2090,8 +2090,7 @@
   </item>
 
   <!-- Jail North Door -->
-  <item label="jail-door-north">
-    <door>north</door>
+  <door label="jail-door-north">
     <widthX>9</widthX>
     <widthX>9</widthX>
     <widthX>9</widthX>
@@ -2106,11 +2105,10 @@
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
     </picture>
-  </item>
+  </door>
 
   <!-- Blacktooth North Door -->
-  <item label="blacktooth-door-north">
-    <door>north</door>
+  <door label="blacktooth-door-north">
     <widthX>9</widthX>
     <widthX>9</widthX>
     <widthX>9</widthX>
@@ -2125,11 +2123,10 @@
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
     </picture>
-  </item>
+  </door>
 
   <!-- Market North Door -->
-  <item label="market-door-north">
-    <door>north</door>
+  <door label="market-door-north">
     <widthX>9</widthX>
     <widthX>9</widthX>
     <widthX>9</widthX>
@@ -2144,11 +2141,10 @@
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
     </picture>
-  </item>
+  </door>
 
   <!-- Moon North Door -->
-  <item label="moon-door-north">
-    <door>north</door>
+  <door label="moon-door-north">
     <widthX>9</widthX>
     <widthX>9</widthX>
     <widthX>9</widthX>
@@ -2163,11 +2159,10 @@
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
     </picture>
-  </item>
+  </door>
 
   <!-- Byblos North Door -->
-  <item label="byblos-door-north">
-    <door>north</door>
+  <door label="byblos-door-north">
     <widthX>9</widthX>
     <widthX>9</widthX>
     <widthX>9</widthX>
@@ -2182,11 +2177,10 @@
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
     </picture>
-  </item>
+  </door>
 
   <!-- Egyptus North Door -->
-  <item label="egyptus-door-north">
-    <door>north</door>
+  <door label="egyptus-door-north">
     <widthX>9</widthX>
     <widthX>9</widthX>
     <widthX>9</widthX>
@@ -2201,11 +2195,10 @@
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
     </picture>
-  </item>
+  </door>
 
   <!-- Penitentiary North Door -->
-  <item label="penitentiary-door-north">
-    <door>north</door>
+  <door label="penitentiary-door-north">
     <widthX>9</widthX>
     <widthX>9</widthX>
     <widthX>9</widthX>
@@ -2220,11 +2213,10 @@
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
     </picture>
-  </item>
+  </door>
 
   <!-- Safari North Door -->
-  <item label="safari-door-north">
-    <door>north</door>
+  <door label="safari-door-north">
     <widthX>9</widthX>
     <widthX>9</widthX>
     <widthX>9</widthX>
@@ -2239,11 +2231,10 @@
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
     </picture>
-  </item>
+  </door>
 
   <!-- Jail South Door -->
-  <item label="jail-door-south">
-    <door>south</door>
+  <door label="jail-door-south">
     <widthX>9</widthX>
     <widthX>9</widthX>
     <widthX>9</widthX>
@@ -2258,11 +2249,10 @@
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
     </picture>
-  </item>
+  </door>
 
   <!-- Blacktooth South Door -->
-  <item label="blacktooth-door-south">
-    <door>south</door>
+  <door label="blacktooth-door-south">
     <widthX>9</widthX>
     <widthX>9</widthX>
     <widthX>9</widthX>
@@ -2277,11 +2267,10 @@
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
     </picture>
-  </item>
+  </door>
 
   <!-- Market South Door -->
-  <item label="market-door-south">
-    <door>south</door>
+  <door label="market-door-south">
     <widthX>9</widthX>
     <widthX>9</widthX>
     <widthX>9</widthX>
@@ -2296,11 +2285,10 @@
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
     </picture>
-  </item>
+  </door>
 
   <!-- Moon South Door -->
-  <item label="moon-door-south">
-    <door>south</door>
+  <door label="moon-door-south">
     <widthX>9</widthX>
     <widthX>9</widthX>
     <widthX>9</widthX>
@@ -2315,11 +2303,10 @@
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
     </picture>
-  </item>
+  </door>
 
   <!-- Byblos South Door -->
-  <item label="byblos-door-south">
-    <door>south</door>
+  <door label="byblos-door-south">
     <widthX>9</widthX>
     <widthX>9</widthX>
     <widthX>9</widthX>
@@ -2334,11 +2321,10 @@
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
     </picture>
-  </item>
+  </door>
 
   <!-- Egyptus South Door -->
-  <item label="egyptus-door-south">
-    <door>south</door>
+  <door label="egyptus-door-south">
     <widthX>9</widthX>
     <widthX>9</widthX>
     <widthX>9</widthX>
@@ -2353,11 +2339,10 @@
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
     </picture>
-  </item>
+  </door>
 
   <!-- Penitentiary South Door -->
-  <item label="penitentiary-door-south">
-    <door>south</door>
+  <door label="penitentiary-door-south">
     <widthX>9</widthX>
     <widthX>9</widthX>
     <widthX>9</widthX>
@@ -2372,11 +2357,10 @@
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
     </picture>
-  </item>
+  </door>
 
   <!-- Safari South Door -->
-  <item label="safari-door-south">
-    <door>south</door>
+  <door label="safari-door-south">
     <widthX>9</widthX>
     <widthX>9</widthX>
     <widthX>9</widthX>
@@ -2391,11 +2375,10 @@
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
     </picture>
-  </item>
+  </door>
 
   <!-- Jail East Door -->
-  <item label="jail-door-east">
-    <door>east</door>
+  <door label="jail-door-east">
     <widthX>9</widthX>
     <widthX>9</widthX>
     <widthX>32</widthX>
@@ -2410,11 +2393,10 @@
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
     </picture>
-  </item>
+  </door>
 
   <!-- Blacktooth East Door -->
-  <item label="blacktooth-door-east">
-    <door>east</door>
+  <door label="blacktooth-door-east">
     <widthX>9</widthX>
     <widthX>9</widthX>
     <widthX>32</widthX>
@@ -2429,11 +2411,10 @@
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
     </picture>
-  </item>
+  </door>
 
   <!-- Market East Door -->
-  <item label="market-door-east">
-    <door>east</door>
+  <door label="market-door-east">
     <widthX>9</widthX>
     <widthX>9</widthX>
     <widthX>32</widthX>
@@ -2448,11 +2429,10 @@
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
     </picture>
-  </item>
+  </door>
 
   <!-- Moon East Door -->
-  <item label="moon-door-east">
-    <door>east</door>
+  <door label="moon-door-east">
     <widthX>9</widthX>
     <widthX>9</widthX>
     <widthX>32</widthX>
@@ -2467,11 +2447,10 @@
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
     </picture>
-  </item>
+  </door>
 
   <!-- Byblos East Door -->
-  <item label="byblos-door-east">
-    <door>east</door>
+  <door label="byblos-door-east">
     <widthX>9</widthX>
     <widthX>9</widthX>
     <widthX>32</widthX>
@@ -2486,11 +2465,10 @@
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
     </picture>
-  </item>
+  </door>
 
   <!-- Egyptus East Door -->
-  <item label="egyptus-door-east">
-    <door>east</door>
+  <door label="egyptus-door-east">
     <widthX>9</widthX>
     <widthX>9</widthX>
     <widthX>32</widthX>
@@ -2505,11 +2483,10 @@
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
     </picture>
-  </item>
+  </door>
 
   <!-- Penitentiary East Door -->
-  <item label="penitentiary-door-east">
-    <door>east</door>
+  <door label="penitentiary-door-east">
     <widthX>9</widthX>
     <widthX>9</widthX>
     <widthX>32</widthX>
@@ -2524,11 +2501,10 @@
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
     </picture>
-  </item>
+  </door>
 
   <!-- Safari East Door -->
-  <item label="safari-door-east">
-    <door>east</door>
+  <door label="safari-door-east">
     <widthX>9</widthX>
     <widthX>9</widthX>
     <widthX>32</widthX>
@@ -2543,11 +2519,10 @@
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
     </picture>
-  </item>
+  </door>
 
   <!-- Jail West Door -->
-  <item label="jail-door-west">
-    <door>west</door>
+  <door label="jail-door-west">
     <widthX>9</widthX>
     <widthX>9</widthX>
     <widthX>32</widthX>
@@ -2562,11 +2537,10 @@
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
     </picture>
-  </item>
+  </door>
 
   <!-- Blacktooth West Door -->
-  <item label="blacktooth-door-west">
-    <door>west</door>
+  <door label="blacktooth-door-west">
     <widthX>9</widthX>
     <widthX>9</widthX>
     <widthX>32</widthX>
@@ -2581,11 +2555,10 @@
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
     </picture>
-  </item>
+  </door>
 
   <!-- Market West Door -->
-  <item label="market-door-west">
-    <door>west</door>
+  <door label="market-door-west">
     <widthX>9</widthX>
     <widthX>9</widthX>
     <widthX>32</widthX>
@@ -2600,11 +2573,10 @@
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
     </picture>
-  </item>
+  </door>
 
   <!-- Moon West Door -->
-  <item label="moon-door-west">
-    <door>west</door>
+  <door label="moon-door-west">
     <widthX>9</widthX>
     <widthX>9</widthX>
     <widthX>32</widthX>
@@ -2619,11 +2591,10 @@
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
     </picture>
-  </item>
+  </door>
 
   <!-- Byblos West Door -->
-  <item label="byblos-door-west">
-    <door>west</door>
+  <door label="byblos-door-west">
     <widthX>9</widthX>
     <widthX>9</widthX>
     <widthX>32</widthX>
@@ -2638,11 +2609,10 @@
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
     </picture>
-  </item>
+  </door>
 
   <!-- Egyptus West Door -->
-  <item label="egyptus-door-west">
-    <door>west</door>
+  <door label="egyptus-door-west">
     <widthX>9</widthX>
     <widthX>9</widthX>
     <widthX>32</widthX>
@@ -2657,11 +2627,10 @@
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
     </picture>
-  </item>
+  </door>
 
   <!-- Penitentiary West Door -->
-  <item label="penitentiary-door-west">
-    <door>west</door>
+  <door label="penitentiary-door-west">
     <widthX>9</widthX>
     <widthX>9</widthX>
     <widthX>32</widthX>
@@ -2676,11 +2645,10 @@
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
     </picture>
-  </item>
+  </door>
 
   <!-- Safari West Door -->
-  <item label="safari-door-west">
-    <door>west</door>
+  <door label="safari-door-west">
     <widthX>9</widthX>
     <widthX>9</widthX>
     <widthX>32</widthX>
@@ -2695,5 +2663,5 @@
       <frameWidth>82</frameWidth>
       <frameHeight>140</frameHeight>
     </picture>
-  </item>
+  </door>
 </items>

@@ -24,37 +24,6 @@
 class DescriptionOfItem
 {
 
-private:
-
-        DescriptionOfItem ( const std::string & itemLabel
-                                        , unsigned int itemWidthX , unsigned int itemWidthY , unsigned int itemHeight
-                                        , double itemWeight
-                                        , double itemSpeed
-                                        , unsigned short itemOrientations
-                                        , double itemDelayBetweenFrames
-                                        , unsigned int itemWidthOfFrame , unsigned int itemHeightOfFrame
-                                        , unsigned int itemWidthOfShadow , unsigned int itemHeightOfShadow
-                                        , bool isItemMortal
-                                        , unsigned short itemExtraFrames )
-                : label( itemLabel )
-                , widthX( itemWidthX )
-                , widthY( itemWidthY )
-                , height( itemHeight )
-                , weight( itemWeight )
-                , speed( itemSpeed )
-                , orientations( itemOrientations )
-                , delayBetweenFrames( itemDelayBetweenFrames )
-                , widthOfFrame( itemWidthOfFrame )
-                , heightOfFrame( itemHeightOfFrame )
-                , widthOfShadow( itemWidthOfShadow )
-                , heightOfShadow( itemHeightOfShadow )
-                , mortal( isItemMortal )
-                , extraFrames( itemExtraFrames )
-                , partOfDoor( false )
-        { }
-
-        static DescriptionOfItem * clone ( const DescriptionOfItem & toClone ) ;
-
 public:
 
         DescriptionOfItem( const std::string & itemLabel )
@@ -62,11 +31,11 @@ public:
                 , widthX( 0 ) , widthY( 0 ) , height( 0 )
                 , weight( 0.0 )
                 , speed( 0.0 )
-                , orientations( 0 )
-                , delayBetweenFrames( 0.0 )
-                , widthOfFrame( 0 ) , heightOfFrame( 0 )
-                , widthOfShadow( 0 ) , heightOfShadow( 0 )
                 , mortal( false )
+                , widthOfFrame( 0 ) , heightOfFrame( 0 )
+                , delayBetweenFrames( 0.0 )
+                , widthOfShadow( 0 ) , heightOfShadow( 0 )
+                , orientations( 0 )
                 , extraFrames( 0 )
                 , partOfDoor( false )
         { }
@@ -79,69 +48,51 @@ public:
 
         static DescriptionOfItem * cloneAsRightJambOfDoor ( const DescriptionOfItem & toClone ) ;
 
+private:
+
+        static DescriptionOfItem * clone ( const DescriptionOfItem & what ) ;
+
 public:
-
-        const std::string & getNameOfFile () const {  return this->nameOfFile;  }
-
-        void setNameOfFile ( const std::string & newName ) {  this->nameOfFile = newName ;  }
-
-        const std::string & getNameOfShadowFile () const {  return this->nameOfShadowFile;  }
-
-        void setNameOfShadowFile ( const std::string & newNameOfShadow ) {  this->nameOfShadowFile = newNameOfShadow ;  }
 
         const std::string & getLabel () const {  return label ;  }
 
         unsigned int getWidthX () const {  return widthX ;  }
-
         unsigned int getWidthY () const {  return widthY ;  }
-
         unsigned int getHeight () const {  return height ;  }
 
         void setWidthX ( unsigned int wx ) {  this->widthX = wx ;  }
-
         void setWidthY ( unsigned int wy ) {  this->widthY = wy ;  }
-
         void setHeight ( unsigned int wz ) {  this->height = wz ;  }
 
         double getWeight () const {  return weight ;  }
-
         void setWeight( double newWeight ) {  this->weight = newWeight ;  }
 
         double getSpeed () const {  return speed ;  }
-
         void setSpeed( double newSpeed ) {  this->speed = newSpeed ;  }
 
-        double getDelayBetweenFrames () const {  return delayBetweenFrames ;  }
-
-        void setDelayBetweenFrames( double newDelay ) {  this->delayBetweenFrames = newDelay ;  }
-
-        unsigned int getWidthOfFrame () const {  return widthOfFrame ;  }
-
-        unsigned int getHeightOfFrame () const {  return heightOfFrame ;  }
-
-        void setWidthOfFrame( unsigned int newWidthOfFrame ) {  this->widthOfFrame = newWidthOfFrame ;  }
-
-        void setHeightOfFrame( unsigned int newHeightOfFrame ) {  this->heightOfFrame = newHeightOfFrame ;  }
-
-        unsigned int getWidthOfShadow () const {  return widthOfShadow ;  }
-
-        unsigned int getHeightOfShadow () const {  return heightOfShadow ;  }
-
-        void setWidthOfShadow( unsigned int newWidthOfShadow ) {  this->widthOfShadow = newWidthOfShadow ;  }
-
-        void setHeightOfShadow( unsigned int newHeightOfShadow ) {  this->heightOfShadow = newHeightOfShadow ;  }
-
         bool isMortal() const {  return mortal ;  }
-
         void setMortal( bool newMortal ) {  this->mortal = newMortal ;  }
 
-        unsigned short howManyOrientations () const {  return orientations ;  }
+        const std::string & getNameOfPicturesFile () const {  return this->nameOfPicturesFile ;  }
+        void setNameOfPicturesFile ( const std::string & newPicturesFile ) {  this->nameOfPicturesFile = newPicturesFile ;  }
 
-        void setHowManyOrientations( unsigned short newOrientations ) {  this->orientations = newOrientations ;  }
+        unsigned int getWidthOfFrame () const {  return widthOfFrame ;  }
+        void setWidthOfFrame( unsigned int newWidthOfFrame ) {  this->widthOfFrame = newWidthOfFrame ;  }
 
-        unsigned short howManyExtraFrames () const {  return extraFrames ;  }
+        unsigned int getHeightOfFrame () const {  return heightOfFrame ;  }
+        void setHeightOfFrame( unsigned int newHeightOfFrame ) {  this->heightOfFrame = newHeightOfFrame ;  }
 
-        void setHowManyExtraFrames( unsigned short newExtraFrames ) {  this->extraFrames = newExtraFrames ;  }
+        double getDelayBetweenFrames () const {  return delayBetweenFrames ;  }
+        void setDelayBetweenFrames( double newDelay ) {  this->delayBetweenFrames = newDelay ;  }
+
+        const std::string & getNameOfShadowsFile () const {  return this->nameOfShadowsFile ;  }
+        void setNameOfShadowsFile ( const std::string & newShadowsFile ) {  this->nameOfShadowsFile = newShadowsFile ;  }
+
+        unsigned int getWidthOfShadow () const {  return widthOfShadow ;  }
+        void setWidthOfShadow( unsigned int newWidthOfShadow ) {  this->widthOfShadow = newWidthOfShadow ;  }
+
+        unsigned int getHeightOfShadow () const {  return heightOfShadow ;  }
+        void setHeightOfShadow( unsigned int newHeightOfShadow ) {  this->heightOfShadow = newHeightOfShadow ;  }
 
         void setSequenceOFrames( const std::vector< unsigned int > & newSequence )
         {
@@ -149,12 +100,33 @@ public:
                 this->sequenceOFrames = newSequence ;
         }
 
+        void makeSequenceOFrames( unsigned int howMany )
+        {
+                if ( this->sequenceOFrames.size() > 0 ) this->sequenceOFrames.clear () ;
+
+                for ( unsigned int j = 0 ; j < howMany ; j ++ )
+                        this->sequenceOFrames.push_back( j );
+        }
+
         unsigned int getFrameAt( unsigned int at ) const
         {
-                return ( at < sequenceOFrames.size () ? sequenceOFrames[ at ] : 0 ) ;
+                return ( at < sequenceOFrames.size () ) ? sequenceOFrames[ at ] : 0 ;
         }
 
         unsigned int howManyFramesPerOrientation () const {  return sequenceOFrames.size () ;  }
+
+        unsigned short howManyOrientations () const {  return orientations ;  }
+
+        void setHowManyOrientations( unsigned short newOrientations )
+        {
+                     if ( newOrientations == 1 )  orientations = 1 ;
+                else if ( newOrientations == 2 )  orientations = 2 ;
+                else if ( newOrientations == 4 )  orientations = 4 ;
+                else                              orientations = 0 ;
+        }
+
+        unsigned short howManyExtraFrames () const {  return extraFrames ;  }
+        void setHowManyExtraFrames( unsigned short newExtraFrames ) {  this->extraFrames = newExtraFrames ;  }
 
         bool isPartOfDoor () const {  return partOfDoor ;  }
 
@@ -180,35 +152,36 @@ private:
         double speed ;
 
         /**
-         * 1 if the item is the same on all sides, thus there’s only one orientation,
-         * 2 if there’re different images for south and west, or
-         * 4 when there’re different images for each orientation
-         */
-        unsigned short orientations ;
-
-        double delayBetweenFrames ;
-
-        /**
-         * Width and height in pixels of each item’s frame
-         */
-        unsigned int widthOfFrame ;
-        unsigned int heightOfFrame ;
-
-        /**
-         * Width and height in pixels of each frame for the item’s shadow
-         */
-        unsigned int widthOfShadow ;
-        unsigned int heightOfShadow ;
-
-        /**
          * When true, this item takes one life from the character on touch
          */
         bool mortal ;
 
         /**
-         * Extra frames such as for jumping
+         * The file with graphics for this item
          */
-        unsigned short extraFrames ;
+        std::string nameOfPicturesFile ;
+
+        /**
+         * The width and height in pixels of a single frame of the item’s image
+         */
+        unsigned int widthOfFrame ;
+        unsigned int heightOfFrame ;
+
+	/**
+         * The delay, in seconds, between frames in the animation sequence
+         */
+        double delayBetweenFrames ;
+
+        /**
+         * The file with shadows for this item
+         */
+        std::string nameOfShadowsFile ;
+
+        /**
+         * The width and height in pixels of a single frame of the item’s shadow
+         */
+        unsigned int widthOfShadow ;
+        unsigned int heightOfShadow ;
 
         /**
          * The sequence of item's frames for one orientation
@@ -216,15 +189,19 @@ private:
         std::vector< unsigned int > sequenceOFrames ;
 
         /**
-         * The file with images for this item
+         * 1 if the item is the same on all sides, thus there’s only one orientation,
+         * 2 if there’re different images for south and west, or
+         * 4 when there’re different images for each orientation
+         * 0 otherwise and for new descriptions
          */
-        std::string nameOfFile ;
+        unsigned short orientations ;
 
         /**
-         * The file with shadows for this item
+         * Extra frames such as for jumping or blinking
          */
-        std::string nameOfShadowFile ;
+        unsigned short extraFrames ;
 
+        // used when a door is disassembled into three parts
         bool partOfDoor ;
 
 } ;

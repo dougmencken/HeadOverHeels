@@ -30,21 +30,21 @@ Door::Door( const std::string & label, int cx, int cy, int z, const std::string 
         , rightJamb( nilPointer )
         , lintel( nilPointer )
 {
-        /* std::cout << "the creation of door \"" << labelOfDoor << "\"" << std::endl ; */
-
         const DescriptionOfItem * lintelData = ItemDescriptions::descriptions ().getDescriptionByLabel( labelOfDoor + "~lintel" );
 
         // load the graphics of door
 
+        const std::string & filWithGraphicsOfDoor = lintelData->getNameOfPicturesFile () ;
+
         autouniqueptr< allegro::Pict > pictureOfDoor( allegro::Pict::fromPNGFile( ospaths::pathToFile(
-                ospaths::sharePath() + GameManager::getInstance().getChosenGraphicsSet(), lintelData->getNameOfFile( )
+                ospaths::sharePath() + GameManager::getInstance().getChosenGraphicsSet(), filWithGraphicsOfDoor
         ) ) );
         if ( ! pictureOfDoor->isNotNil() )
         {
                 std::cerr <<
-                        "picture of door \"" << lintelData->getNameOfFile( ) <<
-                        "\" for \"" << GameManager::getInstance().getChosenGraphicsSet() <<
-                        "\" is absent" << std::endl ;
+                        "picture of door \"" << filWithGraphicsOfDoor << "\" for \""
+                                << GameManager::getInstance().getChosenGraphicsSet()
+                                        << "\" is absent" << std::endl ;
                 return ;
         }
 

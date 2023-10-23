@@ -196,7 +196,7 @@ void MapManager::readMap ( const std::string& fileName )
                         theRoom->setConnections( connections );
                         gameRooms[ roomFile ] = theRoom ;
 
-                        // write file of room
+                        // write the room's file
                         theRoom->saveAsXML( pathToRooms + theRoom->getNameOfRoomDescriptionFile() );
                 }
                 else

@@ -8,43 +8,45 @@ DescriptionOfItem::~DescriptionOfItem( )
 }
 
 /* private */ /* static */
-DescriptionOfItem * DescriptionOfItem::clone ( const DescriptionOfItem & toClone )
+DescriptionOfItem * DescriptionOfItem::clone ( const DescriptionOfItem & what )
 {
-        DescriptionOfItem * copyOfDescription = new DescriptionOfItem (
-                toClone.getLabel (),
-                toClone.getWidthX (),
-                toClone.getWidthY (),
-                toClone.getHeight (),
-                toClone.getWeight (),
-                toClone.getSpeed (),
-                toClone.howManyOrientations (),
-                toClone.getDelayBetweenFrames (),
-                toClone.getWidthOfFrame (),
-                toClone.getHeightOfFrame (),
-                toClone.getWidthOfShadow (),
-                toClone.getHeightOfShadow (),
-                toClone.isMortal (),
-                toClone.howManyExtraFrames ()
-        );
+        DescriptionOfItem * theClone = new DescriptionOfItem ( what.getLabel () );
+
+        theClone->setWidthX( what.getWidthX () );
+        theClone->setWidthY( what.getWidthY () );
+        theClone->setHeight( what.getHeight () );
+
+        theClone->setWeight( what.getWeight () );
+        theClone->setSpeed( what.getSpeed () );
+
+        theClone->setMortal( what.isMortal () );
+
+        theClone->setNameOfPicturesFile( what.getNameOfPicturesFile () );
+
+        theClone->setWidthOfFrame( what.getWidthOfFrame () );
+        theClone->setHeightOfFrame( what.getHeightOfFrame () );
+
+        theClone->setDelayBetweenFrames( what.getDelayBetweenFrames () );
+
+        theClone->setNameOfShadowsFile( what.getNameOfShadowsFile () );
+
+        theClone->setWidthOfShadow( what.getWidthOfShadow () );
+        theClone->setHeightOfShadow( what.getHeightOfShadow () );
 
         // copy the sequence of animation
-        if ( toClone.sequenceOFrames.size() > 1 )
-        {
-                for ( std::vector< unsigned int >::const_iterator fi = toClone.sequenceOFrames.begin () ;
-                                fi != toClone.sequenceOFrames.end () ; ++ fi )
-                {
-                        copyOfDescription->sequenceOFrames.push_back( *fi );
-                }
-        }
-        else // it’s just single 0 for a static item
-        {
-                copyOfDescription->sequenceOFrames.push_back( 0 );
+        size_t frames = what.sequenceOFrames.size () ;
+        if ( frames > 1 ) {
+                for ( unsigned int i = 0 ; i < frames ; i ++ )
+                        theClone->sequenceOFrames.push_back( what.sequenceOFrames[ i ] );
+        } else {
+                // it’s just single 0 for a static item
+                theClone->sequenceOFrames.push_back( 0 );
         }
 
-        copyOfDescription->setNameOfFile( toClone.getNameOfFile () );
-        copyOfDescription->setNameOfShadowFile( toClone.getNameOfShadowFile () );
+        theClone->setHowManyOrientations( what.howManyOrientations () );
+        theClone->setHowManyExtraFrames( what.howManyExtraFrames () );
 
-        return copyOfDescription ;
+        return theClone ;
 }
 
 /* static */
